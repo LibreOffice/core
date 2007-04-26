@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdlgfact.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:59:48 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:50:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -583,10 +583,10 @@ void AbstractScImportOptionsDlg_Impl::GetImportOptions( ScImportOptions& rOption
 
 //add for ScImportAsciiDlg begin
 AbstractScImportAsciiDlg * ScAbstractDialogFactory_Impl::CreateScImportAsciiDlg ( Window* pParent, String aDatName,
-                                                    SvStream* pInStream, const ResId& rResId, sal_Unicode cSep )
+                                                    SvStream* pInStream, int nId, sal_Unicode cSep )
 {
     ScImportAsciiDlg* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_ASCII :
             pDlg = new ScImportAsciiDlg( pParent, aDatName,pInStream, cSep );
@@ -607,10 +607,10 @@ AbstractScAutoFormatDlg * ScAbstractDialogFactory_Impl::CreateScAutoFormatDlg( W
                                                                 ScAutoFormat*               pAutoFormat,
                                                                 const ScAutoFormatData*    pSelFormatData,
                                                                 ScDocument*                pDoc,
-                                                                const ResId& rResId)
+                                                                int nId)
 {
     ScAutoFormatDlg* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_AUTOFORMAT :
             pDlg = new ScAutoFormatDlg( pParent, pAutoFormat,pSelFormatData, pDoc );
@@ -628,12 +628,12 @@ AbstractScAutoFormatDlg * ScAbstractDialogFactory_Impl::CreateScAutoFormatDlg( W
 //add for ScColRowLabelDlg begin
 
 AbstractScColRowLabelDlg *  ScAbstractDialogFactory_Impl::CreateScColRowLabelDlg(Window* pParent, //add for ScColRowLabelDlg
-                                                                const ResId& rResId,
+                                                                int nId,
                                                                 BOOL bCol ,
                                                                 BOOL bRow)
 {
     ScColRowLabelDlg* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_CHARTCOLROW :
             pDlg = new ScColRowLabelDlg( pParent, bCol,bRow );
@@ -654,11 +654,11 @@ AbstractScColRowLabelDlg *  ScAbstractDialogFactory_Impl::CreateScColRowLabelDlg
 VclAbstractDialog *  ScAbstractDialogFactory_Impl::CreateScColOrRowDlg(Window*          pParent,
                                                     const String&   rStrTitle,
                                                     const String&   rStrLabel,
-                                                    const ResId& rResId,
+                                                    int nId,
                                                     BOOL                bColDefault)
 {
     Dialog * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_COLORROW :
             pDlg = new ScColOrRowDlg( pParent, rStrTitle,rStrLabel,bColDefault );
@@ -677,10 +677,10 @@ VclAbstractDialog *  ScAbstractDialogFactory_Impl::CreateScColOrRowDlg(Window*  
 //add for ScDataPilotDatabaseDlg begin
 
 AbstractScDataPilotDatabaseDlg *  ScAbstractDialogFactory_Impl::CreateScDataPilotDatabaseDlg (Window* pParent ,
-                                                                                              const ResId& rResId )  //add for ScDataPilotDatabaseDlg
+                                                                                              int nId )  //add for ScDataPilotDatabaseDlg
 {
     ScDataPilotDatabaseDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_DAPIDATA :
             pDlg = new ScDataPilotDatabaseDlg( pParent );
@@ -698,10 +698,10 @@ AbstractScDataPilotDatabaseDlg *  ScAbstractDialogFactory_Impl::CreateScDataPilo
 //add for ScDataPilotSourceTypeDlg begin
 AbstractScDataPilotSourceTypeDlg* ScAbstractDialogFactory_Impl::CreateScDataPilotSourceTypeDlg( Window* pParent,
                                                                                                BOOL bEnableExternal,
-                                                                                               const ResId& rResId )
+                                                                                               int nId )
 {
     ScDataPilotSourceTypeDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_DAPITYPE :
             pDlg = new ScDataPilotSourceTypeDlg( pParent, bEnableExternal );
@@ -721,10 +721,10 @@ AbstractScDataPilotSourceTypeDlg* ScAbstractDialogFactory_Impl::CreateScDataPilo
 //add for ScDataPilotServiceDlg begin
 AbstractScDataPilotServiceDlg* ScAbstractDialogFactory_Impl::CreateScDataPilotServiceDlg( Window* pParent,
                                                                         const com::sun::star::uno::Sequence<rtl::OUString>& rServices,
-                                                            const ResId& rResId )
+                                                            int nId )
 {
     ScDataPilotServiceDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_DAPISERVICE :
             pDlg = new ScDataPilotServiceDlg( pParent, rServices );
@@ -741,11 +741,11 @@ AbstractScDataPilotServiceDlg* ScAbstractDialogFactory_Impl::CreateScDataPilotSe
 // add for ScDataPilotServiceDlg end
 
 //add for ScDeleteCellDlg begin
-AbstractScDeleteCellDlg* ScAbstractDialogFactory_Impl::CreateScDeleteCellDlg( Window* pParent, const ResId& rResId,
+AbstractScDeleteCellDlg* ScAbstractDialogFactory_Impl::CreateScDeleteCellDlg( Window* pParent, int nId,
                                                                              BOOL bDisallowCellMove )
 {
     ScDeleteCellDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_DELCELL :
             pDlg = new ScDeleteCellDlg( pParent, bDisallowCellMove );
@@ -762,11 +762,11 @@ AbstractScDeleteCellDlg* ScAbstractDialogFactory_Impl::CreateScDeleteCellDlg( Wi
 //add for ScDeleteCellDlg  end
 
 //add for ScDeleteContentsDlg begin
-AbstractScDeleteContentsDlg* ScAbstractDialogFactory_Impl::CreateScDeleteContentsDlg(Window* pParent,const ResId& rResId, //add for ScDeleteContentsDlg
+AbstractScDeleteContentsDlg* ScAbstractDialogFactory_Impl::CreateScDeleteContentsDlg(Window* pParent,int nId, //add for ScDeleteContentsDlg
                                                                  USHORT  nCheckDefaults )
 {
     ScDeleteContentsDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_DELCONT :
             pDlg = new ScDeleteContentsDlg( pParent, nCheckDefaults );
@@ -792,10 +792,10 @@ AbstractScFillSeriesDlg* ScAbstractDialogFactory_Impl::CreateScFillSeriesDlg( Wi
                                                             double          fStep,
                                                             double          fMax,
                                                             USHORT          nPossDir,
-                                                            const ResId& rResId)
+                                                            int nId)
 {
     ScFillSeriesDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_FILLSERIES :
             pDlg = new ScFillSeriesDlg( pParent, rDocument,eFillDir, eFillCmd,eFillDateCmd, aStartStr,fStep,fMax,nPossDir);
@@ -814,12 +814,12 @@ AbstractScFillSeriesDlg* ScAbstractDialogFactory_Impl::CreateScFillSeriesDlg( Wi
 //add for ScGroupDlg begin
 AbstractScGroupDlg* ScAbstractDialogFactory_Impl::CreateAbstractScGroupDlg( Window* pParent,
                                                             USHORT  nResId,
-                                                            const ResId& rResId,
+                                                            int nId,
                                                             BOOL    bUnGroup ,
                                                             BOOL    bRows   )
 {
     ScGroupDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_GRP_KILL :
         case RID_SCDLG_GRP_MAKE :
@@ -839,11 +839,11 @@ AbstractScGroupDlg* ScAbstractDialogFactory_Impl::CreateAbstractScGroupDlg( Wind
 
 //add for ScInsertCellDlg begin
 AbstractScInsertCellDlg * ScAbstractDialogFactory_Impl::CreateScInsertCellDlg( Window* pParent, //add for ScInsertCellDlg
-                                                                const ResId& rResId,
+                                                                int nId,
                                                             BOOL bDisallowCellMove )
 {
     ScInsertCellDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_INSCELL :
             pDlg = new ScInsertCellDlg( pParent, bDisallowCellMove);
@@ -861,12 +861,12 @@ AbstractScInsertCellDlg * ScAbstractDialogFactory_Impl::CreateScInsertCellDlg( W
 
 //add for ScInsertContentsDlg begin
 AbstractScInsertContentsDlg * ScAbstractDialogFactory_Impl::CreateScInsertContentsDlg( Window*      pParent,
-                                                                                    const ResId& rResId,
+                                                                                    int nId,
                                                                                     USHORT          nCheckDefaults,
                                                                                     const String*   pStrTitle )
 {
     ScInsertContentsDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_INSCONT :
             pDlg = new ScInsertContentsDlg( pParent, nCheckDefaults,pStrTitle );
@@ -883,10 +883,10 @@ AbstractScInsertContentsDlg * ScAbstractDialogFactory_Impl::CreateScInsertConten
 
 //add for ScInsertTableDlg begin
 AbstractScInsertTableDlg * ScAbstractDialogFactory_Impl::CreateScInsertTableDlg ( Window* pParent, ScViewData& rViewData,
-                                                                SCTAB nTabCount, bool bFromFile, const ResId& rResId)
+                                                                SCTAB nTabCount, bool bFromFile, int nId)
 {
     ScInsertTableDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_INSERT_TABLE :
             pDlg = new ScInsertTableDlg( pParent, rViewData,nTabCount, bFromFile );
@@ -907,10 +907,10 @@ AbstractScSelEntryDlg * ScAbstractDialogFactory_Impl::CreateScSelEntryDlg ( Wind
                                                         const String& aTitle,
                                                         const String& aLbTitle,
                                                                 List&   aEntryList,
-                                                            const ResId& rResId )
+                                                            int nId )
 {
     ScSelEntryDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_SELECTDB :
             pDlg = new ScSelEntryDlg( pParent, nResId,aTitle, aLbTitle, aEntryList );
@@ -927,10 +927,10 @@ AbstractScSelEntryDlg * ScAbstractDialogFactory_Impl::CreateScSelEntryDlg ( Wind
 
 //add for ScLinkedAreaDlg begin
 AbstractScLinkedAreaDlg * ScAbstractDialogFactory_Impl::CreateScLinkedAreaDlg (  Window* pParent,
-                                                                const ResId& rResId)
+                                                                int nId)
 {
     ScLinkedAreaDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_LINKAREA :
             pDlg = new ScLinkedAreaDlg( pParent );
@@ -950,7 +950,7 @@ AbstractScMetricInputDlg * ScAbstractDialogFactory_Impl::CreateScMetricInputDlg 
                                                                 USHORT      nResId,     // Ableitung fuer jeden Dialog!
                                                                 long            nCurrent,
                                                                 long            nDefault,
-                                                                const ResId& rResId ,
+                                                                int nId ,
                                                                 FieldUnit       eFUnit,
                                                                 USHORT      nDecimals,
                                                                 long            nMaximum ,
@@ -959,7 +959,7 @@ AbstractScMetricInputDlg * ScAbstractDialogFactory_Impl::CreateScMetricInputDlg 
                                                                 long          nLast )
 {
     ScMetricInputDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_ROW_MAN :
         case RID_SCDLG_ROW_OPT :
@@ -980,10 +980,10 @@ AbstractScMetricInputDlg * ScAbstractDialogFactory_Impl::CreateScMetricInputDlg 
 
 
 //add for  ScMoveTableDlg  begin
-AbstractScMoveTableDlg * ScAbstractDialogFactory_Impl::CreateScMoveTableDlg(  Window* pParent, const ResId& rResId )
+AbstractScMoveTableDlg * ScAbstractDialogFactory_Impl::CreateScMoveTableDlg(  Window* pParent, int nId )
 {
     ScMoveTableDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_MOVETAB :
             pDlg = new ScMoveTableDlg( pParent );
@@ -1000,10 +1000,10 @@ AbstractScMoveTableDlg * ScAbstractDialogFactory_Impl::CreateScMoveTableDlg(  Wi
 
 
 //add for ScNameCreateDlg begin
-AbstractScNameCreateDlg * ScAbstractDialogFactory_Impl::CreateScNameCreateDlg ( Window * pParent, USHORT nFlags, const ResId& rResId )
+AbstractScNameCreateDlg * ScAbstractDialogFactory_Impl::CreateScNameCreateDlg ( Window * pParent, USHORT nFlags, int nId )
 {
     ScNameCreateDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_NAMES_CREATE :
             pDlg = new ScNameCreateDlg( pParent, nFlags );
@@ -1021,10 +1021,10 @@ AbstractScNameCreateDlg * ScAbstractDialogFactory_Impl::CreateScNameCreateDlg ( 
 
 //add for ScNamePasteDlg begin
  AbstractScNamePasteDlg * ScAbstractDialogFactory_Impl::CreateScNamePasteDlg ( Window * pParent, const ScRangeName* pList,
-                                                            const ResId& rResId , BOOL bInsList )
+                                                            int nId , BOOL bInsList )
 {
     ScNamePasteDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_NAMES_PASTE :
             pDlg = new ScNamePasteDlg( pParent, pList, bInsList );
@@ -1041,10 +1041,10 @@ AbstractScNameCreateDlg * ScAbstractDialogFactory_Impl::CreateScNameCreateDlg ( 
 
 //add for ScPivotFilterDlg begin
 AbstractScPivotFilterDlg * ScAbstractDialogFactory_Impl::CreateScPivotFilterDlg ( Window* pParent,
-                                                                const SfxItemSet&   rArgSet, USHORT nSourceTab , const ResId& rResId )
+                                                                const SfxItemSet&   rArgSet, USHORT nSourceTab , int nId )
 {
     ScPivotFilterDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_PIVOTFILTER :
             pDlg = new ScPivotFilterDlg( pParent, rArgSet, nSourceTab );
@@ -1062,13 +1062,13 @@ AbstractScPivotFilterDlg * ScAbstractDialogFactory_Impl::CreateScPivotFilterDlg 
 
 //add for ScDPFunctionDlg begin
 AbstractScDPFunctionDlg * ScAbstractDialogFactory_Impl::CreateScDPFunctionDlg ( Window* pParent,
-                                                                const ResId& rResId,
+                                                                int nId,
                                                                 const ScDPLabelDataVec& rLabelVec,
                                                                 const ScDPLabelData& rLabelData,
                                                                 const ScDPFuncData& rFuncData )
 {
     ScDPFunctionDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_DPDATAFIELD :
             pDlg = new ScDPFunctionDlg( pParent, rLabelVec, rLabelData, rFuncData );
@@ -1085,7 +1085,7 @@ AbstractScDPFunctionDlg * ScAbstractDialogFactory_Impl::CreateScDPFunctionDlg ( 
 
 //add for ScDPSubtotalDlg begin
 AbstractScDPSubtotalDlg * ScAbstractDialogFactory_Impl::CreateScDPSubtotalDlg ( Window* pParent,
-                                                                const ResId& rResId,
+                                                                int nId,
                                                                 ScDPObject& rDPObj,
                                                                 const ScDPLabelData& rLabelData,
                                                                 const ScDPFuncData& rFuncData,
@@ -1093,7 +1093,7 @@ AbstractScDPSubtotalDlg * ScAbstractDialogFactory_Impl::CreateScDPSubtotalDlg ( 
                                                                 bool bEnableLayout )
 {
     ScDPSubtotalDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_PIVOTSUBT :
             pDlg = new ScDPSubtotalDlg( pParent, rDPObj, rLabelData, rFuncData, rDataFields, bEnableLayout );
@@ -1109,27 +1109,27 @@ AbstractScDPSubtotalDlg * ScAbstractDialogFactory_Impl::CreateScDPSubtotalDlg ( 
 //add for ScDPSubtotalDlg end
 
 AbstractScDPNumGroupDlg * ScAbstractDialogFactory_Impl::CreateScDPNumGroupDlg(
-        Window* pParent, const ResId& rResId, const ScDPNumGroupInfo& rInfo )
+        Window* pParent, int nId, const ScDPNumGroupInfo& rInfo )
 {
-    if( rResId.GetId() == RID_SCDLG_DPNUMGROUP )
+    if( nId == RID_SCDLG_DPNUMGROUP )
         return new AbstractScDPNumGroupDlg_Impl( new ScDPNumGroupDlg( pParent, rInfo ) );
     return 0;
 }
 
 AbstractScDPDateGroupDlg * ScAbstractDialogFactory_Impl::CreateScDPDateGroupDlg(
-        Window* pParent, const ResId& rResId,
+        Window* pParent, int nId,
         const ScDPNumGroupInfo& rInfo, sal_Int32 nDatePart, const Date& rNullDate )
 {
-    if( rResId.GetId() == RID_SCDLG_DPDATEGROUP )
+    if( nId == RID_SCDLG_DPDATEGROUP )
         return new AbstractScDPDateGroupDlg_Impl( new ScDPDateGroupDlg( pParent, rInfo, nDatePart, rNullDate ) );
     return 0;
 }
 
 //add for ScDPShowDetailDlg begin
 AbstractScDPShowDetailDlg * ScAbstractDialogFactory_Impl::CreateScDPShowDetailDlg (
-        Window* pParent, const ResId& rResId, ScDPObject& rDPObj, USHORT nOrient )
+        Window* pParent, int nId, ScDPObject& rDPObj, USHORT nOrient )
 {
-    if( rResId.GetId() == RID_SCDLG_DPSHOWDETAIL )
+    if( nId == RID_SCDLG_DPSHOWDETAIL )
         return new AbstractScDPShowDetailDlg_Impl( new ScDPShowDetailDlg( pParent, rDPObj, nOrient ) );
     return 0;
 }
@@ -1137,11 +1137,11 @@ AbstractScDPShowDetailDlg * ScAbstractDialogFactory_Impl::CreateScDPShowDetailDl
 
 //add for ScNewScenarioDlg begin
 AbstractScNewScenarioDlg * ScAbstractDialogFactory_Impl::CreateScNewScenarioDlg ( Window* pParent, const String& rName,
-                                                                const ResId& rResId,
+                                                                int nId,
                                                                 BOOL bEdit , BOOL bSheetProtected )
 {
     ScNewScenarioDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_NEWSCENARIO :
             pDlg = new ScNewScenarioDlg( pParent, rName, bEdit,bSheetProtected );
@@ -1157,10 +1157,10 @@ AbstractScNewScenarioDlg * ScAbstractDialogFactory_Impl::CreateScNewScenarioDlg 
 //add for ScNewScenarioDlg end
 
 //add for ScShowTabDlg begin
-AbstractScShowTabDlg * ScAbstractDialogFactory_Impl::CreateScShowTabDlg ( Window* pParent, const ResId& rResId )
+AbstractScShowTabDlg * ScAbstractDialogFactory_Impl::CreateScShowTabDlg ( Window* pParent, int nId )
 {
     ScShowTabDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_SHOW_TAB :
             pDlg = new ScShowTabDlg( pParent);
@@ -1183,10 +1183,10 @@ AbstractScShowTabDlg * ScAbstractDialogFactory_Impl::CreateScShowTabDlg ( Window
                                                                 const String& rEditTitle,
                                                                 const String& rDefault,
                                                                 ULONG nHelpId ,
-                                                                const ResId& rResId )
+                                                                int nId )
 {
     ScStringInputDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_STRINPUT :
             pDlg = new ScStringInputDlg( pParent, rTitle, rEditTitle,rDefault, nHelpId );
@@ -1203,7 +1203,7 @@ AbstractScShowTabDlg * ScAbstractDialogFactory_Impl::CreateScShowTabDlg ( Window
 
 //add for ScImportOptionsDlg begin
 AbstractScImportOptionsDlg * ScAbstractDialogFactory_Impl::CreateScImportOptionsDlg ( Window*               pParent,
-                                                                    const ResId& rResId,
+                                                                    int nId,
                                                                     BOOL                    bAscii,
                                                                     const ScImportOptions*  pOptions,
                                                                     const String*           pStrTitle,
@@ -1212,7 +1212,7 @@ AbstractScImportOptionsDlg * ScAbstractDialogFactory_Impl::CreateScImportOptions
                                                                     BOOL                    bImport )
 {
     ScImportOptionsDlg * pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_IMPORTOPT :
             pDlg = new ScImportOptionsDlg( pParent, bAscii, pOptions,pStrTitle, bMultiByte,bOnlyDbtoolsEncodings, bImport );
@@ -1231,10 +1231,10 @@ AbstractScImportOptionsDlg * ScAbstractDialogFactory_Impl::CreateScImportOptions
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScAttrDlg( SfxViewFrame*  pFrame,
                                                                         Window*          pParent,
                                                                         const SfxItemSet* pCellAttrs,
-                                                                        const ResId& rResId)
+                                                                        int nId)
 {
     SfxTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_ATTR :
             pDlg = new ScAttrDlg( pFrame, pParent, pCellAttrs );
@@ -1255,11 +1255,11 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScHFEditDlg( SfxViewF
                                                                         Window*         pParent,
                                                                         const SfxItemSet&   rCoreSet,
                                                                         const String&       rPageStyle,
-                                                                        const ResId& rResId,
+                                                                        int nId,
                                                                         USHORT              nResId )
 {
     SfxTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_HFEDIT :
             pDlg = new ScHFEditDlg( pFrame, pParent, rCoreSet,rPageStyle, nResId );
@@ -1278,10 +1278,10 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScHFEditDlg( SfxViewF
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScStyleDlg( Window*              pParent,
                                                                         SfxStyleSheetBase&  rStyleBase,
                                                                         USHORT              nRscId,
-                                                                        const ResId& rResId)
+                                                                        int nId)
 {
     SfxTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_STYLES_PAGE :
         case RID_SCDLG_STYLES_PAR :
@@ -1300,10 +1300,10 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScStyleDlg( Window*  
 //add for ScSubTotalDlg begin
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScSubTotalDlg( Window*               pParent,
                                                                         const SfxItemSet*   pArgSet,
-                                                                        const ResId& rResId)
+                                                                        int nId)
 {
     SfxTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_SUBTOTALS :
             pDlg = new ScSubTotalDlg( pParent, pArgSet );
@@ -1320,10 +1320,10 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScSubTotalDlg( Window
 
 //add for ScCharDlg begin
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScCharDlg( Window* pParent, const SfxItemSet* pAttr,
-                                                    const SfxObjectShell* pDocShell, const ResId& rResId )
+                                                    const SfxObjectShell* pDocShell, int nId )
 {
     SfxTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_CHAR :
             pDlg = new ScCharDlg( pParent, pAttr, pDocShell );
@@ -1340,10 +1340,10 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScCharDlg( Window* pP
 
 //add for ScParagraphDlg begin
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScParagraphDlg( Window* pParent, const SfxItemSet* pAttr ,
-                                                                            const ResId& rResId )
+                                                                            int nId )
 {
     SfxTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_PARAGRAPH :
             pDlg = new ScParagraphDlg( pParent, pAttr );
@@ -1360,10 +1360,10 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScParagraphDlg( Windo
 
 //add for ScValidationDlg begin
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScValidationDlg( Window* pParent,
-                                                        const SfxItemSet* pArgSet,const ResId& rResId  )
+                                                        const SfxItemSet* pArgSet,int nId  )
 {
     SfxTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case TAB_DLG_VALIDATION :
             pDlg = new ScValidationDlg( pParent, pArgSet );
@@ -1380,10 +1380,10 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScValidationDlg( Wind
 
 //add for ScSortDlg begin
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScSortDlg( Window*            pParent,
-                                                    const SfxItemSet* pArgSet,const ResId& rResId )
+                                                    const SfxItemSet* pArgSet,int nId )
 {
     SfxTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nId )
     {
         case RID_SCDLG_SORT :
             pDlg = new ScSortDlg( pParent, pArgSet );
