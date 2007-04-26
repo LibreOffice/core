@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:37:14 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:02:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1508,7 +1508,7 @@ short OQueryController::saveModified()
         String sObjectType;
         {
             LocalResourceAccess aLocalRes( RSC_QUERY_OBJECT_TYPE, RSC_RESOURCE );
-            sObjectType = String( ResId( m_bIndependent ? 3 : m_bCreateView ? 2 : 1 ) );
+            sObjectType = String( ModuleRes( m_bIndependent ? 3 : m_bCreateView ? 2 : 1 ) );
         }
         sMessageText.SearchAndReplace( String::CreateFromAscii( "$object$" ), sObjectType );
 
