@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailconfigpage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:40:20 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:51:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,23 +188,23 @@ public:
 SwMailConfigPage::SwMailConfigPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, SW_RES(TP_MAILCONFIG), rSet),
 #pragma warning (disable : 4355)
-    m_aIdentityFL( this, ResId(       FL_IDENTITY)),
-    m_aDisplayNameFT( this, ResId(    FT_DISPLAYNAME)),
-    m_aDisplayNameED( this, ResId(    ED_DISPLAYNAME)),
-    m_aAddressFT( this, ResId(        FT_ADDRESS)),
-    m_aAddressED( this, ResId(        ED_ADDRESS)),
-    m_aReplyToCB( this, ResId(        CB_REPLYTO)),
-    m_aReplyToFT( this, ResId(        FT_REPLYTO)),
-    m_aReplyToED( this, ResId(        ED_REPLYTO)),
-    m_aSMTPFL( this, ResId(           FL_SMTP)),
-    m_aServerFT( this, ResId(         FT_SERVER)),
-    m_aServerED( this, ResId(         ED_SERVER)),
-    m_aPortFT( this, ResId(           FT_PORT)),
-    m_aPortNF( this, ResId(           NF_PORT)),
-    m_aSecureCB( this, ResId(         CB_SECURE)),
-    m_aServerAuthenticationPB( this, ResId( PB_AUTHENTICATION )),
-    m_aSeparatorFL( this,            ResId( FL_SEPARATOR      )),
-    m_aTestPB( this, ResId(           PB_TEST)),
+    m_aIdentityFL( this, SW_RES(       FL_IDENTITY)),
+    m_aDisplayNameFT( this, SW_RES(    FT_DISPLAYNAME)),
+    m_aDisplayNameED( this, SW_RES(    ED_DISPLAYNAME)),
+    m_aAddressFT( this, SW_RES(        FT_ADDRESS)),
+    m_aAddressED( this, SW_RES(        ED_ADDRESS)),
+    m_aReplyToCB( this, SW_RES(        CB_REPLYTO)),
+    m_aReplyToFT( this, SW_RES(        FT_REPLYTO)),
+    m_aReplyToED( this, SW_RES(        ED_REPLYTO)),
+    m_aSMTPFL( this, SW_RES(           FL_SMTP)),
+    m_aServerFT( this, SW_RES(         FT_SERVER)),
+    m_aServerED( this, SW_RES(         ED_SERVER)),
+    m_aPortFT( this, SW_RES(           FT_PORT)),
+    m_aPortNF( this, SW_RES(           NF_PORT)),
+    m_aSecureCB( this, SW_RES(         CB_SECURE)),
+    m_aServerAuthenticationPB( this, SW_RES( PB_AUTHENTICATION )),
+    m_aSeparatorFL( this,            SW_RES( FL_SEPARATOR      )),
+    m_aTestPB( this, SW_RES(           PB_TEST)),
 #pragma warning (default : 4355)
     m_pConfigItem( new SwMailMergeConfigItem )
 {
@@ -310,24 +310,24 @@ IMPL_LINK(SwMailConfigPage, TestHdl, PushButton*, pButton)
 SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_TESTACCOUNTSETTINGS)),
 #pragma warning (disable : 4355)
-    m_aInfoFI( this, ResId(         FI_INFO )),
+    m_aInfoFI( this, SW_RES(         FI_INFO )),
     m_aStatusHB( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER),
-    m_aStatusLB( this, ResId(       LB_STATUS )),
-    m_aErrorFI( this, ResId(        FI_ERROR  )),
-    m_eErrorsED( this, ResId(       ED_ERROR  )),
-    m_aSeparatorFL( this, ResId(    FL_SEPAPARATOR )),
-    m_aStopPB( this, ResId(         PB_STOP   )),
-    m_aCancelPB( this, ResId(       PB_CANCEL )),
-    m_aHelpPB( this, ResId(         PB_HELP   )),
+    m_aStatusLB( this, SW_RES(       LB_STATUS )),
+    m_aErrorFI( this, SW_RES(        FI_ERROR  )),
+    m_eErrorsED( this, SW_RES(       ED_ERROR  )),
+    m_aSeparatorFL( this, SW_RES(    FL_SEPAPARATOR )),
+    m_aStopPB( this, SW_RES(         PB_STOP   )),
+    m_aCancelPB( this, SW_RES(       PB_CANCEL )),
+    m_aHelpPB( this, SW_RES(         PB_HELP   )),
 #pragma warning (default : 4355)
-    m_aImageList( ResId( GetSettings().GetStyleSettings().GetWindowColor().IsDark() ? ILIST_HC : ILIST) ),
-    m_sTask( ResId(        ST_TASK          )),
-    m_sStatus( ResId(      ST_STATUS        )),
-    m_sEstablish( ResId(   ST_ESTABLISH     )),
-    m_sFindServer( ResId(  ST_FINDSERVER    )),
-    m_sCompleted( ResId(   ST_COMPLETED     )),
-    m_sFailed( ResId(      ST_FAILED        )),
-    m_sErrorServer( ResId( ST_ERROR_SERVER )),
+    m_aImageList( SW_RES( GetSettings().GetStyleSettings().GetWindowColor().IsDark() ? ILIST_HC : ILIST) ),
+    m_sTask( SW_RES(        ST_TASK          )),
+    m_sStatus( SW_RES(      ST_STATUS        )),
+    m_sEstablish( SW_RES(   ST_ESTABLISH     )),
+    m_sFindServer( SW_RES(  ST_FINDSERVER    )),
+    m_sCompleted( SW_RES(   ST_COMPLETED     )),
+    m_sFailed( SW_RES(      ST_FAILED        )),
+    m_sErrorServer( SW_RES( ST_ERROR_SERVER )),
     m_pParent(pParent),
     m_bStop(false)
 {
@@ -525,30 +525,30 @@ SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
         SwMailConfigPage* pParent, SwMailMergeConfigItem& rItem) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_SERVERAUTHENTICATION)),
 #pragma warning (disable : 4355)
-        m_aAuthenticationCB( this,          ResId( CB_AUTHENTICATION        )),
-        m_aSeparateAuthenticationRB( this,  ResId( RB_SEP_AUTHENTICATION   )),
-        m_aSMTPAfterPOPRB( this,            ResId( RB_SMPTAFTERPOP         )),
-        m_aOutgoingServerFT( this,          ResId( FT_OUTGOINGSERVER        )),
-        m_aUserNameFT( this,                ResId( FT_USERNAME             )),
-        m_aUserNameED( this,                ResId( ED_USERNAME             )),
-        m_aOutPasswordFT( this,             ResId( FT_OUTPASSWORD          )),
-        m_aOutPasswordED( this,             ResId( ED_OUTPASSWORD          )),
-        m_aIncomingServerFT( this,          ResId( FT_INCOMINGSERVER       )),
-        m_aServerFT( this,                  ResId( FT_SERVER               )),
-        m_aServerED( this,                  ResId( ED_SERVER               )),
-        m_aPortFT( this,                    ResId( FT_PORT                 )),
-        m_aPortNF( this,                    ResId( NF_PORT                 )),
-        m_aProtocolFT( this,                ResId( FT_PROTOCOL      )),
-        m_aPOP3RB( this,                    ResId( RB_POP3          )),
-        m_aIMAPRB( this,                    ResId( RB_IMAP          )),
-        m_aInUsernameFT( this,              ResId( FT_INUSERNAME            )),
-        m_aInUsernameED( this,              ResId( ED_INUSERNAME           )),
-        m_aInPasswordFT( this,              ResId( FT_INPASSWORD           )),
-        m_aInPasswordED( this,              ResId( ED_INPASSWORD           )),
-        m_aSeparatorFL( this,               ResId( FL_SEPARATOR            )),
-        m_aOKPB( this,                      ResId( PB_OK                   )),
-        m_aCancelPB( this,                  ResId( PB_CANCEL               )),
-        m_aHelpPB( this,                    ResId( PB_HELP                 )),
+        m_aAuthenticationCB( this,          SW_RES( CB_AUTHENTICATION        )),
+        m_aSeparateAuthenticationRB( this,  SW_RES( RB_SEP_AUTHENTICATION   )),
+        m_aSMTPAfterPOPRB( this,            SW_RES( RB_SMPTAFTERPOP         )),
+        m_aOutgoingServerFT( this,          SW_RES( FT_OUTGOINGSERVER        )),
+        m_aUserNameFT( this,                SW_RES( FT_USERNAME             )),
+        m_aUserNameED( this,                SW_RES( ED_USERNAME             )),
+        m_aOutPasswordFT( this,             SW_RES( FT_OUTPASSWORD          )),
+        m_aOutPasswordED( this,             SW_RES( ED_OUTPASSWORD          )),
+        m_aIncomingServerFT( this,          SW_RES( FT_INCOMINGSERVER       )),
+        m_aServerFT( this,                  SW_RES( FT_SERVER               )),
+        m_aServerED( this,                  SW_RES( ED_SERVER               )),
+        m_aPortFT( this,                    SW_RES( FT_PORT                 )),
+        m_aPortNF( this,                    SW_RES( NF_PORT                 )),
+        m_aProtocolFT( this,                SW_RES( FT_PROTOCOL      )),
+        m_aPOP3RB( this,                    SW_RES( RB_POP3          )),
+        m_aIMAPRB( this,                    SW_RES( RB_IMAP          )),
+        m_aInUsernameFT( this,              SW_RES( FT_INUSERNAME            )),
+        m_aInUsernameED( this,              SW_RES( ED_INUSERNAME           )),
+        m_aInPasswordFT( this,              SW_RES( FT_INPASSWORD           )),
+        m_aInPasswordED( this,              SW_RES( ED_INPASSWORD           )),
+        m_aSeparatorFL( this,               SW_RES( FL_SEPARATOR            )),
+        m_aOKPB( this,                      SW_RES( PB_OK                   )),
+        m_aCancelPB( this,                  SW_RES( PB_CANCEL               )),
+        m_aHelpPB( this,                    SW_RES( PB_HELP                 )),
 #pragma warning (default : 4355)
         rConfigItem( rItem )
 {

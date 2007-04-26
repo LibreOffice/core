@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swuiccoll.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:38:42 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:51:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,18 +94,18 @@ Page: Ctor
 SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
 
     : SfxTabPage(pParent, SW_RES(TP_CONDCOLL), rSet),
-    aConditionFL( this, ResId( FL_CONDITION )),
-    aConditionCB( this, ResId( CB_CONDITION ) ),
-    aContextFT  ( this, ResId( FT_CONTEXT   ) ),
-    aUsedFT     ( this, ResId( FT_USED      ) ),
-    aTbLinks(     this, ResId( TB_CONDCOLLS ) ),
-    aStyleFT    ( this, ResId( FT_STYLE     ) ),
-    aStyleLB    ( this, ResId( LB_STYLE     ) ),
-    aFilterLB   ( this, ResId( LB_FILTER    ) ),
-    aRemovePB   ( this, ResId( PB_REMOVE    ) ),
-    aAssignPB   ( this, ResId( PB_ASSIGN    ) ),
-    sNoTmpl     (       ResId( STR_NOTEMPL  ) ),
-    aStrArr     (       ResId( STR_REGIONS  ) ),
+    aConditionFL( this, SW_RES( FL_CONDITION )),
+    aConditionCB( this, SW_RES( CB_CONDITION ) ),
+    aContextFT  ( this, SW_RES( FT_CONTEXT  ) ),
+    aUsedFT     ( this, SW_RES( FT_USED         ) ),
+    aTbLinks(     this, SW_RES( TB_CONDCOLLS ) ),
+    aStyleFT    ( this, SW_RES( FT_STYLE    ) ),
+    aStyleLB    ( this, SW_RES( LB_STYLE    ) ),
+    aFilterLB   ( this, SW_RES( LB_FILTER   ) ),
+    aRemovePB   ( this, SW_RES( PB_REMOVE   ) ),
+    aAssignPB   ( this, SW_RES( PB_ASSIGN   ) ),
+    sNoTmpl     (       SW_RES( STR_NOTEMPL  ) ),
+    aStrArr     (       SW_RES( STR_REGIONS  ) ),
     rSh(::GetActiveView()->GetWrtShell()),
     pFmt(0),
     pCmds( SwCondCollItem::GetCmds() ),
