@@ -4,9 +4,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:23:47 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:27:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,7 +224,7 @@ XubString Button::GetStandardText( StandardButtonType eButton )
     ResMgr* pResMgr = ImplGetResMgr();
     if( pResMgr )
     {
-        ResId aResId( aResIdAry[(USHORT)eButton].nResId, pResMgr );
+        ResId aResId( aResIdAry[(USHORT)eButton].nResId, *pResMgr );
         aText = String( aResId );
     }
     else
@@ -3157,7 +3157,7 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, USHORT nFlags )
         ResMgr* pResMgr = ImplGetResMgr();
         Bitmap aBmp;
         if( pResMgr )
-            aBmp = Bitmap( ResId( SV_RESID_BITMAP_RADIO+nStyle, ImplGetResMgr() ) );
+            aBmp = Bitmap( ResId( SV_RESID_BITMAP_RADIO+nStyle, *pResMgr ) );
         aBmp.Replace( pColorAry1, pColorAry2, 6, NULL );
         pSVData->maCtrlData.mpRadioImgList = new ImageList( aBmp, Color( 0x00, 0x00, 0xFF ), 6 );
         pSVData->maCtrlData.mnRadioStyle = nStyle;
@@ -3979,7 +3979,7 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, USHORT nFlags )
         ResMgr* pResMgr = ImplGetResMgr();
         Bitmap aBmp;
         if( pResMgr )
-            aBmp = Bitmap( ResId( SV_RESID_BITMAP_CHECK+nStyle, ImplGetResMgr() ) );
+            aBmp = Bitmap( ResId( SV_RESID_BITMAP_CHECK+nStyle, *pResMgr ) );
         aBmp.Replace( pColorAry1, pColorAry2, 6, NULL );
         pSVData->maCtrlData.mpCheckImgList = new ImageList( aBmp, 9 );
         pSVData->maCtrlData.mnCheckStyle = nStyle;
@@ -4076,7 +4076,7 @@ ImageButton::ImageButton( Window* pParent, const ResId& rResId ) :
 
     if ( RSC_IMAGEBUTTON_IMAGE & nObjMask )
     {
-        SetModeImage( Image( ResId( (RSHEADER_TYPE*)GetClassRes() ) ) );
+        SetModeImage( Image( ResId( (RSHEADER_TYPE*)GetClassRes(), *rResId.GetResMgr() ) ) );
         IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
     }
 
@@ -4125,7 +4125,7 @@ ImageRadioButton::ImageRadioButton( Window* pParent, const ResId& rResId ) :
 
     if ( RSC_IMAGERADIOBUTTON_IMAGE & nObjMask )
     {
-        SetModeRadioImage( Image( ResId( (RSHEADER_TYPE*)GetClassRes() ) ) );
+        SetModeRadioImage( Image( ResId( (RSHEADER_TYPE*)GetClassRes(), *rResId.GetResMgr() ) ) );
         IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
     }
 }
