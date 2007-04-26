@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsselect.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:37:41 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:00:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,19 +130,19 @@ using namespace ::comphelper;
 //==================================================================
 ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringBag& _rDatasources, DATASOURCE_TYPE _eType,SfxItemSet* _pOutputSet)
      :ModalDialog(_pParent, ModuleRes(DLG_DATASOURCE_SELECTION))
-     ,m_aDescription        (this, ResId(FT_DESCRIPTION))
-     ,m_aDatasource         (this, ResId(LB_DATASOURCE))
-     ,m_aOk                 (this, ResId(PB_OK))
-     ,m_aCancel             (this, ResId(PB_CANCEL))
-     ,m_aHelp               (this, ResId(PB_HELP))
-     ,m_aManageDatasources  (this, ResId(PB_MANAGE))
-     ,m_aCreateAdabasDB     (this, ResId(PB_CREATE))
+     ,m_aDescription        (this, ModuleRes(FT_DESCRIPTION))
+     ,m_aDatasource         (this, ModuleRes(LB_DATASOURCE))
+     ,m_aOk                 (this, ModuleRes(PB_OK))
+     ,m_aCancel             (this, ModuleRes(PB_CANCEL))
+     ,m_aHelp               (this, ModuleRes(PB_HELP))
+     ,m_aManageDatasources  (this, ModuleRes(PB_MANAGE))
+     ,m_aCreateAdabasDB     (this, ModuleRes(PB_CREATE))
      ,m_pOutputSet(_pOutputSet)
 {
     if (DST_ADABAS == _eType)
     {   // set a new title (indicating that we're browsing local data sources only)
-        SetText(ResId(STR_LOCAL_DATASOURCES));
-        m_aDescription.SetText(ResId(STR_DESCRIPTION2));
+        SetText(ModuleRes(STR_LOCAL_DATASOURCES));
+        m_aDescription.SetText(ModuleRes(STR_DESCRIPTION2));
 
         m_aCreateAdabasDB.Show();
         m_aCreateAdabasDB.SetClickHdl(LINK(this,ODatasourceSelectDialog,CreateDBClickHdl));
