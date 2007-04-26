@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpview.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:36:33 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:54:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,40 +76,40 @@ ScTpContentOptions::ScTpContentOptions( Window*         pParent,
                              const SfxItemSet&  rArgSet ) :
     SfxTabPage(pParent, ScResId( RID_SCPAGE_CONTENT ), rArgSet),
 
-    aLinesGB( this,         ResId(GB_LINES          )),
-    aGridCB( this,          ResId(CB_GRID           )),
-    aColorFT( this,         ResId(FT_COLOR          )),
-    aColorLB( this,         ResId(LB_COLOR          )),
-    aBreakCB( this,         ResId(CB_PAGEBREAKS     )),
-    aGuideLineCB( this,     ResId(CB_GUIDELINE      )),
-    aHandleCB( this,        ResId(CB_HANDLES        )),
-    aBigHandleCB( this,     ResId(CB_BIGHANDLES     )),
+    aLinesGB( this,         ScResId(GB_LINES          )),
+    aGridCB( this,          ScResId(CB_GRID         )),
+    aColorFT( this,         ScResId(FT_COLOR            )),
+    aColorLB( this,         ScResId(LB_COLOR            )),
+    aBreakCB( this,         ScResId(CB_PAGEBREAKS       )),
+    aGuideLineCB( this,     ScResId(CB_GUIDELINE        )),
+    aHandleCB( this,        ScResId(CB_HANDLES      )),
+    aBigHandleCB( this,     ScResId(CB_BIGHANDLES       )),
 
-    aSeparator1FL    (this, ResId(FL_SEPARATOR1 )),
-    aDisplayGB( this,   ResId(GB_DISPLAY)),
-    aFormulaCB( this,   ResId(CB_FORMULA)),
-    aNilCB( this,       ResId(CB_NIL    )),
-    aAnnotCB( this,     ResId(CB_ANNOT  )),
-    aValueCB( this,     ResId(CB_VALUE  )),
-    aAnchorCB( this,    ResId(CB_ANCHOR )),
-    aClipMarkCB( this,  ResId(CB_CLIP   )),
-    aRangeFindCB( this,     ResId( CB_RFIND     )),
+    aSeparator1FL    (this, ScResId(FL_SEPARATOR1 )),
+    aDisplayGB( this,   ScResId(GB_DISPLAY)),
+    aFormulaCB( this,   ScResId(CB_FORMULA)),
+    aNilCB( this,       ScResId(CB_NIL  )),
+    aAnnotCB( this,     ScResId(CB_ANNOT    )),
+    aValueCB( this,     ScResId(CB_VALUE    )),
+    aAnchorCB( this,    ScResId(CB_ANCHOR   )),
+    aClipMarkCB( this,  ScResId(CB_CLIP )),
+    aRangeFindCB( this,     ScResId( CB_RFIND     )),
 
-    aObjectGB( this,    ResId(GB_OBJECT )),
-    aObjGrfFT( this,    ResId(FT_OBJGRF )),
-    aObjGrfLB( this,    ResId(LB_OBJGRF )),
-    aDiagramFT( this,   ResId(FT_DIAGRAM)),
-    aDiagramLB( this,   ResId(LB_DIAGRAM)),
-    aDrawFT( this,      ResId(FT_DRAW   )),
-    aDrawLB( this,      ResId(LB_DRAW   )),
+    aObjectGB( this,    ScResId(GB_OBJECT )),
+    aObjGrfFT( this,    ScResId(FT_OBJGRF   )),
+    aObjGrfLB( this,    ScResId(LB_OBJGRF   )),
+    aDiagramFT( this,   ScResId(FT_DIAGRAM)),
+    aDiagramLB( this,   ScResId(LB_DIAGRAM)),
+    aDrawFT( this,      ScResId(FT_DRAW )),
+    aDrawLB( this,      ScResId(LB_DRAW )),
 
-    aSeparator2FL    (this, ResId(FL_SEPARATOR2)),
-    aWindowGB( this,        ResId(GB_WINDOW         )),
-    aRowColHeaderCB(this,   ResId(CB_ROWCOLHEADER   )),
-    aHScrollCB( this,       ResId(CB_HSCROLL        )),
-    aVScrollCB( this,       ResId(CB_VSCROLL        )),
-    aTblRegCB( this,        ResId(CB_TBLREG         )),
-    aOutlineCB( this,       ResId(CB_OUTLINE        )),
+    aSeparator2FL    (this, ScResId(FL_SEPARATOR2)),
+    aWindowGB( this,        ScResId(GB_WINDOW         )),
+    aRowColHeaderCB(this,   ScResId(CB_ROWCOLHEADER )),
+    aHScrollCB( this,       ScResId(CB_HSCROLL      )),
+    aVScrollCB( this,       ScResId(CB_VSCROLL      )),
+    aTblRegCB( this,        ScResId(CB_TBLREG           )),
+    aOutlineCB( this,       ScResId(CB_OUTLINE      )),
     pLocalOptions(0)
 {
     FreeResource();
@@ -426,28 +426,28 @@ IMPL_LINK( ScTpContentOptions, GridHdl, CheckBox*, pBox )
 ScTpLayoutOptions::ScTpLayoutOptions(   Window* pParent,
                                         const SfxItemSet&   rArgSet ) :
     SfxTabPage(pParent, ScResId( RID_SCPAGE_LAYOUT ), rArgSet),
-    aUnitGB( this,          ResId(GB_UNIT           )),
-    aUnitFT( this,          ResId(FT_UNIT           )),
-    aUnitLB( this,          ResId(LB_UNIT           )),
-    aTabFT( this,           ResId( FT_TAB           )),
-    aTabMF( this,           ResId( MF_TAB           )),
-    aSeparatorFL( this,     ResId( FL_SEPARATOR         )),
-    aLinkGB     (this, ResId(GB_LINK    )),
-    aLinkFT(this, ResId(FT_UPDATE_LINKS )),
-    aAlwaysRB   (this, ResId(RB_ALWAYS  )),
-    aRequestRB  (this, ResId(RB_REQUEST )),
-    aNeverRB    (this, ResId(RB_NEVER   )),
+    aUnitGB( this,          ScResId(GB_UNIT           )),
+    aUnitFT( this,          ScResId(FT_UNIT           )),
+    aUnitLB( this,          ScResId(LB_UNIT           )),
+    aTabFT( this,           ScResId( FT_TAB           )),
+    aTabMF( this,           ScResId( MF_TAB           )),
+    aSeparatorFL( this,     ScResId( FL_SEPARATOR         )),
+    aLinkGB     (this, ScResId(GB_LINK  )),
+    aLinkFT(this, ScResId(FT_UPDATE_LINKS )),
+    aAlwaysRB   (this, ScResId(RB_ALWAYS    )),
+    aRequestRB  (this, ScResId(RB_REQUEST   )),
+    aNeverRB    (this, ScResId(RB_NEVER )),
 
-    aOptionsGB( this,       ResId( GB_OPTIONS   )),
-    aAlignCB  ( this,       ResId( CB_ALIGN     )),
-    aAlignLB  ( this,       ResId( LB_ALIGN     )),
-    aEditModeCB( this,      ResId( CB_EDITMODE  )),
-    aFormatCB( this,        ResId( CB_FORMAT    )),
-    aExpRefCB( this,        ResId( CB_EXPREF    )),
-    aMarkHdrCB( this,       ResId( CB_MARKHDR   )),
-    aTextFmtCB( this,       ResId( CB_TEXTFMT   )),
-    aReplWarnCB( this,      ResId( CB_REPLWARN  )),
-    aUnitArr(               ResId(ST_UNIT           )),
+    aOptionsGB( this,       ScResId( GB_OPTIONS   )),
+    aAlignCB  ( this,       ScResId( CB_ALIGN       )),
+    aAlignLB  ( this,       ScResId( LB_ALIGN       )),
+    aEditModeCB( this,      ScResId( CB_EDITMODE    )),
+    aFormatCB( this,        ScResId( CB_FORMAT  )),
+    aExpRefCB( this,        ScResId( CB_EXPREF    )),
+    aMarkHdrCB( this,       ScResId( CB_MARKHDR   )),
+    aTextFmtCB( this,       ScResId( CB_TEXTFMT   )),
+    aReplWarnCB( this,      ScResId( CB_REPLWARN  )),
+    aUnitArr(               ScResId(ST_UNIT           )),
     pDoc(NULL)
 {
     FreeResource();
