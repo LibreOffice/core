@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:35:25 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:35:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,37 +89,37 @@ static long nTabs[] =
 
 
 SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, SvLinkManager* pMgr, BOOL bHtml )
-    : ModalDialog( pParent, ResId( MD_UPDATE_BASELINKS, DIALOG_MGR() ) ),
-    aFtFiles( this, ResId( FT_FILES ) ),
-    aFtLinks( this, ResId( FT_LINKS ) ),
-    aFtType( this, ResId( FT_TYPE ) ),
-    aFtStatus( this, ResId( FT_STATUS ) ),
-    aCancelButton1( this, ResId( 1 ) ),
-    aHelpButton1( this, ResId( 1 ) ),
-    aPbUpdateNow( this, ResId( PB_UPDATE_NOW ) ),
-    aPbOpenSource( this, ResId( PB_OPEN_SOURCE ) ),
-    aPbChangeSource( this, ResId( PB_CHANGE_SOURCE ) ),
-    aPbBreakLink( this, ResId( PB_BREAK_LINK ) ),
-    aFtFiles2( this, ResId( FT_FILES2 ) ),
-    aFtSource2( this, ResId( FT_SOURCE2 ) ),
-    aFtType2( this, ResId( FT_TYPE2 ) ),
-    aFtUpdate( this, ResId( FT_UPDATE ) ),
-    aRbAutomatic( this, ResId( RB_AUTOMATIC ) ),
-    aRbManual( this, ResId( RB_MANUAL ) ),
-    aFtFullFileName( this, ResId( FT_FULL_FILE_NAME ) ),
-    aFtFullSourceName( this, ResId( FT_FULL_SOURCE_NAME ) ),
-    aFtFullTypeName( this, ResId( FT_FULL_TYPE_NAME ) ),
-    aStrAutolink( ResId( STR_AUTOLINK, DIALOG_MGR() ) ),
-    aStrManuallink( ResId( STR_MANUALLINK, DIALOG_MGR() ) ),
-    aStrBrokenlink( ResId( STR_BROKENLINK, DIALOG_MGR() ) ),
-    aStrGraphiclink( ResId( STR_GRAPHICLINK, DIALOG_MGR() ) ),
-    aStrButtonclose( ResId( STR_BUTTONCLOSE, DIALOG_MGR() ) ),
-    aStrCloselinkmsg( ResId( STR_CLOSELINKMSG, DIALOG_MGR() ) ),
-    aStrCloselinkmsgMulti( ResId( STR_CLOSELINKMSG_MULTI, DIALOG_MGR() ) ),
-    aStrWaitinglink( ResId( STR_WAITINGLINK, DIALOG_MGR() ) ),
+    : ModalDialog( pParent, SVX_RES( MD_UPDATE_BASELINKS ) ),
+    aFtFiles( this, SVX_RES( FT_FILES ) ),
+    aFtLinks( this, SVX_RES( FT_LINKS ) ),
+    aFtType( this, SVX_RES( FT_TYPE ) ),
+    aFtStatus( this, SVX_RES( FT_STATUS ) ),
+    aCancelButton1( this, SVX_RES( 1 ) ),
+    aHelpButton1( this, SVX_RES( 1 ) ),
+    aPbUpdateNow( this, SVX_RES( PB_UPDATE_NOW ) ),
+    aPbOpenSource( this, SVX_RES( PB_OPEN_SOURCE ) ),
+    aPbChangeSource( this, SVX_RES( PB_CHANGE_SOURCE ) ),
+    aPbBreakLink( this, SVX_RES( PB_BREAK_LINK ) ),
+    aFtFiles2( this, SVX_RES( FT_FILES2 ) ),
+    aFtSource2( this, SVX_RES( FT_SOURCE2 ) ),
+    aFtType2( this, SVX_RES( FT_TYPE2 ) ),
+    aFtUpdate( this, SVX_RES( FT_UPDATE ) ),
+    aRbAutomatic( this, SVX_RES( RB_AUTOMATIC ) ),
+    aRbManual( this, SVX_RES( RB_MANUAL ) ),
+    aFtFullFileName( this, SVX_RES( FT_FULL_FILE_NAME ) ),
+    aFtFullSourceName( this, SVX_RES( FT_FULL_SOURCE_NAME ) ),
+    aFtFullTypeName( this, SVX_RES( FT_FULL_TYPE_NAME ) ),
+    aStrAutolink( SVX_RES( STR_AUTOLINK ) ),
+    aStrManuallink( SVX_RES( STR_MANUALLINK ) ),
+    aStrBrokenlink( SVX_RES( STR_BROKENLINK ) ),
+    aStrGraphiclink( SVX_RES( STR_GRAPHICLINK ) ),
+    aStrButtonclose( SVX_RES( STR_BUTTONCLOSE ) ),
+    aStrCloselinkmsg( SVX_RES( STR_CLOSELINKMSG ) ),
+    aStrCloselinkmsgMulti( SVX_RES( STR_CLOSELINKMSG_MULTI ) ),
+    aStrWaitinglink( SVX_RES( STR_WAITINGLINK ) ),
     pLinkMgr( NULL ),
     bHtmlMode(bHtml),
-    aTbLinks( this, ResId(TB_LINKS ) )
+    aTbLinks( this, SVX_RES(TB_LINKS ) )
 {
     FreeResource();
 
