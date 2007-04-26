@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 15:23:54 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:26:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -391,11 +391,11 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
         ResMgr *pResMgr = ImplGetResMgr();
         if( bErrorMessage && bAllowCancel && pResMgr )
         {
-            String aTitle(ResId(SV_ACCESSERROR_JAVA_NOT_CONFIGURED, pResMgr));
-            String aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, pResMgr));
+            String aTitle(ResId(SV_ACCESSERROR_JAVA_NOT_CONFIGURED, *pResMgr));
+            String aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr));
 
             aMessage += String(" ", 1, RTL_TEXTENCODING_ASCII_US);
-            aMessage += String(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, pResMgr));
+            aMessage += String(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr));
 
             int ret = ImplGetSalSystem()->ShowNativeMessageBox(
                 aTitle,
@@ -416,11 +416,11 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
         ResMgr *pResMgr = ImplGetResMgr();
         if( bErrorMessage && bAllowCancel && pResMgr )
         {
-            String aTitle(ResId(SV_ACCESSERROR_FAULTY_JAVA, pResMgr));
-            String aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, pResMgr));
+            String aTitle(ResId(SV_ACCESSERROR_FAULTY_JAVA, *pResMgr));
+            String aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr));
 
             aMessage += String(" ", 1, RTL_TEXTENCODING_ASCII_US);
-            aMessage += String(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, pResMgr));
+            aMessage += String(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr));
 
             int ret = ImplGetSalSystem()->ShowNativeMessageBox(
                 aTitle,
@@ -441,11 +441,11 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
         ResMgr *pResMgr = ImplGetResMgr();
         if( bErrorMessage && bAllowCancel && pResMgr )
         {
-            String aTitle(ResId(SV_ACCESSERROR_MISSING_JAVA, pResMgr));
-            String aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, pResMgr));
+            String aTitle(ResId(SV_ACCESSERROR_MISSING_JAVA, *pResMgr));
+            String aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr));
 
             aMessage += String(" ", 1, RTL_TEXTENCODING_ASCII_US);
-            aMessage += String(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, pResMgr));
+            aMessage += String(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr));
 
             int ret = ImplGetSalSystem()->ShowNativeMessageBox(
                 aTitle,
@@ -466,11 +466,11 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
         ResMgr *pResMgr = ImplGetResMgr();
         if( bErrorMessage && bAllowCancel && pResMgr )
         {
-            String aTitle(ResId(SV_ACCESSERROR_JAVA_DISABLED, pResMgr));
-            String aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, pResMgr));
+            String aTitle(ResId(SV_ACCESSERROR_JAVA_DISABLED, *pResMgr));
+            String aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr));
 
             aMessage += String(" ", 1, RTL_TEXTENCODING_ASCII_US);
-            aMessage += String(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, pResMgr));
+            aMessage += String(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr));
 
             int ret = ImplGetSalSystem()->ShowNativeMessageBox(
                 aTitle,
@@ -493,15 +493,15 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
         if( bErrorMessage && pResMgr )
         {
             String aTitle;
-            String aMessage(ResId(SV_ACCESSERROR_BRIDGE_MSG, pResMgr));
+            String aMessage(ResId(SV_ACCESSERROR_BRIDGE_MSG, *pResMgr));
 
             if( 0 == e.Message.compareTo(::rtl::OUString::createFromAscii("ClassNotFound"), 13) )
             {
-                aTitle = String(ResId(SV_ACCESSERROR_MISSING_BRIDGE, pResMgr));
+                aTitle = String(ResId(SV_ACCESSERROR_MISSING_BRIDGE, *pResMgr));
             }
             else if( 0 == e.Message.compareTo(::rtl::OUString::createFromAscii("NoSuchMethod"), 12) )
             {
-                aTitle = String(ResId(SV_ACCESSERROR_WRONG_VERSION, pResMgr));
+                aTitle = String(ResId(SV_ACCESSERROR_WRONG_VERSION, *pResMgr));
             }
 
             if( aTitle.Len() != 0 )
@@ -512,7 +512,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
                     // startup. Since the office will be probably unusable for a disabled user, we offer
                     // to terminate directly.
                     aMessage += String(" ", 1, RTL_TEXTENCODING_ASCII_US);
-                    aMessage += String(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, pResMgr));
+                    aMessage += String(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr));
 
                     int ret = ImplGetSalSystem()->ShowNativeMessageBox(
                         aTitle,
