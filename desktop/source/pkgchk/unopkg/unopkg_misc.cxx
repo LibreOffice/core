@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg_misc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-14 08:32:32 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:25:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -452,7 +452,7 @@ Reference<XComponentContext> getUNO(
                         NULL );
 
             {
-                ResId warnId(WARNINGBOX_CONCURRENTINSTANCE,DeploymentGuiResMgr::get() );
+                ResId warnId(WARNINGBOX_CONCURRENTINSTANCE,*DeploymentGuiResMgr::get() );
                 WarningBox warn(NULL, warnId);
                 warn.SetText(::utl::ConfigManager::GetDirectConfigProperty(
                     ::utl::ConfigManager::PRODUCTNAME).get<OUString>());
