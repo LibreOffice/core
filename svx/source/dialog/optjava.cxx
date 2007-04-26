@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optjava.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:07:02 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:39:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,14 +196,14 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
 
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_OPTIONS_JAVA ), rSet ),
 
-    m_aJavaLine         ( this, ResId( FL_JAVA ) ),
-    m_aJavaEnableCB     ( this, ResId( CB_JAVA_ENABLE ) ),
-    m_aJavaFoundLabel   ( this, ResId( FT_JAVA_FOUND ) ),
-    m_aJavaList         ( this, ResId( LB_JAVA ) ),
-    m_aJavaPathText     ( this, ResId( FT_JAVA_PATH ) ),
-    m_aAddBtn           ( this, ResId( PB_ADD ) ),
-    m_aParameterBtn     ( this, ResId( PB_PARAMETER ) ),
-    m_aClassPathBtn     ( this, ResId( PB_CLASSPATH ) ),
+    m_aJavaLine         ( this, SVX_RES( FL_JAVA ) ),
+    m_aJavaEnableCB     ( this, SVX_RES( CB_JAVA_ENABLE ) ),
+    m_aJavaFoundLabel   ( this, SVX_RES( FT_JAVA_FOUND ) ),
+    m_aJavaList         ( this, SVX_RES( LB_JAVA ) ),
+    m_aJavaPathText     ( this, SVX_RES( FT_JAVA_PATH ) ),
+    m_aAddBtn           ( this, SVX_RES( PB_ADD ) ),
+    m_aParameterBtn     ( this, SVX_RES( PB_PARAMETER ) ),
+    m_aClassPathBtn     ( this, SVX_RES( PB_CLASSPATH ) ),
 
     m_pParamDlg         ( NULL ),
     m_pPathDlg          ( NULL ),
@@ -212,9 +212,9 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     m_pClassPath        ( NULL ),
     m_nInfoSize         ( 0 ),
     m_nParamSize        ( 0 ),
-    m_sInstallText      (       ResId( STR_INSTALLED_IN ) ),
-    m_sAccessibilityText(       ResId( STR_ACCESSIBILITY ) ),
-    m_sAddDialogText    (       ResId( STR_ADDDLGTEXT ) ),
+    m_sInstallText      (       SVX_RES( STR_INSTALLED_IN ) ),
+    m_sAccessibilityText(       SVX_RES( STR_ACCESSIBILITY ) ),
+    m_sAddDialogText    (       SVX_RES( STR_ADDDLGTEXT ) ),
 
     xDialogListener     ( new ::svt::DialogClosedListener() )
 
@@ -237,11 +237,11 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
 
     m_aJavaList.SvxSimpleTable::SetTabs( aStaticTabs );
     String sHeader( '\t' );
-    sHeader += String( ResId( STR_HEADER_VENDOR ) );
+    sHeader += String( SVX_RES( STR_HEADER_VENDOR ) );
     sHeader += '\t';
-    sHeader += String( ResId( STR_HEADER_VERSION ) );
+    sHeader += String( SVX_RES( STR_HEADER_VERSION ) );
     sHeader += '\t';
-    sHeader += String( ResId( STR_HEADER_FEATURES ) );
+    sHeader += String( SVX_RES( STR_HEADER_FEATURES ) );
     sHeader += '\t';
     m_aJavaList.InsertHeaderEntry( sHeader, HEADERBAR_APPEND, HIB_LEFT );
 
@@ -822,17 +822,17 @@ SvxJavaParameterDlg::SvxJavaParameterDlg( Window* pParent ) :
 
     ModalDialog( pParent, SVX_RES( RID_SVXDLG_JAVA_PARAMETER ) ),
 
-    m_aParameterLabel   ( this, ResId( FT_PARAMETER ) ),
-    m_aParameterEdit    ( this, ResId( ED_PARAMETER ) ),
-    m_aAssignBtn        ( this, ResId( PB_ASSIGN ) ),
-    m_aAssignedLabel    ( this, ResId( FT_ASSIGNED ) ),
-    m_aAssignedList     ( this, ResId( LB_ASSIGNED ) ),
-    m_aExampleText      ( this, ResId( FT_EXAMPLE ) ),
-    m_aRemoveBtn        ( this, ResId( PB_REMOVE ) ),
-    m_aButtonsLine      ( this, ResId( FL_BUTTONS ) ),
-    m_aOKBtn            ( this, ResId( PB_PARAMETER_OK ) ),
-    m_aCancelBtn        ( this, ResId( PB_PARAMETER_ESC ) ),
-    m_aHelpBtn          ( this, ResId( PB_PARAMETER_HLP ) )
+    m_aParameterLabel   ( this, SVX_RES( FT_PARAMETER ) ),
+    m_aParameterEdit    ( this, SVX_RES( ED_PARAMETER ) ),
+    m_aAssignBtn        ( this, SVX_RES( PB_ASSIGN ) ),
+    m_aAssignedLabel    ( this, SVX_RES( FT_ASSIGNED ) ),
+    m_aAssignedList     ( this, SVX_RES( LB_ASSIGNED ) ),
+    m_aExampleText      ( this, SVX_RES( FT_EXAMPLE ) ),
+    m_aRemoveBtn        ( this, SVX_RES( PB_REMOVE ) ),
+    m_aButtonsLine      ( this, SVX_RES( FL_BUTTONS ) ),
+    m_aOKBtn            ( this, SVX_RES( PB_PARAMETER_OK ) ),
+    m_aCancelBtn        ( this, SVX_RES( PB_PARAMETER_ESC ) ),
+    m_aHelpBtn          ( this, SVX_RES( PB_PARAMETER_HLP ) )
 
 {
     FreeResource();
@@ -962,15 +962,15 @@ SvxJavaClassPathDlg::SvxJavaClassPathDlg( Window* pParent ) :
 
     ModalDialog( pParent, SVX_RES( RID_SVXDLG_JAVA_CLASSPATH ) ),
 
-    m_aPathLabel        ( this, ResId( FT_PATH ) ),
-    m_aPathList         ( this, ResId( LB_PATH ) ),
-    m_aAddArchiveBtn    ( this, ResId( PB_ADDARCHIVE ) ),
-    m_aAddPathBtn       ( this, ResId( PB_ADDPATH ) ),
-    m_aRemoveBtn        ( this, ResId( PB_REMOVE_PATH ) ),
-    m_aButtonsLine      ( this, ResId( FL_PATH_BUTTONS ) ),
-    m_aOKBtn            ( this, ResId( PB_PATH_OK ) ),
-    m_aCancelBtn        ( this, ResId( PB_PATH_ESC ) ),
-    m_aHelpBtn          ( this, ResId( PB_PATH_HLP ) )
+    m_aPathLabel        ( this, SVX_RES( FT_PATH ) ),
+    m_aPathList         ( this, SVX_RES( LB_PATH ) ),
+    m_aAddArchiveBtn    ( this, SVX_RES( PB_ADDARCHIVE ) ),
+    m_aAddPathBtn       ( this, SVX_RES( PB_ADDPATH ) ),
+    m_aRemoveBtn        ( this, SVX_RES( PB_REMOVE_PATH ) ),
+    m_aButtonsLine      ( this, SVX_RES( FL_PATH_BUTTONS ) ),
+    m_aOKBtn            ( this, SVX_RES( PB_PATH_OK ) ),
+    m_aCancelBtn        ( this, SVX_RES( PB_PATH_ESC ) ),
+    m_aHelpBtn          ( this, SVX_RES( PB_PATH_HLP ) )
 
 {
     FreeResource();
