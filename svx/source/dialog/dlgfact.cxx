@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-21 12:00:43 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:29:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1088,17 +1088,17 @@ Window * AbstractSvxPostItDialog_Impl::GetWindow()
 
 //--------------------------------------------------------------
 // Create dialogs with simplest interface
-VclAbstractDialog* AbstractDialogFactory_Impl::CreateVclDialog( Window* pParent, const ResId& rResId )
+VclAbstractDialog* AbstractDialogFactory_Impl::CreateVclDialog( Window* pParent, sal_uInt32 nResId )
 {
     Dialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case SID_OPTIONS_TREEDIALOG :
         case SID_OPTIONS_DATABASES:
         {
             css::uno::Reference< css::frame::XFrame > xFrame;
             OfaTreeOptionsDialog* pOptDlg = new OfaTreeOptionsDialog( pParent, xFrame );
-            if(rResId.GetId() == SID_OPTIONS_DATABASES)
+            if(nResId == SID_OPTIONS_DATABASES)
             {
                 pOptDlg->ActivatePage(SID_SB_DBREGISTEROPTIONS);
             }
@@ -1115,22 +1115,22 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateVclDialog( Window* pParent,
 }
 
 // dialogs that use SfxBindings
-VclAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* /*pParent*/, const SfxBindings&, const ResId& )
+VclAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* /*pParent*/, const SfxBindings&, sal_uInt32 )
 {
     return 0;
 }
 
 VclAbstractDialog* AbstractDialogFactory_Impl::CreateFrameDialog(
-    Window* pParent, const css::uno::Reference< css::frame::XFrame >& _xFrame, const ResId& rResId )
+    Window* pParent, const css::uno::Reference< css::frame::XFrame >& _xFrame, sal_uInt32 nResId )
 {
     Dialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case SID_OPTIONS_TREEDIALOG :
         case SID_OPTIONS_DATABASES:
         {
             OfaTreeOptionsDialog* pOptDlg = new OfaTreeOptionsDialog( pParent, _xFrame );
-            if(rResId.GetId() == SID_OPTIONS_DATABASES)
+            if(nResId == SID_OPTIONS_DATABASES)
             {
                 pOptDlg->ActivatePage(SID_SB_DBREGISTEROPTIONS);
             }
@@ -1147,7 +1147,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateFrameDialog(
 }
 
 // TabDialog outside the drawing layer
-SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( const ResId& rResId,
+SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nResId,
                                                 Window* pParent,
                                                 const SfxItemSet* pAttrSet,
                                                 SfxViewFrame* ,
@@ -1155,7 +1155,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( const ResId& 
                                                 const String * )
 {
     SfxTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_OFA_AUTOCORR_DLG :
             pDlg = new OfaAutoCorrDlg( pParent, pAttrSet );
@@ -1172,7 +1172,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( const ResId& 
     return 0;
 }
 
-SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( const ResId& rResId,
+SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nResId,
                                                 Window* pParent,
                                                 const SfxItemSet* pAttrSet,
                                                 const css::uno::Reference< css::frame::XFrame >& xViewFrame,
@@ -1180,7 +1180,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( const ResId& 
                                                 const String * )
 {
     SfxTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_OFA_AUTOCORR_DLG :
             pDlg = new OfaAutoCorrDlg( pParent, pAttrSet );
@@ -1204,12 +1204,12 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( const ResId& 
 // TabDialog that use functionality of the drawing layer
 SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTextTabDialog( Window* pParent,
                                             const SfxItemSet* pAttrSet,
-                                            const ResId& rResId,
+                                            sal_uInt32 nResId,
                                             SdrView* pView,
                                             SdrModel* )
 {
     SfxTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXDLG_TEXT :
             pDlg = new SvxTextTabDialog( pParent, pAttrSet, pView );
@@ -1226,11 +1226,11 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTextTabDialog( Window* p
 //TabDialog that use functionality of the drawing layer and add AnchorTypes  -- for SvxCaptionTabDialog CHINA001
 AbstractSvxCaptionDialog*       AbstractDialogFactory_Impl::CreateCaptionDialog( Window* pParent,
                                             const SdrView* pView,
-                                            const ResId& rResId,
+                                            sal_uInt32 nResId,
                                             USHORT nAnchorTypes )
 {
     SvxCaptionTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXDLG_CAPTION :
             pDlg = new SvxCaptionTabDialog( pParent, pView, nAnchorTypes );
@@ -1246,12 +1246,12 @@ AbstractSvxCaptionDialog*       AbstractDialogFactory_Impl::CreateCaptionDialog(
 
 AbstractSvxDistributeDialog*    AbstractDialogFactory_Impl::CreateSvxDistributeDialog(Window* pParent,
                                             const SfxItemSet& rAttr,
-                                            const ResId& rResId,
+                                            sal_uInt32 nResId,
                                             SvxDistributeHorizontal eHor ,
                                             SvxDistributeVertical eVer)
 {
     SvxDistributeDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXPAGE_DISTRIBUTE :
             pDlg = new SvxDistributeDialog( pParent, rAttr, eHor, eVer);
@@ -1267,10 +1267,10 @@ AbstractSvxDistributeDialog*    AbstractDialogFactory_Impl::CreateSvxDistributeD
 
 AbstractHangulHanjaConversionDialog* AbstractDialogFactory_Impl::CreateHangulHanjaConversionDialog(Window* pParent,
                                                                                                    HangulHanjaConversion::ConversionDirection _ePrimaryDirection,
-                                                                                                    const ResId& rResId)
+                                                                                                    sal_uInt32 nResId)
 {
     HangulHanjaConversionDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVX_MDLG_HANGULHANJA :
             pDlg = new HangulHanjaConversionDialog( pParent, _ePrimaryDirection);
@@ -1285,10 +1285,10 @@ AbstractHangulHanjaConversionDialog* AbstractDialogFactory_Impl::CreateHangulHan
 }
 
 AbstractFmShowColsDialog * AbstractDialogFactory_Impl::CreateFmShowColsDialog( Window* pParent,  //add for FmShowColsDialog
-                                             const ResId& rResId)
+                                             sal_uInt32 nResId)
 {
    FmShowColsDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVX_DLG_SHOWGRIDCOLUMNS :
             pDlg = new FmShowColsDialog( pParent);
@@ -1303,10 +1303,10 @@ AbstractFmShowColsDialog * AbstractDialogFactory_Impl::CreateFmShowColsDialog( W
 }
 AbstractSvxZoomDialog * AbstractDialogFactory_Impl::CreateSvxZoomDialog( Window* pParent,  //add for SvxZoomDialog
                                             const SfxItemSet& rCoreSet,
-                                            const ResId& rResId)
+                                            sal_uInt32 nResId)
 {
    SvxZoomDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXDLG_ZOOM :
             pDlg = new SvxZoomDialog( pParent, rCoreSet);
@@ -1335,10 +1335,10 @@ AbstractSpellDialog *  AbstractDialogFactory_Impl::CreateSvxSpellDialog(
 //CHINA001 GalleryDialog start
 VclAbstractRefreshableDialog * AbstractDialogFactory_Impl::CreateActualizeProgressDialog( Window* pParent,  //add for ActualizeProgress
                                             GalleryTheme* pThm,
-                                            const ResId& rResId)
+                                            sal_uInt32 nResId)
 {
    Dialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS :
             pDlg = new ActualizeProgress( pParent, pThm);
@@ -1354,10 +1354,10 @@ VclAbstractRefreshableDialog * AbstractDialogFactory_Impl::CreateActualizeProgre
 
 AbstractSearchProgress * AbstractDialogFactory_Impl::CreateSearchProgressDialog( Window* pParent,  //add for SearchProgress
                                             const INetURLObject& rStartURL,
-                                            const ResId& rResId)
+                                            sal_uInt32 nResId)
 {
    SearchProgress* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXDLG_GALLERY_SEARCH_PROGRESS :
             pDlg = new SearchProgress( pParent, rStartURL);
@@ -1372,10 +1372,10 @@ AbstractSearchProgress * AbstractDialogFactory_Impl::CreateSearchProgressDialog(
 }
 
 AbstractTakeProgress * AbstractDialogFactory_Impl::CreateTakeProgressDialog( Window* pParent,  //add for TakeProgress
-                                            const ResId& rResId)
+                                            sal_uInt32 nResId)
 {
    TakeProgress* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXDLG_GALLERY_TAKE_PROGRESS :
             pDlg = new TakeProgress( pParent );
@@ -1439,10 +1439,10 @@ VclAbstractDialog * AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog( Window
 
 AbstractTitleDialog * AbstractDialogFactory_Impl::CreateTitleDialog( Window* pParent,  //add for TitleDialog
                                             const String& rOldText,
-                                            const ResId& rResId)
+                                            sal_uInt32 nResId)
 {
    TitleDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXDLG_GALLERY_TITLE :
             pDlg = new TitleDialog( pParent, rOldText);
@@ -1458,10 +1458,10 @@ AbstractTitleDialog * AbstractDialogFactory_Impl::CreateTitleDialog( Window* pPa
 
 AbstractGalleryIdDialog * AbstractDialogFactory_Impl::CreateGalleryIdDialog( Window* pParent,  //add for SvxZoomDialog
                                             GalleryTheme* pThm,
-                                            const ResId& rResId)
+                                            sal_uInt32 nResId)
 {
    GalleryIdDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXDLG_GALLERY_THEMEID :
             pDlg = new GalleryIdDialog( pParent, pThm);
@@ -1478,10 +1478,10 @@ AbstractGalleryIdDialog * AbstractDialogFactory_Impl::CreateGalleryIdDialog( Win
 VclAbstractDialog2 * AbstractDialogFactory_Impl::CreateGalleryThemePropertiesDialog( Window* pParent,  //add for GalleryThemeProperties
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet,
-                                            const ResId& rResId)
+                                            sal_uInt32 nResId)
 {
     Dialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXTABDLG_GALLERYTHEME :
             pDlg = new GalleryThemeProperties( pParent, pData, pItemSet);
@@ -1500,10 +1500,10 @@ AbstractURLDlg * AbstractDialogFactory_Impl::CreateURLDialog( Window* pParent,  
                                             const String& rURL, const String& rDescription,
                                             const String& rTarget, const String& rName,
                                             TargetList& rTargetList,
-                                            const ResId& rResId)
+                                            sal_uInt32 nResId)
 {
     URLDlg* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXDLG_IMAPURL :
             pDlg = new URLDlg( pParent, rURL, rDescription, rTarget, rName, rTargetList);
@@ -1519,10 +1519,10 @@ AbstractURLDlg * AbstractDialogFactory_Impl::CreateURLDialog( Window* pParent,  
 //CHINA001 URLDlg end
 
 //CHINA001 SvxHlinkDlgMarkWnd begin
-AbstractSvxHlinkDlgMarkWnd* AbstractDialogFactory_Impl::CreateSvxHlinkDlgMarkWndDialog( SvxHyperlinkTabPageBase* pParent, const ResId& rResId )
+AbstractSvxHlinkDlgMarkWnd* AbstractDialogFactory_Impl::CreateSvxHlinkDlgMarkWndDialog( SvxHyperlinkTabPageBase* pParent, sal_uInt32 nResId )
 {
     SvxHlinkDlgMarkWnd* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXFLOAT_HYPERLINK_MARKWND :
             pDlg = new  SvxHlinkDlgMarkWnd( pParent );
@@ -1539,11 +1539,11 @@ AbstractSvxHlinkDlgMarkWnd* AbstractDialogFactory_Impl::CreateSvxHlinkDlgMarkWnd
 
 //CHINA001  SvxCharacterMap begin
 AbstractSvxCharacterMap * AbstractDialogFactory_Impl::CreateSvxCharacterMap( Window* pParent,  //add for SvxCharacterMap
-                                                            const ResId& rResId,
+                                                            sal_uInt32 nResId,
                                                             BOOL bOne  )
 {
     SvxCharacterMap* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXDLG_CHARMAP :
             pDlg = new  SvxCharacterMap( pParent,bOne );
@@ -1561,10 +1561,10 @@ AbstractSvxCharacterMap * AbstractDialogFactory_Impl::CreateSvxCharacterMap( Win
 //CHINA001  SvxSearchFormatDialog begin
 SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabItemDialog( Window* pParent,
                                             const SfxItemSet& rSet,
-                                            const ResId& rResId)
+                                            sal_uInt32 nResId)
 {
     SfxTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXDLG_SEARCHFORMAT :
             pDlg = new SvxSearchFormatDialog( pParent, rSet );
@@ -1583,10 +1583,10 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabItemDialog( Window* p
 VclAbstractDialog*      AbstractDialogFactory_Impl::CreateSvxSearchAttributeDialog( Window* pParent,
                                             SearchAttrItemList& rLst,
                                             const USHORT* pWhRanges,
-                                            const ResId& rResId ) //add for SvxSearchAttributeDialog
+                                            sal_uInt32 nResId ) //add for SvxSearchAttributeDialog
 {
     Dialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXDLG_SEARCHATTR :
             pDlg = new SvxSearchAttributeDialog( pParent, rLst, pWhRanges);
@@ -1618,11 +1618,11 @@ AbstractSvxSearchSimilarityDialog * AbstractDialogFactory_Impl::CreateSvxSearchS
 //CHINA001  SvxBorderBackgroundDlg begin
 SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxBorderBackgroundDlg( Window* pParent,
                                             const SfxItemSet& rCoreSet,
-                                            const ResId& rResId,
+                                            sal_uInt32 nResId,
                                             BOOL bEnableSelector)
 {
     SfxTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXDLG_BBDLG :
             pDlg = new SvxBorderBackgroundDlg( pParent, rCoreSet, bEnableSelector);
@@ -1641,11 +1641,11 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxBorderBackgroundDlg( 
 AbstractSvxTransformTabDialog* AbstractDialogFactory_Impl::CreateSvxTransformTabDialog( Window* pParent,
                                                                               const SfxItemSet* pAttr,
                                                                                 const SdrView* pView,
-                                                                                const ResId& rResId,
+                                                                                sal_uInt32 nResId,
                                                                                 USHORT nAnchorTypes )
 {
     SvxTransformTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXDLG_TRANSFORM :
             pDlg = new SvxTransformTabDialog( pParent, pAttr,pView, nAnchorTypes);
@@ -1665,12 +1665,12 @@ AbstractSvxTransformTabDialog* AbstractDialogFactory_Impl::CreateSvxTransformTab
 SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSchTransformTabDialog( Window* pParent,
                                                                 const SfxItemSet* pAttr,
                                                                 const SdrView* pSdrView,
-                                                                const ResId& rResId,
+                                                                sal_uInt32 nResId,
                                                                 bool bSizeTabPage
                                                                 )
 {
     SfxTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SCH_TransformTabDLG_SVXPAGE_ANGLE :
             {
@@ -1699,10 +1699,10 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSchTransformTabDialog( W
 AbstractSvxJSearchOptionsDialog * AbstractDialogFactory_Impl::CreateSvxJSearchOptionsDialog( Window* pParent,
                                                             const SfxItemSet& rOptionsSet, USHORT nUniqueId,
                                                             INT32 nInitialFlags,
-                                                            const ResId& rResId)
+                                                            sal_uInt32 nResId)
 {
     SvxJSearchOptionsDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXPAGE_JSEARCH_OPTIONS :
             pDlg = new SvxJSearchOptionsDialog( pParent, rOptionsSet, nUniqueId, nInitialFlags );
@@ -1719,10 +1719,10 @@ AbstractSvxJSearchOptionsDialog * AbstractDialogFactory_Impl::CreateSvxJSearchOp
 
 //CHINA001  FmInputRecordNoDialog begin
 AbstractFmInputRecordNoDialog * AbstractDialogFactory_Impl::CreateFmInputRecordNoDialog( Window* pParent,
-                                                            const ResId& rResId)
+                                                            sal_uInt32 nResId)
 {
     FmInputRecordNoDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVX_DLG_INPUTRECORDNO :
             pDlg = new FmInputRecordNoDialog( pParent );
@@ -1740,10 +1740,10 @@ AbstractFmInputRecordNoDialog * AbstractDialogFactory_Impl::CreateFmInputRecordN
 //CHINA001  SvxNewDictionaryDialog begin
 AbstractSvxNewDictionaryDialog * AbstractDialogFactory_Impl::CreateSvxNewDictionaryDialog( Window* pParent,
                                             ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpl,
-                                            const ResId& rResId )
+                                            sal_uInt32 nResId )
 {
     SvxNewDictionaryDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SFXDLG_NEWDICT :
             pDlg = new SvxNewDictionaryDialog( pParent, xSpl );
@@ -1762,10 +1762,10 @@ AbstractSvxNewDictionaryDialog * AbstractDialogFactory_Impl::CreateSvxNewDiction
 VclAbstractDialog*      AbstractDialogFactory_Impl::CreateSvxEditDictionaryDialog( Window* pParent,
                                             const String& rName,
                                             ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellChecker1> &xSpl,
-                                            const ResId& rResId )
+                                            sal_uInt32 nResId )
 {
     Dialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SFXDLG_EDITDICT :
             pDlg = new SvxEditDictionaryDialog( pParent, rName, xSpl );
@@ -1783,10 +1783,10 @@ VclAbstractDialog*      AbstractDialogFactory_Impl::CreateSvxEditDictionaryDialo
 //CHINA001  SvxNameDialog begin
 AbstractSvxNameDialog * AbstractDialogFactory_Impl::CreateSvxNameDialog( Window* pParent,
                                     const String& rName, const String& rDesc,
-                                    const ResId& rResId )
+                                    sal_uInt32 nResId )
 {
     SvxNameDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXDLG_NAME :
             pDlg = new SvxNameDialog( pParent, rName, rDesc );
@@ -1804,9 +1804,9 @@ AbstractSvxNameDialog * AbstractDialogFactory_Impl::CreateSvxNameDialog( Window*
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // #i68101#
 
-AbstractSvxObjectNameDialog* AbstractDialogFactory_Impl::CreateSvxObjectNameDialog(Window* pParent, const String& rName, const ResId& rResId)
+AbstractSvxObjectNameDialog* AbstractDialogFactory_Impl::CreateSvxObjectNameDialog(Window* pParent, const String& rName, sal_uInt32 nResId)
 {
-    return ((RID_SVXDLG_OBJECT_NAME == rResId.GetId())
+    return ((RID_SVXDLG_OBJECT_NAME == nResId)
         ? new AbstractSvxObjectNameDialog_Impl(new SvxObjectNameDialog(pParent, rName))
         : NULL);
 }
@@ -1814,9 +1814,9 @@ AbstractSvxObjectNameDialog* AbstractDialogFactory_Impl::CreateSvxObjectNameDial
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // #i68101#
 
-AbstractSvxObjectTitleDescDialog* AbstractDialogFactory_Impl::CreateSvxObjectTitleDescDialog(Window* pParent, const String& rTitle, const String& rDescription, const ResId& rResId)
+AbstractSvxObjectTitleDescDialog* AbstractDialogFactory_Impl::CreateSvxObjectTitleDescDialog(Window* pParent, const String& rTitle, const String& rDescription, sal_uInt32 nResId)
 {
-    return ((RID_SVXDLG_OBJECT_TITLE_DESC == rResId.GetId())
+    return ((RID_SVXDLG_OBJECT_TITLE_DESC == nResId)
         ? new AbstractSvxObjectTitleDescDialog_Impl(new SvxObjectTitleDescDialog(pParent, rTitle, rDescription))
         : NULL);
 }
@@ -1824,11 +1824,11 @@ AbstractSvxObjectTitleDescDialog* AbstractDialogFactory_Impl::CreateSvxObjectTit
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 //CHINA001  SvxMessDialog begin
-AbstractSvxMessDialog * AbstractDialogFactory_Impl::CreateSvxMessDialog( Window* pParent, const ResId& rResId,
+AbstractSvxMessDialog * AbstractDialogFactory_Impl::CreateSvxMessDialog( Window* pParent, sal_uInt32 nResId,
                                     const String& rText, const String& rDesc, Image* pImg )
 {
     SvxMessDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXDLG_MESSBOX :
             pDlg = new SvxMessDialog( pParent, rText, rDesc, pImg );
@@ -1844,11 +1844,11 @@ AbstractSvxMessDialog * AbstractDialogFactory_Impl::CreateSvxMessDialog( Window*
 //CHINA001  SvxMessDialog end
 
 //CHINA001  SvxMultiPathDialog begin
-AbstractSvxMultiPathDialog * AbstractDialogFactory_Impl::CreateSvxMultiPathDialog( Window* pParent, const ResId& rResId,
+AbstractSvxMultiPathDialog * AbstractDialogFactory_Impl::CreateSvxMultiPathDialog( Window* pParent, sal_uInt32 nResId,
                                                 BOOL bEmptyAllowed )
 {
     SvxMultiPathDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXDLG_MULTIPATH :
             pDlg = new SvxMultiPathDialog( pParent, bEmptyAllowed );
@@ -1864,11 +1864,11 @@ AbstractSvxMultiPathDialog * AbstractDialogFactory_Impl::CreateSvxMultiPathDialo
 //CHINA001  SvxMultiPathDialog end
 
 //CHINA001  SvxMultiFileDialog begin
-AbstractSvxMultiFileDialog * AbstractDialogFactory_Impl::CreateSvxMultiFileDialog( Window* pParent, const ResId& rResId,
+AbstractSvxMultiFileDialog * AbstractDialogFactory_Impl::CreateSvxMultiFileDialog( Window* pParent, sal_uInt32 nResId,
                                                 BOOL bEmptyAllowed )
 {
     SvxMultiFileDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXDLG_MULTIPATH :
             pDlg = new SvxMultiFileDialog( pParent, bEmptyAllowed );
@@ -1886,10 +1886,10 @@ AbstractSvxMultiFileDialog * AbstractDialogFactory_Impl::CreateSvxMultiFileDialo
 //CHINA001  SvxHpLinkDlg begin
 AbstractSvxHpLinkDlg * AbstractDialogFactory_Impl::CreateSvxHpLinkDlg (Window* pParent,  //add for SvxMultiFileDialog
                                             SfxBindings* pBindings,
-                                            const ResId& rResId)
+                                            sal_uInt32 nResId)
 {
     SvxHpLinkDlg* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case SID_HYPERLINK_DIALOG :
             pDlg = new SvxHpLinkDlg( pParent, pBindings );
@@ -1924,10 +1924,10 @@ AbstractFmSearchDialog*  AbstractDialogFactory_Impl::CreateFmSearchDialog(Window
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterEmboss (Window* pParent,  //add for GraphicFilterEmboss
                                             const Graphic& rGraphic,
                                             RECT_POINT eLightSource,
-                                            const ResId& rResId)
+                                            sal_uInt32 nResId)
 {
     GraphicFilterDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVX_GRFFILTER_DLG_EMBOSS :
             pDlg = new GraphicFilterEmboss( pParent, rGraphic, eLightSource );
@@ -1946,10 +1946,10 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterEmb
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterPosterSepia (Window* pParent,  //add for GraphicFilterPoster & GraphicFilterSepia
                                             const Graphic& rGraphic,
                                             USHORT nCount,
-                                            const ResId& rResId)
+                                            sal_uInt32 nResId)
 {
     GraphicFilterDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVX_GRFFILTER_DLG_POSTER :
             pDlg = new GraphicFilterPoster( pParent, rGraphic, nCount );
@@ -1972,10 +1972,10 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterPos
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSolarize (Window* pParent,  //add for GraphicFilterSolarize
                                             const Graphic& rGraphic,
                                             BYTE nGreyThreshold, BOOL bInvert,
-                                            const ResId& rResId)
+                                            sal_uInt32 nResId)
 {
     GraphicFilterDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVX_GRFFILTER_DLG_SOLARIZE :
             pDlg = new GraphicFilterSolarize( pParent, rGraphic, nGreyThreshold, bInvert );
@@ -1994,10 +1994,10 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSol
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterMosaic (Window* pParent,  //add for GraphicFilterMosaic
                                             const Graphic& rGraphic,
                                             USHORT nTileWidth, USHORT nTileHeight, BOOL bEnhanceEdges,
-                                            const ResId& rResId)
+                                            sal_uInt32 nResId)
 {
     GraphicFilterDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVX_GRFFILTER_DLG_MOSAIC :
             pDlg = new GraphicFilterMosaic( pParent, rGraphic, nTileWidth, nTileHeight, bEnhanceEdges );
@@ -2015,11 +2015,11 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterMos
 AbstractSvxAreaTabDialog* AbstractDialogFactory_Impl::CreateSvxAreaTabDialog( Window* pParent,
                                                             const SfxItemSet* pAttr,
                                                             SdrModel* pModel,
-                                                            const ResId& rResId,
+                                                            sal_uInt32 nResId,
                                                             const SdrView* pSdrView )
 {
     SvxAreaTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXDLG_AREA :
             pDlg = new SvxAreaTabDialog( pParent, pAttr, pModel,pSdrView );
@@ -2036,12 +2036,12 @@ AbstractSvxAreaTabDialog* AbstractDialogFactory_Impl::CreateSvxAreaTabDialog( Wi
 //CHINA001  SvxLineTabDialog begin
 SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxLineTabDialog( Window* pParent, const SfxItemSet* pAttr, //add forSvxLineTabDialog
                                                                  SdrModel* pModel,
-                                                                 const ResId& rResId,
+                                                                 sal_uInt32 nResId,
                                                                  const SdrObject* pObj ,
                                                                 BOOL bHasObj)
 {
     SfxTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXDLG_LINE :
             pDlg = new SvxLineTabDialog( pParent, pAttr, pModel,pObj,bHasObj );
@@ -2060,11 +2060,11 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxLineTabDialog( Window
 AbstractSfxSingleTabDialog* AbstractDialogFactory_Impl::CreateSfxSingleTabDialog( Window* pParent,
                                                                         const SfxItemSet& rAttr,
                                                                         const SdrView* pView,
-                                                                        const ResId& rResId
+                                                                        sal_uInt32 nResId
                                                                         )
 {
     SfxSingleTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXPAGE_MEASURE :
             pDlg = new SvxMeasureDialog( pParent, rAttr, pView );
@@ -2087,11 +2087,11 @@ AbstractSfxSingleTabDialog* AbstractDialogFactory_Impl::CreateSfxSingleTabDialog
 //CHINA001 SvxPostItDialog begin
 AbstractSvxPostItDialog* AbstractDialogFactory_Impl::CreateSvxPostItDialog( Window* pParent,
                                                                         const SfxItemSet& rCoreSet,
-                                                                        const ResId& rResId,
+                                                                        sal_uInt32 nResId,
                                                                         BOOL bPrevNext, BOOL bRedline )
 {
     SvxPostItDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
+    switch ( nResId )
     {
         case RID_SVXDLG_POSTIT :
             pDlg = new SvxPostItDialog( pParent, rCoreSet, bPrevNext, bRedline );
@@ -2121,10 +2121,10 @@ VclAbstractDialog * AbstractDialogFactory_Impl::CreateSvxMacroAssignDlg( Window*
 //STRIP001 ::com::sun::star::uno::Reference<
 //STRIP001 ::com::sun::star::linguistic2::XSpellChecker1 >  &xChecker,
 //STRIP001 SvxSpellWrapper* pWrapper,
-//STRIP001 const ResId& rResId)
+//STRIP001 sal_uInt32 nResId)
 //STRIP001 {
 //STRIP001 SvxSpellCheckDialog* pDlg=NULL;
-//STRIP001 switch ( rResId.GetId() )
+//STRIP001 switch ( nResId )
 //STRIP001 {
 //STRIP001      case RID_SVXDLG_SPELLCHECK :
 //STRIP001 pDlg = new SvxSpellCheckDialog( pParent, xChecker,pWrapper);
