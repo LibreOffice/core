@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:34:50 $
+#   last change: $Author: rt $ $Date: 2007-04-26 08:34:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,11 @@ SRS1FILES= \
 RESLIB1NAME=stt
 RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES= \
-        $(SRS)$/app.srs \
+        $(SRS)$/app.srs
+        
+RESLIB2NAME=sb
+RESLIB2IMAGES=$(PRJ)$/res
+RESLIB2SRSFILES= \
         $(SRS)$/classes.srs \
         $(SRS)$/sbx.srs
 ########## remove sbx.srx (and this line) when issue i53795 is fixed
