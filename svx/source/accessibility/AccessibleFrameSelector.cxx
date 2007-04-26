@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleFrameSelector.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:00:34 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:24:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,8 +130,8 @@ AccFrameSelector::AccFrameSelector( FrameSelector& rFrameSel, FrameBorderType eB
     meBorder( eBorder ),
     maFocusListeners( maFocusMutex ),
     maPropertyListeners( maPropertyMutex ),
-    maNames( ResId( ARR_TEXTS ) ),
-    maDescriptions( ResId(ARR_DESCRIPTIONS ) )
+    maNames( SVX_RES( ARR_TEXTS ) ),
+    maDescriptions( SVX_RES(ARR_DESCRIPTIONS ) )
 {
     FreeResource();
 }
