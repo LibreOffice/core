@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uiregionsw.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:25:48 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:06:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -362,8 +362,8 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     aDismiss            ( this, SW_RES( CB_DISMISS ) ),
     aHelp               ( this, SW_RES( PB_HELP ) ),
     aCancel             ( this, SW_RES( PB_CANCEL ) ),
-    aImageIL            (       ResId(IL_BITMAPS)),
-    aImageILH           (       ResId(ILH_BITMAPS)),
+    aImageIL            (       SW_RES(IL_BITMAPS)),
+    aImageILH           (       SW_RES(ILH_BITMAPS)),
     pDocInserter        ( NULL ),
     pOldDefDlgParent    ( NULL ),
     bDontCheckPasswd    ( sal_True)
@@ -1522,7 +1522,7 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
     rWrtSh(rSh),
     pToInsertSection(0)
 {
-    String sInsert(ResId(ST_INSERT));
+    String sInsert(SW_RES(ST_INSERT));
     GetOKButton().SetText(sInsert);
     FreeResource();
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create(); //CHINA001
@@ -2372,12 +2372,12 @@ void SwSectionPropertyTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
   -----------------------------------------------------------------------*/
 SwSectionIndentTabPage::SwSectionIndentTabPage( Window *pParent, const SfxItemSet &rAttrSet ) :
     SfxTabPage(pParent, SW_RES(TP_SECTION_INDENTS), rAttrSet),
-    aIndentFL(this,     ResId(FL_INDENT     )),
-    aBeforeFT(this,     ResId(FT_BEFORE     )),
-    aBeforeMF(this,     ResId(MF_BEFORE     )),
-    aAfterFT(this,      ResId(FT_AFTER      )),
-    aAfterMF(this,      ResId(MF_AFTER      )),
-    aPreviewWin(this,   ResId(WIN_PREVIEW   ))
+    aIndentFL(this,     SW_RES(FL_INDENT     )),
+    aBeforeFT(this,     SW_RES(FT_BEFORE     )),
+    aBeforeMF(this,     SW_RES(MF_BEFORE     )),
+    aAfterFT(this,      SW_RES(FT_AFTER      )),
+    aAfterMF(this,      SW_RES(MF_AFTER      )),
+    aPreviewWin(this,   SW_RES(WIN_PREVIEW   ))
 {
     FreeResource();
     Link aLk = LINK(this, SwSectionIndentTabPage, IndentModifyHdl);
