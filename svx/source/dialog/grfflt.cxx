@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfflt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:13:07 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:31:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,7 +210,7 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    AbstractGraphicFilterDialog* aDlg = pFact->CreateGraphicFilterMosaic( pWindow, rGraphic, 4, 4, FALSE, ResId(RID_SVX_GRFFILTER_DLG_MOSAIC) );
+                    AbstractGraphicFilterDialog* aDlg = pFact->CreateGraphicFilterMosaic( pWindow, rGraphic, 4, 4, FALSE, RID_SVX_GRFFILTER_DLG_MOSAIC );
                     DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
                     if( aDlg->Execute() == RET_OK ) //CHINA001 if( aDlg.Execute() == RET_OK )
                         aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 ); //CHINA001 aGraphic = aDlg.GetFilteredGraphic( rGraphic, 1.0, 1.0 );
@@ -225,7 +225,7 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    AbstractGraphicFilterDialog* aDlg = pFact->CreateGraphicFilterEmboss( pWindow, rGraphic, RP_MM, ResId(RID_SVX_GRFFILTER_DLG_EMBOSS) );
+                    AbstractGraphicFilterDialog* aDlg = pFact->CreateGraphicFilterEmboss( pWindow, rGraphic, RP_MM, RID_SVX_GRFFILTER_DLG_EMBOSS );
                     DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
                     if( aDlg->Execute() == RET_OK ) //CHINA001 if( aDlg.Execute() == RET_OK )
                         aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 ); //CHINA001 aGraphic = aDlg.GetFilteredGraphic( rGraphic, 1.0, 1.0 );
@@ -240,7 +240,7 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    AbstractGraphicFilterDialog* aDlg = pFact->CreateGraphicFilterPosterSepia( pWindow, rGraphic, 16, ResId(RID_SVX_GRFFILTER_DLG_POSTER) );
+                    AbstractGraphicFilterDialog* aDlg = pFact->CreateGraphicFilterPosterSepia( pWindow, rGraphic, 16, RID_SVX_GRFFILTER_DLG_POSTER );
                     DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
                     if( aDlg->Execute() == RET_OK ) //CHINA001 if( aDlg.Execute() == RET_OK )
                         aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 ); //CHINA001 aGraphic = aDlg.GetFilteredGraphic( rGraphic, 1.0, 1.0 );
@@ -280,7 +280,7 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    AbstractGraphicFilterDialog* aDlg = pFact->CreateGraphicFilterPosterSepia( pWindow, rGraphic, 10, ResId(RID_SVX_GRFFILTER_DLG_SEPIA) );
+                    AbstractGraphicFilterDialog* aDlg = pFact->CreateGraphicFilterPosterSepia( pWindow, rGraphic, 10, RID_SVX_GRFFILTER_DLG_SEPIA );
                     DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
                     if( aDlg->Execute() == RET_OK ) //CHINA001 if( aDlg.Execute() == RET_OK )
                         aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 ); //CHINA001 aGraphic = aDlg.GetFilteredGraphic( rGraphic, 1.0, 1.0 );
@@ -295,7 +295,7 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    AbstractGraphicFilterDialog* aDlg = pFact->CreateGraphicFilterSolarize( pWindow, rGraphic, 128, FALSE, ResId(RID_SVX_GRFFILTER_DLG_SOLARIZE) );
+                    AbstractGraphicFilterDialog* aDlg = pFact->CreateGraphicFilterSolarize( pWindow, rGraphic, 128, FALSE, RID_SVX_GRFFILTER_DLG_SOLARIZE );
                     DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
                     if( aDlg->Execute() == RET_OK ) //CHINA001 if( aDlg.Execute() == RET_OK )
                         aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 ); //CHINA001 aGraphic = aDlg.GetFilteredGraphic( rGraphic, 1.0, 1.0 );
