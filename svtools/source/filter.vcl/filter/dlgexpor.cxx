@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgexpor.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:44:52 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:44:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,23 +57,23 @@
 \************************************************************************/
 
 DlgExportPix::DlgExportPix( FltCallDialogParameter& rPara ) :
-                ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_PIX, rPara.pResMgr ) ),
+                ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_PIX, *rPara.pResMgr ) ),
                 rFltCallPara        ( rPara ),
-                aBtnOK              ( this, ResId( BTN_OK_PIX ) ),
-                aBtnCancel          ( this, ResId( BTN_CANCEL_PIX ) ),
-                aBtnHelp            ( this, ResId( BTN_HELP_PIX ) ),
-                aLbColors           ( this, ResId( LB_COLORS ) ),
-                aCbxRLE             ( this, ResId( CBX_RLE ) ),
-                aGrpColors          ( this, ResId( GRP_COLORS ) ),
-                aRbOriginal         ( this, ResId( RB_ORIGINAL_PIX ) ),
-                aRbRes              ( this, ResId( RB_RES_PIX ) ),
-                aRbSize             ( this, ResId( RB_SIZE_PIX ) ),
-                aFtSizeX            ( this, ResId( FT_SIZEX_PIX ) ),
-                aMtfSizeX           ( this, ResId( MTF_SIZEX_PIX ) ),
-                aFtSizeY            ( this, ResId( FT_SIZEY_PIX ) ),
-                aMtfSizeY           ( this, ResId( MTF_SIZEY_PIX ) ),
-                aGrpMode            ( this, ResId( GRP_MODE_PIX ) ),
-                aCbbRes             ( this, ResId( CBB_RES_PIX ) ),
+                aBtnOK              ( this, ResId( BTN_OK_PIX, *rPara.pResMgr ) ),
+                aBtnCancel          ( this, ResId( BTN_CANCEL_PIX, *rPara.pResMgr ) ),
+                aBtnHelp            ( this, ResId( BTN_HELP_PIX, *rPara.pResMgr ) ),
+                aLbColors           ( this, ResId( LB_COLORS, *rPara.pResMgr ) ),
+                aCbxRLE             ( this, ResId( CBX_RLE, *rPara.pResMgr ) ),
+                aGrpColors          ( this, ResId( GRP_COLORS, *rPara.pResMgr ) ),
+                aRbOriginal         ( this, ResId( RB_ORIGINAL_PIX, *rPara.pResMgr ) ),
+                aRbRes              ( this, ResId( RB_RES_PIX, *rPara.pResMgr ) ),
+                aRbSize             ( this, ResId( RB_SIZE_PIX, *rPara.pResMgr ) ),
+                aFtSizeX            ( this, ResId( FT_SIZEX_PIX, *rPara.pResMgr ) ),
+                aMtfSizeX           ( this, ResId( MTF_SIZEX_PIX, *rPara.pResMgr ) ),
+                aFtSizeY            ( this, ResId( FT_SIZEY_PIX, *rPara.pResMgr ) ),
+                aMtfSizeY           ( this, ResId( MTF_SIZEY_PIX, *rPara.pResMgr ) ),
+                aGrpMode            ( this, ResId( GRP_MODE_PIX, *rPara.pResMgr ) ),
+                aCbbRes             ( this, ResId( CBB_RES_PIX, *rPara.pResMgr ) ),
                 pMgr                ( rPara.pResMgr ),
                 aExt                ( rPara.aFilterExt )
 {
@@ -92,14 +92,14 @@ DlgExportPix::DlgExportPix( FltCallDialogParameter& rPara ) :
     aLbColors.SetSelectHdl( LINK( this, DlgExportPix, SelectLbColors ) );
 
     aTitle.ToUpperAscii();
-    aTitle += String( ResId( EXPORT_DIALOG_TITLE, pMgr ) );
+    aTitle += String( ResId( EXPORT_DIALOG_TITLE, *pMgr ) );
     SetText( aTitle );
 
     // Config-Parameter lesen
-    sal_Int32   nColors = pConfigItem->ReadInt32( String( ResId( KEY_COLORS, pMgr ) ), 0 );
-    sal_Int32   nMode = pConfigItem->ReadInt32( String( ResId( KEY_MODE, pMgr ) ), 0 );
-    sal_Int32   nRes = pConfigItem->ReadInt32( String( ResId( KEY_RES, pMgr ) ), 75 );
-    sal_Bool    bRleCoding = pConfigItem->ReadBool( String( ResId( KEY_RLE_CODING, pMgr ) ), sal_True );
+    sal_Int32   nColors = pConfigItem->ReadInt32( String( ResId( KEY_COLORS, *pMgr ) ), 0 );
+    sal_Int32   nMode = pConfigItem->ReadInt32( String( ResId( KEY_MODE, *pMgr ) ), 0 );
+    sal_Int32   nRes = pConfigItem->ReadInt32( String( ResId( KEY_RES, *pMgr ) ), 75 );
+    sal_Bool    bRleCoding = pConfigItem->ReadBool( String( ResId( KEY_RLE_CODING, *pMgr ) ), sal_True );
 
     aLbColors.SelectEntryPos( Min( (sal_uInt16) 7, (sal_uInt16)nColors ) );
 
@@ -109,7 +109,7 @@ DlgExportPix::DlgExportPix( FltCallDialogParameter& rPara ) :
 
     ::com::sun::star::awt::Size aDefault( 10000, 10000 );
     ::com::sun::star::awt::Size aSize;
-    aSize = pConfigItem->ReadSize( String( ResId( KEY_SIZE, pMgr ) ), aDefault );
+    aSize = pConfigItem->ReadSize( String( ResId( KEY_SIZE, *pMgr ) ), aDefault );
 
     aCbxRLE.Check( bRleCoding );
 
@@ -198,12 +198,12 @@ IMPL_LINK( DlgExportPix, OK, void *, EMPTYARG )
     else
         nMode = 0;
 
-    pConfigItem->WriteInt32( String( ResId( KEY_MODE, pMgr ) ), nMode );
-    pConfigItem->WriteInt32( String( ResId( KEY_RES, pMgr ) ), nRes );
+    pConfigItem->WriteInt32( String( ResId( KEY_MODE, *pMgr ) ), nMode );
+    pConfigItem->WriteInt32( String( ResId( KEY_RES, *pMgr ) ), nRes );
 
-    pConfigItem->WriteSize( String( ResId( KEY_SIZE, pMgr ) ), aSize );
-    pConfigItem->WriteInt32( String( ResId( KEY_COLORS, pMgr ) ), (sal_Int32)aLbColors.GetSelectEntryPos() );
-    pConfigItem->WriteBool( String( ResId( KEY_RLE_CODING, pMgr ) ), aCbxRLE.IsChecked() );
+    pConfigItem->WriteSize( String( ResId( KEY_SIZE, *pMgr ) ), aSize );
+    pConfigItem->WriteInt32( String( ResId( KEY_COLORS, *pMgr ) ), (sal_Int32)aLbColors.GetSelectEntryPos() );
+    pConfigItem->WriteBool( String( ResId( KEY_RLE_CODING, *pMgr ) ), aCbxRLE.IsChecked() );
     rFltCallPara.aFilterData = pConfigItem->GetFilterData();
     EndDialog( RET_OK );
 
@@ -296,19 +296,19 @@ IMPL_LINK( DlgExportPix, SelectLbColors, void*, EMPTYARG )
 \************************************************************************/
 
 DlgExportVec::DlgExportVec( FltCallDialogParameter& rPara ) :
-                ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_VEC, rPara.pResMgr ) ),
+                ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_VEC, *rPara.pResMgr ) ),
                 rFltCallPara        ( rPara ),
-                aBtnOK              ( this, ResId( BTN_OK_VEC ) ),
-                aBtnCancel          ( this, ResId( BTN_CANCEL_VEC ) ),
-                aBtnHelp            ( this, ResId( BTN_HELP_VEC ) ),
-                aRbOriginal         ( this, ResId( RB_ORIGINAL_VEC ) ),
-                aRbSize             ( this, ResId( RB_SIZE_VEC ) ),
-                aGrpMode            ( this, ResId( GRP_MODE_VEC ) ),
-                aFtSizeX            ( this, ResId( FT_SIZEX_VEC ) ),
-                aMtfSizeX           ( this, ResId( MTF_SIZEX_VEC ) ),
-                aFtSizeY            ( this, ResId( FT_SIZEY_VEC ) ),
-                aMtfSizeY           ( this, ResId( MTF_SIZEY_VEC ) ),
-                aGrpSize            ( this, ResId( GRP_SIZE_VEC ) ),
+                aBtnOK              ( this, ResId( BTN_OK_VEC, *rPara.pResMgr ) ),
+                aBtnCancel          ( this, ResId( BTN_CANCEL_VEC, *rPara.pResMgr ) ),
+                aBtnHelp            ( this, ResId( BTN_HELP_VEC, *rPara.pResMgr ) ),
+                aRbOriginal         ( this, ResId( RB_ORIGINAL_VEC, *rPara.pResMgr ) ),
+                aRbSize             ( this, ResId( RB_SIZE_VEC, *rPara.pResMgr ) ),
+                aGrpMode            ( this, ResId( GRP_MODE_VEC, *rPara.pResMgr ) ),
+                aFtSizeX            ( this, ResId( FT_SIZEX_VEC, *rPara.pResMgr ) ),
+                aMtfSizeX           ( this, ResId( MTF_SIZEX_VEC, *rPara.pResMgr ) ),
+                aFtSizeY            ( this, ResId( FT_SIZEY_VEC, *rPara.pResMgr ) ),
+                aMtfSizeY           ( this, ResId( MTF_SIZEY_VEC, *rPara.pResMgr ) ),
+                aGrpSize            ( this, ResId( GRP_SIZE_VEC, *rPara.pResMgr ) ),
                 pMgr                ( rPara.pResMgr ),
                 aExt                ( rPara.aFilterExt )
 {
@@ -325,16 +325,16 @@ DlgExportVec::DlgExportVec( FltCallDialogParameter& rPara ) :
     aRbSize.SetClickHdl( LINK( this, DlgExportVec, ClickRbSize ) );
 
     aTitle.ToUpperAscii();
-    aTitle += String( ResId( EXPORT_DIALOG_TITLE, pMgr ) );
+    aTitle += String( ResId( EXPORT_DIALOG_TITLE, *pMgr ) );
     SetText( aTitle );
 
     // reading config-parameter
 
-    sal_Int32   nMode = pConfigItem->ReadInt32( String( ResId( KEY_MODE, pMgr ) ), 0 );
+    sal_Int32   nMode = pConfigItem->ReadInt32( String( ResId( KEY_MODE, *pMgr ) ), 0 );
 
     ::com::sun::star::awt::Size aDefault( 10000, 10000 );
     ::com::sun::star::awt::Size aSize;
-    aSize = pConfigItem->ReadSize( String( ResId( KEY_SIZE, pMgr ) ), aDefault );
+    aSize = pConfigItem->ReadSize( String( ResId( KEY_SIZE, *pMgr ) ), aDefault );
 
     aMtfSizeX.SetDefaultUnit( FUNIT_MM );
     aMtfSizeY.SetDefaultUnit( FUNIT_MM );
@@ -407,8 +407,8 @@ IMPL_LINK( DlgExportVec, OK, void *, EMPTYARG )
     else
         nMode = 0;
 
-    pConfigItem->WriteInt32( String( ResId( KEY_MODE, pMgr ) ), nMode );
-    pConfigItem->WriteSize( String( ResId( KEY_SIZE, pMgr ) ), aSize );
+    pConfigItem->WriteInt32( String( ResId( KEY_MODE, *pMgr ) ), nMode );
+    pConfigItem->WriteSize( String( ResId( KEY_SIZE, *pMgr ) ), aSize );
     rFltCallPara.aFilterData = pConfigItem->GetFilterData();
     EndDialog( RET_OK );
 
