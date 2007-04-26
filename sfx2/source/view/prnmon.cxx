@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prnmon.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:14:41 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:15:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,11 +166,11 @@ void SfxPrintProgress_Impl::SFX_NOTIFY(
 SfxPrintMonitor_Impl::SfxPrintMonitor_Impl( Window* pParent, SfxViewShell* rpViewShell ) :
     ModelessDialog( pParent, SfxResId( DLG_PRINTMONITOR ) ),
     pViewShell  ( rpViewShell ),
-    aDocName    ( this, ResId( FT_DOCNAME ) ),
-    aPrinting   ( this, ResId( FT_PRINTING ) ),
-    aPrinter    ( this, ResId( FT_PRINTER ) ),
-    aPrintInfo  ( this, ResId( FT_PRINTINFO ) ),
-    aCancel     ( this, ResId( PB_CANCELPRNMON ) )
+    aDocName    ( this, SfxResId( FT_DOCNAME ) ),
+    aPrinting   ( this, SfxResId( FT_PRINTING ) ),
+    aPrinter    ( this, SfxResId( FT_PRINTER ) ),
+    aPrintInfo  ( this, SfxResId( FT_PRINTINFO ) ),
+    aCancel     ( this, SfxResId( PB_CANCELPRNMON ) )
 {
     FreeResource();
 }
