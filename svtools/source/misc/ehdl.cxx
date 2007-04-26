@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ehdl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:23:23 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:45:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,18 +87,6 @@ static USHORT aWndFunc(
 
 
 {
-#if 0
-    // OS/2 und Mac haengen bei ModalDialogs in Drop
-    // #38777: TH meint, das man das nicht mehr braucht
-#if defined(MAC) || defined(OS2)
-    if ( Application::IsUICaptured() )
-    {
-        Sound::Beep();
-        return ERRCODE_BUTTON_OK;
-    }
-#endif
-#endif
-
     NAMESPACE_VOS( OGuard ) aGuard( Application::GetSolarMutex() );
 
     // aus den Flags die benoetigten WinBits ermitteln
@@ -197,15 +185,22 @@ static USHORT aWndFunc(
 
 SfxErrorHandler::SfxErrorHandler(USHORT nIdP, ULONG lStartP, ULONG lEndP,
                                  ResMgr *pMgrP)
-    : lStart(lStartP), lEnd(lEndP), nId(nIdP), pMgr(pMgrP)
+    : lStart(lStartP), lEnd(lEndP), nId(nIdP), pMgr(pMgrP), pFreeMgr( NULL )
 {
     RegisterDisplay(&aWndFunc);
+    if( ! pMgr )
+    {
+        com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+        pFreeMgr = pMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(ofa), aLocale );
+    }
 }
 
 //-------------------------------------------------------------------------
 
 SfxErrorHandler::~SfxErrorHandler()
 {
+    if( pFreeMgr )
+        delete pFreeMgr;
 }
 
 //-------------------------------------------------------------------------
@@ -303,7 +298,7 @@ ResString::ResString(ResId & rId):
     String(rId.SetAutoRelease(FALSE)),
     nFlags(0)
 {
-    ResMgr * pResMgr = Resource::GetResManager();
+    ResMgr * pResMgr = rId.GetResMgr();
      // String ctor temporarily sets global ResManager
     if (pResMgr->GetRemainSize())
         nFlags = USHORT(pResMgr->ReadShort());
@@ -325,7 +320,7 @@ struct ErrorResource_Impl : private Resource
     ResId aResId;
 
     ErrorResource_Impl(ResId& rErrIdP, USHORT nId)
-        : Resource(rErrIdP),aResId(nId){}
+        : Resource(rErrIdP),aResId(nId,*rErrIdP.GetResMgr()){}
 
     ~ErrorResource_Impl() { FreeResource(); }
 
@@ -346,7 +341,7 @@ BOOL SfxErrorHandler::GetClassString(ULONG lClassId, String &rStr) const
 
 {
 
-    ResId aId(RID_ERRHDL);
+    ResId aId(RID_ERRHDL, *pMgr);
     ErrorResource_Impl aEr(aId, (USHORT)lClassId);
     if(aEr)
     {
@@ -370,7 +365,7 @@ BOOL SfxErrorHandler::GetMessageString(
 
 {
     BOOL bRet = FALSE;
-    ResId *pResId= new ResId(nId, pMgr);
+    ResId *pResId= new ResId(nId, *pMgr);
     ErrorResource_Impl aEr(*pResId, (USHORT)lErrId);
     if(aEr)
     {
@@ -402,7 +397,7 @@ BOOL SfxErrorHandler::GetErrorString(
 
     BOOL bRet = FALSE;
     rStr=String(SvtResId(RID_ERRHDL_CLASS));
-    ResId *pResId = new ResId(nId, pMgr);
+    ResId *pResId = new ResId(nId, *pMgr);
 
     {
         ErrorResource_Impl aEr(*pResId, (USHORT)lErrId);
@@ -468,34 +463,45 @@ BOOL SfxErrorContext::GetString(ULONG nErrId, String &rStr)
 
 {
     bool bRet = false;
-    ResId* pResId = new ResId( nResId, pMgr );
+    ResMgr* pFreeMgr = NULL;
+    if( ! pMgr )
     {
+        com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+        pFreeMgr = pMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(ofa), aLocale );
+    }
+    if( pMgr )
+    {
+        NAMESPACE_VOS( OGuard ) aGuard( Application::GetSolarMutex() );
+
+        ResId aResId( nResId, *pMgr );
+
+        ErrorResource_Impl aTestEr( aResId, nCtxId );
+        if ( aTestEr )
         {
-            NAMESPACE_VOS( OGuard ) aGuard( Application::GetSolarMutex() );
-            ErrorResource_Impl aEr( *pResId, nCtxId );
-            if ( aEr )
-            {
-                rStr = ( (ResString)aEr ).GetString();
-                rStr.SearchAndReplace( String::CreateFromAscii( "$(ARG1)" ), aArg1 );
-                bRet = true;
-            }
-            else
-            {
-                DBG_ERRORFILE( "ErrorContext cannot find the resource" );
-                bRet = false;
-            }
+            rStr = ( (ResString)aTestEr ).GetString();
+            rStr.SearchAndReplace( String::CreateFromAscii( "$(ARG1)" ), aArg1 );
+            bRet = true;
+        }
+        else
+        {
+            DBG_ERRORFILE( "ErrorContext cannot find the resource" );
+            bRet = false;
         }
 
         if ( bRet )
         {
-            NAMESPACE_VOS( OGuard ) aGuard( Application::GetSolarMutex() );
             USHORT nId = ( nErrId & ERRCODE_WARNING_MASK ) ? ERRCTX_WARNING : ERRCTX_ERROR;
-            ResId aSfxResId( RID_ERRCTX );
+            ResId aSfxResId( RID_ERRCTX, *pMgr );
             ErrorResource_Impl aEr( aSfxResId, nId );
             rStr.SearchAndReplace( String::CreateFromAscii( "$(ERR)" ), ( (ResString)aEr ).GetString() );
         }
     }
-    delete pResId;
+
+    if( pFreeMgr )
+    {
+        delete pFreeMgr;
+        pMgr = NULL;
+    }
     return bRet;
 }
 
