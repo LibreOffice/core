@@ -3,9 +3,6 @@
 
 # Execution environment configuration.
 
-# Standard C-language command names and flags
-CC         *:= cl		# C   compiler 
-
 # Directory cache configuration.
 .DIRCACHE  *:= no
 
