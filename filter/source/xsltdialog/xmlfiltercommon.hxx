@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltercommon.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:17:23 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:12:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,6 +128,6 @@ extern const application_info_impl* getApplicationInfo( const rtl::OUString& rSe
 
 extern ResMgr* getXSLTDialogResMgr();
 
-#define RESID(x) ResId(x, getXSLTDialogResMgr() )
+#define RESID(x) ResId(x, *getXSLTDialogResMgr() )
 
 #endif
