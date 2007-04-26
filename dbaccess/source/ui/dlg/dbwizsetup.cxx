@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:33:46 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:58:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -285,7 +285,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
                                )
     :svt::RoadmapWizard( _pParent, ModuleRes(DLG_DATABASE_WIZARD),
                         WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP,
-                        ResId( STR_ROADMAPHEADER ), sal_True)
+                        ModuleRes( STR_ROADMAPHEADER ), sal_True)
 
     , m_pOutSet(NULL)
     , m_eType( DST_UNKNOWN )
@@ -294,26 +294,26 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     , m_bApplied(sal_False)
     , m_bUIEnabled( sal_True )
     , m_bIsConnectable( sal_False)
-    , m_sRM_IntroText(ResId(STR_PAGETITLE_INTROPAGE))
-    , m_sRM_dBaseText(ResId(STR_PAGETITLE_DBASE))
-    , m_sRM_TextText(ResId(STR_PAGETITLE_TEXT))
-    , m_sRM_MSAccessText(ResId(STR_PAGETITLE_MSACCESS))
-    , m_sRM_LDAPText(ResId(STR_PAGETITLE_LDAP))
-    , m_sRM_ADABASText(ResId(STR_PAGETITLE_ADABAS))
-    , m_sRM_ADOText(ResId(STR_PAGETITLE_ADO))
-    , m_sRM_JDBCText(ResId(STR_PAGETITLE_JDBC))
+    , m_sRM_IntroText(ModuleRes(STR_PAGETITLE_INTROPAGE))
+    , m_sRM_dBaseText(ModuleRes(STR_PAGETITLE_DBASE))
+    , m_sRM_TextText(ModuleRes(STR_PAGETITLE_TEXT))
+    , m_sRM_MSAccessText(ModuleRes(STR_PAGETITLE_MSACCESS))
+    , m_sRM_LDAPText(ModuleRes(STR_PAGETITLE_LDAP))
+    , m_sRM_ADABASText(ModuleRes(STR_PAGETITLE_ADABAS))
+    , m_sRM_ADOText(ModuleRes(STR_PAGETITLE_ADO))
+    , m_sRM_JDBCText(ModuleRes(STR_PAGETITLE_JDBC))
     , m_pGeneralPage( NULL )
     , m_pMySQLIntroPage(NULL)
     , m_pCollection( NULL )
 {
     DBG_CTOR(ODbTypeWizDialogSetup,NULL);
     // no local resources needed anymore
-    m_sRM_MySQLText = String(ResId(STR_PAGETITLE_MYSQL));
-    m_sRM_OracleText = String(ResId(STR_PAGETITLE_ORACLE));
-    m_sRM_ODBCText = String(ResId(STR_PAGETITLE_ODBC));
-    m_sRM_SpreadSheetText = String(ResId(STR_PAGETITLE_SPREADSHEET));
-    m_sRM_AuthentificationText = String(ResId(STR_PAGETITLE_AUTHENTIFICATION));
-    m_sRM_FinalText = String(ResId(STR_PAGETITLE_FINAL));
+    m_sRM_MySQLText = String(ModuleRes(STR_PAGETITLE_MYSQL));
+    m_sRM_OracleText = String(ModuleRes(STR_PAGETITLE_ORACLE));
+    m_sRM_ODBCText = String(ModuleRes(STR_PAGETITLE_ODBC));
+    m_sRM_SpreadSheetText = String(ModuleRes(STR_PAGETITLE_SPREADSHEET));
+    m_sRM_AuthentificationText = String(ModuleRes(STR_PAGETITLE_AUTHENTIFICATION));
+    m_sRM_FinalText = String(ModuleRes(STR_PAGETITLE_FINAL));
     m_sWorkPath = SvtPathOptions().GetWorkPath();
     pFinalPage = NULL;
     // extract the datasource type collection from the item set
@@ -510,7 +510,7 @@ String ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ){
         case PAGE_DBSETUPWIZARD_USERDEFINED:
             {
                 LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
-                sRoadmapItem = String(ResId(STR_PAGETITLE_CONNECTION));
+                sRoadmapItem = String(ModuleRes(STR_PAGETITLE_CONNECTION));
             }
             break;
         case PAGE_DBSETUPWIZARD_FINAL:
