@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:29:09 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:44:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -799,7 +799,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
 
     if ( rGraphic.GetType() != GRAPHIC_NONE )
     {
-        sal_Int32 nMode = rConfigItem.ReadInt32( String( ResId( KEY_MODE, pResMgr ) ), -1 );
+        sal_Int32 nMode = rConfigItem.ReadInt32( String( ResId( KEY_MODE, *pResMgr ) ), -1 );
         if ( nMode == -1 )  // the property is not there, this is possible, if the graphic filter
         {                   // is called via UnoGraphicExporter and not from a graphic export Dialog
             nMode = 0;      // then we are defaulting this mode to 0
@@ -828,7 +828,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
                 Bitmap      aBitmap( rGraphic.GetBitmap() );
                 MapMode     aMap( MAP_100TH_INCH );
 
-                sal_Int32   nDPI = rConfigItem.ReadInt32( String( ResId( KEY_RES, pResMgr ) ), 75 );
+                sal_Int32   nDPI = rConfigItem.ReadInt32( String( ResId( KEY_RES, *pResMgr ) ), 75 );
                 Fraction    aFrac( 1, Min( Max( nDPI, sal_Int32( 75 ) ), sal_Int32( 600 ) ) );
 
                 aMap.SetScaleX( aFrac );
@@ -852,7 +852,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             else
                 aGraphic = rGraphic;
 
-            sal_Int32 nColors = rConfigItem.ReadInt32( String( ResId( KEY_COLORS, pResMgr ) ), 0 ); // #92767#
+            sal_Int32 nColors = rConfigItem.ReadInt32( String( ResId( KEY_COLORS, *pResMgr ) ), 0 ); // #92767#
             if ( nColors )  // graphic conversion necessary ?
             {
                 BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
@@ -1801,7 +1801,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
                         aBmp = aGraphic.GetBitmap();
                 }
                 ResMgr*     pResMgr = CREATERESMGR( svt );
-                sal_Bool    bRleCoding = aConfigItem.ReadBool( String( ResId( KEY_RLE_CODING, pResMgr ) ), sal_True );
+                sal_Bool    bRleCoding = aConfigItem.ReadBool( String( ResId( KEY_RLE_CODING, *pResMgr ) ), sal_True );
                 // Wollen wir RLE-Kodiert speichern?
                 aBmp.Write( rOStm, bRleCoding );
                 delete pResMgr;
