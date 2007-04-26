@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UserAdminDlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:06:53 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:57:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,7 @@ DBG_NAME(OUserAdminDlg)
         delete pExampleSet;
         pExampleSet = new SfxItemSet(*GetInputSetImpl());
 
-        AddTabPage(TAB_PAGE_USERADMIN, String(ResId(STR_PAGETITLE_USERADMIN)), OUserAdmin::Create,0, sal_False, 1);
+        AddTabPage(TAB_PAGE_USERADMIN, String(ModuleRes(STR_PAGETITLE_USERADMIN)), OUserAdmin::Create,0, sal_False, 1);
 
         // remove the reset button - it's meaning is much too ambiguous in this dialog
         RemoveResetButton();

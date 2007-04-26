@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextConnectionHelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:06:25 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:56:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,25 +168,25 @@ DBG_NAME(OTextConnectionHelper)
 //------------------------------------------------------------------------
     OTextConnectionHelper::OTextConnectionHelper( Window* pParent, sal_Bool _bWizardMode )
         :Control(pParent)
-           ,m_aHeader                   (pParent, ResId(CB_AUTOHEADER))
-        ,m_aLineFormat              (pParent, ResId(FL_AUTOSEPARATOR2))
-        ,m_aFTExtensionHeader       (pParent, ResId(FT_AUTOEXTENSIONHEADER))
-        ,m_aRBAccessTextFiles       (pParent, ResId(RB_AUTOACCESSCTEXTFILES))
-        ,m_aRBAccessCSVFiles        (pParent, ResId(RB_AUTOACCESSCCSVFILES))
-        ,m_aRBAccessOtherFiles      (pParent, ResId(RB_AUTOACCESSOTHERS))
-        ,m_aETOwnExtension          (pParent, ResId(ET_AUTOOWNEXTENSION))
-        ,m_aFTExtensionExample      (pParent, ResId(FT_AUTOOWNEXTENSIONAPPENDIX))
-        ,m_aFieldSeparatorLabel     (pParent, ResId(FT_AUTOFIELDSEPARATOR))
-        ,m_aFieldSeparator          (pParent, ResId(CM_AUTOFIELDSEPARATOR))
-        ,m_aTextSeparatorLabel      (pParent, ResId(FT_AUTOTEXTSEPARATOR))
-        ,m_aTextSeparator           (pParent, ResId(CM_AUTOTEXTSEPARATOR))
-        ,m_aDecimalSeparatorLabel   (pParent, ResId(FT_AUTODECIMALSEPARATOR))
-        ,m_aDecimalSeparator        (pParent, ResId(CM_AUTODECIMALSEPARATOR))
-        ,m_aThousandsSeparatorLabel (pParent, ResId(FT_AUTOTHOUSANDSSEPARATOR))
-        ,m_aThousandsSeparator      (pParent, ResId(CM_AUTOTHOUSANDSSEPARATOR))
-        ,m_aFieldSeparatorList      (ResId(STR_AUTOFIELDSEPARATORLIST))
-        ,m_aTextSeparatorList       (ResId(STR_AUTOTEXTSEPARATORLIST))
-        ,m_aTextNone                (ResId(STR_AUTOTEXT_FIELD_SEP_NONE))
+           ,m_aHeader                   (pParent, ModuleRes(CB_AUTOHEADER))
+        ,m_aLineFormat              (pParent, ModuleRes(FL_AUTOSEPARATOR2))
+        ,m_aFTExtensionHeader       (pParent, ModuleRes(FT_AUTOEXTENSIONHEADER))
+        ,m_aRBAccessTextFiles       (pParent, ModuleRes(RB_AUTOACCESSCTEXTFILES))
+        ,m_aRBAccessCSVFiles        (pParent, ModuleRes(RB_AUTOACCESSCCSVFILES))
+        ,m_aRBAccessOtherFiles      (pParent, ModuleRes(RB_AUTOACCESSOTHERS))
+        ,m_aETOwnExtension          (pParent, ModuleRes(ET_AUTOOWNEXTENSION))
+        ,m_aFTExtensionExample      (pParent, ModuleRes(FT_AUTOOWNEXTENSIONAPPENDIX))
+        ,m_aFieldSeparatorLabel     (pParent, ModuleRes(FT_AUTOFIELDSEPARATOR))
+        ,m_aFieldSeparator          (pParent, ModuleRes(CM_AUTOFIELDSEPARATOR))
+        ,m_aTextSeparatorLabel      (pParent, ModuleRes(FT_AUTOTEXTSEPARATOR))
+        ,m_aTextSeparator           (pParent, ModuleRes(CM_AUTOTEXTSEPARATOR))
+        ,m_aDecimalSeparatorLabel   (pParent, ModuleRes(FT_AUTODECIMALSEPARATOR))
+        ,m_aDecimalSeparator        (pParent, ModuleRes(CM_AUTODECIMALSEPARATOR))
+        ,m_aThousandsSeparatorLabel (pParent, ModuleRes(FT_AUTOTHOUSANDSSEPARATOR))
+        ,m_aThousandsSeparator      (pParent, ModuleRes(CM_AUTOTHOUSANDSSEPARATOR))
+        ,m_aFieldSeparatorList      (ModuleRes(STR_AUTOFIELDSEPARATORLIST))
+        ,m_aTextSeparatorList       (ModuleRes(STR_AUTOTEXTSEPARATORLIST))
+        ,m_aTextNone                (ModuleRes(STR_AUTOTEXT_FIELD_SEP_NONE))
     {
         DBG_CTOR(OTextConnectionHelper,NULL);
 
@@ -316,61 +316,61 @@ DBG_NAME(OTextConnectionHelper)
         String aDelText(m_aFieldSeparator.GetText());
         if(!aDelText.Len())
         {   // Kein FeldTrenner
-            aErrorText = String(ResId(STR_AUTODELIMITER_MISSING));
+            aErrorText = String(ModuleRes(STR_AUTODELIMITER_MISSING));
             aErrorText.SearchAndReplaceAscii("#1",m_aFieldSeparatorLabel.GetText());
             pErrorWin = &m_aFieldSeparator;
         }
         else if (!m_aDecimalSeparator.GetText().Len())
         {   // kein Decimaltrenner
-            aErrorText = String(ResId(STR_AUTODELIMITER_MISSING));
+            aErrorText = String(ModuleRes(STR_AUTODELIMITER_MISSING));
             aErrorText.SearchAndReplaceAscii("#1",m_aDecimalSeparatorLabel.GetText());
             pErrorWin = &m_aDecimalSeparator;
         }
         else if (m_aTextSeparator.GetText() == m_aFieldSeparator.GetText())
         {   // Feld und TextTrenner duerfen nicht gleich sein
-            aErrorText = String(ResId(STR_AUTODELIMITER_MUST_DIFFER));
+            aErrorText = String(ModuleRes(STR_AUTODELIMITER_MUST_DIFFER));
             aErrorText.SearchAndReplaceAscii("#1",m_aTextSeparatorLabel.GetText());
             aErrorText.SearchAndReplaceAscii("#2",m_aFieldSeparatorLabel.GetText());
             pErrorWin = &m_aTextSeparator;
         }
         else if (m_aDecimalSeparator.GetText() == m_aThousandsSeparator.GetText())
         {   // Tausender und DecimalTrenner duerfen nicht gleich sein
-            aErrorText = String(ResId(STR_AUTODELIMITER_MUST_DIFFER));
+            aErrorText = String(ModuleRes(STR_AUTODELIMITER_MUST_DIFFER));
             aErrorText.SearchAndReplaceAscii("#1",m_aDecimalSeparatorLabel.GetText());
             aErrorText.SearchAndReplaceAscii("#2",m_aThousandsSeparatorLabel.GetText());
             pErrorWin = &m_aDecimalSeparator;
         }
         else if (m_aFieldSeparator.GetText() == m_aThousandsSeparator.GetText())
         {   // Tausender und FeldTrenner duerfen nicht gleich sein
-            aErrorText = String(ResId(STR_AUTODELIMITER_MUST_DIFFER));
+            aErrorText = String(ModuleRes(STR_AUTODELIMITER_MUST_DIFFER));
             aErrorText.SearchAndReplaceAscii("#1",m_aFieldSeparatorLabel.GetText());
             aErrorText.SearchAndReplaceAscii("#2",m_aThousandsSeparatorLabel.GetText());
             pErrorWin = &m_aFieldSeparator;
         }
         else if (m_aFieldSeparator.GetText() == m_aDecimalSeparator.GetText())
         {   // Zehner und FeldTrenner duerfen nicht gleich sein
-            aErrorText = String(ResId(STR_AUTODELIMITER_MUST_DIFFER));
+            aErrorText = String(ModuleRes(STR_AUTODELIMITER_MUST_DIFFER));
             aErrorText.SearchAndReplaceAscii("#1",m_aFieldSeparatorLabel.GetText());
             aErrorText.SearchAndReplaceAscii("#2",m_aDecimalSeparatorLabel.GetText());
             pErrorWin = &m_aFieldSeparator;
         }
         else if (m_aTextSeparator.GetText() == m_aThousandsSeparator.GetText())
         {   // Tausender und TextTrenner duerfen nicht gleich sein
-            aErrorText = String(ResId(STR_AUTODELIMITER_MUST_DIFFER));
+            aErrorText = String(ModuleRes(STR_AUTODELIMITER_MUST_DIFFER));
             aErrorText.SearchAndReplaceAscii("#1",m_aTextSeparatorLabel.GetText());
             aErrorText.SearchAndReplaceAscii("#2",m_aThousandsSeparatorLabel.GetText());
             pErrorWin = &m_aTextSeparator;
         }
         else if (m_aTextSeparator.GetText() == m_aDecimalSeparator.GetText())
         {   // Zehner und TextTrenner duerfen nicht gleich sein
-            aErrorText = String(ResId(STR_AUTODELIMITER_MUST_DIFFER));
+            aErrorText = String(ModuleRes(STR_AUTODELIMITER_MUST_DIFFER));
             aErrorText.SearchAndReplaceAscii("#1",m_aTextSeparatorLabel.GetText());
             aErrorText.SearchAndReplaceAscii("#2",m_aDecimalSeparatorLabel.GetText());
             pErrorWin = &m_aTextSeparator;
         }
         else if ((sExtension.Search('*') != STRING_NOTFOUND) || (sExtension.Search('?') != STRING_NOTFOUND))
         {
-            aErrorText = String(ResId(STR_AUTONO_WILDCARDS));
+            aErrorText = String(ModuleRes(STR_AUTONO_WILDCARDS));
             aErrorText.SearchAndReplaceAscii("#1",sExtension);
             pErrorWin = &m_aETOwnExtension;
         }
