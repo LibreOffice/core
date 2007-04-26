@@ -4,9 +4,9 @@
  *
  *  $RCSfile: labfmt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:55:30 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:08:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,26 +326,26 @@ SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet) :
 
     SfxTabPage(pParent, SW_RES(TP_LAB_FMT), rSet),
     aItem        ((const SwLabItem&) rSet.Get(FN_LABEL)),
-    aMakeFI      (this, ResId(FI_MAKE)),
-    aTypeFI      (this, ResId(FI_TYPE)),
-    aPreview     (this, ResId(WIN_PREVIEW)),
-    aHDistText   (this, ResId(TXT_HDIST  )),
-    aHDistField  (this, ResId(FLD_HDIST  )),
-    aVDistText   (this, ResId(TXT_VDIST  )),
-    aVDistField  (this, ResId(FLD_VDIST  )),
-    aWidthText   (this, ResId(TXT_WIDTH  )),
-    aWidthField  (this, ResId(FLD_WIDTH  )),
-    aHeightText  (this, ResId(TXT_HEIGHT )),
-    aHeightField (this, ResId(FLD_HEIGHT )),
-    aLeftText    (this, ResId(TXT_LEFT   )),
-    aLeftField   (this, ResId(FLD_LEFT   )),
-    aUpperText   (this, ResId(TXT_UPPER  )),
-    aUpperField  (this, ResId(FLD_UPPER  )),
-    aColsText    (this, ResId(TXT_COLUMNS)),
-    aColsField   (this, ResId(FLD_COLUMNS)),
-    aRowsText    (this, ResId(TXT_ROWS   )),
-    aRowsField   (this, ResId(FLD_ROWS   )),
-    aSavePB      (this, ResId(PB_SAVE  )),
+    aMakeFI      (this, SW_RES(FI_MAKE)),
+    aTypeFI      (this, SW_RES(FI_TYPE)),
+    aPreview     (this, SW_RES(WIN_PREVIEW)),
+    aHDistText   (this, SW_RES(TXT_HDIST  )),
+    aHDistField  (this, SW_RES(FLD_HDIST  )),
+    aVDistText   (this, SW_RES(TXT_VDIST  )),
+    aVDistField  (this, SW_RES(FLD_VDIST  )),
+    aWidthText   (this, SW_RES(TXT_WIDTH  )),
+    aWidthField  (this, SW_RES(FLD_WIDTH  )),
+    aHeightText  (this, SW_RES(TXT_HEIGHT )),
+    aHeightField (this, SW_RES(FLD_HEIGHT )),
+    aLeftText    (this, SW_RES(TXT_LEFT  )),
+    aLeftField   (this, SW_RES(FLD_LEFT  )),
+    aUpperText   (this, SW_RES(TXT_UPPER  )),
+    aUpperField  (this, SW_RES(FLD_UPPER  )),
+    aColsText    (this, SW_RES(TXT_COLUMNS)),
+    aColsField   (this, SW_RES(FLD_COLUMNS)),
+    aRowsText    (this, SW_RES(TXT_ROWS  )),
+    aRowsField   (this, SW_RES(FLD_ROWS  )),
+    aSavePB      (this, SW_RES(PB_SAVE  )),
     bModified(FALSE)
 
 {
@@ -639,15 +639,15 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec) :
     ModalDialog(pParent, SW_RES(DLG_SAVE_LABEL)),
     rLabRec(rRec),
     pLabPage(pParent),
-    aOptionsFL(this,ResId(FL_OPTIONS  )),
-    aMakeFT(this,   ResId(FT_MAKE     )),
-    aMakeCB(this,   ResId(CB_MAKE     )),
-    aTypeFT(this,   ResId(FT_TYPE     )),
-    aTypeED(this,   ResId(ED_TYPE     )),
-    aOKPB(this,     ResId(PB_OK     )),
-    aCancelPB(this, ResId(PB_CANCEL )),
-    aHelpPB(this,   ResId(PB_HELP   )),
-    aQueryMB(this,  ResId(MB_QUERY )),
+    aOptionsFL(this,SW_RES(FL_OPTIONS  )),
+    aMakeFT(this,   SW_RES(FT_MAKE     )),
+    aMakeCB(this,   SW_RES(CB_MAKE     )),
+    aTypeFT(this,   SW_RES(FT_TYPE     )),
+    aTypeED(this,   SW_RES(ED_TYPE     )),
+    aOKPB(this,     SW_RES(PB_OK     )),
+    aCancelPB(this, SW_RES(PB_CANCEL )),
+    aHelpPB(this,   SW_RES(PB_HELP      )),
+    aQueryMB(this,  SW_RES(MB_QUERY )),
     bSuccess(sal_False)
 {
     FreeResource();
