@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgegif.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:40:55 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:59:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,15 +51,15 @@
 \************************************************************************/
 
 DlgExportEGIF::DlgExportEGIF( FltCallDialogParameter& rPara ) :
-                ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_GIF, rPara.pResMgr ) ),
+                ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_GIF, *rPara.pResMgr ) ),
                 rFltCallPara        ( rPara ),
-                aCbxInterlaced      ( this, ResId( CBX_INTERLACED ) ),
-                aCbxTranslucent     ( this, ResId( CBX_TRANSLUCENT ) ),
-                aGrpMode            ( this, ResId( GRP_MODE ) ),
-                aGrpDraw            ( this, ResId( GRP_DRAW ) ),
-                aBtnOK              ( this, ResId( BTN_OK ) ),
-                aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
-                aBtnHelp            ( this, ResId( BTN_HELP ) ),
+                aCbxInterlaced      ( this, ResId( CBX_INTERLACED, *rPara.pResMgr ) ),
+                aCbxTranslucent     ( this, ResId( CBX_TRANSLUCENT, *rPara.pResMgr ) ),
+                aGrpMode            ( this, ResId( GRP_MODE, *rPara.pResMgr ) ),
+                aGrpDraw            ( this, ResId( GRP_DRAW, *rPara.pResMgr ) ),
+                aBtnOK              ( this, ResId( BTN_OK, *rPara.pResMgr ) ),
+                aBtnCancel          ( this, ResId( BTN_CANCEL, *rPara.pResMgr ) ),
+                aBtnHelp            ( this, ResId( BTN_HELP, *rPara.pResMgr ) ),
                 pMgr                ( rPara.pResMgr )
 {
     FreeResource();
@@ -67,8 +67,8 @@ DlgExportEGIF::DlgExportEGIF( FltCallDialogParameter& rPara ) :
     String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/GIF" ) );
     pConfigItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
 
-    String aInterlaceStr( ResId( KEY_INTER, pMgr ) );
-    String aTranslucentStr( ResId( KEY_TRANS, pMgr ) );
+    String aInterlaceStr( ResId( KEY_INTER, *pMgr ) );
+    String aTranslucentStr( ResId( KEY_TRANS, *pMgr ) );
     // Config-Parameter lesen
     sal_Bool bInterlaced = pConfigItem->ReadInt32( aInterlaceStr, 1 ) != 0;
     sal_Bool bTranslucent = pConfigItem->ReadInt32( aTranslucentStr, 1 ) != 0;
@@ -94,8 +94,8 @@ IMPL_LINK( DlgExportEGIF, OK, void *, EMPTYARG )
 {
 
     // Config-Parameter schreiben
-    String aInterlaceStr( ResId( KEY_INTER, pMgr ) );
-    String aTranslucentStr( ResId( KEY_TRANS, pMgr ) );
+    String aInterlaceStr( ResId( KEY_INTER, *pMgr ) );
+    String aTranslucentStr( ResId( KEY_TRANS, *pMgr ) );
 
     sal_Int32 nValue = 0;
     if ( aCbxInterlaced.IsChecked() )
