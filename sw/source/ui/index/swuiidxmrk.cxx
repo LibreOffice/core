@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swuiidxmrk.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:04:33 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:12:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -744,12 +744,12 @@ class SwNewUserIdxDlg : public ModalDialog
         SwNewUserIdxDlg(SwIndexMarkDlg* pParent) :
             ModalDialog(pParent, SW_RES(DLG_NEW_USER_IDX)),
             pDlg(pParent),
-            aOKPB(this, ResId(      PB_OK       )),
-            aCancelPB(this, ResId(  PB_CANCEL   )),
-            aHelpPB(this, ResId(    PB_HELP     )),
-            aNameFL(this, ResId(    FL_NAME     )),
-            aNameFT(this, ResId(    FT_NAME     )),
-            aNameED(this, ResId(    ED_NAME     ))
+            aOKPB(this, SW_RES(     PB_OK       )),
+            aCancelPB(this, SW_RES( PB_CANCEL   )),
+            aHelpPB(this, SW_RES(   PB_HELP     )),
+            aNameFL(this, SW_RES(    FL_NAME     )),
+            aNameFT(this, SW_RES(   FT_NAME     )),
+            aNameED(this, SW_RES(   ED_NAME     ))
             {
                 FreeResource();
                 aNameED.SetModifyHdl(LINK(this, SwNewUserIdxDlg, ModifyHdl));
@@ -1184,7 +1184,7 @@ SwIndexMarkFloatDlg::SwIndexMarkFloatDlg(SfxBindings* pBindings,
                                 SfxChildWinInfo* pInfo,
                                    sal_Bool bNew) :
 SfxModelessDialog(pBindings, pChild, pParent, SvtCJKOptions().IsCJKFontEnabled()?SW_RES(DLG_INSIDXMARK_CJK):SW_RES(DLG_INSIDXMARK)),
-    aDlg(this, bNew, ResId(WIN_DLG), SvtCJKOptions().IsCJKFontEnabled()?DLG_INSIDXMARK_CJK:DLG_INSIDXMARK)
+    aDlg(this, bNew, SW_RES(WIN_DLG), SvtCJKOptions().IsCJKFontEnabled()?DLG_INSIDXMARK_CJK:DLG_INSIDXMARK)
 {
     FreeResource();
       SwWrtShell* pWrtShell = ::GetActiveWrtShell();
@@ -1211,7 +1211,7 @@ void SwIndexMarkFloatDlg::ReInitDlg(SwWrtShell& rWrtShell)
  --------------------------------------------------*/
 SwIndexMarkModalDlg::SwIndexMarkModalDlg(Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark) :
 SvxStandardDialog(pParent, SvtCJKOptions().IsCJKFontEnabled()?SW_RES(DLG_EDIT_IDXMARK_CJK):SW_RES(DLG_EDIT_IDXMARK)),
-    aDlg(this, sal_False, ResId(WIN_DLG), SvtCJKOptions().IsCJKFontEnabled()?DLG_EDIT_IDXMARK_CJK:DLG_EDIT_IDXMARK)
+    aDlg(this, sal_False, SW_RES(WIN_DLG), SvtCJKOptions().IsCJKFontEnabled()?DLG_EDIT_IDXMARK_CJK:DLG_EDIT_IDXMARK)
 {
     FreeResource();
     aDlg.ReInitDlg(rSh, pCurTOXMark);
@@ -1345,22 +1345,22 @@ SwAuthMarkDlg::SwAuthMarkDlg(  Window *pParent,
                                const ResId& rResId,
                                sal_Bool bNewDlg) :
     Window(pParent, rResId),
-    aFromComponentRB(   this, ResId(RB_FROMCOMPONENT    )),
-    aFromDocContentRB(  this, ResId(RB_FROMDOCCONTENT   )),
-    aEntryFT(   this, ResId(FT_ENTRY    )),
-    aEntryED(   this, ResId(ED_ENTRY    )),
-    aEntryLB(   this, ResId(LB_ENTRY    )),
-    aAuthorFT(  this, ResId(FT_AUTHOR       )),
-    aAuthorFI(  this, ResId(FI_AUTHOR   )),
-    aTitleFT(   this, ResId(FT_TITLE    )),
-    aTitleFI(   this, ResId(FI_TITLE    )),
-    aEntryFL(   this, ResId(FL_ENTRY    )),
-    aOKBT(      this, ResId(PB_OK       )),
-    aCancelBT(  this, ResId(PB_CANCEL   )),
-    aHelpBT(    this, ResId(PB_HELP )),
-    sChangeST(  ResId(ST_CHANGE)),
-    aCreateEntryPB(this,ResId(PB_CREATEENTRY)),
-    aEditEntryPB(this,  ResId(PB_EDITENTRY)),
+    aFromComponentRB(   this, ResId(RB_FROMCOMPONENT, *rResId.GetResMgr()   )),
+    aFromDocContentRB(  this, ResId(RB_FROMDOCCONTENT, *rResId.GetResMgr()  )),
+    aEntryFT(   this, ResId(FT_ENTRY, *rResId.GetResMgr()   )),
+    aEntryED(   this, ResId(ED_ENTRY, *rResId.GetResMgr()   )),
+    aEntryLB(   this, ResId(LB_ENTRY, *rResId.GetResMgr()   )),
+    aAuthorFT(  this, ResId(FT_AUTHOR, *rResId.GetResMgr()      )),
+    aAuthorFI(  this, ResId(FI_AUTHOR, *rResId.GetResMgr()      )),
+    aTitleFT(   this, ResId(FT_TITLE, *rResId.GetResMgr()   )),
+    aTitleFI(   this, ResId(FI_TITLE, *rResId.GetResMgr()   )),
+    aEntryFL(   this, ResId(FL_ENTRY, *rResId.GetResMgr()    )),
+    aOKBT(      this, ResId(PB_OK, *rResId.GetResMgr()      )),
+    aCancelBT(  this, ResId(PB_CANCEL, *rResId.GetResMgr()  )),
+    aHelpBT(    this, ResId(PB_HELP, *rResId.GetResMgr()    )),
+    sChangeST(  ResId(ST_CHANGE, *rResId.GetResMgr())),
+    aCreateEntryPB(this,ResId(PB_CREATEENTRY, *rResId.GetResMgr())),
+    aEditEntryPB(this,  ResId(PB_EDITENTRY, *rResId.GetResMgr())),
     bNewEntry(bNewDlg),
     pSh(0),
     bBibAccessInitialized(sal_False)
@@ -1796,10 +1796,10 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
         sal_Bool bNewEntry,
         sal_Bool bCreate) :
     ModalDialog(pParent, SW_RES(DLG_CREATE_AUTH_ENTRY)),
-    aOKBT(this,         ResId(PB_OK         )),
-    aCancelBT(this,     ResId(PB_CANCEL     )),
-    aHelpBT(this,       ResId(PB_HELP       )),
-    aEntriesFL(this,    ResId(FL_ENTRIES    )),
+    aOKBT(this,         SW_RES(PB_OK            )),
+    aCancelBT(this,     SW_RES(PB_CANCEL        )),
+    aHelpBT(this,       SW_RES(PB_HELP      )),
+    aEntriesFL(this,    SW_RES(FL_ENTRIES    )),
     pIdentifierBox(0),
     pTypeListBox(0),
     rWrtSh(rSh),
@@ -2043,7 +2043,7 @@ SwAuthMarkFloatDlg::SwAuthMarkFloatDlg(SfxBindings* pBindings,
                                 SfxChildWinInfo* pInfo,
                                    sal_Bool bNew) :
     SfxModelessDialog(pBindings, pChild, pParent, SW_RES(DLG_INSAUTHMARK)),
-    aDlg(this, ResId(WIN_DLG), bNew)
+    aDlg(this, SW_RES(WIN_DLG), bNew)
 {
     FreeResource();
     Initialize(pInfo);
@@ -2070,7 +2070,7 @@ void SwAuthMarkFloatDlg::ReInitDlg(SwWrtShell& rWrtShell)
  --------------------------------------------------*/
 SwAuthMarkModalDlg::SwAuthMarkModalDlg(Window *pParent, SwWrtShell& rSh) :
     SvxStandardDialog(pParent, SW_RES(DLG_EDIT_AUTHMARK)),
-    aDlg(this, ResId(WIN_DLG), sal_False)
+    aDlg(this, SW_RES(WIN_DLG), sal_False)
 {
     FreeResource();
     aDlg.ReInitDlg(rSh);
