@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:10:11 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:00:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,23 +112,23 @@ namespace dbaui
     //-------------------------------------------------------------------------
     OGeneralPage::OGeneralPage(Window* pParent, const SfxItemSet& _rItems, sal_Bool _bDBWizardMode)
         :OGenericAdministrationPage(pParent, ModuleRes(PAGE_GENERAL), _rItems)
-        ,m_aFTHeaderText                (this, ResId(FT_GENERALHEADERTEXT))
-        ,m_aFTHelpText                  (this, ResId(FT_GENERALHELPTEXT))
-        ,m_aFT_DatasourceTypeHeader     (this, ResId(FT_DATASOURCEHEADER))
-        ,m_aRB_CreateDatabase           (this, ResId(RB_CREATEDBDATABASE))
-        ,m_aRB_OpenDocument             (this, ResId(RB_OPENEXISTINGDOC))
-        ,m_aRB_GetExistingDatabase      (this, ResId(RB_GETEXISTINGDATABASE))
-        ,m_aFT_DocListLabel             (this, ResId(FT_DOCLISTLABEL))
-        ,m_pLB_DocumentList             ( new OpenDocumentListBox( this, "com.sun.star.sdb.OfficeDatabaseDocument", ResId( LB_DOCUMENTLIST ) ) )
-        ,m_aPB_OpenDocument             (this, "com.sun.star.sdb.OfficeDatabaseDocument", ResId(PB_OPENDOCUMENT))
-        ,m_aTypePreLabel                (this, ResId(FT_DATASOURCETYPE_PRE))
-        ,m_aDatasourceTypeLabel         (this, ResId(FT_DATATYPE))
-        ,m_pDatasourceType              ( new ListBox(this, ResId(LB_DATATYPE)))
-        ,m_aFTDataSourceAppendix        (this, ResId(FT_DATATYPEAPPENDIX))
-        ,m_aTypePostLabel               (this, ResId(FT_DATASOURCETYPE_POST))
-        ,m_aSpecialMessage              (this, ResId(FT_SPECIAL_MESSAGE))
+        ,m_aFTHeaderText                (this, ModuleRes(FT_GENERALHEADERTEXT))
+        ,m_aFTHelpText                  (this, ModuleRes(FT_GENERALHELPTEXT))
+        ,m_aFT_DatasourceTypeHeader     (this, ModuleRes(FT_DATASOURCEHEADER))
+        ,m_aRB_CreateDatabase           (this, ModuleRes(RB_CREATEDBDATABASE))
+        ,m_aRB_OpenDocument             (this, ModuleRes(RB_OPENEXISTINGDOC))
+        ,m_aRB_GetExistingDatabase      (this, ModuleRes(RB_GETEXISTINGDATABASE))
+        ,m_aFT_DocListLabel             (this, ModuleRes(FT_DOCLISTLABEL))
+        ,m_pLB_DocumentList             ( new OpenDocumentListBox( this, "com.sun.star.sdb.OfficeDatabaseDocument", ModuleRes( LB_DOCUMENTLIST ) ) )
+        ,m_aPB_OpenDocument             (this, "com.sun.star.sdb.OfficeDatabaseDocument", ModuleRes(PB_OPENDOCUMENT))
+        ,m_aTypePreLabel                (this, ModuleRes(FT_DATASOURCETYPE_PRE))
+        ,m_aDatasourceTypeLabel         (this, ModuleRes(FT_DATATYPE))
+        ,m_pDatasourceType              ( new ListBox(this, ModuleRes(LB_DATATYPE)))
+        ,m_aFTDataSourceAppendix        (this, ModuleRes(FT_DATATYPEAPPENDIX))
+        ,m_aTypePostLabel               (this, ModuleRes(FT_DATASOURCETYPE_POST))
+        ,m_aSpecialMessage              (this, ModuleRes(FT_SPECIAL_MESSAGE))
         ,m_DBWizardMode                 (_bDBWizardMode)
-        ,m_sMySQLEntry                  (ResId(STR_MYSQLENTRY))
+        ,m_sMySQLEntry                  (ModuleRes(STR_MYSQLENTRY))
         ,m_eOriginalCreationMode        (eCreateNew)
         ,m_pCollection                  (NULL)
         ,m_eCurrentSelection            (DST_UNKNOWN)
@@ -270,7 +270,7 @@ namespace dbaui
             if ( m_pAdminDialog )
             {
                 LocalResourceAccess aStringResAccess( PAGE_GENERAL, RSC_TABPAGE );
-                String sMessage = String(ResId(STR_PARENTTITLE));
+                String sMessage = String(ModuleRes(STR_PARENTTITLE));
                 sMessage.SearchAndReplaceAscii("#",sName);
                 m_pAdminDialog->setTitle(sMessage);
             }
@@ -316,7 +316,7 @@ namespace dbaui
             if ( nResId )
             {
                 LocalResourceAccess aStringResAccess( PAGE_GENERAL, RSC_TABPAGE );
-                sMessage = String(ResId(nResId));
+                sMessage = String(ModuleRes(nResId));
             }
             m_aSpecialMessage.SetText(sMessage);
 
