@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgrid.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:39:01 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:50:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,44 +189,44 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
 
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_GRID ), rCoreSet ),
 
-    aCbxUseGridsnap ( this, ResId( CBX_USE_GRIDSNAP ) ),
-    aCbxGridVisible ( this, ResId( CBX_GRID_VISIBLE ) ),
+    aCbxUseGridsnap ( this, SVX_RES( CBX_USE_GRIDSNAP ) ),
+    aCbxGridVisible ( this, SVX_RES( CBX_GRID_VISIBLE ) ),
 
-    aFlResolution   ( this, ResId( FL_RESOLUTION ) ),
-    aFtDrawX        ( this, ResId( FT_DRAW_X ) ),
-    aMtrFldDrawX    ( this, ResId( MTR_FLD_DRAW_X ) ),
-    aFtDrawY        ( this, ResId( FT_DRAW_Y ) ),
-    aMtrFldDrawY    ( this, ResId( MTR_FLD_DRAW_Y ) ),
+    aFlResolution   ( this, SVX_RES( FL_RESOLUTION ) ),
+    aFtDrawX        ( this, SVX_RES( FT_DRAW_X ) ),
+    aMtrFldDrawX    ( this, SVX_RES( MTR_FLD_DRAW_X ) ),
+    aFtDrawY        ( this, SVX_RES( FT_DRAW_Y ) ),
+    aMtrFldDrawY    ( this, SVX_RES( MTR_FLD_DRAW_Y ) ),
 
-    aFlDivision     ( this, ResId( FL_DIVISION ) ),
-    aFtDivisionX(     this, ResId( FT_DIVISION_X) ),
-    aNumFldDivisionX( this, ResId( NUM_FLD_DIVISION_X ) ),
-    aDivisionPointX(  this, ResId( FT_HORZ_POINTS) ),
+    aFlDivision     ( this, SVX_RES( FL_DIVISION ) ),
+    aFtDivisionX(     this, SVX_RES( FT_DIVISION_X) ),
+    aNumFldDivisionX( this, SVX_RES( NUM_FLD_DIVISION_X ) ),
+    aDivisionPointX(  this, SVX_RES( FT_HORZ_POINTS) ),
 
-    aFtDivisionY(     this, ResId( FT_DIVISION_Y) ),
-    aNumFldDivisionY( this, ResId( NUM_FLD_DIVISION_Y ) ),
-    aDivisionPointY(  this, ResId( FT_VERT_POINTS) ),
+    aFtDivisionY(     this, SVX_RES( FT_DIVISION_Y) ),
+    aNumFldDivisionY( this, SVX_RES( NUM_FLD_DIVISION_Y ) ),
+    aDivisionPointY(  this, SVX_RES( FT_VERT_POINTS) ),
 
-    aCbxSynchronize ( this, ResId( CBX_SYNCHRONIZE ) ),
-    aGrpDrawGrid    ( this, ResId( GRP_DRAWGRID ) ),
+    aCbxSynchronize ( this, SVX_RES( CBX_SYNCHRONIZE ) ),
+    aGrpDrawGrid    ( this, SVX_RES( GRP_DRAWGRID ) ),
 
-    aGrpSnap            ( this, ResId( GRP_SNAP ) ),
-    aCbxSnapHelplines   ( this, ResId( CBX_SNAP_HELPLINES ) ),
-    aCbxSnapBorder      ( this, ResId( CBX_SNAP_BORDER ) ),
-    aCbxSnapFrame       ( this, ResId( CBX_SNAP_FRAME ) ),
-    aCbxSnapPoints      ( this, ResId( CBX_SNAP_POINTS ) ),
-    aFtSnapArea         ( this, ResId( FT_SNAP_AREA ) ),
-    aMtrFldSnapArea     ( this, ResId( MTR_FLD_SNAP_AREA ) ),
+    aGrpSnap            ( this, SVX_RES( GRP_SNAP ) ),
+    aCbxSnapHelplines   ( this, SVX_RES( CBX_SNAP_HELPLINES ) ),
+    aCbxSnapBorder      ( this, SVX_RES( CBX_SNAP_BORDER ) ),
+    aCbxSnapFrame       ( this, SVX_RES( CBX_SNAP_FRAME ) ),
+    aCbxSnapPoints      ( this, SVX_RES( CBX_SNAP_POINTS ) ),
+    aFtSnapArea         ( this, SVX_RES( FT_SNAP_AREA ) ),
+    aMtrFldSnapArea     ( this, SVX_RES( MTR_FLD_SNAP_AREA ) ),
 
-    aSeparatorFL        ( this, ResId( FL_SEPARATOR ) ),
+    aSeparatorFL        ( this, SVX_RES( FL_SEPARATOR ) ),
 
-    aGrpOrtho           ( this, ResId( GRP_ORTHO ) ),
-    aCbxOrtho           ( this, ResId( CBX_ORTHO ) ),
-    aCbxBigOrtho        ( this, ResId( CBX_BIGORTHO ) ),
-    aCbxRotate          ( this, ResId( CBX_ROTATE ) ),
-    aMtrFldAngle        ( this, ResId( MTR_FLD_ANGLE ) ),
-    aFtBezAngle         ( this, ResId( FT_BEZ_ANGLE ) ),
-    aMtrFldBezAngle     ( this, ResId( MTR_FLD_BEZ_ANGLE ) ),
+    aGrpOrtho           ( this, SVX_RES( GRP_ORTHO ) ),
+    aCbxOrtho           ( this, SVX_RES( CBX_ORTHO ) ),
+    aCbxBigOrtho        ( this, SVX_RES( CBX_BIGORTHO ) ),
+    aCbxRotate          ( this, SVX_RES( CBX_ROTATE ) ),
+    aMtrFldAngle        ( this, SVX_RES( MTR_FLD_ANGLE ) ),
+    aFtBezAngle         ( this, SVX_RES( FT_BEZ_ANGLE ) ),
+    aMtrFldBezAngle     ( this, SVX_RES( MTR_FLD_BEZ_ANGLE ) ),
 
     bAttrModified( FALSE )
 {
