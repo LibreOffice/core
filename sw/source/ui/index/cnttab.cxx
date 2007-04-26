@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:03:52 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:11:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -374,10 +374,10 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
                     SwTOXBase* pCurTOX,
                     sal_uInt16 nToxType, sal_Bool bGlobal) :
         SfxTabDialog(   pParent, SW_RES(DLG_MULTI_TOX), &rSet),
-        aExampleContainerWIN(this, ResId(WIN_EXAMPLE)),
+        aExampleContainerWIN(this, SW_RES(WIN_EXAMPLE)),
         aExampleWIN( &aExampleContainerWIN, 0 ),
-        aShowExampleCB( this, ResId(CB_SHOWEXAMPLE)),
-        sUserDefinedIndex(ResId(ST_USERDEFINEDINDEX)),
+        aShowExampleCB( this, SW_RES(CB_SHOWEXAMPLE)),
+        sUserDefinedIndex(SW_RES(ST_USERDEFINEDINDEX)),
         pMgr( new SwTOXMgr( &rShell ) ),
         pParamTOXBase(pCurTOX),
         rSh(rShell),
@@ -830,8 +830,8 @@ public:
  --------------------------------------------------*/
 SwHeaderTree::SwHeaderTree(Window* pParent, const ResId rResId) :
         Control(pParent, rResId),
-        aStylesHB(  this, ResId(HB_STYLES)),
-        aStylesTLB( this, ResId(TLB_STYLES  ))
+        aStylesHB(  this, ResId(HB_STYLES, *rResId.GetResMgr())),
+        aStylesTLB( this, ResId(TLB_STYLES, *rResId.GetResMgr()))
 {
     FreeResource();
     aStylesHB.SetStyle(aStylesHB.GetStyle()|WB_BUTTONSTYLE|WB_TABSTOP|WB_BORDER);
@@ -884,14 +884,14 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
             SwWrtShell& rWrtSh, String rStringArr[]) :
     SfxModalDialog(pParent, SW_RES(DLG_ADD_IDX_STYLES)),
     pStyleArr(rStringArr),
-    aHeaderTree(this, ResId(TR_HEADER   )),
-    aStylesFL(  this, ResId(FL_STYLES   )),
-    aOk(        this, ResId(PB_OK       )),
-    aCancel(    this, ResId(PB_CANCEL   )),
-    aHelp(      this, ResId(PB_HELP     )),
-    aLeftPB(    this, ResId(PB_LEFT     )),
-    aRightPB(   this, ResId(PB_RIGHT    )),
-    sHBFirst(   ResId(ST_HB_FIRST))
+    aHeaderTree(this, SW_RES(TR_HEADER  )),
+    aStylesFL(  this, SW_RES(FL_STYLES   )),
+    aOk(        this, SW_RES(PB_OK      )),
+    aCancel(    this, SW_RES(PB_CANCEL  )),
+    aHelp(      this, SW_RES(PB_HELP        )),
+    aLeftPB(    this, SW_RES(PB_LEFT        )),
+    aRightPB(   this, SW_RES(PB_RIGHT   )),
+    sHBFirst(   SW_RES(ST_HB_FIRST))
 {
     FreeResource();
 
@@ -1038,64 +1038,64 @@ IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, PushButton*, pBtn)
   -----------------------------------------------------------------------*/
 SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrSet) :
     SfxTabPage(pParent, SW_RES(TP_TOX_SELECT), rAttrSet),
-    aTypeTitleFL(       this, ResId(FL_TYPETITLE        )),
-    aTitleFT(           this, ResId(FT_TITLE            )),
-    aTitleED(           this, ResId(ED_TITLE            )),
-    aTypeFT(            this, ResId(FT_TYPE             )),
-    aTypeLB(            this, ResId(LB_TYPE             )),
-    aReadOnlyCB(        this, ResId(CB_READONLY         )),
+    aTypeTitleFL(       this, SW_RES(FL_TYPETITLE        )),
+    aTitleFT(           this, SW_RES(FT_TITLE            )),
+    aTitleED(           this, SW_RES(ED_TITLE           )),
+    aTypeFT(            this, SW_RES(FT_TYPE                )),
+    aTypeLB(            this, SW_RES(LB_TYPE                )),
+    aReadOnlyCB(        this, SW_RES(CB_READONLY            )),
 
-    aAreaFL(            this, ResId(FL_AREA             )),
-    aAreaFT(            this, ResId(FT_AREA             )),
-    aAreaLB(            this, ResId(LB_AREA             )),
-    aLevelFT(           this, ResId(FT_LEVEL            )),
-    aLevelNF(           this, ResId(NF_LEVEL            )),
+    aAreaFL(            this, SW_RES(FL_AREA             )),
+    aAreaFT(            this, SW_RES(FT_AREA             )),
+    aAreaLB(            this, SW_RES(LB_AREA                )),
+    aLevelFT(           this, SW_RES(FT_LEVEL           )),
+    aLevelNF(           this, SW_RES(NF_LEVEL           )),
 
-    aCreateFromFL(      this, ResId(FL_CREATEFROM       )),
-    aFromHeadingsCB(    this, ResId(CB_FROMHEADINGS     )),
-    aChapterDlgPB(      this, ResId(PB_CHAPTERDLG       )),
-    aAddStylesCB(       this, ResId(CB_ADDSTYLES        )),
-    aAddStylesPB(       this, ResId(PB_ADDSTYLES        )),
-    aFromTablesCB(      this, ResId(CB_FROMTABLES       )),
-    aFromFramesCB(      this, ResId(CB_FROMFRAMES       )),
-    aFromGraphicsCB(    this, ResId(CB_FROMGRAPHICS     )),
-    aFromOLECB(         this, ResId(CB_FROMOLE          )),
-    aLevelFromChapterCB(this, ResId(CB_LEVELFROMCHAPTER )),
-    aFromCaptionsRB(    this, ResId(RB_FROMCAPTIONS     )),
-    aFromObjectNamesRB( this, ResId(RB_FROMOBJECTNAMES  )),
-    aCaptionSequenceFT( this, ResId(FT_CAPTIONSEQUENCE  )),
-    aCaptionSequenceLB( this, ResId(LB_CAPTIONSEQUENCE  )),
-    aDisplayTypeFT(     this, ResId(FT_DISPLAYTYPE      )),
-    aDisplayTypeLB(     this, ResId(LB_DISPLAYTYPE      )),
-    aTOXMarksCB(        this, ResId(CB_TOXMARKS         )),
+    aCreateFromFL(      this, SW_RES(FL_CREATEFROM       )),
+    aFromHeadingsCB(    this, SW_RES(CB_FROMHEADINGS     )),
+    aChapterDlgPB(      this, SW_RES(PB_CHAPTERDLG      )),
+    aAddStylesCB(       this, SW_RES(CB_ADDSTYLES       )),
+    aAddStylesPB(       this, SW_RES(PB_ADDSTYLES       )),
+    aFromTablesCB(      this, SW_RES(CB_FROMTABLES      )),
+    aFromFramesCB(      this, SW_RES(CB_FROMFRAMES      )),
+    aFromGraphicsCB(    this, SW_RES(CB_FROMGRAPHICS        )),
+    aFromOLECB(         this, SW_RES(CB_FROMOLE         )),
+    aLevelFromChapterCB(this, SW_RES(CB_LEVELFROMCHAPTER    )),
+    aFromCaptionsRB(    this, SW_RES(RB_FROMCAPTIONS        )),
+    aFromObjectNamesRB( this, SW_RES(RB_FROMOBJECTNAMES )),
+    aCaptionSequenceFT( this, SW_RES(FT_CAPTIONSEQUENCE  )),
+    aCaptionSequenceLB( this, SW_RES(LB_CAPTIONSEQUENCE  )),
+    aDisplayTypeFT(     this, SW_RES(FT_DISPLAYTYPE     )),
+    aDisplayTypeLB(     this, SW_RES(LB_DISPLAYTYPE     )),
+    aTOXMarksCB(        this, SW_RES(CB_TOXMARKS            )),
 
-    aCollectSameCB(     this, ResId(CB_COLLECTSAME      )),
-    aUseFFCB(           this, ResId(CB_USEFF            )),
-    aUseDashCB(         this, ResId(CB_USE_DASH         )),
-    aCaseSensitiveCB(   this, ResId(CB_CASESENSITIVE    )),
-    aInitialCapsCB(     this, ResId(CB_INITIALCAPS      )),
-    aKeyAsEntryCB(      this, ResId(CB_KEYASENTRY       )),
-    aFromFileCB(        this, ResId(CB_FROMFILE         )),
-    aAutoMarkPB(        this, ResId(MB_AUTOMARK         )),
-    aIdxOptionsFL(      this, ResId(FL_IDXOPTIONS       )),
-    aFromNames(         ResId(RES_SRCTYPES              )),
-    aFromObjCLB(        this, ResId(CLB_FROMOBJ         )),
-    aFromObjFL(         this, ResId(FL_FROMOBJ          )),
-    aSequenceCB(        this, ResId(CB_SEQUENCE         )),
-    aBracketFT(         this, ResId(FT_BRACKET          )),
-    aBracketLB(         this, ResId(LB_BRACKET          )),
-    aAuthorityFormatFL( this, ResId(FL_AUTHORITY        )),
-    aSortOptionsFL(     this, ResId(FL_SORTOPTIONS      )),
-    aLanguageFT(        this, ResId(FT_LANGUAGE         )),
-    aLanguageLB(        this, ResId(LB_LANGUAGE         )),
-    aSortAlgorithmFT(   this, ResId(FT_SORTALG          )),
-    aSortAlgorithmLB(   this, ResId(LB_SORTALG          )),
-    sAddStyleUser(ResId(ST_USER_ADDSTYLE)),
-    sAutoMarkType(ResId(ST_AUTOMARK_TYPE)),
+    aCollectSameCB(     this, SW_RES(CB_COLLECTSAME      )),
+    aUseFFCB(           this, SW_RES(CB_USEFF           )),
+    aUseDashCB(         this, SW_RES(CB_USE_DASH            )),
+    aCaseSensitiveCB(   this, SW_RES(CB_CASESENSITIVE   )),
+    aInitialCapsCB(     this, SW_RES(CB_INITIALCAPS     )),
+    aKeyAsEntryCB(      this, SW_RES(CB_KEYASENTRY      )),
+    aFromFileCB(        this, SW_RES(CB_FROMFILE            )),
+    aAutoMarkPB(        this, SW_RES(MB_AUTOMARK            )),
+    aIdxOptionsFL(      this, SW_RES(FL_IDXOPTIONS       )),
+    aFromNames(         SW_RES(RES_SRCTYPES             )),
+    aFromObjCLB(        this, SW_RES(CLB_FROMOBJ            )),
+    aFromObjFL(         this, SW_RES(FL_FROMOBJ          )),
+    aSequenceCB(        this, SW_RES(CB_SEQUENCE            )),
+    aBracketFT(         this, SW_RES(FT_BRACKET         )),
+    aBracketLB(         this, SW_RES(LB_BRACKET         )),
+    aAuthorityFormatFL( this, SW_RES(FL_AUTHORITY        )),
+    aSortOptionsFL(     this, SW_RES(FL_SORTOPTIONS      )),
+    aLanguageFT(        this, SW_RES(FT_LANGUAGE         )),
+    aLanguageLB(        this, SW_RES(LB_LANGUAGE         )),
+    aSortAlgorithmFT(   this, SW_RES(FT_SORTALG          )),
+    aSortAlgorithmLB(   this, SW_RES(LB_SORTALG          )),
+    sAddStyleUser(SW_RES(ST_USER_ADDSTYLE)),
+    sAutoMarkType(SW_RES(ST_AUTOMARK_TYPE)),
     bFirstCall(sal_True),
     pIndexRes(0)
 {
-    aBracketLB.InsertEntry(String(ResId(ST_NO_BRACKET)), 0);
+    aBracketLB.InsertEntry(String(SW_RES(ST_NO_BRACKET)), 0);
     FreeResource();
 
     pIndexEntryWrapper = new IndexEntrySupplierWrapper();
@@ -2081,68 +2081,68 @@ void    SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 //---------------------------------------------------
 SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet) :
         SfxTabPage(pParent, SW_RES(TP_TOX_ENTRY), rAttrSet),
-    aLevelLB(this,              ResId(LB_LEVEL              )),
-    aLevelFT(this,              ResId(FT_LEVEL              )),
-    aTokenFT(this,              ResId(FT_TOKEN              )),
-    aTokenWIN(this,             ResId(WIN_TOKEN             )),
-    aAllLevelsPB(this,          ResId(PB_ALL_LEVELS         )),
-    aEntryNoPB(this,            ResId(PB_ENTRYNO            )),
-    aEntryPB(this,              ResId(PB_ENTRY              )),
-    aChapterInfoPB(this,        ResId(PB_CHAPTERINFO        )),
-    aPageNoPB(this,             ResId(PB_PAGENO             )),
-    aTabPB(this,                ResId(PB_TAB                )),
-    aHyperLinkPB(this,          ResId(PB_HYPERLINK          )),
-    aAuthFieldsLB(this,         ResId(LB_AUTHFIELD          )),
-    aAuthInsertPB(this,         ResId(PB_AUTHINSERT         )),
-    aAuthRemovePB(this,         ResId(PB_AUTHREMOVE         )),
-    aCharStyleFT(this,          ResId(FT_CHARSTYLE          )),
-    aCharStyleLB(this,          ResId(LB_CHARSTYLE          )),
-    aEditStylePB(this,          ResId(PB_EDITSTYLE          )),
-    aFillCharFT(this,           ResId(FT_FILLCHAR           )),
-    aFillCharCB(this,           ResId(CB_FILLCHAR           )),
-    aChapterEntryFT(this,       ResId(FT_CHAPTERENTRY       )),
-    aChapterEntryLB(this,       ResId(LB_CHAPTERENTRY       )),
-    aTabPosFT(this,             ResId(FT_TABPOS             )),
-    aTabPosMF(this,             ResId(MF_TABPOS             )),
-    aAutoRightCB(this,          ResId(CB_AUTORIGHT          )),
-    aEntryFL(this,              ResId(FL_ENTRY              )),
-    aRelToStyleCB(this,         ResId(CB_RELTOSTYLE         )),
-    aMainEntryStyleFT(this,     ResId(FT_MAIN_ENTRY_STYLE)),
-    aMainEntryStyleLB(this,     ResId(LB_MAIN_ENTRY_STYLE)),
-    aAlphaDelimCB(this,         ResId(CB_ALPHADELIM         )),
-    aCommaSeparatedCB(this,     ResId(CB_COMMASEPARATED     )),
-    aFormatFL(this,             ResId(FL_FORMAT             )),
+    aLevelLB(this,              SW_RES(LB_LEVEL             )),
+    aLevelFT(this,              SW_RES(FT_LEVEL             )),
+    aTokenFT(this,              SW_RES(FT_TOKEN              )),
+    aTokenWIN(this,             SW_RES(WIN_TOKEN             )),
+    aAllLevelsPB(this,          SW_RES(PB_ALL_LEVELS            )),
+    aEntryNoPB(this,            SW_RES(PB_ENTRYNO            )),
+    aEntryPB(this,              SW_RES(PB_ENTRY             )),
+    aChapterInfoPB(this,        SW_RES(PB_CHAPTERINFO       )),
+    aPageNoPB(this,             SW_RES(PB_PAGENO                )),
+    aTabPB(this,                SW_RES(PB_TAB               )),
+    aHyperLinkPB(this,          SW_RES(PB_HYPERLINK         )),
+    aAuthFieldsLB(this,         SW_RES(LB_AUTHFIELD         )),
+    aAuthInsertPB(this,         SW_RES(PB_AUTHINSERT            )),
+    aAuthRemovePB(this,         SW_RES(PB_AUTHREMOVE            )),
+    aCharStyleFT(this,          SW_RES(FT_CHARSTYLE         )),
+    aCharStyleLB(this,          SW_RES(LB_CHARSTYLE         )),
+    aEditStylePB(this,          SW_RES(PB_EDITSTYLE         )),
+    aFillCharFT(this,           SW_RES(FT_FILLCHAR          )),
+    aFillCharCB(this,           SW_RES(CB_FILLCHAR          )),
+    aChapterEntryFT(this,       SW_RES(FT_CHAPTERENTRY      )),
+    aChapterEntryLB(this,       SW_RES(LB_CHAPTERENTRY      )),
+    aTabPosFT(this,             SW_RES(FT_TABPOS                )),
+    aTabPosMF(this,             SW_RES(MF_TABPOS                )),
+    aAutoRightCB(this,          SW_RES(CB_AUTORIGHT         )),
+    aEntryFL(this,              SW_RES(FL_ENTRY              )),
+    aRelToStyleCB(this,         SW_RES(CB_RELTOSTYLE            )),
+    aMainEntryStyleFT(this,     SW_RES(FT_MAIN_ENTRY_STYLE)),
+    aMainEntryStyleLB(this,     SW_RES(LB_MAIN_ENTRY_STYLE)),
+    aAlphaDelimCB(this,         SW_RES(CB_ALPHADELIM            )),
+    aCommaSeparatedCB(this,     SW_RES(CB_COMMASEPARATED        )),
+    aFormatFL(this,             SW_RES(FL_FORMAT             )),
 
-    aSortDocPosRB(this,         ResId(RB_DOCPOS             )),
-    aSortContentRB(this,        ResId(RB_SORTCONTENT        )),
-    aSortingFL(this,            ResId(FL_SORTING            )),
+    aSortDocPosRB(this,         SW_RES(RB_DOCPOS                )),
+    aSortContentRB(this,        SW_RES(RB_SORTCONTENT       )),
+    aSortingFL(this,            SW_RES(FL_SORTING            )),
 
-    aFirstKeyFT(this,           ResId(FT_FIRSTKEY           )),
-    aFirstKeyLB(this,           ResId(LB_FIRSTKEY           )),
-    aSecondKeyFT(this,          ResId(FT_SECONDKEY          )),
-    aSecondKeyLB(this,          ResId(LB_SECONDKEY          )),
-    aThirdKeyFT(this,           ResId(FT_THIRDDKEY          )),
-    aThirdKeyLB(this,           ResId(LB_THIRDKEY           )),
-    aFirstSortUpRB(this,        ResId(RB_SORTUP1            )),
-    aFirstSortDownRB(this,      ResId(RB_SORTDOWN1          )),
-    aSecondSortUpRB(this,       ResId(RB_SORTUP2            )),
-    aSecondSortDownRB(this,     ResId(RB_SORTDOWN2          )),
-    aThirdSortUpRB(this,        ResId(RB_SORTUP3            )),
-    aThirdSortDownRB(this,      ResId(RB_SORTDOWN3          )),
-    aSortKeyFL(this,            ResId(FL_SORTKEY            )),
-    sNoCharStyle(               ResId(STR_NO_CHAR_STYLE)),
-    sNoCharSortKey(             ResId(STR_NOSORTKEY     )),
-    sDelimStr(                  ResId(STR_DELIM)),
-    sAuthTypeStr(               ResId(ST_AUTHTYPE)),
+    aFirstKeyFT(this,           SW_RES(FT_FIRSTKEY          )),
+    aFirstKeyLB(this,           SW_RES(LB_FIRSTKEY          )),
+    aSecondKeyFT(this,          SW_RES(FT_SECONDKEY         )),
+    aSecondKeyLB(this,          SW_RES(LB_SECONDKEY         )),
+    aThirdKeyFT(this,           SW_RES(FT_THIRDDKEY          )),
+    aThirdKeyLB(this,           SW_RES(LB_THIRDKEY           )),
+    aFirstSortUpRB(this,        SW_RES(RB_SORTUP1               )),
+    aFirstSortDownRB(this,      SW_RES(RB_SORTDOWN1          )),
+    aSecondSortUpRB(this,       SW_RES(RB_SORTUP2               )),
+    aSecondSortDownRB(this,     SW_RES(RB_SORTDOWN2          )),
+    aThirdSortUpRB(this,        SW_RES(RB_SORTUP3           )),
+    aThirdSortDownRB(this,      SW_RES(RB_SORTDOWN3          )),
+    aSortKeyFL(this,            SW_RES(FL_SORTKEY            )),
+    sNoCharStyle(               SW_RES(STR_NO_CHAR_STYLE)),
+    sNoCharSortKey(             SW_RES(STR_NOSORTKEY        )),
+    sDelimStr(                  SW_RES(STR_DELIM)),
+    sAuthTypeStr(               SW_RES(ST_AUTHTYPE)),
     pCurrentForm(0),
     bInLevelHdl(sal_False)
 {
-    Image aSortUpHC(ResId(IMG_SORTUP_HC ));
+    Image aSortUpHC(SW_RES(IMG_SORTUP_HC ));
     aFirstSortUpRB.SetModeRadioImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
     aSecondSortUpRB.SetModeRadioImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
     aThirdSortUpRB.SetModeRadioImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
 
-    Image aSortDownHC(ResId(IMG_SORTDOWN_HC ));
+    Image aSortDownHC(SW_RES(IMG_SORTDOWN_HC ));
     aFirstSortDownRB.SetModeRadioImage(aSortDownHC,BMP_COLOR_HIGHCONTRAST);
     aSecondSortDownRB.SetModeRadioImage(aSortDownHC,BMP_COLOR_HIGHCONTRAST);
     aThirdSortDownRB.SetModeRadioImage(aSortDownHC,BMP_COLOR_HIGHCONTRAST);
@@ -3017,15 +3017,15 @@ String  SwTOXEntryTabPage::GetLevelHelp(sal_uInt16 nLevel) const
 
 SwTokenWindow::SwTokenWindow(SwTOXEntryTabPage* pParent, const ResId& rResId) :
         Window( pParent, rResId ),
-        aLeftScrollWin(this, ResId(WIN_LEFT_SCROLL   )),
-        aCtrlParentWin(this, ResId(WIN_CTRL_PARENT   )),
-        aRightScrollWin(this, ResId(WIN_RIGHT_SCROLL )),
+        aLeftScrollWin(this, ResId(WIN_LEFT_SCROLL, *rResId.GetResMgr()  )),
+        aCtrlParentWin(this, ResId(WIN_CTRL_PARENT, *rResId.GetResMgr()   )),
+        aRightScrollWin(this, ResId(WIN_RIGHT_SCROLL, *rResId.GetResMgr() )),
         pForm(0),
         m_pParent(pParent),
         nLevel(0),
         bValid(sal_False),
         pActiveCtrl(0),
-        sCharStyle(ResId(STR_CHARSTYLE))
+        sCharStyle(ResId(STR_CHARSTYLE, *rResId.GetResMgr()))
 {
     SetStyle(GetStyle()|WB_TABSTOP|WB_DIALOGCONTROL);
     SetHelpId(HID_TOKEN_WINDOW);
@@ -3034,12 +3034,12 @@ SwTokenWindow::SwTokenWindow(SwTOXEntryTabPage* pParent, const ResId& rResId) :
         sal_uInt16 nTextId = STR_BUTTON_TEXT_START + i;
         if( STR_TOKEN_ENTRY_TEXT == nTextId )
             nTextId = STR_TOKEN_ENTRY;
-        aButtonTexts[i] = String(ResId(nTextId));
+        aButtonTexts[i] = String(ResId(nTextId, *rResId.GetResMgr()));
 
         sal_uInt16 nHelpId = STR_BUTTON_HELP_TEXT_START + i;
         if(STR_TOKEN_HELP_ENTRY_TEXT == nHelpId)
             nHelpId = STR_TOKEN_HELP_ENTRY;
-        aButtonHelpTexts[i] = String(ResId(nHelpId));
+        aButtonHelpTexts[i] = String(ResId(nHelpId, *rResId.GetResMgr()));
     }
 
     FreeResource();
@@ -4096,15 +4096,15 @@ SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, const ResId& rId,
                            BROWSER_VLINESFULL |
                            BROWSER_AUTO_VSCROLL|
                            BROWSER_HIDECURSOR   ),
-            sSearch(        ResId(ST_SEARCH         )),
-            sAlternative(   ResId(ST_ALTERNATIVE    )),
-            sPrimKey(       ResId(ST_PRIMKEY        )),
-            sSecKey(        ResId(ST_SECKEY         )),
-            sComment(       ResId(ST_COMMENT        )),
-            sCaseSensitive( ResId(ST_CASESENSITIVE  )),
-            sWordOnly(      ResId(ST_WORDONLY       )),
-            sYes(           ResId(ST_TRUE           )),
-            sNo(            ResId(ST_FALSE          )),
+            sSearch(        ResId(ST_SEARCH, *rId.GetResMgr()       )),
+            sAlternative(   ResId(ST_ALTERNATIVE, *rId.GetResMgr()  )),
+            sPrimKey(       ResId(ST_PRIMKEY, *rId.GetResMgr()      )),
+            sSecKey(        ResId(ST_SECKEY, *rId.GetResMgr()           )),
+            sComment(       ResId(ST_COMMENT, *rId.GetResMgr()      )),
+            sCaseSensitive( ResId(ST_CASESENSITIVE, *rId.GetResMgr()    )),
+            sWordOnly(      ResId(ST_WORDONLY, *rId.GetResMgr()     )),
+            sYes(           ResId(ST_TRUE, *rId.GetResMgr()             )),
+            sNo(            ResId(ST_FALSE, *rId.GetResMgr()            )),
             aCellEdit(&GetDataWindow(), 0),
             aCellCheckBox(&GetDataWindow()),
             bModified(sal_False)
@@ -4379,11 +4379,11 @@ sal_Bool SwEntryBrowseBox::IsModified()const
 SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(Window* pParent, const String& rAutoMarkURL,
         const String& rAutoMarkType, sal_Bool bCreate) :
     ModalDialog(pParent, SW_RES(DLG_CREATE_AUTOMARK)),
-    aOKPB(      this, ResId(PB_OK       )),
-    aCancelPB(  this, ResId(PB_CANCEL   )),
-    aHelpPB(    this, ResId(PB_HELP     )),
-    aEntriesBB( this, ResId(BB_ENTRIES  )),
-    aEntriesFL( this, ResId(FL_ENTRIES  )),
+    aOKPB(      this, SW_RES(PB_OK      )),
+    aCancelPB(  this, SW_RES(PB_CANCEL  )),
+    aHelpPB(    this, SW_RES(PB_HELP        )),
+    aEntriesBB( this, SW_RES(BB_ENTRIES )),
+    aEntriesFL( this, SW_RES(FL_ENTRIES  )),
     sAutoMarkURL(rAutoMarkURL),
     sAutoMarkType(rAutoMarkType),
     bCreateMode(bCreate)
