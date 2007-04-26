@@ -467,3 +467,6 @@ _real@41f0000000000000
 ??1SolIdMapper@@UAE@XZ
 ??_GSolIdMapper2@@UAEPAXI@Z
 ??_GSolIdMapper@@UAEPAXI@Z
+??0ResId@@QAE@GAAVResMgr@@@Z
+?ImplInit@ResId@@AAEXKAAVResMgr@@PAURSHEADER_TYPE@@@Z
+??_R1PI@?0A@A@SolDevDll@@8
