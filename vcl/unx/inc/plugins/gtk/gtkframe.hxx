@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:30:08 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:40:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,6 +190,7 @@ class GtkSalFrame : public SalFrame
     USHORT                          m_nKeyModifiers;
     GdkCursor                      *m_pCurrentCursor;
     GdkVisibilityState              m_nVisibility;
+    PointerStyle                    m_ePointerStyle;
     int                             m_nSavedScreenSaverTimeout;
     int                             m_nWorkArea;
     bool                            m_bFullscreen;
