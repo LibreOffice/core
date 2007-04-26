@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optupdt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-10 06:52:26 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:40:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,17 +112,17 @@ namespace util = ::com::sun::star::util;
 SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage( Window* pParent, const SfxItemSet& rSet ) :
 
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_ONLINEUPDATE ), rSet ),
-        m_aOptionsLine( this, ResId( FL_OPTIONS ) ),
-        m_aAutoCheckCheckBox( this, ResId( CB_AUTOCHECK ) ),
-        m_aEveryDayButton( this, ResId( RB_EVERYDAY ) ),
-        m_aEveryWeekButton( this, ResId( RB_EVERYWEEK ) ),
-        m_aEveryMonthButton( this, ResId( RB_EVERYMONTH ) ),
-        m_aCheckNowButton( this, ResId( PB_CHECKNOW ) ),
-        m_aAutoDownloadCheckBox( this, ResId( CB_AUTODOWNLOAD ) ),
-        m_aDestPathLabel( this, ResId( FT_DESTPATHLABEL ) ),
-        m_aDestPath( this, ResId( FT_DESTPATH ) ),
-        m_aChangePathButton( this, ResId( PB_CHANGEPATH ) ),
-        m_aLastChecked( this, ResId( FT_LASTCHECKED ) )
+        m_aOptionsLine( this, SVX_RES( FL_OPTIONS ) ),
+        m_aAutoCheckCheckBox( this, SVX_RES( CB_AUTOCHECK ) ),
+        m_aEveryDayButton( this, SVX_RES( RB_EVERYDAY ) ),
+        m_aEveryWeekButton( this, SVX_RES( RB_EVERYWEEK ) ),
+        m_aEveryMonthButton( this, SVX_RES( RB_EVERYMONTH ) ),
+        m_aCheckNowButton( this, SVX_RES( PB_CHECKNOW ) ),
+        m_aAutoDownloadCheckBox( this, SVX_RES( CB_AUTODOWNLOAD ) ),
+        m_aDestPathLabel( this, SVX_RES( FT_DESTPATHLABEL ) ),
+        m_aDestPath( this, SVX_RES( FT_DESTPATH ) ),
+        m_aChangePathButton( this, SVX_RES( PB_CHANGEPATH ) ),
+        m_aLastChecked( this, SVX_RES( FT_LASTCHECKED ) )
 {
     m_aNeverChecked = String( ResId( STR_NEVERCHECKED ) );
     FreeResource();
