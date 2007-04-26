@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thesdlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:43:29 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:45:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,11 +171,11 @@ SvxThesaurusLanguageDlg_Impl::SvxThesaurusLanguageDlg_Impl( Window* pParent ) :
 
     ModalDialog( pParent, SVX_RES( RID_SVXDLG_THES_LANGUAGE ) ),
 
-    aLangLB     ( this, ResId( LB_THES_LANGUAGE ) ),
-    aLangFL     ( this, ResId( FL_THES_LANGUAGE ) ),
-    aOKBtn      ( this, ResId( BTN_LANG_OK ) ),
-    aCancelBtn  ( this, ResId( BTN_LANG_CANCEL ) ),
-    aHelpBtn    ( this, ResId( BTN_LANG_HELP ) )
+    aLangLB     ( this, SVX_RES( LB_THES_LANGUAGE ) ),
+    aLangFL     ( this, SVX_RES( FL_THES_LANGUAGE ) ),
+    aOKBtn      ( this, SVX_RES( BTN_LANG_OK ) ),
+    aCancelBtn  ( this, SVX_RES( BTN_LANG_CANCEL ) ),
+    aHelpBtn    ( this, SVX_RES( BTN_LANG_HELP ) )
 {
     FreeResource();
 
@@ -220,28 +220,28 @@ SvxThesaurusDialog::SvxThesaurusDialog( Window* pParent, Reference< XThesaurus >
 
     SvxStandardDialog( pParent, SVX_RES( RID_SVXDLG_THESAURUS ) ),
 
-    aWordText   ( this, ResId( FT_WORD ) ),
-    aWordLB     ( this, ResId( LB_WORD ) ),
-    aReplaceText( this, ResId( FT_REPL ) ),
-    aReplaceEdit( this, ResId( ED_REPL ) ),
-    aMeanText   ( this, ResId( FT_MEAN ) ),
-    aMeanLB     ( this, ResId( LB_MEAN ) ),
-    aSynonymText( this, ResId( FT_SYNON ) ),
-    aSynonymLB  ( this, ResId( LB_SYNON ) ),
-    aVarFL      ( this, ResId( FL_VAR ) ),
-    aOkBtn      ( this, ResId( BTN_THES_OK ) ),
-    aCancelBtn  ( this, ResId( BTN_THES_CANCEL ) ),
-    aLookUpBtn  ( this, ResId( BTN_LOOKUP ) ),
-    aLangBtn    ( this, ResId( BTN_LANGUAGE ) ),
-    aHelpBtn    ( this, ResId( BTN_THES_HELP ) ),
-    aErrStr     (       ResId( STR_ERR_WORDNOTFOUND ) )
+    aWordText   ( this, SVX_RES( FT_WORD ) ),
+    aWordLB     ( this, SVX_RES( LB_WORD ) ),
+    aReplaceText( this, SVX_RES( FT_REPL ) ),
+    aReplaceEdit( this, SVX_RES( ED_REPL ) ),
+    aMeanText   ( this, SVX_RES( FT_MEAN ) ),
+    aMeanLB     ( this, SVX_RES( LB_MEAN ) ),
+    aSynonymText( this, SVX_RES( FT_SYNON ) ),
+    aSynonymLB  ( this, SVX_RES( LB_SYNON ) ),
+    aVarFL      ( this, SVX_RES( FL_VAR ) ),
+    aOkBtn      ( this, SVX_RES( BTN_THES_OK ) ),
+    aCancelBtn  ( this, SVX_RES( BTN_THES_CANCEL ) ),
+    aLookUpBtn  ( this, SVX_RES( BTN_LOOKUP ) ),
+    aLangBtn    ( this, SVX_RES( BTN_LANGUAGE ) ),
+    aHelpBtn    ( this, SVX_RES( BTN_THES_HELP ) ),
+    aErrStr     (       SVX_RES( STR_ERR_WORDNOTFOUND ) )
 {
     pImpl = new ThesDlg_Impl( xThes );
     pImpl->aLookUpText = ::rtl::OUString( rWord );
     pImpl->nLookUpLanguage = nLanguage;
     pImpl->pErrContext =
         new SfxErrorContext( ERRCTX_SVX_LINGU_THESAURUS, String(), this,
-                             RID_SVXERRCTX, DIALOG_MGR() );
+                             RID_SVXERRCTX, &DIALOG_MGR() );
 
     aLangBtn.SetClickHdl( LINK( this, SvxThesaurusDialog, LanguageHdl_Impl ) );
     aLookUpBtn.SetClickHdl( LINK( this, SvxThesaurusDialog, LookUpHdl_Impl ) );
