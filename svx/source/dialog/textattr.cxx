@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textattr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:29:39 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:44:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,32 +144,32 @@ static USHORT pRanges[] =
 \************************************************************************/
 
 SvxTextAttrPage::SvxTextAttrPage( Window* pWindow, const SfxItemSet& rInAttrs ) :
-                SvxTabPage      ( pWindow, ResId( RID_SVXPAGE_TEXTATTR, DIALOG_MGR() ),
+                SvxTabPage      ( pWindow, SVX_RES( RID_SVXPAGE_TEXTATTR ),
                                   rInAttrs ),
 
-                aFlText         ( this, ResId( FL_TEXT ) ),
-                aTsbAutoGrowWidth  ( this, ResId( TSB_AUTOGROW_WIDTH ) ),
-                aTsbAutoGrowHeight ( this, ResId( TSB_AUTOGROW_HEIGHT ) ),
-                aTsbFitToSize   ( this, ResId( TSB_FIT_TO_SIZE ) ),
-                aTsbContour     ( this, ResId( TSB_CONTOUR ) ),
-                aTsbWordWrapText( this, ResId( TSB_WORDWRAP_TEXT ) ),
-                aTsbAutoGrowSize( this, ResId( TSB_AUTOGROW_SIZE ) ),
-                aFlDistance     ( this, ResId( FL_DISTANCE ) ),
-                aFtLeft         ( this, ResId( FT_LEFT ) ),
-                aMtrFldLeft     ( this, ResId( MTR_FLD_LEFT ) ),
-                aFtRight        ( this, ResId( FT_RIGHT ) ),
-                aMtrFldRight    ( this, ResId( MTR_FLD_RIGHT ) ),
-                aFtTop          ( this, ResId( FT_TOP ) ),
-                aMtrFldTop      ( this, ResId( MTR_FLD_TOP ) ),
-                aFtBottom       ( this, ResId( FT_BOTTOM ) ),
-                aMtrFldBottom   ( this, ResId( MTR_FLD_BOTTOM ) ),
+                aFlText         ( this, SVX_RES( FL_TEXT ) ),
+                aTsbAutoGrowWidth  ( this, SVX_RES( TSB_AUTOGROW_WIDTH ) ),
+                aTsbAutoGrowHeight ( this, SVX_RES( TSB_AUTOGROW_HEIGHT ) ),
+                aTsbFitToSize   ( this, SVX_RES( TSB_FIT_TO_SIZE ) ),
+                aTsbContour     ( this, SVX_RES( TSB_CONTOUR ) ),
+                aTsbWordWrapText( this, SVX_RES( TSB_WORDWRAP_TEXT ) ),
+                aTsbAutoGrowSize( this, SVX_RES( TSB_AUTOGROW_SIZE ) ),
+                aFlDistance     ( this, SVX_RES( FL_DISTANCE ) ),
+                aFtLeft         ( this, SVX_RES( FT_LEFT ) ),
+                aMtrFldLeft     ( this, SVX_RES( MTR_FLD_LEFT ) ),
+                aFtRight        ( this, SVX_RES( FT_RIGHT ) ),
+                aMtrFldRight    ( this, SVX_RES( MTR_FLD_RIGHT ) ),
+                aFtTop          ( this, SVX_RES( FT_TOP ) ),
+                aMtrFldTop      ( this, SVX_RES( MTR_FLD_TOP ) ),
+                aFtBottom       ( this, SVX_RES( FT_BOTTOM ) ),
+                aMtrFldBottom   ( this, SVX_RES( MTR_FLD_BOTTOM ) ),
 
-                aFlSeparator    ( this, ResId( FL_SEPARATOR ) ),
+                aFlSeparator    ( this, SVX_RES( FL_SEPARATOR ) ),
 
-                aFlPosition     ( this, ResId( FL_POSITION ) ),
-                aCtlPosition    ( this, ResId( CTL_POSITION ),
+                aFlPosition     ( this, SVX_RES( FL_POSITION ) ),
+                aCtlPosition    ( this, SVX_RES( CTL_POSITION ),
                                             RP_MM, 240, 100 ),
-                aTsbFullWidth   ( this, ResId( TSB_FULL_WIDTH ) ),
+                aTsbFullWidth   ( this, SVX_RES( TSB_FULL_WIDTH ) ),
 
                 rOutAttrs       ( rInAttrs )
 {
@@ -594,10 +594,10 @@ void SvxTextAttrPage::Construct()
                 {
                     if ( ((SdrTextObj*)pObj)->HasText() )
                     {
-                        // Konturfluss ist NICHT bei reinen Textobjekten m”glich
+                        // Konturfluss ist NICHT bei reinen Textobjekten mï¿½glich
                         bContourEnabled = FALSE;
 
-                        // Breite und Hoehe anpassen ist NUR bei reinen Textobjekten m”glich
+                        // Breite und Hoehe anpassen ist NUR bei reinen Textobjekten mï¿½glich
                         bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = TRUE;
                     }
                 }
