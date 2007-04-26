@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 15:02:22 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:08:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1246,7 +1246,7 @@ USHORT SfxWorkWindow::HasNextObjectBar_Impl( USHORT, String* )
 
 //------------------------------------------------------------------------
 
-void SfxWorkWindow::SetObjectBar_Impl( USHORT nPos, const ResId& rResId,
+void SfxWorkWindow::SetObjectBar_Impl( USHORT nPos, sal_uInt32 nResId,
             SfxInterface* pIFace, const String *pName)
 {
     DBG_ASSERT( (nPos & SFX_POSITION_MASK) < SFX_OBJECTBAR_MAX,
@@ -1255,13 +1255,13 @@ void SfxWorkWindow::SetObjectBar_Impl( USHORT nPos, const ResId& rResId,
     USHORT nRealPos = nPos & SFX_POSITION_MASK;
     if ( pParent && IsAppWorkWinToolbox_Impl( nRealPos ) )
     {
-        pParent->SetObjectBar_Impl( nPos, rResId, pIFace, pName );
+        pParent->SetObjectBar_Impl( nPos, nResId, pIFace, pName );
         return;
     }
 
     SfxObjectBar_Impl aObjBar;
     aObjBar.pIFace = pIFace;
-    aObjBar.nId = USHORT( rResId.GetId() );
+    aObjBar.nId = sal::static_int_cast<USHORT>(nResId);
     aObjBar.nPos = nRealPos;
     aObjBar.nMode = (nPos & SFX_VISIBILITY_MASK);
     if (pName)
@@ -1327,7 +1327,7 @@ BOOL SfxWorkWindow::IsVisible_Impl( USHORT nMode ) const
     }
 }
 
-Window* SfxWorkWindow::GetObjectBar_Impl( USHORT, ResId& )
+Window* SfxWorkWindow::GetObjectBar_Impl( USHORT, sal_uInt32 )
 {
     return NULL;
 }
@@ -1748,10 +1748,10 @@ void SfxWorkWindow::ResetStatusBar_Impl()
 }
 
 //--------------------------------------------------------------------
-void SfxWorkWindow::SetStatusBar_Impl( const ResId& rResId, SfxShell*, SfxBindings& )
+void SfxWorkWindow::SetStatusBar_Impl( sal_uInt32 nResId, SfxShell*, SfxBindings& )
 {
-    if ( rResId.GetId() && bShowStatusBar && IsVisible_Impl() )
-        aStatBar.nId = USHORT( rResId.GetId() );
+    if ( nResId && bShowStatusBar && IsVisible_Impl() )
+        aStatBar.nId = sal::static_int_cast<USHORT>(nResId);
 }
 
 #define SFX_ITEMTYPE_STATBAR 4
@@ -1765,7 +1765,7 @@ void SfxWorkWindow::SetTempStatusBar_Impl( BOOL bSet )
         if ( bSet && !aStatBar.nId )
         {
             bReset = TRUE;
-            SetStatusBar_Impl( SfxResId(SFX_ITEMTYPE_STATBAR), SFX_APP(), GetBindings() );
+            SetStatusBar_Impl( SFX_ITEMTYPE_STATBAR, SFX_APP(), GetBindings() );
         }
 
         if ( aStatBar.nId && aStatBar.bOn && !bIsFullScreen )
