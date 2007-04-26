@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srtdlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:09:34 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:14:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -428,7 +428,7 @@ IMPL_LINK( SwSortDlg, DelimCharHdl, PushButton*, pButton )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        AbstractSvxCharacterMap* pMap = pFact->CreateSvxCharacterMap( &aDelimPB,  ResId(RID_SVXDLG_CHARMAP));
+        AbstractSvxCharacterMap* pMap = pFact->CreateSvxCharacterMap( &aDelimPB, RID_SVXDLG_CHARMAP);
         DBG_ASSERT(pMap, "Dialogdiet fail!");//CHINA001
         pMap->SetChar( GetDelimChar() );
         if( RET_OK == pMap->Execute() )
