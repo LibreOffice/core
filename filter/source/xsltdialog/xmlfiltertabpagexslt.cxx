@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltertabpagexslt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:45:02 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:13:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,26 +69,26 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 
 XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr, const Reference< XMultiServiceFactory >& rxMSF ) :
-    TabPage( pParent, ResId( RID_XML_FILTER_TABPAGE_XSLT, &rResMgr ) ),
+    TabPage( pParent, ResId( RID_XML_FILTER_TABPAGE_XSLT, rResMgr ) ),
 
-    maFTDocType( this, ResId( FT_XML_DOCTYPE ) ),
-    maEDDocType( this, ResId( ED_XML_DOCTYPE ) ),
+    maFTDocType( this, ResId( FT_XML_DOCTYPE, rResMgr ) ),
+    maEDDocType( this, ResId( ED_XML_DOCTYPE, rResMgr ) ),
 
-    maFTDTDSchema( this, ResId( FT_XML_DTD_SCHEMA ) ),
-    maEDDTDSchema( this, ResId( ED_XML_DTD_SCHEMA ), INET_PROT_FILE ),
-    maPBDTDSchemaBrowse( this, ResId( ED_XML_DTD_SCHEMA_BROWSE ) ),
+    maFTDTDSchema( this, ResId( FT_XML_DTD_SCHEMA, rResMgr ) ),
+    maEDDTDSchema( this, ResId( ED_XML_DTD_SCHEMA, rResMgr ), INET_PROT_FILE ),
+    maPBDTDSchemaBrowse( this, ResId( ED_XML_DTD_SCHEMA_BROWSE, rResMgr ) ),
 
-    maFTExportXSLT( this, ResId( FT_XML_EXPORT_XSLT ) ),
-    maEDExportXSLT( this, ResId( ED_XML_EXPORT_XSLT ), INET_PROT_FILE ),
-    maPBExprotXSLT( this, ResId( PB_XML_EXPORT_XSLT_BROWSE ) ),
+    maFTExportXSLT( this, ResId( FT_XML_EXPORT_XSLT, rResMgr ) ),
+    maEDExportXSLT( this, ResId( ED_XML_EXPORT_XSLT, rResMgr ), INET_PROT_FILE ),
+    maPBExprotXSLT( this, ResId( PB_XML_EXPORT_XSLT_BROWSE, rResMgr ) ),
 
-    maFTImportXSLT( this, ResId( FT_XML_IMPORT_XSLT ) ),
-    maEDImportXSLT( this, ResId( ED_XML_IMPORT_XSLT ), INET_PROT_FILE ),
-    maPBImportXSLT( this, ResId( PB_XML_IMPORT_XSLT_BROWSE ) ),
+    maFTImportXSLT( this, ResId( FT_XML_IMPORT_XSLT, rResMgr ) ),
+    maEDImportXSLT( this, ResId( ED_XML_IMPORT_XSLT, rResMgr ), INET_PROT_FILE ),
+    maPBImportXSLT( this, ResId( PB_XML_IMPORT_XSLT_BROWSE, rResMgr ) ),
 
-    maFTImportTemplate( this, ResId( FT_XML_IMPORT_TEMPLATE ) ),
-    maEDImportTemplate( this, ResId( ED_XML_IMPORT_TEMPLATE ), INET_PROT_FILE ),
-    maPBImportTemplate( this, ResId( PB_XML_IMPORT_TEMPLATE_BROWSE ) ),
+    maFTImportTemplate( this, ResId( FT_XML_IMPORT_TEMPLATE, rResMgr ) ),
+    maEDImportTemplate( this, ResId( ED_XML_IMPORT_TEMPLATE, rResMgr ), INET_PROT_FILE ),
+    maPBImportTemplate( this, ResId( PB_XML_IMPORT_TEMPLATE_BROWSE, rResMgr ) ),
 
     sHTTPSchema( RTL_CONSTASCII_USTRINGPARAM( "http://" ) ),
     sSHTTPSchema( RTL_CONSTASCII_USTRINGPARAM( "shttp://" ) ),
