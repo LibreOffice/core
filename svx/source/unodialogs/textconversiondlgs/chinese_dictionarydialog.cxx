@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chinese_dictionarydialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:23:36 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:53:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -504,25 +504,25 @@ bool DictionaryEntry::operator==( const DictionaryEntry& rE ) const
 ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
     : ModalDialog( pParent, TextConversionDlgs_ResId( DLG_CHINESEDICTIONARY ) )
     , m_nTextConversionOptions( i18n::TextConversionOption::NONE )
-    , m_aRB_To_Simplified( this, ResId( RB_TO_SIMPLIFIED ) )
-    , m_aRB_To_Traditional( this, ResId( RB_TO_TRADITIONAL ) )
-    , m_aCB_Reverse( this, ResId( CB_REVERSE ) )
-    , m_aFT_Term( this, ResId( FT_TERM ) )
-    , m_aED_Term( this, ResId( ED_TERM ) )
-    , m_aFT_Mapping( this, ResId( FT_MAPPING ) )
-    , m_aED_Mapping( this, ResId( ED_MAPPING ) )
-    , m_aFT_Property( this, ResId( FT_PROPERTY ) )
-    , m_aLB_Property( this, ResId( LB_PROPERTY ) )
+    , m_aRB_To_Simplified( this, TextConversionDlgs_ResId( RB_TO_SIMPLIFIED ) )
+    , m_aRB_To_Traditional( this, TextConversionDlgs_ResId( RB_TO_TRADITIONAL ) )
+    , m_aCB_Reverse( this, TextConversionDlgs_ResId( CB_REVERSE ) )
+    , m_aFT_Term( this, TextConversionDlgs_ResId( FT_TERM ) )
+    , m_aED_Term( this, TextConversionDlgs_ResId( ED_TERM ) )
+    , m_aFT_Mapping( this, TextConversionDlgs_ResId( FT_MAPPING ) )
+    , m_aED_Mapping( this, TextConversionDlgs_ResId( ED_MAPPING ) )
+    , m_aFT_Property( this, TextConversionDlgs_ResId( FT_PROPERTY ) )
+    , m_aLB_Property( this, TextConversionDlgs_ResId( LB_PROPERTY ) )
     , m_pHeaderBar( 0 )
-    , m_aCT_DictionaryToSimplified( this, ResId( CT_MAPPINGLIST ) )
+    , m_aCT_DictionaryToSimplified( this, TextConversionDlgs_ResId( CT_MAPPINGLIST ) )
     , m_aCT_DictionaryToTraditional( this )
-    , m_aPB_Add( this, ResId( PB_ADD ) )
-    , m_aPB_Modify( this, ResId( PB_MODIFY ) )
-    , m_aPB_Delete( this, ResId( PB_DELETE ) )
-    , m_aFL_Bottomline( this, ResId( FL_BOTTOMLINE ) )
-    , m_aBP_OK( this, ResId( PB_OK ) )
-    , m_aBP_Cancel( this, ResId( PB_CANCEL ) )
-    , m_aBP_Help( this, ResId( PB_HELP ) )
+    , m_aPB_Add( this, TextConversionDlgs_ResId( PB_ADD ) )
+    , m_aPB_Modify( this, TextConversionDlgs_ResId( PB_MODIFY ) )
+    , m_aPB_Delete( this, TextConversionDlgs_ResId( PB_DELETE ) )
+    , m_aFL_Bottomline( this, TextConversionDlgs_ResId( FL_BOTTOMLINE ) )
+    , m_aBP_OK( this, TextConversionDlgs_ResId( PB_OK ) )
+    , m_aBP_Cancel( this, TextConversionDlgs_ResId( PB_CANCEL ) )
+    , m_aBP_Help( this, TextConversionDlgs_ResId( PB_HELP ) )
     , m_xContext( 0 )
     , m_xFactory( 0 )
 {
