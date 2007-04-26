@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commonlingui.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:12:07 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:26:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,20 +106,20 @@ __EXPORT SvxClickInfoCtr::~SvxClickInfoCtr()
 //-----------------------------------------------------------------------------
 SvxCommonLinguisticControl::SvxCommonLinguisticControl( ModalDialog* _pParent )
     :Window( _pParent, SVX_RES( RID_SVX_WND_COMMON_LINGU ) )
-    ,aWordText      ( this, ResId( FT_WORD ) )
-    ,aAktWord       ( this, ResId( FT_AKTWORD ) )
-    ,aNewWord       ( this, ResId( FT_NEWWORD ) )
-    ,aNewWordED     ( this, ResId( ED_NEWWORD ) )
-    ,aSuggestionFT  ( this, ResId( FT_SUGGESTION ) )
-    ,aIgnoreBtn     ( this, ResId( BTN_IGNORE ) )
-    ,aIgnoreAllBtn  ( this, ResId( BTN_IGNOREALL ) )
-    ,aChangeBtn     ( this, ResId( BTN_CHANGE ) )
-    ,aChangeAllBtn  ( this, ResId( BTN_CHANGEALL ) )
-    ,aOptionsBtn    ( this, ResId( BTN_OPTIONS ) )
-    ,aStatusText    ( this, ResId( FT_STATUS ) )
-    ,aHelpBtn       ( this, ResId( BTN_SPL_HELP ) )
-    ,aCancelBtn     ( this, ResId( BTN_SPL_CANCEL ) )
-    ,aAuditBox      ( this, ResId( GB_AUDIT ) )
+    ,aWordText      ( this, SVX_RES( FT_WORD ) )
+    ,aAktWord       ( this, SVX_RES( FT_AKTWORD ) )
+    ,aNewWord       ( this, SVX_RES( FT_NEWWORD ) )
+    ,aNewWordED     ( this, SVX_RES( ED_NEWWORD ) )
+    ,aSuggestionFT  ( this, SVX_RES( FT_SUGGESTION ) )
+    ,aIgnoreBtn     ( this, SVX_RES( BTN_IGNORE ) )
+    ,aIgnoreAllBtn  ( this, SVX_RES( BTN_IGNOREALL ) )
+    ,aChangeBtn     ( this, SVX_RES( BTN_CHANGE ) )
+    ,aChangeAllBtn  ( this, SVX_RES( BTN_CHANGEALL ) )
+    ,aOptionsBtn    ( this, SVX_RES( BTN_OPTIONS ) )
+    ,aStatusText    ( this, SVX_RES( FT_STATUS ) )
+    ,aHelpBtn       ( this, SVX_RES( BTN_SPL_HELP ) )
+    ,aCancelBtn     ( this, SVX_RES( BTN_SPL_CANCEL ) )
+    ,aAuditBox      ( this, SVX_RES( GB_AUDIT ) )
 {
     FreeResource();
 
