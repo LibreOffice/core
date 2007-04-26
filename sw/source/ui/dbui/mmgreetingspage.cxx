@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmgreetingspage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:46:12 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:03:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,29 +239,29 @@ void    SwGreetingsHandler::Contains(sal_Bool bContainsGreeting)
 SwMailMergeGreetingsPage::SwMailMergeGreetingsPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage(_pParent, SW_RES(DLG_MM_GREETINGS_PAGE)),
 #pragma warning (disable : 4355)
-    m_aHeaderFI(this, ResId(          FI_HEADER     ) ),
-    m_aGreetingLineCB(this, ResId(    CB_GREETINGLINE ) ),
-    m_aPersonalizedCB(this, ResId(      CB_PERSONALIZED ) ),
-    m_aFemaleFT(this, ResId(            FT_FEMALE   ) ),
-    m_aFemaleLB(this, ResId(            LB_FEMALE   ) ),
-    m_aFemalePB(this, ResId(            PB_FEMALE   ) ),
-    m_aMaleFT(this, ResId(              FT_MALE     ) ),
-    m_aMaleLB(this, ResId(              LB_MALE     ) ),
-    m_aMalePB(this, ResId(              PB_MALE     ) ),
-    m_aFemaleFI(this, ResId(            FI_FEMALE      ) ),
-    m_aFemaleColumnFT(this, ResId(      FT_FEMALECOLUMN ) ),
-    m_aFemaleColumnLB(this, ResId(      LB_FEMALECOLUMN ) ),
-    m_aFemaleFieldFT(this, ResId(       FT_FEMALEFIELD  ) ),
-    m_aFemaleFieldCB(this, ResId(       CB_FEMALEFIELD  ) ),
-    m_aNeutralFT(this, ResId(           FT_NEUTRAL      ) ),
-    m_aNeutralCB(this, ResId(         CB_NEUTRAL      ) ),
-    m_aPreviewFI(       this, ResId( FI_PREVIEW     ) ),
-    m_aPreviewWIN(      this, ResId( WIN_PREVIEW    ) ),
-    m_aAssignPB(        this, ResId( PB_ASSIGN      ) ),
-    m_aDocumentIndexFI( this, ResId( FI_DOCINDEX    ) ),
-    m_aPrevSetIB(       this, ResId( IB_PREVSET     ) ),
-    m_aNextSetIB(       this, ResId( IB_NEXTSET     ) ),
-    m_sDocument(        ResId(       STR_DOCUMENT  ) )
+    m_aHeaderFI(this, SW_RES(          FI_HEADER     ) ),
+    m_aGreetingLineCB(this, SW_RES(    CB_GREETINGLINE ) ),
+    m_aPersonalizedCB(this, SW_RES(      CB_PERSONALIZED ) ),
+    m_aFemaleFT(this, SW_RES(            FT_FEMALE   ) ),
+    m_aFemaleLB(this, SW_RES(            LB_FEMALE   ) ),
+    m_aFemalePB(this, SW_RES(            PB_FEMALE   ) ),
+    m_aMaleFT(this, SW_RES(              FT_MALE     ) ),
+    m_aMaleLB(this, SW_RES(              LB_MALE     ) ),
+    m_aMalePB(this, SW_RES(              PB_MALE     ) ),
+    m_aFemaleFI(this, SW_RES(            FI_FEMALE      ) ),
+    m_aFemaleColumnFT(this, SW_RES(      FT_FEMALECOLUMN ) ),
+    m_aFemaleColumnLB(this, SW_RES(      LB_FEMALECOLUMN ) ),
+    m_aFemaleFieldFT(this, SW_RES(       FT_FEMALEFIELD  ) ),
+    m_aFemaleFieldCB(this, SW_RES(       CB_FEMALEFIELD  ) ),
+    m_aNeutralFT(this, SW_RES(           FT_NEUTRAL      ) ),
+    m_aNeutralCB(this, SW_RES(         CB_NEUTRAL      ) ),
+    m_aPreviewFI(       this, SW_RES( FI_PREVIEW     ) ),
+    m_aPreviewWIN(      this, SW_RES( WIN_PREVIEW    ) ),
+    m_aAssignPB(        this, SW_RES( PB_ASSIGN      ) ),
+    m_aDocumentIndexFI( this, SW_RES( FI_DOCINDEX    ) ),
+    m_aPrevSetIB(       this, SW_RES( IB_PREVSET     ) ),
+    m_aNextSetIB(       this, SW_RES( IB_NEXTSET     ) ),
+    m_sDocument(        SW_RES(       STR_DOCUMENT  ) )
 #pragma warning (default : 4355)
 {
     m_pWizard = _pParent;
@@ -451,27 +451,27 @@ IMPL_LINK(SwMailMergeGreetingsPage, InsertDataHdl_Impl, ImageButton*, pButton)
 SwMailBodyDialog::SwMailBodyDialog(Window* pParent, SwMailMergeWizard* _pWizard) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_MAILBODY)),
 #pragma warning (disable : 4355)
-    m_aGreetingLineCB(this, ResId(    CB_GREETINGLINE ) ),
-    m_aPersonalizedCB(this, ResId(      CB_PERSONALIZED ) ),
-    m_aFemaleFT(this, ResId(            FT_FEMALE   ) ),
-    m_aFemaleLB(this, ResId(            LB_FEMALE   ) ),
-    m_aFemalePB(this, ResId(            PB_FEMALE   ) ),
-    m_aMaleFT(this, ResId(              FT_MALE     ) ),
-    m_aMaleLB(this, ResId(              LB_MALE     ) ),
-    m_aMalePB(this, ResId(              PB_MALE     ) ),
-    m_aFemaleFI(this, ResId(            FI_FEMALE      ) ),
-    m_aFemaleColumnFT(this, ResId(      FT_FEMALECOLUMN ) ),
-    m_aFemaleColumnLB(this, ResId(      LB_FEMALECOLUMN ) ),
-    m_aFemaleFieldFT(this, ResId(       FT_FEMALEFIELD  ) ),
-    m_aFemaleFieldCB(this, ResId(       CB_FEMALEFIELD  ) ),
-    m_aNeutralFT(this, ResId(           FT_NEUTRAL      ) ),
-    m_aNeutralCB(this, ResId(         CB_NEUTRAL      ) ),
-    m_aBodyFT(   this, ResId(         FT_BODY         ) ),
-    m_aBodyMLE(   this, ResId(        MLE_BODY        ) ),
-    m_aSeparatorFL(   this, ResId(    FL_SEPARATOR    ) ),
-    m_aOK(   this, ResId(             PB_OK           ) ),
-    m_aCancel(   this, ResId(         PB_CANCEL       ) ),
-    m_aHelp(   this, ResId(           PB_HELP         ) )
+    m_aGreetingLineCB(this, SW_RES(    CB_GREETINGLINE ) ),
+    m_aPersonalizedCB(this, SW_RES(      CB_PERSONALIZED ) ),
+    m_aFemaleFT(this, SW_RES(            FT_FEMALE   ) ),
+    m_aFemaleLB(this, SW_RES(            LB_FEMALE   ) ),
+    m_aFemalePB(this, SW_RES(            PB_FEMALE   ) ),
+    m_aMaleFT(this, SW_RES(              FT_MALE     ) ),
+    m_aMaleLB(this, SW_RES(              LB_MALE     ) ),
+    m_aMalePB(this, SW_RES(              PB_MALE     ) ),
+    m_aFemaleFI(this, SW_RES(            FI_FEMALE      ) ),
+    m_aFemaleColumnFT(this, SW_RES(      FT_FEMALECOLUMN ) ),
+    m_aFemaleColumnLB(this, SW_RES(      LB_FEMALECOLUMN ) ),
+    m_aFemaleFieldFT(this, SW_RES(       FT_FEMALEFIELD  ) ),
+    m_aFemaleFieldCB(this, SW_RES(       CB_FEMALEFIELD  ) ),
+    m_aNeutralFT(this, SW_RES(           FT_NEUTRAL      ) ),
+    m_aNeutralCB(this, SW_RES(         CB_NEUTRAL      ) ),
+    m_aBodyFT(   this, SW_RES(         FT_BODY         ) ),
+    m_aBodyMLE(   this, SW_RES(        MLE_BODY        ) ),
+    m_aSeparatorFL(   this, SW_RES(    FL_SEPARATOR    ) ),
+    m_aOK(   this, SW_RES(             PB_OK           ) ),
+    m_aCancel(   this, SW_RES(         PB_CANCEL       ) ),
+    m_aHelp(   this, SW_RES(           PB_HELP         ) )
 #pragma warning (default : 4355)
 {
     m_pWizard = _pWizard;
