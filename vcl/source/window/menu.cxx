@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 15:25:08 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:30:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -652,7 +652,7 @@ void DecoToolBox::calcMinSize()
 
         Bitmap aBitmap;
         if( pResMgr )
-            aBitmap = Bitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, pResMgr ) );
+            aBitmap = Bitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, *pResMgr ) );
         aTbx.InsertItem( IID_DOCUMENTCLOSE, Image( aBitmap ) );
     }
     else
@@ -1030,6 +1030,10 @@ Menu* Menu::ImplGetStartedFrom() const
 
 void Menu::ImplLoadRes( const ResId& rResId )
 {
+    ResMgr* pMgr = rResId.GetResMgr();
+    if( ! pMgr )
+        return;
+
     rResId.SetRT( RSC_MENU );
     GetRes( rResId );
 
@@ -1041,7 +1045,7 @@ void Menu::ImplLoadRes( const ResId& rResId )
         // MenuItems einfuegen
         for( ULONG i = 0; i < nObjFollows; i++ )
         {
-            InsertItem( ResId( (RSHEADER_TYPE*)GetClassRes() ) );
+            InsertItem( ResId( (RSHEADER_TYPE*)GetClassRes(), *pMgr ) );
             IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
         }
     }
@@ -1257,6 +1261,10 @@ void Menu::InsertItem( USHORT nItemId,
 
 void Menu::InsertItem( const ResId& rResId, USHORT nPos )
 {
+    ResMgr* pMgr = rResId.GetResMgr();
+    if( ! pMgr )
+        return;
+
     ULONG              nObjMask;
 
     GetRes( rResId.SetRT( RSC_MENUITEM ) );
@@ -1283,7 +1291,7 @@ void Menu::InsertItem( const ResId& rResId, USHORT nPos )
     {
         if ( !bSep )
         {
-            Bitmap aBmp( ResId( (RSHEADER_TYPE*)GetClassRes() ) );
+            Bitmap aBmp( ResId( (RSHEADER_TYPE*)GetClassRes(), *pMgr ) );
             if ( aText.Len() )
                 InsertItem( nItemId, aText, aBmp, nStatus, nPos );
             else
@@ -1318,7 +1326,7 @@ void Menu::InsertItem( const ResId& rResId, USHORT nPos )
     if ( nObjMask & RSC_MENUITEM_KEYCODE )
     {
         if ( !bSep )
-            SetAccelKey( nItemId, KeyCode( ResId( (RSHEADER_TYPE*)GetClassRes() ) ) );
+            SetAccelKey( nItemId, KeyCode( ResId( (RSHEADER_TYPE*)GetClassRes(), *pMgr ) ) );
         IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
     }
     if( nObjMask & RSC_MENUITEM_CHECKED )
@@ -1344,7 +1352,7 @@ void Menu::InsertItem( const ResId& rResId, USHORT nPos )
             MenuItemData* pData = GetItemList()->GetData( nItemId );
             if ( pData )
             {
-                PopupMenu* pSubMenu = new PopupMenu( ResId( (RSHEADER_TYPE*)GetClassRes() ) );
+                PopupMenu* pSubMenu = new PopupMenu( ResId( (RSHEADER_TYPE*)GetClassRes(), *pMgr ) );
                 pData->pAutoSubMenu = pSubMenu;
                 // #111060# keep track of this pointer, may be it will be deleted from outside
                 pSubMenu->pRefAutoSubMenu = &pData->pAutoSubMenu;
@@ -3510,7 +3518,7 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
         ResMgr* pResMgr = ImplGetResMgr();
         if( pResMgr )
         {
-            String aTmpEntryText( ResId( SV_RESID_STRING_NOSELECTIONPOSSIBLE, pResMgr ) );
+            String aTmpEntryText( ResId( SV_RESID_STRING_NOSELECTIONPOSSIBLE, *pResMgr ) );
             MenuItemData* pData = pItemList->Insert(
                 0xFFFF, MENUITEM_STRING, 0, aTmpEntryText, Image(), NULL, 0xFFFF );
                 pData->bIsTemporary = TRUE;
@@ -4938,8 +4946,8 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
 
     if( pResMgr )
     {
-        Bitmap aBitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, pResMgr ) );
-        Bitmap aBitmapHC( ResId( SV_RESID_BITMAP_CLOSEDOCHC, pResMgr ) );
+        Bitmap aBitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, *pResMgr ) );
+        Bitmap aBitmapHC( ResId( SV_RESID_BITMAP_CLOSEDOCHC, *pResMgr ) );
 
         aCloser.maImage = Image( aBitmap, Color( COL_LIGHTMAGENTA ) );
         aCloser.maImageHC = Image( aBitmapHC, Color( COL_LIGHTMAGENTA ) );
@@ -4953,15 +4961,15 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
         GetSettings().GetStyleSettings().GetMenuBarColor().IsDark() ? aCloser.maImageHC : aCloser.maImage, 0 );
         aCloser.SetSelectHdl( LINK( this, MenuBarWindow, CloserHdl ) );
         aCloser.AddEventListener( LINK( this, MenuBarWindow, ToolboxEventHdl ) );
-        aCloser.SetQuickHelpText( IID_DOCUMENTCLOSE, XubString( ResId( SV_HELPTEXT_CLOSEDOCUMENT, pResMgr ) ) );
+        aCloser.SetQuickHelpText( IID_DOCUMENTCLOSE, XubString( ResId( SV_HELPTEXT_CLOSEDOCUMENT, *pResMgr ) ) );
 
         aFloatBtn.SetClickHdl( LINK( this, MenuBarWindow, FloatHdl ) );
         aFloatBtn.SetSymbol( SYMBOL_FLOAT );
-        aFloatBtn.SetQuickHelpText( XubString( ResId( SV_HELPTEXT_RESTORE, pResMgr ) ) );
+        aFloatBtn.SetQuickHelpText( XubString( ResId( SV_HELPTEXT_RESTORE, *pResMgr ) ) );
 
         aHideBtn.SetClickHdl( LINK( this, MenuBarWindow, HideHdl ) );
         aHideBtn.SetSymbol( SYMBOL_HIDE );
-        aHideBtn.SetQuickHelpText( XubString( ResId( SV_HELPTEXT_MINIMIZE, pResMgr ) ) );
+        aHideBtn.SetQuickHelpText( XubString( ResId( SV_HELPTEXT_MINIMIZE, *pResMgr ) ) );
     }
 
     ImplInitStyleSettings();
