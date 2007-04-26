@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:33:39 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:13:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -534,17 +534,17 @@ short SwOutlineTabDialog::Ok()
  * --------------------------------------------------*/
 SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_OUTLINE_NUM), rSet),
-    aLevelFL(       this, ResId(FL_LEVEL    )),
-    aLevelLB(       this, ResId(LB_LEVEL    )),
-    aPreviewWIN(    this, ResId(WIN_PREVIEW )),
+    aLevelFL(       this, SW_RES(FL_LEVEL    )),
+    aLevelLB(       this, SW_RES(LB_LEVEL   )),
+    aPreviewWIN(    this, SW_RES(WIN_PREVIEW    )),
     aCollLbl(this, SW_RES(FT_COLL)),
     aCollBox(this, SW_RES(LB_COLL)),
     aNumberLbl(this, SW_RES(FT_NUMBER)),
     aNumberBox(this, SW_RES(LB_NUMBER), INSERT_NUM_TYPE_NO_NUMBERING|INSERT_NUM_EXTENDED_TYPES),
     aCharFmtFT(this, SW_RES(FT_CHARFMT)),
     aCharFmtLB(this, SW_RES(LB_CHARFMT)),
-    aAllLevelFT(    this, ResId(FT_ALL_LEVEL)),
-    aAllLevelNF(    this, ResId(NF_ALL_LEVEL)),
+    aAllLevelFT(    this, SW_RES(FT_ALL_LEVEL)),
+    aAllLevelNF(    this, SW_RES(NF_ALL_LEVEL)),
     aDelim(this, SW_RES(FT_DELIM)),
     aPrefixFT(this, SW_RES(FT_PREFIX)),
     aPrefixED(this, SW_RES(ED_PREFIX)),
