@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:32:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:39:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -511,6 +511,7 @@ void GtkSalFrame::InitCommon()
     m_nSavedScreenSaverTimeout = 0;
     m_nExtStyle         = 0;
     m_pRegion           = NULL;
+    m_ePointerStyle     = 0xffff;
 
     gtk_widget_set_app_paintable( GTK_WIDGET(m_pWindow), TRUE );
     gtk_widget_set_double_buffered( GTK_WIDGET(m_pWindow), FALSE );
@@ -1741,8 +1742,9 @@ void GtkSalFrame::ToTop( USHORT nFlags )
 
 void GtkSalFrame::SetPointer( PointerStyle ePointerStyle )
 {
-    if( m_pWindow )
+    if( m_pWindow && ePointerStyle != m_ePointerStyle )
     {
+        m_ePointerStyle = ePointerStyle;
         GdkCursor *pCursor = getDisplay()->getCursor( ePointerStyle );
         gdk_window_set_cursor( GTK_WIDGET(m_pWindow)->window, pCursor );
         m_pCurrentCursor = pCursor;
@@ -2347,7 +2349,6 @@ gboolean GtkSalFrame::signalExpose( GtkWidget*, GdkEventExpose* pEvent, gpointer
     aEvent.mnBoundHeight    = pEvent->area.height;
 
     GTK_YIELD_GRAB();
-
     pThis->CallCallback( SALEVENT_PAINT, &aEvent );
 
     return FALSE;
