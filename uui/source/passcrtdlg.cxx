@@ -4,9 +4,9 @@
  *
  *  $RCSfile: passcrtdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:25:25 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:20:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ IMPL_LINK( PasswordCreateDialog, OKHdl_Impl, OKButton *, EMPTYARG )
         EndDialog( RET_OK );
     else
     {
-        String aErrorMsg( ResId( STR_ERROR_PASSWORDS_NOT_IDENTICAL, pResourceMgr ));
+        String aErrorMsg( ResId( STR_ERROR_PASSWORDS_NOT_IDENTICAL, *pResourceMgr ));
         ErrorBox aErrorBox( this, WB_OK, aErrorMsg );
         aErrorBox.Execute();
         aEDPasswordCrt.SetText( String() );
@@ -87,15 +87,15 @@ PasswordCreateDialog::PasswordCreateDialog
     ResMgr*                                     pResMgr
 ) :
 
-    ModalDialog( pParent, ResId( DLG_UUI_PASSWORD_CRT, pResMgr ) ),
+    ModalDialog( pParent, ResId( DLG_UUI_PASSWORD_CRT, *pResMgr ) ),
 
-    aFTPasswordCrt      ( this, ResId( FT_PASSWORD_CRT ) ),
-    aEDPasswordCrt      ( this, ResId( ED_PASSWORD_CRT ) ),
-    aFTPasswordRepeat   ( this, ResId( FT_PASSWORD_REPEAT ) ),
-    aEDPasswordRepeat   ( this, ResId( ED_PASSWORD_REPEAT ) ),
-    aOKBtn                  ( this, ResId( BTN_PASSCRT_OK ) ),
-    aCancelBtn              ( this, ResId( BTN_PASSCRT_CANCEL ) ),
-    aHelpBtn                ( this, ResId( BTN_PASSCRT_HELP ) ),
+    aFTPasswordCrt      ( this, ResId( FT_PASSWORD_CRT, *pResMgr ) ),
+    aEDPasswordCrt      ( this, ResId( ED_PASSWORD_CRT, *pResMgr ) ),
+    aFTPasswordRepeat   ( this, ResId( FT_PASSWORD_REPEAT, *pResMgr ) ),
+    aEDPasswordRepeat   ( this, ResId( ED_PASSWORD_REPEAT, *pResMgr ) ),
+    aOKBtn                  ( this, ResId( BTN_PASSCRT_OK, *pResMgr ) ),
+    aCancelBtn              ( this, ResId( BTN_PASSCRT_CANCEL, *pResMgr ) ),
+    aHelpBtn                ( this, ResId( BTN_PASSCRT_HELP, *pResMgr ) ),
     pResourceMgr            ( pResMgr ),
     nMinLen(5)
 {
