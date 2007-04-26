@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adtabdlg.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:30:50 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:57:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,13 +319,13 @@ bool QueryListFacade::isLeafSelected() const
 //------------------------------------------------------------------------------
 OAddTableDlg::OAddTableDlg( Window* pParent, IAddTableDialogContext& _rContext )
              :ModelessDialog( pParent, ModuleRes(DLG_JOIN_TABADD) )
-             ,m_aCaseTables( this, ResId( RB_CASE_TABLES ) )
-             ,m_aCaseQueries( this, ResId( RB_CASE_QUERIES ) )
-             ,m_aTableList( this, NULL, ResId( LB_TABLE_OR_QUERY ), sal_False )
-             ,m_aQueryList( this, ResId( LB_TABLE_OR_QUERY ) )
-             ,aAddButton( this, ResId( PB_ADDTABLE ) )
-             ,aCloseButton( this, ResId( PB_CLOSE ) )
-             ,aHelpButton( this, ResId( PB_HELP ) )
+             ,m_aCaseTables( this, ModuleRes( RB_CASE_TABLES ) )
+             ,m_aCaseQueries( this, ModuleRes( RB_CASE_QUERIES ) )
+             ,m_aTableList( this, NULL, ModuleRes( LB_TABLE_OR_QUERY ), sal_False )
+             ,m_aQueryList( this, ModuleRes( LB_TABLE_OR_QUERY ) )
+             ,aAddButton( this, ModuleRes( PB_ADDTABLE ) )
+             ,aCloseButton( this, ModuleRes( PB_CLOSE ) )
+             ,aHelpButton( this, ModuleRes( PB_HELP ) )
              ,m_rContext( _rContext )
 {
     // der Close-Button hat schon einen Standard-Help-Text, den ich aber hier nicht haben moechte, also den Text ruecksetzen
@@ -492,9 +492,9 @@ String OAddTableDlg::getDialogTitleForContext( IAddTableDialogContext& _rContext
 
     ::svt::OLocalResourceAccess aLocalRes( ModuleRes( DLG_JOIN_TABADD ), RSC_MODELESSDIALOG );
     if ( _rContext.allowQueries() )
-        sTitle = String( ResId( STR_ADD_TABLE_OR_QUERY ) );
+        sTitle = String( ModuleRes( STR_ADD_TABLE_OR_QUERY ) );
     else
-        sTitle = String( ResId( STR_ADD_TABLES ) );
+        sTitle = String( ModuleRes( STR_ADD_TABLES ) );
 
     return sTitle;
 }
