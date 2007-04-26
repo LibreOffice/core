@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:15:48 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:49:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1019,7 +1019,7 @@ void GalleryBrowser2::ImplExecute( USHORT nId )
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        AbstractTitleDialog* aDlg = pFact->CreateTitleDialog( this, aOldTitle, ResId(RID_SVXDLG_GALLERY_TITLE) );
+                        AbstractTitleDialog* aDlg = pFact->CreateTitleDialog( this, aOldTitle, RID_SVXDLG_GALLERY_TITLE );
                         DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
                         if( aDlg->Execute() == RET_OK )//CHINA001 if( aDlg.Execute() == RET_OK )
                         {
