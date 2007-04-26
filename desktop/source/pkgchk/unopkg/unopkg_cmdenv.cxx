@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg_cmdenv.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-17 10:33:12 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:25:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,18 +173,18 @@ CommandEnvironmentImpl::~CommandEnvironmentImpl()
 void CommandEnvironmentImpl::printLicense(const OUString& sLicense, bool & accept, bool &decline)
 {
     ResMgr * pResMgr = DeploymentResMgr::get();
-    OUString s1 = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_1, pResMgr));
+    OUString s1 = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_1, *pResMgr));
     ::rtl::OString os1 = ::rtl::OUStringToOString(s1, osl_getThreadTextEncoding());
-    OUString s2 = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_2, pResMgr));
+    OUString s2 = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_2, *pResMgr));
     ::rtl::OString os2 = ::rtl::OUStringToOString(s2, osl_getThreadTextEncoding());
-    OUString s3 = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_3, pResMgr));
+    OUString s3 = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_3, *pResMgr));
     ::rtl::OString os3 = ::rtl::OUStringToOString(s3, osl_getThreadTextEncoding());
-    OUString s4 = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_4, pResMgr));
+    OUString s4 = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_4, *pResMgr));
     ::rtl::OString os4 = ::rtl::OUStringToOString(s4, osl_getThreadTextEncoding());
-    OUString sYES = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_YES, pResMgr));
-    OUString sY = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_Y, pResMgr));
-    OUString sNO = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_NO, pResMgr));
-    OUString sN = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_N, pResMgr));
+    OUString sYES = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_YES, *pResMgr));
+    OUString sY = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_Y, *pResMgr));
+    OUString sNO = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_NO, *pResMgr));
+    OUString sN = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_N, *pResMgr));
 
     fprintf(stdout, "\n\n%s\n\n", os1.getStr());
     fprintf(stdout, "%s\n\n", OUStringToOString(sLicense, osl_getThreadTextEncoding()).getStr());
@@ -302,7 +302,7 @@ void CommandEnvironmentImpl::handle(
     }
     else if (request >>= licAgreementExc)
     {
-        String sResMsg( ResId( RID_STR_UNOPKG_NO_SHARED_ALLOWED, DeploymentResMgr::get() ) );
+        String sResMsg( ResId( RID_STR_UNOPKG_NO_SHARED_ALLOWED, *DeploymentResMgr::get() ) );
         sResMsg.SearchAndReplaceAllAscii( "%NAME", licExc.ExtensionName );
         ::rtl::OString oMsg = ::rtl::OUStringToOString(sResMsg, osl_getThreadTextEncoding());
         fprintf(stdout, "\n%s\n\n", oMsg.getStr());
