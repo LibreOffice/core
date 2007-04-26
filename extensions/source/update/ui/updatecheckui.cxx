@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheckui.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 07:48:42 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:09:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,8 +250,8 @@ UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xCont
     mpUpdResMgr = ResMgr::CreateResMgr( "updchk" MAKE_NUMSTR(SUPD) );
     mpSfxResMgr = ResMgr::CreateResMgr( "sfx" MAKE_NUMSTR(SUPD) );
 
-    maDefaultTitle = String( ResId( RID_UPDATE_DEFAULT_TITLE, mpUpdResMgr ) );
-    maDefaultText = String( ResId( RID_UPDATE_DEFAULT_TEXT, mpUpdResMgr ) );
+    maDefaultTitle = String( ResId( RID_UPDATE_DEFAULT_TITLE, *mpUpdResMgr ) );
+    maDefaultText = String( ResId( RID_UPDATE_DEFAULT_TEXT, *mpUpdResMgr ) );
     maBubbleImage = GetBubbleImage( maBubbleImageURL );
 
     maWaitTimer.SetTimeout( 400 );
@@ -351,7 +351,7 @@ Image UpdateCheckUI::GetMenuBarIcon( MenuBar* pMBar )
             nResID = RID_UPDATE_AVAILABLE_16;
     }
 
-    return Image( ResId( nResID, mpUpdResMgr ) );
+    return Image( ResId( nResID, *mpUpdResMgr ) );
 }
 
 //------------------------------------------------------------------------------
@@ -655,7 +655,7 @@ IMPL_LINK( UpdateCheckUI, ClickHdl, USHORT*, EMPTYARG )
             mrJob->execute( aEmpty );
         }
         catch(const uno::Exception&) {
-            ErrorBox( NULL, ResId( MSG_ERR_NO_WEBBROWSER_FOUND, mpSfxResMgr )).Execute();
+            ErrorBox( NULL, ResId( MSG_ERR_NO_WEBBROWSER_FOUND, *mpSfxResMgr )).Execute();
         }
     }
 
