@@ -4,9 +4,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:49:15 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:15:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1078,7 +1078,7 @@ TYPEINIT1(SfxTopFrame, SfxFrame);
 TYPEINIT1(SfxTopViewFrame, SfxViewFrame);
 
 //--------------------------------------------------------------------
-SFX_IMPL_INTERFACE(SfxTopViewFrame,SfxViewFrame,ResId(0,0))
+SFX_IMPL_INTERFACE(SfxTopViewFrame,SfxViewFrame,SfxResId(0))
 {
 }
 
