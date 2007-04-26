@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputpage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 18:31:26 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:04:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,13 +263,13 @@ public:
   -----------------------------------------------------------------------*/
 SwSaveWarningBox_Impl::SwSaveWarningBox_Impl(Window* pParent, const String& rFileName) :
     ModalDialog(pParent, SW_RES(   DLG_MM_SAVEWARNING )),
-    aWarningImageIM(this,   ResId( IM_WARNING   )),
-    aWarningFI(this,        ResId( FI_WARNING   )),
-    aFileNameFT(this,       ResId( FT_FILENAME  )),
-    aFileNameED(this,       ResId( ED_FILENAME  )),
-    aSeparatorFL(this,      ResId( FL_SEPARATOR )),
-    aOKPB(this,             ResId( PB_OK        )),
-    aCancelPB(this,         ResId( PB_CANCEL    ))
+    aWarningImageIM(this,   SW_RES( IM_WARNING   )),
+    aWarningFI(this,        SW_RES( FI_WARNING   )),
+    aFileNameFT(this,       SW_RES( FT_FILENAME  )),
+    aFileNameED(this,       SW_RES( ED_FILENAME  )),
+    aSeparatorFL(this,      SW_RES( FL_SEPARATOR )),
+    aOKPB(this,             SW_RES( PB_OK        )),
+    aCancelPB(this,         SW_RES( PB_CANCEL    ))
 {
     FreeResource();
     aWarningImageIM.SetImage(WarningBox::GetStandardImage());
@@ -296,12 +296,12 @@ IMPL_LINK( SwSaveWarningBox_Impl, ModifyHdl, Edit*, pEdit)
   -----------------------------------------------------------------------*/
 SwSendQueryBox_Impl::SwSendQueryBox_Impl(Window* pParent, const String& rText) :
     ModalDialog(pParent, SW_RES(   DLG_MM_QUERY )),
-    aQueryImageIM( this,    ResId( IM_QUERY     )),
-    aQueryFI( this,         ResId( FI_QUERY     )),
-    aTextED( this,          ResId( ED_TEXT      )),
-    aSeparatorFL(this,      ResId( FL_SEPARATOR )),
-    aOKPB(this,             ResId( PB_OK        )),
-    aCancelPB(this,         ResId( PB_CANCEL    )),
+    aQueryImageIM( this,    SW_RES( IM_QUERY     )),
+    aQueryFI( this,         SW_RES( FI_QUERY     )),
+    aTextED( this,          SW_RES( ED_TEXT      )),
+    aSeparatorFL(this,      SW_RES( FL_SEPARATOR )),
+    aOKPB(this,             SW_RES( PB_OK        )),
+    aCancelPB(this,         SW_RES( PB_CANCEL    )),
     bIsEmptyAllowed(true)
 {
     FreeResource();
@@ -360,16 +360,16 @@ public:
 SwCopyToDialog::SwCopyToDialog(Window* pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_COPYTO)),
 #pragma warning (disable : 4355)
-    m_aDescriptionFI( this, ResId(       FI_DESCRIPTION )),
-    m_aCCFT( this, ResId(                FT_CC          )),
-    m_aCCED( this, ResId(                ED_CC          )),
-    m_aBCCFT( this, ResId(               FT_BCC         )),
-    m_aBCCED( this, ResId(               ED_BCC         )),
-    m_aNoteFI( this, ResId(              FI_NOTE        )),
-    m_aSeparatorFL( this, ResId(         FL_SEPARATOR   )),
-    m_aOK( this, ResId(                  PB_OK          )),
-    m_aCancel( this, ResId(              PB_CANCEL      )),
-    m_aHelp( this, ResId(                PB_HELP        ))
+    m_aDescriptionFI( this, SW_RES(       FI_DESCRIPTION )),
+    m_aCCFT( this, SW_RES(                FT_CC          )),
+    m_aCCED( this, SW_RES(                ED_CC          )),
+    m_aBCCFT( this, SW_RES(               FT_BCC         )),
+    m_aBCCED( this, SW_RES(               ED_BCC         )),
+    m_aNoteFI( this, SW_RES(              FI_NOTE        )),
+    m_aSeparatorFL( this, SW_RES(         FL_SEPARATOR   )),
+    m_aOK( this, SW_RES(                  PB_OK          )),
+    m_aCancel( this, SW_RES(              PB_CANCEL      )),
+    m_aHelp( this, SW_RES(                PB_HELP        ))
 #pragma warning (default : 4355)
 {
     FreeResource();
@@ -387,49 +387,49 @@ SwCopyToDialog::~SwCopyToDialog()
 SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_OUTPUT_PAGE)),
 #pragma warning (disable : 4355)
-    m_aHeaderFI(this,           ResId(  FI_HEADER           ) ),
-    m_aOptionsFI(this,          ResId(  FI_OPTIONS          ) ),
-    m_aSaveStartDocRB(this,     ResId(  RB_SAVESTARTDOC     ) ),
-    m_aSaveMergedDocRB(this,    ResId(  RB_SAVEMERGEDDOC    ) ),
-    m_aPrintRB(this,            ResId(  RB_PRINT            ) ),
-    m_aSendMailRB(this,         ResId(  RB_SENDMAIL         ) ),
-    m_aSeparatorFL(this,        ResId(  FL_SEPARATOR        ) ),
-    m_aSaveStartDocPB(this,     ResId(  PB_SAVESTARTDOC     ) ),
-    m_aSaveAsOneRB(this,        ResId(  RB_SAVEASONE        ) ),
-    m_aSaveIndividualRB(this,   ResId(  RB_SAVEINDIVIDUAL   ) ),
-    m_aFromRB(this,             ResId(  RB_FROM             ) ),
-    m_aFromNF(this,             ResId(  NF_FROM             ) ),
-    m_aToFT(this,               ResId(  FT_TO               ) ),
-    m_aToNF(this,               ResId(  NF_TO               ) ),
-    m_aSaveNowPB(this,          ResId(  PB_SAVENOW          ) ),
-    m_aPrinterFT(this,          ResId(  FT_PRINT            ) ),
-    m_aPrinterLB(this,          ResId(  LB_PRINT            ) ),
-    m_aPrinterSettingsPB(this,  ResId(  PB_PRINTERSETTINGS  ) ),
-    m_aPrintAllRB(this,         ResId(  RB_PRINTALL         ) ),
-    m_aPrintNowPB(this,         ResId(  PB_PRINTNOW         ) ),
+    m_aHeaderFI(this,           SW_RES(  FI_HEADER           ) ),
+    m_aOptionsFI(this,          SW_RES(  FI_OPTIONS          ) ),
+    m_aSaveStartDocRB(this,     SW_RES(  RB_SAVESTARTDOC     ) ),
+    m_aSaveMergedDocRB(this,    SW_RES(  RB_SAVEMERGEDDOC    ) ),
+    m_aPrintRB(this,            SW_RES(  RB_PRINT            ) ),
+    m_aSendMailRB(this,         SW_RES(  RB_SENDMAIL         ) ),
+    m_aSeparatorFL(this,        SW_RES(  FL_SEPARATOR        ) ),
+    m_aSaveStartDocPB(this,     SW_RES(  PB_SAVESTARTDOC     ) ),
+    m_aSaveAsOneRB(this,        SW_RES(  RB_SAVEASONE        ) ),
+    m_aSaveIndividualRB(this,   SW_RES(  RB_SAVEINDIVIDUAL   ) ),
+    m_aFromRB(this,             SW_RES(  RB_FROM             ) ),
+    m_aFromNF(this,             SW_RES(  NF_FROM             ) ),
+    m_aToFT(this,               SW_RES(  FT_TO               ) ),
+    m_aToNF(this,               SW_RES(  NF_TO               ) ),
+    m_aSaveNowPB(this,          SW_RES(  PB_SAVENOW          ) ),
+    m_aPrinterFT(this,          SW_RES(  FT_PRINT            ) ),
+    m_aPrinterLB(this,          SW_RES(  LB_PRINT            ) ),
+    m_aPrinterSettingsPB(this,  SW_RES(  PB_PRINTERSETTINGS  ) ),
+    m_aPrintAllRB(this,         SW_RES(  RB_PRINTALL         ) ),
+    m_aPrintNowPB(this,         SW_RES(  PB_PRINTNOW         ) ),
 
-    m_aMailToFT( this, ResId(        FT_MAILTO              ) ),
-    m_aMailToLB( this, ResId(        LB_MAILTO              ) ),
-    m_aCopyToPB( this, ResId(        PB_COPYTO              ) ),
-    m_aSubjectFT( this, ResId(       FT_SUBJECT             ) ),
-    m_aSubjectED( this, ResId(       ED_SUBJECT             ) ),
-    m_aSendAsFT( this, ResId(        FT_SENDAS              ) ),
-    m_aSendAsLB( this, ResId(        LB_SENDAS              ) ),
-    m_aSendAsPB( this, ResId(        PB_SENDAS              ) ),
-    m_aAttachmentFT( this, ResId(    FT_ATTACHMENT              ) ),
-    m_aAttachmentED( this, ResId(    ED_ATTACHMENT              ) ),
-    m_aSendAllRB( this, ResId(       RB_SENDALL             ) ),
-    m_aSendDocumentsPB( this, ResId( PB_SENDDOCUMENTS       ) ),
+    m_aMailToFT( this, SW_RES(        FT_MAILTO              ) ),
+    m_aMailToLB( this, SW_RES(        LB_MAILTO              ) ),
+    m_aCopyToPB( this, SW_RES(        PB_COPYTO              ) ),
+    m_aSubjectFT( this, SW_RES(       FT_SUBJECT             ) ),
+    m_aSubjectED( this, SW_RES(       ED_SUBJECT             ) ),
+    m_aSendAsFT( this, SW_RES(        FT_SENDAS              ) ),
+    m_aSendAsLB( this, SW_RES(        LB_SENDAS              ) ),
+    m_aSendAsPB( this, SW_RES(        PB_SENDAS              ) ),
+    m_aAttachmentFT( this, SW_RES(    FT_ATTACHMENT              ) ),
+    m_aAttachmentED( this, SW_RES(    ED_ATTACHMENT              ) ),
+    m_aSendAllRB( this, SW_RES(       RB_SENDALL             ) ),
+    m_aSendDocumentsPB( this, SW_RES( PB_SENDDOCUMENTS       ) ),
 
-    m_sSaveStartST(ResId(           ST_SAVESTART  ) ),
-    m_sSaveMergedST(ResId(          ST_SAVEMERGED ) ),
-    m_sPrintST(ResId(               ST_PRINT      ) ),
-    m_sDefaultAttachmentST(ResId(   ST_DEFAULTATTACHMENT )),
-    m_sNoSubjectQueryST(ResId(      ST_SUBJECTQUERY      )),
-    m_sNoSubjectST(ResId(           ST_NOSUBJECT )),
-    m_sNoAttachmentNameST(ResId(    ST_NOATTACHMENTNAME )),
-    m_sSendMailST(ResId(            ST_SENDMAIL   ) ),
-    m_sConfigureMail(ResId(         ST_CONFIGUREMAIL)),
+    m_sSaveStartST(SW_RES(           ST_SAVESTART  ) ),
+    m_sSaveMergedST(SW_RES(          ST_SAVEMERGED ) ),
+    m_sPrintST(SW_RES(               ST_PRINT      ) ),
+    m_sDefaultAttachmentST(SW_RES(   ST_DEFAULTATTACHMENT )),
+    m_sNoSubjectQueryST(SW_RES(      ST_SUBJECTQUERY      )),
+    m_sNoSubjectST(SW_RES(           ST_NOSUBJECT )),
+    m_sNoAttachmentNameST(SW_RES(    ST_NOATTACHMENTNAME )),
+    m_sSendMailST(SW_RES(            ST_SENDMAIL   ) ),
+    m_sConfigureMail(SW_RES(         ST_CONFIGUREMAIL)),
 #pragma warning (default : 4355)
     m_pWizard(_pParent),
     m_pDocumentPrinterCopy(0),
