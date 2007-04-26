@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 17:02:43 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:06:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -345,7 +345,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     pFrame->GetValue() >>= xFrame;
 
                 SfxAbstractTabDialog* pDlg = pFact->CreateTabDialog(
-                    ResId( RID_SVXDLG_CUSTOMIZE ),
+                    RID_SVXDLG_CUSTOMIZE,
                     NULL, &aSet, xFrame );
 
                   if ( pDlg )
@@ -523,13 +523,13 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             ( aVersion += aVerId ) += ']';
 
             // About-Dialog suchen
-            ResId aDialogResId( RID_DEFAULTABOUT, pAppData_Impl->pLabelResMgr );
-            ResMgr* pResMgr = pAppData_Impl->pLabelResMgr->IsAvailable(
-                                aDialogResId.SetRT( RSC_MODALDIALOG ) )
-                            ? pAppData_Impl->pLabelResMgr
-                            : 0;
+            ResId aDialogResId( RID_DEFAULTABOUT, *pAppData_Impl->pLabelResMgr );
+            ResMgr* pResMgr = pAppData_Impl->pLabelResMgr;
+            if( ! pResMgr->IsAvailable( aDialogResId.SetRT( RSC_MODALDIALOG ) ) )
+                pResMgr = GetOffResManager_Impl();
+
             aDialogResId.SetResMgr( pResMgr );
-            if ( !Resource::GetResManager()->IsAvailable( aDialogResId ) )
+            if ( !pResMgr->IsAvailable( aDialogResId ) )
             {
                 DBG_ERROR( "No RID_DEFAULTABOUT in label-resource-dll" );
             }
@@ -843,7 +843,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             if ( pFact )
             {
-                VclAbstractDialog* pDlg = pFact->CreateFrameDialog( NULL, xFrame, ResId( rReq.GetSlot() ) );
+                VclAbstractDialog* pDlg = pFact->CreateFrameDialog( NULL, xFrame, rReq.GetSlot() );
                   pDlg->Execute();
                   delete pDlg;
             }
@@ -1119,7 +1119,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 if ( pSet && pSet->GetItemState( pSetPool->GetWhich( SID_AUTO_CORRECT_DLG ), FALSE, &pItem ) == SFX_ITEM_SET )
                     aSet.Put( *pItem );
 
-                  SfxAbstractTabDialog* pDlg = pFact->CreateTabDialog( ResId( RID_OFA_AUTOCORR_DLG ), NULL, &aSet, NULL );
+                  SfxAbstractTabDialog* pDlg = pFact->CreateTabDialog( RID_OFA_AUTOCORR_DLG, NULL, &aSet, NULL );
                   pDlg->Execute();
                   delete pDlg;
             }
@@ -1133,7 +1133,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             SvtModuleOptions aModuleOpt;
             if ( !aModuleOpt.IsImpress() )
             {
-                ErrorBox( 0, ResId( RID_ERRBOX_MODULENOTINSTALLED, GetOffResManager_Impl() )).Execute();
+                ErrorBox( 0, ResId( RID_ERRBOX_MODULENOTINSTALLED, *GetOffResManager_Impl() )).Execute();
                 return;
             }
 
