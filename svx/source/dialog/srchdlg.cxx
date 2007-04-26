@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:27:14 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:43:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,8 +178,8 @@ struct SearchDlg_Impl
     util::URL   aCommand2URL;
 
     SearchDlg_Impl( Window* pParent ) :
-        aSearchFormats  ( pParent, ResId( FT_SEARCH_FORMATS ) ),
-        aReplaceFormats ( pParent, ResId( FT_REPLACE_FORMATS ) ),
+        aSearchFormats  ( pParent, SVX_RES( FT_SEARCH_FORMATS ) ),
+        aReplaceFormats ( pParent, SVX_RES( FT_REPLACE_FORMATS ) ),
         bMultiLineEdit  ( FALSE ),
         bSaveToModule   ( TRUE ),
         bFocusOnSearch  ( TRUE ),
@@ -371,48 +371,48 @@ void SvxJSearchOptionsDialog::SetTransliterationFlags( INT32 nSettings )
 #undef INI_LIST
 #endif
 #define INI_LIST() \
-    aSearchText     ( this, ResId( FT_SEARCH ) ),                           \
-    aSearchLB       ( this, ResId( ED_SEARCH ) ),                           \
-    aSearchTmplLB   ( this, ResId( LB_SEARCH ) ),                           \
-    aSearchAttrText ( this, ResId( FT_SEARCH_ATTR ) ),                      \
-    aReplaceText    ( this, ResId( FT_REPLACE ) ),                          \
-    aReplaceLB      ( this, ResId( ED_REPLACE ) ),                          \
-    aReplaceTmplLB  ( this, ResId( LB_REPLACE ) ),                          \
-    aReplaceAttrText( this, ResId( FT_REPLACE_ATTR ) ),                     \
-    aSearchBtn      ( this, ResId( BTN_SEARCH ) ),                          \
-    aSearchAllBtn   ( this, ResId( BTN_SEARCH_ALL ) ),                      \
-    aSearchCmdLine  ( this, ResId( FL_SEARCH_COMMAND ) ),                   \
-    aReplaceBtn     ( this, ResId( BTN_REPLACE ) ),                         \
-    aReplaceAllBtn  ( this, ResId( BTN_REPLACE_ALL ) ),                     \
-    aSearchComponentFL( this, ResId( FL_SEARCH_COMPONENT ) ), \
-    aSearchComponent1PB( this, ResId( BTN_COMPONENT_1 ) ), \
-    aSearchComponent2PB( this, ResId( BTN_COMPONENT_2 ) ), \
-    aMatchCaseCB    ( this, ResId( CB_MATCH_CASE ) ),                       \
-    aWordBtn        ( this, ResId( CB_WHOLE_WORDS ) ),                      \
-    aButtonsFL      ( this, ResId( FL_BUTTONS ) ),                          \
-    pMoreBtn        ( new MoreButton( this, ResId( BTN_MORE ) ) ),          \
-    aHelpBtn        ( this, ResId( BTN_HELP ) ),                            \
-    aCloseBtn       ( this, ResId( BTN_CLOSE ) ),                           \
-    aOptionsFL      ( this, ResId( FL_OPTIONS ) ),                          \
-    aSelectionBtn   ( this, ResId( CB_SELECTIONS ) ),                       \
-    aBackwardsBtn   ( this, ResId( CB_BACKWARDS ) ),                        \
-    aRegExpBtn      ( this, ResId( CB_REGEXP ) ),                           \
-    aSimilarityBox  ( this, ResId( CB_SIMILARITY) ),                        \
-    aSimilarityBtn  ( this, ResId( PB_SIMILARITY) ),                        \
-    aLayoutBtn      ( this, ResId( CB_LAYOUTS ) ),                          \
-    aJapMatchFullHalfWidthCB( this, ResId( CB_JAP_MATCH_FULL_HALF_WIDTH ) ),\
-    aJapOptionsCB   ( this, ResId( CB_JAP_SOUNDS_LIKE ) ),                  \
-    aJapOptionsBtn  ( this, ResId( PB_JAP_OPTIONS ) ),                      \
-    aAttributeBtn   ( this, ResId( BTN_ATTRIBUTE ) ),                       \
-    aFormatBtn      ( this, ResId( BTN_FORMAT ) ),                          \
-    aNoFormatBtn    ( this, ResId( BTN_NOFORMAT ) ),                        \
-    aCalcFL         ( this, ResId( FL_CALC ) ),                             \
-    aCalcSearchInFT ( this, ResId( FT_CALC_SEARCHIN ) ),                    \
-    aCalcSearchInLB ( this, ResId( LB_CALC_SEARCHIN ) ),                    \
-    aCalcSearchDirFT( this, ResId( FT_CALC_SEARCHDIR ) ),                   \
-    aRowsBtn        ( this, ResId( RB_CALC_ROWS ) ),                        \
-    aColumnsBtn     ( this, ResId( RB_CALC_COLUMNS ) ),                     \
-    aAllSheetsCB    ( this, ResId( CB_ALL_SHEETS ) ),                       \
+    aSearchText     ( this, SVX_RES( FT_SEARCH ) ),                         \
+    aSearchLB       ( this, SVX_RES( ED_SEARCH ) ),                         \
+    aSearchTmplLB   ( this, SVX_RES( LB_SEARCH ) ),                         \
+    aSearchAttrText ( this, SVX_RES( FT_SEARCH_ATTR ) ),                        \
+    aReplaceText    ( this, SVX_RES( FT_REPLACE ) ),                            \
+    aReplaceLB      ( this, SVX_RES( ED_REPLACE ) ),                            \
+    aReplaceTmplLB  ( this, SVX_RES( LB_REPLACE ) ),                            \
+    aReplaceAttrText( this, SVX_RES( FT_REPLACE_ATTR ) ),                       \
+    aSearchBtn      ( this, SVX_RES( BTN_SEARCH ) ),                          \
+    aSearchAllBtn   ( this, SVX_RES( BTN_SEARCH_ALL ) ),                        \
+    aSearchCmdLine  ( this, SVX_RES( FL_SEARCH_COMMAND ) ),                   \
+    aReplaceBtn     ( this, SVX_RES( BTN_REPLACE ) ),                         \
+    aReplaceAllBtn  ( this, SVX_RES( BTN_REPLACE_ALL ) ),                     \
+    aSearchComponentFL( this, SVX_RES( FL_SEARCH_COMPONENT ) ), \
+    aSearchComponent1PB( this, SVX_RES( BTN_COMPONENT_1 ) ), \
+    aSearchComponent2PB( this, SVX_RES( BTN_COMPONENT_2 ) ), \
+    aMatchCaseCB    ( this, SVX_RES( CB_MATCH_CASE ) ),                       \
+    aWordBtn        ( this, SVX_RES( CB_WHOLE_WORDS ) ),                      \
+    aButtonsFL      ( this, SVX_RES( FL_BUTTONS ) ),                          \
+    pMoreBtn        ( new MoreButton( this, SVX_RES( BTN_MORE ) ) ),          \
+    aHelpBtn        ( this, SVX_RES( BTN_HELP ) ),                            \
+    aCloseBtn       ( this, SVX_RES( BTN_CLOSE ) ),                           \
+    aOptionsFL      ( this, SVX_RES( FL_OPTIONS ) ),                          \
+    aSelectionBtn   ( this, SVX_RES( CB_SELECTIONS ) ),                       \
+    aBackwardsBtn   ( this, SVX_RES( CB_BACKWARDS ) ),                        \
+    aRegExpBtn      ( this, SVX_RES( CB_REGEXP ) ),                           \
+    aSimilarityBox  ( this, SVX_RES( CB_SIMILARITY) ),                        \
+    aSimilarityBtn  ( this, SVX_RES( PB_SIMILARITY) ),                        \
+    aLayoutBtn      ( this, SVX_RES( CB_LAYOUTS ) ),                          \
+    aJapMatchFullHalfWidthCB( this, SVX_RES( CB_JAP_MATCH_FULL_HALF_WIDTH ) ),\
+    aJapOptionsCB   ( this, SVX_RES( CB_JAP_SOUNDS_LIKE ) ),                  \
+    aJapOptionsBtn  ( this, SVX_RES( PB_JAP_OPTIONS ) ),                      \
+    aAttributeBtn   ( this, SVX_RES( BTN_ATTRIBUTE ) ),                       \
+    aFormatBtn      ( this, SVX_RES( BTN_FORMAT ) ),                            \
+    aNoFormatBtn    ( this, SVX_RES( BTN_NOFORMAT ) ),                      \
+    aCalcFL         ( this, SVX_RES( FL_CALC ) ),                             \
+    aCalcSearchInFT ( this, SVX_RES( FT_CALC_SEARCHIN ) ),                    \
+    aCalcSearchInLB ( this, SVX_RES( LB_CALC_SEARCHIN ) ),                    \
+    aCalcSearchDirFT( this, SVX_RES( FT_CALC_SEARCHDIR ) ),                   \
+    aRowsBtn        ( this, SVX_RES( RB_CALC_ROWS ) ),                        \
+    aColumnsBtn     ( this, SVX_RES( RB_CALC_COLUMNS ) ),                     \
+    aAllSheetsCB    ( this, SVX_RES( CB_ALL_SHEETS ) ),                       \
     rBindings       ( rBind ),                                              \
     bWriter         ( FALSE ),                                              \
     bSearch         ( TRUE ),                                               \
@@ -422,7 +422,7 @@ void SvxJSearchOptionsDialog::SetTransliterationFlags( INT32 nSettings )
     bReadOnly       ( FALSE ),                                              \
     bConstruct      ( TRUE ),                                               \
     nModifyFlag     ( 0 ),                                                  \
-    aCalcStr        ( ResId( STR_WORDCALC ) ),                              \
+    aCalcStr        ( SVX_RES( STR_WORDCALC ) ),                              \
     pImpl           ( NULL ),                                               \
     pSearchList     ( NULL ),                                               \
     pReplaceList    ( NULL ),                                               \
@@ -511,8 +511,8 @@ void SvxSearchDialog::Construct_Impl()
     ListToStrArr_Impl( SID_SEARCHDLG_REPLACESTRINGS,
                        aReplaceStrings, aReplaceLB  );
 
-    pMoreBtn->SetMoreText( String( ResId( STR_MORE_BTN ) ) );
-    pMoreBtn->SetLessText( String( ResId( STR_LESS_BTN ) ) );
+    pMoreBtn->SetMoreText( String( SVX_RES( STR_MORE_BTN ) ) );
+    pMoreBtn->SetLessText( String( SVX_RES( STR_LESS_BTN ) ) );
 
     FreeResource();
     InitControls_Impl();
@@ -1528,7 +1528,7 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            AbstractSvxJSearchOptionsDialog* aDlg = pFact->CreateSvxJSearchOptionsDialog( this, aSet, RID_SVXPAGE_JSEARCH_OPTIONS, pSearchItem->GetTransliterationFlags(), ResId(RID_SVXPAGE_JSEARCH_OPTIONS) );
+            AbstractSvxJSearchOptionsDialog* aDlg = pFact->CreateSvxJSearchOptionsDialog( this, aSet, RID_SVXPAGE_JSEARCH_OPTIONS, pSearchItem->GetTransliterationFlags(), RID_SVXPAGE_JSEARCH_OPTIONS );
             DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
             int nRet = aDlg->Execute(); //CHINA001 int nRet = aDlg.Execute();
             if (RET_OK == nRet) //! true only if FillItemSet of SvxJSearchOptionsPage returns true
@@ -2116,7 +2116,7 @@ IMPL_LINK( SvxSearchDialog, FormatHdl_Impl, Button *, EMPTYARG )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        SfxAbstractTabDialog* pDlg = pFact->CreateTabItemDialog( this, aSet, ResId(RID_SVXDLG_SEARCHFORMAT) );
+        SfxAbstractTabDialog* pDlg = pFact->CreateTabItemDialog( this, aSet, RID_SVXDLG_SEARCHFORMAT );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         aTxt.Insert( pDlg->GetText(), 0 );
         pDlg->SetText( aTxt );
@@ -2193,7 +2193,7 @@ IMPL_LINK( SvxSearchDialog, AttributeHdl_Impl, Button *, EMPTYARG )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        VclAbstractDialog* pDlg = pFact->CreateSvxSearchAttributeDialog( this, *pSearchList, pImpl->pRanges, ResId(RID_SVXDLG_SEARCHATTR) );
+        VclAbstractDialog* pDlg = pFact->CreateSvxSearchAttributeDialog( this, *pSearchList, pImpl->pRanges, RID_SVXDLG_SEARCHATTR );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         pDlg->Execute();
         delete pDlg;
