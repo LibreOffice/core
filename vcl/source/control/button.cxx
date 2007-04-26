@@ -4,9 +4,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:27:13 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:36:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3380,9 +3380,10 @@ void CheckBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
     WinBits                 nWinStyle = GetStyle();
     XubString               aText( GetText() );
 
-    pDev->Push( PUSH_CLIPREGION );
+    pDev->Push( PUSH_CLIPREGION | PUSH_LINECOLOR );
     pDev->IntersectClipRegion( Rectangle( rPos, rSize ) );
 
+    long nLineY = rPos.Y() + (rSize.Height()-1)/2;
     if ( ( aText.Len() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) ) ||
          ( HasImage() && !  (ImplGetButtonState() & BUTTON_DRAW_NOIMAGE) ) )
     {
@@ -3395,6 +3396,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
 
         ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, 1,
                               nDrawFlags, nTextStyle, NULL );
+        nLineY = aPos.Y() + aSize.Height()/2;
 
         rMouseRect          = Rectangle( aPos, aSize );
         rMouseRect.Left()   = rPos.X();
@@ -3432,6 +3434,24 @@ void CheckBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
         rMouseRect          = rStateRect;
 
         ImplSetFocusRect( rStateRect );
+    }
+
+    const int nLineSpace = 4;
+    if( (GetStyle() & WB_CBLINESTYLE) != 0 &&
+        rMouseRect.Right()-1-nLineSpace < rPos.X()+rSize.Width() )
+    {
+        const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
+        if ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO )
+            SetLineColor( Color( COL_BLACK ) );
+        else
+            SetLineColor( rStyleSettings.GetShadowColor() );
+        long nLineX = rMouseRect.Right()+nLineSpace;
+        DrawLine( Point( nLineX, nLineY ), Point( rPos.X() + rSize.Width()-1, nLineY ) );
+        if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+        {
+            SetLineColor( rStyleSettings.GetLightColor() );
+            DrawLine( Point( nLineX, nLineY+1 ), Point( rPos.X() + rSize.Width()-1, nLineY+1 ) );
+        }
     }
 
     pDev->Pop();
