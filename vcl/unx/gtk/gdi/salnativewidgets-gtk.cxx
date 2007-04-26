@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:25:16 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:39:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -405,6 +405,9 @@ void GtkData::initNWF( void )
 
     // draw toolbars in separate lines
     pSVData->maNWFData.mbDockingAreaSeparateTB = true;
+
+    // open first menu on F10
+    pSVData->maNWFData.mbOpenMenuOnF10 = true;
 
     if( SalGetDesktopEnvironment().equalsAscii( "KDE" ) )
         // KDE 3.3 invented a bug in the qt<->gtk theme engine
