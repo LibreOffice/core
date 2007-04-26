@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpath.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:06:31 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:40:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,20 +261,20 @@ SvxPathTabPage::SvxPathTabPage( Window* pParent, const SfxItemSet& rSet ) :
 
     SfxTabPage( pParent, SVX_RES( RID_SFXPAGE_PATH ), rSet ),
 
-    aTypeText       ( this, ResId( FT_TYPE ) ),
-    aPathText       ( this, ResId( FT_PATH ) ),
-    aPathCtrl       ( this, ResId( LB_PATH ) ),
-    aStandardBtn    ( this, ResId( BTN_STANDARD ) ),
-    aPathBtn        ( this, ResId( BTN_PATH ) ),
-    aStdBox         ( this, ResId( GB_STD ) ),
+    aTypeText       ( this, SVX_RES( FT_TYPE ) ),
+    aPathText       ( this, SVX_RES( FT_PATH ) ),
+    aPathCtrl       ( this, SVX_RES( LB_PATH ) ),
+    aStandardBtn    ( this, SVX_RES( BTN_STANDARD ) ),
+    aPathBtn        ( this, SVX_RES( BTN_PATH ) ),
+    aStdBox         ( this, SVX_RES( GB_STD ) ),
 
     pHeaderBar      ( NULL ),
     pPathBox        ( NULL ),
-    pImpl           ( new OptPath_Impl( ResId(IMG_LOCK), ResId(IMG_LOCK_HC) ) ),
+    pImpl           ( new OptPath_Impl( SVX_RES(IMG_LOCK), SVX_RES(IMG_LOCK_HC) ) ),
     xDialogListener ( new ::svt::DialogClosedListener() )
 
 {
-    pImpl->m_sMultiPathDlg = String( ResId( STR_MULTIPATHDLG ) );
+    pImpl->m_sMultiPathDlg = String( SVX_RES( STR_MULTIPATHDLG ) );
     aStandardBtn.SetClickHdl( LINK( this, SvxPathTabPage, StandardHdl_Impl ) );
     Link aLink = LINK( this, SvxPathTabPage, PathHdl_Impl );
     aPathBtn.SetClickHdl( aLink );
@@ -600,7 +600,7 @@ IMPL_LINK( SvxPathTabPage, PathHdl_Impl, PushButton *, EMPTYARG )
         if ( pFact )
         {
             AbstractSvxMultiPathDialog* pMultiDlg =
-                pFact->CreateSvxMultiPathDialog( this, ResId( RID_SVXDLG_MULTIPATH ) );
+                pFact->CreateSvxMultiPathDialog( this, RID_SVXDLG_MULTIPATH );
             DBG_ASSERT( pMultiDlg, "Dialogdiet fail!" );
             pMultiDlg->EnableRadioButtonMode();
 
