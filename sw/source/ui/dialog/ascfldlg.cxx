@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ascfldlg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:48:45 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:05:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,21 +118,21 @@ const USHORT nDialogExtraDataLen = 11;      // 12345678901
 SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                                     SvStream* pStream )
     : SfxModalDialog( pParent, SW_RES( DLG_ASCII_FILTER )),
-    aFL( this, ResId( FL_1 )),
-    aCharSetFT( this, ResId( FT_CHARSET )),
-    aCharSetLB( this, ResId( LB_CHARSET )),
-    aFontFT( this, ResId( FT_FONT )),
-    aFontLB( this, ResId( LB_FONT )),
-    aLanguageFT( this, ResId( FT_LANGUAGE )),
-    aLanguageLB( this, ResId( LB_LANGUAGE )),
-    aCRLF_FT( this, ResId( FT_CRLF )),
-    aCRLF_RB( this, ResId( RB_CRLF )),
-    aCR_RB( this, ResId( RB_CR )),
-    aLF_RB( this, ResId( RB_LF )),
-    aOkPB( this, ResId( PB_OK )),
-    aCancelPB( this, ResId( PB_CANCEL )),
-    aHelpPB( this, ResId( PB_HELP )),
-    sSystemCharSet( ResId( STR_SYS_CHARSET )),
+    aFL( this, SW_RES( FL_1 )),
+    aCharSetFT( this, SW_RES( FT_CHARSET )),
+    aCharSetLB( this, SW_RES( LB_CHARSET )),
+    aFontFT( this, SW_RES( FT_FONT )),
+    aFontLB( this, SW_RES( LB_FONT )),
+    aLanguageFT( this, SW_RES( FT_LANGUAGE )),
+    aLanguageLB( this, SW_RES( LB_LANGUAGE )),
+    aCRLF_FT( this, SW_RES( FT_CRLF )),
+    aCRLF_RB( this, SW_RES( RB_CRLF )),
+    aCR_RB( this, SW_RES( RB_CR )),
+    aLF_RB( this, SW_RES( RB_LF )),
+    aOkPB( this, SW_RES( PB_OK )),
+    aCancelPB( this, SW_RES( PB_CANCEL )),
+    aHelpPB( this, SW_RES( PB_HELP )),
+    sSystemCharSet( SW_RES( STR_SYS_CHARSET )),
     bSaveLineStatus( TRUE )
 {
     FreeResource();
