@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionPageSetup.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:05:02 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:56:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,7 +225,7 @@ namespace dbaui
     OConnectionTabPageSetup::OConnectionTabPageSetup(Window* pParent, USHORT _rId, const SfxItemSet& _rCoreAttrs, USHORT _nHelpTextResId, USHORT _nHeaderResId, USHORT _nUrlResId)
         :OConnectionHelper(pParent, ModuleRes(_rId), _rCoreAttrs)
         ,m_bUserGrabFocus(sal_True)
-        ,m_aFT_HelpText(this, ResId(FT_AUTOWIZARDHELPTEXT))
+        ,m_aFT_HelpText(this, ModuleRes(FT_AUTOWIZARDHELPTEXT))
     {
         DBG_CTOR(OConnectionTabPageSetup, NULL);
 
