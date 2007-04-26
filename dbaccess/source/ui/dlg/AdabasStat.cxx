@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AdabasStat.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:03:40 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:54:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,21 +95,21 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
                                      const Reference< ::com::sun::star::sdbc::XConnection >& _xCurrentConnection,
                                      const Reference< XMultiServiceFactory >& _xFactory)
     : ModalDialog( pParent, ModuleRes(DLG_ADABASSTAT) )
-    ,m_FL_FILES(            this , ResId(FL_FILES))
-    ,m_FT_SYSDEVSPACE(      this , ResId(FT_SYSDEVSPACE))
-    ,m_ET_SYSDEVSPACE(      this , STR_ADABAS_HELP_SYSDEVSPACE,ResId(ET_SYSDEVSPACE))
-    ,m_FT_TRANSACTIONLOG(   this , ResId(FT_TRANSACTIONLOG))
-    ,m_ET_TRANSACTIONLOG(   this , STR_ADABAS_HELP_TRANSACT,ResId(ET_TRANSACTIONLOG))
-    ,m_FT_DATADEVSPACE(     this , ResId(FT_DATADEVSPACE))
-    ,m_LB_DATADEVS(         this , STR_ADABAS_HELP_DATADEVSPACES,ResId(LB_DATADEVS))
-    ,m_FL_SIZES(            this , ResId(FL_SIZES))
-    ,m_FT_SIZE(             this , ResId(FT_SIZE))
-    ,m_ET_SIZE(             this , STR_ADABAS_HELP_SIZE,ResId(ET_SIZE))
-    ,m_FT_FREESIZE(         this , ResId(FT_FREESIZE))
-    ,m_ET_FREESIZE(         this , STR_ADABAS_HELP_FREESIZE,ResId(ET_FREESIZE))
-    ,m_FT_MEMORYUSING(      this , ResId(FT_MEMORYUSING))
-    ,m_ET_MEMORYUSING(      this , STR_ADABAS_HELP_MEMORYUSING,ResId(ET_MEMORYUSING))
-    ,m_PB_OK(               this , ResId(PB_OK))
+    ,m_FL_FILES(            this , ModuleRes(FL_FILES))
+    ,m_FT_SYSDEVSPACE(      this , ModuleRes(FT_SYSDEVSPACE))
+    ,m_ET_SYSDEVSPACE(      this , STR_ADABAS_HELP_SYSDEVSPACE,ModuleRes(ET_SYSDEVSPACE))
+    ,m_FT_TRANSACTIONLOG(   this , ModuleRes(FT_TRANSACTIONLOG))
+    ,m_ET_TRANSACTIONLOG(   this , STR_ADABAS_HELP_TRANSACT,ModuleRes(ET_TRANSACTIONLOG))
+    ,m_FT_DATADEVSPACE(     this , ModuleRes(FT_DATADEVSPACE))
+    ,m_LB_DATADEVS(         this , STR_ADABAS_HELP_DATADEVSPACES,ModuleRes(LB_DATADEVS))
+    ,m_FL_SIZES(            this , ModuleRes(FL_SIZES))
+    ,m_FT_SIZE(             this , ModuleRes(FT_SIZE))
+    ,m_ET_SIZE(             this , STR_ADABAS_HELP_SIZE,ModuleRes(ET_SIZE))
+    ,m_FT_FREESIZE(         this , ModuleRes(FT_FREESIZE))
+    ,m_ET_FREESIZE(         this , STR_ADABAS_HELP_FREESIZE,ModuleRes(ET_FREESIZE))
+    ,m_FT_MEMORYUSING(      this , ModuleRes(FT_MEMORYUSING))
+    ,m_ET_MEMORYUSING(      this , STR_ADABAS_HELP_MEMORYUSING,ModuleRes(ET_MEMORYUSING))
+    ,m_PB_OK(               this , ModuleRes(PB_OK))
     ,m_xConnection(_xCurrentConnection)
     ,m_bErrorShown(sal_False)
 {
