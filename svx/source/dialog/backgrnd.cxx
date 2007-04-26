@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:32:46 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:25:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -377,34 +377,34 @@ SvxBackgroundTabPage::SvxBackgroundTabPage( Window* pParent,
 
     SvxTabPage( pParent, SVX_RES( RID_SVXPAGE_BACKGROUND ), rCoreSet ),
 
-    aBorderWin          ( this, ResId(CT_BORDER) ),
-    aBackgroundColorSet ( &aBorderWin, ResId( SET_BGDCOLOR ) ),
-    aBackgroundColorBox ( this, ResId( GB_BGDCOLOR ) ),
+    aBorderWin          ( this, SVX_RES(CT_BORDER) ),
+    aBackgroundColorSet ( &aBorderWin, SVX_RES( SET_BGDCOLOR ) ),
+    aBackgroundColorBox ( this, SVX_RES( GB_BGDCOLOR ) ),
     pPreviewWin1        ( new BackgroundPreviewImpl(
-                            this, ResId( WIN_PREVIEW1 ), FALSE ) ),
-    aColTransFT         ( this, ResId( FT_COL_TRANS ) ),
-    aColTransMF         ( this, ResId( MF_COL_TRANS ) ),
-    aBtnBrowse          ( this, ResId( BTN_BROWSE ) ),
-    aBtnLink            ( this, ResId( BTN_LINK ) ),
-    aBtnPreview         ( this, ResId( BTN_PREVIEW ) ),
-    aFtFile             ( this, ResId( FT_FILE ) ),
-    aGbFile             ( this, ResId( GB_FILE ) ),
-    aBtnPosition        ( this, ResId( BTN_POSITION ) ),
-    aBtnArea            ( this, ResId( BTN_AREA ) ),
-    aBtnTile            ( this, ResId( BTN_TILE ) ),
-    aWndPosition        ( this, ResId( WND_POSITION ), RP_MM ),
-    aGbPosition         ( this, ResId( GB_POSITION ) ),
-    aGraphTransFL       ( this, ResId( FL_GRAPH_TRANS ) ),
-    aGraphTransMF       ( this, ResId( MF_GRAPH_TRANS ) ),
+                            this, SVX_RES( WIN_PREVIEW1 ), FALSE ) ),
+    aColTransFT         ( this, SVX_RES( FT_COL_TRANS ) ),
+    aColTransMF         ( this, SVX_RES( MF_COL_TRANS ) ),
+    aBtnBrowse          ( this, SVX_RES( BTN_BROWSE ) ),
+    aBtnLink            ( this, SVX_RES( BTN_LINK ) ),
+    aBtnPreview         ( this, SVX_RES( BTN_PREVIEW ) ),
+    aFtFile             ( this, SVX_RES( FT_FILE ) ),
+    aGbFile             ( this, SVX_RES( GB_FILE ) ),
+    aBtnPosition        ( this, SVX_RES( BTN_POSITION ) ),
+    aBtnArea            ( this, SVX_RES( BTN_AREA ) ),
+    aBtnTile            ( this, SVX_RES( BTN_TILE ) ),
+    aWndPosition        ( this, SVX_RES( WND_POSITION ), RP_MM ),
+    aGbPosition         ( this, SVX_RES( GB_POSITION ) ),
+    aGraphTransFL       ( this, SVX_RES( FL_GRAPH_TRANS ) ),
+    aGraphTransMF       ( this, SVX_RES( MF_GRAPH_TRANS ) ),
     pPreviewWin2        ( new BackgroundPreviewImpl(
-                            this, ResId( WIN_PREVIEW2 ), TRUE ) ),
-    aSelectTxt          ( this, ResId( FT_SELECTOR ) ),
-    aLbSelect           ( this, ResId( LB_SELECTOR ) ),
-    aStrBrowse          ( ResId( STR_BROWSE ) ),
-    aStrUnlinked        ( ResId( STR_UNLINKED ) ),
-    aTblDesc            ( this, ResId( FT_TBL_DESC ) ),
-    aTblLBox            ( this, ResId( LB_TBL_BOX ) ),
-    aParaLBox           ( this, ResId( LB_PARA_BOX ) ),
+                            this, SVX_RES( WIN_PREVIEW2 ), TRUE ) ),
+    aSelectTxt          ( this, SVX_RES( FT_SELECTOR ) ),
+    aLbSelect           ( this, SVX_RES( LB_SELECTOR ) ),
+    aStrBrowse          ( SVX_RES( STR_BROWSE ) ),
+    aStrUnlinked        ( SVX_RES( STR_UNLINKED ) ),
+    aTblDesc            ( this, SVX_RES( FT_TBL_DESC ) ),
+    aTblLBox            ( this, SVX_RES( LB_TBL_BOX ) ),
+    aParaLBox           ( this, SVX_RES( LB_PARA_BOX ) ),
     nHtmlMode           ( 0 ),
     bAllowShowSelector  ( TRUE ),
     bIsGraphicValid     ( FALSE ),
@@ -1186,7 +1186,7 @@ void SvxBackgroundTabPage::RaiseLoadError_Impl()
                               String(),
                               this,
                               RID_SVXERRCTX,
-                              DIALOG_MGR() );
+                              &DIALOG_MGR() );
 
     ErrorHandler::HandleError(
         *new StringErrorInfo( ERRCODE_SVX_GRAPHIC_NOTREADABLE,
@@ -1243,9 +1243,9 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
         long nCount = pColorTable->Count();
         XColorEntry* pEntry = NULL;
         Color aColWhite( COL_WHITE );
-        String aStrWhite( ResId( RID_SVXITEMS_COLOR_WHITE, DIALOG_MGR() ) );
+        String aStrWhite( SVX_RES( RID_SVXITEMS_COLOR_WHITE ) );
         WinBits nBits = ( aBackgroundColorSet.GetStyle() | WB_ITEMBORDER | WB_NAMEFIELD | WB_NONEFIELD );
-        aBackgroundColorSet.SetText( String( ResId( RID_SVXSTR_TRANSPARENT, DIALOG_MGR() ) ) );
+        aBackgroundColorSet.SetText( String( SVX_RES( RID_SVXSTR_TRANSPARENT ) ) );
         aBackgroundColorSet.SetStyle( nBits );
         for ( i = 0; i < nCount; i++ )
         {
