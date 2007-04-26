@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:17:16 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:41:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -679,31 +679,31 @@ int SvxStdParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
 SvxStdParagraphTabPage::SvxStdParagraphTabPage( Window* pParent,
                                                 const SfxItemSet& rAttr ) :
 
-    SfxTabPage( pParent, ResId( RID_SVXPAGE_STD_PARAGRAPH, DIALOG_MGR() ), rAttr ),
+    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_STD_PARAGRAPH ), rAttr ),
 
-    aLeftLabel              ( this, ResId( FT_LEFTINDENT ) ),
-    aLeftIndent             ( this, ResId( ED_LEFTINDENT ) ),
-    aRightLabel             ( this, ResId( FT_RIGHTINDENT ) ),
-    aRightIndent            ( this, ResId( ED_RIGHTINDENT ) ),
+    aLeftLabel              ( this, SVX_RES( FT_LEFTINDENT ) ),
+    aLeftIndent             ( this, SVX_RES( ED_LEFTINDENT ) ),
+    aRightLabel             ( this, SVX_RES( FT_RIGHTINDENT ) ),
+    aRightIndent            ( this, SVX_RES( ED_RIGHTINDENT ) ),
 
-    aFLineLabel             ( this, ResId( FT_FLINEINDENT ) ),
-    aFLineIndent            ( this, ResId( ED_FLINEINDENT ) ),
-    aAutoCB                 ( this, ResId( CB_AUTO ) ),
-    aIndentFrm              ( this, ResId( FL_INDENT ) ),
-    aTopLabel               ( this, ResId( FT_TOPDIST ) ),
-    aTopDist                ( this, ResId( ED_TOPDIST ) ),
-    aBottomLabel            ( this, ResId( FT_BOTTOMDIST ) ),
-    aBottomDist             ( this, ResId( ED_BOTTOMDIST ) ),
-    aDistFrm                ( this, ResId( FL_DIST ) ),
-    aLineDist               ( this, ResId( LB_LINEDIST ) ),
-    aLineDistAtLabel        ( this, ResId( FT_LINEDIST ) ),
-    aLineDistAtPercentBox   ( this, ResId( ED_LINEDISTPERCENT ) ),
-    aLineDistAtMetricBox    ( this, ResId( ED_LINEDISTMETRIC ) ),
-    aLineDistFrm            ( this, ResId( FL_LINEDIST ) ),
-    sAbsDist                ( ResId(ST_LINEDIST_ABS) ),
-    aExampleWin             ( this, ResId( WN_EXAMPLE ) ),
-    aRegisterCB             ( this, ResId( CB_REGISTER ) ),
-    aRegisterFL             ( this, ResId( FL_REGISTER ) ),
+    aFLineLabel             ( this, SVX_RES( FT_FLINEINDENT ) ),
+    aFLineIndent            ( this, SVX_RES( ED_FLINEINDENT ) ),
+    aAutoCB                 ( this, SVX_RES( CB_AUTO ) ),
+    aIndentFrm              ( this, SVX_RES( FL_INDENT ) ),
+    aTopLabel               ( this, SVX_RES( FT_TOPDIST ) ),
+    aTopDist                ( this, SVX_RES( ED_TOPDIST ) ),
+    aBottomLabel            ( this, SVX_RES( FT_BOTTOMDIST ) ),
+    aBottomDist             ( this, SVX_RES( ED_BOTTOMDIST ) ),
+    aDistFrm                ( this, SVX_RES( FL_DIST ) ),
+    aLineDist               ( this, SVX_RES( LB_LINEDIST ) ),
+    aLineDistAtLabel        ( this, SVX_RES( FT_LINEDIST ) ),
+    aLineDistAtPercentBox   ( this, SVX_RES( ED_LINEDISTPERCENT ) ),
+    aLineDistAtMetricBox    ( this, SVX_RES( ED_LINEDISTMETRIC ) ),
+    aLineDistFrm            ( this, SVX_RES( FL_LINEDIST ) ),
+    sAbsDist                ( SVX_RES(ST_LINEDIST_ABS) ),
+    aExampleWin             ( this, SVX_RES( WN_EXAMPLE ) ),
+    aRegisterCB             ( this, SVX_RES( CB_REGISTER ) ),
+    aRegisterFL             ( this, SVX_RES( FL_REGISTER ) ),
     pActLineDistFld ( &aLineDistAtPercentBox ),
     nAbst           ( MAX_DURCH ),
     nWidth          ( 11905 /*567 * 50*/ ),
@@ -1081,34 +1081,34 @@ void    SvxStdParagraphTabPage::PageCreated(SfxAllItemSet aSet)
 
 --------------------------------------------------*/
 SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSet )
-    : SfxTabPage(pParent, ResId( RID_SVXPAGE_ALIGN_PARAGRAPH, DIALOG_MGR() ),rSet),
-    aAlignFrm           ( this, ResId( FL_ALIGN ) ),
-    aLeft               ( this, ResId( BTN_LEFTALIGN ) ),
-    aRight              ( this, ResId( BTN_RIGHTALIGN ) ),
-    aCenter             ( this, ResId( BTN_CENTERALIGN ) ),
-    aJustify            ( this, ResId( BTN_JUSTIFYALIGN ) ),
-    aLastLineFT         ( this, ResId( FT_LASTLINE ) ),
-    aLastLineLB         ( this, ResId( LB_LASTLINE ) ),
-    aExpandCB           ( this, ResId( CB_EXPAND ) ),
-    aSnapToGridCB       ( this, ResId( CB_SNAP ) ),
-    aExampleWin         ( this, ResId( WN_EXAMPLE ) ),
+    : SfxTabPage(pParent, SVX_RES( RID_SVXPAGE_ALIGN_PARAGRAPH ),rSet),
+    aAlignFrm           ( this, SVX_RES( FL_ALIGN ) ),
+    aLeft               ( this, SVX_RES( BTN_LEFTALIGN ) ),
+    aRight              ( this, SVX_RES( BTN_RIGHTALIGN ) ),
+    aCenter             ( this, SVX_RES( BTN_CENTERALIGN ) ),
+    aJustify            ( this, SVX_RES( BTN_JUSTIFYALIGN ) ),
+    aLastLineFT         ( this, SVX_RES( FT_LASTLINE ) ),
+    aLastLineLB         ( this, SVX_RES( LB_LASTLINE ) ),
+    aExpandCB           ( this, SVX_RES( CB_EXPAND ) ),
+    aSnapToGridCB       ( this, SVX_RES( CB_SNAP ) ),
+    aExampleWin         ( this, SVX_RES( WN_EXAMPLE ) ),
 
-    aVertAlignFL        ( this, ResId( FL_VERTALIGN ) ),
-    aVertAlignFT        ( this, ResId( FT_VERTALIGN ) ),
-    aVertAlignLB        ( this, ResId( LB_VERTALIGN ) ),
+    aVertAlignFL        ( this, SVX_RES( FL_VERTALIGN ) ),
+    aVertAlignFT        ( this, SVX_RES( FT_VERTALIGN ) ),
+    aVertAlignLB        ( this, SVX_RES( LB_VERTALIGN ) ),
 
-    aPropertiesFL       ( this, ResId( FL_PROPERTIES    )),
-    aTextDirectionFT    ( this, ResId( FT_TEXTDIRECTION )),
-    aTextDirectionLB    ( this, ResId( LB_TEXTDIRECTION ))
+    aPropertiesFL       ( this, SVX_RES( FL_PROPERTIES    )),
+    aTextDirectionFT    ( this, SVX_RES( FT_TEXTDIRECTION )),
+    aTextDirectionLB    ( this, SVX_RES( LB_TEXTDIRECTION ))
 {
     SvtLanguageOptions aLangOptions;
     USHORT nLastLinePos = LASTLINEPOS_DEFAULT;
 
     if ( aLangOptions.IsAsianTypographyEnabled() )
     {
-        String sLeft(ResId(ST_LEFTALIGN_ASIAN));
+        String sLeft(SVX_RES(ST_LEFTALIGN_ASIAN));
         aLeft.SetText(sLeft);
-        aRight.SetText(String(ResId(ST_RIGHTALIGN_ASIAN)));
+        aRight.SetText(String(SVX_RES(ST_RIGHTALIGN_ASIAN)));
         sLeft = MnemonicGenerator::EraseAllMnemonicChars( sLeft );
 
         if ( aLastLineLB.GetEntryCount() == LASTLINECOUNT_OLD )
@@ -1984,39 +1984,39 @@ void SvxExtParagraphTabPage::DisablePageBreak()
 
 SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSet& rAttr ) :
 
-    SfxTabPage( pParent, ResId( RID_SVXPAGE_EXT_PARAGRAPH, DIALOG_MGR() ), rAttr ),
+    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_EXT_PARAGRAPH ), rAttr ),
 
-    aHyphenBox          ( this, ResId( BTN_HYPHEN ) ),
-    aBeforeText         ( this, ResId( FT_HYPHENBEFORE ) ),
-    aExtHyphenBeforeBox ( this, ResId( ED_HYPHENBEFORE ) ),
-    aAfterText          ( this, ResId( FT_HYPHENAFTER ) ),
-    aExtHyphenAfterBox  ( this, ResId( ED_HYPHENAFTER ) ),
-    aMaxHyphenLabel     ( this, ResId( FT_MAXHYPH ) ),
-    aMaxHyphenEdit      ( this, ResId( ED_MAXHYPH ) ),
-    aExtFL              ( this, ResId( FL_HYPHEN ) ),
-    aBreaksFL           ( this, ResId( FL_BREAKS ) ),
-    aPageBreakBox       ( this, ResId( BTN_PAGEBREAK ) ),
-    aBreakTypeFT        ( this, ResId( FT_BREAKTYPE     )),
-    aBreakTypeLB        ( this, ResId( LB_BREAKTYPE     )),
-    aBreakPositionFT    ( this, ResId( FT_BREAKPOSITION )),
-    aBreakPositionLB    ( this, ResId( LB_BREAKPOSITION )),
-//    aPageBox            ( this, ResId( BTN_BREAKPAGE ) ),
-//    aColumnBox          ( this, ResId( BTN_BREAKCOLUMN ) ),
-//    aBeforeBox          ( this, ResId( BTN_PAGEBREAKBEFORE ) ),
-//    aAfterBox           ( this, ResId( BTN_PAGEBREAKAFTER ) ),
-    aApplyCollBtn       ( this, ResId( BTN_PAGECOLL ) ),
-    aApplyCollBox       ( this, ResId( LB_PAGECOLL ) ),
-    aPagenumText        ( this, ResId( FT_PAGENUM ) ),
-    aPagenumEdit        ( this, ResId( ED_PAGENUM ) ),
-    aExtendFL           ( this, ResId( FL_OPTIONS ) ),
-    aKeepTogetherBox    ( this, ResId( BTN_KEEPTOGETHER ) ),
-    aKeepParaBox        ( this, ResId( CB_KEEPTOGETHER ) ),
-    aOrphanBox          ( this, ResId( BTN_ORPHANS ) ),
-    aOrphanRowNo        ( this, ResId( ED_ORPHANS ) ),
-    aOrphanRowLabel     ( this, ResId( FT_ORPHANS ) ),
-    aWidowBox           ( this, ResId( BTN_WIDOWS ) ),
-    aWidowRowNo         ( this, ResId( ED_WIDOWS ) ),
-    aWidowRowLabel      ( this, ResId( FT_WIDOWS ) ),
+    aHyphenBox          ( this, SVX_RES( BTN_HYPHEN ) ),
+    aBeforeText         ( this, SVX_RES( FT_HYPHENBEFORE ) ),
+    aExtHyphenBeforeBox ( this, SVX_RES( ED_HYPHENBEFORE ) ),
+    aAfterText          ( this, SVX_RES( FT_HYPHENAFTER ) ),
+    aExtHyphenAfterBox  ( this, SVX_RES( ED_HYPHENAFTER ) ),
+    aMaxHyphenLabel     ( this, SVX_RES( FT_MAXHYPH ) ),
+    aMaxHyphenEdit      ( this, SVX_RES( ED_MAXHYPH ) ),
+    aExtFL              ( this, SVX_RES( FL_HYPHEN ) ),
+    aBreaksFL           ( this, SVX_RES( FL_BREAKS ) ),
+    aPageBreakBox       ( this, SVX_RES( BTN_PAGEBREAK ) ),
+    aBreakTypeFT        ( this, SVX_RES( FT_BREAKTYPE     )),
+    aBreakTypeLB        ( this, SVX_RES( LB_BREAKTYPE     )),
+    aBreakPositionFT    ( this, SVX_RES( FT_BREAKPOSITION )),
+    aBreakPositionLB    ( this, SVX_RES( LB_BREAKPOSITION )),
+//    aPageBox            ( this, SVX_RES( BTN_BREAKPAGE ) ),
+//    aColumnBox          ( this, SVX_RES( BTN_BREAKCOLUMN ) ),
+//    aBeforeBox          ( this, SVX_RES( BTN_PAGEBREAKBEFORE ) ),
+//    aAfterBox           ( this, SVX_RES( BTN_PAGEBREAKAFTER ) ),
+    aApplyCollBtn       ( this, SVX_RES( BTN_PAGECOLL ) ),
+    aApplyCollBox       ( this, SVX_RES( LB_PAGECOLL ) ),
+    aPagenumText        ( this, SVX_RES( FT_PAGENUM ) ),
+    aPagenumEdit        ( this, SVX_RES( ED_PAGENUM ) ),
+    aExtendFL           ( this, SVX_RES( FL_OPTIONS ) ),
+    aKeepTogetherBox    ( this, SVX_RES( BTN_KEEPTOGETHER ) ),
+    aKeepParaBox        ( this, SVX_RES( CB_KEEPTOGETHER ) ),
+    aOrphanBox          ( this, SVX_RES( BTN_ORPHANS ) ),
+    aOrphanRowNo        ( this, SVX_RES( ED_ORPHANS ) ),
+    aOrphanRowLabel     ( this, SVX_RES( FT_ORPHANS ) ),
+    aWidowBox           ( this, SVX_RES( BTN_WIDOWS ) ),
+    aWidowRowNo         ( this, SVX_RES( ED_WIDOWS ) ),
+    aWidowRowLabel      ( this, SVX_RES( FT_WIDOWS ) ),
     bPageBreak  ( TRUE ),
     bHtmlMode   ( FALSE ),
     nStdPos     ( 0 )
@@ -2297,15 +2297,15 @@ void SvxExtParagraphTabPage::PageCreated(SfxAllItemSet aSet)
 
   -----------------------------------------------------------------------*/
 SvxAsianTabPage::SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, ResId( RID_SVXPAGE_PARA_ASIAN, DIALOG_MGR() ), rSet),
-    aOptionsFL(         this, ResId(FL_AS_OPTIONS       )),
-    aForbiddenRulesCB(  this, ResId(CB_AS_FORBIDDEN     )),
-    aAllowWordBreakCB(  this, ResId(CB_AS_ALLOW_WORD_BREAK)),
-    aHangingPunctCB(    this, ResId(CB_AS_HANG_PUNC     )),
-    aCharDistFL(        this, ResId(FL_AS_CHAR_DIST     )),
-    aPuntuationCB(      this, ResId(CB_AS_PUNCTUATION   )),
-    aScriptSpaceCB(     this, ResId(CB_AS_SCRIPT_SPACE  )),
-    aAdjustNumbersCB(   this, ResId(CB_AS_ADJUST_NUMBERS))
+    SfxTabPage(pParent, SVX_RES( RID_SVXPAGE_PARA_ASIAN ), rSet),
+    aOptionsFL(         this, SVX_RES(FL_AS_OPTIONS       )),
+    aForbiddenRulesCB(  this, SVX_RES(CB_AS_FORBIDDEN     )),
+    aAllowWordBreakCB(  this, SVX_RES(CB_AS_ALLOW_WORD_BREAK)),
+    aHangingPunctCB(    this, SVX_RES(CB_AS_HANG_PUNC     )),
+    aCharDistFL(        this, SVX_RES(FL_AS_CHAR_DIST     )),
+    aPuntuationCB(      this, SVX_RES(CB_AS_PUNCTUATION   )),
+    aScriptSpaceCB(     this, SVX_RES(CB_AS_SCRIPT_SPACE    )),
+    aAdjustNumbersCB(   this, SVX_RES(CB_AS_ADJUST_NUMBERS))
 
 {
     FreeResource();
