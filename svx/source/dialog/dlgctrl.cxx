@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:54:32 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:29:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -679,7 +679,7 @@ void SvxRectCtl::Reset()
 
 /*************************************************************************
 |*
-|*  Gibt den aktuell ausgewaehlten RECT_POINT zurück
+|*  Gibt den aktuell ausgewaehlten RECT_POINT zurï¿½ck
 |*
 \************************************************************************/
 
@@ -690,7 +690,7 @@ RECT_POINT SvxRectCtl::GetActualRP() const
 
 /*************************************************************************
 |*
-|*  Gibt den aktuell ausgewaehlten RECT_POINT zurück
+|*  Gibt den aktuell ausgewaehlten RECT_POINT zurï¿½ck
 |*
 \************************************************************************/
 
@@ -1748,13 +1748,12 @@ void FillAttrLB::SelectEntryByList( const XBitmapList* pList, const String& rStr
 
 void FillTypeLB::Fill()
 {
-    ResMgr* pMgr = DIALOG_MGR();
     SetUpdateMode( FALSE );
-    InsertEntry( String( ResId( RID_SVXSTR_INVISIBLE, pMgr ) ) );
-    InsertEntry( String( ResId( RID_SVXSTR_COLOR, pMgr ) ) );
-    InsertEntry( String( ResId( RID_SVXSTR_GRADIENT, pMgr ) ) );
-    InsertEntry( String( ResId( RID_SVXSTR_HATCH, pMgr ) ) );
-    InsertEntry( String( ResId( RID_SVXSTR_BITMAP, pMgr ) ) );
+    InsertEntry( String( SVX_RES( RID_SVXSTR_INVISIBLE ) ) );
+    InsertEntry( String( SVX_RES( RID_SVXSTR_COLOR ) ) );
+    InsertEntry( String( SVX_RES( RID_SVXSTR_GRADIENT ) ) );
+    InsertEntry( String( SVX_RES( RID_SVXSTR_HATCH ) ) );
+    InsertEntry( String( SVX_RES( RID_SVXSTR_BITMAP ) ) );
     SetUpdateMode( TRUE );
 }
 
