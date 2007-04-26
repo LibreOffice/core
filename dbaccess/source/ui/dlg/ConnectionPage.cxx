@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionPage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:04:48 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:55:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,16 +201,16 @@ namespace dbaui
         :OConnectionHelper(pParent, ModuleRes(PAGE_CONNECTION), _rCoreAttrs)
         ,m_pCollection(NULL)
         ,m_bUserGrabFocus(sal_True)
-        ,m_aFL1(this, ResId(FL_SEPARATOR1))
-        ,m_aFL2(this, ResId(FL_SEPARATOR2))
-        ,m_aUserNameLabel(this, ResId(FT_USERNAME))
-        ,m_aUserName(this, ResId(ET_USERNAME))
-        ,m_aPasswordRequired(this, ResId(CB_PASSWORD_REQUIRED))
-        ,m_aFL3(this, ResId(FL_SEPARATOR3))
-        ,m_aJavaDriverLabel(this, ResId(FT_JDBCDRIVERCLASS))
-        ,m_aJavaDriver(this, ResId(ET_JDBCDRIVERCLASS))
-        ,m_aTestJavaDriver(this, ResId(PB_TESTDRIVERCLASS))
-        ,m_aTestConnection(this, ResId(PB_TESTCONNECTION))
+        ,m_aFL1(this, ModuleRes(FL_SEPARATOR1))
+        ,m_aFL2(this, ModuleRes(FL_SEPARATOR2))
+        ,m_aUserNameLabel(this, ModuleRes(FT_USERNAME))
+        ,m_aUserName(this, ModuleRes(ET_USERNAME))
+        ,m_aPasswordRequired(this, ModuleRes(CB_PASSWORD_REQUIRED))
+        ,m_aFL3(this, ModuleRes(FL_SEPARATOR3))
+        ,m_aJavaDriverLabel(this, ModuleRes(FT_JDBCDRIVERCLASS))
+        ,m_aJavaDriver(this, ModuleRes(ET_JDBCDRIVERCLASS))
+        ,m_aTestJavaDriver(this, ModuleRes(PB_TESTDRIVERCLASS))
+        ,m_aTestConnection(this, ModuleRes(PB_TESTCONNECTION))
     {
         DBG_CTOR(OConnectionTabPage,NULL);
         m_aET_Connection.SetModifyHdl(LINK(this, OConnectionTabPage, OnEditModified));
