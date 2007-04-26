@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:34:52 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:50:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -699,7 +699,7 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
 //CHINA001      pActShell ? pActShell : pWrtShell, bNew);
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-        SfxAbstractTabDialog* pDlg = pFact->CreateTemplateDialog( ResId(DLG_TEMPLATE_BASE),
+        SfxAbstractTabDialog* pDlg = pFact->CreateTemplateDialog( DLG_TEMPLATE_BASE,
                                                     0, aTmp, nFamily, bColumn,
                                                     pActShell ? pActShell : pWrtShell, bNew);
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
