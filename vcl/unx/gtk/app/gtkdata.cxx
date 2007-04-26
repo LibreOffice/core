@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:51:58 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:39:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,13 @@ GdkFilterReturn call_filterGdkEvent( GdkXEvent* sys_event,
 {
     return GtkSalDisplay::filterGdkEvent( sys_event, event, data );
 }
+
+void signalKeysChanged( GdkKeymap*, gpointer data )
+{
+    GtkSalDisplay* pDisp = (GtkSalDisplay*)data;
+    pDisp->GetKeyboardName(TRUE);
+}
+
 }
 
 GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
@@ -596,6 +603,7 @@ void GtkXLib::Init()
 
     m_pGtkSalDisplay->SetKbdExtension( pKbdExtension );
 
+    g_signal_connect( G_OBJECT(gdk_keymap_get_default()), "keys_changed", G_CALLBACK(signalKeysChanged), m_pGtkSalDisplay );
 }
 
 extern "C"
