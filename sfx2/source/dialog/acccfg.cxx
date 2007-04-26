@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:18:59 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:10:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -503,22 +503,22 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     : SfxTabPage              (pParent, SfxResId(TP_CONFIG_ACCEL), aSet)
     , m_pMacroInfoItem        ()
     , m_pFileDlg              (NULL)
-    , aEntriesBox             (this   , this, ResId(BOX_ACC_ENTRIES   ))
-    , aKeyboardGroup          (this   , ResId(GRP_ACC_KEYBOARD        ))
-    , aOfficeButton           (this   , ResId(RB_OFFICE               ))
-    , aModuleButton           (this   , ResId(RB_MODULE               ))
-    , aChangeButton           (this   , ResId(BTN_ACC_CHANGE          ))
-    , aRemoveButton           (this   , ResId(BTN_ACC_REMOVE          ))
-    , aGroupText              (this   , ResId(TXT_ACC_GROUP           ))
-    , aGroupLBox              (this   , ResId(BOX_ACC_GROUP), SFX_SLOT_ACCELCONFIG)
-    , aFunctionText           (this   , ResId(TXT_ACC_FUNCTION        ))
-    , aFunctionBox            (this   , ResId(BOX_ACC_FUNCTION        ))
-    , aKeyText                (this   , ResId(TXT_ACC_KEY             ))
-    , aKeyBox                 (this   , ResId(BOX_ACC_KEY             ))
-    , aFunctionsGroup         (this   , ResId(GRP_ACC_FUNCTIONS       ))
-    , aLoadButton             (this   , ResId(BTN_LOAD                ))
-    , aSaveButton             (this   , ResId(BTN_SAVE                ))
-    , aResetButton            (this   , ResId(BTN_RESET               ))
+    , aEntriesBox             (this   , this, SfxResId(BOX_ACC_ENTRIES   ))
+    , aKeyboardGroup          (this   , SfxResId(GRP_ACC_KEYBOARD        ))
+    , aOfficeButton           (this   , SfxResId(RB_OFFICE               ))
+    , aModuleButton           (this   , SfxResId(RB_MODULE               ))
+    , aChangeButton           (this   , SfxResId(BTN_ACC_CHANGE          ))
+    , aRemoveButton           (this   , SfxResId(BTN_ACC_REMOVE          ))
+    , aGroupText              (this   , SfxResId(TXT_ACC_GROUP           ))
+    , aGroupLBox              (this   , SfxResId(BOX_ACC_GROUP), SFX_SLOT_ACCELCONFIG)
+    , aFunctionText           (this   , SfxResId(TXT_ACC_FUNCTION        ))
+    , aFunctionBox            (this   , SfxResId(BOX_ACC_FUNCTION        ))
+    , aKeyText                (this   , SfxResId(TXT_ACC_KEY             ))
+    , aKeyBox                 (this   , SfxResId(BOX_ACC_KEY             ))
+    , aFunctionsGroup         (this   , SfxResId(GRP_ACC_FUNCTIONS       ))
+    , aLoadButton             (this   , SfxResId(BTN_LOAD                ))
+    , aSaveButton             (this   , SfxResId(BTN_SAVE                ))
+    , aResetButton            (this   , SfxResId(BTN_RESET               ))
     , m_bStylesInfoInitialized(sal_False)
     , m_xGlobal               ()
     , m_xModule               ()
