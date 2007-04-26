@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dwfunctr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:14:17 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:53:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,12 +115,12 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
                 SfxChildWindow *pCW, Window* pParent, const ResId& rResId ) :
 
     SfxDockingWindow( pBindingsP, pCW, pParent, rResId ),
-    aPrivatSplit    ( this, ResId( FT_SPLIT ),SC_SPLIT_VERT),
-    aCatBox         ( this, ResId( CB_CAT ) ),
-    aFuncList       ( this, ResId( LB_FUNC ) ),
-    aDDFuncList     ( this, ResId( DDLB_FUNC ) ),
-    aInsertButton   ( this, ResId( IMB_INSERT ) ),
-    aFiFuncDesc     ( this, ResId( FI_FUNCDESC ) ),
+    aPrivatSplit    ( this, ResId( FT_SPLIT, *rResId.GetResMgr()  ),SC_SPLIT_VERT),
+    aCatBox         ( this, ResId( CB_CAT, *rResId.GetResMgr()  ) ),
+    aFuncList       ( this, ResId( LB_FUNC, *rResId.GetResMgr()  ) ),
+    aDDFuncList     ( this, ResId( DDLB_FUNC, *rResId.GetResMgr()  ) ),
+    aInsertButton   ( this, ResId( IMB_INSERT, *rResId.GetResMgr()  ) ),
+    aFiFuncDesc     ( this, ResId( FI_FUNCDESC, *rResId.GetResMgr()  ) ),
     aOldSize        (0,0)
 {
     FreeResource();
