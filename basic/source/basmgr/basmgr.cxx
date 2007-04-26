@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:38:04 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:32:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1181,6 +1181,7 @@ BasicLibInfo* BasicManager::CreateLibInfo()
     pLibs->Insert( pInf, LIST_APPEND );
     return pInf;
 }
+
 BOOL BasicManager::ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage, BOOL bInfosOnly ) const
 {
     DBG_CHKTHIS( BasicManager, 0 );
