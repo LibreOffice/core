@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:57:25 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:32:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@
 #include "printer.hxx"
 #include "basic.hrc"
 #include "resids.hrc"
+#include "basrid.hxx"
 
 class PrintingDialog : public ModelessDialog {
     String aName;
@@ -91,7 +92,7 @@ void BasicPrinter::Header()
     nPage++;
     StartPage();
     String aHdr;
-    String aPage( ResId( IDS_PAGE ) );
+    String aPage( SttResId( IDS_PAGE ) );
     aPage.Append( String::CreateFromInt32(nPage) );
     aHdr = aFile.Copy( 0, 80 - aPage.Len() );
     aHdr.Expand( 80 - aPage.Len(), ' ' );
@@ -105,7 +106,7 @@ void BasicPrinter::Print( const String& rFile, const String& rText, BasicFrame *
     nPage = 0; nLine = 9999;
     aFile = rFile;
     // Dialog einrichten
-    ResId aResId( IDD_PRINT_DIALOG );
+    SttResId aResId( IDD_PRINT_DIALOG );
     pDlg = new PrintingDialog
           ( aBasicApp.pFrame, this, aResId, aFile );
     // Position des Dialogs setzen
@@ -179,8 +180,8 @@ PrintingDialog::PrintingDialog
               ( Window* pParent, BasicPrinter* pPrn, ResId& rId, String& rName )
 : ModelessDialog( pParent, rId )
 , aName  ( rName )
-, aText  ( this, ResId( RID_TEXT ) )
-, aCancel( this, ResId( RID_CANCEL ) )
+, aText  ( this, ResId( RID_TEXT, *rId.GetResMgr() ) )
+, aCancel( this, ResId( RID_CANCEL, *rId.GetResMgr() ) )
 {
     FreeResource();
     aCancel.SetClickHdl( LINK( pPrn, BasicPrinter, Abort ) );
@@ -188,10 +189,10 @@ PrintingDialog::PrintingDialog
 
 void PrintingDialog::ChangeMessage( short nPage )
 {
-    String aMsg( ResId( IDS_PRINTMSG ) );
+    String aMsg( SttResId( IDS_PRINTMSG ) );
     aMsg += aName;
     aMsg += CUniString("\n");
-    aMsg += String( ResId( IDS_PAGE ) );
+    aMsg += String( SttResId( IDS_PAGE ) );
     aMsg += String::CreateFromInt32( nPage );
     aText.SetText( aMsg );
 }
