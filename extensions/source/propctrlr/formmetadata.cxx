@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:35:33 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:07:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -527,11 +527,11 @@ namespace pcr
             ::svt::OLocalResourceAccess aEnumStrings( aResId, RSC_RESOURCE );
 
             sal_Int16 i = 1;
-            ResId aLocalId( i );
+            PcrRes aLocalId( i );
             while ( aEnumStrings.IsAvailableRes( aLocalId.SetRT( RSC_STRING ) ) )
             {
                 aReturn.push_back( String( aLocalId ) );
-                aLocalId = ResId( ++i );
+                aLocalId = PcrRes( ++i );
             }
         }
 
