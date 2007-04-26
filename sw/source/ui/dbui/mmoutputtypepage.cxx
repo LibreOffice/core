@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputtypepage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:47:08 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:04:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,19 +68,19 @@
 SwMailMergeOutputTypePage::SwMailMergeOutputTypePage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_OUTPUTTYPE_PAGE)),
 #pragma warning (disable : 4355)
-    m_aHeaderFI(    this, ResId( FI_HEADER    )),
-    m_aTypeFT(      this, ResId( FT_TYPE    )),
-    m_aLetterRB(    this, ResId( RB_LETTER  )),
-    m_aMailRB(      this, ResId( RB_MAIL    )),
-    m_aHintHeaderFI(this, ResId( FI_HINTHEADER)),
-    m_aHintFI(      this, ResId( FI_HINT)),
-    m_aNoMailHintFI(this, ResId( FT_NOMAILHINT)),
+    m_aHeaderFI(    this, SW_RES( FI_HEADER    )),
+    m_aTypeFT(      this, SW_RES( FT_TYPE    )),
+    m_aLetterRB(    this, SW_RES( RB_LETTER  )),
+    m_aMailRB(      this, SW_RES( RB_MAIL    )),
+    m_aHintHeaderFI(this, SW_RES( FI_HINTHEADER)),
+    m_aHintFI(      this, SW_RES( FI_HINT)),
+    m_aNoMailHintFI(this, SW_RES( FT_NOMAILHINT)),
 #pragma warning (default : 4355)
     m_pWizard(_pParent),
-    m_sLetterHintHeader(  ResId( ST_LETTERHINTHEADER)),
-    m_sMailHintHeader(      ResId( ST_MAILHINTHEADER)),
-    m_sLetterHint(          ResId( ST_LETTERHINT)),
-    m_sMailHint(            ResId( ST_MAILHINT))
+    m_sLetterHintHeader(  SW_RES( ST_LETTERHINTHEADER)),
+    m_sMailHintHeader(      SW_RES( ST_MAILHINTHEADER)),
+    m_sLetterHint(          SW_RES( ST_LETTERHINT)),
+    m_sMailHint(            SW_RES( ST_MAILHINT))
 {
     FreeResource();
     Link aLink = LINK(this, SwMailMergeOutputTypePage, TypeHdl_Impl);
