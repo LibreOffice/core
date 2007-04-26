@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querydlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:27:09 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:03:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,13 +83,13 @@ DlgQryJoin::DlgQryJoin( Window * pParent,
                        const Reference< XConnection >& _xConnection,
                        BOOL _bAllowTableSelect)
     :ModalDialog( pParent, ModuleRes(DLG_QRY_JOIN) )
-    ,aFL_Join( this, ResId( FL_JOIN ) )
-    ,aFT_Title( this, ResId(FT_LISTBOXTITLE) )
-    ,aLB_JoinType( this, ResId(LB_JOINTYPE) )
-    ,aML_HelpText( this, ResId(ML_HELPTEXT) )
-    ,aPB_OK( this, ResId( PB_OK ) )
-    ,aPB_CANCEL( this, ResId( PB_CANCEL ) )
-    ,aPB_HELP( this, ResId( PB_HELP ) )
+    ,aFL_Join( this, ModuleRes( FL_JOIN ) )
+    ,aFT_Title( this, ModuleRes(FT_LISTBOXTITLE) )
+    ,aLB_JoinType( this, ModuleRes(LB_JOINTYPE) )
+    ,aML_HelpText( this, ModuleRes(ML_HELPTEXT) )
+    ,aPB_OK( this, ModuleRes( PB_OK ) )
+    ,aPB_CANCEL( this, ModuleRes( PB_CANCEL ) )
+    ,aPB_HELP( this, ModuleRes( PB_HELP ) )
     ,m_pTableControl( NULL )
     ,m_pTableMap(_pTableMap)
     ,eJoinType(_pData->GetJoinType())
