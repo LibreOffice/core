@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_xkb.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:33:15 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:41:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,18 +39,8 @@
 
 #include <stdio.h>
 
-#if defined(LINUX) || defined(FREEBSD) || defined(MACOSX) // should really check for xfree86 or for X11R6.1 and higher
-#define __XKeyboardExtension__ 1
-#else
-#define __XKeyboardExtension__ 0
-#endif
-
-#include <prex.h>
-#include <X11/X.h>
-#if __XKeyboardExtension__
-#include <X11/XKBlib.h>
-#endif
-#include <postx.h>
+#include "saldisp.hxx"
+#include "saldata.hxx"
 
 #ifndef _SAL_I18N_XKBDEXTENSION_HXX
 #include "i18n_xkb.hxx"
@@ -150,7 +140,6 @@ pEvent
             #endif
             break;
     }
-
     #endif // __XKeyboardExtension__
 }
 
