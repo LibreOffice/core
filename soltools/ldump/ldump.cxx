@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ldump.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:27:59 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 14:01:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 int bFilter = 0;
 int bLdump3 = 0;
 int bUseDirectives = 0;
+int bVerbose = 0;
 
 class ExportSet : public HashTable
 {
@@ -364,7 +365,8 @@ bool LibDump::PrintSym(char *pName, bool bName )
                             pData->bByName = true;
                         else
                             pData->bByName = false;
-                        fprintf(stderr,".");
+                        if ( bVerbose )
+                            fprintf(stderr,".");
                      }
                      else
                      {
@@ -383,7 +385,8 @@ bool LibDump::PrintSym(char *pName, bool bName )
                         sprintf( cBuffer, "%lu", pData->nOrdinal );
                         pIndexTab->Insert( cBuffer, pData );
                         delete [] cBuffer;
-                        fprintf(stderr,"n");
+                        if ( bVerbose )
+                            fprintf(stderr,"n");
                      }
                 }
             }
@@ -647,7 +650,8 @@ void LibDump::DumpError( unsigned long n )
                      "-A     : all symbols (default: only C++)\n"
                      "-E nn  : gerenration of export table beginning with number nn\n"
                      "-F name: Filter file\n"
-                     "-D     : file contains \"dumpbin\" directives\n"; break;
+                     "-D     : file contains \"dumpbin\" directives\n"
+                     "-V     : be verbose\n"; break;
         case 500: p = "Unable to open filter file\n"; break;
         case 510: p = "Overflow of filter table\n"; break;
         case 600: p = "Unable to open base database file\n"; break;
@@ -729,6 +733,12 @@ main( int argc, char **argv )
                 usage();
             }
             bUseDirectives = 1;
+        }
+        else if (( !strcmp( argv[ i ], "-V" )) || ( !strcmp( argv[ i ], "-v" ))) {
+            if ( nState != STATE_NON ) {
+                usage();
+            }
+            bVerbose = 1;
         }
         else {
             switch ( nState ) {
