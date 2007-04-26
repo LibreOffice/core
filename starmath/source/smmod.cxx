@@ -4,9 +4,9 @@
  *
  *  $RCSfile: smmod.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:55:20 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:14:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,7 @@ TYPEINIT1( SmModule, SfxModule );
 
 
 SmResId::SmResId( USHORT nId )
-    : ResId(nId, SM_MOD()->GetResMgr())
+    : ResId(nId, *SM_MOD()->GetResMgr())
 {
 }
 
@@ -122,10 +122,10 @@ SmResId::SmResId( USHORT nId )
 
 SmLocalizedSymbolData::SmLocalizedSymbolData() :
     Resource( SmResId(RID_LOCALIZED_NAMES) ),
-    aUiSymbolNamesAry       ( ResId(RID_UI_SYMBOL_NAMES) ),
-    aExportSymbolNamesAry   ( ResId(RID_EXPORT_SYMBOL_NAMES) ),
-    aUiSymbolSetNamesAry    ( ResId(RID_UI_SYMBOLSET_NAMES) ),
-    aExportSymbolSetNamesAry( ResId(RID_EXPORT_SYMBOLSET_NAMES) ),
+    aUiSymbolNamesAry       ( SmResId(RID_UI_SYMBOL_NAMES) ),
+    aExportSymbolNamesAry   ( SmResId(RID_EXPORT_SYMBOL_NAMES) ),
+    aUiSymbolSetNamesAry    ( SmResId(RID_UI_SYMBOLSET_NAMES) ),
+    aExportSymbolSetNamesAry( SmResId(RID_EXPORT_SYMBOLSET_NAMES) ),
     p50NamesAry             ( 0 ),
     p60NamesAry             ( 0 ),
     n50NamesLang            ( LANGUAGE_NONE ),
