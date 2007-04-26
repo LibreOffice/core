@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:49:10 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:32:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,17 +167,17 @@ sal_Bool SvxHyperlinkNewDocTp::ImplGetURLObject( const String& rPath, const Stri
 
 SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& rItemSet)
 :   SvxHyperlinkTabPageBase ( pParent, SVX_RES( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT ), rItemSet ),
-    maGrpNewDoc     ( this, ResId (GRP_NEWDOCUMENT) ),
-    maRbtEditNow    ( this, ResId (RB_EDITNOW) ),
-    maRbtEditLater  ( this, ResId (RB_EDITLATER) ),
-    maFtPath        ( this, ResId (FT_PATH_NEWDOC) ),
+    maGrpNewDoc     ( this, SVX_RES (GRP_NEWDOCUMENT) ),
+    maRbtEditNow    ( this, SVX_RES (RB_EDITNOW) ),
+    maRbtEditLater  ( this, SVX_RES (RB_EDITLATER) ),
+    maFtPath        ( this, SVX_RES (FT_PATH_NEWDOC) ),
     maCbbPath       ( this, INET_PROT_FILE ),
-    maBtCreate      ( this, ResId (BTN_CREATE) ),
-    maFtDocTypes    ( this, ResId (FT_DOCUMENT_TYPES) ),
-    maLbDocTypes    ( this, ResId (LB_DOCUMENT_TYPES) )
+    maBtCreate      ( this, SVX_RES (BTN_CREATE) ),
+    maFtDocTypes    ( this, SVX_RES (FT_DOCUMENT_TYPES) ),
+    maLbDocTypes    ( this, SVX_RES (LB_DOCUMENT_TYPES) )
 {
     // Set HC bitmaps and disable display of bitmap names.
-    maBtCreate.SetModeImage( Image( ResId( IMG_CREATE_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    maBtCreate.SetModeImage( Image( SVX_RES( IMG_CREATE_HC ) ), BMP_COLOR_HIGHCONTRAST );
     maBtCreate.EnableTextDisplay (FALSE);
 
     InitStdControls();
