@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:20:01 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:16:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -630,7 +630,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
         }
         break;
 
-        case FN_FORMAT_RESET:   // Harte Textattributierung l”schen
+        case FN_FORMAT_RESET:   // Harte Textattributierung lï¿½schen
         {
             SfxItemSet aEmptyAttr(GetPool(), EE_ITEMS_START, EE_ITEMS_END);
             pSdrView->SetAttributes(aEmptyAttr, TRUE);
@@ -661,7 +661,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                 {
                     SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog(
                                 &(GetView().GetViewFrame()->GetWindow()),
-                                &aNewAttr, ResId( RID_SVXDLG_TEXT ), pSdrView );
+                                &aNewAttr, RID_SVXDLG_TEXT, pSdrView );
                     USHORT nResult = pDlg->Execute();
 
                     if (nResult == RET_OK)
@@ -888,7 +888,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         //CHINA001 SvxCharacterMap* pDlg = new SvxCharacterMap( NULL, FALSE );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-        AbstractSvxCharacterMap* pDlg = pFact->CreateSvxCharacterMap( NULL,  ResId(RID_SVXDLG_CHARMAP), FALSE );
+        AbstractSvxCharacterMap* pDlg = pFact->CreateSvxCharacterMap( NULL, RID_SVXDLG_CHARMAP, FALSE );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
         Font aDlgFont( pDlg->GetCharFont() );
