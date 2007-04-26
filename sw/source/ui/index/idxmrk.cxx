@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:04:06 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:12:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,7 +160,7 @@ SwInsertIdxMarkWrapper::SwInsertIdxMarkWrapper( Window *pParentWindow,
     //CHINA001 pWindow = new SwIndexMarkFloatDlg(pBindings, this, pParentWindow, pInfo );
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
     DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
-    pAbstDlg = pFact->CreateIndexMarkFloatDlg( ResId( DLG_INSIDXMARK ), pBindings, this, pParentWindow, pInfo );
+    pAbstDlg = pFact->CreateIndexMarkFloatDlg( DLG_INSIDXMARK, pBindings, this, pParentWindow, pInfo );
     DBG_ASSERT(pAbstDlg, "Dialogdiet fail!");//CHINA001
     pWindow = pAbstDlg->GetWindow(); //CHINA001
     pWindow->Show();    // at this point,because before pSh has to be initialized in ReInitDlg()
@@ -198,7 +198,7 @@ SwInsertAuthMarkWrapper::SwInsertAuthMarkWrapper(   Window *pParentWindow,
     //CHINA001 pWindow = new SwAuthMarkFloatDlg(pBindings, this, pParentWindow, pInfo );
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
     DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
-    pAbstDlg = pFact->CreateAuthMarkFloatDlg( ResId( DLG_INSAUTHMARK ), pBindings, this, pParentWindow, pInfo );
+    pAbstDlg = pFact->CreateAuthMarkFloatDlg( DLG_INSAUTHMARK, pBindings, this, pParentWindow, pInfo );
     DBG_ASSERT(pAbstDlg, "Dialogdiet fail!");//CHINA001
     pWindow = pAbstDlg->GetWindow(); //CHINA001
 
