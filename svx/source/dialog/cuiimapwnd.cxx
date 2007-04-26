@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuiimapwnd.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:15:15 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:28:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,17 +116,17 @@ URLDlg::URLDlg( Window* pWindow, const String& rURL,
 
     ModalDialog         ( pWindow, SVX_RES( RID_SVXDLG_IMAPURL ) ),
 
-    aFlURL              ( this, ResId( FL_URL ) ),
-    aFtURL1             ( this, ResId( FT_URL1 ) ),
-    aEdtURL             ( this, ResId( EDT_URL ) ),
-    aFtURLDescription   ( this, ResId( FT_URLDESCRIPTION ) ),
-    aEdtURLDescription  ( this, ResId( EDT_URLDESCRIPTION ) ),
-    aFtTarget           ( this, ResId( FT_TARGET ) ),
-    aCbbTargets         ( this, ResId( CBB_TARGETS ) ),
-    aFtName             ( this, ResId( FT_NAME ) ),
-    aEdtName            ( this, ResId( EDT_NAME ) ),
-    aBtnOk              ( this, ResId( BTN_OK ) ),
-    aBtnCancel          ( this, ResId( BTN_CANCEL1 ) )
+    aFlURL              ( this, SVX_RES( FL_URL ) ),
+    aFtURL1             ( this, SVX_RES( FT_URL1 ) ),
+    aEdtURL             ( this, SVX_RES( EDT_URL ) ),
+    aFtURLDescription   ( this, SVX_RES( FT_URLDESCRIPTION ) ),
+    aEdtURLDescription  ( this, SVX_RES( EDT_URLDESCRIPTION ) ),
+    aFtTarget           ( this, SVX_RES( FT_TARGET ) ),
+    aCbbTargets         ( this, SVX_RES( CBB_TARGETS ) ),
+    aFtName             ( this, SVX_RES( FT_NAME ) ),
+    aEdtName            ( this, SVX_RES( EDT_NAME ) ),
+    aBtnOk              ( this, SVX_RES( BTN_OK ) ),
+    aBtnCancel          ( this, SVX_RES( BTN_CANCEL1 ) )
 
 {
     FreeResource();
