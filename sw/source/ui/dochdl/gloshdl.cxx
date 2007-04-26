@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:51:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:07:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,7 +174,7 @@ void SwGlossaryHdl::GlossaryDlg()
 //CHINA001  SwGlossaryDlg* pDlg = new SwGlossaryDlg( pViewFrame, this, pWrtShell );
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-    AbstractGlossaryDlg* pDlg = pFact->CreateGlossaryDlg( ResId(DLG_RENAME_GLOS),
+    AbstractGlossaryDlg* pDlg = pFact->CreateGlossaryDlg( DLG_RENAME_GLOS,
                                                         pViewFrame, this, pWrtShell);
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     String sName, sShortName;
@@ -638,7 +638,7 @@ BOOL SwGlossaryHdl::Expand( const String& rShortName,
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
                 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-                AbstarctSwSelGlossaryDlg* pDlg = pFact->CreateSwSelGlossaryDlg( 0, aShortName,ResId( DLG_SEL_GLOS ));
+                AbstarctSwSelGlossaryDlg* pDlg = pFact->CreateSwSelGlossaryDlg( 0, aShortName, DLG_SEL_GLOS );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 for(USHORT i = 0; i < aFoundArr.Count(); ++i)
                 {
