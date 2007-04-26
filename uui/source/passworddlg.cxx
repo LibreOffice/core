@@ -4,9 +4,9 @@
  *
  *  $RCSfile: passworddlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:26:28 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:20:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,19 +69,19 @@ PasswordDialog::PasswordDialog
     ResMgr*                                     pResMgr
 ) :
 
-    ModalDialog( pParent, ResId( DLG_UUI_PASSWORD, pResMgr ) ),
+    ModalDialog( pParent, ResId( DLG_UUI_PASSWORD, *pResMgr ) ),
 
-    aFTPassword     ( this, ResId( FT_PASSWORD ) ),
-    aEDPassword     ( this, ResId( ED_PASSWORD ) ),
-    aOKBtn          ( this, ResId( BTN_PASSWORD_OK ) ),
-    aCancelBtn      ( this, ResId( BTN_PASSWORD_CANCEL ) ),
-    aHelpBtn        ( this, ResId( BTN_PASSWORD_HELP ) ),
+    aFTPassword     ( this, ResId( FT_PASSWORD, *pResMgr ) ),
+    aEDPassword     ( this, ResId( ED_PASSWORD, *pResMgr ) ),
+    aOKBtn          ( this, ResId( BTN_PASSWORD_OK, *pResMgr ) ),
+    aCancelBtn      ( this, ResId( BTN_PASSWORD_CANCEL, *pResMgr ) ),
+    aHelpBtn        ( this, ResId( BTN_PASSWORD_HELP, *pResMgr ) ),
     nDialogMode     ( aDialogMode ),
     pResourceMgr    ( pResMgr )
 {
     if( nDialogMode == ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER )
     {
-        String aErrorMsg( ResId( STR_ERROR_PASSWORD_WRONG, pResourceMgr ));
+        String aErrorMsg( ResId( STR_ERROR_PASSWORD_WRONG, *pResourceMgr ));
         ErrorBox aErrorBox( pParent, WB_OK, aErrorMsg );
         aErrorBox.Execute();
     }
