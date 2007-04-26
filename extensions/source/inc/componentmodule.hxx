@@ -4,9 +4,9 @@
  *
  *  $RCSfile: componentmodule.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:34:57 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:07:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,7 +207,7 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
     class ModuleRes : public ::ResId
     {
     public:
-        ModuleRes(USHORT _nId) : ResId(_nId, OModule::getResManager()) { }
+        ModuleRes(USHORT _nId) : ResId(_nId, *OModule::getResManager()) { }
     };
 
     //==========================================================================
