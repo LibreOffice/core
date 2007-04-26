@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appenv.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:32:52 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:49:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -328,7 +328,7 @@ static USHORT nTitleNo = 0;
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
         DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-        pDlg = pFact->CreateSwEnvDlg( pParent, aSet, pOldSh, pTempPrinter, !bEnvChange,ResId( DLG_ENV ));
+        pDlg = pFact->CreateSwEnvDlg( pParent, aSet, pOldSh, pTempPrinter, !bEnvChange, DLG_ENV );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         nMode = pDlg->Execute();
     }
