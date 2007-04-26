@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multipat.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:19:20 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:36:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,21 +224,21 @@ SvxMultiPathDialog::SvxMultiPathDialog( Window* pParent, BOOL bEmptyAllowed ) :
 
     ModalDialog( pParent, SVX_RES( RID_SVXDLG_MULTIPATH ) ),
 
-    aPathFL     ( this, ResId( FL_MULTIPATH) ),
-    aPathLB     ( this, ResId( LB_MULTIPATH ) ),
-    aRadioLB    ( this, ResId( LB_RADIOBUTTON ) ),
-    aRadioFT    ( this, ResId( FT_RADIOBUTTON ) ),
-    aAddBtn     ( this, ResId( BTN_ADD_MULTIPATH ) ),
-    aDelBtn     ( this, ResId( BTN_DEL_MULTIPATH ) ),
-    aOKBtn      ( this, ResId( BTN_MULTIPATH_OK ) ),
-    aCancelBtn  ( this, ResId( BTN_MULTIPATH_CANCEL ) ),
-    aHelpButton ( this, ResId( BTN_MULTIPATH_HELP ) ),
+    aPathFL     ( this, SVX_RES( FL_MULTIPATH) ),
+    aPathLB     ( this, SVX_RES( LB_MULTIPATH ) ),
+    aRadioLB    ( this, SVX_RES( LB_RADIOBUTTON ) ),
+    aRadioFT    ( this, SVX_RES( FT_RADIOBUTTON ) ),
+    aAddBtn     ( this, SVX_RES( BTN_ADD_MULTIPATH ) ),
+    aDelBtn     ( this, SVX_RES( BTN_DEL_MULTIPATH ) ),
+    aOKBtn      ( this, SVX_RES( BTN_MULTIPATH_OK ) ),
+    aCancelBtn  ( this, SVX_RES( BTN_MULTIPATH_CANCEL ) ),
+    aHelpButton ( this, SVX_RES( BTN_MULTIPATH_HELP ) ),
     pImpl       ( new MultiPath_Impl( bEmptyAllowed ) )
 
 {
     static long aStaticTabs[]= { 2, 0, 12 };
     aRadioLB.SvxSimpleTable::SetTabs( aStaticTabs );
-    String sHeader( ResId( STR_HEADER_PATHS ) );
+    String sHeader( SVX_RES( STR_HEADER_PATHS ) );
     aRadioLB.SetQuickHelpText( sHeader );
     sHeader.Insert( '\t', 0 );
     aRadioLB.InsertHeaderEntry( sHeader, HEADERBAR_APPEND, HIB_LEFT );
