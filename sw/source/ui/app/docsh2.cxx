@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:45:40 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:50:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1103,7 +1103,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
             DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-            AbstractSwInsertAbstractDlg* pDlg = pFact->CreateSwInsertAbstractDlg(0,ResId( DLG_INSERT_ABSTRACT ));
+            AbstractSwInsertAbstractDlg* pDlg = pFact->CreateSwInsertAbstractDlg(0, DLG_INSERT_ABSTRACT);
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             if(RET_OK == pDlg->Execute())
             {
