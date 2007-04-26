@@ -4,9 +4,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-06 14:34:41 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:09:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,13 +97,13 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
 
     SfxModalDialog  ( pParent,  rId ),
 
-    aOKButton       ( this,     ResId( ABOUT_BTN_OK ) ),
-    aVersionText    ( this,     ResId( ABOUT_FTXT_VERSION ) ),
-    aCopyrightText  ( this,     ResId( ABOUT_FTXT_COPYRIGHT ) ),
+    aOKButton       ( this,     ResId( ABOUT_BTN_OK, *rId.GetResMgr() ) ),
+    aVersionText    ( this,     ResId( ABOUT_FTXT_VERSION, *rId.GetResMgr() ) ),
+    aCopyrightText  ( this,     ResId( ABOUT_FTXT_COPYRIGHT, *rId.GetResMgr() ) ),
     aBuildData      ( this ),
-    aDeveloperAry   (           ResId( ABOUT_STR_DEVELOPER_ARY ) ),
+    aDeveloperAry   (           ResId( ABOUT_STR_DEVELOPER_ARY, *rId.GetResMgr() ) ),
     aDevVersionStr  ( rVerStr ),
-    aAccelStr       (           ResId( ABOUT_STR_ACCEL ) ),
+    aAccelStr       (           ResId( ABOUT_STR_ACCEL, *rId.GetResMgr() ) ),
 
     aTimer          (),
     nOff            ( 0 ),
@@ -123,7 +123,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
         ::rtl::OUString sFrenchLang( DEFINE_CONST_OUSTRING( "fr" ) );
         if ( aLocale.Language.equals( sFrenchLang ) )
         {
-            String sNewCopyrightText( ResId( ABOUT_STR_FRENCH_COPYRIGHT ) );
+            String sNewCopyrightText( ResId( ABOUT_STR_FRENCH_COPYRIGHT, *rId.GetResMgr() ) );
             aCopyrightText.SetText( sNewCopyrightText );
         }
         // <--
@@ -142,7 +142,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     }
     else
     {
-        aAppLogo = Image( Bitmap( ResId( RID_DEFAULT_ABOUT_BMP_LOGO, rId.GetResMgr() ) ) );
+        aAppLogo = Image( Bitmap( ResId( RID_DEFAULT_ABOUT_BMP_LOGO, *rId.GetResMgr() ) ) );
     }
 
     // Transparenter Font
