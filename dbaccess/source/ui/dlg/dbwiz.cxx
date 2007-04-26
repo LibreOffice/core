@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwiz.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:08:13 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:58:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -392,7 +392,7 @@ TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
         // open our own resource block, as the page titles are strings local to this block
         LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
 
-        pPage->SetText(String(ResId(nStringId)));
+        pPage->SetText(String(ModuleRes(nStringId)));
         defaultButton( _nState == START_PAGE ? WZB_NEXT : WZB_FINISH );
         enableButtons( WZB_FINISH, _nState == START_PAGE ? sal_False : sal_True);
         pPage->Show();
