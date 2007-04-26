@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parclass.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:17:38 $
+ *  last change: $Author: gm $ $Date: 2007-04-26 07:39:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@
 
 #if OSL_DEBUG_LEVEL > 1
 // the documentation thingy
+#include <stdio.h>
 #include "compiler.hxx"
 #include "sc.hrc"   // VAR_ARGS
 #endif
@@ -423,7 +424,7 @@ void ScParameterClassification::MergeArgumentsFromFunctionResource()
             nArgs = CommonData::nMaxParams;
             pRun->aData.bRepeatLast = true;
         }
-        pRun->nMinParams = nArgs;
+        pRun->nMinParams = static_cast< BYTE >( nArgs );
         for ( size_t j=0; j < nArgs; ++j )
         {
             pRun->aData.nParam[j] = Value;
@@ -484,6 +485,7 @@ void ScParameterClassification::GenerateDocumentation()
                     case ocPercentSign:
                         aToken.SetByte(1);
                     break;
+                    default:;
                 }
             }
             else if ( eOp <= ocEndBinOp )
@@ -564,6 +566,7 @@ void ScParameterClassification::GenerateDocumentation()
                 case ocNoName:
                     aStr += "   // error function, not a real function";
                 break;
+                default:;
             }
             fprintf( stdout, "%s\n", aStr.GetBuffer());
         }
