@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 11:40:32 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:43:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1001,7 +1001,7 @@ MultiLineEdit::MultiLineEdit( Window* pParent, const ResId& rResId )
     : Edit( pParent, rResId.SetRT( RSC_MULTILINEEDIT ) )
 {
     SetType( WINDOW_MULTILINEEDIT );
-    WinBits nWinStyle = rResId.aWinBits;
+    WinBits nWinStyle = rResId.GetWinBits();
     pImpSvMEdit = new ImpSvMEdit( this, nWinStyle );
     ImplInitSettings( TRUE, TRUE, TRUE );
     pUpdateDataTimer = 0;
