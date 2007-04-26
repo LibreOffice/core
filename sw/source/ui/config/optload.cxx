@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:41:03 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:51:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,19 +112,19 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
 
     SfxTabPage( pParent, SW_RES( TP_OPTLOAD_PAGE ), rSet ),
 
-    aUpdateFL           ( this, ResId( FL_UPDATE ) ),
-    aLinkFT             ( this, ResId( FT_LINK ) ),
-    aAlwaysRB           ( this, ResId( RB_ALWAYS ) ),
-    aRequestRB          ( this, ResId( RB_REQUEST ) ),
-    aNeverRB            ( this, ResId( RB_NEVER ) ),
-    aFieldFT            ( this, ResId( FT_FIELD ) ),
-    aAutoUpdateFields   ( this, ResId( CB_AUTO_UPDATE_FIELDS ) ),
-    aAutoUpdateCharts   ( this, ResId( CB_AUTO_UPDATE_CHARTS ) ),
-    aSettingsFL         ( this, ResId( FL_SETTINGS ) ),
-    aMetricLB           ( this, ResId( LB_METRIC ) ),
-    aMetricFT           ( this, ResId( FT_METRIC ) ),
-    aTabFT              ( this, ResId( FT_TAB ) ),
-    aTabMF              ( this, ResId( MF_TAB ) ),
+    aUpdateFL           ( this, SW_RES( FL_UPDATE ) ),
+    aLinkFT             ( this, SW_RES( FT_LINK ) ),
+    aAlwaysRB           ( this, SW_RES( RB_ALWAYS ) ),
+    aRequestRB          ( this, SW_RES( RB_REQUEST ) ),
+    aNeverRB            ( this, SW_RES( RB_NEVER    ) ),
+    aFieldFT            ( this, SW_RES( FT_FIELD ) ),
+    aAutoUpdateFields   ( this, SW_RES( CB_AUTO_UPDATE_FIELDS ) ),
+    aAutoUpdateCharts   ( this, SW_RES( CB_AUTO_UPDATE_CHARTS ) ),
+    aSettingsFL         ( this, SW_RES( FL_SETTINGS ) ),
+    aMetricLB           ( this, SW_RES( LB_METRIC ) ),
+    aMetricFT           ( this, SW_RES( FT_METRIC ) ),
+    aTabFT              ( this, SW_RES( FT_TAB ) ),
+    aTabMF              ( this, SW_RES( MF_TAB ) ),
 
     pWrtShell   ( NULL ),
     nLastTab    ( 0 ),
@@ -443,7 +443,7 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     sEnd            (SW_RESSTR(STR_END                  )),
     sAbove          (SW_RESSTR(STR_ABOVE                )),
     sBelow          (SW_RESSTR(STR_CP_BELOW             )),
-    sNone           (ResId( STR_CATEGORY_NONE )),
+    sNone           (SW_RESSTR( STR_CATEGORY_NONE )),
 
     pMgr            (new SwFldMgr()),
     bHTMLMode(FALSE)
