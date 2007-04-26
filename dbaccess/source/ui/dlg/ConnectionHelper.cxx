@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionHelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:04:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:55:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,9 +200,9 @@ DBG_NAME(OConnectionHelper)
 
     OConnectionHelper::OConnectionHelper( Window* pParent, const ResId& _rId, const SfxItemSet& _rCoreAttrs)
         :OGenericAdministrationPage(pParent, _rId, _rCoreAttrs)
-        ,m_aFT_Connection(this, ResId(FT_AUTOBROWSEURL))
-           ,m_aET_Connection(this, ResId(ET_AUTOBROWSEURL))
-        ,m_aPB_Connection(this, ResId(PB_AUTOBROWSEURL))
+        ,m_aFT_Connection(this, ResId(FT_AUTOBROWSEURL,*_rId.GetResMgr()))
+           ,m_aET_Connection(this, ResId(ET_AUTOBROWSEURL,*_rId.GetResMgr()))
+        ,m_aPB_Connection(this, ResId(PB_AUTOBROWSEURL,*_rId.GetResMgr()))
     {
         DBG_CTOR(OConnectionHelper,NULL);
 
@@ -408,7 +408,7 @@ DBG_NAME(OConnectionHelper)
                 else
                 {
                     LocalResourceAccess aLocRes( PAGE_CONNECTION, RSC_TABPAGE );
-                    String sError = String(ResId(STR_NO_ADABASE_DATASOURCES));
+                    String sError = String(ModuleRes(STR_NO_ADABASE_DATASOURCES));
                     ErrorBox aBox(this, WB_OK, sError);
                     aBox.Execute();
                 }
