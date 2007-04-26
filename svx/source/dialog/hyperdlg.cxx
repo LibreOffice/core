@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyperdlg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:50:17 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:34:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( Window* _pParent, USHORT nId,
     //CHINA001 pWindow = new SvxHpLinkDlg( _pParent, pBindings );
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-    mpDlg = pFact->CreateSvxHpLinkDlg( _pParent, pBindings, ResId(SID_HYPERLINK_DIALOG) );
+    mpDlg = pFact->CreateSvxHpLinkDlg( _pParent, pBindings, SID_HYPERLINK_DIALOG );
     DBG_ASSERT(mpDlg, "Dialogdiet fail!");//CHINA001
     pWindow = mpDlg->GetWindow();
     ((MyStruct*)pImp)->bVisible = FALSE;
