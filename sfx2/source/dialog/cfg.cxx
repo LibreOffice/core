@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:31:00 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:10:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -597,16 +597,16 @@ SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
     Window* pParent, const ResId& rResId, ULONG nConfigMode )
         : SvTreeListBox( pParent, rResId )
         , nMode( nConfigMode ), bShowSF( FALSE ), bShowBasic( TRUE ),
-    m_hdImage(ResId(IMG_HARDDISK)),
-    m_hdImage_hc(ResId(IMG_HARDDISK_HC)),
-    m_libImage(ResId(IMG_LIB)),
-    m_libImage_hc(ResId(IMG_LIB_HC)),
-    m_macImage(ResId(IMG_MACRO)),
-    m_macImage_hc(ResId(IMG_MACRO_HC)),
-    m_docImage(ResId(IMG_DOC)),
-    m_docImage_hc(ResId(IMG_DOC_HC)),
-    m_sMyMacros(String(ResId(STR_MYMACROS))),
-    m_sProdMacros(String(ResId(STR_PRODMACROS)))
+    m_hdImage(ResId(IMG_HARDDISK,*rResId.GetResMgr())),
+    m_hdImage_hc(ResId(IMG_HARDDISK_HC,*rResId.GetResMgr())),
+    m_libImage(ResId(IMG_LIB,*rResId.GetResMgr())),
+    m_libImage_hc(ResId(IMG_LIB_HC,*rResId.GetResMgr())),
+    m_macImage(ResId(IMG_MACRO,*rResId.GetResMgr())),
+    m_macImage_hc(ResId(IMG_MACRO_HC,*rResId.GetResMgr())),
+    m_docImage(ResId(IMG_DOC,*rResId.GetResMgr())),
+    m_docImage_hc(ResId(IMG_DOC_HC,*rResId.GetResMgr())),
+    m_sMyMacros(String(ResId(STR_MYMACROS,*rResId.GetResMgr()))),
+    m_sProdMacros(String(ResId(STR_PRODMACROS,*rResId.GetResMgr())))
 /*  Beschreibung
     Diese Listbox zeigt alle Funktionsgruppen und Basics an, die zur Konfiguration
     zur Verf"ugung stehen. Basics werden noch in Bibliotheken und Module untergliedert.
@@ -614,8 +614,8 @@ SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
 {
     aScriptType = String(SfxResId(STR_BASICNAME));
     SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
-    SetNodeBitmaps( Image( BMP_COLLAPSED ), Image( BMP_EXPANDED ) , BMP_COLOR_NORMAL );
-    SetNodeBitmaps( Image( BMP_COLLAPSED_HC ), Image( BMP_EXPANDED_HC ), BMP_COLOR_HIGHCONTRAST );
+    SetNodeBitmaps( Image( ResId(BMP_COLLAPSED,*rResId.GetResMgr()) ), Image( ResId(BMP_EXPANDED,*rResId.GetResMgr()) ) , BMP_COLOR_NORMAL );
+    SetNodeBitmaps( Image( ResId(BMP_COLLAPSED_HC,*rResId.GetResMgr()) ), Image( ResId(BMP_EXPANDED_HC,*rResId.GetResMgr()) ), BMP_COLOR_HIGHCONTRAST );
 
     // Check configuration to see whether only Basic macros,
   // only Scripting Framework scripts, or both should be listed
