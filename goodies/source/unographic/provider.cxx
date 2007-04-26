@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:55:14 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:02:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,7 +231,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const :
         if( pResMgr )
         {
             const ::rtl::OUString   aResourceType( rResourceURL.getToken( 0, '/', nIndex ) );
-            const ResId             aResId( rResourceURL.getToken( 0, '/', nIndex ).toInt32(), pResMgr );
+            const ResId             aResId( rResourceURL.getToken( 0, '/', nIndex ).toInt32(), *pResMgr );
 
             if( aResourceType.getLength() )
             {
