@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tplnedef.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:31:10 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:46:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,27 +107,27 @@ SvxLineDefTabPage::SvxLineDefTabPage
 
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_LINE_DEF ), rInAttrs ),
 
-    aFlDefinition   ( this, ResId( FL_DEFINITION ) ),
-    aFTLinestyle    ( this, ResId( FT_LINESTYLE ) ),
-    aLbLineStyles   ( this, ResId( LB_LINESTYLES ) ),
-    aFtType         ( this, ResId( FT_TYPE ) ),
-    aLbType1        ( this, ResId( LB_TYPE_1 ) ),
-    aLbType2        ( this, ResId( LB_TYPE_2 ) ),
-    aFtNumber       ( this, ResId( FT_NUMBER ) ),
-    aNumFldNumber1  ( this, ResId( NUM_FLD_1 ) ),
-    aNumFldNumber2  ( this, ResId( NUM_FLD_2 ) ),
-    aFtLength       ( this, ResId( FT_LENGTH ) ),
-    aMtrLength1     ( this, ResId( MTR_FLD_LENGTH_1 ) ),
-    aMtrLength2     ( this, ResId( MTR_FLD_LENGTH_2 ) ),
-    aFtDistance     ( this, ResId( FT_DISTANCE ) ),
-    aMtrDistance    ( this, ResId( MTR_FLD_DISTANCE ) ),
-    aCbxSynchronize ( this, ResId( CBX_SYNCHRONIZE ) ),
-    aBtnAdd         ( this, ResId( BTN_ADD ) ),
-    aBtnModify      ( this, ResId( BTN_MODIFY ) ),
-    aBtnDelete      ( this, ResId( BTN_DELETE ) ),
-    aBtnLoad        ( this, ResId( BTN_LOAD ) ),
-    aBtnSave        ( this, ResId( BTN_SAVE ) ),
-    aCtlPreview     ( this, ResId( CTL_PREVIEW ), &XOut ),
+    aFlDefinition   ( this, SVX_RES( FL_DEFINITION ) ),
+    aFTLinestyle    ( this, SVX_RES( FT_LINESTYLE ) ),
+    aLbLineStyles   ( this, SVX_RES( LB_LINESTYLES ) ),
+    aFtType         ( this, SVX_RES( FT_TYPE ) ),
+    aLbType1        ( this, SVX_RES( LB_TYPE_1 ) ),
+    aLbType2        ( this, SVX_RES( LB_TYPE_2 ) ),
+    aFtNumber       ( this, SVX_RES( FT_NUMBER ) ),
+    aNumFldNumber1  ( this, SVX_RES( NUM_FLD_1 ) ),
+    aNumFldNumber2  ( this, SVX_RES( NUM_FLD_2 ) ),
+    aFtLength       ( this, SVX_RES( FT_LENGTH ) ),
+    aMtrLength1     ( this, SVX_RES( MTR_FLD_LENGTH_1 ) ),
+    aMtrLength2     ( this, SVX_RES( MTR_FLD_LENGTH_2 ) ),
+    aFtDistance     ( this, SVX_RES( FT_DISTANCE ) ),
+    aMtrDistance    ( this, SVX_RES( MTR_FLD_DISTANCE ) ),
+    aCbxSynchronize ( this, SVX_RES( CBX_SYNCHRONIZE ) ),
+    aBtnAdd         ( this, SVX_RES( BTN_ADD ) ),
+    aBtnModify      ( this, SVX_RES( BTN_MODIFY ) ),
+    aBtnDelete      ( this, SVX_RES( BTN_DELETE ) ),
+    aBtnLoad        ( this, SVX_RES( BTN_LOAD ) ),
+    aBtnSave        ( this, SVX_RES( BTN_SAVE ) ),
+    aCtlPreview     ( this, SVX_RES( CTL_PREVIEW ), &XOut ),
 
     rOutAttrs       ( rInAttrs ),
 
@@ -140,8 +140,8 @@ SvxLineDefTabPage::SvxLineDefTabPage
     aXLineAttr          ( pXPool ),
     rXLSet              ( aXLineAttr.GetItemSet() )
 {
-    aBtnLoad.SetModeImage( Image( ResId( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnSave.SetModeImage( Image( ResId( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnLoad.SetModeImage( Image( SVX_RES( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnSave.SetModeImage( Image( SVX_RES( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
 
     FreeResource();
 
@@ -285,23 +285,23 @@ void SvxLineDefTabPage::CheckChanges_Impl()
         aLbType2.GetSelectEntryPos() != aLbType2.GetSavedValue() ||
         aMtrDistance.GetText()       != aMtrDistance.GetSavedValue() )
     {
-        ResMgr* pMgr = DIALOG_MGR();
+        ResMgr& rMgr = DIALOG_MGR();
         Image aWarningBoxImage = WarningBox::GetStandardImage();
         //CHINA001 SvxMessDialog aMessDlg( DLGWIN,
-        //CHINA001  String( ResId( RID_SVXSTR_LINESTYLE, pMgr ) ),
-        //CHINA001  String( ResId( RID_SVXSTR_ASK_CHANGE_LINESTYLE, pMgr ) ),
+        //CHINA001  String( ResId( RID_SVXSTR_LINESTYLE, rMgr ) ),
+        //CHINA001  String( ResId( RID_SVXSTR_ASK_CHANGE_LINESTYLE, rMgr ) ),
         //CHINA001  &aWarningBoxImage );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-        AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( DLGWIN, ResId(RID_SVXDLG_MESSBOX),
-                                                    String( ResId( RID_SVXSTR_LINESTYLE, pMgr ) ),
-                                                    String( ResId( RID_SVXSTR_ASK_CHANGE_LINESTYLE, pMgr ) ),
+        AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( DLGWIN, RID_SVXDLG_MESSBOX,
+                                                    String( ResId( RID_SVXSTR_LINESTYLE, rMgr ) ),
+                                                    String( ResId( RID_SVXSTR_ASK_CHANGE_LINESTYLE, rMgr ) ),
                                                     &aWarningBoxImage );
         DBG_ASSERT(aMessDlg, "Dialogdiet fail!");//CHINA001
         aMessDlg->SetButtonText( MESS_BTN_1, //CHINA001 aMessDlg.SetButtonText( MESS_BTN_1,
-                                String( ResId( RID_SVXSTR_CHANGE, pMgr ) ) );
+                                String( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
         aMessDlg->SetButtonText( MESS_BTN_2, //CHINA001 aMessDlg.SetButtonText( MESS_BTN_2,
-                                String( ResId( RID_SVXSTR_ADD, pMgr ) ) );
+                                String( ResId( RID_SVXSTR_ADD, rMgr ) ) );
 
         short nRet = aMessDlg->Execute(); //CHINA001 short nRet = aMessDlg.Execute();
 
@@ -605,9 +605,9 @@ IMPL_LINK( SvxLineDefTabPage, SelectTypeHdl_Impl, void *, p )
 
 IMPL_LINK( SvxLineDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 {
-    ResMgr* pMgr = DIALOG_MGR();
-    String aNewName( ResId( RID_SVXSTR_LINESTYLE, pMgr ) );
-    String aDesc( ResId( RID_SVXSTR_DESC_LINESTYLE, pMgr ) );
+    ResMgr& rMgr = DIALOG_MGR();
+    String aNewName( ResId( RID_SVXSTR_LINESTYLE, rMgr ) );
+    String aDesc( ResId( RID_SVXSTR_DESC_LINESTYLE, rMgr ) );
     String aName;
     XDashEntry* pEntry;
 
@@ -630,7 +630,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
     //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, ResId(RID_SVXDLG_NAME) );
+    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, RID_SVXDLG_NAME );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     BOOL bLoop = TRUE;
 
@@ -675,7 +675,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         }
         else
         {
-            WarningBox aBox( DLGWIN, WinBits( WB_OK ),String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, pMgr ) ) );
+            WarningBox aBox( DLGWIN, WinBits( WB_OK ),String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
             aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
             aBox.Execute();
         }
@@ -700,16 +700,16 @@ IMPL_LINK( SvxLineDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        ResMgr* pMgr = DIALOG_MGR();
-        String aNewName( ResId( RID_SVXSTR_LINESTYLE, pMgr ) );
-        String aDesc( ResId( RID_SVXSTR_DESC_LINESTYLE, pMgr ) );
+        ResMgr& rMgr = DIALOG_MGR();
+        String aNewName( ResId( RID_SVXSTR_LINESTYLE, rMgr ) );
+        String aDesc( ResId( RID_SVXSTR_DESC_LINESTYLE, rMgr ) );
         String aName( pDashList->GetDash( nPos )->GetName() );
         String aOldName = aName;
 
         //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, ResId(RID_SVXDLG_NAME) );
+        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, RID_SVXDLG_NAME );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
         long nCount = pDashList->Count();
@@ -757,7 +757,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
             }
             else
             {
-                WarningBox aBox( DLGWIN, WinBits( WB_OK ), String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, pMgr ) ) );
+                WarningBox aBox( DLGWIN, WinBits( WB_OK ), String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
                 aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
                 aBox.Execute();
             }
@@ -809,13 +809,13 @@ IMPL_LINK( SvxLineDefTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 {
-    ResMgr* pMgr = DIALOG_MGR();
+    ResMgr& rMgr = DIALOG_MGR();
     USHORT nReturn = RET_YES;
 
     if ( *pnDashListState & CT_MODIFIED )
     {
         nReturn = WarningBox( DLGWIN, WinBits( WB_YES_NO_CANCEL ),
-            String( ResId( RID_SVXSTR_WARN_TABLE_OVERWRITE, pMgr ) ) ).Execute();
+            String( ResId( RID_SVXSTR_WARN_TABLE_OVERWRITE, rMgr ) ) ).Execute();
 
         if ( nReturn == RET_YES )
             pDashList->Save();
@@ -862,7 +862,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
 /*                  // Ermitteln (evtl. abschneiden) des Namens und in
                     // der GroupBox darstellen
-                    String aString( ResId( RID_SVXSTR_TABLE, pMgr ) );
+                    String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
                     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
                     if ( aURL.getBase().Len() > 18 )
@@ -884,7 +884,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             else
                 //aIStream.Close();
                 ErrorBox( DLGWIN, WinBits( WB_OK ),
-                    String( ResId( RID_SVXSTR_READ_DATA_ERROR, pMgr ) ) ).Execute();
+                    String( ResId( RID_SVXSTR_READ_DATA_ERROR, rMgr ) ) ).Execute();
         }
     }
 
