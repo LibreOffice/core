@@ -4,9 +4,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-17 10:15:53 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:17:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,39 +120,39 @@ DigitalSignaturesDialog::DigitalSignaturesDialog( Window* pParent, uno::Referenc
     :ModalDialog        ( pParent, XMLSEC_RES( RID_XMLSECDLG_DIGSIG ) )
     ,maSignatureHelper  ( rxMSF )
     ,meSignatureMode    ( eMode )
-    ,maHintDocFT        ( this, ResId( FT_HINT_DOC ) )
-    ,maHintBasicFT      ( this, ResId( FT_HINT_BASIC ) )
-    ,maHintPackageFT    ( this, ResId( FT_HINT_PACK ) )
-    ,maSignaturesLB     ( this, ResId( LB_SIGNATURES ) )
-    ,maSigsValidImg     ( this, ResId( IMG_STATE_VALID ) )
-    ,maSigsValidFI      ( this, ResId( FI_STATE_VALID ) )
-    ,maSigsInvalidImg   ( this, ResId( IMG_STATE_BROKEN ) )
-    ,maSigsInvalidFI    ( this, ResId( FI_STATE_BROKEN ) )
-    ,maSigsNotvalidatedImg( this, ResId( IMG_STATE_NOTVALIDATED ) )
-    ,maSigsNotvalidatedFI ( this, ResId( FI_STATE_NOTVALIDATED ) )
-    ,maViewBtn          ( this, ResId( BTN_VIEWCERT ) )
-    ,maAddBtn           ( this, ResId( BTN_ADDCERT ) )
-    ,maRemoveBtn        ( this, ResId( BTN_REMOVECERT ) )
-    ,maBottomSepFL      ( this, ResId( FL_BOTTOM_SEP ) )
-    ,maOKBtn            ( this, ResId( BTN_OK ) )
-    ,maCancelBtn        ( this, ResId( BTN_CANCEL ) )
-    ,maHelpBtn          ( this, ResId( BTN_HELP ) )
+    ,maHintDocFT        ( this, XMLSEC_RES( FT_HINT_DOC ) )
+    ,maHintBasicFT      ( this, XMLSEC_RES( FT_HINT_BASIC ) )
+    ,maHintPackageFT    ( this, XMLSEC_RES( FT_HINT_PACK ) )
+    ,maSignaturesLB     ( this, XMLSEC_RES( LB_SIGNATURES ) )
+    ,maSigsValidImg     ( this, XMLSEC_RES( IMG_STATE_VALID ) )
+    ,maSigsValidFI      ( this, XMLSEC_RES( FI_STATE_VALID ) )
+    ,maSigsInvalidImg   ( this, XMLSEC_RES( IMG_STATE_BROKEN ) )
+    ,maSigsInvalidFI    ( this, XMLSEC_RES( FI_STATE_BROKEN ) )
+    ,maSigsNotvalidatedImg( this, XMLSEC_RES( IMG_STATE_NOTVALIDATED ) )
+    ,maSigsNotvalidatedFI ( this, XMLSEC_RES( FI_STATE_NOTVALIDATED ) )
+    ,maViewBtn          ( this, XMLSEC_RES( BTN_VIEWCERT ) )
+    ,maAddBtn           ( this, XMLSEC_RES( BTN_ADDCERT ) )
+    ,maRemoveBtn        ( this, XMLSEC_RES( BTN_REMOVECERT ) )
+    ,maBottomSepFL      ( this, XMLSEC_RES( FL_BOTTOM_SEP ) )
+    ,maOKBtn            ( this, XMLSEC_RES( BTN_OK ) )
+    ,maCancelBtn        ( this, XMLSEC_RES( BTN_CANCEL ) )
+    ,maHelpBtn          ( this, XMLSEC_RES( BTN_HELP ) )
 {
     // --> PB #i48253 the tablistbox needs its own unique id
     maSignaturesLB.Window::SetUniqueId( HID_XMLSEC_TREE_SIGNATURESDLG );
     // <--
     static long nTabs[] = { 4, 0, 6*DS_LB_WIDTH/100, 36*DS_LB_WIDTH/100, 74*DS_LB_WIDTH/100 };
     maSignaturesLB.SetTabs( &nTabs[ 0 ] );
-    maSignaturesLB.InsertHeaderEntry( String( ResId( STR_HEADERBAR ) ) );
+    maSignaturesLB.InsertHeaderEntry( String( XMLSEC_RES( STR_HEADERBAR ) ) );
 
-    maSigsNotvalidatedFI.SetText( String( ResId( STR_NO_INFO_TO_VERIFY ) ) );
+    maSigsNotvalidatedFI.SetText( String( XMLSEC_RES( STR_NO_INFO_TO_VERIFY ) ) );
 
     if ( GetBackground().GetColor().IsDark() )
     {
         // high contrast mode needs other images
-        maSigsValidImg.SetImage( Image( ResId( IMG_STATE_VALID_HC ) ) );
-        maSigsInvalidImg.SetImage( Image( ResId( IMG_STATE_BROKEN_HC ) ) );
-        maSigsNotvalidatedImg.SetImage( Image( ResId( IMG_STATE_NOTVALIDATED_HC ) ) );
+        maSigsValidImg.SetImage( Image( XMLSEC_RES( IMG_STATE_VALID_HC ) ) );
+        maSigsInvalidImg.SetImage( Image( XMLSEC_RES( IMG_STATE_BROKEN_HC ) ) );
+        maSigsNotvalidatedImg.SetImage( Image( XMLSEC_RES( IMG_STATE_NOTVALIDATED_HC ) ) );
     }
 
     FreeResource();
