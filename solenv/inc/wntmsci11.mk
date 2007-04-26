@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci11.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-28 12:31:59 $
+#   last change: $Author: rt $ $Date: 2007-04-26 13:57:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@ AFLAGS=/c /Cp /coff
 # exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
 ARCH_FLAGS*=
 
+CC*:=$(WRAPCMD) cl
 .IF "$(bndchk)" != ""
 CXX*=nmcl
 .ELSE
