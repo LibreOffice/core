@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pivotsh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:06:26 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:57:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ void ScPivotShell::Execute( SfxRequest& rReq )
 
                 AbstractScPivotFilterDlg* pDlg = pFact->CreateScPivotFilterDlg( pViewShell->GetDialogParent(),
                                                                                 aArgSet, nSrcTab,
-                                                                                ResId(RID_SCDLG_PIVOTFILTER));
+                                                                                RID_SCDLG_PIVOTFILTER);
                 DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
 
                 if( pDlg->Execute() == RET_OK )
