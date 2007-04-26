@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsave.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:23:16 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:40:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,10 +154,10 @@ class FilterWarningDialog_Impl : public ModalDialog
 // ----------------------------------------------------------------------
 FilterWarningDialog_Impl::FilterWarningDialog_Impl(Window* pParent) :
     ModalDialog(pParent, SVX_RES( RID_SVXDLG_FILTER_WARNING ) ),
-    aOk(                this, ResId(PB_OK               )),
-    aCancel(            this, ResId(PB_CANCEL           )),
-    aImage(             this, ResId(IMG_WARNING         )),
-    aFilterWarningFT(   this, ResId(FT_FILTER_WARNING   ))
+    aOk(                this, SVX_RES(PB_OK               )),
+    aCancel(            this, SVX_RES(PB_CANCEL           )),
+    aImage(             this, SVX_RES(IMG_WARNING         )),
+    aFilterWarningFT(   this, SVX_RES(FT_FILTER_WARNING   ))
 {
     FreeResource();
     aImage.SetImage(WarningBox::GetStandardImage());
@@ -254,27 +254,27 @@ SvxSaveTabPage_Impl::~SvxSaveTabPage_Impl()
 SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
 
     SfxTabPage( pParent, SVX_RES( RID_SFXPAGE_SAVE ), rCoreSet ),
-    aLoadFL             ( this, ResId( LB_LOAD ) ),
-    aLoadUserSettingsCB ( this, ResId( CB_LOAD_SETTINGS ) ),
-    aSaveBox            ( this, ResId( GB_SAVE ) ),
-    aDocInfoBtn         ( this, ResId( BTN_DOCINFO ) ),
-    aBackupFI           ( this, ResId( FI_BACKUP ) ),
-    aBackupBtn          ( this, ResId( BTN_BACKUP ) ),
-    aAutoSaveBtn        ( this, ResId( BTN_AUTOSAVE ) ),
-    aAutoSaveEdit       ( this, ResId( ED_AUTOSAVE ) ),
-    aMinuteText         ( this, ResId( FT_MINUTE ) ),
-    aNoPrettyPrintingBtn( this, ResId( BTN_NOPRETTYPRINTING ) ),
-    aWarnAlienFormatBtn ( this, ResId( BTN_WARNALIENFORMAT ) ),
-    aRelBox             ( this, ResId( GB_RELATIVE ) ),
-    aRelFsysBtn         ( this, ResId( BTN_RELATIVE_FSYS ) ),
-    aRelInetBtn         ( this, ResId( BTN_RELATIVE_INET ) ),
-    aFilterFL           ( this, ResId( FL_FILTER ) ),
-    aApplicationFT      ( this, ResId( FT_APP ) ),
-    aApplicationLB      ( this, ResId( LB_APP ) ),
-    aFiltersFT          ( this, ResId( FT_FILTER ) ),
-    aFiltersFI          ( this, ResId( FI_FILTER ) ),
-    aFiltersLB          ( this, ResId( LB_FILTER ) ),
-    aWarningFT          ( this, ResId( FT_WARN ) ),
+    aLoadFL             ( this, SVX_RES( LB_LOAD ) ),
+    aLoadUserSettingsCB ( this, SVX_RES( CB_LOAD_SETTINGS ) ),
+    aSaveBox            ( this, SVX_RES( GB_SAVE ) ),
+    aDocInfoBtn         ( this, SVX_RES( BTN_DOCINFO ) ),
+    aBackupFI           ( this, SVX_RES( FI_BACKUP ) ),
+    aBackupBtn          ( this, SVX_RES( BTN_BACKUP ) ),
+    aAutoSaveBtn        ( this, SVX_RES( BTN_AUTOSAVE ) ),
+    aAutoSaveEdit       ( this, SVX_RES( ED_AUTOSAVE ) ),
+    aMinuteText         ( this, SVX_RES( FT_MINUTE ) ),
+    aNoPrettyPrintingBtn( this, SVX_RES( BTN_NOPRETTYPRINTING ) ),
+    aWarnAlienFormatBtn ( this, SVX_RES( BTN_WARNALIENFORMAT ) ),
+    aRelBox             ( this, SVX_RES( GB_RELATIVE ) ),
+    aRelFsysBtn         ( this, SVX_RES( BTN_RELATIVE_FSYS ) ),
+    aRelInetBtn         ( this, SVX_RES( BTN_RELATIVE_INET ) ),
+    aFilterFL           ( this, SVX_RES( FL_FILTER ) ),
+    aApplicationFT      ( this, SVX_RES( FT_APP ) ),
+    aApplicationLB      ( this, SVX_RES( LB_APP ) ),
+    aFiltersFT          ( this, SVX_RES( FT_FILTER ) ),
+    aFiltersFI          ( this, SVX_RES( FI_FILTER ) ),
+    aFiltersLB          ( this, SVX_RES( LB_FILTER ) ),
+    aWarningFT          ( this, SVX_RES( FT_WARN ) ),
     pImpl( new SvxSaveTabPage_Impl )
 {
     FreeResource();
