@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmaddressblockpage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:03:06 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:39:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -822,7 +822,7 @@ bool   SwCustomizeAddressBlockDialog::HasItem_Impl(sal_Int32 nUserData)
     sEntry.Insert( '<', 0);
     //search for this entry in the content
     String sText = m_aDragED.GetText();
-    bool bRet = bRet = sText.Search(sEntry) != STRING_NOTFOUND;
+    bool bRet = sText.Search(sEntry) != STRING_NOTFOUND;
     return bRet;
 }
 /*-- 25.06.2004 13:10:16---------------------------------------------------
