@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:36:50 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:49:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,7 +326,7 @@ void GalleryBrowser1::ImplGalleryThemeProperties( const String & rThemeName, boo
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Got no AbstractDialogFactory!");
-    VclAbstractDialog2* pThemeProps = pFact->CreateGalleryThemePropertiesDialog( NULL, mpExchangeData, mpThemePropsDlgItemSet, ResId(RID_SVXTABDLG_GALLERYTHEME) );
+    VclAbstractDialog2* pThemeProps = pFact->CreateGalleryThemePropertiesDialog( NULL, mpExchangeData, mpThemePropsDlgItemSet, RID_SVXTABDLG_GALLERYTHEME );
     DBG_ASSERT(pThemeProps, "Got no GalleryThemePropertiesDialog!");
 
     if ( bCreateNew )
@@ -425,7 +425,7 @@ void GalleryBrowser1::ImplExecute( USHORT nId )
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if(pFact)
             {
-                VclAbstractRefreshableDialog* aActualizeProgress = pFact->CreateActualizeProgressDialog( this, pTheme, ResId(RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS) );
+                VclAbstractRefreshableDialog* aActualizeProgress = pFact->CreateActualizeProgressDialog( this, pTheme, RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS );
                 DBG_ASSERT(aActualizeProgress, "Dialogdiet fail!");//CHINA001
 
                 aActualizeProgress->Update();  //CHINA001 aActualizeProgress.Update();
@@ -450,7 +450,7 @@ void GalleryBrowser1::ImplExecute( USHORT nId )
             //CHINA001 TitleDialog      aDlg( this, aOldName );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-            AbstractTitleDialog* aDlg = pFact->CreateTitleDialog( this, aOldName, ResId(RID_SVXDLG_GALLERY_TITLE) );
+            AbstractTitleDialog* aDlg = pFact->CreateTitleDialog( this, aOldName, RID_SVXDLG_GALLERY_TITLE );
             DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
 
             if( aDlg->Execute() == RET_OK ) //CHINA001 if( aDlg.Execute() == RET_OK )
@@ -487,7 +487,7 @@ void GalleryBrowser1::ImplExecute( USHORT nId )
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    AbstractGalleryIdDialog* aDlg = pFact->CreateGalleryIdDialog( this, pTheme, ResId(RID_SVXDLG_GALLERY_THEMEID) );
+                    AbstractGalleryIdDialog* aDlg = pFact->CreateGalleryIdDialog( this, pTheme, RID_SVXDLG_GALLERY_THEMEID );
                     DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
 
                     if( aDlg->Execute() == RET_OK ) //CHINA001 if( aDlg.Execute() == RET_OK )
