@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strarray.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:27:27 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:43:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 
 //------------------------------------------------------------------------
 
-SvxStringArray::SvxStringArray( USHORT nResId ) :
+SvxStringArray::SvxStringArray( sal_uInt32 nResId ) :
 
     ResStringArray( SVX_RES( nResId ) )
 
@@ -71,7 +71,7 @@ SvxStringArray::~SvxStringArray()
 
 //------------------------------------------------------------------------
 
-const String& SvxStringArray::GetStringByPos( USHORT nPos ) const
+const String& SvxStringArray::GetStringByPos( sal_uInt32 nPos ) const
 {
     if ( RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count() )
         return ResStringArray::GetString( nPos );
