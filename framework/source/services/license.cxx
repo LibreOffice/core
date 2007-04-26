@@ -4,9 +4,9 @@
  *
  *  $RCSfile: license.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:42:04 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:16:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -446,20 +446,20 @@ void SAL_CALL License::removeCloseListener(const css::uno::Reference< css::util:
 //************************************************************************
 
 LicenseDialog::LicenseDialog(const OUString & aLicensePath, ResMgr *pResMgr) :
-    ModalDialog(NULL, ResId(DLG_LICENSE, pResMgr)),
-    aLicenseML(this, ResId(ML_LICENSE, pResMgr)),
-    aInfo1FT(this, ResId(FT_INFO1, pResMgr)),
-    aInfo2FT(this, ResId(FT_INFO2, pResMgr)),
-    aInfo3FT(this, ResId(FT_INFO3, pResMgr)),
-    aInfo2_1FT(this, ResId(FT_INFO2_1, pResMgr)),
-    aInfo3_1FT(this, ResId(FT_INFO3_1, pResMgr)),
-    aFixedLine(this, ResId(FL_DIVIDE, pResMgr)),
-    aPBPageDown(this, ResId(PB_PAGEDOWN, pResMgr)),
-    aPBDecline( this, ResId(PB_DECLINE, pResMgr) ),
-    aPBAccept( this, ResId(PB_ACCEPT, pResMgr) ),
-    aArrow(this, ResId(IMG_ARROW, pResMgr)),
-    aStrAccept( ResId(LICENSE_ACCEPT, pResMgr) ),
-    aStrNotAccept( ResId(LICENSE_NOTACCEPT, pResMgr) ),
+    ModalDialog(NULL, ResId(DLG_LICENSE, *pResMgr)),
+    aLicenseML(this, ResId(ML_LICENSE, *pResMgr)),
+    aInfo1FT(this, ResId(FT_INFO1, *pResMgr)),
+    aInfo2FT(this, ResId(FT_INFO2, *pResMgr)),
+    aInfo3FT(this, ResId(FT_INFO3, *pResMgr)),
+    aInfo2_1FT(this, ResId(FT_INFO2_1, *pResMgr)),
+    aInfo3_1FT(this, ResId(FT_INFO3_1, *pResMgr)),
+    aFixedLine(this, ResId(FL_DIVIDE, *pResMgr)),
+    aPBPageDown(this, ResId(PB_PAGEDOWN, *pResMgr)),
+    aPBDecline( this, ResId(PB_DECLINE, *pResMgr) ),
+    aPBAccept( this, ResId(PB_ACCEPT, *pResMgr) ),
+    aArrow(this, ResId(IMG_ARROW, *pResMgr)),
+    aStrAccept( ResId(LICENSE_ACCEPT, *pResMgr) ),
+    aStrNotAccept( ResId(LICENSE_NOTACCEPT, *pResMgr) ),
     bEndReached(FALSE)
 {
     FreeResource();
