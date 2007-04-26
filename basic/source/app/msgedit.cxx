@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msgedit.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 13:59:41 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:32:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,11 +72,12 @@ Version 3           Changed Charset from CHARSET_IBMPC to RTL_TEXTENCODING_UTF8
 #include "apperror.hxx"
 #include "appbased.hxx"
 #include "basmsg.hrc"
+#include "basrid.hxx"
 
 USHORT MsgEdit::nMaxLogLen = 0;
 BOOL MsgEdit::bLimitLogLen = FALSE;
 
-#define WARNING_PREFIX String( ResId( S_WARNING_PREFIX ) )
+#define WARNING_PREFIX String( SttResId( S_WARNING_PREFIX ) )
 #define VERSION_STRING CUniString("File Format Version: ")
 #define THIS_VERSION 2
 
@@ -95,7 +96,7 @@ MsgEdit::MsgEdit( AppError* pParent, BasicFrame *pBF, const WinBits& aBits )
 , aEditTree( pParent, pBF, aBits | WB_HASBUTTONS | WB_HASLINES | WB_HASBUTTONSATROOT )
 {
 //  SetFont( aEditTree.GetDefaultFont( DEFAULTFONT_FIXED, aEditTree.GetSettings().GetLanguage(), 0, &aEditTree ) );
-    aEditTree.SetNodeBitmaps( Bitmap( ResId (MBP_PLUS) ), Bitmap( ResId (MBP_MINUS) ) );
+    aEditTree.SetNodeBitmaps( Bitmap( SttResId (MBP_PLUS) ), Bitmap( SttResId (MBP_MINUS) ) );
     aEditTree.SetSelectionMode( MULTIPLE_SELECTION );
     if ( aEditTree.GetModel()->GetSortMode() != SortNone )
         aEditTree.GetModel()->SetSortMode( SortNone );
@@ -713,7 +714,7 @@ BOOL MsgEdit::Save( const String& aName )
 {
     BOOL bOk = TRUE;
     BOOL bIsText = DirEntry( aName ).GetExtension().CompareIgnoreCaseToAscii("TXT") == COMPARE_EQUAL;
-    if ( bIsText && !QueryBox( NULL, ResId( IDS_LOSS_OF_INFORMATION ) ).Execute() )
+    if ( bIsText && !QueryBox( NULL, SttResId( IDS_LOSS_OF_INFORMATION ) ).Execute() )
         return FALSE;
     SvFileStream aStrm( aName, STREAM_STD_WRITE | STREAM_TRUNC );
     if( aStrm.IsOpen() )
