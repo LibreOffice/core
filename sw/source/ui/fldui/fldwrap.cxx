@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldwrap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:59:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:10:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,7 +183,7 @@ SwFldDlgWrapper::SwFldDlgWrapper( Window* pParent, USHORT nId,
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
     DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-    AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, pParent,ResId( DLG_FLD_INSERT ));
+    AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, pParent, DLG_FLD_INSERT );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     pDlgInterface = pDlg;
     pWindow = pDlg->GetWindow();
@@ -244,7 +244,7 @@ SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* pParent, USHORT nId,
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
     DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-    AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, pParent,ResId( DLG_FLD_INSERT ));
+    AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, pParent, DLG_FLD_INSERT );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     pDlgInterface = pDlg; //CHINA001
 
