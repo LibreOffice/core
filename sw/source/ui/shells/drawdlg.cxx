@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:13:21 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:15:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
             {
-                SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( NULL, &aNewAttr, ResId( RID_SVXDLG_TEXT ), pView );
+                SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( NULL, &aNewAttr, RID_SVXDLG_TEXT, pView );
                 USHORT nResult = pDlg->Execute();
 
                 if (nResult == RET_OK)
@@ -131,7 +131,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog( NULL,
                                                                             &aNewAttr,
                                                                             pDoc,
-                                                                            ResId(RID_SVXDLG_AREA),
+                                                                            RID_SVXDLG_AREA,
                                                                             pView);
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             const SvxColorTableItem* pColorItem = (const SvxColorTableItem*)
@@ -176,7 +176,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             SfxAbstractTabDialog * pDlg = pFact->CreateSvxLineTabDialog( NULL,
                     &aNewAttr,
                 pDoc,
-                ResId(RID_SVXDLG_LINE),
+                RID_SVXDLG_LINE,
                 pObj,
                 bHasMarked);
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
