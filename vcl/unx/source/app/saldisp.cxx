@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:38:45 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:41:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2453,6 +2453,8 @@ long SalX11Display::Dispatch( XEvent *pEvent )
                 XRefreshKeyboardMapping( &pEvent->xmapping );
                 if( MappingModifier == pEvent->xmapping.request )
                     ModifierMapping();
+                if( MappingKeyboard == pEvent->xmapping.request ) // refresh mapping
+                    GetKeyboardName( TRUE );
             }
             break;
 
@@ -3468,7 +3470,7 @@ Pixel SalColormap::GetPixel( SalColor nSalColor ) const
                             const_cast<SalColormap*>(this)->m_aPalette[aInversColor.pixel] = nInversColor;
 #ifdef DBG_UTIL
                         else
-                            fprintf( stderr, "SalColormap::GetPixel() 0x06lx=%d 0x06lx=%d\n",
+                            fprintf( stderr, "SalColormap::GetPixel() 0x%06lx=%lu 0x%06lx=%lu\n",
                                      nSalColor, aColor.pixel,
                                      nInversColor, aInversColor.pixel);
 #endif
