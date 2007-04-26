@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futhes.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:25:52 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:39:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,7 @@ FunctionReference FuThesaurus::Create( ViewShell* pViewSh, ::sd::Window* pWin, :
 void FuThesaurus::DoExecute( SfxRequest& )
 {
     SfxErrorContext aContext(ERRCTX_SVX_LINGU_THESAURUS, String(),
-                             mpWindow, RID_SVXERRCTX, DIALOG_MGR() );
+                             mpWindow, RID_SVXERRCTX, &DIALOG_MGR() );
 
     if( mpViewShell && mpViewShell->ISA(DrawViewShell) )
     {
