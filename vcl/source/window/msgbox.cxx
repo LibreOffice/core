@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msgbox.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:20:17 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:30:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ static void ImplInitMsgBoxImageList()
         ResMgr* pResMgr = ImplGetResMgr();
         if( pResMgr )
         {
-            aBmpEx = BitmapEx( ResId( SV_RESID_BITMAP_MSGBOX, ImplGetResMgr() ) );
+            aBmpEx = BitmapEx( ResId( SV_RESID_BITMAP_MSGBOX, *pResMgr ) );
 
             if( !aBmpEx.IsTransparent() )
                 aBmpEx = BitmapEx( aBmpEx.GetBitmap(), Color( 0xC0, 0xC0, 0xC0 ) );
@@ -493,7 +493,7 @@ void MessBox::SetDefaultCheckBoxText()
 {
     ResMgr* pResMgr = ImplGetResMgr();
     if( pResMgr )
-        maCheckBoxText = XubString( ResId( SV_STDTEXT_DONTHINTAGAIN, pResMgr ) );
+        maCheckBoxText = XubString( ResId( SV_STDTEXT_DONTHINTAGAIN, *pResMgr ) );
 }
 
 // -----------------------------------------------------------------------
@@ -590,7 +590,7 @@ void WarningBox::SetDefaultCheckBoxText()
 {
     ResMgr* pResMgr = ImplGetResMgr();
     if( pResMgr )
-        maCheckBoxText = XubString( ResId( SV_STDTEXT_DONTWARNAGAIN, pResMgr ) );
+        maCheckBoxText = XubString( ResId( SV_STDTEXT_DONTWARNAGAIN, *pResMgr ) );
 }
 
 // -----------------------------------------------------------------------
@@ -672,7 +672,7 @@ void QueryBox::SetDefaultCheckBoxText()
 {
     ResMgr* pResMgr = ImplGetResMgr();
     if( pResMgr )
-        maCheckBoxText = XubString( ResId( SV_STDTEXT_DONTASKAGAIN, pResMgr ) );
+        maCheckBoxText = XubString( ResId( SV_STDTEXT_DONTASKAGAIN, *pResMgr ) );
 }
 
 // -----------------------------------------------------------------------
