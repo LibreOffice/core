@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-21 12:00:01 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:26:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -840,19 +840,19 @@ SvxShowText::~SvxShowText()
 
 SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, BOOL bOne_ )
 :   mpDialog( pDialog ),
-    aShowSet        ( pDialog, ResId( CT_SHOWSET ) ),
-    aShowText       ( pDialog, ResId( CT_SHOWTEXT ) ),
-    aOKBtn          ( pDialog, ResId( BTN_CHAR_OK ) ),
-    aCancelBtn      ( pDialog, ResId( BTN_CHAR_CANCEL ) ),
-    aHelpBtn        ( pDialog, ResId( BTN_CHAR_HELP ) ),
-    aDeleteBtn      ( pDialog, ResId( BTN_DELETE ) ),
-    aFontText       ( pDialog, ResId( FT_FONT ) ),
-    aFontLB         ( pDialog, ResId( LB_FONT ) ),
-    aSubsetText     ( pDialog, ResId( FT_SUBSET ) ),
-    aSubsetLB       ( pDialog, ResId( LB_SUBSET ) ),
-    aSymbolText     ( pDialog, ResId( FT_SYMBOLE ) ),
-    aShowChar       ( pDialog, ResId( CT_SHOWCHAR ), TRUE ),
-    aCharCodeText   ( pDialog, ResId( FT_CHARCODE ) ),
+    aShowSet        ( pDialog, SVX_RES( CT_SHOWSET ) ),
+    aShowText       ( pDialog, SVX_RES( CT_SHOWTEXT ) ),
+    aOKBtn          ( pDialog, SVX_RES( BTN_CHAR_OK ) ),
+    aCancelBtn      ( pDialog, SVX_RES( BTN_CHAR_CANCEL ) ),
+    aHelpBtn        ( pDialog, SVX_RES( BTN_CHAR_HELP ) ),
+    aDeleteBtn      ( pDialog, SVX_RES( BTN_DELETE ) ),
+    aFontText       ( pDialog, SVX_RES( FT_FONT ) ),
+    aFontLB         ( pDialog, SVX_RES( LB_FONT ) ),
+    aSubsetText     ( pDialog, SVX_RES( FT_SUBSET ) ),
+    aSubsetLB       ( pDialog, SVX_RES( LB_SUBSET ) ),
+    aSymbolText     ( pDialog, SVX_RES( FT_SYMBOLE ) ),
+    aShowChar       ( pDialog, SVX_RES( CT_SHOWCHAR ), TRUE ),
+    aCharCodeText   ( pDialog, SVX_RES( FT_CHARCODE ) ),
     bOne( bOne_ ),
     pSubsetMap( NULL )
 {
@@ -1163,7 +1163,7 @@ IMPL_LINK( SvxCharMapData, DeleteHdl, PushButton *, EMPTYARG )
 // we let it mature here though because it is currently the only use
 
 SubsetMap::SubsetMap( const FontCharMap* pFontCharMap )
-:   Resource( ResId( SVX_RES(RID_SUBSETMAP) ) )
+:   Resource( SVX_RES(RID_SUBSETMAP) )
 {
     InitList();
     ApplyCharMap( pFontCharMap );
@@ -1190,7 +1190,7 @@ const Subset* SubsetMap::GetSubsetByUnicode( sal_UCS4 cChar ) const
 }
 
 inline Subset::Subset( sal_UCS4 nMin, sal_UCS4 nMax, int resId)
-:   mnRangeMin(nMin), mnRangeMax(nMax), maRangeName( ResId(resId) )
+:   mnRangeMin(nMin), mnRangeMax(nMax), maRangeName( SVX_RES(resId) )
 {}
 
 void SubsetMap::InitList()
