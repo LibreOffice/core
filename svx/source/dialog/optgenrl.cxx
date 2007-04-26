@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgenrl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-06 13:43:24 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:38:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,50 +114,50 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
 
     SfxTabPage( pParent, SVX_RES(RID_SFXPAGE_GENERAL), rCoreSet ),
 
-    aCompanyLbl     ( this, ResId( FT_COMPANY ) ),
-    aCompanyEdit    ( this, ResId( ED_COMPANY ) ),
-    aNameLbl        ( this, ResId( FT_NAME ) ),
-    aNameLblRuss    ( this, ResId( FT_NAME_RUSS ) ),
-    aFirstName      ( this, ResId( ED_FIRSTNAME ) ),
-    aFatherName     ( this, ResId( ED_FATHERNAME ) ),
-    aName           ( this, ResId( ED_NAME ) ),
-    aShortName      ( this, ResId( ED_SHORTNAME ) ),
-    aStreetLbl      ( this, ResId( FT_STREET ) ),
-    aStreetLblRuss  ( this, ResId( FT_STREET_RUSS ) ),
-    aStreetEdit     ( this, ResId( ED_STREET ) ),
-    aApartmentNrEdit( this, ResId( ED_APARTMENTNR ) ),
-    aCityLbl        ( this, ResId( FT_CITY ) ),
-    aPLZEdit        ( this, ResId( ED_PLZ ) ),
-    aCityEdit       ( this, ResId( ED_CITY ) ),
-    aUsCityEdit     ( this, ResId( ED_US_CITY ) ),
-    aUsStateEdit    ( this, ResId( ED_US_STATE ) ),
-    aUsZipEdit      ( this, ResId( ED_US_ZIPCODE ) ),
-    aCountryLbl     ( this, ResId( FT_COUNTRY ) ),
-    aCountryEdit    ( this, ResId( ED_COUNTRY ) ),
-    aTitlePosLbl    ( this, ResId( FT_TITLEPOS ) ),
-    aTitleEdit      ( this, ResId( ED_TITLE ) ),
-    aPositionEdit   ( this, ResId( ED_POSITION ) ),
-    aPhoneLbl       ( this, ResId( FT_PHONE ) ),
-    aTelPrivEdit    ( this, ResId( ED_TELPRIVAT ) ),
-    aTelCompanyEdit ( this, ResId( ED_TELCOMPANY ) ),
-    aFaxMailLbl     ( this, ResId( FT_FAXMAIL ) ),
-    aFaxEdit        ( this, ResId( ED_FAX ) ),
-    aEmailEdit      ( this, ResId( ED_EMAIL ) ),
-    aAddrFrm        ( this, ResId( GB_ADDRESS ) ),
-    aUseDataCB      ( this, ResId( CB_USEDATA ) ),
+    aCompanyLbl     ( this, SVX_RES( FT_COMPANY ) ),
+    aCompanyEdit    ( this, SVX_RES( ED_COMPANY ) ),
+    aNameLbl        ( this, SVX_RES( FT_NAME ) ),
+    aNameLblRuss    ( this, SVX_RES( FT_NAME_RUSS ) ),
+    aFirstName      ( this, SVX_RES( ED_FIRSTNAME ) ),
+    aFatherName     ( this, SVX_RES( ED_FATHERNAME ) ),
+    aName           ( this, SVX_RES( ED_NAME ) ),
+    aShortName      ( this, SVX_RES( ED_SHORTNAME ) ),
+    aStreetLbl      ( this, SVX_RES( FT_STREET ) ),
+    aStreetLblRuss  ( this, SVX_RES( FT_STREET_RUSS ) ),
+    aStreetEdit     ( this, SVX_RES( ED_STREET ) ),
+    aApartmentNrEdit( this, SVX_RES( ED_APARTMENTNR ) ),
+    aCityLbl        ( this, SVX_RES( FT_CITY ) ),
+    aPLZEdit        ( this, SVX_RES( ED_PLZ ) ),
+    aCityEdit       ( this, SVX_RES( ED_CITY ) ),
+    aUsCityEdit     ( this, SVX_RES( ED_US_CITY ) ),
+    aUsStateEdit    ( this, SVX_RES( ED_US_STATE ) ),
+    aUsZipEdit      ( this, SVX_RES( ED_US_ZIPCODE ) ),
+    aCountryLbl     ( this, SVX_RES( FT_COUNTRY ) ),
+    aCountryEdit    ( this, SVX_RES( ED_COUNTRY ) ),
+    aTitlePosLbl    ( this, SVX_RES( FT_TITLEPOS ) ),
+    aTitleEdit      ( this, SVX_RES( ED_TITLE ) ),
+    aPositionEdit   ( this, SVX_RES( ED_POSITION ) ),
+    aPhoneLbl       ( this, SVX_RES( FT_PHONE ) ),
+    aTelPrivEdit    ( this, SVX_RES( ED_TELPRIVAT ) ),
+    aTelCompanyEdit ( this, SVX_RES( ED_TELCOMPANY ) ),
+    aFaxMailLbl     ( this, SVX_RES( FT_FAXMAIL ) ),
+    aFaxEdit        ( this, SVX_RES( ED_FAX ) ),
+    aEmailEdit      ( this, SVX_RES( ED_EMAIL ) ),
+    aAddrFrm        ( this, SVX_RES( GB_ADDRESS ) ),
+    aUseDataCB      ( this, SVX_RES( CB_USEDATA ) ),
 
     pImpl           ( new GeneralTabPage_Impl )
 
 {
     LanguageType eLang = Application::GetSettings().GetUILanguage();
-    pImpl->maQueryStr = String( ResId( STR_QUERY_REG ) );
+    pImpl->maQueryStr = String( SVX_RES( STR_QUERY_REG ) );
 
     if ( LANGUAGE_ENGLISH_US == eLang )
     {
         // amerikanische Postadresse aufbauen
         aPLZEdit.Hide();
         aCityEdit.Hide();
-        aCityLbl.SetText( ResId( STR_US_STATE ) );
+        aCityLbl.SetText( SVX_RES( STR_US_STATE ) );
     }
     else if ( LANGUAGE_RUSSIAN == eLang )
     {
