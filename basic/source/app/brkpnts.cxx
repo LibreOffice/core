@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brkpnts.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:22:01 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:31:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@
 #include "brkpnts.hxx"
 #include "basic.hrc"
 #include "resids.hrc"
+#include "basrid.hxx"
 
 struct Breakpoint
 {
@@ -91,7 +92,7 @@ BreakpointWindow::BreakpointWindow( Window *pParent )
 , bErrorMarker( FALSE )
 {
     if ( !pImages )
-        pImages = new ImageList( ResId( RID_IMGLST_LAYOUT ) );
+        pImages = new ImageList( SttResId( RID_IMGLST_LAYOUT ) );
 
     Gradient aGradient( GRADIENT_AXIAL, Color( 185, 182, 215 ), Color( 250, 245, 255 ) );
     aGradient.SetAngle(900);
