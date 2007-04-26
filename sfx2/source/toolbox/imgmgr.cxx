@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:48:11 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:15:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,10 +144,10 @@ static ImageList* GetImageList( BOOL bBig, BOOL bHiContrast )
                                 ( bHiContrast ? pImageListHiSmall : pImageListSmall );
     if ( !rpList )
     {
-        ResMgr *pResMgr = Resource::GetResManager();
+        ResMgr *pResMgr = SfxApplication::GetOrCreate()->GetOffResManager_Impl();
 
         ResId aResId( bBig ? ( bHiContrast ? RID_DEFAULTIMAGELIST_LCH : RID_DEFAULTIMAGELIST_LC ) :
-                             ( bHiContrast ? RID_DEFAULTIMAGELIST_SCH : RID_DEFAULTIMAGELIST_SC ));
+                             ( bHiContrast ? RID_DEFAULTIMAGELIST_SCH : RID_DEFAULTIMAGELIST_SC ), *pResMgr);
 
         aResId.SetRT( RSC_IMAGELIST );
 
