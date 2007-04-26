@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:59:08 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:18:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,12 +106,12 @@ namespace uui
 *//*-*************************************************************************************************************/
 FilterDialog::FilterDialog( Window* pParentWindow ,
                             ResMgr* pResMgr       )
-    :   ModalDialog  ( pParentWindow, ResId( DLG_FILTER_SELECT, pResMgr ) )
-    ,   m_ftURL      ( this, ResId( FT_URL            )                   )
-    ,   m_lbFilters  ( this, ResId( LB_FILTERS        )                   )
-    ,   m_btnOK      ( this, ResId( BTN_OK            )                   )
-    ,   m_btnCancel  ( this, ResId( BTN_CANCEL        )                   )
-    ,   m_btnHelp    ( this, ResId( BTN_HELP          )                   )
+    :   ModalDialog  ( pParentWindow, ResId( DLG_FILTER_SELECT, *pResMgr ) )
+    ,   m_ftURL      ( this, ResId( FT_URL, *pResMgr            )                   )
+    ,   m_lbFilters  ( this, ResId( LB_FILTERS, *pResMgr        )                   )
+    ,   m_btnOK      ( this, ResId( BTN_OK, *pResMgr            )                   )
+    ,   m_btnCancel  ( this, ResId( BTN_CANCEL, *pResMgr        )                   )
+    ,   m_btnHelp    ( this, ResId( BTN_HELP, *pResMgr          )                   )
 {
     FreeResource();
 }
