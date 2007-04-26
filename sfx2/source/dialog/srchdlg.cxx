@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 09:46:57 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:12:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,15 +67,15 @@ SearchDialog::SearchDialog( Window* pWindow, const ::rtl::OUString& rConfigName 
 
     ModelessDialog( pWindow, SfxResId( RID_DLG_SEARCH ) ),
 
-    m_aSearchLabel      ( this, ResId( FT_SEARCH ) ),
-    m_aSearchEdit       ( this, ResId( ED_SEARCH ) ),
-    m_aWholeWordsBox    ( this, ResId( CB_WHOLEWORDS ) ),
-    m_aMatchCaseBox     ( this, ResId( CB_MATCHCASE ) ),
-    m_aWrapAroundBox    ( this, ResId( CB_WRAPAROUND ) ),
-    m_aBackwardsBox     ( this, ResId( CB_BACKWARDS ) ),
-    m_aFindBtn          ( this, ResId( PB_FIND ) ),
-    m_aCancelBtn        ( this, ResId( PB_CANCELFIND ) ),
-    m_sToggleText       (       ResId( STR_TOGGLE ) ),
+    m_aSearchLabel      ( this, SfxResId( FT_SEARCH ) ),
+    m_aSearchEdit       ( this, SfxResId( ED_SEARCH ) ),
+    m_aWholeWordsBox    ( this, SfxResId( CB_WHOLEWORDS ) ),
+    m_aMatchCaseBox     ( this, SfxResId( CB_MATCHCASE ) ),
+    m_aWrapAroundBox    ( this, SfxResId( CB_WRAPAROUND ) ),
+    m_aBackwardsBox     ( this, SfxResId( CB_BACKWARDS ) ),
+    m_aFindBtn          ( this, SfxResId( PB_FIND ) ),
+    m_aCancelBtn        ( this, SfxResId( PB_CANCELFIND ) ),
+    m_sToggleText       (       SfxResId( STR_TOGGLE ) ),
     m_sConfigName       ( rConfigName ),
     m_bIsConstructed    ( false )
 
