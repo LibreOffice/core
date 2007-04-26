@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:12:56 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:51:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -638,7 +638,7 @@ void SdrItemPool::TakeItemName(sal_uInt16 nWhich, String& rItemName)
         case EE_FEATURE_FIELD   : nResId = SIP_EE_FEATURE_FIELD;break;
     } // switch
 
-    rItemName = String( ResId( nResId, pResMgr ) );
+    rItemName = String( ResId( nResId, *pResMgr ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
