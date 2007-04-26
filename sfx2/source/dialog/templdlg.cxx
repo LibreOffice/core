@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:55:59 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:13:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -907,9 +907,9 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
     SfxViewFrame* pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
     pCurObjShell = pViewFrame->GetObjectShell();
     ResMgr* pMgr = pCurObjShell ? pCurObjShell->GetResMgr() : NULL;
-    ResId aFamId( DLG_STYLE_DESIGNER, pMgr );
+    ResId aFamId( DLG_STYLE_DESIGNER, *pMgr );
     aFamId.SetRT(RSC_SFX_STYLE_FAMILIES);
-    m_pStyleFamiliesId = new ResId( aFamId );
+    m_pStyleFamiliesId = new ResId( aFamId.GetId(), *pMgr );
     if( !pMgr || !pMgr->IsAvailable( aFamId ) )
         pStyleFamilies = new SfxStyleFamilies;
     else
@@ -2366,7 +2366,7 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
     m_pFloat            ( pDlgWindow ),
     m_bZoomIn           ( FALSE ),
     m_aActionTbL        ( pDlgWindow, this ),
-    m_aActionTbR        ( pDlgWindow, ResId( TB_ACTION ) )
+    m_aActionTbR        ( pDlgWindow, SfxResId( TB_ACTION ) )
 
 {
     pDlgWindow->FreeResource();
