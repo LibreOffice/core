@@ -4,9 +4,9 @@
  *
  *  $RCSfile: envfmt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:53:44 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:07:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -333,7 +333,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
             SwAbstractDialogFactory* pFact = swui::GetFactory();//CHINA001
             DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-            SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( GetParent(), pSh->GetView(), aTmpSet,ResId( DLG_CHAR ),&pColl->GetName() );
+            SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( GetParent(), pSh->GetView(), aTmpSet, DLG_CHAR,&pColl->GetName() );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             if (pDlg->Execute() == RET_OK)
             {
