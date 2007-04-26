@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_SeriesToAxis.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:00:02 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:37:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,16 +70,16 @@ namespace chart
 
 SchOptionTabPage::SchOptionTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
     SfxTabPage(pWindow, SchResId(TP_OPTIONS), rInAttrs),
-    aGrpAxis(this, ResId(GRP_OPT_AXIS)),
-    aRbtAxis1(this,ResId(RBT_OPT_AXIS_1)),
-    aRbtAxis2(this,ResId(RBT_OPT_AXIS_2)),
+    aGrpAxis(this, SchResId(GRP_OPT_AXIS)),
+    aRbtAxis1(this,SchResId(RBT_OPT_AXIS_1)),
+    aRbtAxis2(this,SchResId(RBT_OPT_AXIS_2)),
 
-    aGrpBar(this, ResId(GB_BAR)),
-    aFTGap(this,ResId(FT_GAP)),
-    aMTGap(this,ResId(MT_GAP)),
-    aFTOverlap(this,ResId(FT_OVERLAP)),
-    aMTOverlap(this,ResId(MT_OVERLAP)),
-    aCBConnect(this,ResId(CB_CONNECTOR))
+    aGrpBar(this, SchResId(GB_BAR)),
+    aFTGap(this,SchResId(FT_GAP)),
+    aMTGap(this,SchResId(MT_GAP)),
+    aFTOverlap(this,SchResId(FT_OVERLAP)),
+    aMTOverlap(this,SchResId(MT_OVERLAP)),
+    aCBConnect(this,SchResId(CB_CONNECTOR))
 {
     FreeResource();
 
