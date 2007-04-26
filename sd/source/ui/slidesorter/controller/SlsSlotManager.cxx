@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:18:06 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:40:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -915,7 +915,7 @@ void SlotManager::RenameSlide (void)
             DBG_ASSERT(pFact, "Dialogdiet fail!");
             AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog(
                 mrController.GetViewShell().GetActiveWindow(),
-                aPageName, aDescr, ResId(RID_SVXDLG_NAME) );
+                aPageName, aDescr, RID_SVXDLG_NAME );
             DBG_ASSERT(aNameDlg, "Dialogdiet fail!");
             aNameDlg->SetText( aTitle );
             aNameDlg->SetCheckNameHdl( LINK( this, SlotManager, RenameSlideHdl ), true );
