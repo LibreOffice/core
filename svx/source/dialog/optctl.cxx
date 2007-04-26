@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optctl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:29:58 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:37:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,19 +76,19 @@ IMPL_LINK( SvxCTLOptionsPage, SequenceCheckingCB_Hdl, void*, EMPTYARG )
 
 SvxCTLOptionsPage::SvxCTLOptionsPage( Window* pParent, const SfxItemSet& rSet ) :
 
-    SfxTabPage( pParent, ResId( RID_SVXPAGE_OPTIONS_CTL, DIALOG_MGR() ), rSet ),
+    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_OPTIONS_CTL ), rSet ),
 
-    m_aSequenceCheckingFL   ( this, ResId( FL_SEQUENCECHECKING ) ),
-    m_aSequenceCheckingCB   ( this, ResId( CB_SEQUENCECHECKING ) ),
-    m_aRestrictedCB         ( this, ResId( CB_RESTRICTED ) ),
-    m_aTypeReplaceCB        ( this, ResId( CB_TYPE_REPLACE ) ),
-    m_aCursorControlFL      ( this, ResId( FL_CURSORCONTROL ) ),
-    m_aMovementFT           ( this, ResId( FT_MOVEMENT ) ),
-    m_aMovementLogicalRB    ( this, ResId( RB_MOVEMENT_LOGICAL ) ),
-    m_aMovementVisualRB     ( this, ResId( RB_MOVEMENT_VISUAL ) ),
-    m_aGeneralFL            ( this, ResId( FL_GENERAL ) ),
-    m_aNumeralsFT           ( this, ResId( FT_NUMERALS ) ),
-    m_aNumeralsLB           ( this, ResId( LB_NUMERALS ) )
+    m_aSequenceCheckingFL   ( this, SVX_RES( FL_SEQUENCECHECKING ) ),
+    m_aSequenceCheckingCB   ( this, SVX_RES( CB_SEQUENCECHECKING ) ),
+    m_aRestrictedCB         ( this, SVX_RES( CB_RESTRICTED ) ),
+    m_aTypeReplaceCB        ( this, SVX_RES( CB_TYPE_REPLACE ) ),
+    m_aCursorControlFL      ( this, SVX_RES( FL_CURSORCONTROL ) ),
+    m_aMovementFT           ( this, SVX_RES( FT_MOVEMENT ) ),
+    m_aMovementLogicalRB    ( this, SVX_RES( RB_MOVEMENT_LOGICAL ) ),
+    m_aMovementVisualRB     ( this, SVX_RES( RB_MOVEMENT_VISUAL ) ),
+    m_aGeneralFL            ( this, SVX_RES( FL_GENERAL ) ),
+    m_aNumeralsFT           ( this, SVX_RES( FT_NUMERALS ) ),
+    m_aNumeralsLB           ( this, SVX_RES( LB_NUMERALS ) )
 
 {
     FreeResource();
