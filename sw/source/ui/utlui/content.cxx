@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:03:41 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:22:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2984,7 +2984,7 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
         DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-        AbstractSwRenameXNamedDlg* pDlg = pFact->CreateSwRenameXNamedDlg( this, xNamed, xNameAccess,ResId( DLG_RENAME_XNAMED ));
+        AbstractSwRenameXNamedDlg* pDlg = pFact->CreateSwRenameXNamedDlg( this, xNamed, xNameAccess, DLG_RENAME_XNAMED );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         if(xSecond.is())
             pDlg->SetAlternativeAccess( xSecond, xThird); //CHINA001 aDlg.SetAlternativeAccess( xSecond, xThird);
