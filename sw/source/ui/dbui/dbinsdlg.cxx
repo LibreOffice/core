@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 15:17:39 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:58:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -945,8 +945,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
 //CHINA001  pTblSet, &rSh );
     SwAbstractDialogFactory* pFact = swui::GetFactory();//CHINA001
     DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
-
-    SfxAbstractTabDialog* pDlg = pFact->CreateSwTableTabDlg(  pButton, rSh.GetAttrPool(),pTblSet, &rSh, ResId( DLG_FORMAT_TABLE ));
+    SfxAbstractTabDialog* pDlg = pFact->CreateSwTableTabDlg(  pButton, rSh.GetAttrPool(),pTblSet, &rSh, DLG_FORMAT_TABLE );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     if( RET_OK == pDlg->Execute() )
         pTblSet->Put( *pDlg->GetOutputItemSet() );
@@ -967,8 +966,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, AutoFmtHdl, PushButton*, pButton )
     //CHINA001 SwAutoFormatDlg aDlg( pButton, pView->GetWrtShellPtr(), FALSE, pTAutoFmt );
     SwAbstractDialogFactory* pFact = swui::GetFactory();//CHINA001
     DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
-
-    AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton, pView->GetWrtShellPtr(),ResId( DLG_AUTOFMT_TABLE ), FALSE, pTAutoFmt);
+    AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton, pView->GetWrtShellPtr(), DLG_AUTOFMT_TABLE, FALSE, pTAutoFmt);
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     if( RET_OK == pDlg->Execute()) //CHINA001 if( RET_OK == aDlg.Execute())
         pDlg->FillAutoFmtOfIndex( pTAutoFmt ); //CHINA001 aDlg.FillAutoFmtOfIndex( pTAutoFmt );
