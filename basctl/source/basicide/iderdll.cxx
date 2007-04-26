@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iderdll.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:56:08 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:33:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ BasicIDEDLL* BasicIDEDLL::GetDLL()
 }
 
 IDEResId::IDEResId( USHORT nId ):
-    ResId( nId, (*(BasicIDEModule**)GetAppData(SHL_IDE))->GetResMgr() )
+    ResId( nId, *(*(BasicIDEModule**)GetAppData(SHL_IDE))->GetResMgr() )
 {
 }
 
