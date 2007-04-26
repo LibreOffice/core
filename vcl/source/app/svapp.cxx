@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:26:32 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:35:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1391,6 +1391,63 @@ Rectangle Application::GetWorkAreaPosSizePixel( unsigned int nScreen )
 {
     SalSystem* pSys = ImplGetSalSystem();
     return pSys ? pSys->GetDisplayWorkAreaPosSizePixel( nScreen ) : Rectangle();
+}
+
+namespace {
+unsigned long calcDistSquare( const Point& i_rPoint, const Rectangle& i_rRect )
+{
+    const Point aRectCenter( (i_rRect.Left() + i_rRect.Right())/2,
+                       (i_rRect.Top() + i_rRect.Bottom())/ 2 );
+    const long nDX = aRectCenter.X() - i_rPoint.X();
+    const long nDY = aRectCenter.Y() - i_rPoint.Y();
+    return nDX*nDX + nDY*nDY;
+}
+}
+
+unsigned int Application::GetBestScreen( const Rectangle& i_rRect )
+{
+    if( IsMultiDisplay() )
+        return GetDefaultDisplayNumber();
+
+    const unsigned int nScreens = GetScreenCount();
+    unsigned int nBestMatchScreen = 0;
+    unsigned long nOverlap = 0;
+    for( unsigned int i = 0; i < nScreens; i++ )
+    {
+        const Rectangle aCurScreenRect( GetScreenPosSizePixel( i ) );
+        // if a screen contains the rectangle completely it is obviously the best screen
+        if( aCurScreenRect.IsInside( i_rRect ) )
+            return i;
+        // next the screen which contains most of the area of the rect is the best
+        Rectangle aIntersection( aCurScreenRect.GetIntersection( i_rRect ) );
+        if( ! aIntersection.IsEmpty() )
+        {
+            const unsigned long nCurOverlap( aIntersection.GetWidth() * aIntersection.GetHeight() );
+            if( nCurOverlap > nOverlap )
+            {
+                nOverlap = nCurOverlap;
+                nBestMatchScreen = i;
+            }
+        }
+    }
+    if( nOverlap > 0 )
+        return nBestMatchScreen;
+
+    // finally the screen which center is nearest to the rect is the best
+    const Point aCenter( (i_rRect.Left() + i_rRect.Right())/2,
+                         (i_rRect.Top() + i_rRect.Bottom())/2 );
+    unsigned long nDist = ULONG_MAX;
+    for( unsigned int i = 0; i < nScreens; i++ )
+    {
+        const Rectangle aCurScreenRect( GetScreenPosSizePixel( i ) );
+        const unsigned long nCurDist( calcDistSquare( aCenter, aCurScreenRect ) );
+        if( nCurDist < nDist )
+        {
+            nBestMatchScreen = i;
+            nDist = nCurDist;
+        }
+    }
+    return nBestMatchScreen;
 }
 
 // -----------------------------------------------------------------------
