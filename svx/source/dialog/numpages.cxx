@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 15:23:56 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:36:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -307,8 +307,8 @@ Font& lcl_GetDefaultBulletFont()
 SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(Window* pParent,
                                const SfxItemSet& rSet)  :
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_PICK_SINGLE_NUM ), rSet ),
-    aValuesFL(      this, ResId(FL_VALUES) ),
-    pExamplesVS(    new SvxNumValueSet(this, ResId(VS_VALUES), NUM_PAGETYPE_SINGLENUM )),
+    aValuesFL(      this, SVX_RES(FL_VALUES) ),
+    pExamplesVS(    new SvxNumValueSet(this, SVX_RES(VS_VALUES), NUM_PAGETYPE_SINGLENUM )),
     pActNum(0),
     pSaveNum(0),
     nActNumLvl( USHRT_MAX ),
@@ -533,8 +533,8 @@ IMPL_LINK(SvxSingleNumPickTabPage, DoubleClickHdl_Impl, ValueSet*, EMPTYARG)
 SvxBulletPickTabPage::SvxBulletPickTabPage(Window* pParent,
                                const SfxItemSet& rSet)  :
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_PICK_BULLET ), rSet ),
-    aValuesFL(      this, ResId(FL_VALUES) ),
-    pExamplesVS(    new SvxNumValueSet(this, ResId(VS_VALUES), NUM_PAGETYPE_BULLET )),
+    aValuesFL(      this, SVX_RES(FL_VALUES) ),
+    pExamplesVS(    new SvxNumValueSet(this, SVX_RES(VS_VALUES), NUM_PAGETYPE_BULLET )),
     pActNum(0),
     pSaveNum(0),
     nActNumLvl( USHRT_MAX ),
@@ -729,8 +729,8 @@ void SvxBulletPickTabPage::PageCreated(SfxAllItemSet aSet)
 SvxNumPickTabPage::SvxNumPickTabPage(Window* pParent,
                                const SfxItemSet& rSet) :
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_PICK_NUM ), rSet ),
-    aValuesFL(      this, ResId(FL_VALUES) ),
-    pExamplesVS(    new SvxNumValueSet(this, ResId(VS_VALUES), NUM_PAGETYPE_NUM )),
+    aValuesFL(      this, SVX_RES(FL_VALUES) ),
+    pExamplesVS(    new SvxNumValueSet(this, SVX_RES(VS_VALUES), NUM_PAGETYPE_NUM )),
     pActNum(0),
     pSaveNum(0),
     nActNumLvl( USHRT_MAX ),
@@ -1033,10 +1033,10 @@ void lcl_PaintLevel(OutputDevice* pVDev, sal_Int16 nNumberingType,
 SvxBitmapPickTabPage::SvxBitmapPickTabPage(Window* pParent,
                                const SfxItemSet& rSet) :
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_PICK_BMP ), rSet ),
-    aValuesFL(      this, ResId(FL_VALUES) ),
-    pExamplesVS(    new SvxBmpNumValueSet(this, ResId(VS_VALUES)/*, aGrfNames*/ )),
-    aErrorText(     this, ResId(FT_ERROR)),
-    aLinkedCB(      this, ResId(CB_LINKED)),
+    aValuesFL(      this, SVX_RES(FL_VALUES) ),
+    pExamplesVS(    new SvxBmpNumValueSet(this, SVX_RES(VS_VALUES)/*, aGrfNames*/ )),
+    aErrorText(     this, SVX_RES(FT_ERROR)),
+    aLinkedCB(      this, SVX_RES(CB_LINKED)),
     pActNum(0),
     pSaveNum(0),
     nActNumLvl( USHRT_MAX ),
@@ -1368,40 +1368,40 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
                                const SfxItemSet& rSet) :
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_NUM_OPTIONS ), rSet ),
 
-    aFormatFL(      this, ResId(FL_FORMAT   )),
-    aLevelFT(       this, ResId(FT_LEVEL    )),
-    aLevelLB(       this, ResId(LB_LEVEL    )),
-    aFmtFT(         this, ResId(FT_FMT      )),
-    aFmtLB(         this, ResId(LB_FMT      )),
-    aPrefixFT(      this, ResId(FT_PREFIX   )),
-    aPrefixED(      this, ResId(ED_PREFIX   )),
-    aSuffixFT(      this, ResId(FT_SUFFIX   )),
-    aSuffixED(      this, ResId(ED_SUFFIX   )),
-    aCharFmtFT(     this, ResId(FT_CHARFMT  )),
-    aCharFmtLB(     this, ResId(LB_CHARFMT  )),
-    aBulColorFT(    this, ResId(FT_BUL_COLOR)),
-    aBulColLB(      this, ResId(LB_BUL_COLOR)),
-    aBulRelSizeFT(  this, ResId(FT_BUL_REL_SIZE)),
-    aBulRelSizeMF(  this, ResId(MF_BUL_REL_SIZE)),
-    aAllLevelFT(    this, ResId(FT_ALL_LEVEL)),
-    aAllLevelNF(    this, ResId(NF_ALL_LEVEL)),
-    aStartFT(       this, ResId(FT_START    )),
-    aStartED(       this, ResId(ED_START    )),
-    aBulletPB(      this, ResId(PB_BULLET   )),
-    aAlignFT(       this, ResId(FT_ALIGN    )),
-    aAlignLB(       this, ResId(LB_ALIGN    )),
-    aBitmapFT(      this, ResId(FT_BITMAP   )),
-    aBitmapMB(      this, ResId(MB_BITMAP   )),
-    aSizeFT(        this, ResId(FT_SIZE     )),
-    aWidthMF(       this, ResId(MF_WIDTH    )),
-    aMultFT(        this, ResId(FT_MULT     )),
-    aHeightMF(      this, ResId(MF_HEIGHT   )),
-    aRatioCB(       this, ResId(CB_RATIO    )),
-    aOrientFT(      this, ResId(FT_ORIENT   )),
-    aOrientLB(      this, ResId(LB_ORIENT   )),
-    aSameLevelFL(   this, ResId(FL_SAME_LEVEL)),
-    aSameLevelCB(   this, ResId(CB_SAME_LEVEL)),
-    pPreviewWIN(    new SvxNumberingPreview(this, ResId(WIN_PREVIEW ))),
+    aFormatFL(      this, SVX_RES(FL_FORMAT   )),
+    aLevelFT(       this, SVX_RES(FT_LEVEL    )),
+    aLevelLB(       this, SVX_RES(LB_LEVEL  )),
+    aFmtFT(         this, SVX_RES(FT_FMT        )),
+    aFmtLB(         this, SVX_RES(LB_FMT        )),
+    aPrefixFT(      this, SVX_RES(FT_PREFIX )),
+    aPrefixED(      this, SVX_RES(ED_PREFIX )),
+    aSuffixFT(      this, SVX_RES(FT_SUFFIX )),
+    aSuffixED(      this, SVX_RES(ED_SUFFIX )),
+    aCharFmtFT(     this, SVX_RES(FT_CHARFMT    )),
+    aCharFmtLB(     this, SVX_RES(LB_CHARFMT    )),
+    aBulColorFT(    this, SVX_RES(FT_BUL_COLOR)),
+    aBulColLB(      this, SVX_RES(LB_BUL_COLOR)),
+    aBulRelSizeFT(  this, SVX_RES(FT_BUL_REL_SIZE)),
+    aBulRelSizeMF(  this, SVX_RES(MF_BUL_REL_SIZE)),
+    aAllLevelFT(    this, SVX_RES(FT_ALL_LEVEL)),
+    aAllLevelNF(    this, SVX_RES(NF_ALL_LEVEL)),
+    aStartFT(       this, SVX_RES(FT_START  )),
+    aStartED(       this, SVX_RES(ED_START  )),
+    aBulletPB(      this, SVX_RES(PB_BULLET )),
+    aAlignFT(       this, SVX_RES(FT_ALIGN  )),
+    aAlignLB(       this, SVX_RES(LB_ALIGN  )),
+    aBitmapFT(      this, SVX_RES(FT_BITMAP )),
+    aBitmapMB(      this, SVX_RES(MB_BITMAP )),
+    aSizeFT(        this, SVX_RES(FT_SIZE       )),
+    aWidthMF(       this, SVX_RES(MF_WIDTH  )),
+    aMultFT(        this, SVX_RES(FT_MULT       )),
+    aHeightMF(      this, SVX_RES(MF_HEIGHT )),
+    aRatioCB(       this, SVX_RES(CB_RATIO  )),
+    aOrientFT(      this, SVX_RES(FT_ORIENT )),
+    aOrientLB(      this, SVX_RES(LB_ORIENT )),
+    aSameLevelFL(   this, SVX_RES(FL_SAME_LEVEL)),
+    aSameLevelCB(   this, SVX_RES(CB_SAME_LEVEL)),
+    pPreviewWIN(    new SvxNumberingPreview(this, SVX_RES(WIN_PREVIEW   ))),
     pActNum(0),
     pSaveNum(0),
     bHasChild(FALSE),
@@ -1411,7 +1411,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
     bAutomaticCharStyles(TRUE),
     bHTMLMode(FALSE),
     bMenuButtonInitialized(FALSE),
-    sBullet(ResId(STR_BULLET)),
+    sBullet(SVX_RES(STR_BULLET)),
     nBullet(0xff),
     nActNumLvl(USHRT_MAX),
     nNumItemId(SID_ATTR_NUMBERING_RULE)
@@ -1444,7 +1444,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
     PopupMenu* pPopup = new PopupMenu;
     aBitmapMB.GetPopupMenu()->SetPopupMenu( MN_GALLERY, pPopup );
 
-    pPopup->InsertItem( NUM_NO_GRAPHIC, String(ResId(ST_POPUP_EMPTY_ENTRY)) );
+    pPopup->InsertItem( NUM_NO_GRAPHIC, String(SVX_RES(ST_POPUP_EMPTY_ENTRY)) );
     pPopup->EnableItem( NUM_NO_GRAPHIC, FALSE );
 
     eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
@@ -2457,7 +2457,7 @@ IMPL_LINK( SvxNumOptionsTabPage, BulletHdl_Impl, Button *, EMPTYARG )
     //CHINA001 SvxCharacterMap* pMap = new SvxCharacterMap(this, TRUE);
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-    AbstractSvxCharacterMap* pMap = pFact->CreateSvxCharacterMap( this,  ResId(RID_SVXDLG_CHARMAP), TRUE );
+    AbstractSvxCharacterMap* pMap = pFact->CreateSvxCharacterMap( this, RID_SVXDLG_CHARMAP, TRUE );
     DBG_ASSERT(pMap, "Dialogdiet fail!");//CHINA001
 
     USHORT nMask = 1;
@@ -2969,20 +2969,20 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
 SvxNumPositionTabPage::SvxNumPositionTabPage(Window* pParent,
                                const SfxItemSet& rSet) :
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_NUM_POSITION ), rSet ),
-    aPositionFL(    this, ResId(FL_POSITION )),
-    aLevelFT(       this, ResId(FT_LEVEL    )),
-    aLevelLB(       this, ResId(LB_LEVEL    )),
-    aDistBorderFT(  this, ResId(FT_BORDERDIST   )),
-    aDistBorderMF(  this, ResId(MF_BORDERDIST   )),
-    aRelativeCB(    this, ResId(CB_RELATIVE     )),
-    aIndentFT(      this, ResId(FT_INDENT       )),
-    aIndentMF(      this, ResId(MF_INDENT       )),
-    aDistNumFT(     this, ResId(FT_NUMDIST      )),
-    aDistNumMF(     this, ResId(MF_NUMDIST      )),
-    aAlignFT(       this, ResId(FT_ALIGN    )),
-    aAlignLB(       this, ResId(LB_ALIGN    )),
-    aStandardPB(    this, ResId(PB_STANDARD     )),
-    pPreviewWIN(    new SvxNumberingPreview(this, ResId(WIN_PREVIEW ))),
+    aPositionFL(    this, SVX_RES(FL_POSITION )),
+    aLevelFT(       this, SVX_RES(FT_LEVEL    )),
+    aLevelLB(       this, SVX_RES(LB_LEVEL  )),
+    aDistBorderFT(  this, SVX_RES(FT_BORDERDIST )),
+    aDistBorderMF(  this, SVX_RES(MF_BORDERDIST )),
+    aRelativeCB(    this, SVX_RES(CB_RELATIVE       )),
+    aIndentFT(      this, SVX_RES(FT_INDENT     )),
+    aIndentMF(      this, SVX_RES(MF_INDENT     )),
+    aDistNumFT(     this, SVX_RES(FT_NUMDIST        )),
+    aDistNumMF(     this, SVX_RES(MF_NUMDIST        )),
+    aAlignFT(       this, SVX_RES(FT_ALIGN  )),
+    aAlignLB(       this, SVX_RES(LB_ALIGN  )),
+    aStandardPB(    this, SVX_RES(PB_STANDARD       )),
+    pPreviewWIN(    new SvxNumberingPreview(this, SVX_RES(WIN_PREVIEW   ))),
     pActNum(0),
     pSaveNum(0),
     nActNumLvl( USHRT_MAX ),
