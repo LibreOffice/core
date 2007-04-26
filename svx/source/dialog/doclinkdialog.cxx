@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doclinkdialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:18:36 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:29:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,18 +85,18 @@ namespace svx
     //------------------------------------------------------------------
     ODocumentLinkDialog::ODocumentLinkDialog( Window* _pParent, sal_Bool _bCreateNew )
         :ModalDialog( _pParent, SVX_RES(DLG_DOCUMENTLINK) )
-        ,m_aURLLabel        (this, ResId(FT_URL))
-        ,m_aURL             (this, ResId(CMB_URL))
-        ,m_aBrowseFile      (this, ResId(PB_BROWSEFILE))
-        ,m_aNameLabel       (this, ResId(FT_NAME))
-        ,m_aName            (this, ResId(ET_NAME))
-        ,m_aBottomLine      (this, ResId(FL_BOTTOM))
-        ,m_aOK              (this, ResId(BTN_OK))
-        ,m_aCancel          (this, ResId(BTN_CANCEL))
-        ,m_aHelp            (this, ResId(BTN_HELP))
+        ,m_aURLLabel        (this, SVX_RES(FT_URL))
+        ,m_aURL             (this, SVX_RES(CMB_URL))
+        ,m_aBrowseFile      (this, SVX_RES(PB_BROWSEFILE))
+        ,m_aNameLabel       (this, SVX_RES(FT_NAME))
+        ,m_aName            (this, SVX_RES(ET_NAME))
+        ,m_aBottomLine      (this, SVX_RES(FL_BOTTOM))
+        ,m_aOK              (this, SVX_RES(BTN_OK))
+        ,m_aCancel          (this, SVX_RES(BTN_CANCEL))
+        ,m_aHelp            (this, SVX_RES(BTN_HELP))
         ,m_bCreatingNew(_bCreateNew)
     {
-        String sText = String( ResId( m_bCreatingNew ? STR_NEW_LINK : STR_EDIT_LINK ) );
+        String sText = String( SVX_RES( m_bCreatingNew ? STR_NEW_LINK : STR_EDIT_LINK ) );
         SetText(sText);
 
         FreeResource();
