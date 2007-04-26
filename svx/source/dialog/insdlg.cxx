@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mav $ $Date: 2006-10-16 07:24:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:35:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,20 @@ using namespace ::com::sun::star::ui::dialogs;
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 
+
+static String impl_getSvtResString( sal_uInt32 nId )
+{
+    String aRet;
+    com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+    ResMgr* pMgr = ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME(svt), aLocale );
+    if( pMgr )
+    {
+        aRet = String( ResId( nId, *pMgr ) );
+        delete pMgr;
+    }
+    return aRet;
+}
+
 BOOL InsertObjectDialog_Impl::IsCreateNew() const
 {
     return FALSE;
@@ -233,18 +247,18 @@ SvInsertOleDlg::SvInsertOleDlg
     const Reference < embed::XStorage >& xStorage,
     const SvObjectServerList* pServers
 )
-    : InsertObjectDialog_Impl( pParent, ResId( MD_INSERT_OLEOBJECT, DIALOG_MGR() ), xStorage ),
-    aRbNewObject( this, ResId( RB_NEW_OBJECT ) ),
-    aRbObjectFromfile( this, ResId( RB_OBJECT_FROMFILE ) ),
-    aLbObjecttype( this, ResId( LB_OBJECTTYPE ) ),
-    aEdFilepath( this, ResId( ED_FILEPATH ) ),
-    aBtnFilepath( this, ResId( BTN_FILEPATH ) ),
-    aCbFilelink( this, ResId( CB_FILELINK ) ),
-    aGbObject( this, ResId( GB_OBJECT ) ),
-    aOKButton1( this, ResId( 1 ) ),
-    aCancelButton1( this, ResId( 1 ) ),
-    aHelpButton1( this, ResId( 1 ) ),
-    aStrFile( ResId( STR_FILE ) ),
+    : InsertObjectDialog_Impl( pParent, SVX_RES( MD_INSERT_OLEOBJECT ), xStorage ),
+    aRbNewObject( this, SVX_RES( RB_NEW_OBJECT ) ),
+    aRbObjectFromfile( this, SVX_RES( RB_OBJECT_FROMFILE ) ),
+    aLbObjecttype( this, SVX_RES( LB_OBJECTTYPE ) ),
+    aEdFilepath( this, SVX_RES( ED_FILEPATH ) ),
+    aBtnFilepath( this, SVX_RES( BTN_FILEPATH ) ),
+    aCbFilelink( this, SVX_RES( CB_FILELINK ) ),
+    aGbObject( this, SVX_RES( GB_OBJECT ) ),
+    aOKButton1( this, SVX_RES( 1 ) ),
+    aCancelButton1( this, SVX_RES( 1 ) ),
+    aHelpButton1( this, SVX_RES( 1 ) ),
+    aStrFile( SVX_RES( STR_FILE ) ),
     m_pServers( pServers )
 {
     FreeResource();
@@ -345,7 +359,7 @@ short SvInsertOleDlg::Execute()
                     {
                         // Objekt konnte nicht aus Datei erzeugt werden
                         // global Resource from svtools (former so3 resource)
-                        String aErr( ResId( STR_ERROR_OBJNOCREATE_FROM_FILE ) );
+                        String aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_FROM_FILE ) );
                         aErr.SearchAndReplace( String( '%' ), aFileName );
                         ErrorBox( this, WB_3DLOOK | WB_OK, aErr ).Execute();
                     }
@@ -353,7 +367,7 @@ short SvInsertOleDlg::Execute()
                     {
                         // Objekt konnte nicht erzeugt werden
                         // global Resource from svtools (former so3 resource)
-                        String aErr( ResId( STR_ERROR_OBJNOCREATE ) );
+                        String aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE ) );
                         aErr.SearchAndReplace( String( '%' ), aServerName );
                         ErrorBox( this, WB_3DLOOK | WB_OK, aErr ).Execute();
                     }
@@ -406,7 +420,7 @@ short SvInsertOleDlg::Execute()
             {
                 // Objekt konnte nicht aus Datei erzeugt werden
                 // global Resource from svtools (former so3 resource)
-                String aErr( ResId( STR_ERROR_OBJNOCREATE_FROM_FILE ) );
+                String aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_FROM_FILE ) );
                 aErr.SearchAndReplace( String( '%' ), aFileName );
                 ErrorBox( this, WB_3DLOOK | WB_OK, aErr ).Execute();
             }
@@ -478,15 +492,15 @@ IMPL_LINK( SvInsertPlugInDialog, BrowseHdl, PushButton *, EMPTYARG )
 // -----------------------------------------------------------------------
 
 SvInsertPlugInDialog::SvInsertPlugInDialog( Window* pParent, const uno::Reference < embed::XStorage >& xStorage )
-    : InsertObjectDialog_Impl( pParent, ResId( MD_INSERT_OBJECT_PLUGIN, DIALOG_MGR() ), xStorage ),
-    aEdFileurl( this, ResId( ED_FILEURL ) ),
-    aBtnFileurl( this, ResId( BTN_FILEURL ) ),
-    aGbFileurl( this, ResId( GB_FILEURL ) ),
-    aEdPluginsOptions( this, ResId( ED_PLUGINS_OPTIONS ) ),
-    aGbPluginsOptions( this, ResId( GB_PLUGINS_OPTIONS ) ),
-    aOKButton1( this, ResId( 1 ) ),
-    aCancelButton1( this, ResId( 1 ) ),
-    aHelpButton1( this, ResId( 1 ) ),
+    : InsertObjectDialog_Impl( pParent, SVX_RES( MD_INSERT_OBJECT_PLUGIN ), xStorage ),
+    aEdFileurl( this, SVX_RES( ED_FILEURL ) ),
+    aBtnFileurl( this, SVX_RES( BTN_FILEURL ) ),
+    aGbFileurl( this, SVX_RES( GB_FILEURL ) ),
+    aEdPluginsOptions( this, SVX_RES( ED_PLUGINS_OPTIONS ) ),
+    aGbPluginsOptions( this, SVX_RES( GB_PLUGINS_OPTIONS ) ),
+    aOKButton1( this, SVX_RES( 1 ) ),
+    aCancelButton1( this, SVX_RES( 1 ) ),
+    aHelpButton1( this, SVX_RES( 1 ) ),
     m_pURL(0)
 {
     FreeResource();
@@ -564,7 +578,7 @@ short SvInsertPlugInDialog::Execute()
         {
             // PlugIn konnte nicht erzeugt werden
             // global Resource from svtools (former so3 resource)
-            String aErr( ResId( STR_ERROR_OBJNOCREATE_PLUGIN ) );
+            String aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_PLUGIN ) );
             aErr.SearchAndReplace( String( '%' ), aURL );
             ErrorBox( this, WB_3DLOOK | WB_OK, aErr ).Execute();
         }
@@ -622,18 +636,18 @@ IMPL_LINK( SvInsertAppletDialog, BrowseHdl, PushButton *, EMPTYARG )
 // -----------------------------------------------------------------------
 
 SvInsertAppletDialog::SvInsertAppletDialog( Window* pParent, const uno::Reference < embed::XStorage >& xStorage )
-    : InsertObjectDialog_Impl( pParent, ResId( MD_INSERT_OBJECT_APPLET, DIALOG_MGR() ), xStorage ),
-    aFtClassfile( this, ResId( FT_CLASSFILE ) ),
-    aEdClassfile( this, ResId( ED_CLASSFILE ) ),
-    aFtClasslocation( this, ResId( FT_CLASSLOCATION ) ),
-    aEdClasslocation( this, ResId( ED_CLASSLOCATION ) ),
-    aBtnClass( this, ResId( BTN_CLASS ) ),
-    aGbClass( this, ResId( GB_CLASS ) ),
-    aEdAppletOptions( this, ResId( ED_APPLET_OPTIONS ) ),
-    aGbAppletOptions( this, ResId( GB_APPLET_OPTIONS ) ),
-    aOKButton1( this, ResId( 1 ) ),
-    aCancelButton1( this, ResId( 1 ) ),
-    aHelpButton1( this, ResId( 1 ) ),
+    : InsertObjectDialog_Impl( pParent, SVX_RES( MD_INSERT_OBJECT_APPLET ), xStorage ),
+    aFtClassfile( this, SVX_RES( FT_CLASSFILE ) ),
+    aEdClassfile( this, SVX_RES( ED_CLASSFILE ) ),
+    aFtClasslocation( this, SVX_RES( FT_CLASSLOCATION ) ),
+    aEdClasslocation( this, SVX_RES( ED_CLASSLOCATION ) ),
+    aBtnClass( this, SVX_RES( BTN_CLASS ) ),
+    aGbClass( this, SVX_RES( GB_CLASS ) ),
+    aEdAppletOptions( this, SVX_RES( ED_APPLET_OPTIONS ) ),
+    aGbAppletOptions( this, SVX_RES( GB_APPLET_OPTIONS ) ),
+    aOKButton1( this, SVX_RES( 1 ) ),
+    aCancelButton1( this, SVX_RES( 1 ) ),
+    aHelpButton1( this, SVX_RES( 1 ) ),
     m_pURL(0)
 {
     FreeResource();
@@ -641,18 +655,18 @@ SvInsertAppletDialog::SvInsertAppletDialog( Window* pParent, const uno::Referenc
 }
 
 SvInsertAppletDialog::SvInsertAppletDialog( Window* pParent, const uno::Reference < embed::XEmbeddedObject >& xObj )
-    : InsertObjectDialog_Impl( pParent, ResId( MD_INSERT_OBJECT_APPLET, DIALOG_MGR() ), uno::Reference < embed::XStorage >() ),
-    aFtClassfile( this, ResId( FT_CLASSFILE ) ),
-    aEdClassfile( this, ResId( ED_CLASSFILE ) ),
-    aFtClasslocation( this, ResId( FT_CLASSLOCATION ) ),
-    aEdClasslocation( this, ResId( ED_CLASSLOCATION ) ),
-    aBtnClass( this, ResId( BTN_CLASS ) ),
-    aGbClass( this, ResId( GB_CLASS ) ),
-    aEdAppletOptions( this, ResId( ED_APPLET_OPTIONS ) ),
-    aGbAppletOptions( this, ResId( GB_APPLET_OPTIONS ) ),
-    aOKButton1( this, ResId( 1 ) ),
-    aCancelButton1( this, ResId( 1 ) ),
-    aHelpButton1( this, ResId( 1 ) ),
+    : InsertObjectDialog_Impl( pParent, SVX_RES( MD_INSERT_OBJECT_APPLET ), uno::Reference < embed::XStorage >() ),
+    aFtClassfile( this, SVX_RES( FT_CLASSFILE ) ),
+    aEdClassfile( this, SVX_RES( ED_CLASSFILE ) ),
+    aFtClasslocation( this, SVX_RES( FT_CLASSLOCATION ) ),
+    aEdClasslocation( this, SVX_RES( ED_CLASSLOCATION ) ),
+    aBtnClass( this, SVX_RES( BTN_CLASS ) ),
+    aGbClass( this, SVX_RES( GB_CLASS ) ),
+    aEdAppletOptions( this, SVX_RES( ED_APPLET_OPTIONS ) ),
+    aGbAppletOptions( this, SVX_RES( GB_APPLET_OPTIONS ) ),
+    aOKButton1( this, SVX_RES( 1 ) ),
+    aCancelButton1( this, SVX_RES( 1 ) ),
+    aHelpButton1( this, SVX_RES( 1 ) ),
     m_pURL(0)
 {
     m_xObj = xObj;
@@ -697,7 +711,7 @@ short SvInsertAppletDialog::Execute()
                 SetAppletOptions( aList.GetCommands() );
             }
 
-            String aText( ResId( STR_EDIT_APPLET, DIALOG_MGR() ) );
+            String aText( SVX_RES( STR_EDIT_APPLET ) );
             SetText( aText );
             bOK = TRUE;
         }
@@ -763,31 +777,31 @@ short SvInsertAppletDialog::Execute()
 
 SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog( Window *pParent,
                             const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage )
-    : InsertObjectDialog_Impl( pParent, ResId( MD_INSERT_OBJECT_IFRAME, DIALOG_MGR() ), xStorage )
-    , aFTName ( this, ResId( FT_FRAMENAME ) )
-    , aEDName ( this, ResId( ED_FRAMENAME ) )
-    , aFTURL ( this, ResId( FT_URL ) )
-    , aEDURL ( this, ResId( ED_URL ) )
-    , aBTOpen ( this, ResId(BT_FILEOPEN ) )
-    , aRBScrollingOn ( this, ResId( RB_SCROLLINGON ) )
-    , aRBScrollingOff ( this, ResId( RB_SCROLLINGOFF ) )
-    , aRBScrollingAuto ( this, ResId( RB_SCROLLINGAUTO ) )
-    , aFLScrolling ( this, ResId( GB_SCROLLING ) )
-    , aFLSepLeft( this, ResId( FL_SEP_LEFT ) )
-    , aRBFrameBorderOn ( this, ResId( RB_FRMBORDER_ON ) )
-    , aRBFrameBorderOff ( this, ResId( RB_FRMBORDER_OFF ) )
-    , aFLFrameBorder( this, ResId( GB_BORDER ) )
-    , aFLSepRight( this, ResId( FL_SEP_RIGHT ) )
-    , aFTMarginWidth ( this, ResId( FT_MARGINWIDTH ) )
-    , aNMMarginWidth ( this, ResId( NM_MARGINWIDTH ) )
-    , aCBMarginWidthDefault( this, ResId( CB_MARGINHEIGHTDEFAULT ) )
-    , aFTMarginHeight ( this, ResId( FT_MARGINHEIGHT ) )
-    , aNMMarginHeight ( this, ResId( NM_MARGINHEIGHT ) )
-    , aCBMarginHeightDefault( this, ResId( CB_MARGINHEIGHTDEFAULT ) )
-    , aFLMargin( this, ResId( GB_MARGIN ) )
-    , aOKButton1( this, ResId( 1 ) )
-    , aCancelButton1( this, ResId( 1 ) )
-    , aHelpButton1( this, ResId( 1 ) )
+    : InsertObjectDialog_Impl( pParent, SVX_RES( MD_INSERT_OBJECT_IFRAME ), xStorage )
+    , aFTName ( this, SVX_RES( FT_FRAMENAME ) )
+    , aEDName ( this, SVX_RES( ED_FRAMENAME ) )
+    , aFTURL ( this, SVX_RES( FT_URL ) )
+    , aEDURL ( this, SVX_RES( ED_URL ) )
+    , aBTOpen ( this, SVX_RES(BT_FILEOPEN ) )
+    , aRBScrollingOn ( this, SVX_RES( RB_SCROLLINGON ) )
+    , aRBScrollingOff ( this, SVX_RES( RB_SCROLLINGOFF ) )
+    , aRBScrollingAuto ( this, SVX_RES( RB_SCROLLINGAUTO ) )
+    , aFLScrolling ( this, SVX_RES( GB_SCROLLING ) )
+    , aFLSepLeft( this, SVX_RES( FL_SEP_LEFT ) )
+    , aRBFrameBorderOn ( this, SVX_RES( RB_FRMBORDER_ON ) )
+    , aRBFrameBorderOff ( this, SVX_RES( RB_FRMBORDER_OFF ) )
+    , aFLFrameBorder( this, SVX_RES( GB_BORDER ) )
+    , aFLSepRight( this, SVX_RES( FL_SEP_RIGHT ) )
+    , aFTMarginWidth ( this, SVX_RES( FT_MARGINWIDTH ) )
+    , aNMMarginWidth ( this, SVX_RES( NM_MARGINWIDTH ) )
+    , aCBMarginWidthDefault( this, SVX_RES( CB_MARGINHEIGHTDEFAULT ) )
+    , aFTMarginHeight ( this, SVX_RES( FT_MARGINHEIGHT ) )
+    , aNMMarginHeight ( this, SVX_RES( NM_MARGINHEIGHT ) )
+    , aCBMarginHeightDefault( this, SVX_RES( CB_MARGINHEIGHTDEFAULT ) )
+    , aFLMargin( this, SVX_RES( GB_MARGIN ) )
+    , aOKButton1( this, SVX_RES( 1 ) )
+    , aCancelButton1( this, SVX_RES( 1 ) )
+    , aHelpButton1( this, SVX_RES( 1 ) )
 {
     FreeResource();
 
@@ -807,31 +821,31 @@ SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog( Window *pParent,
 }
 
 SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog( Window *pParent, const uno::Reference < embed::XEmbeddedObject >& xObj )
-    : InsertObjectDialog_Impl( pParent, ResId( MD_INSERT_OBJECT_IFRAME, DIALOG_MGR() ), uno::Reference < embed::XStorage >() )
-    , aFTName ( this, ResId( FT_FRAMENAME ) )
-    , aEDName ( this, ResId( ED_FRAMENAME ) )
-    , aFTURL ( this, ResId( FT_URL ) )
-    , aEDURL ( this, ResId( ED_URL ) )
-    , aBTOpen ( this, ResId(BT_FILEOPEN ) )
-    , aRBScrollingOn ( this, ResId( RB_SCROLLINGON ) )
-    , aRBScrollingOff ( this, ResId( RB_SCROLLINGOFF ) )
-    , aRBScrollingAuto ( this, ResId( RB_SCROLLINGAUTO ) )
-    , aFLScrolling ( this, ResId( GB_SCROLLING ) )
-    , aFLSepLeft( this, ResId( FL_SEP_LEFT ) )
-    , aRBFrameBorderOn ( this, ResId( RB_FRMBORDER_ON ) )
-    , aRBFrameBorderOff ( this, ResId( RB_FRMBORDER_OFF ) )
-    , aFLFrameBorder( this, ResId( GB_BORDER ) )
-    , aFLSepRight( this, ResId( FL_SEP_RIGHT ) )
-    , aFTMarginWidth ( this, ResId( FT_MARGINWIDTH ) )
-    , aNMMarginWidth ( this, ResId( NM_MARGINWIDTH ) )
-    , aCBMarginWidthDefault( this, ResId( CB_MARGINHEIGHTDEFAULT ) )
-    , aFTMarginHeight ( this, ResId( FT_MARGINHEIGHT ) )
-    , aNMMarginHeight ( this, ResId( NM_MARGINHEIGHT ) )
-    , aCBMarginHeightDefault( this, ResId( CB_MARGINHEIGHTDEFAULT ) )
-    , aFLMargin( this, ResId( GB_MARGIN ) )
-    , aOKButton1( this, ResId( 1 ) )
-    , aCancelButton1( this, ResId( 1 ) )
-    , aHelpButton1( this, ResId( 1 ) )
+    : InsertObjectDialog_Impl( pParent, SVX_RES( MD_INSERT_OBJECT_IFRAME ), uno::Reference < embed::XStorage >() )
+    , aFTName ( this, SVX_RES( FT_FRAMENAME ) )
+    , aEDName ( this, SVX_RES( ED_FRAMENAME ) )
+    , aFTURL ( this, SVX_RES( FT_URL ) )
+    , aEDURL ( this, SVX_RES( ED_URL ) )
+    , aBTOpen ( this, SVX_RES(BT_FILEOPEN ) )
+    , aRBScrollingOn ( this, SVX_RES( RB_SCROLLINGON ) )
+    , aRBScrollingOff ( this, SVX_RES( RB_SCROLLINGOFF ) )
+    , aRBScrollingAuto ( this, SVX_RES( RB_SCROLLINGAUTO ) )
+    , aFLScrolling ( this, SVX_RES( GB_SCROLLING ) )
+    , aFLSepLeft( this, SVX_RES( FL_SEP_LEFT ) )
+    , aRBFrameBorderOn ( this, SVX_RES( RB_FRMBORDER_ON ) )
+    , aRBFrameBorderOff ( this, SVX_RES( RB_FRMBORDER_OFF ) )
+    , aFLFrameBorder( this, SVX_RES( GB_BORDER ) )
+    , aFLSepRight( this, SVX_RES( FL_SEP_RIGHT ) )
+    , aFTMarginWidth ( this, SVX_RES( FT_MARGINWIDTH ) )
+    , aNMMarginWidth ( this, SVX_RES( NM_MARGINWIDTH ) )
+    , aCBMarginWidthDefault( this, SVX_RES( CB_MARGINHEIGHTDEFAULT ) )
+    , aFTMarginHeight ( this, SVX_RES( FT_MARGINHEIGHT ) )
+    , aNMMarginHeight ( this, SVX_RES( NM_MARGINHEIGHT ) )
+    , aCBMarginHeightDefault( this, SVX_RES( CB_MARGINHEIGHTDEFAULT ) )
+    , aFLMargin( this, SVX_RES( GB_MARGIN ) )
+    , aOKButton1( this, SVX_RES( 1 ) )
+    , aCancelButton1( this, SVX_RES( 1 ) )
+    , aHelpButton1( this, SVX_RES( 1 ) )
 {
     FreeResource();
 
@@ -1069,7 +1083,7 @@ IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, OpenHdl, PushButton*, EMPTYARG )
     sfx2::FileDialogHelper aFileDlg( WB_OPEN | SFXWB_PASSWORD, String() );
 
     // set the title
-    aFileDlg.SetTitle( OUString( String( ResId( MD_INSERT_OBJECT_IFRAME, DIALOG_MGR() ) ) ) );
+    aFileDlg.SetTitle( OUString( String( SVX_RES( MD_INSERT_OBJECT_IFRAME ) ) ) );
 
     // show the dialog
     if ( aFileDlg.Execute() == ERRCODE_NONE )
