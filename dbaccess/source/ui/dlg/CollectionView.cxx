@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CollectionView.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:04:21 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:55:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,17 +129,17 @@ OCollectionView::OCollectionView( Window * pParent
                                  ,const ::rtl::OUString& _sDefaultName
                                  ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB)
     : ModalDialog( pParent, ModuleRes(DLG_COLLECTION_VIEW))
-    , m_aFTCurrentPath( this, ResId( FT_EXPLORERFILE_CURRENTPATH ) )
-    , m_aNewFolder(     this, ResId( BTN_EXPLORERFILE_NEWFOLDER ) )
-    , m_aUp(            this, ResId( BTN_EXPLORERFILE_UP ) )
-    , m_aView(          this, ResId( CTRL_VIEW ) ,FILEVIEW_SHOW_TITLE )
-    , m_aFTName(        this, ResId( FT_EXPLORERFILE_FILENAME ) )
-    , m_aName(          this, ResId( ED_EXPLORERFILE_FILENAME ) )
-    , m_aFL(            this, ResId( FL_1 ) )
-    , m_aPB_OK(         this, ResId( BTN_EXPLORERFILE_SAVE ) )
-    , m_aPB_CANCEL(     this, ResId( PB_CANCEL ) )
-    , m_aPB_HELP(       this, ResId( PB_HELP ) )
-    , m_sPath(          ResId( STR_PATHNAME ) )
+    , m_aFTCurrentPath( this, ModuleRes( FT_EXPLORERFILE_CURRENTPATH ) )
+    , m_aNewFolder(     this, ModuleRes( BTN_EXPLORERFILE_NEWFOLDER ) )
+    , m_aUp(            this, ModuleRes( BTN_EXPLORERFILE_UP ) )
+    , m_aView(          this, ModuleRes( CTRL_VIEW ) ,FILEVIEW_SHOW_TITLE )
+    , m_aFTName(        this, ModuleRes( FT_EXPLORERFILE_FILENAME ) )
+    , m_aName(          this, ModuleRes( ED_EXPLORERFILE_FILENAME ) )
+    , m_aFL(            this, ModuleRes( FL_1 ) )
+    , m_aPB_OK(         this, ModuleRes( BTN_EXPLORERFILE_SAVE ) )
+    , m_aPB_CANCEL(     this, ModuleRes( PB_CANCEL ) )
+    , m_aPB_HELP(       this, ModuleRes( PB_HELP ) )
+    , m_sPath(          ModuleRes( STR_PATHNAME ) )
     , m_xContent(_xContent)
     , m_xORB(_xORB)
     , m_bCreateForm(sal_True)
