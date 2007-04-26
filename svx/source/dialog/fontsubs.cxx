@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontsubs.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:11:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:30:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,39 +77,39 @@
 
 SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
                                 const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, ResId(RID_SVX_FONT_SUBSTITUTION, DIALOG_MGR()), rSet),
-    aUseTableCB         (this,  ResId(CB_USETABLE)),
-    aFont1FT            (this,  ResId(FT_FONT1)),
-    aFont1CB            (this,  ResId(CB_FONT1)),
-    aFont2FT            (this,  ResId(FT_FONT2)),
-    aFont2CB            (this,  ResId(CB_FONT2)),
-    aNewDelTBX          (this,  ResId(TBX_SUBSTNEWDEL)),
-    aCheckLB            (this,  ResId(CLB_SUBSTITUTES)),
+    SfxTabPage(pParent, SVX_RES(RID_SVX_FONT_SUBSTITUTION), rSet),
+    aUseTableCB         (this,  SVX_RES(CB_USETABLE)),
+    aFont1FT            (this,  SVX_RES(FT_FONT1)),
+    aFont1CB            (this,  SVX_RES(CB_FONT1)),
+    aFont2FT            (this,  SVX_RES(FT_FONT2)),
+    aFont2CB            (this,  SVX_RES(CB_FONT2)),
+    aNewDelTBX          (this,  SVX_RES(TBX_SUBSTNEWDEL)),
+    aCheckLB            (this,  SVX_RES(CLB_SUBSTITUTES)),
 
-    aSourceViewFontsFL (this,  ResId(FL_SOURCEVIEW  )),
-    aFontNameFT        (this,  ResId(FT_FONTNAME    )),
-    aFontNameLB        (this,  ResId(LB_FONTNAME    )),
-    aNonPropFontsOnlyCB(this,  ResId(CB_NONPROP     )),
-    aFontHeightFT      (this,  ResId(FT_FONTHEIGHT  )),
-    aFontHeightLB      (this,  ResId(LB_FONTHEIGHT  )),
+    aSourceViewFontsFL (this,  SVX_RES(FL_SOURCEVIEW  )),
+    aFontNameFT        (this,  SVX_RES(FT_FONTNAME    )),
+    aFontNameLB        (this,  SVX_RES(LB_FONTNAME    )),
+    aNonPropFontsOnlyCB(this,  SVX_RES(CB_NONPROP     )),
+    aFontHeightFT      (this,  SVX_RES(FT_FONTHEIGHT  )),
+    aFontHeightLB      (this,  SVX_RES(LB_FONTHEIGHT  )),
 
-    aImageList          (ResId(IL_ICON)),
+    aImageList          (SVX_RES(IL_ICON)),
 
-    sAutomatic          (ResId( STR_AUTOMATIC  )),
+    sAutomatic          (SVX_RES( STR_AUTOMATIC  )),
     pConfig(new SvtFontSubstConfig),
     pSourceViewConfig(new svt::SourceViewConfig),
 
-    sHeader1            (ResId( STR_HEADER1     )),
-    sHeader2            (ResId( STR_HEADER2     )),
-    sHeader3            (ResId( STR_HEADER3     )),
-    sHeader4            (ResId( STR_HEADER4     )),
+    sHeader1            (SVX_RES( STR_HEADER1       )),
+    sHeader2            (SVX_RES( STR_HEADER2       )),
+    sHeader3            (SVX_RES( STR_HEADER3       )),
+    sHeader4            (SVX_RES( STR_HEADER4       )),
 
-    aChkunBmp           (ResId( CHKBUT_UNCHECKED)),
-    aChkchBmp           (ResId( CHKBUT_CHECKED  )),
-    aChkchhiBmp         (ResId( CHKBUT_HICHECKED)),
-    aChkunhiBmp         (ResId( CHKBUT_HIUNCHECKED)),
-    aChktriBmp          (ResId( CHKBUT_TRISTATE )),
-    aChktrihiBmp        (ResId( CHKBUT_HITRISTATE)),
+    aChkunBmp           (SVX_RES(   CHKBUT_UNCHECKED)),
+    aChkchBmp           (SVX_RES(   CHKBUT_CHECKED  )),
+    aChkchhiBmp         (SVX_RES(   CHKBUT_HICHECKED)),
+    aChkunhiBmp         (SVX_RES(   CHKBUT_HIUNCHECKED)),
+    aChktriBmp          (SVX_RES(   CHKBUT_TRISTATE )),
+    aChktrihiBmp        (SVX_RES(   CHKBUT_HITRISTATE)),
     sFontGroup          ("FontSubstitution"),
     pCheckButtonData(0)
 {
