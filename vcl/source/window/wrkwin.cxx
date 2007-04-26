@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrkwin.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 09:59:12 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:32:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,7 +165,8 @@ WorkWindow::WorkWindow( Window* pParent, const ResId& rResId ) :
 {
     ImplInitWorkWindowData();
     rResId.SetRT( RSC_WORKWIN );
-    ImplInit( pParent, ImplInitRes( rResId ) );
+    WinBits nStyle = ImplInitRes( rResId );
+    ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 }
 
@@ -196,7 +197,7 @@ void WorkWindow::ImplLoadRes( const ResId& rResId )
     SystemWindow::ImplLoadRes( rResId );
 
     ReadLongRes();
-    if ( !(rResId.aWinBits & WB_HIDE) && (RSC_WORKWIN == rResId.GetRT()) )
+    if ( !(rResId.GetWinBits() & WB_HIDE) && (RSC_WORKWIN == rResId.GetRT()) )
         Show();
 }
 
