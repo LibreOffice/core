@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swpossizetabpage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:36:29 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:44:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -564,48 +564,48 @@ ULONG lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
 
   -----------------------------------------------------------------------*/
 SvxSwPosSizeTabPage::SvxSwPosSizeTabPage( Window* pParent, const SfxItemSet& rInAttrs  ) :
-    SfxTabPage( pParent, ResId( RID_SVXPAGE_SWPOSSIZE, DIALOG_MGR() ), rInAttrs ),
+    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_SWPOSSIZE ), rInAttrs ),
 #ifdef WNT
 #pragma warning (disable : 4355)
 #endif
-    m_aSizeFL(    this, ResId( FL_SIZE   ) ),
-    m_aWidthFT(   this, ResId( FT_WIDTH  ) ),
-    m_aWidthMF(   this, ResId( MF_WIDTH  ) ),
-    m_aHeightFT(  this, ResId( FT_HEIGHT ) ),
-    m_aHeightMF(  this, ResId( MF_HEIGHT ) ),
-    m_aKeepRatioCB(this,ResId( CB_KEEPRATIO) ),
-    m_aSeparatorFL(this,ResId( FL_SEPARATOR) ),
+    m_aSizeFL(    this, SVX_RES( FL_SIZE   ) ),
+    m_aWidthFT(   this, SVX_RES( FT_WIDTH  ) ),
+    m_aWidthMF(   this, SVX_RES( MF_WIDTH  ) ),
+    m_aHeightFT(  this, SVX_RES( FT_HEIGHT ) ),
+    m_aHeightMF(  this, SVX_RES( MF_HEIGHT ) ),
+    m_aKeepRatioCB(this,SVX_RES( CB_KEEPRATIO) ),
+    m_aSeparatorFL(this,SVX_RES( FL_SEPARATOR) ),
 
-    m_aAnchorFL(  this, ResId( FL_ANCHOR ) ),
-    m_aToPageRB(  this, ResId( RB_TOPAGE ) ),
-    m_aToParaRB(  this, ResId( RB_TOPARA ) ),
-    m_aToCharRB(  this, ResId( RB_TOCHAR ) ),
-    m_aAsCharRB(  this, ResId( RB_ASCHAR ) ),
-    m_aToFrameRB( this, ResId( RB_TOFRAME) ),
+    m_aAnchorFL(  this, SVX_RES( FL_ANCHOR ) ),
+    m_aToPageRB(  this, SVX_RES( RB_TOPAGE ) ),
+    m_aToParaRB(  this, SVX_RES( RB_TOPARA ) ),
+    m_aToCharRB(  this, SVX_RES( RB_TOCHAR ) ),
+    m_aAsCharRB(  this, SVX_RES( RB_ASCHAR ) ),
+    m_aToFrameRB( this, SVX_RES( RB_TOFRAME) ),
 
-    m_aProtectionFL(  this, ResId( FL_PROTECTION  ) ),
-    m_aPositionCB(    this, ResId( CB_POSITION    ) ),
-    m_aSizeCB(        this, ResId( CB_SIZE        ) ),
+    m_aProtectionFL(  this, SVX_RES( FL_PROTECTION  ) ),
+    m_aPositionCB(    this, SVX_RES( CB_POSITION    ) ),
+    m_aSizeCB(        this, SVX_RES( CB_SIZE        ) ),
 
-    m_aPositionFL(    this, ResId( FL_POSITION    ) ),
-    m_aHoriFT(        this, ResId( FT_HORI        ) ),
-    m_aHoriLB(        this, ResId( LB_HORI        ) ),
-    m_aHoriByFT(      this, ResId( FT_HORIBY      ) ),
-    m_aHoriByMF(      this, ResId( MF_HORIBY      ) ),
-    m_aHoriToFT(      this, ResId( FT_HORITO      ) ),
-    m_aHoriToLB(      this, ResId( LB_HORITO      ) ),
+    m_aPositionFL(    this, SVX_RES( FL_POSITION    ) ),
+    m_aHoriFT(        this, SVX_RES( FT_HORI        ) ),
+    m_aHoriLB(        this, SVX_RES( LB_HORI        ) ),
+    m_aHoriByFT(      this, SVX_RES( FT_HORIBY      ) ),
+    m_aHoriByMF(      this, SVX_RES( MF_HORIBY      ) ),
+    m_aHoriToFT(      this, SVX_RES( FT_HORITO      ) ),
+    m_aHoriToLB(      this, SVX_RES( LB_HORITO      ) ),
 
-    m_aHoriMirrorCB(  this, ResId( CB_HORIMIRROR  ) ),
+    m_aHoriMirrorCB(  this, SVX_RES( CB_HORIMIRROR  ) ),
 
-    m_aVertFT(        this, ResId( FT_VERT        ) ),
-    m_aVertLB(        this, ResId( LB_VERT        ) ),
-    m_aVertByFT(      this, ResId( FT_VERTBY      ) ),
-    m_aVertByMF(      this, ResId( MF_VERTBY      ) ),
-    m_aVertToFT(      this, ResId( FT_VERTTO      ) ),
-    m_aVertToLB(      this, ResId( LB_VERTTO      ) ),
+    m_aVertFT(        this, SVX_RES( FT_VERT        ) ),
+    m_aVertLB(        this, SVX_RES( LB_VERT        ) ),
+    m_aVertByFT(      this, SVX_RES( FT_VERTBY      ) ),
+    m_aVertByMF(      this, SVX_RES( MF_VERTBY      ) ),
+    m_aVertToFT(      this, SVX_RES( FT_VERTTO      ) ),
+    m_aVertToLB(      this, SVX_RES( LB_VERTTO      ) ),
 
-    m_aFollowCB(      this, ResId( CB_FOLLOW      ) ),
-    m_aExampleWN( this,   ResId( WN_EXAMPLE ) ),
+    m_aFollowCB(      this, SVX_RES( CB_FOLLOW      ) ),
+    m_aExampleWN( this,   SVX_RES( WN_EXAMPLE ) ),
 #ifdef WNT
 #pragma warning (default : 4355)
 #endif
