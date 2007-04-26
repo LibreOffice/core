@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuline.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:19:00 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:38:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ void FuLine::DoExecute( SfxRequest& rReq )
         mpView->GetAttributes( *pNewAttr );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        SfxAbstractTabDialog * pDlg = pFact ? pFact->CreateSvxLineTabDialog(NULL,pNewAttr,mpDoc,ResId(RID_SVXDLG_LINE),pObj,bHasMarked) : 0;
+        SfxAbstractTabDialog * pDlg = pFact ? pFact->CreateSvxLineTabDialog(NULL,pNewAttr,mpDoc,RID_SVXDLG_LINE,pObj,bHasMarked) : 0;
         if( pDlg && (pDlg->Execute() == RET_OK) )
         {
             mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));
