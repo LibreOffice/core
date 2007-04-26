@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-06 14:34:30 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:06:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,7 +216,7 @@ void SfxApplication::InitializeDisplayName_Impl()
         aVersion += ( String::CreateFromInt32( nProductVersion % 10 ) );
 */
         // load application title
-        aTitle = String( ResId( RID_APPTITLE, pAppData->pLabelResMgr ) );
+        aTitle = String( ResId( RID_APPTITLE, *pAppData->pLabelResMgr ) );
         // merge version into title
         aTitle.SearchAndReplaceAscii( "$(VER)", String() /*aVersion*/ );
 
