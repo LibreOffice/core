@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mgetempl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:33:46 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,22 +79,22 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
 
     SfxTabPage( pParent, SfxResId( TP_MANAGE_STYLES ), rAttrSet ),
 
-    aNameFt     ( this, ResId( FT_NAME ) ),
-    aNameEd     ( this, ResId( ED_NAME ) ),
-    aAutoCB     ( this, ResId( CB_AUTO ) ),
+    aNameFt     ( this, SfxResId( FT_NAME ) ),
+    aNameEd     ( this, SfxResId( ED_NAME ) ),
+    aAutoCB     ( this, SfxResId( CB_AUTO ) ),
 
-    aFollowFt   ( this, ResId( FT_NEXT ) ),
-    aFollowLb   ( this, ResId( LB_NEXT ) ),
+    aFollowFt   ( this, SfxResId( FT_NEXT ) ),
+    aFollowLb   ( this, SfxResId( LB_NEXT ) ),
 
-    aBaseFt     ( this, ResId( FT_BASE ) ),
-    aBaseLb     ( this, ResId( LB_BASE ) ),
+    aBaseFt     ( this, SfxResId( FT_BASE ) ),
+    aBaseLb     ( this, SfxResId( LB_BASE ) ),
 
-    aFilterFt   ( this, ResId( FT_REGION ) ),
-    aFilterLb   ( this, ResId( LB_REGION ) ),
+    aFilterFt   ( this, SfxResId( FT_REGION ) ),
+    aFilterLb   ( this, SfxResId( LB_REGION ) ),
 
-    aDescFt     ( this, ResId( FT_DESC ) ),
-    aDescED     ( this, ResId( ED_DESC ) ),
-    aDescGb     ( this, ResId( GB_DESC ) ),
+    aDescFt     ( this, SfxResId( FT_DESC ) ),
+    aDescED     ( this, SfxResId( ED_DESC ) ),
+    aDescGb     ( this, SfxResId( GB_DESC ) ),
 
     pStyle( &( (SfxStyleDialog*)pParent->GetParent() )->GetStyleSheet() ),
 
@@ -128,7 +128,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
 
     ResMgr* pResMgr = SFX_APP()->GetModule_Impl()->GetResMgr();
     DBG_ASSERT( pResMgr, "kein ResMgr am Modul" );
-    pFamilies = new SfxStyleFamilies( ResId( DLG_STYLE_DESIGNER, pResMgr ) );
+    pFamilies = new SfxStyleFamilies( ResId( DLG_STYLE_DESIGNER, *pResMgr ) );
 
     SfxStyleSheetBasePool* pPool = 0;
     SfxObjectShell* pDocShell = SfxObjectShell::Current();
