@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:07:38 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:51:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -434,7 +434,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-                        AbstractScColRowLabelDlg* pDlg = pFact->CreateScColRowLabelDlg( pParent,ResId(RID_SCDLG_CHARTCOLROW), bRowHeaders, bColHeaders);
+                        AbstractScColRowLabelDlg* pDlg = pFact->CreateScColRowLabelDlg( pParent, RID_SCDLG_CHARTCOLROW, bRowHeaders, bColHeaders);
                         DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
                         if ( pDlg->Execute() == RET_OK ) //CHINA001 if ( aDlg.Execute() == RET_OK )
                         {
@@ -936,7 +936,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                                 DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-                                AbstractScNewScenarioDlg* pNewDlg = pFact->CreateScNewScenarioDlg( GetActiveDialogParent(), aName, ResId(RID_SCDLG_NEWSCENARIO), TRUE,bSheetProtected);
+                                AbstractScNewScenarioDlg* pNewDlg = pFact->CreateScNewScenarioDlg( GetActiveDialogParent(), aName, RID_SCDLG_NEWSCENARIO, TRUE,bSheetProtected);
                                 DBG_ASSERT(pNewDlg, "Dialog create fail!");//CHINA001
                                 pNewDlg->SetScenarioData( aName, aComment, aColor, nFlags );
                                 if ( pNewDlg->Execute() == RET_OK )
@@ -1394,7 +1394,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-                        SfxAbstractTabDialog* pDlg = pFact->CreateScStyleDlg( GetActiveDialogParent(), *pStyleSheet, RID_SCDLG_STYLES_PAGE,ResId(RID_SCDLG_STYLES_PAGE) );
+                        SfxAbstractTabDialog* pDlg = pFact->CreateScStyleDlg( GetActiveDialogParent(), *pStyleSheet, RID_SCDLG_STYLES_PAGE, RID_SCDLG_STYLES_PAGE );
                         DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
 
                         if ( pDlg->Execute() == RET_OK )
@@ -1560,7 +1560,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                                                                                 GetActiveDialogParent(),
                                                                                 rStyleSet,
                                                                                 aStr,
-                                                                                ResId(RID_SCDLG_HFEDIT), nResId);
+                                                                                RID_SCDLG_HFEDIT, nResId);
                         DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
                         if ( pDlg->Execute() == RET_OK )
                         {
