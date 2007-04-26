@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgsize.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:41:23 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:59:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,12 +63,12 @@ DlgSize::DlgSize( Window* pParent, sal_Int32 nVal, sal_Bool bRow, sal_Int32 _nAl
         :ModalDialog( pParent, ModuleRes(bRow ? DLG_ROWHEIGHT : DLG_COLWIDTH))
         ,m_nPrevValue(nVal)
         ,m_nStandard(bRow ? DEF_ROW_HEIGHT : DEF_COL_WIDTH)
-        ,aFT_VALUE(this,    ResId( FT_VALUE))
-        ,aMF_VALUE(this,    ResId( MF_VALUE))
-        ,aCB_STANDARD(this, ResId(CB_STANDARD))
-        ,aPB_OK(this,       ResId(PB_OK))
-        ,aPB_CANCEL(this,   ResId(PB_CANCEL))
-        ,aPB_HELP(this,     ResId(PB_HELP))
+        ,aFT_VALUE(this,    ModuleRes( FT_VALUE))
+        ,aMF_VALUE(this,    ModuleRes( MF_VALUE))
+        ,aCB_STANDARD(this, ModuleRes(CB_STANDARD))
+        ,aPB_OK(this,       ModuleRes(PB_OK))
+        ,aPB_CANCEL(this,   ModuleRes(PB_CANCEL))
+        ,aPB_HELP(this,     ModuleRes(PB_HELP))
 {
     DBG_CTOR(DlgSize,NULL);
 
