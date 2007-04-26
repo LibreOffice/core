@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgevtatt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:34:41 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:21:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -501,7 +501,7 @@ namespace dlgprov
             ResMgr* pResMgr = SFX_APP()->GetSfxResManager();
             if( pResMgr )
             {
-                String aRes( ResId(STR_ERRUNOEVENTBINDUNG, pResMgr) );
+                String aRes( ResId(STR_ERRUNOEVENTBINDUNG, *pResMgr) );
                 ::rtl::OUString aQuoteChar( RTL_CONSTASCII_USTRINGPARAM( "\"" ) );
 
                 ::rtl::OUString aOURes = aRes;
