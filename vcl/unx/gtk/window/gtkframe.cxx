@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 15:25:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:32:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1053,7 +1053,7 @@ void GtkSalFrame::SetIcon( USHORT nIcon )
     for( nIndex = 0; nIndex < sizeof(nOffsets)/ sizeof(USHORT); nIndex++ )
     {
         // #i44723# workaround gcc temporary problem
-        ResId aResId( nOffsets[nIndex] + nIcon, ImplGetResMgr() );
+        ResId aResId( nOffsets[nIndex] + nIcon, *ImplGetResMgr() );
         BitmapEx aIcon( aResId );
 
         ImpBitmap *pIconImpBitmap = aIcon.ImplGetBitmapImpBitmap();
