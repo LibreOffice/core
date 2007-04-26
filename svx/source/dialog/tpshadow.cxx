@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpshadow.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:31:36 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:47:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,17 +97,17 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
 
     SvxTabPage          ( pParent, SVX_RES( RID_SVXPAGE_SHADOW ), rInAttrs ),
 
-    aFlProp             ( this, ResId( FL_PROP ) ),
-    aTsbShowShadow      ( this, ResId( TSB_SHOW_SHADOW ) ),
-    aFtPosition         ( this, ResId( FT_POSITION ) ),
-    aCtlPosition        ( this, ResId( CTL_POSITION ) ),
-    aFtDistance         ( this, ResId( FT_DISTANCE ) ),
-    aMtrDistance        ( this, ResId( MTR_FLD_DISTANCE ) ),
-    aFtShadowColor      ( this, ResId( FT_SHADOW_COLOR ) ),
-    aLbShadowColor      ( this, ResId( LB_SHADOW_COLOR ) ),
-    aFtTransparent      ( this, ResId( FT_TRANSPARENT ) ),
-    aMtrTransparent      ( this, ResId( MTR_SHADOW_TRANSPARENT ) ),
-    aCtlXRectPreview    ( this, ResId( CTL_COLOR_PREVIEW ), &XOut,
+    aFlProp             ( this, SVX_RES( FL_PROP ) ),
+    aTsbShowShadow      ( this, SVX_RES( TSB_SHOW_SHADOW ) ),
+    aFtPosition         ( this, SVX_RES( FT_POSITION ) ),
+    aCtlPosition        ( this, SVX_RES( CTL_POSITION ) ),
+    aFtDistance         ( this, SVX_RES( FT_DISTANCE ) ),
+    aMtrDistance        ( this, SVX_RES( MTR_FLD_DISTANCE ) ),
+    aFtShadowColor      ( this, SVX_RES( FT_SHADOW_COLOR ) ),
+    aLbShadowColor      ( this, SVX_RES( LB_SHADOW_COLOR ) ),
+    aFtTransparent      ( this, SVX_RES( FT_TRANSPARENT ) ),
+    aMtrTransparent      ( this, SVX_RES( MTR_SHADOW_TRANSPARENT ) ),
+    aCtlXRectPreview    ( this, SVX_RES( CTL_COLOR_PREVIEW ), &XOut,
                                     (XOutdevItemPool*) rInAttrs.GetPool() ),
     rOutAttrs           ( rInAttrs ),
     pColorTab( NULL ),
@@ -325,9 +325,9 @@ BOOL SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
         }
 
         // Wenn die Werte des Schattenabstanden==SFX_ITEM_DONTCARE und der angezeigte
-        // String im entspr. MetricField=="", dann würde der Vergleich zw. alten und
+        // String im entspr. MetricField=="", dann wï¿½rde der Vergleich zw. alten und
         // neuen Distance-Werte ein falsches Ergebnis liefern, da in so einem Fall die
-        // neuen Distance-Werte den Default-Werten des MetricField entsprächen !!!!
+        // neuen Distance-Werte den Default-Werten des MetricField entsprï¿½chen !!!!
         if ( !aMtrDistance.IsEmptyFieldValue()                                  ||
              rOutAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SFX_ITEM_DONTCARE ||
              rOutAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SFX_ITEM_DONTCARE    )
@@ -401,7 +401,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
     if( !bDisable )
     {
         // Alle Objekte koennen einen Schatten besitzen
-        // z.Z. gibt es nur 8 m”gliche Positionen den Schatten zu setzen
+        // z.Z. gibt es nur 8 mï¿½gliche Positionen den Schatten zu setzen
 
         // Ist Schatten gesetzt?
         if( rAttrs.GetItemState( SDRATTR_SHADOW ) != SFX_ITEM_DONTCARE )
@@ -462,7 +462,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
 
             // Tristate, z.B. mehrer Objekte wurden markiert, wovon einige einen Schatten besitzen, einige nicht.
             // Der anzuzeigende Text des MetricFields wird auf "" gesetzt und dient in der Methode FillItemSet
-            // als Erkennungszeichen dafür, das der Distance-Wert NICHT verändert wurde !!!!
+            // als Erkennungszeichen dafï¿½r, das der Distance-Wert NICHT verï¿½ndert wurde !!!!
             aMtrDistance.SetText( String() );
             aCtlPosition.SetActualRP( RP_MM );
         }
