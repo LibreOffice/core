@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatedialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-14 08:32:22 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:23:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,7 @@
 #include "dp_gui_thread.hxx"
 #include "dp_gui_updatedata.hxx"
 #include "dp_gui_updatedialog.hxx"
+#include "dp_gui_shared.hxx"
 
 class KeyEvent;
 class MouseEvent;
@@ -122,8 +123,6 @@ namespace com { namespace sun { namespace star { namespace uno {
 using dp_gui::UpdateDialog;
 
 namespace {
-
-namespace css = com::sun::star;
 
 static sal_Unicode const LF = 0x000A;
 static sal_Unicode const CR = 0x000D;
@@ -581,35 +580,31 @@ UpdateDialog::UpdateDialog(
     css::uno::Sequence< css::uno::Reference<
         css::deployment::XPackageManager > > const & packageManagers,
     std::vector< dp_gui::UpdateData > * updateData):
-    ModalDialog(
-        parent,
-        ResId(
-            RID_DLG_UPDATE,
-            ResMgr::CreateResMgr("deploymentgui" LIBRARY_SOLARUPD()))),
+    ModalDialog(parent,DpGuiResId(RID_DLG_UPDATE)),
     m_context(context),
-    m_checking(this, ResId(RID_DLG_UPDATE_CHECKING)),
-    m_update(this, ResId(RID_DLG_UPDATE_UPDATE)),
+    m_checking(this, DpGuiResId(RID_DLG_UPDATE_CHECKING)),
+    m_update(this, DpGuiResId(RID_DLG_UPDATE_UPDATE)),
     m_updates(
-        *this, ResId(RID_DLG_UPDATE_UPDATES),
-        Image(ResId(RID_DLG_UPDATE_NORMALALERT)),
-        Image(ResId(RID_DLG_UPDATE_HIGHCONTRASTALERT))),
-    m_all(this, ResId(RID_DLG_UPDATE_ALL)),
-    m_description(this, ResId(RID_DLG_UPDATE_DESCRIPTION)),
-    m_descriptions(this, ResId(RID_DLG_UPDATE_DESCRIPTIONS)),
-    m_line(this, ResId(RID_DLG_UPDATE_LINE)),
-    m_help(this, ResId(RID_DLG_UPDATE_HELP)),
-    m_ok(this, ResId(RID_DLG_UPDATE_OK)),
-    m_cancel(this, ResId(RID_DLG_UPDATE_CANCEL)),
-    m_error(String(ResId(RID_DLG_UPDATE_ERROR))),
-    m_none(String(ResId(RID_DLG_UPDATE_NONE))),
-    m_noInstallable(String(ResId(RID_DLG_UPDATE_NOINSTALLABLE))),
-    m_failure(String(ResId(RID_DLG_UPDATE_FAILURE))),
-    m_unknownError(String(ResId(RID_DLG_UPDATE_UNKNOWNERROR))),
-    m_noDescription(String(ResId(RID_DLG_UPDATE_NODESCRIPTION))),
-    m_noInstall(String(ResId(RID_DLG_UPDATE_NOINSTALL))),
-    m_noDependency(String(ResId(RID_DLG_UPDATE_NODEPENDENCY))),
-    m_noPermission(String(ResId(RID_DLG_UPDATE_NOPERMISSION))),
-    m_noUpdate(String(ResId(RID_DLG_UPDATE_NOUPDATE))),
+        *this, DpGuiResId(RID_DLG_UPDATE_UPDATES),
+        Image(DpGuiResId(RID_DLG_UPDATE_NORMALALERT)),
+        Image(DpGuiResId(RID_DLG_UPDATE_HIGHCONTRASTALERT))),
+    m_all(this, DpGuiResId(RID_DLG_UPDATE_ALL)),
+    m_description(this, DpGuiResId(RID_DLG_UPDATE_DESCRIPTION)),
+    m_descriptions(this, DpGuiResId(RID_DLG_UPDATE_DESCRIPTIONS)),
+    m_line(this, DpGuiResId(RID_DLG_UPDATE_LINE)),
+    m_help(this, DpGuiResId(RID_DLG_UPDATE_HELP)),
+    m_ok(this, DpGuiResId(RID_DLG_UPDATE_OK)),
+    m_cancel(this, DpGuiResId(RID_DLG_UPDATE_CANCEL)),
+    m_error(String(DpGuiResId(RID_DLG_UPDATE_ERROR))),
+    m_none(String(DpGuiResId(RID_DLG_UPDATE_NONE))),
+    m_noInstallable(String(DpGuiResId(RID_DLG_UPDATE_NOINSTALLABLE))),
+    m_failure(String(DpGuiResId(RID_DLG_UPDATE_FAILURE))),
+    m_unknownError(String(DpGuiResId(RID_DLG_UPDATE_UNKNOWNERROR))),
+    m_noDescription(String(DpGuiResId(RID_DLG_UPDATE_NODESCRIPTION))),
+    m_noInstall(String(DpGuiResId(RID_DLG_UPDATE_NOINSTALL))),
+    m_noDependency(String(DpGuiResId(RID_DLG_UPDATE_NODEPENDENCY))),
+    m_noPermission(String(DpGuiResId(RID_DLG_UPDATE_NOPERMISSION))),
+    m_noUpdate(String(DpGuiResId(RID_DLG_UPDATE_NOUPDATE))),
     m_updateData(*updateData),
     m_thread(
         new UpdateDialog::Thread(
@@ -633,7 +628,7 @@ UpdateDialog::UpdateDialog(
     } catch (css::uno::Exception & e) {
         throw css::uno::RuntimeException(e.Message, e.Context);
     }
-    Control c(this, ResId(RID_DLG_UPDATE_THROBBER));
+    Control c(this, DpGuiResId(RID_DLG_UPDATE_THROBBER));
     Point pos(c.GetPosPixel());
     Size size(c.GetSizePixel());
     try {
