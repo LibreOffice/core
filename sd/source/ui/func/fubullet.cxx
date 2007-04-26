@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fubullet.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:14:04 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:37:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,7 +209,7 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
 void FuBullet::InsertSpecialCharacter()
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    AbstractSvxCharacterMap* pDlg = pFact ? pFact->CreateSvxCharacterMap( NULL,  ResId(RID_SVXDLG_CHARMAP), FALSE ) : 0;
+    AbstractSvxCharacterMap* pDlg = pFact ? pFact->CreateSvxCharacterMap( NULL,  RID_SVXDLG_CHARMAP, FALSE ) : 0;
 
     if( !pDlg )
         return;
