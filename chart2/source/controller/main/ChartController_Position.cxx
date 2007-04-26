@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_Position.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:04:57 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:38:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize( const ::rtl::OUS
         SvxAbstractDialogFactory * pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT( pFact, "No dialog factory" );
         pDlg = pFact->CreateSchTransformTabDialog(
-            NULL, &aItemSet, pSdrView, ResId( RID_SCH_TransformTabDLG_SVXPAGE_ANGLE ), bResizePossible );
+            NULL, &aItemSet, pSdrView, RID_SCH_TransformTabDLG_SVXPAGE_ANGLE, bResizePossible );
         DBG_ASSERT( pDlg, "Couldn't create SchTransformTabDialog" );
 
         if( pDlg->Execute() == RET_OK )

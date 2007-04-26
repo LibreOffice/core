@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_TitleRotation.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:00:18 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:38:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,22 +79,22 @@ SchAlignmentTabPage::SchAlignmentTabPage(Window* pWindow,
                                          const SfxItemSet& rInAttrs) :
     SfxTabPage(pWindow, SchResId(TP_ALIGNMENT), rInAttrs),
 
-//  aCbxTextBreak   ( this, ResId( CBX_TEXTBREAK ) ),
-//  aCbxTextOverlap ( this, ResId( CBX_TEXTOVERLAP ) ),
-//  aFlTextBreak    ( this, ResId( FL_TEXTBREAK ) ),
-//  aRbtSideBySide(this, ResId(RBT_SIDEBYSIDE)),
-//  aRbtUpDown(this, ResId(RBT_UPDOWN)),
-//  aRbtDownUp(this, ResId(RBT_DOWNUP)),
-//  aRbtAutoOrder(this, ResId(RBT_AUTOORDER)),
-//  aFlOrder(this, ResId(FL_ORDER)),
+//  aCbxTextBreak   ( this, SchResId( CBX_TEXTBREAK ) ),
+//  aCbxTextOverlap ( this, SchResId( CBX_TEXTOVERLAP ) ),
+//  aFlTextBreak    ( this, SchResId( FL_TEXTBREAK ) ),
+//  aRbtSideBySide(this, SchResId(RBT_SIDEBYSIDE)),
+//  aRbtUpDown(this, SchResId(RBT_UPDOWN)),
+//  aRbtDownUp(this, SchResId(RBT_DOWNUP)),
+//  aRbtAutoOrder(this, SchResId(RBT_AUTOORDER)),
+//  aFlOrder(this, SchResId(FL_ORDER)),
 //  eOrderMode(CHORDMODE_X_AXIS),
 
     //Seit 4/1998 koennen Texte frei gedreht werden: SCHATTR_TEXT_DEGREES
-    aFlAlign        ( this, ResId( FL_ALIGN ) ),
-    aCtrlDial       ( this, ResId( CTR_DIAL ) ),
-    aFtRotate       ( this, ResId( FT_DEGREES ) ),
-    aNfRotate       ( this, ResId( NF_ORIENT ) ),
-    aCbStacked      ( this, ResId( BTN_TXTSTACKED ) ),
+    aFlAlign        ( this, SchResId( FL_ALIGN ) ),
+    aCtrlDial       ( this, SchResId( CTR_DIAL ) ),
+    aFtRotate       ( this, SchResId( FT_DEGREES ) ),
+    aNfRotate       ( this, SchResId( NF_ORIENT ) ),
+    aCbStacked      ( this, SchResId( BTN_TXTSTACKED ) ),
     aOrientHlp      ( this, aCtrlDial, aNfRotate, aCbStacked )
 
 {
