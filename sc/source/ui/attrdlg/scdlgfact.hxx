@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdlgfact.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:00:00 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:50:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,38 +364,38 @@ class ScAbstractDialogFactory_Impl : public ScAbstractDialogFactory
 {
 
 public:
-    //CHINA001 AbstractSwSaveLabelDlg*          CreateSwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec, const ResId& rResId );
+    //CHINA001 AbstractSwSaveLabelDlg*          CreateSwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec, int nId );
 
     virtual     AbstractScImportAsciiDlg * CreateScImportAsciiDlg( Window* pParent, String aDatName, //add for ScImportAsciiDlg
-                                                                    SvStream* pInStream, const ResId& rResId,
+                                                                    SvStream* pInStream, int nId,
                                                                     sal_Unicode cSep = '\t');
 
     virtual     AbstractScAutoFormatDlg * CreateScAutoFormatDlg( Window*                    pParent, //add for ScAutoFormatDlg
                                                                 ScAutoFormat*               pAutoFormat,
                                                                 const ScAutoFormatData*    pSelFormatData,
                                                                 ScDocument*                pDoc,
-                                                                const ResId& rResId);
+                                                                int nId);
     virtual AbstractScColRowLabelDlg * CreateScColRowLabelDlg (Window* pParent, //add for ScColRowLabelDlg
-                                                                const ResId& rResId,
+                                                                int nId,
                                                                 BOOL bCol = FALSE,
                                                                 BOOL bRow = FALSE);
 
     virtual VclAbstractDialog * CreateScColOrRowDlg( Window*            pParent, //add for ScColOrRowDlg
                                                     const String&   rStrTitle,
                                                     const String&   rStrLabel,
-                                                    const ResId& rResId,
+                                                    int nId,
                                                     BOOL                bColDefault = TRUE );
-    virtual AbstractScDataPilotDatabaseDlg * CreateScDataPilotDatabaseDlg (Window* pParent ,const ResId& rResId ); //add for ScDataPilotDatabaseDlg
+    virtual AbstractScDataPilotDatabaseDlg * CreateScDataPilotDatabaseDlg (Window* pParent ,int nId ); //add for ScDataPilotDatabaseDlg
 
-    virtual AbstractScDataPilotSourceTypeDlg * CreateScDataPilotSourceTypeDlg (  Window* pParent, BOOL bEnableExternal, const ResId& rResId ) ; //add for ScDataPilotSourceTypeDlg
+    virtual AbstractScDataPilotSourceTypeDlg * CreateScDataPilotSourceTypeDlg (  Window* pParent, BOOL bEnableExternal, int nId ) ; //add for ScDataPilotSourceTypeDlg
 
     virtual AbstractScDataPilotServiceDlg * CreateScDataPilotServiceDlg( Window* pParent, //add for ScDataPilotServiceDlg
                                                                         const com::sun::star::uno::Sequence<rtl::OUString>& rServices,
-                                                                        const ResId& rResId );
-    virtual AbstractScDeleteCellDlg * CreateScDeleteCellDlg( Window* pParent, const ResId& rResId,
+                                                                        int nId );
+    virtual AbstractScDeleteCellDlg * CreateScDeleteCellDlg( Window* pParent, int nId,
                                                             BOOL bDisallowCellMove = FALSE ); //add for ScDeleteCellDlg
 
-    virtual AbstractScDeleteContentsDlg * CreateScDeleteContentsDlg(Window* pParent,const ResId& rResId, //add for ScDeleteContentsDlg
+    virtual AbstractScDeleteContentsDlg * CreateScDeleteContentsDlg(Window* pParent,int nId, //add for ScDeleteContentsDlg
                                                                  USHORT  nCheckDefaults = 0 );
 
     virtual AbstractScFillSeriesDlg * CreateScFillSeriesDlg( Window*        pParent, //add for ScFillSeriesDlg
@@ -407,40 +407,40 @@ public:
                                                             double          fStep,
                                                             double          fMax,
                                                             USHORT          nPossDir,
-                                                            const ResId& rResId);
+                                                            int nId);
     virtual AbstractScGroupDlg * CreateAbstractScGroupDlg( Window* pParent, //add for ScGroupDlg
                                                             USHORT  nResId,
-                                                            const ResId& rResId,
+                                                            int nId,
                                                             BOOL    bUnGroup = FALSE,
                                                             BOOL    bRows    = TRUE  );
 
     virtual AbstractScInsertCellDlg * CreateScInsertCellDlg( Window* pParent, //add for ScInsertCellDlg
-                                                                const ResId& rResId,
+                                                                int nId,
                                                             BOOL bDisallowCellMove = FALSE );
 
     virtual AbstractScInsertContentsDlg * CreateScInsertContentsDlg( Window*        pParent, //add for ScInsertContentsDlg
-                                                                    const ResId& rResId,
+                                                                    int nId,
                                                                     USHORT          nCheckDefaults = 0,
                                                                     const String*   pStrTitle = NULL );
 
     virtual AbstractScInsertTableDlg * CreateScInsertTableDlg ( Window* pParent, ScViewData& rViewData,  //add for ScInsertTableDlg
-                                                                SCTAB nTabCount, bool bFromFile, const ResId& rResId);
+                                                                SCTAB nTabCount, bool bFromFile, int nId);
 
     virtual AbstractScSelEntryDlg * CreateScSelEntryDlg ( Window* pParent, // add for ScSelEntryDlg
                                                             USHORT  nResId,
                                                         const String& aTitle,
                                                         const String& aLbTitle,
                                                                 List&   aEntryList,
-                                                            const ResId& rResId );
+                                                            int nId );
 
     virtual AbstractScLinkedAreaDlg * CreateScLinkedAreaDlg (  Window* pParent, //add for ScLinkedAreaDlg
-                                                                const ResId& rResId);
+                                                                int nId);
 
     virtual AbstractScMetricInputDlg * CreateScMetricInputDlg (  Window*        pParent, //add for ScMetricInputDlg
                                                                 USHORT      nResId,     // Ableitung fuer jeden Dialog!
                                                                 long            nCurrent,
                                                                 long            nDefault,
-                                                                const ResId& rResId ,
+                                                                int nId ,
                                                                 FieldUnit       eFUnit    = FUNIT_MM,
                                                                 USHORT      nDecimals = 2,
                                                                 long            nMaximum  = 1000,
@@ -448,21 +448,21 @@ public:
                                                                 long            nFirst    = 1,
                                                                 long          nLast     = 100 );
 
-    virtual AbstractScMoveTableDlg * CreateScMoveTableDlg(  Window* pParent, const ResId& rResId ); //add for ScMoveTableDlg
-    virtual AbstractScNameCreateDlg * CreateScNameCreateDlg ( Window * pParent, USHORT nFlags, const ResId& rResId ); //add for ScNameCreateDlg
+    virtual AbstractScMoveTableDlg * CreateScMoveTableDlg(  Window* pParent, int nId ); //add for ScMoveTableDlg
+    virtual AbstractScNameCreateDlg * CreateScNameCreateDlg ( Window * pParent, USHORT nFlags, int nId ); //add for ScNameCreateDlg
 
     virtual AbstractScNamePasteDlg * CreateScNamePasteDlg ( Window * pParent, const ScRangeName* pList, //add for ScNamePasteDlg
-                                                            const ResId& rResId , BOOL bInsList=TRUE );
+                                                            int nId , BOOL bInsList=TRUE );
 
     virtual AbstractScPivotFilterDlg * CreateScPivotFilterDlg ( Window* pParent, //add for ScPivotFilterDlg
-                                                                const SfxItemSet&   rArgSet, USHORT nSourceTab , const ResId& rResId );
+                                                                const SfxItemSet&   rArgSet, USHORT nSourceTab , int nId );
 
-    virtual AbstractScDPFunctionDlg * CreateScDPFunctionDlg( Window* pParent, const ResId& rResId,
+    virtual AbstractScDPFunctionDlg * CreateScDPFunctionDlg( Window* pParent, int nId,
                                                                 const ScDPLabelDataVec& rLabelVec,
                                                                 const ScDPLabelData& rLabelData,
                                                                 const ScDPFuncData& rFuncData );
 
-    virtual AbstractScDPSubtotalDlg * CreateScDPSubtotalDlg( Window* pParent, const ResId& rResId,
+    virtual AbstractScDPSubtotalDlg * CreateScDPSubtotalDlg( Window* pParent, int nId,
                                                                 ScDPObject& rDPObj,
                                                                 const ScDPLabelData& rLabelData,
                                                                 const ScDPFuncData& rFuncData,
@@ -470,32 +470,32 @@ public:
                                                                 bool bEnableLayout );
 
     virtual AbstractScDPNumGroupDlg * CreateScDPNumGroupDlg( Window* pParent,
-                                                                const ResId& rResId,
+                                                                int nId,
                                                                 const ScDPNumGroupInfo& rInfo );
 
     virtual AbstractScDPDateGroupDlg * CreateScDPDateGroupDlg( Window* pParent,
-                                                                const ResId& rResId,
+                                                                int nId,
                                                                 const ScDPNumGroupInfo& rInfo,
                                                                 sal_Int32 nDatePart,
                                                                 const Date& rNullDate );
 
-    virtual AbstractScDPShowDetailDlg * CreateScDPShowDetailDlg( Window* pParent, const ResId& rResId,
+    virtual AbstractScDPShowDetailDlg * CreateScDPShowDetailDlg( Window* pParent, int nId,
                                                                 ScDPObject& rDPObj,
                                                                 USHORT nOrient );
 
     virtual AbstractScNewScenarioDlg * CreateScNewScenarioDlg ( Window* pParent, const String& rName, //add for ScNewScenarioDlg
-                                                                const ResId& rResId,
+                                                                int nId,
                                                                 BOOL bEdit = FALSE, BOOL bSheetProtected = FALSE );
-    virtual AbstractScShowTabDlg * CreateScShowTabDlg ( Window* pParent, const ResId& rResId ); //add for ScShowTabDlg
+    virtual AbstractScShowTabDlg * CreateScShowTabDlg ( Window* pParent, int nId ); //add for ScShowTabDlg
 
     virtual AbstractScStringInputDlg * CreateScStringInputDlg (  Window* pParent, //add for ScStringInputDlg
                                                                 const String& rTitle,
                                                                 const String& rEditTitle,
                                                                 const String& rDefault,
                                                                 ULONG nHelpId ,
-                                                                const ResId& rResId );
+                                                                int nId );
     virtual AbstractScImportOptionsDlg * CreateScImportOptionsDlg ( Window*                 pParent, //add for ScImportOptionsDlg
-                                                                    const ResId& rResId,
+                                                                    int nId,
                                                                     BOOL                    bAscii = TRUE,
                                                                     const ScImportOptions*  pOptions = NULL,
                                                                     const String*           pStrTitle = NULL,
@@ -505,34 +505,34 @@ public:
     virtual SfxAbstractTabDialog * CreateScAttrDlg( SfxViewFrame*    pFrame, //add for ScAttrDlg
                                                     Window*          pParent,
                                                     const SfxItemSet* pCellAttrs,
-                                                    const ResId& rResId);
+                                                    int nId);
 
     virtual SfxAbstractTabDialog * CreateScHFEditDlg( SfxViewFrame*     pFrame, //add for ScHFEditDlg
                                                     Window*         pParent,
                                                     const SfxItemSet&   rCoreSet,
                                                     const String&       rPageStyle,
-                                                    const ResId& rResId,
+                                                    int nId,
                                                     USHORT              nResId = RID_SCDLG_HFEDIT );
 
     virtual SfxAbstractTabDialog * CreateScStyleDlg( Window*                pParent,//add for ScStyleDlg
                                                     SfxStyleSheetBase&  rStyleBase,
                                                     USHORT              nRscId,
-                                                    const ResId& rResId);
+                                                    int nId);
 
     virtual SfxAbstractTabDialog * CreateScSubTotalDlg( Window*             pParent, //add for ScSubTotalDlg
                                                         const SfxItemSet*   pArgSet,
-                                                        const ResId& rResId);
+                                                        int nId);
     virtual SfxAbstractTabDialog * CreateScCharDlg( Window* pParent, const SfxItemSet* pAttr,//add for ScCharDlg
-                                                    const SfxObjectShell* pDocShell, const ResId& rResId );
+                                                    const SfxObjectShell* pDocShell, int nId );
 
     virtual SfxAbstractTabDialog * CreateScParagraphDlg( Window* pParent, const SfxItemSet* pAttr ,//add for ScParagraphDlg
-                                                            const ResId& rResId );
+                                                            int nId );
 
     virtual SfxAbstractTabDialog * CreateScValidationDlg( Window* pParent, //add for ScValidationDlg
-                                                        const SfxItemSet* pArgSet,const ResId& rResId  );
+                                                        const SfxItemSet* pArgSet,int nId  );
 
     virtual SfxAbstractTabDialog * CreateScSortDlg( Window*          pParent, //add for ScSortDlg
-                                                    const SfxItemSet* pArgSet,const ResId& rResId );
+                                                    const SfxItemSet* pArgSet,int nId );
     // For TabPage
     virtual CreateTabPage               GetTabPageCreatorFunc( USHORT nId );
 
