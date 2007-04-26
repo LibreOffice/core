@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:08:39 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2403,7 +2403,7 @@ void SwFrmPage::SetFormatUsed(BOOL bFmt)
 
 SwGrfExtPage::SwGrfExtPage(Window *pParent, const SfxItemSet &rSet) :
     SfxTabPage( pParent, SW_RES(TP_GRF_EXT), rSet ),
-    aBmpWin                 (this, WN_BMP, Graphic(), Bitmap(BMP_EXAMPLE) ),
+    aBmpWin                 (this, WN_BMP, Graphic(), Bitmap(SW_RES(BMP_EXAMPLE)) ),
     aConnectFL              (this, SW_RES( FL_CONNECT )),
     aConnectFT              (this, SW_RES( FT_CONNECT )),
     aConnectED              (this, SW_RES( ED_CONNECT )),
