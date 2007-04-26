@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbregister.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:10:48 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:28:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,13 +170,13 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const Sfx
 
     SfxTabPage( pParent, SVX_RES( RID_SFXPAGE_DBREGISTER), rSet ),
 
-    aTypeText       ( this, ResId( FT_TYPE ) ),
-    aPathText       ( this, ResId( FT_PATH ) ),
-    aPathCtrl       ( this, ResId( LB_PATH ) ),
-    m_aNew          ( this, ResId( BTN_NEW ) ),
-    m_aEdit         ( this, ResId( BTN_EDIT ) ),
-    m_aDelete       ( this, ResId( BTN_DELETE ) ),
-    aStdBox         ( this, ResId( GB_STD ) ),
+    aTypeText       ( this, SVX_RES( FT_TYPE ) ),
+    aPathText       ( this, SVX_RES( FT_PATH ) ),
+    aPathCtrl       ( this, SVX_RES( LB_PATH ) ),
+    m_aNew          ( this, SVX_RES( BTN_NEW ) ),
+    m_aEdit         ( this, SVX_RES( BTN_EDIT ) ),
+    m_aDelete       ( this, SVX_RES( BTN_DELETE ) ),
+    aStdBox         ( this, SVX_RES( GB_STD ) ),
     pHeaderBar      ( NULL ),
     pPathBox        ( NULL ),
     m_pCurEntry     ( NULL ),
