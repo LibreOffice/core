@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchxtra.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:39:41 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:43:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,11 +179,11 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
 
     ModalDialog( pParent, SVX_RES( RID_SVXDLG_SEARCHATTR )  ),
 
-    aAttrFL ( this, ResId( FL_ATTR ) ),
-    aAttrLB ( this, ResId( LB_ATTR ) ),
-    aOKBtn  ( this, ResId( BTN_ATTR_OK ) ),
-    aEscBtn ( this, ResId( BTN_ATTR_CANCEL ) ),
-    aHelpBtn( this, ResId( BTN_ATTR_HELP ) ),
+    aAttrFL ( this, SVX_RES( FL_ATTR ) ),
+    aAttrLB ( this, SVX_RES( LB_ATTR ) ),
+    aOKBtn  ( this, SVX_RES( BTN_ATTR_OK ) ),
+    aEscBtn ( this, SVX_RES( BTN_ATTR_CANCEL ) ),
+    aHelpBtn( this, SVX_RES( BTN_ATTR_HELP ) ),
 
     rList( rLst )
 
@@ -221,9 +221,9 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
 
             USHORT nResId = nSlot - SID_SVX_START + RID_ATTR_BEGIN;
             SvLBoxEntry* pEntry = NULL;
-            ResId aId( nResId );
+            ResId aId( nResId, DIALOG_MGR() );
             aId.SetRT( RSC_STRING );
-            if ( DIALOG_MGR()->IsAvailable( aId ) )
+            if ( DIALOG_MGR().IsAvailable( aId ) )
                 pEntry = aAttrLB.SvTreeListBox::InsertEntry( SVX_RESSTR( nResId ) );
             else
             {
@@ -306,18 +306,18 @@ SvxSearchSimilarityDialog::SvxSearchSimilarityDialog
 ) :
     ModalDialog( pParent, SVX_RES( RID_SVXDLG_SEARCHSIMILARITY ) ),
 
-    aFixedLine  ( this, ResId( FL_SIMILARITY ) ),
-    aOtherTxt   ( this, ResId( FT_OTHER ) ),
-    aOtherFld   ( this, ResId( NF_OTHER ) ),
-    aLongerTxt  ( this, ResId( FT_LONGER ) ),
-    aLongerFld  ( this, ResId( NF_LONGER ) ),
-    aShorterTxt ( this, ResId( FT_SHORTER ) ),
-    aShorterFld ( this, ResId( NF_SHORTER ) ),
-    aRelaxBox   ( this, ResId( CB_RELAX ) ),
+    aFixedLine  ( this, SVX_RES( FL_SIMILARITY ) ),
+    aOtherTxt   ( this, SVX_RES( FT_OTHER ) ),
+    aOtherFld   ( this, SVX_RES( NF_OTHER   ) ),
+    aLongerTxt  ( this, SVX_RES( FT_LONGER ) ),
+    aLongerFld  ( this, SVX_RES( NF_LONGER ) ),
+    aShorterTxt ( this, SVX_RES( FT_SHORTER ) ),
+    aShorterFld ( this, SVX_RES( NF_SHORTER ) ),
+    aRelaxBox   ( this, SVX_RES( CB_RELAX ) ),
 
-    aOKBtn      ( this, ResId( BTN_ATTR_OK ) ),
-    aEscBtn     ( this, ResId( BTN_ATTR_CANCEL ) ),
-    aHelpBtn    ( this, ResId( BTN_ATTR_HELP ) )
+    aOKBtn      ( this, SVX_RES( BTN_ATTR_OK ) ),
+    aEscBtn     ( this, SVX_RES( BTN_ATTR_CANCEL ) ),
+    aHelpBtn    ( this, SVX_RES( BTN_ATTR_HELP ) )
 
 {
     FreeResource();
