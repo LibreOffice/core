@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:33:52 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:18:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -333,7 +333,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             //CHINA001 SwInsFootNoteDlg *pDlg = new SwInsFootNoteDlg( GetView().GetWindow(), rWrtSh, FALSE );
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-            AbstractInsFootNoteDlg* pDlg = pFact->CreateInsFootNoteDlg( ResId(DLG_INS_FOOTNOTE),
+            AbstractInsFootNoteDlg* pDlg = pFact->CreateInsFootNoteDlg( DLG_INS_FOOTNOTE,
                                                         GetView().GetWindow(), rWrtSh, FALSE );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             pDlg->SetHelpId(nSlot);
@@ -359,7 +359,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
             DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-            VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg( GetView().GetWindow(), rWrtSh,ResId( DLG_DOC_FOOTNOTE ));
+            VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg( GetView().GetWindow(), rWrtSh, DLG_DOC_FOOTNOTE );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             pDlg->Execute();
             delete pDlg;
@@ -394,7 +394,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
                 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-                AbstractSwBreakDlg* pDlg = pFact->CreateSwBreakDlg( GetView().GetWindow(), rWrtSh,ResId( DLG_BREAK ));
+                AbstractSwBreakDlg* pDlg = pFact->CreateSwBreakDlg( GetView().GetWindow(), rWrtSh, DLG_BREAK );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -445,7 +445,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
                 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-                VclAbstractDialog* pDlg = pFact->CreateSwInsertBookmarkDlg( GetView().GetWindow(), rWrtSh, rReq,ResId( DLG_INSERT_BOOKMARK ));
+                VclAbstractDialog* pDlg = pFact->CreateSwInsertBookmarkDlg( GetView().GetWindow(), rWrtSh, rReq, DLG_INSERT_BOOKMARK );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 pDlg->Execute();
                 delete pDlg;
@@ -476,7 +476,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
             DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-            AbstractSwModalRedlineAcceptDlg* pDlg = pFact->CreateSwModalRedlineAcceptDlg( &GetView().GetEditWin(),ResId( DLG_MOD_REDLINE_ACCEPT ));
+            AbstractSwModalRedlineAcceptDlg* pDlg = pFact->CreateSwModalRedlineAcceptDlg( &GetView().GetEditWin(), DLG_MOD_REDLINE_ACCEPT );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
             switch (lcl_AskRedlineMode(&GetView().GetEditWin()))
@@ -542,7 +542,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
             DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-            VclAbstractDialog* pDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rWrtSh,ResId( DLG_SORTING ));
+            VclAbstractDialog* pDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rWrtSh, DLG_SORTING );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             pDlg->Execute();
             delete pDlg;
@@ -555,7 +555,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             //CHINA001 SwOutlineTabDialog* pDlg = new SwOutlineTabDialog(GetView().GetWindow(), &aTmp, rWrtSh);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-            SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( ResId(DLG_TAB_OUTLINE),
+            SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
                                                         GetView().GetWindow(), &aTmp, rWrtSh);
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             pDlg->Execute();
@@ -724,7 +724,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
                 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-                pDlg = pFact->CreateSwCharDlg( GetView().GetWindow(), GetView(), aCoreSet,ResId( DLG_CHAR ) );
+                pDlg = pFact->CreateSwCharDlg( GetView().GetWindow(), GetView(), aCoreSet, DLG_CHAR );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 if( FN_INSERT_HYPERLINK == nSlot )
                     pDlg->SetCurPageId(TP_CHAR_URL);
@@ -892,7 +892,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
                 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-                pDlg = pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet,DLG_STD,ResId( DLG_PARA ),NULL, FALSE, nDefPage );
+                pDlg = pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet,DLG_STD, DLG_PARA,NULL, FALSE, nDefPage );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             }
             SfxItemSet* pSet = NULL;
