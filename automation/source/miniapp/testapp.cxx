@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testapp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:34:27 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:39:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::ucb;
 
+static ResMgr* pAppMgr = NULL;
+
 MainWindow::MainWindow(MyApp *pAppl)
 : WorkWindow(NULL, WB_STDWORK)
 , pApp(pAppl)
@@ -114,7 +116,7 @@ void MainWindow::FileOpen()
 
 void MainWindow::TestGross()
 {
-    ModalDialogGROSSER_TEST_DLG Dlg(this,ResId(GROSSER_TEST_DLG));
+    ModalDialogGROSSER_TEST_DLG Dlg(this,ResId(GROSSER_TEST_DLG, *pAppMgr));
 
     if (Dlg.Execute() == RET_OK)
     {
@@ -352,12 +354,12 @@ void MyApp::Main()
     aSettings.SetUILanguage( aRequestedLanguage );
     aSettings.SetLanguage( aRequestedLanguage );
     SetSettings( aSettings );
-    Resource::SetResManager( CREATEVERSIONRESMGR( tma ) );
+    pAppMgr =  CREATEVERSIONRESMGR( tma );
 
     MainWindow  MainWin(this);
     pMainWin = &MainWin;
 
-    MenuBar aMenu(ResId(MENU_CLIENT));
+    MenuBar aMenu(ResId(MENU_CLIENT,*pAppMgr));
     MainWin.SetMenuBar( &aMenu );
     aMenu.GetPopupMenu( IDM_FILE )->SetSelectHdl(LINK(&MainWin, MainWindow, MenuSelectHdl));
     aMenu.GetPopupMenu( IDM_TEST )->SetSelectHdl(LINK(&MainWin, MainWindow, MenuSelectHdl));
