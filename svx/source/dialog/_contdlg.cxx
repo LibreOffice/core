@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _contdlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:32:34 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:24:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -420,9 +420,9 @@ SvxSuperContourDlg::SvxSuperContourDlg( SfxBindings *_pBindings, SfxChildWindow 
         SvxContourDlg       ( _pBindings, pCW, _pParent, rResId ),
         pCheckObj           ( NULL ),
         aContourItem        ( SID_CONTOUR_EXEC, *this, *_pBindings ),
-        aTbx1               ( this, ResId( TBX1 ) ),
-        aMtfTolerance       ( this, ResId( MTF_TOLERANCE ) ),
-        aContourWnd         ( this, ResId( CTL_CONTOUR) ),
+        aTbx1               ( this, ResId( TBX1, *rResId.GetResMgr() ) ),
+        aMtfTolerance       ( this, ResId( MTF_TOLERANCE, *rResId.GetResMgr() ) ),
+        aContourWnd         ( this, ResId( CTL_CONTOUR, *rResId.GetResMgr() ) ),
         aStbStatus          ( this, WB_BORDER | WB_3DLOOK | WB_LEFT ),
         nGrfChanged         ( 0UL ),
         bExecState          ( FALSE ),
