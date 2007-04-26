@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:21:32 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:30:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,7 @@
 #include "ttbasic.hxx"
 #include "dialogs.hxx"
 #include "basrdll.hxx"
+#include "basrid.hxx"
 
 #ifndef _RUNTIME_HXX
 #include "runtime.hxx"
@@ -439,7 +440,6 @@ void BasicApp::Main( )
 //  ResMgr::CreateResMgr( CREATEVERSIONRESMGR( stt ),  )
 //const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
 
-    Resource::SetResManager( CREATEVERSIONRESMGR( stt ) );
 //  ResMgr::CreateResMgr( CREATEVERSIONRESMGR( stt )
 //  ResMgr *pRes = new ResMgr( "testtool.res" );
 //  Resource::SetResManager( pRes );
@@ -455,7 +455,7 @@ void BasicApp::Main( )
 //  DeactivateExtHelp();
 
     // Acceleratoren
-    Accelerator aAccel( ResId( MAIN_ACCEL ) );
+    Accelerator aAccel( SttResId( MAIN_ACCEL ) );
     InsertAccel( &aAccel );
     pMainAccel = &aAccel;
 
@@ -593,9 +593,9 @@ private:
 
 
 FloatingExecutionStatus::FloatingExecutionStatus( Window * pParent )
-    : FloatingWindow( pParent, ResId(LOAD_CONF) ),
-    aStatus( this, ResId( WORK ) ),
-    aAdditionalInfo( this, ResId( FILENAME ) )
+    : FloatingWindow( pParent, SttResId(LOAD_CONF) ),
+    aStatus( this, SttResId( WORK ) ),
+    aAdditionalInfo( this, SttResId( FILENAME ) )
 {
     FreeResource();
     aAusblend.SetTimeoutHdl( LINK(this, FloatingExecutionStatus, HideNow ) );
@@ -656,16 +656,16 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
     if ( pBasic->pTestObject )  // also sid wir testtool
     {
 //      aAppIcon = Icon( ResId( RID_APPICON2 ) );
-        aAppName = String( ResId( IDS_APPNAME2 ) );
+        aAppName = String( SttResId( IDS_APPNAME2 ) );
     }
     else
     {
 //      aAppIcon = Icon( ResId( RID_APPICON ) );
-        aAppName = String( ResId( IDS_APPNAME ) );
+        aAppName = String( SttResId( IDS_APPNAME ) );
     }
 
     // Menu:
-    MenuBar *pBar = new MenuBar( ResId( RID_APPMENUBAR ) );
+    MenuBar *pBar = new MenuBar( SttResId( RID_APPMENUBAR ) );
     SetMenuBar( pBar );
 
     pBar->SetHighlightHdl( LINK( this, BasicFrame, HighlightMenu ) );
@@ -703,8 +703,8 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
     PopupMenu *pExtras;
     if (Basic().pTestObject )       // Wir sind also TestTool
     {
-        pExtras = new PopupMenu( ResId( RID_TT_EXTRAS ) );
-        pBar->InsertItem( RID_TT_EXTRAS, String( ResId( RID_TT_EXTRAS_NAME ) ), 0, pBar->GetItemPos( RID_APPWINDOW ) );
+        pExtras = new PopupMenu( SttResId( RID_TT_EXTRAS ) );
+        pBar->InsertItem( RID_TT_EXTRAS, String( SttResId( RID_TT_EXTRAS_NAME ) ), 0, pBar->GetItemPos( RID_APPWINDOW ) );
         pBar->SetPopupMenu( RID_TT_EXTRAS, pExtras );
 
         pExtras->SetSelectHdl( LINK( this, BasicFrame, MenuCommand ) );
@@ -1102,7 +1102,7 @@ void BasicFrame::FocusWindow( AppWin *pWin )
 BOOL BasicFrame::Close()
 {
     if( bInBreak || Basic().IsRunning() )
-        if( RET_NO == QueryBox( this, ResId( IDS_RUNNING ) ).Execute() )
+        if( RET_NO == QueryBox( this, SttResId( IDS_RUNNING ) ).Execute() )
             return FALSE;
 
     StarBASIC::Stop();
@@ -1430,14 +1430,14 @@ long BasicFrame::Command( short nID, BOOL bChecked )
             if( pWork )
                 pPrn->Print( pWork->GetText(), pWork->pDataEdit->GetText(), this );
 #else
-            InfoBox( this, ResId( IDS_NOPRINTERERROR ) ).Execute();
+            InfoBox( this, SttResId( IDS_NOPRINTERERROR ) ).Execute();
 #endif
             break;
         case RID_FILESETUP:
 #ifndef UNX
             pPrn->Setup();
 #else
-            InfoBox( this, ResId( IDS_NOPRINTERERROR ) ).Execute();
+            InfoBox( this, SttResId( IDS_NOPRINTERERROR ) ).Execute();
 #endif
             break;
         case RID_QUIT:
@@ -1555,12 +1555,12 @@ long BasicFrame::Command( short nID, BOOL bChecked )
 
         case RID_OPTIONS:
             {
-                OptionsDialog *pOptions = new OptionsDialog( this, ResId(IDD_OPTIONS_DLG) );
+                OptionsDialog *pOptions = new OptionsDialog( this, SttResId(IDD_OPTIONS_DLG) );
                 pOptions->Show();
             }
             break;
         case RID_DECLARE_HELPER:
-            InfoBox( this, ResId( IDS_NOT_YET_IMPLEMENTED ) ).Execute();
+            InfoBox( this, SttResId( IDS_NOT_YET_IMPLEMENTED ) ).Execute();
             break;
 
         case RID_WINTILE:
@@ -1662,11 +1662,11 @@ long BasicFrame::Command( short nID, BOOL bChecked )
             break;
 */      case RID_HELPABOUT:
             {
-                ResId aResId( IDD_ABOUT_DIALOG );
+                SttResId aResId( IDD_ABOUT_DIALOG );
                 if ( Basic().pTestObject )      // Wir sind also TestTool
-                    aResId = ResId( IDD_TT_ABOUT_DIALOG );
+                    aResId = SttResId( IDD_TT_ABOUT_DIALOG );
                 else
-                    aResId = ResId( IDD_ABOUT_DIALOG );
+                    aResId = SttResId( IDD_ABOUT_DIALOG );
                 AboutDialog aAbout( this, aResId );
                 aAbout.Execute();
             }
@@ -1712,7 +1712,7 @@ BOOL BasicFrame::SaveAll()
     for( p = pList->First(); p; p = pList->Next() )
     {
         USHORT nRes = p->QuerySave( QUERY_DISK_CHANGED );
-        if( (( nRes == SAVE_RES_ERROR ) && QueryBox(this,ResId(IDS_ASKSAVEERROR)).Execute() == RET_NO )
+        if( (( nRes == SAVE_RES_ERROR ) && QueryBox(this,SttResId(IDS_ASKSAVEERROR)).Execute() == RET_NO )
             || ( nRes == SAVE_RES_CANCEL ) )
             return FALSE;
     }
@@ -1849,29 +1849,29 @@ BOOL BasicFrame::QueryFileName
 {
     NewFileDialog aDlg( this, bSave ? WinBits( WB_SAVEAS ) :
                                 WinBits( WB_OPEN ) );
-    aDlg.SetText( String( ResId( bSave ? IDS_SAVEDLG : IDS_LOADDLG ) ) );
+    aDlg.SetText( String( SttResId( bSave ? IDS_SAVEDLG : IDS_LOADDLG ) ) );
 
     if ( nFileType & FT_RESULT_FILE )
     {
-        aDlg.SetDefaultExt( String( ResId( IDS_RESFILE ) ) );
-        aDlg.AddFilter( String( ResId( IDS_RESFILTER ) ), String( ResId( IDS_RESFILE ) ) );
-        aDlg.AddFilter( String( ResId( IDS_TXTFILTER ) ), String( ResId( IDS_TXTFILE ) ) );
-        aDlg.SetCurFilter( ResId( IDS_RESFILTER ) );
+        aDlg.SetDefaultExt( String( SttResId( IDS_RESFILE ) ) );
+        aDlg.AddFilter( String( SttResId( IDS_RESFILTER ) ), String( SttResId( IDS_RESFILE ) ) );
+        aDlg.AddFilter( String( SttResId( IDS_TXTFILTER ) ), String( SttResId( IDS_TXTFILE ) ) );
+        aDlg.SetCurFilter( SttResId( IDS_RESFILTER ) );
     }
 
     if ( nFileType & FT_BASIC_SOURCE )
     {
-        aDlg.SetDefaultExt( String( ResId( IDS_NONAMEFILE ) ) );
-        aDlg.AddFilter( String( ResId( IDS_BASFILTER ) ), String( ResId( IDS_NONAMEFILE ) ) );
-        aDlg.AddFilter( String( ResId( IDS_INCFILTER ) ), String( ResId( IDS_INCFILE ) ) );
-        aDlg.SetCurFilter( ResId( IDS_BASFILTER ) );
+        aDlg.SetDefaultExt( String( SttResId( IDS_NONAMEFILE ) ) );
+        aDlg.AddFilter( String( SttResId( IDS_BASFILTER ) ), String( SttResId( IDS_NONAMEFILE ) ) );
+        aDlg.AddFilter( String( SttResId( IDS_INCFILTER ) ), String( SttResId( IDS_INCFILE ) ) );
+        aDlg.SetCurFilter( SttResId( IDS_BASFILTER ) );
     }
 
     if ( nFileType & FT_BASIC_LIBRARY )
     {
-        aDlg.SetDefaultExt( String( ResId( IDS_LIBFILE ) ) );
-        aDlg.AddFilter( String( ResId( IDS_LIBFILTER ) ), String( ResId( IDS_LIBFILE ) ) );
-        aDlg.SetCurFilter( ResId( IDS_LIBFILTER ) );
+        aDlg.SetDefaultExt( String( SttResId( IDS_LIBFILE ) ) );
+        aDlg.AddFilter( String( SttResId( IDS_LIBFILTER ) ), String( SttResId( IDS_LIBFILE ) ) );
+        aDlg.SetCurFilter( SttResId( IDS_LIBFILTER ) );
     }
 
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
@@ -1882,7 +1882,7 @@ BOOL BasicFrame::QueryFileName
     if ( aFilter.Len() )
         aDlg.SetCurFilter( String( aFilter, RTL_TEXTENCODING_UTF8 ) );
     else
-        aDlg.SetCurFilter( String( ResId( IDS_BASFILTER ) ) );
+        aDlg.SetCurFilter( String( SttResId( IDS_BASFILTER ) ) );
 
     aDlg.FilterSelect();    // Setzt den Pfad vom letzten mal.
 //  if ( bSave )
@@ -1908,10 +1908,10 @@ USHORT BasicFrame::BreakHandler()
 //  InitMenu(GetMenuBar()->GetPopupMenu( RID_APPRUN ));
 //  MenuBar aBar( ResId( RID_APPMENUBAR ) );
 //  aBar.EnableItem( RID_APPEDIT, FALSE );
-    SetAppMode( String( ResId ( IDS_APPMODE_BREAK ) ) );
+    SetAppMode( String( SttResId ( IDS_APPMODE_BREAK ) ) );
     while( bInBreak )
         GetpApp()->Yield();
-    SetAppMode( String( ResId ( IDS_APPMODE_RUN ) ) );
+    SetAppMode( String( SttResId ( IDS_APPMODE_RUN ) ) );
 //  aBar.EnableItem( RID_APPEDIT, TRUE );
 //  InitMenu(GetMenuBar()->GetPopupMenu( RID_APPRUN ));
     return nFlags;
@@ -1940,7 +1940,7 @@ void BasicFrame::LoadLibrary()
         else
         {
             delete pNew;
-            ErrorBox( this, ResId( IDS_READERROR ) ).Execute();
+            ErrorBox( this, SttResId( IDS_READERROR ) ).Execute();
         }
     }
 }
@@ -1952,7 +1952,7 @@ void BasicFrame::SaveLibrary()
     {
         SvFileStream aStrm( s, STREAM_STD_WRITE );
         if( !Basic().Store( aStrm ) )
-            ErrorBox( this, ResId( IDS_WRITEERROR ) ).Execute();
+            ErrorBox( this, SttResId( IDS_WRITEERROR ) ).Execute();
     }
 }
 
@@ -1983,7 +1983,7 @@ String BasicFrame::GenRealString( const String &aResString )
                 aString.Erase();
             }
 //          if ( Resource::GetResManager()->IsAvailable( ResId( aValue ) ) )
-                aString = String( ResId( (USHORT)(aValue.ToInt32()) ) );
+                aString = String( SttResId( (USHORT)(aValue.ToInt32()) ) );
 //          else
             {
 //              DBG_ERROR( "Ressource konnte nicht geladen werden" );
