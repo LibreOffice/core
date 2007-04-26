@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:40:04 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:16:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -678,7 +678,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             if ( bDo && GetFrame()->DocIsModified_Impl() &&
                  !rReq.IsAPI() && ( !pSilentItem || !pSilentItem->GetValue() ) )
             {
-                QueryBox aBox( &GetWindow(), ResId(MSG_QUERY_LASTVERSION) );
+                QueryBox aBox( &GetWindow(), SfxResId(MSG_QUERY_LASTVERSION) );
                 bDo = ( RET_YES == aBox.Execute() );
             }
 
