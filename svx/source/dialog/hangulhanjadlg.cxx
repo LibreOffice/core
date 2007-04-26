@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hangulhanjadlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:14:00 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:32:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -571,26 +571,26 @@ namespace svx
     HangulHanjaConversionDialog::HangulHanjaConversionDialog( Window* _pParent, HHC::ConversionDirection _ePrimaryDirection )
         :ModalDialog( _pParent, SVX_RES( RID_SVX_MDLG_HANGULHANJA ) )
         ,m_pPlayground( new SvxCommonLinguisticControl( this ) )
-        ,m_aFind            ( m_pPlayground.get(), ResId( PB_FIND ) )
-        ,m_aSuggestions     ( m_pPlayground.get(), ResId( CTL_SUGGESTIONS ) )
-        ,m_aFormat          ( m_pPlayground.get(), ResId( FT_FORMAT ) )
-        ,m_aSimpleConversion( m_pPlayground.get(), ResId( RB_SIMPLE_CONVERSION ) )
-        ,m_aHangulBracketed ( m_pPlayground.get(), ResId( RB_HANJA_HANGUL_BRACKETED ) )
-        ,m_aHanjaBracketed  ( m_pPlayground.get(), ResId( RB_HANGUL_HANJA_BRACKETED ) )
-        ,m_aConversion      ( m_pPlayground.get(), ResId( FT_CONVERSION ) )
-        ,m_aHangulOnly      ( m_pPlayground.get(), ResId( CB_HANGUL_ONLY ) )
-        ,m_aHanjaOnly       ( m_pPlayground.get(), ResId( CB_HANJA_ONLY ) )
-        ,m_aReplaceByChar   ( m_pPlayground.get(), ResId( CB_REPLACE_BY_CHARACTER ) )
+        ,m_aFind            ( m_pPlayground.get(), SVX_RES( PB_FIND ) )
+        ,m_aSuggestions     ( m_pPlayground.get(), SVX_RES( CTL_SUGGESTIONS ) )
+        ,m_aFormat          ( m_pPlayground.get(), SVX_RES( FT_FORMAT ) )
+        ,m_aSimpleConversion( m_pPlayground.get(), SVX_RES( RB_SIMPLE_CONVERSION ) )
+        ,m_aHangulBracketed ( m_pPlayground.get(), SVX_RES( RB_HANJA_HANGUL_BRACKETED ) )
+        ,m_aHanjaBracketed  ( m_pPlayground.get(), SVX_RES( RB_HANGUL_HANJA_BRACKETED ) )
+        ,m_aConversion      ( m_pPlayground.get(), SVX_RES( FT_CONVERSION ) )
+        ,m_aHangulOnly      ( m_pPlayground.get(), SVX_RES( CB_HANGUL_ONLY ) )
+        ,m_aHanjaOnly       ( m_pPlayground.get(), SVX_RES( CB_HANJA_ONLY ) )
+        ,m_aReplaceByChar   ( m_pPlayground.get(), SVX_RES( CB_REPLACE_BY_CHARACTER ) )
         ,m_pIgnoreNonPrimary( NULL )
         ,m_bDocumentMode( true )
     {
         // special creation of the 4 pseudo-ruby radio buttons
-        String sSecondaryHangul( ResId( STR_HANGUL ) );
-        String sSecondaryHanja( ResId( STR_HANJA ) );
-        m_pHanjaAbove.reset( new RubyRadioButton( m_pPlayground.get(), ResId( RB_HANGUL_HANJA_ABOVE ), sSecondaryHanja, PseudoRubyText::eAbove ) );
-        m_pHanjaBelow.reset( new RubyRadioButton( m_pPlayground.get(), ResId( RB_HANGUL_HANJA_BELOW ), sSecondaryHanja, PseudoRubyText::eBelow ) );
-        m_pHangulAbove.reset( new RubyRadioButton( m_pPlayground.get(), ResId( RB_HANJA_HANGUL_ABOVE ), sSecondaryHangul, PseudoRubyText::eAbove ) );
-        m_pHangulBelow.reset( new RubyRadioButton( m_pPlayground.get(), ResId( RB_HANJA_HANGUL_BELOW ), sSecondaryHangul, PseudoRubyText::eBelow ) );
+        String sSecondaryHangul( SVX_RES( STR_HANGUL ) );
+        String sSecondaryHanja( SVX_RES( STR_HANJA ) );
+        m_pHanjaAbove.reset( new RubyRadioButton( m_pPlayground.get(), SVX_RES( RB_HANGUL_HANJA_ABOVE ), sSecondaryHanja, PseudoRubyText::eAbove ) );
+        m_pHanjaBelow.reset( new RubyRadioButton( m_pPlayground.get(), SVX_RES( RB_HANGUL_HANJA_BELOW ), sSecondaryHanja, PseudoRubyText::eBelow ) );
+        m_pHangulAbove.reset( new RubyRadioButton( m_pPlayground.get(), SVX_RES( RB_HANJA_HANGUL_ABOVE ), sSecondaryHangul, PseudoRubyText::eAbove ) );
+        m_pHangulBelow.reset( new RubyRadioButton( m_pPlayground.get(), SVX_RES( RB_HANJA_HANGUL_BELOW ), sSecondaryHangul, PseudoRubyText::eBelow ) );
 
         // since these 4 buttons are not created within the other members, they have a wrong initial Z-Order
         // correct this
@@ -623,7 +623,7 @@ namespace svx
         // additionall, the playground is not wide enough (in it's default size)
         sal_Int32 nEnlargeWidth = 0;
         {
-            FixedText aBottomAnchor( m_pPlayground.get(), ResId( FT_RESIZE_ANCHOR ) );
+            FixedText aBottomAnchor( m_pPlayground.get(), SVX_RES( FT_RESIZE_ANCHOR ) );
             Point aAnchorPos = aBottomAnchor.GetPosPixel();
 
             nEnlargeWidth = aAnchorPos.X() - m_pPlayground->GetActionButtonsLocation().X();
@@ -1201,18 +1201,18 @@ namespace svx
 
     HangulHanjaOptionsDialog::HangulHanjaOptionsDialog( Window* _pParent )
         :ModalDialog            ( _pParent, SVX_RES( RID_SVX_MDLG_HANGULHANJA_OPT ) )
-        ,m_aUserdefdictFT       ( this, ResId( FT_USERDEFDICT ) )
-        ,m_aDictsLB             ( this, ResId( LB_DICTS ) )
-        ,m_aOptionsFL           ( this, ResId( FL_OPTIONS ) )
-        ,m_aIgnorepostCB        ( this, ResId( CB_IGNOREPOST ) )
-        ,m_aShowrecentlyfirstCB ( this, ResId( CB_SHOWRECENTLYFIRST ) )
-        ,m_aAutoreplaceuniqueCB ( this, ResId( CB_AUTOREPLACEUNIQUE ) )
-        ,m_aNewPB               ( this, ResId( PB_HHO_NEW ) )
-        ,m_aEditPB              ( this, ResId( PB_HHO_EDIT ) )
-        ,m_aDeletePB            ( this, ResId( PB_HHO_DELETE ) )
-        ,m_aOkPB                ( this, ResId( PB_HHO_OK ) )
-        ,m_aCancelPB            ( this, ResId( PB_HHO_CANCEL ) )
-        ,m_aHelpPB              ( this, ResId( PB_HHO_HELP ) )
+        ,m_aUserdefdictFT       ( this, SVX_RES( FT_USERDEFDICT ) )
+        ,m_aDictsLB             ( this, SVX_RES( LB_DICTS ) )
+        ,m_aOptionsFL           ( this, SVX_RES( FL_OPTIONS ) )
+        ,m_aIgnorepostCB        ( this, SVX_RES( CB_IGNOREPOST ) )
+        ,m_aShowrecentlyfirstCB ( this, SVX_RES( CB_SHOWRECENTLYFIRST ) )
+        ,m_aAutoreplaceuniqueCB ( this, SVX_RES( CB_AUTOREPLACEUNIQUE ) )
+        ,m_aNewPB               ( this, SVX_RES( PB_HHO_NEW ) )
+        ,m_aEditPB              ( this, SVX_RES( PB_HHO_EDIT ) )
+        ,m_aDeletePB            ( this, SVX_RES( PB_HHO_DELETE ) )
+        ,m_aOkPB                ( this, SVX_RES( PB_HHO_OK ) )
+        ,m_aCancelPB            ( this, SVX_RES( PB_HHO_CANCEL ) )
+        ,m_aHelpPB              ( this, SVX_RES( PB_HHO_HELP ) )
 
         ,m_pCheckButtonData     ( NULL )
         ,m_xConversionDictionaryList( NULL )
@@ -1302,12 +1302,12 @@ namespace svx
 
     HangulHanjaNewDictDialog::HangulHanjaNewDictDialog( Window* _pParent )
         :ModalDialog    ( _pParent, SVX_RES( RID_SVX_MDLG_HANGULHANJA_NEWDICT ) )
-        ,m_aNewDictFL   ( this, ResId( FL_NEWDICT ) )
-        ,m_aDictNameFT  ( this, ResId( FT_DICTNAME ) )
-        ,m_aDictNameED  ( this, ResId( ED_DICTNAME ) )
-        ,m_aOkBtn       ( this, ResId( PB_NEWDICT_OK ) )
-        ,m_aCancelBtn   ( this, ResId( PB_NEWDICT_ESC ) )
-        ,m_aHelpBtn     ( this, ResId( PB_NEWDICT_HLP ) )
+        ,m_aNewDictFL   ( this, SVX_RES( FL_NEWDICT ) )
+        ,m_aDictNameFT  ( this, SVX_RES( FT_DICTNAME ) )
+        ,m_aDictNameED  ( this, SVX_RES( ED_DICTNAME ) )
+        ,m_aOkBtn       ( this, SVX_RES( PB_NEWDICT_OK ) )
+        ,m_aCancelBtn   ( this, SVX_RES( PB_NEWDICT_ESC ) )
+        ,m_aHelpBtn     ( this, SVX_RES( PB_NEWDICT_HLP ) )
 
         ,m_bEntered     ( false )
     {
@@ -1871,24 +1871,24 @@ namespace svx
 
     HangulHanjaEditDictDialog::HangulHanjaEditDictDialog( Window* _pParent, HHDictList& _rDictList, sal_uInt32 _nSelDict )
         :ModalDialog            ( _pParent, SVX_RES( RID_SVX_MDLG_HANGULHANJA_EDIT ) )
-        ,m_aEditHintText        ( ResId( STR_EDITHINT ) )
+        ,m_aEditHintText        ( SVX_RES( STR_EDITHINT ) )
         ,m_rDictList            ( _rDictList )
         ,m_nCurrentDict         ( 0xFFFFFFFF )
         ,m_pSuggestions         ( NULL )
-        ,m_aBookFT              ( this, ResId( FT_BOOK ) )
-        ,m_aBookLB              ( this, ResId( LB_BOOK ) )
-        ,m_aOriginalFT          ( this, ResId( FT_ORIGINAL ) )
-        ,m_aOriginalLB          ( this, ResId( LB_ORIGINAL ) )
-        ,m_aSuggestionsFT       ( this, ResId( FT_SUGGESTIONS ) )
-        ,m_aEdit1               ( this, ResId( ED_1 ), m_aScrollSB, NULL, &m_aEdit2 )
-        ,m_aEdit2               ( this, ResId( ED_2 ), m_aScrollSB, &m_aEdit1, &m_aEdit3 )
-        ,m_aEdit3               ( this, ResId( ED_3 ), m_aScrollSB, &m_aEdit2, &m_aEdit4 )
-        ,m_aEdit4               ( this, ResId( ED_4 ), m_aScrollSB, &m_aEdit3, NULL )
-        ,m_aScrollSB            ( this, ResId( SB_SCROLL ) )
-        ,m_aNewPB               ( this, ResId( PB_HHE_NEW ) )
-        ,m_aDeletePB            ( this, ResId( PB_HHE_DELETE ) )
-        ,m_aHelpPB              ( this, ResId( PB_HHE_HELP ) )
-        ,m_aClosePB             ( this, ResId( PB_HHE_CLOSE ) )
+        ,m_aBookFT              ( this, SVX_RES( FT_BOOK ) )
+        ,m_aBookLB              ( this, SVX_RES( LB_BOOK ) )
+        ,m_aOriginalFT          ( this, SVX_RES( FT_ORIGINAL ) )
+        ,m_aOriginalLB          ( this, SVX_RES( LB_ORIGINAL ) )
+        ,m_aSuggestionsFT       ( this, SVX_RES( FT_SUGGESTIONS ) )
+        ,m_aEdit1               ( this, SVX_RES( ED_1 ), m_aScrollSB, NULL, &m_aEdit2 )
+        ,m_aEdit2               ( this, SVX_RES( ED_2 ), m_aScrollSB, &m_aEdit1, &m_aEdit3 )
+        ,m_aEdit3               ( this, SVX_RES( ED_3 ), m_aScrollSB, &m_aEdit2, &m_aEdit4 )
+        ,m_aEdit4               ( this, SVX_RES( ED_4 ), m_aScrollSB, &m_aEdit3, NULL )
+        ,m_aScrollSB            ( this, SVX_RES( SB_SCROLL ) )
+        ,m_aNewPB               ( this, SVX_RES( PB_HHE_NEW ) )
+        ,m_aDeletePB            ( this, SVX_RES( PB_HHE_DELETE ) )
+        ,m_aHelpPB              ( this, SVX_RES( PB_HHE_HELP ) )
+        ,m_aClosePB             ( this, SVX_RES( PB_HHE_CLOSE ) )
         ,m_nTopPos              ( 0 )
         ,m_bModifiedSuggestions ( false )
         ,m_bModifiedOriginal    ( false )
