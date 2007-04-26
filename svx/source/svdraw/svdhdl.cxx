@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:40:50 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:52:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,7 @@ SdrHdlBitmapSet::SdrHdlBitmapSet(UINT16 nResId)
 {
     // #101928# change color used for transparent parts to 0x00ff00ff (ImageList standard)
     Color aColTransparent(0x00ff00ff);
-    Bitmap aBitmap(ResId(nResId, ImpGetResMgr()));
+    Bitmap aBitmap(ResId(nResId, *ImpGetResMgr()));
     maMarkersBitmap = BitmapEx(aBitmap, aColTransparent);
 }
 
