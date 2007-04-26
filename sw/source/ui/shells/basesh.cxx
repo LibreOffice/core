@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:28:21 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:15:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1012,7 +1012,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
                 AbstractSwConvertTableDlg* pDlg = pFact->CreateSwConvertTableDlg(
-                            GetView(),ResId( DLG_CONV_TEXT_TABLE ), bToTable);
+                            GetView(), DLG_CONV_TEXT_TABLE, bToTable);
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 if( RET_OK == pDlg->Execute() )
                 {
@@ -2584,7 +2584,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
                 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-                pDlg = pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_TABLE,ResId( RC_DLG_SWBORDERDLG ));
+                pDlg = pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_TABLE, RC_DLG_SWBORDERDLG );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2602,7 +2602,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
                 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-                pDlg = pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_FRAME,ResId( RC_DLG_SWBORDERDLG ));
+                pDlg = pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_FRAME, RC_DLG_SWBORDERDLG );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2621,7 +2621,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
                 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-                pDlg = pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_PARA,ResId( RC_DLG_SWBORDERDLG ));
+                pDlg = pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_PARA, RC_DLG_SWBORDERDLG );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2655,7 +2655,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 SvxBrushItem aBrush(RES_BACKGROUND);
                 rSh.GetBoxBackground( aBrush );
                 //CHINA001 pDlg = new SwBackgroundDlg( pMDI, aSet );
-                pDlg = pFact->CreateSfxSingleTabDialog( pMDI, aSet,ResId( RC_SWDLG_BACKGROUND ));
+                pDlg = pFact->CreateSfxSingleTabDialog( pMDI, aSet, RC_SWDLG_BACKGROUND );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 aSet.Put( aBrush );
                 if ( pDlg->Execute() == RET_OK )
@@ -2673,7 +2673,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 rSh.GetFlyFrmAttr( aSet );
 
                 //CHINA001 pDlg = new SwBackgroundDlg( pMDI, aSet );
-                pDlg = pFact->CreateSfxSingleTabDialog( pMDI, aSet,ResId( RC_SWDLG_BACKGROUND ));
+                pDlg = pFact->CreateSfxSingleTabDialog( pMDI, aSet, RC_SWDLG_BACKGROUND );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2687,7 +2687,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 rSh.GetAttr( aSet );
 
                 //CHINA001 pDlg = new SwBackgroundDlg( pMDI, aSet );
-                pDlg = pFact->CreateSfxSingleTabDialog( pMDI, aSet,ResId( RC_SWDLG_BACKGROUND ));
+                pDlg = pFact->CreateSfxSingleTabDialog( pMDI, aSet, RC_SWDLG_BACKGROUND );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2807,7 +2807,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 //CHINA001 SwInsTableDlg *pDlg = new SwInsTableDlg(rView);
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-                AbstractInsTableDlg* pDlg = pFact->CreateInsTableDlg( ResId(DLG_INSERT_TABLE), rView );
+                AbstractInsTableDlg* pDlg = pFact->CreateInsTableDlg( DLG_INSERT_TABLE, rView );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 if( RET_OK == pDlg->Execute() )
                 {
@@ -3018,7 +3018,7 @@ void SwBaseShell::ExecField( SfxRequest& rReq )
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
             DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-            VclAbstractDialog* pDlg = pFact->CreateSwChangeDBDlg(GetView(),ResId( DLG_CHANGE_DB ));
+            VclAbstractDialog* pDlg = pFact->CreateSwChangeDBDlg(GetView(), DLG_CHANGE_DB );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             pDlg->Execute();
             delete pDlg;
