@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wordcountdialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:51:21 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:07:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,20 +58,20 @@
 SwWordCountDialog::SwWordCountDialog(Window* pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_WORDCOUNT)),
 #pragma warning (disable : 4355)
-    aCurrentFL( this, ResId(              FL_CURRENT            )),
-    aCurrentWordFT( this, ResId(          FT_CURRENTWORD        )),
-    aCurrentWordFI( this, ResId(          FI_CURRENTWORD        )),
-    aCurrentCharacterFT( this, ResId(     FT_CURRENTCHARACTER   )),
-    aCurrentCharacterFI( this, ResId(     FI_CURRENTCHARACTER   )),
+    aCurrentFL( this, SW_RES(              FL_CURRENT            )),
+    aCurrentWordFT( this, SW_RES(          FT_CURRENTWORD        )),
+    aCurrentWordFI( this, SW_RES(          FI_CURRENTWORD        )),
+    aCurrentCharacterFT( this, SW_RES(     FT_CURRENTCHARACTER   )),
+    aCurrentCharacterFI( this, SW_RES(     FI_CURRENTCHARACTER   )),
 
-    aDocFL( this, ResId(                  FL_DOC                )),
-    aDocWordFT( this, ResId(              FT_DOCWORD            )),
-    aDocWordFI( this, ResId(              FI_DOCWORD            )),
-    aDocCharacterFT( this, ResId(         FT_DOCCHARACTER       )),
-    aDocCharacterFI( this, ResId(         FI_DOCCHARACTER       )),
-    aBottomFL(this, ResId(                FL_BOTTOM             )),
-    aOK( this, ResId(                     PB_OK                 )),
-    aHelp( this, ResId(                   PB_HELP               ))
+    aDocFL( this, SW_RES(                  FL_DOC                )),
+    aDocWordFT( this, SW_RES(              FT_DOCWORD            )),
+    aDocWordFI( this, SW_RES(              FI_DOCWORD            )),
+    aDocCharacterFT( this, SW_RES(         FT_DOCCHARACTER       )),
+    aDocCharacterFI( this, SW_RES(         FI_DOCCHARACTER       )),
+    aBottomFL(this, SW_RES(                FL_BOTTOM             )),
+    aOK( this, SW_RES(                     PB_OK                 )),
+    aHelp( this, SW_RES(                   PB_HELP               ))
 #pragma warning (default : 4355)
 {
     FreeResource();
