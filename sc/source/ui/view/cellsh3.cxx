@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh3.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:48:58 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:56:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -498,7 +498,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                             DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-                            AbstractScNewScenarioDlg* pNewDlg = pFact->CreateScNewScenarioDlg( pTabViewShell->GetDialogParent(), aName, ResId(RID_SCDLG_NEWSCENARIO), FALSE,bSheetProtected);
+                            AbstractScNewScenarioDlg* pNewDlg = pFact->CreateScNewScenarioDlg( pTabViewShell->GetDialogParent(), aName, RID_SCDLG_NEWSCENARIO, FALSE,bSheetProtected);
                             DBG_ASSERT(pNewDlg, "Dialog create fail!");//CHINA001
                             if ( pNewDlg->Execute() == RET_OK )
                             {
@@ -562,7 +562,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_ROW_MAN,
                                                                                     nCurHeight,
                                                                                     ScGlobal::nStdRowHeight,
-                                                                                    ResId(RID_SCDLG_ROW_MAN),
+                                                                                    RID_SCDLG_ROW_MAN,
                                                                                     eMetric,
                                                                                     2,
                                                                                     MAX_COL_HEIGHT);
@@ -614,7 +614,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_ROW_OPT,
                                                                                     ScGlobal::nLastRowHeightExtra,
                                                                                     0,
-                                                                                    ResId(RID_SCDLG_ROW_OPT),
+                                                                                    RID_SCDLG_ROW_OPT,
                                                                                     eMetric,
                                                                                     1,
                                                                                     MAX_EXTRA_HEIGHT);
@@ -668,7 +668,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_COL_MAN,
                                                                                     nCurHeight,
                                                                                     STD_COL_WIDTH,
-                                                                                    ResId(RID_SCDLG_COL_MAN),
+                                                                                    RID_SCDLG_COL_MAN,
                                                                                     eMetric,
                                                                                     2,
                                                                                     MAX_COL_WIDTH);
@@ -721,7 +721,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_COL_OPT,
                                                                                     ScGlobal::nLastColWidthExtra,
                                                                                     STD_EXTRA_WIDTH,
-                                                                                    ResId(RID_SCDLG_COL_OPT),
+                                                                                    RID_SCDLG_COL_OPT,
                                                                                     eMetric,
                                                                                     1,
                                                                                     MAX_EXTRA_WIDTH);
@@ -876,7 +876,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-                        AbstractScAutoFormatDlg* pDlg = pFact->CreateScAutoFormatDlg( pDlgParent, ScGlobal::GetAutoFormat(), pNewEntry,GetViewData()->GetDocument(), ResId(RID_SCDLG_AUTOFORMAT) );
+                        AbstractScAutoFormatDlg* pDlg = pFact->CreateScAutoFormatDlg( pDlgParent, ScGlobal::GetAutoFormat(), pNewEntry,GetViewData()->GetDocument(), RID_SCDLG_AUTOFORMAT );
                         DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
 
                         if ( pDlg->Execute() == RET_OK )
