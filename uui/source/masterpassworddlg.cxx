@@ -4,9 +4,9 @@
  *
  *  $RCSfile: masterpassworddlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:24:05 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:19:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,19 +69,19 @@ MasterPasswordDialog::MasterPasswordDialog
     ResMgr*                                     pResMgr
 ) :
 
-    ModalDialog( pParent, ResId( DLG_UUI_MASTERPASSWORD, pResMgr ) ),
+    ModalDialog( pParent, ResId( DLG_UUI_MASTERPASSWORD, *pResMgr ) ),
 
-    aFTMasterPassword       ( this, ResId( FT_MASTERPASSWORD ) ),
-    aEDMasterPassword       ( this, ResId( ED_MASTERPASSWORD ) ),
-    aOKBtn                  ( this, ResId( BTN_MASTERPASSWORD_OK ) ),
-    aCancelBtn              ( this, ResId( BTN_MASTERPASSWORD_CANCEL ) ),
-    aHelpBtn                ( this, ResId( BTN_MASTERPASSWORD_HELP ) ),
+    aFTMasterPassword       ( this, ResId( FT_MASTERPASSWORD, *pResMgr ) ),
+    aEDMasterPassword       ( this, ResId( ED_MASTERPASSWORD, *pResMgr ) ),
+    aOKBtn                  ( this, ResId( BTN_MASTERPASSWORD_OK, *pResMgr ) ),
+    aCancelBtn              ( this, ResId( BTN_MASTERPASSWORD_CANCEL, *pResMgr ) ),
+    aHelpBtn                ( this, ResId( BTN_MASTERPASSWORD_HELP, *pResMgr ) ),
     nDialogMode             ( aDialogMode ),
     pResourceMgr            ( pResMgr )
 {
     if( nDialogMode == ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER )
     {
-        String aErrorMsg( ResId( STR_ERROR_MASTERPASSWORD_WRONG, pResourceMgr ));
+        String aErrorMsg( ResId( STR_ERROR_MASTERPASSWORD_WRONG, *pResourceMgr ));
         ErrorBox aErrorBox( pParent, WB_OK, aErrorMsg );
         aErrorBox.Execute();
     }
