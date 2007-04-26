@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newdatatype.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 12:00:44 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:08:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,10 +64,10 @@ namespace pcr
     //--------------------------------------------------------------------
     NewDataTypeDialog::NewDataTypeDialog( Window* _pParent, const ::rtl::OUString& _rNameBase, const ::std::vector< ::rtl::OUString >& _rProhibitedNames )
         :ModalDialog( _pParent, PcrRes( RID_DLG_NEW_DATA_TYPE ) )
-        ,m_aLabel   ( this, ResId( FT_LABEL  ) )
-        ,m_aName    ( this, ResId( ED_NAME   ) )
-        ,m_aOK      ( this, ResId( PB_OK     ) )
-        ,m_aCancel  ( this, ResId( PB_CANCEL ) )
+        ,m_aLabel   ( this, PcrRes( FT_LABEL  ) )
+        ,m_aName    ( this, PcrRes( ED_NAME   ) )
+        ,m_aOK      ( this, PcrRes( PB_OK     ) )
+        ,m_aCancel  ( this, PcrRes( PB_CANCEL ) )
         ,m_aProhibitedNames( _rProhibitedNames.begin(), _rProhibitedNames.end() )
     {
         FreeResource();
