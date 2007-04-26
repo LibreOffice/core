@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdresid.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:01:38 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:35:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@ class SD_DLLPUBLIC SdResId : public ResId
 {
 public:
     SdResId(USHORT nId);
-    SdResId(USHORT nId, ResMgr* pMgr);   // kann entfallen
 };
 
 #endif /* _SD_SDRESID_HXX */
