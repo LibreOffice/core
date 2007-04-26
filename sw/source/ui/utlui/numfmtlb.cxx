@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numfmtlb.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:59:17 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:23:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -485,7 +485,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
         DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-        AbstractSfxSingleTabDialog* pDlg = pFact->CreateSfxSingleTabDialog( this, aCoreSet, ResId( RC_DLG_SWNUMFMTDLG ));
+        AbstractSfxSingleTabDialog* pDlg = pFact->CreateSfxSingleTabDialog( this, aCoreSet, RC_DLG_SWNUMFMTDLG );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
         if (RET_OK == pDlg->Execute())
