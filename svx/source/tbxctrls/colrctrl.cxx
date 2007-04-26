@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colrctrl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:52:17 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:52:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,7 +305,7 @@ SvxColorDockingWindow::SvxColorDockingWindow
     SfxDockingWindow( _pBindings, pCW, _pParent, rResId ),
 
     pColorTable     ( NULL ),
-    aColorSet       ( this, ResId( 1 ) ),
+    aColorSet       ( this, ResId( 1, *rResId.GetResMgr() ) ),
     nLeftSlot       ( SID_ATTR_FILL_COLOR ),
     nRightSlot      ( SID_ATTR_LINE_COLOR ),
     nCols           ( 20 ),
