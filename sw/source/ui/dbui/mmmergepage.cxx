@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmmergepage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:46:39 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:04:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,16 +78,16 @@
 SwMailMergeMergePage::SwMailMergeMergePage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage(_pParent, SW_RES(DLG_MM_MERGE_PAGE)),
 #pragma warning (disable : 4355)
-    m_aHeaderFI(this,           ResId(  FI_HEADER           ) ),
-    m_aEditFI(this, ResId(           FI_EDIT )),
-    m_aEditPB(this, ResId(           PB_EDIT )),
-    m_aFindFL(this, ResId(           FL_FIND )),
-    m_aFineFT(this, ResId(           FT_FIND )),
-    m_aFindED(this, ResId(           ED_FIND )),
-    m_aFindPB(this, ResId(           PB_FIND )),
-    m_aWholeWordsCB(this, ResId(     CB_WHOLEWORDS)),
-    m_aBackwardsCB(this, ResId(      CB_BACKWARDS )),
-    m_aMatchCaseCB(this, ResId(      CB_MATCHCASE )),
+    m_aHeaderFI(this,           SW_RES(  FI_HEADER           ) ),
+    m_aEditFI(this, SW_RES(           FI_EDIT )),
+    m_aEditPB(this, SW_RES(           PB_EDIT )),
+    m_aFindFL(this, SW_RES(           FL_FIND )),
+    m_aFineFT(this, SW_RES(           FT_FIND )),
+    m_aFindED(this, SW_RES(           ED_FIND )),
+    m_aFindPB(this, SW_RES(           PB_FIND )),
+    m_aWholeWordsCB(this, SW_RES(     CB_WHOLEWORDS)),
+    m_aBackwardsCB(this, SW_RES(      CB_BACKWARDS )),
+    m_aMatchCaseCB(this, SW_RES(      CB_MATCHCASE )),
 #pragma warning (default : 4355)
     m_pWizard(_pParent)
 {
