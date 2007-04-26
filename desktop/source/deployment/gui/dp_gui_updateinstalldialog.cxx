@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updateinstalldialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:25:07 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:24:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,31 +240,31 @@ UpdateInstallDialog::UpdateInstallDialog(
     Reference< cssu::XComponentContext > const & xCtx):
     ModalDialog(
         parent,
-        ResId(RID_DLG_UPDATEINSTALL, DeploymentGuiResMgr::get())),
+        DpGuiResId(RID_DLG_UPDATEINSTALL)),
 
         m_thread(new Thread(xCtx, *this, aVecUpdateData)),
         m_xComponentContext(xCtx),
         m_bError(false),
         m_bNoEntry(true),
         m_bActivated(false),
-        m_sInstalling(String(ResId(RID_DLG_UPDATE_INSTALL_INSTALLING))),
-        m_sFinished(String(ResId(RID_DLG_UPDATE_INSTALL_FINISHED))),
-        m_sNoErrors(String(ResId(RID_DLG_UPDATE_INSTALL_NO_ERRORS))),
-        m_sErrorDownload(String(ResId(RID_DLG_UPDATE_INSTALL_ERROR_DOWNLOAD))),
-        m_sErrorInstallation(String(ResId(RID_DLG_UPDATE_INSTALL_ERROR_INSTALLATION))),
-        m_sErrorLicenseDeclined(String(ResId(RID_DLG_UPDATE_INSTALL_ERROR_LIC_DECLINED))),
-        m_sNoInstall(String(ResId(RID_DLG_UPDATE_INSTALL_EXTENSION_NOINSTALL))),
-        m_sThisErrorOccurred(String(ResId(RID_DLG_UPDATE_INSTALL_THIS_ERROR_OCCURRED))),
-        m_sNoTemp(String(ResId(RID_DLG_UPDATE_INSTALL_NOTEMP))),
-        m_ft_action(this, ResId(RID_DLG_UPDATE_INSTALL_DOWNLOADING)),
-        m_statusbar(this,ResId(RID_DLG_UPDATE_INSTALL_STATUSBAR)),
-        m_ft_extension_name(this, ResId(RID_DLG_UPDATE_INSTALL_EXTENSION_NAME)),
-        m_ft_results(this, ResId(RID_DLG_UPDATE_INSTALL_RESULTS)),
-        m_mle_info(this, ResId(RID_DLG_UPDATE_INSTALL_INFO)),
-        m_line(this, ResId(RID_DLG_UPDATE_INSTALL_LINE)),
-        m_help(this, ResId(RID_DLG_UPDATE_INSTALL_HELP)),
-        m_ok(this, ResId(RID_DLG_UPDATE_INSTALL_OK)),
-        m_cancel(this, ResId(RID_DLG_UPDATE_INSTALL_ABORT))
+        m_sInstalling(String(DpGuiResId(RID_DLG_UPDATE_INSTALL_INSTALLING))),
+        m_sFinished(String(DpGuiResId(RID_DLG_UPDATE_INSTALL_FINISHED))),
+        m_sNoErrors(String(DpGuiResId(RID_DLG_UPDATE_INSTALL_NO_ERRORS))),
+        m_sErrorDownload(String(DpGuiResId(RID_DLG_UPDATE_INSTALL_ERROR_DOWNLOAD))),
+        m_sErrorInstallation(String(DpGuiResId(RID_DLG_UPDATE_INSTALL_ERROR_INSTALLATION))),
+        m_sErrorLicenseDeclined(String(DpGuiResId(RID_DLG_UPDATE_INSTALL_ERROR_LIC_DECLINED))),
+        m_sNoInstall(String(DpGuiResId(RID_DLG_UPDATE_INSTALL_EXTENSION_NOINSTALL))),
+        m_sThisErrorOccurred(String(DpGuiResId(RID_DLG_UPDATE_INSTALL_THIS_ERROR_OCCURRED))),
+        m_sNoTemp(String(DpGuiResId(RID_DLG_UPDATE_INSTALL_NOTEMP))),
+        m_ft_action(this, DpGuiResId(RID_DLG_UPDATE_INSTALL_DOWNLOADING)),
+        m_statusbar(this,DpGuiResId(RID_DLG_UPDATE_INSTALL_STATUSBAR)),
+        m_ft_extension_name(this, DpGuiResId(RID_DLG_UPDATE_INSTALL_EXTENSION_NAME)),
+        m_ft_results(this, DpGuiResId(RID_DLG_UPDATE_INSTALL_RESULTS)),
+        m_mle_info(this, DpGuiResId(RID_DLG_UPDATE_INSTALL_INFO)),
+        m_line(this, DpGuiResId(RID_DLG_UPDATE_INSTALL_LINE)),
+        m_help(this, DpGuiResId(RID_DLG_UPDATE_INSTALL_HELP)),
+        m_ok(this, DpGuiResId(RID_DLG_UPDATE_INSTALL_OK)),
+        m_cancel(this, DpGuiResId(RID_DLG_UPDATE_INSTALL_ABORT))
 {
     FreeResource();
 
