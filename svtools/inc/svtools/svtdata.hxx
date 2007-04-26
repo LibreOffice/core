@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtdata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:38:11 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:41:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ class SvpResId: public ResId
 {
 public:
     SvpResId( USHORT nId, const ::com::sun::star::lang::Locale aLocale ):
-        ResId( nId, ImpSvtData::GetSvtData().GetResMgr( aLocale ) ) {}
+        ResId( nId, *ImpSvtData::GetSvtData().GetResMgr( aLocale ) ) {}
 
      // VCL dependant, only available in SVT, not in SVL!
     SvpResId( USHORT nId );
@@ -103,9 +103,9 @@ class SvtResId: public ResId
 {
 public:
     SvtResId(USHORT nId, const ::com::sun::star::lang::Locale aLocale):
-        ResId(nId, ImpSvtData::GetSvtData().GetResMgr(aLocale)) {}
+        ResId(nId, *ImpSvtData::GetSvtData().GetResMgr(aLocale)) {}
 
-    SvtResId(USHORT nId): ResId(nId, ImpSvtData::GetSvtData().GetResMgr()) {}
+    SvtResId(USHORT nId): ResId(nId, *ImpSvtData::GetSvtData().GetResMgr()) {}
      // VCL dependant, only available in SVT, not in SVL!
 };
 
