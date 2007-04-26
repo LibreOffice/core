@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vcldata.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:14:15 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:45:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ ResMgr * ImpSvtData::GetPatchResMgr()
 }
 
 SvpResId::SvpResId( USHORT nId ) :
-    ResId( nId, ImpSvtData::GetSvtData().GetPatchResMgr() )
+    ResId( nId, *ImpSvtData::GetSvtData().GetPatchResMgr() )
 {
 }
 
