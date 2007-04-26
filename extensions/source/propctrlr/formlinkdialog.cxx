@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formlinkdialog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:17:55 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:07:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,9 +153,9 @@ namespace pcr
     //------------------------------------------------------------------------
     FieldLinkRow::FieldLinkRow( Window* _pParent, const ResId& _rId )
         :Window( _pParent, _rId )
-        ,m_aDetailColumn( this, ResId( 1 ) )
-        ,m_aEqualSign   ( this, ResId( 1 ) )
-        ,m_aMasterColumn( this, ResId( 2 ) )
+        ,m_aDetailColumn( this, ResId( 1, *_rId.GetResMgr() ) )
+        ,m_aEqualSign   ( this, ResId( 1, *_rId.GetResMgr() ) )
+        ,m_aMasterColumn( this, ResId( 2, *_rId.GetResMgr() ) )
     {
         FreeResource();
 
@@ -208,17 +208,17 @@ namespace pcr
     FormLinkDialog::FormLinkDialog( Window* _pParent, const Reference< XForm >& _rxDetailForm,
         const Reference< XForm >& _rxMasterForm, const Reference< XMultiServiceFactory >& _rxORB )
         :ModalDialog( _pParent, PcrRes( RID_DLG_FORMLINKS ) )
-        ,m_aExplanation( this, ResId( FT_EXPLANATION  ) )
-        ,m_aDetailLabel( this, ResId( FT_DETAIL_LABEL ) )
-        ,m_aMasterLabel( this, ResId( FT_MASTER_LABEL ) )
-        ,m_aRow1       ( new FieldLinkRow( this, ResId( 1 ) ) )
-        ,m_aRow2       ( new FieldLinkRow( this, ResId( 2 ) ) )
-        ,m_aRow3       ( new FieldLinkRow( this, ResId( 3 ) ) )
-        ,m_aRow4       ( new FieldLinkRow( this, ResId( 4 ) ) )
-        ,m_aOK         ( this, ResId( PB_OK           ) )
-        ,m_aCancel     ( this, ResId( PB_CANCEL       ) )
-        ,m_aHelp       ( this, ResId( PB_HELP         ) )
-        ,m_aSuggest    ( this, ResId( PB_SUGGEST      ) )
+        ,m_aExplanation( this, PcrRes( FT_EXPLANATION  ) )
+        ,m_aDetailLabel( this, PcrRes( FT_DETAIL_LABEL ) )
+        ,m_aMasterLabel( this, PcrRes( FT_MASTER_LABEL ) )
+        ,m_aRow1       ( new FieldLinkRow( this, PcrRes( 1 ) ) )
+        ,m_aRow2       ( new FieldLinkRow( this, PcrRes( 2 ) ) )
+        ,m_aRow3       ( new FieldLinkRow( this, PcrRes( 3 ) ) )
+        ,m_aRow4       ( new FieldLinkRow( this, PcrRes( 4 ) ) )
+        ,m_aOK         ( this, PcrRes( PB_OK           ) )
+        ,m_aCancel     ( this, PcrRes( PB_CANCEL       ) )
+        ,m_aHelp       ( this, PcrRes( PB_HELP         ) )
+        ,m_aSuggest    ( this, PcrRes( PB_SUGGEST      ) )
         ,m_xORB       ( _rxORB        )
         ,m_xDetailForm( _rxDetailForm )
         ,m_xMasterForm( _rxMasterForm )
@@ -321,7 +321,7 @@ namespace pcr
         if ( !sDetailType.Len() )
         {
             ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
-            sDetailType = String( ResId( STR_DETAIL_FORM ) );
+            sDetailType = String( PcrRes( STR_DETAIL_FORM ) );
         }
         m_aDetailLabel.SetText( sDetailType );
 
@@ -330,7 +330,7 @@ namespace pcr
         if ( !sMasterType.Len() )
         {
             ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
-            sMasterType = String( ResId( STR_MASTER_FORM ) );
+            sMasterType = String( PcrRes( STR_MASTER_FORM ) );
         }
         m_aMasterLabel.SetText( sMasterType );
     }
@@ -472,7 +472,7 @@ namespace pcr
             String sErrorMessage;
             {
                 ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
-                sErrorMessage = String( ResId( ( _rxForm == m_xDetailForm ) ? STR_ERROR_RETRIEVING_MASTER_COLUMNS : STR_ERROR_RETRIEVING_DETAIL_COLUMNS ) );
+                sErrorMessage = String( PcrRes( ( _rxForm == m_xDetailForm ) ? STR_ERROR_RETRIEVING_MASTER_COLUMNS : STR_ERROR_RETRIEVING_DETAIL_COLUMNS ) );
             }
 
             SQLContext aContext;
