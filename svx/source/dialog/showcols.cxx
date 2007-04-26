@@ -4,9 +4,9 @@
  *
  *  $RCSfile: showcols.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-16 14:04:47 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:42:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,10 +80,10 @@ DBG_NAME(FmShowColsDialog)
 //--------------------------------------------------------------------------
 FmShowColsDialog::FmShowColsDialog(Window* pParent)
     :ModalDialog(pParent, SVX_RES(RID_SVX_DLG_SHOWGRIDCOLUMNS))
-    ,m_aList(this, ResId(1))
-    ,m_aLabel(this, ResId(1))
-    ,m_aOK(this, ResId(1))
-    ,m_aCancel(this, ResId(1))
+    ,m_aList(this, SVX_RES(1))
+    ,m_aLabel(this, SVX_RES(1))
+    ,m_aOK(this, SVX_RES(1))
+    ,m_aCancel(this, SVX_RES(1))
 {
     DBG_CTOR(FmShowColsDialog,NULL);
     m_aList.EnableMultiSelection(sal_True);
