@@ -4,9 +4,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:49:04 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:50:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ SVX_DLLPUBLIC bool GetSpecialCharsForEdit(Window* i_pParent, const Font& i_rFont
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        AbstractSvxCharacterMap* aDlg = pFact->CreateSvxCharacterMap( i_pParent, ResId(RID_SVXDLG_CHARMAP) );
+        AbstractSvxCharacterMap* aDlg = pFact->CreateSvxCharacterMap( i_pParent, RID_SVXDLG_CHARMAP );
         aDlg->DisableFontSelection();
         aDlg->SetCharFont(i_rFont);
         if ( aDlg->Execute() == RET_OK )
