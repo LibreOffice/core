@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dependencydialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:22:26 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:22:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 
 #include "dp_gui.hrc"
 #include "dp_gui_dependencydialog.hxx"
+#include "dp_gui_shared.hxx"
 
 class Window;
 
@@ -58,14 +59,10 @@ using dp_gui::DependencyDialog;
 
 DependencyDialog::DependencyDialog(
     Window * parent, std::vector< rtl::OUString > const & dependencies):
-    ModalDialog(
-        parent,
-        ResId(
-            RID_DLG_DEPENDENCIES,
-            ResMgr::CreateResMgr("deploymentgui" LIBRARY_SOLARUPD()))),
-    m_text(this, ResId(RID_DLG_DEPENDENCIES_TEXT)),
-    m_list(this, ResId(RID_DLG_DEPENDENCIES_LIST)),
-    m_ok(this, ResId(RID_DLG_DEPENDENCIES_OK)),
+    ModalDialog(parent, DpGuiResId(RID_DLG_DEPENDENCIES) ),
+    m_text(this, DpGuiResId(RID_DLG_DEPENDENCIES_TEXT)),
+    m_list(this, DpGuiResId(RID_DLG_DEPENDENCIES_LIST)),
+    m_ok(this, DpGuiResId(RID_DLG_DEPENDENCIES_OK)),
     m_listDelta(
         GetOutputSizePixel().Width() - m_list.GetSizePixel().Width(),
         GetOutputSizePixel().Height() - m_list.GetSizePixel().Height())
