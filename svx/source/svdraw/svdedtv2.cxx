@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:06:40 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:51:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -735,7 +735,7 @@ void SdrEditView::DistributeMarkedObjects()
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            AbstractSvxDistributeDialog *pDlg = pFact->CreateSvxDistributeDialog(NULL, aNewAttr, ResId(RID_SVXPAGE_DISTRIBUTE));
+            AbstractSvxDistributeDialog *pDlg = pFact->CreateSvxDistributeDialog(NULL, aNewAttr, RID_SVXPAGE_DISTRIBUTE);
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
             UINT16 nResult = pDlg->Execute();
