@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:12:37 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:17:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -777,7 +777,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             aSet.Put(aMgr.GetAttrSet());
             aSet.SetParent( aMgr.GetAttrSet().GetParent() );
 
-            // Minimalgroesse in Spalten l”schen
+            // Minimalgroesse in Spalten lï¿½schen
             SvxBoxInfoItem aBoxInfo((SvxBoxInfoItem &)aSet.Get(SID_ATTR_BORDER_INNER));
             const SvxBoxItem& rBox = (const SvxBoxItem&)aSet.Get(RES_BOX);
             aBoxInfo.SetMinDist(FALSE);
@@ -789,7 +789,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             //CHINA001 SwFrmDlg* pDlg = new SwFrmDlg(GetView().GetViewFrame(), &GetView().GetViewFrame()->GetWindow(), aSet, TRUE);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-            SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog( ResId(DLG_FRM_STD),
+            SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog( DLG_FRM_STD,
                                                     GetView().GetViewFrame(), &GetView().GetViewFrame()->GetWindow(), aSet, TRUE);
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             if(pDlg->Execute() && pDlg->GetOutputItemSet())
@@ -852,7 +852,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             //CHINA001 SwInsertGrfRulerDlg* pDlg = new SwInsertGrfRulerDlg(pParent);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-            AbstractInsertGrfRulerDlg* pDlg = pFact->CreateInsertGrfRulerDlg( ResId(DLG_INSERT_RULER),
+            AbstractInsertGrfRulerDlg* pDlg = pFact->CreateInsertGrfRulerDlg( DLG_INSERT_RULER,
                                                         pParent );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             // MessageBox fuer fehlende Grafiken
@@ -908,7 +908,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         //CHINA001 SwColumnDlg* pColDlg = new SwColumnDlg(GetView().GetWindow(), rSh);
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-        VclAbstractDialog* pColDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, ResId(DLG_COLUMN));
+        VclAbstractDialog* pColDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, DLG_COLUMN);
         DBG_ASSERT(pColDlg, "Dialogdiet fail!");//CHINA001
         pColDlg->Execute();
         delete pColDlg;
@@ -1223,7 +1223,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         //CHINA001 SvxCharacterMap* pDlg = new SvxCharacterMap( &GetView().GetViewFrame()->GetWindow(), FALSE );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-        AbstractSvxCharacterMap* pDlg = pFact->CreateSvxCharacterMap( &GetView().GetViewFrame()->GetWindow(),  ResId(RID_SVXDLG_CHARMAP), FALSE );
+        AbstractSvxCharacterMap* pDlg = pFact->CreateSvxCharacterMap( &GetView().GetViewFrame()->GetWindow(), RID_SVXDLG_CHARMAP, FALSE );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
         Font aDlgFont( pDlg->GetCharFont() );
