@@ -15,6 +15,7 @@
 
 import unohelper
 import uno
+import re
 
 #to implement com::sun::star::mail::XMailServiceProvider
 
@@ -36,6 +37,7 @@ from email.MIMEBase import MIMEBase
 from email.Message import Message
 from email import Encoders
 from email.MIMEMultipart import MIMEMultipart
+from email.Utils import formatdate
 
 import sys, smtplib, imaplib, poplib
 
@@ -132,7 +134,8 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		textbody = content.getTransferData(flavor)
 
 		textmsg = Message()
-		textmsg['Content-Type'] = flavor.MimeType
+		mimeEncoding = re.sub("charset=.*", "charset=UTF-8", flavor.MimeType)
+		textmsg['Content-Type'] = mimeEncoding
 	        textmsg['MIME-Version'] = '1.0'
 		textmsg.set_payload(textbody.encode('utf-8'))
 
@@ -151,6 +154,8 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		if xMailMessage.ReplyToAddress != '':
 			msg['Reply-To'] = xMailMessage.ReplyToAddress
 		msg['X-Mailer'] = "OpenOffice.org 2.0 via Caolan's mailmerge component"
+
+		msg['Date'] = formatdate(localtime=True)
 
 		for attachment in attachments:
 			content = attachment.Data
