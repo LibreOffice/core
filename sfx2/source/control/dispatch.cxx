@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 15:02:37 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:08:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,13 +162,13 @@ IMPL_OBJSTACK(SfxToDoStack_Impl, SfxToDo_Impl);
 
 struct SfxObjectBars_Impl
 {
-    ResId               aResId; // Resource - und ConfigId der Toolbox
-    sal_uInt16              nMode;  // spezielle Sichtbarkeitsflags
+    sal_uInt32          nResId; // Resource - und ConfigId der Toolbox
+    sal_uInt16          nMode;  // spezielle Sichtbarkeitsflags
     String              aName;
     SfxInterface*       pIFace;
 
     SfxObjectBars_Impl() :
-        aResId( 0,0 )
+        nResId( 0 )
     {}
 };
 
@@ -417,7 +417,7 @@ void SfxDispatcher::Construct_Impl( SfxDispatcher* pParent )
     pImp->nActionLevel = 0;
 
     for (sal_uInt16 n=0; n<SFX_OBJECTBAR_MAX; n++)
-        pImp->aObjBars[n].aResId = ResId( 0,0 );
+        pImp->aObjBars[n].nResId = 0;
 
     GenLink aGenLink( LINK(this, SfxDispatcher, PostMsgHandler) );
 
@@ -1850,7 +1850,7 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, 
         nHelpId = pImp->pParent->_Update_Impl( bUIActive, bIsMDIApp, bIsIPOwner, pTaskWin );
 
     for (sal_uInt16 n=0; n<SFX_OBJECTBAR_MAX; n++)
-        pImp->aObjBars[n].aResId = ResId( 0,0 );
+        pImp->aObjBars[n].nResId = 0;
     pImp->aChildWins.Remove(0, pImp->aChildWins.Count());
 
     // bQuiet : own shells aren't considered for UI and SlotServer
@@ -1902,7 +1902,7 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, 
 
             SfxObjectBars_Impl& rBar = pImp->aObjBars[nPos & SFX_POSITION_MASK];
             rBar.nMode = nPos;
-            rBar.aResId = pIFace->GetObjectBarResId(nNo);
+            rBar.nResId = pIFace->GetObjectBarResId(nNo).GetId();
             const String *pName = pIFace->GetObjectBarName(nNo);
             if ( pName )
                 rBar.aName = *pName;
@@ -1913,11 +1913,11 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, 
             if ( bUIActive || bIsActive )
             {
                 pWorkWin->SetObjectBar_Impl(
-                    nPos, rBar.aResId, rBar.pIFace, &rBar.aName );
+                    nPos, rBar.nResId, rBar.pIFace, &rBar.aName );
             }
 
             if ( !bVisible )
-                rBar.aResId = ResId( 0,0 );
+                rBar.nResId = 0;
         }
 
         for ( nNo=0; pIFace && nNo<pIFace->GetChildWindowCount(); nNo++ )
@@ -1974,12 +1974,12 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, 
     for ( sal_uInt16 nPos=0; nPos<SFX_OBJECTBAR_MAX; nPos++ )
     {
         SfxObjectBars_Impl& rFixed = pImp->aFixedObjBars[nPos];
-        if ( rFixed.aResId.GetId() )
+        if ( rFixed.nResId )
         {
             SfxObjectBars_Impl& rBar = pImp->aObjBars[nPos];
             rBar = rFixed;
             pWorkWin->SetObjectBar_Impl( rFixed.nMode,
-                rFixed.aResId, rFixed.pIFace, &rFixed.aName );
+                rFixed.nResId, rFixed.pIFace, &rFixed.aName );
         }
     }
 
@@ -2142,7 +2142,7 @@ void SfxDispatcher::FlushImpl()
     DBG_PROFSTOP(SfxDispatcherFlush);
 
     for (sal_uInt16 n=0; n<SFX_OBJECTBAR_MAX; n++)
-        pImp->aFixedObjBars[n].aResId = ResId( 0,0 );
+        pImp->aFixedObjBars[n].nResId = 0;
 
 #ifdef DBG_UTIL
     aMsg += " done";
@@ -2850,7 +2850,7 @@ void SfxDispatcher::Lock( sal_Bool bLock )
 
 sal_uInt32 SfxDispatcher::GetObjectBarId( sal_uInt16 nPos ) const
 {
-    return pImp->aObjBars[nPos].aResId.GetId();
+    return pImp->aObjBars[nPos].nResId;
 }
 
 //--------------------------------------------------------------------
@@ -2863,7 +2863,7 @@ void SfxDispatcher::ResetObjectBars_Impl()
 */
 {
     for (sal_uInt16 n=0; n<SFX_OBJECTBAR_MAX; n++)
-        pImp->aObjBars[n].aResId = ResId( 0,0 );
+        pImp->aObjBars[n].nResId = 0;
     pImp->aChildWins.Remove(0, pImp->aChildWins.Count());
 }
 
