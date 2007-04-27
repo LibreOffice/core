@@ -1,0 +1,95 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XWorksheet.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-04-27 07:45:19 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __org_openoffice_excel_XWorksheet_idl__
+#define __org_openoffice_excel_XWorksheet_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+//=============================================================================
+
+module org {  module openoffice {  module excel {
+
+//=============================================================================
+
+interface XComments;
+interface XRange;
+interface XOutline;
+interface XWorksheet: com::sun::star::uno::XInterface
+{
+    [attribute] string Name;
+    [attribute] boolean Visible;
+    [attribute, readonly] long StandardHeight;
+    [attribute, readonly] long StandardWidth;
+    [attribute, readonly] boolean ProtectionMode;
+    [attribute, readonly] boolean ProtectContents;
+    [attribute, readonly] boolean ProtectDrawingObjects;
+    [attribute, readonly] XRange UsedRange;
+    [attribute, readonly] XWorksheet Next;
+    [attribute, readonly] XWorksheet Previous;
+
+    void Activate();
+    void Calculate( );
+    void Select();
+    void Move([in] any Before,[in] any After );
+    void Copy([in] any Before,[in] any After );
+    void Paste([in] any Destination,[in] any Link);
+    void Delete( );
+    void Protect([in] any Password,[in] any DrawingObjects ,[in] any Contents,[in] any Scenarios,[in] any UserInterfaceOnly);
+    void Unprotect([in] any Password );
+    void CheckSpelling([in] any CustomDictionary,[in] any IgnoreUppercase, [in] any AlwaysSuggest,[in] any SpellingLang );
+    XRange Range([in] any Cell1, [in] any Cell2 );
+    any ChartObjects([in] any Index);
+    any PivotTables([in] any Index);
+    any Comments([in] any Index);
+    XOutline Outline();
+
+
+// FIXME: should prolly inherit from Range somehow...
+    XRange Cells([in] any RowIndex, [in] any ColumnIndex);
+    XRange Rows([in] any aIndex);
+    XRange Columns([in] any aIndex);
+
+    any Evaluate( [in] string Name);
+};
+
+//=============================================================================
+
+}; }; };
+
+#endif
+
+

@@ -1,0 +1,88 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XApplication.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-04-27 07:38:44 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __org_openoffice_excel_XApplication_idl__
+#define __org_openoffice_excel_XApplication_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+module org {  module openoffice {  module excel {
+
+interface XRange;
+interface XWorkbook;
+interface XWorkbooks;
+interface XWorksheets;
+interface XWorksheetFunction;
+interface XWindow;
+interface XWorksheet;
+
+interface XApplication: com::sun::star::uno::XInterface
+{
+    [attribute, readonly] XRange Selection;
+    [attribute, readonly] XWorkbook ActiveWorkbook;
+    [attribute, readonly] XRange ActiveCell;
+    [attribute, readonly] XWindow ActiveWindow;
+    [attribute, readonly] XWorksheet ActiveSheet;
+    [attribute] long Calculation;
+    //#TODO #FIXME this is more of a placeholder, will return
+    // the value of activeworkbook, in xl 'ThisWorkbook' should return the
+    // workbook in which the 'calling' macro is running. Should be possible
+    // to determine this
+    [attribute, readonly] XWorkbook ThisWorkbook;
+    [attribute] boolean ScreenUpdating;
+    [attribute] boolean DisplayStatusBar;
+    [attribute] any CutCopyMode;
+    [attribute] any StatusBar;
+    [attribute] long Cursor;
+    [attribute, readonly] string Version;
+    any Workbooks( [in] any aIndex );
+    any Worksheets( [in] any aIndex );
+    any Windows( [in] any aIndex );
+    any WorksheetFunction();
+    any Evaluate( [in] string Name );
+    any Dialogs( [in] any DialogIndex );
+    any Range( [in] any Cell1, [in] any Cell2 );
+    void GoTo( [in] any Reference, [in] any Scroll );
+    // #FIXME #TODO up to 30 args needed
+    double CountA( [in] any arg1 );
+    void wait( [in] double time );
+};
+
+}; }; };
+
+#endif
+
+
