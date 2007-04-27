@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmpage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 15:12:51 $
+ *  last change: $Author: rt $ $Date: 2007-04-27 10:11:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,7 @@ public:
     virtual void    SetModel(SdrModel* pNewModel);
 
     virtual SdrPage* Clone() const;
+    using SdrPage::Clone;
 
     virtual void    InsertObject(SdrObject* pObj, ULONG nPos = CONTAINER_APPEND,
                                     const SdrInsertReason* pReason=NULL);
