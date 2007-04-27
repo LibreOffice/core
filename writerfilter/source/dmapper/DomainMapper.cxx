@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-25 13:28:10 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-27 12:51:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,25 @@ using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace ::writerfilter;
 namespace dmapper{
+
+struct _PageSz
+{
+    sal_Int32 code;
+    sal_Int32 h;
+    sal_Bool  orient;
+    sal_Int32 w;
+} PageSz;
+
+struct _PageMar
+{
+    sal_Int32 top;
+    sal_Int32 right;
+    sal_Int32 bottom;
+    sal_Int32 left;
+    sal_Int32 header;
+    sal_Int32 footer;
+    sal_Int32 gutter;
+} PageMar;
 
 /*-- 09.06.2006 09:52:11---------------------------------------------------
 
@@ -1596,6 +1615,42 @@ void DomainMapper::attribute(doctok::Id nName, doctok::Value & val)
             m_pImpl->GetTopContext()->Insert(PROP_CHAR_ROTATION_IS_FIT_TO_LINE, uno::makeAny ( nIntValue ? true : false));
             break;
 
+        case NS_ooxml::LN_CT_PageSz_code:
+            PageSz.code = nIntValue;
+            break;
+        case NS_ooxml::LN_CT_PageSz_h:
+            PageSz.h = ConversionHelper::convertToMM100(ConversionHelper::SnapPageDimension(nIntValue));
+            break;
+        case NS_ooxml::LN_CT_PageSz_orient:
+            PageSz.orient = (nIntValue != 0);
+            break;
+        case NS_ooxml::LN_CT_PageSz_w:
+            PageSz.w = ConversionHelper::convertToMM100(ConversionHelper::SnapPageDimension(nIntValue));
+            break;
+
+        case NS_ooxml::LN_CT_PageMar_top:
+            PageMar.top = nIntValue;
+
+            break;
+        case NS_ooxml::LN_CT_PageMar_right:
+            PageMar.right = ConversionHelper::convertToMM100(nIntValue);
+            break;
+        case NS_ooxml::LN_CT_PageMar_bottom:
+            PageMar.bottom = ConversionHelper::convertToMM100(nIntValue);
+            break;
+        case NS_ooxml::LN_CT_PageMar_left:
+            PageMar.left = ConversionHelper::convertToMM100(nIntValue);
+            break;
+        case NS_ooxml::LN_CT_PageMar_header:
+            PageMar.header = ConversionHelper::convertToMM100(nIntValue);
+            break;
+        case NS_ooxml::LN_CT_PageMar_footer:
+            PageMar.footer = ConversionHelper::convertToMM100(nIntValue);
+            break;
+        case NS_ooxml::LN_CT_PageMar_gutter:
+            PageMar.gutter = ConversionHelper::convertToMM100(nIntValue);
+            break;
+
         default:
             {
                 //int nVal = val.getInt();
@@ -2476,7 +2531,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         break;  // sprmPicBrcLeft
     case 0x6C04:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        break;  // sprmPicBrcBottom
+        break;  // sprmPicBrcBoConversionHelper::convertToMM100ttom
     case 0x6C05:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmPicBrcRight
@@ -2710,10 +2765,11 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     {
         /* WRITERFILTERSTATUS: done: 1, planned: 0.5, spent: 0 */
         //left page margin default 0x708 twip
-         rContext->Insert( PROP_LEFT_MARGIN, uno::makeAny( ConversionHelper::convertToMM100( nIntValue ) ) );
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        sal_Int32 nConverted = ConversionHelper::convertToMM100( nIntValue );
         if(pSectionContext)
-            pSectionContext->SetLeftMargin( ConversionHelper::convertToMM100( nIntValue ) );
+            pSectionContext->SetLeftMargin( nConverted );
+        rContext->Insert( PROP_LEFT_MARGIN, uno::makeAny( nConverted ));
     }
     break;
     case 167:
@@ -2722,8 +2778,10 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         /* WRITERFILTERSTATUS: done: 1, planned: 0.5, spent: 0 */
         //right page margin default 0x708 twip
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        sal_Int32 nConverted = ConversionHelper::convertToMM100( nIntValue );
         if(pSectionContext)
-            pSectionContext->SetRightMargin( ConversionHelper::convertToMM100( nIntValue ) );
+            pSectionContext->SetRightMargin( nConverted );
+        rContext->Insert( PROP_RIGHT_MARGIN, uno::makeAny( nConverted ));
     }
     break;
     case 168:
@@ -3048,10 +3106,45 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case NS_ooxml::LN_CT_PPrBase_tabs:
     case NS_ooxml::LN_EG_SectPrContents_footnotePr:
     case NS_ooxml::LN_EG_SectPrContents_endnotePr:
-    case NS_ooxml::LN_EG_SectPrContents_pgSz:
-    case NS_ooxml::LN_EG_SectPrContents_pgMar:
 //    case NS_ooxml::LN_CT_PPr_rPr:
         resolveSprmProps(sprm_);
+        break;
+
+    case NS_ooxml::LN_EG_SectPrContents_pgSz:
+        PageSz.code = PageSz.h = PageSz.orient = PageSz.w = 0;
+        resolveSprmProps(sprm_);
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if (PageSz.h)
+            rContext->Insert( PROP_HEIGHT, uno::makeAny( PageSz.h ) );
+        if (PageSz.orient)
+        {
+            if(pSectionContext)
+                pSectionContext->SetLandscape( PageSz.orient );
+            rContext->Insert( PROP_IS_LANDSCAPE , uno::makeAny( PageSz.orient ));
+        }
+        if (PageSz.w)
+            rContext->Insert( PROP_WIDTH, uno::makeAny( PageSz.w ) );
+        break;
+
+    case NS_ooxml::LN_EG_SectPrContents_pgMar:
+        PageMar.top = PageMar.right = PageMar.bottom = PageMar.left = PageMar.header = PageMar.footer = PageMar.gutter = 0;
+        resolveSprmProps(sprm_);
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if(pSectionContext)
+        {
+            printf("here we go 2\n");
+            pSectionContext->SetTopMargin( PageMar.top );
+            pSectionContext->SetRightMargin( PageMar.right );
+            pSectionContext->SetBottomMargin( PageMar.bottom );
+            pSectionContext->SetLeftMargin( PageMar.left );
+            pSectionContext->SetHeaderTop( PageMar.header );
+            pSectionContext->SetHeaderBottom( PageMar.footer );
+        }
+        rContext->Insert( PROP_TOP_MARGIN, uno::makeAny( PageMar.top ));
+        rContext->Insert( PROP_RIGHT_MARGIN, uno::makeAny( PageMar.right ));
+        rContext->Insert( PROP_BOTTOM_MARGIN, uno::makeAny( PageMar.bottom ));
+        rContext->Insert( PROP_LEFT_MARGIN, uno::makeAny( PageMar.left ));
+
         break;
 
     default:
