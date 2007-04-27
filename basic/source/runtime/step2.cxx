@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 15:52:45 $
+ *  last change: $Author: rt $ $Date: 2007-04-27 09:16:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ using namespace com::sun::star::lang;
 const static String aThisComponent( RTL_CONSTASCII_USTRINGPARAM("ThisComponent") );
 const static String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
 //  i#i68894#
-SbxArray* getVBAGlobals( StarBASIC* pSBasic )
+SbxArray* getVBAGlobals( )
 {
     static SbxArrayRef pArray;
     static bool isInitialised = false;
@@ -83,12 +83,12 @@ SbxArray* getVBAGlobals( StarBASIC* pSBasic )
 }
 
 //  i#i68894#
-SbxVariable* VBAFind( const String& rName, SbxClassType t, StarBASIC* pBasic )
+SbxVariable* VBAFind( const String& rName, SbxClassType t )
 {
     if( rName == aThisComponent )
         return NULL;
 
-    SbxArray *pVBAGlobals = getVBAGlobals( pBasic );
+    SbxArray *pVBAGlobals = getVBAGlobals( );
     for (USHORT i = 0; pVBAGlobals && i < pVBAGlobals->Count(); i++)
     {
         SbxVariable *pElem = pVBAGlobals->Get( i );
@@ -159,7 +159,7 @@ SbxVariable* SbiRuntime::FindElement
                 if ( bIsVBAInterOp )
                 {
                     // Try Find in VBA symbols space
-                    pElem = VBAFind( aName, SbxCLASS_DONTCARE, &rBasic );
+                    pElem = VBAFind( aName, SbxCLASS_DONTCARE );
                     if ( pElem )
                         bSetName = false; // don't overwrite uno name
                 }
