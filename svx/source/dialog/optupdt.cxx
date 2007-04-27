@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optupdt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:40:25 $
+ *  last change: $Author: rt $ $Date: 2007-04-27 08:44:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage( Window* pParent, const SfxItemSe
         m_aChangePathButton( this, SVX_RES( PB_CHANGEPATH ) ),
         m_aLastChecked( this, SVX_RES( FT_LASTCHECKED ) )
 {
-    m_aNeverChecked = String( ResId( STR_NEVERCHECKED ) );
+    m_aNeverChecked = String( SVX_RES( STR_NEVERCHECKED ) );
     FreeResource();
 
     m_aAutoCheckCheckBox.SetClickHdl( LINK( this, SvxOnlineUpdateTabPage, AutoCheckHdl_Impl ) );
