@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-27 08:31:04 $
+#   last change: $Author: rt $ $Date: 2007-04-27 09:25:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,13 +37,6 @@ PRJ=..$/..$/..
 
 PRJNAME=sc
 TARGET=vbaobj
-.IF "$(ENABLE_VBA)"!="YES"
-dummy:
-        @echo "not building vba..."
-.ENDIF
-
-
-NO_BSYMBOLIC=   TRUE
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -51,13 +44,12 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 DLLPRE =
 
-ALLTAR : \
-        $(MISC)$/$(TARGET).don \
-        $(SLOTARGET)
+.IF "$(ENABLE_VBA)"!="YES"
+dummy:
+        @echo "not building vba..."
+.ENDIF
 
-$(MISC)$/$(TARGET).don : $(SOLARBINDIR)$/oovbaapi.rdb
-        +$(CPPUMAKER) -O$(OUT)$/inc -BUCR $(SOLARBINDIR)$/oovbaapi.rdb -X$(SOLARBINDIR)$/types.rdb && echo > $@
-        echo $@
+INCPRE=$(INCCOM)$/$(TARGET)
 
 # ------------------------------------------------------------------
 
@@ -99,3 +91,13 @@ SLOFILES= \
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
+ALLTAR : \
+        $(MISC)$/$(TARGET).don \
+
+$(SLOFILES) : $(MISC)$/$(TARGET).don
+
+$(MISC)$/$(TARGET).don : $(SOLARBINDIR)$/oovbaapi.rdb
+        +$(CPPUMAKER) -O$(INCCOM)$/$(TARGET) -BUCR $(SOLARBINDIR)$/oovbaapi.rdb -X$(SOLARBINDIR)$/types.rdb && echo > $@
+        echo $@
+
