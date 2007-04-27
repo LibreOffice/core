@@ -14709,6 +14709,8 @@
     </resource>
     <resource name="CT_SectPr" resource="Properties">
       <attribute name="sectPrChange" tokenid="ooxml:CT_SectPr_sectPrChange"/>
+      <!--      <action name="end" action="endSectionGroup"/>
+      <action name="end" action="startSectionGroup"/> -->
     </resource>
     <resource name="ST_BrType" resource="List">
       <value tokenid="ooxml:Value_ST_BrType_column">column</value>
@@ -15134,7 +15136,10 @@
       <attribute name="name" tokenid="ooxml:CT_Font_name"/>
     </resource>
     <resource name="CT_FontsList" resource="Table" tokenid="rtf:FONTTABLE"/>
-    <resource name="CT_Body" resource="Stream"/>
+    <resource name="CT_Body" resource="Stream">
+      <action name="start" action="startSectionGroup"/>
+      <action name="end" action="endSectionGroup"/>
+    </resource>
     <resource name="ST_ThemeColor" resource="List">
       <value tokenid="ooxml:Value_St_ThemeColor_dark1">dark1</value>
       <value tokenid="ooxml:Value_St_ThemeColor_light1">light1</value>

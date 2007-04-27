@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-24 12:52:38 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-27 15:43:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -975,6 +975,10 @@ bool </xsl:text>
         <xsl:text>
     mrStream.startCharacterGroup();</xsl:text>
       </xsl:when>
+      <xsl:when test="$resource/action[@name='start' and @action='startSectionGroup']">
+        <xsl:text>
+    mrStream.startSectionGroup();</xsl:text>
+      </xsl:when>
     </xsl:choose>
     <xsl:if test="$resource/@resource='Properties'">
       <xsl:for-each select="$resource//attribute[@default]">
@@ -1030,6 +1034,10 @@ bool </xsl:text>
     <xsl:if test="$resource/action[@name='end' and @action='endCharacterGroup']">
         <xsl:text>
     mrStream.endCharacterGroup();</xsl:text>
+    </xsl:if>
+    <xsl:if test="$resource/action[@name='end' and @action='endSectionGroup']">
+        <xsl:text>
+    mrStream.endSectionGroup();</xsl:text>
     </xsl:if>
     <xsl:text>
 }&#xa;</xsl:text>

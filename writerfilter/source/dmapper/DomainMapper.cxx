@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-27 12:51:36 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-27 15:43:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3132,7 +3132,6 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
         {
-            printf("here we go 2\n");
             pSectionContext->SetTopMargin( PageMar.top );
             pSectionContext->SetRightMargin( PageMar.right );
             pSectionContext->SetBottomMargin( PageMar.bottom );
