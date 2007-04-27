@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:19:04 $
+ *  last change: $Author: rt $ $Date: 2007-04-27 08:49:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2290,7 +2290,7 @@ UUIInteractionHelper::handleGenericErrorRequest(
         } catch( star::uno::Exception& )
         {}
 
-        ::rtl::OUString aErrTitle = String( ResId( STR_WARNING_BROKENSIGNATURE_TITLE, xManager.get() ) );
+        ::rtl::OUString aErrTitle = String( ResId( STR_WARNING_BROKENSIGNATURE_TITLE, *xManager.get() ) );
         if ( aTitle.getLength() && aErrTitle.getLength() )
             aTitle += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " - " ) );
          aTitle += aErrTitle;
