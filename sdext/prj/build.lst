@@ -1,0 +1,5 @@
+dx	sdext	:	NULL
+dx	sdext									usr1	-	all	sdext_mkout NULL
+dx	sdext\inc								nmake	-	all	sdext_inc NULL
+dx	sdext\prj								get		-	all	sdext_prj NULL
+dx	sdext\util								nmake	-	all	sdext_util NULL
