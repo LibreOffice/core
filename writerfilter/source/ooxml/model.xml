@@ -329,10 +329,8 @@
           </attribute>
         </optional>
         <optional>
-          <attribute name="fadeDir">
-            <text/>
-            <xs:documentation>Fade Direction</xs:documentation>
-          </attribute>
+          <attribute name="fadeDir"><text/>index.ht
+            <xs:documentation>Fade Direction</xs:documentation></attribute>
         </optional>
         <optional>
           <attribute name="sx">
@@ -14709,8 +14707,7 @@
     </resource>
     <resource name="CT_SectPr" resource="Properties">
       <attribute name="sectPrChange" tokenid="ooxml:CT_SectPr_sectPrChange"/>
-      <!--      <action name="end" action="endSectionGroup"/>
-      <action name="end" action="startSectionGroup"/> -->
+      <action name="end" action="setLastParagraphInSection"/>
     </resource>
     <resource name="ST_BrType" resource="List">
       <value tokenid="ooxml:Value_ST_BrType_column">column</value>

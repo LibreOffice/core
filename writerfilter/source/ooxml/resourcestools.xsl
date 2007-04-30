@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-27 15:43:22 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-30 16:32:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1026,6 +1026,10 @@ bool </xsl:text>
     <xsl:if test="$resource/action[@name='end' and @action='endOfParagraph']">
       <xsl:text>
     mrStream.utext(reinterpret_cast&lt;const sal_uInt8 *&gt;(sCR.getStr()), sCR.getLength());</xsl:text>
+    </xsl:if>
+    <xsl:if test="$resource/action[@name='end' and @action='setLastParagraphInSection']">
+      <xsl:text>
+    mrStream.setLastParagraphInSection();</xsl:text>
     </xsl:if>
     <xsl:if test="$resource/action[@name='end' and @action='endParagraphGroup']">
         <xsl:text>

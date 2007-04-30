@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicImport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2006-11-22 14:03:57 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-30 16:32:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,7 @@ public:
 
     // Stream
     virtual void startSectionGroup();
+    virtual void setLastParagraphInSection() {};
     virtual void endSectionGroup();
     virtual void startParagraphGroup();
     virtual void endParagraphGroup();

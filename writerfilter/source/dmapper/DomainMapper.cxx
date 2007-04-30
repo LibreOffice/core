@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-27 15:43:19 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-30 16:32:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,8 @@ struct _PageMar
 DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xContext,
                             uno::Reference< lang::XComponent > xModel) :
     m_pImpl( new DomainMapper_Impl( *this, xContext, xModel )),
-    mnBackgroundColor(0), mbIsHighlightSet(false)
+    mnBackgroundColor(0), mbIsHighlightSet(false), mbIsLastParagraphInSection(false),
+    mbIsSectionOpened(false)
 {
 }
 /*-- 09.06.2006 09:52:12---------------------------------------------------
@@ -2855,7 +2856,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 0x702D:  // sprmSBrcBottom
         /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
     case 0x702E:  // sprmSBrcRight
-        /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
+        /* WRITERFILTERSTATUS: Sectiondone: 100, planned: 0.5, spent: 0 */
         {
             table::BorderLine aBorderLine;
             sal_Int32 nLineDistance = ConversionHelper::MakeBorderLine( nIntValue, aBorderLine );
@@ -3173,25 +3174,46 @@ void DomainMapper::data(const sal_uInt8* /*buf*/, size_t /*len*/,
 -----------------------------------------------------------------------*/
 void DomainMapper::startSectionGroup()
 {
-    m_pImpl->PushProperties(CONTEXT_SECTION);
+    if (!mbIsSectionOpened)
+    {
+        m_pImpl->PushProperties(CONTEXT_SECTION);
+        mbIsSectionOpened = true;
+        mbIsLastParagraphInSection = false;
+    }
+}
+
+void DomainMapper::setLastParagraphInSection()
+{
+    if (!mbIsLastParagraphInSection)
+        mbIsLastParagraphInSection = true;
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
 
 -----------------------------------------------------------------------*/
 void DomainMapper::endSectionGroup()
 {
-    PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_SECTION);
-    SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
-    OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-    if(pSectionContext)
-        pSectionContext->CloseSectionGroup( *m_pImpl );
-    m_pImpl->PopProperties(CONTEXT_SECTION);
+    if (mbIsSectionOpened)
+    {
+        PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_SECTION);
+        SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if(pSectionContext)
+            pSectionContext->CloseSectionGroup( *m_pImpl );
+        m_pImpl->PopProperties(CONTEXT_SECTION);
+        mbIsSectionOpened = false;
+    }
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
 
 -----------------------------------------------------------------------*/
 void DomainMapper::startParagraphGroup()
 {
+    if (!mbIsSectionOpened && mbIsLastParagraphInSection)
+    {
+        startSectionGroup();
+        mbIsLastParagraphInSection = false;
+    }
+
     m_pImpl->getTableManager().startParagraphGroup();
     m_pImpl->PushProperties(CONTEXT_PARAGRAPH);
 }
@@ -3202,6 +3224,9 @@ void DomainMapper::endParagraphGroup()
 {
     m_pImpl->PopProperties(CONTEXT_PARAGRAPH);
     m_pImpl->getTableManager().endParagraphGroup();
+
+    if (mbIsLastParagraphInSection && mbIsSectionOpened)
+        endSectionGroup();
 }
 /*-- 09.06.2006 09:52:14---------------------------------------------------
 
@@ -3224,8 +3249,6 @@ void DomainMapper::text(const sal_uInt8 * data_, size_t len)
 {
     try
     {
-
-
         bool bContinue = true;
         //TODO: Determine the right text encoding (FIB?)
         ::rtl::OUString sText( (const sal_Char*) data_, len, RTL_TEXTENCODING_MS_1252 );

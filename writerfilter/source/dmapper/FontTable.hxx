@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FontTable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2006-11-02 12:37:24 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-30 16:32:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,7 @@ public:
 
     // Stream
     virtual void startSectionGroup();
+    virtual void setLastParagraphInSection() {};
     virtual void endSectionGroup();
     virtual void startParagraphGroup();
     virtual void endParagraphGroup();

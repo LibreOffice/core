@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLStreamImpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-16 12:51:37 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-30 16:32:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@ protected:
     rtl::OUString msPath;
 
     StreamType_t mnStreamType;
+
 public:
     typedef boost::shared_ptr<OOXMLStreamImpl> Pointer_t;
 
