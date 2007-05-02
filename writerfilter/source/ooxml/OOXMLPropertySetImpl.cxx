@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-24 12:52:37 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-02 18:06:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,6 +234,19 @@ OOXMLValue * OOXMLValue::clone() const
 OOXMLBooleanValue::OOXMLBooleanValue(bool bValue)
 : mbValue(bValue)
 {
+}
+
+OOXMLBooleanValue::OOXMLBooleanValue(const rtl::OUString & rValue)
+: mbValue(false)
+{
+    if (strue.compareTo(rValue) == 0
+        || sTrue.compareTo(rValue) == 0
+        || s1.compareTo(rValue) == 0
+        || son.compareTo(rValue) == 0
+        || sOn.compareTo(rValue) == 0)
+        mbValue = true;
+     else
+        mbValue = false;
 }
 
 OOXMLBooleanValue::~OOXMLBooleanValue()

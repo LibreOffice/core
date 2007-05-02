@@ -8350,7 +8350,7 @@
       </define>
       <define name="CT_SectType">
         <attribute name="val">
-          <text/>
+          <ref name="ST_SectionMark"/>
           <xs:documentation>Section Type Setting</xs:documentation>
         </attribute>
       </define>
@@ -8718,13 +8718,13 @@
       <define name="CT_Column">
         <optional>
           <attribute name="w">
-            <text/>
+            <ref name="ST_TwipsMeasure"/>
             <xs:documentation>Column Width</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="space">
-            <text/>
+            <ref name="ST_TwipsMeasure"/>
             <xs:documentation>Space Before Following Column</xs:documentation>
           </attribute>
         </optional>
@@ -8737,25 +8737,25 @@
         </zeroOrMore>
         <optional>
           <attribute name="equalWidth">
-            <text/>
+            <ref name="ST_OnOff"/>
             <xs:documentation>Equal Column Widths</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="space">
-            <text/>
+            <ref name="ST_TwipsMeasure"/>
             <xs:documentation>Spacing Between Equal Width Columns</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="num">
-            <text/>
+            <ref name="ST_DecimalNumber"/>
             <xs:documentation>Number of Equal Width Columns</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="sep">
-            <text/>
+            <ref name="ST_OnOff"/>
             <xs:documentation>Draw Line Between Columns</xs:documentation>
           </attribute>
         </optional>
@@ -14595,7 +14595,14 @@
     <resource name="CT_FFName" resource="StringValue" generated="yes"/>
     <resource name="CT_FFHelpText" resource="StringValue" generated="yes"/>
     <resource name="CT_FFStatusText" resource="StringValue" generated="yes"/>
-    <resource name="CT_SectType" resource="StringValue" generated="yes"/>
+    <resource name="ST_SectionMark" resource="List">
+      <value tokenid="0">continuous</value>
+      <value tokenid="1">nextColumn</value>
+      <value tokenid="2">nextPage</value>
+      <value tokenid="3">evenPage</value>
+      <value tokenid="4">oddPage</value>
+    </resource>
+    <resource name="CT_SectType" resource="ListValue"/>
     <resource name="ST_NumberFormat" resource="List">
       <value tokenid="ooxml:Value_ST_NumberFormat_decimal">decimal</value>
       <value tokenid="ooxml:Value_ST_NumberFormat_upperRoman">upperRoman</value>
@@ -14677,6 +14684,17 @@
       <attribute name="footer" tokenid="ooxml:CT_PageMar_footer"/>
       <attribute name="gutter" tokenid="ooxml:CT_PageMar_gutter"/>
     </resource>
+    <resource name="CT_Column" resource="Properties">
+      <attribute name="space" tokenid="ooxml:CT_Column_space"/>
+      <attribute name="w" tokenid="ooxml:CT_Column_w"/>
+    </resource>
+    <resource name="CT_Columns" resource="Properties">
+      <attribute name="equalWidth" tokenid="ooxml:CT_Columns_equalWidth"/>
+      <attribute name="space" tokenid="ooxml:CT_Columns_space"/>
+      <attribute name="num" tokenid="ooxml:CT_Columns_num"/>
+      <attribute name="sep" tokenid="ooxml:CT_Columns_sep"/>
+      <sprm name="col" tokenid="ooxml:CT_Columns_col"/>
+    </resource>
     <resource name="ST_VerticalJc" resource="List">
       <value tokenid="ooxml:Value_ST_VerticalJc_top">top</value>
       <value tokenid="ooxml:Value_ST_VerticalJc_center">center</value>
@@ -14702,7 +14720,7 @@
       <attribute name="rtlGutter" tokenid="ooxml:EG_SectPrContents_rtlGutter"/>
       <attribute name="textDirection" tokenid="ooxml:EG_SectPrContents_textDirection"/>
       <attribute name="titlePg" tokenid="ooxml:EG_SectPrContents_titlePg"/>
-      <attribute name="type" tokenid="ooxml:EG_SectPrContents_type"/>
+      <attribute name="type" tokenid="0x3009"/>
       <attribute name="vAlign" tokenid="ooxml:EG_SectPrContents_vAlign"/>
     </resource>
     <resource name="CT_SectPr" resource="Properties">
@@ -15002,7 +15020,9 @@
     <resource name="CT_EdnPos" resource="ListValue">
       <attribute name="val" tokenid="ooxml:CT_EdnPos_val"/>
     </resource>
-    <resource name="CT_NumFmt" resource="ListValue"/>
+    <resource name="CT_NumFmt" resource="ListValue">
+      <attribute name="val" tokenid="ooxml:CT_NumFmt_val"/>
+    </resource>
     <resource name="ST_RestartNumber" resource="List">
       <value tokenid="ooxml:Value_ST_RestartNumber_continuous">continuous</value>
       <value tokenid="ooxml:Value_ST_RestartNumber_eachSect">eachSect</value>

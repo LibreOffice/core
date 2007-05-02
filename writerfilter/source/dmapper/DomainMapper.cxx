@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-30 16:32:21 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-02 18:06:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,13 +109,14 @@ using namespace ::rtl;
 using namespace ::writerfilter;
 namespace dmapper{
 
+/* ---- Fridrich's mess begins here ---- */
 struct _PageSz
 {
     sal_Int32 code;
     sal_Int32 h;
     sal_Bool  orient;
     sal_Int32 w;
-} PageSz;
+} CT_PageSz;
 
 struct _PageMar
 {
@@ -126,7 +127,23 @@ struct _PageMar
     sal_Int32 header;
     sal_Int32 footer;
     sal_Int32 gutter;
-} PageMar;
+} CT_PageMar;
+
+struct _Column
+{
+    sal_Int32 w;
+    sal_Int32 space;
+} CT_Column;
+
+struct _Columns
+{
+    bool equalWidth;
+    sal_Int32 space;
+    sal_Int32 num;
+    bool sep;
+    std::vector<_Column> cols;
+} CT_Columns;
+/* ---- Fridrich's mess (hopefully) ends here ---- */
 
 /*-- 09.06.2006 09:52:11---------------------------------------------------
 
@@ -152,7 +169,7 @@ void DomainMapper::attribute(doctok::Id nName, doctok::Value & val)
 
     sal_Int32 nIntValue = val.getInt();
     rtl::OUString sStringValue = val.getString();
-    // printf("*** attribute *** 0x%.8x *** 0x%.8x *** %s *** attribute ***\n", (unsigned int)Name, (unsigned int)nIntValue, OUStringToOString(sStringValue, RTL_TEXTENCODING_UTF8).getStr());
+    // printf("*** attribute *** 0x%.8x *** 0x%.8x *** %s *** attribute ***\n", (unsigned int)nName, (unsigned int)nIntValue, OUStringToOString(sStringValue, RTL_TEXTENCODING_UTF8).getStr());
     if( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR )
         m_pImpl->GetFIB().SetData( nName, nIntValue );
     else
@@ -1617,39 +1634,58 @@ void DomainMapper::attribute(doctok::Id nName, doctok::Value & val)
             break;
 
         case NS_ooxml::LN_CT_PageSz_code:
-            PageSz.code = nIntValue;
+            CT_PageSz.code = nIntValue;
             break;
         case NS_ooxml::LN_CT_PageSz_h:
-            PageSz.h = ConversionHelper::convertToMM100(ConversionHelper::SnapPageDimension(nIntValue));
+            CT_PageSz.h = ConversionHelper::convertToMM100(ConversionHelper::SnapPageDimension(nIntValue));
             break;
         case NS_ooxml::LN_CT_PageSz_orient:
-            PageSz.orient = (nIntValue != 0);
+            CT_PageSz.orient = (nIntValue != 0);
             break;
         case NS_ooxml::LN_CT_PageSz_w:
-            PageSz.w = ConversionHelper::convertToMM100(ConversionHelper::SnapPageDimension(nIntValue));
+            CT_PageSz.w = ConversionHelper::convertToMM100(ConversionHelper::SnapPageDimension(nIntValue));
             break;
 
         case NS_ooxml::LN_CT_PageMar_top:
-            PageMar.top = nIntValue;
-
+            CT_PageMar.top = ConversionHelper::convertToMM100(nIntValue);
             break;
         case NS_ooxml::LN_CT_PageMar_right:
-            PageMar.right = ConversionHelper::convertToMM100(nIntValue);
+            CT_PageMar.right = ConversionHelper::convertToMM100(nIntValue);
             break;
         case NS_ooxml::LN_CT_PageMar_bottom:
-            PageMar.bottom = ConversionHelper::convertToMM100(nIntValue);
+            CT_PageMar.bottom = ConversionHelper::convertToMM100(nIntValue);
             break;
         case NS_ooxml::LN_CT_PageMar_left:
-            PageMar.left = ConversionHelper::convertToMM100(nIntValue);
+            CT_PageMar.left = ConversionHelper::convertToMM100(nIntValue);
             break;
         case NS_ooxml::LN_CT_PageMar_header:
-            PageMar.header = ConversionHelper::convertToMM100(nIntValue);
+            CT_PageMar.header = ConversionHelper::convertToMM100(nIntValue);
             break;
         case NS_ooxml::LN_CT_PageMar_footer:
-            PageMar.footer = ConversionHelper::convertToMM100(nIntValue);
+            CT_PageMar.footer = ConversionHelper::convertToMM100(nIntValue);
             break;
         case NS_ooxml::LN_CT_PageMar_gutter:
-            PageMar.gutter = ConversionHelper::convertToMM100(nIntValue);
+            CT_PageMar.gutter = ConversionHelper::convertToMM100(nIntValue);
+            break;
+
+        case NS_ooxml::LN_CT_Columns_equalWidth:
+            CT_Columns.equalWidth = (nIntValue != 0);
+            break;
+        case NS_ooxml::LN_CT_Columns_space:
+            CT_Columns.space = ConversionHelper::convertToMM100( nIntValue );
+            break;
+        case NS_ooxml::LN_CT_Columns_num:
+            CT_Columns.num = nIntValue;
+            break;
+        case NS_ooxml::LN_CT_Columns_sep:
+            CT_Columns.sep = (nIntValue != 0);
+            break;
+
+        case NS_ooxml::LN_CT_Column_w:
+            CT_Column.w = ConversionHelper::convertToMM100( nIntValue );
+            break;
+        case NS_ooxml::LN_CT_Column_space:
+            CT_Column.space = ConversionHelper::convertToMM100( nIntValue );
             break;
 
         default:
@@ -1679,7 +1715,8 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
 
     sal_uInt32 nId = sprm_.getId();
     //needed for page properties
-    SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( rContext.get() );
+    PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_SECTION);
+    SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
 
     //TODO: In rtl-paragraphs the meaning of left/right are to be exchanged
     bool bExchangeLeftRight = false;
@@ -2541,6 +2578,10 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         break;  // sprmScnsPgn
     case 0x3001:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if(pSectionContext)
+            pSectionContext->SetEvenlySpaced( nIntValue > 0 );
+
         break;  // sprmSiHeadingPgn
     case 0xD202:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
@@ -2553,21 +2594,21 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
             pSectionContext->AppendColumnWidth( ConversionHelper::convertToMM100( (nIntValue & 0xffff00) >> 8 ));
-    break;
+        break;
     case 0xF204: // sprmSDxaColSpacing
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         // the lowet byte contains the index
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
             pSectionContext->AppendColumnSpacing( ConversionHelper::convertToMM100( (nIntValue & 0xffff00) >> 8 ));
-    break;
+        break;
     case 138:
     case 0x3005:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
             pSectionContext->SetEvenlySpaced( nIntValue > 0 );
-    break;  // sprmSFEvenlySpaced
+        break;  // sprmSFEvenlySpaced
     case 0x3006: // sprmSFProtected
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         //todo: missing feature - unlocked sections in protected documents
@@ -2577,7 +2618,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
             pSectionContext->SetFirstPaperBin(nIntValue);
-    break;
+        break;
     case 0x5008: // sprmSDmBinOther
         /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
@@ -2764,7 +2805,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 166:
     case 0xB021:  // sprmSDxaLeft
     {
-        /* WRITERFILTERSTATUS: done: 1, planned: 0.5, spent: 0 */
+        /* WRITERFILTERSTATUS: done: 1, planned: 0.5, spepSectionContext->SetSeparatorLine( nIntValue > 0 )nt: 0 */
         //left page margin default 0x708 twip
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         sal_Int32 nConverted = ConversionHelper::convertToMM100( nIntValue );
@@ -3095,7 +3136,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         m_pImpl->IncorporateTabStop(m_pImpl->m_aCurrentTabStop);
         break;
 
-    // TEMPORARY SOLUTION: have to find how to make this attribute instead of sprm
+    case NS_ooxml::LN_CT_PPr_sectPr:
     case NS_ooxml::LN_EG_RPrBase_color:
     case NS_ooxml::LN_EG_RPrBase_rFonts:
     case NS_ooxml::LN_EG_RPrBase_bdr:
@@ -3112,39 +3153,78 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         break;
 
     case NS_ooxml::LN_EG_SectPrContents_pgSz:
-        PageSz.code = PageSz.h = PageSz.orient = PageSz.w = 0;
+        CT_PageSz.code = CT_PageSz.h = CT_PageSz.orient = CT_PageSz.w = 0;
         resolveSprmProps(sprm_);
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if (PageSz.h)
-            rContext->Insert( PROP_HEIGHT, uno::makeAny( PageSz.h ) );
-        if (PageSz.orient)
+        if (CT_PageSz.h)
+            rContext->Insert( PROP_HEIGHT, uno::makeAny( CT_PageSz.h ) );
+        if (CT_PageSz.orient)
         {
             if(pSectionContext)
-                pSectionContext->SetLandscape( PageSz.orient );
-            rContext->Insert( PROP_IS_LANDSCAPE , uno::makeAny( PageSz.orient ));
+                pSectionContext->SetLandscape( CT_PageSz.orient );
+            rContext->Insert( PROP_IS_LANDSCAPE , uno::makeAny( CT_PageSz.orient ));
         }
-        if (PageSz.w)
-            rContext->Insert( PROP_WIDTH, uno::makeAny( PageSz.w ) );
+        if (CT_PageSz.w)
+            rContext->Insert( PROP_WIDTH, uno::makeAny( CT_PageSz.w ) );
         break;
 
     case NS_ooxml::LN_EG_SectPrContents_pgMar:
-        PageMar.top = PageMar.right = PageMar.bottom = PageMar.left = PageMar.header = PageMar.footer = PageMar.gutter = 0;
+        CT_PageMar.top = CT_PageMar.right = CT_PageMar.bottom = CT_PageMar.left = CT_PageMar.header = CT_PageMar.footer = CT_PageMar.gutter = 0;
         resolveSprmProps(sprm_);
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
         {
-            pSectionContext->SetTopMargin( PageMar.top );
-            pSectionContext->SetRightMargin( PageMar.right );
-            pSectionContext->SetBottomMargin( PageMar.bottom );
-            pSectionContext->SetLeftMargin( PageMar.left );
-            pSectionContext->SetHeaderTop( PageMar.header );
-            pSectionContext->SetHeaderBottom( PageMar.footer );
+            pSectionContext->SetTopMargin( CT_PageMar.top );
+            pSectionContext->SetRightMargin( CT_PageMar.right );
+            pSectionContext->SetBottomMargin( CT_PageMar.bottom );
+            pSectionContext->SetLeftMargin( CT_PageMar.left );
+            pSectionContext->SetHeaderTop( CT_PageMar.header );
+            pSectionContext->SetHeaderBottom( CT_PageMar.footer );
         }
-        rContext->Insert( PROP_TOP_MARGIN, uno::makeAny( PageMar.top ));
-        rContext->Insert( PROP_RIGHT_MARGIN, uno::makeAny( PageMar.right ));
-        rContext->Insert( PROP_BOTTOM_MARGIN, uno::makeAny( PageMar.bottom ));
-        rContext->Insert( PROP_LEFT_MARGIN, uno::makeAny( PageMar.left ));
+        rContext->Insert( PROP_TOP_MARGIN, uno::makeAny( CT_PageMar.top ));
+        rContext->Insert( PROP_RIGHT_MARGIN, uno::makeAny( CT_PageMar.right ));
+        rContext->Insert( PROP_BOTTOM_MARGIN, uno::makeAny( CT_PageMar.bottom ));
+        rContext->Insert( PROP_LEFT_MARGIN, uno::makeAny( CT_PageMar.left ));
 
+        break;
+
+    case NS_ooxml::LN_EG_SectPrContents_cols:
+        CT_Columns.equalWidth = CT_Columns.sep = false;
+        CT_Columns.space = CT_Columns.num = 0;
+        CT_Columns.cols.erase(CT_Columns.cols.begin(), CT_Columns.cols.end());
+        resolveSprmProps(sprm_);
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if(pSectionContext)
+        {
+            if (CT_Columns.equalWidth)
+            {
+                pSectionContext->SetEvenlySpaced( true );
+                pSectionContext->SetColumnCount( (sal_Int16) (CT_Columns.num - 1) );
+                pSectionContext->SetColumnDistance( CT_Columns.space );
+                pSectionContext->SetSeparatorLine( CT_Columns.sep );
+            }
+            else if (!CT_Columns.cols.empty())
+            {
+                pSectionContext->SetEvenlySpaced( false );
+                pSectionContext->SetColumnDistance( CT_Columns.space );
+                pSectionContext->SetColumnCount( (sal_Int16)(CT_Columns.cols.size() -1));
+                std::vector<_Column>::const_iterator tmpIter = CT_Columns.cols.begin();
+                for (; tmpIter != CT_Columns.cols.end(); tmpIter++)
+                {
+                    pSectionContext->AppendColumnWidth( tmpIter->w );
+                    if ((tmpIter != CT_Columns.cols.end() - 1) || (tmpIter->space > 0))
+                        pSectionContext->AppendColumnSpacing( tmpIter->space );
+                }
+                pSectionContext->SetSeparatorLine( CT_Columns.sep );
+            }
+        }
+
+        break;
+
+    case NS_ooxml::LN_CT_Columns_col:
+        CT_Column.w = CT_Column.space = 0;
+        resolveSprmProps(sprm_);
+        CT_Columns.cols.push_back(CT_Column);
         break;
 
     default:
@@ -3178,14 +3258,12 @@ void DomainMapper::startSectionGroup()
     {
         m_pImpl->PushProperties(CONTEXT_SECTION);
         mbIsSectionOpened = true;
-        mbIsLastParagraphInSection = false;
     }
 }
 
 void DomainMapper::setLastParagraphInSection()
 {
-    if (!mbIsLastParagraphInSection)
-        mbIsLastParagraphInSection = true;
+    mbIsLastParagraphInSection = true;
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
 
@@ -3208,7 +3286,7 @@ void DomainMapper::endSectionGroup()
 -----------------------------------------------------------------------*/
 void DomainMapper::startParagraphGroup()
 {
-    if (!mbIsSectionOpened && mbIsLastParagraphInSection)
+    if (mbIsLastParagraphInSection)
     {
         startSectionGroup();
         mbIsLastParagraphInSection = false;
@@ -3225,7 +3303,7 @@ void DomainMapper::endParagraphGroup()
     m_pImpl->PopProperties(CONTEXT_PARAGRAPH);
     m_pImpl->getTableManager().endParagraphGroup();
 
-    if (mbIsLastParagraphInSection && mbIsSectionOpened)
+    if (mbIsLastParagraphInSection)
         endSectionGroup();
 }
 /*-- 09.06.2006 09:52:14---------------------------------------------------
