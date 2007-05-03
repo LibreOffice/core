@@ -4,9 +4,9 @@
 #
 #   $RCSfile: CvsModule.pm,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-09 17:19:30 $
+#   last change: $Author: rt $ $Date: 2007-05-03 10:27:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -345,22 +345,22 @@ sub changed_files
 
     my $root = $self->get_rcmd_root();
 
-    $tag_old = '-r' . $tag_old;
-    $tag_new = '-r' . $tag_new;
+    my $option_tag_old = '-r' . $tag_old;
+    my $option_tag_new = '-r' . $tag_new;
     my $verbose = $self->verbose();
     my ($t1, $t0);
     if ( $verbose > 1 ) {
         $t0 = Benchmark->new();
         autoflush STDOUT 1;
-        print "checking for changed files in module '$module'; $tag_old $tag_new\n";
+        print "checking for changed files in module '$module'; $option_tag_old $option_tag_new\n";
     }
 
     my $server_died_silently = 1;
     my @changed_files = ();
-    open(RDIFF, "$cvs_binary -d $root rdiff -s $tag_old $tag_new $module 2>&1 |");
+    open(RDIFF, "$cvs_binary -d $root rdiff -s $option_tag_old $option_tag_new $module 2>&1 |");
     while(<RDIFF>) {
         $self->append_to_log($_);
-        if ( /^cvs server: Diffing (.*)$/ ) {
+        if ( /^cvs (server|rdiff): Diffing (.*)$/ ) {
             print "." if $verbose;
             $server_died_silently = 0;
         }
@@ -374,11 +374,12 @@ sub changed_files
                 $rev_old = $1;
                 $rev_new = $2;
             }
-            elsif ( /is new; current revision ([\d\.]+)/ ) {
-                $rev_new = $1;
+            elsif ( /is new; (current|$tag_new) revision ([\d\.]+)/ ) {
+                $rev_new = $2;
                 $rev_old = undef;
             }
-            elsif ( /is removed; not included in release tag/ ) {
+            elsif ( /is removed; not included in release tag/ ||
+                    /is removed; $tag_old revision ([\d\.]+)/ ) {
                 $rev_new = undef;
                 $rev_old = undef;
             }
@@ -442,7 +443,7 @@ sub tag
         if ( /\[.* aborted\]: connect to/ ) {
             croak("ERROR: CvsModule::tag(): connection to server failed");
         }
-        if ( /^cvs server: Tagging (.*)$/ ) {
+        if ( /^cvs (server|tag): Tagging (.*)$/ ) {
             print "." if $verbose;
         }
         elsif ( /^T / ) {
@@ -552,9 +553,9 @@ sub do_checkout
         if ( /\[.* aborted\]: connect to/ ) {
             croak("ERROR: CvsModule::do_checkout(): connection to server failed");
         }
-        if ( /^cvs server: Updating (.*)$/ ) {
+        if ( /^cvs (server|checkout): Updating (.*)$/ ) {
             print "." if $verbose;
-            push(@updated_dirs, $1);
+            push(@updated_dirs, $2);
         }
         if ( /^([U|M|P|C]) (.*)$/ ) {
             push(@updated_files, [$2, $1]);
@@ -604,9 +605,9 @@ sub do_update
         if ( /\[.* aborted\]: connect to/ ) {
             croak("ERROR: CvsModule::do_update(): connection to server failed");
         }
-        if ( /^cvs server: Updating (.*)$/ ) {
+        if ( /^cvs (server|update): Updating (.*)$/ ) {
             print "." if $verbose;
-            push(@updated_dirs, $1);
+            push(@updated_dirs, $2);
         }
         if ( /^([U|M|P|C]) (.*)$/ ) {
             push(@updated_files, [$2, $1]);
