@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: os $ $Date: 2007-05-03 06:25:37 $
+ *  last change: $Author: os $ $Date: 2007-05-03 07:14:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,7 @@ struct _PageSz
 {
     sal_Int32 code;
     sal_Int32 h;
-    sal_Bool  orient;
+    bool      orient;
     sal_Int32 w;
 } CT_PageSz;
 
@@ -3148,6 +3148,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
 
     case NS_ooxml::LN_EG_SectPrContents_pgSz:
         CT_PageSz.code = CT_PageSz.h = CT_PageSz.orient = CT_PageSz.w = 0;
+        CT_PageSz.orient = false;
         resolveSprmProps(sprm_);
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if (CT_PageSz.h)
