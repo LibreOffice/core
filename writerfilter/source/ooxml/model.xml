@@ -14806,7 +14806,6 @@
     </resource>
     <resource name="CT_R" resource="Stream">
       <action name="start" action="startCharacterGroup"/>
-      <action name="end" action="endCharacterGroup"/>
     </resource>
     <resource name="ST_Hint" resource="List">
       <value tokenid="ooxml:Value_ST_Hint_default">default</value>
@@ -14887,8 +14886,8 @@
     <resource name="CT_Attr" resource="StringValue" generated="yes"/>
     <resource name="CT_P" resource="Stream">
       <action name="start" action="startParagraphGroup"/>
+      <action name="start" action="sendTableDepth"/>
       <action name="end" action="endOfParagraph"/>
-      <action name="end" action="endParagraphGroup"/>
     </resource>
     <resource name="ST_TblWidth" resource="List">
       <value tokenid="ooxml:Value_ST_TblWidth_nil">nil</value>
@@ -14946,7 +14945,9 @@
     </resource>
     <resource name="CT_TcPr" resource="Properties"/>
     <resource name="CT_Tc" resource="TextTableCell">
-      <action name="start" action="startParagraphGroup"/>
+      <action name="start" action="startCell"/>
+      <action name="end" action="endCell"/>
+      <action name="end" action="endCharacterGroup"/>
       <action name="end" action="endParagraphGroup"/>
     </resource>
     <resource name="CT_Cnf" resource="StringValue" generated="yes"/>
@@ -15155,6 +15156,8 @@
     <resource name="CT_FontsList" resource="Table" tokenid="rtf:FONTTABLE"/>
     <resource name="CT_Body" resource="Stream">
       <action name="start" action="startSectionGroup"/>
+      <action name="end" action="endCharacterGroup"/>
+      <action name="end" action="endParagraphGroup"/>
       <action name="end" action="endSectionGroup"/>
     </resource>
     <resource name="ST_ThemeColor" resource="List">

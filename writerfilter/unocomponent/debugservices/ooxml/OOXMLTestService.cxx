@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLTestService.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-02-22 17:16:07 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-05-03 13:44:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
         TimeValue t1; osl_getSystemTime(&t1);
 #endif
 
-        doctok::Stream::Pointer_t pStream = ooxml::createStreamHandler();
+        doctok::Stream::Pointer_t pStream = doctok::createStreamHandler();
         pDocument->resolve(*pStream);
 
 #if 0

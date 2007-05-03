@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-30 16:32:25 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-05-03 13:44:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -964,22 +964,31 @@ bool </xsl:text>
 : </xsl:text>
     <xsl:call-template name="contextparent"/>
     <xsl:text>(rContext)
-{
-</xsl:text>
-    <xsl:choose>
-      <xsl:when test="$resource/action[@name='start' and @action='startParagraphGroup']">
-        <xsl:text>
-    mrStream.startParagraphGroup();</xsl:text>
-      </xsl:when>
-      <xsl:when test="$resource/action[@name='start' and @action='startCharacterGroup']">
-        <xsl:text>
-    mrStream.startCharacterGroup();</xsl:text>
-      </xsl:when>
-      <xsl:when test="$resource/action[@name='start' and @action='startSectionGroup']">
-        <xsl:text>
+{</xsl:text>
+    <xsl:for-each select="$resource/action[@name='start']">
+      <xsl:choose>
+        <xsl:when test="@action='sendTableDepth'">
+          <xsl:text>
+    sendTableDepth();</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='startCell'">
+          <xsl:text>
+    startCell();</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='startParagraphGroup'">
+          <xsl:text>
+    startParagraphGroup();</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='startCharacterGroup'">
+          <xsl:text>
+    startCharacterGroup();</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='startSectionGroup'">
+          <xsl:text>
     mrStream.startSectionGroup();</xsl:text>
-      </xsl:when>
-    </xsl:choose>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:for-each>
     <xsl:if test="$resource/@resource='Properties'">
       <xsl:for-each select="$resource//attribute[@default]">
         /*<xsl:value-of select="@name"/>*/
@@ -1023,26 +1032,34 @@ bool </xsl:text>
     <xsl:value-of select="$classname"/>
     <xsl:text>()
 {</xsl:text>
-    <xsl:if test="$resource/action[@name='end' and @action='endOfParagraph']">
-      <xsl:text>
+    <xsl:for-each select="$resource/action[@name='end']">
+      <xsl:choose>
+        <xsl:when test="@action='endOfParagraph'">
+          <xsl:text>
     mrStream.utext(reinterpret_cast&lt;const sal_uInt8 *&gt;(sCR.getStr()), sCR.getLength());</xsl:text>
-    </xsl:if>
-    <xsl:if test="$resource/action[@name='end' and @action='setLastParagraphInSection']">
+        </xsl:when>
+        <xsl:when test="@action='setLastParagraphInSection'">
       <xsl:text>
     mrStream.setLastParagraphInSection();</xsl:text>
-    </xsl:if>
-    <xsl:if test="$resource/action[@name='end' and @action='endParagraphGroup']">
+        </xsl:when>
+        <xsl:when test="@action='endCell'">
         <xsl:text>
-    mrStream.endParagraphGroup();</xsl:text>
-    </xsl:if>
-    <xsl:if test="$resource/action[@name='end' and @action='endCharacterGroup']">
+    endCell();</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='endParagraphGroup'">
         <xsl:text>
-    mrStream.endCharacterGroup();</xsl:text>
-    </xsl:if>
-    <xsl:if test="$resource/action[@name='end' and @action='endSectionGroup']">
+    endParagraphGroup();</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='endCharacterGroup'">
+        <xsl:text>
+    endCharacterGroup();</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='endSectionGroup'">
         <xsl:text>
     mrStream.endSectionGroup();</xsl:text>
-    </xsl:if>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:for-each>
     <xsl:text>
 }&#xa;</xsl:text>
   </xsl:template>

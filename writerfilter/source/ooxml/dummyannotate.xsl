@@ -5,9 +5,9 @@
  *
  *  $RCSfile: dummyannotate.xsl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-16 09:14:16 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-05-03 13:44:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -767,9 +767,30 @@
     </xsl:element>
   </xsl:template>
 
+  <xsl:template match="rng:define" mode="tabledoc" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+    <xsl:for-each select=".//rng:element">
+      <w:tbl>
+        <w:tblPr>
+          <xsl:element name="w:{@name}"/>
+        </w:tblPr>
+        <w:tr>
+          <w:tc>
+            <w:tcPr/>
+            <w:p >
+              <w:pPr>
+                <w:rPr/>
+              </w:pPr>
+              <w:r><w:t><xsl:value-of select="@name"/></w:t></w:r>
+            </w:p>
+          </w:tc>
+        </w:tr>
+      </w:tbl>
+    </xsl:for-each>
+  </xsl:template>
+
   <xsl:template match="/">
     <out>
-      <xsl:apply-templates select="//rng:define[@name='CT_FontSig']" mode="resourcesPropertySetValue"/>
+      <xsl:apply-templates select="//rng:define[@name='CT_TrPrBase']" mode="resourcesPropertySetValue"/>
     </out>
   </xsl:template>
 </xsl:stylesheet>
