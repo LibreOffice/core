@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableManager.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2007-04-25 11:27:43 $
+ *  last change: $Author: os $ $Date: 2007-05-03 06:25:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,9 @@
 #ifndef INCLUDED_BORDERHANDLER_HXX
 #include <BorderHandler.hxx>
 #endif
+#ifndef INCLUDED_CELLCOLORHANDLER_HXX
+#include <CellColorHandler.hxx>
+#endif
 #ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HDL_
 #include <com/sun/star/text/HoriOrientation.hpp>
 #endif
@@ -49,7 +52,10 @@ using namespace ::std;
 /*-- 23.04.2007 14:57:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-DomainMapperTableManager::DomainMapperTableManager()
+DomainMapperTableManager::DomainMapperTableManager() :
+    m_nRow(0),
+    m_nCell(0),
+    m_nCellBorderIndex(0)
 {
 }
 /*-- 23.04.2007 14:57:49---------------------------------------------------
@@ -122,8 +128,23 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
                 {
                     BorderHandlerPtr pBorderHandler( new BorderHandler );
                     pProperties->resolve(*pBorderHandler);
-                    //todo: applyBorder()?;
-                    cellPropsByCell(0, PropertyMapPtr( pBorderHandler->getProperties()) );
+                    cellPropsByCell( m_nCellBorderIndex, PropertyMapPtr( pBorderHandler->getProperties()) );
+                    ++m_nCellBorderIndex;
+                }
+            }
+            break;
+            case 0xd61a : // sprmTCellTopColor
+            case 0xd61b : // sprmTCellLeftColor
+            case 0xd61c : // sprmTCellBottomColor
+            case 0xd61d : // sprmTCellRightColor
+            {
+                // each color sprm contains as much colors as cells are in a row
+                doctok::Reference<doctok::Properties>::Pointer_t pProperties = rSprm.getProps();
+                if( pProperties.get())
+                {
+                    CellColorHandlerPtr pCellColorHandler( new CellColorHandler );
+                    pProperties->resolve( *pCellColorHandler );
+//                    cellPropsByCell(0, PropertyMapPtr( pColorHandler->getProperties()) );
                 }
             }
             break;
@@ -132,5 +153,48 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
     }
     return bRet;
 }
+/*-- 26.04.2007 08:20:08---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+//void DomainMapperTableManager::attribute(doctok::Id nName, doctok::Value & rVal)
+//{
+//    sal_Int32 nIntValue = rVal.getInt();
+//    rtl::OUString sStringValue = val.getString();
+//    /* WRITERFILTERSTATUS: table: tablemanager_attributedata */
+//    switch( nName )
+//    {
+//        case NS_rtf::LN_cellTopColor:
+//            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+//            break;
+//        case NS_rtf::LN_cellLeftColor:
+//            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+//            break;
+//        case NS_rtf::LN_cellBottomColor:
+//            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+//            break;
+//        case NS_rtf::LN_cellRightColor:
+//            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+//            break;
+//    }
+
+/*-- 02.05.2007 14:36:26---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void DomainMapperTableManager::endCell()
+{
+    DomainMapperTableManager_Base_t::endCell();
+    ++m_nCell;
+}
+/*-- 02.05.2007 14:36:26---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void DomainMapperTableManager::endRow()
+{
+    DomainMapperTableManager_Base_t::endRow();
+    ++m_nRow;
+    m_nCell = 0;
+    m_nCellBorderIndex = 0;
+}
+
 
 }

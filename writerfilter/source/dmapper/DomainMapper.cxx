@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-02 18:06:21 $
+ *  last change: $Author: os $ $Date: 2007-05-03 06:25:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1471,17 +1471,11 @@ void DomainMapper::attribute(doctok::Id nName, doctok::Value & val)
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             break;
         case NS_rtf::LN_cellTopColor:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
-            break;
         case NS_rtf::LN_cellLeftColor:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
-            break;
         case NS_rtf::LN_cellBottomColor:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
-            break;
         case NS_rtf::LN_cellRightColor:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
-            break;
+            OSL_ASSERT("handled by DomainMapperTableManager");
+        break;
 
         case NS_rtf::LN_LISTTABLE:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */

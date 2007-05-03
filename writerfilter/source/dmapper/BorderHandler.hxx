@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BorderHandler.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2007-04-25 11:28:59 $
+ *  last change: $Author: os $ $Date: 2007-05-03 06:25:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,9 @@
 #endif
 #include <doctok/WW8ResourceModel.hxx>
 #include <boost/shared_ptr.hpp>
-#include <com/sun/star/table/TableBorder.hpp>
+#ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
+#include <com/sun/star/table/BorderLine.hpp>
+#endif
 
 namespace dmapper
 {
@@ -56,7 +58,8 @@ public:
         BORDER_BOTTOM,
         BORDER_RIGHT,
         BORDER_HORIZONTAL,
-        BORDER_VERTICAL
+        BORDER_VERTICAL,
+        BORDER_COUNT
     };
 
 private:
@@ -67,7 +70,7 @@ private:
     sal_Int32       m_nLineColor;
     sal_Int32       m_nLineDistance;
 
-    ::com::sun::star::table::TableBorder        m_aTableBorder;
+    ::com::sun::star::table::BorderLine         m_aBorderLines[BORDER_COUNT];
 
 public:
     BorderHandler( );

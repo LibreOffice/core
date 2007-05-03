@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableHandler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2007-04-25 11:30:51 $
+ *  last change: $Author: os $ $Date: 2007-05-03 06:25:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,15 +76,16 @@ class DomainMapperTableHandler : public doctok::TableDataHandler<Handle_t , Prop
     PropertyMapVector1      m_aRowProperties;
     PropertyMapPtr          m_aTableProperties;
 
-    //sal_Int32 m_nHandleIndex;
+    sal_Int32 m_nCellIndex;
     sal_Int32 m_nRowIndex;
-    sal_Int32 m_nTableIndex;
 
 public:
     typedef boost::shared_ptr<DomainMapperTableHandler> Pointer_t;
 
     DomainMapperTableHandler(TextReference_t xText)
-    : m_xText(xText)
+    : m_xText(xText),
+        m_nCellIndex(0),
+        m_nRowIndex(0)
     {
     }
     virtual ~DomainMapperTableHandler() {}

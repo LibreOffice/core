@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2007-04-25 11:30:51 $
+ *  last change: $Author: os $ $Date: 2007-05-03 06:25:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -294,8 +294,8 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_CREATE_FROM_MARKS      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateFromMarks")); break;
             case PROP_STANDARD               :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard")); break;
             case PROP_IS_SPLIT_ALLOWED       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsSplitAllowed")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+            case META_PROP_VERTICAL_BORDER   :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VerticalBorder")); break;
+            case META_PROP_HORIZONTAL_BORDER :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HorizontalBorder")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;

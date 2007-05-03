@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BorderHandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-25 14:04:47 $
+ *  last change: $Author: os $ $Date: 2007-05-03 06:25:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,13 +64,6 @@ BorderHandler::BorderHandler() :
     m_nLineColor(0),
     m_nLineDistance(0)
 {
-    m_aTableBorder.IsTopLineValid = sal_False;;
-    m_aTableBorder.IsBottomLineValid = sal_False;;
-    m_aTableBorder.IsLeftLineValid = sal_False;;
-    m_aTableBorder.IsRightLineValid = sal_False;;
-    m_aTableBorder.IsHorizontalLineValid = sal_False;;
-    m_aTableBorder.IsVerticalLineValid = sal_False;;
-    m_aTableBorder.IsDistanceValid = sal_False;
 }
 /*-- 24.04.2007 09:06:35---------------------------------------------------
 
@@ -93,36 +86,37 @@ void BorderHandler::attribute(doctok::Id rName, doctok::Value & rVal)
             {
                 pProperties->resolve(*this);
                 //
-                table::BorderLine* pToFill = 0;
-                switch(m_nCurrentBorderPosition)
-                {
-                    case BORDER_TOP:
-                        pToFill = &m_aTableBorder.TopLine;
-                        m_aTableBorder.IsTopLineValid = sal_True;
-                    break;
-                    case BORDER_LEFT:
-                        pToFill = &m_aTableBorder.LeftLine;
-                        m_aTableBorder.IsLeftLineValid = sal_True;
-                    break;
-                    case BORDER_BOTTOM:
-                        pToFill = &m_aTableBorder.BottomLine;
-                        m_aTableBorder.IsBottomLineValid = sal_True;;
-                    break;
-                    case BORDER_RIGHT:
-                        pToFill = &m_aTableBorder.RightLine;
-                        m_aTableBorder.IsRightLineValid = sal_True;
-                    break;
-                    case BORDER_HORIZONTAL:
-                        pToFill = &m_aTableBorder.HorizontalLine;
-                        m_aTableBorder.IsHorizontalLineValid = sal_True;;
-                    break;
-                    case BORDER_VERTICAL:
-                        m_aTableBorder.IsVerticalLineValid = sal_True;;
-                    default:
-                        pToFill = &m_aTableBorder.VerticalLine; break;
-                }
-                ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,  *pToFill );
-                OSL_ENSURE(m_nCurrentBorderPosition <= BORDER_VERTICAL, "too many border values");
+//                table::BorderLine* pToFill = 0;
+//                switch(m_nCurrentBorderPosition)
+//                {
+//                    case BORDER_TOP:
+//                        pToFill = &m_aTableBorder.TopLine;
+//                        m_aTableBorder.IsTopLineValid = sal_True;
+//                    break;
+//                    case BORDER_LEFT:
+//                        pToFill = &m_aTableBorder.LeftLine;
+//                        m_aTableBorder.IsLeftLineValid = sal_True;
+//                    break;
+//                    case BORDER_BOTTOM:
+//                        pToFill = &m_aTableBorder.BottomLine;
+//                        m_aTableBorder.IsBottomLineValid = sal_True;;
+//                    break;
+//                    case BORDER_RIGHT:
+//                        pToFill = &m_aTableBorder.RightLine;
+//                        m_aTableBorder.IsRightLineValid = sal_True;
+//                    break;
+//                    case BORDER_HORIZONTAL:
+//                        pToFill = &m_aTableBorder.HorizontalLine;
+//                        m_aTableBorder.IsHorizontalLineValid = sal_True;;
+//                    break;
+//                    case BORDER_VERTICAL:
+//                        m_aTableBorder.IsVerticalLineValid = sal_True;;
+//                    default:
+//                        pToFill = &m_aTableBorder.VerticalLine; break;
+//                }
+                ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,
+                                                                                m_aBorderLines[m_nCurrentBorderPosition] );
+                OSL_ENSURE(m_nCurrentBorderPosition < BORDER_COUNT, "too many border values");
                 ++m_nCurrentBorderPosition;
             }
         }
@@ -162,8 +156,18 @@ void BorderHandler::sprm(doctok::Sprm & rSprm)
   -----------------------------------------------------------------------*/
 PropertyMapPtr  BorderHandler::getProperties()
 {
+    static const PropertyIds aPropNames[BORDER_COUNT] =
+    {
+        PROP_TOP_BORDER,
+        PROP_LEFT_BORDER,
+        PROP_BOTTOM_BORDER,
+        PROP_RIGHT_BORDER,
+        META_PROP_HORIZONTAL_BORDER,
+        META_PROP_VERTICAL_BORDER
+    };
     PropertyMapPtr pPropertyMap(new PropertyMap);
-    pPropertyMap->Insert( PROP_TABLE_BORDER, uno::makeAny( m_aTableBorder ) );
+    for( sal_Int32 nProp = 0; nProp < BORDER_COUNT; ++nProp)
+        pPropertyMap->Insert( aPropNames[nProp], uno::makeAny( m_aBorderLines[nProp] ) );
     return pPropertyMap;
 }
 } //namespace dmapper

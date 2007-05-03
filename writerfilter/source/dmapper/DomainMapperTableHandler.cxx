@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableHandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2007-04-25 11:30:51 $
+ *  last change: $Author: os $ $Date: 2007-05-03 06:25:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ void DomainMapperTableHandler::startTable(unsigned int nRows,
 {
     m_aTableProperties = pProps;
     m_pTableSeq = TableSequencePointer_t(new TableSequence_t(nRows));
-    m_nTableIndex = 0;
+    m_nRowIndex = 0;
 
 #ifdef DEBUG
     char sBuffer[256];
@@ -85,16 +85,100 @@ void DomainMapperTableHandler::startTable(unsigned int nRows,
 void DomainMapperTableHandler::endTable()
 {
 #ifdef DEBUG
+{
     clog << "</table>" << endl;
+    sal_uInt32 nCells = 0;
+    sal_uInt32 nRows = m_aRowProperties.size();
+    if( nRows == m_aCellProperties.size() )
+    {
+        for( sal_uInt32 nRow = 0; nRow < nRows; ++nRow )
+            nCells += m_aCellProperties[nRow].size();
+    }
+    sal_uInt32 nTblPropSize = m_aTableProperties.get() ? m_aTableProperties->size() : 0;
+    (void)nTblPropSize;
+}
 #endif
-    CellPropertyValuesSeq_t     aCellProperties;
-    RowPropertyValuesSeq_t      aRowProperties;
+
+
+    //  expands to uno::Sequence< Sequence< beans::PropertyValues > >
+    CellPropertyValuesSeq_t     aCellProperties( m_aCellProperties.size() );
+
+    // std::vector< std::vector<PropertyMapPtr> > m_aCellProperties
+    PropertyMapVector2::const_iterator aRowOfCellsIterator = m_aCellProperties.begin();
+    PropertyMapVector2::const_iterator aRowOfCellsIteratorEnd = m_aCellProperties.end();
+    sal_Int32 nRow = 0;
+    //it's a uno::Sequence< beans::PropertyValues >*
+    RowPropertyValuesSeq_t* pCellProperties = aCellProperties.getArray();
+    while( aRowOfCellsIterator != aRowOfCellsIteratorEnd )
+    {
+        //aRowOfCellsIterator points to a vector of PropertyMapPtr
+        PropertyMapVector1::const_iterator aCellIterator = aRowOfCellsIterator->begin();
+        PropertyMapVector1::const_iterator aCellIteratorEnd = aRowOfCellsIterator->end();
+
+        sal_Int32 nCell = 0;
+        pCellProperties[nRow].realloc( aRowOfCellsIterator->size() );
+        beans::PropertyValues* pSingleCellProperties = pCellProperties->getArray();
+        while( aCellIterator != aCellIteratorEnd )
+        {
+            //TODO: aCellIterator contains HorizontalBorder and VerticalBorder
+            // they have to be removed, depending on the position of the cell they
+            // have to be moved to BottomBorder/RightBorder respectively
+            //aCellIterator points to a PropertyMapPtr;
+            if( aCellIterator->get() )
+            {
+
+                PropertyNameSupplier& rPropSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+                const PropertyMap::iterator aVerticalIter =
+                                aCellIterator->get()->find( rPropSupplier.GetName(META_PROP_VERTICAL_BORDER) );
+                const PropertyMap::iterator aHorizontalIter =
+                                aCellIterator->get()->find( rPropSupplier.GetName(META_PROP_HORIZONTAL_BORDER) );
+                const PropertyMap::const_iterator aRightIter =
+                                aCellIterator->get()->find( rPropSupplier.GetName(PROP_RIGHT_BORDER) );
+                const PropertyMap::const_iterator aBottomIter =
+                                aCellIterator->get()->find( rPropSupplier.GetName(PROP_BOTTOM_BORDER) );
+                aCellIterator->get()->erase( aVerticalIter );
+                aCellIterator->get()->erase( aHorizontalIter );
+
+                pSingleCellProperties[nCell] = aCellIterator->get()->GetPropertyValues();
+            }
+            ++nCell;
+            ++aCellIterator;
+        }
+        ++nRow;
+        ++aRowOfCellsIterator;
+    }
+
+    RowPropertyValuesSeq_t      aRowProperties( m_aRowProperties.size() );
+    PropertyMapVector1::const_iterator aRowIter = m_aRowProperties.begin();
+    PropertyMapVector1::const_iterator aRowIterEnd = m_aRowProperties.end();
+    nRow = 0;
+    while( aRowIter != aRowIterEnd )
+    {
+        if( aRowIter->get() )
+            aRowProperties[nRow] = aRowIter->get()->GetPropertyValues();
+        ++nRow;
+        ++aRowIter;
+    }
+
     TablePropertyValues_t       aTableProperties;
+    if( m_aTableProperties.get() )
+        aTableProperties = m_aTableProperties->GetPropertyValues();
 
     if (m_pTableSeq->getLength() > 0)
     {
         try
         {
+#ifdef DEBUG
+    {
+        sal_Int32 nCellPropertiesRows = aCellProperties.getLength();
+        sal_Int32 nCellPropertiesCells = aCellProperties[0].getLength();
+        sal_Int32 nCellPropertiesProperties = aCellProperties[0][0].getLength();
+        (void) nCellPropertiesRows;
+        (void) nCellPropertiesCells;
+        (void) nCellPropertiesProperties;
+        ++nCellPropertiesProperties;
+    }
+#endif
             m_xText->convertToTable(*m_pTableSeq,
                                     aCellProperties,
                                     aRowProperties,
@@ -124,14 +208,14 @@ void DomainMapperTableHandler::startRow(unsigned int nCells,
 #endif
 
     m_pRowSeq = RowSequencePointer_t(new RowSequence_t(nCells));
-    m_nRowIndex = 0;
+    m_nCellIndex = 0;
 }
 
 void DomainMapperTableHandler::endRow()
 {
-    (*m_pTableSeq)[m_nTableIndex] = *m_pRowSeq;
-    ++m_nTableIndex;
-
+    (*m_pTableSeq)[m_nRowIndex] = *m_pRowSeq;
+    ++m_nRowIndex;
+    m_nCellIndex = 0;
 #ifdef DEBUG
     clog << "</table.row>" << endl;
 #endif
@@ -166,8 +250,8 @@ void DomainMapperTableHandler::endCell(const Handle_t & end)
 #endif
 
     (*m_pCellSeq)[1] = end->getEnd();
-    (*m_pRowSeq)[m_nRowIndex] = *m_pCellSeq;
-    ++m_nRowIndex;
+    (*m_pRowSeq)[m_nCellIndex] = *m_pCellSeq;
+    ++m_nCellIndex;
 }
 
 }

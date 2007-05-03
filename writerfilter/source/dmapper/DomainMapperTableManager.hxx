@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableManager.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2007-04-25 11:28:13 $
+ *  last change: $Author: os $ $Date: 2007-05-03 06:25:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,9 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > H
 typedef doctok::TableManager<Handle_t , PropertyMapPtr > DomainMapperTableManager_Base_t;
 class DomainMapperTableManager : public DomainMapperTableManager_Base_t
 {
+    sal_uInt32       m_nRow;
+    sal_uInt32       m_nCell;
+    sal_uInt32       m_nCellBorderIndex; //borders are provided for all cells and need counting
 public:
 
     DomainMapperTableManager();
@@ -58,6 +61,8 @@ public:
 
     virtual bool sprm(doctok::Sprm & rSprm);
 
+    virtual void endCell();
+    virtual void endRow();
 };
 
 }

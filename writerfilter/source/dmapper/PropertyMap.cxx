@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2007-04-25 11:30:52 $
+ *  last change: $Author: os $ $Date: 2007-05-03 06:25:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -793,8 +793,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 }
             }
         }
-        catch( const uno::Exception& )
+        catch( const uno::Exception& rEx)
         {
+            (void)rEx;
         }
     }
 }
