@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Cvs.pm,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: obo $ $Date: 2006-01-16 12:32:19 $
+#   last change: $Author: rt $ $Date: 2007-05-03 16:37:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -346,8 +346,9 @@ sub commit
     return wantarray ? ('success', $new_revision) : 'success';
 }
 
-# Tag file with specified tag. Options my be specified,
+# Tag file with specified tag. Options may be specified,
 # '-b' for a branch tag and -F for forced tag are valid options.
+# '-B' to force moving existing tag also is valid.
 # Retagging without moving the tag is considered a succesful
 # operation.
 sub tag
@@ -361,7 +362,7 @@ sub tag
     if ( $options ) {
         my @elem = split(' ', $options);
         foreach (@elem) {
-            unless ( /^-F/ || /-b/ ) {
+            unless ( /-B/ || /^-F/ || /-b/ ) {
                 return 'invalidoption';
             }
             $options = join(' ', @elem);

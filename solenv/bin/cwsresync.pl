@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsresync.pl,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-12 15:50:49 $
+#   last change: $Author: rt $ $Date: 2007-05-03 16:37:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ use CwsConfig;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.29 $ ';
+my $id_str = ' $Revision: 1.30 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -586,6 +586,10 @@ sub commit_dir_action
 
     my $save_dir = cwd();
 
+    # what server/repository are we working on?
+    my $cvs_module = get_cvs_module($cws, $cvs_dir);
+    my $repository = $cvs_module->cvs_repository();
+
     # chdir into module
     if ( !chdir("$dir/$cvs_dir") ) {
         print_warning("Can't chdir() to '$cvs_dir'.");
@@ -599,7 +603,7 @@ sub commit_dir_action
     my %stats;
     my $rc;
     foreach (@main::changed_files) {
-        $rc = commit_file($cws, $_);
+        $rc = commit_file($cws, $_, $repository);
         $stats{$rc}++;
         $global_stats{$rc}++;
     }
@@ -629,7 +633,7 @@ sub commit_file_action
     if ( !chdir("$dir") ) {
         print_error("Can't chdir() to '$dir'", 6);
     }
-    my $rc = commit_file($cws, $file);
+    my $rc = commit_file($cws, $file, 'unknown');
     $global_stats{$rc}++;
     # chdir back
     chdir($save_dir);
@@ -1357,8 +1361,9 @@ sub merge_file
 # Requires a valid .resync file next to the CVS file
 sub commit_file
 {
-    my $cws  = shift;
-    my $file = shift;
+    my $cws        = shift;
+    my $file       = shift;
+    my $repository = shift;
 
     if ( !open(CHECKIN, "<$file.resync" ) ) {
         print_error("can't open $file.resync: $!", 0);
@@ -1381,7 +1386,7 @@ sub commit_file
     if ( $type eq 'moved' || $type eq 'new') {
         # just move the tags, no cvs->commit()
         print "\tCommit '$file': move tag: ";
-        my $rc = move_tags($cws, $file, $new_rev);
+        my $rc = move_tags($cws, $file, $new_rev, $repository);
         if ( $rc ) {
             print_error("can't unlink $file.resync: $!.", 0) unless unlink("$file.resync");
         }
@@ -1422,9 +1427,10 @@ sub commit_file
 # Move CWS tags to new revision.
 sub move_tags
 {
-    my $cws     = shift;
-    my $file    = shift;
-    my $new_rev = shift;
+    my $cws        = shift;
+    my $file       = shift;
+    my $new_rev    = shift;
+    my $repository = shift;
 
     my ($master_branch_tag, $cws_branch_tag, $cws_anchor_tag) = $cws->get_tags();
     my $cvs_archive = get_cvs_archive($file);
@@ -1435,7 +1441,9 @@ sub move_tags
         return 0;
     }
 
-    $rc = $cvs_archive->tag($cws_branch_tag, '-F -b');
+    my $tagoptions = '-F -b';
+    $tagoptions = '-B ' . $tagoptions unless ( $repository =~ /cvs_so/ );
+    $rc = $cvs_archive->tag($cws_branch_tag, $tagoptions);
     if ( $rc ne 'success' ) {
         print_error("Tagging '$file': tag operation returned: '$rc'.", 0);
         print "failed!\n";
