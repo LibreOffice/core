@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-30 16:32:20 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-04 13:29:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,6 @@ public:
 
     // Stream
     virtual void startSectionGroup();
-    virtual void setLastParagraphInSection();
     virtual void endSectionGroup();
     virtual void startParagraphGroup();
     virtual void endParagraphGroup();
@@ -113,7 +112,7 @@ private:
     void resolveAttributeProperties(doctok::Value & val);
     void resolveSprmProps(doctok::Sprm & sprm_);
     sal_Int32 mnBackgroundColor;
-    bool mbIsHighlightSet, mbIsLastParagraphInSection, mbIsSectionOpened;
+    bool mbIsHighlightSet;
 };
 
 } // namespace dmapper

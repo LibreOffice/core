@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-02 18:06:22 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-04 13:29:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,8 +100,8 @@ class OOXMLBooleanValue : public OOXMLValue
 protected:
     bool mbValue;
 public:
-    OOXMLBooleanValue(bool bValue);
-    OOXMLBooleanValue(const rtl::OUString & rValue);
+    explicit OOXMLBooleanValue(bool bValue);
+    explicit OOXMLBooleanValue(const rtl::OUString & rValue);
     virtual ~OOXMLBooleanValue();
 
     virtual int getInt() const;
@@ -115,7 +115,7 @@ class OOXMLStringValue : public OOXMLValue
 protected:
     rtl::OUString mStr;
 public:
-    OOXMLStringValue(const rtl::OUString & rStr);
+    explicit OOXMLStringValue(const rtl::OUString & rStr);
     virtual ~OOXMLStringValue();
 
     virtual uno::Any getAny() const;
@@ -166,8 +166,8 @@ class OOXMLIntegerValue : public OOXMLValue
 protected:
     sal_Int32 mnValue;
 public:
-    OOXMLIntegerValue(sal_Int32 nValue);
-    OOXMLIntegerValue(const rtl::OUString & rValue);
+    explicit OOXMLIntegerValue(sal_Int32 nValue);
+    explicit OOXMLIntegerValue(const rtl::OUString & rValue);
     virtual ~OOXMLIntegerValue();
 
     virtual int getInt() const;
@@ -181,8 +181,8 @@ class OOXMLHexValue : public OOXMLValue
 protected:
     sal_uInt32 mnValue;
 public:
-    OOXMLHexValue(sal_uInt32 nValue);
-    OOXMLHexValue(const rtl::OUString & rValue);
+    explicit OOXMLHexValue(sal_uInt32 nValue);
+    explicit OOXMLHexValue(const rtl::OUString & rValue);
     virtual ~OOXMLHexValue();
 
     virtual int getInt() const;

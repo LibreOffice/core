@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8ResourceModelImpl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-30 16:32:22 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-04 13:29:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,7 +331,6 @@ public:
     virtual ~WW8StreamHandler();
 
     virtual void startSectionGroup();
-    virtual void setLastParagraphInSection() {};
     virtual void endSectionGroup();
     virtual void startParagraphGroup();
     virtual void endParagraphGroup();

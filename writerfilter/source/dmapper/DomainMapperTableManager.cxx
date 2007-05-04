@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableManager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2007-05-03 06:25:38 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-04 13:29:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,8 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
         bRet = true;
         sal_uInt32 nId = rSprm.getId();
         doctok::Value::Pointer_t pValue = rSprm.getValue();
-        sal_Int32 nIntValue = pValue->getInt();
+        OSL_ENSURE(pValue.get(), "no pointer to value");
+        sal_Int32 nIntValue = ((pValue.get() != NULL) ? pValue->getInt() : 0);
         /* WRITERFILTERSTATUS: table: table_sprmdata */
         switch( nId )
         {

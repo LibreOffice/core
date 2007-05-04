@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: os $ $Date: 2007-05-03 07:14:08 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-04 13:29:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,8 +151,7 @@ struct _Columns
 DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xContext,
                             uno::Reference< lang::XComponent > xModel) :
     m_pImpl( new DomainMapper_Impl( *this, xContext, xModel )),
-    mnBackgroundColor(0), mbIsHighlightSet(false), mbIsLastParagraphInSection(false),
-    mbIsSectionOpened(false)
+    mnBackgroundColor(0), mbIsHighlightSet(false)
 {
 }
 /*-- 09.06.2006 09:52:12---------------------------------------------------
@@ -1631,13 +1630,19 @@ void DomainMapper::attribute(doctok::Id nName, doctok::Value & val)
             CT_PageSz.code = nIntValue;
             break;
         case NS_ooxml::LN_CT_PageSz_h:
-            CT_PageSz.h = ConversionHelper::convertToMM100(ConversionHelper::SnapPageDimension(nIntValue));
+            {
+                sal_Int32 nHeight = ConversionHelper::SnapPageDimension(nIntValue);
+                CT_PageSz.h = ConversionHelper::convertToMM100(nHeight);
+            }
             break;
         case NS_ooxml::LN_CT_PageSz_orient:
             CT_PageSz.orient = (nIntValue != 0);
             break;
         case NS_ooxml::LN_CT_PageSz_w:
-            CT_PageSz.w = ConversionHelper::convertToMM100(ConversionHelper::SnapPageDimension(nIntValue));
+            {
+                sal_Int32 nWidth = ConversionHelper::SnapPageDimension(nIntValue);
+                CT_PageSz.w = ConversionHelper::convertToMM100(nWidth);
+            }
             break;
 
         case NS_ooxml::LN_CT_PageMar_top:
@@ -3147,24 +3152,24 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         break;
 
     case NS_ooxml::LN_EG_SectPrContents_pgSz:
-        CT_PageSz.code = CT_PageSz.h = CT_PageSz.orient = CT_PageSz.w = 0;
+        CT_PageSz.code = 0;
+        CT_PageSz.h = ConversionHelper::convertToMM100( ConversionHelper::SnapPageDimension( sal_Int32(15840) ));
+        CT_PageSz.w = ConversionHelper::convertToMM100( ConversionHelper::SnapPageDimension( sal_Int32(12240) ));
         CT_PageSz.orient = false;
         resolveSprmProps(sprm_);
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if (CT_PageSz.h)
-            rContext->Insert( PROP_HEIGHT, uno::makeAny( CT_PageSz.h ) );
-        if (CT_PageSz.orient)
-        {
-            if(pSectionContext)
-                pSectionContext->SetLandscape( CT_PageSz.orient );
-            rContext->Insert( PROP_IS_LANDSCAPE , uno::makeAny( CT_PageSz.orient ));
-        }
-        if (CT_PageSz.w)
-            rContext->Insert( PROP_WIDTH, uno::makeAny( CT_PageSz.w ) );
+        rContext->Insert( PROP_HEIGHT, uno::makeAny( CT_PageSz.h ) );
+        rContext->Insert( PROP_IS_LANDSCAPE, uno::makeAny( CT_PageSz.orient ));
+        rContext->Insert( PROP_WIDTH, uno::makeAny( CT_PageSz.w ) );
+        if(pSectionContext)
+            pSectionContext->SetLandscape( CT_PageSz.orient );
         break;
 
     case NS_ooxml::LN_EG_SectPrContents_pgMar:
-        CT_PageMar.top = CT_PageMar.right = CT_PageMar.bottom = CT_PageMar.left = CT_PageMar.header = CT_PageMar.footer = CT_PageMar.gutter = 0;
+        CT_PageMar.header = CT_PageMar.footer = CT_PageMar.top = CT_PageMar.bottom =
+            ConversionHelper::convertToMM100( sal_Int32(1440));
+        CT_PageMar.right = CT_PageMar.left = ConversionHelper::convertToMM100( sal_Int32(1800));
+        CT_PageMar.gutter = 0;
         resolveSprmProps(sprm_);
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
@@ -3180,7 +3185,6 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         rContext->Insert( PROP_RIGHT_MARGIN, uno::makeAny( CT_PageMar.right ));
         rContext->Insert( PROP_BOTTOM_MARGIN, uno::makeAny( CT_PageMar.bottom ));
         rContext->Insert( PROP_LEFT_MARGIN, uno::makeAny( CT_PageMar.left ));
-
         break;
 
     case NS_ooxml::LN_EG_SectPrContents_cols:
@@ -3249,44 +3253,25 @@ void DomainMapper::data(const sal_uInt8* /*buf*/, size_t /*len*/,
 -----------------------------------------------------------------------*/
 void DomainMapper::startSectionGroup()
 {
-    if (!mbIsSectionOpened)
-    {
-        m_pImpl->PushProperties(CONTEXT_SECTION);
-        mbIsSectionOpened = true;
-    }
-}
-
-void DomainMapper::setLastParagraphInSection()
-{
-    mbIsLastParagraphInSection = true;
+    m_pImpl->PushProperties(CONTEXT_SECTION);
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
 
 -----------------------------------------------------------------------*/
 void DomainMapper::endSectionGroup()
 {
-    if (mbIsSectionOpened)
-    {
-        PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_SECTION);
-        SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
-            pSectionContext->CloseSectionGroup( *m_pImpl );
-        m_pImpl->PopProperties(CONTEXT_SECTION);
-        mbIsSectionOpened = false;
-    }
+    PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_SECTION);
+    SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
+    OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+    if(pSectionContext)
+        pSectionContext->CloseSectionGroup( *m_pImpl );
+    m_pImpl->PopProperties(CONTEXT_SECTION);
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
 
 -----------------------------------------------------------------------*/
 void DomainMapper::startParagraphGroup()
 {
-    if (mbIsLastParagraphInSection)
-    {
-        startSectionGroup();
-        mbIsLastParagraphInSection = false;
-    }
-
     m_pImpl->getTableManager().startParagraphGroup();
     m_pImpl->PushProperties(CONTEXT_PARAGRAPH);
 }
@@ -3297,9 +3282,6 @@ void DomainMapper::endParagraphGroup()
 {
     m_pImpl->PopProperties(CONTEXT_PARAGRAPH);
     m_pImpl->getTableManager().endParagraphGroup();
-
-    if (mbIsLastParagraphInSection)
-        endSectionGroup();
 }
 /*-- 09.06.2006 09:52:14---------------------------------------------------
 

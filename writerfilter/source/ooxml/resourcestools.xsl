@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-05-03 13:44:07 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-04 13:29:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -985,7 +985,7 @@ bool </xsl:text>
         </xsl:when>
         <xsl:when test="@action='startSectionGroup'">
           <xsl:text>
-    mrStream.startSectionGroup();</xsl:text>
+    startSectionGroup();</xsl:text>
         </xsl:when>
       </xsl:choose>
     </xsl:for-each>
@@ -1040,7 +1040,7 @@ bool </xsl:text>
         </xsl:when>
         <xsl:when test="@action='setLastParagraphInSection'">
       <xsl:text>
-    mrStream.setLastParagraphInSection();</xsl:text>
+    setLastParagraphInSection();</xsl:text>
         </xsl:when>
         <xsl:when test="@action='endCell'">
         <xsl:text>
@@ -1056,7 +1056,7 @@ bool </xsl:text>
         </xsl:when>
         <xsl:when test="@action='endSectionGroup'">
         <xsl:text>
-    mrStream.endSectionGroup();</xsl:text>
+    endSectionGroup();</xsl:text>
         </xsl:when>
       </xsl:choose>
     </xsl:for-each>

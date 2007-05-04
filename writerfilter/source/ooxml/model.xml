@@ -4394,7 +4394,7 @@
       <define name="CT_R">
         <optional>
           <element name="rPr">
-            <ref name="CT_RPr"/>
+            <ref name="CT_RPR"/>
           </element>
         </optional>
         <optional>
@@ -8666,25 +8666,25 @@
       <define name="CT_LineNumber">
         <optional>
           <attribute name="countBy">
-            <text/>
+            <ref name="ST_DecimalNumber"/>
             <xs:documentation>Line Number Increments to Display</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="start">
-            <text/>
+            <ref name="ST_DecimalNumber"/>
             <xs:documentation>Line Numbering Starting Value</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="distance">
-            <text/>
+            <ref name="ST_TwipsMeasure"/>
             <xs:documentation>Distance Between Text and Line Numbering</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="restart">
-            <text/>
+            <ref name="ST_LineNumberRestart"/>
             <xs:documentation>Line Numbering Restart Setting</xs:documentation>
           </attribute>
         </optional>
@@ -8692,25 +8692,25 @@
       <define name="CT_PageNumber">
         <optional>
           <attribute name="fmt">
-            <text/>
+            <ref name="ST_NumberFormat"/>
             <xs:documentation>Page Number Format</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="start">
-            <text/>
+            <ref name="ST_DecimalNumber"/>
             <xs:documentation>Starting Page Number</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="chapStyle">
-            <text/>
+            <ref name="ST_DecimalNumber"/>
             <xs:documentation>Chapter Heading Style</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="chapSep">
-            <text/>
+            <ref name="ST_ChapterSep"/>
             <xs:documentation>Chapter Separator Character</xs:documentation>
           </attribute>
         </optional>
@@ -8841,7 +8841,7 @@
       <define name="CT_HdrFtrRef">
         <ref name="CT_Rel"/>
         <attribute name="type">
-          <text/>
+          <ref name="ST_HdrFtr"/>
           <xs:documentation>Header or Footer Type</xs:documentation>
         </attribute>
       </define>
@@ -14684,6 +14684,30 @@
       <attribute name="footer" tokenid="ooxml:CT_PageMar_footer"/>
       <attribute name="gutter" tokenid="ooxml:CT_PageMar_gutter"/>
     </resource>
+    <resource name="ST_ChapterSep" resource="List">
+      <value tokenid="ooxml:Value_ST_ChapterSep_hyphen">hyphen</value>
+      <value tokenid="ooxml:Value_ST_ChapterSep_period">period</value>
+      <value tokenid="ooxml:Value_ST_ChapterSep_colon">colon</value>
+      <value tokenid="ooxml:Value_ST_ChapterSep_emDash">emDash</value>
+      <value tokenid="ooxml:Value_ST_ChapterSep_enDash">enDash</value>
+    </resource>
+    <resource name="ST_LineNumberRestart" resource="List">
+      <value tokenid="0">newPage</value>
+      <value tokenid="1">newSection</value>
+      <value tokenid="2">continuous</value>
+    </resource>
+    <resource name="CT_LineNumber" resource="Properties">
+      <attribute name="countBy" tokenid="ooxml:CT_LineNumber_countBy"/>
+      <attribute name="start" tokenid="ooxml:CT_LineNumber_start"/>
+      <attribute name="distance" tokenid="ooxml:CT_LineNumber_distance"/>
+      <attribute name="restart" tokenid="ooxml:CT_LineNumber_restart"/>
+    </resource>
+    <resource name="CT_PageNumber" resource="Properties">
+      <attribute name="fmt" tokenid="ooxml:CT_PageNumber_fmt"/>
+      <attribute name="start" tokenid="ooxml:CT_PageNumber_start"/>
+      <attribute name="chapStyle" tokenid="ooxml:CT_PageNumber_chapStyle"/>
+      <attribute name="chapSep" tokenid="ooxml:CT_PageNumber_chapSep"/>
+    </resource>
     <resource name="CT_Column" resource="Properties">
       <attribute name="space" tokenid="ooxml:CT_Column_space"/>
       <attribute name="w" tokenid="ooxml:CT_Column_w"/>
@@ -14696,12 +14720,19 @@
       <sprm name="col" tokenid="ooxml:CT_Columns_col"/>
     </resource>
     <resource name="ST_VerticalJc" resource="List">
-      <value tokenid="ooxml:Value_ST_VerticalJc_top">top</value>
-      <value tokenid="ooxml:Value_ST_VerticalJc_center">center</value>
-      <value tokenid="ooxml:Value_ST_VerticalJc_both">both</value>
-      <value tokenid="ooxml:Value_ST_VerticalJc_bottom">bottom</value>
+      <value tokenid="0">top</value>
+      <value tokenid="1">center</value>
+      <value tokenid="2">both</value>
+      <value tokenid="3">bottom</value>
     </resource>
     <resource name="CT_VerticalJc" resource="ListValue"/>
+    <resource name="CT_HdrFtrRef" resource="Properties">
+      <attribute name="type" tokenid="ooxml:CT_HdrFtrRef_type"/>
+    </resource>
+    <resource name="EG_HdrFtrReferences" resource="Properties">
+      <attribute name="headerReference" tokenid="ooxml:EG_HdrFtrReferences_headerReference"/>
+      <attribute name="footerReference" tokenid="ooxml:EG_HdrFtrReferences_footerReference"/>
+    </resource>
     <resource name="EG_SectPrContents" resource="Properties">
       <attribute name="bidi" tokenid="ooxml:EG_SectPrContents_bidi"/>
       <attribute name="cols" tokenid="ooxml:EG_SectPrContents_cols"/>
