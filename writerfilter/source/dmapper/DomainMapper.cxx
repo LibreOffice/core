@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-04 13:29:19 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-04 14:54:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1715,6 +1715,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     sal_uInt32 nId = sprm_.getId();
     //needed for page properties
     PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_SECTION);
+    OSL_ENSURE(pContext.get(), "Section context is not in the stack!");
     SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
 
     //TODO: In rtl-paragraphs the meaning of left/right are to be exchanged
@@ -3158,11 +3159,13 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         CT_PageSz.orient = false;
         resolveSprmProps(sprm_);
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        rContext->Insert( PROP_HEIGHT, uno::makeAny( CT_PageSz.h ) );
-        rContext->Insert( PROP_IS_LANDSCAPE, uno::makeAny( CT_PageSz.orient ));
-        rContext->Insert( PROP_WIDTH, uno::makeAny( CT_PageSz.w ) );
         if(pSectionContext)
+        {
+            pContext->Insert( PROP_HEIGHT, uno::makeAny( CT_PageSz.h ) );
+            pContext->Insert( PROP_IS_LANDSCAPE, uno::makeAny( CT_PageSz.orient ));
+            pContext->Insert( PROP_WIDTH, uno::makeAny( CT_PageSz.w ) );
             pSectionContext->SetLandscape( CT_PageSz.orient );
+        }
         break;
 
     case NS_ooxml::LN_EG_SectPrContents_pgMar:
@@ -3180,11 +3183,11 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
             pSectionContext->SetLeftMargin( CT_PageMar.left );
             pSectionContext->SetHeaderTop( CT_PageMar.header );
             pSectionContext->SetHeaderBottom( CT_PageMar.footer );
+            pContext->Insert( PROP_TOP_MARGIN, uno::makeAny( CT_PageMar.top ));
+            pContext->Insert( PROP_RIGHT_MARGIN, uno::makeAny( CT_PageMar.right ));
+            pContext->Insert( PROP_BOTTOM_MARGIN, uno::makeAny( CT_PageMar.bottom ));
+            pContext->Insert( PROP_LEFT_MARGIN, uno::makeAny( CT_PageMar.left ));
         }
-        rContext->Insert( PROP_TOP_MARGIN, uno::makeAny( CT_PageMar.top ));
-        rContext->Insert( PROP_RIGHT_MARGIN, uno::makeAny( CT_PageMar.right ));
-        rContext->Insert( PROP_BOTTOM_MARGIN, uno::makeAny( CT_PageMar.bottom ));
-        rContext->Insert( PROP_LEFT_MARGIN, uno::makeAny( CT_PageMar.left ));
         break;
 
     case NS_ooxml::LN_EG_SectPrContents_cols:
