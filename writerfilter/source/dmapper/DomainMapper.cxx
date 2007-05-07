@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-04 14:54:11 $
+ *  last change: $Author: os $ $Date: 2007-05-07 06:22:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1714,9 +1714,14 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
 
     sal_uInt32 nId = sprm_.getId();
     //needed for page properties
-    PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_SECTION);
-    OSL_ENSURE(pContext.get(), "Section context is not in the stack!");
-    SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
+    SectionPropertyMap* pSectionContext = 0;
+    //the section context is not availabe before the first call of startSectionGroup()
+    if( !m_pImpl->IsStyleSheetImport() )
+    {
+        PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_SECTION);
+        OSL_ENSURE(pContext.get(), "Section context is not in the stack!");
+        pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
+    }
 
     //TODO: In rtl-paragraphs the meaning of left/right are to be exchanged
     bool bExchangeLeftRight = false;
@@ -3161,9 +3166,9 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
         {
-            pContext->Insert( PROP_HEIGHT, uno::makeAny( CT_PageSz.h ) );
-            pContext->Insert( PROP_IS_LANDSCAPE, uno::makeAny( CT_PageSz.orient ));
-            pContext->Insert( PROP_WIDTH, uno::makeAny( CT_PageSz.w ) );
+            pSectionContext->Insert( PROP_HEIGHT, uno::makeAny( CT_PageSz.h ) );
+            pSectionContext->Insert( PROP_IS_LANDSCAPE, uno::makeAny( CT_PageSz.orient ));
+            pSectionContext->Insert( PROP_WIDTH, uno::makeAny( CT_PageSz.w ) );
             pSectionContext->SetLandscape( CT_PageSz.orient );
         }
         break;
