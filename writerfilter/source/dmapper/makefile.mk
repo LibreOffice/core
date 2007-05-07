@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: os $ $Date: 2007-05-03 06:23:04 $
+#   last change: $Author: os $ $Date: 2007-05-07 06:17:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ SLOFILES=           $(SLO)$/BorderHandler.obj \
                     $(SLO)$/PropertyIds.obj  \
                     $(SLO)$/FontTable.obj   \
                     $(SLO)$/StyleSheetTable.obj \
+                    $(SLO)$/TableLeftIndentHandler.obj \
                     $(SLO)$/ListTable.obj  \
                     $(SLO)$/LFOTable.obj    \
                     $(SLO)$/GraphicImport.obj  \
