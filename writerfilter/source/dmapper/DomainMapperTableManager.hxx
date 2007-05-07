@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableManager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2007-05-03 06:25:38 $
+ *  last change: $Author: os $ $Date: 2007-05-07 06:21:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,11 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > H
 typedef doctok::TableManager<Handle_t , PropertyMapPtr > DomainMapperTableManager_Base_t;
 class DomainMapperTableManager : public DomainMapperTableManager_Base_t
 {
-    sal_uInt32       m_nRow;
-    sal_uInt32       m_nCell;
-    sal_uInt32       m_nCellBorderIndex; //borders are provided for all cells and need counting
+    sal_uInt32      m_nRow;
+    sal_uInt32      m_nCell;
+    sal_uInt32      m_nCellBorderIndex; //borders are provided for all cells and need counting
+    sal_Int32       m_nHeaderRepeat; //counter of repeated headers - if == -1 then the repeating stops
+    sal_Int32       m_nGapHalf; // necessary value to calculate width and columns
 public:
 
     DomainMapperTableManager();
