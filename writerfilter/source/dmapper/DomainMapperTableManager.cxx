@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableManager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-04 14:21:31 $
+ *  last change: $Author: os $ $Date: 2007-05-07 06:20:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,9 @@
 #ifndef INCLUDED_CELLCOLORHANDLER_HXX
 #include <CellColorHandler.hxx>
 #endif
+#ifndef INCLUDED_TABLELEFTINDENTHANDLER_HXX
+#include <TableLeftIndentHandler.hxx>
+#endif
 #ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HDL_
 #include <com/sun/star/text/HoriOrientation.hpp>
 #endif
@@ -55,7 +58,9 @@ using namespace ::std;
 DomainMapperTableManager::DomainMapperTableManager() :
     m_nRow(0),
     m_nCell(0),
-    m_nCellBorderIndex(0)
+    m_nCellBorderIndex(0),
+    m_nHeaderRepeat(0),
+    m_nGapHalf(0)
 {
 }
 /*-- 23.04.2007 14:57:49---------------------------------------------------
@@ -103,6 +108,18 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
             break;
             case 0x9602: // sprmTDxaGapHalf
                 /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
+                m_nGapHalf = nIntValue;
+            break;
+            case 0xf661 : //sprmTTRLeft - contains unit and value of left table indent
+                {
+                doctok::Reference<doctok::Properties>::Pointer_t pProperties = rSprm.getProps();
+                if( pProperties.get())
+                {   //contains attributes x2902 (LN_unit) and x17e2 (LN_trleft)
+                    TableLeftIndentHandlerPtr pTableLeftIndentHandler( new TableLeftIndentHandler );
+                    pProperties->resolve(*pTableLeftIndentHandler);
+                    tableProps(pTableLeftIndentHandler->getProperties());
+                }
+            }
             break;
             case 0x3403: // sprmTFCantSplit
             {
@@ -116,9 +133,16 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
             case 0x3404:// sprmTTableHeader
                 /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
                 // if nIntValue == 1 then the row is a repeated header line
-//                PropertyMapPtr pPropMap( new PropertyMap );
-//                pPropMap->Insert( , uno::makeAny(sal_Bool( nIntValue == 1 ?  ) ));
-//                insertRowProps(pPropMap);
+                // to prevent later rows from increasing the repeating m_nHeaderRepeat is set to NULL when repeating stops
+                if( nIntValue > 0 && m_nHeaderRepeat >= 0 )
+                {
+                    ++m_nHeaderRepeat;
+                    PropertyMapPtr pPropMap( new PropertyMap );
+                    pPropMap->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny( m_nHeaderRepeat ));
+                    tableProps(pPropMap);
+                }
+                else
+                    m_nHeaderRepeat = -1;
             break;
             case 0xD605: // sprmTTableBorders
             {
