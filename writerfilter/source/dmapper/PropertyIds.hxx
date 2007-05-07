@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2007-05-03 06:25:38 $
+ *  last change: $Author: os $ $Date: 2007-05-07 06:18:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,7 +238,7 @@ enum PropertyIds
 /*196*/ ,PROP_IS_SPLIT_ALLOWED
 /*197*/ ,META_PROP_VERTICAL_BORDER
 /*198*/ ,META_PROP_HORIZONTAL_BORDER
-///*199*/ ,PROP_
+/*199*/ ,PROP_HEADER_ROW_COUNT
 ///*200*/ ,PROP_
 ///*201*/ ,PROP_
 ///*202*/ ,PROP_
