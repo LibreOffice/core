@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableManager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2007-05-07 06:20:52 $
+ *  last change: $Author: os $ $Date: 2007-05-07 12:05:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,14 @@
 #ifndef INCLUDED_TABLELEFTINDENTHANDLER_HXX
 #include <TableLeftIndentHandler.hxx>
 #endif
+#ifndef INCLUDED_DMAPPER_CONVERSIONHELPER_HXX
+#include <ConversionHelper.hxx>
+#endif
 #ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HDL_
 #include <com/sun/star/text/HoriOrientation.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_SIZETYPE_HDL_
+#include <com/sun/star/text/SizeType.hpp>
 #endif
 
 namespace dmapper {
@@ -100,7 +106,7 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
                 }
                 PropertyMapPtr pTableMap( new PropertyMap );
                 pTableMap->Insert( PROP_HORI_ORIENT, uno::makeAny( nOrient ) );
-                tableProps( pTableMap );
+                insertTableProps( pTableMap );
             }
             break;
             case 0x9601: // sprmTDxaLeft
@@ -117,7 +123,7 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
                 {   //contains attributes x2902 (LN_unit) and x17e2 (LN_trleft)
                     TableLeftIndentHandlerPtr pTableLeftIndentHandler( new TableLeftIndentHandler );
                     pProperties->resolve(*pTableLeftIndentHandler);
-                    tableProps(pTableLeftIndentHandler->getProperties());
+                    insertTableProps(pTableLeftIndentHandler->getProperties());
                 }
             }
             break;
@@ -139,11 +145,29 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
                     ++m_nHeaderRepeat;
                     PropertyMapPtr pPropMap( new PropertyMap );
                     pPropMap->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny( m_nHeaderRepeat ));
-                    tableProps(pPropMap);
+                    insertTableProps(pPropMap);
                 }
                 else
                     m_nHeaderRepeat = -1;
             break;
+            case 0x9407: // sprmTDyaRowHeight
+            {
+                /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0.5 */
+                // table row height - negative values indicate 'exact height' - positive 'at least'
+                PropertyMapPtr pPropMap( new PropertyMap );
+                bool bMinHeight = true;
+                sal_Int16 nHeight = static_cast<sal_Int16>( nIntValue );
+                if( nHeight < 0 )
+                {
+                    bMinHeight = false;
+                    nHeight *= -1;
+                }
+                pPropMap->Insert( PROP_SIZE_TYPE, uno::makeAny(bMinHeight ? text::SizeType::MIN : text::SizeType::FIX ));
+                pPropMap->Insert( PROP_HEIGHT, uno::makeAny(ConversionHelper::convertToMM100( nHeight )));
+                insertRowProps(pPropMap);
+            }
+            break;
+
             case 0xD605: // sprmTTableBorders
             {
                 /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
