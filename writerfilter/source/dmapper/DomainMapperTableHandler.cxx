@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableHandler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2007-05-03 06:25:37 $
+ *  last change: $Author: os $ $Date: 2007-05-07 06:19:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,8 +136,10 @@ void DomainMapperTableHandler::endTable()
                                 aCellIterator->get()->find( rPropSupplier.GetName(PROP_RIGHT_BORDER) );
                 const PropertyMap::const_iterator aBottomIter =
                                 aCellIterator->get()->find( rPropSupplier.GetName(PROP_BOTTOM_BORDER) );
-                aCellIterator->get()->erase( aVerticalIter );
-                aCellIterator->get()->erase( aHorizontalIter );
+                if( aVerticalIter != aCellIterator->get()->end())
+                    aCellIterator->get()->erase( aVerticalIter );
+                if( aHorizontalIter != aCellIterator->get()->end())
+                    aCellIterator->get()->erase( aHorizontalIter );
 
                 pSingleCellProperties[nCell] = aCellIterator->get()->GetPropertyValues();
             }
