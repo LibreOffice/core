@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableHandler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2007-05-07 06:19:52 $
+ *  last change: $Author: os $ $Date: 2007-05-07 12:06:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,8 @@ void DomainMapperTableHandler::endTable()
     PropertyMapVector2::const_iterator aRowOfCellsIterator = m_aCellProperties.begin();
     PropertyMapVector2::const_iterator aRowOfCellsIteratorEnd = m_aCellProperties.end();
     sal_Int32 nRow = 0;
+    PropertyNameSupplier& rPropSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+
     //it's a uno::Sequence< beans::PropertyValues >*
     RowPropertyValuesSeq_t* pCellProperties = aCellProperties.getArray();
     while( aRowOfCellsIterator != aRowOfCellsIteratorEnd )
@@ -127,7 +129,6 @@ void DomainMapperTableHandler::endTable()
             if( aCellIterator->get() )
             {
 
-                PropertyNameSupplier& rPropSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
                 const PropertyMap::iterator aVerticalIter =
                                 aCellIterator->get()->find( rPropSupplier.GetName(META_PROP_VERTICAL_BORDER) );
                 const PropertyMap::iterator aHorizontalIter =
@@ -157,14 +158,31 @@ void DomainMapperTableHandler::endTable()
     while( aRowIter != aRowIterEnd )
     {
         if( aRowIter->get() )
+        {
+            //set default to 'break across pages"
+            if( aRowIter->get()->find(rPropSupplier.GetName(PROP_IS_SPLIT_ALLOWED)) == aRowIter->get()->end())
+                aRowIter->get()->Insert( PROP_IS_SPLIT_ALLOWED, uno::makeAny(sal_True ) );
+
             aRowProperties[nRow] = aRowIter->get()->GetPropertyValues();
+        }
         ++nRow;
         ++aRowIter;
     }
 
     TablePropertyValues_t       aTableProperties;
     if( m_aTableProperties.get() )
+    {
+        //fill default value - if not available
+        const PropertyMap::const_iterator aRepeatIter =
+                                m_aTableProperties->find( rPropSupplier.GetName(PROP_HEADER_ROW_COUNT) );
+        if( aRepeatIter == m_aTableProperties->end() )
+        {
+            m_aTableProperties->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny( (sal_Int32)0 ));
+        }
+
+
         aTableProperties = m_aTableProperties->GetPropertyValues();
+    }
 
     if (m_pTableSeq->getLength() > 0)
     {
