@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: os $ $Date: 2007-05-07 06:22:40 $
+ *  last change: $Author: os $ $Date: 2007-05-07 06:48:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3188,10 +3188,6 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
             pSectionContext->SetLeftMargin( CT_PageMar.left );
             pSectionContext->SetHeaderTop( CT_PageMar.header );
             pSectionContext->SetHeaderBottom( CT_PageMar.footer );
-            pContext->Insert( PROP_TOP_MARGIN, uno::makeAny( CT_PageMar.top ));
-            pContext->Insert( PROP_RIGHT_MARGIN, uno::makeAny( CT_PageMar.right ));
-            pContext->Insert( PROP_BOTTOM_MARGIN, uno::makeAny( CT_PageMar.bottom ));
-            pContext->Insert( PROP_LEFT_MARGIN, uno::makeAny( CT_PageMar.left ));
         }
         break;
 
