@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2007-04-25 11:35:48 $
+ *  last change: $Author: os $ $Date: 2007-05-07 06:18:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,6 +311,7 @@ public:
 
     ::com::sun::star::uno::Any    GetPropertyFromStyleSheet(PropertyIds eId);
     void        SetStyleSheetImport( bool bSet ) { m_bInStyleSheetImport = bSet;}
+    bool        IsStyleSheetImport()const { return m_bInStyleSheetImport;}
 
     void PushPageHeader(SectionPropertyMap::PageType eType);
     void PushPageFooter(SectionPropertyMap::PageType eType);
