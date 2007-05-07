@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableManager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2007-05-07 12:05:13 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-05-07 12:30:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,17 +228,15 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
 /*-- 02.05.2007 14:36:26---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void DomainMapperTableManager::endCell()
+void DomainMapperTableManager::endOfCellAction()
 {
-    DomainMapperTableManager_Base_t::endCell();
     ++m_nCell;
 }
 /*-- 02.05.2007 14:36:26---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void DomainMapperTableManager::endRow()
+void DomainMapperTableManager::endOfRowAction()
 {
-    DomainMapperTableManager_Base_t::endRow();
     ++m_nRow;
     m_nCell = 0;
     m_nCellBorderIndex = 0;

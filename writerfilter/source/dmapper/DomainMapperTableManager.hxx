@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableManager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2007-05-07 06:21:37 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-05-07 12:30:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,8 +63,8 @@ public:
 
     virtual bool sprm(doctok::Sprm & rSprm);
 
-    virtual void endCell();
-    virtual void endRow();
+    virtual void endOfCellAction();
+    virtual void endOfRowAction();
 };
 
 }
