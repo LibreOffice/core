@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8DocumentImpl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2007-04-25 11:37:59 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-05-08 14:53:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1641,7 +1641,6 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 
     WW8DocumentIterator::Pointer_t pIt = begin();
     WW8DocumentIterator::Pointer_t pItEnd = end();
-    WW8DocumentIterator::Pointer_t pItChp;
 
     bool bInParagraphGroup = false;
     bool bInCharacterGroup = false;
@@ -1698,8 +1697,6 @@ void WW8DocumentImpl::resolve(Stream & rStream)
                 rStream.startCharacterGroup();
 
                 bInCharacterGroup = true;
-
-                pItChp = pIt;
             }
 
             break;
@@ -1780,9 +1777,6 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         {
             rStream.startCharacterGroup();
             bInCharacterGroup = true;
-
-            if (pItChp.get() != NULL && pItChp->getProperties().get() != NULL)
-                rStream.props(pItChp->getProperties());
         }
 
         resolveText(pIt, rStream);
