@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLStreamImpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:23:30 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-05-08 14:54:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ using namespace ::std;
 OOXMLStreamImpl::OOXMLStreamImpl
 (uno::Reference<uno::XComponentContext> xContext,
  uno::Reference<embed::XStorage> xStorage, StreamType_t nType)
-: mxContext(xContext),  mxStorage(xStorage), mnStreamType(nType)
+: mxContext(xContext), mxStorage(xStorage), mnStreamType(nType)
 {
     mxRelationshipAccess = uno::Reference<embed::XRelationshipAccess>
         (mxStorage, uno::UNO_QUERY);
@@ -58,8 +58,38 @@ OOXMLStreamImpl::OOXMLStreamImpl
 
 OOXMLStreamImpl::OOXMLStreamImpl
 (OOXMLStreamImpl & rOOXMLStream, StreamType_t nStreamType)
-: mxContext(rOOXMLStream.mxContext), mxStorage(rOOXMLStream.mxStorage),
-  msPath(rOOXMLStream.msPath), mnStreamType(nStreamType)
+: mxContext(rOOXMLStream.mxContext),
+  mxStorage(rOOXMLStream.mxStorage),
+  mnStreamType(nStreamType),
+  msPath(rOOXMLStream.msPath)
+{
+    mxRelationshipAccess = uno::Reference<embed::XRelationshipAccess>
+        (rOOXMLStream.mxDocumentStream, uno::UNO_QUERY);
+
+    init();
+}
+
+OOXMLStreamImpl::OOXMLStreamImpl
+(uno::Reference<uno::XComponentContext> xContext,
+ uno::Reference<embed::XStorage> xStorage, const rtl::OUString & rId)
+: mxContext(xContext),
+  mxStorage(xStorage),
+  mnStreamType(UNKNOWN),
+  msId(rId)
+{
+    mxRelationshipAccess = uno::Reference<embed::XRelationshipAccess>
+        (mxStorage, uno::UNO_QUERY);
+
+    init();
+}
+
+OOXMLStreamImpl::OOXMLStreamImpl
+(OOXMLStreamImpl & rOOXMLStream, const rtl::OUString & rId)
+: mxContext(rOOXMLStream.mxContext),
+  mxStorage(rOOXMLStream.mxStorage),
+  mnStreamType(UNKNOWN),
+  msId(rId),
+  msPath(rOOXMLStream.msPath)
 {
     mxRelationshipAccess = uno::Reference<embed::XRelationshipAccess>
         (rOOXMLStream.mxDocumentStream, uno::UNO_QUERY);
@@ -74,6 +104,7 @@ OOXMLStreamImpl::~OOXMLStreamImpl()
 void OOXMLStreamImpl::init()
 {
     static rtl::OUString sType(RTL_CONSTASCII_USTRINGPARAM("Type"));
+    static rtl::OUString sId(RTL_CONSTASCII_USTRINGPARAM("Id"));
     static rtl::OUString sDocumentType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument"));
     static rtl::OUString sStylesType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles"));
     static rtl::OUString sNumberingType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering"));
@@ -116,6 +147,9 @@ void OOXMLStreamImpl::init()
 
                 if (aPair.First.compareTo(sType) == 0 &&
                     aPair.Second.compareTo(sStreamType) == 0)
+                    bFound = true;
+                else if (aPair.First.compareTo(sType) == 0 &&
+                         aPair.Second.compareTo(sId))
                     bFound = true;
                 else if (aPair.First.compareTo(sTarget) == 0)
                 {
@@ -210,6 +244,15 @@ OOXMLDocumentFactory::createStream
     return OOXMLStream::Pointer_t
         (new OOXMLStreamImpl(*dynamic_cast<OOXMLStreamImpl *>(pStream.get()),
                              nStreamType));
+}
+
+OOXMLStream::Pointer_t
+OOXMLDocumentFactory::createStream
+(OOXMLStream::Pointer_t pStream, const rtl::OUString & rId)
+{
+    return OOXMLStream::Pointer_t
+        (new OOXMLStreamImpl(*dynamic_cast<OOXMLStreamImpl *>(pStream.get()),
+                             rId));
 }
 
 }

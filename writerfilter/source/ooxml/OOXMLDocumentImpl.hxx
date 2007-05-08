@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocumentImpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-11 10:37:38 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-05-08 14:54:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,12 +46,16 @@ class OOXMLDocumentImpl : public OOXMLDocument
 {
     OOXMLStream::Pointer_t mpStream;
 
+protected:
+    virtual void resolveSubStream(Stream & rStream,
+                                  OOXMLStream::StreamType_t nType);
+    doctok::Reference<Stream>::Pointer_t
+    getSubStream(const rtl::OUString & rId);
+
 public:
     OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream);
     virtual ~OOXMLDocumentImpl();
 
-    virtual void resolveSubStream(Stream & rStream,
-                                  OOXMLStream::StreamType_t nType);
     virtual void resolve(Stream & rStream);
 
     virtual string getType() const;

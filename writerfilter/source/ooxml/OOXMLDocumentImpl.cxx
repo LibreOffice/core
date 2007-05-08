@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocumentImpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-20 14:36:20 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-05-08 14:54:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,15 @@ void OOXMLDocumentImpl::resolveSubStream(Stream & rStream,
             xInputStream->closeInput();
         }
     }
+}
+
+doctok::Reference<Stream>::Pointer_t
+OOXMLDocumentImpl::getSubStream(const rtl::OUString & rId)
+{
+    OOXMLStream::Pointer_t pStream
+        (OOXMLDocumentFactory::createStream(mpStream, rId));
+
+    return doctok::Reference<Stream>::Pointer_t(new OOXMLDocumentImpl(pStream));
 }
 
 void OOXMLDocumentImpl::resolve(Stream & rStream)

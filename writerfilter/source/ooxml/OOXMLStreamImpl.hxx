@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLStreamImpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-30 16:32:23 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-05-08 14:54:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,9 +65,10 @@ protected:
     uno::Reference<embed::XRelationshipAccess> mxRelationshipAccess;
     uno::Reference<io::XStream> mxDocumentStream;
 
-    rtl::OUString msPath;
-
     StreamType_t mnStreamType;
+
+    rtl::OUString msId;
+    rtl::OUString msPath;
 
 public:
     typedef boost::shared_ptr<OOXMLStreamImpl> Pointer_t;
@@ -78,6 +79,11 @@ public:
     (uno::Reference<uno::XComponentContext> xContext,
      uno::Reference<embed::XStorage> xStorage,
      StreamType_t nType);
+    OOXMLStreamImpl(OOXMLStreamImpl & rStream, const rtl::OUString & rId);
+    OOXMLStreamImpl
+    (uno::Reference<uno::XComponentContext> xContext,
+     uno::Reference<embed::XStorage> xStorage,
+     const rtl::OUString & rId);
 
     virtual ~OOXMLStreamImpl();
 

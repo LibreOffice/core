@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocument.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:30:53 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-05-08 14:49:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ using namespace com::sun::star;
 class WRITERFILTER_DLLPUBLIC OOXMLStream
 {
 public:
-    enum StreamType_t { DOCUMENT, STYLES, FONTTABLE, NUMBERING };
+    enum StreamType_t { UNKNOWN, DOCUMENT, STYLES, FONTTABLE, NUMBERING };
     typedef boost::shared_ptr<OOXMLStream> Pointer_t;
 
     virtual ~OOXMLStream() {}
@@ -101,6 +101,9 @@ public:
     static OOXMLStream::Pointer_t
     createStream(OOXMLStream::Pointer_t pStream,
                  OOXMLStream::StreamType_t nStreamType = OOXMLStream::DOCUMENT);
+
+    static OOXMLStream::Pointer_t
+    createStream(OOXMLStream::Pointer_t pStream, const rtl::OUString & rId);
 
     static OOXMLDocument *
     createDocument(OOXMLStream::Pointer_t pStream);
