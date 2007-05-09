@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdcrtv.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:16:33 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:32:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,11 @@
 // #i72535#
 #ifndef _SVX_FMOBJ_HXX
 #include "fmobj.hxx"
+#endif
+
+// #i68562#
+#ifndef _SVDOCIRC_HXX
+#include <svdocirc.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -830,6 +835,15 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, BOOL bFull*/)
                 {
                     bUseSolidDragging = sal_False;
                 }
+            }
+
+            // #i68562# Force to non-solid dragging when not creating a full circle and up to step three
+            if(bUseSolidDragging
+                && pAktCreate->ISA(SdrCircObj)
+                && OBJ_CIRC != (SdrObjKind)(static_cast< SdrCircObj* >(pAktCreate)->GetObjIdentifier())
+                && aDragStat.GetPointAnz() < 4L)
+            {
+                bUseSolidDragging = false;
             }
 
             if(bUseSolidDragging)
