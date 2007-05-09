@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:42:56 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:26:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 
+#include <uno/mapping.hxx>
+
+#include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <typelib/typedescription.h>
 
@@ -741,9 +744,20 @@ void EventListenerImpl::disposing( lang::EventObject const & rEvt )
 
 //==================================================================================================
 sal_Bool SAL_CALL installTypeDescriptionManager(
-    Reference< container::XHierarchicalNameAccess > const & xTDMgr )
+    Reference< container::XHierarchicalNameAccess > const & xTDMgr_c )
     SAL_THROW( () )
 {
+    uno::Environment curr_env(Environment::getCurrent());
+    uno::Environment target_env(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(CPPU_STRINGIFY(CPPU_ENV))));
+
+    uno::Mapping curr2target(curr_env, target_env);
+
+
+    Reference<container::XHierarchicalNameAccess> xTDMgr(
+        reinterpret_cast<container::XHierarchicalNameAccess *>(
+            curr2target.mapInterface(xTDMgr_c.get(), ::getCppuType(&xTDMgr_c))),
+        SAL_NO_ACQUIRE);
+
     Reference< lang::XComponent > xComp( xTDMgr, UNO_QUERY );
     if (xComp.is())
     {
