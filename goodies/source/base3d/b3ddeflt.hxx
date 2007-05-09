@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3ddeflt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:06:59 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:25:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,6 +138,10 @@ private:
 
     // Lokale Scissor Region (ohne TopLeft)
     Rectangle               aDefaultScissorRectangle;
+
+    // #i71618#
+    // derived from mfPolygonOffset in StartScene() using Z-Buffer depth
+    sal_uInt32              maPolygonOffset;
 
     // bitfileld
     // Booleans fuer Zeichenoperationen
