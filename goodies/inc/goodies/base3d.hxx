@@ -4,9 +4,9 @@
  *
  *  $RCSfile: base3d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 20:32:50 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:25:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -281,6 +281,9 @@ private:
     // Darstellungsqualitaet (0..255)
     UINT8                   nDisplayQuality;
 
+     // #i71618#
+     double                 mfPolygonOffset;
+
     // EdgeFlag
     unsigned                bEdgeFlag                   : 1;
 
@@ -412,6 +415,13 @@ public:
     virtual void SetPolygonOffset(
         Base3DPolygonOffset eNew=Base3DPolygonOffsetLine, BOOL bNew=FALSE);
     BOOL GetPolygonOffset(Base3DPolygonOffset eNew=Base3DPolygonOffsetLine) const;
+
+     // #i71618#
+     // support for value for PolygonOffset. Value is relative to Z-Buffer depth. To keep
+     // it implementation-independent, it is a value in the range [0.0 .. 1.0]. Default
+     // is now 0,005 which expands to ca. 80.000 with 14bit Z-Buffer
+     void setPolygonOffset(double fNew);
+     double getPolygonOffset() const;
 
     // RenderMode
     virtual void SetRenderMode(Base3DRenderMode eNew,
