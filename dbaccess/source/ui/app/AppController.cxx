@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:26:37 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:24:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1959,15 +1959,12 @@ void OApplicationController::renameEntry()
 
                             xRename->rename(sNewName);
 
-                            if ( !Reference< XNameAccess >( xRename, UNO_QUERY ).is() )
+                            if ( eType == E_TABLE )
                             {
-                                if ( eType == E_TABLE )
-                                {
-                                    Reference<XPropertySet> xProp(xRename,UNO_QUERY);
-                                    sNewName = ::dbaui::composeTableName( m_xMetaData, xProp, ::dbtools::eInDataManipulation, false, false, false );
-                                }
-                                getContainer()->elementReplaced( eType , sOldName, sNewName );
+                                Reference<XPropertySet> xProp(xRename,UNO_QUERY);
+                                sNewName = ::dbaui::composeTableName( m_xMetaData, xProp, ::dbtools::eInDataManipulation, false, false, false );
                             }
+                            getContainer()->elementReplaced( eType , sOldName, sNewName );
 
                             bTryAgain = sal_False;
                         }
