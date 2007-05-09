@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:24:36 $
+#   last change: $Author: kz $ $Date: 2007-05-09 13:39:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,11 @@ SLOFILES= \
     $(SLO)$/any.obj      \
     $(SLO)$/lbmap.obj    \
     $(SLO)$/lbenv.obj    \
-    $(SLO)$/IdentityMapping.obj
+    $(SLO)$/IdentityMapping.obj \
+    $(SLO)$/EnvDcp.obj \
+    $(SLO)$/cascade_mapping.obj \
+    $(SLO)$/EnvStack.obj \
+    $(SLO)$/env_subst.obj
 
 # --- Targets ------------------------------------------------------
 
