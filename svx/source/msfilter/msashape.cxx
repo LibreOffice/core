@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:29:10 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:31:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -6544,13 +6544,17 @@ SdrObject* SvxMSDffCustomShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet
                                 nChecksum = 0;
                                 break;
                             }
-                            const XPolyPolygon& rPolyPolygon = ((SdrPathObj*)pNext)->GetPathPoly();
-                            sal_uInt16 j, k = rPolyPolygon.Count();
+
+                            // #i74631# use explicit constructor here. Also XPolyPolygon is not necessary,
+                            // reducing to PolyPolygon
+                            const PolyPolygon aPolyPolygon(((SdrPathObj*)pNext)->GetPathPoly());
+
+                            sal_uInt16 j, k = aPolyPolygon.Count();
                             sal_Int32 aVal[ 3 ];
                             while( k )
                             {
-                                const XPolygon& rPoly = rPolyPolygon[ --k ];
-                                j = rPoly.GetPointCount();
+                                const Polygon& rPoly = aPolyPolygon[ --k ];
+                                j = rPoly.GetSize();
                                 while( j )
                                 {
                                     const Point& rPoint = rPoly[ --j ];
