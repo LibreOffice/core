@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.226 $
+ *  $Revision: 1.227 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-21 12:02:52 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:35:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -7813,7 +7813,7 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
     rResultVector.reserve( aB2DPolyPolyVector.size() );
     ::basegfx::B2DPolyPolygonVector::const_iterator aIt = aB2DPolyPolyVector.begin();
     for(; aIt != aB2DPolyPolyVector.end(); ++aIt )
-        rResultVector.push_back( *aIt );
+        rResultVector.push_back(PolyPolygon(*aIt)); // #i76339#
 
     return TRUE;
 }
@@ -7836,7 +7836,7 @@ BOOL OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
     ::basegfx::B2DPolyPolygonVector::const_iterator aIt = aB2DPolyPolyVector.begin();
     for(; aIt != aB2DPolyPolyVector.end(); ++aIt )
         for( unsigned int i = 0; i < aIt->count(); ++i )
-            rPolyPoly.Insert( (*aIt).getB2DPolygon( i ) );
+            rPolyPoly.Insert(Polygon((*aIt).getB2DPolygon( i ))); // #i76339#
 
     return TRUE;
 }
