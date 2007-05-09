@@ -4,9 +4,9 @@
  *
  *  $RCSfile: base3d.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:22:48 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:25:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,6 +237,7 @@ Base3D::Base3D(OutputDevice* pOutDev)
     aMaterialFront(),
     aMaterialBack(),
     nDisplayQuality(127),
+    mfPolygonOffset(0.005), // #i71618#
     bEdgeFlag(TRUE),
     bContextIsValid(TRUE),
     bPolyOffsetFill(FALSE),
@@ -1194,6 +1195,20 @@ double Base3D::GetLineWidth() const
 void Base3D::SetLineWidth(double fNew)
 {
     fLineWidth = fNew;
+}
+
+// #i71618#
+void Base3D::setPolygonOffset(double fNew)
+{
+    if(fNew != mfPolygonOffset)
+    {
+        mfPolygonOffset = fNew;
+    }
+}
+
+double Base3D::getPolygonOffset() const
+{
+    return mfPolygonOffset;
 }
 
 /*************************************************************************
