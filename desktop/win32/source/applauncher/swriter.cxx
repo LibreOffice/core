@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swriter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:53:08 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:25:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,10 +32,11 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
+
+#define UNICODE
+
 #include "launcher.hxx"
 
 _TCHAR APPLICATION_SWITCH[] = _T( "-writer" );
