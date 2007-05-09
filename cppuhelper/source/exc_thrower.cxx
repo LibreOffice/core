@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exc_thrower.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:40:10 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:25:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,12 +44,15 @@
 #include "cppuhelper/detail/XExceptionThrower.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
 
+#include "cppuhelper/exc_hlp.hxx"
+
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::cppu;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 namespace
@@ -227,8 +230,7 @@ void SAL_CALL throwException( Any const & exc ) SAL_THROW( (Exception) )
             Reference< XInterface >() );
     }
 
-    Mapping uno2cpp(
-        OUSTR(UNO_LB_UNO), OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
+    Mapping uno2cpp(Environment(OUSTR(UNO_LB_UNO)), Environment::getCurrent());
     if (! uno2cpp.is())
     {
         throw RuntimeException(
@@ -248,16 +250,14 @@ void SAL_CALL throwException( Any const & exc ) SAL_THROW( (Exception) )
 //==============================================================================
 Any SAL_CALL getCaughtException()
 {
-    Mapping cpp2uno(
-        OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME), OUSTR(UNO_LB_UNO) );
+    Mapping cpp2uno(Environment::getCurrent(), Environment(OUSTR(UNO_LB_UNO)));
     if (! cpp2uno.is())
     {
         throw RuntimeException(
             OUSTR("cannot get C++ to binary UNO mapping!"),
             Reference< XInterface >() );
     }
-    Mapping uno2cpp(
-        OUSTR(UNO_LB_UNO), OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
+    Mapping uno2cpp(Environment(OUSTR(UNO_LB_UNO)), Environment::getCurrent());
     if (! uno2cpp.is())
     {
         throw RuntimeException(
