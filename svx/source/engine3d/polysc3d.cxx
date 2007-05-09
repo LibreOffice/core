@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polysc3d.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:21:42 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:30:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,6 +198,10 @@ BOOL E3dPolyScene::LocalPaint3D(XOutputDevice& rOut,
 
     DBG_ASSERT(pBase3D, "Habe keinen Base3D Kontext bekommen!!");
     pBase3D->SetDisplayQuality(GetDisplayQuality());
+
+    // #i71618#
+    // copy local PolygonOffset to base3d
+    pBase3D->setPolygonOffset(getPolygonOffset());
 
     if(nShadeMode == 0)
         pBase3D->SetShadeModel(Base3DFlat);
