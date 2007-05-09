@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_calc.scp,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 13:52:32 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:22:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,7 +177,7 @@ File gid_File_Exe_Scalc
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = EXENAME(scalc);
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
 End
 
 #if defined UNX && ! defined MACOSX
