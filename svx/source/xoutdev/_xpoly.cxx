@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _xpoly.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 14:58:49 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:33:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1501,199 +1501,33 @@ void XPolygon::Rotate20()
     }
 }
 
-// #116512# convert to basegfx::B2DPolygon and return
 basegfx::B2DPolygon XPolygon::getB2DPolygon() const
 {
-    basegfx::B2DPolygon aRetval;
-    const sal_uInt16 nCount(GetPointCount());
+    // #i74631# use tools Polygon class for conversion to not have the code doubled
+    // here. This needs one more conversion but avoids different convertors in
+    // the long run
+    DBG_ASSERT(pImpXPolygon != 0, "XPolygon::getB2DPolygon(): XPolygon has no implementation incarnated (!)");
+    const Polygon aSource(GetPointCount(), pImpXPolygon->pPointAry, pImpXPolygon->pFlagAry);
 
-    for(sal_uInt16 a(0L); a < nCount;)
-    {
-        // get point
-        Point aPointA = (*this)[a++];
-
-        // test flags of next point if available, maybe it's a control point
-        if(a < nCount && XPOLY_CONTROL == GetFlags(a))
-        {
-            // get two control points
-            Point aControlA = (*this)[a++];
-            Point aControlB = (*this)[a++];
-
-            // add point A
-            basegfx::B2DPoint aPoA(aPointA.X(), aPointA.Y());
-            aRetval.append(aPoA);
-
-            // calculate Vectors and add them
-            const sal_uInt32 nDestIndex(aRetval.count() - 1L);
-            basegfx::B2DVector aVeA(aControlA.X() - aPointA.X(), aControlA.Y() - aPointA.Y());
-            aRetval.setControlVectorA(nDestIndex, aVeA);
-            basegfx::B2DVector aVeB(aControlB.X() - aPointA.X(), aControlB.Y() - aPointA.Y());
-            aRetval.setControlVectorB(nDestIndex, aVeB);
-        }
-        else
-        {
-            // add point A
-            basegfx::B2DPoint aPoA(aPointA.X(), aPointA.Y());
-            aRetval.append(aPoA);
-        }
-    }
-
-    // set closed flag
-    basegfx::tools::checkClosed(aRetval);
-
-    return aRetval;
+    return aSource.getB2DPolygon();
 }
 
-// #116512# constructor to convert from basegfx::B2DPolygon
 XPolygon::XPolygon(const basegfx::B2DPolygon& rPolygon)
 {
+    // #i74631# use tools Polygon class for conversion to not have the code doubled
+    // here. This needs one more conversion but avoids different convertors in
+    // the long run
     DBG_CTOR(XPolygon,NULL);
 
-    const sal_Bool bCurve(rPolygon.areControlPointsUsed());
-    const sal_Bool bClosed(rPolygon.isClosed());
-    const sal_uInt32 nCount(rPolygon.count());
+    const Polygon aSource(rPolygon);
+    USHORT nSize = aSource.GetSize();
+    pImpXPolygon = new ImpXPolygon( nSize );
+    pImpXPolygon->nPoints = nSize;
 
-    if(bCurve)
+    for( USHORT i = 0; i < nSize;  i++ )
     {
-        // curve creation
-        const sal_uInt32 nLoopCount(bClosed ? nCount : (nCount ? nCount - 1L : 0L ));
-        const sal_uInt32 nTargetCount(nLoopCount ? (nLoopCount * 3L) + 1L : 0L);
-        DBG_ASSERT(nTargetCount == sal_uInt32(sal_uInt16(nTargetCount)),
-            "XPolygon::XPolygon: Too many points in given basegfx::B2DPolygon (!)");
-        pImpXPolygon = new ImpXPolygon( sal_uInt16(nTargetCount) , 1024 );
-
-        if(nLoopCount)
-        {
-            sal_uInt16 nIndex(0);
-
-            for(sal_uInt32 a(0L); a < nLoopCount; a++)
-            {
-                // get and add start point
-                const basegfx::B2DPoint aB2DPointA(rPolygon.getB2DPoint(a));
-                const Point aPointA(FRound(aB2DPointA.getX()), FRound(aB2DPointA.getY()));
-                const sal_uInt16 nPointIndex(nIndex++);
-                Insert(nPointIndex, aPointA, XPOLY_NORMAL);
-
-                // get and add first and second control point if one is defined
-                const basegfx::B2DVector aB2DVectorA(rPolygon.getControlVectorA(a));
-                const basegfx::B2DVector aB2DVectorB(rPolygon.getControlVectorB(a));
-                const sal_Bool bVectorAUsed(!aB2DVectorA.equalZero());
-                const sal_Bool bVectorBUsed(!aB2DVectorB.equalZero());
-
-                if(bVectorAUsed || bVectorBUsed)
-                {
-                    if(bVectorAUsed)
-                    {
-                        const Point aVecA(FRound(aB2DPointA.getX() + aB2DVectorA.getX()),  FRound(aB2DPointA.getY() + aB2DVectorA.getY()));
-                        Insert(nIndex++, aVecA, XPOLY_CONTROL);
-                    }
-                    else
-                    {
-                        Insert(nIndex++, aPointA, XPOLY_CONTROL);
-                    }
-
-                    if(bVectorBUsed)
-                    {
-                        const Point aVecB(FRound(aB2DPointA.getX() + aB2DVectorB.getX()), FRound(aB2DPointA.getY() + aB2DVectorB.getY()));
-                        Insert(nIndex++, aVecB, XPOLY_CONTROL);
-                    }
-                    else
-                    {
-                        const basegfx::B2DPoint aB2DPointB(rPolygon.getB2DPoint(basegfx::tools::getIndexOfSuccessor(a, rPolygon)));
-                        const Point aVecB(FRound(aB2DPointB.getX()), FRound(aB2DPointB.getY()));
-                        Insert(nIndex++, aVecB, XPOLY_CONTROL);
-                    }
-                }
-
-                // test continuity with previous control point
-                if(bVectorAUsed && (bClosed || a))
-                {
-                    const sal_uInt32 nPrevInd(a == 0L ? nCount  - 1L : a - 1L);
-                    const basegfx::B2DVector aB2DVectorPrev(rPolygon.getControlPointB(nPrevInd) - aB2DPointA);
-
-                    // do not use basegfx::getContinuity() here since the values are (or were) integer
-                    // based on their way, so basegfx::areParallel() needs to be unsharp enough for detecting
-                    // the C1 continoity for the integer case
-                    if(!aB2DVectorPrev.equalZero() && !aB2DVectorA.equalZero())
-                    {
-                        if( basegfx::fTools::equal(aB2DVectorPrev.getX(), -aB2DVectorA.getX()) &&
-                            basegfx::fTools::equal(aB2DVectorPrev.getY(), -aB2DVectorA.getY()))
-                        {
-                            // same direction and same length -> C2
-                            SetFlags(nPointIndex, XPOLY_SYMMTR);
-                        }
-                        else
-                        {
-                            const double fCrossA(aB2DVectorPrev.getX() * aB2DVectorA.getY());
-                            const double fCrossB(aB2DVectorPrev.getY() * aB2DVectorA.getX());
-                            bool bIsParallel(false);
-
-                            if(basegfx::fTools::equal(fCrossA, fCrossB))
-                            {
-                                bIsParallel = true;
-                            }
-                            else
-                            {
-                                const double fRelativeDifference((fCrossA - fCrossB) / (fCrossA + fCrossB));
-
-                                if(basegfx::fTools::equalZero(fRelativeDifference, 0.01))
-                                {
-                                    bIsParallel = true;
-                                }
-                            }
-
-                            if(bIsParallel)
-                            {
-                                // same direction -> C1
-                                SetFlags(nPointIndex, XPOLY_SMOOTH);
-                            }
-                        }
-                    }
-                }
-            }
-
-            if(rPolygon.isClosed())
-            {
-                // add first point as closing point
-                Insert(nIndex, (*this)[0], XPOLY_NORMAL);
-            }
-            else
-            {
-                // add last point as closing point
-                const basegfx::B2DPoint aClosingPoint(rPolygon.getB2DPoint(nCount - 1L));
-                const Point aEnd(FRound(aClosingPoint.getX()), FRound(aClosingPoint.getY()));
-                Insert(nIndex, aEnd, XPOLY_NORMAL);
-            }
-
-            // set correct point count
-            pImpXPolygon->nPoints = nIndex + 1;
-        }
-    }
-    else
-    {
-        // point list creation
-        const sal_uInt32 nTargetCount(nCount + (bClosed ? 1L : 0L));
-        DBG_ASSERT(nTargetCount == sal_uInt32(sal_uInt16(nTargetCount)),
-            "XPolygon::XPolygon: Too many points in given basegfx::B2DPolygon (!)");
-        pImpXPolygon = new ImpXPolygon( sal_uInt16(nTargetCount) , 1024 );
-
-        if(nCount)
-        {
-            sal_uInt16 nIndex(0);
-
-            for(sal_uInt32 a(0L); a < nCount; a++)
-            {
-                const basegfx::B2DPoint aB2DPoint(rPolygon.getB2DPoint(a));
-                const Point aPoint(FRound(aB2DPoint.getX()), FRound(aB2DPoint.getY()));
-                Insert(nIndex++, aPoint, XPOLY_NORMAL);
-            }
-
-            if(rPolygon.isClosed())
-            {
-                // add first point as closing point
-                Insert(nIndex, (*this)[0], XPOLY_NORMAL);
-            }
-        }
+        pImpXPolygon->pPointAry[i] = aSource[i];
+        pImpXPolygon->pFlagAry[i] = (BYTE) aSource.GetFlags( i );
     }
 }
 
@@ -2305,8 +2139,6 @@ void XPolyPolygon::Distort(const Rectangle& rRefRect,
                                                            rDistortedRect);
 }
 
-
-// #116512# convert to basegfx::B2DPolyPolygon and return
 basegfx::B2DPolyPolygon XPolyPolygon::getB2DPolyPolygon() const
 {
     basegfx::B2DPolyPolygon aRetval;
@@ -2320,7 +2152,6 @@ basegfx::B2DPolyPolygon XPolyPolygon::getB2DPolyPolygon() const
     return aRetval;
 }
 
-// #116512# constructor to convert from basegfx::B2DPolyPolygon
 XPolyPolygon::XPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
     DBG_CTOR(XPolyPolygon,NULL);
