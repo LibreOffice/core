@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dhommatrix.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:06:55 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:22:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -296,9 +296,8 @@ namespace basegfx
 
     void B3DHomMatrix::shearXY(double fSx, double fSy)
     {
-        const double fOne(1.0);
-
-        if(!fTools::equal(fOne, fSx) || !fTools::equal(fOne, fSy))
+        // #i76239# do not test againt 1.0, but against 0.0. We are talking about a value not on the diagonal (!)
+        if(!fTools::equalZero(fSx) || !fTools::equalZero(fSy))
         {
             Impl3DHomMatrix aShearXYMat;
 
@@ -311,9 +310,8 @@ namespace basegfx
 
     void B3DHomMatrix::shearYZ(double fSy, double fSz)
     {
-        const double fOne(1.0);
-
-        if(!fTools::equal(fOne, fSy) || !fTools::equal(fOne, fSz))
+        // #i76239# do not test againt 1.0, but against 0.0. We are talking about a value not on the diagonal (!)
+        if(!fTools::equalZero(fSy) || !fTools::equalZero(fSz))
         {
             Impl3DHomMatrix aShearYZMat;
 
@@ -326,9 +324,8 @@ namespace basegfx
 
     void B3DHomMatrix::shearXZ(double fSx, double fSz)
     {
-        const double fOne(1.0);
-
-        if(!fTools::equal(fOne, fSx) || !fTools::equal(fOne, fSz))
+        // #i76239# do not test againt 1.0, but against 0.0. We are talking about a value not on the diagonal (!)
+        if(!fTools::equalZero(fSx) || !fTools::equalZero(fSz))
         {
             Impl3DHomMatrix aShearXZMat;
 
