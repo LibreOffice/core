@@ -4,9 +4,9 @@
  *
  *  $RCSfile: process.h,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:30:44 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:21:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -397,6 +397,12 @@ sal_uInt32 SAL_CALL osl_getCommandArgCount(void);
 oslProcessError SAL_CALL osl_getCommandArg(sal_uInt32 nArg, rtl_uString **strCommandArg);
 
 /** Set the command-line arguments as passed to the main-function of this process.
+
+    Depricated: This function is only for internal use. Passing the args from main will
+    only work for Unix, on Windows there's no effect, the full command line will automtically
+    be taken. This is due to Windows 9x/ME limitation that don't allow UTF-16 wmain to provide
+    a osl_setCommandArgsU( int argc, sal_Unicode **argv );
+
     @param argc [in] The number of elements in the argv array.
     @param argv [in] The array of command-line arguments.
     @see osl_getExecutableFile
