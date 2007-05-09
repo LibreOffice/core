@@ -4,9 +4,9 @@
  *
  *  $RCSfile: environment.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 12:14:57 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:35:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #include <uno/environment.h>
 #endif
 
+#include "uno/lbnames.h"
 
 /** */ //for docpp
 namespace com
@@ -70,6 +71,14 @@ class Environment
     uno_Environment * _pEnv;
 
 public:
+    /** Returns the current Environment.
+
+        @param env_type   the optional type of the Environment, falls back to "uno" in case being empty,
+                          respectively to current C++ Environment.
+        @since UDK 3.2.7
+    */
+    inline static Environment getCurrent(rtl::OUString const & typeName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(CPPU_STRINGIFY(CPPU_ENV)))) SAL_THROW( () );
+
     // these are here to force memory de/allocation to sal lib.
     /** @internal */
     inline static void * SAL_CALL operator new ( size_t nSize ) SAL_THROW( () )
@@ -93,10 +102,10 @@ public:
     /** Gets a specific environment. If the specified environment does not exist, then a default one
         is created and registered.
 
-        @param envTypeName      type name of the environment
+        @param envDcp           descriptor of the environment
         @param pContext         context pointer
     */
-    inline explicit Environment( rtl::OUString const & envEypeName, void * pContext = NULL ) SAL_THROW( () );
+    inline explicit Environment( rtl::OUString const & envDcp, void * pContext = NULL ) SAL_THROW( () );
 
 
     /** Copy constructor: acquires given environment
@@ -154,6 +163,35 @@ public:
     /** Releases a set environment.
     */
     inline void SAL_CALL clear() SAL_THROW( () );
+
+    /** Invoke the passed function in this environment.
+
+        @param pCallee  the function to call
+        @param param    the parameter pointer to be passed to the function
+        @since UDK 3.2.7
+    */
+    inline void SAL_CALL invoke_v(uno_EnvCallee * pCallee, va_list param) const SAL_THROW( () );
+
+    /** Invoke the passed function in this environment.
+
+        @param pCallee  the function to call
+        @param ...      the parameters to be passed to the function
+        @since UDK 3.2.7
+    */
+    inline void SAL_CALL invoke(uno_EnvCallee * pCallee, ...) const SAL_THROW( () );
+
+    /** Enter this environment explicitly.
+
+        @since UDK 3.2.7
+    */
+    inline void SAL_CALL enter() const SAL_THROW( () );
+
+    /** Checks, if it is valid to currently call objects
+        belonging to this environment.
+
+        @since UDK 3.2.7
+    */
+    inline int  SAL_CALL isValid(rtl::OUString * pReason) const SAL_THROW( () );
 };
 //__________________________________________________________________________________________________
 inline Environment::Environment( uno_Environment * pEnv ) SAL_THROW( () )
@@ -163,10 +201,10 @@ inline Environment::Environment( uno_Environment * pEnv ) SAL_THROW( () )
         (*_pEnv->acquire)( _pEnv );
 }
 //__________________________________________________________________________________________________
-inline Environment::Environment( rtl::OUString const & rEnvTypeName, void * pContext ) SAL_THROW( () )
+inline Environment::Environment( rtl::OUString const & rEnvDcp, void * pContext ) SAL_THROW( () )
     : _pEnv(NULL)
 {
-    uno_getEnvironment(&_pEnv, rEnvTypeName.pData, pContext);
+    uno_getEnvironment(&_pEnv, rEnvDcp.pData, pContext);
 }
 //__________________________________________________________________________________________________
 inline Environment::Environment( const Environment & rEnv ) SAL_THROW( () )
@@ -202,6 +240,48 @@ inline Environment & Environment::operator = ( uno_Environment * pEnv ) SAL_THRO
         _pEnv = pEnv;
     }
     return *this;
+}
+//__________________________________________________________________________________________________
+inline void SAL_CALL Environment::invoke_v(uno_EnvCallee * pCallee, va_list param) const SAL_THROW( () )
+{
+    if (_pEnv)
+        uno_Environment_invoke_v(_pEnv, pCallee, param);
+}
+//__________________________________________________________________________________________________
+inline void SAL_CALL Environment::invoke(uno_EnvCallee * pCallee, ...) const SAL_THROW( () )
+{
+    if (_pEnv)
+    {
+        va_list param;
+
+        va_start(param, pCallee);
+        uno_Environment_invoke_v(_pEnv, pCallee, param);
+        va_end(param);
+    }
+
+}
+//__________________________________________________________________________________________________
+inline void SAL_CALL Environment::enter() const SAL_THROW( () )
+{
+    uno_Environment_enter(_pEnv);
+}
+//__________________________________________________________________________________________________
+inline int  SAL_CALL Environment::isValid(rtl::OUString * pReason) const SAL_THROW( () )
+{
+    return uno_Environment_isValid(_pEnv, (rtl_uString **)pReason);
+}
+//__________________________________________________________________________________________________
+inline Environment Environment::getCurrent(rtl::OUString const & typeName) SAL_THROW( () )
+{
+    Environment environment;
+
+    uno_Environment * pEnv = NULL;
+    uno_getCurrentEnvironment(&pEnv, typeName.pData);
+    environment = pEnv;
+    if (pEnv)
+        pEnv->release(pEnv);
+
+    return environment;
 }
 
 }
