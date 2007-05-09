@@ -1,4 +1,4 @@
-br	bridges	:	cppuhelper cli_ure jurt jvmaccess salhelper NULL
+br	bridges	:	cppuhelper jurt jvmaccess salhelper NULL
 br	bridges									usr1	-	all	br_mkout NULL
 br	bridges\inc								nmake	-	all	br_inc NULL
 br	bridges\unotypes						nmake	-	all	br_unotypes NULL
@@ -22,6 +22,5 @@ br	bridges\source\cpp_uno\gcc3_solaris_sparc			nmake	-	u	br_gcc3sogs br_cppuno_s
 br	bridges\source\cpp_uno\gcc3_solaris_intel			nmake	-	u	br_gcc3sogi br_cppuno_shared br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\gcc3_netbsd_intel	nmake	-	u	br_gccni br_unotypes br_inc NULL
 br  bridges\source\cpp_uno\shared           nmake   -   all br_cppuno_shared br_unotypes br_inc NULL
-br	bridges\source\cli_uno					nmake	-	w,vc7	br_cli_uno br_unotypes br_inc NULL
 br	bridges\source\jni_uno					nmake	-	all	br_jni_uno br_unotypes br_inc NULL
 br	bridges\source\jni_uno\java\com\sun\star\bridges\jni_uno				nmake	-	all	br_jni_uno_java br_unotypes br_inc NULL
