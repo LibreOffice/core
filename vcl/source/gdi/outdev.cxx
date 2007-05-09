@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:25:06 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:35:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,11 @@
 #endif
 #ifndef _VCL_UNOWRAP_HXX
 #include <unowrap.hxx>
+#endif
+
+// #i75163#
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
 
 #include <com/sun/star/awt/XGraphics.hpp>
@@ -885,6 +890,31 @@ void OutputDevice::ImplInitOutDevData()
         mpOutDevData->mpRotateDev = NULL;
         mpOutDevData->mpRecordLayout = NULL;
         mpOutDevData->mpFirstFontSubstEntry = NULL;
+
+        // #i75163#
+        mpOutDevData->mpViewTransform = NULL;
+        mpOutDevData->mpInverseViewTransform = NULL;
+    }
+}
+
+// -----------------------------------------------------------------------
+
+// #i75163#
+void OutputDevice::ImplInvalidateViewTransform()
+{
+    if(mpOutDevData)
+    {
+        if(mpOutDevData->mpViewTransform)
+        {
+            delete mpOutDevData->mpViewTransform;
+            mpOutDevData->mpViewTransform = NULL;
+        }
+
+        if(mpOutDevData->mpInverseViewTransform)
+        {
+            delete mpOutDevData->mpInverseViewTransform;
+            mpOutDevData->mpInverseViewTransform = NULL;
+        }
     }
 }
 
@@ -910,6 +940,10 @@ void OutputDevice::ImplDeInitOutDevData()
             delete pEntry;
             pEntry = pNext;
         }
+
+        // #i75163#
+        ImplInvalidateViewTransform();
+
         delete mpOutDevData;
     }
 }
