@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dhommatrix.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-05 12:50:26 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:21:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -328,9 +328,8 @@ namespace basegfx
 
     void B2DHomMatrix::shearX(double fSx)
     {
-        const double fOne(1.0);
-
-        if(!fTools::equal(fOne, fSx))
+        // #i76239# do not test againt 1.0, but against 0.0. We are talking about a value not on the diagonal (!)
+        if(!fTools::equalZero(fSx))
         {
             Impl2DHomMatrix aShearXMat;
 
@@ -342,9 +341,8 @@ namespace basegfx
 
     void B2DHomMatrix::shearY(double fSy)
     {
-        const double fOne(1.0);
-
-        if(!fTools::equal(fOne, fSy))
+        // #i76239# do not test againt 1.0, but against 0.0. We are talking about a value not on the diagonal (!)
+        if(!fTools::equalZero(fSy))
         {
             Impl2DHomMatrix aShearYMat;
 
