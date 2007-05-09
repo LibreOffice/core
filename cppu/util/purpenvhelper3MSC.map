@@ -1,0 +1,8 @@
+UDK_3_0_0 {
+    global:
+        ?Environment_initWithEnterable@purpenv@helper@cppu@@YAXPAU_uno_Environment@@PAVEnterable@3@@Z;
+        ?createMapping@purpenv@helper@cppu@@YAXPAPAU_uno_Mapping@@PAU_uno_Environment@@1P6AX_NPAX3PAU_typelib_TypeDescriptionReference@@PAU_typelib_MethodParameter@@JPBU_typelib_TypeDescription@@3QAPAXPAPAU_uno_Any@@@Z3@Z;
+
+    local:
+        *;
+};
