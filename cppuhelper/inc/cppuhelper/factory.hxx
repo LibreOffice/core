@@ -4,9 +4,9 @@
  *
  *  $RCSfile: factory.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:17:59 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:24:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@
 //##################################################################################################
 
 #define COMPONENT_GETENV            "component_getImplementationEnvironment"
+#define COMPONENT_GETENVEXT         "component_getImplementationEnvironmentExt"
 #define COMPONENT_GETDESCRIPTION    "component_getDescription"
 #define COMPONENT_WRITEINFO         "component_writeInfo"
 #define COMPONENT_GETFACTORY        "component_getFactory"
@@ -73,6 +74,23 @@ typedef struct _uno_Environment uno_Environment;
 */
 typedef void (SAL_CALL * component_getImplementationEnvironmentFunc)(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv );
+
+/** Function pointer declaration.
+    Function determines the environment of the component implementation, i.e. the compiler.
+    If the environment is NOT session specific (needs no additional context),
+    then this function should return the environment type name and leave ppEnv (to 0).
+
+    @param ppEnvTypeName environment type name; string must be a constant
+    @param ppEnv         function returns an environment if the environment is session specific,
+                         i.e. has special context
+    @param pImplName
+*/
+typedef void (SAL_CALL * component_getImplementationEnvironmentExtFunc)(
+    sal_Char        const ** ppEnvTypeName,
+    uno_Environment       ** ppEnv,
+    sal_Char        const  * pImplName,
+    uno_Environment        * pTargetEnv
+);
 
 /** Function pointer declaration.
     Function retrieves a component description.
