@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3ddeflt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:06:47 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:25:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,6 +265,11 @@ void Base3DDefault::StartScene()
             aDefaultScissorRectangle.SetSize(Size(nReducedWidth + 1, nReducedHeight + 1));
         }
     }
+
+    // #i71618#
+    // derive maPolygonOffset from mfPolygonOffset and use instead of old
+    // POLYGONOFFSET_VALUE which was much to low with default of 120
+    maPolygonOffset = (sal_uInt32)(getPolygonOffset() * ZBUFFER_DEPTH_RANGE);
 
     // call parent
     Base3DCommon::StartScene();
@@ -604,8 +609,6 @@ void Base3DDefault::WritePixel(sal_Int32 nX, sal_Int32 nY, Color aColor, sal_uIn
 |*
 \************************************************************************/
 
-#define POLYGONOFFSET_VALUE         (120)
-
 void Base3DDefault::Clipped3DPoint(sal_uInt32 nInd)
 {
     B3dEntity& rEntity = aBuffers[nInd];
@@ -618,8 +621,8 @@ void Base3DDefault::Clipped3DPoint(sal_uInt32 nInd)
     // PolygonOffset beachten
     if(GetPolygonOffset(Base3DPolygonOffsetPoint))
     {
-        if(nDepth >= POLYGONOFFSET_VALUE)
-            nDepth -= POLYGONOFFSET_VALUE;
+        if(nDepth >= maPolygonOffset)
+            nDepth -= maPolygonOffset;
         else
             nDepth = 0;
     }
@@ -717,13 +720,13 @@ void Base3DDefault::Clipped3DLine(sal_uInt32 nInd1, sal_uInt32 nInd2)
                 double fDepthLeft = rEntity1.Point().getZ();
                 double fDepthRight = rEntity2.Point().getZ();
 
-                if(fDepthLeft >= double(POLYGONOFFSET_VALUE))
-                    fDepthLeft -= double(POLYGONOFFSET_VALUE);
+                if(fDepthLeft >= double(maPolygonOffset))
+                    fDepthLeft -= double(maPolygonOffset);
                 else
                     fDepthLeft = 0.0;
 
-                if(fDepthRight >= double(POLYGONOFFSET_VALUE))
-                    fDepthRight -= double(POLYGONOFFSET_VALUE);
+                if(fDepthRight >= double(maPolygonOffset))
+                    fDepthRight -= double(maPolygonOffset);
                 else
                     fDepthRight = 0.0;
 
