@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:04:00 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:21:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1243,7 +1243,7 @@ public:
 class XMLDdeFieldImportContext : public XMLTextFieldImportContext
 {
     ::rtl::OUString sName;
-
+    ::rtl::OUString sPropertyContent;
 public:
 
     TYPEINFO();
