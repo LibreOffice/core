@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xpoly.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:59:52 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:30:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,8 @@ public:
     basegfx::B2DPolygon getB2DPolygon() const;
 
     // #116512# constructor to convert from basegfx::B2DPolygon
-    XPolygon(const basegfx::B2DPolygon& rPolygon);
+     // #i76339# made explicit
+     explicit XPolygon(const basegfx::B2DPolygon& rPolygon);
 };
 
 /*************************************************************************
@@ -222,7 +223,8 @@ public:
     basegfx::B2DPolyPolygon getB2DPolyPolygon() const;
 
     // #116512# constructor to convert from basegfx::B2DPolyPolygon
-    XPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon);
+     // #i76339# made explicit
+     explicit XPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon);
 };
 
 #endif      // _XPOLY_HXX
