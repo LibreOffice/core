@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:11:27 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:26:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2109,7 +2109,7 @@ void SwpHints::Insert( SwTxtAttr* pHint, SwTxtNode &rNode, USHORT nMode )
 
         BuildPortions( rNode, *pHint, nMode );
 
-        if ( nHtStart < *pHtEnd ) // skip merging for 0-length attributes
+        if ( nHtStart < nHintEnd ) // skip merging for 0-length attributes
             MergePortions( rNode );
     }
     else
