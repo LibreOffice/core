@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:06:55 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:21:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3396,6 +3396,7 @@ XMLDdeFieldImportContext::XMLDdeFieldImportContext(
         XMLTextFieldImportContext(rImport, rHlp, sAPI_dde,
                                   nPrfx, sLocalName),
         sName()
+        ,sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content))
 {
 }
 
@@ -3432,7 +3433,8 @@ void XMLDdeFieldImportContext::EndElement()
             Reference<XPropertySet> xMaster;
             Any aAny = xFieldMasterNameAccess->getByName(sMasterName);
             aAny >>= xMaster;
-
+            //apply the content to the master
+            xMaster->setPropertyValue( sPropertyContent, uno::makeAny( GetContent()));
             // master exists: create text field and attach
             Reference<XPropertySet> xField;
             sBuf.appendAscii(sAPI_textfield_prefix);
