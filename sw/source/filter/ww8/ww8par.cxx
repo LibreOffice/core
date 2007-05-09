@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.175 $
+ *  $Revision: 1.176 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:56:33 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:23:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3676,25 +3676,16 @@ void SwWW8ImplReader::ReadDocVars()
         aDocVarStrings, &aDocVarStringIds, &aDocValueStrings);
     if (!bVer67) {
         using namespace com::sun::star;
-
-        uno::Reference<lang::XComponent> xModelComp(mpDocShell->GetModel(),
-           uno::UNO_QUERY);
-        uno::Reference<document::XDocumentInfoSupplier> xSupp( mpDocShell->GetModel(), uno::UNO_QUERY );
-        if ( xSupp.is() )
+    SwDoc* pDoc = mpDocShell->GetDoc();
+        if ( pDoc )
         {
-            uno::Reference< document::XDocumentInfo> xDocInfo = xSupp->getDocumentInfo();
-            uno::Reference<beans::XPropertySet> xInfoProp( xDocInfo, uno::UNO_QUERY );
-            uno::Reference<beans::XPropertyContainer> xInfoContainer( xDocInfo, uno::UNO_QUERY );
             for(int i=0;i<aDocVarStrings.size();i++)
             {
                 uno::Any aDefaultValue;
                 ::rtl::OUString name(aDocVarStrings[i]);
                 uno::Any aValue;
                 aValue <<= ::rtl::OUString(aDocValueStrings[i]);
-                try {
-                xInfoContainer->addProperty( name, 0, aValue);
-                } catch(com::sun::star::beans::PropertyExistException &e) {
-                }
+                pDoc->GetInfo()->SetCustomProperty( name, aValue );
             }
         }
     }
