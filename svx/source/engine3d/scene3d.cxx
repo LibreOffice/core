@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:21:55 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:31:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -285,7 +285,8 @@ E3dScene::E3dScene()
     bDoubleBuffered(FALSE),
     bClipping(FALSE),
     bFitInSnapRect(TRUE),
-    bDrawOnlySelected(FALSE)
+    bDrawOnlySelected(FALSE),
+    mfPolygonOffset(0.005) // #i71618#
 {
     // Defaults setzen
     E3dDefaultAttributes aDefault;
@@ -301,7 +302,8 @@ E3dScene::E3dScene(E3dDefaultAttributes& rDefault)
     bDoubleBuffered(FALSE),
     bClipping(FALSE),
     bFitInSnapRect(TRUE),
-    bDrawOnlySelected(FALSE)
+    bDrawOnlySelected(FALSE),
+    mfPolygonOffset(0.005) // #i71618#
 {
     // Defaults setzen
     SetDefaultAttributes(rDefault);
