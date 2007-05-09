@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdocirc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:23:32 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:29:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,10 +80,10 @@ class SVX_DLLPUBLIC SdrCircObj : public SdrRectObj
     friend class sdr::properties::CircleProperties;
 
     // only for SdrCircleAttributes
-    SdrObjKind GetCircleKind() const { return eKind; }
+    SdrObjKind GetCircleKind() const { return meCircleKind; }
 
 protected:
-    SdrObjKind                  eKind;
+     SdrObjKind                 meCircleKind;
     long                        nStartWink;
     long                        nEndWink;
     Point                       aPnt1;
@@ -93,7 +93,7 @@ protected:
     unsigned                    mbPolygonIsLine : 1;
 
 private:
-    SVX_DLLPRIVATE XPolygon ImpCalcXPolyCirc(const Rectangle& rRect1, long nStart, long nEnd, FASTBOOL bContour=FALSE) const; // ImpCalcXPoly -> ImpCalcXPolyCirc
+     SVX_DLLPRIVATE basegfx::B2DPolygon ImpCalcXPolyCirc(const SdrObjKind eKind, const Rectangle& rRect1, long nStart, long nEnd) const;
     SVX_DLLPRIVATE void ImpSetCreateParams(SdrDragStat& rStat) const;
     SVX_DLLPRIVATE void ImpSetAttrToCircInfo(); // Werte vom Pool kopieren
     SVX_DLLPRIVATE void ImpSetCircInfoToAttr(); // Werte in den Pool kopieren
