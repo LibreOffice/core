@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mapping.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 12:15:11 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:35:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,12 +323,17 @@ inline void * Mapping::mapInterface(
     return pOut;
 }
 
-/** Maps an binary C UNO interface to be used in the currently used compiler environment.
+/** Deprecated. This function DOES NOT WORK with Purpose Environments
+    (http://wiki.services.openoffice.org/wiki/Uno/Binary/Spec/Purpose Environments)
+
+    Maps an binary C UNO interface to be used in the currently used compiler environment.
 
     @tplparam C interface type
     @param ppRet inout returned interface pointer
     @param pUnoI binary C UNO interface
     @return true if successful, false otherwise
+
+    @deprecated
 */
 template< class C >
 inline sal_Bool mapToCpp( Reference< C > * ppRet, uno_Interface * pUnoI ) SAL_THROW( () )
@@ -341,12 +346,17 @@ inline sal_Bool mapToCpp( Reference< C > * ppRet, uno_Interface * pUnoI ) SAL_TH
             (void **)ppRet, pUnoI, ::cppu::getTypeFavourUnsigned( ppRet ) );
     return (0 != *ppRet);
 }
-/** Maps an UNO interface of the currently used compiler environment to binary C UNO.
+/** Deprecated. This function DOES NOT WORK with Purpose Environments
+    (http://wiki.services.openoffice.org/wiki/Uno/Binary/Spec/Purpose Environments)
+
+    Maps an UNO interface of the currently used compiler environment to binary C UNO.
 
     @tplparam C interface type
     @param ppRet inout returned interface pointer
     @param x interface reference
     @return true if successful, false otherwise
+
+    @deprecated
 */
 template< class C >
 inline sal_Bool mapToUno( uno_Interface ** ppRet, const Reference< C > & x ) SAL_THROW( () )
