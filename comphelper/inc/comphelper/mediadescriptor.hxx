@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediadescriptor.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:43:19 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:25:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,10 @@
 #ifndef INCLUDED_COMPHELPERDLLAPI_H
 #include "comphelper/comphelperdllapi.h"
 #endif
+
+namespace com { namespace sun { namespace star { namespace io {
+    class XInputStream;
+} } } }
 
 //_______________________________________________
 // namespace
@@ -193,7 +197,7 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
                     The MediaDescriptor itself is changed inside this method.
                     Means: the stream is added internal and not returned by a value.
 
-            @param  xPostData
+            @param  _rxPostData
                     the PostData stream.
 
             @return TRUE if the stream could be added successfully.
@@ -201,9 +205,13 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
 
             @throw  [css::uno::RuntimeException]
                     if the MediaDescriptor seems to be invalid!
+
+            @throw  [css::lang::IllegalArgumentException]
+                    if the given PostData stream is <NULL/>.
          */
-        COMPHELPER_DLLPRIVATE sal_Bool impl_openStreamWithPostData()
-            throw(::com::sun::star::uno::RuntimeException);
+        COMPHELPER_DLLPRIVATE sal_Bool impl_openStreamWithPostData(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& _rxPostData
+            )   throw(::com::sun::star::uno::RuntimeException);
 
         //---------------------------------------
         /** @short  tries to open a stream by using the given URL.
