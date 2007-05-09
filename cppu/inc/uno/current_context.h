@@ -4,9 +4,9 @@
  *
  *  $RCSfile: current_context.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:38:49 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:34:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,26 +49,26 @@ extern "C"
     Don't spread the returned interface around to other threads.  Every thread has its own
     current context.
 
-    @param ppCurrentContext inout param current context of type com.sun.star.uno.XCurrentContext
-    @param pEnvTypeName type name of returned interface's environment
-    @param pEnvContext context of returned interface's environment (commonly 0)
-    @return true, if context ref was transferred (even if null ref)
+    @param ppCurrentContext  inout param current context of type com.sun.star.uno.XCurrentContext
+    @param pEnvDcp           descriptor of returned interface's environment
+    @param pEnvContext       context of returned interface's environment (commonly 0)
+    @return                  true, if context ref was transferred (even if null ref)
 */
 sal_Bool SAL_CALL uno_getCurrentContext(
     void ** ppCurrentContext,
-    rtl_uString * pEnvTypeName, void * pEnvContext )
+    rtl_uString * pEnvDcp, void * pEnvContext )
     SAL_THROW_EXTERN_C();
 
 /** Sets the current task's context.
 
-    @param pCurrentContext in param current context of type com.sun.star.uno.XCurrentContext
-    @param pEnvTypeName type name of interface's environment
-    @param pEnvContext context of interface's environment (commonly 0)
-    @return true, if context ref was transferred (even if null ref)
+    @param pCurrentContext  in param current context of type com.sun.star.uno.XCurrentContext
+    @param pEnvDcp          descriptor of interface's environment
+    @param pEnvContext      context of interface's environment (commonly 0)
+    @return                 true, if context ref was transferred (even if null ref)
 */
 sal_Bool SAL_CALL uno_setCurrentContext(
     void * pCurrentContext,
-    rtl_uString * pEnvTypeName, void * pEnvContext )
+    rtl_uString * pEnvDcp, void * pEnvContext )
     SAL_THROW_EXTERN_C();
 
 #ifdef __cplusplus
