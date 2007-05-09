@@ -4,9 +4,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:39:56 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:25:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,8 @@
 #include <osl/mutex.hxx>
 
 #include <rtl/ustrbuf.hxx>
+
+#include <uno/mapping.hxx>
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/compbase2.hxx>
@@ -831,33 +833,72 @@ ComponentContext::ComponentContext(
 
 
 //##################################################################################################
-Reference< XComponentContext > SAL_CALL createComponentContext(
-    ContextEntry_Init const * pEntries, sal_Int32 nEntries,
-    Reference< XComponentContext > const & xDelegate )
-    SAL_THROW( () )
+extern "C" { static void s_createComponentContext_v(va_list param)
 {
+    ContextEntry_Init const  * pEntries     = va_arg(param, ContextEntry_Init const *);
+    sal_Int32                  nEntries     = va_arg(param, sal_Int32);
+    XComponentContext        * pDelegatee   = va_arg(param, XComponentContext *);
+    void                    ** ppContext    = va_arg(param, void **);
+    uno::Mapping             * pTarget2curr = va_arg(param, uno::Mapping *);
+
+    Reference<XComponentContext> xDelegate(pDelegatee, SAL_NO_ACQUIRE);
+    Reference<XComponentContext> xContext;
+
     if (nEntries > 0)
     {
         try
         {
             ComponentContext * p = new ComponentContext( pEntries, nEntries, xDelegate );
-            Reference< XComponentContext > xContext( p );
+            xContext.set(p);
             // listen delegate for disposing, to dispose this (wrapping) context first.
             DisposingForwarder::listen( Reference< lang::XComponent >::query( xDelegate ), p );
-            return xContext;
         }
         catch (Exception & exc)
         {
             (void) exc; // avoid warning about unused variable
             OSL_ENSURE( 0, OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-            return Reference< XComponentContext >();
+            xContext.clear();
         }
     }
     else
     {
-        return xDelegate;
+        xContext = xDelegate;
     }
+
+    delete[] pEntries;
+
+    *ppContext = pTarget2curr->mapInterface(xContext.get(), ::getCppuType(&xContext));
+}}
+
+Reference< XComponentContext > SAL_CALL createComponentContext(
+    ContextEntry_Init const * pEntries, sal_Int32 nEntries,
+    Reference< XComponentContext > const & xDelegate )
+    SAL_THROW( () )
+{
+    uno::Environment curr_env(Environment::getCurrent());
+    uno::Environment source_env(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(CPPU_STRINGIFY(CPPU_ENV) ":unsafe")));
+
+    uno::Mapping curr2source(curr_env, source_env);
+    uno::Mapping source2curr(source_env, curr_env);
+
+    ContextEntry_Init * mapped_entries = new ContextEntry_Init[nEntries];
+    for (sal_Int32 nPos = 0; nPos < nEntries; ++ nPos)
+    {
+        mapped_entries[nPos].bLateInitService = pEntries[nPos].bLateInitService;
+        mapped_entries[nPos].name             = pEntries[nPos].name;
+
+        uno_type_any_constructAndConvert(&mapped_entries[nPos].value,
+                                         const_cast<void *>(pEntries[nPos].value.getValue()),
+                                         pEntries[nPos].value.getValueTypeRef(),
+                                         curr2source.get());
+    }
+
+    void * mapped_delegate = curr2source.mapInterface(xDelegate.get(), ::getCppuType(&xDelegate));
+    XComponentContext * pXComponentContext = NULL;
+    source_env.invoke(s_createComponentContext_v, mapped_entries, nEntries, mapped_delegate, &pXComponentContext, &source2curr);
+
+    return Reference<XComponentContext>(pXComponentContext, SAL_NO_ACQUIRE);
 }
 
 }
