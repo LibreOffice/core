@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:57:44 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:22:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,7 @@
 #endif
 
 #include <tools/diagnose_ex.h>
+#include <unotools/sharedunocomponent.hxx>
 
 //.........................................................................
 namespace dbtools
@@ -634,26 +635,37 @@ Reference< XTablesSupplier> getDataDefinitionByURLAndConnection(
             const Reference< XConnection>& _xConnection,
             const Reference< XMultiServiceFactory>& _rxFactory)
 {
-    Reference< XDriverAccess> xManager(_rxFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdbc.DriverManager") ), UNO_QUERY);
-    Reference< XDataDefinitionSupplier > xSupp(xManager->getDriverByURL(_rsUrl),UNO_QUERY);
     Reference< XTablesSupplier> xTablesSup;
-
-    if ( xSupp.is() )
-        xTablesSup = xSupp->getDataDefinitionByConnection(_xConnection);
-    // if we don't get the catalog from the original driver we have to try them all.
-    if ( !xTablesSup.is() )
+    try
     {
-        Reference< XEnumerationAccess> xEnumAccess(xManager,UNO_QUERY);
-        Reference< XEnumeration> xEnum = xEnumAccess->createEnumeration();
-        while ( xEnum.is() && xEnum->hasMoreElements() && !xTablesSup.is() )
+        Reference< XDriverAccess> xManager(
+            _rxFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.sdbc.DriverManager") ),
+            UNO_QUERY_THROW );
+        Reference< XDataDefinitionSupplier > xSupp( xManager->getDriverByURL( _rsUrl ), UNO_QUERY );
+
+        if ( xSupp.is() )
+            xTablesSup = xSupp->getDataDefinitionByConnection( _xConnection );
+
+        // if we don't get the catalog from the original driver we have to try them all.
+        if ( !xTablesSup.is() )
         {
-            xEnum->nextElement() >>= xSupp;
-            if ( xSupp.is() )
-                xTablesSup = xSupp->getDataDefinitionByConnection(_xConnection);
+            Reference< XEnumerationAccess> xEnumAccess( xManager, UNO_QUERY_THROW );
+            Reference< XEnumeration > xEnum( xEnumAccess->createEnumeration(), UNO_QUERY_THROW );
+            while ( xEnum.is() && xEnum->hasMoreElements() && !xTablesSup.is() )
+            {
+                xEnum->nextElement() >>= xSupp;
+                if ( xSupp.is() )
+                    xTablesSup = xSupp->getDataDefinitionByConnection( _xConnection );
+            }
         }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
     return xTablesSup;
 }
+
 // -----------------------------------------------------------------------------
 sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
                              const ::rtl::OUString& _sCatalog,
@@ -777,35 +789,23 @@ void collectColumnInformation(const Reference< XConnection>& _xConnection,
 
     try
     {
-        Reference<XStatement> xStmt = _xConnection->createStatement();
-        Reference<XResultSet> xResult = xStmt->executeQuery(sSelect);
-        if ( xResult.is() )
+        ::utl::SharedUNOComponent< XStatement > xStmt( _xConnection->createStatement() );
+        Reference< XPropertySet > xStatementProps( xStmt, UNO_QUERY_THROW );
+        xStatementProps->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_ESCAPEPROCESSING ), makeAny( (sal_Bool)sal_False ) );
+        Reference< XResultSet > xResult( xStmt->executeQuery( sSelect ), UNO_QUERY_THROW );
+        Reference< XResultSetMetaDataSupplier > xSuppMeta( xResult, UNO_QUERY_THROW );
+        Reference< XResultSetMetaData > xMeta( xSuppMeta->getMetaData(), UNO_QUERY_THROW );
+
+        sal_Int32 nCount = xMeta->getColumnCount();
+        for (sal_Int32 i=1; i <= nCount ; ++i)
         {
-            Reference<XResultSetMetaData> xMD = Reference<XResultSetMetaDataSupplier>(xResult,UNO_QUERY)->getMetaData();
-            if ( xMD.is() )
-            {
-                sal_Int32 nCount = xMD->getColumnCount();
-                for (sal_Int32 i=1; i <= nCount ; ++i)
-                {
-                    _rInfo.insert(ColumnInformationMap::value_type(xMD->getColumnName(i),
-                        ColumnInformation(TBoolPair(xMD->isAutoIncrement(i),xMD->isCurrency(i)),xMD->getColumnType(i))));
-                }
-                xMD = NULL;
-            }
-            xResult = NULL;
-            ::comphelper::disposeComponent(xStmt);
+            _rInfo.insert(ColumnInformationMap::value_type(xMeta->getColumnName(i),
+                ColumnInformation(TBoolPair(xMeta->isAutoIncrement(i),xMeta->isCurrency(i)),xMeta->getColumnType(i))));
         }
     }
-    catch(SQLException&)
+    catch( const Exception& )
     {
-    }
-    catch(DisposedException&)
-    {
-        OSL_ENSURE(0,"Exception catched!");
-    }
-    catch(Exception&)
-    {
-        OSL_ENSURE(0,"Exception catched!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
