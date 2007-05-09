@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpoev.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:49:18 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:33:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -528,79 +528,116 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
     }
 }
 
-BOOL SdrPolyEditView::IsRipUpAtMarkedPointsPossible() const
+bool SdrPolyEditView::IsRipUpAtMarkedPointsPossible() const
 {
-    BOOL bRet=FALSE;
-    ULONG nMarkAnz=GetMarkedObjectCount();
-    for (ULONG nMarkNum=0; nMarkNum<nMarkAnz && !bRet; nMarkNum++) {
-        SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
-        SdrObject* pObj=pM->GetMarkedSdrObj();
-        SdrUShortCont* pPts=pM->GetMarkedPoints();
-        ULONG nMarkPntAnz=pPts!=NULL ? pPts->GetCount() : 0;
-        if (pPts!=NULL && nMarkPntAnz!=0 && pObj!=NULL && pObj->ISA(SdrPathObj)) {
-            const XPolyPolygon& rXPP=((SdrPathObj*)pObj)->GetPathPoly();
-            if (rXPP.Count()==1) { // es muss genau 1 Polygon drin sein!
-                const XPolygon& rXP=rXPP[0];
-                USHORT nPntAnz=rXP.GetPointCount();
-                if (nPntAnz>=3) {
-                    bRet=pObj->IsClosedObj();
-                    if (!bRet) {
-                        for (ULONG nMarkPntNum=0; nMarkPntNum<nMarkPntAnz && !bRet; nMarkPntNum++) {
-                            USHORT nMarkPt=pPts->GetObject(nMarkPntNum);
-                            bRet=nMarkPt>0 && nMarkPt<nPntAnz-1;
+    bool bRetval(false);
+    const sal_uInt32 nMarkCount(GetMarkedObjectCount());
+
+    for(sal_uInt32 a(0); a < nMarkCount; a++)
+    {
+        const SdrMark* pMark = GetSdrMarkByIndex(a);
+        const SdrPathObj* pMarkedPathObject = dynamic_cast< const SdrPathObj* >(pMark->GetMarkedSdrObj());
+
+        if(pMarkedPathObject)
+        {
+            const SdrUShortCont* pSelectedPoints = pMark->GetMarkedPoints();
+
+            if(pSelectedPoints && pSelectedPoints->GetCount())
+            {
+                const basegfx::B2DPolyPolygon& rPathPolyPolygon = pMarkedPathObject->GetPathPoly();
+
+                if(1 == rPathPolyPolygon.count())
+                {
+                    // #i76617# Do not yet use basegfx::B2DPolygon since curve definitions
+                    // are different and methods need to be changed thoroughly with interaction rework
+                    const Polygon aPathPolygon(rPathPolyPolygon.getB2DPolygon(0));
+                    const sal_uInt16 nPointCount(aPathPolygon.GetSize());
+
+                    if(nPointCount >= 3)
+                    {
+                        bRetval = pMarkedPathObject->IsClosedObj(); // #i76617# aPathPolygon.isClosed();
+
+                        for(sal_uInt32 b(0); !bRetval && b < pSelectedPoints->GetCount(); b++)
+                        {
+                            const sal_uInt16 nMarkedPointNum(pSelectedPoints->GetObject(b));
+
+                            bRetval = (nMarkedPointNum > 0 && nMarkedPointNum < nPointCount - 1);
                         }
                     }
                 }
             }
         }
     }
-    return bRet;
+
+    return bRetval;
 }
 
-BOOL SdrPolyEditView::IsOpenCloseMarkedObjectsPossible() const
+bool SdrPolyEditView::IsOpenCloseMarkedObjectsPossible() const
 {
-    BOOL bRet=FALSE;
-    ULONG nMarkAnz=GetMarkedObjectCount();
-    for (ULONG nm=0; nm<nMarkAnz && !bRet; nm++) {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
-        SdrObject* pO=pM->GetMarkedSdrObj();
-        if (pO->ISA(SdrPathObj)) {
-            const XPolyPolygon& rXPP=((SdrPathObj*)pO)->GetPathPoly();
-            USHORT nPolyAnz=rXPP.Count();
-            for (USHORT nPolyNum=0; nPolyNum<nPolyAnz && !bRet; nPolyNum++) {
-                const XPolygon& rXP=rXPP[nPolyNum];
-                USHORT nPntAnz=rXP.GetPointCount();
-                bRet=nPntAnz>=3;
+    bool bRetval(false);
+    const sal_uInt32 nMarkCount(GetMarkedObjectCount());
+
+    for(sal_uInt32 a(0); a < nMarkCount; a++)
+    {
+        const SdrMark* pMark = GetSdrMarkByIndex(a);
+        const SdrPathObj* pMarkedPathObject = dynamic_cast< const SdrPathObj* >(pMark->GetMarkedSdrObj());
+
+        if(pMarkedPathObject)
+        {
+            // #i76617# Do not yet use basegfx::B2DPolygon since curve definitions
+            // are different and methods need to be changed thoroughly with interaction rework
+            const PolyPolygon aPathPolyPolygon(pMarkedPathObject->GetPathPoly());
+            const sal_uInt16 nPolygonCount(aPathPolyPolygon.Count());
+
+            for(sal_uInt16 b(0); !bRetval && b < nPolygonCount; b++)
+            {
+                const Polygon& rPathPolygon = aPathPolyPolygon[b];
+                const sal_uInt16 nPointCount(rPathPolygon.GetSize());
+
+                bRetval = (nPointCount >= 3);
             }
         }
-        else
-            return FALSE;
     }
-    return bRet;
+
+    return bRetval;
 }
 
 SdrObjClosedKind SdrPolyEditView::GetMarkedObjectsClosedState() const
 {
-    BOOL bOpen=FALSE;
-    BOOL bClosed=FALSE;
-    ULONG nMarkAnz=GetMarkedObjectCount();
-    for (ULONG nm=0; nm<nMarkAnz && (!bOpen || !bClosed); nm++) {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
-        SdrObject* pO=pM->GetMarkedSdrObj();
-        if (pO->ISA(SdrPathObj)) {
-            const XPolyPolygon& rXPP=((SdrPathObj*)pO)->GetPathPoly();
-            if (rXPP.Count()==1) { // es muss genau 1 Polygon drin sein!
-                const XPolygon& rXP=rXPP[0];
-                USHORT nPntAnz=rXP.GetPointCount();
-                if (nPntAnz>=3) {
-                    if (pO->IsClosedObj()) bClosed=TRUE; else bOpen=TRUE;
-                }
+    bool bOpen(false);
+    bool bClosed(false);
+    const sal_uInt32 nMarkCount(GetMarkedObjectCount());
+
+    for(sal_uInt32 a(0); !(bOpen && bClosed) && a < nMarkCount; a++)
+    {
+        const SdrMark* pMark = GetSdrMarkByIndex(a);
+        const SdrPathObj* pMarkedPathObject = dynamic_cast< const SdrPathObj* >(pMark->GetMarkedSdrObj());
+
+        if(pMarkedPathObject)
+        {
+            if(pMarkedPathObject->IsClosedObj())
+            {
+                bClosed = true;
+            }
+            else
+            {
+                bOpen = true;
             }
         }
     }
-    if (bOpen && bClosed) return SDROBJCLOSED_DONTCARE;
-    if (bOpen) return SDROBJCLOSED_OPEN;
-    return SDROBJCLOSED_CLOSED;
+
+    if(bOpen && bClosed)
+    {
+        return SDROBJCLOSED_DONTCARE;
+    }
+    else if(bOpen)
+    {
+        return SDROBJCLOSED_OPEN;
+    }
+    else
+    {
+        return SDROBJCLOSED_CLOSED;
+    }
 }
 
 void SdrPolyEditView::ShutMarkedObjects()
