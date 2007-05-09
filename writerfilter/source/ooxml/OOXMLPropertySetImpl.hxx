@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-04 13:29:20 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-09 21:01:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,6 +194,7 @@ class OOXMLListValue : public OOXMLIntegerValue
 {
 public:
     OOXMLListValue();
+    OOXMLListValue(sal_Int32 nValue);
     virtual ~OOXMLListValue();
 };
 

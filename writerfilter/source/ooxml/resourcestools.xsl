@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-04 13:29:21 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-09 21:01:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -816,9 +816,9 @@ doctok::Id
       <xsl:variable name="mynsid" select="generate-id(ancestor::namespace)"/>
       <xsl:for-each select="key('defines-with-name', @name)[generate-id(ancestor::namespace)=$mynsid]">
           <xsl:text>
-          mpValue = OOXMLValue::Pointer_t(new </xsl:text>
+          mnValue = </xsl:text>
           <xsl:call-template name="valuenamefordefine"/>
-          <xsl:text>(rValue));
+          <xsl:text>(rValue).getInt();
       }</xsl:text>
       </xsl:for-each>
     </xsl:for-each>

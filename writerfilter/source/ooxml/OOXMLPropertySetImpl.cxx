@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-02 18:06:22 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-09 21:01:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -487,6 +487,12 @@ OOXMLListValue::OOXMLListValue()
 : OOXMLIntegerValue(0)
 {
 }
+
+OOXMLListValue::OOXMLListValue(sal_Int32 nValue)
+: OOXMLIntegerValue(nValue)
+{
+}
+
 
 OOXMLListValue::~OOXMLListValue()
 {
