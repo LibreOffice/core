@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polypolyaction.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 11:51:27 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:36:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,8 +112,7 @@ namespace cppcanvas
                                             bool                                bFill,
                                             bool                                bStroke ) :
                 CachedPrimitiveBase( rCanvas, false ),
-                mxPolyPoly( ::vcl::unotools::xPolyPolygonFromPolyPolygon( rCanvas->getUNOCanvas()->getDevice(),
-                                                                          rPolyPoly ) ),
+                mxPolyPoly( ::vcl::unotools::xPolyPolygonFromPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), /*#i76339#*/ ::PolyPolygon(rPolyPoly) ) ),
                 maBounds( ::basegfx::tools::getRange(rPolyPoly) ),
                 mpCanvas( rCanvas ),
                 maState(),
@@ -135,8 +134,7 @@ namespace cppcanvas
                                             bool                                bStroke,
                                             int                                 nTransparency ) :
                 CachedPrimitiveBase( rCanvas, false ),
-                mxPolyPoly( ::vcl::unotools::xPolyPolygonFromPolyPolygon( rCanvas->getUNOCanvas()->getDevice(),
-                                                                          rPolyPoly ) ),
+                mxPolyPoly( ::vcl::unotools::xPolyPolygonFromPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), /*#i76339#*/ ::PolyPolygon(rPolyPoly) ) ),
                 maBounds( ::basegfx::tools::getRange(rPolyPoly) ),
                 mpCanvas( rCanvas ),
                 maState(),
@@ -508,7 +506,7 @@ namespace cppcanvas
                                                                      const OutDevState&                 rState,
                                                                      const rendering::Texture&          rTexture )
         {
-            return ActionSharedPtr( new TexturedPolyPolyAction( rPoly, rCanvas, rState, rTexture ) );
+            return ActionSharedPtr( new TexturedPolyPolyAction( /*#i76339#*/ ::PolyPolygon(rPoly), rCanvas, rState, rTexture ) );
         }
 
         ActionSharedPtr PolyPolyActionFactory::createLinePolyPolyAction( const ::basegfx::B2DPolyPolygon& rPoly,
@@ -530,7 +528,7 @@ namespace cppcanvas
         {
             OSL_ENSURE( rState.isLineColorSet,
                         "PolyPolyActionFactory::createPolyPolyAction() for strokes called with empty line color" );
-            return ActionSharedPtr( new StrokedPolyPolyAction( rPoly, rCanvas, rState, rStrokeAttributes ) );
+            return ActionSharedPtr( new StrokedPolyPolyAction( /*#i76339#*/ ::PolyPolygon(rPoly), rCanvas, rState, rStrokeAttributes ) );
         }
 
         ActionSharedPtr PolyPolyActionFactory::createPolyPolyAction( const ::basegfx::B2DPolyPolygon& rPoly,
