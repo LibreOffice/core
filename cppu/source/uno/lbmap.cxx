@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:26:17 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:39:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,10 @@
 #include "uno/environment.hxx"
 
 #include "typelib/typedescription.h"
+
+#include "cppu/EnvDcp.hxx"
+#include "cascade_mapping.hxx"
+#include "IdentityMapping.hxx"
 
 
 using namespace std;
@@ -342,9 +346,9 @@ static inline OUString getBridgeName(
         aBridgeName.append( rAddPurpose );
         aBridgeName.append( (sal_Unicode)'_' );
     }
-    aBridgeName.append( rFrom.getTypeName() );
+    aBridgeName.append( EnvDcp::getTypeName(rFrom.getTypeName()) );
     aBridgeName.append( (sal_Unicode)'_' );
-    aBridgeName.append( rTo.getTypeName() );
+    aBridgeName.append( EnvDcp::getTypeName(rTo.getTypeName()) );
     return aBridgeName.makeStringAndClear();
 }
 //==================================================================================================
@@ -399,7 +403,7 @@ static Mapping loadExternalMapping(
         oslModule hModule = 0;
         OUString aName;
 
-        if (rFrom.getTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_UNO) ))
+        if (EnvDcp::getTypeName(rFrom.getTypeName()).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_UNO) ))
             hModule = loadModule( aName = getBridgeName( rTo, rFrom, rAddPurpose ) );
         if (! hModule)
             hModule = loadModule( aName = getBridgeName( rFrom, rTo, rAddPurpose ) );
@@ -576,6 +580,14 @@ void SAL_CALL uno_getMapping(
     // See if an identity mapping does fit.
     if (!aRet.is() && pFrom == pTo && !aAddPurpose.getLength())
         aRet = createIdentityMapping(pFrom);
+
+    if (!aRet.is())
+    {
+        getCascadeMapping(ppMapping, pFrom, pTo, pAddPurpose);
+
+        if (*ppMapping)
+            return;
+    }
 
     if (! aRet.is()) // try callback chain
     {
