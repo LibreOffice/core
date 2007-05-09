@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentcontainer.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:45:21 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:23:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -718,6 +718,31 @@ void SAL_CALL ODocumentContainer::removeByName( const ::rtl::OUString& _rName ) 
 
     notifyByName( aGuard, _rName, NULL, NULL, E_REMOVED, ContainerListemers );
 }
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+void SAL_CALL ODocumentContainer::rename( const ::rtl::OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
+{
+    try
+    {
+        osl::ClearableGuard< osl::Mutex > aGuard(m_aMutex);
+        if ( newName.equals( m_pImpl->m_aProps.aTitle ) )
+            return;
+
+        sal_Int32 nHandle = PROPERTY_ID_NAME;
+        Any aOld = makeAny(m_pImpl->m_aProps.aTitle);
+        Any aNew = makeAny(newName);
+
+        aGuard.clear();
+        fire(&nHandle, &aNew, &aOld, 1, sal_True );
+        m_pImpl->m_aProps.aTitle = newName;
+        fire(&nHandle, &aNew, &aOld, 1, sal_False );
+    }
+    catch(const PropertyVetoException&)
+    {
+        throw ElementExistException(newName,*this);
+    }
+}
+
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
