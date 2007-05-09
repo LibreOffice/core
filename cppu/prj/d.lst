@@ -1,4 +1,5 @@
 mkdir: %_DEST%\inc%_EXT%\cppu
+mkdir: %_DEST%\inc%_EXT%\cppu\helper\purpenv
 mkdir: %_DEST%\inc%_EXT%\com
 mkdir: %_DEST%\inc%_EXT%\com\sun
 mkdir: %_DEST%\inc%_EXT%\com\sun\star
@@ -39,9 +40,31 @@ mkdir: %_DEST%\inc%_EXT%\uno
 ..\inc\uno\current_context.h %_DEST%\inc%_EXT%\uno\current_context.h
 ..\inc\uno\current_context.hxx %_DEST%\inc%_EXT%\uno\current_context.hxx
 ..\inc\uno\cuno.h %_DEST%\inc%_EXT%\uno\cuno.h
+..\inc\uno\EnvDcp.h              %_DEST%\inc%_EXT%\uno\EnvDcp.h
+..\inc\uno\Enterable.h           %_DEST%\inc%_EXT%\uno\Enterable.h
+
+..\inc\cppu\EnvDcp.hxx           %_DEST%\inc%_EXT%\cppu\EnvDcp.hxx
+..\inc\cppu\Enterable.hxx        %_DEST%\inc%_EXT%\cppu\Enterable.hxx
+..\inc\cppu\EnvGuards.hxx        %_DEST%\inc%_EXT%\cppu\EnvGuards.hxx
+..\inc\cppu\FreeReference.hxx    %_DEST%\inc%_EXT%\cppu\FreeReference.hxx
+..\inc\cppu\Map.hxx              %_DEST%\inc%_EXT%\cppu\Map.hxx
+..\inc\cppu\Shield.hxx           %_DEST%\inc%_EXT%\cppu\Shield.hxx
+
+..\inc\cppu\helper\purpenv\Environment.hxx  %_DEST%\inc%_EXT%\cppu\helper\purpenv\Environment.hxx
+..\inc\cppu\helper\purpenv\Mapping.hxx      %_DEST%\inc%_EXT%\cppu\helper\purpenv\Mapping.hxx
 
 ..\%__SRC%\lib\icppu.lib %_DEST%\lib%_EXT%\icppu.lib
 ..\%__SRC%\bin\cppu* %_DEST%\bin%_EXT%\*
 ..\%__SRC%\lib\libuno_cppu.*.* %_DEST%\lib%_EXT%\*
+
+..\%__SRC%\lib\ipurpenvhelper*        %_DEST%\lib%_EXT%\*
+..\%__SRC%\bin\purpenvhelper*.dll     %_DEST%\bin%_EXT%\*
+..\%__SRC%\lib\libuno_purpenvhelper*  %_DEST%\lib%_EXT%\*
+
+..\%__SRC%\bin\unsafe_uno_uno*.dll    %_DEST%\bin%_EXT%\*
+..\%__SRC%\lib\libunsafe_uno_uno.*    %_DEST%\lib%_EXT%\*
+
+..\%__SRC%\bin\affine_uno_uno*.dll   %_DEST%\bin%_EXT%\*
+..\%__SRC%\lib\libaffine_uno_uno.*   %_DEST%\lib%_EXT%\*
 
 linklib: libuno_cppu.*.*
