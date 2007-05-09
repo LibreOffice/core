@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlExport.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:47:01 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:24:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1057,9 +1057,15 @@ void ODBExport::GetConfigurationSettings(Sequence<PropertyValue>& aProps)
         sal_Int32 nLength = aProps.getLength();
         try
         {
-            aProps.realloc(nLength + 1);
-            aProps[nLength].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("layout-settings"));
-            aProps[nLength].Value = xProp->getPropertyValue(PROPERTY_LAYOUTINFORMATION);
+            Any aValue = xProp->getPropertyValue(PROPERTY_LAYOUTINFORMATION);
+            Sequence< PropertyValue > aPropValues;
+            aValue >>= aPropValues;
+            if ( aPropValues.getLength() )
+            {
+                aProps.realloc(nLength + 1);
+                aProps[nLength].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("layout-settings"));
+                aProps[nLength].Value = aValue;
+            }
         }
         catch(Exception)
         {
