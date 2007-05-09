@@ -4,9 +4,9 @@
  *
  *  $RCSfile: current.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:19:17 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:37:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include "osl/mutex.hxx"
 
 #include "uno/environment.hxx"
-#include "uno/mapping.h"
+#include "uno/mapping.hxx"
 #include "uno/lbnames.h"
 #include "typelib/typedescription.h"
 
@@ -177,17 +177,10 @@ extern "C" void SAL_CALL delete_IdContainer( void * p )
         IdContainer * pId = reinterpret_cast< IdContainer * >( p );
         if (pId->pCurrentContext)
         {
-            if (pId->pCurrentContextEnv)
-            {
-                (*pId->pCurrentContextEnv->releaseInterface)(
-                    pId->pCurrentContextEnv, pId->pCurrentContext );
-                (*((uno_Environment *)pId->pCurrentContextEnv)->release)(
-                    (uno_Environment *)pId->pCurrentContextEnv );
-            }
-            else // current compiler used for context interface implementation
-            {
-                reinterpret_cast< ::cppu::XInterface * >( pId->pCurrentContext )->release();
-            }
+            (*pId->pCurrentContextEnv->releaseInterface)(
+                pId->pCurrentContextEnv, pId->pCurrentContext );
+            (*((uno_Environment *)pId->pCurrentContextEnv)->release)(
+                (uno_Environment *)pId->pCurrentContextEnv );
         }
         if (pId->bInit)
         {
@@ -229,55 +222,38 @@ extern "C" sal_Bool SAL_CALL uno_setCurrentContext(
     // free old one
     if (pId->pCurrentContext)
     {
-        if (pId->pCurrentContextEnv)
-        {
-            (*pId->pCurrentContextEnv->releaseInterface)(
-                pId->pCurrentContextEnv, pId->pCurrentContext );
-            (*((uno_Environment *)pId->pCurrentContextEnv)->release)(
-                (uno_Environment *)pId->pCurrentContextEnv );
-            pId->pCurrentContextEnv = 0;
-        }
-        else // current compiler used for context interface implementation
-        {
-            reinterpret_cast< ::cppu::XInterface * >( pId->pCurrentContext )->release();
-        }
+        (*pId->pCurrentContextEnv->releaseInterface)(
+            pId->pCurrentContextEnv, pId->pCurrentContext );
+        (*((uno_Environment *)pId->pCurrentContextEnv)->release)(
+            (uno_Environment *)pId->pCurrentContextEnv );
+        pId->pCurrentContextEnv = 0;
+
         pId->pCurrentContext = 0;
     }
 
     if (pCurrentContext)
     {
-        OUString const & rEnvTypeName = * reinterpret_cast< OUString const * >( &pEnvTypeName );
-        if (rEnvTypeName.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ))
+        uno_Environment * pEnv = 0;
+        ::uno_getEnvironment( &pEnv, pEnvTypeName, pEnvContext );
+        OSL_ASSERT( pEnv && pEnv->pExtEnv );
+        if (pEnv)
         {
-            reinterpret_cast< ::cppu::XInterface * >( pCurrentContext )->acquire();
-            pId->pCurrentContext = pCurrentContext;
-            pId->pCurrentContextEnv = 0; // special for this compiler env
-        }
-        else
-        {
-            uno_Environment * pEnv = 0;
-            ::uno_getEnvironment( &pEnv, pEnvTypeName, pEnvContext );
-            OSL_ASSERT( pEnv && pEnv->pExtEnv );
-            if (pEnv)
+            if (pEnv->pExtEnv)
             {
-                if (pEnv->pExtEnv)
-                {
-                    pId->pCurrentContextEnv = pEnv->pExtEnv;
-                    (*pId->pCurrentContextEnv->acquireInterface)(
-                        pId->pCurrentContextEnv, pCurrentContext );
-                    pId->pCurrentContext = pCurrentContext;
-                }
-                else
-                {
-                    (*pEnv->release)( pEnv );
-                    return sal_False;
-                }
+                pId->pCurrentContextEnv = pEnv->pExtEnv;
+                (*pId->pCurrentContextEnv->acquireInterface)(
+                    pId->pCurrentContextEnv, pCurrentContext );
+                pId->pCurrentContext = pCurrentContext;
             }
             else
             {
+                (*pEnv->release)( pEnv );
                 return sal_False;
             }
+        }
+        else
+        {
+            return sal_False;
         }
     }
     return sal_True;
@@ -290,29 +266,21 @@ extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
     IdContainer * pId = getIdContainer();
     OSL_ASSERT( pId );
 
-    ::com::sun::star::uno::Environment target_env;
-    OUString const & rEnvTypeName = * reinterpret_cast< OUString const * >( &pEnvTypeName );
+    Environment target_env;
 
     // release inout parameter
     if (*ppCurrentContext)
     {
-        if (rEnvTypeName.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ))
-        {
-            reinterpret_cast< ::cppu::XInterface * >( *ppCurrentContext )->release();
-        }
-        else
-        {
-            uno_getEnvironment( (uno_Environment **) &target_env, pEnvTypeName, pEnvContext );
-            OSL_ASSERT( target_env.is() );
-            if (! target_env.is())
-                return sal_False;
-            uno_ExtEnvironment * pEnv = target_env.get()->pExtEnv;
-            OSL_ASSERT( 0 != pEnv );
-            if (0 == pEnv)
-                return sal_False;
-            (*pEnv->releaseInterface)( pEnv, *ppCurrentContext );
-        }
+        target_env = Environment(rtl::OUString(pEnvTypeName), pEnvContext);
+        OSL_ASSERT( target_env.is() );
+        if (! target_env.is())
+            return sal_False;
+        uno_ExtEnvironment * pEnv = target_env.get()->pExtEnv;
+        OSL_ASSERT( 0 != pEnv );
+        if (0 == pEnv)
+            return sal_False;
+        (*pEnv->releaseInterface)( pEnv, *ppCurrentContext );
+
         *ppCurrentContext = 0;
     }
 
@@ -320,60 +288,20 @@ extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
     if (0 == pId->pCurrentContext)
         return sal_True;
 
-    // case: same env (current compiler env)
-    if ((0 == pId->pCurrentContextEnv) &&
-        rEnvTypeName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ) &&
-        (0 == pEnvContext))
-    {
-        reinterpret_cast< ::cppu::XInterface * >( pId->pCurrentContext )->acquire();
-        *ppCurrentContext = pId->pCurrentContext;
-        return sal_True;
-    }
-    // case: same env (!= current compiler env)
-    if ((0 != pId->pCurrentContextEnv) &&
-        (0 == ::rtl_ustr_compare(
-            ((uno_Environment *) pId->pCurrentContextEnv)->pTypeName->buffer,
-            pEnvTypeName->buffer )) &&
-        ((uno_Environment *) pId->pCurrentContextEnv)->pContext == pEnvContext)
-    {
-        // target env == current env
-        (*pId->pCurrentContextEnv->acquireInterface)(
-            pId->pCurrentContextEnv, pId->pCurrentContext );
-        *ppCurrentContext = pId->pCurrentContext;
-        return sal_True;
-    }
-    // else: mapping needed
-
     if (! target_env.is())
     {
-        uno_getEnvironment( (uno_Environment **) &target_env, pEnvTypeName, pEnvContext );
+        target_env = Environment(rtl::OUString(pEnvTypeName), pEnvContext);
         OSL_ASSERT( target_env.is() );
         if (! target_env.is())
             return sal_False;
     }
 
-    ::com::sun::star::uno::Environment source_env;
-    uno_Environment * p_source_env = (uno_Environment *) pId->pCurrentContextEnv;
-    if (0 == p_source_env)
-    {
-        OUString current_env_name(
-            RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
-        uno_getEnvironment( (uno_Environment **) &source_env, current_env_name.pData, 0 );
-        OSL_ASSERT( source_env.is() );
-        if (! source_env.is())
-            return sal_False;
-        p_source_env = source_env.get();
-    }
-
-    uno_Mapping * mapping = 0;
-    uno_getMapping( &mapping, p_source_env, target_env.get(), 0 );
-    OSL_ASSERT( mapping != 0 );
-    if (! mapping)
+    Mapping mapping((uno_Environment *) pId->pCurrentContextEnv, target_env.get());
+    OSL_ASSERT( mapping.is() );
+    if (! mapping.is())
         return sal_False;
-    (*mapping->mapInterface)(
-        mapping,
-        ppCurrentContext, pId->pCurrentContext, ::cppu::get_type_XCurrentContext() );
-    (*mapping->release)( mapping );
+
+    mapping.mapInterface(ppCurrentContext, pId->pCurrentContext, ::cppu::get_type_XCurrentContext() );
+
     return sal_True;
 }
