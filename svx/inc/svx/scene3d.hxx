@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scene3d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:07:03 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:29:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,9 @@ protected:
     // Flag to determine if only selected objects should be drawn
     unsigned                    bDrawOnlySelected       : 1;
 
+     // #i71618#
+     double                     mfPolygonOffset;
+
     virtual void NewObjectInserted(const E3dObject* p3DObj);
     virtual void StructureChanged(const E3dObject* p3DObj);
 
@@ -159,6 +162,22 @@ public:
     E3dScene();
     E3dScene(E3dDefaultAttributes& rDefault);
     virtual ~E3dScene();
+
+     // #i71618#
+     // support for value for PolygonOffset. Value is relative to Z-Buffer depth. Used
+     // for 3d rendering. See Base3D for more info
+     void setPolygonOffset(double fNew)
+     {
+         if(fNew != mfPolygonOffset)
+         {
+             mfPolygonOffset = fNew;
+         }
+     }
+
+     double getPolygonOffset() const
+     {
+         return mfPolygonOffset;
+     }
 
     // #110988#
     sal_uInt32 RemapOrdNum(sal_uInt32 nOrdNum) const;
