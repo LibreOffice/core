@@ -1,2 +1,2 @@
-ur ure : solenv NULL
+ur ure : cli_ure solenv NULL
 ur ure\source nmake - all ur_source NULL
