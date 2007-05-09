@@ -4,9 +4,9 @@
  *
  *  $RCSfile: overlaymanagerbuffered.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:40:31 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:31:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,11 @@
 
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
+#endif
+
+// #i75163#
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -446,14 +451,20 @@ namespace sdr
             // to trigger a timer event for refresh
             maBufferTimer.Start();
 
-            // also add the range to the remembered region
-            const Point aTL((sal_Int32)floor(rRange.getMinX()), (sal_Int32)floor(rRange.getMinY()));
-            const Point aBR((sal_Int32)floor(rRange.getMaxX()) + 1L, (sal_Int32)floor(rRange.getMaxY()) + 1L);
-            const Point aTLPix(getOutputDevice().LogicToPixel(aTL));
-            const Point aBRPix(getOutputDevice().LogicToPixel(aBR));
+            // add the range to the remembered region
+            // #i75163# use double precision and floor/ceil rounding to get overlapped pixel region, even
+            // when the given logic region has a width/height of 0.0. This does NOT work with LogicToPixel
+            // since it just transforms the top left and bottom right points equally without taking
+            // pixel coverage into account. An empty B2DRange and thus empty logic Rectangle translated
+            // to an also empty pixel rectangle what is wrong.
+            basegfx::B2DRange aPixelRange(rRange);
+            aPixelRange.transform(getOutputDevice().GetViewTransformation());
 
-            maBufferRememberedRangePixel.expand(basegfx::B2IPoint(aTLPix.X(), aTLPix.Y()));
-            maBufferRememberedRangePixel.expand(basegfx::B2IPoint(aBRPix.X(), aBRPix.Y()));
+            const basegfx::B2IPoint aTopLeft((sal_Int32)floor(aPixelRange.getMinX()), (sal_Int32)floor(aPixelRange.getMinY()));
+            const basegfx::B2IPoint aBottomRight((sal_Int32)ceil(aPixelRange.getMaxX()), (sal_Int32)ceil(aPixelRange.getMaxY()));
+
+            maBufferRememberedRangePixel.expand(aTopLeft);
+            maBufferRememberedRangePixel.expand(aBottomRight);
         }
 
         void OverlayManagerBuffered::SetRefreshWithPreRendering(sal_Bool bNew)
