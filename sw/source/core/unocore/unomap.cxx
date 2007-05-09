@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.196 $
+ *  $Revision: 1.197 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:45:17 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:24:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2404,6 +2404,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NMID(UNO_NAME_IS_AUTOMATIC_UPDATE), FIELD_PROP_BOOL1,  CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,    0},
                     {SW_PROP_NMID(UNO_NAME_NAME),               FIELD_PROP_PAR1,  CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_INSTANCE_NAME),      FIELD_PROP_PAR3,    CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
+                    {SW_PROP_NMID(UNO_NAME_CONTENT),            FIELD_PROP_PAR5,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aDDEFieldTypePropMap;
