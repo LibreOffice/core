@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spritehelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 14:49:20 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:21:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,7 +302,7 @@ namespace vclcanvas
                             rTargetSurface.SetLineColor( Color( 0,255,0 ) );
                             rTargetSurface.SetFillColor();
 
-                            rTargetSurface.DrawPolyPolygon( aClipPoly );
+                            rTargetSurface.DrawPolyPolygon(PolyPolygon(aClipPoly)); // #i76339#
                         }
 
 #ifndef WNT
@@ -334,7 +334,7 @@ namespace vclcanvas
                             rTargetSurface.SetLineColor();
                             rTargetSurface.SetFillColor( COL_BLACK );
                             rTargetSurface.SetRasterOp( ROP_0 );
-                            rTargetSurface.DrawPolyPolygon( aClipPoly );
+                            rTargetSurface.DrawPolyPolygon(PolyPolygon(aClipPoly)); // #i76339#
 
                             rTargetSurface.SetRasterOp( ROP_XOR );
                             rTargetSurface.DrawBitmap( aOutPos,
@@ -359,7 +359,9 @@ namespace vclcanvas
                             ::basegfx::B2DRange aOutputRect(::basegfx::B2DPoint(0,0),::basegfx::B2DPoint(aSize.Width(),aSize.Height()));
                             ::basegfx::B2DPolygon aClippedClip(::basegfx::tools::clipTriangleListOnRange(aTriangulatedClip,aOutputRect));
 
-                            PolyPolygon aPolyPoly( aClippedClip );
+                            // #i76339#
+                            const Polygon aPoly(aClippedClip);
+                            const PolyPolygon aPolyPoly(aPoly);
                             rTargetSurface.SetTriangleClipRegion(aPolyPoly);
                         }
                     }
