@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_writer.scp,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 17:00:12 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:23:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ File gid_File_Exe_Swriter
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = EXENAME(swriter);
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
 End
 
 #ifdef SOLAR_JAVA
