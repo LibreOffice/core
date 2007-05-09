@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:29:42 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:22:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1035,7 +1035,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                 }
                 catch ( embed::UnreachableStateException& )
                 {
-                    if ( nVerb == 0 )
+                    if ( nVerb == 0 || nVerb == embed::EmbedVerbs::MS_OLEVERB_OPEN )
                     {
                         // a workaround for the default verb, usually makes sence for alien objects
                         try
