@@ -107,3 +107,17 @@ UDK_3.1 {
         typelib_typedescription_newStruct;
     cppu_Any_extraction_failure_msg;
 } UDK_3_0_0;
+
+UDK_3.2 {
+    global:
+        uno_EnvDcp_getTypeName;
+        uno_EnvDcp_getPurpose;
+
+        uno_getCurrentEnvironment;
+        uno_Environment_invoke_v;
+        uno_Environment_invoke;
+        uno_Environment_enter;
+
+        uno_Environment_isValid;
+} UDK_3.1;
+
