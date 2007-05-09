@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 13:42:05 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:32:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,7 @@ struct ImpSdrPathDragData  : public SdrDragStatUserData
 
     // ##
     BOOL                        mbMultiPointDrag;
-    const XPolyPolygon&         mrOrig;
+    const XPolyPolygon          maOrig;
     XPolyPolygon                maMove;
     Container                   maHandles;
 
@@ -174,7 +174,7 @@ public:
 ImpSdrPathDragData::ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl, BOOL bMuPoDr, const SdrDragStat& rDrag)
 :   aXP(5),
     mbMultiPointDrag(bMuPoDr),
-    mrOrig(rPO.GetPathPoly()),
+    maOrig(rPO.GetPathPoly()),
     maHandles(0)
 {
     if(mbMultiPointDrag)
@@ -195,7 +195,7 @@ ImpSdrPathDragData::ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl
             }
         }
 
-        maMove = mrOrig;
+        maMove = maOrig;
         bValid = TRUE;
     }
     else
@@ -655,7 +655,7 @@ FASTBOOL ImpPathForDragAndCreate::MovDrag(SdrDragStat& rDrag) const
                 SdrHdl* pHandle = (SdrHdl*)pID->maHandles.GetObject(a);
                 const sal_uInt16 nPolyIndex((sal_uInt16)pHandle->GetPolyNum());
                 const sal_uInt16 nPointIndex((sal_uInt16)pHandle->GetPointNum());
-                const XPolygon& rOrig = pID->mrOrig[nPolyIndex];
+                const XPolygon& rOrig = pID->maOrig[nPolyIndex];
                 XPolygon& rMove = pID->maMove[nPolyIndex];
                 const sal_uInt16 nPointCount(rOrig.GetPointCount());
                 BOOL bClosed(rOrig[0] == rOrig[nPointCount-1]);
