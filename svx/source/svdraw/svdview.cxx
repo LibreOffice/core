@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdview.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:50:54 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:33:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -374,20 +374,23 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         pOut = GetFirstOutputDevice();
         //pOut=GetWin(0);
     }
-    Point aPnt(rLogicPos);
+
+    // #i73628# Use a non-changeable copy of he logic pos
+    const Point aLocalLogicPosition(rLogicPos);
+
     BOOL bEditMode=IsEditMode();
     BOOL bPointMode=bEditMode && HasMarkablePoints();
     BOOL bGluePointMode=IsGluePointEditMode();
     BOOL bInsPolyPt=bPointMode && IsInsObjPointMode() && IsInsObjPointPossible();
     BOOL bInsGluePt=bGluePointMode && IsInsGluePointMode() && IsInsGluePointPossible();
     BOOL bIsTextEdit=IsTextEdit();
-    BOOL bTextEditHit=IsTextEditHit(aPnt,0/*nHitTolLog*/);
+    BOOL bTextEditHit=IsTextEditHit(aLocalLogicPosition,0/*nHitTolLog*/);
     BOOL bTextEditSel=IsTextEditInSelectionMode();
     BOOL bShift=(rVEvt.nMouseCode & KEY_SHIFT) !=0;
     BOOL bCtrl=(rVEvt.nMouseCode & KEY_MOD1) !=0;
     BOOL bAlt=(rVEvt.nMouseCode & KEY_MOD2) !=0;
     SdrHitKind eHit=SDRHIT_NONE;
-    SdrHdl* pHdl=pOut!=NULL && !bTextEditSel ? PickHandle(aPnt) : NULL;
+    SdrHdl* pHdl=pOut!=NULL && !bTextEditSel ? PickHandle(aLocalLogicPosition) : NULL;
     SdrPageView* pPV=NULL;
     SdrObject* pObj=NULL;
     SdrObject* pHitObj=NULL;
@@ -400,17 +403,17 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         bTextEditHit=TRUE;
     } else if (pHdl!=NULL) {
         eHit=SDRHIT_HANDLE; // Handle getroffen hat hoechste Prioritaet
-    } else if (bEditMode && IsHlplVisible() && IsHlplFront() && pOut!=NULL && PickHelpLine(aPnt,nHitTolLog,*pOut,nHlplIdx,pPV)) {
+    } else if (bEditMode && IsHlplVisible() && IsHlplFront() && pOut!=NULL && PickHelpLine(aLocalLogicPosition,nHitTolLog,*pOut,nHlplIdx,pPV)) {
         eHit=SDRHIT_HELPLINE; // Hilfslinie im Vordergrund getroffen zum verschieben
-    } else if (bGluePointMode && PickGluePoint(aPnt,pObj,nGlueId,pPV)) {
+    } else if (bGluePointMode && PickGluePoint(aLocalLogicPosition,pObj,nGlueId,pPV)) {
         eHit=SDRHIT_GLUEPOINT; // nichtmarkierter Klebepunkt getroffen
-    } else if (PickObj(aPnt,nHitTolLog,pHitObj,pPV,SDRSEARCH_DEEP|SDRSEARCH_MARKED,&pObj,NULL,&nHitPassNum)) {
+    } else if (PickObj(aLocalLogicPosition,nHitTolLog,pHitObj,pPV,SDRSEARCH_DEEP|SDRSEARCH_MARKED,&pObj,NULL,&nHitPassNum)) {
         eHit=SDRHIT_MARKEDOBJECT;
-    } else if (PickObj(aPnt,nHitTolLog,pHitObj,pPV,SDRSEARCH_DEEP|/*SDRSEARCH_TESTMARKABLE|*/SDRSEARCH_ALSOONMASTER|SDRSEARCH_WHOLEPAGE,&pObj,NULL,&nHitPassNum)) {
+    } else if (PickObj(aLocalLogicPosition,nHitTolLog,pHitObj,pPV,SDRSEARCH_DEEP|/*SDRSEARCH_TESTMARKABLE|*/SDRSEARCH_ALSOONMASTER|SDRSEARCH_WHOLEPAGE,&pObj,NULL,&nHitPassNum)) {
         // MasterPages und WholePage fuer Macro und URL
         eHit=SDRHIT_UNMARKEDOBJECT;
         bUnmarkedObjHit=TRUE;
-    } else if (bEditMode && IsHlplVisible() && !IsHlplFront() && pOut!=NULL && PickHelpLine(aPnt,nHitTolLog,*pOut,nHlplIdx,pPV)) {
+    } else if (bEditMode && IsHlplVisible() && !IsHlplFront() && pOut!=NULL && PickHelpLine(aLocalLogicPosition,nHitTolLog,*pOut,nHlplIdx,pPV)) {
         eHit=SDRHIT_HELPLINE; // Hilfslinie im Vordergrund getroffen zum verschieben
     }
     if (IsMacroMode() && eHit==SDRHIT_UNMARKEDOBJECT) {
@@ -434,8 +437,8 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
 
         if (bDeep || bMid || bRoot) {
             SdrObjMacroHitRec aHitRec;
-            aHitRec.aPos=aPnt;
-            aHitRec.aDownPos=aPnt;
+            aHitRec.aPos=aLocalLogicPosition;
+            aHitRec.aDownPos=aLocalLogicPosition;
             aHitRec.nTol=nHitTolLog;
             aHitRec.pVisiLayer=&pPV->GetVisibleLayers();
             aHitRec.pPageView=pPV;
@@ -455,7 +458,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     if (IsMacroMode() && eHit==SDRHIT_UNMARKEDOBJECT) {
         SdrTextObj* pTextObj=PTR_CAST(SdrTextObj,pHitObj);
         if (pTextObj!=NULL && pTextObj->HasText()) {
-            BOOL bTEHit=pTextObj->IsTextEditHit(aPnt,0/*nHitTolLog*/,&pPV->GetVisibleLayers());
+            BOOL bTEHit=pTextObj->IsTextEditHit(aLocalLogicPosition,0/*nHitTolLog*/,&pPV->GetVisibleLayers());
             if (bTEHit) {
                 Rectangle aTextRect;
                 Rectangle aAnchor;
@@ -464,24 +467,27 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                     pOutliner = &pTextObj->GetModel()->GetHitTestOutliner();
 
                 pTextObj->TakeTextRect( *pOutliner, aTextRect, FALSE, &aAnchor, FALSE );
-                aPnt-=aTextRect.TopLeft();
+
+                // #i73628# Use a text-relative position for hit test in hit test outliner
+                Point aTemporaryTextRelativePosition(aLocalLogicPosition - aTextRect.TopLeft());
+
                 // FitToSize berueksichtigen
                 SdrFitToSizeType eFit=pTextObj->GetFitToSize();
                 BOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
                 if (bFitToSize) {
                     Fraction aX(aTextRect.GetWidth()-1,aAnchor.GetWidth()-1);
                     Fraction aY(aTextRect.GetHeight()-1,aAnchor.GetHeight()-1);
-                    ResizePoint(aPnt,Point(),aX,aY);
+                    ResizePoint(aTemporaryTextRelativePosition,Point(),aX,aY);
                 }
                 // Drehung berueksichtigen
                 const GeoStat& rGeo=pTextObj->GetGeoStat();
-                if (rGeo.nDrehWink!=0) RotatePoint(aPnt,Point(),-rGeo.nSin,rGeo.nCos); // -sin fuer Unrotate
+                if (rGeo.nDrehWink!=0) RotatePoint(aTemporaryTextRelativePosition,Point(),-rGeo.nSin,rGeo.nCos); // -sin fuer Unrotate
                 // Laufschrift berueksichtigen fehlt noch ...
                 if(pActualOutDev && pActualOutDev->GetOutDevType() == OUTDEV_WINDOW)
                 {
                     OutlinerView aOLV(pOutliner, (Window*)pActualOutDev);
                     const EditView& aEV=aOLV.GetEditView();
-                    const SvxFieldItem* pItem=aEV.GetField(aPnt);
+                    const SvxFieldItem* pItem=aEV.GetField(aTemporaryTextRelativePosition);
                     if (pItem!=NULL) {
                         const SvxFieldData* pFld=pItem->GetField();
                         const SvxURLField* pURL=PTR_CAST(SvxURLField,pFld);
@@ -518,17 +524,17 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
             nTolerance = pOut->PixelToLogic(Size(2, 0)).Width();
         }
 
-        if( (aPnt.X() >= aBoundRect.Left() - nTolerance && aPnt.X() <= aBoundRect.Left() + nTolerance)
-         || (aPnt.X() >= aBoundRect.Right() - nTolerance && aPnt.X() <= aBoundRect.Right() + nTolerance)
-         || (aPnt.Y() >= aBoundRect.Top() - nTolerance && aPnt.Y() <= aBoundRect.Top() + nTolerance)
-         || (aPnt.Y() >= aBoundRect.Bottom() - nTolerance && aPnt.Y() <= aBoundRect.Bottom() + nTolerance))
+        if( (aLocalLogicPosition.X() >= aBoundRect.Left() - nTolerance && aLocalLogicPosition.X() <= aBoundRect.Left() + nTolerance)
+         || (aLocalLogicPosition.X() >= aBoundRect.Right() - nTolerance && aLocalLogicPosition.X() <= aBoundRect.Right() + nTolerance)
+         || (aLocalLogicPosition.Y() >= aBoundRect.Top() - nTolerance && aLocalLogicPosition.Y() <= aBoundRect.Top() + nTolerance)
+         || (aLocalLogicPosition.Y() >= aBoundRect.Bottom() - nTolerance && aLocalLogicPosition.Y() <= aBoundRect.Bottom() + nTolerance))
         {
             bBoundRectHit = sal_True;
         }
 
         if(!bBoundRectHit)
         {
-            BOOL bTEHit=pHitObj->IsTextEditHit(aPnt,0,&pPV->GetVisibleLayers());
+            BOOL bTEHit=pHitObj->IsTextEditHit(aLocalLogicPosition,0,&pPV->GetVisibleLayers());
 
             // TextEdit an Objekten im gesperrten Layer
             if (pPV->GetLockedLayers().IsSet(pHitObj->GetLayer())) bTEHit=FALSE;
@@ -656,7 +662,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     rVEvt.bIsAction=bIsAction;
     rVEvt.bIsTextEdit=bIsTextEdit;
     rVEvt.bTextEditHit=bTextEditHit;
-    rVEvt.aLogicPos=aPnt;
+    rVEvt.aLogicPos=aLocalLogicPosition;
     rVEvt.pHdl=pHdl;
     rVEvt.pObj=pObj;
     if (rVEvt.pRootObj==NULL) rVEvt.pRootObj=pObj;
