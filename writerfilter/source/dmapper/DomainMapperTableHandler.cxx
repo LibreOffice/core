@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableHandler.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2007-05-07 12:06:09 $
+ *  last change: $Author: os $ $Date: 2007-05-09 13:54:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,13 +32,19 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#include <iostream>
 #include <DomainMapperTableHandler.hxx>
-
+#ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HDL_
+#include <com/sun/star/text/HoriOrientation.hpp>
+#endif
+#ifdef DEBUG
+#include <iostream>
+#endif
 namespace dmapper {
 
 using namespace ::com::sun::star;
 using namespace ::std;
+
+#define DEF_BORDER_DIST 190  //0,19cm
 
 #ifdef DEBUG
 static void lcl_printHandle(const Handle_t rHandle)
@@ -141,6 +147,15 @@ void DomainMapperTableHandler::endTable()
                     aCellIterator->get()->erase( aVerticalIter );
                 if( aHorizontalIter != aCellIterator->get()->end())
                     aCellIterator->get()->erase( aHorizontalIter );
+                //now set the default left+right border distance TODO: there's an sprm containing the default distance!
+                const PropertyMap::const_iterator aLeftDistanceIter =
+                                aCellIterator->get()->find( rPropSupplier.GetName(PROP_LEFT_BORDER_DISTANCE) );
+                if( aLeftDistanceIter == aCellIterator->get()->end() )
+                    aCellIterator->get()->Insert( PROP_LEFT_BORDER_DISTANCE, uno::makeAny((sal_Int32) DEF_BORDER_DIST ) );
+                const PropertyMap::const_iterator aRightDistanceIter =
+                                aCellIterator->get()->find( rPropSupplier.GetName(PROP_RIGHT_BORDER_DISTANCE) );
+                if( aRightDistanceIter == aCellIterator->get()->end() )
+                    aCellIterator->get()->Insert( PROP_RIGHT_BORDER_DISTANCE, uno::makeAny((sal_Int32) DEF_BORDER_DIST ) );
 
                 pSingleCellProperties[nCell] = aCellIterator->get()->GetPropertyValues();
             }
@@ -176,11 +191,13 @@ void DomainMapperTableHandler::endTable()
         const PropertyMap::const_iterator aRepeatIter =
                                 m_aTableProperties->find( rPropSupplier.GetName(PROP_HEADER_ROW_COUNT) );
         if( aRepeatIter == m_aTableProperties->end() )
-        {
             m_aTableProperties->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny( (sal_Int32)0 ));
-        }
 
-
+        //set default orientation if not already set
+        const PropertyMap::const_iterator aOrientIter =
+                    m_aTableProperties->find( rPropSupplier.GetName( PROP_HORI_ORIENT ));
+        if( aOrientIter == m_aTableProperties->end() )
+            m_aTableProperties->Insert( PROP_HORI_ORIENT, uno::makeAny( text::HoriOrientation::LEFT_AND_WIDTH ) );
         aTableProperties = m_aTableProperties->GetPropertyValues();
     }
 
