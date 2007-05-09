@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:17:01 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:22:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,11 +247,18 @@ Window* Window::ImplGetDlgWindow( USHORT nIndex, USHORT nType,
             {
                 // 2ten Index mitfuehren, falls alle Controls disablte
                 USHORT nStartIndex2 = i;
+                USHORT nOldIndex = i+1;
 
                 do
                 {
                     if ( pWindow->GetStyle() & WB_TABSTOP )
                         break;
+                    if( i == nOldIndex ) // only disabled controls ?
+                    {
+                        i = nStartIndex2;
+                        break;
+                    }
+                    nOldIndex = i;
                     if ( (i > nFormEnd) || (i < nFormStart) )
                         pWindow = ImplGetChildWindow( this, nFormStart, i, TRUE );
                     else
