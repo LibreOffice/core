@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macro_expander.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:41:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:25:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 #include "precompiled_cppuhelper.hxx"
 
 #include <rtl/bootstrap.hxx>
+
+#include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -233,10 +235,20 @@ namespace cppu
 //##################################################################################################
 Reference< lang::XSingleComponentFactory > create_boostrap_macro_expander_factory() SAL_THROW( () )
 {
-    return ::cppu::createSingleComponentFactory(
-        service_create,
-        s_impl_name(),
-        s_get_service_names() );
+    Reference< lang::XSingleComponentFactory > free(::cppu::createSingleComponentFactory(
+                                                        service_create,
+                                                        s_impl_name(),
+                                                        s_get_service_names() ));
+
+    uno::Environment curr_env(Environment::getCurrent());
+    uno::Environment target_env(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(CPPU_STRINGIFY(CPPU_ENV))));
+
+    uno::Mapping target2curr(target_env, curr_env);
+
+    return Reference<lang::XSingleComponentFactory>(
+        reinterpret_cast<lang::XSingleComponentFactory *>(
+            target2curr.mapInterface(free.get(), ::getCppuType(&free))),
+        SAL_NO_ACQUIRE);
 }
 
 }
