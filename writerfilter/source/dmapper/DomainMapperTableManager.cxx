@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableManager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-05-07 12:30:42 $
+ *  last change: $Author: os $ $Date: 2007-05-09 13:55:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,11 +40,14 @@
 #ifndef INCLUDED_CELLCOLORHANDLER_HXX
 #include <CellColorHandler.hxx>
 #endif
-#ifndef INCLUDED_TABLELEFTINDENTHANDLER_HXX
-#include <TableLeftIndentHandler.hxx>
-#endif
 #ifndef INCLUDED_DMAPPER_CONVERSIONHELPER_HXX
 #include <ConversionHelper.hxx>
+#endif
+#ifndef INCLUDED_MEASUREHANDLER_HXX
+#include <MeasureHandler.hxx>
+#endif
+#ifndef INCLUDED_TDEFTABLEHANDLER_HXX
+#include <TDefTableHandler.hxx>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HDL_
 #include <com/sun/star/text/HoriOrientation.hpp>
@@ -66,7 +69,9 @@ DomainMapperTableManager::DomainMapperTableManager() :
     m_nCell(0),
     m_nCellBorderIndex(0),
     m_nHeaderRepeat(0),
-    m_nGapHalf(0)
+    m_nGapHalf(0),
+    m_nLeftMargin(0),
+    m_nTableWidth(0)
 {
 }
 /*-- 23.04.2007 14:57:49---------------------------------------------------
@@ -84,17 +89,17 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
     if( !bRet )
     {
         bRet = true;
-        sal_uInt32 nId = rSprm.getId();
+        sal_uInt32 nSprmId = rSprm.getId();
         doctok::Value::Pointer_t pValue = rSprm.getValue();
         sal_Int32 nIntValue = ((pValue.get() != NULL) ? pValue->getInt() : 0);
         /* WRITERFILTERSTATUS: table: table_sprmdata */
-        switch( nId )
+        switch( nSprmId )
         {
             case 0x5400: // sprmTJc
             {
                 /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
                 //table justification 0: left, 1: center, 2: right
-                sal_Int16 nOrient = text::HoriOrientation::LEFT;
+                sal_Int16 nOrient = text::HoriOrientation::LEFT_AND_WIDTH;
                 switch( nIntValue )
                 {
                     case 1 : nOrient = text::HoriOrientation::CENTER; break;
@@ -113,17 +118,36 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
                 /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
             break;
             case 0x9602: // sprmTDxaGapHalf
+            {
                 /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
                 m_nGapHalf = nIntValue;
+                PropertyMapPtr pPropMap( new PropertyMap );
+                pPropMap->Insert( PROP_LEFT_MARGIN, uno::makeAny( m_nLeftMargin - m_nGapHalf ));
+                insertTableProps(pPropMap);
+            }
             break;
-            case 0xf661 : //sprmTTRLeft - contains unit and value of left table indent
-                {
+            case 0xf661: //sprmTTRLeft left table indent
+            case 0xf614: // sprmTTPreferredWidth - preferred table width
+            {
+                //contains unit and value
                 doctok::Reference<doctok::Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
                 {   //contains attributes x2902 (LN_unit) and x17e2 (LN_trleft)
-                    TableLeftIndentHandlerPtr pTableLeftIndentHandler( new TableLeftIndentHandler );
-                    pProperties->resolve(*pTableLeftIndentHandler);
-                    insertTableProps(pTableLeftIndentHandler->getProperties());
+                    MeasureHandlerPtr pMeasureHandler( new MeasureHandler );
+                    pProperties->resolve(*pMeasureHandler);
+                    PropertyMapPtr pPropMap( new PropertyMap );
+                    if( nSprmId == 0xf661)
+                    {
+                        m_nLeftMargin = pMeasureHandler->getTwipValue();
+                        pPropMap->Insert( PROP_LEFT_MARGIN, uno::makeAny( m_nLeftMargin - m_nGapHalf ));
+                    }
+                    else
+                    {
+                        m_nTableWidth = pMeasureHandler->getTwipValue();
+                        if( m_nTableWidth )
+                            pPropMap->Insert( PROP_WIDTH, uno::makeAny( m_nTableWidth ));
+                    }
+                    insertTableProps(pPropMap);
                 }
             }
             break;
@@ -167,7 +191,28 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
                 insertRowProps(pPropMap);
             }
             break;
-
+            case 0xd608: // TDefTable
+            {
+                /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
+                doctok::Reference<doctok::Properties>::Pointer_t pProperties = rSprm.getProps();
+                if( pProperties.get())
+                {
+                    TDefTableHandlerPtr pTDefTableHandler( new TDefTableHandler );
+                    pProperties->resolve( *pTDefTableHandler );
+                    insertRowProps( pTDefTableHandler->getProperties() );
+                    if( !m_nTableWidth )
+                    {
+                        m_nTableWidth= pTDefTableHandler->getTableWidth();
+                        if( m_nTableWidth )
+                        {
+                            PropertyMapPtr pPropMap( new PropertyMap );
+                            pPropMap->Insert( PROP_WIDTH, uno::makeAny( m_nTableWidth ));
+                            insertTableProps(pPropMap);
+                        }
+                    }
+                }
+            }
+            break;
             case 0xD605: // sprmTTableBorders
             {
                 /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
