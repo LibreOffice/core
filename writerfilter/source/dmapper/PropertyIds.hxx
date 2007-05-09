@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2007-05-07 12:04:19 $
+ *  last change: $Author: os $ $Date: 2007-05-09 13:53:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,7 +241,7 @@ enum PropertyIds
 /*199*/ ,PROP_HEADER_ROW_COUNT
 /*200*/ ,PROP_IS_AUTO_HEIGHT
 /*201*/ ,PROP_SIZE_TYPE
-///*202*/ ,PROP_
+/*202*/ ,PROP_TABLE_COLUMN_SEPARATORS
 ///*203*/ ,PROP_
 ///*204*/ ,PROP_
 ///*205*/ ,PROP_

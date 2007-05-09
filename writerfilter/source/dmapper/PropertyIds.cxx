@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2007-05-07 12:04:18 $
+ *  last change: $Author: os $ $Date: 2007-05-09 13:53:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,7 +299,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_HEADER_ROW_COUNT      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderRowCount")); break;
             case PROP_IS_AUTO_HEIGHT        :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsAutoHeight")); break;
             case PROP_SIZE_TYPE             :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SizeType")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+            case PROP_TABLE_COLUMN_SEPARATORS:   sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableColumnSeparators")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
