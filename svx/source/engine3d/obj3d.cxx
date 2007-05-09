@@ -4,9 +4,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:49:25 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:30:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4796,8 +4796,9 @@ void E3dCompoundObject::ImpDrawShadowPolygon(const basegfx::B2DPolyPolygon& rPol
                 pDevice->SetFillColor();
             }
 
-            Polygon aPolygon(aPoly);
-            pDevice->DrawPolygon(aPoly);
+            // #i74631# Polygon constructor with B2DPolygon is now explicit; found a bug here
+            const Polygon aPolygon(aPoly);
+            pDevice->DrawPolygon(aPolygon);
         }
     }
 }
