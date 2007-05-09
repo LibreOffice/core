@@ -4,9 +4,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:21:44 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:21:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,22 +264,22 @@ static struct CommandArgs_Impl g_command_args =
     0
 };
 
+#pragma warning( push )
+#pragma warning( disable: 4100 )
 static rtl_uString ** osl_createCommandArgs_Impl (int argc, char ** argv)
 {
     rtl_uString ** ppArgs =
         (rtl_uString**)rtl_allocateZeroMemory (argc * sizeof(rtl_uString*));
     if (ppArgs != 0)
     {
-        rtl_TextEncoding encoding = osl_getThreadTextEncoding();
-
         int i;
-        for (i = 0; i < argc; i++)
+        int nArgs;
+        LPWSTR *wargv = CommandLineToArgvW( GetCommandLineW(), &nArgs );
+        OSL_ASSERT( nArgs == argc );
+        for (i = 0; i < nArgs; i++)
         {
             /* Convert to unicode */
-            rtl_string2UString (
-                &(ppArgs[i]),
-                argv[i], rtl_str_getLength (argv[i]), encoding,
-                OSTRING_TO_OUSTRING_CVTFLAGS);
+            rtl_uString_newFromStr( &(ppArgs[i]), wargv[i] );
         }
         if (ppArgs[0] != 0)
         {
@@ -309,7 +309,9 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char ** argv)
         }
     }
     return (ppArgs);
+
 }
+#pragma warning( pop )
 
 /***************************************************************************/
 
