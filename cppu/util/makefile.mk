@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-19 13:50:07 $
+#   last change: $Author: kz $ $Date: 2007-05-09 13:51:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,11 +40,15 @@ USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
 
+.IF "$(OS)" != "WNT"
 UNIXVERSIONNAMES=UDK
+.ENDIF
+
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE : ../source/helper/purpenv/export.mk
 
 # --- Files --------------------------------------------------------
 
@@ -55,7 +59,7 @@ SHL1LIBS= \
     $(SLB)$/cppu_cppu.lib
 
 .IF "$(GUI)" == "WNT"
-SHL1TARGET=$(TARGET)
+SHL1TARGET=$(TARGET)$(UDK_MAJOR)
 .ELSE
 SHL1TARGET= uno_$(TARGET)
 .ENDIF
@@ -72,7 +76,29 @@ SHL1VERSIONMAP=$(TARGET).map
 
 DEF1NAME=$(SHL1TARGET)
 
+
+SHL2TARGET  := $(NAMEpurpenv_helper)
+DEF2NAME    := $(SHL2TARGET)
+SHL2VERSIONMAP:=$(SHL2TARGET).map
+SHL2DEF     := $(MISC)$/$(SHL2TARGET).def
+SHL2IMPLIB  := i$(SHL2TARGET)
+SHL2STDLIBS := $(CPPULIB) $(SALHELPERLIB) $(SALLIB) 
+SHL2OBJS    := \
+    $(SLO)$/helper_purpenv_Environment.obj 	\
+    $(SLO)$/helper_purpenv_Mapping.obj      \
+    $(SLO)$/helper_purpenv_Proxy.obj
+
+
 # --- Targets ------------------------------------------------------
+
+.PHONY: ALLTAR
+
+
+ALLTAR:   $(SHL2TARGETN)
+    $(MAKE) $(MAKECMDGOALS) -f extra.mk
+
 
 .INCLUDE :	target.mk
 
+
+$(SHL2TARGETN): $(SHL1TARGETN)
