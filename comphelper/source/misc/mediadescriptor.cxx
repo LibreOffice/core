@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediadescriptor.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:12:29 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:25:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,8 +58,20 @@
 #include <com/sun/star/io/XStream.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
+#include <com/sun/star/io/XActiveDataSink.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
+#include <com/sun/star/io/XSeekable.hpp>
+#endif
+
 #ifndef __COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP__
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
 
 #ifndef __COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP__
@@ -90,6 +102,10 @@
 #include <com/sun/star/uri/XUriReference.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UCB_POSTCOMMANDARGUMENT2_HPP_
+#include <com/sun/star/ucb/PostCommandArgument2.hpp>
+#endif
+
 #ifndef _UCBHELPER_INTERCEPTEDINTERACTION_HXX_
 #include <ucbhelper/interceptedinteraction.hxx>
 #endif
@@ -100,6 +116,10 @@
 
 #ifndef _UCBHELPER_COMMANDENVIRONMENT_HXX
 #include <ucbhelper/commandenvironment.hxx>
+#endif
+
+#ifndef _UCBHELPER_ACTIVEDATASINK_HXX
+#include <ucbhelper/activedatasink.hxx>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -513,12 +533,8 @@ sal_Bool MediaDescriptor::addInputStream()
             const css::uno::Any& rPostData = pIt->second;
             css::uno::Reference< css::io::XInputStream > xPostData;
             rPostData >>= xPostData;
-            if (!xPostData.is())
-                throw css::uno::Exception(
-                        ::rtl::OUString::createFromAscii("Found invalid PostData."),
-                        css::uno::Reference< css::uno::XInterface >());
 
-            return impl_openStreamWithPostData();
+            return impl_openStreamWithPostData( xPostData );
         }
 
         // b) ... or we must get it from the given URL
@@ -551,12 +567,26 @@ sal_Bool MediaDescriptor::addInputStream()
 /*-----------------------------------------------
     25.03.2004 12:38
 -----------------------------------------------*/
-sal_Bool MediaDescriptor::impl_openStreamWithPostData()
+sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference< css::io::XInputStream >& _rxPostData )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    // PostData cant be used in read/write mode!
+    if ( !_rxPostData.is() )
+        throw css::lang::IllegalArgumentException(
+                ::rtl::OUString::createFromAscii("Found invalid PostData."),
+                css::uno::Reference< css::uno::XInterface >(), 1);
+
+    // PostData can't be used in read/write mode!
     (*this)[MediaDescriptor::PROP_READONLY()] <<= sal_True;
 
+    // prepare the environment
+    css::uno::Reference< css::task::XInteractionHandler > xInteraction = getUnpackedValueOrDefault(
+        MediaDescriptor::PROP_INTERACTIONHANDLER(),
+        css::uno::Reference< css::task::XInteractionHandler >());
+    css::uno::Reference< css::ucb::XProgressHandler > xProgress;
+    ::ucb::CommandEnvironment* pCommandEnv = new ::ucb::CommandEnvironment(xInteraction, xProgress);
+    css::uno::Reference< css::ucb::XCommandEnvironment > xCommandEnv(static_cast< css::ucb::XCommandEnvironment* >(pCommandEnv), css::uno::UNO_QUERY);
+
+    // media type
     ::rtl::OUString sMediaType = getUnpackedValueOrDefault(MediaDescriptor::PROP_MEDIATYPE(), ::rtl::OUString());
     if (!sMediaType.getLength())
     {
@@ -564,14 +594,47 @@ sal_Bool MediaDescriptor::impl_openStreamWithPostData()
         (*this)[MediaDescriptor::PROP_MEDIATYPE()] <<= sMediaType;
     }
 
-    css::uno::Reference< css::io::XInputStream > xInputStream = getUnpackedValueOrDefault(MediaDescriptor::PROP_POSTDATA(), css::uno::Reference< css::io::XInputStream >());
-    if (xInputStream.is())
+    // url
+    ::rtl::OUString sURL( getUnpackedValueOrDefault( PROP_URL(), ::rtl::OUString() ) );
+
+    css::uno::Reference< css::io::XInputStream > xResultStream;
+    try
     {
-        (*this)[MediaDescriptor::PROP_INPUTSTREAM()] <<= xInputStream;
-        return sal_True;
+        // seek PostData stream to the beginning
+        css::uno::Reference< css::io::XSeekable > xSeek( _rxPostData, css::uno::UNO_QUERY );
+        if ( xSeek.is() )
+            xSeek->seek( 0 );
+
+        // a content for the URL
+        ::ucb::Content aContent( sURL, xCommandEnv );
+
+        // use post command
+        css::ucb::PostCommandArgument2 aPostArgument;
+        aPostArgument.Source = _rxPostData;
+        css::uno::Reference< css::io::XActiveDataSink > xSink( new ucb::ActiveDataSink );
+        aPostArgument.Sink = xSink;
+        aPostArgument.MediaType = sMediaType;
+        aPostArgument.Referer = getUnpackedValueOrDefault( PROP_REFERRER(), ::rtl::OUString() );
+
+        ::rtl::OUString sCommandName( RTL_CONSTASCII_USTRINGPARAM( "post" ) );
+        aContent.executeCommand( sCommandName, css::uno::makeAny( aPostArgument ) );
+
+        // get result
+        xResultStream = xSink->getInputStream();
+    }
+    catch( const css::uno::Exception& )
+    {
     }
 
-    return sal_False;
+    // success?
+    if ( !xResultStream.is() )
+    {
+        OSL_ENSURE( false, "no valid reply to the HTTP-Post" );
+        return sal_False;
+    }
+
+    (*this)[MediaDescriptor::PROP_INPUTSTREAM()] <<= xResultStream;
+    return sal_True;
 }
 
 /*-----------------------------------------------*/
