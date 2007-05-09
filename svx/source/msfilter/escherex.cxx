@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:26:29 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:31:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4197,13 +4197,16 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( sal_Bool bFirst )
                         sal_Int16 a, b, nIndex = 0;
                         sal_uInt32 nDistance = 0xffffffff;
 
-                        const XPolyPolygon& rPolyPoly = ((SdrPathObj*)pPoly)->GetPathPoly();
-                        for ( a = 0; a < rPolyPoly.Count(); a++ )
+                        // #i74631# use explicit constructor here. Also XPolyPolygon is not necessary,
+                        // reducing to PolyPolygon
+                        const PolyPolygon aPolyPoly(((SdrPathObj*)pPoly)->GetPathPoly());
+
+                        for ( a = 0; a < aPolyPoly.Count(); a++ )
                         {
-                            const XPolygon& rPoly = rPolyPoly.GetObject( a );
-                            for ( b = 0; b < rPoly.GetPointCount(); b++ )
+                            const Polygon& rPoly = aPolyPoly.GetObject( a );
+                            for ( b = 0; b < rPoly.GetSize(); b++ )
                             {
-                                if ( rPoly.GetFlags( b ) != XPOLY_NORMAL )
+                                if ( rPoly.GetFlags( b ) != POLY_NORMAL )
                                     continue;
                                 const Point& rPt = rPoly[ b ];
                                 sal_uInt32 nDist = (sal_uInt32)hypot( aRefPoint.X - rPt.X(), aRefPoint.Y - rPt.Y() );
