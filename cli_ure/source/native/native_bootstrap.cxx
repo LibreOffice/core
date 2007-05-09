@@ -4,9 +4,9 @@
  *
  *  $RCSfile: native_bootstrap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:52:08 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:30:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cli_ure.hxx"
 
+#pragma warning(push, 1)
+#include <windows.h>
+#include "uno/environment.hxx"
+#pragma warning(pop)
+
 #include "native_share.h"
 
 #include "rtl/bootstrap.hxx"
 #include "cppuhelper/bootstrap.hxx"
-
-#pragma warning(push, 1)
-#include <windows.h>
-#pragma warning(pop)
 
 #include <delayimp.h>
 #include <stdio.h>
