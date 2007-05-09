@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Environment.test.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-14 08:31:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:39:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -14,7 +14,7 @@
  *
  *    GNU Lesser General Public License Version 2.1
  *    =============================================
- *    Copyright 2000 by Sun Microsystems, Inc.
+ *    Copyright 2005 by Sun Microsystems, Inc.
  *    901 San Antonio Road, Palo Alto, CA 94303, USA
  *
  *    This library is free software; you can redistribute it and/or
