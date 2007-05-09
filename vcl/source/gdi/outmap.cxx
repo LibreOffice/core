@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outmap.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:07:56 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:35:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,14 @@
 #endif
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
+#endif
+
+// #i75163#
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+#ifndef _SV_OUTDEV_H
+#include <outdev.h>
 #endif
 
 #define USE_64BIT_INTS
@@ -845,6 +853,9 @@ void OutputDevice::SetMapMode()
         // #106426# Adapt logical offset when changing mapmode
         mnOutOffLogicX = mnOutOffOrigX; // no mapping -> equal offsets
         mnOutOffLogicY = mnOutOffOrigY;
+
+        // #i75163#
+        ImplInvalidateViewTransform();
     }
 
     if( mpAlphaVDev )
@@ -891,6 +902,10 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
             maMapRes.mnMapOfsX = aOrigin.X();
             maMapRes.mnMapOfsY = aOrigin.Y();
             maMapMode = rNewMapMode;
+
+            // #i75163#
+            ImplInvalidateViewTransform();
+
             return;
         }
         if ( !bOldMap && bRelMap )
@@ -943,6 +958,9 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
     mnOutOffLogicY = ImplPixelToLogic( mnOutOffOrigY, mnDPIY,
                                        maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
                                        maThresRes.mnThresPixToLogY );
+
+    // #i75163#
+    ImplInvalidateViewTransform();
 }
 
 // -----------------------------------------------------------------------
@@ -1018,6 +1036,60 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
 
     if( mpAlphaVDev )
         mpAlphaVDev->SetRelativeMapMode( rNewMapMode );
+}
+
+// -----------------------------------------------------------------------
+
+// #i75163#
+basegfx::B2DHomMatrix OutputDevice::GetViewTransformation() const
+{
+    if(mbMap)
+    {
+        const_cast< OutputDevice* >(this)->ImplInitOutDevData();
+
+        if(!mpOutDevData->mpViewTransform)
+        {
+            mpOutDevData->mpViewTransform = new basegfx::B2DHomMatrix;
+
+            const double fScaleFactorX((double)mnDPIX * (double)maMapRes.mnMapScNumX / (double)maMapRes.mnMapScDenomX);
+            const double fScaleFactorY((double)mnDPIY * (double)maMapRes.mnMapScNumY / (double)maMapRes.mnMapScDenomY);
+            const double fZeroPointX(((double)maMapRes.mnMapOfsX * fScaleFactorX) + (double)mnOutOffOrigX);
+            const double fZeroPointY(((double)maMapRes.mnMapOfsY * fScaleFactorY) + (double)mnOutOffOrigY);
+
+            mpOutDevData->mpViewTransform->set(0, 0, fScaleFactorX);
+            mpOutDevData->mpViewTransform->set(1, 1, fScaleFactorY);
+            mpOutDevData->mpViewTransform->set(0, 2, fZeroPointX);
+            mpOutDevData->mpViewTransform->set(1, 2, fZeroPointY);
+        }
+
+        return *mpOutDevData->mpViewTransform;
+    }
+    else
+    {
+        return basegfx::B2DHomMatrix();
+    }
+}
+
+// -----------------------------------------------------------------------
+
+// #i75163#
+basegfx::B2DHomMatrix OutputDevice::GetInverseViewTransformation() const
+{
+    if(mbMap)
+    {
+        if(!mpOutDevData->mpInverseViewTransform)
+        {
+            GetViewTransformation();
+            mpOutDevData->mpInverseViewTransform = new basegfx::B2DHomMatrix(*mpOutDevData->mpViewTransform);
+            mpOutDevData->mpInverseViewTransform->invert();
+        }
+
+        return *mpOutDevData->mpInverseViewTransform;
+    }
+    else
+    {
+        return basegfx::B2DHomMatrix();
+    }
 }
 
 // -----------------------------------------------------------------------
