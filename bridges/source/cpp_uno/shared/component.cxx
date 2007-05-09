@@ -4,9 +4,9 @@
  *
  *  $RCSfile: component.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:55:49 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:24:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,7 @@
 #include "uno/environment.h"
 #include "uno/lbnames.h"
 #include "uno/mapping.h"
+#include "cppu/EnvDcp.hxx"
 
 namespace bridges { namespace cpp_uno { namespace shared {
 
@@ -106,10 +107,14 @@ const ::rtl::OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() SAL_THROW( () )
 
 extern "C" {
 
-static void SAL_CALL computeObjectIdentifier(
-    uno_ExtEnvironment * pEnv, rtl_uString ** ppOId, void * pInterface )
+static void s_stub_computeObjectIdentifier(va_list param)
     SAL_THROW( () )
 {
+    uno_ExtEnvironment  * pEnv       = va_arg(param, uno_ExtEnvironment *);
+    rtl_uString        ** ppOId      = va_arg(param, rtl_uString **);
+    void                * pInterface = va_arg(param, void *);
+
+
     OSL_ENSURE( pEnv && ppOId && pInterface, "### null ptr!" );
     if (pEnv && ppOId && pInterface)
     {
@@ -156,16 +161,41 @@ static void SAL_CALL computeObjectIdentifier(
     }
 }
 
-static void SAL_CALL acquireInterface( uno_ExtEnvironment *, void * pCppI )
+static void SAL_CALL computeObjectIdentifier(
+    uno_ExtEnvironment * pExtEnv, rtl_uString ** ppOId, void * pInterface )
     SAL_THROW( () )
 {
+    uno_Environment_invoke(&pExtEnv->aBase, s_stub_computeObjectIdentifier, pExtEnv, ppOId, pInterface);
+}
+
+static void s_stub_acquireInterface(va_list param)
+    SAL_THROW( () )
+{
+    /*uno_ExtEnvironment * pExtEnv = */va_arg(param, uno_ExtEnvironment *);
+    void               * pCppI   = va_arg(param, void *);
+
     reinterpret_cast< ::com::sun::star::uno::XInterface * >( pCppI )->acquire();
 }
 
-static void SAL_CALL releaseInterface( uno_ExtEnvironment *, void * pCppI )
+static void SAL_CALL acquireInterface( uno_ExtEnvironment * pExtEnv, void * pCppI )
     SAL_THROW( () )
 {
+    uno_Environment_invoke(&pExtEnv->aBase, s_stub_acquireInterface, pExtEnv, pCppI);
+}
+
+static void s_stub_releaseInterface(va_list param)
+    SAL_THROW( () )
+{
+    /*uno_ExtEnvironment * pExtEnv = */va_arg(param, uno_ExtEnvironment *);
+    void               * pCppI   = va_arg(param, void *);
+
     reinterpret_cast< ::com::sun::star::uno::XInterface * >( pCppI )->release();
+}
+
+static void SAL_CALL releaseInterface( uno_ExtEnvironment * pExtEnv, void * pCppI )
+    SAL_THROW( () )
+{
+    uno_Environment_invoke(&pExtEnv->aBase, s_stub_releaseInterface, pExtEnv, pCppI);
 }
 
 static void SAL_CALL environmentDisposing( uno_Environment * ) SAL_THROW( () )
@@ -184,8 +214,8 @@ void SAL_CALL uno_initEnvironment(uno_Environment * pCppEnv)
 {
     OSL_ENSURE( pCppEnv->pExtEnv, "### expected extended environment!" );
     OSL_ENSURE(
-        ::rtl_ustr_ascii_compare(
-            pCppEnv->pTypeName->buffer, CPPU_CURRENT_LANGUAGE_BINDING_NAME )
+        ::rtl_ustr_ascii_compare_WithLength(
+             pCppEnv->pTypeName->buffer, rtl_str_getLength(CPPU_CURRENT_LANGUAGE_BINDING_NAME), CPPU_CURRENT_LANGUAGE_BINDING_NAME )
         == 0,
         "### wrong environment type!" );
     bridges::cpp_uno::shared::g_moduleCount.modCnt.acquire(
@@ -206,11 +236,14 @@ void SAL_CALL uno_ext_getMapping(
     {
         uno_Mapping * pMapping = 0;
 
+        rtl::OUString from_envTypeName(cppu::EnvDcp::getTypeName(pFrom->pTypeName));
+        rtl::OUString to_envTypeName(cppu::EnvDcp::getTypeName(pTo->pTypeName));
+
         if (0 == rtl_ustr_ascii_compare(
-                pFrom->pTypeName->buffer,
+                from_envTypeName.pData->buffer,
                 CPPU_CURRENT_LANGUAGE_BINDING_NAME ) &&
             0 == rtl_ustr_ascii_compare(
-                pTo->pTypeName->buffer, UNO_LB_UNO ))
+                to_envTypeName.pData->buffer, UNO_LB_UNO ))
         {
             // ref count initially 1
             pMapping = bridges::cpp_uno::shared::Bridge::createMapping(
@@ -221,10 +254,10 @@ void SAL_CALL uno_ext_getMapping(
                 (uno_Environment *)pTo->pExtEnv, 0 );
         }
         else if (0 == rtl_ustr_ascii_compare(
-                     pTo->pTypeName->buffer,
+                     to_envTypeName.pData->buffer,
                      CPPU_CURRENT_LANGUAGE_BINDING_NAME ) &&
                  0 == rtl_ustr_ascii_compare(
-                     pFrom->pTypeName->buffer, UNO_LB_UNO ))
+                     from_envTypeName.pData->buffer, UNO_LB_UNO ))
         {
             // ref count initially 1
             pMapping = bridges::cpp_uno::shared::Bridge::createMapping(
