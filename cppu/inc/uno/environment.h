@@ -4,9 +4,9 @@
  *
  *  $RCSfile: environment.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:39:30 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:34:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,8 @@
 #ifndef _RTL_USTRING_H_
 #include <rtl/ustring.h>
 #endif
+
+#include <stdarg.h>
 
 #ifdef __cplusplus
 extern "C"
@@ -283,11 +285,11 @@ typedef void (SAL_CALL * uno_initEnvironmentFunc)( uno_Environment * pEnv );
     is created and registered. The environment revokes itself on last release() call.
 
     @param ppEnv        inout parameter of environment; given environment will be released
-    @param pEnvTypeName type name of environment
+    @param pEnvDcp      descriptor of environment
     @param pContext     some context pointer (e.g., to distinguish java vm; set 0 if not needed)
 */
 void SAL_CALL uno_getEnvironment(
-    uno_Environment ** ppEnv, rtl_uString * pEnvTypeName, void * pContext )
+    uno_Environment ** ppEnv, rtl_uString * pEnvDcp, void * pContext )
     SAL_THROW_EXTERN_C();
 
 /** Gets all specified environments. Caller has to release returned environments and free allocated
@@ -296,21 +298,21 @@ void SAL_CALL uno_getEnvironment(
     @param pppEnvs      out param; pointer to array of environments
     @param pnLen        out param; length of array
     @param memAlloc     function for allocating memory that is passed back
-    @param pEnvTypeName type name of environments; 0 defaults to all
+    @param pEnvDcp      descriptor of environments; 0 defaults to all
 */
 void SAL_CALL uno_getRegisteredEnvironments(
     uno_Environment *** pppEnvs, sal_Int32 * pnLen, uno_memAlloc memAlloc,
-    rtl_uString * pEnvTypeName )
+    rtl_uString * pEnvDcp )
     SAL_THROW_EXTERN_C();
 
 /** Creates an environment. The new environment is anonymous (NOT publicly registered/ accessible).
 
     @param ppEnv        out parameter of environment; given environment will be released
-    @param pEnvTypeName name of environment
+    @param pEnvDcp      descriptor of environment
     @param pContext     context pointer (e.g., to distinguish java vm); set 0 if not needed
 */
 void SAL_CALL uno_createEnvironment(
-    uno_Environment ** ppEnv, rtl_uString * pEnvTypeName, void * pContext )
+    uno_Environment ** ppEnv, rtl_uString * pEnvDcp, void * pContext )
     SAL_THROW_EXTERN_C();
 
 /** Dumps out environment information, i.e. registered interfaces.
@@ -325,12 +327,70 @@ void SAL_CALL uno_dumpEnvironment(
 /** Dumps out environment information, i.e. registered interfaces.
 
     @param stream       output stream (FILE *)
-    @param pEnvTypeName type name of environment to be dumped
+    @param pEnvDcp      descritpro of environment to be dumped
     @param pFilter      if not null, filters output
 */
 void SAL_CALL uno_dumpEnvironmentByName(
-    void * stream, rtl_uString * pEnvTypeName, const sal_Char * pFilter )
+    void * stream, rtl_uString * pEnvDcp, const sal_Char * pFilter )
     SAL_THROW_EXTERN_C();
+
+
+
+/** Returns the current Environment.
+    In case no Environment has explicitly been entered, a purpose free
+    default environment gets returned (e.g. the "uno" or "gcc3" Environment).
+
+    @param ppEnv      inout parameter; a given environment will be released
+    @param pTypeName  the optional type of the environment, falls back to "uno"
+    @since UDK 3.2.7
+*/
+void SAL_CALL uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl_uString * pTypeName)
+    SAL_THROW_EXTERN_C();
+
+/** Typedef for variable argument function.
+ */
+typedef void SAL_CALL uno_EnvCallee(va_list param);
+
+/** Invoke the passed function in the given environment.
+
+    @param pEnv     the target environment
+    @param pCallee  the function to call
+    @param param    the parameter pointer passed to the function
+    @since UDK 3.2.7
+ */
+void SAL_CALL uno_Environment_invoke_v(uno_Environment * pEnv, uno_EnvCallee * pCallee, va_list param)
+    SAL_THROW_EXTERN_C();
+
+/** Invoke the passed function in the given environment.
+
+    @param pEnv     the target environment
+    @param pCallee  the function to call
+    @param ...      the parameters passed to the function
+    @since UDK 3.2.7
+*/
+void SAL_CALL uno_Environment_invoke (uno_Environment * pEnv, uno_EnvCallee * pCallee, ...)
+    SAL_THROW_EXTERN_C();
+
+/** Enter an environment explicitly.
+
+    @param pEnv    the environment to enter; NULL leaves all environments
+    @since UDK 3.2.7
+*/
+void SAL_CALL uno_Environment_enter(uno_Environment * pEnv)
+    SAL_THROW_EXTERN_C();
+
+/** Check if a particular environment is currently valid, so
+    that objects of that environment might be called.
+
+    @param pEnv                    the environment
+    @param rtl_uString ** pReason  the reason, if it is not valid
+    @return                        1 == valid, 0 == invalid
+    @since UDK 3.2.7
+*/
+int SAL_CALL uno_Environment_isValid(uno_Environment * pEnv, rtl_uString ** pReason)
+    SAL_THROW_EXTERN_C();
+
+
 
 #ifdef __cplusplus
 }
