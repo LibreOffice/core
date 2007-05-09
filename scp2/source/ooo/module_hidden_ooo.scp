@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 11:55:09 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:52:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -297,6 +297,7 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Comphelper2,
 	gid_File_Lib_Cppu,
 	gid_File_Lib_Cppuhelper,
+	gid_File_Lib_PurpEnvHelper,
 	gid_File_Lib_Defreg,
 	gid_File_Lib_Corefl,
 	gid_File_Lib_Cpld,
@@ -394,6 +395,8 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Jvmfwk,
 	gid_File_Lib_Unoxml,
 	gid_File_Lib_Urp_Uno,
+	gid_File_Lib_Unsafe_UnoUno,
+	gid_File_Lib_Affine_UnoUno,
 	gid_File_Lib_Vos,
 	gid_File_Lib_Localebe,
 	gid_File_Lib_Migrationoo2,
