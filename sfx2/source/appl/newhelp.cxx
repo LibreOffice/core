@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:07:12 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:26:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1643,6 +1643,16 @@ void SfxHelpWindow_Impl::loadHelpContent(const ::rtl::OUString& sHelpURL, sal_Bo
     Reference< XComponentLoader > xLoader(getTextFrame(), UNO_QUERY);
     if (!xLoader.is())
         return;
+
+    // --> PB 2007-03-12 #134037#
+    // If a print job runs do not open a new page
+    Reference< XFrame > xFrame = pTextWin->getFrame();
+    if ( xFrame->getController().is() && !xFrame->getController()->suspend( sal_True ) )
+    {
+        xFrame->getController()->suspend( sal_False );
+        return;
+    }
+    // <--
 
     // save url to history
     if (bAddToHistory)
