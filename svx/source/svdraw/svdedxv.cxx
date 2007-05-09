@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:40:31 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:32:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -768,10 +768,10 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
 
             aHdl.SetMoveOutside(TRUE);
 
-            if(!IsMarkHdlWhenTextEdit())
-            {
-                AdjustMarkHdl(); //HMHsal_True);
-            }
+            // #i72757#
+            // Since IsMarkHdlWhenTextEdit() is ignored, it is necessary
+            // to call AdjustMarkHdl() always.
+            AdjustMarkHdl();
 
             pTextEditOutlinerView=ImpMakeOutlinerView(pWin,!bEmpty,pGivenOutlinerView);
 
@@ -989,14 +989,10 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
                 ((SdrTextObj*)pTEObj)->SetTextAnimationAllowed(sal_True);
             }
 
-            // #i33755#
-            // If !IsMarkHdlWhenTextEdit(), it is necessary to
-            // again reset the handles since they evtl. need to
-            // be shown again
-            if(!IsMarkHdlWhenTextEdit())
-            {
-                AdjustMarkHdl(); //HMHsal_True);
-            }
+            // #i72757#
+            // Since IsMarkHdlWhenTextEdit() is ignored, it is necessary
+            // to call AdjustMarkHdl() always.
+            AdjustMarkHdl();
         }
         // alle OutlinerViews loeschen
         for (ULONG i=pTEOutliner->GetViewCount(); i>0;) {
