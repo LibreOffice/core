@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namecont.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:39:18 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:22:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,9 @@
 #include "namecont.hxx"
 #include "basicmanagerrepository.hxx"
 
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -1722,6 +1725,17 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     uno::Reference< embed::XStorage > xSourceLibrariesStor;
     if( bStorage )
     {
+        // first of all, clean the target library storage, since the storing procedure must do overwrite
+        try {
+            if ( xStorage->hasByName( maLibrariesDir ) )
+                xStorage->removeElement( maLibrariesDir );
+        }
+        catch( uno::Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+            return;
+        }
+
         // Don't write if only empty standard lib exists
         if( nNameCount == 1 )
         {
