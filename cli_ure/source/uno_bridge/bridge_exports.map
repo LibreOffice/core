@@ -1,0 +1,8 @@
+UDK_3_0_0 {
+    global:
+        component_canUnload;
+        uno_initEnvironment;
+        uno_ext_getMapping;
+    local:
+    *;
+};
