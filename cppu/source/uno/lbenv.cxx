@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:21:20 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:39:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppu.hxx"
+
+#include "cppu/EnvDcp.hxx"
 
 #include "sal/alloca.h"
 #include "osl/diagnose.h"
@@ -146,11 +148,11 @@ struct EnvironmentsData
     ~EnvironmentsData();
 
     inline void getEnvironment(
-        uno_Environment ** ppEnv, const OUString & rTypeName, void * pContext );
+        uno_Environment ** ppEnv, const OUString & rEnvDcp, void * pContext );
     inline void registerEnvironment( uno_Environment ** ppEnv );
     inline void getRegisteredEnvironments(
         uno_Environment *** pppEnvs, sal_Int32 * pnLen,
-        uno_memAlloc memAlloc, const OUString & rEnvTypeName );
+        uno_memAlloc memAlloc, const OUString & rEnvDcp );
 };
 
 //------------------------------------------------------------------------------
@@ -180,7 +182,7 @@ struct uno_DefaultEnvironment : public uno_ExtEnvironment
     OId2ObjectMap aOId2ObjectMap;
 
     uno_DefaultEnvironment(
-        const OUString & rTypeName_, void * pContext_ );
+        const OUString & rEnvDcp_, void * pContext_ );
     ~uno_DefaultEnvironment();
 };
 
@@ -373,9 +375,11 @@ static void SAL_CALL defenv_registerProxyInterface(
 }
 
 //------------------------------------------------------------------------------
-static void SAL_CALL defenv_revokeInterface(
-    uno_ExtEnvironment * pEnv, void * pInterface )
+static void SAL_CALL s_stub_defenv_revokeInterface(va_list param)
 {
+    uno_ExtEnvironment * pEnv       = va_arg(param, uno_ExtEnvironment *);
+    void               * pInterface = va_arg(param, void *);
+
     OSL_ENSURE( pEnv && pInterface, "### null ptr!" );
     uno_DefaultEnvironment * that =
         static_cast< uno_DefaultEnvironment * >( pEnv );
@@ -459,6 +463,11 @@ static void SAL_CALL defenv_revokeInterface(
             }
         }
     }
+}
+
+static void SAL_CALL defenv_revokeInterface(uno_ExtEnvironment * pEnv, void * pInterface)
+{
+    uno_Environment_invoke(&pEnv->aBase, s_stub_defenv_revokeInterface, pEnv, pInterface);
 }
 
 //------------------------------------------------------------------------------
@@ -624,7 +633,7 @@ static void SAL_CALL defenv_dispose( uno_Environment * )
 
 //______________________________________________________________________________
 uno_DefaultEnvironment::uno_DefaultEnvironment(
-    const OUString & rTypeName_, void * pContext_ )
+    const OUString & rEnvDcp_, void * pContext_ )
     : nRef( 0 ),
       nWeakRef( 0 )
 {
@@ -639,8 +648,8 @@ uno_DefaultEnvironment::uno_DefaultEnvironment(
     that->dispose = defenv_dispose;
     that->pExtEnv = this;
     // identifier
-    ::rtl_uString_acquire( rTypeName_.pData );
-    that->pTypeName = rTypeName_.pData;
+    ::rtl_uString_acquire( rEnvDcp_.pData );
+    that->pTypeName = rEnvDcp_.pData;
     that->pContext = pContext_;
 
     // will be late initialized
@@ -805,11 +814,11 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
 
 //##############################################################################
 extern "C" void SAL_CALL uno_dumpEnvironmentByName(
-    void * stream, rtl_uString * pEnvTypeName, const sal_Char * pFilter )
+    void * stream, rtl_uString * pEnvDcp, const sal_Char * pFilter )
     SAL_THROW_EXTERN_C()
 {
     uno_Environment * pEnv = 0;
-    uno_getEnvironment( &pEnv, pEnvTypeName, 0 );
+    uno_getEnvironment( &pEnv, pEnvDcp, 0 );
     if (pEnv)
     {
         ::uno_dumpEnvironment( stream, pEnv, pFilter );
@@ -819,7 +828,7 @@ extern "C" void SAL_CALL uno_dumpEnvironmentByName(
     {
         ::rtl::OUStringBuffer buf( 32 );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("environment \"") );
-        buf.append( pEnvTypeName );
+        buf.append( pEnvDcp );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" does not exist!") );
         writeLine( stream, buf.makeStringAndClear(), pFilter );
     }
@@ -948,7 +957,7 @@ EnvironmentsData::~EnvironmentsData()
 
 //______________________________________________________________________________
 inline void EnvironmentsData::getEnvironment(
-    uno_Environment ** ppEnv, const OUString & rEnvTypeName, void * pContext )
+    uno_Environment ** ppEnv, const OUString & rEnvDcp, void * pContext )
 {
     if (*ppEnv)
     {
@@ -958,7 +967,7 @@ inline void EnvironmentsData::getEnvironment(
 
     OUString aKey(
         OUString::valueOf( reinterpret_cast< sal_IntPtr >(pContext) ) );
-    aKey += rEnvTypeName;
+    aKey += rEnvDcp;
 
     // try to find registered mapping
     OUString2EnvironmentMap::const_iterator const iFind(
@@ -1015,7 +1024,7 @@ inline void EnvironmentsData::registerEnvironment( uno_Environment ** ppEnv )
 //______________________________________________________________________________
 inline void EnvironmentsData::getRegisteredEnvironments(
     uno_Environment *** pppEnvs, sal_Int32 * pnLen, uno_memAlloc memAlloc,
-    const OUString & rEnvTypeName )
+    const OUString & rEnvDcp )
 {
     OSL_ENSURE( pppEnvs && pnLen && memAlloc, "### null ptr!" );
 
@@ -1029,8 +1038,8 @@ inline void EnvironmentsData::getRegisteredEnvironments(
           iPos != aName2EnvMap.end(); ++iPos )
     {
         uno_Environment * pWeak = iPos->second;
-        if (!rEnvTypeName.getLength() ||
-            rEnvTypeName.equals( pWeak->pTypeName ))
+        if (!rEnvDcp.getLength() ||
+            rEnvDcp.equals( pWeak->pTypeName ))
         {
             ppFound[nSize] = 0;
             (*pWeak->harden)( &ppFound[nSize], pWeak );
@@ -1056,59 +1065,88 @@ inline void EnvironmentsData::getRegisteredEnvironments(
     }
 }
 
+static bool loadEnv(OUString const  & cLibStem,
+                    uno_Environment * pEnv,
+                    void            * /*pContext*/)
+{
+    // late init with some code from matching uno language binding
+    ::rtl::OUStringBuffer aLibName( 16 );
+#if defined SAL_DLLPREFIX
+    aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM(SAL_DLLPREFIX) );
+#endif
+    aLibName.append(cLibStem);
+    aLibName.appendAscii(RTL_CONSTASCII_STRINGPARAM(SAL_DLLEXTENSION));
+
+    OUString aStr( aLibName.makeStringAndClear() );
+
+    // will be unloaded by environment
+    oslModule hMod = ::osl_loadModule(
+        aStr.pData, SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY );
+
+    if (!hMod)
+        return false;
+
+    OUString aSymbolName(RTL_CONSTASCII_USTRINGPARAM(UNO_INIT_ENVIRONMENT));
+    uno_initEnvironmentFunc fpInit = (uno_initEnvironmentFunc)
+        ::osl_getFunctionSymbol( hMod, aSymbolName.pData );
+    if (!fpInit)
+    {
+        ::osl_unloadModule( hMod );
+        return false;
+    }
+
+    (*fpInit)( pEnv ); // init of environment
+    ::rtl_registerModuleForUnloading( hMod );
+
+    return true;
+}
+
+
 extern "C"
 {
 
 //------------------------------------------------------------------------------
 static uno_Environment * initDefaultEnvironment(
-    const OUString & rEnvTypeName, void * pContext )
+    const OUString & rEnvDcp, void * pContext )
 {
-    uno_Environment * pEnv = 0;
+    uno_Environment * pEnv = &(new uno_DefaultEnvironment( rEnvDcp, pContext ))->aBase;
+    (*pEnv->acquire)( pEnv );
+
+    OUString envTypeName = cppu::EnvDcp::getTypeName(rEnvDcp);
 
     // create default environment
-    if (rEnvTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_UNO) ))
+    if (envTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_UNO) ))
     {
-        uno_DefaultEnvironment * that = new uno_DefaultEnvironment(
-            rEnvTypeName, pContext );
-        pEnv = (uno_Environment *)that;
-        (*pEnv->acquire)( pEnv );
+        uno_DefaultEnvironment * that = (uno_DefaultEnvironment *)pEnv;
         that->computeObjectIdentifier = unoenv_computeObjectIdentifier;
         that->acquireInterface = unoenv_acquireInterface;
         that->releaseInterface = unoenv_releaseInterface;
+
+        OUString envPurpose = cppu::EnvDcp::getPurpose(rEnvDcp);
+        if (envPurpose.getLength())
+        {
+            rtl::OUString libStem = envPurpose.copy(envPurpose.lastIndexOf(':') + 1);
+            libStem += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_uno_uno") );
+
+            if(!loadEnv(libStem, pEnv, pContext))
+            {
+                pEnv->release(pEnv);
+                return NULL;
+            }
+        }
     }
     else
     {
         // late init with some code from matching uno language binding
         ::rtl::OUStringBuffer aLibName( 16 );
-#if defined SAL_DLLPREFIX
-        aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM(SAL_DLLPREFIX) );
-#endif
-        aLibName.append( rEnvTypeName );
-        aLibName.appendAscii(
-            RTL_CONSTASCII_STRINGPARAM("_uno" SAL_DLLEXTENSION) );
+        aLibName.append( envTypeName );
+        aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM("_uno" ) );
         OUString aStr( aLibName.makeStringAndClear() );
-        // will be unloaded by environment
-        oslModule hMod = ::osl_loadModule(
-            aStr.pData, SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY );
-        if (hMod)
+
+        if (!loadEnv(aStr, pEnv, pContext))
         {
-            OUString aSymbolName(
-                RTL_CONSTASCII_USTRINGPARAM(UNO_INIT_ENVIRONMENT) );
-            uno_initEnvironmentFunc fpInit = (uno_initEnvironmentFunc)
-                ::osl_getFunctionSymbol( hMod, aSymbolName.pData );
-            if (fpInit)
-            {
-                pEnv = reinterpret_cast< uno_Environment * >(
-                    new uno_DefaultEnvironment(
-                        rEnvTypeName, pContext ) );
-                (*pEnv->acquire)( pEnv );
-                (*fpInit)( pEnv ); // init of environment
-                ::rtl_registerModuleForUnloading( hMod );
-            }
-            else
-            {
-                ::osl_unloadModule( hMod );
-            }
+            pEnv->release(pEnv);
+            return NULL;
         }
     }
 
@@ -1117,32 +1155,32 @@ static uno_Environment * initDefaultEnvironment(
 
 //##############################################################################
 void SAL_CALL uno_createEnvironment(
-    uno_Environment ** ppEnv, rtl_uString * pEnvTypeName, void * pContext )
+    uno_Environment ** ppEnv, rtl_uString * pEnvDcp, void * pContext )
     SAL_THROW_EXTERN_C()
 {
     OSL_ENSURE( ppEnv, "### null ptr!" );
     if (*ppEnv)
         (*(*ppEnv)->release)( *ppEnv );
 
-    OUString const & rEnvTypeName = OUString::unacquired( &pEnvTypeName );
-    *ppEnv = initDefaultEnvironment( rEnvTypeName, pContext );
+    OUString const & rEnvDcp = OUString::unacquired( &pEnvDcp );
+    *ppEnv = initDefaultEnvironment( rEnvDcp, pContext );
 }
 
 //##############################################################################
-void SAL_CALL uno_getEnvironment(
-    uno_Environment ** ppEnv, rtl_uString * pEnvTypeName, void * pContext )
+void SAL_CALL uno_direct_getEnvironment(
+    uno_Environment ** ppEnv, rtl_uString * pEnvDcp, void * pContext )
     SAL_THROW_EXTERN_C()
 {
     OSL_ENSURE( ppEnv, "### null ptr!" );
-    OUString const & rEnvTypeName = OUString::unacquired( &pEnvTypeName );
+    OUString const & rEnvDcp = OUString::unacquired( &pEnvDcp );
 
     EnvironmentsData & rData = getEnvironmentsData();
 
     ::osl::MutexGuard guard( rData.mutex );
-    rData.getEnvironment( ppEnv, rEnvTypeName, pContext );
+    rData.getEnvironment( ppEnv, rEnvDcp, pContext );
     if (! *ppEnv)
     {
-        *ppEnv = initDefaultEnvironment( rEnvTypeName, pContext );
+        *ppEnv = initDefaultEnvironment( rEnvDcp, pContext );
         if (*ppEnv)
         {
             // register new environment:
@@ -1154,7 +1192,7 @@ void SAL_CALL uno_getEnvironment(
 //##############################################################################
 void SAL_CALL uno_getRegisteredEnvironments(
     uno_Environment *** pppEnvs, sal_Int32 * pnLen, uno_memAlloc memAlloc,
-    rtl_uString * pEnvTypeName )
+    rtl_uString * pEnvDcp )
     SAL_THROW_EXTERN_C()
 {
     EnvironmentsData & rData = getEnvironmentsData();
@@ -1162,7 +1200,7 @@ void SAL_CALL uno_getRegisteredEnvironments(
     ::osl::MutexGuard guard( rData.mutex );
     rData.getRegisteredEnvironments(
         pppEnvs, pnLen, memAlloc,
-        (pEnvTypeName ? OUString(pEnvTypeName) : OUString()) );
+        (pEnvDcp ? OUString(pEnvDcp) : OUString()) );
 }
 
 } // extern "C"
