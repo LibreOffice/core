@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.230 $
+ *  $Revision: 1.231 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:18:25 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:52:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -513,6 +513,19 @@ File gid_File_Lib_Cppuhelper
     Name = STRING(CONCAT5(cppuhelper,UDK_MAJOR,COMID,.,dll));
   #endif
 End
+
+File gid_File_Lib_PurpEnvHelper
+    TXT_FILE_BODY;
+    Styles = (PACKED, PATCH);
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT5(libuno_purpenvhelper,COMID,UNXSUFFIX,.,UDK_MAJOR));
+  #else
+    Name = STRING(CONCAT5(purpenvhelper,UDK_MAJOR,COMID,.,dll));
+  #endif
+End
+
+
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Ctl , ctl)
 
@@ -2312,6 +2325,28 @@ File gid_File_Lib_Urp_Uno
     Name = STRING(CONCAT2(liburp_uno,UNXSUFFIX));
   #else
     Name = "urp_uno.dll";
+  #endif
+End
+
+File gid_File_Lib_Unsafe_UnoUno
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT2(libunsafe_uno_uno,UNXSUFFIX));
+  #else
+    Name = "unsafe_uno_uno.dll";
+  #endif
+End
+
+File gid_File_Lib_Affine_UnoUno
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT2(libaffine_uno_uno,UNXSUFFIX));
+  #else
+    Name = "affine_uno_uno.dll";
   #endif
 End
 
