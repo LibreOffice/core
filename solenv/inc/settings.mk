@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.212 $
+#   $Revision: 1.213 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-26 13:56:54 $
+#   last change: $Author: kz $ $Date: 2007-05-09 13:26:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -739,7 +739,7 @@ INCGUI=$(PRJ)$/$(GUIBASE)$/inc
 INCCOM=$(OUT)$/inc
 INCCOMX=$(OUT)$/inc
 INCUNOIDL=$(INCCOM)$/$(PRJNAME)
-INCDEPN=. $(INCGUI) $(INCLOCAL) $(INC)
+INCDEPN=. $(INCGUI) $(INCLOCAL) $(INC) $(INC)$/$(PRJNAME)
 .IF "$(PRJINC)"!=""
 INCLOCPRJ=$(foreach,i,$(PRJINC) $i$/inc)
 INCDEPN+=$(INCLOCPRJ)
@@ -901,7 +901,7 @@ CDEFSDBGUTIL=-DDBG_UTIL
 CDEFSOPT=-DOPTIMIZE
 HDEFS=-D:$(GUI) -D:$(COM)
 
-MKDEPFLAGS+=-D_SOLAR__PRIVATE -I$(INCDEPN:s/ / -I/:s/-I-I/-I/)
+MKDEPFLAGS+=-I$(INCDEPN:s/ / -I/:s/-I-I/-I/)
 MKDEPALLINC=$(SOLARINC:s/-I/ -I/)
 MKDEPPREINC=-I$(PREPATH)$/$(INPATH)$/inc$(UPDMINOREXT)
 MKDEPSOLENV=-I$(SOLARENV)$/inc -I$(SOLARENV)$/$(GUI)$(CVER)$(COMEX)$/inc
