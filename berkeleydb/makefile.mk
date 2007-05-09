@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-05 13:16:57 $
+#   last change: $Author: kz $ $Date: 2007-05-09 13:20:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,9 @@ all:
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=db-4.2.52.NC
+TARFILE_NAME=db-4.2.52.NC-custom
+TARFILE_ROOTDIR=db-4.2.52.NC
+
 ADDITIONAL_FILES=    \
     makefile.mk btree$/makefile.mk clib$/makefile.mk common$/makefile.mk  \
     cxx$/makefile.mk db$/makefile.mk dbm$/makefile.mk dbreg$/makefile.mk  \
