@@ -4,9 +4,9 @@
  *
  *  $RCSfile: launcher.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:19:31 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:24:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,12 @@
  *
  ************************************************************************/
 
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
+
+#define UNICODE
 #include "launcher.hxx"
+
 
 #ifndef _WINDOWS_
 #   define WIN32_LEAN_AND_MEAN
@@ -44,6 +46,7 @@
 #pragma warning(push, 1)
 #endif
 #   include <windows.h>
+#   include <shellapi.h>
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
