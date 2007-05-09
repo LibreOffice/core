@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:01:55 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:34:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,8 @@ class ImplLayoutArgs;
 class VirtualDevice;
 
 namespace basegfx {
+    class B2DHomMatrix;
+    class B2DPolygon;
     class B2DPolyPolygon;
     typedef ::std::vector< B2DPolyPolygon > B2DPolyPolygonVector;
 }
@@ -909,6 +911,11 @@ public:
     void                SetRefPoint( const Point& rRefPoint );
     const Point&        GetRefPoint() const { return maRefPoint; }
     BOOL                IsRefPoint() const { return mbRefPoint; }
+
+     // #i75163#
+    basegfx::B2DHomMatrix GetViewTransformation() const;
+    basegfx::B2DHomMatrix GetInverseViewTransformation() const;
+    SAL_DLLPRIVATE void ImplInvalidateViewTransform();
 
     /** Set an offset in pixel
 
