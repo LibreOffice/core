@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:06:20 $
+#   last change: $Author: kz $ $Date: 2007-05-09 13:25:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,8 @@ UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 UNOUCRDEP=$(UNOUCRRDB)
 UNOUCROUT=$(OUT)$/inc$/$(TARGET)
 INCPRE+=$(OUT)$/inc$/$(TARGET) $(OUT)$/inc$/private
+
+CPPUMAKERFLAGS= -C
 
 UNOTYPES= \
         com.sun.star.beans.PropertyAttribute \
