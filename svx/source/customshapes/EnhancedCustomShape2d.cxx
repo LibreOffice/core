@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-07 13:12:31 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:30:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,11 @@
 
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+// #i76201#
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #endif
 
 #include <math.h>
@@ -1808,8 +1813,13 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 break;
                 case MOVETO :
                 {
-                    if ( aNewB2DPolygon.count() > 1L )
-                        aNewB2DPolyPolygon.append( aNewB2DPolygon );
+                    if(aNewB2DPolygon.count() > 1L)
+                    {
+                        // #i76201# Add conversion to closed polygon when first and last points are equal
+                        basegfx::tools::checkClosed(aNewB2DPolygon);
+                        aNewB2DPolyPolygon.append(aNewB2DPolygon);
+                    }
+
                     aNewB2DPolygon.clear();
 
                     if ( rSrcPt < nCoordSize )
@@ -1825,9 +1835,12 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 {
                     if(aNewB2DPolygon.count())
                     {
-                        aNewB2DPolygon.setClosed(true);
-                        if ( aNewB2DPolygon.count() > 1L )
-                            aNewB2DPolyPolygon.append( aNewB2DPolygon );
+                        if(aNewB2DPolygon.count() > 1L)
+                        {
+                            aNewB2DPolygon.setClosed(true);
+                            aNewB2DPolyPolygon.append(aNewB2DPolygon);
+                        }
+
                         aNewB2DPolygon.clear();
                     }
                 }
@@ -1853,8 +1866,13 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
 
                 case ANGLEELLIPSE :
                 {
-                    if ( aNewB2DPolygon.count() > 1l )
-                        aNewB2DPolyPolygon.append( aNewB2DPolygon );
+                    if(aNewB2DPolygon.count() > 1L)
+                    {
+                        // #i76201# Add conversion to closed polygon when first and last points are equal
+                        basegfx::tools::checkClosed(aNewB2DPolygon);
+                        aNewB2DPolyPolygon.append(aNewB2DPolygon);
+                    }
+
                     aNewB2DPolygon.clear();
                 }
                 case ANGLEELLIPSETO :
@@ -1947,8 +1965,13 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 case ARC :
                 case CLOCKWISEARC :
                 {
-                    if ( aNewB2DPolygon.count() > 1L )
-                        aNewB2DPolyPolygon.append( aNewB2DPolygon );
+                    if(aNewB2DPolygon.count() > 1L)
+                    {
+                        // #i76201# Add conversion to closed polygon when first and last points are equal
+                        basegfx::tools::checkClosed(aNewB2DPolygon);
+                        aNewB2DPolyPolygon.append(aNewB2DPolygon);
+                    }
+
                     aNewB2DPolygon.clear();
                 }
                 case ARCTO :
@@ -2053,10 +2076,14 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
     if ( rSegmentInd == nSegInfoSize )
         rSegmentInd++;
 
-    if ( aNewB2DPolygon.count() > 1L )
-        aNewB2DPolyPolygon.append( aNewB2DPolygon );
-    aNewB2DPolygon.clear();
-    if ( aNewB2DPolyPolygon.count() )
+    if(aNewB2DPolygon.count() > 1L)
+    {
+        // #i76201# Add conversion to closed polygon when first and last points are equal
+        basegfx::tools::checkClosed(aNewB2DPolygon);
+        aNewB2DPolyPolygon.append(aNewB2DPolygon);
+    }
+
+    if(aNewB2DPolyPolygon.count())
     {
         // #i37011#
         bool bForceCreateTwoObjects(false);
@@ -2086,6 +2113,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 pFill->SetMergedItemSet(aTempSet);
                 rObjectList.push_back(pFill);
             }
+
             if(!bNoStroke)
             {
                 SdrPathObj* pStroke = new SdrPathObj(OBJ_PLIN, aNewB2DPolyPolygon);
@@ -2098,15 +2126,19 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
         }
         else
         {
-            SdrObjKind eObjKind(bNoFill ? OBJ_PLIN : OBJ_POLY);
-            aNewB2DPolyPolygon.setClosed(true);
-            SdrPathObj* pObj = new SdrPathObj(eObjKind, aNewB2DPolyPolygon);
+            SdrPathObj* pObj = 0;
             SfxItemSet aTempSet(*this);
             aTempSet.Put(SdrShadowItem(sal_False));
 
             if(bNoFill)
             {
+                pObj = new SdrPathObj(OBJ_PLIN, aNewB2DPolyPolygon);
                 aTempSet.Put(XFillStyleItem(XFILL_NONE));
+            }
+            else
+            {
+                aNewB2DPolyPolygon.setClosed(true);
+                pObj = new SdrPathObj(OBJ_POLY, aNewB2DPolyPolygon);
             }
 
             if(bNoStroke)
@@ -2114,8 +2146,11 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 aTempSet.Put(XLineStyleItem(XLINE_NONE));
             }
 
-            pObj->SetMergedItemSet(aTempSet);
-            rObjectList.push_back(pObj);
+            if(pObj)
+            {
+                pObj->SetMergedItemSet(aTempSet);
+                rObjectList.push_back(pObj);
+            }
         }
     }
 }
