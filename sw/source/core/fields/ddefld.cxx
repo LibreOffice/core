@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddefld.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:10:42 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:23:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -298,7 +298,6 @@ SwDDEFieldType::~SwDDEFieldType()
     refLink->Disconnect();
 }
 
-
 SwFieldType* SwDDEFieldType::Copy() const
 {
     SwDDEFieldType* pType = new SwDDEFieldType( aName, GetCmd(), GetType() );
@@ -381,6 +380,9 @@ BOOL SwDDEFieldType::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) con
             rVal.setValue(&bSet, ::getBooleanCppuType());
         }
         break;
+    case FIELD_PROP_PAR5:
+        rVal <<= ::rtl::OUString(aExpansion);
+    break;
     default:
         DBG_ERROR("illegal property");
     }
@@ -404,6 +406,13 @@ BOOL SwDDEFieldType::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId )
         SetType( *(sal_Bool*)rVal.getValue() ? sfx2::LINKUPDATE_ALWAYS
                                              : sfx2::LINKUPDATE_ONCALL );
         break;
+    case FIELD_PROP_PAR5:
+    {
+        ::rtl::OUString sTemp;
+        rVal >>= sTemp;
+        aExpansion = sTemp;
+    }
+    break;
     default:
         DBG_ERROR("illegal property");
     }
