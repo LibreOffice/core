@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poly.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 20:14:35 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:22:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -257,7 +257,8 @@ public:
     ::basegfx::B2DPolygon getB2DPolygon() const;
 
     // constructor to convert from ::basegfx::B2DPolygon
-    Polygon(const ::basegfx::B2DPolygon& rPolygon);
+    // #i76339# made explicit
+    explicit Polygon(const ::basegfx::B2DPolygon& rPolygon);
 };
 
 // ---------------
@@ -355,7 +356,8 @@ public:
     ::basegfx::B2DPolyPolygon getB2DPolyPolygon() const;
 
     // constructor to convert from ::basegfx::B2DPolyPolygon
-    PolyPolygon(const ::basegfx::B2DPolyPolygon& rPolyPolygon);
+     // #i76339# made explicit
+     explicit PolyPolygon(const ::basegfx::B2DPolyPolygon& rPolyPolygon);
 };
 
 typedef std::vector< PolyPolygon > PolyPolyVector;
