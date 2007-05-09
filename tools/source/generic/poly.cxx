@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poly.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:10:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:22:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2183,50 +2183,122 @@ void Polygon::Write( SvStream& rOStream ) const
 }
 
 // -----------------------------------------------------------------------
-// convert to ::basegfx::B2DPolygon and return
-::basegfx::B2DPolygon Polygon::getB2DPolygon() const
+// #i74631# numerical correction method for B2DPolygon
+bool impCorrectVectorAForContinuity(basegfx::B2DVector& rNewVectorA, BYTE nCFlag, const basegfx::B2DPolygon& rTarget, sal_uInt32 nCurrentIndex, sal_uInt32 nPreviousIndex)
 {
-    ::basegfx::B2DPolygon aRetval;
-    const sal_uInt16 nCount(mpImplPolygon->mnPoints);
-
-    for(sal_uInt16 a(0L); a < nCount;)
+    if(POLY_SMOOTH == nCFlag || POLY_SYMMTR == nCFlag)
     {
-        // get point
-        Point aPointA = mpImplPolygon->mpPointAry[a++];
+        // get previous vectorB
+        const basegfx::B2DVector aPreviousVectorB(rTarget.getControlVectorB(nPreviousIndex));
 
-        // test flags of next point if available, maybe it's a control point
-        if(a < nCount && mpImplPolygon->mpFlagAry && POLY_CONTROL == mpImplPolygon->mpFlagAry[a])
+        if(!aPreviousVectorB.equalZero())
         {
-            // get two control points
-            Point aControlA = mpImplPolygon->mpPointAry[a++];
+            // aPreviousVectorB is used. Make it relative to the new start point
+            const basegfx::B2DVector aRelativeVectorB((rTarget.getB2DPoint(nPreviousIndex) + aPreviousVectorB) - rTarget.getB2DPoint(nCurrentIndex));
 
-            DBG_ASSERT( a < nCount, "Polygon::getB2DPolygon(): invalid polygon (polygon is ending with only one control point)" );
-            if ( a < nCount )
+            if(!aRelativeVectorB.equalZero())
             {
-                Point aControlB = mpImplPolygon->mpPointAry[a++];
+                if(POLY_SMOOTH == nCFlag)
+                {
+                    // apply inverse direction of aRelativeVectorB to aVectorA, keep length
+                    const double fOriginalLength(rNewVectorA.getLength());
+                    rNewVectorA = -aRelativeVectorB;
+                    rNewVectorA.setLength(fOriginalLength);
+                }
+                else // POLY_SYMMTR
+                {
+                    // apply inverse aRelativeVectorB to rNewVectorA
+                    rNewVectorA = -aRelativeVectorB;
+                }
 
-                // add point A
-                ::basegfx::B2DPoint aPoA(aPointA.X(), aPointA.Y());
-                aRetval.append(aPoA);
-
-                // calculate Vectors and add them
-                const sal_uInt32 nDestIndex(aRetval.count() - 1L);
-                ::basegfx::B2DVector aVeA(aControlA.X() - aPointA.X(), aControlA.Y() - aPointA.Y());
-                aRetval.setControlVectorA(nDestIndex, aVeA);
-                ::basegfx::B2DVector aVeB(aControlB.X() - aPointA.X(), aControlB.Y() - aPointA.Y());
-                aRetval.setControlVectorB(nDestIndex, aVeB);
+                return true;
             }
-        }
-        else
-        {
-            // add point A
-            ::basegfx::B2DPoint aPoA(aPointA.X(), aPointA.Y());
-            aRetval.append(aPoA);
         }
     }
 
-    // set closed flag
-    ::basegfx::tools::checkClosed(aRetval);
+    return false;
+}
+
+// -----------------------------------------------------------------------
+// convert to ::basegfx::B2DPolygon and return
+::basegfx::B2DPolygon Polygon::getB2DPolygon() const
+{
+    basegfx::B2DPolygon aRetval;
+    const sal_uInt16 nCount(mpImplPolygon->mnPoints);
+
+    if(mpImplPolygon->mpFlagAry)
+    {
+        // handling for curves. Will work with non-curves too (add test for mpFlagAry
+        // again where commented below), but the more used non-curve case is faster this way
+        for(sal_uInt16 a(0); a < nCount;)
+        {
+            // get start point and add
+            const BYTE nStartPointFlag(mpImplPolygon->mpFlagAry[a]);
+            const Point aStartPoint(mpImplPolygon->mpPointAry[a++]);
+            const basegfx::B2DPoint aB2DStartPoint(aStartPoint.X(), aStartPoint.Y());
+            aRetval.append(aB2DStartPoint);
+
+            // test flags of next point if available, maybe it's a control point
+            if(a < nCount && /*mpImplPolygon->mpFlagAry &&*/ POLY_CONTROL == mpImplPolygon->mpFlagAry[a])
+            {
+                // check if there are two control points
+                if(a + 1 < nCount && POLY_CONTROL == mpImplPolygon->mpFlagAry[a + 1])
+                {
+                    // get the two control points and calculate the vectors
+                    const Point aControlA(mpImplPolygon->mpPointAry[a++]);
+                    const Point aControlB(mpImplPolygon->mpPointAry[a++]);
+                    basegfx::B2DVector aVectorA(aControlA.X() - aStartPoint.X(), aControlA.Y() - aStartPoint.Y());
+                    const basegfx::B2DVector aVectorB(aControlB.X() - aStartPoint.X(), aControlB.Y() - aStartPoint.Y());
+                    const sal_uInt32 nDestIndex(aRetval.count() - 1L);
+
+                    if(nDestIndex)
+                    {
+                        // #i74631# check if we have a C1 or C2 flagged continuity in the source. If yes,
+                        // we will need to correct the to-be-set VectorA to have the numerically
+                        // correct value for double precision
+                        impCorrectVectorAForContinuity(aVectorA, nStartPointFlag, aRetval, nDestIndex, nDestIndex - 1);
+                    }
+
+                    // add Vectors
+                    aRetval.setControlVectorA(nDestIndex, aVectorA);
+                    aRetval.setControlVectorB(nDestIndex, aVectorB);
+                }
+                else
+                {
+                    // we have an invalid polygon (!), inform the user
+                    DBG_ASSERT(false, "Polygon::getB2DPolygon(): invalid source polygon (curve edge with only one control point detected)" );
+                }
+            }
+        }
+
+        // set closed flag
+        ::basegfx::tools::checkClosed(aRetval);
+
+        if(aRetval.isClosed() && nCount && aRetval.count())
+        {
+            // #i74631# when a closed poly is produced we need to evtl. correct continuity in start point, too
+            const BYTE nStartPointFlag(mpImplPolygon->mpFlagAry[0]);
+            basegfx::B2DVector aStartVector(aRetval.getControlVectorA(0));
+
+            if(impCorrectVectorAForContinuity(aStartVector, nStartPointFlag, aRetval, 0, aRetval.count() - 1))
+            {
+                aRetval.setControlVectorA(0, aStartVector);
+            }
+        }
+    }
+    else
+    {
+        // extra handling for non-curves for speedup
+        for(sal_uInt16 a(0); a < nCount; a++)
+        {
+            // get point and add
+            const Point aPoint(mpImplPolygon->mpPointAry[a]);
+            aRetval.append(basegfx::B2DPoint(aPoint.X(), aPoint.Y()));
+        }
+
+        // set closed flag
+        ::basegfx::tools::checkClosed(aRetval);
+    }
 
     return aRetval;
 }
