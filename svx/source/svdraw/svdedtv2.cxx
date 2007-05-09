@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:51:38 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:32:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1410,54 +1410,64 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
     const SdrPathObj* pSrcPath = PTR_CAST(SdrPathObj, pObj);
     const SdrObjCustomShape* pCustomShape = PTR_CAST(SdrObjCustomShape, pObj);
 
-    // #i37011#
     if(pSrcPath)
     {
-        SdrObject* pLast=NULL; // // fuer die Zuweisung des OutlinerParaObject
-        const XPolyPolygon& rXPP=pSrcPath->GetPathPoly();
-        USHORT nPolyAnz=rXPP.Count();
-        for (USHORT i=0; i<nPolyAnz; i++) {
-            const XPolygon& rAktXP=rXPP.GetObject(i);
-            const XPolygon* pXP=&rAktXP;
-            XPolygon aTmpPoly;
-            USHORT nPointAnz=rAktXP.GetPointCount();
-            if (nPointAnz<2) bMakeLines=FALSE;
-            for (USHORT nPoint=0; nPoint<nPointAnz; nPoint++) {
-                SdrObjKind eKind=OBJ_PATHFILL;
-                if (bMakeLines) {
-                    eKind=OBJ_PLIN;
-                    pXP=&aTmpPoly;
-                    aTmpPoly.SetSize(2);
-                    aTmpPoly[0]=rAktXP[nPoint];
-                    aTmpPoly.SetFlags(0,XPOLY_NORMAL);
-                    aTmpPoly[1]=rAktXP[nPoint+1];
-                    aTmpPoly.SetFlags(1,rAktXP.GetFlags(nPoint+1));
-                    if (aTmpPoly.IsControl(1) && nPoint+3<nPointAnz) { // Aha, Beziersegment
-                        aTmpPoly[2]=rAktXP[nPoint+2];
-                        aTmpPoly.SetFlags(2,rAktXP.GetFlags(nPoint+2));
-                        aTmpPoly[3]=rAktXP[nPoint+3];
-                        aTmpPoly.SetFlags(3,rAktXP.GetFlags(nPoint+3));
-                        nPoint+=2;
-                        eKind=OBJ_PATHLINE;
-                    }
-                    aTmpPoly.SetFlags(USHORT(aTmpPoly.GetPointCount()-1),XPOLY_NORMAL);
-                    if (nPoint>=USHORT(nPointAnz-2)) nPoint=nPointAnz;
-                } else {
-                    nPoint=nPointAnz;
-                    eKind=SdrObjKind(pSrcPath->GetObjIdentifier());
-                }
-                SdrPathObj* pPath=new SdrPathObj(eKind, basegfx::B2DPolyPolygon(pXP->getB2DPolygon()));
-                ImpCopyAttributes(pSrcPath,pPath);
-                pLast=pPath;
-                SdrInsertReason aReason(SDRREASON_VIEWCALL,pSrcPath);
-                rOL.InsertObject(pPath,rPos,&aReason);
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath,TRUE));
-                MarkObj(pPath,pPV,FALSE,TRUE);
+        // #i74631# redesigned due to XpolyPolygon removal and explicit constructors
+        SdrObject* pLast = 0; // fuer die Zuweisung des OutlinerParaObject
+        const basegfx::B2DPolyPolygon& rPolyPolygon(pSrcPath->GetPathPoly());
+        const sal_uInt32 nPolyCount(rPolyPolygon.count());
+
+        for(sal_uInt32 a(0); a < nPolyCount; a++)
+        {
+            const basegfx::B2DPolygon& rCandidate(rPolyPolygon.getB2DPolygon(a));
+            const sal_uInt32 nPointCount(rCandidate.count());
+
+            if(!bMakeLines || nPointCount < 2)
+            {
+                SdrPathObj* pPath = new SdrPathObj((SdrObjKind)pSrcPath->GetObjIdentifier(), basegfx::B2DPolyPolygon(rCandidate));
+                ImpCopyAttributes(pSrcPath, pPath);
+                pLast = pPath;
+                SdrInsertReason aReason(SDRREASON_VIEWCALL, pSrcPath);
+                rOL.InsertObject(pPath, rPos, &aReason);
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath, TRUE));
+                MarkObj(pPath, pPV, FALSE, TRUE);
                 rPos++;
             }
+            else
+            {
+                const sal_uInt32 nLoopCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1);
+
+                for(sal_uInt32 b(0); b < nLoopCount; b++)
+                {
+                    SdrObjKind eKind(OBJ_PLIN);
+                    basegfx::B2DPolygon aNewPolygon;
+
+                    aNewPolygon.append(rCandidate.getB2DPoint(b));
+                    aNewPolygon.append(rCandidate.getB2DPoint((b + 1) % nPointCount));
+
+                    if(rCandidate.areControlPointsUsed())
+                    {
+                        aNewPolygon.setControlVectorA(0, rCandidate.getControlVectorA(b));
+                        aNewPolygon.setControlVectorB(0, rCandidate.getControlVectorB(b));
+                        eKind = OBJ_PATHLINE;
+                    }
+
+                    SdrPathObj* pPath = new SdrPathObj(eKind, basegfx::B2DPolyPolygon(aNewPolygon));
+                    ImpCopyAttributes(pSrcPath, pPath);
+                    pLast = pPath;
+                    SdrInsertReason aReason(SDRREASON_VIEWCALL, pSrcPath);
+                    rOL.InsertObject(pPath, rPos, &aReason);
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath, TRUE));
+                    MarkObj(pPath, pPV, FALSE, TRUE);
+                    rPos++;
+                }
+            }
         }
-        if (pLast!=NULL && pSrcPath->GetOutlinerParaObject()!=NULL)
+
+        if(pLast && pSrcPath->GetOutlinerParaObject())
+        {
             pLast->SetOutlinerParaObject(pSrcPath->GetOutlinerParaObject()->Clone());
+        }
     }
     else if(pCustomShape)
     {
