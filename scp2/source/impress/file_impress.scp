@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_impress.scp,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 13:53:03 $
+ *  last change: $Author: kz $ $Date: 2007-05-09 13:23:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ File gid_File_Exe_Simpress
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = EXENAME(simpress);
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
 End
 
 #if defined UNX && ! defined MACOSX
