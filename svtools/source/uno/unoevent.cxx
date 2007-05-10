@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoevent.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-23 10:24:56 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:37:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,8 +56,6 @@
 #ifndef _SVTOOLS_UNOEVENT_HXX_
 #include "unoevent.hxx"
 #endif
-
-#define ITEMID_MACRO    0
 
 #ifndef _SFXMACITEM_HXX
 #include "macitem.hxx"
