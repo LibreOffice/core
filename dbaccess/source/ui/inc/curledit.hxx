@@ -4,9 +4,9 @@
  *
  *  $RCSfile: curledit.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:46:34 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:31:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,6 @@ class OConnectionURLEdit : public Edit
     BOOL                m_bShowPrefix; // when <TRUE> the prefix will be visible, otherwise not
 
 public:
-    OConnectionURLEdit(Window* pParent, WinBits nStyle = WB_BORDER,BOOL _bShowPrefix = FALSE);
     OConnectionURLEdit(Window* pParent, const ResId& rResId,BOOL _bShowPrefix = FALSE);
     ~OConnectionURLEdit();
 
