@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 13:28:53 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:03:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,7 @@ SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
             bDelete = true;
         }
         SvxFontItem aFont( pFnt->GetFamily(), pFnt->GetName(),
-                        aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet() );
+                        aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet(), RES_CHRATR_FONT );
         pItemSet->Put( aFont );
         pItemSet->Put( aFont, RES_CHRATR_CJK_FONT );
         pItemSet->Put( aFont, RES_CHRATR_CTL_FONT );
@@ -518,7 +518,7 @@ ULONG SwASCIIParser::ReadChars()
                         }
                         pDoc->SplitNode( *pPam->GetPoint(), false );
                         pDoc->Insert( *pPam, SvxFmtBreakItem(
-                                    SVX_BREAK_PAGE_BEFORE ), 0);
+                                    SVX_BREAK_PAGE_BEFORE, RES_BREAK ), 0);
                         pLastStt = pStt;
                         nLineLen = 0;
                         bIns = false;
