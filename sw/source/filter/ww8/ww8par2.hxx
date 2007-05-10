@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:18:54 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:11:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,6 +189,7 @@ public:
         nOutlineLevel( MAXLEVEL ),
         n81Flags( 0 ),
         n81BiDiFlags(0),
+        maWordLR( RES_LR_SPACE ),
         bValid(false),
         bImported(false),
         bColl(false),
