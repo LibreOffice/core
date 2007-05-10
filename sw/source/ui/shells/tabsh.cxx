@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:17:01 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:23:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
-#endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -354,7 +349,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     rSet.Put( aBrush, SID_ATTR_BRUSH_TABLE );
 
     // text direction in boxes
-    SvxFrameDirectionItem aBoxDirection;
+    SvxFrameDirectionItem aBoxDirection( FRMDIR_ENVIRONMENT, RES_FRAMEDIR );
     if(rSh.GetBoxDirection( aBoxDirection ))
         rSet.Put(aBoxDirection, FN_TABLE_BOX_TEXTDIRECTION);
 
@@ -365,7 +360,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
         rSh.Push();
         rSh.GetView().GetViewFrame()->GetDispatcher()->Execute( FN_TABLE_SELECT_ALL, FALSE );
     }
-    SvxBoxInfoItem aBoxInfo;
+    SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
 
         // Tabellenvariante, wenn mehrere Tabellenzellen selektiert
     rSh.GetCrsr();                  //Damit GetCrsrCnt() auch das Richtige liefert
@@ -512,7 +507,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
 
         if(bBoxDirection)
         {
-            SvxFrameDirectionItem aDirection;
+            SvxFrameDirectionItem aDirection( FRMDIR_ENVIRONMENT, RES_FRAMEDIR );
             aDirection.SetValue(static_cast< const SvxFrameDirectionItem* >(pBoxDirection)->GetValue());
             rSh.SetBoxDirection(aDirection);
         }
@@ -687,12 +682,12 @@ void SwTableShell::Execute(SfxRequest &rReq)
             if(!pArgs)
                 break;
             //Items erzeugen, weil wir sowieso nacharbeiten muessen
-            SvxBoxItem     aBox;
+            SvxBoxItem     aBox( RES_BOX );
             SfxItemSet aCoreSet( GetPool(),
                             RES_BOX, RES_BOX,
                             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                             0);
-            SvxBoxInfoItem aCoreInfo;
+            SvxBoxInfoItem aCoreInfo( SID_ATTR_BORDER_INNER );
             aCoreSet.Put(aCoreInfo);
             rSh.GetTabBorders( aCoreSet );
             const SvxBoxItem& rCoreBox = (const SvxBoxItem&)
@@ -709,7 +704,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             else
                 {ASSERT( !this, "Wo ist das Box-Item?" )}
 
-            SvxBoxInfoItem aInfo;
+            SvxBoxInfoItem aInfo( SID_ATTR_BORDER_INNER );
             if (pArgs->GetItemState(SID_ATTR_BORDER_INNER, TRUE, &pItem) == SFX_ITEM_SET)
                 aInfo = *(SvxBoxInfoItem*)pItem;
             aInfo.SetTable( TRUE );
@@ -1572,7 +1567,7 @@ void SwTableShell::GetFrmBorderState(SfxItemSet &rSet)
     SfxItemSet aCoreSet( GetPool(),
                          RES_BOX, RES_BOX,
                          SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER, 0 );
-    SvxBoxInfoItem aBoxInfo;
+    SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
     aCoreSet.Put( aBoxInfo );
     GetShell().GetTabBorders( aCoreSet );
     rSet.Put( aCoreSet );
@@ -1642,7 +1637,7 @@ void SwTableShell::GetLineStyleState(SfxItemSet &rSet)
     SfxItemSet aCoreSet( GetPool(),
                             RES_BOX, RES_BOX,
                             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER, 0);
-    SvxBoxInfoItem aCoreInfo;
+    SvxBoxInfoItem aCoreInfo( SID_ATTR_BORDER_INNER );
     aCoreSet.Put(aCoreInfo);
     GetShell().GetTabBorders( aCoreSet );
 
