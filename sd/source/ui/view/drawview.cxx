@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:10:28 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:33:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,7 @@
 #endif
 
 #include <svx/svdoutl.hxx>
+#undef BMP_OLEOBJ
 #include <svx/svdstr.hrc>
 #include <svx/dialmgr.hxx>
 
