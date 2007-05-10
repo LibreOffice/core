@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 12:05:11 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:53:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,34 +61,6 @@
 #endif
 
 #include <eeitem.hxx>
-
-#define ITEMID_FONTLIST         0
-#define ITEMID_FONT             0
-#define ITEMID_POSTURE          0
-#define ITEMID_WEIGHT           0
-#define ITEMID_FONTHEIGHT       0
-#define ITEMID_UNDERLINE        0
-#define ITEMID_CROSSEDOUT       0
-#define ITEMID_SHADOWED         0
-#define ITEMID_AUTOKERN         0
-#define ITEMID_WORDLINEMODE     0
-#define ITEMID_CONTOUR          0
-#define ITEMID_PROPSIZE         0
-#define ITEMID_COLOR            0
-#define ITEMID_CHARSETCOLOR     0
-#define ITEMID_KERNING          0
-#define ITEMID_CASEMAP          0
-#define ITEMID_ESCAPEMENT       0
-#define ITEMID_LANGUAGE         0
-#define ITEMID_NOLINEBREAK      0
-#define ITEMID_NOHYPHENHERE     0
-#define ITEMID_BLINK            0
-#define ITEMID_EMPHASISMARK     0
-#define ITEMID_TWOLINES         0
-#define ITEMID_CHARROTATE       0
-#define ITEMID_CHARSCALE_W      0
-#define ITEMID_CHARRELIEF       0
-
 
 #include <basic/sbx.hxx>
 #define GLOBALOVERFLOW3
@@ -241,34 +213,34 @@ BOOL SvxFontItem::bEnableStoreUnicodeNames = FALSE;
 // -----------------------------------------------------------------------
 
 TYPEINIT1(SvxFontListItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxFontItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxPostureItem, SfxEnumItem);
-TYPEINIT1_AUTOFACTORY(SvxWeightItem, SfxEnumItem);
-TYPEINIT1_AUTOFACTORY(SvxFontHeightItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxFontWidthItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxUnderlineItem, SfxEnumItem);
-TYPEINIT1_AUTOFACTORY(SvxCrossedOutItem, SfxEnumItem);
-TYPEINIT1_AUTOFACTORY(SvxShadowedItem, SfxBoolItem);
-TYPEINIT1_AUTOFACTORY(SvxAutoKernItem, SfxBoolItem);
-TYPEINIT1_AUTOFACTORY(SvxWordLineModeItem, SfxBoolItem);
-TYPEINIT1_AUTOFACTORY(SvxContourItem, SfxBoolItem);
-TYPEINIT1_AUTOFACTORY(SvxPropSizeItem, SfxUInt16Item);
-TYPEINIT1_AUTOFACTORY(SvxColorItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxCharSetColorItem, SvxColorItem);
-TYPEINIT1_AUTOFACTORY(SvxKerningItem, SfxInt16Item);
-TYPEINIT1_AUTOFACTORY(SvxCaseMapItem, SfxEnumItem);
-TYPEINIT1_AUTOFACTORY(SvxEscapementItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxLanguageItem, SfxEnumItem);
-TYPEINIT1_AUTOFACTORY(SvxNoLinebreakItem, SfxBoolItem);
-TYPEINIT1_AUTOFACTORY(SvxNoHyphenItem, SfxBoolItem);
-TYPEINIT1_AUTOFACTORY(SvxLineColorItem, SvxColorItem);
-TYPEINIT1_AUTOFACTORY(SvxBlinkItem, SfxBoolItem);
-TYPEINIT1_AUTOFACTORY(SvxEmphasisMarkItem, SfxUInt16Item);
-TYPEINIT1_AUTOFACTORY(SvxTwoLinesItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxScriptTypeItem, SfxUInt16Item);
-TYPEINIT1_AUTOFACTORY(SvxCharRotateItem, SfxUInt16Item);
-TYPEINIT1_AUTOFACTORY(SvxCharScaleWidthItem, SfxUInt16Item);
-TYPEINIT1_AUTOFACTORY(SvxCharReliefItem, SfxEnumItem);
+TYPEINIT1_FACTORY(SvxFontItem, SfxPoolItem, new SvxFontItem(0));
+TYPEINIT1_FACTORY(SvxPostureItem, SfxEnumItem, new SvxPostureItem(ITALIC_NONE, 0));
+TYPEINIT1_FACTORY(SvxWeightItem, SfxEnumItem, new SvxWeightItem(WEIGHT_NORMAL, 0));
+TYPEINIT1_FACTORY(SvxFontHeightItem, SfxPoolItem, new SvxFontHeightItem(240, 100, 0));
+TYPEINIT1_FACTORY(SvxFontWidthItem, SfxPoolItem, new SvxFontWidthItem(0, 100, 0));
+TYPEINIT1_FACTORY(SvxUnderlineItem, SfxEnumItem, new SvxUnderlineItem(UNDERLINE_NONE, 0));
+TYPEINIT1_FACTORY(SvxCrossedOutItem, SfxEnumItem, new SvxCrossedOutItem(STRIKEOUT_NONE, 0));
+TYPEINIT1_FACTORY(SvxShadowedItem, SfxBoolItem, new SvxShadowedItem(sal_False, 0));
+TYPEINIT1_FACTORY(SvxAutoKernItem, SfxBoolItem, new SvxAutoKernItem(sal_False, 0));
+TYPEINIT1_FACTORY(SvxWordLineModeItem, SfxBoolItem, new SvxWordLineModeItem(sal_False, 0));
+TYPEINIT1_FACTORY(SvxContourItem, SfxBoolItem, new SvxContourItem(sal_False, 0));
+TYPEINIT1_FACTORY(SvxPropSizeItem, SfxUInt16Item, new SvxPropSizeItem(100, 0));
+TYPEINIT1_FACTORY(SvxColorItem, SfxPoolItem, new SvxColorItem(0));
+TYPEINIT1_FACTORY(SvxCharSetColorItem, SvxColorItem, new SvxCharSetColorItem(0));
+TYPEINIT1_FACTORY(SvxKerningItem, SfxInt16Item, new SvxKerningItem(0, 0));
+TYPEINIT1_FACTORY(SvxCaseMapItem, SfxEnumItem, new SvxCaseMapItem(SVX_CASEMAP_NOT_MAPPED, 0));
+TYPEINIT1_FACTORY(SvxEscapementItem, SfxPoolItem, new SvxEscapementItem(0));
+TYPEINIT1_FACTORY(SvxLanguageItem, SfxEnumItem, new SvxLanguageItem(LANGUAGE_GERMAN, 0));
+TYPEINIT1_FACTORY(SvxNoLinebreakItem, SfxBoolItem, new SvxNoLinebreakItem(sal_True, 0));
+TYPEINIT1_FACTORY(SvxNoHyphenItem, SfxBoolItem, new SvxNoHyphenItem(sal_True, 0));
+TYPEINIT1_FACTORY(SvxLineColorItem, SvxColorItem, new SvxLineColorItem(0));
+TYPEINIT1_FACTORY(SvxBlinkItem, SfxBoolItem, new SvxBlinkItem(sal_False, 0));
+TYPEINIT1_FACTORY(SvxEmphasisMarkItem, SfxUInt16Item, new SvxEmphasisMarkItem(EMPHASISMARK_NONE, 0));
+TYPEINIT1_FACTORY(SvxTwoLinesItem, SfxPoolItem, new SvxTwoLinesItem(sal_True, 0, 0, 0));
+TYPEINIT1_FACTORY(SvxScriptTypeItem, SfxUInt16Item, new SvxScriptTypeItem);
+TYPEINIT1_FACTORY(SvxCharRotateItem, SfxUInt16Item, new SvxCharRotateItem(0, sal_False, 0));
+TYPEINIT1_FACTORY(SvxCharScaleWidthItem, SfxUInt16Item, new SvxCharScaleWidthItem(100, 0));
+TYPEINIT1_FACTORY(SvxCharReliefItem, SfxEnumItem, new SvxCharReliefItem(RELIEF_NONE, 0));
 
 
 TYPEINIT1(SvxScriptSetItem, SfxSetItem );
