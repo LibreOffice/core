@@ -4,9 +4,9 @@
  *
  *  $RCSfile: standardcontrol.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:33:05 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:50:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,7 +247,7 @@ namespace pcr
         {
         }
 
-        long GetLastValue() const { return mnLastValue; }
+        sal_Int64 GetLastValue() const { return mnLastValue; }
     };
 
     //========================================================================
@@ -291,7 +291,7 @@ namespace pcr
         /** converts a control value, as obtained from our Numeric field, into a value which can passed
             to outer callers via our UNO API.
         */
-        double  impl_fieldValueToApiValue_nothrow( long _nFieldValue ) const;
+        double  impl_fieldValueToApiValue_nothrow( sal_Int64 _nFieldValue ) const;
     };
 
     //========================================================================
