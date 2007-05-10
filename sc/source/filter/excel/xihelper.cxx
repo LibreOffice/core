@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:26:55 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:48:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,6 @@
 #include "scitems.hxx"
 #endif
 #include <svx/eeitem.hxx>
-#define ITEMID_FIELD EE_FEATURE_FIELD
 #ifndef _SVX_FLDITEM_HXX
 #include <svx/flditem.hxx>
 #endif
@@ -408,14 +407,14 @@ void XclImpHFConverter::ParseString( const String& rHFString )
                     case 'C':   SetNewPortion( EXC_HF_CENTER ); break;  // Center portion
                     case 'R':   SetNewPortion( EXC_HF_RIGHT );  break;  // Right portion
 
-                    case 'P':   InsertField( SvxFieldItem( SvxPageField() ) );      break;  // page
-                    case 'N':   InsertField( SvxFieldItem( SvxPagesField() ) );     break;  // page count
-                    case 'D':   InsertField( SvxFieldItem( SvxDateField() ) );      break;  // date
-                    case 'T':   InsertField( SvxFieldItem( SvxTimeField() ) );      break;  // time
-                    case 'A':   InsertField( SvxFieldItem( SvxTableField() ) );     break;  // table name
+                    case 'P':   InsertField( SvxFieldItem( SvxPageField(), EE_FEATURE_FIELD ) );      break;  // page
+                    case 'N':   InsertField( SvxFieldItem( SvxPagesField(), EE_FEATURE_FIELD ) );     break;  // page count
+                    case 'D':   InsertField( SvxFieldItem( SvxDateField(), EE_FEATURE_FIELD ) );      break;  // date
+                    case 'T':   InsertField( SvxFieldItem( SvxTimeField(), EE_FEATURE_FIELD ) );      break;  // time
+                    case 'A':   InsertField( SvxFieldItem( SvxTableField(), EE_FEATURE_FIELD ) );     break;  // table name
 
                     case 'Z':           // file path
-                        InsertField( SvxFieldItem( SvxExtFileField() ) );   // convert to full name
+                        InsertField( SvxFieldItem( SvxExtFileField(), EE_FEATURE_FIELD ) );   // convert to full name
                         if( (pNull - pChar >= 2) && (*(pChar + 1) == '&') && (*(pChar + 2) == 'F') )
                         {
                             // &Z&F found - ignore the &F part
@@ -423,7 +422,7 @@ void XclImpHFConverter::ParseString( const String& rHFString )
                         }
                     break;
                     case 'F':           // file name
-                        InsertField( SvxFieldItem( SvxExtFileField( EMPTY_STRING, SVXFILETYPE_VAR, SVXFILEFORMAT_NAME_EXT ) ) );
+                        InsertField( SvxFieldItem( SvxExtFileField( EMPTY_STRING, SVXFILETYPE_VAR, SVXFILEFORMAT_NAME_EXT ), EE_FEATURE_FIELD ) );
                     break;
 
                     case 'U':           // underline
