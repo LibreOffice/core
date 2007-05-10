@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:15:58 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:29:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,9 +93,6 @@
 #endif
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _EEITEMID_HXX
-#include <svx/eeitemid.hxx>
 #endif
 #ifndef _SVX_ADJITEM_HXX
 #include <svx/adjitem.hxx>
@@ -363,7 +360,7 @@ BOOL FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                 // calling SetVerticalWriting() again since this item may not yet
                 // be set at the object and thus may differ from verical state of
                 // the object.
-                aSet.Put(SvxWritingModeItem(com::sun::star::text::WritingMode_TB_RL));
+                aSet.Put(SvxWritingModeItem(com::sun::star::text::WritingMode_TB_RL, SDRATTR_TEXTDIRECTION));
                 pObj->SetMergedItemSet(aSet);
             }
 
@@ -625,7 +622,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         else
             rAttr.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_BLOCK ) );
 
-        rAttr.Put( SvxAdjustItem( SVX_ADJUST_CENTER ) );
+        rAttr.Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
         rAttr.Put( SdrTextLeftDistItem( 100 ) );
         rAttr.Put( SdrTextRightDistItem( 100 ) );
         rAttr.Put( SdrTextUpperDistItem( 100 ) );
