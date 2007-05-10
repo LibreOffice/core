@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-03 16:33:18 $
+#   last change: $Author: kz $ $Date: 2007-05-10 15:37:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -105,13 +105,13 @@ SHL1STDLIBS+= \
 SHL1STDLIBS+= $(SCHLIB)
 .ENDIF # MACOSX
 
-SHL1LIBS=   $(LIB3TARGET)
+SHL1LIBS= $(LIB3TARGET) $(LIB5TARGET)
 SHL1DEPN+=	makefile.mk
 
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 DEF1DEPN        =$(MISC)$/$(SHL1TARGET).flt
 DEF1NAME	=$(SHL1TARGET)
-DEFLIB1NAME = $(TARGET)
+DEFLIB1NAME = $(TARGET) $(LIB5TARGET:b)
 
 .IF "$(GUI)" == "WNT"
 SHL1RES=    $(RCTARGET)
@@ -126,34 +126,38 @@ LIB2OBJFILES=   \
             $(SLO)$/sdmod.obj
 
 LIB3TARGET=$(SLB)$/sdraw3.lib
-LIB3FILES=      								\
-            $(SLB)$/view.lib        			\
-            $(SLB)$/app.lib						\
-            $(SLB)$/func.lib        			\
-            $(SLB)$/docshell.lib    			\
-            $(SLB)$/dlg.lib						\
-            $(SLB)$/core.lib					\
-            $(SLB)$/undo.lib					\
-            $(SLB)$/helper.lib					\
-            $(SLB)$/xml.lib						\
-            $(SLB)$/cgm.lib						\
-            $(SLB)$/grf.lib						\
-            $(SLB)$/html.lib					\
-            $(SLB)$/filter.lib					\
-            $(SLB)$/unoidl.lib					\
-            $(SLB)$/ppt.lib 					\
-            $(SLB)$/animui.lib					\
-            $(SLB)$/accessibility.lib			\
-            $(SLB)$/toolpanel.lib				\
-            $(SLB)$/uitools.lib					\
-            $(SLB)$/tpcontrols.lib				\
-            $(SLB)$/slsshell.lib				\
-            $(SLB)$/slsmodel.lib				\
-            $(SLB)$/slsview.lib					\
-            $(SLB)$/slscontroller.lib			\
-            $(SLB)$/slscache.lib				\
-            $(SLB)$/notes.lib					\
-            $(SLB)$/slideshow.lib				\
+LIB3FILES=      \
+            $(SLB)$/view.lib        \
+            $(SLB)$/app.lib			\
+            $(SLB)$/func.lib        \
+            $(SLB)$/func_2.lib        \
+            $(SLB)$/docshell.lib    \
+            $(SLB)$/dlg.lib			\
+            $(SLB)$/core.lib		\
+            $(SLB)$/undo.lib		\
+            $(SLB)$/helper.lib		\
+            $(SLB)$/xml.lib			\
+            $(SLB)$/cgm.lib			\
+            $(SLB)$/grf.lib
+
+LIB5TARGET=$(SLB)$/sdraw3_2.lib
+LIB5FILES=      \
+            $(SLB)$/html.lib		\
+            $(SLB)$/filter.lib		\
+            $(SLB)$/unoidl.lib		\
+            $(SLB)$/ppt.lib 		\
+            $(SLB)$/animui.lib		\
+            $(SLB)$/accessibility.lib	\
+            $(SLB)$/toolpanel.lib		\
+            $(SLB)$/uitools.lib			\
+            $(SLB)$/tpcontrols.lib		\
+            $(SLB)$/slsshell.lib		\
+            $(SLB)$/slsmodel.lib		\
+            $(SLB)$/slsview.lib			\
+            $(SLB)$/slscontroller.lib	\
+            $(SLB)$/slscache.lib		\
+            $(SLB)$/notes.lib			\
+            $(SLB)$/slideshow.lib		\
             $(SLB)$/framework_pane.lib			\
             $(SLB)$/framework_view.lib			\
             $(SLB)$/framework_configuration.lib	\
