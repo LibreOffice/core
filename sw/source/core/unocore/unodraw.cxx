@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:33:04 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:02:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -259,13 +259,13 @@ public:
     SvxLRSpaceItem* GetLRSpace(sal_Bool bCreate = sal_False)
         {
             if(bCreate && !pLRSpace)
-                pLRSpace = new SvxLRSpaceItem();
+                pLRSpace = new SvxLRSpaceItem(RES_LR_SPACE);
             return pLRSpace;
         }
     SvxULSpaceItem* GetULSpace(sal_Bool bCreate = sal_False)
         {
             if(bCreate && !pULSpace)
-                pULSpace = new SvxULSpaceItem();
+                pULSpace = new SvxULSpaceItem(RES_UL_SPACE);
             return pULSpace;
         }
     uno::Reference< text::XTextRange > &    GetTextRange()
