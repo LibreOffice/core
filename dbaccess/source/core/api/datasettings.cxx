@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasettings.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:30:31 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:11:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,6 @@
 #endif
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
-#ifndef _DBA_CORE_PROPERTYHELPER_HXX_
-#include "propertyhelper.hxx"
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -87,84 +84,6 @@ using namespace ::cppu;
 //........................................................................
 namespace dbaccess
 {
-//........................................................................
-float ConvertFontWeight( ::FontWeight eWeight )
-{
-    if( eWeight == WEIGHT_DONTKNOW )
-        return ::com::sun::star::awt::FontWeight::DONTKNOW;
-    else if( eWeight == WEIGHT_THIN )
-        return ::com::sun::star::awt::FontWeight::THIN;
-    else if( eWeight == WEIGHT_ULTRALIGHT )
-        return ::com::sun::star::awt::FontWeight::ULTRALIGHT;
-    else if( eWeight == WEIGHT_LIGHT )
-        return ::com::sun::star::awt::FontWeight::LIGHT;
-    else if( eWeight == WEIGHT_SEMILIGHT )
-        return ::com::sun::star::awt::FontWeight::SEMILIGHT;
-    else if( ( eWeight == WEIGHT_NORMAL ) || ( eWeight == WEIGHT_MEDIUM ) )
-        return ::com::sun::star::awt::FontWeight::NORMAL;
-    else if( eWeight == WEIGHT_SEMIBOLD )
-        return ::com::sun::star::awt::FontWeight::SEMIBOLD;
-    else if( eWeight == WEIGHT_BOLD )
-        return ::com::sun::star::awt::FontWeight::BOLD;
-    else if( eWeight == WEIGHT_ULTRABOLD )
-        return ::com::sun::star::awt::FontWeight::ULTRABOLD;
-    else if( eWeight == WEIGHT_BLACK )
-        return ::com::sun::star::awt::FontWeight::BLACK;
-
-    OSL_ENSURE(0, "Unknown FontWeigth" );
-    return ::com::sun::star::awt::FontWeight::DONTKNOW;
-}
-// -----------------------------------------------------------------------------
-float ConvertFontWidth( ::FontWidth eWidth )
-{
-    if( eWidth == WIDTH_DONTKNOW )
-        return ::com::sun::star::awt::FontWidth::DONTKNOW;
-    else if( eWidth == WIDTH_ULTRA_CONDENSED )
-        return ::com::sun::star::awt::FontWidth::ULTRACONDENSED;
-    else if( eWidth == WIDTH_EXTRA_CONDENSED )
-        return ::com::sun::star::awt::FontWidth::EXTRACONDENSED;
-    else if( eWidth == WIDTH_CONDENSED )
-        return ::com::sun::star::awt::FontWidth::CONDENSED;
-    else if( eWidth == WIDTH_SEMI_CONDENSED )
-        return ::com::sun::star::awt::FontWidth::SEMICONDENSED;
-    else if( eWidth == WIDTH_NORMAL )
-        return ::com::sun::star::awt::FontWidth::NORMAL;
-    else if( eWidth == WIDTH_SEMI_EXPANDED )
-        return ::com::sun::star::awt::FontWidth::SEMIEXPANDED;
-    else if( eWidth == WIDTH_EXPANDED )
-        return ::com::sun::star::awt::FontWidth::EXPANDED;
-    else if( eWidth == WIDTH_EXTRA_EXPANDED )
-        return ::com::sun::star::awt::FontWidth::EXTRAEXPANDED;
-    else if( eWidth == WIDTH_ULTRA_EXPANDED )
-        return ::com::sun::star::awt::FontWidth::ULTRAEXPANDED;
-
-    OSL_ENSURE(0, "Unknown FontWidth" );
-    return ::com::sun::star::awt::FontWidth::DONTKNOW;
-}
-//------------------------------------------------------------------
-::com::sun::star::awt::FontDescriptor ImplCreateFontDescriptor( const Font& rFont )
-{
-    ::com::sun::star::awt::FontDescriptor aFD;
-    aFD.Name            = rFont.GetName();
-    aFD.StyleName       = rFont.GetStyleName();
-    aFD.Height          = (sal_Int16)rFont.GetSize().Height();
-    aFD.Width           = (sal_Int16)rFont.GetSize().Width();
-    aFD.Family          = (sal_Int16)rFont.GetFamily();
-    aFD.CharSet         = rFont.GetCharSet();
-    aFD.Pitch           = (sal_Int16)rFont.GetPitch();
-    aFD.CharacterWidth  = ConvertFontWidth( rFont.GetWidthType() );
-    aFD.Weight          = ConvertFontWeight( rFont.GetWeight() );
-    aFD.Slant           = (::com::sun::star::awt::FontSlant)rFont.GetItalic();
-    aFD.Underline       = (sal_Int16)rFont.GetUnderline();
-    aFD.Strikeout       = (sal_Int16)rFont.GetStrikeout();
-    aFD.Orientation     = rFont.GetOrientation();
-    aFD.Kerning         = rFont.IsKerning();
-    aFD.WordLineMode    = rFont.IsWordLineMode();
-    aFD.Type            = 0;   // ??? => Nur an Metric...
-    return aFD;
-}
-
-
 //==========================================================================
 //= ODataSettings
 //==========================================================================
@@ -228,14 +147,6 @@ void ODataSettings::registerPropertiesFor(ODataSettings_Base* _pItem)
 ODataSettings::ODataSettings(OBroadcastHelper& _rBHelper,sal_Bool _bQuery)
     :OPropertyStateContainer(_rBHelper)
     ,ODataSettings_Base()
-    ,m_bQuery(_bQuery)
-{
-}
-
-//--------------------------------------------------------------------------
-ODataSettings::ODataSettings(const ODataSettings& _rSource, ::cppu::OBroadcastHelper& _rBHelper,sal_Bool _bQuery)
-    :OPropertyStateContainer(_rBHelper)
-    ,ODataSettings_Base(_rSource)
     ,m_bQuery(_bQuery)
 {
 }
