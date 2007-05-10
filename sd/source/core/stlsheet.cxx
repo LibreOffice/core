@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:37:02 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:23:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,9 @@
 #include "precompiled_sd.hxx"
 
 
-#include "eetext.hxx"       // definiert ITEMID_... fuer frmitems und textitem
-#ifndef _EEITEMID_HXX //autogen
-#include <svx/eeitemid.hxx>
+#include "eetext.hxx"
+#ifndef _EEITEM_HXX
+#include <svx/eeitem.hxx>
 #endif
 #ifndef _SVX_FHGTITEM_HXX //autogen
 #include <svx/fhgtitem.hxx>
