@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:09:01 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:45:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,7 +236,7 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
                         //  The page default depends on the system language.
                         SvxFrameDirection eDirection = ScGlobal::IsSystemRTL() ?
                                         FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP;
-                        pSet->Put( SvxFrameDirectionItem( eDirection ), ATTR_WRITINGDIR );
+                        pSet->Put( SvxFrameDirectionItem( eDirection, ATTR_WRITINGDIR ), ATTR_WRITINGDIR );
 
                         rItemPool.SetPoolDefaultItem( aPageItem );
                         rItemPool.SetPoolDefaultItem( aPaperSizeItem );
