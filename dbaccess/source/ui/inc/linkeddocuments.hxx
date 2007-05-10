@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkeddocuments.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:18:03 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:33:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,6 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>   implOpen(const ::rtl::OUString& _rLinkName
                                 ,::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition
                                 , EOpenMode _eOpenMode);
-        void    implDrop(const ::rtl::OUString& _rLinkName);
     };
 
 //......................................................................
