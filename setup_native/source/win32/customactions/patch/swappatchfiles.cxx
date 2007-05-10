@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swappatchfiles.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:08:40 $
+ *  last change: $Author: gm $ $Date: 2007-05-10 11:03:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@
 #endif
 
 #include <systools/win32/uwinapi.h>
+#include <../tools/seterror.hxx>
 
 #define WININIT_FILENAME    "wininit.ini"
 #define RENAME_SECTION      "rename"
@@ -329,6 +330,7 @@ static bool SwapFiles( const std::_tstring& sFileName1, const std::_tstring& sFi
         }
         else
             OutputDebugStringFormat( TEXT("Error Code %d: Unknown"), dwError );
+        SetMsiErrorCode( dwError );
     }
 
     return fSuccess;
@@ -709,7 +711,10 @@ extern "C" UINT __stdcall IsOfficeRunning( MSIHANDLE handle )
         } while ( fSuccess && fRenameSucceeded );
 
         if ( !fRenameSucceeded )
+        {
             MsiSetProperty(handle, TEXT("OFFICERUNS"), TEXT("1"));
+            SetMsiErrorCode( MSI_ERROR_OFFICE_IS_RUNNING );
+        }
 
         FindClose( hFind );
     }
