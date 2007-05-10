@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.232 $
+ *  $Revision: 1.233 $
  *
- *  last change: $Author: gm $ $Date: 2007-05-10 11:06:21 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:18:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2509,6 +2509,24 @@ File gid_File_Lib_Xml2
   #endif
 End
 #endif
+
+#ifndef SYSTEM_LIBXSLT
+File gid_File_Lib_Xslt
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    #ifdef MACOSX
+       Name = STRING(CONCAT3(libxslt,.1.1.16,UNXSUFFIX));
+    #else
+       Name = STRING(CONCAT3(libxslt,UNXSUFFIX,.1.1.16));
+    #endif
+  #else
+    Name = "libxslt.dll";
+  #endif
+End
+#endif
+
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Unoxml, unoxml )
 
