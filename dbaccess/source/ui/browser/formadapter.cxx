@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formadapter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:35:22 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:19:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,11 +81,6 @@ using namespace ::com::sun::star::container;
 // SbaXFormAdapter
 //==================================================================
 
-//------------------------------------------------------------------
-Reference< XInterface >  SbaXFormAdapter_CreateInstance(const Reference< ::com::sun::star::lang::XMultiServiceFactory>& /*_rxFactory*/)
-{
-    return *(new SbaXFormAdapter());
-}
 DBG_NAME(SbaXFormAdapter)
 // -------------------------------------------------------------------------
 SbaXFormAdapter::SbaXFormAdapter()
@@ -1436,37 +1431,6 @@ void SAL_CALL SbaXFormAdapter::cancel() throw( RuntimeException )
     if (xCancel.is())
         return;
     xCancel->cancel();
-}
-
-// Helper
-//------------------------------------------------------------------------------
-void SbaXFormAdapter::onError(::com::sun::star::sdbc::SQLException& rException)
-{
-    // just notify all listeners
-    if (m_aErrorListeners.getLength())
-    {
-        rException.Context = *this;
-
-        Any aVal;
-        aVal <<= rException;
-        ::com::sun::star::sdb::SQLErrorEvent aEvt(*this, aVal);
-
-        ::cppu::OInterfaceIteratorHelper aIt((::cppu::OInterfaceContainerHelper&)m_aErrorListeners);
-        while (aIt.hasMoreElements())
-            ((::com::sun::star::sdb::XSQLErrorListener*)aIt.next())->errorOccured(aEvt);
-    }
-}
-
-// -------------------------------------------------------------------------
-sal_Bool SbaXFormAdapter::checkMainForm()
-{
-    if (m_xMainForm.is())
-        return sal_True;
-
-    ::com::sun::star::sdbc::SQLException aException;
-    aException.Message = String(ModuleRes(RID_STR_CONNECTION_LOST));
-    onError(aException);
-    return sal_False;
 }
 
 // ::com::sun::star::beans::XPropertyState
