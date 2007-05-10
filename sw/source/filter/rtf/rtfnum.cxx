@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfnum.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:52:47 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:07:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -307,7 +307,7 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
                 aSet.Put( rCFmtSet );
                 // and put the current "LRSpace" into the set
                 {
-                    SvxLRSpaceItem aLR;
+                    SvxLRSpaceItem aLR( RES_LR_SPACE );
                     aLR.SetTxtLeft( pCurNumFmt->GetAbsLSpace() );
                     aLR.SetTxtFirstLineOfst(pCurNumFmt->GetFirstLineOffset());
                     aSet.Put( aLR );
@@ -955,7 +955,8 @@ SwNumRule *SwRTFParser::ReadNumSecLevel( int nToken )
                 GetNumChrFmt( *pDoc, *pCurRule, nLevel ).Put(
                             SvxFontItem( rSVFont.GetFamily(),
                                 rSVFont.GetName(), rSVFont.GetStyleName(),
-                                rSVFont.GetPitch(), rSVFont.GetCharSet() ));
+                                rSVFont.GetPitch(), rSVFont.GetCharSet(),
+                                            RES_CHRATR_FONT ));
                 if( SVX_NUM_CHAR_SPECIAL == pCurNumFmt->GetNumberingType() )
                     pCurNumFmt->SetBulletFont( &rSVFont );
             }
@@ -967,21 +968,21 @@ SwNumRule *SwRTFParser::ReadNumSecLevel( int nToken )
                 else
                     nTokenValue *= 10;
                 GetNumChrFmt( *pDoc, *pCurRule, nLevel ).Put(
-                            SvxFontHeightItem( (const USHORT)nTokenValue ));
+                            SvxFontHeightItem( (const USHORT)nTokenValue, 100, RES_CHRATR_FONTSIZE ));
             }
             break;
 
         case RTF_PNB:
             {
                 GetNumChrFmt( *pDoc, *pCurRule, nLevel ).Put( SvxWeightItem(
-                                nTokenValue ? WEIGHT_BOLD : WEIGHT_NORMAL ));
+                                nTokenValue ? WEIGHT_BOLD : WEIGHT_NORMAL, RES_CHRATR_WEIGHT ));
             }
             break;
 
         case RTF_PNI:
             {
                 GetNumChrFmt( *pDoc, *pCurRule, nLevel ).Put( SvxPostureItem(
-                            nTokenValue ? ITALIC_NORMAL : ITALIC_NONE ));
+                            nTokenValue ? ITALIC_NORMAL : ITALIC_NONE, RES_CHRATR_POSTURE ));
             }
             break;
 
@@ -990,20 +991,20 @@ SwNumRule *SwRTFParser::ReadNumSecLevel( int nToken )
             {
                 GetNumChrFmt( *pDoc, *pCurRule, nLevel ).Put( SvxCaseMapItem(
                                 nTokenValue ? SVX_CASEMAP_KAPITAELCHEN
-                                            : SVX_CASEMAP_NOT_MAPPED ));
+                                            : SVX_CASEMAP_NOT_MAPPED, RES_CHRATR_CASEMAP ));
             }
             break;
         case RTF_PNSTRIKE:
             {
                 GetNumChrFmt( *pDoc, *pCurRule, nLevel ).Put( SvxCrossedOutItem(
-                        nTokenValue ? STRIKEOUT_SINGLE : STRIKEOUT_NONE ));
+                        nTokenValue ? STRIKEOUT_SINGLE : STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT ));
             }
             break;
 
         case RTF_PNCF:
             {
                 GetNumChrFmt( *pDoc, *pCurRule, nLevel ).Put( SvxColorItem(
-                            GetColor( USHORT(nTokenValue) ) ));
+                            GetColor( USHORT(nTokenValue) ), RES_CHRATR_COLOR ));
             }
             break;
 
@@ -1023,7 +1024,7 @@ SwNumRule *SwRTFParser::ReadNumSecLevel( int nToken )
         case RTF_PNULW:
             {
                 GetNumChrFmt( *pDoc, *pCurRule, nLevel ).Put(
-                                    SvxWordLineModeItem( TRUE ));
+                                    SvxWordLineModeItem( TRUE, RES_CHRATR_WORDLINEMODE ));
             }
             eUnderline = UNDERLINE_SINGLE;
             goto NUMATTR_SETUNDERLINE;
@@ -1031,7 +1032,7 @@ SwNumRule *SwRTFParser::ReadNumSecLevel( int nToken )
 NUMATTR_SETUNDERLINE:
             {
                 GetNumChrFmt( *pDoc, *pCurRule, nLevel ).Put(
-                        SvxUnderlineItem( eUnderline ));
+                        SvxUnderlineItem( eUnderline, RES_CHRATR_UNDERLINE ));
             }
             break;
 
