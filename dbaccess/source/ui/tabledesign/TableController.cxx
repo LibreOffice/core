@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:37:28 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:41:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1267,10 +1267,12 @@ void OTableController::alterColumns()
                 {
                     if(xDrop.is() && xAppend.is())
                     {
-                        String aMessage(ModuleRes(STR_TABLEDESIGN_ALTER_ERROR));
-                        aMessage.SearchAndReplaceAscii("$column$",pField->GetName());
-                        String sTitle(ModuleRes(STR_STAT_WARNING));
-                        OSQLMessageBox aMsg(getView(),sTitle,aMessage,WB_YES_NO|WB_DEF_YES,OSQLMessageBox::Warning);
+                        String aMessage( ModuleRes( STR_TABLEDESIGN_ALTER_ERROR ) );
+                        aMessage.SearchAndReplaceAscii( "$column$", pField->GetName() );
+                        String sTitle( ModuleRes( STR_STAT_WARNING ) );
+
+                        SQLExceptionInfo aError( ::cppu::getCaughtException() );
+                        OSQLMessageBox aMsg( getView(), sTitle, aMessage, WB_YES_NO | WB_DEF_YES , OSQLMessageBox::Warning, &aError );
                         bNotOk = aMsg.Execute() == RET_YES;
                     }
                     else
