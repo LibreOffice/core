@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pivot2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:07:57 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:45:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,12 +82,12 @@ void ScPivot::SetFrame(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHOR
     {
         SvxBorderLine aLine;
         aLine.SetOutWidth(nWidth);
-        SvxBoxItem aBox;
+        SvxBoxItem aBox( ATTR_BORDER );
         aBox.SetLine(&aLine, BOX_LINE_LEFT);
         aBox.SetLine(&aLine, BOX_LINE_TOP);
         aBox.SetLine(&aLine, BOX_LINE_RIGHT);
         aBox.SetLine(&aLine, BOX_LINE_BOTTOM);
-        SvxBoxInfoItem aBoxInfo;
+        SvxBoxInfoItem aBoxInfo( ATTR_BORDER_INNER );
         aBoxInfo.SetValid(VALID_HORI,FALSE);
         aBoxInfo.SetValid(VALID_VERT,FALSE);
         aBoxInfo.SetValid(VALID_DISTANCE,FALSE);
@@ -101,12 +101,12 @@ void ScPivot::SetFrameHor(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
     {
         SvxBorderLine aLine;
         aLine.SetOutWidth(20);
-        SvxBoxItem aBox;
+        SvxBoxItem aBox( ATTR_BORDER );
         aBox.SetLine(&aLine, BOX_LINE_LEFT);
         aBox.SetLine(&aLine, BOX_LINE_TOP);
         aBox.SetLine(&aLine, BOX_LINE_RIGHT);
         aBox.SetLine(&aLine, BOX_LINE_BOTTOM);
-        SvxBoxInfoItem aBoxInfo;
+        SvxBoxInfoItem aBoxInfo(ATTR_BORDER_INNER);
         aBoxInfo.SetValid(VALID_VERT,FALSE);
         aBoxInfo.SetValid(VALID_DISTANCE,FALSE);
         aBoxInfo.SetLine(&aLine, BOXINFO_LINE_HORI);
@@ -120,12 +120,12 @@ void ScPivot::SetFrameVer(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
     {
         SvxBorderLine aLine;
         aLine.SetOutWidth(20);
-        SvxBoxItem aBox;
+        SvxBoxItem aBox( ATTR_BORDER );
         aBox.SetLine(&aLine, BOX_LINE_LEFT);
         aBox.SetLine(&aLine, BOX_LINE_TOP);
         aBox.SetLine(&aLine, BOX_LINE_RIGHT);
         aBox.SetLine(&aLine, BOX_LINE_BOTTOM);
-        SvxBoxInfoItem aBoxInfo;
+        SvxBoxInfoItem aBoxInfo( ATTR_BORDER_INNER );
         aBoxInfo.SetValid(VALID_HORI,FALSE);
         aBoxInfo.SetValid(VALID_DISTANCE,FALSE);
         aBoxInfo.SetLine(&aLine, BOXINFO_LINE_VERT);
@@ -138,7 +138,7 @@ void ScPivot::SetFontBold(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
     if (pDoc->pTab[nDestTab])
     {
         ScPatternAttr aPattern( pDoc->GetPool() );
-        aPattern.GetItemSet().Put( SvxWeightItem( WEIGHT_BOLD ) );
+        aPattern.GetItemSet().Put( SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT ) );
         pDoc->pTab[nDestTab]->ApplyPatternArea(nCol1, nRow1, nCol2, nRow2, aPattern);
     }
 }
@@ -148,7 +148,7 @@ void ScPivot::SetJustifyLeft(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
     if (pDoc->pTab[nDestTab])
     {
         ScPatternAttr aPattern( pDoc->GetPool() );
-        aPattern.GetItemSet().Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT ) );
+        aPattern.GetItemSet().Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT, ATTR_HOR_JUSTIFY ) );
         pDoc->pTab[nDestTab]->ApplyPatternArea(nCol1, nRow1, nCol2, nRow2, aPattern);
     }
 }
@@ -158,7 +158,7 @@ void ScPivot::SetJustifyRight(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
     if (pDoc->pTab[nDestTab])
     {
         ScPatternAttr aPattern( pDoc->GetPool() );
-        aPattern.GetItemSet().Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_RIGHT ) );
+        aPattern.GetItemSet().Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_RIGHT, ATTR_HOR_JUSTIFY ) );
         pDoc->pTab[nDestTab]->ApplyPatternArea(nCol1, nRow1, nCol2, nRow2, aPattern);
     }
 }
@@ -204,9 +204,9 @@ void ScPivot::SetStyle(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHOR
         pStyle->SetParent( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
         SfxItemSet& rSet = pStyle->GetItemSet();
         if ( nId==PIVOT_STYLE_RESULT || nId==PIVOT_STYLE_TITLE )
-            rSet.Put( SvxWeightItem( WEIGHT_BOLD ) );
+            rSet.Put( SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT ) );
         if ( nId==PIVOT_STYLE_CATEGORY || nId==PIVOT_STYLE_TITLE )
-            rSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT ) );
+            rSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT, ATTR_HOR_JUSTIFY ) );
     }
 
     pDoc->pTab[nDestTab]->ApplyStyleArea( nCol1, nRow1, nCol2, nRow2, *pStyle );
