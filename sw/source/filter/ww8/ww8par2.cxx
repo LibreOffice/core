@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:54:50 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:11:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,6 @@
 #include <sfx2/docinf.hxx>
 #endif
 
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -2438,7 +2437,7 @@ void WW8TabDesc::CreateSwTable()
     {
         // minimize Fontsize to minimize height growth of the header/footer
         // set font size to 1 point to minimize y-growth of Hd/Ft
-        SvxFontHeightItem aSz(20);
+        SvxFontHeightItem aSz(20, 100, RES_CHRATR_FONTSIZE);
         pIo->NewAttr( aSz );
         pIo->pCtrlStck->SetAttr(*pPoint, RES_CHRATR_FONTSIZE);
     }
@@ -2501,7 +2500,7 @@ void WW8TabDesc::CreateSwTable()
     }
 
     SvxFrameDirectionItem aDirection(
-        bIsBiDi ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP );
+        bIsBiDi ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR );
     pTable->GetFrmFmt()->SetAttr(aDirection);
 
     if (HORI_LEFT_AND_WIDTH == eOri)
@@ -2531,7 +2530,7 @@ void WW8TabDesc::CreateSwTable()
             //table, so the space to the left of the table isn't to be used
             //inside the frame, in word the dialog involved greys out the
             //ability to set the margin.
-            SvxLRSpaceItem aL;
+            SvxLRSpaceItem aL( RES_LR_SPACE );
             aL.SetLeft( GetMinLeft() );
             aItemSet.Put(aL);
         }
@@ -3049,7 +3048,7 @@ void WW8TabDesc::StartMiserableHackForUnsupportedDirection(short nWwCol)
     if (pActBand && pActBand->maDirections[nWwCol] == 3)
     {
         pIo->pCtrlStck->NewAttr(*pIo->pPaM->GetPoint(),
-            SvxCharRotateItem(900, false));
+            SvxCharRotateItem(900, false, RES_CHRATR_ROTATE));
     }
 }
 
@@ -3182,7 +3181,7 @@ void WW8TabDesc::SetTabBorders(SwTableBox* pBox, short nWwIdx)
         return;                 // kuenstlich erzeugte Zellen -> Kein Rand
 
 
-    SvxBoxItem aFmtBox;
+    SvxBoxItem aFmtBox( RES_BOX );
     if (pActBand->pTCs)     // neither Cell Border nor Default Border defined ?
     {
         WW8_TCell* pT = &pActBand->pTCs[nWwIdx];
@@ -3244,7 +3243,7 @@ void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
         Color aColor(pActBand->pNewSHDs[nWwIdx]);
         if (aColor.GetColor() == 0x00333333)
             pIo->maTracer.Log(sw::log::eAutoColorBg);
-        pBox->GetFrmFmt()->SetAttr(SvxBrushItem(aColor));
+        pBox->GetFrmFmt()->SetAttr(SvxBrushItem(aColor, RES_BACKGROUND));
         bFound = true;
     }
 
@@ -3256,7 +3255,7 @@ void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
             return;
 
         SwWW8Shade aSh( pIo->bVer67, rSHD );
-        pBox->GetFrmFmt()->SetAttr(SvxBrushItem(aSh.aColor));
+        pBox->GetFrmFmt()->SetAttr(SvxBrushItem(aSh.aColor, RES_BACKGROUND));
     }
 }
 
@@ -3295,7 +3294,7 @@ void WW8TabDesc::SetTabDirection(SwTableBox* pBox, short nWwIdx)
 {
     if (nWwIdx < 0 || nWwIdx >= pActBand->nWwCols)
         return;
-    SvxFrameDirectionItem aItem(MakeDirection(pActBand->maDirections[nWwIdx], bIsBiDi));
+    SvxFrameDirectionItem aItem(MakeDirection(pActBand->maDirections[nWwIdx], bIsBiDi), RES_FRAMEDIR);
     pBox->GetFrmFmt()->SetAttr(aItem);
 }
 
@@ -3999,12 +3998,12 @@ void WW8RStyle::Set1StyleDefaults()
     {
         // Style has no text color set, winword default is auto
         if ( !bTxtColChanged )
-            pIo->pAktColl->SetAttr(SvxColorItem(Color(COL_AUTO)));
+            pIo->pAktColl->SetAttr(SvxColorItem(Color(COL_AUTO), RES_CHRATR_COLOR));
 
         // Style has no FontSize ? WinWord Default is 10pt for western and asian
         if( !bFSizeChanged )
         {
-            SvxFontHeightItem aAttr(200);
+            SvxFontHeightItem aAttr(200, 100, RES_CHRATR_FONTSIZE);
             pIo->pAktColl->SetAttr(aAttr);
             aAttr.SetWhich(RES_CHRATR_CJK_FONTSIZE);
             pIo->pAktColl->SetAttr(aAttr);
@@ -4013,15 +4012,15 @@ void WW8RStyle::Set1StyleDefaults()
         // Style has no FontSize ? WinWord Default is 10pt for western and asian
         if( !bFCTLSizeChanged )
         {
-            SvxFontHeightItem aAttr(200);
+            SvxFontHeightItem aAttr(200, 100, RES_CHRATR_FONTSIZE);
             aAttr.SetWhich(RES_CHRATR_CTL_FONTSIZE);
             pIo->pAktColl->SetAttr(aAttr);
         }
 
         if( pIo->pWDop->fWidowControl && !bWidowsChanged )  // Widows ?
         {
-            pIo->pAktColl->SetAttr( SvxWidowsItem( 2 ) );
-            pIo->pAktColl->SetAttr( SvxOrphansItem( 2 ) );
+            pIo->pAktColl->SetAttr( SvxWidowsItem( 2, RES_PARATR_WIDOWS ) );
+            pIo->pAktColl->SetAttr( SvxOrphansItem( 2, RES_PARATR_ORPHANS ) );
         }
     }
 }
@@ -4740,7 +4739,7 @@ void WW8RStyle::Import()
             && SFX_ITEM_SET != pIo->pStandardFmtColl->GetItemState(
                                             RES_PARATR_HYPHENZONE, false) )
         {
-            SvxHyphenZoneItem aAttr(true);
+            SvxHyphenZoneItem aAttr(true, RES_PARATR_HYPHENZONE);
             aAttr.GetMinLead()    = 2;
             aAttr.GetMinTrail()   = 2;
             aAttr.GetMaxHyphens() = 0;
@@ -4757,7 +4756,7 @@ void WW8RStyle::Import()
             false))
         {
            pIo->pStandardFmtColl->SetAttr(
-                SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP));
+                SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR));
         }
     }
 
