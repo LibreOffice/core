@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inunx.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:28:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:15:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_i18npool.hxx"
+
+// no include "precompiled_i18npool.hxx" because this file is included in insys.cxx
 
 #include <stdlib.h>  // for getenv()
 #include <stdio.h>
