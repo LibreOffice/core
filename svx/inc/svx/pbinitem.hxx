@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pbinitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:05:08 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:30:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ class SVX_DLLPUBLIC SvxPaperBinItem : public SfxByteItem
 public:
     TYPEINFO();
 
-    inline SvxPaperBinItem( const USHORT nId = ITEMID_PAPERBIN,
+    inline SvxPaperBinItem( const USHORT nId ,
                             const BYTE nTray = PAPERBIN_PRINTER_SETTINGS );
     inline SvxPaperBinItem &operator=( const SvxPaperBinItem &rCpy );
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfcrop.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:56:04 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:26:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,10 +51,10 @@ class SVX_DLLPUBLIC SvxGrfCrop : public SfxPoolItem
 {
     sal_Int32   nLeft, nRight, nTop, nBottom;
 public:
-    SvxGrfCrop( USHORT = ITEMID_GRF_CROP );
+    SvxGrfCrop( USHORT  );
     SvxGrfCrop( sal_Int32 nLeft,    sal_Int32 nRight,
                 sal_Int32 nTop,     sal_Int32 nBottom,
-                USHORT = ITEMID_GRF_CROP );
+                USHORT  );
     virtual ~SvxGrfCrop();
 
     // "pure virtual Methoden" vom SfxPoolItem

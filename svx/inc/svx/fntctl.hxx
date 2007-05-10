@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntctl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:52:23 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:25:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 #include "svx/svxdllapi.h"
 #endif
 
-#ifdef ITEMID_FONT
+
 
 class FontNameMenu;
 class SfxBindings;
@@ -81,7 +81,7 @@ public:
     SFX_DECL_MENU_CONTROL();
 };
 
-#endif
+
 
 #endif
 

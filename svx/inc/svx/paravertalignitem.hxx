@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paravertalignitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:04:43 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:29:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,8 +63,8 @@ public:
     enum { AUTOMATIC, BASELINE, TOP, CENTER, BOTTOM };
     TYPEINFO();
 
-    SvxParaVertAlignItem( sal_uInt16 nValue = 0,
-                       const sal_uInt16 nId = ITEMID_PARAVERTALIGN );
+    SvxParaVertAlignItem( sal_uInt16 nValue /*= 0*/,
+                       const sal_uInt16 nId  );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, USHORT) const;

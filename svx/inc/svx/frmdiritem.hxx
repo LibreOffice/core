@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmdiritem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:54:57 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:26:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,8 +65,9 @@ class SVX_DLLPUBLIC SvxFrameDirectionItem : public SfxUInt16Item
 public:
     TYPEINFO();
 
-    SvxFrameDirectionItem( SvxFrameDirection nValue = FRMDIR_HORI_LEFT_TOP,
-                            USHORT nWhich = ITEMID_FRAMEDIR );
+    SvxFrameDirectionItem( USHORT nWhich  );
+    SvxFrameDirectionItem( SvxFrameDirection nValue /*= FRMDIR_HORI_LEFT_TOP*/,
+                            USHORT nWhich  );
     virtual ~SvxFrameDirectionItem();
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
