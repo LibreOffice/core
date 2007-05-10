@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmthbsh.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:50:50 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:53:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ public:
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
-    inline SwFmtSoftHyph& operator=(const SwFmtSoftHyph& rSH) {
+    inline SwFmtSoftHyph& operator=(const SwFmtSoftHyph&) {
             return *this;
         }
 };
