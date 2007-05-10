@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.59 $
+#   $Revision: 1.60 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:26:31 $
+#   last change: $Author: kz $ $Date: 2007-05-10 16:27:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -83,22 +83,24 @@ RESLIB1IMAGES=$(PRJ)$/imglst $(PRJ)$/res
 RESLIB1SRSFILES= \
     $(sw_res_files)
 
+SWLIBFILES       = \
+        $(SLB)$/core1.lib	\
+        $(SLB)$/core2.lib	\
+        $(SLB)$/core3.lib	\
+        $(SLB)$/core4.lib	\
+        $(SLB)$/filter.lib	\
+        $(SLB)$/ui1.lib	\
+        $(SLB)$/ui2.lib
+
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1USE_EXPORTS=ordinal
 SHL1IMPLIB= _$(TARGET)
-SHL1LIBS= $(SLB)$/swall.lib
+SHL1LIBS= $(SLB)$/swall.lib $(SWLIBFILES)
 
 LIB1TARGET      =$(SLB)$/swall.lib
 
 LIB1OBJFILES= $(OUT)$/slo$/swmodule.obj \
     $(OUT)$/slo$/swdll.obj
-
-LIB1FILES       = \
-        $(SLB)$/core1.lib	\
-        $(SLB)$/core2.lib	\
-        $(SLB)$/filter.lib	\
-        $(SLB)$/ui1.lib	\
-        $(SLB)$/ui2.lib
 
 .IF "$(OS)"!="MACOSX"
 # static libraries
@@ -146,7 +148,7 @@ SHL1STDLIBS+= $(ADVAPI32LIB)
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 SHL1BASE=	0x1e000000
 DEF1NAME	=$(SHL1TARGET)
-DEFLIB1NAME=swall
+DEFLIB1NAME=swall $(SWLIBFILES:b)
 
 SHL2TARGET= swd$(UPD)$(DLLPOSTFIX)
 SHL2IMPLIB= swdimp
