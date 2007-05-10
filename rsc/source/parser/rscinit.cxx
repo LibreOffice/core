@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscinit.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:59:30 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 17:06:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,8 +241,8 @@ void RscTypCont::Init()
     aNmTb.Put( "FALSE",              BOOLEAN,        (long)FALSE );
 
 /* Vordefinierte HilfeId's */
-    aNmTb.Put( "HELP_INDEX",         NUMBER,     HELP_INDEX      );
-    aNmTb.Put( "HELP_HELPONHELP",    NUMBER,     HELP_HELPONHELP );
+    aNmTb.Put( "HELP_INDEX",         NUMBER,     OOO_HELP_INDEX      );
+    aNmTb.Put( "HELP_HELPONHELP",    NUMBER,     OOO_HELP_HELPONHELP );
 
     aNmTb.Put( "XSCALE",             XSCALE ,        (long)0     );
     aNmTb.Put( "YSCALE",             YSCALE ,        (long)0     );
