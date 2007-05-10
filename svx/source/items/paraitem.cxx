@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:17:43 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:52:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,20 +61,6 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
-
-#define ITEMID_TABSTOP      0
-#define ITEMID_LINESPACING  0
-#define ITEMID_ADJUST       0
-#define ITEMID_ORPHANS      0
-#define ITEMID_WIDOWS       0
-#define ITEMID_PAGEMODEL    0
-#define ITEMID_FMTSPLIT     0
-#define ITEMID_HYPHENZONE   0
-#define ITEMID_SCRIPTSPACE  0
-#define ITEMID_HANGINGPUNCTUATION 0
-#define ITEMID_FORBIDDENRULE 0
-#define ITEMID_PARAVERTALIGN 0
-#define ITEMID_PARAGRID 0
 
 #include <tools/rtti.hxx>
 #include <basic/sbx.hxx>
@@ -134,19 +120,19 @@ using namespace ::com::sun::star;
 // -----------------------------------------------------------------------
 
 
-TYPEINIT1_AUTOFACTORY(SvxLineSpacingItem, SfxPoolItem );
-TYPEINIT1_AUTOFACTORY(SvxAdjustItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxWidowsItem, SfxByteItem);
-TYPEINIT1_AUTOFACTORY(SvxOrphansItem, SfxByteItem);
-TYPEINIT1_AUTOFACTORY(SvxHyphenZoneItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxTabStopItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxFmtSplitItem, SfxBoolItem);
-TYPEINIT1_AUTOFACTORY(SvxPageModelItem, SfxStringItem);
-TYPEINIT1_AUTOFACTORY(SvxScriptSpaceItem, SfxBoolItem);
-TYPEINIT1_AUTOFACTORY(SvxHangingPunctuationItem, SfxBoolItem);
-TYPEINIT1_AUTOFACTORY(SvxForbiddenRuleItem, SfxBoolItem);
-TYPEINIT1_AUTOFACTORY(SvxParaVertAlignItem, SfxUInt16Item);
-TYPEINIT1_AUTOFACTORY(SvxParaGridItem, SfxBoolItem);
+TYPEINIT1_FACTORY(SvxLineSpacingItem, SfxPoolItem , new SvxLineSpacingItem(LINE_SPACE_DEFAULT_HEIGHT, 0));
+TYPEINIT1_FACTORY(SvxAdjustItem, SfxPoolItem, new SvxAdjustItem(SVX_ADJUST_LEFT, 0));
+TYPEINIT1_FACTORY(SvxWidowsItem, SfxByteItem, new SvxWidowsItem(0, 0));
+TYPEINIT1_FACTORY(SvxOrphansItem, SfxByteItem, new SvxOrphansItem(0, 0));
+TYPEINIT1_FACTORY(SvxHyphenZoneItem, SfxPoolItem, new SvxHyphenZoneItem(sal_False, 0));
+TYPEINIT1_FACTORY(SvxTabStopItem, SfxPoolItem, new SvxTabStopItem(0));
+TYPEINIT1_FACTORY(SvxFmtSplitItem, SfxBoolItem, new SvxFmtSplitItem(sal_False, 0));
+TYPEINIT1_FACTORY(SvxPageModelItem, SfxStringItem, new SvxPageModelItem(0));
+TYPEINIT1_FACTORY(SvxScriptSpaceItem, SfxBoolItem, new SvxScriptSpaceItem(sal_False, 0));
+TYPEINIT1_FACTORY(SvxHangingPunctuationItem, SfxBoolItem, new SvxHangingPunctuationItem(sal_False, 0));
+TYPEINIT1_FACTORY(SvxForbiddenRuleItem, SfxBoolItem, new SvxForbiddenRuleItem(sal_False, 0));
+TYPEINIT1_FACTORY(SvxParaVertAlignItem, SfxUInt16Item, new SvxParaVertAlignItem(0, 0));
+TYPEINIT1_FACTORY(SvxParaGridItem, SfxBoolItem, new SvxParaGridItem(sal_True, 0));
 
 SV_IMPL_VARARR_SORT( SvxTabStopArr, SvxTabStop )
 
