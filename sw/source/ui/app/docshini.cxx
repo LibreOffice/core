@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:13:58 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:13:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,11 +40,10 @@
 #include <hintids.hxx>
 #endif
 
-//Statt uiparam.hxx selbst definieren, das spart keys
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
-#define ITEMID_FONTLIST         SID_ATTR_CHAR_FONTLIST
+
 #ifndef _SOT_STORINFO_HXX
 #include <sot/storinfo.hxx>
 #endif
@@ -107,7 +106,7 @@
 #include <svx/xtable.hxx>
 #endif
 #ifndef _SVX_DRAWITEM_HXX //autogen
-#define ITEMID_COLOR_TABLE SID_COLOR_TABLE
+
 #include <svx/drawitem.hxx>
 #endif
 #ifndef _SVX_FHGTITEM_HXX
@@ -471,7 +470,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         the default adjusment is to the right. */
     if( !bHTMLTemplSet &&
         FRMDIR_HORI_RIGHT_TOP == GetDefaultFrameDirection(GetAppLanguage()) )
-        pDoc->SetDefault( SvxAdjustItem(SVX_ADJUST_RIGHT) );
+        pDoc->SetDefault( SvxAdjustItem(SVX_ADJUST_RIGHT, RES_PARATR_ADJUST ) );
 
     // OD 09.10.2003 #i18732# - set dynamic pool default for
     // item RES_FOLLOW_TEXT_FLOW to FALSE for *new document*.
@@ -485,7 +484,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 // <-- collapsing
 
     //#i16874# AutoKerning as default for new documents
-    pDoc->SetDefault( SvxAutoKernItem( sal_True ) );
+    pDoc->SetDefault( SvxAutoKernItem( sal_True, RES_CHRATR_AUTOKERN ) );
 
     // --> OD 2005-02-10 #i42080# - Due to the several calls of method <SetDefault(..)>
     // at the document instance, the document is modified. Thus, reset this
@@ -906,7 +905,7 @@ void SwDocShell::SubInitNew()
         sal_uInt16 nNewPos = SW_MOD()->GetUsrPref(FALSE)->GetDefTab();
         if( nNewPos )
             aDfltSet.Put( SvxTabStopItem( 1, nNewPos,
-                                          SVX_TAB_ADJUST_DEFAULT ) );
+                                          SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP ) );
     }
     aDfltSet.Put( SvxColorItem( Color( COL_AUTO ), RES_CHRATR_COLOR ) );
 
