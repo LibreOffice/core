@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optitems.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:13:04 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:20:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ namespace linguistic2{
 
 // class SfxSpellCheckItem -----------------------------------------------
 
-#ifdef ITEMID_SPELLCHECK
+
 
 class SVX_DLLPUBLIC SfxSpellCheckItem: public SfxPoolItem
 {
@@ -70,7 +70,7 @@ public:
 
     SfxSpellCheckItem( ::com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XSpellChecker1 >  &xChecker,
-                       sal_uInt16 nWhich = ITEMID_SPELLCHECK );
+                       sal_uInt16 nWhich  );
     SfxSpellCheckItem( const SfxSpellCheckItem& rItem );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -89,11 +89,11 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 >         xSpellCheck;
 };
-#endif
+
 
 // class SfxHyphenRegionItem ---------------------------------------------
 
-#ifdef ITEMID_HYPHENREGION
+
 
 class SVX_DLLPUBLIC SfxHyphenRegionItem: public SfxPoolItem
 {
@@ -103,7 +103,7 @@ class SVX_DLLPUBLIC SfxHyphenRegionItem: public SfxPoolItem
 public:
     TYPEINFO();
 
-    SfxHyphenRegionItem( const sal_uInt16 nId = ITEMID_HYPHENREGION );
+    SfxHyphenRegionItem( const sal_uInt16 nId  );
     SfxHyphenRegionItem( const SfxHyphenRegionItem& rItem );
 
     virtual int              operator==( const SfxPoolItem& ) const;
@@ -129,7 +129,7 @@ public:
         return *this;
     }
 };
-#endif
+
 
 
 #endif
