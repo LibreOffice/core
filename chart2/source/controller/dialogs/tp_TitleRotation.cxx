@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_TitleRotation.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:38:08 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:33:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,8 +56,6 @@
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
 #endif
-//#define ITEMID_CHARTTEXTORDER SCHATTR_TEXT_ORDER
-// #define ITEMID_CHARTTEXTORIENT   SCHATTR_TEXT_ORIENT
 #ifndef _SVX_CHRTITEM_HXX //autogen
 #include <svx/chrtitem.hxx>
 #endif
