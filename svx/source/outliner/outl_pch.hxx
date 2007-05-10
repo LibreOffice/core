@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outl_pch.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:56:47 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:55:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,13 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#define ITEMID_FONTHEIGHT       0
-#define ITEMID_ADJUST           0
-#define ITEMID_LINESPACING      0
-#define ITEMID_LRSPACE          0
-#define ITEMID_BRUSH            0
-#define ITEMID_FIELD            0
-
 #include <svtools/intitem.hxx>
 
 #include <editeng.hxx>
