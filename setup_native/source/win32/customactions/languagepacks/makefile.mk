@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:07:52 $
+#   last change: $Author: gm $ $Date: 2007-05-10 11:02:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,9 @@ STDSHL+=	\
     $(ADVAPI32LIB)\
     $(MSILIB)\
     $(LIBSTLPORTST)								
+
+SHL1OBJS = $(SLOFILES)               \
+    $(SLO)$/seterror.obj
 
 .IF "$(COM)"=="GCC"
 STDSHL+=	\
