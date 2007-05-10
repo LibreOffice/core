@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TypeInspector.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:37:27 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:53:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,11 +233,29 @@ public class TypeInspector{
      * @param _curDataType
      * @return
      */
-    public String getDefaultTypeName(int _curDataType){
-        int i = JavaTools.FieldInIntTable(nDataTypeInfos, _curDataType, 0);
-        if (i > -1)
-            return sDataTypeNames[i];;
-        return "";
+    public String getDefaultTypeName(int _curDataType, Integer precision){
+        String ret = "";
+        for( int i = 0 ; i < nDataTypeInfos.length ; i ++ )
+        {
+            if( nDataTypeInfos[i] == _curDataType )
+            {
+//                 System.out.println( "Desired prec " + precision + ",nPrecisionInfos[i]="+nPrecisionInfos[i] + ",sDataTypeNames[i]="+sDataTypeNames[i] );
+
+                if( precision == null || nPrecisionInfos[i] >= precision.intValue() )
+                {
+                    ret = sDataTypeNames[i]; // this fits best !
+                    break;
+                }
+                else if( ret.length() == 0 )
+                {
+                    // in case we dont find anything else, we at return a typename
+                    // with the correct class
+                    ret = sDataTypeNames[i];
+                }
+            }
+        }
+//         System.out.println( "_curDataType="+_curDataType+",precision="+precision+",ret="+
+        return ret;
     }
 
 
@@ -361,7 +379,7 @@ public class TypeInspector{
                 int i = JavaTools.FieldInIntTable(nDataTypeInfos, nDataType, startindex);
                 bleaveloop = (i < 0);
                 if (!bleaveloop){
-                    if (this.bisAutoIncrementableInfos[i] = true)
+                    if (this.bisAutoIncrementableInfos[i] )
                         return new TypeInfo(nDataType, this.sDataTypeNames[i], true);
                 }
                 else
@@ -370,6 +388,6 @@ public class TypeInspector{
         }
         // As Autoincrementation is not supported for any numeric datatype we take the first available numeric Type;
         nDataType =convertDataType(DataType.INTEGER);
-        return new TypeInfo(nDataType, getDefaultTypeName(nDataType), false);
+        return new TypeInfo(nDataType, getDefaultTypeName(nDataType,null), false);
     }
 }
