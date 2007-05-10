@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:20:35 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:25:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1736,7 +1736,7 @@ BOOL  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
             SfxUInt16Item(FN_PARAM_TABLE_HEADLINE, aHeadLineCB.IsChecked()? USHORT(aRepeatHeaderNF.GetValue()) : 0 ));
     }
     if(aKeepCB.IsChecked() != aKeepCB.GetSavedValue())
-        bModified |= 0 != rSet.Put( SvxFmtKeepItem( aKeepCB.IsChecked()));
+        bModified |= 0 != rSet.Put( SvxFmtKeepItem( aKeepCB.IsChecked(), RES_KEEP));
 
     if(aSplitCB.IsChecked() != aSplitCB.GetSavedValue())
         bModified |= 0 != rSet.Put( SwFmtLayoutSplit( aSplitCB.IsChecked()));
