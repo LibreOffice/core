@@ -22,5 +22,8 @@ s#^#^#
 s#$#$#' | tr '\n' '|' | sed "s#|\$##" >$2
 
 # Please note that the awk expression expects to get the output of 'nm -gx'!
+# On Panther we have to filter out symbols with a value "1f" otherwise external
+# symbols will erroneously be added to the generated export symbols list file.
 awk -v SYMBOLSREGEXP="`cat $2`" '
-match ($6,SYMBOLSREGEXP) > 0 &&  $6 !~ /_GLOBAL_/ { if ($2 != 1) print $6 }'
+match ($6,SYMBOLSREGEXP) > 0 &&  $6 !~ /_GLOBAL_/ { if (($2 != 1) && ( $2 != "1f" ) ) print $6 }'
+
