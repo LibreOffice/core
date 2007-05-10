@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpoutput.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:04:13 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:44:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,9 +137,9 @@ void lcl_SetStyleById( ScDocument* pDoc, SCTAB nTab,
         pStyle->SetParent( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
         SfxItemSet& rSet = pStyle->GetItemSet();
         if ( nStrId==STR_PIVOT_STYLE_RESULT || nStrId==STR_PIVOT_STYLE_TITLE )
-            rSet.Put( SvxWeightItem( WEIGHT_BOLD ) );
+            rSet.Put( SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT ) );
         if ( nStrId==STR_PIVOT_STYLE_CATEGORY || nStrId==STR_PIVOT_STYLE_TITLE )
-            rSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT ) );
+            rSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT, ATTR_HOR_JUSTIFY ) );
     }
 
     pDoc->ApplyStyleAreaTab( nCol1, nRow1, nCol2, nRow2, nTab, *pStyle );
@@ -151,12 +151,12 @@ void lcl_SetFrame( ScDocument* pDoc, SCTAB nTab,
 {
     SvxBorderLine aLine;
     aLine.SetOutWidth(nWidth);
-    SvxBoxItem aBox;
+    SvxBoxItem aBox( ATTR_BORDER );
     aBox.SetLine(&aLine, BOX_LINE_LEFT);
     aBox.SetLine(&aLine, BOX_LINE_TOP);
     aBox.SetLine(&aLine, BOX_LINE_RIGHT);
     aBox.SetLine(&aLine, BOX_LINE_BOTTOM);
-    SvxBoxInfoItem aBoxInfo;
+    SvxBoxInfoItem aBoxInfo( ATTR_BORDER_INNER );
     aBoxInfo.SetValid(VALID_HORI,FALSE);
     aBoxInfo.SetValid(VALID_VERT,FALSE);
     aBoxInfo.SetValid(VALID_DISTANCE,FALSE);
