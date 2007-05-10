@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlwrapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 21:17:31 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 17:07:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -523,6 +523,8 @@ public:
     typedef MultiControlWrapperHelper       ControlType;
     typedef ValueT                          ControlValueType;
     typedef MultiControlWrapper< ValueT >   MultiControlWrapperType;
+
+    MultiControlWrapper() : maDefValue( 0 ){}
 
     /** Returns the default value that can be used in GetControlValue(). */
     inline const ValueT& GetDefaultValue() const { return maDefValue; }

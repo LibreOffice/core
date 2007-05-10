@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 21:18:43 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 17:07:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,12 +122,12 @@ class SfxPoolCancelManager_Impl;
 
 #define S2BS(s) ByteString( s, RTL_TEXTENCODING_MS_1252 )
 
-//#if 0 // _SOLAR__PRIVATE
-#ifndef STRING_LIST
-#define STRING_LIST
-DECLARE_LIST( StringList, String* )
-#endif
+////#if 0 // _SOLAR__PRIVATE
+//#ifndef STRING_LIST
+//#define STRING_LIST
+//DECLARE_LIST( StringList, String* )
 //#endif
+////#endif
 
 //____________________________________________________________________________________________________________________________________
 //  defines for namespaces

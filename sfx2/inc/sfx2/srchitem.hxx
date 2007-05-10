@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 21:30:05 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 17:07:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@
 
 // class SvxSearchItem ---------------------------------------------------
 
-#ifdef ITEMID_SEARCH
+//#ifdef ITEMID_SEARCH
 
 /*  [Beschreibung]
 
@@ -127,7 +127,7 @@ class SFX2_DLLPUBLIC SvxSearchItem :
 public:
     TYPEINFO();
 
-    SvxSearchItem( const sal_uInt16 nId = ITEMID_SEARCH );
+    SvxSearchItem( const sal_uInt16 nId /*= ITEMID_SEARCH*/ );
     SvxSearchItem( const SvxSearchItem& rItem );
     virtual ~SvxSearchItem();
 
@@ -328,5 +328,5 @@ sal_Bool SvxSearchItem::IsMatchFullHalfWidthForms() const
 
 #endif
 
-#endif
+//#endif
 

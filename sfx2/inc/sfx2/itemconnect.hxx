@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemconnect.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 21:22:03 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 17:07:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ const ItemConnFlags ITEMCONN_NONE               = 0x0000;
 /** Connection is inactive - virtual functions will not be called. */
 const ItemConnFlags ITEMCONN_INACTIVE           = 0x0001;
 /** Clone item in FillItemSet() from old item set. */
-const ItemConnFlags ITEMCONN_CLONE_ITEM         = 0x0002;
+//const ItemConnFlags ITEMCONN_CLONE_ITEM         = 0x0002;
 
 /** Enable control(s), if the item is known. */
 const ItemConnFlags ITEMCONN_ENABLE_KNOWN       = 0x0010;
@@ -554,21 +554,11 @@ bool ItemControlConnection< ItemWrpT, ControlWrpT >::FillItemSet(
         if( !pOldItem || !(maItemWrp.GetItemValue( *pOldItem ) == aNewValue) )
         {
             USHORT nWhich = ItemWrapperHelper::GetWhichId( rDestSet, maItemWrp.GetSlotId() );
-            if( GetFlags() & ITEMCONN_CLONE_ITEM )
-            {
-                std::auto_ptr< ItemType > xItem(
-                    static_cast< ItemType* >( maItemWrp.GetDefaultItem( rDestSet ).Clone() ) );
-                xItem->SetWhich( nWhich );
-                maItemWrp.SetItemValue( *xItem, aNewValue );
-                rDestSet.Put( *xItem );
-            }
-            else
-            {
-                ItemType aItem;
-                aItem.SetWhich( nWhich );
-                maItemWrp.SetItemValue( aItem, aNewValue );
-                rDestSet.Put( aItem );
-            }
+            std::auto_ptr< ItemType > xItem(
+                static_cast< ItemType* >( maItemWrp.GetDefaultItem( rDestSet ).Clone() ) );
+            xItem->SetWhich( nWhich );
+            maItemWrp.SetItemValue( *xItem, aNewValue );
+            rDestSet.Put( *xItem );
             bChanged = true;
         }
     }
