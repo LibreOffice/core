@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionPageSetup.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:56:11 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:22:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,7 +239,7 @@ namespace dbaui
 
 
         if ( USHRT_MAX != _nHeaderResId )
-            SetHeaderText(this, FT_AUTOWIZARDHEADER, _nHeaderResId);
+            SetHeaderText(FT_AUTOWIZARDHEADER, _nHeaderResId);
 
         if ( USHRT_MAX != _nUrlResId )
         {
@@ -323,16 +323,6 @@ namespace dbaui
         callModifiedHdl();
         return 0L;
     }
-
-    // -----------------------------------------------------------------------
-    void OConnectionTabPageSetup::toggleURLControlGroup(BOOL _bEnable)
-    {
-        m_aET_Connection.Enable(_bEnable);
-        m_aPB_Connection.Enable(_bEnable);
-        m_aFT_Connection.Enable(_bEnable);
-    }
-
-
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
