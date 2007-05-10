@@ -4,9 +4,9 @@
  *
  *  $RCSfile: deflt3d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:18:34 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:46:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#define ITEMID_COLOR            SID_ATTR_3D_LIGHTCOLOR
 
 #ifndef _E3D_DEFLT3D_HXX
 #include "deflt3d.hxx"
