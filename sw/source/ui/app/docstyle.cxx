@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docstyle.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-05 10:54:41 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:14:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 
 #define _SVSTDARR_USHORTS
 
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
-#endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -99,9 +96,6 @@
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _UIITEMS_HXX
-#include <uiitems.hxx>
 #endif
 #ifndef _CMDID_H
 #include <cmdid.h>
@@ -1091,7 +1085,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
         case SFX_STYLE_FAMILY_PARA :
         case SFX_STYLE_FAMILY_FRAME:
             {
-                SvxBoxInfoItem aBoxInfo;
+                SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
                 aBoxInfo.SetTable( FALSE );
                 aBoxInfo.SetDist( TRUE);    // Abstandsfeld immer anzeigen
                 aBoxInfo.SetMinDist( TRUE );// Minimalgroesse in Tabellen und Absaetzen setzen
