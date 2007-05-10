@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:35:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:40:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1512,11 +1512,18 @@ void VCLXListBox::addItems( const ::com::sun::star::uno::Sequence< ::rtl::OUStri
     if ( pBox )
     {
         sal_uInt16 nP = nPos;
-        for ( sal_uInt16 n = 0; n < aItems.getLength(); n++ )
+        const ::rtl::OUString* pItems = aItems.getConstArray();
+        const ::rtl::OUString* pItemsEnd = aItems.getConstArray() + aItems.getLength();
+        while ( pItems != pItemsEnd )
         {
-            pBox->InsertEntry( aItems.getConstArray()[n], nP );
-            if ( (sal_uInt16)nPos < 0xFFFF )    // Nicht wenn 0xFFFF, weil LIST_APPEND
-                nP++;
+            if ( (sal_uInt16)nP == 0xFFFF )
+            {
+                OSL_ENSURE( false, "VCLXListBox::addItems: too many entries!" );
+                // skip remaining entries, list cannot hold them, anyway
+                break;
+            }
+
+            pBox->InsertEntry( *pItems++, nP++ );
         }
     }
 }
