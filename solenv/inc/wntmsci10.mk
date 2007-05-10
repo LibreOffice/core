@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-26 15:06:34 $
+#   last change: $Author: kz $ $Date: 2007-05-10 15:12:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,8 @@ CFLAGS+= -Ob1
 .ENDIF
 
 # flags to enable build with symbols; required for crashdump feature
-CFLAGSENABLESYMBOLS=-Zi -Fd$(MISC)$/_ooo_st_$(TARGET).PDB
+#CFLAGSENABLESYMBOLS=-Zi -Fd$(MISC)$/_ooo_st_$(TARGET).PDB
+CFLAGSENABLESYMBOLS=-Z7 -Yd
 
 .IF "$(bndchk)" != ""
 .IF "$(debug)" == ""
@@ -115,9 +116,9 @@ RSCDEFS+=-DFULL_DESK
 CFLAGSEXCEPTIONS=-GX
 CFLAGS_NO_EXCEPTIONS=
 
-CFLAGS_CREATE_PCH=-I$(PRJ)$/inc$/pch -Fo$(SLO)$/pchname.obj -Ycprecompiled_$(PRJNAME).hxx -Fp$(SLO)$/pchname.pch -DPRECOMPILED_HEADERS
-CFLAGS_USE_PCH=-I$(PRJ)$/inc$/pch -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)$/pchname.pch -DPRECOMPILED_HEADERS
-CFLAGS_USE_EXCEPTIONS_PCH=-I$(PRJ)$/inc$/pch -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)$/pchname_ex.pch -DPRECOMPILED_HEADERS
+CFLAGS_CREATE_PCH=-I$(INCPCH) -Fo$(SLO)$/pchname.obj -Ycprecompiled_$(PRJNAME).hxx -DPRECOMPILED_HEADERS
+CFLAGS_USE_PCH=-I$(INCPCH) -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)$/pch/precompiled_$(PRJNAME).hxx$(PCHPOST) -DPRECOMPILED_HEADERS
+CFLAGS_USE_EXCEPTIONS_PCH=-I$(INCPCH) -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)$/pch_ex/precompiled_$(PRJNAME).hxx$(PCHPOST) -DPRECOMPILED_HEADERS
 .IF "$(CALL_CDECL)"=="TRUE"
 CFLAGSCALL=-Gd
 .ELSE			# "$(CALL_CDECL)"=="TRUE"
