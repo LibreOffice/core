@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sane.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:27:12 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:51:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -489,7 +489,7 @@ BOOL Sane::SetOptionValue( int n, double fSet, int nElement )
     {
         SANE_Word nSetTo =
             mppOptions[n]->type == SANE_TYPE_INT ?
-            nSetTo = (SANE_Word)fSet : nSetTo = SANE_FIX( fSet );
+            (SANE_Word)fSet : SANE_FIX( fSet );
 
         nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, &nSetTo );
         if( nStatus == SANE_STATUS_GOOD )
