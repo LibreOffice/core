@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LayerDialogContent.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:39:50 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:26:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,8 +44,6 @@
 #ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONSPEED_HPP_
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #endif
-
-#define ITEMID_COLOR SID_COLOR_TABLE
 
 #include <svx/gallery.hxx>
 #include <svx/colritem.hxx>
