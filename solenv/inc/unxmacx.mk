@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacx.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: ihi $ $Date: 2007-04-16 11:12:53 $
+#   last change: $Author: kz $ $Date: 2007-05-10 13:22:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -150,8 +150,7 @@ MODULES_WITH_WARNINGS := \
     lingu \
     r_tools \
     starmath \
-    sw \
-    xmlsecurity
+    sw
 
 # Currently, there is no nas support for OS X...
 CDEFS+= -DNO_AUDIO
