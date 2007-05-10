@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:28:17 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:49:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -312,7 +312,8 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
         rtl_TextEncoding eTempTextEnc = (bEE && (eFontEnc == GetTextEncoding())) ?
             ScfTools::GetSystemTextEncoding() : eFontEnc;
 
-        SvxFontItem aFontItem( maData.GetScFamily( GetTextEncoding() ), maData.maName, EMPTY_STRING, PITCH_DONTKNOW, eTempTextEnc );
+        SvxFontItem aFontItem( maData.GetScFamily( GetTextEncoding() ), maData.maName, EMPTY_STRING,
+                PITCH_DONTKNOW, eTempTextEnc, ATTR_FONT );
         // #91658# set only for valid script types
         if( mbHasWstrn )
             PUTITEM( aFontItem, ATTR_FONT,      EE_CHAR_FONTINFO );
@@ -329,7 +330,7 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
         if( bEE && (eType != EXC_FONTITEM_HF) )     // do not convert header/footer height
             nHeight = (nHeight * 127 + 36) / EXC_POINTS_PER_INCH;   // #98527# 1 in == 72 pt
 
-        SvxFontHeightItem aHeightItem( nHeight );
+        SvxFontHeightItem aHeightItem( nHeight, 100, ATTR_FONT_HEIGHT );
         PUTITEM( aHeightItem,   ATTR_FONT_HEIGHT,       EE_CHAR_FONTHEIGHT );
         PUTITEM( aHeightItem,   ATTR_CJK_FONT_HEIGHT,   EE_CHAR_FONTHEIGHT_CJK );
         PUTITEM( aHeightItem,   ATTR_CTL_FONT_HEIGHT,   EE_CHAR_FONTHEIGHT_CTL );
@@ -337,12 +338,12 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
 
 // Font color - pass AUTO_COL to item
     if( mbColorUsed )
-        PUTITEM( SvxColorItem( GetPalette().GetColor( maData.mnColor ) ), ATTR_FONT_COLOR, EE_CHAR_COLOR );
+        PUTITEM( SvxColorItem( GetPalette().GetColor( maData.mnColor ), ATTR_FONT_COLOR ), ATTR_FONT_COLOR, EE_CHAR_COLOR );
 
 // Font weight (for all script types)
     if( mbWeightUsed )
     {
-        SvxWeightItem aWeightItem( maData.GetScWeight() );
+        SvxWeightItem aWeightItem( maData.GetScWeight(), ATTR_FONT_WEIGHT );
         PUTITEM( aWeightItem,   ATTR_FONT_WEIGHT,       EE_CHAR_WEIGHT );
         PUTITEM( aWeightItem,   ATTR_CJK_FONT_WEIGHT,   EE_CHAR_WEIGHT_CJK );
         PUTITEM( aWeightItem,   ATTR_CTL_FONT_WEIGHT,   EE_CHAR_WEIGHT_CTL );
@@ -351,14 +352,14 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
 // Font underline
     if( mbUnderlUsed )
     {
-        SvxUnderlineItem aUnderlItem( maData.GetScUnderline() );
+        SvxUnderlineItem aUnderlItem( maData.GetScUnderline(), ATTR_FONT_UNDERLINE );
         PUTITEM( aUnderlItem,   ATTR_FONT_UNDERLINE,    EE_CHAR_UNDERLINE );
     }
 
 // Font posture (for all script types)
     if( mbItalicUsed )
     {
-        SvxPostureItem aPostItem( maData.GetScPosture() );
+        SvxPostureItem aPostItem( maData.GetScPosture(), ATTR_FONT_POSTURE );
         PUTITEM( aPostItem, ATTR_FONT_POSTURE,      EE_CHAR_ITALIC );
         PUTITEM( aPostItem, ATTR_CJK_FONT_POSTURE,  EE_CHAR_ITALIC_CJK );
         PUTITEM( aPostItem, ATTR_CTL_FONT_POSTURE,  EE_CHAR_ITALIC_CTL );
@@ -366,11 +367,11 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
 
 // Boolean attributes crossed out, contoured, shadowed
     if( mbStrikeUsed )
-        PUTITEM( SvxCrossedOutItem( maData.GetScStrikeout() ), ATTR_FONT_CROSSEDOUT, EE_CHAR_STRIKEOUT );
+        PUTITEM( SvxCrossedOutItem( maData.GetScStrikeout(), ATTR_FONT_CROSSEDOUT ), ATTR_FONT_CROSSEDOUT, EE_CHAR_STRIKEOUT );
     if( mbOutlineUsed )
-        PUTITEM( SvxContourItem( maData.mbOutline ), ATTR_FONT_CONTOUR, EE_CHAR_OUTLINE );
+        PUTITEM( SvxContourItem( maData.mbOutline, ATTR_FONT_CONTOUR ), ATTR_FONT_CONTOUR, EE_CHAR_OUTLINE );
     if( mbShadowUsed )
-        PUTITEM( SvxShadowedItem( maData.mbShadow ), ATTR_FONT_SHADOWED, EE_CHAR_SHADOW );
+        PUTITEM( SvxShadowedItem( maData.mbShadow, ATTR_FONT_SHADOWED ), ATTR_FONT_SHADOWED, EE_CHAR_SHADOW );
 
 // Super-/subscript: only on edit engine objects
     if( mbEscapemUsed && bEE )
@@ -677,13 +678,13 @@ void XclImpCellAlign::FillFromXF8( sal_uInt16 nAlign, sal_uInt16 nMiscAttrib )
 void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFont, bool bSkipPoolDefs ) const
 {
     // horizontal alignment
-    ScfTools::PutItem( rItemSet, SvxHorJustifyItem( GetScHorAlign() ), bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, SvxHorJustifyItem( GetScHorAlign(), ATTR_HOR_JUSTIFY ), bSkipPoolDefs );
 
     // text wrap
     ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_LINEBREAK, mbLineBreak ), bSkipPoolDefs );
 
     // vertical alignment
-    ScfTools::PutItem( rItemSet, SvxVerJustifyItem( GetScVerAlign() ), bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, SvxVerJustifyItem( GetScVerAlign(), ATTR_VER_JUSTIFY ), bSkipPoolDefs );
 
     // indent
     sal_uInt16 nScIndent = mnIndent * 200; // 1 Excel unit == 10 pt == 200 twips
@@ -713,7 +714,7 @@ void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFo
     ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_VERTICAL_ASIAN, bAsianVert ), bSkipPoolDefs );
 
     // CTL text direction
-    ScfTools::PutItem( rItemSet, SvxFrameDirectionItem( GetScFrameDir() ), bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, SvxFrameDirectionItem( GetScFrameDir(), ATTR_WRITINGDIR ), bSkipPoolDefs );
 }
 
 // ----------------------------------------------------------------------------
@@ -844,7 +845,7 @@ void XclImpCellBorder::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette&
 {
     if( mbLeftUsed || mbRightUsed || mbTopUsed || mbBottomUsed )
     {
-        SvxBoxItem aBoxItem;
+        SvxBoxItem aBoxItem( ATTR_BORDER );
         SvxBorderLine aLine;
         if( mbLeftUsed && lclConvertBorderLine( aLine, rPalette, mnLeftLine, mnLeftColor ) )
             aBoxItem.SetLine( &aLine, BOX_LINE_LEFT );
@@ -951,7 +952,7 @@ void XclImpCellArea::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette& r
 
     if( mbPattUsed )    // colors may be both unused in cond. formats
     {
-        SvxBrushItem aBrushItem;
+        SvxBrushItem aBrushItem( ATTR_BACKGROUND );
 
         // #108935# do not use IsTransparent() - old Calc filter writes tranparency with different color indexes
         if( mnPattern == EXC_PATT_NONE )
