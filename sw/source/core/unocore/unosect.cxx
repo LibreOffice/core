@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:00:35 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:02:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -870,7 +870,7 @@ void SAL_CALL SwXTextSection::SetPropertyValues_Impl(
                             else if(RES_BACKGROUND == pMap->nWID)
                             {
                                 if(!pProps->pBrushItem)
-                                    pProps->pBrushItem = new SvxBrushItem;
+                                    pProps->pBrushItem = new SvxBrushItem(RES_BACKGROUND);
                                 pPutItem = pProps->pBrushItem;
                             }
                             else if(RES_FTN_AT_TXTEND == pMap->nWID)
@@ -1190,7 +1190,7 @@ uno::Sequence< Any > SAL_CALL SwXTextSection::GetPropertyValues_Impl(
                             else if(RES_BACKGROUND == pMap->nWID)
                             {
                                 if(!pProps->pBrushItem)
-                                    pProps->pBrushItem = new SvxBrushItem;
+                                    pProps->pBrushItem = new SvxBrushItem(RES_BACKGROUND);
                                 pQueryItem = pProps->pBrushItem;
                             }
                             else if(RES_FTN_AT_TXTEND == pMap->nWID)
@@ -1220,14 +1220,14 @@ uno::Sequence< Any > SAL_CALL SwXTextSection::GetPropertyValues_Impl(
                             else if(RES_FRAMEDIR == pMap->nWID)
                             {
                                 if(!pProps->pFrameDirItem)
-                                    pProps->pFrameDirItem = new SvxFrameDirectionItem;
+                                    pProps->pFrameDirItem = new SvxFrameDirectionItem(FRMDIR_ENVIRONMENT, RES_FRAMEDIR);
                                 pQueryItem = pProps->pFrameDirItem;
                             }
                             /* -> #109700# */
                             else if(RES_LR_SPACE == pMap->nWID)
                             {
                                 if(!pProps->pLRSpaceItem)
-                                    pProps->pLRSpaceItem = new SvxLRSpaceItem;
+                                    pProps->pLRSpaceItem = new SvxLRSpaceItem( RES_LR_SPACE );
                                 pQueryItem = pProps->pLRSpaceItem;
                             }
                             /* <- #109700# */
