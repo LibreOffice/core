@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.142 $
-# Date:        $Date: 2007-05-09 13:27:09 $
+# Version:     $Revision: 1.143 $
+# Date:        $Date: 2007-05-10 13:15:24 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1463,7 +1463,6 @@ CreateFileHeader( *OUT_JAM, $UPD, $platform, "jam", "#" ) if defined($outfile_ja
 ToFile( "SRC_ROOT",	     $SRC_ROOT,          "e" );
 ToFile( "SHELL",             $SHELL,             "e" );
 ToFile( "JAVA_HOME",         $JAVA_HOME,         "e" );
-ToFile( "XSLTPROC",          "@XSLTPROC@",       "e" );
 ToFile( "ANT_HOME",          "@ANT_HOME@",       "e" );
 ToFile( "ANT_LIB",           "@ANT_LIB@",        "e" );
 ToFile( "ANT",               "@ANT@",            "e" );
@@ -1838,11 +1837,10 @@ ToFile( "XERCES_JAR",        "@XERCES_JAR@",       "e" );
 ToFile( "SYSTEM_XALAN",      "@SYSTEM_XALAN@",     "e" );
 ToFile( "XALAN_JAR",         "@XALAN_JAR@",        "e" );
 ToFile( "SERIALIZER_JAR",    "@SERIALIZER_JAR@",   "e" );
-ToFile( "SYSTEM_XT",         "@SYSTEM_XT@",        "e" );
-ToFile( "XT_JAR",            "@XT_JAR@",           "e" );
-ToFile( "SYSTEM_SABLOT",     "@SYSTEM_SABLOT@",    "e" );
-ToFile( "SABLOT_LIBS",       "@SABLOT_LIBS@",      "e" );
 ToFile( "SYSTEM_ODBC_HEADERS","@SYSTEM_ODBC_HEADERS@","e" );
+ToFile( "SYSTEM_LIBXSLT",    "@SYSTEM_LIBXSLT@",   "e" );
+ToFile( "LIBXSLT_CFLAGS",    "@LIBXSLT_CFLAGS@",   "e" );
+ToFile( "LIBXSLT_LIBS",      "@LIBXSLT_LIBS@",     "e" );
 ToFile( "SYSTEM_SANE_HEADER","@SYSTEM_SANE_HEADER@","e" );
 ToFile( "SYSTEM_XRENDER_HEADERS","@SYSTEM_XRENDER_HEADERS@","e" );
 ToFile( "SYSTEM_CURL",       "@SYSTEM_CURL@",      "e" );
