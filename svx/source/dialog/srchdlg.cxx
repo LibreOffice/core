@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:43:03 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:41:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@
 #include "svxitems.hrc"
 #include "srchdlg.hrc"
 
-#define ITEMID_SEARCH       SID_ATTR_SEARCH
+
 #define ITEMID_SETITEM      0
 
 #include <sfx2/srchitem.hxx>
@@ -119,7 +119,7 @@
 #ifndef _SVX_OPTJSEARCH_HXX_
 #include <optjsearch.hxx>
 #endif
-#define ITEMID_BRUSH SID_ATTR_BRUSH
+
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <brshitem.hxx>
 #endif
