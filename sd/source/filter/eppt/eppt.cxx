@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:21:05 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:23:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,9 +118,6 @@
 
 #ifndef _MSDFFIMP_HXX
 #include <svx/msdffimp.hxx>
-#endif
-#ifndef _EEITEMID_HXX
-#include <svx/eeitemid.hxx>
 #endif
 #ifndef _SVX_FLDITEM_HXX
 #include <svx/flditem.hxx>
