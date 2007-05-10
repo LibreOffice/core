@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hdft.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:32:17 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:37:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,16 +59,16 @@
 #include "dialogs.hrc"
 #include "hdft.hrc"
 
-#define ITEMID_PAGE     0
-#define ITEMID_SIZE     0
-#define ITEMID_ULSPACE  0
-#define ITEMID_LRSPACE  0
-#define ITEMID_PAPERBIN 0
-#define ITEMID_SETITEM  0
-#define ITEMID_BRUSH    0
-#define ITEMID_BOX      0
-#define ITEMID_BOXINFO  0
-#define ITEMID_SHADOW   0
+
+
+
+
+
+
+
+
+
+
 
 #define _SVX_HDFT_CXX
 
