@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:02:01 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:18:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,6 @@
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
 #endif
 
 #ifndef _LIST_HXX //autogen
@@ -105,6 +102,7 @@
 #include <svx/svxids.hrc> //CHINA001
 #include <svx/flagsdef.hxx> //CHINA001
 #include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc>
 
 /*--------------------------------------------------------------------
     Beschreibung:   Der Traeger des Dialoges
