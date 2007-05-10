@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:21:59 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:09:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1307,7 +1307,7 @@ bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
 
                 SvxLRSpaceItem aResultLR(rPageLR.GetLeft() +
                     rSectionLR.GetLeft(), rPageLR.GetRight() +
-                    rSectionLR.GetRight());
+                    rSectionLR.GetRight(), 0, 0, RES_LR_SPACE );
 
                 aSet.Put(aResultLR);
 
