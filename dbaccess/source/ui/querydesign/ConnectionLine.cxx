@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionLine.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:19:20 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:36:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,18 +156,6 @@ OConnectionLine::OConnectionLine( OTableConnection* _pConn, OConnectionLineDataR
 }
 
 //------------------------------------------------------------------------
-OConnectionLine::OConnectionLine( OTableConnection* _pConn, const String& _rSourceFieldName,
-                                  const String& _rDestFieldName )
-    :m_pTabConn( _pConn )
-    ,m_pData(NULL)
-    ,m_pSourceEntry( NULL )
-    ,m_pDestEntry( NULL )
-{
-    DBG_CTOR(OConnectionLine,NULL);
-    m_pData = new OConnectionLineData( _rSourceFieldName,_rDestFieldName);
-}
-
-//------------------------------------------------------------------------
 OConnectionLine::OConnectionLine( const OConnectionLine& _rLine )
 {
     DBG_CTOR(OConnectionLine,NULL);
@@ -179,18 +167,6 @@ OConnectionLine::OConnectionLine( const OConnectionLine& _rLine )
 OConnectionLine::~OConnectionLine()
 {
     DBG_DTOR(OConnectionLine,NULL);
-}
-
-//------------------------------------------------------------------------
-void OConnectionLine::SetSourceFieldName( const String& rSourceFieldName )
-{
-    m_pData->SetSourceFieldName( rSourceFieldName );
-}
-
-//------------------------------------------------------------------------
-void OConnectionLine::SetDestFieldName( const String& rDestFieldName )
-{
-    m_pData->SetDestFieldName( rDestFieldName );
 }
 
 //------------------------------------------------------------------------
@@ -213,23 +189,6 @@ OConnectionLine& OConnectionLine::operator=( const OConnectionLine& rLine )
 
     return *this;
 }
-
-//------------------------------------------------------------------------
-BOOL OConnectionLine::Connect( const String& rSourceFieldName, const String& rDestFieldName )
-{
-    //////////////////////////////////////////////////////////////////////
-    // Parameter duerfen nicht leer sein
-    if( !rSourceFieldName.Len() || !rDestFieldName.Len() )
-        return FALSE;
-
-    //////////////////////////////////////////////////////////////////////
-    // Feldnamen setzen
-    m_pData->SetSourceFieldName( rSourceFieldName );
-    m_pData->SetDestFieldName( rDestFieldName );
-
-    return TRUE;
-}
-
 
 //------------------------------------------------------------------------
 Rectangle OConnectionLine::GetBoundingRect()
