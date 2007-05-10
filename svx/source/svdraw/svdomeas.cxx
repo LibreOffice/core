@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:56:25 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:58:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #include "svdomeas.hxx"
 #include <math.h>
-#include "svditext.hxx" // enthaelt u.a. define ITEMID_FIELD fuer include flditem
+#include "svditext.hxx" //
 #include "xpoly.hxx"
 #include "xoutx.hxx"
 #include "svdtrans.hxx"
@@ -756,10 +756,10 @@ void SdrMeasureObj::UndirtyText() const
     if (bTextDirty) {
         SdrOutliner& rOutliner=ImpGetDrawOutliner();
         if (pOutlinerParaObject==NULL) {
-            rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SDRMEASUREFIELD_ROTA90BLANCS)),ESelection(0,0));
-            rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SDRMEASUREFIELD_VALUE)),ESelection(0,1));
-            rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SDRMEASUREFIELD_UNIT)),ESelection(0,2));
-            rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SDRMEASUREFIELD_ROTA90BLANCS)),ESelection(0,3));
+            rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SDRMEASUREFIELD_ROTA90BLANCS), EE_FEATURE_FIELD), ESelection(0,0));
+            rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SDRMEASUREFIELD_VALUE), EE_FEATURE_FIELD),ESelection(0,1));
+            rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SDRMEASUREFIELD_UNIT), EE_FEATURE_FIELD),ESelection(0,2));
+            rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SDRMEASUREFIELD_ROTA90BLANCS), EE_FEATURE_FIELD),ESelection(0,3));
 
             if(GetStyleSheet())
                 rOutliner.SetStyleSheet(0, GetStyleSheet());
