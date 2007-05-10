@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:28:04 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:06:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -468,9 +468,13 @@ String RID_STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE
     Text [ en-US ] = "The entered criterion cannot be compared with this field.";
 };
 
-
 String RID_STR_DATANAVIGATOR
 {
     Text [ en-US ] = "Data Navigator" ;
 };
 
+String RID_STR_READONLY_VIEW
+{
+    Text [ de ] = " (schreibgeschützt)" ;
+    Text [ en-US ] = " (read-only)" ;
+};
