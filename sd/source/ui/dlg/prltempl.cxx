@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prltempl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:08:16 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:27:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,17 +41,6 @@
 #endif
 
 
-#define ITEMID_FONTLIST     SID_ATTR_CHAR_FONTLIST
-//#define ITEMID_ESCAPEMENT SID_ATTR_CHAR_ESCAPEMENT
-#define ITEMID_CASEMAP      SID_ATTR_CHAR_CASEMAP
-
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
-#define ITEMID_GRADIENT_LIST    SID_GRADIENT_LIST
-#define ITEMID_HATCH_LIST       SID_HATCH_LIST
-#define ITEMID_BITMAP_LIST      SID_BITMAP_LIST
-#define ITEMID_DASH_LIST        SID_DASH_LIST
-#define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
-
 #include "eetext.hxx"
 
 #include <svx/dialogs.hrc>
@@ -69,14 +58,12 @@
 #ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
 #endif
-#define ITEMID_BRUSH    0
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
 #endif
 #ifndef _SV_GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
-#define ITEMID_LRSPACE          EE_PARA_LRSPACE
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
 #endif
@@ -429,7 +416,7 @@ const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet() const
 
             if( pSvxNumBulletItem )
             {
-                SvxLRSpaceItem& rLRItem = *(SvxLRSpaceItem*)pOutSet->GetItem( ITEMID_LRSPACE );
+                SvxLRSpaceItem& rLRItem = *(SvxLRSpaceItem*)pOutSet->GetItem( EE_PARA_LRSPACE );
 
                 SvxNumRule* pNumRule = pSvxNumBulletItem->GetNumRule();
                 if(pNumRule)
