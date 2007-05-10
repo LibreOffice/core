@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:26:31 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:11:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -419,13 +419,6 @@ void ODBTableDecorator::construct()
     describeProperties(aTableProps);
 
     return new ::cppu::OPropertyArrayHelper(aTableProps);
-}
-// -----------------------------------------------------------------------------
-void ODBTableDecorator::setTable(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxTable)
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
-    m_xTable = _rxTable;
 }
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper & SAL_CALL ODBTableDecorator::getInfoHelper()
