@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.256 $
+ *  $Revision: 1.257 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:39:04 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:29:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4938,7 +4938,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
         else
         {
             if ( !nStartHelpId )
-                nStartHelpId = HELP_INDEX;
+                nStartHelpId = OOO_HELP_INDEX;
 
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
