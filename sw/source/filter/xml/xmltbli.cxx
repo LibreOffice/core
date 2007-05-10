@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:55:23 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:12:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2167,7 +2167,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     // table cell protection
     if( pCell->IsProtected() )
     {
-        SvxProtectItem aProtectItem;
+        SvxProtectItem aProtectItem( RES_PROTECT );
         aProtectItem.SetCntntProtect( sal_True );
         pBoxFmt->SetAttr( aProtectItem );
     }
