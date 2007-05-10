@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:16:42 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:43:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3568,6 +3568,18 @@ StackVar ScInterpreter::Interpret()
             }
         }
 
+        // Need a clean stack environment for the JumpMatrix to work.
+        if (nGlobalError && eOp != ocPush && sp > nStackBase + 1)
+        {
+            // Not all functions pop all parameters in case an error is
+            // generated. Clean up stack. Assumes that every function pushes a
+            // result, may be arbitrary in case of error.
+            const ScToken* pResult = pStack[ sp - 1 ];
+            while (sp > nStackBase)
+                Pop();
+            PushTempToken( *pResult );
+        }
+
         bool bGotResult;
         do
         {
@@ -3631,18 +3643,6 @@ StackVar ScInterpreter::Interpret()
             }
             if ( nErrorFunction >= nErrorFunctionCount )
                 ++nErrorFunction;   // that's it, error => terminate
-            else
-            {
-                if ( eOp != ocPush && sp > nStackBase + 1 )
-                {
-                    // Clear stack. Assumes that every function pushes a
-                    // result, may be arbitrary in case of error.
-                    const ScToken* pTempResult = pStack[ sp - 1 ];
-                    while ( sp > nStackBase )
-                        Pop();
-                    PushTempToken( *pTempResult );
-                }
-            }
         }
 
         nOldOpCode = sal::static_int_cast<UINT16>( eOp );
