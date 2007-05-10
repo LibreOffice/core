@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:27:54 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:42:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,9 +59,9 @@
 
 #include <svtools/smplhint.hxx>
 
-#define ITEMID_TABSTOP  0
-#define ITEMID_LRSPACE  0
-#define ITEMID_PROTECT  0
+
+
+
 
 #include "dialogs.hrc"
 #include "dialmgr.hxx"
@@ -71,7 +71,6 @@
 #include "tstpitem.hxx"
 #include "lrspitem.hxx"
 #include "protitem.hxx"
-
 #ifndef RULER_TAB_RTL
 #define RULER_TAB_RTL           ((USHORT)0x0010)
 #endif
@@ -248,6 +247,7 @@ struct SvxRuler_Impl  {
     lOldWinPos(0),
     lMaxLeftLogic(0), lMaxRightLogic(0),
     lLastLMargin(0), lLastRMargin(0),
+    aProtectItem(SID_RULER_PROTECT),
     pTextRTLItem(0), nControlerItems(0),
     nIdx(0),
     nColLeftPix(0), nColRightPix(0),
