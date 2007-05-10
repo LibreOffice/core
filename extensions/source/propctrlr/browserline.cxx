@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserline.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:12:55 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:46:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,8 @@ namespace pcr
             ,m_pControlWindow( NULL )
             ,m_pBrowseButton(NULL)
             ,m_pAdditionalBrowseButton( NULL )
-            ,m_bIndentTitle( sal_False )
+            ,m_bIndentTitle( false )
+            ,m_bReadOnly( false )
             ,m_nNameWidth(0)
             ,m_pTheParent(pParent)
             ,m_pClickListener( NULL )
@@ -103,7 +104,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::IndentTitle( sal_Bool _bIndent )
+    void OBrowserLine::IndentTitle( bool _bIndent )
     {
         if ( m_bIndentTitle != _bIndent )
         {
@@ -355,6 +356,16 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
+    void OBrowserLine::SetReadOnly( bool _bReadOnly )
+    {
+        if ( m_bReadOnly != _bReadOnly )
+        {
+            m_bReadOnly = _bReadOnly;
+            implUpdateEnabledDisabled();
+        }
+    }
+
+    //------------------------------------------------------------------
     namespace
     {
         void implSetBitIfAffected( sal_uInt16& _nEnabledBits, sal_Int16 _nAffectedMask, sal_Int16 _nTestBit, bool _bSet )
@@ -366,10 +377,16 @@ namespace pcr
                     _nEnabledBits &= ~_nTestBit;
         }
 
-        void implEnable( Window* _pWindow, sal_uInt16 _nEnabledBits, sal_uInt16 _nMatchBits )
+        void implEnable( Window* _pWindow, sal_uInt16 _nEnabledBits, sal_uInt16 _nMatchBits  )
         {
             if ( _pWindow )
                 _pWindow->Enable( ( _nEnabledBits & _nMatchBits ) == _nMatchBits );
+        }
+
+        void implEnable( Window* _pWindow, bool _bEnable )
+        {
+            if ( _pWindow )
+                _pWindow->Enable( _bEnable );
         }
     }
 
@@ -379,8 +396,17 @@ namespace pcr
         implEnable( &m_aFtTitle,                m_nEnableFlags, PropertyLineElement::CompleteLine );
         if ( m_pControlWindow )
             implEnable( m_pControlWindow,       m_nEnableFlags, PropertyLineElement::CompleteLine | PropertyLineElement::InputControl );
-        implEnable( m_pBrowseButton,            m_nEnableFlags, PropertyLineElement::CompleteLine | PropertyLineElement::PrimaryButton );
-        implEnable( m_pAdditionalBrowseButton,  m_nEnableFlags, PropertyLineElement::CompleteLine | PropertyLineElement::SecondaryButton );
+
+        if ( m_bReadOnly )
+        {
+            implEnable( m_pBrowseButton,            false );
+            implEnable( m_pAdditionalBrowseButton,  false );
+        }
+        else
+        {
+            implEnable( m_pBrowseButton,            m_nEnableFlags, PropertyLineElement::CompleteLine | PropertyLineElement::PrimaryButton );
+            implEnable( m_pAdditionalBrowseButton,  m_nEnableFlags, PropertyLineElement::CompleteLine | PropertyLineElement::SecondaryButton );
+        }
     }
 
     //------------------------------------------------------------------
