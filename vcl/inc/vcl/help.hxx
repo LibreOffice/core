@@ -4,9 +4,9 @@
  *
  *  $RCSfile: help.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:56:21 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:29:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,8 +67,8 @@ class Window;
 #define QUICKHELP_BIDI_RTL  ((USHORT)0x8000)
 
 // By changes you must also change: rsc/vclrsc.hxx
-#define HELP_INDEX          ((ULONG)0xFFFFFFFF)
-#define HELP_HELPONHELP     ((ULONG)0xFFFFFFFE)
+#define OOO_HELP_INDEX          ((ULONG)0xFFFFFFFF)
+#define OOO_HELP_HELPONHELP     ((ULONG)0xFFFFFFFE)
 
 // --------
 // - Help -
