@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.150 $
+ *  $Revision: 1.151 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 09:00:08 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:57:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,9 +86,6 @@
 #include "polysc3d.hxx"
 #include "extrud3d.hxx"
 #include "svdoashp.hxx"
-#ifndef _EEITEMID_HXX
-#include "eeitemid.hxx"
-#endif
 #ifndef _SVX_TSPTITEM_HXX
 #include "tstpitem.hxx"
 #endif
@@ -144,9 +141,6 @@
 #endif
 #ifndef _EDITENG_HXX
 #include <editeng.hxx>
-#endif
-#ifndef _EEITEMID_HXX
-#include <eeitemid.hxx>
 #endif
 #ifndef _SVX_LSPCITEM_HXX //autogen
 #include <lspcitem.hxx>
@@ -3700,7 +3694,7 @@ BOOL PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
         Graphic aGraphic;
         if ( pParaProv->GetGraphic( nBuInstance, aGraphic ) )
         {
-            SvxBrushItem aBrush( aGraphic, GPOS_MM );
+            SvxBrushItem aBrush( aGraphic, GPOS_MM, SID_ATTR_BRUSH );
             rNumberFormat.SetGraphicBrush( &aBrush );
             sal_uInt32 nHeight = (sal_uInt32)( (double)nFontHeight * 0.2540 * nBulletHeight + 0.5 );
             Size aPrefSize( aGraphic.GetPrefSize() );
@@ -5666,24 +5660,24 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
     UINT32  nVal;
     if ( GetAttrib( PPT_CharAttr_Bold, nVal, nDestinationInstance ) )
     {
-        rSet.Put( SvxWeightItem( nVal != 0 ? WEIGHT_BOLD : WEIGHT_NORMAL ) );
+        rSet.Put( SvxWeightItem( nVal != 0 ? WEIGHT_BOLD : WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
         rSet.Put( SvxWeightItem( nVal != 0 ? WEIGHT_BOLD : WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ) );
         rSet.Put( SvxWeightItem( nVal != 0 ? WEIGHT_BOLD : WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL ) );
     }
     if ( GetAttrib( PPT_CharAttr_Italic, nVal, nDestinationInstance ) )
     {
-        rSet.Put( SvxPostureItem( nVal != 0 ? ITALIC_NORMAL : ITALIC_NONE ) );
+        rSet.Put( SvxPostureItem( nVal != 0 ? ITALIC_NORMAL : ITALIC_NONE, EE_CHAR_ITALIC ) );
         rSet.Put( SvxPostureItem( nVal != 0 ? ITALIC_NORMAL : ITALIC_NONE, EE_CHAR_ITALIC_CJK ) );
         rSet.Put( SvxPostureItem( nVal != 0 ? ITALIC_NORMAL : ITALIC_NONE, EE_CHAR_ITALIC_CTL ) );
     }
     if ( GetAttrib( PPT_CharAttr_Underline, nVal, nDestinationInstance ) )
-        rSet.Put( SvxUnderlineItem( nVal != 0 ? UNDERLINE_SINGLE : UNDERLINE_NONE ) );
+        rSet.Put( SvxUnderlineItem( nVal != 0 ? UNDERLINE_SINGLE : UNDERLINE_NONE, EE_CHAR_UNDERLINE ) );
 
     if ( GetAttrib( PPT_CharAttr_Shadow, nVal, nDestinationInstance ) )
-        rSet.Put( SvxShadowedItem( nVal != 0 ) );
+        rSet.Put( SvxShadowedItem( nVal != 0, EE_CHAR_SHADOW ) );
 
     if ( GetAttrib( PPT_CharAttr_Strikeout, nVal, nDestinationInstance ) )
-        rSet.Put( SvxCrossedOutItem( nVal != 0 ? STRIKEOUT_SINGLE : STRIKEOUT_NONE ) );
+        rSet.Put( SvxCrossedOutItem( nVal != 0 ? STRIKEOUT_SINGLE : STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ) );
 
     sal_uInt32  nAsianFontId = 0xffff;
     if ( GetAttrib( PPT_CharAttr_AsianOrComplexFont, nAsianFontId, nDestinationInstance ) )
@@ -5704,7 +5698,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
     {
         PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nVal );
         if ( pFontEnityAtom )
-            rSet.Put( SvxFontItem( pFontEnityAtom->eFamily, pFontEnityAtom->aName, String(), pFontEnityAtom->ePitch, pFontEnityAtom->eCharSet ) );
+            rSet.Put( SvxFontItem( pFontEnityAtom->eFamily, pFontEnityAtom->aName, String(), pFontEnityAtom->ePitch, pFontEnityAtom->eCharSet, EE_CHAR_FONTINFO ) );
     }
     if ( GetAttrib( PPT_CharAttr_FontHeight, nVal, nDestinationInstance ) ) // Schriftgrad in Point
     {
@@ -5715,7 +5709,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
     }
 
     if ( GetAttrib( PPT_CharAttr_Embossed, nVal, nDestinationInstance ) )
-        rSet.Put( SvxCharReliefItem( nVal != 0 ? RELIEF_EMBOSSED : RELIEF_NONE ) );
+        rSet.Put( SvxCharReliefItem( nVal != 0 ? RELIEF_EMBOSSED : RELIEF_NONE, EE_CHAR_RELIEF ) );
     if ( nVal ) /* if Embossed is set, the font color depends to the fillstyle/color of the object,
                    if the object has no fillstyle, the font color depends to fillstyle of the background */
     {
@@ -5866,7 +5860,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
             nEsc = (sal_Int16)nVal;
             nProp = DFLT_ESC_PROP;
         }
-        SvxEscapementItem aItem( nEsc, nProp );
+        SvxEscapementItem aItem( nEsc, nProp, EE_CHAR_ESCAPEMENT );
         rSet.Put( aItem );
     }
     if ( mnLanguage[ 0 ] )
@@ -6292,7 +6286,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
 
     if ( GetAttrib( PPT_ParaAttr_TextOfs, nVal, nDestinationInstance ) )
     {
-        SvxLRSpaceItem aLRSpaceItem( ITEMID_LRSPACE );
+        SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );
         aLRSpaceItem.SetLeft( (UINT16)(((UINT32) nVal * 2540 ) / ( 72 * 8 ) ) );
         rSet.Put( aLRSpaceItem );
     }
@@ -6302,7 +6296,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
         if ( nVal <= 3 )
         {   // Absatzausrichtung
             static SvxAdjust __READONLY_DATA aAdj[ 4 ] = { SVX_ADJUST_LEFT, SVX_ADJUST_CENTER, SVX_ADJUST_RIGHT, SVX_ADJUST_BLOCK };
-            rSet.Put( SvxAdjustItem( aAdj[ nVal ] ) );
+            rSet.Put( SvxAdjustItem( aAdj[ nVal ], EE_PARA_JUST ) );
         }
     }
 
@@ -6366,7 +6360,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
     }
     if ( bIsHardAttribute )
     {
-        SvxULSpaceItem aULSpaceItem( ITEMID_ULSPACE );
+        SvxULSpaceItem aULSpaceItem( EE_PARA_ULSPACE );
         nVal2 = (INT16)nUpperDist;
         if ( nVal2 <= 0 )
             aULSpaceItem.SetUpper( (UINT16)(((UINT32) - nVal2 * 2540 ) / ( 72 * 8 ) ) );
@@ -6394,7 +6388,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
         GetAttrib( PPT_ParaAttr_BulletOfs, nTab, nDestinationInstance );
         GetAttrib( PPT_ParaAttr_BulletOn, i, nDestinationInstance );
         GetAttrib( PPT_ParaAttr_DefaultTab, nDefaultTab, nDestinationInstance );
-        SvxTabStopItem aTabItem( 0, 0 );
+        SvxTabStopItem aTabItem( 0, 0, SVX_TAB_ADJUST_DEFAULT, EE_PARA_TABS );
         if ( GetTabCount() )
         {
             for ( i = 0; i < GetTabCount(); i++ )
@@ -6535,10 +6529,10 @@ void PPTFieldEntry::SetDateTime( UINT32 nVal )
     SvxTimeFormat eTimeFormat;
     GetDateTime( nVal, eDateFormat, eTimeFormat );
     if ( eDateFormat != SVXDATEFORMAT_APPDEFAULT )
-        pField1 = new SvxFieldItem( SvxDateField( Date(), SVXDATETYPE_VAR, eDateFormat ) );
+        pField1 = new SvxFieldItem( SvxDateField( Date(), SVXDATETYPE_VAR, eDateFormat ), EE_FEATURE_FIELD );
     if ( eTimeFormat != SVXTIMEFORMAT_APPDEFAULT )
     {
-        SvxFieldItem* pFieldItem = new SvxFieldItem( SvxExtTimeField( Time(), SVXTIMETYPE_VAR, eTimeFormat ) );
+        SvxFieldItem* pFieldItem = new SvxFieldItem( SvxExtTimeField( Time(), SVXTIMETYPE_VAR, eTimeFormat ), EE_FEATURE_FIELD );
         if ( pField1 )
             pField2 = pFieldItem;
         else
@@ -6952,7 +6946,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                     {
                                         pEntry = new PPTFieldEntry;
                                         rIn >> pEntry->nPos;
-                                        pEntry->pField1 = new SvxFieldItem( SvxFooterField() );
+                                        pEntry->pField1 = new SvxFieldItem( SvxFooterField(), EE_FEATURE_FIELD );
                                     }
                                     break;
 
@@ -6960,7 +6954,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                     {
                                         pEntry = new PPTFieldEntry;
                                         rIn >> pEntry->nPos;
-                                        pEntry->pField1 = new SvxFieldItem( SvxHeaderField() );
+                                        pEntry->pField1 = new SvxFieldItem( SvxHeaderField(), EE_FEATURE_FIELD );
                                     }
                                     break;
 
@@ -6968,7 +6962,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                     {
                                         pEntry = new PPTFieldEntry;
                                         rIn >> pEntry->nPos;
-                                        pEntry->pField1 = new SvxFieldItem( SvxDateTimeField() );
+                                        pEntry->pField1 = new SvxFieldItem( SvxDateTimeField(), EE_FEATURE_FIELD );
                                         if ( rPersistEntry.pHeaderFooterEntry ) // sj: #i34111# on master pages it is possible
                                         {                                       // that there is no HeaderFooterEntry available
                                             if ( rPersistEntry.pHeaderFooterEntry->nAtom & 0x20000 )    // auto date time
@@ -6993,10 +6987,10 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                             switch( aTextHd.nRecType )
                                             {
                                                 case PPT_PST_SlideNumberMCAtom:
-                                                    pEntry->pField1 = new SvxFieldItem( SvxPageField() );
+                                                    pEntry->pField1 = new SvxFieldItem( SvxPageField(), EE_FEATURE_FIELD );
                                                 break;
                                                 case PPT_PST_RTFDateTimeMCAtom:
-                                                    pEntry->pField1 = new SvxFieldItem( SvxDateField( Date(), SVXDATETYPE_FIX ) );
+                                                    pEntry->pField1 = new SvxFieldItem( SvxDateField( Date(), SVXDATETYPE_FIX ), EE_FEATURE_FIELD );
                                                 break;
                                             }
                                         }
@@ -7038,7 +7032,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                                 aTarget.Append( (sal_Unicode)'#' );
                                                                 aTarget.Append( pHyperlink->aConvSubString );
                                                             }
-                                                            pEntry->pField1 = new SvxFieldItem( SvxURLField( aTarget, String(), SVXURLFORMAT_REPR ) );
+                                                            pEntry->pField1 = new SvxFieldItem( SvxURLField( aTarget, String(), SVXURLFORMAT_REPR ), EE_FEATURE_FIELD );
                                                         }
                                                     }
                                                     break;
@@ -7158,7 +7152,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             {
                                                                 if ( nNextStringLen <= nHyperLenLeft )
                                                                 {
-                                                                    pCurrent->mpFieldItem = new SvxFieldItem( SvxURLField( pField->GetURL(), pCurrent->maString, SVXURLFORMAT_REPR ) );
+                                                                    pCurrent->mpFieldItem = new SvxFieldItem( SvxURLField( pField->GetURL(), pCurrent->maString, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD );
                                                                     nHyperLenLeft -= nNextStringLen;
 
                                                                     if ( nHyperLenLeft )
@@ -7179,7 +7173,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                                     pNewCPS->maString = String( pCurrent->maString, (UINT16)nHyperLenLeft, (UINT16)( nNextStringLen - nHyperLenLeft ) );
                                                                     aCharPropList.Insert( pNewCPS, nIdx + 1 );
                                                                     String aRepresentation( pCurrent->maString, 0, (UINT16)nHyperLenLeft );
-                                                                    pCurrent->mpFieldItem = new SvxFieldItem( SvxURLField( pField->GetURL(), aRepresentation, SVXURLFORMAT_REPR ) );
+                                                                    pCurrent->mpFieldItem = new SvxFieldItem( SvxURLField( pField->GetURL(), aRepresentation, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD );
                                                                     nHyperLenLeft = 0;
                                                                 }
                                                                 pCurrent->maString = String();
