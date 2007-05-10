@@ -198,6 +198,7 @@ common
         WITH_LDAP
 		WST
 		XCLASSPATH
+        XSLTPROC
         ZIPDEP
 		ZIPSOURCE
 	}
