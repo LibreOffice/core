@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.68 $
+#   $Revision: 1.69 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-02 12:22:01 $
+#   last change: $Author: gm $ $Date: 2007-05-10 10:58:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,7 @@ BEGIN
     $msilanguage = "";  # hash reference for msi languages LCID
     $sofficeiconadded = 0;
     $temppath = "";
+    $globaltempdirname = "ooopackaging";
     $cyg_temppath = "";
     $temppathdefined = 0;
     $jdstemppathdefined = 0;
@@ -158,6 +159,7 @@ BEGIN
     @errorlogfileinfo = ();
     @globallogfileinfo = ();
     $exitlog = "";
+    $globalinfo_copied = 0;
     $quiet = 0;
 
     $debug = 0;
@@ -241,13 +243,16 @@ BEGIN
     $number_of_cabfiles = 4;    # only for $fix_number_of_cab_files = 1
     $include_cab_in_msi = 0;
     $msidatabasename = "";
-
+    $prepare_winpatch = 0;
+    $previous_idt_dir = "";
     $updatepack = 0;
 
     $saveinstalldir = "";
     $csp_installdir = "";       # global installdir of createsimplepackage() in simplepackage.pm
     $csp_installlogdir = "";    # global installlogdir of createsimplepackage() in simplepackage.pm
     $csp_languagestring = "";   # global languagestring of createsimplepackage() in simplepackage.pm
+    $localinstalldirset = 0;
+    $localinstalldir = "";
 
     $adafilename = "";
     $javafilename = "";
@@ -291,6 +296,7 @@ BEGIN
         $unzippath = "unzip.exe";           # Has to be in the path: r:\btw\unzip.exe
         $zippath= "zip.exe";                # Has to be in the path: r:\btw\zip.exe
         $checksumfile = "so_checksum.exe";
+        $unopkgfile = "unopkg.exe";
         if ( $plat =~ /cygwin/i )
         {
             $separator = "/";
@@ -307,12 +313,17 @@ BEGIN
         $isunix = 0;
         $iswin = 1;
         $wrapcmd = "";
+        %savedmapping = ();
+        %savedrevmapping = ();
+        %savedrev83mapping = ();
+        %saved83dirmapping = ();
     }
     elsif (( $plat =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} ne "4nt" ))
     {
         $unzippath = "unzip";               # Has to be in the path: /usr/bin/unzip
         $zippath = "zip";                   # Has to be in the path: /usr/bin/zip
         $checksumfile = "so_checksum";
+        $unopkgfile = "unopkg.exe";
         $separator = "/";
         $pathseparator = "\:";
         $libextension = "\.dll";
@@ -320,12 +331,17 @@ BEGIN
         $isunix = 0;
         $iswin = 1;
         $wrapcmd = $ENV{'WRAPCMD'}." -env ";
+        %savedmapping = ();
+        %savedrevmapping = ();
+        %savedrev83mapping = ();
+        %saved83dirmapping = ();
     }
     else
     {
         $unzippath = "unzip";               # Has to be in the path: /usr/bin/unzip
         $zippath = "zip";                   # Has to be in the path: /usr/bin/zip
         $checksumfile = "so_checksum";
+        $unopkgfile = "unopkg";
         $separator = "/";
         $pathseparator = "\:";
         if ( $plat =~ /darwin/i )
