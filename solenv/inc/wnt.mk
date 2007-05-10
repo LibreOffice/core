@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.77 $
+#   $Revision: 1.78 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 13:10:02 $
+#   last change: $Author: kz $ $Date: 2007-05-10 15:11:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,7 @@ DLLPRE=
 DLLPOST=.dll
 EXECPOST=.exe
 SCPPOST=.inf
+PCHPOST=.pch
 DLLDEST=$(BIN)
 SOLARSHAREDBIN=$(SOLARBINDIR)
 
