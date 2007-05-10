@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerhelper.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:13:11 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:14:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,10 +224,18 @@ namespace
 namespace sw
 {
     Frame::Frame(const SwFrmFmt &rFmt, const SwPosition &rPos)
-        : mpFlyFrm(&rFmt), maPos(rPos), meWriterType(eTxtBox),
-        mpStartFrameContent(0)
+        : mpFlyFrm(&rFmt),
+          maPos(rPos),
+          maSize(),
+          // --> OD 2007-04-19 #i43447#
+          maLayoutSize(),
+          // <--
+          meWriterType(eTxtBox),
+          mpStartFrameContent(0),
+          // --> OD 2007-04-19 #i43447# - move to initialization list
+          mbIsInline( (rFmt.GetAnchor().GetAnchorId() == FLY_IN_CNTNT) )
+          // <--
     {
-        mbIsInline = (rFmt.GetAnchor().GetAnchorId() == FLY_IN_CNTNT);
         switch (rFmt.Which())
         {
             case RES_FLYFRMFMT:
@@ -236,6 +244,19 @@ namespace sw
                     SwNodeIndex aIdx(*pIdx, 1);
                     const SwNode &rNd = aIdx.GetNode();
                     using sw::util::GetSwappedInSize;
+                    // --> OD 2007-04-19 #i43447# - determine layout size
+                    {
+                        SwRect aLayRect( rFmt.FindLayoutRect() );
+                        Rectangle aRect( aLayRect.SVRect() );
+                        // The Object is not rendered (e.g. something in unused
+                        // header/footer) - thus, get the values from the format.
+                        if ( aLayRect.IsEmpty() )
+                        {
+                            aRect.SetSize( rFmt.GetFrmSize().GetSize() );
+                        }
+                        maLayoutSize = aRect.GetSize();
+                    }
+                    // <--
                     switch (rNd.GetNodeType())
                     {
                         case ND_GRFNODE:
@@ -247,23 +268,11 @@ namespace sw
                             maSize = GetSwappedInSize(*rNd.GetNoTxtNode());
                             break;
                         default:
-                            {
-                                meWriterType = eTxtBox;
-
-                                Rectangle aRect;
-                                SwRect aLayRect(rFmt.FindLayoutRect());
-                                /*
-                                 The Object is not rendered (e.g. something in
-                                 unused header/footer - so get the values from
-                                 the format.
-                                */
-                                if (aLayRect.IsEmpty())
-                                    aRect.SetSize(rFmt.GetFrmSize().GetSize());
-                                else
-                                    aRect = aLayRect.SVRect();
-
-                                maSize = aRect.GetSize();
-                            }
+                            meWriterType = eTxtBox;
+                            // --> OD 2007-04-19 #i43447#
+                            // Size equals layout size for text boxes
+                            maSize = maLayoutSize;
+                            // <--
                             break;
                     }
                     mpStartFrameContent = &rNd;
