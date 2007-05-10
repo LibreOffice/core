@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:58:41 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:25:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -679,16 +679,6 @@ void ODbTypeWizDialogSetup::resetPages(const Reference< XPropertySet >& _rxDatas
     // extract all relevant data from the property set of the data source
     m_pImpl->translateProperties(_rxDatasource, *getWriteOutputSet());
 }
-//-------------------------------------------------------------------------
-ODbTypeWizDialogSetup::ApplyResult ODbTypeWizDialogSetup::implApplyChanges()
-{
-    if ( !m_pImpl->saveChanges(*m_pOutSet) )
-        return AR_KEEP;
-
-    m_bApplied = sal_True;
-
-    return AR_LEAVE_MODIFIED;
-}
 // -----------------------------------------------------------------------------
 const SfxItemSet* ODbTypeWizDialogSetup::getOutputSet() const
 {
@@ -949,6 +939,12 @@ void ODbTypeWizDialogSetup::setTitle(const ::rtl::OUString& /*_sTitle*/)
 {
     DBG_ERROR( "ODbTypeWizDialogSetup::setTitle: not implemented!" );
         // why?
+}
+
+//-------------------------------------------------------------------------
+void ODbTypeWizDialogSetup::enableConfirmSettings( bool _bEnable )
+{
+    (void)_bEnable;
 }
 
 //-------------------------------------------------------------------------
