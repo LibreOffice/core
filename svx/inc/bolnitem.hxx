@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bolnitem.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:17:26 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:18:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ class SVX_DLLPUBLIC SvxLineItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxLineItem( const USHORT nId = ITEMID_LINE );
+    SvxLineItem( const USHORT nId );
     SvxLineItem( const SvxLineItem& rCpy );
     ~SvxLineItem();
     SvxLineItem &operator=( const SvxLineItem& rLine );
