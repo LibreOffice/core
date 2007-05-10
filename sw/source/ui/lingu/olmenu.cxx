@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:05:27 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:19:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -419,7 +419,7 @@ void SwSpellPopup::Execute( USHORT nId )
 
                     SfxItemSet aSet(pSh->GetAttrPool(), RES_CHRATR_LANGUAGE,
                                                         RES_CHRATR_LANGUAGE);
-                    aSet.Put( SvxLanguageItem( nCorrLang ) );
+                    aSet.Put( SvxLanguageItem( nCorrLang, RES_CHRATR_LANGUAGE ) );
                     pSh->SetAttr( aSet );
 
                     pSh->EndAction();
