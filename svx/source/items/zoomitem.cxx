@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zoomitem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:11:50 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:54:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@
 
 // -----------------------------------------------------------------------
 
-TYPEINIT1_AUTOFACTORY(SvxZoomItem,SfxUInt16Item);
+TYPEINIT1_FACTORY(SvxZoomItem,SfxUInt16Item, new SvxZoomItem);
 
 #define ZOOM_PARAM_VALUE    "Value"
 #define ZOOM_PARAM_VALUESET "ValueSet"
