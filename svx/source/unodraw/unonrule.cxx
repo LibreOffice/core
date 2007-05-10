@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unonrule.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:13:44 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:03:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svx.hxx"
 
 #define PROPERTY_NONE 0
-#define ITEMID_BRUSH        0
+
 
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <brshitem.hxx>
@@ -460,7 +460,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
             if( aVal >>= xBmp )
             {
                 Graphic aGraf( VCLUnoHelper::GetBitmap( xBmp ) );
-                SvxBrushItem aBrushItem(aGraf, GPOS_AREA);
+                SvxBrushItem aBrushItem(aGraf, GPOS_AREA, SID_ATTR_BRUSH);
                 aFmt.SetGraphicBrush( &aBrushItem );
                 continue;
             }
@@ -471,7 +471,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
             if( aVal >>= aURL )
             {
                 GraphicObject aGrafObj( CreateGraphicObjectFromURL( aURL ) );
-                SvxBrushItem aBrushItem( aGrafObj, GPOS_AREA );
+                SvxBrushItem aBrushItem( aGrafObj, GPOS_AREA, SID_ATTR_BRUSH );
                 aFmt.SetGraphicBrush( &aBrushItem );
                 continue;
             }
@@ -553,7 +553,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
         if( NULL == aFmt.GetBrush() )
         {
             GraphicObject aGrafObj;
-            SvxBrushItem aBrushItem( aGrafObj, GPOS_AREA );
+            SvxBrushItem aBrushItem( aGrafObj, GPOS_AREA, SID_ATTR_BRUSH );
             aFmt.SetGraphicBrush( &aBrushItem );
         }
     }
