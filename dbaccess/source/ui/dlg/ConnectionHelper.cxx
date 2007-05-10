@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionHelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:55:47 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:21:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,11 +250,26 @@ DBG_NAME(OConnectionHelper)
             checkTestConnection();
             m_aET_Connection.ClearModifyFlag();
         }
+
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
     }
 
+    // -----------------------------------------------------------------------
+    void OConnectionHelper::implUpdateURLDependentStates() const
+    {
+        OSL_PRECOND( m_pAdminDialog, "OConnectionHelper::implUpdateURLDependentStates: no admin dialog!" );
+        if ( !m_pAdminDialog )
+            return;
 
-
+        switch ( m_eType )
+        {
+        case DST_CALC:
+            m_pAdminDialog->enableConfirmSettings( getURLNoPrefix().Len() > 0 );
+            break;
+        default:
+            break;
+        }
+    }
 
     // -----------------------------------------------------------------------
     IMPL_LINK(OConnectionHelper, OnBrowseConnections, PushButton*, /*_pButton*/)
@@ -512,7 +527,7 @@ DBG_NAME(OConnectionHelper)
     void OConnectionHelper::implSetURL( const String& _rURL, sal_Bool _bPrefix )
     {
         String sURL( _rURL );
-        DBG_ASSERT( m_pCollection, "OConnectionHelper::setURL: have no interpreter for the URLs!" );
+        DBG_ASSERT( m_pCollection, "OConnectionHelper::implSetURL: have no interpreter for the URLs!" );
 
         if ( m_pCollection && sURL.Len() )
         {
@@ -548,6 +563,8 @@ DBG_NAME(OConnectionHelper)
             m_aET_Connection.SetText( sURL );
         else
             m_aET_Connection.SetTextNoPrefix( sURL );
+
+        implUpdateURLDependentStates();
     }
 
     //-------------------------------------------------------------------------
@@ -574,25 +591,19 @@ DBG_NAME(OConnectionHelper)
                     sFileURLDecoded = sURL;
                 }
 
-                // encode the URL
-                INetURLObject aFileURL( sFileURLDecoded, INetURLObject::ENCODE_ALL, RTL_TEXTENCODING_UTF8 );
-                sFileURLDecoded = aFileURL.GetMainURL( INetURLObject::NO_DECODE );
                 sURL = sTypePrefix;
                 if ( sFileURLDecoded.Len() )
                 {
-                    OFileNotation aFileNotation(sFileURLDecoded,OFileNotation::N_SYSTEM);
-
-                    // set this decoded URL as text
-                    sURL += String(aFileNotation.get(OFileNotation::N_URL));
+                    OFileNotation aFileNotation( sFileURLDecoded, OFileNotation::N_SYSTEM );
+                    sURL += String( aFileNotation.get( OFileNotation::N_URL ) );
                 }
+
+                // encode the URL
+                INetURLObject aFileURL( sFileURLDecoded, INetURLObject::ENCODE_ALL, RTL_TEXTENCODING_UTF8 );
+                sFileURLDecoded = aFileURL.GetMainURL( INetURLObject::NO_DECODE );
             }
         }
         return sURL;
-    }
-    //-------------------------------------------------------------------------
-    String OConnectionHelper::getURL( ) const
-    {
-        return implGetURL( sal_True );
     }
 
     //-------------------------------------------------------------------------
@@ -611,18 +622,6 @@ DBG_NAME(OConnectionHelper)
     void OConnectionHelper::setURLNoPrefix( const String& _rURL )
     {
         implSetURL( _rURL, sal_False );
-    }
-
-    //-------------------------------------------------------------------------
-    String OConnectionHelper::getConnectionURL( ) const
-    {
-        return getURL( );
-    }
-
-    //-------------------------------------------------------------------------
-    void OConnectionHelper::changeConnectionURL( const String& _rNewDSN )
-    {
-        setURL( _rNewDSN );
     }
 
     //-------------------------------------------------------------------------
