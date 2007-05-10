@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formatclipboard.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 15:18:39 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:25:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #include "formatclipboard.hxx"
 
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
+
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -216,11 +216,11 @@ void lcl_getTableAttributes( SfxItemSet& rSet, SwWrtShell &rSh )
     rSh.GetTabBackground(aBrush);
     rSet.Put( aBrush, SID_ATTR_BRUSH_TABLE );
 
-    SvxBoxInfoItem aBoxInfo;
+    SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
     rSet.Put(aBoxInfo);
     rSh.GetTabBorders( rSet );
 
-    SvxFrameDirectionItem aBoxDirection;
+    SvxFrameDirectionItem aBoxDirection( FRMDIR_ENVIRONMENT, RES_FRAMEDIR );
     if(rSh.GetBoxDirection( aBoxDirection ))
         rSet.Put(aBoxDirection, FN_TABLE_BOX_TEXTDIRECTION);
 
@@ -326,7 +326,7 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
 
     if( SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_BOX_TEXTDIRECTION, FALSE, &pItem) )
     {
-        SvxFrameDirectionItem aDirection;
+        SvxFrameDirectionItem aDirection( FRMDIR_ENVIRONMENT, RES_FRAMEDIR );
         aDirection.SetValue(static_cast< const SvxFrameDirectionItem* >(pItem)->GetValue());
         rSh.SetBoxDirection(aDirection);
     }
@@ -501,8 +501,8 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
     rWrtShell.Pop(FALSE);
     rWrtShell.EndAction();
 }
-typedef boost::shared_ptr< SfxPoolItem > SfxPoolItemPtr;
-typedef std::vector< SfxPoolItemPtr > ItemVector;
+typedef boost::shared_ptr< SfxPoolItem > SfxPoolItemSharedPtr;
+typedef std::vector< SfxPoolItemSharedPtr > ItemVector;
 // #144857# collect all PoolItems from the applied styles
 void lcl_AppendSetItems( ItemVector& rItemVector, const SfxItemSet& rStyleAttrSet )
 {
@@ -514,7 +514,7 @@ void lcl_AppendSetItems( ItemVector& rItemVector, const SfxItemSet& rStyleAttrSe
             const SfxPoolItem* pItem;
             if( SFX_ITEM_SET == rStyleAttrSet.GetItemState( nWhich, sal_False, &pItem ) )
             {
-                rItemVector.push_back( SfxPoolItemPtr( pItem->Clone() ) );
+                rItemVector.push_back( SfxPoolItemSharedPtr( pItem->Clone() ) );
             }
         }
         pRanges += 2;
