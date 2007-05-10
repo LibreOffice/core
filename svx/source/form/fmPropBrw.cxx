@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 11:49:23 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:05:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,9 +179,6 @@ FmPropBrwMgr::FmPropBrwMgr( Window* _pParent, sal_uInt16 _nId,
                             SfxBindings* _pBindings, SfxChildWinInfo* _pInfo)
               :SfxChildWindow(_pParent, _nId)
 {
-    // my UNO representation
-    m_xUnoRepresentation = VCLUnoHelper::CreateControlContainer(_pParent);
-
     pWindow = new FmPropBrw( ::comphelper::getProcessServiceFactory(), _pBindings, this, _pParent, _pInfo );
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
     ((SfxFloatingWindow*)pWindow)->Initialize( _pInfo );
@@ -429,6 +426,7 @@ void FmPropBrw::implDetachController()
         m_xBrowserController->attachFrame( NULL );
 
     m_xBrowserController.clear();
+    m_xInspectorModel.clear();
     m_xMeAsFrame.clear();
 }
 
@@ -469,6 +467,22 @@ sal_Bool FmPropBrw::Close()
     }
 
     return bClose;
+}
+
+//-----------------------------------------------------------------------
+bool FmPropBrw::implIsReadOnlyModel() const
+{
+    try
+    {
+        if ( m_xInspectorModel.is() )
+            return m_xInspectorModel->getIsReadOnly();
+        return false;
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return true;
 }
 
 //-----------------------------------------------------------------------
@@ -523,6 +537,9 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
             else if ( Reference< XForm >( xSingleSelection, UNO_QUERY ).is() )
                 sTitle = String( SVX_RES( RID_STR_PROPERTIES_FORM ) );
         }
+
+        if ( implIsReadOnlyModel() )
+            sTitle += String( SVX_RES( RID_STR_READONLY_VIEW ) );
 
         SetText( sTitle );
 
@@ -638,15 +655,15 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
     bool bEnableHelpSection = lcl_shouldEnableHelpSection( m_xORB );
 
     // an object inspector model
-    Reference< XObjectInspectorModel > xModel(
+    m_xInspectorModel =
             bEnableHelpSection
         ?   DefaultFormComponentInspectorModel::createWithHelpSection( xInspectorContext, 3, 5 )
-        :   DefaultFormComponentInspectorModel::createDefault( xInspectorContext ) );
+        :   DefaultFormComponentInspectorModel::createDefault( xInspectorContext );
 
     // an object inspector
     m_xBrowserController = m_xBrowserController.query(
         ObjectInspector::createWithModel(
-            xInspectorContext, xModel
+            xInspectorContext, m_xInspectorModel
         ) );
 
     if ( !m_xBrowserController.is() )
@@ -689,6 +706,7 @@ void FmPropBrw::impl_ensurePropertyBrowser_nothrow( FmFormShell* _pFormShell )
         else
             ::comphelper::disposeComponent( m_xBrowserController );
         m_xBrowserController.clear();
+        m_xInspectorModel.clear();
         m_xBrowserComponentWindow.clear();
 
         // and create a new one
