@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:58:51 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:25:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1415,9 +1415,9 @@ DBG_NAME(OTextDetailsPage)
     }
 
     // -----------------------------------------------------------------------
-    sal_Bool OTextDetailsPage::checkItems()
+    sal_Bool OTextDetailsPage::prepareLeave()
     {
-        return m_pTextConnectionHelper->checkItems();
+        return m_pTextConnectionHelper->prepareLeave();
     }
 
     //------------------------------------------------------------------------
