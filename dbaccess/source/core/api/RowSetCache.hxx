@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:42:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:11:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,8 +206,6 @@ namespace dbaccess
 
         TORowSetOldRowHelperRef registerOldRow();
         void deregisterOldRow(const TORowSetOldRowHelperRef& _rRow);
-
-        void clearModified();
 
     // ::com::sun::star::sdbc::XResultSetMetaDataSupplier
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > getMetaData(  );
