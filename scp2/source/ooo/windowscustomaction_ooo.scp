@@ -4,9 +4,9 @@
  *
  *  $RCSfile: windowscustomaction_ooo.scp,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 13:54:03 $
+ *  last change: $Author: gm $ $Date: 2007-05-10 11:07:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -370,3 +370,15 @@ WindowsCustomAction gid_Customaction_MigrateInstallPath
       Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "CostInitialize");
       Assignment2 = ("InstallUISequence", "Not REMOVE=\"ALL\" And Not PATCH", "CostInitialize");
 End
+
+WindowsCustomAction gid_Customaction_CheckVersions
+	Name = "CheckVersions";
+	Typ = "321";
+	Source = "sn_tools.dll";
+	Target = "CheckVersions";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "NOT Installed", "NewProductFound");
+	Assignment2 = ("InstallUISequence", "NOT Installed", "NewProductFound");
+End
+
+
