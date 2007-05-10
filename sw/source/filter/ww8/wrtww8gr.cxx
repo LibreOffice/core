@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:10:45 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:15:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -501,8 +501,14 @@ void SwWW8Writer::OutGrf(const sw::Frame &rFrame)
     Set_UInt8( pArr, nAttrMagicIdx++ );
     pChpPlc->AppendFkpEntry( pStrm->Tell(), pArr - aArr, aArr );
 
-    if( ( eAn == FLY_AT_CNTNT && (bWrtWW8 || !bIsInTable )) ||
-        eAn == FLY_PAGE )
+    // --> OD 2007-04-23 #i75464#
+    // Check, if graphic isn't exported as-character anchored.
+    // Otherwise, an additional paragraph is exported for a graphic, which is
+    // forced to be treated as inline, because it's anchored inside another frame.
+    if ( !rFrame.IsInline() &&
+         ( ( eAn == FLY_AT_CNTNT && ( bWrtWW8 || !bIsInTable ) ) ||
+           eAn == FLY_PAGE ) )
+    // <--
     {
         WriteChar( (char)0x0d ); // umgebenden Rahmen mit CR abschliessen
 
@@ -533,19 +539,21 @@ void SwWW8WrGrf::Insert(const sw::Frame &rFly)
     const SwNoTxtNode *pNd =
         rFly.GetContent() ? rFly.GetContent()->GetNoTxtNode() : 0;
 
-    UINT16 nWidth;
-    UINT16 nHeight;
-    if (rWrt.nFlyWidth > 0 && rWrt.nFlyHeight > 0)
-    {
-        nWidth = rWrt.nFlyWidth;
-        nHeight = rWrt.nFlyHeight;
-    }
-    else
-    {
-        Size aSize(rFly.GetSize());
-        nWidth = aSize.Width();
-        nHeight = aSize.Height();
-    }
+    // --> OD 2007-04-19 #i43447# - use layout size
+//    UINT16 nWidth;
+//    UINT16 nHeight;
+//    if (rWrt.nFlyWidth > 0 && rWrt.nFlyHeight > 0)
+//    {
+//        nWidth = rWrt.nFlyWidth;
+//        nHeight = rWrt.nFlyHeight;
+//    }
+//    else
+//    {
+    const Size aSize( rFly.GetLayoutSize() );
+    const UINT16 nWidth = aSize.Width();
+    const UINT16 nHeight = aSize.Height();
+//    }
+    // <--
     maDetails.push_back(GraphicDetails(rFly, nWidth, nHeight));
 }
 
