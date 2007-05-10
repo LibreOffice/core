@@ -4,9 +4,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 12:20:58 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:58:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -355,7 +355,7 @@ Menu RID_TASKPANE_LAYOUTMENU_POPUP
 
         MenuItem
         {
-            Identifier = SID_INSERTPAGE;
+            Identifier = SID_INSERTPAGE_LAYOUT_MENU;
             HelpID = SID_INSERTPAGE;
             Text [ en-US ] = "~Insert Slide";
         };
