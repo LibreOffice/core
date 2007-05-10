@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwiz.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:51:21 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:31:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,11 +71,10 @@ class ODsnTypeCollection;
 //= ODbTypeWizDialog
 //=========================================================================
 class OGeneralPage;
-struct OPageSettings;
 class ODbDataSourceAdministrationHelper;
 /** tab dialog for administrating the office wide registered data sources
 */
-class ODbTypeWizDialog : public svt::OWizardMachine , public IItemSetHelper, public IAdminHelper,public dbaui::OModuleClient
+class ODbTypeWizDialog : public svt::OWizardMachine , public IItemSetHelper, public IDatabaseSettingsDialog,public dbaui::OModuleClient
 {
 private:
     ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
@@ -108,6 +107,7 @@ public:
     virtual void clearPassword();
     virtual sal_Bool saveDatasource();
     virtual void setTitle(const ::rtl::OUString& _sTitle);
+    virtual void enableConfirmSettings( bool _bEnable );
 
 protected:
     /// to override to create new pages

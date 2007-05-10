@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IItemSetHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:24:58 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:27:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ namespace dbaui
         virtual SfxItemSet* getWriteOutputSet() = 0;
     };
 
-    class SAL_NO_VTABLE IAdminHelper
+    class SAL_NO_VTABLE IDatabaseSettingsDialog
     {
     public:
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() = 0;
@@ -71,6 +71,13 @@ namespace dbaui
         virtual void clearPassword() = 0;
         virtual sal_Bool saveDatasource() = 0;
         virtual void setTitle(const ::rtl::OUString& _sTitle) = 0;
+
+        /** enables or disables the user's possibility to confirm the settings
+
+            In a wizard, disabling this will usually disable the "Finish" button.
+            In a normal tab dialog, this will usually disable the "OK" button.
+        */
+        virtual void enableConfirmSettings( bool _bEnable ) = 0;
     };
 }
 #endif // DBAUI_ITEMSETHELPER_HXX
