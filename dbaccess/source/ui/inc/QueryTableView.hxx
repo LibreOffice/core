@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryTableView.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:28:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:28:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,9 +84,6 @@ namespace dbaui
 
         // und ein AddTabWin, das einen Alias vorgibt
         void    AddTabWin(const ::rtl::OUString& strDatabase, const ::rtl::OUString& strTableName, const ::rtl::OUString& strAlias, BOOL bNewTable = FALSE);
-        // Fenster an Hand des AliasNamen loeschen (zieht sich natuerlich auf voriges RemoveTabWin zurueck)
-        BOOL    RemoveTabWin(const String& rAliasName);
-
         // TabWin suchen
         OQueryTableWindow*  FindTable(const String& rAliasName);
         BOOL            FindTableFromField(const String& rFieldName, OTableFieldDescRef& rInfo, USHORT& rCnt);
