@@ -1,10 +1,12 @@
 /*************************************************************************
  *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
  *  $RCSfile: IDocumentTimerAccess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:37:13 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:10:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
