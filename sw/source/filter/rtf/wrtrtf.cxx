@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:53:01 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:07:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <stdlib.h>
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -1471,7 +1470,8 @@ USHORT SwRTFWriter::GetId( const Font& rFont ) const
 {
     return GetId( SvxFontItem( rFont.GetFamily(), rFont.GetName(),
                                 rFont.GetStyleName(), rFont.GetPitch(),
-                                rFont.GetCharSet() ) );
+                                rFont.GetCharSet(),
+                                RES_CHRATR_FONT ) );
 }
 
 USHORT SwRTFWriter::GetId( const SwTxtFmtColl& rColl ) const
