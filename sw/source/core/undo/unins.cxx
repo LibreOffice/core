@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:49:25 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:02:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1071,7 +1071,7 @@ void SwUndoInsertLabel::Redo( SwUndoIter& rIter )
             SwTableNode *pNd = rDoc.GetNodes()[
                         rDoc.GetNodes()[NODE.nNode-1]->StartOfSectionIndex()]->GetTableNode();
             if ( pNd )
-                pNd->GetTable().GetFrmFmt()->SetAttr( SvxFmtKeepItem(TRUE) );
+                pNd->GetTable().GetFrmFmt()->SetAttr( SvxFmtKeepItem(TRUE, RES_KEEP) );
         }
         NODE.pUndoInsNd->Undo( rIter );
         delete NODE.pUndoInsNd, NODE.pUndoInsNd = 0;

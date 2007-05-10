@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:44:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:01:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -565,7 +565,7 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
                     Color aColor;
                     if ( lcl_ChgHyperLinkColor( rAttr, *pItem, mpShell, &aColor ) )
                     {
-                        SvxColorItem aItemNext( aColor );
+                        SvxColorItem aItemNext( aColor, RES_CHRATR_COLOR );
                         FontChg( aItemNext, rFnt, sal_True );
                     }
                     else
@@ -700,7 +700,7 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const USHORT nAttr )
             Color aColor;
             if ( lcl_ChgHyperLinkColor( *pTopAt, *pItemNext, mpShell, &aColor ) )
             {
-                SvxColorItem aItemNext( aColor );
+                SvxColorItem aItemNext( aColor, RES_CHRATR_COLOR );
                 FontChg( aItemNext, rFnt, sal_False );
             }
             else
