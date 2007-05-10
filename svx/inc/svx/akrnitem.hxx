@@ -4,9 +4,9 @@
  *
  *  $RCSfile: akrnitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:38:12 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:22:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,8 +66,8 @@ class SVX_DLLPUBLIC SvxAutoKernItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxAutoKernItem( const BOOL bAutoKern = FALSE,
-                     const USHORT nId = ITEMID_AUTOKERN );
+    SvxAutoKernItem( const BOOL bAutoKern /*= FALSE*/,
+                     const USHORT nId );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adjitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:38:00 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:21:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,8 +86,8 @@ class SVX_DLLPUBLIC SvxAdjustItem : public SfxEnumItemInterface
 public:
     TYPEINFO();
 
-    SvxAdjustItem( const SvxAdjust eAdjst = SVX_ADJUST_LEFT,
-                   const USHORT nId = ITEMID_ADJUST );
+    SvxAdjustItem( const SvxAdjust eAdjst /*= SVX_ADJUST_LEFT*/,
+                   const USHORT nId );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;

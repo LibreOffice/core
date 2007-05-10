@@ -4,9 +4,9 @@
  *
  *  $RCSfile: algitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:38:23 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:22:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,16 +57,18 @@ class SvStream;
 
 //------------------------------------------------------------------------
 
-#ifdef ITEMID_HORJUSTIFY
+
 
 class SVX_DLLPUBLIC SvxHorJustifyItem: public SfxEnumItem
 {
 public:
     TYPEINFO();
 
+    SvxHorJustifyItem( const USHORT nId );
+
     SvxHorJustifyItem(
-        const SvxCellHorJustify eJustify = SVX_HOR_JUSTIFY_STANDARD,
-        const USHORT nId = ITEMID_HORJUSTIFY );
+        const SvxCellHorJustify eJustify /*= SVX_HOR_JUSTIFY_STANDARD*/,
+        const USHORT nId );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -88,20 +90,20 @@ public:
             }
 };
 
-#endif
 
 //------------------------------------------------------------------------
 
-#ifdef ITEMID_VERJUSTIFY
 
 class SVX_DLLPUBLIC SvxVerJustifyItem: public SfxEnumItem
 {
 public:
     TYPEINFO();
 
+    SvxVerJustifyItem( const USHORT nId  );
+
     SvxVerJustifyItem(
-        const SvxCellVerJustify eJustify = SVX_VER_JUSTIFY_STANDARD,
-        const USHORT nId = ITEMID_VERJUSTIFY );
+        const SvxCellVerJustify eJustify /*= SVX_VER_JUSTIFY_STANDARD*/,
+        const USHORT nId  );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -123,11 +125,8 @@ public:
             }
 };
 
-#endif
 
 //------------------------------------------------------------------------
-
-#ifdef ITEMID_ORIENTATION
 
 class SVX_DLLPUBLIC SvxOrientationItem: public SfxEnumItem
 {
@@ -135,12 +134,12 @@ public:
     TYPEINFO();
 
     SvxOrientationItem(
-        const SvxCellOrientation eOrientation = SVX_ORIENTATION_STANDARD,
-        const USHORT nId = ITEMID_ORIENTATION );
+        const SvxCellOrientation eOrientation /*= SVX_ORIENTATION_STANDARD*/,
+        const USHORT nId );
 
     SvxOrientationItem(
         INT32 nRotation, BOOL bStacked,
-        const USHORT nId = ITEMID_ORIENTATION );
+        const USHORT nId );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -169,11 +168,7 @@ public:
     void                    SetFromRotation( INT32 nRotation, BOOL bStacked );
 };
 
-#endif
-
 //------------------------------------------------------------------------
-
-#ifdef ITEMID_MARGIN
 
 class SVX_DLLPUBLIC SvxMarginItem: public SfxPoolItem
 {
@@ -183,10 +178,10 @@ class SVX_DLLPUBLIC SvxMarginItem: public SfxPoolItem
     INT16       nBottomMargin;
 public:
     TYPEINFO();
-    SvxMarginItem( const USHORT nId = ITEMID_MARGIN );
-    SvxMarginItem( INT16 nLeft, INT16 nTop = 0,
-                   INT16 nRight = 0, INT16 nBottom = 0,
-                   const USHORT nId = ITEMID_MARGIN );
+    SvxMarginItem( const USHORT nId  );
+    SvxMarginItem( INT16 nLeft, INT16 nTop /*= 0*/,
+                   INT16 nRight /*= 0*/, INT16 nBottom /*= 0*/,
+                   const USHORT nId  );
     SvxMarginItem( const SvxMarginItem& );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -220,8 +215,6 @@ public:
                 return *this;
             }
 };
-
-#endif
 
 #endif
 

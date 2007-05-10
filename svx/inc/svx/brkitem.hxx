@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brkitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:39:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:22:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,11 +70,8 @@ class SVX_DLLPUBLIC SvxFmtBreakItem : public SfxEnumItem
 public:
     TYPEINFO();
 
-    inline SvxFmtBreakItem( const SvxBreak eBrk = SVX_BREAK_NONE,
-#if SUPD<372
-                            const BOOL bAuto = FALSE,
-#endif
-                            const USHORT nWhich = ITEMID_FMTBREAK );
+    inline SvxFmtBreakItem( const SvxBreak eBrk /*= SVX_BREAK_NONE*/,
+                            const USHORT nWhich );
     inline SvxFmtBreakItem( const SvxFmtBreakItem& rBreak );
     inline SvxFmtBreakItem& operator=( const SvxFmtBreakItem& rCpy );
 
@@ -101,39 +98,8 @@ public:
     const SvxBreak           GetBreak() const { return SvxBreak( GetValue() ); }
     void                     SetBreak( const SvxBreak eNew )
                                 { SetValue( (USHORT)eNew ); }
-#if SUPD<372
-    BOOL                     IsAuto() const { return bAuto; }
-private:
-    BOOL bAuto;     //Fuer automatische Breaks, wirkt auf das Verhalten bei
-                    //Backspace und Delete. Wird nie veraendert, nicht const
-                    //wg. dem Zuweisungsoperator.
-    SVX_DLLPRIVATE void SetAuto( const BOOL bNew ) { bAuto = bNew; }
-#endif
 };
 
-#if SUPD<372
-
-inline SvxFmtBreakItem::SvxFmtBreakItem( const SvxBreak eBreak,
-                                         const BOOL bA,
-                                         const USHORT nWhich ) :
-    SfxEnumItem( nWhich, (USHORT)eBreak ),
-    bAuto( bA )
-{}
-
-inline SvxFmtBreakItem::SvxFmtBreakItem( const SvxFmtBreakItem& rBreak ) :
-    SfxEnumItem( rBreak ),
-    bAuto( rBreak.IsAuto() )
-{}
-
-inline SvxFmtBreakItem& SvxFmtBreakItem::operator=(
-    const SvxFmtBreakItem& rBreak )
-{
-    SetValue( rBreak.GetValue() );
-    SetAuto( rBreak.IsAuto() );
-    return *this;
-}
-
-#else
 
 inline SvxFmtBreakItem::SvxFmtBreakItem( const SvxBreak eBreak,
                                          const USHORT _nWhich ) :
@@ -150,8 +116,6 @@ inline SvxFmtBreakItem& SvxFmtBreakItem::operator=(
     SetValue( rBreak.GetValue() );
     return *this;
 }
-
-#endif
 
 #endif
 

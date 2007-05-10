@@ -4,9 +4,9 @@
  *
  *  $RCSfile: blnkitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:38:34 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:22:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ class SVX_DLLPUBLIC SvxBlinkItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxBlinkItem( const BOOL bBlink = FALSE, const USHORT nId = ITEMID_BLINK );
+    SvxBlinkItem( const BOOL bBlink /*= FALSE*/, const USHORT nId  );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;

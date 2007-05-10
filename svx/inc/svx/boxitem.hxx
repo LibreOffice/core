@@ -4,9 +4,9 @@
  *
  *  $RCSfile: boxitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:39:23 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:22:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ class SVX_DLLPUBLIC SvxBoxItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxBoxItem( const USHORT nId = ITEMID_BOX );
+    SvxBoxItem( const USHORT nId );
     SvxBoxItem( const SvxBoxItem &rCpy );
     ~SvxBoxItem();
     SvxBoxItem &operator=( const SvxBoxItem& rBox );
@@ -154,7 +154,6 @@ horizontalen und vertikalen innerern Linien transportiert.
 #define VALID_DISTANCE      0x40
 #define VALID_DISABLE       0x80
 
-#ifdef ITEMID_BOXINFO
 class SVX_DLLPUBLIC SvxBoxInfoItem : public SfxPoolItem
 {
     SvxBorderLine* pHori;   //innere horizontale Linie
@@ -191,7 +190,7 @@ class SVX_DLLPUBLIC SvxBoxInfoItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxBoxInfoItem( const USHORT nId = ITEMID_BOXINFO );
+    SvxBoxInfoItem( const USHORT nId );
     SvxBoxInfoItem( const SvxBoxInfoItem &rCpy );
     ~SvxBoxInfoItem();
     SvxBoxInfoItem &operator=( const SvxBoxInfoItem &rCpy );
@@ -239,7 +238,5 @@ public:
                                          : ( nValidFlags &= ~nValid ); }
     void                    ResetFlags();
 };
-#endif
-
 #endif
 
