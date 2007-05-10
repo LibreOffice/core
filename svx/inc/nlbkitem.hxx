@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nlbkitem.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:07:16 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:20:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,8 +59,8 @@ class SVX_DLLPUBLIC SvxNoLinebreakItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxNoLinebreakItem( const BOOL bBreak = TRUE,
-                        const USHORT nId = ITEMID_NOLINEBREAK );
+    SvxNoLinebreakItem( const BOOL bBreak /*= TRUE*/,
+                        const USHORT nId  );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
