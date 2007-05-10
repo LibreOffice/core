@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:17:54 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:59:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,63 +37,6 @@
 #include "precompiled_svx.hxx"
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
-#define ITEMID_FONTLIST     0
-#define ITEMID_FONT         0
-#define ITEMID_POSTURE      0
-#define ITEMID_WEIGHT       0
-#define ITEMID_FONTHEIGHT   0
-#define ITEMID_UNDERLINE    0
-#define ITEMID_CROSSEDOUT   0
-#define ITEMID_SHADOWED     0
-#define ITEMID_AUTOKERN     0
-#define ITEMID_WORDLINEMODE 0
-#define ITEMID_CONTOUR      0
-#define ITEMID_PROPSIZE     0
-#define ITEMID_COLOR        0
-#define ITEMID_CHARSETCOLOR 0
-#define ITEMID_KERNING      0
-#define ITEMID_CASEMAP      0
-#define ITEMID_ESCAPEMENT   0
-#define ITEMID_LANGUAGE     0
-#define ITEMID_NOLINEBREAK  0
-#define ITEMID_NOHYPHENHERE 0
-#define ITEMID_BLINK        0
-#define ITEMID_PAPERBIN     0
-#define ITEMID_SIZE         0
-#define ITEMID_LRSPACE      0
-#define ITEMID_ULSPACE      0
-#define ITEMID_PRINT        0
-#define ITEMID_OPAQUE       0
-#define ITEMID_PROTECT      0
-#define ITEMID_SHADOW       0
-#define ITEMID_BOX          0
-#define ITEMID_BOXINFO      0
-#define TEMID_FMTBREAK      0
-#define ITEMID_FMTKEEP      0
-#define ITEMID_LINE         0
-#define ITEMID_BRUSH        0
-#define ITEMID_LINESPACING  0
-#define TEMID_ADJUST        0
-#define ITEMID_ORPHANS      0
-#define ITEMID_WIDOWS       0
-#define ITEMID_TABSTOP      0
-#define ITEMID_PAGEMODEL    0
-#define ITEMID_FMTSPLIT     0
-#define ITEMID_HYPHENZONE   0
-#define ITEMID_FMTBREAK     0
-#define ITEMID_ADJUST       0
-#define ITEMID_EMPHASISMARK 0
-#define ITEMID_TWOLINES     0
-#define ITEMID_CHARSCALE_W  0
-#define ITEMID_CHARROTATE   0
-#define ITEMID_CHARRELIEF   0
-#define ITEMID_PARAVERTALIGN 0
-#define ITEMID_FORBIDDENRULE 0
-#define ITEMID_SCRIPTSPACE 0
-#define ITEMID_HANGINGPUNCTUATION 0
-#define ITEMID_FRAMEDIR 0
-#define ITEMID_CHARHIDDEN 0
 
 #include "flstitem.hxx"
 #include "fontitem.hxx"
