@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmltab.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:52:49 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:05:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,6 @@
 #include <vcl/wrkwin.hxx>
 #endif
 #ifndef _SVX_BOXITEM_HXX //autogen
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #include <svx/boxitem.hxx>
 #endif
 #ifndef _SVX_BRSHITEM_HXX //autogen
@@ -1517,7 +1516,7 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
         {
             sal_Bool bSet = (nCellPadding > 0);
 
-            SvxBoxItem aBoxItem;
+            SvxBoxItem aBoxItem( RES_BOX );
             long nInnerFrmWidth = nFrmWidth;
 
             if( bTopLine )
@@ -1625,7 +1624,7 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
                     pFrmFmt->UnlockModify();
                 else if( pCNd && SVX_ADJUST_END != eAdjust )
                 {
-                    SvxAdjustItem aAdjItem( eAdjust );
+                    SvxAdjustItem aAdjItem( eAdjust, RES_PARATR_ADJUST );
                     pCNd->SetAttr( aAdjItem );
                 }
             }
@@ -1669,7 +1668,7 @@ void HTMLTable::FixFillerFrameFmt( SwTableBox *pBox, sal_Bool bRight ) const
     if( bFillerTopBorder || bFillerBottomBorder ||
         (!bRight && bInhLeftBorder) || (bRight && bInhRightBorder) )
     {
-        SvxBoxItem aBoxItem;
+        SvxBoxItem aBoxItem( RES_BOX );
         if( bFillerTopBorder )
             aBoxItem.SetLine( &aTopBorderLine, BOX_LINE_TOP );
         if( bFillerBottomBorder )
@@ -2934,7 +2933,7 @@ const SwStartNode *SwHTMLParser::InsertTableSection
     }
 
     SwCntntNode *pCNd = pDoc->GetNodes()[pStNd->GetIndex()+1] ->GetCntntNode();
-    SvxFontHeightItem aFontHeight( 40 );
+    SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
     pCNd->SetAttr( aFontHeight );
     aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
     pCNd->SetAttr( aFontHeight );
@@ -3089,7 +3088,7 @@ SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
 
     if( !pBrushItem && (pColor || rImageURL.Len()) )
     {
-        pBrushItem = new SvxBrushItem();
+        pBrushItem = new SvxBrushItem(RES_BACKGROUND);
 
         if( pColor )
             pBrushItem->SetColor(*pColor);
@@ -3358,7 +3357,7 @@ _CellSaveStruct::_CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
     }
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken, nColl, aEmptyStr, sal_True );
     if( SVX_ADJUST_END != eAdjust )
-        rParser.InsertAttr( &rParser.aAttrTab.pAdjust, SvxAdjustItem(eAdjust),
+        rParser.InsertAttr( &rParser.aAttrTab.pAdjust, SvxAdjustItem(eAdjust, RES_PARATR_ADJUST),
                             pCntxt );
 
     if( rParser.HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -3701,7 +3700,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                     {
                         pDoc->SetTxtFmtColl( *pPam,
                             pCSS1Parser->GetTxtCollFromPool(RES_POOLCOLL_STANDARD) );
-                        SvxFontHeightItem aFontHeight( 40 );
+                        SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
 
                         _HTMLAttr* pTmp =
                             new _HTMLAttr( *pPam->GetPoint(), aFontHeight );
@@ -3716,7 +3715,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                         aSetAttrTab.Insert( pTmp, aSetAttrTab.Count() );
 
                         pTmp = new _HTMLAttr( *pPam->GetPoint(),
-                                            SvxULSpaceItem( 0, 0 ) );
+                                            SvxULSpaceItem( 0, 0, RES_UL_SPACE ) );
                         aSetAttrTab.Insert( pTmp, 0 ); // ja, 0, weil schon
                                                         // vom Tabellenende vorher
                                                         // was gesetzt sein kann.
@@ -3833,10 +3832,10 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
 
                     sal_uInt16 nSpace = pCurTable->GetHSpace();
                     if( nSpace )
-                        aFrmSet.Put( SvxLRSpaceItem(nSpace,nSpace) );
+                        aFrmSet.Put( SvxLRSpaceItem(nSpace,nSpace, 0, 0, RES_LR_SPACE) );
                     nSpace = pCurTable->GetVSpace();
                     if( nSpace )
-                        aFrmSet.Put( SvxULSpaceItem(nSpace,nSpace) );
+                        aFrmSet.Put( SvxULSpaceItem(nSpace,nSpace, RES_UL_SPACE) );
 
                     RndStdIds eAnchorId = ((const SwFmtAnchor&)aFrmSet.
                                                 Get( RES_ANCHOR )).
@@ -4225,7 +4224,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                                         : RES_POOLCOLL_TABLE );
 
         SwCntntNode *pCNd = pDoc->GetNodes()[pStNd->GetIndex()+1] ->GetCntntNode();
-        SvxFontHeightItem aFontHeight( 40 );
+        SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
         pCNd->SetAttr( aFontHeight );
         aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
         pCNd->SetAttr( aFontHeight );
@@ -4982,7 +4981,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_CAPTION_ON );
 
         // Tabellen-Ueberschriften sind immer zentriert.
-        NewAttr( &aAttrTab.pAdjust, SvxAdjustItem(SVX_ADJUST_CENTER) );
+        NewAttr( &aAttrTab.pAdjust, SvxAdjustItem(SVX_ADJUST_CENTER, RES_PARATR_ADJUST) );
 
         _HTMLAttrs &rAttrs = pCntxt->GetAttrs();
         rAttrs.Insert( aAttrTab.pAdjust, rAttrs.Count() );
