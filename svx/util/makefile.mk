@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:06:14 $
+#   last change: $Author: kz $ $Date: 2007-05-10 15:04:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,24 @@ RSCLOCINC+=-I$(PRJ)$/source$/svdraw
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1FILES=\
+    $(SLB)$/animation.lib \
+    $(SLB)$/overlay.lib \
+    $(SLB)$/svdraw.lib \
+    $(SLB)$/form.lib \
+    $(SLB)$/fmcomp.lib \
+    $(SLB)$/engine3d.lib \
+    $(SLB)$/msfilter.lib \
+    $(SLB)$/xout.lib \
+    $(SLB)$/xml.lib
+
+
+
+.IF "$(GUI)" == "OS2" || "(GUIBASE)" == "WIN"
+LIB1FILES+=$(SLB)$/ibrwimp.lib
+.ENDIF # (OS2 || WIN)
+
+LIB2TARGET= $(SLB)$/$(TARGET)_2.lib
+LIB2FILES=\
     $(SLB)$/init.lib \
     $(SLB)$/items.lib     \
     $(SLB)$/svxlink.lib   \
@@ -67,7 +85,10 @@ LIB1FILES=\
     $(SLB)$/options.lib   \
     $(SLB)$/stbctrls.lib  \
     $(SLB)$/tbxctrls.lib  \
-    $(SLB)$/unoedit.lib   \
+    $(SLB)$/unoedit.lib
+    
+LIB3TARGET= $(SLB)$/$(TARGET)_3.lib
+LIB3FILES=\
     $(SLB)$/unodraw.lib	\
     $(SLB)$/unogallery.lib\
     $(SLB)$/gal.lib		\
@@ -77,16 +98,7 @@ LIB1FILES=\
     $(SLB)$/properties.lib \
     $(SLB)$/contact.lib \
     $(SLB)$/mixer.lib \
-    $(SLB)$/event.lib \
-    $(SLB)$/animation.lib \
-    $(SLB)$/overlay.lib \
-    $(SLB)$/svdraw.lib \
-    $(SLB)$/form.lib \
-    $(SLB)$/fmcomp.lib \
-    $(SLB)$/engine3d.lib \
-    $(SLB)$/msfilter.lib \
-    $(SLB)$/xout.lib \
-    $(SLB)$/xml.lib
+    $(SLB)$/event.lib
 
 .IF "$(GUI)" == "OS2" || "(GUIBASE)" == "WIN"
 LIB1FILES+=$(SLB)$/ibrwimp.lib
@@ -99,7 +111,7 @@ SHL1TARGET= svx$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= i$(TARGET)
 SHL1USE_EXPORTS=ordinal
 
-SHL1LIBS=	$(LIB1TARGET)
+SHL1LIBS= $(LIB1TARGET) $(LIB2TARGET) $(LIB3TARGET)
 SHL1STDLIBS= \
             $(AVMEDIALIB) \
             $(SFX2LIB) \
@@ -131,7 +143,8 @@ SHL1STDLIBS+=$(SHELLLIB)
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
-DEFLIB1NAME=$(TARGET)
+DEFLIB1NAME=$(TARGET) $(TARGET)_2 $(TARGET)_3
+
 
 # cui
 SHL2TARGET= cui$(UPD)$(DLLPOSTFIX)
@@ -176,6 +189,8 @@ SHL2STDLIBS+= \
              $(ADVAPI32LIB)
 .ENDIF # WNT
 
+# ------------------------------------------------------------------------------
+
 # Resource files
 SRSFILELIST=\
                 $(SRS)$/svdstr.srs      \
@@ -201,19 +216,7 @@ RESLIB1NAME=svx
 RESLIB1IMAGES=$(PRJ)$/res $(PRJ)$/source/svdraw
 RESLIB1SRSFILES= $(SRSFILELIST)
 
-.IF "$(depend)" != ""
-
-ALL:
-    @echo nothing to depend on
-
-.ELSE
-
-ALL: \
-        $(MAKELANGDIR)  \
-        ALLTAR
-
-.ENDIF # "$(depend)" != ""
-
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
+
