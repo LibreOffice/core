@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:14:11 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:14:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,6 @@
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
 #endif
 #ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
@@ -530,7 +527,7 @@ void lcl_FillAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet,
     }
 
     if( !bBackGr )
-        rSet.Put( SvxColorItem( aCol ) );
+        rSet.Put( SvxColorItem( aCol, RES_CHRATR_COLOR ) );
 }
 
 /*--------------------------------------------------------------------
