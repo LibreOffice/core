@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clickableimage.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:32:43 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:56:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,6 +187,8 @@ namespace frm
         ImageProducer*  getImageProducer( GuardAccess ) { return m_pProducer; }
 
     protected:
+        using OControlModel::getMutex;
+
         void implConstruct();
 
         // to be called from within the cloning-ctor of your derived class
