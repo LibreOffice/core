@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:20:48 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:36:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,6 @@
 #ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
 #endif
-#define ITEMID_COLOR                    EE_CHAR_COLOR
 #ifndef _SVX_COLRITEM_HXX
 #include <svx/colritem.hxx>
 #endif
