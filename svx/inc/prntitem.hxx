@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prntitem.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:21:37 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:21:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ class SVX_DLLPUBLIC SvxPrintItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxPrintItem( const USHORT nId = ITEMID_PRINT, const BOOL bPrt = TRUE );
+    SvxPrintItem( const USHORT nId , const BOOL bPrt = TRUE );
     inline SvxPrintItem &operator=( const SvxPrintItem &rCpy );
 
     // "pure virtual Methoden" vom SfxPoolItem
