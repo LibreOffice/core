@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:26:34 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:36:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,32 +87,32 @@
 #include "chardlg.hrc"
 
 //Erstmal definieren, damit die Klassendeklarionen angezogen werden.
-#define ITEMID_FONT             SID_ATTR_CHAR_FONT
-#define ITEMID_POSTURE          SID_ATTR_CHAR_POSTURE
-#define ITEMID_WEIGHT           SID_ATTR_CHAR_WEIGHT
-#define ITEMID_SHADOWED         SID_ATTR_CHAR_SHADOWED
-#define ITEMID_WORDLINEMODE     SID_ATTR_CHAR_WORDLINEMODE
-#define ITEMID_CONTOUR          SID_ATTR_CHAR_CONTOUR
-#define ITEMID_CROSSEDOUT       SID_ATTR_CHAR_STRIKEOUT
-#define ITEMID_UNDERLINE        SID_ATTR_CHAR_UNDERLINE
-#define ITEMID_FONTHEIGHT       SID_ATTR_CHAR_FONTHEIGHT
-#define ITEMID_PROPSIZE         SID_ATTR_CHAR_PROPSIZE
-#define ITEMID_COLOR            SID_ATTR_CHAR_COLOR
-#define ITEMID_KERNING          SID_ATTR_CHAR_KERNING
-#define ITEMID_CASEMAP          SID_ATTR_CHAR_CASEMAP
-#define ITEMID_LANGUAGE         SID_ATTR_CHAR_LANGUAGE
-#define ITEMID_ESCAPEMENT       SID_ATTR_CHAR_ESCAPEMENT
-#define ITEMID_FONTLIST         SID_ATTR_CHAR_FONTLIST
-#define ITEMID_AUTOKERN         SID_ATTR_CHAR_AUTOKERN
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
-#define ITEMID_BLINK            SID_ATTR_FLASH
-#define ITEMID_BRUSH            SID_ATTR_BRUSH
-#define ITEMID_EMPHASISMARK     SID_ATTR_CHAR_EMPHASISMARK
-#define ITEMID_TWOLINES         SID_ATTR_CHAR_TWO_LINES
-#define ITEMID_CHARROTATE       SID_ATTR_CHAR_ROTATED
-#define ITEMID_CHARSCALE_W      SID_ATTR_CHAR_SCALEWIDTH
-#define ITEMID_CHARRELIEF       SID_ATTR_CHAR_RELIEF
-#define ITEMID_CHARHIDDEN       SID_ATTR_CHAR_HIDDEN
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #include "xtable.hxx"       // XColorTable
 #include "chardlg.hxx"
@@ -3082,7 +3082,7 @@ void SvxCharPositionPage::UpdatePreview_Impl( BYTE nProp, BYTE nEscProp, short n
 
 void SvxCharPositionPage::SetEscapement_Impl( USHORT nEsc )
 {
-    SvxEscapementItem aEscItm( (SvxEscapement)nEsc );
+    SvxEscapementItem aEscItm( (SvxEscapement)nEsc, SID_ATTR_CHAR_ESCAPEMENT );
 
     if ( SVX_ESCAPEMENT_SUPERSCRIPT == nEsc )
     {
