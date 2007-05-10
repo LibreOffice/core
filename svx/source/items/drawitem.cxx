@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:09:51 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:50:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,12 +40,6 @@
 
 #include "svxids.hrc"
 
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
-#define ITEMID_GRADIENT_LIST    SID_GRADIENT_LIST
-#define ITEMID_HATCH_LIST       SID_HATCH_LIST
-#define ITEMID_BITMAP_LIST      SID_BITMAP_LIST
-#define ITEMID_DASH_LIST        SID_DASH_LIST
-#define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
 
 #include "xoutx.hxx"
 #include "drawitem.hxx"
@@ -55,12 +49,12 @@ using namespace ::com::sun::star;
 
 // -----------------------------------------------------------------------
 
-TYPEINIT1_AUTOFACTORY( SvxColorTableItem, SfxPoolItem );
-TYPEINIT1_AUTOFACTORY( SvxGradientListItem, SfxPoolItem );
-TYPEINIT1_AUTOFACTORY( SvxHatchListItem, SfxPoolItem );
-TYPEINIT1_AUTOFACTORY( SvxBitmapListItem, SfxPoolItem );
-TYPEINIT1_AUTOFACTORY( SvxDashListItem, SfxPoolItem );
-TYPEINIT1_AUTOFACTORY( SvxLineEndListItem, SfxPoolItem );
+TYPEINIT1_FACTORY( SvxColorTableItem, SfxPoolItem , new  SvxColorTableItem);
+TYPEINIT1_FACTORY( SvxGradientListItem, SfxPoolItem , new  SvxGradientListItem);
+TYPEINIT1_FACTORY( SvxHatchListItem, SfxPoolItem , new  SvxHatchListItem);
+TYPEINIT1_FACTORY( SvxBitmapListItem, SfxPoolItem , new  SvxBitmapListItem);
+TYPEINIT1_FACTORY( SvxDashListItem, SfxPoolItem , new  SvxDashListItem);
+TYPEINIT1_FACTORY( SvxLineEndListItem, SfxPoolItem , new  SvxLineEndListItem);
 
 //==================================================================
 //
