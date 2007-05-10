@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmview.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:52:11 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:04:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,11 @@ namespace svx {
     class ODataAccessDescriptor;
     struct OXFormsDescriptor;
 }
+
+namespace com { namespace sun { namespace star { namespace form {
+    class XForm;
+    class XFormController;
+} } } }
 
 class SVX_DLLPUBLIC FmFormView : public E3dView
 {
@@ -120,6 +125,11 @@ public:
             <TRUE/> if the handling should be done synchronously.
     */
     void    GrabFirstControlFocus( sal_Bool _bForceSync = sal_False );
+
+    /** returns the form controller for a given form and a given device
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >
+            GetFormController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm, const OutputDevice& _rDevice ) const;
 
     // SdrView
     BOOL KeyInput(const KeyEvent& rKEvt, Window* pWin);
