@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:15:11 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:22:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 #include <sot/factory.hxx>
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
@@ -2350,7 +2347,7 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
         }
     }
 
-    SvxBrushItem aBrushItem;
+    SvxBrushItem aBrushItem( RES_BACKGROUND );
 
     if( SwWrtShell::SEL_TBL_CELLS & nSelType )
         rSh.GetBoxBackground( aBrushItem );
@@ -2370,7 +2367,7 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
         {
             case SID_BACKGROUND_COLOR  :
             {
-                SvxColorItem aColorItem(aBrushItem.GetColor());
+                SvxColorItem aColorItem(aBrushItem.GetColor(), SID_BACKGROUND_COLOR);
                 rSet.Put( aColorItem, SID_BACKGROUND_COLOR );
             }
             break;
@@ -2401,7 +2398,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
     if( !pArgs  && nSlot != SID_BACKGROUND_COLOR)
         return ;
 
-    SvxBrushItem aBrushItem;
+    SvxBrushItem aBrushItem( RES_BACKGROUND );
 
     if( SwWrtShell::SEL_TBL_CELLS & nSelType )
     {
@@ -2507,7 +2504,7 @@ void SwBaseShell::GetBorderState(SfxItemSet &rSet)
         SfxItemSet aCoreSet( GetPool(),
                              RES_BOX, RES_BOX,
                              SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER, 0 );
-        SvxBoxInfoItem aBoxInfo;
+        SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
         aCoreSet.Put( aBoxInfo );
         rSh.GetTabBorders( aCoreSet );
         rSet.Put( aCoreSet );
