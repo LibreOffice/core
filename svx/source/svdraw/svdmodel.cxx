@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 12:21:38 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:58:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,6 @@
 #include "svdstr.hrc"   // Objektname
 #include "svdoutlinercache.hxx"
 
-#include <eeitemid.hxx>
 
 #ifndef _SVX_ASIANCFG_HXX
 #include "asiancfg.hxx"
@@ -284,7 +283,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SfxObjectShell* pPers,
     pItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
 
 // SJ: #95129# using static SdrEngineDefaults only if default SvxFontHeight item is not available
-    const SfxPoolItem* pPoolItem = pItemPool->GetPoolDefaultItem( ITEMID_FONTHEIGHT );
+    const SfxPoolItem* pPoolItem = pItemPool->GetPoolDefaultItem( EE_CHAR_FONTHEIGHT );
     if ( pPoolItem )
         nDefTextHgt = ((SvxFontHeightItem*)pPoolItem)->GetHeight();
     else
@@ -863,7 +862,7 @@ void ImpGetDefaultFontsLanguage( SvxFontItem& rLatin, SvxFontItem& rAsian, SvxFo
 void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, ULONG nDefTextHgt )
 {
     // #95114# set application-language specific dynamic pool language defaults
-    SvxFontItem aSvxFontItem;
+    SvxFontItem aSvxFontItem( EE_CHAR_FONTINFO) ;
     SvxFontItem aSvxFontItemCJK(EE_CHAR_FONTINFO_CJK);
     SvxFontItem aSvxFontItemCTL(EE_CHAR_FONTINFO_CTL);
     sal_uInt16 nLanguage(Application::GetSettings().GetLanguage());
@@ -901,7 +900,7 @@ void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, ULONG nDefTextHgt )
     pItemPool->SetPoolDefaultItem( SvxFontHeightItem(nDefTextHgt, 100, EE_CHAR_FONTHEIGHT_CTL ) );
 
     // set FontColor defaults
-    pItemPool->SetPoolDefaultItem( SvxColorItem(SdrEngineDefaults::GetFontColor()) );
+    pItemPool->SetPoolDefaultItem( SvxColorItem(SdrEngineDefaults::GetFontColor(), EE_CHAR_COLOR) );
 }
 
 SdrOutliner& SdrModel::GetDrawOutliner(const SdrTextObj* pObj) const
