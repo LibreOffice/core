@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: cmc $ $Date: 2007-04-18 09:06:43 $
+#   last change: $Author: kz $ $Date: 2007-05-10 13:10:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,7 @@ OUT2INC=libxslt$/*.h
 
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=libxslt$/.libs$/libxslt.*.dylib
+OUT2LIB+=libexslt$/.libs$/libexslt.*.dylib
 OUT2BIN+=xsltproc$/.libs$/xsltproc
 .ELIF "$(OS)"=="WNT"
 OUT2LIB+=win32$/bin.msvc$/*.lib
@@ -97,6 +98,7 @@ OUT2BIN+=win32$/bin.msvc$/*.dll
 OUT2BIN+=win32$/bin.msvc$/*.exe*
 .ELSE
 OUT2LIB+=libxslt$/.libs$/libxslt.so*
+OUT2LIB+=libexslt$/.libs$/libexslt.so*
 OUT2BIN+=xsltproc$/.libs$/xsltproc
 .ENDIF
 
