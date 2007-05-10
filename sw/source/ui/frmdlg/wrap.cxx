@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrap.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:03:10 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:18:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -361,7 +361,7 @@ BOOL SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
     const SwFmtSurround& rOldSur = (const SwFmtSurround&)GetItemSet().Get(RES_SURROUND);
     SwFmtSurround aSur( rOldSur );
 
-    SvxOpaqueItem aOp;
+    SvxOpaqueItem aOp( RES_OPAQUE);
 
     if (!bDrawMode)
     {
@@ -414,7 +414,7 @@ BOOL SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
     BOOL bTopMod = aTopMarginED.IsValueModified();
     BOOL bBottomMod = aBottomMarginED.IsValueModified();
 
-    SvxULSpaceItem aUL;
+    SvxULSpaceItem aUL( RES_UL_SPACE );
     aUL.SetUpper((USHORT)aTopMarginED.Denormalize(aTopMarginED.GetValue(FUNIT_TWIP)));
     aUL.SetLower((USHORT)aBottomMarginED.Denormalize(aBottomMarginED.GetValue(FUNIT_TWIP)));
 
@@ -431,7 +431,7 @@ BOOL SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
     BOOL bLeftMod = aLeftMarginED.IsValueModified();
     BOOL bRightMod = aRightMarginED.IsValueModified();
 
-    SvxLRSpaceItem aLR;
+    SvxLRSpaceItem aLR( RES_LR_SPACE );
     aLR.SetLeft((USHORT)aLeftMarginED.Denormalize(aLeftMarginED.GetValue(FUNIT_TWIP)));
     aLR.SetRight((USHORT)aRightMarginED.Denormalize(aRightMarginED.GetValue(FUNIT_TWIP)));
 
