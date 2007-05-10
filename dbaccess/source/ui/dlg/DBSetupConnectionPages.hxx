@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DBSetupConnectionPages.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:03:28 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:22:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ namespace dbaui
 {
 //.........................................................................
 
-    class IAdminHelper;
+    class IDatabaseSettingsDialog;
 //      static  OGenericAdministrationPage* CreateDbaseTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
 
 
@@ -105,7 +105,7 @@ namespace dbaui
 
     protected:
         virtual ~OTextConnectionPageSetup();
-        virtual sal_Bool checkItems();
+        virtual sal_Bool prepareLeave();
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
