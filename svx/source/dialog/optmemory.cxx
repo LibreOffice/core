@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optmemory.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:39:51 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:39:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@
 #ifndef _UNO_LINGU_HXX
 #include "unolingu.hxx"
 #endif
-#define ITEMID_LANGUAGE 0
+
 #ifndef _SVX_LANGITEM_HXX
 #include "langitem.hxx"
 #endif
