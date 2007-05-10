@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.143 $
-# Date:        $Date: 2007-05-10 13:15:24 $
+# Version:     $Revision: 1.144 $
+# Date:        $Date: 2007-05-10 16:40:35 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -667,7 +667,11 @@ elsif ( $platform =~ m/darwin/ )
           $CPUNAME        = "POWERPC";
           $OUTPATH        = "unxmacxp";
       }
-      $CVER           = "C300";
+      if (@GCCVER@ >= 30401) {
+	  $CVER           = "C341";
+      } else {
+	  $CVER           = "C300";
+      }
       $GUI            = "UNX";
       $GUIENV         = "sal";
       $GVER           = "VCL";
