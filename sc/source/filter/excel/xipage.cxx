@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xipage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:27:31 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:49:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,7 +248,7 @@ void XclImpPageSettings::ReadBitmap( XclImpStream& rStrm )
                 }
 
                 aBmp.ReleaseAccess( pAccess );
-                maData.mxBrushItem.reset( new SvxBrushItem( Graphic( aBmp ), GPOS_TILED ) );
+                maData.mxBrushItem.reset( new SvxBrushItem( Graphic( aBmp ), GPOS_TILED, ATTR_BACKGROUND ) );
             }
         }
         else
