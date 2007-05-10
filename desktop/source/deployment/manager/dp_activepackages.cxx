@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_activepackages.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-19 14:15:41 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:09:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 #include "rtl/uri.h"
 #include "rtl/uri.hxx"
 #include "rtl/ustring.hxx"
-#include "stl/hash_map"
+#include <hash_map>
 
 #include "dp_identifier.hxx"
 #include "dp_persmap.h"
