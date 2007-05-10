@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rene $ $Date: 2007-01-11 17:18:02 $
+#   last change: $Author: hjs $ $Date: 2007-05-10 14:19:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ TAR_EXCLUDES=*/*Helvetica-Narrow*
 
 .INCLUDE : set_ext.mk
 
-ZIP1DIR         = $(MISC)/build/$(TARFILE_NAME)
+ZIP1DIR         = $(MISC)$/build$/$(TARFILE_NAME)
 ZIP1TARGET      = fontunxafm
 ZIP1LIST        = *.afm
 
