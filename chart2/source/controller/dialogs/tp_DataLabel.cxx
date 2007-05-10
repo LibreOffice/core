@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_DataLabel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:36:21 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:32:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@
 #ifndef _SFXENUMITEM_HXX
 #include <svtools/eitem.hxx>
 #endif
-#define ITEMID_CHARTDATADESCR   SCHATTR_DATADESCR_DESCR
 #ifndef _SVX_CHRTITEM_HXX
 #include <svx/chrtitem.hxx>
 #endif
@@ -131,7 +130,7 @@ BOOL SchDataDescrTabPage::FillItemSet(SfxItemSet& rOutAttrs)
     else
         eDescr = CHDESCR_NONE;
 
-    rOutAttrs.Put(SvxChartDataDescrItem(eDescr));
+    rOutAttrs.Put(SvxChartDataDescrItem(eDescr, SCHATTR_DATADESCR_DESCR));
     rOutAttrs.Put(SfxBoolItem( SCHATTR_DATADESCR_SHOW_SYM,
                                aCbSymbol.IsChecked()) );
     return TRUE;

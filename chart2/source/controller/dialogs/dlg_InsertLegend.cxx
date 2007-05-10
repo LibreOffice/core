@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertLegend.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:35:15 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:31:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
 #include "SchSfxItemIds.hxx"
 
 // header for enum SvxChartLegendPos
-#define ITEMID_CHARTLEGENDPOS   SCHATTR_LEGEND_POS
 #ifndef _SVX_CHRTITEM_HXX
 #include <svx/chrtitem.hxx>
 #endif
@@ -135,7 +134,7 @@ void SchLegendDlg::GetAttr(SfxItemSet& _rOutAttrs)
     else
         ePos = CHLEGEND_NONE;
 
-    _rOutAttrs.Put(SvxChartLegendPosItem(ePos));
+    _rOutAttrs.Put(SvxChartLegendPosItem(ePos, SCHATTR_LEGEND_POS));
 }
 
 
