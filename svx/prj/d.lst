@@ -21,14 +21,20 @@ mkdir: %COMMON_DEST%\pck%_EXT%\starsuite_bitmap
 mkdir: %COMMON_DEST%\pck%_EXT%\staroffice_bitmap
 mkdir: %COMMON_DEST%\pck%_EXT%\openoffice
 mkdir: %COMMON_DEST%\pck%_EXT%\openoffice_dev
+mkdir: %COMMON_DEST%\pck%_EXT%\broffice
+mkdir: %COMMON_DEST%\pck%_EXT%\broffice_dev
 ..\res\cjkabout.bmp %COMMON_DEST%\pck%_EXT%\starsuite_bitmap\about.bmp
 ..\res\cjkintro.bmp %COMMON_DEST%\pck%_EXT%\starsuite_bitmap\intro.bmp
 ..\res\ofaabout.bmp %COMMON_DEST%\pck%_EXT%\staroffice_bitmap\about.bmp
 ..\res\soffice.bmp %COMMON_DEST%\pck%_EXT%\staroffice_bitmap\intro.bmp
 ..\res\ooointro.bmp %COMMON_DEST%\pck%_EXT%\openoffice\intro.bmp
+..\res\oooabout.bmp %COMMON_DEST%\pck%_EXT%\openoffice\about.bmp
 ..\res\ooonologointro.bmp %COMMON_DEST%\pck%_EXT%\openoffice\nologointro.bmp
 ..\res\ooodevintro.bmp %COMMON_DEST%\pck%_EXT%\openoffice_dev\intro.bmp
 ..\res\ooodevnologointro.bmp %COMMON_DEST%\pck%_EXT%\openoffice_dev\nologointro.bmp
+..\res\brabout.bmp %COMMON_DEST%\pck%_EXT%\broffice\about.bmp
+..\res\brintro.bmp %COMMON_DEST%\pck%_EXT%\broffice\intro.bmp
+..\res\brdevintro.bmp %COMMON_DEST%\pck%_EXT%\broffice_dev\intro.bmp
 
 mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\flagsdef.hxx %_DEST%\inc%_EXT%\svx\flagsdef.hxx
