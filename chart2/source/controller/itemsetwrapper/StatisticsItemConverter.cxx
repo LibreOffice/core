@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StatisticsItemConverter.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:03:32 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:34:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@
 #include "CharacterPropertyItemConverter.hxx"
 
 #ifndef _SVX_CHRTITEM_HXX
-#include "SchAllDefinesFor_svx_chrtitem.hxx"
 #include <svx/chrtitem.hxx>
 #endif
 #ifndef _SFXINTITEM_HXX
@@ -573,7 +572,7 @@ void StatisticsItemConverter::FillSpecialItem(
                     }
                 }
             }
-            rOutItemSet.Put( SvxChartKindErrorItem( eErrorKind ));
+            rOutItemSet.Put( SvxChartKindErrorItem( eErrorKind, SCHATTR_STAT_KIND_ERROR ));
         }
         break;
 
@@ -632,7 +631,7 @@ void StatisticsItemConverter::FillSpecialItem(
                     RegressionCurveHelper::getRegressType(
                         uno::Reference< chart2::XRegressionCurveContainer >(
                             GetPropertySet(), uno::UNO_QUERY ) )));
-            rOutItemSet.Put( SvxChartRegressItem( eRegress ));
+            rOutItemSet.Put( SvxChartRegressItem( eRegress, SCHATTR_STAT_REGRESSTYPE ));
         }
         break;
 
@@ -660,7 +659,7 @@ void StatisticsItemConverter::FillSpecialItem(
                         eIndicate = CHINDICATE_NONE;
                 }
             }
-            rOutItemSet.Put( SvxChartIndicateItem( eIndicate ));
+            rOutItemSet.Put( SvxChartIndicateItem( eIndicate, SCHATTR_STAT_INDICATE ));
         }
         break;
    }
