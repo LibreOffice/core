@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colrctrl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:52:38 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:16:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -318,7 +318,24 @@ SvxColorDockingWindow::SvxColorDockingWindow
     aColorSet.SetStyle( aColorSet.GetStyle() | WB_ITEMBORDER );
     aColorSet.SetSelectHdl( LINK( this, SvxColorDockingWindow, SelectHdl ) );
 
-    SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    // Get the model from the view shell.  Using SfxObjectShell::Current()
+    // is unreliable when called at the wrong times.
+    SfxObjectShell* pDocSh = NULL;
+    if (_pBindings != NULL)
+    {
+        SfxDispatcher* pDispatcher = _pBindings->GetDispatcher();
+        if (pDispatcher != NULL)
+        {
+            SfxViewFrame* pFrame = pDispatcher->GetFrame();
+            if (pFrame != NULL)
+            {
+                SfxViewShell* pViewShell = pFrame->GetViewShell();
+                if (pViewShell != NULL)
+                    pDocSh = pViewShell->GetObjectShell();
+            }
+        }
+    }
+
     if ( pDocSh )
     {
         const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
