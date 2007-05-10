@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontdialog.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 11:58:40 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:07:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,21 +86,6 @@
 #ifndef _EXTENSIONS_PROPCTRLR_FONTITEMIDS_HXX_
 #include "fontitemids.hxx"
 #endif
-#define ITEMID_FONT             CFID_FONT
-#define ITEMID_FONTHEIGHT       CFID_HEIGHT
-#define ITEMID_WEIGHT           CFID_WEIGHT
-#define ITEMID_POSTURE          CFID_POSTURE
-#define ITEMID_LANGUAGE         CFID_LANGUAGE
-#define ITEMID_UNDERLINE        CFID_UNDERLINE
-#define ITEMID_CROSSEDOUT       CFID_STRIKEOUT
-#define ITEMID_WORDLINEMODE     CFID_WORDLINEMODE
-#define ITEMID_COLOR            CFID_CHARCOLOR
-#define ITEMID_CHARRELIEF       CFID_RELIEF
-#define ITEMID_EMPHASISMARK     CFID_EMPHASIS
-#define ITEMID_CASEMAP          CFID_CASEMAP
-#define ITEMID_CONTOUR          CFID_CONTOUR
-#define ITEMID_SHADOWED         CFID_SHADOWED
-#define ITEMID_FONTLIST         CFID_FONTLIST
 
 #ifndef _SVX_CHARRELIEFITEM_HXX
 #include <svx/charreliefitem.hxx>
@@ -350,8 +335,8 @@ namespace pcr
             SvxLanguageItem aLanguageItem(Application::GetSettings().GetUILanguage(), CFID_LANGUAGE);
 
             // the 2 CJK props
-            SvxCharReliefItem aFontReliefItem((FontRelief)nFontRelief);
-            SvxEmphasisMarkItem aEmphasisMarkitem((FontEmphasisMark)nFontEmphasisMark);
+            SvxCharReliefItem aFontReliefItem((FontRelief)nFontRelief, CFID_RELIEF);
+            SvxEmphasisMarkItem aEmphasisMarkitem((FontEmphasisMark)nFontEmphasisMark, CFID_EMPHASIS);
 
             _pSet->Put(aFontItem, CFID_FONT);
             _pSet->Put(aSvxFontHeightItem,CFID_HEIGHT);
