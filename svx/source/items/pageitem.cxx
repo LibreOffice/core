@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pageitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:10:38 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:52:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,6 @@
 #include <tools/stream.hxx>
 #endif
 
-// Erstmal definieren, damit die Klassendeklarionen angezogen werden.
-#define  ITEMID_PAGE        0
-#define  ITEMID_SETITEM     0
 
 #include "pageitem.hxx"
 #include "itemtype.hxx"
@@ -66,7 +63,7 @@ using namespace ::com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
-TYPEINIT1_AUTOFACTORY( SvxPageItem, SfxPoolItem );
+TYPEINIT1_FACTORY( SvxPageItem, SfxPoolItem , new  SvxPageItem(0));
 
 /*--------------------------------------------------------------------
     Beschreibung: Konstruktor

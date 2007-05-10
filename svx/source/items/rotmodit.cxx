@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rotmodit.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:11:03 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:53:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ using namespace ::com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
-TYPEINIT1_AUTOFACTORY(SvxRotateModeItem,        SfxEnumItem);
+TYPEINIT1_FACTORY(SvxRotateModeItem, SfxEnumItem, new SvxRotateModeItem(SVX_ROTATE_MODE_STANDARD, 0));
 
 
 //-----------------------------------------------------------------------
