@@ -4,9 +4,9 @@
  *
  *  $RCSfile: section.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:08:10 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:14:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,6 +229,9 @@ public:
     // return the TOX base class if the section is a TOX section
     const SwTOXBase* GetTOXBase() const;
 
+    // --> OD 2007-02-14 #b6521322#
+    void BreakLink();
+    // <--
 private:
     // privater Constructor, weil nie kopiert werden darf !!
     SwSection( const SwSection& );
