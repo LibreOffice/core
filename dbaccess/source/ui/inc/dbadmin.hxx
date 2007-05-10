@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:47:34 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:31:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,11 +66,10 @@ class ODsnTypeCollection;
 //= ODbAdminDialog
 //=========================================================================
 class OGeneralPage;
-struct OPageSettings;
 class ODbDataSourceAdministrationHelper;
 /** tab dialog for administrating the office wide registered data sources
 */
-class ODbAdminDialog : public SfxTabDialog , public IItemSetHelper, public IAdminHelper
+class ODbAdminDialog : public SfxTabDialog , public IItemSetHelper, public IDatabaseSettingsDialog
 {
 private:
     typedef ::std::stack< sal_Int32 > PageStack;
@@ -118,6 +117,7 @@ public:
     virtual void clearPassword();
     virtual sal_Bool saveDatasource();
     virtual void setTitle(const ::rtl::OUString& _sTitle);
+    virtual void enableConfirmSettings( bool _bEnable );
 
 protected:
     // adds a new detail page and remove all the old ones
