@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customshapeitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:53:25 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:50:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ size_t SdrCustomShapeGeometryItem::PropertyPairHash::operator()( const SdrCustom
     return (size_t)r1.first.hashCode() + r1.second.hashCode();
 };
 
-TYPEINIT1_AUTOFACTORY( SdrCustomShapeGeometryItem, SfxPoolItem );
+TYPEINIT1_FACTORY( SdrCustomShapeGeometryItem, SfxPoolItem , new  SdrCustomShapeGeometryItem(0));
 SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem()
 :   SfxPoolItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )
 {}

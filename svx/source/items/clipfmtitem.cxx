@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clipfmtitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:53:11 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:49:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ struct SvxClipboardFmtItem_Impl
 
 String SvxClipboardFmtItem_Impl::sEmptyStr;
 
-TYPEINIT1_AUTOFACTORY( SvxClipboardFmtItem, SfxPoolItem );
+TYPEINIT1_FACTORY( SvxClipboardFmtItem, SfxPoolItem , new  SvxClipboardFmtItem(0));
 
 SvxClipboardFmtItem_Impl::SvxClipboardFmtItem_Impl(
                             const SvxClipboardFmtItem_Impl& rCpy )
