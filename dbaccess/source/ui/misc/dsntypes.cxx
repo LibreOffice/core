@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:02:32 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:36:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -345,11 +345,6 @@ void ODsnTypeCollection::extractHostNamePort(const String& _rDsn,String& _sDatab
             break;
     }
 }
-//-------------------------------------------------------------------------
-String ODsnTypeCollection::getTypeDisplayName(const String& _rDsn) const
-{
-    return getTypeDisplayName(getType(_rDsn));
-}
 
 //-------------------------------------------------------------------------
 sal_Bool ODsnTypeCollection::isFileSystemBased(DATASOURCE_TYPE _eType) const
@@ -683,11 +678,6 @@ Sequence<PropertyValue> ODsnTypeCollection::getEmbeddedDatabaseProperties(const 
     }
     return aRet;
 }
-//-------------------------------------------------------------------------
-sal_Int32 ODsnTypeCollection::implDetermineTypeIndex(const String& _rDsn) const
-{
-    return implDetermineTypeIndex(getType(_rDsn));
-}
 // -----------------------------------------------------------------------------
 String ODsnTypeCollection::getTypeExtension(DATASOURCE_TYPE _eType) const
 {
@@ -743,13 +733,6 @@ DATASOURCE_TYPE ODsnTypeCollection::TypeIterator::getType() const
 {
     DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypes.size(), "ODsnTypeCollection::TypeIterator::getType : invalid position!");
     return m_pContainer->m_aDsnTypes[m_nPosition];
-}
-
-//-------------------------------------------------------------------------
-String ODsnTypeCollection::TypeIterator::getPrefix() const
-{
-    DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDsnPrefixes.size(), "ODsnTypeCollection::TypeIterator::getPrefix : invalid position!");
-    return m_pContainer->m_aDsnPrefixes[m_nPosition];
 }
 
 //-------------------------------------------------------------------------
