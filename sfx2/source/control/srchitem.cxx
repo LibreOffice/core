@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchitem.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:48:39 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 17:07:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ using namespace com::sun::star::uno;
 
 // STATIC DATA -----------------------------------------------------------
 
-TYPEINIT1_AUTOFACTORY(SvxSearchItem, SfxPoolItem);
+TYPEINIT1_FACTORY(SvxSearchItem, SfxPoolItem, new SvxSearchItem(0));
 
 // -----------------------------------------------------------------------
 
