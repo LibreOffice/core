@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 12:57:12 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:22:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,6 @@
 #include "precompiled_sd.hxx"
 
 
-#ifndef _EEITEMID_HXX //autogen
-#include <svx/eeitemid.hxx>
-#endif
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
 #endif
@@ -85,7 +82,6 @@
 #ifndef _SVX_NUMITEM_HXX //autogen
 #include <svx/numitem.hxx>
 #endif
-#define ITEMID_BRUSH    0
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
 #endif
@@ -98,8 +94,6 @@
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
 #endif
-#define ITEMID_EMPHASISMARK       EE_CHAR_EMPHASISMARK
-#define ITEMID_CHARRELIEF         EE_CHAR_RELIEF
 #ifndef _SVX_CHARRELIEFITEM_HXX
 #include <svx/charreliefitem.hxx>
 #endif
@@ -107,7 +101,6 @@
 #include <svx/emphitem.hxx>
 #endif
 
-#define ITEMID_AUTOKERN EE_CHAR_PAIRKERNING
 #include <svx/akrnitem.hxx>
 
 #include <svx/svdattr.hxx>
@@ -290,8 +283,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     String aHelpFile;
 
     SfxStyleSheetBase* pParent = NULL;
-    SvxLRSpaceItem aSvxLRSpaceItem;
-    SvxULSpaceItem aSvxULSpaceItem;
+    SvxLRSpaceItem aSvxLRSpaceItem( EE_PARA_LRSPACE );
+    SvxULSpaceItem aSvxULSpaceItem( EE_PARA_ULSPACE );
     USHORT nLevel;
 
     for( nLevel = 1; nLevel < 10; nLevel++)
@@ -324,13 +317,13 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
                 rSet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
                 rSet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ) );
                 rSet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL ) );
-                rSet.Put( SvxUnderlineItem(UNDERLINE_NONE) );
-                rSet.Put( SvxCrossedOutItem(STRIKEOUT_NONE) );
-                rSet.Put( SvxShadowedItem(FALSE) );
-                rSet.Put( SvxContourItem(FALSE) );
-                rSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE) );
-                rSet.Put( SvxCharReliefItem(RELIEF_NONE) );
-                rSet.Put( SvxColorItem( Color(COL_AUTO)) );
+                rSet.Put( SvxUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE ) );
+                rSet.Put( SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ) );
+                rSet.Put( SvxShadowedItem(FALSE, EE_CHAR_SHADOW ) );
+                rSet.Put( SvxContourItem(FALSE, EE_CHAR_OUTLINE ) );
+                rSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK ) );
+                rSet.Put( SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF) );
+                rSet.Put( SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR) );
                 rSet.Put( XLineStyleItem(XLINE_NONE) );
                 rSet.Put( XFillStyleItem(XFILL_NONE) );
                 // #i16874# enable kerning by default but only for new documents
@@ -459,14 +452,14 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rTitleSet.Put(SvxFontHeightItem( 1552, 100, EE_CHAR_FONTHEIGHT ) );                 // 44 pt
         rTitleSet.Put(SvxFontHeightItem( 1552, 100, EE_CHAR_FONTHEIGHT_CJK ) );                 // 44 pt
         rTitleSet.Put(SvxFontHeightItem( SdDrawDocument::convertFontHeightToCTL( 1552 ), 100, EE_CHAR_FONTHEIGHT_CTL ) );                   // 44 pt
-        rTitleSet.Put(SvxUnderlineItem(UNDERLINE_NONE));
-        rTitleSet.Put(SvxCrossedOutItem(STRIKEOUT_NONE));
-        rTitleSet.Put(SvxShadowedItem(FALSE));
-        rTitleSet.Put(SvxContourItem(FALSE));
-        rTitleSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE) );
-        rTitleSet.Put( SvxCharReliefItem(RELIEF_NONE) );
-        rTitleSet.Put(SvxColorItem( Color(COL_AUTO)));
-        rTitleSet.Put(SvxAdjustItem(SVX_ADJUST_CENTER));
+        rTitleSet.Put(SvxUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE ));
+        rTitleSet.Put(SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ));
+        rTitleSet.Put(SvxShadowedItem(FALSE, EE_CHAR_SHADOW ));
+        rTitleSet.Put(SvxContourItem(FALSE, EE_CHAR_OUTLINE ));
+        rTitleSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK ) );
+        rTitleSet.Put( SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF ) );
+        rTitleSet.Put(SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR ));
+        rTitleSet.Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST ));
         rTitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         rTitleSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
         // #i16874# enable kerning by default but only for new documents
@@ -504,14 +497,14 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rSubtitleSet.Put( SvxFontHeightItem( 1129, 100, EE_CHAR_FONTHEIGHT ) );     // 32 pt
         rSubtitleSet.Put( SvxFontHeightItem( 1129, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 32 pt
         rSubtitleSet.Put( SvxFontHeightItem( SdDrawDocument::convertFontHeightToCTL( 1129 ), 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 32 pt
-        rSubtitleSet.Put(SvxUnderlineItem(UNDERLINE_NONE));
-        rSubtitleSet.Put(SvxCrossedOutItem(STRIKEOUT_NONE));
-        rSubtitleSet.Put(SvxShadowedItem(FALSE));
-        rSubtitleSet.Put(SvxContourItem(FALSE));
-        rSubtitleSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE) );
-        rSubtitleSet.Put( SvxCharReliefItem(RELIEF_NONE) );
-        rSubtitleSet.Put(SvxColorItem( Color(COL_AUTO)));
-        rSubtitleSet.Put(SvxAdjustItem(SVX_ADJUST_CENTER));
+        rSubtitleSet.Put(SvxUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE ));
+        rSubtitleSet.Put(SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ));
+        rSubtitleSet.Put(SvxShadowedItem(FALSE, EE_CHAR_SHADOW ));
+        rSubtitleSet.Put(SvxContourItem(FALSE, EE_CHAR_OUTLINE ));
+        rSubtitleSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK ) );
+        rSubtitleSet.Put( SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF ) );
+        rSubtitleSet.Put(SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR ));
+        rSubtitleSet.Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST ));
         rSubtitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         rSubtitleSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
         // #i16874# enable kerning by default but only for new documents
@@ -552,15 +545,15 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rNotesSet.Put( SvxFontHeightItem( 705, 100, EE_CHAR_FONTHEIGHT ) );     // 20 pt
         rNotesSet.Put( SvxFontHeightItem( 705, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 20 pt
         rNotesSet.Put( SvxFontHeightItem( SdDrawDocument::convertFontHeightToCTL( 705 ), 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 20 pt
-        rNotesSet.Put( SvxUnderlineItem(UNDERLINE_NONE) );
-        rNotesSet.Put( SvxCrossedOutItem(STRIKEOUT_NONE) );
-        rNotesSet.Put( SvxShadowedItem(FALSE) );
-        rNotesSet.Put( SvxContourItem(FALSE) );
-        rNotesSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE) );
-        rNotesSet.Put( SvxCharReliefItem(RELIEF_NONE) );
-        rNotesSet.Put( SvxColorItem( Color(COL_AUTO)) );
+        rNotesSet.Put( SvxUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE ) );
+        rNotesSet.Put( SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ) );
+        rNotesSet.Put( SvxShadowedItem(FALSE, EE_CHAR_SHADOW ) );
+        rNotesSet.Put( SvxContourItem(FALSE, EE_CHAR_OUTLINE ) );
+        rNotesSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK ) );
+        rNotesSet.Put( SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF) );
+        rNotesSet.Put( SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR ) );
         rNotesSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
-        rNotesSet.Put( SvxLRSpaceItem( 0, 0, 600, -600 ) );
+        rNotesSet.Put( SvxLRSpaceItem( 0, 0, 600, -600, EE_PARA_LRSPACE  ) );
         // #i16874# enable kerning by default but only for new documents
         rNotesSet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
 
