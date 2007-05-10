@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-01 15:16:03 $
+#   last change: $Author: gm $ $Date: 2007-05-10 10:59:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -334,6 +334,8 @@ sub remove_old_installation_sets
 
     # finally the $basedir can be created empty
 
+    if ( $installer::globals::localinstalldirset ) { installer::systemactions::create_directory_structure($basedir); }
+
     installer::systemactions::create_directory($basedir);
 }
 
@@ -402,6 +404,11 @@ sub create_installation_directory
     else
     {
         $installdir = installer::systemactions::create_directories("install", $languageref);
+        if ( $installer::globals::localinstalldir )
+        {
+            $installdir = $installer::globals::localinstalldir;
+            $installer::globals::localinstalldirset = 1;
+        }
         installer::logger::print_message( "... creating installation set in $installdir ...\n" );
         remove_old_installation_sets($installdir);
         my $inprogressinstalldir = $installdir . "_inprogress";
