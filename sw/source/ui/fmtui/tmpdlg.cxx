@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tmpdlg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:00:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:17:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,6 @@
 #endif
 
 
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
-#endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -152,9 +149,6 @@
 #endif
 #ifndef _MACASSGN_HXX
 #include <macassgn.hxx>     //
-#endif
-#ifndef _UIITEMS_HXX
-#include <uiitems.hxx>      // inclusive der NumTabPages!
 #endif
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
