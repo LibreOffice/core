@@ -4,9 +4,9 @@
  *
  *  $RCSfile: qprostyle.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:40:52 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:51:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,59 +84,60 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
     sal_uInt8 nOrient = ( nTmp & 0x60 );
 
     // Horizontal Alignment
-    SvxHorJustifyItem aJustify = SVX_HOR_JUSTIFY_STANDARD;
+    SvxCellHorJustify eJustify = SVX_HOR_JUSTIFY_STANDARD;
     switch( nHor )
     {
         case 0x00:
-            aJustify = SVX_HOR_JUSTIFY_STANDARD;
+            eJustify = SVX_HOR_JUSTIFY_STANDARD;
             break;
 
         case 0x01:
-            aJustify = SVX_HOR_JUSTIFY_LEFT;
+            eJustify = SVX_HOR_JUSTIFY_LEFT;
             break;
 
         case 0x02:
-            aJustify = SVX_HOR_JUSTIFY_CENTER;
+            eJustify = SVX_HOR_JUSTIFY_CENTER;
             break;
 
         case 0x03:
-            aJustify = SVX_HOR_JUSTIFY_RIGHT;
+            eJustify = SVX_HOR_JUSTIFY_RIGHT;
             break;
 
         case 0x04:
-            aJustify = SVX_HOR_JUSTIFY_BLOCK;
+            eJustify = SVX_HOR_JUSTIFY_BLOCK;
             break;
     }
-    rItemSet.Put( aJustify );
+    rItemSet.Put( SvxHorJustifyItem( eJustify, ATTR_HOR_JUSTIFY ) );
 
     // Vertical Alignment
-    SvxVerJustifyItem aVerJustify = SVX_VER_JUSTIFY_STANDARD;
+    SvxCellVerJustify eVerJustify = SVX_VER_JUSTIFY_STANDARD;
     switch( nVer )
     {
         case 0x00:
-            aVerJustify = SVX_VER_JUSTIFY_BOTTOM;
+            eVerJustify = SVX_VER_JUSTIFY_BOTTOM;
             break;
 
         case 0x08:
-            aVerJustify = SVX_VER_JUSTIFY_CENTER;
+            eVerJustify = SVX_VER_JUSTIFY_CENTER;
             break;
 
         case 0x10:
-            aVerJustify = SVX_VER_JUSTIFY_TOP;
+            eVerJustify = SVX_VER_JUSTIFY_TOP;
             break;
     }
-    rItemSet.Put( aVerJustify );
+
+    rItemSet.Put(SvxVerJustifyItem( eVerJustify, ATTR_VER_JUSTIFY ) );
 
     // Orientation
-    SvxOrientationItem aOrientItem = SVX_ORIENTATION_STANDARD;
+    SvxCellOrientation eOrient = SVX_ORIENTATION_STANDARD;
     switch( nOrient )
     {
         case 0x20:
-            aOrientItem = SVX_ORIENTATION_TOPBOTTOM;
+            eOrient = SVX_ORIENTATION_TOPBOTTOM;
             break;
 
     }
-    rItemSet.Put( aOrientItem );
+    rItemSet.Put( SvxOrientationItem( eOrient, 0) );
 
     // Wrap cell contents
     if( nTmp & 0x80 )
@@ -163,10 +164,10 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
         rItemSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE, ATTR_FONT_UNDERLINE ) );
 
     if (maFontHeight[ maFont [ nStyle ] ])
-        rItemSet.Put( SvxFontHeightItem( (ULONG) (20 * maFontHeight[ maFont[ nStyle ] ] ) ) );
+        rItemSet.Put( SvxFontHeightItem( (ULONG) (20 * maFontHeight[ maFont[ nStyle ] ] ), 100, ATTR_FONT_HEIGHT ) );
 
     String fntName = maFontType[ maFont[ nStyle ] ];
-    rItemSet.Put( SvxFontItem( FAMILY_SYSTEM, fntName, EMPTY_STRING ) );
+    rItemSet.Put( SvxFontItem( FAMILY_SYSTEM, fntName, EMPTY_STRING, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ) );
 
     pDoc->ApplyPattern( nCol, nRow, nTab, aPattern );
 }
