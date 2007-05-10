@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:52:57 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:56:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,7 @@
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
-#define ITEMID_FIELD EE_FEATURE_FIELD
 
-#include "eetext.hxx"
 #include <svx/svxdlg.hxx>
 #include <svx/brkitem.hxx>
 #include <svx/hyznitem.hxx>
@@ -110,11 +108,11 @@ BOOL ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
     // Muss natuerlich noch geaendert werden
     // aNewAttr.Put( SvxParaDlgLimitsItem( 567 * 50, 5670) );
 
-    aNewAttr.Put( SvxHyphenZoneItem() );
-    aNewAttr.Put( SvxFmtBreakItem() );
-    aNewAttr.Put( SvxFmtSplitItem() );
-    aNewAttr.Put( SvxWidowsItem() );
-    aNewAttr.Put( SvxOrphansItem() );
+    aNewAttr.Put( SvxHyphenZoneItem( sal_False, SID_ATTR_PARA_HYPHENZONE ) );
+    aNewAttr.Put( SvxFmtBreakItem( SVX_BREAK_NONE, SID_ATTR_PARA_PAGEBREAK ) );
+    aNewAttr.Put( SvxFmtSplitItem( sal_True, SID_ATTR_PARA_SPLIT)  );
+    aNewAttr.Put( SvxWidowsItem( 0, SID_ATTR_PARA_WIDOWS) );
+    aNewAttr.Put( SvxOrphansItem( 0, SID_ATTR_PARA_ORPHANS) );
 
 //CHINA001  ScParagraphDlg* pDlg = new ScParagraphDlg( pViewData->GetDialogParent(),
 //CHINA001  &aNewAttr );
