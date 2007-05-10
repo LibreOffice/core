@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlnum.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:11:04 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:05:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,7 +311,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
         aNumFmt.SetNumberingType(SVX_NUM_BITMAP);
 
         // Die Grafik als Brush anlegen
-        SvxBrushItem aBrushItem;
+        SvxBrushItem aBrushItem( RES_BACKGROUND );
         aBrushItem.SetGraphicLink( aBulletSrc );
         aBrushItem.SetGraphicPos( GPOS_AREA );
 
