@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:57:30 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:24:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,18 +118,10 @@ namespace dbaui
 
 
     //=========================================================================
-    //= OPageSettings
-    //=========================================================================
-    //-------------------------------------------------------------------------
-    OPageSettings::~OPageSettings()
-    {
-    }
-
-    //=========================================================================
     //= OGenericAdministrationPage
     //=========================================================================
-DBG_NAME(OGenericAdministrationPage)
-//-------------------------------------------------------------------------
+    DBG_NAME(OGenericAdministrationPage)
+    //-------------------------------------------------------------------------
     OGenericAdministrationPage::OGenericAdministrationPage(Window* _pParent, const ResId& _rId, const SfxItemSet& _rAttrSet)
         :SfxTabPage(_pParent, _rId, _rAttrSet)
         ,m_abEnableRoadmap(sal_False)
@@ -155,7 +147,7 @@ DBG_NAME(OGenericAdministrationPage)
     {
         if (_pSet)
         {
-            if (!checkItems())
+            if (!prepareLeave())
                 return KEEP_PAGE;
             FillItemSet(*_pSet);
         }
@@ -180,24 +172,6 @@ DBG_NAME(OGenericAdministrationPage)
     void OGenericAdministrationPage::ActivatePage(const SfxItemSet& _rSet)
     {
         implInitControls(_rSet, sal_True);
-    }
-
-    // -----------------------------------------------------------------------
-    OPageSettings* OGenericAdministrationPage::createViewSettings()
-    {
-        return NULL;
-    }
-
-    // -----------------------------------------------------------------------
-    void OGenericAdministrationPage::fillViewSettings(OPageSettings* /*_rSettings*/)
-    {
-        // nothing to do
-    }
-
-    // -----------------------------------------------------------------------
-    void OGenericAdministrationPage::restoreViewSettings(const OPageSettings* /*_pPageState*/)
-    {
-        // nothing to do
     }
 
     // -----------------------------------------------------------------------
@@ -244,8 +218,9 @@ DBG_NAME(OGenericAdministrationPage)
         }
         return sal_True;
     }
+
     // -----------------------------------------------------------------------
-    void OGenericAdministrationPage::postInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void OGenericAdministrationPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
         sal_Bool bValid, bReadonly;
@@ -361,17 +336,13 @@ DBG_NAME(OGenericAdministrationPage)
         return 0L;
     }
 
-    void OGenericAdministrationPage::SetHeaderText( Window* _parent, USHORT _nFTResId, USHORT _StringResId)
+    void OGenericAdministrationPage::SetHeaderText( USHORT _nFTResId, USHORT _StringResId)
     {
-//        if (!m_pFT_HeaderText)
-//        {
-            delete(m_pFT_HeaderText);
-            m_pFT_HeaderText = new FixedText(_parent, ModuleRes(_nFTResId));
- //       }
+        delete(m_pFT_HeaderText);
+        m_pFT_HeaderText = new FixedText(this, ModuleRes(_nFTResId));
         String sHeaderText = String(ModuleRes(_StringResId));
         m_pFT_HeaderText->SetText(sHeaderText);
         SetControlFontWeight(m_pFT_HeaderText);
-//        return m_pFT_HeaderText;
     }
 
 
