@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasettings.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:46:22 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:13:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,6 @@ class ODataSettings : public ::comphelper::OPropertyStateContainer
     sal_Bool m_bQuery;
 protected:
     ODataSettings(::cppu::OBroadcastHelper& _rBHelper,sal_Bool _bQuery = sal_False);
-    ODataSettings(const ODataSettings& _rSource, ::cppu::OBroadcastHelper& _rBHelper,sal_Bool _bQuery = sal_False);
     virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _rDefault ) const;
 
     /** register the properties from the param given. The parameter instance must be alive as long as tis object live.
