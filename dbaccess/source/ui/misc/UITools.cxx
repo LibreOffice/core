@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:53:01 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:34:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1767,47 +1767,6 @@ Reference<XPropertySet> createView( const ::rtl::OUString& _sName
     return xView;
 }
 // -----------------------------------------------------------------------------
-String convertURLtoUI(sal_Bool _bPrefix,ODsnTypeCollection* _pCollection,const ::rtl::OUString& _sURL)
-{
-    ODsnTypeCollection* pCollection = _pCollection;
-    if ( pCollection == NULL )
-    {
-        static ODsnTypeCollection s_TypeCollection;
-        pCollection = &s_TypeCollection;
-    }
-
-    String sURL( _sURL );
-    DATASOURCE_TYPE eType = pCollection->getType( sURL );
-
-    if ( pCollection->isFileSystemBased( eType ) )
-    {
-        // get the tow parts: prefix and file URL
-        String sTypePrefix, sFileURLEncoded;
-        if ( _bPrefix )
-        {
-            sTypePrefix = pCollection->getDatasourcePrefix( eType );
-            sFileURLEncoded = pCollection->cutPrefix( sURL );
-        }
-        else
-        {
-            sFileURLEncoded = sURL;
-        }
-
-        // substitute any variables
-        sFileURLEncoded = SvtPathOptions().SubstituteVariable( sFileURLEncoded );
-
-        // decode the URL
-        sURL = sTypePrefix;
-        if ( sFileURLEncoded.Len() )
-        {
-            OFileNotation aFileNotation(sFileURLEncoded);
-            // set this decoded URL as text
-            sURL += String(aFileNotation.get(OFileNotation::N_SYSTEM));
-        }
-    }
-    return sURL;
-}
-// -----------------------------------------------------------------------------
 void fillTreeListNames( const Reference< XNameAccess >& _xContainer, DBTreeListBox& _rList,
         USHORT _nImageId, USHORT _nHighContrastImageId, SvLBoxEntry* _pParent, IContainerFoundListener* _pContainerFoundListener )
 {
@@ -1915,38 +1874,35 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XMultiService
         throw SQLException(sError,NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")) ,0,Any());
     }
 
-    if ( !sNewName.getLength() )
-        return sal_False;
     try
     {
-        Reference<XMultiServiceFactory> xORB(xNameAccess,UNO_QUERY);
-        OSL_ENSURE(xORB.is(),"No service factory given");
-        if ( xORB.is() )
-        {
-            Sequence< Any > aArguments(3);
-            PropertyValue aValue;
-            // set as folder
-            aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
-            aValue.Value <<= sNewName;
-            aArguments[0] <<= aValue;
-            //parent
-            aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Parent"));
-            aValue.Value <<= xNameAccess;
-            aArguments[1] <<= aValue;
+        Reference<XMultiServiceFactory> xORB( xNameAccess, UNO_QUERY_THROW );
+        Sequence< Any > aArguments(3);
+        PropertyValue aValue;
+        // set as folder
+        aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
+        aValue.Value <<= sNewName;
+        aArguments[0] <<= aValue;
+        //parent
+        aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Parent"));
+        aValue.Value <<= xNameAccess;
+        aArguments[1] <<= aValue;
 
-            aValue.Name = PROPERTY_EMBEDDEDOBJECT;
-            aValue.Value <<= _xContent;
-            aArguments[2] <<= aValue;
+        aValue.Name = PROPERTY_EMBEDDEDOBJECT;
+        aValue.Value <<= _xContent;
+        aArguments[2] <<= aValue;
 
-            ::rtl::OUString sServiceName(_bCollection ? ((_bForm) ? SERVICE_NAME_FORM_COLLECTION : SERVICE_NAME_REPORT_COLLECTION) : SERVICE_SDB_DOCUMENTDEFINITION);
+        ::rtl::OUString sServiceName(_bCollection ? ((_bForm) ? SERVICE_NAME_FORM_COLLECTION : SERVICE_NAME_REPORT_COLLECTION) : SERVICE_SDB_DOCUMENTDEFINITION);
 
-            Reference<XContent > xNew(xORB->createInstanceWithArguments(sServiceName,aArguments),UNO_QUERY);
-            Reference<XNameContainer> xNameContainer(xNameAccess,UNO_QUERY);
-            if ( xNameContainer.is() )
-                xNameContainer->insertByName(sNewName,makeAny(xNew));
-        }
+        Reference<XContent > xNew( xORB->createInstanceWithArguments( sServiceName, aArguments ), UNO_QUERY_THROW );
+        Reference< XNameContainer > xNameContainer( xNameAccess, UNO_QUERY_THROW );
+        xNameContainer->insertByName( sNewName, makeAny( xNew ) );
     }
-    catch(Exception&)
+    catch( const IllegalArgumentException& e )
+    {
+        ::dbtools::throwGenericSQLException( e.Message, e.Context );
+    }
+    catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
         return sal_False;
