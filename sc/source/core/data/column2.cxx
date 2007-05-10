@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:40:03 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:43:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
-#define ITEMID_FIELD EE_FEATURE_FIELD
 
 #include <svx/algitem.hxx>
 #include <svx/editobj.hxx>
