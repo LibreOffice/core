@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:41:03 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:35:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -588,13 +588,6 @@ void OCopyTableWizard::AddWizardPage(OWizardPage* pPage)
     DBG_CHKTHIS(OCopyTableWizard,NULL);
     AddPage(pPage);
     ++m_nPageCount;
-}
-// -----------------------------------------------------------------------
-void OCopyTableWizard::RemoveWizardPage(OWizardPage* pPage)
-{
-    DBG_CHKTHIS(OCopyTableWizard,NULL);
-    RemovePage(pPage);
-    --m_nPageCount;
 }
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::insertColumn(sal_Int32 _nPos,OFieldDescription* _pField)
