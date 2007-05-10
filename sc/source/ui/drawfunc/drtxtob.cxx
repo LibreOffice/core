@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:52:43 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:56:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,6 @@
 //-------------------------------------------------------------------------
 
 #include "scitems.hxx"
-#include "eetext.hxx"
-#define ITEMID_FIELD EE_FEATURE_FIELD
 
 #include <svx/adjitem.hxx>
 #include <svx/clipfmtitem.hxx>
@@ -275,7 +273,7 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 
                         SvxURLField aURLField( rURL, rName, SVXURLFORMAT_REPR );
                         aURLField.SetTargetFrame( rTarget );
-                        SvxFieldItem aURLItem( aURLField );
+                        SvxFieldItem aURLItem( aURLField, EE_FEATURE_FIELD );
                         pOutView->InsertField( aURLItem );
 
                         //  select new field
