@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HTable.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:41:11 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:38:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,8 @@
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
 #endif
+
+#include <tools/diagnose_ex.h>
 
 
 using namespace ::comphelper;
@@ -319,8 +321,22 @@ void OHSQLTable::alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rCol
     ::rtl::OUString sSql = getAlterTableColumnPart();
 
     sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ALTER COLUMN "));
-    sSql += ::dbtools::quoteName( getMetaData()->getIdentifierQuoteString(), _rColName );
-    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+#if OSL_DEBUG_LEVEL > 0
+    try
+    {
+        ::rtl::OUString sDescriptorName;
+        OSL_ENSURE( _xDescriptor.is()
+                &&  ( _xDescriptor->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_NAME ) ) >>= sDescriptorName )
+                &&  ( sDescriptorName == _rColName ),
+                "OHSQLTable::alterColumnType: unexpected column name!" );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+#else
+    (void)_rColName;
+#endif
 
     OHSQLColumn* pColumn = new OHSQLColumn(sal_True);
     Reference<XPropertySet> xProp = pColumn;
@@ -376,7 +392,12 @@ void OHSQLTable::executeStatement(const ::rtl::OUString& _rStatement )
     Reference< XStatement > xStmt = getConnection()->createStatement(  );
     if ( xStmt.is() )
     {
-        xStmt->execute(sSQL);
+        try { xStmt->execute(sSQL); }
+        catch( const Exception& )
+        {
+            ::comphelper::disposeComponent(xStmt);
+            throw;
+        }
         ::comphelper::disposeComponent(xStmt);
     }
 }
