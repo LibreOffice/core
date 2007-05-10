@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontainerwindow.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:00:22 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:33:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,8 +97,6 @@ namespace dbaui
 
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
                 getPreviewFrame() const { return m_xBeamer; }
-
-        void initialize(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
 
         OQueryDesignView*   getDesignView() { return m_pViewSwitch->getDesignView(); }
 
