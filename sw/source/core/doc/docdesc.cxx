@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:08:58 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:55:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,8 +201,8 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
     }
 
     //Raender einstellen.
-    SvxLRSpaceItem aLR;
-    SvxULSpaceItem aUL;
+    SvxLRSpaceItem aLR( RES_LR_SPACE );
+    SvxULSpaceItem aUL( RES_UL_SPACE );
 
     aUL.SetUpper( (USHORT)nMinTop );
     aUL.SetLower( (USHORT)nMinBottom );
@@ -703,8 +703,8 @@ USHORT SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
             GetDefaultFrameDirection(GetAppLanguage())
             : FRMDIR_HORI_LEFT_TOP;
 
-        pNew->GetMaster().SetAttr( SvxFrameDirectionItem(aFrameDirection) );
-        pNew->GetLeft().SetAttr( SvxFrameDirectionItem(aFrameDirection) );
+        pNew->GetMaster().SetAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
+        pNew->GetLeft().SetAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
     }
     aPageDescs.Insert( pNew, aPageDescs.Count() );
 
