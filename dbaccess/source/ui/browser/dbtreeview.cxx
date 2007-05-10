@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtreeview.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:57:33 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:18:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,69 +100,9 @@ void DBTreeView::SetPreExpandHandler(const Link& _rHdl)
 }
 
 // -----------------------------------------------------------------------------
-Link DBTreeView::GetPreExpandHandler() const
-{
-    return m_pTreeListBox->GetPreExpandHandler();
-}
-// -----------------------------------------------------------------------------
-void    DBTreeView::setCutHandler(const Link& _rHdl)
-{
-    m_pTreeListBox->setCutHandler(_rHdl);
-}
-// -----------------------------------------------------------------------------
-Link    DBTreeView::getCutHandler() const
-{
-    return m_pTreeListBox->getCutHandler();
-}
-// -----------------------------------------------------------------------------
 void    DBTreeView::setCopyHandler(const Link& _rHdl)
 {
     m_pTreeListBox->setCopyHandler(_rHdl);
-}
-// -----------------------------------------------------------------------------
-Link    DBTreeView::getCopyHandler() const
-{
-    return m_pTreeListBox->getCopyHandler();
-}
-// -----------------------------------------------------------------------------
-void    DBTreeView::setPasteHandler(const Link& _rHdl)
-{
-    m_pTreeListBox->setPasteHandler(_rHdl);
-}
-// -----------------------------------------------------------------------------
-Link    DBTreeView::getPasteHandler() const
-{
-    return m_pTreeListBox->getPasteHandler();
-}
-// -----------------------------------------------------------------------------
-void    DBTreeView::setDeleteHandler(const Link& _rHdl)
-{
-    m_pTreeListBox->setDeleteHandler(_rHdl);
-}
-// -----------------------------------------------------------------------------
-Link    DBTreeView::getDeleteHandler() const
-{
-    return m_pTreeListBox->getDeleteHandler();
-}
-// -----------------------------------------------------------------------------
-void    DBTreeView::setEditingHandler(const Link& _rHdl)
-{
-    m_pTreeListBox->setEditingHandler(_rHdl);
-}
-// -----------------------------------------------------------------------------
-Link    DBTreeView::getEditingHandler() const
-{
-    return m_pTreeListBox->getEditingHandler();
-}
-// -----------------------------------------------------------------------------
-void    DBTreeView::setEditedHandler(const Link& _rHdl)
-{
-    m_pTreeListBox->setEditedHandler(_rHdl);
-}
-// -----------------------------------------------------------------------------
-Link    DBTreeView::getEditedHandler() const
-{
-    return m_pTreeListBox->getEditedHandler();
 }
 // -----------------------------------------------------------------------------
 void DBTreeView::Resize()
@@ -170,13 +110,6 @@ void DBTreeView::Resize()
     Window::Resize();
     m_pTreeListBox->SetPosSizePixel(Point(0,0),GetOutputSizePixel());
 }
-
-// -------------------------------------------------------------------------
-DBTreeListModel* DBTreeView::getModel() const
-{
-    return (DBTreeListModel*)m_pTreeListBox->GetModel();
-}
-
 // -------------------------------------------------------------------------
 void DBTreeView::setModel(DBTreeListModel* _pTreeModel)
 {
