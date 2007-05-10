@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DbAdminImpl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:47:23 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:22:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,10 +138,6 @@ namespace dbaui
         /** returns the data source the dialog is currently working with
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   getCurrentDataSource();
-        /** returs the model we're currently working with
-        */
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >         getCurrentModel();
-
         // returns the Url of a database document
         String              getDocumentUrl(SfxItemSet& _rDest);
 
