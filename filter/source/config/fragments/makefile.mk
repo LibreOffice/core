@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:46:35 $
+#   last change: $Author: kz $ $Date: 2007-05-10 13:13:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -156,9 +156,12 @@ $(ALL_FLAGS) : $(INCLUDE_FRAGMENTS)
 MERGE:=python ../tools/merge/pyAltFCFGMerge
 .ELSE
 MERGE    := $(JAVAI) -jar $(CLASSDIR)$/FCFGMerge.jar
-XALAN_JAR*=$(SOLARBINDIR)$/xalan.jar
-PACKLANG := $(JAVAI) $(JAVACPS) $(XALAN_JAR) org.apache.xalan.xslt.Process -XSL langfilter.xsl
 .ENDIF
+
+PACKLANG := $(XSLTPROC) --nonet
+PACKLANG_IN :=
+PACKLANG_PARAM := --stringparam
+PACKLANG_XSL :=
 
 # -----------------------------------------------------------------------------
 # build every module seperated
@@ -185,8 +188,8 @@ $(REALFILTERPACKAGES_FILTERS_UI_LANGPACKS) : $(REALFILTERPACKAGES_FILTERS_UI_MER
      @echo ===================================================================
      @echo Building language packages $(@:b:s/Filter_//) for filters
      @echo ===================================================================
-     -$(MKDIRHIER) $(@:d)
-     $(PACKLANG) -IN $< -PARAM lang $(@:d:d:d:d:d:d:d:d:b) > $@
+     +-$(MKDIRHIER) $(@:d)
+     $(PACKLANG) $(PACKLANG_PARAM) lang $(@:d:d:d:d:d:d:d:d:b) $(PACKLANG_XSL) langfilter.xsl $(PACKLANG_IN) $< > $@
 
 $(REALFILTERPACKAGES_FILTERS_UI_LANGPACKS_PACKED) : $(REALFILTERPACKAGES_FILTERS_UI_LANGPACKS)
 
