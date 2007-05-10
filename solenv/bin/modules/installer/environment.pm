@@ -4,9 +4,9 @@
 #
 #   $RCSfile: environment.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-02 12:21:34 $
+#   last change: $Author: gm $ $Date: 2007-05-10 10:58:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,9 @@ sub set_global_environment_variables
     if ( $ENV{'JREPATH'} ) { $installer::globals::jrepath = $ENV{'JREPATH'}; }
 
     if ( $ENV{'BSCLIENT'} && ( (lc $ENV{'BSCLIENT'}) eq "true" ) ) { $installer::globals::quiet = 1; }
-
+    if ( $ENV{'PREPARE_WINPATCH'} ) { $installer::globals::prepare_winpatch = 1; }
+    if ( $ENV{'PREVIOUS_IDT_DIR'} ) { $installer::globals::previous_idt_dir = $ENV{'PREVIOUS_IDT_DIR'}; }
+    if ( $ENV{'LOCALINSTALLDIR'} ) { $installer::globals::localinstalldir = $ENV{'LOCALINSTALLDIR'}; }
     if ( $ENV{'MAX_LANG_LENGTH'} ) { $installer::globals::max_lang_length = $ENV{'MAX_LANG_LENGTH'}; }
 }
 
