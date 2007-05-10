@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 13:46:31 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:51:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 #ifndef _FRM_DATABASEFORM_HXX_
 #define _FRM_DATABASEFORM_HXX_
+
+#include "propertybaghelper.hxx"
 
 #ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
 #include <com/sun/star/sdbc/XDataSource.hpp>
@@ -123,6 +125,12 @@
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
+#include <com/sun/star/beans/XPropertyContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
+#include <com/sun/star/beans/XPropertyAccess.hpp>
+#endif
 
 
 #ifndef _LINK_HXX
@@ -144,9 +152,6 @@
 #include "ids.hxx"
 #endif
 
-#ifndef _COMPHELPER_PROPERTY_AGGREGATION_HXX_
-#include <comphelper/propagg.hxx>
-#endif
 #ifndef _COMPHELPER_PROPERTY_MULTIPLEX_HXX_
 #include <comphelper/propmultiplex.hxx>
 #endif
@@ -156,11 +161,11 @@
 #ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE11_HXX_
-#include <cppuhelper/implbase11.hxx>
+#ifndef _CPPUHELPER_IMPLBASE12_HXX_
+#include <cppuhelper/implbase12.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE7_HXX_
 #include <cppuhelper/implbase7.hxx>
@@ -212,21 +217,25 @@ DECLARE_STL_VECTOR(HtmlSuccessfulObj, HtmlSuccessfulObjList);
 //========================================================================
 class OGroupManager;
 class OFormSubmitResetThread;
-typedef ::cppu::ImplHelper11<   ::com::sun::star::form::XForm,
-                                ::com::sun::star::awt::XTabControllerModel,
-                                ::com::sun::star::form::XLoadListener,
-                                ::com::sun::star::sdbc::XRowSetListener,
-                                ::com::sun::star::sdb::XRowSetApproveListener,
-                                ::com::sun::star::form::XDatabaseParameterBroadcaster2,
-                                ::com::sun::star::sdb::XSQLErrorListener,
-                                ::com::sun::star::sdb::XSQLErrorBroadcaster,
-                                ::com::sun::star::form::XReset,
-                                ::com::sun::star::form::XSubmit,
-                                ::com::sun::star::form::XLoadable > ODatabaseForm_BASE1;
+typedef ::cppu::ImplHelper12    <   ::com::sun::star::form::XForm
+                                ,   ::com::sun::star::awt::XTabControllerModel
+                                ,   ::com::sun::star::form::XLoadListener
+                                ,   ::com::sun::star::sdbc::XRowSetListener
+                                ,   ::com::sun::star::sdb::XRowSetApproveListener
+                                ,   ::com::sun::star::form::XDatabaseParameterBroadcaster2
+                                ,   ::com::sun::star::sdb::XSQLErrorListener
+                                ,   ::com::sun::star::sdb::XSQLErrorBroadcaster
+                                ,   ::com::sun::star::form::XReset
+                                ,   ::com::sun::star::form::XSubmit
+                                ,   ::com::sun::star::form::XLoadable
+                                ,   ::com::sun::star::container::XNamed
+                                >   ODatabaseForm_BASE1;
 
 
-typedef ::cppu::ImplHelper2<    ::com::sun::star::container::XNamed,
-                                ::com::sun::star::lang::XServiceInfo> ODatabaseForm_BASE2;
+typedef ::cppu::ImplHelper3 <   ::com::sun::star::lang::XServiceInfo
+                            ,   ::com::sun::star::beans::XPropertyContainer
+                            ,   ::com::sun::star::beans::XPropertyAccess
+                            >   ODatabaseForm_BASE2;
 
 typedef ::cppu::ImplHelper7<    ::com::sun::star::sdbc::XCloseable,
                                 ::com::sun::star::sdbc::XRowSet,
@@ -240,10 +249,10 @@ typedef ::cppu::ImplHelper7<    ::com::sun::star::sdbc::XCloseable,
 class ODatabaseForm :public OFormComponents
                     ,public OPropertySetAggregationHelper
                     ,public OPropertyChangeListener
-                    ,public ::comphelper::OAggregationArrayUsageHelper<ODatabaseForm>
                     ,public ODatabaseForm_BASE1
                     ,public ODatabaseForm_BASE2
                     ,public ODatabaseForm_BASE3
+                    ,public IPropertyBagHelperContext
 {
     friend class OFormSubmitResetThread;
 
@@ -267,6 +276,7 @@ class ODatabaseForm :public OFormComponents
     // same object, interface as member because of performance reasons
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>          m_xAggregateAsRowSet;
 
+    PropertyBagHelper           m_aPropertyBagHelper;
     OPropertyChangeMultiplexer* m_pAggregatePropertyMultiplexer;
     // Verwaltung der ControlGruppen
     OGroupManager*              m_pGroupManager;
@@ -331,10 +341,14 @@ public:
        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     void fire( sal_Int32 * pnHandles, const ::com::sun::star::uno::Any * pNewValues, const ::com::sun::star::uno::Any * pOldValues, sal_Int32 nCount, sal_Bool bVetoable );
 
-    virtual void fillProperties(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
-        ) const;
+    // IPropertyBagHelperContext
+    virtual ::osl::Mutex&   getMutex();
+    virtual void            describeFixedAndAggregateProperties(
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& _out_rFixedProperties,
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& _out_rAggregateProperties
+    ) const;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet >
+                            getPropertiesInterface();
 
     // com::sun::star::beans::XPropertyState
     virtual ::com::sun::star::beans::PropertyState getPropertyStateByHandle(sal_Int32 nHandle);
@@ -506,6 +520,15 @@ public:
     // XPropertyChangeListener
     virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException);
 
+    // XPropertyContainer
+    virtual void SAL_CALL addProperty( const ::rtl::OUString& Name, ::sal_Int16 Attributes, const ::com::sun::star::uno::Any& DefaultValue ) throw (::com::sun::star::beans::PropertyExistException, ::com::sun::star::beans::IllegalTypeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeProperty( const ::rtl::OUString& Name ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::NotRemoveableException, ::com::sun::star::uno::RuntimeException);
+
+    // XPropertyAccess
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPropertyValues(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    using OPropertySetAggregationHelper::setPropertyValues;
+
     inline void submitNBC( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& Control, const ::com::sun::star::awt::MouseEvent& MouseEvt );
 
 protected:
@@ -587,6 +610,8 @@ private:
     void    impl_createLoadTimer();
 
     DECL_LINK( OnTimeout, void* );
+protected:
+    using OPropertySetHelper::getPropertyValues;
 };
 
 inline void ODatabaseForm::submitNBC(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& Control, const ::com::sun::star::awt::MouseEvent& MouseEvt)
