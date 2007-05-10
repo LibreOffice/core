@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:46:57 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:58:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@
 #include "precompiled_svx.hxx"
 
 #define _ANIMATION
-#define ITEMID_GRF_CROP 0
 
 #ifndef _UTL_STREAM_WRAPPER_HXX_
 #include <unotools/streamwrap.hxx>
