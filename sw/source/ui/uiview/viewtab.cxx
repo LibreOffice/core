@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:56:06 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:26:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@
 #endif
 
 #include <hintids.hxx>
-#include "uiparam.hxx"
 #include "uitool.hxx"
 #include <sfx2/app.hxx>
 
@@ -362,7 +361,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
     {
         SvxLongLRSpaceItem aLongLR( (const SvxLongLRSpaceItem&)rReq.GetArgs()->
                                                     Get( SID_ATTR_LONG_LRSPACE ) );
-        SvxLRSpaceItem aLR;
+        SvxLRSpaceItem aLR(RES_LR_SPACE);
         BOOL bSect = 0 != (nFrmType & FRMTYPE_COLSECT);
         if ( !bSect && (bFrmSelection || nFrmType & FRMTYPE_FLY_ANY) )
         {
@@ -601,7 +600,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             }
             else
             {
-                SvxULSpaceItem aUL;
+                SvxULSpaceItem aUL(RES_UL_SPACE);
                 aUL.SetUpper((USHORT)aLongULSpace.GetUpper());
                 aUL.SetLower((USHORT)aLongULSpace.GetLower());
                 aDesc.GetMaster().SetAttr(aUL);
@@ -718,7 +717,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             if ( i >= rTabStops.Count() )
             {
                 // Kein DefTab
-                SvxTabStopItem aTabStops;
+                SvxTabStopItem aTabStops( RES_PARATR_TABSTOP );
                 aTabStops = rTabStops;
 
                 ::lcl_EraseDefTabs(aTabStops);
@@ -1061,6 +1060,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             {
                 SvxLRSpaceItem aLR( aLongLR.GetLeft(),
                                     aLongLR.GetRight(),
+                                    0, 0,
                                     nWhich);
                 rSet.Put(aLR);
             }
@@ -1157,7 +1157,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             }
             else
             {
-                SvxLRSpaceItem aLR;
+                SvxLRSpaceItem aLR( RES_LR_SPACE );
                 if ( !IsTabColFromDoc() )
                 {
                     aLR = (const SvxLRSpaceItem&)aCoreSet.Get(RES_LR_SPACE);
@@ -1208,7 +1208,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         SfxItemSet aCoreSet( GetPool(),
                                                 RES_BOX, RES_BOX,
                                                 SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER, 0 );
-                        SvxBoxInfoItem aBoxInfo;
+                        SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
                         aCoreSet.Put( aBoxInfo );
                         rSh.GetFlyFrmAttr( aCoreSet );
                         const SvxBoxItem& rBox = (const SvxBoxItem&)aCoreSet.Get(RES_BOX);
@@ -1235,7 +1235,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     SfxItemSet aCoreSet( GetPool(),
                                             RES_BOX, RES_BOX,
                                             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER, 0 );
-                    SvxBoxInfoItem aBoxInfo;
+                    SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
                     aBoxInfo.SetTable(FALSE);
                     aBoxInfo.SetDist((BOOL) TRUE);
                     aCoreSet.Put(aBoxInfo);
