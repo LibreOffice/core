@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:14:39 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:48:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,28 +49,6 @@
 #include <svtools/intitem.hxx>
 #endif
 
-#define ITEMID_WEIGHT       0
-#define ITEMID_UNDERLINE    0
-#define ITEMID_CROSSEDOUT   0
-#define ITEMID_CONTOUR      0
-#define ITEMID_SHADOWED     0
-#define ITEMID_POSTURE      0
-#define ITEMID_FONTHEIGHT   0
-#define ITEMID_FONT         0
-#define ITEMID_CHARRELIEF   0
-#define ITEMID_ESCAPEMENT   0
-#define ITEMID_COLOR        0
-#define ITEMID_WORDLINEMODE 0
-#define ITEMID_CHARSCALE_W  0
-#define ITEMID_AUTOKERN     0
-#define ITEMID_ULSPACE      0
-#define ITEMID_LRSPACE      0
-#define ITEMID_LINESPACING  0
-#define ITEMID_LANGUAGE     0
-#define ITEMID_KERNING      0
-#define ITEMID_TABSTOP      0
-#define ITEMID_ADJUST       0
-#define ITEMID_EMPHASISMARK 0
 #ifndef _SVX_WGHTITEM_HXX
 #include "wghtitem.hxx"
 #endif
