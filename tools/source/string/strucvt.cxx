@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strucvt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:48:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:39:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,7 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_tools.hxx"
+// no include "precompiled_tools.hxx" because this is included in other cxx files.
 
 // =======================================================================
 
