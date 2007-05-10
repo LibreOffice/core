@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:56:52 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 17:00:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
-#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
@@ -1074,13 +1074,13 @@ void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
         case SID_ALIGN_ANY_HCENTER:
         case SID_ALIGN_ANY_RIGHT:
         case SID_ALIGN_ANY_JUSTIFIED:
-            pTabViewShell->ApplyAttr( SvxHorJustifyItem( lclConvertSlotToHAlign( nSlot ) ) );
+            pTabViewShell->ApplyAttr( SvxHorJustifyItem( lclConvertSlotToHAlign( nSlot ), ATTR_HOR_JUSTIFY ) );
         break;
         case SID_ALIGN_ANY_VDEFAULT:
         case SID_ALIGN_ANY_TOP:
         case SID_ALIGN_ANY_VCENTER:
         case SID_ALIGN_ANY_BOTTOM:
-            pTabViewShell->ApplyAttr( SvxVerJustifyItem( lclConvertSlotToVAlign( nSlot ) ) );
+            pTabViewShell->ApplyAttr( SvxVerJustifyItem( lclConvertSlotToVAlign( nSlot ), ATTR_VER_JUSTIFY ) );
         break;
 
         default:
@@ -1104,10 +1104,10 @@ void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
                         break;
 
                         case SID_H_ALIGNCELL:
-                            pTabViewShell->ApplyAttr( SvxHorJustifyItem( (SvxCellHorJustify)((const SvxHorJustifyItem*)pItem)->GetValue() ) );
+                            pTabViewShell->ApplyAttr( SvxHorJustifyItem( (SvxCellHorJustify)((const SvxHorJustifyItem*)pItem)->GetValue(), ATTR_HOR_JUSTIFY ) );
                         break;
                         case SID_V_ALIGNCELL:
-                            pTabViewShell->ApplyAttr( SvxVerJustifyItem( (SvxCellVerJustify)((const SvxVerJustifyItem*)pItem)->GetValue() ) );
+                            pTabViewShell->ApplyAttr( SvxVerJustifyItem( (SvxCellVerJustify)((const SvxVerJustifyItem*)pItem)->GetValue(), ATTR_VER_JUSTIFY ) );
                         break;
                         default:
                             DBG_ERROR( "ExecuteAlignment: invalid slot" );
@@ -1183,7 +1183,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     if ( pCore && ((const SvxWeightItem*)pCore)->GetWeight() == WEIGHT_BOLD )
                         eWeight = WEIGHT_NORMAL;
 
-                    aSetItem.PutItemForScriptType( nScript, SvxWeightItem( eWeight ) );
+                    aSetItem.PutItemForScriptType( nScript, SvxWeightItem( eWeight, ATTR_FONT_WEIGHT ) );
                 }
                 pTabViewShell->ApplyUserItemSet( aSetItem.GetItemSet() );
                 pNewSet->Put( aSetItem.GetItemSet(), FALSE );
@@ -1208,7 +1208,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     if ( pCore && ((const SvxPostureItem*)pCore)->GetPosture() == ITALIC_NORMAL )
                         eItalic = ITALIC_NONE;
 
-                    aSetItem.PutItemForScriptType( nScript, SvxPostureItem( eItalic ) );
+                    aSetItem.PutItemForScriptType( nScript, SvxPostureItem( eItalic, ATTR_FONT_POSTURE ) );
                 }
                 pTabViewShell->ApplyUserItemSet( aSetItem.GetItemSet() );
                 pNewSet->Put( aSetItem.GetItemSet(), FALSE );
