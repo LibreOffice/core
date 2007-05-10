@@ -4,9 +4,9 @@
  *
  *  $RCSfile: precompiled_canvas.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:16:37 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:12:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,5 +36,6 @@
 // MARKER(update_precomp.py): Generated on 2006-09-01 17:49:32.389803
 
 #ifdef PRECOMPILED_HEADERS
+#include <sal/macros.h>
 #endif
 
