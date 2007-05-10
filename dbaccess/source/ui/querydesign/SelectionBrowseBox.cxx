@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:53:47 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:38:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1562,24 +1562,6 @@ void OSelectionBrowseBox::DeleteFields(const String& rAliasName)
 
         if (bWasEditing)
             ActivateCell(nRow , nColId);
-    }
-}
-
-//------------------------------------------------------------------------------
-void OSelectionBrowseBox::SetColWidth()
-{
-    DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    // Spaltenbreite ermitteln
-    sal_uInt16 nColCount = ColCount();
-    sal_uInt32 nColWidth = 0;
-
-    for( sal_uInt16 nColId=1; nColId<=nColCount; nColId++ )
-    {
-        nColWidth = static_cast<OQueryController*>(getDesignView()->getController())->getColWidth( nColId );
-
-        if( nColWidth == 0)
-            nColWidth = DEFAULT_SIZE;
-        SetColumnWidth( nColId, nColWidth );
     }
 }
 
