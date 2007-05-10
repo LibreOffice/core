@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlcommanddesign.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:32:41 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:50:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,10 +190,8 @@ namespace pcr
                 our designer component is actually active (->isActive)
             @precond
                 we're not disposed already
-            @throws ::com::sun::star::lang::DisposedException
-                if we're already disposed
         */
-        void impl_closeDesigner_throw();
+        void impl_closeDesigner_nothrow();
 
         /** suspends our designer component
             @precond
