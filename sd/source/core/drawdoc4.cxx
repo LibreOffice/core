@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 12:57:00 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:22:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,13 +68,6 @@
 #include <vcl/svapp.hxx>
 #include <eetext.hxx>
 
-#define ITEMID_SEARCH               SID_SEARCH_ITEM
-#define ITEMID_LANGUAGE             EE_CHAR_LANGUAGE
-#define ITEMID_EMPHASISMARK         EE_CHAR_EMPHASISMARK
-#define ITEMID_CHARRELIEF           EE_CHAR_RELIEF
-#define ITEMID_FRAMEDIR             EE_PARA_WRITINGDIR
-
-#define ITEMID_AUTOKERN EE_CHAR_PAIRKERNING
 #include <svx/akrnitem.hxx>
 
 #include <svx/svxids.hrc>
@@ -352,17 +345,17 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK ) );
     rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL ) );
 
-    rISet.Put(SvxContourItem(FALSE));
-    rISet.Put(SvxShadowedItem(FALSE));
-    rISet.Put(SvxUnderlineItem(UNDERLINE_NONE));
-    rISet.Put(SvxCrossedOutItem(STRIKEOUT_NONE));
-    rISet.Put(SvxEmphasisMarkItem(EMPHASISMARK_NONE));
-    rISet.Put(SvxCharReliefItem(RELIEF_NONE));
-    rISet.Put(SvxColorItem(Color(COL_AUTO)));
+    rISet.Put(SvxContourItem(FALSE, EE_CHAR_OUTLINE ));
+    rISet.Put(SvxShadowedItem(FALSE, EE_CHAR_SHADOW ));
+    rISet.Put(SvxUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE));
+    rISet.Put(SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ));
+    rISet.Put(SvxEmphasisMarkItem(EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK));
+    rISet.Put(SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF));
+    rISet.Put(SvxColorItem(Color(COL_AUTO), EE_CHAR_COLOR ));
 
     // Absatzattribute (Edit Engine)
-    rISet.Put(SvxLRSpaceItem());
-    rISet.Put(SvxULSpaceItem());
+    rISet.Put(SvxLRSpaceItem(EE_PARA_LRSPACE));
+    rISet.Put(SvxULSpaceItem(EE_PARA_ULSPACE));
 
     // only change paragraph text direction,
     // if this is a new document and
@@ -389,7 +382,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put( SdrTextUpperDistItem( 125 ) );
     rISet.Put( SdrTextLowerDistItem( 125 ) );
 
-    rISet.Put( SvxLineSpacingItem() );
+    rISet.Put( SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL ) );
 
     // #i16874# enable kerning by default but only for new documents
     rISet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
@@ -486,7 +479,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineStyleItem(XLINE_NONE));
     pISet->Put(XFillStyleItem(XFILL_NONE));
 
-    pISet->Put(SvxFontHeightItem(564));         // 16 pt
+    pISet->Put(SvxFontHeightItem(564, 100, EE_CHAR_FONTHEIGHT));        // 16 pt
 
     // ---- Textk”rper mit Blocksatz --------------------------------------
 
@@ -499,7 +492,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineStyleItem(XLINE_NONE));
     pISet->Put(XFillStyleItem(XFILL_NONE));
 
-    pISet->Put(SvxAdjustItem(SVX_ADJUST_BLOCK));
+    pISet->Put(SvxAdjustItem(SVX_ADJUST_BLOCK, EE_PARA_JUST ));
 
     // ---- Textkoerper mit Einzug -----------------------------------------
 
@@ -512,7 +505,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineStyleItem(XLINE_NONE));
     pISet->Put(XFillStyleItem(XFILL_NONE));
 
-    SvxLRSpaceItem aLRSpaceItem;
+    SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );
     aLRSpaceItem.SetTxtFirstLineOfst(600);      // Erstzeileneinzug 6mm, rechts 0
     pISet->Put(aLRSpaceItem);
 
@@ -532,7 +525,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineStyleItem(XLINE_NONE));
     pISet->Put(XFillStyleItem(XFILL_NONE));
 
-    pISet->Put(SvxFontHeightItem(1551));        // 44 pt
+    pISet->Put(SvxFontHeightItem(1551, 100, EE_CHAR_FONTHEIGHT ));      // 44 pt
 
     // ---- Titel1 --------------------------------------------------------
 
@@ -551,9 +544,9 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(SdrShadowXDistItem(200));        // 2 mm Schattendistanz
     pISet->Put(SdrShadowYDistItem(200));
 
-    pISet->Put(SvxFontHeightItem(846));         // 24 pt
+    pISet->Put(SvxFontHeightItem(846, 100, EE_CHAR_FONTHEIGHT ));       // 24 pt
 
-    pISet->Put(SvxAdjustItem(SVX_ADJUST_CENTER));
+    pISet->Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST ));
 
     // ---- Titel2 --------------------------------------------------------
 
@@ -575,18 +568,18 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(SdrShadowXDistItem(200));        // 2 mm Schattendistanz
     pISet->Put(SdrShadowYDistItem(200));
 
-    pISet->Put(SvxFontHeightItem(1270));        // 36 pt
+    pISet->Put(SvxFontHeightItem(1270, 100, EE_CHAR_FONTHEIGHT ));      // 36 pt
 
-    SvxLRSpaceItem aLRSpItem(0, 200, 200);
+    SvxLRSpaceItem aLRSpItem( 200, 200, 0, 0, EE_PARA_LRSPACE);
     pISet->Put( aLRSpItem );    // Erstzeileneinzug 0 mm, links und rechts 2 mm
     // SvxLRSpaceItem hart gesetzt: NumBulletItem anpassen
     SvxNumBulletItem aNmBullet( (const SvxNumBulletItem&) pISet->Get(EE_PARA_NUMBULLET) );
     EditEngine::ImportBulletItem( aNmBullet, 0, NULL, &aLRSpItem );
     pISet->Put( aNmBullet );
 
-    pISet->Put(SvxULSpaceItem(100, 100));       // Absatzrand oben/unten 1 mm
+    pISet->Put(SvxULSpaceItem(100, 100, EE_PARA_ULSPACE ));      // Absatzrand oben/unten 1 mm
 
-    pISet->Put(SvxAdjustItem(SVX_ADJUST_CENTER));
+    pISet->Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST ));
 
     // ---- Ueberschrift ---------------------------------------------------
 
@@ -599,9 +592,9 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineStyleItem(XLINE_NONE));
     pISet->Put(XFillStyleItem(XFILL_NONE));
 
-    pISet->Put(SvxFontHeightItem(846));         // 24 pt
+    pISet->Put(SvxFontHeightItem(846, 100, EE_CHAR_FONTHEIGHT ));        // 24 pt
 
-    pISet->Put(SvxULSpaceItem(420, 210));       // Absatzrand oben 4,2 mm,
+    pISet->Put(SvxULSpaceItem(420, 210, EE_PARA_ULSPACE ));      // Absatzrand oben 4,2 mm,
                                                 // unten 2,1 mm
 
     // ---- Ueberschrift1 --------------------------------------------------
@@ -615,11 +608,11 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineStyleItem(XLINE_NONE));
     pISet->Put(XFillStyleItem(XFILL_NONE));
 
-    pISet->Put(SvxWeightItem(WEIGHT_BOLD));
+    pISet->Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT ));
 
-    pISet->Put(SvxFontHeightItem(635));         // 18 pt
+    pISet->Put(SvxFontHeightItem(635, 100, EE_CHAR_FONTHEIGHT ));       // 18 pt
 
-    pISet->Put(SvxULSpaceItem(420, 210));       // Absatzrand oben 4,2 mm,
+    pISet->Put(SvxULSpaceItem(420, 210, EE_PARA_ULSPACE ));      // Absatzrand oben 4,2 mm,
                                                 // unten 2,1 mm
 
     // ---- Ueberschrift2 --------------------------------------------------
@@ -633,12 +626,12 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineStyleItem(XLINE_NONE));
     pISet->Put(XFillStyleItem(XFILL_NONE));
 
-    pISet->Put(SvxPostureItem(ITALIC_NORMAL));
-    pISet->Put(SvxWeightItem(WEIGHT_BOLD));
+    pISet->Put(SvxPostureItem(ITALIC_NORMAL, EE_CHAR_ITALIC ));
+    pISet->Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
 
-    pISet->Put(SvxFontHeightItem(494));         // 14 pt
+    pISet->Put(SvxFontHeightItem(494, 0, EE_CHAR_FONTHEIGHT ));        // 14 pt
 
-    pISet->Put(SvxULSpaceItem(420, 210));       // Absatzrand oben 4,2 mm,
+    pISet->Put(SvxULSpaceItem(420, 210, EE_PARA_ULSPACE ));      // Absatzrand oben 4,2 mm,
                                                 // unten 2,1 mm
 
     // ---- Bemassung --------------------------------------------------
@@ -651,7 +644,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(XFillStyleItem(XFILL_NONE));
 
-    pISet->Put(SvxFontHeightItem(423));         // 12 pt
+    pISet->Put(SvxFontHeightItem(423, 100, EE_CHAR_FONTHEIGHT ));         // 12 pt
 
     pISet->Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW),::basegfx::B2DPolyPolygon(aArrow)));
     pISet->Put(XLineStartWidthItem(200));
@@ -1011,7 +1004,7 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
             pObj->BroadcastObjectChange();
         }
 
-        mpOnlineSearchItem = new SvxSearchItem();
+        mpOnlineSearchItem = new SvxSearchItem( SID_SEARCH_ITEM );
         mpOnlineSearchItem->SetSearchString(pInfo->aWord);
         StartOnlineSpelling();
     }
@@ -1395,7 +1388,7 @@ void SdDrawDocument::SetDefaultWritingMode(::com::sun::star::text::WritingMode e
         SvxFrameDirectionItem aModeItem( nVal, EE_PARA_WRITINGDIR );
         pItemPool->SetPoolDefaultItem( aModeItem );
 
-        SvxAdjustItem aAdjust;
+        SvxAdjustItem aAdjust( SVX_ADJUST_LEFT, EE_PARA_JUST );
 
         if( eMode == ::com::sun::star::text::WritingMode_RL_TB )
             aAdjust.SetEnumValue( SVX_ADJUST_RIGHT );
