@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 11:59:48 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:43:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@
 #ifndef _EDITOBJ_HXX
 #include <svx/editobj.hxx>
 #endif
-#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
 #endif
@@ -1976,7 +1976,7 @@ EditTextObject* ScFormulaCell::CreateURLObject()
     SvxURLField aUrlField( aURL, aCellText, SVXURLFORMAT_APPDEFAULT);
     EditEngine& rEE = pDocument->GetEditEngine();
     rEE.SetText( EMPTY_STRING );
-    rEE.QuickInsertField( SvxFieldItem( aUrlField ), ESelection( 0xFFFF, 0xFFFF ) );
+    rEE.QuickInsertField( SvxFieldItem( aUrlField, EE_FEATURE_FIELD ), ESelection( 0xFFFF, 0xFFFF ) );
 
     return rEE.CreateTextObject();
 }
