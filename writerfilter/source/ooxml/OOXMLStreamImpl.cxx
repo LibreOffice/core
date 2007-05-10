@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLStreamImpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-05-08 14:54:08 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-10 12:16:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,8 +148,8 @@ void OOXMLStreamImpl::init()
                 if (aPair.First.compareTo(sType) == 0 &&
                     aPair.Second.compareTo(sStreamType) == 0)
                     bFound = true;
-                else if (aPair.First.compareTo(sType) == 0 &&
-                         aPair.Second.compareTo(sId))
+                else if (aPair.First.compareTo(sId) == 0 &&
+                         aPair.Second.compareTo(msId) == 0)
                     bFound = true;
                 else if (aPair.First.compareTo(sTarget) == 0)
                 {
