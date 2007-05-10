@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:26:53 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:16:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -969,11 +969,6 @@ sal_Bool OAppDetailPageHelper::isPreviewEnabled()
     return m_ePreviewMode != E_PREVIEWNONE;
 }
 // -----------------------------------------------------------------------------
-void OAppDetailPageHelper::switchPreview()
-{
-    //  m_aTBPreview.GetClickHdl().Call(&m_aTBPreview);
-}
-// -----------------------------------------------------------------------------
 void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,BOOL _bForce)
 {
     if ( m_ePreviewMode != _eMode || _bForce )
@@ -1195,11 +1190,6 @@ IMPL_LINK(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, /*pToolBox*/)
         getBorderWin().getView()->getCommandController()->executeChecked(nSelectedAction,Sequence<PropertyValue>());
     }
     return 0L;
-}
-// -----------------------------------------------------------------------------
-void OAppDetailPageHelper::disableControls(sal_Bool _bDisable)
-{
-    m_aTBPreview.Enable(!_bDisable);
 }
 // -----------------------------------------------------------------------------
 void OAppDetailPageHelper::KeyInput( const KeyEvent& rKEvt )
