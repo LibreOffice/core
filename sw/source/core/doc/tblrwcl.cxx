@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblrwcl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:42:00 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:57:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,6 @@
 #endif
 
 #define _ZFORLIST_DECLARE_TABLE
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
-
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
 #endif
