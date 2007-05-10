@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-28 15:38:20 $
+#   last change: $Author: kz $ $Date: 2007-05-10 15:54:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,23 +58,19 @@ SUBLIBS1= \
         $(SLB)$/attr.lib \
         $(SLB)$/edit.lib \
         $(SLB)$/crsr.lib \
-        $(SLB)$/view.lib \
-        $(SLB)$/frmedt.lib \
-        $(SLB)$/ole.lib \
-        $(SLB)$/fields.lib \
-        $(SLB)$/tox.lib \
-        $(SLB)$/undo.lib \
-        $(SLB)$/bastyp.lib
+        $(SLB)$/view.lib
 
 
 SUBLIBS2= \
         $(SLB)$/draw.lib \
-                $(SLB)$/sw3io.lib \
+        $(SLB)$/sw3io.lib \
         $(SLB)$/swg.lib \
         $(SLB)$/layout.lib \
         $(SLB)$/text.lib \
-        $(SLB)$/txtnode.lib \
         $(SLB)$/doc.lib \
+        $(SLB)$/txtnode.lib
+
+SUBLIBS3= \
         $(SLB)$/docnode.lib \
                 $(SLB)$/unocore.lib \
                 $(SLB)$/objectpositioning.lib \
@@ -83,10 +79,17 @@ SUBLIBS2= \
                 $(SLB)$/tablecore.lib
 
 .IF "$(PRODUCT)" == ""
-SUBLIBS2+= \
+SUBLIBS3+= \
         $(SLB)$/except.lib
 .ENDIF
 
+SUBLIBS4= \
+        $(SLB)$/frmedt.lib \
+        $(SLB)$/ole.lib \
+        $(SLB)$/fields.lib \
+        $(SLB)$/tox.lib \
+        $(SLB)$/undo.lib \
+        $(SLB)$/bastyp.lib
 #-------------------------------------------------------------------------
 
 ################################################################
@@ -98,6 +101,14 @@ LIB1FILES= \
 LIB2TARGET=$(SLB)$/core2.lib
 LIB2FILES= \
         $(SUBLIBS2)
+
+LIB3TARGET=$(SLB)$/core3.lib
+LIB3FILES= \
+        $(SUBLIBS3)
+
+LIB4TARGET=$(SLB)$/core4.lib
+LIB4FILES= \
+        $(SUBLIBS4)
 
 .INCLUDE :  target.mk
 
