@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pgfnote.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:22:33 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:20:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,6 @@
 #endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
 #endif
 
 #ifndef _REF_HXX //to avoid internal compiler errors
