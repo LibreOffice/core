@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: kz $ $Date: 2007-02-15 16:44:47 $
+#   last change: $Author: kz $ $Date: 2007-05-10 15:21:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,112 +52,10 @@ TARGET=debian
 
 # --- Files --------------------------------------------------------
 
-# GNOME does not like icon names with more than one '.'
-ICONPREFIX = $(UNIXFILENAME:s/.//g)
-
-LAUNCHERLIST = writer calc draw impress math base printeradmin extension
-LAUNCHERDEPN = $(foreach,i,$(LAUNCHERLIST) $(UNIXFILENAME)-$i.desktop)
-LAUNCHERDIR  = $(shell cd $(MISC)$/$(TARGET); pwd)
-
-MIMELIST = \
-    text \
-    text-template \
-    spreadsheet \
-    spreadsheet-template \
-    drawing \
-    drawing-template \
-    presentation \
-    presentation-template \
-    formula \
-    master-document \
-    oasis-text \
-    oasis-text-template \
-    oasis-spreadsheet \
-    oasis-spreadsheet-template \
-    oasis-drawing \
-    oasis-drawing-template \
-    oasis-presentation \
-    oasis-presentation-template \
-    oasis-formula \
-    oasis-master-document \
-    oasis-database \
-    oasis-web-template \
-    extension
-
-MIMEICONLIST = \
-    oasis-text \
-    oasis-text-template \
-    oasis-spreadsheet \
-    oasis-spreadsheet-template \
-    oasis-drawing \
-    oasis-drawing-template \
-    oasis-presentation \
-    oasis-presentation-template \
-    oasis-formula \
-    oasis-master-document \
-    oasis-database \
-    oasis-web-template \
-    text \
-    text-template \
-    spreadsheet \
-    spreadsheet-template \
-    drawing \
-    drawing-template \
-    presentation \
-    presentation-template \
-    formula \
-    master-document \
-    database \
-    extension
-
-GNOMEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.keys ../mimetypes/openoffice.mime 
-KDEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.desktop
-
-KDEMIMEFLAGFILE = \
-    $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/mimelnk/application.flag
-        
-GNOMEICONLIST = \
-    {16x16 32x32 48x48}/apps/$(ICONPREFIX)-{$(LAUNCHERLIST)}.png \
-    {16x16 32x32 48x48}/mimetypes/$(ICONPREFIX)-{$(MIMEICONLIST)}.png
-
-HCICONLIST = \
-    HighContrast/{16x16 32x32 48x48}/apps/$(ICONPREFIX)-{$(LAUNCHERLIST)}.png \
-    HighContrast/{16x16 32x32 48x48}/mimetypes/$(ICONPREFIX)-{$(HCMIMEICONLIST)}.png
-    
-KDEICONLIST = \
-    hicolor/{16x16 32x32 48x48}/apps/$(ICONPREFIX)-{$(LAUNCHERLIST)}.png \
-    hicolor/{16x16 32x32 48x48}/mimetypes/$(ICONPREFIX)-{$(MIMEICONLIST)}.png \
-    locolor/{16x16 32x32}/apps/$(ICONPREFIX)-{$(LAUNCHERLIST)}.png \
-    locolor/{16x16 32x32}/mimetypes/$(ICONPREFIX)-{$(MIMEICONLIST)}.png
-
 .IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/deb//)"
 
-PKGNAME=openoffice.org-$(TARGET)-menus
-DEBFILE=$(PKGDIR)/$(PKGNAME)_$(PKGVERSION)-$(PKGREV)_all.deb
-DEBDEPN = \
-    $(MISC)/$(TARGET)/$(DEBFILE:f)/etc/$(UNIXFILENAME) \
-    $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/soffice \
-    $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/unopkg \
-    $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/$(UNIXFILENAME) \
-    $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/$(UNIXFILENAME)-printeradmin \
-    $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/lib/menu/$(PKGNAME) \
-    $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/applications/{$(LAUNCHERDEPN)} \
-    $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/applnk/Office \
-    $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/application-registry/$(UNIXFILENAME).applications \
-    $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/mime/packages/openoffice.org.xml \
-    $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/mime-info/$(UNIXFILENAME).keys \
-    $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/mime-info/$(UNIXFILENAME).mime \
-    $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/mimelnk/application.flag \
-    $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/icons/gnome/{$(GNOMEICONLIST)} \
-    $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/icons/{$(KDEICONLIST)} 
-        
-DEBDIR  = $(shell cd $(BIN); pwd)
-.IF "$(WITH_LANG)"!=""
-ULFDIR = $(COMMONMISC)$/desktopshare
-.ELSE			# "$(WITH_LANG)"!=""
-ULFDIR:=..$/share
-.ENDIF			# "$(WITH_LANG)"!=""
-    
+DEBFILES=$(foreach,i,{$(PRODUCTLIST)} $(PKGDIR)$/$i-$(TARGET)-menus_$(PKGVERSION.$i)-$(PKGREV)_all.deb)
+
 .ENDIF
 
 # --- Targets -------------------------------------------------------
@@ -166,117 +64,41 @@ ULFDIR:=..$/share
 
 .IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/deb//)"
 
-ALLTAR : $(DEBFILE) 
-
-# --- launcher ------------------------------------------------------
-
-%.desktop :
-    @$(MKDIRHIER) $(@:d)
-    @ln -sf $(subst,$(UNIXFILENAME)-, /etc/$(UNIXFILENAME)/share/xdg/$(@:f)) $@
-
-%/Office :
-    @$(MKDIRHIER) $@
-
-%/menu/$(PKGNAME) : $$(@:f)
-    @$(MKDIRHIER) $(@:d)
-    @cat $< | sed -e 's/%PRODUCTNAME/$(LONGPRODUCTNAME)/' -e 's/%PREFIX/$(UNIXFILENAME)/' \
-        -e 's/%ICONPREFIX/$(ICONPREFIX)/' > $@
-
-# --- icons --------------------------------------------------------
-
-#
-# This target is responsible for copying the GNOME icons to their package specific target
-# e.g. $(LAUNCHERDIR)/usr/share/icons/gnome/16x16/apps/openoffice-writer.png
-#
-$(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/icons/gnome/{$(GNOMEICONLIST)} : ../icons/hicolor/$$(@:d:d:d:d:f)/$$(@:d:d:f)/$$(@:f:s/$(ICONPREFIX)-//)
-    @$(MKDIRHIER) $(@:d)
-    @$(COPY) $< $@
-
-$(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/icons/{$(KDEICONLIST)} : ../icons/$$(@:d:d:d:d:d:d:f)/$$(@:d:d:d:d:f)/$$(@:d:d:f)/$$(@:f:s/$(ICONPREFIX)-//)
-    @$(MKDIRHIER) $(@:d)
-    @$(COPY) $< $@
-    
-# --- mime types ---------------------------------------------------
-
-$(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/mime-info/$(UNIXFILENAME).keys : $(GNOMEMIMEDEPN) ../productversion.mk ../share/brand.pl ../share/translate.pl $(ULFDIR)/documents.ulf
-    @$(MKDIRHIER) $(@:d)
-    @echo Creating GNOME .keys file ..
-    @echo ---------------------------------
-    @$(PERL) ../share/brand.pl -p $(PRODUCTNAME) -u $(UNIXFILENAME) --iconprefix "$(ICONPREFIX)-" $(GNOMEMIMEDEPN) $(MISC)/$(TARGET)
-    @$(PERL) ../share/translate.pl -p $(PRODUCTNAME) -d $(MISC)/$(TARGET) --ext "keys" --key "description"  $(ULFDIR)/documents.ulf
-    @cat $(MISC)/$(TARGET)/{$(MIMELIST)}.keys > $@
-
-$(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/mime-info/$(UNIXFILENAME).mime : ../mimetypes/openoffice.mime
-    @$(MKDIRHIER) $(@:d)
-    @echo Creating GNOME .mime file ..
-    @echo ---------------------------------
-    @cat $< | tr -d "\015" > $@
-
-$(KDEMIMEFLAGFILE) : $(KDEMIMEDEPN) ../productversion.mk ../share/brand.pl ../share/translate.pl $(ULFDIR)/documents.ulf
-    @$(MKDIRHIER) $(@:db)
-    @echo Creating KDE mimelnk entries ..
-    @echo ---------------------------------
-    @$(PERL) ../share/brand.pl -p "$(PRODUCTNAME)" -u $(UNIXFILENAME) --prefix "$(UNIXFILENAME)-" --iconprefix "$(ICONPREFIX)-" $(KDEMIMEDEPN) $(@:db)
-    @$(PERL) ../share/translate.pl -p "$(PRODUCTNAME)" -d $(@:db) --prefix "$(UNIXFILENAME)-" --ext "desktop" --key "Comment" $(ULFDIR)/documents.ulf
-    @touch $@    
-
-$(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/application-registry/$(UNIXFILENAME).applications : ../productversion.mk ../mimetypes/openoffice.applications
-    @$(MKDIRHIER) $(@:d)
-    @echo Creating GNOME .applications file ..
-    @echo ---------------------------------
-    @cat ../mimetypes/openoffice.applications | tr -d "\015" | sed -e "s/OFFICENAME/$(UNIXFILENAME)/" -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/" > $@
-
-$(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/mime/packages/openoffice.org.xml : $(COMMONMISC)$/desktopshare/openoffice.org.xml
-    @$(MKDIRHIER) $(@:d)
-    @cp $< $@
-
-# --- script ------------------------------------------------------
-
-$(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/$(UNIXFILENAME) : ../share/openoffice.sh
-    @$(MKDIRHIER) $(@:d)
-    @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $@
-    @chmod a+x $@
+ALLTAR : $(DEBFILES) 
 
 
-$(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/$(UNIXFILENAME)-printeradmin : ../share/printeradmin.sh
-    @$(MKDIRHIER) $(@:d)
-    @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $@
-    @chmod a+x $@
+%/DEBIAN/control : $$(@:f)
+    @$(MKDIRHIER) $(@:d) $*$/etc $*$/usr/share/applnk/Office $*$/usr/lib/menu
+    ln -sf /opt/$(UNIXFILENAME.$(*:f:s/-/ /:1)) $*$/etc$/
+    /bin/sh -c -x "cd $(COMMONMISC)$/$(*:f:s/-/ /:1) && DESTDIR=$(shell cd $*; pwd) ICON_PREFIX=$(ICONPREFIX) KDEMAINDIR=/usr GNOMEDIR=/usr create_tree.sh"
+        @cat openoffice.org-debian-menus | sed -e 's/%PRODUCTNAME/$(PRODUCTNAME.$(*:f:s/-/ /:1)) $(PRODUCTVERSION.$(*:f:s/-/ /:1))/' -e 's/%PREFIX/$(UNIXFILENAME.$(*:f:s/-/ /:1))/' -e 's/%ICONPREFIX/$(ICONPREFIX.$(*:f:s/-/ /:1))/' > $*$/usr/lib/menu/$(*:f:s/_/ /:1)
+    echo "Package: $(*:f:s/_/ /:1)" > $@
+    cat $(@:f) | tr -d "\015" >> $@
+    echo "Version: $(PKGVERSION.$(*:f:s/-/ /:1))-$(PKGREV)" >> $@
+    @du -k -s $* | awk -F ' ' '{ printf "Installed-Size: %s\n", $$1 ; }' >> $@
 
-$(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/soffice : 
-    @$(MKDIRHIER) $(@:d)
-    @ln -sf /etc/$(UNIXFILENAME)/program/soffice $@
+%/DEBIAN/postinst : $$(@:f)
+     @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME.$(*:f:s/-/ /:1))/g" > $@
 
-$(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/unopkg : 
-    @$(MKDIRHIER) $(@:d)
-    @ln -sf /etc/$(UNIXFILENAME)/program/unopkg $@
+%/DEBIAN/postrm : $$(@:f)
+     @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME.$(*:f:s/-/ /:1))/g" > $@
 
-$(MISC)/$(TARGET)/$(DEBFILE:f)/etc/$(UNIXFILENAME) :
-    @$(MKDIRHIER) $(@:d)
-    @ln -sf /opt/openoffice.org$(PRODUCTVERSION) $@
-
-
+%/DEBIAN/prerm : $$(@:f)
+     @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME.$(*:f:s/-/ /:1))/g" > $@
 
 # --- packaging ---------------------------------------------------
 
 # getuid.so fakes the user/group for us	
-$(DEBFILE) : $(DEBDEPN) control postinst postrm prerm
-    -@$(RM) $(@:d)/$(PKGNAME)_*_all.deb $(BIN)$/$(PKGNAME)_*_all.deb
-    @$(MKDIRHIER) $(@:d)
-    @$(MKDIRHIER) $(MISC)/$(TARGET)/$(@:f)/DEBIAN
-    @cat control | tr -d "\015" > $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/control
-    @echo "Version: $(PKGVERSION)-$(PKGREV)" >> $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/control
-    @du -k -s $(MISC)/$(TARGET)/$(DEBFILE:f) | awk -F ' ' '{ printf "Installed-Size: %s\n", $$1 ; }' >> $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/control
-    @cat postinst | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/postinst
-    @cat postrm | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/postrm
-    @cat prerm | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/prerm
-    @chmod -R g-w $(MISC)/$(TARGET)/$(DEBFILE:f)
-    @chmod a+rx $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/post* $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/pre*
-    @chmod g-s $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN
-    /bin/bash -c "LD_PRELOAD=$(SOLARBINDIR)/getuid.so dpkg-deb --build $(MISC)/$(TARGET)/$(@:f) $@" && $(TOUCH) $(MISC)$/$(TARGET).debflag
-    @$(TYPE) $(MISC)$/$(TARGET).debflag || echo "ERROR: packing $(TARGET) failed! "
-    @chmod -R g+w $(MISC)/$(TARGET)/$(DEBFILE:f)
-    @$(RM) -r $(MISC)/$(TARGET)/$(@:f)/DEBIAN
-    @chmod -R g+w $(MISC)/$(TARGET)/$(DEBFILE:f)
+$(DEBFILES) : $(COMMONMISC)$/{$(PRODUCTLIST)}$/build.flag
+$(DEBFILES) : makefile.mk control postinst postrm prerm
+    -$(RM) $(@:d)$(@:f:s/_/ /:1)_*
+    $(RM) -r $(MISC)$/$(@:b)
+    dmake $(MISC)$/$(@:b)$/DEBIAN$/{control postinst postrm prerm} 
+    @chmod -R g-w $(MISC)$/$(@:b)
+    @chmod a+rx $(MISC)$/$(@:b)$/DEBIAN $(MISC)/$(@:b)/DEBIAN/post* $(MISC)/$(@:b)/DEBIAN/pre*
+    @chmod g-s $(MISC)/$(@:b)/DEBIAN
+    /bin/bash -c "LD_PRELOAD=$(SOLARBINDIR)/getuid.so dpkg-deb --build $(MISC)/$(@:b) $@" 
+    $(RM) -r $(MISC)$/$(@:b)
+#	@chmod -R g+w $(MISC)/$(TARGET)/$(DEBFILE:f)
 
 .ENDIF
