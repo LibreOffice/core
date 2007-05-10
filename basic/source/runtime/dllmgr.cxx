@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dllmgr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:29:13 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:18:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,8 @@
 
 #if defined( WIN ) || defined( WNT )
 #ifndef _SVWIN_H
+#undef WB_LEFT
+#undef WB_RIGHT
 #include <tools/svwin.h>
 #endif
 #endif
