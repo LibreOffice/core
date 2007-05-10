@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblafmt.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:35:08 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:53:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,14 +58,6 @@ JP 20.07.95:
 
 #ifndef _HINTIDS_HXX
 #include "hintids.hxx"          //_immmer_ vor den solar-items!
-#endif
-
-#define ITEMID_HORJUSTIFY   0
-#define ITEMID_VERJUSTIFY   0
-#define ITEMID_ORIENTATION  0
-#define ITEMID_MARGIN       0
-#ifndef ITEMID_LINE
-#define ITEMID_LINE         0
 #endif
 
 #ifndef _SVX_ALGITEM_HXX //autogen
