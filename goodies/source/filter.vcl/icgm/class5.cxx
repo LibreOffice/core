@@ -4,9 +4,9 @@
  *
  *  $RCSfile: class5.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:47:57 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 17:05:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,6 @@
 #include "precompiled_goodies.hxx"
 //#define VCL_NEED_BASETSD
 
-#if defined( WNT ) || defined( WIN )
-#include <tools/prewin.h>
-#include <windows.h>
-#include <tools/postwin.h>
-#endif
 #include <main.hxx>
 #include <outact.hxx>
 
