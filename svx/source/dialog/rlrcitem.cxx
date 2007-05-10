@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rlrcitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:36:29 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:41:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,10 +42,10 @@
 #include <svtools/rectitem.hxx>
 #endif
 
-#define ITEMID_LRSPACE  0
-#define ITEMID_ULSPACE  0
-#define ITEMID_TABSTOP  0
-#define ITEMID_PROTECT  0
+
+
+
+
 
 #include "dialogs.hrc"
 
