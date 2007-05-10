@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_uri.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:04:39 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:06:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,10 +107,6 @@ public:
     inline sal_Bool isDocument() const;
 
     inline sal_Bool isFolder() const;
-
-    static ::rtl::OUString encodeURL( const ::rtl::OUString & rURL );
-    static ::rtl::OUString encodeSegment( const ::rtl::OUString & rSegment );
-    static ::rtl::OUString decodeSegment( const rtl::OUString& rSegment );
 };
 
 inline void Uri::setUri( const ::rtl::OUString & rUri )
