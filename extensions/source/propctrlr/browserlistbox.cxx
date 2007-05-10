@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserlistbox.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 11:55:35 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:46:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,9 @@
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
+#ifndef _COM_SUN_STAR_INSPECTION_PROPERTYCONTROLTYPE_HPP_
+#include <com/sun/star/inspection/PropertyControlType.hpp>
+#endif
 /** === end UNO includes === **/
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -105,6 +108,7 @@ namespace pcr
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::graphic::XGraphic;
     /** === end UNO using === **/
+    namespace PropertyControlType = ::com::sun::star::inspection::PropertyControlType;
 
     //==================================================================
     //= ControlEvent
@@ -871,7 +875,7 @@ namespace pcr
         sal_Int32 nDelta = _nNewThumbPos - m_aVScroll.GetThumbPos();
         // adjust the scrollbar
         m_aVScroll.SetThumbPos(_nNewThumbPos);
-        sal_Int32 nThumbPos = nThumbPos = _nNewThumbPos;
+        sal_Int32 nThumbPos = _nNewThumbPos;
 
         m_nYOffset = -m_aVScroll.GetThumbPos() * m_nRowHeight;
 
@@ -1198,7 +1202,7 @@ namespace pcr
 
             // the old control and some data about it
             Reference< XPropertyControl > xControl = rLine.pLine->getControl();
-            const Window* pControlWindow = rLine.pLine->getControlWindow();
+            Window* pControlWindow = rLine.pLine->getControlWindow();
             Point aControlPos;
             if ( pControlWindow )
                 aControlPos = pControlWindow->GetPosPixel();
@@ -1258,6 +1262,25 @@ namespace pcr
                 _rPropertyData.PrimaryButtonId,
                 _rPropertyData.SecondaryButtonId
             );
+
+            if ( _rPropertyData.bReadOnly )
+            {
+                rLine.pLine->SetReadOnly( true );
+
+                // user controls (i.e. the ones not provided by the usual
+                // XPropertyControlFactory) have no chance to know that they should be read-only,
+                // since XPropertyHandler::describePropertyLine does not transport this
+                // information.
+                // So, we manually switch this to read-only.
+                if ( xControl.is() && ( xControl->getControlType() == PropertyControlType::Unknown ) )
+                {
+                    Edit* pControlWindowAsEdit = dynamic_cast< Edit* >( rLine.pLine->getControlWindow() );
+                    if ( pControlWindowAsEdit )
+                        pControlWindowAsEdit->SetReadOnly( TRUE );
+                    else
+                        pControlWindowAsEdit->Enable( FALSE );
+                }
+            }
         }
     }
 
