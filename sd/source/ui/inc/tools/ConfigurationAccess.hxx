@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConfigurationAccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:14:52 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:07:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ public:
         @param rList
             The list to be filled.
     */
-    static void ConfigurationAccess::FillList(
+    static void FillList(
         const com::sun::star::uno::Reference<com::sun::star::container::XNameAccess>& rxContainer,
         const ::rtl::OUString& rsArgument,
         ::std::vector<rtl::OUString>& rList);
