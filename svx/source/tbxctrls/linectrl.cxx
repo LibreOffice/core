@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linectrl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:53:02 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:01:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,10 +55,6 @@
 
 #include "dialogs.hrc"
 #include "helpid.hrc"
-
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
-#define ITEMID_DASH_LIST        SID_DASH_LIST
-#define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
 
 #include "drawitem.hxx"
 #include "xattr.hxx"
