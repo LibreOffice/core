@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_config.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:58:59 $
+#   last change: $Author: kz $ $Date: 2007-05-10 13:14:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,13 @@
 #*************************************************************************
 
 PACKAGEDIR*:=$(subst,.,$/ $(PACKAGE))
+XSLTPACKAGEDIR*:=$(subst,.,/ $(PACKAGE))
+XCSROOTURL!:=$(ABSXCSROOT)
+.IF $(GUI)==WNT
+XCSROOTURL!:=$(shell +$(WRAPCMD) echo $(XCSROOTURL))
+XCSROOTURL!:=file:///$(subst,\,/ $(XCSROOTURL))
+.ENDIF
+SYSXSLDIR*:=$(shell +$(WRAPCMD) echo $(XSLDIR)$/)
 
 #
 # --- XCS ---
@@ -60,32 +67,15 @@ $(XCS_TRIM) :   $(DTDDIR)$/registry$/component-schema.dtd \
 $(PROCESSOUT)$/registry$/schema$/$(PACKAGEDIR)$/%.xcs : %.xcs
     @echo -------------+ validating and stripping schema files
     -$(MKDIRHIER) $(@:d)
-.IF "$(XSLTPROC)"=="NO_XSLTPROC"
-.IF "$(NO_INSPECTION)"==""
-    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl org.openoffice.configuration.Inspector $<
-.ENDIF			# "$(NO_INSPECTION)"==""
-    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XT_JAR)$(PATH_SEPERATOR)$(XERCES_JAR) -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/schema_val.xsl $(@:d)$*.val componentName=$(PACKAGE).$*
-    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XT_JAR)$(PATH_SEPERATOR)$(XERCES_JAR) -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/sanity.xsl $(@:d)$*.san 
-    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XT_JAR)$(PATH_SEPERATOR)$(XERCES_JAR) -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/schema_trim.xsl $(@:d)$*.tmp
-    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$*.tmp $@
-.ELSE
-# xsltproc already validates against the dtd.  For additional validation,
-# org.openoffice.configuration.Inspector should be replaced and the
-# replacement should be invoked here.
-    $(XSLTPROC) -o $(@:d)$*.val \
+    $(XSLTPROC) --nonet -o $(@:d)$*.val \
                 --stringparam componentName $(PACKAGE).$* \
-                $(XSLDIR)$/schema_val.xsl $<
-    $(XSLTPROC) -o $(@:d)$*.san \
-                $(XSLDIR)$/sanity.xsl $<
-    $(XSLTPROC) -o $(@:d)$*.tmp \
-                $(XSLDIR)$/schema_trim.xsl $<
-# xsltproc already seems to pretty-print the xml, so
-# org.openoffice.helper.PrettyPrinter seems to be unnecessary.
-    cp $(@:d)$*.tmp $@
-.ENDIF
-    @@$(RM) $(@:d)$*.tmp
-    @@$(RM) $(@:d)$*.val
-    @@$(RM) $(@:d)$*.san
+                $(SYSXSLDIR)schema_val.xsl $<
+    $(XSLTPROC) --nonet -o $(@:d)$*.san \
+                $(SYSXSLDIR)sanity.xsl $<
+    $(XSLTPROC) --nonet -o $@ \
+                $(SYSXSLDIR)schema_trim.xsl $<
+    +-$(RM) $(@:d)$*.val > $(NULLDEV)
+    +-$(RM) $(@:d)$*.san > $(NULLDEV)
 
 $(PROCESSOUT)$/merge$/$(PACKAGEDIR)$/%.xcs : %.xcs
 # just a copy for now - insert "cfgex" commandline when required
@@ -100,13 +90,9 @@ $(XCS_RESOURCES) :   $(XSLDIR)$/resource.xsl
 $(PROCESSOUT)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.properties :| $(PROCESSOUT)$/merge$/$(PACKAGEDIR)$/%.xcs
     @echo -------------+ creating locale dependent resource bundles
     -$(MKDIRHIER) $(@:d)
-.IF "$(XSLTPROC)"=="NO_XSLTPROC"
-    $(JAVAI) $(JAVACPS) $(XT_JAR)$(PATH_SEPERATOR)$(XERCES_JAR) -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/resource.xsl $@ locale={$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(PROCESSOUT)$/registry$/res$/, $@))}
-.ELSE
-    $(XSLTPROC) -o $@ \
+    $(XSLTPROC) --nonet -o $@ \
                 --stringparam locale {$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(PROCESSOUT)$/registry$/res$/, $@))} \
-                $(XSLDIR)$/resource.xsl $<
-.ENDIF
+                $(SYSXSLDIR)resource.xsl $<
 
 # 
 # --- XCU ---
@@ -127,31 +113,15 @@ $(XCU_DEFAULT) : $(DTDDIR)$/registry$/component-update.dtd \
 $(PROCESSOUT)$/registry$/data$/$(PACKAGEDIR)$/%.xcu : %.xcu
     @echo -------------+ validating and creating a locale independent file
     -$(MKDIRHIER) $(@:d) 
-.IF "$(XSLTPROC)"=="NO_XSLTPROC"
-.IF "$(NO_INSPECTION)"==""
-    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl org.openoffice.configuration.Inspector $<
-.ENDIF			# "$(NO_INSPECTION)"==""
-    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XT_JAR)$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/data_val.xsl $(@:d)$*.val xcs=$(XCSROOT)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs schemaRoot=$(XCSROOT)$/registry$/schema
-    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XT_JAR)$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/alllang.xsl $(@:d)$*.tmp xcs=$(XCSROOT)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs schemaRoot=$(XCSROOT)$/registry$/schema
-    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$*.tmp $@
-.ELSE
-# xsltproc already validates against the dtd.  For additional validation,
-# org.openoffice.configuration.Inspector should be replaced and the
-# replacement should be invoked here.
-    $(XSLTPROC) -o $(@:d)$*.val \
-                --stringparam xcs $(XCSROOT)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs \
-                --stringparam schemaRoot $(XCSROOT)$/registry$/schema \
-                $(XSLDIR)$/data_val.xsl $<
-    $(XSLTPROC) -o $(@:d)$*.tmp \
-                --stringparam xcs $(XCSROOT)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs \
-                --stringparam schemaRoot $(XCSROOT)$/registry$/schema \
-                $(XSLDIR)$/alllang.xsl $<
-# xsltproc already seems to pretty-print the xml, so
-# org.openoffice.helper.PrettyPrinter seems to be unnecessary.
-    cp $(@:d)$*.tmp $@
-.ENDIF
-    @@$(RM) $(@:d)$*.tmp
-    @@$(RM) $(@:d)$*.val
+    $(XSLTPROC) --nonet -o $(@:d)$*.val \
+                --stringparam xcs $(XCSROOTURL)/registry/schema/$(XSLTPACKAGEDIR)/$*.xcs \
+                --stringparam schemaRoot $(XCSROOTURL)/registry/schema \
+                $(SYSXSLDIR)data_val.xsl $<
+    $(XSLTPROC) --nonet -o $@ \
+                --stringparam xcs $(XCSROOTURL)/registry/schema/$(XSLTPACKAGEDIR)/$*.xcs \
+                --stringparam schemaRoot $(XCSROOTURL)/registry/schema \
+                $(SYSXSLDIR)alllang.xsl $<
+    +-$(RM) $(@:d)$*.val > $(NULLDEV)
 
 # --- localizations ---
 .IF "$(WITH_LANG)"!=""
@@ -173,20 +143,11 @@ $(PROCESSOUT)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.xcu :| %.xcu
 .ENDIF			# "$(WITH_LANG)"!=""
     @echo ------------- creating locale dependent entries
     -$(MKDIRHIER) $(@:d)
-.IF "$(XSLTPROC)"=="NO_XSLTPROC"
-    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XT_JAR)$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/alllang.xsl $(@:d)$*.tmp xcs=$(XCSROOT)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs schemaRoot=$(XCSROOT)$/registry$/schema locale={$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(PROCESSOUT)$/registry$/res$/, $@))}	
-    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$*.tmp $@
-.ELSE
-    $(XSLTPROC) -o $(@:d)$*.tmp \
-                --stringparam xcs $(XCSROOT)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs \
-                --stringparam schemaRoot $(XCSROOT)$/registry$/schema \
+    $(XSLTPROC) --nonet -o $@ \
+                --stringparam xcs $(XCSROOTURL)/registry/schema/$(XSLTPACKAGEDIR)/$*.xcs \
+                --stringparam schemaRoot $(XCSROOTURL)/registry/schema \
                 --stringparam locale {$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(PROCESSOUT)$/registry$/res$/, $@))} \
-                $(XSLDIR)$/alllang.xsl $<
-# xsltproc already seems to pretty-print the xml, so
-# org.openoffice.helper.PrettyPrinter seems to be unnecessary.
-    cp $(@:d)$*.tmp $@
-.ENDIF
-    @@$(RM) $(@:d)$*.tmp
+                $(SYSXSLDIR)alllang.xsl $<
 
 # --- languagepack tag modules ---
 .IF "$(LANGUAGEPACKS)" != ""
@@ -209,20 +170,11 @@ $(XCU_MODULES) : $(XSLDIR)$/alllang.xsl
 $(PROCESSOUT)$/registry$/spool$/$(PACKAGEDIR)$/%.xcu :| $$(@:b:s/-/./:b).xcu
     @echo -------------+ creating a module file
     -$(MKDIRHIER) $(@:d) 
-.IF "$(XSLTPROC)"=="NO_XSLTPROC"
-    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XT_JAR)$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/alllang.xsl $(@:d)$(@:f:s/.xcu/.tmp/) xcs=$(XCSROOT)$/registry$/schema$/$(PACKAGEDIR)$/$(<:b).xcs schemaRoot=$(XCSROOT)$/registry$/schema module={$(subst,$(<:b)-, $(*))}
-    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$(@:f:s/.xcu/.tmp/) $@
-.ELSE
-    $(XSLTPROC) -o $(@:d)$(@:f:s/.xcu/.tmp/) \
-                --stringparam xcs $(XCSROOT)$/registry$/schema$/$(PACKAGEDIR)$/$(<:b).xcs \
-                --stringparam schemaRoot $(XCSROOT)$/registry$/schema \
+    $(XSLTPROC) --nonet -o $@ \
+                --stringparam xcs $(XCSROOTURL)/registry/schema/$(XSLTPACKAGEDIR)/$(<:b).xcs \
+                --stringparam schemaRoot $(XCSROOTURL)/registry/schema \
                 --stringparam module $(subst,$(<:b)-, $(*)) \
-                $(XSLDIR)$/alllang.xsl $<
-# xsltproc already seems to pretty-print the xml, so
-# org.openoffice.helper.PrettyPrinter seems to be unnecessary.
-    cp $(@:d)$(@:f:s/.xcu/.tmp/) $@
-.ENDIF
-    @@$(RM) $(@:d)$(@:f:s/.xcu/.tmp/)
+                $(SYSXSLDIR)alllang.xsl $<
 
 .IF "$(XCUFILES)"!=""
 ALLTAR: \
@@ -230,7 +182,7 @@ ALLTAR: \
     $(XCU_MODULES) \
     $(XCU_LANG)
 
-$(XCU_DEFAULT) : $$(@:d:s!$(PROCESSOUT)$/registry$/data$/!$(XCSROOT)$/registry$/schema$/!)$$(@:f:s/.xcu/.xcs/)
+$(XCU_DEFAULT) : $$(@:d:s!$(PROCESSOUT)$/registry$/data$/!$(ABSXCSROOT)$/registry$/schema$/!)$$(@:f:s/.xcu/.xcs/)
 
 .ENDIF			# "$(XCUFILES)"!=""
 
