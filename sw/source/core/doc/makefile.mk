@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: ihi $ $Date: 2007-04-16 15:40:34 $
+#   last change: $Author: kz $ $Date: 2007-05-10 13:10:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@ TARGET=doc
 EXCEPTIONSFILES = \
                 $(SLO)$/doclay.obj \
                 $(SLO)$/docxforms.obj \
+                $(SLO)$/tblrwcl.obj \
                 $(SLO)$/docnew.obj
 
 SLOFILES =	$(EXCEPTIONSFILES) \
@@ -89,7 +90,6 @@ SLOFILES =	$(EXCEPTIONSFILES) \
                 $(SLO)$/swstylemanager.obj \
                 $(SLO)$/tblafmt.obj \
         $(SLO)$/tblcpy.obj \
-        $(SLO)$/tblrwcl.obj \
         $(SLO)$/visiturl.obj \
         $(SLO)$/htmltbl.obj \
         $(SLO)$/headerfooterhelper.obj
