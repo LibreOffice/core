@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldDescriptions.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:43:03 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:41:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,41 +118,6 @@ OFieldDescription::OFieldDescription( const OFieldDescription& rDescr )
     ,m_bHidden(rDescr.m_bHidden)
 {
     DBG_CTOR(OFieldDescription,NULL);
-}
-// -----------------------------------------------------------------------------
-OFieldDescription::OFieldDescription(   const ::rtl::OUString&  _sName,
-                    const ::rtl::OUString&  _sTypeName,
-                    const ::rtl::OUString&  _sDescription,
-                    const ::com::sun::star::uno::Any&   _aDefaultValue,
-                    const ::com::sun::star::uno::Any&   _aControlDefault,
-                    const ::rtl::OUString&  _sAutoIncrementValue,
-                    const TOTypeInfoSP&     _pType,
-                    sal_Int32               _nPrecision,
-                    sal_Int32               _nScale,
-                    sal_Int32               _nIsNullable,
-                    sal_Int32               _nFormatKey,
-                    SvxCellHorJustify       _eHorJustify,
-                    sal_Bool                _bIsAutoIncrement,
-                    sal_Bool                _bIsPrimaryKey,
-                    sal_Bool                _bIsCurrency)
-    :m_aDefaultValue(_aDefaultValue)
-    ,m_aControlDefault(_aControlDefault)
-    ,m_pType(_pType)
-    ,m_sName(_sName)
-    ,m_sTypeName(_sTypeName)
-    ,m_sDescription(_sDescription)
-    ,m_sAutoIncrementValue(_sAutoIncrementValue)
-    ,m_nPrecision(_nPrecision)
-    ,m_nScale(_nScale)
-    ,m_nIsNullable(_nIsNullable)
-    ,m_nFormatKey(_nFormatKey)
-    ,m_eHorJustify(_eHorJustify)
-    ,m_bIsAutoIncrement(_bIsAutoIncrement)
-    ,m_bIsPrimaryKey(_bIsPrimaryKey)
-    ,m_bIsCurrency(_bIsCurrency)
-    ,m_bHidden(sal_False)
-{
-     DBG_DTOR(OFieldDescription,NULL);
 }
 
 //------------------------------------------------------------------------------
@@ -516,14 +481,6 @@ void OFieldDescription::SetCurrency(sal_Bool _bIsCurrency)
         return ::comphelper::getString(m_xDest->getPropertyValue(PROPERTY_DESCRIPTION));
     else
         return m_sDescription;
-}
-// -----------------------------------------------------------------------------
-::com::sun::star::uno::Any  OFieldDescription::GetDefaultValue()        const
-{
-    if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE) )
-        return m_xDest->getPropertyValue(PROPERTY_DEFAULTVALUE);
-    else
-        return m_aDefaultValue;
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Any  OFieldDescription::GetControlDefault()      const
