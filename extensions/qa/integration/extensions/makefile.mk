@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2006-05-04 09:00:35 $
+#   last change: $Author: kz $ $Date: 2007-05-10 10:45:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,23 @@ JARCLASSDIRS    = $(PACKAGE)
 JARTARGET       = $(TARGET).jar
 JARCOMPRESS 	= TRUE
 
+# --- Runner Settings ----------------------------------------------
+
+# create connection string for OOoRunner
+.IF "$(RUNNER_CONNECTION_STRING)" == ""
+    .IF "$(OOO_RUNNER_PORT)" == ""
+        OOO_RUNNER_PORT=8100
+    .ENDIF
+    .IF "$(OOO_RUNNER_HOST)" == ""
+        OOO_RUNNER_HOST=localhost
+    .ENDIF
+    RUNNER_CONNECTION_STRING=socket,host=$(OOO_RUNNER_HOST),port=$(OOO_RUNNER_PORT)
+.ENDIF
+
+# classpath and argument list
+RUNNER_CLASSPATH = -cp $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar$(PATH_SEPERATOR)$(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/ConnectivityTools.jar
+RUNNER_ARGS = org.openoffice.Runner -TestBase java_complex -cs $(RUNNER_CONNECTION_STRING)
+
 # --- Targets ------------------------------------------------------
 
 .IF "$(depend)" == ""
@@ -65,10 +82,6 @@ ALL: 	ALLDEP
 .ENDIF
 
 .INCLUDE :  target.mk
-
-
-RUNNER_CLASSPATH = -cp $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar$(PATH_SEPERATOR)$(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/ConnectivityTools.jar
-RUNNER_ARGS = org.openoffice.Runner -TestBase java_complex
 
 run:
     java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce extensions_complex.sce
