@@ -4,9 +4,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:15:05 $
+#   last change: $Author: gm $ $Date: 2007-05-10 10:59:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -417,6 +417,8 @@ sub setglobalvariables
         if ( $ENV{'TMP'} ) { $installer::globals::temppath = $ENV{'TMP'}; }
         elsif ( $ENV{'TEMP'} )  { $installer::globals::temppath = $ENV{'TEMP'}; }
         $installer::globals::temppath =~ s/\Q$installer::globals::separator\E\s*$//;    # removing ending slashes and backslashes
+        $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . $installer::globals::globaltempdirname;
+        installer::systemactions::create_directory($installer::globals::temppath);
         $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . "i";
         $installer::globals::temppath = installer::systemactions::create_pid_directory($installer::globals::temppath);
         push(@installer::globals::removedirs, $installer::globals::temppath);
@@ -439,6 +441,9 @@ sub setglobalvariables
         $installer::globals::temppathdefined = 0;
         $installer::globals::jdstemppathdefined = 0;
     }
+
+    # only one cab file, if Windows msp patches shall be prepared
+    if ( $installer::globals::prepare_winpatch ) { $installer::globals::number_of_cabfiles = 1; }
 
 }
 
