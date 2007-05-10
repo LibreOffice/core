@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableFieldDescription.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:57:06 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:29:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,10 +90,7 @@ namespace dbaui
 
         sal_Bool                operator==( const OTableFieldDesc& rDesc );
 
-        void                    clear();
-
         sal_Bool                IsVisible() const    { return m_bVisible;}
-        sal_Bool                IsNumericDataType() const;
         sal_Bool                IsGroupBy() const    { return m_bGroupBy;}
 
         void                    SetVisible( sal_Bool bVis=sal_True ){ m_bVisible = bVis;}
@@ -145,7 +142,6 @@ namespace dbaui
             return aIter != m_vecCriteria.end();
         }
 
-        void                    NextOrderDir();
         const ::std::vector< ::rtl::OUString>&  GetCriteria() const { return m_vecCriteria;}
 
         void Load(const ::com::sun::star::beans::PropertyValue& _rProperty);
