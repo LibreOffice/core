@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:23:21 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:38:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -270,7 +270,11 @@ namespace
         for(sal_Int32 i=0;pBegin != pEnd;++pBegin,++i)
         {
             Reference<XPropertySet> xColumn;
-            ::cppu::extractInterface(xColumn,_rxSourceForeignKeyColumns->getByName(*pBegin));
+            if ( !( _rxSourceForeignKeyColumns->getByName(*pBegin) >>= xColumn ) )
+            {
+                OSL_ENSURE( false, "addConnections: invalid foreign key column!" );
+                continue;
+            }
 
             aNewConnData.SetFieldType(JTCS_FROM,TAB_NORMAL_FIELD);
 
@@ -854,16 +858,6 @@ sal_Bool OQueryTableView::FindTableFromField(const String& rFieldName, OTableFie
     }
 
     return rCnt == 1;
-}
-
-//------------------------------------------------------------------------------
-sal_Bool OQueryTableView::RemoveTabWin(const String& strAliasName)
-{
-    DBG_CHKTHIS(OQueryTableView,NULL);
-    OQueryTableWindow* pTabWin = FindTable(strAliasName);
-    if ( pTabWin )
-        RemoveTabWin(pTabWin);
-    return pTabWin != NULL;
 }
 
 //------------------------------------------------------------------------------
