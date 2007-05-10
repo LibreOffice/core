@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directsql.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:59:16 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:25:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,15 +187,6 @@ DBG_NAME(DirectSQLDialog)
     {
         CHECK_INVARIANTS("DirectSQLDialog::getHistorySize");
         return m_aStatementHistory.size();
-    }
-
-    //--------------------------------------------------------------------
-    void DirectSQLDialog::setHistoryLimit(sal_Int32 _nMaxEntries)
-    {
-        CHECK_INVARIANTS("DirectSQLDialog::setHistoryLimit");
-
-        m_nHistoryLimit = _nMaxEntries;
-        implEnsureHistoryLimit();
     }
 
     //--------------------------------------------------------------------
