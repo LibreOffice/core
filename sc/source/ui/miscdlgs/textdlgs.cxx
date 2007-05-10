@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textdlgs.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:34:18 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:57:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <svx/svxids.hrc>
-#define ITEMID_TABSTOP  0
 
 //CHINA001 #include <svx/chardlg.hxx>
 #include <svx/flstitem.hxx>
