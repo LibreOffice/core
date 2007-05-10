@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:23:40 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 17:04:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
 #include <svx/eeitem.hxx>
 #endif
 
-#define ITEMID_FIELD EE_FEATURE_FIELD
 #include <svx/editobj.hxx>
 #include <svx/editstat.hxx>
 #include <svx/editview.hxx>
@@ -676,7 +675,7 @@ void ScViewFunc::InsertBookmark( const String& rDescription, const String& rURL,
     SvxURLField aField( rURL, rDescription, SVXURLFORMAT_APPDEFAULT );
     if (pTarget)
         aField.SetTargetFrame(*pTarget);
-    aEngine.QuickInsertField( SvxFieldItem( aField ), aInsSel );
+    aEngine.QuickInsertField( SvxFieldItem( aField, EE_FEATURE_FIELD ), aInsSel );
 
     EditTextObject* pData = aEngine.CreateTextObject();
     EnterData( nPosX, nPosY, nTab, pData );
