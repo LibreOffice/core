@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:15:41 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:10:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@
 #include <vcl/svapp.hxx>
 #endif
 
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
+
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
