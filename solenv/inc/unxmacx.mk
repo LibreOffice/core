@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacx.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 13:22:02 $
+#   last change: $Author: kz $ $Date: 2007-05-10 15:11:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,11 @@ CFLAGSDBGUTIL=
 # Flag to specify output file to compiler/linker
 CFLAGSOUTOBJ=-o
 
+# Flags to enable precompiled headers
+CFLAGS_CREATE_PCH=-x c++-header -I$(INCPCH) -DPRECOMPILED_HEADERS
+CFLAGS_USE_PCH=-I$(SLO)$/pch -DPRECOMPILED_HEADERS -Winvalid-pch
+CFLAGS_USE_EXCEPTIONS_PCH=-I$(SLO)$/pch_ex -DPRECOMPILED_HEADERS -Winvalid-pch
+
 # ---------------------------------
 #  Optimization flags
 # ---------------------------------
@@ -211,6 +216,8 @@ LINKFLAGSOPT=
 DLLPRE=lib
 # File extension to identify dynamic shared libraries on MacOS X
 DLLPOST=.dylib
+# Precompiled header file extension
+PCHPOST=.gch
 
 # We don't use mapping on MacOS X
 #LINKVERSIONMAPFLAG=-Wl,--version-script
