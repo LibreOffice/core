@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlcommanddesign.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:08:39 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:49:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,21 +89,20 @@
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
+#include <com/sun/star/sdb/CommandType.hpp>
+#endif
 /** === end UNO includes === **/
 
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
-#ifndef _SVTOOLS_LOCALRESACCESS_HXX_
 #include <svtools/localresaccess.hxx>
-#endif
+#include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 
 //........................................................................
 namespace pcr
 {
 //........................................................................
 
-    namespace FrameSearchFlag = ::com::sun::star::frame::FrameSearchFlag;
     /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::lang::XMultiComponentFactory;
@@ -134,6 +133,8 @@ namespace pcr
     using ::com::sun::star::frame::XDispatchProvider;
     using ::com::sun::star::frame::XDispatch;
     /** === end UNO using === **/
+    namespace FrameSearchFlag = ::com::sun::star::frame::FrameSearchFlag;
+    namespace CommandType = ::com::sun::star::sdb::CommandType;
 
     //====================================================================
     //= SQLCommandDesigner
@@ -171,7 +172,16 @@ namespace pcr
             {
                 OSL_ENSURE( Event.NewValue.getValueTypeClass() == TypeClass_STRING,
                     "SQLCommandDesigner::propertyChange: invalid new value for the ActiveCommand!" );
-                m_xRowSet->setPropertyValue( PROPERTY_COMMAND, Event.NewValue );
+                try
+                {
+                    m_xRowSet->setPropertyValue( PROPERTY_COMMAND, Event.NewValue );
+                }
+                catch( const RuntimeException& ) { throw; }
+                catch( const Exception& )
+                {
+                    // not allowed to leave, so silence it
+                    DBG_UNHANDLED_EXCEPTION();
+                }
             }
         }
     }
@@ -195,7 +205,7 @@ namespace pcr
             return;
 
         if ( isActive() )
-            impl_closeDesigner_throw();
+            impl_closeDesigner_nothrow();
 
         m_xConnection.clear();
         m_xContext.clear();
@@ -243,7 +253,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "SQLCommandDesigner::impl_raise_nothrow: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -295,13 +305,13 @@ namespace pcr
             if ( xFrameProps.is() && xFrameProps->getPropertySetInfo().is() && xFrameProps->getPropertySetInfo()->hasPropertyByName( PROPERTY_TITLE ) )
             {
                 ::svt::OLocalResourceAccess aEnumStrings( PcrRes( RID_RSC_ENUM_COMMAND_TYPE ), RSC_RESOURCE );
-                ::rtl::OUString sDisplayName = String( PcrRes( 3 ) );
+                ::rtl::OUString sDisplayName = String( PcrRes( CommandType::COMMAND + 1 ) );
                 xFrameProps->setPropertyValue( PROPERTY_TITLE, makeAny( sDisplayName ) );
             }
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "SQLCommandDesigner::impl_doOpenDesignerFrame_nothrow: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
             m_xDesigner.clear();
         }
     }
@@ -325,7 +335,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "SQLCommandDesigner::impl_createEmptyParentlessTask_nothrow: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
         return xFrame;
     }
@@ -338,11 +348,9 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void SQLCommandDesigner::impl_closeDesigner_throw()
+    void SQLCommandDesigner::impl_closeDesigner_nothrow()
     {
-        impl_checkDisposed_throw();
-        OSL_PRECOND( isActive(), "SQLCommandDesigner::impl_closeDesigner_throw: invalid calle!" );
-
+        OSL_PRECOND( isActive(), "SQLCommandDesigner::impl_closeDesigner_nothrow: invalid calle!" );
         // close it
         try
         {
@@ -355,12 +363,12 @@ namespace pcr
             // instead of calling XCloseable::close directly. The latter method would also close
             // the frame, but not care for things like shutting down the office when the last
             // frame is gone ...
-            UnoURL aCloseURL( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CloseDoc" ) ),
+            const UnoURL aCloseURL( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CloseDoc" ) ),
                 Reference< XMultiServiceFactory >( m_xORB, UNO_QUERY ) );
 
             Reference< XDispatchProvider > xProvider( m_xDesigner->getFrame(), UNO_QUERY_THROW );
             Reference< XDispatch > xDispatch( xProvider->queryDispatch( aCloseURL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_top" ) ), FrameSearchFlag::SELF ) );
-            OSL_ENSURE( xDispatch.is(), "SQLCommandDesigner::impl_closeDesigner_throw: no dispatcher for the CloseDoc command!" );
+            OSL_ENSURE( xDispatch.is(), "SQLCommandDesigner::impl_closeDesigner_nothrow: no dispatcher for the CloseDoc command!" );
             if ( xDispatch.is() )
             {
                 xDispatch->dispatch( aCloseURL, Sequence< PropertyValue >( ) );
@@ -375,7 +383,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "SQLCommandDesigner::impl_closeDesigner_throw: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         m_xDesigner = NULL;
@@ -392,7 +400,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "SQLCommandDesigner::impl_trySuspendDesigner_nothrow: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
         return bAllow;
     }
