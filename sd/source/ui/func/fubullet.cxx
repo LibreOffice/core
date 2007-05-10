@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fubullet.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:37:32 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:29:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
 #endif
-#define ITEMID_FONT             EE_CHAR_FONTINFO
 #include <svx/fontitem.hxx>
 
 #ifndef SD_OUTLINE_VIEW_SHELL_HXX
@@ -275,7 +274,7 @@ void FuBullet::InsertSpecialCharacter()
             // Einfuegen eines Leerstrings geloescht)
             pOV->InsertText( aEmptyStr );
 
-            SfxItemSet aOldSet( mpDoc->GetPool(), ITEMID_FONT, ITEMID_FONT, 0 );
+            SfxItemSet aOldSet( mpDoc->GetPool(), EE_CHAR_FONTINFO, EE_CHAR_FONTINFO, 0 );
             aOldSet.Put( pOV->GetAttribs() );
 
             SfxUndoManager& rUndoMgr =  pOL->GetUndoManager();
@@ -287,7 +286,8 @@ void FuBullet::InsertSpecialCharacter()
             SfxItemSet aSet(pOL->GetEmptyItemSet());
             SvxFontItem aFontItem (aFont.GetFamily(),    aFont.GetName(),
                                    aFont.GetStyleName(), aFont.GetPitch(),
-                                   aFont.GetCharSet());
+                                   aFont.GetCharSet(),
+                                   EE_CHAR_FONTINFO);
             aSet.Put(aFontItem);
             aSet.Put(aFontItem, EE_CHAR_FONTINFO_CJK);
             aSet.Put(aFontItem, EE_CHAR_FONTINFO_CTL);
