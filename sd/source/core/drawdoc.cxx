@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:31:02 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:22:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#define ITEMID_SEARCH           SID_SEARCH_ITEM
-
 #include "PageListWatcher.hxx"
 
 #ifndef _COM_SUN_STAR_TEXT_WRITINGMODE_HPP_
@@ -56,7 +54,6 @@
 #include <sfx2/srchitem.hxx>
 #endif
 #include <svx/eeitem.hxx>
-#define ITEMID_SCRIPTSPACE      EE_PARA_ASIANCJKSPACING
 #include <svx/scriptspaceitem.hxx>
 
 #ifndef _OFA_MISCCFG_HXX
@@ -78,9 +75,6 @@
 
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
-#endif
-#ifndef _EEITEMID_HXX //autogen
-#include <svx/eeitemid.hxx>
 #endif
 #ifndef _EDITSTAT_HXX //autogen
 #include <svx/editstat.hxx>
@@ -351,7 +345,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     // for korean and japanese languages we have a different default for apply spacing between asian, latin and ctl text
     if( ( LANGUAGE_KOREAN  == eRealCTLLanguage ) || ( LANGUAGE_KOREAN_JOHAB == eRealCTLLanguage ) || ( LANGUAGE_JAPANESE == eRealCTLLanguage ) )
     {
-        GetPool().GetSecondaryPool()->SetPoolDefaultItem( SvxScriptSpaceItem( FALSE ) );
+        GetPool().GetSecondaryPool()->SetPoolDefaultItem( SvxScriptSpaceItem( FALSE, EE_PARA_ASIANCJKSPACING ) );
     }
 
     // DefTab und SpellOptions setzen
