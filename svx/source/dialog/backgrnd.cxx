@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:25:44 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:35:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,8 +76,8 @@
 #include "backgrnd.hrc"
 #include "svxitems.hrc"
 
-#define ITEMID_BRUSH        0
-#define ITEMID_COLOR_TABLE  0
+
+
 
 // Tabellenhintergrund
 #define TBL_DEST_CELL   0
@@ -1719,11 +1719,10 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
         }
         pTableBck_Impl->nActPos = nSelPos;
         if(!*pActItem)
-            *pActItem = new SvxBrushItem;
+            *pActItem = new SvxBrushItem(nWhich);
         if(0 == aLbSelect.GetSelectEntryPos())  // Brush ausgewaehlt
         {
-            **pActItem = aBgdColor;
-            (*pActItem)->SetWhich(nWhich);
+            **pActItem = SvxBrushItem( aBgdColor, nWhich );
         }
         else
         {
@@ -1794,8 +1793,7 @@ IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
         if(0 == aLbSelect.GetSelectEntryPos())  // Brush ausgewaehlt
         {
             USHORT nWhich = (*pActItem)->Which();
-            **pActItem = aBgdColor;
-            (*pActItem)->SetWhich(nWhich);
+            **pActItem = SvxBrushItem( aBgdColor, nWhich );
         }
         else
         {
