@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extrusioncontrols.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:19:35 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:00:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,11 +61,9 @@
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
 #endif
-#define ITEMID_COLOR 0
 #ifndef _SVX_COLRITEM_HXX
 #include "colritem.hxx"
 #endif
-#define ITEMID_DOUBLE 0
 #ifndef _SVX_CHRTITEM_HXX
 #include "chrtitem.hxx"
 #endif
