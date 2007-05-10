@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodalredlineacceptdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:09:47 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:21:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,6 @@
 #define _SVSTDARR_USHORTSSORT
 #define _SVSTDARR_USHORTS
 
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
-#endif
 
 #ifndef _REDLINE_HXX
 #include <redline.hxx>
