@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view3d1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:22:46 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:47:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#define ITEMID_COLOR            SID_ATTR_3D_LIGHTCOLOR
 
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
