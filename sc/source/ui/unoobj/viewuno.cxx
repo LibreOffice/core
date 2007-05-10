@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:48:00 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:52:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
 #include <svx/svdview.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unoshcol.hxx>
+#include <svx/fmshell.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
@@ -168,6 +169,7 @@ uno::Any SAL_CALL ScViewPaneBase::queryInterface( const uno::Type& rType )
 {
     SC_QUERYINTERFACE( sheet::XViewPane )
     SC_QUERYINTERFACE( sheet::XCellRangeReferrer )
+    SC_QUERYINTERFACE( view::XFormLayerAccess )
     SC_QUERYINTERFACE( view::XControlAccess )
     SC_QUERYINTERFACE( lang::XServiceInfo )
     SC_QUERYINTERFACE( lang::XTypeProvider )
@@ -184,7 +186,7 @@ uno::Sequence<uno::Type> SAL_CALL ScViewPaneBase::getTypes() throw(uno::RuntimeE
         uno::Type* pPtr = aTypes.getArray();
         pPtr[0] = getCppuType((const uno::Reference<sheet::XViewPane>*)0);
         pPtr[1] = getCppuType((const uno::Reference<sheet::XCellRangeReferrer>*)0);
-        pPtr[2] = getCppuType((const uno::Reference<view::XControlAccess>*)0);
+        pPtr[2] = getCppuType((const uno::Reference<view::XFormLayerAccess>*)0);
         pPtr[3] = getCppuType((const uno::Reference<lang::XServiceInfo>*)0);
         pPtr[4] = getCppuType((const uno::Reference<lang::XTypeProvider>*)0);
     }
@@ -325,6 +327,64 @@ uno::Reference<table::XCellRange> SAL_CALL ScViewPaneBase::getReferredCells()
     return NULL;
 }
 
+namespace
+{
+    bool lcl_prepareFormShellCall( ScTabViewShell* _pViewShell, USHORT _nPane, FmFormShell*& _rpFormShell, Window*& _rpWindow, SdrView*& _rpSdrView )
+    {
+        if ( !_pViewShell )
+            return false;
+
+        ScViewData* pViewData = _pViewShell->GetViewData();
+        ScSplitPos eWhich = ( _nPane == SC_VIEWPANE_ACTIVE ) ?
+                                pViewData->GetActivePart() :
+                                (ScSplitPos) _nPane;
+        _rpWindow = _pViewShell->GetWindowByPos( eWhich );
+        _rpSdrView = _pViewShell->GetSdrView();
+        _rpFormShell = _pViewShell->GetFormShell();
+        return ( _rpFormShell != NULL ) && ( _rpSdrView != NULL )&& ( _rpWindow != NULL );
+    }
+}
+
+// XFormLayerAccess
+uno::Reference< form::XFormController > SAL_CALL ScViewPaneBase::getFormController( const uno::Reference< form::XForm >& _Form ) throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    uno::Reference< form::XFormController > xController;
+
+    Window* pWindow( NULL );
+    SdrView* pSdrView( NULL );
+    FmFormShell* pFormShell( NULL );
+    if ( lcl_prepareFormShellCall( pViewShell, nPane, pFormShell, pWindow, pSdrView ) )
+        xController = pFormShell->GetFormController( _Form, *pSdrView, *pWindow );
+
+    return xController;
+}
+
+::sal_Bool SAL_CALL ScViewPaneBase::isFormDesignMode(  ) throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    sal_Bool bIsFormDesignMode( sal_True );
+
+    FmFormShell* pFormShell( pViewShell ? pViewShell->GetFormShell() : NULL );
+    if ( pFormShell )
+        bIsFormDesignMode = pFormShell->IsDesignMode();
+
+    return bIsFormDesignMode;
+}
+
+void SAL_CALL ScViewPaneBase::setFormDesignMode( ::sal_Bool _DesignMode ) throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    Window* pWindow( NULL );
+    SdrView* pSdrView( NULL );
+    FmFormShell* pFormShell( NULL );
+    if ( lcl_prepareFormShellCall( pViewShell, nPane, pFormShell, pWindow, pSdrView ) )
+        pFormShell->SetDesignMode( _DesignMode );
+}
+
 // XControlAccess
 
 uno::Reference<awt::XControl> SAL_CALL ScViewPaneBase::getControl(
@@ -332,40 +392,16 @@ uno::Reference<awt::XControl> SAL_CALL ScViewPaneBase::getControl(
                 throw(container::NoSuchElementException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<awt::XControl> xRet;
-    if ( pViewShell )
-    {
-        ScViewData* pViewData = pViewShell->GetViewData();
-        ScSplitPos eWhich = ( nPane == SC_VIEWPANE_ACTIVE ) ?
-                                pViewData->GetActivePart() :
-                                (ScSplitPos) nPane;
-        Window* pWin = pViewShell->GetWindowByPos( eWhich );
-        SdrModel* pModel = pViewData->GetDocument()->GetDrawLayer();
-        SdrView* pSdrView = pViewShell->GetSdrView();
-        if ( pWin && pModel && pSdrView )
-        {
-            SdrPage* pPage = pModel->GetPage( static_cast<sal_uInt16>(pViewData->GetTabNo()) );
-            if ( pPage )
-            {
-                ULONG nCount = pPage->GetObjCount();
-                for ( ULONG i=0; i<nCount; i++ )
-                {
-                    SdrUnoObj* pFormObj = PTR_CAST( SdrUnoObj, pPage->GetObj(i) );
-                    if ( pFormObj )
-                    {
-                        uno::Reference<awt::XControlModel> xCM(pFormObj->GetUnoControlModel());
-                        if ( xCM.is() && xModel == xCM )
-                        {
-                            xRet.set(pFormObj->GetUnoControl( *pSdrView, *pWin ));
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
 
-    if (!xRet.is())
+    uno::Reference<awt::XControl> xRet;
+
+    Window* pWindow( NULL );
+    SdrView* pSdrView( NULL );
+    FmFormShell* pFormShell( NULL );
+    if ( lcl_prepareFormShellCall( pViewShell, nPane, pFormShell, pWindow, pSdrView ) )
+        pFormShell->GetFormControl( xModel, *pSdrView, *pWindow, xRet );
+
+    if ( !xRet.is() )
         throw container::NoSuchElementException();      // no control found
 
     return xRet;
