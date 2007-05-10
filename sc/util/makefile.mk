@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-25 16:15:20 $
+#   last change: $Author: kz $ $Date: 2007-05-10 17:04:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -115,9 +115,7 @@ SHL1STDLIBS+=       \
 SHL1STDLIBS+= $(SCHLIB)
 .ENDIF
 
-SHL1LIBS= $(LIB1TARGET)
-LIB1TARGET=$(SLB)$/scall.lib
-LIB1FILES = $(LIB3TARGET) $(LIB4TARGET)
+SHL1LIBS=$(LIB3TARGET) $(LIB4TARGET)
 
 .IF "$(GUI)"!="UNX"
 .IF "$(GUI)$(COM)" != "WNTGCC"
@@ -127,7 +125,7 @@ SHL1OBJS=   $(SLO)$/scdll.obj
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
-DEFLIB1NAME= scall
+DEFLIB1NAME= $(LIB3TARGET:b) $(LIB4TARGET:b)
 
 .IF "$(GUI)" == "WNT"
 SHL1RES=    $(RCTARGET)
