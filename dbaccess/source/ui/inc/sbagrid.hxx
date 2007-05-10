@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbagrid.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:18:37 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:33:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,6 @@ namespace dbaui
 
     //  class ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > ;
     FORWARD_DECLARE_INTERFACE(lang,XMultiServiceFactory)
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SbaXGridControl_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &) throw( ::com::sun::star::uno::Exception );
 
     class SbaXStatusMultiplexer;
     class SbaXGridControl
@@ -339,8 +338,6 @@ namespace dbaui
         virtual void DoColumnDrag(sal_uInt16 nColumnPos);
         virtual void DoRowDrag(sal_Int16 nRowPos);
         virtual void DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos);
-
-        void refresh();
 
         void SetBrowserAttrs();
         void SetColWidth(sal_uInt16 nColId);
