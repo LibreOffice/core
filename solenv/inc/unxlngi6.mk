@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: ihi $ $Date: 2007-04-17 10:13:37 $
+#   last change: $Author: kz $ $Date: 2007-05-10 15:11:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,10 @@ PICSWITCH:=-fpic
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 CFLAGSCXX += -fvisibility-inlines-hidden
 .ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+
+CFLAGS_CREATE_PCH=-x c++-header -I$(INCPCH) -DPRECOMPILED_HEADERS
+CFLAGS_USE_PCH=-I$(SLO)$/pch -DPRECOMPILED_HEADERS -Winvalid-pch
+CFLAGS_USE_EXCEPTIONS_PCH=-I$(SLO)$/pch_ex -DPRECOMPILED_HEADERS -Winvalid-pch
 
 # Compiler flags for compiling static object in multi threaded environment with graphical user interface
 CFLAGSOBJGUIMT=
@@ -237,4 +241,5 @@ RCSETVERSION=
 DLLPOSTFIX=li
 DLLPRE=lib
 DLLPOST=.so
+PCHPOST=.gch
 
