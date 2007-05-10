@@ -4,9 +4,9 @@
  *
  *  $RCSfile: memory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:29:07 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:50:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,11 +112,11 @@ BOOL MemNew( void )
 
     // fuer tool.cxx::PutFormString()
     pAttrUnprot = new ScProtectionAttr( TRUE );
-    pAttrRight = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_RIGHT );
-    pAttrLeft = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT );
-    pAttrCenter = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER );
-    pAttrRepeat = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_REPEAT );
-    pAttrStandard = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD );
+    pAttrRight = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_RIGHT, ATTR_HOR_JUSTIFY );
+    pAttrLeft = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT, ATTR_HOR_JUSTIFY );
+    pAttrCenter = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY );
+    pAttrRepeat = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_REPEAT, ATTR_HOR_JUSTIFY );
+    pAttrStandard = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY );
     bFormInit = TRUE;
 
     return TRUE;
