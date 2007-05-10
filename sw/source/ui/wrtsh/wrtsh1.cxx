@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:34:03 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:27:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,10 +50,6 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
-#endif
-
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
 #endif
 
 #if STLPORT_VERSION>=321
@@ -1028,7 +1024,7 @@ void SwWrtShell::InsertPageBreak(const String *pPageDesc, USHORT nPgNum )
             SetAttr( aDesc );
         }
         else
-            SetAttr( SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE) );
+            SetAttr( SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK) );
         EndUndo(UIUNDO_INSERT_PAGE_BREAK);
     }
 }
@@ -1074,7 +1070,7 @@ void SwWrtShell::InsertColumnBreak()
                 DelRight();
             SwFEShell::SplitNode( FALSE, FALSE );
         }
-        SetAttr(SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE));
+        SetAttr(SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK));
 
         EndUndo(UIUNDO_INSERT_COLUMN_BREAK);
     }
