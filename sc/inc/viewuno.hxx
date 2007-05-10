@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewuno.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 11:58:59 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:52:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,8 @@
 #include <svtools/itemprop.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_VIEW_XCONTROLACCESS_HPP_
-#include <com/sun/star/view/XControlAccess.hpp>
+#ifndef _COM_SUN_STAR_VIEW_XFORMLAYERACCESS_HPP_
+#include <com/sun/star/view/XFormLayerAccess.hpp>
 #endif
 #ifndef _COM_SUN_STAR_VIEW_XSELECTIONCHANGELISTENER_HPP_
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
@@ -129,7 +129,7 @@ SV_DECL_PTRARR_DEL( XActivationEventListenerArr_Impl, XActivationEventListenerPt
 
 class ScViewPaneBase : public com::sun::star::sheet::XViewPane,
                        public com::sun::star::sheet::XCellRangeReferrer,
-                       public com::sun::star::view::XControlAccess,
+                       public com::sun::star::view::XFormLayerAccess,
                        public com::sun::star::lang::XServiceInfo,
                        public com::sun::star::lang::XTypeProvider,
                        public SfxListener
@@ -165,6 +165,17 @@ public:
                             // XCellRangeReferrer
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange > SAL_CALL
                             getReferredCells() throw(::com::sun::star::uno::RuntimeException);
+
+                            // XFormLayerAccess
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > SAL_CALL
+                            getFormController( const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::form::XForm >& Form )
+                                    throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL
+                            isFormDesignMode(  )
+                                throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setFormDesignMode( ::sal_Bool DesignMode )
+                                throw (::com::sun::star::uno::RuntimeException);
 
                             // XControlAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > SAL_CALL
