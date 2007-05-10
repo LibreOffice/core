@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uitool.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:29:02 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:27:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,6 @@
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
 #endif
 
 
@@ -224,7 +221,7 @@ void SetMetric(MetricFormatter& rCtrl, FieldUnit eUnit)
 
 void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh)
 {
-    SvxBoxInfoItem aBoxInfo;
+    SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
     const SfxPoolItem *pBoxInfo;
     if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BORDER_INNER,
                                         TRUE, &pBoxInfo))
@@ -449,7 +446,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     //
     rSet.Put(rMaster.GetAttrSet());
 
-    SvxBoxInfoItem aBoxInfo;
+    SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
     const SfxPoolItem *pBoxInfo;
     if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BORDER_INNER,
                                             TRUE, &pBoxInfo) )
