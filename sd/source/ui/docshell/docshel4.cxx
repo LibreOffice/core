@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:42:53 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:28:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,6 @@
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#define ITEMID_FONTLIST     SID_ATTR_CHAR_FONTLIST
 #ifndef _SVX_FLSTITEM_HXX
 #include <svx/flstitem.hxx>
 #endif
@@ -259,7 +258,7 @@ void DrawDocShell::UpdateFontList()
     else
         pRefDevice = SD_MOD()->GetVirtualRefDevice();
     mpFontList = new FontList( pRefDevice, NULL, FALSE );
-    SvxFontListItem aFontListItem( mpFontList );
+    SvxFontListItem aFontListItem( mpFontList, SID_ATTR_CHAR_FONTLIST );
     PutItem( aFontListItem );
 }
 
