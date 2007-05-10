@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:21:42 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:25:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,9 +83,6 @@
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
 #endif
 
 #ifndef _SW_REWRITER_HXX
@@ -1091,7 +1088,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
         {
             if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_DEFTABSTOP, FALSE, &pItem))
             {
-                SvxTabStopItem aDefTabs( 0, 0 );
+                SvxTabStopItem aDefTabs( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
                 USHORT nTab = ((const SfxUInt16Item*)pItem)->GetValue();
                 MakeDefTabs( nTab, aDefTabs );
                 pWrtShell->SetDefault( aDefTabs );
