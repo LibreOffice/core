@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:26:06 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:10:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
  */
 
 
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
+
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -3482,7 +3482,7 @@ static Writer& OutWW8_SwFmtPageDesc(Writer& rWrt, const SfxPoolItem& rHt)
         const SwFmtPageDesc &rPgDesc = (const SwFmtPageDesc&)rHt;
         const SwTxtFmtColl* pC = (SwTxtFmtColl*)rWW8Wrt.pOutFmtNode;
         if ((SFX_ITEM_SET != pC->GetItemState(RES_BREAK, false)) && rPgDesc.GetRegisteredIn())
-            OutWW8_SwFmtBreak(rWrt, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE));
+            OutWW8_SwFmtBreak(rWrt, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK));
     }
     return rWrt;
 }
