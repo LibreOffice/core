@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:46:39 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:16:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,12 +243,6 @@ namespace dbaui
                 <TRUE/> if read only or doesn't exist, otherwise <FALSE/>
         */
         sal_Bool isConnectionReadOnly() const;
-
-        /** checks if the database allows the creation of relation
-            @return
-                <TRUE/> if read only, otherwise <FALSE/>
-        */
-        sal_Bool isRelationDesignAllowed() const;
 
         /** fills the list with the selected entries.
             @param  _rNames
