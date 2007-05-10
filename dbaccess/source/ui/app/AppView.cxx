@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppView.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 13:01:06 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:17:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -513,12 +513,6 @@ void OApplicationView::clearPages(sal_Bool _bTaskAlso)
     getDetailView()->clearPages(_bTaskAlso);
 }
 // -----------------------------------------------------------------------------
-void OApplicationView::clearSelection()
-{
-    OSL_ENSURE(m_pWin && getPanel(),"Detail view is NULL! -> GPF");
-    getPanel()->clearSelection();
-}
-// -----------------------------------------------------------------------------
 void OApplicationView::changeContainer(ElementType _eType)
 {
     OSL_ENSURE(m_pWin && getPanel(),"Detail view is NULL! -> GPF");
@@ -542,12 +536,6 @@ sal_Bool OApplicationView::isPreviewEnabled()
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     return getDetailView()->isPreviewEnabled();
-}
-// -----------------------------------------------------------------------------
-void OApplicationView::switchPreview()
-{
-    OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
-    getDetailView()->switchPreview();
 }
 // -----------------------------------------------------------------------------
 void OApplicationView::switchPreview(PreviewMode _eMode)
@@ -608,12 +596,6 @@ void OApplicationView::GetFocus()
     {
         m_pWin->GrabFocus();
     }
-}
-// -----------------------------------------------------------------------------
-void OApplicationView::disableControls(sal_Bool _bDisable)
-{
-    OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
-    getDetailView()->disableControls(_bDisable);
 }
 // -----------------------------------------------------------------------------
 void OApplicationView::_disposing( const ::com::sun::star::lang::EventObject& /*_rSource*/ )
