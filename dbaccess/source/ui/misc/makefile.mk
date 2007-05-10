@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 13:08:03 $
+#   last change: $Author: kz $ $Date: 2007-05-10 10:36:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,6 @@ SLOFILES=	\
         $(SLO)$/HtmlReader.obj				\
         $(SLO)$/RtfReader.obj				\
         $(SLO)$/propertysetitem.obj			\
-        $(SLO)$/containermultiplexer.obj	\
         $(SLO)$/databaseobjectview.obj      \
         $(SLO)$/DExport.obj					\
         $(SLO)$/uiservices.obj				\
