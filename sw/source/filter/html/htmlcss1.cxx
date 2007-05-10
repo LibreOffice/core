@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlcss1.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:08:28 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:04:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 
 
 
-#define ITEMID_FONTLIST         SID_ATTR_CHAR_FONTLIST
 #include "hintids.hxx"
 
 #ifndef _SFXITEMITER_HXX //autogen
@@ -72,7 +71,7 @@
 #include <svx/ulspitem.hxx>
 #endif
 #ifndef _SVX_BOXITEM_HXX //autogen
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
+
 #include <svx/boxitem.hxx>
 #endif
 #ifndef _SVX_FHGTITEM_HXX //autogen
@@ -254,11 +253,11 @@ BOOL SwCSS1Parser::SetFmtBreak( SfxItemSet& rItemSet,
     }
 
     if( bSetBreak )
-        rItemSet.Put( SvxFmtBreakItem( eBreak ) );
+        rItemSet.Put( SvxFmtBreakItem( eBreak, RES_BREAK ) );
     if( bSetPageDesc )
         rItemSet.Put( SwFmtPageDesc( pPageDesc ) );
     if( bSetKeep )
-        rItemSet.Put( SvxFmtKeepItem( bKeep ) );
+        rItemSet.Put( SvxFmtKeepItem( bKeep, RES_KEEP ) );
 
     return bSetBreak;
 }
@@ -463,9 +462,9 @@ void SwCSS1Parser::SetTableTxtColl( BOOL bHeader )
 void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
                                      SfxItemSet *pItemSet )
 {
-    SvxBrushItem aBrushItem;
-    SvxBoxItem aBoxItem;
-    SvxFrameDirectionItem aFrmDirItem;
+    SvxBrushItem aBrushItem( RES_BACKGROUND );
+    SvxBoxItem aBoxItem( RES_BOX );
+    SvxFrameDirectionItem aFrmDirItem(FRMDIR_ENVIRONMENT, RES_FRAMEDIR);
     BOOL bSetBrush = pBrush!=0, bSetBox = FALSE, bSetFrmDir = FALSE;
     if( pBrush )
         aBrushItem = *pBrush;
@@ -2074,7 +2073,7 @@ BOOL SwHTMLParser::ParseStyleOptions( const String &rStyle,
         LanguageType eLang = MsLangId::convertIsoStringToLanguage( *pLang );
         if( LANGUAGE_DONTKNOW != eLang )
         {
-            SvxLanguageItem aLang( eLang );
+            SvxLanguageItem aLang( eLang, RES_CHRATR_LANGUAGE );
             rItemSet.Put( aLang );
             aLang.SetWhich( RES_CHRATR_CJK_LANGUAGE );
             rItemSet.Put( aLang );
@@ -2096,7 +2095,7 @@ BOOL SwHTMLParser::ParseStyleOptions( const String &rStyle,
 
         if( FRMDIR_ENVIRONMENT != eDir )
         {
-            SvxFrameDirectionItem aDir( eDir );
+            SvxFrameDirectionItem aDir( eDir, RES_FRAMEDIR );
             rItemSet.Put( aDir );
 
             bRet = sal_True;
