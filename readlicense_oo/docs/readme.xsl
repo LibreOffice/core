@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:xt="http://www.jclark.com/xt"
-                extension-element-prefixes="xt" version="1.0">
-                
-  <xsl:output method = "HTML" doctype-public = "-//W3C//DTD HTML 3.2//EN" /> 
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+  <xsl:output method="html" doctype-public="-//W3C//DTD HTML 3.2//EN" />
   	
   <!-- inputvariable declaration -->
   <xsl:param name="os1"/>
@@ -20,7 +17,6 @@
   <!-- creates the HTML-output-->
   <xsl:if test="$type='html'">
    <!-- the outputname for htlm-files-->
-    <xt:document method="html" href="{$file}">
                   <html>
 	<!-- HTML utf-8 encoding enable -->
   		<head>
@@ -31,14 +27,11 @@
   		</body>
   	</html>
   	
-  	</xt:document>
   </xsl:if>
   <!-- creates the Textoutput -->
   <xsl:if test="$type='text'">
     <!-- the outputfilename for Textfiles -->
-    <xt:document method="text" href="{$file}">
     	<xsl:apply-templates/>
-    </xt:document>
   </xsl:if>
 </xsl:template>
 
