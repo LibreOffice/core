@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh4.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:24:50 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:56:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
 
             if ( pDocSh )
             {
-                const SfxPoolItem*  pItem = pDocSh->GetItem( ITEMID_COLOR_TABLE );
+                const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
                 XColorTable*        pColorTable = NULL;
 
                 if ( pItem )
