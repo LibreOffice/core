@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontainerwindow.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:26:40 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:40:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,15 +186,6 @@ namespace dbaui
     void OQueryContainerWindow::Construct()
     {
         m_pViewSwitch->Construct();
-    }
-
-    // -----------------------------------------------------------------------------
-    void OQueryContainerWindow::initialize(const Reference<XFrame>& _xFrame)
-    {
-        // append our frame
-        Reference < XFramesSupplier > xSup(_xFrame,UNO_QUERY);
-        Reference < XFrames > xFrames = xSup->getFrames();
-        xFrames->append( m_xBeamer );
     }
 
     // -----------------------------------------------------------------------------
