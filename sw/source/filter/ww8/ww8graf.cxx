@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 14:47:06 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:10:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,8 +238,6 @@
 #include <svx/eeitem.hxx>
 #endif
 #ifndef _SVX_FLDITEM_HXX
-//miserable hack to get around #98519#
-#define ITEMID_FIELD            EE_FEATURE_FIELD
 #include <svx/flditem.hxx>
 #endif
 // OD 30.09.2003 #i18732#
@@ -946,7 +944,7 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
         {
             SvxURLField aURL(aIter->GetURL(), aString,
                 SVXURLFORMAT_APPDEFAULT);
-            pDrawEditEngine->QuickInsertField(SvxFieldItem(aURL), aSel);
+            pDrawEditEngine->QuickInsertField(SvxFieldItem(aURL, EE_FEATURE_FIELD), aSel);
             nChanged = nOrigLen - 1;
         }
         else
@@ -1946,7 +1944,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     // Schattenwurf der Box: SvxShadowItem
     if( WW8ITEMVALUE(rOldSet, SDRATTR_SHADOW, SdrShadowItem) )
     {
-        SvxShadowItem aShadow;
+        SvxShadowItem aShadow( RES_SHADOW );
 
         const Color aShdColor = static_cast< SdrShadowColorItem const & >(
             rOldSet.Get(SDRATTR_SHADOWCOLOR)).GetColorValue();
@@ -1987,7 +1985,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
         rFlySet.Put( aShadow );
     }
     Color Temp(COL_WHITE);
-    SvxBrushItem aBrushItem(Temp);
+    SvxBrushItem aBrushItem(Temp, RES_BACKGROUND);
     bool bBrushItemOk = false;
     sal_uInt8 nTrans = 0;
 
@@ -2144,14 +2142,14 @@ void SwWW8ImplReader::MapWrapIntoFlyFmt(SvxMSDffImportRec* pRecord,
     if (pRecord->nDxWrapDistLeft || pRecord->nDxWrapDistRight)
     {
         SvxLRSpaceItem aLR(writer_cast<USHORT>(pRecord->nDxWrapDistLeft),
-            writer_cast<USHORT>(pRecord->nDxWrapDistRight));
+            writer_cast<USHORT>(pRecord->nDxWrapDistRight), 0, 0, RES_LR_SPACE);
         AdjustLRWrapForWordMargins(*pRecord, aLR);
         pFlyFmt->SetAttr(aLR);
     }
     if (pRecord->nDyWrapDistTop || pRecord->nDyWrapDistBottom)
     {
         SvxULSpaceItem aUL(writer_cast<USHORT>(pRecord->nDyWrapDistTop),
-            writer_cast<USHORT>(pRecord->nDyWrapDistBottom));
+            writer_cast<USHORT>(pRecord->nDyWrapDistBottom), RES_UL_SPACE);
         AdjustULWrapForWordMargins(*pRecord, aUL);
         pFlyFmt->SetAttr(aUL);
     }
@@ -3059,7 +3057,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
 
         SdrTextObj *pSdrTextObj = PTR_CAST(SdrTextObj, rpObject);
         if (pSdrTextObj && pSdrTextObj->IsVerticalWriting())
-            rFlySet.Put(SvxFrameDirectionItem(FRMDIR_VERT_TOP_RIGHT));
+            rFlySet.Put(SvxFrameDirectionItem(FRMDIR_VERT_TOP_RIGHT, RES_FRAMEDIR));
 
         pRetFrmFmt = rDoc.MakeFlySection(eAnchor, pPaM->GetPoint(), &rFlySet);
         ASSERT(pRetFrmFmt->GetAnchor().GetAnchorId() == eAnchor,
