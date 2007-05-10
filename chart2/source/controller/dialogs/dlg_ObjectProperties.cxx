@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:58:10 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:31:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,12 +75,6 @@
 #include <svx/svxids.hrc>
 #endif
 
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
-#define ITEMID_GRADIENT_LIST    SID_GRADIENT_LIST
-#define ITEMID_HATCH_LIST       SID_HATCH_LIST
-#define ITEMID_BITMAP_LIST      SID_BITMAP_LIST
-#define ITEMID_DASH_LIST        SID_DASH_LIST
-#define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
 
 #ifndef _SVX_DRAWITEM_HXX
 #include <svx/drawitem.hxx>
@@ -105,7 +99,6 @@
 
 #include <svx/flagsdef.hxx>
 
-#define ITEMID_NUMBERINFO   SID_ATTR_NUMBERFORMAT_INFO
 #ifndef _SVX_NUMINF_HXX
 #include <svx/numinf.hxx>
 #endif
