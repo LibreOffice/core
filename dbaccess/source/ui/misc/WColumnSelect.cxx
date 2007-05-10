@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WColumnSelect.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 12:00:51 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:34:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,13 +84,6 @@ using namespace dbaui;
 
 // -----------------------------------------------------------------------
 String OWizColumnSelect::GetTitle() const { return String(ModuleRes(STR_WIZ_COLUMN_SELECT_TITEL)); }
-// -----------------------------------------------------------------------
-OWizardPage::OWizardPage( Window* pParent, WinBits nStyle)
-    : TabPage(pParent,nStyle)
-    ,m_pParent(static_cast<OCopyTableWizard*>(pParent))
-    ,m_bFirstTime(sal_True)
-{
-}
 // -----------------------------------------------------------------------------
 OWizardPage::OWizardPage( Window* pParent, const ResId& rResId )
     : TabPage(pParent,rResId)
