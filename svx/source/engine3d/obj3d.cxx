@@ -4,9 +4,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:30:41 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:47:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#define ITEMID_COLOR            SID_ATTR_3D_LIGHTCOLOR
 
 #include "svdstr.hrc"
 #include "svdglob.hxx"
