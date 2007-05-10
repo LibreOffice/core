@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-19 11:58:21 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:58:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,6 +172,9 @@
 #endif
 #ifndef FORMS_WINDOWSTATEGUARD_HXX
 #include "windowstateguard.hxx"
+#endif
+#ifndef FORMS_PROPERTYBAGHELPER_HXX
+#include "propertybaghelper.hxx"
 #endif
 
 #ifndef _COMPHELPER_PROPERTY_MULTIPLEX_HXX_
@@ -371,6 +374,7 @@ protected:
 //= OControlModel
 //= model of a form layer control
 //==================================================================
+
 typedef ::cppu::ImplHelper7 <   ::com::sun::star::form::XFormComponent
                             ,   ::com::sun::star::io::XPersistObject
                             ,   ::com::sun::star::container::XNamed
@@ -380,11 +384,11 @@ typedef ::cppu::ImplHelper7 <   ::com::sun::star::form::XFormComponent
                             ,   ::com::sun::star::beans::XPropertyAccess
                             >   OControlModel_BASE;
 
-
 class OControlModel :public ::cppu::OComponentHelper
                     ,public OPropertySetAggregationHelper
                     ,public OControlModel_BASE
                     ,public OCloneableAggregation
+                    ,public IPropertyBagHelperContext
 {
 
 protected:
@@ -394,12 +398,7 @@ protected:
 
     InterfaceRef                    m_xParent;                  // ParentComponent
     OImplementationIdsRef           m_aHoldIdHelper;
-    ::comphelper::OPropertyArrayAggregationHelper*
-                                    m_pPropertyArrayHelper;
-    ::comphelper::PropertyBag
-                                    m_aDynamicProperties;
-
-    static ConcretInfoService s_aPropInfos;
+    PropertyBagHelper               m_aPropertyBagHelper;
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
         getORB( ) const { return m_xServiceFactory; }
@@ -516,8 +515,9 @@ public:
 // XPropertyAccess
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPropertyValues(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    using OPropertySetAggregationHelper::setPropertyValues;
+
 protected:
+    using OPropertySetAggregationHelper::setPropertyValues;
     using OPropertySetAggregationHelper::getPropertyValues;
 
 protected:
@@ -530,17 +530,6 @@ protected:
     // OPropertySetHelper
     virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
-    /** returns the IPropertyArrayHelper instance used by |this|
-    */
-    ::comphelper::OPropertyArrayAggregationHelper& impl_ts_getArrayHelper() const;
-
-    /** finds a free property handle
-        @param _rPropertyName
-            the name of the property to find a handle for. If possible, the handle as determined by
-            our ConcretInfoService instance will be used
-    */
-    sal_Int32   impl_findFreeHandle( const ::rtl::OUString& _rPropertyName );
-
     /** describes the properties provided by this class, or its respective
         derived class
 
@@ -549,6 +538,15 @@ protected:
     virtual void describeFixedProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
     ) const;
+
+    // IPropertyBagHelperContext
+    virtual ::osl::Mutex&   getMutex();
+    virtual void            describeFixedAndAggregateProperties(
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& _out_rFixedProperties,
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& _out_rAggregateProperties
+    ) const;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet >
+                            getPropertiesInterface();
 
     /** describes the properties of our aggregate
 
@@ -560,9 +558,6 @@ protected:
     virtual void describeAggregateProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
     ) const;
-
-private:
-    void    impl_invalidatePropertySetInfo();
 };
 
 //==================================================================
