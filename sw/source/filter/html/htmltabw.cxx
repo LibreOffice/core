@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmltabw.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:53:03 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:06:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@
 #include "precompiled_sw.hxx"
 
 
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
