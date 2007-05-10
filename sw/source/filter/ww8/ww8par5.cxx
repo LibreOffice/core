@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:14:53 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:11:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1924,13 +1924,13 @@ eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, String& rStr )
         if (aName.Len())                           // Font Name set ?
         {
             SvxFontItem aFont(FAMILY_DONTKNOW, aName, aEmptyStr,
-                PITCH_DONTKNOW, RTL_TEXTENCODING_SYMBOL);
+                PITCH_DONTKNOW, RTL_TEXTENCODING_SYMBOL, RES_CHRATR_FONT);
             NewAttr(aFont);                       // new Font
         }
 
         if (nSize > 0)  //#i20118#
         {
-            SvxFontHeightItem aSz(nSize);
+            SvxFontHeightItem aSz(nSize, 100, RES_CHRATR_FONTSIZE);
             NewAttr(aSz);
         }
 
@@ -2613,9 +2613,9 @@ void SwWW8ImplReader::Read_SubF_Ruby( _ReadFieldParams& rReadParam)
             SwStyleNameMapper::FillUIName(RES_POOLCHR_RUBYTEXT,aNm);
             aNm+=String::CreateFromInt32(aRubyCharFmts.size()+1);
             pFmt = rDoc.MakeCharFmt(aNm,(SwCharFmt*)rDoc.GetDfltCharFmt());
-            SvxFontHeightItem aHeightItem(nFontSize*10);
+            SvxFontHeightItem aHeightItem(nFontSize*10, 100, RES_CHRATR_FONTSIZE);
             SvxFontItem aFontItem(FAMILY_DONTKNOW,sFontName,
-                aEmptyStr,PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW);
+                aEmptyStr,PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT);
             aHeightItem.SetWhich(GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript));
             aFontItem.SetWhich(GetWhichOfScript(RES_CHRATR_FONT,nScript));
             pFmt->SetAttr(aHeightItem);
