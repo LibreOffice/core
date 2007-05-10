@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:05:26 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:24:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,18 +117,9 @@ namespace dbaui
     };
 
     //=========================================================================
-    //= OPageSettings
-    //=========================================================================
-    struct OPageSettings
-    {
-        virtual ~OPageSettings();
-    };
-
-
-    //=========================================================================
     //= OGenericAdministrationPage
     //=========================================================================
-    class IAdminHelper;
+    class IDatabaseSettingsDialog;
     class IItemSetHelper;
     class OGenericAdministrationPage : public SfxTabPage, public svt::IWizardPage
     {
@@ -136,7 +127,7 @@ namespace dbaui
         Link            m_aModifiedHandler;     /// to be called if something on the page has been modified
         sal_Bool        m_abEnableRoadmap;
     protected:
-        IAdminHelper* m_pAdminDialog;
+        IDatabaseSettingsDialog*   m_pAdminDialog;
         IItemSetHelper* m_pItemSetHelper;
         FixedText*      m_pFT_HeaderText;
 
@@ -155,7 +146,7 @@ namespace dbaui
             @param  _pItemSetHelper
                 the itemset helper
         */
-        inline void SetAdminDialog(IAdminHelper* _pDialog,IItemSetHelper* _pItemSetHelper)
+        inline void SetAdminDialog(IDatabaseSettingsDialog* _pDialog,IItemSetHelper* _pItemSetHelper)
         {
             OSL_ENSURE(_pDialog && _pItemSetHelper,"Values are NULL!");
             m_pAdminDialog = _pDialog;
@@ -170,27 +161,6 @@ namespace dbaui
         {
             m_xORB = _rxORB;
         }
-
-        /** create an instance of view settings for the page
-            <p>The caller is responsible for destroying the object later on.</p>
-            <p>The page may return <NULL/> if it does not support view settings.</p>
-        */
-        virtual OPageSettings*  createViewSettings();
-
-        /** get the pages current view settings, if any
-        */
-        virtual void            fillViewSettings(OPageSettings* _pSettings);
-
-        /** called by the dialog after changes have been applied asnychronously
-            <p>The page can use this method to restore it's (non-persistent, e.g. view-) settings to the
-            state before the changes have been applied</p>
-            <p>This method is necessary because during applying, the page may die and be re-created.</p>
-
-            @param _pPageState
-                the page state as given in <method>IAdminHelper::applyChangesAsync</method>
-            @see IAdminHelper::applyChangesAsync
-        */
-        virtual void            restoreViewSettings(const OPageSettings* _pSettings);
 
         /** opens a dialog filled with all data sources available for this type and
             returns the selected on.
@@ -208,18 +178,11 @@ namespace dbaui
         virtual void initializePage();
         virtual sal_Bool commitPage(COMMIT_REASON _eReason);
 
-//        Link                maRoadmapHdl;
-//      void                SetRoadmapHdl( const Link& rLink ) { maRoadmapHdl = rLink; }
-//        const Link&         GetRoadmapHdl() const { return maRoadmapHdl; }
-
         void                SetRoadmapStateValue( sal_Bool _bDoEnable ) { m_abEnableRoadmap = _bDoEnable; }
         bool                GetRoadmapStateValue() const { return m_abEnableRoadmap; }
 
-        DECL_LINK(ImplRoadmapHdl, OGenericAdministrationPage*);
-
-
     protected:
-        /// default implementation: call FillItemSet, call checkItems,
+        /// default implementation: call FillItemSet, call prepareLeave,
         virtual int DeactivatePage(SfxItemSet* pSet);
         using SfxTabPage::DeactivatePage;
         /// default implementation: call implInitControls with the given item set and _bSaveValue = sal_False
@@ -234,24 +197,24 @@ namespace dbaui
         void callModifiedHdl() const { if (m_aModifiedHandler.IsSet()) m_aModifiedHandler.Call((void*)this); }
 
         /// called from within DeactivatePage. The page is allowed to be deactivated if this method returns sal_True
-        virtual sal_Bool checkItems() { return sal_True; }
+        virtual sal_Bool prepareLeave() { return sal_True; }
 
         /** called from within Reset and ActivatePage, use to initialize the controls with the items from the given set
             @param      _bSaveValue     if set to sal_True, the implementation should call SaveValue on all relevant controls
         */
-        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue) { postInitControls(_rSet, _bSaveValue); }
+        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
 
         /// analyze the invalid and the readonly flag which may be present in the set
         void getFlags(const SfxItemSet& _rSet, sal_Bool& _rValid, sal_Bool& _rReadonly);
 
-        /** will be called inside <method>postInitControl</method> to save the value if necessary
+        /** will be called inside <method>implInitControls</method> to save the value if necessary
             @param  _rControlList
                 The list must be filled with the controls.
                 It is not allowed to clear the list before pusching data into it.
         */
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) = 0;
 
-        /** will be called inside <method>postInitControl</method> to disable if necessary
+        /** will be called inside <method>implInitControls</method> to disable if necessary
             @param  _rControlList
                 The list must be filled with the controls.
                 It is not allowed to clear the list before pusching data into it.
@@ -296,7 +259,7 @@ namespace dbaui
 
         // used to set the right Pane header of a wizard to bold
         void SetControlFontWeight(Window* _pWindow, FontWeight _eWeight = WEIGHT_BOLD);
-        void SetHeaderText( Window* _parent, USHORT _nFTResId, USHORT _StringResId);
+        void SetHeaderText( USHORT _nFTResId, USHORT _StringResId);
 
         Point MovePoint(Point _aPixelBasePoint, sal_Int32 _XShift, sal_Int32 _YShift);
 
@@ -310,9 +273,6 @@ namespace dbaui
 
         /// may be used in SetXXXHdl calls to controls, is a link to <method>OnControlModified</method>
         virtual Link getControlModifiedLink() { return LINK(this, OGenericAdministrationPage, OnControlModified); }
-
-    private:
-        void postInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
     };
 
 //.........................................................................
