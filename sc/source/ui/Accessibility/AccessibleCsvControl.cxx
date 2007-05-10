@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:54:46 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:52:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -425,9 +425,9 @@ inline void lcl_FillProperty( PropertyValue& rVal, const OUString& rPropName, co
 /** Fills the sequence with all font attributes of rFont. */
 void lcl_FillFontAttributes( Sequence< PropertyValue >& rSeq, const Font& rFont )
 {
-    SvxFontItem aFontItem( rFont.GetFamily(), rFont.GetName(), rFont.GetStyleName(), rFont.GetPitch(), rFont.GetCharSet() );
-    SvxFontHeightItem aHeightItem( rFont.GetSize().Height() );
-    SvxLanguageItem aLangItem( rFont.GetLanguage() );
+    SvxFontItem aFontItem( rFont.GetFamily(), rFont.GetName(), rFont.GetStyleName(), rFont.GetPitch(), rFont.GetCharSet(), ATTR_FONT );
+    SvxFontHeightItem aHeightItem( rFont.GetSize().Height(), 100, ATTR_FONT_HEIGHT );
+    SvxLanguageItem aLangItem( rFont.GetLanguage(), ATTR_FONT_LANGUAGE );
 
     sal_Int32 nIndex = lcl_ExpandSequence( rSeq, 7 );
     lcl_FillProperty( rSeq[ nIndex++ ], CREATE_OUSTRING( "CharFontName" ),      aFontItem,   MID_FONT_FAMILY_NAME );
