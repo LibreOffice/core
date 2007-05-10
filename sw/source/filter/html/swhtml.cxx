@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:54:00 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:06:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,6 @@
 #include <svx/kernitem.hxx>
 #endif
 #ifndef _SVX_BOXITEM_HXX //autogen
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #include <svx/boxitem.hxx>
 #endif
 #ifndef _SVX_FHGTITEM_HXX //autogen
@@ -479,7 +478,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
 
     bKeepUnknown = pHtmlOptions->IsImportUnknown();
 
-    SvxFontHeightItem aFontHeight(aFontHeights[2]);
+    SvxFontHeightItem aFontHeight(aFontHeights[2], 100, RES_CHRATR_FONTSIZE);
     pDoc->SetDefault( aFontHeight );
     aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
     pDoc->SetDefault( aFontHeight );
@@ -1535,7 +1534,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
             AppendTxtNode();
         if( !pTable && !pDoc->IsInHeaderFooter( pPam->GetPoint()->nNode ) )
         {
-            NewAttr( &aAttrTab.pBreak, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE) );
+            NewAttr( &aAttrTab.pBreak, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK) );
             EndAttr( aAttrTab.pBreak, 0, FALSE );
         }
         break;
@@ -1835,7 +1834,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
     // Attribute :
     case HTML_ITALIC_ON:
         {
-            SvxPostureItem aPosture( ITALIC_NORMAL );
+            SvxPostureItem aPosture( ITALIC_NORMAL, RES_CHRATR_POSTURE );
             SvxPostureItem aPostureCJK( ITALIC_NORMAL, RES_CHRATR_CJK_POSTURE );
             SvxPostureItem aPostureCTL( ITALIC_NORMAL, RES_CHRATR_CTL_POSTURE );
             NewStdAttr( HTML_ITALIC_ON,
@@ -1847,7 +1846,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
 
     case HTML_BOLD_ON:
         {
-            SvxWeightItem aWeight( WEIGHT_BOLD );
+            SvxWeightItem aWeight( WEIGHT_BOLD, RES_CHRATR_WEIGHT );
             SvxWeightItem aWeightCJK( WEIGHT_BOLD, RES_CHRATR_CJK_WEIGHT );
             SvxWeightItem aWeightCTL( WEIGHT_BOLD, RES_CHRATR_CTL_WEIGHT );
             NewStdAttr( HTML_BOLD_ON,
@@ -1862,35 +1861,35 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
     case HTML_STRIKETHROUGH_ON:
         {
             NewStdAttr( HTML_STRIKE_ON, &aAttrTab.pStrike,
-                        SvxCrossedOutItem(STRIKEOUT_SINGLE) );
+                        SvxCrossedOutItem(STRIKEOUT_SINGLE, RES_CHRATR_CROSSEDOUT) );
         }
         break;
 
     case HTML_UNDERLINE_ON:
         {
             NewStdAttr( HTML_UNDERLINE_ON, &aAttrTab.pUnderline,
-                        SvxUnderlineItem(UNDERLINE_SINGLE) );
+                        SvxUnderlineItem(UNDERLINE_SINGLE, RES_CHRATR_UNDERLINE) );
         }
         break;
 
     case HTML_SUPERSCRIPT_ON:
         {
             NewStdAttr( HTML_SUPERSCRIPT_ON, &aAttrTab.pEscapement,
-                        SvxEscapementItem(HTML_ESC_SUPER,HTML_ESC_PROP) );
+                        SvxEscapementItem(HTML_ESC_SUPER,HTML_ESC_PROP, RES_CHRATR_ESCAPEMENT) );
         }
         break;
 
     case HTML_SUBSCRIPT_ON:
         {
             NewStdAttr( HTML_SUBSCRIPT_ON, &aAttrTab.pEscapement,
-                        SvxEscapementItem(HTML_ESC_SUB,HTML_ESC_PROP) );
+                        SvxEscapementItem(HTML_ESC_SUB,HTML_ESC_PROP, RES_CHRATR_ESCAPEMENT) );
         }
         break;
 
     case HTML_BLINK_ON:
         {
             NewStdAttr( HTML_BLINK_ON, &aAttrTab.pBlink,
-                        SvxBlinkItem( TRUE ) );
+                        SvxBlinkItem( TRUE, RES_CHRATR_BLINK ) );
         }
         break;
 
@@ -2224,7 +2223,7 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
             {
                 pTxtNode->SwCntntNode::SetAttr(
                     SvxULSpaceItem( rULSpace.GetUpper(),
-                         AM_NOSPACE==eMode ? 0 : HTML_PARSPACE ) );
+                         AM_NOSPACE==eMode ? 0 : HTML_PARSPACE, RES_UL_SPACE ) );
             }
         }
     }
@@ -2478,7 +2477,7 @@ void SwHTMLParser::AddParSpace()
         else
         {
             pTxtNode->SwCntntNode::SetAttr(
-                SvxULSpaceItem( rULSpace.GetUpper(), HTML_PARSPACE )  );
+                SvxULSpaceItem( rULSpace.GetUpper(), HTML_PARSPACE, RES_UL_SPACE )  );
         }
     }
 }
@@ -3625,7 +3624,7 @@ void SwHTMLParser::NewBasefontAttr()
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        SvxFontHeightItem aFontHeight( aFontHeights[nSize-1] );
+        SvxFontHeightItem aFontHeight( aFontHeights[nSize-1], 100, RES_CHRATR_FONTSIZE );
         aItemSet.Put( aFontHeight );
         aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
         aItemSet.Put( aFontHeight );
@@ -3639,7 +3638,7 @@ void SwHTMLParser::NewBasefontAttr()
     }
     else
     {
-        SvxFontHeightItem aFontHeight( aFontHeights[nSize-1] );
+        SvxFontHeightItem aFontHeight( aFontHeights[nSize-1], 100, RES_CHRATR_FONTSIZE );
         InsertAttr( &aAttrTab.pFontHeight, aFontHeight, pCntxt );
         aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
         InsertAttr( &aAttrTab.pFontHeightCJK, aFontHeight, pCntxt );
@@ -3827,7 +3826,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
 
         if( nFontHeight )
         {
-            SvxFontHeightItem aFontHeight( nFontHeight );
+            SvxFontHeightItem aFontHeight( nFontHeight, 100, RES_CHRATR_FONTSIZE );
             aItemSet.Put( aFontHeight );
             aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
             aItemSet.Put( aFontHeight );
@@ -3835,10 +3834,10 @@ void SwHTMLParser::NewFontAttr( int nToken )
             aItemSet.Put( aFontHeight );
         }
         if( bColor )
-            aItemSet.Put( SvxColorItem(aColor) );
+            aItemSet.Put( SvxColorItem(aColor, RES_CHRATR_COLOR) );
         if( aFontName.Len() )
         {
-            SvxFontItem aFont( eFamily, aFontName, aStyleName, ePitch, eEnc );
+            SvxFontItem aFont( eFamily, aFontName, aStyleName, ePitch, eEnc, RES_CHRATR_FONT );
             aItemSet.Put( aFont );
             aFont.SetWhich( RES_CHRATR_CJK_FONT );
             aItemSet.Put( aFont );
@@ -3856,7 +3855,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
     {
         if( nFontHeight )
         {
-            SvxFontHeightItem aFontHeight( nFontHeight );
+            SvxFontHeightItem aFontHeight( nFontHeight, 100, RES_CHRATR_FONTSIZE );
             InsertAttr( &aAttrTab.pFontHeight, aFontHeight, pCntxt );
             aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
             InsertAttr( &aAttrTab.pFontHeightCJK, aFontHeight, pCntxt );
@@ -3864,10 +3863,10 @@ void SwHTMLParser::NewFontAttr( int nToken )
             InsertAttr( &aAttrTab.pFontHeightCTL, aFontHeight, pCntxt );
         }
         if( bColor )
-            InsertAttr( &aAttrTab.pFontColor, SvxColorItem(aColor), pCntxt );
+            InsertAttr( &aAttrTab.pFontColor, SvxColorItem(aColor, RES_CHRATR_COLOR), pCntxt );
         if( aFontName.Len() )
         {
-            SvxFontItem aFont( eFamily, aFontName, aStyleName, ePitch, eEnc );
+            SvxFontItem aFont( eFamily, aFontName, aStyleName, ePitch, eEnc, RES_CHRATR_FONT );
             InsertAttr( &aAttrTab.pFont, aFont, pCntxt );
             aFont.SetWhich( RES_CHRATR_CJK_FONT );
             InsertAttr( &aAttrTab.pFontCJK, aFont, pCntxt );
@@ -3953,7 +3952,7 @@ void SwHTMLParser::NewPara()
     }
 
     if( SVX_ADJUST_END != eParaAdjust )
-        InsertAttr( &aAttrTab.pAdjust, SvxAdjustItem(eParaAdjust), pCntxt );
+        InsertAttr( &aAttrTab.pAdjust, SvxAdjustItem(eParaAdjust, RES_PARATR_ADJUST), pCntxt );
 
     // und auf den Stack packen
     PushContext( pCntxt );
@@ -4086,7 +4085,7 @@ void SwHTMLParser::NewHeading( int nToken )
     }
 
     if( SVX_ADJUST_END != eParaAdjust )
-        InsertAttr( &aAttrTab.pAdjust, SvxAdjustItem(eParaAdjust), pCntxt );
+        InsertAttr( &aAttrTab.pAdjust, SvxAdjustItem(eParaAdjust, RES_PARATR_ADJUST), pCntxt );
 
     // udn auf den Stack packen
     PushContext( pCntxt );
@@ -4939,7 +4938,7 @@ void SwHTMLParser::InsertSpacer()
             SetSpace( aSpace, aDummyItemSet, aDummyPropInfo, aFrmSet );
 
             // den Inhalt schuetzen
-            SvxProtectItem aProtectItem;
+            SvxProtectItem aProtectItem( RES_PROTECT) ;
             aProtectItem.SetCntntProtect( TRUE );
             aFrmSet.Put( aProtectItem );
 
@@ -4990,7 +4989,7 @@ void SwHTMLParser::InsertSpacer()
             }
             else
             {
-                NewAttr( &aAttrTab.pULSpace, SvxULSpaceItem( 0, (USHORT)nSize ) );
+                NewAttr( &aAttrTab.pULSpace, SvxULSpaceItem( 0, (USHORT)nSize, RES_UL_SPACE ) );
                 EndAttr( aAttrTab.pULSpace, 0, FALSE );
 
                 AppendTxtNode();    // nicht am Abstand drehen!
@@ -5018,7 +5017,7 @@ void SwHTMLParser::InsertSpacer()
                 GetMarginsFromContextWithNumBul( nLeft, nRight, nIndent );
                 nIndent += (short)nSize;
 
-                SvxLRSpaceItem aLRItem;
+                SvxLRSpaceItem aLRItem( RES_LR_SPACE );
                 aLRItem.SetTxtLeft( nLeft );
                 aLRItem.SetRight( nRight );
                 aLRItem.SetTxtFirstLineOfst( nIndent );
@@ -5028,7 +5027,7 @@ void SwHTMLParser::InsertSpacer()
             }
             else
             {
-                NewAttr( &aAttrTab.pKerning, SvxKerningItem( (short)nSize ) );
+                NewAttr( &aAttrTab.pKerning, SvxKerningItem( (short)nSize, RES_CHRATR_KERNING ) );
                 String aTmp( ' ' );
                 pDoc->Insert( *pPam, aTmp /*, CHARSET_ANSI*/, true );
                 EndAttr( aAttrTab.pKerning );
@@ -5208,7 +5207,7 @@ void SwHTMLParser::InsertLineBreak()
     } // kein CLEAR
 
     // Styles parsen
-    SvxFmtBreakItem aBreakItem;
+    SvxFmtBreakItem aBreakItem( SVX_BREAK_NONE, RES_BREAK );
     BOOL bBreakItem = FALSE;
     if( HasStyleOptions( aStyle, aId, aClass ) )
     {
@@ -5353,7 +5352,7 @@ void SwHTMLParser::InsertHorzRule()
             aBorderLine.SetDistance( DEF_DOUBLE_LINE0_DIST );
         }
 
-        SvxBoxItem aBoxItem;
+        SvxBoxItem aBoxItem(RES_BOX);
         aBoxItem.SetLine( &aBorderLine, BOX_LINE_BOTTOM );
         _HTMLAttr* pTmp = new _HTMLAttr( *pPam->GetPoint(), aBoxItem );
         aSetAttrTab.Insert( pTmp, aSetAttrTab.Count() );
