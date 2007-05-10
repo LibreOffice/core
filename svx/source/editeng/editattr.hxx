@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editattr.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:34:32 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:45:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef _EDITATTR_HXX
 #define _EDITATTR_HXX
 
-#include <eeitemid.hxx>
+#include <eeitem.hxx>
 
 class SvxFont;
 class SvxFontItem;
