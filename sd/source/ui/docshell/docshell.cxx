@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:12:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:28:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,15 +37,6 @@
 #include "precompiled_sd.hxx"
 
 #include "DrawDocShell.hxx"
-
-#define ITEMID_FONTLIST                 SID_ATTR_CHAR_FONTLIST
-#define ITEMID_COLOR_TABLE              SID_COLOR_TABLE
-#define ITEMID_GRADIENT_LIST            SID_GRADIENT_LIST
-#define ITEMID_HATCH_LIST               SID_HATCH_LIST
-#define ITEMID_BITMAP_LIST              SID_BITMAP_LIST
-#define ITEMID_DASH_LIST                SID_DASH_LIST
-#define ITEMID_LINEEND_LIST             SID_LINEEND_LIST
-#define ITEMID_SEARCH                   SID_SEARCH_ITEM
 
 #ifndef _PSTM_HXX
 #include <tools/pstm.hxx>
@@ -532,12 +523,12 @@ SfxUndoManager* DrawDocShell::GetUndoManager()
 
 void DrawDocShell::UpdateTablePointers()
 {
-    PutItem( SvxColorTableItem( mpDoc->GetColorTable() ) );
-    PutItem( SvxGradientListItem( mpDoc->GetGradientList() ) );
-    PutItem( SvxHatchListItem( mpDoc->GetHatchList() ) );
-    PutItem( SvxBitmapListItem( mpDoc->GetBitmapList() ) );
-    PutItem( SvxDashListItem( mpDoc->GetDashList() ) );
-    PutItem( SvxLineEndListItem( mpDoc->GetLineEndList() ) );
+    PutItem( SvxColorTableItem( mpDoc->GetColorTable(), SID_COLOR_TABLE ) );
+    PutItem( SvxGradientListItem( mpDoc->GetGradientList(), SID_GRADIENT_LIST ) );
+    PutItem( SvxHatchListItem( mpDoc->GetHatchList(), SID_HATCH_LIST ) );
+    PutItem( SvxBitmapListItem( mpDoc->GetBitmapList(), SID_BITMAP_LIST ) );
+    PutItem( SvxDashListItem( mpDoc->GetDashList(), SID_DASH_LIST ) );
+    PutItem( SvxLineEndListItem( mpDoc->GetLineEndList(), SID_LINEEND_LIST ) );
 
     UpdateFontList();
 }
