@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CollectionView.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:55:22 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:21:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,9 @@
 #ifndef _COMPHELPER_INTERACTION_HXX_
 #include <comphelper/interaction.hxx>
 #endif
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
+#endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
@@ -98,6 +101,9 @@
 #ifndef _COM_SUN_STAR_TASK_INTERACTIONCLASSIFICATION_HPP_
 #include <com/sun/star/task/InteractionClassification.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_SQLEXCEPTION_HPP_
+#include <com/sun/star/sdbc/SQLException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
 #endif
@@ -106,6 +112,9 @@
 #endif
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
 #endif
 
 #define FILEDIALOG_DEF_IMAGEBORDER  10
@@ -121,6 +130,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::sdbc;
 using namespace comphelper;
 // -----------------------------------------------------------------------------
 DBG_NAME(OCollectionView)
@@ -283,6 +293,10 @@ IMPL_LINK( OCollectionView, NewFolder_Click, PushButton*, EMPTYARG )
         Reference<XHierarchicalNameContainer> xNameContainer(m_xContent,UNO_QUERY);
         if ( dbaui::insertHierachyElement(this,m_xORB,xNameContainer,String(),m_bCreateForm) )
             m_aView.Initialize(m_xContent,String());
+    }
+    catch( const SQLException& )
+    {
+        showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), this, m_xORB );
     }
     catch(Exception)
     {
