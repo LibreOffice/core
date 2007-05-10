@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:12:35 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:03:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #include <hintids.hxx>
 #ifndef _DATE_HXX
 #include <tools/date.hxx>
@@ -745,9 +744,9 @@ void Reader::SetNoOutlineNum( SwDoc& rDoc )
 
 void Reader::ResetFrmFmtAttrs( SfxItemSet &rFrmSet )
 {
-    rFrmSet.Put( SvxLRSpaceItem() );
-    rFrmSet.Put( SvxULSpaceItem() );
-    rFrmSet.Put( SvxBoxItem() );
+    rFrmSet.Put( SvxLRSpaceItem(RES_LR_SPACE) );
+    rFrmSet.Put( SvxULSpaceItem(RES_UL_SPACE) );
+    rFrmSet.Put( SvxBoxItem(RES_BOX) );
 }
 
 
