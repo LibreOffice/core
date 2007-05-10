@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormController.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:19:59 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:01:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,10 @@
 #include <com/sun/star/form/FormControllerDispatcher.idl>
 #endif
 
+#ifndef __com_sun_star_form_runtime_XFormOperations_idl__
+#include <com/sun/star/form/runtime/XFormOperations.idl>
+#endif
+
 //=============================================================================
 
  module com {  module sun {  module star {  module form {
@@ -111,6 +115,13 @@ published service FormController
         functionality to the controller by querying the dispatch interceptor for it.</p>
     */
     [optional] service FormControllerDispatcher;
+
+    /** denotes the instance which is used to implement operations on the form which the controller
+        works for.
+
+        <p>This instance can be used, for instance, to determine the current state of certain form features.</p>
+    */
+//    [optional, property] ::com::sun::star::form::runtime::XFormOperations FormOperations;
 
     /** is used for notifying the (de)activation of the controller.
      */
