@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.66 $
+#   $Revision: 1.67 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-01 15:58:43 $
+#   last change: $Author: kz $ $Date: 2007-05-10 15:10:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,16 @@ ooolanguagepack : $(foreach,i,$(alllangiso) ooolanguagepack_$i)
 
 sdkoo: $(foreach,i,$(alllangiso) sdkoo_$i)
 
+broffice: $(foreach,i,$(alllangiso) broffice_$i)
+
+brofficedev: $(foreach,i,$(alllangiso) brofficedev_$i)
+
+brofficewithjre: $(foreach,i,$(alllangiso) brofficewithjre_$i)
+
+broolanguagepack : $(foreach,i,$(alllangiso) broolanguagepack_$i)
+
+sdkbro: $(foreach,i,$(alllangiso) sdkbro_$i)
+
 MSIOFFICETEMPLATESOURCE=$(PRJ)$/inc_openoffice$/windows$/msi_templates
 MSILANGPACKTEMPLATESOURCE=$(PRJ)$/inc_ooolangpack$/windows$/msi_templates
 MSIURETEMPLATESOURCE=$(PRJ)$/inc_ure$/windows$/msi_templates
@@ -179,6 +189,16 @@ $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $(ADDDEPS)
 $(foreach,i,$(alllangiso) sdkoo_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) ure_$i) : $(ADDDEPS)
+
+$(foreach,i,$(alllangiso) broffice_$i) : $(ADDDEPS)
+
+$(foreach,i,$(alllangiso) brofficedev_$i) : $(ADDDEPS)
+
+$(foreach,i,$(alllangiso) brofficewithjre_$i) : $(ADDDEPS)
+
+$(foreach,i,$(alllangiso) broolanguagepack_$i) : $(ADDDEPS)
+
+$(foreach,i,$(alllangiso) sdkbro_$i) : $(ADDDEPS)
 
 .IF "$(MAKETARGETS)"!=""
 $(MAKETARGETS) : $(ADDDEPS)
@@ -255,6 +275,72 @@ sdkoo_% :
     $(RM) $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice_SDK$/install$/ $(@:b))$/gid_*
     rmdir $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice_SDK$/install$/ $(@:b))$/SDK/OpenOffice.org
     cd $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice_SDK$/install$/ $(@:b)) && hdiutil create -srcfolder 'SDK' -volname 'OpenOffice.org SDK' -ov -o $(subst,$(@:s/_/ /:1),OpenOffice.org-SDK-$(shell sed -n '/^OpenOffice_SDK$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b))
+.ENDIF                  # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
+
+.IF "$(PKGFORMAT)"!=""
+$(foreach,i,$(alllangiso) broffice_$i) : $$@{$(PKGFORMAT:^".")}
+.IF "$(MAKETARGETS)"!="" && "$(PKGFORMAT)"!=""
+.IF "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)" && "$(MAKETARGETS:s/archive//)"=="$(MAKETARGETS)"
+$(MAKETARGETS) : $$@{$(PKGFORMAT:^".")}
+$(MAKETARGETS){$(PKGFORMAT:^".")} : $(ADDDEPS)
+.ENDIF			# "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)" && "$(MAKETARGETS:s/archive//)"=="$(MAKETARGETS)"
+.ENDIF			# "$(MAKETARGETS)"!="" && "$(PKGFORMAT)"!=""
+broffice_%{$(PKGFORMAT:^".")} :
+.ELSE			# "$(PKGFORMAT)"!=""
+broffice_% :
+.ENDIF			# "$(PKGFORMAT)"!=""
+.IF "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!="portable"
+    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -addsystemintegration $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH))
+.ELSE                   # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
+    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -destdir $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice$/install$/ $(@:b))_inprogress$/ -simple staging
+    +$(RM) $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice$/install$/ $(@:b))$/gid_*
+    +-$(MKDIR) $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice$/install$/ $(@:b))$/staging$/.background
+    +$(COPY) $(PRJ)$/res/osxdndinstall.png $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice$/install$/ $(@:b))$/staging$/.background$/background.png
+    +$(COPY) $(PRJ)$/res/DS_Store $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice$/install$/ $(@:b))$/staging$/.DS_Store
+    +ln -s /Applications $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice$/install$/ $(@:b))$/staging$/
+    +cd $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice$/install$/ $(@:b)) && hdiutil makehybrid -hfs -hfs-openfolder staging staging \
+    -hfs-volume-name BrOffice.org -ov -o tmp && hdiutil convert -ov -format UDZO tmp.dmg \
+    -o $(subst,$(@:s/_/ /:1),BrOffice.org-$(shell sed -n '/^BrOffice$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b)) && $(RM) tmp.dmg
+    
+.ENDIF                  # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
+
+.IF "$(PKGFORMAT)"!=""
+$(foreach,i,$(alllangiso) brofficewithjre_$i) : $$@{$(PKGFORMAT:^".")}
+brofficewithjre_%{$(PKGFORMAT:^".")} :
+.ELSE			# "$(PKGFORMAT)"!=""
+brofficewithjre_% :
+.ENDIF			# "$(PKGFORMAT)"!=""
+    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice_wJRE -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -addchildprojects -addsystemintegration $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH))
+
+.IF "$(PKGFORMAT)"!=""
+$(foreach,i,$(alllangiso) brofficedev_$i) : $$@{$(PKGFORMAT:^".")}
+brofficedev_%{$(PKGFORMAT:^".")} :
+.ELSE			# "$(PKGFORMAT)"!=""
+brofficedev_% :
+.ENDIF			# "$(PKGFORMAT)"!=""
+    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice_Dev -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH))
+
+.IF "$(PKGFORMAT)"!=""
+$(foreach,i,$(alllangiso) broolanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
+broolanguagepack_%{$(PKGFORMAT:^".")} :
+.ELSE			# "$(PKGFORMAT)"!=""
+broolanguagepack_% :
+.ENDIF			# "$(PKGFORMAT)"!=""
+    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist_language.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSILANGPACKTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -languagepack $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH))
+
+.IF "$(PKGFORMAT)"!=""
+$(foreach,i,$(alllangiso) sdkbro_$i) : $$@{$(PKGFORMAT:^".")}
+sdkbro_%{$(PKGFORMAT:^".")} :
+.ELSE			# "$(PKGFORMAT)"!=""
+sdkbro_% :
+.ENDIF			# "$(PKGFORMAT)"!=""
+.IF "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!="portable"
+    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice_SDK -packagelist $(PRJ)$/inc_sdkoo$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSISDKOOTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles $(subst,xxx,$(@:e:s/.//) -dontstrip $(PKGFORMATSWITCH))
+.ELSE                   # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
+    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice_SDK -packagelist $(PRJ)$/inc_sdkoo$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -destdir $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice_SDK$/install$/ $(@:b))_inprogress$/ -simple 'SDK/BrOffice.org SDK'
+    +$(RM) $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice_SDK$/install$/ $(@:b))$/gid_*
+    +rmdir $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice_SDK$/install$/ $(@:b))$/SDK/BrOffice.org
+    +cd $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice_SDK$/install$/ $(@:b)) && hdiutil create -srcfolder 'SDK' -volname 'BrOffice.org SDK' -ov -o $(subst,$(@:s/_/ /:1),BrOffice.org-SDK-$(shell sed -n '/^BrOffice_SDK$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b))
 .ENDIF                  # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
 
 .ELSE			# "$(alllangiso)"!=""
