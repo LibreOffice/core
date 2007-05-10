@@ -1,5 +1,6 @@
 mkdir: %_DEST%\inc%_EXT%\external
 mkdir: %_DEST%\inc%_EXT%\external\neon
-..\%__SRC%\inc\*.h %_DEST%\inc%_EXT%\external\neon\*.h
+..\version.mk %_DEST%\inc%_EXT%\external\neon\version.mk
+..\%__SRC%\inc\ne_*.h %_DEST%\inc%_EXT%\external\neon\ne_*.h
 ..\%__SRC%\slb\neon.lib %_DEST%\lib%_EXT%\neon.lib
 ..\%__SRC%\lib\libneon.a %_DEST%\lib%_EXT%\libneon.a
