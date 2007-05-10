@@ -4,9 +4,9 @@
  *
  *  $RCSfile: align.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:25:19 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:35:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,12 +47,6 @@
 #include "dialogs.hrc"
 #include "align.hrc"
 #include "rotmodit.hxx"
-
-#define ITEMID_HORJUSTIFY       SID_ATTR_ALIGN_HOR_JUSTIFY
-#define ITEMID_VERJUSTIFY       SID_ATTR_ALIGN_VER_JUSTIFY
-#define ITEMID_LINEBREAK        SID_ATTR_ALIGN_LINEBREAK
-#define ITEMID_MARGIN           SID_ATTR_ALIGN_MARGIN
-#define ITEMID_FRAMEDIR         SID_ATTR_FRAMEDIRECTION
 
 #include "algitem.hxx"
 #include "frmdiritem.hxx"
