@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:18:21 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:38:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,8 @@
 #include <basic/basmgr.hxx>
 #endif
 
-#define ITEMID_MACRO 0
+
 #include "macropg.hxx"
-#undef ITEMID_MACRO
 
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
