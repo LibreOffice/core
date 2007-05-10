@@ -4,9 +4,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:40:37 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:40:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,15 +42,15 @@
 
 // include ---------------------------------------------------------------
 
-#define ITEMID_BRUSH        0
-#define ITEMID_BOX          0
-#define ITEMID_BOXINFO      0
-#define ITEMID_SHADOW       0
-#define ITEMID_PAPERBIN     0
-#define ITEMID_LRSPACE      0
-#define ITEMID_ULSPACE      0
-#define ITEMID_SIZE         0
-#define ITEMID_FRAMEDIR     0
+
+
+
+
+
+
+
+
+
 
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
@@ -89,9 +89,9 @@
 #include "page.hrc"
 #include "helpid.hrc"
 
-#define ITEMID_PAGE             0
-#define ITEMID_SETITEM          0
-#define ITEMID_PTR              0
+
+
+
 
 #include "page.hxx"
 #include "pageitem.hxx"
