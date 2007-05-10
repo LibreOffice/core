@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ooo.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:31:27 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:40:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ ModalDialog RID_DEFAULTABOUT
     {
         Pos = MAP_APPFONT ( 54 , 25 ) ;
         Size = MAP_APPFONT ( 168 , 51 ) ;
-        Text[ en-US ] ="Copyright 2000-2006 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org.\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ en-US ] ="Copyright 2000-2007 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org.\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
         WordBreak = TRUE ;
     };
     StringArray ABOUT_STR_DEVELOPER_ARY
