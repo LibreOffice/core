@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 15:49:46 $
+#   last change: $Author: kz $ $Date: 2007-05-10 13:09:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,8 @@
 #*************************************************************************
 
 XSLDIR=$(PRJ)$/util
-XCSROOT=$(PWD)$/$(PRJ)
+ABSXCSROOT=$(PWD)$/$(PRJ)
+XCSROOT=..
 DTDDIR=$(PRJ)
 PROCESSOUT=$(MISC)
 PROCESSORDIR=$(CLASSDIR)
