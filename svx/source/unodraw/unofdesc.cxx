@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofdesc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:25:17 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:02:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,37 +46,30 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
 
-#define ITEMID_FONT EE_CHAR_FONTINFO
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include <fontitem.hxx>
 #endif
 
-#define ITEMID_FONTHEIGHT EE_CHAR_FONTHEIGHT
 #ifndef _SVX_FHGTITEM_HXX //autoge
 #include <fhgtitem.hxx>
 #endif
 
-#define ITEMID_POSTURE EE_CHAR_ITALIC
 #ifndef _SVX_POSTITEM_HXX //autogen
 #include <postitem.hxx>
 #endif
 
-#define ITEMID_UNDERLINE EE_CHAR_UNDERLINE
 #ifndef _SVX_UDLNITEM_HXX //autogen
 #include <udlnitem.hxx>
 #endif
 
-#define ITEMID_WEIGHT EE_CHAR_WEIGHT
 #ifndef _SVX_WGHTITEM_HXX //autogen
 #include <wghtitem.hxx>
 #endif
 
-#define ITEMID_CROSSEDOUT EE_CHAR_STRIKEOUT
 #ifndef _SVX_CRSDITEM_HXX //autog
 #include <crsditem.hxx>
 #endif
 
-#define ITEMID_WORDLINEMODE EE_CHAR_WLM
 #ifndef _SVX_WRLMITEM_HXX //aut
 #include <wrlmitem.hxx>
 #endif
