@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.176 $
+ *  $Revision: 1.177 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:23:13 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:10:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1386,7 +1386,7 @@ void SwWW8ImplReader::Read_Tab(USHORT , const BYTE* pData, short nLen)
     BYTE nIns = pData[nDel*2+1];
     WW8_TBD* pTyp = (WW8_TBD*)(pData + 2*nDel + 2*nIns + 2);// Typ - Array
 
-    SvxTabStopItem aAttr(0, 0, SVX_TAB_ADJUST_DEFAULT);
+    SvxTabStopItem aAttr(0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP);
 
     const SwTxtFmtColl* pSty = 0;
     USHORT nTabBase;
@@ -1575,7 +1575,7 @@ void SwWW8ImplReader::ImportDop()
         nDefTabSiz = 709;
 
     // wir wollen genau einen DefaultTab
-    SvxTabStopItem aNewTab( 1, USHORT(nDefTabSiz), SVX_TAB_ADJUST_DEFAULT );
+    SvxTabStopItem aNewTab( 1, USHORT(nDefTabSiz), SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
     ((SvxTabStop&)aNewTab[0]).GetAdjustment() = SVX_TAB_ADJUST_DEFAULT;
 
     rDoc.GetAttrPool().SetPoolDefaultItem( aNewTab );
@@ -2721,7 +2721,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             {
                 // Always insert a txtnode for a column break, e.g. ##
                 AppendTxtNode(*pPaM->GetPoint());
-                rDoc.Insert(*pPaM, SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE), 0);
+                rDoc.Insert(*pPaM, SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK), 0);
             }
             break;
         case 0x7:
@@ -3195,7 +3195,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
                     AppendTxtNode(*pPaM->GetPoint());
                 }
                 // <--
-                rDoc.Insert(*pPaM, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE), 0);
+                rDoc.Insert(*pPaM, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK), 0);
                 bPgSecBreak = false;
             }
         }
