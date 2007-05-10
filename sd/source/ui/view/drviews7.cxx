@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:31:47 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:34:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,6 @@
 #include <svx/eeitem.hxx>
 #endif
 #ifndef _FLDITEM_HXX
-#define ITEMID_FIELD    EE_FEATURE_FIELD
 #include <svx/flditem.hxx>
 #endif
 #ifndef _SVXIDS_HXX
