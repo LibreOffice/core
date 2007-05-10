@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:01:48 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:26:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,9 @@
 #ifndef _DBAUI_TABLESSINGLEDLG_HXX_
 #include "TablesSingleDlg.hxx"
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 
 //.........................................................................
 namespace dbaui
@@ -148,7 +151,6 @@ DBG_NAME(OTableSubscriptionPage)
 //------------------------------------------------------------------------
     OTableSubscriptionPage::OTableSubscriptionPage( Window* pParent, const SfxItemSet& _rCoreAttrs,OTableSubscriptionDialog* _pTablesDlg )
         :OGenericAdministrationPage( pParent, ModuleRes(PAGE_TABLESUBSCRIPTION), _rCoreAttrs )
-        ,OContainerListener( m_aNotifierMutex )
         ,m_aTables              (this, ModuleRes(FL_SEPARATOR1))
         ,m_aTablesList          (this, NULL,ModuleRes(CTL_TABLESUBSCRIPTION),sal_True)
         ,m_aExplanation         (this, ModuleRes(FT_FILTER_EXPLANATION))
@@ -183,8 +185,6 @@ DBG_NAME(OTableSubscriptionPage)
             ::comphelper::disposeComponent(m_xCurrentConnection);
         }
         catch (RuntimeException&) { }
-
-        retireNotifiers();
 
         DBG_DTOR(OTableSubscriptionPage,NULL);
     }
@@ -225,23 +225,6 @@ DBG_NAME(OTableSubscriptionPage)
                     aOldSize
                     );
         }
-    }
-    //------------------------------------------------------------------------
-    void OTableSubscriptionPage::retireNotifiers()
-    {
-        for (   AdapterArrayIterator aLoop = m_aNotifiers.begin();
-                aLoop != m_aNotifiers.end();
-                ++aLoop
-            )
-        {
-            if ( *aLoop )
-            {
-                ( *aLoop )->dispose();
-                ( *aLoop )->release();
-                ( *aLoop ) = NULL;
-            }
-        }
-        m_aNotifiers.clear( );
     }
     //------------------------------------------------------------------------
     void OTableSubscriptionPage::implCheckTables(const Sequence< ::rtl::OUString >& _rTables)
@@ -338,7 +321,7 @@ DBG_NAME(OTableSubscriptionPage)
 
         // get the name of the data source we're working for
         SFX_ITEMSET_GET(_rSet, pNameItem, SfxStringItem, DSID_NAME, sal_True);
-        DBG_ASSERT(pNameItem, "OTableSubscriptionPage::ActivatePage: missing the name attribute!");
+        DBG_ASSERT(pNameItem, "OTableSubscriptionPage::implInitControls: missing the name attribute!");
         String sDSName = pNameItem->GetValue();
 
         if (bValid && sDSName.Len() && !m_xCurrentConnection.is() )
@@ -346,7 +329,7 @@ DBG_NAME(OTableSubscriptionPage)
 
             // the PropertyValues for the current dialog settings
             Sequence< PropertyValue > aConnectionParams;
-            DBG_ASSERT(m_pTablesDlg, "OTableSubscriptionPage::ActivatePage : need a parent dialog doing the translation!");
+            DBG_ASSERT(m_pTablesDlg, "OTableSubscriptionPage::implInitControls: need a parent dialog doing the translation!");
             if ( m_pTablesDlg )
             {
                 if (!m_pTablesDlg->getCurrentSettings(aConnectionParams))
@@ -461,13 +444,9 @@ DBG_NAME(OTableSubscriptionPage)
                         m_bCatalogAtStart = xMeta->isCatalogAtStart();
                     }
                 }
-                catch(SQLException&)
-                {
-                    DBG_ERROR("OTableSubscriptionPage::ActivatePage : could not retrieve the qualifier separator for the used connection !");
-                }
                 catch(Exception&)
                 {
-                    OSL_ENSURE(0,"Exception catched!");
+                    DBG_UNHANDLED_EXCEPTION();
                 }
             }
         }
@@ -527,8 +506,6 @@ DBG_NAME(OTableSubscriptionPage)
             ::comphelper::disposeComponent(m_xCurrentConnection);
         }
         catch (RuntimeException&) { }
-
-        retireNotifiers();
 
         return nResult;
     }
@@ -678,73 +655,6 @@ DBG_NAME(OTableSubscriptionPage)
         }
 
         return pParent;
-    }
-
-    //------------------------------------------------------------------------
-    OPageSettings* OTableSubscriptionPage::createViewSettings()
-    {
-        return new OTablePageViewSettings;
-    }
-
-    //------------------------------------------------------------------------
-    void OTableSubscriptionPage::fillViewSettings(OPageSettings* _pSettings)
-    {
-        OTablePageViewSettings* pMySettings = static_cast<OTablePageViewSettings*>(_pSettings);
-        if (!pMySettings)
-            return;
-
-        // collect the names of the expanded extries
-        EntryPredicateCheck aExpandedCheck =&SvListView::IsExpanded;
-        collectEntryPaths(pMySettings->aExpandedEntries, aExpandedCheck);
-
-        // collect the names of the selected extries
-        EntryPredicateCheck aSelectedCheck = &SvListView::IsSelected;
-        collectEntryPaths(pMySettings->aSelectedEntries, aSelectedCheck);
-
-        SvLBoxEntry* pCurEntry = m_aTablesList.GetCurEntry();
-        if (pCurEntry)
-        {
-            StringArray aLocalNames;
-            while (pCurEntry && (pCurEntry != m_aTablesList.getAllObjectsEntry()))
-            {
-                aLocalNames.push_back(m_aTablesList.GetEntryText(pCurEntry));
-                pCurEntry = m_aTablesList.GetParent(pCurEntry);
-            }
-
-            const ::rtl::OUString sSeparator = ::rtl::OUString::createFromAscii(".");
-
-            // assemble the name
-            pMySettings->sFocusEntry = ::rtl::OUString();
-            for (   StringArray::reverse_iterator aSegments = aLocalNames.rbegin();
-                    aSegments != aLocalNames.rend();
-
-                )
-            {
-                pMySettings->sFocusEntry += *aSegments;
-                if (++aSegments != aLocalNames.rend())
-                    pMySettings->sFocusEntry += sSeparator;
-            }
-        }
-    }
-
-    //------------------------------------------------------------------------
-    void OTableSubscriptionPage::restoreViewSettings(const OPageSettings* _pSettings)
-    {
-        const OTablePageViewSettings* pMySettings = static_cast<const OTablePageViewSettings*>(_pSettings);
-        if (!pMySettings)
-            return;
-
-        // expand the entries
-        // TODO: some kind of collapse all
-        actOnEntryPaths(pMySettings->aExpandedEntries, &OTableSubscriptionPage::doExpand);
-
-        // select the entries
-        m_aTablesList.SelectAll(sal_False);
-        actOnEntryPaths(pMySettings->aSelectedEntries, &OTableSubscriptionPage::doSelect);
-
-        SvLBoxEntry* pFocusEntry = getEntryFromPath(pMySettings->sFocusEntry);
-        if (pFocusEntry)
-            m_aTablesList.SetCurEntry(pFocusEntry);
     }
 
     //------------------------------------------------------------------------
@@ -917,78 +827,6 @@ DBG_NAME(OTableSubscriptionPage)
         return sal_True;
     }
 
-    //------------------------------------------------------------------------
-    void OTableSubscriptionPage::_elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException)
-    {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
-        ::rtl::OUString sName;
-        _rEvent.Accessor >>= sName;
-        DBG_ASSERT( 0 != sName.getLength(), "OTableSubscriptionPage::_elementInserted: invalid accessor!" );
-
-        m_aTablesList.addedTable( sName );
-
-        // update the checks from the table filter set on the data source
-        try
-        {
-            Reference< XPropertySet > xDS = m_pTablesDlg->getCurrentDataSource();
-            if ( xDS.is() )
-            {
-                Sequence< ::rtl::OUString > aTableFilter;
-                xDS->getPropertyValue( PROPERTY_TABLEFILTER ) >>= aTableFilter;
-                implCompleteTablesCheck( aTableFilter );
-            }
-        }
-        catch( const Exception& )
-        {
-        }
-
-        // update the check states
-        m_aTablesList.CheckButtons();
-    }
-
-    //------------------------------------------------------------------------
-    void OTableSubscriptionPage::_elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException)
-    {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
-        ::rtl::OUString sName;
-        _rEvent.Accessor >>= sName;
-        DBG_ASSERT( 0 != sName.getLength(), "OTableSubscriptionPage::_elementRemoved: invalid accessor!" );
-
-        m_aTablesList.removedTable( sName );
-
-        m_aTablesList.CheckButtons();
-    }
-
-    //------------------------------------------------------------------------
-    void OTableSubscriptionPage::_elementReplaced( const ContainerEvent& /*_rEvent*/ ) throw(RuntimeException)
-    {
-        DBG_ERROR( "OTableSubscriptionPage::_elementReplaced: not implemented!" );
-    }
-
-    //------------------------------------------------------------------------
-    void OTableSubscriptionPage::_disposing(const EventObject& _rSource) throw( RuntimeException)
-    {
-        Reference< XContainer > xSource( _rSource.Source, UNO_QUERY );
-
-        // look for the notifier which caused this
-        for (   AdapterArrayIterator aSearch = m_aNotifiers.begin();
-                aSearch != m_aNotifiers.end();
-                ++aSearch
-            )
-        {
-            if  (   *aSearch
-                &&  ( *aSearch )->getContainer().get() == xSource.get()
-                )
-            {
-                ( *aSearch )->release();
-                m_aNotifiers.erase( aSearch );
-                break;
-            }
-        }
-        // not interested in
-    }
     // -----------------------------------------------------------------------
     void OTableSubscriptionPage::fillControls(::std::vector< ISaveValueWrapper* >& /*_rControlList*/)
     {
