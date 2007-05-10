@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:26:55 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:06:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -792,4 +792,10 @@ FmFormObj* FmFormView::getMarkedGrid() const
     }
     return pObj;
 }
+
 // -----------------------------------------------------------------------------
+Reference< XFormController > FmFormView::GetFormController( const Reference< XForm >& _rxForm, const OutputDevice& _rDevice ) const
+{
+    return pImpl->getFormController( _rxForm, _rDevice );
+}
+
