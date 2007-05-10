@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionPage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:55:59 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:21:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,6 +236,7 @@ namespace dbaui
     {
         DBG_DTOR(OConnectionTabPage,NULL);
     }
+
     // -----------------------------------------------------------------------
     void OConnectionTabPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
