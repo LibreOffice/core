@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futempl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:25:05 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:31:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,6 @@
 #ifndef _MyEDITENG_HXX //autogen
 #include <svx/editeng.hxx>
 #endif
-#define ITEMID_LRSPACE          EE_PARA_LRSPACE
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
 #endif
