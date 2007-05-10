@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcomponenthandler.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:47:38 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:07:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,7 +211,6 @@
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
 #endif
-#define ITEMID_NUMBERINFO   SID_ATTR_NUMBERFORMAT_INFO
 #ifndef _SVX_NUMINF_HXX
 #include <svx/numinf.hxx>
 #endif
