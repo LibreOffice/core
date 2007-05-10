@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.148 $
+ *  $Revision: 1.149 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:38:33 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:29:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -899,7 +899,7 @@ static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighl
             else if ( nHelpId )
                 pHelp->Start( nHelpId, NULL );
             else
-                pHelp->Start( HELP_INDEX, NULL );
+                pHelp->Start( OOO_HELP_INDEX, NULL );
         }
         bDone = TRUE;
     }
