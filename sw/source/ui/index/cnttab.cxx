@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:11:46 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:19:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,9 +137,6 @@
 #endif
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
-#endif
-#ifndef _UIITEMS_HXX //autogen
-#include <uiitems.hxx>
 #endif
 #ifndef _FMTCOL_HXX //autogen
 #include <fmtcol.hxx>
