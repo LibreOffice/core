@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 11:46:32 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:48:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,9 +184,18 @@ String RID_STR_ICONSIZE
 {
     Text [ en-US ] = "Icon size" ;
 };
-String RID_STR_ICONSIZE_TYPE
+Resource RID_RSC_ENUM_ICONSIZE_TYPE
 {
-    Text [ en-US ] = "Small;Large" ;
+    String 1
+    {
+        Text [ de ] = "Klein" ;
+        Text [ en-US ] = "Small" ;
+    };
+    String 2
+    {
+        Text [ de ] = "Groß" ;
+        Text [ en-US ] = "Large" ;
+    };
 };
 String RID_STR_SHOW_POSITION
 {
@@ -452,53 +461,322 @@ String RID_STR_SUBMIT_TARGET
 {
     Text [ en-US ] = "Frame" ;
 };
-String RID_STR_BORDER_TYPE
+
+Resource RID_RSC_ENUM_BORDER_TYPE
 {
-    Text [ en-US ] = "Without frame;3D look;Flat" ;
+    String 1
+    {
+        Text [ de ] = "Ohne Rahmen" ;
+        Text [ en-US ] = "Without frame" ;
+    };
+    String 2
+    {
+        Text [ de ] = "3D-Look" ;
+        Text [ en-US ] = "3D look" ;
+    };
+    String 3
+    {
+        Text [ de ] = "Flach" ;
+        Text [ en-US ] = "Flat" ;
+    };
 };
-String RID_STR_LISTSOURCE_TYPE
+
+Resource RID_RSC_ENUM_LISTSOURCE_TYPE
 {
-    Text [ en-US ] = "Valuelist;Table;Query;Sql;Sql [Native];Tablefields" ;
+    String 1
+    {
+        Text [ de ] = "Werteliste";
+        Text [ en-US ] = "Valuelist";
+    };
+    String 2
+    {
+        Text [ de ] = "Tabelle";
+        Text [ en-US ] = "Table";
+    };
+    String 3
+    {
+        Text [ de ] = "Abfrage";
+        Text [ en-US ] = "Query";
+    };
+    String 4
+    {
+        Text [ de ] = "Sql";
+        Text [ en-US ] = "Sql";
+    };
+    String 5
+    {
+        Text [ de ] = "Sql [Native]";
+        Text [ en-US ] = "Sql [Native]";
+    };
+    String 6
+    {
+        Text [ de ] = "Tabellenfelder" ;
+        Text [ en-US ] = "Tablefields" ;
+    };
 };
-String RID_STR_ALIGNMENT
+Resource RID_RSC_ENUM_ALIGNMENT
 {
-    Text [ en-US ] = "Left;Center;Right" ;
+    String 1
+    {
+        Text [ de ] = "Links";
+        Text [ en-US ] = "Left";
+    };
+    String 2
+    {
+        Text [ de ] = "Zentriert";
+        Text [ en-US ] = "Center";
+    };
+    String 3
+    {
+        Text [ de ] = "Rechts" ;
+        Text [ en-US ] = "Right" ;
+    };
 };
-String RID_STR_ENUM_BUTTONTYPE
+Resource RID_RSC_ENUM_BUTTONTYPE
 {
-    Text [ en-US ] = "None;Submit form;Reset form;Open document/web page;First record;Previous record;Next record;Last record;Save record;Undo data entry;New record;Delete record;Refresh form";
+    String 1
+    {
+        Text [ de ] = "Keine";
+        Text [ en-US ] = "None";
+    };
+    String 2
+    {
+        Text [ de ] = "Formular übertragen";
+        Text [ en-US ] = "Submit form";
+    };
+    String 3
+    {
+        Text [ de ] = "Formular zurücksetzen";
+        Text [ en-US ] = "Reset form";
+    };
+    String 4
+    {
+        Text [ de ] = "Dokument/Webseite öffnen";
+        Text [ en-US ] = "Open document/web page";
+    };
+    String 5
+    {
+        Text [ de ] = "Erster Datensatz";
+        Text [ en-US ] = "First record";
+    };
+    String 6
+    {
+        Text [ de ] = "Vorheriger Datensatz";
+        Text [ en-US ] = "Previous record";
+    };
+    String 7
+    {
+        Text [ de ] = "Nächster Datensatz";
+        Text [ en-US ] = "Next record";
+    };
+    String 8
+    {
+        Text [ de ] = "Letzter Datensatz";
+        Text [ en-US ] = "Last record";
+    };
+    String 9
+    {
+        Text [ de ] = "Datensatz speichern";
+        Text [ en-US ] = "Save record";
+    };
+    String 10
+    {
+        Text [ de ] = "Rückgängig: Dateneingabe";
+        Text [ en-US ] = "Undo data entry";
+    };
+    String 11
+    {
+        Text [ de ] = "Neuer Datensatz";
+        Text [ en-US ] = "New record";
+    };
+    String 12
+    {
+        Text [ de ] = "Datensatz löschen";
+        Text [ en-US ] = "Delete record";
+    };
+    String 13
+    {
+        Text [ de ] = "Formular aktualisieren";
+        Text [ en-US ] = "Refresh form";
+    };
 };
-String RID_STR_ENUM_SUBMIT_METHOD
+Resource RID_RSC_ENUM_SUBMIT_METHOD
 {
-    Text [ en-US ] = "Get;Post" ;
+    String 1
+    {
+        Text [ de ] = "Get";
+        Text [ en-US ] = "Get";
+    };
+    String 2
+    {
+        Text [ de ] = "Post" ;
+        Text [ en-US ] = "Post" ;
+    };
 };
-String RID_STR_ENUM_SUBMIT_ENCODING
+Resource RID_RSC_ENUM_SUBMIT_ENCODING
 {
-    Text [ en-US ] = "URL;Multipart;Text" ;
+    String 1
+    {
+        Text [ de ] = "URL";
+        Text [ en-US ] = "URL";
+    };
+    String 2
+    {
+        Text [ de ] = "Multipart";
+        Text [ en-US ] = "Multipart";
+    };
+    String 3
+    {
+        Text [ de ] = "Text" ;
+        Text [ en-US ] = "Text" ;
+    };
 };
-String RID_STR_DATEFORMAT_LIST
+Resource RID_RSC_ENUM_DATEFORMAT_LIST
 {
-    Text [ en-US ] = "Standard (short);Standard (short YY);Standard (short YYYY);Standard (long);DD/MM/YY;MM/DD/YY;YY/MM/DD;DD/MM/YYYY;MM/DD/YYYY;YYYY/MM/DD;YY-MM-DD;YYYY-MM-DD" ;
+    String 1
+    {
+        Text [ de ] = "Standard (kurz)";
+        Text [ en-US ] = "Standard (short)";
+    };
+    String 2
+    {
+        Text [ de ] = "Standard (kurz JJ)";
+        Text [ en-US ] = "Standard (short YY)";
+    };
+    String 3
+    {
+        Text [ de ] = "Standard (kurz JJJJ)";
+        Text [ en-US ] = "Standard (short YYYY)";
+    };
+    String 4
+    {
+        Text [ de ] = "Standard (lang)";
+        Text [ en-US ] = "Standard (long)";
+    };
+    String 5
+    {
+        Text [ de ] = "TT.MM.JJ";
+        Text [ en-US ] = "DD/MM/YY";
+    };
+    String 6
+    {
+        Text [ de ] = "MM.TT.JJ";
+        Text [ en-US ] = "MM/DD/YY";
+    };
+    String 7
+    {
+        Text [ de ] = "JJ.MM.TT";
+        Text [ en-US ] = "YY/MM/DD";
+    };
+    String 8
+    {
+        Text [ de ] = "TT.MM.JJJJ";
+        Text [ en-US ] = "DD/MM/YYYY";
+    };
+    String 9
+    {
+        Text [ de ] = "MM.TT.JJJJ";
+        Text [ en-US ] = "MM/DD/YYYY";
+    };
+    String 10
+    {
+        Text [ de ] = "JJJJ.MM.TT";
+        Text [ en-US ] = "YYYY/MM/DD";
+    };
+    String 11
+    {
+        Text [ de ] = "JJ-MM-TT (DIN5008)";
+        Text [ en-US ] = "YY-MM-DD";
+    };
+    String 12
+    {
+        Text [ de ] = "JJJJ-MM-TT (DIN5008)" ;
+        Text [ en-US ] = "YYYY-MM-DD" ;
+    };
 };
-String RID_STR_TIMEFORMAT_LIST
+Resource RID_RSC_ENUM_TIMEFORMAT_LIST
 {
-    Text [ en-US ] = "13:45;13:45:00;01:45 PM;01:45:00 PM" ;
+    String 1
+    {
+        Text [ de ] = "13:45";
+        Text [ en-US ] = "13:45";
+    };
+    String 2
+    {
+        Text [ de ] = "13:45:00";
+        Text [ en-US ] = "13:45:00";
+    };
+    String 3
+    {
+        Text [ de ] = "01:45 PM";
+        Text [ en-US ] = "01:45 PM";
+    };
+    String 4
+    {
+        Text [ de ] = "01:45:00 PM" ;
+        Text [ en-US ] = "01:45:00 PM" ;
+    };
 };
-String RID_STR_ENUM_CHECKED
+Resource RID_RSC_ENUM_CHECKED
 {
-    Text [ en-US ] = "Not Selected;Selected;Not Defined" ;
+    String 1
+    {
+        Text [ de ] = "Nicht ausgewählt";
+        Text [ en-US ] = "Not Selected";
+    };
+    String 2
+    {
+        Text [ de ] = "Ausgewählt";
+        Text [ en-US ] = "Selected";
+    };
+    String 3
+    {
+        Text [ de ] = "Unbestimmt" ;
+        Text [ en-US ] = "Not Defined" ;
+    };
 };
-String RID_STR_ENUM_CYCLE
+Resource RID_RSC_ENUM_CYCLE
 {
-    Text [ en-US ] = "All records;Active record;Current page" ;
+    String 1
+    {
+        Text [ de ] = "Alle Datensätze";
+        Text [ en-US ] = "All records";
+    };
+    String 2
+    {
+        Text [ de ] = "Aktueller Datensatz";
+        Text [ en-US ] = "Active record";
+    };
+    String 3
+    {
+        Text [ de ] = "Aktuelle Seite" ;
+        Text [ en-US ] = "Current page" ;
+    };
 };
-String RID_STR_ENUM_NAVIGATION
+Resource RID_RSC_ENUM_NAVIGATION
 {
-    Text [ en-US ] = "No;Yes;Parent Form";
+    String 1
+    {
+        Text [ de ] = "Nein";
+        Text [ en-US ] = "No";
+    };
+    String 2
+    {
+        Text [ de ] = "Ja";
+        Text [ en-US ] = "Yes";
+    };
+    String 3
+    {
+        Text [ de ] = "Übergeordnetes Formular" ;
+        Text [ en-US ] = "Parent Form";
+    };
 };
-String RID_STR_ENUM_SUBMIT_TARGET
+Resource RID_RSC_ENUM_SUBMIT_TARGET
 {
-    Text = "_blank;_parent;_self;_top" ;
+    String 1 { Text = "_blank"; };
+    String 2 { Text = "_parent"; };
+    String 3 { Text = "_self"; };
+    String 4 { Text = "_top"; };
 };
 String RID_STR_EVT_APPROVEPARAMETER
 {
@@ -704,9 +982,18 @@ String RID_STR_ORIENTATION
 {
     Text [ en-US ] = "Orientation";
 };
-String RID_STR_ENUM_ORIENTATION
+Resource RID_RSC_ENUM_ORIENTATION
 {
-    Text [ en-US ] = "Horizontal;Vertical";
+    String 1
+    {
+        Text [ de ] = "Horizontal";
+        Text [ en-US ] = "Horizontal";
+    };
+    String 2
+    {
+        Text [ de ] = "Vertikal" ;
+        Text [ en-US ] = "Vertical";
+    };
 };
 String RID_STR_EVT_ADJUSTMENTVALUECHANGED
 {
@@ -732,9 +1019,28 @@ String RID_STR_PUSHBUTTONTYPE
 {
     Text [ en-US ] = "Button type";
 };
-String RID_STR_ENUM_PUSHBUTTONTYPE
+Resource RID_RSC_ENUM_PUSHBUTTONTYPE
 {
-    Text [ en-US ] = "Default;OK;Cancel;Help";
+    String 1
+    {
+        Text [ de ] = "Standard";
+        Text [ en-US ] = "Default";
+    };
+    String 2
+    {
+        Text [ de ] = "OK";
+        Text [ en-US ] = "OK";
+    };
+    String 3
+    {
+        Text [ de ] = "Abbrechen";
+        Text [ en-US ] = "Cancel";
+    };
+    String 4
+    {
+        Text [ de ] = "Hilfe" ;
+        Text [ en-US ] = "Help";
+    };
 };
 String RID_STR_UNABLETOCONNECT
 {
@@ -760,9 +1066,18 @@ String RID_STR_CELL_EXCHANGE_TYPE
     Text [ en-US ] = "Contents of the linked cell";
 };
 
-String RID_STR_ENUM_CELL_EXCHANGE_TYPE
+Resource RID_RSC_ENUM_CELL_EXCHANGE_TYPE
 {
-    Text [ en-US ] = "The selected entry;Position of the selected entry";
+    String 1
+    {
+        Text [ de ] = "Der ausgewählte Eintrag";
+        Text [ en-US ] = "The selected entry";
+    };
+    String 2
+    {
+        Text [ de ] = "Position des ausgewählten Eintrags";
+        Text [ en-US ] = "Position of the selected entry";
+    };
 };
 
 String RID_STR_SHOW_SCROLLBARS
