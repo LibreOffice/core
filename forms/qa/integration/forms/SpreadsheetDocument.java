@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SpreadsheetDocument.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:30:43 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:50:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,11 +53,13 @@ import com.sun.star.beans.NamedValue;
 public class SpreadsheetDocument extends DocumentHelper
 {
     /** Creates a new blank spreadsheet document */
+    /* ------------------------------------------------------------------ */
     public SpreadsheetDocument( XMultiServiceFactory orb ) throws com.sun.star.uno.Exception
     {
-        super( orb, implCreateBlankDocument( orb, "private:factory/scalc" ) );
+        super( orb, implLoadAsComponent( orb, "private:factory/scalc" ) );
     }
 
+    /* ------------------------------------------------------------------ */
     public SpreadsheetDocument( XMultiServiceFactory orb, XComponent document ) throws com.sun.star.uno.Exception
     {
         super( orb, document );
