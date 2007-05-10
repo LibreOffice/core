@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:07:30 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:16:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -707,7 +707,7 @@ BOOL SwGlossaryHdl::Expand( const String& rShortName,
                     pWrtShell->SttPara ();
                     pWrtShell->SplitNode();
                     pWrtShell->Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
-                    SvxWeightItem aWeightItem ( WEIGHT_BOLD );
+                    SvxWeightItem aWeightItem ( WEIGHT_BOLD, RES_CHRATR_WEIGHT );
                     pWrtShell->Insert ( String ( RTL_CONSTASCII_USTRINGPARAM ( "The StarWriter team!" ) ) );
                     pWrtShell->SttPara ( TRUE );
                     pWrtShell->SetAttr( aWeightItem);
