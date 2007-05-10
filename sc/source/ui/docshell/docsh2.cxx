@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:07:12 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:55:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,12 +145,12 @@ void ScDocShell::InitItems()
     ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
     if (pDrawLayer)
     {
-        PutItem( SvxColorTableItem  ( pDrawLayer->GetColorTable() ) );
-        PutItem( SvxGradientListItem( pDrawLayer->GetGradientList() ) );
-        PutItem( SvxHatchListItem   ( pDrawLayer->GetHatchList() ) );
-        PutItem( SvxBitmapListItem  ( pDrawLayer->GetBitmapList() ) );
-        PutItem( SvxDashListItem    ( pDrawLayer->GetDashList() ) );
-        PutItem( SvxLineEndListItem ( pDrawLayer->GetLineEndList() ) );
+        PutItem( SvxColorTableItem  ( pDrawLayer->GetColorTable(), SID_COLOR_TABLE ) );
+        PutItem( SvxGradientListItem( pDrawLayer->GetGradientList(), SID_GRADIENT_LIST ) );
+        PutItem( SvxHatchListItem   ( pDrawLayer->GetHatchList(), SID_HATCH_LIST ) );
+        PutItem( SvxBitmapListItem  ( pDrawLayer->GetBitmapList(), SID_BITMAP_LIST ) );
+        PutItem( SvxDashListItem    ( pDrawLayer->GetDashList(), SID_DASH_LIST ) );
+        PutItem( SvxLineEndListItem ( pDrawLayer->GetLineEndList(), SID_LINEEND_LIST ) );
 
             //  andere Anpassungen nach dem Anlegen des DrawLayers
 
@@ -162,7 +162,7 @@ void ScDocShell::InitItems()
     else
     {
         //  always use global color table instead of local copy
-        PutItem( SvxColorTableItem( XColorTable::GetStdColorTable() ) );
+        PutItem( SvxColorTableItem( XColorTable::GetStdColorTable(), SID_COLOR_TABLE ) );
     }
 
     if ( !aDocument.GetForbiddenCharacters().isValid() ||
