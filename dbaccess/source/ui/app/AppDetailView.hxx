@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailView.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 13:00:52 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:17:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -303,8 +303,6 @@ namespace dbaui
         /// <TRUE/> if the preview is enabled
         sal_Bool isPreviewEnabled();
 
-        /// switches the current preview
-        void switchPreview();
 
         /** switches to the given preview mode
             @param  _eMode
@@ -338,12 +336,6 @@ namespace dbaui
                 The command to be executed.
         */
         void onCreationClick( const ::rtl::OUString& _sCommand);
-
-        /** disable the controls
-            @param  _bDisable
-                if <TRUE/> then the controls will be disabled otherwise they will be enabled.
-        */
-        void disableControls(sal_Bool _bDisable);
     };
 }
 #endif // DBAUI_APPDETAILVIEW_HXX
