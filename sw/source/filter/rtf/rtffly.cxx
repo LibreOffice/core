@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:54:31 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:07:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -507,7 +507,7 @@ void SwRTFParser::SetFlysInDoc()
             } else {
                 Color aColor = Color(0xff, 0xff, 0xff);
                 aColor.SetTransparency( 0xFE);
-                SvxBrushItem aBrush(aColor);
+                SvxBrushItem aBrush(aColor, RES_BACKGROUND);
                 aTmpSet.Put(aBrush, RES_BACKGROUND);
             }
             // #117914# Topic 6.
@@ -635,7 +635,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
     SwFmtHoriOrient aHori( 0, HORI_LEFT, FRAME );
     SwFmtVertOrient aVert( 0, VERT_TOP, FRAME );
     // <--
-    SvxFrameDirectionItem aFrmDir( FRMDIR_HORI_LEFT_TOP );
+    SvxFrameDirectionItem aFrmDir( FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR );
 
     USHORT nCols = USHRT_MAX, nColSpace = USHRT_MAX, nAktCol = 0;
     SvUShorts aColumns;
@@ -711,8 +711,8 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
             break;
         case RTF_DXFRTEXT:
                 {
-                    SvxULSpaceItem aUL;
-                    SvxLRSpaceItem aLR;
+                    SvxULSpaceItem aUL( RES_UL_SPACE );
+                    SvxLRSpaceItem aLR( RES_LR_SPACE );
                     aUL.SetUpper( nVal );   aUL.SetLower( nVal );
                     aLR.SetLeft( nVal );    aLR.SetRight( nVal );
                     pSet->Put( aUL );
@@ -722,14 +722,14 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
 
         case RTF_DFRMTXTX:
                 {
-                    SvxLRSpaceItem aLR;
+                    SvxLRSpaceItem aLR( RES_LR_SPACE );
                     aLR.SetLeft( nVal );    aLR.SetRight( nVal );
                     pSet->Put( aLR );
                 }
                 break;
         case RTF_DFRMTXTY:
                 {
-                    SvxULSpaceItem aUL;
+                    SvxULSpaceItem aUL( RES_UL_SPACE );
                     aUL.SetUpper( nVal );   aUL.SetLower( nVal );
                     pSet->Put( aUL );
                 }
@@ -844,8 +844,8 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                     ((nToken = GetNextToken() ) & ~(0xff | RTF_SWGDEFS)) )
                 {
                     bReadSwFly = TRUE;      // alles kommt in den akt. Fly
-                    SvxLRSpaceItem aLR;
-                    SvxULSpaceItem aUL;
+                    SvxLRSpaceItem aLR( RES_LR_SPACE );
+                    SvxULSpaceItem aUL( RES_UL_SPACE );
                     nCols = USHRT_MAX;      // neu aufsetzen
                     nColSpace = USHRT_MAX;
                     do {
@@ -867,7 +867,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                     case RTF_FLYPRTCTD:
                         {
                             RTFProtect aP( (BYTE)nTokenValue );
-                            SvxProtectItem aProtectItem;
+                            SvxProtectItem aProtectItem( RES_PROTECT );
                             aProtectItem.SetCntntProtect( aP.GetCntnt() );
                             aProtectItem.SetSizeProtect( aP.GetSize() );
                             aProtectItem.SetPosProtect( aP.GetPos() );
@@ -1120,7 +1120,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
             {
                 USHORT _index=USHORT(nTokenValue);
                 const Color& rColor = GetColor(_index);
-                SvxBrushItem aBrush(rColor);
+                SvxBrushItem aBrush(rColor, RES_BACKGROUND);
                 SwFlySave* pFlySave = aFlyArr[nFlyArrCnt-1];
                 pFlySave->aFlySet.Put(aBrush, RES_BACKGROUND);
             }
