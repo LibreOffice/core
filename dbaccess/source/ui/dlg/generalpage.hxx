@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generalpage.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:08:05 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:26:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@
 namespace dbaui
 {
 //.........................................................................
-    class IAdminHelper;
+    class IDatabaseSettingsDialog;
     class RadioDependentEnabler;
     //=========================================================================
     //= OGeneralPage
