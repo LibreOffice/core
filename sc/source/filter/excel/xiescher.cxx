@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:26:32 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:48:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,6 @@
 #include "scitems.hxx"
 #endif
 #include <svx/eeitem.hxx>
-#define ITEMID_FIELD EE_FEATURE_FIELD
 #ifndef _SVX_COLRITEM_HXX
 #include <svx/colritem.hxx>
 #endif
@@ -363,7 +362,7 @@ void XclImpTxoData::ProcessSdrObject( SdrObject& rSdrObj ) const
         SdrTextVertAdjust eVerAlign = lclGetSvxVerAlignment( maData.GetXclVerAlignment() );
         pTextObj->SetMergedItem( SdrTextVertAdjustItem( eVerAlign ) );
         ::com::sun::star::text::WritingMode eWriteMode = lclGetApiWritingMode( GetOrientation() );
-        pTextObj->SetMergedItem( SvxWritingModeItem( eWriteMode ) );
+        pTextObj->SetMergedItem( SvxWritingModeItem( eWriteMode, SDRATTR_TEXTDIRECTION ) );
     }
 }
 
