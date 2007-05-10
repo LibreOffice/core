@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:29:19 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:31:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,6 @@
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
 #endif
-#define ITEMID_FIELD    EE_FEATURE_FIELD
 #include <svx/flditem.hxx>
 
 #include "app.hrc"
