@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmprop.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:17:53 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:07:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #define FM_ATTR_START           0
 
 #define FM_ATTR_FILTER_CRITERIA ( FM_ATTR_START + 1 )
+#define FM_ATTR_FORM_OPERATIONS ( FM_ATTR_START + 2 )
 
 
 
@@ -184,8 +185,8 @@ namespace svxform
     DECLARE_CONSTASCII_USTRING( FM_PROP_CONTROL_BORDER_COLOR_FOCUS );
     DECLARE_CONSTASCII_USTRING( FM_PROP_CONTROL_BORDER_COLOR_MOUSE );
     DECLARE_CONSTASCII_USTRING( FM_PROP_CONTROL_BORDER_COLOR_INVALID );
-
     DECLARE_CONSTASCII_USTRING( FM_PROP_BUTTON_TYPE );
+    DECLARE_CONSTASCII_USTRING( FM_PROP_FORM_OPERATIONS );
 
 }   // namespace svxform
 
