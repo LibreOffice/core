@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propstate.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:20:08 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:54:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,10 @@
 #include <comphelper/propstate.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_GENFUNC_H_
+#include <com/sun/star/uno/genfunc.h>
+#endif
+
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
 #endif
@@ -58,6 +62,10 @@ namespace comphelper
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::lang::XTypeProvider;
     using ::com::sun::star::uno::Any;
+    using ::com::sun::star::uno::cpp_queryInterface;
+    using ::com::sun::star::uno::cpp_release;
+    using ::com::sun::star::beans::PropertyState_DEFAULT_VALUE;
+    using ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
 
     //=====================================================================
     // OPropertyStateHelper
@@ -168,9 +176,19 @@ namespace comphelper
     }
 
     //---------------------------------------------------------------------
-    ::com::sun::star::beans::PropertyState OPropertyStateHelper::getPropertyStateByHandle(sal_Int32)
+    ::com::sun::star::beans::PropertyState OPropertyStateHelper::getPropertyStateByHandle( sal_Int32 _nHandle )
     {
-        return  ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
+        // simply compare the current and the default value
+        Any aCurrentValue = getPropertyDefaultByHandle( _nHandle );
+        Any aDefaultValue;  getFastPropertyValue( aDefaultValue, _nHandle );
+
+        sal_Bool bEqual = uno_type_equalData(
+                const_cast< void* >( aCurrentValue.getValue() ), aCurrentValue.getValueType().getTypeLibType(),
+                const_cast< void* >( aDefaultValue.getValue() ), aDefaultValue.getValueType().getTypeLibType(),
+                reinterpret_cast< uno_QueryInterfaceFunc >(cpp_queryInterface),
+                reinterpret_cast< uno_ReleaseFunc >(cpp_release)
+            );
+        return bEqual ? PropertyState_DEFAULT_VALUE : PropertyState_DIRECT_VALUE;
     }
 
     //---------------------------------------------------------------------
