@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layerexport.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 15:10:40 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:41:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -296,7 +296,7 @@ namespace xmloff
 
         /** collects AutoStyles for grid columns
         */
-        void collectGridAutoStyles( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl );
+        void collectGridColumnStylesAndIds( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl );
 
         /** ensures that the number format of the given control exist in our own formats supplier.
 
