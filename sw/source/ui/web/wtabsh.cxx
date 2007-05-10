@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wtabsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:38:25 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:27:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 
 
 
-#include "uiparam.hxx"
 #include "hintids.hxx"
 
 #ifndef _SFXAPP_HXX //autogen
@@ -67,6 +66,7 @@
 
 #define SwWebTableShell
 #include "itemdef.hxx"
+#include "svx/svxids.hrc"
 #include "swslots.hxx"
 
 SFX_IMPL_INTERFACE(SwWebTableShell, SwTableShell, SW_RES(STR_SHELLNAME_TABLE))
