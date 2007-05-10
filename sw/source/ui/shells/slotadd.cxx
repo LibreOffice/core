@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slotadd.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:16:20 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:23:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 
 #include "hintids.hxx"
 #include "uiitems.hxx"
-#include "uiparam.hxx"
 #include "cmdid.h"
 
 #include <svtools/globalnameitem.hxx>
@@ -257,7 +256,7 @@
 #ifndef _SVX_GRAFCTRL_HXX
 #include <svx/grafctrl.hxx>
 #endif
-#define ITEMID_DOUBLE           0
+
 
 #ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
@@ -295,12 +294,12 @@
 #pragma code_seg( "SWSTATICS" )
 #endif
 
-#define ITEMID_DASH_LIST        SID_DASH_LIST
-#define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
-#define ITEMID_GRADIENT_LIST    SID_GRADIENT_LIST
-#define ITEMID_HATCH_LIST       SID_HATCH_LIST
-#define ITEMID_BITMAP_LIST      SID_BITMAP_LIST
+
+
+
+
+
+
 
 #ifndef _SVX_DRAWITEM_HXX
 #include <svx/drawitem.hxx>
