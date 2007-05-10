@@ -4,9 +4,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-14 08:28:11 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:16:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,25 +75,47 @@ static sal_Bool SAL_CALL osl_psz_getUserName(oslSecurity Security, sal_Char* psz
 static sal_Bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
 static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
 
-static oslSecurityImpl * newSecurityImpl(size_t * bufSize) {
+enum Result { KNOWN, UNKNOWN, ERROR };
+
+static enum Result sysconf_SC_GETPW_R_SIZE_MAX(size_t * value) {
+#if defined _SC_GETPW_R_SIZE_MAX
     long m;
-    size_t n;
     errno = 0;
     m = sysconf(_SC_GETPW_R_SIZE_MAX);
     if (m == -1) {
-        if (errno == 0) {
-            /* _SC_GETPW_R_SIZE_MAX has no limit, choose something sensible (the
-               callers of newSecurityImpl should detect it if the allocated
-               buffer is too small, so this could lead to an error upstream, but
-               not a crash): */
-            n = 1024;
+        if (errno == 0 || errno == EINVAL) {
+            /* _SC_GETPW_R_SIZE_MAX has no limit; some platforms like certain
+               FreeBSD versions support sysconf(_SC_GETPW_R_SIZE_MAX) in a
+               broken way and always set EINVAL, so be resilient here: */
+            return UNKNOWN;
         } else {
             /* sysconf failed: */
-            return NULL;
+            return ERROR;
         }
     } else {
         OSL_ASSERT(m >= 0 && (unsigned long) m < SIZE_MAX);
-        n = (size_t) m;
+        *value = (size_t) m;
+        return KNOWN;
+    }
+#else
+    /* some platforms like Mac OS X 1.3 do not define _SC_GETPW_R_SIZE_MAX: */
+    return UNKNOWN;
+#endif
+}
+
+static oslSecurityImpl * newSecurityImpl(size_t * bufSize) {
+    size_t n = 0;
+    switch (sysconf_SC_GETPW_R_SIZE_MAX(&n)) {
+    case KNOWN:
+        break;
+    case UNKNOWN:
+        /* choose something sensible (the callers of newSecurityImpl should
+           detect it if the allocated buffer is too small, so this could lead to
+           an error upstream, but not a crash): */
+        n = 1024;
+        break;
+    default: /* ERROR */
+        return NULL;
     }
     if (n <= SIZE_MAX - offsetof(oslSecurityImpl, m_buffer)) {
         *bufSize = n;
