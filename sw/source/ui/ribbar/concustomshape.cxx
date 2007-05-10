@@ -4,9 +4,9 @@
  *
  *  $RCSfile: concustomshape.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:18:00 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:21:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,9 +109,6 @@
 #endif
 #ifndef _SVDOASHP_HXX
 #include <svx/svdoashp.hxx>
-#endif
-#ifndef _EEITEMID_HXX
-#include <svx/eeitemid.hxx>
 #endif
 #ifndef _SVX_ADJITEM_HXX
 #include <svx/adjitem.hxx>
@@ -273,7 +270,7 @@ void ConstCustomShape::SetAttributes( SdrObject* pObj )
     }
     if ( !bAttributesAppliedFromGallery )
     {
-        pObj->SetMergedItem( SvxAdjustItem( SVX_ADJUST_CENTER ) );
+        pObj->SetMergedItem( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ) );
         pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
         pObj->SetMergedItem( SdrTextAutoGrowHeightItem( sal_False ) );
