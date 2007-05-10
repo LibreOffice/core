@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabtempl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:10:17 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:27:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,12 +44,6 @@
 
 #include <svx/svxids.hrc>
 
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
-#define ITEMID_GRADIENT_LIST    SID_GRADIENT_LIST
-#define ITEMID_HATCH_LIST       SID_HATCH_LIST
-#define ITEMID_BITMAP_LIST      SID_BITMAP_LIST
-#define ITEMID_DASH_LIST            SID_DASH_LIST
-#define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
 #include <svx/drawitem.hxx>
 #include <svtools/intitem.hxx>
 #include <svx/ofaitem.hxx>
@@ -61,26 +55,8 @@
 #include <svtools/cjkoptions.hxx>
 #endif
 
-#ifndef _EEITEMID_HXX //autogen
-#include <svx/eeitemid.hxx>
-#endif
 
 #include <svx/dialogs.hrc>
-
-#ifdef ITEMID_FONTLIST
-#undef ITEMID_FONTLIST
-#endif
-#define ITEMID_FONTLIST     SID_ATTR_CHAR_FONTLIST
-
-#ifdef ITEMID_ESCAPEMENT
-#undef ITEMID_ESCAPEMENT
-#endif
-#define ITEMID_ESCAPEMENT   SID_ATTR_CHAR_ESCAPEMENT
-
-#ifdef ITEMID_CASEMAP
-#undef ITEMID_CASEMAP
-#endif
-#define ITEMID_CASEMAP      SID_ATTR_CHAR_CASEMAP
 
 #include <svx/svxdlg.hxx>
 
