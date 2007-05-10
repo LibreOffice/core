@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailView.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 13:00:38 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:17:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -832,12 +832,6 @@ sal_Bool OApplicationDetailView::isPreviewEnabled()
     return m_pControlHelper->isPreviewEnabled();
 }
 // -----------------------------------------------------------------------------
-void OApplicationDetailView::switchPreview()
-{
-    DBG_CHKTHIS(OApplicationDetailView,NULL);
-    m_pControlHelper->switchPreview();
-}
-// -----------------------------------------------------------------------------
 void OApplicationDetailView::switchPreview(PreviewMode _eMode)
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
@@ -862,12 +856,5 @@ sal_Bool OApplicationDetailView::isSortUp() const
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     return m_pControlHelper->isSortUp();
-}
-// -----------------------------------------------------------------------------
-void OApplicationDetailView::disableControls(sal_Bool _bDisable)
-{
-    DBG_CHKTHIS(OApplicationDetailView,NULL);
-    static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->Enable(!_bDisable);
-    m_pControlHelper->disableControls(_bDisable);
 }
 // -----------------------------------------------------------------------------
