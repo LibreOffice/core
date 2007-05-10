@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:30:24 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:34:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,6 @@
 #include "precompiled_sd.hxx"
 
 #include "DrawViewShell.hxx"
-
-#define ITEMID_SIZE 0
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
