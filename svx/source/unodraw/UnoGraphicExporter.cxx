@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 09:00:34 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:02:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,7 +223,6 @@
 #include "svdoutl.hxx"
 #endif
 
-#define ITEMID_FIELD EE_FEATURE_FIELD
 #ifndef _SVX_FLDITEM_HXX
 #include "flditem.hxx"
 #endif
