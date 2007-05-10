@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eetext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:54:22 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,55 +34,6 @@
  ************************************************************************/
 #ifndef _EETEXT_HXX
 #define _EETEXT_HXX
-
-// Zeichenattribute....
-#define ITEMID_FONT             EE_CHAR_FONTINFO
-#define ITEMID_POSTURE          EE_CHAR_ITALIC
-#define ITEMID_WEIGHT           EE_CHAR_WEIGHT
-#define ITEMID_SHADOWED         EE_CHAR_SHADOW
-#define ITEMID_CONTOUR          EE_CHAR_OUTLINE
-#define ITEMID_CROSSEDOUT       EE_CHAR_STRIKEOUT
-#define ITEMID_UNDERLINE        EE_CHAR_UNDERLINE
-#define ITEMID_FONTHEIGHT       EE_CHAR_FONTHEIGHT
-#define ITEMID_COLOR            EE_CHAR_COLOR
-#ifdef MAC
-#ifdef ITEMID_WORDLINEMODE
-#undef ITEMID_WORDLINEMODE
-#endif
-#ifdef ITEMID_CHARSETCOLOR
-#undef ITEMID_CHARSETCOLOR
-#endif
-#endif
-// #define ITEMID_WORDLINEMODE  0
-#define ITEMID_PROPSIZE         0
-// #define ITEMID_CHARSETCOLOR  0
-// #define ITEMID_KERNING           0
-// #define ITEMID_CASEMAP           0
-// #define ITEMID_LANGUAGE      0
-#define ITEMID_ESCAPEMENT       EE_CHAR_ESCAPEMENT
-#define ITEMID_NOLINEBREAK      0
-#define ITEMID_NOHYPHENHERE     0
-
-// Absatzattribute
-#define ITEMID_ADJUST           EE_PARA_JUST
-#define ITEMID_LINESPACING      EE_PARA_SBL
-// #define ITEMID_WIDOWS            0
-// #define ITEMID_ORPHANS           0
-// #define ITEMID_HYPHENZONE        0
-
-#define ITEMID_TABSTOP          EE_PARA_TABS
-
-#define ITEMID_PAPERBIN         0
-#define ITEMID_LRSPACE          EE_PARA_LRSPACE
-#define ITEMID_ULSPACE          EE_PARA_ULSPACE
-#define ITEMID_PRINT            0
-#define ITEMID_OPAQUE           0
-#define ITEMID_PROTECT          0
-#define ITEMID_BACKGROUND       0
-#define ITEMID_SHADOW           0
-#define ITEMID_MACRO            0
-#define ITEMID_BOX              0
-#define ITEMID_BOXINFO          0
 
 #ifndef _OUTLINER_HXX
 #include <svx/outliner.hxx>
