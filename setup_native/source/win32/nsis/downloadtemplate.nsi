@@ -275,13 +275,15 @@ Section -Post
 
     StrCmp $2 "ON" postremovesilent nopostremovesilent
     nopostremovesilent:
-      ExecWait "$INSTDIR\setup.exe -lang $LANGUAGE $3 /qr -ignore_running"
+      ExecWait "$INSTDIR\setup.exe -lang $LANGUAGE $3 /qr -ignore_running" $0
+      SetErrorLevel $0
       Quit
       GoTo onPostDone
     postremovesilent:
-      ExecWait "$INSTDIR\setup.exe -lang $LANGUAGE $3 /qr -ignore_running"
+      ExecWait "$INSTDIR\setup.exe -lang $LANGUAGE $3 /qr -ignore_running" $0
       RMDir /r $INSTDIR
       RMDir $INSTDIR
+      SetErrorLevel $0
       Quit
       GoTo onPostDone
 
@@ -298,9 +300,10 @@ Section -Post
       Quit
       GoTo onPostDone
     postremove:
-      ExecWait "$INSTDIR\setup.exe -lang $LANGUAGE $3"
+      ExecWait "$INSTDIR\setup.exe -lang $LANGUAGE $3" $0
       RMDir /r $INSTDIR
       RMDir $INSTDIR
+      SetErrorLevel $0
       Quit
       GoTo onPostDone
 
