@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futhes.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:39:05 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:32:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,6 @@
 #include <svx/eeitem.hxx>
 #endif
 
-#define ITEMID_LANGUAGE         SID_ATTR_CHAR_LANGUAGE
 #include <svx/dialogs.hrc>
 #include <svx/svxerr.hxx>
 #include <svx/dialmgr.hxx>
