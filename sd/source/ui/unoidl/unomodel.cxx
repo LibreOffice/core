@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:41:53 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:13:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2753,24 +2753,22 @@ void SAL_CALL SdMasterPagesAccess::remove( const uno::Reference< drawing::XDrawP
     if(pSdPage == NULL)
         return;
 
-    SdrPage* pSdrPage = pSdPage->GetSdrPage();
+    SdPage* pPage = dynamic_cast< SdPage* > (pSdPage->GetSdrPage());
 
-    DBG_ASSERT( pSdrPage->IsMasterPage(), "SdMasterPage is not masterpage?")
+    DBG_ASSERT( pPage && pPage->IsMasterPage(), "SdMasterPage is not masterpage?")
 
-    if(mpModel->mpDoc->GetMasterPageUserCount(pSdrPage) > 0)
-        return; //Todo: hier fehlt eine uno::Exception
+    if( !pPage || !pPage->IsMasterPage() || (mpModel->mpDoc->GetMasterPageUserCount(pPage) > 0))
+        return; //Todo: this should be excepted
 
-    sal_uInt16 nCount = mpModel->mpDoc->GetMasterPageCount();
-    for( sal_uInt16 nPgNum = 0; nPgNum < nCount; nPgNum++ )
+    // only standard pages can be removed directly
+    if( pPage->GetPageKind() == PK_STANDARD )
     {
-        if(mpModel->mpDoc->GetMasterPage(nPgNum) == pSdrPage)
-        {
-            mpModel->mpDoc->DeleteMasterPage(nPgNum);
-            break;
-        }
-    }
+        sal_uInt16 nPage = pPage->GetPageNum();
+        mpModel->mpDoc->RemoveMasterPage( nPage );
 
-    pSdPage->Invalidate();
+        // next page is the notes master
+        mpModel->mpDoc->RemoveMasterPage( nPage );
+    }
 }
 
 // XServiceInfo
