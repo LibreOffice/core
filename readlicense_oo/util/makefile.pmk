@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 08:51:51 $
+#   last change: $Author: kz $ $Date: 2007-05-10 13:08:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,39 +62,33 @@ $(COMMONMISC)$/readme.dtd : ..$/readme.dtd
     $(COPY) $< $@
 
 $(MISC)$/$(GUI)$/README%.html : $(MISC)$/readme%.html
-    @-$(MKDIR) $(@:d)
-    $(COPY) $< $@
+    @+-$(MKDIRHIER) $(@:d)
+    +$(COPY) $< $@
    
 $(MISC)$/$(GUI)$/README% : $(MISC)$/readme%.txt
-    @-$(MKDIR) $(@:d)
-    $(COPY) $< $@
+    @+-$(MKDIRHIER) $(@:d)
+    +$(COPY) $< $@
    
 $(MISC)$/$(GUI)$/readme% : $(MISC)$/readme%
-    @-$(MKDIR) $(@:d)
-    $(COPY) $< $@
+    @+-$(MKDIRHIER) $(@:d)
+    +$(COPY) $< $@
    
 $(MISC)$/readme%.html :
-    @-$(MKDIR) $(@:d)
-.IF "$(XSLTPROC)"=="NO_XSLTPROC"
-    $(JAVAI) $(JAVACPS) $(XT_JAR)$(PATH_SEPERATOR)$(XML_APIS_JAR)$(PATH_SEPERATOR)$(XERCES_JAR) -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $(subst,_$(@:b:s/_/./:e:s/.//), $(MERGEDXRMDIR)$/$(@:b).xrm) ..$/readme.xsl os1=$(OS) gui1=$(GUI) cp1=$(CPUNAME) com1=$(COM) lang1=$(@:b:s/_/./:e:s/.//) type=html file=$@
-.ELSE
-    sed 's|xmlns:xt="http://www.jclark.com/xt"||;s|extension-element-prefixes="xt"||;s|.*xt:document.*||;s|<xsl:output method = "HTML" doctype-public = "-//W3C//DTD HTML 3.2//EN" />|<xsl:output method="html" doctype-public="-//W3C//DTD HTML 3.2//EN" />|' < ..$/readme.xsl | xsltproc -o $@ \
+    @+-$(MKDIRHIER) $(@:d)
+    $(XSLTPROC) --nonet -o $@ \
              --stringparam os1 $(OS) \
              --stringparam gui1 $(GUI) \
              --stringparam cp1 $(CPUNAME) \
              --stringparam com1 $(COM) \
              --stringparam lang1 $(@:b:s/_/./:e:s/.//) \
              --stringparam type html \
-         - \
+         ..$/readme.xsl \
              $(subst,_$(@:b:s/_/./:e:s/.//), $(MERGEDXRMDIR)$/$(@:b).xrm)
-.ENDIF
 
 $(MISC)$/readme%.txt :
-    @-$(MKDIR) $(@:d)
-.IF "$(XSLTPROC)"=="NO_XSLTPROC"
-    $(JAVAI) $(JAVACPS) $(XT_JAR)$(PATH_SEPERATOR)$(XML_APIS_JAR)$(PATH_SEPERATOR)$(XERCES_JAR) -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $(subst,_$(@:b:s/_/./:e:s/.//), $(MERGEDXRMDIR)$/$(@:b).xrm) ..$/readme.xsl os1=$(OS) gui1=$(GUI) cp1=$(CPUNAME) com1=$(COM) lang1=$(@:b:s/_/./:e:s/.//) type=text file=$@
-.ELSE
-    sed 's|xmlns:xt="http://www.jclark.com/xt"||;s|extension-element-prefixes="xt"||;s|.*xt:document.*||;s|<xsl:output method = "HTML" doctype-public = "-//W3C//DTD HTML 3.2//EN" />|<xsl:output method="text" />|' < ..$/readme.xsl | xsltproc -o $@ \
+    @+-$(MKDIRHIER) $(@:d)
+    $(SED) "s#method=\(.\)html..*#method=\1text\1/>#" < ..$/readme.xsl | \
+             $(XSLTPROC) --nonet -o $@ \
              --stringparam os1 $(OS) \
              --stringparam gui1 $(GUI) \
              --stringparam cp1 $(CPUNAME) \
@@ -103,5 +97,3 @@ $(MISC)$/readme%.txt :
              --stringparam type text \
              - \
              $(subst,_$(@:b:s/_/./:e:s/.//), $(MERGEDXRMDIR)$/$(@:b).xrm)
-.ENDIF
-
