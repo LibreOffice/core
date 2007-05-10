@@ -1,9 +1,8 @@
 # version and release passed by command-line
 Version: %version
 Release: %release
-Summary: OpenOffice.org desktop integration
-Name: openoffice.org-freedesktop-menus
-BuildRoot: %_tmppath/%name-%version-build%unique
+Summary: %productname desktop integration
+Name: %pkgprefix-freedesktop-menus
 #BuildRequires: sed
 #BuildRequires: perl
 Group: Office
@@ -14,85 +13,51 @@ BuildArch: noarch
 AutoReqProv: no
 
 %description
-OpenOffice.org desktop integration for desktop-environments that implement 
+%productname desktop integration for desktop-environments that implement 
 the menu- and mime-related specifications from http://www.freedesktop.org
 Install this package if you're using a distribution not covered by any of 
-the other openoffice.org-<distribution>-menus packages.
-
-%prep
-# create & change to rpm-Build-Dir
-%setup -c -T -n %name-%version-build%unique
-
-# let's copy everything we need to the builddir.
-# basedir is passed on the commandline
-cp -a %source/usr .
-
-%build
-# freedesktop-based desktop-environments don't need/use this.
-rm -rf usr/share/application-registry
-rm -rf usr/share/applications.flag
-rm -rf usr/share/mime-info
-rm -rf usr/share/mimelnk
-rm -rf usr/share/applnk-redhat
-
-## add symlinks so that nautilus can identify the mime-icons 
-## not strictly freedesktop-stuff but there is no common naming scheme yet.
-## One proposal is "mime-application:vnd.oasis.opendocument.spreadsheet.png"
-## for e.g. application/vnd.oasis.opendocument.spreadsheet
-cd usr/share/icons/hicolor
-rm */mimetypes/gnome-mime-application-vnd*
-originalname=%unixfilename
-iconname=`echo $originalname | sed -e 's/\.//g'`
-for dir in *; do
-  cd $dir/mimetypes
-# ln -s $iconname-database.png Anybody knows the mimetype?
-  ln -s $iconname-drawing.png                gnome-mime-application-vnd.sun.xml.draw.png
-  ln -s $iconname-drawing-template.png       gnome-mime-application-vnd.sun.xml.draw.template.png
-  ln -s $iconname-formula.png                gnome-mime-application-vnd.sun.xml.math.png
-  ln -s $iconname-master-document.png        gnome-mime-application-vnd.sun.xml.writer.global.png
-  ln -s $iconname-oasis-database.png         gnome-mime-application-vnd.sun.xml.base.png
-  ln -s $iconname-oasis-database.png         gnome-mime-application-vnd.oasis.opendocument.database.png
-  ln -s $iconname-oasis-drawing.png          gnome-mime-application-vnd.oasis.opendocument.graphics.png
-  ln -s $iconname-oasis-drawing-template.png gnome-mime-application-vnd.oasis.opendocument.graphics-template.png
-  ln -s $iconname-oasis-formula.png          gnome-mime-application-vnd.oasis.opendocument.formula.png
-  ln -s $iconname-oasis-master-document.png  gnome-mime-application-vnd.oasis.opendocument.text-master.png
-  ln -s $iconname-oasis-presentation.png     gnome-mime-application-vnd.oasis.opendocument.presentation.png
-  ln -s $iconname-oasis-presentation-template.png gnome-mime-application-vnd.oasis.opendocument.presentation-template.png
-  ln -s $iconname-oasis-spreadsheet.png           gnome-mime-application-vnd.oasis.opendocument.spreadsheet.png
-  ln -s $iconname-oasis-spreadsheet-template.png  gnome-mime-application-vnd.oasis.opendocument.spreadsheet-template.png
-  ln -s $iconname-oasis-text.png             gnome-mime-application-vnd.oasis.opendocument.text.png
-  ln -s $iconname-oasis-text-template.png    gnome-mime-application-vnd.oasis.opendocument.text-template.png
-  ln -s $iconname-oasis-web-template.png     gnome-mime-application-vnd.oasis.opendocument.text-web.png
-  ln -s $iconname-presentation.png           gnome-mime-application-vnd.sun.xml.impress.png
-  ln -s $iconname-presentation-template.png  gnome-mime-application-vnd.sun.xml.impress.template.png
-  ln -s $iconname-spreadsheet.png            gnome-mime-application-vnd.sun.xml.calc.png
-  ln -s $iconname-spreadsheet-template.png   gnome-mime-application-vnd.sun.xml.calc.template.png
-  ln -s $iconname-text.png                   gnome-mime-application-vnd.sun.xml.writer.png
-  ln -s $iconname-text-template.png          gnome-mime-application-vnd.sun.xml.writer.template.png
-  ln -s $iconname-extension.png          gnome-mime-application-vnd.openofficeorg.extension.png
-  cd ../..  
-done
+the other %pkgprefix-<distribution>-menus packages.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT/etc
-# copy everything to the buildroot
-cp -a * $RPM_BUILD_ROOT
-# dummy for %ghost
-touch $RPM_BUILD_ROOT/etc/%unixfilename
 
 # hack/workaround to make SuSE's brp-symlink-script happy. It wants the targets of all links
 # to be present on the build-system/the buildroot. But the point is that we generate stale
 # links intentionally (until we find a better solution) #46226
 export NO_BRP_STALE_LINK_ERROR=yes
 
+# enable relocation in create_tree.sh
+mkdir -p $RPM_BUILD_ROOT/etc
+# dummy for %ghost
+touch $RPM_BUILD_ROOT/etc/%unixfilename
+
+# FIXME: remove - only purpose is to create packages identical to OOF680 m8
+umask 0000
+
+# set parameters for the create_tree script 
+export DESTDIR=$RPM_BUILD_ROOT
+export KDEMAINDIR=/usr
+export GNOMEDIR=/usr
+export GNOME_MIME_THEME=hicolor
+
+create_tree.sh
+
+cd $RPM_BUILD_ROOT
+
+# freedesktop-based desktop-environments don't need/use this.
+rm -rf usr/share/application-registry
+rm -rf usr/share/applications.flag
+rm -rf usr/share/mime-info
+rm -rf usr/share/mimelnk
+rm -rf usr/share/applnk-redhat
+#find usr/share/icons -name '*.png' -exec chmod g+w {} \;
+
 %clean
-cd ..
-rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%name-%version-build%unique
+rm -rf $RPM_BUILD_ROOT 
 
 #include<symlink_triggers>
 
-%triggerin -- openoffice.org-writer, openoffice.org-calc, openoffice.org-draw, openoffice.org-impress, openoffice.org-math
+%triggerin -- %pkgprefix-writer, %pkgprefix-calc, %pkgprefix-draw, %pkgprefix-impress, %pkgprefix-math
 # this is run when one of the above packages is already installed and the menu
 # package gets installed OR when the menu-package is already installed and one
 # of the above listed packages gets installed
@@ -110,7 +75,7 @@ elif (which update-desktop-database); then
   update-desktop-database -q /usr/share/applications
 fi
 
-%triggerun -- openoffice.org-writer, openoffice.org-calc, openoffice.org-draw, openoffice.org-impress, openoffice.org-math
+%triggerun -- %pkgprefix-writer, %pkgprefix-calc, %pkgprefix-draw, %pkgprefix-impress, %pkgprefix-math
 if [ "$1" = "0" ] ; then  
   # the menu-package gets uninstalled/updated - postun will run the command
   exit 0
