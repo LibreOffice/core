@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listsh.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:15:38 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:23:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 
 
 #include "cmdid.h"
-#include "uiparam.hxx"
 #include "hintids.hxx"
 
 #ifndef _SVX_SIZEITEM_HXX //autogen
