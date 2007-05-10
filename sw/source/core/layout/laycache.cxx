@@ -4,9 +4,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:20:11 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:00:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -796,7 +796,7 @@ void lcl_ApplyWorkaroundForB6375613( SwFrm* p_pFirstFrmOnNewPage )
             SwDoc* pDoc( pFirstTextFrmOnNewPage->GetTxtNode()->GetDoc() );
             IDocumentContentOperations* pIDCO = pFirstTextFrmOnNewPage->GetTxtNode()->getIDocumentContentOperations();
             const SwPaM aTmpPaM( *(pFirstTextFrmOnNewPage->GetTxtNode()) );
-            pIDCO->Insert( aTmpPaM, SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE ), 0 );
+            pIDCO->Insert( aTmpPaM, SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE, RES_BREAK ), 0 );
             pFirstTextFrmOnNewPage->GetTxtNode()->UnlockModify();
 
             uno::Reference< document::XDocumentInfoSupplier > xDoc(
