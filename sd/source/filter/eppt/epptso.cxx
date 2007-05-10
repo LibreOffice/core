@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:33:41 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:24:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,9 +186,6 @@
 #include <com/sun/star/text/FontRelief.hpp>
 #endif
 
-#ifndef _EEITEMID_HXX
-#include <svx/eeitemid.hxx>
-#endif
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
 #endif
