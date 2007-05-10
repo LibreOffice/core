@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuhhconv.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:01:00 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:30:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,11 +55,9 @@
 #include <svx/eeitem.hxx>
 #endif
 
-#define ITEMID_LANGUAGE EE_CHAR_LANGUAGE_CJK
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
 #endif
-#define ITEMID_FONT EE_CHAR_FONTINFO_CJK
 #ifndef _SVX_FONTITEM_HXX
 #include <svx/fontitem.hxx>
 #endif
