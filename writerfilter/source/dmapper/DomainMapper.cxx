@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-10 12:47:15 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-10 13:10:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1556,13 +1556,13 @@ void DomainMapper::attribute(doctok::Id nName, doctok::Value & val)
             break;
 
         case NS_ooxml::LN_CT_Fonts_ascii:
-            m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( val.getString() ));
+            m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( sStringValue ));
             break;
         case NS_ooxml::LN_CT_Fonts_eastAsia:
-            m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_ASIAN, uno::makeAny( val.getString() ));
+            m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_ASIAN, uno::makeAny( sStringValue ));
             break;
         case NS_ooxml::LN_CT_Fonts_cs:
-            m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_COMPLEX, uno::makeAny( val.getString() ));
+            m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_COMPLEX, uno::makeAny( sStringValue ));
             break;
         case NS_ooxml::LN_CT_Spacing_before:
             m_pImpl->GetTopContext()->Insert(PROP_PARA_TOP_MARGIN, uno::makeAny( ConversionHelper::convertToMM100( nIntValue ) ));

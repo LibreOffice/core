@@ -14881,7 +14881,7 @@
       <sprm name="emboss" tokenid="0x858"/>
       <sprm name="imprint" tokenid="0x854"/>
       <sprm name="noProof" tokenid="0x875"/>
-      <sprm name="snapToGrid" tokenid="0x0"/>
+      <sprm name="snapToGrid" tokenid="ooxml:EG_RPrBase_snapToGrid"/>
       <sprm name="vanish" tokenid="0x83c"/>
       <sprm name="webHidden" tokenid="0x83c"/>
       <sprm name="color" tokenid="ooxml:EG_RPrBase_color"/>
@@ -14896,7 +14896,7 @@
       <sprm name="effect" tokenid="0x2859"/>
       <sprm name="bdr" tokenid="ooxml:EG_RPrBase_bdr"/>
       <sprm name="shd" tokenid="ooxml:EG_RPrBase_shd"/>
-      <sprm name="fitText" tokenid="0xca76"/>
+      <sprm name="fitText" tokenid="ooxml:EG_RPrBase_fitText"/>
       <sprm name="vertAlign" tokenid="ooxml:EG_RPrBase_vertAlign"/>
       <sprm name="rtl" tokenid="ooxml:EG_RPrBase_rtl"/>
       <sprm name="cs" tokenid="0x882"/>

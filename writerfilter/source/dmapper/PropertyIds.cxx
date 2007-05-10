@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-10 12:47:15 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-10 13:10:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,13 +120,6 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_CHAR_FONT_FAMILY:              sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFontFamily")); break;
             case PROP_CHAR_FONT_CHAR_SET:            sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFontCharSet")); break;
             case PROP_CHAR_FONT_PITCH:               sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFontPitch")); break;
-#if 0
-            case PROP_CHAR_FONT_NAME_HANSI:                sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFontNameHAnsi")); break;
-            case PROP_CHAR_FONT_STYLE_HANSI:               sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFontStyleHAnsi")); break;
-            case PROP_CHAR_FONT_FAMILY_HANSI:              sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFontFamilyHAnsi")); break;
-            case PROP_CHAR_FONT_CHAR_SET_HANSI:            sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFontCharSetHAnsi")); break;
-            case PROP_CHAR_FONT_PITCH_HANSI:               sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFontPitchHAnsi")); break;
-#endif
             case PROP_CHAR_FONT_NAME_ASIAN     :     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFontNameAsian")); break;
             case PROP_CHAR_HEIGHT_ASIAN        :     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharHeightAsian")); break;
             case PROP_CHAR_FONT_STYLE_ASIAN    :     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFontStyleAsian")); break;
