@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:16:06 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:22:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,15 +127,9 @@
 #include <sfx2/request.hxx>
 #endif
 #ifndef _SVX_FLDITEM_HXX
-#   ifndef ITEMID_FIELD
-#       ifndef _MyEDITDATA_HXX //autogen
-#           include <svx/editdata.hxx>  // das include wird wg. EE_FEATURE_FIELD benoetigt
-#       endif
-#       define ITEMID_FIELD EE_FEATURE_FIELD  /* wird fuer #include <flditem.hxx> benoetigt */
-#   endif
-#   ifndef _SVX_FLDITEM_HXX //autogen
-#       include <svx/flditem.hxx>
-#   endif
+#ifndef _SVX_FLDITEM_HXX //autogen
+#include <svx/flditem.hxx>
+#endif
 #endif
 #ifndef _EDITSTAT_HXX //autogen
 #include <svx/editstat.hxx>
@@ -170,9 +164,6 @@
 #endif
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
-#endif
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
 #endif
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
@@ -338,7 +329,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 // util::Language gibts an der EditEngine nicht! Daher nicht im Set.
 
                 aDlgAttr.Put( aEditAttr );
-                aDlgAttr.Put( SvxKerningItem() );
+                aDlgAttr.Put( SvxKerningItem(0, RES_CHRATR_KERNING) );
 
                 //CHINA001 SwCharDlg* pDlg = new SwCharDlg(pView->GetWindow(), *pView, aDlgAttr, 0, sal_True);
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
@@ -384,11 +375,11 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 // Muss natuerlich noch geaendert werden
                 // aDlgAttr.Put( SvxParaDlgLimitsItem( 567 * 50, 5670) );
 
-                aDlgAttr.Put( SvxHyphenZoneItem() );
-                aDlgAttr.Put( SvxFmtBreakItem() );
-                aDlgAttr.Put( SvxFmtSplitItem() );
-                aDlgAttr.Put( SvxWidowsItem() );
-                aDlgAttr.Put( SvxOrphansItem() );
+                aDlgAttr.Put( SvxHyphenZoneItem( sal_False, RES_PARATR_HYPHENZONE) );
+                aDlgAttr.Put( SvxFmtBreakItem( SVX_BREAK_NONE, RES_BREAK ) );
+                aDlgAttr.Put( SvxFmtSplitItem( sal_True, RES_PARATR_SPLIT ) );
+                aDlgAttr.Put( SvxWidowsItem( 0, RES_PARATR_WIDOWS ) );
+                aDlgAttr.Put( SvxOrphansItem( 0, RES_PARATR_ORPHANS ) );
 
                 //CHINA001 SwParaDlg* pDlg = new SwParaDlg(GetView().GetWindow(), GetView(), aDlgAttr, DLG_STD, 0, sal_True);
 
@@ -461,7 +452,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                     aSel.nEndPos++;
                     pOLV->SetSelection(aSel);
                 }
-                pOLV->InsertField(aFld);
+                pOLV->InsertField(SvxFieldItem(aFld, EE_FEATURE_FIELD));
             }
         }
         break;
@@ -483,7 +474,8 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 aAttr.Put( SvxWritingModeItem(
                     nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
                         com::sun::star::text::WritingMode_LR_TB
-                        : com::sun::star::text::WritingMode_TB_RL ) );
+                        : com::sun::star::text::WritingMode_TB_RL,
+                    SDRATTR_TEXTDIRECTION ) );
                 pTmpView->SetAttributes( aAttr );
 
                 rSh.GetView().BeginTextEdit( pTmpObj, pTmpPV, &rSh.GetView().GetEditWin(), sal_False);
