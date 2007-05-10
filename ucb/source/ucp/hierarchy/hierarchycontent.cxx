@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hierarchycontent.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:55:22 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:04:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,8 @@
 #ifndef _HIERARCHYURI_HXX
 #include "hierarchyuri.hxx"
 #endif
+
+#include "../inc/urihelper.hxx"
 
 using namespace com::sun;
 using namespace com::sun::star;
@@ -917,7 +919,7 @@ HierarchyContent::makeNewIdentifier( const rtl::OUString& rTitle )
     HierarchyUri aUri( m_xIdentifier->getContentIdentifier() );
     rtl::OUString aNewURL = aUri.getParentUri();
     aNewURL += rtl::OUString::createFromAscii( "/" );
-    aNewURL += HierarchyUri::encodeSegment( rTitle );
+    aNewURL += ::ucb::urihelper::encodeSegment( rTitle );
 
     return uno::Reference< star::ucb::XContentIdentifier >(
                            new ::ucb::ContentIdentifier( m_xSMgr, aNewURL ) );
@@ -1302,7 +1304,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
 
                             m_aProps.setTitle( aNewValue );
                             m_aProps.setName(
-                                    HierarchyUri::encodeSegment( aNewValue ) );
+                                ::ucb::urihelper::encodeSegment( aNewValue ) );
 
                             // property change event will be set later...
 
