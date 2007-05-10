@@ -4,9 +4,9 @@
  *
  *  $RCSfile: definitioncontainer.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:39:55 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:12:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -639,38 +639,39 @@ void ODefinitionContainer::approveNewObject(const ::rtl::OUString& _sName,const 
     // check the arguments
     if ( !_sName.getLength() )
         throw IllegalArgumentException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The name must not be empty." ) ),
+            DBA_RES( RID_STR_NAME_MUST_NOT_BE_EMPTY ),
             *this,
             0 );
-        // TODO: resource
+
+    if ( _sName.indexOf( '/' ) != -1 )
+        throw IllegalArgumentException(
+            DBA_RES( RID_STR_NO_SLASH_IN_OBJECT_NAME ),
+            *this,
+            0 );
 
     if ( !_rxObject.is() )
         throw IllegalArgumentException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The container cannot contain NULL objects." ) ),
+            DBA_RES( RID_STR_NO_NULL_OBJECTS_IN_CONTAINER ),
             *this,
             0 );
-        // TODO: resource
 
     const ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
     if ( rDefinitions.find( _sName ) != rDefinitions.end() )
         throw ElementExistException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "There already is an object with the given name." ) ),
+            DBA_RES( RID_STR_NAME_ALREADY_USED ),
             *this );
-        // TODO: resource
 
     ::rtl::Reference< OContentHelper > pContent( OContentHelper::getImplementation( _rxObject ) );
     if ( !pContent.is() )
         throw IllegalArgumentException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "This object cannot be part of this container." ) ),
+            DBA_RES( RID_STR_OBJECT_CONTAINER_MISMATCH ),
             *this,
             1 );
-        // TODO: resource
 
     if ( rDefinitions.find( pContent->getImpl() ) != rDefinitions.end() )
         throw ElementExistException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The object is already part of the container - under a different name." ) ),
+            DBA_RES( RID_STR_OBJECT_ALREADY_CONTAINED ),
             *this );
-        // TODO: resource
 }
 
 // -----------------------------------------------------------------------------
