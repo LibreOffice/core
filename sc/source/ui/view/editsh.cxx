@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:56:39 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 17:00:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
-#define ITEMID_FIELD EE_FEATURE_FIELD
 
 #include <svx/clipfmtitem.hxx>
 #include <svx/svxdlg.hxx>
@@ -497,7 +496,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
                             SvxURLField aURLField( rURL, rName, SVXURLFORMAT_REPR );
                             aURLField.SetTargetFrame( rTarget );
-                            SvxFieldItem aURLItem( aURLField );
+                            SvxFieldItem aURLItem( aURLField, EE_FEATURE_FIELD );
                             pTableView->InsertField( aURLItem );
                             pTableView->SetSelection( aSel );       // select inserted field
 
