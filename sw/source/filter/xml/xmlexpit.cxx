@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexpit.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-18 07:51:53 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:12:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -437,7 +437,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
     switch ( rItem.Which() )
     {
 
-        case ITEMID_LRSPACE:
+        case RES_LR_SPACE:
         {
             const SvxLRSpaceItem* pLRSpace = PTR_CAST(SvxLRSpaceItem, &rItem);
             DBG_ASSERT( pLRSpace != NULL, "Wrong Which-ID!" );
@@ -487,7 +487,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         }
         break;
 
-        case ITEMID_ULSPACE:
+        case RES_UL_SPACE:
         {
             const SvxULSpaceItem* pULSpace = PTR_CAST(SvxULSpaceItem, &rItem);
             DBG_ASSERT( pULSpace != NULL, "Wrong Which-ID!" );
@@ -516,7 +516,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         }
         break;
 
-        case ITEMID_SHADOW:
+        case RES_SHADOW:
         {
             const SvxShadowItem* pShadow = PTR_CAST(SvxShadowItem, &rItem);
             DBG_ASSERT( pShadow != NULL, "Wrong Which-ID" );
@@ -555,7 +555,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         }
         break;
 
-        case ITEMID_BOX:
+        case RES_BOX:
         {
             SvxBoxItem* pBox = PTR_CAST(SvxBoxItem, &rItem);
             DBG_ASSERT( pBox != NULL, "Wrong WHich-ID" );
@@ -803,7 +803,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         }
         break;
 
-        case ITEMID_FMTBREAK:
+        case RES_BREAK:
         {
             const SvxFmtBreakItem* pFmtBreak = PTR_CAST(SvxFmtBreakItem, &rItem);
             DBG_ASSERT( pFmtBreak != NULL, "Wrong Which-ID" );
@@ -850,7 +850,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         }
         break;
 
-        case ITEMID_FMTKEEP:
+        case RES_KEEP:
         {
             SvxFmtKeepItem* pFmtKeep = PTR_CAST(SvxFmtKeepItem, &rItem);
             DBG_ASSERT( pFmtKeep != NULL, "Wrong Which-ID" );
@@ -862,7 +862,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         }
         break;
 
-        case ITEMID_BRUSH:
+        case RES_BACKGROUND:
         {
             SvxBrushItem* pBrush = PTR_CAST(SvxBrushItem, &rItem);
             DBG_ASSERT( pBrush != NULL, "Wrong Which-ID" );
