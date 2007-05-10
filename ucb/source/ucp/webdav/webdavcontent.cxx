@@ -4,9 +4,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:05:32 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:08:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-#define BUG_110335 1
 /**************************************************************************
                                   TODO
  **************************************************************************
@@ -2170,7 +2169,8 @@ uno::Any Content::open(
                         // throw away previously cached headers.
                         m_xCachedProps.reset();
                     }
-
+#if 1
+                    // fill inpustream async; return immediately
                     DAVResourceAccessThread * th =
                         new DAVResourceAccessThread(
                             m_xSMgr,
@@ -2192,6 +2192,25 @@ uno::Any Content::open(
                         m_xCachedProps.reset(
                             new ContentProperties( th->getResource() ) );
                     }
+#else
+                    // fill inputsream sync; return if all data present
+                    DAVResource aResource;
+                    std::vector< rtl::OUString > aHeaders;
+//                        // Obtain list containing all HTTP headers that can
+//                        // be mapped to UCB properties.
+//                        ContentProperties::getMappableHTTPHeaders( aHeaders );
+                    uno::Reference< io::XInputStream > xIn
+                        = m_xResAccess->GET( aHeaders, aResource, xEnv );
+
+                    {
+                        osl::MutexGuard aGuard( m_aMutex );
+
+                        m_xCachedProps.reset(
+                            new ContentProperties( aResource ) );
+                    }
+
+                    xDataSink->setInputStream( xIn );
+#endif
                 }
                 catch ( DAVException const & e )
                 {
@@ -2390,8 +2409,11 @@ void Content::insert(
                 static_cast< cppu::OWeakObject * >( this ),
                 star::ucb::NameClash::ERROR );
 
-            uno::Reference< task::XInteractionHandler > xIH
-                = Environment->getInteractionHandler();
+            uno::Reference< task::XInteractionHandler > xIH;
+
+            if ( Environment.is() )
+                xIH = Environment->getInteractionHandler();
+
             if ( xIH.is() )
             {
                 uno::Any aExAsAny( uno::makeAny( aEx ) );
