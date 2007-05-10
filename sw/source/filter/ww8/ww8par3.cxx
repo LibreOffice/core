@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:17:52 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:11:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1907,7 +1907,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             if (pAktColl)
             {
                 pAktColl->SetAttr(*GetDfltAttr( RES_PARATR_NUMRULE));
-                pAktColl->SetAttr(SvxLRSpaceItem());    //#94672#
+                pAktColl->SetAttr(SvxLRSpaceItem(RES_LR_SPACE));    //#94672#
             }
             else if (SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode())
             {
@@ -1949,7 +1949,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                 }
 
                 //#94672#
-                pCtrlStck->NewAttr(*pPaM->GetPoint(), SvxLRSpaceItem());
+                pCtrlStck->NewAttr(*pPaM->GetPoint(), SvxLRSpaceItem(RES_LR_SPACE));
                 pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_LR_SPACE);
             }
             nLFOPosition = USHRT_MAX;
