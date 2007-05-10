@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:41:58 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:13:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1901,14 +1901,18 @@ void ScInterpreter::ScIsValue()
             if ( !pMat )
                 ;   // nothing
             else if ( !pJumpMatrix )
-                nRes = pMat->IsValue( 0 );
+            {
+                if (pMat->GetErrorIfNotString( 0 ) == 0)
+                    nRes = pMat->IsValue( 0 );
+            }
             else
             {
                 SCSIZE nCols, nRows, nC, nR;
                 pMat->GetDimensions( nCols, nRows);
                 pJumpMatrix->GetPos( nC, nR);
                 if ( nC < nCols && nR < nRows )
-                    nRes = pMat->IsValue( nC, nR);
+                    if (pMat->GetErrorIfNotString( nC, nR) == 0)
+                        nRes = pMat->IsValue( nC, nR);
             }
         }
         break;
@@ -2003,14 +2007,14 @@ void ScInterpreter::ScIsNV()
             if ( !pMat )
                 ;   // nothing
             else if ( !pJumpMatrix )
-                nRes = (GetDoubleErrorValue( pMat->GetDouble( 0 )) == NOVALUE);
+                nRes = (pMat->GetErrorIfNotString( 0 ) == NOVALUE);
             else
             {
                 SCSIZE nCols, nRows, nC, nR;
                 pMat->GetDimensions( nCols, nRows);
                 pJumpMatrix->GetPos( nC, nR);
                 if ( nC < nCols && nR < nRows )
-                    nRes = (GetDoubleErrorValue( pMat->GetDouble( nC, nR)) == NOVALUE);
+                    nRes = (pMat->GetErrorIfNotString( nC, nR) == NOVALUE);
             }
         }
         break;
@@ -2052,7 +2056,7 @@ void ScInterpreter::ScIsErr()
                 nRes = ((nGlobalError && nGlobalError != NOVALUE) || !pMat);
             else if ( !pJumpMatrix )
             {
-                USHORT nErr = GetDoubleErrorValue( pMat->GetDouble( 0 ));
+                USHORT nErr = pMat->GetErrorIfNotString( 0 );
                 nRes = (nErr && nErr != NOVALUE);
             }
             else
@@ -2062,7 +2066,7 @@ void ScInterpreter::ScIsErr()
                 pJumpMatrix->GetPos( nC, nR);
                 if ( nC < nCols && nR < nRows )
                 {
-                    USHORT nErr = GetDoubleErrorValue( pMat->GetDouble( nC, nR));
+                    USHORT nErr = pMat->GetErrorIfNotString( nC, nR);
                     nRes = (nErr && nErr != NOVALUE);
                 }
             }
@@ -2108,14 +2112,14 @@ void ScInterpreter::ScIsError()
             if ( nGlobalError || !pMat )
                 nRes = 1;
             else if ( !pJumpMatrix )
-                nRes = (GetDoubleErrorValue( pMat->GetDouble( 0 )) != 0);
+                nRes = (pMat->GetErrorIfNotString( 0 ) != 0);
             else
             {
                 SCSIZE nCols, nRows, nC, nR;
                 pMat->GetDimensions( nCols, nRows);
                 pJumpMatrix->GetPos( nC, nR);
                 if ( nC < nCols && nR < nRows )
-                    nRes = (GetDoubleErrorValue( pMat->GetDouble( nC, nR)) != 0);
+                    nRes = (pMat->GetErrorIfNotString( nC, nR) != 0);
             }
         }
         break;
