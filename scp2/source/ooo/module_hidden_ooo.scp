@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:52:26 $
+ *  last change: $Author: gm $ $Date: 2007-05-10 11:06:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -461,7 +461,8 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Fps,
 	gid_File_Lib_Ftransl,
 	gid_File_Lib_Lngpckinsthlp,
-	GID_FILE_LIB_WPD,
+    gid_File_Lib_sn_tools,
+    GID_FILE_LIB_WPD,
 	gid_File_Lib_Msci_Uno,
 	gid_File_Lib_Msvcp70,
 	gid_File_Lib_Msvcr70,
