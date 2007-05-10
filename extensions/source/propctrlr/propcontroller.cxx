@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:58:19 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:49:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,9 +263,56 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
+    void OPropertyBrowserController::impl_updateReadOnlyView_nothrow()
+    {
+        // this is a huge cudgel, admitted.
+        // The problem is that in case we were previously read-only, all our controls
+        // were created read-only, too. We cannot simply switch them to not-read-only.
+        // Even if they had an API for this, we do not know whether they were
+        // originally created read-only, or if they are read-only just because
+        // the model was.
+        impl_rebindToInspectee_nothrow( m_aInspectedObjects );
+    }
+
+    //--------------------------------------------------------------------
+    bool OPropertyBrowserController::impl_isReadOnlyModel_throw() const
+    {
+        if ( !m_xModel.is() )
+            return false;
+
+        return m_xModel->getIsReadOnly();
+    }
+
+    //--------------------------------------------------------------------
+    void OPropertyBrowserController::impl_startOrStopModelListening_nothrow( bool _bDoListen ) const
+    {
+        if ( !m_xModel.is() )
+            return;
+
+        try
+        {
+            Reference< XPropertySet > xModelProperties( m_xModel, UNO_QUERY_THROW );
+
+            void (SAL_CALL XPropertySet::*pListenerOperation)( const ::rtl::OUString&, const Reference< XPropertyChangeListener >& )
+                = _bDoListen ? &XPropertySet::addPropertyChangeListener : &XPropertySet::removePropertyChangeListener;
+
+            (xModelProperties.get()->*pListenerOperation)(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ),
+                const_cast< OPropertyBrowserController* >( this )
+            );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+
+    //--------------------------------------------------------------------
     void OPropertyBrowserController::impl_bindToNewModel_nothrow( const Reference< XObjectInspectorModel >& _rxInspectorModel )
     {
+        impl_startOrStopModelListening_nothrow( false );
         m_xModel = _rxInspectorModel;
+        impl_startOrStopModelListening_nothrow( true );
 
         // initialize the view, if we already have one
         if ( haveView() )
@@ -273,7 +320,7 @@ namespace pcr
 
         // inspect again, if we already have inspectees
         if ( m_aInspectedObjects.size() )
-            rebindToInspectee( m_aInspectedObjects );
+            impl_rebindToInspectee_nothrow( m_aInspectedObjects );
     }
 
     //--------------------------------------------------------------------
@@ -300,13 +347,13 @@ namespace pcr
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        if ( m_bSuspendingPropertyHandlers || !suspendPropertyHandlers_nothrow( sal_True ) )
+        if ( m_bSuspendingPropertyHandlers || !suspendAll_nothrow() )
         {   // we already are trying to suspend the component (this is somewhere up the stack)
             // OR one of our property handlers raised a veto against closing. Well, we *need* to close
             // it in order to inspect another object.
             throw VetoException();
         }
-        rebindToInspectee( InterfaceArray( _rObjects.getConstArray(), _rObjects.getConstArray() + _rObjects.getLength() ) );
+        impl_rebindToInspectee_nothrow( InterfaceArray( _rObjects.getConstArray(), _rObjects.getConstArray() + _rObjects.getLength() ) );
     }
 
     //--------------------------------------------------------------------
@@ -430,6 +477,25 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
+    sal_Bool OPropertyBrowserController::suspendAll_nothrow()
+    {
+        // if there is a handle inside its "onInteractivePropertySelection" method,
+        // then veto
+        // Normally, we could expect every handler to do this itself, but being
+        // realistic, it's safer to handle this here in general.
+        if ( m_xInteractiveHandler.is() )
+            return sal_False;
+
+        m_bSuspendingPropertyHandlers = true;
+        sal_Bool bHandlerVeto = !suspendPropertyHandlers_nothrow( sal_True );
+        m_bSuspendingPropertyHandlers = false;
+        if ( bHandlerVeto )
+            return sal_False;
+
+        return sal_True;
+    }
+
+    //------------------------------------------------------------------------
     sal_Bool OPropertyBrowserController::suspendPropertyHandlers_nothrow( sal_Bool _bSuspend )
     {
         PropertyHandlerArray aAllHandlers;  // will contain every handler exactly once
@@ -478,13 +544,8 @@ namespace pcr
             return sal_False;
         }
 
-        {
-            m_bSuspendingPropertyHandlers = true;
-            sal_Bool bHandlerVeto = !suspendPropertyHandlers_nothrow( sal_True );
-            m_bSuspendingPropertyHandlers = false;
-            if ( bHandlerVeto )
-                return sal_False;
-        }
+        if ( !suspendAll_nothrow() )
+            return sal_False;
 
         // commit the editor's content
         if ( haveView() )
@@ -549,6 +610,8 @@ namespace pcr
             xViewAsComp->removeEventListener( static_cast< XPropertyChangeListener* >( this ) );
         m_xView.clear( );
 
+        m_aInspectedObjects.clear();
+        impl_bindToNewModel_nothrow( NULL );
     }
 
     //------------------------------------------------------------------------
@@ -738,6 +801,13 @@ namespace pcr
     //------------------------------------------------------------------------
     void SAL_CALL OPropertyBrowserController::propertyChange( const PropertyChangeEvent& _rEvent ) throw (RuntimeException)
     {
+        if ( _rEvent.Source == m_xModel )
+        {
+            if ( _rEvent.PropertyName.equalsAscii( "IsReadOnly" ) )
+                impl_updateReadOnlyView_nothrow();
+            return;
+        }
+
         if ( m_sCommittingProperty != _rEvent.PropertyName )
         {
             Any aNewValue( _rEvent.NewValue );
@@ -758,13 +828,18 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    Reference< XPropertyControl > SAL_CALL OPropertyBrowserController::createPropertyControl( ::sal_Int16 ControlType, ::sal_Bool CreateReadOnly ) throw (IllegalArgumentException, RuntimeException)
+    Reference< XPropertyControl > SAL_CALL OPropertyBrowserController::createPropertyControl( ::sal_Int16 ControlType, ::sal_Bool _CreateReadOnly ) throw (IllegalArgumentException, RuntimeException)
     {
+        ::osl::MutexGuard aGuard( m_aMutex );
+
         Reference< XPropertyControl > xControl;
 
         // default winbits: a border only
         WinBits nWinBits = WB_BORDER;
-        if ( CreateReadOnly )
+
+        // read-only-ness
+        _CreateReadOnly |= (sal_Bool)impl_isReadOnlyModel_throw();
+        if ( _CreateReadOnly )
             nWinBits |= WB_READONLY;
 
         switch ( ControlType )
@@ -949,7 +1024,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::rebindToInspectee( const InterfaceArray& _rObjects )
+    void OPropertyBrowserController::impl_rebindToInspectee_nothrow( const InterfaceArray& _rObjects )
     {
         try
         {
@@ -966,7 +1041,7 @@ namespace pcr
 
         catch(Exception&)
         {
-            DBG_ERROR("OPropertyBrowserController::rebindToInspectee: caught an exception !");
+            DBG_ERROR("OPropertyBrowserController::impl_rebindToInspectee_nothrow: caught an exception !");
         }
     }
 
@@ -1163,6 +1238,8 @@ namespace pcr
                 _rDescriptor.bUnknownValue = true;
                 _rDescriptor.aValue.clear();
             }
+
+            _rDescriptor.bReadOnly = impl_isReadOnlyModel_throw();
         }
         catch( const Exception& )
         {
@@ -1332,6 +1409,7 @@ namespace pcr
             ComposedUIAutoFireGuard aAutoFireGuard( *m_pUIRequestComposer );
 
             Any aData;
+            m_xInteractiveHandler = handler->second;
             InteractiveSelectionResult eResult =
                 handler->second->onInteractivePropertySelection( _rName, _bPrimary, aData,
                     m_pUIRequestComposer->getUIForPropertyHandler( handler->second ) );
@@ -1357,6 +1435,7 @@ namespace pcr
         {
             DBG_ERROR("OPropertyBrowserController::Clicked : caught an exception !")
         }
+        m_xInteractiveHandler = NULL;
     }
 
     //------------------------------------------------------------------------
