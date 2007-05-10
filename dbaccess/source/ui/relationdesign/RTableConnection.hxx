@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RTableConnection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:30:43 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:40:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,6 @@ namespace dbaui
     //==================================================================
     class ORelationTableConnection : public OTableConnection
     {
-    protected:
-        OConnectionLine* CreateConnLine( const OConnectionLine& rConnLine );
-
     public:
         ORelationTableConnection( ORelationTableView* pContainer, ORelationTableConnectionData* pTabConnData );
         ORelationTableConnection( const ORelationTableConnection& rConn );
