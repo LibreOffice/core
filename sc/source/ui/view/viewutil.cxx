@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewutil.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:59:04 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 17:04:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -355,7 +355,7 @@ BOOL ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
             aFont    = pDlg->GetCharFont();
             rNewFont = SvxFontItem( aFont.GetFamily(), aFont.GetName(),
                                     aFont.GetStyleName(), aFont.GetPitch(),
-                                    aFont.GetCharSet() );                   //  nId egal
+                                    aFont.GetCharSet(), ATTR_FONT  );
 
             bRet = TRUE;
         }
