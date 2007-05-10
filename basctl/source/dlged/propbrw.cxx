@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:52:31 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:44:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,9 @@
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 #ifndef _SFX_BINDINGS_HXX
@@ -604,42 +607,43 @@ void PropBrw::Update( SdrView* pNewView )
         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         sal_uInt32 nMarkCount = rMarkList.GetMarkCount();
 
+        if ( nMarkCount == 0 )
+        {
+            EndListening( *(pView->GetModel()) );
+            pView = NULL;
+            implSetNewObject( NULL );
+            return;
+        }
+
+        Reference< XPropertySet > xNewObject;
+        Sequence< Reference< XInterface > > aNewObjects;
         if ( nMarkCount == 1 )
         {
             DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, rMarkList.GetMark(0)->GetMarkedSdrObj() );
             if ( pDlgEdObj )
             {
                 if ( pDlgEdObj->IsGroupObject() ) // group object
-                {
-                    implSetNewObjectSequence( CreateMultiSelectionSequence( rMarkList ) );
-                }
+                    aNewObjects = CreateMultiSelectionSequence( rMarkList );
                 else // single selection
-                {
-                    implSetNewObject( Reference< XPropertySet >( pDlgEdObj->GetUnoControlModel(), UNO_QUERY ) );
-                }
-            }
-            else
-            {
-                implSetNewObject( Reference< XPropertySet >() );
+                    xNewObject = xNewObject.query( pDlgEdObj->GetUnoControlModel() );
             }
         }
         else if ( nMarkCount > 1 ) // multiple selection
         {
-            implSetNewObjectSequence( CreateMultiSelectionSequence( rMarkList ) );
+            aNewObjects = CreateMultiSelectionSequence( rMarkList );
         }
+
+        if ( aNewObjects.getLength() )
+            implSetNewObjectSequence( aNewObjects );
         else
-        {
-            EndListening( *(pView->GetModel()) );
-            pView = NULL;
-            implSetNewObject( Reference< XPropertySet >() );
-            return;
-        }
+            implSetNewObject( xNewObject );
 
         StartListening( *(pView->GetModel()) );
     }
-    catch ( Exception& )
+    catch ( const PropertyVetoException& ) { /* silence */ }
+    catch ( const Exception& )
     {
-        DBG_ERROR( "PropBrw::Update: Exception occured!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
