@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmmergepage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:04:08 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:15:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,9 +50,6 @@
 #endif
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
-#endif
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
 #endif
 #ifndef _VIEW_HXX
 #include <view.hxx>

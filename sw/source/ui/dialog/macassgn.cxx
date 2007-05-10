@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macassgn.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:49:23 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:15:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,9 +157,9 @@ BOOL SwMacroAssignDlg::INetFmtDlg( Window* pParent, SwWrtShell& rSh,
 {
     BOOL bRet = FALSE;
     SfxItemSet aSet( rSh.GetAttrPool(), RES_FRMMACRO, RES_FRMMACRO );
-    SvxMacroItem aItem;
+    SvxMacroItem aItem( RES_FRMMACRO );
     if( !rpINetItem )
-        rpINetItem = new SvxMacroItem;
+        rpINetItem = new SvxMacroItem( RES_FRMMACRO );
     else
         aItem.SetMacroTable( rpINetItem->GetMacroTable() );
 
