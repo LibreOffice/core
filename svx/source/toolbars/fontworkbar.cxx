@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontworkbar.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:42:26 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:02:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,8 +79,6 @@
 #ifndef _EEITEM_HXX //autogen
 #include <eeitem.hxx>
 #endif
-#define ITEMID_CHARSCALE_W  EE_CHAR_FONTWIDTH
-#define ITEMID_KERNING      EE_CHAR_KERNING
 #ifndef _SVX_CHARSCALEITEM_HXX
 #include <charscaleitem.hxx>
 #endif
