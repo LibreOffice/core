@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:26:45 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:33:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,19 +41,12 @@
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
 #endif
-#ifndef _EEITEMID_HXX //autogen
-#include <svx/eeitemid.hxx>
-#endif
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
 #endif
 #ifndef _SVX_FHGTITEM_HXX //autogen
 #include <svx/fhgtitem.hxx>
 #endif
-#ifdef ITEMID_SEARCH
-#undef ITEMID_SEARCH
-#endif
-#define ITEMID_SEARCH           SID_SEARCH_ITEM
 #ifndef _SFX_SRCHITEM_HXX
 #include <sfx2/srchitem.hxx>
 #endif
