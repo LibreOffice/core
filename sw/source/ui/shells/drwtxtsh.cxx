@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:16:21 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:22:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,9 +132,6 @@
 #endif
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
-#endif
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
 #endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
@@ -868,7 +865,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 
     SfxItemSet aSet(pOLV->GetAttribs());
     USHORT nScript = pOLV->GetSelectedScriptType();
-    SvxFontItem aSetDlgFont;
+    SvxFontItem aSetDlgFont( RES_CHRATR_FONT );
     {
         SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, *aSet.GetPool() );
         aSetItem.GetItemSet().Put( aSet, FALSE );
