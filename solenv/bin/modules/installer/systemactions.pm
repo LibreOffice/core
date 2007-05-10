@@ -4,9 +4,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: gm $ $Date: 2007-05-10 10:59:25 $
+#   last change: $Author: kz $ $Date: 2007-05-10 13:56:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1108,6 +1108,36 @@ sub get_all_files_from_one_directory
         my $completeentry = $basedir . $installer::globals::separator . $direntry;
 
         if ( -f $completeentry ) { push(@allfiles, $completeentry); }
+    }
+
+    closedir(DIR);
+
+    return \@allfiles;
+}
+
+##############################################################
+# Collecting all files inside one directory
+##############################################################
+
+sub get_all_files_from_one_directory_without_path
+{
+    my ($basedir) = @_;
+
+    my @allfiles = ();
+    my $direntry;
+
+    $basedir =~ s/\Q$installer::globals::separator\E\s*$//;
+
+    opendir(DIR, $basedir);
+
+    foreach $direntry (readdir (DIR))
+    {
+        next if $direntry eq ".";
+        next if $direntry eq "..";
+
+        my $completeentry = $basedir . $installer::globals::separator . $direntry;
+
+        if ( -f $completeentry ) { push(@allfiles, $direntry); }
     }
 
     closedir(DIR);
