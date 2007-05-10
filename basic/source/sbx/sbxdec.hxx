@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxdec.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:34:40 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:18:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 
 #ifdef WIN32
 
+#undef WB_LEFT
+#undef WB_RIGHT
 #include <tools/prewin.h>
 }   // close extern "C" {
 
