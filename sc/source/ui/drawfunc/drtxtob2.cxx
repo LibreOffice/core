@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:50:11 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:56:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,10 @@ void __EXPORT ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
             {
                 SfxItemSet aAttr( pView->GetModel()->GetItemPool(), SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION, 0 );
-                aAttr.Put( SvxWritingModeItem( nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ? com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL ) );
+                aAttr.Put( SvxWritingModeItem(
+                    nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
+                        com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL,
+                        ATTR_WRITINGDIR ) );
                 pView->SetAttributes( aAttr );
                 pViewData->GetScDrawView()->InvalidateDrawTextAttrs();  // Bidi slots may be disabled
                 rReq.Done( aAttr );
@@ -287,7 +290,7 @@ void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
 
             if ( pDocSh )
             {
-                const SfxPoolItem*  pItem = pDocSh->GetItem( ITEMID_COLOR_TABLE );
+                const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
                 XColorTable*        pColorTable = NULL;
 
                 if ( pItem )
