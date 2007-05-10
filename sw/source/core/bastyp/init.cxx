@@ -4,9 +4,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:32:46 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:54:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -667,80 +665,48 @@ void _InitCore()
     memset( aAttrTab, 0, (POOLATTR_END - POOLATTR_BEGIN) *
                             sizeof( SfxPoolItem* ) );
 
-    aAttrTab[ RES_CHRATR_CASEMAP- POOLATTR_BEGIN ] = new SvxCaseMapItem;
-    aAttrTab[ RES_CHRATR_CHARSETCOLOR- POOLATTR_BEGIN ] = new SvxCharSetColorItem;
-    aAttrTab[ RES_CHRATR_COLOR- POOLATTR_BEGIN ] = new SvxColorItem;
-    aAttrTab[ RES_CHRATR_CONTOUR- POOLATTR_BEGIN ] = new SvxContourItem;
-    aAttrTab[ RES_CHRATR_CROSSEDOUT- POOLATTR_BEGIN ] = new SvxCrossedOutItem;
-    aAttrTab[ RES_CHRATR_ESCAPEMENT- POOLATTR_BEGIN ] = new SvxEscapementItem;
-    aAttrTab[ RES_CHRATR_FONT- POOLATTR_BEGIN ] =
-                                        new SvxFontItem( RES_CHRATR_FONT );
+    aAttrTab[ RES_CHRATR_CASEMAP- POOLATTR_BEGIN ] =        new SvxCaseMapItem( SVX_CASEMAP_NOT_MAPPED, RES_CHRATR_CASEMAP);
+    aAttrTab[ RES_CHRATR_CHARSETCOLOR- POOLATTR_BEGIN ] =   new SvxCharSetColorItem(RES_CHRATR_CHARSETCOLOR);
+    aAttrTab[ RES_CHRATR_COLOR- POOLATTR_BEGIN ] =          new SvxColorItem(RES_CHRATR_COLOR);
+    aAttrTab[ RES_CHRATR_CONTOUR- POOLATTR_BEGIN ] =        new SvxContourItem( sal_False, RES_CHRATR_CONTOUR );
+    aAttrTab[ RES_CHRATR_CROSSEDOUT- POOLATTR_BEGIN ] =     new SvxCrossedOutItem( STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT );
+    aAttrTab[ RES_CHRATR_ESCAPEMENT- POOLATTR_BEGIN ] =     new SvxEscapementItem( RES_CHRATR_ESCAPEMENT );
+    aAttrTab[ RES_CHRATR_FONT- POOLATTR_BEGIN ] =           new SvxFontItem( RES_CHRATR_FONT );
 
-    aAttrTab[ RES_CHRATR_FONTSIZE- POOLATTR_BEGIN ] = new SvxFontHeightItem;
-    aAttrTab[ RES_CHRATR_KERNING- POOLATTR_BEGIN ] = new SvxKerningItem;
-    aAttrTab[ RES_CHRATR_LANGUAGE- POOLATTR_BEGIN ] = new SvxLanguageItem(LANGUAGE_DONTKNOW);
-    aAttrTab[ RES_CHRATR_POSTURE- POOLATTR_BEGIN ] = new SvxPostureItem;
-    aAttrTab[ RES_CHRATR_PROPORTIONALFONTSIZE- POOLATTR_BEGIN ] = new SvxPropSizeItem;
-    aAttrTab[ RES_CHRATR_SHADOWED- POOLATTR_BEGIN ] = new SvxShadowedItem;
-    aAttrTab[ RES_CHRATR_UNDERLINE- POOLATTR_BEGIN ] = new SvxUnderlineItem;
-    aAttrTab[ RES_CHRATR_WEIGHT- POOLATTR_BEGIN ] = new SvxWeightItem;
-    aAttrTab[ RES_CHRATR_WORDLINEMODE- POOLATTR_BEGIN ] = new SvxWordLineModeItem;
-    aAttrTab[ RES_CHRATR_AUTOKERN- POOLATTR_BEGIN ] = new SvxAutoKernItem;
-    aAttrTab[ RES_CHRATR_BLINK - POOLATTR_BEGIN ]
-                = new SvxBlinkItem( FALSE, RES_CHRATR_BLINK );
-    aAttrTab[ RES_CHRATR_NOHYPHEN - POOLATTR_BEGIN ]
-                = new SvxNoHyphenItem( TRUE, RES_CHRATR_NOHYPHEN );
-    aAttrTab[ RES_CHRATR_NOLINEBREAK- POOLATTR_BEGIN ]
-                = new SvxNoLinebreakItem( TRUE, RES_CHRATR_NOLINEBREAK );
-    aAttrTab[ RES_CHRATR_BACKGROUND - POOLATTR_BEGIN ]
-                = new SvxBrushItem( RES_CHRATR_BACKGROUND );
+    aAttrTab[ RES_CHRATR_FONTSIZE- POOLATTR_BEGIN ] =       new SvxFontHeightItem( 240, 100, RES_CHRATR_FONTSIZE );
+    aAttrTab[ RES_CHRATR_KERNING- POOLATTR_BEGIN ] =        new SvxKerningItem( 0, RES_CHRATR_KERNING );
+    aAttrTab[ RES_CHRATR_LANGUAGE- POOLATTR_BEGIN ] =       new SvxLanguageItem(LANGUAGE_DONTKNOW, RES_CHRATR_LANGUAGE );
+    aAttrTab[ RES_CHRATR_POSTURE- POOLATTR_BEGIN ] =        new SvxPostureItem( ITALIC_NONE, RES_CHRATR_POSTURE );
+    aAttrTab[ RES_CHRATR_PROPORTIONALFONTSIZE- POOLATTR_BEGIN ] = new SvxPropSizeItem( 100, RES_CHRATR_PROPORTIONALFONTSIZE );
+    aAttrTab[ RES_CHRATR_SHADOWED- POOLATTR_BEGIN ] =       new SvxShadowedItem( sal_False, RES_CHRATR_SHADOWED );
+    aAttrTab[ RES_CHRATR_UNDERLINE- POOLATTR_BEGIN ] =      new SvxUnderlineItem( UNDERLINE_NONE, RES_CHRATR_UNDERLINE );
+    aAttrTab[ RES_CHRATR_WEIGHT- POOLATTR_BEGIN ] =         new SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_WEIGHT );
+    aAttrTab[ RES_CHRATR_WORDLINEMODE- POOLATTR_BEGIN ] =   new SvxWordLineModeItem( sal_False, RES_CHRATR_WORDLINEMODE );
+    aAttrTab[ RES_CHRATR_AUTOKERN- POOLATTR_BEGIN ] =       new SvxAutoKernItem( sal_False, RES_CHRATR_AUTOKERN );
+    aAttrTab[ RES_CHRATR_BLINK - POOLATTR_BEGIN ] =         new SvxBlinkItem( FALSE, RES_CHRATR_BLINK );
+    aAttrTab[ RES_CHRATR_NOHYPHEN - POOLATTR_BEGIN ] =      new SvxNoHyphenItem( TRUE, RES_CHRATR_NOHYPHEN );
+    aAttrTab[ RES_CHRATR_NOLINEBREAK- POOLATTR_BEGIN ] =    new SvxNoLinebreakItem( TRUE, RES_CHRATR_NOLINEBREAK );
+    aAttrTab[ RES_CHRATR_BACKGROUND - POOLATTR_BEGIN ] =    new SvxBrushItem( RES_CHRATR_BACKGROUND );
 
     // CJK-Attributes
-    aAttrTab[ RES_CHRATR_CJK_FONT - POOLATTR_BEGIN ] =
-                                    new SvxFontItem( RES_CHRATR_CJK_FONT );
-
-    pItem = new SvxFontHeightItem;
-    pItem->SetWhich( RES_CHRATR_CJK_FONTSIZE );
-    aAttrTab[ RES_CHRATR_CJK_FONTSIZE - POOLATTR_BEGIN ] = pItem;
-
-    pItem = new SvxLanguageItem(LANGUAGE_DONTKNOW);
-    pItem->SetWhich( RES_CHRATR_CJK_LANGUAGE );
-    aAttrTab[ RES_CHRATR_CJK_LANGUAGE - POOLATTR_BEGIN ] = pItem;
-
-    pItem = new SvxPostureItem;
-    pItem->SetWhich( RES_CHRATR_CJK_POSTURE );
-    aAttrTab[ RES_CHRATR_CJK_POSTURE - POOLATTR_BEGIN ] = pItem;
-
-    pItem = new SvxWeightItem;
-    pItem->SetWhich( RES_CHRATR_CJK_WEIGHT );
-    aAttrTab[ RES_CHRATR_CJK_WEIGHT - POOLATTR_BEGIN ] = pItem;
+    aAttrTab[ RES_CHRATR_CJK_FONT - POOLATTR_BEGIN ] =      new SvxFontItem( RES_CHRATR_CJK_FONT );
+    aAttrTab[ RES_CHRATR_CJK_FONTSIZE - POOLATTR_BEGIN ] =  new SvxFontHeightItem( 240, 100, RES_CHRATR_CJK_FONTSIZE );
+    aAttrTab[ RES_CHRATR_CJK_LANGUAGE - POOLATTR_BEGIN ] =  new SvxLanguageItem(LANGUAGE_DONTKNOW, RES_CHRATR_CJK_LANGUAGE);
+    aAttrTab[ RES_CHRATR_CJK_POSTURE - POOLATTR_BEGIN ] =   new SvxPostureItem(ITALIC_NONE, RES_CHRATR_CJK_POSTURE );
+    aAttrTab[ RES_CHRATR_CJK_WEIGHT - POOLATTR_BEGIN ] =    new SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_CJK_WEIGHT );
 
     // CTL-Attributes
-    aAttrTab[ RES_CHRATR_CTL_FONT - POOLATTR_BEGIN ] =
-                                    new SvxFontItem( RES_CHRATR_CTL_FONT );
+    aAttrTab[ RES_CHRATR_CTL_FONT - POOLATTR_BEGIN ] =      new SvxFontItem( RES_CHRATR_CTL_FONT );
+    aAttrTab[ RES_CHRATR_CTL_FONTSIZE - POOLATTR_BEGIN ] =  new SvxFontHeightItem(  240, 100,  RES_CHRATR_CTL_FONTSIZE );
+    aAttrTab[ RES_CHRATR_CTL_LANGUAGE - POOLATTR_BEGIN ] =  new SvxLanguageItem(LANGUAGE_DONTKNOW, RES_CHRATR_CTL_LANGUAGE);
+    aAttrTab[ RES_CHRATR_CTL_POSTURE - POOLATTR_BEGIN ] =   new SvxPostureItem(ITALIC_NONE, RES_CHRATR_CTL_POSTURE );
+    aAttrTab[ RES_CHRATR_CTL_WEIGHT - POOLATTR_BEGIN ] =    new SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_CTL_WEIGHT );
 
-    pItem = new SvxFontHeightItem;
-    pItem->SetWhich( RES_CHRATR_CTL_FONTSIZE );
-    aAttrTab[ RES_CHRATR_CTL_FONTSIZE - POOLATTR_BEGIN ] = pItem;
-
-    pItem = new SvxLanguageItem(LANGUAGE_DONTKNOW);
-    pItem->SetWhich( RES_CHRATR_CTL_LANGUAGE );
-    aAttrTab[ RES_CHRATR_CTL_LANGUAGE - POOLATTR_BEGIN ] = pItem;
-
-    pItem = new SvxPostureItem;
-    pItem->SetWhich( RES_CHRATR_CTL_POSTURE );
-    aAttrTab[ RES_CHRATR_CTL_POSTURE - POOLATTR_BEGIN ] = pItem;
-
-    pItem = new SvxWeightItem;
-    pItem->SetWhich( RES_CHRATR_CTL_WEIGHT );
-    aAttrTab[ RES_CHRATR_CTL_WEIGHT - POOLATTR_BEGIN ] = pItem;
-
-    aAttrTab[ RES_CHRATR_ROTATE - POOLATTR_BEGIN ] = new SvxCharRotateItem;
-    aAttrTab[ RES_CHRATR_EMPHASIS_MARK - POOLATTR_BEGIN ] =
-                new SvxEmphasisMarkItem;
-    aAttrTab[ RES_CHRATR_TWO_LINES - POOLATTR_BEGIN ] = new SvxTwoLinesItem( FALSE );
-    aAttrTab[ RES_CHRATR_SCALEW - POOLATTR_BEGIN ] = new SvxCharScaleWidthItem;
-    aAttrTab[ RES_CHRATR_RELIEF - POOLATTR_BEGIN ] = new SvxCharReliefItem;
+    aAttrTab[ RES_CHRATR_ROTATE - POOLATTR_BEGIN ] =        new SvxCharRotateItem( 0, sal_False, RES_CHRATR_ROTATE );
+    aAttrTab[ RES_CHRATR_EMPHASIS_MARK - POOLATTR_BEGIN ] = new SvxEmphasisMarkItem( EMPHASISMARK_NONE, RES_CHRATR_EMPHASIS_MARK );
+    aAttrTab[ RES_CHRATR_TWO_LINES - POOLATTR_BEGIN ] = new SvxTwoLinesItem( FALSE, 0, 0, RES_CHRATR_TWO_LINES );
+    aAttrTab[ RES_CHRATR_SCALEW - POOLATTR_BEGIN ] = new SvxCharScaleWidthItem( 100, RES_CHRATR_SCALEW );
+    aAttrTab[ RES_CHRATR_RELIEF - POOLATTR_BEGIN ] = new SvxCharReliefItem( RELIEF_NONE, RES_CHRATR_RELIEF );
     aAttrTab[ RES_CHRATR_HIDDEN - POOLATTR_BEGIN ] = new SvxCharHiddenItem( FALSE, RES_CHRATR_HIDDEN );
 
 // CharakterAttr - Dummies
@@ -769,14 +735,14 @@ void _InitCore()
     aAttrTab[ RES_TXTATR_DUMMY7 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY7 );
 // TextAttr - Dummies
 
-    aAttrTab[ RES_PARATR_LINESPACING- POOLATTR_BEGIN ] = new SvxLineSpacingItem;
-    aAttrTab[ RES_PARATR_ADJUST- POOLATTR_BEGIN ] = new SvxAdjustItem;
-    aAttrTab[ RES_PARATR_SPLIT- POOLATTR_BEGIN ] = new SvxFmtSplitItem;
-    aAttrTab[ RES_PARATR_WIDOWS- POOLATTR_BEGIN ] = new SvxWidowsItem;
-    aAttrTab[ RES_PARATR_ORPHANS- POOLATTR_BEGIN ] = new SvxOrphansItem;
-    aAttrTab[ RES_PARATR_TABSTOP- POOLATTR_BEGIN ] = new SvxTabStopItem( 1, SVX_TAB_DEFDIST );
+    aAttrTab[ RES_PARATR_LINESPACING- POOLATTR_BEGIN ] = new SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, RES_PARATR_LINESPACING );
+    aAttrTab[ RES_PARATR_ADJUST- POOLATTR_BEGIN ] = new SvxAdjustItem( SVX_ADJUST_LEFT, RES_PARATR_ADJUST );
+    aAttrTab[ RES_PARATR_SPLIT- POOLATTR_BEGIN ] = new SvxFmtSplitItem( sal_True, RES_PARATR_SPLIT );
+    aAttrTab[ RES_PARATR_WIDOWS- POOLATTR_BEGIN ] = new SvxWidowsItem( 0, RES_PARATR_WIDOWS );
+    aAttrTab[ RES_PARATR_ORPHANS- POOLATTR_BEGIN ] = new SvxOrphansItem( 0, RES_PARATR_ORPHANS );
+    aAttrTab[ RES_PARATR_TABSTOP- POOLATTR_BEGIN ] = new SvxTabStopItem( 1, SVX_TAB_DEFDIST, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
 
-    pItem = new SvxHyphenZoneItem;
+    pItem = new SvxHyphenZoneItem( sal_False, RES_PARATR_HYPHENZONE );
     ((SvxHyphenZoneItem*)pItem)->GetMaxHyphens() = 0; // Default z.Z. auf 0
     aAttrTab[ RES_PARATR_HYPHENZONE- POOLATTR_BEGIN ] = pItem;
 
@@ -784,15 +750,11 @@ void _InitCore()
     aAttrTab[ RES_PARATR_REGISTER - POOLATTR_BEGIN ] = new SwRegisterItem( FALSE );
     aAttrTab[ RES_PARATR_NUMRULE - POOLATTR_BEGIN ] = new SwNumRuleItem( aEmptyStr );
 
-    aAttrTab[ RES_PARATR_SCRIPTSPACE - POOLATTR_BEGIN ] =
-                                        new SvxScriptSpaceItem( TRUE );
-    aAttrTab[ RES_PARATR_HANGINGPUNCTUATION - POOLATTR_BEGIN ] =
-                                        new SvxHangingPunctuationItem( TRUE );
-    aAttrTab[ RES_PARATR_FORBIDDEN_RULES - POOLATTR_BEGIN ] =
-                                        new SvxForbiddenRuleItem( TRUE );
-    aAttrTab[ RES_PARATR_VERTALIGN - POOLATTR_BEGIN ] =
-                            new SvxParaVertAlignItem( 0 );
-    aAttrTab[ RES_PARATR_SNAPTOGRID - POOLATTR_BEGIN ] = new SvxParaGridItem;
+    aAttrTab[ RES_PARATR_SCRIPTSPACE - POOLATTR_BEGIN ] =           new SvxScriptSpaceItem( TRUE, RES_PARATR_SCRIPTSPACE );
+    aAttrTab[ RES_PARATR_HANGINGPUNCTUATION - POOLATTR_BEGIN ] =    new SvxHangingPunctuationItem( TRUE, RES_PARATR_HANGINGPUNCTUATION );
+    aAttrTab[ RES_PARATR_FORBIDDEN_RULES - POOLATTR_BEGIN ] =       new SvxForbiddenRuleItem( TRUE, RES_PARATR_FORBIDDEN_RULES );
+    aAttrTab[ RES_PARATR_VERTALIGN - POOLATTR_BEGIN ] =             new SvxParaVertAlignItem( 0, RES_PARATR_VERTALIGN );
+    aAttrTab[ RES_PARATR_SNAPTOGRID - POOLATTR_BEGIN ] =            new SvxParaGridItem( sal_True, RES_PARATR_SNAPTOGRID );
     aAttrTab[ RES_PARATR_CONNECT_BORDER - POOLATTR_BEGIN ] = new SwParaConnectBorderItem;
 // ParaAttr - Dummies
     aAttrTab[ RES_PARATR_DUMMY5 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY5 );
@@ -803,27 +765,27 @@ void _InitCore()
 
     aAttrTab[ RES_FILL_ORDER- POOLATTR_BEGIN ] = new SwFmtFillOrder;
     aAttrTab[ RES_FRM_SIZE- POOLATTR_BEGIN ] = new SwFmtFrmSize;
-    aAttrTab[ RES_PAPER_BIN- POOLATTR_BEGIN ] = new SvxPaperBinItem;
-    aAttrTab[ RES_LR_SPACE- POOLATTR_BEGIN ] = new SvxLRSpaceItem;
-    aAttrTab[ RES_UL_SPACE- POOLATTR_BEGIN ] = new SvxULSpaceItem;
+    aAttrTab[ RES_PAPER_BIN- POOLATTR_BEGIN ] = new SvxPaperBinItem( RES_PAPER_BIN );
+    aAttrTab[ RES_LR_SPACE- POOLATTR_BEGIN ] = new SvxLRSpaceItem( RES_LR_SPACE );
+    aAttrTab[ RES_UL_SPACE- POOLATTR_BEGIN ] = new SvxULSpaceItem( RES_UL_SPACE );
     aAttrTab[ RES_PAGEDESC- POOLATTR_BEGIN ] = new SwFmtPageDesc;
-    aAttrTab[ RES_BREAK- POOLATTR_BEGIN ] = new SvxFmtBreakItem;
+    aAttrTab[ RES_BREAK- POOLATTR_BEGIN ] = new SvxFmtBreakItem( SVX_BREAK_NONE, RES_BREAK);
     aAttrTab[ RES_CNTNT- POOLATTR_BEGIN ] = new SwFmtCntnt;
     aAttrTab[ RES_HEADER- POOLATTR_BEGIN ] = new SwFmtHeader;
     aAttrTab[ RES_FOOTER- POOLATTR_BEGIN ] = new SwFmtFooter;
-    aAttrTab[ RES_PRINT- POOLATTR_BEGIN ] = new SvxPrintItem;
-    aAttrTab[ RES_OPAQUE- POOLATTR_BEGIN ] = new SvxOpaqueItem;
-    aAttrTab[ RES_PROTECT- POOLATTR_BEGIN ] = new SvxProtectItem;
+    aAttrTab[ RES_PRINT- POOLATTR_BEGIN ] = new SvxPrintItem( RES_PRINT );
+    aAttrTab[ RES_OPAQUE- POOLATTR_BEGIN ] = new SvxOpaqueItem( RES_OPAQUE );
+    aAttrTab[ RES_PROTECT- POOLATTR_BEGIN ] = new SvxProtectItem( RES_PROTECT );
     aAttrTab[ RES_SURROUND- POOLATTR_BEGIN ] = new SwFmtSurround;
     aAttrTab[ RES_VERT_ORIENT- POOLATTR_BEGIN ] = new SwFmtVertOrient;
     aAttrTab[ RES_HORI_ORIENT- POOLATTR_BEGIN ] = new SwFmtHoriOrient;
     aAttrTab[ RES_ANCHOR- POOLATTR_BEGIN ] = new SwFmtAnchor;
-    aAttrTab[ RES_BACKGROUND- POOLATTR_BEGIN ] = new SvxBrushItem;
-    aAttrTab[ RES_BOX- POOLATTR_BEGIN ] = new SvxBoxItem;
-    aAttrTab[ RES_SHADOW- POOLATTR_BEGIN ] = new SvxShadowItem;
-    aAttrTab[ RES_FRMMACRO- POOLATTR_BEGIN ] = new SvxMacroItem;
+    aAttrTab[ RES_BACKGROUND- POOLATTR_BEGIN ] = new SvxBrushItem( RES_BACKGROUND );
+    aAttrTab[ RES_BOX- POOLATTR_BEGIN ] = new SvxBoxItem( RES_BOX );
+    aAttrTab[ RES_SHADOW- POOLATTR_BEGIN ] = new SvxShadowItem( RES_SHADOW );
+    aAttrTab[ RES_FRMMACRO- POOLATTR_BEGIN ] = new SvxMacroItem( RES_FRMMACRO );
     aAttrTab[ RES_COL- POOLATTR_BEGIN ] = new SwFmtCol;
-    aAttrTab[ RES_KEEP - POOLATTR_BEGIN ] = new SvxFmtKeepItem( FALSE );
+    aAttrTab[ RES_KEEP - POOLATTR_BEGIN ] = new SvxFmtKeepItem( FALSE, RES_KEEP );
     aAttrTab[ RES_URL - POOLATTR_BEGIN ] = new SwFmtURL();
     aAttrTab[ RES_EDIT_IN_READONLY - POOLATTR_BEGIN ] = new SwFmtEditInReadonly;
     aAttrTab[ RES_LAYOUT_SPLIT - POOLATTR_BEGIN ] = new SwFmtLayoutSplit;
@@ -834,7 +796,7 @@ void _InitCore()
     aAttrTab[ RES_FTN_AT_TXTEND - POOLATTR_BEGIN ] = new SwFmtFtnAtTxtEnd;
     aAttrTab[ RES_END_AT_TXTEND - POOLATTR_BEGIN ] = new SwFmtEndAtTxtEnd;
     aAttrTab[ RES_COLUMNBALANCE - POOLATTR_BEGIN ] = new SwFmtNoBalancedColumns;
-    aAttrTab[ RES_FRAMEDIR - POOLATTR_BEGIN ] = new SvxFrameDirectionItem(FRMDIR_ENVIRONMENT);
+    aAttrTab[ RES_FRAMEDIR - POOLATTR_BEGIN ] = new SvxFrameDirectionItem( FRMDIR_ENVIRONMENT, RES_FRAMEDIR );
     aAttrTab[ RES_ROW_SPLIT - POOLATTR_BEGIN ] = new SwFmtRowSplit;
 
     // OD 18.09.2003 #i18732#
