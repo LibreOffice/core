@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:58:31 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 17:03:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include <sfx2/topfrm.hxx>
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
-#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #include <sfx2/app.hxx>
 #ifndef _SVX_EXTRUSION_BAR_HXX
 #include <svx/extrusionbar.hxx>
