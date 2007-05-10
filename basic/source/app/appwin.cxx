@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appwin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:31:20 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:18:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,7 +206,7 @@ void AppWin::Help()
         while( s.GetChar(0) == ' ' ) s.Erase( 0, 1 );
 //      aBasicApp.pHelp->Start( s );
     } else {
-//      aBasicApp.pHelp->Start( HELP_INDEX );
+//      aBasicApp.pHelp->Start( OOO_HELP_INDEX );
     }
 }
 
