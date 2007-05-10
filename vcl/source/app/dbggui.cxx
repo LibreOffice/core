@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:47:17 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:18:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,7 @@
 #include <vos/mutex.hxx>
 
 #include <map>
+#include <algorithm>
 
 using namespace ::com::sun::star;
 
@@ -668,7 +669,10 @@ BOOL DbgWindow::Close()
     // remember window position
     ByteString aState( GetWindowState() );
     DbgData* pData = DbgGetData();
-    strncpy( pData->aDbgWinState, aState.GetBuffer(), std::min( sizeof( pData->aDbgWinState ), aState.Len() + 1U ) );
+    strncpy( pData->aDbgWinState,
+         aState.GetBuffer(),
+         std::min( sizeof( pData->aDbgWinState ),
+               size_t(aState.Len() + 1U )) );
     pData->aDbgWinState[ sizeof( pData->aDbgWinState ) - 1 ] = 0;
     // and save for next session
     DbgSaveData( *pData );
