@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.50 $
+#   $Revision: 1.51 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-25 16:19:06 $
+#   last change: $Author: kz $ $Date: 2007-05-10 13:18:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,10 @@ SCPDEFS+=-DSYSTEM_CAIRO
 
 .IF "$(SYSTEM_LIBXML)" == "YES"
 SCPDEFS+=-DSYSTEM_LIBXML
+.ENDIF
+
+.IF "$(SYSTEM_LIBXSLT)" == "YES"
+SCPDEFS+=-DSYSTEM_LIBXSLT
 .ENDIF
 
 .IF "$(SYSTEM_DB)" == "YES"
