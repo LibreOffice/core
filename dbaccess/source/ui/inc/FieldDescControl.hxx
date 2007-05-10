@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldDescControl.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:11:34 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:27:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,9 +213,6 @@ namespace dbaui
         void                SetControlText( USHORT nControlId, const String& rText );
         String              GetControlText( USHORT nControlId );
         void                SetReadOnly( BOOL bReadOnly );
-
-        void                ActivatePropertyField(USHORT nVirtualField);
-            // Parameter ist einer der FIELD_PROPERTY_xxx-Werte, das entsprechende Control wird aktiviert, wenn vorhanden
 
         // Resize aufegrufen
         void                CheckScrollBars();
