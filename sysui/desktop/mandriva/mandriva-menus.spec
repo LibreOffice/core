@@ -1,8 +1,8 @@
 # version and release passed by command-line
 Version: %version
 Release: %release
-Summary: OpenOffice.org desktop integration
-Name: openoffice.org-mandriva-menus
+Summary: %productname desktop integration
+Name: %pkgprefix-mandriva-menus
 Group: Office
 License: LGPL
 AutoReqProv: no
@@ -12,7 +12,7 @@ BuildArch: noarch
 #        which provides 'mandrake-release'. We should leave 'mandrake-release'
 #        here and check for the 'mandriva-release' in the future (next year).
 #
-Requires: openoffice.org-core01, mandrake-release
+Requires: %pkgprefix-core01, mandrake-release
 Provides: openoffice.org-desktop-integration
 Obsoletes: openofficeorg-mandrakelinux-menus, openofficeorg-mandriva-menus
 
@@ -23,7 +23,7 @@ Obsoletes: openofficeorg-mandrakelinux-menus, openofficeorg-mandriva-menus
 %{?!trigger_clean_menus:%define trigger_clean_menus if [ "$2" = "0" -a -x /usr/bin/update-menus ]; then /usr/bin/update-menus || true ; fi}
 
 %description 
-OpenOffice.org desktop integration
+%productname desktop integration
 
 #include<symlink_triggers>
 
@@ -32,7 +32,7 @@ OpenOffice.org desktop integration
 # - core01 for base
 # - core02 for spadmin (printeradmin)
 #
-%triggerin -- openoffice.org-core01 openoffice.org-calc openoffice.org-draw openoffice.org-impress openoffice.org-writer openoffice.org-math openoffice.org-core02
+%triggerin -- %pkgprefix-core01 %pkgprefix-calc %pkgprefix-draw %pkgprefix-impress %pkgprefix-writer %pkgprefix-math %pkgprefix-core02
 %{update_menus}
 
 # Update menus
@@ -40,7 +40,7 @@ OpenOffice.org desktop integration
 # - core01 for base
 # - core02 for spadmin (printeradmin)
 #
-%triggerpostun -- openoffice.org-core01 openoffice.org-calc openoffice.org-draw openoffice.org-impress openoffice.org-writer openoffice.org-math openoffice.org-core02
+%triggerpostun -- %pkgprefix-core01 %pkgprefix-calc %pkgprefix-draw %pkgprefix-impress %pkgprefix-writer %pkgprefix-math %pkgprefix-core02
 %{trigger_clean_menus}
 
 %post
@@ -193,10 +193,22 @@ fi
 
 
 %install
+rm -rf $RPM_BUILD_ROOT/*
+
 # hack/workaround to make SuSE's brp-symlink-script happy. It wants the targets of all links
 # to be present on the build-system/the buildroot. But the point is that we generate stale
 # links intentionally (until we find a better solution) #46226
 export NO_BRP_STALE_LINK_ERROR=yes
+
+# enable relocation in create_tree.sh
+mkdir -p $RPM_BUILD_ROOT/etc
+touch $RPM_BUILD_ROOT/etc/%unixfilename
+
+export DESTDIR=$RPM_BUILD_ROOT
+export KDEMAINDIR=/usr
+export GNOMEDIR=/usr
+
+create_tree.sh
 
 #
 # Mandriva menus fun
@@ -214,7 +226,7 @@ GenerateMenu() {
 mimetypes_item=
 [ "$7" != "" ] && mimetypes_item="mimetypes=\"$7\""
 cat >> $RPM_BUILD_ROOT%{_menudir}/%{name} << EOF
-?package(openoffice.org-$6): needs=x11 section="$2" icon="%iconprefix-$3.png" title="$4" longtitle="$5" command="$1" \
+?package(%pkgprefix-$6): needs=x11 section="$2" icon="%iconprefix-$3.png" title="$4" longtitle="$5" command="$1" \
 $mimetypes_item kde_opt="InitialPreference=100" startup_notify="true"
 EOF
 }
@@ -226,48 +238,48 @@ EOF
 GenerateMenu "%unixfilename -base" \
 	"More Applications/Databases" \
 	"base" \
-	"OpenOffice.org %{menuversion} Base" \
-	"OpenOffice.org %{menuversion} Database" \
+	"%productname %{menuversion} Base" \
+	"%productname %{menuversion} Database" \
 	"core01" \
 	"application/vnd.oasis.opendocument.database,application/vnd.sun.xml.base"
 
 GenerateMenu "%unixfilename -calc" \
 	"Office/Spreadsheets" \
 	"calc" \
-	"OpenOffice.org %{menuversion} Calc" \
-	"OpenOffice.org %{menuversion} Spreadsheet" \
+	"%productname %{menuversion} Calc" \
+	"%productname %{menuversion} Spreadsheet" \
 	"calc" \
 	"application/vnd.oasis.opendocument.spreadsheet,application/vnd.oasis.opendocument.spreadsheet-template,application/vnd.sun.xml.calc,application/vnd.sun.xml.calc.template,application/vnd.stardivision.calc,application/vnd.stardivision.chart,application/msexcel,application/vnd.ms-excel"
 
 GenerateMenu "%unixfilename -draw" \
 	"Office/Drawing" \
 	"draw" \
-	"OpenOffice.org %{menuversion} Draw" \
-	"OpenOffice.org %{menuversion} Drawing" \
+	"%productname %{menuversion} Draw" \
+	"%productname %{menuversion} Drawing" \
 	"draw" \
 	"application/vnd.oasis.opendocument.graphics,application/vnd.oasis.opendocument.graphics-template,application/vnd.sun.xml.draw,application/vnd.sun.xml.draw.template,application/vnd.stardivision.draw"
 
 GenerateMenu "%unixfilename -impress" \
 	"Office/Presentations" \
 	"impress" \
-	"OpenOffice.org %{menuversion} Impress" \
-	"OpenOffice.org %{menuversion} Presentation" \
+	"%productname %{menuversion} Impress" \
+	"%productname %{menuversion} Presentation" \
 	"impress" \
 	"application/vnd.oasis.opendocument.presentation,application/vnd.oasis.opendocument.presentation-template,application/vnd.sun.xml.impress,application/vnd.sun.xml.impress.template,application/vnd.stardivision.impress,application/mspowerpoint"
 
 GenerateMenu "%unixfilename -writer" \
 	"Office/Wordprocessors" \
 	"writer" \
-	"OpenOffice.org %{menuversion} Writer" \
-	"OpenOffice.org %{menuversion} Word Processing Component" \
+	"%productname %{menuversion} Writer" \
+	"%productname %{menuversion} Word Processing Component" \
 	"writer" \
 	"application/vnd.oasis.opendocument.text,application/vnd.oasis.opendocument.text-template,application/vnd.oasis.opendocument.text-web,application/vnd.oasis.opendocument.text-master,application/vnd.sun.xml.writer,application/vnd.sun.xml.writer.template,application/vnd.sun.xml.writer.global,application/vnd.stardivision.writer,application/msword,application/vnd.ms-word,application/x-doc,application/rtf"
 
 GenerateMenu "%unixfilename -math" \
 	"Office/Wordprocessors" \
 	"math" \
-	"OpenOffice.org %{menuversion} Math" \
-	"OpenOffice.org %{menuversion} Formula Editor" \
+	"%productname %{menuversion} Math" \
+	"%productname %{menuversion} Formula Editor" \
 	"math" \
 	"application/vnd.oasis.opendocument.formula,application/vnd.sun.xml.math,application/vnd.stardivision.math"
 
@@ -277,12 +289,12 @@ GenerateMenu "%unixfilename -math" \
 GenerateMenu "%unixfilename-printeradmin" \
     "System/Configuration/Printing" \
     "printeradmin" \
-    "OpenOffice.org %{menuversion} Printeradmin" \
-    "OpenOffice.org %{menuversion} Printer Administration" \
+    "%productname %{menuversion} Printeradmin" \
+    "%productname %{menuversion} Printer Administration" \
 	"core02"
 
-# This is needed for Hamburg RE builds
-chmod -R g+w $RPM_BUILD_ROOT/usr/lib
+%clean
+rm -rf $RPM_BUILD_ROOT/*
 
 %preun
 # remove from /etc/mailcap only on de-install
