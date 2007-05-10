@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.86 $
+#   $Revision: 1.87 $
 #
-#   last change: $Author: gm $ $Date: 2007-05-10 10:58:06 $
+#   last change: $Author: kz $ $Date: 2007-05-10 13:56:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -778,6 +778,15 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles13b.log", $filesinproductlanguageresolvedarrayref); }
 
     #####################################
+    # Files with flag HIDDEN
+    #####################################
+
+    installer::logger::print_message( "... analyzing files with flag HIDDEN ...\n" );
+
+    installer::worker::resolving_hidden_flag($filesinproductlanguageresolvedarrayref, $allvariableshashref, "File", $languagestringref);
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles13c.log", $filesinproductlanguageresolvedarrayref); }
+
+    #####################################
     # Creating services.rdb
     #####################################
 
@@ -1476,7 +1485,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                         $installer::globals::subdir = installer::epmfile::create_new_directory_structure($newepmdir);
                         $installer::globals::postprocess_specialepm = 1;
 
-                        if (( $installer::globals::patch ) && ( $installer::globals::issolarisx86build )) { installer::worker::fix_solaris_x86_patch($packagename, $installer::globals::subdir); }
+                        if (( $installer::globals::patch ) && ( $installer::globals::issolarisx86build )) { installer::worker::fix2_solaris_x86_patch($packagename, $installer::globals::subdir); }
                     }
                 }
                 else    # this is the standard epm (not relocatable) or ( nonlinux and nonsolaris )
