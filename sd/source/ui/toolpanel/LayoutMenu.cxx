@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LayoutMenu.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:19:55 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:07:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <comphelper/processfactory.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
@@ -519,14 +520,14 @@ void LayoutMenu::Execute (SfxRequest& rRequest)
     switch (rRequest.GetSlot())
     {
         case SID_TP_APPLY_TO_SELECTED_SLIDES:
-            AssignLayoutToSelectedSlides (GetSelectedAutoLayout());
+            AssignLayoutToSelectedSlides(GetSelectedAutoLayout());
             rRequest.Done();
             break;
 
-        case SID_INSERTPAGE:
-            // Because we can not attach arguments to this slot we have to
-            // forward this request manually to the main view shell.
-            InsertPageWithLayout (GetSelectedAutoLayout());
+        case SID_INSERTPAGE_LAYOUT_MENU:
+            // Add arguments to this slot and forward it to the main view
+            // shell.
+            InsertPageWithLayout(GetSelectedAutoLayout());
             break;
     }
 }
@@ -551,11 +552,13 @@ void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
     ViewShell* pViewShell = mrBase.GetMainViewShell().get();
     if (pViewShell != NULL)
     {
-        // Because we process the SID_INSERTPAGE slot ourselves we have to
-        // call ExecuteSlot() at the main view shell directly or otherwise
-        // would end up being called ourselves.
-        SfxRequest aRequest (CreateRequest (SID_INSERTPAGE, aLayout));
-        pViewShell->ExecuteSlot (aRequest, BOOL(FALSE));
+        // Call SID_INSERTPAGE with the right arguments.  This is because
+        // the popup menu can not call this slot with arguments directly.
+        SfxRequest aRequest (CreateRequest(SID_INSERTPAGE, aLayout));
+        mrBase.GetViewFrame()->GetDispatcher()->Execute(
+            SID_INSERTPAGE,
+            SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+            *aRequest.GetArgs());
         UpdateSelection();
     }
 }
