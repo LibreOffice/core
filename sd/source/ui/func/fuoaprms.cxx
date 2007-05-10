@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuoaprms.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:20:20 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:30:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@
 #include "fuoaprms.hxx"
 
 #include "sdattr.hxx"
-#define ITEMID_COLOR            ATTR_ANIMATION_COLOR
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
 #endif
