@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 15:20:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:14:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2357,7 +2357,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* pF, String& rStr )
 }
 
 // "SERIENDRUCKFELD"
-eF_ResT SwWW8ImplReader::Read_F_DBField( WW8FieldDesc*, String& rStr )
+eF_ResT SwWW8ImplReader::Read_F_DBField( WW8FieldDesc* pF, String& rStr )
 {
     String aName;
     long nRet;
@@ -2373,9 +2373,17 @@ eF_ResT SwWW8ImplReader::Read_F_DBField( WW8FieldDesc*, String& rStr )
         }
     }
     SwDBFieldType aD( &rDoc, aName, SwDBData() );   // Datenbank: Nichts
+
     SwFieldType* pFT = rDoc.InsertFldType( aD );
     SwDBField aFld( (SwDBFieldType*)pFT );
     aFld.SetFieldCode( rStr );
+
+    String aResult;
+    pSBase->WW8ReadString( *pStrm, aResult, pPlcxMan->GetCpOfs()+
+                           pF->nSRes, pF->nLRes, eTextCharSet );
+
+    aFld.InitContent(aResult);
+
     rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0);
 
     return FLD_OK;
