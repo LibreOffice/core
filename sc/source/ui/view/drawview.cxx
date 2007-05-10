@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:50:54 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 17:00:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -886,7 +886,10 @@ void ScDrawView::CaptionTextDirection( USHORT nSlot )
         if(pCaption)
         {
             SfxItemSet aAttr(pCaption->GetMergedItemSet());
-            aAttr.Put( SvxWritingModeItem( nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ? com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL ) );
+            aAttr.Put( SvxWritingModeItem(
+                nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
+                    com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL,
+                    SDRATTR_TEXTDIRECTION ) );
             pCaption->SetMergedItemSet(aAttr);
             FuPoor* pPoor = pViewData->GetView()->GetDrawFuncPtr();
             if ( pPoor )
