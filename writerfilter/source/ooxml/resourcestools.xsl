@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-09 21:01:08 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-10 14:37:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -770,21 +770,22 @@ doctok::Id
     </xsl:text>
   </xsl:template>
 
-  <xsl:template name="contextattributeimplbool">
+ <xsl:template name="contextattributeimplbool">
     <xsl:call-template name="caselabelattribute"/>
+    <xsl:for-each select=".//rng:ref">
+      <xsl:text>
+      {</xsl:text>
+      <xsl:variable name="mynsid" select="generate-id(ancestor::namespace)"/>
+      <xsl:for-each select="key('defines-with-name', @name)[generate-id(ancestor::namespace)=$mynsid]">
+          <xsl:text>
+          mbValue = </xsl:text>
+          <xsl:call-template name="valuenamefordefine"/>
+          <xsl:text>(rValue).getBool();
+      }</xsl:text>
+      </xsl:for-each>
+    </xsl:for-each>
     <xsl:text>
-        if (strue.compareTo(rValue) == 0
-            || sTrue.compareTo(rValue) == 0
-            || s1.compareTo(rValue) == 0
-            || son.compareTo(rValue) == 0
-            || sOn.compareTo(rValue) == 0)
-            mbValue = true;
-        else
-            mbValue = false;
-
-        bResult = true;
-        
-        break;</xsl:text>
+      break;</xsl:text>
   </xsl:template>
 
   <xsl:template name="contextattributeimplint">

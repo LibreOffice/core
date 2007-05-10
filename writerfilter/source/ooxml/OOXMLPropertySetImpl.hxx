@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-09 21:01:07 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-10 14:37:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,12 +43,6 @@ namespace ooxml
 using namespace ::std;
 using namespace doctok;
 
-static ::rtl::OUString strue(RTL_CONSTASCII_USTRINGPARAM("true"));
-static ::rtl::OUString sTrue(RTL_CONSTASCII_USTRINGPARAM("True"));
-static ::rtl::OUString s1(RTL_CONSTASCII_USTRINGPARAM("1"));
-static ::rtl::OUString sOn(RTL_CONSTASCII_USTRINGPARAM("On"));
-static ::rtl::OUString son(RTL_CONSTASCII_USTRINGPARAM("on"));
-
 class OOXMLValue : public Value
 {
 public:
@@ -58,6 +52,7 @@ public:
     virtual ~OOXMLValue();
 
     virtual int getInt() const;
+    virtual bool getBool() const;
     virtual ::rtl::OUString getString() const;
     virtual uno::Any getAny() const;
     virtual doctok::Reference<Properties>::Pointer_t getProperties();
@@ -105,6 +100,7 @@ public:
     virtual ~OOXMLBooleanValue();
 
     virtual int getInt() const;
+    virtual bool getBool() const;
     virtual uno::Any getAny() const;
     virtual string toString() const;
     virtual OOXMLValue * clone() const;
