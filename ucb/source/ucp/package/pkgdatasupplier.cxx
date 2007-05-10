@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pkgdatasupplier.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:59:46 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:05:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,8 @@
 #ifndef _PKGPROVIDER_HXX
 #include "pkgprovider.hxx"
 #endif
+
+#include "../inc/urihelper.hxx"
 
 using namespace com::sun;
 using namespace com::sun::star;
@@ -504,7 +506,7 @@ void DataSupplier::validate()
         if ( nPackageUrlEnd != aURL.getLength() - 1 )
             aURL += rtl::OUString::createFromAscii( "/" );
 
-        aURL += PackageUri::encodeSegment( aName );
+        aURL += ::ucb::urihelper::encodeSegment( aName );
         aURL += aContURL.copy( nParam );
     }
     else
@@ -515,7 +517,7 @@ void DataSupplier::validate()
         if ( nPackageUrlEnd != aURL.getLength() - 1 )
             aURL += rtl::OUString::createFromAscii( "/" );
 
-        aURL += PackageUri::encodeSegment( aName );
+        aURL += ::ucb::urihelper::encodeSegment( aName );
     }
     return aURL;
 }
