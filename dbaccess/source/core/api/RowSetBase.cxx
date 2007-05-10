@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:32:17 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:11:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1273,12 +1273,6 @@ void ORowSetBase::notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& /*_
 // -----------------------------------------------------------------------------
 void ORowSetBase::notifyAllListeners(::osl::ResettableMutexGuard& /*_rGuard*/)
 {
-}
-
-// -----------------------------------------------------------------------------
-sal_Bool ORowSetBase::isModification( )
-{
-    return m_pCache && m_pCache->m_bNew;
 }
 
 // -----------------------------------------------------------------------------
