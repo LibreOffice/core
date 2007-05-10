@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: os $ $Date: 2007-05-07 06:48:16 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-10 12:47:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1557,9 +1557,6 @@ void DomainMapper::attribute(doctok::Id nName, doctok::Value & val)
 
         case NS_ooxml::LN_CT_Fonts_ascii:
             m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( val.getString() ));
-            break;
-        case NS_ooxml::LN_CT_Fonts_hAnsi:
-            m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_HANSI, uno::makeAny( val.getString() ));
             break;
         case NS_ooxml::LN_CT_Fonts_eastAsia:
             m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_ASIAN, uno::makeAny( val.getString() ));
