@@ -4,9 +4,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:50:15 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:08:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,6 @@
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
 #ifndef _SVX_DRAWITEM_HXX
 #include <svx/drawitem.hxx>
 #endif
