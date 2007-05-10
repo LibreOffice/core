@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDocuments.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:05:40 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:15:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,12 +72,6 @@ namespace dbaxml
                     ,const ::rtl::OUString& rLName
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer
                     ,const ::rtl::OUString& _sCollectionServiceName = ::rtl::OUString()
-                    );
-
-        // for tables
-        OXMLDocuments( ODBFilter& rImport
-                    ,sal_uInt16 nPrfx
-                    ,const ::rtl::OUString& rLName
                     );
 
         virtual ~OXMLDocuments();
