@@ -53,9 +53,17 @@ ZIP1TMP:=$(mktmp iii)
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP1TARGET).dpzz : $(ZIP1TARGETN)
 
 .IF "$(common_build_zip)"!=""
+.IF "$(PRJ)"!="."
 ZIP1HELPVAR={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP1TARGET)}
+.ELSE			# "$(PRJ)"=="."
+ZIP1HELPVAR=$(subst,.$/,$(NULL) {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP1TARGET)})
+.ENDIF			# "$(PRJ)"=="."
 .ELSE			# "$(common_build_zip)"!=""
+.IF "$(PRJ)"!="."
 ZIP1HELPVAR=$(BIN)$/$(ZIP1TARGET)
+.ELSE			# "$(PRJ)"=="."
+ZIP1HELPVAR=$(subst,.$/,$(NULL) $(BIN)$/$(ZIP1TARGET))
+.ENDIF			# "$(PRJ)"=="."
 .ENDIF			# "$(common_build_zip)"!=""
 
 $(ZIP1DEPFILE) :
@@ -170,9 +178,17 @@ ZIP2TMP:=$(mktmp iii)
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP2TARGET).dpzz : $(ZIP2TARGETN)
 
 .IF "$(common_build_zip)"!=""
+.IF "$(PRJ)"!="."
 ZIP2HELPVAR={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP2TARGET)}
+.ELSE			# "$(PRJ)"=="."
+ZIP2HELPVAR=$(subst,.$/,$(NULL) {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP2TARGET)})
+.ENDIF			# "$(PRJ)"=="."
 .ELSE			# "$(common_build_zip)"!=""
+.IF "$(PRJ)"!="."
 ZIP2HELPVAR=$(BIN)$/$(ZIP2TARGET)
+.ELSE			# "$(PRJ)"=="."
+ZIP2HELPVAR=$(subst,.$/,$(NULL) $(BIN)$/$(ZIP2TARGET))
+.ENDIF			# "$(PRJ)"=="."
 .ENDIF			# "$(common_build_zip)"!=""
 
 $(ZIP2DEPFILE) :
@@ -287,9 +303,17 @@ ZIP3TMP:=$(mktmp iii)
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP3TARGET).dpzz : $(ZIP3TARGETN)
 
 .IF "$(common_build_zip)"!=""
+.IF "$(PRJ)"!="."
 ZIP3HELPVAR={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP3TARGET)}
+.ELSE			# "$(PRJ)"=="."
+ZIP3HELPVAR=$(subst,.$/,$(NULL) {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP3TARGET)})
+.ENDIF			# "$(PRJ)"=="."
 .ELSE			# "$(common_build_zip)"!=""
+.IF "$(PRJ)"!="."
 ZIP3HELPVAR=$(BIN)$/$(ZIP3TARGET)
+.ELSE			# "$(PRJ)"=="."
+ZIP3HELPVAR=$(subst,.$/,$(NULL) $(BIN)$/$(ZIP3TARGET))
+.ENDIF			# "$(PRJ)"=="."
 .ENDIF			# "$(common_build_zip)"!=""
 
 $(ZIP3DEPFILE) :
@@ -404,9 +428,17 @@ ZIP4TMP:=$(mktmp iii)
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP4TARGET).dpzz : $(ZIP4TARGETN)
 
 .IF "$(common_build_zip)"!=""
+.IF "$(PRJ)"!="."
 ZIP4HELPVAR={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP4TARGET)}
+.ELSE			# "$(PRJ)"=="."
+ZIP4HELPVAR=$(subst,.$/,$(NULL) {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP4TARGET)})
+.ENDIF			# "$(PRJ)"=="."
 .ELSE			# "$(common_build_zip)"!=""
+.IF "$(PRJ)"!="."
 ZIP4HELPVAR=$(BIN)$/$(ZIP4TARGET)
+.ELSE			# "$(PRJ)"=="."
+ZIP4HELPVAR=$(subst,.$/,$(NULL) $(BIN)$/$(ZIP4TARGET))
+.ENDIF			# "$(PRJ)"=="."
 .ENDIF			# "$(common_build_zip)"!=""
 
 $(ZIP4DEPFILE) :
@@ -521,9 +553,17 @@ ZIP5TMP:=$(mktmp iii)
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP5TARGET).dpzz : $(ZIP5TARGETN)
 
 .IF "$(common_build_zip)"!=""
+.IF "$(PRJ)"!="."
 ZIP5HELPVAR={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP5TARGET)}
+.ELSE			# "$(PRJ)"=="."
+ZIP5HELPVAR=$(subst,.$/,$(NULL) {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP5TARGET)})
+.ENDIF			# "$(PRJ)"=="."
 .ELSE			# "$(common_build_zip)"!=""
+.IF "$(PRJ)"!="."
 ZIP5HELPVAR=$(BIN)$/$(ZIP5TARGET)
+.ELSE			# "$(PRJ)"=="."
+ZIP5HELPVAR=$(subst,.$/,$(NULL) $(BIN)$/$(ZIP5TARGET))
+.ENDIF			# "$(PRJ)"=="."
 .ENDIF			# "$(common_build_zip)"!=""
 
 $(ZIP5DEPFILE) :
@@ -638,9 +678,17 @@ ZIP6TMP:=$(mktmp iii)
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP6TARGET).dpzz : $(ZIP6TARGETN)
 
 .IF "$(common_build_zip)"!=""
+.IF "$(PRJ)"!="."
 ZIP6HELPVAR={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP6TARGET)}
+.ELSE			# "$(PRJ)"=="."
+ZIP6HELPVAR=$(subst,.$/,$(NULL) {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP6TARGET)})
+.ENDIF			# "$(PRJ)"=="."
 .ELSE			# "$(common_build_zip)"!=""
+.IF "$(PRJ)"!="."
 ZIP6HELPVAR=$(BIN)$/$(ZIP6TARGET)
+.ELSE			# "$(PRJ)"=="."
+ZIP6HELPVAR=$(subst,.$/,$(NULL) $(BIN)$/$(ZIP6TARGET))
+.ENDIF			# "$(PRJ)"=="."
 .ENDIF			# "$(common_build_zip)"!=""
 
 $(ZIP6DEPFILE) :
@@ -755,9 +803,17 @@ ZIP7TMP:=$(mktmp iii)
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP7TARGET).dpzz : $(ZIP7TARGETN)
 
 .IF "$(common_build_zip)"!=""
+.IF "$(PRJ)"!="."
 ZIP7HELPVAR={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP7TARGET)}
+.ELSE			# "$(PRJ)"=="."
+ZIP7HELPVAR=$(subst,.$/,$(NULL) {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP7TARGET)})
+.ENDIF			# "$(PRJ)"=="."
 .ELSE			# "$(common_build_zip)"!=""
+.IF "$(PRJ)"!="."
 ZIP7HELPVAR=$(BIN)$/$(ZIP7TARGET)
+.ELSE			# "$(PRJ)"=="."
+ZIP7HELPVAR=$(subst,.$/,$(NULL) $(BIN)$/$(ZIP7TARGET))
+.ENDIF			# "$(PRJ)"=="."
 .ENDIF			# "$(common_build_zip)"!=""
 
 $(ZIP7DEPFILE) :
@@ -872,9 +928,17 @@ ZIP8TMP:=$(mktmp iii)
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP8TARGET).dpzz : $(ZIP8TARGETN)
 
 .IF "$(common_build_zip)"!=""
+.IF "$(PRJ)"!="."
 ZIP8HELPVAR={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP8TARGET)}
+.ELSE			# "$(PRJ)"=="."
+ZIP8HELPVAR=$(subst,.$/,$(NULL) {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP8TARGET)})
+.ENDIF			# "$(PRJ)"=="."
 .ELSE			# "$(common_build_zip)"!=""
+.IF "$(PRJ)"!="."
 ZIP8HELPVAR=$(BIN)$/$(ZIP8TARGET)
+.ELSE			# "$(PRJ)"=="."
+ZIP8HELPVAR=$(subst,.$/,$(NULL) $(BIN)$/$(ZIP8TARGET))
+.ENDIF			# "$(PRJ)"=="."
 .ENDIF			# "$(common_build_zip)"!=""
 
 $(ZIP8DEPFILE) :
@@ -989,9 +1053,17 @@ ZIP9TMP:=$(mktmp iii)
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP9TARGET).dpzz : $(ZIP9TARGETN)
 
 .IF "$(common_build_zip)"!=""
+.IF "$(PRJ)"!="."
 ZIP9HELPVAR={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP9TARGET)}
+.ELSE			# "$(PRJ)"=="."
+ZIP9HELPVAR=$(subst,.$/,$(NULL) {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP9TARGET)})
+.ENDIF			# "$(PRJ)"=="."
 .ELSE			# "$(common_build_zip)"!=""
+.IF "$(PRJ)"!="."
 ZIP9HELPVAR=$(BIN)$/$(ZIP9TARGET)
+.ELSE			# "$(PRJ)"=="."
+ZIP9HELPVAR=$(subst,.$/,$(NULL) $(BIN)$/$(ZIP9TARGET))
+.ENDIF			# "$(PRJ)"=="."
 .ENDIF			# "$(common_build_zip)"!=""
 
 $(ZIP9DEPFILE) :
@@ -1106,9 +1178,17 @@ ZIP10TMP:=$(mktmp iii)
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP10TARGET).dpzz : $(ZIP10TARGETN)
 
 .IF "$(common_build_zip)"!=""
+.IF "$(PRJ)"!="."
 ZIP10HELPVAR={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP10TARGET)}
+.ELSE			# "$(PRJ)"=="."
+ZIP10HELPVAR=$(subst,.$/,$(NULL) {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP10TARGET)})
+.ENDIF			# "$(PRJ)"=="."
 .ELSE			# "$(common_build_zip)"!=""
+.IF "$(PRJ)"!="."
 ZIP10HELPVAR=$(BIN)$/$(ZIP10TARGET)
+.ELSE			# "$(PRJ)"=="."
+ZIP10HELPVAR=$(subst,.$/,$(NULL) $(BIN)$/$(ZIP10TARGET))
+.ENDIF			# "$(PRJ)"=="."
 .ENDIF			# "$(common_build_zip)"!=""
 
 $(ZIP10DEPFILE) :

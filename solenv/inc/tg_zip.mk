@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_zip.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:06:34 $
+#   last change: $Author: hjs $ $Date: 2007-05-10 14:21:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -89,9 +89,17 @@ ZIP$(TNR)TMP:=$(mktmp iii)
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP$(TNR)TARGET).dpzz : $(ZIP$(TNR)TARGETN)
 
 .IF "$(common_build_zip)"!=""
+.IF "$(PRJ)"!="."
 ZIP$(TNR)HELPVAR={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP$(TNR)TARGET)}
+.ELSE			# "$(PRJ)"=="."
+ZIP$(TNR)HELPVAR=$(subst,.$/,$(NULL) {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP$(TNR)TARGET)})
+.ENDIF			# "$(PRJ)"=="."
 .ELSE			# "$(common_build_zip)"!=""
+.IF "$(PRJ)"!="."
 ZIP$(TNR)HELPVAR=$(BIN)$/$(ZIP$(TNR)TARGET)
+.ELSE			# "$(PRJ)"=="."
+ZIP$(TNR)HELPVAR=$(subst,.$/,$(NULL) $(BIN)$/$(ZIP$(TNR)TARGET))
+.ENDIF			# "$(PRJ)"=="."
 .ENDIF			# "$(common_build_zip)"!=""
 
 $(ZIP$(TNR)DEPFILE) :
