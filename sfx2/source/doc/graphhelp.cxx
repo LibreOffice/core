@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphhelp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:14:38 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 17:08:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,9 @@
 #include "precompiled_sfx2.hxx"
 
 #ifdef WNT
+
+#undef WB_LEFT
+#undef WB_RIGHT
 
 #define UINT64 USE_WIN_UINT64
 #define INT64 USE_WIN_INT64
