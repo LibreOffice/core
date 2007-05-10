@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hierarchyuri.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:49:18 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:05:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,6 @@ class HierarchyUri
 
 private:
     void init() const;
-    static ::rtl::OUString decodeSegment( const ::rtl::OUString& rSource );
 
 public:
     HierarchyUri() : m_bValid( false ) {}
@@ -89,9 +88,6 @@ public:
     { init(); return m_aName; }
 
     inline sal_Bool isRootFolder() const;
-
-    static ::rtl::OUString encodeURL( const ::rtl::OUString & rURL );
-    static ::rtl::OUString encodeSegment( const ::rtl::OUString & rSegment );
 };
 
 inline sal_Bool HierarchyUri::isRootFolder() const
