@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:47:35 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:45:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 
 // include ---------------------------------------------------------------
 
-#define ITEMID_SIZE 0
+
 
 #ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
