@@ -1,4 +1,4 @@
-PKG=openofficeorg-desktop-integratn
+PKG=%pkgprefix-desktop-integratn
 NAME=%PRODUCTNAME Solaris desktop integration
 CATEGORY=application
 BASEDIR=/
