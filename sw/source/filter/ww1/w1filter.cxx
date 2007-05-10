@@ -4,9 +4,9 @@
  *
  *  $RCSfile: w1filter.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:13:57 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:08:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1107,9 +1107,9 @@ void Ww1Sep::Start(Ww1Shell& rOut, Ww1Manager& rMan)
         aSz.SetHeight(rDOP.yaPageGet());
         rFmt.SetAttr(aSz);
         SvxLRSpaceItem aLR(rDOP.dxaLeftGet()+rDOP.dxaGutterGet(),
-         rDOP.dxaRightGet());
+         rDOP.dxaRightGet(), 0, 0, RES_LR_SPACE);
         rFmt.SetAttr(aLR);
-        SvxULSpaceItem aUL(rDOP.dyaTopGet(), rDOP.dyaBottomGet());
+        SvxULSpaceItem aUL(rDOP.dyaTopGet(), rDOP.dyaBottomGet(), RES_UL_SPACE);
         rFmt.SetAttr(aUL);
     // sobald wir mit dem lesen der zeichen soweit sind, wo sep's
     // momentanes attribut beginnt, wird dieses attribut eingefuegt.
@@ -1167,42 +1167,42 @@ void W1_CHP::Out(Ww1Shell& rOut, Ww1Manager& rMan)
 {
     if (fBoldGet())
         rOut << SvxWeightItem(
-            rOut.GetWeightBold()?WEIGHT_NORMAL:WEIGHT_BOLD);
+            rOut.GetWeightBold()?WEIGHT_NORMAL:WEIGHT_BOLD, RES_CHRATR_WEIGHT);
     if (fItalicGet())
         rOut << SvxPostureItem(
-            rOut.GetPostureItalic()?ITALIC_NONE:ITALIC_NORMAL);
+            rOut.GetPostureItalic()?ITALIC_NONE:ITALIC_NORMAL, RES_CHRATR_POSTURE);
     if (fStrikeGet())
         rOut << SvxCrossedOutItem(
-            rOut.GetCrossedOut()?STRIKEOUT_NONE:STRIKEOUT_SINGLE);
+            rOut.GetCrossedOut()?STRIKEOUT_NONE:STRIKEOUT_SINGLE, RES_CHRATR_CROSSEDOUT);
     if (fOutlineGet())
-        rOut << SvxContourItem(!rOut.GetContour());
+        rOut << SvxContourItem(!rOut.GetContour(), RES_CHRATR_CONTOUR);
     if (fSmallCapsGet())
         rOut << SvxCaseMapItem(
-            rOut.GetCaseKapitaelchen()?SVX_CASEMAP_NOT_MAPPED:SVX_CASEMAP_KAPITAELCHEN);
+            rOut.GetCaseKapitaelchen()?SVX_CASEMAP_NOT_MAPPED:SVX_CASEMAP_KAPITAELCHEN, RES_CHRATR_CASEMAP);
     if (fCapsGet())
         rOut << SvxCaseMapItem(
-            rOut.GetCaseVersalien()?SVX_CASEMAP_NOT_MAPPED:SVX_CASEMAP_VERSALIEN);
+            rOut.GetCaseVersalien()?SVX_CASEMAP_NOT_MAPPED:SVX_CASEMAP_VERSALIEN, RES_CHRATR_CASEMAP);
     if (fsHpsGet())
-            rOut << SvxFontHeightItem(hpsGet() * 10);
+            rOut << SvxFontHeightItem(hpsGet() * 10, 100, RES_CHRATR_FONTSIZE);
     if (fsKulGet())
         switch (kulGet()) {
         case 0: {
-                    rOut << SvxUnderlineItem(UNDERLINE_NONE) <<
-                        SvxWordLineModeItem(FALSE);
+                    rOut << SvxUnderlineItem(UNDERLINE_NONE, RES_CHRATR_UNDERLINE) <<
+                        SvxWordLineModeItem(FALSE, RES_CHRATR_WORDLINEMODE);
                 } break;
         default: DBG_ASSERT(FALSE, "Chpx");
         case 1: {
-                    rOut << SvxUnderlineItem(UNDERLINE_SINGLE);
+                    rOut << SvxUnderlineItem(UNDERLINE_SINGLE, RES_CHRATR_UNDERLINE);
                 } break;
         case 2: {
-                    rOut << SvxUnderlineItem(UNDERLINE_SINGLE) <<
-                    SvxWordLineModeItem(TRUE);
+                    rOut << SvxUnderlineItem(UNDERLINE_SINGLE, RES_CHRATR_UNDERLINE) <<
+                    SvxWordLineModeItem(TRUE, RES_CHRATR_WORDLINEMODE);
                 } break;
         case 3: {
-                    rOut << SvxUnderlineItem(UNDERLINE_DOUBLE);
+                    rOut << SvxUnderlineItem(UNDERLINE_DOUBLE, RES_CHRATR_UNDERLINE);
                 } break;
         case 4: {
-                    rOut << SvxUnderlineItem(UNDERLINE_DOTTED);
+                    rOut << SvxUnderlineItem(UNDERLINE_DOTTED, RES_CHRATR_UNDERLINE);
                 } break;
         }
 
@@ -1210,31 +1210,31 @@ void W1_CHP::Out(Ww1Shell& rOut, Ww1Manager& rMan)
         switch(icoGet()) {
         default: DBG_ASSERT(FALSE, "Chpx");
         case 0: { rOut.EndItem(RES_CHRATR_COLOR); } break;
-        case 1: { rOut << SvxColorItem(Color(COL_BLACK)); } break;
-        case 2: { rOut << SvxColorItem(Color(COL_LIGHTBLUE)); } break;
-        case 3: { rOut << SvxColorItem(Color(COL_LIGHTCYAN)); } break;
-        case 4: { rOut << SvxColorItem(Color(COL_LIGHTGREEN)); } break;
-        case 5: { rOut << SvxColorItem(Color(COL_LIGHTMAGENTA)); } break;
-        case 6: { rOut << SvxColorItem(Color(COL_LIGHTRED)); } break;
-        case 7: { rOut << SvxColorItem(Color(COL_YELLOW)); } break;
-        case 8: { rOut << SvxColorItem(Color(COL_WHITE)); } break;
+        case 1: { rOut << SvxColorItem(Color(COL_BLACK), RES_CHRATR_COLOR); } break;
+        case 2: { rOut << SvxColorItem(Color(COL_LIGHTBLUE), RES_CHRATR_COLOR); } break;
+        case 3: { rOut << SvxColorItem(Color(COL_LIGHTCYAN), RES_CHRATR_COLOR); } break;
+        case 4: { rOut << SvxColorItem(Color(COL_LIGHTGREEN), RES_CHRATR_COLOR); } break;
+        case 5: { rOut << SvxColorItem(Color(COL_LIGHTMAGENTA), RES_CHRATR_COLOR); } break;
+        case 6: { rOut << SvxColorItem(Color(COL_LIGHTRED), RES_CHRATR_COLOR); } break;
+        case 7: { rOut << SvxColorItem(Color(COL_YELLOW), RES_CHRATR_COLOR); } break;
+        case 8: { rOut << SvxColorItem(Color(COL_WHITE), RES_CHRATR_COLOR); } break;
         }
     if (fsSpaceGet()) {
         short sQps = qpsSpaceGet();
         if (sQps > 56)
             sQps = sQps - 64;
-        rOut << SvxKerningItem(sQps);
+        rOut << SvxKerningItem(sQps, RES_CHRATR_KERNING);
     }
     if (fsPosGet())
         if (hpsPosGet() == 0)
-            rOut << SvxEscapementItem(SVX_ESCAPEMENT_OFF);
+            rOut << SvxEscapementItem(SVX_ESCAPEMENT_OFF, 100, RES_CHRATR_ESCAPEMENT);
         else {
             short sHps = hpsPosGet();
             if (sHps > 128)
                 sHps =  sHps - 256;
             sHps *= 100;
             sHps /= 24;
-            rOut << SvxEscapementItem(sHps, 100);
+            rOut << SvxEscapementItem(sHps, 100, RES_CHRATR_ESCAPEMENT);
         }
     if (fsFtcGet()) {
         SvxFontItem aFont(rMan.GetFont(ftcGet()));
@@ -1524,7 +1524,7 @@ SvxFontItem Ww1Fonts::GetFont(USHORT nFCode)
         }
     }
 // nun koennen wir den font basteln: .........................
-    return SvxFontItem(eFamily, aName, aEmptyStr, ePitch, eCharSet);
+    return SvxFontItem(eFamily, aName, aEmptyStr, ePitch, eCharSet, RES_CHRATR_FONT);
 }
 
 /////////////////////////////////////////////////////////////////// Dop
@@ -1537,7 +1537,7 @@ void Ww1Dop::Out(Ww1Shell& rOut)
         nDefTabSiz = 709;
 
     // wir wollen genau einen DefaultTab
-    SvxTabStopItem aNewTab(1, USHORT(nDefTabSiz),SVX_TAB_ADJUST_DEFAULT);
+    SvxTabStopItem aNewTab(1, USHORT(nDefTabSiz), SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP);
     ((SvxTabStop&)aNewTab[0]).GetAdjustment() = SVX_TAB_ADJUST_DEFAULT;
     rOut.GetDoc().GetAttrPool().SetPoolDefaultItem( aNewTab); //~ mdt: besser (GetDoc)
 
@@ -1549,9 +1549,9 @@ void Ww1Dop::Out(Ww1Shell& rOut)
     aSz.SetHeight(rDOP.yaPageGet());
     rFmt.SetAttr(aSz);
     SvxLRSpaceItem aLR(rDOP.dxaLeftGet()+rDOP.dxaGutterGet(),
-     rDOP.dxaRightGet());
+     rDOP.dxaRightGet(), 0, 0, RES_LR_SPACE);
     rFmt.SetAttr(aLR);
-    SvxULSpaceItem aUL(rDOP.dyaTopGet(), rDOP.dyaBottomGet());
+    SvxULSpaceItem aUL(rDOP.dyaTopGet(), rDOP.dyaBottomGet(), RES_UL_SPACE);
     rFmt.SetAttr(aUL);
 
     SwFtnInfo aInfo;
@@ -1600,14 +1600,14 @@ void Ww1StyleSheet::OutDefaults(Ww1Shell& rOut, Ww1Manager& rMan, USHORT stc)
 {
     switch (stc){
     case 222: // Null
-        rOut << SvxFontHeightItem(240);
+        rOut << SvxFontHeightItem(240, 100, RES_CHRATR_FONTSIZE);
         rOut << SvxFontItem(rMan.GetFont(2));
         break;
     case 223: // annotation reference
-        rOut << SvxFontHeightItem(160);
+        rOut << SvxFontHeightItem(160, 100, RES_CHRATR_FONTSIZE);
         break;
     case 224: // annotation text
-        rOut << SvxFontHeightItem(200);
+        rOut << SvxFontHeightItem(200, 100, RES_CHRATR_FONTSIZE);
         break;
     case 225: // table of contents 8
     case 226: // table of contents 7
@@ -1617,7 +1617,7 @@ void Ww1StyleSheet::OutDefaults(Ww1Shell& rOut, Ww1Manager& rMan, USHORT stc)
     case 230: // table of contents 3
     case 231: // table of contents 2
     case 232: // table of contents 1
-        rOut << SvxLRSpaceItem(( 232 - stc ) * 720, 720);
+        rOut << SvxLRSpaceItem(( 232 - stc ) * 720, 720, 0, 0, RES_LR_SPACE);
             // Tabulatoren fehlen noch !
         break;
     case 233: // index 7
@@ -1626,7 +1626,7 @@ void Ww1StyleSheet::OutDefaults(Ww1Shell& rOut, Ww1Manager& rMan, USHORT stc)
     case 236: // und index 4
     case 237: // und index 3
     case 238: // und index 2
-        rOut << SvxLRSpaceItem(( 239 - stc ) * 360, 0);
+        rOut << SvxLRSpaceItem(( 239 - stc ) * 360, 0, 0, 0, RES_LR_SPACE);
         break;
     case 239: // index 1
         break;
@@ -1636,7 +1636,7 @@ void Ww1StyleSheet::OutDefaults(Ww1Shell& rOut, Ww1Manager& rMan, USHORT stc)
         break;
     case 242:  // footer
     case 243:{ // ... und header
-            SvxTabStopItem aAttr;
+            SvxTabStopItem aAttr(RES_PARATR_TABSTOP);
             SvxTabStop aTabStop;
             aTabStop.GetTabPos() = 4535;  // 8 cm
             aTabStop.GetAdjustment() = SVX_TAB_ADJUST_CENTER;
@@ -1648,61 +1648,61 @@ void Ww1StyleSheet::OutDefaults(Ww1Shell& rOut, Ww1Manager& rMan, USHORT stc)
         }
         break;
     case 244: // footnote reference
-        rOut << SvxFontHeightItem(160);
-        rOut << SvxEscapementItem(6 * 100 / 24, 100);
+        rOut << SvxFontHeightItem(160, 100, RES_CHRATR_FONTSIZE);
+        rOut << SvxEscapementItem(6 * 100 / 24, 100, RES_CHRATR_ESCAPEMENT);
         break;
     case 245: // footnote text
-        rOut << SvxFontHeightItem(200);
+        rOut << SvxFontHeightItem(200, 100, RES_CHRATR_FONTSIZE);
         break;
     case 246: // heading 9
     case 247: // und heading 8
     case 248: // und heading 7
-        rOut << SvxLRSpaceItem(720, 0);
+        rOut << SvxLRSpaceItem(720, 0, 0, 0, RES_LR_SPACE);
         rOut << SvxPostureItem(
-                    rOut.GetPostureItalic()?ITALIC_NONE:ITALIC_NORMAL);
-        rOut << SvxFontHeightItem(200);
+                    rOut.GetPostureItalic()?ITALIC_NONE:ITALIC_NORMAL, RES_CHRATR_POSTURE);
+        rOut << SvxFontHeightItem(200, 100, RES_CHRATR_FONTSIZE);
         break;
     case 249: // heading 6
-        rOut << SvxLRSpaceItem(720, 0);
-        rOut << SvxUnderlineItem(UNDERLINE_SINGLE);
-        rOut << SvxFontHeightItem(200);
+        rOut << SvxLRSpaceItem(720, 0, 0, 0, RES_LR_SPACE);
+        rOut << SvxUnderlineItem(UNDERLINE_SINGLE, RES_CHRATR_UNDERLINE);
+        rOut << SvxFontHeightItem(200, 100, RES_CHRATR_FONTSIZE);
         break;
     case 250: // heading 5
-        rOut << SvxLRSpaceItem(720, 0);
-        rOut << SvxWeightItem(rOut.GetWeightBold()?WEIGHT_NORMAL:WEIGHT_BOLD);
-        rOut << SvxFontHeightItem(200);
+        rOut << SvxLRSpaceItem(720, 0, 0, 0, RES_LR_SPACE);
+        rOut << SvxWeightItem(rOut.GetWeightBold()?WEIGHT_NORMAL:WEIGHT_BOLD, RES_CHRATR_WEIGHT);
+        rOut << SvxFontHeightItem(200, 100, RES_CHRATR_FONTSIZE);
         break;
     case 251: // heading 4
-        rOut << SvxLRSpaceItem(360, 0);
-        rOut << SvxUnderlineItem(UNDERLINE_SINGLE);
-        rOut << SvxFontHeightItem(240);
+        rOut << SvxLRSpaceItem(360, 0, 0, 0, RES_LR_SPACE);
+        rOut << SvxUnderlineItem(UNDERLINE_SINGLE, RES_CHRATR_UNDERLINE);
+        rOut << SvxFontHeightItem(240, 100, RES_CHRATR_FONTSIZE);
         break;
     case 252: // heading 3
-        rOut << SvxLRSpaceItem(360, 0);
-        rOut << SvxWeightItem(rOut.GetWeightBold()?WEIGHT_NORMAL:WEIGHT_BOLD);
-        rOut << SvxFontHeightItem(240);
+        rOut << SvxLRSpaceItem(360, 0, 0, 0, RES_LR_SPACE);
+        rOut << SvxWeightItem(rOut.GetWeightBold()?WEIGHT_NORMAL:WEIGHT_BOLD, RES_CHRATR_WEIGHT);
+        rOut << SvxFontHeightItem(240, 100, RES_CHRATR_FONTSIZE);
         break;
     case 253: // heading 2
-        rOut << SvxULSpaceItem(120, 0);
-        rOut << SvxWeightItem(rOut.GetWeightBold()?WEIGHT_NORMAL:WEIGHT_BOLD);
-        rOut << SvxFontHeightItem(240);
+        rOut << SvxULSpaceItem(120, 0, RES_UL_SPACE);
+        rOut << SvxWeightItem(rOut.GetWeightBold()?WEIGHT_NORMAL:WEIGHT_BOLD, RES_CHRATR_WEIGHT);
+        rOut << SvxFontHeightItem(240, 100, RES_CHRATR_FONTSIZE);
         rOut << SvxFontItem(rMan.GetFont(2));
         break;
     case 254: // heading 1
-        rOut << SvxULSpaceItem(240, 0);
-        rOut << SvxWeightItem(rOut.GetWeightBold()?WEIGHT_NORMAL:WEIGHT_BOLD);
-        rOut << SvxUnderlineItem(UNDERLINE_SINGLE);
-        rOut << SvxFontHeightItem(240);
+        rOut << SvxULSpaceItem(240, 0, RES_UL_SPACE);
+        rOut << SvxWeightItem(rOut.GetWeightBold()?WEIGHT_NORMAL:WEIGHT_BOLD, RES_CHRATR_WEIGHT);
+        rOut << SvxUnderlineItem(UNDERLINE_SINGLE, RES_CHRATR_UNDERLINE);
+        rOut << SvxFontHeightItem(240, 100, RES_CHRATR_FONTSIZE);
         rOut << SvxFontItem(rMan.GetFont(2));
         break;
     case 255: // Normal indent
-        rOut << SvxLRSpaceItem(720, 0);
+        rOut << SvxLRSpaceItem(720, 0, 0, 0, RES_LR_SPACE);
         break;
     case 0: // Normal
-        rOut << SvxFontHeightItem(200);
+        rOut << SvxFontHeightItem(200, 100, RES_CHRATR_FONTSIZE);
         break;
     default: // selbstdefiniert
-        rOut << SvxFontHeightItem(200);
+        rOut << SvxFontHeightItem(200, 100, RES_CHRATR_FONTSIZE);
         break;
     }
 }
