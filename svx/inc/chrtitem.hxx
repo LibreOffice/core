@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chrtitem.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:21:00 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:19:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,15 +198,13 @@ enum SvxChartRegress
 
 //------------------------------------------------------------------
 
-#ifdef ITEMID_CHARTSTYLE
-
 class SVX_DLLPUBLIC SvxChartStyleItem : public SfxEnumItem
 {
 public:
     TYPEINFO();
-    SvxChartStyleItem(SvxChartStyle eStyle = CHSTYLE_2D_LINE,
-                      USHORT nId = ITEMID_CHARTSTYLE);
-    SvxChartStyleItem(SvStream& rIn, USHORT nId = ITEMID_CHARTSTYLE);
+    SvxChartStyleItem(SvxChartStyle eStyle /*= CHSTYLE_2D_LINE*/,
+                      USHORT nId );
+    SvxChartStyleItem(SvStream& rIn, USHORT nId );
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
     virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
@@ -216,19 +214,15 @@ public:
         { return (SvxChartStyle)SfxEnumItem::GetValue(); }
 };
 
-#endif
-
 //------------------------------------------------------------------
-
-#ifdef ITEMID_CHARTREGRESS
 
 class SVX_DLLPUBLIC SvxChartRegressItem : public SfxEnumItem
 {
 public:
     TYPEINFO();
-    SvxChartRegressItem(SvxChartRegress eRegress = CHREGRESS_LINEAR,
-                        USHORT nId = ITEMID_CHARTREGRESS);
-    SvxChartRegressItem(SvStream& rIn, USHORT nId = ITEMID_CHARTREGRESS);
+    SvxChartRegressItem(SvxChartRegress eRegress /*= CHREGRESS_LINEAR*/,
+                        USHORT nId );
+    SvxChartRegressItem(SvStream& rIn, USHORT nId );
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
     virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
@@ -239,20 +233,16 @@ public:
     USHORT GetVersion (USHORT nFileFormatVersion) const;
 };
 
-#endif
-
 //------------------------------------------------------------------
-
-#ifdef ITEMID_CHARTDATADESCR
 
 class SVX_DLLPUBLIC SvxChartDataDescrItem : public SfxEnumItem
 {
 public:
     TYPEINFO();
-    SvxChartDataDescrItem(SvxChartDataDescr eDataDescr = CHDESCR_NONE,
-                          USHORT nId = ITEMID_CHARTDATADESCR);
+    SvxChartDataDescrItem(SvxChartDataDescr eDataDescr /*= CHDESCR_NONE*/,
+                          USHORT nId );
     SvxChartDataDescrItem(SvStream& rIn,
-                          USHORT nId = ITEMID_CHARTDATADESCR);
+                          USHORT nId );
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
     virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
@@ -262,20 +252,16 @@ public:
         { return (SvxChartDataDescr)SfxEnumItem::GetValue(); }
 };
 
-#endif
-
 //------------------------------------------------------------------
-
-#ifdef ITEMID_CHARTLEGENDPOS
 
 class SVX_DLLPUBLIC SvxChartLegendPosItem : public SfxEnumItem
 {
 public:
     TYPEINFO();
-    SvxChartLegendPosItem(SvxChartLegendPos eLegendPos = CHLEGEND_NONE,
-                          USHORT nId = ITEMID_CHARTLEGENDPOS);
+    SvxChartLegendPosItem(SvxChartLegendPos eLegendPos /*= CHLEGEND_NONE*/,
+                          USHORT nId );
     SvxChartLegendPosItem(SvStream& rIn,
-                          USHORT nId = ITEMID_CHARTLEGENDPOS);
+                          USHORT nId );
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
     virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
@@ -285,20 +271,16 @@ public:
         { return (SvxChartLegendPos)SfxEnumItem::GetValue(); }
 };
 
-#endif
-
 //------------------------------------------------------------------
-
-#ifdef ITEMID_CHARTTEXTORDER
 
 class SVX_DLLPUBLIC SvxChartTextOrderItem : public SfxEnumItem
 {
 public:
     TYPEINFO();
-    SvxChartTextOrderItem(SvxChartTextOrder eOrder = CHTXTORDER_SIDEBYSIDE,
-                          USHORT nId = ITEMID_CHARTTEXTORDER);
+    SvxChartTextOrderItem(SvxChartTextOrder eOrder /*= CHTXTORDER_SIDEBYSIDE*/,
+                          USHORT nId );
     SvxChartTextOrderItem(SvStream& rIn,
-                          USHORT nId = ITEMID_CHARTTEXTORDER);
+                          USHORT nId );
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
     virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
@@ -311,20 +293,16 @@ public:
         { return (SvxChartTextOrder)SfxEnumItem::GetValue(); }
 };
 
-#endif
-
 //------------------------------------------------------------------
-
-#ifdef ITEMID_CHARTTEXTORIENT
 
 class SVX_DLLPUBLIC SvxChartTextOrientItem : public SfxEnumItem
 {
 public:
     TYPEINFO();
-    SvxChartTextOrientItem(SvxChartTextOrient eOrient = CHTXTORIENT_STANDARD,
-                           USHORT nId = ITEMID_CHARTTEXTORIENT);
+    SvxChartTextOrientItem(SvxChartTextOrient /*eOrient = CHTXTORIENT_STANDARD*/,
+                           USHORT nId );
     SvxChartTextOrientItem(SvStream& rIn,
-                           USHORT nId = ITEMID_CHARTTEXTORIENT);
+                           USHORT nId );
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
     virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
@@ -334,20 +312,16 @@ public:
         { return (SvxChartTextOrient)SfxEnumItem::GetValue(); }
 };
 
-#endif
-
 //------------------------------------------------------------------
-
-#ifdef ITEMID_CHARTKINDERROR
 
 class SVX_DLLPUBLIC SvxChartKindErrorItem : public SfxEnumItem
 {
 public:
     TYPEINFO();
-    SvxChartKindErrorItem(SvxChartKindError eOrient = CHERROR_NONE,
-                           USHORT nId = ITEMID_CHARTKINDERROR);
+    SvxChartKindErrorItem(SvxChartKindError /*eOrient = CHERROR_NONE*/,
+                           USHORT nId );
     SvxChartKindErrorItem(SvStream& rIn,
-                           USHORT nId = ITEMID_CHARTKINDERROR);
+                           USHORT nId );
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
     virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
@@ -359,20 +333,16 @@ public:
     USHORT GetVersion (USHORT nFileFormatVersion) const;
 };
 
-#endif
-
 //------------------------------------------------------------------
-
-#ifdef ITEMID_CHARTINDICATE
 
 class SVX_DLLPUBLIC SvxChartIndicateItem : public SfxEnumItem
 {
 public:
     TYPEINFO();
-    SvxChartIndicateItem(SvxChartIndicate eOrient = CHINDICATE_NONE,
-                           USHORT nId = ITEMID_CHARTINDICATE);
+    SvxChartIndicateItem(SvxChartIndicate eOrient /*= CHINDICATE_NONE*/,
+                           USHORT nId );
     SvxChartIndicateItem(SvStream& rIn,
-                           USHORT nId = ITEMID_CHARTINDICATE);
+                           USHORT nId );
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
     virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
@@ -384,11 +354,7 @@ public:
     USHORT GetVersion (USHORT nFileFormatVersion) const;
 };
 
-#endif
-
 //------------------------------------------------------------------
-
-#ifdef ITEMID_DOUBLE
 
 class SVX_DLLPUBLIC SvxDoubleItem : public SfxPoolItem
 {
@@ -396,8 +362,8 @@ class SVX_DLLPUBLIC SvxDoubleItem : public SfxPoolItem
 
 public:
     TYPEINFO();
-    SvxDoubleItem(double fValue = 0.0, USHORT nId = ITEMID_DOUBLE);
-    SvxDoubleItem(SvStream& rIn, USHORT nId = ITEMID_DOUBLE);
+    SvxDoubleItem(double fValue /*= 0.0*/, USHORT nId );
+    SvxDoubleItem(SvStream& rIn, USHORT nId );
     SvxDoubleItem(const SvxDoubleItem& rItem);
 
 
@@ -425,9 +391,6 @@ public:
     double GetValue() const { return fVal; }
     void SetValue(double fNewVal) { fVal = fNewVal; }
 };
-
-#endif
-
 
 #endif   // _SVX_CHRTITEM_HXX
 
