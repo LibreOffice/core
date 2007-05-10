@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:12:14 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:54:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,32 +41,32 @@
 #include "sc.hrc"
 #include "scitems.hxx"
 
-#define ITEMID_ADJUST           0
-#define ITEMID_CASEMAP          0
+
+
 #define ITEMID_DBTYPE           0
-#define ITEMID_LINESPACE        0
-#define ITEMID_INTERLINESPACE   0
-#define ITEMID_BREAK            0
-#define ITEMID_NUMTYPE          0
-#define ITEMID_SHADOWLOCATION   0
-#define ITEMID_PAGE             0
-#define ITEMID_PAGEMODEL        0
-#define ITEMID_ORPHANS          0
-#define ITEMID_KERNING          0
-#define ITEMID_POSTITDATE       0
-#define ITEMID_TEXT             0
-#define ITEMID_AUTHOR           0
-#define ITEMID_DATE             0
-#define ITEMID_SIZE             0
-#define ITEMID_HYPHENZONE       0
-#define ITEMID_FMTSPLIT         0
-#define ITEMID_FMTKEEP          0
-#define ITEMID_FMTBREAK         0
-#define ITEMID_AUTOKERN         0
-#define ITEMID_LONGLRSPACE      0
-#define ITEMID_LONGULSPACE      0
-#define ITEMID_WIDOWS           0
-#define ITEMID_DOUBLE           0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #include <sfx2/msg.hxx>
 #include <svtools/stritem.hxx>
