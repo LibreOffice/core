@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDescriptor.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 16:30:27 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:53:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,7 +203,7 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
 
         public boolean isColunnNameDuplicate(XNameAccess _xColumns, XPropertySet _xToBeAppendedPropertySet){
         try {
-            String sColumnName = (String) _xToBeAppendedPropertySet.getPropertyValue("Name");
+            String sColumnName = (String) AnyConverter.toString(_xToBeAppendedPropertySet.getPropertyValue("Name"));
             if (_xColumns.hasByName(sColumnName)){
                 String sMessage = JavaTools.replaceSubString(sColumnAlreadyExistsMessage, sColumnName, "%FIELDNAME");
                 showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, sMessage);
@@ -546,7 +546,10 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
                     XPropertySet xColPropertySet = xColumnDataDescriptorFactory.createDataDescriptor();
                     IDFieldName = Desktop.getUniqueName(getColumnNames(), _columnname, "");
                     xColPropertySet.setPropertyValue("Name", IDFieldName);
-                    xColPropertySet.setPropertyValue("Type", new Integer(oTypeInspector.convertDataType(com.sun.star.sdbc.DataType.INTEGER)));
+
+                    int nDataType = oTypeInspector.convertDataType(com.sun.star.sdbc.DataType.INTEGER);
+                    xColPropertySet.setPropertyValue("Type", new Integer(nDataType));
+                    xColPropertySet.setPropertyValue("TypeName", oTypeInspector.getDefaultTypeName( nDataType, null));
                     ColumnDescriptor oColumnDescriptor = new ColumnDescriptor( xColPropertySet, IDFieldName);
                     this.columncontainer.add(0, oColumnDescriptor);
                     this.bIDFieldisInserted = true;
