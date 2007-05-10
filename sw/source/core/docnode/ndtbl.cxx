@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:49:40 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:57:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@
 #include "precompiled_sw.hxx"
 
 
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #ifdef WTC
 #define private public
 #endif
@@ -276,7 +275,7 @@ void lcl_SetDfltBoxAttr( SwFrmFmt& rFmt, BYTE nId )
         aLine.SetInWidth ( DEF_DOUBLE_LINE7_IN  );
         aLine.SetDistance( DEF_DOUBLE_LINE7_DIST);
     }
-    SvxBoxItem aBox; aBox.SetDistance( 55 );
+    SvxBoxItem aBox(RES_BOX); aBox.SetDistance( 55 );
     if ( bTop )
         aBox.SetLine( &aLine, BOX_LINE_TOP );
     if ( bBottom )
@@ -568,7 +567,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
         {
             USHORT nFrmWidth = nLastPos;
             nLastPos = (*pColArr)[ USHORT(pColArr->Count()-2)];
-            pTableFmt->SetAttr( SvxLRSpaceItem( nSttPos, nFrmWidth - nLastPos ) );
+            pTableFmt->SetAttr( SvxLRSpaceItem( nSttPos, nFrmWidth - nLastPos, 0, 0, RES_LR_SPACE ) );
         }
         nWidth = nLastPos - nSttPos;
     }
