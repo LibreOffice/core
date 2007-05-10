@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fielduno.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:46:30 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:59:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
 
 
 #include <svx/eeitem.hxx>
-#define ITEMID_FIELD EE_FEATURE_FIELD
 
 #include <svx/editeng.hxx>
 #include <svx/editobj.hxx>
@@ -581,7 +580,7 @@ SvxFieldItem ScCellFieldObj::CreateFieldItem()
     aField.SetURL( aUrl );
     aField.SetRepresentation( aRepresentation );
     aField.SetTargetFrame( aTarget );
-    return SvxFieldItem( aField );
+    return SvxFieldItem( aField, EE_FEATURE_FIELD );
 }
 
 void ScCellFieldObj::DeleteField()
@@ -730,7 +729,7 @@ void SAL_CALL ScCellFieldObj::setPropertyValue(
 
             if (bOk)
             {
-                pEditEngine->QuickInsertField( SvxFieldItem(*pField), aSelection );
+                pEditEngine->QuickInsertField( SvxFieldItem(*pField, EE_FEATURE_FIELD), aSelection );
                 pEditSource->UpdateData();
             }
         }
@@ -1253,42 +1252,42 @@ SvxFieldItem ScHeaderFieldObj::CreateFieldItem()
         case SC_SERVICE_PAGEFIELD:
             {
                 SvxPageField aField;
-                return SvxFieldItem( aField );
+                return SvxFieldItem( aField, EE_FEATURE_FIELD );
             }
         case SC_SERVICE_PAGESFIELD:
             {
                 SvxPagesField aField;
-                return SvxFieldItem( aField );
+                return SvxFieldItem( aField, EE_FEATURE_FIELD );
             }
         case SC_SERVICE_DATEFIELD:
             {
                 SvxDateField aField;
-                return SvxFieldItem( aField );
+                return SvxFieldItem( aField, EE_FEATURE_FIELD );
             }
         case SC_SERVICE_TIMEFIELD:
             {
                 SvxTimeField aField;
-                return SvxFieldItem( aField );
+                return SvxFieldItem( aField, EE_FEATURE_FIELD );
             }
         case SC_SERVICE_TITLEFIELD:
             {
                 SvxFileField aField;
-                return SvxFieldItem( aField );
+                return SvxFieldItem( aField, EE_FEATURE_FIELD );
             }
         case SC_SERVICE_FILEFIELD:
             {
                 SvxExtFileField aField;
                 aField.SetFormat( (SvxFileFormat) nFileFormat );
-                return SvxFieldItem( aField );
+                return SvxFieldItem( aField, EE_FEATURE_FIELD );
             }
         case SC_SERVICE_SHEETFIELD:
             {
                 SvxTableField aField;
-                return SvxFieldItem( aField );
+                return SvxFieldItem( aField, EE_FEATURE_FIELD );
             }
     }
 
-    return SvxFieldItem( SvxFieldData() );
+    return SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD );
 }
 
 void ScHeaderFieldObj::DeleteField()
@@ -1427,7 +1426,7 @@ void SAL_CALL ScHeaderFieldObj::setPropertyValue(
                 {
                     SvxExtFileField* pExtFile = (SvxExtFileField*)pField;   // local to the ScUnoEditEngine
                     pExtFile->SetFormat( eFormat );
-                    pEditEngine->QuickInsertField( SvxFieldItem(*pField), aSelection );
+                    pEditEngine->QuickInsertField( SvxFieldItem(*pField, EE_FEATURE_FIELD), aSelection );
                     pEditSource->UpdateData();
                 }
             }
