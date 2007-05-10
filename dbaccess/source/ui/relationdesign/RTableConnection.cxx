@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RTableConnection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:43:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:40:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,13 +76,6 @@ ORelationTableConnection::ORelationTableConnection( const ORelationTableConnecti
 ORelationTableConnection::~ORelationTableConnection()
 {
     DBG_DTOR(ORelationTableConnection,NULL);
-}
-
-//------------------------------------------------------------------------
-OConnectionLine* ORelationTableConnection::CreateConnLine( const OConnectionLine& rConnLine )
-{
-    DBG_CHKTHIS(ORelationTableConnection,NULL);
-    return new OConnectionLine( rConnLine );
 }
 
 //------------------------------------------------------------------------
