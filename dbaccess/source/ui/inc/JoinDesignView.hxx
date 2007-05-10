@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinDesignView.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:28:19 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:28:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,12 +84,8 @@ namespace dbaui
         virtual void SaveTabWinUIConfig(OTableWindow* pWin);
         OJoinController* getController() const { return m_pController; }
         // called when fields are deleted
-        // called when a table from tabeview was deleted
-        void TableDeleted(const ::rtl::OUString& rAliasName);
 
         OJoinTableView* getTableView() const { return m_pTableView; }
-        void zoomTableView(const Fraction& _rFraction);
-        void SaveUIConfig();
     protected:
         // return the Rectangle where I can paint myself
         virtual void resizeDocumentView(Rectangle& rRect);
