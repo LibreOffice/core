@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:30:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:35:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,6 @@
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#define ITEMID_FIELD    EE_FEATURE_FIELD
 #ifndef _FLDITEM_HXX
 #include <svx/flditem.hxx>
 #endif
@@ -1588,7 +1587,7 @@ void DrawViewShell::InsertURLField(const String& rURL, const String& rText,
     if (pOLV)
     {
         ESelection aSel( pOLV->GetSelection() );
-        SvxFieldItem aURLItem( SvxURLField( rURL, rText, SVXURLFORMAT_REPR ) );
+        SvxFieldItem aURLItem( SvxURLField( rURL, rText, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD );
         pOLV->InsertField( aURLItem );
         if ( aSel.nStartPos <= aSel.nEndPos )
             aSel.nEndPos = aSel.nStartPos + 1;
@@ -1604,7 +1603,7 @@ void DrawViewShell::InsertURLField(const String& rURL, const String& rText,
 
         SvxURLField aURLField(rURL, rText, SVXURLFORMAT_REPR);
         aURLField.SetTargetFrame(rTarget);
-        SvxFieldItem aURLItem(aURLField);
+        SvxFieldItem aURLItem(aURLField, EE_FEATURE_FIELD);
         pOutl->QuickInsertField( aURLItem, ESelection() );
         OutlinerParaObject* pOutlParaObject = pOutl->CreateParaObject();
 
