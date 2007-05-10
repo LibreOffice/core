@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-28 15:07:30 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:32:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,13 +79,12 @@ class OGenericAdministrationPage;
 //= ODbTypeWizDialogSetup
 //=========================================================================
 class OGeneralPage;
-struct OPageSettings;
 class ODbDataSourceAdministrationHelper;
 /** tab dialog for administrating the office wide registered data sources
 */
 class OMySQLIntroPageSetup;
 
-class ODbTypeWizDialogSetup : public svt::RoadmapWizard , public IItemSetHelper, public IAdminHelper,public dbaui::OModuleClient
+class ODbTypeWizDialogSetup : public svt::RoadmapWizard , public IItemSetHelper, public IDatabaseSettingsDialog,public dbaui::OModuleClient
 {
 
 private:
@@ -140,6 +139,7 @@ public:
     virtual DATASOURCE_TYPE     getDatasourceType(const SfxItemSet& _rSet) const;
     virtual void clearPassword();
     virtual void setTitle(const ::rtl::OUString& _sTitle);
+    virtual void enableConfirmSettings( bool _bEnable );
     virtual sal_Bool saveDatasource();
     virtual String  getStateDisplayName( WizardState _nState );
 
@@ -174,9 +174,6 @@ protected:
         AR_LEAVE_UNCHANGED,     // no changes were made
         AR_KEEP                 // don't leave the page (e.g. because an error occured)
     };
-    /** apply all changes made
-    */
-    ApplyResult implApplyChanges();
 
 private:
     void RegisterDataSourceByLocation(const ::rtl::OUString& sPath);
