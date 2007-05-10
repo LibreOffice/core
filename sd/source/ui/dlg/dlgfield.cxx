@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfield.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:03:16 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:26:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,6 @@
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
 #endif
-#define ITEMID_FIELD    EE_FEATURE_FIELD
 #include <svx/flditem.hxx>
 #ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
@@ -61,7 +60,6 @@
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
-#define ITEMID_LANGUAGE EE_CHAR_LANGUAGE
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
 #endif
