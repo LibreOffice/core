@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeFontWork.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:14:19 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:34:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,11 +81,6 @@
 #ifndef _EEITEM_HXX //autogen
 #include <eeitem.hxx>
 #endif
-#define ITEMID_FONT         EE_CHAR_FONTINFO
-#define ITEMID_CHARSCALE_W  EE_CHAR_FONTWIDTH
-#define ITEMID_FRAMEDIR     EE_PARA_WRITINGDIR
-#define ITEMID_POSTURE      EE_CHAR_ITALIC
-#define ITEMID_WEIGHT       EE_CHAR_WEIGHT
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <frmdiritem.hxx>
 #endif
