@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directsql.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:52:11 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:32:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,9 +111,6 @@ namespace dbaui
 
         /// add an history entry
         void addHistoryEntry(const String& _rStatement);
-
-        /// set the limit for the history size
-        void setHistoryLimit(sal_Int32 _nMaxEntries);
 
         /// number of history entries
         sal_Int32 getHistorySize() const;
