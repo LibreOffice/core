@@ -4,9 +4,9 @@
  *
  *  $RCSfile: algitem.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:09:26 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:49:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,11 +38,6 @@
 
 #include "svxitems.hrc"
 
-#define ITEMID_HORJUSTIFY       0
-#define ITEMID_VERJUSTIFY       0
-#define ITEMID_ORIENTATION      0
-#define ITEMID_LINEBREAK        0
-#define ITEMID_MARGIN           0
 
 #include <tools/stream.hxx>
 
@@ -103,12 +98,19 @@ using namespace ::com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
-TYPEINIT1_AUTOFACTORY( SvxHorJustifyItem, SfxEnumItem );
-TYPEINIT1_AUTOFACTORY( SvxVerJustifyItem, SfxEnumItem );
-TYPEINIT1_AUTOFACTORY( SvxOrientationItem, SfxEnumItem );
-TYPEINIT1_AUTOFACTORY( SvxMarginItem, SfxPoolItem );
+//TYPEINIT1_AUTOFACTORY( SvxHorJustifyItem, SfxEnumItem );
+TYPEINIT1_FACTORY( SvxHorJustifyItem, SfxEnumItem, new SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, 0))
+TYPEINIT1_FACTORY( SvxVerJustifyItem, SfxEnumItem, new SvxVerJustifyItem(SVX_VER_JUSTIFY_STANDARD, 0) );
+TYPEINIT1_FACTORY( SvxOrientationItem, SfxEnumItem, new SvxOrientationItem(SVX_ORIENTATION_STANDARD, 0) );
+TYPEINIT1_FACTORY( SvxMarginItem, SfxPoolItem, new SvxMarginItem(0) );
 
 // class SvxHorJustifyItem -----------------------------------------------
+
+
+SvxHorJustifyItem::SvxHorJustifyItem( const USHORT nId ) :
+    SfxEnumItem( nId, (USHORT)SVX_HOR_JUSTIFY_STANDARD )
+{
+}
 
 SvxHorJustifyItem::SvxHorJustifyItem( const SvxCellHorJustify eJustify,
                                       const USHORT nId ) :
@@ -269,6 +271,11 @@ USHORT SvxHorJustifyItem::GetValueCount() const
 }
 
 // class SvxVerJustifyItem -----------------------------------------------
+
+SvxVerJustifyItem::SvxVerJustifyItem( const USHORT nId ) :
+    SfxEnumItem( nId, (USHORT)SVX_VER_JUSTIFY_STANDARD )
+{
+}
 
 SvxVerJustifyItem::SvxVerJustifyItem( const SvxCellVerJustify eJustify,
                                       const USHORT nId ) :
