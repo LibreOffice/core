@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgattr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:59:28 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:06:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-
-#ifdef MAC
-#ifdef ITEMID_NUMBERINFO
-#undef ITEMID_NUMBERINFO
-#endif
-#endif
-
-#define ITEMID_NUMBERINFO 0
 
 #ifndef DBAUI_SBATTRDLG_HXX
 #include "dlgattr.hxx"
@@ -105,7 +97,7 @@ SbaSbAttrDlg::SbaSbAttrDlg(Window* pParent, const SfxItemSet* pCellAttrs, SvNumb
 {
     DBG_CTOR(SbaSbAttrDlg,NULL);
 
-    pNumberInfoItem = new SvxNumberInfoItem( pFormatter );
+    pNumberInfoItem = new SvxNumberInfoItem( pFormatter, 0 );
 
     if (bRow)
         SetText(aTitle);
