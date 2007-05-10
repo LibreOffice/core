@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:26:40 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:26:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,6 @@
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
@@ -272,7 +269,7 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
             {
                 ASSERT(pSrchItem, "Search-Item fehlt");
                 if( !pSrchItem )
-                    pSrchItem = new SvxSearchItem;
+                    pSrchItem = new SvxSearchItem(SID_SEARCH_ITEM);
             }
             else
             {
