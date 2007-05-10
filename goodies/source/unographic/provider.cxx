@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:02:40 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:14:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,9 @@
 #ifndef _SV_IMAGE_HXX_
 #include <vcl/image.hxx>
 #endif
+#ifndef _SV_METAACT_HXX
+#include <vcl/metaact.hxx>
+#endif
 #ifndef VCL_IMAGEREPOSITORY_HXX
 #include <vcl/imagerepository.hxx>
 #endif
@@ -58,6 +61,7 @@
 #include <svtools/filter.hxx>
 #include <svtools/solar.hrc>
 #include <vcl/salbtype.hxx>
+#include <vcl/virdev.hxx>
 
 #ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
 #include <com/sun/star/io/XStream.hpp>
@@ -420,13 +424,98 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     return xRet;
 }
 
+void ImplCalculateCropRect( ::Graphic& rGraphic, const text::GraphicCrop& rGraphicCropLogic, Rectangle& rGraphicCropPixel )
+{
+    if ( rGraphicCropLogic.Left || rGraphicCropLogic.Top || rGraphicCropLogic.Right || rGraphicCropLogic.Bottom )
+    {
+        Size aSourceSizePixel( rGraphic.GetSizePixel() );
+        if ( aSourceSizePixel.Width() && aSourceSizePixel.Height() )
+        {
+            if ( rGraphicCropLogic.Left || rGraphicCropLogic.Top || rGraphicCropLogic.Right || rGraphicCropLogic.Bottom )
+            {
+                Size aSize100thMM( 0, 0 );
+                if( rGraphic.GetPrefMapMode().GetMapUnit() != MAP_PIXEL )
+                {
+                    aSize100thMM = OutputDevice::LogicToLogic( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode(), MAP_100TH_MM );
+                }
+                else
+                {
+                    aSize100thMM = Application::GetDefaultDevice()->PixelToLogic( rGraphic.GetPrefSize(), MAP_100TH_MM );
+                }
+                if ( aSize100thMM.Width() && aSize100thMM.Height() )
+                {
+                    double fSourceSizePixelWidth = static_cast<double>(aSourceSizePixel.Width());
+                    double fSourceSizePixelHeight= static_cast<double>(aSourceSizePixel.Height());
+                    rGraphicCropPixel.Left() = static_cast< sal_Int32 >((fSourceSizePixelWidth * rGraphicCropLogic.Left ) / aSize100thMM.Width());
+                    rGraphicCropPixel.Top() = static_cast< sal_Int32 >((fSourceSizePixelHeight * rGraphicCropLogic.Top ) / aSize100thMM.Height());
+                    rGraphicCropPixel.Right() = static_cast< sal_Int32 >(( fSourceSizePixelWidth * ( aSize100thMM.Width() - rGraphicCropLogic.Right ) ) / aSize100thMM.Width() );
+                    rGraphicCropPixel.Bottom() = static_cast< sal_Int32 >(( fSourceSizePixelHeight * ( aSize100thMM.Height() - rGraphicCropLogic.Bottom ) ) / aSize100thMM.Height() );
+                }
+            }
+        }
+    }
+}
 
+void ImplApplyBitmapScaling( ::Graphic& rGraphic, sal_Int32 nPixelWidth, sal_Int32 nPixelHeight )
+{
+    if ( nPixelWidth && nPixelHeight )
+    {
+        BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
+        MapMode aPrefMapMode( aBmpEx.GetPrefMapMode() );
+        Size    aPrefSize( aBmpEx.GetPrefSize() );
+        aBmpEx.Scale( Size( nPixelWidth, nPixelHeight ) );
+        aBmpEx.SetPrefMapMode( aPrefMapMode );
+        aBmpEx.SetPrefSize( aPrefSize );
+        rGraphic = aBmpEx;
+    }
+}
+
+void ImplApplyBitmapResolution( ::Graphic& rGraphic, sal_Int32 nImageResolution, const Size& rVisiblePixelSize, const awt::Size& rLogicalSize )
+{
+    if ( nImageResolution && rLogicalSize.Width && rLogicalSize.Height )
+    {
+        const double fImageResolution = static_cast<double>( nImageResolution );
+        const double fSourceDPIX = ( static_cast<double>(rVisiblePixelSize.Width()) * 2540.0 ) / static_cast<double>(rLogicalSize.Width);
+        const double fSourceDPIY = ( static_cast<double>(rVisiblePixelSize.Height()) * 2540.0 ) / static_cast<double>(rLogicalSize.Height);
+        const sal_Int32 nSourcePixelWidth( rGraphic.GetSizePixel().Width() );
+        const sal_Int32 nSourcePixelHeight( rGraphic.GetSizePixel().Height() );
+        const double fSourcePixelWidth = static_cast<double>( nSourcePixelWidth );
+        const double fSourcePixelHeight= static_cast<double>( nSourcePixelHeight );
+
+        sal_Int32 nDestPixelWidth = nSourcePixelWidth;
+        sal_Int32 nDestPixelHeight = nSourcePixelHeight;
+
+        // check, if the bitmap DPI exceeds the maximum DPI
+        if( fSourceDPIX > fImageResolution )
+        {
+            nDestPixelWidth = static_cast<sal_Int32>(( fSourcePixelWidth * fImageResolution ) / fSourceDPIX);
+            if ( !nDestPixelWidth || ( nDestPixelWidth > nSourcePixelWidth ) )
+                nDestPixelWidth = nSourcePixelWidth;
+        }
+        if ( fSourceDPIY > fImageResolution )
+        {
+            nDestPixelHeight= static_cast<sal_Int32>(( fSourcePixelHeight* fImageResolution ) / fSourceDPIY);
+            if ( !nDestPixelHeight || ( nDestPixelHeight > nSourcePixelHeight ) )
+                nDestPixelHeight = nSourcePixelHeight;
+        }
+        if ( ( nDestPixelWidth != nSourcePixelWidth ) || ( nDestPixelHeight != nSourcePixelHeight ) )
+            ImplApplyBitmapScaling( rGraphic, nDestPixelWidth, nDestPixelHeight );
+    }
+}
 
 void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyValue >& rFilterData )
 {
+    /* this method applies following attributes to the graphic, in the first step the
+       cropping area (logical size in 100thmm) is applied, in the second step the resolution
+       is applied, in the third step the graphic is scaled to the corresponding pixelsize.
+       if a parameter value is zero or not available the corresponding step will be skipped */
+
     sal_Int32 nPixelWidth = 0;
     sal_Int32 nPixelHeight= 0;
-    text::GraphicCrop aGraphicCrop( 0, 0, 0, 0 );
+    sal_Int32 nImageResolution = 0;
+    awt::Size aLogicalSize( 0, 0 );
+    text::GraphicCrop aCropLogic( 0, 0, 0, 0 );
+    sal_Bool bRemoveCropArea = sal_True;
 
     for( sal_Int32 i = 0; i < rFilterData.getLength(); ++i )
     {
@@ -437,31 +526,112 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
             aValue >>= nPixelWidth;
         else if( COMPARE_EQUAL == aName.compareToAscii( "PixelHeight" ) )
             aValue >>= nPixelHeight;
-        else if (COMPARE_EQUAL == aName.compareToAscii( "GraphicCrop" ) )
-            aValue >>= aGraphicCrop;
+        else if( COMPARE_EQUAL == aName.compareToAscii( "LogicalSize" ) )
+            aValue >>= aLogicalSize;
+        else if (COMPARE_EQUAL == aName.compareToAscii( "GraphicCropLogic" ) )
+            aValue >>= aCropLogic;
+        else if (COMPARE_EQUAL == aName.compareToAscii( "RemoveCropArea" ) )
+            aValue >>= bRemoveCropArea;
+        else if (COMPARE_EQUAL == aName.compareToAscii( "ImageResolution" ) )
+            aValue >>= nImageResolution;
     }
     if ( rGraphic.GetType() == GRAPHIC_BITMAP )
     {
-        if ( aGraphicCrop.Left || aGraphicCrop.Top || aGraphicCrop.Right || aGraphicCrop.Bottom )
+        Rectangle aCropPixel( Point( 0, 0 ), rGraphic.GetSizePixel() );
+        ImplCalculateCropRect( rGraphic, aCropLogic, aCropPixel );
+        if ( bRemoveCropArea )
         {
             BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
-
-            // convert crops to pixel
-            Point aCropLeftTop( Application::GetDefaultDevice()->
-                LogicToLogic( Point( aGraphicCrop.Left, aGraphicCrop.Top ), MapMode( MAP_100TH_MM ), aBmpEx.GetPrefMapMode() ) );
-            Point aRB( Application::GetDefaultDevice()->
-                LogicToLogic( Point( aGraphicCrop.Right, aGraphicCrop.Bottom ), MapMode( MAP_100TH_MM ), aBmpEx.GetPrefMapMode() ) );
-            Point aCropRightBottom( aBmpEx.GetSizePixel().Width() - aRB.X(), aBmpEx.GetSizePixel().Height() - aRB.Y() );
-
-            aBmpEx.Crop( Rectangle( aCropLeftTop, aCropRightBottom ) );
+            aBmpEx.Crop( aCropPixel );
             rGraphic = aBmpEx;
         }
-        Size aSizePixel( rGraphic.GetSizePixel() );
-        if ( nPixelWidth && nPixelHeight && ( nPixelWidth != aSizePixel.Width() ) || ( nPixelHeight != aSizePixel.Height() ) )
+        Size aVisiblePixelSize( bRemoveCropArea ? rGraphic.GetSizePixel() : aCropPixel.GetSize() );
+        ImplApplyBitmapResolution( rGraphic, nImageResolution, aVisiblePixelSize, aLogicalSize );
+        ImplApplyBitmapScaling( rGraphic, nPixelWidth, nPixelHeight );
+    }
+    else if ( ( rGraphic.GetType() == GRAPHIC_GDIMETAFILE ) && nImageResolution )
+    {
+        VirtualDevice aDummyVDev;
+        GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
+        Size aMtfSize( aDummyVDev.LogicToLogic( aMtf.GetPrefSize(), aMtf.GetPrefMapMode(), MAP_100TH_MM ) );
+        if ( aMtfSize.Width() && aMtfSize.Height() )
         {
-            BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
-            aBmpEx.Scale( Size( nPixelWidth, nPixelHeight ) );
-            rGraphic = aBmpEx;
+            MapMode aNewMapMode( MAP_100TH_MM );
+            aNewMapMode.SetScaleX( static_cast< double >( aLogicalSize.Width ) / static_cast< double >( aMtfSize.Width() ) );
+            aNewMapMode.SetScaleY( static_cast< double >( aLogicalSize.Height ) / static_cast< double >( aMtfSize.Height() ) );
+            aDummyVDev.EnableOutput( sal_False );
+            aDummyVDev.SetMapMode( aNewMapMode );
+
+            for( sal_uInt32 i = 0, nObjCount = aMtf.GetActionCount(); i < nObjCount; i++ )
+            {
+                MetaAction* pAction = aMtf.GetAction( i );
+                switch( pAction->GetType() )
+                {
+                    // only optimizing common bitmap actions:
+                    case( META_MAPMODE_ACTION ):
+                    {
+                        const_cast< MetaAction* >( pAction )->Execute( &aDummyVDev );
+                        break;
+                    }
+                    case( META_PUSH_ACTION ):
+                    {
+                        const MetaPushAction* pA = (const MetaPushAction*)pAction;
+                        aDummyVDev.Push( pA->GetFlags() );
+                        break;
+                    }
+                    case( META_POP_ACTION ):
+                    {
+                        aDummyVDev.Pop();
+                        break;
+                    }
+                    case( META_BMPSCALE_ACTION ):
+                    case( META_BMPEXSCALE_ACTION ):
+                    {
+                        BitmapEx aBmpEx;
+                        Point aPos;
+                        Size aSize;
+                        if ( pAction->GetType() == META_BMPSCALE_ACTION )
+                        {
+                            MetaBmpScaleAction* pScaleAction = dynamic_cast< MetaBmpScaleAction* >( pAction );
+                            aBmpEx = pScaleAction->GetBitmap();
+                            aPos = pScaleAction->GetPoint();
+                            aSize = pScaleAction->GetSize();
+                        }
+                        else
+                        {
+                            MetaBmpExScaleAction* pScaleAction = dynamic_cast< MetaBmpExScaleAction* >( pAction );
+                            aBmpEx = pScaleAction->GetBitmapEx();
+                            aPos = pScaleAction->GetPoint();
+                            aSize = pScaleAction->GetSize();
+                        }
+                        ::Graphic aGraphic( aBmpEx );
+                        const Size aSize100thmm( aDummyVDev.LogicToPixel( aSize ) );
+                        Size aSize100thmm2( aDummyVDev.PixelToLogic( aSize100thmm, MAP_100TH_MM ) );
+
+                        ImplApplyBitmapResolution( aGraphic, nImageResolution,
+                            aGraphic.GetSizePixel(), awt::Size( aSize100thmm2.Width(), aSize100thmm2.Height() ) );
+
+                        MetaAction* pNewAction;
+                        if ( pAction->GetType() == META_BMPSCALE_ACTION )
+                            pNewAction = new MetaBmpScaleAction ( aPos, aSize, aGraphic.GetBitmap() );
+                        else
+                            pNewAction = new MetaBmpExScaleAction( aPos, aSize, aGraphic.GetBitmapEx() );
+
+                        aMtf.ReplaceAction( pNewAction, i );
+                        pAction->Delete();
+                        break;
+                    }
+                    default:
+                    case( META_BMP_ACTION ):
+                    case( META_BMPSCALEPART_ACTION ):
+                    case( META_BMPEX_ACTION ):
+                    case( META_BMPEXSCALEPART_ACTION ):
+                    case( META_MASK_ACTION ):
+                    case( META_MASKSCALE_ACTION ):
+                    break;
+                }
+            }
+            rGraphic = aMtf;
         }
     }
 }
@@ -572,14 +742,19 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
                     ::Graphic aGraphic( *pGraphic );
                     ImplApplyFilterData( aGraphic, aFilterDataSeq );
 
+                    /* sj: using a temporary memory stream, because some graphic filters are seeking behind
+                       stream end (which leads to an invalid argument exception then). */
+                    SvMemoryStream aMemStrm;
                     if( 0 == strcmp( pFilterShortName, MIMETYPE_VCLGRAPHIC ) )
-                        (*pOStm) << aGraphic;
+                        aMemStrm << aGraphic;
                     else
                     {
-                        pFilter->ExportGraphic( aGraphic, aPath, *pOStm,
+                        pFilter->ExportGraphic( aGraphic, aPath, aMemStrm,
                                                 pFilter->GetExportFormatNumberForShortName( ::rtl::OUString::createFromAscii( pFilterShortName ) ),
                                                     ( aFilterDataSeq.getLength() ? &aFilterDataSeq : NULL ) );
                     }
+                    aMemStrm.Seek( STREAM_SEEK_TO_END );
+                    pOStm->Write( aMemStrm.GetData(), aMemStrm.Tell() );
                 }
             }
         }
