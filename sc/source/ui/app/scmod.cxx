@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:58:26 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:54:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 #include "scitems.hxx"
 #include <sfx2/app.hxx>
 #include <svx/eeitem.hxx>
-#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #include <svx/flditem.hxx>
 #include <svx/outliner.hxx>
 #include <basic/sbstar.hxx>
@@ -85,7 +85,7 @@
 #include <vcl/waitobj.hxx>
 #include <svx/svxerr.hxx>
 
-#define ITEMID_SPELLCHECK 0
+
 
 #include "scmod.hxx"
 #include "global.hxx"
