@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemwin.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:39:47 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:01:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,9 +60,6 @@
 #include <vcl/svapp.hxx>
 
 #include "dialogs.hrc"
-
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
-#define ITEMID_DASH_LIST        SID_DASH_LIST
 
 #define DELAY_TIMEOUT           100
 
