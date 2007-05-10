@@ -4,9 +4,9 @@
  *
  *  $RCSfile: e3ditem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:28:25 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:50:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ DBG_NAME(SvxB3DVectorItem)
 
 // -----------------------------------------------------------------------
 
-TYPEINIT1_AUTOFACTORY(SvxB3DVectorItem, SfxPoolItem);
+TYPEINIT1_FACTORY(SvxB3DVectorItem, SfxPoolItem, new SvxB3DVectorItem);
 
 // -----------------------------------------------------------------------
 
