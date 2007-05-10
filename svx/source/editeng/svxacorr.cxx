@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 18:03:23 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:46:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#define ITEMID_UNDERLINE    0
-#define ITEMID_WEIGHT       0
-#define ITEMID_ESCAPEMENT   0
-#define ITEMID_CHARSETCOLOR 0
-#define ITEMID_COLOR        0
 
 #ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
 #include <com/sun/star/io/XStream.hpp>
@@ -643,7 +638,7 @@ BOOL SvxAutoCorrect::FnChgOrdinalNumber(
             if( bChg )      // dann setze mal das Escapement Attribut
             {
                 SvxEscapementItem aSvxEscapementItem( DFLT_ESC_AUTO_SUPER,
-                                                    DFLT_ESC_PROP );
+                                                    DFLT_ESC_PROP, SID_ATTR_CHAR_ESCAPEMENT );
                 rDoc.SetAttr( nEndPos - 2, nEndPos,
                                 SID_ATTR_CHAR_ESCAPEMENT,
                                 aSvxEscapementItem);
@@ -820,14 +815,14 @@ BOOL SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const String& rTxt
         // das gefunde und am Ende stehende Zeichen loeschen
         if( '*' == cInsChar )           // Fett
         {
-            SvxWeightItem aSvxWeightItem( WEIGHT_BOLD );
+            SvxWeightItem aSvxWeightItem( WEIGHT_BOLD, SID_ATTR_CHAR_WEIGHT );
             rDoc.SetAttr( nFndPos + 1, nEndPos,
                             SID_ATTR_CHAR_WEIGHT,
                             aSvxWeightItem);
         }
         else                            // unterstrichen
         {
-            SvxUnderlineItem aSvxUnderlineItem( UNDERLINE_SINGLE );
+            SvxUnderlineItem aSvxUnderlineItem( UNDERLINE_SINGLE, SID_ATTR_CHAR_UNDERLINE );
             rDoc.SetAttr( nFndPos + 1, nEndPos,
                             SID_ATTR_CHAR_UNDERLINE,
                             aSvxUnderlineItem);
