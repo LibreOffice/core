@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntszctl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:57:20 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:54:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,11 +60,7 @@
 #include <sfx2/dispatch.hxx>
 #endif
 
-#define ITEMID_FONTHEIGHT   1
-#define ITEMID_FONTLIST     2
-#define ITEMID_FONT         3
-
-#include "fntszctl.hxx"     // ITEMID_FONTHEIGHT muss vorher definiert sein!
+#include "fntszctl.hxx"     //
 #include "dialogs.hrc"
 
 #ifndef _SVX_FHGTITEM_HXX //autogen
