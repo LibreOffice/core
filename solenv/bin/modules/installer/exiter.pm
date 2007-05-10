@@ -4,9 +4,9 @@
 #
 #   $RCSfile: exiter.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:02:55 $
+#   last change: $Author: gm $ $Date: 2007-05-10 10:58:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,8 @@ sub exit_program
     my $infoline;
 
     $installer::globals::logfilename = $installer::globals::exitlog . $installer::globals::logfilename;
+
+    if ( ! $installer::globals::globalinfo_copied ) { installer::logger::copy_globalinfo_into_logfile(); }
 
     if ( $#installer::globals::logfileinfo > -1 )
     {
