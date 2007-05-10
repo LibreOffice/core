@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: kz $ $Date: 2005-10-05 13:12:10 $
+#   last change: $Author: kz $ $Date: 2007-05-10 15:32:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,10 @@ LIB1OBJFILES= \
         $(SLO)$/fubullet.obj 	\
         $(SLO)$/futempl.obj		\
         $(SLO)$/fuoutl.obj		\
-        $(SLO)$/fuoltext.obj 	\
+        $(SLO)$/fuoltext.obj 
+
+LIB3TARGET=	$(SLB)$/$(TARGET)_2.lib
+LIB3OBJFILES= \
         $(SLO)$/fuinsert.obj 	\
         $(SLO)$/fupage.obj		\
         $(SLO)$/undopage.obj 	\
