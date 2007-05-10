@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:35:30 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:01:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -966,7 +966,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
     // calculation. For this, we push a temporary scaling attribute with
     // scaling value 100 and priority flag on top of the scaling stack
     SwAttrHandler& rAH = aIter.GetAttrHandler();
-    SvxCharScaleWidthItem aItem;
+    SvxCharScaleWidthItem aItem(100, RES_CHRATR_SCALEW);
     SwTxtAttrEnd aAttr( aItem, nStt, nEnd );
     aAttr.SetPriorityAttr( sal_True );
     rAH.PushAndChg( aAttr, *(aIter.GetFnt()) );
