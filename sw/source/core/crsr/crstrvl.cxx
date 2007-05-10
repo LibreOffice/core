@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crstrvl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:37:04 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:55:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1742,7 +1742,7 @@ FASTBOOL SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                 {
                     *pCurCrsr->GetPoint() = aPos;
                     GetDoc()->Insert( *pCurCrsr,
-                            SvxFmtBreakItem( SVX_BREAK_COLUMN_BEFORE ), 0);
+                            SvxFmtBreakItem( SVX_BREAK_COLUMN_BEFORE, RES_BREAK ), 0);
                 }
             }
 
@@ -1765,7 +1765,7 @@ FASTBOOL SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                     const SvxAdjustItem& rAdj = (SvxAdjustItem&)pCNd->
                                         GetAttr( RES_PARATR_ADJUST );
                     if( SVX_ADJUST_LEFT != rAdj.GetAdjust() )
-                        aSet.Put( SvxAdjustItem( SVX_ADJUST_LEFT ) );
+                        aSet.Put( SvxAdjustItem( SVX_ADJUST_LEFT, RES_PARATR_ADJUST ) );
 
                     GetDoc()->Insert( *pCurCrsr, aSet, 0 );
                 }
@@ -1792,7 +1792,7 @@ FASTBOOL SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
             case FILL_MARGIN:
                 if( HORI_NONE != aFPos.eOrient )
                 {
-                    SvxAdjustItem aAdj( SVX_ADJUST_LEFT );
+                    SvxAdjustItem aAdj( SVX_ADJUST_LEFT, RES_PARATR_ADJUST );
                     switch( aFPos.eOrient )
                     {
                     case HORI_CENTER:
