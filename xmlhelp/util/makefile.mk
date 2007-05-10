@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-05 18:18:15 $
+#   last change: $Author: kz $ $Date: 2007-05-10 13:16:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,15 +53,6 @@ NO_BSYMBOLIC=TRUE
 CFLAGS+=-GR
 .ENDIF
 
-.IF "$(SABLOT3RDLIB)"==""
-.IF "$(GUI)"=="UNX"
-SABLOT3RDLIB=-lsablot
-.ENDIF # unx
-.IF "$(GUI)"=="WNT"
-SABLOT3RDLIB=sablot.lib
-.ENDIF # wnt
-.ENDIF # sablot3rdlib
-
 # --- Shared-Library ---------------------------------------------------
 
 SHL1TARGET=$(TARGET)$(UCP_VERSION)
@@ -75,12 +66,11 @@ SHL1STDLIBS=                     \
     $(CPPULIB)               \
     $(SALLIB)                \
     $(VOSLIB)                \
-    $(SABLOT3RDLIB)          \
     $(EXPATASCII3RDLIB)      \
     $(UCBHELPERLIB)          \
-    $(SVLLIB)             \
-    $(BERKELEYLIB)
-#	$(BERKELEYCPPLIB)
+    $(SVLLIB)             	 \
+    $(BERKELEYLIB)		 \
+    $(XSLTLIB)
 
 SHL1LIBS =                       \
     $(SLB)$/jaqe.lib         \
