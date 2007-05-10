@@ -4,9 +4,9 @@
  *
  *  $RCSfile: applab.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:50:02 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:13:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <cstdarg>
 #endif
 
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
+
 #include <hintids.hxx>
 
 #ifndef _APP_HXX //autogen
@@ -365,8 +365,8 @@ static sal_uInt16 nBCTitleNo = 0;
             SwFrmFmt&  rFmt  = aDesc.GetMaster();
 
             // Raender
-            SvxLRSpaceItem aLRMargin;
-            SvxULSpaceItem aULMargin;
+            SvxLRSpaceItem aLRMargin( RES_LR_SPACE );
+            SvxULSpaceItem aULMargin( RES_UL_SPACE );
             aLRMargin.SetLeft ((sal_uInt16) rItem.lLeft );
             aULMargin.SetUpper((sal_uInt16) rItem.lUpper);
             aLRMargin.SetRight(MINLAY/2);
@@ -398,7 +398,7 @@ static sal_uInt16 nBCTitleNo = 0;
             aDesc.SetFollow( &rFollow );
 
             pPrt = pSh->getIDocumentDeviceAccess()->getPrinter( true );
-            SvxPaperBinItem aItem;
+            SvxPaperBinItem aItem( RES_PAPER_BIN );
             aItem.SetValue((sal_Int8)pPrt->GetPaperBin());
             rFmt.SetAttr(aItem);
 
@@ -422,7 +422,7 @@ static sal_uInt16 nBCTitleNo = 0;
             const long nMin = pPrt->GetPageOffset().X() - rItem.lLeft;
             if ( nMin > 0 )
             {
-                SvxLRSpaceItem aLR;
+                SvxLRSpaceItem aLR( RES_LR_SPACE );
                 pSh->SetAttr( aLR );
                 SwFmt *pStandard = pSh->GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
                 aLR.SetLeft ( sal_uInt16(nMin) );
