@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attrib.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:39:50 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:42:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,6 @@
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
-#define ITEMID_FIELD EE_FEATURE_FIELD
 
 #include <svx/boxitem.hxx>
 #include <svx/editdata.hxx>
@@ -1022,37 +1021,37 @@ BOOL lcl_ConvertFields(EditEngine& rEng, const String* pCommands)
         while ((nPos = aStr.Search(pCommands[0])) != STRING_NOTFOUND)
         {
             ESelection aSel( nPar,nPos, nPar,nPos+pCommands[0].Len() );
-            rEng.QuickInsertField( SvxFieldItem(SvxPageField()), aSel );
+            rEng.QuickInsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), aSel );
             lcl_SetSpace(aStr, aSel ); bChange = TRUE;
         }
         while ((nPos = aStr.Search(pCommands[1])) != STRING_NOTFOUND)
         {
             ESelection aSel( nPar,nPos, nPar,nPos+pCommands[1].Len() );
-            rEng.QuickInsertField( SvxFieldItem(SvxPagesField()), aSel );
+            rEng.QuickInsertField( SvxFieldItem(SvxPagesField(), EE_FEATURE_FIELD), aSel );
             lcl_SetSpace(aStr, aSel ); bChange = TRUE;
         }
         while ((nPos = aStr.Search(pCommands[2])) != STRING_NOTFOUND)
         {
             ESelection aSel( nPar,nPos, nPar,nPos+pCommands[2].Len() );
-            rEng.QuickInsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR)), aSel );
+            rEng.QuickInsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR), EE_FEATURE_FIELD), aSel );
             lcl_SetSpace(aStr, aSel ); bChange = TRUE;
         }
         while ((nPos = aStr.Search(pCommands[3])) != STRING_NOTFOUND)
         {
             ESelection aSel( nPar,nPos, nPar,nPos+pCommands[3].Len() );
-            rEng.QuickInsertField( SvxFieldItem(SvxTimeField()), aSel );
+            rEng.QuickInsertField( SvxFieldItem(SvxTimeField(), EE_FEATURE_FIELD ), aSel );
             lcl_SetSpace(aStr, aSel ); bChange = TRUE;
         }
         while ((nPos = aStr.Search(pCommands[4])) != STRING_NOTFOUND)
         {
             ESelection aSel( nPar,nPos, nPar,nPos+pCommands[4].Len() );
-            rEng.QuickInsertField( SvxFieldItem(SvxFileField()), aSel );
+            rEng.QuickInsertField( SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), aSel );
             lcl_SetSpace(aStr, aSel ); bChange = TRUE;
         }
         while ((nPos = aStr.Search(pCommands[5])) != STRING_NOTFOUND)
         {
             ESelection aSel( nPar,nPos, nPar,nPos+pCommands[5].Len() );
-            rEng.QuickInsertField( SvxFieldItem(SvxTableField()), aSel );
+            rEng.QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), aSel );
             lcl_SetSpace(aStr, aSel ); bChange = TRUE;
         }
     }
@@ -1196,7 +1195,7 @@ BOOL ScFieldChangerEditEngine::ConvertFields()
         if ( bConvert )
         {
             ESelection aSel( nConvPara, nConvPos, nConvPara, nConvPos+1 );
-            QuickInsertField( SvxFileField(), aSel );
+            QuickInsertField( SvxFieldItem( SvxFileField(), EE_FEATURE_FIELD), aSel );
             bConverted = TRUE;
         }
     } while ( bConvert );
