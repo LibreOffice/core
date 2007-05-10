@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:24:46 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:12:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,6 @@ private:
         @param  _bReadOnly
             If <TRUE/> the document will be switched to readonly mode
     */
-    void setModelReadOnly(sal_Bool _bReadOnly);
     void updateDocumentTitle();
 protected:
     virtual ~ODocumentDefinition();
