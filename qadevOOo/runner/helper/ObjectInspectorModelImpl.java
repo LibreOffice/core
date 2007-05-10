@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectInspectorModelImpl.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 11:53:35 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:57:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,18 @@ public class ObjectInspectorModelImpl implements XObjectInspectorModel{
     public int getMaxHelpTextLines() {
         return 8;
     };
+
+    /** returns whether or not the inspector's UI should be read-only
+    */
+    public boolean getIsReadOnly() {
+        return false;
+    }
+
+    /** sets the inspector's read-only state
+    */
+    public void setIsReadOnly( boolean _IsReadOnly ) {
+        // not supported, and not used so far in our test cases
+    }
 
     /**
      * retrieves an index in a global property ordering, for a given property name
