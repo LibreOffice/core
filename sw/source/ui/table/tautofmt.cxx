@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tautofmt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:17:35 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:25:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,9 +73,6 @@
 
 #ifndef _SWMODULE_HXX
 #include "swmodule.hxx"
-#endif
-#ifndef _UIPARAM_HXX
-#include "uiparam.hxx"
 #endif
 #ifndef _SWTYPES_HXX
 #include "swtypes.hxx"
