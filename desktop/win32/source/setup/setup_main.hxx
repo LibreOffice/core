@@ -4,9 +4,9 @@
  *
  *  $RCSfile: setup_main.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:32:08 $
+ *  last change: $Author: gm $ $Date: 2007-05-10 11:08:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,13 +39,14 @@
 
 class SetupApp
 {
-    UINT            m_uiRet;
     DWORD           m_nOSVersion;
     DWORD           m_nMinorVersion;
     boolean         m_bIsWin9x      : 1;
     boolean         m_bNeedReboot   : 1;
 
 public:
+    UINT            m_uiRet;
+
                     SetupApp();
     virtual        ~SetupApp();
 
@@ -56,9 +57,9 @@ public:
     virtual boolean CheckVersion() = 0;
     virtual boolean Install( long nLanguage ) = 0;
 
-    virtual void    DisplayError( UINT nErr ) const = 0;
+    virtual UINT    GetError() const = NULL;
+    virtual void    DisplayError( UINT nErr ) const = NULL;
 
-    UINT            GetError() const { return m_uiRet; }
     void            SetError( UINT nErr ) { m_uiRet = nErr; }
     boolean         IsWin9x() const { return m_bIsWin9x; }
     DWORD           GetOSVersion() const { return m_nOSVersion; }
