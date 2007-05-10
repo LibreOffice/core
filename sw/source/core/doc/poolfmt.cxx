@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:49:16 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:56:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -293,8 +291,8 @@ void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
                         SfxItemSet& rSet,
                         USHORT nOutLvlBits, BYTE nLevel, BOOL bItalic )
 {
-    SetAllScriptItem( rSet, SvxWeightItem( WEIGHT_BOLD ) );
-    SvxFontHeightItem aHItem;
+    SetAllScriptItem( rSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ) );
+    SvxFontHeightItem aHItem(240, 100, RES_CHRATR_FONTSIZE);
     const bool bHTMLMode = pDoc->get(IDocumentSettingAccess::HTML_MODE);
     if( bHTMLMode )
         aHItem.SetHeight( aHeadlineSizes[ MAXLEVEL + nLevel ] );
@@ -303,7 +301,7 @@ void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
     SetAllScriptItem( rSet, aHItem );
 
     if( bItalic && !bHTMLMode )
-        SetAllScriptItem( rSet, SvxPostureItem( ITALIC_NORMAL ) );
+        SetAllScriptItem( rSet, SvxPostureItem( ITALIC_NORMAL, RES_CHRATR_POSTURE ) );
 
     if( bHTMLMode )
     {
@@ -350,20 +348,20 @@ void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
 void lcl_SetRegister( SwDoc* pDoc, SfxItemSet& rSet, USHORT nFact,
                         BOOL bHeader, BOOL bTab )
 {
-    SvxLRSpaceItem aLR;
+    SvxLRSpaceItem aLR( RES_LR_SPACE );
     USHORT nLeft = nFact ? GetMetricVal( CM_05 ) * nFact : 0;
     aLR.SetTxtLeft( nLeft );
 
     rSet.Put( aLR );
     if( bHeader )
     {
-        SetAllScriptItem( rSet, SvxWeightItem( WEIGHT_BOLD ) );
-        SetAllScriptItem( rSet, SvxFontHeightItem( PT_16 ) );
+        SetAllScriptItem( rSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ) );
+        SetAllScriptItem( rSet, SvxFontHeightItem( PT_16, 100, RES_CHRATR_FONTSIZE ) );
     }
     if( bTab )
     {
         long nRightMargin = lcl_GetRightMargin( *pDoc );
-        SvxTabStopItem aTStops( 0, 0 );
+        SvxTabStopItem aTStops( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
         aTStops.Insert( SvxTabStop( nRightMargin - nLeft,
                                     SVX_TAB_ADJUST_RIGHT,
                                     cDfltDecimalChar, '.' ));
@@ -379,7 +377,7 @@ void lcl_SetNumBul( SwDoc* pDoc, SwTxtFmtColl* pColl,
                         SwTwips nUpper, SwTwips nLower )
 {
 
-    SvxLRSpaceItem aLR; SvxULSpaceItem aUL;
+    SvxLRSpaceItem aLR( RES_LR_SPACE ); SvxULSpaceItem aUL( RES_UL_SPACE );
     aLR.SetTxtFirstLineOfst( USHORT(nEZ) ); aLR.SetTxtLeft( USHORT(nLeft) );
     aUL.SetUpper( USHORT(nUpper) ); aUL.SetLower( USHORT(nLower) );
     rSet.Put( aLR );
@@ -479,12 +477,12 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
             if (GetDefaultFrameDirection(nAppLanguage) ==
                 FRMDIR_HORI_RIGHT_TOP)
             {
-                SvxAdjustItem aAdjust(SVX_ADJUST_RIGHT);
+                SvxAdjustItem aAdjust(SVX_ADJUST_RIGHT, RES_PARATR_ADJUST );
                 aSet.Put(aAdjust);
             }
             if (nAppLanguage == LANGUAGE_KOREAN)
             {
-                SvxScriptSpaceItem aScriptSpace(FALSE);
+                SvxScriptSpaceItem aScriptSpace(FALSE, RES_PARATR_SCRIPTSPACE);
                 aSet.Put(aScriptSpace);
             }
         }
@@ -492,24 +490,24 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
 
     case RES_POOLCOLL_TEXT:                 // Textkoerper
         {
-            SvxULSpaceItem aUL( 0, PT_6 );
+            SvxULSpaceItem aUL( 0, PT_6, RES_UL_SPACE );
             if( get(IDocumentSettingAccess::HTML_MODE) ) aUL.SetLower( HTML_PARSPACE );
             aSet.Put( aUL );
         }
         break;
     case RES_POOLCOLL_TEXT_IDENT:           // Textkoerper Einzug
         {
-            SvxLRSpaceItem aLR;
+            SvxLRSpaceItem aLR( RES_LR_SPACE );
             aLR.SetTxtFirstLineOfst( GetMetricVal( CM_05 ));
             aSet.Put( aLR );
         }
         break;
     case RES_POOLCOLL_TEXT_NEGIDENT:        // Textkoerper neg. Einzug
         {
-            SvxLRSpaceItem aLR;
+            SvxLRSpaceItem aLR( RES_LR_SPACE );
             aLR.SetTxtFirstLineOfst( -(short)GetMetricVal( CM_05 ));
             aLR.SetTxtLeft( GetMetricVal( CM_1 ));
-            SvxTabStopItem aTStops;     aTStops.Insert( SvxTabStop( 0 ));
+            SvxTabStopItem aTStops(RES_PARATR_TABSTOP);    aTStops.Insert( SvxTabStop( 0 ));
 
             aSet.Put( aLR );
             aSet.Put( aTStops );
@@ -517,7 +515,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
         break;
     case RES_POOLCOLL_TEXT_MOVE:            // Textkoerper Einrueckung
         {
-            SvxLRSpaceItem aLR;
+            SvxLRSpaceItem aLR( RES_LR_SPACE );
             aLR.SetTxtLeft( GetMetricVal( CM_05 ));
             aSet.Put( aLR );
         }
@@ -525,11 +523,11 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
 
     case RES_POOLCOLL_CONFRONTATION:    // Textkoerper Gegenueberstellung
         {
-            SvxLRSpaceItem aLR;
+            SvxLRSpaceItem aLR( RES_LR_SPACE );
             aLR.SetTxtFirstLineOfst( - short( GetMetricVal( CM_1 ) * 4 +
                                               GetMetricVal( CM_05)) );
             aLR.SetTxtLeft( GetMetricVal( CM_1 ) * 5 );
-            SvxTabStopItem aTStops;     aTStops.Insert( SvxTabStop( 0 ));
+            SvxTabStopItem aTStops( RES_PARATR_TABSTOP );    aTStops.Insert( SvxTabStop( 0 ));
 
             aSet.Put( aLR );
             aSet.Put( aTStops );
@@ -537,7 +535,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
         break;
     case RES_POOLCOLL_MARGINAL:         // Textkoerper maginalie
         {
-            SvxLRSpaceItem aLR;
+            SvxLRSpaceItem aLR( RES_LR_SPACE );
             aLR.SetTxtLeft( GetMetricVal( CM_1 ) * 4 );
             aSet.Put( aLR );
         }
@@ -569,11 +567,11 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
                                         aFnt.GetCharSet(), *(pArr+1) ));
             }
 
-            SvxFontHeightItem aFntSize( PT_14 );
-            SvxULSpaceItem aUL( PT_12, PT_6 );
+            SvxFontHeightItem aFntSize( PT_14, 100, RES_CHRATR_FONTSIZE );
+            SvxULSpaceItem aUL( PT_12, PT_6, RES_UL_SPACE );
             if( get(IDocumentSettingAccess::HTML_MODE) )
                 aUL.SetLower( HTML_PARSPACE );
-            aSet.Put( SvxFmtKeepItem( TRUE ));
+            aSet.Put( SvxFmtKeepItem( TRUE, RES_KEEP ));
 
             pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool( RES_POOLCOLL_TEXT ));
 
@@ -642,7 +640,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
 
             long nRightMargin = lcl_GetRightMargin( *this );
 
-            SvxTabStopItem aTStops( 0, 0 );
+            SvxTabStopItem aTStops( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
             aTStops.Insert( SvxTabStop( nRightMargin / 2, SVX_TAB_ADJUST_CENTER ) );
             aTStops.Insert( SvxTabStop( nRightMargin, SVX_TAB_ADJUST_RIGHT ) );
 
@@ -652,8 +650,8 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
 
     case RES_POOLCOLL_TABLE_HDLN:
         {
-            SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD ) );
-            aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER ) );
+            SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ) );
+            aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ) );
             SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
             aSet.Put( aLN );
         }
@@ -662,10 +660,10 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
     case RES_POOLCOLL_FOOTNOTE:             // Fussnote
     case RES_POOLCOLL_ENDNOTE:
         {
-            SvxLRSpaceItem aLR;
+            SvxLRSpaceItem aLR( RES_LR_SPACE );
             aLR.SetTxtFirstLineOfst( -(short)GetMetricVal( CM_05 ));
             aLR.SetTxtLeft( GetMetricVal( CM_05 ));
-            SetAllScriptItem( aSet, SvxFontHeightItem( PT_10 ) );
+            SetAllScriptItem( aSet, SvxFontHeightItem( PT_10, 100, RES_CHRATR_FONTSIZE ) );
             aSet.Put( aLR );
             SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
             aSet.Put( aLN );
@@ -674,10 +672,10 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
 
     case RES_POOLCOLL_LABEL:                // Beschriftung-Basis
         {
-            SvxULSpaceItem aUL; aUL.SetUpper( PT_6 ); aUL.SetLower( PT_6 );
+            SvxULSpaceItem aUL( RES_UL_SPACE ); aUL.SetUpper( PT_6 ); aUL.SetLower( PT_6 );
             aSet.Put( aUL );
-            SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL ) );
-            SetAllScriptItem( aSet, SvxFontHeightItem( PT_10 ) );
+            SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL, RES_CHRATR_POSTURE ) );
+            SetAllScriptItem( aSet, SvxFontHeightItem( PT_10, 100, RES_CHRATR_FONTSIZE ) );
             SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
             aSet.Put( aLN );
         }
@@ -692,7 +690,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
 
     case RES_POOLCOLL_JAKETADRESS:          // UmschlagAdresse
         {
-            SvxULSpaceItem aUL; aUL.SetLower( PT_3 );
+            SvxULSpaceItem aUL( RES_UL_SPACE ); aUL.SetLower( PT_3 );
             aSet.Put( aUL );
             SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
             aSet.Put( aLN );
@@ -702,10 +700,10 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
     case RES_POOLCOLL_SENDADRESS:           // AbsenderAdresse
         {
             if( get(IDocumentSettingAccess::HTML_MODE) )
-                SetAllScriptItem( aSet, SvxPostureItem(ITALIC_NORMAL) );
+                SetAllScriptItem( aSet, SvxPostureItem(ITALIC_NORMAL, RES_CHRATR_POSTURE) );
             else
             {
-                SvxULSpaceItem aUL; aUL.SetLower( PT_3 );
+                SvxULSpaceItem aUL( RES_UL_SPACE ); aUL.SetLower( PT_3 );
                 aSet.Put( aUL );
             }
             SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
@@ -1025,10 +1023,10 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
 
     case RES_POOLCOLL_DOC_TITEL:            // Doc. Titel
         {
-            SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD ) );
-            SetAllScriptItem( aSet, SvxFontHeightItem( PT_18 ) );
+            SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ) );
+            SetAllScriptItem( aSet, SvxFontHeightItem( PT_18, 100, RES_CHRATR_FONTSIZE ) );
 
-            aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER ) );
+            aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ) );
 
             pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool(
                                                 RES_POOLCOLL_DOC_SUBTITEL ));
@@ -1037,10 +1035,10 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
 
     case RES_POOLCOLL_DOC_SUBTITEL:         // Doc. UnterTitel
         {
-            SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL ));
-            SetAllScriptItem( aSet, SvxFontHeightItem( PT_14 ));
+            SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL, RES_CHRATR_POSTURE ));
+            SetAllScriptItem( aSet, SvxFontHeightItem( PT_14, 100, RES_CHRATR_FONTSIZE ));
 
-            aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER ));
+            aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ));
 
             pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool(
                                                 RES_POOLCOLL_TEXT ));
@@ -1049,12 +1047,12 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
 
     case RES_POOLCOLL_HTML_BLOCKQUOTE:
         {
-            SvxLRSpaceItem aLR;
+            SvxLRSpaceItem aLR( RES_LR_SPACE );
             aLR.SetLeft( GetMetricVal( CM_1 ));
             aLR.SetRight( GetMetricVal( CM_1 ));
             aSet.Put( aLR );
-//          aSet.Put( SvxAdjustItem( SVX_ADJUST_BLOCK ) );
-            SvxULSpaceItem aUL;
+//          aSet.Put( SvxAdjustItem( SVX_ADJUST_BLOCK, RES_PARATR_ADJUST ) );
+            SvxULSpaceItem aUL( RES_UL_SPACE );
             aUL = pNewColl->GetULSpace();
             aUL.SetLower( HTML_PARSPACE );
             aSet.Put( aUL);
@@ -1066,12 +1064,12 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
             ::lcl_SetDfltFont( DEFAULTFONT_FIXED, aSet );
 
 // WORKAROUND: PRE auf 10pt setzten
-            SetAllScriptItem( aSet, SvxFontHeightItem(PT_10) );
+            SetAllScriptItem( aSet, SvxFontHeightItem(PT_10, 100, RES_CHRATR_FONTSIZE) );
 // WORKAROUND: PRE auf 10pt setzten
 
             // der untere Absatz-Abstand wird explizit gesetzt (macht
             // die harte Attributierung einfacher)
-            SvxULSpaceItem aULSpaceItem;
+            SvxULSpaceItem aULSpaceItem( RES_UL_SPACE );
             aULSpaceItem = pNewColl->GetULSpace();
             aULSpaceItem.SetLower( 0 );
             aSet.Put( aULSpaceItem );
@@ -1080,7 +1078,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
 
     case RES_POOLCOLL_HTML_HR:
         {
-            SvxBoxItem aBox;
+            SvxBoxItem aBox( RES_BOX );
             Color aColor( COL_GRAY );
             SvxBorderLine aNew( &aColor, DEF_DOUBLE_LINE0_OUT,
                                          DEF_DOUBLE_LINE0_IN,
@@ -1089,9 +1087,9 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
 
             aSet.Put( aBox );
             aSet.Put( SwParaConnectBorderItem( FALSE ) );
-            SetAllScriptItem( aSet, SvxFontHeightItem(120) );
+            SetAllScriptItem( aSet, SvxFontHeightItem(120, 100, RES_CHRATR_FONTSIZE) );
 
-            SvxULSpaceItem aUL;
+            SvxULSpaceItem aUL( RES_UL_SPACE );
             {
                 pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool(
                                                 RES_POOLCOLL_TEXT ));
@@ -1106,7 +1104,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
 
     case RES_POOLCOLL_HTML_DD:
         {
-            SvxLRSpaceItem aLR;
+            SvxLRSpaceItem aLR( RES_LR_SPACE );
             aLR = pNewColl->GetLRSpace();
             // es wird um 1cm eingerueckt. Die IDs liegen immer 2 auseinander!
             aLR.SetLeft( GetMetricVal( CM_1 ));
@@ -1115,7 +1113,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
         break;
     case RES_POOLCOLL_HTML_DT:
         {
-            SvxLRSpaceItem aLR;
+            SvxLRSpaceItem aLR( RES_LR_SPACE );
             {
                 pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool(
                                                     RES_POOLCOLL_HTML_DD ));
@@ -1283,7 +1281,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
     case RES_POOLCHR_ENDNOTE_ANCHOR:        // Endnotenanker
     case RES_POOLCHR_FOOTNOTE_ANCHOR:       // Fussnotenanker
         {
-            aSet.Put( SvxEscapementItem( DFLT_ESC_AUTO_SUPER, 58 ) );
+            aSet.Put( SvxEscapementItem( DFLT_ESC_AUTO_SUPER, 58, RES_CHRATR_ESCAPEMENT ) );
         }
         break;
 
@@ -1295,31 +1293,31 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
             // <--
             SetAllScriptItem( aSet, SvxFontItem( rBulletFont.GetFamily(),
                         rBulletFont.GetName(), rBulletFont.GetStyleName(),
-                        rBulletFont.GetPitch(), rBulletFont.GetCharSet() ));
-            SetAllScriptItem( aSet, SvxFontHeightItem( PT_9 ));
+                        rBulletFont.GetPitch(), rBulletFont.GetCharSet(), RES_CHRATR_FONT ));
+            SetAllScriptItem( aSet, SvxFontHeightItem( PT_9, 100, RES_CHRATR_FONTSIZE ));
         }
         break;
 
     case RES_POOLCHR_INET_NORMAL:
         {
             Color aCol( COL_BLUE );
-            aSet.Put( SvxColorItem( aCol ) );
-            aSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE ) );
+            aSet.Put( SvxColorItem( aCol, RES_CHRATR_COLOR ) );
+            aSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE, RES_CHRATR_UNDERLINE ) );
         }
         break;
     case RES_POOLCHR_INET_VISIT:
         {
             Color aCol( COL_RED );
-            aSet.Put( SvxColorItem( aCol ) );
-            aSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE ) );
+            aSet.Put( SvxColorItem( aCol, RES_CHRATR_COLOR ) );
+            aSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE, RES_CHRATR_UNDERLINE ) );
         }
         break;
     case RES_POOLCHR_JUMPEDIT:
         {
             Color aCol( COL_CYAN );
-            aSet.Put( SvxColorItem( aCol ) );
-            aSet.Put( SvxUnderlineItem( UNDERLINE_DOTTED ) );
-            aSet.Put( SvxCaseMapItem( SVX_CASEMAP_KAPITAELCHEN ) );
+            aSet.Put( SvxColorItem( aCol, RES_CHRATR_COLOR ) );
+            aSet.Put( SvxUnderlineItem( UNDERLINE_DOTTED, RES_CHRATR_UNDERLINE ) );
+            aSet.Put( SvxCaseMapItem( SVX_CASEMAP_KAPITAELCHEN, RES_CHRATR_CASEMAP ) );
         }
         break;
 
@@ -1327,9 +1325,9 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
         {
             long nH = ((SvxFontHeightItem*)GetDfltAttr(
                                 RES_CHRATR_CJK_FONTSIZE ))->GetHeight() / 2;
-            SetAllScriptItem( aSet, SvxFontHeightItem( nH ));
-            aSet.Put(SvxUnderlineItem( UNDERLINE_NONE ));
-            aSet.Put(SvxEmphasisMarkItem( EMPHASISMARK_NONE) );
+            SetAllScriptItem( aSet, SvxFontHeightItem( nH, 100, RES_CHRATR_FONTSIZE));
+            aSet.Put(SvxUnderlineItem( UNDERLINE_NONE, RES_CHRATR_UNDERLINE ));
+            aSet.Put(SvxEmphasisMarkItem( EMPHASISMARK_NONE, RES_CHRATR_EMPHASIS_MARK) );
         }
         break;
 
@@ -1337,14 +1335,14 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
     case RES_POOLCHR_HTML_CITIATION:
     case RES_POOLCHR_HTML_VARIABLE:
         {
-            SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL ) );
+            SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL, RES_CHRATR_POSTURE) );
         }
         break;
 
     case RES_POOLCHR_IDX_MAIN_ENTRY:
     case RES_POOLCHR_HTML_STRONG:
         {
-            SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD ));
+            SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ));
         }
         break;
 
@@ -1357,7 +1355,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
         }
         break;
    case RES_POOLCHR_VERT_NUM:
-            aSet.Put( SvxCharRotateItem( 900 ) );
+            aSet.Put( SvxCharRotateItem( 900, sal_False, RES_CHRATR_ROTATE ) );
     break;
 //nichts besonderes
 //  case RES_POOLCHR_HTML_DEFINSTANCE:
@@ -1380,15 +1378,15 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
                 aSet.Put( SwFmtVertOrient( 0, VERT_TOP, PRTAREA ) );
                 Color aCol( COL_BLACK );
                 SvxBorderLine aLine( &aCol, DEF_LINE_WIDTH_0 );
-                SvxBoxItem aBox;
+                SvxBoxItem aBox( RES_BOX );
                 aBox.SetLine( &aLine, BOX_LINE_TOP );
                 aBox.SetLine( &aLine, BOX_LINE_BOTTOM );
                 aBox.SetLine( &aLine, BOX_LINE_LEFT );
                 aBox.SetLine( &aLine, BOX_LINE_RIGHT );
                 aBox.SetDistance( 85 );
                 aSet.Put( aBox );
-                aSet.Put( SvxLRSpaceItem( 114, 114 ) );
-                aSet.Put( SvxULSpaceItem( 114, 114 ) );
+                aSet.Put( SvxLRSpaceItem( 114, 114, 0, 0, RES_LR_SPACE ) );
+                aSet.Put( SvxULSpaceItem( 114, 114, RES_UL_SPACE ) );
             }
         }
         break;
@@ -1405,7 +1403,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
         {
             aSet.Put( SwFmtAnchor( FLY_IN_CNTNT ) );
             aSet.Put( SwFmtVertOrient( 0, VERT_CHAR_CENTER, FRAME ) );
-            aSet.Put( SvxLRSpaceItem( 114, 114 ) );
+            aSet.Put( SvxLRSpaceItem( 114, 114, 0, 0, RES_LR_SPACE ) );
         }
         break;
     case RES_POOLFRM_MARGINAL:
@@ -1435,9 +1433,9 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
         {
             aSet.Put( SwFmtAnchor( FLY_IN_CNTNT ) );
             aSet.Put( SwFmtVertOrient( 0, VERT_TOP, FRAME ) );
-            aSet.Put( SvxLRSpaceItem( 114, 114 ) );
+            aSet.Put( SvxLRSpaceItem( 114, 114, 0, 0, RES_LR_SPACE ) );
 
-            SvxProtectItem aProtect;
+            SvxProtectItem aProtect( RES_PROTECT );
             aProtect.SetSizeProtect( TRUE );
             aProtect.SetPosProtect( TRUE );
             aSet.Put( aProtect );
@@ -1570,10 +1568,10 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
     }
 
 
-    SvxLRSpaceItem aLR;
+    SvxLRSpaceItem aLR( RES_LR_SPACE );
     aLR.SetLeft( GetMetricVal( CM_1 ) * 2 );
     aLR.SetRight( aLR.GetLeft() );
-    SvxULSpaceItem aUL;
+    SvxULSpaceItem aUL( RES_UL_SPACE );
     aUL.SetUpper( (USHORT)aLR.GetLeft() );
     aUL.SetLower( (USHORT)aLR.GetLeft() );
 
@@ -2342,7 +2340,7 @@ void SwDoc::RemoveAllFmtLanguageDependencies()
     /* #111214# koreans do not like SvxScriptItem(TRUE) */
     pTxtFmtColl->ResetAttr( RES_PARATR_SCRIPTSPACE );
 
-    SvxFrameDirectionItem aFrameDir( FRMDIR_HORI_LEFT_TOP );
+    SvxFrameDirectionItem aFrameDir( FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR );
 
     sal_uInt16 nCount = GetPageDescCnt();
     for( sal_uInt16 i=0; i<nCount; ++i )
