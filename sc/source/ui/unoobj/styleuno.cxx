@@ -4,9 +4,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:47:46 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:59:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1886,7 +1886,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
                 {
                     sal_Int32 nRot = ((const SfxInt32Item&)pItemSet->Get(ATTR_ROTATE_VALUE)).GetValue();
                     BOOL bStacked = ((const SfxBoolItem&)pItemSet->Get(nWhich)).GetValue();
-                    SvxOrientationItem( nRot, bStacked ).QueryValue( aAny );
+                    SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( aAny );
                 }
                 break;
             case ATTR_PAGE_SCALE:
