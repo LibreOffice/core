@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:07:09 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:34:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,33 +173,8 @@ using namespace ::com::sun::star::awt;
 #define HTML_META_SDENDNOTE     11
 #define HTML_META_CONTENT_TYPE  12
 
-const HTMLOptionEnum* getOptions()
-{
-#ifdef __MINGW32__ // for runtime pseudo reloc
-    static HTMLOptionEnum aHTMLMetaNameTable[] =
-#else
-    static HTMLOptionEnum __READONLY_DATA aHTMLMetaNameTable[] =
-#endif
-    {
-        { sHTML_META_author,        HTML_META_AUTHOR        },
-        { sHTML_META_changed,       HTML_META_CHANGED       },
-        { sHTML_META_changedby,     HTML_META_CHANGEDBY     },
-        { sHTML_META_classification,HTML_META_CLASSIFICATION},
-        { sHTML_META_content_type,  HTML_META_CONTENT_TYPE  },
-        { sHTML_META_created,       HTML_META_CREATED       },
-        { sHTML_META_description,   HTML_META_DESCRIPTION   },
-        { sHTML_META_keywords,      HTML_META_KEYWORDS      },
-        { sHTML_META_generator,     HTML_META_GENERATOR     },
-        { sHTML_META_refresh,       HTML_META_REFRESH       },
-        { sHTML_META_sdendnote,     HTML_META_SDENDNOTE     },
-        { sHTML_META_sdfootnote,    HTML_META_SDFOOTNOTE    },
-        { 0,                        0                       }
-    };
-    return aHTMLMetaNameTable;
-}
-
 // ==========================================================================
-DBG_NAME(OHTMLReader);
+DBG_NAME(OHTMLReader)
 // ==========================================================================
 // OHTMLReader
 // ==========================================================================
