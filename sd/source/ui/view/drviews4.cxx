@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:12:20 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:34:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,6 @@
 #ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
 #endif
-#define ITEMID_FIELD    EE_FEATURE_FIELD
 #ifndef _FLDITEM_HXX
 #include <svx/flditem.hxx>
 #endif
@@ -644,7 +643,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 SvxFieldData* pField = aFieldPopup.GetField();
                 if( pField )
                 {
-                    SvxFieldItem aFieldItem( *pField );
+                    SvxFieldItem aFieldItem( *pField, EE_FEATURE_FIELD );
                     //pOLV->DeleteSelected(); <-- fehlt leider !
                     // Feld selektieren, so dass es beim Insert geloescht wird
                     ESelection aSel = pOLV->GetSelection();
