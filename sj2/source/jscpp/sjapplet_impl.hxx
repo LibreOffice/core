@@ -7,6 +7,8 @@
 #ifdef SOLAR_JAVA
 #include <com/sun/star/java/XJavaVM.hpp>
 #include <com/sun/star/java/XJavaThreadRegister_11.hpp>
+#else
+#include <com/sun/star/uno/RuntimeException.hpp>
 #endif // SOLAR_JAVA
 
 #include "rtl/ref.hxx"
