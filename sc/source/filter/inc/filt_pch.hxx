@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filt_pch.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:33:08 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:50:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,7 @@
 //  ItemID-Defines etc. muessen immer ganz vorne stehen
 
 #include "scitems.hxx"
-#include "eetext.hxx"
 
-#define ITEMID_FIELD EE_FEATURE_FIELD
 
 #define _ZFORLIST_DECLARE_TABLE
 
