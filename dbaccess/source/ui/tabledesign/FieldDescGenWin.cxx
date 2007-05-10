@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldDescGenWin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:28:48 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:41:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,11 +133,6 @@ OTableEditorCtrl* OFieldDescGenWin::GetEditorCtrl()
 //{
 //  return m_pFieldControl->GetFormatCategory(pFieldDescr);
 //}
-//------------------------------------------------------------------------------
-void OFieldDescGenWin::ActivatePropertyField(sal_uInt16 nVirtualField)
-{
-    m_pFieldControl->ActivatePropertyField(nVirtualField);
-}
 //------------------------------------------------------------------------------
 void OFieldDescGenWin::SaveData( OFieldDescription* pFieldDescr )
 {
