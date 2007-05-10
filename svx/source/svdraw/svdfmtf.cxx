@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfmtf.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:06:55 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:57:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,11 +44,9 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-
-#ifndef _EEITEMID_HXX //autogen
-#include <eeitemid.hxx>
+#ifndef _EEITEM_HXX
+#include <eeitem.hxx>
 #endif
-
 #ifndef _SVX_FHGTITEM_HXX //autogen
 #include <fhgtitem.hxx>
 #endif
@@ -383,20 +381,20 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, FASTBOOL bForceText
                             aFnt.GetPitch(), aFnt.GetCharSet(), EE_CHAR_FONTINFO_CJK ) );
         pTextAttr->Put( SvxFontItem( aFnt.GetFamily(), aFnt.GetName(), aFnt.GetStyleName(),
                             aFnt.GetPitch(), aFnt.GetCharSet(), EE_CHAR_FONTINFO_CTL ) );
-        pTextAttr->Put(SvxPostureItem(aFnt.GetItalic()));
-        pTextAttr->Put(SvxWeightItem(aFnt.GetWeight()));
+        pTextAttr->Put(SvxPostureItem(aFnt.GetItalic(), EE_CHAR_ITALIC));
+        pTextAttr->Put(SvxWeightItem(aFnt.GetWeight(), EE_CHAR_WEIGHT));
         sal_uInt32 nHeight = FRound(aFnt.GetSize().Height() * fScaleY);
         pTextAttr->Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
         pTextAttr->Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
         pTextAttr->Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
-        pTextAttr->Put(SvxCharScaleWidthItem(100));
-        pTextAttr->Put(SvxUnderlineItem(aFnt.GetUnderline()));
-        pTextAttr->Put(SvxCrossedOutItem(aFnt.GetStrikeout()));
-        pTextAttr->Put(SvxShadowedItem(aFnt.IsShadow()));
-        pTextAttr->Put(SvxAutoKernItem(aFnt.IsKerning()));
-        pTextAttr->Put(SvxWordLineModeItem(aFnt.IsWordLineMode()));
-        pTextAttr->Put(SvxContourItem(aFnt.IsOutline()));
-        pTextAttr->Put(SvxColorItem(aFnt.GetColor()));
+        pTextAttr->Put(SvxCharScaleWidthItem(100, EE_CHAR_FONTWIDTH));
+        pTextAttr->Put(SvxUnderlineItem(aFnt.GetUnderline(), EE_CHAR_UNDERLINE));
+        pTextAttr->Put(SvxCrossedOutItem(aFnt.GetStrikeout(), EE_CHAR_STRIKEOUT));
+        pTextAttr->Put(SvxShadowedItem(aFnt.IsShadow(), EE_CHAR_SHADOW));
+        pTextAttr->Put(SvxAutoKernItem(aFnt.IsKerning(), EE_CHAR_KERNING));
+        pTextAttr->Put(SvxWordLineModeItem(aFnt.IsWordLineMode(), EE_CHAR_WLM));
+        pTextAttr->Put(SvxContourItem(aFnt.IsOutline(), EE_CHAR_OUTLINE));
+        pTextAttr->Put(SvxColorItem(aFnt.GetColor(), EE_CHAR_COLOR));
         //... svxfont textitem svditext
         bFntDirty=FALSE;
     }
