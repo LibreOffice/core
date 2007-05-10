@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-05 10:54:01 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:07:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -733,7 +733,7 @@ void rtfSections::SetPage(SwPageDesc &rInPageDesc, SwFrmFmt &rFmt,
     rFmt.SetAttr(aSz);
 
     rFmt.SetAttr(
-        SvxLRSpaceItem(rSection.GetPageLeft(), rSection.GetPageRight()));
+        SvxLRSpaceItem(rSection.GetPageLeft(), rSection.GetPageRight(), 0, 0, RES_LR_SPACE));
 
     if (!bIgnoreCols)
     {
@@ -873,7 +873,7 @@ void rtfSections::SetPageULSpaceItems(SwFrmFmt &rFmt,
         }
     }
 
-    SvxULSpaceItem aUL(rData.nSwUp, rData.nSwLo); // Page-UL setzen
+    SvxULSpaceItem aUL(rData.nSwUp, rData.nSwLo, RES_UL_SPACE ); // Page-UL setzen
     rFmt.SetAttr(aUL);
 }
 
@@ -976,7 +976,7 @@ SwSectionFmt *rtfSections::InsertSection(SwPaM& rMyPaM, rtfSection &rSection)
 
     sal_uInt8 nRTLPgn = maSegments.empty() ? 0 : maSegments.back().IsBiDi();
     aSet.Put(SvxFrameDirectionItem(
-        nRTLPgn ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP));
+        nRTLPgn ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR));
 
     rSection.mpSection = mrReader.pDoc->Insert( rMyPaM, aSection, &aSet );
     ASSERT(rSection.mpSection, "section not inserted!");
@@ -1791,7 +1791,7 @@ void fixKeepAndSplitAttributes(SwTableNode *pTableNode)
     // move keepnext attribtue from last paragraph to table
     if (pKeepNext!=NULL)
     {
-        SvxFmtKeepItem aNewKeepItem(pKeepNext->GetValue());
+        SvxFmtKeepItem aNewKeepItem(pKeepNext->GetValue(), RES_KEEP);
         SwAttrSet aNewSet(pFmt->GetAttrSet());
         aNewSet.Put(aNewKeepItem);
         pFmt->SetAttr(aNewSet);
@@ -1930,7 +1930,7 @@ void SwRTFParser::NextToken( int nToken )
             if (lcl_UsedPara(*pPam))
                 InsertPara();
             CheckInsNewTblLine();
-            pDoc->Insert(*pPam, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE), 0);
+            pDoc->Insert(*pPam, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK), 0);
         }
         break;
 
@@ -2086,7 +2086,7 @@ void SwRTFParser::NextToken( int nToken )
         break;
 
     case RTF_COLUM:
-        pDoc->Insert( *pPam, SvxFmtBreakItem( SVX_BREAK_COLUMN_BEFORE ), 0);
+        pDoc->Insert( *pPam, SvxFmtBreakItem( SVX_BREAK_COLUMN_BEFORE, RES_BREAK ), 0);
         break;
 
     case RTF_DXFRTEXT:      // werden nur im Zusammenhang mit Flys ausgewertet
@@ -2453,7 +2453,8 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 }
 
 DocPageInformation::DocPageInformation()
-    : mnPaperw(12240), mnPaperh(15840), mnMargl(1800), mnMargr(1800),
+    : maBox( RES_BOX ),
+    mnPaperw(12240), mnPaperh(15840), mnMargl(1800), mnMargr(1800),
     mnMargt(1440), mnMargb(1440), mnGutter(0), mnPgnStart(1), mbFacingp(false),
     mbLandscape(false), mbRTLdoc(false)
 {
@@ -2516,8 +2517,8 @@ void SwRTFParser::SetPageInformationAsDefault(const DocPageInformation &rInfo)
     {
         SwFmtFrmSize aFrmSize(ATT_FIX_SIZE, rInfo.mnPaperw, rInfo.mnPaperh);
 
-        SvxLRSpaceItem aLR(rInfo.mnMargl, rInfo.mnMargr);
-        SvxULSpaceItem aUL(rInfo.mnMargt, rInfo.mnMargb);
+        SvxLRSpaceItem aLR(rInfo.mnMargl, rInfo.mnMargr, 0, 0, RES_LR_SPACE );
+        SvxULSpaceItem aUL(rInfo.mnMargt, rInfo.mnMargb, RES_UL_SPACE );
 
         UseOnPage eUseOn;
         if (rInfo.mbFacingp)
@@ -2528,7 +2529,7 @@ void SwRTFParser::SetPageInformationAsDefault(const DocPageInformation &rInfo)
         USHORT nPgStart(rInfo.mnPgnStart);
 
         SvxFrameDirectionItem aFrmDir(rInfo.mbRTLdoc ?
-            FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP);
+            FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR);
 
         // direkt an der Standartseite drehen
         SwPageDesc& rPg = pDoc->_GetPageDesc( 0 );
@@ -2874,7 +2875,7 @@ void SwRTFParser::ReadDocControls( int nToken )
                 false)
                )
             {
-                pColl->SetAttr(SvxHyphenZoneItem(true));
+                pColl->SetAttr(SvxHyphenZoneItem(true, RES_PARATR_HYPHENZONE));
             }
 
             pDoc->SetTxtFmtColl( *pPam, pColl );
@@ -3386,12 +3387,12 @@ void SwRTFParser::ReadPageDescTbl()
     SwPageDesc* pPg = 0;
     SwFrmFmt* pPgFmt = 0;
 
-    SvxULSpaceItem aUL, aHUL, aFUL;
-    SvxLRSpaceItem aLR, aHLR, aFLR;
+    SvxULSpaceItem aUL( RES_UL_SPACE ), aHUL( RES_UL_SPACE ), aFUL( RES_UL_SPACE );
+    SvxLRSpaceItem aLR( RES_LR_SPACE ), aHLR( RES_LR_SPACE ), aFLR( RES_LR_SPACE );
     SwFmtFrmSize aSz( ATT_FIX_SIZE, 11905, 16837 );     // DIN A4 defaulten
     SwFmtFrmSize aFSz( ATT_MIN_SIZE ), aHSz( ATT_MIN_SIZE );
 
-    SvxFrameDirectionItem aFrmDir(FRMDIR_HORI_LEFT_TOP);
+    SvxFrameDirectionItem aFrmDir(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR);
 
     USHORT nCols = USHRT_MAX, nColSpace = USHRT_MAX, nAktCol = 0;
     SvUShorts aColumns;
@@ -3588,7 +3589,7 @@ void SwRTFParser::ReadPageDescTbl()
 
         case RTF_PAGEBB:
             {
-                pPgFmt->SetAttr( SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE ) );
+                pPgFmt->SetAttr( SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE, RES_BREAK ) );
             }
             break;
 
@@ -3985,7 +3986,7 @@ void SwRTFParser::SetSwgValues( SfxItemSet& rSet )
             nEsc /= long(rFH.GetHeight());
 
             SvxEscapementItem aEsc( (short) nEsc,
-                                ((SvxEscapementItem*)pItem)->GetProp());
+                                ((SvxEscapementItem*)pItem)->GetProp(), RES_CHRATR_ESCAPEMENT);
             rSet.Put( aEsc );
         }
     }
@@ -4023,7 +4024,7 @@ void SwRTFParser::SetSwgValues( SfxItemSet& rSet )
             && ((SvxLRSpaceItem*)pItem)->GetTxtFirstLineOfst() < 0 )
     {
         // negativer Einzug, dann auf 0 Pos einen Tab setzen
-        rSet.Put( SvxTabStopItem( 1, 0 ));
+        rSet.Put( SvxTabStopItem( 1, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP ));
     }
 
     // NumRules anpassen
@@ -4371,14 +4372,14 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
 
     case RTF_PAGEBB:
         {
-            pSet->Put( SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE ));
+            pSet->Put( SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE, RES_BREAK ));
         }
         break;
 
     case RTF_PGBRK:
         {
             pSet->Put( SvxFmtBreakItem( 1 == nTokenValue ?
-                                SVX_BREAK_PAGE_BOTH : SVX_BREAK_PAGE_AFTER ));
+                                SVX_BREAK_PAGE_BOTH : SVX_BREAK_PAGE_AFTER, RES_BREAK ));
         }
         break;
 
