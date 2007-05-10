@@ -339,3 +339,9 @@ UDK_3.3 { # OOo 2.0.4
     global:
         __1cEcppubC__RTTI__1nEcppuLOWeakObject__;
 } UDK_3.2;
+
+UDK_3.4 { # OOo 2.3
+    global:
+        __1cEcppuSOPropertySetHelperIgetTypes6kM_nDcomDsunEstarDunoISequence4n0FEType____;
+} UDK_3.3;
+
