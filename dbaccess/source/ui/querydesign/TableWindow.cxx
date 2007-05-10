@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:54:27 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:40:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -504,15 +504,6 @@ void OTableWindow::Paint( const Rectangle& rRect )
 }
 
 //------------------------------------------------------------------------------
-void OTableWindow::SetTitle( const ::rtl::OUString& rTit )
-{
-    ::rtl::OUString sOldTitle = m_aTitle.GetText();
-    m_aTitle.SetText( rTit );
-    if ( m_pAccessible )
-        m_pAccessible->notifyAccessibleEvent(AccessibleEventId::NAME_CHANGED ,makeAny(sOldTitle),makeAny(rTit));
-}
-
-//------------------------------------------------------------------------------
 void OTableWindow::Draw3DBorder(const Rectangle& rRect)
 {
     // die Style-Settings des Systems fuer meine Farben
@@ -738,12 +729,6 @@ BOOL OTableWindow::HandleKeyInput( const KeyEvent& rEvt )
         bHandle = TRUE;
     }
     return bHandle;
-}
-
-//------------------------------------------------------------------------------
-void OTableWindow::InvalidateLines()
-{
-    getTableView()->InvalidateConnections();
 }
 
 //------------------------------------------------------------------------------
