@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autoform.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:12:15 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:46:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,25 +201,25 @@ void ScAfVersions::Load( SvStream& rStream, USHORT nVer )
 
 void ScAfVersions::Write(SvStream& rStream)
 {
-    rStream << SvxFontItem().GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxFontHeightItem().GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxWeightItem().GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxPostureItem().GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxUnderlineItem().GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxCrossedOutItem().GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxContourItem().GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxShadowedItem().GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxColorItem().GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxBoxItem().GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxLineItem().GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxBrushItem().GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxFontItem(ATTR_FONT).GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxFontHeightItem(240, 100, ATTR_FONT_HEIGHT).GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxWeightItem(WEIGHT_NORMAL, ATTR_FONT_WEIGHT).GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxPostureItem(ITALIC_NONE, ATTR_FONT_POSTURE).GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxUnderlineItem(UNDERLINE_NONE, ATTR_FONT_UNDERLINE).GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxCrossedOutItem(STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT).GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxContourItem(sal_False, ATTR_FONT_CONTOUR).GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxShadowedItem(sal_False, ATTR_FONT_SHADOWED).GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxColorItem(ATTR_FONT_COLOR).GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxBoxItem(ATTR_BORDER).GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxLineItem(SID_FRAME_LINESTYLE).GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxBrushItem(ATTR_BACKGROUND).GetVersion(SOFFICE_FILEFORMAT_40);
 
-    rStream << SvxAdjustItem().GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxAdjustItem(SVX_ADJUST_LEFT, 0).GetVersion(SOFFICE_FILEFORMAT_40);
 
-    rStream << SvxHorJustifyItem().GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxVerJustifyItem().GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxOrientationItem().GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxMarginItem().GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY).GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxVerJustifyItem(SVX_VER_JUSTIFY_STANDARD, ATTR_VER_JUSTIFY).GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxOrientationItem(SVX_ORIENTATION_STANDARD, 0).GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxMarginItem(ATTR_MARGIN).GetVersion(SOFFICE_FILEFORMAT_40);
     rStream << SfxBoolItem(ATTR_LINEBREAK).GetVersion(SOFFICE_FILEFORMAT_40);
     rStream << SfxInt32Item(ATTR_ROTATE_VALUE).GetVersion(SOFFICE_FILEFORMAT_40);
     rStream << SvxRotateModeItem(SVX_ROTATE_MODE_STANDARD,0).GetVersion(SOFFICE_FILEFORMAT_40);
@@ -230,16 +230,34 @@ void ScAfVersions::Write(SvStream& rStream)
 //  ---------------------------------------------------------------------------
 
 ScAutoFormatDataField::ScAutoFormatDataField() :
+    aFont( ATTR_FONT ),
+    aHeight( 240, 100, ATTR_FONT_HEIGHT ),
+    aWeight( WEIGHT_NORMAL, ATTR_FONT_WEIGHT ),
+    aPosture( ITALIC_NONE, ATTR_FONT_POSTURE ),
+
     aCJKFont( ATTR_CJK_FONT ),
     aCJKHeight( 240, 100, ATTR_CJK_FONT_HEIGHT ),
     aCJKWeight( WEIGHT_NORMAL, ATTR_CJK_FONT_WEIGHT ),
     aCJKPosture( ITALIC_NONE, ATTR_CJK_FONT_POSTURE ),
+
     aCTLFont( ATTR_CTL_FONT ),
     aCTLHeight( 240, 100, ATTR_CTL_FONT_HEIGHT ),
     aCTLWeight( WEIGHT_NORMAL, ATTR_CTL_FONT_WEIGHT ),
     aCTLPosture( ITALIC_NONE, ATTR_CTL_FONT_POSTURE ),
+
+    aUnderline( UNDERLINE_NONE,ATTR_FONT_UNDERLINE ),
+    aCrossedOut( STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT ),
+    aContour( sal_False, ATTR_FONT_CONTOUR ),
+    aShadowed( sal_False, ATTR_FONT_SHADOWED ),
+    aColor( ATTR_FONT_COLOR ),
+    aBox( ATTR_BORDER ),
     aTLBR( ATTR_BORDER_TLBR ),
     aBLTR( ATTR_BORDER_BLTR ),
+    aBackground( ATTR_BACKGROUND ),
+    aAdjust( SVX_ADJUST_LEFT, 0 ),
+    aHorJustify( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY ),
+    aVerJustify( SVX_VER_JUSTIFY_STANDARD, ATTR_VER_JUSTIFY ),
+    aMargin( ATTR_MARGIN ),
     aLinebreak( ATTR_LINEBREAK ),
     aRotateAngle( ATTR_ROTATE_VALUE ),
     aRotateMode( SVX_ROTATE_MODE_STANDARD, ATTR_ROTATE_MODE )
@@ -299,7 +317,7 @@ void ScAutoFormatDataField::SetAdjust( const SvxAdjustItem& rAdjust )
 BOOL ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersions, USHORT nVer )
 {
     SfxPoolItem* pNew;
-    SvxOrientationItem aOrientation;
+    SvxOrientationItem aOrientation( SVX_ORIENTATION_STANDARD, 0 );
 
     READ( aFont,        SvxFontItem,        rVersions.nFontVersion)
     READ( aHeight,      SvxFontHeightItem,  rVersions.nFontHeightVersion)
@@ -379,7 +397,7 @@ BOOL ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersio
 BOOL ScAutoFormatDataField::LoadOld( SvStream& rStream, const ScAfVersions& rVersions )
 {
     SfxPoolItem* pNew;
-    SvxOrientationItem aOrientation;
+    SvxOrientationItem aOrientation( SVX_ORIENTATION_STANDARD, 0 );
 
     aNumFormat.Load(rStream, rStream.GetStreamCharSet());
 
@@ -411,7 +429,7 @@ BOOL ScAutoFormatDataField::LoadOld( SvStream& rStream, const ScAfVersions& rVer
 
 BOOL ScAutoFormatDataField::Save( SvStream& rStream )
 {
-    SvxOrientationItem aOrientation( aRotateAngle.GetValue(), aStacked.GetValue() );
+    SvxOrientationItem aOrientation( aRotateAngle.GetValue(), aStacked.GetValue(), 0 );
 
     aFont.Store         ( rStream, aFont.GetVersion( SOFFICE_FILEFORMAT_40 ) );
     aHeight.Store       ( rStream, aHeight.GetVersion( SOFFICE_FILEFORMAT_40 ) );
@@ -904,7 +922,7 @@ ScAutoFormat::ScAutoFormat(USHORT nLim, USHORT nDel, BOOL bDup):
         DEFAULTFONT_LATIN_SPREADSHEET, LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE );
     SvxFontItem aFontItem(
         aStdFont.GetFamily(), aStdFont.GetName(), aStdFont.GetStyleName(),
-        aStdFont.GetPitch(), aStdFont.GetCharSet() );
+        aStdFont.GetPitch(), aStdFont.GetCharSet(), ATTR_FONT );
 
     aStdFont = OutputDevice::GetDefaultFont(
         DEFAULTFONT_CJK_SPREADSHEET, LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE );
@@ -918,12 +936,12 @@ ScAutoFormat::ScAutoFormat(USHORT nLim, USHORT nDel, BOOL bDup):
         aStdFont.GetFamily(), aStdFont.GetName(), aStdFont.GetStyleName(),
         aStdFont.GetPitch(), aStdFont.GetCharSet(), ATTR_CTL_FONT );
 
-    SvxFontHeightItem aHeight( 200 );       // 10 pt;
+    SvxFontHeightItem aHeight( 200, 100, ATTR_FONT_HEIGHT );      // 10 pt;
 
     //  black thin border
     Color aBlack( COL_BLACK );
     SvxBorderLine aLine( &aBlack, DEF_LINE_WIDTH_0 );
-    SvxBoxItem aBox;
+    SvxBoxItem aBox( ATTR_BORDER );
     aBox.SetLine(&aLine, BOX_LINE_LEFT);
     aBox.SetLine(&aLine, BOX_LINE_TOP);
     aBox.SetLine(&aLine, BOX_LINE_RIGHT);
@@ -931,12 +949,12 @@ ScAutoFormat::ScAutoFormat(USHORT nLim, USHORT nDel, BOOL bDup):
 
     Color aWhite(COL_WHITE);
     Color aBlue(COL_BLUE);
-    SvxColorItem aWhiteText( aWhite );
-    SvxColorItem aBlackText( aBlack );
-    SvxBrushItem aBlueBack( aBlue );
-    SvxBrushItem aWhiteBack( aWhite );
-    SvxBrushItem aGray70Back( Color(0x4d, 0x4d, 0x4d) );
-    SvxBrushItem aGray20Back( Color(0xcc, 0xcc, 0xcc) );
+    SvxColorItem aWhiteText( aWhite, ATTR_FONT_COLOR );
+    SvxColorItem aBlackText( aBlack, ATTR_FONT_COLOR );
+    SvxBrushItem aBlueBack( aBlue, ATTR_BACKGROUND );
+    SvxBrushItem aWhiteBack( aWhite, ATTR_BACKGROUND );
+    SvxBrushItem aGray70Back( Color(0x4d, 0x4d, 0x4d), ATTR_BACKGROUND );
+    SvxBrushItem aGray20Back( Color(0xcc, 0xcc, 0xcc), ATTR_BACKGROUND );
 
     for (USHORT i=0; i<16; i++)
     {
