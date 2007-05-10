@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldDescGenWin.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:38:37 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:41:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,6 @@ namespace dbaui
 
         //  short GetFormatCategory(OFieldDescription* pFieldDescr);
             // liefert zum am Feld eingestellten Format einen der CAT_xxx-Werte (CAT_NUMBER, CAT_DATE ...)
-        void ActivatePropertyField(USHORT nVirtualField);
-            // Parameter ist einer der FIELD_PROPERTY_xxx-Werte, das entsprechende Control wird aktiviert, wenn vorhanden
 
         String BoolStringPersistent(const String& rUIString) const;
         String BoolStringUI(const String& rPersistentString) const;
