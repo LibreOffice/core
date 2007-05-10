@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.85 $
+#   $Revision: 1.86 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-02 12:21:20 $
+#   last change: $Author: gm $ $Date: 2007-05-10 10:58:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -177,6 +177,12 @@ installer::logger::print_message( "... checking required files ...\n" );
 installer::control::check_system_path();
 
 my $pathvariableshashref = installer::environment::create_pathvariables($environmentvariableshashref);
+
+###############################################
+# Checking saved setting for Windows patches
+###############################################
+
+if (( $installer::globals::iswindowsbuild ) &&  ( $installer::globals::prepare_winpatch )) { installer::windows::msiglobal::read_saved_mappings(); }
 
 ###################################################
 # Analyzing the settings and variables in zip.lst
@@ -518,6 +524,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         {
             @installer::globals::logfileinfo = ();  # new logfile array and new logfile name
             installer::logger::copy_globalinfo_into_logfile();
+            $installer::globals::globalinfo_copied = 1;
             $installer::globals::defaultlanguage = $$languagestringref;
         }
         else    # switching from office installation to language pack
@@ -573,6 +580,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     {
         @installer::globals::logfileinfo = ();  # new logfile array and new logfile name
         installer::logger::copy_globalinfo_into_logfile();
+        $installer::globals::globalinfo_copied = 1;
     }
 
     my $logminor = "";
@@ -1659,7 +1667,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $installer::globals::compiler =~ /wntgcci/ )
         {
             installer::windows::strip::strip_binaries($filesinproductlanguageresolvedarrayref, $languagestringref);
-            if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . $packagename ."_files.log", $filesinproductlanguageresolvedarrayref); }
+            if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles16e.log", $filesinproductlanguageresolvedarrayref); }
         }
 
         $installdir = installer::worker::create_installation_directory($shipinstalldir, $languagestringref, \$current_install_number);
