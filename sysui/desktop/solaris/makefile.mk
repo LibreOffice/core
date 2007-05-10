@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: kz $ $Date: 2007-02-15 16:49:50 $
+#   last change: $Author: kz $ $Date: 2007-05-10 15:01:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,65 +47,13 @@ TARGET=solaris
 .INCLUDE :  ../productversion.mk
 
 # --- Files --------------------------------------------------------
-
-MIMELIST = \
-    text \
-    text-template \
-    spreadsheet \
-    spreadsheet-template \
-    drawing \
-    drawing-template \
-    presentation \
-    presentation-template \
-    formula \
-    master-document \
-    oasis-text \
-    oasis-text-template \
-    oasis-spreadsheet \
-    oasis-spreadsheet-template \
-    oasis-drawing \
-    oasis-drawing-template \
-    oasis-presentation \
-    oasis-presentation-template \
-    oasis-formula \
-    oasis-master-document \
-    oasis-web-template \
-    oasis-database \
-    extension
-
-GNOMEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.keys 
-  
+ 
 .IF "$(OS)"=="SOLARIS"
 
-PKGFLAGFILE = $(MISC)$/$(TARGET).flag 
-PKGDEPN = \
-    $(MISC)/$(TARGET)/openoffice.applications \
-    $(MISC)/$(TARGET)/openoffice.mime \
-    $(MISC)/$(TARGET)/openoffice.keys \
-    $(MISC)/$(TARGET)/printeradmin.sh \
-    $(MISC)/$(TARGET)/openoffice.sh \
-    $(MISC)/$(TARGET)/space \
-    $(MISC)/$(TARGET)/depend \
-    $(MISC)/$(TARGET)/pkginfo \
-    $(MISC)/$(TARGET)/mailcap \
-    $(MISC)/$(TARGET)/postinstall \
-    $(MISC)/$(TARGET)/prototype \
-    $(MISC)/$(TARGET)/copyright \
-    $(MISC)/$(TARGET)/checkinstall	
-
-PKGDIR  = $(shell cd $(BIN); pwd)
-
-PKGNAME = $(shell sed -n -e s/PKG=//p pkginfo)
-PKGFILE = $(BIN)$/pkg$/openoffice.org-desktop-integration.tar.gz
+PKGFILES = $(BIN)$/pkg$/{$(PRODUCTLIST)}-desktop-integration.tar.gz
    
 PKGDATESTRING = $(shell date -u +%Y.%m.%d)
 PKGARCH=sparc,i386
-
-.IF "$(WITH_LANG)"!=""
-ULFDIR = $(COMMONMISC)$/desktopshare
-.ELSE			# "$(WITH_LANG)"!=""
-ULFDIR:=..$/share
-.ENDIF			# "$(WITH_LANG)"!=""
 
 FASPAC=`test -f $(SOLARBINDIR)/faspac-so.sh && echo "/sbin/sh" || echo "echo"`
 
@@ -117,74 +65,46 @@ FASPAC=`test -f $(SOLARBINDIR)/faspac-so.sh && echo "/sbin/sh" || echo "echo"`
 
 .IF "$(OS)"=="SOLARIS"
 
-ALLTAR : $(PKGFILE) 
-
-# --- mime types ---------------------------------------------------
-
-$(MISC)/$(TARGET)/openoffice.keys : $(GNOMEMIMEDEPN) ../productversion.mk ../share/brand.pl ../share/translate.pl $(ULFDIR)/documents.ulf
-    @$(MKDIRHIER) $(@:d)
-    @echo Creating GNOME .keys file ..
-    @echo ---------------------------------
-    @$(PERL) ../share/brand.pl -p $(PRODUCTNAME) -u $(UNIXFILENAME) --iconprefix "$(UNIXFILENAME)-" $(GNOMEMIMEDEPN) $(MISC)/$(TARGET)
-    @$(PERL) ../share/translate.pl -p $(PRODUCTNAME) -d $(MISC)/$(TARGET) --ext "keys" --key "description"  $(ULFDIR)/documents.ulf
-    @cat $(MISC)/$(TARGET)/{$(MIMELIST)}.keys > $@
-
-$(MISC)/$(TARGET)/openoffice.mime : ../mimetypes/openoffice.mime
-    @$(MKDIRHIER) $(@:d)
-    @echo Creating GNOME .mime file ..
-    @echo ---------------------------------
-    @cat $< | tr -d "\015" > $@
-
-$(MISC)/$(TARGET)/openoffice.applications : ../productversion.mk ../mimetypes/openoffice.applications
-    @$(MKDIRHIER) $(@:d)
-    @echo Creating GNOME .applications file ..
-    @echo ---------------------------------
-    @cat ../mimetypes/openoffice.applications | tr -d "\015" | sed -e "s/OFFICENAME/$(UNIXFILENAME)/" -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/" > $@
+ALLTAR : $(PKGFILES) 
 
 # --- pkginfo ----------------------------------------------------
 
 # Copy the pkginfo file to $(MISC) 
-$(MISC)/$(TARGET)/{pkginfo depend} : $$(@:f) ../productversion.mk
+$(MISC)/{$(PRODUCTLIST)}/{pkginfo depend} : $$(@:f) ../productversion.mk makefile.mk
     @$(MKDIRHIER) $(@:d)
-    @cat $(@:f) | tr -d "\015" | sed -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/g" > $@
-
-# --- prototype ---------------------------------------------------
-
-# Copy the prototype file to $(MISC)
-$(MISC)/$(TARGET)/prototype : $$(@:f) ../productversion.mk $(MISC)/cde/$(UNIXFILENAME).flag
-    @$(MKDIRHIER) $(@:d)
-    @cat $(@:f) | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" -e "s_%SOURCE_$(MISC)/$(TARGET)_g" > $@
-    @pkgproto $(MISC)/cde/types=usr/dt/appconfig/types | awk '{ printf "%s %s %s 0%d%d root bin\n",$$1, $$2, $$3, $$4/100, $$4%10*11 }' >> $@
+    @cat $(@:f) | tr -d "\015" | sed -e "s/%PRODUCTNAME/$(PRODUCTNAME.$(@:d:d:f)) $(PRODUCTVERSION.$(@:d:d:f))/g" -e "s/%pkgprefix/$(@:d:d:f:s/.//)/" > $@
 
 # --- space, postinstall & mailcap ---------------------------------
 
 # Copy the prototype file to $(MISC)
-$(MISC)/$(TARGET)/{space postinstall mailcap} : $$(@:f) ../productversion.mk
+$(MISC)/{$(PRODUCTLIST)}/{space postinstall mailcap} : $$(@:f) ../productversion.mk
     @$(MKDIRHIER) $(@:d)
-    @cat $(@:f) | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" -e "s_%SOURCE_$(MISC)/$(TARGET)_g" > $@
+    @cat $(@:f) | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME.$(@:d:d:f))/g" -e "s_%SOURCE_$(MISC)/$(@:d:d:f)_g" > $@
 
-# --- checkinstall -----------------------------------------------
+# --- checkinstall & copyright--------------------------------
 
 # Copy the checkinstall and copyright file to $(MISC) 
-$(MISC)/$(TARGET)/{checkinstall copyright} : $$(@:f)
+$(MISC)/{$(PRODUCTLIST)}/{checkinstall copyright} : $$(@:f)
     @$(MKDIRHIER) $(@:d)
     @cat $(@:f) | tr -d "\015" > $@
 
-# --- office launch scripts --------------------------------------
+# --- prototype ---------------------------------------------------
 
-# Copy the office launch scripts to $(MISC) 
-$(MISC)/$(TARGET)/{openoffice.sh printeradmin.sh} : ../share/$$(@:f)
-        @$(MKDIRHIER) $(@:d)
-        @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $@
+# Copy the prototype file to $(MISC)
+$(MISC)/{$(PRODUCTLIST)}$/prototype : $$(@:f) ../productversion.mk $(COMMONMISC)$/$$(@:d:d:f)$/cdelauncherlist makefile.mk
+    @$(MKDIRHIER) $(@:d)
+    cat $(@:f) | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME.$(@:d:d:f))/g" -e "s_%SOURCE_$(COMMONMISC)/$(@:d:d:f)_g" -e "s/%ICONPREFIX/$(ICONPREFIX.$(@:d:d:f))/g" > $@
+    pkgproto $(COMMONMISC)$/$(@:d:d:f)/types=usr/dt/appconfig/types | awk '{ printf "%s %s %s 0%d%d root bin\n",$$1, $$2, $$3, $$4/100, $$4%10*11 }' >> $@
 
 # --- packaging ---------------------------------------------------
 
-$(PKGFILE) : $(PKGDEPN) copyright makefile.mk
-    @-$(RM) $(BIN)$/$(PKGNAME).tar.gz
+$(PKGFILES) : $(MISC)/{$(PRODUCTLIST)}/{checkinstall copyright space pkginfo depend postinstall mailcap} makefile.mk
+$(PKGFILES) : $(MISC)$/{$(PRODUCTLIST)}$/prototype
+    @-$(RM) $(BIN)$/$(@:f)
     @$(MKDIRHIER) $(@:d)
-    @pkgmk -r . -f $(MISC)/$(TARGET)/prototype -o -d $(BIN) ARCH=$(PKGARCH) VERSION=$(PKGVERSION),REV=$(PKGREV).$(PKGDATESTRING)
-    @$(FASPAC) $(SOLARBINDIR)/faspac-so.sh -a -d $(BIN) $(PKGNAME) 
-    @tar -cf - -C $(BIN) $(PKGNAME) | gzip > $@
-    @rm -rf $(BIN)/$(PKGNAME)
+    pkgmk -r . -f $(MISC)$/$(@:b:b:s/-/ /:1)$/prototype -o -d $(PKGDIR) ARCH=$(PKGARCH) VERSION=$(PKGVERSION.$(@:b:s/-/ /:1)),REV=$(PKGREV).$(PKGDATESTRING)
+    $(FASPAC) $(SOLARBINDIR)/faspac-so.sh -a -d $(PKGDIR) $(@:b:b:s/-/ /:1:s/.//)-desktop-integratn
+    @tar -cf - -C $(PKGDIR) $(@:b:b:s/-/ /:1:s/.//)-desktop-integratn | gzip > $@
+    @rm -rf $(PKGDIR)/$(@:b:b:s/-/ /:1:s/.//)-desktop-integratn
 
 .ENDIF
