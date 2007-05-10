@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawitem.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:29:54 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:19:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,6 @@
 //  SvxColorTableItem
 //==================================================================
 
-#ifdef ITEMID_COLOR_TABLE
 class XColorTable;
 
 class SVX_DLLPUBLIC SvxColorTableItem: public SfxPoolItem
@@ -68,7 +67,7 @@ public:
                             TYPEINFO();
                             SvxColorTableItem();
                             SvxColorTableItem( XColorTable* pTable,
-                                    USHORT nWhich = ITEMID_COLOR_TABLE );
+                                    USHORT nWhich  );
                             SvxColorTableItem( const SvxColorTableItem& );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -86,13 +85,12 @@ public:
                                     pColorTable = pTable; }
 };
 
-#endif
 
 //==================================================================
 //  SvxGradientListItem
 //==================================================================
 
-#ifdef ITEMID_GRADIENT_LIST
+
 class XGradientList;
 
 class SVX_DLLPUBLIC SvxGradientListItem: public SfxPoolItem
@@ -103,7 +101,7 @@ public:
                             TYPEINFO();
                             SvxGradientListItem();
                             SvxGradientListItem( XGradientList* pList,
-                                    USHORT nWhich = ITEMID_GRADIENT_LIST );
+                                    USHORT nWhich  );
                             SvxGradientListItem( const SvxGradientListItem& );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -121,13 +119,13 @@ public:
                                     pGradientList = pList; }
 };
 
-#endif
+
 
 //==================================================================
 //  SvxHatchListItem
 //==================================================================
 
-#ifdef ITEMID_HATCH_LIST
+
 class XHatchList;
 
 class SVX_DLLPUBLIC SvxHatchListItem: public SfxPoolItem
@@ -138,7 +136,7 @@ public:
                             TYPEINFO();
                             SvxHatchListItem();
                             SvxHatchListItem( XHatchList* pList,
-                                    USHORT nWhich = ITEMID_HATCH_LIST );
+                                    USHORT nWhich  );
                             SvxHatchListItem( const SvxHatchListItem& );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -156,13 +154,13 @@ public:
                                     pHatchList = pList; }
 };
 
-#endif
+
 
 //==================================================================
 //  SvxBitmapListItem
 //==================================================================
 
-#ifdef ITEMID_BITMAP_LIST
+
 class XBitmapList;
 
 class SVX_DLLPUBLIC SvxBitmapListItem: public SfxPoolItem
@@ -173,7 +171,7 @@ public:
                             TYPEINFO();
                             SvxBitmapListItem();
                             SvxBitmapListItem( XBitmapList* pBL,
-                                    USHORT nWhich = ITEMID_BITMAP_LIST );
+                                    USHORT nWhich  );
                             SvxBitmapListItem( const SvxBitmapListItem& );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -191,13 +189,13 @@ public:
                                     pBitmapList = pList; }
 };
 
-#endif
+
 
 //==================================================================
 //  SvxDashListItem
 //==================================================================
 
-#ifdef ITEMID_DASH_LIST
+
 class XDashList;
 
 class SVX_DLLPUBLIC SvxDashListItem: public SfxPoolItem
@@ -208,7 +206,7 @@ public:
                             TYPEINFO();
                             SvxDashListItem();
                             SvxDashListItem( XDashList* pList,
-                                    USHORT nWhich = ITEMID_DASH_LIST );
+                                    USHORT nWhich  );
                             SvxDashListItem( const SvxDashListItem& );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -225,13 +223,13 @@ public:
     void                    SetDashList( XDashList* pList );
 };
 
-#endif
+
 
 //==================================================================
 //  SvxLineEndListItem
 //==================================================================
 
-#ifdef ITEMID_LINEEND_LIST
+
 class XLineEndList;
 
 class SVX_DLLPUBLIC SvxLineEndListItem: public SfxPoolItem
@@ -242,7 +240,7 @@ public:
                             TYPEINFO();
                             SvxLineEndListItem();
                             SvxLineEndListItem( XLineEndList* pList,
-                                    USHORT nWhich = ITEMID_LINEEND_LIST );
+                                    USHORT nWhich  );
                             SvxLineEndListItem( const SvxLineEndListItem& );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -260,7 +258,7 @@ public:
                                     pLineEndList = pList; }
 };
 
-#endif
+
 
 
 #endif
