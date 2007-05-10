@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extrusionbar.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:23:09 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:02:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,11 +87,9 @@
 #ifndef _SVDVIEW_HXX
 #include "svdview.hxx"
 #endif
-#define ITEMID_COLOR 0
 #ifndef _SVX_COLRITEM_HXX
 #include "colritem.hxx"
 #endif
-#define ITEMID_DOUBLE 0
 #include "chrtitem.hxx"
 
 #include "extrusionbar.hxx"
