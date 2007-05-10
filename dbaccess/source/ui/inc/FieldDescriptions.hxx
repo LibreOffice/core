@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldDescriptions.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:52:23 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:27:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,21 +90,6 @@ namespace dbaui
         OFieldDescription();
         OFieldDescription(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xAffectedCol
                          ,sal_Bool _bUseAsDest = sal_False);
-        OFieldDescription(  const ::rtl::OUString&  _sName,
-                            const ::rtl::OUString&  _sTypeName,
-                            const ::rtl::OUString&  _sDescription,
-                            const ::com::sun::star::uno::Any&   _aDefaultValue,
-                            const ::com::sun::star::uno::Any&   _aControlDefault,
-                            const ::rtl::OUString&  _sAutoIncrementValue,
-                            const TOTypeInfoSP&     _pType,
-                            sal_Int32               _nPrecision,
-                            sal_Int32               _nScale,
-                            sal_Int32               _nIsNullable,
-                            sal_Int32               _nFormatKey,
-                            SvxCellHorJustify       _eHorJustify,
-                            sal_Bool                _bIsAutoIncrement,
-                            sal_Bool                _bIsPrimaryKey,
-                            sal_Bool                _bIsCurrency);
         OFieldDescription( const OFieldDescription& rDescr );
         ~OFieldDescription();
 
@@ -134,7 +119,6 @@ namespace dbaui
 
         ::rtl::OUString             GetName()               const;
         ::rtl::OUString             GetDescription()        const;
-        ::com::sun::star::uno::Any  GetDefaultValue()       const;
         ::com::sun::star::uno::Any  GetControlDefault()     const;
         ::rtl::OUString             GetAutoIncrementValue() const;
         sal_Int32                   GetType()               const;
