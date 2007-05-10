@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextvclcontrol.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:14:51 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:28:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,11 +84,9 @@
 #include <svx/eeitem.hxx>
 #endif
 
-#define ITEMID_FONT         EE_CHAR_FONTINFO
 #ifndef _SVX_FONTITEM_HXX
 #include <svx/fontitem.hxx>
 #endif
-#define ITEMID_FONTHEIGHT   EE_CHAR_FONTHEIGHT
 #ifndef _SVX_FHGTITEM_HXX
 #include <svx/fhgtitem.hxx>
 #endif
@@ -242,7 +240,7 @@ namespace frm
     //--------------------------------------------------------------------
     SfxPoolItem* RichTextControl::convertFontHeight( sal_uInt32 _nUnoFontHeight )
     {
-        SvxFontHeightItem* pItem = new SvxFontHeightItem( _nUnoFontHeight );
+        SvxFontHeightItem* pItem = new SvxFontHeightItem( _nUnoFontHeight, 100, EE_CHAR_FONTHEIGHT );
         pItem->SetProp( 100, SFX_MAPUNIT_POINT );
         return pItem;
     }
