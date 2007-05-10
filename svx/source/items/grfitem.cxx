@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:20:12 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:51:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#define ITEMID_GRF_CROP         0
 
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
@@ -55,7 +54,7 @@ using namespace ::com::sun::star;
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
-//TYPEINIT1_AUTOFACTORY( SvxGrfCrop, SfxPoolItem )
+//TYPEINIT1_FACTORY( SvxGrfCrop, SfxPoolItem , new  SvxGrfCrop(0))
 
 /******************************************************************************
  *  Implementierung     class SwCropGrf
