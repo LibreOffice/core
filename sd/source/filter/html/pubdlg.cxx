@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pubdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:43:39 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:24:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,9 +94,6 @@
 #include <svx/impgrf.hxx>
 #ifndef _SV_COLRDLG_HXX
 #include <svtools/colrdlg.hxx>
-#endif
-#ifndef _EEITEMID_HXX
-#include <svx/eeitemid.hxx>
 #endif
 #ifndef _SVX_COLRITEM_HXX
 #include <svx/colritem.hxx>
