@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionPage.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:45:07 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:21:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ namespace dbaui
 {
 //.........................................................................
 
-    class IAdminHelper;
+    class IDatabaseSettingsDialog;
     //=========================================================================
     //= OConnectionTabPage
     //=========================================================================
@@ -88,6 +88,7 @@ namespace dbaui
         DECL_LINK(OnBrowseConnections, PushButton*);
         DECL_LINK(OnTestJavaClickHdl,PushButton*);
         DECL_LINK(OnEditModified,Edit*);
+
     public:
         static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
         virtual BOOL        FillItemSet (SfxItemSet& _rCoreAttrs);
@@ -107,31 +108,20 @@ namespace dbaui
             <p>The new URL must be of the type which is currently selected, only the parts which do not
             affect the type may be changed (compared to the previous URL).</p>
         */
-    protected:
+    private:
         OConnectionTabPage(Window* pParent, const SfxItemSet& _rCoreAttrs);
             // nControlFlags ist eine Kombination der CBTP_xxx-Konstanten
         virtual ~OConnectionTabPage();
-
 
         // <method>OGenericAdministrationPage::fillControls</method>
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         // <method>OGenericAdministrationPage::fillWindows</method>
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
-    private:
-        // setting/retrieving the current connection URL
-        // necessary because for some types, the URL must be decoded for display purposes
 
+    private:
         /** enables the test connection button, if allowed
         */
         virtual bool checkTestConnection();
-
-
-        /** opens the FileOpen dialog and asks for a FileName
-            @param  _sFilterName
-                The filter name.
-            @param  _sExtension
-                The filter extension.
-        */
     };
 //.........................................................................
 }   // namespace dbaui
