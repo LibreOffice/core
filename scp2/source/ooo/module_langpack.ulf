@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_langpack.ulf,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:31:58 $
+ *  last change: $Author: gm $ $Date: 2007-05-10 11:50:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ en-US = "Chinese (simplified)"
 en-US = "Installs Chinese (simplified) support in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_LANGPACK_ZH_TW]
-en-US = "Chinese (tradional)"
+en-US = "Chinese (traditional)"
 
 [STR_DESC_MODULE_LANGPACK_ZH_TW]
 en-US = "Installs Chinese (traditional) support in %PRODUCTNAME %PRODUCTVERSION"
@@ -388,10 +388,10 @@ en-US = "Norwegian (Nynorsk)"
 en-US = "Installs Norwegian (Nynorsk) support in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_LANGPACK_RM]
-en-US = "Raeto-Romance"
+en-US = "Rhaeto-Romance"
 
 [STR_DESC_MODULE_LANGPACK_RM]
-en-US = "Installs Raeto-Romance support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs Rhaeto-Romance support in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_LANGPACK_RO]
 en-US = "Romanian"
@@ -608,3 +608,15 @@ en-US = "Kurdish"
 
 [STR_DESC_MODULE_LANGPACK_KU]
 en-US = "Installs Kurdish support in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_DZ]
+en-US = "Dzongkha"
+
+[STR_DESC_MODULE_LANGPACK_DZ]
+en-US = "Installs Dzongkha support in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_KA]
+en-US = "Georgian"
+
+[STR_DESC_MODULE_LANGPACK_KA]
+en-US = "Installs Georgian support in %PRODUCTNAME %PRODUCTVERSION"
