@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontitem.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:50:21 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:19:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,12 +77,12 @@ class SVX_DLLPUBLIC SvxFontItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxFontItem( const USHORT nId = ITEMID_FONT );
+    SvxFontItem( const USHORT nId  );
     SvxFontItem( const FontFamily eFam, const String& rFamilyName,
         const String& rStyleName,
-        const FontPitch eFontPitch = PITCH_DONTKNOW,
-        const rtl_TextEncoding eFontTextEncoding = RTL_TEXTENCODING_DONTKNOW,
-        const USHORT nId = ITEMID_FONT );
+        const FontPitch eFontPitch /*= PITCH_DONTKNOW*/,
+        const rtl_TextEncoding eFontTextEncoding /*= RTL_TEXTENCODING_DONTKNOW*/,
+        const USHORT nId  );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
