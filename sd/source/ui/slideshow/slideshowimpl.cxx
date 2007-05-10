@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:39:51 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:13:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -670,7 +670,12 @@ bool SlideshowImpl::startPreview(
         }
         else if( mpViewShell )
         {
-            const Rectangle& aContentRect = mpViewShell->GetViewShellBase().getClientRectangle();
+            Rectangle aContentRect (mpViewShell->GetViewShellBase().getClientRectangle());
+            if (Application::GetSettings().GetLayoutRTL())
+            {
+                aContentRect.nLeft = aContentRect.nRight;
+                aContentRect.nRight += aContentRect.nRight;
+            }
             maPresSize = aContentRect.GetSize();
             mpShowWindow->SetPosPixel( aContentRect.TopLeft() );
         }
