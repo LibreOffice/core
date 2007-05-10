@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPointItemConverter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:01:48 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:34:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@
 #include "StatisticsItemConverter.hxx"
 
 #ifndef _SVX_CHRTITEM_HXX
-#define ITEMID_CHARTDATADESCR SCHATTR_DATADESCR_DESCR
 #include <svx/chrtitem.hxx>
 #endif
 #ifndef _COM_SUN_STAR_CHART2_DATAPOINTLABEL_HPP_
@@ -59,7 +58,6 @@
 #include <svtools/intitem.hxx>
 #endif
 #ifndef _SVX_SIZEITEM_HXX
-#define ITEMID_SIZE SCHATTR_SYMBOL_SIZE
 #include <svx/sizeitem.hxx>
 #endif
 
@@ -395,7 +393,7 @@ void DataPointItemConverter::FillSpecialItem(
                         aDescr = CHDESCR_NONE;
                 }
 
-                rOutItemSet.Put( SvxChartDataDescrItem( aDescr ));
+                rOutItemSet.Put( SvxChartDataDescrItem( aDescr, CHDESCR_NONE ));
                 rOutItemSet.Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_SYM, aLabel.ShowLegendSymbol ));
             }
         }

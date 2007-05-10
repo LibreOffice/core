@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LegendItemConverter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:02:33 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:34:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@
 #include "CharacterPropertyItemConverter.hxx"
 
 #ifndef _SVX_CHRTITEM_HXX
-#define ITEMID_CHARTLEGENDPOS SCHATTR_LEGEND_POS
 #include <svx/chrtitem.hxx>
 #endif
 
@@ -264,7 +263,7 @@ void LegendItemConverter::FillSpecialItem(
                 }
             }
 
-            rOutItemSet.Put( SvxChartLegendPosItem( eItemPos ) );
+            rOutItemSet.Put( SvxChartLegendPosItem( eItemPos, SCHATTR_LEGEND_POS ) );
         }
         break;
    }
