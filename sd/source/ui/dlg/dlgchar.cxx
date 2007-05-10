@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgchar.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:02:10 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:26:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,6 @@
 #undef SD_DLLIMPLEMENTATION
 #endif
 
-
-#define ITEMID_FONTLIST     SID_ATTR_CHAR_FONTLIST
 
 #include <svx/dialogs.hrc>
 #include <svx/flstitem.hxx>
