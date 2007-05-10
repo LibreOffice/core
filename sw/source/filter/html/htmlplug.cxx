@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:10:08 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:05:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,7 +295,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
     }
     if( nLeftSpace > 0 || nRightSpace > 0 )
     {
-        SvxLRSpaceItem aLRItem;
+        SvxLRSpaceItem aLRItem( RES_LR_SPACE );
         aLRItem.SetLeft( nLeftSpace > 0 ? nLeftSpace : 0 );
         aLRItem.SetRight( nRightSpace > 0 ? nRightSpace : 0 );
         rFlyItemSet.Put( aLRItem );
@@ -331,7 +331,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
     }
     if( nUpperSpace || nLowerSpace )
     {
-        SvxULSpaceItem aULItem;
+        SvxULSpaceItem aULItem( RES_UL_SPACE );
         aULItem.SetUpper( nUpperSpace );
         aULItem.SetLower( nLowerSpace );
         rFlyItemSet.Put( aULItem );
