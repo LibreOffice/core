@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcomponenthandler.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:57:30 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:47:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,6 +241,12 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
 #endif
 #ifndef _DBHELPER_DBCONVERSION_HXX_
 #include <connectivity/dbconversion.hxx>
@@ -1949,9 +1955,12 @@ namespace pcr
                 OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_ESCAPE_PROCESSING ) >>= bEscapeProcessing );
                 OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_DATASOURCE ) >>= sDataSource );
 
+                Reference< XConnection > xOuterConnection;
+                ::dbtools::isEmbeddedInDatabase( m_xComponent, xOuterConnection );
                 bool doEnable = ( nCommandType == CommandType::COMMAND )
                             &&  ( bEscapeProcessing )
                             &&  (  m_xRowSetConnection.is()
+                                || xOuterConnection.is()
                                 || impl_isValidDataSourceName_nothrow( sDataSource )
                                 );
 
@@ -2434,11 +2443,9 @@ namespace pcr
                 m_xRowSetConnection = ::dbtools::ensureRowSetConnection( xRowSet, m_aContext.getLegacyServiceFactory(), false );
             }
         }
-        catch (SQLContext& e) { aError = e; }
-        catch (SQLWarning& e) { aError = e; }
-        catch (SQLException& e) { aError = e; }
-        catch (WrappedTargetException& e ) { aError = SQLExceptionInfo( e.TargetException ); }
-        catch (Exception&) { }
+        catch ( const SQLException& ) { aError = SQLExceptionInfo( ::cppu::getCaughtException() ); }
+        catch ( const WrappedTargetException& e ) { aError = SQLExceptionInfo( e.TargetException ); }
+        catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
 
         // report errors, if necessary
         if ( aError.isValid() )
