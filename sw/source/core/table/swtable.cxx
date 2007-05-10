@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-02 11:48:43 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:01:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -304,7 +304,7 @@ void _InsTblBox( SwDoc* pDoc, SwTableNode* pTblNd,
         {
             SwAttrSet aAttrSet( *pCNd->GetpSwAttrSet() );
             if( pBox->GetSaveUserColor() )
-                aAttrSet.Put( SvxColorItem( *pBox->GetSaveUserColor() ));
+                aAttrSet.Put( SvxColorItem( *pBox->GetSaveUserColor(), RES_CHRATR_COLOR ));
             else
                 aAttrSet.ClearItem( RES_CHRATR_COLOR );
             pDoc->GetNodes().InsBoxen( pTblNd, pLine, pBoxFrmFmt,
@@ -2148,12 +2148,12 @@ void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
             // ggfs. die alte NumFmtColor loeschen
             if( pCol )
                 // ggfs. die Farbe setzen
-                pTNd->SwCntntNode::SetAttr( SvxColorItem( *pCol ));
+                pTNd->SwCntntNode::SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
             else if( pItem )
             {
                 pNewUserColor = rBox.GetSaveUserColor();
                 if( pNewUserColor )
-                    pTNd->SwCntntNode::SetAttr( SvxColorItem( *pNewUserColor ));
+                    pTNd->SwCntntNode::SetAttr( SvxColorItem( *pNewUserColor, RES_CHRATR_COLOR ));
                 else
                     pTNd->SwCntntNode::ResetAttr( RES_CHRATR_COLOR );
             }
@@ -2166,7 +2166,7 @@ void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
 
             if( pCol )
                 // ggfs. die Farbe setzen
-                pTNd->SwCntntNode::SetAttr( SvxColorItem( *pCol ));
+                pTNd->SwCntntNode::SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
 
         }
         rBox.SetSaveNumFmtColor( pCol );
@@ -2255,7 +2255,7 @@ void ChgNumToText( SwTableBox& rBox, ULONG nFmt )
             RES_PARATR_ADJUST, FALSE, &pItem ) &&
                 SVX_ADJUST_RIGHT == ((SvxAdjustItem*)pItem)->GetAdjust() )
         {
-            pTNd->SwCntntNode::SetAttr( SvxAdjustItem( SVX_ADJUST_LEFT ) );
+            pTNd->SwCntntNode::SetAttr( SvxAdjustItem( SVX_ADJUST_LEFT, RES_PARATR_ADJUST ) );
         }
 
         // Farbe umsetzen oder "Benutzer Farbe" sichern
@@ -2274,12 +2274,12 @@ void ChgNumToText( SwTableBox& rBox, ULONG nFmt )
             // ggfs. die alte NumFmtColor loeschen
             if( pCol )
                 // ggfs. die Farbe setzen
-                pTNd->SwCntntNode::SetAttr( SvxColorItem( *pCol ));
+                pTNd->SwCntntNode::SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
             else if( pItem )
             {
                 pNewUserColor = rBox.GetSaveUserColor();
                 if( pNewUserColor )
-                    pTNd->SwCntntNode::SetAttr( SvxColorItem( *pNewUserColor ));
+                    pTNd->SwCntntNode::SetAttr( SvxColorItem( *pNewUserColor, RES_CHRATR_COLOR ));
                 else
                     pTNd->SwCntntNode::ResetAttr( RES_CHRATR_COLOR );
             }
@@ -2292,7 +2292,7 @@ void ChgNumToText( SwTableBox& rBox, ULONG nFmt )
 
             if( pCol )
                 // ggfs. die Farbe setzen
-                pTNd->SwCntntNode::SetAttr( SvxColorItem( *pCol ));
+                pTNd->SwCntntNode::SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
 
         }
         rBox.SetSaveNumFmtColor( pCol );
