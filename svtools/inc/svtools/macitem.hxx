@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:27:53 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:36:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,8 +166,6 @@ inline SvxMacroTableDtor::SvxMacroTableDtor( const USHORT nInitSz,
     : _SvxMacroTableDtor( nInitSz, nReSz )
 {}
 
-#ifdef ITEMID_MACRO
-
 /*
 [Beschreibung]
 Dieses Item beschreibt eine Makro-Tabelle.
@@ -178,7 +176,7 @@ class SVT_DLLPUBLIC SvxMacroItem: public SfxPoolItem
 public:
     TYPEINFO();
 
-    inline SvxMacroItem ( const USHORT nId = ITEMID_MACRO );
+    inline SvxMacroItem ( const USHORT nId /*= ITEMID_MACRO*/ );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
@@ -229,7 +227,5 @@ inline BOOL SvxMacroItem::DelMacro( USHORT nEvent )
     delete pMacro;
     return ( pMacro != 0 );
 }
-
-#endif //ITEMID_MACRO
 
 #endif
