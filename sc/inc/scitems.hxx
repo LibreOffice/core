@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scitems.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:54:24 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:42:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,62 +196,6 @@
 #define SID_SCATTR_PAGE_FORMULAS        ATTR_PAGE_FORMULAS
 #define SID_SCATTR_PAGE_NULLVALS        ATTR_PAGE_NULLVALS
 #define SID_SCATTR_PAGE_SCALETO         ATTR_PAGE_SCALETO
-
-//--------------------------------
-// IDs fuer Svx-Items:
-//--------------------------------
-#define ITEMID_LINE             SID_FRAME_LINESTYLE
-#define ITEMID_BOX              ATTR_BORDER
-#define ITEMID_BOXINFO          ATTR_BORDER_INNER
-#define ITEMID_SHADOW           ATTR_SHADOW
-#define ITEMID_BRUSH            ATTR_BACKGROUND
-#define ITEMID_FONT             ATTR_FONT
-#define ITEMID_FONTHEIGHT       ATTR_FONT_HEIGHT
-#define ITEMID_WEIGHT           ATTR_FONT_WEIGHT
-#define ITEMID_POSTURE          ATTR_FONT_POSTURE
-#define ITEMID_UNDERLINE        ATTR_FONT_UNDERLINE
-#define ITEMID_CROSSEDOUT       ATTR_FONT_CROSSEDOUT
-#define ITEMID_CONTOUR          ATTR_FONT_CONTOUR
-#define ITEMID_SHADOWED         ATTR_FONT_SHADOWED
-#define ITEMID_COLOR            ATTR_FONT_COLOR
-#define ITEMID_LANGUAGE         ATTR_FONT_LANGUAGE
-#define ITEMID_EMPHASISMARK     ATTR_FONT_EMPHASISMARK
-#define ITEMID_WORDLINEMODE     ATTR_FONT_WORDLINE
-#define ITEMID_CHARRELIEF       ATTR_FONT_RELIEF
-#define ITEMID_SCRIPTSPACE      ATTR_SCRIPTSPACE
-#define ITEMID_HANGINGPUNCTUATION   ATTR_HANGPUNCTUATION
-#define ITEMID_FORBIDDENRULE    ATTR_FORBIDDEN_RULES
-#define ITEMID_HORJUSTIFY       ATTR_HOR_JUSTIFY
-#define ITEMID_VERJUSTIFY       ATTR_VER_JUSTIFY
-/*  SvxOrientationItem not used anymore in Calc core. Define ITEMID_ORIENTATION
-    here anyway to be able to use this item in TableAutoFormat to keep the file
-    format unchanged. */
-#define ITEMID_ORIENTATION      0 /*ATTR_ORIENTATION*/
-#define ITEMID_FRAMEDIR         ATTR_WRITINGDIR
-#define ITEMID_LINEBREAK        ATTR_LINEBREAK
-#define ITEMID_MARGIN           ATTR_MARGIN
-#define ITEMID_ESCAPEMENT       0
-#define ITEMID_CASEMAP          0
-#define ITEMID_NUMBERINFO       0
-#define ITEMID_FONTLIST         0
-#define ITEMID_SEARCH           SCITEM_SEARCHDATA
-#define ITEMID_ADJUST           0
-#define ITEMID_LRSPACE          0
-#define ITEMID_ULSPACE          0
-#define ITEMID_PAPERBIN         0
-#define ITEMID_SIZE             0
-#define ITEMID_PAGE             0
-#define ITEMID_SETITEM          0
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
-#define ITEMID_GRADIENT_LIST    SID_GRADIENT_LIST
-#define ITEMID_HATCH_LIST       SID_HATCH_LIST
-#define ITEMID_BITMAP_LIST      SID_BITMAP_LIST
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
-#define ITEMID_DASH_LIST        SID_DASH_LIST
-#define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
-#define ITEMID_AUTHOR           0
-#define ITEMID_DATE             0
-#define ITEMID_TEXT             0
 
 #endif
 
