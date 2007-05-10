@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 15:47:50 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:19:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -990,13 +990,6 @@ Reference< XConnection > OGenericUnoController::connect(
 
     return xConnection;
 }
-// -----------------------------------------------------------------------------
-Reference<XConnection> OGenericUnoController::connect(const ::rtl::OUString& _rDataSourceName, sal_Bool _bStartListening)
-{
-    const ::rtl::OUString sNoContext;
-    return connect( _rDataSourceName, sNoContext, sNoContext, _bStartListening );
-}
-
 // -----------------------------------------------------------------------------
 Reference< XConnection > OGenericUnoController::connect(
     const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rContextInformation,
