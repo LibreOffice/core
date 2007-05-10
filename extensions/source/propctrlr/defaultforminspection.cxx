@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultforminspection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 11:57:30 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:47:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,13 +105,10 @@ namespace pcr
     //====================================================================
     //--------------------------------------------------------------------
     DefaultFormComponentInspectorModel::DefaultFormComponentInspectorModel( const Reference< XComponentContext >& _rxContext, bool _bUseFormFormComponentHandlers )
-        :m_bUseFormComponentHandlers( _bUseFormFormComponentHandlers )
+        :ImplInspectorModel( _rxContext )
+        ,m_bUseFormComponentHandlers( _bUseFormFormComponentHandlers )
         ,m_bConstructed( false )
-        ,m_bHasHelpSection( false )
-        ,m_nMinHelpTextLines( 3 )
-        ,m_nMaxHelpTextLines( 8 )
         ,m_pInfoService( new OPropertyInfoService )
-        ,m_aContext( _rxContext )
     {
     }
 
@@ -124,17 +121,6 @@ namespace pcr
     ::rtl::OUString SAL_CALL DefaultFormComponentInspectorModel::getImplementationName(  ) throw(RuntimeException)
     {
         return getImplementationName_static();
-    }
-
-    //------------------------------------------------------------------------
-    sal_Bool SAL_CALL DefaultFormComponentInspectorModel::supportsService( const ::rtl::OUString& ServiceName ) throw(RuntimeException)
-    {
-        Sequence< ::rtl::OUString > aSupported( getSupportedServiceNames() );
-        const ::rtl::OUString* pArray = aSupported.getConstArray();
-        for (sal_Int32 i = 0; i < aSupported.getLength(); ++i, ++pArray)
-            if (pArray->equals(ServiceName))
-                return sal_True;
-        return sal_False;
     }
 
     //------------------------------------------------------------------------
@@ -167,7 +153,6 @@ namespace pcr
     Sequence< Any > SAL_CALL DefaultFormComponentInspectorModel::getHandlerFactories() throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-
 
         // service names for all our handlers
         struct
@@ -214,24 +199,6 @@ namespace pcr
         aReturn.realloc( pReturn - aReturn.getArray() );
 
         return aReturn;
-    }
-
-    //--------------------------------------------------------------------
-    ::sal_Bool SAL_CALL DefaultFormComponentInspectorModel::getHasHelpSection() throw (RuntimeException)
-    {
-        return m_bHasHelpSection;
-    }
-
-    //--------------------------------------------------------------------
-    ::sal_Int32 SAL_CALL DefaultFormComponentInspectorModel::getMinHelpTextLines() throw (RuntimeException)
-    {
-        return m_nMinHelpTextLines;
-    }
-
-    //--------------------------------------------------------------------
-    ::sal_Int32 SAL_CALL DefaultFormComponentInspectorModel::getMaxHelpTextLines() throw (RuntimeException)
-    {
-        return m_nMaxHelpTextLines;
     }
 
     //--------------------------------------------------------------------
@@ -316,9 +283,7 @@ namespace pcr
         if ( ( _nMinHelpTextLines <= 0 ) || ( _nMaxHelpTextLines <= 0 ) || ( _nMinHelpTextLines > _nMaxHelpTextLines ) )
             throw IllegalArgumentException( ::rtl::OUString(), *this, 0 );
 
-        m_bHasHelpSection = true;
-        m_nMinHelpTextLines = _nMinHelpTextLines;
-        m_nMaxHelpTextLines = _nMaxHelpTextLines;
+        enableHelpSectionProperties( _nMinHelpTextLines, _nMaxHelpTextLines );
         m_bConstructed = true;
     }
 
