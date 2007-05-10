@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uiregionsw.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:06:47 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:16:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@
 #include <sfx2/filedlghelper.hxx>
 #endif
 #ifndef _SVX_SIZEITEM_HXX //autogen
-#define ITEMID_SIZE 0
+
 #include <svx/sizeitem.hxx>
 #endif
 #ifndef _SVX_HTMLCFG_HXX
@@ -199,6 +199,9 @@ public:
 
 SectRepr::SectRepr( USHORT nPos, SwSection& rSect ) :
     aSection( CONTENT_SECTION, aEmptyStr ),
+    aBrush( RES_BACKGROUND ),
+    aFrmDirItem( FRMDIR_ENVIRONMENT, RES_FRAMEDIR ),
+    aLRSpaceItem( RES_LR_SPACE ),
     bSelected(FALSE)
 {
     aSection = rSect;
@@ -2399,7 +2402,7 @@ BOOL SwSectionIndentTabPage::FillItemSet( SfxItemSet& rSet)
             aAfterMF.IsValueModified())
     {
         SvxLRSpaceItem aLRSpace(aBeforeMF.Denormalize(aBeforeMF.GetValue(FUNIT_TWIP)) ,
-                aAfterMF.Denormalize(aAfterMF.GetValue(FUNIT_TWIP)));
+                aAfterMF.Denormalize(aAfterMF.GetValue(FUNIT_TWIP)), 0, 0, RES_LR_SPACE);
         rSet.Put(aLRSpace);
     }
     return TRUE;
