@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:31:47 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:36:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
 #include <memory>
 
 #include "app.hrc"
-#define ITEMID_HYPERLINK    SID_HYPERLINK_SETLINK
 #ifndef _SVX_DLG_HYPERLINK_HXX //autogen
 #include <svx/hyprlink.hxx>
 #endif
@@ -64,7 +63,6 @@
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
 #endif
-#define ITEMID_FIELD    EE_FEATURE_FIELD
 #ifndef _SVX_FLDITEM_HXX //autogen
 #include <svx/flditem.hxx>
 #endif
@@ -133,9 +131,6 @@
 #endif
 #ifndef _CLIPLISTENER_HXX
 #include <svtools/cliplistener.hxx>
-#endif
-#ifndef _EEITEMID_HXX
-#include <svx/eeitemid.hxx>
 #endif
 #ifndef _SFX_SRCHITEM_HXX
 #include <sfx2/srchitem.hxx>
