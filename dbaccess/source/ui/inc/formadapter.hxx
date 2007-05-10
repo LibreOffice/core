@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formadapter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:39:01 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:32:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -515,11 +515,6 @@ namespace dbaui
         virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
 
     protected:
-        // cursor handling
-        void onError(::com::sun::star::sdbc::SQLException& rException);
-        sal_Bool checkMainForm();
-
-
         // container handling
         void implInsert(const ::com::sun::star::uno::Any& aElement, sal_Int32 nIndex, const ::rtl::OUString* pNewElName = NULL) throw(::com::sun::star::lang::IllegalArgumentException);
         sal_Int32 implGetPos(const ::rtl::OUString& rName);
