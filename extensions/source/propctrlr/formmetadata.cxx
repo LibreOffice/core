@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:07:55 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:47:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -430,7 +430,6 @@ namespace pcr
         OSL_ENSURE( ( ( getPropertyUIFlags( _nId ) & PROP_FLAG_ENUM ) != 0 ) || ( _nId == PROPERTY_ID_TARGET_FRAME ),
             "OPropertyInfoService::getPropertyEnumRepresentations: this is no enum property!" );
 
-        sal_Int16 nCommaSeparatedListResId = 0;
         sal_Int16 nStringItemsResId = 0;
         switch ( _nId )
         {
@@ -438,59 +437,59 @@ namespace pcr
                 nStringItemsResId = RID_RSC_ENUM_IMAGE_POSITION;
                 break;
             case PROPERTY_ID_BORDER:
-                nCommaSeparatedListResId = RID_STR_BORDER_TYPE;
+                nStringItemsResId = RID_RSC_ENUM_BORDER_TYPE;
                 break;
             case PROPERTY_ID_ICONSIZE:
-                nCommaSeparatedListResId = RID_STR_ICONSIZE_TYPE;
+                nStringItemsResId = RID_RSC_ENUM_ICONSIZE_TYPE;
                 break;
             case PROPERTY_ID_COMMANDTYPE:
                 nStringItemsResId = RID_RSC_ENUM_COMMAND_TYPE;
                 break;
             case PROPERTY_ID_LISTSOURCETYPE:
-                nCommaSeparatedListResId = RID_STR_LISTSOURCE_TYPE;
+                nStringItemsResId = RID_RSC_ENUM_LISTSOURCE_TYPE;
                 break;
             case PROPERTY_ID_ALIGN:
-                nCommaSeparatedListResId = RID_STR_ALIGNMENT;
+                nStringItemsResId = RID_RSC_ENUM_ALIGNMENT;
                 break;
             case PROPERTY_ID_VERTICAL_ALIGN:
                 nStringItemsResId = RID_RSC_ENUM_VERTICAL_ALIGN;
                 break;
             case PROPERTY_ID_BUTTONTYPE:
-                nCommaSeparatedListResId = RID_STR_ENUM_BUTTONTYPE;
+                nStringItemsResId = RID_RSC_ENUM_BUTTONTYPE;
                 break;
             case PROPERTY_ID_PUSHBUTTONTYPE:
-                nCommaSeparatedListResId = RID_STR_ENUM_PUSHBUTTONTYPE;
+                nStringItemsResId = RID_RSC_ENUM_PUSHBUTTONTYPE;
                 break;
             case PROPERTY_ID_SUBMIT_METHOD:
-                nCommaSeparatedListResId = RID_STR_ENUM_SUBMIT_METHOD;
+                nStringItemsResId = RID_RSC_ENUM_SUBMIT_METHOD;
                 break;
             case PROPERTY_ID_SUBMIT_ENCODING:
-                nCommaSeparatedListResId = RID_STR_ENUM_SUBMIT_ENCODING;
+                nStringItemsResId = RID_RSC_ENUM_SUBMIT_ENCODING;
                 break;
             case PROPERTY_ID_DATEFORMAT:
-                nCommaSeparatedListResId = RID_STR_DATEFORMAT_LIST;
+                nStringItemsResId = RID_RSC_ENUM_DATEFORMAT_LIST;
                 break;
             case PROPERTY_ID_TIMEFORMAT:
-                nCommaSeparatedListResId = RID_STR_TIMEFORMAT_LIST;
+                nStringItemsResId = RID_RSC_ENUM_TIMEFORMAT_LIST;
                 break;
             case PROPERTY_ID_DEFAULTCHECKED:
             case PROPERTY_ID_STATE:
-                nCommaSeparatedListResId = RID_STR_ENUM_CHECKED;
+                nStringItemsResId = RID_RSC_ENUM_CHECKED;
                 break;
             case PROPERTY_ID_CYCLE:
-                nCommaSeparatedListResId = RID_STR_ENUM_CYCLE;
+                nStringItemsResId = RID_RSC_ENUM_CYCLE;
                 break;
             case PROPERTY_ID_NAVIGATION:
-                nCommaSeparatedListResId = RID_STR_ENUM_NAVIGATION;
+                nStringItemsResId = RID_RSC_ENUM_NAVIGATION;
                 break;
             case PROPERTY_ID_TARGET_FRAME:
-                nCommaSeparatedListResId = RID_STR_ENUM_SUBMIT_TARGET;
+                nStringItemsResId = RID_RSC_ENUM_SUBMIT_TARGET;
                 break;
             case PROPERTY_ID_ORIENTATION:
-                nCommaSeparatedListResId = RID_STR_ENUM_ORIENTATION;
+                nStringItemsResId = RID_RSC_ENUM_ORIENTATION;
                 break;
             case PROPERTY_ID_CELL_EXCHANGE_TYPE:
-                nCommaSeparatedListResId = RID_STR_ENUM_CELL_EXCHANGE_TYPE;
+                nStringItemsResId = RID_RSC_ENUM_CELL_EXCHANGE_TYPE;
                 break;
             case PROPERTY_ID_SHOW_SCROLLBARS:
                 nStringItemsResId = RID_RSC_ENUM_SCROLLBARS;
@@ -513,15 +512,7 @@ namespace pcr
 
         ::std::vector< ::rtl::OUString > aReturn;
 
-        if ( nCommaSeparatedListResId )
-        {
-            String sSeparatedList = String( PcrRes( nCommaSeparatedListResId ) );
-            xub_StrLen nTokens = sSeparatedList.GetTokenCount(';');
-            aReturn.reserve( nTokens );
-            for ( xub_StrLen i = 0; i < nTokens; ++i )
-                aReturn.push_back( sSeparatedList.GetToken( i ) );
-        }
-        else if ( nStringItemsResId )
+        if ( nStringItemsResId )
         {
             PcrRes aResId( nStringItemsResId );
             ::svt::OLocalResourceAccess aEnumStrings( aResId, RSC_RESOURCE );
