@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:54:05 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:39:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,6 @@ namespace dbaui
         sal_Bool                    Save();
         OQueryDesignView*           getDesignView();
         OQueryDesignView*           getDesignView() const;
-        void                        SetColWidth();
         sal_uInt16                  FieldsCount();
 
         void                        SetColWidth(sal_uInt16 nColId, long lNewWidth);
