@@ -4,9 +4,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-02 17:29:38 $
+#   last change: $Author: kz $ $Date: 2007-05-10 15:03:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -432,7 +432,10 @@ sub get_downloadname_language
 
 sub get_downloadname_start
 {
+    my ($allvariables) = @_;
+
     my $start = "OOo";
+    if ( $allvariables->{'PRODUCTNAME'} eq "BrOffice.org" ) { $start = "BrOo"; }
 
     return $start;
 }
@@ -524,7 +527,7 @@ sub set_download_filename
 {
     my ($languagestringref, $allvariables) = @_;
 
-    my $start = get_downloadname_start();
+    my $start = get_downloadname_start($allvariables);
     # my $versionstring = get_current_version();
     my $versionstring = "";
     my $date = installer::logger::set_installation_date();
