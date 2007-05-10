@@ -4,9 +4,9 @@
  *
  *  $RCSfile: postdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:41:40 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:40:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,9 +79,9 @@
 #include "dialogs.hrc"
 #include "postdlg.hrc"
 
-#define ITEMID_AUTHOR   SID_ATTR_POSTIT_AUTHOR
-#define ITEMID_DATE     SID_ATTR_POSTIT_DATE
-#define ITEMID_TEXT     SID_ATTR_POSTIT_TEXT
+
+
+
 
 #include "postattr.hxx"
 #include "postdlg.hxx"
