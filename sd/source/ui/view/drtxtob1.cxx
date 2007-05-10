@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:11:16 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:33:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,13 +38,9 @@
 
 #include "TextObjectBar.hxx"
 
-#define ITEMID_FRAMEDIR EE_PARA_WRITINGDIR
 
 #ifndef _OUTLINER_HXX
 #include <svx/outliner.hxx>
-#endif
-#ifndef _EEITEMID_HXX
-#include <svx/eeitemid.hxx>
 #endif
 #ifndef _ULSPITEM_HXX
 #include <svx/ulspitem.hxx>
@@ -228,7 +224,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     SfxItemSet aAttr( pOLV->GetOutliner()->GetStyleSheet( nPara )->GetItemSet() );
                     SfxItemSet aTmpSet( pOLV->GetOutliner()->GetParaAttribs( nPara ) );
                     aAttr.Put( aTmpSet, FALSE ); // FALSE= InvalidItems nicht als Default, sondern als "Loecher" betrachten
-                    const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) aAttr.Get( ITEMID_ULSPACE );
+                    const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) aAttr.Get( EE_PARA_ULSPACE );
                     SvxULSpaceItem* pNewItem = (SvxULSpaceItem*) rItem.Clone();
 
                     long nUpper = pNewItem->GetUpper();
@@ -265,10 +261,10 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 // Wird enabled, obwohl es nicht richtig funktioniert (s.o.)
                 SfxItemSet aEditAttr( mpView->GetDoc()->GetPool() );
                 mpView->GetAttributes( aEditAttr );
-                if( aEditAttr.GetItemState( ITEMID_ULSPACE ) >= SFX_ITEM_AVAILABLE )
+                if( aEditAttr.GetItemState( EE_PARA_ULSPACE ) >= SFX_ITEM_AVAILABLE )
                 {
                     SfxItemSet aNewAttrs(*(aEditAttr.GetPool()), aEditAttr.GetRanges());
-                    const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) aEditAttr.Get( ITEMID_ULSPACE );
+                    const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) aEditAttr.Get( EE_PARA_ULSPACE );
                     SvxULSpaceItem* pNewItem = (SvxULSpaceItem*) rItem.Clone();
                     long nUpper = pNewItem->GetUpper();
 
@@ -363,7 +359,10 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         {
             mpView->SdrEndTextEdit();
             SfxItemSet aAttr( mpView->GetDoc()->GetPool(), SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION, 0 );
-            aAttr.Put( SvxWritingModeItem( nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ? com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL ) );
+            aAttr.Put( SvxWritingModeItem(
+                nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
+                    com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL,
+                    EE_PARA_WRITINGDIR ) );
             rReq.Done( aAttr );
             mpView->SetAttributes( aAttr );
             Invalidate();
@@ -387,94 +386,97 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     case SID_ATTR_CHAR_WEIGHT:
                     {
                         FontWeight eFW = ( (const SvxWeightItem&) aEditAttr.
-                                        Get( ITEMID_WEIGHT ) ).GetWeight();
+                                        Get( EE_CHAR_WEIGHT ) ).GetWeight();
                         aNewAttr.Put( SvxWeightItem( eFW == WEIGHT_NORMAL ?
-                                            WEIGHT_BOLD : WEIGHT_NORMAL ) );
+                                            WEIGHT_BOLD : WEIGHT_NORMAL,
+                                            EE_CHAR_WEIGHT ) );
                     }
                     break;
                     case SID_ATTR_CHAR_POSTURE:
                     {
                         FontItalic eFI = ( (const SvxPostureItem&) aEditAttr.
-                                        Get( ITEMID_POSTURE ) ).GetPosture();
+                                        Get( EE_CHAR_ITALIC ) ).GetPosture();
                         aNewAttr.Put( SvxPostureItem( eFI == ITALIC_NORMAL ?
-                                            ITALIC_NONE : ITALIC_NORMAL ) );
+                                            ITALIC_NONE : ITALIC_NORMAL,
+                                            EE_CHAR_ITALIC ) );
                     }
                     break;
                     case SID_ATTR_CHAR_UNDERLINE:
                     {
                         FontUnderline eFU = ( (const SvxUnderlineItem&) aEditAttr.
-                                        Get( ITEMID_UNDERLINE ) ).GetUnderline();
+                                        Get( EE_CHAR_UNDERLINE ) ).GetUnderline();
                         aNewAttr.Put( SvxUnderlineItem( eFU == UNDERLINE_SINGLE ?
-                                            UNDERLINE_NONE : UNDERLINE_SINGLE ) );
+                                            UNDERLINE_NONE : UNDERLINE_SINGLE,
+                                            EE_CHAR_UNDERLINE ) );
                     }
                     break;
                     case SID_ATTR_CHAR_CONTOUR:
                     {
                         aNewAttr.Put( SvxContourItem( !( (const SvxContourItem&) aEditAttr.
-                                        Get( ITEMID_CONTOUR ) ).GetValue() ) );
+                                        Get( EE_CHAR_OUTLINE ) ).GetValue(), EE_CHAR_OUTLINE ) );
                     }
                     break;
                     case SID_ATTR_CHAR_SHADOWED:
                     {
                         aNewAttr.Put( SvxShadowedItem( !( (const SvxShadowedItem&) aEditAttr.
-                                        Get( ITEMID_SHADOWED ) ).GetValue() ) );
+                                        Get( EE_CHAR_SHADOW ) ).GetValue(), EE_CHAR_SHADOW ) );
                     }
                     break;
                     case SID_ATTR_CHAR_STRIKEOUT:
                     {
                         FontStrikeout eFSO = ( ( (const SvxCrossedOutItem&) aEditAttr.
-                                        Get( ITEMID_CROSSEDOUT ) ).GetStrikeout() );
+                                        Get( EE_CHAR_STRIKEOUT ) ).GetStrikeout() );
                         aNewAttr.Put( SvxCrossedOutItem( eFSO == STRIKEOUT_SINGLE ?
-                                            STRIKEOUT_NONE : STRIKEOUT_SINGLE ) );
+                                            STRIKEOUT_NONE : STRIKEOUT_SINGLE, EE_CHAR_STRIKEOUT ) );
                     }
                     break;
 
                     case SID_ATTR_PARA_ADJUST_LEFT:
                     {
-                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_LEFT ) );
+                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
                     }
                     break;
                     case SID_ATTR_PARA_ADJUST_CENTER:
                     {
-                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_CENTER ) );
+                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
                     }
                     break;
                     case SID_ATTR_PARA_ADJUST_RIGHT:
                     {
-                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT ) );
+                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
                     }
                     break;
                     case SID_ATTR_PARA_ADJUST_BLOCK:
                     {
-                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_BLOCK ) );
+                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_BLOCK, EE_PARA_JUST ) );
                     }
                     break;
                     case SID_ATTR_PARA_LINESPACE_10:
                     {
-                        SvxLineSpacingItem aItem( SVX_LINESPACE_ONE_LINE );
+                        SvxLineSpacingItem aItem( SVX_LINESPACE_ONE_LINE, EE_PARA_SBL );
                         aItem.SetPropLineSpace( 100 );
                         aNewAttr.Put( aItem );
                     }
                     break;
                     case SID_ATTR_PARA_LINESPACE_15:
                     {
-                        SvxLineSpacingItem aItem( SVX_LINESPACE_ONE_POINT_FIVE_LINES );
+                        SvxLineSpacingItem aItem( SVX_LINESPACE_ONE_POINT_FIVE_LINES, EE_PARA_SBL );
                         aItem.SetPropLineSpace( 150 );
                         aNewAttr.Put( aItem );
                     }
                     break;
                     case SID_ATTR_PARA_LINESPACE_20:
                     {
-                        SvxLineSpacingItem aItem( SVX_LINESPACE_TWO_LINES );
+                        SvxLineSpacingItem aItem( SVX_LINESPACE_TWO_LINES, EE_PARA_SBL );
                         aItem.SetPropLineSpace( 200 );
                         aNewAttr.Put( aItem );
                     }
                     break;
                     case SID_SET_SUPER_SCRIPT:
                     {
-                        SvxEscapementItem aItem;
+                        SvxEscapementItem aItem( EE_CHAR_ESCAPEMENT );
                         SvxEscapement eEsc = (SvxEscapement ) ( (const SvxEscapementItem&)
-                                        aEditAttr.Get( ITEMID_ESCAPEMENT ) ).GetEnumValue();
+                                        aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
                         if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
                             aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
@@ -485,9 +487,9 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     break;
                     case SID_SET_SUB_SCRIPT:
                     {
-                        SvxEscapementItem aItem;
+                        SvxEscapementItem aItem( EE_CHAR_ESCAPEMENT );
                         SvxEscapement eEsc = (SvxEscapement ) ( (const SvxEscapementItem&)
-                                        aEditAttr.Get( ITEMID_ESCAPEMENT ) ).GetEnumValue();
+                                        aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
                         if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
                             aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
@@ -502,7 +504,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     {
                         if( pArgs )
                         {
-                            if( SFX_ITEM_SET == pArgs->GetItemState( ITEMID_FONT, TRUE, &pPoolItem ) )
+                            if( SFX_ITEM_SET == pArgs->GetItemState( EE_CHAR_FONTINFO, TRUE, &pPoolItem ) )
                                 aNewAttr.Put( *pPoolItem );
                         }
                         else
@@ -514,7 +516,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     {
                         if( pArgs )
                         {
-                            if( SFX_ITEM_SET == pArgs->GetItemState( ITEMID_FONTHEIGHT, TRUE, &pPoolItem ) )
+                            if( SFX_ITEM_SET == pArgs->GetItemState( EE_CHAR_FONTHEIGHT, TRUE, &pPoolItem ) )
                                 aNewAttr.Put( *pPoolItem );
                         }
                         else
@@ -524,7 +526,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     break;
                     case SID_ATTR_CHAR_COLOR:
                     {
-                        if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( ITEMID_COLOR, TRUE, &pPoolItem ) )
+                        if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( EE_CHAR_COLOR, TRUE, &pPoolItem ) )
                             aNewAttr.Put( *pPoolItem );
                     }
                     break;
@@ -564,20 +566,20 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 sal_Bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
 
                 USHORT nAdjust = SVX_ADJUST_LEFT;
-                if( SFX_ITEM_ON == aEditAttr.GetItemState(ITEMID_ADJUST, TRUE, &pPoolItem ) )
+                if( SFX_ITEM_ON == aEditAttr.GetItemState(EE_PARA_JUST, TRUE, &pPoolItem ) )
                     nAdjust = ( (SvxAdjustItem*)pPoolItem)->GetEnumValue();
 
                 if( bLeftToRight )
                 {
                     aNewAttr.Put( SvxFrameDirectionItem( FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
                     if( nAdjust == SVX_ADJUST_RIGHT )
-                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_LEFT ) );
+                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
                 }
                 else
                 {
                     aNewAttr.Put( SvxFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR ) );
                     if( nAdjust == SVX_ADJUST_LEFT )
-                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT ) );
+                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
                 }
 
                 rReq.Done( aNewAttr );
