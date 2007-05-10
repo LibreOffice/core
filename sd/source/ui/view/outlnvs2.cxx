@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:31:33 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:36:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 #include "OutlineViewShell.hxx"
 
 #include "app.hrc"
-#define ITEMID_HYPERLINK    SID_HYPERLINK_SETLINK
 #ifndef _SVX_HLNKITEM_HXX
 #include <svx/hlnkitem.hxx>
 #endif
@@ -67,7 +66,6 @@
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
 #endif
-#define ITEMID_FIELD    EE_FEATURE_FIELD
 #ifndef _SVX_FLDITEM_HXX
 #include <svx/flditem.hxx>
 #endif
@@ -421,11 +419,11 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
             if (pReqArgs)
             {
                 SvxHyperlinkItem* pHLItem =
-                (SvxHyperlinkItem*) &pReqArgs->Get(ITEMID_HYPERLINK);
+                (SvxHyperlinkItem*) &pReqArgs->Get(SID_HYPERLINK_SETLINK);
 
                 SvxFieldItem aURLItem(SvxURLField(pHLItem->GetURL(),
                                                   pHLItem->GetName(),
-                                                  SVXURLFORMAT_REPR));
+                                                  SVXURLFORMAT_REPR), EE_FEATURE_FIELD);
                 ESelection aSel( pOutlinerView->GetSelection() );
                 pOutlinerView->InsertField(aURLItem);
                 if ( aSel.nStartPos <= aSel.nEndPos )
@@ -562,20 +560,20 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
             {
                 case SID_INSERT_FLD_DATE_FIX:
                     pFieldItem = new SvxFieldItem(
-                        SvxDateField( Date(), SVXDATETYPE_FIX ) );
+                        SvxDateField( Date(), SVXDATETYPE_FIX ), EE_FEATURE_FIELD );
                 break;
 
                 case SID_INSERT_FLD_DATE_VAR:
-                    pFieldItem = new SvxFieldItem( SvxDateField() );
+                    pFieldItem = new SvxFieldItem( SvxDateField(), EE_FEATURE_FIELD );
                 break;
 
                 case SID_INSERT_FLD_TIME_FIX:
                     pFieldItem = new SvxFieldItem(
-                        SvxExtTimeField( Time(), SVXTIMETYPE_FIX ) );
+                        SvxExtTimeField( Time(), SVXTIMETYPE_FIX ), EE_FEATURE_FIELD );
                 break;
 
                 case SID_INSERT_FLD_TIME_VAR:
-                    pFieldItem = new SvxFieldItem( SvxExtTimeField() );
+                    pFieldItem = new SvxFieldItem( SvxExtTimeField(), EE_FEATURE_FIELD );
                 break;
 
                 case SID_INSERT_FLD_AUTHOR:
@@ -583,12 +581,13 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                     SvtUserOptions aUserOptions;
                     pFieldItem = new SvxFieldItem(
                             SvxAuthorField(
-                                aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID() ) );
+                                aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID() )
+                                , EE_FEATURE_FIELD );
                 }
                 break;
 
                 case SID_INSERT_FLD_PAGE:
-                    pFieldItem = new SvxFieldItem( SvxPageField() );
+                    pFieldItem = new SvxFieldItem( SvxPageField(), EE_FEATURE_FIELD );
                 break;
 
                 case SID_INSERT_FLD_FILE:
@@ -598,7 +597,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                         aName = GetDocSh()->GetMedium()->GetName();
                     //else
                     //  aName = GetDocSh()->GetName();
-                    pFieldItem = new SvxFieldItem( SvxExtFileField( aName ) );
+                    pFieldItem = new SvxFieldItem( SvxExtFileField( aName ), EE_FEATURE_FIELD );
                 }
                 break;
             }
@@ -647,7 +646,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                     SvxFieldData* pField = pDlg->GetField();
                     if( pField )
                     {
-                        SvxFieldItem aFieldItem( *pField );
+                        SvxFieldItem aFieldItem( *pField, EE_FEATURE_FIELD );
                         //pOLV->DeleteSelected(); <-- fehlt leider !
                         // Feld selektieren, so dass es beim Insert geloescht wird
                         ESelection aSel = pOutlinerView->GetSelection();
