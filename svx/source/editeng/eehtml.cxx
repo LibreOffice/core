@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eehtml.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:37:40 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:46:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@
 
 #include <eehtml.hxx>
 #include <impedit.hxx>
-#include <eeitemid.hxx>
 #include <adjitem.hxx>
 #include <flditem.hxx>
 #include <tools/urlobj.hxx>
