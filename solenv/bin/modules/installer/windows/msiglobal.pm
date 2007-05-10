@@ -4,9 +4,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: ihi $ $Date: 2007-03-26 12:45:44 $
+#   last change: $Author: gm $ $Date: 2007-05-10 11:00:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1537,11 +1537,18 @@ sub set_global_code_variables
         $onelanguage = ${$languagesref}[0];
     }
 
-    # ProductCode has to be specified in each language
-
-    # my $searchstring = "PRODUCTCODE";
-    # my $codeblock = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $codefile);
-    # $installer::globals::productcode = installer::windows::idtglobal::get_code_from_code_block($codeblock, $onelanguage);
+    # ProductCode must not change, if Windows patches shall be applied
+    if ( $installer::globals::prepare_winpatch )
+    {
+        # ProductCode has to be specified in each language
+        my $searchstring = "PRODUCTCODE";
+        my $codeblock = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $codefile);
+        $installer::globals::productcode = installer::windows::idtglobal::get_code_from_code_block($codeblock, $onelanguage);
+    } else {
+        my $guidref = get_guid_list(1, 1);  # only one GUID shall be generated
+        ${$guidref}[0] =~ s/\s*$//;     # removing ending spaces
+        $installer::globals::productcode = "\{" . ${$guidref}[0] . "\}";
+    }
 
     if ( $installer::globals::patch ) # patch upgrade codes are defined in soffice.lst
     {
@@ -1560,17 +1567,9 @@ sub set_global_code_variables
     # if (( $installer::globals::productcode eq "" ) && ( ! $isopensource )) { installer::exiter::exit_program("ERROR: ProductCode for language $onelanguage not defined in $installer::globals::codefilename !", "set_global_code_variables"); }
     if ( $installer::globals::upgradecode eq "" ) { installer::exiter::exit_program("ERROR: UpgradeCode not defined in $installer::globals::codefilename !", "set_global_code_variables"); }
 
-    # $infoline = "Setting ProductCode to: $installer::globals::productcode \n";
-    # push( @installer::globals::logfileinfo, $infoline);
-    $infoline = "Setting UpgradeCode to: $installer::globals::upgradecode \n";
-    push( @installer::globals::logfileinfo, $infoline);
-
-    my $guidref = get_guid_list(1, 1);  # only one GUID shall be generated
-
-    ${$guidref}[0] =~ s/\s*$//;     # removing ending spaces
-
-    $installer::globals::productcode = "\{" . ${$guidref}[0] . "\}";
     $infoline = "Setting ProductCode to: $installer::globals::productcode \n";
+    push( @installer::globals::logfileinfo, $infoline);
+    $infoline = "Setting UpgradeCode to: $installer::globals::upgradecode \n";
     push( @installer::globals::logfileinfo, $infoline);
 
     # Adding both variables into the variables array
@@ -1641,6 +1640,149 @@ sub put_msiproductversion_into_bootstrapfile
             last;
         }
     }
+}
+
+##########################################################################
+# Reading saved mappings in Files.idt and Director.idt.
+# This is required, if installation sets shall be created,
+# that can be used for creation of msp files.
+##########################################################################
+
+sub read_saved_mappings
+{
+    installer::logger::include_header_into_logfile("Reading saved mappings from older installation sets:");
+
+    installer::logger::include_timestamp_into_logfile("Performance Info: Reading saved mappings start");
+
+    if ( $installer::globals::previous_idt_dir )
+    {
+        my @errorlines = ();
+        my $errorstring = "";
+        my $error_occured = 0;
+        my $file_error_occured = 0;
+        my $dir_error = 0;
+
+        my $idtdir = $installer::globals::previous_idt_dir;
+        $idtdir =~ s/\Q$installer::globals::separator\E\s*$//;
+
+        # Reading File.idt
+
+        my $idtfile = $idtdir . $installer::globals::separator . "File.idt";
+        push( @installer::globals::globallogfileinfo, "\nAnalyzing file: $idtfile\n" );
+        if ( ! -f $idtfile ) { push( @installer::globals::globallogfileinfo, "Warning: File $idtfile does not exist!\n" ); }
+
+        my $n = 0;
+        open (F, "<$idtfile") || installer::exiter::exit_program("ERROR: Cannot open file $idtfile for reading", "read_saved_mappings");
+        <F>; <F>; <F>;
+        while (<F>)
+        {
+            m/^([^\t]+)\t([^\t]+)\t(([^~]+~\d.*)\|)?([^\t]*)/;
+            next if ("$1" eq "$5") && (!defined($3));
+            my $lc1 = lc($1);
+
+            if ( exists($installer::globals::savedmapping{"$2/$5"}))
+            {
+                if ( ! $file_error_occured )
+                {
+                    $errorstring = "\nErrors in $idtfile: \n";
+                    push(@errorlines, $errorstring);
+                }
+                $errorstring = "Duplicate savedmapping{" . "$2/$5}\n";
+                push(@errorlines, $errorstring);
+                $error_occured = 1;
+                $file_error_occured = 1;
+            }
+
+            if ( exists($installer::globals::savedrevmapping{$lc1}))
+            {
+                if ( ! $file_error_occured )
+                {
+                    $errorstring = "\nErrors in $idtfile: \n";
+                    push(@errorlines, $errorstring);
+                }
+                $errorstring = "Duplicate savedrevmapping{" . "$lc1}\n";
+                push(@errorlines, $errorstring);
+                $error_occured = 1;
+                $file_error_occured = 1;
+            }
+
+            my $shortname = $4 || '';
+
+            if (( $shortname ne '' ) && ( exists($installer::globals::savedrev83mapping{$shortname}) ))
+            {
+                if ( ! $file_error_occured )
+                {
+                    $errorstring = "\nErrors in $idtfile: \n";
+                    push(@errorlines, $errorstring);
+                }
+                $errorstring = "Duplicate savedrev83mapping{" . "$shortname}\n";
+                push(@errorlines, $errorstring);
+                $error_occured = 1;
+                $file_error_occured = 1;
+            }
+
+            $installer::globals::savedmapping{"$2/$5"} = "$1;$shortname";
+            $installer::globals::savedrevmapping{lc($1)} = "$2/$5";
+            $installer::globals::savedrev83mapping{$shortname} = "$2/$5" if $shortname ne '';
+            $n++;
+        }
+
+        close (F);
+
+        push( @installer::globals::globallogfileinfo, "Read $n old file table key or 8.3 name mappings from $idtfile\n" );
+
+        # Reading Director.idt
+
+        $idtfile = $idtdir . $installer::globals::separator . "Director.idt";
+        push( @installer::globals::globallogfileinfo, "\nAnalyzing file $idtfile\n" );
+        if ( ! -f $idtfile ) { push( @installer::globals::globallogfileinfo, "Warning: File $idtfile does not exist!\n" ); }
+
+        $n = 0;
+        open (F, "<$idtfile") || installer::exiter::exit_program("ERROR: Cannot open file $idtfile for reading", "read_saved_mappings");
+        <F>; <F>; <F>;
+        while (<F>)
+        {
+            m/^([^\t]+)\t([^\t]+)\t(([^~]+~\d.*)\|)?([^\t]*)/;
+            next if (!defined($3));
+            my $lc1 = lc($1);
+
+            if ( exists($installer::globals::saved83dirmapping{$1}) )
+            {
+                if ( ! $dir_error_occured )
+                {
+                    $errorstring = "\nErrors in $idtfile: \n";
+                    push(@errorlines, $errorstring);
+                }
+                $errorstring = "Duplicate saved83dirmapping{" . "$1}\n";
+                push(@errorlines, $errorstring);
+                $error_occured = 1;
+                $dir_error_occured = 1;
+            }
+
+            $installer::globals::saved83dirmapping{$1} = $4;
+            $n++;
+        }
+        close (F);
+
+        push( @installer::globals::globallogfileinfo, "Read $n old directory 8.3 name mappings from $idtfile\n" );
+
+        # Analyzing errors
+
+        if ( $error_occured )
+        {
+            for ( my $i = 0; $i <= $#errorlines; $i++ )
+            {
+                print "$errorlines[$i]";
+                push( @installer::globals::globallogfileinfo, "$errorlines[$i]");
+            }
+            installer::exiter::exit_program("ERROR: Duplicate entries in saved mappings!", "read_saved_mappings");
+        }
+    } else {
+        # push( @installer::globals::globallogfileinfo, "WARNING: Windows patch shall be prepared, but PREVIOUS_IDT_DIR is not set!\n" );
+        installer::exiter::exit_program("ERROR: Windows patch shall be prepared, but environment variable PREVIOUS_IDT_DIR is not set!", "read_saved_mappings");
+    }
+
+    installer::logger::include_timestamp_into_logfile("Performance Info: Reading saved mappings end");
 }
 
 1;
