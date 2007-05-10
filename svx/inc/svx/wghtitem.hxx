@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wghtitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:47:57 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:33:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,8 @@ class SVX_DLLPUBLIC SvxWeightItem : public SfxEnumItem
 public:
     TYPEINFO();
 
-    SvxWeightItem(  const FontWeight eWght = WEIGHT_NORMAL,
-                    const USHORT nId = ITEMID_WEIGHT );
+    SvxWeightItem(  const FontWeight eWght /*= WEIGHT_NORMAL*/,
+                    const USHORT nId  );
 
     // "pure virtual Methoden" vom SfxPoolItem + SfxEnumItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

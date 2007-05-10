@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writingmodeitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:48:17 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:34:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,8 @@ class SVX_DLLPUBLIC SvxWritingModeItem : public SfxUInt16Item
 public:
     TYPEINFO();
 
-    SvxWritingModeItem( ::com::sun::star::text::WritingMode eValue = com::sun::star::text::WritingMode_LR_TB, USHORT nWhich = SDRATTR_TEXTDIRECTION );
+    SvxWritingModeItem( ::com::sun::star::text::WritingMode eValue /*= com::sun::star::text::WritingMode_LR_TB*/,
+                USHORT nWhich /*= SDRATTR_TEXTDIRECTION*/ );
     virtual ~SvxWritingModeItem();
 
     SvxWritingModeItem& operator=( const SvxWritingModeItem& rItem );

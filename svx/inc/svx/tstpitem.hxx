@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tstpitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:42:42 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:32:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,11 +143,11 @@ class SVX_DLLPUBLIC SvxTabStopItem : public SfxPoolItem, public SvxTabStopArr
 public:
     TYPEINFO();
 
-    SvxTabStopItem( USHORT nWhich = ITEMID_TABSTOP );
+    SvxTabStopItem( USHORT nWhich  );
     SvxTabStopItem( const USHORT nTabs,
                     const USHORT nDist,
-                    const SvxTabAdjust eAdjst = SVX_TAB_ADJUST_DEFAULT,
-                    USHORT nWhich = ITEMID_TABSTOP );
+                    const SvxTabAdjust eAdjst /*= SVX_TAB_ADJUST_DEFAULT*/,
+                    USHORT nWhich  );
     SvxTabStopItem( const SvxTabStopItem& rTSI );
 
     // Liefert Index-Position des Tabs zurueck oder TAB_NOTFOUND

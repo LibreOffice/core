@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ulspitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:43:46 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:33:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,9 +70,9 @@ class SVX_DLLPUBLIC SvxULSpaceItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxULSpaceItem( const USHORT nId = ITEMID_ULSPACE );
+    SvxULSpaceItem( const USHORT nId  );
     SvxULSpaceItem( const USHORT nUp, const USHORT nLow,
-                    const USHORT nId = ITEMID_ULSPACE );
+                    const USHORT nId  );
     inline SvxULSpaceItem& operator=( const SvxULSpaceItem &rCpy );
 
     // "pure virtual Methoden" vom SfxPoolItem
