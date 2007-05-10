@@ -1,72 +1,55 @@
 # version and release passed by command-line
 Version: %version
 Release: %release
-Summary: OpenOffice.org desktop integration
-Name: openoffice.org-redhat-menus
+Summary: %productname desktop integration
+Name: %pkgprefix-redhat-menus
 Group: Office
 License: LGPL
 Vendor: OpenOffice.org
 AutoReqProv: no
 BuildArch: noarch
-Requires: openoffice.org-core01, redhat-release
+Requires: %pkgprefix-core01, redhat-release
 Provides: openoffice.org-desktop-integration
 Obsoletes: openofficeorg-redhat-menus
 %define _unpackaged_files_terminate_build 0
 %description 
-OpenOffice.org desktop integration
+%productname desktop integration
 
 %install
-## add symlinks so that nautilus can identify the mime-icons 
-## not strictly freedesktop-stuff but there is no common naming scheme yet.
-## One proposal is "mime-application:vnd.oasis.opendocument.spreadsheet.png"
-## for e.g. application/vnd.oasis.opendocument.spreadsheet
-
 # hack/workaround to make SuSE's brp-symlink-script happy. It wants the targets of all links
 # to be present on the build-system/the buildroot. But the point is that we generate stale
 # links intentionally (until we find a better solution) #46226
 export NO_BRP_STALE_LINK_ERROR=yes
 
+# enable relocation in create_tree.sh
+mkdir -p $RPM_BUILD_ROOT/etc
+touch $RPM_BUILD_ROOT/etc/%unixfilename
 
-cd $RPM_BUILD_ROOT/usr/share/icons/hicolor
-originalname=%unixfilename
-iconname=`echo $originalname | sed -e 's/\.//g'`
-for dir in *; do
-  cd $dir/mimetypes
-  ln -sf $iconname-drawing.png                gnome-mime-application-vnd.sun.xml.draw.png
-  ln -sf $iconname-drawing-template.png       gnome-mime-application-vnd.sun.xml.draw.template.png
-  ln -sf $iconname-formula.png                gnome-mime-application-vnd.sun.xml.math.png
-  ln -sf $iconname-master-document.png        gnome-mime-application-vnd.sun.xml.writer.global.png
-  ln -sf $iconname-oasis-database.png         gnome-mime-application-vnd.sun.xml.base.png
-  ln -sf $iconname-oasis-database.png         gnome-mime-application-vnd.oasis.opendocument.database.png
-  ln -sf $iconname-oasis-drawing.png          gnome-mime-application-vnd.oasis.opendocument.graphics.png
-  ln -sf $iconname-oasis-drawing-template.png gnome-mime-application-vnd.oasis.opendocument.graphics-template.png
-  ln -sf $iconname-oasis-formula.png          gnome-mime-application-vnd.oasis.opendocument.formula.png
-  ln -sf $iconname-oasis-master-document.png  gnome-mime-application-vnd.oasis.opendocument.text-master.png
-  ln -sf $iconname-oasis-presentation.png     gnome-mime-application-vnd.oasis.opendocument.presentation.png
-  ln -sf $iconname-oasis-presentation-template.png gnome-mime-application-vnd.oasis.opendocument.presentation-template.png
-  ln -sf $iconname-oasis-spreadsheet.png           gnome-mime-application-vnd.oasis.opendocument.spreadsheet.png
-  ln -sf $iconname-oasis-spreadsheet-template.png  gnome-mime-application-vnd.oasis.opendocument.spreadsheet-template.png
-  ln -sf $iconname-oasis-text.png             gnome-mime-application-vnd.oasis.opendocument.text.png
-  ln -sf $iconname-oasis-text-template.png    gnome-mime-application-vnd.oasis.opendocument.text-template.png
-  ln -sf $iconname-oasis-web-template.png     gnome-mime-application-vnd.oasis.opendocument.text-web.png
-  ln -sf $iconname-presentation.png           gnome-mime-application-vnd.sun.xml.impress.png
-  ln -sf $iconname-presentation-template.png  gnome-mime-application-vnd.sun.xml.impress.template.png
-  ln -sf $iconname-spreadsheet.png            gnome-mime-application-vnd.sun.xml.calc.png
-  ln -sf $iconname-spreadsheet-template.png   gnome-mime-application-vnd.sun.xml.calc.template.png
-  ln -sf $iconname-text.png                   gnome-mime-application-vnd.sun.xml.writer.png
-  ln -sf $iconname-text-template.png          gnome-mime-application-vnd.sun.xml.writer.template.png
-  ln -sf $iconname-extension.png              gnome-mime-application-vnd.openofficeorg.extension.png
-  cd ../..  
+# set parameters for the create_tree script 
+export DESTDIR=$RPM_BUILD_ROOT
+export KDEMAINDIR=/usr
+export GNOMEDIR=/usr
+export GNOME_MIME_THEME=hicolor
+
+create_tree.sh
+
+# legacy redhat KDE location for .desktop files
+mkdir -p $RPM_BUILD_ROOT/usr/share/applnk-redhat/Office
+for i in `cat launcherlist`; do
+  ln -sf /etc/%unixfilename/share/xdg/$i $RPM_BUILD_ROOT/usr/share/applnk-redhat/Office/%unixfilename-$i
 done
+
+%clean
+rm -rf $RPM_BUILD_ROOT/*
 
 #include<symlink_triggers>
 
-%triggerin -- openoffice.org-writer, openoffice.org-calc, openoffice.org-draw, openoffice.org-impress, openoffice.org-base, openoffice.org-math
+%triggerin -- %pkgprefix-writer, %pkgprefix-calc, %pkgprefix-draw, %pkgprefix-impress, %pkgprefix-base, %pkgprefix-math
 if [ -x /usr/bin/update-desktop-database -a -h /etc/%unixfilename ]; then
   update-desktop-database -q /usr/share/applications
 fi
 
-%triggerun -- openoffice.org-writer, openoffice.org-calc, openoffice.org-draw, openoffice.org-impress, openoffice.org-base, openoffice.org-math
+%triggerun -- %pkgprefix-writer, %pkgprefix-calc, %pkgprefix-draw, %pkgprefix-impress, %pkgprefix-base, %pkgprefix-math
 if [ "$1" = "0" ] ; then  
   # the menu-package gets uninstalled/updated - postun will run the command
   exit 0
