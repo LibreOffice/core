@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgolbul.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:03:37 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:26:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
 #endif
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
 #ifndef _SVX_DRAWITEM_HXX //autogen
 #include <svx/drawitem.hxx>
 #endif
