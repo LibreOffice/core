@@ -4,9 +4,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:40:24 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:45:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -648,6 +648,8 @@ private:
     Reference<XSingleServiceFactory >   xModuleFactoryDepr;
     Reference< beans::XPropertySetInfo > m_xInfo;
     ::std::auto_ptr< IPropertyArrayHelper > m_property_array_helper;
+protected:
+    using OPropertySetHelper::getTypes;
 };
 
 // XInterface
