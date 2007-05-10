@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:33:31 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:03:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,11 +61,9 @@
 #endif
 
 #ifndef _SVX_PAGEITEM_HXX //autogen
-#define ITEMID_SETITEM
 #include <svx/pageitem.hxx>
 #endif
 #ifndef _SVX_SIZEITEM_HXX //autogen
-#define ITEMID_SIZE SID_ATTR_PAGE_SIZE
 #include <svx/sizeitem.hxx>
 #endif
 #ifndef _SVX_ULSPITEM_HXX //autogen
@@ -2968,11 +2966,11 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
                     SwPageDesc& rPageDesc = m_pDoc->_GetPageDesc(nPgDscPos);
                     rPageDesc.ResetAllMasterAttr();
 
-                    SvxLRSpaceItem aLR;
+                    SvxLRSpaceItem aLR(RES_LR_SPACE);
                     sal_Int32 nSize = GetMetricVal ( CM_1) * 2;
                     aLR.SetLeft ( nSize );
                     aLR.SetLeft ( nSize );
-                    SvxULSpaceItem aUL;
+                    SvxULSpaceItem aUL( RES_UL_SPACE );
                     aUL.SetUpper ( static_cast < sal_uInt16 > ( nSize ) );
                     aUL.SetLower ( static_cast < sal_uInt16 > ( nSize ) );
                     pTargetFmt->SetAttr ( aLR );
