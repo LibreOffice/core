@@ -4,9 +4,9 @@
  *
  *  $RCSfile: setup.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:53:57 $
+ *  last change: $Author: gm $ $Date: 2007-05-10 11:08:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,7 @@ struct LanguageDataX
 class SetupAppX : public SetupApp
 {
     HINSTANCE   m_hInst;
+    HANDLE      m_hMapFile;
     LPTSTR      m_pAppTitle;
     LPTSTR      m_pCmdLine;
     LPTSTR      m_pDatabase;
@@ -87,6 +88,7 @@ class SetupAppX : public SetupApp
     LPTSTR      m_pTmpName;
     LPTSTR      m_pErrorText;
     LPTSTR      m_pModuleFile;
+    int        *m_pMSIErrorCode;
 
     boolean     m_bQuiet            : 1;
     boolean     m_bAdministrative   : 1;
@@ -135,6 +137,7 @@ public:
     virtual boolean CheckVersion();
     virtual boolean Install( long nLanguage );
 
+    virtual UINT    GetError() const;
     virtual void    DisplayError( UINT nErr ) const;
 
     void            Log( LPCTSTR pMessage, LPCTSTR pText = NULL ) const;
