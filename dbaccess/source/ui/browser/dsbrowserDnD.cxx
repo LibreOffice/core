@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 13:02:15 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:19:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,21 +256,10 @@ namespace dbaui
         return 0;
     }
     // -----------------------------------------------------------------------------
-    sal_Bool SbaTableQueryBrowser::isEntryCutAllowed(SvLBoxEntry* /*_pEntry*/) const
-    {
-        // at the momoent this isn't allowed
-        return sal_False;
-    }
-    // -----------------------------------------------------------------------------
     sal_Bool SbaTableQueryBrowser::isEntryCopyAllowed(SvLBoxEntry* _pEntry) const
     {
         EntryType eType = getEntryType(_pEntry);
         return  ( eType == etTableOrView || eType == etQuery );
-    }
-    // -----------------------------------------------------------------------------
-    sal_Bool SbaTableQueryBrowser::isEntryPasteAllowed(SvLBoxEntry* /*_pEntry*/) const
-    {
-        return sal_False;
     }
     // -----------------------------------------------------------------------------
     void SbaTableQueryBrowser::copyEntry(SvLBoxEntry* _pEntry)
@@ -282,18 +271,6 @@ namespace dbaui
         aEnsureDelete   = pTransfer;
         if (pTransfer)
             pTransfer->CopyToClipboard(getView());
-    }
-    // -----------------------------------------------------------------------------
-    sal_Bool SbaTableQueryBrowser::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc, sal_Bool _bCheck)
-    {
-        // first get the dest connection
-        ::osl::MutexGuard aGuard(m_aMutex);
-
-        SharedConnection xDestConnection;
-        if ( !ensureConnection( _rDesc.pDroppedAt, xDestConnection ) )
-            return sal_False;
-
-        return m_aTableCopyHelper.copyTagTable( _rDesc, _bCheck, xDestConnection );
     }
     // -----------------------------------------------------------------------------
     IMPL_LINK( SbaTableQueryBrowser, OnAsyncDrop, void*, /*NOTINTERESTEDIN*/ )
