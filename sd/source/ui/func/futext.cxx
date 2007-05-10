@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:25:24 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:31:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,6 @@
 #ifndef _SVDOGROUP_HXX //autogen
 #include <svx/svdogrp.hxx>
 #endif
-#define ITEMID_FIELD    EE_FEATURE_FIELD
 #include <svx/flditem.hxx>
 #ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
@@ -112,10 +111,6 @@
 #include <svx/outlobj.hxx>
 #endif
 
-// #104122#
-#ifndef _EEITEMID_HXX
-#include <svx/eeitemid.hxx>
-#endif
 
 // #104122#
 #ifndef _SVX_FRMDIRITEM_HXX
