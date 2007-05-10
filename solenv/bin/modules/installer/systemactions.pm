@@ -4,9 +4,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-02 12:22:14 $
+#   last change: $Author: gm $ $Date: 2007-05-10 10:59:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1257,6 +1257,7 @@ sub remove_complete_directory
     my ($directory, $start) = @_;
 
     my @content = ();
+    my $infoline = "";
 
     $directory =~ s/\Q$installer::globals::separator\E\s*$//;
 
@@ -1264,7 +1265,7 @@ sub remove_complete_directory
     {
         if ( $start )
         {
-            my $infoline = "\n";
+            $infoline = "\n";
             push(@installer::globals::logfileinfo, $infoline);
             $infoline = "Removing directory $directory\n";
             push(@installer::globals::logfileinfo, $infoline);
@@ -1296,8 +1297,39 @@ sub remove_complete_directory
 
         # try to remove empty directory
 
-        rmdir $directory;
+        my $returnvalue = rmdir $directory;
 
+        if ( ! $returnvalue )
+        {
+            $infoline = "Warning: Problem with removing empty dir $directory\n";
+            push(@installer::globals::logfileinfo, $infoline);
+        }
+
+        # try a little bit harder (sometimes there is a performance problem)
+        if ( -d $directory )
+        {
+            for ( my $j = 1; $j <= 3; $j++ )
+            {
+                if ( -d $directory )
+                {
+                    $infoline = "\n";
+                    push(@installer::globals::logfileinfo, $infoline);
+                    $infoline = "Warning (Try $j): Problems with removing directory $directory\n";
+                    push(@installer::globals::logfileinfo, $infoline);
+
+                    $returnvalue = rmdir $directory;
+
+                    if ( $returnvalue )
+                    {
+                        $infoline = "Successfully removed empty dir $directory\n";
+                        push(@installer::globals::logfileinfo, $infoline);
+                    } else {
+                        $infoline = "Warning: rmdir $directory failed.\n";
+                        push(@installer::globals::logfileinfo, $infoline);
+                    }
+                }
+            }
+        }
     }
 }
 
