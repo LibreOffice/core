@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:08:29 $
+#   last change: $Author: gm $ $Date: 2007-05-10 11:02:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,11 +55,7 @@ CFLAGS+=-D_STLP_USE_STATIC_LIB
 UWINAPILIB=
 
 SLOFILES = \
-    $(SLO)$/swappatchfiles.obj \
-    $(SLO)$/respintest.obj     \
-    $(SLO)$/shutdown_quickstart.obj \
-    $(SLO)$/quickstarter.obj \
-    $(SLO)$/upgrade.obj
+    $(SLO)$/swappatchfiles.obj
 
 STDSHL += \
     $(ADVAPI32LIB)\
@@ -73,6 +69,13 @@ STDSHL+=	\
 .ENDIF
 
 SHL1LIBS = $(SLB)$/$(TARGET).lib 
+
+SHL1OBJS = $(SLOFILES)               \
+    $(SLO)$/respintest.obj           \
+    $(SLO)$/shutdown_quickstart.obj  \
+    $(SLO)$/quickstarter.obj         \
+    $(SLO)$/upgrade.obj              \
+    $(SLO)$/seterror.obj
 
 SHL1TARGET = $(TARGET)
 SHL1IMPLIB = i$(TARGET)
