@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usercontrol.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:34:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:50:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,6 +161,9 @@ namespace pcr
     public:
         OTimeDurationControl( ::Window* pParent, WinBits nWinStyle );
         ~OTimeDurationControl();
+
+        // XPropertyControl
+        ::sal_Int16 SAL_CALL getControlType() throw (::com::sun::star::uno::RuntimeException);
 
     private:
         DECL_LINK( OnCustomConvert, MetricField* );
