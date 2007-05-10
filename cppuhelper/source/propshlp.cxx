@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propshlp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:42:03 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:46:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,6 +188,19 @@ Any OPropertySetHelper::queryInterface( const ::com::sun::star::uno::Type & rTyp
         static_cast< XPropertySet * >( this ),
         static_cast< XMultiPropertySet * >( this ),
         static_cast< XFastPropertySet * >( this ) );
+}
+
+/**
+ * called from the derivee's XTypeProvider::getTypes implementation
+ */
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > OPropertySetHelper::getTypes() const
+    throw (RuntimeException)
+{
+    Sequence< ::com::sun::star::uno::Type > aTypes( 3 );
+    aTypes[ 0 ] = XPropertySet::static_type();
+    aTypes[ 1 ] = XMultiPropertySet::static_type();
+    aTypes[ 2 ] = XFastPropertySet::static_type();
+    return aTypes;
 }
 
 // ComponentHelper
