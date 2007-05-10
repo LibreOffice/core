@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablespage.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 13:04:48 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:26:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,6 @@
 #ifndef _COM_SUN_STAR_I18N_XCOLLATOR_HPP_
 #include <com/sun/star/i18n/XCollator.hpp>
 #endif
-#ifndef _DBAUI_CONTAINERMULTIPLEXER_HXX_
-#include "containermultiplexer.hxx"
-#endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
@@ -73,7 +70,6 @@ namespace dbaui
     class OTableSubscriptionDialog;
     class OTableSubscriptionPage
             :public OGenericAdministrationPage
-            ,public OContainerListener
     {
     private:
         FixedLine               m_aTables;
@@ -84,9 +80,7 @@ namespace dbaui
         sal_Bool                m_bCheckedAll : 1;
         sal_Bool                m_bCatalogAtStart : 1;
 
-        DECLARE_STL_VECTOR( OContainerListenerAdapter*, AdapterArray );
         ::osl::Mutex            m_aNotifierMutex;
-        AdapterArray            m_aNotifiers;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                                 m_xCurrentConnection;   /// valid as long as the page is active
@@ -98,10 +92,6 @@ namespace dbaui
         virtual BOOL            FillItemSet(SfxItemSet& _rCoreAttrs);
         virtual int             DeactivatePage(SfxItemSet* _pSet);
         using OGenericAdministrationPage::DeactivatePage;
-
-        virtual OPageSettings*  createViewSettings();
-        virtual void            fillViewSettings(OPageSettings* _pSettings);
-        virtual void            restoreViewSettings(const OPageSettings* _pSettings);
 
         virtual void            StateChanged( StateChangedType nStateChange );
         virtual void            DataChanged( const DataChangedEvent& rDCEvt );
@@ -135,19 +125,6 @@ namespace dbaui
         */
         ::com::sun::star::uno::Sequence< ::rtl::OUString > collectDetailedSelection() const;
 
-        // helper for remembering view settings
-        struct OTablePageViewSettings : public OPageSettings
-        {
-            StringArray     aExpandedEntries;
-            StringArray     aSelectedEntries;
-            ::rtl::OUString sFocusEntry;
-        };
-
-        /// retrieve the current view settings
-        void    getViewSettings(OTablePageViewSettings& _rFillIt);
-        /// initialize the page from the given view settings
-        void    restoreViewSettings(const OTablePageViewSettings& _rInitializeFrom);
-
         typedef sal_Bool (SvListView::*EntryPredicateCheck) (SvListEntry*) const;
         /// collects the names of the entries which for which the given predicate is <TRUE/>
         void    collectEntryPaths(StringArray& _rFillInPaths, EntryPredicateCheck _pPredicateCheck);
@@ -169,17 +146,9 @@ namespace dbaui
 
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
 
-        void retireNotifiers();
-
         // checks the tables according to the filter given
         // in oppsofite to implCheckTables, this method handles the case of an empty sequence, too ...
         void implCompleteTablesCheck( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter );
-
-        // OContainerListener
-        virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
-        virtual void _elementRemoved( const ::com::sun::star::container::ContainerEvent& _Event ) throw(::com::sun::star::uno::RuntimeException);
-        virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
-        virtual void _disposing(const ::com::sun::star::lang::EventObject& _rSource) throw( ::com::sun::star::uno::RuntimeException);
     };
 
 //.........................................................................
