@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontworkgallery.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:52:29 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:01:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,6 @@
 #include "svdview.hxx"
 #include "svdoutl.hxx"
 #include "eeitem.hxx"
-#define ITEMID_FRAMEDIR EE_PARA_WRITINGDIR
 #include "frmdiritem.hxx"
 #include "toolbarmenu.hxx"
 
