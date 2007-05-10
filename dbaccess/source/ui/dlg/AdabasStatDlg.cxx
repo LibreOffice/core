@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AdabasStatDlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:55:00 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:20:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,6 +200,11 @@ DBG_NAME(OAdabasStatPageDlg)
     void OAdabasStatPageDlg::setTitle(const ::rtl::OUString& _sTitle)
     {
         SetText(_sTitle);
+    }
+    //-------------------------------------------------------------------------
+    void OAdabasStatPageDlg::enableConfirmSettings( bool _bEnable )
+    {
+        (void)_bEnable;
     }
     //-------------------------------------------------------------------------
     sal_Bool OAdabasStatPageDlg::saveDatasource()
