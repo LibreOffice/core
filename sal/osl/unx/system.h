@@ -4,9 +4,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-31 13:04:31 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:16:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -368,10 +368,6 @@ int macxp_resolveAlias(char *path, int buflen);
 #ifdef __cplusplus
 }
 #endif
-#endif
-/* XCode < 2.1 (Mac OS X 10.3 Panther and earlier) does not have this in unistd.h (#i64769#) */
-#ifndef _SC_GETPW_R_SIZE_MAX
-#define _SC_GETPW_R_SIZE_MAX 71
 #endif
 
 #if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)  && \
