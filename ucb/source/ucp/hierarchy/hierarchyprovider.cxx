@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hierarchyprovider.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:56:33 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:04:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,8 @@
 #ifndef _HIERARCHYURI_HXX
 #include "hierarchyuri.hxx"
 #endif
+
+#include "../inc/urihelper.hxx"
 
 using namespace com::sun;
 using namespace com::sun::star;
@@ -161,7 +163,7 @@ HierarchyContentProvider::queryContent(
     // Encode URL and create new Id. This may "correct" user-typed-in URL's.
     uno::Reference< star::ucb::XContentIdentifier > xCanonicId
         = new ::ucb::ContentIdentifier( m_xSMgr,
-                                        HierarchyUri::encodeURL(
+                                        ::ucb::urihelper::encodeURI(
                                                             aUri.getUri() ) );
     vos::OGuard aGuard( m_aMutex );
 
