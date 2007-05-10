@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:26:20 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:48:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,6 @@
 #ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
 #endif
-#define ITEMID_FIELD EE_FEATURE_FIELD
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
 #endif
@@ -264,12 +263,12 @@ void lclInsertUrl( const XclImpRoot& rRoot, const String& rUrl, SCCOL nScCol, SC
         if( pEditObj )
         {
             rEE.SetText( *pEditObj );
-            rEE.QuickInsertField( SvxFieldItem( aUrlField ), ESelection( 0, 0, 0xFFFF, 0 ) );
+            rEE.QuickInsertField( SvxFieldItem( aUrlField, EE_FEATURE_FIELD ), ESelection( 0, 0, 0xFFFF, 0 ) );
         }
         else
         {
             rEE.SetText( EMPTY_STRING );
-            rEE.QuickInsertField( SvxFieldItem( aUrlField ), ESelection() );
+            rEE.QuickInsertField( SvxFieldItem( aUrlField, EE_FEATURE_FIELD ), ESelection() );
             if( const ScPatternAttr* pPattern = rDoc.GetPattern( aScPos.Col(), aScPos.Row(), nScTab ) )
             {
                 SfxItemSet aItemSet( rEE.GetEmptyItemSet() );
