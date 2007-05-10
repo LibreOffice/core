@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appenv.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:49:51 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:12:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <cstdarg>
 #endif
 
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
+
 #include <hintids.hxx>
 
 #include <sfx2/request.hxx>
@@ -355,7 +355,7 @@ static USHORT nTitleNo = 0;
         if ( nMode != ENV_NEWDOC )
         {
             ASSERT(pOldSh, "Kein Dokument - war 'Einfuegen' nicht disabled???");
-            SvxPaperBinItem aItem;
+            SvxPaperBinItem aItem( RES_PAPER_BIN );
             aItem.SetValue((BYTE)pSh->getIDocumentDeviceAccess()->getPrinter(true)->GetPaperBin());
             pOldSh->GetPageDescFromPool(RES_POOLPAGE_JAKET)->GetMaster().SetAttr(aItem);
         }
@@ -415,7 +415,7 @@ static USHORT nTitleNo = 0;
                 pSh->SplitNode();
                 pSh->Right( CRSR_SKIP_CHARS, FALSE, 1, FALSE );
                 SfxItemSet aSet( pSh->GetAttrPool(), RES_BREAK, RES_BREAK, 0 );
-                aSet.Put( SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE) );
+                aSet.Put( SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK ) );
                 pSh->SetTblAttr( aSet );
             }
             else
@@ -483,8 +483,8 @@ static USHORT nTitleNo = 0;
                                break;
             case ENV_VER_RGHT: break;
         }
-        SvxLRSpaceItem aLRMargin;
-        SvxULSpaceItem aULMargin;
+        SvxLRSpaceItem aLRMargin( RES_LR_SPACE );
+        SvxULSpaceItem aULMargin( RES_UL_SPACE );
         aLRMargin.SetLeft ((USHORT) lLeft );
         aULMargin.SetUpper((USHORT) lUpper);
         aLRMargin.SetRight(0);
@@ -535,7 +535,7 @@ static USHORT nTitleNo = 0;
         aMgr.SetHeightSizeType(ATT_VAR_SIZE);
 
         //Defaults ueberschreiben!
-        aMgr.GetAttrSet().Put( SvxBoxItem() );
+        aMgr.GetAttrSet().Put( SvxBoxItem(RES_BOX) );
         aMgr.SetULSpace( 0L, 0L );
         aMgr.SetLRSpace( 0L, 0L );
 
