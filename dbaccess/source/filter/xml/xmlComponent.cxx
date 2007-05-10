@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlComponent.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:45:25 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:15:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,10 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
+
 namespace dbaxml
 {
     using namespace ::rtl;
@@ -106,6 +110,10 @@ OXMLComponent::OXMLComponent( ODBFilter& rImport
                 break;
             case XML_TOK_COMPONENT_NAME:
                 m_sName = sValue;
+                // sanitize the name. Previously, we allowed to create forms/reports/queries which contain
+                // a / in their name, which nowadays is forbidden. To not lose such objects if they're contained
+                // in older files, we replace the slash with something less offending.
+                m_sName = m_sName.replace( '/', '_' );
                 break;
             case XML_TOK_AS_TEMPLATE:
                 m_bAsTemplate = (sValue == s_sTRUE ? sal_True : sal_False);
@@ -132,19 +140,14 @@ OXMLComponent::OXMLComponent( ODBFilter& rImport
 
         try
         {
-
-            Reference<XMultiServiceFactory> xORB(_xParentContainer,UNO_QUERY);
-            if ( xORB.is() )
-            {
-                Reference<XInterface> xComponent = xORB->createInstanceWithArguments(_sComponentServiceName,aArguments);
-                Reference<XNameContainer> xNameContainer(_xParentContainer,UNO_QUERY);
-                if ( xNameContainer.is() )
-                    xNameContainer->insertByName(m_sName,makeAny(xComponent));
-            }
+            Reference< XMultiServiceFactory > xORB( _xParentContainer, UNO_QUERY_THROW );
+            Reference< XInterface > xComponent( xORB->createInstanceWithArguments( _sComponentServiceName, aArguments ) );
+            Reference< XNameContainer > xNameContainer( _xParentContainer, UNO_QUERY_THROW );
+            xNameContainer->insertByName( m_sName, makeAny( xComponent ) );
         }
         catch(Exception&)
         {
-            OSL_ENSURE( false, "OXMLComponent::OXMLComponent: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }
