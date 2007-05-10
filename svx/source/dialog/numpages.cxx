@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:36:38 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:38:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
-#define ITEMID_BRUSH SID_ATTR_BRUSH
+
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <brshitem.hxx>
 #endif
@@ -101,7 +101,7 @@
 #include <dlgutil.hxx>
 #endif
 #ifndef _XTABLE_HXX //autogen
-#define ITEMID_COLOR_TABLE SID_COLOR_TABLE
+
 #include <xtable.hxx>
 #endif
 #ifndef _SVX_DRAWITEM_HXX //autogen
@@ -1249,7 +1249,7 @@ IMPL_LINK(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
                     Size aSize = SvxNumberFormat::GetGraphicSizeMM100(&aGraphic);
                     SvxFrameVertOrient eOrient = SVX_VERT_LINE_CENTER;
                     aSize = OutputDevice::LogicToLogic(aSize, MAP_100TH_MM, (MapUnit)eCoreUnit);
-                    SvxBrushItem aBrush(aGraphic, GPOS_AREA );
+                    SvxBrushItem aBrush(aGraphic, GPOS_AREA, SID_ATTR_BRUSH );
                     aFmt.SetGraphicBrush( &aBrush, &aSize, &eOrient );
                 }
                 else if(pGrfName)
