@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:18:48 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:24:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,9 +112,6 @@
 #endif
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
-#endif
-#ifndef _UIITEMS_HXX
-#include <uiitems.hxx>
 #endif
 #ifndef _TEXTSH_HXX
 #include <textsh.hxx>
@@ -248,8 +245,9 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
                     eUnderline = UNDERLINE_NONE;
                 break;
             }
-            rSh.SetAttr(SvxUnderlineItem(eUnderline));
-            rReq.AppendItem(SvxUnderlineItem(eUnderline));
+            SvxUnderlineItem aUnderline(eUnderline, RES_CHRATR_UNDERLINE );
+            rSh.SetAttr( aUnderline );
+            rReq.AppendItem( aUnderline );
             rReq.Done();
         }
         break;
