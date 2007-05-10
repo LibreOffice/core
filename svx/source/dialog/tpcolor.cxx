@@ -5,9 +5,9 @@
  *
  *  $RCSfile: tpcolor.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:45:54 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:43:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #define _SVX_TPCOLOR_CXX
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
+
 
 #include "dialogs.hrc"
 #include "helpid.hrc"
