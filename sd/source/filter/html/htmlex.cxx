@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:36:12 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:24:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,9 +135,6 @@
 #endif
 #ifndef _FILTER_HXX
 #include <svtools/filter.hxx>
-#endif
-#ifndef _EEITEMID_HXX
-#include <svx/eeitemid.hxx>
 #endif
 #ifndef _SVX_COLRITEM_HXX
 #include <svx/colritem.hxx>
@@ -897,8 +894,8 @@ void HtmlExport::SetDocColors( SdPage* pPage )
     if(pSheet)
     {
         SfxItemSet& rSet = pSheet->GetItemSet();
-        if(rSet.GetItemState(ITEMID_COLOR,TRUE) == SFX_ITEM_ON)
-            maTextColor = ((SvxColorItem*)rSet.GetItem(ITEMID_COLOR,TRUE))->GetValue();
+        if(rSet.GetItemState(EE_CHAR_COLOR,TRUE) == SFX_ITEM_ON)
+            maTextColor = ((SvxColorItem*)rSet.GetItem(EE_CHAR_COLOR,TRUE))->GetValue();
     }
 
     // Standard Hintergrundfarbe aus Background der MasterPage der ersten Seite
