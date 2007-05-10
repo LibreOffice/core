@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:42:26 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:36:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,24 +210,6 @@ namespace dbaui
     {
         DBG_DTOR(OLinkedDocumentsAccess,NULL);
     }
-    //------------------------------------------------------------------
-    void OLinkedDocumentsAccess::implDrop(const ::rtl::OUString& _rLinkName)
-    {
-        OSL_ENSURE(m_xDocumentContainer.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid document container!");
-        try
-        {
-            Reference< XNameContainer > xRemoveAccess(m_xDocumentContainer, UNO_QUERY);
-            if (xRemoveAccess.is())
-                xRemoveAccess->removeByName(_rLinkName);
-            else
-                OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::implDrop: : missing the XNameContainer interface!");
-        }
-        catch(const Exception&)
-        {
-            OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::implDrop: : caught an exception while removing the object!");
-        }
-    }
-
     //------------------------------------------------------------------
     Reference< XComponent> OLinkedDocumentsAccess::implOpen(const ::rtl::OUString& _rLinkName,Reference< XComponent >& _xDefinition, EOpenMode _eOpenMode)
     {
