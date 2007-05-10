@@ -1,4 +1,4 @@
-// Registrar.h: Schnittstelle für die Klasse Registrar.
+// Registrar.h: Schnittstelle fï¿½r die Klasse Registrar.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -64,7 +64,8 @@ protected:
         const std::wstring& DocumentDisplayName,
         const std::wstring& DefaultIconEntry,
         const std::wstring& DefaultShellCommand,
-        const std::wstring& ShellNewCommandDisplayName) const;
+        const std::wstring& ShellNewCommandDisplayName,
+        const RegistrationContextInformation::OFFICE_APPLICATION eOfficeApp) const;
 
     virtual void UnregisterForMsOfficeApplication(
         const std::wstring& FileExtension) const;
