@@ -14,9 +14,9 @@
 #
 #   $RCSfile: linkoo,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2007-01-30 08:23:55 $
+#   last change: $Author: kz $ $Date: 2007-05-10 13:21:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ export MALLOC_CHECK_=2
 export OOO_DISABLE_RECOVERY=1
 ';
 
-my @exceptions = ( 'cppuhelper', 'cfgmgr', 'sunjavaplugin' );
+my @exceptions = ( 'cppuhelper', 'configmgr2', 'sunjavaplugin' );
 
 %replaceable = (
     'program' => '\.so$',
@@ -67,6 +67,9 @@ my @exceptions = ( 'cppuhelper', 'cfgmgr', 'sunjavaplugin' );
     'share/config' => '\.zip$',
 #    'share/uno_packages' => '\.zip$'
 );
+
+# strangely enough, OSX has those small differences...
+$replaceable{'program'} = '\.dylib$' if ($ENV{OS} eq 'MACOSX');
 
 @search_dirs = ( 'lib', 'bin', 'class' );
 
