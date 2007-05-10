@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdview.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:33:25 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:59:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,6 @@
 #include "svdoutl.hxx"
 #include "svdview.hxx"
 #include "editview.hxx" // fuer GetField
-#define ITEMID_FIELD EE_FEATURE_FIELD  /* wird fuer #include <flditem.hxx> benoetigt */
 #include "flditem.hxx"  // fuer URLField
 #include "obj3d.hxx"
 #include "svddrgmt.hxx"
