@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:05:53 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:42:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -297,10 +297,14 @@ namespace xmloff
         const Property* pProperties = aProperties.getConstArray();
         for (sal_Int32 i=0; i<aProperties.getLength(); ++i, ++pProperties)
         {
-            static sal_Int32 nExcludeIndicator = PropertyAttribute::READONLY | PropertyAttribute::TRANSIENT;
-            if (pProperties->Attributes & nExcludeIndicator)
-                // no readonly props, no transient props
+            // no transient props
+            if ( pProperties->Attributes & PropertyAttribute::TRANSIENT )
                 continue;
+            // no read-only props
+            if ( ( pProperties->Attributes & PropertyAttribute::READONLY ) != 0 )
+                // except they're dynamically added
+                if ( ( pProperties->Attributes & PropertyAttribute::REMOVEABLE ) == 0 )
+                    continue;
             m_aRemainingProps.insert(pProperties->Name);
         }
     }
