@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:39:15 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:25:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@
 
 #include <svx/dialogs.hrc>
 
-#define ITEMID_LANGUAGE     SID_ATTR_LANGUAGE
 #include <svx/langitem.hxx>
 #include <svx/editdata.hxx>
 
