@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclunohelper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:33:42 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:09:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,8 @@
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
 #endif
 
+#include <com/sun/star/graphic/XGraphic.hpp>
+
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/awt/vclxbitmap.hxx>
@@ -95,6 +97,8 @@
 #include <toolkit/awt/vclxfont.hxx>
 #include <toolkit/controls/unocontrolcontainer.hxx>
 #include <toolkit/controls/unocontrolcontainermodel.hxx>
+
+#include <vcl/graph.hxx>
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -120,32 +124,40 @@ BitmapEx VCLUnoHelper::GetBitmap( const ::com::sun::star::uno::Reference< ::com:
 {
     BitmapEx aBmp;
 
-    VCLXBitmap* pVCLBitmap = VCLXBitmap::GetImplementation( rxBitmap );
-    if ( pVCLBitmap )
-        aBmp = pVCLBitmap->GetBitmap();
-    else
+    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > xGraphic( rxBitmap, ::com::sun::star::uno::UNO_QUERY );
+    if( xGraphic.is() )
     {
-        Bitmap aDIB, aMask;
+        Graphic aGraphic( xGraphic );
+        aBmp = aGraphic.GetBitmapEx();
+    }
+    else if ( rxBitmap.is() )
+    {
+        VCLXBitmap* pVCLBitmap = VCLXBitmap::GetImplementation( rxBitmap );
+        if ( pVCLBitmap )
+            aBmp = pVCLBitmap->GetBitmap();
+        else
         {
-            ::com::sun::star::uno::Sequence<sal_Int8> aBytes = rxBitmap->getDIB();
-            SvMemoryStream aMem( (char*) aBytes.getArray(), aBytes.getLength(), STREAM_READ );
-            aMem >> aDIB;
+            Bitmap aDIB, aMask;
+            {
+                ::com::sun::star::uno::Sequence<sal_Int8> aBytes = rxBitmap->getDIB();
+                SvMemoryStream aMem( (char*) aBytes.getArray(), aBytes.getLength(), STREAM_READ );
+                aMem >> aDIB;
+            }
+            {
+                ::com::sun::star::uno::Sequence<sal_Int8> aBytes = rxBitmap->getMaskDIB();
+                SvMemoryStream aMem( (char*) aBytes.getArray(), aBytes.getLength(), STREAM_READ );
+                aMem >> aMask;
+            }
+            aBmp = BitmapEx( aDIB, aMask );
         }
-        {
-            ::com::sun::star::uno::Sequence<sal_Int8> aBytes = rxBitmap->getMaskDIB();
-            SvMemoryStream aMem( (char*) aBytes.getArray(), aBytes.getLength(), STREAM_READ );
-            aMem >> aMask;
-        }
-        aBmp = BitmapEx( aDIB, aMask );
     }
     return aBmp;
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap> VCLUnoHelper::CreateBitmap( const BitmapEx& rBitmap )
 {
-    VCLXBitmap* pBmp = new VCLXBitmap;
-    pBmp->SetBitmap( rBitmap );
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap> xBmp = pBmp;
+    Graphic aGraphic( rBitmap );
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap> xBmp( aGraphic.GetXGraphic(), ::com::sun::star::uno::UNO_QUERY );
     return xBmp;
 }
 
