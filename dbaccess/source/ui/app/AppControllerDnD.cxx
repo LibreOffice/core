@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerDnD.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:29:59 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:16:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -516,11 +516,6 @@ sal_Bool OApplicationController::isConnectionReadOnly() const
     return bIsConnectionReadOnly;
 }
 // -----------------------------------------------------------------------------
-sal_Bool OApplicationController::isRelationDesignAllowed() const
-{
-    return sal_True;
-}
-// -----------------------------------------------------------------------------
 Reference< XNameAccess > OApplicationController::getElements(ElementType _eType)
 {
     OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
@@ -887,7 +882,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
     catch(const SQLException&) { showError( SQLExceptionInfo( ::cppu::getCaughtException() ) ); }
     catch(const Exception& )
     {
-        DBG_ERROR("OApplicationController::paste: caught a strange exception!");
+        DBG_UNHANDLED_EXCEPTION();
     }
     return sal_False;
 }
