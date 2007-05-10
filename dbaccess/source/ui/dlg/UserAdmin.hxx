@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UserAdmin.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:50:28 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:23:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,6 @@ public:
     static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
 
     ~OUserAdmin();
-    void NotifyCellChange();
     String GetUser();
 
     // must be overloaded by subclasses, but it isn't pure virtual
