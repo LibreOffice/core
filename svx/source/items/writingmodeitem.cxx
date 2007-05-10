@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writingmodeitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:11:29 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:54:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ using namespace ::com::sun::star::text;
 
 // class SvxWritingModeItem -------------------------------------------------
 
-TYPEINIT1_AUTOFACTORY(SvxWritingModeItem, SfxUInt16Item);
+TYPEINIT1_FACTORY(SvxWritingModeItem, SfxUInt16Item, new SvxWritingModeItem(com::sun::star::text::WritingMode_LR_TB, 0));
 
 SvxWritingModeItem::SvxWritingModeItem( WritingMode eValue, USHORT _nWhich )
     : SfxUInt16Item( _nWhich, (sal_uInt16)eValue )
