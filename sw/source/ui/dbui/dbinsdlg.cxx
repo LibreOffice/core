@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:58:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:15:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,6 @@
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
@@ -860,7 +857,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
         pTblSet->Put( aBrush, SID_ATTR_BRUSH_ROW );
         pTblSet->Put( aBrush, SID_ATTR_BRUSH_TABLE );
 
-        SvxBoxInfoItem aBoxInfo;
+        SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
             // Tabellenvariante, wenn mehrere Tabellenzellen selektiert
         aBoxInfo.SetTable( TRUE );
             // Abstandsfeld immer anzeigen
