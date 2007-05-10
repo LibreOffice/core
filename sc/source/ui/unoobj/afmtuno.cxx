@@ -4,9 +4,9 @@
  *
  *  $RCSfile: afmtuno.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:45:01 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:58:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -905,7 +905,7 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const rtl::OUString& a
                         const SfxInt32Item* pRotItem = (const SfxInt32Item*)pData->GetItem( nFieldIndex, ATTR_ROTATE_VALUE );
                         sal_Int32 nRot = pRotItem ? pRotItem->GetValue() : 0;
                         BOOL bStacked = ((const SfxBoolItem*)pItem)->GetValue();
-                        SvxOrientationItem( nRot, bStacked ).QueryValue( aVal );
+                        SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( aVal );
                     }
                     break;
                     default:
