@@ -4,9 +4,9 @@
  *
  *  $RCSfile: section.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:14:55 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:57:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -409,7 +409,7 @@ void SwSection::SetProtect( int bFlag )
 {
     if( GetFmt() )
     {
-        SvxProtectItem aItem;
+        SvxProtectItem aItem( RES_PROTECT );
         aItem.SetCntntProtect( (BOOL)bFlag );
         GetFmt()->SetAttr( aItem );
     }
