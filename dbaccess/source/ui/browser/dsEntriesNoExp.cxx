@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsEntriesNoExp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 13:02:00 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:19:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,11 +193,6 @@ void SbaTableQueryBrowser::describeSupportedFeatures()
 
     implDescribeSupportedFeature( ".uno:CloseWin",      ID_BROWSER_CLOSE, CommandGroup::DOCUMENT );
     implDescribeSupportedFeature( ".uno:DBRebuildData", ID_BROWSER_REFRESH_REBUILD, CommandGroup::DATA );
-}
-// -------------------------------------------------------------------------
-String SbaTableQueryBrowser::getURL() const
-{
-    return String();
 }
 
 // -----------------------------------------------------------------------------
