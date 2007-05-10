@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_uri.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:03:47 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:06:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
  *************************************************************************/
 
 #include "rtl/ustrbuf.hxx"
-#include "rtl/uri.hxx"
+#include "../inc/urihelper.hxx"
 
 #include "tdoc_uri.hxx"
 
@@ -120,7 +120,7 @@ void Uri::init() const
             else
                 m_aName = m_aUri.copy( nLastSlash + 1 );
 
-            m_aDecodedName = decodeSegment( m_aName );
+            m_aDecodedName = ::ucb::urihelper::decodeSegment( m_aName );
 
             sal_Int32 nSlash = m_aPath.indexOf( '/', 1 );
             if ( nSlash == -1 )
@@ -140,45 +140,4 @@ void Uri::init() const
 
         m_eState = VALID;
     }
-}
-
-//============================================================================
-// static
-rtl::OUString Uri::encodeURL( const rtl::OUString& rSource )
-{
-    rtl::OUStringBuffer aResult;
-
-    sal_Int32 nIndex = 0;
-    do
-    {
-        aResult.append(
-            rtl::Uri::encode( rSource.getToken( 0, '/', nIndex ),
-                              rtl_UriCharClassPchar,
-                              rtl_UriEncodeCheckEscapes,
-                              RTL_TEXTENCODING_UTF8 ) );
-        if ( nIndex >= 0 )
-            aResult.append( sal_Unicode( '/' ) );
-    }
-    while ( nIndex >= 0 );
-
-    return aResult.makeStringAndClear();
-}
-
-//=========================================================================
-// static
-rtl::OUString Uri::encodeSegment( const rtl::OUString& rSource )
-{
-    return rtl::Uri::encode( rSource,
-                             rtl_UriCharClassPchar,
-                             rtl_UriEncodeIgnoreEscapes,
-                             RTL_TEXTENCODING_UTF8 );
-}
-
-//=========================================================================
-// static
-rtl::OUString Uri::decodeSegment( const rtl::OUString& rSource )
-{
-    return rtl::Uri::decode( rSource,
-                             rtl_UriDecodeWithCharset,
-                             RTL_TEXTENCODING_UTF8 );
 }
