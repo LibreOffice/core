@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblafmt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:58:42 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:56:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,11 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
-
-
-
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 
 
 #ifndef _TOOLS_RESID_HXX
@@ -237,14 +232,37 @@ void SwAfVersions::Load( SvStream& rStream, USHORT nVer )
 
 SwBoxAutoFmt::SwBoxAutoFmt()
     : aFont( *(SvxFontItem*)GetDfltAttr( RES_CHRATR_FONT ) ),
+    aHeight( 240, 100, RES_CHRATR_FONTSIZE ),
+    aWeight( WEIGHT_NORMAL, RES_CHRATR_WEIGHT ),
+    aPosture( ITALIC_NONE, RES_CHRATR_POSTURE ),
+
     aCJKFont( *(SvxFontItem*)GetDfltAttr( RES_CHRATR_CJK_FONT ) ),
     aCJKHeight( 240, 100, RES_CHRATR_CJK_FONTSIZE ),
     aCJKWeight( WEIGHT_NORMAL, RES_CHRATR_CJK_WEIGHT ),
     aCJKPosture( ITALIC_NONE, RES_CHRATR_CJK_POSTURE ),
+
     aCTLFont( *(SvxFontItem*)GetDfltAttr( RES_CHRATR_CTL_FONT ) ),
     aCTLHeight( 240, 100, RES_CHRATR_CTL_FONTSIZE ),
     aCTLWeight( WEIGHT_NORMAL, RES_CHRATR_CTL_WEIGHT ),
     aCTLPosture( ITALIC_NONE, RES_CHRATR_CTL_POSTURE ),
+
+    aUnderline( UNDERLINE_NONE, RES_CHRATR_UNDERLINE ),
+    aCrossedOut( STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT ),
+    aContour( sal_False, RES_CHRATR_CONTOUR ),
+    aShadowed( sal_False, RES_CHRATR_SHADOWED ),
+    aColor( RES_CHRATR_COLOR ),
+    aBox( RES_BOX ),
+    aTLBR( 0 ),
+    aBLTR( 0 ),
+    aBackground( RES_BACKGROUND ),
+    aAdjust( SVX_ADJUST_LEFT, RES_PARATR_ADJUST ),
+    aHorJustify( SVX_HOR_JUSTIFY_STANDARD, 0),
+    aVerJustify( SVX_VER_JUSTIFY_STANDARD, 0),
+    aStacked( 0 ),
+    aMargin( 0 ),
+    aLinebreak( 0 ),
+    aRotateAngle( 0 ),
+
 // FIXME - add attribute IDs for the diagonal line items
 //    aTLBR( RES_... ),
 //    aBLTR( RES_... ),
@@ -345,35 +363,35 @@ SwBoxAutoFmt& SwBoxAutoFmt::operator=( const SwBoxAutoFmt& rNew )
 BOOL SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, USHORT nVer )
 {
     SfxPoolItem* pNew;
-    SvxOrientationItem aOrientation;
+    SvxOrientationItem aOrientation( SVX_ORIENTATION_STANDARD, 0);
 
-    READ( aFont,        SvxFontItem         , rVersions.nFontVersion)
+    READ( aFont,        SvxFontItem            , rVersions.nFontVersion)
 
     if( rStream.GetStreamCharSet() == aFont.GetCharSet() )
         aFont.GetCharSet() = ::gsl_getSystemTextEncoding();
 
-    READ( aHeight,      SvxFontHeightItem   , rVersions.nFontHeightVersion)
-    READ( aWeight,      SvxWeightItem       , rVersions.nWeightVersion)
-    READ( aPosture,     SvxPostureItem      , rVersions.nPostureVersion)
+    READ( aHeight,      SvxFontHeightItem  , rVersions.nFontHeightVersion)
+    READ( aWeight,      SvxWeightItem      , rVersions.nWeightVersion)
+    READ( aPosture,     SvxPostureItem     , rVersions.nPostureVersion)
     // --- from 641 on: CJK and CTL font settings
     if( AUTOFORMAT_DATA_ID_641 <= nVer )
     {
-        READ( aCJKFont,        SvxFontItem         , rVersions.nFontVersion)
-        READ( aCJKHeight,      SvxFontHeightItem   , rVersions.nFontHeightVersion)
-        READ( aCJKWeight,      SvxWeightItem       , rVersions.nWeightVersion)
-        READ( aCJKPosture,     SvxPostureItem      , rVersions.nPostureVersion)
-        READ( aCTLFont,        SvxFontItem         , rVersions.nFontVersion)
-        READ( aCTLHeight,      SvxFontHeightItem   , rVersions.nFontHeightVersion)
-        READ( aCTLWeight,      SvxWeightItem       , rVersions.nWeightVersion)
-        READ( aCTLPosture,     SvxPostureItem      , rVersions.nPostureVersion)
+        READ( aCJKFont,                        SvxFontItem         , rVersions.nFontVersion)
+        READ( aCJKHeight,       SvxFontHeightItem   , rVersions.nFontHeightVersion)
+        READ( aCJKWeight,     SvxWeightItem       , rVersions.nWeightVersion)
+        READ( aCJKPosture,   SvxPostureItem      , rVersions.nPostureVersion)
+        READ( aCTLFont,                        SvxFontItem         , rVersions.nFontVersion)
+        READ( aCTLHeight,        SvxFontHeightItem   , rVersions.nFontHeightVersion)
+        READ( aCTLWeight,       SvxWeightItem       , rVersions.nWeightVersion)
+        READ( aCTLPosture,   SvxPostureItem      , rVersions.nPostureVersion)
     }
-    READ( aUnderline,   SvxUnderlineItem    , rVersions.nUnderlineVersion)
-    READ( aCrossedOut,  SvxCrossedOutItem   , rVersions.nCrossedOutVersion)
-    READ( aContour,     SvxContourItem      , rVersions.nContourVersion)
-    READ( aShadowed,    SvxShadowedItem     , rVersions.nShadowedVersion)
-    READ( aColor,       SvxColorItem        , rVersions.nColorVersion)
+    READ( aUnderline,   SvxUnderlineItem   , rVersions.nUnderlineVersion)
+    READ( aCrossedOut,  SvxCrossedOutItem  , rVersions.nCrossedOutVersion)
+    READ( aContour,     SvxContourItem     , rVersions.nContourVersion)
+    READ( aShadowed,    SvxShadowedItem       , rVersions.nShadowedVersion)
+    READ( aColor,       SvxColorItem       , rVersions.nColorVersion)
 
-    READ( aBox,         SvxBoxItem          , rVersions.nBoxVersion)
+    READ( aBox,         SvxBoxItem         , rVersions.nBoxVersion)
 
     // --- from 680/dr14 on: diagonal frame lines
     if( nVer >= AUTOFORMAT_DATA_ID_680DR14 )
@@ -388,10 +406,10 @@ BOOL SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, USHOR
     SetAdjust( *(SvxAdjustItem*)pNew );
     delete pNew;
 
-    READ( aHorJustify,  SvxHorJustifyItem   , rVersions.nHorJustifyVersion)
+    READ( aHorJustify,  SvxHorJustifyItem , rVersions.nHorJustifyVersion)
     READ( aVerJustify,  SvxVerJustifyItem   , rVersions.nVerJustifyVersion)
     READ( aOrientation, SvxOrientationItem  , rVersions.nOrientationVersion)
-    READ( aMargin,      SvxMarginItem       , rVersions.nMarginVersion)
+    READ( aMargin, SvxMarginItem       , rVersions.nMarginVersion)
 
     pNew = aLinebreak.Create(rStream, rVersions.nBoolVersion );
     aLinebreak.SetValue( ((SfxBoolItem*)pNew)->GetValue() );
@@ -460,7 +478,7 @@ BOOL SwBoxAutoFmt::LoadOld( SvStream& rStream, USHORT aLoadVer[] )
 
 BOOL SwBoxAutoFmt::Save( SvStream& rStream ) const
 {
-    SvxOrientationItem aOrientation( aRotateAngle.GetValue(), aStacked.GetValue() );
+    SvxOrientationItem aOrientation( aRotateAngle.GetValue(), aStacked.GetValue(), 0 );
 
     aFont.Store( rStream, aFont.GetVersion(SOFFICE_FILEFORMAT_40)  );
     aHeight.Store( rStream, aHeight.GetVersion(SOFFICE_FILEFORMAT_40) );
@@ -522,7 +540,7 @@ BOOL SwBoxAutoFmt::SaveVerionNo( SvStream& rStream ) const
 
     rStream << aHorJustify.GetVersion( SOFFICE_FILEFORMAT_40 );
     rStream << aVerJustify.GetVersion( SOFFICE_FILEFORMAT_40 );
-    rStream << SvxOrientationItem().GetVersion( SOFFICE_FILEFORMAT_40 );
+    rStream << SvxOrientationItem(SVX_ORIENTATION_STANDARD, 0).GetVersion( SOFFICE_FILEFORMAT_40 );
     rStream << aMargin.GetVersion( SOFFICE_FILEFORMAT_40 );
     rStream << aLinebreak.GetVersion( SOFFICE_FILEFORMAT_40 );
     rStream << aRotateAngle.GetVersion( SOFFICE_FILEFORMAT_40 );
@@ -906,9 +924,9 @@ SwTableAutoFmtTbl::SwTableAutoFmtTbl()
     BYTE i;
 
     Color aColor( COL_BLUE );
-    SvxBrushItem aBrushItem( aColor );
+    SvxBrushItem aBrushItem( aColor, RES_BACKGROUND );
     aNew.SetBackground( aBrushItem );
-    aNew.SetColor( Color( COL_WHITE ));
+    aNew.SetColor( SvxColorItem(Color( COL_WHITE ), RES_CHRATR_COLOR) );
 
     for( i = 0; i < 4; ++i )
         pNew->SetBoxFmt( aNew, i );
@@ -923,7 +941,7 @@ SwTableAutoFmtTbl::SwTableAutoFmtTbl()
     aBrushItem.SetColor( RGB_COLORDATA( 0xcc, 0xcc, 0xcc ) );
     aNew.SetBackground( aBrushItem );
     aColor.SetColor( COL_BLACK );
-    aNew.SetColor( aColor );
+    aNew.SetColor( SvxColorItem( aColor, RES_CHRATR_COLOR) );
     for( i = 7; i <= 15; i += 4 )
         pNew->SetBoxFmt( aNew, i );
     for( i = 13; i <= 14; ++i )
@@ -937,7 +955,7 @@ SwTableAutoFmtTbl::SwTableAutoFmtTbl()
         pNew->SetBoxFmt( aNew, i );
 
 
-    SvxBoxItem aBox;
+    SvxBoxItem aBox( RES_BOX );
     aBox.SetDistance( 55 );
     SvxBorderLine aLn( &aColor, DEF_LINE_WIDTH_0 );
     aBox.SetLine( &aLn, BOX_LINE_LEFT );
