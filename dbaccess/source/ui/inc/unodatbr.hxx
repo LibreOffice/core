@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:31:25 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:34:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,8 +275,6 @@ namespace dbaui
         virtual void ColumnChanged();
         virtual void SelectionChanged();
 
-        String getURL() const;
-
         // methods for showing/hiding the explorer part
         sal_Bool    haveExplorer() const;
         void        hideExplorer();
@@ -360,15 +358,6 @@ namespace dbaui
 
         TransferableHelper*
                 implCopyObject( SvLBoxEntry* _pApplyTo, sal_Int32 _nCommandType, sal_Bool _bAllowConnection = sal_True );
-
-        /** copies a table which was constructed by tags like HTML or RTF
-            @param  _rDesc
-                The Drop descriptor
-            @param  _bCheck
-                If set to <TRUE/> than the controller checks only if a copy is possible.
-        */
-        sal_Bool copyTagTable(  OTableCopyHelper::DropDescriptor& _rDesc
-                                , sal_Bool _bCheck);
 
         EntryType   getEntryType( SvLBoxEntry* _pEntry ) const;
         EntryType   getChildType( SvLBoxEntry* _pEntry ) const;
@@ -471,8 +460,10 @@ namespace dbaui
         // sets a frame title
         void setDefaultTitle();
 
+#ifdef DBG_UTIL
         // checks whether the given tree entry denotes a data source
         bool impl_isDataSourceEntry( SvLBoxEntry* _pEntry ) const;
+#endif
 
         /// retrieves the database document to which a given connection belongs
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
@@ -486,9 +477,7 @@ namespace dbaui
         */
         sal_Bool implGetQuerySignature( ::rtl::OUString& _rCommand, sal_Bool& _bEscapeProcessing );
 
-        sal_Bool isEntryCutAllowed(SvLBoxEntry* _pEntry) const;
         sal_Bool isEntryCopyAllowed(SvLBoxEntry* _pEntry) const;
-        sal_Bool isEntryPasteAllowed(SvLBoxEntry* _pEntry) const;
 
         void copyEntry(SvLBoxEntry* _pEntry);
 
