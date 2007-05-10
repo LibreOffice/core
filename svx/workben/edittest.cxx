@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edittest.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:59:10 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:04:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,27 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-
-#define ITEMID_FONT             0
-#define ITEMID_POSTURE          0
-#define ITEMID_WEIGHT           0
-#define ITEMID_SHADOWED         0
-#define ITEMID_CONTOUR          0
-#define ITEMID_CROSSEDOUT       0
-#define ITEMID_UNDERLINE        0
-#define ITEMID_FONTHEIGHT       0
-#define ITEMID_FONTWIDTH        0
-#define ITEMID_COLOR            0
-#define ITEMID_ADJUST           0
-#define ITEMID_LINESPACING      0
-#define ITEMID_TABSTOP          0
-#define ITEMID_LRSPACE          0
-#define ITEMID_ULSPACE          0
-#define ITEMID_AUTOKERN         0
-#define ITEMID_KERNING          0
-#define ITEMID_ESCAPEMENT       0
-#define ITEMID_WORDLINEMODE     0
-#define ITEMID_FIELD            0
 
 #include <editeng.hxx>
 #include <eeitem.hxx>
