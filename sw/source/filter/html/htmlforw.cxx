@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlforw.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 13:45:01 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:05:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1184,7 +1184,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             if( aTmp.getValueType() == ::getCppuType((const sal_Int32*)0) )
             {
                 Color aColor( *(sal_Int32*)aTmp .getValue() );
-                aItemSet.Put( SvxColorItem( aColor ) );
+                aItemSet.Put( SvxColorItem( aColor, RES_CHRATR_COLOR ) );
             }
         }
         sPropName = OUString::createFromAscii( "FontHeight" );
@@ -1196,7 +1196,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             {
                 float nHeight = *(float*)aTmp.getValue();
                 if( nHeight > 0  && (!bEdit || nHeight != 10.) )
-                    aItemSet.Put( SvxFontHeightItem( sal_Int16(nHeight * 20.) ) );
+                    aItemSet.Put( SvxFontHeightItem( sal_Int16(nHeight * 20.), 100, RES_CHRATR_FONTSIZE ) );
             }
         }
         sPropName = OUString::createFromAscii( "FontName" );
@@ -1220,7 +1220,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                         if( aTmp.getValueType() == ::getCppuType((const sal_Int16*)0))
                             eFamily = (FontFamily)*(sal_Int16*) aTmp.getValue();
                     }
-                    SvxFontItem aItem( eFamily, aFName, aEmptyStr );
+                    SvxFontItem aItem( eFamily, aFName, aEmptyStr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT );
                     aItemSet.Put( aItem );
                 }
             }
@@ -1234,7 +1234,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 FontWeight eWeight =
                     VCLUnoHelper::ConvertFontWeight( *(float*)aTmp.getValue() );
                 if( eWeight != WEIGHT_DONTKNOW && eWeight != WEIGHT_NORMAL )
-                    aItemSet.Put( SvxWeightItem( eWeight ) );
+                    aItemSet.Put( SvxWeightItem( eWeight, RES_CHRATR_WEIGHT ) );
             }
         }
         sPropName = OUString::createFromAscii( "FontSlant" );
@@ -1245,7 +1245,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             {
                 FontItalic eItalic = (FontItalic)*(sal_Int16*)aTmp.getValue();
                 if( eItalic != ITALIC_DONTKNOW && eItalic != ITALIC_NONE )
-                    aItemSet.Put( SvxPostureItem( eItalic ) );
+                    aItemSet.Put( SvxPostureItem( eItalic, RES_CHRATR_POSTURE ) );
             }
         }
         sPropName = OUString::createFromAscii( "FontUnderline" );
@@ -1258,7 +1258,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                     (FontUnderline)*(sal_Int16*)aTmp.getValue();
                 if( eUnderline != UNDERLINE_DONTKNOW  &&
                     eUnderline != UNDERLINE_NONE )
-                    aItemSet.Put( SvxUnderlineItem( eUnderline ) );
+                    aItemSet.Put( SvxUnderlineItem( eUnderline, RES_CHRATR_UNDERLINE ) );
             }
         }
         sPropName = OUString::createFromAscii( "FontStrikeout" );
@@ -1271,7 +1271,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                     (FontStrikeout)*(sal_Int16*)aTmp.getValue();
                 if( eStrikeout != STRIKEOUT_DONTKNOW &&
                     eStrikeout != STRIKEOUT_NONE )
-                    aItemSet.Put( SvxCrossedOutItem( eStrikeout ) );
+                    aItemSet.Put( SvxCrossedOutItem( eStrikeout, RES_CHRATR_CROSSEDOUT ) );
             }
         }
 
