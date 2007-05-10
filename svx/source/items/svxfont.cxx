@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxfont.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:55:54 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:53:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,8 +56,6 @@
 #ifndef _COM_SUN_STAR_I18N_KCHARACTERTYPE_HPP_
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #endif
-
-#define ITEMID_ESCAPEMENT   0
 
 #define _SVX_SVXFONT_CXX
 
