@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwview.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:56:26 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:18:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -304,22 +304,11 @@ void UnoDataBrowserView::resizeDocumentView(Rectangle& _rPlayground)
 }
 
 //------------------------------------------------------------------
-sal_uInt16 UnoDataBrowserView::Model2ViewPos(sal_uInt16 nPos) const
-{
-    return m_pVclControl ? m_pVclControl->GetViewColumnPos(m_pVclControl->GetColumnIdFromModelPos(nPos)) : -1;
-}
-
-//------------------------------------------------------------------
 sal_uInt16 UnoDataBrowserView::View2ModelPos(sal_uInt16 nPos) const
 {
     return m_pVclControl ? m_pVclControl->GetModelColumnPos(m_pVclControl->GetColumnIdFromViewPos(nPos)) : -1;
 }
 
-//------------------------------------------------------------------
-sal_uInt16 UnoDataBrowserView::ViewColumnCount() const
-{
-    return m_pVclControl ? m_pVclControl->GetViewColCount() : 0;
-}
 // -----------------------------------------------------------------------------
 SbaGridControl* UnoDataBrowserView::getVclControl() const
 {
