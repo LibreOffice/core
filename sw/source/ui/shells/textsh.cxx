@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:17:55 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:24:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,6 @@
 #define _SW_FRMVALID_HXX
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
 #endif
 
 #include <svtools/globalnameitem.hxx>
@@ -1203,7 +1200,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
     rSh.GetAttr( aSet );
     USHORT nScript = rSh.GetScriptType();
 
-    SvxFontItem aFont;
+    SvxFontItem aFont( RES_CHRATR_FONT );
     {
         SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, *aSet.GetPool() );
         aSetItem.GetItemSet().Put( aSet, FALSE );
