@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conn_shared_res.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 13:52:12 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:39:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 #include "resource/common_res.hrc"
 #include "resource/mozab_res.hrc"
+#include "resource/calc_res.hrc"
 
 // ============================================================================
 // = the mozab driver's resource strings
@@ -147,4 +148,20 @@ String STR_NO_BASEDN
 String STR_COULD_NOT_CONNECT_LDAP
 {
     Text [ en-US ] = "The connection to the LDAP server could not be established.";
+};
+
+// ============================================================================
+// = the mozab driver's resource strings
+// ============================================================================
+
+String STR_COULD_NOT_LOAD_FILE
+{
+    Text [ de ] = "Die Datei $filename$ konnte nicht geladen werden.";
+    Text [ en-US ] = "The file $filename$ could not be loaded.";
+};
+
+String STR_LOAD_FILE_ERROR_MESSAGE
+{
+    Text [ de ] = "Der Versuch, die Datei zu laden, führte zu folgender Fehlermeldung ($exception_type$):\n\n$error_message$";
+    Text [ en-US ] = "The attempt to load the file resulted in the following error message ($exception_type$):\n\n$error_message$";
 };
