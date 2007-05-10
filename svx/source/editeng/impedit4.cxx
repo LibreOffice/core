@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:39:46 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:46:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2257,7 +2257,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView, const ::svx::Spell
                 {
                     //apply language
                     SfxItemSet aSet( aEditDoc.GetItemPool(), nLangWhichId, nLangWhichId);
-                    aSet.Put(SvxLanguageItem(aCurrentNewPortion->eLanguage));
+                    aSet.Put(SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId));
                     SetAttribs( *aCurrentOldPosition, aSet );
                 }
                 if(aCurrentNewPortion == rNewPortions.begin())
