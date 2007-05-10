@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:54:37 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:15:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1926,6 +1926,28 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             }
         }
 
+        // --> OD 2007-04-24 #i75457#
+        // Export page break after attribute from paragraph style.
+        {
+            // If page break attribute at the text node exist, an existing page
+            // break after at the paragraph style hasn't got to be considered.
+            if ( !pNd->GetpSwAttrSet() ||
+                 SFX_ITEM_SET != pNd->GetpSwAttrSet()->GetItemState(RES_BREAK, false) )
+            {
+                const SvxFmtBreakItem* pBreakAtParaStyle =
+                    &(ItemGet<SvxFmtBreakItem>(pNd->GetSwAttrSet(), RES_BREAK));
+                if ( pBreakAtParaStyle &&
+                     pBreakAtParaStyle->GetBreak() == SVX_BREAK_PAGE_AFTER )
+                {
+                    if ( !pTmpSet )
+                    {
+                        pTmpSet = new SfxItemSet(pNd->GetSwAttrSet());
+                    }
+                    pTmpSet->Put( *pBreakAtParaStyle );
+                }
+            }
+        }
+
         const SfxItemSet* pNewSet = pTmpSet ? pTmpSet : pNd->GetpSwAttrSet();
         if( pNewSet )
         {                                               // Para-Attrs
@@ -2787,9 +2809,11 @@ void SwWW8Writer::OutWW8FlyFrm(const sw::Frame& rFmt, const Point& rNdTopLeft)
         {
             // ein NICHT zeichengebundener Rahmen liegt vor
 
-            const SwFmtFrmSize& rS = rFrmFmt.GetFrmSize();
-            nFlyWidth  = rS.GetWidth();  // Fuer Anpassung Graphic-Groesse
-            nFlyHeight = rS.GetHeight();
+            // --> OD 2007-04-19 #i43447# - removed
+//            const SwFmtFrmSize& rS = rFrmFmt.GetFrmSize();
+//            nFlyWidth  = rS.GetWidth();  // Fuer Anpassung Graphic-Groesse
+//            nFlyHeight = rS.GetHeight();
+            // <--
 
             {
                 WW8SaveData aSaveData( *this, nStt, nEnd );
