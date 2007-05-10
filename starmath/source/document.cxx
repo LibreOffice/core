@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:15:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:08:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,9 +154,6 @@
 #endif
 #ifndef _EDITSTAT_HXX
 #include <svx/editstat.hxx>
-#endif
-#ifndef _EEITEMID_HXX
-#include <svx/eeitemid.hxx>
 #endif
 #ifndef _SVX_FONTITEM_HXX
 #include <svx/fontitem.hxx>
