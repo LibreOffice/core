@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optasian.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:37:00 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:38:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,6 @@
 
 #ifndef _SVX_OPTASIAN_HXX
 #include <optasian.hxx>
-#endif
-#ifndef _EEITEMID_HXX
-#include <eeitemid.hxx>
 #endif
 #ifndef _SVX_LANGITEM_HXX
 #include <langitem.hxx>
