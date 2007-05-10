@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxbmpnumvalueset.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 06:50:43 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:41:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
-#define ITEMID_BRUSH SID_ATTR_BRUSH
+
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <brshitem.hxx>
 #endif
@@ -98,7 +98,7 @@
 #include <dlgutil.hxx>
 #endif
 #ifndef _XTABLE_HXX //autogen
-#define ITEMID_COLOR_TABLE SID_COLOR_TABLE
+
 #include <xtable.hxx>
 #endif
 #ifndef _SVX_DRAWITEM_HXX //autogen
