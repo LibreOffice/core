@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:22:54 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:51:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,18 +40,15 @@
 #include <ctype.h>
 #include <hash_map>
 
-#ifndef _FRM_DATABASEFORM_HXX_
 #include "DatabaseForm.hxx"
-#endif
-#ifndef _FRM_EVENT_THREAD_HXX_
 #include "EventThread.hxx"
-#endif
-#ifndef _FRM_RESOURCE_HXX_
 #include "frm_resource.hxx"
-#endif
-#ifndef _FRM_RESOURCE_HRC_
 #include "frm_resource.hrc"
-#endif
+#include "GroupManager.hxx"
+#include "property.hrc"
+#include "property.hxx"
+#include "services.hxx"
+#include "frm_module.hxx"
 
 #ifndef _COM_SUN_STAR_SDB_XCOLUMNUPDATE_HPP_
 #include <com/sun/star/sdb/XColumnUpdate.hpp>
@@ -130,20 +127,6 @@
 #include <vcl/timer.hxx>
 #endif
 
-#ifndef _FRM_GROUPMANAGER_HXX_
-#include "GroupManager.hxx"
-#endif
-
-#ifndef _FRM_PROPERTY_HRC_
-#include "property.hrc"
-#endif
-#ifndef _FRM_PROPERTY_HXX_
-#include "property.hxx"
-#endif
-#ifndef _FRM_SERVICES_HXX_
-#include "services.hxx"
-#endif
-
 #ifndef _FSYS_HXX
 #include <tools/fsys.hxx>
 #endif
@@ -212,9 +195,6 @@
 #endif
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
-#endif
-#ifndef FRM_MODULE_HXX
-#include "frm_module.hxx"
 #endif
 
 // compatiblity: DatabaseCursorType is dead, but for compatiblity reasons we still have to write it ...
@@ -403,6 +383,7 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
         ,m_aSubmitListeners(m_aMutex)
         ,m_aErrorListeners(m_aMutex)
         ,m_aResetListeners( *this, m_aMutex )
+        ,m_aPropertyBagHelper( *this )
         ,m_pAggregatePropertyMultiplexer(NULL)
         ,m_pGroupManager( NULL )
         ,m_aParameterManager( m_aMutex, _rxFactory )
@@ -1387,6 +1368,8 @@ void ODatabaseForm::disposing()
     Reference<XComponent>  xAggregationComponent;
     if (query_aggregation(m_xAggregate, xAggregationComponent))
         xAggregationComponent->dispose();
+
+    m_aPropertyBagHelper.dispose();
 }
 
 //------------------------------------------------------------------------------
@@ -1397,10 +1380,16 @@ Reference< XConnection > ODatabaseForm::getConnection()
     return xConn;
 }
 
+//------------------------------------------------------------------------------
+::osl::Mutex& ODatabaseForm::getMutex()
+{
+    return m_aMutex;
+}
+
 //==============================================================================
 // property handling
 //------------------------------------------------------------------------------
-void ODatabaseForm::fillProperties(
+void ODatabaseForm::describeFixedAndAggregateProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
@@ -1450,15 +1439,45 @@ void ODatabaseForm::fillProperties(
 }
 
 //------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper& ODatabaseForm::getInfoHelper()
+Reference< XMultiPropertySet > ODatabaseForm::getPropertiesInterface()
 {
-    return *const_cast<ODatabaseForm*>(this)->getArrayHelper();
+    return Reference< XMultiPropertySet >( *this, UNO_QUERY );
 }
 
 //------------------------------------------------------------------------------
-Reference<XPropertySetInfo>  ODatabaseForm::getPropertySetInfo() throw( RuntimeException )
+::cppu::IPropertyArrayHelper& ODatabaseForm::getInfoHelper()
+{
+    return m_aPropertyBagHelper.getInfoHelper();
+}
+
+//------------------------------------------------------------------------------
+Reference< XPropertySetInfo > ODatabaseForm::getPropertySetInfo() throw( RuntimeException )
 {
     return createPropertySetInfo( getInfoHelper() );
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL ODatabaseForm::addProperty( const ::rtl::OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
+{
+    m_aPropertyBagHelper.addProperty( _rName, _nAttributes, _rInitialValue );
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL ODatabaseForm::removeProperty( const ::rtl::OUString& _rName ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException)
+{
+    m_aPropertyBagHelper.removeProperty( _rName );
+}
+
+//--------------------------------------------------------------------
+Sequence< PropertyValue > SAL_CALL ODatabaseForm::getPropertyValues() throw (RuntimeException)
+{
+    return m_aPropertyBagHelper.getPropertyValues();
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL ODatabaseForm::setPropertyValues( const Sequence< PropertyValue >& _rProps ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+{
+    m_aPropertyBagHelper.setPropertyValues( _rProps );
 }
 
 //------------------------------------------------------------------------------
@@ -1583,7 +1602,10 @@ void ODatabaseForm::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
             rValue = m_aControlBorderColorInvalid;
             break;
         default:
-            OPropertySetAggregationHelper::getFastPropertyValue( rValue, nHandle );
+            if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( nHandle ) )
+                m_aPropertyBagHelper.getDynamicFastPropertyValue( nHandle, rValue );
+            else
+                OPropertySetAggregationHelper::getFastPropertyValue( rValue, nHandle );
             break;
     }
 }
@@ -1663,7 +1685,10 @@ sal_Bool ODatabaseForm::convertFastPropertyValue( Any& rConvertedValue, Any& rOl
             bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aControlBorderColorInvalid, getCppuType( static_cast< sal_Int32* >( NULL ) ) );
             break;
         default:
-            bModified = OPropertySetAggregationHelper::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
+            if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle ( nHandle ) )
+                bModified = m_aPropertyBagHelper.convertDynamicFastPropertyValue( nHandle, rValue, rConvertedValue, rOldValue );
+            else
+                bModified = OPropertySetAggregationHelper::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
             break;
     }
     return bModified;
@@ -1772,11 +1797,15 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
                     // implied by the database we're embedded in
                     throw PropertyVetoException();
             }
+            OPropertySetAggregationHelper::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+            break;
         }
-        // NO break!
 
         default:
-            OPropertySetAggregationHelper::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+            if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( nHandle ) )
+                m_aPropertyBagHelper.setDynamicFastPropertyValue( nHandle, rValue );
+            else
+                OPropertySetAggregationHelper::setFastPropertyValue_NoBroadcast( nHandle, rValue );
             break;
     }
 }
@@ -1889,30 +1918,40 @@ void ODatabaseForm::setPropertyToDefaultByHandle(sal_Int32 nHandle)
 //------------------------------------------------------------------
 Any ODatabaseForm::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 {
+    Any aReturn;
     switch (nHandle)
     {
         case PROPERTY_ID_INSERTONLY:
         case PROPERTY_ID_DYNAMIC_CONTROL_BORDER:
-            return makeAny( (sal_Bool)(sal_False ) );
+            aReturn = makeAny( (sal_Bool)(sal_False ) );
+            break;
 
         case PROPERTY_ID_FILTER:
-            return makeAny( ::rtl::OUString() );
+            aReturn = makeAny( ::rtl::OUString() );
+            break;
 
         case PROPERTY_ID_APPLYFILTER:
-            return makeAny( (sal_Bool)(sal_True ) );
+            aReturn = makeAny( (sal_Bool)(sal_True ) );
+            break;
 
         case PROPERTY_ID_NAVIGATION:
-            return makeAny(NavigationBarMode_CURRENT);
+            aReturn = makeAny(NavigationBarMode_CURRENT);
+            break;
 
         case PROPERTY_ID_CYCLE:
         case PROPERTY_ID_CONTROL_BORDER_COLOR_FOCUS:
         case PROPERTY_ID_CONTROL_BORDER_COLOR_MOUSE:
         case PROPERTY_ID_CONTROL_BORDER_COLOR_INVALID:
-            return Any();
+            break;
 
         default:
-            return OPropertySetAggregationHelper::getPropertyDefaultByHandle(nHandle);
+            if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( nHandle ) )
+                m_aPropertyBagHelper.getDynamicPropertyDefaultByHandle( nHandle, aReturn );
+            else
+                aReturn = OPropertySetAggregationHelper::getPropertyDefaultByHandle( nHandle );
+            break;
     }
+    return aReturn;
 }
 
 //==============================================================================
