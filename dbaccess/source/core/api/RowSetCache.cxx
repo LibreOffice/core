@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:44:26 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1383,11 +1383,6 @@ void ORowSetCache::rotateCacheIterator(ORowSetMatrix::difference_type _nDist)
             }
         }
     }
-}
-// -----------------------------------------------------------------------------
-void ORowSetCache::clearModified(  )
-{
-    m_bModified = sal_False;
 }
 // -------------------------------------------------------------------------
 void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRow)
