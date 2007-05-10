@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:15:02 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:09:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1411,7 +1411,7 @@ SvxBrushItem SwWW8Writer::TrueFrameBgBrush(const SwFrmFmt &rFlyFmt) const
     if (!pRet)
         pRet = GetCurrentPageBgBrush();
 
-    SvxBrushItem aRet = Color(COL_WHITE);
+    SvxBrushItem aRet( Color(COL_WHITE), RES_BACKGROUND );
     if (pRet && (pRet->GetGraphic() ||( pRet->GetColor() != COL_TRANSPARENT)))
         aRet = *pRet;
 
@@ -1879,7 +1879,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             if ( !pTmpSet )
                 pTmpSet = new SfxItemSet(pNd->GetSwAttrSet());
 
-            pTmpSet->Put(SvxFrameDirectionItem(FRMDIR_HORI_RIGHT_TOP));
+            pTmpSet->Put(SvxFrameDirectionItem(FRMDIR_HORI_RIGHT_TOP, RES_FRAMEDIR));
         }
         // --> OD 2005-10-18 #126238# - move code for handling of numbered,
         // but not counted paragraphs to this place. Otherwise, the paragraph
@@ -1904,7 +1904,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             pTmpSet->GetItemState(RES_LR_SPACE, TRUE, &pItem);
             SvxLRSpaceItem aLRSpace(
                 ( pItem == NULL )
-                    ? SvxLRSpaceItem(0, 0)
+                    ? SvxLRSpaceItem( 0, 0, 0, 0, RES_LR_SPACE )
                     : *static_cast<const SvxLRSpaceItem*>( pItem ) );
 
             // new left margin = old left + label space
