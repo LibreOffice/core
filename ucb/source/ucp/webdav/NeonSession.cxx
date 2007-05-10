@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:05:15 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:07:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -270,7 +270,8 @@ extern "C" void NeonSession_ResponseBlockWriter
     {
         NeonRequestContext * pCtx
             = static_cast< NeonRequestContext * >( inUserData );
-        uno::Reference< io::XOutputStream > xOutputStream = pCtx->xOutputStream;
+        uno::Reference< io::XOutputStream > xOutputStream
+            = pCtx->xOutputStream;
 
         if ( xOutputStream.is() )
         {
@@ -323,8 +324,8 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
 
     if ( attempt == 0 )
     {
-        // neon does not handle username supplied with request URI (for instance
-        // when doing FTP over proxy - last checked: 0.23.5 )
+        // neon does not handle username supplied with request URI (for
+        // instance when doing FTP over proxy - last checked: 0.23.5 )
 
         NeonUri uri( theSession->getRequestEnvironment().m_aRequestURI );
         rtl::OUString aUserInfo( uri.GetUserInfo() );
@@ -594,9 +595,10 @@ void NeonSession::Init()
                 throw DAVException( DAVException::DAV_SESSION_CREATE,
                                     NeonUri::makeConnectionEndPointString(
                                                     m_aHostName, m_nPort ) );
-        // #122205# libxml2 needs to be initialized once if used by
-        // multithreaded programs like OOo
-        xmlInitParser();
+
+            // #122205# - libxml2 needs to be initialized once if used by
+            // multithreaded programs like OOo.
+            xmlInitParser();
 
             m_bGlobalsInited = true;
         }
@@ -1170,10 +1172,7 @@ void NeonSession::PUT( const rtl::OUString &                      inPath,
 
     uno::Sequence< sal_Int8 > aDataToSend;
     if ( !getDataFromInputStream( inInputStream, aDataToSend, false ) )
-    {
-        // @@@ error
-        return;
-    }
+        throw DAVException( DAVException::DAV_INVALID_ARG );
 
     int theRetVal = PUT( m_pHttpSession,
                          rtl::OUStringToOString(
@@ -1200,10 +1199,7 @@ NeonSession::POST( const rtl::OUString & inPath,
 
     uno::Sequence< sal_Int8 > aDataToSend;
     if ( !getDataFromInputStream( inInputStream, aDataToSend, true ) )
-    {
-        // @@@ error
-        return uno::Reference< io::XInputStream >();
-    }
+        throw DAVException( DAVException::DAV_INVALID_ARG );
 
     Init();
 
@@ -1240,9 +1236,7 @@ void NeonSession::POST( const rtl::OUString & inPath,
 
     uno::Sequence< sal_Int8 > aDataToSend;
     if ( !getDataFromInputStream( inInputStream, aDataToSend, true ) )
-    {
-        // @@@ error
-    }
+        throw DAVException( DAVException::DAV_INVALID_ARG );
 
     Init();
 
@@ -1591,7 +1585,8 @@ int NeonSession::GET( ne_session * sess,
     ne_request * req = ne_request_create( sess, "GET", uri );
     int ret;
 #if NEON_VERSION < 0250
-    ne_add_response_header_catcher( req, handler, userdata );
+    if ( handler != 0 )
+        ne_add_response_header_catcher( req, handler, userdata );
 #endif
     ne_add_response_body_reader( req, ne_accept_2xx, reader, userdata );
 
@@ -1702,8 +1697,10 @@ bool NeonSession::getDataFromInputStream(
         {
             try
             {
-                sal_Int32 nSize = sal::static_int_cast<sal_Int32>(xSeekable->getLength());
-                sal_Int32 nRead = xStream->readBytes( rData, nSize );
+                sal_Int32 nSize
+                    = sal::static_int_cast<sal_Int32>(xSeekable->getLength());
+                sal_Int32 nRead
+                    = xStream->readBytes( rData, nSize );
 
                 if ( nRead == nSize )
                 {
