@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optitems.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:00:31 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:55:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,9 +49,6 @@
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER1_HPP_
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #endif
-
-#define ITEMID_SPELLCHECK   0
-#define ITEMID_HYPHENREGION 0
 
 #include "optitems.hxx"
 #include "dialmgr.hxx"
