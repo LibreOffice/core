@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-20 08:43:35 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:23:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -308,7 +308,7 @@
 //  namespace
 //________________________________________________________________________________________________________
 #ifdef css
-    #error "clas on using css as namespace define .-)
+    #error "class is using css as namespace define .-)"
 #else
     #define css ::com::sun::star
 #endif
