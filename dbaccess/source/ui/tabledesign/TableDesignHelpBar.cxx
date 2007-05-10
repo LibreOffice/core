@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDesignHelpBar.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:29:58 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:41:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,24 +136,3 @@ void OTableDesignHelpBar::copy()
 void OTableDesignHelpBar::paste()
 {
 }
-
-
-//==================================================================
-// class OFieldPropTabCtrl
-//==================================================================
-DBG_NAME(OFieldPropTabCtrl);
-//==================================================================
-OFieldPropTabCtrl::OFieldPropTabCtrl( Window* pParent, WinBits nWinStyle ) :
-    TabControl( pParent, nWinStyle )
-{
-    DBG_CTOR(OFieldPropTabCtrl,NULL);
-}
-
-//------------------------------------------------------------------------------
-OFieldPropTabCtrl::~OFieldPropTabCtrl()
-{
-    DBG_DTOR(OFieldPropTabCtrl,NULL);
-}
-
-
-
