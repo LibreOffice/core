@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linedescriptor.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:58:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:48:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,9 +60,11 @@ namespace pcr
         ::com::sun::star::uno::Any  aValue;             // the current value of the property
 
         bool                        bUnknownValue    : 1;   // is the property value currently "unknown"? (PropertyState_AMBIGUOUS)
+        bool                        bReadOnly        : 1;
 
         OLineDescriptor()
             :bUnknownValue( false )
+            ,bReadOnly( false )
         {
         }
 
