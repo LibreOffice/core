@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CharacterPropertyItemConverter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:01:34 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:34:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,27 +45,21 @@
 #include <svx/eeitem.hxx>
 #endif
 #ifndef _SVX_UDLNITEM_HXX
-#define ITEMID_UNDERLINE EE_CHAR_UNDERLINE
 #include <svx/udlnitem.hxx>
 #endif
 #ifndef _SVX_FONTITEM_HXX
-#define ITEMID_FONT EE_CHAR_FONTINFO
 #include <svx/fontitem.hxx>
 #endif
 #ifndef _SVX_CRSDITEM_HXX
-#define ITEMID_CROSSEDOUT EE_CHAR_STRIKEOUT
 #include <svx/crsditem.hxx>
 #endif
 #ifndef _SVX_POSTITEM_HXX
-#define ITEMID_POSTURE EE_CHAR_ITALIC
 #include <svx/postitem.hxx>
 #endif
 #ifndef _SVX_WGHTITEM_HXX
-#define ITEMID_WEIGHT EE_CHAR_WEIGHT
 #include <svx/wghtitem.hxx>
 #endif
 #ifndef _SVX_FHGTITEM_HXX
-#define ITEMID_FONTHEIGHT EE_CHAR_FONTHEIGHT
 #include <svx/fhgtitem.hxx>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
@@ -180,7 +174,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
 
         case EE_CHAR_UNDERLINE:
         {
-            SvxUnderlineItem aItem;
+            SvxUnderlineItem aItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE);
             bool bModified = false;
 
             uno::Any aValue( GetPropertySet()->getPropertyValue( C2U( "CharUnderline" )));
@@ -212,7 +206,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
 
         case EE_CHAR_STRIKEOUT:
         {
-            SvxCrossedOutItem aItem;
+            SvxCrossedOutItem aItem( STRIKEOUT_NONE, EE_CHAR_STRIKEOUT );
 
             uno::Any aValue( GetPropertySet()->getPropertyValue( C2U( "CharStrikeout" )));
             if( aValue.hasValue())
