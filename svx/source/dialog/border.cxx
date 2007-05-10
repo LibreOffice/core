@@ -4,9 +4,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:25:56 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:35:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,11 +57,6 @@
 #include "svxitems.hrc"
 #include "border.hrc"
 #include "helpid.hrc"
-
-#define ITEMID_COLOR_TABLE  0
-#define ITEMID_BOX          SID_ATTR_BORDER_OUTER
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
-#define ITEMID_SHADOW       SID_ATTR_BORDER_SHADOW
 
 #define LINESTYLE_HTML_MAX 5
 
@@ -419,10 +414,10 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
     // --> OD 2005-03-01 #i43593# - item connection doesn't work for Writer,
     // because the Writer item sets contain these items
     // checkbox "Merge with next paragraph" only visible for Writer dialog format.paragraph
-    AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_BORDER_CONNECT, aMergeWithNextCB, sfx::ITEMCONN_CLONE_ITEM | sfx::ITEMCONN_DEFAULT ) );
+    AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_BORDER_CONNECT, aMergeWithNextCB, sfx::ITEMCONN_DEFAULT ) );
     aMergeWithNextCB.Hide();
     // checkbox "Merge adjacent line styles" only visible for Writer dialog format.table
-    AddItemConnection( new sfx::CheckBoxConnection( SID_SW_COLLAPSING_BORDERS, aMergeAdjacentBordersCB, sfx::ITEMCONN_CLONE_ITEM | sfx::ITEMCONN_DEFAULT ) );
+    AddItemConnection( new sfx::CheckBoxConnection( SID_SW_COLLAPSING_BORDERS, aMergeAdjacentBordersCB, sfx::ITEMCONN_DEFAULT ) );
     aMergeAdjacentBordersCB.Hide();
     // <--
 }
