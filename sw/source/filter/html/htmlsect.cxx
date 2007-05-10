@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlsect.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:11:34 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:05:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -430,7 +430,7 @@ void SwHTMLParser::NewDivision( int nToken )
 
     if( SVX_ADJUST_END != eAdjust )
     {
-        InsertAttr( &aAttrTab.pAdjust, SvxAdjustItem(eAdjust), pCntxt );
+        InsertAttr( &aAttrTab.pAdjust, SvxAdjustItem(eAdjust, RES_PARATR_ADJUST), pCntxt );
     }
 
     // Style parsen
@@ -513,7 +513,7 @@ void SwHTMLParser::FixHeaderFooterDistance( sal_Bool bHeader,
         else
             pTxtNode->SwCntntNode::SetAttr(
                 SvxULSpaceItem( rULSpace.GetUpper(),
-                                rCollULSpace.GetLower() ) );
+                                rCollULSpace.GetLower(), RES_UL_SPACE ) );
     }
 
     if( bHeader )
@@ -547,10 +547,10 @@ void SwHTMLParser::FixHeaderFooterDistance( sal_Bool bHeader,
         else
             pTxtNode->SwCntntNode::SetAttr(
                 SvxULSpaceItem( rCollULSpace.GetUpper(),
-                                rULSpace.GetLower() ) );
+                                rULSpace.GetLower(), RES_UL_SPACE ) );
     }
 
-    SvxULSpaceItem aULSpace;
+    SvxULSpaceItem aULSpace( RES_UL_SPACE );
     if( bHeader )
         aULSpace.SetLower( nSpace );
     else
