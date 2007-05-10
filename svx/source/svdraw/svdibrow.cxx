@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdibrow.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:43:08 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:57:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,9 +99,6 @@
 #include "colritem.hxx"
 #endif
 
-#ifndef _EEITEMID_HXX
-#include <eeitemid.hxx>
-#endif
 
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include "fontitem.hxx"
