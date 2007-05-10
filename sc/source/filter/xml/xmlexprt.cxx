@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.203 $
+ *  $Revision: 1.204 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:43:42 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:52:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <svx/eeitem.hxx>
-#define ITEMID_FIELD EE_FEATURE_FIELD
+
 
 #ifndef SC_XMLEXPRT_HXX
 #include "xmlexprt.hxx"
