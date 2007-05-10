@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:26:04 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:05:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
+// no include "precompiled_dbaccess.hxx" because this file is meant to
+// be included itself
 
 //============================================================
 //= property names
