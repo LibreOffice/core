@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtreeview.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:27:53 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:18:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,23 +73,10 @@ namespace dbaui
         */
         void    SetPreExpandHandler(const Link& _rHdl);
         /// gets the currently set NodeExpansionHandler
-        Link    GetPreExpandHandler() const;
 
-        void    setCutHandler(const Link& _rHdl);
-        Link    getCutHandler() const;
         void    setCopyHandler(const Link& _rHdl);
-        Link    getCopyHandler() const;
-        void    setPasteHandler(const Link& _rHdl);
-        Link    getPasteHandler() const;
-        void    setDeleteHandler(const Link& _rHdl);
-        Link    getDeleteHandler() const;
-        void    setEditingHandler(const Link& _rHdl);
-        Link    getEditingHandler() const;
-        void    setEditedHandler(const Link& _rHdl);
-        Link    getEditedHandler() const;
 
 
-        DBTreeListModel*    getModel() const;
         void                setModel(DBTreeListModel* _pTreeModel);
         void                setSelectHdl(const Link& _rHdl);
 
