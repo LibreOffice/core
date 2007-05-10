@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scuitphfedit.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:37:13 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:58:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@
 #define _TPHFEDIT_CXX
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
-#define ITEMID_FIELD EE_FEATURE_FIELD
 
 //CHINA001 #include <svx/chardlg.hxx>
 #include <svx/editobj.hxx>
@@ -269,11 +268,11 @@ void ScHFEditPage::InitPreDefinedList()
     Color* pFldColour = NULL;
 
     // Get the all field values at the outset.
-    String aPageFieldValue(aWndLeft.GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxPageField()), 0,0, pTxtColour, pFldColour));
-    String aSheetFieldValue(aWndLeft.GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxTableField()), 0,0, pTxtColour, pFldColour));
-    String aFileFieldValue(aWndLeft.GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxFileField()), 0,0, pTxtColour, pFldColour));
-    String aExtFileFieldValue(aWndLeft.GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxExtFileField()), 0,0, pTxtColour, pFldColour));
-    String aDateFieldValue(aWndLeft.GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxDateField()), 0,0, pTxtColour, pFldColour));
+    String aPageFieldValue(aWndLeft.GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), 0,0, pTxtColour, pFldColour));
+    String aSheetFieldValue(aWndLeft.GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), 0,0, pTxtColour, pFldColour));
+    String aFileFieldValue(aWndLeft.GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), 0,0, pTxtColour, pFldColour));
+    String aExtFileFieldValue(aWndLeft.GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxExtFileField(), EE_FEATURE_FIELD), 0,0, pTxtColour, pFldColour));
+    String aDateFieldValue(aWndLeft.GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxDateField(), EE_FEATURE_FIELD), 0,0, pTxtColour, pFldColour));
 
     maLbDefined.Clear();
 
@@ -649,7 +648,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             String aPageEntry(ScGlobal::GetRscString( STR_PAGE ) );
             aPageEntry += ' ';
             aWndCenter.GetEditEngine()->SetText(aPageEntry);
-            aWndCenter.InsertField( SvxFieldItem(SvxPageField()) );
+            aWndCenter.InsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD) );
             if(!bTravelling)
                 aWndCenter.GrabFocus();
         }
@@ -663,14 +662,14 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             aPageEntry += ' ';
             aWndCenter.GetEditEngine()->SetText(aPageEntry);
             aSel.nEndPos = aPageEntry.Len();
-            aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField()), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
+            aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             ++aSel.nEndPos;
             String aPageOfEntry = ' ';
             aPageOfEntry += ScGlobal::GetRscString( STR_HF_OF );
             aPageOfEntry += ' ';
             aWndCenter.GetEditEngine()->QuickInsertText(aPageOfEntry,ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             aSel.nEndPos = sal::static_int_cast<xub_StrLen>( aSel.nEndPos + aPageOfEntry.Len() );
-            aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPagesField()), ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
+            aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPagesField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             pTextObj.reset(aWndCenter.GetEditEngine()->CreateTextObject());
             aWndCenter.SetText(*pTextObj);
             XubString aEntry(pTextObj.get()->GetText(0));
@@ -681,7 +680,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
 
         case eSheetEntry:
             ClearTextAreas();
-            aWndCenter.InsertField( SvxFieldItem(SvxTableField()) );
+            aWndCenter.InsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD) );
             if(!bTravelling)
                 aWndCenter.GrabFocus();
         break;
@@ -693,11 +692,11 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             aConfidentialEntry += ' ';
             aConfidentialEntry += ScGlobal::GetRscString( STR_HF_CONFIDENTIAL );
             aWndLeft.GetEditEngine()->SetText(aConfidentialEntry);
-            aWndCenter.InsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR)) );
+            aWndCenter.InsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR), EE_FEATURE_FIELD) );
             String aPageEntry(ScGlobal::GetRscString( STR_PAGE ) );
             aPageEntry += ' ';
             aWndRight.GetEditEngine()->SetText(aPageEntry);
-            aWndRight.InsertField( SvxFieldItem(SvxPageField()) );
+            aWndRight.InsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD) );
             if(!bTravelling)
                 aWndRight.GrabFocus();
         }
@@ -707,7 +706,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
         {
             ClearTextAreas();
             ESelection aSel(0,0,0,0);
-            aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem( SvxFileField() ), aSel );
+            aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem( SvxFileField(), EE_FEATURE_FIELD ), aSel );
             ++aSel.nEndPos;
             String aPageEntry(RTL_CONSTASCII_STRINGPARAM(", "));
             aPageEntry += ScGlobal::GetRscString( STR_PAGE ) ;
@@ -715,7 +714,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             aWndCenter.GetEditEngine()->QuickInsertText(aPageEntry, ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             aSel.nStartPos = aSel.nEndPos;
             aSel.nEndPos = sal::static_int_cast<xub_StrLen>( aSel.nEndPos + aPageEntry.Len() );
-            aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField()), ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
+            aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             pTextObj.reset(aWndCenter.GetEditEngine()->CreateTextObject());
             aWndCenter.SetText(*pTextObj);
             XubString aEntry2(pTextObj.get()->GetText(0));
@@ -727,7 +726,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
         case eExtFileNameEntry:
             ClearTextAreas();
             aWndCenter.InsertField( SvxFieldItem( SvxExtFileField(
-                EMPTY_STRING, SVXFILETYPE_VAR, SVXFILEFORMAT_FULLPATH ) ) );
+                EMPTY_STRING, SVXFILETYPE_VAR, SVXFILEFORMAT_FULLPATH ), EE_FEATURE_FIELD ) );
             if(!bTravelling)
                 aWndCenter.GrabFocus();
         break;
@@ -740,12 +739,12 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             aPageEntry += ' ';
             aWndCenter.GetEditEngine()->SetText(aPageEntry);
             aSel.nEndPos = aPageEntry.Len();
-            aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField()), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
+            aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             ++aSel.nEndPos;
             String aCommaSpace(RTL_CONSTASCII_STRINGPARAM(", "));
             aWndCenter.GetEditEngine()->QuickInsertText(aCommaSpace,ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             aSel.nEndPos = sal::static_int_cast<xub_StrLen>( aSel.nEndPos + aCommaSpace.Len() );
-            aWndCenter.GetEditEngine()->QuickInsertField( SvxFieldItem(SvxTableField()), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
+            aWndCenter.GetEditEngine()->QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             pTextObj.reset(aWndCenter.GetEditEngine()->CreateTextObject());
             aWndCenter.SetText(*pTextObj);
             if(!bTravelling)
@@ -761,12 +760,12 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             aPageEntry += ' ';
             aWndCenter.GetEditEngine()->SetText(aPageEntry);
             aSel.nEndPos = aPageEntry.Len();
-            aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField()), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
+            aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             ++aSel.nEndPos;
             String aCommaSpace(RTL_CONSTASCII_STRINGPARAM(", "));
             aWndCenter.GetEditEngine()->QuickInsertText(aCommaSpace,ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             aSel.nEndPos = sal::static_int_cast<xub_StrLen>( aSel.nEndPos + aCommaSpace.Len() );
-            aWndCenter.GetEditEngine()->QuickInsertField( SvxFieldItem(SvxFileField()), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
+            aWndCenter.GetEditEngine()->QuickInsertField( SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             pTextObj.reset(aWndCenter.GetEditEngine()->CreateTextObject());
             aWndCenter.SetText(*pTextObj);
             if(!bTravelling)
@@ -780,9 +779,9 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             String aPageEntry(ScGlobal::GetRscString( STR_PAGE ) );
             aPageEntry += ' ';
             aWndCenter.GetEditEngine()->SetText(aPageEntry);
-            aWndCenter.InsertField( SvxFieldItem(SvxPageField()) );
+            aWndCenter.InsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD) );
             aWndRight.InsertField( SvxFieldItem( SvxExtFileField(
-                EMPTY_STRING, SVXFILETYPE_VAR, SVXFILEFORMAT_FULLPATH ) ) );
+                EMPTY_STRING, SVXFILETYPE_VAR, SVXFILEFORMAT_FULLPATH ), EE_FEATURE_FIELD ) );
             if(!bTravelling)
                 aWndRight.GrabFocus();
         }
@@ -798,8 +797,8 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             String aPageEntry(ScGlobal::GetRscString( STR_PAGE ) );
             aPageEntry += ' ';
             aWndCenter.GetEditEngine()->SetText(aPageEntry);
-            aWndCenter.InsertField( SvxFieldItem(SvxPageField()) );
-            aWndRight.InsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR)) );
+            aWndCenter.InsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD) );
+            aWndRight.InsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR), EE_FEATURE_FIELD) );
             if(!bTravelling)
                 aWndRight.GrabFocus();
         }
@@ -814,11 +813,11 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             aCreatedByEntry += ' ';
             aCreatedByEntry += aUserOpt.GetLastName();
             aWndLeft.GetEditEngine()->SetText(aCreatedByEntry);
-            aWndCenter.InsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR)) );
+            aWndCenter.InsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR), EE_FEATURE_FIELD) );
             String aPageEntry(ScGlobal::GetRscString( STR_PAGE ) );
             aPageEntry += ' ';
             aWndRight.GetEditEngine()->SetText(aPageEntry);
-            aWndRight.InsertField( SvxFieldItem(SvxPageField()) );
+            aWndRight.InsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD) );
             if(!bTravelling)
                 aWndRight.GrabFocus();
         }
@@ -877,19 +876,19 @@ IMPL_LINK( ScHFEditPage, ClickHdl, ImageButton*, pBtn )
     else
     {
         if ( pBtn == &aBtnPage )
-            pActiveEdWnd->InsertField( SvxFieldItem(SvxPageField()) );
+            pActiveEdWnd->InsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD) );
         else if ( pBtn == &aBtnLastPage )
-            pActiveEdWnd->InsertField( SvxFieldItem(SvxPagesField()) );
+            pActiveEdWnd->InsertField( SvxFieldItem(SvxPagesField(), EE_FEATURE_FIELD) );
         else if ( pBtn == &aBtnDate )
-            pActiveEdWnd->InsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR)) );
+            pActiveEdWnd->InsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR), EE_FEATURE_FIELD) );
         else if ( pBtn == &aBtnTime )
-            pActiveEdWnd->InsertField( SvxFieldItem(SvxTimeField()) );
+            pActiveEdWnd->InsertField( SvxFieldItem(SvxTimeField(), EE_FEATURE_FIELD) );
         else if ( pBtn == &aBtnFile )
         {
-            pActiveEdWnd->InsertField( SvxFieldItem( SvxFileField() ) );
+            pActiveEdWnd->InsertField( SvxFieldItem( SvxFileField(), EE_FEATURE_FIELD ) );
         }
         else if ( pBtn == &aBtnTable )
-            pActiveEdWnd->InsertField( SvxFieldItem(SvxTableField()) );
+            pActiveEdWnd->InsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD) );
     }
     InsertToDefinedList();
     pActiveEdWnd->GrabFocus();
@@ -908,15 +907,15 @@ IMPL_LINK( ScHFEditPage, MenuHdl, ScExtIButton*, pBtn )
         switch(pBtn->GetSelected())
         {
             case FILE_COMMAND_TITEL:
-                pActiveEdWnd->InsertField( SvxFieldItem( SvxFileField() ) );
+                pActiveEdWnd->InsertField( SvxFieldItem( SvxFileField(), EE_FEATURE_FIELD ) );
                 break;
             case FILE_COMMAND_FILENAME:
                 pActiveEdWnd->InsertField( SvxFieldItem( SvxExtFileField(
-                        EMPTY_STRING, SVXFILETYPE_VAR, SVXFILEFORMAT_NAME_EXT ) ) );
+                        EMPTY_STRING, SVXFILETYPE_VAR, SVXFILEFORMAT_NAME_EXT ), EE_FEATURE_FIELD ) );
                 break;
             case FILE_COMMAND_PATH:
                 pActiveEdWnd->InsertField( SvxFieldItem( SvxExtFileField(
-                        EMPTY_STRING, SVXFILETYPE_VAR, SVXFILEFORMAT_FULLPATH ) ) );
+                        EMPTY_STRING, SVXFILETYPE_VAR, SVXFILEFORMAT_FULLPATH ), EE_FEATURE_FIELD ) );
                 break;
         }
     }
