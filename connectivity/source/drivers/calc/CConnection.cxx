@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CConnection.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:15:38 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:38:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,12 @@
 #ifndef _CONNECTIVITY_CALC_ODRIVER_HXX_
 #include "calc/CDriver.hxx"
 #endif
+#ifndef CONNECTIVITY_RESOURCE_CALC_HRC
+#include "resource/calc_res.hrc"
+#endif
+#ifndef CONNECTIVITY_SHAREDRESOURCES_HXX
+#include "resource/sharedresources.hxx"
+#endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
@@ -71,6 +77,9 @@
 #endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
+#endif
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
 #endif
 
 using namespace connectivity::calc;
@@ -160,17 +169,46 @@ void OCalcConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
         aArgs[nPos].Value <<= sPassword;
     }
 
-
-    Reference<XComponent> xComponent = xDesktop->loadComponentFromURL(
-                            aFileName, ::rtl::OUString::createFromAscii("_blank"), 0, aArgs );
+    Reference< XComponent > xComponent;
+    Any aLoaderException;
+    try
+    {
+        xComponent = xDesktop->loadComponentFromURL(
+            aFileName, ::rtl::OUString::createFromAscii("_blank"), 0, aArgs );
+    }
+    catch( const Exception& )
+    {
+        aLoaderException = ::cppu::getCaughtException();
+    }
     m_xDoc = Reference<XSpreadsheetDocument>( xComponent, UNO_QUERY );
 
     //  if the URL is not a spreadsheet document, throw the exception here
     //  instead of at the first access to it
     if ( !m_xDoc.is() )
-        throw SQLException();
+    {
+        SharedResources aResourceLoader;
 
-    // file::OConnection::construct (reads the directory) is not called
+        Any aErrorDetails;
+        if ( aLoaderException.hasValue() )
+        {
+            Exception aLoaderError;
+            OSL_VERIFY( aLoaderException >>= aLoaderError );
+
+            SQLException aDetailException;
+            aDetailException.Message = aResourceLoader.getResourceStringWithSubstitution(
+                STR_LOAD_FILE_ERROR_MESSAGE,
+                "$exception_type$", aLoaderException.getValueTypeName(),
+                "$error_message$", aLoaderError.Message
+            );
+            aErrorDetails <<= aDetailException;
+        }
+
+        ::rtl::OUString sError( aResourceLoader.getResourceStringWithSubstitution(
+            STR_COULD_NOT_LOAD_FILE,
+            "$filename$", aFileName
+         ) );
+        ::dbtools::throwGenericSQLException( sError, *this, aErrorDetails );
+    }
 }
 
 void OCalcConnection::disposing()
