@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawController.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:25:16 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:44:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,12 @@
 #ifndef SD_VIEW_SHELL_MANAGER_HXX
 #include "ViewShellManager.hxx"
 #endif
+#ifndef SD_FORM_SHELL_MANAGER_HXX
+#include "FormShellManager.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include "framework/PaneController.hxx"
 
 #include <comphelper/anytostring.hxx>
@@ -62,6 +68,10 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
+#endif
+
+#ifndef _SVX_FMSHELL_HXX
+#include <svx/fmshell.hxx>
 #endif
 
 #ifndef _VOS_MUTEX_HXX_
@@ -1045,6 +1055,57 @@ Reference < beans::XPropertySetInfo >  DrawController::getPropertySetInfo()
 }
 
 
+uno::Reference< form::XFormController > SAL_CALL DrawController::getFormController( const uno::Reference< form::XForm >& Form ) throw (uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    FmFormShell* pFormShell = mrBase.GetFormShellManager().GetFormShell();
+    SdrView* pSdrView = mrBase.GetDrawView();
+    ViewShell* pViewShell = mrBase.GetMainViewShell();
+    ::sd::Window* pWindow = pViewShell ? pViewShell->GetActiveWindow() : NULL;
+
+    uno::Reference< form::XFormController > xController( NULL );
+    if ( pFormShell && pSdrView && pWindow )
+        xController = pFormShell->GetFormController( Form, *pSdrView, *pWindow );
+    return xController;
+}
+
+::sal_Bool SAL_CALL DrawController::isFormDesignMode(  ) throw (uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    sal_Bool bIsDesignMode = sal_True;
+
+    FmFormShell* pFormShell = mrBase.GetFormShellManager().GetFormShell();
+    if ( pFormShell )
+        bIsDesignMode = pFormShell->IsDesignMode();
+
+    return bIsDesignMode;
+}
+
+void SAL_CALL DrawController::setFormDesignMode( ::sal_Bool _DesignMode ) throw (uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    FmFormShell* pFormShell = mrBase.GetFormShellManager().GetFormShell();
+    if ( pFormShell )
+        pFormShell->SetDesignMode( _DesignMode );
+}
+
+uno::Reference< awt::XControl > SAL_CALL DrawController::getControl( const uno::Reference< awt::XControlModel >& xModel ) throw (container::NoSuchElementException, uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    FmFormShell* pFormShell = mrBase.GetFormShellManager().GetFormShell();
+    SdrView* pSdrView = mrBase.GetDrawView();
+    ViewShell* pViewShell = mrBase.GetMainViewShell();
+    ::sd::Window* pWindow = pViewShell ? pViewShell->GetActiveWindow() : NULL;
+
+    uno::Reference< awt::XControl > xControl( NULL );
+    if ( pFormShell && pSdrView && pWindow )
+        pFormShell->GetFormControl( xModel, *pSdrView, *pWindow, xControl );
+    return xControl;
+}
 
 sal_Bool DrawController::convertFastPropertyValue (
     Any & rConvertedValue,
