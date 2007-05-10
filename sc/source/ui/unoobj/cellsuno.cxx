@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:45:16 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:58:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
-#define ITEMID_FIELD EE_FEATURE_FIELD
+
 
 #include <svx/algitem.hxx>
 #include <svx/boxitem.hxx>
@@ -2384,7 +2384,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertyMap* pMap,
                         {
                             sal_Int32 nRot = ((const SfxInt32Item&)pDataSet->Get(ATTR_ROTATE_VALUE)).GetValue();
                             BOOL bStacked = ((const SfxBoolItem&)pDataSet->Get(pMap->nWID)).GetValue();
-                            SvxOrientationItem( nRot, bStacked ).QueryValue( rAny );
+                            SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( rAny );
                         }
                         break;
                     default:
