@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpacc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:48:09 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:17:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -512,7 +512,6 @@ inline BYTE BitmapReadAccess::GetLuminance( long nY, long nX ) const
 inline void BitmapWriteAccess::SetPalette( const BitmapPalette& rPalette )
 {
     DBG_ASSERT( mpBuffer, "Access is not valid!" );
-    DBG_ASSERT( HasPalette(), "Bitmap has no palette!" );
     mpBuffer->maPalette = rPalette;
 }
 
@@ -521,7 +520,6 @@ inline void BitmapWriteAccess::SetPalette( const BitmapPalette& rPalette )
 inline void BitmapWriteAccess::SetPaletteEntryCount( USHORT nCount )
 {
     DBG_ASSERT( mpBuffer, "Access is not valid!" );
-    DBG_ASSERT( HasPalette(), "Bitmap has no palette!" );
     mpBuffer->maPalette.SetEntryCount( nCount );
 }
 
