@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lotattr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:38:27 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:50:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,15 +108,15 @@ LotAttrCache::LotAttrCache( void )
     pColTab[ 6 ] = Color( COL_YELLOW );
     pColTab[ 7 ] = Color( COL_BLACK );
 
-    ppColorItems[ 0 ] = new SvxColorItem( GetColor( 1 ) );      // 1
-    ppColorItems[ 1 ] = new SvxColorItem( GetColor( 2 ) );
-    ppColorItems[ 2 ] = new SvxColorItem( GetColor( 3 ) );
-    ppColorItems[ 3 ] = new SvxColorItem( GetColor( 4 ) );
-    ppColorItems[ 4 ] = new SvxColorItem( GetColor( 5 ) );
-    ppColorItems[ 5 ] = new SvxColorItem( GetColor( 6 ) );      // 6
+    ppColorItems[ 0 ] = new SvxColorItem( GetColor( 1 ), ATTR_FONT_COLOR );     // 1
+    ppColorItems[ 1 ] = new SvxColorItem( GetColor( 2 ), ATTR_FONT_COLOR );
+    ppColorItems[ 2 ] = new SvxColorItem( GetColor( 3 ), ATTR_FONT_COLOR );
+    ppColorItems[ 3 ] = new SvxColorItem( GetColor( 4 ), ATTR_FONT_COLOR );
+    ppColorItems[ 4 ] = new SvxColorItem( GetColor( 5 ), ATTR_FONT_COLOR );
+    ppColorItems[ 5 ] = new SvxColorItem( GetColor( 6 ), ATTR_FONT_COLOR );     // 6
 
-    pBlack = new SvxColorItem( Color( COL_BLACK ) );
-    pWhite = new SvxColorItem( Color( COL_WHITE ) );
+    pBlack = new SvxColorItem( Color( COL_BLACK ), ATTR_FONT_COLOR );
+    pWhite = new SvxColorItem( Color( COL_WHITE ), ATTR_FONT_COLOR );
 }
 
 
@@ -198,12 +198,11 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
 
     UINT8 nBack = rAttr.nBack & 0x1F;
     if( nBack )
-        rItemSet.Put( SvxBrushItem( GetColor( nBack & 0x07 ) ) );
+        rItemSet.Put( SvxBrushItem( GetColor( nBack & 0x07 ), ATTR_BACKGROUND ) );
 
     if( rAttr.nBack & 0x80 )
     {
-        SvxHorJustifyItem   aHorJustify;
-        aHorJustify.SetValue( SVX_HOR_JUSTIFY_CENTER );
+        SvxHorJustifyItem   aHorJustify(SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY );
         rItemSet.Put( aHorJustify );
     }
 
