@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colrctrl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:16:34 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:00:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,6 @@
 
 #include "dialogs.hrc"
 
-#define ITEMID_COLOR            0
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
 
 #include <tools/list.hxx>
 
