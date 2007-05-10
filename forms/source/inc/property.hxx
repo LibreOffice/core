@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:35:48 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:58:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,7 @@ private:
 
 //..................................................................
 // a class implementing the comphelper::IPropertyInfoService
-class ConcretInfoService : public ::comphelper::IPropertyInfoService
+class ConcreteInfoService : public ::comphelper::IPropertyInfoService
 {
 public:
     virtual sal_Int32 getPreferedPropertyId(const ::rtl::OUString& _rName);
