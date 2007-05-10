@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scflt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:42:32 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:51:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
-#define ITEMID_FIELD EE_FEATURE_FIELD
 
 #include <svx/algitem.hxx>
 #include <svx/boxitem.hxx>
@@ -817,23 +816,24 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
             }
             aEditAttribs.Put(   SvxFontItem(
                                     eFam,
-                                    SC10TOSTRING( pHeadFootLine->LogFont.lfFaceName ), EMPTY_STRING ),
+                                    SC10TOSTRING( pHeadFootLine->LogFont.lfFaceName ), EMPTY_STRING,
+                                    PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO ),
                                 EE_CHAR_FONTINFO );
-            aEditAttribs.Put(   SvxFontHeightItem( Abs( pHeadFootLine->LogFont.lfHeight ) ),
+            aEditAttribs.Put(   SvxFontHeightItem( Abs( pHeadFootLine->LogFont.lfHeight ), 100, EE_CHAR_FONTHEIGHT ),
                                 EE_CHAR_FONTHEIGHT);
 
             Sc10Color nColor = pHeadFootLine->TextColor;
             Color TextColor( nColor.Red, nColor.Green, nColor.Blue );
-            aEditAttribs.Put(SvxColorItem(TextColor), EE_CHAR_COLOR);
+            aEditAttribs.Put(SvxColorItem(TextColor, EE_CHAR_COLOR), EE_CHAR_COLOR);
             // FontAttr
             if (pHeadFootLine->LogFont.lfWeight != fwNormal)
-                aEditAttribs.Put(SvxWeightItem(WEIGHT_BOLD), EE_CHAR_WEIGHT);
+                aEditAttribs.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT), EE_CHAR_WEIGHT);
             if (pHeadFootLine->LogFont.lfItalic != 0)
-                aEditAttribs.Put(SvxPostureItem(ITALIC_NORMAL), EE_CHAR_ITALIC);
+                aEditAttribs.Put(SvxPostureItem(ITALIC_NORMAL, EE_CHAR_ITALIC), EE_CHAR_ITALIC);
             if (pHeadFootLine->LogFont.lfUnderline != 0)
-                aEditAttribs.Put(SvxUnderlineItem(UNDERLINE_SINGLE), EE_CHAR_UNDERLINE);
+                aEditAttribs.Put(SvxUnderlineItem(UNDERLINE_SINGLE, EE_CHAR_UNDERLINE), EE_CHAR_UNDERLINE);
             if (pHeadFootLine->LogFont.lfStrikeOut != 0)
-                aEditAttribs.Put(SvxCrossedOutItem(STRIKEOUT_SINGLE), EE_CHAR_STRIKEOUT);
+                aEditAttribs.Put(SvxCrossedOutItem(STRIKEOUT_SINGLE, EE_CHAR_STRIKEOUT), EE_CHAR_STRIKEOUT);
             String aText( pHeadFootLine->Title, DEFCHARSET );
             aEditEngine.SetText( aText );
             aEditEngine.QuickSetAttribs( aEditAttribs, ESelection( 0, 0, 0, aText.Len() ) );
@@ -885,9 +885,9 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
                default: nFact = 0xffff;
             }
             if( bSwapCol )
-                aSetItemItemSet.Put( SvxBrushItem( GetMixedColor( aBColor, aRColor, nFact ) ) );
+                aSetItemItemSet.Put( SvxBrushItem( GetMixedColor( aBColor, aRColor, nFact ), ATTR_BACKGROUND ) );
             else
-                aSetItemItemSet.Put( SvxBrushItem( GetMixedColor( aRColor, aBColor, nFact ) ) );
+                aSetItemItemSet.Put( SvxBrushItem( GetMixedColor( aRColor, aBColor, nFact ), ATTR_BACKGROUND ) );
 
             if (pHeadFootLine->Frame != 0)
             {
@@ -928,7 +928,7 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
               lcl_ChangeColor(cRight, ColorRight);
               lcl_ChangeColor(cBottom, ColorBottom);
               SvxBorderLine aLine;
-              SvxBoxItem aBox;
+              SvxBoxItem aBox( ATTR_BORDER );
               aLine.SetOutWidth(nLeft);
               aLine.SetColor(ColorLeft);
               aBox.SetLine(&aLine, BOX_LINE_LEFT);
@@ -1255,20 +1255,21 @@ void Sc10Import::LoadPatternCollection()
                     case ffScript     : eFam = FAMILY_SCRIPT;       break;
                     case ffDecorative : eFam = FAMILY_DECORATIVE;   break;
                 }
-                rItemSet.Put( SvxFontItem( eFam, SC10TOSTRING( pPattern->LogFont.lfFaceName ), EMPTY_STRING ) );
-                rItemSet.Put( SvxFontHeightItem( Abs( pPattern->LogFont.lfHeight ) ) );
+                rItemSet.Put( SvxFontItem( eFam, SC10TOSTRING( pPattern->LogFont.lfFaceName ), EMPTY_STRING,
+                        PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ) );
+                rItemSet.Put( SvxFontHeightItem( Abs( pPattern->LogFont.lfHeight ), 100, ATTR_FONT_HEIGHT ) );
                 Color TextColor( COL_BLACK );
                 lcl_ChangeColor( ( pPattern->nColor & 0x000F ), TextColor );
-                rItemSet.Put( SvxColorItem( TextColor ) );
+                rItemSet.Put( SvxColorItem( TextColor, ATTR_FONT_COLOR ) );
                 // FontAttr
                 if( pPattern->LogFont.lfWeight != fwNormal )
-                    rItemSet.Put( SvxWeightItem( WEIGHT_BOLD ) );
+                    rItemSet.Put( SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT ) );
                 if( pPattern->LogFont.lfItalic != 0 )
-                    rItemSet.Put( SvxPostureItem( ITALIC_NORMAL ) );
+                    rItemSet.Put( SvxPostureItem( ITALIC_NORMAL, ATTR_FONT_POSTURE ) );
                 if( pPattern->LogFont.lfUnderline != 0 )
-                    rItemSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE ) );
+                    rItemSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE, ATTR_FONT_UNDERLINE ) );
                 if( pPattern->LogFont.lfStrikeOut != 0 )
-                    rItemSet.Put( SvxCrossedOutItem( STRIKEOUT_SINGLE ) );
+                    rItemSet.Put( SvxCrossedOutItem( STRIKEOUT_SINGLE, ATTR_FONT_CROSSEDOUT ) );
             }
             // Ausrichtung
             if( ( pPattern->FormatFlags & pfJustify ) == pfJustify )
@@ -1281,26 +1282,26 @@ void Sc10Import::LoadPatternCollection()
                     switch( HorJustify )
                     {
                         case hjLeft:
-                            rItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT ) );
+                            rItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT, ATTR_HOR_JUSTIFY ) );
                             break;
                         case hjCenter:
-                            rItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER ) );
+                            rItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY ) );
                             break;
                         case hjRight:
-                            rItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_RIGHT ) );
+                            rItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_RIGHT, ATTR_HOR_JUSTIFY ) );
                             break;
                     }
                 if( VerJustify != 0 )
                     switch( VerJustify )
                     {
                         case vjTop:
-                            rItemSet.Put( SvxVerJustifyItem( SVX_VER_JUSTIFY_TOP ) );
+                            rItemSet.Put( SvxVerJustifyItem( SVX_VER_JUSTIFY_TOP, ATTR_VER_JUSTIFY ) );
                             break;
                         case vjCenter:
-                            rItemSet.Put( SvxVerJustifyItem( SVX_VER_JUSTIFY_CENTER ) );
+                            rItemSet.Put( SvxVerJustifyItem( SVX_VER_JUSTIFY_CENTER, ATTR_VER_JUSTIFY ) );
                             break;
                         case vjBottom:
-                            rItemSet.Put( SvxVerJustifyItem( SVX_VER_JUSTIFY_BOTTOM ) );
+                            rItemSet.Put( SvxVerJustifyItem( SVX_VER_JUSTIFY_BOTTOM, ATTR_VER_JUSTIFY ) );
                             break;
                     }
 
@@ -1316,9 +1317,9 @@ void Sc10Import::LoadPatternCollection()
 //                  ( ( OJustify & ojBottomTop ) == ojBottomTop ) )
 // vielleicht so?
                 if( ( ( OJustify & ojBottomTop ) == ojBottomTop ) )
-                    rItemSet.Put( SvxMarginItem( 20, Margin, 20, Margin ) );
+                    rItemSet.Put( SvxMarginItem( 20, Margin, 20, Margin, ATTR_MARGIN ) );
                 else
-                    rItemSet.Put( SvxMarginItem( Margin, 20, Margin, 20 ) );
+                    rItemSet.Put( SvxMarginItem( Margin, 20, Margin, 20, ATTR_MARGIN ) );
             }
 
             // Frame
@@ -1371,7 +1372,7 @@ void Sc10Import::LoadPatternCollection()
                     lcl_ChangeColor( cBottom, ColorBottom );
 
                     SvxBorderLine   aLine;
-                    SvxBoxItem      aBox;
+                    SvxBoxItem      aBox( ATTR_BORDER );
 
                     aLine.SetOutWidth( nLeft );
                     aLine.SetColor( ColorLeft );
@@ -1421,9 +1422,9 @@ void Sc10Import::LoadPatternCollection()
                     if ( bSetItem )
                     {
                         if( bSwapCol )
-                            rItemSet.Put( SvxBrushItem( GetMixedColor( aBColor, aRColor, nFact ) ) );
+                            rItemSet.Put( SvxBrushItem( GetMixedColor( aBColor, aRColor, nFact ), ATTR_BACKGROUND ) );
                         else
-                            rItemSet.Put( SvxBrushItem( GetMixedColor( aRColor, aBColor, nFact ) ) );
+                            rItemSet.Put( SvxBrushItem( GetMixedColor( aRColor, aBColor, nFact ), ATTR_BACKGROUND ) );
                     }
                 }
             }
@@ -1842,8 +1843,9 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
                     case ffDecorative : eFam = FAMILY_DECORATIVE;   break;
                 }
                 ScPatternAttr aScPattern(pDoc->GetPool());
-                aScPattern.GetItemSet().Put(SvxFontItem(eFam, SC10TOSTRING( pFont->FaceName ), EMPTY_STRING));
-                aScPattern.GetItemSet().Put(SvxFontHeightItem(Abs(pFont->Height)));
+                aScPattern.GetItemSet().Put(SvxFontItem(eFam, SC10TOSTRING( pFont->FaceName ), EMPTY_STRING,
+                    PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ));
+                aScPattern.GetItemSet().Put(SvxFontHeightItem(Abs(pFont->Height), 100, ATTR_FONT_HEIGHT ));
                 pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aScPattern);
             }
             nStart = nEnd + 1;
@@ -1864,7 +1866,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
             Color TextColor(COL_BLACK);
             lcl_ChangeColor((pColData->Value & 0x000F), TextColor);
             ScPatternAttr aScPattern(pDoc->GetPool());
-            aScPattern.GetItemSet().Put(SvxColorItem(TextColor));
+            aScPattern.GetItemSet().Put(SvxColorItem(TextColor, ATTR_FONT_COLOR ));
             pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aScPattern);
         }
         nStart = nEnd + 1;
@@ -1883,13 +1885,13 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         {
             ScPatternAttr aScPattern(pDoc->GetPool());
             if ((nValue1 & atBold) == atBold)
-             aScPattern.GetItemSet().Put(SvxWeightItem(WEIGHT_BOLD));
+             aScPattern.GetItemSet().Put(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
             if ((nValue1 & atItalic) == atItalic)
-             aScPattern.GetItemSet().Put(SvxPostureItem(ITALIC_NORMAL));
+             aScPattern.GetItemSet().Put(SvxPostureItem(ITALIC_NORMAL, ATTR_FONT_POSTURE));
             if ((nValue1 & atUnderline) == atUnderline)
-             aScPattern.GetItemSet().Put(SvxUnderlineItem(UNDERLINE_SINGLE));
+             aScPattern.GetItemSet().Put(SvxUnderlineItem(UNDERLINE_SINGLE, ATTR_FONT_UNDERLINE));
             if ((nValue1 & atStrikeOut) == atStrikeOut)
-             aScPattern.GetItemSet().Put(SvxCrossedOutItem(STRIKEOUT_SINGLE));
+             aScPattern.GetItemSet().Put(SvxCrossedOutItem(STRIKEOUT_SINGLE, ATTR_FONT_CROSSEDOUT));
             pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aScPattern);
         }
         nStart = nEnd + 1;
@@ -1915,26 +1917,26 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
             switch (HorJustify)
             {
                 case hjLeft:
-                    aScPattern.GetItemSet().Put(SvxHorJustifyItem(SVX_HOR_JUSTIFY_LEFT));
+                    aScPattern.GetItemSet().Put(SvxHorJustifyItem(SVX_HOR_JUSTIFY_LEFT, ATTR_HOR_JUSTIFY));
                     break;
                 case hjCenter:
-                    aScPattern.GetItemSet().Put(SvxHorJustifyItem(SVX_HOR_JUSTIFY_CENTER));
+                    aScPattern.GetItemSet().Put(SvxHorJustifyItem(SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY));
                     break;
                 case hjRight:
-                    aScPattern.GetItemSet().Put(SvxHorJustifyItem(SVX_HOR_JUSTIFY_RIGHT));
+                    aScPattern.GetItemSet().Put(SvxHorJustifyItem(SVX_HOR_JUSTIFY_RIGHT, ATTR_HOR_JUSTIFY));
                     break;
             }
 
             switch (VerJustify)
             {
                 case vjTop:
-                    aScPattern.GetItemSet().Put(SvxVerJustifyItem(SVX_VER_JUSTIFY_TOP));
+                    aScPattern.GetItemSet().Put(SvxVerJustifyItem(SVX_VER_JUSTIFY_TOP, ATTR_VER_JUSTIFY));
                     break;
                 case vjCenter:
-                    aScPattern.GetItemSet().Put(SvxVerJustifyItem(SVX_VER_JUSTIFY_CENTER));
+                    aScPattern.GetItemSet().Put(SvxVerJustifyItem(SVX_VER_JUSTIFY_CENTER, ATTR_VER_JUSTIFY));
                     break;
                 case vjBottom:
-                    aScPattern.GetItemSet().Put(SvxVerJustifyItem(SVX_VER_JUSTIFY_BOTTOM));
+                    aScPattern.GetItemSet().Put(SvxVerJustifyItem(SVX_VER_JUSTIFY_BOTTOM, ATTR_VER_JUSTIFY));
                     break;
             }
 
@@ -1947,9 +1949,9 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
 
             INT16 Margin = Max((USHORT)20, (USHORT)(EJustify * 20));
             if (((OJustify & ojBottomTop) == ojBottomTop) || ((OJustify & ojBottomTop) == ojBottomTop))
-                aScPattern.GetItemSet().Put(SvxMarginItem(20, Margin, 20, Margin));
+                aScPattern.GetItemSet().Put(SvxMarginItem(20, Margin, 20, Margin, ATTR_MARGIN));
             else
-                aScPattern.GetItemSet().Put(SvxMarginItem(Margin, 20, Margin, 20));
+                aScPattern.GetItemSet().Put(SvxMarginItem(Margin, 20, Margin, 20, ATTR_MARGIN));
             pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aScPattern);
         }
     nStart = nEnd + 1;
@@ -2041,7 +2043,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         {
             ScPatternAttr   aScPattern(pDoc->GetPool());
             SvxBorderLine   aLine;
-            SvxBoxItem      aBox;
+            SvxBoxItem      aBox( ATTR_BORDER );
 
             aLine.SetOutWidth( nLeft );
             aLine.SetColor( ColorLeft );
@@ -2125,9 +2127,9 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         if ( bSetItem )
         {
             if( bSwapCol )
-                aScPattern.GetItemSet().Put( SvxBrushItem( GetMixedColor( aBColor, aRColor, nFact ) ) );
+                aScPattern.GetItemSet().Put( SvxBrushItem( GetMixedColor( aBColor, aRColor, nFact ), ATTR_BACKGROUND ) );
             else
-                aScPattern.GetItemSet().Put( SvxBrushItem( GetMixedColor( aRColor, aBColor, nFact ) ) );
+                aScPattern.GetItemSet().Put( SvxBrushItem( GetMixedColor( aRColor, aBColor, nFact ), ATTR_BACKGROUND ) );
         }
         if( aRaster.pData[ nRasterIndex ].Row < aColor.pData[ nColorIndex ].Row )
         {
