@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:17:30 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:45:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2754,7 +2754,7 @@ void EditEngine::ImportBulletItem( SvxNumBulletItem& rNumBullet, sal_uInt16 nLev
             }
             else if( eNumType == SVX_NUM_BITMAP )
             {
-                SvxBrushItem aBItem( Graphic( pOldBullet->GetBitmap() ), GPOS_NONE );
+                SvxBrushItem aBItem( Graphic( pOldBullet->GetBitmap() ), GPOS_NONE, SID_ATTR_BRUSH );
                 pNumberFormat->SetGraphicBrush( &aBItem );
             }
         }
