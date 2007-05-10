@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:28:24 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:03:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,12 +70,10 @@
 #include <svtools/itempool.hxx>
 #endif
 
-#define ITEMID_FONT EE_CHAR_FONTINFO
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include <fontitem.hxx>
 #endif
 
-#define ITEMID_TABSTOP EE_PARA_TABS
 #ifndef _SVX_TSPTITEM_HXX //autogen
 #include <tstpitem.hxx>
 #endif
@@ -88,7 +86,6 @@
 #include <svtools/intitem.hxx>
 #endif
 
-#define ITEMID_FIELD EE_FEATURE_FIELD
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 
@@ -332,7 +329,7 @@ void SvxUnoTextRangeBase::attachField( const SvxFieldData* pData ) throw()
         SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
         if( pForwarder )
         {
-            SvxFieldItem aField( *pData );
+            SvxFieldItem aField( *pData, EE_FEATURE_FIELD );
             pForwarder->QuickInsertField( aField, maSelection );
         }
     }
@@ -651,7 +648,7 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertyMap* pMap, uno:
             Color* pFColor = NULL;
 
             SvxTextForwarder* pForwarder = mpEditSource->GetTextForwarder();
-            OUString aPresentation( pForwarder->CalcFieldValue( *pData, maSelection.nStartPara, maSelection.nStartPos, pTColor, pFColor ) );
+            OUString aPresentation( pForwarder->CalcFieldValue( SvxFieldItem(*pData, EE_FEATURE_FIELD), maSelection.nStartPara, maSelection.nStartPos, pTColor, pFColor ) );
 
             delete pTColor;
             delete pFColor;
@@ -1949,7 +1946,7 @@ void SAL_CALL SvxUnoTextBase::insertTextContent( const uno::Reference< text::XTe
         if( pFieldData == NULL )
             throw lang::IllegalArgumentException();
 
-        SvxFieldItem aField( *pFieldData );
+        SvxFieldItem aField( *pFieldData, EE_FEATURE_FIELD );
         pForwarder->QuickInsertField( aField, aSelection );
         GetEditSource()->UpdateData();
 
