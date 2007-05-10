@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmprop.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:08:26 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:06:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,6 +193,7 @@ namespace svxform
     IMPLEMENT_CONSTASCII_USTRING( FM_PROP_CONTROL_BORDER_COLOR_INVALID,"ControlBorderColorOnInvalid" );
 
     IMPLEMENT_CONSTASCII_USTRING( FM_PROP_BUTTON_TYPE, "ButtonType" );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_FORM_OPERATIONS, "FormOperations" );
 
 }   // namespace svxform
 
