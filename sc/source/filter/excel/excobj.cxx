@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:21:58 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:47:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,6 @@
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
-#define ITEMID_FIELD EE_FEATURE_FIELD
 
 #include <svx/colritem.hxx>
 #include <svx/svddef.hxx>
