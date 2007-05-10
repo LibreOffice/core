@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propshlp.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:31:26 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:45:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -369,6 +369,11 @@ public:
      */
     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
         throw (::com::sun::star::uno::RuntimeException);
+
+    /** eases implementing XTypeProvider::getTypes, returns the types of XMultiPropertySet, XFastPropertySet, XPropertySet
+     */
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > getTypes() const
+        throw(::com::sun::star::uno::RuntimeException);
 
     /**
        Send a disposing notification to the listeners in the conatiners aBoundLC
