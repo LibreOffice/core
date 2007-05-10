@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DBSetupConnectionPages.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:56:22 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:22:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,8 +242,8 @@ DBG_NAME(OTextConnectionPageSetup)
     }
 
 
-    sal_Bool OTextConnectionPageSetup::checkItems(){
-        return m_pTextConnectionHelper->checkItems();
+    sal_Bool OTextConnectionPageSetup::prepareLeave(){
+        return m_pTextConnectionHelper->prepareLeave();
     }
 
 
@@ -487,7 +487,7 @@ DBG_NAME(OMySQLIntroPageSetup)
         String sHelpText = String(ModuleRes(_nHelpTextResId));
         m_aFTHelpText.SetText(sHelpText);
         //TODO this code snippet is redundant
-        SetHeaderText(this, FT_AUTOWIZARDHEADER, _nHeaderTextResId);
+        SetHeaderText(FT_AUTOWIZARDHEADER, _nHeaderTextResId);
 
         m_aETDatabasename.SetModifyHdl(getControlModifiedLink());
         m_aETHostname.SetModifyHdl(getControlModifiedLink());
