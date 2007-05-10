@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:18:20 $
+#   last change: $Author: kz $ $Date: 2007-05-10 13:14:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@ ULFEX*=ulfex
 XMLEX*=xmlex
 XRMEX*=xrmex
 CFGEX*=cfgex
+XSLTPROC*=xsltproc
 
 ULFCONV*=ulfconv
 
