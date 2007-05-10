@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textproperties.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:46:01 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:56:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,9 +60,9 @@
 #include <svddef.hxx>
 #endif
 
-#ifndef _EEITEM_HXX
-#include <eeitem.hxx>
-#endif
+//#ifndef _EEITEM_HXX
+//#include <eeitem.hxx>
+//#endif
 
 #ifndef _SVDOTEXT_HXX
 #include <svdotext.hxx>
@@ -88,9 +88,6 @@
 #include <xflclit.hxx>
 #endif
 
-#ifndef _EEITEMID_HXX
-#include <eeitemid.hxx>
-#endif
 
 #ifndef _SVX_ADJITEM_HXX
 #include <adjitem.hxx>
@@ -406,7 +403,7 @@ namespace sdr
             }
             else
             {
-                mpItemSet->Put(SvxAdjustItem(SVX_ADJUST_CENTER));
+                mpItemSet->Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST));
                 mpItemSet->Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
                 mpItemSet->Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
             }
