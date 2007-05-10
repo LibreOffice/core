@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtextcontroldialogs.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:10:06 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:47:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,6 @@
 #ifndef _EEITEM_HXX
 #include "eeitem.hxx"
 #endif
-#define ITEMID_TABSTOP      EE_PARA_TABS
 #ifndef _SVX_TABSTPGE_HXX
 //#include "tabstpge.hxx"
 #endif
