@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WTypeSelect.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:15:53 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:30:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,6 @@ namespace dbaui
         virtual ::rtl::OUString     getAutoIncrementValue() const;
 
     public:
-        OWizTypeSelectControl(Window* pParent, OTableDesignHelpBar* pHelpBar=NULL);
         OWizTypeSelectControl(Window* pParent, const ResId& rResId,OTableDesignHelpBar* pHelpBar=NULL);
         virtual ~OWizTypeSelectControl();
 
