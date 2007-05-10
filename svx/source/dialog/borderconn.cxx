@@ -4,9 +4,9 @@
  *
  *  $RCSfile: borderconn.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:10:56 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:35:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,11 +44,11 @@
 #include "frmsel.hxx"
 #endif
 
-#define ITEMID_LINE     0
-#define ITEMID_BOX      0
-#define ITEMID_BOXINFO  0
-#define ITEMID_MARGIN   SID_ATTR_ALIGN_MARGIN
-#define ITEMID_SHADOW   SID_ATTR_BORDER_SHADOW
+
+
+
+
+
 
 #ifndef _SVX_BOLNITEM_HXX
 #include "bolnitem.hxx"
@@ -211,7 +211,7 @@ public:
 MarginConnection::MarginConnection( const SfxItemSet& rItemSet,
         MetricField& rMfLeft, MetricField& rMfRight, MetricField& rMfTop, MetricField& rMfBottom,
         sfx::ItemConnFlags nFlags ) :
-    ItemControlConnectionType( ITEMID_MARGIN, new MarginControlsWrapper( rMfLeft, rMfRight, rMfTop, rMfBottom ), nFlags )
+    ItemControlConnectionType( SID_ATTR_ALIGN_MARGIN, new MarginControlsWrapper( rMfLeft, rMfRight, rMfTop, rMfBottom ), nFlags )
 {
     mxCtrlWrp->SetDefaultValue( maItemWrp.GetDefaultItem( rItemSet ) );
 }
@@ -297,7 +297,7 @@ public:
 
 ShadowConnection::ShadowConnection( const SfxItemSet& rItemSet,
         ValueSet& rVsPos, MetricField& rMfSize, ColorListBox& rLbColor, sfx::ItemConnFlags nFlags ) :
-    ItemControlConnectionType( ITEMID_SHADOW, new ShadowControlsWrapper( rVsPos, rMfSize, rLbColor ), nFlags )
+    ItemControlConnectionType( SID_ATTR_BORDER_SHADOW, new ShadowControlsWrapper( rVsPos, rMfSize, rLbColor ), nFlags )
 {
     mxCtrlWrp->SetDefaultValue( maItemWrp.GetDefaultItem( rItemSet ) );
 }
