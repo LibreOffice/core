@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationDialog.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:13:00 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:24:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,8 +147,6 @@
 #ifndef _SVX_FLSTITEM_HXX
 #include <svx/flstitem.hxx>
 #endif
-
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
 
 #ifndef _SVX_DRAWITEM_HXX
 #include <svx/drawitem.hxx>
