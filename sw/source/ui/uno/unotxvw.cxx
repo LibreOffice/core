@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 13:45:12 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:49:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,9 @@
 #endif
 #ifndef _UNOTBL_HXX
 #include <unotbl.hxx>
+#endif
+#ifndef _SVX_FMSHELL_HXX
+#include <svx/fmshell.hxx>
 #endif
 #ifndef _SVDVIEW_HXX //autogen
 #include <svx/svdview.hxx>
@@ -210,43 +213,6 @@ SwPaM* lcl_createPamCopy(const SwPaM& rPam)
     }
     return pRet;
 }
-/* -----------------04.11.98 15:32-------------------
- *
- * --------------------------------------------------*/
-sal_Bool lcl_FindObjInGroup(
-    uno::Reference< awt::XControl > & xRet,
-    SdrObjGroup* pGroup,
-    const uno::Reference< awt::XControlModel > & xModel,
-    SdrView& rView,
-    Window& rWin,
-    SdrObject*& rpFound)
-{
-    SdrObjList* pList = pGroup->GetSubList();
-    sal_uInt32 nCount = pList->GetObjCount();
-    for( sal_uInt32 i=0; i< nCount; i++ )
-    {
-        SdrObject* pObj = pList->GetObj(i);
-        SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pObj );
-        SdrObjGroup* pGroup;
-        if( pFormObj )
-        {
-            uno::Reference< awt::XControlModel >  xCM = pFormObj->GetUnoControlModel();
-            if( xCM.is() && xModel == xCM )
-            {
-                xRet = pFormObj->GetUnoControl( rView, rWin );
-                rpFound = pObj;
-                break;
-            }
-        }
-        else if(0 != (pGroup = PTR_CAST( SdrObjGroup, pObj )))
-        {
-            if(lcl_FindObjInGroup(xRet, pGroup, xModel, rView, rWin, rpFound))
-                break;
-        }
-    }
-    return xRet.is();
-}
-
 /******************************************************************
  * SwXTextView
  ******************************************************************/
@@ -317,7 +283,7 @@ Sequence< uno::Type > SAL_CALL SwXTextView::getTypes(  ) throw(::com::sun::star:
     uno::Type* pBaseTypes = aBaseTypes.getArray();
     pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XSelectionSupplier >*)0);
     pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XServiceInfo           >*)0);
-    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XControlAccess     >*)0);
+    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XFormLayerAccess   >*)0);
     pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XTextViewCursorSupplier>*)0);
     pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XViewSettingsSupplier  >*)0);
     pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XRubySelection >*)0);
@@ -374,6 +340,11 @@ uno::Any SAL_CALL SwXTextView::queryInterface( const uno::Type& aType )
     else if(aType == ::getCppuType((uno::Reference<view::XControlAccess     >*)0))
     {
         uno::Reference<view::XControlAccess> xRet = this;
+        aRet.setValue(&xRet, aType);
+    }
+    else if(aType == ::getCppuType((uno::Reference<view::XFormLayerAccess   >*)0))
+    {
+        uno::Reference<view::XFormLayerAccess> xRet = this;
         aRet.setValue(&xRet, aType);
     }
     else if(aType == ::getCppuType((uno::Reference<text::XTextViewCursorSupplier>*)0))
@@ -803,51 +774,17 @@ SdrObject* SwXTextView::GetControl(
         const uno::Reference< awt::XControlModel > & xModel,
         uno::Reference< ::com::sun::star::awt::XControl >& xToFill  )
 {
-    SdrObject* pRet = 0;
-    do
-    {
-        SwView* pView = ((SwXTextView*)this)->GetView();
-        if (!pView)
-            break;
+    SwView* pView = GetView();
+    FmFormShell* pFormShell = pView ? pView->GetFormShell() : NULL;
+    SdrView* pDrawView = pView ? pView->GetDrawView() : NULL;
+    Window* pWindow = pView ? pView->GetWrtShell().GetWin() : NULL;
 
-        SdrView* pDrawView = pView->GetDrawView();
-        if (!pDrawView)
-            break;
+    DBG_ASSERT( pFormShell && pDrawView && pWindow, "SwXTextView::GetControl: how could I?" );
 
-        SdrModel* pModel = pView->GetDocShell()->GetDoc()->GetDrawModel();
-        if (!pModel)
-            break;
-
-        SdrPage* pPage = pModel->GetPage( 0 );
-        Window *pWin = pView->GetWrtShell().GetWin();
-        if (!pWin)
-            break;
-
-        sal_uInt32 nCount = pPage->GetObjCount();
-        for( sal_uInt32 i=0; i< nCount; i++ )
-        {
-            pRet = pPage->GetObj(i);
-            SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pRet );
-            SdrObjGroup* pGroup;
-            if( pFormObj )
-            {
-                uno::Reference< awt::XControlModel >  xCM = pFormObj->GetUnoControlModel();
-                if( xCM.is() && xModel == xCM )
-                {
-                    xToFill = pFormObj->GetUnoControl( *pDrawView, *pWin );
-                    break;
-                }
-            }
-            else if(0 != (pGroup = PTR_CAST( SdrObjGroup, pRet )))
-            {
-                if(lcl_FindObjInGroup(xToFill, pGroup, xModel, *pDrawView, *pWin, pRet))
-                    break;
-            }
-        }
-    }
-    while (false);
-
-    return pRet;
+    SdrObject* pControl = NULL;
+    if ( pFormShell && pDrawView && pWindow )
+        pControl = pFormShell->GetFormControl( xModel, *pDrawView, *pWindow, xToFill );
+    return pControl;
 }
 /*-- 17.12.98 09:34:27---------------------------------------------------
 
@@ -860,6 +797,49 @@ uno::Reference< awt::XControl >  SwXTextView::getControl(const uno::Reference< a
     GetControl(xModel, xRet);
     return xRet;
 }
+
+/*-- 08.03.07 13:55------------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Reference< form::XFormController > SAL_CALL SwXTextView::getFormController( const uno::Reference< form::XForm >& _Form ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    SwView* pView = GetView();
+    FmFormShell* pFormShell = pView ? pView->GetFormShell() : NULL;
+    SdrView* pDrawView = pView ? pView->GetDrawView() : NULL;
+    Window* pWindow = pView ? pView->GetWrtShell().GetWin() : NULL;
+    DBG_ASSERT( pFormShell && pDrawView && pWindow, "SwXTextView::GetControl: how could I?" );
+
+    uno::Reference< form::XFormController > xController;
+    if ( pFormShell && pDrawView && pWindow )
+        xController = pFormShell->GetFormController( _Form, *pDrawView, *pWindow );
+    return xController;
+}
+
+/*-- 08.03.07 13:55------------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+::sal_Bool SAL_CALL SwXTextView::isFormDesignMode(  ) throw (uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SwView* pView = GetView();
+    FmFormShell* pFormShell = pView ? pView->GetFormShell() : NULL;
+    return pFormShell ? pFormShell->IsDesignMode() : sal_True;
+}
+
+/*-- 08.03.07 13:55------------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SAL_CALL SwXTextView::setFormDesignMode( ::sal_Bool _DesignMode ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SwView* pView = GetView();
+    FmFormShell* pFormShell = pView ? pView->GetFormShell() : NULL;
+    if ( pFormShell )
+        pFormShell->SetDesignMode( _DesignMode );
+}
+
 /*-- 17.12.98 09:34:28---------------------------------------------------
 
   -----------------------------------------------------------------------*/
