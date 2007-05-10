@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:25:41 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:53:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,12 +116,11 @@
 #include <toolkit/helper/emptyfontdescriptor.hxx>
 #endif
 
-#ifndef _FRM_RESOURCE_HXX_
 #include "frm_resource.hxx"
-#endif
-#ifndef _FRM_RESOURCE_HRC_
 #include "frm_resource.hrc"
-#endif
+
+#include <functional>
+#include <algorithm>
 
 #include <functional>
 #include <algorithm>
@@ -509,9 +508,6 @@ void OBoundControl::disposing()
 //==================================================================
 //= OControlModel
 //==================================================================
-ConcretInfoService OControlModel::s_aPropInfos;
-#define NEW_HANDLE_BASE 10000
-
 DBG_NAME(OControlModel)
 //------------------------------------------------------------------
 Sequence<sal_Int8> SAL_CALL OControlModel::getImplementationId() throw(RuntimeException)
@@ -603,7 +599,7 @@ OControlModel::OControlModel(
     :OComponentHelper(m_aMutex)
     ,OPropertySetAggregationHelper(OComponentHelper::rBHelper)
     ,m_xServiceFactory(_rxFactory)
-    ,m_pPropertyArrayHelper( NULL )
+    ,m_aPropertyBagHelper( *this )
     ,m_nTabIndex(FRM_DEFAULT_TABINDEX)
     ,m_nClassId(FormComponentType::CONTROL)
     ,m_bNativeLook( sal_False )
@@ -647,7 +643,7 @@ OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< 
     :OComponentHelper( m_aMutex )
     ,OPropertySetAggregationHelper( OComponentHelper::rBHelper )
     ,m_xServiceFactory( _rxFactory )
-    ,m_pPropertyArrayHelper( NULL )
+    ,m_aPropertyBagHelper( *this )
     ,m_nTabIndex( FRM_DEFAULT_TABINDEX )
     ,m_nClassId( FormComponentType::CONTROL )
 {
@@ -686,8 +682,6 @@ OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< 
 //------------------------------------------------------------------
 OControlModel::~OControlModel()
 {
-    delete m_pPropertyArrayHelper, m_pPropertyArrayHelper = NULL;
-
     // release the aggregate
     doResetDelegator( );
 
@@ -838,6 +832,8 @@ void OControlModel::disposing()
         xComp->dispose();
 
     setParent(Reference<XFormComponent>());
+
+    m_aPropertyBagHelper.dispose();
 }
 
 //------------------------------------------------------------------------------
@@ -1008,8 +1004,8 @@ Any OControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
             break;
 
         default:
-            if ( m_aDynamicProperties.hasPropertyByHandle ( _nHandle ) )
-                m_aDynamicProperties.getPropertyDefaultByHandle( _nHandle, aReturn );
+            if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
+                m_aPropertyBagHelper.getDynamicPropertyDefaultByHandle( _nHandle, aReturn );
             else
                 OSL_ENSURE( false, "OControlModel::convertFastPropertyValue: unknown handle!" );
     }
@@ -1037,10 +1033,11 @@ void OControlModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) con
             _rValue <<= (sal_Bool)m_bNativeLook;
             break;
         default:
-            if ( m_aDynamicProperties.hasPropertyByHandle ( _nHandle ) )
-                m_aDynamicProperties.getFastPropertyValue( _nHandle, _rValue );
+            if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
+                m_aPropertyBagHelper.getDynamicFastPropertyValue( _nHandle, _rValue );
             else
                 OPropertySetAggregationHelper::getFastPropertyValue( _rValue, _nHandle );
+            break;
     }
 }
 
@@ -1065,10 +1062,11 @@ sal_Bool OControlModel::convertFastPropertyValue(
             bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_bNativeLook);
             break;
         default:
-            if ( m_aDynamicProperties.hasPropertyByHandle ( _nHandle ) )
-                bModified = m_aDynamicProperties.convertFastPropertyValue( _nHandle, _rValue, _rConvertedValue, _rOldValue );
+            if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
+                bModified = m_aPropertyBagHelper.convertDynamicFastPropertyValue( _nHandle, _rValue, _rConvertedValue, _rOldValue );
             else
                 OSL_ENSURE( false, "OControlModel::convertFastPropertyValue: unknown handle!" );
+            break;
     }
     return bModified;
 }
@@ -1098,10 +1096,11 @@ void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const A
             OSL_VERIFY( _rValue >>= m_bNativeLook );
             break;
         default:
-            if ( m_aDynamicProperties.hasPropertyByHandle ( _nHandle ) )
-                m_aDynamicProperties.setFastPropertyValue( _nHandle, _rValue );
+            if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
+                m_aPropertyBagHelper.setDynamicFastPropertyValue( _nHandle, _rValue );
             else
                 OSL_ENSURE( false, "OControlModel::setFastPropertyValue_NoBroadcast: unknown handle!" );
+            break;
     }
 }
 
@@ -1128,6 +1127,25 @@ void OControlModel::describeAggregateProperties( Sequence< Property >& /* [out] 
 }
 
 //------------------------------------------------------------------------------
+::osl::Mutex& OControlModel::getMutex()
+{
+    return m_aMutex;
+}
+
+//------------------------------------------------------------------------------
+void OControlModel::describeFixedAndAggregateProperties( Sequence< Property >& _out_rFixedProperties, Sequence< Property >& _out_rAggregateProperties ) const
+{
+    describeFixedProperties( _out_rFixedProperties );
+    describeAggregateProperties( _out_rAggregateProperties );
+}
+
+//------------------------------------------------------------------------------
+Reference< XMultiPropertySet > OControlModel::getPropertiesInterface()
+{
+    return Reference< XMultiPropertySet >( *this, UNO_QUERY );
+}
+
+//------------------------------------------------------------------------------
 Reference< XPropertySetInfo> SAL_CALL OControlModel::getPropertySetInfo() throw( RuntimeException)
 {
     return createPropertySetInfo( getInfoHelper() );
@@ -1136,191 +1154,31 @@ Reference< XPropertySetInfo> SAL_CALL OControlModel::getPropertySetInfo() throw(
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& OControlModel::getInfoHelper()
 {
-    return impl_ts_getArrayHelper();
-}
-
-//--------------------------------------------------------------------
-::comphelper::OPropertyArrayAggregationHelper& OControlModel::impl_ts_getArrayHelper() const
-{
-    ::osl::MutexGuard aGuard( const_cast< OControlModel* >( this )->m_aMutex );
-    if ( !m_pPropertyArrayHelper )
-    {
-        // our own fixed and our aggregate's properties
-        Sequence< Property > aFixedProps;
-        describeFixedProperties( aFixedProps );
-
-        // our aggregate's properties
-        Sequence< Property > aAggregateProps;
-        describeAggregateProperties( aAggregateProps );
-
-        // our dynamic properties
-        Sequence< Property > aDynamicProps;
-        m_aDynamicProperties.describeProperties( aDynamicProps );
-
-        Sequence< Property > aOwnProps(
-            ::comphelper::concatSequences( aFixedProps, aDynamicProps ) );
-
-        const_cast< OControlModel* >( this )->m_pPropertyArrayHelper = new OPropertyArrayAggregationHelper( aOwnProps, aAggregateProps, &s_aPropInfos, NEW_HANDLE_BASE );
-    }
-    return *m_pPropertyArrayHelper;
-}
-
-//--------------------------------------------------------------------
-void OControlModel::impl_invalidatePropertySetInfo()
-{
-    delete m_pPropertyArrayHelper, m_pPropertyArrayHelper = NULL;
-}
-
-//--------------------------------------------------------------------
-sal_Int32 OControlModel::impl_findFreeHandle( const ::rtl::OUString& _rPropertyName )
-{
-    ::comphelper::OPropertyArrayAggregationHelper& rPropInfo( impl_ts_getArrayHelper() );
-
-    // check the preferred handle
-    sal_Int32 nHandle = s_aPropInfos.getPreferedPropertyId( _rPropertyName );
-    if ( ( nHandle != -1 ) && rPropInfo.fillPropertyMembersByHandle( NULL, NULL, nHandle ) )
-        nHandle = -1;
-
-    // seach a free handle in <math>F_1009</math>
-    if ( nHandle == -1 )
-    {
-        sal_Int32 nPrime = 1009;
-        sal_Int32 nFactor = 11;
-        sal_Int32 nNum = nFactor;
-        while ( nNum != 1 )
-        {
-            if ( !rPropInfo.fillPropertyMembersByHandle( NULL, NULL, nNum + NEW_HANDLE_BASE ) )
-            {
-                // handle not used, yet
-                nHandle = nNum + NEW_HANDLE_BASE;
-                break;
-            }
-            nNum = ( nNum * nFactor ) % nPrime;
-        }
-    }
-
-    // search a free handle greater NEW_HANDLE_BASE
-    if ( nHandle == -1 )
-    {
-        nHandle = NEW_HANDLE_BASE + 1009;
-        while ( rPropInfo.fillPropertyMembersByHandle( NULL, NULL, nHandle ) )
-            ++nHandle;
-    }
-
-    return nHandle;
+    return m_aPropertyBagHelper.getInfoHelper();
 }
 
 //--------------------------------------------------------------------
 void SAL_CALL OControlModel::addProperty( const ::rtl::OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    //----------------------------------------------
-    // check name sanity
-    ::comphelper::OPropertyArrayAggregationHelper& aPropInfo( impl_ts_getArrayHelper() );
-    if ( aPropInfo.hasPropertyByName( _rName ) )
-        throw PropertyExistException( ::rtl::OUString(), *this );
-
-    //----------------------------------------------
-    // normalize the REMOVEABLE attribute - the FormComponent service
-    // requires that all dynamic properties are REMOVEABLE
-    _nAttributes |= PropertyAttribute::REMOVEABLE;
-
-    //----------------------------------------------
-    // find a free handle
-    sal_Int32 nHandle = impl_findFreeHandle( _rName );
-
-    //----------------------------------------------
-    // register the property, and invalidate our property meta data
-    m_aDynamicProperties.addProperty( _rName, nHandle, _nAttributes, _rInitialValue );
-    impl_invalidatePropertySetInfo();
+    m_aPropertyBagHelper.addProperty( _rName, _nAttributes, _rInitialValue );
 }
 
 //--------------------------------------------------------------------
 void SAL_CALL OControlModel::removeProperty( const ::rtl::OUString& _rName ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    m_aDynamicProperties.removeProperty( _rName );
-    impl_invalidatePropertySetInfo();
+    m_aPropertyBagHelper.removeProperty( _rName );
 }
 
 //--------------------------------------------------------------------
-namespace
+Sequence< PropertyValue > SAL_CALL OControlModel::getPropertyValues() throw (RuntimeException)
 {
-    //----------------------------------------------------------------
-    struct SelectNameOfProperty : public ::std::unary_function< Property, ::rtl::OUString >
-    {
-        const ::rtl::OUString& operator()( const Property& _rProp ) const { return _rProp.Name; }
-    };
-
-    //----------------------------------------------------------------
-    struct SelectNameOfPropertyValue : public ::std::unary_function< PropertyValue, ::rtl::OUString >
-    {
-        const ::rtl::OUString& operator()( const PropertyValue& _rProp ) const { return _rProp.Name; }
-    };
-
-    //----------------------------------------------------------------
-    struct SelectValueOfPropertyValue : public ::std::unary_function< PropertyValue, Any >
-    {
-        const Any& operator()( const PropertyValue& _rProp ) const { return _rProp.Value; }
-    };
-}
-
-//--------------------------------------------------------------------
-Sequence< PropertyValue > SAL_CALL OControlModel::getPropertyValues(  ) throw (RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    Reference< XMultiPropertySet > xMe( *this, UNO_QUERY_THROW );
-    Reference< XPropertySetInfo > xPSI( xMe->getPropertySetInfo(), UNO_QUERY_THROW );
-
-    Sequence< Property > aProperties( xPSI->getProperties() );
-    Sequence< ::rtl::OUString > aPropertyNames( aProperties.getLength() );
-    ::std::transform( aProperties.getConstArray(), aProperties.getConstArray() + aProperties.getLength(),
-        aPropertyNames.getArray(), SelectNameOfProperty() );
-
-    Sequence< Any > aValues;
-    try
-    {
-        aValues = xMe->getPropertyValues( aPropertyNames );
-
-        if ( aValues.getLength() != aPropertyNames.getLength() )
-            throw RuntimeException();
-    }
-    catch( const RuntimeException& ) { throw; }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
-    Sequence< PropertyValue > aPropertyValues( aValues.getLength() );
-    PropertyValue* pPropertyValue = aPropertyValues.getArray();
-
-    const ::rtl::OUString* pName = aPropertyNames.getConstArray();
-    const ::rtl::OUString* pNameEnd = aPropertyNames.getConstArray() + aPropertyNames.getLength();
-    const Any* pValue = aValues.getConstArray();
-    for ( ; pName != pNameEnd; ++pName, ++pValue, ++pPropertyValue )
-    {
-        pPropertyValue->Name = *pName;
-        pPropertyValue->Value = *pValue;
-    }
-
-    return aPropertyValues;
+    return m_aPropertyBagHelper.getPropertyValues();
 }
 
 //--------------------------------------------------------------------
 void SAL_CALL OControlModel::setPropertyValues( const Sequence< PropertyValue >& _rProps ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    Sequence< ::rtl::OUString > aNames( _rProps.getLength() );
-    ::std::transform( _rProps.getConstArray(), _rProps.getConstArray() + _rProps.getLength(),
-        aNames.getArray(), SelectNameOfPropertyValue() );
-
-    Sequence< Any > aValues( _rProps.getLength() );
-    ::std::transform( _rProps.getConstArray(), _rProps.getConstArray() + _rProps.getLength(),
-        aValues.getArray(), SelectValueOfPropertyValue() );
-
-    setPropertyValues( aNames, aValues );
+    m_aPropertyBagHelper.setPropertyValues( _rProps );
 }
 
 //==================================================================
