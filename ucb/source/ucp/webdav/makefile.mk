@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:44:43 $
+#   last change: $Author: kz $ $Date: 2007-05-10 13:08:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,11 +55,17 @@ NO_BSYMBOLIC=TRUE
 
 .INCLUDE: settings.mk
 
+NEONINCDIR=external$/neon
+
+.IF "$(SYSTEM_NEON)" != "YES"
+.INCLUDE: $(SOLARINCDIR)$/$(NEONINCDIR)$/version.mk
+.ENDIF
+
 CFLAGS+= -DNEON_VERSION=$(NEON_VERSION)
+
 .IF "$(SYSTEM_NEON)" == "YES"
 CFLAGS+= $(NEON_CFLAGS)
 .ELSE
-NEONINCDIR=external$/neon
 CFLAGS+= -I$(SOLARINCDIR)$/$(NEONINCDIR)
 .ENDIF
 
@@ -117,6 +123,7 @@ SHL1STDLIBS=\
         $(SALHELPERLIB)         \
         $(VOSLIB)               \
         $(UCBHELPERLIB)         \
+        $(COMPHELPERLIB)		\
         $(NEON3RDLIB)           \
         $(XML2LIB)
 
