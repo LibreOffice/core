@@ -4,9 +4,9 @@
  *
  *  $RCSfile: headerfooterdlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:05:02 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:27:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,11 +48,9 @@
 #include <svx/eeitem.hxx>
 #endif
 
-#define ITEMID_FIELD    EE_FEATURE_FIELD
 #ifndef _SVX_FLDITEM_HXX
 #include <svx/flditem.hxx>
 #endif
-#define ITEMID_LANGUAGE EE_CHAR_LANGUAGE
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
 #endif
