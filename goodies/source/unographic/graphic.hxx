@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphic.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:52:55 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:14:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
+#include <com/sun/star/awt/XBitmap.hpp>
 
 #include "descriptor.hxx"
 
@@ -59,6 +60,7 @@ namespace unographic {
 // -------------------
 
 class Graphic : public ::com::sun::star::graphic::XGraphic,
+                public ::com::sun::star::awt::XBitmap,
                 public ::com::sun::star::lang::XUnoTunnel,
                 public ::unographic::GraphicDescriptor
 {
@@ -94,6 +96,11 @@ protected:
 
     // XGraphic
     virtual ::sal_Int8 SAL_CALL getType(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XBitmap
+    virtual ::com::sun::star::awt::Size SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL getDIB(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL getMaskDIB(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException);
