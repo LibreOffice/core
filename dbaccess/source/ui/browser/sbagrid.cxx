@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:30:27 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:19:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -282,12 +282,6 @@ Reference< XInterface > SAL_CALL SbaXGridControl::Create(const Reference<XMultiS
 //=======================================================================================
 // SbaXGridControl
 //=======================================================================================
-
-//------------------------------------------------------------------
-Reference< XInterface > SAL_CALL SbaXGridControl_CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory) throw( Exception )
-{
-    return *(new SbaXGridControl(_rxFactory));
-}
 
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL SbaXGridControl::getImplementationName() throw()
@@ -1719,19 +1713,6 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
     }
 
     return DND_ACTION_NONE;
-}
-
-//------------------------------------------------------------------------------
-void SbaGridControl::refresh()
-{
-    // aktualisieren
-    Reference< ::com::sun::star::form::XLoadable >  xLoadable(getDataSource(), UNO_QUERY);
-    DBG_ASSERT(xLoadable.is(), "SbaGridControl::Drop : invalid data source !");
-    if (xLoadable.is())
-    {
-        WaitObject aWO(this);
-        xLoadable->reload();
-    }
 }
 
 //------------------------------------------------------------------------------
