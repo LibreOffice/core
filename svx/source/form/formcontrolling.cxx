@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcontrolling.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:26:48 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:14:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -392,10 +392,17 @@ namespace svx
     sal_Bool FormControllerHelper::commitCurrentRecord() const
     {
         sal_Bool bSuccess = sal_False;
-        if ( m_xFormOperations.is() )
+        try
         {
-            sal_Bool bDummy( sal_False );
-            bSuccess = m_xFormOperations->commitCurrentRecord( bDummy );
+            if ( m_xFormOperations.is() )
+            {
+                sal_Bool bDummy( sal_False );
+                bSuccess = m_xFormOperations->commitCurrentRecord( bDummy );
+            }
+        }
+        catch( const Exception& )
+        {
+            bSuccess = sal_False;
         }
         return bSuccess;
     }
