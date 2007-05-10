@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-05-10 13:10:04 $
+dnl * Date: $Date: 2007-05-10 13:15:13 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.202 $ )
+AC_REVISION( $Revision: 1.203 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -182,9 +182,6 @@ AC_ARG_ENABLE(dbgutil,
                           assertions, object counting, etc. Larger build.
                           Independent from --enable-debug
 ],,)
-AC_ARG_ENABLE(xsltproc,
-[  --enable-xsltproc       Use xsltproc at buildtime, even when java is available
-],,)
 AC_ARG_ENABLE(crashdump,
 [[  --enable-crashdump[=yes|TRUE|STATIC|no]
                           Enable (disable) the crashdump feature code.
@@ -351,15 +348,8 @@ AC_ARG_WITH(serializer-jar,
 [  --with-serializer-jar=JARFILE   Specify path to jarfile manually ],
 [ SERIALIZER_JAR="$withval"
 ])
-AC_ARG_WITH(system-xt,
-[  --with-system-xt        Use xt already on system
-],,)
-AC_ARG_WITH(xt-jar,
-[  --with-xt-jar=JARFILE   Specify path to jarfile manually ],
-[ XT_JAR="$withval"
-])
-AC_ARG_WITH(system-sablot,
-[  --with-system-sablot    Use sablot already on system
+AC_ARG_WITH(system-libxslt,
+[  --with-system-libxslt   Use libxslt already on system
 ],,)
 AC_ARG_WITH(system-odbc,
 [  --with-system-odbc-headers     Use the odbc headers already on system
@@ -2166,11 +2156,9 @@ AC_MSG_CHECKING([whether to build with Java support])
 if test "$WITH_JAVA" != "no"; then
    AC_MSG_RESULT([yes])
    SOLAR_JAVA="TRUE"
-   NEEDXSLTPROC="no"
 else
    AC_MSG_RESULT([no])
    SOLAR_JAVA=""
-   NEEDXSLTPROC="yes"
 
    AC_MSG_WARN([building without java will mean some features will not be available])
    echo "building without java will mean some features will not be available" >>warn
@@ -2503,21 +2491,6 @@ AC_SUBST(JAVAINTERPRETER)
 AC_SUBST(JAVACOMPILER)
 AC_SUBST(JAVAAOTCOMPILER)
 AC_SUBST(JAVADOC)
-
-if test "$NEEDXSLTPROC" = "no" && test -z "$enable_xsltproc"; then
-   XSLTPROC=NO_XSLTPROC
-else
-   dnl Check for xsltproc
-   AC_PATH_PROG(XSLTPROC, xsltproc, no)
-   if test "$XSLTPROC" = "no"; then
-      AC_MSG_ERROR([xsltproc is required])
-   fi
-   # somehow AC_MSG_WARN won't work...
-   echo "to prevent incompatibilities between internal libxml2 and xsltproc, the office will be build with system-libxml"
-   echo "to prevent incompatibilities between internal libxml2 and xsltproc, the office will be build with system-libxml" >> warn
-   with_system_libxml=yes
-fi
-AC_SUBST(XSLTPROC)
 
 dnl ===================================================================
 dnl Checks for specific files.
@@ -3020,6 +2993,53 @@ else
 fi
 AC_SUBST(USE_FT_EMBOLDEN)
 
+if test -n "$with_system_libxslt" -o -n "$with_system_libs" && \
+   test "$with_system_libxslt" != "no"; then
+    if test -z "$with_system_libxml" -a -z "$with_system_libs" || \
+      test "$with_system_libxml" == "no"; then
+      # somehow AC_MSG_WARN won't work...
+       echo "to prevent incompatibilities between internal libxml2 and libxslt, the office will be build with system-libxml"
+       echo "to prevent incompatibilities between internal libxml2 and libxslt, the office will be build with system-libxml" >> warn
+       with_system_libxml=yes
+    fi
+fi
+if test -n "$with_system_libxml" -o -n "$with_system_libs" && \
+   test "$with_system_libxml" != "no"; then
+    if test -z "$with_system_libxslt" -a -z "$with_system_libs" || \
+      test "$with_system_libxslt" == "no"; then
+      # somehow AC_MSG_WARN won't work...
+       echo "to prevent incompatibilities between internal libxslt and libxml2, the office will be build with system-libxslt"
+       echo "to prevent incompatibilities between internal libxslt and libxml2, the office will be build with system-libxslt" >> warn
+       with_system_libxslt=yes
+    fi
+fi
+
+dnl ===================================================================
+dnl Check for system libxslt
+dnl ===================================================================
+AC_MSG_CHECKING([which libxslt to use])
+if test -n "$with_system_libxslt" -o -n "$with_system_libs" && \
+   test "$with_system_libxslt" != "no"; then
+   AC_MSG_RESULT([external])
+   SYSTEM_LIBXSLT=YES
+
+   PKG_CHECK_MODULES( LIBXSLT, libxslt )
+
+   dnl Check for xsltproc
+   AC_PATH_PROG(XSLTPROC, xsltproc, no)
+   if test "$XSLTPROC" = "no"; then
+      AC_MSG_ERROR([xsltproc is required])
+   fi
+else
+   AC_MSG_RESULT([internal])
+   SYSTEM_LIBXSLT=NO
+   BUILD_TYPE="$BUILD_TYPE LIBXSLT"
+fi
+AC_SUBST(SYSTEM_LIBXSLT)
+AC_SUBST(LIBXSLT_CFLAGS)
+AC_SUBST(LIBXSLT_LIBS)
+
+
 dnl ===================================================================
 dnl Check for system libxml
 dnl ===================================================================
@@ -3320,59 +3340,6 @@ AC_SUBST(XALAN_JAR)
 if test -n "$NEED_XALAN"; then
    BUILD_TYPE="$BUILD_TYPE XALAN"
 fi
-
-
-dnl ===================================================================
-dnl Check for system xt
-dnl ===================================================================
-AC_MSG_CHECKING([which xt to use])
-if test -n "$with_system_xt" -o -n "$with_system_libs" && \
-        test "$with_system_xt" != "no"; then
-        AC_MSG_RESULT([external])
-        SYSTEM_XT=YES
-        if test -z $XT_JAR; then
-          AC_CHECK_FILE(/usr/share/java/xt.jar, 
-            [ XT_JAR=/usr/share/java/xt.jar ],
-            [ AC_CHECK_FILE(/usr/share/java/xt-0.20050823.jar, 
-              [ XT_JAR=/usr/share/java/xt-0.20050823.jar ],
-                  [ AC_MSG_ERROR(xt.jar replacement not found)]
-              )
-            ]
-          )
-        else
-          AC_CHECK_FILE($XT_JAR, [],
-               [ AC_MSG_ERROR(xt.jar replacement not found.)], [])
-        fi
-else
-    AC_MSG_RESULT([internal])
-    SYSTEM_XT=NO
-fi
-AC_SUBST(SYSTEM_XT)
-AC_SUBST(XT_JAR)
-
-dnl ===================================================================
-dnl Check for system sablot
-dnl ===================================================================
-AC_MSG_CHECKING([which sablot to use])
-if test -n "$with_system_sablot" -o -n "$with_system_libs" && \
-	test "$with_system_sablot" != "no"; then
-   AC_MSG_RESULT([external])
-   SYSTEM_SABLOT=YES
-
-   AC_PATH_PROG( SABLOTCONFIG, sablot-config)
-   if test -z "$SABLOTCONFIG"; then
-      AC_MSG_ERROR([install sablot to run this script])
-   fi
-
-   SABLOT_LIBS=`$SABLOTCONFIG --libs`
-   SABLOT_LIBS="-lsablot $SABLOT_LIBS"
-else
-   AC_MSG_RESULT([internal])
-   SYSTEM_SABLOT=NO
-   BUILD_TYPE="$BUILD_TYPE SABLOT"
-fi
-AC_SUBST(SYSTEM_SABLOT)
-AC_SUBST(SABLOT_LIBS)
 
 dnl ===================================================================
 dnl Check for system curl
