@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshdrw.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:34:24 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:13:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,12 +46,12 @@
 #include <svx/svxids.hrc>
 #endif
 
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
-#define ITEMID_GRADIENT_LIST    SID_GRADIENT_LIST
-#define ITEMID_HATCH_LIST       SID_HATCH_LIST
-#define ITEMID_BITMAP_LIST      SID_BITMAP_LIST
-#define ITEMID_DASH_LIST        SID_DASH_LIST
-#define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
+
+
+
+
+
+
 
 
 #ifndef _SFXSTRITEM_HXX //autogen
@@ -86,18 +86,18 @@ void  SwDocShell::InitDraw()
     if( pDrDoc )
     {
         // Listen, bzw. Tables im ItemSet der DocShell anlegen
-        PutItem( SvxGradientListItem( pDrDoc->GetGradientList() ) );
-        PutItem( SvxHatchListItem( pDrDoc->GetHatchList() ) );
-        PutItem( SvxBitmapListItem( pDrDoc->GetBitmapList() ) );
-        PutItem( SvxDashListItem( pDrDoc->GetDashList() ) );
-        PutItem( SvxLineEndListItem( pDrDoc->GetLineEndList() ) );
+        PutItem( SvxGradientListItem( pDrDoc->GetGradientList(), SID_GRADIENT_LIST ) );
+        PutItem( SvxHatchListItem( pDrDoc->GetHatchList(), SID_HATCH_LIST ) );
+        PutItem( SvxBitmapListItem( pDrDoc->GetBitmapList(), SID_BITMAP_LIST ) );
+        PutItem( SvxDashListItem( pDrDoc->GetDashList(), SID_DASH_LIST ) );
+        PutItem( SvxLineEndListItem( pDrDoc->GetLineEndList(), SID_LINEEND_LIST ) );
 
         Outliner& rOutliner = pDrDoc->GetDrawOutliner();
         com::sun::star::uno::Reference<com::sun::star::linguistic2::XHyphenator> xHyphenator( ::GetHyphenator() );
         rOutliner.SetHyphenator( xHyphenator );
     }
     else
-        PutItem( SvxColorTableItem( XColorTable::GetStdColorTable() ));
+        PutItem( SvxColorTableItem( XColorTable::GetStdColorTable(), SID_COLOR_TABLE ));
 }
 
 
