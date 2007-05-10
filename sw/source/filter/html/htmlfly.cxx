@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlfly.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:09:38 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:04:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 
 
 
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #include "hintids.hxx"
 
 #ifndef _STRING_HXX //autogen
