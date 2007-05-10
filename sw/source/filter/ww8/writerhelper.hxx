@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerhelper.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:13:23 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:14:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,6 +142,12 @@ namespace sw
         const SwFrmFmt* mpFlyFrm;
         SwPosition maPos;
         Size maSize;
+        // --> OD 2007-04-19 #i43447#
+        // Size of the frame in the layout.
+        // Especially needed for graphics, whose layout size can differ from its
+        // size, because it is scaled into its environment.
+        Size maLayoutSize;
+        // <--
         WriterSource meWriterType;
         const SwNode *mpStartFrameContent;
         bool mbIsInline;
@@ -219,6 +225,18 @@ namespace sw
          the best size to use to export to word
         */
         const Size GetSize() const { return maSize; }
+
+        /** The layout size of the contained element
+
+            OD 2007-04-19 #i43447#
+            Needed for graphics, which are scaled into its environment
+
+            @return layout size
+        */
+        const Size GetLayoutSize() const
+        {
+            return maLayoutSize;
+        }
     };
 
     /// STL container of Frames
