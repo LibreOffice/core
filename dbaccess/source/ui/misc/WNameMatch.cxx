@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WNameMatch.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:14:58 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:35:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -408,15 +408,6 @@ void OColumnString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlags*/
     rDev.DrawText( rPos, GetText() );
 }
 //========================================================================
-OColumnTreeBox::OColumnTreeBox( Window* pParent, WinBits nWinStyle )
-    : OMarkableTreeListBox(pParent,NULL,nWinStyle)
-{
-    SetDragDropMode( 0 );
-    EnableInplaceEditing( sal_False );
-    SetWindowBits(WB_BORDER | WB_HASBUTTONS | WB_HSCROLL);
-    SetSelectionMode( SINGLE_SELECTION );
-}
-//------------------------------------------------------------------------
 OColumnTreeBox::OColumnTreeBox( Window* pParent, const ResId& rResId )
     : OMarkableTreeListBox(pParent,NULL,rResId)
 {
