@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:06:20 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:45:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -554,10 +554,10 @@ void ScGlobal::Init()
     ppRscString = new String *[ STR_COUNT+1 ];
     for( USHORT nC = 0 ; nC <= STR_COUNT ; nC++ ) ppRscString[ nC ] = NULL;
 
-    pEmptyBrushItem = new SvxBrushItem( Color( COL_TRANSPARENT ) );
-    pButtonBrushItem = new SvxBrushItem( Color() );
-    pEmbeddedBrushItem = new SvxBrushItem( Color( COL_LIGHTCYAN ) );
-    pProtectedBrushItem = new SvxBrushItem( Color( COL_LIGHTGRAY ) );
+    pEmptyBrushItem = new SvxBrushItem( Color( COL_TRANSPARENT ), ATTR_BACKGROUND );
+    pButtonBrushItem = new SvxBrushItem( Color(), ATTR_BACKGROUND );
+    pEmbeddedBrushItem = new SvxBrushItem( Color( COL_LIGHTCYAN ), ATTR_BACKGROUND );
+    pProtectedBrushItem = new SvxBrushItem( Color( COL_LIGHTGRAY ), ATTR_BACKGROUND );
 
     UpdatePPT(NULL);
     ScCompiler::Init();
