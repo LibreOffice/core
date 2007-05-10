@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbcontrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:42:20 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:32:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,7 +243,7 @@ friend class SfxStyleControllerItem_Impl;
 //========================================================================
 // class SvxFontNameToolBoxControl ---------------------------------------
 //========================================================================
-#ifdef ITEMID_FONT
+
 
 class SVX_DLLPUBLIC SvxFontNameToolBoxControl : public SfxToolBoxControl
 {
@@ -256,12 +256,12 @@ public:
     virtual Window* CreateItemWindow    ( Window *pParent );
 };
 
-#endif // ITEMID_FONT
+
 
 //========================================================================
 // class SvxFontHeightToolBoxControl -------------------------------------
 //========================================================================
-#ifdef ITEMID_FONTHEIGHT
+
 
 class SvxFontSizeItem;
 class SvxFontItem;
@@ -295,13 +295,13 @@ public:
 //#endif
 };
 
-#endif // ITEMID_FONTHEIGHT
+
 
 //========================================================================
 // class SvxFontColorToolBoxControl --------------------------------------
 //========================================================================
 
-#ifdef ITEMID_COLOR
+
 
 class SvxTbxButtonColorUpdater_Impl;
 
@@ -320,13 +320,13 @@ public:
     virtual SfxPopupWindow*     CreatePopupWindow();
 };
 
-#endif // ITEMID_COLOR
+
 
 //========================================================================
 // class SvxFontColorExtToolBoxControl --------------------------------------
 //========================================================================
 
-#ifdef ITEMID_COLOR
+
 
 class SVX_DLLPUBLIC SvxFontColorExtToolBoxControl : public SfxToolBoxControl
 {
@@ -349,12 +349,12 @@ public:
 
 };
 
-#endif // ITEMID_COLOR
+
 
 //========================================================================
 // class SvxColorToolBoxControl ------------------------------------------
 //========================================================================
-#ifdef ITEMID_BRUSH
+
 
 class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
 {
@@ -370,12 +370,12 @@ public:
     virtual SfxPopupWindow*     CreatePopupWindow();
 };
 
-#endif // ITEMID_BRUSH
+
 
 //========================================================================
 // class SvxFrameToolBoxControl ------------------------------------------
 //========================================================================
-#ifdef ITEMID_BOX
+
 
 class SVX_DLLPUBLIC SvxFrameToolBoxControl : public SfxToolBoxControl
 {
@@ -390,12 +390,12 @@ public:
 
 };
 
-#endif // ITEMID_BOX
+
 
 //========================================================================
 // class SvxLineStyleToolBoxControl --------------------------------------
 //========================================================================
-#ifdef ITEMID_LINE
+
 
 class SVX_DLLPUBLIC SvxFrameLineStyleToolBoxControl : public SfxToolBoxControl
 {
@@ -409,12 +409,12 @@ public:
                                               const SfxPoolItem* pState );
 };
 
-#endif // ITEMID_LINE
+
 
 //========================================================================
 // class SvxFrameLineColorToolBoxControl ---------------------------------
 //========================================================================
-#ifdef ITEMID_BRUSH
+
 
 class SVX_DLLPUBLIC SvxFrameLineColorToolBoxControl : public SfxToolBoxControl
 {
@@ -432,7 +432,7 @@ public:
     virtual SfxPopupWindow*     CreatePopupWindow();
 };
 
-#endif // ITEMID_BRUSH
+
 
 class SvxReloadControllerItem_Impl;
 class SvxReloadControllerItem : public SfxToolBoxControl

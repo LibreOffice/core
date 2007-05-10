@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svx3ditems.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:29:21 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:32:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,10 +43,7 @@
 #include <svtools/eitem.hxx>
 #endif
 
-#ifdef ITEMID_COLOR
-#undef ITEMID_COLOR
-#endif
-#define ITEMID_COLOR            (SID_ATTR_3D_LIGHTCOLOR)
+
 #ifndef _SVX_COLRITEM_HXX
 #include <svx/colritem.hxx>
 #endif

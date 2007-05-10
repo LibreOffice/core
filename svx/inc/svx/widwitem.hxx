@@ -4,9 +4,9 @@
  *
  *  $RCSfile: widwitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:48:06 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:33:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ class SVX_DLLPUBLIC SvxWidowsItem: public SfxByteItem
 public:
     TYPEINFO();
 
-    SvxWidowsItem( const BYTE nL=0, const USHORT nId = ITEMID_WIDOWS );
+    SvxWidowsItem( const BYTE nL /*= 0*/, const USHORT nId  );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;

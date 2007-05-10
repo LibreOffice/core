@@ -4,9 +4,9 @@
  *
  *  $RCSfile: twolinesitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:42:52 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:33:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,10 +61,10 @@ class SVX_DLLPUBLIC SvxTwoLinesItem : public SfxPoolItem
     sal_Bool bOn;
 public:
     TYPEINFO();
-    SvxTwoLinesItem( sal_Bool bOn = TRUE,
-                     sal_Unicode nStartBracket = 0,
-                     sal_Unicode nEndBracket = 0,
-                     sal_uInt16 nId = ITEMID_TWOLINES );
+    SvxTwoLinesItem( sal_Bool bOn /*= TRUE*/,
+                     sal_Unicode nStartBracket /*= 0*/,
+                     sal_Unicode nEndBracket /*= 0*/,
+                     sal_uInt16 nId  );
     SvxTwoLinesItem( const SvxTwoLinesItem& rAttr );
     virtual ~SvxTwoLinesItem();
 
