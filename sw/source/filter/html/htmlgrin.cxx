@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlgrin.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:10:49 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:05:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 
 #include "hintids.hxx"
 
@@ -341,13 +339,13 @@ void SwHTMLParser::SetAnchorAndAdjustment( SwVertOrient eVertOri,
             // hier auch geweohnlich attributiert !!!
             USHORT nUpper=0, nLower=0;
             GetULSpaceFromContext( nUpper, nLower );
-            InsertAttr( SvxULSpaceItem( nUpper, 0 ), FALSE, TRUE );
+            InsertAttr( SvxULSpaceItem( nUpper, 0, RES_UL_SPACE ), FALSE, TRUE );
 
             AppendTxtNode( AM_NOSPACE );
 
             if( nUpper )
             {
-                NewAttr( &aAttrTab.pULSpace, SvxULSpaceItem( 0, nLower ) );
+                NewAttr( &aAttrTab.pULSpace, SvxULSpaceItem( 0, nLower, RES_UL_SPACE ) );
                 aParaAttrs.Insert( aAttrTab.pULSpace, aParaAttrs.Count() );
                 EndAttr( aAttrTab.pULSpace, 0, FALSE );
             }
@@ -427,7 +425,7 @@ void SwHTMLParser::InsertImage()
     BOOL bIsMap = FALSE;
     BOOL bPrcWidth = FALSE;
     BOOL bPrcHeight = FALSE;
-    SvxMacroItem aMacroItem;
+    SvxMacroItem aMacroItem(RES_FRMMACRO);
 
     ScriptType eDfltScriptType;
     String sDfltScriptType;
@@ -623,7 +621,7 @@ IMAGE_SETEVENT:
         }
 
 
-        SvxBoxItem aBoxItem;
+        SvxBoxItem aBoxItem( RES_BOX );
         aBoxItem.SetLine( &aHBorderLine, BOX_LINE_TOP );
         aBoxItem.SetLine( &aHBorderLine, BOX_LINE_BOTTOM );
         aBoxItem.SetLine( &aVBorderLine, BOX_LINE_LEFT );
@@ -1014,7 +1012,7 @@ void SwHTMLParser::InsertBodyOptions()
     {
         // Die Textfarbe wird an der Standard-Vorlage gesetzt
         pCSS1Parser->GetTxtCollFromPool( RES_POOLCOLL_STANDARD )
-            ->SetAttr( SvxColorItem(aTextColor) );
+            ->SetAttr( SvxColorItem(aTextColor, RES_CHRATR_COLOR) );
         pCSS1Parser->SetBodyTextSet();
     }
 
@@ -1096,14 +1094,14 @@ void SwHTMLParser::InsertBodyOptions()
     {
         SwCharFmt *pCharFmt =
             pCSS1Parser->GetCharFmtFromPool(RES_POOLCHR_INET_NORMAL);
-        pCharFmt->SetAttr( SvxColorItem(aLinkColor) );
+        pCharFmt->SetAttr( SvxColorItem(aLinkColor, RES_CHRATR_COLOR) );
         pCSS1Parser->SetBodyLinkSet();
     }
     if( bVLinkColor && !pCSS1Parser->IsBodyVLinkSet() )
     {
         SwCharFmt *pCharFmt =
             pCSS1Parser->GetCharFmtFromPool(RES_POOLCHR_INET_VISIT);
-        pCharFmt->SetAttr( SvxColorItem(aVLinkColor) );
+        pCharFmt->SetAttr( SvxColorItem(aVLinkColor, RES_CHRATR_COLOR) );
         pCSS1Parser->SetBodyVLinkSet();
     }
     if( aLang.Len() )
@@ -1126,8 +1124,7 @@ void SwHTMLParser::InsertBodyOptions()
             }
             if( nWhich )
             {
-                SvxLanguageItem aLang( eLang );
-                aLang.SetWhich( nWhich );
+                SvxLanguageItem aLang( eLang, nWhich );
                 pDoc->SetDefault( aLang );
             }
         }
@@ -1523,7 +1520,7 @@ void SwHTMLParser::StripTrailingPara()
 
     if( bSetSmallFont )
     {
-        SvxFontHeightItem aFontHeight( 40 );
+        SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
         pCNd->SetAttr( aFontHeight );
         aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
         pCNd->SetAttr( aFontHeight );
