@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuiimapwnd.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:28:16 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:36:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@
 #include <sfx2/sfxsids.hrc>     // SID_ATTR_MACROITEM
 #endif
 #define _ANIMATION
-#define ITEMID_MACRO SID_ATTR_MACROITEM
+
 #ifndef _MACROPG_HXX //autogen
 #include <sfx2/macropg.hxx>
 #endif
