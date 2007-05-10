@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:05:16 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:41:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -383,7 +383,11 @@ namespace xmloff
             m_nIncludeCommon = m_nIncludeCommon & ~CCA_SERVICE_NAME;
         #endif
         }
+    }
 
+    //---------------------------------------------------------------------
+    void OControlExport::exportInnerAttributes()
+    {
         // the control id
         if (CCA_CONTROL_ID & m_nIncludeCommon)
         {
@@ -397,11 +401,7 @@ namespace xmloff
             m_nIncludeCommon = m_nIncludeCommon & ~CCA_CONTROL_ID;
         #endif
         }
-    }
 
-    //---------------------------------------------------------------------
-    void OControlExport::exportInnerAttributes()
-    {
         // common control attributes
         exportCommonControlAttributes();
 
@@ -1962,9 +1962,9 @@ namespace xmloff
     //= OColumnExport
     //=====================================================================
     //---------------------------------------------------------------------
-    OColumnExport::OColumnExport(IFormsExportContext& _rContext, const Reference< XPropertySet >& _rxControl,
+    OColumnExport::OColumnExport(IFormsExportContext& _rContext, const Reference< XPropertySet >& _rxControl, const ::rtl::OUString& _rControlId,
         const Sequence< ScriptEventDescriptor >& _rEvents)
-        :OControlExport(_rContext, _rxControl, ::rtl::OUString(), ::rtl::OUString(), _rEvents)
+        :OControlExport(_rContext, _rxControl, _rControlId, ::rtl::OUString(), _rEvents)
     {
     }
 
@@ -2034,7 +2034,7 @@ namespace xmloff
         OControlExport::examine();
 
         // grid columns miss some properties of the controls they're representing
-        m_nIncludeCommon &= ~(CCA_CONTROL_ID | CCA_FOR | CCA_PRINTABLE | CCA_TAB_INDEX | CCA_TAB_STOP | CCA_LABEL);
+        m_nIncludeCommon &= ~(CCA_FOR | CCA_PRINTABLE | CCA_TAB_INDEX | CCA_TAB_STOP | CCA_LABEL);
         m_nIncludeSpecial &= ~(SCA_ECHO_CHAR | SCA_AUTOMATIC_COMPLETION | SCA_MULTIPLE | SCA_MULTI_LINE | SCA_IS_TRISTATE);
 
         if (FormComponentType::DATEFIELD != m_nClassId)
