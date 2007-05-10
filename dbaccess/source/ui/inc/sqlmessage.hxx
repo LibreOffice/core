@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlmessage.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:33:43 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:33:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,8 @@ public:
                 const UniString& rTitle,
                 const UniString& rMessage,
                 WinBits nStyle = WB_OK | WB_DEF_OK,
-                MessageType eImage = Info);
+                MessageType eImage = Info,
+                const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = NULL );
 
     ~OSQLMessageBox();
 
