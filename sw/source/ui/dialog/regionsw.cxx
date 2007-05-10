@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:05:54 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:15:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@
 #include <sfx2/linkmgr.hxx>
 #endif
 #ifndef _SVX_SIZEITEM_HXX //autogen
-#define ITEMID_SIZE 0
+
 #include <svx/sizeitem.hxx>
 #endif
 
