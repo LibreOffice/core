@@ -5,9 +5,9 @@
  
     $RCSfile: alllang.xsl,v $
  
-    $Revision: 1.12 $
+    $Revision: 1.13 $
  
-    last change: $Author: rt $ $Date: 2005-09-08 15:47:44 $
+    last change: $Author: kz $ $Date: 2007-05-10 13:09:23 $
  
     The Contents of this file are made available subject to
     the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,7 @@
 		xmlns:xs="http://www.w3.org/2001/XMLSchema"
 		xmlns:oor="http://openoffice.org/2001/registry"
 		xmlns:install="http://openoffice.org/2004/installation"
-		xmlns:filehelper="http://www.jclark.com/xt/java/org.openoffice.configuration.FileHelper"
-        exclude-result-prefixes="install"
-		extension-element-prefixes="filehelper">
+        	exclude-result-prefixes="install">
 
 <!-- Get the correct format -->
 <xsl:output method="xml" indent="yes" />
@@ -54,16 +52,10 @@
 <xsl:param name="fallback-locale">en-US</xsl:param>
 
 <xsl:variable name="schemaRootURL">
-    <xsl:choose>
-        <xsl:when test="function-available('filehelper:makeAbs')"><xsl:value-of select="filehelper:makeAbs($schemaRoot)"/></xsl:when>
-        <xsl:otherwise><xsl:value-of select="$schemaRoot"/></xsl:otherwise>
-    </xsl:choose>
+    <xsl:value-of select="$schemaRoot"/>
 </xsl:variable>
 <xsl:variable name="schemaURL">
-    <xsl:choose>
-        <xsl:when test="function-available('filehelper:makeAbs')"><xsl:value-of select="filehelper:makeAbs($xcs)"/></xsl:when>
-        <xsl:otherwise><xsl:value-of select="$xcs"/></xsl:otherwise>
-    </xsl:choose>
+    <xsl:value-of select="$xcs"/>
 </xsl:variable>
 
 <!--************************** TEMPLATES ******************************** -->
