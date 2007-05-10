@@ -4,9 +4,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:23:43 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:50:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -575,11 +575,11 @@ namespace pcr
     {
         Optional< double > aReturn( sal_True, 0 );
 
-        long minValue = getTypedControlWindow()->GetMin();
-        if ( minValue == ::std::numeric_limits< long >::min() )
+        sal_Int64 minValue = getTypedControlWindow()->GetMin();
+        if ( minValue == ::std::numeric_limits< sal_Int64 >::min() )
             aReturn.IsPresent = sal_False;
         else
-            aReturn.Value = minValue;
+            aReturn.Value = (double)minValue;
 
         return aReturn;
     }
@@ -588,7 +588,7 @@ namespace pcr
     void SAL_CALL ONumericControl::setMinValue( const Optional< double >& _minvalue ) throw (RuntimeException)
     {
         if ( !_minvalue.IsPresent )
-            getTypedControlWindow()->SetMin( ::std::numeric_limits< long >::min() );
+            getTypedControlWindow()->SetMin( ::std::numeric_limits< sal_Int64 >::min() );
         else
             getTypedControlWindow()->SetMin( impl_apiValueToFieldValue_nothrow( _minvalue.Value ) );
     }
@@ -598,11 +598,11 @@ namespace pcr
     {
         Optional< double > aReturn( sal_True, 0 );
 
-        long maxValue = getTypedControlWindow()->GetMax();
-        if ( maxValue == ::std::numeric_limits< long >::max() )
+        sal_Int64 maxValue = getTypedControlWindow()->GetMax();
+        if ( maxValue == ::std::numeric_limits< sal_Int64 >::max() )
             aReturn.IsPresent = sal_False;
         else
-            aReturn.Value = maxValue;
+            aReturn.Value = (double)maxValue;
 
         return aReturn;
     }
@@ -611,7 +611,7 @@ namespace pcr
     void SAL_CALL ONumericControl::setMaxValue( const Optional< double >& _maxvalue ) throw (RuntimeException)
     {
         if ( !_maxvalue.IsPresent )
-            getTypedControlWindow()->SetMax( ::std::numeric_limits< long >::max() );
+            getTypedControlWindow()->SetMax( ::std::numeric_limits< sal_Int64 >::max() );
         else
             getTypedControlWindow()->SetMax( impl_apiValueToFieldValue_nothrow( _maxvalue.Value ) );
     }
@@ -685,9 +685,9 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    double ONumericControl::impl_fieldValueToApiValue_nothrow( long _nFieldValue ) const
+    double ONumericControl::impl_fieldValueToApiValue_nothrow( sal_Int64 _nFieldValue ) const
     {
-        double nApiValue = ImplCalcDoubleValue( _nFieldValue, getTypedControlWindow()->GetDecimalDigits() );
+        double nApiValue = ImplCalcDoubleValue( (long)_nFieldValue, getTypedControlWindow()->GetDecimalDigits() );
         nApiValue *= m_nFieldToUNOValueFactor;
         return nApiValue;
     }
@@ -766,6 +766,11 @@ namespace pcr
         }
 
         getTypedControlWindow()->SetDropDownLineCount( LB_DEFAULT_COUNT );
+        if ( ( nWinStyle & WB_READONLY ) != 0 )
+        {
+            getTypedControlWindow()->SetReadOnly( TRUE );
+            getTypedControlWindow()->Enable( TRUE );
+        }
     }
 
     //------------------------------------------------------------------
@@ -863,6 +868,11 @@ namespace pcr
         :OListboxControl_Base( PropertyControlType::ListBox, pParent, nWinStyle )
     {
         getTypedControlWindow()->SetDropDownLineCount( LB_DEFAULT_COUNT );
+        if ( ( nWinStyle & WB_READONLY ) != 0 )
+        {
+            getTypedControlWindow()->SetReadOnly( TRUE );
+            getTypedControlWindow()->Enable( TRUE );
+        }
     }
 
     //------------------------------------------------------------------
@@ -1205,19 +1215,19 @@ namespace pcr
         //..............................................................
         String lcl_convertListToDisplayText( const StlSyntaxSequence< ::rtl::OUString >& _rStrings )
         {
-            String sComposed;
+            ::rtl::OUStringBuffer aComposed;
             for (   StlSyntaxSequence< ::rtl::OUString >::const_iterator strings = _rStrings.begin();
                     strings != _rStrings.end();
                     ++strings
                 )
             {
                 if ( strings != _rStrings.begin() )
-                    sComposed += ';';
-                sComposed += '\"';
-                sComposed += String( *strings );
-                sComposed += '\"';
+                    aComposed.append( (sal_Unicode)';' );
+                aComposed.append( (sal_Unicode)'\"' );
+                aComposed.append( *strings );
+                aComposed.append( (sal_Unicode)'\"' );
             }
-            return sComposed;
+            return aComposed.makeStringAndClear();
         }
     }
 
@@ -1360,7 +1370,7 @@ namespace pcr
     //------------------------------------------------------------------
     void DropDownEditControl::SetTextValue( const ::rtl::OUString& _rText )
     {
-        OSL_PRECOND( m_nOperationMode == eMultiLineText, "DropDownEditControl::GetTextValue: illegal call!" );
+        OSL_PRECOND( m_nOperationMode == eMultiLineText, "DropDownEditControl::SetTextValue: illegal call!" );
 
         m_pFloatingEdit->getEdit()->SetText( _rText );
         SetText( _rText );
