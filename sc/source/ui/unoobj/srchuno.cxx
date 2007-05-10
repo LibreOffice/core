@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchuno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:47:14 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:59:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@ const SfxItemPropertyMap* lcl_GetSearchPropertyMap()
 ScCellSearchObj::ScCellSearchObj() :
     aPropSet(lcl_GetSearchPropertyMap())
 {
-    pSearchItem = new SvxSearchItem;
+    pSearchItem = new SvxSearchItem( SCITEM_SEARCHDATA );
     //  Defaults:
     pSearchItem->SetWordOnly(FALSE);
     pSearchItem->SetExact(FALSE);
