@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagedesc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-05 10:52:59 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:00:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 
 
 
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #include <hintids.hxx>
 
 #ifndef _SVX_PBINITEM_HXX //autogen
@@ -183,7 +182,7 @@ void SwPageDesc::Mirror()
 {
     //Das Spiegeln findet nur beim RandAttribut statt, alle anderen Werte
     //werden schlicht uebertragen.
-    SvxLRSpaceItem aLR;
+    SvxLRSpaceItem aLR( RES_LR_SPACE );
     const SvxLRSpaceItem &rLR = aMaster.GetLRSpace();
     aLR.SetLeft(  rLR.GetRight() );
     aLR.SetRight( rLR.GetLeft() );
@@ -209,7 +208,7 @@ void SwPageDesc::ResetAllAttr( sal_Bool bLeft )
     // --> OD 2007-01-25 #i73790# - method renamed
     rFmt.ResetAllFmtAttr();
     // <--
-    rFmt.SetAttr( SvxFrameDirectionItem() );
+    rFmt.SetAttr( SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR) );
 }
 
 /*************************************************************************
