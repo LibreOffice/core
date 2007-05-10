@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:32:40 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:37:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1203,7 +1203,7 @@ void ViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence <
     // usually be the called view shell, but to be on the safe side we call
     // the main view shell explicitly.
     sal_uInt16 nViewID (IMPRESS_FACTORY_ID);
-    if (GetViewShellBase().GetMainViewShell() != NULL)
+    if (GetViewShellBase().GetMainViewShell().get() != NULL)
         nViewID = GetViewShellBase().GetMainViewShell()->mpImpl->GetViewId();
     rSequence[nIndex].Name = rtl::OUString (
         RTL_CONSTASCII_USTRINGPARAM( sUNO_View_ViewId ) );
