@@ -1,4 +1,4 @@
-// MsOfficeDocumentInformation.h: Schnittstelle für die Klasse MsOfficeDocumentInformation.
+// MsOfficeDocumentInformation.h: Schnittstelle fï¿½r die Klasse MsOfficeDocumentInformation.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -28,6 +28,7 @@ class RegistrationContextInformation
 public:
 
     enum SHELL_COMMAND {New, Open, Print, Printto};
+    enum OFFICE_APPLICATION {Office, Writer, Calc, Impress};
 
     RegistrationContextInformation(MSIHANDLE hMsi, const std::wstring& OpenOfficeExecutablePath);
 
@@ -50,6 +51,16 @@ public:
     std::wstring GetWordTemplateFileExtension() const;
     std::wstring GetWordTemplateDefaultIconEntry() const;
     std::wstring GetWordTemplateDefaultShellCommand() const;
+
+    /** Rtf document information
+        The icon index is the index of the icon
+        in soffice.exe to be associated with
+        rtf document files
+    */
+    std::wstring GetRtfDocumentDisplayName() const;
+    std::wstring GetRtfDocumentFileExtension() const;
+    std::wstring GetRtfDocumentDefaultIconEntry() const;
+    std::wstring GetRtfDocumentDefaultShellCommand() const;
 
     /** Excel sheet information
         The icon index is the index of the icon
@@ -125,7 +136,8 @@ public:
 
     /** A command line for the specified shell command
     */
-    std::wstring GetOpenOfficeCommandline(SHELL_COMMAND ShellCommand) const;
+    std::wstring GetOpenOfficeCommandline(SHELL_COMMAND ShellCommand,
+                                          OFFICE_APPLICATION OfficeApp) const;
 
 private:
     bool IsConvertableToAnsi(const std::wstring& String)  const;
