@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txatritr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:19:21 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:54:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,8 @@
 #ifndef _SVARRAY_HXX
 #include <svtools/svarray.hxx>
 #endif
+#include <svx/langitem.hxx>
+#include <hintids.hxx>
 
 class String;
 class SwTxtNode;
@@ -94,8 +96,6 @@ public:
 };
 
 
-#ifdef ITEMID_LANGUAGE
-
 class SwLanguageIterator : public SwTxtAttrIterator
 {
 public:
@@ -108,8 +108,6 @@ public:
     sal_uInt16 GetLanguage() const
         { return ((SvxLanguageItem&)GetAttr()).GetValue(); }
 };
-
-#endif
 
 
 #endif
