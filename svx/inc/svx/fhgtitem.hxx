@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fhgtitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:49:16 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:25:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,8 @@ class SVX_DLLPUBLIC SvxFontHeightItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxFontHeightItem( const ULONG nSz = 240, const USHORT nPropHeight = 100,
-                       const USHORT nId = ITEMID_FONTHEIGHT );
+    SvxFontHeightItem( const ULONG nSz /*= 240*/, const USHORT nPropHeight /*= 100*/,
+                       const USHORT nId  );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;

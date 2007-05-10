@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numinf.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:02:15 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:29:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 
 // class SvxNumberInfoItem -----------------------------------------------
 
-#ifdef ITEMID_NUMBERINFO
+
 
 /*
 [Beschreibung]
@@ -62,13 +62,13 @@ class SVX_DLLPUBLIC SvxNumberInfoItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxNumberInfoItem( const USHORT nId = ITEMID_NUMBERINFO );
+    SvxNumberInfoItem( const USHORT nId  );
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
-                       const USHORT nId = ITEMID_NUMBERINFO );
+                       const USHORT nId  );
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter, const String& rVal,
-                       const USHORT nId = ITEMID_NUMBERINFO );
+                       const USHORT nId  );
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter, const double& rVal,
-                       const USHORT nId = ITEMID_NUMBERINFO );
+                       const USHORT nId  );
     // if both double and String are supplied, String is used for text formats
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter, const double& rVal,
                        const String& rValueStr, const USHORT nId );
@@ -109,7 +109,7 @@ private:
     sal_uInt32          nDelCount;
 };
 
-#endif
+
 
 #endif
 

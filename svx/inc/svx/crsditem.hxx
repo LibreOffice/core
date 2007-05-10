@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crsditem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:42:17 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:24:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,8 @@ class SVX_DLLPUBLIC SvxCrossedOutItem : public SfxEnumItem
 public:
     TYPEINFO();
 
-    SvxCrossedOutItem( const FontStrikeout eSt = STRIKEOUT_NONE,
-                       const USHORT nId = ITEMID_CROSSEDOUT );
+    SvxCrossedOutItem( const FontStrikeout eSt /*= STRIKEOUT_NONE*/,
+                       const USHORT nId  );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

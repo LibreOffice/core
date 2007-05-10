@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escpitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:48:17 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:25:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,11 +77,11 @@ class SVX_DLLPUBLIC SvxEscapementItem : public SfxEnumItemInterface
 public:
     TYPEINFO();
 
-    SvxEscapementItem( const USHORT nId = ITEMID_ESCAPEMENT );
+    SvxEscapementItem( const USHORT nId  );
     SvxEscapementItem( const SvxEscapement eEscape,
-                   const USHORT nId = ITEMID_ESCAPEMENT  );
+                   const USHORT nId  );
     SvxEscapementItem( const short nEsc, const BYTE nProp,
-                   const USHORT nId = ITEMID_ESCAPEMENT  );
+                   const USHORT nId  );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;

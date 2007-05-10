@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prszitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:06:31 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:30:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,8 +60,8 @@ class SVX_DLLPUBLIC SvxPropSizeItem : public SfxUInt16Item
 public:
     TYPEINFO();
 
-    SvxPropSizeItem( const USHORT nPercent = 100,
-                 const USHORT nID = ITEMID_PROPSIZE );
+    SvxPropSizeItem( const USHORT nPercent /*= 100*/,
+                 const USHORT nID  );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;

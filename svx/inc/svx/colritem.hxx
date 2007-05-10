@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colritem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:41:51 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:24:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,9 +74,9 @@ private:
 public:
     TYPEINFO();
 
-    SvxColorItem( const USHORT nId = ITEMID_COLOR );
-    SvxColorItem( const Color& aColor, const USHORT nId = ITEMID_COLOR );
-    SvxColorItem( SvStream& rStrm, const USHORT nId = ITEMID_COLOR );
+    SvxColorItem( const USHORT nId );
+    SvxColorItem( const Color& aColor, const USHORT nId  );
+    SvxColorItem( SvStream& rStrm, const USHORT nId  );
     SvxColorItem( const SvxColorItem& rCopy );
     ~SvxColorItem();
 

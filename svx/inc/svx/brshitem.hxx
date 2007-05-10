@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brshitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:39:46 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:23:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,20 +90,20 @@ class SVX_DLLPUBLIC SvxBrushItem : public SfxPoolItem
     DECL_STATIC_LINK( SvxBrushItem, DoneHdl_Impl, void *);
     // wird nur von Create benutzt
     SvxBrushItem( SvStream& rStrm,
-                  USHORT nVersion, USHORT nWhich = ITEMID_BRUSH );
+                  USHORT nVersion, USHORT nWhich  );
 
 public:
     TYPEINFO();
 
-    SvxBrushItem( USHORT nWhich = ITEMID_BRUSH );
-    SvxBrushItem( const Color& rColor, USHORT nWhich = ITEMID_BRUSH );
+    SvxBrushItem( USHORT nWhich );
+    SvxBrushItem( const Color& rColor, USHORT nWhich  );
 
     SvxBrushItem( const Graphic& rGraphic,
-                  SvxGraphicPosition ePos, USHORT nWhich = ITEMID_BRUSH );
+                  SvxGraphicPosition ePos, USHORT nWhich );
     SvxBrushItem( const GraphicObject& rGraphicObj,
-                  SvxGraphicPosition ePos, USHORT nWhich = ITEMID_BRUSH );
+                  SvxGraphicPosition ePos, USHORT nWhich );
     SvxBrushItem( const String& rLink, const String& rFilter,
-                  SvxGraphicPosition ePos, USHORT nWhich = ITEMID_BRUSH );
+                  SvxGraphicPosition ePos, USHORT nWhich );
     SvxBrushItem( const SvxBrushItem& );
     SvxBrushItem( const CntWallpaperItem&, USHORT nWhich );
 

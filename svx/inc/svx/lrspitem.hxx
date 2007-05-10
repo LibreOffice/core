@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lrspitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:00:02 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:28:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,10 +95,10 @@ class SVX_DLLPUBLIC SvxLRSpaceItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxLRSpaceItem( const USHORT nId = ITEMID_LRSPACE );
+    SvxLRSpaceItem( const USHORT nId  );
     SvxLRSpaceItem( const long nLeft, const long nRight,
-                    const long nTLeft = 0, const short nOfset = 0,
-                    const USHORT nId = ITEMID_LRSPACE );
+                    const long nTLeft /*= 0*/, const short nOfset /*= 0*/,
+                    const USHORT nId  );
     inline SvxLRSpaceItem& operator=( const SvxLRSpaceItem &rCpy );
 
     // "pure virtual Methoden" vom SfxPoolItem

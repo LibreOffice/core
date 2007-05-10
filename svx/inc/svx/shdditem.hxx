@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shdditem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:16:03 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:31:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,8 +66,8 @@ class SVX_DLLPUBLIC SvxShadowedItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxShadowedItem( const BOOL bShadowed = FALSE,
-                     const USHORT nId = ITEMID_SHADOWED );
+    SvxShadowedItem( const BOOL bShadowed /*= FALSE*/,
+                     const USHORT nId  );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;

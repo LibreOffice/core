@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pageitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:04:10 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:29:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ enum SvxPageUsage
     Beschreibung:   Teile der Seitenbeschreibung
  --------------------------------------------------------------------*/
 
-#ifdef ITEMID_PAGE
+
 
 /*
 [Beschreibung]
@@ -102,7 +102,7 @@ private:
 public:
 
     TYPEINFO();
-    SvxPageItem( const USHORT nId = ITEMID_PAGE);
+    SvxPageItem( const USHORT nId );
     SvxPageItem( const SvxPageItem& rItem );
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
@@ -133,14 +133,14 @@ public:
     const String&   GetDescName() const                 { return aDescName;  }
     void            SetDescName(const String& rStr)     { aDescName = rStr;  }
 };
-#endif
+
 
 
 /*--------------------------------------------------------------------
     Beschreibung:   Container fuer Header/Footer-Attribute
  --------------------------------------------------------------------*/
 
-#ifdef ITEMID_SETITEM
+
 
 /*
 [Beschreibung]
@@ -164,7 +164,7 @@ public:
     virtual SfxPoolItem*    Create( SvStream&, USHORT nVersion ) const;
     virtual SvStream&       Store( SvStream&, USHORT nItemVersion ) const;
 };
-#endif
+
 
 
 

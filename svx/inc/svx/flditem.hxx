@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flditem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:49:38 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:25:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ class MetaAction;
 
 // class SvxFieldItem ---------------------------------------------------
 
-#ifdef ITEMID_FIELD
+
 
 class SVX_DLLPUBLIC SvxFieldData : public SvPersistBase
 {
@@ -94,7 +94,7 @@ private:
 public:
             TYPEINFO();
 
-            SvxFieldItem( const SvxFieldData& rField, const USHORT nId = ITEMID_FIELD );
+            SvxFieldItem( const SvxFieldData& rField, const USHORT nId  );
             SvxFieldItem( const SvxFieldItem& rItem );
             ~SvxFieldItem();
 
@@ -441,7 +441,7 @@ public:
     virtual int             operator==( const SvxFieldData& ) const;
 };
 
-#endif
+
 
 
 #endif

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sizeitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:16:26 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:31:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ class SVX_DLLPUBLIC SvxSizeItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxSizeItem( const USHORT nId = ITEMID_SIZE);
+    SvxSizeItem( const USHORT nId );
     SvxSizeItem( const USHORT nId, const Size& rSize);
 
     inline SvxSizeItem& operator=( const SvxSizeItem &rCpy );

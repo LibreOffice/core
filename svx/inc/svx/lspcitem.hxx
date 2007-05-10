@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lspcitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:00:14 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:28:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@ namespace rtl
 Dieses Item beschreibt den Abstand zwischen den Zeilen.
 */
 
+#define LINE_SPACE_DEFAULT_HEIGHT 200
 class SVX_DLLPUBLIC SvxLineSpacingItem : public SfxEnumItemInterface
 {
     friend SvStream& operator<<( SvStream&, SvxLineSpacingItem& ); //$ ostream
@@ -83,7 +84,8 @@ public:
     // die Folgen beim Writer absehen ?
     // => lieber einen krummen Wert als Default, aber der Programmierer
     // sieht, dass dort etwas besonderes passiert.
-    SvxLineSpacingItem( USHORT nHeight = 200, const USHORT nId = ITEMID_LINESPACING );
+
+    SvxLineSpacingItem( USHORT nHeight /*= LINE_SPACE_DEFAULT_HEIGHT*/, const USHORT nId  );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;

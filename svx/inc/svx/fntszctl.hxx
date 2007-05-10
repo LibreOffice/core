@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntszctl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:53:01 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:26:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #include "svx/svxdllapi.h"
 #endif
 
-#ifdef ITEMID_FONTHEIGHT
+
 
 class SfxBindings;
 class FontSizeMenu;
@@ -76,7 +76,7 @@ public:
     SFX_DECL_MENU_CONTROL();
 };
 
-#endif
+
 
 #endif
 

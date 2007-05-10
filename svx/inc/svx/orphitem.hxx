@@ -4,9 +4,9 @@
  *
  *  $RCSfile: orphitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:03:13 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:29:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ class SVX_DLLPUBLIC SvxOrphansItem: public SfxByteItem
 public:
     TYPEINFO();
 
-    SvxOrphansItem( const BYTE nL=0, const USHORT nId = ITEMID_ORPHANS );
+    SvxOrphansItem( const BYTE nL /*= 0*/, const USHORT nId  );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
