@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwview.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:16:20 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:30:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,10 +99,8 @@ namespace dbaui
         /** as columns may be hidden there is a difference between a columns model pos and its view pos
             so we you may use these translation function
         */
-        sal_uInt16 Model2ViewPos(sal_uInt16 nPos) const;
         sal_uInt16 View2ModelPos(sal_uInt16 nPos) const;
         /// for the same reason the view column count isn't the same as the model column count
-        sal_uInt16 ViewColumnCount() const;
 
         void setSplitter(Splitter* _pSplitter);
         void setTreeView(DBTreeView* _pTreeView);
