@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectinspectormodel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 12:01:10 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:49:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,23 +39,14 @@
 #ifndef EXTENSIONS_PROPCTRLR_MODULEPRC_HXX
 #include "modulepcr.hxx"
 #endif
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_PCROMPONENTCONTEXT_HXX
-#include "pcrcomponentcontext.hxx"
-#endif
 #ifndef _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
 #include "pcrcommon.hxx"
 #endif
+#ifndef INSPECTORMODELBASE_HXX
+#include "inspectormodelbase.hxx"
+#endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_INSPECTION_XOBJECTINSPECTORMODEL_HPP_
-#include <com/sun/star/inspection/XObjectInspectorModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
-#include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UCB_ALREADYINITIALIZEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #endif
@@ -64,9 +55,10 @@
 #endif
 /** === end UNO includes === **/
 
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
-#endif
+
+#include <comphelper/broadcasthelper.hxx>
+#include <comphelper/uno3.hxx>
 
 //........................................................................
 namespace pcr
@@ -87,33 +79,23 @@ namespace pcr
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::ucb::AlreadyInitializedException;
+    using ::com::sun::star::beans::XPropertySetInfo;
+    using ::com::sun::star::uno::makeAny;
     /** === end UNO using === **/
 
     //====================================================================
     //= ObjectInspectorModel
     //====================================================================
-    typedef ::cppu::WeakImplHelper3 <   XObjectInspectorModel
-                                    ,   XInitialization
-                                    ,   XServiceInfo
-                                    >   ObjectInspectorModel_Base;
-
-    class ObjectInspectorModel : public ObjectInspectorModel_Base
+    class ObjectInspectorModel : public ImplInspectorModel
     {
     private:
-        ComponentContext        m_aContext;
-        Sequence< Any >         m_aFactories;
-        bool                    m_bHasHelpSection;
-        sal_Int32               m_nMinHelpTextLines;
-        sal_Int32               m_nMaxHelpTextLines;
+        Sequence< Any >             m_aFactories;
 
     public:
         ObjectInspectorModel( const Reference< XComponentContext >& _rxContext );
 
         // XObjectInspectorModel
         virtual Sequence< Any > SAL_CALL getHandlerFactories() throw (RuntimeException);
-        virtual ::sal_Bool SAL_CALL getHasHelpSection() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::sal_Int32 SAL_CALL getMinHelpTextLines() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::sal_Int32 SAL_CALL getMaxHelpTextLines() throw (::com::sun::star::uno::RuntimeException);
         virtual Sequence< PropertyCategoryDescriptor > SAL_CALL describeCategories(  ) throw (RuntimeException);
         virtual ::sal_Int32 SAL_CALL getPropertyOrderIndex( const ::rtl::OUString& PropertyName ) throw (RuntimeException);
 
@@ -122,7 +104,6 @@ namespace pcr
 
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
-        virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (RuntimeException);
         virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
 
         // XServiceInfo - static versions
@@ -146,10 +127,7 @@ namespace pcr
     //= ObjectInspectorModel
     //====================================================================
     ObjectInspectorModel::ObjectInspectorModel( const Reference< XComponentContext >& _rxContext )
-        :m_aContext( _rxContext )
-        ,m_bHasHelpSection( false )
-        ,m_nMinHelpTextLines( 3 )
-        ,m_nMaxHelpTextLines( 8 )
+        :ImplInspectorModel( _rxContext )
     {
     }
 
@@ -157,24 +135,6 @@ namespace pcr
     Sequence< Any > SAL_CALL ObjectInspectorModel::getHandlerFactories() throw (RuntimeException)
     {
         return m_aFactories;
-    }
-
-    //--------------------------------------------------------------------
-    ::sal_Bool SAL_CALL ObjectInspectorModel::getHasHelpSection() throw (RuntimeException)
-    {
-        return m_bHasHelpSection;
-    }
-
-    //--------------------------------------------------------------------
-    ::sal_Int32 SAL_CALL ObjectInspectorModel::getMinHelpTextLines() throw (RuntimeException)
-    {
-        return m_nMinHelpTextLines;
-    }
-
-    //--------------------------------------------------------------------
-    ::sal_Int32 SAL_CALL ObjectInspectorModel::getMaxHelpTextLines() throw (RuntimeException)
-    {
-        return m_nMaxHelpTextLines;
     }
 
     //--------------------------------------------------------------------
@@ -194,6 +154,7 @@ namespace pcr
     //--------------------------------------------------------------------
     void SAL_CALL ObjectInspectorModel::initialize( const Sequence< Any >& _arguments ) throw (Exception, RuntimeException)
     {
+        ::osl::MutexGuard aGuard( m_aMutex );
         if ( m_aFactories.getLength() )
             throw AlreadyInitializedException();
 
@@ -229,20 +190,6 @@ namespace pcr
     ::rtl::OUString SAL_CALL ObjectInspectorModel::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_static();
-    }
-
-    //--------------------------------------------------------------------
-    ::sal_Bool SAL_CALL ObjectInspectorModel::supportsService( const ::rtl::OUString& ServiceName ) throw (RuntimeException)
-    {
-        StlSyntaxSequence< ::rtl::OUString > aSupported( getSupportedServiceNames() );
-        for (   StlSyntaxSequence< ::rtl::OUString >::const_iterator check = aSupported.begin();
-                check != aSupported.end();
-                ++check
-            )
-            if ( check->equals( ServiceName ) )
-                return sal_True;
-
-        return sal_False;
     }
 
     //--------------------------------------------------------------------
@@ -293,9 +240,7 @@ namespace pcr
         impl_verifyArgument_throw( _nMinHelpTextLines <= _nMaxHelpTextLines, 2 );
 
         m_aFactories = _rFactories;
-        m_bHasHelpSection = true;
-        m_nMinHelpTextLines = _nMinHelpTextLines;
-        m_nMaxHelpTextLines = _nMaxHelpTextLines;
+        enableHelpSectionProperties( _nMinHelpTextLines, _nMaxHelpTextLines );
     }
 
     //--------------------------------------------------------------------
