@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementexport.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:16:51 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:41:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,6 +295,7 @@ namespace xmloff
         */
         OColumnExport(IFormsExportContext& _rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl,
+            const ::rtl::OUString& _rControlId,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rxEvents);
 
         ~OColumnExport();
