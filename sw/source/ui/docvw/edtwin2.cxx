@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:16:44 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:16:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,16 +60,8 @@
 #include <fmtrfmrk.hxx>
 #endif
 
-#ifndef _SVX_FLDITEM_HXX
-#   ifndef ITEMID_FIELD
-#       ifndef _EEITEM_HXX //autogen
-#           include <svx/eeitem.hxx>
-#       endif
-#       define ITEMID_FIELD EE_FEATURE_FIELD  /* wird fuer #include <flditem.hxx> benoetigt */
-#   endif
-#   ifndef _SVX_FLDITEM_HXX //autogen
-#       include <svx/flditem.hxx>
-#   endif
+#ifndef _SVX_FLDITEM_HXX //autogen
+#include <svx/flditem.hxx>
 #endif
 
 #ifndef SVTOOLS_URIHELPER_HXX
