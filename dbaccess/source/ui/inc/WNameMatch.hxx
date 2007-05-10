@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WNameMatch.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:14:17 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:30:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,6 @@ namespace dbaui
         virtual void InitEntry(SvLBoxEntry* pEntry, const String& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind);
 
     public:
-        OColumnTreeBox( Window* pParent, WinBits nWinStyle=0 );
         OColumnTreeBox( Window* pParent, const ResId& rResId );
 
         void FillListBox( const ODatabaseExport::TColumnVector& _rList);
