@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:27:46 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:08:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,6 +234,8 @@ public:
     FmWinRecList::const_iterator findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC ) const;
     const FmWinRecList& getWindowList() const {return m_aWinList;}
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >
+            getFormController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm, const OutputDevice& _rDevice ) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() { return m_xORB; }
 
