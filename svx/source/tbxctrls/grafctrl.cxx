@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:39:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:01:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#define ITEMID_SIZE 0
-#define ITEMID_BRUSH 0
-#define ITEMID_GRF_CROP SID_ATTR_GRAF_CROP
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
