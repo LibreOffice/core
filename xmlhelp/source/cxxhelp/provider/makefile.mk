@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 12:19:42 $
+#   last change: $Author: kz $ $Date: 2007-05-10 13:16:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,18 @@ CFLAGS +=  -DHAVE_EXPAT_H
 CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)
 .ENDIF
 
-.IF "$(SYSTEM_SABLOT)" == "YES"
-CFLAGS+=-DSYSTEM_SABLOT
+.IF "$(SYSTEM_LIBXML)" == "YES"
+CFLAGS+= $(LIBXML_CFLAGS)
+.ELSE
+LIBXMLINCDIR=external$/libxml
+CFLAGS+= -I$(SOLARINCDIR)$/$(LIBXMLINCDIR)
+.ENDIF
+
+.IF "$(SYSTEM_LIBXSLT)" == "YES"
+CFLAGS+= $(LIBXSLT_CFLAGS)
+.ELSE
+LIBXSLTINCDIR=external$/libxslt
+CFLAGS+= -I$(SOLARINCDIR)$/$(LIBXSLTINCDIR)
 .ENDIF
 
 .IF "$(GUI)"=="WNT"
