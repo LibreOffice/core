@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:52:00 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:04:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,14 @@ class FmFormPage;
 class SvxFmTabWin;
 class FmXFormShell;
 class FmFormView;
+class SdrView;
+class SdrPage;
+class SdrUnoObj;
+
+namespace com { namespace sun { namespace star { namespace form {
+    class XForm;
+    class XFormController;
+} } } }
 
 //========================================================================
 class SVX_DLLPUBLIC FmDesignModeChangedHint : public SfxHint
@@ -143,7 +151,6 @@ public:
     FmXFormShell* GetImpl() const {return m_pImpl;};
 
     sal_uInt16  PrepareClose(sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False);
-    sal_Bool    IsDesignMode() const {return m_bDesignMode;}
 
     bool        IsActiveControl() const;
     void        ForgetActiveControl();
@@ -152,12 +159,27 @@ public:
     virtual void    Activate(sal_Bool bMDI);
     virtual void    Deactivate(sal_Bool bMDI);
 
+    // helper methods for implementing XFormLayerAccess
+    SdrUnoObj* GetFormControl(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& _rxModel,
+        const SdrView& _rView,
+        const OutputDevice& _rDevice,
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _out_rxControl
+    ) const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > GetFormController(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm,
+        const SdrView& _rView,
+        const OutputDevice& _rDevice
+    ) const;
+    sal_Bool    IsDesignMode() const { return m_bDesignMode; }
+    void        SetDesignMode( sal_Bool _bDesignMode );
+
 protected:
     void GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich);
 
     // gibt es ein Formular auf der aktuellen Seite?
     void DetermineForms(sal_Bool bInvalidate);
-    void SetDesignMode( sal_Bool bDesign);
+    void impl_setDesignMode( sal_Bool bDesign);
 };
 
 // ***************************************************************************************************
