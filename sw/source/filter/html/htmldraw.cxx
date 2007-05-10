@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmldraw.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:08:56 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:04:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,10 +59,6 @@
 #endif
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
-#endif
-
-#ifndef ITEMID_FIELD
-#   define ITEMID_FIELD EE_FEATURE_FIELD  /* wird fuer #include <flditem.hxx> benoetigt */
 #endif
 
 #ifndef _OUTLINER_HXX //autogen
@@ -200,7 +196,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     }
     if( nLeftSpace || nRightSpace )
     {
-        SvxLRSpaceItem aLRItem;
+        SvxLRSpaceItem aLRItem( RES_LR_SPACE );
         aLRItem.SetLeft( nLeftSpace );
         aLRItem.SetRight( nRightSpace );
         aFrmSet.Put( aLRItem );
@@ -226,7 +222,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     }
     if( nUpperSpace || nLowerSpace )
     {
-        SvxULSpaceItem aULItem;
+        SvxULSpaceItem aULItem( RES_UL_SPACE );
         aULItem.SetUpper( nUpperSpace );
         aULItem.SetLower( nLowerSpace );
         aFrmSet.Put( aULItem );
