@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:53:30 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:07:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -613,7 +613,7 @@ void SwRTFParser::ReadTable( int nToken )
             if( HORI_LEFT_AND_WIDTH == eAdjust &&
                 nLSpace != pFmt->GetLRSpace().GetLeft() )
             {
-                SvxLRSpaceItem aL; aL.SetLeft( nLSpace );
+                SvxLRSpaceItem aL( RES_LR_SPACE ); aL.SetLeft( nLSpace );
                 ((SfxItemSet&)pFmt->GetAttrSet()).Put( aL );
             }
         }
@@ -650,7 +650,7 @@ void SwRTFParser::ReadTable( int nToken )
                                                             eAdjust ) );
             if( HORI_LEFT_AND_WIDTH == eAdjust && nLSpace )
             {
-                SvxLRSpaceItem aL; aL.SetLeft( nLSpace );
+                SvxLRSpaceItem aL( RES_LR_SPACE ); aL.SetLeft( nLSpace );
                 ((SfxItemSet&)pFmt->GetAttrSet()).Put( aL );
             }
         }
@@ -773,11 +773,11 @@ void SwRTFParser::ReadTable( int nToken )
             SwFmtFrmSize aSz( pFmt->GetFrmSize() );
             aSz.SetWidth( nTblSz );
             ((SfxItemSet&)pFmt->GetAttrSet()).Put( aSz );
-            ((SfxItemSet&)pFmt->GetAttrSet()).Put(SvxFrameDirectionItem(eDir));
+            ((SfxItemSet&)pFmt->GetAttrSet()).Put(SvxFrameDirectionItem(eDir, RES_FRAMEDIR));
 
             if( HORI_LEFT_AND_WIDTH == eAdjust && nLSpace )
             {
-                SvxLRSpaceItem aL; aL.SetLeft( nLSpace );
+                SvxLRSpaceItem aL( RES_LR_SPACE ); aL.SetLeft( nLSpace );
                 ((SfxItemSet&)pFmt->GetAttrSet()).Put( aL );
             }
 
