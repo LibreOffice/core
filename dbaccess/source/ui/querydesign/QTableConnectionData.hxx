@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QTableConnectionData.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:21:53 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:37:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,6 @@ namespace dbaui
         */
         virtual BOOL Update();
 
-        ::rtl::OUString GetTableName(EConnectionSide nWhich) const;
         ::rtl::OUString GetAliasName(EConnectionSide nWhich) const;
 
         sal_Int32       GetFieldIndex(EConnectionSide nWhich) const { return nWhich==JTCS_TO ? m_nDestEntryIndex : m_nFromEntryIndex; }
