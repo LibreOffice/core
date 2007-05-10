@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customshapeproperties.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:40:54 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:55:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,8 +49,8 @@
 #ifndef _SVDOASHP_HXX
 #include <svdoashp.hxx>
 #endif
-#ifndef _EEITEMID_HXX
-#include <eeitemid.hxx>
+#ifndef _EEITEM_HXX
+#include <eeitem.hxx>
 #endif
 #ifndef _SDTAGITM_HXX
 #include <sdtagitm.hxx>
