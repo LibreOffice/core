@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:40:49 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:20:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1904,32 +1904,6 @@ IMPL_LINK(OFieldDescControl, OnControlFocusLost, Control*, pControl )
     implFocusLost(pControl);
 
     return 0L;
-}
-//------------------------------------------------------------------------------
-void OFieldDescControl::ActivatePropertyField(sal_uInt16 nVirtualField)
-{
-    Control** ppToActivate = NULL;
-    switch (nVirtualField)
-    {
-        case FIELD_PROPERTY_REQUIRED        : ppToActivate = (Control**)&pRequired; break;
-        case FIELD_PROPERTY_NUMTYPE         : ppToActivate = (Control**)&pNumType; break;
-        case FIELD_PROPERTY_AUTOINC         : ppToActivate = (Control**)&pAutoIncrement; break;
-        case FIELD_PROPERTY_DEFAULT         : ppToActivate = (Control**)&pDefault; if (!*ppToActivate) ppToActivate = (Control**)&pBoolDefault; break;
-                                                    // da es immer nur eines der beiden Controls gibt, ist das hier eindeutig
-        case FIELD_PROPERTY_TEXTLEN         : ppToActivate = (Control**)&pTextLen; break;
-        case FIELD_PROPERTY_LENGTH          : ppToActivate = (Control**)&pLength; break;
-        case FIELD_PROPERTY_SCALE           : ppToActivate = (Control**)&pScale; break;
-        case FIELD_PROPERTY_FORMAT          : ppToActivate = (Control**)&pFormatSample; break;
-        case FIELD_PRPOERTY_COLUMNNAME      : ppToActivate = (Control**)&m_pColumnName; break;
-        case FIELD_PRPOERTY_TYPE            : ppToActivate = (Control**)&m_pType; break;
-        case FIELD_PRPOERTY_AUTOINCREMENT   : ppToActivate = (Control**)&m_pAutoIncrementValue; break;
-
-        default:
-            DBG_ERROR("OFieldDescControl::ActivatePropertyField : ungueltiger Parameter !");
-    }
-
-    if (*ppToActivate)
-        nDelayedGrabFocusEvent = Application::PostUserEvent(LINK(this, OFieldDescControl, DelayedGrabFocus), ppToActivate);
 }
 //------------------------------------------------------------------------------
 void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
