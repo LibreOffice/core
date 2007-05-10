@@ -4,9 +4,9 @@
  *
  *  $RCSfile: envfmt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:07:44 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:17:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -393,7 +393,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
                     FALSE, &pItem ) &&
                     nDefDist != (nNewDist = ((SfxUInt16Item*)pItem)->GetValue()) )
                 {
-                    SvxTabStopItem aDefTabs( 0, 0 );
+                    SvxTabStopItem aDefTabs( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
                     MakeDefTabs( nNewDist, aDefTabs );
                     pSh->SetDefault( aDefTabs );
                     pOutputSet->ClearItem( SID_ATTR_TABSTOP_DEFAULTS );
