@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.154 $
+ *  $Revision: 1.155 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:47:54 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:17:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -723,8 +723,8 @@ uno::Any SvxShape::GetBitmap( sal_Bool bMetaFile /* = sal_False */ ) const throw
         aGraph.SetPrefSize(aSize);
         aGraph.SetPrefMapMode(MAP_100TH_MM);
 
-        Reference< awt::XBitmap > xBmp( VCLUnoHelper::CreateBitmap(aGraph.GetBitmapEx()) );
-        aAny.setValue( &xBmp, ::getCppuType(( const uno::Reference< awt::XBitmap>*)0) );
+        Reference< awt::XBitmap > xBmp( aGraph.GetXGraphic(), UNO_QUERY );
+        aAny <<= xBmp;
     }
 
     pView->UnmarkAll();
