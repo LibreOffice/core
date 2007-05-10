@@ -4,9 +4,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-02 12:23:25 $
+#   last change: $Author: gm $ $Date: 2007-05-10 11:00:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,11 @@ sub get_next_free_number_with_hash
         $counter++;
         $newname = $name . $counter;
         $newname = uc($newname);    # case insensitive, always upper case
-        if ( exists($shortnamesref->{$newname}) ) { $alreadyexists = 1; }
+        if ( exists($shortnamesref->{$newname}) ||
+             exists($installer::globals::savedrev83mapping{$newname}) )
+        {
+            $alreadyexists = 1;
+        }
     }
     until (!($alreadyexists));
 
@@ -371,6 +375,16 @@ sub write_idt_header
         $oneline = "s72\ts72\tl255\ti4\tS72\tS20\tI2\ti2\n";
         push(@{$idtref}, $oneline);
         $oneline = "File\tFile\n";
+        push(@{$idtref}, $oneline);
+    }
+
+    if ( $definestring eq "filehash" )
+    {
+        $oneline = "File_\tOptions\tHashPart1\tHashPart2\tHashPart3\tHashPart4\n";
+        push(@{$idtref}, $oneline);
+        $oneline = "s72\ti2\ti4\ti4\ti4\ti4\n";
+        push(@{$idtref}, $oneline);
+        $oneline = "MsiFileHash\tFile_\n";
         push(@{$idtref}, $oneline);
     }
 
