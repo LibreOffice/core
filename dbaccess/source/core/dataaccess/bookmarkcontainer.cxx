@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bookmarkcontainer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:38:17 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:12:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -354,12 +354,6 @@ sal_Bool SAL_CALL OBookmarkContainer::hasByName( const ::rtl::OUString& _rName )
     checkValid(sal_False);
 
     return checkExistence(_rName);
-}
-
-//--------------------------------------------------------------------------
-sal_Bool OBookmarkContainer::isReadOnly() const
-{
-    return sal_False;
 }
 
 //--------------------------------------------------------------------------
