@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:33:13 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:22:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-#include "eetext.hxx"       // definiert ITEMID_... fuer frmitems und textitem
+#include "eetext.hxx"
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
 #endif
@@ -103,7 +103,6 @@
 #endif
 
 #ifndef _SVX_FLDITEM_HXX
-#define ITEMID_FIELD    EE_FEATURE_FIELD
 #include <svx/flditem.hxx>
 #endif
 
@@ -111,7 +110,6 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 #endif
 
-#define ITEMID_ADJUST EE_PARA_JUST
 #include <svx/adjitem.hxx>
 
 
@@ -506,7 +504,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
             }
 
             if( eH != SVX_ADJUST_LEFT )
-                aTempAttr.Put(SvxAdjustItem(eH));
+                aTempAttr.Put(SvxAdjustItem(eH, EE_PARA_JUST ));
 
             pSdrObj->SetMergedItemSet(aTempAttr);
         }
@@ -562,7 +560,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
         {
             SfxItemSet aSet( ((SdDrawDocument*) pModel)->GetPool() );
             aSet.Put( SdrTextContourFrameItem( TRUE ) );
-            aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER ) );
+            aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
 
             pSdrObj->SetMergedItemSet(aSet);
         }
@@ -2068,9 +2066,9 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                 ULONG nHeight = pObj->GetLogicRect().GetSize().Height();
                                 ULONG nFontHeight = (ULONG) (nHeight * 0.0741);
                                 SfxItemSet& rSet = pNotesSheet->GetItemSet();
-                                rSet.Put( SvxFontHeightItem(nFontHeight, EE_CHAR_FONTHEIGHT ));
-                                rSet.Put( SvxFontHeightItem(nFontHeight, EE_CHAR_FONTHEIGHT_CJK ));
-                                rSet.Put( SvxFontHeightItem(nFontHeight, EE_CHAR_FONTHEIGHT_CTL ));
+                                rSet.Put( SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT ));
+                                rSet.Put( SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CJK ));
+                                rSet.Put( SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CTL ));
                                 pNotesSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
                             }
                         }
@@ -2573,7 +2571,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
                 if( pData )
                 {
                     ESelection e;
-                    SvxFieldItem aField( *pData );
+                    SvxFieldItem aField( *pData, EE_FEATURE_FIELD );
                     pOutl->QuickInsertField(aField,e);
                     delete pData;
                 }
