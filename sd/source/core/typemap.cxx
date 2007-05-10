@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:17:35 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:23:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,41 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
-
-
-#define ITEMID_CASEMAP          0
-#define ITEMID_DBTYPE           0
-#define ITEMID_LINESPACE        0
-#define ITEMID_INTERLINESPACE   0
-#define ITEMID_BREAK            0
-#define ITEMID_NUMTYPE          0
-#define ITEMID_SHADOWLOCATION   0
-#define ITEMID_BRUSH            0
-#define ITEMID_PAGE             0
-#define ITEMID_PAGEMODEL        0
-#define ITEMID_ORPHANS          0
-#define ITEMID_KERNING          0
-#define ITEMID_POSTITDATE       0
-#define ITEMID_SEARCH           0
-#define ITEMID_TEXT             0
-#define ITEMID_AUTHOR           0
-#define ITEMID_DATE             0
-#define ITEMID_SIZE             0
-#define ITEMID_LANGUAGE         0
-#define ITEMID_HYPHENZONE       0
-#define ITEMID_FMTSPLIT         0
-#define ITEMID_FMTKEEP          0
-#define ITEMID_FMTBREAK         0
-#define ITEMID_AUTOKERN         0
-#define ITEMID_LINE             0
-#define ITEMID_LONGLRSPACE      0
-#define ITEMID_LONGULSPACE      0
-#define ITEMID_ZOOM             0
-#define ITEMID_HORJUSTIFY       0
-#define ITEMID_VERJUSTIFY       0
-#define ITEMID_ORIENTATION      0
-#define ITEMID_WIDOWS           0
-#define ITEMID_DOUBLE           0
 
 #include "eetext.hxx"
 #ifndef _EEITEM_HXX //autogen
@@ -211,13 +176,6 @@
 #include <avmedia/mediaitem.hxx>
 #endif
 
-
-#define ITEMID_DASH_LIST        SID_DASH_LIST
-#define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
-#define ITEMID_GRADIENT_LIST    SID_GRADIENT_LIST
-#define ITEMID_HATCH_LIST       SID_HATCH_LIST
-#define ITEMID_BITMAP_LIST      SID_BITMAP_LIST
 #ifndef _SVX_DRAWITEM_HXX
 #include <svx/drawitem.hxx>
 #endif
