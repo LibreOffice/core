@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 15:17:48 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:02:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1236,7 +1236,7 @@ void SalGtkFilePicker::HandleSetListValue(GtkComboBox *pWidget, sal_Int16 nContr
             break;
         case ControlActions::DELETE_ITEM:
             {
-                sal_Int32 nPos;
+                sal_Int32 nPos=0;
                 rValue >>= nPos;
                 gtk_combo_box_remove_text(pWidget, nPos);
             }
@@ -1258,7 +1258,7 @@ void SalGtkFilePicker::HandleSetListValue(GtkComboBox *pWidget, sal_Int16 nContr
             break;
         case ControlActions::SET_SELECT_ITEM:
             {
-                sal_Int32 nPos;
+                sal_Int32 nPos=0;
                 rValue >>= nPos;
                 gtk_combo_box_set_active(pWidget, nPos);
             }
