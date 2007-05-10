@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:16:52 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:15:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -512,7 +512,9 @@ public:
     SvStream *pTableStrm, *pDataStrm;   // Streams fuer WW97 Export
 
     SwEscherEx* pEscher;            // escher export class
-    SwTwips nFlyWidth, nFlyHeight;  // Fuer Anpassung Graphic
+    // --> OD 2007-04-19 #i43447# - removed
+//    SwTwips nFlyWidth, nFlyHeight;  // Fuer Anpassung Graphic
+    // <--
 
     BYTE nTxtTyp;
 
