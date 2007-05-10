@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:57:17 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:59:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,6 @@
 #include <svtools/itemiter.hxx>
 #endif
 
-#define ITEMID_LRSPACE          EE_PARA_LRSPACE
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <lrspitem.hxx>
 #endif
@@ -425,8 +424,8 @@ void SdrTextObj::NbcResizeTextAttributes(const Fraction& xFact, const Fraction& 
             if (nAbsHgt>0xFFFF) nAbsHgt=0xFFFF;
 
             // und nun attributieren
-            SetObjectItem(SvxCharScaleWidthItem( (USHORT) nRelWdt));
-            SetObjectItem(SvxFontHeightItem(nAbsHgt,(USHORT)nRelHgt));
+            SetObjectItem(SvxCharScaleWidthItem( (USHORT) nRelWdt, EE_CHAR_FONTWIDTH));
+            SetObjectItem(SvxFontHeightItem(nAbsHgt,(USHORT)nRelHgt, EE_CHAR_FONTHEIGHT));
             // Zeichen- und Absatzattribute innerhalb des OutlinerParaObjects
             Outliner& rOutliner=ImpGetDrawOutliner();
             rOutliner.SetPaperSize(Size(LONG_MAX,LONG_MAX));
