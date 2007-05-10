@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opaqitem.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:52:05 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:20:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ class SVX_DLLPUBLIC SvxOpaqueItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxOpaqueItem( const USHORT nId = ITEMID_OPAQUE, const BOOL bOpa = TRUE );
+    SvxOpaqueItem( const USHORT nId , const BOOL bOpa = TRUE );
     inline SvxOpaqueItem &operator=( const SvxOpaqueItem &rCpy );
 
     // "pure virtual Methoden" vom SfxPoolItem
