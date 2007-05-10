@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawbase.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:18:47 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:21:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
-#endif
 
 #ifndef _LIST_HXX //autogen
 #include <tools/list.hxx>
