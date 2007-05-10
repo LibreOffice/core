@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:29:14 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:36:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@
 #include "linkdlg.hxx"
 #include "SpellDialog.hxx"
 #include "cfg.hxx"    //add for SvxConfigDialog
-#define ITEMID_TABSTOP  0 //add for #include "tabstpge.hxx"
+
 #include "numpages.hxx" // add for
 #include "paragrph.hxx" //add for
 #include "tabstpge.hxx" // add  for
