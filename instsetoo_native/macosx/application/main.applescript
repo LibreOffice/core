@@ -4,9 +4,9 @@
  *
  *  $RCSfile: main.applescript,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-26 14:57:12 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:15:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,11 +185,17 @@ on startXServer()
 	
 	-- if nothing really was found, display an error message.
 	if (whichserver is equal to "NOXSERVER") then
-		display dialog getMessage("ERROR_NEED_X11") buttons {"Quit", "More Info"} default button "More Info" cancel button "Quit" with icon stop
-		-- if more info is chosen, then open a help web page
-		do shell script "open http://porting.openoffice.org/mac/faq/installing/X11.html"
-		-- cannot continue, so quit the script
-		return "error"
+		
+		display dialog getMessage("ERROR_NEED_X11") buttons {"Quit", "More Info"} default button "More Info"
+		if the button returned of the result is "Quit" then
+			quit
+		else
+			-- if more info is chosen, then open a help web page
+			do shell script "open http://porting.openoffice.org/mac/faq/installing/X11.html"
+			-- cannot continue, so quit the script
+			return "error"
+		end if
+		
 	end if
 	
 	set now_running to ""
