@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:58:51 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:02:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,15 +143,15 @@
 #include "svxitems.hrc"
 #include "helpid.hrc"
 
-#define ITEMID_COLOR_TABLE  0
-#define ITEMID_FONTLIST     SID_ATTR_CHAR_FONTLIST
-#define ITEMID_FONT         SID_ATTR_CHAR_FONT
-#define ITEMID_FONTHEIGHT   SID_ATTR_CHAR_FONTHEIGHT
-#define ITEMID_COLOR        SID_ATTR_CHAR_COLOR
-#define ITEMID_BRUSH        SID_ATTR_BRUSH
-#define ITEMID_BOX          SID_ATTR_BORDER_OUTER
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
-#define ITEMID_LINE         SID_FRAME_LINESTYLE
+
+
+
+
+
+
+
+
+
 
 #include "htmlmode.hxx"
 #include "xtable.hxx"
@@ -1811,7 +1811,7 @@ void SvxLineWindow_Impl::MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& r
 
 IMPL_LINK( SvxLineWindow_Impl, SelectHdl, void *, EMPTYARG )
 {
-    SvxLineItem     aLineItem;
+    SvxLineItem     aLineItem( SID_FRAME_LINESTYLE );
     USHORT          n1 = 0,
                     n2 = 0,
                     n3 = 0;
