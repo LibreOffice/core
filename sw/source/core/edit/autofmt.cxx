@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:42:38 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:58:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@
 #include "precompiled_sw.hxx"
 
 
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #define _SVSTDARR_LONGS
 #define _SVSTDARR_USHORTS
 
@@ -719,7 +718,7 @@ BOOL SwAutoFormat::DoUnderline()
                     RES_BOX, RES_BOX,
                     0);
         aSet.Put( SwParaConnectBorderItem( FALSE ) );
-        SvxBoxItem aBox;
+        SvxBoxItem aBox( RES_BOX );
         aBox.SetLine( &aLine, BOX_LINE_BOTTOM );
         aBox.SetDistance( 42 );     // ~0,75 mm
         aSet.Put(aBox);
@@ -1790,13 +1789,14 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                                   aFlags.aBulletFont.GetName(),
                                   aFlags.aBulletFont.GetStyleName(),
                                   aFlags.aBulletFont.GetPitch(),
-                                  aFlags.aBulletFont.GetCharSet() ) );
+                                  aFlags.aBulletFont.GetCharSet(),
+                                  RES_CHRATR_FONT ) );
                 pDoc->SetFmtItemByAutoFmt( aDelPam, aSet );
                 aDelPam.DeleteMark();
                 nAutoCorrPos = 2;
                 aSet.ClearItem();
             }
-            SvxTabStopItem aTStops;     aTStops.Insert( SvxTabStop( 0 ));
+            SvxTabStopItem aTStops( RES_PARATR_TABSTOP );    aTStops.Insert( SvxTabStop( 0 ));
             aSet.Put( aTStops );
             pDoc->SetFmtItemByAutoFmt( aDelPam, aSet );
         }
