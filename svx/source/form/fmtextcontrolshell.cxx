@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtextcontrolshell.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:26:23 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:48:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,13 +165,10 @@
 #include "fmtextcontroldialogs.hxx"
 #endif
 
-#define ITEMID_SCRIPTSPACE      EE_PARA_ASIANCJKSPACING
 #ifndef _SVX_SRIPTSPACEITEM_HXX
 #include "scriptspaceitem.hxx"
 #endif
 
-#define ITEMID_UNDERLINE        SID_ATTR_CHAR_UNDERLINE
-#define ITEMID_CROSSEDOUT       SID_ATTR_CHAR_STRIKEOUT
 #include "udlnitem.hxx"
 #include "crsditem.hxx"
 
