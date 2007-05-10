@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontbuff.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:49:43 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:47:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,13 +78,13 @@ void LotusFontBuffer::Fill( const UINT8 nIndex, SfxItemSet& rItemSet )
 
     if( nIndex & 0x08 )
     {
-        SvxWeightItem aWeightItem( WEIGHT_BOLD );
+        SvxWeightItem aWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT );
         rItemSet.Put( aWeightItem );
     }
 
     if( nIndex & 0x10 )
     {
-        SvxPostureItem aAttr( ITALIC_NORMAL );
+        SvxPostureItem aAttr( ITALIC_NORMAL, ATTR_FONT_POSTURE );
         rItemSet.Put( aAttr );
     }
 
@@ -98,7 +98,7 @@ void LotusFontBuffer::Fill( const UINT8 nIndex, SfxItemSet& rItemSet )
     }
     if( eUnderline != UNDERLINE_NONE )
     {
-        SvxUnderlineItem aUndItem( eUnderline );
+        SvxUnderlineItem aUndItem( eUnderline, ATTR_FONT_UNDERLINE );
         rItemSet.Put( aUndItem );
     }
 }
@@ -122,7 +122,7 @@ void LotusFontBuffer::SetHeight( const UINT16 nIndex, const UINT16 nHeight )
 {
     DBG_ASSERT( nIndex < nSize, "*LotusFontBuffer::SetHeight(): Array zu klein!" );
     if( nIndex < nSize )
-        pData[ nIndex ].Height( *( new SvxFontHeightItem( ( ULONG ) nHeight * 20 ) ) );
+        pData[ nIndex ].Height( *( new SvxFontHeightItem( ( ULONG ) nHeight * 20, 100, ATTR_FONT_HEIGHT ) ) );
 }
 
 
@@ -164,7 +164,7 @@ void LotusFontBuffer::MakeFont( ENTRY* pEntry )
             break;
     }
 
-    pEntry->pFont = new SvxFontItem( eFamily, *pEntry->pTmpName, EMPTY_STRING, ePitch, eCharSet );
+    pEntry->pFont = new SvxFontItem( eFamily, *pEntry->pTmpName, EMPTY_STRING, ePitch, eCharSet, ATTR_FONT );
 
     delete pEntry->pTmpName;
     pEntry->pTmpName = NULL;
