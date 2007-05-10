@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterView.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:37:54 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:32:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -434,10 +434,10 @@ void SlideSorterView::DeterminePageObjectVisibilities (void)
             {
                 pContact = NULL;
                 pDescriptor = mrModel.GetPageDescriptor(nIndex);
-                if (pDescriptor != NULL)
+                if (pDescriptor.get() != NULL)
                     pContact = pDescriptor->GetViewObjectContact();
 
-                if (pDescriptor != NULL)
+                if (pDescriptor.get() != NULL)
                     pDescriptor->SetVisible (bIsVisible);
             }
 
@@ -465,7 +465,7 @@ void SlideSorterView::UpdatePreciousFlags (void)
         {
             pContact = NULL;
             pDescriptor = mrModel.GetPageDescriptor (nIndex);
-            if (pDescriptor != NULL)
+            if (pDescriptor.get() != NULL)
                 pContact = pDescriptor->GetViewObjectContact();
 
             if (pContact != NULL)
