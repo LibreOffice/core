@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:10:03 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:50:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,22 +48,6 @@
 
 #include <limits.h>
 #include <comphelper/processfactory.hxx>
-
-#define ITEMID_PAPERBIN 0
-#define ITEMID_SIZE     0
-#define ITEMID_LRSPACE  0
-#define ITEMID_ULSPACE  0
-#define ITEMID_PRINT    0
-#define ITEMID_OPAQUE   0
-#define ITEMID_PROTECT  0
-#define ITEMID_SHADOW   0
-#define ITEMID_BOX      0
-#define ITEMID_BOXINFO  0
-#define ITEMID_FMTBREAK 0
-#define ITEMID_FMTKEEP  0
-#define ITEMID_LINE     0
-#define ITEMID_BRUSH    0
-#define ITEMID_FRAMEDIR 0
 
 
 #ifndef _GRFMGR_HXX //autogen
@@ -228,21 +212,21 @@ inline void SetValueProp( XubString& rStr, const short nValue,
 
 // -----------------------------------------------------------------------
 
-TYPEINIT1_AUTOFACTORY(SvxPaperBinItem, SfxByteItem);
-TYPEINIT1_AUTOFACTORY(SvxSizeItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxLRSpaceItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxULSpaceItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxPrintItem, SfxBoolItem);
-TYPEINIT1_AUTOFACTORY(SvxOpaqueItem, SfxBoolItem);
-TYPEINIT1_AUTOFACTORY(SvxProtectItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxBrushItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxShadowItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxBoxItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxBoxInfoItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxFmtBreakItem, SfxEnumItem);
-TYPEINIT1_AUTOFACTORY(SvxFmtKeepItem, SfxBoolItem);
-TYPEINIT1_AUTOFACTORY(SvxLineItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxFrameDirectionItem, SfxUInt16Item);
+TYPEINIT1_FACTORY(SvxPaperBinItem, SfxByteItem, new SvxPaperBinItem(0));
+TYPEINIT1_FACTORY(SvxSizeItem, SfxPoolItem, new SvxSizeItem(0));
+TYPEINIT1_FACTORY(SvxLRSpaceItem, SfxPoolItem, new SvxLRSpaceItem(0));
+TYPEINIT1_FACTORY(SvxULSpaceItem, SfxPoolItem, new SvxULSpaceItem(0));
+TYPEINIT1_FACTORY(SvxPrintItem, SfxBoolItem, new SvxPrintItem(0));
+TYPEINIT1_FACTORY(SvxOpaqueItem, SfxBoolItem, new SvxOpaqueItem(0));
+TYPEINIT1_FACTORY(SvxProtectItem, SfxPoolItem, new SvxProtectItem(0));
+TYPEINIT1_FACTORY(SvxBrushItem, SfxPoolItem, new SvxBrushItem(0));
+TYPEINIT1_FACTORY(SvxShadowItem, SfxPoolItem, new SvxShadowItem(0));
+TYPEINIT1_FACTORY(SvxBoxItem, SfxPoolItem, new SvxBoxItem(0));
+TYPEINIT1_FACTORY(SvxBoxInfoItem, SfxPoolItem, new SvxBoxInfoItem(0));
+TYPEINIT1_FACTORY(SvxFmtBreakItem, SfxEnumItem, new SvxFmtBreakItem(SVX_BREAK_NONE, 0));
+TYPEINIT1_FACTORY(SvxFmtKeepItem, SfxBoolItem, new SvxFmtKeepItem(sal_False, 0));
+TYPEINIT1_FACTORY(SvxLineItem, SfxPoolItem, new SvxLineItem(0));
+TYPEINIT1_FACTORY(SvxFrameDirectionItem, SfxUInt16Item, new SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, 0));
 
 
 // class SvxPaperBinItem ------------------------------------------------
@@ -4474,6 +4458,11 @@ void  SvxBrushItem::ApplyGraphicTransparency_Impl()
     }
 }
 // class SvxFrameDirectionItem ----------------------------------------------
+
+SvxFrameDirectionItem::SvxFrameDirectionItem( USHORT _nWhich )
+    : SfxUInt16Item( _nWhich, (UINT16)FRMDIR_HORI_LEFT_TOP )
+{
+}
 
 SvxFrameDirectionItem::SvxFrameDirectionItem( SvxFrameDirection nValue ,
                                             USHORT _nWhich )
