@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.63 $
+#   $Revision: 1.64 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-02 12:21:47 $
+#   last change: $Author: kz $ $Date: 2007-05-10 13:56:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -443,11 +443,11 @@ sub create_epm_header
         $requires = "requires";         # the name in the packagelist
     }
 
-    if ( $installer::globals::patch )
-    {
-        $onepackage->{$provides} = "";
-        $onepackage->{$requires} = "";
-    }
+    # if ( $installer::globals::patch )
+    # {
+    #   $onepackage->{$provides} = "";
+    #   $onepackage->{$requires} = "";
+    # }
 
     if ( $onepackage->{$provides} )
     {
@@ -941,31 +941,84 @@ sub set_revision_in_pkginfo
 
 sub set_patchlist_in_pkginfo_for_respin
 {
-    my ($changefile, $filename, $allvariables) = @_;
+    my ($changefile, $filename, $allvariables, $packagename) = @_;
 
     my $patchlistname = "SOLSPARCPATCHLISTFORRESPIN";
     if ( $installer::globals::issolarisx86build ) { $patchlistname = "SOLIAPATCHLISTFORRESPIN"; }
 
     if ( $allvariables->{$patchlistname} )
     {
-        my $newline = "PATCHLIST=" . $allvariables->{$patchlistname} . "\n";
-        add_one_line_into_file($changefile, $newline, $filename);
-
-        # Adding patch info for each  patch in the patchlist
         # patchlist separator is a blank
-
         my $allpatchesstring = $allvariables->{$patchlistname};
+        my @usedpatches = ();
+
+        # Analyzing the patchlist
+        # Syntax: 120186-10 126411-01(+core-01) -> use 126411-01 only for core-01
+        # Syntax: 120186-10 126411-01(-core-01) -> use 126411-01 for all packages except for core-01
         my $allpatches = installer::converter::convert_whitespace_stringlist_into_array(\$allpatchesstring);
 
         for ( my $i = 0; $i <= $#{$allpatches}; $i++ )
         {
-            my $patchid = ${$allpatches}[$i];
-            my $key = "PATCH_INFO_" . $patchid;
-            $key =~ s/\s*$//;
+            my $patchdefinition = ${$allpatches}[$i];
 
-            if ( ! $allvariables->{$key} ) { installer::exiter::exit_program("ERROR: No Patch info available in zip list file for $key", "set_patchlist_in_pkginfo"); }
-            $newline = $key . "=" . $allvariables->{$key} . "\n";
+            my $patchid = "";
+            my $symbol = "";
+            my $constraint = "";
+            my $isusedpatch = 0;
+
+            if ( $patchdefinition =~ /^\s*(.+)\(([+-])(.+)\)\s*$/ )
+            {
+                $patchid = $1;
+                $symbol = $2;
+                $constraint = $3;
+            }
+            elsif (( $patchdefinition =~ /\(/ ) || ( $patchdefinition =~ /\)/ ))    # small syntax check
+            {
+                # if there is a bracket in the $patchdefinition, but it does not
+                # match the if-condition, this is an erroneous definition.
+                installer::exiter::exit_program("ERROR: Unknown patch string: $patchdefinition", "set_patchlist_in_pkginfo_for_respin");
+            }
+            else
+            {
+                $patchid = $patchdefinition;
+                $isusedpatch = 1; # patches without constraint are always included
+            }
+
+            if ( $symbol ne "" )
+            {
+                if ( $symbol eq "+" )
+                {
+                    if ( $packagename =~ /^.*\Q$constraint\E\s*$/ ) { $isusedpatch = 1; }
+                }
+
+                if ( $symbol eq "-" )
+                {
+                    if ( ! ( $packagename =~ /^.*\Q$constraint\E\s*$/ )) { $isusedpatch = 1; }
+                }
+            }
+
+            if ( $isusedpatch ) { push(@usedpatches, $patchid); }
+        }
+
+        if ( $#usedpatches > -1 )
+        {
+            my $patchstring = installer::converter::convert_array_to_space_separated_string(\@usedpatches);
+
+            my $newline = "PATCHLIST=" . $patchstring . "\n";
             add_one_line_into_file($changefile, $newline, $filename);
+
+            # Adding patch info for each used patch in the patchlist
+
+            for ( my $i = 0; $i <= $#usedpatches; $i++ )
+            {
+                my $patchid = $usedpatches[$i];
+                my $key = "PATCH_INFO_" . $patchid;
+                $key =~ s/\s*$//;
+
+                if ( ! $allvariables->{$key} ) { installer::exiter::exit_program("ERROR: No Patch info available in zip list file for $key", "set_patchlist_in_pkginfo"); }
+                $newline = $key . "=" . $allvariables->{$key} . "\n";
+                add_one_line_into_file($changefile, $newline, $filename);
+            }
         }
     }
 }
@@ -1452,6 +1505,7 @@ sub include_patchinfos_into_pkginfo
     # SUNW_OBSOLETES=114999-01 113999-01
     # SUNW_PKGTYPE=usr
     # SUNW_PKGVERS=1.0
+    # SUNW_REQUIRES=126411-01
 
     my $patchidname = "SOLSPARCPATCHID";
     if ( $installer::globals::issolarisx86build ) { $patchidname = "SOLIAPATCHID"; }
@@ -1468,6 +1522,16 @@ sub include_patchinfos_into_pkginfo
     if ( $variableshashref->{$patchobsoletesname} ) { $obsoletes = $variableshashref->{$patchobsoletesname}; }
     $newline = "SUNW_OBSOLETES=" . $obsoletes . "\n";
     add_one_line_into_file($changefile, $newline, $filename);
+
+    my $patchrequiresname = "SOLSPARCPATCHREQUIRES";
+    if ( $installer::globals::issolarisx86build ) { $patchrequiresname = "SOLIAPATCHREQUIRES"; }
+
+    if ( $variableshashref->{$patchrequiresname} )
+    {
+        my $requires = $variableshashref->{$patchrequiresname};
+        $newline = "SUNW_REQUIRES=" . $requires . "\n";
+        add_one_line_into_file($changefile, $newline, $filename);
+    }
 
     $newline = "SUNW_PATCH_PROPERTIES=\n";
     add_one_line_into_file($changefile, $newline, $filename);
@@ -1666,7 +1730,7 @@ sub prepare_packages
         set_maxinst_in_pkginfo($changefile, $filename);
         set_solaris_parameter_in_pkginfo($changefile, $filename, $variableshashref);
         if ( $installer::globals::issolarisx86build ) { fix_architecture_setting($changefile); }
-        if ( ! $installer::globals::patch ) { set_patchlist_in_pkginfo_for_respin($changefile, $filename, $variableshashref); }
+        if ( ! $installer::globals::patch ) { set_patchlist_in_pkginfo_for_respin($changefile, $filename, $variableshashref, $packagename); }
         if ( $installer::globals::patch ) { include_patchinfos_into_pkginfo($changefile, $filename, $variableshashref); }
         if ( $installer::globals::languagepack ) { include_languageinfos_into_pkginfo($changefile, $filename, $languagestringref, $onepackage, $variableshashref); }
         installer::files::save_file($completefilename, $changefile);
@@ -2627,6 +2691,16 @@ sub set_patchinfo
 
     replace_one_variable_in_file($patchinfofile, "PATCHCORRECTSPLACEHOLDER", $patchcorrects);
 
+    # Setting also PATCH_REQUIRES in patch info file, if entry in zip list file exists
+    my $requiresstring = "";
+    if ( $installer::globals::issolarissparcbuild ) { $requiresstring = "SOLSPARCPATCHREQUIRES"; }
+    if ( $installer::globals::issolarisx86build ) { $requiresstring = "SOLIAPATCHREQUIRES"; }
+
+    if ( $allvariables->{$requiresstring} )
+    {
+        my $newline = "PATCH_REQUIRES=\"" . $allvariables->{$requiresstring} . "\"" . "\n";
+        push(@{$patchinfofile}, $newline);
+    }
 }
 
 ######################################################
