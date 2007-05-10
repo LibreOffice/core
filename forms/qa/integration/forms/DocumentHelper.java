@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentHelper.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:18:54 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:49:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ public class DocumentHelper
     }
 
     /* ------------------------------------------------------------------ */
-    private static DocumentHelper implLoadDocument( XMultiServiceFactory orb, String documentOrFactoryURL ) throws com.sun.star.uno.Exception
+    protected static XComponent implLoadAsComponent( XMultiServiceFactory orb, String documentOrFactoryURL ) throws com.sun.star.uno.Exception
     {
         XComponentLoader aLoader = (XComponentLoader)UnoRuntime.queryInterface(
             XComponentLoader.class,
@@ -78,6 +78,13 @@ public class DocumentHelper
         XComponent document = dbfTools.queryComponent(
             aLoader.loadComponentFromURL( documentOrFactoryURL, "_blank", 0, new PropertyValue[ 0 ] )
         );
+        return document;
+    }
+
+    /* ------------------------------------------------------------------ */
+    private static DocumentHelper implLoadDocument( XMultiServiceFactory orb, String documentOrFactoryURL ) throws com.sun.star.uno.Exception
+    {
+        XComponent document = implLoadAsComponent( orb, documentOrFactoryURL );
 
         XServiceInfo xSI = (XServiceInfo)UnoRuntime.queryInterface( XServiceInfo.class,
             document );
