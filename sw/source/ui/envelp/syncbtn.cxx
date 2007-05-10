@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syncbtn.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:56:27 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:17:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 
 
 
-#include "uiparam.hxx"
 
 #ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
