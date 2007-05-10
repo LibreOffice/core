@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DbAdminImpl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:48:20 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:22:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -432,14 +432,6 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver()
         throw SQLException(sCurrentActionError, getORB(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, Any());
     }
     return xDriver;
-}
-
-// -----------------------------------------------------------------------------
-Reference< XModel > ODbDataSourceAdministrationHelper::getCurrentModel()
-{
-    // ensure that the data source / model have been obtained
-    getCurrentDataSource();
-    return m_xModel;
 }
 
 // -----------------------------------------------------------------------------
