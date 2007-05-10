@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsi.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:17:08 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:35:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 
 #include "DrawViewShell.hxx"
 
-#define ITEMID_COLOR            ATTR_ANIMATION_COLOR
 #ifndef _XTABLE_HXX
 #include <svx/xtable.hxx>
 #endif
