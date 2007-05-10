@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 12:02:20 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:49:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,6 +222,7 @@ namespace pcr
                                                         PropertyHandlerMultiRepository;
         PropertyHandlerRepository                       m_aPropertyHandlers;
         PropertyHandlerMultiRepository                  m_aDependencyHandlers;
+        PropertyHandlerRef                              m_xInteractiveHandler;
 
         ::std::auto_ptr< ComposedPropertyUIUpdate >     m_pUIRequestComposer;
 
@@ -350,7 +351,7 @@ namespace pcr
         void doInspection();
 
         // bind the browser to m_xIntrospecteeAsProperty
-        void rebindToInspectee( const InterfaceArray& _rObjects );
+        void    impl_rebindToInspectee_nothrow( const InterfaceArray& _rObjects );
 
         /** retrieves special property handlers for our introspectee
         */
@@ -389,6 +390,9 @@ namespace pcr
 
         /// calls XPropertyHandler::suspend for all our property handlers
         sal_Bool    suspendPropertyHandlers_nothrow( sal_Bool _bSuspend );
+
+        /// suspends the complete inspector
+        sal_Bool    suspendAll_nothrow();
 
         /** selects a page according to our current view data
         */
@@ -464,6 +468,26 @@ namespace pcr
             happens.
         */
         void    impl_initializeView_nothrow();
+
+        /** determines whether the view should be readonly.
+
+            Effectively, this means that the method simply checks the IsReadOnly attribute of the model.
+            If there is no model, <FALSE/> is returned.
+
+            @throws ::com::sun::star::uno::RuntimeException
+                in case asking the model for its IsReadOnly attribute throws a ::com::sun::star::uno::RuntimeException
+                itself.
+        */
+        bool    impl_isReadOnlyModel_throw() const;
+
+        /** updates our view so that it is read-only, as indicated by the model property
+            @see impl_isReadOnlyModel_throw
+        */
+        void    impl_updateReadOnlyView_nothrow();
+
+        /** starts or stops listening at the model
+        */
+        void    impl_startOrStopModelListening_nothrow( bool _bDoListen ) const;
 
     private:
         DECL_LINK(OnPageActivation, void*);
