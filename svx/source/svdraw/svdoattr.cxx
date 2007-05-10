@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:44:24 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:58:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,9 +102,6 @@
 #include "xftshit.hxx"
 #endif
 
-#ifndef _EEITEMID_HXX
-#include <eeitemid.hxx>
-#endif
 
 #ifndef _SVX_COLRITEM_HXX //autogen
 #include "colritem.hxx"
