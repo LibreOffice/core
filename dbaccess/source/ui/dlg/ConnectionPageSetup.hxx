@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionPageSetup.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:03:03 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:22:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,12 +68,12 @@ namespace dbaui
     };
     */
 
-    class IAdminHelper;
+    class IDatabaseSettingsDialog;
     //=========================================================================
     //= OConnectionTabPageSetup
     //=========================================================================
 
-    /** implements the connection page of teh data source properties dialog.
+    /** implements the connection page of the data source properties dialog.
     */
     class OConnectionTabPageSetup : public OConnectionHelper
     {
@@ -121,7 +121,6 @@ namespace dbaui
     protected:
         OConnectionTabPageSetup(Window* pParent, USHORT _rId, const SfxItemSet& _rCoreAttrs, USHORT _nHelpTextResId, USHORT _nHeaderResId, USHORT _nUrlResId);
         virtual bool checkTestConnection();
-        void toggleURLControlGroup(BOOL _bEnable);
             // nControlFlags ist eine Kombination der CBTP_xxx-Konstanten
         virtual ~OConnectionTabPageSetup();
     };
