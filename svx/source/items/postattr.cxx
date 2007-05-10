@@ -4,9 +4,9 @@
  *
  *  $RCSfile: postattr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:22:38 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:53:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,18 +39,14 @@
 // include ---------------------------------------------------------------
 
 #define _SVX_POSTATTR_CXX
-#define ITEMID_AUTHOR   0
-#define ITEMID_DATE     0
-#define ITEMID_TEXT     0
-
 #include "postattr.hxx"
 #include "itemtype.hxx"
 
 // -----------------------------------------------------------------------
 
-TYPEINIT1_AUTOFACTORY(SvxPostItAuthorItem, SfxStringItem);
-TYPEINIT1_AUTOFACTORY(SvxPostItDateItem, SfxStringItem);
-TYPEINIT1_AUTOFACTORY(SvxPostItTextItem, SfxStringItem);
+TYPEINIT1_FACTORY(SvxPostItAuthorItem, SfxStringItem, new SvxPostItAuthorItem(0));
+TYPEINIT1_FACTORY(SvxPostItDateItem, SfxStringItem, new SvxPostItDateItem(0));
+TYPEINIT1_FACTORY(SvxPostItTextItem, SfxStringItem, new SvxPostItTextItem(0));
 
 // class SvxPostItAuthorItem ---------------------------------------------
 
