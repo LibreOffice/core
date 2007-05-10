@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:18:08 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:24:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,9 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-
+#ifndef _SVX_DIALOGS_HRC
+#include <svx/dialogs.hrc>
+#endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -136,9 +138,6 @@
 #endif
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
-#endif
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
 #endif
 #ifndef _SWEVENT_HXX
 #include <swevent.hxx>
@@ -317,7 +316,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 rWrtSh.GetAttr( aSet );
                 SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
                 SvxFontItem aFont( rFont.GetFamily(), pFont->GetValue(),
-                                    rFont.GetStyleName(), rFont.GetPitch() );
+                                    rFont.GetStyleName(), rFont.GetPitch(), RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT );
                                     //pCharset ? (CharSet) pCharset->GetValue() : RTL_TEXTENCODING_DONTKNOW );
                 rWrtSh.SetAttr( aSet, SETATTR_DONTEXPAND );
                 rWrtSh.ResetSelect(0, FALSE);
@@ -909,7 +908,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 if( SFX_ITEM_SET == pSet->GetItemState( SID_ATTR_TABSTOP_DEFAULTS, FALSE, &pItem ) &&
                     nDefDist != (nNewDist = ((SfxUInt16Item*)pItem)->GetValue()) )
                 {
-                    SvxTabStopItem aDefTabs( 0, 0 );
+                    SvxTabStopItem aDefTabs( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
                     MakeDefTabs( nNewDist, aDefTabs );
                     rWrtSh.SetDefault( aDefTabs );
                     pSet->ClearItem( SID_ATTR_TABSTOP_DEFAULTS );
@@ -1546,7 +1545,7 @@ void SwTextShell::ChangeHeaderOrFooter(
                     rMaster.SetAttr( SwFmtFooter( bOn ));
                 if( bOn )
                 {
-                    SvxULSpaceItem aUL(bHeader ? 0 : MM50, bHeader ? MM50 : 0 );
+                    SvxULSpaceItem aUL(bHeader ? 0 : MM50, bHeader ? MM50 : 0, RES_UL_SPACE );
                     SwFrmFmt* pFmt = bHeader ?
                         (SwFrmFmt*)rMaster.GetHeader().GetHeaderFmt() :
                         (SwFrmFmt*)rMaster.GetFooter().GetFooterFmt();
