@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:49:38 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:04:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -499,7 +499,8 @@ Any SAL_CALL FTPContent::execute(
                         xOutputStream(aOpenCommand.Sink,UNO_QUERY);
 
                     if(xActiveDataSink.is()) {
-#ifndef ABI_IS_ON_VACATION_AETSCH
+#if 1
+                        // fill inpustream async; return immediately
                         FTPDownloadThread* p =
                             new FTPDownloadThread(
                                 m_xIdentifier->getContentIdentifier(),
@@ -510,6 +511,7 @@ Any SAL_CALL FTPContent::execute(
                             throw e;
                         }
 #else
+                        // fill inputsream sync; return if all data present
                         xActiveDataSink->setInputStream(
                             new FTPInputStream(m_aFTPURL.open()));
 #endif
