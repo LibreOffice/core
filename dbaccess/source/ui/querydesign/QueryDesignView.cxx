@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:53:22 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:38:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,9 +73,6 @@
 #endif
 #ifndef DBAUI_QUERYDESIGN_OSELECTIONBROWSEBOX_HXX
 #include "SelectionBrowseBox.hxx"
-#endif
-#ifndef DBAUI_TABLEFIELDDATA_HXX
-#include "TableFieldData.hxx"
 #endif
 #ifndef _DBU_QRY_HRC_
 #include "dbu_qry.hrc"
@@ -2552,11 +2549,6 @@ void OQueryDesignView::copy()
         m_pSelectionBox->copy();
 }
 // -----------------------------------------------------------------------------
-BOOL OQueryDesignView::IsAddAllowed()
-{
-    return m_pTableView->IsAddAllowed();
-}
-// -----------------------------------------------------------------------------
 sal_Bool OQueryDesignView::isCutAllowed()
 {
     sal_Bool bAllowed = sal_False;
@@ -2619,11 +2611,6 @@ void OQueryDesignView::TableDeleted(const ::rtl::OUString& rAliasName)
 void OQueryDesignView::DeleteFields( const ::rtl::OUString& rAliasName )
 {
     m_pSelectionBox->DeleteFields( rAliasName );
-}
-// -----------------------------------------------------------------------------
-void OQueryDesignView::SaveTabWinUIConfig(OQueryTableWindow* pWin)
-{
-    static_cast<OQueryController*>(getController())->SaveTabWinPosSize(pWin, m_pScrollWindow->GetHScrollBar()->GetThumbPos(), m_pScrollWindow->GetVScrollBar()->GetThumbPos());
 }
 // -----------------------------------------------------------------------------
 SqlParseError OQueryDesignView::InsertField( const OTableFieldDescRef& rInfo, sal_Bool bVis, sal_Bool bActivate)
@@ -2879,11 +2866,6 @@ sal_Bool OQueryDesignView::isSlotEnabled(sal_Int32 _nSlotId)
     return m_pSelectionBox->IsRowVisible(nRow);
 }
 // -----------------------------------------------------------------------------
-void OQueryDesignView::zoomTableView(const Fraction& _rFraction)
-{
-    m_pTableView->SetZoom(_rFraction);
-}
-// -----------------------------------------------------------------------------
 void OQueryDesignView::SaveUIConfig()
 {
     OQueryController* pCtrl = static_cast<OQueryController*>(getController());
@@ -3021,10 +3003,5 @@ sal_Bool OQueryDesignView::InitFromParseNode()
         m_pController->showError(aError);
     }
     return eErrorCode == eOk;
-}
-// -----------------------------------------------------------------------------
-sal_Bool OQueryDesignView::HasTable() const
-{
-    return !m_pTableView->GetTabWinMap()->empty();
 }
 // -----------------------------------------------------------------------------
