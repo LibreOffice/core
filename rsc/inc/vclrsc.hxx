@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclrsc.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:31:10 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 17:05:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,8 +175,8 @@ typedef sal_Int64 WinBits;
 // --------------
 
 // from vcl/inc/help.hxx
-#define HELP_INDEX          ((ULONG)0xFFFFFFFF)
-#define HELP_HELPONHELP     ((ULONG)0xFFFFFFFE)
+#define OOO_HELP_INDEX          ((ULONG)0xFFFFFFFF)
+#define OOO_HELP_HELPONHELP     ((ULONG)0xFFFFFFFE)
 
 // --------------
 // - FieldTypes -
