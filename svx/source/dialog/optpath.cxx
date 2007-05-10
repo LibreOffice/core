@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpath.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:40:02 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:39:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,8 +137,8 @@ using namespace svx;
 #define TAB_WIDTH1      80
 #define TAB_WIDTH_MIN   10
 #define TAB_WIDTH2      1000
-#define ITEMID_TYPE     1
-#define ITEMID_PATH     2
+#define ITEMID_TYPE       1
+#define ITEMID_PATH       2
 
 #define POSTFIX_INTERNAL    String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_internal" ) )
 #define POSTFIX_USER        String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_user" ) )
