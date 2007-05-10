@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsb.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:14:49 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:35:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@
 #ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
 #endif
-#define ITEMID_HYPERLINK    SID_HYPERLINK_SETLINK
 
 #include <svx/hyprlink.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -62,7 +61,6 @@
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
 #endif
-#define ITEMID_FIELD    EE_FEATURE_FIELD
 #ifndef _FLDITEM_HXX
 #include <svx/flditem.hxx>
 #endif
@@ -497,7 +495,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
             if (pReqArgs)
             {
                 SvxHyperlinkItem* pHLItem =
-                (SvxHyperlinkItem*) &pReqArgs->Get(ITEMID_HYPERLINK);
+                (SvxHyperlinkItem*) &pReqArgs->Get(SID_HYPERLINK_SETLINK);
 
                 if (pHLItem->GetInsertMode() == HLINK_FIELD)
                 {
@@ -546,20 +544,20 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
             {
                 case SID_INSERT_FLD_DATE_FIX:
                     pFieldItem = new SvxFieldItem(
-                        SvxDateField( Date(), SVXDATETYPE_FIX ) );
+                        SvxDateField( Date(), SVXDATETYPE_FIX ), EE_FEATURE_FIELD );
                 break;
 
                 case SID_INSERT_FLD_DATE_VAR:
-                    pFieldItem = new SvxFieldItem( SvxDateField() );
+                    pFieldItem = new SvxFieldItem( SvxDateField(), EE_FEATURE_FIELD );
                 break;
 
                 case SID_INSERT_FLD_TIME_FIX:
                     pFieldItem = new SvxFieldItem(
-                        SvxExtTimeField( Time(), SVXTIMETYPE_FIX ) );
+                        SvxExtTimeField( Time(), SVXTIMETYPE_FIX ), EE_FEATURE_FIELD );
                 break;
 
                 case SID_INSERT_FLD_TIME_VAR:
-                    pFieldItem = new SvxFieldItem( SvxExtTimeField() );
+                    pFieldItem = new SvxFieldItem( SvxExtTimeField(), EE_FEATURE_FIELD );
                 break;
 
                 case SID_INSERT_FLD_AUTHOR:
@@ -567,13 +565,13 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                     SvtUserOptions aUserOptions;
                     pFieldItem = new SvxFieldItem(
                             SvxAuthorField(
-                                aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID() ) );
+                                aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID() ), EE_FEATURE_FIELD );
                 }
                 break;
 
                 case SID_INSERT_FLD_PAGE:
                 {
-                    pFieldItem = new SvxFieldItem( SvxPageField() );
+                    pFieldItem = new SvxFieldItem( SvxPageField(), EE_FEATURE_FIELD );
                     nMul = 3;
                 }
                 break;
@@ -585,7 +583,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                         aName = GetDocSh()->GetMedium()->GetName();
                     //else
                     //  aName = GetDocSh()->GetName();
-                    pFieldItem = new SvxFieldItem( SvxExtFileField( aName ) );
+                    pFieldItem = new SvxFieldItem( SvxExtFileField( aName ), EE_FEATURE_FIELD );
                 }
                 break;
             }
@@ -683,7 +681,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
 
                         if( pField )
                         {
-                            SvxFieldItem aFieldItem( *pField );
+                            SvxFieldItem aFieldItem( *pField, EE_FEATURE_FIELD );
 
                             if( aSel.nStartPos == aSel.nEndPos )
                             {
