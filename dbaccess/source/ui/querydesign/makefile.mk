@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 03:29:33 $
+#   last change: $Author: kz $ $Date: 2007-05-10 10:40:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,6 @@ EXCEPTIONSFILES =\
             $(SLO)$/JoinDesignView.obj			\
             $(SLO)$/JoinController.obj			\
             $(SLO)$/QueryDesignView.obj			\
-            $(SLO)$/TableFieldData.obj			\
             $(SLO)$/SelectionBrowseBox.obj		\
             $(SLO)$/querydlg.obj				\
             $(SLO)$/QueryTabWinUndoAct.obj		\
