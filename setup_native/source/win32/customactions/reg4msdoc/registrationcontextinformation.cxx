@@ -83,6 +83,30 @@ std::wstring RegistrationContextInformation::GetWordTemplateDefaultShellCommand(
     return std::wstring(TEXT("new"));
 }
 
+std::wstring RegistrationContextInformation::GetRtfDocumentDisplayName() const
+{
+    std::wstring str;
+    GetMsiProp(msihandle_, TEXT("STR_RTF_DOCUMENT"), str);
+    if (m_IsWin9x && !IsConvertableToAnsi(str))
+        str = TEXT("Rich Text Document");
+    return str;
+}
+
+std::wstring RegistrationContextInformation::GetRtfDocumentFileExtension() const
+{
+    return std::wstring(TEXT(".rtf"));
+}
+
+std::wstring RegistrationContextInformation::GetRtfDocumentDefaultIconEntry() const
+{
+    return m_OOExecPath + std::wstring(TEXT(",1"));
+}
+
+std::wstring RegistrationContextInformation::GetRtfDocumentDefaultShellCommand() const
+{
+    return std::wstring(TEXT("open"));
+}
+
 std::wstring RegistrationContextInformation::GetExcelSheetDisplayName() const
 {
     std::wstring str;
@@ -263,32 +287,43 @@ std::wstring RegistrationContextInformation::GetOpenOfficeExecutableName() const
 }
 
 /** A command line for the specified shell command */
-std::wstring RegistrationContextInformation::GetOpenOfficeCommandline(SHELL_COMMAND ShellCommand) const
+std::wstring RegistrationContextInformation::GetOpenOfficeCommandline(SHELL_COMMAND ShellCommand,
+                                                                      OFFICE_APPLICATION OfficeApp) const
 {
     // quote the path to OpenOffice, this is important
     // for Windows 9x
     std::wstring cmd_line = std::wstring(TEXT("\"")) + m_OOExecPath + std::wstring(TEXT("\""));
 
+    switch( OfficeApp )
+    {
+    case Writer:
+        cmd_line += std::wstring( TEXT( " -writer" ) );
+        break;
+    case Calc:
+        cmd_line += std::wstring( TEXT( " -calc" ) );
+        break;
+    case Impress:
+        cmd_line += std::wstring( TEXT( " -impress" ) );
+        break;
+    case Office: // default to std command line
+        break;
+    // default: no default to find new added enums at compile time
+    }
     switch(ShellCommand)
     {
     case New:
         cmd_line += std::wstring(TEXT(" -n \"%1\""));
         break;
-
     case Open:
         cmd_line += std::wstring(TEXT(" -o \"%1\""));
         break;
-
     case Print:
         cmd_line += std::wstring(TEXT(" -p \"%1\""));
         break;
-
     case Printto:
         cmd_line += std::wstring(TEXT(" -pt \"%2\" \"%1\""));
         break;
-
-    default:
-        assert(false);
+    // default: no default to find new added enums at compile time
     }
     return cmd_line;
 }
