@@ -20050,7 +20050,6 @@ echo "${ECHO_T}internal" >&6
     SYSTEM_NEON=NO
     NEON_LIBS=-lneon
     NEON_CFLAGS=
-    NEON_VERSION=0247
     BUILD_TYPE="$BUILD_TYPE NEON"
 fi
 
