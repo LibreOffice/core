@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:37:19 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:47:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#define ITEMID_COLOR 0
 
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
