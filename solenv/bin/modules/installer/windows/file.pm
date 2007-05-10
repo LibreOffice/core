@@ -4,9 +4,9 @@
 #
 #   $RCSfile: file.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2007-02-19 13:50:19 $
+#   last change: $Author: gm $ $Date: 2007-05-10 11:00:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,9 @@
 
 package installer::windows::file;
 
+require Filesys::CygwinPaths if $^O =~ /cygwin/i;
+
+use Digest::MD5;
 use installer::existence;
 use installer::exiter;
 use installer::files;
@@ -148,21 +151,30 @@ sub get_component_from_assigned_file
 
 sub generate_unique_filename_for_filetable
 {
-    my ($fileref) = @_;
+    my ($fileref, $component) = @_;
 
     # This new filename has to be saved into $fileref, because this is needed to find the source.
     # The filename sbasic.idx/OFFSETS is changed to OFFSETS, but OFFSETS is not unique.
     # In this procedure names like OFFSETS5 are produced. And exactly this string has to be added to
     # the array of all files.
 
-    my ($onefile, $uniquename);
     my $uniquefilename = "";
-    my $alreadyexists = 0;
     my $counter = 0;
 
     if ( $fileref->{'Name'} ) { $uniquefilename = $fileref->{'Name'}; }
 
     installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$uniquefilename); # making /registry/schema/org/openoffice/VCL.xcs to VCL.xcs
+
+    if (( $installer::globals::prepare_winpatch ) && ( exists($installer::globals::savedmapping{"$component/$uniquefilename"}) ))
+    {
+        # If we have a FTK mapping for this component/file, use it.
+        $installer::globals::savedmapping{"$component/$uniquefilename"} =~ m/^(.*);/;
+        $uniquefilename = $1;
+         $lcuniquefilename = lc($uniquefilename);
+        $installer::globals::alluniquefilenames{$uniquefilename} = 1;
+        $installer::globals::alllcuniquefilenames{$lcuniquefilename} = 1;
+        return $uniquefilename;
+    }
 
     $uniquefilename =~ s/\-/\_/g;       # no "-" allowed
     $uniquefilename =~ s/\@/\_/g;       # no "@" allowed
@@ -175,7 +187,8 @@ sub generate_unique_filename_for_filetable
 
     my $newname = 0;
 
-    if ( ! exists($installer::globals::alllcuniquefilenames{$lcuniquefilename}) )   # case insensitive
+    if ( ! exists($installer::globals::alllcuniquefilenames{$lcuniquefilename}) &&
+         ! exists($installer::globals::savedrevmapping{$lcuniquefilename}) )
     {
         $installer::globals::alluniquefilenames{$uniquefilename} = 1;
         $installer::globals::alllcuniquefilenames{$lcuniquefilename} = 1;
@@ -206,7 +219,8 @@ sub generate_unique_filename_for_filetable
             $newname = 0;
             $lcuniquefilename = lc($uniquefilename);    # only lowercase names
 
-            if ( ! exists($installer::globals::alllcuniquefilenames{$lcuniquefilename}) )
+            if ( ! exists($installer::globals::alllcuniquefilenames{$lcuniquefilename}) &&
+                 ! exists($installer::globals::savedrevmapping{$lcuniquefilename}) )
             {
                 $installer::globals::alluniquefilenames{$uniquefilename} = 1;
                 $installer::globals::alllcuniquefilenames{$lcuniquefilename} = 1;
@@ -235,7 +249,16 @@ sub generate_filename_for_filetable
 
     installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$filename);   # making /registry/schema/org/openoffice/VCL.xcs to VCL.xcs
 
-    my $shortstring = installer::windows::idtglobal::make_eight_three_conform_with_hash($filename, "file", $shortnamesref);
+    my $shortstring;
+    if (( $installer::globals::prepare_winpatch ) && ( exists($installer::globals::savedmapping{"$fileref->{'componentname'}/$filename"}) ))
+    {
+        $installer::globals::savedmapping{"$fileref->{'componentname'}/$filename"} =~ m/.*;(.*)/;
+        $shortstring = $1 || $filename;
+    }
+    else
+    {
+        $shortstring = installer::windows::idtglobal::make_eight_three_conform_with_hash($filename, "file", $shortnamesref);
+    }
 
     if ( $shortstring eq $filename ) { $returnstring = $filename; } # nothing changed
     else {$returnstring = $shortstring . "\|" . $filename; }
@@ -283,6 +306,8 @@ sub get_fileversion
         if ( ! $allvariables->{'LIBRARYVERSION'} ) { installer::exiter::exit_program("ERROR: USE_FILEVERSION is set, but not LIBRARYVERSION", "get_fileversion"); }
         $fileversion = $allvariables->{'LIBRARYVERSION'} . "\." . $installer::globals::buildid;
     }
+
+    if ( $installer::globals::prepare_winpatch ) { $fileversion = ""; } # Windows patches do not allow this version
 
     return $fileversion;
 }
@@ -366,6 +391,7 @@ sub create_files_table
 
     my @allfiles = ();
     my @filetable = ();
+    my @filehashtable = ();
     my %allfilecomponents = ();
     my $counter = 0;
 
@@ -375,6 +401,7 @@ sub create_files_table
     my %shortnames = ();
 
     installer::windows::idtglobal::write_idt_header(\@filetable, "file");
+    installer::windows::idtglobal::write_idt_header(\@filehashtable, "filehash");
 
     for ( my $i = 0; $i <= $#{$filesref}; $i++ )
     {
@@ -387,12 +414,10 @@ sub create_files_table
         if (( $styles =~ /\bJAVAFILE\b/ ) && ( ! ($allvariables->{'JAVAPRODUCT'} ))) { next; }
         if (( $styles =~ /\bADAFILE\b/ ) && ( ! ($allvariables->{'ADAPRODUCT'} ))) { next; }
 
-        $file{'File'} = generate_unique_filename_for_filetable($onefile);
+        $file{'Component_'} = get_file_component_name($onefile, $filesref);
+        $file{'File'} = generate_unique_filename_for_filetable($onefile, $file{'Component_'});
 
         $onefile->{'uniquename'} = $file{'File'};
-
-        $file{'Component_'} = get_file_component_name($onefile, $filesref);
-
         $onefile->{'componentname'} = $file{'Component_'};
 
         # Collecting all components
@@ -427,6 +452,26 @@ sub create_files_table
 
         push(@allfiles, $onefile);
 
+        if ( $installer::globals::prepare_winpatch )
+        {
+            my $path = $onefile->{'sourcepath'};
+            if ( $^O =~ /cygwin/i ) { $path = Filesys::CygwinPaths::win32path ($onefile->{'sourcepath'}); }
+
+            open(FILE, $path) or die "ERROR: Can't open $path for creating file hash";
+            binmode(FILE);
+            my $hashinfo = pack("l", 20);
+            $hashinfo .= Digest::MD5->new->addfile(*FILE)->digest;
+
+            my @i = unpack ('x[l]l4', $hashinfo);
+            $oneline = $file{'File'} . "\t" .
+                "0" . "\t" .
+                $i[0] . "\t" .
+                $i[1] . "\t" .
+                $i[2] . "\t" .
+                $i[3] . "\n";
+            push (@filehashtable, $oneline);
+        }
+
         # Saving the sequence number in a hash with uniquefilename as key.
         # This is used for better performance in "save_packorder"
         $installer::globals::uniquefilenamesequence{$onefile->{'uniquename'}} = $onefile->{'sequencenumber'};
@@ -454,6 +499,11 @@ sub create_files_table
     push(@installer::globals::logfileinfo, $infoline);
 
     installer::logger::include_timestamp_into_logfile("Performance Info: File Table end");
+
+    my $filehashtablename = $basedir . $installer::globals::separator . "MsiFileHash.idt";
+    installer::files::save_file($filehashtablename ,\@filehashtable);
+    $infoline = "\nCreated idt file: $filehashtablename\n";
+    push(@installer::globals::logfileinfo, $infoline);
 
     return \@allfiles;
 }
