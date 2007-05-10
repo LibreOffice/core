@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:41:06 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:40:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,22 +56,22 @@
 #include <vcl/mnemonic.hxx>
 #endif
 
-#define ITEMID_LINESPACING  0
-#define ITEMID_ADJUST       0
-#define ITEMID_ORPHANS      0
-#define ITEMID_WIDOWS       0
-#define ITEMID_TABSTOP      0
-#define ITEMID_PAGEMODEL    0
-#define ITEMID_FMTSPLIT     0
-#define ITEMID_HYPHENZONE   0
-#define ITEMID_ULSPACE      0
-#define ITEMID_LRSPACE      0
-#define ITEMID_FMTBREAK     0
-#define ITEMID_FMTKEEP      0
-#define ITEMID_PARAVERTALIGN 0
+
+
+
+
+
+
+
+
+
+
+
+
+
 #define _SVX_PARAGRPH_CXX   0
-#define ITEMID_PARAGRID     0
-#define ITEMID_FRAMEDIR     0
+
+
 
 
 #ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
