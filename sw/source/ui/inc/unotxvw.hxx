@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxvw.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:46:55 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:48:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,8 +49,8 @@
 #ifndef _COM_SUN_STAR_TEXT_XRUBYSELECTION_HPP_
 #include <com/sun/star/text/XRubySelection.hpp>
 #endif
-#ifndef _COM_SUN_STAR_VIEW_XCONTROLACCESS_HPP_
-#include <com/sun/star/view/XControlAccess.hpp>
+#ifndef _COM_SUN_STAR_VIEW_XFORMLAYERACCESS_HPP_
+#include <com/sun/star/view/XFormLayerAccess.hpp>
 #endif
 #ifndef _COM_SUN_STAR_VIEW_XSCREENCURSOR_HPP_
 #include <com/sun/star/view/XScreenCursor.hpp>
@@ -109,7 +109,7 @@ SV_DECL_PTRARR_DEL( SelectionChangeListenerArr, XSelectionChangeListenerPtr, 4, 
 class SwXTextView :
     public ::com::sun::star::view::XSelectionSupplier,
     public ::com::sun::star::lang::XServiceInfo,
-    public ::com::sun::star::view::XControlAccess,
+    public ::com::sun::star::view::XFormLayerAccess,
     public ::com::sun::star::text::XTextViewCursorSupplier,
     public ::com::sun::star::text::XRubySelection,
     public ::com::sun::star::view::XViewSettingsSupplier,
@@ -151,7 +151,12 @@ public:
     virtual void SAL_CALL addSelectionChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener > & xListener) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL removeSelectionChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener > & xListener) throw( ::com::sun::star::uno::RuntimeException );
 
-    //XControlAccess
+    // XFormLayerAccess
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > SAL_CALL getFormController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& Form ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isFormDesignMode(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setFormDesignMode( ::sal_Bool DesignMode ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XControlAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  SAL_CALL getControl(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & Model) throw( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException );
 
     //XTextViewCursorSupplier
