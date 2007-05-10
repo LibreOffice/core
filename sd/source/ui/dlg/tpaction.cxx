@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:10:32 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:27:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,8 +71,6 @@
 
 #include "sdattr.hxx"
 
-#define ITEMID_COLOR            ATTR_ANIMATION_COLOR
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
 
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
