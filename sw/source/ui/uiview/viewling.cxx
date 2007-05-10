@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:22:20 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:26:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,10 +40,6 @@
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>      // fuer ITEMID_SPELLCHECK (muss _vor_ sfxdlg.hxx!)
-#endif
-
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
@@ -178,6 +174,7 @@
 #ifndef _STMENU_HXX
 #include "stmenu.hxx"              // PopupMenu for smarttags
 #endif
+#include <svx/dialogs.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
