@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:34:38 $
+#   last change: $Author: kz $ $Date: 2007-05-10 15:02:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,11 +82,11 @@ PKGCONFIG_LIBS!:=-Wl,--export-dynamic $(PKGCONFIG_LIBS)
 .ENDIF          # "$(ENABLE_GNOMEVFS)"!=""
 
 .IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
-TARFILE=$(BIN)$/rpm$/openoffice.org-desktop-integration.tar.gz
+RPMTARFILES=$(BIN)$/rpm$/{$(PRODUCTLIST)}-desktop-integration.tar.gz
 .ENDIF
 
 .IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/deb//)"
-TARFILE2=$(BIN)$/deb$/openoffice.org-desktop-integration.tar.gz
+DEBTARFILES=$(BIN)$/deb$/{$(PRODUCTLIST)}-desktop-integration.tar.gz
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -107,24 +107,24 @@ SCRIPTS= \
 
 .INCLUDE :  target.mk
 
-ALLTAR: $(SCRIPTS) $(TARFILE) $(TARFILE2)
+ALLTAR: $(SCRIPTS) $(RPMTARFILES) $(DEBTARFILES)
 
 $(SCRIPTS) : $$(@:f)
     @rm -f $@ 2>/dev/null
     @cat $(@:f) | tr -d "\015" > $@
 
-.IF "$(TARFILE)" != ""
+.IF "$(RPMTARFILES)" != ""
 
-$(TARFILE) : $(PKGDIR)$/{$(shell ls $(PKGDIR))}
+$(RPMTARFILES) : $(PKGDIR)
     $(MKDIRHIER) $(@:d)
-    tar -C $(PKGDIR:d:d) -cf - $(PKGDIR:f)/ | gzip > $@
+    tar -C $(PKGDIR:d:d) -cf - $(PKGDIR:f)$/{$(shell cd $(PKGDIR); ls $(@:b:b:s/-/ /:1)*)} | gzip > $@
 
 .ENDIF # "$(TARFILE)" != ""
 
-.IF "$(TARFILE2)" != ""
+.IF "$(DEBTARFILES)" != ""
 
-$(TARFILE2) : $(shell ls $(PKGDIR)$/*.deb)
+$(DEBTARFILES) : $(PKGDIR)
     $(MKDIRHIER) $(@:d)
-    tar -C $(PKGDIR) -cf - {$(<:f)} | gzip > $@
+    tar -C $(PKGDIR:d:d) -cf - $(PKGDIR:f)$/{$(shell cd $(PKGDIR); ls $(@:b:b:s/-/ /:1)*.deb)} | gzip > $@
     
 .ENDIF
