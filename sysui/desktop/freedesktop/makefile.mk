@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:33:36 $
+#   last change: $Author: kz $ $Date: 2007-05-10 15:23:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,36 +48,21 @@ TARGET=freedesktop
 .INCLUDE :  ../productversion.mk
 
 # --- Files --------------------------------------------------------
-
+ 
 .IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 
-PACKAGE_RPM = $(MISC)$/$(TARGET).rpmflag
+SPECFILE=$(MISC)$/$(TARGET)-menus.spec
+RPMFILES=$(foreach,i,{$(PRODUCTLIST)} $(PKGDIR)$/$i-$(SPECFILE:b)-$(PKGVERSION.$i)-$(PKGREV).noarch.rpm)
 
 .ENDIF
 
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
+.INCLUDE : ../tg_rpm.mk
 
 .IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 
-ALLTAR : $(PACKAGE_RPM)
-
-# --- packaging ---------------------------------------------------
-    
-$(PACKAGE_RPM) : $(MISC)$/redhat.rpmflag
-
-$(PACKAGE_RPM) : $(MISC)/$(TARGET)-menus.spec
-    @-$(MKDIRHIER) $(@:d)
-    -@$(RM) $(PKGDIR)$/openoffice.org-$(TARGET)-*.noarch.rpm $(BIN)/noarch/openoffice.org-$(TARGET)-*.noarch.rpm
-    @$(MKDIRHIER) $(MISC)$/$(TARGET)
-    @$(MKDIRHIER) $(MISC)$/$(TARGET)$/BUILD
-    @$(RPM) $(RPMMACROS) -bb $< \
-        --define "basedir $(PWD)" --define "unixfilename $(UNIXFILENAME)" \
-        --define "version $(PKGVERSION)" --define "release $(PKGREV)" \
-        --define "source $(ABSLOCALOUT)$/misc$/redhat" \
-        --define "unique $(shell echo $$$$)" \
-        --define "_builddir $(ABSLOCALOUT)$/misc$/$(TARGET)/BUILD" && $(TOUCH) $@
-    @$(TYPE) $@ || echo "ERROR: packing $(TARGET) failed! "
+$(RPMFILES) : $(COMMONMISC)$/{$(PRODUCTLIST)}$/build.flag
 
 .ENDIF
