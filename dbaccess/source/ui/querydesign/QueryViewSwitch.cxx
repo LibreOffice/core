@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:23:48 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:38:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,29 +148,12 @@ void OQueryViewSwitch::clear()
         m_pDesignView->clear();
 }
 // -----------------------------------------------------------------------------
-void OQueryViewSwitch::GetFocus()
-{
-    if ( m_pTextView && m_pTextView->IsVisible() )
-        m_pTextView->GetFocus();
-    else if ( m_pDesignView && m_pDesignView->IsVisible() )
-        m_pDesignView->GrabFocus();
-}
-// -----------------------------------------------------------------------------
 void OQueryViewSwitch::GrabFocus()
 {
     if ( m_pTextView && m_pTextView->IsVisible() )
         m_pTextView->GrabFocus();
     else if ( m_pDesignView && m_pDesignView->IsVisible() )
         m_pDesignView->GrabFocus();
-}
-// -----------------------------------------------------------------------------
-Window* OQueryViewSwitch::getActive() const
-{
-    Window* pRet = m_pDesignView;
-    if ( m_pTextView && m_pTextView->IsVisible() )
-        pRet = m_pTextView;
-
-    return pRet;
 }
 // -----------------------------------------------------------------------------
 void OQueryViewSwitch::setStatement(const ::rtl::OUString& _rsStatement)
@@ -289,11 +272,6 @@ sal_Bool OQueryViewSwitch::switchView()
     return bRet;
 }
 // -----------------------------------------------------------------------------
-void OQueryViewSwitch::clearDesignView()
-{
-    m_pDesignView->clear();
-}
-// -----------------------------------------------------------------------------
 OAddTableDlg* OQueryViewSwitch::getAddTableDialog()
 {
     if ( !m_pDesignView )
@@ -301,11 +279,6 @@ OAddTableDlg* OQueryViewSwitch::getAddTableDialog()
     if ( !m_pDesignView->getController() )
         return NULL;
     return m_pDesignView->getController()->getAddTableDialog();
-}
-// -----------------------------------------------------------------------------
-BOOL OQueryViewSwitch::IsAddAllowed()
-{
-    return m_pDesignView->IsAddAllowed();
 }
 // -----------------------------------------------------------------------------
 sal_Bool OQueryViewSwitch::isSlotEnabled(sal_Int32 _nSlotId)
@@ -316,11 +289,6 @@ sal_Bool OQueryViewSwitch::isSlotEnabled(sal_Int32 _nSlotId)
 void OQueryViewSwitch::setSlotEnabled(sal_Int32 _nSlotId,sal_Bool _bEnable)
 {
     m_pDesignView->setSlotEnabled(_nSlotId,_bEnable);
-}
-// -----------------------------------------------------------------------------
-void OQueryViewSwitch::zoomTableView(const Fraction& _rFraction)
-{
-    m_pDesignView->zoomTableView(_rFraction);
 }
 // -----------------------------------------------------------------------------
 void OQueryViewSwitch::SaveUIConfig()
