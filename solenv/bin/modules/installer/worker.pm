@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: gm $ $Date: 2007-05-10 10:59:38 $
+#   last change: $Author: kz $ $Date: 2007-05-10 13:56:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -2459,6 +2459,33 @@ sub set_old_architecture_string
 }
 
 ##############################################
+# For the new copied package, it is necessary
+# that a value for the key SUNW_REQUIRES
+# is set. Otherwise this copied package
+# with ARCH=i86pc would be useless.
+##############################################
+
+sub check_requires_setting
+{
+    my ($pkginfofile) = @_;
+
+    my $found = 0;
+    my $patchid = "";
+
+    for ( my $i = 0; $i <= $#{$pkginfofile}; $i++ )
+    {
+        if ( ${$pkginfofile}[$i] =~ /^\s*SUNW_REQUIRES=(\S*?)\s*$/ )
+        {
+            $patchid = $1;
+            $found = 1;
+            last;
+        }
+    }
+
+    if (( ! $found ) || ( $patchid eq "" )) { installer::exiter::exit_program("ERROR: No patch id defined for SUNW_REQUIRES in patch pkginfo file!", "check_requires_setting"); }
+}
+
+##############################################
 # Setting checksum and wordcount for changed
 # pkginfo file into pkgmap.
 ##############################################
@@ -2490,6 +2517,63 @@ sub set_pkginfo_line
             last;
         }
     }
+}
+
+##############################################
+# Setting time stamp of copied files to avoid
+# errors from pkgchk.
+##############################################
+
+sub set_time_stamp
+{
+    my ($olddir, $newdir, $copyfiles) = @_;
+
+    for ( my $i = 0; $i <= $#{$copyfiles}; $i++ )
+    {
+        my $sourcefile = $olddir . $installer::globals::separator . ${$copyfiles}[$i];
+        my $destfile = $newdir . $installer::globals::separator . ${$copyfiles}[$i];
+
+        my $systemcall = "touch -r $sourcefile $destfile";
+
+        my $returnvalue = system($systemcall);
+
+        my $infoline = "Systemcall: $systemcall\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+        if ($returnvalue)
+        {
+            $infoline = "ERROR: \"$systemcall\" failed!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+        else
+        {
+            $infoline = "Success: \"$systemcall\" !\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+    }
+}
+
+##############################################
+# Include only files from install directory
+# in pkgmap file.
+##############################################
+
+sub filter_pkgmapfile
+{
+    my ($pkgmapfile) = @_;
+
+    my @pkgmap = ();
+
+    my $line = ": 1 10\n";
+    push(@pkgmap, $line);
+
+    for ( my $i = 0; $i <= $#{$pkgmapfile}; $i++ )
+    {
+        $line = ${$pkgmapfile}[$i];
+        if ( $line =~ /^\s*1\si\s/ ) { push(@pkgmap, $line); }
+    }
+
+    return \@pkgmap;
 }
 
 ##############################################
@@ -2555,6 +2639,151 @@ sub fix_solaris_x86_patch
 
     # changing back to startdir
     chdir($startdir);
+}
+
+###################################################
+# Creating double core01 package for Solaris x86.
+# One package with ARCH=i386 and one with
+# ARCH=i86pc. This is necessary, to inform the
+# user about the missing "small patch", if
+# packages with ARCH=i86pc are installed.
+###################################################
+
+sub fix2_solaris_x86_patch
+{
+    my ($packagename, $subdir) = @_;
+
+    if ( $packagename =~ /-core01\s*$/ )    # only this one package needs to be duplicated
+    {
+        my $startdir = cwd();
+        chdir($subdir);
+
+        # $packagename is: "SUNWstaroffice-core01"
+        # $installer::globals::subdir is "packages"
+        # Current working directory is: "<path>/install/en-US_inprogress"
+
+        # create new package in "packages": $packagename . ".i"
+        my $olddir = $packagename;
+        my $newpackagename = $packagename . "\.i";
+        my $newdir = $newpackagename;
+
+        installer::systemactions::create_directory($newdir);
+
+        my $oldinstalldir = $olddir . $installer::globals::separator . "install";
+        my $newinstalldir = $newdir . $installer::globals::separator . "install";
+
+        installer::systemactions::copy_complete_directory($oldinstalldir, $newinstalldir);
+
+        # setting time stamp of all copied files to avoid errors from pkgchk
+        my $allinstallfiles = installer::systemactions::get_all_files_from_one_directory_without_path($newinstalldir);
+        set_time_stamp($oldinstalldir, $newinstalldir, $allinstallfiles);
+
+        # copy "pkginfo" and "pkgmap" from $packagename to $packagename . ".i"
+        my @allcopyfiles = ("pkginfo", "pkgmap");
+        for ( my $i = 0; $i <= $#allcopyfiles; $i++ )
+        {
+            my $sourcefile = $olddir . $installer::globals::separator . $allcopyfiles[$i];
+            my $destfile = $newdir . $installer::globals::separator . $allcopyfiles[$i];
+            installer::systemactions::copy_one_file($sourcefile, $destfile);
+        }
+
+        # change in pkginfo in $packagename . ".i" the value for ARCH from i386 to i86pc
+        my $pkginfofilename = "pkginfo";
+        $pkginfofilename = $newdir . $installer::globals::separator . $pkginfofilename;
+
+        my $pkginfofile = installer::files::read_file($pkginfofilename);
+        set_old_architecture_string($pkginfofile);
+        check_requires_setting($pkginfofile);
+        installer::files::save_file($pkginfofilename, $pkginfofile);
+
+        # adapt the values in pkgmap for pkginfo file, because this file was edited
+        my $pkgmapfilename = "pkgmap";
+        $pkgmapfilename = $newdir . $installer::globals::separator . $pkgmapfilename;
+
+        my $pkgmapfile = installer::files::read_file($pkgmapfilename);
+        set_pkginfo_line($pkgmapfile, $pkginfofilename);
+        $pkgmapfile = filter_pkgmapfile($pkgmapfile);
+        installer::files::save_file($pkgmapfilename, $pkgmapfile);
+
+        # setting time stamp of all copied files to avoid errors from pkgchk
+        set_time_stamp($olddir, $newdir, \@allcopyfiles);
+
+        # changing back to startdir
+        chdir($startdir);
+    }
+}
+
+################################################
+# Files with flag HIDDEN get a dot at the
+# beginning of the file name. This cannot be
+# defined in scp2 project, because tooling
+# cannot handle files with beginning dot
+# correctly.
+################################################
+
+sub resolving_hidden_flag
+{
+    my ($filesarrayref, $variableshashref, $item, $languagestringref) = @_;
+
+    my $diritem = lc($item);
+    my $infoline = "";
+
+    my $hiddendirbase = installer::systemactions::create_directories("hidden_$diritem", $languagestringref);
+
+    installer::logger::include_header_into_logfile("$item with flag HIDDEN:");
+
+    for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
+    {
+        my $onefile = ${$filesarrayref}[$i];
+        my $styles = "";
+
+        if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
+
+        if ( $styles =~ /\bHIDDEN\b/ )
+        {
+            # Language specific subdirectory
+
+            my $onelanguage = $onefile->{'specificlanguage'};
+
+            if ($onelanguage eq "")
+            {
+                $onelanguage = "00";    # files without language into directory "00"
+            }
+
+            my $hiddendir = $hiddendirbase . $installer::globals::separator . $onelanguage . $installer::globals::separator;
+            installer::systemactions::create_directory($hiddendir); # creating language specific directories
+
+            # copy files and edit them with the variables defined in the zip.lst
+
+            my $onefilename = $onefile->{'Name'};
+            my $newfilename = "\." . $onefilename;
+            my $sourcefile = $onefile->{'sourcepath'};
+            my $destfile = $hiddendir . $newfilename;
+
+            my $copysuccess = installer::systemactions::copy_one_file($sourcefile, $destfile);
+
+            if ( $copysuccess )
+            {
+                # $onefile->{'Name'} = $newfilename;
+                $onefile->{'sourcepath'} = $destfile;
+                $destination = $onefile->{'destination'};
+                installer::pathanalyzer::get_path_from_fullqualifiedname(\$destination);
+                if ( $destination eq "" ) { $onefile->{'destination'} = $newfilename; }
+                else { $onefile->{'destination'} = $destination . $installer::globals::separator . $newfilename; }
+
+                $infoline = "Success: Using file with flag HIDDEN from \"$onefile->{'sourcepath'}\"!\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
+            else
+            {
+                $infoline = "Error: Failed to copy HIDDEN file from \"$sourcefile\" to \"$destfile\"!\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
+        }
+    }
+
+    $infoline = "\n";
+    push( @installer::globals::logfileinfo, $infoline);
 }
 
 1;
