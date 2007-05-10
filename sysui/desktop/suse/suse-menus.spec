@@ -1,74 +1,54 @@
 # version and release passed by command-line
 Version: %version
 Release: %release
-Summary: OpenOffice.org desktop integration
-Name: openoffice.org-suse-menus
+Summary: %productname desktop integration
+Name: %pkgprefix-suse-menus
 Group: Office
 License: LGPL
 Vendor: OpenOffice.org
 AutoReqProv: no
 BuildArch: noarch
 # /etc/SuSE-release for SuSE, SLES and Novell Linux Desktop ..
-Requires: openoffice.org-core01, /etc/SuSE-release
+Requires: %pkgprefix-core01, /etc/SuSE-release
 # .. but not for Sun JDS
 Conflicts: SunDesktopVersion
 Provides: openoffice.org-desktop-integration
 Obsoletes: openofficeorg-suse-menus
 %define _unpackaged_files_terminate_build 0
 %description 
-OpenOffice.org desktop integration
+%productname desktop integration
 
 %install
+rm -rf $RPM_BUILD_ROOT/*
 
 # hack/workaround to make SuSE's brp-symlink-script happy. It wants the targets of all links
 # to be present on the build-system/the buildroot. But the point is that we generate stale
 # links intentionally (until we find a better solution) #46226
 export NO_BRP_STALE_LINK_ERROR=yes
 
+# enable relocation in create_tree.sh
+mkdir -p $RPM_BUILD_ROOT/etc
+touch $RPM_BUILD_ROOT/etc/%unixfilename
 
-## add symlinks so that nautilus can identify the mime-icons 
-## not strictly freedesktop-stuff but there is no common naming scheme yet.
-## One proposal is "mime-application:vnd.oasis.opendocument.spreadsheet.png"
-## for e.g. application/vnd.oasis.opendocument.spreadsheet
-cd $RPM_BUILD_ROOT/opt/gnome/share/icons/gnome
-originalname=%unixfilename
-iconname=`echo $originalname | sed -e 's/\.//g'`
-for dir in *; do
-  mkdir -p $RPM_BUILD_ROOT/opt/gnome/share/icons/hicolor/$dir/mimetypes
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-drawing.png                ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.draw.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-drawing-template.png       ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.draw.template.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-formula.png                ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.math.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-master-document.png        ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.writer.global.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-database.png         ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.base.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-database.png         ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.database.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-drawing.png          ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.graphics.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-drawing-template.png ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.graphics-template.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-formula.png          ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.formula.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-master-document.png  ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.text-master.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-presentation.png     ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.presentation.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-presentation-template.png ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.presentation-template.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-spreadsheet.png           ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.spreadsheet.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-spreadsheet-template.png  ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.spreadsheet-template.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-text.png             ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.text.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-text-template.png    ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.text-template.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-web-template.png     ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.text-web.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-presentation.png           ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.impress.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-presentation-template.png  ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.impress.template.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-spreadsheet.png            ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.calc.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-spreadsheet-template.png   ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.calc.template.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-text.png                   ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.writer.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-text-template.png          ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.writer.template.png
-  ln -sf ../../../gnome/$dir/mimetypes/$iconname-extension.png              ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.openofficeorg.extension.png
-done
+# set parameters for the create_tree script 
+export DESTDIR=$RPM_BUILD_ROOT
+export KDEMAINDIR=/opt/kde3
+export GNOMEDIR=/opt/gnome
+export GNOME_MIME_THEME=hicolor
+
+create_tree.sh
+
+%clean
+rm -rf $RPM_BUILD_ROOT/*
 
 #include<symlink_triggers>
 
-%triggerin -- openoffice.org-writer, openoffice.org-calc, openoffice.org-draw, openoffice.org-impress, openoffice.org-base, openoffice.org-math
+%triggerin -- %pkgprefix-writer, %pkgprefix-calc, %pkgprefix-draw, %pkgprefix-impress, %pkgprefix-base, %pkgprefix-math
 if [ -x /opt/gnome/bin/update-desktop-database -a -h /etc/%unixfilename ]; then
   /opt/gnome/bin/update-desktop-database -q /usr/share/applications
 fi 
 
-%triggerun -- openoffice.org-writer, openoffice.org-calc, openoffice.org-draw, openoffice.org-impress, openoffice.org-base, openoffice.org-math
+%triggerun -- %pkgprefix-writer, %pkgprefix-calc, %pkgprefix-draw, %pkgprefix-impress, %pkgprefix-base, %pkgprefix-math
 if [ "$1" = "0" ] ; then  
   # the menu-package gets uninstalled/updated - postun will run the command
   exit 0
