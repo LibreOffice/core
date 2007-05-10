@@ -4,9 +4,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:27:27 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:59:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <com/sun/star/embed/EmbedMisc.hpp>
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #include "hintids.hxx"
 
 #ifdef WIN
