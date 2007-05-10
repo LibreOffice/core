@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDeco.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:28:22 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:13:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,7 +175,6 @@ namespace dbaccess
 
 
 
-        void setTable(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxTable);
         // ODescriptor
         virtual void construct();
 
