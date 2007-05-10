@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.140 $
+ *  $Revision: 1.141 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:53:10 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:16:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@
 #ifndef _SFXPTITEM_HXX
 #include <svtools/ptitem.hxx>
 #endif
-#define ITEMID_SIZE SID_ATTR_SIZE
+
 #ifndef _SVX_SIZEITEM_HXX
 #include <svx/sizeitem.hxx>
 #endif
@@ -143,16 +143,8 @@
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
 #endif
-#ifndef _SVX_FLDITEM_HXX
-#   ifndef ITEMID_FIELD
-#       ifndef _EEITEM_HXX //autogen
-#           include <svx/eeitem.hxx>
-#       endif
-#       define ITEMID_FIELD EE_FEATURE_FIELD  // wird fuer #include <flditem.hxx> benoetigt
-#   endif
-#   ifndef _SVX_FLDITEM_HXX //autogen
-#       include <svx/flditem.hxx>
-#   endif
+#ifndef _SVX_FLDITEM_HXX //autogen
+#include <svx/flditem.hxx>
 #endif
 #ifndef _SVX_COLRITEM_HXX //autogen
 #include <svx/colritem.hxx>
@@ -4767,22 +4759,22 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                     case DICTATIONCOMMAND_DEL:          nSlotId = FN_DELETE_BACK_WORD; break;
 
                     case DICTATIONCOMMAND_BOLD_ON:      nSlotId = SID_ATTR_CHAR_WEIGHT;
-                                                        pItem = new SvxWeightItem( WEIGHT_BOLD );
+                                                        pItem = new SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT );
                                                         break;
                     case DICTATIONCOMMAND_BOLD_OFF:     nSlotId = SID_ATTR_CHAR_WEIGHT;
-                                                        pItem = new SvxWeightItem( WEIGHT_NORMAL );
+                                                        pItem = new SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_WEIGHT );
                                                         break;
                     case DICTATIONCOMMAND_UNDERLINE_ON: nSlotId = SID_ATTR_CHAR_UNDERLINE;
-                                                        pItem = new SvxUnderlineItem( UNDERLINE_SINGLE );
+                                                        pItem = new SvxUnderlineItem( UNDERLINE_SINGLE, RES_CHRATR_WEIGHT );
                                                         break;
                     case DICTATIONCOMMAND_UNDERLINE_OFF:nSlotId = SID_ATTR_CHAR_UNDERLINE;
-                                                        pItem = new SvxUnderlineItem( UNDERLINE_NONE );
+                                                        pItem = new SvxUnderlineItem( UNDERLINE_NONE, RES_CHRATR_UNDERLINE );
                                                         break;
                     case DICTATIONCOMMAND_ITALIC_ON:    nSlotId = SID_ATTR_CHAR_POSTURE;
-                                                        pItem = new SvxPostureItem( ITALIC_NORMAL );
+                                                        pItem = new SvxPostureItem( ITALIC_NORMAL, RES_CHRATR_POSTURE );
                                                         break;
                     case DICTATIONCOMMAND_ITALIC_OFF:   nSlotId = SID_ATTR_CHAR_POSTURE;
-                                                        pItem = new SvxPostureItem( ITALIC_NONE );
+                                                        pItem = new SvxPostureItem( ITALIC_NONE, RES_CHRATR_POSTURE );
                                                         break;
                     case DICTATIONCOMMAND_NUMBERING_ON:
                                     if ( !rSh.GetCurNumRule() )
