@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlmessage.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:01:23 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:26:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -699,7 +699,7 @@ OSQLMessageBox::OSQLMessageBox(Window* _pParent, const SQLExceptionInfo& _rExcep
 }
 
 //------------------------------------------------------------------------------
-OSQLMessageBox::OSQLMessageBox( Window* _pParent, const UniString& _rTitle, const UniString& _rMessage, WinBits _nStyle, MessageType _eImage )
+OSQLMessageBox::OSQLMessageBox( Window* _pParent, const UniString& _rTitle, const UniString& _rMessage, WinBits _nStyle, MessageType _eImage, const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
     :ButtonDialog( _pParent, WB_HORZ | WB_STDDIALOG )
     ,m_aInfoImage( this )
     ,m_aTitle( this, WB_WORDBREAK | WB_LEFT )
@@ -708,6 +708,8 @@ OSQLMessageBox::OSQLMessageBox( Window* _pParent, const UniString& _rTitle, cons
     SQLContext aError;
     aError.Message = _rTitle;
     aError.Details = _rMessage;
+    if ( _pAdditionalErrorInfo )
+        aError.NextException = _pAdditionalErrorInfo->get();
 
     m_pImpl.reset( new SQLMessageBox_Impl( SQLExceptionInfo( aError ) ) );
 
