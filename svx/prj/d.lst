@@ -435,7 +435,6 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\editund2.hxx %_DEST%\inc%_EXT%\svx\editund2.hxx
 ..\inc\svx\editview.hxx %_DEST%\inc%_EXT%\svx\editview.hxx
 ..\inc\svx\eeitem.hxx %_DEST%\inc%_EXT%\svx\eeitem.hxx
-..\inc\svx\eeitemid.hxx %_DEST%\inc%_EXT%\svx\eeitemid.hxx
 ..\inc\eerdll.hxx %_DEST%\inc%_EXT%\svx\editdll.hxx
 ..\inc\svx\svxacorr.hxx %_DEST%\inc%_EXT%\svx\svxacorr.hxx
 ..\inc\svx\swafopt.hxx %_DEST%\inc%_EXT%\svx\swafopt.hxx
