@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwiz.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:58:29 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:24:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,33 +265,6 @@ WizardTypes::WizardState ODbTypeWizDialog::determineNextState(WizardState _nCurr
     return nNextState;
 }
 
-//-------------------------------------------------------------------------
-void ODbTypeWizDialog::resetPages(const Reference< XPropertySet >& _rxDatasource)
-{
-    // remove all items which relate to indirect properties from the input set
-    // (without this, the following may happen: select an arbitrary data source where some indirect properties
-    // are set. Select another data source of the same type, where the indirect props are not set (yet). Then,
-    // the indirect property values of the first ds are shown in the second ds ...)
-    const ODbDataSourceAdministrationHelper::MapInt2String& rMap = m_pImpl->getIndirectProperties();
-    for (   ODbDataSourceAdministrationHelper::ConstMapInt2StringIterator aIndirect = rMap.begin();
-            aIndirect != rMap.end();
-            ++aIndirect
-        )
-        getWriteOutputSet()->ClearItem( (sal_uInt16)aIndirect->first );
-
-    // extract all relevant data from the property set of the data source
-    m_pImpl->translateProperties(_rxDatasource, *getWriteOutputSet());
-}
-//-------------------------------------------------------------------------
-ODbTypeWizDialog::ApplyResult ODbTypeWizDialog::implApplyChanges()
-{
-    if ( !m_pImpl->saveChanges(*m_pOutSet) )
-        return AR_KEEP;
-
-    m_bApplied = sal_True;
-
-    return AR_LEAVE_MODIFIED;
-}
 // -----------------------------------------------------------------------------
 const SfxItemSet* ODbTypeWizDialog::getOutputSet() const
 {
@@ -411,6 +384,17 @@ sal_Bool ODbTypeWizDialog::leaveState(WizardState _nState)
 void ODbTypeWizDialog::setTitle(const ::rtl::OUString& _sTitle)
 {
     SetText(_sTitle);
+}
+//-------------------------------------------------------------------------
+void ODbTypeWizDialog::enableConfirmSettings( bool _bEnable )
+{
+    enableButtons( WZB_FINISH, _bEnable );
+    // TODO:
+    // this is hacky. At the moment, this method is used in only one case (#b6532894#).
+    // As soon as it is to be used more wide-spread, we should find a proper concept
+    // for enabling both the Next and Finish buttons, depending on the current page state.
+    // Plus, the concept must also care for the case where those pages are embedded into
+    // anormal tab dialog.
 }
 //-------------------------------------------------------------------------
 sal_Bool ODbTypeWizDialog::saveDatasource()
