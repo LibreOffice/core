@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdbt_resource.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:47:31 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:15:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,5 +51,6 @@
 #define STR_BASENAME_QUERY                  RID_SDBT_STRINGS_START +  4
 #define STR_NO_QUOTES_IN_QUERY_NAMES        RID_SDBT_STRINGS_START +  5
 #define STR_NO_VALID_SQL_NAME               RID_SDBT_STRINGS_START +  6
+#define STR_NO_SLASHES_IN_QUERY_NAMES       RID_SDBT_STRINGS_START +  7
 
 #endif // DBACCESS_SDBT_RESOURCE_HRC
