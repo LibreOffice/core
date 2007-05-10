@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusearch.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:01:14 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:31:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@
 
 #include <sfx2/viewfrm.hxx>
 
-#define ITEMID_SEARCH           SID_SEARCH_ITEM
 #include <svx/svxids.hrc>
 #include <sfx2/srchitem.hxx>
 #include <svx/srchdlg.hxx>
