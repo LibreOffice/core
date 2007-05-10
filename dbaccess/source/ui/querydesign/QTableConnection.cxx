@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QTableConnection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:21:16 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:37:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,13 +78,6 @@ OQueryTableConnection::OQueryTableConnection(const OQueryTableConnection& rConn)
 OQueryTableConnection::~OQueryTableConnection()
 {
     DBG_DTOR(OQueryTableConnection,NULL);
-}
-
-//------------------------------------------------------------------------
-OConnectionLine* OQueryTableConnection::CreateConnLine( const OConnectionLine& rConnLine )
-{
-    // keine Spezialisierung bei den ConnectionLines, also eine Instanz der Standard-Klasse
-    return new OConnectionLine(rConnLine);
 }
 
 //------------------------------------------------------------------------
