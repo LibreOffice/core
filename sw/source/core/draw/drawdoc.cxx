@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:02:23 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:58:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,12 +56,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <svx/xtable.hxx>
 
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
-#define ITEMID_GRADIENT_LIST    SID_GRADIENT_LIST
-#define ITEMID_HATCH_LIST       SID_HATCH_LIST
-#define ITEMID_BITMAP_LIST      SID_BITMAP_LIST
-#define ITEMID_DASH_LIST        SID_DASH_LIST
-#define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
 #ifndef _SVX_DRAWITEM_HXX
 #include <svx/drawitem.hxx>
 #endif
@@ -122,19 +116,19 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
     {
         SetObjectShell( pDocSh );
         SvxColorTableItem* pColItem = ( SvxColorTableItem* )
-                                ( pDocSh->GetItem( ITEMID_COLOR_TABLE ) );
+                                ( pDocSh->GetItem( SID_COLOR_TABLE ) );
         XColorTable *pXCol = pColItem ? pColItem->GetColorTable() :
                                         XColorTable::GetStdColorTable();
         SetColorTable( pXCol );
 
         if ( !pColItem )
-            pDocSh->PutItem( SvxColorTableItem( pXCol ) );
+            pDocSh->PutItem( SvxColorTableItem( pXCol, SID_COLOR_TABLE ) );
 
-        pDocSh->PutItem( SvxGradientListItem( GetGradientList() ));
-        pDocSh->PutItem( SvxHatchListItem( GetHatchList() ) );
-        pDocSh->PutItem( SvxBitmapListItem( GetBitmapList() ) );
-        pDocSh->PutItem( SvxDashListItem( GetDashList() ) );
-        pDocSh->PutItem( SvxLineEndListItem( GetLineEndList() ) );
+        pDocSh->PutItem( SvxGradientListItem( GetGradientList(), SID_GRADIENT_LIST ));
+        pDocSh->PutItem( SvxHatchListItem( GetHatchList(), SID_HATCH_LIST ) );
+        pDocSh->PutItem( SvxBitmapListItem( GetBitmapList(), SID_BITMAP_LIST ) );
+        pDocSh->PutItem( SvxDashListItem( GetDashList(), SID_DASH_LIST ) );
+        pDocSh->PutItem( SvxLineEndListItem( GetLineEndList(), SID_LINEEND_LIST ) );
         pDocSh->PutItem( SfxUInt16Item(SID_ATTR_LINEEND_WIDTH_DEFAULT, 111) );
         SetObjectShell( pDocSh );
     }
