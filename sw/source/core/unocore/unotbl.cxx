@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:01:37 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:03:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_sw.hxx"
 
 
-#define ITEMID_BOXINFO SID_ATTR_BORDER_INNER
+
 
 #include <float.h> // for DBL_MIN
 
@@ -1817,7 +1817,7 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName,
             {
                 case FN_UNO_TABLE_CELL_BACKGROUND:
                 {
-                    SvxBrushItem aBrush;
+                    SvxBrushItem aBrush( RES_BACKGROUND );
                     pDoc->GetBoxAttr( *pUnoCrsr, aBrush );
                     aBrush.PutValue(aValue, pMap->nMemberId);
                     pDoc->SetBoxAttr( *pUnoCrsr, aBrush );
@@ -1873,7 +1873,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
             {
                 case FN_UNO_TABLE_CELL_BACKGROUND:
                 {
-                    SvxBrushItem aBrush;
+                    SvxBrushItem aBrush( RES_BACKGROUND );
                     if(pTblCrsr->GetDoc()->GetBoxAttr( *pUnoCrsr, aBrush ))
                         aBrush.QueryValue(aRet, pMap->nMemberId);
 
@@ -3289,8 +3289,8 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                                             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                                             0);
 
-                            SvxBoxItem aBox;
-                            SvxBoxInfoItem aBoxInfo;
+                            SvxBoxItem aBox( RES_BOX );
+                            SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
                             SvxBorderLine aLine;
 
                             sal_Bool bSet = lcl_LineToSvxLine(pBorder->TopLine, aLine);
@@ -3431,7 +3431,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                                         RES_BOX, RES_BOX,
                                         SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                                         0);
-                        aSet.Put(SvxBoxInfoItem());
+                        aSet.Put(SvxBoxInfoItem( SID_ATTR_BORDER_INNER ));
                         pDoc->GetTabBorders(*pCrsr, aSet);
                         const SvxBoxInfoItem& rBoxInfoItem = (const SvxBoxInfoItem&)aSet.Get(SID_ATTR_BORDER_INNER);
                         const SvxBoxItem& rBox = (const SvxBoxItem&)aSet.Get(RES_BOX);
@@ -3965,7 +3965,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
             {
                 case FN_UNO_TABLE_CELL_BACKGROUND:
                 {
-                    SvxBrushItem aBrush;
+                    SvxBrushItem aBrush( RES_BACKGROUND );
                     pDoc->GetBoxAttr( *pTblCrsr, aBrush );
                     ((SfxPoolItem&)aBrush).PutValue(aValue, pMap->nMemberId);
                     pDoc->SetBoxAttr( *pTblCrsr, aBrush );
@@ -3978,7 +3978,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                                     RES_BOX, RES_BOX,
                                     SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                                     0);
-                    SvxBoxInfoItem aBoxInfo;
+                    SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
                     aBoxInfo.SetValid(0xff, FALSE);
                     BYTE nValid = 0;
                     switch(pMap->nMemberId & ~CONVERT_TWIPS)
@@ -4070,7 +4070,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
             {
                 case FN_UNO_TABLE_CELL_BACKGROUND:
                 {
-                    SvxBrushItem aBrush;
+                    SvxBrushItem aBrush( RES_BACKGROUND );
                     if(pTblCrsr->GetDoc()->GetBoxAttr( *pTblCrsr, aBrush ))
                         aBrush.QueryValue(aRet, pMap->nMemberId);
 
@@ -4083,7 +4083,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
                                     RES_BOX, RES_BOX,
                                     SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                                     0);
-                    aSet.Put(SvxBoxInfoItem());
+                    aSet.Put(SvxBoxInfoItem( SID_ATTR_BORDER_INNER ));
                     pDoc->GetTabBorders(*pTblCrsr, aSet);
                     const SvxBoxItem& rBoxItem = ((const SvxBoxItem&)aSet.Get(RES_BOX));
                     rBoxItem.QueryValue(aRet, pMap->nMemberId);
