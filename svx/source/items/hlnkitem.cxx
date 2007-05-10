@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hlnkitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:10:15 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:51:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@
 
 // -----------------------------------------------------------------------
 
-TYPEINIT1_AUTOFACTORY(SvxHyperlinkItem, SfxPoolItem);
+TYPEINIT1_FACTORY(SvxHyperlinkItem, SfxPoolItem, new SvxHyperlinkItem(0));
 
 // class SvxHyperlinkItem ------------------------------------------------
 
