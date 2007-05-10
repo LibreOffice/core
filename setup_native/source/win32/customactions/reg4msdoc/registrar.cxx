@@ -65,14 +65,24 @@ void Registrar::RegisterForMsWord() const
         m_ContextInformation.GetWordDocumentDisplayName(),
         m_ContextInformation.GetWordDocumentDefaultIconEntry(),
         m_ContextInformation.GetWordDocumentDefaultShellCommand(),
-        m_ContextInformation.ShellNewCommandDisplayName());
+        m_ContextInformation.ShellNewCommandDisplayName(),
+        RegistrationContextInformation::OFFICE_APPLICATION::Writer);
 
     RegisterForMsOfficeApplication(
         m_ContextInformation.GetWordTemplateFileExtension(),
         m_ContextInformation.GetWordTemplateDisplayName(),
         m_ContextInformation.GetWordTemplateDefaultIconEntry(),
         m_ContextInformation.GetWordTemplateDefaultShellCommand(),
-        m_ContextInformation.ShellNewCommandDisplayName());
+        m_ContextInformation.ShellNewCommandDisplayName(),
+        RegistrationContextInformation::OFFICE_APPLICATION::Writer);
+
+    RegisterForMsOfficeApplication(
+        m_ContextInformation.GetRtfDocumentFileExtension(),
+        m_ContextInformation.GetRtfDocumentDisplayName(),
+        m_ContextInformation.GetRtfDocumentDefaultIconEntry(),
+        m_ContextInformation.GetRtfDocumentDefaultShellCommand(),
+        m_ContextInformation.ShellNewCommandDisplayName(),
+        RegistrationContextInformation::OFFICE_APPLICATION::Writer);
 
     SaveRegisteredFor(MSWORD);
 }
@@ -93,6 +103,14 @@ void Registrar::UnregisterForMsWord() const
     {
         UnregisterForMsOfficeApplication(
             m_ContextInformation.GetWordTemplateFileExtension());
+    }
+    catch(RegistryKeyNotFoundException&)
+    {}
+
+    try
+    {
+        UnregisterForMsOfficeApplication(
+            m_ContextInformation.GetRtfDocumentFileExtension());
     }
     catch(RegistryKeyNotFoundException&)
     {}
@@ -144,14 +162,16 @@ void Registrar::RegisterForMsExcel() const
         m_ContextInformation.GetExcelSheetDisplayName(),
         m_ContextInformation.GetExcelSheetDefaultIconEntry(),
         m_ContextInformation.GetExcelSheetDefaultShellCommand(),
-        m_ContextInformation.ShellNewCommandDisplayName());
+        m_ContextInformation.ShellNewCommandDisplayName(),
+        RegistrationContextInformation::OFFICE_APPLICATION::Calc);
 
     RegisterForMsOfficeApplication(
         m_ContextInformation.GetExcelTemplateFileExtension(),
         m_ContextInformation.GetExcelTemplateDisplayName(),
         m_ContextInformation.GetExcelTemplateDefaultIconEntry(),
         m_ContextInformation.GetExcelTemplateDefaultShellCommand(),
-        m_ContextInformation.ShellNewCommandDisplayName());
+        m_ContextInformation.ShellNewCommandDisplayName(),
+        RegistrationContextInformation::OFFICE_APPLICATION::Calc);
 
     SaveRegisteredFor(MSEXCEL);
 }
@@ -194,21 +214,24 @@ void Registrar::RegisterForMsPowerPoint() const
         m_ContextInformation.GetPowerPointDocumentDisplayName(),
         m_ContextInformation.GetPowerPointDocumentDefaultIconEntry(),
         m_ContextInformation.GetPowerPointDocumentDefaultShellCommand(),
-        m_ContextInformation.ShellNewCommandDisplayName());
+        m_ContextInformation.ShellNewCommandDisplayName(),
+        RegistrationContextInformation::OFFICE_APPLICATION::Impress);
 
     RegisterForMsOfficeApplication(
         m_ContextInformation.GetPowerPointShowFileExtension(),
         m_ContextInformation.GetPowerPointShowDisplayName(),
         m_ContextInformation.GetPowerPointShowDefaultIconEntry(),
         m_ContextInformation.GetPowerPointShowDefaultShellCommand(),
-        m_ContextInformation.ShellNewCommandDisplayName());
+        m_ContextInformation.ShellNewCommandDisplayName(),
+        RegistrationContextInformation::OFFICE_APPLICATION::Impress);
 
     RegisterForMsOfficeApplication(
         m_ContextInformation.GetPowerPointTemplateFileExtension(),
         m_ContextInformation.GetPowerPointTemplateDisplayName(),
         m_ContextInformation.GetPowerPointTemplateDefaultIconEntry(),
         m_ContextInformation.GetPowerPointTemplateDefaultShellCommand(),
-        m_ContextInformation.ShellNewCommandDisplayName());
+        m_ContextInformation.ShellNewCommandDisplayName(),
+        RegistrationContextInformation::OFFICE_APPLICATION::Impress);
 
     SaveRegisteredFor(MSPOWERPOINT);
 }
@@ -279,7 +302,8 @@ void Registrar::RegisterAsHtmlEditorForInternetExplorer() const
     RegistryValue RegVal(
         new RegistryValueImpl(
             DEFAULT_VALUE_NAME,
-            m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::Open)));
+            m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::Open,
+                                                          RegistrationContextInformation::Writer)));
 
     RegKey->SetValue(RegVal);
 
@@ -293,7 +317,8 @@ void Registrar::RegisterAsHtmlEditorForInternetExplorer() const
     RegKey = RegKey->CreateSubKey(SHELL_EDIT_COMMAND);
     RegVal->SetName(DEFAULT_VALUE_NAME);
     RegVal->SetValue(
-        m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::Open));
+        m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::Open,
+                                                      RegistrationContextInformation::Writer));
     RegKey->SetValue(RegVal);
 
     SaveRegisteredFor(HTML_EDITOR);
@@ -351,7 +376,8 @@ void Registrar::RegisterAsDefaultHtmlEditorForInternetExplorer() const
     }
 
     RegVal->SetValue(
-        m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::Open));
+        m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::Open,
+                                                      RegistrationContextInformation::Writer));
     RegKey = RegistrationRootKey->OpenSubKey(MS_IE_DEF_HTML_EDITOR_SHL_EDIT_CMD);
     RegKey->SetValue(RegVal);
 
@@ -442,7 +468,8 @@ void Registrar::RegisterAsDefaultShellHtmlEditor() const
     }
 
     RegVal->SetValue(
-        m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::Open));
+        m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::Open,
+                                                      RegistrationContextInformation::Writer));
 
     RegKey->SetValue(RegVal);
 
@@ -608,7 +635,8 @@ void Registrar::RegisterForMsOfficeApplication(
     const std::wstring& DocumentDisplayName,
     const std::wstring& DefaultIconEntry,
     const std::wstring& DefaultShellCommand,
-    const std::wstring& ShellNewCommandDisplayName) const
+    const std::wstring& ShellNewCommandDisplayName,
+    const RegistrationContextInformation::OFFICE_APPLICATION eOfficeApp) const
 {
     assert(m_RootKey.get());
 
@@ -631,19 +659,19 @@ void Registrar::RegisterForMsOfficeApplication(
     RegKey->SetValue(RegVal);
 
     RegKey = RegKey->CreateSubKey(L"command");
-    RegVal->SetValue(m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::New));
+    RegVal->SetValue(m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::New, eOfficeApp));
     RegKey->SetValue(RegVal);
 
     RegKey = RegKeyShell->CreateSubKey(L"open\\command");
-    RegVal->SetValue(m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::Open));
+    RegVal->SetValue(m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::Open, eOfficeApp));
     RegKey->SetValue(RegVal);
 
     RegKey = RegKeyShell->CreateSubKey(L"print\\command");
-    RegVal->SetValue(m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::Print));
+    RegVal->SetValue(m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::Print, eOfficeApp));
     RegKey->SetValue(RegVal);
 
     RegKey = RegKeyShell->CreateSubKey(L"printto\\command");
-    RegVal->SetValue(m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::Printto));
+    RegVal->SetValue(m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::Printto, eOfficeApp));
     RegKey->SetValue(RegVal);
 
     // set the new forward key under the appropriate extension
