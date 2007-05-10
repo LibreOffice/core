@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chrtitem.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:09:39 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:49:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,23 +65,13 @@
 #include <float.h>
 #include <rtl/math.hxx>
 
-#define ITEMID_CHARTSTYLE       0
-#define ITEMID_CHARTDATADESCR   0
-#define ITEMID_CHARTLEGENDPOS   0
-#define ITEMID_CHARTTEXTORDER   0
-#define ITEMID_CHARTTEXTORIENT  0
-#define ITEMID_CHARTKINDERROR   0
-#define ITEMID_CHARTINDICATE    0
-#define ITEMID_DOUBLE           0
-#define ITEMID_CHARTREGRESS     0
-
 #include "chrtitem.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
 // -----------------------------------------------------------------------
 
-TYPEINIT1_AUTOFACTORY(SvxChartStyleItem, SfxEnumItem);
+TYPEINIT1_FACTORY(SvxChartStyleItem, SfxEnumItem, new SvxChartStyleItem(CHSTYLE_2D_LINE, 0));
 TYPEINIT1(SvxChartDataDescrItem, SfxEnumItem);
 TYPEINIT1(SvxChartLegendPosItem, SfxEnumItem);
 TYPEINIT1(SvxChartTextOrderItem, SfxEnumItem);
@@ -89,7 +79,7 @@ TYPEINIT1(SvxChartTextOrientItem, SfxEnumItem);
 TYPEINIT1(SvxChartIndicateItem, SfxEnumItem);
 TYPEINIT1(SvxChartKindErrorItem, SfxEnumItem);
 TYPEINIT1(SvxChartRegressItem, SfxEnumItem);
-TYPEINIT1_AUTOFACTORY(SvxDoubleItem, SfxPoolItem);
+TYPEINIT1_FACTORY(SvxDoubleItem, SfxPoolItem, new SvxDoubleItem(0.0, 0));
 
 /*************************************************************************
 |*
