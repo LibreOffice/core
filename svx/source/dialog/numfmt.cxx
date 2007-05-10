@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:36:26 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:38:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@
 #include "dialogs.hrc"
 #include "numfmt.hrc"
 
-#define ITEMID_NUMBERINFO 0
+
 #include "numinf.hxx"
 
 #include "numfmt.hxx"
