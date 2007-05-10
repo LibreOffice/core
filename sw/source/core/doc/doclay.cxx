@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:48:50 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:55:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@
 #include "precompiled_sw.hxx"
 #include <com/sun/star/embed/EmbedStates.hpp>
 
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -1465,8 +1464,9 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
                     //Die Attribute hart setzen, weil sie sonst aus der
                     // Vorlage kommen koenten und dann passt die
                     // Grossenberechnung nicht mehr.
-                    pNewSet->Put( SvxBoxItem() );
-                    pNewSet->Put( SvxShadowItem() );
+                    pNewSet->Put( SvxBoxItem(RES_BOX) );
+                    pNewSet->Put( SvxShadowItem(RES_SHADOW) );
+
                 }
 
                 //Anker immer uebertragen, ist sowieso ein hartes Attribut.
@@ -1529,11 +1529,11 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
                 //kommen koenten und dann passt die Grossenberechnung nicht mehr.
                 if( bCpyBrd )
                 {
-                    pNewSet->Put( SvxBoxItem() );
-                    pNewSet->Put( SvxShadowItem() );
+                    pNewSet->Put( SvxBoxItem(RES_BOX) );
+                    pNewSet->Put( SvxShadowItem(RES_SHADOW) );
                 }
-                pNewSet->Put( SvxLRSpaceItem() );
-                pNewSet->Put( SvxULSpaceItem() );
+                pNewSet->Put( SvxLRSpaceItem(RES_LR_SPACE) );
+                pNewSet->Put( SvxULSpaceItem(RES_UL_SPACE) );
 
                 //Der Alte ist absatzgebunden, und zwar am Absatz im neuen.
                 SwFmtAnchor aAnch( FLY_AT_CNTNT );
@@ -1604,14 +1604,14 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
             if ( bBefore )
             {
                 if ( !pNew->GetSwAttrSet().GetKeep().GetValue()  )
-                    pNew->SwCntntNode::SetAttr( SvxFmtKeepItem( sal_True ) );
+                    pNew->SwCntntNode::SetAttr( SvxFmtKeepItem( sal_True, RES_KEEP ) );
             }
             else
             {
                 SwTableNode *pNd = GetNodes()[nNdIdx]->GetStartNode()->GetTableNode();
                 SwTable &rTbl = pNd->GetTable();
                 if ( !rTbl.GetFrmFmt()->GetKeep().GetValue() )
-                    rTbl.GetFrmFmt()->SetAttr( SvxFmtKeepItem( sal_True ) );
+                    rTbl.GetFrmFmt()->SetAttr( SvxFmtKeepItem( sal_True, RES_KEEP ) );
                 if ( pUndo )
                     pUndo->SetUndoKeep();
             }
@@ -1714,7 +1714,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     // Ggf. Groesse und Position des Rahmens schuetzen
     if ( rSdrObj.IsMoveProtect() || rSdrObj.IsResizeProtect() )
     {
-        SvxProtectItem aProtect;
+        SvxProtectItem aProtect(RES_PROTECT);
         aProtect.SetCntntProtect( sal_False );
         aProtect.SetPosProtect( rSdrObj.IsMoveProtect() );
         aProtect.SetSizeProtect( rSdrObj.IsResizeProtect() );
@@ -1729,7 +1729,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     if ( GetHellId() != nLayerId &&
          GetInvisibleHellId() != nLayerId )
     {
-        SvxOpaqueItem aOpaque;
+        SvxOpaqueItem aOpaque( RES_OPAQUE );
         aOpaque.SetValue( sal_True );
         pNewSet->Put( aOpaque );
     }
@@ -1803,8 +1803,8 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     // OD 02.07.2003 #108784# - consider drawing objects in 'invisible' hell layer
     else if( nLayerId == GetInvisibleHellId() )
         rSdrObj.SetLayer( GetInvisibleHeavenId() );
-    pNewSet->Put( SvxLRSpaceItem() );
-    pNewSet->Put( SvxULSpaceItem() );
+    pNewSet->Put( SvxLRSpaceItem( RES_LR_SPACE ) );
+    pNewSet->Put( SvxULSpaceItem( RES_UL_SPACE ) );
 
     // OD 2004-04-15 #i26791# - set position of the drawing object, which is labeled.
     pNewSet->Put( SwFmtVertOrient( 0, VERT_TOP, FRAME ) );
