@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hhcwrp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:05:00 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:19:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,6 @@
 #endif
 
 
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
-#endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
