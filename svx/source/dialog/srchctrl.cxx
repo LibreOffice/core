@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:39:13 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:41:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 
 #define _SVX_SRCHDLG_CXX // damit private-Methoden vom SrchDlg bekannt sind
 
-#define ITEMID_SEARCH       SID_ATTR_SEARCH
+
 
 #include "srchctrl.hxx"
 #include "srchdlg.hxx"
