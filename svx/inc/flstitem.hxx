@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flstitem.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:38:22 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:19:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,6 @@
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
 #endif
-#ifndef   ITEMID_FONTLIST
-#define   ITEMID_FONTLIST 0
-#endif
 #include <rtl/ustring.hxx>
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
@@ -73,7 +70,7 @@ public:
     TYPEINFO();
 
     SvxFontListItem( const FontList* pFontLst,
-                     const USHORT nId = ITEMID_FONTLIST );
+                     const USHORT nId  );
     SvxFontListItem( const SvxFontListItem& rItem );
 
     virtual int             operator==( const SfxPoolItem& ) const;
