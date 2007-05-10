@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-17 13:42:20 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:45:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,6 @@
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
-#define ITEMID_FIELD EE_FEATURE_FIELD
-
 #include <svx/algitem.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/brshitem.hxx>
@@ -412,7 +410,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     // [leer][\TABELLE\][leer]
     //----------------------------------------
     pEdEngine->SetText(EMPTY_STRING);
-    pEdEngine->QuickInsertField( SvxFieldItem(SvxTableField()), ESelection() );
+    pEdEngine->QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection() );
     pTxtObj = pEdEngine->CreateTextObject();
     pHeaderItem->SetLeftArea  ( *pEmptyTxtObj );
     pHeaderItem->SetCenterArea( *pTxtObj );
@@ -427,7 +425,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     aStr = SCSTR( STR_PAGE ); aStr += ' ';
     pEdEngine->SetText( aStr );
     nStrLen = aStr.Len();
-    pEdEngine->QuickInsertField( SvxFieldItem(SvxPageField()), ESelection(0,nStrLen,0,nStrLen) );
+    pEdEngine->QuickInsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(0,nStrLen,0,nStrLen) );
     pTxtObj = pEdEngine->CreateTextObject();
     pFooterItem->SetLeftArea  ( *pEmptyTxtObj );
     pFooterItem->SetCenterArea( *pTxtObj );
@@ -475,16 +473,16 @@ void ScStyleSheetPool::CreateStandardStyles()
     //----------------------------------------
     aStr = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(" ()"));
     pEdEngine->SetText( aStr );
-    pEdEngine->QuickInsertField( SvxFieldItem(SvxFileField()), ESelection(0,2,0,2) );
-    pEdEngine->QuickInsertField( SvxFieldItem(SvxTableField()), ESelection() );
+    pEdEngine->QuickInsertField( SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), ESelection(0,2,0,2) );
+    pEdEngine->QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection() );
     pTxtObj = pEdEngine->CreateTextObject();
     pHeaderItem->SetLeftArea( *pTxtObj );
     pHeaderItem->SetCenterArea( *pEmptyTxtObj );
     DELETEZ( pTxtObj );
     aStr = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(", "));
     pEdEngine->SetText( aStr );
-    pEdEngine->QuickInsertField( SvxFieldItem(SvxTimeField()), ESelection(0,2,0,2) );
-    pEdEngine->QuickInsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR)),
+    pEdEngine->QuickInsertField( SvxFieldItem(SvxTimeField(), EE_FEATURE_FIELD), ESelection(0,2,0,2) );
+    pEdEngine->QuickInsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR), EE_FEATURE_FIELD),
                                     ESelection() );
     pTxtObj = pEdEngine->CreateTextObject();
     pHeaderItem->SetRightArea( *pTxtObj );
@@ -500,8 +498,8 @@ void ScStyleSheetPool::CreateStandardStyles()
     aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" / "));
     xub_StrLen nStrLen2 = aStr.Len();
     pEdEngine->SetText( aStr );
-    pEdEngine->QuickInsertField( SvxFieldItem(SvxPagesField()), ESelection(0,nStrLen2,0,nStrLen2) );
-    pEdEngine->QuickInsertField( SvxFieldItem(SvxPageField()), ESelection(0,nStrLen,0,nStrLen) );
+    pEdEngine->QuickInsertField( SvxFieldItem(SvxPagesField(), EE_FEATURE_FIELD), ESelection(0,nStrLen2,0,nStrLen2) );
+    pEdEngine->QuickInsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(0,nStrLen,0,nStrLen) );
     pTxtObj = pEdEngine->CreateTextObject();
     pFooterItem->SetLeftArea  ( *pEmptyTxtObj );
     pFooterItem->SetCenterArea( *pTxtObj );
