@@ -4,9 +4,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-02 12:22:59 $
+#   last change: $Author: gm $ $Date: 2007-05-10 10:59:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,7 @@ sub create_defaultdir_directorynames
     my ($directoryref) = @_;
 
     my @shortnames = ();
+    if ( $installer::globals::prepare_winpatch ) { @shortnames = values(%installer::globals::saved83dirmapping); }
 
     for ( my $i = 0; $i <= $#{$directoryref}; $i++ )
     {
@@ -111,7 +112,16 @@ sub create_defaultdir_directorynames
         $hostname =~ s/\Q$installer::globals::separator\E\s*$//;
         get_last_directory_name(\$hostname);
         # installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$hostname); # making program/classes to classes
-        my $shortstring = installer::windows::idtglobal::make_eight_three_conform($hostname, "dir", \@shortnames);
+        my $uniquename = $onedir->{'uniquename'};
+        my $shortstring;
+        if (( $installer::globals::prepare_winpatch ) && ( exists($installer::globals::saved83dirmapping{$uniquename}) ))
+        {
+            $shortstring = $installer::globals::saved83dirmapping{$uniquename};
+        }
+        else
+        {
+            $shortstring = installer::windows::idtglobal::make_eight_three_conform($hostname, "dir", \@shortnames);
+        }
 
         my $defaultdir;
 
@@ -195,7 +205,15 @@ sub add_root_directories
 
         my $productname = $allvariableshashref->{'PRODUCTNAME'};
         my $productversion = $allvariableshashref->{'PRODUCTVERSION'};
-        my $productkey = $productname . " " . $productversion;
+        my $baseproductversion = $productversion;
+
+        if (( $installer::globals::prepare_winpatch ) && ( $allvariableshashref->{'BASEPRODUCTVERSION'} ))
+        {
+            $baseproductversion = $allvariableshashref->{'BASEPRODUCTVERSION'};  # for example "2.0" for OOo
+        }
+
+        my $realproductkey = $productname . " " . $productversion;
+        my $productkey = $productname . " " . $baseproductversion;
 
         if (( $allvariableshashref->{'POSTVERSIONEXTENSION'} ) && ( ! $allvariableshashref->{'DONTUSEEXTENSIONINDEFAULTDIR'} )) { $productkey = $productkey . " " . $allvariableshashref->{'POSTVERSIONEXTENSION'}; }
         if ( $allvariableshashref->{'NOVERSIONINDIRNAME'} ) { $productkey = $productname; }
@@ -223,7 +241,7 @@ sub add_root_directories
 
         if (( ! $installer::globals::patch ) && ( ! $installer::globals::languagepack ) && ( ! $allvariableshashref->{'DONTUSESTARTMENUFOLDER'} ))
         {
-            $oneline = "$installer::globals::officemenufolder\t$installer::globals::programmenufolder\t$shortproductkey|$productkey\n";
+            $oneline = "$installer::globals::officemenufolder\t$installer::globals::programmenufolder\t$shortproductkey|$realproductkey\n";
             push(@{$directorytableref}, $oneline);
         }
 
