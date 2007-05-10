@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:18:38 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:16:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,17 +64,9 @@
 #ifndef _RTL_URI_HXX_
 #include <rtl/uri.hxx>
 #endif
-#ifdef SYSTEM_SABLOT
-#include <sablot.h>
-#include <shandler.h>
-#else
-#ifndef SablotHIncl
-#include <sablot/sablot.h>
-#endif
-#ifndef ShandlerHIncl
-#include <sablot/shandler.h>
-#endif
-#endif
+#include <libxslt/xslt.h>
+#include <libxslt/transform.h>
+#include <libxslt/xsltutils.h>
 #ifndef BERKELEYDBPROXY_DB_HXX_
 #include "db.hxx"
 #endif
@@ -739,42 +731,6 @@ bool URLParameter::query()
     return ret;
 }
 
-
-
-
-////////////////////////////////////////////////////////////////////////////////
-//                           InutStreamTransformerImpl                        //
-////////////////////////////////////////////////////////////////////////////////
-
-int schemehandlergetall( void *userData,
-                         SablotHandle processor_,
-                         const char *scheme,
-                         const char *rest,
-                         char **buffer,
-                         int *byteCount);
-int schemehandlerfreememory( void *userData,
-                             SablotHandle processor_,
-                             char *buffer );
-int schemehandleropen( void *userData,
-                       SablotHandle processor_,
-                       const char *scheme,
-                       const char *rest,
-                       int *handle );
-int schemehandlerget( void *userData,
-                      SablotHandle processor_,
-                      int handle,
-                      char *buffer,
-                      int *byteCount );
-int schemehandlerput( void *userData,
-                      SablotHandle processor_,
-                      int handle,
-                      const char *buffer,
-                      int *byteCount );
-int schemehandlerclose( void *userData,
-                        SablotHandle processor_,
-                        int handle );
-
-
 struct UserData {
 
     UserData( InputStreamTransformer* pTransformer,
@@ -791,7 +747,164 @@ struct UserData {
     URLParameter*                       m_pInitial;
 };
 
+UserData *ugblData = 0;
 
+extern "C" {
+
+static int
+fileMatch(const char * URI) {
+    if ((URI != NULL) && !strncmp(URI, "file:/", 6))
+        return 1;
+    return 0;
+}
+
+static int
+pkgMatch(const char * URI) {
+    if ((URI != NULL) && !strncmp(URI, "vnd.sun.star.pkg:/", 18))
+        return 1;
+    return 0;
+}
+
+static int
+helpMatch(const char * URI) {
+    if ((URI != NULL) && !strncmp(URI, "vnd.sun.star.help:/", 19))
+        return 1;
+    return 0;
+}
+
+static void *
+fileOpen(const char *URI) {
+    osl::File *pRet = new osl::File(rtl::OUString(URI, strlen(URI), RTL_TEXTENCODING_UTF8));
+    pRet->open(OpenFlag_Read);
+    return pRet;
+}
+
+static void *
+pkgOpen(const char * /*URI*/) {
+    rtl::OUString language,jar,path;
+
+    if( ugblData->m_pInitial->get_eid().getLength() )
+        return (void*)(new Reference< XHierarchicalNameAccess >);
+    else
+    {
+        jar = ugblData->m_pInitial->get_jar();
+        language = ugblData->m_pInitial->get_language();
+        path = ugblData->m_pInitial->get_path();
+    }
+
+    Reference< XHierarchicalNameAccess > xNA(ugblData->m_pDatabases->jarFile( jar,language ));
+
+    Reference< XInputStream > xInputStream;
+
+    if( xNA.is() )
+    {
+        try
+        {
+            Any aEntry = xNA->getByHierarchicalName( path );
+            Reference< XActiveDataSink > xSink;
+            if( ( aEntry >>= xSink ) && xSink.is() )
+                xInputStream = xSink->getInputStream();
+        }
+        catch ( NoSuchElementException & )
+        {
+        }
+    }
+
+    if( xInputStream.is() )
+    {
+        return new Reference<XInputStream>(xInputStream);
+    }
+    return 0;
+}
+
+static void *
+helpOpen(const char * URI) {
+    rtl::OUString language,jar,path;
+
+    URLParameter urlpar( rtl::OUString::createFromAscii( URI ),
+                         ugblData->m_pDatabases );
+
+    jar = urlpar.get_jar();
+    language = urlpar.get_language();
+    path = urlpar.get_path();
+
+    Reference< XHierarchicalNameAccess > xNA(ugblData->m_pDatabases->jarFile( jar,language ));
+
+    Reference< XInputStream > xInputStream;
+
+    if( xNA.is() )
+    {
+        try
+        {
+            Any aEntry = xNA->getByHierarchicalName( path );
+            Reference< XActiveDataSink > xSink;
+            if( ( aEntry >>= xSink ) && xSink.is() )
+                xInputStream = xSink->getInputStream();
+        }
+        catch ( NoSuchElementException & )
+        {
+        }
+    }
+
+    if( xInputStream.is() )
+        return new Reference<XInputStream>(xInputStream);
+    return 0;
+}
+
+static int
+helpRead(void * context, char * buffer, int len) {
+    Reference< XInputStream > *pRef = (Reference< XInputStream >*)context;
+
+    Sequence< sal_Int8 > aSeq;
+    len = (*pRef)->readBytes( aSeq,len);
+    memcpy(buffer, aSeq.getConstArray(), len);
+
+    return len;
+}
+
+static int
+pkgRead(void * context, char * buffer, int len) {
+    if( ugblData->m_pInitial->get_eid().getLength() )
+    {
+        ugblData->m_pDatabases->popupDocument( ugblData->m_pInitial,&buffer,&len);
+        return len;
+    }
+    else
+        return helpRead(context, buffer, len);
+}
+
+static int
+fileRead(void * context, char * buffer, int len) {
+    int nRead = 0;
+    osl::File *pFile = (osl::File*)context;
+    if (pFile)
+    {
+        sal_uInt64 uRead = 0;
+        if (osl::FileBase::E_None == pFile->read(buffer, len, uRead))
+            nRead = static_cast<int>(uRead);
+    }
+    return nRead;
+}
+
+static int
+uriClose(void * context) {
+    Reference< XInputStream > *pRef = (Reference< XInputStream >*)context;
+    delete pRef;
+    return 0;
+}
+
+static int
+fileClose(void * context) {
+    osl::File *pFile = (osl::File*)context;
+    if (pFile)
+    {
+        pFile->close();
+        delete pFile;
+    }
+    return 0;
+}
+
+} // extern "C"
 
 InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
                                                 Databases*    pDatabases,
@@ -818,125 +931,116 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
     }
     else
     {
-        SchemeHandler schemeHandler;
-        schemeHandler.getAll = schemehandlergetall;
-        schemeHandler.freeMemory = schemehandlerfreememory;
-        schemeHandler.open = schemehandleropen;
-        schemeHandler.get = schemehandlerget;
-        schemeHandler.put = schemehandlerput;
-        schemeHandler.close = schemehandlerclose;
-
         UserData userData( this,urlParam,pDatabases );
 
         // Uses the implementation detail, that rtl::OString::getStr returns a zero terminated character-array
 
-        const char* parameter[42];
+        const char* parameter[44];
         rtl::OString parString[43];
         int last = 0;
 
         parString[last++] = "Program";
-        parString[last++] = urlParam->getByName( "Program" );
+        parString[last++] = rtl::OString('\'') + urlParam->getByName( "Program" ) + rtl::OString('\'');
         parString[last++] = "Database";
-        parString[last++] = urlParam->getByName( "DatabasePar" );
+        parString[last++] = rtl::OString('\'') + urlParam->getByName( "DatabasePar" ) + rtl::OString('\'');
         parString[last++] = "Id";
-        parString[last++] = urlParam->getByName( "Id" );
+        parString[last++] = rtl::OString('\'') + urlParam->getByName( "Id" ) + rtl::OString('\'');
         parString[last++] = "Path";
-        parString[last++] = urlParam->getByName( "Path" );
+        parString[last++] = rtl::OString('\'') + urlParam->getByName( "Path" ) + rtl::OString('\'');
         parString[last++] = "Language";
-        parString[last++] = urlParam->getByName( "Language" );
+        parString[last++] = rtl::OString('\'') + urlParam->getByName( "Language" ) + rtl::OString('\'');
         parString[last++] = "System";
-        parString[last++] = urlParam->getByName( "System" );
+        parString[last++] = rtl::OString('\'') + urlParam->getByName( "System" ) + rtl::OString('\'');
         parString[last++] = "productname";
-        parString[last++] = rtl::OString(
+        parString[last++] = rtl::OString('\'') + rtl::OString(
             pDatabases->getProductName().getStr(),
             pDatabases->getProductName().getLength(),
-            RTL_TEXTENCODING_UTF8 );
+            RTL_TEXTENCODING_UTF8 ) + rtl::OString('\'');
         parString[last++] = "productversion";
-        parString[last++] =
-            rtl::OString( pDatabases->getProductVersion().getStr(),
+        parString[last++] = rtl::OString('\'') +
+            rtl::OString(  pDatabases->getProductVersion().getStr(),
                           pDatabases->getProductVersion().getLength(),
-                          RTL_TEXTENCODING_UTF8 );
+                          RTL_TEXTENCODING_UTF8 ) + rtl::OString('\'');
 
         parString[last++] = "imgrepos";
-        parString[last++] = pDatabases->getImagesZipFileURL();
+        parString[last++] = rtl::OString('\'') + pDatabases->getImagesZipFileURL() + rtl::OString('\'');
         parString[last++] = "hp";
-        parString[last++] = urlParam->getByName( "HelpPrefix" );
+        parString[last++] = rtl::OString('\'') + urlParam->getByName( "HelpPrefix" ) + rtl::OString('\'');
 
         if( parString[last-1].getLength() )
         {
             parString[last++] = "sm";
-            parString[last++] = "vnd.sun.star.help%3A%2F%2F";
+            parString[last++] = "'vnd.sun.star.help%3A%2F%2F'";
             parString[last++] = "qm";
-            parString[last++] = "%3F";
+            parString[last++] = "'%3F'";
             parString[last++] = "es";
-            parString[last++] = "%3D";
+            parString[last++] = "'%3D'";
             parString[last++] = "am";
-            parString[last++] = "%26";
+            parString[last++] = "'%26'";
             parString[last++] = "cl";
-            parString[last++] = "%3A";
+            parString[last++] = "'%3A'";
             parString[last++] = "sl";
-            parString[last++] = "%2F";
+            parString[last++] = "'%2F'";
             parString[last++] = "hm";
-            parString[last++] = "%23";
+            parString[last++] = "'%23'";
             parString[last++] = "cs";
-            parString[last++] = "css";
+            parString[last++] = "'css'";
 
             parString[last++] = "vendorname";
-            parString[last++] =
+            parString[last++] = rtl::OString('\'') +
                 rtl::OString( pDatabases->getVendorName().getStr(),
                               pDatabases->getVendorName().getLength(),
-                              RTL_TEXTENCODING_UTF8 );
+                              RTL_TEXTENCODING_UTF8 ) + rtl::OString('\'');
             parString[last++] = "vendorversion";
-            parString[last++] =
+            parString[last++] = rtl::OString('\'') +
                 rtl::OString( pDatabases->getVendorVersion().getStr(),
                               pDatabases->getVendorVersion().getLength(),
-                              RTL_TEXTENCODING_UTF8 );
+                              RTL_TEXTENCODING_UTF8 ) + rtl::OString('\'');
             parString[last++] = "vendorshort";
-            parString[last++] =
+            parString[last++] = rtl::OString('\'') +
                 rtl::OString( pDatabases->getVendorShort().getStr(),
                               pDatabases->getVendorShort().getLength(),
-                              RTL_TEXTENCODING_UTF8 );
+                              RTL_TEXTENCODING_UTF8 ) + rtl::OString('\'');
         }
 
         for( int i = 0; i < last; ++i )
             parameter[i] = parString[i].getStr();
         parameter[last] = 0;
 
-
-        SablotHandle p;
-        SablotCreateProcessor(&p);
-        SablotRegHandler( p,HLR_SCHEME,&schemeHandler,(void*)(&userData) );
-        rtl::OUString xslURL = pDatabases->getInstallPathAsURL/*WithOutEncoding*/();
+        rtl::OUString xslURL = pDatabases->getInstallPathAsURL();
 
         rtl::OString xslURLascii(
             xslURL.getStr(),
             xslURL.getLength(),
-            RTL_TEXTENCODING_ASCII_US/*osl_getThreadTextEncoding()*/);
+            RTL_TEXTENCODING_UTF8);
         xslURLascii += "main_transform.xsl";
 
-        const char aVndPkgConstStr[] = "vnd.sun.star.pkg:/";
-        const char aVndResConstStr[] = "vnd.sun.star.resultat:/";
-        char aVndPkgStr[ sizeof( aVndPkgConstStr ) ];
-        strcpy( aVndPkgStr, aVndPkgConstStr );
-        char aVndResStr[ sizeof( aVndResConstStr ) ];
-        strcpy( aVndResStr, aVndResConstStr );
-#ifdef SYSTEM_SABLOT
-        SablotRunProcessor( p,
-                            xslURLascii.getStr(),
-                            aVndPkgStr,
-                            aVndResStr,
-                            parameter,
-                            0);
-#else
-        SablotRunProcessor( p,
-                            const_cast<char*>(xslURLascii.getStr()),
-                            aVndPkgStr,
-                            aVndResStr,
-                            const_cast<char**>(parameter),
-                            0);
-#endif
+        ugblData = &userData;
 
-        SablotDestroyProcessor( p );
+        xmlRegisterInputCallbacks(pkgMatch, pkgOpen, pkgRead, uriClose);
+        xmlRegisterInputCallbacks(helpMatch, helpOpen, helpRead, uriClose);
+        xmlRegisterInputCallbacks(fileMatch, fileOpen, fileRead, fileClose);
+
+        xsltStylesheetPtr cur =
+            xsltParseStylesheetFile((const xmlChar *)xslURLascii.getStr());
+
+        xmlDocPtr doc = xmlParseFile("vnd.sun.star.pkg:/");
+
+        xmlDocPtr res = xsltApplyStylesheet(cur, doc, parameter);
+        if (res)
+        {
+            xmlChar *doc_txt_ptr=0;
+            int doc_txt_len;
+            xsltSaveResultToString(&doc_txt_ptr, &doc_txt_len, res, cur);
+            addToBuffer((const char*)doc_txt_ptr, doc_txt_len);
+            xmlFree(doc_txt_ptr);
+        }
+        xmlPopInputCallbacks(); //filePatch
+        xmlPopInputCallbacks(); //helpPatch
+        xmlPopInputCallbacks(); //pkgMatch
+        xmlFreeDoc(res);
+        xmlFreeDoc(doc);
+        xsltFreeStylesheet(cur);
     }
 }
 
@@ -1080,205 +1184,3 @@ void InputStreamTransformer::addToBuffer( const char* buffer_,int len_ )
     delete[] tmp;
     len += len_;
 }
-
-
-
-
-
-/**
- *    getAll: open the URI and return the whole string
- *    scheme = URI scheme (e.g. "http")
- *    rest = the rest of the URI (without colon)
- *    the document is returned in a handler-allocated buffer
- *    byteCount holds the byte count on return
- *    return *buffer = NULL if not processed
-*/
-
-int schemehandlergetall( void *userData,
-                         SablotHandle processor_,
-                         const char *scheme,
-                         const char *rest,
-                         char **buffer,
-                         int *byteCount )
-{
-    (void)processor_;
-
-    rtl::OUString language,jar,path;
-    UserData *uData = reinterpret_cast< UserData* >( userData );
-
-    if( strcmp( scheme,"vnd.sun.star.help" ) == 0 )
-    {
-        URLParameter urlpar( rtl::OUString::createFromAscii( scheme ) +
-                             rtl::OUString::createFromAscii( ":" )    +
-                             rtl::OUString::createFromAscii( rest ),
-                             uData->m_pDatabases );
-
-        jar = urlpar.get_jar();
-        language = urlpar.get_language();
-        path = urlpar.get_path();
-    }
-    else if( strcmp( scheme,"vnd.sun.star.pkg" ) == 0 )
-    {
-        if( uData->m_pInitial->get_eid().getLength() )
-        {
-            uData->m_pDatabases->popupDocument( uData->m_pInitial,buffer,byteCount );
-            return 0;
-        }
-        else
-        {
-            jar = uData->m_pInitial->get_jar();
-            language = uData->m_pInitial->get_language();
-            path = uData->m_pInitial->get_path();
-        }
-    }
-    else
-    {
-        *buffer = 0;
-        *byteCount = 0;
-        return 0;
-    }
-
-//     fprintf(stdout,"jarFile %s\n",(rtl::OUStringToOString(jar,RTL_TEXTENCODING_UTF8).getStr()));
-//     fprintf(stdout,"lang %s\n",(rtl::OUStringToOString(language,RTL_TEXTENCODING_UTF8).getStr()));
-//     fprintf(stdout,"path %s\n",(rtl::OUStringToOString(path,RTL_TEXTENCODING_UTF8).getStr()));
-
-    Reference< XInputStream > xInputStream;
-    Reference< XHierarchicalNameAccess > xNA = uData->m_pDatabases->jarFile( jar,language );
-
-    if( xNA.is() )
-    {
-        try
-        {
-            Any aEntry = xNA->getByHierarchicalName( path );
-            Reference< XActiveDataSink > xSink;
-            if( ( aEntry >>= xSink ) && xSink.is() )
-                xInputStream = xSink->getInputStream();
-        }
-        catch ( NoSuchElementException & )
-        {
-        }
-    }
-
-    if( xInputStream.is() )
-    {
-        sal_Int32 size = 0;
-
-        Reference< XSeekable > xSeekable( xInputStream,UNO_QUERY );
-
-        if( xSeekable.is() )
-            size = sal_Int32( xSeekable->getLength() );
-        else
-            size = sal_Int32( xInputStream->available() );
-
-        *buffer = new char[ 1+size ];
-        (*buffer)[ size ] = 0;
-
-        Sequence< sal_Int8 > aSeq;
-        xInputStream->readBytes( aSeq,size );
-
-        rtl_copyMemory( (void*)(*buffer),(void*)(aSeq.getConstArray()),sal_uInt32(size) );
-        *byteCount = size;
-    }
-    else
-        uData->m_pDatabases->errorDocument( language,buffer,byteCount );
-
-    return 0;
-}
-
-/*  freeMemory: free the buffer allocated by getAll
- */
-
-int schemehandlerfreememory( void *userData,
-                             SablotHandle processor_,
-                             char *buffer )
-{
-    (void)userData;
-    (void)processor_;
-
-    delete[] buffer;
-    return 0;
-}
-
-
-/*  open: open the URI and return a handle
-    scheme = URI scheme (e.g. "http")
-    rest = the rest of the URI (without colon)
-    the resulting handle is returned in '*handle'
-*/
-
-int schemehandleropen( void *userData,
-                       SablotHandle processor_,
-                       const char *scheme,
-                       const char *rest,
-                       int *handle )
-{
-    (void)userData;
-    (void)processor_;
-    (void)scheme;
-    (void)rest;
-
-    *handle = 0;
-    return 0;
-}
-
-/*  get: retrieve data from the URI
-    handle = the handle assigned on open
-    buffer = pointer to the data
-    *byteCount = number of bytes to read
-    (the number actually read is returned here)
-*/
-
-int schemehandlerget( void *userData,
-                      SablotHandle processor_,
-                      int handle,
-                      char *buffer,
-                      int *byteCount )
-{
-    (void)userData;
-    (void)processor_;
-    (void)handle;
-    (void)buffer;
-
-    *byteCount = 0;
-    return 0;
-}
-
-/*  put: save data to the URI (if possible)
-    handle = the handle assigned on open
-    buffer = pointer to the data
-    *byteCount = number of bytes to write
-    (the number actually written is returned here)
-*/
-int schemehandlerput( void *userData,
-                      SablotHandle processor_,
-                      int handle,
-                      const char *buffer,
-                      int *byteCount )
-{
-    (void)processor_;
-    (void)handle;
-
-    UserData *uData = reinterpret_cast< UserData* >( userData );
-    uData->m_pTransformer->addToBuffer( buffer,*byteCount );
-    return 0;
-}
-
-/*  close: close the URI with the given handle
-    handle = the handle assigned on open
-*/
-
-int schemehandlerclose( void *userData,
-                        SablotHandle processor_,
-                        int handle )
-{
-    (void)userData;
-    (void)processor_;
-    (void)handle;
-
-    return 0;
-}
-
-
-
-
-
