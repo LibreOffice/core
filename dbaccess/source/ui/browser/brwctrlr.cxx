@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:16:14 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:18:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -558,12 +558,6 @@ SbaXDataBrowserController::~SbaXDataBrowserController()
     }
 
     DBG_DTOR(SbaXDataBrowserController,NULL);
-}
-// -----------------------------------------------------------------------------
-void SbaXDataBrowserController::deleteView()
-{
-    ::std::auto_ptr<ODataView> aTemp(m_pView);
-    m_pView = NULL;
 }
 // -----------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::attachFrame(const Reference< ::com::sun::star::frame::XFrame > & xFrame) throw( RuntimeException )
