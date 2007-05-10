@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 13:41:53 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:39:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2345,74 +2345,29 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
     ::vos::OGuard aGuard( GetMutex() );
 
     Window* pWindow = GetWindow();
+    if ( !pWindow )
+        return;
 
-    if ( pWindow )
-    {
-        OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( mxViewGraphics );
-        Point aPos( nX, nY );
+    OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( mxViewGraphics );
+    if ( !pDev )
+        pDev = pWindow->GetParent();
+    if ( !pDev)
+        return;
 
-        if ( !pDev )
-            pDev = pWindow->GetParent();
+    Size aSize = pWindow->GetSizePixel();
+    aSize = pDev->PixelToLogic( aSize );
 
-        if ( pWindow->GetParent() && !pWindow->IsSystemWindow() && ( pWindow->GetParent() == pDev ) )
-        {
-            // #i40647# don't draw here if this is a recursive call
-            // sometimes this is called recursively, because the Update call on the parent
-            // (strangely) triggers another paint. Prevent a stack overflow here
-            // Yes, this is only fixing symptoms for the moment ....
-            // #i40647# / 2005-01-18 / frank.schoenheit@sun.com
-            if ( !mbDrawingOntoParent )
-            {
-                FlagGuard aDrawingflagGuard( mbDrawingOntoParent );
+    Point aPos = pDev->PixelToLogic( Point( nX, nY ) );
 
-                BOOL bWasVisible = pWindow->IsVisible();
-                Point aOldPos( pWindow->GetPosPixel() );
+    vcl::PDFExtOutDevData* pPDFExport   = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
+    bool bDrawSimplified =  ( pDev->GetOutDevType() == OUTDEV_PRINTER )
+                         || ( pDev->GetOutDevViewType() == OUTDEV_VIEWTYPE_PRINTPREVIEW )
+                         || ( pPDFExport && ! pPDFExport->GetIsExportFormFields() );
 
-                if ( bWasVisible && aOldPos == aPos )
-                {
-                    pWindow->Update();
-                    return;
-                }
-
-                pWindow->SetPosPixel( aPos );
-
-                // Erstmal ein Update auf den Parent, damit nicht beim Update
-                // auf dieses Fenster noch ein Paint vom Parent abgearbeitet wird,
-                // wo dann ggf. dieses Fenster sofort wieder gehidet wird.
-                if( pWindow->GetParent() )
-                    pWindow->GetParent()->Update();
-
-                pWindow->Show();
-                pWindow->Update();
-                pWindow->SetParentUpdateMode( sal_False );
-                pWindow->Hide();
-                pWindow->SetParentUpdateMode( sal_True );
-
-                pWindow->SetPosPixel( aOldPos );
-                if ( bWasVisible )
-                    pWindow->Show( TRUE );
-            }
-        }
-        else if ( pDev )
-        {
-            Size aSz = pWindow->GetSizePixel();
-            aSz = pDev->PixelToLogic( aSz );
-            Point aP = pDev->PixelToLogic( aPos );
-
-            vcl::PDFExtOutDevData* pPDFExport   = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
-            bool bDrawSimple =    ( pDev->GetOutDevType() == OUTDEV_PRINTER )
-                               || ( pDev->GetOutDevViewType() == OUTDEV_VIEWTYPE_PRINTPREVIEW )
-                               || ( pPDFExport && ! pPDFExport->GetIsExportFormFields() );
-            if ( bDrawSimple )
-            {
-                pWindow->Draw( pDev, aP, aSz, WINDOW_DRAW_NOCONTROLS );
-            }
-            else
-            {
-                pWindow->PaintToDevice( pDev, aP, aSz );
-            }
-        }
-    }
+    if ( bDrawSimplified )
+        pWindow->Draw( pDev, aPos, aSize, WINDOW_DRAW_NOCONTROLS );
+    else
+        pWindow->PaintToDevice( pDev, aPos, aSize );
 }
 
 void VCLXWindow::setZoom( float fZoomX, float /*fZoomY*/ ) throw(::com::sun::star::uno::RuntimeException)
