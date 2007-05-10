@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:40:02 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:56:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1763,7 +1763,7 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
         USHORT nLvl = rBase.GetLevel();
         ASSERT( nLvl < GetTOXForm().GetFormMax(), "ungueltiges FORM_LEVEL");
 
-        SvxTabStopItem aTStops( 0, 0 );
+        SvxTabStopItem aTStops( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
         xub_StrLen nLinkStartPosition = STRING_NOTFOUND;
         String  sLinkCharacterStyle; //default to "Default" character style - which is none
         String sURL;
