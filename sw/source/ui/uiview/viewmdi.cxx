@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewmdi.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:25:56 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:26:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
 #include "hintids.hxx"
-#include "uiparam.hxx"
 
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
