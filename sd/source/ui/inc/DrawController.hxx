@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawController.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:02:09 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:44:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,9 @@
 #ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_VIEW_XFORMLAYERACCESS_HPP_
+#include <com/sun/star/view/XFormLayerAccess.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWVIEW_HPP_
 #include <com/sun/star/drawing/XDrawView.hpp>
 #endif
@@ -68,8 +71,8 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE6_HXX_
-#include <cppuhelper/implbase6.hxx>
+#ifndef _CPPUHELPER_IMPLBASE7_HXX_
+#include <cppuhelper/implbase7.hxx>
 #endif
 #include <tools/weakbase.hxx>
 #include <memory>
@@ -81,12 +84,13 @@ class SdXImpressDocument;
 
 namespace {
 
-typedef ::cppu::ImplInheritanceHelper6 <
+typedef ::cppu::ImplInheritanceHelper7 <
     SfxBaseController,
     ::com::sun::star::view::XSelectionSupplier,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::drawing::XDrawView,
     ::com::sun::star::view::XSelectionChangeListener,
+    ::com::sun::star::view::XFormLayerAccess
     ::com::sun::star::drawing::framework::XControllerManager,
     ::com::sun::star::lang::XUnoTunnel
     > DrawControllerInterfaceBase;
@@ -224,6 +228,13 @@ public:
     // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
+    // XFormLayerAccess
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > SAL_CALL getFormController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& Form ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isFormDesignMode(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setFormDesignMode( ::sal_Bool DesignMode ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XControlAccess
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > SAL_CALL getControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
 
     // XDrawView
     virtual void SAL_CALL
