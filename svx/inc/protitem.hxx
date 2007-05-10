@@ -4,9 +4,9 @@
  *
  *  $RCSfile: protitem.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:52:51 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:21:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ class SVX_DLLPUBLIC SvxProtectItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    inline SvxProtectItem( const USHORT nId = ITEMID_PROTECT );
+    inline SvxProtectItem( const USHORT nId  );
     inline SvxProtectItem &operator=( const SvxProtectItem &rCpy );
 
     // "pure virtual Methoden" vom SfxPoolItem
