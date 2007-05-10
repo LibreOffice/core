@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:33:33 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:13:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,9 +34,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
-#endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -472,7 +469,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
         pPref->SetDefTab(nTabDist);
         if(pAppView)
         {
-            SvxTabStopItem aDefTabs( 0, 0 );
+            SvxTabStopItem aDefTabs( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
             MakeDefTabs( nTabDist, aDefTabs );
             pAppView->GetWrtShell().SetDefault( aDefTabs );
         }
