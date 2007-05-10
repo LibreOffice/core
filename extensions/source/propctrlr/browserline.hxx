@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserline.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:17:13 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:46:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,8 @@ namespace pcr
         Window*                 m_pTheParent;
         sal_uInt16              m_nNameWidth;
         sal_uInt16              m_nEnableFlags;
-        sal_Bool                m_bIndentTitle : 1;
+        bool                    m_bIndentTitle;
+        bool                    m_bReadOnly;
 
     public:
                             OBrowserLine( const ::rtl::OUString& _rEntryName, Window* pParent);
@@ -96,7 +97,7 @@ namespace pcr
         {
             return m_xControl;
         }
-        inline const Window* getControlWindow() const
+        inline Window* getControlWindow() const
         {
             return m_pControlWindow;
         }
@@ -129,9 +130,11 @@ namespace pcr
         void                EnablePropertyLine( bool _bEnable );
         sal_Bool            IsPropertyInputEnabled( ) const;
 
+        void                SetReadOnly( bool _bReadOnly );
+
         void                SetClickListener( IButtonClickListener* _pListener );
 
-        void                IndentTitle( sal_Bool _bIndent );
+        void                IndentTitle( bool _bIndent );
 
     private:
         DECL_LINK( OnButtonClicked, PushButton* );
