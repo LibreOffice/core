@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.185 $
+ *  $Revision: 1.186 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:32:25 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:20:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3243,11 +3243,13 @@ sal_Bool SbaTableQueryBrowser::getExistentConnectionFor( SvLBoxEntry* _pAnyEntry
     return _rConnection.is();
 }
 
+#ifdef DBG_UTIL
 // -----------------------------------------------------------------------------
 bool SbaTableQueryBrowser::impl_isDataSourceEntry( SvLBoxEntry* _pEntry ) const
 {
     return m_pTreeModel->GetRootLevelParent( _pEntry ) == _pEntry;
 }
+#endif
 
 // -------------------------------------------------------------------------
 Reference< XModel > SbaTableQueryBrowser::impl_nf_getDBDocumentForConnection( const Reference< XConnection >& _rxConnection )
