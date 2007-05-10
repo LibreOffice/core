@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppView.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 13:01:20 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:17:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,10 +284,6 @@ namespace dbaui
         void elementRemoved(ElementType _eType
                             ,const ::rtl::OUString& _rName );
 
-        /** clears the selection in the icon choice control and calls the handler
-        */
-        void clearSelection();
-
 
         /** changes the container which should be displayed. The select handler will also be called.
             @param  _eType
@@ -300,9 +296,6 @@ namespace dbaui
 
         /// <TRUE/> if the preview is enabled
         sal_Bool isPreviewEnabled();
-
-        /// switches the current preview
-        void switchPreview();
 
         /** switches to the given preview mode
             @param  _eMode
@@ -333,12 +326,6 @@ namespace dbaui
                             sal_Bool _bTable);
 
         SvLBoxEntry* getEntry( const Point& _aPosPixel ) const;
-
-        /** disable the controls
-            @param  _bDisable
-                if <TRUE/> then the controls will be disabled otherwise they will be enabled.
-        */
-        void disableControls(sal_Bool _bDisable);
 
         DECL_LINK( SwitchHdl, Accelerator* );
     };
