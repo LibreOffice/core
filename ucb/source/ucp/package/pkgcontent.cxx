@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:59:20 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:05:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,6 +163,8 @@
 #ifndef _PKGRESULTSET_HXX
 #include "pkgresultset.hxx"
 #endif
+
+#include "../inc/urihelper.hxx"
 
 using namespace com::sun;
 using namespace com::sun::star;
@@ -1470,7 +1472,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         // Assemble new content identifier...
         rtl::OUString aNewURL = m_aUri.getParentUri();
         aNewURL += rtl::OUString::createFromAscii( "/" );
-        aNewURL += PackageUri::encodeSegment( aNewTitle );
+        aNewURL += ::ucb::urihelper::encodeSegment( aNewTitle );
         uno::Reference< star::ucb::XContentIdentifier > xNewId
             = new ::ucb::ContentIdentifier( m_xSMgr, aNewURL );
 
@@ -1737,7 +1739,7 @@ void Content::insert(
     rtl::OUString aNewURL = m_aUri.getParentUri();
     if (1 + aNewURL.lastIndexOf('/') != aNewURL.getLength())
         aNewURL += rtl::OUString::createFromAscii( "/" );
-    aNewURL += PackageUri::encodeSegment( m_aProps.aTitle );
+    aNewURL += ::ucb::urihelper::encodeSegment( m_aProps.aTitle );
     PackageUri aNewUri( aNewURL );
 
     // Handle possible name clash...
@@ -2151,7 +2153,7 @@ void Content::transfer(
                                                 != aChildId.getLength() )
                         aChildId += rtl::OUString::createFromAscii( "/" );
 
-                    aChildId += PackageUri::encodeSegment( aName );
+                    aChildId += ::ucb::urihelper::encodeSegment( aName );
 
                     star::ucb::TransferInfo aInfo;
                     aInfo.MoveData  = sal_False;
