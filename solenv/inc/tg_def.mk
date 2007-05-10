@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:45:23 $
+#   last change: $Author: kz $ $Date: 2007-05-10 15:11:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ DEFLIB$(TNR)NAME*=$(DEF$(TNR)LIBNAME)
 
 .IF "$(DEFLIB$(TNR)NAME)"!=""
 .IF "$(UPDATER)"!=""
-DEF$(TNR)DEPN+=$(SLB)$/$(DEFLIB$(TNR)NAME).lib
+DEF$(TNR)DEPN+=$(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)$/$(i).lib)
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF
 
@@ -138,7 +138,7 @@ $(DEF$(TNR)TARGETN) .PHONY :
 .ENDIF
     $(EXPORT$(TNR)_PROTECT) $(RMHACK$(TNR)) $(MISC)$/$(SHL$(TNR)TARGET).exp
 .ELSE			# "$(SHL$(TNR)USE_EXPORTS)"!="ordinal"
-    @$(EXPORT$(TNR)_PROTECT) $(DUMPBIN) -DIRECTIVES $(SLB)$/$(DEFLIB$(TNR)NAME).lib | $(GREP) EXPORT: > $(MISC)$/$(SHL$(TNR)TARGET).direct
+    @$(EXPORT$(TNR)_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL$(TNR)TARGET).direct
 .IF "$(DEF$(TNR)CEXP)"!=""
     @$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -D -A $(DEF$(TNR)CEXP) -E 20 -F $(DEF$(TNR)FILTER) $(MISC)$/$(SHL$(TNR)TARGET).direct >>$@.tmpfile
 .ELSE
