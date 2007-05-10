@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_content.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:00:59 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:06:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,8 @@
 #include "tdoc_content.hxx"
 #include "tdoc_resultset.hxx"
 #include "tdoc_passwordrequest.hxx"
+
+#include "../inc/urihelper.hxx"
 
 using namespace com::sun;
 using namespace com::sun::star;
@@ -839,7 +841,7 @@ Content::makeNewIdentifier( const rtl::OUString& rTitle )
     // Assemble new content identifier...
     Uri aUri( m_xIdentifier->getContentIdentifier() );
     rtl::OUStringBuffer aNewURL = aUri.getParentUri();
-    aNewURL.append( Uri::encodeSegment( rTitle ) );
+    aNewURL.append( ::ucb::urihelper::encodeSegment( rTitle ) );
 
     return
         uno::Reference< star::ucb::XContentIdentifier >(
@@ -2213,7 +2215,7 @@ void Content::transfer(
         aTargetUri += rtl::OUString::createFromAscii( "/" );
 
     if ( rInfo.NewTitle.getLength() > 0 )
-        aTargetUri += Uri::encodeSegment( rInfo.NewTitle );
+        aTargetUri += ::ucb::urihelper::encodeSegment( rInfo.NewTitle );
     else
         aTargetUri += aSourceUri.getName();
 
