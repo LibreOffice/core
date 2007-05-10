@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numitem.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:55:07 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:52:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 
 #include <numitem.hxx>
 
-#define ITEMID_BRUSH SID_ATTR_BRUSH
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <brshitem.hxx>
 #endif
@@ -265,7 +264,7 @@ SvxNumberFormat::SvxNumberFormat(SvStream &rStream)
     rStream >> nUSHORT;
     if(nUSHORT)
     {
-        SvxBrushItem aHelper;
+        SvxBrushItem aHelper(0);
         pGraphicBrush = (SvxBrushItem*) aHelper.Create( rStream, BRUSH_GRAPHIC_VERSION );
     }
     else
@@ -487,7 +486,7 @@ void SvxNumberFormat::SetGraphic( const String& rName )
 
     delete pGraphicBrush;
     String sTmp;
-    pGraphicBrush = new SvxBrushItem( rName, sTmp, GPOS_AREA );
+    pGraphicBrush = new SvxBrushItem( rName, sTmp, GPOS_AREA, 0 );
     pGraphicBrush->SetDoneLink( STATIC_LINK( this, SvxNumberFormat, GraphicArrived) );
     if( eVertOrient == SVX_VERT_NONE )
         eVertOrient = SVX_VERT_TOP;
