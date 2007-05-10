@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:27:08 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:07:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -912,6 +912,26 @@ namespace
             DBG_UNHANDLED_EXCEPTION();
         }
     }
+}
+
+// -----------------------------------------------------------------------------
+Reference< XFormController > FmXFormView::getFormController( const Reference< XForm >& _rxForm, const OutputDevice& _rDevice ) const
+{
+    Reference< XFormController > xController;
+
+    for ( FmWinRecList::const_iterator rec = m_aWinList.begin(); rec != m_aWinList.end(); ++rec )
+    {
+        const FmXPageViewWinRec* pViewWinRec( *rec );
+        OSL_ENSURE( pViewWinRec, "FmXFormView::getFormController: invalid PageViewWinRec!" );
+        if ( !pViewWinRec || ( pViewWinRec->getWindow() != &_rDevice ) )
+            // wrong device
+            continue;
+
+        xController = pViewWinRec->getController( _rxForm );
+        if ( xController.is() )
+            break;
+    }
+    return xController;
 }
 
 // -----------------------------------------------------------------------------
