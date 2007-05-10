@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 17:03:06 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:02:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -808,7 +808,7 @@ SwGrfNumPortion::SwGrfNumPortion(
         const SwFmtVertOrient* pGrfOrient, const Size& rGrfSize,
         const sal_Bool bLft, const sal_Bool bCntr, const KSHORT nMinDst ) :
     SwNumberPortion( aEmptyStr, NULL, bLft, bCntr, nMinDst ),
-    pBrush( new SvxBrushItem() ), nId( 0 )
+    pBrush( new SvxBrushItem(RES_BACKGROUND) ), nId( 0 )
 {
     SetWhichPor( POR_GRFNUM );
     SetAnimated( sal_False );
