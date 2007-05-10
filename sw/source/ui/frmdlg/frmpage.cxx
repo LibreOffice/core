@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:11:18 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:18:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,9 +50,6 @@
 #endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
 #endif
 
 #ifndef _SV_MSGBOX_HXX //autogen
