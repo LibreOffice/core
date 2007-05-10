@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_TitleRotation.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:19:17 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:33:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@
 /*
 #include "SchSfxItemIds.hxx"
 // header for enum SvxChartKindError
-#include "SchAllDefinesFor_svx_chrtitem.hxx"
 #ifndef _SVX_CHRTITEM_HXX //autogen
 #include <svx/chrtitem.hxx>
 #endif
