@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchxtra.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:43:28 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:41:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@
 #endif
 
 #ifndef _SVX_FLSTITEM_HXX
-#define ITEMID_FONTLIST     SID_ATTR_CHAR_FONTLIST
+
 #include "flstitem.hxx"
 #endif
 #ifndef _SVX_CHARDLG_HXX
@@ -153,7 +153,7 @@ void SvxSearchFormatDialog::PageCreated( USHORT nId, SfxTabPage& rPage )
 
             if ( pList )
                 ( (SvxCharNamePage&)rPage ).
-                    SetFontList( SvxFontListItem( pList ) );
+                    SetFontList( SvxFontListItem( pList, SID_ATTR_CHAR_FONTLIST ) );
             ( (SvxCharNamePage&)rPage ).EnableSearchMode();
             break;
         }
