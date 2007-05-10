@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:47:47 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:45:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,11 +214,11 @@
 #include <langitem.hxx>
 #endif
 #ifndef _SVX_OPTITEMS_HXX
-#define ITEMID_SPELLCHECK   SID_ATTR_SPELL
-#define ITEMID_HYPHENREGION SID_ATTR_HYPHENREGION
+
+
 #include <optitems.hxx>
 #endif
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
+
 #ifndef _SVX_DRAWITEM_HXX
 #include <drawitem.hxx>
 #endif
@@ -2022,7 +2022,7 @@ short OfaTreeOptionsDialog::Execute()
                     if( _pColorTab &&
                         _pColorTab->GetPath() == GetColorTable()->GetPath() &&
                         _pColorTab->GetName() == GetColorTable()->GetName() )
-                        SfxObjectShell::Current()->PutItem( SvxColorTableItem( GetColorTable() ) );
+                        SfxObjectShell::Current()->PutItem( SvxColorTableItem( GetColorTable(), SID_COLOR_TABLE ) );
                 }
             }
         }
