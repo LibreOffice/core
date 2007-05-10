@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-06 14:44:12 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:59:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -684,7 +684,7 @@ void SdrTextObj::SetModel(SdrModel* pNewModel)
             // zunaechst das HeightItem festklopfen, damit
             // 1. Es eben bestehen bleibt und
             // 2. DoStretchChars vom richtigen Wert ausgeht
-            SetObjectItem(SvxFontHeightItem(nOldFontHgt));
+            SetObjectItem(SvxFontHeightItem(nOldFontHgt, 100, EE_CHAR_FONTHEIGHT ));
         }
         // erst jetzt den Outliner holen, etc. damit obiges SetAttr auch wirkt
         SdrOutliner& rOutliner=ImpGetDrawOutliner();
@@ -703,7 +703,7 @@ void SdrTextObj::SetModel(SdrModel* pNewModel)
             if (bSetHgtItem) {
                 // Und nun noch das Rahmenattribut korregieren
                 nOldFontHgt=BigMulDiv(nOldFontHgt,aMetricFactor.GetNumerator(),aMetricFactor.GetDenominator());
-                SetObjectItem(SvxFontHeightItem(nOldFontHgt));
+                SetObjectItem(SvxFontHeightItem(nOldFontHgt, 100, EE_CHAR_FONTHEIGHT));
             }
         }
         SetOutlinerParaObject(rOutliner.CreateParaObject()); // #34494#
@@ -1940,7 +1940,8 @@ void SdrTextObj::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
     {
         SvxWritingModeItem aWritingMode(pOutlinerParaObject->IsVertical()
             ? com::sun::star::text::WritingMode_TB_RL
-            : com::sun::star::text::WritingMode_LR_TB);
+            : com::sun::star::text::WritingMode_LR_TB,
+            SDRATTR_TEXTDIRECTION);
         GetProperties().SetObjectItemDirect(aWritingMode);
     }
 
