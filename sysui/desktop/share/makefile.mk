@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:17:54 $
+#   last change: $Author: kz $ $Date: 2007-05-10 15:34:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,12 +49,6 @@ TARGET=desktopshare
 
 # --- Files --------------------------------------------------------
 
-# gnome-vfs treats everything behind the last '.' as an icon extension, 
-# even though the "icon_filename" in '.keys' is specified as filename 
-# without extension. Since it alos does not know how to handle "9-writer"
-# type icons :-), we are stripping all '.' for now.
-ICONPREFIX = $(UNIXFILENAME:s/.//g)
-
 .IF "$(WITH_LANG)"!=""
 ULFDIR:=$(COMMONMISC)$/$(TARGET)
 .ELSE			# "$(WITH_LANG)"!=""
@@ -70,14 +64,66 @@ LAUNCHERLIST = writer calc draw impress math base printeradmin qstart extension
 LAUNCHERDEPN = ../menus/{$(LAUNCHERLIST)}.desktop
 
 LAUNCHERFLAGFILE = $(COMMONMISC)/$(TARGET)/xdg.flag
-MIMEINFO = $(COMMONMISC)/$(TARGET)/openoffice.org.xml
+
+MIMELIST = \
+    text \
+    text-template \
+    spreadsheet \
+    spreadsheet-template \
+    drawing \
+    drawing-template \
+    presentation \
+    presentation-template \
+    formula \
+    master-document \
+    oasis-text \
+    oasis-text-template \
+    oasis-spreadsheet \
+    oasis-spreadsheet-template \
+    oasis-drawing \
+    oasis-drawing-template \
+    oasis-presentation \
+    oasis-presentation-template \
+    oasis-formula \
+    oasis-master-document \
+    oasis-database \
+    oasis-web-template \
+    extension
+
+MIMEICONLIST = \
+    oasis-text \
+    oasis-text-template \
+    oasis-spreadsheet \
+    oasis-spreadsheet-template \
+    oasis-drawing \
+    oasis-drawing-template \
+    oasis-presentation \
+    oasis-presentation-template \
+    oasis-formula \
+    oasis-master-document \
+    oasis-database \
+    oasis-web-template \
+    text \
+    text-template \
+    spreadsheet \
+    spreadsheet-template \
+    drawing \
+    drawing-template \
+    presentation \
+    presentation-template \
+    formula \
+    master-document \
+    database \
+    extension
+
+ICONDEPN = \
+    ../icons/hicolor/{16x16 32x32 48x48}/apps/{$(LAUNCHERLIST:s/qstart//)}.png \
+    ../icons/hicolor/{16x16 32x32 48x48}/mimetypes/{$(MIMEICONLIST)}.png \
+    ../icons/locolor/{16x16 32x32}/apps/{$(LAUNCHERLIST:s/qstart//)}.png \
+    ../icons/locolor/{16x16 32x32}/mimetypes/{$(MIMEICONLIST)}.png
 
 .IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
-SPECFILES = \
-    $(MISC)/redhat-menus.spec \
-    $(MISC)/suse-menus.spec \
-    $(MISC)/freedesktop-menus.spec \
-    $(MISC)/mandriva-menus.spec
+SPECFILES = $(MISC)$/{redhat suse freedesktop mandriva}-menus.spec
 .ENDIF
 
 # --- Targets ------------------------------------------------------
@@ -85,35 +131,38 @@ SPECFILES = \
 .INCLUDE :  target.mk
 
 .IF "$(GUI)"=="UNX"
-ALLTAR : $(LAUNCHERFLAGFILE) $(MIMEINFO) $(SPECFILES) $(UNOPKGWRAPPER)
+ALLTAR : $(LAUNCHERFLAGFILE) $(SPECFILES) $(COMMONMISC)$/{$(PRODUCTLIST)}$/build.flag
+
 .ENDIF          # "$(GUI)"=="UNIX"
 
 #
 # Copy/patch the .desktop files to the output tree and 
 # merge-in the translations. 
 #
-$(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN) ../productversion.mk brand.pl translate.pl $(ULFDIR)$/launcher_name.ulf $(ULFDIR)$/launcher_comment.ulf
+$(LAUNCHERFLAGFILE) : ../productversion.mk brand.pl translate.pl $(ULFDIR)$/launcher_name.ulf $(ULFDIR)$/launcher_comment.ulf
+$(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN) 
     @$(MKDIRHIER) $(@:db).$(INPATH)
-    @echo Creating desktop entries ..
+    @echo Creating desktop entries for $(@:f) ..
     @echo ---------------------------------
-    @$(PERL) brand.pl -p "$(LONGPRODUCTNAME)" -u $(UNIXFILENAME) --iconprefix "$(ICONPREFIX)-" $(LAUNCHERDEPN) $(@:db).$(INPATH)
-    @$(PERL) translate.pl -p "$(LONGPRODUCTNAME)" -d $(@:db).$(INPATH) --ext "desktop" --key "Name" $(ULFDIR)$/launcher_name.ulf
-    @$(PERL) translate.pl -p "$(LONGPRODUCTNAME)" -d $(@:db).$(INPATH) --ext "desktop" --key "Comment" $(ULFDIR)$/launcher_comment.ulf
+    @$(PERL) brand.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -u '$${{UNIXPRODUCTNAME}}$${{PRODUCTVERSION}}' --iconprefix '$${{WITHOUTDOTUNIXPRODUCTNAME}}${ICONVERSION}-' $< $(@:db).$(INPATH)
+    @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH) --ext "desktop" --key "Name" $(ULFDIR)$/launcher_name.ulf
+    @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH) --ext "desktop" --key "Comment" $(ULFDIR)$/launcher_comment.ulf
 .IF "$(WITH_LIBSN)"=="YES"
     @noop x$(foreach,i,$(LAUNCHERLIST) $(shell echo "StartupNotify=true" >> $(@:db).$(INPATH)/$i.desktop))x
 .ENDIF
-    mv -f $(@:db).$(INPATH)/* $(@:d)
+    @$(MV) -f $(@:db).$(INPATH)/* $(@:d)
+    @rmdir $(@:db).$(INPATH)
     @touch $@
 
 #
 # Create shared mime info xml file
 #
-$(MIMEINFO) : $(shell ls ../mimetypes/*.desktop) create_mime_xml.pl
-$(MIMEINFO) : $(ULFDIR)$/documents.ulf
+$(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.org.xml : ../mimetypes/{$(MIMELIST)}.desktop create_mime_xml.pl
+$(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.org.xml : $(ULFDIR)$/documents.ulf
     @echo Create shared mime info xml file ..
     @echo ---------------------------------
-    @$(PERL) create_mime_xml.pl $< > $(@).$(INPATH)
-    @mv -f $(@).$(INPATH) $@
+    @$(PERL) create_mime_xml.pl $< > $@.$(INPATH)
+    @mv -f $@.$(INPATH) $@
 
 .IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 $(SPECFILES) : add_specfile_triggers.sed symlink_triggers
@@ -122,10 +171,92 @@ $(SPECFILES) : ../$$(@:b:s/-menus//)/$$(@:f)
 .ENDIF
 
 #
-# Install section
+# Create GNOME mime-info files
 #
 
-%.xml : $(COMMONMISC)/$(TARGET)/$$(@:f)
+$(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.keys : ../mimetypes/openoffice.mime brand.pl translate.pl ../productversion.mk $(ULFDIR)$/documents.ulf
+$(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.keys : ../mimetypes/{$(MIMELIST)}.keys  
     @$(MKDIRHIER) $(@:d)
-    @$(COPY) $< $@
-#	@chmod 0544 $@
+    @echo Creating GNOME .keys file for $(@:d:d:f) ..
+    @echo ---------------------------------
+    @$(PERL) brand.pl -p $(PRODUCTNAME.$(@:d:d:f)) -u $(UNIXFILENAME.$(@:d:d:f)) --iconprefix "$(ICONPREFIX.$(@:d:d:f))-" $< $(MISC)/$(@:d:d:f)
+    @$(PERL) translate.pl -p $(PRODUCTNAME.$(@:d:d:f)) -d $(MISC)/$(@:d:d:f) --ext "keys" --key "description" $(ULFDIR)$/documents.ulf
+    @cat $(MISC)/$(@:d:d:f)/{$(MIMELIST)}.keys > $@.$(INPATH)
+    @mv -f $@.$(INPATH) $@
+
+$(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.mime : ../mimetypes/$$(@:f)
+    @$(MKDIRHIER) $(@:d)
+    @echo Creating GNOME .mime file for $(@:d:d:f) ..
+    @echo ---------------------------------
+    @cat $< | tr -d "\015" > $@.$(INPATH)
+    @mv -f $@.$(INPATH) $@
+
+$(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.applications : ../productversion.mk 
+$(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.applications : ../mimetypes/$$(@:f)
+    @$(MKDIRHIER) $(@:d)
+    @echo Creating GNOME .applications file for $(@:d:d:f) ..
+    @echo ---------------------------------
+    @cat $< | tr -d "\015" | sed -e "s/OFFICENAME/$(UNIXFILENAME.$(@:d:d:f))/" -e "s/%PRODUCTNAME/$(PRODUCTNAME.$(@:d:d:f)) $(PRODUCTVERSION.$(@:d:d:f))/" > $@.$(INPATH)
+    @mv -f $@.$(INPATH) $@
+
+#
+# Create KDE mimelnk files
+#
+$(COMMONMISC)$/{$(PRODUCTLIST)}$/mimelnklist : brand.pl translate.pl ../productversion.mk $(ULFDIR)$/documents.ulf
+$(COMMONMISC)$/{$(PRODUCTLIST)}$/mimelnklist : ../mimetypes/{$(MIMELIST)}.desktop
+    @$(MKDIRHIER) $(@:db).$(INPATH)
+    @echo Creating KDE mimelnk entries for $(@:d:d:f) ..
+    @echo ---------------------------------
+    @$(PERL) brand.pl -p "$(PRODUCTNAME.$(@:d:d:f))" -u $(UNIXFILENAME.$(@:d:d:f)) --iconprefix "$(ICONPREFIX.$(@:d:d:f))-" $< $(@:db).$(INPATH)
+    @$(PERL) ../share/translate.pl -p "$(PRODUCTNAME.$(@:d:d:f))" -d $(@:db).$(INPATH) --ext "desktop" --key "Comment" $(ULFDIR)$/documents.ulf
+    @mv -f $(@:db).$(INPATH)/* $(@:d)
+    @rmdir $(@:db).$(INPATH)
+    @echo  "{$(MIMELIST)}.desktop" > $@   
+
+#
+# Generate customized install scripts
+#
+$(COMMONMISC)$/{$(PRODUCTLIST)}$/create_tree.sh : makefile.mk
+$(COMMONMISC)$/{$(PRODUCTLIST)}$/create_tree.sh : $$(@:f)
+    @$(MKDIRHIER) $(@:d)
+    @echo "#\!/bin/bash" > $@.$(INPATH)
+    @echo "PREFIX=$(UNIXFILENAME.$(@:d:d:f))" >> $@.$(INPATH)
+    @echo "ICON_PREFIX=$(ICONPREFIX.$(@:d:d:f))" >> $@.$(INPATH)
+    @echo "ICON_SOURCE_DIR=../../../desktop/icons" >> $@.$(INPATH)
+    @cat $< >> $@.$(INPATH)
+    @chmod 774 $@.$(INPATH)
+    @mv -f $@.$(INPATH) $@
+
+#
+# Create skript files
+#
+
+$(COMMONMISC)$/{$(PRODUCTLIST)}$/{openoffice printeradmin}.sh : ../productversion.mk
+$(COMMONMISC)$/{$(PRODUCTLIST)}$/{openoffice printeradmin}.sh : $$(@:f)
+    @$(MKDIRHIER) $(@:d)
+    @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME.$(@:d:d:f))/g" > $@.$(INPATH)
+    @mv -f $@.$(INPATH) $@
+
+#
+# Launcher list
+#
+
+$(COMMONMISC)$/{$(PRODUCTLIST)}$/launcherlist : $(LAUNCHERDEPN)
+    @$(MKDIRHIER) $(@:d)
+    @echo "{$(LAUNCHERLIST:s/qstart//)}.desktop" >$@.$(INPATH)
+    @mv -f $@.$(INPATH) $@
+
+#
+# Flagfile
+#
+$(COMMONMISC)$/{$(PRODUCTLIST)}$/build.flag : $(ICONDEPN) \
+    $(COMMONMISC)$/{$(PRODUCTLIST)}$/launcherlist \
+    $(COMMONMISC)$/{$(PRODUCTLIST)}$/mimelnklist \
+    $(COMMONMISC)$/{$(PRODUCTLIST)}$/create_tree.sh \
+    $(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.keys \
+    $(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.mime \
+    $(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.org.xml	\
+    $(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.applications \
+    $(COMMONMISC)$/{$(PRODUCTLIST)}$/{openoffice printeradmin}.sh
+    @touch $@
+
