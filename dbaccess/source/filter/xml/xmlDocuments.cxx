@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDocuments.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:46:48 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:15:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,15 +101,6 @@ OXMLDocuments::OXMLDocuments( ODBFilter& rImport
     SvXMLImportContext( rImport, nPrfx, rLName )
         ,m_xContainer(_xContainer)
         ,m_sCollectionServiceName(_sCollectionServiceName)
-{
-    DBG_CTOR(OXMLDocuments,NULL);
-}
-// -----------------------------------------------------------------------------
-OXMLDocuments::OXMLDocuments( ODBFilter& rImport
-                ,sal_uInt16 nPrfx
-                , const OUString& rLName
-) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
 {
     DBG_CTOR(OXMLDocuments,NULL);
 }
