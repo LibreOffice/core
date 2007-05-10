@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XPropertyControlFactory.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:05:00 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:02:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,7 @@ interface XPropertyControlFactory
 
         @param ControlType
             the type of the requested control
+
         @param CreateReadOnly
             determines whether the newly created control should be readonly.
 
@@ -66,6 +67,9 @@ interface XPropertyControlFactory
             changed at all in the <type>ObjectInspector</type>. Instead, an <type>XPropertyHandler</type>
             can still decide that there is a dedicated UI for entering the property value,
             which is usually triggered by a <member>LineDescriptor::PrimaryButton</member>.</p>
+
+            <p>Note that this parameter might be ignored if the <member>XObjectInspectorModel::IsReadOnly</member>
+            attribute is <TRUE/>, in which case all created property controls must be readonly.</p>
 
         @returns
             a control of the given type.
