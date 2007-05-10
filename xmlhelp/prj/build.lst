@@ -1,4 +1,4 @@
-xh	xmlhelp	:	ucbhelper XmlSearch SABLOT:sablot jut unoil BERKELEYDB:berkeleydb svtools NULL
+xh	xmlhelp	:	ucbhelper XmlSearch LIBXSLT:libxslt jut unoil BERKELEYDB:berkeleydb svtools NULL
 xh	xmlhelp									usr1	-	all	xh_mkout NULL
 xh	xmlhelp\inc								nmake	-	all	xh_inc NULL
 xh	xmlhelp\source\helpprovider				nmake	-	all	xh_helpprovider xh_inc NULL
