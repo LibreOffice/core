@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.173 $
+ *  $Revision: 1.174 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 14:47:37 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:11:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #include <rtl/tencinfo.h>
 #endif
 
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
+
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -390,7 +390,7 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
     if (bVer67)
         return;
 
-    rFmt.SetAttr(SvxFrameDirectionItem(rSection.meDir));
+    rFmt.SetAttr(SvxFrameDirectionItem(rSection.meDir, RES_FRAMEDIR));
 
     SwTwips nTextareaHeight = rFmt.GetFrmSize().GetHeight();
     const SvxULSpaceItem &rUL = ItemGet<SvxULSpaceItem>(rFmt, RES_UL_SPACE);
@@ -484,7 +484,7 @@ void SwWW8ImplReader::Read_ParaBiDi(USHORT, const BYTE* pData, short nLen)
     {
         SvxFrameDirection eDir =
             *pData ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP;
-        NewAttr(SvxFrameDirectionItem(eDir));
+        NewAttr(SvxFrameDirectionItem(eDir, RES_FRAMEDIR));
     }
 }
 
@@ -590,7 +590,7 @@ void wwSectionManager::SetPage(SwPageDesc &rInPageDesc, SwFrmFmt &rFmt,
     rFmt.SetAttr(aSz);
 
     rFmt.SetAttr(
-        SvxLRSpaceItem(rSection.GetPageLeft(), rSection.GetPageRight()));
+        SvxLRSpaceItem(rSection.GetPageLeft(), rSection.GetPageRight(), 0, 0, RES_LR_SPACE));
 
     if (!bIgnoreCols)
         SetCols(rFmt, rSection, rSection.GetTextAreaWidth());
@@ -818,7 +818,7 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
     }
 
     SvxULSpaceItem aUL(writer_cast<USHORT>(rData.nSwUp),
-        writer_cast<USHORT>(rData.nSwLo));
+        writer_cast<USHORT>(rData.nSwLo), RES_UL_SPACE);
     rFmt.SetAttr(aUL);
 }
 
@@ -831,7 +831,7 @@ SwSectionFmt *wwSectionManager::InsertSection(
 
     sal_uInt8 nRTLPgn = maSegments.empty() ? 0 : maSegments.back().IsBiDi();
     aSet.Put(SvxFrameDirectionItem(
-        nRTLPgn ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP));
+        nRTLPgn ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR));
 
     if (2 == mrReader.pWDop->fpc)
         aSet.Put( SwFmtFtnAtTxtEnd(FTNEND_ATTXTEND));
@@ -874,7 +874,7 @@ SwSectionFmt *wwSectionManager::InsertSection(
     long nSectionRight = rSection.GetPageRight() - nPageRight;
     if ((nSectionLeft != 0) || (nSectionRight != 0))
     {
-        SvxLRSpaceItem aLR(nSectionLeft, nSectionRight);
+        SvxLRSpaceItem aLR(nSectionLeft, nSectionRight, 0, 0, RES_LR_SPACE);
         pFmt->SetAttr(aLR);
     }
 
@@ -1688,13 +1688,13 @@ bool SwWW8ImplReader::SetFlyBordersShadow(SfxItemSet& rFlySet,
     bool bShadowed = false;
     if (IsBorder(pbrc))
     {
-        SvxBoxItem aBox;
+        SvxBoxItem aBox( RES_BOX );
         SetBorder(aBox, pbrc, pSizeArray);
 
         rFlySet.Put( aBox );
 
         // fShadow
-        SvxShadowItem aShadow;
+        SvxShadowItem aShadow( RES_SHADOW );
         if( SetShadow( aShadow, pSizeArray, pbrc ))
         {
             bShadowed = true;
@@ -2237,7 +2237,7 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     if (!rReader.mbNewDoc)
         Reader::ResetFrmFmtAttrs(*this);    // Abstand/Umrandung raus
                                             // Position
-    Put(SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP));
+    Put(SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR));
 
 /*Below can all go when we have from left in rtl mode*/
     SwTwips nXPos = pFS->nXPos;
@@ -2248,10 +2248,10 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     Put( SwFmtVertOrient( pFS->nYPos, pFS->eVAlign, pFS->eVRel ) );
 
     if (pFS->nLeMgn || pFS->nRiMgn)     // Raender setzen
-        Put(SvxLRSpaceItem(pFS->nLeMgn, pFS->nRiMgn));
+        Put(SvxLRSpaceItem(pFS->nLeMgn, pFS->nRiMgn, 0, 0, RES_LR_SPACE));
 
     if (pFS->nUpMgn || pFS->nLoMgn)
-        Put(SvxULSpaceItem(pFS->nUpMgn, pFS->nLoMgn));
+        Put(SvxULSpaceItem(pFS->nUpMgn, pFS->nLoMgn, RES_UL_SPACE));
 
     //we no longer need to hack around the header/footer problems
     Put(SwFmtSurround(pFS->eSurround));
@@ -2290,7 +2290,7 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
 {
     Init(rReader, pPaM);
 
-    Put(SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP));
+    Put(SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR));
 
     short aSizeArray[5]={0};
     /*
@@ -2304,8 +2304,8 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
     */
     if (rReader.SetFlyBordersShadow( *this, rPic.rgbrc, &aSizeArray[0]))
     {
-        Put(SvxLRSpaceItem( aSizeArray[WW8_LEFT], 0 ) );
-        Put(SvxULSpaceItem( aSizeArray[WW8_TOP], 0 ));
+        Put(SvxLRSpaceItem( aSizeArray[WW8_LEFT], 0, 0, 0, RES_LR_SPACE ) );
+        Put(SvxULSpaceItem( aSizeArray[WW8_TOP], 0, RES_UL_SPACE ));
         aSizeArray[WW8_RIGHT]*=2;
         aSizeArray[WW8_BOT]*=2;
     }
@@ -2326,7 +2326,7 @@ void WW8FlySet::Init(const SwWW8ImplReader& rReader, const SwPaM* pPaM)
     if (!rReader.mbNewDoc)
         Reader::ResetFrmFmtAttrs(*this);  // Abstand/Umrandung raus
 
-    Put(SvxLRSpaceItem()); //inline writer ole2 objects start with 0.2cm l/r
+    Put(SvxLRSpaceItem(RES_LR_SPACE)); //inline writer ole2 objects start with 0.2cm l/r
     SwFmtAnchor aAnchor(FLY_IN_CNTNT);
 
     aAnchor.SetAnchor(pPaM->GetPoint());
@@ -2671,7 +2671,7 @@ void SwWW8ImplReader::StopApo()
             pNd->JoinNext();
         }
 
-        pSFlyPara->pFlyFmt->SetAttr(SvxBrushItem(aBg));
+        pSFlyPara->pFlyFmt->SetAttr(SvxBrushItem(aBg, RES_BACKGROUND));
 
         DeleteAnchorStk();
         pAnchorStck = pSFlyPara->pOldAnchorStck;
@@ -3095,14 +3095,14 @@ void SwWW8ImplReader::SetToggleBiDiAttr(BYTE nAttrId, bool bOn)
     {
         case 0:
             {
-                SvxWeightItem aAttr( bOn ? WEIGHT_BOLD : WEIGHT_NORMAL );
+                SvxWeightItem aAttr( bOn ? WEIGHT_BOLD : WEIGHT_NORMAL, RES_CHRATR_WEIGHT );
                 aAttr.SetWhich( RES_CHRATR_CTL_WEIGHT );
                 NewAttr( aAttr );
             }
             break;
         case 1:
             {
-                SvxPostureItem aAttr( bOn ? ITALIC_NORMAL : ITALIC_NONE );
+                SvxPostureItem aAttr( bOn ? ITALIC_NORMAL : ITALIC_NONE, RES_CHRATR_POSTURE );
                 aAttr.SetWhich( RES_CHRATR_CTL_POSTURE );
                 NewAttr( aAttr );
             }
@@ -3120,7 +3120,7 @@ void SwWW8ImplReader::SetToggleAttr(BYTE nAttrId, bool bOn)
     {
         case 0:
             {
-                SvxWeightItem aAttr( bOn ? WEIGHT_BOLD : WEIGHT_NORMAL );
+                SvxWeightItem aAttr( bOn ? WEIGHT_BOLD : WEIGHT_NORMAL, RES_CHRATR_WEIGHT );
                 NewAttr( aAttr );
                 aAttr.SetWhich( RES_CHRATR_CJK_WEIGHT );
                 NewAttr( aAttr );
@@ -3128,35 +3128,35 @@ void SwWW8ImplReader::SetToggleAttr(BYTE nAttrId, bool bOn)
             break;
         case 1:
             {
-                SvxPostureItem aAttr( bOn ? ITALIC_NORMAL : ITALIC_NONE );
+                SvxPostureItem aAttr( bOn ? ITALIC_NORMAL : ITALIC_NONE, RES_CHRATR_POSTURE );
                 NewAttr( aAttr );
                 aAttr.SetWhich( RES_CHRATR_CJK_POSTURE );
                 NewAttr( aAttr );
             }
             break;
         case 2:
-            NewAttr(SvxCrossedOutItem(bOn ? STRIKEOUT_SINGLE : STRIKEOUT_NONE));
+            NewAttr(SvxCrossedOutItem(bOn ? STRIKEOUT_SINGLE : STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT));
             break;
         case 3:
-            NewAttr( SvxContourItem( bOn ) );
+            NewAttr( SvxContourItem( bOn, RES_CHRATR_CONTOUR ) );
             break;
         case 4:
-            NewAttr( SvxShadowedItem( bOn ) );
+            NewAttr( SvxShadowedItem( bOn, RES_CHRATR_SHADOWED ) );
             break;
         case 5:
             NewAttr( SvxCaseMapItem( bOn ? SVX_CASEMAP_KAPITAELCHEN
-                                              : SVX_CASEMAP_NOT_MAPPED ) );
+                                              : SVX_CASEMAP_NOT_MAPPED, RES_CHRATR_CASEMAP ) );
             break;
         case 6:
             NewAttr( SvxCaseMapItem( bOn ? SVX_CASEMAP_VERSALIEN
-                                             : SVX_CASEMAP_NOT_MAPPED ) );
+                                             : SVX_CASEMAP_NOT_MAPPED, RES_CHRATR_CASEMAP ) );
             break;
         case 7:
-            NewAttr(SvxCharHiddenItem(bOn));
+            NewAttr(SvxCharHiddenItem(bOn, RES_CHRATR_HIDDEN));
             break;
         case 8:
             NewAttr( SvxCrossedOutItem( bOn ? STRIKEOUT_DOUBLE
-                                                : STRIKEOUT_NONE ) );
+                                                : STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT ) );
             break;
         default:
             ASSERT(!this, "Unhandled unknown toggle attribute");
@@ -3220,7 +3220,7 @@ void SwWW8ImplReader::Read_SubSuper( USHORT, const BYTE* pData, short nLen )
             nProp = 100;
             break;
     }
-    NewAttr( SvxEscapementItem( nEs, nProp ) );
+    NewAttr( SvxEscapementItem( nEs, nProp, RES_CHRATR_ESCAPEMENT ) );
 }
 
 SwFrmFmt *SwWW8ImplReader::ContainsSingleInlineGraphic(const SwPaM &rRegion)
@@ -3313,7 +3313,7 @@ void SwWW8ImplReader::Read_SubSuperProp( USHORT, const BYTE* pData, short nLen )
         nPos2 = 100;
     if( nPos2 < -100 )
         nPos2 = -100;
-    SvxEscapementItem aEs( (short)nPos2, 100 );
+    SvxEscapementItem aEs( (short)nPos2, 100, RES_CHRATR_ESCAPEMENT );
     NewAttr( aEs );
 }
 
@@ -3371,9 +3371,9 @@ void SwWW8ImplReader::Read_Underline( USHORT, const BYTE* pData, short nLen )
     }
     else
     {
-        NewAttr( SvxUnderlineItem( eUnderline ));
+        NewAttr( SvxUnderlineItem( eUnderline, RES_CHRATR_UNDERLINE ));
         if( bWordLine )
-            NewAttr(SvxWordLineModeItem(true));
+            NewAttr(SvxWordLineModeItem(true, RES_CHRATR_WORDLINEMODE));
     }
 }
 
@@ -3407,14 +3407,14 @@ void SwWW8ImplReader::Read_DoubleLine_Rotate( USHORT, const BYTE* pData,
                 case 3: cStt = '<', cEnd = '>'; break;
                 case 4: cStt = '{', cEnd = '}'; break;
                 }
-                NewAttr( SvxTwoLinesItem( sal_True, cStt, cEnd ));
+                NewAttr( SvxTwoLinesItem( sal_True, cStt, cEnd, RES_CHRATR_TWO_LINES ));
             }
             break;
 
         case 1:                         // rotated characters
             {
                 bool bFitToLine = 0 != *(pData+1);
-                NewAttr( SvxCharRotateItem( 900, bFitToLine ));
+                NewAttr( SvxCharRotateItem( 900, bFitToLine, RES_CHRATR_ROTATE ));
             }
             break;
         }
@@ -3436,7 +3436,7 @@ void SwWW8ImplReader::Read_TxtColor( USHORT, const BYTE* pData, short nLen )
         if( b > 16 )                // unbekannt -> Black
             b = 0;
 
-        NewAttr( SvxColorItem(Color(GetCol(b))));
+        NewAttr( SvxColorItem(Color(GetCol(b)), RES_CHRATR_COLOR));
         if (pAktColl && pStyles)
             pStyles->bTxtColChanged = true;
     }
@@ -3460,7 +3460,7 @@ void SwWW8ImplReader::Read_TxtForeColor(USHORT, const BYTE* pData, short nLen)
     else
     {
         Color aColor(wwUtility::BGRToRGB(SVBT32ToUInt32(pData)));
-        NewAttr(SvxColorItem(aColor));
+        NewAttr(SvxColorItem(aColor, RES_CHRATR_COLOR));
         if (pAktColl && pStyles)
             pStyles->bTxtColChanged = true;
     }
@@ -3807,7 +3807,7 @@ void SwWW8ImplReader::Read_Kern( USHORT, const BYTE* pData, short nLen )
         return;
     }
     INT16 nKern = SVBT16ToShort( pData );    // Kerning in Twips
-    NewAttr( SvxKerningItem( nKern ) );
+    NewAttr( SvxKerningItem( nKern, RES_CHRATR_KERNING ) );
 }
 
 void SwWW8ImplReader::Read_FontKern( USHORT, const BYTE* , short nLen )
@@ -3815,7 +3815,7 @@ void SwWW8ImplReader::Read_FontKern( USHORT, const BYTE* , short nLen )
     if( nLen < 0 ) // Ende des Attributes
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_AUTOKERN );
     else
-        NewAttr(SvxAutoKernItem(true));
+        NewAttr(SvxAutoKernItem(true, RES_CHRATR_AUTOKERN));
 }
 
 void SwWW8ImplReader::Read_CharShadow(  USHORT, const BYTE* pData, short nLen )
@@ -3963,7 +3963,7 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
 
     short nPara = SVBT16ToShort( pData );
 
-    SvxLRSpaceItem aLR;
+    SvxLRSpaceItem aLR( RES_LR_SPACE );
     const SfxPoolItem* pLR = GetFmtAttr(RES_LR_SPACE);
     if( pLR )
         aLR = *(const SvxLRSpaceItem*)pLR;
@@ -4091,7 +4091,7 @@ void SwWW8ImplReader::Read_LineSpace( USHORT, const BYTE* pData, short nLen )
     USHORT nSwPost = 0;
     USHORT nSpaceTw = 0;
 
-    SvxLineSpacingItem aLSpc;
+    SvxLineSpacingItem aLSpc( LINE_SPACE_DEFAULT_HEIGHT, RES_PARATR_LINESPACING );
 
     if( 1 == nMulti )               // MultilineSpace ( proportional )
     {
@@ -4280,7 +4280,7 @@ void SwWW8ImplReader::Read_Justify( USHORT, const BYTE* pData, short nLen )
             bDistributed = true;
             break;
     }
-    SvxAdjustItem aAdjust(eAdjust);
+    SvxAdjustItem aAdjust(eAdjust, RES_PARATR_ADJUST);
     if (bDistributed)
         aAdjust.SetLastBlock(SVX_ADJUST_BLOCK);
 
@@ -4339,7 +4339,7 @@ void SwWW8ImplReader::Read_RTLJustify( USHORT, const BYTE* pData, short nLen )
                 bDistributed = true;
                 break;
         }
-        SvxAdjustItem aAdjust(eAdjust);
+        SvxAdjustItem aAdjust(eAdjust, RES_PARATR_ADJUST);
         if (bDistributed)
             aAdjust.SetLastBlock(SVX_ADJUST_BLOCK);
 
@@ -4433,7 +4433,7 @@ void SwWW8ImplReader::Read_Emphasis( USHORT, const BYTE* pData, short nLen )
             break;
         }
 
-        NewAttr( SvxEmphasisMarkItem( nVal ) );
+        NewAttr( SvxEmphasisMarkItem( nVal, RES_CHRATR_EMPHASIS_MARK ) );
     }
 }
 
@@ -4447,7 +4447,7 @@ void SwWW8ImplReader::Read_ScaleWidth( USHORT, const BYTE* pData, short nLen )
         //The number must be between 1 and 600
         if (nVal < 1 || nVal > 600)
             nVal = 100;
-        NewAttr( SvxCharScaleWidthItem( nVal ) );
+        NewAttr( SvxCharScaleWidthItem( nVal, RES_CHRATR_SCALEW ) );
     }
 }
 
@@ -4473,7 +4473,7 @@ void SwWW8ImplReader::Read_Relief( USHORT nId, const BYTE* pData, short nLen )
                 if( RELIEF_NONE != nNewValue )
                     nNewValue = RELIEF_NONE;
             }
-            NewAttr( SvxCharReliefItem( nNewValue ));
+            NewAttr( SvxCharReliefItem( nNewValue, RES_CHRATR_RELIEF ));
         }
     }
 }
@@ -4499,7 +4499,7 @@ void SwWW8ImplReader::Read_TxtAnim(USHORT nId, const BYTE* pData, short nLen)
             else
                 bBlink = false;
 
-            NewAttr(SvxBlinkItem(bBlink));
+            NewAttr(SvxBlinkItem(bBlink, RES_CHRATR_BLINK));
         }
     }
 }
@@ -4662,7 +4662,7 @@ void SwWW8ImplReader::Read_Shade( USHORT, const BYTE* pData, short nLen )
         aSHD.SetWWValue( *(SVBT16*)pData );
         SwWW8Shade aSh( bVer67, aSHD );
 
-        NewAttr(SvxBrushItem(aSh.aColor));
+        NewAttr(SvxBrushItem(aSh.aColor, RES_BACKGROUND));
     }
 }
 
@@ -4684,7 +4684,7 @@ void SwWW8ImplReader::Read_ParaBackColor(USHORT, const BYTE* pData, short nLen)
         ASSERT(nLen == 10, "Len of para back colour not 10!");
         if (nLen != 10)
             return;
-        NewAttr(SvxBrushItem(Color(ExtractColour(pData, bVer67))));
+        NewAttr(SvxBrushItem(Color(ExtractColour(pData, bVer67)), RES_BACKGROUND));
     }
 }
 
@@ -4751,7 +4751,7 @@ void SwWW8ImplReader::Read_Border(USHORT , const BYTE* , short nLen)
                 // moeglich
                 const SvxBoxItem* pBox
                     = (const SvxBoxItem*)GetFmtAttr( RES_BOX );
-                SvxBoxItem aBox;
+                SvxBoxItem aBox(RES_BOX);
                 if (pBox)
                     aBox = *pBox;
                 short aSizeArray[5]={0};
@@ -4770,7 +4770,7 @@ void SwWW8ImplReader::Read_Border(USHORT , const BYTE* , short nLen)
 
                 NewAttr( aBox );
 
-                SvxShadowItem aS;
+                SvxShadowItem aS(RES_SHADOW);
                 if( SetShadow( aS, &aSizeArray[0], aBrcs ) )
                     NewAttr( aS );
             }
@@ -4812,8 +4812,8 @@ void SwWW8ImplReader::Read_WidowControl( USHORT, const BYTE* pData, short nLen )
     {
         BYTE nL = ( *pData & 1 ) ? 2 : 0;
 
-        NewAttr( SvxWidowsItem( nL ) );     // Aus -> nLines = 0
-        NewAttr( SvxOrphansItem( nL ) );
+        NewAttr( SvxWidowsItem( nL, RES_PARATR_WIDOWS ) );     // Aus -> nLines = 0
+        NewAttr( SvxOrphansItem( nL, RES_PARATR_ORPHANS ) );
 
         if( pAktColl && pStyles )           // Style-Def ?
             pStyles->bWidowsChanged = true; // merken zur Simulation
@@ -4828,9 +4828,9 @@ void SwWW8ImplReader::Read_UsePgsuSettings(USHORT,const BYTE* pData,short nLen)
     else
     {
         if(nInTable)
-            NewAttr( SvxParaGridItem(false) );
+            NewAttr( SvxParaGridItem(false, RES_PARATR_SNAPTOGRID) );
         else
-            NewAttr( SvxParaGridItem(*pData) );
+            NewAttr( SvxParaGridItem(*pData, RES_PARATR_SNAPTOGRID) );
     }
 }
 
@@ -4863,7 +4863,7 @@ void SwWW8ImplReader::Read_AlignFont( USHORT, const BYTE* pData, short nLen )
                 ASSERT(!this,"Unknown paragraph vertical align");
                 break;
         }
-        NewAttr( SvxParaVertAlignItem( nVal ) );
+        NewAttr( SvxParaVertAlignItem( nVal, RES_PARATR_VERTALIGN ) );
     }
 }
 
@@ -4872,7 +4872,7 @@ void SwWW8ImplReader::Read_KeepLines( USHORT, const BYTE* pData, short nLen )
     if( nLen <= 0 )
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_PARATR_SPLIT );
     else
-        NewAttr( SvxFmtSplitItem( ( *pData & 1 ) == 0 ) );
+        NewAttr( SvxFmtSplitItem( ( *pData & 1 ) == 0, RES_PARATR_SPLIT ) );
 }
 
 void SwWW8ImplReader::Read_KeepParas( USHORT, const BYTE* pData, short nLen )
@@ -4880,7 +4880,7 @@ void SwWW8ImplReader::Read_KeepParas( USHORT, const BYTE* pData, short nLen )
     if( nLen <= 0 )
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_KEEP );
     else
-        NewAttr( SvxFmtKeepItem( ( *pData & 1 ) != 0 ) );
+        NewAttr( SvxFmtKeepItem( ( *pData & 1 ) != 0 , RES_KEEP) );
 }
 
 void SwWW8ImplReader::Read_BreakBefore( USHORT, const BYTE* pData, short nLen )
@@ -4889,7 +4889,7 @@ void SwWW8ImplReader::Read_BreakBefore( USHORT, const BYTE* pData, short nLen )
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_BREAK );
     else
         NewAttr( SvxFmtBreakItem(
-                ( *pData & 1 ) ? SVX_BREAK_PAGE_BEFORE : SVX_BREAK_NONE ) );
+                ( *pData & 1 ) ? SVX_BREAK_PAGE_BEFORE : SVX_BREAK_NONE, RES_BREAK ) );
 }
 
 void SwWW8ImplReader::Read_ApoPPC( USHORT, const BYTE* pData, short )
