@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:38:38 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:05:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,9 @@
 
 #ifndef _TOOLS_RESID_HXX //autogen
 #include <tools/resid.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 #ifndef _SV_SOUND_HXX //autogen
@@ -1630,7 +1633,15 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
             RowInserted(0, nRecordCount, sal_False);
 
             if (m_xSeekRow->IsValid())
-                m_nSeekPos = m_pSeekCursor->getRow() - 1;
+                try
+                {
+                    m_nSeekPos = m_pSeekCursor->getRow() - 1;
+                }
+                catch( const Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                    m_nSeekPos = -1;
+                }
         }
         else
         {
