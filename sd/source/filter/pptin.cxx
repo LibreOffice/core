@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:03:05 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:23:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,6 @@
 #ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
 #endif
-#define ITEMID_COLOR                    EE_CHAR_COLOR
 #ifndef _SVX_COLRITEM_HXX //autogen
 #include <svx/colritem.hxx>
 #endif
@@ -98,9 +97,6 @@
 #include <svx/xlnclit.hxx>
 #endif
 
-#ifndef _EEITEMID_HXX
-#include <svx/eeitemid.hxx>
-#endif
 #ifndef _SVX_ADJITEM_HXX
 #include <svx/adjitem.hxx>
 #endif
