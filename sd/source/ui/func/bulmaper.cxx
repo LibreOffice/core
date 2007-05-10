@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bulmaper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:13:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:28:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,16 +44,6 @@
 #include <svx/svxids.hrc>
 #endif
 
-#define ITEMID_FONT         SID_ATTR_CHAR_FONT
-#define ITEMID_FONTHEIGHT   SID_ATTR_CHAR_FONTHEIGHT
-#define ITEMID_COLOR        SID_ATTR_CHAR_COLOR
-#define ITEMID_POSTURE      SID_ATTR_CHAR_POSTURE
-#define ITEMID_WEIGHT       SID_ATTR_CHAR_WEIGHT
-#define ITEMID_SHADOWED     SID_ATTR_CHAR_SHADOWED
-#define ITEMID_CONTOUR      SID_ATTR_CHAR_CONTOUR
-#define ITEMID_CROSSEDOUT   SID_ATTR_CHAR_STRIKEOUT
-#define ITEMID_UNDERLINE    SID_ATTR_CHAR_UNDERLINE
-
 //-> Fonts & Items
 #ifndef _SV_FONT_HXX
 #include <vcl/font.hxx>
@@ -88,7 +78,6 @@
 #ifndef _SVX_BULITEM_HXX
 #include <svx/bulitem.hxx>
 #endif
-#define ITEMID_BRUSH    0
 #ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
 #endif
@@ -167,10 +156,10 @@ void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& 
             // dem Vorlagen-Font angeglichen
 
             // to be implemented if module supports CJK
-            long nFontID = ITEMID_FONT;
-            long nFontHeightID = ITEMID_FONTHEIGHT;
-            long nWeightID = ITEMID_WEIGHT;
-            long nPostureID = ITEMID_POSTURE;
+            long nFontID = SID_ATTR_CHAR_FONT;
+            long nFontHeightID = SID_ATTR_CHAR_FONTHEIGHT;
+            long nWeightID = SID_ATTR_CHAR_WEIGHT;
+            long nPostureID = SID_ATTR_CHAR_POSTURE;
 
             if( 0 )
             {
