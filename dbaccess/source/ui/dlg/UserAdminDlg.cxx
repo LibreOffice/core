@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UserAdminDlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:57:16 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:24:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,6 +249,11 @@ DBG_NAME(OUserAdminDlg)
     void OUserAdminDlg::setTitle(const ::rtl::OUString& _sTitle)
     {
         SetText(_sTitle);
+    }
+    //-------------------------------------------------------------------------
+    void OUserAdminDlg::enableConfirmSettings( bool _bEnable )
+    {
+        (void)_bEnable;
     }
     //-------------------------------------------------------------------------
     sal_Bool OUserAdminDlg::saveDatasource()
