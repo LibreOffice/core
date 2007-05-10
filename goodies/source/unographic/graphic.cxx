@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphic.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:56:26 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:14:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,8 @@ uno::Any SAL_CALL Graphic::queryAggregation( const uno::Type& rType )
 
     if( rType == ::getCppuType((const uno::Reference< graphic::XGraphic >*)0) )
         aAny <<= uno::Reference< graphic::XGraphic >( this );
+    else if( rType == ::getCppuType((const uno::Reference< awt::XBitmap >*)0) )
+        aAny <<= uno::Reference< awt::XBitmap >( this );
     else if( rType == ::getCppuType((const uno::Reference< lang::XUnoTunnel >*)0) )
         aAny <<= uno::Reference< lang::XUnoTunnel >(this);
     else
@@ -214,8 +216,9 @@ uno::Sequence< uno::Type > SAL_CALL Graphic::getTypes()
     uno::Sequence< uno::Type >  aRet( ::unographic::GraphicDescriptor::getTypes() );
     sal_Int32                   nOldCount = aRet.getLength();
 
-    aRet.realloc( nOldCount + 1 );
+    aRet.realloc( nOldCount + 2 );
     aRet[ nOldCount ] = ::getCppuType((const uno::Reference< graphic::XGraphic>*)0);
+    aRet[ nOldCount+1 ] = ::getCppuType((const uno::Reference< awt::XBitmap>*)0);
 
     return aRet;
 }
@@ -239,6 +242,57 @@ uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId()
         cRet = ( ( mpGraphic->GetType() == GRAPHIC_BITMAP ) ? graphic::GraphicType::PIXEL : graphic::GraphicType::VECTOR );
 
     return cRet;
+}
+
+//----------------------------------------------------------------------
+// XBitmap
+//----------------------------------------------------------------------
+
+awt::Size SAL_CALL Graphic::getSize(  ) throw (uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    ::Size aVclSize;
+    if( mpGraphic && ( mpGraphic->GetType() != GRAPHIC_NONE ) )
+        aVclSize = mpGraphic->GetSizePixel();
+
+    return awt::Size( aVclSize.Width(), aVclSize.Height() );
+}
+
+//----------------------------------------------------------------------
+
+uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getDIB(  ) throw (uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    if( mpGraphic && ( mpGraphic->GetType() != GRAPHIC_NONE ) )
+    {
+        SvMemoryStream aMem;
+        aMem << mpGraphic->GetBitmapEx().GetBitmap();
+        return ::com::sun::star::uno::Sequence<sal_Int8>( (sal_Int8*) aMem.GetData(), aMem.Tell() );
+    }
+    else
+    {
+        return uno::Sequence<sal_Int8>();
+    }
+}
+
+//----------------------------------------------------------------------
+
+uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getMaskDIB(  ) throw (uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    if( mpGraphic && ( mpGraphic->GetType() != GRAPHIC_NONE ) )
+    {
+        SvMemoryStream aMem;
+        aMem << mpGraphic->GetBitmapEx().GetMask();
+        return ::com::sun::star::uno::Sequence<sal_Int8>( (sal_Int8*) aMem.GetData(), aMem.Tell() );
+    }
+    else
+    {
+        return uno::Sequence<sal_Int8>();
+    }
 }
 
 //----------------------------------------------------------------------
