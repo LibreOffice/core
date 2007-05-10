@@ -1,5 +1,4 @@
-Package: openoffice.org-debian-menus
-Description: OpenOffice.org desktop integration
+Description: %productname desktop integration
 Maintainer: OpenOffice.org
 Architecture: all
 Provides: openoffice.org-desktop-integration, openoffice.org-unbundled
