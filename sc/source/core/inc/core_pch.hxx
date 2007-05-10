@@ -4,9 +4,9 @@
  *
  *  $RCSfile: core_pch.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:23:57 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:46:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,7 @@
 //  ItemID-Defines etc. muessen immer ganz vorne stehen
 
 #include "scitems.hxx"
-#include "eetext.hxx"
 
-#define ITEMID_FIELD EE_FEATURE_FIELD
 
 #define _ZFORLIST_DECLARE_TABLE
 
