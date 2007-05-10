@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyids.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:03:38 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:37:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,7 @@ namespace dbtools
         const sal_Char* getPROPERTY_PRIVILEGES()            { return    "Privileges"; }
         const sal_Char* getPROPERTY_ID_HAVINGCLAUSE()       { return    "HavingClause"; }
         const sal_Char* getPROPERTY_ID_ISSIGNED()           { return    "IsSigned"; }
+        const sal_Char* getPROPERTY_ID_ISSEARCHABLE()       { return    "IsSearchable"; }
     //============================================================
     //= error messages
     //============================================================
@@ -182,6 +183,7 @@ namespace dbtools
                 case PROPERTY_ID_PRIVILEGES:                { rtl_uString_newFromAscii(&pStr,getPROPERTY_PRIVILEGES()           ); break; }
                 case PROPERTY_ID_HAVINGCLAUSE:              { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_HAVINGCLAUSE()          ); break; }
                 case PROPERTY_ID_ISSIGNED:                  { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_ISSIGNED()          ); break; }
+                case PROPERTY_ID_ISSEARCHABLE:              { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_ISSEARCHABLE()          ); break; }
 
             }
             m_aPropertyMap[_nIndex] = pStr;
