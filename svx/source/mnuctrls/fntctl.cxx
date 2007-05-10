@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntctl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:57:05 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:54:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,10 +51,7 @@
 #include <sfx2/dispatch.hxx>
 #endif
 
-#define ITEMID_FONT     1
-#define ITEMID_FONTLIST 2
-
-#include "fntctl.hxx"       // ITEMID_FONT muss vorher definiert sein!
+#include "fntctl.hxx"       //
 #include "svxids.hrc"
 
 #ifndef _SVX_FLSTITEM_HXX //autogen
