@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imapwnd.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:34:40 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:37:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 #include <sfx2/sfxsids.hrc>     // SID_ATTR_MACROITEM
 #endif
 #define _ANIMATION
-#define ITEMID_MACRO SID_ATTR_MACROITEM
+
 #ifndef _MACROPG_HXX //autogen
 #include <sfx2/macropg.hxx>
 #endif
@@ -897,7 +897,7 @@ void IMapWindow::DoMacroAssign()
     if ( pSdrObj )
     {
         SfxItemSet      aSet( *pIMapPool, SID_ATTR_MACROITEM, SID_ATTR_MACROITEM );
-        SvxMacroItem    aMacroItem;
+        SvxMacroItem    aMacroItem(SID_ATTR_MACROITEM);
         IMapObject*     pIMapObj = GetIMapObj( pSdrObj );
 
         aMacroItem.SetMacroTable( pIMapObj->GetMacroTable() );
