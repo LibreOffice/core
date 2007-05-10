@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:25:43 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:06:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
@@ -1229,7 +1228,7 @@ void OutRTF_SwRTL(SwRTFWriter& rWrt, const SwTxtNode *pNd)
         eDir =
             static_cast<SvxFrameDirection>(rWrt.pDoc->GetTextDirection(aPos));
     }
-    OutSvxFrmDir(rWrt, SvxFrameDirectionItem(eDir));
+    OutSvxFrmDir(rWrt, SvxFrameDirectionItem(eDir, RES_FRAMEDIR));
 }
 
 static Writer& OutRTF_SwTxtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
