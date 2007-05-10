@@ -4,9 +4,9 @@
  *
  *  $RCSfile: setup.cpp,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:20:01 $
+ *  last change: $Author: gm $ $Date: 2007-05-10 11:08:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,22 @@
 typedef HRESULT (CALLBACK* PFnDllGetVersion)( DLLVERSIONINFO *pdvi);
 typedef BOOL (WINAPI* PFnCheckTokenMembership)(HANDLE TokenHandle, PSID SidToCheck, PBOOL IsMember);
 
+#ifdef DEBUG
+inline void OutputDebugStringFormat( LPCTSTR pFormat, ... )
+{
+    TCHAR    buffer[1024];
+    va_list  args;
+
+    va_start( args, pFormat );
+    StringCchVPrintf( buffer, sizeof(buffer), pFormat, args );
+    OutputDebugString( buffer );
+}
+#else
+static inline void OutputDebugStringFormat( LPCTSTR, ... )
+{
+}
+#endif
+
 //--------------------------------------------------------------------------
 
 const TCHAR sInstKey[]       = TEXT( "Software\\Microsoft\\Windows\\CurrentVersion\\Installer" );
@@ -93,11 +109,13 @@ const TCHAR sMsiDll[]        = TEXT( "\\msi.dll" );
 const TCHAR sMsiExe[]        = TEXT( "\\msiexec.exe" );
 const TCHAR sDelayReboot[]   = TEXT( " /c:\"msiinst /delayreboot\"" );
 const TCHAR sMsiQuiet[]      = TEXT( " /q" );
+const TCHAR sMemMapName[]    = TEXT( "Global\\MsiErrorObject" );
 
 //--------------------------------------------------------------------------
 SetupAppX::SetupAppX()
 {
     m_hInst     = NULL;
+    m_hMapFile  = NULL;
     m_pAppTitle = NULL;
     m_pCmdLine  = NULL;
 
@@ -110,6 +128,7 @@ SetupAppX::SetupAppX()
     m_pTmpName      = NULL;
     m_pLogFile      = NULL;
     m_pModuleFile   = NULL;
+    m_pMSIErrorCode = NULL;
 
     m_pErrorText    = new TCHAR[ MAX_STR_LENGTH ];
     m_pErrorText[0] = '\0';
@@ -148,6 +167,9 @@ SetupAppX::~SetupAppX()
         free( m_pTmpName );
     }
 
+    if ( m_pMSIErrorCode ) UnmapViewOfFile( m_pMSIErrorCode );
+    if ( m_hMapFile ) CloseHandle( m_hMapFile );
+
     if ( m_pAppTitle ) delete [] m_pAppTitle;
     if ( m_pDatabase ) delete [] m_pDatabase;
     if ( m_pInstMsiW ) delete [] m_pInstMsiW;
@@ -183,6 +205,28 @@ boolean SetupAppX::Initialize( HINSTANCE hInst )
 
     if ( ! GetCmdLineParameters( &m_pCmdLine ) )
         return false;
+
+    m_hMapFile = CreateFileMapping(
+                 INVALID_HANDLE_VALUE,      // use paging file
+                 NULL,                      // default security
+                 PAGE_READWRITE,            // read/write access
+                 0,                         // max. object size
+                 sizeof( int ),             // buffer size
+                 sMemMapName );
+    if ( m_hMapFile )
+    {
+        m_pMSIErrorCode = (int*) MapViewOfFile( m_hMapFile,  // handle to map object
+                        FILE_MAP_ALL_ACCESS,   // read/write permission
+                        0,
+                        0,
+                        sizeof( int ) );
+        if ( m_pMSIErrorCode )
+            *m_pMSIErrorCode = 0;
+        else
+            OutputDebugStringFormat( TEXT("Could not map view of file (%d).\n"), GetLastError() );
+    }
+    else
+        OutputDebugStringFormat( TEXT("Could not create file mapping object (%d).\n"), GetLastError() );
 
     Log( TEXT("Starting: %s\r\n"), m_pModuleFile );
     Log( TEXT(" CommandLine=<%s>\r\n"), m_pCmdLine );
@@ -853,6 +897,22 @@ boolean SetupAppX::Install( long nLanguage )
     }
 
     return LaunchInstaller( pParams );
+}
+
+//--------------------------------------------------------------------------
+UINT SetupAppX::GetError() const
+{
+    UINT nErr = 0;
+
+    if ( m_pMSIErrorCode )
+        nErr = (UINT) *m_pMSIErrorCode;
+
+    if ( nErr == 0 )
+        nErr = m_uiRet;
+
+    if ( nErr != 0 )
+        OutputDebugStringFormat( TEXT("Setup will return error (%d).\n"), nErr );
+    return nErr;
 }
 
 //--------------------------------------------------------------------------
