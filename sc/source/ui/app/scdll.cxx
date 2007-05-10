@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:50:27 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:54:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 
 
 #include <svx/eeitem.hxx>
-#define ITEMID_FIELD EE_FEATURE_FIELD
+
 
 #ifndef _FM_FMOBJFAC_HXX
 #include <svx/fmobjfac.hxx>
