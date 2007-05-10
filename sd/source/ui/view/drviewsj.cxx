@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsj.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:31:30 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:35:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,6 @@
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
 #endif
-#define ITEMID_FIELD    EE_FEATURE_FIELD
 #ifndef _FLDITEM_HXX
 #include <svx/flditem.hxx>
 #endif
