@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 15:10:29 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:41:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,8 @@
 #ifndef _XMLOFF_FORMS_CONTROLPROPERTYHDL_HXX_
 #include "controlpropertyhdl.hxx"
 #endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
-#include <comphelper/extract.hxx>
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 #ifndef _XMLOFF_FORMS_CONTROLPROPERTYMAP_HXX_
@@ -215,7 +215,7 @@ namespace xmloff
         const Sequence< ScriptEventDescriptor >& _rEvents)
     {
         // do the exporting
-        OColumnExport aExportImpl(*this, _rxColumn, _rEvents);
+        OColumnExport aExportImpl(*this, _rxColumn, getControlId( _rxColumn ), _rEvents);
         aExportImpl.doExport();
     }
 
@@ -230,11 +230,7 @@ namespace xmloff
             sReferringControls = aReferring->second;
 
         // the control id (should already have been created in examineForms)
-        ::rtl::OUString sControlId;
-        MapPropertySet2String::const_iterator aControlId = m_aCurrentPageIds->second.find(_rxControl);
-        OSL_ENSURE(aControlId != m_aCurrentPageIds->second.end(), "OFormLayerXMLExport_Impl::exportControl: could not find the control id!");
-        if (aControlId != m_aCurrentPageIds->second.end())
-            sControlId = aControlId->second;
+        ::rtl::OUString sControlId( getControlId( _rxControl ) );
 
         // do the exporting
         OControlExport aExportImpl(*this, _rxControl, sControlId, sReferringControls, _rEvents);
@@ -271,7 +267,6 @@ namespace xmloff
         Reference< XEventAttacherManager > xElementEventManager(_rxCollection, UNO_QUERY);
         Sequence< ScriptEventDescriptor > aElementEvents;
 
-        Reference< XPropertySet > xCurrentProps;
         Reference< XPropertySetInfo > xPropsInfo;
         Reference< XIndexAccess > xCurrentContainer;
         for (sal_Int32 i=0; i<nElements; ++i)
@@ -279,7 +274,7 @@ namespace xmloff
             try
             {
                 // extract the current element
-                ::cppu::extractInterface(xCurrentProps, _rxCollection->getByIndex(i));
+                Reference< XPropertySet > xCurrentProps( _rxCollection->getByIndex(i), UNO_QUERY );
                 OSL_ENSURE(xCurrentProps.is(), "OFormLayerXMLExport_Impl::exportCollectionElements: invalid child element, skipping!");
                 if (!xCurrentProps.is())
                     continue;
@@ -527,15 +522,13 @@ namespace xmloff
         ::std::stack< Reference< XIndexAccess > >   aContainerHistory;
         ::std::stack< sal_Int32 >                   aIndexHistory;
 
-        Reference< XPropertySet >       xCurrent;
-
         Reference< XIndexAccess > xLoop = xCollectionIndex;
         sal_Int32 nChildPos = 0;
         do
         {
             if (nChildPos < xLoop->getCount())
             {
-                ::cppu::extractInterface(xCurrent, xLoop->getByIndex(nChildPos));
+                Reference< XPropertySet > xCurrent( xLoop->getByIndex( nChildPos ), UNO_QUERY );
                 OSL_ENSURE(xCurrent.is(), "OFormLayerXMLExport_Impl::examineForms: invalid child object");
                 if (!xCurrent.is())
                     continue;
@@ -636,8 +629,7 @@ namespace xmloff
             // check if this control has a "LabelControl" property referring another control
             if ( xCurrentInfo->hasPropertyByName( PROPERTY_CONTROLLABEL ) )
             {
-                Reference< XPropertySet > xCurrentReference;
-                ::cppu::extractInterface( xCurrentReference, _rxObject->getPropertyValue( PROPERTY_CONTROLLABEL ) );
+                Reference< XPropertySet > xCurrentReference( _rxObject->getPropertyValue( PROPERTY_CONTROLLABEL ), UNO_QUERY );
                 if (xCurrentReference.is())
                 {
                     ::rtl::OUString& sReferencedBy = m_aCurrentPageReferring->second[xCurrentReference];
@@ -670,7 +662,7 @@ namespace xmloff
             _rxObject->getPropertyValue( PROPERTY_CLASSID ) >>= nControlType;
             if ( FormComponentType::GRIDCONTROL == nControlType )
             {
-                collectGridAutoStyles( _rxObject );
+                collectGridColumnStylesAndIds( _rxObject );
             }
         }
 
@@ -678,69 +670,80 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OFormLayerXMLExport_Impl::collectGridAutoStyles( const Reference< XPropertySet >& _rxControl )
+    void OFormLayerXMLExport_Impl::collectGridColumnStylesAndIds( const Reference< XPropertySet >& _rxControl )
     {
         // loop through all columns of the grid
         try
         {
             Reference< XIndexAccess > xContainer( _rxControl, UNO_QUERY );
-            OSL_ENSURE( xContainer.is(), "OFormLayerXMLExport_Impl::collectGridAutoStyles: grid control not being a container?!" );
-            if ( xContainer.is() )
+            OSL_ENSURE( xContainer.is(), "OFormLayerXMLExport_Impl::collectGridColumnStylesAndIds: grid control not being a container?!" );
+            if ( !xContainer.is() )
+                return;
+
+            Reference< XPropertySetInfo > xColumnPropertiesMeta;
+
+            sal_Int32 nCount = xContainer->getCount();
+            for ( sal_Int32 i=0; i<nCount; ++i )
             {
-                Reference< XPropertySet > xColumnProperties;
-                Reference< XPropertySetInfo > xColumnPropertiesMeta;
+                Reference< XPropertySet > xColumnProperties( xContainer->getByIndex( i ), UNO_QUERY );
+                OSL_ENSURE( xColumnProperties.is(), "OFormLayerXMLExport_Impl::collectGridColumnStylesAndIds: invalid grid column encountered!" );
+                if ( !xColumnProperties.is() )
+                    continue;
 
-                sal_Int32 nCount = xContainer->getCount();
-                for ( sal_Int32 i=0; i<nCount; ++i )
-                {
-                    if ( xContainer->getByIndex( i ) >>= xColumnProperties )
-                    {
-                        xColumnPropertiesMeta = xColumnProperties->getPropertySetInfo();
-                        // get the styles of the column
-                        ::std::vector< XMLPropertyState > aPropertyStates = m_xExportMapper->Filter( xColumnProperties );
+                // ----------------------------------
+                // generate a new control id
 
-                        // care for the number format, additionally
-                        ::rtl::OUString sColumnNumberStyle;
-                        if ( xColumnPropertiesMeta.is() && xColumnPropertiesMeta->hasPropertyByName( PROPERTY_FORMATKEY ) )
-                            sColumnNumberStyle = getImmediateNumberStyle( xColumnProperties );
+                // find a free id
+                ::rtl::OUString sCurrentId = lcl_findFreeControlId( m_aControlIds );
+                // add it to the map
+                m_aCurrentPageIds->second[ xColumnProperties ] = sCurrentId;
 
-                        if ( sColumnNumberStyle.getLength() )
-                        {   // the column indeed has a formatting
-                            sal_Int32 nStyleMapIndex = m_xExportMapper->getPropertySetMapper()->FindEntryIndex( CTF_FORMS_DATA_STYLE );
-                                // TODO: move this to the ctor
-                            OSL_ENSURE ( -1 != nStyleMapIndex, "XMLShapeExport::collectShapeAutoStyles: could not obtain the index for our context id!");
+                // ----------------------------------
+                // determine a number style, if needed
+                xColumnPropertiesMeta = xColumnProperties->getPropertySetInfo();
+                // get the styles of the column
+                ::std::vector< XMLPropertyState > aPropertyStates = m_xExportMapper->Filter( xColumnProperties );
 
-                            XMLPropertyState aNumberStyleState( nStyleMapIndex, makeAny( sColumnNumberStyle ) );
-                            aPropertyStates.push_back( aNumberStyleState );
-                        }
+                // care for the number format, additionally
+                ::rtl::OUString sColumnNumberStyle;
+                if ( xColumnPropertiesMeta.is() && xColumnPropertiesMeta->hasPropertyByName( PROPERTY_FORMATKEY ) )
+                    sColumnNumberStyle = getImmediateNumberStyle( xColumnProperties );
+
+                if ( sColumnNumberStyle.getLength() )
+                {   // the column indeed has a formatting
+                    sal_Int32 nStyleMapIndex = m_xExportMapper->getPropertySetMapper()->FindEntryIndex( CTF_FORMS_DATA_STYLE );
+                        // TODO: move this to the ctor
+                    OSL_ENSURE ( -1 != nStyleMapIndex, "XMLShapeExport::collectShapeAutoStyles: could not obtain the index for our context id!");
+
+                    XMLPropertyState aNumberStyleState( nStyleMapIndex, makeAny( sColumnNumberStyle ) );
+                    aPropertyStates.push_back( aNumberStyleState );
+                }
 
 #if OSL_DEBUG_LEVEL > 0
-                        ::std::vector< XMLPropertyState >::const_iterator aHaveALook = aPropertyStates.begin();
-                        for ( ; aHaveALook != aPropertyStates.end(); ++aHaveALook )
-                        {
-                            (void)aHaveALook;
-                        }
+                ::std::vector< XMLPropertyState >::const_iterator aHaveALook = aPropertyStates.begin();
+                for ( ; aHaveALook != aPropertyStates.end(); ++aHaveALook )
+                {
+                    (void)aHaveALook;
+                }
 #endif
 
-                        if ( aPropertyStates.size() )
-                        {   // add to the style pool
-                            ::rtl::OUString sColumnStyleName = m_rContext.GetAutoStylePool()->Add( XML_STYLE_FAMILY_CONTROL_ID, aPropertyStates );
+                // ----------------------------------
+                // determine the column style
 
-                            OSL_ENSURE( m_aGridColumnStyles.end() == m_aGridColumnStyles.find( xColumnProperties ),
-                                "OFormLayerXMLExport_Impl::collectGridAutoStyles: already have a style for this column!" );
+                if ( aPropertyStates.size() )
+                {   // add to the style pool
+                    ::rtl::OUString sColumnStyleName = m_rContext.GetAutoStylePool()->Add( XML_STYLE_FAMILY_CONTROL_ID, aPropertyStates );
 
-                            m_aGridColumnStyles.insert( MapPropertySet2String::value_type( xColumnProperties, sColumnStyleName ) );
-                        }
-                    }
-                    else
-                        OSL_ENSURE( sal_False, "OFormLayerXMLExport_Impl::collectGridAutoStyles: invalid grid column encountered!" );
+                    OSL_ENSURE( m_aGridColumnStyles.end() == m_aGridColumnStyles.find( xColumnProperties ),
+                        "OFormLayerXMLExport_Impl::collectGridColumnStylesAndIds: already have a style for this column!" );
+
+                    m_aGridColumnStyles.insert( MapPropertySet2String::value_type( xColumnProperties, sColumnStyleName ) );
                 }
             }
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-            (void)e;    // make compiler happy
-            OSL_ENSURE( sal_False, "OFormLayerXMLExport_Impl::collectGridAutoStyles: error examining the grid colums!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
