@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextConnectionHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:04:34 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:23:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ namespace dbaui
         void        SetClickHandler(const Link& _rHandler) { m_aGetExtensionHandler = _rHandler; }
         String      GetExtension();
         sal_Bool FillItemSet( SfxItemSet& rSet, const sal_Bool bChangedSomething );
-        sal_Bool checkItems();
+        sal_Bool prepareLeave();
     };
 
 //.........................................................................
