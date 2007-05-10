@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:39:32 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:25:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,6 @@
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
 #endif
-
-#define ITEMID_FIELD    EE_FEATURE_FIELD
 
 #ifndef _SVX_FLDITEM_HXX //autogen
 #include <svx/flditem.hxx>
@@ -80,7 +78,6 @@
 #include <svx/editstat.hxx>
 #include <svx/editeng.hxx>
 
-#define ITEMID_SPELLCHECK   0
 #include <svx/dialogs.hrc>
 
 #ifndef _SVDOTEXT_HXX
