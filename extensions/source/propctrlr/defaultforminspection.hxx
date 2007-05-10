@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultforminspection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 11:58:05 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:47:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,25 +35,12 @@
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_DEFAULTFORMINSPECTION_HXX
 #define EXTENSIONS_SOURCE_PROPCTRLR_DEFAULTFORMINSPECTION_HXX
 
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_PCROMPONENTCONTEXT_HXX
-#include "pcrcomponentcontext.hxx"
+#ifndef INSPECTORMODELBASE_HXX
+#include "inspectormodelbase.hxx"
 #endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_INSPECTION_XOBJECTINSPECTORMODEL_HPP_
-#include <com/sun/star/inspection/XObjectInspectorModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
-#include <com/sun/star/lang/XInitialization.hpp>
-#endif
 /** === end UNO includes === **/
-
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/implbase3.hxx>
-#endif
 
 #include <memory>
 
@@ -66,20 +53,11 @@ namespace pcr
     //====================================================================
     //= DefaultFormComponentInspectorModel
     //====================================================================
-    typedef ::cppu::WeakAggImplHelper3  <   ::com::sun::star::inspection::XObjectInspectorModel
-                                        ,   ::com::sun::star::lang::XServiceInfo
-                                        ,   ::com::sun::star::lang::XInitialization
-                                        >   DefaultFormComponentInspectorModel_Base;
-    class DefaultFormComponentInspectorModel : public DefaultFormComponentInspectorModel_Base
+    class DefaultFormComponentInspectorModel : public ImplInspectorModel
     {
     private:
-        ::osl::Mutex                                m_aMutex;
-        ComponentContext                            m_aContext;
         bool                                        m_bUseFormComponentHandlers;
         bool                                        m_bConstructed;
-        bool                                        m_bHasHelpSection;
-        sal_Int32                                   m_nMinHelpTextLines;
-        sal_Int32                                   m_nMaxHelpTextLines;
 
         /// access to property meta data
         ::std::auto_ptr< OPropertyInfoService >     m_pInfoService;
@@ -89,14 +67,10 @@ namespace pcr
 
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
         // XObjectInspectorModel
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getHandlerFactories() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::sal_Bool SAL_CALL getHasHelpSection() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::sal_Int32 SAL_CALL getMinHelpTextLines() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::sal_Int32 SAL_CALL getMaxHelpTextLines() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::inspection::PropertyCategoryDescriptor > SAL_CALL describeCategories(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Int32 SAL_CALL getPropertyOrderIndex( const ::rtl::OUString& PropertyName ) throw (::com::sun::star::uno::RuntimeException);
 
