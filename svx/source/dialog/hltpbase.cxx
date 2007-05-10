@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:33:49 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:37:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 #include <sot/formats.hxx>
 #endif
 #include <sfx2/sfxsids.hrc>
-#define ITEMID_MACRO SID_ATTR_MACROITEM
+
 #ifndef _SFXMACITEM_HXX
 #include <svtools/macitem.hxx>
 #endif
