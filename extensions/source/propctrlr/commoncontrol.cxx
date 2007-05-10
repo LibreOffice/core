@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commoncontrol.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 11:57:02 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:46:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,9 @@
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _SV_COMBOBOX_HXX
 #include <vcl/combobox.hxx>
@@ -126,16 +129,9 @@ namespace pcr
                 m_xContext->valueChanged( &m_rAntiImpl );
                 m_bModified = sal_False;
             }
-            catch( const Exception& e )
+            catch( const Exception& )
             {
-            #if OSL_DEBUG_LEVEL > 0
-                ::rtl::OString sMessage( "ControlHelper::notifyModifiedValue: caught an exception!\n" );
-                sMessage += "message:\n";
-                sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
-                OSL_ENSURE( false, sMessage );
-            #else
-                e; // make compiler happy
-            #endif
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
     }
@@ -169,16 +165,9 @@ namespace pcr
             if ( m_xContext.is() )
                 m_xContext->activateNextControl( const_cast< XPropertyControl* >( &m_rAntiImpl ) );
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-        #if OSL_DEBUG_LEVEL > 0
-            ::rtl::OString sMessage( "ControlHelper::impl_activateNextControl_nothrow: caught an exception!\n" );
-            sMessage += "message:\n";
-            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
-            OSL_ENSURE( false, sMessage );
-        #else
-            e; // make compiler happy
-        #endif
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -216,16 +205,9 @@ namespace pcr
             if ( m_xContext.is() )
                 m_xContext->focusGained( &m_rAntiImpl );
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-        #if OSL_DEBUG_LEVEL > 0
-            ::rtl::OString sMessage( "ControlHelper, GetFocusHdl: caught an exception!\n" );
-            sMessage += "message:\n";
-            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
-            OSL_ENSURE( false, sMessage );
-        #else
-            e; // make compiler happy
-        #endif
+            DBG_UNHANDLED_EXCEPTION();
         }
         return 0;
     }
