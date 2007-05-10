@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:19:15 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:36:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#include "eetext.hxx"       // definiert ITEMID_... fuer frmitems und textitem
+#include "eetext.hxx"
 #ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
 #endif
