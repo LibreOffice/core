@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_AxisLabel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:58:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:32:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,6 @@
 #include "SchSfxItemIds.hxx"
 #include "SchSlotIds.hxx"
 
-#define ITEMID_CHARTTEXTORDER   SCHATTR_TEXT_ORDER
-// #define ITEMID_CHARTTEXTORIENT   SCHATTR_TEXT_ORIENT
 // header for SvxChartTextOrientItem / SvxChartTextOrderItem
 #ifndef _SVX_CHRTITEM_HXX
 #include <svx/chrtitem.hxx>
@@ -65,8 +63,6 @@
 #endif
 
 #include "schattr.hxx"
-#define ITEMID_CHARTTEXTORDER   SCHATTR_TEXT_ORDER
-#define ITEMID_CHARTTEXTORIENT  SCHATTR_TEXT_ORIENT
 // header for SvxChartTextOrientItem / SvxChartTextOrderItem
 #ifndef _SVX_CHRTITEM_HXX
 #include <svx/chrtitem.hxx>
@@ -176,7 +172,7 @@ BOOL SchAxisLabelTabPage::FillItemSet( SfxItemSet& rOutAttrs )
             bRadioButtonChecked = false;
 
         if( bRadioButtonChecked )
-            rOutAttrs.Put( SvxChartTextOrderItem( eOrder ));
+            rOutAttrs.Put( SvxChartTextOrderItem( eOrder, SCHATTR_TEXT_ORDER ));
     }
 
     if( aCbTextOverlap.GetState() != STATE_DONTKNOW )
