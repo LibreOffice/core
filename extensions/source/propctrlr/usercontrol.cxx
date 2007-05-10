@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usercontrol.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:25:03 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:50:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,9 @@
 #endif
 
 /** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_INSPECTION_PROPERTYCONTROLTYPE_HPP_
+#include <com/sun/star/inspection/PropertyControlType.hpp>
+#endif
 #ifndef _COM_SUN_STAR_INSPECTION_PROPERTYCONTROLTYPE_HPP_
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #endif
@@ -306,6 +309,14 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
+    ::sal_Int16 SAL_CALL OTimeDurationControl::getControlType() throw (::com::sun::star::uno::RuntimeException)
+    {
+        // don't use the base class'es method, it would claim we're a standard control, which
+        // we in fact aren't
+        return PropertyControlType::Unknown;
+    }
+
+    //------------------------------------------------------------------
     IMPL_LINK( OTimeDurationControl, OnCustomConvert, MetricField*, /*pField*/ )
     {
         long nMultiplier = 1;
@@ -314,7 +325,7 @@ namespace pcr
         if ( getTypedControlWindow()->GetCurUnitText().EqualsIgnoreCaseAscii( "s" ) )
             nMultiplier = 1000;
         else if ( getTypedControlWindow()->GetCurUnitText().EqualsIgnoreCaseAscii( "m" ) )
-            nMultiplier = 1000 * 60 * 60;
+            nMultiplier = 1000 * 60;
         else if ( getTypedControlWindow()->GetCurUnitText().EqualsIgnoreCaseAscii( "h" ) )
             nMultiplier = 1000 * 60 * 60;
 
