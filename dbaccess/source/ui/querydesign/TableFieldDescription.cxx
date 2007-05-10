@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableFieldDescription.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:25:02 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:39:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,29 +129,6 @@ sal_Bool OTableFieldDesc::operator==( const OTableFieldDesc& rDesc )
                 m_bVisible != rDesc.IsVisible() );
 
 }
-// -----------------------------------------------------------------------------
-void OTableFieldDesc::clear()
-{
-    m_vecCriteria.clear();
-    ::std::vector< ::rtl::OUString>().swap( m_vecCriteria );
-    m_aTableName    = m_aAliasName = m_aFieldName = m_aFieldAlias = m_aFunctionName = ::rtl::OUString();
-    m_pTabWindow    = NULL;
-    m_eDataType     = 1000;
-    m_bVisible      = sal_False;
-    m_eOrderDir     =  ORDER_NONE;
-    m_eFunctionType = FKT_NONE;
-    m_bGroupBy      = sal_False;
-}
-
-//------------------------------------------------------------------------------
-void OTableFieldDesc::NextOrderDir()
-{
-    DBG_CHKTHIS(OTableFieldDesc,NULL);
-    int nTmp = ((int)m_eOrderDir);
-    nTmp++;
-    nTmp %= (ORDER_DESC+1);
-    m_eOrderDir = EOrderDir(nTmp);
-}
 
 //------------------------------------------------------------------------------
 void OTableFieldDesc::SetCriteria( sal_uInt16 nIdx, const ::rtl::OUString& rCrit)
@@ -178,27 +155,6 @@ void OTableFieldDesc::SetCriteria( sal_uInt16 nIdx, const ::rtl::OUString& rCrit
     return aRetStr;
 }
 
-//------------------------------------------------------------------------------
-sal_Bool OTableFieldDesc::IsNumericDataType() const
-{
-    DBG_CHKTHIS(OTableFieldDesc,NULL);
-    sal_Bool bErg(sal_False);
-    switch (m_eDataType)
-    {
-        case DataType::BIT:
-        case DataType::BOOLEAN:
-        case DataType::TINYINT:
-        case DataType::SMALLINT:
-        case DataType::INTEGER:
-        case DataType::REAL:
-        case DataType::DOUBLE:
-        case DataType::BIGINT:
-        case DataType::DECIMAL:
-        case DataType::NUMERIC:
-            bErg = sal_True;
-    }
-    return bErg;
-}
 // -----------------------------------------------------------------------------
 void OTableFieldDesc::Load(const ::com::sun::star::beans::PropertyValue& _rProperty)
 {
