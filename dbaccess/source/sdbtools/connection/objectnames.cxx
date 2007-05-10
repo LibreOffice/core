@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectnames.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:49:59 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:15:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,7 +229,7 @@ namespace sdbtools
         {
         }
 
-        virtual bool validateName( const ::rtl::OUString& _rName )
+        inline USHORT validateName_getErrorResource( const ::rtl::OUString& _rName )
         {
             if  (   ( _rName.indexOf( (sal_Unicode)34  ) >= 0 )  // "
                 ||  ( _rName.indexOf( (sal_Unicode)39  ) >= 0 )  // '
@@ -238,15 +238,27 @@ namespace sdbtools
                 ||  ( _rName.indexOf( (sal_Unicode)146 ) >= 0 )  // ’
                 ||  ( _rName.indexOf( (sal_Unicode)180 ) >= 0 )  // ´
                 )
+                return STR_NO_QUOTES_IN_QUERY_NAMES;
+
+            if ( _rName.indexOf( '/') >= 0 )
+                return STR_NO_SLASHES_IN_QUERY_NAMES;
+
+            return 0;
+        }
+
+        virtual bool validateName( const ::rtl::OUString& _rName )
+        {
+            if ( validateName_getErrorResource( _rName ) != 0 )
                 return false;
             return true;
         }
 
         virtual void validateName_throw( const ::rtl::OUString& _rName )
         {
-            if ( !validateName( _rName ) )
+            USHORT nErrorResource = validateName_getErrorResource( _rName );
+            if ( nErrorResource != 0 )
             {
-                String sError( SdbtRes( STR_NO_QUOTES_IN_QUERY_NAMES ) );
+                String sError = String( SdbtRes( nErrorResource ) );
                 ::dbtools::throwGenericSQLException( sError, m_xConnection );
             }
         }
