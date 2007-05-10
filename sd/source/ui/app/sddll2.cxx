@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:38:57 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:24:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 
 
 
-#define ITEMID_SIZE 0
-#define ITEMID_LINE 0         // kann spaeter raus!
-#define ITEMID_BRUSH 0        // kann spaeter raus!
 #include <svx/editdata.hxx>
 #include "eetext.hxx"
 #include <svx/svxids.hrc>
@@ -49,7 +46,6 @@
 #include <svx/eeitem.hxx>
 #endif
 
-#define ITEMID_FIELD    EE_FEATURE_FIELD
 #include <svx/flditem.hxx>
 #ifndef _IMAPDLG_HXX_ //autogen
 #include <svx/imapdlg.hxx>
