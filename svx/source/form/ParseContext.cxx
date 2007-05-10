@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ParseContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:44:00 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:05:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,8 +199,17 @@ namespace
     OSystemParseContext* getSharedContext(OSystemParseContext* _pContext = NULL,sal_Bool _bSet = sal_False)
     {
         static OSystemParseContext* s_pSharedContext = NULL;
-        if ( _pContext && !s_pSharedContext || _bSet )
+        if ( _pContext && !s_pSharedContext )
+        {
             s_pSharedContext = _pContext;
+            return s_pSharedContext;
+        }
+        if ( _bSet )
+        {
+            OSystemParseContext* pReturn = _pContext ? _pContext : s_pSharedContext;
+            s_pSharedContext = _pContext;
+            return pReturn;
+        }
         return s_pSharedContext;
     }
     // -----------------------------------------------------------------------------
