@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atklistener.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:10:00 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:18:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -343,7 +343,7 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
         // AtkText
         case accessibility::AccessibleEventId::CARET_CHANGED:
         {
-            sal_Int32 nPos;
+            sal_Int32 nPos=0;
             aEvent.NewValue >>= nPos;
             g_signal_emit_by_name( mpAccessible, "text_caret_moved", nPos );
             break;
