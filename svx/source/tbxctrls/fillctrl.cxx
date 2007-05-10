@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillctrl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:02:52 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:00:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,11 +55,6 @@
 #include <rtl/ustring.hxx>
 
 #include "dialogs.hrc"
-
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
-#define ITEMID_GRADIENT_LIST    SID_GRADIENT_LIST
-#define ITEMID_HATCH_LIST       SID_HATCH_LIST
-#define ITEMID_BITMAP_LIST      SID_BITMAP_LIST
 
 #define DELAY_TIMEOUT           300
 
