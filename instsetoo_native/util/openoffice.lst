@@ -189,7 +189,7 @@ OpenOffice_SDK
             POSTVERSIONEXTENSION SDK
             PACKAGEVERSION 2.3.0
             PACKAGEREVISION {milestone}
-            LICENSENAME LGPL, SISSL
+            LICENSENAME LGPL
             NOVERSIONINDIRNAME 0
             NOSPACEINDIRECTORYNAME 1
             CHANGETARGETDIR 1
@@ -203,6 +203,187 @@ OpenOffice_SDK
         compression 5
         script sdkoo
         include {solarpath}/bin.{minor}/sdkoo,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarcommonpath}/bin.{minor},{solarenvpath}/{os}/MS
+        fail sun.star.releng.pack.errors@staroffice-news.germany.sun.com
+        mailinfo ms-eham02-01,packager,packager
+    }
+}
+
+BrOffice
+{
+	Settings
+	{
+		variables
+		{
+			PRODUCTNAME BrOffice.org
+			PRODUCTVERSION 2.2
+			PRODUCTEXTENSION
+			LONG_PRODUCTEXTENSION
+			USERDIRPRODUCTVERSION 2
+			ABOUTBOXPRODUCTVERSION 2.2.0
+			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
+			UPDATEURL http://update.services.openoffice.org/ProductUpdateService/check.Update
+			ADD_INCLUDE_FILES cliureversion.mk
+			EVAL
+			FILEFORMATNAME OpenOffice.org
+			FILEFORMATVERSION 1.0
+			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
+			PACKAGEVERSION 2.2.0
+			PACKAGEREVISION {milestone}
+			LICENSENAME LGPL
+			SERVICESPROJEKT 1
+			GLOBALFILEGID gid_File_Lib_Vcl
+			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
+			OPENSOURCE 1
+			OOODOWNLOADNAME 1
+			SUNDIR 0
+			XPDINSTALLER 0
+			BETAUPGRADECODE {8BC2B4E7-74CA-4A3A-B431-585A1ABEFA66}
+			CHANGETARGETDIR 1
+			USE_FILEVERSION 1
+			LIBRARYVERSION 8.2.0
+			CODEFILENAME codes_broo.txt
+			PATCHCODEFILE ooo_patchcodes.txt
+			DOWNLOADBANNER	brobanner.bmp
+			DOWNLOADBITMAP	brobitmap.bmp
+			DOWNLOADSETUPICO	ooosetup.ico
+		}
+		active			1
+		compression		5
+		script			setup_osl
+		downloadname	BrOo_{productversion}_{os}_install_{languages}
+		langpackdownloadname	BrOo_{productversion}_languagepack_{os}_install_{languages}
+		include			.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/broffice,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/broffice,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
+		fail sun.star.releng.pack.errors@staroffice-news.germany.sun.com
+		mailinfo ms-eham02-01,packager,packager
+	}
+}
+
+BrOffice_wJRE
+{
+	Settings
+	{
+		variables
+		{
+			PRODUCTNAME BrOffice.org
+			PRODUCTVERSION 2.2
+			PRODUCTEXTENSION
+			LONG_PRODUCTEXTENSION
+			USERDIRPRODUCTVERSION 2
+			ABOUTBOXPRODUCTVERSION 2.2.0
+			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
+			UPDATEURL http://update.services.openoffice.org/ProductUpdateService/check.Update
+			ADD_INCLUDE_FILES cliureversion.mk
+			EVAL
+			FILEFORMATNAME OpenOffice.org
+			FILEFORMATVERSION 1.0
+			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
+			PACKAGEVERSION 2.2.0
+			PACKAGEREVISION {milestone}
+			LICENSENAME LGPL
+			SERVICESPROJEKT 1
+			GLOBALFILEGID gid_File_Lib_Vcl
+			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
+			OPENSOURCE 1
+			OOODOWNLOADNAME 1
+			SUNDIR 0
+			XPDINSTALLER 0
+			BETAUPGRADECODE {8BC2B4E7-74CA-4A3A-B431-585A1ABEFA66}
+			CHANGETARGETDIR 1
+			USE_FILEVERSION 1
+			LIBRARYVERSION 8.2.0
+			CODEFILENAME codes_broo.txt
+			PATCHCODEFILE ooo_patchcodes.txt
+			JAVAPRODUCT 1
+			DOWNLOADBANNER	brobanner.bmp
+			DOWNLOADBITMAP	brobitmap.bmp
+			DOWNLOADSETUPICO	ooosetup.ico
+		}
+		active			1
+		compression		5
+		script			setup_osljre
+		downloadname	BrOo_{productversion}_{os}_installwjre_{languages}
+		include			.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/broffice,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/broffice,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
+		fail sun.star.releng.pack.errors@staroffice-news.germany.sun.com
+		mailinfo ms-eham02-01,packager,packager
+	}
+}
+
+BrOffice_Dev
+{
+	Settings
+	{
+		variables
+		{
+			PRODUCTNAME BrOo-dev
+			PRODUCTVERSION 2.2
+			PRODUCTEXTENSION
+			LONG_PRODUCTEXTENSION
+			USERDIRPRODUCTVERSION 2
+			ABOUTBOXPRODUCTVERSION 2.2.0
+			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
+			UPDATEURL http://update.services.openoffice.org/ProductUpdateService/check.Update
+			ADD_INCLUDE_FILES cliureversion.mk
+			EVAL
+			FILEFORMATNAME OpenOffice.org
+			FILEFORMATVERSION 1.0
+			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
+			PACKAGEVERSION 2.2.0
+			PACKAGEREVISION {milestone}
+			LICENSENAME LGPL
+			SERVICESPROJEKT 1
+			GLOBALFILEGID gid_File_Lib_Vcl
+			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
+			OPENSOURCE 1
+			OOODOWNLOADNAME 1
+			SUNDIR 0
+			XPDINSTALLER 0
+			BETAUPGRADECODE {8BC2B4E7-74CA-4A3A-B431-585A1ABEFA66}
+			CHANGETARGETDIR 1
+			USE_FILEVERSION 1
+			LIBRARYVERSION 8.2.0
+			PATCHCODEFILE ooo_patchcodes.txt
+			CODEFILENAME codes_broodev.txt
+			DOWNLOADBANNER	brobanner.bmp
+			DOWNLOADBITMAP	brobitmap.bmp
+			DOWNLOADSETUPICO	ooosetup.ico
+			LOCALUSERDIR $ORIGIN/..
+		}
+		active			1
+		compression		5
+		script			setup_osl
+		downloadname	BrOo-dev_{productversion}_{os}_install_{languages}
+		langpackdownloadname	BrOo_{productversion}_languagepack_{os}_install_{languages}
+		include			.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/broffice,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/broffice_dev,{solarcommonpath}/pck.{minor}/broffice,{solarcommonpath}/pck.{minor}/openoffice_dev,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
+		fail sun.star.releng.pack.errors@staroffice-news.germany.sun.com
+		mailinfo ms-eham02-01,packager,packager
+	}
+}
+
+BrOffice_SDK
+{
+    Settings
+    {
+        downloadname BrOo-SDK_{productversion}_{os}_install_{languages}
+        variables
+        {
+            PRODUCTNAME BrOffice.org
+            PRODUCTVERSION 2.2
+            POSTVERSIONEXTENSION SDK
+            PACKAGEVERSION 2.2.0
+            PACKAGEREVISION {milestone}
+            LICENSENAME LGPL
+            NOVERSIONINDIRNAME 0
+            NOSPACEINDIRECTORYNAME 1
+            CHANGETARGETDIR 1
+            DOWNLOADBANNER brobanner.bmp
+            DOWNLOADBITMAP brobitmap.bmp
+            DOWNLOADSETUPICO ooosetup.ico
+            RELATIVE_PATHES_IN_DDF 1
+        }
+        active 1
+        compression 5
+        script sdkoo
+        include {solarpath}/bin.{minor}/sdkoo,{solarpath}/bin.{minor}/broffice,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarcommonpath}/bin.{minor},{solarenvpath}/{os}/MS
         fail sun.star.releng.pack.errors@staroffice-news.germany.sun.com
         mailinfo ms-eham02-01,packager,packager
     }
