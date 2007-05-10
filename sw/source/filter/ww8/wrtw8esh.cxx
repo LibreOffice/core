@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 14:46:52 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:09:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@
 #endif
 #ifndef _SVX_FLDITEM_HXX
 //miserable hack to get around #98519#
-#define ITEMID_FIELD            EE_FEATURE_FIELD
+
 #include <svx/flditem.hxx>
 #endif
 
