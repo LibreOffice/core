@@ -257,3 +257,8 @@ UDK_3.2 {
         ?addPropertyChangeListener@PropertySetMixinImpl@cppu@@MAAXABVOUString@rtl@@ABV?$Reference@VXPropertyChangeListener@beans@star@sun@com@@@uno@star@sun@com@@@Z;
         ?addVetoableChangeListener@PropertySetMixinImpl@cppu@@MAAXABVOUString@rtl@@ABV?$Reference@VXVetoableChangeListener@beans@star@sun@com@@@uno@star@sun@com@@@Z;
 } UDK_3.1;
+
+UDK_3.3 {
+    global:
+        ?getTypes@OPropertySetHelper@cppu@@QBE?AV?$Sequence@VType@uno@star@sun@com@@@uno@star@sun@com@@XZ;
+} UDK_3.2;
