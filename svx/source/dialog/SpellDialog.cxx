@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SpellDialog.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:24:30 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:35:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@
 #include <helpid.hrc>
 #include "SpellDialog.hrc"
 
-#define ITEMID_SPELLCHECK   SID_ATTR_SPELL
+
 
 #include "optitems.hxx"
 #include "svxenum.hxx"
@@ -499,7 +499,7 @@ void SpellDialog::StartSpellOptDlg_Impl()
         0
     };
     SfxItemSet aSet( SFX_APP()->GetPool(), aSpellInfos);
-    aSet.Put(SfxSpellCheckItem( xSpell ),SID_ATTR_SPELL );
+    aSet.Put(SfxSpellCheckItem( xSpell, SID_ATTR_SPELL ));
     SfxSingleTabDialog* pDlg =
         new SfxSingleTabDialog( this, aSet, RID_SFXPAGE_LINGU );
     SfxTabPage* pPage = SvxLinguTabPage::Create( pDlg, aSet );
