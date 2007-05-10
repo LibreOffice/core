@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionLine.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:15:35 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:27:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,8 +77,6 @@ namespace dbaui
         Point                   m_aSourceDescrLinePos,
                                 m_aDestDescrLinePos;
     public:
-        OConnectionLine( OTableConnection* pConn, const String& rSourceFieldName = String(),
-                         const String& rDestFieldName = String() );
         OConnectionLine( OTableConnection* pConn, OConnectionLineDataRef pLineData );
         OConnectionLine( const OConnectionLine& rLine );
         virtual ~OConnectionLine();
@@ -92,9 +90,6 @@ namespace dbaui
         String              GetSourceFieldName() const { return m_pData->GetSourceFieldName(); }
         String              GetDestFieldName() const { return m_pData->GetDestFieldName(); }
 
-        void                SetSourceFieldName( const String& rSourceFieldName );
-        void                SetDestFieldName( const String& rDestFieldName );
-        BOOL                Connect( const String& rSourceFieldName, const String& rDestFieldName );
         BOOL                IsValid() const;
 
         Rectangle           GetSourceTextPos() const;
