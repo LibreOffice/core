@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 13:42:28 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:16:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1727,15 +1727,23 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
                 ((SdrGrafObj*)mpObj.get())->SetGraphic(aGraphic);
             }
         }
-        else if( aValue.getValueType() == INTERFACE_TYPE( awt::XBitmap))
+        else if( (aValue.getValueType() == awt::XBitmap::static_type()) || (aValue.getValueType() == graphic::XGraphic::static_type()))
         {
-            // Bitmap in das Objekt packen
-            Reference< awt::XBitmap > xBmp;
-            if( aValue >>= xBmp )
+            Reference< graphic::XGraphic> xGraphic( aValue, UNO_QUERY );
+            if( xGraphic.is() )
             {
-                // Bitmap einsetzen
-                Graphic aGraphic(VCLUnoHelper::GetBitmap( xBmp ));
-                ((SdrGrafObj*)mpObj.get())->SetGraphic(aGraphic);
+                ((SdrGrafObj*)mpObj.get())->SetGraphic(Graphic(xGraphic));
+            }
+            else
+            {
+                // Bitmap in das Objekt packen
+                Reference< awt::XBitmap > xBmp( aValue, UNO_QUERY );
+                if( xBmp.is() )
+                {
+                    // Bitmap einsetzen
+                    Graphic aGraphic(VCLUnoHelper::GetBitmap( xBmp ));
+                    ((SdrGrafObj*)mpObj.get())->SetGraphic(aGraphic);
+                }
             }
         }
     }
@@ -1821,9 +1829,9 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
     }
     else if( mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAPHIC)))
     {
-        Reference< graphic::XGraphic > xGraphic;
+        Reference< graphic::XGraphic > xGraphic( aValue, UNO_QUERY );
 
-        if( !( aValue >>= xGraphic ) )
+        if( !xGraphic.is() )
             throw lang::IllegalArgumentException();
 
         static_cast< SdrGrafObj*>( mpObj.get() )->SetGraphic( xGraphic );
