@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:11:00 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:33:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,11 +38,7 @@
 
 #include "TextObjectBar.hxx"
 
-#define ITEMID_FRAMEDIR EE_PARA_WRITINGDIR
 
-#ifndef _EEITEMID_HXX
-#include <svx/eeitemid.hxx>
-#endif
 #ifndef _ULSPITEM_HXX
 #include <svx/ulspitem.hxx>
 #endif
@@ -445,10 +441,6 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
     rSet.Put( aAttrSet, FALSE ); // <- FALSE, damit DontCare-Status uebernommen wird
 
-/*
-    FontUnderline eFU = ( (const SvxUnderlineItem&) rAttrSet.Get( ITEMID_UNDERLINE ) ).GetUnderline();
-    rSet.Put( SvxUnderlineItem( SID_ATTR_CHAR_UNDERLINE, eFU == UNDERLINE_SINGLE ? TRUE : FALSE ) );
-*/
 
     // die sind im Gliederungsmodus disabled
     if (!mpViewShell->ISA(DrawViewShell))
@@ -486,7 +478,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             for( ULONG nPara = nStartPara; nPara <= nEndPara; nPara++ )
             {
                 const SfxItemSet& rItems = pOLV->GetOutliner()->GetParaAttribs( nPara );
-                const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) rItems.Get( ITEMID_ULSPACE );
+                const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) rItems.Get( EE_PARA_ULSPACE );
                 nUpper = Max( nUpper, (long)rItem.GetUpper() );
             }
             if( nUpper == 0L )
@@ -500,7 +492,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         }
 
         // Absatzausrichtung
-        SvxAdjust eAdj = ( (const SvxAdjustItem&) aAttrSet.Get( ITEMID_ADJUST ) ).GetAdjust();
+        SvxAdjust eAdj = ( (const SvxAdjustItem&) aAttrSet.Get( EE_PARA_JUST ) ).GetAdjust();
         switch( eAdj )
         {
             case SVX_ADJUST_LEFT:
@@ -583,7 +575,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         }
 
         USHORT nLineSpace = (USHORT) ( (const SvxLineSpacingItem&) aAttrSet.
-                            Get( ITEMID_LINESPACING ) ).GetPropLineSpace();
+                            Get( EE_PARA_SBL ) ).GetPropLineSpace();
         switch( nLineSpace )
         {
             case 100:
@@ -600,7 +592,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
     // Ausrichtung (hoch/tief) wird auch im Gliederungsmodus gebraucht
     SvxEscapement eEsc = (SvxEscapement ) ( (const SvxEscapementItem&)
-                    aAttrSet.Get( ITEMID_ESCAPEMENT ) ).GetEnumValue();
+                    aAttrSet.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
     if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
         rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, TRUE ) );
