@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:58:19 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:59:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ sal_Int32 PropertyInfoService::getPropertyId(const ::rtl::OUString& _rName)
 }
 
 //------------------------------------------------------------------
-sal_Int32 ConcretInfoService::getPreferedPropertyId(const ::rtl::OUString& _rName)
+sal_Int32 ConcreteInfoService::getPreferedPropertyId(const ::rtl::OUString& _rName)
 {
     return PropertyInfoService::getPropertyId(_rName);
 }
