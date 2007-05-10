@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryViewSwitch.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:31:11 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:28:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,18 +84,12 @@ namespace dbaui
         void     setNoneVisbleRow(sal_Int32 _nRows);
         // returs the add table dialog from the design view
         OAddTableDlg* getAddTableDialog();
-        BOOL IsAddAllowed();
-        void zoomTableView(const Fraction& _rFraction);
         void SaveUIConfig();
-        void clearDesignView();
-        void GetFocus();
         void reset();
         void GrabFocus();
 
         OQueryDesignView*       getDesignView() const { return m_pDesignView; }
         OQueryContainerWindow*  getContainer() const;
-
-        Window* getActive() const;
 
         void SetPosSizePixel( Point _rPt,Size _rSize);
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const;
