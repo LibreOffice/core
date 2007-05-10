@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwshe.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:59:45 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 17:03:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@
 #endif
 
 #include "scitems.hxx"
-#define ITEMID_FIELD EE_FEATURE_FIELD
 #include <svx/editview.hxx>
 #include <svx/flditem.hxx>
 #include <svx/hlnkitem.hxx>
@@ -185,7 +184,7 @@ void ScTabViewShell::InsertURLField( const String& rName, const String& rURL, co
 {
     SvxURLField aURLField( rURL, rName, SVXURLFORMAT_REPR );
     aURLField.SetTargetFrame( rTarget );
-    SvxFieldItem aURLItem( aURLField );
+    SvxFieldItem aURLItem( aURLField, EE_FEATURE_FIELD );
 
     ScViewData*     pViewData   = GetViewData();
     ScModule*       pScMod      = SC_MOD();
