@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UStringDescription_Impl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:40:43 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:38:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,7 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_COMMAND);
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_CHECKOPTION);
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_PASSWORD);
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_RELATEDCOLUMN);
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ISSEARCHABLE);
 
 IMPLEMENT_CONSTASCII_USTRING(STAT_INVALID_INDEX);
 
