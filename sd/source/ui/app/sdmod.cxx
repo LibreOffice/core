@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:36:22 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:25:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,6 @@
 #include <svtools/ehdl.hxx>
 #endif
 
-#define ITEMID_SEARCH           SID_SEARCH_ITEM
 #include <svx/svxids.hrc>
 #include <sfx2/srchitem.hxx>
 #include <svx/svxerr.hxx>
@@ -145,7 +144,7 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     mpResourceContainer(new ::sd::SdGlobalResourceContainer())
 {
     SetName( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarDraw" ) ) );  // Nicht uebersetzen!
-    pSearchItem = new SvxSearchItem(ITEMID_SEARCH);
+    pSearchItem = new SvxSearchItem(SID_SEARCH_ITEM);
     pSearchItem->SetAppFlag(SVX_SEARCHAPP_DRAW);
     StartListening( *SFX_APP() );
     SvxErrorHandler::Get();
