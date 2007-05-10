@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:35:18 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:16:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,19 +244,35 @@ BOOL OutputDevice::ImplSelectClipRegion( SalGraphics* pGraphics, const Region& r
     bRegionRect = rRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
     if( bClipDeviceBounds )
     {
+        // #b6520266# Perform actual rect clip against outdev
+        // dimensions, to generate empty clips whenever one of the
+        // values is completely off the device.
+        const long nOffX( pOutDev->mnOutOffX );
+        const long nOffY( pOutDev->mnOutOffY );
+        Rectangle aDeviceBounds(nOffX, nOffY,
+                                nOffX+pOutDev->GetOutputWidthPixel()-1,
+                                nOffY+pOutDev->GetOutputHeightPixel()-1);
         while ( bRegionRect )
         {
             // #i59315# Limit coordinates passed to sal layer to actual
             // outdev dimensions - everything else bears the risk of
             // overflowing internal coordinates (e.g. the 16 bit wire
             // format of X11).
-            nX = ::std::max<long>(0,nX);
-            nY = ::std::max<long>(0,nY);
-            nWidth  = ::std::min<long>(pOutDev->GetOutputWidthPixel(), nWidth);
-            nHeight = ::std::min<long>(pOutDev->GetOutputHeightPixel(), nHeight);
-            if ( !pGraphics->UnionClipRegion( nX, nY, nWidth, nHeight, pOutDev ) )
-                bClipRegion = FALSE;
-            DBG_ASSERT( bClipRegion, "OutputDevice::ImplSelectClipRegion() - can't cerate region" );
+            Rectangle aTmpRect(nX,nY,nX+nWidth-1,nY+nHeight-1);
+            aTmpRect.Intersection(aDeviceBounds);
+
+            if( !aTmpRect.IsEmpty() )
+            {
+                if ( !pGraphics->UnionClipRegion( aTmpRect.Left(),
+                                                  aTmpRect.Top(),
+                                                  aTmpRect.GetWidth(),
+                                                  aTmpRect.GetHeight(),
+                                                  pOutDev ) )
+                {
+                    bClipRegion = FALSE;
+                }
+            }
+            DBG_ASSERT( bClipRegion, "OutputDevice::ImplSelectClipRegion() - can't create region" );
             bRegionRect = rRegion.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
         }
     }
