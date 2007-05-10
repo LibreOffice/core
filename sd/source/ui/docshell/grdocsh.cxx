@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grdocsh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:13:05 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:28:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#define ITEMID_SEARCH                   SID_SEARCH_ITEM
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
 #endif
