@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charhiddenitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:52:41 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:49:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#define ITEMID_CHARHIDDEN            0
 
 #ifndef _SVX_CHARHIDDENITEM_HXX
 #include <charhiddenitem.hxx>
@@ -44,7 +43,7 @@
 #include "svxitems.hrc"
 #include "dialmgr.hxx"
 
-TYPEINIT1_AUTOFACTORY(SvxCharHiddenItem, SfxBoolItem);
+TYPEINIT1_FACTORY(SvxCharHiddenItem, SfxBoolItem, new SvxCharHiddenItem(sal_False, 0));
 
 /*-- 16.12.2003 15:24:25---------------------------------------------------
 
