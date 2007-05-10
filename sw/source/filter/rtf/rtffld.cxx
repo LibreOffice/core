@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:14:10 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:06:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -808,12 +808,11 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                         pCharFmt = pDoc->MakeCharFmt( sNm,
                                             ( SwCharFmt*)pDoc->GetDfltCharFmt() );
 
-                        SvxFontHeightItem aHeightItem( aData.nFontSize * 10 );
+                        SvxFontHeightItem aHeightItem( aData.nFontSize * 10, 100, RES_CHRATR_FONTSIZE );
                         aHeightItem.SetWhich( nFntHWhich );
 
                         SvxFontItem aFontItem( FAMILY_DONTKNOW, aData.sFontName,
-                            aEmptyStr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW );
-                        aFontItem.SetWhich( nFntWhich );
+                            aEmptyStr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, nFntWhich );
 
                         pCharFmt->SetAttr( aHeightItem );
                         pCharFmt->SetAttr( aFontItem );
