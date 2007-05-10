@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoadmin.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:05:47 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:33:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ namespace dbaui
 {
 //.........................................................................
 
-class IAdminHelper;
+class IDatabaseSettingsDialog;
 
 //=========================================================================
 //= ODatabaseAdministrationDialog
