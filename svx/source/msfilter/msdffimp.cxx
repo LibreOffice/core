@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:38:11 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:55:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,25 +76,25 @@
 #include <svtools/urihelper.hxx>
 
 //      textitem.hxx        editdata.hxx
-#define ITEMID_COLOR        EE_CHAR_COLOR
-#define ITEMID_FONT         EE_CHAR_FONTINFO
-#define ITEMID_FONTHEIGHT   EE_CHAR_FONTHEIGHT
-#define ITEMID_FONTWIDTH    EE_CHAR_FONTWIDTH
-#define ITEMID_WEIGHT       EE_CHAR_WEIGHT
-#define ITEMID_UNDERLINE    EE_CHAR_UNDERLINE
-#define ITEMID_CROSSEDOUT   EE_CHAR_STRIKEOUT
-#define ITEMID_POSTURE      EE_CHAR_ITALIC
-#define ITEMID_CONTOUR      EE_CHAR_OUTLINE
-#define ITEMID_SHADOWED     EE_CHAR_SHADOW
-#define ITEMID_ESCAPEMENT   EE_CHAR_ESCAPEMENT
-#define ITEMID_AUTOKERN     EE_CHAR_PAIRKERNING
-#define ITEMID_WORDLINEMODE EE_CHAR_WLM
-#define ITEMID_CHARSCALE_W  EE_CHAR_FONTWIDTH
-#define ITEMID_KERNING      EE_CHAR_KERNING
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //      paraitem.hxx       editdata.hxx
-#define ITEMID_ADJUST      EE_PARA_JUST
-#define ITEMID_FIELD       EE_FEATURE_FIELD
+
+
 
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
@@ -180,17 +180,13 @@
 //#endif
 
 #ifndef _SDGCPITM_HXX
-#ifndef ITEMID_GRF_CROP
-#define ITEMID_GRF_CROP 0
-#endif
+
+//#endif
 #include <sdgcpitm.hxx>
 #endif
 
 #ifndef _SDGMOITM_HXX
 #include <sdgmoitm.hxx>
-#endif
-#ifndef _EEITEMID_HXX
-#include "eeitemid.hxx"
 #endif
 #ifndef _SVX_TSPTITEM_HXX
 #include "tstpitem.hxx"
@@ -3184,23 +3180,23 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, const 
         switch ( nRecType )
         {
             case DFF_Prop_gtextSize :
-                rSet.Put( SvxFontHeightItem( rManager.ScalePt( nContent ) ) );
+                rSet.Put( SvxFontHeightItem( rManager.ScalePt( nContent ), 100, EE_CHAR_FONTHEIGHT ) );
             break;
             // GeoText
             case DFF_Prop_gtextFStrikethrough :
             {
                 if ( nContent & 0x20 )
-                    rSet.Put( SvxWeightItem( nContent ? WEIGHT_BOLD : WEIGHT_NORMAL ) );
+                    rSet.Put( SvxWeightItem( nContent ? WEIGHT_BOLD : WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
                 if ( nContent & 0x10 )
-                    rSet.Put( SvxPostureItem( nContent ? ITALIC_NORMAL : ITALIC_NONE ) );
+                    rSet.Put( SvxPostureItem( nContent ? ITALIC_NORMAL : ITALIC_NONE, EE_CHAR_ITALIC ) );
                 if ( nContent & 0x08 )
-                    rSet.Put( SvxUnderlineItem( nContent ? UNDERLINE_SINGLE : UNDERLINE_NONE ) );
+                    rSet.Put( SvxUnderlineItem( nContent ? UNDERLINE_SINGLE : UNDERLINE_NONE, EE_CHAR_UNDERLINE ) );
                 if ( nContent & 0x40 )
-                    rSet.Put(SvxShadowedItem( nContent != 0 ) );
+                    rSet.Put(SvxShadowedItem( nContent != 0, EE_CHAR_SHADOW ) );
 //              if ( nContent & 0x02 )
 //                  rSet.Put( SvxCaseMapItem( nContent ? SVX_CASEMAP_KAPITAELCHEN : SVX_CASEMAP_NOT_MAPPED ) );
                 if ( nContent & 0x01 )
-                    rSet.Put( SvxCrossedOutItem( nContent ? STRIKEOUT_SINGLE : STRIKEOUT_NONE ) );
+                    rSet.Put( SvxCrossedOutItem( nContent ? STRIKEOUT_SINGLE : STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ) );
             }
             break;
 
@@ -4104,7 +4100,7 @@ FASTBOOL SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
                                 UINT16 nDefaultTab = 2540; // PPT def: 1 Inch //rOutliner.GetDefTab();
                                 UINT16 nMostrightTab = 0;
                                 SfxItemSet aSet(rOutliner.GetEmptyItemSet());
-                                SvxTabStopItem aTabItem(0, 0);
+                                SvxTabStopItem aTabItem(0, 0, SVX_TAB_ADJUST_DEFAULT, EE_PARA_TABS);
 
                                 rSt >> nVal1;
                                 rSt >> nVal2;
@@ -4293,7 +4289,9 @@ SdrObject* SvxMSDffManager::ImportFontWork( SvStream& rStCt, SfxItemSet& rSet, R
             rSet.Put( SdrTextFitToSizeTypeItem( eFTS ) );
             rSet.Put( SdrTextAutoGrowHeightItem( FALSE ) );
             rSet.Put( SdrTextAutoGrowWidthItem( FALSE ) );
-            rSet.Put( SvxFontItem( FAMILY_DONTKNOW, aFontName, String() ) );
+            rSet.Put( SvxFontItem( FAMILY_DONTKNOW, aFontName, String(),
+                            PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO ));
+
             pNewObj->SetMergedItemSet(rSet);
 
             pRet = pNewObj->ConvertToPolyObj( FALSE, FALSE );
@@ -4924,11 +4922,12 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
                             if ( SeekToContent( DFF_Prop_gtextFont, rSt ) )
                             {
-                                SvxFontItem aLatin, aAsian, aComplex;
+                                SvxFontItem aLatin(EE_CHAR_FONTINFO), aAsian(EE_CHAR_FONTINFO_CJK), aComplex(EE_CHAR_FONTINFO_CTL);
                                 GetDefaultFonts( aLatin, aAsian, aComplex );
 
                                 MSDFFReadZString( rSt, aFontName, GetPropertyValue( DFF_Prop_gtextFont ), TRUE );
-                                aSet.Put( SvxFontItem( aLatin.GetFamily(), aFontName, aLatin.GetStyleName() ) );
+                                aSet.Put( SvxFontItem( aLatin.GetFamily(), aFontName, aLatin.GetStyleName(),
+                                            PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO ));
                                 aSet.Put( SvxFontItem( aLatin.GetFamily(), aFontName, aLatin.GetStyleName(),
                                             PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO_CJK ) );
                                 aSet.Put( SvxFontItem( aLatin.GetFamily(), aFontName, aLatin.GetStyleName(),
@@ -4937,10 +4936,10 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
                             // SJ: applying fontattributes for Fontwork :
                             if ( IsHardAttribute( DFF_Prop_gtextFItalic ) )
-                                aSet.Put( SvxPostureItem( ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x0010 ) != 0 ? ITALIC_NORMAL : ITALIC_NONE ) );
+                                aSet.Put( SvxPostureItem( ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x0010 ) != 0 ? ITALIC_NORMAL : ITALIC_NONE, EE_CHAR_ITALIC ) );
 
                             if ( IsHardAttribute( DFF_Prop_gtextFBold ) )
-                                aSet.Put( SvxWeightItem( ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x0020 ) != 0 ? WEIGHT_BOLD : WEIGHT_NORMAL ) );
+                                aSet.Put( SvxWeightItem( ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x0020 ) != 0 ? WEIGHT_BOLD : WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
 
                             // SJ TODO: Vertical Writing is not correct, instead this should be
                             // replaced through "CharacterRotation" by 90°, therefore a new Item has to be
@@ -5350,7 +5349,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                 {
                      ApplyAttributes( rSt, aSet, aObjData.eShapeType, aObjData.nSpFlags );
                     if ( !GetPropertyValue( DFF_Prop_gtextSize, 0 ) )
-                        aSet.Put( SvxFontHeightItem( ScalePt( 24 << 16 ) ) );
+                        aSet.Put( SvxFontHeightItem( ScalePt( 24 << 16 ), 100, EE_CHAR_FONTHEIGHT ) );
                     if ( aObjData.eShapeType == mso_sptTextBox )
                         aSet.Put( SdrTextMinFrameHeightItem( aBoundRect.GetHeight() ) );
                     pRet->SetModel( pSdrModel );
