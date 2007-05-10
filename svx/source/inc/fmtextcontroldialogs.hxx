@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtextcontroldialogs.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:07:06 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:48:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@
 #include <sfx2/tabdlg.hxx>
 #endif
 
-#define ITEMID_FONTLIST     SID_ATTR_CHAR_FONTLIST
 #ifndef _SVX_FLSTITEM_HXX
 #include <flstitem.hxx>
 #endif
