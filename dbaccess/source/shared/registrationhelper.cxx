@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registrationhelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:52:47 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:05:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
+// no include "precompiled_dbaccess.hxx" because this file is meant to
+// be included in other cxx files
 
 #ifndef _REGISTRATIONHELPER_CXX_INCLUDED_INDIRECTLY_
 #error "don't build this file directly! use dba_reghelper.cxx or dbu_reghelper.cxx instead!"
