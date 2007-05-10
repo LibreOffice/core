@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindow.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:51:37 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:29:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,6 @@ namespace dbaui
         void                        SetSizePixel( const Size& rNewSize );
         void                        SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
 
-        void                        SetTitle( const ::rtl::OUString& rTit );
         String                      getTitle() const;
         void                        SetBoldTitle( BOOL bBold );
         void                        setActive(sal_Bool _bActive = sal_True);
@@ -233,8 +232,6 @@ namespace dbaui
         // Accessibility
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
-        // Linien neu zeichnen
-        void InvalidateLines();
         // habe ich Connections nach aussen ?
         BOOL ExistsAConn() const;
 
