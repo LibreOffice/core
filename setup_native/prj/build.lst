@@ -2,6 +2,7 @@ pk	setup_native	:	soltools PYTHON:python xml2cmp sal NULL
 pk  setup_native                                          usr1    - all  sn_mkout NULL
 pk  setup_native\scripts\source                           nmake   -  u   sn_source NULL
 pk  setup_native\scripts                                  nmake   -  u   sn_scripts sn_source.u NULL
+pk  setup_native\source\win32\customactions\tools         nmake   -  w   sn_tools NULL
 pk  setup_native\source\win32\customactions\regactivex    nmake   -  w   sn_regactivex NULL
 pk  setup_native\source\win32\customactions\regpatchactivex nmake -  w   sn_regpatchactivex NULL
 pk  setup_native\source\win32\customactions\reg4msdoc     nmake   -  w   sn_reg4msdoc NULL
@@ -10,7 +11,7 @@ pk  setup_native\source\win32\customactions\javafilter    nmake   -  w   sn_java
 pk  setup_native\source\win32\customactions\quickstarter  nmake   -  w   sn_quickstarter NULL
 pk  setup_native\source\win32\customactions\shellextensions nmake   -  w   sn_shellextensions NULL
 pk  setup_native\source\win32\customactions\indexingfilter nmake   -  w   sn_indexingfilter NULL
-pk  setup_native\source\win32\customactions\languagepacks nmake   -  w   sn_languagepacks NULL
-pk  setup_native\source\win32\customactions\patch         nmake   -  w   sn_patch sn_languagepacks.w sn_shellextensions.w sn_quickstarter.w NULL
+pk  setup_native\source\win32\customactions\languagepacks nmake   -  w   sn_languagepacks sn_tools.w NULL
+pk  setup_native\source\win32\customactions\patch         nmake   -  w   sn_patch sn_languagepacks.w sn_shellextensions.w sn_quickstarter.w sn_tools.w NULL
 pk  setup_native\source\ulfconv                           nmake   -  all sn_ulfconv NULL
 
