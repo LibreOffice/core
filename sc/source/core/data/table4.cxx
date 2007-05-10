@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table4.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:09:54 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:45:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1766,7 +1766,7 @@ void ScTable::GetAutoFormatFrame(SCCOL nCol, SCROW nRow, USHORT nFlags, USHORT n
     const SvxBoxItem* pRightBox = (SvxBoxItem*)GetAttr(nCol + 1, nRow, ATTR_BORDER);
     const SvxBoxItem* pBottomBox = (SvxBoxItem*)GetAttr(nCol, nRow + 1, ATTR_BORDER);
 
-    SvxBoxItem aBox;
+    SvxBoxItem aBox( ATTR_BORDER );
     if (nFlags & LF_LEFT)
     {
         if (pLeftBox)
