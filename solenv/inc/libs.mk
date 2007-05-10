@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.110 $
+#   $Revision: 1.111 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:31:37 $
+#   last change: $Author: kz $ $Date: 2007-05-10 13:14:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.110 $$"
+LIBSMKREV!:="$$Revision: 1.111 $$"
 
 .IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC" || "$(COM)"=="GCC"
 
@@ -263,6 +263,11 @@ XML2LIB=$(LIBXML_LIBS)
 XML2LIB=-lxml2
 .ENDIF
 .ENDIF
+.IF "$(SYSTEM_LIBXSLT)"=="YES"
+XSLTLIB=$(LIBXSLT_LIBS)
+.ELSE
+XSLTLIB=-lxslt $(ZLIB3RD) $(XML2LIB)
+.ENDIF
 .IF "$(GUI)$(COM)"=="WNTGCC"
 JVMFWKLIB = -ljvmfwk$(UDK_MAJOR)
 .ELSE
@@ -438,6 +443,8 @@ SYSSHELLLIB=sysshell.lib
 JVMACCESSLIB = ijvmaccess.lib
 CPPUNITLIB = cppunit.lib
 XML2LIB = libxml2.lib
+XSLTLIB = libxslt.lib $(ZLIB3RD) $(XML2LIB)
+
 JVMFWKLIB = ijvmfwk.lib
 
 # #110743#
