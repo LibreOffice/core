@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:42:30 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:05:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,6 +242,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::form::validation;
+using namespace ::com::sun::star::form::runtime;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::script;
@@ -732,7 +733,12 @@ void FmXFormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) c
                 }
             }
             rValue <<= ::rtl::OUString(aFilter);
-        }   break;
+        }
+        break;
+
+        case FM_ATTR_FORM_OPERATIONS:
+            rValue <<= m_aControllerFeatures->getFormOperations();
+            break;
     }
 }
 
@@ -757,10 +763,11 @@ void FmXFormController::fillProperties(
         Sequence< Property >& /* [out] */ /*_rAggregateProps*/
         ) const
 {
-    _rProps.realloc(1);
+    _rProps.realloc(2);
     sal_Int32 nPos = 0;
     Property* pDesc = _rProps.getArray();
     DECL_PROP1(FILTER_CRITERIA, rtl::OUString, READONLY);
+    DECL_PROP1(FORM_OPERATIONS, Reference< XFormOperations >, READONLY);
 }
 
 //------------------------------------------------------------------------------
