@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabline.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:04:57 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:42:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,9 +63,9 @@
 #include "tabline.hrc"
 #include "dlgname.hrc"
 
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
-#define ITEMID_DASH_LIST        SID_DASH_LIST
-#define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
+
+
+
 
 #include "cuitabline.hxx"
 #include "dlgname.hxx"
@@ -142,14 +142,14 @@ void SvxLineTabDialog::SavePalettes()
     {
         delete pDrawModel->GetDashList();
         pDrawModel->SetDashList( pNewDashList );
-        SfxObjectShell::Current()->PutItem( SvxDashListItem( pNewDashList ) );
+        SfxObjectShell::Current()->PutItem( SvxDashListItem( pNewDashList, SID_DASH_LIST ) );
         pDashList = pDrawModel->GetDashList();
     }
     if( pNewLineEndList != pDrawModel->GetLineEndList() )
     {
         delete pDrawModel->GetLineEndList();
         pDrawModel->SetLineEndList( pNewLineEndList );
-        SfxObjectShell::Current()->PutItem( SvxLineEndListItem( pNewLineEndList ) );
+        SfxObjectShell::Current()->PutItem( SvxLineEndListItem( pNewLineEndList, SID_LINEEND_LIST ) );
         pLineEndList = pDrawModel->GetLineEndList();
     }
 
@@ -163,7 +163,7 @@ void SvxLineTabDialog::SavePalettes()
         pDashList->Save();
 
         // ToolBoxControls werden benachrichtigt:
-        SfxObjectShell::Current()->PutItem( SvxDashListItem( pDashList ) );
+        SfxObjectShell::Current()->PutItem( SvxDashListItem( pDashList, SID_DASH_LIST ) );
     }
 
     if( nLineEndListState & CT_MODIFIED )
@@ -172,7 +172,7 @@ void SvxLineTabDialog::SavePalettes()
         pLineEndList->Save();
 
         // ToolBoxControls werden benachrichtigt:
-        SfxObjectShell::Current()->PutItem( SvxLineEndListItem( pLineEndList ) );
+        SfxObjectShell::Current()->PutItem( SvxLineEndListItem( pLineEndList, SID_LINEEND_LIST ) );
     }
 }
 
