@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:44:18 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:21:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ namespace dbaui
         PATH_NOT_KNOWN
     };
 
-    class IAdminHelper;
+    class IDatabaseSettingsDialog;
 
     class OConnectionHelper : public OGenericAdministrationPage
     {
@@ -106,9 +106,6 @@ namespace dbaui
         String      getURLNoPrefix( ) const;
         void        setURLNoPrefix( const String& _rURL );
 
-        void        changeConnectionURL( const String& _rNewDSN );
-        String      getConnectionURL(  ) const;
-
         /** checks if the path is existence
             @param  _rURL
                 The URL to check.
@@ -134,15 +131,14 @@ namespace dbaui
 
     protected:
         DECL_LINK(OnBrowseConnections, PushButton*);
-        String      getURL( ) const;
         void        setURL( const String& _rURL );
         String      implGetURL( sal_Bool _bPrefix ) const;
         void        implSetURL( const String& _rURL, sal_Bool _bPrefix );
         StringBag getInstalledAdabasDBDirs(const String &_rPath,const ::ucb::ResultSetInclude& _reResultSetInclude);
         StringBag getInstalledAdabasDBs(const String &_rConfigDir,const String &_rWorkDir);
         virtual bool checkTestConnection();
-    private:
 
+        void    implUpdateURLDependentStates() const;
     };
 
 //.........................................................................
