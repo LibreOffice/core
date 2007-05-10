@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scendlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:51:16 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:55:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL b
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     if ( pDocSh )
     {
-        const SfxPoolItem* pItem = pDocSh->GetItem( ITEMID_COLOR_TABLE );
+        const SfxPoolItem* pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pItem )
         {
             XColorTable* pColorTable = ((SvxColorTableItem*)pItem)->GetColorTable();
