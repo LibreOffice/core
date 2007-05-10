@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:00:04 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:37:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
 
 #ifndef GCC
 #endif
-#define ITEMID_MACRO 0
 
 #include "macitem.hxx"
 
@@ -51,8 +50,7 @@
 DBG_NAME(SvxMacroItem);
 
 // -----------------------------------------------------------------------
-
-TYPEINIT1_AUTOFACTORY(SvxMacroItem, SfxPoolItem);
+TYPEINIT1_FACTORY(SvxMacroItem, SfxPoolItem, new SvxMacroItem(0));
 
 // -----------------------------------------------------------------------
 
