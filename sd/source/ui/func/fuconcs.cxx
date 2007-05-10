@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconcs.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:15:21 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:29:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,9 +93,6 @@
 #endif
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _EEITEMID_HXX
-#include <svx/eeitemid.hxx>
 #endif
 #ifndef _SVX_ADJITEM_HXX
 #include <svx/adjitem.hxx>
@@ -386,7 +383,7 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
     }
     if ( !bAttributesAppliedFromGallery )
     {
-        pObj->SetMergedItem( SvxAdjustItem( SVX_ADJUST_CENTER ) );
+        pObj->SetMergedItem( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
         pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
         pObj->SetMergedItem( SdrTextAutoGrowHeightItem( sal_False ) );
