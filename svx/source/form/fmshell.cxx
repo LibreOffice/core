@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:49:03 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:06:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -604,7 +604,7 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
 }
 
 //------------------------------------------------------------------------
-void FmFormShell::SetDesignMode(sal_Bool bDesign)
+void FmFormShell::impl_setDesignMode(sal_Bool bDesign)
 {
     if (m_pFormView)
     {
@@ -706,25 +706,6 @@ void FmFormShell::Execute(SfxRequest &rReq)
             m_nLastSlot = nSlot;
             GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SID_FM_CONFIG );
             break;
-        case SID_FM_DESIGN_MODE:    // gibt es was zu tun?
-        {
-            // if we are moving our data source cursor currently ....
-            if (GetImpl()->HasAnyPendingCursorAction())
-                // ... cancel this
-                GetImpl()->CancelAnyPendingCursorAction();
-
-            SFX_REQUEST_ARG(rReq, pDesignItem, SfxBoolItem, nSlot, sal_False);
-            if (!pDesignItem || pDesignItem->GetValue() != m_bDesignMode)
-            {
-                m_nLastSlot = nSlot;
-                GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SID_FM_CONFIG );
-            }
-            else
-            {
-                rReq.Done();
-                return;
-            }
-        }   break;
     }
 
     //////////////////////////////////////////////////////////////////////
@@ -979,28 +960,16 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_DESIGN_MODE:
         {
             SFX_REQUEST_ARG(rReq, pDesignItem, SfxBoolItem, nSlot, sal_False);
-            if (!pDesignItem || pDesignItem->GetValue() != m_bDesignMode)
-            {
-                FmFormModel* pModel = GetFormModel();
-                if (pModel)
-                {   // fuer die Zeit des Uebergangs das Undo-Environment ausschalten, das sichert, dass man dort auch nicht-transiente
-                    // Properties mal eben aendern kann (sollte allerdings mit Vorsicht genossen und beim Rueckschalten des Modes
-                    // auch immer wieder rueckgaegig gemacht werden. Ein Beispiel ist das Setzen der maximalen Text-Laenge durch das
-                    // OEditModel an seinem Control.)
-                    pModel->GetUndoEnv().Lock();
-                }
+            sal_Bool bDesignMode = pDesignItem ? pDesignItem->GetValue() : !m_bDesignMode;
+            SetDesignMode( bDesignMode );
+            if ( m_bDesignMode == bDesignMode )
+                rReq.Done();
 
-                // dann die eigentliche Umschaltung
-                if (m_bDesignMode || PrepareClose(sal_True))
-                {
-                    SetDesignMode(!m_bDesignMode );
-                    rReq.Done();
-                }
-                // und mein Undo-Environment wieder an
-                if (pModel)
-                    pModel->GetUndoEnv().UnLock();
-            }
-        }   break;
+            m_nLastSlot = SID_FM_DESIGN_MODE;
+            GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SID_FM_CONFIG );
+        }
+        break;
+
         case SID_FM_AUTOCONTROLFOCUS:
         {
             FmFormModel* pModel = GetFormModel();
@@ -1531,7 +1500,7 @@ void FmFormShell::SetView(FmFormView* pView)
         m_pFormView->SetFormShell( this );
         m_pFormModel = (FmFormModel*)m_pFormView->GetModel();
 
-        SetDesignMode(pView->IsDesignMode());
+        impl_setDesignMode(pView->IsDesignMode());
 
         // We activate our view if we are activated ourself, but sometimes the Activate precedes the SetView.
         // But here we know both the view and our activation state so we at least are able to pass the latter
@@ -1615,4 +1584,84 @@ void FmFormShell::ForgetActiveControl()
 void FmFormShell::SetControlActivationHandler( const Link& _rHdl )
 {
     m_pImpl->SetControlActivationHandler( _rHdl );
+}
+
+//------------------------------------------------------------------------
+SdrUnoObj* FmFormShell::GetFormControl( const Reference< XControlModel >& _rxModel, const SdrView& _rView, const OutputDevice& _rDevice, Reference< XControl >& _out_rxControl ) const
+{
+    if ( !_rxModel.is() )
+        return NULL;
+
+    FmFormModel* pModel = GetFormModel();
+    OSL_ENSURE( pModel, "FmFormShell::GetFormControl: no model!" );
+    if ( !pModel )
+        return NULL;
+
+    sal_uInt16 pageCount = pModel->GetPageCount();
+    for ( sal_uInt16 page = 0; page < pageCount; ++page )
+    {
+        SdrPage* pPage = pModel->GetPage( page );
+        OSL_ENSURE( pPage, "FmFormShell::GetFormControl: NULL page encountered!" );
+        if  ( !pPage )
+            continue;
+
+        SdrObjListIter aIter( *pPage );
+        while ( aIter.IsMore() )
+        {
+            SdrObject* pObject = aIter.Next();
+            SdrUnoObj* pUnoObject = pObject ? PTR_CAST( SdrUnoObj, pObject ) : NULL;
+            if ( !pUnoObject )
+                continue;
+
+            Reference< XControlModel > xControlModel = pUnoObject->GetUnoControlModel();
+            if ( !xControlModel.is() )
+                continue;
+
+            if ( _rxModel == xControlModel )
+            {
+                _out_rxControl = pUnoObject->GetUnoControl( _rView, _rDevice );
+                return pUnoObject;
+            }
+        }
+    }
+
+    return NULL;
+}
+
+//------------------------------------------------------------------------
+Reference< XFormController > FmFormShell::GetFormController( const Reference< XForm >& _rxForm, const SdrView& _rView, const OutputDevice& _rDevice ) const
+{
+    const FmFormView* pFormView = dynamic_cast< const FmFormView* >( &_rView );
+    if ( !pFormView )
+        return NULL;
+
+    return pFormView->GetFormController( _rxForm, _rDevice );
+}
+
+//------------------------------------------------------------------------
+void FmFormShell::SetDesignMode( sal_Bool _bDesignMode )
+{
+    if ( _bDesignMode == m_bDesignMode )
+        return;
+
+    // if we are moving our data source cursor currently ....
+    if ( GetImpl()->HasAnyPendingCursorAction() )
+        // ... cancel this
+        GetImpl()->CancelAnyPendingCursorAction();
+
+    FmFormModel* pModel = GetFormModel();
+    if (pModel)
+        // fuer die Zeit des Uebergangs das Undo-Environment ausschalten, das sichert, dass man dort auch nicht-transiente
+        // Properties mal eben aendern kann (sollte allerdings mit Vorsicht genossen und beim Rueckschalten des Modes
+        // auch immer wieder rueckgaegig gemacht werden. Ein Beispiel ist das Setzen der maximalen Text-Laenge durch das
+        // OEditModel an seinem Control.)
+        pModel->GetUndoEnv().Lock();
+
+    // dann die eigentliche Umschaltung
+    if ( m_bDesignMode || PrepareClose( sal_True ) )
+        impl_setDesignMode(!m_bDesignMode );
+
+    // und mein Undo-Environment wieder an
+    if ( pModel )
+        pModel->GetUndoEnv().UnLock();
 }
