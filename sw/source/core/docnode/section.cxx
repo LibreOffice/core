@@ -4,9 +4,9 @@
  *
  *  $RCSfile: section.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:02:07 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:14:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,6 +173,14 @@ public:
     virtual const SwNode* GetAnchor() const;
     virtual BOOL IsInRange( ULONG nSttNd, ULONG nEndNd, xub_StrLen nStt = 0,
                             xub_StrLen nEnd = STRING_NOTFOUND ) const;
+
+    // --> OD 2007-02-14 #b6521322#
+    inline SwSectionNode* GetSectNode()
+    {
+        const SwNode* pSectNd( const_cast<SwIntrnlSectRefLink*>(this)->GetAnchor() );
+        return const_cast<SwSectionNode*>( dynamic_cast<const SwSectionNode*>( pSectNd ) );
+    }
+    // <--
 };
 
 
@@ -1129,6 +1137,45 @@ const SwSection* SwSectionFmt::GetGlobalDocSection() const
     return 0;
 }
 
+// --> OD 2007-02-14 #b6521322#
+// Method to break section links inside a linked section
+void lcl_BreakSectionLinksInSect( const SwSectionNode& rSectNd )
+{
+    if ( !rSectNd.GetDoc() )
+    {
+        ASSERT( false,
+                "method <lcl_RemoveSectionLinksInSect(..)> - no Doc at SectionNode" );
+        return;
+    }
+
+    if ( !rSectNd.GetSection().IsConnected() )
+    {
+        ASSERT( false,
+                "method <lcl_RemoveSectionLinksInSect(..)> - no Link at Section of SectionNode" );
+        return;
+    }
+    const ::sfx2::SvBaseLink* pOwnLink( &(rSectNd.GetSection().GetBaseLink() ) );
+    const ::sfx2::SvBaseLinks& rLnks = rSectNd.GetDoc()->GetLinkManager().GetLinks();
+    for ( USHORT n = rLnks.Count(); n > 0; )
+    {
+        SwIntrnlSectRefLink* pSectLnk = dynamic_cast<SwIntrnlSectRefLink*>(&(*rLnks[ --n ]));
+        if ( pSectLnk && pSectLnk != pOwnLink &&
+             pSectLnk->IsInRange( rSectNd.GetIndex(), rSectNd.EndOfSectionIndex() ) )
+        {
+            // break the link of the corresponding section.
+            // the link is also removed from the link manager
+            pSectLnk->GetSectNode()->GetSection().BreakLink();
+
+            // for robustness, because link is removed from the link manager
+            if ( n > rLnks.Count() )
+            {
+                n = rLnks.Count();
+            }
+        }
+    }
+}
+// <--
+
 void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 {
     SwDoc* pDoc = rSectNd.GetDoc();
@@ -1471,6 +1518,10 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
                     delete pCpyRg;
                 }
 
+                // --> OD 2007-02-14 #b6521322#
+                lcl_BreakSectionLinksInSect( *pSectNd );
+                // <--
+
                 // update alle Links in diesem Bereich
                 lcl_UpdateLinksInSect( *this, *pSectNd );
             }
@@ -1650,6 +1701,36 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
         break;
     }
 }
+
+// --> OD 2007-02-14 #b6521322#
+void SwSection::BreakLink()
+{
+    const SectionType eCurrentType( GetType() );
+    if ( eCurrentType == CONTENT_SECTION ||
+         eCurrentType == TOX_HEADER_SECTION ||
+         eCurrentType == TOX_CONTENT_SECTION )
+    {
+        // nothing to do
+        return;
+    }
+
+    // release link, if it exists
+    if ( refLink.Is() )
+    {
+        if ( GetFmt() )
+        {
+            GetFmt()->GetDoc()->GetLinkManager().Remove( refLink );
+        }
+        refLink.Clear();
+    }
+    // change type
+    SetType( CONTENT_SECTION );
+    // reset linked file data
+    String aEmptyStr;
+    SetLinkFileName( aEmptyStr );
+    SetLinkFilePassWd( aEmptyStr );
+}
+// <--
 
 const SwNode* SwIntrnlSectRefLink::GetAnchor() const
 {
