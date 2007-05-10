@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:25:58 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:53:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,24 +36,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
 
-#ifndef _FORMS_FORMATTEDFIELD_HXX_
 #include "FormattedField.hxx"
-#endif
-#ifndef _FRM_SERVICES_HXX_
 #include "services.hxx"
-#endif
-#ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
-#endif
-#ifndef _FRM_PROPERTY_HXX_
 #include "property.hxx"
-#endif
-#ifndef _FRM_RESOURCE_HXX_
 #include "frm_resource.hxx"
-#endif
-#ifndef _FRM_RESOURCE_HRC_
 #include "frm_resource.hrc"
-#endif
+#include "propertybaghelper.hxx"
 
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
@@ -608,7 +597,7 @@ void OFormattedModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
 //------------------------------------------------------------------------------
 void OFormattedModel::setPropertyToDefault(const ::rtl::OUString& aPropertyName) throw( com::sun::star::beans::UnknownPropertyException, RuntimeException )
 {
-    OPropertyArrayAggregationHelper& rPH = impl_ts_getArrayHelper();
+    OPropertyArrayAggregationHelper& rPH = m_aPropertyBagHelper.getInfoHelper();
     sal_Int32 nHandle = rPH.getHandleByName( aPropertyName );
 
     if (nHandle == PROPERTY_ID_FORMATSSUPPLIER)
@@ -632,7 +621,7 @@ Any OFormattedModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 //------------------------------------------------------------------------------
 Any SAL_CALL OFormattedModel::getPropertyDefault( const ::rtl::OUString& aPropertyName ) throw( com::sun::star::beans::UnknownPropertyException, RuntimeException )
 {
-    OPropertyArrayAggregationHelper& rPH = impl_ts_getArrayHelper();
+    OPropertyArrayAggregationHelper& rPH = m_aPropertyBagHelper.getInfoHelper();
     sal_Int32 nHandle = rPH.getHandleByName( aPropertyName );
 
     if (nHandle == PROPERTY_ID_FORMATSSUPPLIER)
