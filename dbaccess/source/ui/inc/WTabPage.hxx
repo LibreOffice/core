@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WTabPage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:43:10 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,6 @@ namespace dbaui
         OCopyTableWizard*           m_pParent;
         sal_Bool                    m_bFirstTime;   // Page wird das erste mal gerufen ; should be set in the reset methode
 
-        OWizardPage( Window* pParent, WinBits nStyle = WB_STDTABDIALOG );//: TabPage(pParent,nStyle),m_pParent((OCopyTableWizard*)pParent),m_bFirstTime(sal_True) {};
         OWizardPage( Window* pParent, const ResId& rResId );// : TabPage(pParent,rResId),m_pParent((OCopyTableWizard*)pParent),m_bFirstTime(sal_True) {};
     public:
         virtual void        Reset ( )           = 0;
