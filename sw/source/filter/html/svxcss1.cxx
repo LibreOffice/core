@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxcss1.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:12:30 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:06:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,33 +41,6 @@
 
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-
-#ifndef _HINTIDS_HXX
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
-#define ITEMID_FONT         SID_ATTR_CHAR_FONT
-#define ITEMID_LANGUAGE     SID_ATTR_CHAR_LANGUAGE
-#define ITEMID_POSTURE      SID_ATTR_CHAR_POSTURE
-#define ITEMID_WEIGHT       SID_ATTR_CHAR_WEIGHT
-#define ITEMID_FONTHEIGHT   SID_ATTR_CHAR_FONTHEIGHT
-#define ITEMID_UNDERLINE    SID_ATTR_CHAR_UNDERLINE
-#define ITEMID_CROSSEDOUT   SID_ATTR_CHAR_STRIKEOUT
-#define ITEMID_COLOR        SID_ATTR_CHAR_COLOR
-#define ITEMID_KERNING      SID_ATTR_CHAR_KERNING
-#define ITEMID_CASEMAP      SID_ATTR_CHAR_CASEMAP
-#define ITEMID_BLINK        SID_ATTR_FLASH
-
-#define ITEMID_LINESPACING  SID_ATTR_PARA_LINESPACE
-#define ITEMID_ADJUST       SID_ATTR_PARA_ADJUST
-#define ITEMID_WIDOWS       SID_ATTR_PARA_WIDOWS
-#define ITEMID_ORPHANS      SID_ATTR_PARA_ORPHANS
-#define ITEMID_FMTSPLIT     SID_ATTR_PARA_SPLIT
-
-#define ITEMID_LRSPACE SID_ATTR_LRSPACE
-#define ITEMID_ULSPACE SID_ATTR_ULSPACE
-#define ITEMID_BOX SID_ATTR_BORDER_OUTER
-#define ITEMID_BRUSH SID_ATTR_BRUSH
-#define ITEMID_FRAMEDIR     SID_ATTR_FRAMEDIRECTION
 #endif
 
 #ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
