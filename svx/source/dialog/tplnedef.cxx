@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tplnedef.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:46:46 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:44:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,8 +72,8 @@
 #include "dlgname.hrc"
 #include "helpid.hrc"
 
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
-#define ITEMID_DASH_LIST        SID_DASH_LIST
+
+
 
 #include "xattr.hxx"
 #include "xpool.hxx"
