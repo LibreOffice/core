@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptdocument.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:59:30 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 13:19:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -921,7 +921,7 @@ namespace basctl
     //--------------------------------------------------------------------
     sal_Int32 ScriptDocument::hashCode() const
     {
-        return reinterpret_cast< sal_Int32 >( m_pImpl->getObjectShell() );
+        return sal::static_int_cast<sal_Int32>(reinterpret_cast< sal_IntPtr >( m_pImpl->getObjectShell() ));
     }
 
     //--------------------------------------------------------------------
