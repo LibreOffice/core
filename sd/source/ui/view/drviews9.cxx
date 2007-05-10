@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews9.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:14:06 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:34:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,10 +120,6 @@
 
 #include <sfx2/viewfrm.hxx>
 
-
-#define ITEMID_SIZE             0
-#define ITEMID_LRSPACE          EE_PARA_LRSPACE
-#define ITEMID_ULSPACE          EE_PARA_ULSPACE
 
 #include "app.hrc"
 #include "strings.hrc"
