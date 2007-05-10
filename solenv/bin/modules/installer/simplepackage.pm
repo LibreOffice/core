@@ -4,9 +4,9 @@
 #
 #   $RCSfile: simplepackage.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2007-02-19 13:49:19 $
+#   last change: $Author: gm $ $Date: 2007-05-10 10:59:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@ package installer::simplepackage;
 
 use Cwd;
 use installer::download;
+use installer::exiter;
 use installer::globals;
 use installer::logger;
 use installer::strip;
@@ -59,6 +60,87 @@ sub check_simple_packager_project
     {
         $installer::globals::is_simple_packager_project = 1;
     }
+}
+
+####################################################
+# Registering extensions
+####################################################
+
+sub register_extensions
+{
+    my ($officedir) = @_;
+
+    my $programdir = $officedir . $installer::globals::separator . "program";
+    my $from = cwd();
+    chdir($programdir);
+
+    my $infoline = "";
+
+    # my $unopkgfile = $officedir . $installer::globals::separator . "program" .
+    #               $installer::globals::separator . $installer::globals::unopkgfile;
+
+    my $unopkgfile = $installer::globals::unopkgfile;
+
+    # my $extensiondir = $officedir . $installer::globals::separator . "share" .
+    #           $installer::globals::separator . "extension" .
+    #           $installer::globals::separator . "install";
+
+    my $extensiondir = ".." . $installer::globals::separator . "share" . $installer::globals::separator . "extension" . $installer::globals::separator . "install";
+
+    my $allextensions = installer::systemactions::find_file_with_file_extension("oxt", $extensiondir);
+
+    if ( $#{$allextensions} > -1)
+    {
+        my $currentdir = cwd();
+        print "... current dir: $currentdir ...\n";
+        $infoline = "Current dir: $currentdir\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+        for ( my $i = 0; $i <= $#{$allextensions}; $i++ )
+        {
+            my $oneextension = $extensiondir . $installer::globals::separator . ${$allextensions}[$i];
+
+            # my $systemcall = $unopkgfile . " add --shared " . "\"" . $oneextension . "\"";
+
+            if ( ! -f $unopkgfile ) { installer::exiter::exit_program("ERROR: $unopkgfile not found!", "register_extensions"); }
+            if ( ! -f $oneextension ) { installer::exiter::exit_program("ERROR: $oneextension not found!", "register_extensions"); }
+
+            my $systemcall = $unopkgfile . " add --shared --verbose " . $oneextension . " 2\>\&1 |";
+
+            print "... $systemcall ...\n";
+
+            $infoline = "Systemcall: $systemcall\n";
+            push( @installer::globals::logfileinfo, $infoline);
+
+            my @unopkgoutput = ();
+
+            open (UNOPKG, $systemcall);
+            while (<UNOPKG>) {push(@unopkgoutput, $_); }
+            close (UNOPKG);
+
+            my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+            if ($returnvalue)
+            {
+                $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+                push( @installer::globals::logfileinfo, $infoline);
+                for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { push( @installer::globals::logfileinfo, "$unopkgoutput[$j]"); }
+                installer::exiter::exit_program("ERROR: $systemcall failed!", "register_extensions");
+            }
+            else
+            {
+                $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
+        }
+    }
+    else
+    {
+        $infoline = "No extensions located in directory $extensiondir.\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    chdir($from);
 }
 
 #############################################
@@ -172,11 +254,10 @@ sub create_simple_package
     {
         if ( $isfirstrun )
         {
-            if ( $installer::globals::is_unix_multi )
-                { $installer::globals::csp_languagestring = $installer::globals::unixmultipath; }
-            else
-                { $installer::globals::csp_languagestring = $$languagestringref; }
+            if ( $installer::globals::is_unix_multi ) { $installer::globals::csp_languagestring = $installer::globals::unixmultipath; }
+            else { $installer::globals::csp_languagestring = $$languagestringref; }
         }
+
         my $locallanguage = $installer::globals::csp_languagestring;
 
         if ( $allvariables->{'OOODOWNLOADNAME'} )
@@ -268,18 +349,35 @@ sub create_simple_package
         push(@installer::globals::logfileinfo, $infoline);
     }
 
-    if ( $installer::globals::packageformat eq "archive" )
+    # Registering the extensions
+
+    if ( $islastrun )
     {
-        # creating a package
-        # -> zip for Windows
-        # -> tar.gz for all other platforms
-        create_package($installdir, $packagename, $includepatharrayref);
+        installer::logger::print_message( "... registering extensions ...\n" );
+        installer::logger::include_header_into_logfile("Registering extensions:");
+        register_extensions($subfolderdir);
+    }
+
+    # Creating archive file
+
+    if ( $islastrun )
+    {
+        if ( $installer::globals::packageformat eq "archive" )
+        {
+            # creating a package
+            # -> zip for Windows
+            # -> tar.gz for all other platforms
+            installer::logger::print_message( "... creating archive file ...\n" );
+            installer::logger::include_header_into_logfile("Creating archive file:");
+            create_package($installdir, $packagename, $includepatharrayref);
+        }
     }
 
     # Analyzing the log file
 
     if ( $islastrun )
     {
+        installer::worker::clean_output_tree(); # removing directories created in the output tree
         installer::worker::analyze_and_save_logfile($loggingdir, $installdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
     }
 }
