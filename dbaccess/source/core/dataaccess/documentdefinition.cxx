@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:24:31 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:12:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1465,21 +1465,29 @@ Reference< ::com::sun::star::util::XCloseable> ODocumentDefinition::getComponent
     return xComp;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODocumentDefinition::rename( const ::rtl::OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
+void SAL_CALL ODocumentDefinition::rename( const ::rtl::OUString& _rNewName ) throw (SQLException, ElementExistException, RuntimeException)
 {
     try
     {
         osl::ClearableGuard< osl::Mutex > aGuard(m_aMutex);
-        if ( newName.equals( m_pImpl->m_aProps.aTitle ) )
+        if ( _rNewName.equals( m_pImpl->m_aProps.aTitle ) )
             return;
 
+        // document definitions are organized in a hierarchicalway, so reject names
+        // which contain a /, as this is reserved for hierarchy level separation
+        if ( _rNewName.indexOf( '/' ) != -1 )
+        {
+            ::dbtools::throwGenericSQLException(
+                DBA_RES( RID_STR_NO_SLASH_IN_OBJECT_NAME ), *this );
+        }
+
         sal_Int32 nHandle = PROPERTY_ID_NAME;
-        Any aOld = makeAny(m_pImpl->m_aProps.aTitle);
-        Any aNew = makeAny(newName);
+        Any aOld = makeAny( m_pImpl->m_aProps.aTitle );
+        Any aNew = makeAny( _rNewName );
 
         aGuard.clear();
         fire(&nHandle, &aNew, &aOld, 1, sal_True );
-        m_pImpl->m_aProps.aTitle = newName;
+        m_pImpl->m_aProps.aTitle = _rNewName;
         fire(&nHandle, &aNew, &aOld, 1, sal_False );
 
         ::osl::ClearableGuard< ::osl::Mutex > aGuard2( m_aMutex );
@@ -1488,7 +1496,7 @@ void SAL_CALL ODocumentDefinition::rename( const ::rtl::OUString& newName ) thro
     }
     catch(const PropertyVetoException&)
     {
-        throw ElementExistException(newName,*this);
+        throw ElementExistException(_rNewName,*this);
     }
 }
 // -----------------------------------------------------------------------------
@@ -1549,23 +1557,10 @@ bool ODocumentDefinition::prepareClose()
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "ODocumentDefinition::prepareClose: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     return true;
-}
-// -----------------------------------------------------------------------------
-void ODocumentDefinition::setModelReadOnly(sal_Bool _bReadOnly)
-{
-    Reference<XModel> xModel(getComponent(),UNO_QUERY);
-    if ( xModel.is() )
-    {
-        Sequence<PropertyValue> aArgs = xModel->getArgs();
-        ::comphelper::MediaDescriptor aHelper(aArgs);
-        aHelper[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ReadOnly" ) )] <<= _bReadOnly;
-        aHelper >> aArgs;
-        xModel->attachResource(xModel->getURL(),aArgs);
-    }
 }
 // -----------------------------------------------------------------------------
 void ODocumentDefinition::fillReportData(sal_Bool _bFill)
