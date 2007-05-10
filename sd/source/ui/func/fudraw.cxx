@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 17:55:48 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:29:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@
 #include <vcl/waitobj.hxx>
 #endif
 
-#define ITEMID_FIELD    EE_FEATURE_FIELD
 #include <svx/flditem.hxx>
 #ifndef _SVDOGRP_HXX //autogen
 #include <svx/svdogrp.hxx>
