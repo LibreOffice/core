@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:46:34 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:44:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 // include ---------------------------------------------------------------
 
 #ifndef _SVX_SIZEITEM_HXX //autogen
-#define ITEMID_SIZE 0
+
 #include <sizeitem.hxx>
 #endif
 #ifndef _SHL_HXX //autogen
@@ -65,9 +65,9 @@
 #include "tabline.hrc"
 #include "dlgname.hrc"
 
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
-#define ITEMID_DASH_LIST        SID_DASH_LIST
-#define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
+
+
+
 
 #include "xattr.hxx"
 #include "xpool.hxx"
@@ -128,7 +128,7 @@
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
 #endif
-#define ITEMID_BRUSH SID_ATTR_BRUSH
+
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <brshitem.hxx>
 #endif
@@ -1652,7 +1652,7 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
             if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( *pGrfName, aPhysicalName ))
                 pUIName = &aPhysicalName;
 
-            SvxBrushItem* pBrushItem = new SvxBrushItem(*pGrfName, aEmptyStr, GPOS_AREA);
+            SvxBrushItem* pBrushItem = new SvxBrushItem(*pGrfName, aEmptyStr, GPOS_AREA, SID_ATTR_BRUSH);
             pBrushItem->SetDoneLink(STATIC_LINK(this, SvxLineTabPage, GraphicArrivedHdl_Impl));
 
             SvxBmpItemInfo* pInfo = new SvxBmpItemInfo();
@@ -1735,7 +1735,7 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
             if(pObj)
                 delete pObj;
 
-            SvxBrushItem* pBrushItem = new SvxBrushItem(Graphic(aMeta), GPOS_AREA);
+            SvxBrushItem* pBrushItem = new SvxBrushItem(Graphic(aMeta), GPOS_AREA, SID_ATTR_BRUSH);
             pBrushItem->SetDoneLink(STATIC_LINK(this, SvxLineTabPage, GraphicArrivedHdl_Impl));
 
             SvxBmpItemInfo* pInfo = new SvxBmpItemInfo();
