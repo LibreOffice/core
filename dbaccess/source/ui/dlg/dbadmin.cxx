@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:58:05 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:24:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -329,6 +329,11 @@ void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource)
 void ODbAdminDialog::setTitle(const ::rtl::OUString& _sTitle)
 {
     SetText(_sTitle);
+}
+//-------------------------------------------------------------------------
+void ODbAdminDialog::enableConfirmSettings( bool _bEnable )
+{
+    (void)_bEnable;
 }
 //-------------------------------------------------------------------------
 sal_Bool ODbAdminDialog::saveDatasource()
