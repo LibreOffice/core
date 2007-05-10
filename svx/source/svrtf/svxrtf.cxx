@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:18:08 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:00:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
-#define ITEMID_FONT     0
-#define ITEMID_COLOR    0
-#define ITEMID_SCRIPTSPACE 0
 
 #include <ctype.h>
 
