@@ -4,9 +4,9 @@
  *
  *  $RCSfile: respintest.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:08:03 $
+ *  last change: $Author: gm $ $Date: 2007-05-10 11:02:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,8 @@
 #include <string>
 #include <systools/win32/uwinapi.h>
 
+#include <../tools/seterror.hxx>
+
 #if defined(_WIN32_WINNT) && !defined(__MINGW32__)
 #error YES
 #endif
@@ -88,7 +90,6 @@ namespace
     {
         MsiSetProperty(handle, sProperty.c_str(), TEXT("1"));
     }
-
 } // namespace
 
 extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
@@ -124,6 +125,7 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
         // No setup.ini or no "ProductCode" in setup.ini. This is an invalid directory.
         SetMsiProperty( handle, TEXT("INVALIDDIRECTORY"), TEXT("YES") );
         // MessageBox(NULL, "INVALIDDIRECTORY set", "DEBUG", MB_OK);
+        SetMsiErrorCode( MSI_ERROR_INVALIDDIRECTORY );
         return ERROR_SUCCESS;
     }
 
@@ -162,6 +164,7 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
             // MessageBox(NULL, "Neither bootstrap.ini nor version.ini exist -> ISWRONGPRODUCT 1 set", "DEBUG", MB_OK);
             SetMsiProperty( handle, TEXT("ISWRONGPRODUCT"), TEXT("YES") );
             // MessageBox(NULL, "ISWRONGPRODUCT 1 set", "DEBUG", MB_OK);
+            SetMsiErrorCode( MSI_ERROR_ISWRONGPRODUCT );
             return ERROR_SUCCESS;
         }
         else
@@ -202,6 +205,7 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
     {
         SetMsiProperty( handle, TEXT("ISWRONGPRODUCT"), TEXT("YES") );
         // MessageBox(NULL, "ISWRONGPRODUCT 1 set", "DEBUG", MB_OK);
+        SetMsiErrorCode( MSI_ERROR_ISWRONGPRODUCT );
         return ERROR_SUCCESS;
     }
 
@@ -214,6 +218,7 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
     {
         SetMsiProperty( handle, TEXT("ISWRONGPRODUCT"), TEXT("YES") );
         // MessageBox(NULL, "ISWRONGPRODUCT 2 set", "DEBUG", MB_OK);
+        SetMsiErrorCode( MSI_ERROR_ISWRONGPRODUCT );
         return ERROR_SUCCESS;
     }
 
@@ -243,6 +248,7 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
         {
             SetMsiProperty( handle, TEXT("PATCHISOLDER"), TEXT("YES") );
             // MessageBox(NULL, "PATCHISOLDER set", "DEBUG", MB_OK);
+            SetMsiErrorCode( MSI_ERROR_PATCHISOLDER );
             return ERROR_SUCCESS;
         }
     }
