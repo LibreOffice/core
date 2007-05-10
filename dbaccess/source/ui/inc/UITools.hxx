@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:51:56 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:29:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -438,18 +438,6 @@ namespace dbaui
     */
     ::rtl::OUString getStrippedDatabaseName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDataSource
                                             ,::rtl::OUString& _rsDatabaseName);
-
-    /** converts the URL for UI purpose, system file based URLs will be converted into system path.
-        @param  _bPrefix
-            <TRUE/> if the type prefix should append in front of the URL, otherwise it will be dropped.
-        @param  _pCollection
-            The type collection.
-        @param  _sURL
-            The URL which should be converted.
-        @return
-            The new converted URL.
-    */
-    String convertURLtoUI(sal_Bool _bPrefix,ODsnTypeCollection* _pCollection,const ::rtl::OUString& _sURL);
 
     /** returns the standard database filter
         @retrun
