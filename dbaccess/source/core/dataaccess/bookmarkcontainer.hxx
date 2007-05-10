@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bookmarkcontainer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:39:59 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:12:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,10 +181,6 @@ protected:
                                             a description string is thrown.
     */
     void        checkValid(sal_Bool _bIntendWriteAccess) const throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::DisposedException);
-
-    /** checks whether or not the configuration data the object is based on is readonly
-    */
-    sal_Bool    isReadOnly() const;
 
     /** quickly checks if there already is an element with a given name. No access to the configuration occures, i.e.
         if there is such an object which is not already loaded, it won't be loaded now.
