@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2006-11-14 11:28:38 $
+#   last change: $Author: kz $ $Date: 2007-05-10 15:00:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,89 +48,7 @@ TARGET=slackware
 
 # --- Files --------------------------------------------------------
 
-# GNOME does not like icon names with more than one '.'
-ICONPREFIX = $(UNIXFILENAME:s/.//g)
-
-LAUNCHERLIST = writer calc draw impress math base printeradmin
-
-MIMELIST = \
-    text \
-    text-template \
-    spreadsheet \
-    spreadsheet-template \
-    drawing \
-    drawing-template \
-    presentation \
-    presentation-template \
-    formula \
-    master-document \
-    oasis-text \
-    oasis-text-template \
-    oasis-spreadsheet \
-    oasis-spreadsheet-template \
-    oasis-drawing \
-    oasis-drawing-template \
-    oasis-presentation \
-    oasis-presentation-template \
-    oasis-formula \
-    oasis-master-document \
-    oasis-database \
-    oasis-web-template \
-
-MIMEICONLIST = \
-    oasis-text \
-    oasis-text-template \
-    oasis-spreadsheet \
-    oasis-spreadsheet-template \
-    oasis-drawing \
-    oasis-drawing-template \
-    oasis-presentation \
-    oasis-presentation-template \
-    oasis-formula \
-    oasis-master-document \
-    oasis-database \
-    oasis-web-template \
-    text \
-    text-template \
-    spreadsheet \
-    spreadsheet-template \
-    drawing \
-    drawing-template \
-    presentation \
-    presentation-template \
-    formula \
-    master-document \
-    database
-
-KDEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.desktop
-
-KDEMIMEFLAGFILE = \
-    $(MISC)/$(TARGET)/opt/kde/share/mimelnk/application.flag
-
-KDEICONLIST = \
-    hicolor/{16x16 32x32 48x48}/apps/$(ICONPREFIX)-{$(LAUNCHERLIST)}.png \
-    hicolor/{16x16 32x32 48x48}/mimetypes/$(ICONPREFIX)-{$(MIMEICONLIST)}.png \
-    locolor/{16x16 32x32}/apps/$(ICONPREFIX)-{$(LAUNCHERLIST)}.png \
-    locolor/{16x16 32x32}/mimetypes/$(ICONPREFIX)-{$(MIMEICONLIST)}.png
-
-
-PKGNAME=openoffice.org-$(TARGET)-menus
-MENUFILE=$(PKGDIR)/$(PKGNAME)-$(PKGVERSION)-noarch-$(PKGREV).tgz
-MENUDEPN = \
-    $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME) \
-    $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME)-printeradmin \
-    $(MISC)/$(TARGET)/usr/share/applications/ \
-    $(MISC)/$(TARGET)/usr/share/mime/packages/openoffice.org.xml \
-    $(MISC)/$(TARGET)/opt/kde/share/mimelnk/application.flag \
-    $(MISC)/$(TARGET)/opt/kde/share/icons/{$(KDEICONLIST)} \
-    $(MISC)/$(TARGET)/install/doinst.sh \
-    $(MISC)/$(TARGET)/install/slack-desc 
-        
-.IF "$(WITH_LANG)"!=""
-ULFDIR = $(COMMONMISC)$/desktopshare
-.ELSE			# "$(WITH_LANG)"!=""
-ULFDIR:=..$/share
-.ENDIF			# "$(WITH_LANG)"!=""
+MENUFILES=$(PKGDIR)$/{$(PRODUCTLIST)}-$(TARGET)-menus-$(PKGVERSION)-noarch-$(PKGREV).tgz
 
 # --- Targets -------------------------------------------------------
 
@@ -138,60 +56,38 @@ ULFDIR:=..$/share
 
 .IF "$(OS)" == "LINUX"
 
-ALLTAR : $(MENUFILE) 
+ALLTAR : $(MENUFILES) 
 
 $(MISC)/$(TARGET)/usr/share/applications/ :
     @$(MKDIRHIER) $(@)
-
-# --- icons --------------------------------------------------------
-
-$(MISC)/$(TARGET)/opt/kde/share/icons/{$(KDEICONLIST)} : ../icons/$$(@:d:d:d:d:d:d:f)/$$(@:d:d:d:d:f)/$$(@:d:d:f)/$$(@:f:s/$(ICONPREFIX)-//)
-    @$(MKDIRHIER) $(@:d)
-    @$(COPY) $< $@
     
-# --- mime types ---------------------------------------------------
-
-$(KDEMIMEFLAGFILE) : $(KDEMIMEDEPN) ../productversion.mk ../share/brand.pl ../share/translate.pl $(ULFDIR)/documents.ulf
-    @$(MKDIRHIER) $(@:db)
-    @echo Creating KDE mimelnk entries ..
-    @echo ---------------------------------
-    @$(PERL) ../share/brand.pl -p "$(PRODUCTNAME)" -u $(UNIXFILENAME) --prefix "$(UNIXFILENAME)-" --iconprefix "$(ICONPREFIX)-" $(KDEMIMEDEPN) $(@:db)
-    @$(PERL) ../share/translate.pl -p "$(PRODUCTNAME)" -d $(@:db) --prefix "$(UNIXFILENAME)-" --ext "desktop" --key "Comment" $(ULFDIR)/documents.ulf
-    @touch $@    
-
-$(MISC)/$(TARGET)/usr/share/mime/packages/openoffice.org.xml : $(COMMONMISC)$/desktopshare/openoffice.org.xml
-    @$(MKDIRHIER) $(@:d)
-    @$(COPY) $< $@
-
-# --- script ------------------------------------------------------
-
-$(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME) : ../share/openoffice.sh
-    @$(MKDIRHIER) $(@:d)
-    @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $@
-    @chmod 0755 $@
-
-$(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME)-printeradmin : ../share/printeradmin.sh
-    @$(MKDIRHIER) $(@:d)
-    @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $@
-    @chmod 0755 $@
-
 # --- slackware-specific stuff ------------------------------------
 # symlinks shall not be included in the tarball, but created with the doinst-script
 
-$(MISC)/$(TARGET)/install/doinst.sh : update-script
-    @$(MKDIRHIER) $(@:d)
-    @echo "( cd etc ; rm -rf $(UNIXFILENAME) )" > $@
-    @echo "( cd etc ; ln -snf /opt/$(UNIXFILENAME:s/-//) $(UNIXFILENAME) )" >> $@
+# FIXME: removal of *-extension.* only to create identical packages to OOF680
+%/usr/share/applications : 
+    @$(MKDIRHIER) $@
+    /bin/sh -c "cd $(COMMONMISC)$/$(*:b:s/-/ /:1); DESTDIR=$(shell cd $*; pwd) GNOMEDIR="" ICON_PREFIX=$(ICONPREFIX.$(*:b:s/-/ /:1)) KDEMAINDIR=/opt/kde .$/create_tree.sh"
+    $(RM) $*$/opt$/kde$/share$/icons$/*$/*$/*$/*-extension.png	
+    $(RM) $*$/opt$/kde$/share$/mimelnk$/application$/*-extension.desktop 
+    $(RM) $*$/usr$/share$/applications$/*.desktop
+    $(RM) $*$/usr$/bin$/soffice
+    $(RM) $*$/usr$/bin$/unopkg
+
+%$/install$/doinst.sh : update-script
+    @echo "( cd etc ; rm -rf $(UNIXFILENAME.$(*:b:s/-/ /:1)) )" > $@
+    @echo "( cd etc ; ln -snf /opt/$(UNIXFILENAME.$(*:b:s/-/ /:1):s/-//) $(UNIXFILENAME.$(*:b:s/-/ /:1)) )" >> $@
     @echo "( cd usr/bin ; rm -rf soffice )" >> $@
-    @echo "( cd usr/bin ; ln -sf /etc/$(UNIXFILENAME)/program/soffice soffice )" >> $@
-    @echo $(foreach,i,$(LAUNCHERLIST) "\n( cd usr/share/applications ; rm -rf $(UNIXFILENAME)-$i.desktop )\n( cd usr/share/applications ; ln -sf /etc/$(UNIXFILENAME)/share/xdg/$i.desktop $(UNIXFILENAME)-$i.desktop )") >> $@
+    @echo "( cd usr/bin ; ln -sf /etc/$(UNIXFILENAME.$(*:b:s/-/ /:1))/program/soffice soffice )" >> $@
+    @echo $(foreach,i,$(shell sed  's/extension.desktop//' $(COMMONMISC)$/$(*:b:s/-/ /:1)/launcherlist) "\n( cd usr/share/applications ; rm -rf $(UNIXFILENAME.$(*:b:s/-/ /:1))-$i )\n( cd usr/share/applications ; ln -sf /etc/$(UNIXFILENAME.$(*:b:s/-/ /:1))/share/xdg/$i $(UNIXFILENAME.$(*:b:s/-/ /:1))-$i )") >> $@
     @cat $< >> $@
 
-$(MISC)/$(TARGET)/install/slack-desc : slack-desc
+%$/install$/slack-desc : slack-desc
     @$(MKDIRHIER) $(@:d)
-    @sed -e "s/PKGNAME/$(PKGNAME)/g" -e "s/PKGVERSION/$(PKGVERSION)/g" \
-         -e "s/LONGPRODUCTNAME/$(LONGPRODUCTNAME)/g" -e "s/PRODUCTNAME/$(PRODUCTNAME)/g" \
-         -e "s/UNIXFILENAME/$(UNIXFILENAME)/g" $< > $@
+    @sed -e "s/PKGNAME/$(*:b:s/-/ /:1)-$(TARGET)-menus/g" -e "s/PKGVERSION/$(PKGVERSION.$(*:b:s/-/ /:1))/g" \
+        -e "s/LONGPRODUCTNAME/$(PRODUCTNAME.$(*:b:s/-/ /:1)) $(PRODUCTVERSION.$(*:b:s/-/ /:1))/g" \
+        -e "s/PRODUCTNAME/$(PRODUCTNAME.$(*:b:s/-/ /:1))/g" \
+        -e "s/UNIXFILENAME/$(UNIXFILENAME.$(*:b:s/-/ /:1))/g" $< > $@
 
 # needed to satisfy the slackware pagckage tools - they need
 # the entries like this
@@ -206,15 +102,20 @@ $(MISC)/$(TARGET)/install/slack-desc : slack-desc
 $(MISC)/$(TARGET)/empty.tar :
     @$(MKDIRHIER) $(@:d)/empty
     @tar -C $(MISC)/$(TARGET)/empty -cf $@ .
-    
+
+
 # --- packaging ---------------------------------------------------
-    
-$(MENUFILE) : $(MENUDEPN) $(MISC)/$(TARGET)/empty.tar
+
+$(MENUFILES) : makefile.mk slack-desc update-script $(COMMONMISC)$/{$(PRODUCTLIST)}$/build.flag
+$(MENUFILES) : $(MISC)/$(TARGET)/empty.tar
     @-$(MKDIRHIER) $(@:d)
-    -$(RM) $(@:d)$/$(PKGNAME)-*.tgz 
-    @$(COPY) $(MISC)/$(TARGET)/empty.tar $@.tmp
-    @tar -C $(MISC)/$(TARGET) --owner=root --group=root --same-owner --exclude application.flag -rf $@.tmp install usr opt
+    -$(RM) $(@:d)$/$(@:b:s/-/ /:1)-$(TARGET)-menus-*.tgz 
+    -$(RM) -r $(MISC)$/$(@:b)
+    dmake $(MISC)$/$(@:b)$/usr/share/applications $(MISC)$/$(@:b)$/install$/slack-desc $(MISC)$/$(@:b)$/install$/doinst.sh
+    @$(COPY) $(MISC)/$(TARGET)$/empty.tar $@.tmp
+    @tar -C $(MISC)/$(@:b) --owner=root --group=root --same-owner --exclude application.flag -rf $@.tmp install usr opt
     @gzip < $@.tmp > $@
     @$(RM) $@.tmp
+    $(RM) -r $(MISC)$/$(@:b)
 
 .ENDIF
