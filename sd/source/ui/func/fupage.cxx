@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:29:05 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:30:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,14 +42,6 @@
 #include <sfx2/viewfrm.hxx>
 
 // Seite einrichten Tab-Page
-#define ITEMID_PAGE         SID_ATTR_PAGE
-#define ITEMID_LRSPACE      SID_ATTR_LRSPACE
-#define ITEMID_ULSPACE      SID_ATTR_ULSPACE
-#define ITEMID_SIZE         SID_ATTR_PAGE_SIZE
-#define ITEMID_PAPERBIN     SID_ATTR_PAGE_PAPERBIN
-
-#define ITEMID_BOX          SID_ATTR_BORDER_OUTER
-#define ITEMID_SHADOW       SID_ATTR_BORDER_SHADOW
 
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
@@ -84,7 +76,6 @@
 #ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
 #endif
-#define ITEMID_FRAMEDIR             EE_PARA_WRITINGDIR
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
 #endif
@@ -238,17 +229,19 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
     ///////////////////////////////////////////////////////////////////////
     // Retrieve additional data for dialog
 
-    SvxShadowItem aShadowItem;
+    SvxShadowItem aShadowItem(SID_ATTR_BORDER_SHADOW);
     aNewAttr.Put( aShadowItem );
-    SvxBoxItem aBoxItem;
+    SvxBoxItem aBoxItem( SID_ATTR_BORDER_OUTER );
     aNewAttr.Put( aBoxItem );
 
-    aNewAttr.Put( SvxFrameDirectionItem( mpDoc->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP ) );
+    aNewAttr.Put( SvxFrameDirectionItem(
+        mpDoc->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP,
+        EE_PARA_WRITINGDIR ) );
 
     ///////////////////////////////////////////////////////////////////////
     // Retrieve page-data for dialog
 
-    SvxPageItem aPageItem;
+    SvxPageItem aPageItem( SID_ATTR_PAGE );
     aPageItem.SetDescName( mpPage->GetName() );
     aPageItem.SetPageUsage( (SvxPageUsage) SVX_PAGE_ALL );
     aPageItem.SetLandscape( mpPage->GetOrientation() == ORIENTATION_LANDSCAPE ? TRUE: FALSE );
