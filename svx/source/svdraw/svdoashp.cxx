@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-06 14:40:22 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:58:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,21 +148,6 @@
 #endif
 
 //      textitem.hxx        editdata.hxx
-#define ITEMID_COLOR        EE_CHAR_COLOR
-#define ITEMID_FONT         EE_CHAR_FONTINFO
-#define ITEMID_FONTHEIGHT   EE_CHAR_FONTHEIGHT
-#define ITEMID_FONTWIDTH    EE_CHAR_FONTWIDTH
-#define ITEMID_WEIGHT       EE_CHAR_WEIGHT
-#define ITEMID_UNDERLINE    EE_CHAR_UNDERLINE
-#define ITEMID_CROSSEDOUT   EE_CHAR_STRIKEOUT
-#define ITEMID_POSTURE      EE_CHAR_ITALIC
-#define ITEMID_CONTOUR      EE_CHAR_OUTLINE
-#define ITEMID_SHADOWED     EE_CHAR_SHADOW
-#define ITEMID_ESCAPEMENT   EE_CHAR_ESCAPEMENT
-#define ITEMID_AUTOKERN     EE_CHAR_PAIRKERNING
-#define ITEMID_WORDLINEMODE EE_CHAR_WLM
-#define ITEMID_ADJUST      EE_PARA_JUST
-#define ITEMID_FIELD       EE_FEATURE_FIELD
 #include "xlnclit.hxx"
 
 
@@ -365,7 +350,7 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         // is creating a paraobject, but paraobjects can not be created without model. So
         // we are preventing the crash by setting the writing mode always left to right,
         // this is not bad since our shadow geometry does not contain text.
-        aTempSet.Put( SvxWritingModeItem( com::sun::star::text::WritingMode_LR_TB ) );
+        aTempSet.Put( SvxWritingModeItem( com::sun::star::text::WritingMode_LR_TB, SDRATTR_TEXTDIRECTION ) );
 
         // no shadow
         aTempSet.Put(SdrShadowItem(sal_False));
