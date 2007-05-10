@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.213 $
+#   $Revision: 1.214 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-09 13:26:32 $
+#   last change: $Author: kz $ $Date: 2007-05-10 15:11:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1097,8 +1097,8 @@ CFLAGS+=$(CFLAGSNOOPT)
 GLOBAL_EXCEPTIONS_FLAGS+=$(CFLAGSEXCEPTIONS)
 GLOBAL_EXCEPTIONS_FLAGS+=-DEXCEPTIONS_ON
 .ELSE
-GLOBAL_EXCEPTIONS_FLAGS+=-DEXCEPTIONS_OFF
 GLOBAL_EXCEPTIONS_FLAGS+=$(CFLAGS_NO_EXCEPTIONS)
+GLOBAL_EXCEPTIONS_FLAGS+=-DEXCEPTIONS_OFF
 .ENDIF
 # used if an object appears in the EXCEPTIONSFILES list
 # see also rules.mk
