@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-08 11:35:22 $
+#   last change: $Author: kz $ $Date: 2007-05-10 13:11:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,10 @@ PACKAGE=org.openoffice.Office
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
-XSLDIR=$(SOLARXMLDIR)$/processing
-XCSROOT=$(SOLARXMLDIR)
-DTDDIR=$(SOLARXMLDIR)
+ABSXCSROOT=$(SOLARXMLDIR)
+XCSROOT=..
+DTDDIR=$(ABSXCSROOT)
+XSLDIR=$(ABSXCSROOT)$/processing
 PROCESSOUT=$(MISC)$/$(TARGET)
 PROCESSORDIR=$(SOLARBINDIR)
 
