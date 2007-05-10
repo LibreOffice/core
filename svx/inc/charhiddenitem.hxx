@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charhiddenitem.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:19:24 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:18:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ class SVX_DLLPUBLIC SvxCharHiddenItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxCharHiddenItem( const BOOL bHidden = FALSE, const USHORT nId = ITEMID_CHARHIDDEN );
+    SvxCharHiddenItem( const BOOL bHidden /*= FALSE*/, const USHORT nId );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
