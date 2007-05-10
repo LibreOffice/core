@@ -23,7 +23,7 @@ rpm --query --queryformat "[%{FILEMODES:perms} %{FILEUSERNAME}/%{FILEGROUPNAME} 
 
 rpm2cpio $package | cpio --extract --make-directories
 
-rm --force `sed --silent 's|^lrw.r..r..- root/root \\./\\(.*\\) -> .*|\\1 |p' filelist | tr -d "\\012"`
+rm --force `sed --silent 's|^lrw.r..r..-* root/root \\./\\(.*\\) -> .*|\\1 |p' filelist | tr -d "\\012"`
 EOF
 
 # the last step removes all symbolic links from the extracted file tree as they
@@ -61,6 +61,14 @@ bzcat $package/archive/none.bz2 | cpio -i -d
 EOF
 }
 
+sub unpack_tgz {
+   my ($package) = @_;
+
+  system << "EOF"
+cat $package | gunzip | tar -xf -
+EOF
+}
+
 my $script = basename($0);
 
 die "Usage: $script <package 1> <package 2>\n" unless $#ARGV == 1;
@@ -88,6 +96,7 @@ while ( $#ARGV >= 0 )
     if ( $package =~ /\.rpm$/ )   { unpack_rpm( $package ); }
     elsif( $package =~ /\.deb$/ ) { unpack_deb( $package ); }
     elsif( -f "$package/pkgmap" ) { unpack_solpkg( $package ); }
+    elsif( $package =~ /\.tgz$/ ) { unpack_tgz( $package ); }
 
     push @pkgroot, $basename;
     chdir $dir;
