@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fwdtitem.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:47:28 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:19:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,6 @@
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
 #endif
-#ifndef   ITEMID_FONTWIDTH
-#define   ITEMID_FONTWIDTH 0
-#endif
 
 
 // class SvxFontWidthItem -----------------------------------------------
@@ -61,9 +58,9 @@ class SvxFontWidthItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxFontWidthItem(   const USHORT nSz = 0,
-                        const USHORT nPropWidth = 100,
-                        const USHORT nId = ITEMID_FONTWIDTH );
+    SvxFontWidthItem(   const USHORT nSz /*= 0*/,
+                        const USHORT nPropWidth /*= 100*/,
+                        const USHORT nId  );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
