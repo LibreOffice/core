@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmPropBrw.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:05:05 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:07:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 #ifndef SVX_FMPROPBRW_HXX
 #define SVX_FMPROPBRW_HXX
 
+/** === begin UNO includes === **/
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -44,6 +45,10 @@
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
+#ifndef _COM_SUN_STAR_INSPECTION_XOBJECTINSPECTORMODEL_HPP_
+#include <com/sun/star/inspection/XObjectInspectorModel.hpp>
+#endif
+/** === end UNO includes === **/
 #ifndef _BASEDLGS_HXX
 #include <sfx2/basedlgs.hxx>
 #endif
@@ -60,9 +65,6 @@
 //========================================================================
 class FmPropBrwMgr : public SfxChildWindow
 {
-protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
-                    m_xUnoRepresentation;
 public:
     FmPropBrwMgr(Window *pParent, sal_uInt16 nId, SfxBindings *pBindings, SfxChildWinInfo *pInfo);
     SFX_DECL_CHILDWINDOW(FmPropBrwMgr);
@@ -83,6 +85,8 @@ class FmPropBrw : public SfxFloatingWindow, public SfxControllerItem
                     m_xMeAsFrame;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                     m_xLastKnownDocument;
+    ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorModel >
+                    m_xInspectorModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
                     m_xBrowserController;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
@@ -99,6 +103,7 @@ protected:
 
     void implSetNewSelection( const InterfaceBag& _rSelection );
     void implDetachController();
+    bool implIsReadOnlyModel() const;
     ::rtl::OUString getCurrentPage() const;
 
 public:
