@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagectrl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:24:08 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:40:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 
 // include ---------------------------------------------------------------
 
-#define ITEMID_BOX          0
-#define ITEMID_FRAMEDIR     0
+
+
 #ifndef _SV_BITMAP_HXX
 #include <vcl/bitmap.hxx>
 #endif
