@@ -4,9 +4,9 @@
  *
  *  $RCSfile: postattr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:21:04 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 14:21:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@
 
 // class SvxPostItAuthorItem ---------------------------------------------
 
-#ifdef ITEMID_AUTHOR
+
 
 /*
 [Beschreibung]
@@ -59,9 +59,9 @@ class SVX_DLLPUBLIC SvxPostItAuthorItem: public SfxStringItem
 public:
     TYPEINFO();
 
-    SvxPostItAuthorItem( USHORT nWhich = ITEMID_AUTHOR );
+    SvxPostItAuthorItem( USHORT nWhich  );
 
-    SvxPostItAuthorItem( const String& rAuthor, USHORT nWhich = ITEMID_AUTHOR );
+    SvxPostItAuthorItem( const String& rAuthor, USHORT nWhich  );
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -75,11 +75,11 @@ public:
         return *this;
     }
 };
-#endif
+
 
 // class SvxPostItDateItem -----------------------------------------------
 
-#ifdef ITEMID_DATE
+
 
 /*
 [Beschreibung]
@@ -91,9 +91,9 @@ class SVX_DLLPUBLIC SvxPostItDateItem: public SfxStringItem
 public:
     TYPEINFO();
 
-    SvxPostItDateItem( USHORT nWhich = ITEMID_DATE );
+    SvxPostItDateItem( USHORT nWhich  );
 
-    SvxPostItDateItem( const String& rDate, USHORT nWhich = ITEMID_DATE );
+    SvxPostItDateItem( const String& rDate, USHORT nWhich  );
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -106,11 +106,11 @@ public:
         return *this;
     }
 };
-#endif
+
 
 // class SvxPostItTextItem -----------------------------------------------
 
-#ifdef ITEMID_TEXT
+
 
 /*
 [Beschreibung]
@@ -122,9 +122,9 @@ class SVX_DLLPUBLIC SvxPostItTextItem: public SfxStringItem
 public:
     TYPEINFO();
 
-    SvxPostItTextItem( USHORT nWhich = ITEMID_TEXT );
+    SvxPostItTextItem( USHORT nWhich  );
 
-    SvxPostItTextItem( const String& rText, USHORT nWhich = ITEMID_TEXT );
+    SvxPostItTextItem( const String& rText, USHORT nWhich  );
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -139,7 +139,7 @@ public:
         return *this;
     }
 };
-#endif
+
 
 
 #endif
