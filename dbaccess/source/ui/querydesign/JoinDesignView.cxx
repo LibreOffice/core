@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinDesignView.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:20:32 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:37:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,22 +158,6 @@ void OJoinDesignView::resizeDocumentView(Rectangle& _rPlayground)
 // -----------------------------------------------------------------------------
 void OJoinDesignView::setReadOnly(sal_Bool /*_bReadOnly*/)
 {
-}
-// -----------------------------------------------------------------------------
-void OJoinDesignView::TableDeleted(const ::rtl::OUString& /*rAliasName*/)
-{
-}
-// -----------------------------------------------------------------------------
-void OJoinDesignView::zoomTableView(const Fraction& _rFraction)
-{
-    m_pTableView->SetZoom(_rFraction);
-}
-// -----------------------------------------------------------------------------
-void OJoinDesignView::SaveUIConfig()
-{
-    OJoinController* pCtrl = getController();
-    if (pCtrl)
-        pCtrl->SaveTabWinsPosSize( m_pTableView->GetTabWinMap(), m_pScrollWindow->GetHScrollBar()->GetThumbPos(), m_pScrollWindow->GetVScrollBar()->GetThumbPos() );
 }
 // -----------------------------------------------------------------------------
 void OJoinDesignView::SaveTabWinUIConfig(OTableWindow* pWin)
