@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_Scale.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:37:14 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:32:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
 #include <rtl/math.hxx>
 #endif
 // header for class SvxDoubleItem
-#define ITEMID_DOUBLE   0
 #ifndef _SVX_CHRTITEM_HXX
 #include <svx/chrtitem.hxx>
 #endif
@@ -88,7 +87,6 @@
 #endif
 
 #include "schattr.hxx"
-#define ITEMID_DOUBLE   0
 #ifndef _SVX_CHRTITEM_HXX //autogen
 #include <svx/chrtitem.hxx>
 #endif
