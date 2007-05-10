@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryDesignView.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:12:31 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:28:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,6 @@ namespace dbaui
         virtual long PreNotify( NotifyEvent& rNEvt );
         virtual void GetFocus();
 
-        BOOL IsAddAllowed();
         sal_Bool isSlotEnabled(sal_Int32 _nSlotId);
         void setSlotEnabled(sal_Int32 _nSlotId,sal_Bool _bEnable);
         void setNoneVisbleRow(sal_Int32 _nRows);
@@ -145,10 +144,8 @@ namespace dbaui
         ::com::sun::star::lang::Locale      getLocale() const           { return m_aLocale;}
         ::rtl::OUString                     getDecimalSeparator() const { return m_sDecimalSep;}
 
-        sal_Bool HasTable() const;
         SqlParseError InsertField( const OTableFieldDescRef& rInfo, sal_Bool bVis=sal_True, sal_Bool bActivate = sal_True);
         // save the position of the table window and the pos of the splitters
-        void SaveTabWinUIConfig(OQueryTableWindow* pWin);
         // called when fields are deleted
         void DeleteFields( const ::rtl::OUString& rAliasName );
         // called when a table from tabeview was deleted
@@ -156,7 +153,6 @@ namespace dbaui
 
         BOOL getColWidth( const ::rtl::OUString& rAliasName, const ::rtl::OUString& rFieldName, sal_uInt32& nWidth );
         void fillValidFields(const ::rtl::OUString& strTableName, ComboBox* pFieldList);
-        void zoomTableView(const Fraction& _rFraction);
 
         void SaveUIConfig();
         void stopTimer();
