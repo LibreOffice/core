@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listenernotification.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:29:03 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 10:54:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,10 +226,10 @@ namespace comphelper
         using OListenerContainer::createIterator;
 
         /// typed notification
-        bool    notify( const EventClass& _rEvent, NotificationMethod _pNotify ) SAL_THROW(( ::com::sun::star::uno::Exception ));
+        inline bool    notify( const EventClass& _rEvent, NotificationMethod _pNotify ) SAL_THROW(( ::com::sun::star::uno::Exception ));
 
     protected:
-        virtual bool    implNotify(
+        inline virtual bool    implNotify(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _rxListener,
                             const ::com::sun::star::lang::EventObject& _rEvent
                         )   SAL_THROW( ( ::com::sun::star::uno::Exception ) );
@@ -237,7 +237,7 @@ namespace comphelper
 
     //--------------------------------------------------------------------
     template< class LISTENER, class EVENT >
-    bool OSimpleListenerContainer< LISTENER, EVENT >::notify( const EventClass& _rEvent, NotificationMethod _pNotify ) SAL_THROW(( ::com::sun::star::uno::Exception ))
+    inline bool OSimpleListenerContainer< LISTENER, EVENT >::notify( const EventClass& _rEvent, NotificationMethod _pNotify ) SAL_THROW(( ::com::sun::star::uno::Exception ))
     {
         m_pNotificationMethod = _pNotify;
         bool bRet = OListenerContainer::notify( _rEvent );
@@ -247,7 +247,7 @@ namespace comphelper
 
     //--------------------------------------------------------------------
     template< class LISTENER, class EVENT >
-    bool OSimpleListenerContainer< LISTENER, EVENT >::implNotify(
+    inline bool OSimpleListenerContainer< LISTENER, EVENT >::implNotify(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _rxListener,
             const ::com::sun::star::lang::EventObject& _rEvent )   SAL_THROW( ( ::com::sun::star::uno::Exception ) )
     {
@@ -293,7 +293,7 @@ namespace comphelper
         using OListenerContainer::notify;
 
     protected:
-        virtual bool    implNotify(
+        inline virtual bool    implNotify(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _rxListener,
                             const ::com::sun::star::lang::EventObject& _rEvent
                         )   SAL_THROW( ( ::com::sun::star::uno::Exception ) );
@@ -305,7 +305,7 @@ namespace comphelper
     };
 
     template< class LISTENER, class EVENT >
-    bool OListenerContainerBase< LISTENER, EVENT >::implNotify(
+    inline bool OListenerContainerBase< LISTENER, EVENT >::implNotify(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _rxListener,
             const ::com::sun::star::lang::EventObject& _rEvent )   SAL_THROW( ( ::com::sun::star::uno::Exception ) )
     {
