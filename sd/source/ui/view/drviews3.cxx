@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:29:29 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 15:34:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,8 @@
 
 #include <sfx2/viewfrm.hxx>
 
-#ifndef _EEITEMID_HXX
-#include <svx/eeitemid.hxx>
+#ifndef _EEITEM_HXX
+#include <svx/eeitem.hxx>
 #endif
 #ifndef _SVX_TSPTITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
@@ -748,9 +748,9 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
             if( mpDrawView->IsTextEdit() )
             {
                 const SvxTabStopItem& rItem = (const SvxTabStopItem&)
-                            pArgs->Get( ITEMID_TABSTOP );
+                            pArgs->Get( EE_PARA_TABS );
 
-                SfxItemSet aEditAttr( GetPool(), ITEMID_TABSTOP, ITEMID_TABSTOP );
+                SfxItemSet aEditAttr( GetPool(), EE_PARA_TABS, EE_PARA_TABS );
 
                 aEditAttr.Put( rItem );
                 mpDrawView->SetAttributes( aEditAttr );
@@ -769,9 +769,9 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 const SvxLRSpaceItem& rItem = (const SvxLRSpaceItem&)
                             pArgs->Get( nId );
 
-                SfxItemSet aEditAttr( GetPool(), ITEMID_LRSPACE, ITEMID_LRSPACE );
+                SfxItemSet aEditAttr( GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
 
-                nId = ITEMID_LRSPACE;
+                nId = EE_PARA_LRSPACE;
                 SvxLRSpaceItem aLRSpaceItem( rItem.GetLeft(),
                         rItem.GetRight(), rItem.GetTxtLeft(),
                         rItem.GetTxtFirstLineOfst(), nId );
@@ -850,14 +850,14 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
             {
                 SfxItemSet aEditAttr( GetDoc()->GetPool() );
                 mpDrawView->GetAttributes( aEditAttr );
-                if( aEditAttr.GetItemState( ITEMID_TABSTOP ) >= SFX_ITEM_AVAILABLE )
+                if( aEditAttr.GetItemState( EE_PARA_TABS ) >= SFX_ITEM_AVAILABLE )
                 {
-                    const SvxTabStopItem& rItem = (const SvxTabStopItem&) aEditAttr.Get( ITEMID_TABSTOP );
+                    const SvxTabStopItem& rItem = (const SvxTabStopItem&) aEditAttr.Get( EE_PARA_TABS );
                     rSet.Put( rItem );
 
                     //Rectangle aRect = maMarkRect;
 
-                    const SvxLRSpaceItem& rLRSpaceItem = (const SvxLRSpaceItem&) aEditAttr.Get( ITEMID_LRSPACE );
+                    const SvxLRSpaceItem& rLRSpaceItem = (const SvxLRSpaceItem&) aEditAttr.Get( EE_PARA_LRSPACE );
                     USHORT nId = SID_ATTR_PARA_LRSPACE;
                     SvxLRSpaceItem aLRSpaceItem( rLRSpaceItem.GetLeft(),
                             rLRSpaceItem.GetRight(), rLRSpaceItem.GetTxtLeft(),
@@ -906,7 +906,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
         }
         else
         {
-            rSet.DisableItem( ITEMID_TABSTOP );
+            rSet.DisableItem( EE_PARA_TABS );
             rSet.DisableItem( SID_RULER_TEXT_RIGHT_TO_LEFT );
 
             if( mpDrawView->IsResizeAllowed(TRUE) )
@@ -917,7 +917,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                 SvxObjectItem aObjItem(aResizeRect.Left(), aResizeRect.Right(),
                                        aResizeRect.Top(), aResizeRect.Bottom());
                 rSet.Put(aObjItem);
-                rSet.DisableItem( ITEMID_TABSTOP );
+                rSet.DisableItem( EE_PARA_TABS );
             }
             else
             {
@@ -928,7 +928,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
     else
     {
         rSet.DisableItem( SID_RULER_OBJECT );
-        rSet.DisableItem( ITEMID_TABSTOP );
+        rSet.DisableItem( EE_PARA_TABS );
 //      rSet.DisableItem( SID_RULER_TEXT_RIGHT_TO_LEFT );
     }
 
