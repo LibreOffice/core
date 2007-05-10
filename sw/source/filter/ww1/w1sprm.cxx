@@ -4,9 +4,9 @@
  *
  *  $RCSfile: w1sprm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:19:49 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 16:09:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_sw.hxx"
 
 
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
+
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -246,7 +246,7 @@ void Ww1SingleSprmPJc::Start(
         SVX_ADJUST_BLOCK };
     BYTE nPara = SVBT8ToByte(pSprm);
     nPara %=(sizeof(aAdj)/sizeof(*aAdj));
-    rOut << SvxAdjustItem(aAdj[nPara]);
+    rOut << SvxAdjustItem(aAdj[nPara], RES_PARATR_ADJUST);
 }
 
 STOP1(Ww1SingleSprmPJc, RES_PARATR_ADJUST)
@@ -254,7 +254,7 @@ STOP1(Ww1SingleSprmPJc, RES_PARATR_ADJUST)
 void Ww1SingleSprmPFKeep::Start(
     Ww1Shell& rOut, BYTE, BYTE* pSprm, USHORT, Ww1Manager&)
 {
-    rOut << SvxFmtSplitItem((SVBT8ToByte(pSprm) & 1) == 0);
+    rOut << SvxFmtSplitItem((SVBT8ToByte(pSprm) & 1) == 0, RES_PARATR_SPLIT);
 }
 
 STOP1(Ww1SingleSprmPFKeep, RES_PARATR_SPLIT)
@@ -262,7 +262,7 @@ STOP1(Ww1SingleSprmPFKeep, RES_PARATR_SPLIT)
 void Ww1SingleSprmPFKeepFollow::Start(
     Ww1Shell& rOut, BYTE, BYTE* pSprm, USHORT, Ww1Manager&)
 {
-    rOut << SvxFmtKeepItem((SVBT8ToByte(pSprm) & 1) != 0);
+    rOut << SvxFmtKeepItem((SVBT8ToByte(pSprm) & 1) != 0, RES_KEEP);
 }
 
 STOP1(Ww1SingleSprmPFKeepFollow, RES_KEEP)
@@ -271,7 +271,7 @@ void Ww1SingleSprmPPageBreakBefore::Start(
     Ww1Shell& rOut, BYTE, BYTE* pSprm, USHORT, Ww1Manager&)
 {
     rOut << SvxFmtBreakItem(SVBT8ToByte(pSprm) & 1?
-     SVX_BREAK_PAGE_BEFORE:SVX_BREAK_NONE );
+     SVX_BREAK_PAGE_BEFORE:SVX_BREAK_NONE, RES_BREAK );
 }
 
 STOP1(Ww1SingleSprmPPageBreakBefore, RES_BREAK)
@@ -337,7 +337,7 @@ void Ww1SingleSprmPBrc::Start(
     if(pBrc->fShadowGet())
     {
         Color aBlack(COL_BLACK); // schwarzer...
-        SvxShadowItem aS(ITEMID_SHADOW,(const Color*)&aBlack, 32,
+        SvxShadowItem aS(RES_SHADOW,(const Color*)&aBlack, 32,
                          SVX_SHADOW_BOTTOMRIGHT); // 1.6 tw breit
         if( rOut.IsInFly() )
             rOut.SetFlyFrmAttr( aS );
@@ -398,7 +398,7 @@ void Ww1SingleSprmPDyaLine::Start(
     short nSpace = SVBT16ToShort(pSprm);
     if(nSpace < 0)
         nSpace = -nSpace;
-    SvxLineSpacingItem aLSpc;
+    SvxLineSpacingItem aLSpc( LINE_SPACE_DEFAULT_HEIGHT, RES_PARATR_LINESPACING );
     if(TRUE)
     {// MultilineSpace(proportional)
         long n = nSpace * 100 / 240;    // W1: 240 = 100%, SW: 100 = 100%
@@ -727,12 +727,12 @@ void Ww1SingleSprmPFromText::Start(
                             // definitiv nicht
         short nFromText = SVBT16ToShort(pSprm);
 
-        SvxLRSpaceItem aLR;
+        SvxLRSpaceItem aLR( RES_LR_SPACE );
         aLR.SetTxtLeft( nFromText );
         aLR.SetRight( nFromText );
         rOut.SetFlyFrmAttr( aLR );
 
-        rOut.SetFlyFrmAttr( SvxULSpaceItem( nFromText, nFromText ) );
+        rOut.SetFlyFrmAttr( SvxULSpaceItem( nFromText, nFromText, RES_UL_SPACE ) );
     }
 }
 
