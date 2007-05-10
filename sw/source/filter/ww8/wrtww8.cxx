@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:31:07 $
+ *  last change: $Author: kz $ $Date: 2007-05-10 09:15:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2180,7 +2180,9 @@ ULONG SwWW8Writer::StoreDoc()
     pFlyOffset = 0;
     eNewAnchorType = FLY_PAGE;
     nTxtTyp = TXT_MAINTEXT;
-    nFlyWidth = nFlyHeight = 0;
+    // --> OD 2007-04-19 #i43447# - removed
+//    nFlyWidth = nFlyHeight = 0;
+    // <--
     nStyleBeforeFly = nLastFmtId = 0;
     pStyAttr = 0;
     pOutFmtNode = 0;
