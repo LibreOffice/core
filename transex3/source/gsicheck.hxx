@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gsicheck.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 10:24:46 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 09:12:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,14 +108,16 @@ private:
     BOOL bCheckTranslationLang;
     BOOL bReference;
     BOOL bAllowKeyIDs;
+    BOOL bAllowSuspicious;
 
     BOOL bHasBlockError;
 
     BOOL IsUTF8( const ByteString &aTestee, BOOL bFixTags, USHORT &nErrorPos, ByteString &aErrorMsg, BOOL &bHasBeenFixed, ByteString &aFixed ) const;
     BOOL TestUTF8( GSILine* pTestee, BOOL bFixTags );
+    BOOL HasSuspiciousChars( GSILine* pTestee, GSILine* pSource );
 
 public:
-    GSIBlock( BOOL PbPrintContext, BOOL bSource, BOOL bTrans, BOOL bRef, BOOL bAllowKID );
+    GSIBlock( BOOL PbPrintContext, BOOL bSource, BOOL bTrans, BOOL bRef, BOOL bAllowKID, BOOL bAllowSusp );
     ~GSIBlock();
     void PrintMessage( ByteString aType, ByteString aMsg, ByteString aPrefix, ByteString aContext, ULONG nLine, ByteString aUniqueId = ByteString() );
     void PrintError( ByteString aMsg, ByteString aPrefix, ByteString aContext, ULONG nLine, ByteString aUniqueId = ByteString() );
