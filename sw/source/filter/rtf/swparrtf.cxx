@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:07:43 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 09:21:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3685,23 +3685,10 @@ void SwRTFParser::ReadOLEData()
 
 void SwRTFParser::ReadPrtData()
 {
-    // der Eingabe Stream steht auf der aktuellen Position
-    USHORT nLen = USHORT( nTokenValue ), nCnt = 0;
-    BYTE * pData = new BYTE[ nLen ];
-
-    while( IsParserWorking() )          // lese bis zur schliessenden Klammer
+    while( IsParserWorking() )
     {
         int nToken = GetNextToken();
-        if( RTF_TEXTTOKEN == nToken )
-        {
-            xub_StrLen nTknLen = HexToBin( aToken );
-            if( STRING_NOTFOUND != nTknLen )
-            {
-                memcpy( pData + nCnt, (sal_Char*)aToken.GetBuffer(), nTknLen );
-                nCnt += nTknLen;
-            }
-        }
-        else if( '}' == nToken )
+        if( (RTF_TEXTTOKEN != nToken) && ('}' == nToken) )
             break;
     }
 
