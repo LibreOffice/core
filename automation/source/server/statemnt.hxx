@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statemnt.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:25:03 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 08:55:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,8 @@ extern "C"
 #define IsVisible IsReallyVisible
 #define GET_REAL_PARENT() GetWindow( WINDOW_REALPARENT )
 
+// switch behaviour of ImplMouse* and ImplKeyInput
+#define FORCE_DIRECT_CALL   TRUE
 
 typedef USHORT SearchFlags;
 #define SEARCH_NOOVERLAP            ((SearchFlags) 0x0001)
@@ -210,8 +212,6 @@ protected:
     static BOOL bWasDragManager;            // Wenn dieses sich ändert wird Safe Reschedule abgebrochen
     static BOOL bWasPopupMenu;              // Wenn dieses sich ändert wird Safe Reschedule abgebrochen
        static BOOL bBasicWasRunning;
-
-    static USHORT nControlType;             // Auf diesen Typ werden Controls gecastst
 
     static USHORT nMinTypeKeysDelay;                /// Verzögerung der einzelnen Anschläge für TypeKeys
     static USHORT nMaxTypeKeysDelay;
@@ -338,6 +338,9 @@ public:
     static USHORT GetDocFrameCount();
 
     static BOOL bCatchGPF;
+
+    static BOOL bUsePostEvents;         // use Application::Post*Event or own impl to handle key and mouseevents
+
 #if OSL_DEBUG_LEVEL > 1
     static EditWindow *m_pDbgWin;
 #endif
@@ -514,10 +517,11 @@ public:
 };
 
 
-void ImplKeyInput( Window* pWin, KeyEvent &aKEvnt );
-void ImplMouseMove( Window* pWin, MouseEvent &aMEvnt );
-void ImplMouseButtonDown( Window* pWin, MouseEvent &aMEvnt );
-void ImplMouseButtonUp( Window* pWin, MouseEvent &aMEvnt );
+void ImplKeyInput( Window* pWin, KeyEvent &aKEvnt, BOOL bForceDirect=FALSE );
+void ImplMouseMove( Window* pWin, MouseEvent &aMEvnt, BOOL bForceDirect=FALSE );
+void ImplMouseButtonDown( Window* pWin, MouseEvent &aMEvnt, BOOL bForceDirect=FALSE );
+void ImplMouseButtonUp( Window* pWin, MouseEvent &aMEvnt, BOOL bForceDirect=FALSE );
 void ImplCommand( Window* pWin, CommandEvent &aCmdEvnt );
+void ImplEventWait( ULONG nID );
 
 #endif
