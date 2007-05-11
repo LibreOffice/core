@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FontTable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-25 09:06:53 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-11 14:52:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 #endif
 #ifndef INCLUDED_RESOURCESIDS
 #include <doctok/resourceids.hxx>
+#include <ooxml/resourceids.hxx>
 #endif
 #include <vector>
 #include <stdio.h>
@@ -77,7 +78,7 @@ void FontTable::attribute(doctok::Id Name, doctok::Value & val)
         return ;
     int nIntValue = val.getInt();
     ::rtl::OUString sValue = val.getString();
-    // printf ( "FontTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
+    printf ( "FontTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     switch(Name)
     {
 //        case NS_rtf::LN_ISTD: break;
@@ -495,6 +496,7 @@ void FontTable::attribute(doctok::Id Name, doctok::Value & val)
             m_pImpl->pCurrentEntry->sAlternativeFont = sValue;
         break;
         case NS_rtf::LN_XSZFFN:
+        case NS_ooxml::LN_CT_Font_name:
             m_pImpl->pCurrentEntry->sFontName = sValue;
         break;
 //        case NS_rtf::LN_XSTZNAME: break;
@@ -527,9 +529,29 @@ void FontTable::attribute(doctok::Id Name, doctok::Value & val)
 /*-- 19.06.2006 12:04:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FontTable::sprm(doctok::Sprm&)
+void FontTable::sprm(doctok::Sprm& sprm_)
 {
+    OSL_ENSURE( m_pImpl->pCurrentEntry, "current entry has to be set here");
+    if(!m_pImpl->pCurrentEntry)
+        return ;
+    sal_uInt32 nId = sprm_.getId();
+
+    doctok::Value::Pointer_t pValue = sprm_.getValue();
+    sal_Int32 nIntValue = pValue->getInt();
+    rtl::OUString sStringValue = pValue->getString();
+
+    printf ( "FontTable::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
+
+    switch(nId)
+    {
+    default:
+        {
+            OSL_ASSERT("FontTable::sprm()"); //
+            //doctok::Value::Pointer_t pValue_ = sprm_.getValue();
+        }
+    }
 }
+
 /*-- 19.06.2006 12:04:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/

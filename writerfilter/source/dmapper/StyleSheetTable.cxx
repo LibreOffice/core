@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-25 09:06:53 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-11 14:52:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #endif
 #ifndef INCLUDED_RESOURCESIDS
 #include <doctok/resourceids.hxx>
+#include <ooxml/resourceids.hxx>
 #endif
 #include <vector>
 #ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
@@ -145,7 +146,7 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
         return ;
     int nIntValue = val.getInt();
     ::rtl::OUString sValue = val.getString();
-    // printf ( "StyleSheetTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
+    printf ( "StyleSheetTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     switch(Name)
     {
         case NS_rtf::LN_ISTD:
@@ -599,12 +600,11 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
   -----------------------------------------------------------------------*/
 void StyleSheetTable::sprm(doctok::Sprm & sprm_)
 {
-    //fill the attributes of the style sheet
-    if(m_pImpl->m_pCurrentEntry)
-    {
-        m_pImpl->m_rDMapper.sprm( sprm_, m_pImpl->m_pCurrentEntry->pProperties );
-    }
+    if(!m_pImpl->m_pCurrentEntry)
+        return;
 
+    //fill the attributes of the style sheet
+    m_pImpl->m_rDMapper.sprm( sprm_, m_pImpl->m_pCurrentEntry->pProperties );
 }
 /*-- 19.06.2006 12:04:33---------------------------------------------------
 

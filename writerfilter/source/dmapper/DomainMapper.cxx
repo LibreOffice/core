@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-10 13:10:30 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-11 14:52:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,7 +168,7 @@ void DomainMapper::attribute(doctok::Id nName, doctok::Value & val)
 
     sal_Int32 nIntValue = val.getInt();
     rtl::OUString sStringValue = val.getString();
-    // printf("*** attribute *** 0x%.8x *** 0x%.8x *** %s *** attribute ***\n", (unsigned int)nName, (unsigned int)nIntValue, OUStringToOString(sStringValue, RTL_TEXTENCODING_UTF8).getStr());
+    printf ( "DomainMapper::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nName, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     if( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR )
         m_pImpl->GetFIB().SetData( nName, nIntValue );
     else
@@ -1727,7 +1727,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     doctok::Value::Pointer_t pValue = sprm_.getValue();
     sal_Int32 nIntValue = pValue->getInt();
     rtl::OUString sStringValue = pValue->getString();
-    // printf("*** sprm *** 0x%.8x *** sprm *** 0x%.8x *** %s *** sprm ***\n", (unsigned int)nId, (unsigned int)nIntValue, OUStringToOString(sStringValue, RTL_TEXTENCODING_UTF8).getStr());
+    printf ( "DomainMapper::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     /* WRITERFILTERSTATUS: table: sprmdata */
 
     switch(nId)
@@ -3150,6 +3150,10 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case NS_ooxml::LN_CT_PPrBase_tabs:
     case NS_ooxml::LN_EG_SectPrContents_footnotePr:
     case NS_ooxml::LN_EG_SectPrContents_endnotePr:
+    case NS_ooxml::LN_CT_RPrDefault_rPr:
+    case NS_ooxml::LN_CT_PPrDefault_pPr:
+    case NS_ooxml::LN_CT_DocDefaults_pPrDefault:
+    case NS_ooxml::LN_CT_DocDefaults_rPrDefault:
 //    case NS_ooxml::LN_CT_PPr_rPr:
         resolveSprmProps(sprm_);
         break;
@@ -3413,15 +3417,12 @@ void DomainMapper::table(doctok::Id name, doctok::Reference<Table>::Pointer_t re
     case NS_rtf::LN_FONTTABLE:
         /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
 
-        {
-            // create a font table object that listens to the attributes
-            // each entry call inserts a new font entry
-            ref->resolve( *m_pImpl->GetFontTable() );
-        }
+        // create a font table object that listens to the attributes
+        // each entry call inserts a new font entry
+        ref->resolve( *m_pImpl->GetFontTable() );
         break;
     case NS_rtf::LN_STYLESHEET:
         /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
-
         //same as above to import style sheets
         m_pImpl->SetStyleSheetImport( true );
         ref->resolve( *m_pImpl->GetStyleSheetTable() );

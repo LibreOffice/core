@@ -4338,7 +4338,7 @@
       </define>
       <define name="CT_Style">
         <attribute name="val">
-          <text/>
+          <ref name="ST_Style"/>
           <xs:documentation>Value</xs:documentation>
         </attribute>
       </define>
@@ -5360,7 +5360,13 @@
     <resource name="CT_LimLoc" resource="StringValue" generated="yes"/>
     <resource name="CT_TopBot" resource="StringValue" generated="yes"/>
     <resource name="CT_Script" resource="StringValue" generated="yes"/>
-    <resource name="CT_Style" resource="StringValue" generated="yes"/>
+    <resource name="ST_Style" resource="List">
+      <value tokenid="ooxml:Value_ST_Style_b">b</value>
+      <value tokenid="ooxml:Value_ST_Style_bi">bi</value>
+      <value tokenid="ooxml:Value_ST_Style_i">i</value>
+      <value tokenid="ooxml:Value_ST_Style_p">p</value>
+    </resource>
+    <resource name="CT_Style" resource="ListValue"/>
     <resource name="CT_OMathJc" resource="StringValue" generated="yes"/>
     <resource name="CT_TwipsMeasure" resource="StringValue" generated="yes"/>
     <resource name="CT_BreakBin" resource="StringValue" generated="yes"/>
@@ -13248,7 +13254,7 @@
       </define>
       <define name="CT_Panose">
         <attribute name="val">
-          <text/>
+          <ref name="ST_Panose"/>
           <xs:documentation>Value</xs:documentation>
         </attribute>
       </define>
@@ -14109,7 +14115,10 @@
     <resource name="CT_Lang" resource="StringValue">
       <attribute name="val" tokenid="ooxml:CT_Lang_val"/>
     </resource>
-    <resource name="CT_Guid" resource="StringValue" generated="yes"/>
+    <resource name="ST_Guid" resource="String"/>
+    <resource name="CT_Guid" resource="StringValue">
+      <attribute name="val" tokenid="ooxml:CT_Guid_val"/>
+    </resource>
     <resource name="ST_Underline" resource="List">
       <value tokenid="1">single</value>
       <value tokenid="2">words</value>
@@ -14906,7 +14915,9 @@
       <sprm name="specVanish" tokenid="0x818"/>
       <sprm name="oMath" tokenid="ooxml:EG_RPrBase_oMath"/>
     </resource>
-    <resource name="CT_RPr" resource="Properties"/>
+    <resource name="EG_RPrContent" resource="Properties"/>
+    <resource name="CT_RPr" resource="Properties">
+    </resource>
     <resource name="CT_ParaRPr" resource="Properties">
       <attribute name="rPrChange" tokenid="ooxml:CT_ParaRPr_rPrChange"/>
     </resource>
@@ -15079,6 +15090,16 @@
     <resource name="CT_TargetScreenSz" resource="StringValue" generated="yes"/>
     <resource name="CT_DocVar" resource="StringValue" generated="yes"/>
     <resource name="CT_CharacterSpacing" resource="StringValue" generated="yes"/>
+    <resource name="CT_RPrDefault" resource="Properties">
+      <attribute name="rPr" tokenid="ooxml:CT_RPrDefault_rPr"/>
+    </resource>
+    <resource name="CT_PPrDefault" resource="Properties">
+      <attribute name="pPr" tokenid="ooxml:CT_PPrDefault_pPr"/>
+    </resource>
+    <resource name="CT_DocDefaults" resource="Properties">
+      <attribute name="pPrDefault" tokenid="ooxml:CT_DocDefaults_pPrDefault"/>
+      <attribute name="rPrDefault" tokenid="ooxml:CT_DocDefaults_rPrDefault"/>
+    </resource>
     <resource name="CT_FrameScrollbar" resource="StringValue" generated="yes"/>
     <resource name="CT_FrameLayout" resource="StringValue" generated="yes"/>
     <resource name="CT_LevelSuffix" resource="StringValue" generated="yes"/>
@@ -15145,6 +15166,36 @@
       <sprm name="num" tokenid="ooxml:CT_Numbering_num"/>
       <sprm name="numIdMacAtCleanup" tokenid="ooxml:CT_Numbering_numIdMacAtCleanup"/>
     </resource>
+    <resource name="CT_Style" resource="Properties">
+      <sprm name="name" tokenid="ooxml:CT_Style_name"/>
+      <sprm name="aliases" tokenid="ooxml:CT_Style_aliases"/>
+      <sprm name="basedOn" tokenid="ooxml:CT_Style_basedOn"/>
+      <sprm name="next" tokenid="ooxml:CT_Style_next"/>
+      <sprm name="link" tokenid="ooxml:CT_Style_link"/>
+      <sprm name="autoRedefine" tokenid="ooxml:CT_Style_"/>
+      <sprm name="hidden" tokenid="ooxml:CT_Style_hidden"/>
+      <sprm name="uiPriority" tokenid="ooxml:CT_Style_uiPriority"/>
+      <sprm name="semiHidden" tokenid="ooxml:CT_Style_semiHidden"/>
+      <sprm name="unhideWhenUsed" tokenid="ooxml:CT_Style_unhideWhenUsed"/>
+      <sprm name="qFormat" tokenid="ooxml:CT_Style_qFormat"/>
+      <sprm name="locked" tokenid="ooxml:CT_Style_locked"/>
+      <sprm name="personal" tokenid="ooxml:CT_Style_personal"/>
+      <sprm name="personalCompose" tokenid="ooxml:CT_Style_personalCompose"/>
+      <sprm name="personalReply" tokenid="ooxml:CT_Style_personalReply"/>
+      <sprm name="rsid" tokenid="ooxml:CT_Style_rsid"/>
+      <sprm name="pPr" tokenid="ooxml:CT_Style_pPr"/>
+      <sprm name="rPr" tokenid="ooxml:CT_Style_rPr"/>
+      <sprm name="tblPr" tokenid="ooxml:CT_Style_tblPr"/>
+      <sprm name="trPr" tokenid="ooxml:CT_Style_trPr"/>
+      <sprm name="tcPr" tokenid="ooxml:CT_Style_tcPr"/>
+      <sprm name="tblStylePr" tokenid="ooxml:CT_Style_tblStylePr"/>
+      <attribute name="type" tokenid="ooxml:CT_Style_type"/>
+      <attribute name="styleId" tokenid="ooxml:CT_Style_styleId"/>
+      <attribute name="default" tokenid="ooxml:CT_Style_default"/>
+      <attribute name="customStyle" tokenid="ooxml:CT_Style_customStyle"/>
+    </resource>
+    <resource name="CT_Styles" resource="Table" tokenid="rtf:STYLESHEET"/>
+    <resource name="ST_Panose" resource="Hex"/>
     <resource name="CT_Panose" resource="HexValue"/>
     <resource name="ST_FontFamily" resource="List">
       <value tokenid="ooxml:Value_ST_FontFamily_decorative">decorative</value>
@@ -15168,6 +15219,10 @@
       <attribute name="usb3" tokenid="ooxml:CT_FontSig_usb3"/>
       <attribute name="csb0" tokenid="ooxml:CT_FontSig_csb0"/>
       <attribute name="csb1" tokenid="ooxml:CT_FontSig_csb1"/>
+    </resource>
+    <resource name="CT_FontRel" resource="Properties">
+      <attribute name="fontKey" tokenid="ooxml:CT_FontRel_fontKey"/>
+      <attribute name="subsetted" tokenid="ooxml:CT_FontRel_subsetted"/>
     </resource>
     <resource name="CT_Font" resource="Properties">
       <kind name="character"/>
