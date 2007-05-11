@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:49:35 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 11:43:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -477,13 +477,13 @@ Menu RID_FILE {
     ITEMLIST = {
     MenuItem  {
         Identifier = RID_FILENEW;
+        TEXT[ en-US ] = "~New";
         AccelKey = KeyCode { Function = KEYFUNC_NEW; };
-            TEXT[ en-US ] = "~New";
         };
     MenuItem  {
         Identifier = RID_FILEOPEN;
+        TEXT[ en-US ] = "~Open...";
         AccelKey = KeyCode { Function = KEYFUNC_OPEN; };
-            TEXT[ en-US ] = "~Open...";
         };
     MenuItem  {
         SEPARATOR = TRUE;
@@ -495,43 +495,43 @@ Menu RID_FILE {
         };
     MenuItem  {
         Identifier = RID_FILESAVE;
+        TEXT[ en-US ] = "~Save";
         AccelKey = KeyCode { Function = KEYFUNC_SAVE; };
-            TEXT[ en-US ] = "~Save";
         };
     MenuItem  {
         Identifier = RID_FILESAVEAS;
+        TEXT[ en-US ] = "Save~ As...";
         AccelKey = KeyCode { Function = KEYFUNC_SAVEAS; };
-            TEXT[ en-US ] = "Save~ As...";
         };
     MenuItem  {
         SEPARATOR = TRUE;
         };
     MenuItem  {
         Identifier = RID_FILELOADLIB;
-            TEXT[ en-US ] = "~Load Library...";
+        TEXT[ en-US ] = "~Load Library...";
         };
     MenuItem  {
         Identifier = RID_FILESAVELIB;
-            TEXT[ en-US ] = "Save Li~brary...";
+        TEXT[ en-US ] = "Save Li~brary...";
         };
     MenuItem  {
         SEPARATOR = TRUE;
         };
     MenuItem  {
         Identifier = RID_FILEPRINT;
-            TEXT[ en-US ] = "~Print";
+        TEXT[ en-US ] = "~Print";
         };
     MenuItem  {
         Identifier = RID_FILESETUP;
-            TEXT[ en-US ] = "P~rinter Setting...";
+        TEXT[ en-US ] = "P~rinter Setting...";
         };
     MenuItem  {
         SEPARATOR = TRUE;
         };
     MenuItem  {
         Identifier = RID_QUIT;
+        TEXT[ en-US ] = "~Exit";
         AccelKey = KeyCode { Function = KEYFUNC_QUIT; };
-            TEXT[ en-US ] = "~Exit";
         };
     };
 };
@@ -539,54 +539,54 @@ Menu RID_EDIT {
     ITEMLIST = {
     MenuItem  {
         Identifier = RID_EDITUNDO;
+        TEXT[ en-US ] = "~Undo";
 //      AccelKey = KeyCode { Function = KEYFUNC_CUT; };
-            TEXT[ en-US ] = "~Undo";
         };
     MenuItem  {
         Identifier = RID_EDITREDO;
+        TEXT[ en-US ] = "~Redo";
 //      AccelKey = KeyCode { Function = KEYFUNC_CUT; };
-            TEXT[ en-US ] = "~Redo";
         };
     MenuItem  {
         SEPARATOR = TRUE;
         };
     MenuItem  {
         Identifier = RID_EDITCUT;
+        TEXT[ en-US ] = "~Cut";
         AccelKey = KeyCode { Function = KEYFUNC_CUT; };
-            TEXT[ en-US ] = "~Cut";
         };
     MenuItem  {
         Identifier = RID_EDITCOPY;
+        TEXT[ en-US ] = "~Copy";
         AccelKey = KeyCode { Function = KEYFUNC_COPY; };
-            TEXT[ en-US ] = "~Copy";
         };
     MenuItem  {
         Identifier = RID_EDITPASTE;
+        TEXT[ en-US ] = "~Paste";
         AccelKey = KeyCode { Function = KEYFUNC_PASTE; };
-            TEXT[ en-US ] = "~Paste";
         };
     MenuItem  {
         Identifier = RID_EDITDEL;
+        TEXT[ en-US ] = "~Delete";
         AccelKey = KeyCode { Function = KEYFUNC_DELETE; };
-            TEXT[ en-US ] = "~Delete";
         };
     MenuItem  {
         SEPARATOR = TRUE;
         };
     MenuItem  {
         Identifier = RID_EDITSEARCH;
+        TEXT[ en-US ] = "~Find...";
         AccelKey = KeyCode { Function = KEYFUNC_FIND; };
-            TEXT[ en-US ] = "~Find...";
         };
     MenuItem  {
         Identifier = RID_EDITREPLACE;
-            TEXT[ en-US ] = "~Replace...";
+        TEXT[ en-US ] = "~Replace...";
         };
     MenuItem  {
         Identifier = RID_EDITREPEAT;
+        TEXT[ en-US ] = "Repeat S~earch";
         AccelKey = KeyCode { Code = KEY_F3; };
 //      AccelKey = KeyCode { Function = KEYFUNC_REPEAT; };
-            TEXT[ en-US ] = "Repeat S~earch";
         };
     };
 };
@@ -594,26 +594,26 @@ Menu RID_RUN {
     ITEMLIST = {
     MenuItem  {
         Identifier = RID_RUNCOMPILE;
-            TEXT[ en-US ] = "~Compile";
+        TEXT[ en-US ] = "~Compile";
         };
     MenuItem  {
         Identifier = RID_RUNDISAS;
-            TEXT[ en-US ] = "~Disassemble";
+        TEXT[ en-US ] = "~Disassemble";
         };
     MenuItem  {
         Identifier = RID_RUNSTART;
+        TEXT[ en-US ] = "~Start";
         AccelKey = KeyCode { Code = KEY_F5; };
-            TEXT[ en-US ] = "~Start";
         };
     MenuItem  {
         Identifier = RID_RUNSTEPINTO;
+        TEXT[ en-US ] = "~Single Step";
         AccelKey = KeyCode { Code = KEY_F8; };
-            TEXT[ en-US ] = "~Single Step";
         };
     MenuItem  {
         Identifier = RID_RUNSTEPOVER;
+        TEXT[ en-US ] = "Si~ngle Step over Procedure";
         AccelKey = KeyCode { Code = KEY_F10; };
-            TEXT[ en-US ] = "Si~ngle Step over Procedure";
         };
 //  MenuItem  {
 //      Identifier = RID_RUNTOCURSOR;
@@ -622,28 +622,28 @@ Menu RID_RUN {
 //      };
     MenuItem  {
         Identifier = RID_TOGLEBRKPNT;
+        TEXT[ en-US ] = "Set / Delete Break Point";
         AccelKey = KeyCode { Code = KEY_F9; };
-            TEXT[ en-US ] = "Set / Delete Break Point";
         };
     MenuItem  {
         Identifier = RID_RUNBREAK;
+        TEXT[ en-US ] = "~Break";
         AccelKey = KeyCode { Code = KEY_F5; Modifier1 = TRUE; };
-            TEXT[ en-US ] = "~Break";
         };
     MenuItem  {
         Identifier = RID_RUNSTOP;
+        TEXT[ en-US ] = "~Stop";
         AccelKey = KeyCode { Code = KEY_F5; Shift = TRUE; };
-            TEXT[ en-US ] = "~Stop";
         };
     MenuItem  {
         Identifier = RID_RUNNEXTERR;
+        TEXT[ en-US ] = "~Next Error";
         AccelKey = KeyCode { Code = KEY_F8; Shift = TRUE; };
-            TEXT[ en-US ] = "~Next Error";
         };
     MenuItem  {
         Identifier = RID_RUNPREVERR;
+        TEXT[ en-US ] = "~Previous Error";
         AccelKey = KeyCode { Code = KEY_F7; Shift = TRUE; };
-            TEXT[ en-US ] = "~Previous Error";
         };
     MenuItem  {
         SEPARATOR = TRUE;
@@ -734,12 +734,12 @@ ModelessDialog IDD_PRINT_DIALOG {
             Pos = MAP_APPFONT( 11, 9 );
             Size = MAP_APPFONT( 146, 28 );
             CENTER = TRUE;
-        TEXT[ en-US ] = "Print ";
+            TEXT[ en-US ] = "Print ";
     };
     CancelButton RID_CANCEL {
             Pos = MAP_APPFONT( 56, 46 );
             Size = MAP_APPFONT( 47, 19 );
-        TEXT[ en-US ] = "Cancel";
+            TEXT[ en-US ] = "Cancel";
     };
     TEXT[ en-US ] = "Testtool: Print File";
 };
@@ -750,6 +750,7 @@ TabDialog IDD_OPTIONS_DLG
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT( 248, 140 );
+    Text[ en-US ] = "Settings";
     Moveable = TRUE ;
     Closeable = TRUE ;
     TabControl RES_TC_OPTIONS
@@ -772,6 +773,11 @@ TabDialog IDD_OPTIONS_DLG
             };
             PageItem
             {
+                Identifier = RID_TP_CRA ;
+                Text[ en-US ] = "Crashreport";
+            };
+            PageItem
+            {
                 Identifier = RID_TP_MIS ;
                 Text[ en-US ] = "Misc";
             };
@@ -782,7 +788,6 @@ TabDialog IDD_OPTIONS_DLG
             };
         };
     };
-    Text[ en-US ] = "Settings";
 };
 
 
@@ -793,7 +798,7 @@ TabPage RID_TP_GENERIC {
     FixedLine RID_FL_AREA {
             Pos = MAP_APPFONT( 4, 2 );
             Size = MAP_APPFONT( 228, 8 );
-        Text[ en-US ] = "Area";
+            Text[ en-US ] = "Area";
     };
     ComboBox RID_CB_AREA {
             HScroll              = TRUE;
@@ -809,18 +814,18 @@ TabPage RID_TP_GENERIC {
             Pos = MAP_APPFONT( 144, 12 );
             Size = MAP_APPFONT( 40, 12 );
             TabStop = TRUE;
-        Text[ en-US ] = "New";
+            Text[ en-US ] = "New";
     };
     PushButton RID_PD_DEL_AREA {
             Pos = MAP_APPFONT( 188, 12 );
             Size = MAP_APPFONT( 40, 12 );
             TabStop = TRUE;
-        Text[ en-US ] = "Delete";
+            Text[ en-US ] = "Delete";
     };
     FixedLine RID_FL_VALUE {
             Pos = MAP_APPFONT( 4, 32 );
             Size = MAP_APPFONT( 228, 8 );
-        Text[ en-US ] = "Setting";
+            Text[ en-US ] = "Setting";
     };
     ComboBox RID_CB_VALUE {
             HScroll              = TRUE;
@@ -859,7 +864,7 @@ TabPage RID_TP_PROFILE {
     FixedLine RID_FL_PROFILE {
             Pos = MAP_APPFONT( 4, 4 );
             Size = MAP_APPFONT( 22, 8 );
-        Text[ en-US ] = "Profile";
+            Text[ en-US ] = "Profile";
     };
     ComboBox RID_CB_PROFILE {
             HScroll              = TRUE;
@@ -875,50 +880,52 @@ TabPage RID_TP_PROFILE {
             Pos = MAP_APPFONT( 144, 2 );
             Size = MAP_APPFONT( 40, 12 );
             TabStop = TRUE;
-        Text[ en-US ] = "New";
+            Text[ en-US ] = "New";
     };
     PushButton RID_PD_DEL_PROFILE {
             Pos = MAP_APPFONT( 188, 2 );
             Size = MAP_APPFONT( 40, 12 );
             TabStop = TRUE;
-        Text[ en-US ] = "Delete";
+            Text[ en-US ] = "Delete";
     };
     FixedLine FL_DIRECTORIES {
             Pos = MAP_APPFONT( 4, 16 );
             Size = MAP_APPFONT( 230, 8 );
-        Text[ en-US ] = "Profile settings";
+            Text[ en-US ] = "Profile settings";
     };
     FixedText LOG_TEXT {
             Pos = MAP_APPFONT( 7, 26 );
-            Size = MAP_APPFONT( 76, 12 );
-        Text[ en-US ] = "Log base directory";
+            Size = MAP_APPFONT( 86, 12 );
+            Text[ en-US ] = "Log base directory";
     };
     FixedText BASIS_TEXT {
             Pos = MAP_APPFONT( 7, 42 );
-            Size = MAP_APPFONT( 76, 12 );
-        Text[ en-US ] = "Base directory";
+            Size = MAP_APPFONT( 86, 12 );
+            Text[ en-US ] = "Base directory";
     };
-    FixedText HID_TEXT {
+    CheckBox HID_CHECK {
             Pos = MAP_APPFONT( 7, 58 );
-            Size = MAP_APPFONT( 76, 12 );
-        Text[ en-US ] = "HID directory";
+            Size = MAP_APPFONT( 86, 12 );
+            Text[ en-US ] = "Default HID directory";
+            TabStop = TRUE;
+            Hide = FALSE;
     };
     Edit LOG_NAME {
             Border = TRUE;
-            Pos = MAP_APPFONT( 87, 26 );
-            Size = MAP_APPFONT( 126, 12 );
+            Pos = MAP_APPFONT( 97, 26 );
+            Size = MAP_APPFONT( 116, 12 );
             TabStop = TRUE;
         };
     Edit BASIS_NAME {
             Border = TRUE;
-            Pos = MAP_APPFONT( 87, 42 );
-            Size = MAP_APPFONT( 126, 12 );
+            Pos = MAP_APPFONT( 97, 42 );
+            Size = MAP_APPFONT( 116, 12 );
             TabStop = TRUE;
         };
     Edit HID_NAME {
             Border = TRUE;
-            Pos = MAP_APPFONT( 87, 58 );
-            Size = MAP_APPFONT( 126, 12 );
+            Pos = MAP_APPFONT( 97, 58 );
+            Size = MAP_APPFONT( 116, 12 );
             TabStop = TRUE;
         };
     PushButton LOG_SET {
@@ -956,6 +963,67 @@ TabPage RID_TP_PROFILE {
     };
 };
 
+TabPage RID_TP_CRASH {
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT( 244, 100 );
+    FixedLine FL_CRASHREPORT {
+            Pos = MAP_APPFONT( 4, 2 );
+            Size = MAP_APPFONT( 230, 8 );
+            Text[ en-US ] = "Crashreport";
+    };
+    CheckBox CB_USEPROXY {
+            Pos = MAP_APPFONT( 8, 12 );
+            Size = MAP_APPFONT( 120, 12 );
+            Text[ en-US ] = "Use Proxy";
+    };
+    FixedText FT_CRHOST {
+            Pos = MAP_APPFONT( 8+12, 12+13 );
+            Size = MAP_APPFONT( 30, 12 );
+            Text[ en-US ] = "Host";
+    };
+    Edit ED_CRHOST {
+            Border = TRUE;
+            Pos = MAP_APPFONT( 43+12, 12+13 );
+            Size = MAP_APPFONT( 80, 12 );
+            TabStop = TRUE;
+        };
+    FixedText FT_CRPORT {
+            Pos = MAP_APPFONT( 8+12, 12+13+16 );
+            Size = MAP_APPFONT( 30, 12 );
+            Text[ en-US ] = "Port";
+    };
+    NumericField NF_CRPORT {
+            Border = TRUE;
+            Pos = MAP_APPFONT( 43+12, 12+13+16 );
+            Size = MAP_APPFONT( 40, 12 );
+            TabStop = TRUE;
+            Right = TRUE;
+            Repeat = TRUE;
+            Spin = TRUE;
+            Minimum = 1024;
+            Maximum = 0xffff;
+            First = 1024;
+            Last = 0xffff;
+        };
+    CheckBox CB_ALLOWCONTACT {
+            Pos = MAP_APPFONT( 8, 12+13+16+16 );
+            Size = MAP_APPFONT( 120, 12 );
+            Text[ en-US ] = "Allow Contact";
+    };
+    FixedText FT_EMAIL {
+            Pos = MAP_APPFONT( 8+12, 12+13+16+16+13 );
+            Size = MAP_APPFONT( 30, 12 );
+            Text[ en-US ] = "EMail";
+    };
+    Edit ED_EMAIL {
+            Border = TRUE;
+            Pos = MAP_APPFONT( 43+12, 12+13+16+16+13 );
+            Size = MAP_APPFONT( 80, 12 );
+            TabStop = TRUE;
+        };
+};
+
 
 TabPage RID_TP_MISC {
     Hide = TRUE ;
@@ -964,12 +1032,12 @@ TabPage RID_TP_MISC {
     FixedLine FL_COMMUNICATION {
             Pos = MAP_APPFONT( 4, 2 );
             Size = MAP_APPFONT( 230, 8 );
-        Text[ en-US ] = "Communication";
+            Text[ en-US ] = "Communication";
     };
     FixedText FT_HOST {
             Pos = MAP_APPFONT( 8, 12 );
             Size = MAP_APPFONT( 30, 12 );
-        Text[ en-US ] = "Host";
+            Text[ en-US ] = "Host";
     };
     Edit ED_HOST {
             Border = TRUE;
@@ -980,7 +1048,7 @@ TabPage RID_TP_MISC {
     FixedText FT_TTPORT {
             Pos = MAP_APPFONT( 132, 12 );
             Size = MAP_APPFONT( 70, 12 );
-        Text[ en-US ] = "Testtool Port";
+            Text[ en-US ] = "Testtool Port";
     };
     NumericField NF_TTPORT {
             Border = TRUE;
@@ -998,7 +1066,7 @@ TabPage RID_TP_MISC {
     FixedText FT_UNOPORT {
             Pos = MAP_APPFONT( 132, 12+15 );
             Size = MAP_APPFONT( 70, 12 );
-        Text[ en-US ] = "Remote UNO Port";
+            Text[ en-US ] = "Remote UNO Port";
     };
     NumericField NF_UNOPORT {
             Border = TRUE;
@@ -1017,16 +1085,16 @@ TabPage RID_TP_MISC {
     FixedLine FL_OTHER {
             Pos = MAP_APPFONT( 4, 27 +13 );
             Size = MAP_APPFONT( 230, 8 );
-        Text[ en-US ] = "Other settings";
+            Text[ en-US ] = "Other settings";
     };
     FixedText TIMEOUT_TEXT {
-            Pos = MAP_APPFONT( 8, 48 );
+            Pos = MAP_APPFONT( 8, 50 );
             Size = MAP_APPFONT( 70, 12 );
-        Text[ en-US ] = "Server Timeout";
+            Text[ en-US ] = "Server Timeout";
     };
     TimeField SERVER_TIMEOUT {
             Border = TRUE;
-            Pos = MAP_APPFONT( 83, 48 );
+            Pos = MAP_APPFONT( 83, 50 );
             Size = MAP_APPFONT( 40, 12 );
             TabStop = TRUE;
             Repeat = TRUE;
@@ -1035,13 +1103,13 @@ TabPage RID_TP_MISC {
             Duration = TRUE;
         };
     FixedText FT_LRU {
-            Pos = MAP_APPFONT( 132, 48 );
+            Pos = MAP_APPFONT( 132, 50 );
             Size = MAP_APPFONT( 70, 12 );
-        Text[ en-US ] = "Max LRU Files";
+            Text[ en-US ] = "Max LRU Files";
     };
     NumericField TF_MAX_LRU {
             Border = TRUE;
-            Pos = MAP_APPFONT( 191, 48);
+            Pos = MAP_APPFONT( 191, 50);
             Size = MAP_APPFONT( 40, 12 );
             TabStop = TRUE;
             Right = TRUE;
@@ -1050,6 +1118,23 @@ TabPage RID_TP_MISC {
             Minimum = 0;
             Maximum = IDM_FILE_LRUn - IDM_FILE_LRU1 +1;
         };
+    FixedText FT_PROGDIR {
+            Pos = MAP_APPFONT( 8, 50+15 );
+            Size = MAP_APPFONT( 76, 12 );
+            Text[ en-US ] = "OOo Program Dir";
+    };
+    Edit ED_PROGDIR {
+            Border = TRUE;
+            Pos = MAP_APPFONT( 83, 50+15 );
+            Size = MAP_APPFONT( 219-83-4, 12 );
+            TabStop = TRUE;
+        };
+    PushButton PB_PROGDIR {
+            Pos = MAP_APPFONT( 219, 50+15 );
+            Size = MAP_APPFONT( 12, 12 );
+            TabStop = TRUE;
+        Text[ en-US ] = "...";
+    };
 };
 
 
@@ -1091,6 +1176,8 @@ TabPage RID_TP_FONT {
     FixedText FT_PREVIEW {
         Pos = MAP_APPFONT( 4, 12*5+5 );
         Size = MAP_APPFONT( 229, 30 );
+        Center = TRUE;
+        Border = TRUE;
     };
                             // 229 is max
 };
