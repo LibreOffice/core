@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:35:36 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 09:13:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1109,6 +1109,26 @@ void Application::RemoveMouseAndKeyEvents( Window* pWin )
         else
             ++aIter;
     }
+}
+
+// -----------------------------------------------------------------------
+
+BOOL Application::IsProcessedMouseOrKeyEvent( ULONG nEventId )
+{
+    const ::vos::OGuard aGuard( GetSolarMutex() );
+
+    // find event
+    ::std::list< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );
+
+    while( aIter != aPostedEventList.end() )
+    {
+        if( (*aIter).second->mnEventId == nEventId )
+            return FALSE;
+
+        else
+            ++aIter;
+    }
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
