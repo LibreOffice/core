@@ -4,9 +4,9 @@
  *
  *  $RCSfile: server.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:17:30 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 08:54:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@
 #include "automation.hxx"
 #endif
 
-#include "svtools/svtmsg.hrc"
+#include "basic/svtmsg.hrc"
 
 #ifdef DBG_UTIL
 void TestToolDebugPrint( const sal_Char *pString )
@@ -344,15 +344,21 @@ void ExtraIdle::Timeout()
     {
         if ( nStep )    // Schon angefangen? dann abbrechen, sonst später nochmal
         {
-            Sound::Beep();
-            Sound::Beep();
+            if ( nStep < 15 )
+            {
+                Sound::Beep();
+                Sound::Beep();
+            }
 #if OSL_DEBUG_LEVEL < 2
             delete this;
 #endif
         }
 #if OSL_DEBUG_LEVEL > 1
-        Sound::Beep();
-        Sound::Beep();
+        if ( nStep < 15 )
+        {
+            Sound::Beep();
+            Sound::Beep();
+        }
 #endif
         return;
     }
@@ -450,7 +456,7 @@ void ExtraIdle::Timeout()
             }
 #endif
 
-//          ::svt::OStringTransfer::CopyString( UniString( aStr, RTL_TEXTENCODING_ASCII_US ) );
+            ::svt::OStringTransfer::CopyString( UniString( aStr, RTL_TEXTENCODING_ASCII_US ), StatementList::GetFirstDocFrame()  );
 
             new StatementSlot( StatementList::pTTProperties->nSidPaste );
             return;
@@ -576,7 +582,7 @@ void ExtraIdle::Timeout()
             else
 #endif
             {
-//              ::svt::OStringTransfer::CopyString( CUniString("\nSorry! no bitmap") );
+                ::svt::OStringTransfer::CopyString( CUniString("\nSorry! no bitmap"), StatementList::GetFirstDocFrame() );
             }
 
 /***********************************************************************
