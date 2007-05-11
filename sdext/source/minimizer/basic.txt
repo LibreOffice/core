@@ -1,0 +1,89 @@
+Sub Main
+
+Dim oSettings(11) as new com.sun.star.beans.PropertyValue
+oSettings(0).Name = "JPEGCompression"
+oSettings(0).Value= True
+oSettings(1).Name = "JPEGQuality"
+oSettings(1).Value= 25
+oSettings(2).Name = "RemoveCropArea"
+oSettings(2).Value= True
+oSettings(3).Name = "ImageResolution"
+oSettings(3).Value= 90
+oSettings(4).Name = "OLEOptimization"
+oSettings(4).Value= False
+oSettings(5).Name = "OLEOptimizationType"
+oSettings(5).Value= 1
+oSettings(6).Name = "DeleteUnusedMasterPages"
+oSettings(6).Value= True
+oSettings(7).Name = "DeleteHiddenSlides"
+oSettings(7).Value= True
+oSettings(8).Name = "DeleteNotesPages"
+oSettings(8).Value= True
+oSettings(9).Name = "SaveAs"
+oSettings(9).Value= true
+oSettings(10).Name = "EmbedLinkedGraphics"
+oSettings(10).Value = false
+oSettings(11).Name = "SaveAsURL"
+oSettings(11).Value = ""
+oSettings(12).Name = "FilterName"
+oSettings(12).Value = "impress8"
+
+
+
+Dim oArg(0) as new com.sun.star.beans.PropertyValue
+oArg(0).Name = "Settings"
+oArg(0).Value= oSettings
+
+Dim url As String
+Dim oPresentations(17) as String
+oPresentations( 0)="d:\data\sunpresentations\01-22-07SunIntelAnnouncementPresentation,01-22-2007.star_impress_8x.odp"
+oPresentations( 1)="d:\data\sunpresentations\01_Schwartz_SAS_VF.odp"
+oPresentations( 2)="d:\data\sunpresentations\CorporateSocialResponsibilityCustomerPresentation,02-12-2007.star_impress_8x.odp"
+oPresentations( 3)="d:\data\sunpresentations\Current-ProjectBlackboxCustomerPresentation,03-07-2007.star_impress_8x.odp"
+oPresentations( 4)="d:\data\sunpresentations\JavaSE6CustomerPresentation,12-11-2006(2).star_impress_8x.odp"
+oPresentations( 5)="d:\data\sunpresentations\JavaSE6CustomerPresentation,12-11-2006.star_impress_8x.odp"
+oPresentations( 6)="d:\data\sunpresentations\NetworkComputingLaunchPresentation,Q22006,Washington,DC,05-08-2006.star_impress_8x.odp"
+oPresentations( 7)="d:\data\sunpresentations\ProjectBlackboxTechnicalPresentation-NDAONLY,11-09-2006.star_impress_8x.odp"
+oPresentations( 8)="d:\data\sunpresentations\ScottMcNealy,IntlAssocofPrivacyProfessionals)ConferenceOpeningKeynote,'PlayingonSunday-GettingPrivacyRight',March,8,2007,Washington,DC,,03-08-2007.star_impress_8x.odp"
+oPresentations( 9)="d:\data\sunpresentations\Sun'sStoragetekAcademy-JonathanSchwartzTheSky'sTheLimit!,February,292007,SanFrancisco,CA,02-28-2007.star_impress_8x.odp"
+oPresentations(10)="d:\data\sunpresentations\SunAnalystSummit2007(SAS)-DonGranthamExecutingonStrategy,February,6,2007,SanFrancisco,CA,02-07-2007.star_impress_8x.odp"
+oPresentations(11)="d:\data\sunpresentations\SunConsultingServicesPortfolio-Presentation,03-17-2006.star_impress_6x.sxi"
+oPresentations(12)="d:\data\sunpresentations\SunFedOpenYourMindandSunFedTechDayatGTSI,ScottMcNealy,January23and24,2007,Washington,DC,01-23-2007.star_impress_8x.odp"
+oPresentations(13)="d:\data\sunpresentations\SunFedTechDaysatAccenture,ScottMcNealy,January24,2007,Washington,DC,01-24-2007.star_impress_8x.odp"
+oPresentations(14)="d:\data\sunpresentations\SunManagedServicesGoldenPitch,03-22-2007.star_impress_8x.odp"
+oPresentations(15)="d:\data\sunpresentations\SunServicesEducationServicesGeneralPresentation,01-11-2006.star_impress_6x.sxi"
+oPresentations(16)="d:\data\sunpresentations\SunSystemPacks-CustomerReadyPresentation,01-23-2007.star_impress_8x.odp"
+oPresentations(17)="d:\data\sunpresentations\U.S.SalesMeetingCustomerPresentation(08-01-2006),08-01-2006.odp"
+
+FOR I = 0 TO 17
+url=oPresentations( I )
+oSettings(11)=url+string( I, 2 )
+url=converttourl( url )
+optimize( url, oArg() )
+NEXT I
+
+End Sub
+
+Sub Optimize( url as String, oArg )
+
+Dim oPPPOptimizerDialog as Object
+Dim oUrl as new com.sun.star.util.URL
+Dim oTrans as Object
+oTrans = createUNOService("com.sun.star.util.URLTransformer")
+oUrl.Complete = "vnd.com.sun.star.comp.PPPOptimizer:optimize"
+oTrans.parsestrict(oUrl)
+
+Dim oDoc As Object
+Dim FileProperties(0) As New com.sun.star.beans.PropertyValue
+oSM = CreateObject("com.sun.star.ServiceManager")
+oDesk = oSM.createInstance("com.sun.star.frame.Desktop")
+oDoc = oDesk.loadComponentFromURL( url, "_blank", 0, FileProperties() )
+
+Dim oInitialization( 0 ) as Object
+oInitialization(0) = oDoc.getCurrentController.getFrame
+oPPPOptimizerDialog = createUNOservice("com.sun.star.comp.PPPOptimizerImp")
+oPPPOptimizerDialog.initialize( oInitialization )
+oPPPOptimizerDialog.dispatch(oURL, oArg)
+odoc.dispose
+End Sub
+
