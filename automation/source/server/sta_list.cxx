@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:17:44 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 08:54:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,17 @@
 #include <vcl/toolbox.hxx>
 #endif
 
+// only needed for dynamic_cast in wintree
+#ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
+#include <svtools/editbrowsebox.hxx>
+#endif
+#ifndef _VALUESET_HXX //autogen
+#include <svtools/valueset.hxx>
+#endif
+#ifndef _SVTOOLS_ROADMAP_HXX
+#include <svtools/roadmap.hxx>
+#endif
+
 #define WINDOW_ANYTYPE WINDOW_BASE
 
 
@@ -93,7 +104,7 @@ BOOL StatementList::IsError = FALSE;
 BOOL StatementList::bDying = FALSE;
 BOOL StatementList::bExecuting = FALSE;
 StatementList *StatementList::pCurrentProfileStatement = NULL;
-USHORT StatementList::nControlType = CONST_CTBrowseBox;
+BOOL StatementList::bUsePostEvents = TRUE;
 #if OSL_DEBUG_LEVEL > 1
 EditWindow *StatementList::m_pDbgWin;
 #endif
@@ -605,11 +616,10 @@ Menu* StatementList::GetMatchingMenu( Window* pWin, Menu* pBaseMenu )
                 return pMenu;
         }
 
-        for ( USHORT nSkip = 0;; )
+        USHORT nSkip = 0;
+        Window* pMenuBarWin = NULL;
+        while ( (pMenuBarWin = GetWinByRT( NULL, WINDOW_MENUBARWINDOW, TRUE, nSkip++, TRUE )) != NULL )
         {
-            Window* pMenuBarWin = GetWinByRT( NULL, WINDOW_MENUBARWINDOW, TRUE, nSkip++, TRUE );
-            if ( pMenuBarWin == NULL )
-                break;
             Window* pParent = pMenuBarWin->GET_REAL_PARENT();
             if ( pParent && pParent->GetType() == WINDOW_BORDERWINDOW && pParent->IsVisible() )
             {
@@ -928,11 +938,11 @@ UniString StatementList::Tree(Window *pBase, int Indent)
 String StatementList::ClientTree(Window *pBase, int Indent)
 {
 #if OSL_DEBUG_LEVEL > 1
-#define WRITE(Text) m_pDbgWin->AddText(Text); aReturn += Text
-#define WRITEc(Text) m_pDbgWin->AddText(Text); aReturn.AppendAscii(Text)
+#define WRITE(Text) { m_pDbgWin->AddText(Text); aReturn += Text; }
+#define WRITEc(Text) { m_pDbgWin->AddText(Text); aReturn.AppendAscii(Text); }
 #else
-#define WRITE(Text) aReturn += Text
-#define WRITEc(Text) aReturn.AppendAscii(Text)
+#define WRITE(Text) { aReturn += Text; }
+#define WRITEc(Text) { aReturn.AppendAscii(Text); }
 #endif
 
     String sIndent,aText,aReturn;
@@ -1010,6 +1020,17 @@ String StatementList::ClientTree(Window *pBase, int Indent)
     WRITE(sIndent);
     WRITEc("RTyp: ");
     WRITE(MakeStringNumber(TypeKenn,pBase->GetType()));
+    if ( pBase->GetType() == WINDOW_CONTROL )
+    {
+        if ( dynamic_cast< svt::EditBrowseBox* >(pBase) )
+            WRITEc("/BrowseBox")
+        else if ( dynamic_cast< ValueSet* >(pBase) )
+            WRITEc("/ValueSet")
+        else if ( dynamic_cast< svt::ORoadmap* >(pBase) )
+            WRITEc("/RoadMap")
+        else
+            WRITEc("/Unknown")
+    }
     WRITEc("\n");
 
     aReturn.ConvertLineEnd();
@@ -1100,71 +1121,127 @@ void StatementList::DirectLog( ULONG nType, String aMessage )
     }                                                               \
 }
 
-void ImplKeyInput( Window* pWin, KeyEvent &aKEvnt )
+void ImplKeyInput( Window* pWin, KeyEvent &aKEvnt, BOOL bForceDirect )
 {
-//    Application::PostKeyEvent( VCLEVENT_WINDOW_KEYINPUT, pWin, &aKEvnt );
-//    Application::PostKeyEvent( VCLEVENT_WINDOW_KEYUP, pWin, &aKEvnt );
 
-    if ( !Application::CallAccel( aKEvnt.GetKeyCode() ) )
+    if ( StatementList::bUsePostEvents && !bForceDirect )
     {
-        CALL_EVENT_WITH_NOTIFY( EVENT_KEYINPUT, aKEvnt, pWin, KeyInput )
-
-        KeyCode aCode = aKEvnt.GetKeyCode();
-        if ( (aCode.GetCode() == KEY_CONTEXTMENU) || ((aCode.GetCode() == KEY_F10) && aCode.IsShift()) )
+        if ( StatementList::WinPtrValid( pWin ) )
         {
-            if ( StatementList::WinPtrValid( pWin ) )
-            {
-                Point aPos;
-                // simulate mouseposition at center of window
-                Size aSize = pWin->GetOutputSize();
-                aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
-
-                CommandEvent aEvent( aPos, COMMAND_CONTEXTMENU, FALSE );
-                ImplCommand( pWin, aEvent );
-            }
+            ULONG nID;
+            nID = Application::PostKeyEvent( VCLEVENT_WINDOW_KEYINPUT, pWin, &aKEvnt );
+            ImplEventWait( nID );
+            nID = Application::PostKeyEvent( VCLEVENT_WINDOW_KEYUP, pWin, &aKEvnt );
+            ImplEventWait( nID );
         }
     }
+    else
+    {
+        if ( !Application::CallAccel( aKEvnt.GetKeyCode() ) )
+        {
+            CALL_EVENT_WITH_NOTIFY( EVENT_KEYINPUT, aKEvnt, pWin, KeyInput )
 
-    CALL_EVENT_WITH_NOTIFY( EVENT_KEYUP, aKEvnt, pWin, KeyUp )
+            KeyCode aCode = aKEvnt.GetKeyCode();
+            if ( (aCode.GetCode() == KEY_CONTEXTMENU) || ((aCode.GetCode() == KEY_F10) && aCode.IsShift()) )
+            {
+                if ( StatementList::WinPtrValid( pWin ) )
+                {
+                    Point aPos;
+                    // simulate mouseposition at center of window
+                    Size aSize = pWin->GetOutputSize();
+                    aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
+
+                    CommandEvent aEvent( aPos, COMMAND_CONTEXTMENU, FALSE );
+                    ImplCommand( pWin, aEvent );
+                }
+            }
+        }
+
+        CALL_EVENT_WITH_NOTIFY( EVENT_KEYUP, aKEvnt, pWin, KeyUp )
+    }
 };
 
-void ImplMouseMove( Window* pWin, MouseEvent &aMEvnt )
+void ImplMouseMove( Window* pWin, MouseEvent &aMEvnt, BOOL bForceDirect )
 {
-/*  DragManager* pDragManager = DragManager::GetDragManager();
-    if ( pDragManager )
-        pDragManager->MouseMove( aMEvnt, pWin );
-    else*/ if ( pWin->IsTracking() )
+    if ( StatementList::bUsePostEvents && !bForceDirect )
     {
-        TrackingEvent   aTEvt( aMEvnt );
-        pWin->Tracking( aTEvt );
+        if ( StatementList::WinPtrValid( pWin ) )
+        {
+            ULONG nID;
+            nID = Application::PostMouseEvent( VCLEVENT_WINDOW_MOUSEMOVE, pWin, &aMEvnt );
+            ImplEventWait( nID );
+        }
     }
     else
-        CALL_EVENT_WITH_NOTIFY( EVENT_MOUSEMOVE, aMEvnt, pWin, MouseMove )
-};
-
-void ImplMouseButtonDown( Window* pWin, MouseEvent &aMEvnt )
-{
-    CALL_EVENT_WITH_NOTIFY( EVENT_MOUSEBUTTONDOWN, aMEvnt, pWin, MouseButtonDown )
-};
-
-void ImplMouseButtonUp( Window* pWin, MouseEvent &aMEvnt )
-{
-/*  DragManager* pDragManager = DragManager::GetDragManager();
-    if ( pDragManager )
-        pDragManager->ButtonUp( aMEvnt, pWin );
-    else*/ if ( pWin->IsTracking() )
     {
-        // siehe #64693 die Position ist für Toolboxen relevant
-        // #60020 Jetzt hoffentlich kein GPF mehr
-        // Zuerst Tracking beenden ohne Event
-        pWin->EndTracking( ENDTRACK_DONTCALLHDL );
-        // dann eigenen Event mit richtigem Maus-Event senden
-        TrackingEvent   aTEvt( aMEvnt, ENDTRACK_END );
-        pWin->Tracking( aTEvt );
+    //  DragManager* pDragManager = DragManager::GetDragManager();
+    //  if ( pDragManager )
+    //      pDragManager->MouseMove( aMEvnt, pWin );
+    //  else
+            if ( pWin->IsTracking() )
+        {
+            TrackingEvent   aTEvt( aMEvnt );
+            pWin->Tracking( aTEvt );
+        }
+        else
+            CALL_EVENT_WITH_NOTIFY( EVENT_MOUSEMOVE, aMEvnt, pWin, MouseMove )
+    }
+};
+
+void ImplMouseButtonDown( Window* pWin, MouseEvent &aMEvnt, BOOL bForceDirect )
+{
+    if ( StatementList::bUsePostEvents && !bForceDirect )
+    {
+        if ( StatementList::WinPtrValid( pWin ) )
+        {
+            ULONG nID;
+            nID = Application::PostMouseEvent( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, pWin, &aMEvnt );
+            ImplEventWait( nID );
+        }
     }
     else
-        CALL_EVENT_WITH_NOTIFY( EVENT_MOUSEBUTTONUP, aMEvnt, pWin, MouseButtonUp )
+    {
+        CALL_EVENT_WITH_NOTIFY( EVENT_MOUSEBUTTONDOWN, aMEvnt, pWin, MouseButtonDown )
+    }
 };
+
+void ImplMouseButtonUp( Window* pWin, MouseEvent &aMEvnt, BOOL bForceDirect )
+{
+    if ( StatementList::bUsePostEvents && !bForceDirect )
+    {
+        if ( StatementList::WinPtrValid( pWin ) )
+        {
+            ULONG nID;
+            nID = Application::PostMouseEvent( VCLEVENT_WINDOW_MOUSEBUTTONUP, pWin, &aMEvnt );
+            ImplEventWait( nID );
+        }
+    }
+    else
+    {
+    //      DragManager* pDragManager = DragManager::GetDragManager();
+    //  if ( pDragManager )
+    //      pDragManager->ButtonUp( aMEvnt, pWin );
+    //  else
+            if ( pWin->IsTracking() )
+        {
+            // siehe #64693 die Position ist für Toolboxen relevant
+            // #60020 Jetzt hoffentlich kein GPF mehr
+            // Zuerst Tracking beenden ohne Event
+            pWin->EndTracking( ENDTRACK_DONTCALLHDL );
+            // dann eigenen Event mit richtigem Maus-Event senden
+            TrackingEvent   aTEvt( aMEvnt, ENDTRACK_END );
+            pWin->Tracking( aTEvt );
+        }
+        else
+            CALL_EVENT_WITH_NOTIFY( EVENT_MOUSEBUTTONUP, aMEvnt, pWin, MouseButtonUp )
+    }
+};
+
+void ImplEventWait( ULONG nID )
+{
+    while ( !Application::IsProcessedMouseOrKeyEvent( nID ) )
+        Application::Yield();
+}
 
 void ImplCommand( Window* pWin, CommandEvent &aCmdEvnt )
 {
