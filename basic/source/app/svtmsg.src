@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:51:06 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 11:44:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#include <svtools/svtmsg.hrc>
+#include "svtmsg.hrc"
 
 
 // Hier sind die Messages aus dem Verzeichnis /basic/source/app enhalten
@@ -61,7 +61,7 @@ String S_SID_EXECUTE_FAILED_NO_DISPATCHER
 };
 String S_SID_EXECUTE_FAILED
 {
-    Text[ en-US ] = "Slot ID could not be execute";
+    Text[ en-US ] = "Slot ID could not be executed";
 };
 String S_UNO_PROPERTY_NITIALIZE_FAILED
 {
@@ -129,7 +129,7 @@ String S_WIN_INVISIBLE
 };
 String S_WIN_DISABLED
 {
-    Text[ en-US ] = "($Arg1) could not be accessed.";
+    Text[ en-US ] = "($Arg1) could not be accessed. Disabled";
 };
 String S_NUMBER_TOO_BIG
 {
@@ -149,7 +149,7 @@ String S_ERROR_SAVING_IMAGE
 };
 String S_INVALID_POSITION
 {
-    Text[ en-US ] = "Invalid positon at ($Arg1)";
+    Text[ en-US ] = "Invalid position at ($Arg1)";
 };
 String S_SPLITWIN_NOT_FOUND
 {
@@ -332,4 +332,8 @@ String S_SIZE_BELOW_MINIMUM
 String S_CANNOT_FIND_FLOATING_WIN
 {
     Text[ en-US ] = "Cannot find FloatingWindow for floating DockingWindow at ($Arg1).";
+};
+String S_NO_LIST_BOX_STRING
+{
+    Text[ en-US ] = "String does not exist in ($Arg1)";
 };
