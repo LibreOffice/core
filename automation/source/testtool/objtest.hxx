@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objtest.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:27:23 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 08:56:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,9 @@
 #ifndef _SMARTID_HXX_
 #include <vcl/smartid.hxx>
 #endif
-
+#ifndef _HTTPREQUEST_HXX_
+#include "httprequest.hxx"
+#endif
 
 #include <map>
 
@@ -110,6 +112,8 @@
 #define ID_GetLinkDestination 54
 #define ID_GetRegistryValue 55
 #define ID_KillApp         56
+#define ID_HTTPSend        57
+#define ID_HTTPSetProxy    58
 #define ID_DoNothing       99
 
 void ReadFlatArray( const ControlDefLoad arWas [], CNames *&pNames );
@@ -313,7 +317,9 @@ public:
 
     BOOL bStopOnSyntaxError;    // catch syntax errors in testcases or not
 
-    Environment *pChildEnv;      // Environment Variables for child Process
+    Environment *pChildEnv;     // Environment Variables for child Process
+
+    HttpRequest *pHttpRequest;  // used for sending HTTP requests
 };
 
 
