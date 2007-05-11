@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msgedit.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:32:08 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 09:05:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -328,13 +328,8 @@ void MsgEdit::AddWarning( String aMsg, TTDebugData aDebugData )
         aEditTree.ShowEntry( pThisEntry );
     }
 
-    while ( !aEditTree.IsEntryVisible( pThisEntry ) )
-    {
-        pThisEntry = aEditTree.GetParent( pThisEntry );
-        if ( pThisEntry == NULL )
-            break;
+    while ( !aEditTree.IsEntryVisible( pThisEntry ) && ( pThisEntry = aEditTree.GetParent( pThisEntry ) ) != NULL )
         aEditTree.InvalidateEntry( pThisEntry );
-    }
 }
 
 void MsgEdit::AddAssertion( String aMsg, TTDebugData aDebugData )
@@ -363,13 +358,8 @@ void MsgEdit::AddAssertion( String aMsg, TTDebugData aDebugData )
 
     pCurrentAssertion = pThisEntry;
 
-    while ( !aEditTree.IsEntryVisible( pThisEntry ) )
-    {
-        pThisEntry = aEditTree.GetParent( pThisEntry );
-        if ( pThisEntry == NULL )
-            break;
+    while ( !aEditTree.IsEntryVisible( pThisEntry ) && ( pThisEntry = aEditTree.GetParent( pThisEntry ) ) != NULL )
         aEditTree.InvalidateEntry( pThisEntry );
-    }
 }
 
 void MsgEdit::AddAssertionStack( String aMsg, TTDebugData aDebugData )
@@ -392,13 +382,8 @@ void MsgEdit::AddAssertionStack( String aMsg, TTDebugData aDebugData )
         aEditTree.ShowEntry( pThisEntry );
     }
 
-    while ( !aEditTree.IsEntryVisible( pThisEntry ) )
-    {
-        pThisEntry = aEditTree.GetParent( pThisEntry );
-        if ( pThisEntry == NULL )
-            break;
+    while ( !aEditTree.IsEntryVisible( pThisEntry ) && ( pThisEntry = aEditTree.GetParent( pThisEntry ) ) != NULL )
         aEditTree.InvalidateEntry( pThisEntry );
-    }
 }
 
 void MsgEdit::AddQAError( String aMsg, TTDebugData aDebugData )
@@ -419,13 +404,8 @@ void MsgEdit::AddQAError( String aMsg, TTDebugData aDebugData )
         aEditTree.ShowEntry( pThisEntry );
     }
 
-    while ( !aEditTree.IsEntryVisible( pThisEntry ) )
-    {
-        pThisEntry = aEditTree.GetParent( pThisEntry );
-        if ( pThisEntry == NULL )
-            break;
+    while ( !aEditTree.IsEntryVisible( pThisEntry ) && ( pThisEntry = aEditTree.GetParent( pThisEntry ) ) != NULL )
         aEditTree.InvalidateEntry( pThisEntry );
-    }
 }
 
 /*
