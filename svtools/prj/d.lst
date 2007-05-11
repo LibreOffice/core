@@ -140,8 +140,6 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\inc\txtattr.hxx %_DEST%\inc%_EXT%\svtools\txtattr.hxx
 ..\inc\sychconv.hxx %_DEST%\inc%_EXT%\svtools\sychconv.hxx
 ..\inc\svtools\ttprops.hxx %_DEST%\inc%_EXT%\svtools\ttprops.hxx
-..\inc\ttglobal.hrc %_DEST%\inc%_EXT%\svtools\ttglobal.hrc
-..\inc\svtools\svtmsg.hrc %_DEST%\inc%_EXT%\svtools\svtmsg.hrc
 ..\inc\svtools\transfer.hxx %_DEST%\inc%_EXT%\svtools\transfer.hxx
 ..\inc\svtools\embedtransfer.hxx %_DEST%\inc%_EXT%\svtools\embedtransfer.hxx
 ..\inc\embedhlp.hxx %_DEST%\inc%_EXT%\svtools\embedhlp.hxx
@@ -259,6 +257,8 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\inc\localresaccess.hxx %_DEST%\inc%_EXT%\svtools\localresaccess.hxx
 ..\inc\svtools\wizardmachine.hxx %_DEST%\inc%_EXT%\svtools\wizardmachine.hxx
 ..\inc\svtools\roadmapwizard.hxx %_DEST%\inc%_EXT%\svtools\roadmapwizard.hxx
+..\inc\roadmap.hxx %_DEST%\inc%_EXT%\svtools\roadmap.hxx
+..\inc\svtools\hyperlabel.hxx %_DEST%\inc%_EXT%\svtools\hyperlabel.hxx
 ..\inc\helpagentwindow.hxx %_DEST%\inc%_EXT%\svtools\helpagentwindow.hxx
 ..\inc\pickerhistory.hxx %_DEST%\inc%_EXT%\svtools\pickerhistory.hxx
 ..\inc\pickerhistoryaccess.hxx %_DEST%\inc%_EXT%\svtools\pickerhistoryaccess.hxx
