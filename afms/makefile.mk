@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2007-05-10 14:19:31 $
+#   last change: $Author: kz $ $Date: 2007-05-11 13:21:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,8 @@ TARGET=afms
 
 TARFILE_NAME=Adobe-Core35_AFMs-314
 TARFILE_ROOTDIR=Adobe-Core35_AFMs-314
-TAR_EXCLUDES=*/*Helvetica-Narrow*
+# TAR_EXCLUDES broken for solaris tar - #i77247#
+# TAR_EXCLUDES=*/*Helvetica-Narrow*
 
 # --- Targets ------------------------------------------------------
 
@@ -54,7 +55,7 @@ TAR_EXCLUDES=*/*Helvetica-Narrow*
 
 ZIP1DIR         = $(MISC)$/build$/$(TARFILE_NAME)
 ZIP1TARGET      = fontunxafm
-ZIP1LIST        = *.afm
+ZIP1LIST        = *.afm -x "*Helvetica-Narrow*"
 
 .INCLUDE : target.mk
 
