@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resids.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:12:04 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 09:06:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@
 #define FL_DIRECTORIES     45
 #define LOG_TEXT           46
 #define BASIS_TEXT         47
-#define HID_TEXT           48
+#define HID_CHECK          48
 #define LOG_NAME           49
 #define BASIS_NAME         50
 #define HID_NAME           51
@@ -88,6 +88,18 @@
 #define CB_AUTORELOAD      55
 #define CB_AUTOSAVE        56
 #define CB_STOPONSYNTAXERRORS 57
+
+// Crashreporter Options
+#define RID_TP_CRA         50
+#define FL_CRASHREPORT     51
+#define CB_USEPROXY        52
+#define FT_CRHOST          53
+#define ED_CRHOST          54
+#define FT_CRPORT          55
+#define NF_CRPORT          56
+#define CB_ALLOWCONTACT    57
+#define FT_EMAIL           58
+#define ED_EMAIL           59
 
 // MiscOptions
 #define RID_TP_MIS         60
@@ -103,6 +115,10 @@
 #define SERVER_TIMEOUT     70
 #define FT_LRU             71
 #define TF_MAX_LRU         72
+#define FT_PROGDIR         73
+#define ED_PROGDIR         74
+#define PB_PROGDIR         75
+
 
 // Font Settings
 #define RID_TP_FON         70
@@ -127,10 +143,10 @@
 
 
 // BreakpointWindow
-#define IMGID_BRKENABLED        90
-#define IMGID_BRKDISABLED       91
-#define IMGID_STEPMARKER        92
-#define IMGID_ERRORMARKER       93
+#define IMGID_BRKENABLED        30838
+#define IMGID_BRKDISABLED       30839
+#define IMGID_STEPMARKER        30840
+#define IMGID_ERRORMARKER       30841
 
 
 // Edit Variables
