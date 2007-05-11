@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogclosedlistener.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:21:04 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 08:22:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,8 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+#include "precompiled_svtools.hxx"
 
 #ifndef _SVTOOLS_DIALOGCLOSEDLISTENER_HXX
 #include "dialogclosedlistener.hxx"
