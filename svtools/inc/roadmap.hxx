@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roadmap.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-11 08:57:00 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 11:51:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 #endif
 
 #ifndef _SVTOOLS_HYPERLABEL_HXX
-#include "hyperlabel.hxx"
+#include "svtools/hyperlabel.hxx"
 #endif
 
 
