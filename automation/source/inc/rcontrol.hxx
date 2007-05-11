@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rcontrol.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:15:02 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 08:53:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@
 
 // Maximale 7 Container
 #define C_TabPage           32
-#define C_Dlg               33
+#define C_ModalDlg          33
 #define C_FloatWin          34
 #define C_ModelessDlg       35
 #define C_WorkWin           36
@@ -135,12 +135,8 @@
 #define C_CancelButton      66
 #define C_ButtonDialog      67
 
+#define C_Dialog            68
 
-// Some new Elements for Mozilla
-#define C_Anchor            68
-#define C_FormElement       69
-#define C_DOMText           70
-#define C_Image             71
 
 
 
@@ -174,16 +170,6 @@
 #define M_Yes               38
 #define M_No                39
 #define M_Repeat            40
-
-// Diese Defines fallen nach einiger Zeit weg!!
-//#define M_Schliessen        M_Close
-//#define M_Abbrechen         M_Cancel
-//#define M_Hilfe             M_Help
-
-//#define M_Ja              M_Yes
-//#define M_Nein                M_No
-//#define M_Wiederholen     M_Repeat
-// Ende der wegfallenden Defines
 
 #define M_Open              41
 #define M_Pick              42
@@ -291,7 +277,7 @@
 #define M_HasScrollBar      ( M_WITH_RETURN | 38 )
 #define M_IsScrollBarEnabled ( M_WITH_RETURN | 39 )
 
-// Diese befehle werden nur intern im Controller verwendet. Sie tauchen nicht im Testtool auf!
+// Dieser befehl wird nur intern im Controller (sts library) verwendet. Sie tauchen nicht im Testtool auf!
 #define _M_IsEnabled        ( M_WITH_RETURN | 50 )
 
 
@@ -302,7 +288,14 @@
 #define M_IsMin             ( M_WITH_RETURN | 53 )
 #define M_IsRestore         ( M_WITH_RETURN | 54 )
 
+#define M_GetItemType       ( M_WITH_RETURN | 55 )
 
+// Commands for (Edit)BrowseBox
+#define M_GetColumnCount    ( M_WITH_RETURN | 56 )
+#define M_GetRowCount       ( M_WITH_RETURN | 57 )
+#define M_IsEditing         ( M_WITH_RETURN | 58 )
+
+#define M_IsItemEnabled     ( M_WITH_RETURN | 59 )
 
 //#define M_SOFFICE           0x0800  // Command valid for Star/Open Office
 //#define M_MOZILLA           0x1000  // Command valid for Mozilla
@@ -402,7 +395,13 @@
 
 #define RC_GetSystemLanguage ( M_SOFFICE             | M_WITH_RETURN | 40 )
 
-#define RC_IsProduct         ( M_SOFFICE             | M_WITH_RETURN | 41 )
+#define RC_IsProduct        ( M_SOFFICE             | M_WITH_RETURN | 41 )
+
+#define RC_MenuHasSubMenu   ( M_SOFFICE             | M_WITH_RETURN | 42 )
+
+#define RC_UsePostEvents    ( M_SOFFICE             | M_WITH_RETURN | 43 )
+
+#define RC_WaitSlot         ( M_SOFFICE             | M_WITH_RETURN | 44 )
 
 // Flow Control
 #define F_EndCommandBlock   101         // Initiiert Rückmeldung des Status
@@ -443,9 +442,9 @@
 // Verschiedene Typen von Controls für den Befehl SetControlType
 // !!!!!!!!!!!  Müssen alle bei SetControlType eingetragen werden  !!!!!!!!!!!!
 #define CONST_CTBrowseBox       100
-//#define CONST_CTTreeListBox       101
-#define CONST_CTProgressBar     102     // Eigentlich ein Window, aber der Einheitlichen Namensgebung wegen
 #define CONST_CTValueSet        103
+#define CONST_CTORoadmap        104
+#define CONST_CTUnknown         199
 
 // Konstanten für das ALignment des gesuchten Splitters
 #define CONST_ALIGN_LEFT        120
@@ -462,6 +461,17 @@
 #define CONST_NodeTypeElement   556
 #define CONST_NodeTypeComment   557
 
+/// ItemTypes for TreeListBox and maybe others
+#define CONST_ItemTypeText          602
+#define CONST_ItemTypeBMP           601
+#define CONST_ItemTypeCheckbox      600
+#define CONST_ItemTypeContextBMP    603
+#define CONST_ItemTypeUnknown       604
+
+/// Return values for WaitSlot
+#define CONST_WSTimeout             701
+#define CONST_WSAborted             702
+#define CONST_WSFinished            703
 
 // Beschreibt die Parametertypen als Bitfeld  Reihenfolge immer!
 // wie hier Aufgelistet
