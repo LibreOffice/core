@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:35:37 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 09:05:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,14 +124,34 @@ public:
 
 class ConfEdit : public PushButton
 {
+protected:
     FixedText aText;
     Edit aEdit;
     ByteString aKeyName;
+
+    void Init( Config &aConf );
+
 public:
     ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, Config &aConf );
+    ConfEdit( Window* pParent, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, Config &aConf );
     void Save( Config &aConf );
     void Reload( Config &aConf );
     void Click();
+    String GetValue() { return aEdit.GetText(); };
+    void SetModifyHdl( Link aLink ) { aEdit.SetModifyHdl( aLink ); };
+};
+
+
+class OptConfEdit : public ConfEdit
+{
+protected:
+    CheckBox aCheck;
+    ConfEdit& rBase;
+    DECL_LINK( ToggleHdl, CheckBox* );
+public:
+    OptConfEdit( Window* pParent, USHORT nResCheck, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, ConfEdit& rBaseEdit, Config& aConf );
+    void Reload( Config &aConf );
+    DECL_LINK( BaseModifyHdl, Edit* );
 };
 
 
@@ -167,7 +187,7 @@ class ProfileOptions : public TabPage
     FixedLine aDirs;
     ConfEdit aLog;
     ConfEdit aBasis;
-    ConfEdit aHID;
+    OptConfEdit aHID;
 
     CheckBox aAutoReload;
     CheckBox aAutoSave;
@@ -188,6 +208,28 @@ public:
     void Save( Config &rConfig );
 };
 
+
+class CrashreportOptions : public TabPage
+{
+    FixedLine aFLCrashreport;
+    CheckBox aCBUseProxy;
+    FixedText aFTCRHost;
+    Edit aEDCRHost;
+    FixedText aFTCRPort;
+    NumericField aNFCRPort;
+
+    CheckBox aCBAllowContact;
+    FixedText aFTEMail;
+    Edit aEDEMail;
+
+    DECL_LINK( CheckProxy, void*);
+    DECL_LINK( CheckResponse, void*);
+
+public:
+    CrashreportOptions( Window*, Config &aConfig );
+    void Save( Config &aConfig );
+};
+
 class MiscOptions : public TabPage
 {
     FixedLine aFLCommunication;
@@ -202,6 +244,11 @@ class MiscOptions : public TabPage
     TimeField aServerTimeout;
     FixedText aFTLRU;
     NumericField aTFMaxLRU;
+    FixedText aFTProgDir;
+    Edit aEDProgDir;
+    PushButton aPBProgDir;
+
+    DECL_LINK( Click, void*);
 
 public:
     MiscOptions( Window*, Config &aConfig );
