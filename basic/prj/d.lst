@@ -22,6 +22,8 @@ mkdir: %COMMON_DEST%\res%_EXT%
 mkdir: %_DEST%\inc%_EXT%\basic
 ..\inc\testtool.hrc %_DEST%\inc%_EXT%\basic\testtool.hrc
 ..\inc\ttmsg.hrc %_DEST%\inc%_EXT%\basic\ttmsg.hrc
+..\inc\basic\ttglobal.hrc %_DEST%\inc%_EXT%\basic\ttglobal.hrc
+..\inc\svtmsg.hrc %_DEST%\inc%_EXT%\basic\svtmsg.hrc
 
 ..\inc\basic\sbdef.hxx %_DEST%\inc%_EXT%\basic\sbdef.hxx
 ..\inc\basic\sbmod.hxx %_DEST%\inc%_EXT%\basic\sbmod.hxx
