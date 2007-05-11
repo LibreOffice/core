@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:34:55 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 12:01:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -354,6 +354,7 @@ public:
     static ULONG                PostKeyEvent( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent );
     static ULONG                PostMouseEvent( ULONG nEvent, Window *pWin, MouseEvent* pMouseEvent );
     static void                 RemoveMouseAndKeyEvents( Window *pWin );
+    static BOOL                 IsProcessedMouseOrKeyEvent( ULONG nEventId );
 
     static ULONG                PostUserEvent( ULONG nEvent, void* pEventData = NULL );
     static ULONG                PostUserEvent( const Link& rLink, void* pCaller = NULL );
