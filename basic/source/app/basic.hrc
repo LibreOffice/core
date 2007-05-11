@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basic.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:21:17 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 09:04:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,11 +170,12 @@
 #define IDD_PRINT_DIALOG 4006
 #define IDD_OPTIONS_DLG 4007
 #define RID_TP_PROFILE 4008
-#define RID_TP_MISC 4009
-#define RID_TP_FONT 4010
-#define RID_TP_GENERIC 4011
-#define IDD_DISPLAY_HID 4012
-#define IDD_EDIT_VAR 4013
+#define RID_TP_CRASH 4009
+#define RID_TP_MISC 4010
+#define RID_TP_FONT 4011
+#define RID_TP_GENERIC 4012
+#define IDD_DISPLAY_HID 4013
+#define IDD_EDIT_VAR 4014
 
 
 //#define RID_APPFONT 5000
