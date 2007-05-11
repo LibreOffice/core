@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwbox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:12:14 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 11:52:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -394,8 +394,10 @@ protected:
     // Der RowCount wird jetzt intern automatisch gezaehlt
     // (ueber RowInserted und RowRemoved), daher ist das Ueberladen
     // dieser Methode ueberfluessig!
+public:
     virtual long    GetRowCount() const;
 
+protected:
     // fuer Anzeige im VScrollBar z.B. auf "?" oder setzen
     void            SetRealRowCount( const String &rRealRowCount );
 
