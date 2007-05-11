@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roadmap.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:02:34 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 08:57:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,10 @@
  ************************************************************************/
 #ifndef _SVTOOLS_ROADMAP_HXX
 #define _SVTOOLS_ROADMAP_HXX
+
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
 
 #ifndef _SV_CTRL_HXX
 #include <vcl/ctrl.hxx>
@@ -125,7 +129,7 @@ namespace svt
     //=====================================================================
     //= Roadmap
     //=====================================================================
-    class ORoadmap : public Control, public RoadmapTypes
+    class SVT_DLLPUBLIC ORoadmap : public Control, public RoadmapTypes
     {
     protected:
         RoadmapImpl*    m_pImpl;
@@ -145,6 +149,7 @@ namespace svt
         sal_Bool        IsRoadmapItemEnabled( ItemId _nItemId, ItemIndex _nStartIndex = 0 ) const;
 
         void            ChangeRoadmapItemLabel( ItemId _nID, ::rtl::OUString sLabel, ItemIndex _nStartIndex = 0 );
+        ::rtl::OUString GetRoadmapItemLabel( ItemId _nID, ItemIndex _nStartIndex = 0 );
         void            ChangeRoadmapItemID( ItemId _nID, ItemId _NewID, ItemIndex _nStartIndex = 0  );
 
         void            SetRoadmapInteractive( sal_Bool _bInteractive );
@@ -155,6 +160,7 @@ namespace svt
 
         ItemIndex       GetItemCount() const;
         ItemId          GetItemID( ItemIndex _nIndex ) const;
+        ItemIndex       GetItemIndex( ItemId _nID ) const;
 
         void            InsertRoadmapItem( ItemIndex _Index, ::rtl::OUString _RoadmapItem, ItemId _nUniqueId, sal_Bool _bEnabled = sal_True );
         void            ReplaceRoadmapItem( ItemIndex _Index, ::rtl::OUString _RoadmapItem, ItemId _nUniqueId, sal_Bool _bEnabled );
