@@ -1,0 +1,57 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: ttglobal.hrc,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: kz $ $Date: 2007-05-11 11:42:00 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef _TTGLOBAL_HXX
+#define _TTGLOBAL_HXX
+
+///////////////////////////////
+// Fehlermeldungen, die in das Resultfile gelangen.
+// *********************
+// ***  !!ACHTUNG!!  ***
+// *********************
+// Die Nummern dürfen sich NIE! ändern,
+// da sie in den Resultfiles gespeichert sind, und bei erneutem Anzeigen
+// statdessen die entsprechenden neuen oder garkeine Strings angzeigt werden.
+///////////////////////////////
+
+// Start der Ressourcen für das Testtool (Eigene Datei)
+// > 256 und > 9100 (Grösste res im TT selbst)
+#define TT_START 20000              // Messages aus /basic/source/testtool
+#define BAS_START 21000             // Messages aus /basic/source/app
+#define SVT_START 22000             // Messages aus /svtools/source/plugapp
+
+
+#endif
+
