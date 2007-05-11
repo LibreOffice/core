@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:18:00 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 09:04:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,10 +149,6 @@ void TestToolDebugMessageFilter( const sal_Char *pString, BOOL bIsOsl )
     if ( bIsOsl )
     {
         // OSL
-        if ( aMessage.Search( CByteString("PropertySetRegistry::") ) != STRING_NOTFOUND )
-            bIgnore = TRUE;
-        if ( aMessage.Search( CByteString("AcquireTree failed") ) != STRING_NOTFOUND )
-            bIgnore = TRUE;
         if ( aMessage.Search( CByteString("Cannot open Configuration: Connector: unknown delegatee com.sun.star.connection.Connector.portal") ) != STRING_NOTFOUND )
             bIgnore = TRUE;
     }
@@ -163,12 +159,21 @@ void TestToolDebugMessageFilter( const sal_Char *pString, BOOL bIsOsl )
         if ( aMessage.Search( CByteString("SelectAppIconPixmap") ) != STRING_NOTFOUND )
             bIgnore = TRUE;
 #endif
+        if ( aMessage.Search( CByteString("PropertySetRegistry::") ) != STRING_NOTFOUND )
+            bIgnore = TRUE;
         if ( aMessage.Search( CByteString("property value missing") ) != STRING_NOTFOUND )
             bIgnore = TRUE;
         if ( aMessage.Search( CByteString("getDateFormatsImpl") ) != STRING_NOTFOUND
             && aMessage.Search( CByteString("no date formats") ) != STRING_NOTFOUND )
             bIgnore = TRUE;
+        if ( aMessage.Search( CByteString("ucb::configureUcb(): Bad arguments") ) != STRING_NOTFOUND )
+            bIgnore = TRUE;
+        if ( aMessage.Search( CByteString("CreateInstance with arguments exception") ) != STRING_NOTFOUND )
+            bIgnore = TRUE;
+        if ( aMessage.Search( CByteString("AcquireTree failed") ) != STRING_NOTFOUND )
+            bIgnore = TRUE;
     }
+
 
     if ( bIgnore )
     {
@@ -189,6 +194,7 @@ void TestToolDebugMessageFilter( const sal_Char *pString, BOOL bIsOsl )
             aBasicApp.DbgPrintMsgBox( pString );
         }
         catch ( ... )
+
         {
             printf("DbgPrintMsgBox failed: %s\n", pString );
         }
