@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tagtest.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 09:55:35 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 09:12:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -429,10 +429,19 @@ BOOL TokenInfo::IsPropertyValueValid( const ByteString &aName, const String &aVa
     return TRUE;
 }
 
-BOOL TokenInfo::IsPropertyInvariant( const ByteString &aName ) const
+BOOL TokenInfo::IsPropertyInvariant( const ByteString &aName, const String &aValue ) const
 {
     if ( aTagName.EqualsAscii( "link" ) && aName.Equals( "name" ) )
         return FALSE;
+    if ( aTagName.EqualsAscii( "link" ) && aName.Equals( "href" ) )
+    {   // check for external reference
+        if (  aValue.Copy( 0, 5 ).EqualsIgnoreCaseAscii( "http:" )
+           || aValue.Copy( 0, 6 ).EqualsIgnoreCaseAscii( "https:" )
+           || aValue.Copy( 0, 4 ).EqualsIgnoreCaseAscii( "ftp:" ) )
+            return FALSE;
+        else
+            return TRUE;
+    }
     return TRUE;
 }
 
@@ -472,7 +481,7 @@ BOOL TokenInfo::MatchesTranslation( TokenInfo& rInfo, BOOL bGenErrors, ParserMes
         {
             if ( IsPropertyRelevant( iProp->first, iProp->second ) || IsPropertyRelevant( iProp->first, rInfo.aProperties.find( iProp->first )->second ) )
             {
-                if ( IsPropertyInvariant( iProp->first ) )
+                if ( IsPropertyInvariant( iProp->first, iProp->second ) )
                 {
                     if ( !rInfo.aProperties.find( iProp->first )->second.Equals( iProp->second ) )
                     {
