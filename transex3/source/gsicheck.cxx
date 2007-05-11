@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gsicheck.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 09:55:17 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 09:12:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,7 +247,7 @@ void GSILine::ReassembleLine()
 // class GSIBlock
 //
 /*****************************************************************************/
-GSIBlock::GSIBlock( BOOL PbPrintContext, BOOL bSource, BOOL bTrans, BOOL bRef, BOOL bAllowKID )
+GSIBlock::GSIBlock( BOOL PbPrintContext, BOOL bSource, BOOL bTrans, BOOL bRef, BOOL bAllowKID, BOOL bAllowSusp )
 /*****************************************************************************/
             : pSourceLine( NULL )
             , pReferenceLine( NULL )
@@ -256,6 +256,7 @@ GSIBlock::GSIBlock( BOOL PbPrintContext, BOOL bSource, BOOL bTrans, BOOL bRef, B
             , bCheckTranslationLang( bTrans )
             , bReference( bRef )
             , bAllowKeyIDs( bAllowKID )
+            , bAllowSuspicious( bAllowSusp )
             , bHasBlockError( FALSE )
 {
 }
@@ -467,6 +468,27 @@ BOOL GSIBlock::TestUTF8( GSILine* pTestee, BOOL bFixTags )
     return !bError;
 }
 
+
+/*****************************************************************************/
+BOOL GSIBlock::HasSuspiciousChars( GSILine* pTestee, GSILine* pSource )
+/*****************************************************************************/
+{
+    USHORT nPos = 0;
+    if ( !bAllowSuspicious && ( nPos = pTestee->GetText().Search("??")) != STRING_NOTFOUND )
+        if ( pSource->GetText().Search("??") == STRING_NOTFOUND )
+        {
+            String aUTF8Tester = String( pTestee->GetText(), 0, nPos, RTL_TEXTENCODING_UTF8 );
+            USHORT nErrorPos = aUTF8Tester.Len();
+            ByteString aContext( pTestee->GetText().Copy( nPos, 20 ) );
+            PrintError( ByteString("Found double questionmark in translation only. Looks like an encoding problem at Position " ).Append( ByteString::CreateFromInt32( nErrorPos ) ), "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId() );
+            pTestee->NotOK();
+            return TRUE;
+        }
+
+    return FALSE;
+}
+
+
 /*****************************************************************************/
 BOOL GSIBlock::CheckSyntax( ULONG nLine, BOOL bRequireSourceLine, BOOL bFixTags )
 /*****************************************************************************/
@@ -537,6 +559,8 @@ BOOL GSIBlock::CheckSyntax( ULONG nLine, BOOL bRequireSourceLine, BOOL bFixTags 
             PrintList( &(aTester.GetCompareWarnings()), "Translation Tag Missmatch", GetObject( i ) );
         }
         bHasError |= !TestUTF8( GetObject( i ), bFixTags );
+        if ( pSourceLine )
+            bHasError |= HasSuspiciousChars( GetObject( i ), pSourceLine );
     }
 
     return bHasError || bHasBlockError;
@@ -616,7 +640,7 @@ void Help()
 /*****************************************************************************/
 {
     fprintf( stdout, "\n" );
-    fprintf( stdout, "gsicheck Version 1.8.5 (c)1999 - 2006 by SUN Microsystems\n" );
+    fprintf( stdout, "gsicheck Version 1.8.7 (c)1999 - 2006 by SUN Microsystems\n" );
     fprintf( stdout, "=========================================================\n" );
     fprintf( stdout, "\n" );
     fprintf( stdout, "gsicheck checks the syntax of tags in GSI-Files and SDF-Files\n" );
@@ -638,6 +662,8 @@ void Help()
     fprintf( stdout, "-s    Check only source language. Should be used before handing out to vendor.\n" );
     fprintf( stdout, "-t    Check only Translation language(s). Should be used before merging.\n" );
     fprintf( stdout, "-k    Allow KeyIDs to be present in strings\n" );
+    fprintf( stdout, "-e    disable encoding checks. E.g.: double questionmark \'??\' which may be the\n" );
+    fprintf( stdout, "      result of false conversions\n" );
     fprintf( stdout, "-l    ISO Languagecode or numerical 2 digits Identifier of the source language.\n" );
     fprintf( stdout, "      Default is en-US. Use \"\" (empty string) or 'none'\n" );
     fprintf( stdout, "      to disable source language dependent checks\n" );
@@ -664,6 +690,7 @@ int _cdecl main( int argc, char *argv[] )
     BOOL bWriteFixed = FALSE;
     BOOL bFixTags = FALSE;
     BOOL bAllowKID = FALSE;
+    BOOL bAllowSuspicious = FALSE;
     String aErrorFilename;
     String aCorrectFilename;
     String aFixedFilename;
@@ -783,6 +810,11 @@ int _cdecl main( int argc, char *argv[] )
                 case 'k':
                     {
                         bAllowKID = TRUE;
+                    }
+                    break;
+                case 'e':
+                    {
+                        bAllowSuspicious = TRUE;
                     }
                     break;
                 default:
@@ -963,7 +995,7 @@ int _cdecl main( int argc, char *argv[] )
 
                         delete pBlock;
                     }
-                    pBlock = new GSIBlock( bPrintContext, bCheckSourceLang, bCheckTranslationLang, bReferenceFile, bAllowKID );
+                    pBlock = new GSIBlock( bPrintContext, bCheckSourceLang, bCheckTranslationLang, bReferenceFile, bAllowKID, bAllowSuspicious );
 
                     aOldId = aId;
 
