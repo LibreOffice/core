@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roadmap.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:39:56 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 08:57:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -413,6 +413,24 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
+    RoadmapTypes::ItemIndex ORoadmap::GetItemIndex( ItemId _nID ) const
+    {
+        ORoadmapHyperLabel* CurHyperLabel;
+        ItemId nLocID = 0;
+        HL_Vector &LocHyperLabels = m_pImpl->getHyperLabels();
+        ItemIndex nResult = 0;
+        for ( HL_Vector::iterator i = LocHyperLabels.begin(); i< LocHyperLabels.end(); i++)
+        {
+            CurHyperLabel = *i;
+            nLocID = CurHyperLabel->GetID();
+            if ( nLocID == _nID )
+                return nResult;
+            nResult++;
+        }
+        return -1;
+    }
+
+    //---------------------------------------------------------------------
     void ORoadmap::InsertRoadmapItem( ItemIndex _Index, ::rtl::OUString _RoadmapItem, ItemId _nUniqueId, sal_Bool _bEnabled )
     {
         ORoadmapHyperLabel* CurHyperLabel;
@@ -469,6 +487,17 @@ namespace svt
                 Index++;
             }
         }
+    }
+
+    //---------------------------------------------------------------------
+
+    ::rtl::OUString ORoadmap::GetRoadmapItemLabel( ItemId _nID, ItemIndex _nStartIndex )
+    {
+        ORoadmapHyperLabel* CurHyperLabel = GetByID( _nID, _nStartIndex );
+        if ( CurHyperLabel != NULL )
+            return CurHyperLabel->GetLabel();
+        else
+            return ::rtl::OUString();
     }
 
     //---------------------------------------------------------------------
