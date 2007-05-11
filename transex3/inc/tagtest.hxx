@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tagtest.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:19:51 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 09:06:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@ explicit    TokenInfo( TokenId pnId, USHORT nP, String paStr, ParserMessageList 
         Does the property contain the same value for all languages
         e.g.: the href in a link tag
     **/
-    BOOL IsPropertyInvariant( const ByteString &aName ) const;
+    BOOL IsPropertyInvariant( const ByteString &aName, const String &aValue ) const;
     /**
         a subset of IsPropertyInvariant but containing only those that are fixable
         we dont wat to fix e.g.: ahelp :: visibility
