@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:31:45 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 11:43:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,11 +186,7 @@ void CheckButtons( ComboBox &aCB, Button &aNewB, Button &aDelB )
 }
 
 
-ConfEdit::ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, Config &aConf )
-: PushButton( pParent, SttResId(nResButton) )
-, aText( pParent, SttResId(nResText) )
-, aEdit( pParent, SttResId(nResEdit) )
-, aKeyName(aKN)
+void ConfEdit::Init( Config &aConf )
 {
     aConf.SetGroup("Misc");
     ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Path" );
@@ -198,6 +194,25 @@ ConfEdit::ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nR
 
     String aTemp = UniString( aConf.ReadKey( aKeyName ), RTL_TEXTENCODING_UTF8 );
     aEdit.SetText( aTemp );
+}
+
+ConfEdit::ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, Config &aConf )
+: PushButton( pParent, SttResId(nResButton) )
+, aText( pParent, SttResId(nResText) )
+, aEdit( pParent, SttResId(nResEdit) )
+, aKeyName(aKN)
+{
+    Init( aConf );
+}
+
+ConfEdit::ConfEdit( Window* pParent, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, Config &aConf )
+: PushButton( pParent, SttResId(nResButton) )
+, aText( pParent )
+, aEdit( pParent, SttResId(nResEdit) )
+, aKeyName(aKN)
+{
+    Init( aConf );
+    aText.Hide();
 }
 
 void ConfEdit::Save( Config &aConf )
@@ -222,7 +237,52 @@ void ConfEdit::Click()
     PathDialog aPD( this );
     aPD.SetPath( aEdit.GetText() );
     if ( aPD.Execute() )
+    {
         aEdit.SetText( aPD.GetPath() );
+        aEdit.Modify();
+    }
+}
+
+OptConfEdit::OptConfEdit( Window* pParent, USHORT nResCheck, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, ConfEdit& rBaseEdit, Config& aConf )
+: ConfEdit( pParent, nResEdit, nResButton, aKN, aConf )
+, aCheck( pParent, SttResId( nResCheck ) )
+, rBase( rBaseEdit )
+{
+    aCheck.SetToggleHdl( LINK( this, OptConfEdit, ToggleHdl ) );
+    rBase.SetModifyHdl( LINK( this, OptConfEdit, BaseModifyHdl ) );
+}
+
+void OptConfEdit::Reload( Config &aConf )
+{
+    ConfEdit::Reload( aConf );
+
+    DirEntry aCalculatedHIDDir( rBase.GetValue() );
+    aCalculatedHIDDir += DirEntry( "global/hid", FSYS_STYLE_FAT );
+
+    DirEntry aCurrentHIDDir( aEdit.GetText() );
+
+    aCheck.Check( aCalculatedHIDDir == aCurrentHIDDir || aEdit.GetText().Len() == 0 );
+       aEdit.Enable( !aCheck.IsChecked() );
+    Enable( !aCheck.IsChecked() );
+}
+
+IMPL_LINK( OptConfEdit, ToggleHdl, CheckBox*, EMPTYARG )
+{
+    BaseModifyHdl( &aEdit );
+       aEdit.Enable( !aCheck.IsChecked() );
+    Enable( !aCheck.IsChecked() );
+    return 0;
+}
+
+IMPL_LINK( OptConfEdit, BaseModifyHdl, Edit*, EMPTYARG )
+{
+    if ( aCheck.IsChecked() )
+    {
+        DirEntry aCalculatedHIDDir( rBase.GetValue() );
+        aCalculatedHIDDir += DirEntry( "global/hid", FSYS_STYLE_FAT );
+        aEdit.SetText( aCalculatedHIDDir.GetFull() );
+    }
+    return 0;
 }
 
 
@@ -278,6 +338,9 @@ IMPL_LINK( OptionsDialog, ActivatePageHdl, TabControl *, pTabCtrl )
             case RID_TP_PRO:
                 pNewTabPage = new ProfileOptions( pTabCtrl, aConfig );
                 break;
+            case RID_TP_CRA:
+                pNewTabPage = new CrashreportOptions( pTabCtrl, aConfig );
+                break;
             case RID_TP_MIS:
                 pNewTabPage = new MiscOptions( pTabCtrl, aConfig );
                 break;
@@ -309,6 +372,11 @@ IMPL_LINK( OptionsDialog, OKClick, Button *, pButton )
     if ( pProfile )
         pProfile->Save( aConfig );
 
+    CrashreportOptions *pCrash;
+    pCrash = (CrashreportOptions*)aTabCtrl.GetTabPage( RID_TP_CRA );
+    if ( pCrash )
+        pCrash->Save( aConfig );
+
     MiscOptions *pMisc;
     pMisc = (MiscOptions*)aTabCtrl.GetTabPage( RID_TP_MIS );
     if ( pMisc )
@@ -339,9 +407,9 @@ ProfileOptions::ProfileOptions( Window* pParent, Config &rConfig )
 , aPbDelProfile( this, SttResId( RID_PD_DEL_PROFILE ) )
 
 , aDirs( this, SttResId(FL_DIRECTORIES) )
-, aLog( this, LOG_TEXT, LOG_NAME, LOG_SET ,"LogBaseDir", rConfig )
-, aBasis( this, BASIS_TEXT, BASIS_NAME, BASIS_SET ,"BaseDir", rConfig )
-, aHID( this, HID_TEXT, HID_NAME, HID_SET ,"HIDDir", rConfig )
+, aLog( this, LOG_TEXT, LOG_NAME, LOG_SET, "LogBaseDir", rConfig )
+, aBasis( this, BASIS_TEXT, BASIS_NAME, BASIS_SET, "BaseDir", rConfig )
+, aHID( this, HID_CHECK, HID_NAME, HID_SET, "HIDDir", aBasis, rConfig )
 
 , aAutoReload( this, SttResId(CB_AUTORELOAD) )
 , aAutoSave( this, SttResId(CB_AUTOSAVE) )
@@ -471,6 +539,91 @@ void ProfileOptions::Save( Config &rConfig )
     rConfig.WriteKey( "StopOnSyntaxError", aStopOnSyntaxError.IsChecked()?"1":"0" );
 }
 
+CrashreportOptions::CrashreportOptions( Window* pParent, Config &aConfig )
+: TabPage( pParent, SttResId( RID_TP_CRASH ) )
+, aFLCrashreport( this, SttResId( FL_CRASHREPORT ) )
+, aCBUseProxy( this, SttResId( CB_USEPROXY ) )
+, aFTCRHost( this, SttResId( FT_CRHOST ) )
+, aEDCRHost( this, SttResId( ED_CRHOST ) )
+, aFTCRPort( this, SttResId( FT_CRPORT ) )
+, aNFCRPort( this, SttResId( NF_CRPORT ) )
+, aCBAllowContact( this, SttResId( CB_ALLOWCONTACT ) )
+, aFTEMail( this, SttResId( FT_EMAIL ) )
+, aEDEMail( this, SttResId( ED_EMAIL ) )
+{
+    FreeResource();
+
+    aNFCRPort.SetUseThousandSep( FALSE );
+
+    ByteString aTemp;
+
+    aConfig.SetGroup("Crashreporter");
+
+    aTemp = aConfig.ReadKey( "UseProxy", "false" );
+    if ( aTemp.EqualsIgnoreCaseAscii( "true" ) || aTemp.Equals( "1" ) )
+        aCBUseProxy.Check();
+    else
+        aCBUseProxy.Check( FALSE );
+
+    aCBUseProxy.SetToggleHdl( LINK( this, CrashreportOptions, CheckProxy ) );
+    LINK( this, CrashreportOptions, CheckProxy ).Call( NULL );  // call once to initialize
+
+    aTemp = aConfig.ReadKey( "ProxyServer" );
+    aEDCRHost.SetText( String( aTemp, RTL_TEXTENCODING_UTF8 ) );
+    aTemp = aConfig.ReadKey( "ProxyPort", "8080" );
+    aNFCRPort.SetValue( aTemp.ToInt32() );
+
+
+    aTemp = aConfig.ReadKey( "AllowContact", "false" );
+    if ( aTemp.EqualsIgnoreCaseAscii( "true" ) || aTemp.Equals( "1" ) )
+        aCBAllowContact.Check();
+    else
+        aCBAllowContact.Check( FALSE );
+
+    aCBAllowContact.SetToggleHdl( LINK( this, CrashreportOptions, CheckResponse ) );
+    LINK( this, CrashreportOptions, CheckResponse ).Call( NULL );  // call once to initialize
+
+    aTemp = aConfig.ReadKey( "ReturnAddress" );
+    aEDEMail.SetText( String( aTemp, RTL_TEXTENCODING_UTF8 ) );
+}
+
+
+void CrashreportOptions::Save( Config &aConfig )
+{
+    aConfig.SetGroup("Crashreporter");
+
+    if ( aCBUseProxy.IsChecked() )
+        aConfig.WriteKey( "UseProxy", "true" );
+    else
+        aConfig.WriteKey( "UseProxy", "false" );
+
+    aConfig.WriteKey( "ProxyServer", ByteString( aEDCRHost.GetText(), RTL_TEXTENCODING_UTF8 ) );
+    aConfig.WriteKey( "ProxyPort", ByteString::CreateFromInt64( aNFCRPort.GetValue() ) );
+
+    if ( aCBAllowContact.IsChecked() )
+        aConfig.WriteKey( "AllowContact", "true" );
+    else
+        aConfig.WriteKey( "AllowContact", "false" );
+
+    aConfig.WriteKey( "ReturnAddress", ByteString( aEDEMail.GetText(), RTL_TEXTENCODING_UTF8 ) );
+}
+
+IMPL_LINK( CrashreportOptions, CheckProxy, void*, EMPTYARG )
+{
+    aFTCRHost.Enable( aCBUseProxy.IsChecked() );
+    aEDCRHost.Enable( aCBUseProxy.IsChecked() );
+    aFTCRPort.Enable( aCBUseProxy.IsChecked() );
+    aNFCRPort.Enable( aCBUseProxy.IsChecked() );
+
+    return 0;
+}
+IMPL_LINK( CrashreportOptions, CheckResponse, void*, EMPTYARG )
+{
+    aFTEMail.Enable( aCBAllowContact.IsChecked() );
+    aEDEMail.Enable( aCBAllowContact.IsChecked() );
+    return 0;
+}
+
 MiscOptions::MiscOptions( Window* pParent, Config &aConfig )
 : TabPage( pParent, SttResId( RID_TP_MISC ) )
 , aFLCommunication( this, SttResId(FL_COMMUNICATION) )
@@ -485,6 +638,9 @@ MiscOptions::MiscOptions( Window* pParent, Config &aConfig )
 , aServerTimeout( this, SttResId(SERVER_TIMEOUT) )
 , aFTLRU( this, SttResId(FT_LRU) )
 , aTFMaxLRU( this, SttResId(TF_MAX_LRU) )
+, aFTProgDir( this, SttResId(FT_PROGDIR) )
+, aEDProgDir( this, SttResId(ED_PROGDIR) )
+, aPBProgDir( this, SttResId(PB_PROGDIR) )
 {
     FreeResource();
 
@@ -509,6 +665,20 @@ MiscOptions::MiscOptions( Window* pParent, Config &aConfig )
     aConfig.SetGroup("LRU");
     aTemp = aConfig.ReadKey( "MaxLRU", "4" );
     aTFMaxLRU.SetValue( aTemp.ToInt32() );
+
+    aConfig.SetGroup("OOoProgramDir");
+    aTemp = aConfig.ReadKey( "Current" );
+    aEDProgDir.SetText( String( aTemp, RTL_TEXTENCODING_UTF8 ) );
+    aPBProgDir.SetClickHdl( LINK( this, MiscOptions, Click ) );
+}
+
+IMPL_LINK( MiscOptions, Click, void*, EMPTYARG )
+{
+    PathDialog aPD( this );
+    aPD.SetPath( aEDProgDir.GetText() );
+    if ( aPD.Execute() )
+        aEDProgDir.SetText( aPD.GetPath() );
+    return 0;
 }
 
 
@@ -529,6 +699,9 @@ void MiscOptions::Save( Config &aConfig )
     for ( n = nOldMaxLRU ; n > aTFMaxLRU.GetValue() ; n-- )
         aConfig.DeleteKey( ByteString("LRU").Append( ByteString::CreateFromInt32( n ) ) );
     aConfig.WriteKey( "MaxLRU", ByteString::CreateFromInt64( aTFMaxLRU.GetValue() ) );
+
+    aConfig.SetGroup("OOoProgramDir");
+    aConfig.WriteKey( "Current", ByteString( aEDProgDir.GetText(), RTL_TEXTENCODING_UTF8 ) );
 }
 
 
@@ -672,11 +845,9 @@ StringList* GenericOptions::GetAllGroups()
 void GenericOptions::LoadData()
 {
     StringList* pGroups = GetAllGroups();
-    for (;;)
+    String* pGroup;
+    while ( (pGroup = pGroups->First()) != NULL )
     {
-        String* pGroup = pGroups->First();
-        if ( pGroup == NULL )
-            break;
         pGroups->Remove( pGroup );
         aConf.SetGroup( ByteString( *pGroup, RTL_TEXTENCODING_UTF8 ) );
         if ( aConf.ReadKey( C_KEY_AKTUELL ).Len() > 0 )
