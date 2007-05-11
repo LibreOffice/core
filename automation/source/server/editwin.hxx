@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editwin.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:23:25 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 08:54:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ protected:
 
 public:
     EditWindow( WorkWindow *pParent, const UniString &rName = UniString( RTL_CONSTASCII_USTRINGPARAM ( "Debug" ) ), WinBits iWstyle = WB_HSCROLL | WB_VSCROLL );
-    ~EditWindow();
+    virtual ~EditWindow();
 
     void Clear();
     void Show();
