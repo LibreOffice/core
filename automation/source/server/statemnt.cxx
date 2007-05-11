@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:18:09 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 08:54:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,6 +132,9 @@
 #ifndef _VALUESET_HXX //autogen
 #include <svtools/valueset.hxx>
 #endif
+#ifndef _SVTOOLS_ROADMAP_HXX
+#include <svtools/roadmap.hxx>
+#endif
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
 #endif
@@ -211,7 +214,7 @@
 #include "profiler.hxx"
 
 #include "testtool.hrc"
-#include "svtools/svtmsg.hrc"
+#include <basic/svtmsg.hrc>
 
 #include <algorithm>
 
@@ -447,7 +450,7 @@ static short ImpGetRType( Window *pWin, SmartId aUId )
 
 
         case WINDOW_TABPAGE:            nRT = C_TabPage;        break;
-        case WINDOW_MODALDIALOG:        nRT = C_Dlg;            break;
+        case WINDOW_MODALDIALOG:        nRT = C_ModalDlg;       break;
         case WINDOW_FLOATINGWINDOW:     nRT = C_FloatWin;       break;
         case WINDOW_MODELESSDIALOG:     nRT = C_ModelessDlg;    break;
         case WINDOW_WORKWINDOW:         nRT = C_WorkWin;        break;
@@ -476,6 +479,8 @@ static short ImpGetRType( Window *pWin, SmartId aUId )
         case WINDOW_CANCELBUTTON:       nRT = C_CancelButton;   break;
         case WINDOW_BUTTONDIALOG:       nRT = C_ButtonDialog;   break;
         case WINDOW_TREELISTBOX:        nRT = C_TreeListBox;    break;
+
+        case WINDOW_DIALOG:             nRT = C_Dialog;         break;
     }
 #ifdef DBG_UTIL
     // Die Werte n sind bei den WindowTypen nicht mehr vergeben, werden aber in der AutoID noch verwendet
@@ -579,11 +584,19 @@ void StatementSlot::AddReferer()
     if ( !nAnzahl )
         return;
 
+    PropertyValue* pArg;
+
     nAnzahl++;
     aArgs.realloc(nAnzahl);
-    PropertyValue* pArg = aArgs.getArray();
+    pArg = aArgs.getArray();
     pArg[nAnzahl-1].Name = rtl::OUString::createFromAscii("Referer");
     pArg[nAnzahl-1].Value <<= ::rtl::OUString::createFromAscii("private:user");
+
+    nAnzahl++;
+    aArgs.realloc(nAnzahl);
+    pArg = aArgs.getArray();
+    pArg[nAnzahl-1].Name = rtl::OUString::createFromAscii("SynchronMode");
+    pArg[nAnzahl-1].Value <<= sal_Bool( TRUE );
 }
 
 class SlotStatusListener : public cppu::WeakImplHelper1< XStatusListener >
@@ -982,13 +995,27 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
             if ( aName.Len() == 0 )
                 aName = pBase->GetText();
 
+
+            String aTypeSuffix;
+            if ( pBase->GetType() == WINDOW_CONTROL )
+            {
+                if ( dynamic_cast< EditBrowseBox* >(pBase) )
+                    aTypeSuffix.AppendAscii( "/BrowseBox", 10 );
+                else if ( dynamic_cast< ValueSet* >(pBase) )
+                    aTypeSuffix.AppendAscii( "/ValueSet", 9 );
+                else if ( dynamic_cast< ORoadmap* >(pBase) )
+                    aTypeSuffix.AppendAscii( "/RoadMap", 8 );
+                else
+                    aTypeSuffix.AppendAscii( "/Unknown", 8 );
+            }
+
             SmartId aId = pBase->GetSmartUniqueOrHelpId();
             if ( aId.HasString() || ( nConf & DH_MODE_ALLWIN ) )
                 pRet->GenReturn ( RET_WinInfo, SmartId( aId.GetStr() ), (comm_ULONG)pBase->GetType(),
-                    TypeString(pBase->GetType()).AppendAscii(": ").Append(aName), FALSE );
+                    TypeString(pBase->GetType()).Append(aTypeSuffix).AppendAscii(": ").Append(aName), FALSE );
             if ( !aId.HasString() || ( nConf & DH_MODE_ALLWIN ) )
                 pRet->GenReturn ( RET_WinInfo, SmartId( aId.GetNum() ), (comm_ULONG)pBase->GetType(),
-                    TypeString(pBase->GetType()).AppendAscii(": ").Append(aName), FALSE );
+                    TypeString(pBase->GetType()).Append(aTypeSuffix).AppendAscii(": ").Append(aName), FALSE );
 
 
             if ( pBase->GetType() == WINDOW_TOOLBOX )   // Buttons und Controls auf Toolboxen.
@@ -2404,8 +2431,8 @@ BOOL StatementCommand::Execute()
 
                     // So daß nacher auch wieder alles auf Default steht
                     nUseBindings = 0;
-                    nControlType = CONST_CTBrowseBox;
                     bCatchGPF = TRUE;
+                    bUsePostEvents = TRUE;
 
                     aSubMenuId1 = SmartId();
                     aSubMenuId2 = SmartId();
@@ -2440,7 +2467,8 @@ BOOL StatementCommand::Execute()
 
                         switch( nRT )
                         {
-                            case C_Dlg:
+                            case C_ModalDlg:
+                            case C_Dialog:
                             case C_TabDlg:
                                 REPORT_WIN_CLOSEDc(pControl, "Dialog");
                                 SET_WINP_CLOSING(pControl);
@@ -2793,6 +2821,7 @@ BOOL StatementCommand::Execute()
         case RC_MenuIsItemEnabled:
         case RC_MenuGetItemText:
         case RC_MenuGetItemCommand:
+        case RC_MenuHasSubMenu:
         case RC_MenuSelect:
             {
                 PopupMenu *pPopup = NULL;
@@ -2965,6 +2994,11 @@ BOOL StatementCommand::Execute()
                             pRet->GenReturn ( RET_Value, aSmartMethodId, (String)pMenu->GetItemCommand(nNr1) );
                         }
                         break;
+                    case RC_MenuHasSubMenu:
+                        {
+                            pRet->GenReturn ( RET_Value, aSmartMethodId, (BOOL)(pMenu->GetPopupMenu(nNr1) != NULL) );
+                        }
+                        break;
                     case RC_MenuSelect:
                         {
                             if ( pMenu->GetPopupMenu(nNr1) )
@@ -3007,17 +3041,7 @@ BOOL StatementCommand::Execute()
             break;
         case RC_SetControlType:
             {
-                switch ( nNr1 )
-                {
-                    case CONST_CTBrowseBox:
-                    case CONST_CTProgressBar:
-                    case CONST_CTValueSet:
-                        nControlType = nNr1;
-                        break;
-                    default:
-                        ReportError( GEN_RES_STR1( S_CONTROLTYPE_NOT_SUPPORTED , UniString::CreateFromInt32( nNr1 ) ) );
-                }
-
+                DirectLog( S_QAError, GEN_RES_STR0( S_DEPRECATED ) );
             }
             break;
         case RC_Kill:
@@ -3517,7 +3541,10 @@ BOOL StatementCommand::Execute()
             break;
         case RC_CatchGPF :
             {
-                bCatchGPF = bBool1;
+                if( (nParams & PARAM_BOOL_1) )
+                    bCatchGPF = bBool1;
+                else
+                    bCatchGPF = TRUE;
             }
             break;
         case RC_IsProduct :
@@ -3529,6 +3556,14 @@ BOOL StatementCommand::Execute()
                     bIsProduct = TRUE;
                 #endif
                 pRet->GenReturn ( RET_Value, aSmartMethodId, (BOOL)bIsProduct );
+            }
+            break;
+        case RC_UsePostEvents :
+            {
+                if( (nParams & PARAM_BOOL_1) )
+                    bUsePostEvents = bBool1;
+                else
+                    bUsePostEvents = TRUE;
             }
             break;
         default:
@@ -3658,6 +3693,7 @@ BOOL IsDialog(Window *pWin)
         case WINDOW_FLOATINGWINDOW:
         case WINDOW_DOCKINGWINDOW:
         case WINDOW_MODELESSDIALOG:
+        case WINDOW_DIALOG:
         case WINDOW_MODALDIALOG:
         case WINDOW_WORKWINDOW:
         case WINDOW_TABDIALOG:
@@ -3674,7 +3710,6 @@ BOOL IsDialog(Window *pWin)
 
 // ab hier nicht ansprechbar (da nicht implementiert)
         case WINDOW_SYSWINDOW:
-        case WINDOW_DIALOG:
         case WINDOW_SYSTEMDIALOG:
         case WINDOW_COLORDIALOG:
         case WINDOW_FONTDIALOG:
@@ -4059,6 +4094,12 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                 for (int j = 0; j < nNr1; j++)
                     for (xub_StrLen i = 0; i < aString1.Len(); i++)
                     {
+                         if ( StatementList::bUsePostEvents )
+                        { // grab focus every time
+                            Window *pFocus = GetpApp()->GetFocusWindow();
+                            if ( !pFocus || !pControl->IsWindowOrChild( pFocus, TRUE ) )
+                                pControl->GrabFocus();
+                        }
                         if ( bBool1 )   // Jedesmal das FocusWindow finden
                         {
                             Window *pFocus = GetpApp()->GetFocusWindow();
@@ -4285,10 +4326,11 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                 ToolBox* pTB = (ToolBox*)pControl;
                 if ( (pControl->GetType() == WINDOW_TOOLBOX) && pTB->IsMenuEnabled() )
                 {
-                    Rectangle aRect = pTB->GetMenubuttonRect();
+                    pTB->ExecuteCustomMenu();
+/*                    Rectangle aRect = pTB->GetMenubuttonRect();
                     AnimateMouse( pControl, aRect.Center() );
                     MouseEvent aMEvnt(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
-                    ImplMouseButtonDown( pTB, aMEvnt );
+                    ImplMouseButtonDown( pTB, aMEvnt );*/
                 }
                 else
                 {
@@ -4391,8 +4433,8 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                             MouseEvent aMEvnt;
                             Point aPt( pSW->GetAutoHideRect().Center() );
                             aMEvnt = MouseEvent( aPt,1,MOUSE_SIMPLECLICK,MOUSE_LEFT );
-                            ImplMouseButtonDown( pControl, aMEvnt );
-                            ImplMouseButtonUp  ( pControl, aMEvnt );
+                            ImplMouseButtonDown( pControl, aMEvnt, FORCE_DIRECT_CALL );
+                            ImplMouseButtonUp  ( pControl, aMEvnt, FORCE_DIRECT_CALL );
                         }
 //                              pSW->AutoHide();
                         break;
@@ -4687,6 +4729,28 @@ BOOL StatementControl::Execute()
             bBool2 = TRUE;
             return FALSE;
         }
+        // TODO: handle GetFocus for all Methods and Windows like this (remove part below)
+        //       See for impact of changed focus for HandleVisibleControls() (taking Snapshots might be different, possible exclude those methods)
+        if (( (nRT == C_TreeListBox) && !bBool2 )
+            && nMethodId != M_TypeKeys          // TypeKeys macht das selbst, falls eigenes Focushandling gewünscht
+            && nMethodId != M_MouseDown
+            && nMethodId != M_MouseUp
+            && nMethodId != M_MouseMove
+            /*&& nMethodId != M_MouseDoubleClick*/ )
+        {
+            if ( !pControl->HasFocus() )
+            {
+                pControl->GrabFocus();
+                int i = 10;
+                while ( i && !pControl->HasFocus() )    // reschedule a bit
+                    SafeReschedule();
+                if ( !pControl->HasFocus() )  // to get asyncronous focus
+                {
+                    bBool2 = TRUE;
+                    return FALSE;
+                }
+            }
+        }
     }
 
     Advance();
@@ -4698,12 +4762,13 @@ BOOL StatementControl::Execute()
     }
     if( ControlOK( pControl, "Window/Control" ) )
     {
-        if ((( nRT < C_TabPage && nRT > C_TabControl )
-//          || nMethodId == M_TypeKeys      // TypeKeys macht das selbst, falls eigenes Focushandling gewünscht
-//          || nMethodId == M_MouseDown
-//          || nMethodId == M_MouseUp
-//          || nMethodId == M_MouseMove
-//          || nMethodId == M_MouseDoubleClick
+        if (((( nRT < C_TabPage && nRT > C_TabControl )
+              || nRT == C_PatternBox
+              || nRT == C_ToolBox
+              || nRT == C_ValueSet
+              || nRT == C_Control
+              || nRT == C_TreeListBox
+             )
             || nMethodId == M_OpenContextMenu )
             && nMethodId != M_TypeKeys          // TypeKeys macht das selbst, falls eigenes Focushandling gewünscht
             && nMethodId != M_MouseDown
@@ -5196,8 +5261,8 @@ BOOL StatementControl::Execute()
                                 MouseEvent aMEvnt;
                                 Point aPt( pControl->GetSizePixel().Width() / 2, pControl->GetSizePixel().Height() / 2 );
                                 aMEvnt = MouseEvent( aPt,1,MOUSE_SIMPLECLICK,MOUSE_LEFT );
-                                ImplMouseButtonDown( pControl, aMEvnt );
-                                ImplMouseButtonUp  ( pControl, aMEvnt );
+                                ImplMouseButtonDown( pControl, aMEvnt, FORCE_DIRECT_CALL );
+                                ImplMouseButtonUp  ( pControl, aMEvnt, FORCE_DIRECT_CALL );
                             }
                             break;
                         case M_Open :
@@ -5206,14 +5271,14 @@ BOOL StatementControl::Execute()
                                 MouseEvent aMEvnt;
                                 Point aPt( pControl->GetSizePixel().Width() / 2, pControl->GetSizePixel().Height() / 2 );
                                 aMEvnt = MouseEvent( aPt,1,MOUSE_SIMPLECLICK,MOUSE_LEFT );
-                                ImplMouseButtonDown( pControl, aMEvnt );
+                                ImplMouseButtonDown( pControl, aMEvnt, FORCE_DIRECT_CALL );
 
                                 ULONG nStart = Time::GetSystemTicks();
                                 ULONG nDelay = pControl->GetSettings().GetMouseSettings().GetActionDelay();
                                 while ( ( Time::GetSystemTicks() - nStart ) < nDelay + 100 )
                                     SafeReschedule();
 
-                                ImplMouseButtonUp  ( pControl, aMEvnt );
+                                ImplMouseButtonUp  ( pControl, aMEvnt, FORCE_DIRECT_CALL );
 
                                 aSubMenuId1 = SmartId();
                                 aSubMenuId2 = SmartId();
@@ -5317,9 +5382,10 @@ BOOL StatementControl::Execute()
                                         Rectangle aRect = pTB->GetItemRect(pTB->GetItemId(nItemPos));
                                         if ( aRect.IsEmpty() )
                                         {
-                                            aRect = pTB->GetMenubuttonRect();
+                                            pTB->ExecuteCustomMenu();
+/*                                          aRect = pTB->GetMenubuttonRect();
                                             MouseEvent aMEvnt(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
-                                            ImplMouseButtonDown( pTB, aMEvnt );
+                                            ImplMouseButtonDown( pTB, aMEvnt );*/
 
                                             aSubMenuId1 = SmartId();
                                             aSubMenuId2 = SmartId();
@@ -5333,8 +5399,8 @@ BOOL StatementControl::Execute()
                                             aRect = pTB->GetItemRect(pTB->GetItemId(nItemPos));
                                             MouseEvent aMEvnt;
                                             aMEvnt = MouseEvent(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
-                                            ImplMouseButtonDown( pTB, aMEvnt );
-                                            ImplMouseButtonUp  ( pTB, aMEvnt );
+                                            ImplMouseButtonDown( pTB, aMEvnt, FORCE_DIRECT_CALL );
+                                            ImplMouseButtonUp  ( pTB, aMEvnt, FORCE_DIRECT_CALL );
                                         }
                                     }
                                 }
@@ -5347,33 +5413,28 @@ BOOL StatementControl::Execute()
                                         Rectangle aRect = pTB->GetItemPosDropDownRect( nItemPos );
                                         AnimateMouse( pControl, aRect.Center() );
                                         MouseEvent aMEvnt(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
-                                        ImplMouseButtonDown( pTB, aMEvnt );
+                                        ImplMouseButtonDown( pTB, aMEvnt, FORCE_DIRECT_CALL );
 
-                                        Window *pWin;
+                                        Window *pWin = NULL;
                                         // Wait for the window to open.
                                         StatementList::bExecuting = TRUE;       // Bah ist das ein ekliger Hack
                                         {                                           // Das verhindert, daß schon der nächste Befehl ausgeführt wird.
                                             Time aDelay;
-                                            for ( ;; )
-                                            {
-                                                pWin = GetPopupFloatingWin();
-                                                if ( pWin || ( Time() - aDelay ).GetSec() >= 15 )
-                                                    break;
+                                            while ( !pWin && ( (pWin = GetPopupFloatingWin()) == NULL ) && ( Time() - aDelay ).GetSec() < 15 )
                                                 SafeReschedule();
-                                            }
                                         }
                                         StatementList::bExecuting = FALSE;  // Bah ist das ein ekliger Hack
 
                                         if ( pWin && pWin->GetType() == WINDOW_FLOATINGWINDOW )
                                         {
                                             aMEvnt = MouseEvent(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
-                                            ImplMouseButtonUp( pTB, aMEvnt );
+                                            ImplMouseButtonUp( pTB, aMEvnt, FORCE_DIRECT_CALL );
                                             ((FloatingWindow*)pWin)->EndPopupMode( FLOATWIN_POPUPMODEEND_TEAROFF );
                                         }
                                         else
                                         {
                                             aMEvnt = MouseEvent(Point(1,-10), 1, MOUSE_SIMPLECLICK,MOUSE_LEFT);
-                                            ImplMouseButtonUp( pTB, aMEvnt );
+                                            ImplMouseButtonUp( pTB, aMEvnt, FORCE_DIRECT_CALL );
                                             ReportError( aUId, GEN_RES_STR1( S_TEAROFF_FAILED, MethodString( nMethodId ) ) );
                                         }
                                     }
@@ -5387,7 +5448,7 @@ BOOL StatementControl::Execute()
                                         Rectangle aRect = pTB->GetItemPosDropDownRect( nItemPos );
                                         AnimateMouse( pControl, aRect.Center() );
                                         MouseEvent aMEvnt(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
-                                        ImplMouseButtonDown( pTB, aMEvnt );
+                                        ImplMouseButtonDown( pTB, aMEvnt, FORCE_DIRECT_CALL );
 
                                         // Das Fenster ist offen.
                                         aSubMenuId1 = SmartId();
@@ -5475,7 +5536,7 @@ BOOL StatementControl::Execute()
 
 
 
-#define COUNT_LBOX( First, Next, Anzahl)    \
+#define GET_NTH_ENTRY_LBOX( First, Next, Anzahl)    \
     SvLBoxEntry *pThisEntry = ((SvTreeListBox*)pControl)->First(); \
     { \
         int niTemp = Anzahl; \
@@ -5485,42 +5546,30 @@ BOOL StatementControl::Execute()
         } \
     }
 
-#define FIND_LBOX( First, Next, Cond)   \
-    SvLBoxEntry *pFindEntry = (SvLBoxEntry*)((SvTreeListBox*)pControl)->First(); \
-    { \
-        while ( pFindEntry && !(Cond) ) \
-        { \
-            pFindEntry = (SvLBoxEntry*)((SvTreeListBox*)pControl)->Next( pFindEntry ); \
-        } \
-    }
-
-#define GetFirstValidTextItem( pThisEntry, nNr )\
-SvLBoxString* pItem = NULL;\
-USHORT nValidTextItemCount = 0;\
-{\
-    USHORT nIndex = 0;\
-    SvLBoxItem *pMyItem;\
-    while ( ( nValidTextItemCount < nNr ) && nIndex < pThisEntry->ItemCount() )\
-    {\
-        pMyItem = pThisEntry->GetItem( nIndex );\
-        if ( pMyItem->IsA() == SV_ITEM_ID_LBOXSTRING )\
-        {\
-            pItem = (SvLBoxString*)pMyItem;\
-            nValidTextItemCount++;\
-        }\
-        nIndex++;\
-    }\
-}
-
-                        case M_GetText :
-                            {
+                        case M_GetText :               // Get the first text of the given (default=1) line
+                            {                          // should get removed some time
                                 SvTreeListBox *pTree = (SvTreeListBox*)pControl;
                                 SvLBoxEntry *pThisEntry = pTree->GetCurEntry();
                                 if ( ! (nParams & PARAM_USHORT_1) )
                                     nNr1 = 1;
                                 if ( pThisEntry )
                                 {
-                                    GetFirstValidTextItem( pThisEntry, nNr1 );
+                                    SvLBoxString* pItem = NULL;
+                                    USHORT nValidTextItemCount = 0;
+                                    {
+                                        USHORT nIndex = 0;
+                                        SvLBoxItem *pMyItem;
+                                        while ( ( nValidTextItemCount < nNr1 ) && nIndex < pThisEntry->ItemCount() )
+                                        {
+                                            pMyItem = pThisEntry->GetItem( nIndex );
+                                            if ( pMyItem->IsA() == SV_ITEM_ID_LBOXSTRING )
+                                            {
+                                                pItem = (SvLBoxString*)pMyItem;
+                                                nValidTextItemCount++;
+                                            }
+                                            nIndex++;
+                                        }
+                                    }
                                     if ( ValueOK( aUId, CUniString("GetText"), nNr1, nValidTextItemCount ) )
                                         pRet->GenReturn ( RET_Value, aUId, pItem->GetText() );
                                 }
@@ -5531,42 +5580,17 @@ USHORT nValidTextItemCount = 0;\
                         case M_GetSelCount :
                             pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((SvLBox*)pControl)->GetSelectionCount()));
                             break;
+                        case M_GetItemCount :
+                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((SvLBox*)pControl)->GetVisibleCount()) );
+                            break;
                         case M_GetSelIndex :
                             if ( ! (nParams & PARAM_USHORT_1) )
                                 nNr1 = 1;
                             if ( ValueOK(aUId, CUniString("GetSelIndex"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
                             {
                                 nNr1--;
-                                COUNT_LBOX( FirstSelected, NextSelected, nNr1);
+                                GET_NTH_ENTRY_LBOX( FirstSelected, NextSelected, nNr1);
                                 pRet->GenReturn ( RET_Value, aUId, comm_ULONG( ((SvTreeListBox*)pControl)->GetVisiblePos( pThisEntry )) +1 );
-                            }
-                            break;
-                        case M_GetSelText :
-                            if ( ! (nParams & PARAM_USHORT_1) )
-                                nNr1 = 1;
-                            if ( ! (nParams & PARAM_USHORT_2) )
-                                nNr2 = 1;
-                            if ( ValueOK(aUId, CUniString("GetSelText"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
-                            {
-                                nNr1--;
-                                COUNT_LBOX( FirstSelected, NextSelected, nNr1);
-                                GetFirstValidTextItem( pThisEntry, nNr2 );
-                                if ( ValueOK( aUId, CUniString("GetSelText"), nNr2, nValidTextItemCount ) )
-                                    pRet->GenReturn ( RET_Value, aUId, pItem->GetText() );
-                            }
-                            break;
-                        case M_GetItemCount :
-                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((SvLBox*)pControl)->GetVisibleCount()) );
-                            break;
-                        case M_GetItemText :
-                            if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,((SvLBox*)pControl)->GetVisibleCount()) )
-                            {
-                                SvLBoxEntry *pEntry = (SvLBoxEntry*)((SvTreeListBox*)pControl)->GetEntryAtVisPos( nNr1-1 );
-                                if ( ! (nParams & PARAM_USHORT_2) )
-                                    nNr2 = 1;
-                                GetFirstValidTextItem( pEntry, nNr2 );
-                                if ( ValueOK( aUId, CUniString("GetItemText"), nNr2, nValidTextItemCount ) )
-                                    pRet->GenReturn ( RET_Value, aUId, pItem->GetText() );
                             }
                             break;
                         case M_Select :
@@ -5594,6 +5618,59 @@ USHORT nValidTextItemCount = 0;\
                                 }
                             }
                             break;
+                        case M_GetSelText :
+                            if ( ! (nParams & PARAM_USHORT_1) )
+                                nNr1 = 1;
+                            if ( ! (nParams & PARAM_USHORT_2) )
+                                nNr2 = 1;
+                            if ( ValueOK(aUId, CUniString("GetSelText"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
+                            {
+                                nNr1--;
+                                GET_NTH_ENTRY_LBOX( FirstSelected, NextSelected, nNr1);
+                                if ( ValueOK( aUId, MethodString( nMethodId ),nNr2,pThisEntry->ItemCount() ) )
+                                {
+                                    SvLBoxString* pItem = NULL;
+                                    if ( ! (nParams & PARAM_USHORT_2) )
+                                        pItem = (SvLBoxString*)pThisEntry->GetFirstItem( SV_ITEM_ID_LBOXSTRING );
+                                    else
+                                    {
+                                        SvLBoxItem *pMyItem = pThisEntry->GetItem( nNr2-1 );
+                                        if ( pMyItem->IsA() == SV_ITEM_ID_LBOXSTRING )
+                                            pItem = (SvLBoxString*)pMyItem;
+                                    }
+
+                                    if ( pItem )
+                                        pRet->GenReturn ( RET_Value, aUId, pItem->GetText() );
+                                    else
+                                        ReportError( aUId, GEN_RES_STR1( S_NO_LIST_BOX_STRING, MethodString( nMethodId ) ) );
+                                }
+                            }
+                            break;
+                        case M_GetItemText :
+                            if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,((SvLBox*)pControl)->GetVisibleCount()) )
+                            {
+                                SvLBoxEntry *pThisEntry = (SvLBoxEntry*)((SvTreeListBox*)pControl)->GetEntryAtVisPos( nNr1-1 );
+                                if ( ! (nParams & PARAM_USHORT_2) )
+                                    nNr2 = 1;
+                                if ( ValueOK( aUId, MethodString( nMethodId ),nNr2,pThisEntry->ItemCount() ) )
+                                {
+                                    SvLBoxString* pItem = NULL;
+                                    if ( ! (nParams & PARAM_USHORT_2) )
+                                        pItem = (SvLBoxString*)pThisEntry->GetFirstItem( SV_ITEM_ID_LBOXSTRING );
+                                    else
+                                    {
+                                        SvLBoxItem *pMyItem = pThisEntry->GetItem( nNr2-1 );
+                                        if ( pMyItem->IsA() == SV_ITEM_ID_LBOXSTRING )
+                                            pItem = (SvLBoxString*)pMyItem;
+                                    }
+
+                                    if ( pItem )
+                                        pRet->GenReturn ( RET_Value, aUId, pItem->GetText() );
+                                    else
+                                        ReportError( aUId, GEN_RES_STR1( S_NO_LIST_BOX_STRING, MethodString( nMethodId ) ) );
+                                }
+                            }
+                            break;
                         case M_IsChecked :
                         case M_IsTristate :
                         case M_GetState :
@@ -5602,42 +5679,115 @@ USHORT nValidTextItemCount = 0;\
                         case M_TriState :
                             {
                                 SvTreeListBox *pTree = (SvTreeListBox*)pControl;
-                                SvLBoxEntry *pThisEntry = pTree->GetCurEntry();
-                                if ( !pThisEntry )
-                                    ReportError( aUId, GEN_RES_STR2c2( S_NO_SELECTED_ENTRY, MethodString( nMethodId ), "TreeListBox" ) );
+                                SvLBoxEntry *pThisEntry = NULL;
+
+                                if ( ! (nParams & PARAM_USHORT_1) )
+                                {
+                                    pThisEntry = pTree->GetCurEntry();
+                                    if ( !pThisEntry )
+                                        ReportError( aUId, GEN_RES_STR2c2( S_NO_SELECTED_ENTRY, MethodString( nMethodId ), "TreeListBox" ) );
+                                }
                                 else
                                 {
-                                    SvLBoxButton* pItem = (SvLBoxButton*)(pThisEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
-                                    if(!pItem)
-                                        ReportError( aUId, GEN_RES_STR1( S_NO_LIST_BOX_BUTTON, MethodString( nMethodId ) ) );
-                                    else
-                                        switch( nMethodId )
+                                    if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,((SvLBox*)pControl)->GetVisibleCount()) )
+                                    {
+                                        pThisEntry = (SvLBoxEntry*)pTree->GetEntryAtVisPos( nNr1-1 );
+                                    }
+                                }
+
+                                if ( ! (nParams & PARAM_USHORT_2) )
+                                    nNr2 = 1;
+
+                                if ( pThisEntry )
+                                {
+                                    if ( ValueOK( aUId, MethodString( nMethodId ),nNr2,pThisEntry->ItemCount() ) )
+                                    {
+                                        SvLBoxButton* pItem = NULL;
+                                        if ( ! (nParams & PARAM_USHORT_2) )
+                                            pItem = (SvLBoxButton*)pThisEntry->GetFirstItem( SV_ITEM_ID_LBOXBUTTON );
+                                        else
                                         {
-                                            case M_IsChecked :
-                                                pRet->GenReturn ( RET_Value, aUId, comm_BOOL( pItem->IsStateChecked() ) );
-                                                break;
-                                            case M_IsTristate :
-                                                pRet->GenReturn ( RET_Value, aUId, comm_BOOL( pItem->IsStateTristate() ) );
-                                                break;
-                                            case M_GetState :
-                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pItem->GetButtonFlags() & ~SV_STATE_MASK ));
-                                                break;
-                                            case M_Check :
-                                                pTree->SetCheckButtonState( pThisEntry, SV_BUTTON_CHECKED );
-                                                pTree->CheckButtonHdl();
-                                                break;
-                                            case M_UnCheck :
-                                                pTree->SetCheckButtonState( pThisEntry, SV_BUTTON_UNCHECKED );
-                                                pTree->CheckButtonHdl();
-                                                break;
-                                            case M_TriState :
-                                                pTree->SetCheckButtonState( pThisEntry, SV_BUTTON_TRISTATE );
-                                                pTree->CheckButtonHdl();
-                                                break;
-                                            default:
-                                                ReportError( aUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
-                                                break;
+                                            SvLBoxItem *pMyItem = pThisEntry->GetItem( nNr2-1 );
+                                            if ( pMyItem->IsA() == SV_ITEM_ID_LBOXBUTTON )
+                                                pItem = (SvLBoxButton*)pMyItem;
                                         }
+
+                                        if ( pItem )
+                                        {
+                                            switch( nMethodId )
+                                            {
+                                                case M_IsChecked :
+                                                    pRet->GenReturn ( RET_Value, aUId, comm_BOOL( pItem->IsStateChecked() ) );
+                                                    break;
+                                                case M_IsTristate :
+                                                    pRet->GenReturn ( RET_Value, aUId, comm_BOOL( pItem->IsStateTristate() ) );
+                                                    break;
+                                                case M_GetState :
+                                                    pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pItem->GetButtonFlags() & ~SV_STATE_MASK ));
+                                                    break;
+                                                case M_Check :
+                                                    pItem->SetStateChecked();
+                                                    pTree->CheckButtonHdl();
+                                                    pTree->InvalidateEntry( pThisEntry );
+                                                    break;
+                                                case M_UnCheck :
+                                                    pItem->SetStateUnchecked();
+                                                    pTree->CheckButtonHdl();
+                                                    pTree->InvalidateEntry( pThisEntry );
+                                                    break;
+                                                case M_TriState :
+                                                    pItem->SetStateTristate();
+                                                    pTree->CheckButtonHdl();
+                                                    pTree->InvalidateEntry( pThisEntry );
+                                                    break;
+                                                default:
+                                                    ReportError( aUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
+                                                    break;
+                                            }
+                                        }
+                                        else
+                                            ReportError( aUId, GEN_RES_STR1( S_NO_LIST_BOX_BUTTON, MethodString( nMethodId ) ) );
+                                    }
+                                }
+                            }
+                            break;
+                        case M_GetItemType :
+                            {
+                                SvTreeListBox *pTree = (SvTreeListBox*)pControl;
+                                SvLBoxEntry *pThisEntry = NULL;
+
+                                if ( ! (nParams & PARAM_USHORT_1) )
+                                {
+                                    pThisEntry = pTree->GetCurEntry();
+                                    if ( !pThisEntry )
+                                        ReportError( aUId, GEN_RES_STR2c2( S_NO_SELECTED_ENTRY, MethodString( nMethodId ), "TreeListBox" ) );
+                                }
+                                else
+                                {
+                                    if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,((SvLBox*)pControl)->GetVisibleCount()) )
+                                    {
+                                        pThisEntry = (SvLBoxEntry*)pTree->GetEntryAtVisPos( nNr1-1 );
+                                    }
+                                }
+
+                                if ( pThisEntry )
+                                {
+                                    if ( ! (nParams & PARAM_USHORT_2) )
+                                        nNr2 = 1;
+                                    if ( ValueOK( aUId, MethodString( nMethodId ),nNr2,pThisEntry->ItemCount() ) )
+                                    {
+                                        SvLBoxItem *pMyItem = pThisEntry->GetItem( nNr2-1 );
+                                        comm_USHORT nType;
+                                        switch ( pMyItem->IsA() )
+                                        {
+                                            case SV_ITEM_ID_LBOXSTRING: nType = CONST_ItemTypeText ; break;
+                                            case SV_ITEM_ID_LBOXBMP: nType = CONST_ItemTypeBMP ; break;
+                                            case SV_ITEM_ID_LBOXBUTTON: nType = CONST_ItemTypeCheckbox ; break;
+                                            case SV_ITEM_ID_LBOXCONTEXTBMP: nType = CONST_ItemTypeContextBMP ; break;
+                                            default: nType = CONST_ItemTypeUnknown;
+                                        }
+                                        pRet->GenReturn ( RET_Value, aUId, nType );
+                                    }
                                 }
                             }
                             break;
@@ -5646,235 +5796,209 @@ USHORT nValidTextItemCount = 0;\
                             break;
                     }
                     break;
-            case C_Control:
+                case C_Control:
+                {
+                    USHORT nRealControlType = 0;
+                    if ( dynamic_cast< EditBrowseBox* >(pControl) )
+                        nRealControlType = CONST_CTBrowseBox;
+                    else if ( dynamic_cast< ValueSet* >(pControl) )
+                        nRealControlType = CONST_CTValueSet;
+                    else if ( dynamic_cast< ORoadmap* >(pControl) )
+                        nRealControlType = CONST_CTORoadmap;
+                    else
+                        nRealControlType = CONST_CTUnknown;
+
                     switch( nMethodId )
                     {
                         case M_AnimateMouse :
                             AnimateMouse( pControl, MitteOben);
                             break;
                         default:
-                            switch( nControlType )
+                            switch( nRealControlType )
                             {
                                 case CONST_CTBrowseBox:
-
-                                    switch( nMethodId )
                                     {
-
-/*
-
-
-BOOL            MakeFieldVisible( long nRow, USHORT nColId, BOOL bComplete = FALSE );
-// access to dynamic values of cursor row
-String          GetColumnTitle( USHORT nColumnId ) const;
-USHORT          GetColumnId( USHORT nPos ) const;
-USHORT          GetColumnPos( USHORT nColumnId ) const;
-// access and movement of cursor
-long            GetCurRow() const { return nCurRow; }
-USHORT          GetCurColumnId() const { return nCurColId; }
-BOOL            GoToRow( long nRow );
-BOOL            GoToRowAndDoNotModifySelection( long nRow );
-BOOL            GoToColumnId( USHORT nColId );
-BOOL            GoToRowColumnId( long nRow, USHORT nColId );
-// selections
-void            SetNoSelection();
-void            SelectAll();
-void            SelectRow( long nRow, BOOL bSelect = TRUE, BOOL bExpand = TRUE );
-void            SelectColumnPos( USHORT nCol, BOOL bSelect = TRUE )
-                    { SelectColumnPos( nCol, bSelect, TRUE); }
-void            SelectColumnId( USHORT nColId, BOOL bSelect = TRUE )
-                    { SelectColumnPos( GetColumnPos(nColId), bSelect, TRUE); }
-long            GetSelectRowCount() const;
-USHORT          GetSelectColumnCount() const;
-BOOL            IsRowSelected( long nRow ) const;
-BOOL            IsColumnSelected( USHORT nColumnId ) const;
-long            FirstSelectedRow( BOOL bInverse = FALSE );
-long            LastSelectedRow( BOOL bInverse = FALSE );
-long            PrevSelectedRow();
-long            NextSelectedRow();
-const MultiSelection* GetSelection() const
-                { return bMultiSelection ? uRow.pSel : 0; }
-void            SetSelection( const MultiSelection &rSelection );
+                                        EditBrowseBox* pEBBox = dynamic_cast< EditBrowseBox* >(pControl);
+                                        switch( nMethodId )
+                                        {
 
 
-
-  EditBrowseBox
-
-        sal_Bool IsEditing() const {return aController.Is();}
-        void InvalidateStatusCell(long nRow) {RowModified(nRow, 0);}
-        void InvalidateHandleColumn();
-
-        CellControllerRef Controller() const { return aController; }
-        sal_Int32   GetBrowserFlags() const { return m_nBrowserFlags; }
-
-        virtual void ActivateCell(long nRow, sal_uInt16 nCol, sal_Bool bSetCellFocus = sal_True);
-        virtual void DeactivateCell(sal_Bool bUpdate = sal_True);
+    /*
 
 
+    BOOL            MakeFieldVisible( long nRow, USHORT nColId, BOOL bComplete = FALSE );
+    // access to dynamic values of cursor row
+    String          GetColumnTitle( USHORT nColumnId ) const;
+    USHORT          GetColumnId( USHORT nPos ) const;
+    USHORT          GetColumnPos( USHORT nColumnId ) const;
+    // access and movement of cursor
+    long            GetCurRow() const { return nCurRow; }
+    USHORT          GetCurColumnId() const { return nCurColId; }
+    BOOL            GoToRow( long nRow );
+    BOOL            GoToRowAndDoNotModifySelection( long nRow );
+    BOOL            GoToColumnId( USHORT nColId );
+    BOOL            GoToRowColumnId( long nRow, USHORT nColId );
+    // selections
+    void            SetNoSelection();
+    void            SelectAll();
+    void            SelectRow( long nRow, BOOL bSelect = TRUE, BOOL bExpand = TRUE );
+    void            SelectColumnPos( USHORT nCol, BOOL bSelect = TRUE )
+                        { SelectColumnPos( nCol, bSelect, TRUE); }
+    void            SelectColumnId( USHORT nColId, BOOL bSelect = TRUE )
+                        { SelectColumnPos( GetColumnPos(nColId), bSelect, TRUE); }
+    long            GetSelectRowCount() const;
+    USHORT          GetSelectColumnCount() const;
+    BOOL            IsRowSelected( long nRow ) const;
+    BOOL            IsColumnSelected( USHORT nColumnId ) const;
+    long            FirstSelectedRow( BOOL bInverse = FALSE );
+    long            LastSelectedRow( BOOL bInverse = FALSE );
+    long            PrevSelectedRow();
+    long            NextSelectedRow();
+    const MultiSelection* GetSelection() const
+                    { return bMultiSelection ? uRow.pSel : 0; }
+    void            SetSelection( const MultiSelection &rSelection );
+
+    virtual String  GetCellText(long _nRow, USHORT _nColId) const;
+    USHORT GetColumnCount() const { return ColCount(); }
+protected:
+    virtual long    GetRowCount() const;
+
+
+    EditBrowseBox
+
+            sal_Bool IsEditing() const {return aController.Is();}
+            void InvalidateStatusCell(long nRow) {RowModified(nRow, 0);}
+            void InvalidateHandleColumn();
+
+            CellControllerRef Controller() const { return aController; }
+            sal_Int32   GetBrowserFlags() const { return m_nBrowserFlags; }
+
+            virtual void ActivateCell(long nRow, sal_uInt16 nCol, sal_Bool bSetCellFocus = sal_True);
+            virtual void DeactivateCell(sal_Bool bUpdate = sal_True);
 
 
 
-
-
-
-#define COUNT_LBOX( First, Next, Anzahl)    \
-    SvLBoxEntry *pThisEntry = ((SvTreeListBox*)pControl)->First(); \
-    { \
-        int niTemp = Anzahl; \
-        while ( Anzahl-- ) \
-        { \
-            pThisEntry = ((SvTreeListBox*)pControl)->Next( pThisEntry ); \
-        } \
-    }
-
-#define FIND_LBOX( First, Next, Cond)   \
-    SvLBoxEntry *pFindEntry = (SvLBoxEntry*)((SvTreeListBox*)pControl)->First(); \
-    { \
-        while ( pFindEntry && !(Cond) ) \
-        { \
-            pFindEntry = (SvLBoxEntry*)((SvTreeListBox*)pControl)->Next( pFindEntry ); \
-        } \
-    }
-
-#define GetFirstValidTextItem( pThisEntry )\
-SvLBoxString* pItem = NULL;\
-{\
-    USHORT nIndex = 0;\
-    SvLBoxItem *pMyItem;\
-    while ( nIndex < pThisEntry->ItemCount() )\
-    {\
-        pMyItem = pThisEntry->GetItem( nIndex );\
-        if ( pMyItem->IsA() == SV_ITEM_ID_LBOXSTRING )\
-            if ( ((SvLBoxString*)pMyItem)->GetText().Len() )\
-                pItem = (SvLBoxString*)pMyItem;\
-        nIndex++;\
-    }\
-}
-*/
-                                        case M_GetSelText : // EditBrowseBox wird angenommen! (Das kann ja nur schief gehen)
-                                            {
-                                                CellControllerRef aControler;
-                                                aControler = ((EditBrowseBox*)pControl)->Controller();
-                                                if ( aControler.Is() )
-                                                    pRet->GenReturn ( RET_Value, aUId, aControler->GetWindow().GetText() );
-                                                else
-                                                    ReportError( aUId, GEN_RES_STR2c2( S_NO_SELECTED_ENTRY, MethodString( nMethodId ), "BrowseBox" ) );
-                                            }
-                                            break;/*
-                                        case M_GetSelCount :    // EditBrowseBox wird angenommen! (Das kann ja nur schief gehen)
-                                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((SvLBox*)pControl)->GetSelectionCount()));
-                                            break;
-                                        case M_GetSelIndex :    // EditBrowseBox wird angenommen! (Das kann ja nur schief gehen)
-                                            if ( ! (nParams & PARAM_USHORT_1) )
-                                                nNr1 = 1;
-                                            if ( ValueOK(aUId, CUniString("GetSelIndex"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
-                                            {
-                                                nNr1--;
-                                                COUNT_LBOX( FirstSelected, NextSelected, nNr1);
-                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG( ((SvTreeListBox*)pControl)->GetVisiblePos( pThisEntry )) +1 );
-                                            }
-                                            break;
-                                        case M_GetSelText : // EditBrowseBox wird angenommen! (Das kann ja nur schief gehen)
-                                            if ( ! (nParams & PARAM_USHORT_1) )
-                                                nNr1 = 1;
-                                            if ( ValueOK(aUId, CUniString("GetSelText"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
-                                            {
-                                                nNr1--;
-                                                COUNT_LBOX( FirstSelected, NextSelected, nNr1);
-                                                GetFirstValidTextItem( pThisEntry );
-                                                pRet->GenReturn ( RET_Value, aUId, pItem->GetText() );
-                                            }
-                                            break;
-                                        case M_GetItemCount :   // EditBrowseBox wird angenommen! (Das kann ja nur schief gehen)
-                                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((SvLBox*)pControl)->GetVisibleCount()) );
-                                            break;
-                                        case M_GetItemText :    // EditBrowseBox wird angenommen! (Das kann ja nur schief gehen)
-                                            if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,((SvLBox*)pControl)->GetVisibleCount()) )
-                                            {
-                                                SvLBoxEntry *pEntry = (SvLBoxEntry*)((SvTreeListBox*)pControl)->GetEntryAtVisPos( nNr1-1 );
-                                                GetFirstValidTextItem( pEntry );
-                                                pRet->GenReturn ( RET_Value, aUId, pItem->GetText() );
-                                            }
-                                            break;
-                                        case M_Select : // EditBrowseBox wird angenommen! (Das kann ja nur schief gehen)
-                                            if ( ! (nParams & PARAM_BOOL_1) )
-                                                bBool1 = TRUE;
-                                            if( nParams & PARAM_STR_1 )
-                                            {
-            / *                                 ListBox *pLB = ((ListBox*)pControl);
-                                                if ( pLB->GetEntryPos( aString1 ) == LISTBOX_ENTRY_NOTFOUND )
-                                                    ReportError( aUId, GEN_RES_STR2( S_ENTRY_NOT_FOUND, MethodString( nMethodId ), aString1 ) );
-                                                else
+    */
+                                            case M_GetSelText :
                                                 {
-                                                    pLB->SelectEntry( aString1, bBool1 );
-                                                    if ( pLB->IsEntrySelected( aString1 ) ? !bBool1 : bBool1 )  // XOR rein mit BOOL
-                                                        ReportError( aUId, GEN_RES_STR2( S_METHOD_FAILED, MethodString( nMethodId ), aString1 ) );
+                                                    pRet->GenReturn ( RET_Value, aUId, pEBBox->GetCellText( pEBBox->GetCurrRow(), pEBBox->GetColumnId( pEBBox->GetCurrColumn() )));
                                                 }
-            * /                                 ReportError( aUId, GEN_RES_STR1( S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED, MethodString( nMethodId ) ) );
-                                            }
-                                            else
-                                            {
+                                                break;
+                                            case M_GetColumnCount :
+                                                {
+                                                    USHORT nColCount = pEBBox->GetColumnCount();
+                                                    comm_USHORT nUnfrozenColCount = 0;
+                                                    USHORT i;
+                                                    for ( i=0 ; i < nColCount ; i++ )
+                                                    {
+                                                        if ( !pEBBox->IsFrozen( pEBBox->GetColumnId( i ) ) )
+                                                            nUnfrozenColCount++;
+                                                    }
+                                                    pRet->GenReturn ( RET_Value, aUId, nUnfrozenColCount );
+                                                }
+                                                break;
+                                            case M_GetRowCount :
+                                                {
+                                                    pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pEBBox->GetRowCount() );
+                                                }
+                                                break;
+                                            case M_IsEditing :
+                                                {
+                                                    CellControllerRef aControler;
+                                                    aControler = pEBBox->Controller();
+                                                    pRet->GenReturn ( RET_Value, aUId, (comm_BOOL)aControler.Is() );
+                                                }
+                                                break;
+                                            case M_Select :
+                                                {
+                                                    if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,pEBBox->GetRowCount() ) )
+                                                    {
+                                                        USHORT nColCount = pEBBox->GetColumnCount();
+                                                        comm_USHORT nUnfrozenColCount = 0;
+                                                        USHORT i;
+                                                        for ( i=0 ; i < nColCount ; i++ )
+                                                        {
+                                                            if ( !pEBBox->IsFrozen( pEBBox->GetColumnId( i ) ) )
+                                                                nUnfrozenColCount++;
+                                                        }
+                                                        if ( ValueOK(aUId, MethodString( nMethodId ),nNr2,nUnfrozenColCount ) )
+                                                            pEBBox->GoToRowColumnId( nNr1-1, pEBBox->GetColumnId( nNr2 ) );
+                                                    }
+                                                }
+                                                break;
+
+
+
+                                                /*
+                                            case M_GetSelCount :
+                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((SvLBox*)pControl)->GetSelectionCount()));
+                                                break;
+                                            case M_GetSelIndex :
+                                                if ( ! (nParams & PARAM_USHORT_1) )
+                                                    nNr1 = 1;
+                                                if ( ValueOK(aUId, CUniString("GetSelIndex"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
+                                                {
+                                                    nNr1--;
+                                                    COUNT_LBOX( FirstSelected, NextSelected, nNr1);
+                                                    pRet->GenReturn ( RET_Value, aUId, comm_ULONG( ((SvTreeListBox*)pControl)->GetVisiblePos( pThisEntry )) +1 );
+                                                }
+                                                break;
+                                            case M_GetSelText :
+                                                if ( ! (nParams & PARAM_USHORT_1) )
+                                                    nNr1 = 1;
+                                                if ( ValueOK(aUId, CUniString("GetSelText"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
+                                                {
+                                                    nNr1--;
+                                                    COUNT_LBOX( FirstSelected, NextSelected, nNr1);
+                                                    GetFirstValidTextItem( pThisEntry );
+                                                    pRet->GenReturn ( RET_Value, aUId, pItem->GetText() );
+                                                }
+                                                break;
+                                            case M_GetItemCount :
+                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((SvLBox*)pControl)->GetVisibleCount()) );
+                                                break;
+                                            case M_GetItemText :
                                                 if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,((SvLBox*)pControl)->GetVisibleCount()) )
                                                 {
                                                     SvLBoxEntry *pEntry = (SvLBoxEntry*)((SvTreeListBox*)pControl)->GetEntryAtVisPos( nNr1-1 );
-                                                    ((SvTreeListBox*)pControl)->Select ( pEntry, bBool1 );
+                                                    GetFirstValidTextItem( pEntry );
+                                                    pRet->GenReturn ( RET_Value, aUId, pItem->GetText() );
                                                 }
-                                            }
-                                            break;
-                                        case M_IsChecked :  // EditBrowseBox wird angenommen! (Das kann ja nur schief gehen)
-                                        case M_IsTristate : // EditBrowseBox wird angenommen! (Das kann ja nur schief gehen)
-                                        case M_GetState :
-                                        case M_Check :  // EditBrowseBox wird angenommen! (Das kann ja nur schief gehen)
-                                        case M_UnCheck :    // EditBrowseBox wird angenommen! (Das kann ja nur schief gehen)
-                                        case M_TriState :   // EditBrowseBox wird angenommen! (Das kann ja nur schief gehen)
-                                            {
-                                                SvTreeListBox *pTree = (SvTreeListBox*)pControl;
-                                                SvLBoxEntry *pThisEntry = pTree->GetCurEntry();
-                                                if ( !pThisEntry )
-                                                    ReportError( aUId, GEN_RES_STR2c2( S_NO_SELECTED_ENTRY, MethodString( nMethodId ), "BrowseBox" ) );
+                                                break;
+                                            case M_Select :
+                                                if ( ! (nParams & PARAM_BOOL_1) )
+                                                    bBool1 = TRUE;
+                                                if( nParams & PARAM_STR_1 )
+                                                {
+                / *                                 ListBox *pLB = ((ListBox*)pControl);
+                                                    if ( pLB->GetEntryPos( aString1 ) == LISTBOX_ENTRY_NOTFOUND )
+                                                        ReportError( aUId, GEN_RES_STR2( S_ENTRY_NOT_FOUND, MethodString( nMethodId ), aString1 ) );
+                                                    else
+                                                    {
+                                                        pLB->SelectEntry( aString1, bBool1 );
+                                                        if ( pLB->IsEntrySelected( aString1 ) ? !bBool1 : bBool1 )  // XOR rein mit BOOL
+                                                            ReportError( aUId, GEN_RES_STR2( S_METHOD_FAILED, MethodString( nMethodId ), aString1 ) );
+                                                    }
+                * /                                 ReportError( aUId, GEN_RES_STR1( S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED, MethodString( nMethodId ) ) );
+                                                }
                                                 else
                                                 {
-                                                    SvLBoxButton* pItem = (SvLBoxButton*)(pThisEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
-                                                    if(!pItem)
-                                                        ReportError( aUId, GEN_RES_STR1( S_NO_LIST_BOX_BUTTON, MethodString( nMethodId ) ) );
-                                                    else
-                                                        switch( nMethodId )
-                                                        {
-                                                            case M_IsChecked :  // EditBrowseBox wird angenommen! (Das kann ja nur schief gehen)
-                                                                pRet->GenReturn ( RET_Value, aUId, comm_BOOL( pItem->IsStateChecked() ) );
-                                                                break;
-                                                            case M_IsTristate : // EditBrowseBox wird angenommen! (Das kann ja nur schief gehen)
-                                                                pRet->GenReturn ( RET_Value, aUId, comm_BOOL( pItem->IsStateTristate() ) );
-                                                                break;
-                                                            case M_GetState :
-                                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pItem->GetButtonFlags() & ~SV_STATE_MASK ));
-                                                                break;
-                                                            case M_Check :  // EditBrowseBox wird angenommen! (Das kann ja nur schief gehen)
-                                                                pItem->SetStateChecked();
-                                                                pTree->InvalidateEntry( pThisEntry );
-                                                                break;
-                                                            case M_UnCheck :    // EditBrowseBox wird angenommen! (Das kann ja nur schief gehen)
-                                                                pItem->SetStateUnchecked();
-                                                                pTree->InvalidateEntry( pThisEntry );
-                                                                break;
-                                                            case M_TriState :   // EditBrowseBox wird angenommen! (Das kann ja nur schief gehen)
-                                                                pItem->SetStateTristate();
-                                                                pTree->InvalidateEntry( pThisEntry );
-                                                                break;
-                                                            default:
-                                                                ReportError( aUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
-                                                                break;
-                                                        }
+                                                    if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,((SvLBox*)pControl)->GetVisibleCount()) )
+                                                    {
+                                                        SvLBoxEntry *pEntry = (SvLBoxEntry*)((SvTreeListBox*)pControl)->GetEntryAtVisPos( nNr1-1 );
+                                                        ((SvTreeListBox*)pControl)->Select ( pEntry, bBool1 );
+                                                    }
                                                 }
-                                            }
-                                            break;*/
-                                        default:
-                                            ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "EditBrowseBox" ) );
-                                            break;
+                                                break;*/
+                                            default:
+                                                ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "EditBrowseBox" ) );
+                                                break;
+                                        }
                                     }
                                     break;
                                 case CONST_CTValueSet:
                                     {
-                                        ValueSet *pVS = (ValueSet*)pControl;
+                                        ValueSet *pVS = dynamic_cast< ValueSet* >(pControl);
                                         switch ( nMethodId )
                                         {
                                         case M_GetItemCount:
@@ -5909,10 +6033,45 @@ SvLBoxString* pItem = NULL;\
                                         }
                                     }
                                     break;
-
-
-                                case CONST_CTProgressBar:
-                                    ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "Control" ) );
+                                case CONST_CTORoadmap:
+                                    {
+                                        ORoadmap *pRM = dynamic_cast< ORoadmap* >(pControl);
+                                        switch ( nMethodId )
+                                        {
+                                        case M_GetItemCount:
+                                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pRM->GetItemCount()));
+                                            break;
+                                        case M_GetItemText:
+                                            if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pRM->GetItemCount() ))
+                                                 pRet->GenReturn ( RET_Value, aUId, pRM->GetRoadmapItemLabel( pRM->GetItemID( nNr1-1 ) ) );
+                                            break;
+                                        case M_Select:
+                                            if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pRM->GetItemCount() ))
+                                            {
+                                                if ( pRM->IsRoadmapItemEnabled( pRM->GetItemID( nNr1-1 ) ) )
+                                                     pRM->SelectRoadmapItemByID( pRM->GetItemID( nNr1-1 ) );
+                                                else
+                                                    ReportError( aUId, GEN_RES_STR1c( S_WIN_DISABLED, "RoadmapItem" ) );
+                                            }
+                                            break;
+                                        case M_GetSelIndex :
+                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pRM->GetItemIndex( pRM->GetCurrentRoadmapItemID() ) +1));
+                                            break;
+                                        case M_GetSelText :
+                                                pRet->GenReturn ( RET_Value, aUId, pRM->GetRoadmapItemLabel( pRM->GetCurrentRoadmapItemID() ) );
+                                            break;
+                                        case M_IsItemEnabled :
+                                            if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pRM->GetItemCount() ))
+                                                pRet->GenReturn ( RET_Value, aUId, (comm_BOOL)pRM->IsRoadmapItemEnabled( pRM->GetItemID( nNr1-1 ) ) );
+                                            break;
+                                        default:
+                                            ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "RoadMap" ) );
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                case CONST_CTUnknown:
+                                    ReportError( aUId, GEN_RES_STR2( S_UNKNOWN_TYPE, UniString::CreateFromInt32( nRT ), MethodString(nMethodId) ) );
                                     break;
                                 default:
                                     ReportError( aUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
@@ -5920,6 +6079,7 @@ SvLBoxString* pItem = NULL;\
                             }
                     }
                     break;
+                }
                 case C_Window:
                     switch( nMethodId )
                     {
@@ -5927,25 +6087,6 @@ SvLBoxString* pItem = NULL;\
                             AnimateMouse( pControl, MitteOben);
                             break;
                         default:
-                            switch( nControlType )
-                            {
-                                case CONST_CTProgressBar:
-//                                  switch ( nMethodId )
-//                                  {
-                                        // Erstmal nichts, da sowiso nur Prozente abgefragt werden k"onnten
-//                                      default:
-                                            ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "ProgressBar" ) );
-//                                          break;
-//                                  }
-                                    break;
-                                case CONST_CTBrowseBox:
-                                case CONST_CTValueSet:
-                                    ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "Window" ) );
-                                    break;
-                                default:
-                                    ReportError( aUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
-                                    break;
-                            }
                             ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "Window" ) );
                             break;
                     }
@@ -6064,7 +6205,8 @@ SvLBoxString* pItem = NULL;\
                     }
                     break;
                 case C_ModelessDlg:
-                case C_Dlg:
+                case C_ModalDlg:
+                case C_Dialog:
                 case C_TabDlg:
                     MoreDialog:
                     switch( nMethodId )
