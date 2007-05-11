@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.257 $
+ *  $Revision: 1.258 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:29:49 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 09:13:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4309,6 +4309,10 @@ Window::~Window()
 
     DBG_DTOR( Window, ImplDbgCheckWindow );
     DBG_ASSERT( !mpWindowImpl->mbInDtor, "~Window - already in DTOR!" );
+
+
+    // remove Key and Mouse events issued by Application::PostKey/MouseEvent
+    Application::RemoveMouseAndKeyEvents( this );
 
     // Dispose of the canvas implementation (which, currently, has an
     // own wrapper window as a child to this one.
