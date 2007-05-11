@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:40:15 $
+ *  last change: $Author: kz $ $Date: 2007-05-11 11:32:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -538,36 +538,34 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     abGP.Append( "15" );  // Linux x86-64
 #elif defined LINUX && defined SPARC
     abGP.Append( "16" );  // Linux SPARC
+#elif defined OS2
+    abGP.Append( "17" );
 #else
 #error ("unknown platform. please request an ID for your platform on qa/dev")
 #endif
     GETSET( aGP, "Current", abGP );
+
+// #i68804# Write default Communication section to testtoolrc/.ini
+//  this is not fastest but too keep defaultsettings in one place in the code
+    GetHostConfig();
+    GetTTPortConfig();
+    GetUnoPortConfig();
 }
 
-#define MAKE_TT_KEYWORD( cName, aType, aResultType, nID ) \
-{ \
-    SbxVariableRef pMeth; \
-    pMeth = Make( CUniString(cName), aType, aResultType ); \
-    pMeth->SetUserData( nID ); \
+#define MAKE_TT_KEYWORD( cName, aType, aResultType, nID )                       \
+{                                                                               \
+    SbxVariableRef pMeth;                                                       \
+    pMeth = Make( CUniString(cName), aType, aResultType );                      \
+    pMeth->SetUserData( nID );                                                  \
 }
 
-#define MAKE_REMOTE_COMMAND(aName, aId)                                                                         \
-    {\
-        SbxTransportMethod *pMeth = new SbxTransportMethod( SbxVARIANT );       \
-        pMeth->SetName( aName );                                                                                        \
-        pMeth->SetUserData( ID_RemoteCommand );                                                         \
-        pMeth->nValue = aId.GetNum();                                                                                            \
-        Insert( pMeth );                                                                                                        \
-        StartListening( pMeth->GetBroadcaster(), TRUE );                                        \
-    }
-
-// SetUserData muï¿½ irgendwas sein, sonst wird es im Find rausgefiltert!!!
-#define MAKE_USHORT_CONSTANT(cName, nValue)                                                                         \
-    {\
-        SbxProperty *pVal = new SbxProperty( CUniString( cName) , SbxINTEGER );       \
-        pVal->PutInteger( nValue ) ;                                                                                            \
-        pVal->SetUserData( 32000 );                                                         \
-        Insert( pVal );                                                                                                        \
+// SetUserData muß irgendwas sein, sonst wird es im Find rausgefiltert!!!
+#define MAKE_USHORT_CONSTANT(cName, nValue)                                     \
+    {                                                                           \
+        SbxProperty *pVal = new SbxProperty( CUniString( cName) , SbxINTEGER ); \
+        pVal->PutInteger( nValue ) ;                                            \
+        pVal->SetUserData( 32000 );                                             \
+        Insert( pVal );                                                         \
     }
 
 #define RTLNAME "@SBRTL"    // copied from basic/source/classes/sb.cxx
@@ -606,6 +604,7 @@ void TestToolObj::InitTestToolObj()
 
     pShortNames = new CRevNames;
 
+    pImpl->pHttpRequest = NULL;
 
 // overwrite standard "wait" method, cause we can do better than that!!
 // Insert Object into SbiStdObject but change listening.
@@ -694,13 +693,22 @@ void TestToolObj::InitTestToolObj()
 
     MAKE_TT_KEYWORD( "KillApp", SbxCLASS_METHOD, SbxNULL, ID_KillApp );
 
+    MAKE_TT_KEYWORD( "HTTPSend", SbxCLASS_METHOD, SbxUSHORT, ID_HTTPSend );
+    MAKE_TT_KEYWORD( "HTTPSetProxy", SbxCLASS_METHOD, SbxNULL, ID_HTTPSetProxy );
+
     // Load the Remote Commands from list
     if ( !pRCommands )                 // Ist static, wird also nur einmal geladen
         ReadFlatArray( arR_Cmds, pRCommands );
     USHORT i;
     for ( i = 0 ; i < pRCommands->Count() ; i++ )
-        MAKE_REMOTE_COMMAND( pRCommands->GetObject( i )->pData->Kurzname, pRCommands->GetObject( i )->pData->aUId );
-
+    {
+        SbxTransportMethod *pMeth = new SbxTransportMethod( SbxVARIANT );
+        pMeth->SetName( pRCommands->GetObject( i )->pData->Kurzname );
+        pMeth->SetUserData( ID_RemoteCommand );
+        pMeth->nValue = pRCommands->GetObject( i )->pData->aUId.GetNum();
+        Insert( pMeth );
+        StartListening( pMeth->GetBroadcaster(), TRUE );
+    }
 
 // Konstanten fï¿½r SetControlType
     MAKE_USHORT_CONSTANT("CTBrowseBox",CONST_CTBrowseBox);
@@ -720,6 +728,20 @@ void TestToolObj::InitTestToolObj()
     MAKE_USHORT_CONSTANT("NodeTypeCharacter",CONST_NodeTypeCharacter);
     MAKE_USHORT_CONSTANT("NodeTypeElement",CONST_NodeTypeElement);
     MAKE_USHORT_CONSTANT("NodeTypeComment",CONST_NodeTypeComment);
+
+
+/// ItemTypes for TreeListBox and maybe others
+    MAKE_USHORT_CONSTANT("ItemTypeText",CONST_ItemTypeText);
+    MAKE_USHORT_CONSTANT("ItemTypeBMP",CONST_ItemTypeBMP);
+    MAKE_USHORT_CONSTANT("ItemTypeCheckbox",CONST_ItemTypeCheckbox);
+    MAKE_USHORT_CONSTANT("ItemTypeContextBMP",CONST_ItemTypeContextBMP);
+    MAKE_USHORT_CONSTANT("ItemTypeUnknown",CONST_ItemTypeUnknown);
+
+
+/// Return values for WaitSlot
+    MAKE_USHORT_CONSTANT("WSTimeout",CONST_WSTimeout);
+    MAKE_USHORT_CONSTANT("WSAborted",CONST_WSAborted);
+    MAKE_USHORT_CONSTANT("WSFinished",CONST_WSFinished);
 
 
     pImpl->pControlsObj = new Controls( CUniString("GetNextCloseWindow") );
@@ -827,10 +849,16 @@ TestToolObj::~TestToolObj()
     delete In;
     if ( pImpl->pTTSfxBroadcaster )
         delete pImpl->pTTSfxBroadcaster;
-    delete pShortNames;
+    delete pImpl->pChildEnv;
+
+    pImpl->xErrorList.Clear();
+    pImpl->xWarningList.Clear();
+    pImpl->xQAErrorList.Clear();
+    pImpl->xIncludeFileWarningList.Clear();
+
     delete pImpl;
 
-    delete pImpl->pChildEnv;
+    delete pShortNames;
 }
 
 SfxBroadcaster& TestToolObj::GetTTBroadcaster()
@@ -2511,7 +2539,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             }
                         }
                         else
-                            SetError( SbERR_BAD_ARGUMENT );
+                            SetError( SbERR_BAD_NUMBER_OF_ARGS );
                     }
                     break;
                 case ID_GetErrorCount:
@@ -2585,7 +2613,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             pImpl->pChildEnv->insert( EnvironmentVariable( rPar->Get(1)->GetString(), rPar->Get(2)->GetString() ) );
                         }
                         else
-                            SetError( SbERR_BAD_ARGUMENT );
+                            SetError( SbERR_BAD_NUMBER_OF_ARGS );
                     }
                     break;
                 case ID_GetChildEnv:
@@ -2599,7 +2627,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                                 pVar->PutString( String() );
                         }
                         else
-                            SetError( SbERR_BAD_ARGUMENT );
+                            SetError( SbERR_BAD_NUMBER_OF_ARGS );
                     }
                     break;
                 case ID_GetLinkDestination:
@@ -2633,7 +2661,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             pVar->PutString( aDest );
                         }
                         else
-                            SetError( SbERR_BAD_ARGUMENT );
+                            SetError( SbERR_BAD_NUMBER_OF_ARGS );
                     }
                     break;
                 case ID_GetRegistryValue:
@@ -2647,7 +2675,46 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             pVar->PutString( aValue );
                         }
                         else
-                            SetError( SbERR_BAD_ARGUMENT );
+                            SetError( SbERR_BAD_NUMBER_OF_ARGS );
+                    }
+                    break;
+                case ID_HTTPSend:
+                    {
+                        if( rPar && ( rPar->Count() == 4 || rPar->Count() == 5 ) )
+                        {
+                            if ( !pImpl->pHttpRequest )
+                                pImpl->pHttpRequest = new HttpRequest;
+                            pImpl->pHttpRequest->SetRequest( ByteString( rPar->Get(1)->GetString(), RTL_TEXTENCODING_ASCII_US ), ByteString( rPar->Get(2)->GetString(), RTL_TEXTENCODING_ASCII_US ), rPar->Get(3)->GetUShort() );
+
+                            if ( pImpl->pHttpRequest->Execute() )
+                            {
+                                if ( rPar->Count() == 5 )
+                                {   // filename is given
+                                    SvFileStream aDestination( rPar->Get(4)->GetString(), STREAM_STD_READWRITE | STREAM_TRUNC );
+                                    (*(pImpl->pHttpRequest->GetBody())) >> aDestination;
+                                    if ( aDestination.GetError() != ERRCODE_NONE )
+                                        SetError( SbERR_ACCESS_ERROR );
+                                    aDestination.Close();
+                                }
+                                pVar->PutUShort( pImpl->pHttpRequest->GetResultId() );
+                            }
+                            else
+                                SetError( SbERR_ACCESS_ERROR );
+                        }
+                        else
+                            SetError( SbERR_BAD_NUMBER_OF_ARGS  );
+                    }
+                    break;
+                case ID_HTTPSetProxy:
+                    {
+                        if( rPar && rPar->Count() == 3 )
+                        {
+                            if ( !pImpl->pHttpRequest )
+                                pImpl->pHttpRequest = new HttpRequest;
+                            pImpl->pHttpRequest->SetProxy( ByteString( rPar->Get(1)->GetString(), RTL_TEXTENCODING_ASCII_US ), rPar->Get(2)->GetUShort() );
+                        }
+                        else
+                            SetError( SbERR_BAD_NUMBER_OF_ARGS );
                     }
                     break;
             }  //  switch( nHintUserData )
@@ -2871,7 +2938,7 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.31 $
+    // search $Revision: 1.32 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
@@ -2982,11 +3049,9 @@ xub_StrLen TestToolObj::PreCompilePart( String &aSource, xub_StrLen nStart, xub_
     String aEndcatchLabel( ENDCATCH_LABEL);
     aEndcatchLabel += aStr;
 
-    while ( !WasPrecompilerError() )
+    xub_StrLen nTry2 = 0;
+    while ( !WasPrecompilerError() && (nTry2 = ImplSearch( aSource, nStart, nEnd, CUniString("try"), nTry+1 )) != STRING_NOTFOUND )
     {   // Wir rekursieren erstmal mit dem 2. Try
-        xub_StrLen nTry2 = ImplSearch( aSource, nStart, nEnd, CUniString("try"), nTry+1 );
-        if ( nTry2 == STRING_NOTFOUND )
-            break;
         if ( nTry2 < nCatch )
             nEnd += PreCompilePart( aSource, nTry2, nEndcatch+8, aCatchLabel, nLabelCount ) - nEndcatch-8;
         else
