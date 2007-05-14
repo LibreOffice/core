@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinf.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 08:38:51 $
+ *  last change: $Author: kz $ $Date: 2007-05-14 14:46:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -316,7 +316,6 @@ public:
 //#if 0 // _SOLAR__PRIVATE
     TDynamicProps&  GetDynamicProps_Impl();
     const TDynamicProps&  GetDynamicProps_Impl() const;
-    BOOL SetCustomProperty(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue);
 //#endif
 };
 
