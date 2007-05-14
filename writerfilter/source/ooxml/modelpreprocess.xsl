@@ -5,9 +5,9 @@
  *
  *  $RCSfile: modelpreprocess.xsl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-05 16:14:08 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-05-14 15:54:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,20 +68,40 @@
     xmlns:UML = 'org.omg.xmi.namespace.UML' xml:space="default">
   <xsl:output method="xml" />
 
+  <!--<xsl:include href="resourcestools.xsl"/>-->
+
+  <xsl:key name="namespace-aliases" match="//namespace-alias" use="@name"/>
+
   <xsl:template match="/">
     <xsl:apply-templates/>
   </xsl:template>
 
   <xsl:template name="prefixfromurl">
     <xsl:param name="url"/>
-    <xsl:value-of select="translate(substring-after($url, 'http://'), '/.', '__')"/>
+    <xsl:variable name="prefix" select="key('namespace-aliases', $url)/@alias"/>
+    <xsl:choose>
+      <xsl:when test="string-length($prefix) > 0">
+        <xsl:value-of select="$prefix"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="translate(substring-after($url, 'http://'), '/.', '__')"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="prefixforgrammar">
     <xsl:variable name="ns" select="ancestor::rng:grammar/@ns"/>
-    <xsl:call-template name="prefixfromurl">
-      <xsl:with-param name="url" select="$ns"/>
-    </xsl:call-template>
+    <xsl:variable name="prefix" select="key('namespace-aliases', $ns)/@alias"/>
+    <xsl:choose>
+      <xsl:when test="string-length($prefix) > 0">
+        <xsl:value-of select="$prefix"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="prefixfromurl">
+          <xsl:with-param name="url" select="$ns"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="nsforgrammar">

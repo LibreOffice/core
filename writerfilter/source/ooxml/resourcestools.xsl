@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-10 14:37:40 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-05-14 15:54:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,8 @@
 
   <xsl:key name="defines-with-application"
            match="rng:define" use="ancestor::rng:grammar/@application"/>
+
+  <xsl:key name="namespace-aliases" match="//namespace-alias" use="@name"/>
 
   <xsl:template name="namespace">
     <xsl:value-of select="ancestor::rng:grammar/@ns"/>
@@ -284,7 +286,16 @@
 
   <xsl:template name="prefixforgrammar">
     <xsl:variable name="ns" select="ancestor::rng:grammar/@ns"/>
-    <xsl:value-of select="translate(substring-after($ns, 'http://'), '/.', '__')"/>
+    <xsl:variable name="nsalias"><xsl:value-of select="key('namespace-aliases', $ns)/@alias"/></xsl:variable>
+    <!--<xsl:variable name="nsalias">test</xsl:variable>-->
+    <xsl:choose>
+      <xsl:when test="string-length($nsalias) > 0">
+        <xsl:value-of select="$nsalias"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="translate(substring-after($ns, 'http://'), '/.', '__')"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="*" mode="grammar-prefix">
