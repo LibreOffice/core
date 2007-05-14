@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helper_purpenv_Mapping.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:37:17 $
+ *  last change: $Author: kz $ $Date: 2007-05-14 09:32:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cppu.hxx"
 
 #include "cppu/helper/purpenv/Mapping.hxx"
 
