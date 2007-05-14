@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model xmlns:rng="http://relaxng.org/ns/structure/1.0">
+  <namespace-alias alias="drawingml" name="http://schemas.openxmlformats.org/drawingml/2006/main"/>
+  <namespace-alias alias="wordprocessingDrawing" name="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"/>
+  <namespace-alias alias="schemaLibrary" name="http://schemas.openxmlformats.org/schemaLibrary/2006/main"/>
+  <namespace-alias alias="math" name="http://schemas.openxmlformats.org/officeDocument/2006/math"/>
+  <namespace-alias alias="picture" name="http://schemas.openxmlformats.org/drawingml/2006/picture"/>
+  <namespace-alias alias="wordprocessingml" name="http://schemas.openxmlformats.org/wordprocessingml/2006/main"/>
   <namespace name="a" url="http://schemas.openxmlformats.org/drawingml/2006/main">
     <start name="blip"/>
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
@@ -15273,10 +15279,4 @@
     <resource name="CT_Document" resource="Stream"/>
     <resource name="document" resource="Stream"/>
   </namespace>
-  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/main" alias="drawingml"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" alias="wordprocessingDrawing"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/schemaLibrary/2006/main" alias="schemaLibrary"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/math" alias="math"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/picture" alias="picture"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/wordprocessingml/2006/main" alias="wordprocessingml"/>
 </model>

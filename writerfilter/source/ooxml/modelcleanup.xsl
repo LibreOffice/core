@@ -5,9 +5,9 @@
  *
  *  $RCSfile: modelcleanup.xsl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-20 14:57:02 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-14 20:14:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,9 +78,14 @@
       </xsl:for-each>
     </xsl:element>
   </xsl:template>
+  
+  <xsl:template match="namespace-alias">
+    <namespace-alias name="{@name}" alias="{@alias}" />
+  </xsl:template>
 
   <xsl:template match="/">
     <model>
+      <xsl:apply-templates select=".//namespace-alias"/>
       <xsl:apply-templates select=".//namespace"/>
     </model>
   </xsl:template>
