@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-11 14:52:44 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-14 19:45:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,11 +116,15 @@ struct StyleSheetTable_Impl
 {
     DomainMapper&                           m_rDMapper;
     std::vector< StyleSheetEntry >          m_aStyleSheetEntries;
-    StyleSheetEntry*                        m_pCurrentEntry;
+    StyleSheetEntry                         *m_pCurrentEntry;
+    PropertyMapPtr                          m_pDefaultParaProps, m_pDefaultCharProps;
+    PropertyMapPtr                          m_pCurrentProps;
     StringPairMap_t                         m_aStyleNameMap;
     StyleSheetTable_Impl(DomainMapper& rDMapper) :
             m_rDMapper( rDMapper ),
-            m_pCurrentEntry(0){}
+            m_pCurrentEntry(0),
+            m_pDefaultParaProps(new PropertyMap),
+            m_pDefaultCharProps(new PropertyMap) {};
 };
 /*-- 19.06.2006 12:04:32---------------------------------------------------
 
@@ -586,6 +590,14 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
 //        case NS_rtf::LN_LFOTABLE: break;
 //        case NS_rtf::LN_StyleSheetTable: break;
 //        case NS_rtf::LN_STYLESHEET: break;
+        break;
+        case NS_ooxml::LN_CT_Style_type:
+            if (nIntValue == 1)
+                *(m_pImpl->m_pCurrentEntry->pProperties) = *(m_pImpl->m_pDefaultParaProps);
+            else if (nIntValue == 2)
+                *(m_pImpl->m_pCurrentEntry->pProperties) = *(m_pImpl->m_pDefaultCharProps);
+            m_pImpl->m_pCurrentEntry->nStyleTypeCode = (StyleType)nIntValue;
+        break;
         default:
         {
             //----> debug
@@ -600,11 +612,30 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
   -----------------------------------------------------------------------*/
 void StyleSheetTable::sprm(doctok::Sprm & sprm_)
 {
-    if(!m_pImpl->m_pCurrentEntry)
-        return;
+    sal_uInt32 nId = sprm_.getId();
+    doctok::Value::Pointer_t pValue = sprm_.getValue();
+    sal_Int32 nIntValue = pValue.get() ? pValue->getInt() : 0;
+    rtl::OUString sStringValue = pValue.get() ? pValue->getString() : rtl::OUString();
+    printf ( "StyleSheetTable::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
+
+    switch(nId)
+    {
+    case NS_ooxml::LN_CT_DocDefaults_pPrDefault:
+        m_pImpl->m_pCurrentProps = m_pImpl->m_pDefaultParaProps;
+        break;
+    case NS_ooxml::LN_CT_DocDefaults_rPrDefault:
+        m_pImpl->m_pCurrentProps = m_pImpl->m_pDefaultCharProps;
+        break;
+    default:
+        m_pImpl->m_pCurrentProps = m_pImpl->m_pCurrentEntry->pProperties;
+        break;
+    }
+
+//    if(!m_pImpl->m_pCurrentEntry)
+//      return;
 
     //fill the attributes of the style sheet
-    m_pImpl->m_rDMapper.sprm( sprm_, m_pImpl->m_pCurrentEntry->pProperties );
+    m_pImpl->m_rDMapper.sprm( sprm_, m_pImpl->m_pCurrentProps );
 }
 /*-- 19.06.2006 12:04:33---------------------------------------------------
 
@@ -613,7 +644,7 @@ void StyleSheetTable::entry(int /*pos*/, doctok::Reference<Properties>::Pointer_
 {
     //create a new font entry
     OSL_ENSURE( !m_pImpl->m_pCurrentEntry, "current entry has to be NULL here");
-    m_pImpl->m_pCurrentEntry = new StyleSheetEntry ;
+    m_pImpl->m_pCurrentEntry = new StyleSheetEntry;
     ref->resolve(*this);
     //append it to the table
     m_pImpl->m_aStyleSheetEntries.push_back( *m_pImpl->m_pCurrentEntry );
@@ -692,7 +723,7 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
             std::vector< StyleSheetEntry >::iterator aIt = m_pImpl->m_aStyleSheetEntries.begin();
             while( aIt != m_pImpl->m_aStyleSheetEntries.end() )
             {
-                bool bParaStyle = aIt->nPropertyCalls > 1;
+                bool bParaStyle = aIt->nStyleTypeCode == STYLE_TYPE_PARA;  // why not to use this one instead of the nPropertyCalls?????
                 bool bInsert = false;
                 uno::Reference< container::XNameContainer > xStyles = bParaStyle ? xParaStyles : xCharStyles;
                 uno::Reference< style::XStyle > xStyle;
@@ -719,7 +750,7 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
                             break;
                         }
                 }
-                else if( aIt->nStyleTypeCode == STYLE_TYPE_PARA )
+                else if( bParaStyle )
                 {
                     //now it's time to set the default parameters - for paragraph styles
                     //Fonts: Western first entry in font table
@@ -806,25 +837,6 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
                 }
                 if(bInsert)
                     xStyles->insertByName( sConvertedStyleName, uno::makeAny( xStyle) );
-
-
-/*
-struct StyleSheetEntry
-{
-    sal_Int16       nStyleIdentifier;
-    bool            bInvalidHeight;
-    bool            bHasUPE; //universal property expansion
-    sal_uInt8       nStyleTypeCode; //sgc
-    sal_Int16       nBaseStyleIdentifier;
-    sal_Int16       nNextStyleIdentifier;
-    ::rtl::OUString sStyleName;
-    ::rtl::OUString sStyleName1;
-    PropertyMapPtr  pProperties;
-    sal_Int16       nPropertyCalls; //determines paragraph (2)/character style(1)
-    StyleSheetEntry();
-};
-
- */
                 ++aIt;
             }
         }
