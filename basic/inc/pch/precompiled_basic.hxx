@@ -4,9 +4,9 @@
  *
  *  $RCSfile: precompiled_basic.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:17:47 $
+ *  last change: $Author: kz $ $Date: 2007-05-14 15:13:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,7 +195,6 @@
 #include "svtools/svmedit.hxx"
 #include "svtools/svstdarr.hxx"
 #include "svtools/svtdata.hxx"
-#include "svtools/svtmsg.hrc"
 #include "svtools/svtools.hrc"
 #include "svtools/svtreebx.hxx"
 #include "svtools/syslocale.hxx"
@@ -204,7 +203,6 @@
 #include "svtools/texteng.hxx"
 #include "svtools/textview.hxx"
 #include "svtools/transfer.hxx"
-#include "svtools/ttglobal.hrc"
 #include "svtools/txtattr.hxx"
 #include "svtools/undo.hxx"
 #include "svtools/zforlist.hxx"
