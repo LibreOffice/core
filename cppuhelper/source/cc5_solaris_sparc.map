@@ -342,6 +342,6 @@ UDK_3.3 { # OOo 2.0.4
 
 UDK_3.4 { # OOo 2.3
     global:
-        __1cEcppuSOPropertySetHelperIgetTypes6kM_nDcomDsunEstarDunoISequence4n0FEType____;
+        __1cEcppuSOPropertySetHelperIgetTypes6M_nDcomDsunEstarDunoISequence4n0FEType____;
 } UDK_3.3;
 

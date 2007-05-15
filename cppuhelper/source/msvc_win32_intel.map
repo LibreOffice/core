@@ -260,5 +260,5 @@ UDK_3.2 {
 
 UDK_3.3 {
     global:
-        ?getTypes@OPropertySetHelper@cppu@@QBE?AV?$Sequence@VType@uno@star@sun@com@@@uno@star@sun@com@@XZ;
+        ?getTypes@OPropertySetHelper@cppu@@QAE?AV?$Sequence@VType@uno@star@sun@com@@@uno@star@sun@com@@XZ;
 } UDK_3.2;

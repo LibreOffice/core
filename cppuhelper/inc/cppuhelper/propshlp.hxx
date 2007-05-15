@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propshlp.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:45:04 $
+ *  last change: $Author: kz $ $Date: 2007-05-15 12:18:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -372,7 +372,7 @@ public:
 
     /** eases implementing XTypeProvider::getTypes, returns the types of XMultiPropertySet, XFastPropertySet, XPropertySet
      */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > getTypes() const
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > getTypes()
         throw(::com::sun::star::uno::RuntimeException);
 
     /**

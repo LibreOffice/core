@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propshlp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:46:03 $
+ *  last change: $Author: kz $ $Date: 2007-05-15 12:18:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,7 +193,7 @@ Any OPropertySetHelper::queryInterface( const ::com::sun::star::uno::Type & rTyp
 /**
  * called from the derivee's XTypeProvider::getTypes implementation
  */
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > OPropertySetHelper::getTypes() const
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > OPropertySetHelper::getTypes()
     throw (RuntimeException)
 {
     Sequence< ::com::sun::star::uno::Type > aTypes( 3 );
