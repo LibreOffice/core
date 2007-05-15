@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-14 19:45:16 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-15 08:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,6 @@ StyleSheetEntry::StyleSheetEntry() :
         ,nBaseStyleIdentifier(0xfff)
         ,nNextStyleIdentifier(-1)
         ,pProperties(new PropertyMap)
-        ,nPropertyCalls(0)
         {
         }
 
@@ -569,12 +568,11 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
         break;
 //        case NS_rtf::LN_UPXSTART: break;
         case NS_rtf::LN_UPX:
-        {
-            doctok::Reference<Properties>::Pointer_t pProperties;
-            ++m_pImpl->m_pCurrentEntry->nPropertyCalls;
-            if((pProperties = val.getProperties()).get())
-                pProperties->resolve(*this);
-        }
+            {
+                doctok::Reference<Properties>::Pointer_t pProperties;
+                if((pProperties = val.getProperties()).get())
+                    pProperties->resolve(*this);
+            }
         break;
 //        case NS_rtf::LN_sed: break;
 //        case NS_rtf::LN_picf: break;
@@ -723,7 +721,7 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
             std::vector< StyleSheetEntry >::iterator aIt = m_pImpl->m_aStyleSheetEntries.begin();
             while( aIt != m_pImpl->m_aStyleSheetEntries.end() )
             {
-                bool bParaStyle = aIt->nStyleTypeCode == STYLE_TYPE_PARA;  // why not to use this one instead of the nPropertyCalls?????
+                bool bParaStyle = aIt->nStyleTypeCode == STYLE_TYPE_PARA;
                 bool bInsert = false;
                 uno::Reference< container::XNameContainer > xStyles = bParaStyle ? xParaStyles : xCharStyles;
                 uno::Reference< style::XStyle > xStyle;

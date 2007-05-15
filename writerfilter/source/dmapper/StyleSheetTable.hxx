@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-14 19:45:16 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-15 08:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,8 +78,6 @@ struct StyleSheetEntry
     ::rtl::OUString sStyleName;
     ::rtl::OUString sStyleName1;
     PropertyMapPtr  pProperties;
-    sal_Int16       nPropertyCalls; //determines paragraph (2)/character style(1)
-    // DO WE REALLY REALLY  NEED THIS ONE????
     StyleSheetEntry();
 };
 class DomainMapper;
