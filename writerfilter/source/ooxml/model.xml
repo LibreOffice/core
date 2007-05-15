@@ -4188,7 +4188,7 @@
       </define>
       <define name="CT_String">
         <attribute name="val">
-          <text/>
+          <ref name="ST_String"/>
           <xs:documentation>value</xs:documentation>
         </attribute>
       </define>
@@ -14081,7 +14081,7 @@
     <resource name="ST_EighthPointMeasure" resource="Integer"/>
     <resource name="ST_PointMeasure" resource="Integer"/>
     <resource name="ST_String" resource="String"/>
-    <resource name="CT_String" resource="StringValue" generated="yes"/>
+    <resource name="CT_String" resource="StringValue"/>
     <resource name="ST_TextScale" resource="Integer"/>
     <resource name="CT_TextScale" resource="IntegerValue"/>
     <resource name="ST_HighlightColor" resource="List">

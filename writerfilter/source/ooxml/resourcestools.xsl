@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-05-14 15:54:28 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-15 14:29:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -816,7 +816,7 @@ doctok::Id
    <xsl:template name="contextattributeimplstring">
     <xsl:call-template name="caselabelattribute"/>
     <xsl:text>
-        mpValue = OOXMLValue::Pointer_t(new OOXMLStringValue(rValue));
+        msValue = OOXMLStringValue(rValue).getString();
         break;</xsl:text>
   </xsl:template>
 
