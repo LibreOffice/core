@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawController.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:44:15 $
+ *  last change: $Author: kz $ $Date: 2007-05-15 12:14:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ typedef ::cppu::ImplInheritanceHelper7 <
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::drawing::XDrawView,
     ::com::sun::star::view::XSelectionChangeListener,
-    ::com::sun::star::view::XFormLayerAccess
+    ::com::sun::star::view::XFormLayerAccess,
     ::com::sun::star::drawing::framework::XControllerManager,
     ::com::sun::star::lang::XUnoTunnel
     > DrawControllerInterfaceBase;

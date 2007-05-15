@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawController.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:44:40 $
+ *  last change: $Author: kz $ $Date: 2007-05-15 12:14:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1059,9 +1059,9 @@ uno::Reference< form::XFormController > SAL_CALL DrawController::getFormControll
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    FmFormShell* pFormShell = mrBase.GetFormShellManager().GetFormShell();
-    SdrView* pSdrView = mrBase.GetDrawView();
-    ViewShell* pViewShell = mrBase.GetMainViewShell();
+    FmFormShell* pFormShell = mpBase->GetFormShellManager().GetFormShell();
+    SdrView* pSdrView = mpBase->GetDrawView();
+    ::boost::shared_ptr<ViewShell> pViewShell = mpBase->GetMainViewShell();
     ::sd::Window* pWindow = pViewShell ? pViewShell->GetActiveWindow() : NULL;
 
     uno::Reference< form::XFormController > xController( NULL );
@@ -1076,7 +1076,7 @@ uno::Reference< form::XFormController > SAL_CALL DrawController::getFormControll
 
     sal_Bool bIsDesignMode = sal_True;
 
-    FmFormShell* pFormShell = mrBase.GetFormShellManager().GetFormShell();
+    FmFormShell* pFormShell = mpBase->GetFormShellManager().GetFormShell();
     if ( pFormShell )
         bIsDesignMode = pFormShell->IsDesignMode();
 
@@ -1087,7 +1087,7 @@ void SAL_CALL DrawController::setFormDesignMode( ::sal_Bool _DesignMode ) throw 
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    FmFormShell* pFormShell = mrBase.GetFormShellManager().GetFormShell();
+    FmFormShell* pFormShell = mpBase->GetFormShellManager().GetFormShell();
     if ( pFormShell )
         pFormShell->SetDesignMode( _DesignMode );
 }
@@ -1096,9 +1096,9 @@ uno::Reference< awt::XControl > SAL_CALL DrawController::getControl( const uno::
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    FmFormShell* pFormShell = mrBase.GetFormShellManager().GetFormShell();
-    SdrView* pSdrView = mrBase.GetDrawView();
-    ViewShell* pViewShell = mrBase.GetMainViewShell();
+    FmFormShell* pFormShell = mpBase->GetFormShellManager().GetFormShell();
+    SdrView* pSdrView = mpBase->GetDrawView();
+    ::boost::shared_ptr<ViewShell> pViewShell = mpBase->GetMainViewShell();
     ::sd::Window* pWindow = pViewShell ? pViewShell->GetActiveWindow() : NULL;
 
     uno::Reference< awt::XControl > xControl( NULL );
