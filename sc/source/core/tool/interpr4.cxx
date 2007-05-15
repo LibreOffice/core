@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:43:06 $
+ *  last change: $Author: kz $ $Date: 2007-05-15 12:53:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3574,10 +3574,10 @@ StackVar ScInterpreter::Interpret()
             // Not all functions pop all parameters in case an error is
             // generated. Clean up stack. Assumes that every function pushes a
             // result, may be arbitrary in case of error.
-            const ScToken* pResult = pStack[ sp - 1 ];
+            const ScToken* pLocalResult = pStack[ sp - 1 ];
             while (sp > nStackBase)
                 Pop();
-            PushTempToken( *pResult );
+            PushTempToken( *pLocalResult );
         }
 
         bool bGotResult;
