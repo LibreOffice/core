@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-15 08:57:53 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-15 11:23:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -568,11 +568,7 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
         break;
 //        case NS_rtf::LN_UPXSTART: break;
         case NS_rtf::LN_UPX:
-            {
-                doctok::Reference<Properties>::Pointer_t pProperties;
-                if((pProperties = val.getProperties()).get())
-                    pProperties->resolve(*this);
-            }
+            resolveAttributeProperties(val);
         break;
 //        case NS_rtf::LN_sed: break;
 //        case NS_rtf::LN_picf: break;
@@ -619,13 +615,21 @@ void StyleSheetTable::sprm(doctok::Sprm & sprm_)
     switch(nId)
     {
     case NS_ooxml::LN_CT_DocDefaults_pPrDefault:
-        m_pImpl->m_pCurrentProps = m_pImpl->m_pDefaultParaProps;
-        break;
     case NS_ooxml::LN_CT_DocDefaults_rPrDefault:
-        m_pImpl->m_pCurrentProps = m_pImpl->m_pDefaultCharProps;
+        resolveSprmProps(sprm_);
         break;
+    case NS_ooxml::LN_CT_PPrDefault_pPr:
+        m_pImpl->m_rDMapper.sprm( sprm_, m_pImpl->m_pDefaultParaProps );
+        break;
+    case NS_ooxml::LN_CT_RPrDefault_rPr:
+        m_pImpl->m_rDMapper.sprm( sprm_, m_pImpl->m_pDefaultCharProps );
+        break;
+    case NS_ooxml::LN_CT_Style_pPr:
+    case NS_ooxml::LN_CT_Style_rPr:
     default:
-        m_pImpl->m_pCurrentProps = m_pImpl->m_pCurrentEntry->pProperties;
+        if (!m_pImpl->m_pCurrentEntry)
+            break;
+        m_pImpl->m_rDMapper.sprm( sprm_, m_pImpl->m_pCurrentEntry->pProperties );
         break;
     }
 
@@ -633,7 +637,7 @@ void StyleSheetTable::sprm(doctok::Sprm & sprm_)
 //      return;
 
     //fill the attributes of the style sheet
-    m_pImpl->m_rDMapper.sprm( sprm_, m_pImpl->m_pCurrentProps );
+//    m_pImpl->m_rDMapper.sprm( sprm_, m_pImpl->m_pCurrentProps );
 }
 /*-- 19.06.2006 12:04:33---------------------------------------------------
 
@@ -994,6 +998,20 @@ const StyleSheetEntry* StyleSheetTable::FindParentStyleSheet(sal_Int32 nBaseStyl
     if(aIt != m_pImpl->m_aStyleNameMap.end() && aIt->second.getLength())
         sRet = aIt->second;
     return sRet;
+}
+
+void StyleSheetTable::resolveSprmProps(doctok::Sprm & sprm_)
+{
+    doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
+    if( pProperties.get())
+        pProperties->resolve(*this);
+}
+
+void StyleSheetTable::resolveAttributeProperties(doctok::Value & val)
+{
+    doctok::Reference<Properties>::Pointer_t pProperties = val.getProperties();
+    if( pProperties.get())
+        pProperties->resolve(*this);
 }
 
 }//namespace dmapper
