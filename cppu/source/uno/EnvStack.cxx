@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnvStack.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:38:18 $
+ *  last change: $Author: kz $ $Date: 2007-05-16 15:21:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,16 +228,16 @@ static int s_getNextEnv(uno_Environment ** ppEnv, uno_Environment * pCurrEnv, un
 extern "C" { static void s_pull(va_list param)
 {
     uno_EnvCallee * pCallee = va_arg(param, uno_EnvCallee *);
-    va_list         xparam  = va_arg(param, va_list);
+       va_list       * xparam  = va_arg(param, va_list *);
 
-    pCallee(xparam);
+       pCallee(*xparam);
 }}
 
 static void s_callInto_v(uno_Environment * pEnv, uno_EnvCallee * pCallee, va_list param)
 {
     cppu::Enterable * pEnterable = reinterpret_cast<cppu::Enterable *>(pEnv->pReserved);
     if (pEnterable)
-        pEnterable->callInto(s_pull, pCallee, param);
+               pEnterable->callInto(s_pull, pCallee, &param);
 
     else
         pCallee(param);
@@ -278,9 +278,9 @@ extern "C" { static void s_environment_invoke_vv(va_list param)
     uno_Environment * pCurrEnv    = va_arg(param, uno_Environment *);
     uno_Environment * pTargetEnv  = va_arg(param, uno_Environment *);
     uno_EnvCallee   * pCallee = va_arg(param, uno_EnvCallee *);
-    va_list           xparam  = va_arg(param, va_list);
+       va_list         *  xparam  = va_arg(param, va_list *);
 
-    s_environment_invoke_v(pCurrEnv, pTargetEnv, pCallee, xparam);
+       s_environment_invoke_v(pCurrEnv, pTargetEnv, pCallee, *xparam);
 }}
 
 static void s_environment_invoke_v(uno_Environment * pCurrEnv, uno_Environment * pTargetEnv, uno_EnvCallee * pCallee, va_list param)
@@ -290,7 +290,7 @@ static void s_environment_invoke_v(uno_Environment * pCurrEnv, uno_Environment *
     {
     case -1:
         s_setCurrent(pNextEnv);
-        s_callOut(pCurrEnv, s_environment_invoke_vv, pNextEnv, pTargetEnv, pCallee, param);
+               s_callOut(pCurrEnv, s_environment_invoke_vv, pNextEnv, pTargetEnv, pCallee, &param);
         s_setCurrent(pCurrEnv);
         break;
 
@@ -304,7 +304,7 @@ static void s_environment_invoke_v(uno_Environment * pCurrEnv, uno_Environment *
 
     case 1:
         s_setCurrent(pNextEnv);
-        s_callInto(pNextEnv, s_environment_invoke_vv, pNextEnv, pTargetEnv, pCallee, param);
+               s_callInto(pNextEnv, s_environment_invoke_vv, pNextEnv, pTargetEnv, pCallee, &param);
         s_setCurrent(pCurrEnv);
         break;
     }
