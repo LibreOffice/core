@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-15 08:57:53 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-16 14:35:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3154,6 +3154,8 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case NS_ooxml::LN_CT_PPrDefault_pPr:
     case NS_ooxml::LN_CT_DocDefaults_pPrDefault:
     case NS_ooxml::LN_CT_DocDefaults_rPrDefault:
+    case NS_ooxml::LN_CT_Style_pPr:
+    case NS_ooxml::LN_CT_Style_rPr:
 //    case NS_ooxml::LN_CT_PPr_rPr:
         resolveSprmProps(sprm_);
         break;

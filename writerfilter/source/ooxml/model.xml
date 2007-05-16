@@ -13155,25 +13155,25 @@
         </group>
         <optional>
           <attribute name="type">
-            <text/>
+            <ref name="ST_StyleType"/>
             <xs:documentation>Style Type</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="styleId">
-            <text/>
+            <ref name="ST_String"/>
             <xs:documentation>Style ID</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="default">
-            <text/>
+            <ref name="ST_OnOff"/>
             <xs:documentation>Default Style</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="customStyle">
-            <text/>
+            <ref name="ST_OnOff"/>
             <xs:documentation>User-Defined Style</xs:documentation>
           </attribute>
         </optional>
@@ -15172,13 +15172,19 @@
       <sprm name="num" tokenid="ooxml:CT_Numbering_num"/>
       <sprm name="numIdMacAtCleanup" tokenid="ooxml:CT_Numbering_numIdMacAtCleanup"/>
     </resource>
+    <resource name="ST_StyleType" resource="List">
+      <value tokenid="1">paragraph</value>
+      <value tokenid="2">character</value>
+      <value tokenid="3">table</value>
+      <value tokenid="4">numbering</value>
+    </resource>
     <resource name="CT_Style" resource="Properties">
       <sprm name="name" tokenid="ooxml:CT_Style_name"/>
       <sprm name="aliases" tokenid="ooxml:CT_Style_aliases"/>
       <sprm name="basedOn" tokenid="ooxml:CT_Style_basedOn"/>
       <sprm name="next" tokenid="ooxml:CT_Style_next"/>
       <sprm name="link" tokenid="ooxml:CT_Style_link"/>
-      <sprm name="autoRedefine" tokenid="ooxml:CT_Style_"/>
+      <sprm name="autoRedefine" tokenid="ooxml:CT_Style_autoRedefine"/>
       <sprm name="hidden" tokenid="ooxml:CT_Style_hidden"/>
       <sprm name="uiPriority" tokenid="ooxml:CT_Style_uiPriority"/>
       <sprm name="semiHidden" tokenid="ooxml:CT_Style_semiHidden"/>

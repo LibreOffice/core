@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-29 15:44:44 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-16 14:35:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@
 #include <rtl/string.h>
 
 
-#include <hash_map>
+#include <map>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -321,23 +321,7 @@ struct FieldConversion
     FieldId             eFieldId;
 };
 
-struct FieldConversionHash
-{
-    unsigned long operator()(const OUString& rKey) const
-    {
-        return static_cast<unsigned long>(rKey.hashCode());
-    }
-};
-
-struct FieldConversionEq
-{
-    bool operator() (const OUString& rA, const OUString& rB) const
-    {
-        return rA == rB;
-    }
-};
-
-typedef ::std::hash_map< ::rtl::OUString, FieldConversion, FieldConversionHash, FieldConversionEq>
+typedef ::std::map< ::rtl::OUString, FieldConversion>
             FieldConversionMap_t;
 
 /*-- 18.07.2006 08:56:55---------------------------------------------------

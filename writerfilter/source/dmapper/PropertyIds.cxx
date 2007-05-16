@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-10 13:10:30 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-16 14:35:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,30 +36,12 @@
 #include <PropertyIds.hxx>
 #endif
 #include <rtl/ustring.hxx>
-#include <hash_map>
+#include <map>
 
 namespace dmapper{
 
-struct PropertyIdHash
-{
-    unsigned long operator()(const PropertyIds& eId) const
-    {
-        return static_cast<unsigned long>(eId);
-    }
-};
+typedef ::std::map< PropertyIds, ::rtl::OUString> PropertyNameMap_t;
 
-struct PropertyIdEq
-{
-    bool operator() (const PropertyIds& rA, const PropertyIds& rB) const
-    {
-        return rA == rB;
-    }
-};
-
-typedef ::std::hash_map< PropertyIds, ::rtl::OUString, PropertyIdHash, PropertyIdEq> PropertyNameMap_t;
-
-
-//typedef std::map< PropertyIds, ::rtl::OUString > PropertyNameMap_t;
 struct PropertyNameSupplier_Impl
 {
     PropertyNameMap_t aNameMap;

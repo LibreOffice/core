@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-15 11:23:34 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-16 14:35:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-#include <hash_map>
+#include <map>
 #include <stdio.h>
 #include <rtl/ustrbuf.hxx>
 
@@ -76,22 +76,7 @@ namespace dmapper
 {
 using namespace writerfilter;
 
-struct OUStringHash
-{
-    unsigned long operator()(const ::rtl::OUString& rString) const
-    {
-        return static_cast<unsigned long>(rString.hashCode());
-    }
-};
-
-struct OUStringEq
-{
-    bool operator() (const ::rtl::OUString& rA, const ::rtl::OUString& rB) const
-    {
-        return rA == rB;
-    }
-};
-typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, OUStringHash, OUStringEq> StringPairMap_t;
+typedef ::std::map< ::rtl::OUString, ::rtl::OUString> StringPairMap_t;
 
 /*-- 21.06.2006 07:34:44---------------------------------------------------
 
@@ -614,6 +599,35 @@ void StyleSheetTable::sprm(doctok::Sprm & sprm_)
 
     switch(nId)
     {
+    case NS_ooxml::LN_CT_Style_name:
+        m_pImpl->m_pCurrentEntry->sStyleName == sStringValue;
+        if (m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_PARA)
+            m_pImpl->m_pCurrentEntry->pProperties->Insert(PROP_PARA_STYLE_NAME, uno::makeAny(sStringValue));
+        else if (m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_CHAR)
+            m_pImpl->m_pCurrentEntry->pProperties->Insert(PROP_CHAR_STYLE_NAME, uno::makeAny(sStringValue));
+        break;
+    case NS_ooxml::LN_CT_Style_basedOn:
+        break;
+    case NS_ooxml::LN_CT_Style_next:
+        break;
+    case NS_ooxml::LN_CT_Style_aliases:
+    case NS_ooxml::LN_CT_Style_link:
+    case NS_ooxml::LN_CT_Style_autoRedefine:
+    case NS_ooxml::LN_CT_Style_hidden:
+    case NS_ooxml::LN_CT_Style_uiPriority:
+    case NS_ooxml::LN_CT_Style_semiHidden:
+    case NS_ooxml::LN_CT_Style_unhideWhenUsed:
+    case NS_ooxml::LN_CT_Style_qFormat:
+    case NS_ooxml::LN_CT_Style_locked:
+    case NS_ooxml::LN_CT_Style_personal:
+    case NS_ooxml::LN_CT_Style_personalCompose:
+    case NS_ooxml::LN_CT_Style_personalReply:
+    case NS_ooxml::LN_CT_Style_rsid:
+    case NS_ooxml::LN_CT_Style_tblPr:
+    case NS_ooxml::LN_CT_Style_trPr:
+    case NS_ooxml::LN_CT_Style_tcPr:
+    case NS_ooxml::LN_CT_Style_tblStylePr:
+        break;
     case NS_ooxml::LN_CT_DocDefaults_pPrDefault:
     case NS_ooxml::LN_CT_DocDefaults_rPrDefault:
         resolveSprmProps(sprm_);
@@ -644,6 +658,7 @@ void StyleSheetTable::sprm(doctok::Sprm & sprm_)
   -----------------------------------------------------------------------*/
 void StyleSheetTable::entry(int /*pos*/, doctok::Reference<Properties>::Pointer_t ref)
 {
+    printf("StyleSheetTable::entry(...)\n");
     //create a new font entry
     OSL_ENSURE( !m_pImpl->m_pCurrentEntry, "current entry has to be NULL here");
     m_pImpl->m_pCurrentEntry = new StyleSheetEntry;
