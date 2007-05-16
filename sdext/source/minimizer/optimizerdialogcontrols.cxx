@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optimizerdialogcontrols.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-16 15:07:46 $
+ *  last change: $Author: sj $ $Date: 2007-05-16 15:29:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -634,14 +634,14 @@ void OptimizerDialog::UpdateControlStatesPage4()
     setControlProperty( TKGet( TK_CheckBox0Pg4 ), TKGet( TK_Enabled ), Any( bSaveAs ) );
     setControlProperty( TKGet( TK_ComboBox0Pg4 ), TKGet( TK_Enabled ), Any( sal_False ) );
 
-    sal_uInt32 i;
+    sal_uInt32 w;
     Sequence< OUString > aItemList;
     const std::vector< OptimizerSettings >& rList( GetOptimizerSettings() );
     if ( rList.size() > 1 ) // the first session in the list is the actual one -> skipping first one
     {
         aItemList.realloc( rList.size() - 1 );
-        for ( i = 1; i < rList.size(); i++ )
-            aItemList[ i - 1 ] = rList[ i ].maName;
+        for ( w = 1; w < rList.size(); w++ )
+            aItemList[ w - 1 ] = rList[ w ].maName;
     }
     setControlProperty( TKGet( TK_ComboBox0Pg4 ), TKGet( TK_StringItemList ), Any( aItemList ) );
 
@@ -649,9 +649,9 @@ void OptimizerDialog::UpdateControlStatesPage4()
     sal_Bool bSaveSettingsEnabled = sal_True;
     if ( rList.size() > 1 ) // the first session in the list is the actual one -> skipping first one
     {
-        for ( i = 1; i < rList.size(); i++ )
+        for ( w = 1; w < rList.size(); w++ )
         {
-            if ( rList[ i ] == rList[ 0 ] )
+            if ( rList[ w ] == rList[ 0 ] )
             {
                 bSaveSettingsEnabled = sal_False;
                 break;
