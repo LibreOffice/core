@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MtaOleClipb.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 15:08:38 $
+ *  last change: $Author: vg $ $Date: 2007-05-16 12:07:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 #pragma warning( disable : 4786 ) // identifier was truncated to 'number'
                                    // characters in the debug information
 
-#define UNICODE
+//#define UNICODE
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
