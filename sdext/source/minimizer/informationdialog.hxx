@@ -4,9 +4,9 @@
  *
  *  $RCSfile: informationdialog.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-11 13:56:41 $
+ *  last change: $Author: sj $ $Date: 2007-05-16 15:19:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,4 +132,4 @@ private:
     InformationDialog& mrInformationDialog;
 };
 
-#endif INFORMATIONDIALOG_HXX
+#endif
