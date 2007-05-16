@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 15:37:12 $
+#   last change: $Author: hjs $ $Date: 2007-05-16 09:44:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -105,13 +105,13 @@ SHL1STDLIBS+= \
 SHL1STDLIBS+= $(SCHLIB)
 .ENDIF # MACOSX
 
-SHL1LIBS= $(LIB3TARGET) $(LIB5TARGET)
+SHL1LIBS= $(LIB3TARGET) $(LIB5TARGET) $(LIB6TARGET)
 SHL1DEPN+=	makefile.mk
 
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 DEF1DEPN        =$(MISC)$/$(SHL1TARGET).flt
 DEF1NAME	=$(SHL1TARGET)
-DEFLIB1NAME = $(TARGET) $(LIB5TARGET:b)
+DEFLIB1NAME = $(TARGET) $(LIB5TARGET:b) $(LIB6TARGET:b)
 
 .IF "$(GUI)" == "WNT"
 SHL1RES=    $(RCTARGET)
@@ -151,7 +151,10 @@ LIB5FILES=      \
             $(SLB)$/toolpanel.lib		\
             $(SLB)$/uitools.lib			\
             $(SLB)$/tpcontrols.lib		\
-            $(SLB)$/slsshell.lib		\
+            $(SLB)$/slsshell.lib
+
+LIB6TARGET=$(SLB)$/sdraw3_3.lib
+LIB6FILES=      \
             $(SLB)$/slsmodel.lib		\
             $(SLB)$/slsview.lib			\
             $(SLB)$/slscontroller.lib	\
@@ -165,7 +168,6 @@ LIB5FILES=      \
             $(SLB)$/framework_toolbar.lib		\
             $(SLB)$/framework_tools.lib			\
             $(SLB)$/framework_command.lib
-
 
 # sdd
 SHL2TARGET= sdd$(UPD)$(DLLPOSTFIX)
