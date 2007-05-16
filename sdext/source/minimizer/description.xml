@@ -3,9 +3,7 @@
     xmlns:xlink="http://www.w3.org/1999/xlink">
     <registration>
         <simple-license  accept-by="admin" default-license-id="en-NZ">
-            <license-text xlink:href="registration/license_de-DE.txt" lang="de-DE" />
-            <license-text xlink:href="registration/license_en-US.txt" lang="en-US" />
+            <license-text xlink:href="licensefile" lang="isocode" />
         </simple-license>
     </registration>
 </description>
-

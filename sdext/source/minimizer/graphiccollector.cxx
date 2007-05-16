@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphiccollector.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-11 13:50:36 $
+ *  last change: $Author: sj $ $Date: 2007-05-16 15:07:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -367,6 +367,112 @@ void GraphicCollector::CollectGraphics( const Reference< XComponentContext >& rx
             if ( !aGraphicIter->mbRemoveCropArea )
                 aGraphicIter->maGraphicCropLogic = text::GraphicCrop( 0, 0, 0, 0 );
             aGraphicIter++;
+        }
+    }
+    catch ( Exception& )
+    {
+    }
+}
+
+void ImpCountGraphicObjects( const Reference< XComponentContext >& rxMSF, const Reference< XShapes >& rxShapes, const GraphicSettings& rGraphicSettings, sal_Int32& rnGraphics )
+{
+    for ( sal_Int32 i = 0; i < rxShapes->getCount(); i++ )
+    {
+        try
+        {
+            const OUString sGraphicObjectShape( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GraphicObjectShape" ) );
+            const OUString sGroupShape( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GroupShape" ) );
+            Reference< XShape > xShape( rxShapes->getByIndex( i ), UNO_QUERY_THROW );
+            const OUString sShapeType( xShape->getShapeType() );
+            if ( sShapeType == sGroupShape )
+            {
+                Reference< XShapes > xShapes( xShape, UNO_QUERY_THROW );
+                ImpCountGraphicObjects( rxMSF, xShapes, rGraphicSettings, rnGraphics );
+                continue;
+            }
+
+            if ( sShapeType == sGraphicObjectShape )
+            {
+                rnGraphics++;
+            }
+
+            // now check for a fillstyle
+            Reference< XPropertySet > xEmptyPagePropSet;
+            Reference< XPropertySet > xShapePropertySet( xShape, UNO_QUERY_THROW );
+            awt::Size aLogicalSize( xShape->getSize() );
+
+            FillStyle eFillStyle;
+            if ( xShapePropertySet->getPropertyValue( TKGet( TK_FillStyle ) ) >>= eFillStyle )
+            {
+                if ( eFillStyle == FillStyle_BITMAP )
+                {
+                    rnGraphics++;
+                }
+            }
+        }
+        catch( Exception& )
+        {
+        }
+    }
+}
+
+void ImpCountBackgroundGraphic( const Reference< XComponentContext >& /* rxMSF */, const Reference< XDrawPage >& rxDrawPage,
+                               const GraphicSettings& /* rGraphicSettings */, sal_Int32& rnGraphics )
+{
+    try
+    {
+        awt::Size aLogicalSize( 28000, 21000 );
+        Reference< XPropertySet > xPropertySet( rxDrawPage, UNO_QUERY_THROW );
+        xPropertySet->getPropertyValue( TKGet( TK_Width ) ) >>= aLogicalSize.Width;
+        xPropertySet->getPropertyValue( TKGet( TK_Height ) ) >>= aLogicalSize.Height;
+
+        Reference< XPropertySet > xBackgroundPropSet;
+        if ( xPropertySet->getPropertyValue( TKGet( TK_Background ) ) >>= xBackgroundPropSet )
+        {
+            FillStyle eFillStyle;
+            if ( xBackgroundPropSet->getPropertyValue( TKGet( TK_FillStyle ) ) >>= eFillStyle )
+            {
+                if ( eFillStyle == FillStyle_BITMAP )
+                {
+                    rnGraphics++;
+                }
+            }
+        }
+    }
+    catch( Exception& )
+    {
+    }
+}
+
+void GraphicCollector::CountGraphics( const Reference< XComponentContext >& rxMSF, const Reference< XModel >& rxModel,
+        const GraphicSettings& rGraphicSettings, sal_Int32& rnGraphics )
+{
+    try
+    {
+        sal_Int32 i;
+        Reference< XDrawPagesSupplier > xDrawPagesSupplier( rxModel, UNO_QUERY_THROW );
+        Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY_THROW );
+        for ( i = 0; i < xDrawPages->getCount(); i++ )
+        {
+            Reference< XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), UNO_QUERY_THROW );
+            ImpCountBackgroundGraphic( rxMSF, xDrawPage, rGraphicSettings, rnGraphics );
+            Reference< XShapes > xDrawShapes( xDrawPage, UNO_QUERY_THROW );
+            ImpCountGraphicObjects( rxMSF, xDrawShapes, rGraphicSettings, rnGraphics );
+
+            Reference< XPresentationPage > xPresentationPage( xDrawPage, UNO_QUERY_THROW );
+            Reference< XDrawPage > xNotesPage( xPresentationPage->getNotesPage() );
+            ImpCountBackgroundGraphic( rxMSF, xNotesPage, rGraphicSettings, rnGraphics );
+            Reference< XShapes > xNotesShapes( xNotesPage, UNO_QUERY_THROW );
+            ImpCountGraphicObjects( rxMSF, xNotesShapes, rGraphicSettings, rnGraphics );
+        }
+        Reference< XMasterPagesSupplier > xMasterPagesSupplier( rxModel, UNO_QUERY_THROW );
+        Reference< XDrawPages > xMasterPages( xMasterPagesSupplier->getMasterPages(), UNO_QUERY_THROW );
+        for ( i = 0; i < xMasterPages->getCount(); i++ )
+        {
+            Reference< XDrawPage > xMasterPage( xMasterPages->getByIndex( i ), UNO_QUERY_THROW );
+            ImpCountBackgroundGraphic( rxMSF, xMasterPage, rGraphicSettings, rnGraphics );
+            Reference< XShapes > xMasterPageShapes( xMasterPage, UNO_QUERY_THROW );
+            ImpCountGraphicObjects( rxMSF, xMasterPageShapes, rGraphicSettings, rnGraphics );
         }
     }
     catch ( Exception& )

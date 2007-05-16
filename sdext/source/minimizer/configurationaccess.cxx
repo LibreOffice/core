@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configurationaccess.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-11 13:49:41 $
+ *  last change: $Author: sj $ $Date: 2007-05-16 15:07:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ static const OUString& GetConfigurationProviderServiceName (void)
 static const OUString& GetPathToConfigurationRoot (void)
 {
     static const OUString sPathToConfigurationRoot (
-        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.SunPresentationMinimizer"));
+        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.extension.SunPresentationMinimizer"));
     return sPathToConfigurationRoot;
 }
 

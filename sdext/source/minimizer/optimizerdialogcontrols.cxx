@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optimizerdialogcontrols.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-11 13:57:48 $
+ *  last change: $Author: sj $ $Date: 2007-05-16 15:07:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -658,13 +658,14 @@ void OptimizerDialog::UpdateControlStatesPage4()
             }
         }
     }
+    sal_Int16 nInt16 = 0;
+    getControlProperty( TKGet( TK_CheckBox1Pg4 ), TKGet( TK_State ) ) >>= nInt16;
     setControlProperty( TKGet( TK_CheckBox1Pg4 ), TKGet( TK_Enabled ), Any( bSaveSettingsEnabled ) );
-    setControlProperty( TKGet( TK_ComboBox0Pg4 ), TKGet( TK_Enabled ), Any( bSaveSettingsEnabled && GetConfigProperty( TK_CheckBox1Pg4, sal_False ) ) );
+    setControlProperty( TKGet( TK_ComboBox0Pg4 ), TKGet( TK_Enabled ), Any( bSaveSettingsEnabled && nInt16 ) );
 
     std::vector< OUString > aSummaryStrings;
 
     // taking care of deleted slides
-    sal_Int16 nInt16 = 0;
     sal_Int32 nDeletedSlides = 0;
     rtl::OUString aCustomShowName;
     if ( getControlProperty( TKGet( TK_CheckBox3Pg3 ), TKGet( TK_State ) ) >>= nInt16 )
@@ -759,14 +760,14 @@ void OptimizerDialog::UpdateControlStatesPage4()
     }
 
 // generating graphic compression info
-    std::vector< GraphicCollector::GraphicEntity > aGraphicList;
-//  sal_Bool bJPEGCompression( GetConfigProperty( TK_JPEGCompression, sal_False ) );
+    sal_Int32 nGraphics = 0;
+    sal_Bool bJPEGCompression( GetConfigProperty( TK_JPEGCompression, sal_False ) );
     sal_Int32 nJPEGQuality( GetConfigProperty( TK_JPEGQuality, (sal_Int32)90 ) );
     sal_Int32 nImageResolution( GetConfigProperty( TK_ImageResolution, (sal_Int32)0 ) );
-//  GraphicSettings aGraphicSettings( bJPEGCompression, nJPEGQuality, GetConfigProperty( TK_RemoveCropArea, sal_False ),
-//                                      nImageResolution, GetConfigProperty( TK_EmbedLinkedGraphics, sal_True ) );
-//  GraphicCollector::CollectGraphics( mxMSF, mxController->getModel(), aGraphicSettings, aGraphicList );
-//  if ( aGraphicList.size() > 1 )
+    GraphicSettings aGraphicSettings( bJPEGCompression, nJPEGQuality, GetConfigProperty( TK_RemoveCropArea, sal_False ),
+                                        nImageResolution, GetConfigProperty( TK_EmbedLinkedGraphics, sal_True ) );
+    GraphicCollector::CountGraphics( mxMSF, mxController->getModel(), aGraphicSettings, nGraphics );
+    if ( nGraphics > 1 )
     {
         OUString aStr( getString( STR_OPTIMIZE_IMAGES ) );
         OUString aImagePlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%IMAGES" ) );
@@ -774,7 +775,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
         OUString aResolutionPlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%RESOLUTION" ) );
         sal_Int32 i = aStr.indexOf( aImagePlaceholder, 0 );
         if ( i >= 0 )
-            aStr = aStr.replaceAt( i, aImagePlaceholder.getLength(), OUString::valueOf( static_cast< sal_Int32 >( aGraphicList.size() ) ) );
+            aStr = aStr.replaceAt( i, aImagePlaceholder.getLength(), OUString::valueOf( nGraphics ) );
 
         sal_Int32 j = aStr.indexOf( aQualityPlaceholder, 0 );
         if ( j >= 0 )
@@ -893,7 +894,7 @@ void OptimizerDialog::InitPage4()
     aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText1Pg4 ), OUString(), PAGE_POS_X + 6, DIALOG_HEIGHT - 86, PAGE_WIDTH - 12, 8, sal_True, sal_False, mnTabIndex++ ) );
     aControlList.push_back( TKGet( TK_Progress ) );
     aControlList.push_back( InsertSeparator( *this, TKGet( TK_Separator1Pg4 ), 0, PAGE_POS_X + 6, DIALOG_HEIGHT - 58, PAGE_WIDTH - 12, 1 ) );
-    aControlList.push_back( InsertCheckBox(  *this, TKGet( TK_CheckBox1Pg4 ), mxItemListener, getString( STR_SAVE_SETTINGS ), PAGE_POS_X + 6, DIALOG_HEIGHT - 48, PAGE_WIDTH - 12, 8, mnTabIndex++ ) );
+    aControlList.push_back( InsertCheckBox(  *this, TKGet( TK_CheckBox1Pg4 ), mxItemListener, getString( STR_SAVE_SETTINGS ), PAGE_POS_X + 6, DIALOG_HEIGHT - 48, 70, 8, mnTabIndex++ ) );
     aControlList.push_back( InsertComboBox(  *this, TKGet( TK_ComboBox0Pg4 ), xTextListener, sal_True, aItemList, PAGE_POS_X + 76, DIALOG_HEIGHT - 48, 100, 12, mnTabIndex++ ) );
     maControlPages.push_back( aControlList );
     DeactivatePage( 4 );

@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: sj $ $Date: 2007-05-11 14:49:48 $
+#   last change: $Author: sj $ $Date: 2007-05-16 15:07:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,12 +37,19 @@ PRJ=..$/..
 PRJNAME=sdext
 TARGET=SunPresentationMinimizer
 GEN_HID=FALSE
+EXTNAME=minimi
 
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+
+DESCRIPTION:=$(MISC)$/SunPresentationMinimizer$/description.xml
+
+PACKLICS:=$(foreach,i,$(alllangiso) $(MISC)$/SunPresentationMinimizer$/registry$/LICENSE_$i)
+
 
 DLLPRE=
 common_build_zip=
@@ -79,22 +86,23 @@ SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 SHL1VERSIONMAP=	exports.map
 DEF1NAME=		$(SHL1TARGET)
 
+COMPONENT_MERGED_XCU= \
+    $(MISC)$/SunPresentationMinimizer$/registry$/data$/org$/openoffice$/Office$/Addons.xcu \
+    $(MISC)$/SunPresentationMinimizer$/registry$/data$/org$/openoffice$/Office$/extension$/SunPresentationMinimizer.xcu \
+    $(MISC)$/SunPresentationMinimizer$/registry$/data$/org$/openoffice$/Office$/UI$/ImpressWindowState.xcu \
+
 COMPONENT_FILES= \
-    $(MISC)$/SunPresentationMinimizer$/registration$/license_en-US.txt \
-    $(MISC)$/SunPresentationMinimizer$/registration$/license_de-DE.txt \
-    $(MISC)$/SunPresentationMinimizer$/configuration$/SunPresentationMinimizer.xcs \
-    $(MISC)$/SunPresentationMinimizer$/configuration$/SunPresentationMinimizer.xcu \
-    $(MISC)$/SunPresentationMinimizer$/configuration$/Addons.xcu \
-    $(MISC)$/SunPresentationMinimizer$/configuration$/ImpressWindowState.xcu \
-    $(MISC)$/SunPresentationMinimizer$/configuration$/ProtocolHandler.xcu \
-    $(MISC)$/SunPresentationMinimizer$/description.xml
+    $(MISC)$/SunPresentationMinimizer$/registry$/schema$/org$/openoffice$/Office$/extension$/SunPresentationMinimizer.xcs \
+    $(MISC)$/SunPresentationMinimizer$/registry$/data$/org$/openoffice$/Office$/ProtocolHandler.xcu
 
 COMPONENT_BITMAPS= \
     $(MISC)$/SunPresentationMinimizer$/bitmaps$/aboutlogo.png \
     $(MISC)$/SunPresentationMinimizer$/bitmaps$/opt_16.png \
     $(MISC)$/SunPresentationMinimizer$/bitmaps$/opt_26.png \
     $(MISC)$/SunPresentationMinimizer$/bitmaps$/opt_16_h.png \
-    $(MISC)$/SunPresentationMinimizer$/bitmaps$/opt_26_h.png
+    $(MISC)$/SunPresentationMinimizer$/bitmaps$/opt_26_h.png \
+    $(MISC)$/SunPresentationMinimizer$/bitmaps$/minimizepresi_80.png \
+    $(MISC)$/SunPresentationMinimizer$/bitmaps$/minimizepresi_80_h.png
 
 COMPONENT_HELP= \
     $(MISC)$/SunPresentationMinimizer$/help$/help_de.odt \
@@ -106,7 +114,7 @@ COMPONENT_MANIFEST= \
 COMPONENT_LIBRARY= \
     $(MISC)$/SunPresentationMinimizer$/SunPresentationMinimizer.uno$(DLLPOST)
 
-ZIP1DEPN=		$(COMPONENT_MANIFEST) $(COMPONENT_FILES) $(COMPONENT_BITMAPS) $(COMPONENT_HELP) $(COMPONENT_LIBRARY)
+ZIP1DEPS=		$(PACKLICS) $(DESCRIPTION) $(COMPONENT_MANIFEST) $(COMPONENT_FILES) $(COMPONENT_BITMAPS) $(COMPONENT_HELP) $(COMPONENT_LIBRARY) $(COMPONENT_MERGED_XCU)
 ZIP1TARGET=		sun-presentation-minimizer
 ZIP1DIR=		$(MISC)$/SunPresentationMinimizer
 ZIP1EXT=		.oxt
@@ -118,24 +126,43 @@ ZIP1LIST=		*
 .INCLUDE : target.mk
 
 $(COMPONENT_MANIFEST) : $$(@:f)
-    @-$(MKDIRHIER) $(@:d)
-    +$(TYPE) $< | $(SED) "s/SHARED_EXTENSION/$(DLLPOST)/" > $@
-
-$(COMPONENT_FILES) : $$(@:f)
-    @-$(MKDIRHIER) $(@:d)
-    +$(COPY) $< $@
+    @@-$(MKDIRHIER) $(@:d)
+    $(TYPE) $< | $(SED) "s/SHARED_EXTENSION/$(DLLPOST)/" > $@
 
 $(COMPONENT_BITMAPS) : bitmaps$/$$(@:f)
-    @-$(MKDIRHIER) $(@:d)
-    +$(COPY) $< $@
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
 
 $(COMPONENT_HELP) : help$/$$(@:f)
-    @-$(MKDIRHIER) $(@:d)
-    +$(COPY) $< $@
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
  
 $(COMPONENT_LIBRARY) : $(DLLDEST)$/$$(@:f)
-    @-$(MKDIRHIER) $(@:d)
-    +$(COPY) $< $@
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+    
+$(PACKLICS) : $(SOLARBINDIR)$/oxt_templatepack01$/LICENSE$$(@:b:s/_/./:e:s/./_/)$$(@:e)
+    @@-$(MKDIRHIER) $(@:d)
+    $(GNUCOPY) $< $@
 
-# remove this once ZIPnDEPN exists
-$(ZIP1TARGETN) : $(COMPONENT_MANIFEST) $(COMPONENT_FILES) $(COMPONENT_BITMAPS) $(COMPONENT_HELP) $(COMPONENT_LIBRARY)
+$(MISC)$/SunPresentationMinimizer$/registry$/data$/%.xcu : $(MISC)$/$(EXTNAME)$/merge$/%.xcu
+    @@-$(MKDIRHIER) $(@:d)
+    $(GNUCOPY) $< $@
+
+$(MISC)$/SunPresentationMinimizer$/%.xcu : %.xcu
+    @@-$(MKDIRHIER) $(@:d)
+    $(GNUCOPY) $< $@
+
+$(MISC)$/SunPresentationMinimizer$/%.xcs : %.xcs
+    @@-$(MKDIRHIER) $(@:d)
+    $(GNUCOPY) $< $@
+
+.INCLUDE .IGNORE : $(MISC)$/$(TARGET)_lang_track.mk
+.IF "$(LAST_WITH_LANG)"!="$(WITH_LANG)"
+PHONYDESC=.PHONY
+.ENDIF			# "$(LAST_WITH_LANG)"!="$(WITH_LANG)"
+$(DESCRIPTION) $(PHONYDESC) : $$(@:f)
+    @@-$(MKDIRHIER) $(@:d)
+    $(PERL) $(SOLARENV)$/bin$/licinserter.pl description.xml registry/LICENSE_xxx $@
+    @echo LAST_WITH_LANG=$(WITH_LANG) > $(MISC)$/$(TARGET)_lang_track.mk
+
