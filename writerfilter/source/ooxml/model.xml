@@ -8856,6 +8856,9 @@
           <ref name="ST_HdrFtr"/>
           <xs:documentation>Header or Footer Type</xs:documentation>
         </attribute>
+        <optional>
+          <attribute name="r:id"/>
+        </optional>
       </define>
       <define name="EG_HdrFtrReferences">
         <choice>
@@ -14741,6 +14744,11 @@
       <value tokenid="3">bottom</value>
     </resource>
     <resource name="CT_VerticalJc" resource="ListValue"/>
+    <resource name="ST_HdrFtr" resource="List">
+      <value tokenid="ooxml:Value_ST_HrdFtr_even">even</value>
+      <value tokenid="ooxml:Value_ST_HrdFtr_default">default</value>
+      <value tokenid="ooxml:Value_ST_HrdFtr_first">first</value>
+    </resource>
     <resource name="CT_HdrFtrRef" resource="Properties">
       <attribute name="type" tokenid="ooxml:CT_HdrFtrRef_type"/>
     </resource>

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-04 13:29:19 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-18 15:44:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,8 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
+
+#include <map>
 
 namespace com{ namespace sun {namespace star{
     namespace uno{
@@ -111,6 +113,7 @@ private:
     sal_Unicode getFillCharFromValue(const sal_Int32 nIntValue);
     void resolveAttributeProperties(doctok::Value & val);
     void resolveSprmProps(doctok::Sprm & sprm_);
+    void appendHeadersFooters();
     sal_Int32 mnBackgroundColor;
     bool mbIsHighlightSet;
 };
