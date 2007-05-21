@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-18 15:44:43 $
+ *  last change: $Author: os $ $Date: 2007-05-21 14:20:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,7 +178,7 @@ void DomainMapper::attribute(doctok::Id nName, doctok::Value & val)
 
     sal_Int32 nIntValue = val.getInt();
     rtl::OUString sStringValue = val.getString();
-    printf ( "DomainMapper::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nName, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
+    //printf ( "DomainMapper::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nName, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     if( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR )
         m_pImpl->GetFIB().SetData( nName, nIntValue );
     else
@@ -1741,7 +1741,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     doctok::Value::Pointer_t pValue = sprm_.getValue();
     sal_Int32 nIntValue = pValue->getInt();
     rtl::OUString sStringValue = pValue->getString();
-    printf ( "DomainMapper::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
+    //printf ( "DomainMapper::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     /* WRITERFILTERSTATUS: table: sprmdata */
 
     switch(nId)

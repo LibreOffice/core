@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FontTable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-11 14:52:44 $
+ *  last change: $Author: os $ $Date: 2007-05-21 14:24:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ void FontTable::attribute(doctok::Id Name, doctok::Value & val)
         return ;
     int nIntValue = val.getInt();
     ::rtl::OUString sValue = val.getString();
-    printf ( "FontTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
+    //printf ( "FontTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     switch(Name)
     {
 //        case NS_rtf::LN_ISTD: break;
@@ -535,21 +535,23 @@ void FontTable::sprm(doctok::Sprm& sprm_)
     if(!m_pImpl->pCurrentEntry)
         return ;
     sal_uInt32 nId = sprm_.getId();
+    (void)nId;
 
     doctok::Value::Pointer_t pValue = sprm_.getValue();
     sal_Int32 nIntValue = pValue->getInt();
+    (void)nIntValue;
     rtl::OUString sStringValue = pValue->getString();
 
-    printf ( "FontTable::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
+    //printf ( "FontTable::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
 
-    switch(nId)
+/*    switch(nId)
     {
     default:
         {
             OSL_ASSERT("FontTable::sprm()"); //
             //doctok::Value::Pointer_t pValue_ = sprm_.getValue();
         }
-    }
+    }*/
 }
 
 /*-- 19.06.2006 12:04:33---------------------------------------------------

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-16 14:35:30 $
+ *  last change: $Author: os $ $Date: 2007-05-21 14:25:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,8 +133,9 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
     if(!m_pImpl->m_pCurrentEntry)
         return ;
     int nIntValue = val.getInt();
+    (void)nIntValue;
     ::rtl::OUString sValue = val.getString();
-    printf ( "StyleSheetTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
+//    printf ( "StyleSheetTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     switch(Name)
     {
         case NS_rtf::LN_ISTD:
@@ -594,8 +595,9 @@ void StyleSheetTable::sprm(doctok::Sprm & sprm_)
     sal_uInt32 nId = sprm_.getId();
     doctok::Value::Pointer_t pValue = sprm_.getValue();
     sal_Int32 nIntValue = pValue.get() ? pValue->getInt() : 0;
+    (void)nIntValue;
     rtl::OUString sStringValue = pValue.get() ? pValue->getString() : rtl::OUString();
-    printf ( "StyleSheetTable::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
+    //printf ( "StyleSheetTable::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
 
     switch(nId)
     {
@@ -658,8 +660,8 @@ void StyleSheetTable::sprm(doctok::Sprm & sprm_)
   -----------------------------------------------------------------------*/
 void StyleSheetTable::entry(int /*pos*/, doctok::Reference<Properties>::Pointer_t ref)
 {
-    printf("StyleSheetTable::entry(...)\n");
-    //create a new font entry
+    //create a new style entry
+//    printf("StyleSheetTable::entry(...)\n");
     OSL_ENSURE( !m_pImpl->m_pCurrentEntry, "current entry has to be NULL here");
     m_pImpl->m_pCurrentEntry = new StyleSheetEntry;
     ref->resolve(*this);
