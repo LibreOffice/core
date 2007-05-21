@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TDefTableHandler.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2007-05-09 13:49:50 $
+ *  last change: $Author: os $ $Date: 2007-05-21 14:23:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@ public:
 
 private:
     ::std::vector<sal_Int32> m_aCellBorders;
+    ::std::vector<sal_Int32> m_aCellVertAlign;
 public:
     TDefTableHandler( );
     virtual ~TDefTableHandler();
@@ -62,7 +63,9 @@ public:
     virtual void attribute(doctok::Id Name, doctok::Value & val);
     virtual void sprm(doctok::Sprm & sprm);
 
-    ::boost::shared_ptr<PropertyMap>            getProperties() const;
+    size_t                                      getCellCount() const;
+    ::boost::shared_ptr<PropertyMap>            getCellProperties( size_t nCell ) const;
+    ::boost::shared_ptr<PropertyMap>            getRowProperties() const;
     sal_Int32                                   getTableWidth() const;
 };
 typedef boost::shared_ptr< TDefTableHandler >          TDefTableHandlerPtr;

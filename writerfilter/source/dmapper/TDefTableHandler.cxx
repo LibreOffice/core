@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TDefTableHandler.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2007-05-09 13:50:21 $
+ *  last change: $Author: os $ $Date: 2007-05-21 14:23:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_TABLECOLUMNSEPARATOR_HPP_
 #include <com/sun/star/text/TableColumnSeparator.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_VERTORIENTATION_HDL_
+#include <com/sun/star/text/VertOrientation.hpp>
 #endif
 
 namespace dmapper {
@@ -107,7 +110,11 @@ void TDefTableHandler::attribute(doctok::Id rName, doctok::Value & rVal)
         case NS_rtf::LN_FROTATEFONT:
         case NS_rtf::LN_FVERTMERGE:
         case NS_rtf::LN_FVERTRESTART:
+        break;
         case NS_rtf::LN_VERTALIGN:
+            //TODO: m_aCellVertAlign is just a temporary solution! 0 - top 1 - center 2 - bottom
+            m_aCellVertAlign.push_back( nIntValue );
+        break;
         case NS_rtf::LN_FUNUSED:
         case NS_rtf::LN_CellPrefferedSize:
         break;
@@ -134,7 +141,7 @@ void TDefTableHandler::sprm(doctok::Sprm & rSprm)
 /*-- 24.04.2007 09:09:01---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-PropertyMapPtr  TDefTableHandler::getProperties() const
+PropertyMapPtr  TDefTableHandler::getRowProperties() const
 {
     PropertyMapPtr pPropertyMap(new PropertyMap);
 
@@ -160,6 +167,25 @@ PropertyMapPtr  TDefTableHandler::getProperties() const
 
     return pPropertyMap;
 }
+/*-- 10.05.2007 16:10:33---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+::boost::shared_ptr<PropertyMap> TDefTableHandler::getCellProperties( size_t nCell ) const
+{
+    PropertyMapPtr pPropertyMap(new PropertyMap);
+    if( m_aCellBorders.size() > nCell )
+    {
+        sal_Int16 nVertOrient = text::VertOrientation::NONE;
+        switch( m_aCellVertAlign[nCell] ) //0 - top 1 - center 2 - bottom
+        {
+            case 1: nVertOrient = text::VertOrientation::CENTER; break;
+            case 2: nVertOrient = text::VertOrientation::BOTTOM; break;
+            default:;
+        }
+        pPropertyMap->Insert( PROP_VERT_ORIENT, uno::makeAny( nVertOrient ) );
+    }
+    return pPropertyMap;
+}
 /*-- 09.05.2007 13:14:17---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -172,6 +198,13 @@ sal_Int32 TDefTableHandler::getTableWidth() const
         nWidth = m_aCellBorders[m_aCellBorders.size() - 1] - m_aCellBorders[0];
     }
     return nWidth;
+}
+/*-- 10.05.2007 16:09:10---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+size_t TDefTableHandler::getCellCount() const
+{
+    return m_aCellVertAlign.size();
 }
 
 } //namespace dmapper
