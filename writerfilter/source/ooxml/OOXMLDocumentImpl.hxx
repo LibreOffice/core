@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocumentImpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-05-08 14:54:08 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-05-21 14:40:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,12 +45,20 @@ namespace ooxml
 class OOXMLDocumentImpl : public OOXMLDocument
 {
     OOXMLStream::Pointer_t mpStream;
+    rtl::OUString msXNoteId;
 
 protected:
     virtual void resolveSubStream(Stream & rStream,
                                   OOXMLStream::StreamType_t nType);
+
     doctok::Reference<Stream>::Pointer_t
     getSubStream(const rtl::OUString & rId);
+
+    doctok::Reference<Stream>::Pointer_t
+    getXNoteStream(OOXMLStream::StreamType_t nType,
+                   const rtl::OUString & rNoteId);
+
+    void setXNoteId(const rtl::OUString & rId);
 
 public:
     OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream);
@@ -59,6 +67,12 @@ public:
     virtual void resolve(Stream & rStream);
 
     virtual string getType() const;
+
+    virtual void resolveFootnote(Stream & rStream,
+                                 const rtl::OUString & rNoteId);
+    virtual void resolveEndnote(Stream & rStream,
+                                const rtl::OUString & rNoteId);
+
 };
 }
 #endif // OOXML_DOCUMENT_IMPL_HXX

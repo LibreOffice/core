@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocumentImpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-05-08 14:54:08 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-05-21 14:40:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #endif
 
+#include <doctok/resourceids.hxx>
 #include "OOXMLDocumentImpl.hxx"
 #include "OOXMLSaxHandler.hxx"
 
@@ -68,10 +69,13 @@ void OOXMLDocumentImpl::resolveSubStream(Stream & rStream,
 
     if (oSaxParser.is())
     {
+        OOXMLSaxHandler * pSaxHandler = new OOXMLSaxHandler(rStream, this);
+        pSaxHandler->setXNoteId(msXNoteId);
+
         uno::Reference<xml::sax::XDocumentHandler>
             xDocumentHandler
             (static_cast<cppu::OWeakObject *>
-             (new OOXMLSaxHandler(rStream)), uno::UNO_QUERY);
+             (pSaxHandler), uno::UNO_QUERY);
         oSaxParser->setDocumentHandler( xDocumentHandler );
 
         uno::Reference<io::XInputStream> xInputStream =
@@ -96,6 +100,11 @@ void OOXMLDocumentImpl::resolveSubStream(Stream & rStream,
     }
 }
 
+void OOXMLDocumentImpl::setXNoteId(const rtl::OUString & rId)
+{
+    msXNoteId = rId;
+}
+
 doctok::Reference<Stream>::Pointer_t
 OOXMLDocumentImpl::getSubStream(const rtl::OUString & rId)
 {
@@ -105,6 +114,37 @@ OOXMLDocumentImpl::getSubStream(const rtl::OUString & rId)
     return doctok::Reference<Stream>::Pointer_t(new OOXMLDocumentImpl(pStream));
 }
 
+doctok::Reference<Stream>::Pointer_t
+OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const rtl::OUString & /* rId */)
+{
+    OOXMLStream::Pointer_t pStream =
+        (OOXMLDocumentFactory::createStream(mpStream, nType));
+    OOXMLDocumentImpl * pDocument = new OOXMLDocumentImpl(pStream);
+    pDocument->setXNoteId(msXNoteId);
+
+    return doctok::Reference<Stream>::Pointer_t(pDocument);
+}
+
+void OOXMLDocumentImpl::resolveFootnote(Stream & rStream,
+                                        const rtl::OUString & rNoteId)
+{
+    doctok::Reference<Stream>::Pointer_t pStream =
+        getXNoteStream(OOXMLStream::FOOTNOTES, rNoteId);
+
+
+    rStream.substream(NS_rtf::LN_footnote, pStream);
+}
+
+void OOXMLDocumentImpl::resolveEndnote(Stream & rStream,
+                                       const rtl::OUString & rNoteId)
+{
+    doctok::Reference<Stream>::Pointer_t pStream =
+        getXNoteStream(OOXMLStream::ENDNOTES, rNoteId);
+
+
+    rStream.substream(NS_rtf::LN_endnote, pStream);
+}
+
 void OOXMLDocumentImpl::resolve(Stream & rStream)
 {
     {
@@ -112,10 +152,13 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
 
         if (oSaxParser.is())
         {
+            OOXMLSaxHandler * pSaxHandler = new OOXMLSaxHandler(rStream, this);
+            pSaxHandler->setXNoteId(msXNoteId);
+
             uno::Reference<xml::sax::XDocumentHandler>
                 xDocumentHandler
                 (static_cast<cppu::OWeakObject *>
-                 (new OOXMLSaxHandler(rStream)), uno::UNO_QUERY);
+                 (pSaxHandler), uno::UNO_QUERY);
             oSaxParser->setDocumentHandler( xDocumentHandler );
 
             resolveSubStream(rStream, OOXMLStream::NUMBERING);

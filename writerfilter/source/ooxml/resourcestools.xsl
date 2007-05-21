@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-15 14:29:28 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-05-21 14:43:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -687,7 +687,6 @@ OOXMLContext::Pointer_t
     <xsl:value-of select="$switchbody"/>
        <xsl:text>
      case OOXML_TOKENS_END:
-        // prevent warning
          break;
      default:
          pResult = elementFromRefs(nToken);
@@ -700,6 +699,10 @@ OOXMLContext::Pointer_t
       </xsl:otherwise>
     </xsl:choose>
      <xsl:text>
+
+    if (pResult.get() != NULL)
+        pResult->setToken(nToken);
+
     return pResult;
 }
      </xsl:text>
@@ -1069,6 +1072,26 @@ bool </xsl:text>
         <xsl:when test="@action='endSectionGroup'">
         <xsl:text>
     endSectionGroup();</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='handleXNotes'">
+          <xsl:text>
+    switch (meToken)
+    {
+    case OOXML_ELEMENT_wordprocessingml_footnoteReference:
+        {
+            OOXMLFootnoteHandler aFootnoteHandler(this);
+            mpPropertySet->resolve(aFootnoteHandler);
+        }
+        break;
+    case OOXML_ELEMENT_wordprocessingml_endnoteReference:
+        {
+            OOXMLEndnoteHandler aEndnoteHandler(this);
+            mpPropertySet->resolve(aEndnoteHandler);
+        }
+        break;
+    default:
+        break;
+    }</xsl:text>
         </xsl:when>
       </xsl:choose>
     </xsl:for-each>
