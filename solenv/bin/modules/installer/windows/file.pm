@@ -4,9 +4,9 @@
 #
 #   $RCSfile: file.pm,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: gm $ $Date: 2007-05-10 11:00:04 $
+#   last change: $Author: kz $ $Date: 2007-05-21 10:40:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,6 @@
 
 package installer::windows::file;
 
-require Filesys::CygwinPaths if $^O =~ /cygwin/i;
-
 use Digest::MD5;
 use installer::existence;
 use installer::exiter;
@@ -44,6 +42,7 @@ use installer::files;
 use installer::globals;
 use installer::logger;
 use installer::pathanalyzer;
+use installer::worker;
 use installer::windows::idtglobal;
 use installer::windows::language;
 
@@ -395,6 +394,8 @@ sub create_files_table
     my %allfilecomponents = ();
     my $counter = 0;
 
+    if ( $^O =~ /cygwin/i ) { installer::worker::generate_cygwin_pathes($filesref); }
+
     # The filenames must be collected because of uniqueness
     # 01-44-~1.DAT, 01-44-~2.DAT, ...
     # my @shortnames = ();
@@ -455,7 +456,7 @@ sub create_files_table
         if ( $installer::globals::prepare_winpatch )
         {
             my $path = $onefile->{'sourcepath'};
-            if ( $^O =~ /cygwin/i ) { $path = Filesys::CygwinPaths::win32path ($onefile->{'sourcepath'}); }
+            if ( $^O =~ /cygwin/i ) { $path = $onefile->{'cyg_sourcepath'}; }
 
             open(FILE, $path) or die "ERROR: Can't open $path for creating file hash";
             binmode(FILE);

@@ -4,9 +4,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: gm $ $Date: 2007-05-10 11:00:34 $
+#   last change: $Author: kz $ $Date: 2007-05-21 10:40:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 package installer::windows::msiglobal;
 
 use Cwd;
-use File::Temp qw(tmpnam);
 use installer::converter;
 use installer::exiter;
 use installer::files;
@@ -46,6 +45,7 @@ use installer::pathanalyzer;
 use installer::remover;
 use installer::scriptitems;
 use installer::systemactions;
+use installer::worker;
 use installer::windows::idtglobal;
 use installer::windows::language;
 
@@ -155,29 +155,10 @@ sub generate_cab_file_list
 
     installer::logger::include_timestamp_into_logfile("Performance Info: ddf file generation start");
 
+    if ( $^O =~ /cygwin/i ) { installer::worker::generate_cygwin_pathes($filesref); }
+
     if (( $installer::globals::cab_file_per_component ) || ( $installer::globals::fix_number_of_cab_files ))
     {
-        if ( $^O =~ /cygwin/i )
-        {
-            my ($tmpfilehandle, $tmpfilename) = tmpnam();
-            my $onefile;
-            open SOURCEPATHLIST, ">$tmpfilename" or die "oops...\n";
-            for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-            {
-                $onefile = ${$filesref}[$i];
-                print SOURCEPATHLIST "$onefile->{'sourcepath'}\n";
-            }
-            close SOURCEPATHLIST;
-            my @cyg_sourcepathlist = qx{cygpath -w -f "$tmpfilename"};
-            chomp @cyg_sourcepathlist;
-            unlink "$tmpfilename" or die "oops\n";
-            for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-            {
-                my $onefile = ${$filesref}[$i];
-                $onefile->{'cyg_sourcepath'} = $cyg_sourcepathlist[$i];
-            }
-        }
-
         for ( my $i = 0; $i <= $#{$filesref}; $i++ )
         {
             my $onefile = ${$filesref}[$i];
@@ -258,26 +239,6 @@ sub generate_cab_file_list
 
         my $cabinetfile = "";
 
-        if ( $^O =~ /cygwin/i )
-        {
-            my ($tmpfilehandle, $tmpfilename) = tmpnam();
-            my $onefile;
-            open SOURCEPATHLIST, ">$tmpfilename" or die "oops...\n";
-            for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-            {
-                $onefile = ${$filesref}[$i];
-                print SOURCEPATHLIST "$onefile->{'sourcepath'}\n";
-            }
-            close SOURCEPATHLIST;
-            my @cyg_sourcepathlist = qx{cygpath -w -f "$tmpfilename"};
-            chomp @cyg_sourcepathlist;
-            unlink "$tmpfilename" or die "oops\n";
-            for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-            {
-                my $onefile = ${$filesref}[$i];
-                $onefile->{'cyg_sourcepath'} = $cyg_sourcepathlist[$i];
-            }
-        }
         for ( my $i = 0; $i <= $#{$filesref}; $i++ )
         {
             my $onefile = ${$filesref}[$i];

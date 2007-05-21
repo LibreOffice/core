@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 13:56:59 $
+#   last change: $Author: kz $ $Date: 2007-05-21 10:41:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 package installer::worker;
 
 use Cwd;
+use File::Temp qw(tmpnam);
 use installer::control;
 use installer::converter;
 use installer::existence;
@@ -2557,6 +2558,30 @@ sub set_time_stamp
 # Include only files from install directory
 # in pkgmap file.
 ##############################################
+########################################
+# Generating pathes for cygwin.
+########################################
+
+sub generate_cygwin_pathes
+{
+    my ($filesref) = @_;
+
+    my ($tmpfilehandle, $tmpfilename) = tmpnam();
+    open SOURCEPATHLIST, ">$tmpfilename" or die "oops...\n";
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        print SOURCEPATHLIST "${$filesref}[$i]->{'sourcepath'}\n";
+    }
+    close SOURCEPATHLIST;
+    my @cyg_sourcepathlist = qx{cygpath -w -f "$tmpfilename"};
+    chomp @cyg_sourcepathlist;
+    unlink "$tmpfilename" or die "oops\n";
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        ${$filesref}[$i]->{'cyg_sourcepath'} = $cyg_sourcepathlist[$i];
+    }
+}
+
 
 sub filter_pkgmapfile
 {
