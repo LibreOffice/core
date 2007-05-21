@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableHandler.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2007-05-09 13:54:44 $
+ *  last change: $Author: os $ $Date: 2007-05-21 14:21:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ void DomainMapperTableHandler::endTable()
 
         sal_Int32 nCell = 0;
         pCellProperties[nRow].realloc( aRowOfCellsIterator->size() );
-        beans::PropertyValues* pSingleCellProperties = pCellProperties->getArray();
+        beans::PropertyValues* pSingleCellProperties = pCellProperties[nRow].getArray();
         while( aCellIterator != aCellIteratorEnd )
         {
             //TODO: aCellIterator contains HorizontalBorder and VerticalBorder
@@ -162,9 +162,59 @@ void DomainMapperTableHandler::endTable()
             ++nCell;
             ++aCellIterator;
         }
+#ifdef DEBUG
+//-->debug cell properties
+        {
+            ::rtl::OUString sNames;
+            const uno::Sequence< beans::PropertyValues > aDebugCurrentRow = aCellProperties[nRow];
+            sal_Int32 nDebugCells = aDebugCurrentRow.getLength();
+            (void) nDebugCells;
+            for( sal_Int32  nDebugCell = 0; nDebugCell < nDebugCells; ++nDebugCell)
+            {
+                const uno::Sequence< beans::PropertyValue >& aDebugCellProperties = aDebugCurrentRow[nDebugCell];
+                sal_Int32 nDebugCellProperties = aDebugCellProperties.getLength();
+                for( sal_Int32  nDebugProperty = 0; nDebugProperty < nDebugCellProperties; ++nDebugProperty)
+                {
+                    const ::rtl::OUString sName = aDebugCellProperties[nDebugProperty].Name;
+                    sNames += sName;
+                    sNames += ::rtl::OUString('-');
+                }
+                sNames += ::rtl::OUString(' ');
+            }
+            (void)sNames;
+        }
+//--<
+#endif
         ++nRow;
         ++aRowOfCellsIterator;
     }
+#ifdef DEBUG
+//-->debug cell properties of all rows
+    {
+        ::rtl::OUString sNames;
+        for( sal_Int32  nDebugRow = 0; nDebugRow < aCellProperties.getLength(); ++nDebugRow)
+        {
+            const uno::Sequence< beans::PropertyValues > aDebugCurrentRow = aCellProperties[nDebugRow];
+            sal_Int32 nDebugCells = aDebugCurrentRow.getLength();
+            (void) nDebugCells;
+            for( sal_Int32  nDebugCell = 0; nDebugCell < nDebugCells; ++nDebugCell)
+            {
+                const uno::Sequence< beans::PropertyValue >& aDebugCellProperties = aDebugCurrentRow[nDebugCell];
+                sal_Int32 nDebugCellProperties = aDebugCellProperties.getLength();
+                for( sal_Int32  nDebugProperty = 0; nDebugProperty < nDebugCellProperties; ++nDebugProperty)
+                {
+                    const ::rtl::OUString sName = aDebugCellProperties[nDebugProperty].Name;
+                    sNames += sName;
+                    sNames += ::rtl::OUString('-');
+                }
+                sNames += ::rtl::OUString('+');
+            }
+            sNames += ::rtl::OUString('|');
+        }
+        (void)sNames;
+    }
+//--<
+#endif
 
     RowPropertyValuesSeq_t      aRowProperties( m_aRowProperties.size() );
     PropertyMapVector1::const_iterator aRowIter = m_aRowProperties.begin();
