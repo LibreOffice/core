@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableManager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2007-05-09 13:55:52 $
+ *  last change: $Author: os $ $Date: 2007-05-21 14:22:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,7 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
                 {
                     TDefTableHandlerPtr pTDefTableHandler( new TDefTableHandler );
                     pProperties->resolve( *pTDefTableHandler );
-                    insertRowProps( pTDefTableHandler->getProperties() );
+                    insertRowProps( pTDefTableHandler->getRowProperties() );
                     if( !m_nTableWidth )
                     {
                         m_nTableWidth= pTDefTableHandler->getTableWidth();
@@ -210,6 +210,8 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
                             insertTableProps(pPropMap);
                         }
                     }
+                    for( size_t nCell = 0; nCell < pTDefTableHandler->getCellCount(); ++nCell )
+                        cellPropsByCell( nCell, pTDefTableHandler->getCellProperties( nCell ) );
                 }
             }
             break;
@@ -240,6 +242,38 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
 //                    cellPropsByCell(0, PropertyMapPtr( pColorHandler->getProperties()) );
                 }
             }
+            break;
+            case 0xd632 : //sprmTNewSpacing
+            case 0xd634 : //sprmTNewSpacing
+                //TODO: sprms contain default (TNew) and actual border spacing of cells - not resolvable yet
+            break;
+            case 0xd613: //sprmTGridLineProps
+                // TODO: needs a handler
+                /*contains:
+                 GridLineProps">
+                    rtf:LINEPROPSTOP
+                    rtf:LINEPROPSLEFT
+                    rtf:LINEPROPSBOTTOM
+                    rtf:LINEPROPSRIGHT
+                    rtf:LINEPROPSHORIZONTAL
+                    rtf:LINEPROPSVERTICAL
+                        rtf:LINECOLOR
+                        rtf:LINEWIDTH
+                        rtf:LINETYPE
+
+                */
+            break;
+            case 0x740a : //sprmTTlp
+                //TODO: Table look specifier
+            break;
+            case 0x6816 : //unknown
+            case 0x3466 : //unknown
+            case 0x3615 : //unknown
+            case 0x646b : //unknown - expandable sprm - see ww8scan.cxx
+            case 0x7479 : //unknown
+            case 0xf617 : //unknown
+            case 0xf618 : //unknown
+                bRet = false;
             break;
             default: bRet = false;
         }
