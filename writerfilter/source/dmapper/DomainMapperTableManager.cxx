@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableManager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2007-05-21 14:22:16 $
+ *  last change: $Author: os $ $Date: 2007-05-21 15:00:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
             case 0x9602: // sprmTDxaGapHalf
             {
                 /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-                m_nGapHalf = nIntValue;
+                m_nGapHalf = ConversionHelper::convertToMM100( nIntValue );
                 PropertyMapPtr pPropMap( new PropertyMap );
                 pPropMap->Insert( PROP_LEFT_MARGIN, uno::makeAny( m_nLeftMargin - m_nGapHalf ));
                 insertTableProps(pPropMap);
