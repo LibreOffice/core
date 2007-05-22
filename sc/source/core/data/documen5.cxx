@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:01:59 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:42:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,14 +35,14 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-#ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
-#include <com/sun/star/embed/XClassifiedObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
+
 #include <com/sun/star/util/XModifiable.hpp>
-#endif
-
-
+#include <com/sun/star/chart/ChartDataRowSource.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/data/XDataProvider.hpp>
+#include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 
 #ifdef WNT
@@ -56,8 +56,6 @@
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
-#include <sch/schdll.hxx>
-#include <sch/memchrt.hxx>
 //REMOVE    #include <so3/ipobj.hxx>
 
 //REMOVE    #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -75,15 +73,75 @@
 #endif
 #include <sot/exchange.hxx>
 
+#include "miscuno.hxx"
+#include "chart2uno.hxx"
+
 using namespace ::com::sun::star;
 
 // -----------------------------------------------------------------------
 
-        // Charts aus altem Dokument updaten
-
-void ScDocument::UpdateAllCharts(BOOL bDoUpdate)
+void lcl_GetChartParameters( const uno::Reference< chart2::XChartDocument >& xChartDoc,
+            rtl::OUString& rRanges, chart::ChartDataRowSource& rDataRowSource,
+            bool& rHasCategories, bool& rFirstCellAsLabel )
 {
-    if (!pDrawLayer)
+    rHasCategories = rFirstCellAsLabel = false;     // default if not in sequence
+
+    uno::Reference< chart2::data::XDataReceiver > xReceiver( xChartDoc, uno::UNO_QUERY );
+
+    uno::Reference< chart2::data::XDataSource > xDataSource = xReceiver->getUsedData();
+    uno::Reference< chart2::data::XDataProvider > xProvider = xChartDoc->getDataProvider();
+
+    if ( xProvider.is() )
+    {
+        uno::Sequence< beans::PropertyValue > aArgs( xProvider->detectArguments( xDataSource ) );
+
+        const beans::PropertyValue* pPropArray = aArgs.getConstArray();
+        long nPropCount = aArgs.getLength();
+        for (long i = 0; i < nPropCount; i++)
+        {
+            const beans::PropertyValue& rProp = pPropArray[i];
+            String aPropName(rProp.Name);
+
+            if (aPropName.EqualsAscii( "CellRangeRepresentation" ))
+                rProp.Value >>= rRanges;
+            else if (aPropName.EqualsAscii( "DataRowSource" ))
+                rDataRowSource = (chart::ChartDataRowSource)ScUnoHelpFunctions::GetEnumFromAny( rProp.Value );
+            else if (aPropName.EqualsAscii( "HasCategories" ))
+                rHasCategories = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
+            else if (aPropName.EqualsAscii( "FirstCellAsLabel" ))
+                rFirstCellAsLabel = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
+        }
+    }
+}
+
+void lcl_SetChartParameters( const uno::Reference< chart2::data::XDataReceiver >& xReceiver,
+            const rtl::OUString& rRanges, chart::ChartDataRowSource eDataRowSource,
+            bool bHasCategories, bool bFirstCellAsLabel )
+{
+    if ( xReceiver.is() )
+    {
+        uno::Sequence< beans::PropertyValue > aArgs( 4 );
+        aArgs[0] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
+            uno::makeAny( rRanges ), beans::PropertyState_DIRECT_VALUE );
+        aArgs[1] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("HasCategories"), -1,
+            uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
+        aArgs[2] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
+            uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
+        aArgs[3] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("DataRowSource"), -1,
+            uno::makeAny( eDataRowSource ), beans::PropertyState_DIRECT_VALUE );
+        xReceiver->setArguments( aArgs );
+    }
+}
+
+// update charts after loading old document
+
+void ScDocument::UpdateAllCharts()
+{
+    if ( !pDrawLayer || !pShell )
         return;
 
     USHORT nDataCount = pChartCollection->GetCount();
@@ -116,21 +174,34 @@ void ScDocument::UpdateAllCharts(BOOL bDoUpdate)
                             ScChartArray* pChartObj = (*pChartCollection)[nPos];
                             if (pChartObj->GetName() == aIPName)
                             {
-                                if (bDoUpdate)
+                                ScRangeListRef aRanges = pChartObj->GetRangeList();
+                                String sRangeStr;
+                                aRanges->Format( sRangeStr, SCR_ABS_3D, this );
+
+                                chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
+                                bool bHasCategories = pChartObj->HasRowHeaders();
+                                bool bFirstCellAsLabel = pChartObj->HasColHeaders();
+
+                                // Calc -> DataProvider
+                                uno::Reference< chart2::data::XDataProvider > xDataProvider =
+                                        new ScChart2DataProvider( this );
+                                // Chart -> DataReceiver
+                                uno::Reference< chart2::data::XDataReceiver > xReceiver;
+                                uno::Reference< embed::XComponentSupplier > xCompSupp( xIPObj, uno::UNO_QUERY );
+                                if( xCompSupp.is())
+                                    xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
+                                if( xReceiver.is())
                                 {
-                                    SchMemChart* pMemChart = pChartObj->CreateMemChart();
-                                    SchDLL::Update( xIPObj, pMemChart );
-                                    ((SdrOle2Obj*)pObject)->GetNewReplacement();
-                                    delete pMemChart;
+                                    // connect
+                                    xReceiver->attachDataProvider( xDataProvider );
+                                    uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier(
+                                            pShell->GetModel(), uno::UNO_QUERY );
+                                    xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
+
+                                    lcl_SetChartParameters( xReceiver, sRangeStr, eDataRowSource,
+                                                            bHasCategories, bFirstCellAsLabel );
                                 }
-                                else        // nur Position uebernehmen
-                                {
-                                    SchMemChart* pChartData = SchDLL::GetChartData(xIPObj);
-                                    if (pChartData)
-                                    {
-                                        pChartObj->SetExtraStrings(*pChartData);
-                                    }
-                                }
+
                                 ScChartListener* pCL = new ScChartListener(
                                     aIPName, this, pChartObj->GetRangeList() );
                                 pChartListenerCollection->Insert( pCL );
@@ -181,16 +252,72 @@ BOOL ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pName )
 
 void ScDocument::UpdateChartArea( const String& rChartName,
             const ScRange& rNewArea, BOOL bColHeaders, BOOL bRowHeaders,
-            BOOL bAdd, Window* pWindow )
+            BOOL bAdd )
 {
     ScRangeListRef aRLR( new ScRangeList );
     aRLR->Append( rNewArea );
-    UpdateChartArea( rChartName, aRLR, bColHeaders, bRowHeaders, bAdd, pWindow );
+    UpdateChartArea( rChartName, aRLR, bColHeaders, bRowHeaders, bAdd );
+}
+
+void ScDocument::GetOldChartParameters( const String& rName,
+            ScRangeList& rRanges, BOOL& rColHeaders, BOOL& rRowHeaders )
+{
+    // used for undo of changing chart source area
+
+    if (!pDrawLayer)
+        return;
+
+    sal_uInt16 nCount = pDrawLayer->GetPageCount();
+    for (sal_uInt16 nTab=0; nTab<nCount; nTab++)
+    {
+        SdrPage* pPage = pDrawLayer->GetPage(nTab);
+        DBG_ASSERT(pPage,"Page ?");
+
+        SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+        SdrObject* pObject = aIter.Next();
+        while (pObject)
+        {
+            if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
+                    ((SdrOle2Obj*)pObject)->GetPersistName() == rName )
+            {
+                uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
+                if ( xIPObj.is() )
+                {
+                    svt::EmbeddedObjectRef::TryRunningState( xIPObj );
+
+                    uno::Reference< util::XCloseable > xComponent = xIPObj->getComponent();
+                    uno::Reference< chart2::XChartDocument > xChartDoc( xComponent, uno::UNO_QUERY );
+                    if ( xChartDoc.is() )
+                    {
+                        chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
+                        bool bHasCategories = false;
+                        bool bFirstCellAsLabel = false;
+                        rtl::OUString aRangesStr;
+                        lcl_GetChartParameters( xChartDoc, aRangesStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
+
+                        rRanges.Parse( aRangesStr, this );
+                        if ( eDataRowSource == chart::ChartDataRowSource_COLUMNS )
+                        {
+                            rRowHeaders = bHasCategories;
+                            rColHeaders = bFirstCellAsLabel;
+                        }
+                        else
+                        {
+                            rColHeaders = bHasCategories;
+                            rRowHeaders = bFirstCellAsLabel;
+                        }
+                    }
+                }
+                return;
+            }
+            pObject = aIter.Next();
+        }
+    }
 }
 
 void ScDocument::UpdateChartArea( const String& rChartName,
             const ScRangeListRef& rNewList, BOOL bColHeaders, BOOL bRowHeaders,
-            BOOL bAdd, Window* pWindow )
+            BOOL bAdd )
 {
     if (!pDrawLayer)
         return;
@@ -210,41 +337,69 @@ void ScDocument::UpdateChartArea( const String& rChartName,
                 uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
                 if ( xIPObj.is() )
                 {
-                    const SchMemChart* pChartData = SchDLL::GetChartData(xIPObj);
-                    if ( pChartData )
+                    svt::EmbeddedObjectRef::TryRunningState( xIPObj );
+
+                    uno::Reference< util::XCloseable > xComponent = xIPObj->getComponent();
+                    uno::Reference< chart2::XChartDocument > xChartDoc( xComponent, uno::UNO_QUERY );
+                    uno::Reference< chart2::data::XDataReceiver > xReceiver( xComponent, uno::UNO_QUERY );
+                    if ( xChartDoc.is() && xReceiver.is() )
                     {
-                        ScChartArray aArray( this, *pChartData );
-                        if ( bAdd )
+                        ScRangeListRef aNewRanges;
+                        chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
+                        bool bHasCategories = false;
+                        bool bFirstCellAsLabel = false;
+                        rtl::OUString aRangesStr;
+                        lcl_GetChartParameters( xChartDoc, aRangesStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
+
+                        sal_Bool bInternalData = xChartDoc->hasInternalDataProvider();
+
+                        if ( bAdd && !bInternalData )
                         {
-                            // bei bAdd werden Header-Angaben ignoriert
-                            aArray.AddToRangeList( rNewList );
+                            // append to old ranges, keep other settings
+
+                            aNewRanges = new ScRangeList;
+                            aNewRanges->Parse( aRangesStr, this );
+
+                            ULONG nAddCount = rNewList->Count();
+                            for ( ULONG nAdd=0; nAdd<nAddCount; nAdd++ )
+                                aNewRanges->Append( *rNewList->GetObject(nAdd) );
                         }
                         else
                         {
-                            aArray.SetRangeList( rNewList );
-                            aArray.SetHeaders( bColHeaders, bRowHeaders );
+                            // directly use new ranges (only eDataRowSource is used from old settings)
+
+                            if ( eDataRowSource == chart::ChartDataRowSource_COLUMNS )
+                            {
+                                bHasCategories = bRowHeaders;
+                                bFirstCellAsLabel = bColHeaders;
+                            }
+                            else
+                            {
+                                bHasCategories = bColHeaders;
+                                bFirstCellAsLabel = bRowHeaders;
+                            }
+                            aNewRanges = rNewList;
                         }
-                        pChartListenerCollection->ChangeListening(
-                            rChartName, aArray.GetRangeList() );
 
+                        if ( bInternalData && pShell )
+                        {
+                            // Calc -> DataProvider
+                            uno::Reference< chart2::data::XDataProvider > xDataProvider = new ScChart2DataProvider( this );
+                            xReceiver->attachDataProvider( xDataProvider );
+                            uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier(
+                                    pShell->GetModel(), uno::UNO_QUERY );
+                            xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
+                        }
 
-                        SchMemChart* pMemChart = aArray.CreateMemChart();
-                        ScChartArray::CopySettings( *pMemChart, *pChartData );
+                        String sRangeStr;
+                        aNewRanges->Format( sRangeStr, SCR_ABS_3D, this );
 
-                        SchDLL::Update( xIPObj, pMemChart, pWindow );
-                        ((SdrOle2Obj*)pObject)->GetNewReplacement();
-                        delete pMemChart;
+                        lcl_SetChartParameters( xReceiver, sRangeStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
 
-                        // Dies veranlaesst Chart zum sofortigen Update
-                        //SvData aEmpty;
-                        //aIPObj->SendDataChanged( aEmpty );
+                        pChartListenerCollection->ChangeListening( rChartName, aNewRanges );
 
-                        // the method below did nothing in SO7
-//REMOVE                            aIPObj->SendViewChanged();
-
-                        // repaint only
-                        pObject->ActionChanged();
-                        // pObject->SendRepaintBroadcast();
+                        // ((SdrOle2Obj*)pObject)->GetNewReplacement();
+                        // pObject->ActionChanged();
 
                         return;         // nicht weitersuchen
                     }
@@ -255,7 +410,7 @@ void ScDocument::UpdateChartArea( const String& rChartName,
     }
 }
 
-void ScDocument::UpdateChart( const String& rChartName, Window* pWindow )
+void ScDocument::UpdateChart( const String& rChartName )
 {
     if (!pDrawLayer || bInDtorClear)
         return;
@@ -272,6 +427,40 @@ void ScDocument::UpdateChart( const String& rChartName, Window* pWindow )
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
                     ((SdrOle2Obj*)pObject)->GetPersistName() == rChartName )
             {
+                //@todo?: maybe we need a notification
+                //from the calc to the chart in future
+                //that calc content has changed
+                // ((SdrOle2Obj*)pObject)->GetNewReplacement();
+
+                // Load the object and set modified
+
+                uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
+                if ( xIPObj.is() )
+                {
+                    svt::EmbeddedObjectRef::TryRunningState( xIPObj );
+
+                    try
+                    {
+                        uno::Reference< util::XModifiable > xModif( xIPObj->getComponent(), uno::UNO_QUERY_THROW );
+                        xModif->setModified( sal_True );
+                    }
+                    catch ( uno::Exception& )
+                    {
+                    }
+                }
+
+                // repaint
+
+                pObject->ActionChanged();
+
+                // After the update, chart keeps track of its own data source ranges,
+                // the listener doesn't need to listen anymore.
+
+                pChartListenerCollection->ChangeListening( rChartName, new ScRangeList );
+
+                return;
+
+                /* old chart:
                 uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
                 if ( xIPObj.is() )
                 {
@@ -336,8 +525,37 @@ void ScDocument::UpdateChart( const String& rChartName, Window* pWindow )
                         return;         // nicht weitersuchen
                     }
                 }
+                */
             }
             pObject = aIter.Next();
+        }
+    }
+}
+
+void ScDocument::RestoreChartListener( const String& rName )
+{
+    // Read the data ranges from the chart object, and start listening to those ranges again
+    // (called when a chart is saved, because then it might be swapped out and stop listening itself).
+
+    uno::Reference< embed::XEmbeddedObject > xObject = FindOleObjectByName( rName );
+    if ( xObject.is() )
+    {
+        uno::Reference< util::XCloseable > xComponent = xObject->getComponent();
+        uno::Reference< chart2::XChartDocument > xChartDoc( xComponent, uno::UNO_QUERY );
+        uno::Reference< chart2::data::XDataReceiver > xReceiver( xComponent, uno::UNO_QUERY );
+        if ( xChartDoc.is() && xReceiver.is() && !xChartDoc->hasInternalDataProvider())
+        {
+            uno::Sequence<rtl::OUString> aRepresentations( xReceiver->getUsedRangeRepresentations() );
+            ScRangeListRef aRanges = new ScRangeList;
+            sal_Int32 nRangeCount = aRepresentations.getLength();
+            for ( sal_Int32 i=0; i<nRangeCount; i++ )
+            {
+                ScRange aRange;
+                if ( aRange.ParseAny( aRepresentations[i], this ) & SCA_VALID )
+                    aRanges->Append( aRange );
+            }
+
+            pChartListenerCollection->ChangeListening( rName, aRanges );
         }
     }
 }
@@ -397,6 +615,7 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
         }
         if ( bChanged )
         {
+#if 0
             if ( nDz != 0 )
             {   // #81844# sheet to be deleted or inserted or moved
                 // => no valid sheet names for references right now
@@ -404,9 +623,22 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
                 pChartListener->ScheduleSeriesRanges();
             }
             else
+#endif
             {
-                SetChartRangeList( pChartListener->GetString(), aNewRLR );
-                pChartListener->ChangeListening( aNewRLR, bDataChanged );
+//              SetChartRangeList( pChartListener->GetString(), aNewRLR );
+//              pChartListener->ChangeListening( aNewRLR, bDataChanged );
+
+                // Force the chart to be loaded now, so it registers itself for UNO events.
+                // UNO broadcasts are done after UpdateChartRef, so the chart will get this
+                // reference change.
+
+                uno::Reference< embed::XEmbeddedObject > xIPObj = FindOleObjectByName( pChartListener->GetString() );
+                svt::EmbeddedObjectRef::TryRunningState( xIPObj );
+
+                // After the change, chart keeps track of its own data source ranges,
+                // the listener doesn't need to listen anymore.
+
+                pChartListener->ChangeListening( new ScRangeList, bDataChanged );
             }
         }
     }
@@ -416,12 +648,52 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
 void ScDocument::SetChartRangeList( const String& rChartName,
             const ScRangeListRef& rNewRangeListRef )
 {
-    SchMemChart* pChartData = FindChartData( rChartName, TRUE );
-    if ( pChartData )
+    // called from ChartListener
+
+    if (!pDrawLayer)
+        return;
+
+    for (SCTAB nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++)
     {
-        ScChartArray aArray( this, *pChartData );
-        aArray.SetRangeList( rNewRangeListRef );
-        aArray.SetExtraStrings( *pChartData );
+        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
+        DBG_ASSERT(pPage,"Page ?");
+
+        SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+        SdrObject* pObject = aIter.Next();
+        while (pObject)
+        {
+            if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
+                    ((SdrOle2Obj*)pObject)->GetPersistName() == rChartName )
+            {
+                uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
+                if ( xIPObj.is() )
+                {
+                    svt::EmbeddedObjectRef::TryRunningState( xIPObj );
+
+                    uno::Reference< util::XCloseable > xComponent = xIPObj->getComponent();
+                    uno::Reference< chart2::XChartDocument > xChartDoc( xComponent, uno::UNO_QUERY );
+                    uno::Reference< chart2::data::XDataReceiver > xReceiver( xComponent, uno::UNO_QUERY );
+                    if ( xChartDoc.is() && xReceiver.is() )
+                    {
+                        ScRangeListRef aNewRanges;
+                        chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
+                        bool bHasCategories = false;
+                        bool bFirstCellAsLabel = false;
+                        rtl::OUString aRangesStr;
+                        lcl_GetChartParameters( xChartDoc, aRangesStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
+
+                        String sRangeStr;
+                        rNewRangeListRef->Format( sRangeStr, SCR_ABS_3D, this );
+
+                        lcl_SetChartParameters( xReceiver, sRangeStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
+
+                        // don't modify pChartListenerCollection here, called from there
+                        return;
+                    }
+                }
+            }
+            pObject = aIter.Next();
+        }
     }
 }
 
@@ -434,10 +706,11 @@ BOOL ScDocument::HasData( SCCOL nCol, SCROW nRow, SCTAB nTab )
         return FALSE;
 }
 
-SchMemChart* ScDocument::FindChartData(const String& rName, BOOL bForModify)
+uno::Reference< embed::XEmbeddedObject >
+    ScDocument::FindOleObjectByName( const String& rName )
 {
     if (!pDrawLayer)
-        return NULL;
+        return uno::Reference< embed::XEmbeddedObject >();
 
     //  die Seiten hier vom Draw-Layer nehmen,
     //  weil sie evtl. nicht mit den Tabellen uebereinstimmen
@@ -453,38 +726,21 @@ SchMemChart* ScDocument::FindChartData(const String& rName, BOOL bForModify)
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
-            if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
-                    ((SdrOle2Obj*)pObject)->GetPersistName() == rName )
+            if ( pObject->GetObjIdentifier() == OBJ_OLE2 )
             {
-                uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                if ( xIPObj.is() )
+                SdrOle2Obj * pOleObject ( dynamic_cast< SdrOle2Obj * >( pObject ));
+                if( pOleObject &&
+                    pOleObject->GetPersistName() == rName )
                 {
-                    // load object before setting modified
-                    SchMemChart* pMemChart = SchDLL::GetChartData( xIPObj );
-                    if (bForModify)
-                    {
-                        try
-                        {
-                            uno::Reference< util::XModifiable> xModif =
-                                uno::Reference< util::XModifiable>(
-                                        xIPObj->getComponent(),
-                                        uno::UNO_QUERY_THROW);
-                            xModif->setModified( sal_True);
-                        }
-                        catch( uno::Exception& )
-                        {
-                        }
-                    }
-                    return pMemChart;
+                    return pOleObject->GetObjRef();
                 }
             }
             pObject = aIter.Next();
         }
     }
 
-    return NULL;                            // nix
+    return uno::Reference< embed::XEmbeddedObject >();
 }
-
 
 BOOL lcl_StringInCollection( const StrCollection* pColl, const String& rStr )
 {
@@ -533,152 +789,39 @@ void ScDocument::UpdateChartListenerCollection()
                         }
                         else
                         {
-                            //  SchDLL::GetChartData always loads the chart dll,
-                            //  so SchModuleDummy::HasID must be tested before
+                            bool bIsChart = false;
 
-                            BOOL bIsChart = FALSE;
-                            USHORT nId;
-
-//REMOVE                                //  Ask the SvPersist for the InfoObject to find out
-//REMOVE                                //  whether it is a Chart. The old way with GetObjRef
-//REMOVE                                //  loads the object which takes too much unnecessary
-//REMOVE                                //  time
-//REMOVE                                SvInfoObject* pInfoObj = pShell->Find(aObjName);
-//REMOVE                                DBG_ASSERT(pInfoObj, "Why isn't here a SvInfoObject?");
-//REMOVE                                if ( pInfoObj && ( nId = SotExchange::IsChart( pInfoObj->GetClassName() ) ) )
                             uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
                             DBG_ASSERT( xIPObj.is(), "No embedded object is given!");
-                            uno::Reference< embed::XClassifiedObject > xClassified( xIPObj, uno::UNO_QUERY );
-                            DBG_ASSERT( xClassified.is(), "The object must implement XClassifiedObject!" );
-                            if ( xClassified.is() )
+                            uno::Reference< ::com::sun::star::chart2::data::XDataReceiver > xReceiver;
+                            uno::Reference< embed::XComponentSupplier > xCompSupp( xIPObj, uno::UNO_QUERY );
+                            if( xCompSupp.is())
+                                xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
+
+                            // if the object is a chart2::XDataReceiver, we must attach as XDataProvider
+                            if( xReceiver.is() &&
+                                !PastingDrawFromOtherDoc())
                             {
-                                SvGlobalName aObjectClassName;
-                                try {
-                                    aObjectClassName = SvGlobalName( xClassified->getClassID() );
-                                } catch( uno::Exception& )
-                                {
-                                    // TODO: handle error
-                                }
+                                // NOTE: this currently does not work as we are
+                                // unable to set the data. So a chart from the
+                                // same document is treated like a chart with
+                                // own data for the time being.
+#if 0
+                                // data provider
+                                uno::Reference< chart2::data::XDataProvider > xDataProvider = new
+                                    ScChart2DataProvider( this );
+                                xReceiver->attachDataProvider( xDataProvider );
+                                // number formats supplier
+                                uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pShell->GetModel(), uno::UNO_QUERY );
+                                xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
+                                // data ?
+                                // how to set?? Defined in XML-file, which is already loaded!!!
+                                // => we have to do this stuff here, BEFORE the chart is actually loaded
 
-                                if ( ( nId = SotExchange::IsChart( aObjectClassName ) ) != 0 )
-                                {
-//REMOVE                                        BOOL bSO6 = (nId >= SOFFICE_FILEFORMAT_60);
-                                    SchMemChart* pChartData = SchDLL::GetChartData(xIPObj);
-                                    // #84359# manually inserted OLE object
-                                    // => no listener at ScAddress(0,0,0)
-                                    // >=SO6: if no series set
-                                    // < SO6: if no SomeData set
-                                    if ( pChartData &&
-                                         pChartData->GetChartRange().maRanges.size() )
-//REMOVE                                            ((!bSO6 && pChartData->SomeData1().Len()) ||
-//REMOVE                                            (bSO6 && pChartData->GetChartRange().maRanges.size())) )
-                                    {
-                                        if ( PastingDrawFromOtherDoc() )
-                                        {
-                                            // #89247# Remove series ranges from
-                                            // charts not originating from the
-                                            // same document, they become true OLE
-                                            // objects.
-                                            pChartData->SomeData1().Erase();
-                                            pChartData->SomeData2().Erase();
-                                            pChartData->SomeData3().Erase();
-                                            pChartData->SomeData4().Erase();
-                                            SchChartRange aChartRange;
-                                            pChartData->SetChartRange( aChartRange );
-                                            pChartData->SetReadOnly( FALSE );
-                                            SchDLL::Update( xIPObj, pChartData );
-                                            ((SdrOle2Obj*)pObject)->GetNewReplacement();
-                                        }
-                                        else
-                                        {
-                                            bIsChart = TRUE;
-
-                                            ScChartArray aArray( this, *pChartData );
-                                            ScChartListener* pCL = new ScChartListener(
-                                                aObjName,
-                                                this, aArray.GetRangeList() );
-                                            pChartListenerCollection->Insert( pCL );
-                                            pCL->StartListeningTo();
-                                            pCL->SetUsed( TRUE );
-
-                                            // BOOL bForceSave = FALSE;
-
-                                            //  Set ReadOnly flag at MemChart, so Chart knows
-                                            //  about the external data in a freshly loaded document.
-                                            //  #73642# only if the chart really has external data
-                                            if ( aArray.IsValid() )
-                                            {
-                                                pChartData->SetReadOnly( TRUE );
-
-                                                //  #81525# re-create series ranges from old extra string
-                                                //  if not set (after loading)
-//REMOVE                                                    if ( !bSO6 )
-//REMOVE                                                    {
-//REMOVE                                                        String aOldData3 = pChartData->SomeData3();
-//REMOVE                                                        aArray.SetExtraStrings( *pChartData );
-//REMOVE                                                        if ( aOldData3 != pChartData->SomeData3() )
-//REMOVE                                                        {
-//REMOVE                                                            //  #96148# ChartRange isn't saved in binary format anyway,
-//REMOVE                                                            //  but SomeData3 (sheet names) has to survive swapping out,
-//REMOVE                                                            //  or the chart can't be saved to 6.0 format.
-//REMOVE
-//REMOVE                                                            bForceSave = TRUE;
-//REMOVE                                                        }
-//REMOVE                                                    }
-                                            }
-
-    #if 1
-    // #74046# initially loaded charts need the number formatter standard precision
-                                            // TODO/LATER: probably should be handled somehow in the future
-//REMOVE                                                BOOL bEnabled = aIPObj->IsEnableSetModified();
-//REMOVE                                                if (bEnabled)
-//REMOVE                                                    aIPObj->EnableSetModified(FALSE);
-                                            pChartData->SetNumberFormatter( GetFormatTable() );
-                                            SchDLL::Update( xIPObj, pChartData );
-                                            ((SdrOle2Obj*)pObject)->GetNewReplacement();
-                                            //! pChartData got deleted, don't use it anymore
-//REMOVE                                                if (bEnabled)
-//REMOVE                                                    aIPObj->EnableSetModified(TRUE);
-    #ifndef PRODUCT
-    //                                          static BOOL bShown74046 = 0;
-    //                                          if ( !bShown74046 && SOFFICE_FILEFORMAT_NOW > SOFFICE_FILEFORMAT_50 )
-    //                                          {
-    //                                              bShown74046 = 1;
-    //                                              DBG_ERRORFILE( "on incompatible file format save number formatter standard precision in chart" );
-    //                                          }
-    #endif
-    #endif
-                                                // the following saving was used only for SO5 formats
-//REMOVE                                                if ( bForceSave )
-//REMOVE                                                {
-//REMOVE                                                    //  #96148# after adjusting the data that wasn't in the MemChart
-//REMOVE                                                    //  in a binary file (ChartRange etc.), the chart object has to be
-//REMOVE                                                    //  saved (within the open document, in transacted mode, so the
-//REMOVE                                                    //  original file isn't changed yet), so the changes are still
-//REMOVE                                                    //  there after the chart is swapped out and loaded again.
-//REMOVE                                                    //  The chart can't get the modified flag set, because then it
-//REMOVE                                                    //  wouldn't be swapped out at all. So it has to be saved manually
-//REMOVE                                                    //  here (which is unnecessary if the chart is modified before it
-//REMOVE                                                    //  it swapped out). At this point, we don't have to care about
-//REMOVE                                                    //  contents being lost when saving in old binary format, because
-//REMOVE                                                    //  the chart was just loaded from that format.
-//REMOVE
-//REMOVE                                                    uno::Reference< embed::XEmbedPersist > xPersist( xIOPbj, uno::UNO_QUERY );
-//REMOVE                                                    try
-//REMOVE                                                    {
-//REMOVE                                                        xPersist->storeOwn();
-//REMOVE                                                    }
-//REMOVE                                                    catch( uno::Exception& )
-//REMOVE                                                    {
-//REMOVE                                                        // TODO/LATER: error handling
-//REMOVE                                                    }
-//REMOVE    //REMOVE                                                    aIPObj->DoSave();
-//REMOVE    //REMOVE                                                    aIPObj->DoSaveCompleted();
-//REMOVE                                                }
-                                        }
-                                    }
-                                }
+                                bIsChart = true;
+#endif
                             }
+
                             if (!bIsChart)
                             {
                                 //  put into list of other ole objects, so the object doesn't have to
