@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-12 12:18:34 $
+#   last change: $Author: vg $ $Date: 2007-05-22 15:17:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -271,7 +271,10 @@ SLOFILES=\
     $(SLO)$/framelink.obj	\
     $(SLO)$/framelinkarray.obj \
     $(SLO)$/databaseregistrationui.obj \
-    $(SLO)$/radiobtnbox.obj
+    $(SLO)$/radiobtnbox.obj \
+    $(SLO)$/cfgchart.obj \
+    $(SLO)$/optupdt.obj	\
+    $(SLO)$/optchart.obj
 
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
@@ -451,7 +454,9 @@ LIB2OBJFILES= \
     $(SLO)$/numfmt.obj \
     $(SLO)$/page.obj \
     $(SLO)$/postdlg.obj \
-    $(SLO)$/grfpage.obj
+    $(SLO)$/grfpage.obj \
+    $(SLO)$/cfgchart.obj \
+    $(SLO)$/optchart.obj
 
 .IF "$(GUI)"=="WNT"
 SLOFILES+=$(SLO)$/winpluginlib.obj
