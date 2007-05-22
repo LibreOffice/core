@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VLineProperties.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:45:48 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,12 +55,14 @@ struct VLineProperties
     com::sun::star::uno::Any LineStyle; //type drawing::LineStyle for property UNO_NAME_LINESTYLE
     com::sun::star::uno::Any Transparence;//type sal_Int16 for property UNO_NAME_LINETRANSPARENCE
     com::sun::star::uno::Any Width;//type sal_Int32 for property UNO_NAME_LINEWIDTH
-    com::sun::star::uno::Any Dash;//type drawing::LineDash for property UNO_NAME_LINEDASH
+    com::sun::star::uno::Any DashName;//type OUString for property "LineDashName"
 
     VLineProperties();
     void initFromPropertySet( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::beans::XPropertySet >& xProp
                               , bool bUseSeriesPropertyNames=false );
+
+    bool isLineVisible() const;
 };
 
 //.............................................................................
