@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Spreadsheets.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:53:56 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:11:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,10 @@
 #include <com/sun/star/container/XEnumerationAccess.idl>
 #endif
 
+#ifndef __com_sun_star_sheet_XCellRangesAccess_idl__
+#include <com/sun/star/sheet/XCellRangesAccess.idl>
+#endif
+
 //=============================================================================
 
 module com {  module sun {  module star {  module sheet {
@@ -84,6 +88,10 @@ published service Spreadsheets
         @see com::sun::star::sheet::SpreadsheetsEnumeration
      */
     interface com::sun::star::container::XEnumerationAccess;
+
+    //-------------------------------------------------------------------------
+
+    [optional] interface com::sun::star::sheet::XCellRangesAccess;
 
 };
 
