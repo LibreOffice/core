@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:46:58 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:45:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,9 @@
 #endif
 #ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
+#endif
+#ifndef SC_XIHELPER_HXX
+#include "xihelper.hxx"
 #endif
 #ifndef SC_XIPAGE_HXX
 #include "xipage.hxx"
@@ -321,9 +324,6 @@ void ImportExcel8::PostDocLoad( void )
     GetWebQueryBuffer().Apply();    //! test if extant
 
     ImportExcel::PostDocLoad();
-
-    // process all drawing objects (including OLE, charts, controls; after hiding rows/columns)
-    GetObjectManager().ConvertObjects();
 
     // Scenarien bemachen! ACHTUNG: Hier wird Tabellen-Anzahl im Dokument erhoeht!!
     if( !pD->IsClipboard() && aScenList.Count() )
