@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-10 18:54:14 $
+#   last change: $Author: vg $ $Date: 2007-05-22 20:09:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,6 @@ SRC1FILES = \
     optdlg.src   \
     scerrors.src \
     textdlgs.src \
-    chartdlg.src \
     scfuncs.src	 \
     crnrdlg.src	 \
     condfrmt.src \
