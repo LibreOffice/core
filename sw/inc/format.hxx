@@ -4,9 +4,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:55:00 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:19:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@ class IDocumentDrawModelAccess;
 class IDocumentLayoutAccess;
 class IDocumentTimerAccess;
 class IDocumentFieldsAccess;
+class IDocumentChartDataProviderAccess;
 class SwDoc;
 
 class SwFmt : public SwModify
@@ -170,6 +171,10 @@ public:
      /** Provides access to the document idle timer interface
      */
     IDocumentFieldsAccess* getIDocumentFieldsAccess();
+
+     /** gives access to the chart data-provider
+     */
+    IDocumentChartDataProviderAccess* getIDocumentChartDataProviderAccess();
 
     // erfragen und setzen der Poolvorlagen-Id's
     USHORT GetPoolFmtId() const { return nPoolFmtId; }
