@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:54:12 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:05:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -320,7 +320,6 @@ void ScDLL::Init()
     ScSpecialFilterDlgWrapper   ::RegisterChildWindow(FALSE, pMod);
     ScDbNameDlgWrapper          ::RegisterChildWindow(FALSE, pMod);
     ScConsolidateDlgWrapper     ::RegisterChildWindow(FALSE, pMod);
-    ScChartDlgWrapper           ::RegisterChildWindow(FALSE, pMod);
     ScPrintAreasDlgWrapper      ::RegisterChildWindow(FALSE, pMod);
     ScCondFormatDlgWrapper      ::RegisterChildWindow(FALSE, pMod);
     ScColRowNameRangesDlgWrapper::RegisterChildWindow(FALSE, pMod);
@@ -331,7 +330,7 @@ void ScDLL::Init()
 
     // Redlining- Window
     ScAcceptChgDlgWrapper       ::RegisterChildWindow(FALSE, pMod);
-    ScSimpleRefDlgWrapper       ::RegisterChildWindow(FALSE, pMod);
+    ScSimpleRefDlgWrapper       ::RegisterChildWindow(FALSE, pMod, SFX_CHILDWIN_ALWAYSAVAILABLE);
     ScHighlightChgDlgWrapper    ::RegisterChildWindow(FALSE, pMod);
 
     SvxSearchDialogWrapper      ::RegisterChildWindow(FALSE, pMod);
