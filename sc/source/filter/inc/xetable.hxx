@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xetable.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:57:53 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:56:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -915,7 +915,7 @@ public:
     /** Returns the height of the row in twips. */
     inline sal_uInt16   GetHeight() const { return mnHeight; }
     /** Returns true, if this row does not contain at least one valid cell. */
-    inline bool         IsEmpty() const { return maCellList.Empty(); }
+    inline bool         IsEmpty() const { return maCellList.IsEmpty(); }
     /** Returns true, if this row is hidden. */
     inline bool         IsHidden() const { return ::get_flag( mnFlags, EXC_ROW_HIDDEN ); }
     /** Returns true, if this row contains a manually set height. */
