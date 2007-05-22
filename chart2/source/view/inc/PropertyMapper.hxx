@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMapper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:44:19 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:20:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,9 @@
 #ifndef _CHART2_PROPERTYMAPPER_HXX
 #define _CHART2_PROPERTYMAPPER_HXX
 
-#include "InlineContainer.hxx"
+#ifndef INCLUDED_COMPHELPER_INLINE_CONTAINER_HXX
+#include <comphelper/InlineContainer.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -73,7 +75,8 @@ public:
                 ::com::sun::star::beans::XPropertySet >& xTarget
         , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet >& xSource
-        , const tPropertyNameMap& rMap );
+        , const tPropertyNameMap& rMap
+        , tPropertyNameValueMap* pOverwriteMap=0 );
 
     static void getValueMap(
           tPropertyNameValueMap& rValueMap
@@ -110,6 +113,7 @@ public:
     static const tMakePropertyNameMap& getPropertyNameMapForParagraphProperties();
     static const tMakePropertyNameMap& getPropertyNameMapForFillProperties();
     static const tMakePropertyNameMap& getPropertyNameMapForLineProperties();
+    static const tMakePropertyNameMap& getPropertyNameMapForFillAndLineProperties();
 
     static const tMakePropertyNameMap& getPropertyNameMapForFilledSeriesProperties();
     static const tMakePropertyNameMap& getPropertyNameMapForLineSeriesProperties();
