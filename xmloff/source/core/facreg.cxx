@@ -4,9 +4,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:20:44 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:09:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,11 +129,13 @@ SERVICE( XMLImpressClipboardExport );
 
 // chart oasis import
 SERVICE( SchXMLImport );
+SERVICE( SchXMLImport_Meta );
 SERVICE( SchXMLImport_Styles );
 SERVICE( SchXMLImport_Content );
 
 // chart oasis export
 SERVICE( SchXMLExport_Oasis );
+SERVICE( SchXMLExport_Oasis_Meta );
 SERVICE( SchXMLExport_Oasis_Styles );
 SERVICE( SchXMLExport_Oasis_Content );
 
@@ -259,11 +261,13 @@ XMLOFF_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void * /*pServiceManager
 
             // chart oasis import
             WRITEINFO( SchXMLImport );
+            WRITEINFO( SchXMLImport_Meta );
             WRITEINFO( SchXMLImport_Styles );
             WRITEINFO( SchXMLImport_Content );
 
             // chart oasis export
             WRITEINFO( SchXMLExport_Oasis );
+            WRITEINFO( SchXMLExport_Oasis_Meta );
             WRITEINFO( SchXMLExport_Oasis_Styles );
             WRITEINFO( SchXMLExport_Oasis_Content );
 
@@ -366,11 +370,13 @@ XMLOFF_DLLPUBLIC void * SAL_CALL component_getFactory( const sal_Char * pImplNam
 
         // chart oasis import
         else SINGLEFACTORY( SchXMLImport )
+        else SINGLEFACTORY( SchXMLImport_Meta )
         else SINGLEFACTORY( SchXMLImport_Styles )
         else SINGLEFACTORY( SchXMLImport_Content )
 
         // chart oasis export
         else SINGLEFACTORY( SchXMLExport_Oasis )
+        else SINGLEFACTORY( SchXMLExport_Oasis_Meta )
         else SINGLEFACTORY( SchXMLExport_Oasis_Styles )
         else SINGLEFACTORY( SchXMLExport_Oasis_Content )
 
