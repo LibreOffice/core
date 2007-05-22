@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:45:24 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:18:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,6 +193,9 @@
 #ifndef _SVX_OPTUPDT_HXX
 #include "optupdt.hxx"
 #endif
+#ifndef _SVX_OPTCHART_HXX
+#include "optchart.hxx"
+#endif
 
 #include "optgdlg.hxx"
 #include "optmemory.hxx"
@@ -208,6 +211,7 @@
 #include "connpoolconfig.hxx"
 #include "dbregister.hxx"
 #include "dbregisterednamesconfig.hxx"
+#include "cfgchart.hxx"
 
 #ifndef _SVX_LANGITEM_HXX
 #define ITEMID_LANGUAGE SID_ATTR_CHAR_LANGUAGE
@@ -339,6 +343,7 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItem
         //added by jmeng end
         case RID_SVXPAGE_OPTIONS_JAVA:              fnCreate = &SvxJavaOptionsPage::Create ; break;
         case RID_SVXPAGE_ONLINEUPDATE:              fnCreate = &SvxOnlineUpdateTabPage::Create; break;
+        case RID_OPTPAGE_CHART_DEFCOLORS:           fnCreate = &SvxDefaultColorOptPage::Create; break;
     }
 
     SfxTabPage* pRet = fnCreate ? (*fnCreate)( pParent, rSet ) : NULL;
@@ -430,7 +435,7 @@ static OptionsMapping_Impl __READONLY_DATA OptionsMap_Impl[] =
     { "Draw",               "Grid",                 SID_SD_TP_SNAP },
     { "Draw",               "Print",                SID_SD_TP_PRINT },
     { "Charts",             NULL,                   SID_SCH_EDITOPTIONS },
-    { "Charts",             "DefaultColors",        SID_SCH_TP_DEFCOLORS },
+    { "Charts",             "DefaultColors",        RID_OPTPAGE_CHART_DEFCOLORS },
     { "Base",               NULL,                   SID_SB_STARBASEOPTIONS },
     { "Base",               "Connections",          SID_SB_CONNECTIONPOOLING },
     { "Base",               "Databases",            SID_SB_DBREGISTEROPTIONS },
@@ -1019,7 +1024,7 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
                     }
                 }
 
-                if ( pPageInfo->nPageId != SID_SCH_TP_DEFCOLORS )
+//              if ( pPageInfo->nPageId != RID_OPTPAGE_CHART_DEFCOLORS )
                 {
                     if(!pGroupInfo->pInItemSet)
                         pGroupInfo->pInItemSet = pGroupInfo->pShell ? pGroupInfo->pShell->CreateItemSet( pGroupInfo->nDialogId ) : CreateItemSet( pGroupInfo->nDialogId );
@@ -1031,29 +1036,6 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
             if(pGroupInfo->pModule)
             {
                 pPageInfo->pPage = pGroupInfo->pModule->CreateTabPage( pPageInfo->nPageId, this, *pGroupInfo->pInItemSet );
-            }
-            else if ( SID_SCH_TP_DEFCOLORS == pPageInfo->nPageId )
-            {
-                // Hack: force chart library to be loaded
-                Reference < util::XCloseable > xCloseable ( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.chart.ChartDocument") ), UNO_QUERY );
-                if ( xCloseable.is() )
-                {
-                    Reference < frame::XLoadable > xLoadable( xCloseable, UNO_QUERY );
-                    xLoadable->initNew();
-                    xCloseable->close( sal_True );
-                }
-
-                SfxModule *pSchMod = (*(SfxModule**) GetAppData(SHL_SCH));
-                if ( pSchMod )
-                {
-                    if( !pGroupInfo->pInItemSet )
-                        pGroupInfo->pInItemSet = pSchMod->CreateItemSet( pGroupInfo->nDialogId );
-                    pPageInfo->pPage = pSchMod->CreateTabPage( pPageInfo->nPageId, this, *pGroupInfo->pInItemSet );
-                    if( !pGroupInfo->pOutItemSet )
-                        pGroupInfo->pOutItemSet = new SfxItemSet(*pGroupInfo->pInItemSet->GetPool(), pGroupInfo->pInItemSet->GetRanges());
-                    if( !pGroupInfo->pShell )
-                        pGroupInfo->pShell = pSchMod;
-                }
             }
             else if(RID_SVXPAGE_COLOR != pPageInfo->nPageId)
                 pPageInfo->pPage = ::CreateGeneralTabPage( pPageInfo->nPageId, this, *pGroupInfo->pInItemSet );
@@ -1459,6 +1441,14 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             ::offapp::ConnectionPoolConfig::GetOptions(*pRet);
             ::svx::DbRegisteredNamesConfig::GetOptions(*pRet);
             break;
+
+        case SID_SCH_EDITOPTIONS:
+        {
+            SvxChartOptions aChartOpt;
+            pRet = new SfxItemSet( SFX_APP()->GetPool(), SID_SCH_EDITOPTIONS, SID_SCH_EDITOPTIONS );
+            pRet->Put( SvxChartColorTableItem( SID_SCH_EDITOPTIONS, aChartOpt.GetDefaultColors() ) );
+            break;
+        }
     }
     return pRet;
 }
@@ -1527,6 +1517,10 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
         case SID_SB_STARBASEOPTIONS:
             ::offapp::ConnectionPoolConfig::SetOptions( rSet );
             ::svx::DbRegisteredNamesConfig::SetOptions(rSet);
+            break;
+
+        case SID_SCH_EDITOPTIONS:
+            // nothing to do. Chart options only apply to newly created charts
             break;
 
         default:
