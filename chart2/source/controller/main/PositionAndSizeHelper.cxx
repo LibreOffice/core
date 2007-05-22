@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PositionAndSizeHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:06:50 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:08:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,20 +37,21 @@
 #include "precompiled_chart2.hxx"
 
 #include "PositionAndSizeHelper.hxx"
-#include "chartview/ObjectIdentifier.hxx"
 #include "macros.hxx"
 #include "ChartModelHelper.hxx"
+#include "ControllerLockGuard.hxx"
 
 #ifndef _COM_SUN_STAR_CHART2_LEGENDPOSITION_HPP_
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
-#include <com/sun/star/layout/RelativePosition.hpp>
+#ifndef _COM_SUN_STAR_CHART2_RELATIVEPOSITION_HPP_
+#include <com/sun/star/chart2/RelativePosition.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LAYOUT_RELATIVESIZE_HPP_
-#include <com/sun/star/layout/RelativeSize.hpp>
+#ifndef _COM_SUN_STAR_CHART2_RELATIVESIZE_HPP_
+#include <com/sun/star/chart2/RelativeSize.hpp>
 #endif
+#include "chartview/ExplicitValueProvider.hxx"
 
 // header for class Rectangle
 #ifndef _SV_GEN_HXX
@@ -68,106 +69,136 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-bool PositionAndSizeHelper::moveObject( const rtl::OUString& rObjectCID
-                , const uno::Reference< frame::XModel >& xChartModel
+bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
+                , const uno::Reference< beans::XPropertySet >& xObjectProp
                 , const awt::Rectangle& rNewPositionAndSize
                 , const awt::Rectangle& rPageRectangle
                 )
 {
-    uno::Reference< beans::XPropertySet > xProp = ObjectIdentifier::getObjectPropertySet( rObjectCID, xChartModel );
-    if(!xProp.is())
+    if(!xObjectProp.is())
         return false;
     Rectangle aObjectRect( Point(rNewPositionAndSize.X,rNewPositionAndSize.Y), Size(rNewPositionAndSize.Width,rNewPositionAndSize.Height) );
     Rectangle aPageRect( Point(rPageRectangle.X,rPageRectangle.Y), Size(rPageRectangle.Width,rPageRectangle.Height) );
 
-    if(rObjectCID.indexOf(C2U("Title"))!=-1)
+    if( OBJECTTYPE_TITLE==eObjectType )
     {
         //@todo decide wether x is primary or secondary
-        ::com::sun::star::layout::RelativePosition aRelativePosition;
+        chart2::RelativePosition aRelativePosition;
+        aRelativePosition.Anchor = drawing::Alignment_TOP;
         //the anchor point at the title object is top/middle
         Point aPos = aObjectRect.TopLeft();
         aRelativePosition.Primary = (double(aPos.X())+double(aObjectRect.getWidth())/2.0)/double(aPageRect.getWidth());
         aRelativePosition.Secondary = double(aPos.Y())/double(aPageRect.getHeight());
-        xProp->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aRelativePosition) );
+        xObjectProp->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aRelativePosition) );
     }
-    else if(rObjectCID.indexOf(C2U("Legend"))!=-1)
+    else if(OBJECTTYPE_LEGEND==eObjectType)
     {
         LegendPosition ePos = LegendPosition_LINE_END;
-        xProp->getPropertyValue( C2U( "AnchorPosition" )) >>= ePos;
-        Point aLegendAnchor(0,0);//point at legend
-        Point aPageAnchor(0,0);//point at page
-        ::com::sun::star::layout::RelativePosition aRelativePosition;
+        xObjectProp->getPropertyValue( C2U( "AnchorPosition" )) >>= ePos;
+        chart2::RelativePosition aRelativePosition;
+        Point aAnchor = aObjectRect.TopLeft();
+
         switch( ePos )
         {
             case LegendPosition_LINE_START:
-                //@todo language dependent positions ...
-                aLegendAnchor = aObjectRect.LeftCenter();
-                aPageAnchor = aPageRect.LeftCenter();
-                aRelativePosition.Primary = aLegendAnchor.X()-aPageAnchor.X();
-                aRelativePosition.Secondary = aPageAnchor.Y()-aLegendAnchor.Y();
-                aRelativePosition.Primary /= double(aPageRect.getWidth());
-                aRelativePosition.Secondary /= double(aPageRect.getHeight());
+                {
+                    //@todo language dependent positions ...
+                    aRelativePosition.Anchor = drawing::Alignment_LEFT;
+                    aAnchor = aObjectRect.LeftCenter();
+                }
                 break;
             case LegendPosition_LINE_END:
-                //@todo language dependent positions ...
-                aLegendAnchor = aObjectRect.RightCenter();
-                aPageAnchor = aPageRect.RightCenter();
-                aRelativePosition.Primary = aPageAnchor.X()-aLegendAnchor.X();
-                aRelativePosition.Secondary = aLegendAnchor.Y()-aPageAnchor.Y();
-                aRelativePosition.Primary /= double(aPageRect.getWidth());
-                aRelativePosition.Secondary /= double(aPageRect.getHeight());
+                {
+                    //@todo language dependent positions ...
+                    aRelativePosition.Anchor = drawing::Alignment_RIGHT;
+                    aAnchor = aObjectRect.RightCenter();
+                }
                 break;
             case LegendPosition_PAGE_START:
-                //@todo language dependent positions ...
-                aLegendAnchor = aObjectRect.TopCenter();
-                aPageAnchor = aPageRect.TopCenter();
-                aRelativePosition.Primary = aLegendAnchor.Y()-aPageAnchor.Y();
-                aRelativePosition.Secondary = aLegendAnchor.X()-aPageAnchor.X();
-                aRelativePosition.Primary /= double(aPageRect.getHeight());
-                aRelativePosition.Secondary /= double(aPageRect.getWidth());
+                {
+                    //@todo language dependent positions ...
+                    aRelativePosition.Anchor = drawing::Alignment_TOP;
+                    aAnchor = aObjectRect.TopCenter();
+                }
                 break;
             case LegendPosition_PAGE_END:
-            case LegendPosition_CUSTOM:
-            case LegendPosition_MAKE_FIXED_SIZE:
                 //@todo language dependent positions ...
-                aLegendAnchor = aObjectRect.BottomCenter();
-                aPageAnchor = aPageRect.BottomCenter();
-                aRelativePosition.Primary = aPageAnchor.Y()-aLegendAnchor.Y();
-                aRelativePosition.Secondary = aPageAnchor.X()-aLegendAnchor.X();
-                aRelativePosition.Primary /= double(aPageRect.getHeight());
-                aRelativePosition.Secondary /= double(aPageRect.getWidth());
+                {
+                    aRelativePosition.Anchor = drawing::Alignment_BOTTOM;
+                    aAnchor = aObjectRect.BottomCenter();
+                }
+                break;
+            case LegendPosition_CUSTOM:
+                {
+                    //@todo language dependent positions ...
+                    aRelativePosition.Anchor = drawing::Alignment_TOP_LEFT;
+                }
+                break;
+            case LegendPosition_MAKE_FIXED_SIZE:
+                OSL_ASSERT( false );
                 break;
         }
-        xProp->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aRelativePosition) );
-    }
-    else if(rObjectCID.indexOf(C2U("Diagram"))!=-1)
-    {
-        xProp = uno::Reference< beans::XPropertySet >( ChartModelHelper::findDiagram( xChartModel ), uno::UNO_QUERY );
-        if(!xProp.is())
-            return false;
+        aRelativePosition.Primary =
+            static_cast< double >( aAnchor.X()) /
+            static_cast< double >( aPageRect.getWidth() );
+        aRelativePosition.Secondary =
+            static_cast< double >( aAnchor.Y()) /
+            static_cast< double >( aPageRect.getHeight());
 
+        xObjectProp->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aRelativePosition) );
+    }
+    else if(OBJECTTYPE_DIAGRAM==eObjectType || OBJECTTYPE_DIAGRAM_WALL==eObjectType || OBJECTTYPE_DIAGRAM_FLOOR==eObjectType)
+    {
         //@todo decide wether x is primary or secondary
 
+        //xChartView
+
         //set position:
-        Point aPos = aObjectRect.TopLeft();
-        ::com::sun::star::layout::RelativePosition aRelativePosition;
-        //the anchor points for the diagram are in the middle of the diagram
-        //and in the middle of the page
-        aRelativePosition.Primary = (double(aPos.X())+double(aObjectRect.getWidth())/2.0-double(aPageRect.getWidth())/2.0)/double(aPageRect.getWidth());
-        aRelativePosition.Secondary = (double(aPos.Y())+double(aObjectRect.getHeight())/2.0-double(aPageRect.getHeight())/2.0)/double(aPageRect.getHeight());
-        xProp->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aRelativePosition) );
+        chart2::RelativePosition aRelativePosition;
+        aRelativePosition.Anchor = drawing::Alignment_CENTER;
+
+        Point aPos = aObjectRect.Center();
+        aRelativePosition.Primary = double(aPos.X())/double(aPageRect.getWidth());
+        aRelativePosition.Secondary = double(aPos.Y())/double(aPageRect.getHeight());
+        xObjectProp->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aRelativePosition) );
 
         //set size:
-        ::com::sun::star::layout::RelativeSize aRelativeSize;
+        RelativeSize aRelativeSize;
         //the anchor points for the diagram are in the middle of the diagram
         //and in the middle of the page
         aRelativeSize.Primary = double(aObjectRect.getWidth())/double(aPageRect.getWidth());
         aRelativeSize.Secondary = double(aObjectRect.getHeight())/double(aPageRect.getHeight());
-        xProp->setPropertyValue( C2U( "RelativeSize" ), uno::makeAny(aRelativeSize) );
+        xObjectProp->setPropertyValue( C2U( "RelativeSize" ), uno::makeAny(aRelativeSize) );
     }
     else
         return false;
     return true;
+}
+
+bool PositionAndSizeHelper::moveObject( const rtl::OUString& rObjectCID
+                , const uno::Reference< frame::XModel >& xChartModel
+                , const awt::Rectangle& rNewPositionAndSize
+                , const awt::Rectangle& rPageRectangle
+                , uno::Reference< uno::XInterface > xChartView
+                )
+{
+    ControllerLockGuard aLockedControllers( xChartModel );
+
+    awt::Rectangle aNewPositionAndSize( rNewPositionAndSize );
+
+    uno::Reference< beans::XPropertySet > xObjectProp = ObjectIdentifier::getObjectPropertySet( rObjectCID, xChartModel );
+    ObjectType eObjectType( ObjectIdentifier::getObjectType( rObjectCID ) );
+    if(OBJECTTYPE_DIAGRAM==eObjectType || OBJECTTYPE_DIAGRAM_WALL==eObjectType || OBJECTTYPE_DIAGRAM_FLOOR==eObjectType)
+    {
+        xObjectProp = uno::Reference< beans::XPropertySet >( ObjectIdentifier::getDiagramForCID( rObjectCID, xChartModel ), uno::UNO_QUERY );
+        if(!xObjectProp.is())
+            return false;
+
+        //add axis title sizes to the diagram size
+        aNewPositionAndSize = ExplicitValueProvider::calculateDiagramPositionAndSizeInclusiveTitle(
+            xChartModel, xChartView, rNewPositionAndSize );
+    }
+    return moveObject( eObjectType, xObjectProp, aNewPositionAndSize, rPageRectangle );
 }
 
 //.............................................................................
