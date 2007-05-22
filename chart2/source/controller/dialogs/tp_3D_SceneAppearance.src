@@ -1,0 +1,106 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: tp_3D_SceneAppearance.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:42:03 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "tp_3D_SceneAppearance.hrc"
+#include "dlg_View3D.hrc"
+#include "SchSlotIds.hxx"
+
+#define WIDTH_FL 108
+#define WIDTH_LB 57
+#define WIDTH_FT 41
+
+#define HEIGHT_FL 8
+#define HEIGHT_LB 12
+#define HEIGHT_FT 10
+
+#define POS_X_0 6
+#define POS_X_1 6
+#define POS_X_2 POS_X_1+WIDTH_FT+4
+
+#define POS_Y_SCHEME 8
+#define POS_Y_SEPERATOR (POS_Y_SCHEME+13)
+
+#define POS_Y_SHADING       (POS_Y_SEPERATOR+16)
+#define POS_Y_OBJECTLINES   (POS_Y_SHADING+16)
+#define POS_Y_ROUNDEDEDGE   (POS_Y_OBJECTLINES+16)
+
+
+TabPage TP_3D_SCENEAPPEARANCE
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( VIEW3D_PAGE_WIDTH , VIEW3D_PAGE_HEIGHT ) ;
+
+    FixedText FT_SCHEME
+    {
+        Pos = MAP_APPFONT ( POS_X_1 , POS_Y_SCHEME  ) ;
+        Size = MAP_APPFONT ( WIDTH_FT , HEIGHT_FT ) ;
+        Text [ en-US ] = "Sche~me" ;
+    };
+    ListBox LB_SCHEME
+    {
+        Border = TRUE;
+        TabStop = TRUE;
+        DropDown = TRUE;
+        Pos = MAP_APPFONT ( POS_X_2 , POS_Y_SCHEME-2  ) ;
+        Size = MAP_APPFONT ( WIDTH_LB , HEIGHT_LB ) ;
+    };
+    FixedLine FL_SEPERATOR
+    {
+        Pos = MAP_APPFONT ( POS_X_0 , POS_Y_SEPERATOR  ) ;
+        Size = MAP_APPFONT ( WIDTH_FL , HEIGHT_FL ) ;
+    };
+
+    CheckBox CB_SHADING
+    {
+        Pos = MAP_APPFONT ( POS_X_1 , POS_Y_SHADING ) ;
+        Size = MAP_APPFONT ( WIDTH_FL , HEIGHT_LB ) ;
+        Text [ en-US ] = "~Shading" ;
+    };
+    CheckBox CB_OBJECTLINES
+    {
+        Pos = MAP_APPFONT ( POS_X_1 , POS_Y_OBJECTLINES ) ;
+        Size = MAP_APPFONT ( WIDTH_FL , HEIGHT_LB ) ;
+        Text [ en-US ] = "~Object borders" ;
+    };
+    Checkbox CB_ROUNDEDEDGE
+    {
+        Pos = MAP_APPFONT ( POS_X_1 , POS_Y_ROUNDEDEDGE  ) ;
+        Size = MAP_APPFONT ( WIDTH_FL , HEIGHT_LB ) ;
+        Text [ en-US ] = "~Rounded edges" ;
+    };
+};
+
