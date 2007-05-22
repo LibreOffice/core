@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewDefines.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:46:20 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:22:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@ namespace chart
 #define CHART_3DOBJECT_SEGMENTCOUNT ((sal_Int32)32)
 #define FIXED_SIZE_FOR_3D_CHART_VOLUME (10000.0)
 //There needs to be a little distance betweengrid lines and walls in 3D, otherwise the lines are partly hidden by the walls
-#define GRID_TO_WALL_DISTANCE (20.0)
+#define GRID_TO_WALL_DISTANCE (50.0)
 #define FLOOR_THICKNESS (100.0)
 
 const double    ZDIRECTION = 1.0;
