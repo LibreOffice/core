@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_Insert.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:04:43 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:03:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,29 +43,22 @@
 #include "dlg_InsertStatistic.hxx"
 #include "dlg_InsertTitle.hxx"
 
+#include "ChartWindow.hxx"
 #include "ChartModelHelper.hxx"
-#include "MeterHelper.hxx"
+#include "AxisHelper.hxx"
 #include "TitleHelper.hxx"
 #include "ContextHelper.hxx"
 #include "macros.hxx"
-#include "DrawModelWrapper.hxx"
+#include "chartview/DrawModelWrapper.hxx"
 #include "MultipleChartConverters.hxx"
-#include "LegendItemConverter.hxx"
+#include "ControllerLockGuard.hxx"
+#include "UndoGuard.hxx"
+#include "ResId.hxx"
+#include "Strings.hrc"
+#include "ReferenceSizeProvider.hxx"
 
-#ifndef _COM_SUN_STAR_CHART2_XAXISCONTAINER_HPP_
-#include <com/sun/star/chart2/XAxisContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XBOUNDEDCOORDINATESYSTEMCONTAINER_HPP_
-#include <com/sun/star/chart2/XBoundedCoordinateSystemContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
-#include <com/sun/star/chart2/XDiagram.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XGRIDCONTAINER_HPP_
-#include <com/sun/star/chart2/XGridContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XTITLED_HPP_
-#include <com/sun/star/chart2/XTitled.hpp>
+#ifndef _SVX_ACTIONDESCRIPTIONPROVIDER_HXX
+#include <svx/ActionDescriptionProvider.hxx>
 #endif
 
 //--------------------------------------
@@ -78,11 +71,14 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
-
-#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
-#include <com/sun/star/util/XCloneable.hpp>
+// header for class Application
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
-
+// header for class ::vos::OGuard
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 
 //.............................................................................
 namespace chart
@@ -92,258 +88,39 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-namespace
-{
-//-----------------------------------------------------------------------------
-//status of grid or axis
-
-void getExistingAxes( uno::Sequence< sal_Bool >& rExistenceList, const uno::Reference< XDiagram >& xDiagram )
-{
-    rExistenceList.realloc(6);
-
-    sal_Int32 nN;
-    uno::Reference< XAxis > xAxis;
-    for(nN=0;nN<3;nN++)
-    {
-         xAxis = MeterHelper::getAxis( nN, true, xDiagram );
-         rExistenceList[nN] = xAxis.is();
-    }
-    for(nN=3;nN<6;nN++)
-    {
-         xAxis = MeterHelper::getAxis( nN%3, false, xDiagram );
-         rExistenceList[nN] = xAxis.is();
-    }
-}
-
-void getExistingGrids( uno::Sequence< sal_Bool >& rExistenceList, const uno::Reference< XDiagram >& xDiagram )
-{
-    sal_Int32 nN;
-    uno::Reference< XGrid > xGrid;
-    for(nN=0;nN<3;nN++)
-    {
-        xGrid = MeterHelper::getGrid( nN, true, xDiagram );
-        rExistenceList[nN] = xGrid.is();
-    }
-    for(nN=3;nN<6;nN++)
-    {
-        xGrid = MeterHelper::getGrid( nN%3, false, xDiagram );
-        rExistenceList[nN] = xGrid.is();
-    }
-}
-
-//-----------------------------------------------------------------------------
-//change grid or axis
-
-void createAxis( sal_Int32 nDimensionIndex, bool bMainAxis
-                , const uno::Reference< XDiagram >& xDiagram
-                , const uno::Reference< uno::XComponentContext >& xContext )
-{
-    sal_Int32 nCooSysIndex = bMainAxis ? 0 : 1;
-    uno::Reference< XBoundedCoordinateSystem > xCooSys = MeterHelper::getBoundedCoordinateSystemByIndex( xDiagram, nCooSysIndex  );
-    if(!xCooSys.is())
-    {
-        //create a new CooSys by cloning it from another exsisting one
-        uno::Reference< XBoundedCoordinateSystem > xOtherCooSys
-            = MeterHelper::getBoundedCoordinateSystemByIndex( xDiagram, nCooSysIndex-1 );
-        if(!xOtherCooSys.is()) //@todo? ...
-            return;
-
-        uno::Reference< util::XCloneable > xCloneable( xOtherCooSys,uno::UNO_QUERY);
-        if( xCloneable.is() )
-            xCooSys = uno::Reference< XBoundedCoordinateSystem >( xCloneable->createClone(), uno::UNO_QUERY );
-
-        uno::Reference< XBoundedCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY );
-        if( xCooSysCnt.is() && xCooSys.is() )
-            xCooSysCnt->addCoordinateSystem( xCooSys );
-    }
-    // create axis
-    MeterHelper::createAxis( nDimensionIndex, xCooSys, uno::Reference< XAxisContainer >( xDiagram, uno::UNO_QUERY ), xContext );
-}
-
-void createGrid( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGrid
-                , const uno::Reference< XDiagram >& xDiagram
-                , const uno::Reference< uno::XComponentContext >& xContext )
-{
-    uno::Reference< XBoundedCoordinateSystem > xCooSys = MeterHelper::getBoundedCoordinateSystemByIndex( xDiagram, nCooSysIndex );
-    if(!xCooSys.is())
-    {
-        //@todo create initial coosys if none exsists (but this state is not likly to occur)
-        return;
-    }
-    // create grid
-    uno::Reference< XGrid > xGrid;
-    OSL_ENSURE( nDimensionIndex <= 3, "Check Code for more than 3 dimensions" );
-
-    ::rtl::OUStringBuffer aId( MeterHelper::makeGridIdentifier( nDimensionIndex, nCooSysIndex, bMainGrid ) );
-
-    ContextHelper::tContextEntryMapType aContextValues(
-        ContextHelper::MakeContextEntryMap(
-        C2U( "Identifier" ), uno::makeAny( aId.makeStringAndClear()) ));
-
-    xGrid.set( xContext->getServiceManager()->createInstanceWithContext(
-            C2U( "com.sun.star.chart2.Grid" ),
-            ContextHelper::createContext( aContextValues, xContext ) )
-            , uno::UNO_QUERY );
-    OSL_ASSERT( xGrid.is());
-    if( xGrid.is())
-    {
-        xGrid->attachCoordinateSystem( xCooSys, nDimensionIndex );
-        uno::Reference< XGridContainer > xGridContainer( xDiagram, uno::UNO_QUERY );
-        xGridContainer->addGrid( xGrid );
-    }
-}
-
-bool changeExistingAxes( const uno::Reference< XDiagram >& xDiagram
-                        , const uno::Sequence< sal_Bool >& rOldExistenceList
-                        , const uno::Sequence< sal_Bool >& rNewExistenceList
-                        , const uno::Reference< uno::XComponentContext >& xContext )
-{
-    bool bChanged = false;
-    for(sal_Int32 nN=0;nN<6;nN++)
-    {
-        if(rOldExistenceList[nN]!=rNewExistenceList[nN])
-        {
-            bChanged = true;
-            if(rNewExistenceList[nN]) //add axis
-            {
-                createAxis( nN%3, nN<3, xDiagram, xContext );
-            }
-            else //remove axis
-            {
-                uno::Reference< XAxisContainer > xAxisContainer( xDiagram, uno::UNO_QUERY );
-                if(xAxisContainer.is())
-                {
-                    uno::Reference< XAxis > xAxis = MeterHelper::getAxis( nN%3, nN<3, xDiagram );
-                    xAxisContainer->removeAxis(xAxis);
-                }
-            }
-        }
-    }
-    return bChanged;
-}
-
-bool changeExistingGrids( const uno::Reference< XDiagram >& xDiagram
-                        , const uno::Sequence< sal_Bool >& rOldExistenceList
-                        , const uno::Sequence< sal_Bool >& rNewExistenceList
-                        , const uno::Reference< uno::XComponentContext >& xContext )
-{
-    bool bChanged = false;
-    for(sal_Int32 nN=0;nN<6;nN++)
-    {
-        if(rOldExistenceList[nN]!=rNewExistenceList[nN])
-        {
-            bChanged = true;
-            if(rNewExistenceList[nN]) //add grid
-            {
-                createGrid( nN%3, 0, nN<3, xDiagram, xContext );
-            }
-            else //remove grid
-            {
-                uno::Reference< XGridContainer > xGridContainer( xDiagram, uno::UNO_QUERY );
-                if(xGridContainer.is())
-                {
-                    uno::Reference< XGrid > xGrid = MeterHelper::getGrid( nN%3, nN<3, xDiagram );
-                    xGridContainer->removeGrid(xGrid);
-                }
-            }
-        }
-    }
-    return bChanged;
-}
-
-//-----------------------------------------------------------------------------
-//status of titles
-void fillInsertTitleDialogDataFromModel( InsertTitleDialogData& rDialogData
-        , const uno::Reference< frame::XModel>& xChartModel )
-{
-    uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram(xChartModel);
-
-    //get possibilities
-    uno::Sequence< sal_Bool > aMeterPossibilityList;
-    MeterHelper::getMeterPossibilities( aMeterPossibilityList, xDiagram );
-    rDialogData.aPossibilityList[2]=aMeterPossibilityList[0];//x axis title
-    rDialogData.aPossibilityList[3]=aMeterPossibilityList[1];//y axis title
-    rDialogData.aPossibilityList[4]=aMeterPossibilityList[2];//z axis title
-
-    //find out which title exsist and get their text
-    //main title:
-    for( sal_Int32 nTitleIndex = static_cast< sal_Int32 >( TitleHelper::TITLE_BEGIN);
-         nTitleIndex < static_cast< sal_Int32 >( TitleHelper::TITLE_END );
-         nTitleIndex++)
-    {
-        uno::Reference< XTitle > xTitle =  TitleHelper::getTitle(
-            static_cast< TitleHelper::eTitleType >( nTitleIndex ), xChartModel );
-        rDialogData.aExistenceList[nTitleIndex] = xTitle.is();
-        rDialogData.aTextList[nTitleIndex]=TitleHelper::getCompleteString( xTitle );
-    }
-}
-
-//-----------------------------------------------------------------------------
-//change existing titles
-
-bool changeExistingTitles( const uno::Reference< frame::XModel >& xModel
-                        , const InsertTitleDialogData& rOldState
-                        , const InsertTitleDialogData& rNewState
-                        , const uno::Reference< uno::XComponentContext >& xContext )
-{
-    bool bChanged = false;
-    for( sal_Int32 nN = static_cast< sal_Int32 >( TitleHelper::TITLE_BEGIN );
-         nN < static_cast< sal_Int32 >( TitleHelper::TITLE_END );
-         nN++)
-    {
-        if( rOldState.aExistenceList[nN] != rNewState.aExistenceList[nN] )
-        {
-            if(rNewState.aExistenceList[nN])
-            {
-                TitleHelper::createTitle(
-                    static_cast< TitleHelper::eTitleType >( nN ), rNewState.aTextList[nN], xModel, xContext );
-                bChanged = true;
-            }
-            else
-            {
-                TitleHelper::removeTitle( static_cast< TitleHelper::eTitleType >( nN ), xModel );
-                bChanged = true;
-            }
-        }
-        else if( rOldState.aTextList[nN] != rNewState.aTextList[nN] )
-        {
-            //change content
-            uno::Reference< XTitle > xTitle(
-                TitleHelper::getTitle( static_cast< TitleHelper::eTitleType >( nN ), xModel ) );
-            if(xTitle.is())
-            {
-                TitleHelper::setCompleteString( rNewState.aTextList[nN], xTitle, xContext );
-                bChanged = true;
-            }
-        }
-    }
-    return bChanged;
-}
-
-}// anonymous namespace
-
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 void SAL_CALL ChartController::executeDispatch_InsertAxis()
 {
+    UndoGuard aUndoGuard(
+        ActionDescriptionProvider::createDescription(
+            ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_AXES )))),
+        m_aUndoManager, m_aModel->getModel() );
+
     try
     {
-        Window* pParent( NULL );
-        InsertMeterDialogData aDialogInput;
+        InsertAxisOrGridDialogData aDialogInput;
         uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram(m_aModel->getModel());
-        getExistingAxes( aDialogInput.aExistenceList, xDiagram );
-        MeterHelper::getMeterPossibilities( aDialogInput.aPossibilityList, xDiagram );
+        AxisHelper::getAxisOrGridExcistence( aDialogInput.aExistenceList, xDiagram, sal_True );
+        AxisHelper::getAxisOrGridPossibilities( aDialogInput.aPossibilityList, xDiagram, sal_True );
 
-        SchAxisDlg aDlg( pParent, aDialogInput );
+        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SchAxisDlg aDlg( m_pChartWindow, aDialogInput );
         if( aDlg.Execute() == RET_OK )
         {
-            InsertMeterDialogData aDialogOutput;
+            // lock controllers till end of block
+            ControllerLockGuard aCLGuard( m_aModel->getModel());
+
+            InsertAxisOrGridDialogData aDialogOutput;
             aDlg.getResult( aDialogOutput );
-            bool bChanged = changeExistingAxes( xDiagram
-                , aDialogInput.aExistenceList, aDialogOutput.aExistenceList, m_xCC );
-            if(bChanged)
-                impl_rebuildView();
+            ::std::auto_ptr< ReferenceSizeProvider > mpRefSizeProvider(
+                impl_createReferenceSizeProvider());
+            bool bChanged = AxisHelper::changeVisibilityOfAxes( xDiagram
+                , aDialogInput.aExistenceList, aDialogOutput.aExistenceList, m_xCC
+                , mpRefSizeProvider.get() );
+            if( bChanged )
+                aUndoGuard.commitAction();
         }
     }
     catch( uno::RuntimeException& e)
@@ -354,23 +131,30 @@ void SAL_CALL ChartController::executeDispatch_InsertAxis()
 
 void SAL_CALL ChartController::executeDispatch_InsertGrid()
 {
+    UndoGuard aUndoGuard(
+        ActionDescriptionProvider::createDescription(
+            ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_GRIDS )))),
+        m_aUndoManager, m_aModel->getModel() );
+
     try
     {
-        Window* pParent( NULL );
-        InsertMeterDialogData aDialogInput;
+        InsertAxisOrGridDialogData aDialogInput;
         uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram(m_aModel->getModel());
-        getExistingGrids( aDialogInput.aExistenceList, xDiagram );
-        MeterHelper::getMeterPossibilities( aDialogInput.aPossibilityList, xDiagram, false );
+        AxisHelper::getAxisOrGridExcistence( aDialogInput.aExistenceList, xDiagram, sal_False );
+        AxisHelper::getAxisOrGridPossibilities( aDialogInput.aPossibilityList, xDiagram, sal_False );
 
-        SchGridDlg aDlg( pParent, aDialogInput );//aItemSet, b3D, bNet, bSecondaryX, bSecondaryY );
+        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SchGridDlg aDlg( m_pChartWindow, aDialogInput );//aItemSet, b3D, bNet, bSecondaryX, bSecondaryY );
         if( aDlg.Execute() == RET_OK )
         {
-            InsertMeterDialogData aDialogOutput;
+            // lock controllers till end of block
+            ControllerLockGuard aCLGuard( m_aModel->getModel());
+            InsertAxisOrGridDialogData aDialogOutput;
             aDlg.getResult( aDialogOutput );
-            bool bChanged = changeExistingGrids( xDiagram
+            bool bChanged = AxisHelper::changeVisibilityOfGrids( xDiagram
                 , aDialogInput.aExistenceList, aDialogOutput.aExistenceList, m_xCC );
-            if(bChanged)
-                impl_rebuildView();
+            if( bChanged )
+                aUndoGuard.commitAction();
         }
     }
     catch( uno::RuntimeException& e)
@@ -384,21 +168,27 @@ void SAL_CALL ChartController::executeDispatch_InsertGrid()
 
 void SAL_CALL ChartController::executeDispatch_InsertTitle()
 {
+    UndoGuard aUndoGuard(
+        ActionDescriptionProvider::createDescription(
+            ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_TITLES )))),
+        m_aUndoManager, m_aModel->getModel() );
+
     try
     {
-        Window* pParent( NULL );
-        InsertTitleDialogData aDialogInput;
-        fillInsertTitleDialogDataFromModel( aDialogInput, m_aModel->getModel() );
+        TitleDialogData aDialogInput;
+        aDialogInput.readFromModel( m_aModel->getModel() );
 
-        SchTitleDlg aDlg( pParent, aDialogInput );
+        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SchTitleDlg aDlg( m_pChartWindow, aDialogInput );
         if( aDlg.Execute() == RET_OK )
         {
-            InsertTitleDialogData aDialogOutput;
+            // lock controllers till end of block
+            ControllerLockGuard aCLGuard( m_aModel->getModel());
+            TitleDialogData aDialogOutput( impl_createReferenceSizeProvider());
             aDlg.getResult( aDialogOutput );
-            bool bChanged = changeExistingTitles(
-                m_aModel->getModel(), aDialogInput, aDialogOutput, m_xCC );
-            if(bChanged)
-                impl_rebuildView();
+            bool bChanged = aDialogOutput.writeDifferenceToModel( m_aModel->getModel(), m_xCC, &aDialogInput );
+            if( bChanged )
+                aUndoGuard.commitAction();
         }
     }
     catch( uno::RuntimeException& e)
@@ -409,38 +199,25 @@ void SAL_CALL ChartController::executeDispatch_InsertTitle()
 
 void SAL_CALL ChartController::executeDispatch_InsertLegend()
 {
-    bool bChanged = false;
+    UndoGuard aUndoGuard(
+        ActionDescriptionProvider::createDescription(
+            ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_LEGEND )))),
+        m_aUndoManager, m_aModel->getModel() );
+
     try
     {
-        uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram(m_aModel->getModel());
-        uno::Reference< beans::XPropertySet > xProp( xDiagram->getLegend(), uno::UNO_QUERY );
-        //todo: If there is no legend, the dialog must be opened to add one
-        if( ! xProp.is())
-            return;
-        wrapper::LegendItemConverter aItemConverter(
-            xProp, m_pDrawModelWrapper->GetItemPool(), m_pDrawModelWrapper->getSdrModel() );
-        SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
-        aItemConverter.FillItemSet( aItemSet );
-
         //prepare and open dialog
-        Window* pParent( NULL );
-        SchLegendDlg aDlg( pParent, aItemSet);
+        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SchLegendDlg aDlg( m_pChartWindow, m_xCC );
+        aDlg.init( m_aModel->getModel() );
         if( aDlg.Execute() == RET_OK )
         {
-            SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
-            aDlg.GetAttr( aOutItemSet );
-
-            bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
+            // lock controllers till end of block
+            ControllerLockGuard aCLGuard( m_aModel->getModel() );
+            bool bChanged = aDlg.writeToModel( m_aModel->getModel() );
+            if( bChanged )
+                aUndoGuard.commitAction();
         }
-    }
-    catch( uno::RuntimeException& e)
-    {
-        ASSERT_EXCEPTION( e );
-    }
-    //make sure that all objects using  m_pDrawModelWrapper or m_pChartView are already deleted
-    if(bChanged) try
-    {
-        impl_rebuildView();
     }
     catch( uno::RuntimeException& e)
     {
@@ -453,34 +230,34 @@ void SAL_CALL ChartController::executeDispatch_InsertLegend()
 
 void SAL_CALL ChartController::executeDispatch_InsertDataLabel()
 {
-    bool bChanged = false;
+    UndoGuard aUndoGuard(
+        ActionDescriptionProvider::createDescription(
+            ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_DATALABELS )))),
+        m_aUndoManager, m_aModel->getModel() );
+
     try
     {
         wrapper::AllDataLabelItemConverter aItemConverter(
             m_aModel->getModel(),
             m_pDrawModelWrapper->GetItemPool(),
-            m_pDrawModelWrapper->getSdrModel());
+            m_pDrawModelWrapper->getSdrModel(),
+            uno::Reference< lang::XMultiServiceFactory >( m_aModel->getModel(), uno::UNO_QUERY ));
         SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
         aItemConverter.FillItemSet( aItemSet );
 
         //prepare and open dialog
-        Window* pParent( NULL );
-        SchDataDescrDlg aDlg( pParent, aItemSet);
+        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SchDataDescrDlg aDlg( m_pChartWindow, aItemSet);
         if( aDlg.Execute() == RET_OK )
         {
             SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
             aDlg.GetAttr( aOutItemSet );
-            bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
+            // lock controllers till end of block
+            ControllerLockGuard aCLGuard( m_aModel->getModel());
+            bool bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
+            if( bChanged )
+                aUndoGuard.commitAction();
         }
-    }
-    catch( uno::RuntimeException& e)
-    {
-        ASSERT_EXCEPTION( e );
-    }
-    //make sure that all objects using  m_pDrawModelWrapper or m_pChartView are already deleted
-    if(bChanged) try
-    {
-        impl_rebuildView();
     }
     catch( uno::RuntimeException& e)
     {
@@ -490,7 +267,11 @@ void SAL_CALL ChartController::executeDispatch_InsertDataLabel()
 
 void SAL_CALL ChartController::executeDispatch_InsertStatistic()
 {
-    bool bChanged = false;
+    UndoGuard aUndoGuard(
+        ActionDescriptionProvider::createDescription(
+            ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_PAGE_STATISTICS )))),
+        m_aUndoManager, m_aModel->getModel() );
+
     try
     {
         wrapper::AllSeriesStatisticsConverter aItemConverter(
@@ -499,8 +280,8 @@ void SAL_CALL ChartController::executeDispatch_InsertStatistic()
         aItemConverter.FillItemSet( aItemSet );
 
         //prepare and open dialog
-        Window* pParent( NULL );
-        SchDataStatisticsDlg aDlg( pParent, aItemSet);
+        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SchDataStatisticsDlg aDlg( m_pChartWindow, aItemSet);
 //         aDlg.EnableRegression( ChartTypeHelper::isSupportingRegressionProperties( xChartType ));
         aDlg.EnableRegression( true );
 
@@ -509,17 +290,12 @@ void SAL_CALL ChartController::executeDispatch_InsertStatistic()
             SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
             aDlg.GetAttr( aOutItemSet );
 
-            bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
+            // lock controllers till end of block
+            ControllerLockGuard aCLGuard( m_aModel->getModel());
+            bool bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
+            if( bChanged )
+                aUndoGuard.commitAction();
         }
-    }
-    catch( uno::RuntimeException& e)
-    {
-        ASSERT_EXCEPTION( e );
-    }
-    //make sure that all objects using  m_pDrawModelWrapper or m_pChartView are already deleted
-    if(bChanged) try
-    {
-        impl_rebuildView();
     }
     catch( uno::RuntimeException& e)
     {
