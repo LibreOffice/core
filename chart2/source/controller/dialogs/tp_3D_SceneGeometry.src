@@ -1,0 +1,147 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: tp_3D_SceneGeometry.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:42:42 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "tp_3D_SceneGeometry.hrc"
+#include "dlg_View3D.hrc"
+#include "SchSlotIds.hxx"
+
+#ifndef _SVT_CONTROLDIMS_HRC_
+#include <svtools/controldims.hrc>
+#endif
+
+#define WIDTH_FL 108
+#define WIDTH_MF 57
+#define WIDTH_FT 50
+
+#define HEIGHT_FL 8
+#define HEIGHT_MF 12
+#define HEIGHT_FT 10
+
+#define POS_X_0 6
+#define POS_X_1 12
+#define POS_X_2 POS_X_1+WIDTH_FT+4
+
+#define POS_Y_1 8
+#define POS_Y_2 (POS_Y_1+RSC_CD_FIXEDTEXT_HEIGHT+8)
+#define POS_Y_3 (POS_Y_2+RSC_CD_FIXEDTEXT_HEIGHT+8)
+#define POS_Y_4 (POS_Y_3+RSC_CD_FIXEDTEXT_HEIGHT+14)
+
+#define CUSTOMUNITTEXT_DEGREE \
+Border = TRUE ; \
+TabStop = TRUE ; \
+Repeat = TRUE ; \
+Spin = TRUE ; \
+Minimum = -180 ; \
+Maximum = 180 ; \
+StrictFormat = TRUE ; \
+DecimalDigits = 0 ; \
+First = -180 ; \
+Last = 180 ; \
+SpinSize = 5 ; \
+Unit = FUNIT_CUSTOM ; \
+CustomUnitText [ en-US ] = " degrees" ;
+
+TabPage TP_3D_SCENEGEOMETRY
+{
+    HelpID = SID_3D_VIEW ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( VIEW3D_PAGE_WIDTH , VIEW3D_PAGE_HEIGHT ) ;
+
+    FixedText FT_X_ROTATION
+    {
+        Pos = MAP_APPFONT ( POS_X_1 , POS_Y_1  ) ;
+        Size = MAP_APPFONT ( WIDTH_FT , HEIGHT_FT ) ;
+        Text [ en-US ] = "~X rotation" ;
+    };
+    FixedText FT_Y_ROTATION
+    {
+        Pos = MAP_APPFONT ( POS_X_1 , POS_Y_2  ) ;
+        Size = MAP_APPFONT ( WIDTH_FT , HEIGHT_FT ) ;
+        Text [ en-US ] = "~Y rotation" ;
+    };
+    FixedText FT_Z_ROTATION
+    {
+        Pos = MAP_APPFONT ( POS_X_1 , POS_Y_3  ) ;
+        Size = MAP_APPFONT ( WIDTH_FT , HEIGHT_FT ) ;
+        Text [ en-US ] = "~Z rotation" ;
+    };
+    MetricField MTR_FLD_X_ROTATION
+    {
+        Pos = MAP_APPFONT ( POS_X_2 , POS_Y_1-2  ) ;
+        Size = MAP_APPFONT ( WIDTH_MF , HEIGHT_MF ) ;
+        CUSTOMUNITTEXT_DEGREE
+    };
+    MetricField MTR_FLD_Y_ROTATION
+    {
+        Pos = MAP_APPFONT ( POS_X_2 , POS_Y_2-2  ) ;
+        Size = MAP_APPFONT ( WIDTH_MF , HEIGHT_MF ) ;
+        CUSTOMUNITTEXT_DEGREE
+    };
+    MetricField MTR_FLD_Z_ROTATION
+    {
+        Pos = MAP_APPFONT ( POS_X_2 , POS_Y_3-2 ) ;
+        Size = MAP_APPFONT ( WIDTH_MF , HEIGHT_MF ) ;
+        CUSTOMUNITTEXT_DEGREE
+    };
+
+    CheckBox CBX_PERSPECTIVE
+    {
+        Pos = MAP_APPFONT ( POS_X_1 , POS_Y_4  ) ;
+        Size = MAP_APPFONT ( WIDTH_FT , HEIGHT_FT ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Perspective" ;
+    };
+    MetricField MTR_FLD_PERSPECTIVE
+    {
+        Pos = MAP_APPFONT ( POS_X_2 , POS_Y_4-2  ) ;
+        Size = MAP_APPFONT ( WIDTH_MF , HEIGHT_MF ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 0 ;
+        First = 0 ;
+        Last = 100 ;
+        SpinSize = 5 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+    };
+};
+
