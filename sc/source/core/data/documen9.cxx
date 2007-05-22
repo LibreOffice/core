@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:44:10 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:42:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,8 +72,6 @@
 #include <svtools/saveopt.hxx>
 #include <svtools/pathoptions.hxx>
 //REMOVE    #include <so3/ipobj.hxx>
-#include <sch/schdll.hxx>
-#include <sch/memchrt.hxx>
 
 #include "document.hxx"
 #include "docoptio.hxx"
@@ -205,30 +203,21 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDes
 
                     if ( xIPObj.is() && SotExchange::IsChart( aObjectClassName ) )
                     {
-                        SchMemChart* pChartData = SchDLL::GetChartData(xIPObj);
-                        if ( pChartData )
+                        String aNewName = ((SdrOle2Obj*)pNewObject)->GetPersistName();
+
+                        //! need to set new DataProvider, or does Chart handle this itself?
+
+                        ScRangeListRef aRanges( new ScRangeList );
+                        BOOL bColHeaders = FALSE;
+                        BOOL bRowHeaders = FALSE;
+                        GetOldChartParameters( aNewName, *aRanges, bColHeaders, bRowHeaders );
+                        if ( lcl_AdjustRanges( *aRanges, nSrcPos, nDestPos, GetTableCount() ) )
                         {
-                            ScChartArray aArray( this, *pChartData );   // parses range description
-                            ScRangeListRef xRanges = aArray.GetRangeList();
-                            // #i37941# have to check IsValid, to skip a chart with its own data
-                            if ( aArray.IsValid() && xRanges.Is() )
-                            {
-                                ScRangeListRef xNewRanges = new ScRangeList( *xRanges );
-                                if ( lcl_AdjustRanges( *xNewRanges,
-                                                        nSrcPos, nDestPos, GetTableCount() ) )
-                                {
-                                    aArray.SetRangeList( xNewRanges );
-                                }
-
-                                // update all charts, even if the ranges were not changed
-
-                                SchMemChart* pMemChart = aArray.CreateMemChart();
-                                ScChartArray::CopySettings( *pMemChart, *pChartData );
-                                SchDLL::Update( xIPObj, pMemChart );
-                                ((SdrOle2Obj*)pNewObject)->GetNewReplacement();
-                                delete pMemChart;
-                            }
+                            // orientation isn't changed by UpdateChartArea
+                            UpdateChartArea( aNewName, aRanges, bColHeaders, bRowHeaders, FALSE );
                         }
+
+                        // update all charts, even if the ranges were not changed
                     }
                 }
 
