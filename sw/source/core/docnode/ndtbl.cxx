@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:57:19 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:26:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #ifdef WTC
 #define private public
@@ -201,6 +202,9 @@
 #include <tabcol.hxx>
 #endif
 #endif
+#ifndef _UNOCHART_HXX
+#include <unochart.hxx>
+#endif
 
 #include <node.hxx>
 #include <ndtxt.hxx>
@@ -225,6 +229,11 @@
 #endif
 #endif
 
+
+#include <fldupde.hxx>
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 // #i17764# delete table redlines when modifying the table structure?
 // #define DEL_TABLE_REDLINES 1
@@ -2992,7 +3001,9 @@ BOOL SwDoc::SplitTable( const SwPosition& rPos, USHORT eHdlnMode,
     _FndBox aFndBox( 0, 0 );
     aFndBox.SetTableLines( rTbl );
     aFndBox.DelFrms( rTbl );
-    aFndBox.SaveChartData( rTbl );
+
+    // TL_CHART2: need to inform chart of probably changed cell names
+    //pDoc->UpdateCharts( rTbl.GetFrmFmt()->GetName() );
 
     SwTableNode* pNew = GetNodes().SplitTable( rPos.nNode, FALSE, bCalcNewSize );
 
@@ -3069,7 +3080,10 @@ BOOL SwDoc::SplitTable( const SwPosition& rPos, USHORT eHdlnMode,
 
     //Layout updaten
     aFndBox.MakeFrms( rTbl );
-    aFndBox.RestoreChartData( rTbl );
+
+    // TL_CHART2: need to inform chart of probably changed cell names
+    UpdateCharts( rTbl.GetFrmFmt()->GetName() );
+
     SetFieldsDirty( true, NULL, 0 );
 
     return 0 != pNew;
@@ -3236,10 +3250,28 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, BOOL bAfter,
     }
 
     {
-        // die Lines ruebermoven
+        // die Lines ruebermoven...
         SwTable& rNewTbl = pNewTblNd->GetTable();
         rNewTbl.GetTabLines().Insert( &rTbl.GetTabLines(), 0, nLinePos );
-        // und loeschen
+        //
+        // von hinten (unten-rechts) nach vorn (oben-links) alle Boxen
+        // beim chart data provider austragen (das modified event wird dann
+        // in der aufrufenden Funktion getriggert.
+        // TL_CHART2:
+        SwChartDataProvider *pPCD = rTbl.GetFrmFmt()->getIDocumentChartDataProviderAccess()->GetChartDataProvider();
+        for (USHORT k = nLinePos;  k < rTbl.GetTabLines().Count();  ++k)
+        {
+            USHORT nLineIdx = (rTbl.GetTabLines().Count() - 1) - k + nLinePos;
+            USHORT nBoxCnt = rTbl.GetTabLines()[ nLineIdx ]->GetTabBoxes().Count();
+            for (USHORT j = 0;  j < nBoxCnt;  ++j)
+            {
+                USHORT nIdx = nBoxCnt - 1 - j;
+                if (pPCD)
+                    pPCD->DeleteBox( &rTbl, *rTbl.GetTabLines()[ nLineIdx ]->GetTabBoxes()[nIdx] );
+            }
+        }
+        //
+        // ...und loeschen
         rTbl.GetTabLines().Remove( nLinePos,
                                     rTbl.GetTabLines().Count() - nLinePos );
 
@@ -3264,6 +3296,9 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, BOOL bAfter,
         if( bCalcNewSize && lcl_ChgTblSize( rTbl ) )
             lcl_ChgTblSize( pNewTblNd->GetTable() );
     }
+
+    // TL_CHART2: need to inform chart of probably changed cell names
+    rTbl.UpdateCharts();
 
     return pNewTblNd;       // das wars
 }
@@ -3350,7 +3385,17 @@ BOOL SwNodes::MergeTable( const SwNodeIndex& rPos, BOOL bWithPrev,
     _FndBox aFndBox( 0, 0 );
     aFndBox.SetTableLines( rTbl );
     aFndBox.DelFrms( rTbl );
-    aFndBox.SaveChartData( rTbl );
+
+    // TL_CHART2: since chart currently does not want to get informed about
+    // additional rows/cols there is no need for a modified event in the
+    // remaining first table. Also, if it is required it  should be done
+    // after the merging and not here...
+    // pDoc->UpdateCharts( rTbl.GetFrmFmt()->GetName() );
+
+
+    // TL_CHART2:
+    // tell the charts about the table to be deleted and have them use their own data
+    GetDoc()->CreateChartInternalDataProviders( &rDelTbl );
 
     // die Breite der TabellenFormate abgleichen:
     {
@@ -3426,7 +3471,7 @@ BOOL SwNodes::MergeTable( const SwNodeIndex& rPos, BOOL bWithPrev,
 
     //Layout updaten
     aFndBox.MakeFrms( rTbl );
-    aFndBox.RestoreChartData( rTbl );
+
     return TRUE;
 }
 
@@ -3906,11 +3951,16 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, BOOL bCallUpdate )
             EndUndo( UNDO_END, NULL );
         }
 
+        const SwTableNode* pTblNd = rBox.GetSttNd()->FindTableNode();
         if( bCallUpdate )
         {
-            const SwTableNode* pTblNd = rBox.GetSttNd()->FindTableNode();
             SwTableFmlUpdate aTblUpdate( &pTblNd->GetTable() );
             UpdateTblFlds( &aTblUpdate );
+
+            // TL_CHART2: update charts (when cursor leaves cell and
+            // automatic update is enabled)
+            if (AUTOUPD_FIELD_AND_CHARTS == getFieldUpdateFlags(true))
+                pTblNd->GetTable().UpdateCharts();
         }
         SetModified();
     }
