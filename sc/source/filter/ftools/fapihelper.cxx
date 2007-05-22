@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fapihelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:43:15 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:52:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@
 
 #include <algorithm>
 
+#ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
+#include <com/sun/star/lang/XServiceName.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -77,6 +80,10 @@
 #include <svtools/docpasswdrequest.hxx>
 #endif
 
+#ifndef SC_MISCUNO_HXX
+#include "miscuno.hxx"
+#endif
+
 using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
@@ -87,11 +94,21 @@ using ::com::sun::star::uno::TypeClass_BOOLEAN;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
+using ::com::sun::star::lang::XServiceName;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::task::XInteractionHandler;
 using ::com::sun::star::task::XInteractionRequest;
 
 // Static helper functions ====================================================
+
+OUString ScfApiHelper::GetServiceName( Reference< XInterface > xInt )
+{
+    OUString aService;
+    Reference< XServiceName > xServiceName( xInt, UNO_QUERY );
+    if( xServiceName.is() )
+        aService = xServiceName->getServiceName();
+    return aService;
+}
 
 Reference< XMultiServiceFactory > ScfApiHelper::GetServiceFactory( SfxObjectShell* pShell )
 {
@@ -203,6 +220,11 @@ void ScfPropertySet::Set( Reference< XPropertySet > xPropSet )
     mxMultiPropSet.set( mxPropSet, UNO_QUERY );
 }
 
+OUString ScfPropertySet::GetServiceName() const
+{
+    return ScfApiHelper::GetServiceName( mxPropSet );
+}
+
 // Get properties -------------------------------------------------------------
 
 bool ScfPropertySet::GetAnyProperty( Any& rValue, const OUString& rPropName ) const
@@ -222,21 +244,17 @@ bool ScfPropertySet::GetAnyProperty( Any& rValue, const OUString& rPropName ) co
     return bHasValue;
 }
 
-bool ScfPropertySet::GetBoolProperty( bool& rbValue, const ::rtl::OUString& rPropName ) const
+bool ScfPropertySet::GetBoolProperty( const ::rtl::OUString& rPropName ) const
 {
     Any aAny;
-    bool bRet = GetAnyProperty( aAny, rPropName ) && (aAny.getValueTypeClass() == TypeClass_BOOLEAN);
-    if( bRet )
-        rbValue = *static_cast< const sal_Bool* >( aAny.getValue() );
-    return bRet;
+    return GetAnyProperty( aAny, rPropName ) && ScUnoHelpFunctions::GetBoolFromAny( aAny );
 }
 
 bool ScfPropertySet::GetStringProperty( String& rValue, const OUString& rPropName ) const
 {
     OUString aOUString;
     bool bRet = GetProperty( aOUString, rPropName );
-    if( bRet )
-        rValue = aOUString;
+    rValue = aOUString;
     return bRet;
 }
 
@@ -244,8 +262,7 @@ bool ScfPropertySet::GetColorProperty( Color& rColor, const ::rtl::OUString& rPr
 {
     sal_Int32 nApiColor = 0;
     bool bRet = GetProperty( nApiColor, rPropName );
-    if( bRet )
-        rColor = ScfApiHelper::ConvertFromApiColor( nApiColor );
+    rColor = ScfApiHelper::ConvertFromApiColor( nApiColor );
     return bRet;
 }
 
@@ -298,13 +315,13 @@ void ScfPropertySet::SetProperties( const Sequence< OUString >& rPropNames, cons
     DBG_ASSERT( rPropNames.getLength() == rValues.getLength(), "ScfPropertySet::SetProperties - length of sequences different" );
     try
     {
-//        DBG_ASSERT( mxMultiPropSet.is(), "ScfPropertySet::SetProperties - multi property set not available" );
         if( mxMultiPropSet.is() )   // first try the XMultiPropertySet
         {
             mxMultiPropSet->setPropertyValues( rPropNames, rValues );
         }
         else if( mxPropSet.is() )
         {
+            DBG_ERRORFILE( "ScfPropertySet::SetProperties - multi property set not available" );
             const OUString* pPropName = rPropNames.getConstArray();
             const OUString* pPropNameEnd = pPropName + rPropNames.getLength();
             const Any* pValue = rValues.getConstArray();
@@ -314,7 +331,7 @@ void ScfPropertySet::SetProperties( const Sequence< OUString >& rPropNames, cons
     }
     catch( Exception& )
     {
-//        DBG_ERRORFILE( "ScfPropertySet::SetAnyProperty - cannot set multiple properties" );
+        DBG_ERRORFILE( "ScfPropertySet::SetAnyProperty - cannot set multiple properties" );
     }
 }
 
@@ -359,6 +376,39 @@ ScfPropSetHelper::ScfPropSetHelper( const sal_Char* const* ppcPropNames ) :
 void ScfPropSetHelper::ReadFromPropertySet( const ScfPropertySet& rPropSet )
 {
     rPropSet.GetProperties( maValueSeq, maNameSeq );
+    mnNextIdx = 0;
+}
+
+bool ScfPropSetHelper::ReadValue( UnoAny& rAny )
+{
+    UnoAny* pAny = GetNextAny();
+    if( pAny )
+        rAny = *pAny;
+    return pAny != 0;
+}
+
+bool ScfPropSetHelper::ReadValue( String& rString )
+{
+    OUString aOUString;
+    bool bRet = ReadValue( aOUString );
+    rString = aOUString;
+    return bRet;
+}
+
+bool ScfPropSetHelper::ReadValue( Color& rColor )
+{
+    sal_Int32 nApiColor;
+    bool bRet = ReadValue( nApiColor );
+    rColor = ScfApiHelper::ConvertFromApiColor( nApiColor );
+    return bRet;
+}
+
+bool ScfPropSetHelper::ReadValue( bool& rbValue )
+{
+    Any aAny;
+    bool bRet = ReadValue( aAny );
+    rbValue = ScUnoHelpFunctions::GetBoolFromAny( aAny );
+    return bRet;
 }
 
 // write properties -----------------------------------------------------------
@@ -380,7 +430,7 @@ void ScfPropSetHelper::WriteValue( const Any& rAny )
 void ScfPropSetHelper::WriteValue( const bool& rbValue )
 {
     if( Any* pAny = GetNextAny() )
-        ::comphelper::setBOOL( *pAny, rbValue );
+        ScUnoHelpFunctions::SetBoolInAny( *pAny, rbValue );
 }
 
 void ScfPropSetHelper::WriteToPropertySet( ScfPropertySet& rPropSet ) const
