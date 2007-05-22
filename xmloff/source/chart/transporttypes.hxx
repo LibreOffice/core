@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transporttypes.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:19:21 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:09:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,15 @@
 #ifndef SCH_XML_TRANSPORTTYPES_HXX_
 #define SCH_XML_TRANSPORTTYPES_HXX_
 
+#ifndef _COM_SUN_STAR_CHART2_XDATASERIES_HPP_
+#include <com/sun/star/chart2/XDataSeries.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_DATA_XLABELEDDATASEQUENCE_HPP_
+#include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
+#endif
+
 #include <vector>
+#include <map>
 
 enum SchXMLCellType
 {
@@ -63,11 +71,31 @@ struct SchXMLTable
 
     sal_Int32 nNumberOfColsEstimate;                    /// parsing column-elements may yield an estimate
 
+    bool bHasHeaderRow;
+    bool bHasHeaderColumn;
+
     SchXMLTable() : nRowIndex( -1 ),
                     nColumnIndex( -1 ),
                     nMaxColumnIndex( -1 ),
-                    nNumberOfColsEstimate( 0 ) {}
+                    nNumberOfColsEstimate( 0 ),
+                    bHasHeaderRow( false ),
+                    bHasHeaderColumn( false )
+    {}
 };
+
+typedef sal_Int32 tSchXMLIndex;
+#define SCH_XML_CATEGORIES_INDEX (static_cast<tSchXMLIndex>(-1))
+enum SchXMLLabeledSequencePart
+{
+    SCH_XML_PART_LABEL,
+    SCH_XML_PART_VALUES
+};
+typedef ::std::pair< tSchXMLIndex, SchXMLLabeledSequencePart > tSchXMLIndexWithPart;
+typedef ::std::multimap< tSchXMLIndexWithPart,
+        ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence > >
+    tSchXMLLSequencesPerIndex;
+
+bool operator < ( const tSchXMLIndexWithPart & rFirst, const tSchXMLIndexWithPart & rSecond );
 
 // ----------------------------------------
 
@@ -92,7 +120,7 @@ struct SchNumericCellRangeAddress
 
 enum SchXMLAxisClass
 {
-    SCH_XML_AXIS_X,
+    SCH_XML_AXIS_X = 0,
     SCH_XML_AXIS_Y,
     SCH_XML_AXIS_Z,
     SCH_XML_AXIS_UNDEF
@@ -104,10 +132,50 @@ struct SchXMLAxis
     sal_Int8 nIndexInCategory;
     rtl::OUString aName;
     rtl::OUString aTitle;
-    com::sun::star::awt::Point aPosition;
-    bool bTitleHasMoved;
+    bool bHasCategories;
 
-    SchXMLAxis() : eClass( SCH_XML_AXIS_UNDEF ), nIndexInCategory( 0 ), bTitleHasMoved( false ) {}
+    SchXMLAxis() : eClass( SCH_XML_AXIS_UNDEF ), nIndexInCategory( 0 ), bHasCategories( false ) {}
+};
+
+// ----------------------------------------
+
+struct DataRowPointStyle
+{
+    enum StyleType
+    {
+        DATA_POINT,
+        DATA_SERIES,
+        MEAN_VALUE,
+        REGRESSION,
+        ERROR_INDICATOR
+    };
+
+    StyleType meType;
+    ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XDataSeries > m_xSeries;
+    ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySet > m_xOldAPISeries;
+    sal_Int32 m_nPointIndex;
+    sal_Int32 m_nPointRepeat;
+    ::rtl::OUString msStyleName;
+    ::rtl::OUString msSeriesStyleNameForDonuts;
+    sal_Int32 mnAttachedAxis;
+
+    DataRowPointStyle( StyleType eType
+                       , const ::com::sun::star::uno::Reference<
+                          ::com::sun::star::chart2::XDataSeries >& xSeries
+                        , sal_Int32 nPointIndex
+                        , sal_Int32 nPointRepeat
+                        , ::rtl::OUString sStyleName
+                        , sal_Int32 nAttachedAxis = 0 ) :
+            meType( eType ),
+            m_xSeries( xSeries ),
+            m_xOldAPISeries( 0 ),
+            m_nPointIndex( nPointIndex ),
+            m_nPointRepeat( nPointRepeat ),
+            msStyleName( sStyleName ),
+            mnAttachedAxis( nAttachedAxis )
+        {}
 };
 
 #endif  // SCH_XML_TRANSPORTTYPES_HXX_
