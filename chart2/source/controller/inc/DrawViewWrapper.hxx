@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawViewWrapper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:22:37 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:53:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,13 @@
 #include <svx/view3d.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
+#include <com/sun/star/drawing/XShape.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+
 class SdrModel;
 
 //.............................................................................
@@ -67,10 +74,14 @@ public:
     //triggers the use of an updated first page
     void    ReInit();
 
+    /// tries to get an OutputDevice from the XParent of the model to use as reference device
+    void attachParentReferenceDevice(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xChartModel );
+
     //fill list of selection handles 'aHdl'
     virtual void SetMarkHandles();
 
-    SdrPageView*    GetPageView() { return m_pWrappedDLPageView; };
+    SdrPageView*    GetPageView() const;
 
     SdrObject* getHitObject( const Point& rPnt ) const;
     //BOOL PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, ULONG nOptions, SdrObject** ppRootObj, ULONG* pnMarkNum=NULL, USHORT* pnPassNum=NULL) const;
@@ -92,8 +103,15 @@ public:
 
     SfxItemSet   getPositionAndSizeItemSetFromMarkedObject() const;
 
+    SdrObject* getNamedSdrObject( const rtl::OUString& rName ) const;
+    bool IsObjectHit( SdrObject* pObj, const Point& rPnt ) const;
+
+    virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
+
+    static SdrObject* getSdrObject( const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::drawing::XShape >& xShape );
+
 private:
-    mutable SdrPageView*            m_pWrappedDLPageView;
     mutable MarkHandleProvider*     m_pMarkHandleProvider;
 
     ::std::auto_ptr< SdrOutliner >  m_apOutliner;
