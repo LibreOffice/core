@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:03:00 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:26:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,6 @@
 #endif
 #ifndef _VCL_CMDEVT_HXX //autogen
 #include <vcl/cmdevt.hxx>
-#endif
-#ifndef _SCH_DLL_HXX //autogen
-#include <sch/schdll.hxx>
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
@@ -145,6 +142,9 @@
 #endif
 #ifndef _SECTION_HXX
 #include <section.hxx>
+#endif
+#ifndef _UNOCHART_HXX
+#include <unochart.hxx>
 #endif
 
 using namespace com::sun::star;
@@ -563,11 +563,10 @@ const String& SwEditShell::GetChartName( const uno::Reference < embed::XEmbedded
     return aEmptyStr;
 }
 
-void SwEditShell::UpdateChartData( const String &rName, SchMemChart *&pData )
+void SwEditShell::UpdateChartData( const String &rName )
 {
     //Fuer das Update brauchen wir die SwTable. Also muessen wir ggf. die
     //gewuenschte Table anspringen.
-    String sSelection;
     const SwTableNode *pTblNd = IsCrsrInTbl();
     if( !pTblNd || rName != pTblNd->GetTable().GetFrmFmt()->GetName() )
     {
@@ -576,11 +575,9 @@ void SwEditShell::UpdateChartData( const String &rName, SchMemChart *&pData )
         pTblNd = IsCrsrInTbl();
         Pop( FALSE );
     }
-    else if( IsTableMode() )
-        sSelection = GetBoxNms();
 
     if( pTblNd )
-        pData = pTblNd->GetTable().UpdateData( pData, &sSelection );
+        pTblNd->GetTable().UpdateCharts();
 }
 
 
