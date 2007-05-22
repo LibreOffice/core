@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 13:06:18 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:05:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,9 @@
 #endif
 #ifndef _SC_XMLSTYLESIMPORTHELPER_HXX
 #include "XMLStylesImportHelper.hxx"
+#endif
+#ifndef SC_RANGEUTL_HXX
+#include "rangeutl.hxx"
 #endif
 
 #include <xmloff/xmltkmap.hxx>
@@ -233,7 +236,7 @@ void ScXMLTableContext::EndElement()
             if( xPrintAreas.is() )
             {
                 uno::Sequence< table::CellRangeAddress > aRangeList;
-                ScXMLConverter::GetRangeListFromString( aRangeList, sPrintRanges, pDoc );
+                ScRangeStringConverter::GetRangeListFromString( aRangeList, sPrintRanges, pDoc );
                 xPrintAreas->setPrintAreas( aRangeList );
             }
         }
