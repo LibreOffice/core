@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.148 $
+ *  $Revision: 1.149 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:55:06 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:19:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -7522,6 +7522,47 @@ const char* GetInternalServerName_Impl( const SvGlobalName& aGlobName )
     return 0;
 }
 
+::rtl::OUString GetFilterNameFromClassID_Impl( const SvGlobalName& aGlobName )
+{
+    if ( aGlobName == SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_60 ) )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice XML (Writer)" ) );
+
+    if ( aGlobName == SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_8 ) )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer8" ) );
+
+    if ( aGlobName == SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_60 ) )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice XML (Calc)" ) );
+
+    if ( aGlobName == SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_8 ) )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc8" ) );
+
+    if ( aGlobName == SvGlobalName( SO3_SIMPRESS_OLE_EMBED_CLASSID_60 ) )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice XML (Impress)" ) );
+
+    if ( aGlobName == SvGlobalName( SO3_SIMPRESS_OLE_EMBED_CLASSID_8 ) )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress8" ) );
+
+    if ( aGlobName == SvGlobalName( SO3_SDRAW_OLE_EMBED_CLASSID_60 ) )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice XML (Draw)" ) );
+
+    if ( aGlobName == SvGlobalName( SO3_SDRAW_OLE_EMBED_CLASSID_8 ) )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "draw8" ) );
+
+    if ( aGlobName == SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_60 ) )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice XML (Math)" ) );
+
+    if ( aGlobName == SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_8 ) )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "math8" ) );
+
+    if ( aGlobName == SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_60 ) )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice XML (Chart)" ) );
+
+    if ( aGlobName == SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_8 ) )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "chart8" ) );
+
+    return ::rtl::OUString();
+}
+
 com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConvertFlags,
                         SotStorage& rSrcStg, const uno::Reference < embed::XStorage >& rDestStorage,
                         const Graphic& rGrf,
@@ -7620,16 +7661,23 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
             String aDstStgName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(MSO_OLE_Obj)));
             aDstStgName += String::CreateFromInt32(nMSOleObjCntr);
 
-            uno::Sequence < beans::PropertyValue > aMedium( pFilter ? 3 : 2);
+            ::rtl::OUString aFilterName;
+            if ( pFilter )
+                aFilterName = pFilter->GetName();
+            else
+                aFilterName = GetFilterNameFromClassID_Impl( aStgNm );
+
+            uno::Sequence < beans::PropertyValue > aMedium( aFilterName.getLength() ? 3 : 2);
             aMedium[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InputStream" ) );
             uno::Reference < io::XInputStream > xStream = new ::utl::OSeekableInputStreamWrapper( *pStream );
             aMedium[0].Value <<= xStream;
             aMedium[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
             aMedium[1].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:stream" ) );
-            if ( pFilter )
+
+            if ( aFilterName.getLength() )
             {
                 aMedium[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
-                aMedium[2].Value <<= ::rtl::OUString( pFilter->GetName() );
+                aMedium[2].Value <<= aFilterName;
             }
 
             ::rtl::OUString aName( aDstStgName );
