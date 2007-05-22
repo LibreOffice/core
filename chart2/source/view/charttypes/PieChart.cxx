@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PieChart.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:33:48 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:16:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,16 +36,22 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
+
 #include "PieChart.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "ShapeFactory.hxx"
 #include "PolarLabelPositionHelper.hxx"
-//#include "chartview/servicenames_charttypes.hxx"
-//#include "servicenames_coosystems.hxx"
-
+#include "macros.hxx"
 #include "CommonConverters.hxx"
 #include "ViewDefines.hxx"
-#include "chartview/ObjectIdentifier.hxx"
+#include "ObjectIdentifier.hxx"
+
+#ifndef _COM_SUN_STAR_CHART2_XCOLORSCHEME_HPP_
+#include <com/sun/star/chart2/XColorScheme.hpp>
+#endif
+
+//#include "chartview/servicenames_charttypes.hxx"
+//#include "servicenames_coosystems.hxx"
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -64,46 +70,46 @@ using namespace ::com::sun::star::chart2;
 class PiePositionHelper : public PolarPlottingPositionHelper
 {
 public:
-    PiePositionHelper();
+    PiePositionHelper( NormalAxis eNormalAxis, double fAngleDegreeOffset );
     virtual ~PiePositionHelper();
 
-    bool                getInnerAndOuterRadius( double fCategoryX, double& fLogicInnerRadius, double& fLogicOuterRadius ) const;
-
-    sal_Int32           getStartCategoryIndex() const {
-                            //first category (index 0) matches with real number 1.0
-                            sal_Int32 nStart = static_cast<sal_Int32>(getLogicMinX() - 0.5);
-                            if( nStart < 0 )
-                                nStart = 0;
-                            return nStart;
-                        }
-    sal_Int32           getEndCategoryIndex() const  {
-                            //first category (index 0) matches with real number 1.0
-                            sal_Int32 nEnd = static_cast<sal_Int32>(getLogicMaxX() - 0.5);
-                            if( nEnd < 0 )
-                                nEnd = 0;
-                            return nEnd;
-                        }
+    bool    getInnerAndOuterRadius( double fCategoryX, double& fLogicInnerRadius, double& fLogicOuterRadius, bool bUseRings, double fMaxOffset ) const;
 
 public:
     //Distance between different category rings, seen relative to width of a ring:
-    double      m_fRingDistance; //>=0 m_fRingDistance=1 --> distance == width
+    double  m_fRingDistance; //>=0 m_fRingDistance=1 --> distance == width
 };
 
-PiePositionHelper::PiePositionHelper()
-        : PolarPlottingPositionHelper(true)
+PiePositionHelper::PiePositionHelper( NormalAxis eNormalAxis, double fAngleDegreeOffset )
+        : PolarPlottingPositionHelper(eNormalAxis)
         , m_fRingDistance(0.0)
 {
     m_fRadiusOffset = 0.0;
+    m_fAngleDegreeOffset = fAngleDegreeOffset;
 }
 
 PiePositionHelper::~PiePositionHelper()
 {
 }
-bool PiePositionHelper::getInnerAndOuterRadius( double fCategoryX, double& fLogicInnerRadius, double& fLogicOuterRadius ) const
+
+bool PiePositionHelper::getInnerAndOuterRadius( double fCategoryX
+                                               , double& fLogicInnerRadius, double& fLogicOuterRadius
+                                               , bool bUseRings, double fMaxOffset ) const
 {
+    if( !bUseRings )
+        fCategoryX = 1.0;
+
     bool bIsVisible = true;
     double fLogicInner = fCategoryX -0.5+m_fRingDistance/2.0;
     double fLogicOuter = fCategoryX +0.5-m_fRingDistance/2.0;
+
+    if( !isMathematicalOrientationRadius() )
+    {
+        //in this case the given getMaximumX() was not corrcect instead the minimum should have been smaller by fMaxOffset
+        //but during getMaximumX and getMimumX we do not know the axis orientation
+        fLogicInner += fMaxOffset;
+        fLogicOuter += fMaxOffset;
+    }
 
     if( fLogicInner >= getLogicMaxX() )
         return false;
@@ -117,6 +123,8 @@ bool PiePositionHelper::getInnerAndOuterRadius( double fCategoryX, double& fLogi
 
     fLogicInnerRadius = fLogicInner;
     fLogicOuterRadius = fLogicOuter;
+    if( !isMathematicalOrientationRadius() )
+        std::swap(fLogicInnerRadius,fLogicOuterRadius);
     return bIsVisible;
 }
 
@@ -124,18 +132,63 @@ bool PiePositionHelper::getInnerAndOuterRadius( double fCategoryX, double& fLogi
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel, double fRadiusOffset, double fRingDistance )
-        : VSeriesPlotter( xChartTypeModel )
-        , m_pPosHelper( new PiePositionHelper() )
+PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel
+                   , sal_Int32 nDimensionCount )
+        : VSeriesPlotter( xChartTypeModel, nDimensionCount )
+        , m_pPosHelper( new PiePositionHelper( NormalAxis_Z, (m_nDimension==3)?0.0:90.0 ) )
+        , m_bUseRings(false)
 {
     PlotterBase::m_pPosHelper = m_pPosHelper;
-    m_pPosHelper->m_fRadiusOffset = fRadiusOffset;
-    m_pPosHelper->m_fRingDistance = fRingDistance;
+    VSeriesPlotter::m_pMainPosHelper = m_pPosHelper;
+    m_pPosHelper->m_fRadiusOffset = 0.0;
+    m_pPosHelper->m_fRingDistance = 0.0;
+
+    uno::Reference< beans::XPropertySet > xChartTypeProps( xChartTypeModel, uno::UNO_QUERY );
+    if( xChartTypeProps.is() ) try
+    {
+        xChartTypeProps->getPropertyValue( C2U( "UseRings" )) >>= m_bUseRings;
+        if( m_bUseRings )
+        {
+            m_pPosHelper->m_fRadiusOffset = 1.0;
+            if( nDimensionCount==3 )
+                m_pPosHelper->m_fRingDistance = 0.1;
+        }
+    }
+    catch( uno::Exception& e )
+    {
+        ASSERT_EXCEPTION( e );
+    }
 }
 
 PieChart::~PieChart()
 {
     delete m_pPosHelper;
+}
+
+//-----------------------------------------------------------------
+
+void SAL_CALL PieChart::setScales( const uno::Sequence< ExplicitScaleData >& rScales
+                                     , sal_Bool bSwapXAndYAxis )
+                            throw (uno::RuntimeException)
+{
+    DBG_ASSERT(m_nDimension<=rScales.getLength(),"Dimension of Plotter does not fit two dimension of given scale sequence");
+    m_pPosHelper->setScales( rScales, true );
+}
+
+//-----------------------------------------------------------------
+
+drawing::Direction3D PieChart::getPreferredDiagramAspectRatio() const
+{
+    if( m_nDimension == 3 )
+        return drawing::Direction3D(1,1,0.25);
+    return drawing::Direction3D(1,1,1);
+}
+
+bool PieChart::keepAspectRatio() const
+{
+    if( m_nDimension == 3 )
+        return false;
+    return true;
 }
 
 //-----------------------------------------------------------------
@@ -155,91 +208,148 @@ APPHELPER_XSERVICEINFO_IMPL(PieChart,CHART2_VIEW_PIECHART_SERVICE_IMPLEMENTATION
 
 bool PieChart::isSingleRingChart() const
 {
-    return m_pPosHelper->getEndCategoryIndex()==1 ;
+    if( m_aZSlots.size() == 1 && m_aZSlots[0].size() ==1 )
+        return true;
+    return !m_bUseRings;
 }
 
 uno::Reference< drawing::XShape > PieChart::createDataPoint(
           const uno::Reference< drawing::XShapes >& xTarget
         , const uno::Reference< beans::XPropertySet >& xObjectProperties
-        , double fLogicStartAngleValue, double fLogicEndAngleValue
-        , double fLogicInnerRadius, double fLogicOuterRadius
-        , double fLogicZ, double fDepth )
+        , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
+        , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
+        , double fLogicZ, double fDepth, double fExplodePercentage
+        , tPropertyNameValueMap* pOverwritePropertiesMap )
 {
-    //transformation 3) -> 4)
-    uno::Reference< XTransformation > xTransformation = m_pPosHelper->getTransformationLogicToScene();
-
     //---------------------------
-    //transformed angle:
-    double fWidthAngleDegree = m_pPosHelper->getWidthAngleDegree(fLogicStartAngleValue,fLogicEndAngleValue);
-    double fStartAngleDegree = m_pPosHelper->transformToAngleDegree(fLogicStartAngleValue );
-
-    //---------------------------
-    //transform origin:
-    drawing::Position3D aTransformedOrigin;
+    //transform position:
+    drawing::Direction3D aOffset;
+    if( !::rtl::math::approxEqual( fExplodePercentage, 0.0 ) )
     {
-        drawing::Position3D aLogicOrigin(0.0,0.0,0.0);
-        aTransformedOrigin = SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicOrigin) ) );
+        double fAngle  = fUnitCircleStartAngleDegree + fUnitCircleWidthAngleDegree/2.0;
+        double fRadius = (fUnitCircleOuterRadius-fUnitCircleInnerRadius)*fExplodePercentage;
+        drawing::Position3D aOrigin = m_pPosHelper->transformUnitCircleToScene( 0, 0, fLogicZ );
+        drawing::Position3D aNewOrigin = m_pPosHelper->transformUnitCircleToScene( fAngle, fRadius, fLogicZ );
+        aOffset = aNewOrigin - aOrigin;
     }
 
     //---------------------------
-    //transform radii:
-    double fTransformedInnerXRadius, fTransformedOuterXRadius, fTransformedOuterYRadius;
-    double fTransformedDepth;
-    {
-        double fInnerRadius = m_pPosHelper->transformToRadius( fLogicInnerRadius );
-        double fOuterRadius = m_pPosHelper->transformToRadius( fLogicOuterRadius );
-
-        drawing::Position3D aLogicPos1;
-        drawing::Position3D aLogicPos2( aLogicPos1 );
-        aLogicPos2.PositionX += fInnerRadius;
-        aLogicPos2.PositionZ += fDepth;
-        drawing::Position3D aLogicPos3( aLogicPos1 );
-        aLogicPos3.PositionX += fOuterRadius;
-        aLogicPos3.PositionY += fOuterRadius;
-
-        drawing::Position3D aTransformedPos1( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicPos1) ) ) );
-        drawing::Position3D aTransformedPos2( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicPos2) ) ) );
-        drawing::Position3D aTransformedPos3( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicPos3) ) ) );
-
-        fTransformedInnerXRadius = aTransformedPos2.PositionX - aTransformedPos1.PositionX;
-        fTransformedOuterXRadius = aTransformedPos3.PositionX - aTransformedPos1.PositionX;
-        fTransformedOuterYRadius = aTransformedPos3.PositionY - aTransformedPos1.PositionY;
-        fTransformedDepth        = aTransformedPos2.PositionZ - aTransformedPos1.PositionZ;
-    }
-
+    //create point
     uno::Reference< drawing::XShape > xShape(0);
     if(m_nDimension==3)
+    {
         xShape = m_pShapeFactory->createPieSegment( xTarget
-            , fStartAngleDegree, fWidthAngleDegree
-            , fTransformedInnerXRadius, fTransformedOuterXRadius, fTransformedOuterYRadius
-            , aTransformedOrigin, fTransformedDepth );
+            , fUnitCircleStartAngleDegree, fUnitCircleWidthAngleDegree
+            , fUnitCircleInnerRadius, fUnitCircleOuterRadius
+            , aOffset, B3DHomMatrixToHomogenMatrix( m_pPosHelper->getUnitCartesianToScene() )
+            , fDepth );
+    }
     else
+    {
         xShape = m_pShapeFactory->createPieSegment2D( xTarget
-            , fStartAngleDegree, fWidthAngleDegree
-            , fTransformedInnerXRadius, fTransformedOuterXRadius, fTransformedOuterYRadius
-            , aTransformedOrigin );
-
-    this->setMappedProperties( xShape, xObjectProperties, m_aShapePropertyMapForArea );
+            , fUnitCircleStartAngleDegree, fUnitCircleWidthAngleDegree
+            , fUnitCircleInnerRadius, fUnitCircleOuterRadius
+            , aOffset, B3DHomMatrixToHomogenMatrix( m_pPosHelper->getUnitCartesianToScene() ) );
+    }
+    this->setMappedProperties( xShape, xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties(), pOverwritePropertiesMap );
     return xShape;
 }
 
-void PieChart::addSeries( VDataSeries* pSeries, sal_Int32 xSlot, sal_Int32 ySlot )
+void PieChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlot, sal_Int32 ySlot )
 {
-    VSeriesPlotter::addSeries( pSeries, 0, ySlot );
+    VSeriesPlotter::addSeries( pSeries, 0, -1, 0 );
 }
 
-double PieChart::getMinimumYInRange( double fMinimumX, double fMaximumX )
+double PieChart::getMinimumX()
+{
+    return 0.5;
+}
+double PieChart::getMaxOffset() const
+{
+    double fRet = 0.0;
+    if( m_aZSlots.size()<=0 )
+        return fRet;
+    if( m_aZSlots[0].size()<=0 )
+        return fRet;
+
+    const ::std::vector< VDataSeries* >& rSeriesList( m_aZSlots[0][0].m_aSeriesVector );
+    if( rSeriesList.size()<=0 )
+        return fRet;
+
+    VDataSeries* pSeries = rSeriesList[0];
+    uno::Reference< beans::XPropertySet > xSeriesProp( pSeries->getPropertiesOfSeries() );
+    if( !xSeriesProp.is() )
+        return fRet;
+
+    double fExplodePercentage=0.0;
+    xSeriesProp->getPropertyValue( C2U( "Offset" )) >>= fExplodePercentage;
+    if(fExplodePercentage>fRet)
+        fRet=fExplodePercentage;
+
+    uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
+    if( xSeriesProp->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aAttributedDataPointIndexList )
+    {
+        for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
+        {
+            uno::Reference< beans::XPropertySet > xPointProp( pSeries->getPropertiesOfPoint(aAttributedDataPointIndexList[nN]) );
+            if(xPointProp.is())
+            {
+                fExplodePercentage=0.0;
+                xPointProp->getPropertyValue( C2U( "Offset" )) >>= fExplodePercentage;
+                if(fExplodePercentage>fRet)
+                    fRet=fExplodePercentage;
+            }
+        }
+    }
+    return fRet;
+}
+double PieChart::getMaximumX()
+{
+    double fMaxOffset = getMaxOffset();
+    if( m_aZSlots.size()>0 && m_bUseRings)
+        return m_aZSlots[0].size()+0.5+fMaxOffset;
+    return 1.5+fMaxOffset;
+}
+double PieChart::getMinimumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex )
 {
     return 0.0;
 }
 
-double PieChart::getMaximumYInRange( double fMinimumX, double fMaximumX )
+double PieChart::getMaximumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex )
 {
     return 1.0;
 }
 
+bool PieChart::isExpandBorderToIncrementRhythm( sal_Int32 nDimensionIndex )
+{
+    return false;
+}
+
+bool PieChart::isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex )
+{
+    return false;
+}
+
+bool PieChart::isExpandWideValuesToZero( sal_Int32 nDimensionIndex )
+{
+    return false;
+}
+
+bool PieChart::isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex )
+{
+    return false;
+}
+
+bool PieChart::isSeperateStackingForDifferentSigns( sal_Int32 nDimensionIndex )
+{
+    return false;
+}
+
 void PieChart::createShapes()
 {
+    if( m_aZSlots.begin() == m_aZSlots.end() ) //no series
+        return;
+
     DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"PieChart is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
@@ -251,109 +361,171 @@ void PieChart::createShapes()
         createGroupShape( m_xLogicTarget,rtl::OUString() ));
     uno::Reference< drawing::XShapes > xTextTarget(
         m_pShapeFactory->createGroup2D( m_xFinalTarget,rtl::OUString() ));
-
     //---------------------------------------------
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 
-    //update/create information for current group
-    //(@todo maybe different iteration for breaks in axis ?)
-    sal_Int32 nStartCategoryIndex = m_pPosHelper->getStartCategoryIndex(); // inclusive
-    sal_Int32 nEndCategoryIndex   = m_pPosHelper->getEndCategoryIndex(); //inclusive
 //=============================================================================
-    //iterate through all shown categories
-    for( sal_Int32 nCatIndex = nStartCategoryIndex; nCatIndex <= nEndCategoryIndex; nCatIndex++ )
+    ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = m_aZSlots[0].begin();
+    const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = m_aZSlots[0].end();
+
+    ::std::vector< VDataSeriesGroup >::size_type nExplodeableSlot = 0;
+    if( m_pPosHelper->isMathematicalOrientationRadius() && m_bUseRings )
+        nExplodeableSlot = m_aZSlots[0].size()-1;
+//=============================================================================
+    for( double fSlotX=0; aXSlotIter != aXSlotEnd && (m_bUseRings||fSlotX<0.5 ); aXSlotIter++, fSlotX+=1.0 )
     {
-        ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = m_aXSlots.begin();
-        const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = m_aXSlots.end();
-//=============================================================================
-        //for the pie chart there should be at most one x slot per category (one ring is one x slot and there is only one ring per category)
-        if( aXSlotIter != aXSlotEnd )
+        ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
+        if( pSeriesList->size()<=0 )//there should be only one series in each x slot
+            continue;
+        VDataSeries* pSeries = (*pSeriesList)[0];
+        if(!pSeries)
+            continue;
+
+        double fLogicYSum = 0.0;
+        //iterate through all points to get the sum
+        sal_Int32 nPointIndex=0;
+        sal_Int32 nPointCount=pSeries->getTotalPointCount();
+        for( nPointIndex = 0; nPointIndex <= nPointCount; nPointIndex++ )
         {
-            ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
-
-            ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
-            const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
-
-            double fLogicYForNextSeries = 0.0;
-
-            double fLogicYSum = 0.0;
-            for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
+            double fY = pSeries->getY( nPointIndex );
+            if(fY<0.0)
             {
-                double fY = (*aSeriesIter)->getY( nCatIndex );
-                if(fY<0.0)
-                {
-                    //@todo warn somehow that negative values are treated as positive
-                }
-                if( ::rtl::math::isNan(fY) )
-                    continue;
-                fLogicYSum += fabs(fY);
+                //@todo warn somehow that negative values are treated as positive
             }
-            if(fLogicYSum==0.0)
+            if( ::rtl::math::isNan(fY) )
                 continue;
-            aSeriesIter = pSeriesList->begin();
-
+            fLogicYSum += fabs(fY);
+        }
+        if(fLogicYSum==0.0)
+            continue;
+        double fLogicYForNextPoint = 0.0;
+        //iterate through all points to create shapes
+        for( nPointIndex = 0; nPointIndex <= nPointCount; nPointIndex++ )
+        {
             double fLogicInnerRadius, fLogicOuterRadius;
-            bool bIsVisible = m_pPosHelper->getInnerAndOuterRadius( (double)nCatIndex+1.0, fLogicInnerRadius, fLogicOuterRadius );
+            bool bIsVisible = m_pPosHelper->getInnerAndOuterRadius( fSlotX+1.0, fLogicInnerRadius, fLogicOuterRadius, m_bUseRings, getMaxOffset() );
             if( !bIsVisible )
                 continue;
 
             double fLogicZ = -0.5;//as defined
-            double fDepth  = 1.0; //as defined
+            double fDepth  = this->getTransformedDepth();
 //=============================================================================
-            //iterate through all series in this x slot (in this ring)
-            for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
+
+            uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, xSeriesTarget);
+            //collect data point information (logic coordinates, style ):
+            double fLogicYValue = fabs(pSeries->getY( nPointIndex ));
+            if( ::rtl::math::isNan(fLogicYValue) )
+                continue;
+            if(fLogicYValue==0.0)//@todo: continue also if the resolution to small
+                continue;
+            double fLogicYPos = fLogicYForNextPoint;
+            fLogicYForNextPoint += fLogicYValue;
+
+            uno::Reference< beans::XPropertySet > xPointProperties = pSeries->getPropertiesOfPoint( nPointIndex );
+
+            //iterate through all subsystems to create partial points
             {
-                uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(*aSeriesIter, xSeriesTarget);
-                //collect data point information (logic coordinates, style ):
-                double fLogicYValue = fabs((*aSeriesIter)->getY( nCatIndex ));
-                if( ::rtl::math::isNan(fLogicYValue) )
-                    continue;
-                if(fLogicYValue==0.0)//@todo: continue also if the resolution to small
-                    continue;
-                double fLogicYPos = fLogicYForNextSeries;
-                fLogicYForNextSeries += fLogicYValue;
+                //logic values on angle axis:
+                double fLogicStartAngleValue = fLogicYPos/fLogicYSum;
+                double fLogicEndAngleValue = (fLogicYPos+fLogicYValue)/fLogicYSum;
 
-                rtl::OUString aPointCID = ObjectIdentifier::createPointCID(
-                    (*aSeriesIter)->getPointCID_Stub(), nCatIndex );
-                //each subsystem may add an additional shape to form the whole point
-                //create a group shape for this point and add to the series shape:
-                uno::Reference< drawing::XShapes > xPointGroupShape_Shapes(
-                    createGroupShape(xSeriesGroupShape_Shapes,aPointCID) );
-                uno::Reference<drawing::XShape> xPointGroupShape_Shape =
-                        uno::Reference<drawing::XShape>( xPointGroupShape_Shapes, uno::UNO_QUERY );
-
-                //iterate through all subsystems to create partial points
+                double fExplodePercentage=0.0;
+                bool bDoExplode = ( nExplodeableSlot == static_cast< ::std::vector< VDataSeriesGroup >::size_type >(fSlotX) );
+                if(bDoExplode) try
                 {
-                    //logic values on angle axis:
-                    double fLogicStartAngleValue = fLogicYPos/fLogicYSum;
-                    double fLogicEndAngleValue = (fLogicYPos+fLogicYValue)/fLogicYSum;
+                    xPointProperties->getPropertyValue( C2U( "Offset" )) >>= fExplodePercentage;
+                }
+                catch( uno::Exception& e )
+                {
+                    ASSERT_EXCEPTION( e );
+                }
 
-                    //create data point
-                    createDataPoint( xPointGroupShape_Shapes ,(*aSeriesIter)->getPropertiesOfPoint( nCatIndex )
-                                        , fLogicStartAngleValue, fLogicEndAngleValue
-                                        , fLogicInnerRadius, fLogicOuterRadius
-                                        , fLogicZ, fDepth );
+                //---------------------------
+                //transforme to unit circle:
+                double fUnitCircleWidthAngleDegree = m_pPosHelper->getWidthAngleDegree( fLogicStartAngleValue, fLogicEndAngleValue );
+                double fUnitCircleStartAngleDegree = m_pPosHelper->transformToAngleDegree( fLogicStartAngleValue );
+                double fUnitCircleInnerRadius = m_pPosHelper->transformToRadius( fLogicInnerRadius );
+                double fUnitCircleOuterRadius = m_pPosHelper->transformToRadius( fLogicOuterRadius );
 
-                    //create label
-                    if( (**aSeriesIter).getDataPointLabelIfLabel(nCatIndex) )
+                //---------------------------
+                //point color:
+                std::auto_ptr< tPropertyNameValueMap > apOverwritePropertiesMap(0);
+                {
+                    if(!pSeries->hasPointOwnColor(nPointIndex) && m_xColorScheme.is())
                     {
-                        LabelAlignment eAlignment(LABEL_ALIGN_CENTER);
-                        awt::Point aScreenPosition2D(
-                            PolarLabelPositionHelper(m_pPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory).getLabelScreenPositionAndAlignment(eAlignment, this->isSingleRingChart()
-                            , fLogicStartAngleValue, fLogicEndAngleValue
-                            , fLogicInnerRadius, fLogicOuterRadius, fLogicZ ));
-                        this->createDataLabel( xTextTarget, **aSeriesIter, nCatIndex
-                                        , fLogicYValue, fLogicYSum, aScreenPosition2D, eAlignment );
+                        apOverwritePropertiesMap = std::auto_ptr< tPropertyNameValueMap >( new tPropertyNameValueMap() );
+                        (*apOverwritePropertiesMap)[C2U("FillColor")] = uno::makeAny(
+                            m_xColorScheme->getColorByIndex( nPointIndex ));
                     }
                 }
 
-                //remove PointGroupShape if empty
-                if(!xPointGroupShape_Shapes->getCount())
-                    xSeriesGroupShape_Shapes->remove(xPointGroupShape_Shape);
+                //create data point
+                uno::Reference<drawing::XShape> xPointShape(
+                    createDataPoint( xSeriesGroupShape_Shapes, xPointProperties
+                                    , fUnitCircleStartAngleDegree, fUnitCircleWidthAngleDegree
+                                    , fUnitCircleInnerRadius, fUnitCircleOuterRadius
+                                    , fLogicZ, fDepth, fExplodePercentage, apOverwritePropertiesMap.get() ) );
 
+                //create label
+                if( pSeries->getDataPointLabelIfLabel(nPointIndex) )
+                {
+                    if( !::rtl::math::approxEqual( fExplodePercentage, 0.0 ) )
+                    {
+                        double fExplodeOffset = (fUnitCircleOuterRadius-fUnitCircleInnerRadius)*fExplodePercentage;
+                        fUnitCircleInnerRadius += fExplodeOffset;
+                        fUnitCircleOuterRadius += fExplodeOffset;
+                    }
+
+                    LabelAlignment eAlignment(LABEL_ALIGN_CENTER);
+                    sal_Int32 nScreenValueOffsetInRadiusDirection = (3!=m_nDimension && this->isSingleRingChart()) ? 500 : 0 ;//todo maybe calculate this font height dependent
+                    awt::Point aScreenPosition2D(
+                        PolarLabelPositionHelper(m_pPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory)
+                        .getLabelScreenPositionAndAlignmentForUnitCircleValues(eAlignment, this->isSingleRingChart()
+                        , fUnitCircleStartAngleDegree, fUnitCircleWidthAngleDegree
+                        , fUnitCircleInnerRadius, fUnitCircleOuterRadius, 0.0, nScreenValueOffsetInRadiusDirection ));
+                    this->createDataLabel( xTextTarget, *pSeries, nPointIndex
+                                    , fLogicYValue, fLogicYSum, aScreenPosition2D, eAlignment );
+                }
+
+                if(!bDoExplode)
+                {
+                    ShapeFactory::setShapeName( xPointShape
+                                , ObjectIdentifier::createPointCID( pSeries->getPointCID_Stub(), nPointIndex ) );
+                }
+                else try
+                {
+                    //enable dragging of outer segments
+
+                    double fAngle  = fUnitCircleStartAngleDegree + fUnitCircleWidthAngleDegree/2.0;
+                    double fMaxDeltaRadius = fUnitCircleOuterRadius-fUnitCircleInnerRadius;
+                    drawing::Position3D aOrigin = m_pPosHelper->transformUnitCircleToScene( fAngle, fUnitCircleOuterRadius, fLogicZ );
+                    drawing::Position3D aNewOrigin = m_pPosHelper->transformUnitCircleToScene( fAngle, fUnitCircleOuterRadius + fMaxDeltaRadius, fLogicZ );
+
+                    sal_Int32 nOffsetPercent( static_cast<sal_Int32>(fExplodePercentage * 100.0) );
+
+                    awt::Point aMinimumPosition( PlottingPositionHelper::transformSceneToScreenPosition(
+                        aOrigin, m_xLogicTarget, m_pShapeFactory, m_nDimension ) );
+                    awt::Point aMaximumPosition( PlottingPositionHelper::transformSceneToScreenPosition(
+                        aNewOrigin, m_xLogicTarget, m_pShapeFactory, m_nDimension ) );
+
+                    //enable draging of piesegments
+                    rtl::OUString aPointCIDStub( ObjectIdentifier::createSeriesSubObjectStub( OBJECTTYPE_DATA_POINT
+                        , pSeries->getSeriesParticle()
+                        , ObjectIdentifier::getPieSegmentDragMethodServiceName()
+                        , ObjectIdentifier::createPieSegmentDragParameterString(
+                            nOffsetPercent, aMinimumPosition, aMaximumPosition )
+                        ) );
+
+                    ShapeFactory::setShapeName( xPointShape
+                                , ObjectIdentifier::createPointCID( aPointCIDStub, nPointIndex ) );
+                }
+                catch( uno::Exception& e )
+                {
+                    ASSERT_EXCEPTION( e );
+                }
             }//next series in x slot (next y slot)
-        }//next x slot
-    }//next category
+        }//next category
+    }//next x slot
 //=============================================================================
 //=============================================================================
 //=============================================================================
