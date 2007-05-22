@@ -1,0 +1,86 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: DataPointLabel.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 14:51:16 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_DataPointLabel_idl
+#define com_sun_star_chart2_DataPointLabel_idl
+
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+struct DataPointLabel
+{
+    /** if <TRUE/>, the value that is represented by a data point is
+        displayed next to it.
+
+        @see <member>ShowNumberInPercent</member>
+     */
+    boolean                     ShowNumber;
+
+    /** This is only effective, if <member>ShowNumber</member> is
+        <TRUE/>.  If this member is also <TRUE/>, the numbers are
+        displayed as percentages of a category.
+
+        <p>That means, if a data point is the first one of a series,
+        the percentage is calculated by using the first data points of
+        all available series.</p>
+    */
+    boolean                     ShowNumberInPercent;
+
+    /** The caption contains the category name of the category to
+        which a data point belongs.
+     */
+    boolean                     ShowCategoryName;
+
+    /** The symbol of data series is additionally displayed in the
+        caption.
+     */
+    boolean                     ShowLegendSymbol;
+};
+
+//=============================================================================
+
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif
