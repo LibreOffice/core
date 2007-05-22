@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docuno.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 15:56:55 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:39:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XCELLRANGESACCESS_HPP_
+#include <com/sun/star/sheet/XCellRangesAccess.hpp>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
@@ -415,8 +418,9 @@ public:
 };
 
 
-class ScTableSheetsObj : public cppu::WeakImplHelper4<
+class ScTableSheetsObj : public cppu::WeakImplHelper5<
                                 com::sun::star::sheet::XSpreadsheets,
+                                com::sun::star::sheet::XCellRangesAccess,
                                 com::sun::star::container::XEnumerationAccess,
                                 com::sun::star::container::XIndexAccess,
                                 com::sun::star::lang::XServiceInfo>,
@@ -442,6 +446,20 @@ public:
     virtual void SAL_CALL   copyByName( const ::rtl::OUString& aName,
                                 const ::rtl::OUString& aCopy, sal_Int16 nDestination )
                                     throw(::com::sun::star::uno::RuntimeException);
+
+                            // XCellRangesAccess
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >
+        SAL_CALL getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow, sal_Int32 nSheet )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >
+        SAL_CALL getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom, sal_Int32 nSheet )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange > >
+        SAL_CALL getCellRangesByName( const ::rtl::OUString& aRange )
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
                             // XNameContainer
     virtual void SAL_CALL   insertByName( const ::rtl::OUString& aName,
