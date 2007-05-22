@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OPropertySet.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:44:32 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:20:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,8 @@ public:
     virtual ~OPropertySet();
 
 protected:
+    explicit OPropertySet( const OPropertySet & rOther, ::osl::Mutex & rMutex );
+
     /** implement this method to provide default values for all properties
         supporting defaults.  If a property does not have a default value, you
         may throw an UnknownPropertyException.
@@ -219,6 +221,14 @@ protected:
     /// make original interface function visible again
     using ::com::sun::star::beans::XFastPropertySet::getFastPropertyValue;
 
+    /** implement this method in derived classes to get called when properties
+        change.
+     */
+    virtual void firePropertyChangeEvent();
+
+    /// call this when a derived component is disposed
+    virtual void disposePropertySet();
+
     // ========================================
     // Interfaces
     // ========================================
@@ -305,6 +315,19 @@ protected:
 //         throw (::com::sun::star::beans::UnknownPropertyException,
 //                ::com::sun::star::lang::WrappedTargetException,
 //                ::com::sun::star::uno::RuntimeException);
+
+    // ____ XMultiPropertySet ____
+    virtual void SAL_CALL setPropertyValues(
+        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values )
+        throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // ____ XFastPropertySet ____
+    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // Note: it is assumed that the base class implements setPropertyValue by
+    // using setFastPropertyValue
 
 private:
     /// reference to mutex of class deriving from here
