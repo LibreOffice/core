@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Wall.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:07:23 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:42:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,15 @@
 #ifndef CHART_WALL_HXX
 #define CHART_WALL_HXX
 
-// #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
-// #include <com/sun/star/uno/XComponentContext.hpp>
-// #endif
+#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
+#include <com/sun/star/util/XCloneable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFYBROADCASTER_HPP_
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFYLISTENER_HPP_
+#include <com/sun/star/util/XModifyListener.hpp>
+#endif
 
 #ifndef CHART_MUTEXCONTAINER_HXX
 #include "MutexContainer.hxx"
@@ -51,7 +57,11 @@
 #endif
 
 #include "ServiceMacros.hxx"
+#include "ModifyListenerHelper.hxx"
 
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
+#endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
@@ -59,15 +69,22 @@
 namespace chart
 {
 
+namespace impl
+{
+typedef ::cppu::WeakImplHelper3<
+        ::com::sun::star::util::XCloneable,
+        ::com::sun::star::util::XModifyBroadcaster,
+        ::com::sun::star::util::XModifyListener >
+    Wall_Base;
+}
+
 class Wall :
-    public helper::MutexContainer,
-    public ::property::OPropertySet,
-    public ::cppu::OWeakObject
+    public MutexContainer,
+    public impl::Wall_Base,
+    public ::property::OPropertySet
 {
 public:
     Wall();
-//  Wall( ::com::sun::star::uno::Reference<
-//           ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~Wall();
 
     /// XServiceInfo declarations
@@ -77,6 +94,8 @@ public:
      DECLARE_XINTERFACE()
 
 protected:
+    explicit Wall( const Wall & rOther );
+
     // ____ OPropertySet ____
     virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
         throw(::com::sun::star::beans::UnknownPropertyException);
@@ -96,7 +115,36 @@ protected:
 //           const ::com::sun::star::uno::Any& rValue )
 //      throw (::com::sun::star::lang::IllegalArgumentException);
 
+    // ____ XCloneable ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XModifyBroadcaster ____
+    virtual void SAL_CALL addModifyListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeModifyListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XModifyListener ____
+    virtual void SAL_CALL modified(
+        const ::com::sun::star::lang::EventObject& aEvent )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XEventListener (base of XModifyListener) ____
+    virtual void SAL_CALL disposing(
+        const ::com::sun::star::lang::EventObject& Source )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ OPropertySet ____
+    virtual void firePropertyChangeEvent();
+
+    void fireModifyEvent();
+
 private:
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xModifyEventForwarder;
 };
 
 } //  namespace chart
