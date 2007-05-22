@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ColumnLineChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:18:20 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:47:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,12 @@
 #include "precompiled_chart2.hxx"
 #include "ColumnLineChartTypeTemplate.hxx"
 #include "macros.hxx"
-#include "LineChartType.hxx"
-#include "BarChartType.hxx"
-#include "algohelper.hxx"
-#include "DataSeriesTreeHelper.hxx"
+#include "CommonConverters.hxx"
+#include "DiagramHelper.hxx"
+#include "DataSeriesHelper.hxx"
+#include "servicenames_charttypes.hxx"
+#include "ColumnLineDataInterpreter.hxx"
+#include "ContainerHelper.hxx"
 
 #ifndef CHART_PROPERTYHELPER_HXX
 #include "PropertyHelper.hxx"
@@ -48,9 +50,16 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPECONTAINER_HPP_
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XDATASERIESCONTAINER_HPP_
+#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#endif
 
 #include <algorithm>
 
+using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
@@ -84,7 +93,7 @@ void lcl_AddPropertiesToVector(
 }
 
 void lcl_AddDefaultsToMap(
-    ::chart::helper::tPropertyValueMap & rOutMap )
+    ::chart::tPropertyValueMap & rOutMap )
 {
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_COL_LINE_NUMBER_OF_LINES ));
     rOutMap[ PROP_COL_LINE_NUMBER_OF_LINES ] =
@@ -105,10 +114,10 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
 
         // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::helper::PropertyNameLess() );
+                     ::chart::PropertyNameLess() );
 
         // transfer result to static Sequence
-        aPropSeq = ::chart::helper::VectorToSequence( aProperties );
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
     return aPropSeq;
@@ -132,7 +141,7 @@ ColumnLineChartTypeTemplate::ColumnLineChartTypeTemplate(
     Reference<
         uno::XComponentContext > const & xContext,
     const ::rtl::OUString & rServiceName,
-    chart2::StackMode eStackMode,
+    StackMode eStackMode,
     sal_Int32 nNumberOfLines ) :
         ChartTypeTemplate( xContext, rServiceName ),
         ::property::OPropertySet( m_aMutex ),
@@ -148,7 +157,7 @@ ColumnLineChartTypeTemplate::~ColumnLineChartTypeTemplate()
 uno::Any ColumnLineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    static helper::tPropertyValueMap aStaticDefaults;
+    static tPropertyValueMap aStaticDefaults;
 
     // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -158,7 +167,7 @@ uno::Any ColumnLineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
         lcl_AddDefaultsToMap( aStaticDefaults );
     }
 
-    helper::tPropertyValueMap::const_iterator aFound(
+    tPropertyValueMap::const_iterator aFound(
         aStaticDefaults.find( nHandle ));
 
     if( aFound == aStaticDefaults.end())
@@ -193,100 +202,95 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
     // \--
 }
 
-Reference< chart2::XDataSeriesTreeParent > ColumnLineChartTypeTemplate::createDataSeriesTree(
-    const Sequence< Reference< chart2::XDataSeries > > & aSeriesSeq,
-    const Reference< chart2::XBoundedCoordinateSystem > & rCoordSys )
+void ColumnLineChartTypeTemplate::createChartTypes(
+    const Sequence< Sequence< Reference< XDataSeries > > > & aSeriesSeq,
+    const Sequence< Reference< XCoordinateSystem > > & rCoordSys,
+    const Sequence< Reference< XChartType > >& aOldChartTypesSeq )
 {
-    // create series tree nodes
-    // root
-    Reference< chart2::XDataSeriesTreeParent > aRoot( createRootNode());
+    if( rCoordSys.getLength() == 0 ||
+        ! rCoordSys[0].is() )
+        return;
 
-    sal_Int32 nNumberOfBars = aSeriesSeq.getLength();
-    sal_Int32 nNumberOfLines = 1;
-    getFastPropertyValue( PROP_COL_LINE_NUMBER_OF_LINES ) >>= nNumberOfLines;
-
-    if( nNumberOfLines >= nNumberOfBars )
+    try
     {
-        nNumberOfLines = 1;
-        nNumberOfBars -= 1;
+        Reference< lang::XMultiServiceFactory > xFact(
+            GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
+        Sequence< Reference< XDataSeries > > aFlatSeriesSeq( FlattenSequence( aSeriesSeq ));
+        sal_Int32 nNumberOfSeries = aFlatSeriesSeq.getLength();
+        sal_Int32 nNumberOfLines = 0;
+        sal_Int32 nNumberOfColumns = 0;
+
+        getFastPropertyValue( PROP_COL_LINE_NUMBER_OF_LINES ) >>= nNumberOfLines;
+        OSL_ENSURE( nNumberOfLines>=0, "number of lines should be not negative" );
+        if( nNumberOfLines < 0 )
+            nNumberOfLines = 0;
+
+        if( nNumberOfLines >= nNumberOfSeries )
+        {
+            if( nNumberOfSeries > 0 )
+            {
+                nNumberOfLines = nNumberOfSeries - 1;
+                nNumberOfColumns = 1;
+            }
+            else
+                nNumberOfLines = 0;
+        }
+        else
+            nNumberOfColumns = nNumberOfSeries - nNumberOfLines;
+
+        // Columns
+        // -------
+        Reference< XChartType > xCT(
+            xFact->createInstance( CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ), uno::UNO_QUERY_THROW );
+
+        ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem( aOldChartTypesSeq, xCT );
+
+        Reference< XChartTypeContainer > xCTCnt( rCoordSys[ 0 ], uno::UNO_QUERY_THROW );
+        xCTCnt->setChartTypes( Sequence< Reference< chart2::XChartType > >( &xCT, 1 ));
+
+        if( nNumberOfColumns > 0 )
+        {
+            Reference< XDataSeriesContainer > xDSCnt( xCT, uno::UNO_QUERY_THROW );
+            Sequence< Reference< XDataSeries > > aColumnSeq( nNumberOfColumns );
+            ::std::copy( aFlatSeriesSeq.getConstArray(),
+                         aFlatSeriesSeq.getConstArray() + nNumberOfColumns,
+                         aColumnSeq.getArray());
+            xDSCnt->setDataSeries( aColumnSeq );
+        }
+
+        // Lines
+        // -----
+        xCT.set( xFact->createInstance( CHART2_SERVICE_NAME_CHARTTYPE_LINE ), uno::UNO_QUERY_THROW );
+        xCTCnt.set( rCoordSys[ 0 ], uno::UNO_QUERY_THROW );
+        xCTCnt->addChartType( xCT );
+
+        if( nNumberOfLines > 0 )
+        {
+            Reference< XDataSeriesContainer > xDSCnt( xCT, uno::UNO_QUERY_THROW );
+            Sequence< Reference< XDataSeries > > aLineSeq( nNumberOfLines );
+            ::std::copy( aFlatSeriesSeq.getConstArray() + nNumberOfColumns,
+                         aFlatSeriesSeq.getConstArray() + aFlatSeriesSeq.getLength(),
+                         aLineSeq.getArray());
+            xDSCnt->setDataSeries( aLineSeq );
+        }
     }
-    else
-        nNumberOfBars -= nNumberOfLines;
-
-    // Bars
-    // ----
-    // chart type group
-    Reference< chart2::XDataSeriesTreeNode > aBarNode(
-        createChartTypeGroup( new BarChartType() ));
-
-    // 'x-axis' group
-    Reference< chart2::XDataSeriesTreeNode > aBarCategoryNode(
-        createScaleGroup( true, true, rCoordSys, 0, chart2::StackMode_STACKED ));
-
-    // 'y-axis' group
-    Reference< chart2::XDataSeriesTreeNode > aBarValueNode(
-        createScaleGroup( false, true, rCoordSys, 1, m_eStackMode ));
-
-    // Lines
-    // -----
-    // chart type group
-    Reference< chart2::XDataSeriesTreeNode > aLineNode(
-        createChartTypeGroup( new LineChartType() ));
-
-    // 'x-axis' group
-    Reference< chart2::XDataSeriesTreeNode > aLineCategoryNode(
-        createScaleGroup( true, false, rCoordSys, 0, chart2::StackMode_STACKED ));
-
-    // 'y-axis' group
-    Reference< chart2::XDataSeriesTreeNode > aLineValueNode(
-        createScaleGroup( false, false, rCoordSys, 1, chart2::StackMode_NONE ));
-
-    // Build Tree
-    // ----------
-
-    // add series node to value nodes
-    Sequence< Reference< chart2::XDataSeries > > aBarSeq( nNumberOfBars );
-    ::std::copy( aSeriesSeq.getConstArray(),
-                 aSeriesSeq.getConstArray() + nNumberOfBars,
-                 aBarSeq.getArray());
-    addDataSeriesToGroup( aBarValueNode, aBarSeq );
-
-    Sequence< Reference< chart2::XDataSeries > > aLineSeq( nNumberOfLines );
-    ::std::copy( aSeriesSeq.getConstArray() + nNumberOfBars,
-                 aSeriesSeq.getConstArray() + aSeriesSeq.getLength(),
-                 aLineSeq.getArray());
-    addDataSeriesToGroup( aLineValueNode, aLineSeq );
-
-    // add value nodes to category nodes
-    attachNodeToNode( aBarCategoryNode, aBarValueNode );
-    attachNodeToNode( aLineCategoryNode, aLineValueNode );
-
-    // add category node to chart type node
-    attachNodeToNode( aBarNode, aBarCategoryNode );
-    attachNodeToNode( aLineNode, aLineCategoryNode );
-
-    // add chart type nodes to root of tree
-    aRoot->addChild( aBarNode );
-    aRoot->addChild( aLineNode );
-
-    return aRoot;
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
 }
 
-chart2::StackMode ColumnLineChartTypeTemplate::getYStackMode() const
+StackMode ColumnLineChartTypeTemplate::getStackMode( sal_Int32 nChartTypeIndex ) const
 {
-    return m_eStackMode;
+    if( nChartTypeIndex == 0 )
+        return m_eStackMode;
+    return StackMode_NONE;
 }
-
-uno::Reference< chart2::XChartType > ColumnLineChartTypeTemplate::getDefaultChartType()
-    throw (uno::RuntimeException)
-{
-    return new LineChartType();
-}
-
 
 // ____ XChartTypeTemplate ____
 sal_Bool SAL_CALL ColumnLineChartTypeTemplate::matchesTemplate(
-    const uno::Reference< chart2::XDiagram >& xDiagram )
+    const uno::Reference< XDiagram >& xDiagram,
+    sal_Bool bAdaptProperties )
     throw (uno::RuntimeException)
 {
     sal_Bool bResult = sal_False;
@@ -296,24 +300,65 @@ sal_Bool SAL_CALL ColumnLineChartTypeTemplate::matchesTemplate(
 
     try
     {
-        uno::Reference< chart2::XDataSeriesTreeParent > xParent( xDiagram->getTree(), uno::UNO_QUERY_THROW );
-        ::std::vector< uno::Reference< chart2::XChartTypeGroup > > aChartTypeGroups(
-            helper::DataSeriesTreeHelper::getChartTypes( xParent ));
+        Reference< chart2::XChartType > xColumnChartType;
+        Reference< XCoordinateSystem > xColumnChartCooSys;
+        Reference< chart2::XChartType > xLineChartType;
+        sal_Int32 nNumberOfChartTypes = 0;
 
-        if( aChartTypeGroups.size() == 2 &&
-            aChartTypeGroups[0].is() &&
-            aChartTypeGroups[1].is() &&
-            aChartTypeGroups[0]->getChartType().is() &&
-            aChartTypeGroups[1]->getChartType().is() &&
-            aChartTypeGroups[0]->getChartType()->getChartType().equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.BarChart" )) &&
-            aChartTypeGroups[1]->getChartType()->getChartType().equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.LineChart" )) )
+        Reference< XCoordinateSystemContainer > xCooSysCnt(
+            xDiagram, uno::UNO_QUERY_THROW );
+        Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
+            xCooSysCnt->getCoordinateSystems());
+        for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
         {
-            bResult = ( helper::DataSeriesTreeHelper::getStackMode(
-                            uno::Reference< chart2::XDataSeriesTreeParent >(
-                                aChartTypeGroups[0], uno::UNO_QUERY )) ==
-                        getYStackMode() );
+            Reference< XChartTypeContainer > xCTCnt( aCooSysSeq[i], uno::UNO_QUERY_THROW );
+            Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
+            for( sal_Int32 j=0; j<aChartTypeSeq.getLength(); ++j )
+            {
+                if( aChartTypeSeq[j].is())
+                {
+                    ++nNumberOfChartTypes;
+                    if( nNumberOfChartTypes > 2 )
+                        break;
+                    OUString aCTService = aChartTypeSeq[j]->getChartType();
+                    if( aCTService.equals( CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ))
+                    {
+                        xColumnChartType.set( aChartTypeSeq[j] );
+                        xColumnChartCooSys.set( aCooSysSeq[i] );
+                    }
+                    else if( aCTService.equals( CHART2_SERVICE_NAME_CHARTTYPE_LINE ))
+                        xLineChartType.set( aChartTypeSeq[j] );
+                }
+            }
+            if( nNumberOfChartTypes > 2 )
+                break;
+        }
+
+        if( nNumberOfChartTypes == 2 &&
+            xColumnChartType.is() &&
+            xLineChartType.is())
+        {
+            OSL_ASSERT( xColumnChartCooSys.is());
+
+            // check stackmode of bars
+            bResult = (xColumnChartCooSys->getDimension() == getDimension());
+            if( bResult )
+            {
+                bResult = ( DiagramHelper::getStackModeFromChartType(
+                                xColumnChartType,
+                                xColumnChartCooSys )
+                            == getStackMode( 0 ) );
+
+                if( bResult && bAdaptProperties )
+                {
+                    Reference< XDataSeriesContainer > xSeriesContainer( xLineChartType, uno::UNO_QUERY );
+                    if( xSeriesContainer.is() )
+                    {
+                        sal_Int32 nNumberOfLines = xSeriesContainer->getDataSeries().getLength();
+                        setFastPropertyValue_NoBroadcast( PROP_COL_LINE_NUMBER_OF_LINES, uno::makeAny( nNumberOfLines ));
+                    }
+                }
+            }
         }
     }
     catch( uno::Exception & ex )
@@ -322,6 +367,47 @@ sal_Bool SAL_CALL ColumnLineChartTypeTemplate::matchesTemplate(
     }
 
     return bResult;
+}
+
+Reference< XChartType > SAL_CALL ColumnLineChartTypeTemplate::getChartTypeForNewSeries(
+        const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
+    throw (uno::RuntimeException)
+{
+    Reference< chart2::XChartType > xResult;
+
+    try
+    {
+        Reference< lang::XMultiServiceFactory > xFact(
+            GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
+        xResult.set( xFact->createInstance(
+                         CHART2_SERVICE_NAME_CHARTTYPE_LINE ), uno::UNO_QUERY_THROW );
+        ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem( aFormerlyUsedChartTypes, xResult );
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    return xResult;
+}
+
+Reference< XDataInterpreter > SAL_CALL ColumnLineChartTypeTemplate::getDataInterpreter()
+    throw (uno::RuntimeException)
+{
+    if( ! m_xDataInterpreter.is())
+    {
+        sal_Int32 nNumberOfLines = 1;
+        getFastPropertyValue( PROP_COL_LINE_NUMBER_OF_LINES ) >>= nNumberOfLines;
+        m_xDataInterpreter.set( new ColumnLineDataInterpreter( nNumberOfLines, GetComponentContext() ) );
+    }
+    else
+    {
+        //todo...
+        OSL_ENSURE( false, "number of lines may not be valid anymore in the datainterpreter" );
+
+    }
+
+    return m_xDataInterpreter;
 }
 
 // ----------------------------------------
