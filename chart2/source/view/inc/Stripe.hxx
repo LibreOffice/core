@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Stripe.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:44:48 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:20:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,10 @@ public:
         , const ::com::sun::star::drawing::Direction3D& rDirectionToPoint2
         , const ::com::sun::star::drawing::Direction3D& rDirectionToPoint4 );
 
+    Stripe( const ::com::sun::star::drawing::Position3D& rPoint1
+        , const ::com::sun::star::drawing::Position3D& rPoint2
+        , double fDepth );
+
 /*
     Stripe( const ::com::sun::star::drawing::Position3D& rPoint1
         , const ::com::sun::star::drawing::Position3D& rPoint2
@@ -72,7 +76,8 @@ public:
 
 
     ::com::sun::star::uno::Any      getPolyPolygonShape3D() const;
-    ::com::sun::star::uno::Any      getNormalsPolyPolygonShape3D() const;
+    ::com::sun::star::uno::Any      getNormalsPolygon() const;
+    ::com::sun::star::uno::Any      getTexturePolygon() const;
 
     ::com::sun::star::drawing::Position3D GetPosition1() const { return m_aPoint1; }
     ::com::sun::star::drawing::Position3D GetPosition2() const { return m_aPoint2; }
