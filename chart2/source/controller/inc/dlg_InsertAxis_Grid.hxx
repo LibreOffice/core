@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertAxis_Grid.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:26:48 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:58:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,12 +57,12 @@ namespace chart
 {
 //.............................................................................
 
-struct InsertMeterDialogData
+struct InsertAxisOrGridDialogData
 {
     ::com::sun::star::uno::Sequence< sal_Bool > aPossibilityList;
     ::com::sun::star::uno::Sequence< sal_Bool > aExistenceList;
 
-    InsertMeterDialogData();
+    InsertAxisOrGridDialogData();
 };
 
 /*************************************************************************
@@ -90,10 +90,10 @@ protected:
     HelpButton          aPbHelp;
 
 public:
-    SchAxisDlg( Window* pParent, const InsertMeterDialogData& rInput, BOOL bAxisDlg=true );
+    SchAxisDlg( Window* pParent, const InsertAxisOrGridDialogData& rInput, BOOL bAxisDlg=true );
     virtual ~SchAxisDlg();
 
-    void getResult( InsertMeterDialogData& rOutput );
+    void getResult( InsertAxisOrGridDialogData& rOutput );
 };
 
 
@@ -105,7 +105,7 @@ public:
 class SchGridDlg : public SchAxisDlg
 {
 public:
-    SchGridDlg( Window* pParent, const InsertMeterDialogData& rInput );
+    SchGridDlg( Window* pParent, const InsertAxisOrGridDialogData& rInput );
     virtual ~SchGridDlg();
 };
 
