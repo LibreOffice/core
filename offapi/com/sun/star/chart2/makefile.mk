@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:01:21 $
+#   last change: $Author: vg $ $Date: 2007-05-22 15:06:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,17 +47,69 @@ PRJNAME=offapi
 #-------------------------------------------------------------------
 
 IDLFILES= \
-    DataChangeEvent.idl \
-    DataSequenceRole.idl \
-    XDataChangeListener.idl \
-    XDataInterpretation.idl \
-    XDataProvider.idl \
-    XDataReceiver.idl \
-    XDataSequence.idl \
-    XDataSink.idl \
-    XDataSource.idl \
-    XNumericalDataSequence.idl \
-    XTextualDataSequence.idl
+    AxisType.idl \
+    AxisOrientation.idl \
+    AxisPosition.idl \
+    Break.idl \
+    CoordinateSystemTypeID.idl \
+    CurveStyle.idl \
+    DataPointGeometry3D.idl \
+    DataPointLabel.idl \
+    ErrorBarStyle.idl \
+    ExplicitIncrementData.idl \
+    ExplicitScaleData.idl \
+    ExplicitSubIncrement.idl \
+    FillBitmap.idl \
+    IncrementData.idl \
+    InterpretedData.idl \
+    LegendExpansion.idl \
+    LegendPosition.idl \
+    LegendSymbolStyle.idl \
+    LightSource.idl \
+    PieChartOffsetMode.idl \
+    RelativePosition.idl \
+    RelativeSize.idl \
+    ScaleData.idl \
+    StackingDirection.idl \
+    SubIncrement.idl \
+    Symbol.idl \
+    SymbolStyle.idl \
+    TickmarkStyle.idl \
+    TransparencyStyle.idl \
+    ViewLegendEntry.idl \
+    XAxis.idl \
+    XCoordinateSystem.idl \
+    XCoordinateSystemContainer.idl \
+    XChartDocument.idl \
+    XChartShape.idl \
+    XChartShapeContainer.idl \
+    XChartType.idl \
+    XChartTypeContainer.idl \
+    XChartTypeManager.idl \
+    XChartTypeTemplate.idl \
+    XColorScheme.idl \
+    XDataInterpreter.idl \
+    XDataSeries.idl \
+    XDataSeriesContainer.idl \
+    XDiagram.idl \
+    XDiagramProvider.idl \
+    XFastPropertyState.idl \
+    XFormattedString.idl \
+    XInternalDataProvider.idl \
+    XLabeled.idl \
+    XLegend.idl \
+    XLegendEntry.idl \
+    XLegendSymbolProvider.idl \
+    XPlotter.idl \
+    XRegressionCurve.idl \
+    XRegressionCurveCalculator.idl \
+    XRegressionCurveContainer.idl \
+    XScaling.idl \
+    XStyleSupplier.idl \
+    XTarget.idl \
+    XTitle.idl \
+    XTitled.idl \
+    XTransformation.idl
 
 # --- Targets ------------------------------------------------------
 
