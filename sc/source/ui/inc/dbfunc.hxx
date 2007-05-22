@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfunc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:08:39 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:07:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,7 @@ public:
 
     void            UpdateCharts(BOOL bAllCharts = FALSE);      // Default: am Cursor
 
-    static USHORT   DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, Window* pActiveWin, BOOL bAllCharts );
+    static USHORT   DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, BOOL bAllCharts );
 };
 
 
