@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsorti.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:52:22 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:04:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,9 @@
 #endif
 #ifndef SC_UNONAMES_HXX
 #include "unonames.hxx"
+#endif
+#ifndef SC_RANGEUTL_HXX
+#include "rangeutl.hxx"
 #endif
 
 #include <xmloff/xmltkmap.hxx>
@@ -108,7 +111,7 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
             {
                 ScRange aScRange;
                 sal_Int32 nOffset(0);
-                if (ScXMLConverter::GetRangeFromString( aScRange, sValue, GetScImport().GetDocument(), nOffset ))
+                if (ScRangeStringConverter::GetRangeFromString( aScRange, sValue, GetScImport().GetDocument(), nOffset ))
                 {
                     ScUnoConversion::FillApiAddress( aOutputPosition, aScRange.aStart );
                     bCopyOutputData = sal_True;
