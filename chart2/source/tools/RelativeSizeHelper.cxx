@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelativeSizeHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:29:13 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:04:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include "RelativeSizeHelper.hxx"
+#include "macros.hxx"
 
 #include <vector>
 #include <algorithm>
@@ -46,6 +47,7 @@ using namespace ::std;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::makeAny;
+using ::com::sun::star::uno::Exception;
 using ::rtl::OUString;
 
 namespace chart
@@ -69,7 +71,7 @@ double RelativeSizeHelper::calculate(
 
 // static
 void RelativeSizeHelper::adaptFontSizes(
-    Reference< XPropertySet > & xTargetProperties,
+    const Reference< XPropertySet > & xTargetProperties,
     const Size & rOldReferenceSize,
     const Size & rNewReferenceSize )
 {
@@ -86,12 +88,19 @@ void RelativeSizeHelper::adaptFontSizes(
     for( vector< OUString >::const_iterator aIt = aProperties.begin();
          aIt != aProperties.end(); ++aIt )
     {
-        if( xTargetProperties->getPropertyValue( *aIt ) >>= fFontHeight )
+        try
         {
-            xTargetProperties->setPropertyValue(
-                *aIt,
-                makeAny( static_cast< float >(
-                             calculate( fFontHeight, rOldReferenceSize, rNewReferenceSize ))));
+            if( xTargetProperties->getPropertyValue( *aIt ) >>= fFontHeight )
+            {
+                xTargetProperties->setPropertyValue(
+                    *aIt,
+                    makeAny( static_cast< float >(
+                                 calculate( fFontHeight, rOldReferenceSize, rNewReferenceSize ))));
+            }
+        }
+        catch( const Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
         }
     }
 }
