@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:14:37 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:50:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,12 +149,12 @@ void XclImpTabViewSettings::ReadWindow2( XclImpStream& rStrm, bool bChart )
         sal_uInt16 nFlags;
         rStrm >> nFlags >> maData.maFirstXclPos;
 
+        // #i59590# real life: Excel ignores some view settings in chart sheets
         maData.mbSelected       = ::get_flag( nFlags, EXC_WIN2_SELECTED );
         maData.mbDisplayed      = ::get_flag( nFlags, EXC_WIN2_DISPLAYED );
-        // #i59590# real life: Excel ignores mirror flag in chart sheets
         maData.mbMirrored       = !bChart && ::get_flag( nFlags, EXC_WIN2_MIRRORED );
-        maData.mbFrozenPanes    = ::get_flag( nFlags, EXC_WIN2_FROZEN );
-        maData.mbPageMode       = ::get_flag( nFlags, EXC_WIN2_PAGEBREAKMODE );
+        maData.mbFrozenPanes    = !bChart && ::get_flag( nFlags, EXC_WIN2_FROZEN );
+        maData.mbPageMode       = !bChart && ::get_flag( nFlags, EXC_WIN2_PAGEBREAKMODE );
         maData.mbDefGridColor   = ::get_flag( nFlags, EXC_WIN2_DEFGRIDCOLOR );
         maData.mbShowFormulas   = ::get_flag( nFlags, EXC_WIN2_SHOWFORMULAS );
         maData.mbShowGrid       = ::get_flag( nFlags, EXC_WIN2_SHOWGRID );
@@ -187,6 +187,10 @@ void XclImpTabViewSettings::ReadWindow2( XclImpStream& rStrm, bool bChart )
             default:    DBG_ERROR_BIFF();
         }
     }
+
+    // do not scroll chart sheets
+    if( bChart )
+        maData.maFirstXclPos.Set( 0, 0 );
 }
 
 void XclImpTabViewSettings::ReadScl( XclImpStream& rStrm )
@@ -228,7 +232,9 @@ void XclImpTabViewSettings::Finalize()
     // *** sheet options: cursor, selection, splits, zoom ***
 
     // sheet flags
-    rDoc.SetLayoutRTL( nScTab, maData.mbMirrored );
+    if( maData.mbMirrored )
+        // do not call this function with FALSE, it would mirror away all drawing objects
+        rDoc.SetLayoutRTL( nScTab, TRUE );
     rTabSett.mbSelected = maData.mbSelected || bDisplayed;
 
     // first visible cell in top-left pane and in additional pane(s)
