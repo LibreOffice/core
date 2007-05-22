@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmfmt.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 13:21:51 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:19:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@
 #endif
 
 class SwFlyFrm;
+class SwAnchoredObject;
 class Graphic;
 class Point;
 class ImageMap;
@@ -179,6 +180,9 @@ public:
 
     SwFlyFrm* GetFrm( const Point* pDocPos = 0,
                         const BOOL bCalcFrm = FALSE ) const;
+
+    SwAnchoredObject* GetAnchoredObj( const Point* pDocPos = 0,
+                                      const BOOL bCalcFrm = FALSE ) const;
 
     virtual Graphic MakeGraphic( ImageMap* pMap = NULL );
 
