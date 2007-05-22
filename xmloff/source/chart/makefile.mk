@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:14:22 $
+#   last change: $Author: vg $ $Date: 2007-05-22 16:08:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,13 +46,17 @@ ENABLE_EXCEPTIONS	= TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =	$(SLO)$/SchXMLExport.obj \
+SLOFILES =	$(SLO)$/ColorPropertySet.obj \
+            $(SLO)$/SchXMLTools.obj \
+            $(SLO)$/SchXMLExport.obj \
             $(SLO)$/SchXMLImport.obj \
             $(SLO)$/contexts.obj \
             $(SLO)$/SchXMLTableContext.obj \
             $(SLO)$/SchXMLChartContext.obj \
             $(SLO)$/SchXMLPlotAreaContext.obj \
             $(SLO)$/SchXMLParagraphContext.obj \
+            $(SLO)$/SchXMLSeriesHelper.obj \
+            $(SLO)$/SchXMLSeries2Context.obj \
             $(SLO)$/PropertyMaps.obj \
             $(SLO)$/XMLChartStyleContext.obj \
             $(SLO)$/XMLErrorIndicatorPropertyHdl.obj \
@@ -60,7 +64,8 @@ SLOFILES =	$(SLO)$/SchXMLExport.obj \
             $(SLO)$/XMLChartPropertyContext.obj \
             $(SLO)$/XMLSymbolImageContext.obj \
             $(SLO)$/XMLTextOrientationHdl.obj \
-            $(SLO)$/XMLSymbolTypePropertyHdl.obj
+            $(SLO)$/XMLSymbolTypePropertyHdl.obj \
+            $(SLO)$/transporttypes.obj
 
 # --- Targets --------------------------------------------------------------
 
