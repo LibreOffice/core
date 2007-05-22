@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LabelPositionHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:43:09 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:18:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ public:
 
     ::com::sun::star::awt::Point transformSceneToScreenPosition(
             const ::com::sun::star::drawing::Position3D& rScenePosition3D ) const;
-    ::com::sun::star::awt::Point transformLogicToScreenPosition(
+    ::com::sun::star::awt::Point transformScaledLogicToScreenPosition(
             const ::com::sun::star::drawing::Position3D& rScenePosition3D ) const;
 
     static void changeTextAdjustment( tAnySequence& rPropValues, const tNameSequence& rPropNames, LabelAlignment eAlignment);
