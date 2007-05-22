@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CharacterProperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:22:12 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:55:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,84 +36,51 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include "CharacterProperties.hxx"
+#include "ContainerHelper.hxx"
 #include "macros.hxx"
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_XSTYLE_HPP_
 #include <com/sun/star/style/XStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
 #include <com/sun/star/awt/FontSlant.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_AWT_FONTFAMILY_HPP_
 #include <com/sun/star/awt/FontFamily.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_CHARSET_HPP_
 #include <com/sun/star/awt/CharSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTPITCH_HPP_
 #include <com/sun/star/awt/FontPitch.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTUNDERLINE_HPP_
 #include <com/sun/star/awt/FontUnderline.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTWEIGHT_HPP_
 #include <com/sun/star/awt/FontWeight.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
 #include <com/sun/star/awt/FontSlant.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_CASEMAP_HPP_
 #include <com/sun/star/style/CaseMap.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_FONTRELIEF_HPP_
 #include <com/sun/star/text/FontRelief.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_FONTEMPHASIS_HPP_
 #include <com/sun/star/text/FontEmphasis.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_RUBYADJUST_HPP_
 #include <com/sun/star/text/RubyAdjust.hpp>
-#endif
+#include <com/sun/star/awt/FontStrikeout.hpp>
+
+#include <comphelper/InlineContainer.hxx>
 
 using namespace ::com::sun::star;
 
 using ::com::sun::star::beans::Property;
 
+using ::rtl::OUString;
+
 namespace chart
 {
 
 void CharacterProperties::AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties,
-    bool bIncludeStyleProperties /* = false */ )
+    ::std::vector< Property > & rOutProperties )
 {
-    if( bIncludeStyleProperties )
-    {
-        rOutProperties.push_back(
-            Property( C2U( "TextStyle" ),
-                      PROP_CHAR_STYLE,
-                      ::getCppuType( reinterpret_cast< const uno::Reference< ::com::sun::star::style::XStyle > * >(0)),
-                      beans::PropertyAttribute::BOUND
-                      | beans::PropertyAttribute::MAYBEVOID ));
-    }
-
     // CharacterProperties
     rOutProperties.push_back(
         Property( C2U( "CharFontName" ),
                   PROP_CHAR_FONT_NAME,
-                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( C2U( "CharFontStyleName" ),
                   PROP_CHAR_FONT_STYLE_NAME,
-                  ::getCppuType( reinterpret_cast< const  ::rtl::OUString * >(0)),
+                  ::getCppuType( reinterpret_cast< const  OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharFontFamily (see awt.FontFamily)
@@ -315,7 +282,7 @@ void CharacterProperties::AddPropertiesToVector(
 //     rOutProperties.push_back(
 //         Property( C2U( "RubyText" ),
 //                   PROP_CHAR_RUBY_TEXT,
-//                   ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+//                   ::getCppuType( reinterpret_cast< const OUString * >(0)),
 //                   beans::PropertyAttribute::BOUND
 //                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 //     // RubyAdjust (see text.RubyAdjust)
@@ -329,7 +296,7 @@ void CharacterProperties::AddPropertiesToVector(
 //     rOutProperties.push_back(
 //         Property( C2U( "RubyStyleName" ),
 //                   PROP_CHAR_RUBY_STYLE_NAME,
-//                   ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+//                   ::getCppuType( reinterpret_cast< const OUString * >(0)),
 //                   beans::PropertyAttribute::BOUND
 //                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 //     // RubyIsAbove
@@ -353,14 +320,14 @@ void CharacterProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( C2U( "CharFontNameAsian" ),
                   PROP_CHAR_ASIAN_FONT_NAME,
-                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharFontStyleNameAsian
     rOutProperties.push_back(
         Property( C2U( "CharFontStyleNameAsian" ),
                   PROP_CHAR_ASIAN_FONT_STYLE_NAME,
-                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharFontFamilyAsian (see awt.FontFamily)
@@ -419,14 +386,14 @@ void CharacterProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( C2U( "CharFontNameComplex" ),
                   PROP_CHAR_COMPLEX_FONT_NAME,
-                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharFontStyleNameComplex
     rOutProperties.push_back(
         Property( C2U( "CharFontStyleNameComplex" ),
                   PROP_CHAR_COMPLEX_FONT_STYLE_NAME,
-                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharFontFamilyComplex (see awt.FontFamily)
@@ -481,18 +448,24 @@ void CharacterProperties::AddPropertiesToVector(
 }
 
 void CharacterProperties::AddDefaultsToMap(
-    ::chart::helper::tPropertyValueMap & rOutMap,
-    bool bIncludeStyleProperties /* = false */ )
+    ::chart::tPropertyValueMap & rOutMap )
 {
+    const float fDefaultFontHeight = 13.0;
+
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_FONT_NAME ));
     rOutMap[ PROP_CHAR_FONT_NAME ] =
-        uno::makeAny( ::rtl::OUString( C2U( "Albany" )));
+        uno::makeAny( C2U( "Albany" ));
+    //todo correct font default:
+    //see static Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang, ULONG nFlags, const OutputDevice* pOutDev = NULL );
+    //or  SvxFontItem ... (old chart source/core/chtmodel.cxx :Font aCJKFont )
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_FONT_STYLE_NAME ));
+    rOutMap[ PROP_CHAR_FONT_STYLE_NAME ] = uno::Any();
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_FONT_FAMILY ));
     rOutMap[ PROP_CHAR_FONT_FAMILY ] =
         uno::makeAny( awt::FontFamily::SWISS );
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_FONT_CHAR_SET ));
     rOutMap[ PROP_CHAR_FONT_CHAR_SET ] =
-        uno::makeAny( awt::CharSet::SYSTEM );
+        uno::makeAny( awt::CharSet::DONTKNOW );//use DONTKNOW instead of SYSTEM to avoid assertion issue 50249
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_FONT_PITCH ));
     rOutMap[ PROP_CHAR_FONT_PITCH ] =
         uno::makeAny( awt::FontPitch::VARIABLE );
@@ -501,12 +474,22 @@ void CharacterProperties::AddDefaultsToMap(
     rOutMap[ PROP_CHAR_COLOR ] =
         uno::makeAny( sal_Int32(-1) );//automatic color (COL_AUTO)
 
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ESCAPEMENT ));
+    rOutMap[ PROP_CHAR_ESCAPEMENT ] =
+        uno::makeAny( sal_Int16(0) );
+
+
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_CHAR_HEIGHT ));
     rOutMap[ PROP_CHAR_CHAR_HEIGHT ] =
-        uno::makeAny( float( 12.0 ));
+        uno::makeAny( fDefaultFontHeight );
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_UNDERLINE ));
     rOutMap[ PROP_CHAR_UNDERLINE ] =
         uno::makeAny( awt::FontUnderline::NONE );
+
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_UNDERLINE_COLOR ));
+    rOutMap[ PROP_CHAR_UNDERLINE_COLOR ] =
+        uno::makeAny( sal_Int32(-1) );//automatic color (COL_AUTO)
+
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_UNDERLINE_HAS_COLOR ));
     rOutMap[ PROP_CHAR_UNDERLINE_HAS_COLOR ] =
         uno::makeAny( sal_Bool( sal_False ) );
@@ -519,6 +502,12 @@ void CharacterProperties::AddDefaultsToMap(
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_AUTO_KERNING ));
     rOutMap[ PROP_CHAR_AUTO_KERNING ] =
         uno::makeAny( sal_True );
+
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_KERNING ));
+    rOutMap[ PROP_CHAR_KERNING ] =
+        uno::makeAny( sal_Int16(0) );//todo correct default
+
+
 //     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_CASE_MAPPING ));
 //     rOutMap[ PROP_CHAR_CASE_MAPPING ] =
 //         uno::makeAny( style::CaseMap::NONE );
@@ -537,7 +526,7 @@ void CharacterProperties::AddDefaultsToMap(
 //         uno::makeAny( sal_Bool( sal_False ) );
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_STRIKE_OUT ));
     rOutMap[ PROP_CHAR_STRIKE_OUT ] =
-        uno::makeAny( sal_Bool( sal_False ) );
+        uno::makeAny( sal_Int16( awt::FontStrikeout::NONE ) );
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_WORD_MODE ));
     rOutMap[ PROP_CHAR_WORD_MODE ] =
         uno::makeAny( sal_Bool( sal_False ) );
@@ -545,9 +534,9 @@ void CharacterProperties::AddDefaultsToMap(
 //     rOutMap[ PROP_CHAR_FLASH ] =
 //         uno::makeAny( sal_Bool( sal_False ) );
 
-//     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_LOCALE ));
-//     rOutMap[ PROP_CHAR_LOCALE ] =
-//         uno::makeAny( );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_LOCALE ));
+    rOutMap[ PROP_CHAR_LOCALE ] =
+        uno::makeAny( lang::Locale( C2U( "US" ), C2U( "en" ), OUString()) );//todo correct default
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_SHADOWED ));
     rOutMap[ PROP_CHAR_SHADOWED ] =
         uno::makeAny( sal_Bool( sal_False ) );
@@ -575,12 +564,114 @@ void CharacterProperties::AddDefaultsToMap(
     // Asian (com.sun.star.style.CharacterPropertiesAsian)
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ASIAN_CHAR_HEIGHT ));
     rOutMap[ PROP_CHAR_ASIAN_CHAR_HEIGHT ] =
-        uno::makeAny( float( 12.0 ));
+        uno::makeAny( fDefaultFontHeight );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ASIAN_WEIGHT ));
+    rOutMap[ PROP_CHAR_ASIAN_WEIGHT ] =
+        uno::makeAny( awt::FontWeight::NORMAL );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ASIAN_POSTURE ));
+    rOutMap[ PROP_CHAR_ASIAN_POSTURE ] =
+        uno::makeAny( awt::FontSlant_NONE );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ASIAN_LOCALE ));
+    rOutMap[ PROP_CHAR_ASIAN_LOCALE ] =
+        uno::makeAny( lang::Locale( C2U( "US" ), C2U( "en" ), OUString()) );//todo correct default
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ASIAN_FONT_NAME ));
+    rOutMap[ PROP_CHAR_ASIAN_FONT_NAME ] =
+        uno::makeAny( C2U( "Andale Sans UI" ));
+    //todo correct font default:
+    //see static Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang, ULONG nFlags, const OutputDevice* pOutDev = NULL );
+    //or  SvxFontItem ... (old chart source/core/chtmodel.cxx :Font aCJKFont )
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ASIAN_FONT_STYLE_NAME ));
+    rOutMap[ PROP_CHAR_ASIAN_FONT_STYLE_NAME ] = uno::Any();
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ASIAN_FONT_FAMILY ));
+    rOutMap[ PROP_CHAR_ASIAN_FONT_FAMILY ] =
+        uno::makeAny( awt::FontFamily::SWISS );//todo correct default
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ASIAN_CHAR_SET ));
+    rOutMap[ PROP_CHAR_ASIAN_CHAR_SET ] =
+        uno::makeAny( awt::CharSet::DONTKNOW );//use DONTKNOW instead of SYSTEM to avoid assertion issue 50249
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ASIAN_FONT_PITCH ));
+    rOutMap[ PROP_CHAR_ASIAN_FONT_PITCH ] =
+        uno::makeAny( awt::FontPitch::VARIABLE );
 
     // Complex Text Layout (com.sun.star.style.CharacterPropertiesComplex)
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_COMPLEX_CHAR_HEIGHT ));
     rOutMap[ PROP_CHAR_COMPLEX_CHAR_HEIGHT ] =
-        uno::makeAny( float( 12.0 ));
+        uno::makeAny( fDefaultFontHeight );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_COMPLEX_WEIGHT ));
+    rOutMap[ PROP_CHAR_COMPLEX_WEIGHT ] =
+        uno::makeAny( awt::FontWeight::NORMAL );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_COMPLEX_POSTURE ));
+    rOutMap[ PROP_CHAR_COMPLEX_POSTURE ] =
+        uno::makeAny( awt::FontSlant_NONE );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_COMPLEX_LOCALE ));
+    rOutMap[ PROP_CHAR_COMPLEX_LOCALE ] =
+        uno::makeAny( lang::Locale( C2U( "US" ), C2U( "en" ), OUString()) );//todo correct default
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_COMPLEX_FONT_NAME ));
+    rOutMap[ PROP_CHAR_COMPLEX_FONT_NAME ] =
+        uno::makeAny( C2U( "Tahoma" ));//todo correct default
+    //todo correct font default:
+    //see static Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang, ULONG nFlags, const OutputDevice* pOutDev = NULL );
+    //or  SvxFontItem ... (old chart source/core/chtmodel.cxx :Font aCJKFont )
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_COMPLEX_FONT_STYLE_NAME ));
+    rOutMap[ PROP_CHAR_COMPLEX_FONT_STYLE_NAME ] = uno::Any();
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_COMPLEX_FONT_FAMILY ));
+    rOutMap[ PROP_CHAR_COMPLEX_FONT_FAMILY ] =
+        uno::makeAny( awt::FontFamily::SWISS );//todo correct default
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_COMPLEX_CHAR_SET ));
+    rOutMap[ PROP_CHAR_COMPLEX_CHAR_SET ] =
+        uno::makeAny( awt::CharSet::DONTKNOW );//use DONTKNOW instead of SYSTEM to avoid assertion issue 50249
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_COMPLEX_FONT_PITCH ));
+    rOutMap[ PROP_CHAR_COMPLEX_FONT_PITCH ] =
+        uno::makeAny( awt::FontPitch::VARIABLE );
+}
+
+bool CharacterProperties::IsCharacterPropertyHandle( sal_Int32 nHandle )
+{
+    return ( FAST_PROPERTY_ID_START_CHAR_PROP <= nHandle &&
+             nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP );
+}
+
+// static
+awt::FontDescriptor CharacterProperties::createFontDescriptorFromPropertySet(
+    const uno::Reference< beans::XMultiPropertySet > & xMultiPropSet )
+{
+    awt::FontDescriptor aResult;
+    // Note: keep this sorted!
+    ::comphelper::MakeVector< OUString > aPropNames
+        ( C2U("CharFontCharSet"));                // CharSet
+    aPropNames
+        ( C2U("CharFontFamily"))                  // Family
+        ( C2U("CharFontName"))                    // Name
+        ( C2U("CharFontPitch"))                   // Pitch
+        ( C2U("CharFontStyleName"))               // StyleName
+        ( C2U("CharHeight"))                      // Height
+        ( C2U("CharPosture"))                     // Slant
+        ( C2U("CharStrikeout"))                   // Strikeout
+        ( C2U("CharUnderline"))                   // Underline
+        ( C2U("CharWeight"))                      // Weight
+        ( C2U("CharWordMode"))                    // WordLineMode
+        ;
+
+    uno::Sequence< OUString > aPropNameSeq( ContainerHelper::ContainerToSequence( aPropNames ));
+    uno::Sequence< uno::Any > aValues( xMultiPropSet->getPropertyValues( aPropNameSeq ));
+
+    sal_Int32 i=0;
+    // Note keep this sorted according to the list above (comments are the fieldnames)
+    aValues[ i++ ]  >>= aResult.CharSet;
+    aValues[ i++ ]  >>= aResult.Family;
+    aValues[ i++ ]  >>= aResult.Name;
+    aValues[ i++ ]  >>= aResult.Pitch;
+    aValues[ i++ ]  >>= aResult.StyleName;
+    float fCharHeight;
+    aValues[ i++ ]  >>= fCharHeight;
+    aResult.Height = static_cast< sal_Int16 >( fCharHeight );
+    aValues[ i++ ]  >>= aResult.Slant;
+    aValues[ i++ ]  >>= aResult.Strikeout;
+    aValues[ i++ ]  >>= aResult.Underline;
+    aValues[ i++ ]  >>= aResult.Weight;
+    aValues[ i++ ]  >>= aResult.WordLineMode;
+    OSL_ASSERT( i == aValues.getLength());
+
+    return aResult;
 }
 
 } //  namespace chart
