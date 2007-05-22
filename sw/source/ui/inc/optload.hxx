@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optload.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:55:14 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:38:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,6 @@ private:
 
     DECL_LINK(CaptionHdl, PushButton*);
     DECL_LINK(MetricHdl, ListBox*);
-    DECL_LINK(UpdateHdl, CheckBox* );
 
 public:
     SwLoadOptPage( Window* pParent, const SfxItemSet& rSet );
