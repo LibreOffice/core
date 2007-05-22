@@ -1,0 +1,110 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: DataSequenceRole.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:06:52 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_data_DataSequenceRole_idl
+#define com_sun_star_chart2_data_DataSequenceRole_idl
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+module data
+{
+
+/** a string that states in what way a <type>DataSequence</type>
+    should be used.  If this property is an empty string, no
+    proposition about usage is made.
+
+    <p>The strings can have any value.  However some values are
+    predefined and should always be interpreted in the same way.</p>
+
+    <dl>
+     <dt>label</dt>
+       <dd>values are used as a label for a series.  Usually, you
+           will have just one cell containing a string.</dd>
+     <dt>values-x</dt>
+       <dd>values are used as x-values in an XY- or bubble
+           diagram</dd>
+     <dt>values-y</dt>
+       <dd>values are used as y-values in an XY-Diagram or as values
+           in a bar, line, etc. chart</dd>
+     <dt>values-z</dt>
+       <dd>values may be used as z-values in a three-dimensional
+           XYZ-Diagram or a surface-chart</dd>
+     <dt>sizes</dt>
+       <dd>values are used as radius of the bubbles in a
+           Bubble-Diagram</dd>
+     <dt>error-bars-x</dt>
+       <dd>values are used as error-information in x-direction for
+           displaying error-bars</dd>
+     <dt>error-bars-y</dt>
+       <dd>values are used as error-information in y-direction for
+           displaying error-bars</dd>
+     <dt>categories</dt>
+       <dd>values are used for categories in the diagram</dd>
+    </dl>
+
+    <p>In a candle-stick chart you have the following roles:</p>
+
+    <dl>
+     <dt>values-first</dt>
+      <dd>the first value of a series of values.  In a stock-chart this
+          would be the opening course.</dd>
+     <dt>values-last</dt>
+      <dd>the last value of a series of values.  In a stock-chart this
+          would be the closing course.</dd>
+     <dt>values-min</dt>
+      <dd>the minimum value of a series of values.  In a stock-chart
+          this would be the lowest course that occured during
+          trading.</dd>
+     <dt>values-max</dt>
+      <dd>the maximum value of a series of values.  In a stock-chart
+          this would be the highest course that occured during
+          trading.</dd>
+    </dl>
+ */
+typedef string DataSequenceRole;
+
+} ; // data
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+
+#endif
