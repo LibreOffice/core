@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NumberFormatterWrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:36:42 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:24:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,10 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+// header for class SvNumberFormatsSupplierObj
+#ifndef _NUMUNO_HXX
+#include <svtools/numuno.hxx>
+#endif
 // header for class SvNumberformat
 #ifndef _ZFORMAT_HXX
 #include <svtools/zformat.hxx>
@@ -51,24 +55,22 @@
 #ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
 #include <i18npool/mslangid.hxx>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 //.............................................................................
 namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::chart2;
 
 FixedNumberFormatter::FixedNumberFormatter(
-                NumberFormatterWrapper* pNumberFormatterWrapper
-                , const ::com::sun::star::chart2::NumberFormat& rNumberFormat )
-            : m_pNumberFormatterWrapper(pNumberFormatterWrapper)
-            , m_nFormatIndex(0)
+                const uno::Reference< util::XNumberFormatsSupplier >& xSupplier
+                , sal_Int32 nNumberFormatKey )
+            : m_aNumberFormatterWrapper(xSupplier)
+            , m_nNumberFormatKey( nNumberFormatKey )
 {
-    //add the given format string to the NumberFormatter and
-    //get the index of that format to use further
-    if( m_pNumberFormatterWrapper )
-        m_nFormatIndex = m_pNumberFormatterWrapper->getKeyForNumberFormat( rNumberFormat );
 }
 
 FixedNumberFormatter::~FixedNumberFormatter()
@@ -86,10 +88,46 @@ sal_Int32 FixedNumberFormatter::getTextAndColor( double fUnscaledValueForText, r
 
 rtl::OUString FixedNumberFormatter::getFormattedString( double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const
 {
+    return m_aNumberFormatterWrapper.getFormattedString(
+        m_nNumberFormatKey, fValue, rLabelColor, rbColorChanged );
+}
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+NumberFormatterWrapper::NumberFormatterWrapper( const uno::Reference< util::XNumberFormatsSupplier >& xSupplier )
+                    : m_xNumberFormatsSupplier(xSupplier)
+                    , m_pNumberFormatter(NULL)
+
+{
+    SvNumberFormatsSupplierObj* pSupplierObj = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
+    if( pSupplierObj )
+        m_pNumberFormatter = pSupplierObj->GetNumberFormatter();
+    DBG_ASSERT(m_pNumberFormatter,"need a numberformatter");
+}
+
+NumberFormatterWrapper::~NumberFormatterWrapper()
+{
+}
+
+SvNumberFormatter* NumberFormatterWrapper::getSvNumberFormatter() const
+{
+    return m_pNumberFormatter;
+}
+
+rtl::OUString NumberFormatterWrapper::getFormattedString(
+    sal_Int32 nNumberFormatKey, double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const
+{
     String aText;
     Color* pTextColor = NULL;
-    m_pNumberFormatterWrapper->m_pNumberFormatter->GetOutputString(
-        fValue, m_nFormatIndex, aText, &pTextColor);
+    if( !m_pNumberFormatter )
+    {
+        DBG_ERROR("Need a NumberFormatter");
+        return aText;
+    }
+    m_pNumberFormatter->GetOutputString(
+        fValue, nNumberFormatKey, aText, &pTextColor);
     rtl::OUString aRet( aText );
 
     if(pTextColor)
@@ -103,47 +141,7 @@ rtl::OUString FixedNumberFormatter::getFormattedString( double fValue, sal_Int32
     return aRet;
 }
 
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-
-NumberFormatterWrapper::NumberFormatterWrapper()
-                    : m_pNumberFormatter(NULL)
-
-{
-    //@todo: use a formatter via api (does not exsist so far)
-    m_pNumberFormatter = new SvNumberFormatter(
-        //m_xCC->getServiceManager() ,
-        ::comphelper::getProcessServiceFactory(),
-        LANGUAGE_SYSTEM );
-}
-NumberFormatterWrapper::~NumberFormatterWrapper()
-{
-    delete m_pNumberFormatter;
-}
-
-SvNumberFormatter* NumberFormatterWrapper::getSvNumberFormatter() const
-{
-    return m_pNumberFormatter;
-}
-
-sal_Int32 NumberFormatterWrapper::getKeyForNumberFormat( const NumberFormat& rNumberFormat ) const
-{
-    String aStr( rNumberFormat.aFormat );
-    LanguageType eLnge = MsLangId::convertLocaleToLanguage( rNumberFormat.aLocale );
-    return m_pNumberFormatter->GetEntryKey( aStr, eLnge );
-}
-
-NumberFormat NumberFormatterWrapper::getNumberFormatForKey( sal_Int32 nIndex ) const
-{
-    const SvNumberformat* pSvNumberformat = m_pNumberFormatter->GetEntry( nIndex );
-
-    NumberFormat aNumberFormat;
-    aNumberFormat.aFormat = pSvNumberformat->GetFormatstring();
-    LanguageType nLanguageType = pSvNumberformat->GetLanguage();
-    aNumberFormat.aLocale = MsLangId::convertLanguageToLocale( nLanguageType );
-    return aNumberFormat;
-}
+// to get the language type use MsLangId::convertLocaleToLanguage( rNumberFormat.aLocale )
 
 /*
     uno::Reference< i18n::XNumberFormatCode > xNumberFormatCode(
