@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_TitleRotation.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:33:25 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:49:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,13 +34,7 @@
  ************************************************************************/
 #ifndef _CHART2_TP_TITLEROTATION_HXX
 #define _CHART2_TP_TITLEROTATION_HXX
-/*
-#include "SchSfxItemIds.hxx"
-// header for enum SvxChartKindError
-#ifndef _SVX_CHRTITEM_HXX //autogen
-#include <svx/chrtitem.hxx>
-#endif
-*/
+
 // header for SfxTabPage
 #ifndef _SFXTABDLG_HXX
 #include <sfx2/tabdlg.hxx>
@@ -56,26 +50,10 @@
 #include <svx/orienthelper.hxx>
 #endif
 
-/*
-// header for class ValueSet
-#ifndef _VALUESET_HXX
-#include <svtools/valueset.hxx>
-#endif
-*/
-// header for FixedLine
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
 #endif
-// header for CheckBox
-#ifndef _SV_BUTTON_HXX
-#include <vcl/button.hxx>
-#endif
-/*
-// header for MetricField
-#ifndef _SV_FIELD_HXX
-#include <vcl/field.hxx>
-#endif
-*/
+
 //.............................................................................
 namespace chart
 {
@@ -84,9 +62,6 @@ namespace chart
 class SchAlignmentTabPage : public SfxTabPage
 {
 private:
-
-
-    //Seit 4/1998 koennen Texte frei gedreht werden: SID_ATTR_ALIGN_DEGREES
     FixedLine               aFlAlign;
     svx::DialControl        aCtrlDial;
     FixedText               aFtRotate;
@@ -94,20 +69,6 @@ private:
     TriStateBox             aCbStacked;
     svx::OrientationHelper  aOrientHlp;
 
-//  CheckBox    aCbxTextOverlap;
-
-//  CheckBox    aCbxTextBreak;
-//  FixedLine   aFlTextBreak;
-
-//  RadioButton aRbtSideBySide;
-//  RadioButton aRbtUpDown;
-//  RadioButton aRbtDownUp;
-//  RadioButton aRbtAutoOrder;
-//  FixedLine   aFlOrder;
-//  OrderMode   eOrderMode;
-
-//  DECL_LINK(CheckButtonHdl, Button*);
-//  BOOL bTextCanOverlap;
 public:
     SchAlignmentTabPage(Window* pParent, const SfxItemSet& rInAttrs);
     virtual ~SchAlignmentTabPage();
@@ -115,9 +76,6 @@ public:
     static SfxTabPage* Create(Window* pParent, const SfxItemSet& rInAttrs);
     virtual BOOL FillItemSet(SfxItemSet& rOutAttrs);
     virtual void Reset(const SfxItemSet& rInAttrs);
-
-//  void SetOrderMode(OrderMode eMode);
-//  void SetTextCanOverlap(BOOL b){bTextCanOverlap=b;}
 };
 
 //.............................................................................
