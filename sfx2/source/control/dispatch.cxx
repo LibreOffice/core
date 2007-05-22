@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:08:58 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:17:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1943,14 +1943,12 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, 
                 if ( pSlot->IsMode(SFX_SLOT_CONTAINER) )
                 {
                     if ( pWorkWin->IsVisible_Impl( SFX_VISIBILITY_CLIENT ) )
-                    //    continue;
-                    nMode |= SFX_VISIBILITY_CLIENT;
+                        nMode |= SFX_VISIBILITY_CLIENT;
                 }
                 else
                 {
                     if ( pWorkWin->IsVisible_Impl( SFX_VISIBILITY_SERVER ) )
-                    //    continue;
-                    nMode |= SFX_VISIBILITY_SERVER;
+                        nMode |= SFX_VISIBILITY_SERVER;
                 }
             }
 
