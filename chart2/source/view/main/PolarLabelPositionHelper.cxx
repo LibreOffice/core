@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PolarLabelPositionHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:37:38 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:25:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,11 @@
 #include "PlottingPositionHelper.hxx"
 #include "CommonConverters.hxx"
 
-// header for class Vector2D
-#ifndef _VECTOR2D_HXX
-#include <tools/vector2d.hxx>
+#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
+#include <basegfx/vector/b2dvector.hxx>
+#endif
+#ifndef _BGFX_VECTOR_B2IVECTOR_HXX
+#include <basegfx/vector/b2ivector.hxx>
 #endif
 
 //.............................................................................
@@ -66,54 +68,58 @@ PolarLabelPositionHelper::~PolarLabelPositionHelper()
 {
 }
 
-awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignment(
-        LabelAlignment& rAlignment, bool bOutsidePosition
-        , double fStartLogicValueOnAngleAxis, double fEndLogicValueOnAngleAxis
-        , double fLogicInnerRadius, double fLogicOuterRadius
-        , double fLogicZ) const
+awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForLogicValues(
+        LabelAlignment& rAlignment
+        , double fLogicValueOnAngleAxis
+        , double fLogicValueOnRadiusAxis
+        , double fLogicZ
+        , sal_Int32 nScreenValueOffsetInRadiusDirection ) const
 {
-    double fWidthAngleDegree = m_pPosHelper->getWidthAngleDegree( fStartLogicValueOnAngleAxis, fEndLogicValueOnAngleAxis );
-    double fStartAngleDegree = m_pPosHelper->transformToAngleDegree( fStartLogicValueOnAngleAxis );
-    double fAngleDegree = fStartAngleDegree + fWidthAngleDegree/2.0;
-    double fAnglePi     = fAngleDegree*F_PI/180.0;
+    double fUnitCircleAngleDegree = m_pPosHelper->transformToAngleDegree( fLogicValueOnAngleAxis );
+    double fUnitCircleRadius = m_pPosHelper->transformToRadius( fLogicValueOnRadiusAxis );
 
-    double fInnerRadius = m_pPosHelper->transformToRadius(fLogicInnerRadius);
-    double fOuterRadius = m_pPosHelper->transformToRadius(fLogicOuterRadius);
+    return getLabelScreenPositionAndAlignmentForUnitCircleValues(
+           rAlignment, true
+           , fUnitCircleAngleDegree, 0.0
+           , fUnitCircleRadius, fUnitCircleRadius, fLogicZ, nScreenValueOffsetInRadiusDirection );
+}
 
+awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCircleValues(
+        LabelAlignment& rAlignment, bool bOutsidePosition
+        , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
+        , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
+        , double fLogicZ
+        , sal_Int32 nScreenValueOffsetInRadiusDirection ) const
+{
+    double fAngleDegree = fUnitCircleStartAngleDegree + fUnitCircleWidthAngleDegree/2.0;
     double fRadius = 0.0;
     if( bOutsidePosition ) //e.g. for pure pie chart(one ring only) or for angle axis of polyar coordinate system
     {
-        fRadius = fOuterRadius;
-        if(3!=m_nDimensionCount)
-            fRadius += 0.1*fOuterRadius;
+        fRadius = fUnitCircleOuterRadius;
     }
     else
-        fRadius = fInnerRadius + (fOuterRadius-fInnerRadius)/2.0 ;
+        fRadius = fUnitCircleInnerRadius + (fUnitCircleOuterRadius-fUnitCircleInnerRadius)/2.0 ;
 
-    if(3==m_nDimensionCount)
-        fAnglePi *= -1.0;
-    drawing::Position3D aLogicPos(fRadius*cos(fAnglePi),fRadius*sin(fAnglePi),fLogicZ+0.5);
-    awt::Point aRet( this->transformLogicToScreenPosition( aLogicPos ) );
+    awt::Point aRet( this->transformSceneToScreenPosition(
+        m_pPosHelper->transformUnitCircleToScene( fAngleDegree, fRadius, fLogicZ+0.5 ) ) );
 
-    if(3==m_nDimensionCount)
+    if(3==m_nDimensionCount && bOutsidePosition)
     {
         //check wether the upper or the downer edge is more distant from the center
         //take the farest point to put the label to
-        drawing::Position3D aLogicPos2(fRadius*cos(fAnglePi),fRadius*sin(fAnglePi),fLogicZ-0.5);
-        drawing::Position3D aLogicCenter(0,0,fLogicZ);
 
-        awt::Point aP0( this->transformLogicToScreenPosition(
-                        drawing::Position3D(0,0,fLogicZ) ) );
+        awt::Point aP0( this->transformSceneToScreenPosition(
+            m_pPosHelper->transformUnitCircleToScene( 0, 0, fLogicZ ) ) );
         awt::Point aP1(aRet);
-        awt::Point aP2( this->transformLogicToScreenPosition(
-                        drawing::Position3D(fRadius*cos(fAnglePi),fRadius*sin(fAnglePi),fLogicZ-0.5) ) );
+        awt::Point aP2( this->transformSceneToScreenPosition(
+            m_pPosHelper->transformUnitCircleToScene( fAngleDegree, fRadius, fLogicZ-0.5 ) ) );
 
-        Vector2D aV0( aP0.X, aP0.Y );
-        Vector2D aV1( aP1.X, aP1.Y );
-        Vector2D aV2( aP2.X, aP2.Y );
+        ::basegfx::B2DVector aV0( aP0.X, aP0.Y );
+        ::basegfx::B2DVector aV1( aP1.X, aP1.Y );
+        ::basegfx::B2DVector aV2( aP2.X, aP2.Y );
 
-        double fL1 = (aV1-aV0).GetLength();
-        double fL2 = (aV2-aV0).GetLength();
+        double fL1 = ::basegfx::B2DVector(aV1-aV0).getLength();
+        double fL2 = ::basegfx::B2DVector(aV2-aV0).getLength();
 
         if(fL2>fL1)
             aRet = aP2;
@@ -170,6 +176,18 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignment(
     {
         rAlignment = LABEL_ALIGN_CENTER;
     }
+
+    //add a scaling independent Offset if requested
+    if( nScreenValueOffsetInRadiusDirection != 0)
+    {
+        awt::Point aOrigin( this->transformSceneToScreenPosition(
+            m_pPosHelper->transformUnitCircleToScene( 0.0, 0.0, fLogicZ+0.5 ) ) );
+        basegfx::B2IVector aDirection( aRet.X- aOrigin.X, aRet.Y- aOrigin.Y );
+        aDirection.setLength(nScreenValueOffsetInRadiusDirection);
+        aRet.X += aDirection.getX();
+        aRet.Y += aDirection.getY();
+    }
+
     return aRet;
 }
 
