@@ -1,0 +1,109 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XDiagram.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:02:47 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_XDiagram_idl
+#define com_sun_star_chart2_XDiagram_idl
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#include <com/sun/star/beans/XPropertySet.idl>
+
+#include <com/sun/star/chart2/XLegend.idl>
+#include <com/sun/star/chart2/XColorScheme.idl>
+#include <com/sun/star/chart2/data/XLabeledDataSequence.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+interface XDiagram : ::com::sun::star::uno::XInterface
+{
+    /** gets the component that creates a new diagram or modifies
+        an existing diagram according to its rules.
+     */
+//     string getChartTypeTemplateServiceName();
+
+    /** returns the property set that determines the visual appearance
+        of the wall.
+
+        <p>The wall is the area behind the union of all
+        coordinate systems used in a diagram.</p>
+     */
+    com::sun::star::beans::XPropertySet getWall();
+
+    /** returns the property set that determines the visual appearance
+        of the floor if any.
+
+        <p>The floor is the bottom of a 3D diagram.
+        For a 2D diagram NULL is returned.</p>
+     */
+    com::sun::star::beans::XPropertySet getFloor();
+
+    /** returns the legend, which may represent data series and other
+        information about a diagram in a separate box.
+     */
+    XLegend getLegend();
+
+    /** sets a new legend.
+     */
+    void setLegend( [in] XLegend xLegend );
+
+    /** returns an <type>XColorScheme</type> that defines the default
+        colors for data series (or data points) in the diagram.
+     */
+    XColorScheme   getDefaultColorScheme();
+
+    /** sets an <type>XColorScheme</type> that defines the default
+        colors for data series (or data points) in the diagram.
+     */
+    void setDefaultColorScheme( [in] XColorScheme xColorScheme );
+
+    void setUnusedData( [in] sequence< data::XLabeledDataSequence > aUnusedData );
+
+    sequence< data::XLabeledDataSequence > getUnusedData();
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif
