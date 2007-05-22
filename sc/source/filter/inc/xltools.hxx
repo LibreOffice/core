@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xltools.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:25:14 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:00:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #ifndef SC_XLTOOLS_HXX
 #define SC_XLTOOLS_HXX
 
@@ -123,6 +124,11 @@ public:
     /** Calculates the Excel angle value from an angle in 1/100 of degrees. */
     static sal_uInt8    GetXclRotation( sal_Int32 nScRot );
 
+    /** Calculates BIFF8 rotation angle from BIFF2-BIFF5 text orientation. */
+    static sal_uInt8    GetXclRotFromOrient( sal_uInt8 nXclOrient );
+    /** Calculates BIFF2-BIFF5 text orientation from BIFF8 rotation angle. */
+    static sal_uInt8    GetXclOrientFromRot( sal_uInt16 nXclRot );
+
     /** Converts a Calc error code to an Excel error code. */
     static sal_uInt8    GetXclErrorCode( USHORT nScError );
     /** Converts an Excel error code to a Calc error code. */
@@ -159,6 +165,11 @@ public:
     /** Returns a correction value to convert column widths from/to default column widths.
         @param nXclDefFontHeight  Excel height of application default font. */
     static double       GetXclDefColWidthCorrection( long nXclDefFontHeight );
+
+    // formatting -------------------------------------------------------------
+
+    /** Returns the best fitting color for an Excel pattern area format. */
+    static Color        GetPatternColor( const Color& rPattColor, const Color& rBackColor, sal_uInt16 nXclPattern );
 
     // text encoding ----------------------------------------------------------
 
