@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLTableContext.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:16:07 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:07:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #include "SchXMLTableContext.hxx"
 #include "SchXMLParagraphContext.hxx"
 #include "SchXMLImport.hxx"
+#include "SchXMLTools.hxx"
 #include "transporttypes.hxx"
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -64,21 +65,301 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART_XCHARTDOCUMENT_HPP_
-#include <com/sun/star/chart/XChartDocument.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CHART_XCHARTDATAARRAY_HPP_
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART_CHARTDATAROWSOURCE_HPP_
-#include <com/sun/star/chart/ChartDataRowSource.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CHART_CHARTSERIESADDRESS_HPP_
 #include <com/sun/star/chart/ChartSeriesAddress.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+
+#include <com/sun/star/chart2/XDiagram.hpp>
+#include <com/sun/star/chart2/XAxis.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/AxisType.hpp>
+
+#include <algorithm>
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::Reference;
+using ::rtl::OUString;
+
+namespace
+{
+Sequence< OUString > lcl_getCategoriesFromTable( const SchXMLTable & rTable, bool bHasLabels )
+{
+    sal_Int32 nNumRows( static_cast< sal_Int32 >( rTable.aData.size()));
+    OSL_ENSURE( static_cast< size_t >( nNumRows ) == rTable.aData.size(), "Table too big" );
+
+    sal_Int32 nOffset(bHasLabels ? 1 : 0);
+    Sequence< OUString > aResult( nNumRows - nOffset );
+    sal_Int32 i=nOffset;
+    for( ; i<nNumRows; ++i )
+    {
+        if( !rTable.aData[i].empty() && (rTable.aData[i].front().eType == SCH_CELL_TYPE_STRING ))
+            aResult[i - nOffset] = rTable.aData[i].front().aString;
+    }
+    return aResult;
+}
+
+std::vector< Reference< chart2::XAxis > > lcl_getAxesHoldingCategoriesFromDiagram(
+    const Reference< chart2::XDiagram > & xDiagram )
+{
+    std::vector< Reference< chart2::XAxis > > aRet;
+
+    Reference< chart2::XAxis > xResult;
+    // return first x-axis as fall-back
+    Reference< chart2::XAxis > xFallBack;
+    try
+    {
+        Reference< chart2::XCoordinateSystemContainer > xCooSysCnt(
+            xDiagram, uno::UNO_QUERY_THROW );
+        Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(
+            xCooSysCnt->getCoordinateSystems());
+        for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
+        {
+            Reference< chart2::XCoordinateSystem > xCooSys( aCooSysSeq[i] );
+            OSL_ASSERT( xCooSys.is());
+            for( sal_Int32 nN = xCooSys->getDimension(); nN--; )
+            {
+                const sal_Int32 nMaximumScaleIndex = xCooSys->getMaximumAxisIndexByDimension(nN);
+                for(sal_Int32 nI=0; nI<=nMaximumScaleIndex; ++nI)
+                {
+                    Reference< chart2::XAxis > xAxis = xCooSys->getAxisByDimension( nN,nI );
+                    OSL_ASSERT( xAxis.is());
+                    if( xAxis.is())
+                    {
+                        chart2::ScaleData aScaleData = xAxis->getScaleData();
+                        if( aScaleData.Categories.is() || (aScaleData.AxisType == chart2::AxisType::CATEGORY) )
+                        {
+                            aRet.push_back(xAxis);
+                        }
+                        if( (nN == 0) && !xFallBack.is())
+                            xFallBack.set( xAxis );
+                    }
+                }
+            }
+        }
+    }
+    catch( uno::Exception & )
+    {
+    }
+
+    if( aRet.empty())
+        aRet.push_back(xFallBack);
+
+    return aRet;
+}
+
+struct lcl_setCategories : public ::std::unary_function< Reference< chart2::XAxis >, void >
+{
+    lcl_setCategories( const Reference< chart2::data::XDataProvider > & xProvider ) :
+            m_xProvider( xProvider )
+    {}
+    void operator() ( const Reference< chart2::XAxis > & xAxis )
+    {
+        if( xAxis.is() && m_xProvider.is())
+        {
+            chart2::ScaleData aSData( xAxis->getScaleData());
+            if( aSData.Categories.is())
+            {
+                aSData.Categories->setValues(
+                    m_xProvider->createDataSequenceByRangeRepresentation(
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("categories"))));
+                xAxis->setScaleData( aSData );
+            }
+        }
+    }
+
+private:
+    Reference< chart2::data::XDataProvider > m_xProvider;
+};
+
+void lcl_ApplyColumnLabels(
+    const ::std::vector< SchXMLCell > & rFirstRow,
+    Sequence< OUString > & rOutColumnLabels,
+    sal_Int32 nOffset )
+{
+    const sal_Int32 nColumnLabelsSize = rOutColumnLabels.getLength();
+    const sal_Int32 nMax = ::std::min< sal_Int32 >( nColumnLabelsSize,
+                                                    static_cast< sal_Int32 >( rFirstRow.size()) - nOffset );
+    OSL_ASSERT( nMax == nColumnLabelsSize );
+    for( sal_Int32 i=0; i<nMax; ++i )
+        if( rFirstRow[i+nOffset].eType == SCH_CELL_TYPE_STRING )
+            rOutColumnLabels[i] = rFirstRow[i+nOffset].aString;
+}
+
+struct lcl_ApplyCellToData : public ::std::unary_function< SchXMLCell, void >
+{
+    lcl_ApplyCellToData( Sequence< double > & rOutData,
+                         Sequence< OUString > & rOutRowLabels ) :
+            m_rData( rOutData ),
+            m_rRowLabels( rOutRowLabels ),
+            m_nIndex( 0 ),
+            m_nSize( rOutData.getLength())
+    {
+        ::rtl::math::setNan( &m_fNaN );
+    }
+
+    void operator() ( const SchXMLCell & rCell )
+    {
+        if( m_nIndex < m_nSize )
+        {
+            if( rCell.eType == SCH_CELL_TYPE_FLOAT )
+                m_rData[m_nIndex] = rCell.fValue;
+            else
+                m_rData[m_nIndex] = m_fNaN;
+        }
+        ++m_nIndex;
+    }
+
+private:
+    Sequence< double > & m_rData;
+    Sequence< OUString > & m_rRowLabels;
+    sal_Int32 m_nIndex;
+    sal_Int32 m_nSize;
+    double m_fNaN;
+};
+
+struct lcl_ApplyRowsToData : public ::std::unary_function< ::std::vector< SchXMLCell >, void >
+{
+    lcl_ApplyRowsToData( Sequence< Sequence< double > > & rOutData,
+                         Sequence< OUString > & rOutRowLabels,
+                         sal_Int32 nOffset,
+                         bool bHasHeader ) :
+            m_rData( rOutData ),
+            m_rRowLabels( rOutRowLabels ),
+            m_nIndex( 0 ),
+            m_nOuterSize( rOutData.getLength()),
+            m_nOffset( nOffset ),
+            m_bHasHeader( bHasHeader )
+    {}
+    void operator() ( const ::std::vector< SchXMLCell > & rRow )
+    {
+        if( ! rRow.empty())
+        {
+            // label
+            if( m_bHasHeader && m_nIndex < m_rRowLabels.getLength() && rRow.front().eType == SCH_CELL_TYPE_STRING )
+                m_rRowLabels[m_nIndex] = rRow.front().aString;
+            // values
+            if( m_nIndex < m_nOuterSize )
+                ::std::for_each( rRow.begin() + m_nOffset, rRow.end(), lcl_ApplyCellToData( m_rData[m_nIndex], m_rRowLabels ));
+        }
+        ++m_nIndex;
+    }
+
+private:
+    Sequence< Sequence< double > > & m_rData;
+    Sequence< OUString > & m_rRowLabels;
+    sal_Int32 m_nIndex;
+    sal_Int32 m_nOuterSize;
+    sal_Int32 m_nOffset;
+    bool      m_bHasHeader;
+};
+
+Sequence< Sequence< double > > lcl_getSwappedArray( const Sequence< Sequence< double > > & rData )
+{
+    sal_Int32 nOldOuterSize = rData.getLength();
+    sal_Int32 nOldInnerSize = (nOldOuterSize == 0 ? 0 : rData[0].getLength());
+    Sequence< Sequence< double > > aResult( nOldInnerSize );
+
+    for( sal_Int32 i=0; i<nOldInnerSize; ++i )
+        aResult[i].realloc( nOldOuterSize );
+
+    for( sal_Int32 nOuter=0; nOuter<nOldOuterSize; ++nOuter )
+        for( sal_Int32 nInner=0; nInner<nOldInnerSize; ++nInner )
+            aResult[nInner][nOuter] = rData[nOuter][nInner];
+
+    return aResult;
+}
+
+void lcl_applyXMLTableToInternalDataprovider(
+    const SchXMLTable & rTable,
+    const Reference< chart::XChartDataArray > & xDataArray )
+{
+    sal_Int32 nNumRows( static_cast< sal_Int32 >( rTable.aData.size()));
+    sal_Int32 nRowOffset = 0;
+    if( rTable.bHasHeaderRow )
+    {
+        --nNumRows;
+        nRowOffset = 1;
+    }
+    sal_Int32 nNumColumns( rTable.nMaxColumnIndex + 1 );
+    sal_Int32 nColOffset = 0;
+    if( rTable.bHasHeaderColumn )
+    {
+        --nNumColumns;
+        nColOffset = 1;
+    }
+
+    Sequence< Sequence< double > > aData( nNumRows );
+    Sequence< OUString > aRowLabels( nNumRows );
+    Sequence< OUString > aColumnLabels( nNumColumns );
+    for( sal_Int32 i=0; i<nNumRows; ++i )
+        aData[i].realloc( nNumColumns );
+
+    if( rTable.aData.begin() != rTable.aData.end())
+    {
+        if( rTable.bHasHeaderRow )
+            lcl_ApplyColumnLabels( rTable.aData.front(), aColumnLabels, nColOffset );
+        ::for_each( rTable.aData.begin() + nRowOffset, rTable.aData.end(),
+                    lcl_ApplyRowsToData( aData, aRowLabels, nColOffset, rTable.bHasHeaderColumn ));
+    }
+
+    xDataArray->setData( aData );
+
+    if( rTable.bHasHeaderColumn )
+        xDataArray->setRowDescriptions( aRowLabels );
+    if( rTable.bHasHeaderRow )
+        xDataArray->setColumnDescriptions( aColumnLabels );
+}
+
+void lcl_copyProperties(
+    const Reference< beans::XPropertySet > & xSource,
+    const Reference< beans::XPropertySet > & xDestination )
+{
+    if( ! (xSource.is() && xDestination.is()))
+        return;
+
+    try
+    {
+        Reference< beans::XPropertySetInfo > xSrcInfo( xSource->getPropertySetInfo(), uno::UNO_QUERY_THROW );
+        Reference< beans::XPropertySetInfo > xDestInfo( xDestination->getPropertySetInfo(), uno::UNO_QUERY_THROW );
+        Sequence< beans::Property > aProperties( xSrcInfo->getProperties());
+        const sal_Int32 nLength = aProperties.getLength();
+        for( sal_Int32 i = 0; i < nLength; ++i )
+        {
+            OUString aName( aProperties[i].Name);
+            if( xDestInfo->hasPropertyByName( aName ))
+            {
+                beans::Property aProp( xDestInfo->getPropertyByName( aName ));
+                if( (aProp.Attributes & beans::PropertyAttribute::READONLY) == 0 )
+                    xDestination->setPropertyValue(
+                        aName, xSource->getPropertyValue( aName ));
+            }
+        }
+    }
+    catch( const uno::Exception & )
+    {
+        OSL_ENSURE( false, "Copying property sets failed!" );
+    }
+}
+
+} // anonymous namespace
+
 
 // ----------------------------------------
 // class SchXMLTableContext
@@ -113,6 +394,8 @@ SvXMLImportContext *SchXMLTableContext::CreateChildContext(
     switch( rTokenMap.Get( nPrefix, rLocalName ))
     {
         case XML_TOK_TABLE_HEADER_COLS:
+            mrTable.bHasHeaderColumn = true;
+            // fall through intended
         case XML_TOK_TABLE_COLUMNS:
             pContext = new SchXMLTableColumnsContext( mrImportHelper, GetImport(), rLocalName, mrTable );
             break;
@@ -122,6 +405,8 @@ SvXMLImportContext *SchXMLTableContext::CreateChildContext(
             break;
 
         case XML_TOK_TABLE_HEADER_ROWS:
+            mrTable.bHasHeaderRow = true;
+            // fall through intended
         case XML_TOK_TABLE_ROWS:
             pContext = new SchXMLTableRowsContext( mrImportHelper, GetImport(), rLocalName, mrTable );
             break;
@@ -428,7 +713,7 @@ void SchXMLTableCellContext::EndElement()
 // (this is just a workaround for clipboard handling in EA2)
 void SchXMLTableHelper::applyTableSimple(
     const SchXMLTable& rTable,
-    uno::Reference< chart::XChartDocument > xChartDoc )
+    uno::Reference< chart::XChartDataArray > xData )
 {
     // interpret table like this:
     //
@@ -442,66 +727,83 @@ void SchXMLTableHelper::applyTableSimple(
     //   2    x    0   0
     //   3    x    0   0
     //  ...
-    if( xChartDoc.is())
+
+    // Standard Role-interpretation:
+
+    // Column 1 contains the Categories
+
+    // Chart Type/Class | Col 2  Col 3  Col 4  Col 5  Col 6 | Series | Domain
+    // -----------------+-----------------------------------+--------+-------
+    // Category Charts  | Y 1    Y 2    Y 3    Y 4     ...  |   Y    |   -
+    // XY Chart         | X all  Y 1    Y 2    Y 3     ...  |   Y    |   X
+    // Stock Chart 1    | Min    Max    Close    -      -   | Close  |   -
+    // Stock Chart 2    | Open   Min    Max    Close    -   | Close  |   -
+    // Stock Chart 3    | Volume Min    Max    Close    -   | Close  |   -
+    // Stock Chart 4    | Volume Open   Min    Max    Close | Close  |   -
+
+    if( xData.is())
     {
-        uno::Reference< chart::XChartDataArray > xData( xChartDoc->getData(), uno::UNO_QUERY );
-        if( xData.is())
+        // get NaN
+        double fSolarNaN;
+        ::rtl::math::setNan( &fSolarNaN );
+        double fNaN = fSolarNaN;
+        sal_Bool bConvertNaN = sal_False;
+
+        uno::Reference< chart::XChartData > xChartData( xData, uno::UNO_QUERY );
+        if( xChartData.is())
         {
-            // get NaN
-            double fSolarNaN;
-            ::rtl::math::setNan( &fSolarNaN );
-            double fNaN = fSolarNaN;
-            sal_Bool bConvertNaN = sal_False;
-
-            uno::Reference< chart::XChartData > xChartData( xData, uno::UNO_QUERY );
-            if( xChartData.is())
-            {
-                fNaN = xChartData->getNotANumber();
-                bConvertNaN = ( ! ::rtl::math::isNan( fNaN ));
-            }
-
-            sal_Int32 nRowCount = rTable.aData.size();
-            sal_Int32 nColumnCount = 0;
-            sal_Int32 nCol = 0, nRow = 0;
-            if( nRowCount )
-                nColumnCount = rTable.aData[ 0 ].size();
-
-            // #i27909# avoid illegal index access for empty tables
-            if( nColumnCount == 0 || nRowCount == 0 )
-                return;
-
-            uno::Sequence< ::rtl::OUString > aCategories( nRowCount - 1 );
-            uno::Sequence< ::rtl::OUString > aLabels( nColumnCount - 1 );
-            uno::Sequence< uno::Sequence< double > > aData( nRowCount - 1 );
-            for( nRow = 0; nRow < nRowCount - 1; nRow++ )
-                aData[ nRow ].realloc( nColumnCount - 1 );
-
-            // set labels
-            ::std::vector< ::std::vector< SchXMLCell > >::const_iterator iRow = rTable.aData.begin();
-            for( nCol = 1; nCol < nColumnCount; nCol++ )
-            {
-                aLabels[ nCol - 1 ] = (*iRow)[ nCol ].aString;
-            }
-            xData->setColumnDescriptions( aLabels );
-
-            double fVal;
-            const sal_Bool bConstConvertNan = bConvertNaN;
-            for( ++iRow, nRow = 0; iRow != rTable.aData.end(); iRow++, nRow++ )
-            {
-                aCategories[ nRow ] = (*iRow)[ 0 ].aString;
-                for( nCol = 1; nCol < nColumnCount; nCol++ )
-                {
-                    fVal = (*iRow)[ nCol ].fValue;
-                    if( bConstConvertNan &&
-                        ::rtl::math::isNan( fVal ))
-                        aData[ nRow ][ nCol - 1 ] = fNaN;
-                    else
-                        aData[ nRow ][ nCol - 1 ] = fVal;
-                }
-            }
-            xData->setRowDescriptions( aCategories );
-            xData->setData( aData );
+            fNaN = xChartData->getNotANumber();
+            bConvertNaN = ( ! ::rtl::math::isNan( fNaN ));
         }
+
+        sal_Int32 nRowCount = rTable.aData.size();
+        sal_Int32 nColumnCount = 0;
+        sal_Int32 nCol = 0, nRow = 0;
+        if( nRowCount )
+            nColumnCount = rTable.aData[ 0 ].size();
+
+        // #i27909# avoid illegal index access for empty tables
+        if( nColumnCount == 0 || nRowCount == 0 )
+            return;
+
+        uno::Sequence< ::rtl::OUString > aCategories( nRowCount - 1 );
+        uno::Sequence< ::rtl::OUString > aLabels( nColumnCount - 1 );
+        uno::Sequence< uno::Sequence< double > > aData( nRowCount - 1 );
+        for( nRow = 0; nRow < nRowCount - 1; nRow++ )
+            aData[ nRow ].realloc( nColumnCount - 1 );
+
+        // set labels
+        ::std::vector< ::std::vector< SchXMLCell > >::const_iterator iRow = rTable.aData.begin();
+        for( nCol = 1; nCol < nColumnCount; nCol++ )
+        {
+            aLabels[ nCol - 1 ] = (*iRow)[ nCol ].aString;
+        }
+        xData->setColumnDescriptions( aLabels );
+
+        double fVal;
+        const sal_Bool bConstConvertNan = bConvertNaN;
+        for( ++iRow, nRow = 0; iRow != rTable.aData.end(); iRow++, nRow++ )
+        {
+            aCategories[ nRow ] = (*iRow)[ 0 ].aString;
+            sal_Int32 nTableColCount( static_cast< sal_Int32 >((*iRow).size()));
+            for( nCol = 1; nCol < nTableColCount; nCol++ )
+            {
+                fVal = (*iRow)[ nCol ].fValue;
+                if( bConstConvertNan &&
+                    ::rtl::math::isNan( fVal ))
+                    aData[ nRow ][ nCol - 1 ] = fNaN;
+                else
+                    aData[ nRow ][ nCol - 1 ] = fVal;
+            }
+            // set remaining cells to NaN
+            for( ; nCol < nColumnCount; ++nCol )
+                if( bConstConvertNan )
+                    aData[ nRow ][nCol - 1 ] = fNaN;
+                else
+                    ::rtl::math::setNan( &(aData[ nRow ][nCol - 1 ]));
+        }
+        xData->setRowDescriptions( aCategories );
+        xData->setData( aData );
     }
 }
 
@@ -509,264 +811,92 @@ void SchXMLTableHelper::applyTableSimple(
 
 void SchXMLTableHelper::applyTable(
     const SchXMLTable& rTable,
-    uno::Sequence< chart::ChartSeriesAddress >& rSeriesAddresses,
-    rtl::OUString& rCategoriesAddress,
-    uno::Reference< chart::XChartDocument > xChartDoc )
+    const tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
+    uno::Reference< chart2::XChartDocument > xChartDoc )
 {
-    // general note: series are always interpreted as columns in import
-
-    // first check if data can be attached to an appropriate object
-    if( rTable.nRowIndex > -1 &&
-        xChartDoc.is())
-    {
-        uno::Reference< chart::XChartDataArray > xData( xChartDoc->getData(), uno::UNO_QUERY );
-        if( xData.is())
-        {
-            sal_Int32 nNumSeriesAddresses = rSeriesAddresses.getLength();
-            sal_Int32 nDomainOffset = 0;
-            sal_Int32 nNumAddrSize = nNumSeriesAddresses;
-
-            uno::Reference< chart::XChartData > xChartData( xData, uno::UNO_QUERY );
-            if( xChartData.is())
-            {
-                sal_Int32 nColumns = 0;
-                sal_Int32 nRows = 0;
-                sal_Int32 i, j;
-
-                // set data
-                if( nNumSeriesAddresses )
-                {
-                    // get NaN
-                    double fSolarNaN;
-                    ::rtl::math::setNan( &fSolarNaN );
-                    double fNaN = fSolarNaN;
-                    fNaN = xChartData->getNotANumber();
-
-                    // convert data from std::vector to uno::Sequence
-                    // ----------------------------------------------
-
-                    // determine size of data
-                    std::vector< SchNumericCellRangeAddress > aNumericAddresses( nNumSeriesAddresses );
-
-                    for( i = 0; i < nNumSeriesAddresses; i++ )
-                    {
-                        if( rSeriesAddresses[ i ].DomainRangeAddresses.getLength())
-                        {
-                            GetCellRangeAddress( rSeriesAddresses[ i ].DomainRangeAddresses[ 0 ],
-                                                 aNumericAddresses[ i + nDomainOffset ] );
-                            AdjustMax( aNumericAddresses[ i + nDomainOffset ], nRows, nColumns );
-                            nDomainOffset++;
-                            aNumericAddresses.reserve( nNumSeriesAddresses + nDomainOffset );
-                        }
-
-                        GetCellRangeAddress( rSeriesAddresses[ i ].DataRangeAddress,
-                                             aNumericAddresses[ i + nDomainOffset ] );
-                        AdjustMax( aNumericAddresses[ i + nDomainOffset ], nRows, nColumns );
-                    }
-                    nNumAddrSize += nDomainOffset;
-
-                    // allocate memory for sequence
-                    uno::Sequence< uno::Sequence< double > > aSequence( nRows );
-                    for( i = 0; i < nRows; i++ )
-                    {
-                        aSequence[ i ].realloc( nColumns );
-
-                        // initialize values with NaN
-                        for( j = 0; j < nColumns; j++ )
-                            aSequence[ i ][ j ] = fNaN;
-                    }
-
-                    // copy data
-                    for( i = 0; i < nNumAddrSize; i++ )
-                        PutTableContentIntoSequence( rTable, aNumericAddresses[ i ], i, aSequence );
-
-                    // set data to XChartDataArray
-                    xData->setData( aSequence );
-                }
-
-                // set labels
-                uno::Sequence< rtl::OUString > aColumnLabels( nNumAddrSize );
-
-                sal_Int32 nRow, nCol;
-                for( i = 0; i < nNumSeriesAddresses; i++ )
-                {
-                    if( rSeriesAddresses[ i ].LabelAddress.getLength())
-                    {
-                        GetCellAddress( rSeriesAddresses[ i ].LabelAddress, nCol, nRow );
-                        aColumnLabels[ i + nDomainOffset ] = rTable.aData[ nRow ][ nCol ].aString;
-                    }
-                }
-                xData->setColumnDescriptions( aColumnLabels );
-
-                if( rCategoriesAddress.getLength())
-                {
-                    SchNumericCellRangeAddress aAddress;
-                    if( GetCellRangeAddress( rCategoriesAddress, aAddress ))
-                    {
-                        uno::Sequence< rtl::OUString > aLabels;
-
-                        if( aAddress.nCol1 == aAddress.nCol2 )
-                        {
-                            sal_Int32 nWidth = aAddress.nRow2 - aAddress.nRow1 + 1;
-                            aLabels.realloc( nWidth );
-
-                            for( i = 0; i < nWidth; i++ )
-                            {
-                                DBG_ASSERT( rTable.aData[ aAddress.nRow1 + i ][ aAddress.nCol1 ].eType == SCH_CELL_TYPE_STRING, "expecting string" );
-                                aLabels[ i ] = rTable.aData[ aAddress.nRow1 + i ][ aAddress.nCol1 ].aString;
-                            }
-                        }
-                        else
-                        {
-                            DBG_ASSERT( aAddress.nRow1 == aAddress.nRow2, "range must be in one row or one column" );
-
-                            sal_Int32 nWidth = aAddress.nCol2 - aAddress.nCol1 + 1;
-                            aLabels.realloc( nWidth );
-
-                            for( i = 0; i < nWidth; i++ )
-                            {
-                                DBG_ASSERT( rTable.aData[ aAddress.nRow1 ][ aAddress.nCol1 + i ].eType == SCH_CELL_TYPE_STRING, "expecting string" );
-                                aLabels[ i ] = rTable.aData[ aAddress.nRow1 ][ aAddress.nCol1 + i ].aString;
-                            }
-                        }
-
-                        xData->setRowDescriptions( aLabels );
-                    }
-                }
-            }
-        }
-    }
-}
-
-void SchXMLTableHelper::AdjustMax( const SchNumericCellRangeAddress& rAddr,
-                                   sal_Int32& nRows, sal_Int32& nColumns )
-{
-    // rows and columns are both mapped to columns ( == series )
-    if( rAddr.nCol1 == rAddr.nCol2 )
-    {
-        if( rAddr.nRow1 > nRows )
-            nRows = rAddr.nRow1;
-        if( rAddr.nRow2 > nRows )
-            nRows = rAddr.nRow2;
-        if( rAddr.nCol1 > nColumns )
-            nColumns = rAddr.nCol1;
-        if( rAddr.nCol2 > nColumns )
-            nColumns = rAddr.nCol2;
-    }
-    else
-    {
-        DBG_ASSERT( rAddr.nRow1 == rAddr.nRow2, "row indexes should be equal" );
-        if( rAddr.nRow1 > nColumns )
-            nColumns = rAddr.nRow1;
-        if( rAddr.nRow2 > nColumns )
-            nColumns = rAddr.nRow2;
-        if( rAddr.nCol1 > nRows )
-            nRows = rAddr.nCol1;
-        if( rAddr.nCol2 > nRows )
-            nRows = rAddr.nCol2;
-    }
-}
-
-void SchXMLTableHelper::GetCellAddress( const rtl::OUString& rStr, sal_Int32& rCol, sal_Int32& rRow )
-{
-    sal_Int32 nPos = rStr.indexOf( sal_Unicode( '.' ));
-    if( nPos != -1 )
-    {
-        // currently just one letter is accepted
-        sal_Unicode aLetter = rStr.getStr()[ nPos + 1 ];
-        if( 'a' <= aLetter && aLetter <= 'z' )
-            rCol = aLetter - 'a';
-        else
-            rCol = aLetter - 'A';
-
-        rRow = (rStr.copy( nPos + 2 )).toInt32() - 1;
-    }
-}
-
-sal_Bool SchXMLTableHelper::GetCellRangeAddress(
-    const rtl::OUString& rStr, SchNumericCellRangeAddress& rResult )
-{
-    sal_Int32 nBreakAt = rStr.indexOf( sal_Unicode( ':' ));
-    if( nBreakAt != -1 )
-    {
-        GetCellAddress( rStr.copy( 0, nBreakAt ), rResult.nCol1, rResult.nRow1 );
-        GetCellAddress( rStr.copy( nBreakAt + 1 ), rResult.nCol2, rResult.nRow2 );
-        return sal_True;
-    }
-
-    return sal_False;
-}
-
-
-// returns true if datarange was inside one column
-void SchXMLTableHelper::PutTableContentIntoSequence(
-    const SchXMLTable& rTable,
-    SchNumericCellRangeAddress& rAddress,
-    sal_Int32 nSeriesIndex,
-    uno::Sequence< uno::Sequence< double > >& aSequence )
-{
-    if( rAddress.nCol2 > rTable.nMaxColumnIndex + 1 ||
-        rAddress.nRow2 > rTable.nRowIndex + 1 )
-    {
-        DBG_ERROR( "Invalid references" );
-        //ToDo: strip the range
+    if( ! (xChartDoc.is() && xChartDoc->hasInternalDataProvider()))
         return;
+    Reference< chart2::data::XDataProvider >  xDataProv( xChartDoc->getDataProvider());
+    Reference< chart::XChartDataArray > xDataArray( xDataProv, uno::UNO_QUERY );
+    if( ! xDataArray.is())
+        return;
+    OSL_ASSERT( xDataProv.is());
+    Reference< chart2::XDiagram > xDiagram( xChartDoc->getFirstDiagram());
+    if( ! xDiagram.is())
+        return;
+
+    // prerequisite for this method: all objects (data series, domains, etc.)
+    // need their own range string.
+
+    // If the range-strings are valid (starting with "local-table") they should
+    // be interpreted like given, otherwise (when the ranges refer to Calc- or
+    // Writer-ranges, but the container is not available like when pasting a
+    // chart from Calc to Impress) the range is ignored, and every object gets
+    // one table column in the order of appearance, which is: 1. categories,
+    // 2. data series: 2.a) domains, 2.b) values (main-role, usually y-values)
+
+    // apply all data read in the table to the chart data-array of the internal
+    // data provider
+    lcl_applyXMLTableToInternalDataprovider( rTable, xDataArray );
+
+    bool bCategoriesApplied = false;
+    // apply the data to the objects that have been parsed and marked for
+    // getting the new data in ther rLSequencesPerIndex map.
+    for( tSchXMLLSequencesPerIndex::const_iterator aIt( rLSequencesPerIndex.begin());
+         aIt != rLSequencesPerIndex.end(); ++aIt )
+    {
+        if( aIt->second.is())
+        {
+            if( aIt->first.second == SCH_XML_PART_VALUES )
+            {
+                if( aIt->first.first == SCH_XML_CATEGORIES_INDEX )
+                {
+                    Reference< beans::XPropertySet > xOldSequenceProp( aIt->second->getValues(), uno::UNO_QUERY );
+                    Reference< chart2::data::XDataSequence > xNewSequence(
+                        xDataProv->createDataSequenceByRangeRepresentation(
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("categories"))));
+                    lcl_copyProperties(
+                        xOldSequenceProp, Reference< beans::XPropertySet >( xNewSequence, uno::UNO_QUERY ));
+                    aIt->second->setValues( xNewSequence );
+                    bCategoriesApplied = true;
+                }
+                else
+                {
+                    Reference< beans::XPropertySet > xOldSequenceProp( aIt->second->getValues(), uno::UNO_QUERY );
+                    OUString aRep( OUString::valueOf( aIt->first.first ));
+                    Reference< chart2::data::XDataSequence > xNewSequence(
+                        xDataProv->createDataSequenceByRangeRepresentation( aRep ));
+                    lcl_copyProperties(
+                        xOldSequenceProp, Reference< beans::XPropertySet >( xNewSequence, uno::UNO_QUERY ));
+                    aIt->second->setValues( xNewSequence );
+                }
+            }
+            else
+            {
+                Reference< beans::XPropertySet > xOldSequenceProp( aIt->second->getLabel(), uno::UNO_QUERY );
+                OSL_ASSERT( aIt->first.second == SCH_XML_PART_LABEL );
+                // index -1 is for categories => shouldn't have a label
+                OSL_ASSERT( aIt->first.first >= 0 );
+                OUString aRep( RTL_CONSTASCII_USTRINGPARAM("label "));
+                aRep += OUString::valueOf( aIt->first.first );
+
+                Reference< chart2::data::XDataSequence > xNewSequence(
+                    xDataProv->createDataSequenceByRangeRepresentation( aRep ));
+                lcl_copyProperties(
+                    xOldSequenceProp, Reference< beans::XPropertySet >( xNewSequence, uno::UNO_QUERY ));
+                aIt->second->setLabel( xNewSequence );
+            }
+        }
     }
 
-    // currently only ranges that span one row or one column are supported
-
-    sal_Int32 nSeqPos = 0;
-    uno::Sequence< double >* pSeqArray = aSequence.getArray();
-    double fValue;
-
-    // same column
-    if( rAddress.nCol1 == rAddress.nCol2 )
+    // there exist files with own data without a categories element but with row
+    // descriptions.  The row descriptions were used as categories even without
+    // the categories element
+    if( ! bCategoriesApplied )
     {
-        if( rAddress.nRow1 <= rAddress.nRow2 )
-        {
-            for( sal_Int32 nRow = rAddress.nRow1; nRow <= rAddress.nRow2; nRow++, nSeqPos++ )
-            {
-                DBG_ASSERT( rTable.aData[ nRow ][ rAddress.nCol1 ].eType != SCH_CELL_TYPE_UNKNOWN, "trying to refer to unknown cell" );
-                fValue = rTable.aData[ nRow ][ rAddress.nCol1 ].fValue;
-                if( ! ::rtl::math::isNan( fValue ))
-                    pSeqArray[ nSeqPos ][ nSeriesIndex ] = fValue;
-            }
-        }
-        else    // reverse
-        {
-            for( sal_Int32 nRow = rAddress.nRow1; nRow >= rAddress.nRow2; nRow--, nSeqPos++ )
-            {
-                DBG_ASSERT( rTable.aData[ nRow ][ rAddress.nCol1 ].eType != SCH_CELL_TYPE_UNKNOWN, "trying to refer to unknown cell" );
-                fValue = rTable.aData[ nRow ][ rAddress.nCol1 ].fValue;
-                if( ! ::rtl::math::isNan( fValue ))
-                    pSeqArray[ nSeqPos ][ nSeriesIndex ] = fValue;
-            }
-        }
-    }
-    else    // same row
-    {
-        DBG_ASSERT( rAddress.nRow1 == rAddress.nRow2, "range must be in one row or one column" );
-
-        if( rAddress.nCol1 <= rAddress.nCol2 )
-        {
-            for( sal_Int32 nCol = rAddress.nCol1; nCol <= rAddress.nCol2; nCol++, nSeqPos++ )
-            {
-                DBG_ASSERT( rTable.aData[ rAddress.nRow1 ][ nCol ].eType != SCH_CELL_TYPE_UNKNOWN, "trying to refer to unknown cell" );
-                fValue = rTable.aData[ rAddress.nRow1 ][ nCol ].fValue;
-                if( ! ::rtl::math::isNan( fValue ))
-                    pSeqArray[ nSeqPos ][ nSeriesIndex ] = fValue;
-            }
-        }
-        else    // reverse
-        {
-            for( sal_Int32 nCol = rAddress.nCol1; nCol >= rAddress.nCol2; nCol--, nSeqPos++ )
-            {
-                DBG_ASSERT( rTable.aData[ rAddress.nRow1 ][ nCol ].eType != SCH_CELL_TYPE_UNKNOWN, "trying to refer to unknown cell" );
-                fValue = rTable.aData[ rAddress.nRow1 ][ nCol ].fValue;
-                if( ! ::rtl::math::isNan( fValue ))
-                    pSeqArray[ nSeqPos ][ nSeriesIndex ] = fValue;
-            }
-        }
+        SchXMLTools::CreateCategories(
+            xDataProv, xChartDoc, OUString(RTL_CONSTASCII_USTRINGPARAM("categories")),
+            0 /* nCooSysIndex */, 0 /* nDimension */ );
     }
 }
 
