@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartFrameloader.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:06:00 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:05:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,21 @@
 #include "ChartFrameloader.hxx"
 #include "servicenames.hxx"
 #include "MediaDescriptorHelper.hxx"
+#include "macros.hxx"
+
+#ifndef _COMPHELPER_MEDIADESCRIPTOR_HXX_
+#include <comphelper/mediadescriptor.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_XIMPORTER_HPP_
+#include <com/sun/star/document/XImporter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XFILTER_HPP_
+#include <com/sun/star/document/XFilter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XLOADABLE_HPP_
+#include <com/sun/star/frame/XLoadable.hpp>
+#endif
 
 //.............................................................................
 namespace chart
@@ -94,52 +109,28 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
 {
     //@todo ? need to add as terminate listener to desktop?
 
-    //create mediadescriptor to be attached to the model
-    apphelper::MediaDescriptorHelper aMediaDescriptorHelper(rMediaDescriptor);
+    uno::Reference< frame::XModel >         xModel;
+    bool bHaveLoadedModel = false;
 
-    //prepare data for model  ... missing interface XPersist or XLoadable at Model....
+    comphelper::MediaDescriptor aMediaDescriptor(rMediaDescriptor);
     {
-        //@todo ...
+        comphelper::MediaDescriptor::const_iterator aIt( aMediaDescriptor.find( aMediaDescriptor.PROP_MODEL()));
+        if( aIt != aMediaDescriptor.end())
+        {
+            xModel.set( (*aIt).second.get< uno::Reference< frame::XModel > >());
+            bHaveLoadedModel = true;
+        }
     }
 
-    /*
-    static uno::Reference< frame::XFrame > xTestFrame = uno::Reference< frame::XFrame >(
-                m_xCC->getServiceManager()->createInstanceWithContext(
-                ::rtl::OUString::createFromAscii("com.sun.star.frame.Frame"), m_xCC )
-                , uno::UNO_QUERY );
-
-    static uno::Reference< awt::XWindow > xTestWindow = uno::Reference< awt::XWindow >(
-                m_xCC->getServiceManager()->createInstanceWithContext(
-                ::rtl::OUString::createFromAscii("com.sun.star.awt.Window"), m_xCC )
-                , uno::UNO_QUERY );
-    xTestFrame->initialize(xTestWindow);
-    */
-
     //create and initialize the model
-    uno::Reference< frame::XModel >         xModel = NULL;
+    if( ! xModel.is())
     {
         //@todo?? load mechanism to cancel during loading of document
-        xModel = uno::Reference< frame::XModel >(
+        xModel.set(
                 m_xCC->getServiceManager()->createInstanceWithContext(
                 CHART_MODEL_SERVICE_IMPLEMENTATION_NAME, m_xCC )
                 , uno::UNO_QUERY );
 
-        if( impl_checkCancel() )
-            return sal_False;
-
-        //@todo load data to model ... missing interface XPersist or XLoadable at Model....
-        xModel->attachResource( aMediaDescriptorHelper.URL.Complete, aMediaDescriptorHelper.getReducedForModel() );
-    }
-
-    //create the component context for the controller
-    uno::Reference< uno::XComponentContext > xComponentContext_ForController = NULL;
-    {
-        xComponentContext_ForController = uno::Reference< uno::XComponentContext >(
-                m_xCC->getServiceManager()->createInstanceWithContext(
-                ::rtl::OUString::createFromAscii("com.sun.star.uno.ComponentContext"), m_xCC )
-                , uno::UNO_QUERY );
-
-        //@todo
         if( impl_checkCancel() )
             return sal_False;
     }
@@ -150,7 +141,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
     {
         xController = uno::Reference< frame::XController >(
             m_xCC->getServiceManager()->createInstanceWithContext(
-            CHART_CONTROLLER_SERVICE_IMPLEMENTATION_NAME,m_xCC ) //, xComponentContext_ForController )
+            CHART_CONTROLLER_SERVICE_IMPLEMENTATION_NAME,m_xCC )
             , uno::UNO_QUERY );
 
         //!!!it is a special characteristic of the example application
@@ -162,15 +153,62 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
             return sal_False;
     }
 
+
     //connect frame, controller and model one to each other:
     if(xController.is()&&xModel.is())
     {
-        xController->attachFrame(xFrame);
-        xController->attachModel(xModel);
         xModel->connectController(xController);
+        xModel->setCurrentController(xController);
+        xController->attachModel(xModel);
         if(xFrame.is())
             xFrame->setComponent(xComponentWindow,xController);
+        //creates the view and menu
+        //for correct menu creation the initialized component must be already set into the frame
+        xController->attachFrame(xFrame);
     }
+
+    // call initNew() or load() at XLoadable
+    if(!bHaveLoadedModel)
+    try
+    {
+        comphelper::MediaDescriptor::const_iterator aIt( aMediaDescriptor.find( aMediaDescriptor.PROP_URL()));
+        if( aIt != aMediaDescriptor.end())
+        {
+            ::rtl::OUString aURL( (*aIt).second.get< ::rtl::OUString >());
+            if( aURL.matchAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "private:factory/schart" )))
+            {
+                // create new file
+                uno::Reference< frame::XLoadable > xLoadable( xModel, uno::UNO_QUERY_THROW );
+                xLoadable->initNew();
+            }
+            else
+            {
+                aMediaDescriptor.addInputStream();
+                uno::Sequence< beans::PropertyValue > aCompleteMediaDescriptor;
+                aMediaDescriptor >> aCompleteMediaDescriptor;
+                apphelper::MediaDescriptorHelper aMDHelper( aCompleteMediaDescriptor );
+
+                // load file
+                // @todo: replace: aMediaDescriptorHelper.getReducedForModel()
+                uno::Reference< frame::XLoadable > xLoadable( xModel, uno::UNO_QUERY_THROW );
+                xLoadable->load( aCompleteMediaDescriptor );
+
+                //resize standalone files to get correct size:
+                if( xComponentWindow.is() && aMDHelper.ISSET_FilterName && aMDHelper.FilterName.equals( C2U("StarChart 5.0")) )
+                {
+                    awt::Rectangle aRect( xComponentWindow->getPosSize() );
+                    sal_Int16 nFlags=0;
+                    xComponentWindow->setPosSize( aRect.X, aRect.Y, aRect.Width, aRect.Height, nFlags );
+                }
+            }
+        }
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
     return sal_True;
 }
 
