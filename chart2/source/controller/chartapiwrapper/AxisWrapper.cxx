@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AxisWrapper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:54:56 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:16:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include "AxisWrapper.hxx"
-#include "macros.hxx"
-#include "InlineContainer.hxx"
-#include "algohelper.hxx"
-#include "MeterHelper.hxx"
+#include "AxisHelper.hxx"
 #include "Scaling.hxx"
+#include "Chart2ModelContact.hxx"
+#include "ContainerHelper.hxx"
+#include "macros.hxx"
+#include "WrappedDirectStateProperty.hxx"
+
+#ifndef INCLUDED_COMPHELPER_INLINE_CONTAINER_HXX
+#include <comphelper/InlineContainer.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -51,7 +56,15 @@
 
 #include "CharacterProperties.hxx"
 #include "LineProperties.hxx"
+// #include "NamedLineProperties.hxx"
 #include "UserDefinedProperties.hxx"
+#include "WrappedCharacterHeightProperty.hxx"
+#include "WrappedTextRotationProperty.hxx"
+// #include "WrappedNamedProperty.hxx"
+#include "WrappedGapwidthProperty.hxx"
+#include "WrappedScaleProperty.hxx"
+#include "WrappedDefaultProperty.hxx"
+#include "WrappedNumberFormatProperty.hxx"
 
 #include <algorithm>
 
@@ -63,13 +76,19 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::chart2;
+using namespace ::chart::ContainerHelper;
+
 using ::com::sun::star::beans::Property;
 using ::osl::MutexGuard;
-using ::property::OPropertySet;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::Any;
+using ::rtl::OUString;
 
 namespace
 {
-static const ::rtl::OUString lcl_aServiceName(
+static const OUString lcl_aServiceName(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.Axis" ));
 
 enum
@@ -94,30 +113,10 @@ enum
     PROP_AXIS_ARRANGE_ORDER,
     PROP_AXIS_TEXTBREAK,
     PROP_AXIS_CAN_OVERLAP,
-    PROP_AXIS_NUMBERFORMAT
-};
-
-typedef ::std::map< sal_Int32, ::rtl::OUString > lcl_PropertyMapType;
-typedef ::comphelper::MakeMap< sal_Int32, ::rtl::OUString > lcl_MakePropertyMapType;
-
-lcl_PropertyMapType & lcl_GetPropertyMap()
-{
-    static lcl_PropertyMapType aMap(
-        lcl_MakePropertyMapType
-        ( PROP_AXIS_DISPLAY_LABELS,           C2U( "DisplayLabels" ))
-        ( PROP_AXIS_TEXT_ROTATION,            C2U( "TextRotation" ))
-        // preliminary
-        ( PROP_AXIS_MARKS,                    C2U( "MajorTickmarks" ))
-        // preliminary
-        ( PROP_AXIS_HELPMARKS,                C2U( "MinorTickmarks" ))
-        ( PROP_AXIS_ARRANGE_ORDER,            C2U( "ArrangeOrder" ))
-        ( PROP_AXIS_TEXTBREAK,                C2U( "TextBreak" ))
-        ( PROP_AXIS_CAN_OVERLAP,              C2U( "TextOverlap" ))
-        // has to be converted
-        ( PROP_AXIS_NUMBERFORMAT,             C2U( "NumberFormat" ))
-        );
-
-    return aMap;
+    PROP_AXIS_NUMBERFORMAT,
+    PROP_AXIS_LINK_NUMBERFORMAT_TO_SOURCE,
+    PROP_AXIS_VISIBLE,
+    PROP_AXIS_STACKEDTEXT
 };
 
 void lcl_AddPropertiesToVector(
@@ -236,7 +235,7 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "Gapwidth" ),
+        Property( C2U( "GapWidth" ),
                   PROP_AXIS_GAP_WIDTH,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -269,15 +268,32 @@ void lcl_AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "LinkNumberFormatToSource" ),
+                  PROP_AXIS_LINK_NUMBERFORMAT_TO_SOURCE,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "Visible" ),
+                  PROP_AXIS_VISIBLE,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "StackedText" ),
+                  PROP_AXIS_STACKEDTEXT,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-void lcl_AddDefaultsToMap(
-    ::chart::helper::tPropertyValueMap & rOutMap )
-{}
-
-const uno::Sequence< Property > & lcl_GetPropertySequence()
+const Sequence< Property > & lcl_GetPropertySequence()
 {
-    static uno::Sequence< Property > aPropSeq;
+    static Sequence< Property > aPropSeq;
 
     // /--
     MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -286,30 +302,20 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
         // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
-        ::chart::CharacterProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ false );
-        ::chart::LineProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ false );
+        ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
+        ::chart::LineProperties::AddPropertiesToVector( aProperties );
+//         ::chart::NamedLineProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
         // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::helper::PropertyNameLess() );
+                     ::chart::PropertyNameLess() );
 
         // transfer result to static Sequence
-        aPropSeq = ::chart::helper::VectorToSequence( aProperties );
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
     return aPropSeq;
-}
-
-::cppu::IPropertyArrayHelper & lcl_getInfoHelper()
-{
-    static ::cppu::OPropertyArrayHelper aArrayHelper(
-        lcl_GetPropertySequence(),
-        /* bSorted = */ sal_True );
-
-    return aArrayHelper;
 }
 
 } // anonymous namespace
@@ -322,580 +328,268 @@ namespace wrapper
 {
 
 AxisWrapper::AxisWrapper(
-    eAxisType eType,
-    const uno::Reference<
-        ::com::sun::star::chart2::XDiagram > & xDia,
-    const uno::Reference< uno::XComponentContext > & xContext,
-    ::osl::Mutex & _rMutex ) :
-        OPropertySet( _rMutex ),
-        m_rMutex( _rMutex ),
-        m_xContext( xContext ),
-        m_eType( eType ),
-        m_aEventListenerContainer( _rMutex ),
-        m_xDiagram( xDia )
+    tAxisType eType, ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact ) :
+        m_spChart2ModelContact( spChart2ModelContact ),
+        m_aEventListenerContainer( m_aMutex ),
+        m_eType( eType )
 {
-    try
-    {
-        uno::Reference< chart2::XAxisContainer > xAxisCnt( m_xDiagram, uno::UNO_QUERY_THROW );
-        ::rtl::OUString aId;
-
-        switch( eType )
-        {
-            case X_AXIS:
-                aId = MeterHelper::makeAxisIdentifier( 0, 0 );  break;
-            case Y_AXIS:
-                aId = MeterHelper::makeAxisIdentifier( 1, 0 );  break;
-            case Z_AXIS:
-                aId = MeterHelper::makeAxisIdentifier( 2, 0 );  break;
-            case SECOND_X_AXIS:
-                aId = MeterHelper::makeAxisIdentifier( 0, 1 );  break;
-            case SECOND_Y_AXIS:
-                aId = MeterHelper::makeAxisIdentifier( 1, 1 );  break;
-        }
-
-        if( aId.getLength() > 0 )
-            m_xAxis = xAxisCnt->getAxisByIdentifier( aId );
-    }
-    catch( uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-    }
-
-    m_xAxisProperties.set( m_xAxis, uno::UNO_QUERY );
-    m_xAxisFastProperties.set( m_xAxis, uno::UNO_QUERY );
 }
 
 AxisWrapper::~AxisWrapper()
-{}
-
-::osl::Mutex & AxisWrapper::GetMutex() const
 {
-    return m_rMutex;
+}
+
+// ____ XShape ____
+awt::Point SAL_CALL AxisWrapper::getPosition()
+    throw (uno::RuntimeException)
+{
+    awt::Point aResult( m_spChart2ModelContact->GetAxisPosition( this->getAxis() ) );
+    return aResult;
+}
+
+void SAL_CALL AxisWrapper::setPosition( const awt::Point& aPosition )
+    throw (uno::RuntimeException)
+{
+    OSL_ENSURE( false, "trying to set position of Axis" );
+}
+
+awt::Size SAL_CALL AxisWrapper::getSize()
+    throw (uno::RuntimeException)
+{
+    awt::Size aSize( m_spChart2ModelContact->GetAxisSize( this->getAxis() ) );
+    return aSize;
+}
+
+void SAL_CALL AxisWrapper::setSize( const awt::Size& aSize )
+    throw (beans::PropertyVetoException,
+           uno::RuntimeException)
+{
+    OSL_ENSURE( false, "trying to set size of Axis" );
+}
+
+// ____ XShapeDescriptor (base of XShape) ____
+OUString SAL_CALL AxisWrapper::getShapeType()
+    throw (uno::RuntimeException)
+{
+    return C2U( "com.sun.star.chart.ChartAxis" );
+}
+
+// ____ XNumberFormatsSupplier ____
+uno::Reference< beans::XPropertySet > SAL_CALL AxisWrapper::getNumberFormatSettings()
+    throw (uno::RuntimeException)
+{
+    Reference< util::XNumberFormatsSupplier > xNumSuppl( m_spChart2ModelContact->getChartModel(), uno::UNO_QUERY );
+    if( xNumSuppl.is() )
+        return xNumSuppl->getNumberFormatSettings();
+
+    return uno::Reference< beans::XPropertySet >();
+}
+
+uno::Reference< util::XNumberFormats > SAL_CALL AxisWrapper::getNumberFormats()
+    throw (uno::RuntimeException)
+{
+    Reference< util::XNumberFormatsSupplier > xNumSuppl( m_spChart2ModelContact->getChartModel(), uno::UNO_QUERY );
+    if( xNumSuppl.is() )
+        return xNumSuppl->getNumberFormats();
+
+    return uno::Reference< util::XNumberFormats >();
+}
+
+// static
+void AxisWrapper::getDimensionAndMainAxisBool( tAxisType eType, sal_Int32& rnDimensionIndex, sal_Bool& rbMainAxis )
+{
+    switch( eType )
+    {
+        case X_AXIS:
+            rnDimensionIndex = 0; rbMainAxis = sal_True; break;
+        case Y_AXIS:
+            rnDimensionIndex = 1; rbMainAxis = sal_True; break;
+        case Z_AXIS:
+            rnDimensionIndex = 2; rbMainAxis = sal_True; break;
+        case SECOND_X_AXIS:
+            rnDimensionIndex = 0; rbMainAxis = sal_False; break;
+        case SECOND_Y_AXIS:
+            rnDimensionIndex = 1; rbMainAxis = sal_False; break;
+    }
 }
 
 // ____ XComponent ____
 void SAL_CALL AxisWrapper::dispose()
     throw (uno::RuntimeException)
 {
-    m_aEventListenerContainer.disposeAndClear( lang::EventObject( *this ) );
+    Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
+    m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
 
-    // /--
-    MutexGuard aGuard( GetMutex());
-    m_xDiagram = NULL;
-    m_xAxis = NULL;
-    m_xAxisProperties = NULL;
-    m_xAxisFastProperties = NULL;
-    // \--
+    clearWrappedPropertySet();
 }
 
 void SAL_CALL AxisWrapper::addEventListener(
-    const uno::Reference< lang::XEventListener >& xListener )
+    const Reference< lang::XEventListener >& xListener )
     throw (uno::RuntimeException)
 {
     m_aEventListenerContainer.addInterface( xListener );
 }
 
 void SAL_CALL AxisWrapper::removeEventListener(
-    const uno::Reference< lang::XEventListener >& aListener )
+    const Reference< lang::XEventListener >& aListener )
     throw (uno::RuntimeException)
 {
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-sal_Bool SAL_CALL AxisWrapper::convertFastPropertyValue
-    ( uno::Any & rConvertedValue,
-      uno::Any & rOldValue,
-      sal_Int32 nHandle,
-      const uno::Any& rValue )
-    throw (lang::IllegalArgumentException)
-{
-    switch( nHandle )
-    {
-        case PROP_AXIS_TEXT_ROTATION:
-        {
-            // /--
-            MutexGuard aGuard( GetMutex());
-            if( m_xAxisProperties.is())
-                getFastPropertyValue( rOldValue, nHandle );
+// ================================================================================
 
-            sal_Int32 nVal;
-            if( rValue >>= nVal )
+//ReferenceSizePropertyProvider
+void AxisWrapper::setCurrentSizeAsReference()
+{
+    /*
+    Reference< beans::XPropertySet > xProp( this->getAxis(), uno::UNO_QUERY );
+    if( xProp.is() )
+        xProp->setPropertyValue( C2U("ReferenceDiagramSize"), uno::makeAny(
+                            m_spChart2ModelContact->GetDiagramSize() ));
+    */
+}
+Any AxisWrapper::getReferenceSize()
+{
+    Any aRet;
+    /*
+    Reference< beans::XPropertySet > xProp( this->getAxis(), uno::UNO_QUERY );
+    if( xProp.is() )
+        aRet = xProp->getPropertyValue( C2U("ReferenceDiagramSize") );
+    */
+    return aRet;
+}
+awt::Size AxisWrapper::getCurrentSizeForReference()
+{
+    return m_spChart2ModelContact->GetDiagramSize();
+}
+
+// ================================================================================
+
+Reference< chart2::XAxis > AxisWrapper::getAxis()
+{
+    Reference< chart2::XAxis > xAxis;
+    try
+    {
+        sal_Int32 nDimensionIndex = 0;
+        sal_Bool  bMainAxis = sal_True;
+        AxisWrapper::getDimensionAndMainAxisBool( m_eType, nDimensionIndex, bMainAxis );
+
+        Reference< XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+        xAxis = AxisHelper::getAxis( nDimensionIndex, bMainAxis, xDiagram );
+        if( !xAxis.is() )
+        {
+            xAxis = AxisHelper::createAxis( nDimensionIndex, bMainAxis, xDiagram, m_spChart2ModelContact->m_xContext );
+            Reference< beans::XPropertySet > xProp( xAxis, uno::UNO_QUERY );
+            if( xProp.is() )
+                xProp->setPropertyValue( C2U( "Show" ), uno::makeAny( sal_False ) );
+        }
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+    return xAxis;
+}
+
+// WrappedPropertySet
+Reference< beans::XPropertySet > AxisWrapper::getInnerPropertySet()
+{
+    return Reference< beans::XPropertySet >( this->getAxis(), uno::UNO_QUERY );
+}
+
+const Sequence< beans::Property >& AxisWrapper::getPropertySequence()
+{
+    return lcl_GetPropertySequence();
+}
+
+const std::vector< WrappedProperty* > AxisWrapper::createWrappedProperties()
+{
+    ::std::vector< ::chart::WrappedProperty* > aWrappedProperties;
+
+    aWrappedProperties.push_back( new WrappedTextRotationProperty() );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "Marks" ), C2U( "MajorTickmarks" ) ) );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "HelpMarks" ), C2U( "MinorTickmarks" ) ) );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "TextCanOverlap" ), C2U( "TextOverlap" ) ) );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "ArrangeOrder" ), C2U( "ArrangeOrder" ) ) );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "Visible" ), C2U( "Show" ) ) );
+    aWrappedProperties.push_back( new WrappedDefaultProperty( C2U( "DisplayLabels" ), C2U( "DisplayLabels" ), uno::makeAny( false ) ) );
+    aWrappedProperties.push_back( new WrappedDirectStateProperty( C2U( "TextBreak" ), C2U( "TextBreak" ) ) );
+    WrappedNumberFormatProperty* pWrappedNumberFormatProperty = new WrappedNumberFormatProperty( m_spChart2ModelContact );
+    aWrappedProperties.push_back( pWrappedNumberFormatProperty );
+    aWrappedProperties.push_back( new WrappedLinkNumberFormatProperty(pWrappedNumberFormatProperty) );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "StackedText" ), C2U( "StackCharacters" ) ) );
+    {
+        WrappedGapwidthProperty* pWrappedGapwidthProperty( new WrappedGapwidthProperty( m_spChart2ModelContact ) );
+        WrappedBarOverlapProperty* pWrappedBarOverlapProperty( new WrappedBarOverlapProperty( m_spChart2ModelContact ) );
+        sal_Int32 nDimensionIndex = 0;
+        sal_Bool  bMainAxis = sal_True;
+        sal_Int32 nAxisIndex = 0;
+        AxisWrapper::getDimensionAndMainAxisBool( m_eType, nDimensionIndex, bMainAxis );
+        if( !bMainAxis )
+            nAxisIndex = 1;
+        pWrappedGapwidthProperty->setDimensionAndAxisIndex( nDimensionIndex, nAxisIndex );
+        pWrappedBarOverlapProperty->setDimensionAndAxisIndex( nDimensionIndex, nAxisIndex );
+        aWrappedProperties.push_back( pWrappedGapwidthProperty );
+        aWrappedProperties.push_back( pWrappedBarOverlapProperty );
+    }
+
+    WrappedScaleProperty::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
+
+    //aWrappedProperties.push_back( new WrappedStackedTextProperty() );
+//     WrappedNamedProperty::addWrappedLineProperties( aWrappedProperties, m_spChart2ModelContact );
+    WrappedCharacterHeightProperty::addWrappedProperties( aWrappedProperties, this );
+
+    return aWrappedProperties;
+}
+
+
+void SAL_CALL AxisWrapper::setPropertyValue( const OUString& rPropertyName, const uno::Any& rValue )
+                                    throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    bool bSetFixedHelpStepAfterwards = false;
+    uno::Any aHelpStep;
+    if( rPropertyName.equals( C2U( "StepHelp" ) ) )
+    {
+        m_aTemporaryHelpStepValue = rValue;
+    }
+    else if( rPropertyName.equals( C2U( "AutoStepHelp" ) ) )
+    {
+        sal_Bool bAuto=sal_False;
+        if( (rValue >>= bAuto) && bAuto )
+            m_aTemporaryHelpStepValue.clear();
+    }
+    else if( rPropertyName.equals( C2U( "StepMain" ) ) )
+    {
+        Reference< chart2::XAxis > xAxis( this->getAxis() );
+        if( xAxis.is() )
+        {
+            chart2::ScaleData aScaleData( xAxis->getScaleData() );
+            if( aScaleData.IncrementData.SubIncrements.getLength()
+                && aScaleData.IncrementData.SubIncrements[ 0 ].IntervalCount.hasValue() )
             {
-                double fDoubleDegrees = ( static_cast< double >( nVal ) / 100.0 );
-                rConvertedValue <<= fDoubleDegrees;
-                return sal_True;
+                aHelpStep = this->getPropertyValue( C2U( "StepHelp" ) );
+                bSetFixedHelpStepAfterwards = true;
             }
-            break;
-            // \--
-        }
-
-        default:
-            return OPropertySet::convertFastPropertyValue(
-                rConvertedValue, rOldValue, nHandle, rValue );
-    }
-
-    return sal_False;
-}
-
-void SAL_CALL AxisWrapper::setFastPropertyValue_NoBroadcast
-    ( sal_Int32 nHandle, const uno::Any& rValue )
-    throw (uno::Exception)
-{
-    // /--
-    MutexGuard aGuard( GetMutex());
-
-    // try same handle for FastPropertySet.  Caution!  Works for global
-    // properties like FillProperties, LineProperties and CharacterProperties
-    if( nHandle > FAST_PROPERTY_ID_START )
-    {
-        if( m_xAxisFastProperties.is() )
-            m_xAxisFastProperties->setFastPropertyValue( nHandle, rValue );
-    }
-    else
-    {
-        switch( nHandle )
-        {
-            case PROP_AXIS_MAX:
-            case PROP_AXIS_MIN:
-            case PROP_AXIS_ORIGIN:
-            case PROP_AXIS_STEPMAIN:
-            case PROP_AXIS_STEPHELP:
-            case PROP_AXIS_AUTO_MAX:
-            case PROP_AXIS_AUTO_MIN:
-            case PROP_AXIS_AUTO_ORIGIN:
-            case PROP_AXIS_AUTO_STEPMAIN:
-            case PROP_AXIS_AUTO_STEPHELP:
-            case PROP_AXIS_LOGARITHMIC:
-                if( m_xAxis.is())
-                    setFastMeterPropertyValue_NoBroadcast( nHandle, rValue );
-                break;
-
-            case PROP_AXIS_DISPLAY_LABELS:
-            case PROP_AXIS_TEXT_ROTATION:
-            case PROP_AXIS_MARKS:
-            case PROP_AXIS_HELPMARKS:
-            case PROP_AXIS_OVERLAP:
-            case PROP_AXIS_GAP_WIDTH:
-            case PROP_AXIS_ARRANGE_ORDER:
-            case PROP_AXIS_TEXTBREAK:
-            case PROP_AXIS_CAN_OVERLAP:
-            case PROP_AXIS_NUMBERFORMAT:
-                if( m_xAxisProperties.is())
-                {
-                    lcl_PropertyMapType & rMap( lcl_GetPropertyMap());
-                    lcl_PropertyMapType::const_iterator aIt( rMap.find( nHandle ));
-
-                    if( aIt != rMap.end())
-                    {
-                        // found in map
-                        m_xAxisProperties->setPropertyValue( (*aIt).second, rValue );
-                    }
-                }
-                break;
-        }
-    }
-    // \--
-}
-
-void SAL_CALL AxisWrapper::getFastPropertyValue
-    ( uno::Any& rValue,
-      sal_Int32 nHandle ) const
-{
-    // /--
-    MutexGuard aGuard( GetMutex());
-    if( ! m_xAxis.is())
-        return;
-
-    // try same handle for FastPropertySet.  Caution!  Works for global
-    // properties like FillProperties, LineProperties and CharacterProperties
-    if( nHandle > FAST_PROPERTY_ID_START )
-    {
-        if( m_xAxisFastProperties.is() )
-            rValue = m_xAxisFastProperties->getFastPropertyValue( nHandle );
-    }
-    else
-    {
-        switch( nHandle )
-        {
-            case PROP_AXIS_MAX:
-            case PROP_AXIS_MIN:
-            case PROP_AXIS_ORIGIN:
-            case PROP_AXIS_STEPMAIN:
-            case PROP_AXIS_STEPHELP:
-            case PROP_AXIS_AUTO_MAX:
-            case PROP_AXIS_AUTO_MIN:
-            case PROP_AXIS_AUTO_ORIGIN:
-            case PROP_AXIS_AUTO_STEPMAIN:
-            case PROP_AXIS_AUTO_STEPHELP:
-            case PROP_AXIS_LOGARITHMIC:
-                getFastMeterPropertyValue( rValue, nHandle );
-                break;
-
-            case PROP_AXIS_DISPLAY_LABELS:
-            case PROP_AXIS_MARKS:
-            case PROP_AXIS_HELPMARKS:
-            case PROP_AXIS_OVERLAP:
-            case PROP_AXIS_GAP_WIDTH:
-            case PROP_AXIS_ARRANGE_ORDER:
-            case PROP_AXIS_TEXTBREAK:
-            case PROP_AXIS_CAN_OVERLAP:
-            case PROP_AXIS_NUMBERFORMAT:
-                if( m_xAxisProperties.is())
-                {
-                    lcl_PropertyMapType & rMap( lcl_GetPropertyMap());
-                    lcl_PropertyMapType::const_iterator aIt( rMap.find( nHandle ));
-
-                    if( aIt != rMap.end())
-                    {
-                        // found in map
-                        rValue = m_xAxisProperties->getPropertyValue( (*aIt).second );
-                    }
-                }
-                break;
-
-            case PROP_AXIS_TEXT_ROTATION:
-                if( m_xAxisProperties.is())
-                {
-                    double fDoubleDegrees = 0.0;
-                    uno::Any aAny( m_xAxisProperties->getPropertyValue( C2U("TextRotation") ));
-                    if( aAny >>= fDoubleDegrees )
-                    {
-                        sal_Int32 nDeg = static_cast< sal_Int32 >(
-                            ::rtl::math::round( fDoubleDegrees * 100.0 ));
-                        rValue <<= nDeg;
-                    }
-                }
-                break;
-        }
-    }
-    // \--
-}
-
-void AxisWrapper::setFastMeterPropertyValue_NoBroadcast
-    ( sal_Int32 nHandle, const uno::Any& rValue )
-{
-    OSL_ASSERT( m_xAxis.is());
-
-    bool bSetScale         = false;
-    bool bSetIncrement     = false;
-    bool bSetOrigin        = false;
-
-    uno::Reference< chart2::XBoundedCoordinateSystem > xCooSys( m_xAxis->getCoordinateSystem());
-    sal_Int32 nDim = m_xAxis->getRepresentedDimension();
-    uno::Reference< chart2::XIncrement > xInc( m_xAxis->getIncrement());
-    uno::Reference< chart2::XScale > xScale;
-    uno::Sequence< uno::Any > aOrigin;
-
-    chart2::ScaleData aScaleData;
-    chart2::IncrementData aIncData;
-
-    if( xInc.is())
-        aIncData = xInc->getIncrementData();
-
-    if( xCooSys.is())
-    {
-        xScale.set( xCooSys->getScaleByDimension( nDim ));
-        if( xScale.is())
-            aScaleData = xScale->getScaleData();
-        aOrigin = xCooSys->getOrigin();
-    }
-
-    sal_Bool bBool;
-    switch( nHandle )
-    {
-        case PROP_AXIS_MAX:
-            aScaleData.Maximum = rValue;
-            bSetScale = true;
-            break;
-        case PROP_AXIS_MIN:
-            aScaleData.Minimum = rValue;
-            bSetScale = true;
-            break;
-        case PROP_AXIS_STEPMAIN:
-            aIncData.Distance = rValue;
-            bSetIncrement = true;
-            break;
-        case PROP_AXIS_STEPHELP:
-            if( aIncData.Distance.hasValue())
+            else if( m_aTemporaryHelpStepValue.hasValue() )
             {
-                // todo: evaluate PostEquidistant
-                uno::Sequence< chart2::SubIncrement > aSubIncs( xInc->getSubIncrements());
-                if( aSubIncs.getLength() == 0 )
-                    aSubIncs.realloc( 1 );
-
-                double fStepMain, fStepHelp;
-                if( (rValue >>= fStepHelp) &&
-                    (aIncData.Distance >>= fStepMain) &&
-                    (fStepHelp != 0.0) )
-                {
-                    // approximate interval count
-                    sal_Int32 nIntervalCount = static_cast< sal_Int32 >
-                        (fStepMain / fStepHelp);
-
-                    aSubIncs[ 0 ].IntervalCount <<= nIntervalCount;
-                    xInc->setSubIncrements( aSubIncs );
-                }
+                aHelpStep = m_aTemporaryHelpStepValue;
+                bSetFixedHelpStepAfterwards = true;
             }
-            break;
-        case PROP_AXIS_AUTO_MAX:
-            if( (rValue >>= bBool ) &&
-                bBool )
-                aScaleData.Maximum = uno::Any();
-            else
-                // todo: get former auto-value from view
-                aScaleData.Maximum <<= (double)(10.0);
-            bSetScale = true;
-            break;
-        case PROP_AXIS_AUTO_MIN:
-            if( (rValue >>= bBool ) &&
-                bBool )
-                aScaleData.Minimum = uno::Any();
-            else
-                // todo: get former auto-value from view
-                aScaleData.Minimum <<= (double)(0.0);
-            bSetScale = true;
-            break;
-        case PROP_AXIS_AUTO_STEPMAIN:
-            if( (rValue >>= bBool ) &&
-                bBool )
-                aIncData.Distance = uno::Any();
-            else
-                // todo: get former auto-value from view
-                aIncData.Distance <<= (double)(1.0);
-            bSetIncrement = true;
-            break;
-        case PROP_AXIS_AUTO_STEPHELP:
-        {
-            uno::Sequence< chart2::SubIncrement > aSubIncs( xInc->getSubIncrements());
-            if( aSubIncs.getLength() == 0 )
-                aSubIncs.realloc( 1 );
-
-            if( (rValue >>= bBool ) &&
-                bBool )
-                aSubIncs[ 0 ].IntervalCount = uno::Any();
-            else
-                // todo: get former auto-value from view
-                aSubIncs[ 0 ].IntervalCount <<= (sal_Int32)(5);
-            xInc->setSubIncrements( aSubIncs );
-            break;
-        }
-
-        case PROP_AXIS_ORIGIN:
-        {
-            OSL_ASSERT( nDim < aOrigin.getLength());
-
-            if( nDim < aOrigin.getLength())
-            {
-                aOrigin[ nDim ] = rValue;
-                bSetOrigin = true;
-            }
-            break;
-        }
-        case PROP_AXIS_AUTO_ORIGIN:
-        {
-            OSL_ASSERT( nDim < aOrigin.getLength());
-
-            if( nDim < aOrigin.getLength() &&
-                ( rValue >>= bBool ) )
-            {
-                if( bBool )
-                    aOrigin[ nDim ] = uno::Any();
-                else
-                    // todo: get former auto-value from view
-                    aOrigin[ nDim ] <<= (double)(0.0);
-            }
-            bSetOrigin = true;
-            break;
-        }
-        case PROP_AXIS_LOGARITHMIC:
-            if( rValue >>= bBool )
-            {
-                uno::Reference< lang::XServiceName > xServiceName( aScaleData.Scaling, uno::UNO_QUERY );
-                bool bWasLogarithm =
-                    ( xServiceName.is() &&
-                      (xServiceName->getServiceName()).equals(
-                          C2U( "com.sun.star.chart2.LogarithmicScaling" )));
-
-                if( bBool != bWasLogarithm )
-                {
-                    if( bBool )
-                        aScaleData.Scaling = new LogarithmicScaling( 10.0 );
-                    else
-                        aScaleData.Scaling = new LinearScaling( 1.0, 0.0 );
-                    bSetScale = true;
-                }
-            }
-            break;
-    }
-
-    if( bSetScale &&
-        xScale.is() )
-        xScale->setScaleData( aScaleData );
-    if( bSetIncrement &&
-        xInc.is() )
-        xInc->setIncrementData( aIncData );
-    if( bSetOrigin &&
-        xCooSys.is() )
-        xCooSys->setOrigin( aOrigin );
-}
-
-void AxisWrapper::getFastMeterPropertyValue
-    ( uno::Any & rValue,
-      sal_Int32 nHandle ) const
-{
-    OSL_ASSERT( m_xAxis.is());
-
-    uno::Reference< chart2::XBoundedCoordinateSystem > xCooSys( m_xAxis->getCoordinateSystem());
-    sal_Int32 nDim = m_xAxis->getRepresentedDimension();
-    uno::Reference< chart2::XIncrement > xInc( m_xAxis->getIncrement());
-    uno::Sequence< uno::Any > aOrigin;
-
-    chart2::ScaleData aScaleData;
-    chart2::IncrementData aIncData;
-
-    if( xInc.is())
-        aIncData = xInc->getIncrementData();
-
-    if( xCooSys.is())
-    {
-        uno::Reference< chart2::XScale > xScale( xCooSys->getScaleByDimension( nDim ));
-        if( xScale.is())
-            aScaleData = xScale->getScaleData();
-        aOrigin = xCooSys->getOrigin();
-    }
-
-    switch( nHandle )
-    {
-        case PROP_AXIS_MAX:
-            // todo: If value is auto, we need the explicit value from the view
-            rValue = aScaleData.Maximum;
-            break;
-        case PROP_AXIS_MIN:
-            // todo: If value is auto, we need the explicit value from the view
-            rValue = aScaleData.Minimum;
-            break;
-        case PROP_AXIS_STEPMAIN:
-            // todo: If value is auto, we need the explicit value from the view
-            rValue = aIncData.Distance;
-            break;
-        case PROP_AXIS_STEPHELP:
-            // todo: If value is auto, we need the explicit value from the view
-            if( aIncData.Distance.hasValue())
-            {
-                // todo: evaluate PostEquidistant
-                uno::Sequence< chart2::SubIncrement > aSubIncs( xInc->getSubIncrements());
-                if( aSubIncs.getLength() > 0 )
-                {
-                    double fStepMain;
-                    sal_Int32 nIntervalCount;
-                    if( (aIncData.Distance >>= fStepMain) &&
-                        (aSubIncs[ 0 ].IntervalCount >>= nIntervalCount) &&
-                        nIntervalCount > 0 )
-                    {
-                        rValue <<= ( fStepMain / static_cast< double >( nIntervalCount ) );
-                    }
-                }
-            }
-            break;
-        case PROP_AXIS_AUTO_MAX:
-            rValue <<= (sal_Bool)( ! aScaleData.Maximum.hasValue());
-            break;
-        case PROP_AXIS_AUTO_MIN:
-            rValue <<= (sal_Bool)( ! aScaleData.Minimum.hasValue());
-            break;
-        case PROP_AXIS_AUTO_STEPMAIN:
-            rValue <<= (sal_Bool)( ! aIncData.Distance.hasValue());
-            break;
-        case PROP_AXIS_AUTO_STEPHELP:
-        {
-            uno::Sequence< chart2::SubIncrement > aSubIncs( xInc->getSubIncrements());
-            if( aSubIncs.getLength() > 0 )
-                rValue <<= (sal_Bool)( ! aSubIncs[ 0 ].IntervalCount.hasValue() );
-            break;
-        }
-
-        case PROP_AXIS_ORIGIN:
-            OSL_ASSERT( nDim < aOrigin.getLength());
-            // todo: If value is auto, we need the explicit value from the view
-            rValue = aOrigin[ nDim ];
-            break;
-        case PROP_AXIS_AUTO_ORIGIN:
-            OSL_ASSERT( nDim < aOrigin.getLength());
-            rValue <<= (sal_Bool)( ! aOrigin[ nDim ].hasValue());
-            break;
-
-        case PROP_AXIS_LOGARITHMIC:
-        {
-            uno::Reference< lang::XServiceName > xServiceName( aScaleData.Scaling, uno::UNO_QUERY );
-            rValue <<= static_cast< sal_Bool >
-                ( xServiceName.is() &&
-                  (xServiceName->getServiceName()).equals(
-                      C2U( "com.sun.star.chart2.LogarithmicScaling" )));
-            break;
         }
     }
+
+    WrappedPropertySet::setPropertyValue( rPropertyName, rValue );
+
+    if( bSetFixedHelpStepAfterwards )
+        this->setPropertyValue( C2U( "StepHelp" ), aHelpStep );
 }
 
-// --------------------------------------------------------------------------------
+// ================================================================================
 
-// ____ OPropertySet ____
-uno::Any AxisWrapper::GetDefaultValue( sal_Int32 nHandle ) const
-    throw(beans::UnknownPropertyException)
+Sequence< OUString > AxisWrapper::getSupportedServiceNames_Static()
 {
-    static helper::tPropertyValueMap aStaticDefaults;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aStaticDefaults.size() )
-    {
-        // initialize defaults
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        CharacterProperties::AddDefaultsToMap(
-            aStaticDefaults,
-            /* bIncludeStyleProperties = */ false );
-        LineProperties::AddDefaultsToMap(
-            aStaticDefaults,
-            /* bIncludeStyleProperties = */ false );
-    }
-
-    helper::tPropertyValueMap::const_iterator aFound(
-        aStaticDefaults.find( nHandle ));
-
-    if( aFound == aStaticDefaults.end())
-        return uno::Any();
-
-    return (*aFound).second;
-    // \--
-}
-
-::cppu::IPropertyArrayHelper & SAL_CALL AxisWrapper::getInfoHelper()
-{
-    return lcl_getInfoHelper();
-}
-
-
-// ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
-    AxisWrapper::getPropertySetInfo()
-    throw (uno::RuntimeException)
-{
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
-}
-
-uno::Sequence< ::rtl::OUString > AxisWrapper::getSupportedServiceNames_Static()
-{
-    uno::Sequence< ::rtl::OUString > aServices( 3 );
+    Sequence< OUString > aServices( 3 );
     aServices[ 0 ] = C2U( "com.sun.star.chart.ChartAxis" );
     aServices[ 1 ] = C2U( "com.sun.star.xml.UserDefinedAttributeSupplier" );
     aServices[ 2 ] = C2U( "com.sun.star.style.CharacterProperties" );
@@ -905,16 +599,8 @@ uno::Sequence< ::rtl::OUString > AxisWrapper::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// ================================================================================
-
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( AxisWrapper, lcl_aServiceName );
-
-// needed by MSC compiler
-using impl::AxisWrapper_Base;
-
-IMPLEMENT_FORWARD_XINTERFACE2( AxisWrapper, AxisWrapper_Base, OPropertySet )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( AxisWrapper, AxisWrapper_Base, OPropertySet )
 
 } //  namespace wrapper
 } //  namespace chart
