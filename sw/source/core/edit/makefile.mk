@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-15 12:54:04 $
+#   last change: $Author: vg $ $Date: 2007-05-22 16:27:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,10 +67,11 @@ CXXFILES = \
         edtox.cxx \
         edundo.cxx \
         edws.cxx \
-        edsect.cxx 
+        edsect.cxx
 
 EXCEPTIONSFILES=\
-        $(SLO)$/edfldexp.obj
+        $(SLO)$/edfldexp.obj\
+        $(SLO)$/edtab.obj
 
 
 SLOFILES =	\
@@ -89,11 +90,10 @@ SLOFILES =	\
         $(SLO)$/edlingu.obj \
         $(SLO)$/ednumber.obj \
         $(SLO)$/edredln.obj \
-        $(SLO)$/edtab.obj \
         $(SLO)$/edtox.obj \
         $(SLO)$/edundo.obj \
         $(SLO)$/edws.obj \
-        $(SLO)$/edsect.obj 
+        $(SLO)$/edsect.obj
 
 # --- Targets -------------------------------------------------------
 
