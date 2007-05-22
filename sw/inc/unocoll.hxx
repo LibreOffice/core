@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocoll.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 15:22:19 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:21:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,8 +218,9 @@ class SwUnoCollection
 #define SW_SERVICE_IMAP_CIRCLE                          102
 #define SW_SERVICE_IMAP_POLYGON                         103
 #define SW_SERVICE_TYPE_TEXT_GRAPHIC                    104
+#define SW_SERVICE_CHART2_DATA_PROVIDER                 105
 
-#define SW_SERVICE_LAST                 SW_SERVICE_TYPE_TEXT_GRAPHIC
+#define SW_SERVICE_LAST                 SW_SERVICE_CHART2_DATA_PROVIDER
 
 #define SW_SERVICE_INVALID          USHRT_MAX
 
