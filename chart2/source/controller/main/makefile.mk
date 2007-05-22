@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 00:36:15 $
+#   last change: $Author: vg $ $Date: 2007-05-22 18:10:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,8 +49,6 @@ ENABLE_EXCEPTIONS=	TRUE
 #object files to build and link together to lib $(SLB)$/$(TARGET).lib
 SLOFILES =  \
             $(SLO)$/ConfigurationAccess.obj	\
-            $(SLO)$/ViewSingletons.obj	\
-            $(SLO)$/ResId.obj \
             $(SLO)$/SelectionHelper.obj	\
             $(SLO)$/PositionAndSizeHelper.obj	\
             $(SLO)$/ChartWindow.obj	\
@@ -61,8 +59,20 @@ SLOFILES =  \
             $(SLO)$/ChartController_Insert.obj	\
             $(SLO)$/ChartController_TextEdit.obj \
             $(SLO)$/ChartController_Position.obj \
+            $(SLO)$/ChartController_Tools.obj \
             $(SLO)$/ChartFrameloader.obj \
-            $(SLO)$/_serviceregistration_controller.obj
+            $(SLO)$/CommandDispatchContainer.obj \
+            $(SLO)$/CommandDispatch.obj \
+            $(SLO)$/ControllerCommandDispatch.obj \
+            $(SLO)$/UndoCommandDispatch.obj \
+            $(SLO)$/DragMethod_Base.obj \
+            $(SLO)$/DragMethod_RotateDiagram.obj \
+            $(SLO)$/DragMethod_PieSegment.obj \
+            $(SLO)$/ObjectHierarchy.obj \
+            $(SLO)$/_serviceregistration_controller.obj \
+            $(SLO)$/ChartDropTargetHelper.obj \
+            $(SLO)$/StatusBarCommandDispatch.obj \
+            $(SLO)$/ChartTransferable.obj
 
 #			$(SLO)$/CommonConverters.obj \
 #			$(SLO)$/Scaling.obj	\
