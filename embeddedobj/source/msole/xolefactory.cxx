@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xolefactory.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:24:14 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:36:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,10 @@
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
 #endif
 
 #include <rtl/logfile.hxx>
@@ -139,6 +143,23 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
                                     embed::EntryInitModes::DEFAULT_INIT,
                                     aMedDescr,
                                     lObjArgs );
+
+    for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
+    {
+        if ( lObjArgs[nInd].Name.equalsAscii( "CloneFrom" ) )
+        {
+            try
+            {
+                uno::Reference < embed::XEmbeddedObject > xObj;
+                uno::Reference < embed::XEmbeddedObject > xNew( xResult, uno::UNO_QUERY );
+                lObjArgs[nInd].Value >>= xObj;
+                if ( xObj.is() )
+                    xNew->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT ) );
+            }
+            catch ( uno::Exception& ) {};
+            break;
+        }
+    }
 
     return xResult;
 }
