@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicPropertyItemConverter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:22:50 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:53:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
 #include <com/sun/star/beans/PropertyState.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 
 class SdrModel;
 
@@ -69,12 +72,14 @@ public:
         ::com::sun::star::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
         eGraphicObjectType eObjectType = FILLED_DATA_POINT );
     virtual ~GraphicPropertyItemConverter();
 
 protected:
     virtual const USHORT * GetWhichPairs() const;
-    virtual bool GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const;
+    virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const;
 
     virtual void FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const
         throw( ::com::sun::star::uno::Exception );
@@ -89,6 +94,8 @@ protected:
 private:
     eGraphicObjectType              m_eGraphicObjectType;
     SdrModel &                      m_rDrawModel;
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory >  m_xNamedPropertyTableFactory;
 };
 
 } //  namespace wrapper
