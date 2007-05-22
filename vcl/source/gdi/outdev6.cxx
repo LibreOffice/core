@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev6.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:23:21 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:43:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,6 +203,9 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
             mpMetaFile->AddAction( new MetaTransparentAction( rPolyPoly, nTransparencePercent ) );
 
         if( !IsDeviceOutputNecessary() || ( !mbLineColor && !mbFillColor ) || ImplIsRecordLayout() )
+            return;
+
+        if( !mpGraphics && !ImplGetGraphics() )
             return;
 
         VirtualDevice* pOldAlphaVDev = mpAlphaVDev;
