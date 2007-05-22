@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:57:26 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:13:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1936,6 +1936,210 @@ Point ScTabView::GetInsertPos()
     long nPosY = (long) pDoc->GetRowHeight( 0, nRow-1, nTab);
     nPosY = (long)(nPosY * HMM_PER_TWIPS);
     return Point(nPosX,nPosY);
+}
+
+Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange )
+{
+    Point aInsertPos;
+    const long nBorder = 100;   // leave 1mm for border
+    long nNeededWidth = rSize.Width() + 2 * nBorder;
+    long nNeededHeight = rSize.Height() + 2 * nBorder;
+
+    // use the active window, or lower/right if frozen (as in CalcZoom)
+    ScSplitPos eUsedPart = aViewData.GetActivePart();
+    if ( aViewData.GetHSplitMode() == SC_SPLIT_FIX )
+        eUsedPart = (WhichV(eUsedPart)==SC_SPLIT_TOP) ? SC_SPLIT_TOPRIGHT : SC_SPLIT_BOTTOMRIGHT;
+    if ( aViewData.GetVSplitMode() == SC_SPLIT_FIX )
+        eUsedPart = (WhichH(eUsedPart)==SC_SPLIT_LEFT) ? SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT;
+
+    ScGridWindow* pWin = pGridWin[eUsedPart];
+    DBG_ASSERT( pWin, "Window not found" );
+    if (pWin)
+    {
+        ActivatePart( eUsedPart );
+
+        //  get the visible rectangle in logic units
+
+        MapMode aDrawMode = pWin->GetDrawMapMode();
+        Rectangle aVisible( pWin->PixelToLogic( Rectangle( Point(0,0), pWin->GetOutputSizePixel() ), aDrawMode ) );
+
+        ScDocument* pDoc = aViewData.GetDocument();
+        SCTAB nTab = aViewData.GetTabNo();
+        BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+        long nLayoutSign = bLayoutRTL ? -1 : 1;
+
+        long nDocX = (long)( (double) pDoc->GetColOffset( MAXCOL + 1, nTab ) * HMM_PER_TWIPS ) * nLayoutSign;
+        long nDocY = (long)( (double) pDoc->GetRowOffset( MAXROW + 1, nTab ) * HMM_PER_TWIPS );
+
+        if ( aVisible.Left() * nLayoutSign > nDocX * nLayoutSign )
+            aVisible.Left() = nDocX;
+        if ( aVisible.Right() * nLayoutSign > nDocX * nLayoutSign )
+            aVisible.Right() = nDocX;
+        if ( aVisible.Top() > nDocY )
+            aVisible.Top() = nDocY;
+        if ( aVisible.Bottom() > nDocY )
+            aVisible.Bottom() = nDocY;
+
+        //  get the logic position of the selection
+
+        Rectangle aSelection = pDoc->GetMMRect( rCellRange.aStart.Col(), rCellRange.aStart.Row(),
+                                                rCellRange.aEnd.Col(), rCellRange.aEnd.Row(), nTab );
+
+        long nLeftSpace = aSelection.Left() - aVisible.Left();
+        long nRightSpace = aVisible.Right() - aSelection.Right();
+        long nTopSpace = aSelection.Top() - aVisible.Top();
+        long nBottomSpace = aVisible.Bottom() - aSelection.Bottom();
+
+        bool bFitLeft = ( nLeftSpace >= nNeededWidth );
+        bool bFitRight = ( nRightSpace >= nNeededWidth );
+
+        if ( bFitLeft || bFitRight )
+        {
+            // first preference: completely left or right of the selection
+
+            // if both fit, prefer left in RTL mode, right otherwise
+            bool bPutLeft = bFitLeft && ( bLayoutRTL || !bFitRight );
+
+            if ( bPutLeft )
+                aInsertPos.X() = aSelection.Left() - nNeededWidth;
+            else
+                aInsertPos.X() = aSelection.Right() + 1;
+
+            // align with top of selection (is moved again if it doesn't fit)
+            aInsertPos.Y() = std::max( aSelection.Top(), aVisible.Top() );
+        }
+        else if ( nTopSpace >= nNeededHeight || nBottomSpace >= nNeededHeight )
+        {
+            // second preference: completely above or below the selection
+
+            if ( nBottomSpace > nNeededHeight )             // bottom is preferred
+                aInsertPos.Y() = aSelection.Bottom() + 1;
+            else
+                aInsertPos.Y() = aSelection.Top() - nNeededHeight;
+
+            // align with (logic) left edge of selection (moved again if it doesn't fit)
+            if ( bLayoutRTL )
+                aInsertPos.X() = std::min( aSelection.Right(), aVisible.Right() ) - nNeededWidth + 1;
+            else
+                aInsertPos.X() = std::max( aSelection.Left(), aVisible.Left() );
+        }
+        else
+        {
+            // place to the (logic) right of the selection and move so it fits
+
+            if ( bLayoutRTL )
+                aInsertPos.X() = aSelection.Left() - nNeededWidth;
+            else
+                aInsertPos.X() = aSelection.Right() + 1;
+            aInsertPos.Y() = std::max( aSelection.Top(), aVisible.Top() );
+        }
+
+        // move the position if the object doesn't fit in the screen
+
+        Rectangle aCompareRect( aInsertPos, Size( nNeededWidth, nNeededHeight ) );
+        if ( aCompareRect.Right() > aVisible.Right() )
+            aInsertPos.X() -= aCompareRect.Right() - aVisible.Right();
+        if ( aCompareRect.Bottom() > aVisible.Bottom() )
+            aInsertPos.Y() -= aCompareRect.Bottom() - aVisible.Bottom();
+
+        if ( aInsertPos.X() < aVisible.Left() )
+            aInsertPos.X() = aVisible.Left();
+        if ( aInsertPos.Y() < aVisible.Top() )
+            aInsertPos.Y() = aVisible.Top();
+
+        // nNeededWidth / nNeededHeight includes all borders - move aInsertPos to the
+        // object position, inside the border
+
+        aInsertPos.X() += nBorder;
+        aInsertPos.Y() += nBorder;
+    }
+    return aInsertPos;
+}
+
+Point ScTabView::GetChartDialogPos( const Size& rDialogSize, const Rectangle& rLogicChart )
+{
+    // rDialogSize must be in pixels, rLogicChart in 1/100 mm. Return value is in pixels.
+
+    Point aRet;
+
+    // use the active window, or lower/right if frozen (as in CalcZoom)
+    ScSplitPos eUsedPart = aViewData.GetActivePart();
+    if ( aViewData.GetHSplitMode() == SC_SPLIT_FIX )
+        eUsedPart = (WhichV(eUsedPart)==SC_SPLIT_TOP) ? SC_SPLIT_TOPRIGHT : SC_SPLIT_BOTTOMRIGHT;
+    if ( aViewData.GetVSplitMode() == SC_SPLIT_FIX )
+        eUsedPart = (WhichH(eUsedPart)==SC_SPLIT_LEFT) ? SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT;
+
+    ScGridWindow* pWin = pGridWin[eUsedPart];
+    DBG_ASSERT( pWin, "Window not found" );
+    if (pWin)
+    {
+        MapMode aDrawMode = pWin->GetDrawMapMode();
+        Rectangle aObjPixel = pWin->LogicToPixel( rLogicChart, aDrawMode );
+        Rectangle aObjAbs( pWin->OutputToAbsoluteScreenPixel( aObjPixel.TopLeft() ),
+                           pWin->OutputToAbsoluteScreenPixel( aObjPixel.BottomRight() ) );
+
+        Rectangle aDesktop = pWin->GetDesktopRectPixel();
+        Size aSpace = pWin->LogicToPixel( Size( 8, 12 ), MAP_APPFONT );
+
+        ScDocument* pDoc = aViewData.GetDocument();
+        SCTAB nTab = aViewData.GetTabNo();
+        BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+
+        bool bCenterHor = false;
+
+        if ( aDesktop.Bottom() - aObjAbs.Bottom() >= rDialogSize.Height() + aSpace.Height() )
+        {
+            // first preference: below the chart
+
+            aRet.Y() = aObjAbs.Bottom() + aSpace.Height();
+            bCenterHor = true;
+        }
+        else if ( aObjAbs.Top() - aDesktop.Top() >= rDialogSize.Height() + aSpace.Height() )
+        {
+            // second preference: above the chart
+
+            aRet.Y() = aObjAbs.Top() - rDialogSize.Height() - aSpace.Height();
+            bCenterHor = true;
+        }
+        else
+        {
+            bool bFitLeft = ( aObjAbs.Left() - aDesktop.Left() >= rDialogSize.Width() + aSpace.Width() );
+            bool bFitRight = ( aDesktop.Right() - aObjAbs.Right() >= rDialogSize.Width() + aSpace.Width() );
+
+            if ( bFitLeft || bFitRight )
+            {
+                // if both fit, prefer right in RTL mode, left otherwise
+                bool bPutRight = bFitRight && ( bLayoutRTL || !bFitLeft );
+                if ( bPutRight )
+                    aRet.X() = aObjAbs.Right() + aSpace.Width();
+                else
+                    aRet.X() = aObjAbs.Left() - rDialogSize.Width() - aSpace.Width();
+
+                // center vertically
+                aRet.Y() = aObjAbs.Top() + ( aObjAbs.GetHeight() - rDialogSize.Height() ) / 2;
+            }
+            else
+            {
+                // doesn't fit on any edge - put at the bottom of the screen
+                aRet.Y() = aDesktop.Bottom() - rDialogSize.Height();
+                bCenterHor = true;
+            }
+        }
+        if ( bCenterHor )
+            aRet.X() = aObjAbs.Left() + ( aObjAbs.GetWidth() - rDialogSize.Width() ) / 2;
+
+        // limit to screen (centering might lead to invalid positions)
+        if ( aRet.X() + rDialogSize.Width() - 1 > aDesktop.Right() )
+            aRet.X() = aDesktop.Right() - rDialogSize.Width() + 1;
+        if ( aRet.X() < aDesktop.Left() )
+            aRet.X() = aDesktop.Left();
+        if ( aRet.Y() + rDialogSize.Height() - 1 > aDesktop.Bottom() )
+            aRet.Y() = aDesktop.Bottom() - rDialogSize.Height() + 1;
+        if ( aRet.Y() < aDesktop.Top() )
+            aRet.Y() = aDesktop.Top();
+    }
+
+    return aRet;
 }
 
 void ScTabView::LockModifiers( USHORT nModifiers )
