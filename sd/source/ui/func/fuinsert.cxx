@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:30:19 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:13:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,12 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
+#include <com/sun/star/drawing/FillStyle.hpp>
 #endif
 
 #include <tools/urlobj.hxx>
@@ -108,9 +114,6 @@
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
 #endif
-#ifndef _SCH_DLL_HXX //autogen
-#include <sch/schdll.hxx>
-#endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -152,6 +155,34 @@
 #endif
 
 using namespace com::sun::star;
+
+namespace
+{
+void lcl_setTransparentBackgroundAtChart(
+    const uno::Reference < embed::XEmbeddedObject > & xEmbObj )
+{
+    if( xEmbObj.is())
+    {
+        uno::Reference< chart2::XChartDocument > xChartDoc( xEmbObj->getComponent(), uno::UNO_QUERY );
+        OSL_ENSURE( xChartDoc.is(), "Trying to set chart property to non-chart OLE" );
+        if( !xChartDoc.is())
+            return;
+
+        try
+        {
+            uno::Reference< beans::XPropertySet > xPageProp( xChartDoc->getPageBackground());
+            if( xPageProp.is())
+                xPageProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FillStyle")),
+                                             uno::makeAny( drawing::FillStyle_NONE ));
+        }
+        catch( const uno::Exception & )
+        {
+            OSL_ENSURE( false, "Exception caught in lcl_setTransparentBackgroundAtChart" );
+        }
+    }
+}
+
+} // anonymous namespace
 
 namespace sd {
 
@@ -414,7 +445,6 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 if (nSlotId == SID_INSERT_DIAGRAM)
                 {
                     pOleObj->SetProgName( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarChart" ) ) );
-                    SchDLL::SetTransparentBackground( xObj, TRUE );
                 }
                 else if (nSlotId == SID_ATTR_TABLE)
                 {
@@ -432,6 +462,14 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 aSz.Height = aTmp.Height();
                 xObj->setVisualAreaSize( nAspect, aSz );
                 mpViewShell->ActivateObject(pOleObj, SVVERB_SHOW);
+
+                if (nSlotId == SID_INSERT_DIAGRAM)
+                {
+                    // note, that this call modified the chart model which
+                    // results in a change notification.  So call this after
+                    // everything else is finished.
+                    lcl_setTransparentBackgroundAtChart( xObj );
+                }
             }
         }
         else
