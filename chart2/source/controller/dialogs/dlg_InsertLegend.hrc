@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertLegend.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:08:32 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:35:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,13 +32,8 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#define DLG_LEGEND 835
-#define CBX_SHOW 1
-#define FL_LEGEND 1
-#define RBT_LEFT 2
-#define RBT_TOP 3
-#define RBT_RIGHT 4
-#define RBT_BOTTOM 5
+#include "ResourceIds.hrc"
+
 #define BTN_OK 1
 #define BTN_CANCEL 1
 #define BTN_HELP 1
