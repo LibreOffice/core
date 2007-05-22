@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 15:59:23 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:08:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,9 +75,13 @@ class SdrObject;
 class ScHintWindow;
 class ScPageBreakData;
 class ScHighlightRanges;
-class SchMemChart;
 struct ChartSelectionInfo;
 class SdrHdlList;
+
+namespace com { namespace sun { namespace star {
+namespace chart2 { namespace data {
+    struct HighlightedRange;
+}}}}}
 
 #define SPLIT_HANDLE_SIZE   3
 #define SC_FORCEMODE_NONE   0xff
@@ -353,6 +357,9 @@ public:
 
     Point           GetInsertPos();
 
+    Point           GetChartInsertPos( const Size& rSize, const ScRange& rCellRange );
+    Point           GetChartDialogPos( const Size& rDialogSize, const Rectangle& rLogicChart );
+
     void            UpdateAutoFillMark();
 
     void            HideCursor();               // nur aktiver Teil
@@ -458,7 +465,8 @@ public:
     void            AddHighlightRange( const ScRange& rRange, const Color& rColor );
     void            ClearHighlightRanges();
 
-    long            DoChartSelection( ChartSelectionInfo &rInfo, const SchMemChart& rMemChart );
+    void            DoChartSelection( const ::com::sun::star::uno::Sequence<
+                                      ::com::sun::star::chart2::data::HighlightedRange > & rHilightRanges );
 
     long            GetGridWidth( ScHSplitPos eWhich );
     long            GetGridHeight( ScVSplitPos eWhich );
