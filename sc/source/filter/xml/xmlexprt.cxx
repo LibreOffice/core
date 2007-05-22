@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.204 $
+ *  $Revision: 1.205 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:52:15 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:03:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,6 +130,9 @@
 #ifndef SC_CHGTRACK_HXX
 #include "chgtrack.hxx"
 #endif
+#ifndef SC_RANGEUTL_HXX
+#include "rangeutl.hxx"
+#endif
 #ifndef SC_CONVUNO_HXX
 #include "convuno.hxx"
 #endif
@@ -180,9 +183,6 @@
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _SCH_MEMCHRT_HXX
-#include <sch/memchrt.hxx>
 #endif
 #ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
@@ -282,6 +282,10 @@
 #include <com/sun/star/form/XFormsSupplier2.hpp>
 #endif
 
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
+#include <com/sun/star/chart2/data/XDataReceiver.hpp>
+
 #include <sfx2/objsh.hxx>
 
 //! not found in unonames.hxx
@@ -307,6 +311,30 @@
 using namespace rtl;
 using namespace com::sun::star;
 using namespace xmloff::token;
+
+//----------------------------------------------------------------------------
+
+namespace
+{
+OUString lcl_RangeSequenceToString(
+    const uno::Sequence< OUString > & rRanges,
+    const uno::Reference< chart2::data::XRangeXMLConversion > & xFormatConverter )
+{
+    OUStringBuffer aResult;
+    const sal_Int32 nMaxIndex( rRanges.getLength() - 1 );
+    const sal_Unicode cSep( sal_Char(' '));
+    for( sal_Int32 i=0; i<=nMaxIndex; ++i )
+    {
+        OUString aRange( rRanges[i] );
+        if( xFormatConverter.is())
+            aRange = xFormatConverter->convertRangeToXML( aRange );
+        aResult.append( aRange );
+        if( i < nMaxIndex )
+            aResult.append( cSep );
+    }
+    return aResult.makeStringAndClear();
+}
+} // anonymous namespace
 
 //----------------------------------------------------------------------------
 
@@ -1476,7 +1504,7 @@ void ScXMLExport::GetColumnRowHeader(sal_Bool& rHasColumnHeader, table::CellRang
         rRowHeaderRange = xPrintAreas->getTitleRows();
         rColumnHeaderRange = xPrintAreas->getTitleColumns();
         uno::Sequence< table::CellRangeAddress > aRangeList( xPrintAreas->getPrintAreas() );
-        ScXMLConverter::GetStringFromRangeList( rPrintRanges, aRangeList, pDoc );
+        ScRangeStringConverter::GetStringFromRangeList( rPrintRanges, aRangeList, pDoc );
     }
 }
 
@@ -2528,8 +2556,10 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
 void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, awt::Point* pPoint)
 {
     uno::Reference < beans::XPropertySet > xShapeProps ( xShape, uno::UNO_QUERY );
-    sal_Bool bMemChart(sal_False);
+//BM    sal_Bool bMemChart(sal_False);  // das muss man jetzt umbenennen :-)
+    bool bIsChart( false );
     rtl::OUString sPropCLSID (RTL_CONSTASCII_USTRINGPARAM("CLSID"));
+    rtl::OUString sPropModel (RTL_CONSTASCII_USTRINGPARAM("Model"));
     rtl::OUString sPersistName (RTL_CONSTASCII_USTRINGPARAM("PersistName"));
     if (xShapeProps.is())
     {
@@ -2548,48 +2578,79 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
             {
                 if ( sCLSID.equalsIgnoreAsciiCase(GetChartExport()->getChartCLSID()) )
                 {
-                    rtl::OUString sOUName;
-                    xShapeProps->getPropertyValue(sPersistName) >>= sOUName;
-                    String sName(sOUName);
-                    if (!pChartListener)
+                    // we have a chart
+                    uno::Reference< frame::XModel > xChartModel;
+                    if( ( xShapeProps->getPropertyValue( sPropModel ) >>= xChartModel ) &&
+                        xChartModel.is())
                     {
-                        String aEmptyString;
-                        ScRange aRange;
-                        pChartListener = new ScChartListener ( aEmptyString, GetDocument(), aRange );
-                    }
-                    if(pChartListener)
-                    {
-                        USHORT nIndex(0);
-                        pChartListener->SetString( sName );
-                        if ( GetDocument() && GetDocument()->GetChartListenerCollection()->Search( pChartListener, nIndex ) )
+                        uno::Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY );
+                        uno::Reference< chart2::data::XDataReceiver > xReceiver( xChartModel, uno::UNO_QUERY );
+                        if( xChartDoc.is() && xReceiver.is() &&
+                            ! xChartDoc->hasInternalDataProvider())
                         {
-                            const ScRangeListRef& rRangeListRef(((ScChartListener*)
-                                (GetDocument()->GetChartListenerCollection()->
-                                At( nIndex )))->GetRangeList());
-                            if (rRangeListRef.Is())
+                            // we have a chart that gets its data from Calc
+                            bIsChart = true;
+                            uno::Sequence< ::rtl::OUString > aRepresentations(
+                                xReceiver->getUsedRangeRepresentations());
+                            SvXMLAttributeList* pAttrList = 0;
+                            if(aRepresentations.getLength())
                             {
-                                bMemChart = sal_True;
-                                rtl::OUString sRanges;
-                                ScXMLConverter::GetStringFromRangeList(sRanges, rRangeListRef, GetDocument());
-                                SvXMLAttributeList* pAttrList = NULL;
-                                if (sRanges.getLength())
-                                {
-                                    pAttrList = new SvXMLAttributeList();
-                                    pAttrList->AddAttribute(
-                                        GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken(XML_NOTIFY_ON_UPDATE_OF_RANGES) ), sRanges );
-                                }
-                                GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint, pAttrList);
+                                // add the ranges used by the chart to the shape
+                                // element to be able to start listening after
+                                // load (when the chart is not yet loaded)
+                                uno::Reference< chart2::data::XRangeXMLConversion > xRangeConverter( xChartDoc->getDataProvider(), uno::UNO_QUERY );
+                                ::rtl::OUString sRanges( lcl_RangeSequenceToString( aRepresentations, xRangeConverter ));
+                                pAttrList = new SvXMLAttributeList();
+                                pAttrList->AddAttribute(
+                                    GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken(XML_NOTIFY_ON_UPDATE_OF_RANGES) ), sRanges );
                             }
-                        }
-                        else
-                        {
-                            bMemChart = sal_True;
-                            SvXMLAttributeList* pAttrList = new SvXMLAttributeList();
-                            pAttrList->AddAttribute(
-                                GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken(XML_NOTIFY_ON_UPDATE_OF_RANGES) ), rtl::OUString() );
                             GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint, pAttrList);
                         }
                     }
+
+//BM                    rtl::OUString sOUName;
+//BM                    xShapeProps->getPropertyValue(sPersistName) >>= sOUName;
+//BM                    String sName(sOUName);
+//BM                    if (!pChartListener)
+//BM                    {
+//BM                        String aEmptyString;
+//BM                        ScRange aRange;
+//BM                        pChartListener = new ScChartListener ( aEmptyString, GetDocument(), aRange );
+//BM                    }
+//BM                    if(pChartListener)
+//BM                    {
+//BM                        USHORT nIndex(0);
+//BM                        pChartListener->SetString( sName );
+//BM                        if ( GetDocument() && GetDocument()->GetChartListenerCollection()->Search( pChartListener, nIndex ) )
+//BM                        {
+//BM                            const ScRangeListRef& rRangeListRef(((ScChartListener*)
+//BM                                (GetDocument()->GetChartListenerCollection()->
+//BM                                At( nIndex )))->GetRangeList());
+//BM                            if (rRangeListRef.Is())
+//BM                            {
+//BM                                bMemChart = sal_True;
+//BM                                rtl::OUString sRanges;
+//BM                                ScRangeStringConverter::GetStringFromRangeList(sRanges, rRangeListRef, GetDocument());
+//BM                                 SvXMLAttributeList* pAttrList = NULL;
+//BM                                if (sRanges.getLength())
+//BM                                 {
+//BM                                     pAttrList = new SvXMLAttributeList();
+//BM                                     pAttrList->AddAttribute(
+//BM                                         GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken(XML_NOTIFY_ON_UPDATE_OF_RANGES) ), sRanges );
+//BM                                 }
+//BM                                GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint, pAttrList);
+//BM                            }
+//BM                        }
+//BM                        else
+//BM                        {
+//BM                            bMemChart = sal_True;
+//BM                             SvXMLAttributeList* pAttrList = new SvXMLAttributeList();
+//BM                             pAttrList->AddAttribute(
+//BM                                 GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken(XML_NOTIFY_ON_UPDATE_OF_RANGES) ), rtl::OUString() );
+//BM                            GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint, pAttrList);
+//BM                        }
+//BM                    }
+
 /*                  SchMemChart* pMemChart = pDoc->FindChartData(sName);
                     if (pMemChart && pMemChart->GetSeriesAddresses().getLength())
                     {
@@ -2603,7 +2664,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
             }
         }
     }
-    if (!bMemChart)
+    if (!bIsChart)
         GetShapeExport()->exportShape(xShape, SEF_DEFAULT, pPoint);
     IncrementProgressBar(sal_False);
 }
@@ -2635,7 +2696,7 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                     Rectangle aEndRec(pDoc->GetMMRect(aItr->aEndAddress.Col(), aItr->aEndAddress.Row(),
                         aItr->aEndAddress.Col(), aItr->aEndAddress.Row(), aItr->aEndAddress.Tab()));
                     rtl::OUString sEndAddress;
-                    ScXMLConverter::GetStringFromAddress(sEndAddress, aItr->aEndAddress, pDoc);
+                    ScRangeStringConverter::GetStringFromAddress(sEndAddress, aItr->aEndAddress, pDoc);
                     AddAttribute(XML_NAMESPACE_TABLE, XML_END_CELL_ADDRESS, sEndAddress);
                     if (bNegativePage)
                         aEndPoint.X = -aEndRec.Right();
@@ -2865,7 +2926,7 @@ void ScXMLExport::WriteDetective( const ScMyCell& rMyCell )
                 {
                     if( (aObjItr->eObjType == SC_DETOBJ_ARROW) || (aObjItr->eObjType == SC_DETOBJ_TOOTHERTAB))
                     {
-                        ScXMLConverter::GetStringFromRange( sString, aObjItr->aSourceRange, pDoc );
+                        ScRangeStringConverter::GetStringFromRange( sString, aObjItr->aSourceRange, pDoc );
                         AddAttribute( XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, sString );
                     }
                     ScXMLConverter::GetStringFromDetObjType( sString, aObjItr->eObjType );
@@ -3226,7 +3287,7 @@ void ScXMLExport::WriteScenario()
         AddAttribute(XML_NAMESPACE_TABLE, XML_IS_ACTIVE, aBuffer.makeStringAndClear());
         const ScRangeList* pRangeList = pDoc->GetScenarioRanges(static_cast<SCTAB>(nCurrentTable));
         rtl::OUString sRangeListStr;
-        ScXMLConverter::GetStringFromRangeList( sRangeListStr, pRangeList, pDoc );
+        ScRangeStringConverter::GetStringFromRangeList( sRangeListStr, pRangeList, pDoc );
         AddAttribute(XML_NAMESPACE_TABLE, XML_SCENARIO_RANGES, sRangeListStr);
         if (sComment.Len())
             AddAttribute(XML_NAMESPACE_TABLE, XML_COMMENT, rtl::OUString(sComment));
@@ -3268,10 +3329,10 @@ void ScXMLExport::WriteLabelRanges( const uno::Reference< container::XIndexAcces
         {
             OUString sRangeStr;
             table::CellRangeAddress aCellRange( xRange->getLabelArea() );
-            ScXMLConverter::GetStringFromRange( sRangeStr, aCellRange, pDoc );
+            ScRangeStringConverter::GetStringFromRange( sRangeStr, aCellRange, pDoc );
             AddAttribute( XML_NAMESPACE_TABLE, XML_LABEL_CELL_RANGE_ADDRESS, sRangeStr );
             aCellRange = xRange->getDataArea();
-            ScXMLConverter::GetStringFromRange( sRangeStr, aCellRange, pDoc );
+            ScRangeStringConverter::GetStringFromRange( sRangeStr, aCellRange, pDoc );
             AddAttribute( XML_NAMESPACE_TABLE, XML_DATA_CELL_RANGE_ADDRESS, sRangeStr );
             AddAttribute( XML_NAMESPACE_TABLE, XML_ORIENTATION, bColumn ? XML_COLUMN : XML_ROW );
             SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE, XML_LABEL_RANGE, sal_True, sal_True );
@@ -3311,8 +3372,8 @@ void ScXMLExport::WriteNamedExpressions(const com::sun::star::uno::Reference <co
                                 AddAttribute(sAttrName, sOUName);
 
                                 OUString sOUBaseCellAddress;
-                                ScXMLConverter::GetStringFromAddress( sOUBaseCellAddress,
-                                    xNamedRange->getReferencePosition(), pDoc, sal_False, SCA_ABS_3D );
+                                ScRangeStringConverter::GetStringFromAddress( sOUBaseCellAddress,
+                                    xNamedRange->getReferencePosition(), pDoc, ' ', sal_False, SCA_ABS_3D );
                                 AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, sOUBaseCellAddress);
 
                                 sal_uInt16 nRangeIndex;
@@ -3383,10 +3444,10 @@ void ScXMLExport::WriteConsolidation()
 
             sStrData = OUString();
             for( sal_Int32 nIndex = 0; nIndex < pCons->nDataAreaCount; ++nIndex )
-                ScXMLConverter::GetStringFromArea( sStrData, *pCons->ppDataAreas[ nIndex ], pDoc, sal_True );
+                ScRangeStringConverter::GetStringFromArea( sStrData, *pCons->ppDataAreas[ nIndex ], pDoc, sal_True );
             AddAttribute( XML_NAMESPACE_TABLE, XML_SOURCE_CELL_RANGE_ADDRESSES, sStrData );
 
-            ScXMLConverter::GetStringFromAddress( sStrData, ScAddress( pCons->nCol, pCons->nRow, pCons->nTab ), pDoc );
+            ScRangeStringConverter::GetStringFromAddress( sStrData, ScAddress( pCons->nCol, pCons->nRow, pCons->nTab ), pDoc );
             AddAttribute( XML_NAMESPACE_TABLE, XML_TARGET_CELL_ADDRESS, sStrData );
 
             if( pCons->bByCol && !pCons->bByRow )
@@ -3456,7 +3517,7 @@ void ScXMLExport::GetChangeTrackViewSettings(uno::Sequence<beans::PropertyValue>
                 pChangeProps[SC_SHOW_CHANGES_BY_RANGES].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowChangesByRanges"));
                 pChangeProps[SC_SHOW_CHANGES_BY_RANGES].Value <<= pViewSettings->HasRange();
                 rtl::OUString sRangeList;
-                ScXMLConverter::GetStringFromRangeList(sRangeList, &(pViewSettings->GetTheRangeList()), GetDocument());
+                ScRangeStringConverter::GetStringFromRangeList(sRangeList, &(pViewSettings->GetTheRangeList()), GetDocument());
                 pChangeProps[SC_SHOW_CHANGES_BY_RANGES_LIST].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowChangesByRangesList"));
                 pChangeProps[SC_SHOW_CHANGES_BY_RANGES_LIST].Value <<= sRangeList;
 
