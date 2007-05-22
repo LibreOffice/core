@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSheetConditionalEntries.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:19:12 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:11:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,12 +73,15 @@ published interface XSheetConditionalEntries: com::sun::star::container::XIndexA
         <dt><atom>string</atom> Formula2</dt>
         <dd>contains the second value or formula for the operation (used with
         <const>ConditionOperator::BETWEEN</const> or
-        <const>ConditionOperator::NOT_BERWEEN</const> operations).</dd>
+        <const>ConditionOperator::NOT_BETWEEN</const> operations).</dd>
 
         <dt><type scope="com::sun::star::table">CellAddress</type>
         SourcePosition</dt>
         <dd>contains the base address for relative cell references in formulas.
         </dd>
+
+        <dt><atom>string</atom> StyleName</dt>
+        <dd>contains the name of the cell style used by this condition.</dd>
         </dl>
 
         @see com::sun::star::sheet::TableConditionalFormat
