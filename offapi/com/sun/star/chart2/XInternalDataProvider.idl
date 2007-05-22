@@ -1,0 +1,84 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XInternalDataProvider.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:03:23 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_XInternalDataProvider_idl
+#define com_sun_star_chart2_XInternalDataProvider_idl
+
+#include <com/sun/star/chart2/data/XDataProvider.idl>
+#include <com/sun/star/chart2/data/XDataSequence.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+/** An internal DataProvider that has more access to data that a plain
+    DataProvider.
+ */
+interface XInternalDataProvider  : com::sun::star::chart2::data::XDataProvider
+{
+    boolean         hasDataByRangeRepresentation( [in] string aRange );
+    sequence< any > getDataByRangeRepresentation( [in] string aRange );
+    void            setDataByRangeRepresentation( [in] string aRange, [in] sequence< any > aNewData );
+
+    void insertSequence( [in] long nAfterIndex );
+    void deleteSequence( [in] long nAtIndex );
+
+    void insertDataPointForAllSequences( [in] long nAfterIndex );
+    void deleteDataPointForAllSequences( [in] long nAtIndex );
+    void swapDataPointWithNextOneForAllSequences( [in] long nAtIndex );
+
+    /** If range representations of data sequences change due to
+        internal structural changes, they must be registered at the
+        data provider.
+
+        <p>Sequences that are directly retrieved via the methods of
+        the XDataProvider interface are already registered.  If a
+        labeled data sequence was created by cloning an existing one,
+        it has to be explicitly registered via this method.</p>
+     */
+    void registerDataSequenceForChanges( [in] data::XDataSequence xSeq );
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+
+#endif
