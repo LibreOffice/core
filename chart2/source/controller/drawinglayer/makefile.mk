@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 00:20:40 $
+#   last change: $Author: vg $ $Date: 2007-05-22 17:51:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,8 +47,7 @@ ENABLE_EXCEPTIONS=	TRUE
 # --- export library -------------------------------------------------
 
 #object files to build and link together to lib $(SLB)$/$(TARGET).lib
-SLOFILES=   	$(SLO)$/DrawModelWrapper.obj \
-                $(SLO)$/DrawViewWrapper.obj \
+SLOFILES=   	$(SLO)$/DrawViewWrapper.obj \
                 $(SLO)$/ViewElementListProvider.obj
 
 # --- Targets -----------------------------------------------------------------
