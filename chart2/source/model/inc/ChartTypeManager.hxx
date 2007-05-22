@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartTypeManager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:51:04 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:28:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,19 +67,11 @@
 namespace chart
 {
 
-namespace impl
-{
-typedef ::cppu::WeakImplHelper2<
-    ::com::sun::star::lang::XMultiServiceFactory,
-//     ::com::sun::star::lang::XMultiComponentFactory,
-    ::com::sun::star::chart2::XChartTypeManager >
-    ChartTypeManager_Base;
-}
-
 class ChartTypeManager :
-    public helper::MutexContainer,
-    public impl::ChartTypeManager_Base,
-    public ::property::OPropertySet
+        public ::cppu::WeakImplHelper2<
+        ::com::sun::star::lang::XMultiServiceFactory,
+//     ::com::sun::star::lang::XMultiComponentFactory,
+        ::com::sun::star::chart2::XChartTypeManager >
 {
 public:
     explicit ChartTypeManager(
@@ -108,32 +100,8 @@ protected:
         ::rtl::OUString > SAL_CALL getAvailableServiceNames()
         throw (::com::sun::star::uno::RuntimeException);
 
-    // ____ OPropertySet ____
-    virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(::com::sun::star::beans::UnknownPropertyException);
-
-    // ____ OPropertySet ____
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-
-    // ____ XPropertySet ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
-        getPropertySetInfo()
-        throw (::com::sun::star::uno::RuntimeException);
-
-//  virtual sal_Bool SAL_CALL convertFastPropertyValue
-//         ( ::com::sun::star::uno::Any & rConvertedValue,
-//           ::com::sun::star::uno::Any & rOldValue,
-//           sal_Int32 nHandle,
-//           const ::com::sun::star::uno::Any& rValue )
-//      throw (::com::sun::star::lang::IllegalArgumentException);
-
     // ____ XChartTypeManager ____
     // currently empty
-
-    /// merge XInterface implementations
-     DECLARE_XINTERFACE()
-    /// merge XTypeProvider implementations
-     DECLARE_XTYPEPROVIDER()
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
