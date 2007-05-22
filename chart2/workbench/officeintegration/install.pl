@@ -38,8 +38,6 @@ if( $OSNAME eq "MSWin32" ) {
     $COPYCMD = "cp";
 }
 
-print "$OSNAME\n";
-
 # determine office path according to .sversionrc. Note: this only looks for a
 # prefix 'StarOffice 8', such that 'StarOffice 8 dbg=...' is still found
 # if no 'StarOffice 8' was found, 'OpenOffice.org 2' is searched for
@@ -146,6 +144,3 @@ foreach $res (@files)
         symlink "$res", "$copied_res";
     }
 }
-
-print "installing filter...\n";
-print `$COPYCMD $PRJ_PATH${PATHSEP}workbench${PATHSEP}officeintegration${PATHSEP}TypeDetection.xcu $USER_PATH${PATHSEP}registry${PATHSEP}data${PATHSEP}org${PATHSEP}openoffice${PATHSEP}Office`;
