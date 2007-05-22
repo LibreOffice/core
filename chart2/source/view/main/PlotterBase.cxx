@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PlotterBase.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:37:10 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:24:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,15 +67,17 @@ PlotterBase::PlotterBase( sal_Int32 nDimensionCount )
         , m_xFinalTarget(NULL)
         , m_xShapeFactory(NULL)
         , m_pShapeFactory(NULL)
+        , m_aCID()
         , m_nDimension(nDimensionCount)
         , m_pPosHelper(NULL)
 {
 }
 
     void SAL_CALL PlotterBase
-::init(  const uno::Reference< drawing::XShapes >& xLogicTarget
+::initPlotter(  const uno::Reference< drawing::XShapes >& xLogicTarget
        , const uno::Reference< drawing::XShapes >& xFinalTarget
-       , const uno::Reference< lang::XMultiServiceFactory >& xShapeFactory )
+       , const uno::Reference< lang::XMultiServiceFactory >& xShapeFactory
+       , const rtl::OUString& rCID )
             throw (uno::RuntimeException)
 {
     DBG_ASSERT(xLogicTarget.is()&&xFinalTarget.is()&&xShapeFactory.is(),"no proper initialization parameters");
@@ -84,6 +86,7 @@ PlotterBase::PlotterBase( sal_Int32 nDimensionCount )
     m_xFinalTarget  = xFinalTarget;
     m_xShapeFactory = xShapeFactory;
     m_pShapeFactory = new ShapeFactory(xShapeFactory);
+    m_aCID = rCID;
 }
 
 PlotterBase::~PlotterBase()
@@ -91,11 +94,12 @@ PlotterBase::~PlotterBase()
     delete m_pShapeFactory;
 }
 
-void SAL_CALL PlotterBase::setScales( const uno::Sequence< ExplicitScaleData >& rScales )
+void SAL_CALL PlotterBase::setScales( const uno::Sequence< ExplicitScaleData >& rScales
+                                     , sal_Bool bSwapXAndYAxis )
                             throw (uno::RuntimeException)
 {
     DBG_ASSERT(m_nDimension<=rScales.getLength(),"Dimension of Plotter does not fit two dimension of given scale sequence");
-    m_pPosHelper->setScales( rScales );
+    m_pPosHelper->setScales( rScales, bSwapXAndYAxis );
 }
 
 
@@ -126,95 +130,23 @@ uno::Reference< drawing::XShapes > PlotterBase::createGroupShape(
     }
 }
 
-/*
-//-----------------------------------------------------------------
-// chart2::XPlotter
-//-----------------------------------------------------------------
-
-    ::rtl::OUString SAL_CALL PlotterBase
-::getCoordinateSystemTypeID()
-    throw (uno::RuntimeException)
+bool PlotterBase::isValidPosition( const drawing::Position3D& rPos )
 {
-    return CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME;
+    if( ::rtl::math::isNan(rPos.PositionX) )
+        return false;
+    if( ::rtl::math::isNan(rPos.PositionY) )
+        return false;
+    if( ::rtl::math::isNan(rPos.PositionZ) )
+        return false;
+    if( ::rtl::math::isInf(rPos.PositionX) )
+        return false;
+    if( ::rtl::math::isInf(rPos.PositionY) )
+        return false;
+    if( ::rtl::math::isInf(rPos.PositionZ) )
+        return false;
+    return true;
 }
 
-    void SAL_CALL PlotterBase
-::setScales( const uno::Sequence< ExplicitScaleData >& rScales ) throw (uno::RuntimeException)
-{
-}
-    void SAL_CALL PlotterBase
-::setTransformation( const uno::Reference< XTransformation >& xTransformationToLogicTarget, const uno::Reference< XTransformation >& xTransformationToFinalPage ) throw (uno::RuntimeException)
-{
-}
-*/
-
-//e.g. for Rectangle
-/*
-uno::Reference< drawing::XShape > PlotterBase::createPartialPointShape(
-                                    CooPoint + series dependent properties ...(create a special struct for each chart type)
-                                    , uno::Reference< XThinCoordinateSystem > xCoo
-                                    , sal_Bool bIsInBreak
-                                    , PointStyle* pStyle )
-{
-    //create one here; use scaling and transformation to logic target
-
-    //maybe do not show anything in the break //maybe read the behavior out of the configuration
-    //if(bIsInBreak)
-    //  return NULL;
-
-    uno::Reference< drawing::XShape > xNewPartialPointShape(
-        m_xShapeFactory->createInstance(
-        rtl::OUString::createFromAscii( "com.sun.star.drawing.RectangleShape" ) )
-        , uno::UNO_QUERY );
-    //set size and position
-    {
-        //
-    }
-    if(pStyle||bIsInBreak)
-    {
-        //set style properties if any for a single point
-        uno::Reference< beans::XPropertySet > xProp( xNewPartialPointShape, uno::UNO_QUERY );
-        xProp->setPropertyValue( ... );
-
-        //set special properties if point in break (e.g. additional transparency ...)
-    }
-}
-
-//e.g. for PlotterBase in 2 dim cartesian coordinates:
-sal_Bool ShapeFactory::isShown( const Sequence< ExplicitScaleData >& rScales, const CooPoint& rP, double dLogicalWidthBeforeScaling )
-{
-    ASSERT(rScales.getLength()==2)
-    double dMin_x = rScales[0].Minimum;
-    double dMax_x = rScales[0].Maximum;
-    double dMin_y = rScales[1].Minimum;
-    double dMax_y = rScales[1].Maximum;
-
-    //we know that we have cartesian geometry
-    Rectangle aSysRect( rScales[0].Minimum, rScales[1].Maximum, rScales[0].Maximum, rScales[1].Minimum );
-    Rectangle aPointRect( dLogicalWidthBeforeScaling )
-    if(rP)
-}
-
-//-----------------------------------------------------------------------------
-
-class FatCoordinateSystem
-{
-public:
-    //XCoordinateSystemType getType();
-    Sequence<XThinCoordinateSystem> getCoordinateSystems();
-}
-
-class ThinCoordinateSystem
-{
-private:
-
-public:
-    sal_Bool        isBreak();
-    Sequence< ExplicitScaleData > getScales();//SubScales without beak
-
-
-}
-*/
 //.............................................................................
 } //namespace chart
 //.............................................................................
