@@ -1,0 +1,92 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: RelativeSize.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 14:57:01 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_RelativeSize_idl
+#define com_sun_star_chart2_RelativeSize_idl
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+/** Gives a position relative to some size defined by other means.
+    Values from 0 to 1 cover the entire reference rectangle.  Values
+    may also be greater than one, meaning a bigger size than the
+    reference size.  Negative values are not allowed.
+ */
+struct RelativeSize
+{
+    /** The extension in the primary direction.  The direction is
+        defined by the object using this point.
+
+        <p>Typically, the direction is determined by an
+        <type>Orientation</type>.  Another typical use would be the
+        direction of a given orientation-angle.</p>
+
+        <p>The values are relative to the page or an object.  Values
+        between 0 and 1 span the complete bounding rectangle of the
+        page/object.</p>
+
+        <p>For a western <type>Orientation</type> this is the
+        width.</p>
+     */
+    double       Primary;
+
+    /** The extension in the secondary direction.  The direction is
+        defined by the object using this point.
+
+        <p>Typically, the direction is determined by an
+        <type>Orientation</type>.  Another typical use would be the
+        direction perpendicular to a given orientation-angle.</p>
+
+        <p>The values are relative to the page or an object.  Values
+        between 0 and 1 span the complete bounding rectangle of the
+        page/object.</p>
+
+        <p>For a western <type>Orientation</type> this is the
+        height.</p>
+     */
+    double       Secondary;
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif
