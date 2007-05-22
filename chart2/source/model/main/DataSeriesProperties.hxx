@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeriesProperties.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:57:18 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:35:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,16 +52,16 @@ class DataSeriesProperties
 public:
     enum
     {
-        PROP_DATASERIES_DATA_POINT_STYLE = FAST_PROPERTY_ID_START_DATA_SERIES,
-        PROP_DATASERIES_ATTRIBUTED_DATA_POINTS,
-        PROP_DATASERIES_IDENTIFIER
+        PROP_DATASERIES_ATTRIBUTED_DATA_POINTS = FAST_PROPERTY_ID_START_DATA_SERIES,
+        PROP_DATASERIES_STACKING_DIRECTION,
+        PROP_DATASERIES_VARY_COLORS_BY_POINT,
+        PROP_DATASERIES_ATTACHED_AXIS_INDEX
     };
 
     static void AddPropertiesToVector(
-        ::std::vector< ::com::sun::star::beans::Property > & rOutProperties,
-        bool bIncludeStyleProperties = false );
+        ::std::vector< ::com::sun::star::beans::Property > & rOutProperties );
 
-    static void AddDefaultsToMap( helper::tPropertyValueMap & rOutMap, bool bIncludeStyleProperties = false );
+    static void AddDefaultsToMap( tPropertyValueMap & rOutMap );
 
 private:
     // not implemented
