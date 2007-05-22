@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Wall.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:15:46 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:42:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,10 @@
 #include "precompiled_chart2.hxx"
 #include "Wall.hxx"
 #include "macros.hxx"
-#include "algohelper.hxx"
 #include "LineProperties.hxx"
 #include "FillProperties.hxx"
 #include "UserDefinedProperties.hxx"
+#include "ContainerHelper.hxx"
 
 #ifndef CHART_PROPERTYHELPER_HXX
 #include "PropertyHelper.hxx"
@@ -57,9 +57,6 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_HATCH_HPP_
 #include <com/sun/star/drawing/Hatch.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_TRANSPARENCYSTYLE_HPP_
-#include <com/sun/star/chart2/TransparencyStyle.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -94,7 +91,7 @@ static const ::rtl::OUString lcl_aServiceName(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.Wall" ));
 
 void lcl_AddDefaultsToMap(
-    ::chart::helper::tPropertyValueMap & rOutMap )
+    ::chart::tPropertyValueMap & rOutMap )
 {
     // override other defaults
     rOutMap[ ::chart::LineProperties::PROP_LINE_STYLE ] =
@@ -111,18 +108,16 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
     {
         // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
-        ::chart::LineProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ true );
-        ::chart::FillProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ true );
+        ::chart::LineProperties::AddPropertiesToVector( aProperties );
+        ::chart::FillProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
         // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::helper::PropertyNameLess() );
+                     ::chart::PropertyNameLess() );
 
         // transfer result to static Sequence
-        aPropSeq = ::chart::helper::VectorToSequence( aProperties );
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
     return aPropSeq;
@@ -145,11 +140,24 @@ namespace chart
 {
 
 Wall::Wall() :
-        ::property::OPropertySet( m_aMutex )
+        ::property::OPropertySet( m_aMutex ),
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+{}
+
+Wall::Wall( const Wall & rOther ) :
+        ::property::OPropertySet( rOther, m_aMutex ),
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
 {}
 
 Wall::~Wall()
 {}
+
+// ____ XCloneable ____
+uno::Reference< util::XCloneable > SAL_CALL Wall::createClone()
+    throw (uno::RuntimeException)
+{
+    return uno::Reference< util::XCloneable >( new Wall( *this ));
+}
 
 // ================================================================================
 
@@ -157,19 +165,15 @@ Wall::~Wall()
 uno::Any Wall::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    static helper::tPropertyValueMap aStaticDefaults;
+    static tPropertyValueMap aStaticDefaults;
 
     // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aStaticDefaults.size() )
     {
         // initialize defaults
-        LineProperties::AddDefaultsToMap(
-            aStaticDefaults,
-            /* bIncludeStyleProperties = */ true );
-        FillProperties::AddDefaultsToMap(
-            aStaticDefaults,
-            /* bIncludeStyleProperties = */ true );
+        LineProperties::AddDefaultsToMap( aStaticDefaults );
+        FillProperties::AddDefaultsToMap( aStaticDefaults );
 
         // initialize defaults
         // Note: this should be last to override defaults of the previously
@@ -177,7 +181,7 @@ uno::Any Wall::GetDefaultValue( sal_Int32 nHandle ) const
         lcl_AddDefaultsToMap( aStaticDefaults );
     }
 
-    helper::tPropertyValueMap::const_iterator aFound(
+    tPropertyValueMap::const_iterator aFound(
         aStaticDefaults.find( nHandle ));
 
     if( aFound == aStaticDefaults.end())
@@ -212,21 +216,58 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
     // \--
 }
 
-// ____ XInterface ____
-uno::Any SAL_CALL Wall::queryInterface( const uno::Type& aType )
+// ____ XModifyBroadcaster ____
+void SAL_CALL Wall::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
-    return ::cppu::OWeakObject::queryInterface( aType );
+    try
+    {
+        uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
+        xBroadcaster->addModifyListener( aListener );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
 }
 
-void SAL_CALL Wall::acquire() throw ()
+void SAL_CALL Wall::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+    throw (uno::RuntimeException)
 {
-    ::cppu::OWeakObject::acquire();
+    try
+    {
+        uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
+        xBroadcaster->removeModifyListener( aListener );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
 }
 
-void SAL_CALL Wall::release() throw ()
+// ____ XModifyListener ____
+void SAL_CALL Wall::modified( const lang::EventObject& aEvent )
+    throw (uno::RuntimeException)
 {
-    ::cppu::OWeakObject::release();
+    m_xModifyEventForwarder->modified( aEvent );
+}
+
+// ____ XEventListener (base of XModifyListener) ____
+void SAL_CALL Wall::disposing( const lang::EventObject& Source )
+    throw (uno::RuntimeException)
+{
+    // nothing
+}
+
+// ____ OPropertySet ____
+void Wall::firePropertyChangeEvent()
+{
+    fireModifyEvent();
+}
+
+void Wall::fireModifyEvent()
+{
+    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
 // ================================================================================
@@ -241,5 +282,9 @@ uno::Sequence< ::rtl::OUString > Wall::getSupportedServiceNames_Static()
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( Wall, lcl_aServiceName );
+
+using impl::Wall_Base;
+
+IMPLEMENT_FORWARD_XINTERFACE2( Wall, Wall_Base, ::property::OPropertySet )
 
 } //  namespace chart
