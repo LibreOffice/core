@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 13:49:28 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:40:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -700,7 +700,10 @@ IMPL_LINK( SwView, TimeoutHdl, Timer *, EMPTYARG )
     _CheckReadonlyState();
     _CheckReadonlySelection();
 
+    BOOL bOldUndo = pWrtShell->DoesUndo();
+    pWrtShell->DoUndo( FALSE );
     SelectShell();
+    pWrtShell->DoUndo( bOldUndo );
     bAttrChgNotified = sal_False;
     GetViewImpl()->GetUNOObject_Impl()->NotifySelChanged();
 
@@ -1857,7 +1860,6 @@ sal_uInt16  SwView::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
     pVFrame->SetChildWindow( SwInputChild::GetChildWindowId(), sal_False );
     if( pVFrame->GetDispatcher()->IsLocked() )
         pVFrame->GetDispatcher()->Lock(sal_False);
-    pVFrame->SetChildWindow( SwInsertChartChild::GetChildWindowId(), sal_False );
 
     sal_uInt16 nRet;
     if ( pFormShell &&
