@@ -1,0 +1,154 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XFastPropertyState.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:03:04 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_beans_XFastPropertyState_idl__
+#define __com_sun_star_beans_XFastPropertyState_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyState_idl__
+#include <com/sun/star/beans/PropertyState.idl>
+#endif
+
+#ifndef __com_sun_star_beans_UnknownPropertyException_idl__
+#include <com/sun/star/beans/UnknownPropertyException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_WrappedTargetException_idl__
+#include <com/sun/star/lang/WrappedTargetException.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module beans {
+
+//=============================================================================
+
+/** makes it possible to query information about the state of
+    one or more properties.
+
+    <p>The state contains the information if:</p>
+    <ul>
+        <li>a value is available or void</li>
+        <li>the value is stored in the object itself, or if a default value is to be used</li>
+        <li>and if the value cannot be determined, due to ambiguity
+            (multi selection with multiple values).</li>
+    </ul>
+ */
+interface XFastPropertyState: ::com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** @returns
+                the state of the property.
+
+        @param  aPropertyName
+            specifies the name of the property.
+
+        @throws UnknownPropertyException
+            if the property does not exist.
+     */
+    ::com::sun::star::beans::PropertyState getFastPropertyState( [in] long nHandle )
+            raises( ::com::sun::star::beans::UnknownPropertyException );
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
+            a sequence of the states of the properties which are specified
+                by their names.
+
+        <p>The order of the states is correlating to the order of the
+        given property names. </p>
+
+        @param aPropertyNames
+            contains the sequence of property names.
+
+        @throws UnknownPropertyException
+            if one property does not exist.
+     */
+    sequence< ::com::sun::star::beans::PropertyState > getFastPropertyStates(
+            [in] sequence< long > aHandles )
+        raises( ::com::sun::star::beans::UnknownPropertyException );
+
+    //-------------------------------------------------------------------------
+
+    /** Sets the property to default value.
+
+        <p>The value depends on the implementation of this interface.
+        If it is a bound property, you must change the value before
+        the change events are fired.  If it is a constrained property, you
+        must fire the vetoable event before you change the property value.
+        </p>
+
+        @param aPropertyname
+            specifies the name of the property.
+
+        @throws UnknownPropertyException
+            if the property does not exist.
+     */
+    void setFastPropertyToDefault( [in] long nHandle )
+            raises( ::com::sun::star::beans::UnknownPropertyException );
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
+            the default value of the property with the name PropertyName.
+
+        <p>If no default exists, is not known or is void,
+        then the return type is <type>void</type>.
+
+        @param aPropertyName
+            specifies the name of the property.
+
+        @throws UnknownPropertyException
+            if the property does not exist.
+
+        @throws  ::com::sun::star::lang::WrappedTargetException
+            if the implementation has an internal reason for the exception.
+            In this case the original exception is wrapped into that
+            <type scope="::com::sun::star::lang">WrappedTargetException</type>.
+     */
+    any getFastPropertyDefault( [in] long nHandle )
+            raises( ::com::sun::star::beans::UnknownPropertyException,
+                    ::com::sun::star::lang::WrappedTargetException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
