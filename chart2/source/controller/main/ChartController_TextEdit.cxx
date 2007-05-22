@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_TextEdit.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:38:34 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:04:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,10 @@
 #include "DrawViewWrapper.hxx"
 #include "ChartWindow.hxx"
 #include "TitleHelper.hxx"
-#include "chartview/ObjectIdentifier.hxx"
+#include "ObjectIdentifier.hxx"
 #include "macros.hxx"
+#include "ControllerLockGuard.hxx"
+#include "AccessibleTextHelper.hxx"
 
 #include <svx/svdotext.hxx>
 
@@ -63,6 +65,13 @@
 #endif
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
@@ -95,6 +104,7 @@ void ChartController::StartTextEdit()
     if(!pTextObj)
         return;
 
+    m_aUndoManager.preAction( m_aModel->getModel());
     SdrOutliner* pOutliner = m_pDrawViewWrapper->getOutliner();
     //pOutliner->SetRefDevice(m_pChartWindow);
     //pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)pStyleSheetPool);
@@ -142,15 +152,17 @@ bool ChartController::EndTextEdit()
                             pOutliner->GetParagraph( 0 ),
                             pOutliner->GetParagraphCount() );
         uno::Reference< beans::XPropertySet > xPropSet =
-            ObjectIdentifier::getObjectPropertySet( m_aSelectedObjectCID, getModel() );
+            ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), getModel() );
+
+        // lock controllers till end of block
+        ControllerLockGuard aCLGuard( m_aModel->getModel());
 
         //Paragraph* pPara =
         TitleHelper::setCompleteString( aString, uno::Reference<
             ::com::sun::star::chart2::XTitle >::query( xPropSet ), m_xCC );
         try
         {
-            //need to rebuild to react on changed size of title
-            impl_rebuildView();
+            m_aUndoManager.postAction( C2U("Edit Text") );
         }
         catch( uno::RuntimeException& e)
         {
@@ -165,9 +177,14 @@ bool ChartController::EndTextEdit()
 
 void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex());
+
+    if( m_pDrawViewWrapper && !m_pDrawViewWrapper->IsTextEdit() )
+        this->StartTextEdit();
+
     SvxAbstractDialogFactory * pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT( pFact, "No dialog factory" );
-    AbstractSvxCharacterMap * pDlg = pFact->CreateSvxCharacterMap( NULL,  RID_SVXDLG_CHARMAP, FALSE );
+    AbstractSvxCharacterMap * pDlg = pFact->CreateSvxCharacterMap( m_pChartWindow,  RID_SVXDLG_CHARMAP, FALSE );
     DBG_ASSERT( pDlg, "Couldn't create SvxCharacterMap dialog" );
 
     //set fixed current font
@@ -212,6 +229,16 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
 
     delete pDlg;
 }
+
+uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+    ChartController::impl_createAccessibleTextContext()
+{
+    uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > xResult(
+        new AccessibleTextHelper( m_pDrawViewWrapper ));
+
+    return xResult;
+}
+
 
 //.............................................................................
 } //namespace chart
