@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeriesPointWrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:55:49 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:17:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,40 @@
 #include "precompiled_chart2.hxx"
 #include "DataSeriesPointWrapper.hxx"
 #include "macros.hxx"
-#include "InlineContainer.hxx"
-#include "algohelper.hxx"
 #include "RegressionCurveHelper.hxx"
+#include "Chart2ModelContact.hxx"
+#include "ChartTypeHelper.hxx"
+#include "DiagramHelper.hxx"
+#include "ContainerHelper.hxx"
+#include "ChartModelHelper.hxx"
+#include "LineProperties.hxx"
+#include "FillProperties.hxx"
+#include "CharacterProperties.hxx"
+#include "UserDefinedProperties.hxx"
+#include "WrappedCharacterHeightProperty.hxx"
+#include "WrappedProperty.hxx"
+#include "WrappedIgnoreProperty.hxx"
+#include "WrappedStatisticProperties.hxx"
+#include "WrappedSymbolProperties.hxx"
+#include "WrappedDataCaptionProperties.hxx"
+#include "WrappedSeriesAreaOrLineProperty.hxx"
+
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
+#endif
+// header for define DBG_ASSERT
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
+#include <algorithm>
+
+#ifndef INCLUDED_COMPHELPER_INLINE_CONTAINER_HXX
+#include <comphelper/InlineContainer.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -47,41 +78,30 @@
 #ifndef _COM_SUN_STAR_CHART_CHARTAXISASSIGN_HPP_
 #include <com/sun/star/chart/ChartAxisAssign.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART_CHARTDATACAPTION_HPP_
-#include <com/sun/star/chart/ChartDataCaption.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATAPOINTLABEL_HPP_
-#include <com/sun/star/chart2/DataPointLabel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_TRANSPARENCYSTYLE_HPP_
-#include <com/sun/star/chart2/TransparencyStyle.hpp>
-#endif
-
 #ifndef _COM_SUN_STAR_CHART_CHARTERRORCATEGORY_HPP_
 #include <com/sun/star/chart/ChartErrorCategory.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART_CHARTERRORINDICATORTYPE_HPP_
-#include <com/sun/star/chart/ChartErrorIndicatorType.hpp>
+#ifndef _COM_SUN_STAR_CHART_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart/XChartDocument.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART_CHARTREGRESSIONCURVETYPE_HPP_
-#include <com/sun/star/chart/ChartRegressionCurveType.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
+#include <com/sun/star/drawing/FillStyle.hpp>
 #endif
-
-#include "LineProperties.hxx"
-#include "FillProperties.hxx"
-#include "CharacterProperties.hxx"
-#include "UserDefinedProperties.hxx"
-
-#include <algorithm>
-
-#ifndef _RTL_USTRBUF_HXX_
-#include <rtl/ustrbuf.hxx>
+#ifndef _COM_SUN_STAR_DRAWING_LINEJOINT_HPP_
+#include <com/sun/star/drawing/LineJoint.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
+#include <com/sun/star/drawing/LineStyle.hpp>
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::chart::wrapper;
+
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
+using ::com::sun::star::uno::Any;
 using ::osl::MutexGuard;
-using ::property::OPropertySet;
 
 namespace
 {
@@ -90,56 +110,41 @@ static const ::rtl::OUString lcl_aServiceName(
 
 enum
 {
-    PROP_SERIES_ATTACHED_AXIS,
-    PROP_SERIES_DATA_CAPTION,
-
-    PROP_SERIES_STAT_BEGIN,
-    PROP_SERIES_CONST_ERROR_LOW = PROP_SERIES_STAT_BEGIN,
-    PROP_SERIES_CONST_ERROR_HIGH,
-    PROP_SERIES_MEAN_VALUE,
-    PROP_SERIES_ERROR_CATEGORY,
-    PROP_SERIES_PERCENT_ERROR,
-    PROP_SERIES_ERROR_MARGIN,
-    PROP_SERIES_ERROR_INDICATOR,
-    PROP_SERIES_REGRESSION_CURVES,
-    PROP_SERIES_STAT_END = PROP_SERIES_REGRESSION_CURVES
+    //data point  properties
+    PROP_SERIES_DATAPOINT_SOLIDTYPE,
+    PROP_SERIES_DATAPOINT_SEGMENT_OFFSET,
+    PROP_SERIES_DATAPOINT_PERCENT_DIAGONAL,
+    //other series properties
+    PROP_SERIES_ATTACHED_AXIS
 };
 
-typedef ::std::map< sal_Int32, ::rtl::OUString > lcl_PropertyMapType;
-typedef ::comphelper::MakeMap< sal_Int32, ::rtl::OUString > lcl_MakePropertyMapType;
-
-lcl_PropertyMapType & lcl_GetPropertyMapLine()
+void lcl_AddPropertiesToVector_PointProperties(
+    ::std::vector< Property > & rOutProperties )
 {
-    static lcl_PropertyMapType aMap(
-        lcl_MakePropertyMapType
-        ( ::chart::LineProperties::PROP_LINE_TRANSPARENCE,      C2U( "Transparency" ))
-        ( ::chart::LineProperties::PROP_LINE_COLOR,             C2U( "Color" ))
-        ( ::chart::LineProperties::PROP_LINE_STYLE,             C2U( "LineStyle" ))
-        );
+    //service chart::Chart3DBarProperties
+    rOutProperties.push_back(
+        Property( C2U( "SolidType" ),
+                  PROP_SERIES_DATAPOINT_SOLIDTYPE,
+                  ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    return aMap;
-};
+    rOutProperties.push_back(
+        Property( C2U( "SegmentOffset" ),
+                  PROP_SERIES_DATAPOINT_SEGMENT_OFFSET,
+                  ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-lcl_PropertyMapType & lcl_GetPropertyMapFilled()
-{
-    static lcl_PropertyMapType aMap(
-        lcl_MakePropertyMapType
-        // Note: FillStyle has same name but must be mapped (ids differ)
-        ( ::chart::FillProperties::PROP_FILL_STYLE,             C2U( "FillStyle" ))
-        ( ::chart::FillProperties::PROP_FILL_COLOR,             C2U( "Color" ) )
-        ( ::chart::FillProperties::PROP_FILL_TRANSPARENCE,      C2U( "Transparency" ))
-        ( ::chart::FillProperties::PROP_FILL_GRADIENT,          C2U( "Gradient" ))
-        ( ::chart::FillProperties::PROP_FILL_HATCH,             C2U( "Hatch" ))
+    rOutProperties.push_back(
+        Property( C2U( "D3DPercentDiagonal" ),
+                  PROP_SERIES_DATAPOINT_PERCENT_DIAGONAL,
+                  ::getCppuType( reinterpret_cast< sal_Int16 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+}
 
-        ( ::chart::LineProperties::PROP_LINE_STYLE,             C2U( "BorderStyle" ))
-        ( ::chart::LineProperties::PROP_LINE_COLOR,             C2U( "BorderColor" ))
-        ( ::chart::LineProperties::PROP_LINE_WIDTH,             C2U( "BorderWidth" ))
-        );
-
-    return aMap;
-};
-
-void lcl_AddPropertiesToVector(
+void lcl_AddPropertiesToVector_SeriesOnly(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
@@ -148,124 +153,357 @@ void lcl_AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-
-    rOutProperties.push_back(
-        Property( C2U( "DataCaption" ),
-                  PROP_SERIES_DATA_CAPTION,
-                  ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-
-    // Statistics
-    rOutProperties.push_back(
-        Property( C2U( "ConstantErrorLow" ),
-                  PROP_SERIES_CONST_ERROR_LOW,
-                  ::getCppuType( reinterpret_cast< double * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( C2U( "ConstantErrorHigh" ),
-                  PROP_SERIES_CONST_ERROR_HIGH,
-                  ::getCppuType( reinterpret_cast< double * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( C2U( "MeanValue" ),
-                  PROP_SERIES_MEAN_VALUE,
-                  ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( C2U( "ErrorCategory" ),
-                  PROP_SERIES_ERROR_CATEGORY,
-                  ::getCppuType( reinterpret_cast< ::com::sun::star::chart::ChartErrorCategory * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( C2U( "PercentageError" ),
-                  PROP_SERIES_PERCENT_ERROR,
-                  ::getCppuType( reinterpret_cast< double * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( C2U( "ErrorMargin" ),
-                  PROP_SERIES_ERROR_MARGIN,
-                  ::getCppuType( reinterpret_cast< double * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( C2U( "ErrorIndicator" ),
-                  PROP_SERIES_ERROR_INDICATOR,
-                  ::getCppuType( reinterpret_cast< ::com::sun::star::chart::ChartErrorIndicatorType * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( C2U( "RegressionCurves" ),
-                  PROP_SERIES_REGRESSION_CURVES,
-                  ::getCppuType( reinterpret_cast< ::com::sun::star::chart::ChartRegressionCurveType * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-void lcl_AddDefaultsToMap(
-    ::chart::helper::tPropertyValueMap & rOutMap )
+const uno::Sequence< Property > & lcl_GetPropertySequence( DataSeriesPointWrapper::eType eType )
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_SERIES_ATTACHED_AXIS ));
-    rOutMap[ PROP_SERIES_ATTACHED_AXIS ] =
-        uno::makeAny( sal_Int32( ::com::sun::star::chart::ChartAxisAssign::PRIMARY_Y ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_SERIES_DATA_CAPTION ));
-    rOutMap[ PROP_SERIES_DATA_CAPTION ] =
-        uno::makeAny( sal_Int32( ::com::sun::star::chart::ChartDataCaption::NONE ) );
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_SERIES_CONST_ERROR_LOW ));
-    rOutMap[ PROP_SERIES_CONST_ERROR_LOW ] =
-        uno::makeAny( double( 0.0 ));
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_SERIES_CONST_ERROR_HIGH ));
-    rOutMap[ PROP_SERIES_CONST_ERROR_HIGH ] =
-        uno::makeAny( double( 0.0 ));
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_SERIES_MEAN_VALUE ));
-    rOutMap[ PROP_SERIES_MEAN_VALUE ] =
-        uno::makeAny( sal_False );
-}
-
-const uno::Sequence< Property > & lcl_GetPropertySequence()
-{
-    static uno::Sequence< Property > aPropSeq;
+    static uno::Sequence< Property > aSeriesPropSeq;
+    static uno::Sequence< Property > aPointPropSeq;
 
     // /--
     MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+    uno::Sequence< Property >& rPropSeq =
+        (eType == DataSeriesPointWrapper::DATA_SERIES) ? aSeriesPropSeq : aPointPropSeq;
+    if( 0 == rPropSeq.getLength() )
     {
         // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-        ::chart::LineProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ false );
-        ::chart::FillProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ false );
-        ::chart::CharacterProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ false );
+
+        lcl_AddPropertiesToVector_PointProperties( aProperties );
+        if( eType == DataSeriesPointWrapper::DATA_SERIES )
+        {
+            lcl_AddPropertiesToVector_SeriesOnly( aProperties );
+            WrappedStatisticProperties::addProperties( aProperties );
+        }
+        WrappedSymbolProperties::addProperties( aProperties ); //for series and  points
+        WrappedDataCaptionProperties::addProperties( aProperties ); //for series and  points
+
+        ::chart::FillProperties::AddPropertiesToVector( aProperties );
+        ::chart::LineProperties::AddPropertiesToVector( aProperties );
+        ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
         // and sort them for access via bsearch
-        ::std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::helper::PropertyNameLess() );
+        ::std::sort( aProperties.begin(), aProperties.end(), ::chart::PropertyNameLess() );
 
         // transfer result to static Sequence
-        aPropSeq = ::chart::helper::VectorToSequence( aProperties );
+        rPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
-    return aPropSeq;
+    return rPropSeq;
 }
 
-::cppu::IPropertyArrayHelper & lcl_getInfoHelper()
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+
+//PROP_SERIES_ATTACHED_AXIS
+class WrappedAttachedAxisProperty : public ::chart::WrappedProperty
 {
-    static ::cppu::OPropertyArrayHelper aArrayHelper(
-        lcl_GetPropertySequence(),
-        /* bSorted = */ sal_True );
+public:
+    WrappedAttachedAxisProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    virtual ~WrappedAttachedAxisProperty();
 
-    return aArrayHelper;
+    virtual void setPropertyValue( const Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
+                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    virtual Any getPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
+                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    virtual Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+protected:
+    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+};
+
+WrappedAttachedAxisProperty::WrappedAttachedAxisProperty(
+                ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+                : WrappedProperty(C2U("Axis"),rtl::OUString())
+            , m_spChart2ModelContact( spChart2ModelContact )
+{
 }
+
+WrappedAttachedAxisProperty::~WrappedAttachedAxisProperty()
+{
+}
+
+Any WrappedAttachedAxisProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    Any aRet;
+    aRet <<= ::com::sun::star::chart::ChartAxisAssign::PRIMARY_Y;
+    return aRet;
+}
+
+Any WrappedAttachedAxisProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    Any aRet;
+
+    uno::Reference< chart2::XDataSeries > xDataSeries( xInnerPropertySet, uno::UNO_QUERY );
+    bool bAttachedToMainAxis = ::chart::DiagramHelper::isSeriesAttachedToMainAxis( xDataSeries );
+    if( bAttachedToMainAxis )
+        aRet <<= ::com::sun::star::chart::ChartAxisAssign::PRIMARY_Y;
+    else
+        aRet <<= ::com::sun::star::chart::ChartAxisAssign::SECONDARY_Y;
+    return aRet;
+}
+
+void WrappedAttachedAxisProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+                throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    uno::Reference< chart2::XDataSeries > xDataSeries( xInnerPropertySet, uno::UNO_QUERY );
+
+    sal_Int32 nChartAxisAssign = ::com::sun::star::chart::ChartAxisAssign::PRIMARY_Y;
+    if( ! (rOuterValue >>= nChartAxisAssign) )
+        throw lang::IllegalArgumentException( C2U("Property Axis requires value of type sal_Int32"), 0, 0 );
+
+    bool bNewAttachedToMainAxis = nChartAxisAssign == ::com::sun::star::chart::ChartAxisAssign::PRIMARY_Y;
+    bool bOldAttachedToMainAxis = ::chart::DiagramHelper::isSeriesAttachedToMainAxis( xDataSeries );
+
+    if( bNewAttachedToMainAxis != bOldAttachedToMainAxis)
+    {
+        Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+        if( xDiagram.is() )
+            ::chart::DiagramHelper::attachSeriesToAxis( bNewAttachedToMainAxis, xDataSeries, xDiagram, m_spChart2ModelContact->m_xContext );
+    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+class WrappedSegmentOffsetProperty : public ::chart::WrappedProperty
+{
+public:
+    WrappedSegmentOffsetProperty();
+    virtual ~WrappedSegmentOffsetProperty();
+
+protected:
+    virtual Any convertInnerToOuterValue( const Any& rInnerValue ) const;
+    virtual Any convertOuterToInnerValue( const Any& rOuterValue ) const;
+};
+
+WrappedSegmentOffsetProperty::WrappedSegmentOffsetProperty() :
+        WrappedProperty( C2U( "SegmentOffset" ), C2U( "Offset" ) )
+{}
+
+WrappedSegmentOffsetProperty::~WrappedSegmentOffsetProperty()
+{}
+
+Any WrappedSegmentOffsetProperty::convertInnerToOuterValue( const Any& rInnerValue ) const
+{
+    // convert new double offset to former integer segment-offset
+    double fOffset;
+    Any aResult( rInnerValue );
+
+    if( rInnerValue >>= fOffset )
+        aResult <<= static_cast< sal_Int32 >( ::rtl::math::round( fOffset * 100.0 ));
+
+    return aResult;
+}
+
+Any WrappedSegmentOffsetProperty::convertOuterToInnerValue( const Any& rOuterValue ) const
+{
+    // convert former integer segment-offset to new double offset
+    sal_Int32 nOffset;
+    Any aResult( rOuterValue );
+
+    if( rOuterValue >>= nOffset )
+        aResult <<= (static_cast< double >( nOffset ) / 100.0);
+
+    return aResult;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+class WrappedLineColorProperty : public WrappedSeriesAreaOrLineProperty
+{
+public:
+    WrappedLineColorProperty( DataSeriesPointWrapper* pDataSeriesPointWrapper );
+    virtual ~WrappedLineColorProperty();
+
+    virtual void setPropertyValue( const Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
+                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    virtual Any getPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
+                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    virtual void setPropertyToDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::beans::PropertyState getPropertyState( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+
+protected:
+    DataSeriesPointWrapper* m_pDataSeriesPointWrapper;
+    mutable Any             m_aDefaultValue;
+    mutable Any             m_aOuterValue;
+};
+
+WrappedLineColorProperty::WrappedLineColorProperty(
+                DataSeriesPointWrapper* pDataSeriesPointWrapper )
+                : WrappedSeriesAreaOrLineProperty(C2U( "LineColor" ), C2U( "BorderColor" ), C2U( "Color" ), pDataSeriesPointWrapper )
+                , m_pDataSeriesPointWrapper( pDataSeriesPointWrapper )
+                , m_aDefaultValue(uno::makeAny(sal_Int32( 0x0099ccff )))  // blue 8
+                , m_aOuterValue(m_aDefaultValue)
+{
+}
+
+WrappedLineColorProperty::~WrappedLineColorProperty()
+{
+}
+
+Any WrappedLineColorProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    if( m_pDataSeriesPointWrapper && m_pDataSeriesPointWrapper->isLinesForbidden() )
+        return m_aOuterValue;
+    else
+        return WrappedSeriesAreaOrLineProperty::getPropertyValue( xInnerPropertySet );
+}
+
+void WrappedLineColorProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+                throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    if( m_pDataSeriesPointWrapper && m_pDataSeriesPointWrapper->isLinesForbidden() )
+        m_aOuterValue = rOuterValue;
+    else
+        WrappedSeriesAreaOrLineProperty::setPropertyValue( rOuterValue, xInnerPropertySet );
+}
+
+void WrappedLineColorProperty::setPropertyToDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+{
+    if( m_pDataSeriesPointWrapper && m_pDataSeriesPointWrapper->isLinesForbidden() )
+        m_aOuterValue = m_aDefaultValue;
+    else
+        WrappedSeriesAreaOrLineProperty::setPropertyToDefault( xInnerPropertyState );
+}
+
+Any WrappedLineColorProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    if( m_pDataSeriesPointWrapper && !m_pDataSeriesPointWrapper->isSupportingAreaProperties() )
+        return m_aDefaultValue;
+    else
+        return WrappedSeriesAreaOrLineProperty::getPropertyDefault( xInnerPropertyState );
+}
+
+beans::PropertyState WrappedLineColorProperty::getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (beans::UnknownPropertyException, uno::RuntimeException)
+{
+    if( m_pDataSeriesPointWrapper && !m_pDataSeriesPointWrapper->isSupportingAreaProperties() )
+    {
+        beans::PropertyState aState = beans::PropertyState_DIRECT_VALUE;
+        if( m_pDataSeriesPointWrapper->isLinesForbidden() && m_aOuterValue == m_aDefaultValue )
+            aState = beans::PropertyState_DEFAULT_VALUE;
+        return aState;
+    }
+    else
+        return WrappedSeriesAreaOrLineProperty::getPropertyState( xInnerPropertyState );
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+class WrappedLineStyleProperty : public WrappedSeriesAreaOrLineProperty
+{
+public:
+    WrappedLineStyleProperty( DataSeriesPointWrapper* pDataSeriesPointWrapper );
+    virtual ~WrappedLineStyleProperty();
+
+    virtual void setPropertyValue( const Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
+                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    virtual Any getPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
+                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    virtual void setPropertyToDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::beans::PropertyState getPropertyState( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+
+protected:
+    DataSeriesPointWrapper* m_pDataSeriesPointWrapper;
+    mutable Any             m_aDefaultValue;
+    mutable Any             m_aOuterValue;
+};
+
+WrappedLineStyleProperty::WrappedLineStyleProperty(
+                DataSeriesPointWrapper* pDataSeriesPointWrapper )
+                : WrappedSeriesAreaOrLineProperty(C2U( "LineStyle" ), C2U( "BorderStyle" ), C2U( "LineStyle" ), pDataSeriesPointWrapper )
+                , m_pDataSeriesPointWrapper( pDataSeriesPointWrapper )
+                , m_aDefaultValue(uno::makeAny(drawing::LineStyle_SOLID))
+                , m_aOuterValue(m_aDefaultValue)
+{
+}
+
+WrappedLineStyleProperty::~WrappedLineStyleProperty()
+{
+}
+
+Any WrappedLineStyleProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    if( m_pDataSeriesPointWrapper && m_pDataSeriesPointWrapper->isLinesForbidden() )
+        return m_aOuterValue;
+    else
+        return WrappedSeriesAreaOrLineProperty::getPropertyValue( xInnerPropertySet );
+}
+
+void WrappedLineStyleProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+                throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    Any aNewValue(rOuterValue);
+    if( m_pDataSeriesPointWrapper && m_pDataSeriesPointWrapper->isLinesForbidden() )
+    {
+        m_aOuterValue = rOuterValue;
+        aNewValue = uno::makeAny(drawing::LineStyle_NONE);
+    }
+    WrappedSeriesAreaOrLineProperty::setPropertyValue( aNewValue, xInnerPropertySet );
+}
+
+void WrappedLineStyleProperty::setPropertyToDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+{
+    if( m_pDataSeriesPointWrapper && m_pDataSeriesPointWrapper->isLinesForbidden() )
+        m_aOuterValue = m_aDefaultValue;
+    else
+        WrappedSeriesAreaOrLineProperty::setPropertyToDefault( xInnerPropertyState );
+}
+
+Any WrappedLineStyleProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    if( m_pDataSeriesPointWrapper && !m_pDataSeriesPointWrapper->isSupportingAreaProperties() )
+        return m_aDefaultValue;
+    else
+        return WrappedSeriesAreaOrLineProperty::getPropertyDefault( xInnerPropertyState );
+}
+
+beans::PropertyState WrappedLineStyleProperty::getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (beans::UnknownPropertyException, uno::RuntimeException)
+{
+    if( m_pDataSeriesPointWrapper && !m_pDataSeriesPointWrapper->isSupportingAreaProperties() )
+    {
+        beans::PropertyState aState = beans::PropertyState_DIRECT_VALUE;
+        if( m_aOuterValue == m_aDefaultValue )
+            aState = beans::PropertyState_DEFAULT_VALUE;
+        return aState;
+    }
+    else
+        return WrappedSeriesAreaOrLineProperty::getPropertyState( xInnerPropertyState );
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
 } // anonymous namespace
 
@@ -277,38 +515,69 @@ namespace wrapper
 {
 
 DataSeriesPointWrapper::DataSeriesPointWrapper(
-    eParentType eType,
-    const uno::Reference< beans::XPropertySet > & xParentProperties,
-    const uno::Reference< uno::XComponentContext > & xContext,
-    ::osl::Mutex & _rMutex ) :
-        OPropertySet( _rMutex ),
-        m_rMutex( _rMutex ),
-        m_xContext( xContext ),
-        m_aEventListenerContainer( _rMutex ),
-        m_eParentType( eType ),
-        m_xParentProperties( xParentProperties ),
-        m_xParentFastProperties( xParentProperties, uno::UNO_QUERY )
-{}
+            ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+        : m_spChart2ModelContact( spChart2ModelContact )
+        , m_aEventListenerContainer( m_aMutex )
+        , m_eType( DATA_SERIES )
+        , m_nSeriesIndexInNewAPI( -1 )
+        , m_nPointIndex( -1 )
+        , m_xDataSeries(0)
+{
+    //need initialize call afterwards
+}
+
+void SAL_CALL DataSeriesPointWrapper::initialize( const uno::Sequence< uno::Any >& aArguments )
+                throw ( uno::Exception, uno::RuntimeException)
+{
+    DBG_ASSERT(aArguments.getLength() >= 1,"need at least 1 argument to initialize the DataSeriesPointWrapper: series reference + optional datapoint index");
+
+    m_nSeriesIndexInNewAPI = -1;//ignored in this case
+    m_nPointIndex = -1;
+    if( aArguments.getLength() >= 1 )
+    {
+        aArguments[0] >>= m_xDataSeries;
+        if( aArguments.getLength() >= 2 )
+            aArguments[1] >>= m_nPointIndex;
+    }
+
+    if( !m_xDataSeries.is() )
+        throw uno::Exception(
+            C2U( "DataSeries index invalid" ), static_cast< ::cppu::OWeakObject * >( this ));
+
+    //todo: check upper border of point index
+
+    if( m_nPointIndex >= 0 )
+        m_eType = DATA_POINT;
+    else
+        m_eType = DATA_SERIES;
+}
+
+DataSeriesPointWrapper::DataSeriesPointWrapper( eType eType
+            , sal_Int32 nSeriesIndexInNewAPI
+            , sal_Int32 nPointIndex //ignored for series
+            , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+        : m_spChart2ModelContact( spChart2ModelContact )
+        , m_aEventListenerContainer( m_aMutex )
+        , m_eType( DATA_SERIES )
+        , m_nSeriesIndexInNewAPI( nSeriesIndexInNewAPI )
+        , m_nPointIndex( 0 )
+        , m_xDataSeries(0)
+{
+}
 
 DataSeriesPointWrapper::~DataSeriesPointWrapper()
-{}
-
-::osl::Mutex & DataSeriesPointWrapper::GetMutex() const
 {
-    return m_rMutex;
 }
 
 // ____ XComponent ____
 void SAL_CALL DataSeriesPointWrapper::dispose()
     throw (uno::RuntimeException)
 {
-    m_aEventListenerContainer.disposeAndClear( lang::EventObject( *this ) );
+    uno::Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
+    m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
 
-    // /--
-    MutexGuard aGuard( GetMutex());
-    m_xParentProperties = NULL;
-    m_xParentFastProperties = NULL;
-    // \--
+    m_xDataSeries.clear();
+    clearWrappedPropertySet();
 }
 
 void SAL_CALL DataSeriesPointWrapper::addEventListener(
@@ -331,282 +600,319 @@ void SAL_CALL DataSeriesPointWrapper::disposing( const lang::EventObject& Source
 {
 }
 
+// ================================================================================
 
-sal_Bool SAL_CALL DataSeriesPointWrapper::convertFastPropertyValue
-    ( uno::Any & rConvertedValue,
-      uno::Any & rOldValue,
-      sal_Int32 nHandle,
-      const uno::Any& rValue )
-    throw (lang::IllegalArgumentException)
+bool DataSeriesPointWrapper::isSupportingAreaProperties()
 {
-    getFastPropertyValue( rOldValue, nHandle );
+    Reference< chart2::XDataSeries > xSeries( this->getDataSeries() );
+    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ) );
+    sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
 
-    switch( nHandle )
-    {
-        case PROP_SERIES_DATA_CAPTION:
-        {
-            sal_Int32 nCaptionStyle;
-            if( rValue >>= nCaptionStyle )
-            {
-                chart2::DataPointLabel aConvertedLabel;
-
-                if( nCaptionStyle & ::com::sun::star::chart::ChartDataCaption::VALUE )
-                    aConvertedLabel.ShowNumber = true;
-                if( nCaptionStyle & ::com::sun::star::chart::ChartDataCaption::PERCENT )
-                    aConvertedLabel.ShowNumberInPercent = true;
-                if( nCaptionStyle & ::com::sun::star::chart::ChartDataCaption::TEXT )
-                    aConvertedLabel.ShowCategoryName = true;
-                if( nCaptionStyle & ::com::sun::star::chart::ChartDataCaption::SYMBOL )
-                    aConvertedLabel.ShowLegendSymbol = true;
-
-                rConvertedValue <<= aConvertedLabel;
-            }
-            else
-                return sal_False;
-        }
-        break;
-
-        default:
-            rConvertedValue = rValue;
-            break;
-    }
-
-    return sal_True;
+    return ChartTypeHelper::isSupportingAreaProperties( xChartType, nDimensionCount );
 }
 
-void SAL_CALL DataSeriesPointWrapper::getFastPropertyValue
-    ( uno::Any& rValue,
-      sal_Int32 nHandle ) const
+bool DataSeriesPointWrapper::isLinesForbidden()
 {
-    // /--
-    MutexGuard aGuard( GetMutex());
-    if( ! m_xParentProperties.is())
-        return;
-
-    if( nHandle >= PROP_SERIES_STAT_BEGIN &&
-        nHandle <= PROP_SERIES_STAT_END )
+    sal_Bool bLinesForbidden = false;
+    Reference< ::com::sun::star::chart::XChartDocument > xChartDocument = Reference< ::com::sun::star::chart::XChartDocument >( m_spChart2ModelContact->getChartModel(), uno::UNO_QUERY );
+    if( xChartDocument.is() )
     {
-        getStatisticsPropertyValue( rValue, nHandle );
-        return;
+        Reference< beans::XPropertySet > xDiaProp( xChartDocument->getDiagram(), uno::UNO_QUERY );
+        if( xDiaProp.is() )
+        {
+            xDiaProp->getPropertyValue( C2U("Lines") ) >>= bLinesForbidden;
+            bLinesForbidden = !bLinesForbidden;
+        }
     }
-
-    lcl_PropertyMapType & rMap( lcl_GetPropertyMapFilled());
-    lcl_PropertyMapType::const_iterator aIt( rMap.find( nHandle ));
-    if( aIt == rMap.end())
-    {
-        OPropertySet::getFastPropertyValue( rValue, nHandle );
-    }
-    else
-    {
-        rValue = m_xParentProperties->getPropertyValue( (*aIt).second );
-    }
-    // \--
+    return bLinesForbidden;
 }
 
-void SAL_CALL DataSeriesPointWrapper::setFastPropertyValue_NoBroadcast(
-    sal_Int32 nHandle, const uno::Any& rValue )
-    throw (uno::Exception)
+Reference< chart2::XDataSeries > DataSeriesPointWrapper::getDataSeries()
 {
-    // /--
-    MutexGuard aGuard( GetMutex());
-
-    if( m_xParentProperties.is())
+    Reference< chart2::XDataSeries > xSeries( m_xDataSeries );
+    if( !xSeries.is() )
     {
-        if( nHandle >= PROP_SERIES_STAT_BEGIN &&
-            nHandle <= PROP_SERIES_STAT_END )
-        {
-            setStatisticsPropertyValue_NoBroadcast( nHandle, rValue );
-            return;
-        }
+        Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+        ::std::vector< uno::Reference< chart2::XDataSeries > > aSeriesList(
+            ::chart::DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
 
-        lcl_PropertyMapType & rMap( lcl_GetPropertyMapFilled());
-        lcl_PropertyMapType::const_iterator aIt( rMap.find( nHandle ));
-
-        if( aIt != rMap.end())
-        {
-            // found in map
-            m_xParentProperties->setPropertyValue( (*aIt).second, rValue );
-        }
-        else
-        {
-            // try same handle for FastPropertySet.  Caution!  Works for global
-            // properties like FillProperties, LineProperties and
-            // CharacterProperties
-            if( m_xParentFastProperties.is() && nHandle > FAST_PROPERTY_ID_START )
-                m_xParentFastProperties->setFastPropertyValue( nHandle, rValue );
-            else
-            {
-                // get name for property handle
-                try
-                {
-                    ::rtl::OUString aPropName;
-                    getInfoHelper().fillPropertyMembersByHandle( & aPropName, NULL, nHandle );
-                    m_xParentProperties->setPropertyValue( aPropName, rValue );
-                }
-                catch( beans::UnknownPropertyException ex )
-                {
-                    OPropertySet::setFastPropertyValue_NoBroadcast( nHandle, rValue );
-                }
-            }
-
-            if( nHandle == FillProperties::PROP_FILL_TRANSPARENCE )
-            {
-                m_xParentProperties->setPropertyValue(
-                    C2U( "TransparencyStyle" ),
-                    uno::makeAny( chart2::TransparencyStyle_LINEAR ));
-            }
-        }
+        if( m_nSeriesIndexInNewAPI >= 0 && m_nSeriesIndexInNewAPI < static_cast<sal_Int32>(aSeriesList.size()) )
+            xSeries = aSeriesList[m_nSeriesIndexInNewAPI];
     }
-    else
-        OPropertySet::setFastPropertyValue_NoBroadcast( nHandle, rValue );
-    // \--
+
+    return xSeries;
 }
 
-void SAL_CALL DataSeriesPointWrapper::getStatisticsPropertyValue
-    ( uno::Any& rValue,
-      sal_Int32 nHandle ) const
+Reference< beans::XPropertySet > DataSeriesPointWrapper::getDataPointProperties()
 {
-    OSL_ASSERT( m_xParentProperties.is());
+    Reference< beans::XPropertySet > xPointProp;
 
-    if( nHandle == PROP_SERIES_REGRESSION_CURVES ||
-        nHandle == PROP_SERIES_MEAN_VALUE )
+    Reference< chart2::XDataSeries > xSeries( this->getDataSeries() );
+
+    // may throw an IllegalArgumentException
+    if( xSeries.is() )
+        xPointProp = xSeries->getDataPointByIndex( m_nPointIndex );
+
+    return xPointProp;
+}
+
+// ================================================================================
+
+//ReferenceSizePropertyProvider
+void DataSeriesPointWrapper::setCurrentSizeAsReference()
+{
+    /*
+    Reference< beans::XPropertySet > xProp( this->getInnerPropertySet(), uno::UNO_QUERY );
+    if( xProp.is() )
+        xProp->setPropertyValue( C2U("ReferenceDiagramSize"), uno::makeAny(
+                            m_spChart2ModelContact->GetDiagramSize() ));
+    */
+}
+Any DataSeriesPointWrapper::getReferenceSize()
+{
+    Any aRet;
+    /*
+    Reference< beans::XPropertySet > xProp( this->getInnerPropertySet(), uno::UNO_QUERY );
+    if( xProp.is() )
+        aRet = xProp->getPropertyValue( C2U("ReferenceDiagramSize") );
+    */
+    return aRet;
+}
+awt::Size DataSeriesPointWrapper::getCurrentSizeForReference()
+{
+    return m_spChart2ModelContact->GetDiagramSize();
+}
+
+// ================================================================================
+
+// WrappedPropertySet
+
+//XPropertyState
+beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const ::rtl::OUString& rPropertyName )
+                                    throw (beans::UnknownPropertyException, uno::RuntimeException)
+{
+    beans::PropertyState aState( beans::PropertyState_DIRECT_VALUE );
+
+    if( m_eType == DATA_SERIES )
+        aState = WrappedPropertySet::getPropertyState( rPropertyName );
+    else
     {
-        uno::Reference< chart2::XRegressionCurveContainer > xRegCont( m_xParentProperties, uno::UNO_QUERY );
-        if( xRegCont.is())
+        if( rPropertyName.equals(C2U("FillColor")) )
         {
-            if( nHandle == PROP_SERIES_MEAN_VALUE )
-                rValue <<= RegressionCurveHelper::hasMeanValueLine( xRegCont );
-            else
+            Reference< beans::XPropertySet > xSeriesProp( getDataSeries(), uno::UNO_QUERY );
+            sal_Bool bVaryColorsByPoint = sal_False;
+            if( xSeriesProp.is() && (xSeriesProp->getPropertyValue( C2U("VaryColorsByPoint") ) >>= bVaryColorsByPoint)
+                && bVaryColorsByPoint )
+                return beans::PropertyState_DIRECT_VALUE;
+        }
+
+        uno::Any aDefault( getPropertyDefault( rPropertyName ) );
+        uno::Any aValue( getPropertyValue( rPropertyName ) );
+        if( aDefault==aValue )
+            aState = beans::PropertyState_DEFAULT_VALUE;
+    }
+    return aState;
+}
+
+void SAL_CALL DataSeriesPointWrapper::setPropertyToDefault( const ::rtl::OUString& rPropertyName )
+                                    throw (beans::UnknownPropertyException, uno::RuntimeException)
+{
+    if( m_eType == DATA_SERIES )
+        WrappedPropertySet::setPropertyToDefault( rPropertyName );
+    else
+    {
+        //for data points the default is given by the series
+        setPropertyValue( rPropertyName, getPropertyDefault( rPropertyName ) );
+    }
+}
+Any SAL_CALL DataSeriesPointWrapper::getPropertyDefault( const ::rtl::OUString& rPropertyName )
+                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    Any aRet;
+    try
+    {
+        sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
+        if( nHandle > 0 )
+        {
+            //always take the series current value as default for points
+            Reference< beans::XPropertySet > xInnerPropertySet( getDataSeries(), uno::UNO_QUERY );
+            if( xInnerPropertySet.is() )
             {
+                const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
+                if( pWrappedProperty )
+                    aRet = pWrappedProperty->getPropertyValue(xInnerPropertySet);
+                else
+                    aRet = xInnerPropertySet->getPropertyValue( rPropertyName );
             }
         }
     }
-    else
+    catch( beans::UnknownPropertyException& ex )
     {
-        uno::Reference< beans::XPropertySet > xErrorBarProp;
-        if(( m_xParentProperties->getPropertyValue( C2U( "ErrorBarY" )) >>= xErrorBarProp ) &&
-           xErrorBarProp.is())
+        aRet = WrappedPropertySet::getPropertyDefault( rPropertyName );
+    }
+    return aRet;
+}
+
+Reference< beans::XPropertySet > DataSeriesPointWrapper::getInnerPropertySet()
+{
+    if( m_eType == DATA_SERIES )
+        return Reference< beans::XPropertySet >( getDataSeries(), uno::UNO_QUERY );
+    return getDataPointProperties();
+}
+
+const Sequence< beans::Property >& DataSeriesPointWrapper::getPropertySequence()
+{
+    return lcl_GetPropertySequence( m_eType );
+}
+
+const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedProperties()
+{
+    ::std::vector< ::chart::WrappedProperty* > aWrappedProperties;
+
+    WrappedCharacterHeightProperty::addWrappedProperties( aWrappedProperties, this );
+
+    if( m_eType == DATA_SERIES )
+    {
+        WrappedStatisticProperties::addWrappedPropertiesForSeries( aWrappedProperties );
+        aWrappedProperties.push_back( new WrappedAttachedAxisProperty( m_spChart2ModelContact ) );
+    }
+
+    WrappedSymbolProperties::addWrappedPropertiesForSeries( aWrappedProperties );//for series and  points
+    WrappedDataCaptionProperties::addWrappedPropertiesForSeries( aWrappedProperties );//for series and  points
+
+    //add unnamed fill properties (different inner names here)
+//     aWrappedProperties.push_back( new  WrappedUnnamedProperty( C2U( "FillGradient" ), C2U( "GradientName" ) ) );
+//     aWrappedProperties.push_back( new  WrappedUnnamedProperty( C2U( "FillHatch" ), C2U( "HatchName" ) ) );
+//     aWrappedProperties.push_back( new  WrappedUnnamedProperty( C2U( "FillTransparenceGradient" ), C2U( "TransparencyGradientName" ) ) );
+
+    //add unnamed line properties (different inner names here)
+//     aWrappedProperties.push_back( new WrappedUnnamedProperty( C2U( "LineDash" ), C2U( "LineDashName" ) ) );
+
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "FillColor" ), C2U( "Color" ) ) );
+    aWrappedProperties.push_back( new WrappedLineStyleProperty( this ) );
+    aWrappedProperties.push_back( new WrappedLineColorProperty( this ) );
+    aWrappedProperties.push_back( new WrappedSeriesAreaOrLineProperty( C2U( "LineDashName" ), C2U( "BorderDashName" ), C2U( "LineDashName" ), this ) );
+    aWrappedProperties.push_back( new WrappedSeriesAreaOrLineProperty( C2U( "LineTransparence" ), C2U( "BorderTransparency" ), C2U( "Transparency" ), this ) );
+    aWrappedProperties.push_back( new WrappedSeriesAreaOrLineProperty( C2U( "LineWidth" ), C2U( "BorderWidth" ), C2U( "LineWidth" ), this ) );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "FillStyle" ), C2U( "FillStyle" ) ) );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "FillTransparence" ), C2U( "Transparency" ) ) );
+
+    aWrappedProperties.push_back( new WrappedIgnoreProperty( C2U( "LineJoint" ), uno::makeAny( drawing::LineJoint_NONE ) ) );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "FillTransparenceGradientName" ), C2U( "TransparencyGradientName" ) ) );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "FillGradientName" ), C2U( "GradientName" ) ) );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "FillGradientStepCount" ), C2U( "GradientStepCount" ) ) );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "FillHatchName" ), C2U( "HatchName" ) ) );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "FillBitmapName" ), C2U( "FillBitmapName" ) ) );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "FillBackground" ), C2U( "FillBackground" ) ) );
+
+    //bitmap properties
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "FillBitmapMode" ), C2U( "FillBitmapMode" ) ) );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "FillBitmapSizeX" ), C2U( "FillBitmapSizeX" ) ) );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "FillBitmapSizeY" ), C2U( "FillBitmapSizeY" ) ) );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "FillBitmapLogicalSize" ), C2U( "FillBitmapLogicalSize" ) ) );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "FillBitmapOffsetX" ), C2U( "FillBitmapOffsetX" ) ) );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "FillBitmapOffsetY" ), C2U( "FillBitmapOffsetY" ) ) );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "FillBitmapRectanglePoint" ), C2U( "FillBitmapRectanglePoint" ) ) );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "FillBitmapPositionOffsetX" ), C2U( "FillBitmapPositionOffsetX" ) ) );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "FillBitmapPositionOffsetY" ), C2U( "FillBitmapPositionOffsetY" ) ) );
+
+    //aWrappedProperties.push_back( new  WrappedNamedProperty( C2U( "FillBitmapName" ), C2U( "FillBitmap" ), m_spChart2ModelContact ) );
+    //[optional, property] com::sun::star::awt::XBitmap FillBitmap;
+    //[optional, property] string FillBitmapURL;
+
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "SolidType" ), C2U( "Geometry3D" ) ) );
+    aWrappedProperties.push_back( new WrappedSegmentOffsetProperty() );
+    aWrappedProperties.push_back( new WrappedProperty( C2U( "D3DPercentDiagonal" ), C2U( "PercentDiagonal" ) ) );
+
+    return aWrappedProperties;
+}
+
+void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const ::rtl::OUString& rPropertyName, const Any& rValue )
+                                    throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
+    static const sal_Int32 nErrorCategoryHandle = getInfoHelper().getHandleByName( C2U("ErrorCategory") );
+    if( nErrorCategoryHandle == nHandle )
+    {
+        ::com::sun::star::chart::ChartErrorCategory aNewValue = ::com::sun::star::chart::ChartErrorCategory_NONE;
+        rValue >>= aNewValue;
+        Any aLow, aHigh;
+        bool bSetHighAndLowValues = false;
+        switch(aNewValue)
         {
-            switch( nHandle )
+            case ::com::sun::star::chart::ChartErrorCategory_CONSTANT_VALUE:
+                aHigh = this->getPropertyValue(C2U("ConstantErrorHigh"));
+                aLow = this->getPropertyValue(C2U("ConstantErrorLow"));
+                bSetHighAndLowValues = true;
+                break;
+            case ::com::sun::star::chart::ChartErrorCategory_PERCENT:
+                aHigh = aLow = this->getPropertyValue(C2U("PercentageError"));
+                bSetHighAndLowValues = true;
+                break;
+            case ::com::sun::star::chart::ChartErrorCategory_ERROR_MARGIN:
+                aHigh = aLow = this->getPropertyValue(C2U("ErrorMargin"));
+                bSetHighAndLowValues = true;
+                break;
+            default:
+                break;
+        }
+
+        WrappedPropertySet::setPropertyValue( rPropertyName, rValue );
+
+        if(bSetHighAndLowValues)
+        {
+            switch(aNewValue)
             {
-                case PROP_SERIES_CONST_ERROR_LOW:
-                case PROP_SERIES_CONST_ERROR_HIGH:
-                case PROP_SERIES_ERROR_CATEGORY:
-                case PROP_SERIES_PERCENT_ERROR:
-                case PROP_SERIES_ERROR_MARGIN:
-                case PROP_SERIES_ERROR_INDICATOR:
+                case ::com::sun::star::chart::ChartErrorCategory_CONSTANT_VALUE:
+                    this->setPropertyValue(C2U("ConstantErrorHigh"),aHigh);
+                    this->setPropertyValue(C2U("ConstantErrorLow"),aLow);
+                    break;
+                case ::com::sun::star::chart::ChartErrorCategory_PERCENT:
+                    this->setPropertyValue(C2U("PercentageError"),aHigh);
+                    break;
+                case ::com::sun::star::chart::ChartErrorCategory_ERROR_MARGIN:
+                    this->setPropertyValue(C2U("ErrorMargin"),aHigh);
+                    break;
+                default:
                     break;
             }
         }
     }
-}
-
-void SAL_CALL DataSeriesPointWrapper::setStatisticsPropertyValue_NoBroadcast(
-    sal_Int32 nHandle, const uno::Any& rValue )
-    throw (uno::Exception)
-{    OSL_ASSERT( m_xParentProperties.is());
-
-    if( nHandle == PROP_SERIES_REGRESSION_CURVES ||
-        nHandle == PROP_SERIES_MEAN_VALUE )
-    {
-        uno::Reference< chart2::XRegressionCurveContainer > xRegCont( m_xParentProperties, uno::UNO_QUERY );
-        if( xRegCont.is())
-        {
-            sal_Bool bValue;
-            if( (nHandle == PROP_SERIES_MEAN_VALUE) &&
-                (rValue >>= bValue))
-            {
-                bool bHasMVL = RegressionCurveHelper::hasMeanValueLine( xRegCont );
-                if( bHasMVL && ! bValue )
-                    RegressionCurveHelper::removeMeanValueLine( xRegCont );
-                else if( ! bHasMVL && bValue )
-                    RegressionCurveHelper::addMeanValueLine(
-                        xRegCont, uno::Reference< uno::XComponentContext >(), m_xParentProperties );
-            }
-            else
-            {
-            }
-        }
-    }
     else
+        WrappedPropertySet::setPropertyValue( rPropertyName, rValue );
+}
+
+Any SAL_CALL DataSeriesPointWrapper::getPropertyValue( const rtl::OUString& rPropertyName )
+                throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    if( m_eType == DATA_POINT )
     {
-        uno::Reference< beans::XPropertySet > xErrorBarProp;
-        if(( m_xParentProperties->getPropertyValue( C2U( "ErrorBarY" )) >>= xErrorBarProp ) &&
-           xErrorBarProp.is())
+        if( rPropertyName.equals(C2U("FillColor")) )
         {
-            switch( nHandle )
+            Reference< beans::XPropertySet > xSeriesProp( getDataSeries(), uno::UNO_QUERY );
+            sal_Bool bVaryColorsByPoint = sal_False;
+            if( xSeriesProp.is() && (xSeriesProp->getPropertyValue( C2U("VaryColorsByPoint") ) >>= bVaryColorsByPoint)
+                && bVaryColorsByPoint )
             {
-                case PROP_SERIES_CONST_ERROR_LOW:
-                case PROP_SERIES_CONST_ERROR_HIGH:
-                case PROP_SERIES_ERROR_CATEGORY:
-                case PROP_SERIES_PERCENT_ERROR:
-                case PROP_SERIES_ERROR_MARGIN:
-                case PROP_SERIES_ERROR_INDICATOR:
-                    break;
+                uno::Reference< beans::XPropertyState > xPointState( DataSeriesPointWrapper::getDataPointProperties(), uno::UNO_QUERY );
+                if( xPointState.is() && xPointState->getPropertyState( C2U("Color")) == beans::PropertyState_DEFAULT_VALUE )
+                {
+                    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+                    if( xDiagram.is() )
+                    {
+                        Reference< chart2::XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme() );
+                        if( xColorScheme.is() )
+                            return uno::makeAny( xColorScheme->getColorByIndex( m_nPointIndex ) );
+                    }
+                }
             }
         }
     }
+    return WrappedPropertySet::getPropertyValue( rPropertyName );
 }
 
-// --------------------------------------------------------------------------------
-
-// ____ OPropertySet ____
-uno::Any DataSeriesPointWrapper::GetDefaultValue( sal_Int32 nHandle ) const
-    throw(beans::UnknownPropertyException)
-{
-    static helper::tPropertyValueMap aStaticDefaults;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aStaticDefaults.size() )
-    {
-        // initialize defaults
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        LineProperties::AddDefaultsToMap(
-            aStaticDefaults,
-            /* bIncludeStyleProperties = */ false );
-        FillProperties::AddDefaultsToMap(
-            aStaticDefaults,
-            /* bIncludeStyleProperties = */ false );
-        CharacterProperties::AddDefaultsToMap(
-            aStaticDefaults,
-            /* bIncludeStyleProperties = */ false );
-    }
-
-    helper::tPropertyValueMap::const_iterator aFound(
-        aStaticDefaults.find( nHandle ));
-
-    if( aFound == aStaticDefaults.end())
-        return uno::Any();
-
-    return (*aFound).second;
-    // \--
-}
-
-::cppu::IPropertyArrayHelper & SAL_CALL DataSeriesPointWrapper::getInfoHelper()
-{
-    return lcl_getInfoHelper();
-}
-
-
-// ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
-    DataSeriesPointWrapper::getPropertySetInfo()
-    throw (uno::RuntimeException)
-{
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
-}
+// ================================================================================
 
 uno::Sequence< ::rtl::OUString > DataSeriesPointWrapper::getSupportedServiceNames_Static()
 {
@@ -617,21 +923,13 @@ uno::Sequence< ::rtl::OUString > DataSeriesPointWrapper::getSupportedServiceName
     aServices[ 3 ] = C2U( "com.sun.star.beans.PropertySet" );
     aServices[ 4 ] = C2U( "com.sun.star.drawing.FillProperties" );
     aServices[ 5 ] = C2U( "com.sun.star.drawing.LineProperties" );
-    aServices[ 6 ] = C2U( "com.sun.star.drawing.CharacterProperties" );
+    aServices[ 6 ] = C2U( "com.sun.star.style.CharacterProperties" );
 
     return aServices;
 }
 
-// ================================================================================
-
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( DataSeriesPointWrapper, lcl_aServiceName );
-
-// needed by MSC compiler
-using impl::DataSeriesPointWrapper_Base;
-
-IMPLEMENT_FORWARD_XINTERFACE2( DataSeriesPointWrapper, DataSeriesPointWrapper_Base, OPropertySet )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( DataSeriesPointWrapper, DataSeriesPointWrapper_Base, OPropertySet )
 
 } //  namespace wrapper
 } //  namespace chart
