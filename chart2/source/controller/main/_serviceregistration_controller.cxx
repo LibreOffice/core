@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _serviceregistration_controller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:07:48 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:10:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,20 +35,17 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
+#include "ChartController.hxx"
+#include "ChartFrameloader.hxx"
+#include "dlg_CreationWizard_UNO.hxx"
+#include "ChartDocumentWrapper.hxx"
+#include "AccessibleChartView.hxx"
+
 #ifndef _CPPUHELPER_IMPLEMENATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
 #endif
-#ifndef _CHARTCONTROLLER_HXX
-#include "ChartController.hxx"
-#endif
-#ifndef _CHARTFRAMELOADER_HXX
-#include "ChartFrameloader.hxx"
-#endif
-#ifndef CHART_CHARTDOCUMENTWRAPPER_HXX
-#include "ChartDocumentWrapper.hxx"
-#endif
 
-static struct ::cppu::ImplementationEntry g_entries_chart2_view[] =
+static struct ::cppu::ImplementationEntry g_entries_chart2_controller[] =
 {
     {
           ::chart::ChartController::create
@@ -67,9 +64,25 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_view[] =
         , 0
     }
     ,{
+          ::chart::CreationWizardUnoDlg::create
+        , ::chart::CreationWizardUnoDlg::getImplementationName_Static
+        , ::chart::CreationWizardUnoDlg::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+    ,{
           ::chart::wrapper::ChartDocumentWrapper::create
         , ::chart::wrapper::ChartDocumentWrapper::getImplementationName_Static
         , ::chart::wrapper::ChartDocumentWrapper::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+    ,{
+          ::chart::AccessibleChartView::create
+        , ::chart::AccessibleChartView::getImplementationName_Static
+        , ::chart::AccessibleChartView::getSupportedServiceNames_Static
         , ::cppu::createSingleComponentFactory
         , 0
         , 0
@@ -91,14 +104,14 @@ sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
     return ::cppu::component_writeInfoHelper(
-        pServiceManager, pRegistryKey, g_entries_chart2_view );
+        pServiceManager, pRegistryKey, g_entries_chart2_controller );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return ::cppu::component_getFactoryHelper(
-        pImplName, pServiceManager, pRegistryKey , g_entries_chart2_view );
+        pImplName, pServiceManager, pRegistryKey , g_entries_chart2_controller );
 }
 }
 //=========================================================================
