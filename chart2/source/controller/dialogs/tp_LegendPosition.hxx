@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_LegendPosition.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:15:26 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:46:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,25 +43,21 @@
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
 #endif
+//for auto_ptr
+#include <memory>
 
 //.............................................................................
 namespace chart
 {
 //.............................................................................
 
-/*************************************************************************
-|*
-|* Legenden-Anordnungs-Tab-Page
-|*
-\************************************************************************/
+class LegendPositionResources;
 class SchLegendPosTabPage : public SfxTabPage
 {
 private:
     FixedLine   aGrpLegend;
-    RadioButton aRbtLeft;
-    RadioButton aRbtTop;
-    RadioButton aRbtBottom;
-    RadioButton aRbtRight;
+
+    ::std::auto_ptr< LegendPositionResources >   m_apLegendPositionResources;
 
 public:
     SchLegendPosTabPage(Window* pParent, const SfxItemSet& rInAttrs);
