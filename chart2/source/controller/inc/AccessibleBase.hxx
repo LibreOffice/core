@@ -1,0 +1,403 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: AccessibleBase.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:51:41 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef _CHART2_ACCESSIBLEBASE_HXX_
+#define _CHART2_ACCESSIBLEBASE_HXX_
+
+#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HPP_
+#include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECOMPONENT_HPP_
+#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
+#include <com/sun/star/document/XEventListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
+#include <com/sun/star/lang/XEventListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTBROADCASTER_HPP_
+#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
+#endif
+#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#endif
+
+#ifndef COMPHELPER_ACCESSIBLE_EVENT_NOTIFIER
+#include <comphelper/accessibleeventnotifier.hxx>
+#endif
+#ifndef _CPPUHELPER_COMPBASE6_HXX_
+#include <cppuhelper/compbase6.hxx>
+#endif
+#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
+#include <cppuhelper/interfacecontainer.hxx>
+#endif
+#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
+#include <unotools/accessiblestatesethelper.hxx>
+#endif
+
+#include <vector>
+#include <map>
+#include <boost/shared_ptr.hpp>
+
+#include "MutexContainer.hxx"
+
+class SfxItemSet;
+class SdrObject;
+
+namespace chart
+{
+
+class AccessibleBase;
+class ObjectHierarchy;
+
+typedef rtl::OUString AccessibleUniqueId;
+
+struct AccessibleElementInfo
+{
+    AccessibleUniqueId m_aCID;
+
+    ::com::sun::star::uno::WeakReference<
+            ::com::sun::star::chart2::XChartDocument > m_xChartDocument;
+    ::com::sun::star::uno::WeakReference<
+            ::com::sun::star::view::XSelectionSupplier > m_xSelectionSupplier;
+    ::com::sun::star::uno::WeakReference<
+            ::com::sun::star::uno::XInterface >   m_xView;
+    ::com::sun::star::uno::WeakReference<
+            ::com::sun::star::awt::XWindow >      m_xWindow;
+
+    ::boost::shared_ptr< ObjectHierarchy > m_spObjectHierarchy;
+
+    AccessibleBase * m_pParent;
+};
+
+
+namespace impl
+{
+typedef ::cppu::WeakComponentImplHelper6<
+        ::com::sun::star::accessibility::XAccessible,
+        ::com::sun::star::accessibility::XAccessibleContext,
+        ::com::sun::star::accessibility::XAccessibleComponent,
+        ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
+        ::com::sun::star::lang::XServiceInfo,
+        ::com::sun::star::lang::XEventListener
+        > AccessibleBase_Base;
+}
+
+/** Base class for all Chart Accessibility objects
+ */
+class AccessibleBase :
+    public MutexContainer,
+    public impl::AccessibleBase_Base
+{
+public:
+    enum EventType
+    {
+        OBJECT_CHANGE,
+        GOT_SELECTION,
+        LOST_SELECTION,
+        PROPERTY_CHANGE
+    };
+
+    AccessibleBase( const AccessibleElementInfo & rAccInfo,
+                    bool bMayHaveChildren,
+                    bool bAlwaysTransparent = false );
+    virtual ~AccessibleBase();
+
+protected:
+    // for all calls to protected methods it is assumed that the mutex is locked
+    // unless calls outside via UNO, e.g. event notification, are done
+
+    /** @param bThrowException if true, a DisposedException is thrown if the
+               object is already disposed
+        @return true, if the component is already disposed and bThrowException is false,
+                false otherwise
+     */
+    bool             CheckDisposeState( bool bThrowException = true ) const throw (::com::sun::star::lang::DisposedException);
+
+    /** Events coming from the core have to be processed in this methods.  The
+        default implementation returns false, which indicates that the object is
+        not interested in the event.  To react on events you have to implement
+        this method in derived classes.
+
+        The default implementation iterates over all children and forwards the
+        event until the first child returns true.
+
+        @param nObjId contains the object id of chart objects.  If the object is
+                no chart object, the event is not broadcast.
+        @return If an object is the addressee of the event it should return
+                true, false otherwise.
+     */
+    virtual bool     NotifyEvent( EventType eType, const AccessibleUniqueId & rId );
+
+    /** Adds a state to the set.
+    */
+    void             AddState( sal_Int16 aState ) throw (::com::sun::star::uno::RuntimeException);
+
+    /** Removes a state from the set if the set contains the state, otherwise
+        nothing is done.
+    */
+    void             RemoveState( sal_Int16 aState ) throw (::com::sun::star::uno::RuntimeException);
+
+    /** has to be overloaded by derived classes that support child elements.
+        With this method a rescan is initiated that should result in a correct
+        list of children.
+
+        This method is called when access to any methods concerning children is
+        invoked for the first time.
+     */
+    bool UpdateChildren();
+
+    /** Is called by UpdateChildren.  This method is only called if an update is
+        really necessary.
+     */
+    virtual bool ImplUpdateChildren();
+
+    /** adds a child to the end of the internal vector of children.  As a
+        result, the child-count increases by one, but all existing children keep
+        their indices.
+
+        Important: as the implementation is needed, this should remain the only
+        method for adding children (i.e. there mustn't be an AddChild( Reference<
+        XAccessible > ) or the like).
+     */
+    void         AddChild( AccessibleBase* pChild );
+
+    /** removes a child from the internal vector.  All children with index
+        greater than the index of the removed element get an index one less than
+        before.
+     */
+    void         RemoveChildById( const ::rtl::OUString & rId );
+
+    /** Retrieve the pixel coordinates of logical coordinates (0,0) of the
+        current logic coordinate system.  This can be used for
+        getLocationOnScreen, if the coordinates of an object are not relative to
+        its direct parent, but a parent higher up in hierarchy.
+
+        @return the (x,y) pixel coordinates of the upper left corner
+     */
+    virtual ::com::sun::star::awt::Point   GetUpperLeftOnScreen() const;
+
+    /** This method creates an AccessibleEventObject and sends it to all
+        listeners that are currently listening to this object
+
+        If bSendGlobally is true, the event is also broadcast via
+        vcl::unohelper::NotifyAccessibleStateEventGlobally()
+     */
+    void         BroadcastAccEvent( sal_Int16 nId,
+                                    const ::com::sun::star::uno::Any & rNew,
+                                    const ::com::sun::star::uno::Any & rOld,
+                                    bool bSendGlobally = false ) const;
+
+    /** Removes all children from the internal lists and broadcasts child remove
+        events.
+
+        This method cares about mutex locking, and thus should be called without
+        the mutex locked.
+     */
+    virtual void KillAllChildren();
+
+    /** Is called from getAccessibleChild(). Before this method is called, an
+        update of children is done if necessary.
+     */
+    virtual ::com::sun::star::uno::Reference<
+            ::com::sun::star::accessibility::XAccessible >
+        ImplGetAccessibleChildById( sal_Int32 i ) const
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+               ::com::sun::star::uno::RuntimeException);
+
+    /** Is called from getAccessibleChildCount(). Before this method is called,
+        an update of children is done if necessary.
+     */
+    virtual sal_Int32 ImplGetAccessibleChildCount() const
+        throw (::com::sun::star::uno::RuntimeException);
+
+    AccessibleElementInfo GetInfo() const;
+    void SetInfo( const AccessibleElementInfo & rNewInfo );
+    AccessibleUniqueId GetId() const;
+
+    // ________ WeakComponentImplHelper (XComponent::dispose) ________
+    virtual void SAL_CALL disposing();
+
+    // ________ XAccessible ________
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ________ XAccessibleContext ________
+    virtual sal_Int32 SAL_CALL getAccessibleChildCount()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
+        getAccessibleChild( sal_Int32 i )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+               ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
+        getAccessibleParent()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent()
+        throw (::com::sun::star::uno::RuntimeException);
+    /// @return AccessibleRole.SHAPE
+    virtual sal_Int16 SAL_CALL getAccessibleRole()
+        throw (::com::sun::star::uno::RuntimeException);
+    // has to be implemented by derived classes
+//     virtual ::rtl::OUString SAL_CALL getAccessibleName()
+//         throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL
+        getAccessibleRelationSet()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL
+        getAccessibleStateSet()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::lang::Locale SAL_CALL getLocale()
+        throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException,
+               ::com::sun::star::uno::RuntimeException);
+    // has to be implemented by derived classes
+//     virtual ::rtl::OUString SAL_CALL getAccessibleDescription()
+//         throw (::com::sun::star::uno::RuntimeException);
+
+    // ________ XAccessibleComponent ________
+    virtual sal_Bool SAL_CALL containsPoint(
+        const ::com::sun::star::awt::Point& aPoint )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
+        getAccessibleAtPoint( const ::com::sun::star::awt::Point& aPoint )
+        throw (::com::sun::star::uno::RuntimeException);
+    // has to be defined in derived classes
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocation()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Size SAL_CALL getSize()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL grabFocus()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getForeground()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getBackground()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ________ XServiceInfo ________
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService(
+        const ::rtl::OUString& ServiceName )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ________ XEventListener ________
+    virtual void SAL_CALL disposing(
+        const ::com::sun::star::lang::EventObject& Source )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ________ XAccessibleEventBroadcaster ________
+    virtual void SAL_CALL addEventListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener )
+        throw (::com::sun::star::uno::RuntimeException);
+
+private:
+    enum eColorType
+    {
+        ACC_BASE_FOREGROUND,
+        ACC_BASE_BACKGROUND
+    };
+    sal_Int32 getColor( eColorType eColType );
+
+private:
+    typedef ::com::sun::star::uno::Reference<
+            ::com::sun::star::accessibility::XAccessible > tAccessible;
+    /** type of the vector containing the accessible children
+     */
+    typedef ::std::vector< tAccessible > ChildListVectorType;
+    /** type of the hash containing a vector index for every AccessibleUniqueId
+        of the object in the child list
+     */
+    typedef ::std::map< ::rtl::OUString, tAccessible > ChildCIDMap;
+
+    bool                                  m_bIsDisposed;
+    const bool                            m_bMayHaveChildren;
+    bool                                  m_bChildrenInitialized;
+    ChildListVectorType                   m_aChildList;
+
+    ChildCIDMap                           m_aChildCIDMap;
+
+    ::comphelper::AccessibleEventNotifier::TClientId      m_nEventNotifierId;
+
+    /** Implementation helper for getAccessibleStateSet()
+
+        Note: This member must come before m_aStateSet!
+     */
+    ::utl::AccessibleStateSetHelper *     m_pStateSetHelper;
+    /** this is returned in getAccessibleStateSet().
+
+        The implementation is an ::utl::AccessibleStateSetHelper.  To access
+        implementation methods use m_pStateSetHelper.
+
+        Note: Keeping this reference ensures, that the helper object is only
+              destroyed after this object has been disposed().
+     */
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet >
+        m_aStateSet;
+
+    AccessibleElementInfo  m_aAccInfo;
+    const bool             m_bAlwaysTransparent;
+    /** denotes if the state-set is initialized.  On initialization the selected
+        state is checked.
+
+        This variable is monitored by the solar mutex!
+
+        Note: declared volatile to enable double-check-locking
+     */
+    volatile bool          m_bStateSetInitialized;
+};
+
+}  // namespace chart
+
+#endif
