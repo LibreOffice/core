@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RegressionCurveHelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:30:25 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:21:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,8 +44,8 @@
 #ifndef _COM_SUN_STAR_CHART2_XREGRESSIONCURVECONTAINER_HPP_
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART2_XDATASOURCE_HPP_
-#include <com/sun/star/chart2/XDataSource.hpp>
+#ifndef _COM_SUN_STAR_CHART2_DATA_XDATASOURCE_HPP_
+#include <com/sun/star/chart2/data/XDataSource.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CHART2_XDATASERIES_HPP_
 #include <com/sun/star/chart2/XDataSeries.hpp>
@@ -84,6 +84,16 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
 
+    static bool isMeanValueLine(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XRegressionCurve > & xRegCurve );
+
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XRegressionCurve >
+        getMeanValueLine(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
+
     /** creates a mean-value line and adds it to the container.
 
          @param xSeriesProp
@@ -110,11 +120,34 @@ public:
         REGRESSION_TYPE_POWER
     };
 
+    /** Returns the first regression curve found that is not of type
+        mean-value line
+     */
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XRegressionCurve >
+        getFirstCurveNotMeanValueLine(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
+
     /** Returns the type of the first regression curve found that is not of type
         mean-value line
      */
-    static tRegressionType getRegressType(
+    static tRegressionType getFirstRegressTypeNotMeanValueLine(
         const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
+
+    /** xPropertySource is taken as source to copy all properties from if not null
+    */
+    static void addRegressionCurve( tRegressionType eType,
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::XComponentContext > & xContext,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySet >& xPropertySource );
+
+    static bool removeAllExceptMeanValueLine(
+        ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
 
     // ------------------------------------------------------------
@@ -133,28 +166,28 @@ public:
     /** recalculates the regression parameters according to the data given in
         the data source.
 
-        A sequence having the role "x-values" will be used as x-values for the
+        A sequence having the role "values-x" will be used as x-values for the
         calculation if found.  Otherwise a sequence (1, 2, 3, ...) of category
         indexes will be used for the recalculateRegression() method of the
         regression curve.
 
-        The first sequence having the role "y-values" will be used as y-values
+        The first sequence having the role "values-y" will be used as y-values
         for the recalculateRegression() method of the regression curve.
 
         @param bUseXValuesIfAvailable
             If false, the sequence (1, 2, 3, ...) will always be used, even if
-            there is a data-sequence with role "x-values"
+            there is a data-sequence with role "values-x"
      */
     static void initializeCurveCalculator(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurveCalculator > & xOutCurveCalculator,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSource > & xSource,
+            ::com::sun::star::chart2::data::XDataSource > & xSource,
         bool bUseXValuesIfAvailable = true );
 
     /** Same method as above, but uses the given XModel to determine the
         parameter bUseXValuesIfAvailable in the above function.  It is also
-        necessary that the XDataSource is an XDataSeries, thus this parameter
+        necessary that the data::XDataSource is an XDataSeries, thus this parameter
         also changed.
      */
     static void initializeCurveCalculator(
@@ -164,6 +197,9 @@ public:
             ::com::sun::star::chart2::XDataSeries > & xSeries,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xModel );
+
+    static ::rtl::OUString getUINameForRegressionCurve( const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XRegressionCurve >& xCurve );
 
 private:
     // not implemented
