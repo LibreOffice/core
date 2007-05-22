@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Clipping.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:35:45 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:23:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
+
 #include "Clipping.hxx"
 #include "CommonConverters.hxx"
+#include "BaseGFXHelper.hxx"
 
 #ifndef _COM_SUN_STAR_DRAWING_POSITION3D_HPP_
 #include <com/sun/star/drawing/Position3D.hpp>
@@ -48,6 +50,8 @@ namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
+using ::basegfx::B2DRectangle;
+using ::basegfx::B2DTuple;
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -103,12 +107,12 @@ bool lcl_CLIPt(double fDenom,double fNum, double & fTE, double & fTL)
             is returned.  If the line lies completely outside then FALSE is returned and rP0 and
             rP1 are left unmodified.
 */
-bool lcl_clip2d(DoublePoint& rPoint0, DoublePoint& rPoint1, const DoubleRectangle& rRectangle)
+bool lcl_clip2d(B2DTuple& rPoint0, B2DTuple& rPoint1, const B2DRectangle& rRectangle)
 {
     //Direction vector of the line.
-    DoublePoint aDirection = rPoint1 - rPoint0;
+    B2DTuple aDirection = rPoint1 - rPoint0;
 
-    if( aDirection.X==0 && aDirection.Y==0 && rRectangle.isInside(rPoint0) )
+    if( aDirection.getX()==0 && aDirection.getY()==0 && rRectangle.isInside(rPoint0) )
     {
         //  Degenerate case of a zero length line.
         return true;
@@ -121,23 +125,23 @@ bool lcl_clip2d(DoublePoint& rPoint0, DoublePoint& rPoint1, const DoubleRectangl
 
         //  Test wether at least a part lies in the four half-planes with respect to
         //  the rectangles four edges.
-        if( lcl_CLIPt(aDirection.X, rRectangle.Left - rPoint0.X, fTE, fTL) )
-            if( lcl_CLIPt(-aDirection.X, rPoint0.X - rRectangle.Right, fTE, fTL) )
-                if( lcl_CLIPt(aDirection.Y, rRectangle.Top - rPoint0.Y, fTE, fTL) )
-                    if( lcl_CLIPt(-aDirection.Y, rPoint0.Y - rRectangle.Bottom, fTE, fTL) )
+        if( lcl_CLIPt(aDirection.getX(), rRectangle.getMinX() - rPoint0.getX(), fTE, fTL) )
+            if( lcl_CLIPt(-aDirection.getX(), rPoint0.getX() - rRectangle.getMaxX(), fTE, fTL) )
+                if( lcl_CLIPt(aDirection.getY(), rRectangle.getMinY() - rPoint0.getY(), fTE, fTL) )
+                    if( lcl_CLIPt(-aDirection.getY(), rPoint0.getY() - rRectangle.getMaxY(), fTE, fTL) )
                     {
                         //  At least a part is visible.
                         if (fTL < 1)
                         {
                             //  Compute the new end point.
-                            rPoint1.X = rPoint0.X + fTL * aDirection.X;
-                            rPoint1.Y = rPoint0.Y + fTL * aDirection.Y;
+                            rPoint1.setX( rPoint0.getX() + fTL * aDirection.getX() );
+                            rPoint1.setY( rPoint0.getY() + fTL * aDirection.getY() );
                         }
                         if (fTE > 0)
                         {
                             //  Compute the new starting point.
-                            rPoint0.X = rPoint0.X + fTE * aDirection.X;
-                            rPoint0.Y = rPoint0.Y + fTE * aDirection.Y;
+                            rPoint0.setX( rPoint0.getX() + fTE * aDirection.getX() );
+                            rPoint0.setY( rPoint0.getY() + fTE * aDirection.getY() );
                         }
                         return true;
                     }
@@ -147,16 +151,16 @@ bool lcl_clip2d(DoublePoint& rPoint0, DoublePoint& rPoint1, const DoubleRectangl
     }
 }
 
-bool lcl_clip2d_(drawing::Position3D& rPoint0, drawing::Position3D& rPoint1, const DoubleRectangle& rRectangle)
+bool lcl_clip2d_(drawing::Position3D& rPoint0, drawing::Position3D& rPoint1, const B2DRectangle& rRectangle)
 {
-    DoublePoint aP0(rPoint0.PositionX,rPoint0.PositionY);
-    DoublePoint aP1(rPoint1.PositionX,rPoint1.PositionY);
+    B2DTuple aP0(rPoint0.PositionX,rPoint0.PositionY);
+    B2DTuple aP1(rPoint1.PositionX,rPoint1.PositionY);
     bool bRet = lcl_clip2d( aP0, aP1, rRectangle );
 
-    rPoint0.PositionX = aP0.X;
-    rPoint0.PositionY = aP0.Y;
-    rPoint1.PositionX = aP1.X;
-    rPoint1.PositionY = aP1.Y;
+    rPoint0.PositionX = aP0.getX();
+    rPoint0.PositionY = aP0.getY();
+    rPoint1.PositionX = aP1.getX();
+    rPoint1.PositionY = aP1.getY();
 
     return bRet;
 }
@@ -164,7 +168,7 @@ bool lcl_clip2d_(drawing::Position3D& rPoint0, drawing::Position3D& rPoint1, con
 }//end anonymous namespace
 
 void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolygon
-                                      , const DoubleRectangle& rRectangle
+                                      , const B2DRectangle& rRectangle
                                       , drawing::PolyPolygonShape3D& aResult
                                       , bool bSplitPiecesToDifferentPolygons )
 {
@@ -175,36 +179,63 @@ void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolyg
     if(!rPolygon.SequenceX.getLength())
         return;
 
+    //need clipping?:
+    {
+        ::basegfx::B3DRange a3DRange( BaseGFXHelper::getBoundVolume( rPolygon ) );
+        ::basegfx::B2DRange a2DRange( a3DRange.getMinX(), a3DRange.getMinY(), a3DRange.getMaxX(), a3DRange.getMaxY() );
+        if( rRectangle.isInside( a2DRange ) )
+        {
+            aResult = rPolygon;
+            return;
+        }
+        else
+        {
+            a2DRange.intersect( rRectangle );
+            if( a2DRange.isEmpty() )
+                return;
+        }
+    }
+
+    //apply clipping:
     drawing::Position3D aFrom;
     drawing::Position3D aTo;
-    sal_Int32 nOldPointCount = rPolygon.SequenceX[0].getLength();
-    sal_Int32 nNewPoly = -1;
 
-    // set last point to a position outside the rectangle, such that the first
-    // time lcl_clip2d returns true, the comparison to last will always yield false
-    drawing::Position3D aLast(rRectangle.Left-1.0,rRectangle.Top-1.0, 0.0 );
-
-    for(sal_Int32 nOldPoint=1; nOldPoint<nOldPointCount; nOldPoint++)
+    sal_Int32 nNewPolyIndex = 0;
+    sal_Int32 nOldPolyCount = rPolygon.SequenceX.getLength();
+    for(sal_Int32 nOldPolyIndex=0; nOldPolyIndex<nOldPolyCount; nOldPolyIndex++, nNewPolyIndex++ )
     {
-        aFrom = getPointFromPoly(rPolygon,nOldPoint-1);
-        aTo = getPointFromPoly(rPolygon,nOldPoint);
-        if( lcl_clip2d_(aFrom, aTo, rRectangle) )
+        sal_Int32 nOldPointCount = rPolygon.SequenceX[nOldPolyIndex].getLength();
+
+        // set last point to a position outside the rectangle, such that the first
+        // time lcl_clip2d returns true, the comparison to last will always yield false
+        drawing::Position3D aLast(rRectangle.getMinX()-1.0,rRectangle.getMinY()-1.0, 0.0 );
+
+        for(sal_Int32 nOldPoint=1; nOldPoint<nOldPointCount; nOldPoint++)
         {
-            // compose an Polygon of as many consecutive points as possible
-            if(aFrom == aLast)
+            aFrom = getPointFromPoly(rPolygon,nOldPoint-1,nOldPolyIndex);
+            aTo = getPointFromPoly(rPolygon,nOldPoint,nOldPolyIndex);
+            if( lcl_clip2d_(aFrom, aTo, rRectangle) )
             {
-                if( !(aTo==aFrom) )
-                    AddPointToPoly( aResult, aTo, nNewPoly );
+                // compose an Polygon of as many consecutive points as possible
+                if(aFrom == aLast)
+                {
+                    if( !(aTo==aFrom) )
+                        AddPointToPoly( aResult, aTo, nNewPolyIndex );
+                }
+                else
+                {
+                    if( bSplitPiecesToDifferentPolygons && nOldPoint!=1 )
+                    {
+                        if( nNewPolyIndex < aResult.SequenceX.getLength()
+                                && aResult.SequenceX[nNewPolyIndex].getLength() )
+                            nNewPolyIndex++;
+                    }
+                    AddPointToPoly( aResult, aFrom, nNewPolyIndex );
+                    if( !(aTo==aFrom) )
+                        AddPointToPoly( aResult, aTo, nNewPolyIndex );
+                }
+                aLast = aTo;
             }
-            else
-            {
-                if( bSplitPiecesToDifferentPolygons || nNewPoly<0)
-                    nNewPoly++;
-                AddPointToPoly( aResult, aFrom, nNewPoly );
-                if( !(aTo==aFrom) )
-                    AddPointToPoly( aResult, aTo, nNewPoly );
-            }
-            aLast = aTo;
         }
     }
 }
