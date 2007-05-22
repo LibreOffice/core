@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reffact.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:45:11 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:07:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,6 @@ DECL_WRAPPER(ScFilterDlgWrapper)
 DECL_WRAPPER(ScSpecialFilterDlgWrapper)
 DECL_WRAPPER(ScDbNameDlgWrapper)
 DECL_WRAPPER(ScConsolidateDlgWrapper)
-DECL_WRAPPER(ScChartDlgWrapper)
 DECL_WRAPPER(ScPrintAreasDlgWrapper)
 DECL_WRAPPER(ScCondFormatDlgWrapper)
 DECL_WRAPPER(ScColRowNameRangesDlgWrapper)
@@ -103,8 +102,7 @@ class ScSimpleRefDlgWrapper: public SfxChildWindow
         void            SetCloseHdl( const Link& rLink );
         void            SetUnoLinks( const Link& rDone, const Link& rAbort,
                                         const Link& rChange );
-        void            SetFlags( BOOL bCloseOnButtonUp );
-        void            SetSingleCell( BOOL bSingleCell );
+        void            SetFlags( BOOL bCloseOnButtonUp, BOOL bSingleCell, BOOL bMultiSelection );
         static void     SetAutoReOpen(BOOL bFlag);
 
         void            StartRefInput();
