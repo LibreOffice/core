@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLConverter.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:51:45 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:02:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,19 +61,11 @@
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_TABLE_CELLADDRESS_HPP_
-#include <com/sun/star/table/CellAddress.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_CELLRANGEADDRESS_HPP_
-#include <com/sun/star/table/CellRangeAddress.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
 #endif
 
-class ScArea;
 class ScDocument;
-class ScRangeList;
 class DateTime;
 class SvXMLUnitConverter;
 
@@ -82,123 +74,13 @@ class SvXMLUnitConverter;
 
 class ScXMLConverter
 {
-protected:
-    static void         AssignString(
-                            ::rtl::OUString& rString,
-                            const ::rtl::OUString& rNewStr,
-                            sal_Bool bAppendStr );
-
-    static sal_Int32    IndexOf(
-                            const ::rtl::OUString& rString,
-                            sal_Unicode cSearchChar,
-                            sal_Int32 nOffset,
-                            sal_Unicode cQuote = '\'' );
-
-    static sal_Int32    IndexOfDifferent(
-                            const ::rtl::OUString& rString,
-                            sal_Unicode cSearchChar,
-                            sal_Int32 nOffset );
-
 public:
     inline              ScXMLConverter()    {}
     inline              ~ScXMLConverter()   {}
 
 // helper methods
-    static sal_Int32    GetTokenCount(
-                            const ::rtl::OUString& rString );
-    static void         GetTokenByOffset(
-                            ::rtl::OUString& rToken,
-                            const ::rtl::OUString& rString,
-                            sal_Int32& nOffset,
-                            sal_Unicode cQuote = '\'' );
-
-    static void         AppendString(
-                            ::rtl::OUString& rString,
-                            const ::rtl::OUString& rNewStr );
-
     static ScDocument*  GetScDocument(
                             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel );
-
-// IMPORT: CellAddress / CellRange
-    static sal_Bool     GetAddressFromString(
-                            ScAddress& rAddress,
-                            const ::rtl::OUString& rAddressStr,
-                            const ScDocument* pDocument,
-                            sal_Int32& nOffset );
-    static sal_Bool     GetRangeFromString(
-                            ScRange& rRange,
-                            const ::rtl::OUString& rRangeStr,
-                            const ScDocument* pDocument,
-                            sal_Int32& nOffset );
-    static void         GetRangeListFromString(
-                            ScRangeList& rRangeList,
-                            const ::rtl::OUString& rRangeListStr,
-                            const ScDocument* pDocument );
-
-    static sal_Bool     GetAreaFromString(
-                            ScArea& rArea,
-                            const ::rtl::OUString& rRangeStr,
-                            const ScDocument* pDocument,
-                            sal_Int32& nOffset );
-
-    static sal_Bool     GetAddressFromString(
-                            ::com::sun::star::table::CellAddress& rAddress,
-                            const ::rtl::OUString& rAddressStr,
-                            const ScDocument* pDocument,
-                            sal_Int32& nOffset );
-    static sal_Bool     GetRangeFromString(
-                            ::com::sun::star::table::CellRangeAddress& rRange,
-                            const ::rtl::OUString& rRangeStr,
-                            const ScDocument* pDocument,
-                            sal_Int32& nOffset );
-    static void         GetRangeListFromString(
-                            ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress >& rRangeSeq,
-                            const ::rtl::OUString& rRangeListStr,
-                            const ScDocument* pDocument );
-
-// EXPORT: CellAddress / CellRange
-    static void         GetStringFromAddress(
-                            ::rtl::OUString& rString,
-                            const ScAddress& rAddress,
-                            const ScDocument* pDocument,
-                            sal_Bool bAppendStr = sal_False,
-                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
-    static void         GetStringFromRange(
-                            ::rtl::OUString& rString,
-                            const ScRange& rRange,
-                            const ScDocument* pDocument,
-                            sal_Bool bAppendStr = sal_False,
-                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
-    static void         GetStringFromRangeList(
-                            ::rtl::OUString& rString,
-                            const ScRangeList* pRangeList,
-                            const ScDocument* pDocument,
-                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
-
-    static void         GetStringFromArea(
-                            ::rtl::OUString& rString,
-                            const ScArea& rArea,
-                            const ScDocument* pDocument,
-                            sal_Bool bAppendStr = sal_False,
-                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
-
-    static void         GetStringFromAddress(
-                            ::rtl::OUString& rString,
-                            const ::com::sun::star::table::CellAddress& rAddress,
-                            const ScDocument* pDocument,
-                            sal_Bool bAppendStr = sal_False,
-                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
-    static void         GetStringFromRange(
-                            ::rtl::OUString& rString,
-                            const ::com::sun::star::table::CellRangeAddress& rRange,
-                            const ScDocument* pDocument,
-                            sal_Bool bAppendStr = sal_False,
-                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
-    static void         GetStringFromRangeList(
-                            ::rtl::OUString& rString,
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress >& rRangeSeq,
-                            const ScDocument* pDocument,
-                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
 
 // IMPORT: GeneralFunction / ScSubTotalFunc
     static ::com::sun::star::sheet::GeneralFunction
