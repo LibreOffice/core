@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LegendItemConverter.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:34:25 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:01:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,19 +61,6 @@
 
 using namespace ::com::sun::star;
 
-namespace
-{
-// ::comphelper::ItemPropertyMapType & lcl_GetLegendPropertyMap()
-// {
-//     static ::comphelper::ItemPropertyMapType aLegendPropertyMap(
-//         ::comphelper::MakeItemPropertyMap
-//         ( SCHATTR_TEXT_STACKED,   C2U( "StackCharacters" ))
-//         );
-
-//     return aLegendPropertyMap;
-// };
-} // anonymous namespace
-
 namespace chart
 {
 namespace wrapper
@@ -84,11 +71,12 @@ LegendItemConverter::LegendItemConverter(
     ::com::sun::star::beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
+    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
     ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize ) :
         ItemConverter( rPropertySet, rItemPool )
 {
     m_aConverters.push_back( new GraphicPropertyItemConverter(
-                                 rPropertySet, rItemPool, rDrawModel,
+                                 rPropertySet, rItemPool, rDrawModel, xNamedPropertyContainerFactory,
                                  GraphicPropertyItemConverter::LINE_AND_FILL_PROPERTIES ));
     m_aConverters.push_back( new CharacterPropertyItemConverter(
                                  rPropertySet, rItemPool, pRefSize,
@@ -127,18 +115,10 @@ const USHORT * LegendItemConverter::GetWhichPairs() const
     return nLegendWhichPairs;
 }
 
-bool LegendItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const
+bool LegendItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
 {
     // No own (non-special) properties
     return false;
-//     ::comphelper::ItemPropertyMapType & rMap( lcl_GetLegendPropertyMap());
-//     ::comphelper::ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
-
-//     if( aIt == rMap.end())
-//         return false;
-
-//     rOutName =(*aIt).second;
-//     return true;
 }
 
 
@@ -154,7 +134,7 @@ bool LegendItemConverter::ApplySpecialItem(
         {
             chart2::LegendPosition eNewPos, eOldPos;
             bool bIsWide = false;
-            bool bShow = true;
+            sal_Bool bShow = sal_True;
 
             SvxChartLegendPos eItemPos =
                 reinterpret_cast< const SvxChartLegendPosItem & >(
@@ -181,7 +161,7 @@ bool LegendItemConverter::ApplySpecialItem(
                 case CHLEGEND_NONE_RIGHT:
                 case CHLEGEND_NONE_TOP:
                 case CHLEGEND_NONE_BOTTOM:
-                    bShow = false;
+                    bShow = sal_False;
                     break;
             }
 
@@ -191,7 +171,7 @@ bool LegendItemConverter::ApplySpecialItem(
                 if( ! (GetPropertySet()->getPropertyValue( C2U("Show")) >>= bWasShown) ||
                     ( bWasShown != bShow ))
                 {
-                    GetPropertySet()->setPropertyValue( C2U("Show"), uno::Any( &bShow, ::getBooleanCppuType() ));
+                    GetPropertySet()->setPropertyValue( C2U("Show"), uno::makeAny( bShow ));
                     bChanged = true;
                 }
 
