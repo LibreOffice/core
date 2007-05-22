@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLChartContext.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:24:32 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:05:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,8 +44,17 @@
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CHART_CHARTDATAROWSOURCE_HPP_
+#include <com/sun/star/chart/ChartDataRowSource.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#endif
 
 #include "transporttypes.hxx"
+
+#include <list>
 
 class SchXMLImport;
 class SchXMLImportHelper;
@@ -69,6 +78,34 @@ namespace com { namespace sun { namespace star {
 
 // ----------------------------------------
 
+struct SeriesDefaultsAndStyles
+{
+    //default values for series:
+    ::com::sun::star::uno::Any    maSymbolTypeDefault;
+    ::com::sun::star::uno::Any    maDataCaptionDefault;
+
+    ::com::sun::star::uno::Any    maErrorIndicatorDefault;
+    ::com::sun::star::uno::Any    maErrorCategoryDefault;
+    ::com::sun::star::uno::Any    maConstantErrorLowDefault;
+    ::com::sun::star::uno::Any    maConstantErrorHighDefault;
+    ::com::sun::star::uno::Any    maPercentageErrorDefault;
+    ::com::sun::star::uno::Any    maErrorMarginDefault;
+
+    ::com::sun::star::uno::Any    maMeanValueDefault;
+    ::com::sun::star::uno::Any    maRegressionCurvesDefault;
+
+    ::com::sun::star::uno::Any    maStackedDefault;
+    ::com::sun::star::uno::Any    maPercentDefault;
+    ::com::sun::star::uno::Any    maDeepDefault;
+    ::com::sun::star::uno::Any    maStackedBarsConnectedDefault;
+
+    //additional information
+    ::com::sun::star::uno::Any    maLinesOnProperty;
+
+    //styles for series and datapoints
+    ::std::list< DataRowPointStyle > maSeriesStyleList;
+};
+
 class SchXMLChartContext : public SvXMLImportContext
 {
 private:
@@ -77,23 +114,27 @@ private:
 
     ::rtl::OUString maMainTitle, maSubTitle;
     com::sun::star::awt::Point maMainTitlePos, maSubTitlePos, maLegendPos;
-    // #i51307# only set actual positions if the svg:x/y attributes have been read
-    bool mbSetMainTitlePos;
-    bool mbSetSubTitlePos;
-    bool mbSetLegendPos;
     sal_Bool mbHasOwnTable;
-    sal_Bool mbHasLegend;
+    sal_Bool mbAllRangeAddressesAvailable;
+    sal_Bool mbColHasLabels;
+    sal_Bool mbRowHasLabels;
+    ::com::sun::star::chart::ChartDataRowSource meDataRowSource;
+    bool mbIsStockChart;
 
     com::sun::star::uno::Sequence< com::sun::star::chart::ChartSeriesAddress > maSeriesAddresses;
     ::rtl::OUString msCategoriesAddress;
     ::rtl::OUString msChartAddress;
-    ::rtl::OUString msTableNumberList;
+
+    SeriesDefaultsAndStyles maSeriesDefaultsAndStyles;
+    tSchXMLLSequencesPerIndex maLSequencesPerIndex;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > mxDrawPage;
     ::rtl::OUString msColTrans;
     ::rtl::OUString msRowTrans;
+    ::rtl::OUString maChartTypeServiceName;
 
-    ::com::sun::star::uno::Sequence< sal_Int32 > GetNumberSequenceFromString( const ::rtl::OUString& rStr );
+    ::com::sun::star::uno::Sequence< sal_Int32 > GetNumberSequenceFromString( const ::rtl::OUString& rStr, bool bAddOneToEachOldIndex );
+    void MergeSeriesForStockChart();
 
 public:
     SchXMLChartContext( SchXMLImportHelper& rImpHelper,
@@ -122,8 +163,11 @@ private:
     */
     void    InitChart   (com::sun::star::awt::Size aChartSize,
                         sal_Bool bDomainForDefaultDataNeeded,
-                        ::rtl::OUString aServiceName,
+                        const ::rtl::OUString & rChartTypeServiceName,
                         sal_Bool bSetSwitchData);
+
+    void ChangeDiagramAccordingToTemplate(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xNewDoc );
 };
 
 // ----------------------------------------
@@ -135,16 +179,12 @@ private:
     rtl::OUString& mrTitle;
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxTitleShape;
     rtl::OUString msAutoStyleName;
-    com::sun::star::awt::Point& mrPosition;
-    bool & mrSetPosition;
 
 public:
     SchXMLTitleContext( SchXMLImportHelper& rImpHelper,
                         SvXMLImport& rImport, const rtl::OUString& rLocalName,
                         rtl::OUString& rTitle,
-                        com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xTitleShape,
-                        com::sun::star::awt::Point& rPosition,
-                        bool & rSetPosition );
+                        com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xTitleShape );
     virtual ~SchXMLTitleContext();
 
     virtual void StartElement( const com::sun::star::uno::Reference<
@@ -161,14 +201,10 @@ class SchXMLLegendContext : public SvXMLImportContext
 {
 private:
     SchXMLImportHelper& mrImportHelper;
-    com::sun::star::awt::Point& mrPosition;
-    bool & mrSetPosition;
 
 public:
     SchXMLLegendContext( SchXMLImportHelper& rImpHelper,
-                         SvXMLImport& rImport, const rtl::OUString& rLocalName,
-                         com::sun::star::awt::Point& rPosition,
-                        bool & rSetPosition );
+                         SvXMLImport& rImport, const rtl::OUString& rLocalName );
     virtual ~SchXMLLegendContext();
 
     virtual void StartElement( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
