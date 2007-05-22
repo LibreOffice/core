@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ItemPropertyMap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:23:30 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:54:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,15 +35,28 @@
 #ifndef CHART_ITEMPROPERTYMAP_HXX
 #define CHART_ITEMPROPERTYMAP_HXX
 
-#include "InlineContainer.hxx"
+
+#ifndef INCLUDED_COMPHELPER_INLINE_CONTAINER_HXX
+#include <comphelper/InlineContainer.hxx>
+#endif
+
+#ifndef CHART_ITEMCONVERTER_HXX
+#include "ItemConverter.hxx"
+#endif
+
+
+#define IPM_MAP_ENTRY(wid,uno,mid) (wid, ::std::make_pair< ::comphelper::ItemConverter::tPropertyNameType, ::comphelper::ItemConverter::tMemberIdType >(\
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(uno)), mid))
 
 namespace comphelper
 {
 
-typedef ::std::map< USHORT, ::rtl::OUString > ItemPropertyMapType;
-typedef ::comphelper::MakeMap< USHORT, ::rtl::OUString > MakeItemPropertyMap;
+typedef ::std::map< ItemConverter::tWhichIdType, ::std::pair< ItemConverter::tPropertyNameType, ItemConverter::tMemberIdType > >
+    ItemPropertyMapType;
+typedef ::comphelper::MakeMap< ItemConverter::tWhichIdType, ::std::pair< ItemConverter::tPropertyNameType, ItemConverter::tMemberIdType > >
+    MakeItemPropertyMap;
 
-class FillItemSetFunc : public ::std::unary_function< void, ItemConverter * >
+class FillItemSetFunc : public ::std::unary_function< ItemConverter *, void >
 {
 public:
     explicit FillItemSetFunc( SfxItemSet & rOutItemSet ) :
@@ -59,7 +72,7 @@ private:
     SfxItemSet & m_rOutItemSet;
 };
 
-class ApplyItemSetFunc : public ::std::unary_function< void, ItemConverter * >
+class ApplyItemSetFunc : public ::std::unary_function< ItemConverter *, void >
 {
 public:
     explicit ApplyItemSetFunc( const SfxItemSet & rItemSet,
@@ -78,7 +91,7 @@ private:
     bool & m_rOutResult;
 };
 
-struct DeleteItemConverterPtr : public ::std::unary_function< void, ItemConverter * >
+struct DeleteItemConverterPtr : public ::std::unary_function< ItemConverter *, void >
 {
     void operator() ( ItemConverter * pConv )
     { delete pConv; }
