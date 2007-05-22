@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 15:55:59 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:37:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,10 @@
 
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
+#endif
+
+#ifndef _SVT_LISTENER_HXX
+#include <svtools/listener.hxx>
 #endif
 
 #ifndef _SFX_ITEMPROP_HXX
@@ -222,7 +226,7 @@
 
 class ScDocShell;
 class ScMarkData;
-class SchMemChart;
+class ScMemChart;
 class ScPrintRangeSaver;
 class ScAttrRectIterator;
 class ScCellRangeObj;
@@ -233,6 +237,15 @@ class SvxBorderLine;
 class SvxBoxItem;
 class SvxBoxInfoItem;
 
+
+class ScLinkListener : public SvtListener
+{
+    Link    aLink;
+public:
+                    ScLinkListener(const Link& rL) : aLink(rL) {}
+    virtual         ~ScLinkListener();
+    virtual void    Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
+};
 
 typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::util::XModifyListener >* XModifyListenerPtr;
@@ -289,6 +302,7 @@ private:
     SfxItemSet*             pCurrentDataSet;
     ScMarkData*             pMarkData;
     ScRangeList             aRanges;
+    sal_Int64               nObjectId;
     BOOL                    bChartColAsHdr;
     BOOL                    bChartRowAsHdr;
     BOOL                    bCursorOnly;
@@ -301,7 +315,7 @@ private:
     void            PaintRanges_Impl( USHORT nPart );
     ScRangeListRef  GetLimitedChartRanges_Impl( long nDataColumns, long nDataRows ) const;
     void            ForceChartListener_Impl();
-    SchMemChart*    CreateMemChart_Impl() const;
+    ScMemChart*     CreateMemChart_Impl() const;
 
     const ScPatternAttr*    GetCurrentAttrsFlat();
     const ScPatternAttr*    GetCurrentAttrsDeep();
