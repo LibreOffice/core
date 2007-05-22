@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocrsr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:39:57 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:24:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,24 @@ SwUnoCrsr::~SwUnoCrsr()
         pNxt->MoveTo( 0 );      // ausketten
         delete pNxt;            // und loeschen
     }
+}
+
+SwUnoCrsr * SwUnoCrsr::Clone() const
+{
+    SwUnoCrsr * pNewCrsr = 0;
+
+    // check if the cursor is a SwUnoTableCrsr, if so clone that type
+    const SwUnoTableCrsr * pUnoTableCrsr = *this;
+    if (pUnoTableCrsr)
+        pNewCrsr = GetDoc()->CreateUnoCrsr( *GetPoint(), sal_True /* create SwUnoTableCrsr */ );
+    else
+        pNewCrsr = GetDoc()->CreateUnoCrsr( *GetPoint() );
+    if (HasMark())
+    {
+        pNewCrsr->SetMark();
+        *pNewCrsr->GetMark() = *GetMark();
+    }
+    return pNewCrsr;
 }
 
 SwUnoCrsr::operator SwUnoCrsr* ()   { return this; }
