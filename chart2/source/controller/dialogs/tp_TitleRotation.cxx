@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_TitleRotation.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:33:12 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:49:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,34 +39,12 @@
 
 #include "ResId.hxx"
 #include "TabPages.hrc"
-#include "SchSfxItemIds.hxx"
-/*
-#include "Strings.hrc"
-#include "Bitmaps.hrc"
-#include "Bitmaps_HC.hrc"
-*/
+#include "chartview/ChartSfxItemIds.hxx"
 
-/*
-#ifndef _SVX_SVXIDS_HRC //autogen
-#include <svx/svxids.hrc>
-#endif
-#include "schattr.hxx"
-*/
 // header for class SfxInt32Item
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
 #endif
-#ifndef _SVX_CHRTITEM_HXX //autogen
-#include <svx/chrtitem.hxx>
-#endif
-/*
-#include "schresid.hxx"
-#include "strings.hrc"
-#include "chtmodel.hxx"
-#include "attrib.hxx"
-#include "attrib.hrc"
-#include "app.hrc"
-*/
 
 //.............................................................................
 namespace chart
@@ -76,25 +54,12 @@ namespace chart
 SchAlignmentTabPage::SchAlignmentTabPage(Window* pWindow,
                                          const SfxItemSet& rInAttrs) :
     SfxTabPage(pWindow, SchResId(TP_ALIGNMENT), rInAttrs),
-
-//  aCbxTextBreak   ( this, SchResId( CBX_TEXTBREAK ) ),
-//  aCbxTextOverlap ( this, SchResId( CBX_TEXTOVERLAP ) ),
-//  aFlTextBreak    ( this, SchResId( FL_TEXTBREAK ) ),
-//  aRbtSideBySide(this, SchResId(RBT_SIDEBYSIDE)),
-//  aRbtUpDown(this, SchResId(RBT_UPDOWN)),
-//  aRbtDownUp(this, SchResId(RBT_DOWNUP)),
-//  aRbtAutoOrder(this, SchResId(RBT_AUTOORDER)),
-//  aFlOrder(this, SchResId(FL_ORDER)),
-//  eOrderMode(CHORDMODE_X_AXIS),
-
-    //Seit 4/1998 koennen Texte frei gedreht werden: SCHATTR_TEXT_DEGREES
     aFlAlign        ( this, SchResId( FL_ALIGN ) ),
     aCtrlDial       ( this, SchResId( CTR_DIAL ) ),
     aFtRotate       ( this, SchResId( FT_DEGREES ) ),
     aNfRotate       ( this, SchResId( NF_ORIENT ) ),
     aCbStacked      ( this, SchResId( BTN_TXTSTACKED ) ),
     aOrientHlp      ( this, aCtrlDial, aNfRotate, aCbStacked )
-
 {
     FreeResource();
 
@@ -102,56 +67,15 @@ SchAlignmentTabPage::SchAlignmentTabPage(Window* pWindow,
     aOrientHlp.AddDependentWindow( aFtRotate, STATE_CHECK );
 }
 
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
-
 SchAlignmentTabPage::~SchAlignmentTabPage()
 {
 }
-
-/*************************************************************************
-|*
-|* Markierungs-Handler
-|*
-\************************************************************************/
-
-/*
-IMPL_LINK( SchAlignmentTabPage, CheckButtonHdl, Button *, pBtn )
-{
-
-    if (eOrderMode != CHORDMODE_NONE)
-    {
-        BOOL bEnable=TRUE;
-        aRbtSideBySide.Enable(bEnable);
-        aRbtUpDown.Enable(bEnable);
-        aRbtDownUp.Enable(bEnable);
-        aRbtAutoOrder.Enable(bEnable);
-        aFlOrder.Enable(bEnable);
-    }
-    return 0;
-}
-*/
-
-/*************************************************************************
-|*
-|* Erzeugung
-|*
-\*************************************************************************/
 
 SfxTabPage* SchAlignmentTabPage::Create(Window* pWindow,
                                         const SfxItemSet& rOutAttrs)
 {
     return new SchAlignmentTabPage(pWindow, rOutAttrs);
 }
-
-/*************************************************************************
-|*
-|* Fuellt uebergebenen Item-Set mit Dialogbox-Attributen
-|*
-\*************************************************************************/
 
 BOOL SchAlignmentTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
@@ -161,130 +85,21 @@ BOOL SchAlignmentTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 
     sal_Int32 nDegrees = bStacked ? 0 : aCtrlDial.GetRotation();
     rOutAttrs.Put( SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
-
-    /*
-    if (eOrderMode != CHORDMODE_NONE)
-    {
-        SvxChartTextOrder eOrder;
-
-//      if (aRbtUpDown.IsChecked()) eOrder = CHTXTORDER_UPDOWN;
-//      else if (aRbtDownUp.IsChecked()) eOrder = CHTXTORDER_DOWNUP;
-//           else if (aRbtAutoOrder.IsChecked()) eOrder = CHTXTORDER_AUTO;
-                  else eOrder = CHTXTORDER_SIDEBYSIDE;
-
-        rOutAttrs.Put(SvxChartTextOrderItem(eOrder));
-    }
-    */
-
-    // Textumbruch
-//  BOOL bTextOverlap = aCbxTextOverlap.IsChecked();
-//  rOutAttrs.Put( SfxBoolItem( SCHATTR_TEXT_OVERLAP, bTextOverlap ) );
-
-//  BOOL bTextBreak = aCbxTextBreak.IsChecked();
-//  rOutAttrs.Put( SfxBoolItem( SID_TEXTBREAK, bTextBreak ) );
-
-    /*
-    BOOL                bAttrsChanged   = FALSE;
-    const SfxItemSet&   rOldSet         = GetItemSet();
-    */
-//  TriState            eState;
-
     return TRUE;
 }
-
-/*************************************************************************
-|*
-|* Initialisierung
-|*
-\*************************************************************************/
 
 void SchAlignmentTabPage::Reset(const SfxItemSet& rInAttrs)
 {
     const SfxPoolItem *pPoolItem = NULL;
+    const SfxPoolItem* pItem = GetItem( rInAttrs, SCHATTR_TEXT_DEGREES );
 
-    /*
-    if (rInAttrs.GetItemState(SCHATTR_TEXT_ORDER,
-                              TRUE, &pPoolItem) == SFX_ITEM_SET &&
-        eOrderMode != CHORDMODE_NONE)
-    {
-        switch (((const SvxChartTextOrderItem*)pPoolItem)->GetValue())
-        {
-            case CHTXTORDER_SIDEBYSIDE:
-                aRbtSideBySide.Check(TRUE);
-                break;
-
-            case CHTXTORDER_UPDOWN:
-                aRbtUpDown.Check(TRUE);
-                break;
-
-            case CHTXTORDER_DOWNUP:
-                aRbtDownUp.Check(TRUE);
-                break;
-
-            case CHTXTORDER_AUTO:
-                aRbtAutoOrder.Check(TRUE);
-                break;
-        }
-    }
-    */
-
-    //Seit 4/1998 koennen Texte frei gedreht werden: SCHATTR_TEXT_DEGREES
-    const SfxPoolItem* pItem;
-
-    pItem = GetItem( rInAttrs, SCHATTR_TEXT_DEGREES );
     sal_Int32 nDegrees = pItem ? ((const SfxInt32Item*)pItem)->GetValue() : 0;
     aCtrlDial.SetRotation( nDegrees );
 
     pItem = GetItem( rInAttrs, SCHATTR_TEXT_STACKED );
     bool bStacked = pItem && ((const SfxBoolItem*)pItem)->GetValue();
     aOrientHlp.SetStackedState( bStacked ? STATE_CHECK : STATE_NOCHECK );
-
-    // Textumbruch
-    /*
-    if( rInAttrs.GetItemState( SID_TEXTBREAK, FALSE, &pPoolItem ) >= SFX_ITEM_AVAILABLE )
-    {
-        BOOL bTextBreak = ( (const SfxBoolItem*) pPoolItem)->GetValue();
-//      aCbxTextBreak.Check( bTextBreak );
-    }
-    else
-    {
-//      aCbxTextBreak.Hide();
-//      aFlTextBreak.Hide();
-    }
-    // Textueberlapp
-    if( (rInAttrs.GetItemState( SCHATTR_TEXT_OVERLAP, FALSE, &pPoolItem ) >= SFX_ITEM_AVAILABLE) && bTextCanOverlap)
-    {
-        BOOL bTextOverlap = ( (const SfxBoolItem*) pPoolItem)->GetValue();
-//      aCbxTextOverlap.Check( bTextOverlap );
-    }
-    else
-    {
-//      aCbxTextOverlap.Hide();
-    }
-    */
 }
-
-/*************************************************************************
-|*
-|* Anordnungs-Controls hiden
-|*
-\*************************************************************************/
-
-/*
-void SchAlignmentTabPage::SetOrderMode(OrderMode eMode)
-{
-    eOrderMode = eMode;
-
-    if (eOrderMode == CHORDMODE_NONE)
-    {
-        aRbtSideBySide.Hide();
-        aRbtUpDown.Hide();
-        aRbtDownUp.Hide();
-        aRbtAutoOrder.Hide();
-        aFlOrder.Hide();
-    }
-}
-*/
 
 //.............................................................................
 } //namespace chart
