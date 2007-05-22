@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VLegend.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:51:19 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:26:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,23 +44,24 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
 #include <com/sun/star/awt/Rectangle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XDATASERIESTREEPARENT_HPP_
-#include <com/sun/star/chart2/XDataSeriesTreeParent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LAYOUT_ALIGNMENT_HPP_
-#include <com/sun/star/layout/Alignment.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
 
+#include <vector>
+
 //.............................................................................
 namespace chart
 {
 //.............................................................................
+
+class LegendEntryProvider;
 
 //-----------------------------------------------------------------------------
 /**
@@ -70,7 +71,10 @@ class VLegend
 {
 public:
     VLegend( const ::com::sun::star::uno::Reference<
-                 ::com::sun::star::chart2::XLegend > & xLegend );
+                 ::com::sun::star::chart2::XLegend > & xLegend,
+             const ::com::sun::star::uno::Reference<
+                 ::com::sun::star::uno::XComponentContext > & xContext,
+             const std::vector< LegendEntryProvider* >& rLegendEntryProviderList );
 
     void SAL_CALL init( const ::com::sun::star::uno::Reference<
                             ::com::sun::star::drawing::XShapes >& xTargetPage,
@@ -105,11 +109,15 @@ private:
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::lang::XMultiServiceFactory>   m_xShapeFactory;
     ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XLegend >     m_xLegend;
+                    ::com::sun::star::chart2::XLegend >             m_xLegend;
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape >             m_xShape;
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::frame::XModel >               m_xModel;
+    ::com::sun::star::uno::Reference<
+                    ::com::sun::star::uno::XComponentContext >      m_xContext;
+
+    std::vector< LegendEntryProvider* >         m_aLegendEntryProviderList;
 };
 
 //.............................................................................
