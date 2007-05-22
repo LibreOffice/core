@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VCartesianAxis.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:38:14 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:10:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,13 +35,10 @@
 #ifndef _CHART2_VCARTESIANAXIS_HXX
 #define _CHART2_VCARTESIANAXIS_HXX
 
-#include "VMeterBase.hxx"
-#include "VAxisProperties.hxx"
-#include "TickmarkHelper.hxx"
+#include "VAxisBase.hxx"
 
-// header for class Vector2D
-#ifndef _VECTOR2D_HXX
-#include <tools/vector2d.hxx>
+#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
+#include <basegfx/vector/b2dvector.hxx>
 #endif
 
 //.............................................................................
@@ -53,17 +50,15 @@ namespace chart
 /**
 */
 
-class NumberFormatterWrapper;
-
-class VCartesianAxis : public VMeterBase
+class VCartesianAxis : public VAxisBase
 {
     //-------------------------------------------------------------------------
     // public methods
     //-------------------------------------------------------------------------
 public:
     VCartesianAxis( const AxisProperties& rAxisProperties
-           , NumberFormatterWrapper* pNumberFormatterWrapper
-           , sal_Int32 nDimensionCount
+           , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
+           , sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
            , PlottingPositionHelper* pPosHelper = NULL //takes ownership
            );
 
@@ -78,12 +73,21 @@ public:
     virtual void SAL_CALL setTransformation( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >& xTransformationToLogicTarget, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >& xTransformationToFinalPage ) throw (::com::sun::star::uno::RuntimeException);
     */
 
+    virtual void SAL_CALL createMaximumLabels();
+    virtual void SAL_CALL createLabels();
+    virtual void SAL_CALL updatePositions();
+
     virtual void SAL_CALL createShapes();
+
+    virtual sal_Int32 estimateMaximumAutoMainIncrementCount();
+
+    //-------------------------------------------------------------------------
+    virtual TickmarkHelper* createTickmarkHelper();
 
     //-------------------------------------------------------------------------
     double      getLogicValueWhereMainLineCrossesOtherAxis() const;
     bool        getLogicValueWhereExtraLineCrossesOtherAxis( double& fCrossesOtherAxis) const;
-    void        get2DAxisMainLine( Vector2D& rStart, Vector2D& rEnd, double fCrossesOtherAxis ) const;
+    void        get2DAxisMainLine( ::basegfx::B2DVector& rStart, ::basegfx::B2DVector& rEnd, double fCrossesOtherAxis ) const;
 
     //-------------------------------------------------------------------------
     //Layout interface for cartesian axes:
@@ -109,13 +113,18 @@ public:
 protected: //methods
     bool    createTextShapes( const ::com::sun::star::uno::Reference<
                        ::com::sun::star::drawing::XShapes >& xTarget
-                     , ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos
+                     , TickIter& rTickIter
                      , AxisLabelProperties& rAxisLabelProperties
                      , TickmarkHelper_2D* pTickmarkHelper );
 
-private: //member
-    AxisProperties              m_aAxisProperties;
-    NumberFormatterWrapper*     m_pNumberFormatterWrapper;
+    TickmarkHelper_2D* createTickmarkHelper2D();
+
+    void    doStaggeringOfLabels( const AxisLabelProperties& rAxisLabelProperties
+                            , TickmarkHelper_2D* pTickmarkHelper2D );
+    bool    isAutoStaggeringOfLabelsAllowed( const AxisLabelProperties& rAxisLabelProperties
+                            , TickmarkHelper_2D* pTickmarkHelper);
+    bool    isBreakOfLabelsAllowed( const AxisLabelProperties& rAxisLabelProperties
+                                                     , TickmarkHelper_2D* pTickmarkHelper );
 };
 
 //.............................................................................
