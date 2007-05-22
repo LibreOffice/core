@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xelink.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:24:46 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:47:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -928,7 +928,7 @@ sal_uInt16 XclExpExtNameBuffer::InsertDde(
         if( GetDoc().FindDdeLink( rApplic, rTopic, rItem, SC_DDE_IGNOREMODE, nPos ) )
         {
             // create the leading 'StdDocumentName' EXTERNNAME record
-            if( maNameList.Empty() )
+            if( maNameList.IsEmpty() )
                 AppendNew( new XclExpExtNameDde(
                     GetRoot(), CREATE_STRING( "StdDocumentName" ), EXC_EXTN_EXPDDE_STDDOC ) );
 
@@ -947,7 +947,7 @@ void XclExpExtNameBuffer::Save( XclExpStream& rStrm )
 
 sal_uInt16 XclExpExtNameBuffer::GetIndex( const String& rName ) const
 {
-    for( size_t nPos = 0, nSize = maNameList.Size(); nPos < nSize; ++nPos )
+    for( size_t nPos = 0, nSize = maNameList.GetSize(); nPos < nSize; ++nPos )
         if( maNameList.GetRecord( nPos )->GetName() == rName )
             return static_cast< sal_uInt16 >( nPos + 1 );
     return 0;
@@ -956,7 +956,7 @@ sal_uInt16 XclExpExtNameBuffer::GetIndex( const String& rName ) const
 sal_uInt16 XclExpExtNameBuffer::AppendNew( XclExpExtNameBase* pExtName )
 {
     XclExpExtNameRef xExtName( pExtName );
-    size_t nSize = maNameList.Size();
+    size_t nSize = maNameList.GetSize();
     if( nSize < 0x7FFF )
     {
         maNameList.AppendRecord( xExtName );
@@ -1094,7 +1094,7 @@ void XclExpXct::Save( XclExpStream& rStrm )
 
 void XclExpXct::WriteBody( XclExpStream& rStrm )
 {
-    sal_uInt16 nCount = ulimit_cast< sal_uInt16 >( maCrnList.Size() );
+    sal_uInt16 nCount = ulimit_cast< sal_uInt16 >( maCrnList.GetSize() );
     rStrm << nCount << mnSBTab;
 }
 
@@ -1229,7 +1229,7 @@ void XclExpSupbook::StoreCellRange( const ScRange& rRange, sal_uInt16 nSBTab )
 sal_uInt16 XclExpSupbook::InsertTabName( const String& rTabName )
 {
     DBG_ASSERT( meType == EXC_SBTYPE_EXTERN, "XclExpSupbook::InsertTabName - don't insert sheet names here" );
-    sal_uInt16 nSBTab = ulimit_cast< sal_uInt16 >( maXctList.Size() );
+    sal_uInt16 nSBTab = ulimit_cast< sal_uInt16 >( maXctList.GetSize() );
     XclExpXctRef xXct( new XclExpXct( rTabName, nSBTab ) );
     AddRecSize( xXct->GetTabName().GetSize() );
     maXctList.AppendRecord( xXct );
@@ -1272,10 +1272,10 @@ void XclExpSupbook::WriteBody( XclExpStream& rStrm )
         case EXC_SBTYPE_EXTERN:
         case EXC_SBTYPE_SPECIAL:
         {
-            sal_uInt16 nCount = ulimit_cast< sal_uInt16 >( maXctList.Size() );
+            sal_uInt16 nCount = ulimit_cast< sal_uInt16 >( maXctList.GetSize() );
             rStrm << nCount << maUrlEncoded;
 
-            for( size_t nPos = 0, nSize = maXctList.Size(); nPos < nSize; ++nPos )
+            for( size_t nPos = 0, nSize = maXctList.GetSize(); nPos < nSize; ++nPos )
                 rStrm << maXctList.GetRecord( nPos )->GetTabName();
         }
         break;
@@ -1411,7 +1411,7 @@ void XclExpSupbookBuffer::Save( XclExpStream& rStrm )
 bool XclExpSupbookBuffer::GetSupbookUrl(
         XclExpSupbookRef& rxSupbook, sal_uInt16& rnIndex, const String& rUrl ) const
 {
-    for( size_t nPos = 0, nSize = maSupbookList.Size(); nPos < nSize; ++nPos )
+    for( size_t nPos = 0, nSize = maSupbookList.GetSize(); nPos < nSize; ++nPos )
     {
         rxSupbook = maSupbookList.GetRecord( nPos );
         if( rxSupbook->IsUrlLink( rUrl ) )
@@ -1426,7 +1426,7 @@ bool XclExpSupbookBuffer::GetSupbookUrl(
 bool XclExpSupbookBuffer::GetSupbookDde( XclExpSupbookRef& rxSupbook,
         sal_uInt16& rnIndex, const String& rApplic, const String& rTopic ) const
 {
-    for( size_t nPos = 0, nSize = maSupbookList.Size(); nPos < nSize; ++nPos )
+    for( size_t nPos = 0, nSize = maSupbookList.GetSize(); nPos < nSize; ++nPos )
     {
         rxSupbook = maSupbookList.GetRecord( nPos );
         if( rxSupbook->IsDdeLink( rApplic, rTopic ) )
@@ -1441,7 +1441,7 @@ bool XclExpSupbookBuffer::GetSupbookDde( XclExpSupbookRef& rxSupbook,
 sal_uInt16 XclExpSupbookBuffer::Append( XclExpSupbookRef xSupbook )
 {
     maSupbookList.AppendRecord( xSupbook );
-    return ulimit_cast< sal_uInt16 >( maSupbookList.Size() - 1 );
+    return ulimit_cast< sal_uInt16 >( maSupbookList.GetSize() - 1 );
 }
 
 void XclExpSupbookBuffer::AddExtSupbook( SCTAB nScTab )
@@ -1543,7 +1543,7 @@ void XclExpLinkManagerImpl5::Save( XclExpStream& rStrm )
 
 sal_uInt16 XclExpLinkManagerImpl5::GetExtSheetCount() const
 {
-    return static_cast< sal_uInt16 >( maExtSheetList.Size() );
+    return static_cast< sal_uInt16 >( maExtSheetList.GetSize() );
 }
 
 sal_uInt16 XclExpLinkManagerImpl5::AppendInternal( XclExpExtSheetRef xExtSheet )
