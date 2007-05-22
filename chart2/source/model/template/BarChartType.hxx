@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BarChartType.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:09:49 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:44:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #define CHART_BARCHARTTYPE_HXX
 
 #include "ChartType.hxx"
+#include "ServiceMacros.hxx"
 
 namespace chart
 {
@@ -43,12 +44,25 @@ namespace chart
 class BarChartType : public ChartType
 {
 public:
-    BarChartType( sal_Int32 nDim = 2 );
+    BarChartType(
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~BarChartType();
 
+    APPHELPER_XSERVICEINFO_DECL()
+
+    /// establish methods for factory instatiation
+    APPHELPER_SERVICE_FACTORY_HELPER( BarChartType )
+
 protected:
+    explicit BarChartType( const BarChartType & rOther );
+
     // ____ XChartType ____
     virtual ::rtl::OUString SAL_CALL getChartType()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XCloneable ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
         throw (::com::sun::star::uno::RuntimeException);
 };
 
