@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistyle.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 11:34:36 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:58:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,6 +147,9 @@ private:
     /** Reads and sets height, flags, color, boldness, script, family and charset. */
     void                ReadFontData5( XclImpStream& rStrm );
 
+    /** Reads and sets the font color. */
+    void                ReadFontColor( XclImpStream& rStrm );
+
     /** Reads and sets a byte string as font name. */
     void                ReadFontName2( XclImpStream& rStrm );
     /** Reads and sets a Unicode string as font name. */
@@ -224,7 +227,7 @@ public:
     /** Creates the number formats in the Calc document. */
     void                CreateScFormats();
 
-    /** Returns the format key with the Excel index nNumFmt or standard key, if invalid index. */
+    /** Returns the format key with the passed Excel index or NUMBERFORMAT_ENTRY_NOT_FOUND on error. */
     ULONG               GetScFormat( sal_uInt16 nXclNumFmt ) const;
 
     /** Fills an Excel number format to the passed item set.
