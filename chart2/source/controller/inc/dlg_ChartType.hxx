@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_ChartType.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:26:34 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,67 +35,24 @@
 #ifndef _CHART2_DLG_CHARTTYPE_HXX
 #define _CHART2_DLG_CHARTTYPE_HXX
 
-/*
-#ifndef _SCH_DIAGRTYP_HXX_
-#define _SCH_DIAGRTYP_HXX_
-
-#ifndef _SV_BUTTON_HXX //autogen
-#include <vcl/button.hxx>
-#endif
-#ifndef _SV_FIXED_HXX //autogen
-#include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_FIELD_HXX //autogen
-#include <vcl/field.hxx>
-#endif
-#ifndef _VALUESET_HXX //autogen
-#include <svtools/valueset.hxx>
-#endif
-#ifndef _SV_DIALOG_HXX //autogen
-#include <vcl/dialog.hxx>
-#endif
-#ifndef _SFXITEMSET_HXX //autogen
-#include <svtools/itemset.hxx>
-#endif
-*/
-
 // header for class ModalDialog
 #ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
-#endif
-// header for class RadioButton
-#ifndef _SV_BUTTON_HXX
-#include <vcl/button.hxx>
 #endif
 // header for class FixedLine
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
 #endif
-// header for class MetricField
-#ifndef _SV_FIELD_HXX
-#include <vcl/field.hxx>
-#endif
-// header for class ValueSet
-#ifndef _VALUESET_HXX
-#include <svtools/valueset.hxx>
-#endif
-// header for class SfxItemSet
-#ifndef _SFXITEMSET_HXX
-#include <svtools/itemset.hxx>
-#endif
-// header for SvxChartStyle
-#ifndef _SVX_CHRTITEM_HXX
-#include <svx/chrtitem.hxx>
+// header for class OKButton
+#ifndef _SV_BUTTON_HXX
+#include <vcl/button.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
-#include <com/sun/star/chart2/XDiagram.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPETEMPLATE_HPP_
-#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 
 //.............................................................................
@@ -103,102 +60,29 @@ namespace chart
 {
 //.............................................................................
 
-enum ChartDimension
+class ChartTypeTabPage;
+class ChartTypeDialog : public ModalDialog
 {
-    CHDIM_2D,
-    CHDIM_3D
-};
-
-#define CHDIM_COUNT (CHDIM_3D + 1)
-
-/*************************************************************************
-|*
-|* Dialog zur Auswahl eines Diagrammtyps
-|*
-\************************************************************************/
-class SchDiagramTypeDlg : public ModalDialog
-{
-private:
-    long            n3DGeometry;
-    RadioButton     aRbt2D;
-    RadioButton     aRbt3D;
-    FixedLine       aFlDimension;
-    FixedText       aFtDeep;
-    MetricField     aMtrFldDeep;
-    FixedText       aFtGran;
-    MetricField     aMtrFldGran;
-    FixedText       aFtNumLines;
-    MetricField     aMtrFldNumLines;
-
-    FixedText       aFtType;
-    ValueSet        aCtlType;
-    FixedText       aFtVariant;
-    ValueSet        aCtlVariant;
-    OKButton        aBtnOK;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
-    ChartDimension  eDimension;
-
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram > m_xDiagram;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > m_xTemplateManager;
-
-    void Reset();
-
-    void FillTypeSet(ChartDimension eDim, bool bForce=false);
-    void FillVariantSet(USHORT nType);
-
-    DECL_LINK(SelectDimensionHdl, void*);
-    DECL_LINK(SelectTypeHdl, void*);
-    DECL_LINK(DoubleClickHdl, void*);
-    DECL_LINK(ClickHdl, void*);
-
-    void SwitchDepth( SvxChartStyle eID );
-
-    /** Hides/Shows the controls for line/bar combination chart according to the
-        chart type id given as nID.
-     */
-    void SwitchNumLines( SvxChartStyle eID );
-
-    void FillValueSets();
-
 public:
-    SchDiagramTypeDlg(
-        Window* pWindow,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram > & xDiagram,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > & xTemplateManager );
-    virtual ~SchDiagramTypeDlg();
+    ChartTypeDialog( Window* pWindow
+        , const ::com::sun::star::uno::Reference<
+        ::com::sun::star::frame::XModel >& xChartModel
+        , const ::com::sun::star::uno::Reference<
+        ::com::sun::star::uno::XComponentContext >& xContext );
+    ~ChartTypeDialog();
 
-     sal_Int32 GetDepth() const;
-    void      SetDepth( sal_Int32 nDeep );
+private:
+    FixedLine           m_aFL;
+    OKButton            m_aBtnOK;
+    CancelButton        m_aBtnCancel;
+    HelpButton          m_aBtnHelp;
 
-     sal_Int32 GetGranularity() const;
-     void      SetGranularity( sal_Int32 nGranularity );
-
-    /** The value set here determines the maximum number of lines in a line/bar
-        combination chart.  This should usually be one less than the number of
-        series, such that at least one series remains a bar.
-     */
-    void    SetMaximumNumberOfLines( sal_Int32 nMaxLines );
-    /** set the current number of lines that are used in a line/bar combination
-        chart.
-     */
-//     void    SetNumberOfLines( long nLines );
-    /** get the number of lines that should be used for a line/bar combination
-        chart.  This has to be set before to be meaningful
-     */
-    sal_Int32  GetNumberOfLines() const;
-
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    ChartTypeTabPage*   m_pChartTypeTabPage;
 
     ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartTypeTemplate >
-        getTemplate() const;
-
-    bool HasChanged() const;
+                       ::com::sun::star::frame::XModel >            m_xChartModel;
+    ::com::sun::star::uno::Reference<
+                       ::com::sun::star::uno::XComponentContext>    m_xCC;
 };
 
 //.............................................................................
@@ -206,5 +90,4 @@ public:
 //.............................................................................
 
 #endif
-
 
