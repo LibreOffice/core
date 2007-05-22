@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.50 $
+#   $Revision: 1.51 $
 #
-#   last change: $Author: hjs $ $Date: 2007-05-16 09:44:09 $
+#   last change: $Author: vg $ $Date: 2007-05-22 16:14:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,12 +66,6 @@ SHL1TARGET= sd$(UPD)$(DLLPOSTFIX)
 SHL1USE_EXPORTS=ordinal
 SHL1IMPLIB= sdi
 
-# on MacOSX static libs must be at end of libraries to link with
-.IF "$(OS)" != "MACOSX"
-# static libraries
-SHL1STDLIBS+= $(SCHLIB)
-.ENDIF # MACOSX
-
 # dynamic libraries
 SHL1STDLIBS+= \
     $(SVXLIB) \
@@ -99,12 +93,6 @@ SHL1STDLIBS+= \
     $(SALLIB) \
     $(AVMEDIALIB)
 
-# on MacOSX static libs must be at end of libraries to link with
-.IF "$(OS)" == "MACOSX"
-# add back in static libraries
-SHL1STDLIBS+= $(SCHLIB)
-.ENDIF # MACOSX
-
 SHL1LIBS= $(LIB3TARGET) $(LIB5TARGET) $(LIB6TARGET)
 SHL1DEPN+=	makefile.mk
 
@@ -129,8 +117,6 @@ LIB3TARGET=$(SLB)$/sdraw3.lib
 LIB3FILES=      \
             $(SLB)$/view.lib        \
             $(SLB)$/app.lib			\
-            $(SLB)$/func.lib        \
-            $(SLB)$/func_2.lib        \
             $(SLB)$/docshell.lib    \
             $(SLB)$/dlg.lib			\
             $(SLB)$/core.lib		\
@@ -155,6 +141,8 @@ LIB5FILES=      \
 
 LIB6TARGET=$(SLB)$/sdraw3_3.lib
 LIB6FILES=      \
+            $(SLB)$/func.lib        \
+            $(SLB)$/func_2.lib        \
             $(SLB)$/slsmodel.lib		\
             $(SLB)$/slsview.lib			\
             $(SLB)$/slscontroller.lib	\
