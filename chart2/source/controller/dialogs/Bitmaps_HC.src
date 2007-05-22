@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Bitmaps_HC.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:03:51 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:26:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,349 +34,413 @@
  ************************************************************************/
 #include "Bitmaps_HC.hrc"
 
+Image IMG_TYPE_COLUMN_HC
+{
+    ImageBitmap = Bitmap { File = "typecolumn_16.png" ; };
+    MaskColor = SC_HC_MASKCOLOR;
+};
+Image IMG_TYPE_BAR_HC
+{
+    ImageBitmap = Bitmap { File = "typebar_16.png " ; };
+    MaskColor = SC_HC_MASKCOLOR;
+};
+Image IMG_TYPE_PIE_HC
+{
+    ImageBitmap = Bitmap { File = "typepie_16.png" ; };
+    MaskColor = SC_HC_MASKCOLOR;
+};
+Image IMG_TYPE_LINE_HC
+{
+    ImageBitmap = Bitmap { File = "typepointline_16.png" ; };
+    MaskColor = SC_HC_MASKCOLOR;
+};
+Image IMG_TYPE_AREA_HC
+{
+    ImageBitmap = Bitmap { File = "typearea_16.png" ; };
+    MaskColor = SC_HC_MASKCOLOR;
+};
+Image IMG_TYPE_NET_HC
+{
+    ImageBitmap = Bitmap { File = "typenet_16.png" ; };
+    MaskColor = SC_HC_MASKCOLOR;
+};
+Image IMG_TYPE_STOCK_HC
+{
+    ImageBitmap = Bitmap { File = "typestock_16.png" ; };
+    MaskColor = SC_HC_MASKCOLOR;
+};
+Image IMG_TYPE_COLUMN_LINE_HC
+{
+    ImageBitmap = Bitmap { File = "typecolumnline_16.png" ; };
+    MaskColor = SC_HC_MASKCOLOR;
+};
 Bitmap BMP_AREAS_2D_HC
 {
-    File = "areas2d_h.bmp" ;
+    File = "areas_52x60_h.png" ;
 };
 Bitmap BMP_AREAS_2D_1_HC
 {
-    File = "areas2d1_h.bmp" ;
+    File = "areaspiled_52x60_h.png" ;
 };
 Bitmap BMP_AREAS_2D_3_HC
 {
-    File = "areas2d3_h.bmp" ;
+    File = "areasfull_52x60_h.png" ;
 };
 Bitmap BMP_AREAS_3D_HC
 {
-    File = "areas3d_h.bmp" ;
+    File = "areaspiled3d_52x60_h.png" ;
 };
 Bitmap BMP_AREAS_3D_1_HC
 {
-    File = "areas3d1_h.bmp" ;
+    File = "areas3d_52x60_h.png" ;
 };
 Bitmap BMP_AREAS_3D_2_HC
 {
-    File = "areas3d2_h.bmp" ;
+    File = "areasfull3d_52x60_h.png" ;
 };
 //---------------------
-Bitmap BMP_BARS_2D_HC
-{
-    File = "bars2d_h.bmp" ;
-};
 Bitmap BMP_BARS_2D_1_HC
 {
-    File = "bars2d1_h.bmp" ;
+    File = "bar_52x60_h.png" ;
 };
 Bitmap BMP_BARS_2D_2_HC
 {
-    File = "bars2d2_h.bmp" ;
+    File = "barstack_52x60_h.png" ;
 };
 Bitmap BMP_BARS_2D_3_HC
 {
-    File = "bars2d3_h.bmp" ;
+    File = "barpercent_52x60_h.png" ;
 };
 Bitmap BMP_BARS_3D_HC
 {
-    File = "bars3d_h.bmp" ;
+    File = "bar3ddeep_52x60_h.png" ;
 };
 Bitmap BMP_BARS_3D_1_HC
 {
-    File = "bars3d1_h.bmp" ;
+    File = "bar3d_52x60_h.png" ;
 };
 Bitmap BMP_BARS_3D_2_HC
 {
-    File = "bars3d2_h.bmp" ;
+    File = "barstack3d_52x60_h.png" ;
 };
 Bitmap BMP_BARS_3D_3_HC
 {
-    File = "bars3d3_h.bmp" ;
+    File = "barpercent3d_52x60_h.png" ;
 };
 //---------------------
 Bitmap BMP_CIRCLES_2D_HC
 {
-    File = "circl2d_h.bmp" ;
+    File = "pie_52x60_h.png" ;
 };
-Bitmap BMP_CIRCLES_2D_1_HC
+Bitmap BMP_CIRCLES_2D_EXPLODED_HC
 {
-    File = "circl2d1_h.bmp" ;
-};
-Bitmap BMP_CIRCLES_2D_2_HC
-{
-    File = "circl2d2_h.bmp" ;
+    File = "pieexploded_52x60_h.png" ;
 };
 Bitmap BMP_CIRCLES_3D_HC
 {
-    File = "circl3d_h.bmp" ;
+    File = "pie3d_52x60_h.png" ;
+};
+Bitmap BMP_CIRCLES_3D_EXPLODED_HC
+{
+    File = "pie3dexploded_52x60_h.png" ;
 };
 //---------------------
-Bitmap BMP_COLUMNS_2D_HC
+Bitmap BMP_DONUT_2D_HC
 {
-    File = "cols2d_h.bmp" ;
+    File = "donut_52x60_h.png" ;
 };
+Bitmap BMP_DONUT_2D_EXPLODED_HC
+{
+    File = "donutexploded_52x60_h.png" ;
+};
+Bitmap BMP_DONUT_3D_HC
+{
+    File = "donut3d_52x60_h.png" ;
+};
+Bitmap BMP_DONUT_3D_EXPLODED_HC
+{
+    File = "donut3dexploded_52x60_h.png" ;
+};
+//---------------------
 Bitmap BMP_COLUMNS_2D_1_HC
 {
-    File = "cols2d1_h.bmp" ;
+    File = "columns_52x60_h.png" ;
 };
 Bitmap BMP_COLUMNS_2D_2_HC
 {
-    File = "cols2d2_h.bmp" ;
+    File = "columnstack_52x60_h.png" ;
 };
 Bitmap BMP_COLUMNS_2D_3_HC
 {
-    File = "cols2d3_h.bmp" ;
+    File = "columnpercent_52x60_h.png" ;
 };
-Bitmap BMP_COLUMNS_2D_4_HC
+Bitmap BMP_COLUMN_LINE_HC
 {
-    File = "cols2d4_h.bmp" ;
+    File = "columnline_52x60_h.png" ;
 };
-Bitmap BMP_COLUMNS_2D_5_HC
+Bitmap BMP_COLUMN_LINE_STACKED_HC
 {
-    File = "cols2d5_h.bmp" ;
+    File = "columnstackline_52x60_h.png" ;
 };
 //---------------------
 Bitmap BMP_COLUMNS_3D_HC
 {
-    File = "cols3d_h.bmp" ;
+    File = "columns3ddeep_52x60_h.png" ;
 };
 Bitmap BMP_COLUMNS_3D_1_HC
 {
-    File = "cols3d1_h.bmp" ;
+    File = "columns3d_52x60_h.png" ;
 };
 Bitmap BMP_COLUMNS_3D_2_HC
 {
-    File = "cols3d2_h.bmp" ;
+    File = "columnstack3d_52x60_h.png" ;
 };
 Bitmap BMP_COLUMNS_3D_3_HC
 {
-    File = "cols3d3_h.bmp" ;
+    File = "columnpercent3d_52x60_h.png" ;
 };
 //---------------------
-Bitmap BMP_DONUT1_2D_HC
-{
-    File = "donut12d_h.bmp" ;
-};
 Bitmap BMP_KEGELQ_3D_1_HC
 {
-    File = "kegel1q_h.bmp" ;
+    File = "conehori_52x60_h.png" ;
 };
 Bitmap BMP_KEGELQ_3D_2_HC
 {
-    File = "kegel2q_h.bmp" ;
+    File = "conehoristack_52x60_h.png" ;
 };
 Bitmap BMP_KEGELQ_3D_3_HC
 {
-    File = "kegel3q_h.bmp" ;
+    File = "conehoripercent_52x60_h.png" ;
 };
 Bitmap BMP_KEGELQ_3D_4_HC
 {
-    File = "kegel4q_h.bmp" ;
+    File = "conehorideep_52x60_h.png" ;
 };
 Bitmap BMP_KEGEL_3D_1_HC
 {
-    File = "kegel1_h.bmp" ;
+    File = "cone_52x60_h.png" ;
 };
 Bitmap BMP_KEGEL_3D_2_HC
 {
-    File = "kegel2_h.bmp" ;
+    File = "conestack_52x60_h.png" ;
 };
 Bitmap BMP_KEGEL_3D_3_HC
 {
-    File = "kegel3_h.bmp" ;
+    File = "conepercent_52x60_h.png" ;
 };
 Bitmap BMP_KEGEL_3D_4_HC
 {
-    File = "kegel4_h.bmp" ;
+    File = "conedeep_52x60_h.png" ;
 };
 //---------------------
-/*
-Bitmap BMP_LINESYMB_2D_HC
+Bitmap BMP_POINTS_XVALUES_HC
 {
-    File = "lnsym2d_h.bmp" ;
+    File = "valueaxisdirectpoints_52x60_h.png" ;
 };
-*/
-Bitmap BMP_LINESYMB_2D_1_HC
+Bitmap BMP_POINTS_XCATEGORY_HC
 {
-    File = "lnsym2d1_h.bmp" ;
+    File = "nostackdirectpoints_52x60_h.png" ;
 };
-Bitmap BMP_LINESYMB_2D_2_HC
+Bitmap BMP_POINTS_STACKED_HC
 {
-    File = "lnsym2d2_h.bmp" ;
-};
-Bitmap BMP_LINESYMB_2D_3_HC
-{
-    File = "lnsym2d3_h.bmp" ;
+    File = "stackdirectpoints_52x60_h.png" ;
 };
 //---------------------
-Bitmap BMP_LINES_2D_HC
+
+Bitmap BMP_LINE_P_XVALUES_HC
 {
-    File = "lines2d_h.bmp" ;
+    File = "valueaxisdirectboth_52x60_h.png" ;
 };
-Bitmap BMP_LINES_2D_1_HC
+Bitmap BMP_LINE_O_XVALUES_HC
 {
-    File = "lines2d1_h.bmp" ;
+    File = "valueaxisdirectlines_52x60_h.png" ;
 };
-Bitmap BMP_LINES_2D_2_HC
+Bitmap BMP_LINE3D_XVALUES_HC
 {
-    File = "lines2d2_h.bmp" ;
+    File = "valueaxisdirect3d_52x60_h.png" ;
 };
-Bitmap BMP_LINES_2D_3_HC
+
+
+Bitmap BMP_LINE_P_XCATEGORY_HC
 {
-    File = "lines2d3_h.bmp" ;
+    File = "nostackdirectboth_52x60_h.png" ;
 };
-Bitmap BMP_LINES_3D_HC
+Bitmap BMP_LINE_O_XCATEGORY_HC
 {
-    File = "lines3d_h.bmp" ;
+    File = "nostackdirectlines_52x60_h.png" ;
+};
+Bitmap BMP_LINE3D_XCATEGORY_HC
+{
+    File = "nostackdirect3d_52x60_h.png" ;
+};
+
+
+Bitmap BMP_LINE_P_STACKED_HC
+{
+    File = "stackdirectboth_52x60_h.png" ;
+};
+Bitmap BMP_LINE_O_STACKED_HC
+{
+    File = "stackdirectlines_52x60_h.png" ;
+};
+Bitmap BMP_LINE3D_STACKED_HC
+{
+    File = "stackdirect3d_52x60_h.png" ;
+};
+
+//---------------------
+Bitmap BMP_LINE_P_XVALUES_SMOOTH_HC
+{
+    File = "valueaxissmoothboth_52x60_h.png" ;
+};
+Bitmap BMP_LINE_O_XVALUES_SMOOTH_HC
+{
+    File = "valueaxissmoothlines_52x60_h.png" ;
+};
+Bitmap BMP_LINE3D_XVALUES_SMOOTH_HC
+{
+    File = "valueaxissmooth3d_52x60_h.png" ;
+};
+Bitmap BMP_LINE_P_XCATEGORY_SMOOTH_HC
+{
+    File = "nostacksmoothboth_52x60_h.png" ;
+};
+Bitmap BMP_LINE_O_XCATEGORY_SMOOTH_HC
+{
+    File = "nostacksmoothlines_52x60_h.png" ;
+};
+Bitmap BMP_LINE3D_XCATEGORY_SMOOTH_HC
+{
+    File = "nostacksmooth3d_52x60_h.png" ;
+};
+Bitmap BMP_LINE_P_STACKED_SMOOTH_HC
+{
+    File = "stacksmoothboth_52x60_h.png" ;
+};
+Bitmap BMP_LINE_O_STACKED_SMOOTH_HC
+{
+    File = "stacksmoothlines_52x60_h.png" ;
+};
+Bitmap BMP_LINE3D_STACKED_SMOOTH_HC
+{
+    File = "stacksmooth3d_52x60_h.png" ;
 };
 //---------------------
-Bitmap BMP_NETSYMB_2D_HC
+Bitmap BMP_NET_HC
 {
-    File = "net2dsym_h.bmp" ;
+    File = "net_52x60_h.png" ;
 };
-Bitmap BMP_NETSYMB_2D_PERCENT_HC
+Bitmap BMP_NET_STACK_HC
 {
-    File = "n2dsympr_h.bmp" ;
+    File = "netstack_52x60_h.png" ;
 };
-Bitmap BMP_NETSYMB_2D_STACK_HC
+Bitmap BMP_NET_SYMB_HC
 {
-    File = "n2dsymst_h.bmp" ;
+    File = "netpoint_52x60_h.png" ;
 };
-Bitmap BMP_NET_2D_HC
+Bitmap BMP_NET_SYMB_STACK_HC
 {
-    File = "net2d_h.bmp" ;
+    File = "netpointstack_52x60_h.png" ;
 };
-Bitmap BMP_NET_2D_PERCENT_HC
+Bitmap BMP_NET_LINESYMB_HC
 {
-    File = "net2dpr_h.bmp" ;
+    File = "netlinepoint_52x60_h.png" ;
 };
-Bitmap BMP_NET_2D_STACK_HC
+Bitmap BMP_NET_LINESYMB_STACK_HC
 {
-    File = "net2dst_h.bmp" ;
+    File = "netlinepointstack_52x60_h.png" ;
+};
+Bitmap BMP_NET_FILLED_HC
+{
+    File = "net_52x60_h.png" ;
+};
+Bitmap BMP_NET_FILLED_STACKED_HC
+{
+    File = "netstack_52x60_h.png" ;
 };
 //---------------------
 Bitmap BMP_PYRAMIDQ_3D_1_HC
 {
-    File = "pyra1q_h.bmp" ;
+    File = "pyramindhori_52x60_h.png" ;
 };
 Bitmap BMP_PYRAMIDQ_3D_2_HC
 {
-    File = "pyra2q_h.bmp" ;
+    File = "pyramindhoristack_52x60_h.png" ;
 };
 Bitmap BMP_PYRAMIDQ_3D_3_HC
 {
-    File = "pyra3q_h.bmp" ;
+    File = "pyramindhoripercent_52x60_h.png" ;
 };
 Bitmap BMP_PYRAMIDQ_3D_4_HC
 {
-    File = "pyra4q_h.bmp" ;
+    File = "pyramindhorideep_52x60_h.png" ;
 };
 Bitmap BMP_PYRAMID_3D_1_HC
 {
-    File = "pyra1_h.bmp" ;
+    File = "pyramind_52x60_h.png" ;
 };
 Bitmap BMP_PYRAMID_3D_2_HC
 {
-    File = "pyra2_h.bmp" ;
+    File = "pyramindstack_52x60_h.png" ;
 };
 Bitmap BMP_PYRAMID_3D_3_HC
 {
-    File = "pyra3_h.bmp" ;
+    File = "pyramindpercent_52x60_h.png" ;
 };
 Bitmap BMP_PYRAMID_3D_4_HC
 {
-    File = "pyra4_h.bmp" ;
+    File = "pyraminddeep_52x60_h.png" ;
 };
 //---------------------
 Bitmap BMP_ROEHRE_3D_1_HC
 {
-    File = "roehre1_h.bmp" ;
+    File = "cylinderhori_52x60_h.png" ;
 };
 Bitmap BMP_ROEHRE_3D_2_HC
 {
-    File = "roehre2_h.bmp" ;
+    File = "cylinderhoristack_52x60_h.png" ;
 };
 Bitmap BMP_ROEHRE_3D_3_HC
 {
-    File = "roehre3_h.bmp" ;
+    File = "cylinderhoriprocent_52x60_h.png" ;
 };
 Bitmap BMP_ROEHRE_3D_4_HC
 {
-    File = "roehre4_h.bmp" ;
+    File = "cylinderhorideep_52x60_h.png" ;
 };
 //---------------------
 Bitmap BMP_SAEULE_3D_1_HC
 {
-    File = "saeule1_h.bmp" ;
+    File = "cylinder_52x60_h.png" ;
 };
 Bitmap BMP_SAEULE_3D_2_HC
 {
-    File = "saeule2_h.bmp" ;
+    File = "cylinderstack_52x60_h.png" ;
 };
 Bitmap BMP_SAEULE_3D_3_HC
 {
-    File = "saeule3_h.bmp" ;
+    File = "cylinderpercent_52x60_h.png" ;
 };
 Bitmap BMP_SAEULE_3D_4_HC
 {
-    File = "saeule4_h.bmp" ;
-};
-//---------------------
-Bitmap BMP_SPLINE_B_HC
-{
-    File = "splineb_h.bmp" ;
-};
-Bitmap BMP_SPLINE_B_SYMBOL_HC
-{
-    File = "splnbsym_h.bmp" ;
-};
-Bitmap BMP_SPLINE_CUBIC_HC
-{
-    File = "spline_h.bmp" ;
-};
-Bitmap BMP_SPLINE_CUBIC_SYMBOL_HC
-{
-    File = "splnesym_h.bmp" ;
+    File = "cylinderdeep_52x60_h.png" ;
 };
 //---------------------
 Bitmap BMP_STOCK_1_HC
 {
-    File = "stock2d1_h.bmp" ;
+    File = "stock_52x60_h.png" ;
 };
 Bitmap BMP_STOCK_2_HC
 {
-    File = "stock2d2_h.bmp" ;
+    File = "stockblock_52x60_h.png" ;
 };
 Bitmap BMP_STOCK_3_HC
 {
-    File = "stock2d3_h.bmp" ;
+    File = "stockcolumns_52x60_h.png" ;
 };
 Bitmap BMP_STOCK_4_HC
 {
-    File = "stock2d4_h.bmp" ;
-};
-//---------------------
-/*
-Bitmap BMP_SURF_3D_HC
-{
-    File = "surf3d_h.bmp" ;
-};
-*/
-Bitmap BMP_XYSYMB_2D_HC
-{
-    File = "xysym2d_h.bmp" ;
-};
-/*
-Bitmap BMP_XYZSYMB_3D_HC
-{
-    File = "xyzsym3d_h.bmp" ;
-};
-Bitmap BMP_XYZ_3D_HC
-{
-    File = "xyz3d_h.bmp" ;
-};
-*/
-Bitmap BMP_XY_2D_HC
-{
-    File = "xy2d_h.bmp" ;
+    File = "stockcolumnsattach_52x60_h.png" ;
 };
 //---------------------
 //---------------------
@@ -390,13 +454,13 @@ Bitmap BMP_INDICATE_BOTH_HC
 {
     File = "indiboth_h.bmp" ;
 };
-Bitmap BMP_INDICATE_UP_HC
-{
-    File = "indiup_h.bmp" ;
-};
 Bitmap BMP_INDICATE_DOWN_HC
 {
     File = "indidown_h.bmp" ;
+};
+Bitmap BMP_INDICATE_UP_HC
+{
+    File = "indiup_h.bmp" ;
 };
 //---------------------
 //regression curves
@@ -421,3 +485,11 @@ Bitmap BMP_REGRESSION_POWER_HC
     File = "regpow_h.bmp" ;
 };
 //---------------------
+Image IMG_SELECTRANGE_HC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "selectrange.png";
+    };
+    MaskColor = SC_HC_MASKCOLOR;
+};
