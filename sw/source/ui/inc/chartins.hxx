@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chartins.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:03:54 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:38:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,93 +35,9 @@
 #ifndef _CHARTINS_HXX
 #define _CHARTINS_HXX
 
-#ifndef _SFX_CHILDWIN_HXX //autogen
-#include <sfx2/childwin.hxx>
-#endif
 
-#ifdef _CHARTINS_CXX
+Point SwGetChartDialogPos( const Window *pParentWin, const Size& rDialogSize, const Rectangle& rLogicChart );
+void SwInsertChart( Window *pParent, SfxBindings *pBindings );
 
-#ifndef _BASEDLGS_HXX //autogen
-#include <sfx2/basedlgs.hxx>
-#endif
-
-#ifndef _STDCTRL_HXX
-#include <svtools/stdctrl.hxx>
-#endif
-
-#ifndef _BUTTON_HXX //autogen
-#include <vcl/button.hxx>
-#endif
-
-#ifndef _BUTTON_HXX //autogen
-#include <vcl/button.hxx>
-#endif
-
-#include "autoedit.hxx"
-
-class SfxItemSet;
-class SwWrtShell;
-class SchMemChart;
-
-//========================================================================
-
-class SwInsertChartDlg : public SfxModelessDialog
-{
-    FixedLine       aFL1;
-    CheckBox        aFirstRow;
-    CheckBox        aFirstCol;
-    FixedText       aRangeFt;
-    AutoEdit        aRangeEd;
-
-    FixedInfo       aTextFt;
-
-    HelpButton      aHelp;
-    CancelButton    aCancel;
-
-    FixedLine       aHLine;
-    PushButton      aPrev;
-    PushButton      aNext;
-    PushButton      aFinish;
-
-    SchMemChart *   pChartData;
-    ModalDialog*    pChartDlg;
-    SfxItemSet*     pInItemSet;
-    SfxItemSet*     pOutItemSet;
-    SwWrtShell*     pWrtShell;
-    String          aAktTableName;
-    BOOL            bUpdateChartData;
-    BOOL            bChartInserted;
-    BOOL            bChildOpen;
-
-    void UpdateData();
-    virtual BOOL        Close();
-
-public:
-    SwInsertChartDlg( SfxBindings*, SfxChildWindow*,
-                      Window *pParent, SwWrtShell * );
-    ~SwInsertChartDlg();
-
-    DECL_LINK( SelTblCellsNotify, SwWrtShell * );
-    DECL_LINK( ModifyHdl, Edit* );
-    DECL_LINK( NextHdl, Button* );
-    DECL_LINK( FinishHdl, Button* );
-    DECL_LINK( CloseHdl, Button* );
-    DECL_LINK( ClickHdl, CheckBox* );
-
-    virtual void    Activate();
-};
-#endif
-
-class SwInsertChartChild : public SfxChildWindow
-{
-public:
-    SwInsertChartChild( Window* ,
-                        USHORT nId,
-                        SfxBindings*,
-                        SfxChildWinInfo*  );
-    SFX_DECL_CHILDWINDOW( SwInsertChartChild );
-};
-
-
-#endif
+#endif  /*_CHARTINS_HXX*/
 
