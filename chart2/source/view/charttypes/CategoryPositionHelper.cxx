@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CategoryPositionHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:33:34 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:15:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
+
 #ifndef _CHART2_CATEGORYPOSITIONHELPER_HXX
 #include "CategoryPositionHelper.hxx"
 #endif
@@ -52,6 +53,14 @@ CategoryPositionHelper::CategoryPositionHelper( double fSeriesCount, double fCat
     , m_fCategoryWidth(fCategoryWidth)
     , m_fInnerDistance(0.0)
     , m_fOuterDistance(1.0)
+{
+}
+
+CategoryPositionHelper::CategoryPositionHelper( const CategoryPositionHelper& rSource )
+    : m_fSeriesCount( rSource.m_fSeriesCount )
+    , m_fCategoryWidth( rSource.m_fCategoryWidth )
+    , m_fInnerDistance( rSource.m_fInnerDistance )
+    , m_fOuterDistance( rSource.m_fOuterDistance )
 {
 }
 
@@ -85,6 +94,24 @@ double CategoryPositionHelper::getSlotPos( double fCategoryX, double fSeriesNumb
            + getSlotWidth()/2.0;
 
     return fPos;
+}
+
+void CategoryPositionHelper::setInnerDistance( double fInnerDistance )
+{
+    if( fInnerDistance < -1.0 )
+        fInnerDistance = -1.0;
+    if( fInnerDistance > 1.0 )
+        fInnerDistance = 1.0;
+    m_fInnerDistance = fInnerDistance;
+}
+
+void CategoryPositionHelper::setOuterDistance( double fOuterDistance )
+{
+    if( fOuterDistance < 0.0 )
+        fOuterDistance = 0.0;
+    if( fOuterDistance > 6.0 )
+        fOuterDistance = 6.0;
+    m_fOuterDistance = fOuterDistance;
 }
 
 //.............................................................................
