@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 01:25:18 $
+#   last change: $Author: vg $ $Date: 2007-05-22 18:53:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,12 +59,13 @@ SLOFILES=	\
     $(SLO)$/AreaChartTypeTemplate.obj \
     $(SLO)$/BarChartType.obj \
     $(SLO)$/BarChartTypeTemplate.obj \
+    $(SLO)$/CandleStickChartType.obj \
     $(SLO)$/ChartType.obj		\
     $(SLO)$/ChartTypeManager.obj		\
     $(SLO)$/ChartTypeTemplate.obj		\
     $(SLO)$/ColumnChartType.obj \
     $(SLO)$/ColumnLineChartTypeTemplate.obj \
-    $(SLO)$/DoubleStackedBarChartTypeTemplate.obj \
+    $(SLO)$/DataInterpreter.obj \
     $(SLO)$/LineChartType.obj \
     $(SLO)$/LineChartTypeTemplate.obj \
     $(SLO)$/NetChartType.obj \
@@ -73,7 +74,11 @@ SLOFILES=	\
     $(SLO)$/PieChartTypeTemplate.obj \
     $(SLO)$/ScatterChartType.obj \
     $(SLO)$/ScatterChartTypeTemplate.obj \
-    $(SLO)$/StockChartTypeTemplate.obj
+    $(SLO)$/StockChartTypeTemplate.obj \
+    $(SLO)$/StockDataInterpreter.obj \
+    $(SLO)$/XYDataInterpreter.obj \
+    $(SLO)$/ColumnLineDataInterpreter.obj \
+    $(SLO)$/_serviceregistration_charttypes.obj
 
 # --- Targets -----------------------------------------------------------------
 
