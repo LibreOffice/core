@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxgrahicitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:41:13 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:17:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@ SvxGraphicItem::SvxGraphicItem( USHORT _nWhich, const Graphic& rGraphic )
 
 }
 SvxGraphicItem::SvxGraphicItem( const SvxGraphicItem& rItem)
-    : SfxPoolItem( rItem.Which() )
+    : SfxPoolItem( rItem.Which() ), aGraphic( rItem.aGraphic )
 {
 }
 
