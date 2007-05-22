@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh.sdi,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:45:02 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:41:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,6 @@ interface BaseSelection
     SID_FM_CREATE_CONTROL   [ ExecMethod = ExecDraw ; ]
     SID_LINKS               [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
     SID_DRAW_CHART          [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
-    SID_OPENDLG_MODCHART    [ ExecMethod = Execute; StateMethod = GetDrawInsState; ]
     SID_FM_CREATE_FIELDCONTROL [ ExecMethod = ExecDrawIns ; ]
 
     // } Einfuegen von Objekten
