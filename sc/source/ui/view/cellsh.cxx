@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:48:24 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:12:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -488,8 +488,8 @@ void ScCellShell::GetState(SfxItemSet &rSet)
     // removed: SID_BORDER_OBJECT (old Basic)
 
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
-    BOOL bOle = pTabViewShell->GetViewFrame()->GetFrame()->IsInPlace();
-    BOOL bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
+//     BOOL bOle = pTabViewShell->GetViewFrame()->GetFrame()->IsInPlace();
+//  BOOL bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScViewData* pData       = GetViewData();
     ScDocument* pDoc        = pData->GetDocument();
@@ -509,11 +509,6 @@ void ScCellShell::GetState(SfxItemSet &rSet)
     {
         switch ( nWhich )
         {
-            case SID_OPENDLG_CHART:
-                if ( bOle || bTabProt || !SvtModuleOptions().IsChart() )
-                    rSet.DisableItem( nWhich );
-                break;
-
             case SID_DETECTIVE_REFRESH:
                 if (!pDoc->HasDetectiveOperations())
                     rSet.DisableItem( nWhich );
