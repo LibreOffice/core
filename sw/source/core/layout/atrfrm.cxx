@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:07:16 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:29:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2878,6 +2878,20 @@ SwFlyFrm* SwFlyFrmFmt::GetFrm( const Point* pPoint, const sal_Bool bCalcFrm ) co
     return (SwFlyFrm*)::GetFrmOfModify( *(SwModify*)this, FRM_FLY,
                                             pPoint, 0, bCalcFrm );
 }
+
+SwAnchoredObject* SwFlyFrmFmt::GetAnchoredObj( const Point* pPoint, const sal_Bool bCalcFrm ) const
+{
+    SwFlyFrm* pFlyFrm( GetFrm( pPoint, bCalcFrm ) );
+    if ( pFlyFrm )
+    {
+        return dynamic_cast<SwAnchoredObject*>(pFlyFrm);
+    }
+    else
+    {
+        return 0L;
+    }
+}
+
 
 sal_Bool SwFlyFrmFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
