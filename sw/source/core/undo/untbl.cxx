@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:02:26 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:33:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,9 @@
 #endif
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
+#endif
+#ifndef _UNOCHART_HXX
+#include <unochart.hxx>
 #endif
 
 #ifdef PRODUCT
@@ -1071,7 +1074,8 @@ void _SaveTable::CreateNew( SwTable& rTbl, BOOL bCreateFrms,
 
     _FndBox aTmpBox( 0, 0 );
     if( bRestoreChart )
-        aTmpBox.SaveChartData( rTbl );
+        // ? TL_CHART2: notification or locking of controller required ?
+        ;
     aTmpBox.DelFrms( rTbl );
 
     // zuerst die Attribute des TabellenFrmFormates zurueck holen
@@ -1102,6 +1106,8 @@ void _SaveTable::CreateNew( SwTable& rTbl, BOOL bCreateFrms,
     if( USHRT_MAX == nLineCount )
         nOldLines = rTbl.GetTabLines().Count();
 
+    SwDoc *pDoc = rTbl.GetFrmFmt()->GetDoc();
+    SwChartDataProvider *pPCD = pDoc->GetChartDataProvider();
     for( n = 0; n < aParent.GetTabLines().Count(); ++n )
     {
         SwTableLine* pLn = aParent.GetTabLines()[ n ];
@@ -1109,21 +1115,53 @@ void _SaveTable::CreateNew( SwTable& rTbl, BOOL bCreateFrms,
         if( n < nOldLines )
         {
             SwTableLine* pOld = rTbl.GetTabLines()[ n ];
+
+            // TL_CHART2: notify chart about boxes to be removed
+            const SwTableBoxes &rBoxes = pOld->GetTabBoxes();
+            USHORT nBoxes = rBoxes.Count();
+            for (USHORT k = 0;  k < nBoxes;  ++k)
+            {
+                SwTableBox *pBox = rBoxes[k];
+                if (pPCD)
+                    pPCD->DeleteBox( &rTbl, *pBox );
+            }
+
             rTbl.GetTabLines().C40_REPLACE( SwTableLine, pLn, n );
             delete pOld;
         }
         else
             rTbl.GetTabLines().C40_INSERT( SwTableLine, pLn, n );
     }
+
     if( n < nOldLines )
+    {
+        // remove remaining lines...
+
+        for (USHORT k1 = 0; k1 < nOldLines - n;  ++k1)
+        {
+            const SwTableBoxes &rBoxes = rTbl.GetTabLines()[n + k1]->GetTabBoxes();
+            USHORT nBoxes = rBoxes.Count();
+            for (USHORT k2 = 0;  k2 < nBoxes;  ++k2)
+            {
+                SwTableBox *pBox = rBoxes[k2];
+                // TL_CHART2: notify chart about boxes to be removed
+                if (pPCD)
+                    pPCD->DeleteBox( &rTbl, *pBox );
+            }
+        }
+
         rTbl.GetTabLines().DeleteAndDestroy( n, nOldLines - n );
+    }
 
     aParent.GetTabLines().Remove( 0, n );
 
     if( bCreateFrms )
         aTmpBox.MakeFrms( rTbl );
     if( bRestoreChart )
-        aTmpBox.RestoreChartData( rTbl );
+    {
+        // TL_CHART2: need to inform chart of probably changed cell names
+        pDoc->UpdateCharts( rTbl.GetFrmFmt()->GetName() );
+    }
 }
 
 
@@ -1785,9 +1823,10 @@ void SwUndoTblNdsChg::Undo( SwUndoIter& rUndoIter )
     CHECK_TABLE( pTblNd->GetTable() )
 
     _FndBox aTmpBox( 0, 0 );
-    aTmpBox.SaveChartData( pTblNd->GetTable() );
-    std::vector< SwTableBox* > aDelBoxes;
+    // ? TL_CHART2: notification or locking of controller required ?
 
+    SwChartDataProvider *pPCD = rDoc.GetChartDataProvider();
+    std::vector< SwTableBox* > aDelBoxes;
     if( IsDelBox() )
     {
         // Trick: die fehlenden Boxen in irgendeine Line einfuegen, beim
@@ -1823,6 +1862,10 @@ void SwUndoTblNdsChg::Undo( SwUndoIter& rUndoIter )
             SwTableBox* pBox = pTblNd->GetTable().GetTblBox( nIdx );
             ASSERT( pBox, "Wo ist meine TabellenBox geblieben?" );
 
+            // TL_CHART2: notify chart about box to be removed
+            if (pPCD)
+                pPCD->DeleteBox( &pTblNd->GetTable(), *pBox );
+
             if( aMvBoxes[ n ] )
             {
                 SwNodeRange aRg( *pBox->GetSttNd(), 1,
@@ -1856,6 +1899,9 @@ void SwUndoTblNdsChg::Undo( SwUndoIter& rUndoIter )
             ULONG nIdx = (*Ptrs.pNewSttNds)[ --n ];
             SwTableBox* pBox = pTblNd->GetTable().GetTblBox( nIdx );
             ASSERT( pBox, "Where's my table box?" );
+            // TL_CHART2: notify chart about box to be removed
+            if (pPCD)
+                pPCD->DeleteBox( &pTblNd->GetTable(), *pBox );
             aDelBoxes.insert( aDelBoxes.end(), pBox );
             rDoc.DeleteSection( rDoc.GetNodes()[ nIdx ] );
         }
@@ -1871,7 +1917,8 @@ void SwUndoTblNdsChg::Undo( SwUndoIter& rUndoIter )
 
     pSaveTbl->CreateNew( pTblNd->GetTable(), TRUE, FALSE );
 
-    aTmpBox.RestoreChartData( pTblNd->GetTable() );
+    // TL_CHART2: need to inform chart of probably changed cell names
+    rDoc.UpdateCharts( pTblNd->GetTable().GetFrmFmt()->GetName() );
 
     if( IsDelBox() )
         nSttNode = pTblNd->GetIndex();
@@ -2026,7 +2073,7 @@ void SwUndoTblMerge::Undo( SwUndoIter& rUndoIter )
     rDoc.UpdateTblFlds( &aMsgHnt );
 
     _FndBox aTmpBox( 0, 0 );
-    aTmpBox.SaveChartData( pTblNd->GetTable() );
+    // ? TL_CHART2: notification or locking of controller required ?
 
 
     // 1. die geloeschten Boxen wiederherstellen:
@@ -2058,6 +2105,7 @@ CHECKTABLE(pTblNd->GetTable())
 DUMPDOC( &rDoc, "d:\\tmp\\tab_b.db" )
 CHECKTABLE(pTblNd->GetTable())
 
+    SwChartDataProvider *pPCD = rDoc.GetChartDataProvider();
     // 2. die eingefuegten Boxen loeschen
     // die Nodes loeschen (von Hinten!!)
     for( n = aNewSttNds.Count(); n; )
@@ -2123,6 +2171,10 @@ DUMPDOC( &rDoc, String( "d:\\tmp\\tab_") + String( aNewSttNds.Count() - i ) +
 
         if( !pSaveTbl->IsNewModel() )
         {
+            // TL_CHART2: notify chart about box to be removed
+            if (pPCD)
+                pPCD->DeleteBox( &pTblNd->GetTable(), *pBox );
+
             SwTableBoxes* pTBoxes = &pBox->GetUpper()->GetTabBoxes();
             pTBoxes->Remove( pTBoxes->C40_GETPOS( SwTableBox, pBox ) );
 
@@ -2145,7 +2197,8 @@ CHECKTABLE(pTblNd->GetTable())
 
     pSaveTbl->CreateNew( pTblNd->GetTable(), TRUE, FALSE );
 
-    aTmpBox.RestoreChartData( pTblNd->GetTable() );
+    // TL_CHART2: need to inform chart of probably changed cell names
+    rDoc.UpdateCharts( pTblNd->GetTable().GetFrmFmt()->GetName() );
 
     if( pHistory )
     {
@@ -3145,13 +3198,13 @@ void SwUndoMergeTbl::Undo( SwUndoIter& rIter )
     _FndBox aFndBox( 0, 0 );
     aFndBox.SetTableLines( *pTbl );
     aFndBox.DelFrms( *pTbl );
-    aFndBox.SaveChartData( *pTbl );
+    // ? TL_CHART2: notification or locking of controller required ?
 
     SwTableNode* pNew = pDoc->GetNodes().SplitTable( rIdx, TRUE, FALSE );
 
     //Layout updaten
     aFndBox.MakeFrms( *pTbl );
-    aFndBox.RestoreChartData( *pTbl );
+    // ? TL_CHART2: notification or locking of controller required ?
 
     if( bWithPrev )
     {
@@ -3182,6 +3235,14 @@ void SwUndoMergeTbl::Undo( SwUndoIter& rIter )
     pPam->GetPoint()->nContent.Assign( pCNd, 0 );
 
     ClearFEShellTabCols();
+
+    // TL_CHART2: need to inform chart of probably changed cell names
+    SwChartDataProvider *pPCD = pDoc->GetChartDataProvider();
+    if (pPCD)
+    {
+        pDoc->UpdateCharts( pTbl->GetFrmFmt()->GetName() );
+        pDoc->UpdateCharts( pNew->GetTable().GetFrmFmt()->GetName() );
+    }
 }
 
 void SwUndoMergeTbl::Redo( SwUndoIter& rIter )
