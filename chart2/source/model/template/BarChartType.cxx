@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BarChartType.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:16:57 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:44:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,24 +36,51 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include "BarChartType.hxx"
+#include "macros.hxx"
+#include "servicenames_charttypes.hxx"
 
 using namespace ::com::sun::star;
 
 namespace chart
 {
 
-BarChartType::BarChartType( sal_Int32 nDim /* = 2 */ ) :
-        ChartType( nDim )
+BarChartType::BarChartType(
+    const uno::Reference< uno::XComponentContext > & xContext ) :
+        ChartType( xContext )
 {}
+
+BarChartType::BarChartType( const BarChartType & rOther ) :
+        ChartType( rOther )
+{
+}
 
 BarChartType::~BarChartType()
 {}
+
+// ____ XCloneable ____
+uno::Reference< util::XCloneable > SAL_CALL BarChartType::createClone()
+    throw (uno::RuntimeException)
+{
+    return uno::Reference< util::XCloneable >( new BarChartType( *this ));
+}
 
 // ____ XChartType ____
 ::rtl::OUString SAL_CALL BarChartType::getChartType()
     throw (uno::RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.BarChart" ));
+    return CHART2_SERVICE_NAME_CHARTTYPE_BAR;
 }
+
+uno::Sequence< ::rtl::OUString > BarChartType::getSupportedServiceNames_Static()
+{
+    uno::Sequence< ::rtl::OUString > aServices( 2 );
+    aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_BAR;
+    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartType" );
+    return aServices;
+}
+
+// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+APPHELPER_XSERVICEINFO_IMPL( BarChartType,
+                             C2U( "com.sun.star.comp.chart.BarChartType" ));
 
 } //  namespace chart
