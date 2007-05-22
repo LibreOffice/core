@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 17:02:49 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:22:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -771,20 +771,23 @@ enum SwPropNameIds
 // --> FME 2005-12-13 #b6354161# Print empty pages
 /* 0704 */  UNO_NAME_PRINT_EMPTY_PAGES,
 // <--
-/* 0705 */  UNO_NAME_FIELD_CODE,
-/* 0706 */  UNO_NAME_HAS_VALID_SIGNATURES,
+// --> BM 2006 New Chart (chart2)
+/* 0705 */  UNO_NAME_ROLE,
+// <--
+/* 0706 */  UNO_NAME_FIELD_CODE,
+/* 0707 */  UNO_NAME_HAS_VALID_SIGNATURES,
 // --> AMA #i65476# automatic styles
-/* 0707 */  UNO_NAME_CHAR_AUTO_STYLE_NAME,
-/* 0708 */  UNO_NAME_PARA_AUTO_STYLE_NAME,
+/* 0708 */   UNO_NAME_CHAR_AUTO_STYLE_NAME,
+/* 0709 */   UNO_NAME_PARA_AUTO_STYLE_NAME,
 // --> OD 2006-03-21 #b6375613#
-/* 0709 */  UNO_NAME_APPLY_WORKAROUND_FOR_B6375613,
-/* 0710 */  UNO_NAME_LAYOUT_SIZE,
+/* 0710 */  UNO_NAME_APPLY_WORKAROUND_FOR_B6375613,
+/* 0711 */  UNO_NAME_LAYOUT_SIZE,
 // --> HB #144146#
-/* 0711 */  UNO_NAME_HELP,
-/* 0712 */  UNO_NAME_TOOLTIP,
+/* 0712 */  UNO_NAME_HELP,
+/* 0713 */  UNO_NAME_TOOLTIP,
 // --> #i73329# / 2007-01-11 / frank.schoenheit@sun.com
-/* 0713 */  UNO_NAME_DIALOG_LIBRARIES,
-/* 0714 */  SW_PROPNAME_END
+/* 0714 */  UNO_NAME_DIALOG_LIBRARIES,
+/* 0715 */  SW_PROPNAME_END
 };
 
 
