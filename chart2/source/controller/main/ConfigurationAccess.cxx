@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConfigurationAccess.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:06:36 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:06:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,8 @@ bool lcl_IsMetric()
 }
 }//end anonymous namespace
 
+// ----------------------------------------
+
 class CalcConfigItem : public ::utl::ConfigItem
 {
 public:
@@ -80,6 +82,7 @@ CalcConfigItem::CalcConfigItem()
     : ConfigItem( ::rtl::OUString( C2U( "Office.Calc/Layout" )))
 {
 }
+
 CalcConfigItem::~CalcConfigItem()
 {
 }
@@ -102,17 +105,34 @@ FieldUnit CalcConfigItem::getFieldUnit()
     return eResult;
 }
 
+// ----------------------------------------
+
+ConfigurationAccess * ConfigurationAccess::m_pThis = 0;
+
+// private, use static getConfigurationAccess method
 ConfigurationAccess::ConfigurationAccess()
     : m_pCalcConfigItem(0)
 {
     m_pCalcConfigItem = new CalcConfigItem();
 }
+
+// static
+ConfigurationAccess * ConfigurationAccess::getConfigurationAccess()
+{
+    // note: not threadsafe
+    if( !m_pThis )
+        m_pThis = new ConfigurationAccess();
+    return m_pThis;
+}
+
 ConfigurationAccess::~ConfigurationAccess()
 {
     delete m_pCalcConfigItem;
 }
+
 FieldUnit ConfigurationAccess::getFieldUnit()
 {
+    OSL_ASSERT( m_pCalcConfigItem );
     FieldUnit aUnit( m_pCalcConfigItem->getFieldUnit() );
     return aUnit;
 }
