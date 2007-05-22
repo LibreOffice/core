@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:DiagramType" toolbar:helpid="helpid:30528" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:DiagramData" toolbar:helpid="helpid:30514" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleGridHorizontal" toolbar:helpid="helpid:30533" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:ToggleLegend" toolbar:helpid="helpid:30530" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:ScaleText" toolbar:helpid="helpid:30586" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:NewArrangement" toolbar:helpid="helpid:30539" toolbar:text="" />
+</toolbar:toolbar>
