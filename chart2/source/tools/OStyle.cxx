@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OStyle.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:28:04 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:03:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,11 +57,11 @@ namespace property
 {
 
 OStyle::OStyle( const Reference< container::XNameAccess > & xStyleFamily,
-                ::osl::Mutex & _rMutex ) :
-        OPropertySet( _rMutex ),
+                ::osl::Mutex & par_rMutex ) :
+        OPropertySet( par_rMutex ),
         m_xStyleFamily( xStyleFamily ),
         m_bUserDefined( false ),
-        m_rMutex( _rMutex )
+        m_rMutex( par_rMutex )
 {}
 
 OStyle::~OStyle()
