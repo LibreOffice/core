@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmetae.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-18 07:49:11 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:10:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -332,8 +332,8 @@ rtl::OUString lcl_GetProductName()
 
 void SfxXMLMetaExport::Export()
 {
-    if ( !xInfoProp.is() ) return;
-
+    // BM: #i60323# export generator even if xInfoProp is empty (which is the
+    // case for charts). The generator does not depend on xInfoProp
     rtl::OUString sElem, sSubElem, sAttrName, sValue;
     uno::Any aPropVal;
 
@@ -345,6 +345,8 @@ void SfxXMLMetaExport::Export()
                                   sal_True, sal_True );
         rExport.Characters( sValue );
     }
+
+    if ( !xInfoProp.is() ) return;
 
     //  document title
     SimpleStringElement( ::rtl::OUString::createFromAscii(PROP_TITLE),
