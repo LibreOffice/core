@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ShapeFactory.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:36:22 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:25:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,11 @@
 #include "Stripe.hxx"
 #include "CommonConverters.hxx"
 #include "macros.hxx"
-#include "InlineContainer.hxx"
 #include "PropertyMapper.hxx"
+
+#ifndef INCLUDED_COMPHELPER_INLINE_CONTAINER_HXX
+#include <comphelper/InlineContainer.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -54,6 +57,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_FLAGSEQUENCE_HPP_
 #include <com/sun/star/drawing/FlagSequence.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
+#include <com/sun/star/drawing/FillStyle.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -79,6 +85,10 @@
 #ifndef _COM_SUN_STAR_DRAWING_TEXTFITTOSIZETYPE_HPP_
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_TEXTUREPROJECTIONMODE_HPP_
+#include <com/sun/star/drawing/TextureProjectionMode.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
 #endif
@@ -109,8 +119,8 @@
 #include <svx/svdopath.hxx>
 #endif
 
-#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
-#include <basegfx/vector/b2dvector.hxx>
+#ifndef _BGFX_VECTOR_B2DPOINT_HXX
+#include <basegfx/point/b2dpoint.hxx>
 #endif
 
 #ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
@@ -155,13 +165,79 @@ void ShapeFactory::setShapeName( const uno::Reference< drawing::XShape >& xShape
 }
 
 //-----------------------------------------------------------------------------
+
+//static
+rtl::OUString ShapeFactory::getShapeName( const uno::Reference< drawing::XShape >& xShape )
+{
+    rtl::OUString aRet;
+
+    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
+    DBG_ASSERT(xProp.is(), "shape offers no XPropertySet");
+    if( xProp.is())
+    {
+        try
+        {
+            xProp->getPropertyValue( C2U( UNO_NAME_MISC_OBJ_NAME ) ) >>= aRet;
+        }
+        catch( uno::Exception& e )
+        {
+            ASSERT_EXCEPTION( e );
+        }
+    }
+
+    return aRet;
+}
+
+//-----------------------------------------------------------------------------
+
+uno::Reference< drawing::XShapes > ShapeFactory::getChartRootShape(
+    const uno::Reference< drawing::XDrawPage>& xDrawPage )
+{
+    uno::Reference< drawing::XShapes > xRet;
+    uno::Reference< drawing::XShapes > xShapes( xDrawPage, uno::UNO_QUERY );
+    if( xShapes.is() )
+    {
+        sal_Int32 nCount = xShapes->getCount();
+        uno::Reference< drawing::XShape > xShape;
+        for( sal_Int32 nN = nCount; nN--; )
+        {
+            if( xShapes->getByIndex( nN ) >>= xShape )
+            {
+                if( ShapeFactory::getShapeName( xShape ).equals(C2U("com.sun.star.chart2.shapes")) )
+                {
+                    xRet = uno::Reference< drawing::XShapes >( xShape, uno::UNO_QUERY );
+                    break;
+                }
+            }
+        }
+    }
+    return xRet;
+}
+
+//-----------------------------------------------------------------------------
+
+uno::Reference< drawing::XShapes > ShapeFactory::getOrCreateChartRootShape(
+    const uno::Reference< drawing::XDrawPage>& xDrawPage )
+{
+    uno::Reference< drawing::XShapes > xRet( ShapeFactory::getChartRootShape( xDrawPage ) );
+    if( !xRet.is()  )
+    {
+        //create the root shape
+        xRet = this->createGroup2D(
+            uno::Reference<drawing::XShapes>( xDrawPage, uno::UNO_QUERY )
+            , C2U("com.sun.star.chart2.shapes") );
+    }
+    return xRet;
+}
+
+//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //  diverse PolyPolygon create methods
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 uno::Any createPolyPolygon_Cube(
-            const drawing::Direction3D& rSize, double fRoundedEdge, sal_Bool bRounded = true )
+            const drawing::Direction3D& rSize, double fRoundedEdge, bool bRounded = true )
 {
     DBG_ASSERT(fRoundedEdge>=0, "fRoundedEdge needs to be >= 0");
 
@@ -208,46 +284,45 @@ uno::Any createPolyPolygon_Cube(
     if(nPointCount == 5)
     {
         *pInnerSequenceY++ = 0.0;
-        *pInnerSequenceY++ = fHeight;
-        *pInnerSequenceY++ = fHeight;
         *pInnerSequenceY++ = 0.0;
+        *pInnerSequenceY++ = fHeight;
+        *pInnerSequenceY++ = fHeight;
         *pInnerSequenceY++ = 0.0;
 
         *pInnerSequenceX++ = -fWidthH;
+        *pInnerSequenceX++ = fWidthH;
+        *pInnerSequenceX++ = fWidthH;
         *pInnerSequenceX++ = -fWidthH;
-        *pInnerSequenceX++ = fWidthH;
-        *pInnerSequenceX++ = fWidthH;
         *pInnerSequenceX++ = -fWidthH;
     }
     else
     {
-        *pInnerSequenceY++ = 0.0; //1.
+        *pInnerSequenceY++ = 0.0;
+        *pInnerSequenceY++ = 0.0;
         *pInnerSequenceY++ = 0.0;
         *pInnerSequenceY++ = fHeightSign*fOffset;
         *pInnerSequenceY++ = fHeight - fHeightSign*fOffset;
         *pInnerSequenceY++ = fHeight;
-        *pInnerSequenceY++ = fHeight; //6.
+        *pInnerSequenceY++ = fHeight;
         *pInnerSequenceY++ = fHeight;
         *pInnerSequenceY++ = fHeight;
         *pInnerSequenceY++ = fHeight - fHeightSign*fOffset;
-        *pInnerSequenceY++ = fHeightSign*fOffset; //10.
-        *pInnerSequenceY++ = 0.0;
+        *pInnerSequenceY++ = fHeightSign*fOffset;
         *pInnerSequenceY++ = 0.0;
         *pInnerSequenceY++ = 0.0;
 
-
-        *pInnerSequenceX++ = -fWidthH + fOffset; //1.
-        *pInnerSequenceX++ = -fWidthH;
-        *pInnerSequenceX++ = -fWidthH;
-        *pInnerSequenceX++ = -fWidthH;
-        *pInnerSequenceX++ = -fWidthH;
-        *pInnerSequenceX++ = -fWidthH + fOffset; //6.
+        *pInnerSequenceX++ = -fWidthH + fOffset;
         *pInnerSequenceX++ = fWidthH - fOffset;
         *pInnerSequenceX++ = fWidthH;
         *pInnerSequenceX++ = fWidthH;
-        *pInnerSequenceX++ = fWidthH; //10.
+        *pInnerSequenceX++ = fWidthH;
         *pInnerSequenceX++ = fWidthH;
         *pInnerSequenceX++ = fWidthH - fOffset;
+        *pInnerSequenceX++ = -fWidthH + fOffset;
+        *pInnerSequenceX++ = -fWidthH;
+        *pInnerSequenceX++ = -fWidthH;
+        *pInnerSequenceX++ = -fWidthH;
+        *pInnerSequenceX++ = -fWidthH;
         *pInnerSequenceX++ = -fWidthH + fOffset;
     }
     return uno::Any( &aPP, ::getCppuType((const drawing::PolyPolygonShape3D*)0) );
@@ -256,7 +331,8 @@ uno::Any createPolyPolygon_Cube(
 uno::Any createPolyPolygon_Cylinder(
              double fHeight
            , double fRadius
-           , double fRoundedEdge )
+           , double fRoundedEdge
+           , sal_Int32& nVerticalSegmentCount )
 {
     //@todo consider offset if Height is negative
 
@@ -274,6 +350,7 @@ uno::Any createPolyPolygon_Cylinder(
     const double fOffset = (fRadius * 2.0 * fRoundedEdge) * 1.05;   // increase by 5% for safety
     const bool bRoundEdges = fRoundedEdge && fOffset < fRadius && 2.0 * fOffset < fHeight;
     const sal_Int32 nPointCount = bRoundEdges ? 8 : 4;
+    nVerticalSegmentCount = nPointCount-1;
 
     //--------------------------------------
     drawing::PolyPolygonShape3D aPP;
@@ -336,7 +413,8 @@ uno::Any createPolyPolygon_Cone(
               double fHeight
             , double fRadius
             , double fTopHeight
-            , double fRoundedEdge)
+            , double fRoundedEdge
+            , sal_Int32& nVerticalSegmentCount )
 {
     //@todo consider offset if Height is negative
 /*
@@ -356,11 +434,13 @@ uno::Any createPolyPolygon_Cone(
 
     fRoundedEdge = 0.0;
 
-    BOOL bTopless = fTopHeight != 0.0;
+    // ::rtl::math::approxEqual cannot compare to 0.0
+    bool bTopless = !::rtl::math::approxEqual( fHeight, fHeight + fTopHeight );
 
     double r1= 0.0, r2 = fRadius;
     if(bTopless)
-        r1 = fRadius * (fTopHeight)/(fHeight+fTopHeight);
+        // #i63212# fHeight may be negative, fTopHeight is always positive -> use fabs(fHeight)
+        r1 = fRadius * (fTopHeight)/(fabs(fHeight)+fTopHeight);
 
     const double fMinimumDimension = ::std::min(r2*2.0,fHeight);
     const double fOffset = (fMinimumDimension * fRoundedEdge) * 1.05;   // increase by 5% for safety
@@ -379,6 +459,7 @@ uno::Any createPolyPolygon_Cone(
         else
             nPointCount = 3;
     }
+    nVerticalSegmentCount = nPointCount-1;
 
     //--------------------------------------
     drawing::PolyPolygonShape3D aPP;
@@ -443,12 +524,12 @@ uno::Any createPolyPolygon_Cone(
 
 uno::Any createPolyPolygon_PieSegment(
               double fHeight
-            , double fXWidthRadius
-            , double fInnerXRadius = 0.0)
+            , double fWidthRadius
+            , double fInnerRadius = 0.0)
 {
     DBG_ASSERT(fHeight>0, "The height of a pie segment needs to be > 0");
-    DBG_ASSERT(fInnerXRadius>=0, "The inner radius of a pie segment needs to be >= 0");
-    DBG_ASSERT(fXWidthRadius>0, "The width radius of a pie segment needs to be > 0");
+    DBG_ASSERT(fInnerRadius>=0, "The inner radius of a pie segment needs to be >= 0");
+    DBG_ASSERT(fWidthRadius>0, "The width radius of a pie segment needs to be > 0");
 
     const BOOL bClosed = true;
 
@@ -476,19 +557,19 @@ uno::Any createPolyPolygon_PieSegment(
     for(sal_Int32 nN = nPointCount; nN--;)
         *pInnerSequenceZ++ = 0.0;
 
-    *pInnerSequenceY++ = 0.0;
-    *pInnerSequenceY++ = 0.0;
-    *pInnerSequenceY++ = fHeight;
-    *pInnerSequenceY++ = fHeight;
+    *pInnerSequenceY++ = fHeight/2.0;
+    *pInnerSequenceY++ = fHeight/2.0;
+    *pInnerSequenceY++ = -fHeight/2.0;
+    *pInnerSequenceY++ = -fHeight/2.0;
     if(bClosed)
-        *pInnerSequenceY++ = 0.0;
+        *pInnerSequenceY++ = fHeight/2.0;
 
-    *pInnerSequenceX++ = fInnerXRadius;
-    *pInnerSequenceX++ = fInnerXRadius+fXWidthRadius;
-    *pInnerSequenceX++ = fInnerXRadius+fXWidthRadius;
-    *pInnerSequenceX++ = fInnerXRadius;
+    *pInnerSequenceX++ = fInnerRadius;
+    *pInnerSequenceX++ = fInnerRadius+fWidthRadius;
+    *pInnerSequenceX++ = fInnerRadius+fWidthRadius;
+    *pInnerSequenceX++ = fInnerRadius;
     if(bClosed)
-        *pInnerSequenceX++ = fInnerXRadius;
+        *pInnerSequenceX++ = fInnerRadius;
 
     return uno::Any( &aPP, ::getCppuType((const drawing::PolyPolygonShape3D*)0) );
 }
@@ -503,11 +584,32 @@ uno::Any createPolyPolygon_PieSegment(
 uno::Reference<drawing::XShape>
         ShapeFactory::createCube(
             const uno::Reference<drawing::XShapes>& xTarget
-            , const DataPointGeometry& rGeometry
+            , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
+            , sal_Int32 nRotateZAngleHundredthDegree
             , const uno::Reference< beans::XPropertySet >& xSourceProp
-            , const tPropertyNameMap& rPropertyNameMap )
+            , const tPropertyNameMap& rPropertyNameMap
+            , bool bRounded )
 {
-    uno::Reference<drawing::XShape> xShape = impl_createCube( xTarget, rGeometry, FALSE );
+    if( !xTarget.is() )
+        return 0;
+    if( bRounded )
+    {
+        try
+        {
+            if( xSourceProp.is() )
+            {
+                drawing::LineStyle aLineStyle;
+                xSourceProp->getPropertyValue( C2U( "BorderStyle" ) ) >>= aLineStyle;
+                if( aLineStyle == drawing::LineStyle_SOLID )
+                    bRounded = false;
+            }
+        }
+        catch( uno::Exception& e )
+        {
+            ASSERT_EXCEPTION( e );
+        }
+    }
+    uno::Reference<drawing::XShape> xShape = impl_createCube( xTarget, rPosition, rSize, nRotateZAngleHundredthDegree, bRounded );
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
     if( xSourceProp.is())
         PropertyMapper::setMappedProperties( xProp, xSourceProp, rPropertyNameMap );
@@ -515,19 +617,15 @@ uno::Reference<drawing::XShape>
 }
 
 uno::Reference<drawing::XShape>
-        ShapeFactory::createRoundedCube(
-            const uno::Reference<drawing::XShapes>& xTarget
-            , const DataPointGeometry& rGeometry )
-{
-    return impl_createCube( xTarget, rGeometry, TRUE);
-}
-
-uno::Reference<drawing::XShape>
         ShapeFactory::impl_createCube(
               const uno::Reference<drawing::XShapes>& xTarget
-            , const DataPointGeometry& rGeometry
-            , sal_Bool bRounded )
+            , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
+            , sal_Int32 nRotateZAngleHundredthDegree
+            , bool bRounded )
 {
+    if( !xTarget.is() )
+        return 0;
+
     //create shape
     uno::Reference< drawing::XShape > xShape(
         m_xShapeFactory->createInstance( C2U(
@@ -542,7 +640,7 @@ uno::Reference<drawing::XShape>
         try
         {
             //depth
-            double fDepth = rGeometry.m_aSize.DirectionZ;
+            double fDepth = rSize.DirectionZ;
             if(fDepth<0)
                 fDepth*=-1.0;
             xProp->setPropertyValue( C2U( UNO_NAME_3D_EXTRUDE_DEPTH )
@@ -555,15 +653,17 @@ uno::Reference<drawing::XShape>
 
             //Polygon
             xProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D )
-                , createPolyPolygon_Cube( rGeometry.m_aSize, double(nPercentDiagonal)/200.0,bRounded) );
+                , createPolyPolygon_Cube( rSize, double(nPercentDiagonal)/200.0,bRounded) );
 
             //Matrix for position
             {
-                ::basegfx::B3DHomMatrix aM4;
-                aM4.translate(rGeometry.m_aPosition.PositionX
-                            , rGeometry.m_aPosition.PositionY
-                            , rGeometry.m_aPosition.PositionZ - (fDepth/2.0));
-                drawing::HomogenMatrix aHM = Matrix4DToHomogenMatrix(aM4);
+                ::basegfx::B3DHomMatrix aM;
+                if(nRotateZAngleHundredthDegree!=0)
+                    aM.rotate(0.0,0.0,-nRotateZAngleHundredthDegree/18000.00*F_PI);
+                aM.translate(rPosition.PositionX
+                            , rPosition.PositionY
+                            , rPosition.PositionZ - (fDepth/2.0));
+                drawing::HomogenMatrix aHM = B3DHomMatrixToHomogenMatrix(aM);
                 xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
                     , uno::makeAny(aHM) );
             }
@@ -579,38 +679,41 @@ uno::Reference<drawing::XShape>
 uno::Reference<drawing::XShape>
         ShapeFactory::createCylinder(
             const uno::Reference<drawing::XShapes>& xTarget
-            , const DataPointGeometry& rGeometry )
+          , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
+          , sal_Int32 nRotateZAngleHundredthDegree )
 {
     return impl_createConeOrCylinder(
-              xTarget, rGeometry, CHART_3DOBJECT_SEGMENTCOUNT, true );
+              xTarget, rPosition, rSize, 0.0, nRotateZAngleHundredthDegree, CHART_3DOBJECT_SEGMENTCOUNT, true );
 }
 
 uno::Reference<drawing::XShape>
         ShapeFactory::createPyramid(
             const uno::Reference<drawing::XShapes>& xTarget
-            , const DataPointGeometry& rGeometry )
+          , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
+          , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree )
 {
-    return impl_createConeOrCylinder( xTarget, rGeometry, 4 );
+    return impl_createConeOrCylinder( xTarget, rPosition, rSize, fTopHeight, nRotateZAngleHundredthDegree, 4 );
 }
 
 uno::Reference<drawing::XShape>
         ShapeFactory::createCone(
             const uno::Reference<drawing::XShapes>& xTarget
-            , const DataPointGeometry& rGeometry )
+          , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
+          , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree )
 {
-    return impl_createConeOrCylinder( xTarget, rGeometry, CHART_3DOBJECT_SEGMENTCOUNT );
+    return impl_createConeOrCylinder( xTarget, rPosition, rSize, fTopHeight, nRotateZAngleHundredthDegree, CHART_3DOBJECT_SEGMENTCOUNT );
 }
 
 uno::Reference<drawing::XShape>
         ShapeFactory::impl_createConeOrCylinder(
               const uno::Reference<drawing::XShapes>& xTarget
-            , const DataPointGeometry& rGeometry
+            , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
+            , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree
             , sal_Int32 nSegments
             , bool bCylinder )
 {
-
-    static int ntest = 0;
-    ntest++;
+    if( !xTarget.is() )
+        return 0;
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -628,13 +731,10 @@ uno::Reference<drawing::XShape>
         while(fAngle>F_PI/2.0)
             fAngle-=F_PI/2.0;
     }
-    //double fWidth      = ::std::min( rGeometry.m_aSize.DirectionX, rGeometry.m_aSize.DirectionZ )/2.0;
-    double fWidth      = rGeometry.m_aSize.DirectionX/2.0; //The depth will be corrrected within Matrix
+    double fWidth      = rSize.DirectionX/2.0; //The depth will be corrrected within Matrix
     double fRadius     = fWidth; //!!!!!!!! problem in drawing layer: rotation object calculates wrong needed size -> wrong camera (it's a problem with bounding boxes)
 //    double fRadius     = fWidth/cos(fAngle); llllllllllllllllllll
-    double fHeight     = rGeometry.m_aSize.DirectionY;
-    //for Cones:
-    double fTopHeight  = rGeometry.m_aSize2.DirectionY;
+    double fHeight     = rSize.DirectionY;
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
@@ -643,36 +743,29 @@ uno::Reference<drawing::XShape>
     {
         try
         {
-            //UNO_NAME_3D_TRANSFORM_MATRIX drawing::HomogenMatrix
-            //UNO_NAME_3D_POLYPOLYGON3D PolyPolygonShape3D
-            //UNO_NAME_3D_LATHE_END_ANGLE sal_Int16
-            //UNO_NAME_3D_HORZ_SEGS sal_Int32
-            //UNO_NAME_3D_PERCENT_DIAGONAL sal_Int16
-            //UNO_NAME_3D_VERT_SEGS sal_Int32
-
             //PercentDiagonal
             sal_Int16 nPercentDiagonal = 5;
             xProp->setPropertyValue( C2U( UNO_NAME_3D_PERCENT_DIAGONAL )
                 , uno::makeAny( nPercentDiagonal ) );
 
             //Polygon
+            sal_Int32 nVerticalSegmentCount = 0;
             uno::Any aPPolygon = bCylinder ? createPolyPolygon_Cylinder(
-                                                fHeight, fRadius, double(nPercentDiagonal)/200.0)
+                                                fHeight, fRadius, double(nPercentDiagonal)/200.0, nVerticalSegmentCount)
                                            : createPolyPolygon_Cone(
-                                                fHeight, fRadius, fTopHeight, double(nPercentDiagonal)/200.0);
+                                                fHeight, fRadius, fTopHeight, double(nPercentDiagonal)/200.0, nVerticalSegmentCount);
             xProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D ), aPPolygon );
 
             //Matrix for position
             {
-                ::basegfx::B3DHomMatrix aM4;
-                //if(ntest%2) //llllllllllllllllllll
-                //aM4.RotateY( fYRotateAnglePi );
-
-                // Note: Uncomment the following to let the objects grow in z
-                // direction to fill the diagram
-//                 aM4.ScaleZ(rGeometry.m_aSize.DirectionZ/rGeometry.m_aSize.DirectionX);
-                aM4.translate(rGeometry.m_aPosition.PositionX, rGeometry.m_aPosition.PositionY, rGeometry.m_aPosition.PositionZ);
-                drawing::HomogenMatrix aHM = Matrix4DToHomogenMatrix(aM4);
+                ::basegfx::B3DHomMatrix aM;
+                //aM.RotateY( fYRotateAnglePi );
+                if(nRotateZAngleHundredthDegree!=0)
+                    aM.rotate(0.0,0.0,-nRotateZAngleHundredthDegree/18000.00*F_PI);
+                //stretch the symmetric objects to given depth
+                aM.scale(1.0,1.0,rSize.DirectionZ/rSize.DirectionX);
+                aM.translate(rPosition.PositionX, rPosition.PositionY, rPosition.PositionZ);
+                drawing::HomogenMatrix aHM = B3DHomMatrixToHomogenMatrix(aM);
                 xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
                     , uno::makeAny(aHM) );
             }
@@ -680,6 +773,12 @@ uno::Reference<drawing::XShape>
             //Segments
             xProp->setPropertyValue( C2U( UNO_NAME_3D_HORZ_SEGS )
                 , uno::makeAny(nSegments) );
+            xProp->setPropertyValue( C2U( UNO_NAME_3D_VERT_SEGS )
+                , uno::makeAny((sal_Int32)nVerticalSegmentCount) );//depends on point count of the used polygon
+
+            //Reduced lines
+            xProp->setPropertyValue( C2U( UNO_NAME_3D_REDUCED_LINE_GEOMETRY )
+                , uno::makeAny((sal_Bool)sal_True) );
         }
         catch( uno::Exception& e )
         {
@@ -693,7 +792,7 @@ uno::Reference<drawing::XShape>
 //------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------
 
-void appendBezierCoords( drawing::PolyPolygonBezierCoords& rReturn, const drawing::PolyPolygonBezierCoords& rAdd, sal_Bool bAppendInverse )
+void appendAndCloseBezierCoords( drawing::PolyPolygonBezierCoords& rReturn, const drawing::PolyPolygonBezierCoords& rAdd, sal_Bool bAppendInverse )
 {
     if(!rAdd.Coordinates.getLength())
         return;
@@ -703,8 +802,8 @@ void appendBezierCoords( drawing::PolyPolygonBezierCoords& rReturn, const drawin
 
     sal_Int32 nOldCount = rReturn.Coordinates[0].getLength();
 
-    rReturn.Coordinates[0].realloc(nOldCount+nAddCount);
-    rReturn.Flags[0].realloc(nOldCount+nAddCount);
+    rReturn.Coordinates[0].realloc(nOldCount+nAddCount+1);
+    rReturn.Flags[0].realloc(nOldCount+nAddCount+1);
 
     for(sal_Int32 nN=0;nN<nAddCount; nN++ )
     {
@@ -712,23 +811,52 @@ void appendBezierCoords( drawing::PolyPolygonBezierCoords& rReturn, const drawin
         rReturn.Coordinates[0][nOldCount+nN] = rAdd.Coordinates[0][nAdd];
         rReturn.Flags[0][nOldCount+nN] = rAdd.Flags[0][nAdd];
     }
+
+    //close
+    rReturn.Coordinates[0][nOldCount+nAddCount] = rReturn.Coordinates[0][0];
+    rReturn.Flags[0][nOldCount+nAddCount] = rReturn.Flags[0][0];
 }
 
 //------------------------------------------------------------------------------------------------------------
 
 drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
-        double fAngleRadian
-        , const ::basegfx::B2DHomMatrix& rTransformationFromUnitCircle )
+        double fStartAngleRadian, double fWidthAngleRadian, double fUnitRadius
+        , const ::basegfx::B2DHomMatrix& rTransformationFromUnitCircle
+        , const double fAngleSubdivisionRadian )
 {
     //at least one polygon is created using two normal and two control points
     //if the angle is larger it is separated into multiple sub angles
 
-    const double fSmallAngleRadian = F_PI/10.0;
-
     drawing::PolyPolygonBezierCoords aReturn = drawing::PolyPolygonBezierCoords();
-    sal_Int32 nSegmentCount = static_cast< sal_Int32 >( fAngleRadian/fSmallAngleRadian );
-    if( fAngleRadian > fSmallAngleRadian*nSegmentCount )
+    sal_Int32 nSegmentCount = static_cast< sal_Int32 >( fWidthAngleRadian/fAngleSubdivisionRadian );
+    if( fWidthAngleRadian > fAngleSubdivisionRadian*nSegmentCount )
         nSegmentCount++;
+
+    double fFirstSegmentAngle = fAngleSubdivisionRadian;
+    double fLastSegmentAngle = fAngleSubdivisionRadian;
+    if(nSegmentCount==1)
+    {
+        fFirstSegmentAngle = fWidthAngleRadian;
+        fLastSegmentAngle = 0.0;
+    }
+    else
+    {
+        double fFirstAngleOnSubDevision = (static_cast<sal_Int32>(fStartAngleRadian/fAngleSubdivisionRadian)+1)*fAngleSubdivisionRadian;
+        if( !::rtl::math::approxEqual( fStartAngleRadian, fFirstAngleOnSubDevision ) )
+            fFirstSegmentAngle = fFirstAngleOnSubDevision-fStartAngleRadian;
+
+        if(nSegmentCount>1)
+        {
+            fLastSegmentAngle = fWidthAngleRadian-fFirstSegmentAngle-fAngleSubdivisionRadian*(nSegmentCount-2);
+            if( fLastSegmentAngle<0 )
+                nSegmentCount--;
+            if( fLastSegmentAngle>fAngleSubdivisionRadian )
+            {
+                fLastSegmentAngle-=fAngleSubdivisionRadian;
+                nSegmentCount++;
+            }
+        }
+    }
 
     sal_Int32 nPointCount     = 1 + 3*nSegmentCount; //first point of next segment equals last point of former segment
 
@@ -740,16 +868,19 @@ drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
 
     //
 
-    ::basegfx::B2DVector P0,P1,P2,P3;
-    ::basegfx::B2DVector POrigin = rTransformationFromUnitCircle * ::basegfx::B2DVector(0.0, 0.0);
+    //!! applying matrix to vector does ignore translation, so it is important to use a B2DPoint here instead of B2DVector
+    ::basegfx::B2DPoint P0,P1,P2,P3;
+    ::basegfx::B2DPoint POrigin = rTransformationFromUnitCircle * ::basegfx::B2DPoint(0.0, 0.0);
 
     sal_Int32 nPoint=0;
+    double fCurrentRotateAngle = fStartAngleRadian;
     for(sal_Int32 nSegment=0; nSegment<nSegmentCount; nSegment++)
     {
-        double fCurrentSegmentAngle = fSmallAngleRadian;
-        //the last segment gets the rest angle that does not fit into equal pieces
-        if(nSegment==(nSegmentCount-1))
-            fCurrentSegmentAngle = fAngleRadian - fSmallAngleRadian*(nSegmentCount-1);
+        double fCurrentSegmentAngle = fAngleSubdivisionRadian;
+        if(nSegment==0)//first segment gets only a smaller peace until the next subdevision
+            fCurrentSegmentAngle = fFirstSegmentAngle;
+        else if(nSegment==(nSegmentCount-1)) //the last segment gets the rest angle that does not fit into equal pieces
+            fCurrentSegmentAngle = fLastSegmentAngle;
 
         //first create untransformed points for a unit circle arc:
         const double fCos = cos(fCurrentSegmentAngle/2.0);
@@ -765,7 +896,10 @@ drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
         P2.setY(-P1.getY());
         //transform thus startangle equals NULL
         ::basegfx::B2DHomMatrix aStart;
-        aStart.rotate(fCurrentSegmentAngle/2.0 + nSegment*fSmallAngleRadian);
+        aStart.rotate(fCurrentSegmentAngle/2.0 + fCurrentRotateAngle );
+        fCurrentRotateAngle+=fCurrentSegmentAngle;
+
+        aStart.scale( fUnitRadius, fUnitRadius );
 
         //apply given transformation to get final points
         P0 = rTransformationFromUnitCircle*(aStart*P0);
@@ -802,32 +936,45 @@ drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
 //------------------------------------------------------------------------------------------------------------
 
 drawing::PolyPolygonBezierCoords getRingBezierCoords(
-            double fInnerXRadius
-            , double fOuterXRadius, double fOuterYRadius
-            , double fWidthAngleRadian, double fStartAngleRadian
-            , double fPosX, double fPosY )
+            double fUnitCircleInnerRadius
+            , double fUnitCircleOuterRadius
+            , double fStartAngleRadian, double fWidthAngleRadian
+            , ::basegfx::B2DHomMatrix aTransformationFromUnitCircle
+            , const double fAngleSubdivisionRadian )
 {
     drawing::PolyPolygonBezierCoords aReturn = drawing::PolyPolygonBezierCoords();
 
     aReturn.Coordinates = drawing::PointSequenceSequence(1);
     aReturn.Flags       = drawing::FlagSequenceSequence(1);
 
-    ::basegfx::B2DHomMatrix aTransformationFromUnitCircle_Outer;
-    aTransformationFromUnitCircle_Outer.rotate(fStartAngleRadian);
-    aTransformationFromUnitCircle_Outer.scale(fOuterXRadius, fOuterYRadius);
-    aTransformationFromUnitCircle_Outer.translate(fPosX, fPosY);
-
-    drawing::PolyPolygonBezierCoords aOuterArc = getCircularArcBezierCoords( fWidthAngleRadian, aTransformationFromUnitCircle_Outer );
+    drawing::PolyPolygonBezierCoords aOuterArc = getCircularArcBezierCoords(
+        fStartAngleRadian, fWidthAngleRadian, fUnitCircleOuterRadius, aTransformationFromUnitCircle, fAngleSubdivisionRadian );
     aReturn.Coordinates[0] = aOuterArc.Coordinates[0];
     aReturn.Flags[0] = aOuterArc.Flags[0];
 
-    ::basegfx::B2DHomMatrix aTransformationFromUnitCircle_Inner;
-    aTransformationFromUnitCircle_Inner.rotate(fStartAngleRadian);
-    aTransformationFromUnitCircle_Inner.scale(fInnerXRadius, fInnerXRadius*fOuterYRadius/fOuterXRadius);
-    aTransformationFromUnitCircle_Inner.translate(fPosX, fPosY);
+    drawing::PolyPolygonBezierCoords aInnerArc = getCircularArcBezierCoords(
+        fStartAngleRadian, fWidthAngleRadian, fUnitCircleInnerRadius, aTransformationFromUnitCircle, fAngleSubdivisionRadian );
+    appendAndCloseBezierCoords( aReturn, aInnerArc, sal_True );
 
-    drawing::PolyPolygonBezierCoords aInnerArc = getCircularArcBezierCoords( fWidthAngleRadian, aTransformationFromUnitCircle_Inner );
-    appendBezierCoords( aReturn, aInnerArc, sal_True );
+    //fill rMarkHandlePoints
+    /*
+    {
+        rMarkHandlePoints.realloc(1);
+        rMarkHandlePoints[0].realloc(6);
+        sal_Int32 nHandleCount=0;
+        sal_Int32 nOuterArcCount = aOuterArc.Coordinates[0].getLength();
+        if(nOuterArcCount>0)
+            rMarkHandlePoints[0][nHandleCount++]=aOuterArc.Coordinates[0][0];
+        if(nOuterArcCount>1)
+            rMarkHandlePoints[0][nHandleCount++]=aOuterArc.Coordinates[0][nOuterArcCount-1];
+        sal_Int32 nInnerArcCount = aInnerArc.Coordinates[0].getLength();
+        if(nInnerArcCount>0)
+            rMarkHandlePoints[0][nHandleCount++]=aInnerArc.Coordinates[0][0];
+        if(nInnerArcCount>1)
+            rMarkHandlePoints[0][nHandleCount++]=aInnerArc.Coordinates[0][nInnerArcCount-1];
+        rMarkHandlePoints[0].realloc(nHandleCount);
+    }
+    */
 
     return aReturn;
 }
@@ -837,14 +984,18 @@ drawing::PolyPolygonBezierCoords getRingBezierCoords(
 uno::Reference< drawing::XShape >
         ShapeFactory::createPieSegment2D(
                     const uno::Reference< drawing::XShapes >& xTarget
-                    , double fStartAngleDegree, double fWidthAngleDegree
-                    , double fInnerXRadius, double fOuterXRadius, double fOuterYRadius
-                    , const drawing::Position3D& rOrigin )
+                    , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
+                    , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
+                    , const drawing::Direction3D& rOffset
+                    , const drawing::HomogenMatrix& rUnitCircleToScene )
 {
-    while(fWidthAngleDegree>360)
-        fWidthAngleDegree -= 360.0;
-    while(fWidthAngleDegree<0)
-        fWidthAngleDegree += 360.0;
+    if( !xTarget.is() )
+        return 0;
+
+    while(fUnitCircleWidthAngleDegree>360)
+        fUnitCircleWidthAngleDegree -= 360.0;
+    while(fUnitCircleWidthAngleDegree<0)
+        fUnitCircleWidthAngleDegree += 360.0;
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -859,18 +1010,37 @@ uno::Reference< drawing::XShape >
     {
         try
         {
+            ::basegfx::B2DHomMatrix aTransformationFromUnitCircle( IgnoreZ( HomogenMatrixToB3DHomMatrix(rUnitCircleToScene) ) );
+            aTransformationFromUnitCircle.translate(rOffset.DirectionX,rOffset.DirectionY);
+
+            const double fAngleSubdivisionRadian = F_PI/10.0;
+
             drawing::PolyPolygonBezierCoords aCoords = getRingBezierCoords(
-                fInnerXRadius, fOuterXRadius, fOuterYRadius
-                , fWidthAngleDegree*F_PI/180.0, fStartAngleDegree*F_PI/180.0
-                , rOrigin.PositionX, rOrigin.PositionY);
+                fUnitCircleInnerRadius, fUnitCircleOuterRadius
+                , fUnitCircleStartAngleDegree*F_PI/180.0, fUnitCircleWidthAngleDegree*F_PI/180.0
+                , aTransformationFromUnitCircle, fAngleSubdivisionRadian );
 
             xProp->setPropertyValue( C2U( "PolyPolygonBezier" ), uno::makeAny( aCoords ) );
+
+            //add shape for markhandles
+            /*
+            drawing::PointSequenceSequence aMarkHandlePoints(1); to be filled within getRingBezierCoords
+            if( xGroup.is() )
+            {
+                VLineProperties aHandleLineProperties;
+                aHandleLineProperties.LineStyle    = uno::makeAny( drawing::LineStyle_NONE );
+                uno::Reference< drawing::XShape > xHandleShape =
+                    this->createLine2D( xGroup, aMarkHandlePoints, &aHandleLineProperties );
+                this->setShapeName( xHandleShape, C2U("HandlesOnly") );
+            }
+            */
         }
         catch( uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
     }
+
     return xShape;
 }
 
@@ -879,20 +1049,24 @@ uno::Reference< drawing::XShape >
 uno::Reference< drawing::XShape >
         ShapeFactory::createPieSegment(
                     const uno::Reference< drawing::XShapes >& xTarget
-                    , double fStartAngleDegree, double fWidthAngleDegree
-                    , double fInnerXRadius, double fOuterXRadius, double fOuterYRadius
-                    , const drawing::Position3D& rOrigin
+                    , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
+                    , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
+                    , const drawing::Direction3D& rOffset
+                    , const drawing::HomogenMatrix& rUnitCircleToScene
                     , double fDepth )
 {
-    while(fWidthAngleDegree>360)
-        fWidthAngleDegree -= 360.0;
-    while(fWidthAngleDegree<0)
-        fWidthAngleDegree += 360.0;
+    if( !xTarget.is() )
+        return 0;
+
+    while(fUnitCircleWidthAngleDegree>360)
+        fUnitCircleWidthAngleDegree -= 360.0;
+    while(fUnitCircleWidthAngleDegree<0)
+        fUnitCircleWidthAngleDegree += 360.0;
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
-            m_xShapeFactory->createInstance(
-            C2U("com.sun.star.drawing.Shape3DLatheObject") ), uno::UNO_QUERY );
+        m_xShapeFactory->createInstance( C2U(
+            "com.sun.star.drawing.Shape3DExtrudeObject") ), uno::UNO_QUERY );
     xTarget->add(xShape); //need to add the shape before setting of properties
 
     //set properties
@@ -902,36 +1076,48 @@ uno::Reference< drawing::XShape >
     {
         try
         {
-            double fXWidthRadius      = fOuterXRadius - fInnerXRadius;
+            ::basegfx::B2DHomMatrix aTransformationFromUnitCircle( IgnoreZ( HomogenMatrixToB3DHomMatrix(rUnitCircleToScene) ) );
+            aTransformationFromUnitCircle.translate(rOffset.DirectionX,rOffset.DirectionY);
+
+            const double fAngleSubdivisionRadian = F_PI/32.0;
+
+            drawing::PolyPolygonBezierCoords aCoords = getRingBezierCoords(
+                fUnitCircleInnerRadius, fUnitCircleOuterRadius
+                , fUnitCircleStartAngleDegree*F_PI/180.0, fUnitCircleWidthAngleDegree*F_PI/180.0
+                , aTransformationFromUnitCircle, fAngleSubdivisionRadian );
+
+            //depth
+            xProp->setPropertyValue( C2U( UNO_NAME_3D_EXTRUDE_DEPTH )
+                , uno::makeAny((sal_Int32)fDepth) );
 
             //PercentDiagonal
+            sal_Int16 nPercentDiagonal = 0;
             xProp->setPropertyValue( C2U( UNO_NAME_3D_PERCENT_DIAGONAL )
-                , uno::makeAny((sal_Int16)0) );
+                , uno::makeAny( nPercentDiagonal ) );
 
             //Polygon
+            drawing::PolyPolygonShape3D aPoly( BezierToPoly(aCoords) );
+            ShapeFactory::closePolygon( aPoly );
             xProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D )
-                , createPolyPolygon_PieSegment( fDepth, fXWidthRadius, fInnerXRadius ) );
+                , uno::makeAny( aPoly ) );
 
-            //UNO_NAME_3D_LATHE_END_ANGLE sal_Int16
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_LATHE_END_ANGLE )
-                , uno::makeAny((sal_Int16)(fWidthAngleDegree*10.0)) );
+            //DoubleSided
+            xProp->setPropertyValue( C2U( UNO_NAME_3D_DOUBLE_SIDED )
+                , uno::makeAny( (sal_Bool)true) );
 
-            //Matrix for position
-            {
-                ::basegfx::B3DHomMatrix aM4;
-                aM4.scale(1.0, 1.0, fOuterYRadius/fOuterXRadius);
-                aM4.rotate( 0.0, ZDIRECTION*fStartAngleDegree*F_PI/180.0, 0.0 );
-                aM4.translate(rOrigin.PositionX, rOrigin.PositionZ, rOrigin.PositionY);
-                drawing::HomogenMatrix aHM = Matrix4DToHomogenMatrix(aM4);
-                xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
-                    , uno::makeAny(aHM) );
-            }
+            //Reduced lines
+            xProp->setPropertyValue( C2U( UNO_NAME_3D_REDUCED_LINE_GEOMETRY )
+                , uno::makeAny((sal_Bool)sal_True) );
 
-            //Segments
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_HORZ_SEGS )
-                , uno::makeAny(CHART_3DOBJECT_SEGMENTCOUNT) );
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_VERT_SEGS )
-                , uno::makeAny((sal_Int32)20) );//@todo replace this expensive count by 1 if draw bug is fixed
+            //TextureProjectionMode
+            xProp->setPropertyValue( C2U( UNO_NAME_3D_TEXTURE_PROJ_Y )
+                , uno::makeAny( drawing::TextureProjectionMode_OBJECTSPECIFIC ) );
+
+            //TextureProjectionMode
+            xProp->setPropertyValue( C2U( UNO_NAME_3D_TEXTURE_PROJ_X )
+                , uno::makeAny( drawing::TextureProjectionMode_PARALLEL ) );
+            xProp->setPropertyValue( C2U( UNO_NAME_3D_TEXTURE_PROJ_Y )
+                , uno::makeAny( drawing::TextureProjectionMode_OBJECTSPECIFIC ) );
         }
         catch( uno::Exception& e )
         {
@@ -952,6 +1138,9 @@ uno::Reference< drawing::XShape >
                     , const tPropertyNameMap& rPropertyNameMap
                     , sal_Bool bDoubleSided )
 {
+    if( !xTarget.is() )
+        return 0;
+
     //create shape
     uno::Reference< drawing::XShape > xShape(
             m_xShapeFactory->createInstance( C2U(
@@ -969,9 +1158,14 @@ uno::Reference< drawing::XShape >
             xProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D )
                 , rStripe.getPolyPolygonShape3D() );
 
+            //TexturePolygon
+            xProp->setPropertyValue( C2U( UNO_NAME_3D_TEXTUREPOLYGON3D )
+                , rStripe.getTexturePolygon() );
+
+
             //Normals Polygon
             xProp->setPropertyValue( C2U( UNO_NAME_3D_NORMALSPOLYGON3D )
-                , rStripe.getNormalsPolyPolygonShape3D() );
+                , rStripe.getNormalsPolygon() );
 
             //NormalsKind
             xProp->setPropertyValue( C2U( UNO_NAME_3D_NORMALS_KIND )
@@ -1001,6 +1195,12 @@ uno::Reference< drawing::XShape >
                     , const drawing::PolyPolygonShape3D& rPolyPolygon
                     , double fDepth )
 {
+    if( !xTarget.is() )
+        return 0;
+
+    if( !rPolyPolygon.SequenceX.getLength())
+        return 0;
+
     //create shape
     uno::Reference< drawing::XShape > xShape(
         m_xShapeFactory->createInstance( C2U(
@@ -1030,6 +1230,21 @@ uno::Reference< drawing::XShape >
             //DoubleSided
             xProp->setPropertyValue( C2U( UNO_NAME_3D_DOUBLE_SIDED )
                 , uno::makeAny( (sal_Bool)true) );
+
+            //the z component of the polygon is now ignored by the drawing layer,
+            //so we nned to translate the object via transformation matrix
+
+            //Matrix for position
+            if( rPolyPolygon.SequenceZ.getLength()&& rPolyPolygon.SequenceZ[0].getLength() )
+            {
+                ::basegfx::B3DHomMatrix aM;
+                aM.translate( 0
+                            , 0
+                            , rPolyPolygon.SequenceZ[0][0] );
+                drawing::HomogenMatrix aHM = B3DHomMatrixToHomogenMatrix(aM);
+                xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
+                    , uno::makeAny(aHM) );
+            }
         }
         catch( uno::Exception& e )
         {
@@ -1043,6 +1258,9 @@ uno::Reference< drawing::XShape >
         ShapeFactory::createArea2D( const uno::Reference< drawing::XShapes >& xTarget
                     , const drawing::PolyPolygonShape3D& rPolyPolygon )
 {
+    if( !xTarget.is() )
+        return 0;
+
     //create shape
     uno::Reference< drawing::XShape > xShape(
         m_xShapeFactory->createInstance( C2U(
@@ -1288,8 +1506,12 @@ uno::Reference< drawing::XShape >
                     , const drawing::Position3D& rPosition
                     , const drawing::Direction3D& rSize
                     , sal_Int32 nStandardSymbol
+                    , sal_Int32 nBorderColor
                     , sal_Int32 nFillColor )
 {
+    if( !xTarget.is() )
+        return 0;
+
     //create shape
     uno::Reference< drawing::XShape > xShape(
         m_xShapeFactory->createInstance( C2U(
@@ -1310,9 +1532,62 @@ uno::Reference< drawing::XShape >
             xProp->setPropertyValue( C2U( UNO_NAME_POLYPOLYGON )
                 , uno::makeAny( aPoints ) );
 
+            //LineColor
+            xProp->setPropertyValue( C2U( UNO_NAME_LINECOLOR )
+                , uno::makeAny( nBorderColor ) );
+
             //FillColor
             xProp->setPropertyValue( C2U( UNO_NAME_FILLCOLOR )
                 , uno::makeAny( nFillColor ) );
+        }
+        catch( uno::Exception& e )
+        {
+            ASSERT_EXCEPTION( e );
+        }
+    }
+    return xShape;
+}
+
+uno::Reference< drawing::XShape >
+        ShapeFactory::createGraphic2D(
+                      const uno::Reference< drawing::XShapes >& xTarget
+                    , const drawing::Position3D& rPosition
+                    , const drawing::Direction3D& rSize
+                    , const uno::Reference< graphic::XGraphic >& xGraphic )
+{
+    if( !xTarget.is() || !xGraphic.is() )
+        return 0;
+
+    // @todo: change this to a rectangle shape with a fill bitmap for
+    // performance reasons (ask AW, said CL)
+
+    //create shape
+    uno::Reference< drawing::XShape > xShape(
+        m_xShapeFactory->createInstance( C2U(
+            "com.sun.star.drawing.GraphicObjectShape") ), uno::UNO_QUERY );
+    xTarget->add(xShape);
+
+    try
+    {
+        // assume position is upper left corner. Transform to center.
+        drawing::Position3D aCenterPosition(
+            rPosition.PositionX - (rSize.DirectionX / 2.0),
+            rPosition.PositionY - (rSize.DirectionY / 2.0),
+            rPosition.PositionZ );
+        xShape->setPosition( Position3DToAWTPoint( aCenterPosition ));
+        xShape->setSize( Direction3DToAWTSize( rSize ));
+    }
+    catch( const uno::Exception & e )
+    {
+        ASSERT_EXCEPTION( e );
+    }
+    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
+    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    if( xProp.is())
+    {
+        try
+        {
+            xProp->setPropertyValue( C2U("Graphic"), uno::makeAny( xGraphic ));
         }
         catch( uno::Exception& e )
         {
@@ -1327,8 +1602,12 @@ uno::Reference< drawing::XShape >
                     , const drawing::Position3D& rPosition
                     , const drawing::Direction3D& rSize
                     , sal_Int32 nStandardSymbol
+                    , sal_Int32 nBorderColor
                     , sal_Int32 nFillColor )
 {
+    if( !xTarget.is() )
+        return 0;
+
     //create shape
     uno::Reference< drawing::XShape > xShape(
         m_xShapeFactory->createInstance( C2U(
@@ -1355,6 +1634,10 @@ uno::Reference< drawing::XShape >
             xProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D )
                 , uno::makeAny( createPolyPolygon_Symbol( rPosition, rSize, nStandardSymbol ) ) );
 
+            //BorderColor
+            xProp->setPropertyValue( C2U( UNO_NAME_LINECOLOR )
+                , uno::makeAny( nBorderColor ) );
+
             //FillColor
             xProp->setPropertyValue( C2U( UNO_NAME_FILLCOLOR )
                 , uno::makeAny( nFillColor ) );
@@ -1369,6 +1652,9 @@ uno::Reference< drawing::XShape >
 
 void setShapeName( uno::Reference< drawing::XShape >& xShape , const ::rtl::OUString& rName )
 {
+    if( !xShape.is() )
+        return;
+
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
     DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
@@ -1389,68 +1675,88 @@ uno::Reference< drawing::XShapes >
         ShapeFactory::createGroup2D( const uno::Reference< drawing::XShapes >& xTarget
         , ::rtl::OUString aName )
 {
-    //create and add to target
-    uno::Reference< drawing::XShape > xShape(
-                m_xShapeFactory->createInstance( C2U(
-                "com.sun.star.drawing.GroupShape" ) ), uno::UNO_QUERY );
-    xTarget->add(xShape);
+    if( !xTarget.is() )
+        return 0;
+    try
+    {
+        //create and add to target
+        uno::Reference< drawing::XShape > xShape(
+                    m_xShapeFactory->createInstance( C2U(
+                    "com.sun.star.drawing.GroupShape" ) ), uno::UNO_QUERY );
+        xTarget->add(xShape);
 
-    //set name
-    if(aName.getLength())
-        setShapeName( xShape , aName );
+        //set name
+        if(aName.getLength())
+            setShapeName( xShape , aName );
 
-    {//workaround
-        //need this null size as otherwise empty group shapes where painted with a gray border
-        xShape->setSize(awt::Size(0,0));
+        {//workaround
+            //need this null size as otherwise empty group shapes where painted with a gray border
+            xShape->setSize(awt::Size(0,0));
+        }
+
+        //return
+        uno::Reference< drawing::XShapes > xShapes =
+            uno::Reference<drawing::XShapes>( xShape, uno::UNO_QUERY );
+        return xShapes;
     }
-
-    //return
-    uno::Reference< drawing::XShapes > xShapes =
-        uno::Reference<drawing::XShapes>( xShape, uno::UNO_QUERY );
-    return xShapes;
+    catch( uno::Exception& e )
+    {
+        ASSERT_EXCEPTION( e );
+    }
+    return 0;
 }
 
 uno::Reference< drawing::XShapes >
         ShapeFactory::createGroup3D( const uno::Reference< drawing::XShapes >& xTarget
         , ::rtl::OUString aName )
 {
-    //create shape
-    uno::Reference< drawing::XShape > xShape(
-            m_xShapeFactory->createInstance( C2U(
-            "com.sun.star.drawing.Shape3DSceneObject" ) ), uno::UNO_QUERY );
-
-    xTarget->add(xShape);
-
-    //it is necessary to set the transform matrix to initialize the scene properly (bug #106316#)
-    //otherwise all objects which are placed into this Group will not be visible
-    //the following should be unnecessary after a the bug is fixed
+    if( !xTarget.is() )
+        return 0;
+    try
     {
-        //set properties
-        uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-        DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
-        if( xProp.is())
+        //create shape
+        uno::Reference< drawing::XShape > xShape(
+                m_xShapeFactory->createInstance( C2U(
+                "com.sun.star.drawing.Shape3DSceneObject" ) ), uno::UNO_QUERY );
+
+        xTarget->add(xShape);
+
+        //it is necessary to set the transform matrix to initialize the scene properly (bug #106316#)
+        //otherwise all objects which are placed into this Group will not be visible
+        //the following should be unnecessary after a the bug is fixed
         {
-            try
+            //set properties
+            uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
+            DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+            if( xProp.is())
             {
-                ::basegfx::B3DHomMatrix aM4;
-                xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
-                    , uno::makeAny(Matrix4DToHomogenMatrix(aM4)) );
-            }
-            catch( uno::Exception& e )
-            {
-                ASSERT_EXCEPTION( e );
+                try
+                {
+                    ::basegfx::B3DHomMatrix aM;
+                    xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
+                        , uno::makeAny(B3DHomMatrixToHomogenMatrix(aM)) );
+                }
+                catch( uno::Exception& e )
+                {
+                    ASSERT_EXCEPTION( e );
+                }
             }
         }
+
+        //set name
+        if(aName.getLength())
+            setShapeName( xShape , aName );
+
+        //return
+        uno::Reference< drawing::XShapes > xShapes =
+                uno::Reference<drawing::XShapes>( xShape, uno::UNO_QUERY );
+        return xShapes;
     }
-
-    //set name
-    if(aName.getLength())
-        setShapeName( xShape , aName );
-
-    //return
-    uno::Reference< drawing::XShapes > xShapes =
-            uno::Reference<drawing::XShapes>( xShape, uno::UNO_QUERY );
-    return xShapes;
+    catch( uno::Exception& e )
+    {
+        ASSERT_EXCEPTION( e );
+    }
+    return 0;
 }
 
 uno::Reference< drawing::XShape >
@@ -1458,6 +1764,9 @@ uno::Reference< drawing::XShape >
                     , const drawing::PolyPolygonShape3D& rPoints
                     , const VLineProperties& rLineProperties )
 {
+    if( !xTarget.is() )
+        return 0;
+
     if(!rPoints.SequenceX.getLength())
         return NULL;
 
@@ -1514,8 +1823,11 @@ uno::Reference< drawing::XShape >
 uno::Reference< drawing::XShape >
         ShapeFactory::createLine2D( const uno::Reference< drawing::XShapes >& xTarget
                     , const drawing::PointSequenceSequence& rPoints
-                    , const VLineProperties& rLineProperties )
+                    , const VLineProperties* pLineProperties )
 {
+    if( !xTarget.is() )
+        return 0;
+
     if(!rPoints.getLength())
         return NULL;
 
@@ -1540,158 +1852,33 @@ uno::Reference< drawing::XShape >
             xProp->setPropertyValue( C2U( UNO_NAME_POLYPOLYGON )
                 , uno::makeAny( rPoints ) );
 
-            //Transparency
-            if(rLineProperties.Transparence.hasValue())
-                xProp->setPropertyValue( C2U( UNO_NAME_LINETRANSPARENCE )
-                    , rLineProperties.Transparence );
-
-            //LineStyle
-            if(rLineProperties.LineStyle.hasValue())
-                xProp->setPropertyValue( C2U( UNO_NAME_LINESTYLE )
-                    , rLineProperties.LineStyle );
-
-            //LineWidth
-            if(rLineProperties.Width.hasValue())
-                xProp->setPropertyValue( C2U( UNO_NAME_LINEWIDTH )
-                    , rLineProperties.Width );
-
-            //LineColor
-            if(rLineProperties.Color.hasValue())
-                xProp->setPropertyValue( C2U( UNO_NAME_LINECOLOR )
-                    , rLineProperties.Color );
-
-            //LineDash
-            if(rLineProperties.Dash.hasValue())
-                xProp->setPropertyValue( C2U( UNO_NAME_LINEDASH )
-                    , rLineProperties.Dash );
-        }
-        catch( uno::Exception& e )
-        {
-            ASSERT_EXCEPTION( e );
-        }
-    }
-    return xShape;
-}
-
-uno::Reference< drawing::XShape > ShapeFactory::createErrorBar2D(
-      const uno::Reference< drawing::XShapes >& xTarget
-    , const drawing::Position3D& rPos
-    , const drawing::Direction3D& rSize
-    , tErrorBarDirection eDirection
-    , bool bClip
-    )
-//     , const tNameSequence& rPropNames
-//     , const tAnySequence& rPropValues )
-{
-    const double fX = rPos.PositionX;
-    const double fY = rPos.PositionY;
-    const double fZ = rPos.PositionZ;
-
-    const double fWidth  = rSize.DirectionX;
-    const double fHeight = rSize.DirectionY;
-    const double fWidthHalf = fWidth/2.0;
-    const double fHeightHalf = fHeight/2.0;
-
-    //create shape and add to page
-    uno::Reference< drawing::XShape > xShape(
-            m_xShapeFactory->createInstance( C2U(
-            "com.sun.star.drawing.PolyLineShape" ) ), uno::UNO_QUERY );
-    xTarget->add(xShape);
-
-    drawing::PolyPolygonShape3D aPPShape;
-
-    sal_Int32 nNumOfPolys = bClip ? 1 : 2;
-    aPPShape.SequenceX.realloc( nNumOfPolys );
-    aPPShape.SequenceY.realloc( nNumOfPolys );
-    aPPShape.SequenceZ.realloc( nNumOfPolys );
-
-    aPPShape.SequenceX[0].realloc(2);
-    aPPShape.SequenceY[0].realloc(2);
-    aPPShape.SequenceZ[0].realloc(2);
-    aPPShape.SequenceZ[0][0] = aPPShape.SequenceZ[0][1] = fZ;
-
-    if( !bClip )
-    {
-        aPPShape.SequenceX[1].realloc(2);
-        aPPShape.SequenceY[1].realloc(2);
-        aPPShape.SequenceZ[1].realloc(2);
-        aPPShape.SequenceZ[1][0] = aPPShape.SequenceZ[1][1] = fZ;
-    }
-
-
-    switch( eDirection )
-    {
-        case ERROR_BAR_UP:
-            // body
-            aPPShape.SequenceX[0][0] = aPPShape.SequenceX[0][1] = fX;
-            aPPShape.SequenceY[0][0] = fY;
-            aPPShape.SequenceY[0][1] = fY - fHeight;
-            // head
-            if( !bClip )
+            if(pLineProperties)
             {
-                aPPShape.SequenceX[1][0] = fX - fWidthHalf;
-                aPPShape.SequenceX[1][1] = fX + fWidthHalf;
-                aPPShape.SequenceY[1][0] = aPPShape.SequenceY[1][1] = fY - fHeight;
+                //Transparency
+                if(pLineProperties->Transparence.hasValue())
+                    xProp->setPropertyValue( C2U( UNO_NAME_LINETRANSPARENCE )
+                        , pLineProperties->Transparence );
+
+                //LineStyle
+                if(pLineProperties->LineStyle.hasValue())
+                    xProp->setPropertyValue( C2U( UNO_NAME_LINESTYLE )
+                        , pLineProperties->LineStyle );
+
+                //LineWidth
+                if(pLineProperties->Width.hasValue())
+                    xProp->setPropertyValue( C2U( UNO_NAME_LINEWIDTH )
+                        , pLineProperties->Width );
+
+                //LineColor
+                if(pLineProperties->Color.hasValue())
+                    xProp->setPropertyValue( C2U( UNO_NAME_LINECOLOR )
+                        , pLineProperties->Color );
+
+                //LineDashName
+                if(pLineProperties->DashName.hasValue())
+                    xProp->setPropertyValue( C2U( "LineDashName" )
+                        , pLineProperties->DashName );
             }
-            break;
-
-        case ERROR_BAR_RIGHT:
-            // body
-            aPPShape.SequenceX[0][0] = fX;
-            aPPShape.SequenceX[0][1] = fX + fWidth;
-            aPPShape.SequenceY[0][0] = aPPShape.SequenceY[0][1] = fY;
-            // head
-            if( !bClip )
-            {
-                aPPShape.SequenceX[1][0] = aPPShape.SequenceX[1][1] = fX + fWidth;
-                aPPShape.SequenceY[1][0] = fY - fHeightHalf;
-                aPPShape.SequenceY[1][1] = fY + fHeightHalf;
-            }
-            break;
-
-        case ERROR_BAR_DOWN:
-            // body
-            aPPShape.SequenceX[0][0] = aPPShape.SequenceX[0][1] = fX;
-            aPPShape.SequenceY[0][0] = fY;
-            aPPShape.SequenceY[0][1] = fY + fHeight;
-            // head
-            if( !bClip )
-            {
-                aPPShape.SequenceX[1][0] = fX - fWidthHalf;
-                aPPShape.SequenceX[1][1] = fX + fWidthHalf;
-                aPPShape.SequenceY[1][0] = aPPShape.SequenceY[1][1] = fY + fHeight;
-            }
-            break;
-
-        case ERROR_BAR_LEFT:
-            // body
-            aPPShape.SequenceX[0][0] = fX;
-            aPPShape.SequenceX[0][1] = fX - fWidth;
-            aPPShape.SequenceY[0][0] = aPPShape.SequenceY[0][1] = fY;
-            // head
-            if( !bClip )
-            {
-                aPPShape.SequenceX[1][0] = aPPShape.SequenceX[1][1] = fX - fWidth;
-                aPPShape.SequenceY[1][0] = fY - fHeightHalf;
-                aPPShape.SequenceY[1][1] = fY + fHeightHalf;
-            }
-            break;
-    }
-
-    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    if( xProp.is() )
-    {
-        //set properties
-//         PropertyMapper::setMultiProperties( rPropNames, rPropValues, xProp );
-
-        //set polygon-shape
-        try
-        {
-            drawing::PointSequenceSequence aPoints( PolyToPointSequence( aPPShape ));
-
-            //Polygon
-            xProp->setPropertyValue( C2U( UNO_NAME_POLYPOLYGON ), uno::makeAny( aPoints ) );
-//             xProp->setPropertyValue( C2U( "PolyPolygon" ), uno::makeAny( aPtSeq ));
         }
         catch( uno::Exception& e )
         {
@@ -1703,14 +1890,58 @@ uno::Reference< drawing::XShape > ShapeFactory::createErrorBar2D(
 
 uno::Any ShapeFactory::makeTransformation( const awt::Point& rScreenPosition2D, double fRotationAnglePi )
 {
-    ::basegfx::B2DHomMatrix aM3;
+    ::basegfx::B2DHomMatrix aM;
     //As autogrow is active the rectangle is automatically expanded to that side
     //to which the text is not adjusted.
-    // aM3.scale( 1, 1 ); Oops? A scale with this parameters is neutral, line commented out
-    aM3.rotate( fRotationAnglePi );
-    aM3.translate( rScreenPosition2D.X, rScreenPosition2D.Y );
-    uno::Any aATransformation = uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM3) );
+    // aM.scale( 1, 1 ); Oops? A scale with this parameters is neutral, line commented out
+    aM.rotate( fRotationAnglePi );
+    aM.translate( rScreenPosition2D.X, rScreenPosition2D.Y );
+    uno::Any aATransformation = uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM) );
     return aATransformation;
+}
+
+void ShapeFactory::makeShapeInvisible( const uno::Reference< drawing::XShape >& xShape )
+{
+    uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
+    DBG_ASSERT(xShapeProp.is(), "created shape offers no XPropertySet");
+    if( xShapeProp.is())
+    {
+        try
+        {
+            xShapeProp->setPropertyValue( C2U("LineStyle"), uno::makeAny( drawing::LineStyle_NONE ));
+            xShapeProp->setPropertyValue( C2U("FillStyle"), uno::makeAny( drawing::FillStyle_NONE ));
+        }
+        catch( uno::Exception& e )
+        {
+            ASSERT_EXCEPTION( e );
+        }
+    }
+}
+
+uno::Reference< drawing::XShape > ShapeFactory::createInvisibleRectangle(
+            const uno::Reference< drawing::XShapes >& xTarget
+            , const awt::Size& rSize )
+{
+    try
+    {
+        if(!xTarget.is())
+            return 0;
+
+        uno::Reference< drawing::XShape > xShape( m_xShapeFactory->createInstance(
+                C2U( "com.sun.star.drawing.RectangleShape" )), uno::UNO_QUERY );
+        if( xTarget.is() && xShape.is())
+        {
+            xTarget->add( xShape );
+            ShapeFactory::makeShapeInvisible( xShape );
+            xShape->setSize( rSize );
+        }
+        return xShape;
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+    return 0;
 }
 
 uno::Reference< drawing::XShape >
@@ -1720,6 +1951,12 @@ uno::Reference< drawing::XShape >
                     , const tAnySequence& rPropValues
                     , const uno::Any& rATransformation )
 {
+    if( !xTarget.is() )
+        return 0;
+
+    if(!rText.getLength())
+        return 0;
+
     //create shape and add to page
     uno::Reference< drawing::XShape > xShape(
             m_xShapeFactory->createInstance( C2U(
@@ -1765,10 +2002,135 @@ rtl::OUString ShapeFactory::getStackedString( const rtl::OUString& rString, bool
     //as we do not no letters here add a newline after each char
     for( sal_Int32 nPosSrc=0; nPosSrc < nLen; nPosSrc++ )
     {
+        if( nPosSrc )
+            aStackStr.append( sal_Unicode('\r') );
         aStackStr.append( aSource.charAt( nPosSrc ) );
-        aStackStr.append( sal_Unicode('\r') );
     }
     return aStackStr.makeStringAndClear();
+}
+
+//static
+bool ShapeFactory::hasPolygonAnyLines( drawing::PolyPolygonShape3D& rPoly)
+{
+    // #i67757# check all contained polygons, if at least one polygon contains 2 or more points, return true
+    for( sal_Int32 nIdx = 0, nCount = rPoly.SequenceX.getLength(); nIdx < nCount; ++nIdx )
+        if( rPoly.SequenceX[ nIdx ].getLength() > 1 )
+            return true;
+    return false;
+}
+
+//static
+bool ShapeFactory::isPolygonEmptyOrSinglePoint( drawing::PolyPolygonShape3D& rPoly)
+{
+    // true, if empty polypolygon or one polygon with one point
+    return (rPoly.SequenceX.getLength() == 0) ||
+        ((rPoly.SequenceX.getLength() == 1) && (rPoly.SequenceX[0].getLength() <= 1));
+}
+
+//static
+void ShapeFactory::closePolygon( drawing::PolyPolygonShape3D& rPoly)
+{
+    DBG_ASSERT( rPoly.SequenceX.getLength() <= 1, "ShapeFactory::closePolygon - single polygon expected" );
+    //add a last point == first point
+    if(isPolygonEmptyOrSinglePoint(rPoly))
+        return;
+    drawing::Position3D aFirst(rPoly.SequenceX[0][0],rPoly.SequenceY[0][0],rPoly.SequenceZ[0][0]);
+    AddPointToPoly( rPoly, aFirst );
+}
+
+//static
+awt::Size ShapeFactory::calculateNewSizeRespectingAspectRatio(
+         const awt::Size& rTargetSize
+         , const awt::Size& rSourceSizeWithCorrectAspectRatio )
+{
+    awt::Size aNewSize;
+
+    double fFactorWidth = double(rTargetSize.Width)/double(rSourceSizeWithCorrectAspectRatio.Width);
+    double fFactorHeight = double(rTargetSize.Height)/double(rSourceSizeWithCorrectAspectRatio.Height);
+    double fFactor = std::min(fFactorWidth,fFactorHeight);
+    aNewSize.Width=static_cast<sal_Int32>(fFactor*rSourceSizeWithCorrectAspectRatio.Width);
+    aNewSize.Height=static_cast<sal_Int32>(fFactor*rSourceSizeWithCorrectAspectRatio.Height);
+
+    return aNewSize;
+}
+
+//static
+awt::Point ShapeFactory::calculateTopLeftPositionToCenterObject(
+           const awt::Point& rTargetAreaPosition
+         , const awt::Size& rTargetAreaSize
+         , const awt::Size& rObjectSize )
+{
+    awt::Point aNewPosition(rTargetAreaPosition);
+    aNewPosition.X += static_cast<sal_Int32>(double(rTargetAreaSize.Width-rObjectSize.Width)/2.0);
+    aNewPosition.Y += static_cast<sal_Int32>(double(rTargetAreaSize.Height-rObjectSize.Height)/2.0);
+    return aNewPosition;
+}
+
+//static
+::basegfx::B2IRectangle ShapeFactory::getRectangleOfShape(
+        const uno::Reference< drawing::XShape >& xShape )
+{
+    ::basegfx::B2IRectangle aRet;
+
+    if( xShape.is() )
+    {
+        awt::Point aPos = xShape->getPosition();
+        awt::Size aSize = xShape->getSize();
+        aRet = BaseGFXHelper::makeRectangle(aPos,aSize);
+    }
+    return aRet;
+
+}
+
+//static
+awt::Size ShapeFactory::getSizeAfterRotation(
+         const uno::Reference< drawing::XShape >& xShape, double fRotationAngleDegree )
+{
+    awt::Size aRet(0,0);
+    if(xShape.is())
+    {
+        const awt::Size aSize( xShape->getSize() );
+
+        if( ::rtl::math::approxEqual( fRotationAngleDegree, 0.0 ) )
+            aRet = aSize;
+        else
+        {
+            while(fRotationAngleDegree>=360.0)
+                fRotationAngleDegree-=360.0;
+            while(fRotationAngleDegree<0.0)
+                fRotationAngleDegree+=360.0;
+            if(fRotationAngleDegree>270.0)
+                fRotationAngleDegree=360.0-fRotationAngleDegree;
+            else if(fRotationAngleDegree>180.0)
+                fRotationAngleDegree=fRotationAngleDegree-180.0;
+            else if(fRotationAngleDegree>90.0)
+                fRotationAngleDegree=180.0-fRotationAngleDegree;
+
+            const double fAnglePi = fRotationAngleDegree*F_PI/180.0;
+
+            aRet.Height = static_cast<sal_Int32>(
+                aSize.Width*rtl::math::sin( fAnglePi )
+                + aSize.Height*rtl::math::cos( fAnglePi ));
+            aRet.Width = static_cast<sal_Int32>(
+                aSize.Width*rtl::math::cos( fAnglePi )
+                + aSize.Height*rtl::math::sin( fAnglePi ));
+        }
+    }
+    return aRet;
+}
+
+void ShapeFactory::removeSubShapes( const uno::Reference< drawing::XShapes >& xShapes )
+{
+    if( xShapes.is() )
+    {
+        sal_Int32 nSubCount = xShapes->getCount();
+        uno::Reference< drawing::XShape > xShape;
+        for( sal_Int32 nS = nSubCount; nS--; )
+        {
+            if( xShapes->getByIndex( nS ) >>= xShape )
+                xShapes->remove( xShape );
+        }
+    }
 }
 
 //.............................................................................
