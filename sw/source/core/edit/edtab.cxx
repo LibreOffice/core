@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtab.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:58:47 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:27:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -111,6 +112,12 @@
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>
 #endif
+#ifndef _UNOCHART_HXX
+#include <unochart.hxx>
+#endif
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 extern void ClearFEShellTabCols();
 
@@ -174,6 +181,10 @@ BOOL SwEditShell::TableToText( sal_Unicode cCh )
     }
     else if( !pTblNd || pCrsr->GetNext() != pCrsr )
         return bRet;
+
+    // TL_CHART2:
+    // tell the charts about the table to be deleted and have them use their own data
+    GetDoc()->CreateChartInternalDataProviders( &pTblNd->GetTable() );
 
     StartAllAction();
 
@@ -271,11 +282,13 @@ void SwEditShell::UpdateTable()
     if( pTblNd )
     {
         StartAllAction();
-        StartUndo();
+        if( DoesUndo() )
+            StartUndo();
         EndAllTblBoxEdit();
         SwTableFmlUpdate aTblUpdate( (SwTable*)&pTblNd->GetTable() );
         GetDoc()->UpdateTblFlds( &aTblUpdate );
-        EndUndo();
+        if( DoesUndo() )
+            EndUndo();
         EndAllAction();
     }
 }
