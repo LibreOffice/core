@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:03:21 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:14:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -710,26 +710,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 }
             }
             break;
-
-        case SID_OPENDLG_MODCHART:
-            {
-                bChartDlgIsEdit = ( nSlot == SID_OPENDLG_MODCHART );
-                if (bChartDlgIsEdit)
-                {
-                    aEditChartName = GetSelectedChartName();
-                    DrawDeselectAll();      // flackert sonst bei Ref-Input
-                }
-
-                ResetChartArea();
-
-                USHORT          nId  = ScChartDlgWrapper::GetChildWindowId();
-                SfxChildWindow* pWnd = pThisFrame->GetChildWindow( nId );
-
-                pScMod->SetRefDialog( nId, pWnd ? FALSE : TRUE );
-            }
-            break;
-
-
 
         //----------------------------------------------------------------
 
