@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:51:03 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:19:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,9 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <hash_map>
+#include <algorithm>
 
 #include <rtl/logfile.hxx>
 
@@ -127,6 +129,7 @@ struct EmbedImpl
     uno::Reference < embed::XStorage > mxStorage;
     EmbeddedObjectContainer* mpTempObjectContainer;
     uno::Reference < embed::XStorage > mxImageStorage;
+    uno::WeakReference < uno::XInterface > m_xModel;
     //EmbeddedObjectContainerNameMap maTempObjectContainer;
     //uno::Reference < embed::XStorage > mxTempStorage;
     sal_Bool bOwnsStorage;
@@ -170,6 +173,15 @@ EmbeddedObjectContainer::EmbeddedObjectContainer( const uno::Reference < embed::
     pImpl->mxStorage = rStor;
     pImpl->bOwnsStorage = sal_False;
     pImpl->mpTempObjectContainer = 0;
+}
+
+EmbeddedObjectContainer::EmbeddedObjectContainer( const uno::Reference < embed::XStorage >& rStor, const uno::Reference < uno::XInterface >& xModel )
+{
+    pImpl = new EmbedImpl;
+    pImpl->mxStorage = rStor;
+    pImpl->bOwnsStorage = sal_False;
+    pImpl->mpTempObjectContainer = 0;
+    pImpl->m_xModel = xModel;
 }
 
 void EmbeddedObjectContainer::SwitchPersistence( const uno::Reference < embed::XStorage >& rStor )
@@ -337,36 +349,51 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::GetEmbeddedOb
     OSL_ENSURE( aIt != pImpl->maObjectContainer.end() || xAccess->hasByName(rName), "Could not return object!" );
 #endif
 
+    // check if object was already created
+    if ( aIt != pImpl->maObjectContainer.end() )
+        xObj = (*aIt).second;
+    else
+        xObj = Get_Impl( rName, uno::Reference < embed::XEmbeddedObject >() );
+
+    return xObj;
+}
+
+uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::Get_Impl( const ::rtl::OUString& rName, const uno::Reference < embed::XEmbeddedObject >& xCopy )
+{
+    uno::Reference < embed::XEmbeddedObject > xObj;
     try
     {
-        // check if object was already created
-        if ( aIt != pImpl->maObjectContainer.end() )
-            xObj = (*aIt).second;
-        else
+        // create the object from the storage
+        uno::Reference < beans::XPropertySet > xSet( pImpl->mxStorage, uno::UNO_QUERY );
+        sal_Bool bReadOnlyMode = sal_True;
+        if ( xSet.is() )
         {
-            // create the object from the storage
-            uno::Reference < beans::XPropertySet > xSet( pImpl->mxStorage, uno::UNO_QUERY );
-            sal_Bool bReadOnlyMode = sal_True;
-            if ( xSet.is() )
-            {
-                // get the open mode from the parent storage
-                sal_Int32 nMode = 0;
-                uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("OpenMode") );
-                if ( aAny >>= nMode )
-                    bReadOnlyMode = !(nMode & embed::ElementModes::WRITE );
-            }
-
-            // object was not added until now - should happen only by calling this method from "inside"
-            //TODO/LATER: it would be good to detect an error when an object should be created already, but isn't (not an "inside" call)
-            uno::Reference < embed::XEmbedObjectCreator > xFactory( ::comphelper::getProcessServiceFactory()->createInstance(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator")) ), uno::UNO_QUERY );
-            xObj = uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitFromEntry(
-                    pImpl->mxStorage, rName,
-                    bReadOnlyMode, uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
-
-            // insert object into my list
-            AddEmbeddedObject( xObj, rName );
+            // get the open mode from the parent storage
+            sal_Int32 nMode = 0;
+            uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("OpenMode") );
+            if ( aAny >>= nMode )
+                bReadOnlyMode = !(nMode & embed::ElementModes::WRITE );
         }
+
+        // object was not added until now - should happen only by calling this method from "inside"
+        //TODO/LATER: it would be good to detect an error when an object should be created already, but isn't (not an "inside" call)
+        uno::Reference < embed::XEmbedObjectCreator > xFactory( ::comphelper::getProcessServiceFactory()->createInstance(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator")) ), uno::UNO_QUERY );
+        uno::Sequence< beans::PropertyValue > aObjDescr( xCopy.is() ? 2 : 1 );
+        aObjDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Parent" ) );
+        aObjDescr[0].Value <<= pImpl->m_xModel.get();
+        if ( xCopy.is() )
+        {
+            aObjDescr[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CloneFrom" ) );
+            aObjDescr[1].Value <<= xCopy;
+        }
+
+        xObj = uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitFromEntry(
+                pImpl->mxStorage, rName,
+                bReadOnlyMode, aObjDescr ), uno::UNO_QUERY );
+
+        // insert object into my list
+        AddEmbeddedObject( xObj, rName );
     }
     catch ( uno::Exception& )
     {
@@ -392,9 +419,13 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
         uno::Reference < embed::XEmbedObjectCreator > xFactory( ::comphelper::getProcessServiceFactory()->createInstance(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator")) ), uno::UNO_QUERY );
 
+        uno::Sequence< beans::PropertyValue > aObjDescr( rArgs.getLength() + 1 );
+        aObjDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Parent" ) );
+        aObjDescr[0].Value <<= pImpl->m_xModel.get();
+        ::std::copy( rArgs.getConstArray(), rArgs.getConstArray() + rArgs.getLength(), aObjDescr.getArray() + 1 );
         xObj = uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitNew(
                     rClassId, ::rtl::OUString(), pImpl->mxStorage, rNewName,
-                    rArgs ), uno::UNO_QUERY );
+                    aObjDescr ), uno::UNO_QUERY );
 
         AddEmbeddedObject( xObj, rNewName );
 
@@ -431,6 +462,9 @@ void EmbeddedObjectContainer::AddEmbeddedObject( const ::com::sun::star::uno::Re
     EmbeddedObjectContainerNameMap::iterator aIt = pImpl->maObjectContainer.find( rName );
     OSL_ENSURE( aIt == pImpl->maObjectContainer.end(), "Element already inserted!" );
     pImpl->maObjectContainer[ rName ] = xObj;
+    uno::Reference < container::XChild > xChild( xObj, uno::UNO_QUERY );
+    if ( xChild.is() && xChild->getParent() != pImpl->m_xModel.get() )
+        xChild->setParent( pImpl->m_xModel.get() );
 
     // look for object in temorary container
     if ( pImpl->mpTempObjectContainer )
@@ -472,8 +506,6 @@ void EmbeddedObjectContainer::AddEmbeddedObject( const ::com::sun::star::uno::Re
                 aIt++;
         }
     }
-
-    //TODO/LATER: set parent of either object or component through XChild
 }
 
 sal_Bool EmbeddedObjectContainer::StoreEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, ::rtl::OUString& rName, sal_Bool bCopy )
@@ -604,8 +636,11 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     {
         uno::Reference < embed::XEmbedObjectCreator > xFactory( ::comphelper::getProcessServiceFactory()->createInstance(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator")) ), uno::UNO_QUERY );
+        uno::Sequence< beans::PropertyValue > aObjDescr( 1 );
+        aObjDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Parent" ) );
+        aObjDescr[0].Value <<= pImpl->m_xModel.get();
         xObj = uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitFromMediaDescriptor(
-                pImpl->mxStorage, rNewName, aMedium, uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
+                pImpl->mxStorage, rNewName, aMedium, aObjDescr ), uno::UNO_QUERY );
         uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
 
            OSL_ENSURE( !xObj.is() || xObj->getCurrentState() != embed::EmbedStates::LOADED,
@@ -636,8 +671,11 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     {
         uno::Reference < embed::XLinkCreator > xFactory( ::comphelper::getProcessServiceFactory()->createInstance(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator")) ), uno::UNO_QUERY );
+        uno::Sequence< beans::PropertyValue > aObjDescr( 1 );
+        aObjDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Parent" ) );
+        aObjDescr[0].Value <<= pImpl->m_xModel.get();
         xObj = uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceLink(
-                pImpl->mxStorage, rNewName, aMedium, uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
+                pImpl->mxStorage, rNewName, aMedium, aObjDescr ), uno::UNO_QUERY );
 
         uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
 
@@ -724,8 +762,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
     // objects without persistance are not really stored by the method
        if ( xObj.is() && StoreEmbeddedObject( xObj, rName, sal_True ) )
     {
-        xResult = GetEmbeddedObject( rName );
-
+        xResult = Get_Impl( rName, xObj);
         if ( !xResult.is() )
         {
             // this is a case when object has no real persistence
@@ -749,12 +786,15 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                     uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
                     aMediaDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
                     aMediaDescr[0].Value <<= aURL;
+                    uno::Sequence< beans::PropertyValue > aObjDescr( 1 );
+                    aObjDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Parent" ) );
+                    aObjDescr[0].Value <<= pImpl->m_xModel.get();
                     xResult = uno::Reference < embed::XEmbeddedObject >(
                                 xCreator->createInstanceLink(
                                     pImpl->mxStorage,
                                     rName,
                                     aMediaDescr,
-                                    uno::Sequence < beans::PropertyValue >() ),
+                                    aObjDescr ),
                                 uno::UNO_QUERY_THROW );
                 }
                 else
@@ -772,14 +812,18 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator") ) ),
                         uno::UNO_QUERY_THROW );
 
+                    uno::Sequence< beans::PropertyValue > aObjDescr( 1 );
+                    aObjDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Parent" ) );
+                    aObjDescr[0].Value <<= pImpl->m_xModel.get();
                     xResult = uno::Reference < embed::XEmbeddedObject >(
                                 xCreator->createInstanceInitNew(
                                     xObj->getClassID(),
                                     xObj->getClassName(),
                                     pImpl->mxStorage,
                                     rName,
-                                    uno::Sequence < beans::PropertyValue >() ),
+                                    aObjDescr ),
                                 uno::UNO_QUERY_THROW );
+
                     if ( xResult->getCurrentState() == embed::EmbedStates::LOADED )
                         xResult->changeState( embed::EmbedStates::RUNNING );
 
@@ -1086,6 +1130,8 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
         {
             pImpl->maObjectContainer.erase( aIt );
             bFound = sal_True;
+            uno::Reference < container::XChild > xChild( xObj, uno::UNO_QUERY );
+            xChild->setParent( uno::Reference < uno::XInterface >() );
             break;
         }
 
