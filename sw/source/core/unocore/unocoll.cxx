@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 15:22:31 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:33:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,11 @@
 #ifndef _SW_XTEXT_DEFAULTS_HXX
 #include <SwXTextDefaults.hxx>
 #endif
+#ifndef _UNOCHART_HXX
+#include <unochart.hxx>
+#endif
+
+#include "docsh.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -264,6 +269,7 @@ const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
     "com.sun.star.image.ImageMapCircleObject",              SW_SERVICE_IMAP_CIRCLE,
     "com.sun.star.image.ImageMapPolygonObject",             SW_SERVICE_IMAP_POLYGON,
     "com.sun.star.text.TextGraphicObject",                  SW_SERVICE_TYPE_TEXT_GRAPHIC,
+    "com.sun.star.chart2.data.DataProvider",                SW_SERVICE_CHART2_DATA_PROVIDER,
 
     // case-correct versions of the service names (see #i67811)
     CSS_TEXT_TEXTFIELD_DATE_TIME,                   SW_SERVICE_FIELDTYPE_DATETIME,
@@ -643,6 +649,15 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         break;
         case SW_SERVICE_IMAP_POLYGON   :
             xRet = SvUnoImageMapPolygonObject_createInstance( lcl_GetSupportedMacroItems() );
+        break;
+        case SW_SERVICE_CHART2_DATA_PROVIDER :
+            // #i64497# If a chart is in a temporary document during clipoard
+            // paste, there should be no data provider, so that own data is used
+            // This should not happen during copy/paste, as this will unlink
+            // charts using table data.
+            OSL_ASSERT( pDoc->GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED );
+            if( pDoc->GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+                xRet = (cppu::OWeakObject*) pDoc->GetChartDataProvider( true /* create - if not yet available */ );
         break;
         default:
             throw uno::RuntimeException();
