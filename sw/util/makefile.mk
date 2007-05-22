@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.60 $
+#   $Revision: 1.61 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 16:27:59 $
+#   last change: $Author: vg $ $Date: 2007-05-22 16:41:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@ sw_res_files= \
     $(SRS)$/table.srs        \
     $(SRS)$/uiview.srs       \
     $(SRS)$/undo.srs        \
+    $(SRS)$/unocore.srs      \
     $(SRS)$/utlui.srs        \
     $(SRS)$/web.srs          \
     $(SRS)$/wrtsh.srs        \
@@ -102,11 +103,6 @@ LIB1TARGET      =$(SLB)$/swall.lib
 LIB1OBJFILES= $(OUT)$/slo$/swmodule.obj \
     $(OUT)$/slo$/swdll.obj
 
-.IF "$(OS)"!="MACOSX"
-# static libraries
-SHL1STDLIBS+= $(SCHLIB)
-.ENDIF
-
 # dynamic libraries
 SHL1STDLIBS+= \
     $(SVXLIB) \
@@ -134,11 +130,6 @@ SHL1STDLIBS+= \
     $(I18NUTILLIB)	\
         $(AVMEDIALIB) \
         $(XML2LIB)
-
-.IF "$(OS)"=="MACOSX"
-# static libraries at end for OS X
-SHL1STDLIBS+= $(SCHLIB)
-.ENDIF
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= $(ADVAPI32LIB)
