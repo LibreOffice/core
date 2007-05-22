@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:47:40 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:21:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1202,6 +1202,21 @@ bool SvxUnoGetResourceRanges( const short nWhich, int& nApiResIds, int& nIntResI
     }
 
     return TRUE;
+}
+
+sal_Int16 SvxUnoGetWhichIdForNamedProperty( const ::rtl::OUString & rPropName )
+{
+    sal_Int16 nWhich = 0;
+
+    const SfxItemPropertyMap* pMap = aSvxMapProvider.GetMap( SVXMAP_SHAPE );
+    if( pMap )
+    {
+        const SfxItemPropertyMap* pFound = SfxItemPropertyMap::GetByName( pMap, rPropName );
+        if( pFound )
+            nWhich = pFound->nWID;
+    }
+
+    return nWhich;
 }
 
 bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount, String& rString ) throw()
