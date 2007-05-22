@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pppoptimizertoken.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-11 14:00:23 $
+ *  last change: $Author: sj $ $Date: 2007-05-22 16:53:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,6 +276,8 @@ enum PPPOptimizerTokenEnum
     STR_OK,
     STR_INFO_1,
     STR_INFO_2,
+    STR_INFO_3,
+    STR_INFO_4,
     STR_DUPLICATING_PRESENTATION,
     STR_DELETING_SLIDES,
     STR_OPTIMIZING_GRAPHICS,

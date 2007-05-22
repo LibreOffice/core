@@ -15,6 +15,10 @@
     </prop>
 
     <node oor:name="Strings">
+        <prop oor:name="STR_SUN_OPTIMIZATION_WIZARD">
+            <value xml:lang="en-US">&ProductName;</value>
+            <value xml:lang="de">&ProductName;</value>
+        </prop>
         <prop oor:name="STR_STEPS">
             <value xml:lang="en-US">Steps</value>
             <value xml:lang="de">Schritte</value>
@@ -264,10 +268,18 @@ Sun, Sun Microsystems, le logo Sun, Java et StarOffice sont des marques de fabri
             <value xml:lang="de">OK</value>
         </prop>
         <prop oor:name="STR_INFO_1">
+            <value xml:lang="en-US">The %EXTENSIONNAME has successfully updated the presentation '%TITLE'. The file size has changed from %OLDFILESIZE MB to %NEWFILESIZE MB.</value>
+            <value xml:lang="de">Das Dokument '%TITLE' wurde erfolgreich vom %EXTENSIONNAME überarbeitet. Die Dateigröße wurde dabei von %OLDFILESIZE MB auf %NEWFILESIZE MB geändert.</value>
+        </prop>
+        <prop oor:name="STR_INFO_2">
             <value xml:lang="en-US">The %EXTENSIONNAME has successfully updated the presentation '%TITLE'. The file size has changed from %OLDFILESIZE MB to approximated %NEWFILESIZE MB.</value>
             <value xml:lang="de">Das Dokument '%TITLE' wurde erfolgreich vom %EXTENSIONNAME überarbeitet. Die Dateigröße wurde dabei von %OLDFILESIZE MB auf in etwa %NEWFILESIZE MB geändert.</value>
         </prop>
-        <prop oor:name="STR_INFO_2">
+        <prop oor:name="STR_INFO_3">
+            <value xml:lang="en-US">The %EXTENSIONNAME has successfully updated the presentation '%TITLE'. The file size has changed to %NEWFILESIZE MB.</value>
+            <value xml:lang="de">Das Dokument '%TITLE' wurde erfolgreich vom %EXTENSIONNAME überarbeitet. Die neue Dateigröße beträgt %NEWFILESIZE MB.</value>
+        </prop>
+        <prop oor:name="STR_INFO_4">
             <value xml:lang="en-US">The %EXTENSIONNAME has successfully updated the presentation '%TITLE'. The file size has changed to approximated %NEWFILESIZE MB.</value>
             <value xml:lang="de">Das Dokument '%TITLE' wurde erfolgreich vom %EXTENSIONNAME überarbeitet. Die neue Dateigröße beträgt in etwa %NEWFILESIZE MB.</value>
         </prop>

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impoptimizer.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-11 13:50:53 $
+ *  last change: $Author: sj $ $Date: 2007-05-22 16:53:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -766,7 +766,8 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
             sal_Bool bInformationDialog = sal_True;
             if ( bInformationDialog )
             {
-                InformationDialog aInformationDialog( mxMSF, xSelf, mbOpenNewDocument, nSourceSize, nDestSize );
+                sal_Int64 nApproxSize = nDestSize;
+                InformationDialog aInformationDialog( mxMSF, xSelf, mbOpenNewDocument, nSourceSize, nDestSize, nApproxSize );
                 aInformationDialog.execute();
             }
             if ( mbOpenNewDocument && xSelf.is() )

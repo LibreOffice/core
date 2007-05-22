@@ -4,9 +4,9 @@
  *
  *  $RCSfile: informationdialog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-16 15:19:53 $
+ *  last change: $Author: sj $ $Date: 2007-05-22 16:53:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,9 @@
 #ifndef _COM_SUN_STAR_AWT_PUSHBUTTONTYPE_HPP_
 #include <com/sun/star/awt/PushButtonType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
+#include <com/sun/star/io/XStream.hpp>
+#endif
 
 // ---------------------
 // - InformationDialog -
@@ -97,14 +100,16 @@ public :
 
     InformationDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxMSF,
                         com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rxFrame,
-                        sal_Bool& bOpenNewDocument, sal_Int64 nSourceSize, sal_Int64 nDestSize );
+                        sal_Bool& bOpenNewDocument, const sal_Int64& nSourceSize, const sal_Int64& nDestSize, const sal_Int64& nApproxDest );
     ~InformationDialog();
 
     sal_Bool                execute();
 
 private :
+
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >mxMSF;
     com::sun::star::uno::Reference< com::sun::star::frame::XFrame >         mxFrame;
+    com::sun::star::uno::Reference< com::sun::star::io::XStream >           mxTempFile;
 
     com::sun::star::uno::Reference< com::sun::star::awt::XActionListener >  mxActionListener;
 
@@ -112,6 +117,7 @@ private :
 
     sal_Int64 mnSourceSize;
     sal_Int64 mnDestSize;
+    sal_Int64 mnApproxSize;
     sal_Bool& mrbOpenNewDocument;
 
 public :
