@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 15:04:09 $
+#   last change: $Author: vg $ $Date: 2007-05-22 15:22:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,6 @@ LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1FILES=\
     $(SLB)$/animation.lib \
     $(SLB)$/overlay.lib \
-    $(SLB)$/svdraw.lib \
     $(SLB)$/form.lib \
     $(SLB)$/fmcomp.lib \
     $(SLB)$/engine3d.lib \
@@ -74,6 +73,7 @@ LIB1FILES+=$(SLB)$/ibrwimp.lib
 
 LIB2TARGET= $(SLB)$/$(TARGET)_2.lib
 LIB2FILES=\
+    $(SLB)$/svdraw.lib \
     $(SLB)$/init.lib \
     $(SLB)$/items.lib     \
     $(SLB)$/svxlink.lib   \
@@ -86,7 +86,7 @@ LIB2FILES=\
     $(SLB)$/stbctrls.lib  \
     $(SLB)$/tbxctrls.lib  \
     $(SLB)$/unoedit.lib
-    
+
 LIB3TARGET= $(SLB)$/$(TARGET)_3.lib
 LIB3FILES=\
     $(SLB)$/unodraw.lib	\
