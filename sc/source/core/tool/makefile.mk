@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-27 12:17:15 $
+#   last change: $Author: vg $ $Date: 2007-05-22 19:43:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@ SLOFILES =  \
         $(SLO)$/callform.obj \
         $(SLO)$/cellform.obj \
         $(SLO)$/chartarr.obj \
+        $(SLO)$/chartpos.obj \
         $(SLO)$/chartlis.obj \
         $(SLO)$/chgtrack.obj \
         $(SLO)$/chgviset.obj \
