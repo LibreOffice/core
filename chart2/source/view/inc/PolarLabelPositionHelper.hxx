@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PolarLabelPositionHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:44:04 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:19:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,11 +65,19 @@ public:
         , ShapeFactory* pShapeFactory );
     virtual ~PolarLabelPositionHelper();
 
-    ::com::sun::star::awt::Point getLabelScreenPositionAndAlignment(
-                        LabelAlignment& rAlignment, bool bCenteredPosition
-                        , double fStartLogicValueOnAngleAxis, double fEndLogicValueOnAngleAxis
-                        , double fLogicInnerRadius, double fLogicOuterRadius
-                        , double fLogicZ) const;
+    ::com::sun::star::awt::Point getLabelScreenPositionAndAlignmentForLogicValues(
+                        LabelAlignment& rAlignment
+                        , double fLogicValueOnAngleAxis
+                        , double fLogicValueOnRadiusAxis
+                        , double fLogicZ
+                        , sal_Int32 nScreenValueOffsetInRadiusDirection=0 ) const;
+
+    ::com::sun::star::awt::Point getLabelScreenPositionAndAlignmentForUnitCircleValues(
+                        LabelAlignment& rAlignment, bool bOutsidePosition
+                        , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
+                        , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
+                        , double fLogicZ
+                        , sal_Int32 nScreenValueOffsetInRadiusDirection=0 ) const;
 
 private:
     PolarPlottingPositionHelper*    m_pPosHelper;
