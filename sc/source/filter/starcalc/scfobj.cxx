@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scfobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:48:43 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:00:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,8 +57,6 @@ using namespace com::sun::star;
 #include <svx/svdpage.hxx>
 #include <sfx2/objsh.hxx>
 #include <sot/storage.hxx>
-#include <sch/schdll.hxx>
-#include <sch/memchrt.hxx>
 #include <sfx2/app.hxx>
 #include <sot/clsids.hxx>
 #ifndef SC_ADDRESS_HXX
