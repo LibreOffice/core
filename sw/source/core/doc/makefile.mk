@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 13:10:26 $
+#   last change: $Author: vg $ $Date: 2007-05-22 16:25:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,10 +46,11 @@ TARGET=doc
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES = \
-                $(SLO)$/doclay.obj \
-                $(SLO)$/docxforms.obj \
-                $(SLO)$/tblrwcl.obj \
-                $(SLO)$/docnew.obj
+    $(SLO)$/doclay.obj \
+    $(SLO)$/docxforms.obj \
+    $(SLO)$/docnew.obj \
+    $(SLO)$/docsort.obj \
+    $(SLO)$/tblrwcl.obj
 
 SLOFILES =	$(EXCEPTIONSFILES) \
         $(SLO)$/SwStyleNameMapper.obj \
@@ -74,7 +75,6 @@ SLOFILES =	$(EXCEPTIONSFILES) \
         $(SLO)$/docnum.obj \
         $(SLO)$/docredln.obj \
         $(SLO)$/docruby.obj \
-        $(SLO)$/docsort.obj \
         $(SLO)$/docstat.obj \
         $(SLO)$/doctxm.obj \
         $(SLO)$/extinput.obj \
@@ -87,8 +87,8 @@ SLOFILES =	$(EXCEPTIONSFILES) \
         $(SLO)$/poolfmt.obj \
         $(SLO)$/sortopt.obj \
         $(SLO)$/swserv.obj \
-                $(SLO)$/swstylemanager.obj \
-                $(SLO)$/tblafmt.obj \
+        $(SLO)$/swstylemanager.obj \
+        $(SLO)$/tblafmt.obj \
         $(SLO)$/tblcpy.obj \
         $(SLO)$/visiturl.obj \
         $(SLO)$/htmltbl.obj \
