@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VAxisProperties.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:31:03 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:10:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,12 @@
 #include "macros.hxx"
 #include "ViewDefines.hxx"
 #include "CommonConverters.hxx"
+#include "AxisHelper.hxx"
+#include "DiagramHelper.hxx"
+
+#ifndef _COM_SUN_STAR_CHART2_XAXISPOSITION_HPP_
+#include <com/sun/star/chart2/AxisPosition.hpp>
+#endif
 
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
@@ -164,39 +170,51 @@ TickmarkProperties AxisProperties::makeTickmarkProperties(
 //--------------------------------------------------------------------------
 
 AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
-                              , const ::com::sun::star::awt::Size& rReferenceSize )
+                              , const uno::Reference< data::XTextualDataSequence >& xAxisTextProvider )
     : m_xAxisModel(xAxisModel)
-    , m_aReferenceSize(rReferenceSize)
+    , m_nDimensionIndex(0)
     , m_bIsMainAxis(true)
+    , m_bSwapXAndY(false)
     , m_pfMainLinePositionAtOtherAxis(NULL)
     , m_pfExrtaLinePositionAtOtherAxis(NULL)
     , m_fInnerDirectionSign(1.0)
     , m_bLabelsOutside(true)
     , m_aLabelAlignment(LABEL_ALIGN_RIGHT_TOP)
     , m_bDisplayLabels( true )
+    , m_nNumberFormatKey(0)
 //    , m_eRelativeLabelPosition(LEFTORBOTTOM_OF_AXIS)
     , m_nMajorTickmarks(1)
     , m_nMinorTickmarks(1)
     , m_aTickmarkPropertiesList()
     , m_aLineProperties()
+    //for category axes
+    , m_nAxisType(AxisType::REALNUMBER)
+    , m_xAxisTextProvider(xAxisTextProvider)
+    , m_bTickmarksAtIndicatedValue(false)
 {
 }
 
 AxisProperties::AxisProperties( const AxisProperties& rAxisProperties )
     : m_xAxisModel( rAxisProperties.m_xAxisModel )
-    , m_aReferenceSize( rAxisProperties.m_aReferenceSize )
+    , m_nDimensionIndex( m_nDimensionIndex )
     , m_bIsMainAxis( rAxisProperties.m_bIsMainAxis )
+    , m_bSwapXAndY( rAxisProperties.m_bSwapXAndY )
     , m_pfMainLinePositionAtOtherAxis( NULL )
     , m_pfExrtaLinePositionAtOtherAxis( NULL )
     , m_fInnerDirectionSign( rAxisProperties.m_fInnerDirectionSign )
     , m_bLabelsOutside( rAxisProperties.m_bLabelsOutside )
     , m_aLabelAlignment( rAxisProperties.m_aLabelAlignment )
     , m_bDisplayLabels( rAxisProperties.m_bDisplayLabels )
+    , m_nNumberFormatKey( rAxisProperties.m_nNumberFormatKey )
 //    , m_eRelativeLabelPosition( rAxisProperties.m_eRelativeLabelPosition )
     , m_nMajorTickmarks( rAxisProperties.m_nMajorTickmarks )
     , m_nMinorTickmarks( rAxisProperties.m_nMinorTickmarks )
     , m_aTickmarkPropertiesList( rAxisProperties.m_aTickmarkPropertiesList )
     , m_aLineProperties( rAxisProperties.m_aLineProperties )
+    //for category axes
+    , m_nAxisType( rAxisProperties.m_nAxisType )
+    , m_xAxisTextProvider( rAxisProperties.m_xAxisTextProvider )
+    , m_bTickmarksAtIndicatedValue( rAxisProperties.m_bTickmarksAtIndicatedValue )
 {
     if( rAxisProperties.m_pfMainLinePositionAtOtherAxis )
         m_pfMainLinePositionAtOtherAxis = new double(*rAxisProperties.m_pfMainLinePositionAtOtherAxis);
@@ -210,61 +228,93 @@ AxisProperties::~AxisProperties()
     delete m_pfExrtaLinePositionAtOtherAxis;
 }
 
-LabelAlignment lcl_getLabelAlignment( const AxisProperties& rAxisProperties, bool bIsYAxis )
+LabelAlignment lcl_getLabelAlignmentForZAxis( const AxisProperties& rAxisProperties )
 {
     LabelAlignment aRet( LABEL_ALIGN_LEFT );
-    if(bIsYAxis)
+    if( rAxisProperties.m_bLabelsOutside )
+        aRet = LABEL_ALIGN_RIGHT;
+    else
+        aRet = LABEL_ALIGN_LEFT;
+    return aRet;
+}
+
+LabelAlignment lcl_getLabelAlignmentForYAxis( const AxisProperties& rAxisProperties )
+{
+    LabelAlignment aRet( LABEL_ALIGN_LEFT );
+    if(rAxisProperties.m_bIsMainAxis)
     {
-        if(rAxisProperties.m_bIsMainAxis)
-        {
-            if( rAxisProperties.m_bLabelsOutside )
-                aRet = LABEL_ALIGN_LEFT;
-            else
-                aRet = LABEL_ALIGN_RIGHT;
-        }
+        if( rAxisProperties.m_bLabelsOutside )
+            aRet = LABEL_ALIGN_LEFT;
         else
-        {
-            if( !rAxisProperties.m_bLabelsOutside )
-                aRet = LABEL_ALIGN_LEFT;
-            else
-                aRet = LABEL_ALIGN_RIGHT;
-        }
+            aRet = LABEL_ALIGN_RIGHT;
     }
     else
     {
-        if(rAxisProperties.m_bIsMainAxis )
-        {
-            if(rAxisProperties.m_bLabelsOutside)
-                aRet = LABEL_ALIGN_BOTTOM;
-            else
-                aRet = LABEL_ALIGN_TOP;
-        }
+        if( !rAxisProperties.m_bLabelsOutside )
+            aRet = LABEL_ALIGN_LEFT;
         else
-        {
-            if(!rAxisProperties.m_bLabelsOutside)
-                aRet = LABEL_ALIGN_BOTTOM;
-            else
-                aRet = LABEL_ALIGN_TOP;
-        }
+            aRet = LABEL_ALIGN_RIGHT;
+    }
+    return aRet;
+}
+
+LabelAlignment lcl_getLabelAlignmentForXAxis( const AxisProperties& rAxisProperties )
+{
+    LabelAlignment aRet( LABEL_ALIGN_LEFT );
+    if(rAxisProperties.m_bIsMainAxis )
+    {
+        if(rAxisProperties.m_bLabelsOutside)
+            aRet = LABEL_ALIGN_BOTTOM;
+        else
+            aRet = LABEL_ALIGN_TOP;
+    }
+    else
+    {
+        if(!rAxisProperties.m_bLabelsOutside)
+            aRet = LABEL_ALIGN_BOTTOM;
+        else
+            aRet = LABEL_ALIGN_TOP;
     }
     return aRet;
 }
 
 void AxisProperties::init( bool bCartesian )
 {
-    if( bCartesian )
-    {
-        sal_Int32 nDimensionIndex = m_xAxisModel->getRepresentedDimension();
-        m_fInnerDirectionSign = m_bIsMainAxis ? 1 : -1;
-        if(nDimensionIndex==1)
-            m_fInnerDirectionSign*=-1;
-        m_aLabelAlignment = lcl_getLabelAlignment(*this,nDimensionIndex==1);
-    }
-
     uno::Reference< beans::XPropertySet > xProp =
         uno::Reference<beans::XPropertySet>::query( this->m_xAxisModel );
     if( !xProp.is() )
         return;
+    if( bCartesian )
+    {
+        try
+        {
+            //todo nAxisPosition and nAxisIndex are the same values so far and maybe need to be seperated in future
+            sal_Int32 nAxisPosition=AxisPosition::MAIN;
+            xProp->getPropertyValue( C2U( "AxisPosition" ) ) >>= nAxisPosition;
+            m_bIsMainAxis = nAxisPosition==AxisPosition::MAIN;
+        }
+        catch( uno::Exception& e )
+        {
+            ASSERT_EXCEPTION( e );
+        }
+
+        m_fInnerDirectionSign = m_bIsMainAxis ? 1 : -1;
+
+        if( m_nDimensionIndex==2 )
+            m_aLabelAlignment = lcl_getLabelAlignmentForZAxis(*this);
+        else
+        {
+            bool bIsYAxisPosition = (m_nDimensionIndex==1 && !m_bSwapXAndY)
+                || (m_nDimensionIndex==0 && m_bSwapXAndY);
+            if( bIsYAxisPosition )
+                m_fInnerDirectionSign*=-1;
+
+            if( bIsYAxisPosition )
+                m_aLabelAlignment = lcl_getLabelAlignmentForYAxis(*this);
+            else
+                m_aLabelAlignment = lcl_getLabelAlignmentForXAxis(*this);
+        }
+    }
 
     try
     {
@@ -273,6 +323,10 @@ void AxisProperties::init( bool bCartesian )
 
         //init display labels
         xProp->getPropertyValue( C2U( "DisplayLabels" ) ) >>= m_bDisplayLabels;
+
+        //init categories
+        ScaleData aScaleData = m_xAxisModel->getScaleData();
+        m_nAxisType = aScaleData.AxisType;
 
         //init TickmarkProperties
         xProp->getPropertyValue( C2U( "MajorTickmarks" ) ) >>= m_nMajorTickmarks;
@@ -293,16 +347,18 @@ void AxisProperties::init( bool bCartesian )
     }
     catch( uno::Exception& e )
     {
-            e;
+        ASSERT_EXCEPTION( e );
     }
 }
 
 //-----------------------------------------------------------------------------
 
 AxisLabelProperties::AxisLabelProperties()
-                        : aNumberFormat()
+                        : m_aFontReferenceSize( 8000, 7000 )
+                        , m_aMaximumSpaceForLabels( 0 , 0, 8000, 7000 )
+                        , nNumberFormatKey(0)
                         , eStaggering( SIDE_BY_SIDE )
-                        , bLineBreakAllowed( true )
+                        , bLineBreakAllowed( false )
                         , bOverlapAllowed( false )
                         , bStackCharacters( false )
                         , fRotationAngleDegree( 0.0 )
@@ -329,11 +385,6 @@ void AxisLabelProperties::init( const uno::Reference< XAxis >& xAxisModel )
     {
         try
         {
-            if( !( xProp->getPropertyValue( C2U( "NumberFormat" ) ) >>= this->aNumberFormat ) )
-            {
-                //@todo get number format from calc
-            }
-
             xProp->getPropertyValue( C2U( "TextBreak" ) ) >>= this->bLineBreakAllowed;
             xProp->getPropertyValue( C2U( "TextOverlap" ) ) >>= this->bOverlapAllowed;
             xProp->getPropertyValue( C2U( "StackCharacters" ) ) >>= this->bStackCharacters;
@@ -359,7 +410,7 @@ void AxisLabelProperties::init( const uno::Reference< XAxis >& xAxisModel )
         }
         catch( uno::Exception& e )
         {
-             e;
+            ASSERT_EXCEPTION( e );
         }
     }
 }
