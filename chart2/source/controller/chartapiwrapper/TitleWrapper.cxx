@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TitleWrapper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:56:32 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:19:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,17 +37,27 @@
 #include "precompiled_chart2.hxx"
 #include "TitleWrapper.hxx"
 #include "macros.hxx"
-#include "InlineContainer.hxx"
-#include "algohelper.hxx"
+#include "ContainerHelper.hxx"
+
+#ifndef INCLUDED_COMPHELPER_INLINE_CONTAINER_HXX
+#include <comphelper/InlineContainer.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_RELATIVEPOSITION_HPP_
+#include <com/sun/star/chart2/RelativePosition.hpp>
 #endif
 
 #include "CharacterProperties.hxx"
 #include "LineProperties.hxx"
 #include "FillProperties.hxx"
 #include "UserDefinedProperties.hxx"
+// #include "NamedProperties.hxx"
+// #include "WrappedNamedProperty.hxx"
+#include "WrappedCharacterHeightProperty.hxx"
+#include "WrappedTextRotationProperty.hxx"
 
 #include <algorithm>
 
@@ -58,11 +68,104 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::beans::Property;
 using ::osl::MutexGuard;
-using ::property::OPropertySet;
+using ::rtl::OUString;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+
+
+namespace chart
+{
+class WrappedTitleStringProperty : public WrappedProperty
+{
+public:
+    WrappedTitleStringProperty( const Reference< uno::XComponentContext >& xContext );
+    virtual ~WrappedTitleStringProperty();
+
+    virtual void setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+                                    throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException);
+    virtual Any getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
+    virtual Any getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
+
+protected:
+    Reference< uno::XComponentContext > m_xContext;
+};
+
+WrappedTitleStringProperty::WrappedTitleStringProperty( const Reference< uno::XComponentContext >& xContext )
+    : ::chart::WrappedProperty( C2U( "String" ), OUString() )
+    , m_xContext( xContext )
+{
+}
+WrappedTitleStringProperty::~WrappedTitleStringProperty()
+{
+}
+
+void WrappedTitleStringProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+                throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    Reference< chart2::XTitle > xTitle(xInnerPropertySet,uno::UNO_QUERY);
+    if(xTitle.is())
+    {
+        OUString aString;
+        rOuterValue >>= aString;
+        TitleHelper::setCompleteString( aString, xTitle, m_xContext );
+    }
+}
+Any WrappedTitleStringProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    Any aRet( getPropertyDefault( Reference< beans::XPropertyState >( xInnerPropertySet, uno::UNO_QUERY ) ) );
+    Reference< chart2::XTitle > xTitle(xInnerPropertySet,uno::UNO_QUERY);
+    if(xTitle.is())
+    {
+        Sequence< Reference< chart2::XFormattedString > > aStrings( xTitle->getText());
+
+        ::rtl::OUStringBuffer aBuf;
+        for( sal_Int32 i = 0; i < aStrings.getLength(); ++i )
+        {
+            aBuf.append( aStrings[ i ]->getString());
+        }
+        aRet <<= aBuf.makeStringAndClear();
+    }
+    return aRet;
+}
+Any WrappedTitleStringProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    return uno::makeAny( rtl::OUString() );//default title is a empty String
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+class WrappedStackedTextProperty : public WrappedProperty
+{
+public:
+    WrappedStackedTextProperty();
+    virtual ~WrappedStackedTextProperty();
+};
+
+WrappedStackedTextProperty::WrappedStackedTextProperty()
+    : ::chart::WrappedProperty( C2U( "StackedText" ), C2U( "StackCharacters" ) )
+{
+}
+WrappedStackedTextProperty::~WrappedStackedTextProperty()
+{
+}
+
+}// end namespace chart
+
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 namespace
 {
-static const ::rtl::OUString lcl_aServiceName(
+static const OUString lcl_aServiceName(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.Title" ));
 
 enum
@@ -70,20 +173,6 @@ enum
     PROP_TITLE_STRING,
     PROP_TITLE_TEXT_ROTATION,
     PROP_TITLE_TEXT_STACKED
-};
-
-typedef ::std::map< sal_Int32, ::rtl::OUString > lcl_PropertyMapType;
-typedef ::comphelper::MakeMap< sal_Int32, ::rtl::OUString > lcl_MakePropertyMapType;
-
-lcl_PropertyMapType & lcl_GetPropertyMap()
-{
-    static lcl_PropertyMapType aMap(
-        lcl_MakePropertyMapType
-        ( PROP_TITLE_TEXT_ROTATION,           C2U( "TextRotation" ))
-        ( PROP_TITLE_TEXT_STACKED,            C2U( "StackCharacters" ))
-        );
-
-    return aMap;
 };
 
 void lcl_AddPropertiesToVector(
@@ -110,54 +199,32 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-void lcl_AddDefaultsToMap(
-    ::chart::helper::tPropertyValueMap & rOutMap )
+const Sequence< Property > & lcl_GetPropertySequence()
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_TITLE_TEXT_ROTATION ));
-    rOutMap[ PROP_TITLE_TEXT_ROTATION ] =
-        uno::makeAny( sal_Int32( 0 ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_TITLE_TEXT_STACKED ));
-    rOutMap[ PROP_TITLE_TEXT_STACKED ] =
-        uno::makeAny( sal_Bool( sal_False ) );
-}
-
-const uno::Sequence< Property > & lcl_GetPropertySequence()
-{
-    static uno::Sequence< Property > aPropSeq;
+    static Sequence< Property > aPropSeq;
 
     // /--
     MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aPropSeq.getLength() )
     {
         // get properties
-        ::std::vector< ::com::sun::star::beans::Property > aProperties;
+        ::std::vector< beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
-        ::chart::CharacterProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ false );
-        ::chart::LineProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ false );
-        ::chart::FillProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ false );
+        ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
+        ::chart::LineProperties::AddPropertiesToVector( aProperties );
+        ::chart::FillProperties::AddPropertiesToVector( aProperties );
+//         ::chart::NamedProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
         // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::helper::PropertyNameLess() );
+                     ::chart::PropertyNameLess() );
 
         // transfer result to static Sequence
-        aPropSeq = ::chart::helper::VectorToSequence( aProperties );
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
     return aPropSeq;
-}
-
-::cppu::IPropertyArrayHelper & lcl_getInfoHelper()
-{
-    static ::cppu::OPropertyArrayHelper aArrayHelper(
-        lcl_GetPropertySequence(),
-        /* bSorted = */ sal_True );
-
-    return aArrayHelper;
 }
 
 } // anonymous namespace
@@ -169,48 +236,45 @@ namespace chart
 namespace wrapper
 {
 
-TitleWrapper::TitleWrapper(
-    const uno::Reference<
-        ::com::sun::star::chart2::XTitle > & xTitle,
-    const uno::Reference< uno::XComponentContext > & xContext,
-    ::osl::Mutex & _rMutex ) :
-        OPropertySet( _rMutex ),
-        m_rMutex( _rMutex ),
-        m_xContext( xContext ),
-        m_aEventListenerContainer( _rMutex ),
-        m_xTitle( xTitle )
+TitleWrapper::TitleWrapper( ::chart::TitleHelper::eTitleType eTitleType,
+    ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact ) :
+        m_spChart2ModelContact( spChart2ModelContact ),
+        m_aEventListenerContainer( m_aMutex ),
+        m_eTitleType(eTitleType)
 {
-    if( m_xTitle.is())
-    {
-        m_xTitleProp.set( m_xTitle, uno::UNO_QUERY );
-        m_xTitleFastProp.set( m_xTitle, uno::UNO_QUERY );
-    }
 }
 
 TitleWrapper::~TitleWrapper()
-{}
-
-::osl::Mutex & TitleWrapper::GetMutex() const
 {
-    return m_rMutex;
 }
 
 // ____ XShape ____
 awt::Point SAL_CALL TitleWrapper::getPosition()
     throw (uno::RuntimeException)
 {
-    return awt::Point( 0, 0 );
+    return m_spChart2ModelContact->GetTitlePosition( this->getTitle() );
 }
 
 void SAL_CALL TitleWrapper::setPosition( const awt::Point& aPosition )
     throw (uno::RuntimeException)
 {
+    Reference< beans::XPropertySet > xPropertySet( this->getInnerPropertySet() );
+    if(xPropertySet.is())
+    {
+        awt::Size aPageSize( m_spChart2ModelContact->GetPageSize() );
+
+        chart2::RelativePosition aRelativePosition;
+        aRelativePosition.Anchor = drawing::Alignment_TOP_LEFT;
+        aRelativePosition.Primary = double(aPosition.X)/double(aPageSize.Width);
+        aRelativePosition.Secondary = double(aPosition.Y)/double(aPageSize.Height);
+        xPropertySet->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aRelativePosition) );
+    }
 }
 
 awt::Size SAL_CALL TitleWrapper::getSize()
     throw (uno::RuntimeException)
 {
-    return awt::Size( 0, 0 );
+    return m_spChart2ModelContact->GetTitleSize( this->getTitle() );
 }
 
 void SAL_CALL TitleWrapper::setSize( const awt::Size& aSize )
@@ -221,7 +285,7 @@ void SAL_CALL TitleWrapper::setSize( const awt::Size& aSize )
 }
 
 // ____ XShapeDescriptor (base of XShape) ____
-::rtl::OUString SAL_CALL TitleWrapper::getShapeType()
+OUString SAL_CALL TitleWrapper::getShapeType()
     throw (uno::RuntimeException)
 {
     return C2U( "com.sun.star.chart.ChartTitle" );
@@ -231,308 +295,240 @@ void SAL_CALL TitleWrapper::setSize( const awt::Size& aSize )
 void SAL_CALL TitleWrapper::dispose()
     throw (uno::RuntimeException)
 {
-    m_aEventListenerContainer.disposeAndClear( lang::EventObject( *this ) );
+    Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
+    m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
 
     // /--
     MutexGuard aGuard( GetMutex());
-    m_xTitle = NULL;
-    m_xTitleProp = NULL;
-    m_xTitleFastProp = NULL;
+    clearWrappedPropertySet();
     // \--
 }
 
 void SAL_CALL TitleWrapper::addEventListener(
-    const uno::Reference< lang::XEventListener >& xListener )
+    const Reference< lang::XEventListener >& xListener )
     throw (uno::RuntimeException)
 {
     m_aEventListenerContainer.addInterface( xListener );
 }
 
 void SAL_CALL TitleWrapper::removeEventListener(
-    const uno::Reference< lang::XEventListener >& aListener )
+    const Reference< lang::XEventListener >& aListener )
     throw (uno::RuntimeException)
 {
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-sal_Bool SAL_CALL TitleWrapper::convertFastPropertyValue
-    ( uno::Any & rConvertedValue,
-      uno::Any & rOldValue,
-      sal_Int32 nHandle,
-      const uno::Any& rValue )
-    throw (lang::IllegalArgumentException)
+// ================================================================================
+
+Reference< beans::XPropertySet > TitleWrapper::getFirstCharacterPropertySet()
 {
-    // /--
-    MutexGuard aGuard( GetMutex());
-    switch( nHandle )
+    Reference< beans::XPropertySet > xProp;
+
+    Reference< chart2::XTitle > xTitle( this->getTitle() );
+    if( xTitle.is())
     {
-        case PROP_TITLE_TEXT_ROTATION:
-        {
-            getFastPropertyValue( rOldValue, nHandle );
-
-            sal_Int32 nVal;
-            if( rValue >>= nVal )
-            {
-                double fDoubleDegrees = ( static_cast< double >( nVal ) / 100.0 );
-                rConvertedValue <<= fDoubleDegrees;
-                return sal_True;
-            }
-            break;
-        }
-
-        default:
-            return OPropertySet::convertFastPropertyValue(
-                rConvertedValue, rOldValue, nHandle, rValue );
+        Sequence< Reference< chart2::XFormattedString > > aStrings( xTitle->getText());
+        if( aStrings.getLength() > 0 )
+            xProp.set( aStrings[0], uno::UNO_QUERY );
     }
 
-    rConvertedValue = rValue;
-
-    return sal_True;
-    // \--
+    return xProp;
 }
 
-void SAL_CALL TitleWrapper::setFastPropertyValue_NoBroadcast
-    ( sal_Int32 nHandle,
-      const uno::Any& rValue )
-    throw (uno::Exception)
-{
-    // /--
-    MutexGuard aGuard( GetMutex());
-
-    if( FAST_PROPERTY_ID_START_CHAR_PROP <= nHandle &&
-        nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP )
-    {
-        setFastCharacterPropertyValue( nHandle, rValue );
-    }
-    // try same handle for FastPropertySet.  Caution!  Works for global
-    // properties like FillProperties, LineProperties and CharacterProperties
-    else if( nHandle > FAST_PROPERTY_ID_START )
-    {
-        if( m_xTitleFastProp.is() )
-            m_xTitleFastProp->setFastPropertyValue( nHandle, rValue );
-    }
-    else
-    {
-        switch( nHandle )
-        {
-            case PROP_TITLE_STRING:
-                if( m_xTitle.is())
-                {
-                    ::rtl::OUString aString;
-
-                    if( rValue >>= aString )
-                    {
-                        uno::Sequence<
-                            uno::Reference<
-                            ::com::sun::star::chart2::XFormattedString > >
-                            aStrings( 1 );
-
-                        aStrings[ 0 ].set(
-                            m_xContext->getServiceManager()->createInstanceWithContext(
-                                C2U( "com.sun.star.chart2.FormattedString" ),
-                                m_xContext ),
-                            uno::UNO_QUERY );
-
-                        if( aStrings[ 0 ].is())
-                            aStrings[ 0 ]->setString( aString );
-
-                        m_xTitle->setText( aStrings );
-                    }
-                    else
-                    {
-                        throw lang::IllegalArgumentException(
-                            C2U( "Type Mismatch for property String" ),
-                            static_cast< ::cppu::OWeakObject * >( this ),
-                            1 );
-                    }
-                }
-                break;
-
-            case PROP_TITLE_TEXT_ROTATION:
-            case PROP_TITLE_TEXT_STACKED:
-                if( m_xTitleProp.is())
-                {
-                    lcl_PropertyMapType & rMap( lcl_GetPropertyMap());
-                    lcl_PropertyMapType::const_iterator aIt( rMap.find( nHandle ));
-
-                    if( aIt != rMap.end())
-                    {
-                        // found in map
-                        m_xTitleProp->setPropertyValue( (*aIt).second, rValue );
-                    }
-                }
-                break;
-        }
-    }
-    // \--
-}
-
-void SAL_CALL TitleWrapper::getFastPropertyValue
-    ( uno::Any& rValue,
-      sal_Int32 nHandle ) const
-{
-    // /--
-    MutexGuard aGuard( GetMutex());
-    if( FAST_PROPERTY_ID_START_CHAR_PROP <= nHandle &&
-        nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP )
-    {
-        getFastCharacterPropertyValue( rValue, nHandle );
-    }
-    else
-    {
-        switch( nHandle )
-        {
-            case PROP_TITLE_STRING:
-                if( m_xTitle.is())
-                {
-                    uno::Sequence<
-                        uno::Reference<
-                        ::com::sun::star::chart2::XFormattedString > >
-                        aStrings( m_xTitle->getText());
-
-                    ::rtl::OUStringBuffer aBuf;
-                    for( sal_Int32 i = 0; i < aStrings.getLength(); ++i )
-                    {
-                        aBuf.append( aStrings[ i ]->getString());
-                    }
-                    rValue <<= aBuf.makeStringAndClear();
-                }
-                break;
-
-            default:
-                if( m_xTitleFastProp.is())
-                {
-                    // Note: handles must be identical ! (Is the case with the
-                    // shared helpers for Character-, Line- and FillProperties
-                    rValue = m_xTitleFastProp->getFastPropertyValue( nHandle );
-                }
-                else
-                    OPropertySet::getFastPropertyValue( rValue, nHandle );
-                break;
-        }
-    }
-    // \--
-}
-
-void TitleWrapper::getFastCharacterPropertyValue(
-    uno::Any& rValue,
-    sal_Int32 nHandle ) const
+void TitleWrapper::getFastCharacterPropertyValue( sal_Int32 nHandle, Any& rValue )
 {
     OSL_ASSERT( FAST_PROPERTY_ID_START_CHAR_PROP <= nHandle &&
                 nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP );
 
-    uno::Reference< beans::XFastPropertySet > xProp;
-
-    if( m_xTitle.is())
+    Reference< beans::XPropertySet > xProp( getFirstCharacterPropertySet(), uno::UNO_QUERY );
+    Reference< beans::XFastPropertySet > xFastProp( xProp, uno::UNO_QUERY );
+    if(xProp.is())
     {
-        uno::Sequence<
-            uno::Reference<
-            ::com::sun::star::chart2::XFormattedString > >
-            aStrings( m_xTitle->getText());
-
-        if( aStrings.getLength() > 0 )
+        const WrappedProperty* pWrappedProperty = getWrappedProperty( nHandle );
+        if( pWrappedProperty )
         {
-            xProp.set( aStrings[0], uno::UNO_QUERY );
+            rValue = pWrappedProperty->getPropertyValue( xProp );
+        }
+        else if( xFastProp.is() )
+        {
+            rValue = xFastProp->getFastPropertyValue( nHandle );
         }
     }
 
-    // Note: handles must be identical ! (Is the case with the
-    // shared helpers for Character-, Line- and FillProperties
-    if( xProp.is())
-        rValue = xProp->getFastPropertyValue( nHandle );
 }
 
 void TitleWrapper::setFastCharacterPropertyValue(
-    sal_Int32 nHandle,
-    const uno::Any& rValue )
-    throw (uno::Exception)
+    sal_Int32 nHandle, const Any& rValue ) throw (uno::Exception)
 {
     OSL_ASSERT( FAST_PROPERTY_ID_START_CHAR_PROP <= nHandle &&
                 nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP );
 
-    if( m_xTitle.is())
+    Reference< chart2::XTitle > xTitle( this->getTitle() );
+    if( xTitle.is())
     {
-        uno::Sequence<
-            uno::Reference<
-            ::com::sun::star::chart2::XFormattedString > >
-            aStrings( m_xTitle->getText());
+        Sequence< Reference< chart2::XFormattedString > > aStrings( xTitle->getText());
+        const WrappedProperty* pWrappedProperty = getWrappedProperty( nHandle );
 
         for( sal_Int32 i = 0; i < aStrings.getLength(); ++i )
         {
-            uno::Reference< beans::XFastPropertySet > xStringProp( aStrings[ i ], uno::UNO_QUERY );
-            if( xStringProp.is())
-            {
-                // Note: handles must be identical ! (Is the case with the
-                // shared helpers for Character-, Line- and FillProperties
-                xStringProp->setFastPropertyValue( nHandle, rValue );
-            }
+            Reference< beans::XFastPropertySet > xFastPropertySet( aStrings[ i ], uno::UNO_QUERY );
+            Reference< beans::XPropertySet > xPropSet( xFastPropertySet, uno::UNO_QUERY );
+
+            if( pWrappedProperty )
+                pWrappedProperty->setPropertyValue( rValue, xPropSet );
+            else if( xFastPropertySet.is() )
+                xFastPropertySet->setFastPropertyValue( nHandle, rValue );
         }
     }
 }
 
-// --------------------------------------------------------------------------------
+// ================================================================================
+// WrappedPropertySet
 
-// ____ OPropertySet ____
-uno::Any TitleWrapper::GetDefaultValue( sal_Int32 nHandle ) const
-    throw(beans::UnknownPropertyException)
+void SAL_CALL TitleWrapper::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
+                                    throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    static helper::tPropertyValueMap aStaticDefaults;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aStaticDefaults.size() )
+    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
+    if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
     {
-        // initialize defaults
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        CharacterProperties::AddDefaultsToMap(
-            aStaticDefaults,
-            /* bIncludeStyleProperties = */ false );
-        LineProperties::AddDefaultsToMap(
-            aStaticDefaults,
-            /* bIncludeStyleProperties = */ false );
-        FillProperties::AddDefaultsToMap(
-            aStaticDefaults,
-            /* bIncludeStyleProperties = */ false );
+        setFastCharacterPropertyValue( nHandle, rValue );
     }
-
-    helper::tPropertyValueMap::const_iterator aFound(
-        aStaticDefaults.find( nHandle ));
-
-    if( aFound == aStaticDefaults.end())
-        return uno::Any();
-
-    return (*aFound).second;
-    // \--
+    else
+        WrappedPropertySet::setPropertyValue( rPropertyName, rValue );
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL TitleWrapper::getInfoHelper()
+Any SAL_CALL TitleWrapper::getPropertyValue( const OUString& rPropertyName )
+                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    return lcl_getInfoHelper();
+    Any aRet;
+    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
+    if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
+        getFastCharacterPropertyValue( nHandle, aRet );
+    else
+        aRet = WrappedPropertySet::getPropertyValue( rPropertyName );
+    return aRet;
 }
 
-
-// ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
-    TitleWrapper::getPropertySetInfo()
-    throw (uno::RuntimeException)
+beans::PropertyState SAL_CALL TitleWrapper::getPropertyState( const OUString& rPropertyName )
+                                    throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
+    beans::PropertyState aState;
 
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
+    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
+    if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
     {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
+        Reference< beans::XPropertyState > xPropState( getFirstCharacterPropertySet(), uno::UNO_QUERY );
+        if( xPropState.is() )
+        {
+            const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
+            if( pWrappedProperty )
+                aState = pWrappedProperty->getPropertyState( xPropState );
+            else
+                aState = xPropState->getPropertyState( rPropertyName );
+        }
     }
+    else
+        aState = WrappedPropertySet::getPropertyState( rPropertyName );
 
-    return xInfo;
-    // \--
+    return aState;
+}
+void SAL_CALL TitleWrapper::setPropertyToDefault( const OUString& rPropertyName )
+                                    throw (beans::UnknownPropertyException, uno::RuntimeException)
+{
+    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
+    if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
+    {
+        Any aDefault = getPropertyDefault( rPropertyName );
+        setFastCharacterPropertyValue( nHandle, aDefault );
+    }
+    else
+        WrappedPropertySet::setPropertyToDefault( rPropertyName );
+}
+Any SAL_CALL TitleWrapper::getPropertyDefault( const OUString& rPropertyName )
+                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    Any aRet;
+
+    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
+    if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
+    {
+        Reference< beans::XPropertyState > xPropState( getFirstCharacterPropertySet(), uno::UNO_QUERY );
+        if( xPropState.is() )
+        {
+            const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
+            if( pWrappedProperty )
+                aRet = pWrappedProperty->getPropertyDefault(xPropState);
+            else
+                aRet = xPropState->getPropertyDefault( rPropertyName );
+        }
+    }
+    else
+        aRet = WrappedPropertySet::getPropertyDefault( rPropertyName );
+
+    return aRet;
 }
 
-uno::Sequence< ::rtl::OUString > TitleWrapper::getSupportedServiceNames_Static()
+// ================================================================================
+
+//ReferenceSizePropertyProvider
+void TitleWrapper::setCurrentSizeAsReference()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 4 );
+    Reference< beans::XPropertySet > xProp( this->getTitle(), uno::UNO_QUERY );
+    if( xProp.is() )
+        xProp->setPropertyValue( C2U("ReferencePageSize"), uno::makeAny(
+                            m_spChart2ModelContact->GetPageSize() ));
+}
+Any TitleWrapper::getReferenceSize()
+{
+    Any aRet;
+    Reference< beans::XPropertySet > xProp( this->getTitle(), uno::UNO_QUERY );
+    if( xProp.is() )
+        aRet = xProp->getPropertyValue( C2U("ReferencePageSize") );
+
+    return aRet;
+}
+awt::Size TitleWrapper::getCurrentSizeForReference()
+{
+    return m_spChart2ModelContact->GetPageSize();
+}
+
+// ================================================================================
+
+Reference< chart2::XTitle > TitleWrapper::getTitle()
+{
+    return TitleHelper::getTitle( m_eTitleType, m_spChart2ModelContact->getChartModel() );
+}
+
+// WrappedPropertySet
+
+Reference< beans::XPropertySet > TitleWrapper::getInnerPropertySet()
+{
+    return Reference< beans::XPropertySet >( this->getTitle(), uno::UNO_QUERY );
+}
+
+const Sequence< beans::Property >& TitleWrapper::getPropertySequence()
+{
+    return lcl_GetPropertySequence();
+}
+
+const std::vector< WrappedProperty* > TitleWrapper::createWrappedProperties()
+{
+    ::std::vector< ::chart::WrappedProperty* > aWrappedProperties;
+
+    aWrappedProperties.push_back( new WrappedTitleStringProperty( m_spChart2ModelContact->m_xContext ) );
+    aWrappedProperties.push_back( new WrappedTextRotationProperty() );
+    aWrappedProperties.push_back( new WrappedStackedTextProperty() );
+//     WrappedNamedProperty::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
+    WrappedCharacterHeightProperty::addWrappedProperties( aWrappedProperties, this );
+
+    return aWrappedProperties;
+}
+
+// ================================================================================
+
+Sequence< OUString > TitleWrapper::getSupportedServiceNames_Static()
+{
+    Sequence< OUString > aServices( 4 );
     aServices[ 0 ] = C2U( "com.sun.star.chart.ChartTitle" );
     aServices[ 1 ] = C2U( "com.sun.star.drawing.Shape" );
     aServices[ 2 ] = C2U( "com.sun.star.xml.UserDefinedAttributeSupplier" );
@@ -544,16 +540,8 @@ uno::Sequence< ::rtl::OUString > TitleWrapper::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// ================================================================================
-
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( TitleWrapper, lcl_aServiceName );
-
-// needed by MSC compiler
-using impl::TitleWrapper_Base;
-
-IMPLEMENT_FORWARD_XINTERFACE2( TitleWrapper, TitleWrapper_Base, OPropertySet )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( TitleWrapper, TitleWrapper_Base, OPropertySet )
 
 } //  namespace wrapper
 } //  namespace chart
