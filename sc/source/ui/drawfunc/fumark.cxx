@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fumark.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:12:52 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:06:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,9 +166,9 @@ BOOL FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
 
         //  Chart-Dialog starten:
 
-    USHORT nId  = ScChartDlgWrapper::GetChildWindowId();
-    SfxChildWindow* pWnd = pViewShell->GetViewFrame()->GetChildWindow( nId );
-    SC_MOD()->SetRefDialog( nId, pWnd ? FALSE : TRUE );
+//  USHORT nId  = ScChartDlgWrapper::GetChildWindowId();
+//  SfxChildWindow* pWnd = pViewShell->GetViewFrame()->GetChildWindow( nId );
+//  SC_MOD()->SetRefDialog( nId, pWnd ? FALSE : TRUE );
 
     return TRUE;
 }
