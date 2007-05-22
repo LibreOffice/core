@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:50:23 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:13:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,6 @@
 
 
 // INCLUDE ---------------------------------------------------------------
-#include <sch/memchrt.hxx>
-#include <sch/schdll.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
