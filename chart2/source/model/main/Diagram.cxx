@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Diagram.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:11:16 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:35:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,26 +38,31 @@
 #include "Diagram.hxx"
 #include "macros.hxx"
 #include "PropertyHelper.hxx"
-#include "algohelper.hxx"
 #include "Wall.hxx"
 #include "ContextHelper.hxx"
 #include "UserDefinedProperties.hxx"
+#include "ConfigColorScheme.hxx"
+#include "ContainerHelper.hxx"
+#include "DiagramHelper.hxx"
+#include "CloneHelper.hxx"
+#include "AxisHelper.hxx"
+#include "SceneProperties.hxx"
+#include "DisposeHelper.hxx"
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
-#include <com/sun/star/layout/RelativePosition.hpp>
+#ifndef _COM_SUN_STAR_CHART2_RELATIVEPOSITION_HPP_
+#include <com/sun/star/chart2/RelativePosition.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LAYOUT_RELATIVESIZE_HPP_
-#include <com/sun/star/layout/RelativeSize.hpp>
+#ifndef _COM_SUN_STAR_CHART2_RELATIVESIZE_HPP_
+#include <com/sun/star/chart2/RelativeSize.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX_HPP_
+#ifndef _COM_SUN_STAR_DRAWING_CAMERAGEOMETRY_HPP_
+#include <com/sun/star/drawing/CameraGeometry.hpp>
+#endif
+
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_SCENEDESCRIPTOR_HPP_
-#include <com/sun/star/chart2/SceneDescriptor.hpp>
-#endif
 
 #include <algorithm>
 #include <iterator>
@@ -82,7 +87,8 @@ enum
 {
     PROP_DIAGRAM_REL_POS,
     PROP_DIAGRAM_REL_SIZE,
-    PROP_DIAGRAM_SCENE_PROPERTIES
+    PROP_DIAGRAM_SORT_BY_X_VALUES,
+    PROP_DIAGRAM_CONNECT_BARS
 };
 
 void lcl_AddPropertiesToVector(
@@ -91,45 +97,42 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( C2U( "RelativePosition" ),
                   PROP_DIAGRAM_REL_POS,
-                  ::getCppuType( reinterpret_cast< const layout::RelativePosition * >(0)),
+                  ::getCppuType( reinterpret_cast< const chart2::RelativePosition * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( C2U( "RelativeSize" ),
                   PROP_DIAGRAM_REL_SIZE,
-                  ::getCppuType( reinterpret_cast< const layout::RelativeSize * >(0)),
+                  ::getCppuType( reinterpret_cast< const chart2::RelativeSize * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "SceneProperties" ),
-                  PROP_DIAGRAM_SCENE_PROPERTIES,
-                  ::getCppuType( reinterpret_cast< const chart2::SceneDescriptor * >(0)),
+        Property( C2U( "SortByXValues" ),
+                  PROP_DIAGRAM_SORT_BY_X_VALUES,
+                  ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U("ConnectBars"),
+                  PROP_DIAGRAM_CONNECT_BARS,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 void lcl_AddDefaultsToMap(
-    ::chart::helper::tPropertyValueMap & rOutMap )
+    ::chart::tPropertyValueMap & rOutMap )
 {
-    uno::Sequence< chart2::LightSource > aLights( 1 );
-    aLights[0].nDiffuseColor = 0xcccccc;  // grey80
-    aLights[0].aDirection = drawing::Direction3D( 1, 1, 1 );
-    aLights[0].bSpecular = false;
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DIAGRAM_SORT_BY_X_VALUES ));
+    rOutMap[ PROP_DIAGRAM_SORT_BY_X_VALUES ] =
+        uno::makeAny( sal_False );
 
-    chart2::SceneDescriptor aSceneDescr(
-        /* aDirection */         ::com::sun::star::drawing::Direction3D( 0.0, 1.0, 0.0 ),
-        /* fRotationAngle */     20.0,
-        /* fRelativeHeight */    1.0,
-        /* fRelativeDepth */     1.0,
-        /* nAmbientLightColor */ 0x666666, // grey40
-        /* aLightSources */      aLights,
-        /* aShadeMode */         drawing::ShadeMode_SMOOTH );
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DIAGRAM_SCENE_PROPERTIES ));
-    rOutMap[ PROP_DIAGRAM_SCENE_PROPERTIES ] =
-        uno::makeAny( aSceneDescr );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DIAGRAM_CONNECT_BARS ));
+    rOutMap[ PROP_DIAGRAM_CONNECT_BARS ] =
+        uno::makeAny( false );
 }
 
 const Sequence< Property > & lcl_GetPropertySequence()
@@ -143,17 +146,50 @@ const Sequence< Property > & lcl_GetPropertySequence()
         // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
+        ::chart::SceneProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
         // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::helper::PropertyNameLess() );
+                     ::chart::PropertyNameLess() );
 
         // transfer result to static Sequence
-        aPropSeq = ::chart::helper::VectorToSequence( aProperties );
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
     return aPropSeq;
+}
+
+/// clones a UNO-sequence of UNO-References
+typedef Reference< chart2::XCoordinateSystem > lcl_tCooSysRef;
+typedef ::std::map< lcl_tCooSysRef, lcl_tCooSysRef >  lcl_tCooSysMapping;
+typedef ::std::vector< lcl_tCooSysRef >               lcl_tCooSysVector;
+
+lcl_tCooSysMapping lcl_CloneCoordinateSystems(
+        const lcl_tCooSysVector & rSource,
+        lcl_tCooSysVector & rDestination )
+{
+    lcl_tCooSysMapping aResult;
+
+    for( lcl_tCooSysVector::const_iterator aIt( rSource.begin());
+         aIt != rSource.end(); ++aIt )
+    {
+        lcl_tCooSysRef xClone;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >
+              xCloneable( *aIt, ::com::sun::star::uno::UNO_QUERY );
+        if( xCloneable.is())
+            xClone.set( xCloneable->createClone(), ::com::sun::star::uno::UNO_QUERY );
+
+        if( xClone.is())
+        {
+            rDestination.push_back( xClone );
+            aResult.insert( lcl_tCooSysMapping::value_type( *aIt, xClone ));
+        }
+        else
+            rDestination.push_back( *aIt );
+    }
+
+    return aResult;
 }
 
 } // anonymous namespace
@@ -165,52 +201,66 @@ namespace chart
 
 Diagram::Diagram( uno::Reference< uno::XComponentContext > const & xContext ) :
         ::property::OPropertySet( m_aMutex ),
-    m_xContext( xContext ),
-    m_xWall( new Wall()),
-    m_xFloor( new Wall()),//@todo maybe other Constructor for different default values ...
-    m_xTitle( NULL ),
-    m_aIdentifier( C2U( "@diagram" ))
+        m_xContext( xContext ),
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
 {
+    // Set camera position to a default position (that should be set hard, so
+    // that it will be exported.  The property default is a camera looking
+    // straight ono the scene).  These defaults have been acquired from the old
+    // chart implemetation.
+    setFastPropertyValue_NoBroadcast(
+        SceneProperties::PROP_SCENE_CAMERA_GEOMETRY, uno::makeAny(
+            DiagramHelper::getDefaultCameraGeometry()));
+}
+
+Diagram::Diagram( const Diagram & rOther ) :
+        ::property::OPropertySet( rOther, m_aMutex ),
+    m_xContext( rOther.m_xContext ),
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+{
+    lcl_tCooSysMapping aCooSysMapping =
+        lcl_CloneCoordinateSystems( rOther.m_aCoordSystems, m_aCoordSystems );
+    ModifyListenerHelper::addListenerToAllElements( m_aCoordSystems, m_xModifyEventForwarder );
+
+    m_xWall.set( CloneHelper::CreateRefClone< Reference< beans::XPropertySet > >()( rOther.m_xWall ));
+    m_xFloor.set( CloneHelper::CreateRefClone< Reference< beans::XPropertySet > >()( rOther.m_xFloor ));
+    m_xTitle.set( CloneHelper::CreateRefClone< Reference< chart2::XTitle > >()( rOther.m_xTitle ));
+    m_xLegend.set( CloneHelper::CreateRefClone< Reference< chart2::XLegend > >()( rOther.m_xLegend ));
+
+    ModifyListenerHelper::addListener( m_xWall, m_xModifyEventForwarder );
+    ModifyListenerHelper::addListener( m_xFloor, m_xModifyEventForwarder );
+    ModifyListenerHelper::addListener( m_xTitle, m_xModifyEventForwarder );
+    ModifyListenerHelper::addListener( m_xLegend, m_xModifyEventForwarder );
 }
 
 Diagram::~Diagram()
-{}
+{
+    try
+    {
+        ModifyListenerHelper::removeListenerFromAllElements( m_aCoordSystems, m_xModifyEventForwarder );
+
+        ModifyListenerHelper::removeListener( m_xWall, m_xModifyEventForwarder );
+        ModifyListenerHelper::removeListener( m_xFloor, m_xModifyEventForwarder );
+        ModifyListenerHelper::removeListener( m_xTitle, m_xModifyEventForwarder );
+        ModifyListenerHelper::removeListener( m_xLegend, m_xModifyEventForwarder );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
 
 // ____ XDiagram ____
-Reference< chart2::XDataSeriesTreeParent > SAL_CALL Diagram::getTree()
-    throw (uno::RuntimeException)
-{
-    // /--
-    MutexGuard aGuard( GetMutex() );
-    return m_xSeriesTree;
-    // \--
-}
-
-void SAL_CALL Diagram::setTree(
-    const Reference< chart2::XDataSeriesTreeParent >& xTree )
-    throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
-{
-    uno::Reference< lang::XServiceInfo > xInfo( xTree, uno::UNO_QUERY );
-    if( xInfo.is() &&
-        xInfo->supportsService( C2U( "com.sun.star.chart2.DataSeriesTree" )) )
-    {
-        // /--
-        MutexGuard aGuard( GetMutex() );
-        m_xSeriesTree = xTree;
-        // \--
-    }
-    else
-    {
-        throw lang::IllegalArgumentException();
-    }
-}
-
 uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getWall()
     throw (uno::RuntimeException)
 {
     // /--
     MutexGuard aGuard( GetMutex() );
+    if( ! m_xWall.is())
+    {
+        m_xWall.set( new Wall());
+        ModifyListenerHelper::addListener( m_xWall, m_xModifyEventForwarder );
+    }
     return m_xWall;
     // \--
 }
@@ -220,6 +270,11 @@ uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getFloor()
 {
     // /--
     MutexGuard aGuard( GetMutex() );
+    if( ! m_xFloor.is())
+    {
+        m_xFloor.set( new Wall());
+        ModifyListenerHelper::addListener( m_xFloor, m_xModifyEventForwarder );
+    }
     return m_xFloor;
     // \--
 }
@@ -237,129 +292,47 @@ void SAL_CALL Diagram::setLegend( const uno::Reference< chart2::XLegend >& xLege
     throw (uno::RuntimeException)
 {
     // /--
-    MutexGuard aGuard( GetMutex() );
-    m_xLegend = xLegend;
-    // \--
-}
-
-// ____ XAxisContainer ____
-void SAL_CALL Diagram::addAxis( const uno::Reference< chart2::XAxis >& aAxis )
-    throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
-{
-    uno::Reference< chart2::XIdentifiable > xIdent( aAxis, uno::UNO_QUERY );
-    if( ! xIdent.is() ||
-        m_aAxes.find( xIdent->getIdentifier() ) != m_aAxes.end() )
-        throw lang::IllegalArgumentException();
-
-    m_aAxes.insert( tAxisContainerType::value_type( xIdent->getIdentifier(), aAxis ) );
-}
-
-void SAL_CALL Diagram::removeAxis( const uno::Reference< chart2::XAxis >& aAxis )
-    throw (container::NoSuchElementException,
-           uno::RuntimeException)
-{
-    if( ! aAxis.is())
-        throw container::NoSuchElementException();
-
-    uno::Reference< chart2::XIdentifiable > xIdent( aAxis, uno::UNO_QUERY );
-    if( xIdent.is())
+    ::osl::ClearableMutexGuard aGuard( GetMutex() );
+    if( xLegend != m_xLegend )
     {
-        tAxisContainerType::iterator aIt( m_aAxes.find( xIdent->getIdentifier() ));
-
-        if( aIt == m_aAxes.end())
-            throw container::NoSuchElementException();
-
-        m_aAxes.erase( aIt );
+        if( m_xLegend.is())
+            ModifyListenerHelper::removeListener( m_xLegend, m_xModifyEventForwarder );
+        m_xLegend = xLegend;
+        if( m_xLegend.is())
+            ModifyListenerHelper::addListener( m_xLegend, m_xModifyEventForwarder );
+        aGuard.clear();
+        // \--
+        fireModifyEvent();
     }
-    else
-        throw container::NoSuchElementException();
 }
 
-uno::Sequence< uno::Reference< chart2::XAxis > > SAL_CALL Diagram::getAxes()
+Reference< chart2::XColorScheme > SAL_CALL Diagram::getDefaultColorScheme()
     throw (uno::RuntimeException)
 {
-    uno::Sequence< uno::Reference< chart2::XAxis > > aResult( m_aAxes.size());
-
-    ::std::transform( m_aAxes.begin(), m_aAxes.end(),
-                      aResult.getArray(),
-                      ::std::select2nd< tAxisContainerType::value_type >() );
-
-    return aResult;
-}
-
-uno::Reference< chart2::XAxis > SAL_CALL Diagram::getAxisByIdentifier( const ::rtl::OUString& aIdentifier )
-    throw (uno::RuntimeException)
-{
-    if(!aIdentifier.getLength())
-        return NULL;
-    uno::Reference< chart2::XAxis > aResult;
-    tAxisContainerType::const_iterator aIt( m_aAxes.find( aIdentifier ));
-
-    if( aIt != m_aAxes.end())
-        aResult = (*aIt).second;
-
-    return aResult;
-}
-
-// ____ XGridContainer ____
-void SAL_CALL Diagram::addGrid( const uno::Reference< chart2::XGrid >& aGrid )
-    throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
-{
-    uno::Reference< chart2::XIdentifiable > xIdent( aGrid, uno::UNO_QUERY );
-    if( ! xIdent.is() ||
-        m_aGrids.find( xIdent->getIdentifier() ) != m_aGrids.end() )
-        throw lang::IllegalArgumentException();
-
-    m_aGrids.insert( tGridContainerType::value_type( xIdent->getIdentifier(), aGrid ));
-}
-
-void SAL_CALL Diagram::removeGrid( const uno::Reference< chart2::XGrid >& aGrid )
-    throw (container::NoSuchElementException,
-           uno::RuntimeException)
-{
-    if( ! aGrid.is())
-        throw container::NoSuchElementException();
-
-    uno::Reference< chart2::XIdentifiable > xIdent( aGrid, uno::UNO_QUERY );
-    if( xIdent.is())
+    if( ! m_xColorScheme.is())
     {
-        tGridContainerType::iterator aIt( m_aGrids.find( xIdent->getIdentifier() ));
-
-        if( aIt == m_aGrids.end())
-            throw container::NoSuchElementException();
-
-        m_aGrids.erase( aIt );
+        m_xColorScheme.set( new ConfigColorScheme( m_xContext ));
     }
-    else
-        throw container::NoSuchElementException();
+    return m_xColorScheme;
 }
 
-uno::Sequence< uno::Reference< chart2::XGrid > > SAL_CALL Diagram::getGrids()
+void SAL_CALL Diagram::setDefaultColorScheme( const Reference< chart2::XColorScheme >& xColorScheme )
     throw (uno::RuntimeException)
 {
-    uno::Sequence< uno::Reference< chart2::XGrid > > aResult( m_aGrids.size());
-
-    ::std::transform( m_aGrids.begin(), m_aGrids.end(),
-                      aResult.getArray(),
-                      ::std::select2nd< tGridContainerType::value_type >() );
-
-    return aResult;
+    m_xColorScheme.set( xColorScheme );
+    fireModifyEvent();
 }
 
-uno::Reference< chart2::XGrid > SAL_CALL Diagram::getGridByIdentifier( const ::rtl::OUString& aIdentifier )
+void SAL_CALL Diagram::setUnusedData( const Sequence< Reference< chart2::data::XLabeledDataSequence > >& aUnusedData )
     throw (uno::RuntimeException)
 {
-    if(!aIdentifier.getLength())
-        return NULL;
-    uno::Reference< chart2::XGrid > aResult;
-    tGridContainerType::const_iterator aIt( m_aGrids.find( aIdentifier ));
+    m_aUnusedData = aUnusedData;
+}
 
-    if( aIt != m_aGrids.end())
-        aResult = (*aIt).second;
-
-    return aResult;
+Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL Diagram::getUnusedData()
+    throw (uno::RuntimeException)
+{
+    return m_aUnusedData;
 }
 
 // ____ XTitled ____
@@ -376,53 +349,143 @@ void SAL_CALL Diagram::setTitle( const uno::Reference< chart2::XTitle >& Title )
     throw (uno::RuntimeException)
 {
     // /--
-    MutexGuard aGuard( GetMutex() );
-    m_xTitle = Title;
-    // \--
+    ::osl::ClearableMutexGuard aGuard( GetMutex() );
+
+    if( m_xTitle != Title )
+    {
+        ModifyListenerHelper::removeListener( m_xTitle, m_xModifyEventForwarder );
+        m_xTitle = Title;
+        ModifyListenerHelper::addListener( m_xTitle, m_xModifyEventForwarder );
+        // \--
+        aGuard.clear();
+        fireModifyEvent();
+    }
 }
 
-// ____ XBoundedCoordinateSystemContainer ____
+// ____ XCoordinateSystemContainer ____
 void SAL_CALL Diagram::addCoordinateSystem(
-    const uno::Reference< chart2::XBoundedCoordinateSystem >& aCoordSys )
+    const uno::Reference< chart2::XCoordinateSystem >& aCoordSys )
     throw (lang::IllegalArgumentException,
            uno::RuntimeException)
 {
-//     if( m_aCoordSystems.find( aCoordSys ) != m_aCoordSystems.end())
     if( ::std::find( m_aCoordSystems.begin(), m_aCoordSystems.end(), aCoordSys )
         != m_aCoordSystems.end())
         throw lang::IllegalArgumentException();
 
-//     m_aCoordSystems.insert( aCoordSys );
+    if( m_aCoordSystems.size()>=1 )
+    {
+        OSL_ENSURE( false, "more than one coordinatesystem is not supported yet by the fileformat" );
+        return;
+    }
+
     m_aCoordSystems.push_back( aCoordSys );
+
+    ModifyListenerHelper::addListener( aCoordSys, m_xModifyEventForwarder );
+    fireModifyEvent();
 }
 
 void SAL_CALL Diagram::removeCoordinateSystem(
-    const uno::Reference< chart2::XBoundedCoordinateSystem >& aCoordSys )
+    const uno::Reference< chart2::XCoordinateSystem >& aCoordSys )
     throw (container::NoSuchElementException,
            uno::RuntimeException)
 {
-    ::std::vector< uno::Reference< chart2::XBoundedCoordinateSystem > >::iterator
+    ::std::vector< uno::Reference< chart2::XCoordinateSystem > >::iterator
           aIt( ::std::find( m_aCoordSystems.begin(), m_aCoordSystems.end(), aCoordSys ));
-//     if( m_aCoordSystems.find( aCoordSys ) == m_aCoordSystems.end())
-    if( aIt != m_aCoordSystems.end())
-        throw container::NoSuchElementException();
+    if( aIt == m_aCoordSystems.end())
+        throw container::NoSuchElementException(
+            C2U( "The given coordinate-system is no element of the container" ),
+            static_cast< uno::XWeak * >( this ));
 
-//     m_aCoordSystems.erase( aCoordSys );
     m_aCoordSystems.erase( aIt );
+
+    ModifyListenerHelper::removeListener( aCoordSys, m_xModifyEventForwarder );
+    fireModifyEvent();
 }
 
-uno::Sequence< uno::Reference< chart2::XBoundedCoordinateSystem > > SAL_CALL Diagram::getCoordinateSystems()
+uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > SAL_CALL Diagram::getCoordinateSystems()
     throw (uno::RuntimeException)
 {
-//     return helper::SetToSequence( m_aCoordSystems );
-    return helper::VectorToSequence( m_aCoordSystems );
+    return ContainerHelper::ContainerToSequence( m_aCoordSystems );
 }
 
-// ____ XIdentifiable ____
-::rtl::OUString SAL_CALL Diagram::getIdentifier()
+void SAL_CALL Diagram::setCoordinateSystems(
+    const Sequence< Reference< chart2::XCoordinateSystem > >& aCoordinateSystems )
+    throw (lang::IllegalArgumentException,
+           uno::RuntimeException)
+{
+    Sequence< Reference< chart2::XCoordinateSystem > > aNew(aCoordinateSystems);
+
+    if( aNew.getLength()>1 )
+    {
+        OSL_ENSURE( false, "more than one coordinatesystem is not supported yet by the fileformat" );
+        aNew.realloc(1);
+    }
+
+    ModifyListenerHelper::removeListenerFromAllElements( m_aCoordSystems, m_xModifyEventForwarder );
+    m_aCoordSystems = ContainerHelper::SequenceToVector( aNew );
+    ModifyListenerHelper::addListenerToAllElements( m_aCoordSystems, m_xModifyEventForwarder );
+    fireModifyEvent();
+}
+
+// ____ XCloneable ____
+Reference< util::XCloneable > SAL_CALL Diagram::createClone()
     throw (uno::RuntimeException)
 {
-    return m_aIdentifier;
+    return Reference< util::XCloneable >( new Diagram( *this ));
+}
+
+// ____ XModifyBroadcaster ____
+void SAL_CALL Diagram::addModifyListener( const Reference< util::XModifyListener >& aListener )
+    throw (uno::RuntimeException)
+{
+    try
+    {
+        Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
+        xBroadcaster->addModifyListener( aListener );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+void SAL_CALL Diagram::removeModifyListener( const Reference< util::XModifyListener >& aListener )
+    throw (uno::RuntimeException)
+{
+    try
+    {
+        Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
+        xBroadcaster->removeModifyListener( aListener );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+// ____ XModifyListener ____
+void SAL_CALL Diagram::modified( const lang::EventObject& aEvent )
+    throw (uno::RuntimeException)
+{
+    m_xModifyEventForwarder->modified( aEvent );
+}
+
+// ____ XEventListener (base of XModifyListener) ____
+void SAL_CALL Diagram::disposing( const lang::EventObject& Source )
+    throw (uno::RuntimeException)
+{
+    // nothing
+}
+
+// ____ OPropertySet ____
+void Diagram::firePropertyChangeEvent()
+{
+    fireModifyEvent();
+}
+
+void Diagram::fireModifyEvent()
+{
+    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
 // ============================================================
@@ -441,7 +504,7 @@ Sequence< OUString > Diagram::getSupportedServiceNames_Static()
 uno::Any Diagram::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    static helper::tPropertyValueMap aStaticDefaults;
+    static tPropertyValueMap aStaticDefaults;
 
     // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -449,9 +512,10 @@ uno::Any Diagram::GetDefaultValue( sal_Int32 nHandle ) const
     {
         // initialize defaults
         lcl_AddDefaultsToMap( aStaticDefaults );
+        ::chart::SceneProperties::AddDefaultsToMap( aStaticDefaults );
     }
 
-    helper::tPropertyValueMap::const_iterator aFound(
+    tPropertyValueMap::const_iterator aFound(
         aStaticDefaults.find( nHandle ));
 
     if( aFound == aStaticDefaults.end())
