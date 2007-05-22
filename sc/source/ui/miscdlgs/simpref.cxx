@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simpref.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:33:31 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:09:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,8 @@ ScSimpleRefDlg::ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
         bRefInputMode   ( FALSE ),
         bAutoReOpen     ( TRUE ),
         bCloseOnButtonUp( FALSE ),
-        bSingleCell     ( FALSE )
+        bSingleCell     ( FALSE ),
+        bMultiSelection ( FALSE )
 {
     //  damit die Strings in der Resource bei den FixedTexten bleiben koennen:
     Init();
@@ -152,7 +153,19 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         else
             theCurArea.Format( aRefStr, ABS_DREF3D, pDocP );
 
-        aEdAssign.SetRefString( aRefStr );
+        if ( bMultiSelection )
+        {
+            String aVal = aEdAssign.GetText();
+            Selection aSel = aEdAssign.GetSelection();
+            aSel.Justify();
+            aVal.Erase( (xub_StrLen)aSel.Min(), (xub_StrLen)aSel.Len() );
+            aVal.Insert( aRefStr, (xub_StrLen)aSel.Min() );
+            Selection aNewSel( aSel.Min(), aSel.Min()+aRefStr.Len() );
+            aEdAssign.SetRefString( aVal );
+            aEdAssign.SetSelection( aNewSel );
+        }
+        else
+            aEdAssign.SetRefString( aRefStr );
 
         aChangeHdl.Call( &aRefStr );
     }
@@ -206,18 +219,21 @@ void ScSimpleRefDlg::SetUnoLinks( const Link& rDone, const Link& rAbort,
     aChangeHdl  = rChange;
 }
 
-void ScSimpleRefDlg::SetFlags( BOOL bSetCloseOnButtonUp )
+void ScSimpleRefDlg::SetFlags( BOOL bSetCloseOnButtonUp, BOOL bSetSingleCell, BOOL bSetMultiSelection )
 {
     bCloseOnButtonUp = bSetCloseOnButtonUp;
-}
-
-void ScSimpleRefDlg::SetSingleCell( BOOL bFlag )
-{
-    bSingleCell = bFlag;
+    bSingleCell = bSetSingleCell;
+    bMultiSelection = bSetMultiSelection;
 }
 
 void ScSimpleRefDlg::StartRefInput()
 {
+    if ( bMultiSelection )
+    {
+        // initially select the whole string, so it gets replaced by default
+        aEdAssign.SetSelection( Selection( 0, aEdAssign.GetText().Len() ) );
+    }
+
     aRbAssign.DoRef();
     bCloseFlag=TRUE;
 }
