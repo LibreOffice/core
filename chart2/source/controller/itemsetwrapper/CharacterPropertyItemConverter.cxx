@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CharacterPropertyItemConverter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:34:01 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:00:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,26 +74,28 @@ namespace
 {
     static ::comphelper::ItemPropertyMapType aCharacterPropertyMap(
         ::comphelper::MakeItemPropertyMap
-        ( EE_CHAR_COLOR,                  C2U( "CharColor" ))
-        ( EE_CHAR_LANGUAGE,               C2U( "CharLocale" ))
-//         ( EE_CHAR_FONTHEIGHT,             C2U( "CharHeight" ))
-//         ( EE_CHAR_ITALIC,                 C2U( "CharPosture" ))
-//         ( EE_CHAR_WEIGHT,                 C2U( "CharWeight" ))
-//         ( EE_CHAR_STRIKEOUT,              C2U( "CharStrikeout" ))
-        ( EE_CHAR_WLM,                    C2U( "CharWordMode" ))
-        ( EE_CHAR_SHADOW,                 C2U( "CharShadowed" ))
-        ( EE_CHAR_RELIEF,                 C2U( "CharRelief" ))
-        ( EE_CHAR_OUTLINE,                C2U( "CharContoured" ))
-        ( EE_CHAR_EMPHASISMARK,           C2U( "CharEmphasis" ))
+        IPM_MAP_ENTRY( EE_CHAR_COLOR, "CharColor", 0 )
+        IPM_MAP_ENTRY( EE_CHAR_LANGUAGE, "CharLocale", 0 )
+//         IPM_MAP_ENTRY( EE_CHAR_FONTHEIGHT, "CharHeight", 0 )
+//         IPM_MAP_ENTRY( EE_CHAR_ITALIC, "CharPosture", 0 )
+//         IPM_MAP_ENTRY( EE_CHAR_WEIGHT, "CharWeight", 0 )
 
-        ( EE_CHAR_LANGUAGE_CJK,           C2U( "CharLocaleAsian" ))
-        ( EE_CHAR_LANGUAGE_CTL,           C2U( "CharLocaleComplex" ))
-//         ( EE_CHAR_FONTHEIGHT_CJK,         C2U( "CharHeightAsian" ))
-//         ( EE_CHAR_FONTHEIGHT_CTL,         C2U( "CharHeightComplex" ))
-//         ( EE_CHAR_WEIGHT_CJK,             C2U( "CharWeightAsian" ))
-//         ( EE_CHAR_WEIGHT_CTL,             C2U( "CharWeightComplex" ))
-//         ( EE_CHAR_ITALIC_CJK,             C2U( "CharPostureAsian" ))
-//         ( EE_CHAR_ITALIC_CTL,             C2U( "CharPostureComplex" ))
+        IPM_MAP_ENTRY( EE_CHAR_STRIKEOUT, "CharStrikeout", MID_CROSS_OUT )
+        IPM_MAP_ENTRY( EE_CHAR_WLM, "CharWordMode", 0 )
+        IPM_MAP_ENTRY( EE_CHAR_SHADOW, "CharShadowed", 0 )
+        IPM_MAP_ENTRY( EE_CHAR_RELIEF, "CharRelief", 0 )
+        IPM_MAP_ENTRY( EE_CHAR_OUTLINE, "CharContoured", 0 )
+        IPM_MAP_ENTRY( EE_CHAR_EMPHASISMARK, "CharEmphasis", 0 )
+
+        IPM_MAP_ENTRY( EE_CHAR_LANGUAGE_CJK, "CharLocaleAsian", 0 )
+        IPM_MAP_ENTRY( EE_CHAR_LANGUAGE_CTL, "CharLocaleComplex", 0 )
+
+//         IPM_MAP_ENTRY( EE_CHAR_FONTHEIGHT_CJK, "CharHeightAsian", 0 )
+//         IPM_MAP_ENTRY( EE_CHAR_FONTHEIGHT_CTL, "CharHeightComplex", 0 )
+//         IPM_MAP_ENTRY( EE_CHAR_WEIGHT_CJK, "CharWeightAsian", 0 )
+//         IPM_MAP_ENTRY( EE_CHAR_WEIGHT_CTL, "CharWeightComplex", 0 )
+//         IPM_MAP_ENTRY( EE_CHAR_ITALIC_CJK, "CharPostureAsian", 0 )
+//         IPM_MAP_ENTRY( EE_CHAR_ITALIC_CTL, "CharPostureComplex", 0 )
 
         );
 
@@ -109,14 +111,21 @@ namespace wrapper
 {
 
 CharacterPropertyItemConverter::CharacterPropertyItemConverter(
-    const ::com::sun::star::uno::Reference<
-    ::com::sun::star::beans::XPropertySet > & rPropertySet,
+    const uno::Reference< beans::XPropertySet > & rPropertySet,
+    SfxItemPool& rItemPool ) :
+        ItemConverter( rPropertySet, rItemPool )
+{}
+
+CharacterPropertyItemConverter::CharacterPropertyItemConverter(
+    const uno::Reference< beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
     ::std::auto_ptr< awt::Size > pRefSize,
-    const ::rtl::OUString & rRefSizePropertyName ) :
+    const ::rtl::OUString & rRefSizePropertyName,
+    const uno::Reference< beans::XPropertySet > & rRefSizePropSet ) :
         ItemConverter( rPropertySet, rItemPool ),
         m_pRefSize( pRefSize ),
-        m_aRefSizePropertyName( rRefSizePropertyName )
+        m_aRefSizePropertyName( rRefSizePropertyName ),
+        m_xRefSizePropSet( rRefSizePropSet.is() ? rRefSizePropSet : rPropertySet )
 {}
 
 CharacterPropertyItemConverter::~CharacterPropertyItemConverter()
@@ -127,7 +136,7 @@ const USHORT * CharacterPropertyItemConverter::GetWhichPairs() const
     return nCharacterPropertyWhichPairs;
 }
 
-bool CharacterPropertyItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const
+bool CharacterPropertyItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
 {
     ::comphelper::ItemPropertyMapType & rMap( lcl_GetCharacterPropertyPropertyMap());
     ::comphelper::ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
@@ -135,7 +144,7 @@ bool CharacterPropertyItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl
     if( aIt == rMap.end())
         return false;
 
-    rOutName =(*aIt).second;
+    rOutProperty =(*aIt).second;
     return true;
 }
 
@@ -204,20 +213,6 @@ void CharacterPropertyItemConverter::FillSpecialItem(
         }
         break;
 
-        case EE_CHAR_STRIKEOUT:
-        {
-            SvxCrossedOutItem aItem( STRIKEOUT_NONE, EE_CHAR_STRIKEOUT );
-
-            uno::Any aValue( GetPropertySet()->getPropertyValue( C2U( "CharStrikeout" )));
-            if( aValue.hasValue())
-            {
-                // default member-id is MID_CROSSED_OUT (bool flag)
-                aItem.PutValue( aValue, MID_CROSS_OUT );
-                rOutItemSet.Put( aItem );
-            }
-        }
-        break;
-
         case EE_CHAR_ITALIC:
         case EE_CHAR_ITALIC_CJK:
         case EE_CHAR_ITALIC_CTL:
@@ -281,16 +276,16 @@ void CharacterPropertyItemConverter::FillSpecialItem(
                     if( m_pRefSize.get())
                     {
                         awt::Size aOldRefSize;
-                        if( GetPropertySet()->getPropertyValue( m_aRefSizePropertyName ) >>= aOldRefSize )
+                        if( GetRefSizePropertySet()->getPropertyValue( m_aRefSizePropertyName ) >>= aOldRefSize )
                         {
                             // calculate font height in view
-                            fHeight = RelativeSizeHelper::calculate(
-                                fHeight, aOldRefSize, *m_pRefSize );
+                            fHeight = static_cast< float >(
+                                RelativeSizeHelper::calculate( fHeight, aOldRefSize, *m_pRefSize ));
                             aValue <<= fHeight;
                         }
                     }
 
-                    aItem.PutValue( aValue );
+                    aItem.PutValue( aValue, MID_FONTHEIGHT );
                     rOutItemSet.Put( aItem );
                 }
             }
@@ -404,23 +399,6 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
         }
         break;
 
-        case EE_CHAR_STRIKEOUT:
-        {
-            const SvxCrossedOutItem & rItem =
-                reinterpret_cast< const SvxCrossedOutItem & >(
-                    rItemSet.Get( nWhichId ));
-
-            if( rItem.QueryValue( aValue, MID_CROSS_OUT ))
-            {
-                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharStrikeout" ) ))
-                {
-                    GetPropertySet()->setPropertyValue( C2U( "CharStrikeout" ), aValue );
-                    bChanged = true;
-                }
-            }
-        }
-        break;
-
         case EE_CHAR_ITALIC:
         case EE_CHAR_ITALIC_CJK:
         case EE_CHAR_ITALIC_CTL:
@@ -487,17 +465,38 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
 
             try
             {
-                if( rItem.QueryValue( aValue ) &&
-                    aValue != GetPropertySet()->getPropertyValue( C2U( "CharHeight" ) + aPostfix ))
+                if( rItem.QueryValue( aValue, MID_FONTHEIGHT ) )
                 {
-                    if( m_pRefSize.get())
+                    bool bSetValue = false;
+                    if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharHeight" ) + aPostfix ))
+                        bSetValue = true;
+                    else
                     {
-                        GetPropertySet()->setPropertyValue( m_aRefSizePropertyName,
-                                                            uno::makeAny( *m_pRefSize ));
+                        if( m_pRefSize.get() )
+                        {
+                            awt::Size aNewRefSize = *m_pRefSize;
+                            awt::Size aOldRefSize;
+                            if( GetRefSizePropertySet()->getPropertyValue( m_aRefSizePropertyName ) >>= aOldRefSize )
+                            {
+                                if( aNewRefSize.Width != aOldRefSize.Width
+                                    || aNewRefSize.Height != aOldRefSize.Height )
+                                    bSetValue = true;
+                            }
+                        }
                     }
+                    if( bSetValue )
+                    {
+                        // set new reference size only if there was a reference size before (auto-scaling on)
+                        if( m_pRefSize.get() &&
+                            GetRefSizePropertySet()->getPropertyValue( m_aRefSizePropertyName ).hasValue())
+                        {
+                            GetRefSizePropertySet()->setPropertyValue( m_aRefSizePropertyName,
+                                                                    uno::makeAny( *m_pRefSize ));
+                        }
 
-                    GetPropertySet()->setPropertyValue( C2U( "CharHeight" ) + aPostfix, aValue );
-                    bChanged = true;
+                        GetPropertySet()->setPropertyValue( C2U( "CharHeight" ) + aPostfix, aValue );
+                        bChanged = true;
+                    }
                 }
             }
             catch( uno::Exception & ex )
@@ -509,6 +508,12 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
     }
 
     return bChanged;
+}
+
+uno::Reference< beans::XPropertySet >
+    CharacterPropertyItemConverter::GetRefSizePropertySet() const
+{
+    return m_xRefSizePropSet;
 }
 
 } //  namespace wrapper
