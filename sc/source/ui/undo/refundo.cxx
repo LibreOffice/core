@@ -4,9 +4,9 @@
  *
  *  $RCSfile: refundo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:25:30 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:10:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,10 +56,12 @@
 #include "chartlis.hxx"
 #include "dpobject.hxx"
 #include "areasave.hxx"
+#include "unoreflist.hxx"
 
 // -----------------------------------------------------------------------
 
-ScRefUndoData::ScRefUndoData( const ScDocument* pDoc )
+ScRefUndoData::ScRefUndoData( const ScDocument* pDoc ) :
+    pUnoRefs( NULL )
 {
     ScDBCollection* pOldDBColl = pDoc->GetDBCollection();
     pDBCollection = pOldDBColl ? new ScDBCollection(*pOldDBColl) : NULL;
@@ -88,6 +90,8 @@ ScRefUndoData::ScRefUndoData( const ScDocument* pDoc )
         new ScChartListenerCollection( *pOldChartListenerCollection ) : NULL;
 
     pAreaLinks = ScAreaLinkSaveCollection::CreateFromDoc(pDoc);     // returns NULL if empty
+
+    const_cast<ScDocument*>(pDoc)->BeginUnoRefUndo();
 }
 
 ScRefUndoData::~ScRefUndoData()
@@ -101,6 +105,7 @@ ScRefUndoData::~ScRefUndoData()
     delete pDetOpList;
     delete pChartListenerCollection;
     delete pAreaLinks;
+    delete pUnoRefs;
 }
 
 void ScRefUndoData::DeleteUnchanged( const ScDocument* pDoc )
@@ -168,6 +173,15 @@ void ScRefUndoData::DeleteUnchanged( const ScDocument* pDoc )
         if ( pAreaLinks->IsEqual( pDoc ) )
             DELETEZ(pAreaLinks);
     }
+
+    if ( pDoc->HasUnoRefUndo() )
+    {
+        pUnoRefs = const_cast<ScDocument*>(pDoc)->EndUnoRefUndo();
+        if ( pUnoRefs && pUnoRefs->IsEmpty() )
+        {
+            DELETEZ( pUnoRefs );
+        }
+    }
 }
 
 void ScRefUndoData::DoUndo( ScDocument* pDoc, BOOL bUndoRefFirst )
@@ -211,6 +225,9 @@ void ScRefUndoData::DoUndo( ScDocument* pDoc, BOOL bUndoRefFirst )
 
     if (pAreaLinks)
         pAreaLinks->Restore( pDoc );
+
+    if ( pUnoRefs )
+        pUnoRefs->Undo( pDoc );
 }
 
 
