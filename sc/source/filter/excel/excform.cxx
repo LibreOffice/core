@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:21:35 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:44:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -474,7 +474,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             case 0x40:
             case 0x60:
             case 0x20: // Array Constant                        [317 268]
-                aIn.Ignore( 7 );
+                aIn.Ignore( (meBiff == EXC_BIFF2) ? 6 : 7 );
                 aPool << ocBad;
                 aPool >> aStack;
                 break;
@@ -1022,7 +1022,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
             case 0x40:
             case 0x60:
             case 0x20: // Array Constant                        [317 268]
-                nIgnore = 7;
+                nIgnore = (meBiff == EXC_BIFF2) ? 6 : 7;
                 break;
             case 0x41:
             case 0x61:
@@ -1314,10 +1314,209 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
     return eRet;
 }
 
-BOOL ExcelToSc::GetAbsRefs( ScRangeList& /*rRangeList*/, XclImpStream& /*rStrm*/, sal_Size /*nLen*/ )
+BOOL ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen )
 {
-    DBG_ERRORFILE( "ExcelToSc::GetAbsRefs - not implemented" );
-    return false;
+    DBG_ASSERT_BIFF( GetBiff() == EXC_BIFF5 );
+    if( GetBiff() != EXC_BIFF5 )
+        return FALSE;
+
+    sal_uInt8 nOp;
+    sal_uInt16 nRow1, nRow2;
+    sal_uInt8 nCol1, nCol2;
+    SCTAB nTab1, nTab2;
+    sal_uInt16 nTabFirst, nTabLast;
+    sal_Int16 nRefIdx;
+
+    sal_Size nSeek;
+    sal_Size nEndPos = rStrm.GetRecPos() + nLen;
+
+    while( rStrm.IsValid() && (rStrm.GetRecPos() < nEndPos) )
+    {
+        rStrm >> nOp;
+        nSeek = 0;
+
+        switch( nOp )
+        {
+            case 0x44:
+            case 0x64:
+            case 0x24: // Cell Reference                        [319 270]
+            case 0x4C:
+            case 0x6C:
+            case 0x2C: // Cell Reference Within a Name          [323    ]
+                       // Cell Reference Within a Shared Formula[    273]
+                rStrm >> nRow1 >> nCol1;
+
+                nRow2 = nRow1;
+                nCol2 = nCol1;
+                nTab1 = nTab2 = GetCurrScTab();
+                goto _common;
+            case 0x45:
+            case 0x65:
+            case 0x25: // Area Reference                        [320 270]
+            case 0x4D:
+            case 0x6D:
+            case 0x2D: // Area Reference Within a Name          [324    ]
+                       // Area Reference Within a Shared Formula[    274]
+                rStrm >> nRow1 >> nRow2 >> nCol1 >> nCol2;
+
+                nTab1 = nTab2 = GetCurrScTab();
+                goto _common;
+            case 0x5A:
+            case 0x7A:
+            case 0x3A: // 3-D Cell Reference                    [    275]
+                rStrm >> nRefIdx;
+                rStrm.Ignore( 8 );
+                rStrm >> nTabFirst >> nTabLast >> nRow1 >> nCol1;
+
+                nRow2 = nRow1;
+                nCol2 = nCol1;
+
+                goto _3d_common;
+            case 0x5B:
+            case 0x7B:
+            case 0x3B: // 3-D Area Reference                    [    276]
+                rStrm >> nRefIdx;
+                rStrm.Ignore( 8 );
+                rStrm >> nTabFirst >> nTabLast >> nRow1 >> nRow2 >> nCol1 >> nCol2;
+
+    _3d_common:
+                nTab1 = static_cast< SCTAB >( nTabFirst );
+                nTab2 = static_cast< SCTAB >( nTabLast );
+
+                // #122885# skip references to deleted sheets
+                if( (nRefIdx >= 0) || !ValidTab( nTab1 ) || (nTab1 != nTab2) )
+                    break;
+
+                goto _common;
+    _common:
+                // do not check abs/rel flags, linked controls have set them!
+//               if( !(( nCol1 & 0xC000 ) || ( nCol2 & 0xC000 )) )
+                {
+                    ScRange aScRange;
+                    nRow1 &= 0x3FFF;
+                    nRow2 &= 0x3FFF;
+                    if( GetAddressConverter().ConvertRange( aScRange, XclRange( nCol1, nRow1, nCol2, nRow2 ), nTab1, nTab2, true ) )
+                        rRangeList.Append( aScRange );
+                }
+                break;
+
+            case 0x03: // Addition                              [312 264]
+            case 0x04: // Subtraction                           [313 264]
+            case 0x05: // Multiplication                        [313 264]
+            case 0x06: // Division                              [313 264]
+            case 0x07: // Exponetiation                         [313 265]
+            case 0x08: // Concatenation                         [313 265]
+            case 0x09: // Less Than                             [313 265]
+            case 0x0A: // Less Than or Equal                    [313 265]
+            case 0x0B: // Equal                                 [313 265]
+            case 0x0C: // Greater Than or Equal                 [313 265]
+            case 0x0D: // Greater Than                          [313 265]
+            case 0x0E: // Not Equal                             [313 265]
+            case 0x0F: // Intersection                          [314 265]
+            case 0x10: // Union                                 [314 265]
+            case 0x11: // Range                                 [314 265]
+            case 0x12: // Unary Plus                            [312 264]
+            case 0x13: // Unary Minus                           [312 264]
+            case 0x14: // Percent Sign                          [312 264]
+            case 0x15: // Parenthesis                           [326 278]
+            case 0x16: // Missing Argument                      [314 266]
+                break;
+            case 0x1C: // Error Value                           [314 266]
+            case 0x1D: // Boolean                               [315 266]
+                nSeek = 1;
+                break;
+            case 0x1E: // Integer                               [315 266]
+            case 0x41:
+            case 0x61:
+            case 0x21: // Function, Fixed Number of Arguments   [333 282]
+            case 0x49:
+            case 0x69:
+            case 0x29: // Variable Reference Subexpression      [331 281]
+            case 0x4E:
+            case 0x6E:
+            case 0x2E: // Reference Subexpression Within a Name [332 282]
+            case 0x4F:
+            case 0x6F:
+            case 0x2F: // Incomplete Reference Subexpression... [332 282]
+            case 0x58:
+            case 0x78:
+            case 0x38: // Command-Equivalent Function           [333    ]
+                nSeek = 2;
+                break;
+            case 0x42:
+            case 0x62:
+            case 0x22: // Function, Variable Number of Arg.     [333 283]
+            case 0x4A:
+            case 0x6A:
+            case 0x2A: // Deleted Cell Reference                [323 273]
+                nSeek = 3;
+                break;
+            case 0x01: // Array Formula                         [325    ]
+                       // Array Formula or Shared Formula       [    277]
+            case 0x02: // Data Table                            [325 277]
+                nSeek = 4;
+                break;
+            case 0x46:
+            case 0x66:
+            case 0x26: // Constant Reference Subexpression      [321 271]
+            case 0x47:
+            case 0x67:
+            case 0x27: // Erroneous Constant Reference Subexpr. [322 272]
+            case 0x48:
+            case 0x68:
+            case 0x28: // Incomplete Constant Reference Subexpr.[331 281]
+            case 0x4B:
+            case 0x6B:
+            case 0x2B: // Deleted Area Refernce                 [323 273]
+                nSeek = 6;
+                break;
+            case 0x40:
+            case 0x60:
+            case 0x20: // Array Constant                        [317 268]
+                nSeek = 7;
+                break;
+            case 0x1F: // Number                                [315 266]
+                nSeek = 8;
+                break;
+            case 0x43:
+            case 0x63:
+            case 0x23: // Name                                  [318 269]
+                nSeek = 14;
+                break;
+            case 0x5C:
+            case 0x7C:
+            case 0x3C: // Deleted 3-D Cell Reference            [    277]
+                nSeek = 17;
+                break;
+            case 0x5D:
+            case 0x7D:
+            case 0x3D: // Deleted 3-D Area Reference            [    277]
+                nSeek = 20;
+                break;
+            case 0x59:
+            case 0x79:
+            case 0x39: // Name or External Name                 [    275]
+                nSeek = 24;
+                break;
+            case 0x17: // String Constant                       [314 266]
+                nSeek = rStrm.ReaduInt8();
+                break;
+            case 0x19: // Special Attribute                     [327 279]
+            {
+                BYTE nOpt;
+                UINT16 nData;
+                rStrm >> nOpt >> nData;
+                if( nOpt & 0x04 )
+                    nSeek = nData * 2 + 2;
+            }
+                break;
+        }
+
+        rStrm.Ignore( nSeek );
+    }
+    rStrm.Seek( nEndPos );
+
+    return rRangeList.Count() != 0;
 }
 
 void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz, sal_uInt8 nMinParamCount )
