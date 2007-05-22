@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:52:42 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:37:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1441,27 +1441,6 @@ void SwDocShell::CalcLayoutForOLEObjects()
         {
             pWrtShell->CalcLayout();
             break;
-        }
-    }
-}
-
-
-//
-// this function is needed to allow embedded Math objects to automatically
-// change their size when the formula content was modified via the API.
-void SwDocShell::CalcAndSetScaleOfOLEObj( SwOLEObj& rOLEObject )
-{
-    SwWrtShell *pSh = GetWrtShell();
-    if ( pSh )
-    {
-        SfxInPlaceClient* pClient = pSh->GetView().FindIPClient( rOLEObject.GetOleRef(), (Window *)&pSh->GetView().GetEditWin() );
-        if ( !pClient )
-        {
-            svt::EmbeddedObjectRef &rObject = rOLEObject.GetObject();
-            pClient = new SwOleClient( &pSh->GetView(),
-                                        &pSh->GetView().GetEditWin(),
-                                        rObject );
-            pSh->CalcAndSetScale( rObject );
         }
     }
 }
