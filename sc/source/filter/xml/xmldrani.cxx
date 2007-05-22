@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldrani.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:50:37 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:03:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,9 @@
 #endif
 #ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
+#endif
+#ifndef SC_RANGEUTL_HXX
+#include "rangeutl.hxx"
 #endif
 
 #include <xmloff/xmltkmap.hxx>
@@ -319,7 +322,7 @@ void ScXMLDatabaseRangeContext::EndElement()
             {
                 table::CellRangeAddress aCellRangeAddress;
                 sal_Int32 nOffset(0);
-                if (ScXMLConverter::GetRangeFromString( aCellRangeAddress, sRangeAddress, pDoc, nOffset ))
+                if (ScRangeStringConverter::GetRangeFromString( aCellRangeAddress, sRangeAddress, pDoc, nOffset ))
                 {
                     sal_Bool bInsert(sal_True);
                     try
