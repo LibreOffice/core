@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TickmarkHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:37:00 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:09:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,10 +45,8 @@
 #include <com/sun/star/chart2/ExplicitScaleData.hpp>
 #endif
 
-
-// header for class Vector2D
-#ifndef _VECTOR2D_HXX
-#include <tools/vector2d.hxx>
+#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
+#include <basegfx/vector/b2dvector.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCESEQUENCE_HPP_
@@ -68,6 +66,7 @@ namespace chart
 {
 //.............................................................................
 
+using ::basegfx::B2DVector;
 //-----------------------------------------------------------------------------
 /**
 */
@@ -77,7 +76,7 @@ struct TickInfo
     double      fScaledTickValue;
     double      fUnscaledTickValue;
 
-    Vector2D    aTickScreenPosition;
+    ::basegfx::B2DVector  aTickScreenPosition;
     bool        bPaintIt;
 
     ::com::sun::star::uno::Reference<
@@ -101,13 +100,18 @@ public:
             , sal_Int32 nMinDepth=0, sal_Int32 nMaxDepth=-1 );
     virtual ~TickIter();
 
-    double*     firstValue();
-    double*     nextValue();
+    virtual double*     firstValue();
+    virtual double*     nextValue();
 
-    TickInfo*   firstInfo();
-    TickInfo*   nextInfo();
+    virtual TickInfo*   firstInfo();
+    virtual TickInfo*   nextInfo();
 
     sal_Int32   getCurrentDepth() const { return m_nCurrentDepth; }
+
+protected:
+    bool        gotoIndex( sal_Int32 nTickIndex );
+    sal_Int32   getCurrentIndex() const;
+    sal_Int32   getMaxIndex() const;
 
 private: //methods
     sal_Int32   getIntervalCount( sal_Int32 nDepth );
@@ -120,21 +124,21 @@ private: //methods
     bool        gotoNext();
 
 
-    double      _getTickValue(sal_Int32 nDepth, sal_Int32 nIndex) const
+    double      getTickValue(sal_Int32 nDepth, sal_Int32 nIndex) const
                 {
                     if(m_pSimpleTicks)
                         return (*m_pSimpleTicks)[nDepth][nIndex];
                     else
                         return (((*m_pInfoTicks)[nDepth])[nIndex]).fScaledTickValue;
                 }
-    sal_Int32   _getTickCount( sal_Int32 nDepth ) const
+    sal_Int32   getTickCount( sal_Int32 nDepth ) const
                 {
                     if(m_pSimpleTicks)
                         return (*m_pSimpleTicks)[nDepth].getLength();
                     else
                         return (*m_pInfoTicks)[nDepth].size();
                 }
-    sal_Int32   _getMaxDepth() const
+    sal_Int32   getMaxDepth() const
                 {
                     if(m_pSimpleTicks)
                         return (*m_pSimpleTicks).getLength()-1;
@@ -189,8 +193,8 @@ protected: //methods
     bool        isVisible( double fValue ) const;
     bool        isWithinOuterBorder( double fScaledValue ) const; //all within the outer major tick marks
 
-    virtual void updateScreenValues( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const {}
-    virtual void hideIdenticalScreenValues( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const {}
+    virtual void updateScreenValues( ::std::vector< ::std::vector< TickInfo > >& /*rAllTickInfos*/ ) const {}
+    virtual void hideIdenticalScreenValues( ::std::vector< ::std::vector< TickInfo > >& /*rAllTickInfos*/ ) const {}
 
 protected: //member
     const ::com::sun::star::chart2::ExplicitScaleData&     m_rScale;
@@ -216,7 +220,7 @@ public:
     TickmarkHelper_2D(
         const ::com::sun::star::chart2::ExplicitScaleData& rScale
         , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement
-        , const Vector2D& rStartScreenPos, const Vector2D& rEndScreenPos );
+        , const ::basegfx::B2DVector& rStartScreenPos, const ::basegfx::B2DVector& rEndScreenPos );
         //, double fStrech_SceneToScreen, double fOffset_SceneToScreen );
     virtual ~TickmarkHelper_2D();
 
@@ -227,17 +231,20 @@ public:
                             , sal_Int32 nSequenceIndex
                             , double fScaledLogicTickValue, double fInnerDirectionSign
                             , const TickmarkProperties& rTickmarkProperties ) const;
-    Vector2D  getDistanceTickToText( const AxisProperties& rAxisProperties ) const;
+    ::basegfx::B2DVector  getDistanceTickToText( const AxisProperties& rAxisProperties ) const;
 
-protected: //methods
     virtual void        updateScreenValues( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
     virtual void        hideIdenticalScreenValues( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
 
-    Vector2D            getTickScreenPosition2D( double fScaledLogicTickValue ) const;
+    bool  isHorizontalAxis() const;
+    bool  isVerticalAxis() const;
+
+protected: //methods
+    ::basegfx::B2DVector     getTickScreenPosition2D( double fScaledLogicTickValue ) const;
 
 private: //member
-    Vector2D    m_aAxisStartScreenPosition2D;
-    Vector2D    m_aAxisEndScreenPosition2D;
+    ::basegfx::B2DVector    m_aAxisStartScreenPosition2D;
+    ::basegfx::B2DVector    m_aAxisEndScreenPosition2D;
 
     double      m_fStrech_LogicToScreen;
     double      m_fOffset_LogicToScreen;
