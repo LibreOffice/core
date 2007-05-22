@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 01:08:25 $
+#   last change: $Author: vg $ $Date: 2007-05-22 18:43:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,11 +50,12 @@ ENABLE_EXCEPTIONS=	TRUE
 #Specifies object files to bind into linked libraries.
 SLOFILES=	\
     $(SLO)$/Axis.obj \
-    $(SLO)$/BoundedCoordinateSystem.obj \
-    $(SLO)$/CachedDataSequence.obj \
+    $(SLO)$/GridProperties.obj \
+    $(SLO)$/BaseCoordinateSystem.obj \
     $(SLO)$/CartesianCoordinateSystem.obj \
+    $(SLO)$/ChartData.obj		\
     $(SLO)$/ChartModel.obj		\
-    $(SLO)$/DataInterpreter.obj \
+    $(SLO)$/ChartModel_Persistence.obj		\
     $(SLO)$/DataPoint.obj \
     $(SLO)$/DataPointProperties.obj \
     $(SLO)$/DataPointStyle.obj \
@@ -62,24 +63,15 @@ SLOFILES=	\
     $(SLO)$/DataSeriesStyle.obj \
     $(SLO)$/Diagram.obj \
     $(SLO)$/DataSeriesProperties.obj \
-    $(SLO)$/FileDataProvider.obj \
-    $(SLO)$/FileDataSource.obj \
     $(SLO)$/FormattedString.obj \
-    $(SLO)$/Grid.obj \
-    $(SLO)$/IdentityTransformation.obj \
     $(SLO)$/ImplChartModel.obj \
-    $(SLO)$/Increment.obj \
-    $(SLO)$/LayoutContainer.obj \
     $(SLO)$/Legend.obj \
     $(SLO)$/PageBackground.obj \
     $(SLO)$/PolarCoordinateSystem.obj \
-    $(SLO)$/PolarTransformation.obj \
-    $(SLO)$/Scale.obj \
+    $(SLO)$/StockBar.obj \
     $(SLO)$/StyleFamilies.obj \
     $(SLO)$/StyleFamily.obj \
-    $(SLO)$/SubGrid.obj \
     $(SLO)$/Title.obj \
-    $(SLO)$/XYDataInterpreter.obj \
     $(SLO)$/Wall.obj \
     $(SLO)$/_serviceregistration_model.obj
 
