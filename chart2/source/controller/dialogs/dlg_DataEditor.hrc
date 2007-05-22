@@ -1,0 +1,60 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: dlg_DataEditor.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:33:06 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#define DLG_DIAGRAM_DATA 744
+
+#define FT_POS 1
+#define TBX_EDIT 1
+#define EDT_FIELD 1
+#define TBX_DATA 2
+#define CTL_DATA 1
+
+// images for toolbox image list
+#define TBI_DATA_INSERT_ROW 1
+#define TBI_DATA_INSERT_COL 2
+#define TBI_DATA_DELETE_ROW 3
+#define TBI_DATA_DELETE_COL 4
+#define TBI_DATA_SWAP_COL 5
+#define TBI_DATA_SWAP_ROW 6
+#define TBI_DATA_TRANSFER 7
+
+// #define TBI_DATA_SORT_ROW 7
+// #define TBI_DATA_SORT_COL 8
+// #define TBI_DATA_SORT_TABLE_ROW 9
+// #define TBI_DATA_SORT_TABLE_COL 10
+// #define TBI_DATA_TRANSFER 11
+
+// image lists (normal and high-contrast) for toolbox
+#define IL_DIAGRAM_DATA     1
+#define IL_HC_DIAGRAM_DATA  2
