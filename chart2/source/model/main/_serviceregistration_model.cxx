@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _serviceregistration_model.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:16:16 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:43:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,29 +41,22 @@
 #ifndef _CHARTMODEL_HXX
 #include "ChartModel.hxx"
 #endif
-#ifndef CHART_FILEDATAPROVIDER_HXX
-#include "FileDataProvider.hxx"
-#endif
-#ifndef CHART_FILEDATASOURCE_HXX
-#include "FileDataSource.hxx"
-#endif
 
 #include "Diagram.hxx"
 #include "Legend.hxx"
 #include "Axis.hxx"
-#include "Grid.hxx"
+#include "GridProperties.hxx"
 #include "Title.hxx"
 #include "FormattedString.hxx"
 #include "PageBackground.hxx"
-
-#include "DataSeriesTree.hxx"
-#include "ChartTypeGroup.hxx"
-#include "ContinuousScaleGroup.hxx"
-#include "DiscreteScaleGroup.hxx"
+#include "DataSeries.hxx"
+#include "PolarCoordinateSystem.hxx"
+#include "CartesianCoordinateSystem.hxx"
 
 #include "ChartTypeManager.hxx"
-// #include "BoundedCoordinateSystem.hxx"
-#include "Scale.hxx"
+#include "XMLFilter.hxx"
+
+#include "_serviceregistration_charttypes.hxx"
 
 static struct ::cppu::ImplementationEntry g_entries_chart2_model[] =
 {
@@ -71,22 +64,6 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_model[] =
           ::chart::ChartModel::create
         , ::chart::ChartModel::getImplementationName_Static
         , ::chart::ChartModel::getSupportedServiceNames_Static
-        , ::cppu::createSingleComponentFactory
-        , 0
-        , 0
-    }
-    ,{
-          ::chart::FileDataProvider::create
-        , ::chart::FileDataProvider::getImplementationName_Static
-        , ::chart::FileDataProvider::getSupportedServiceNames_Static
-        , ::cppu::createSingleComponentFactory
-        , 0
-        , 0
-    }
-    ,{
-          ::chart::FileDataSource::create
-        , ::chart::FileDataSource::getImplementationName_Static
-        , ::chart::FileDataSource::getSupportedServiceNames_Static
         , ::cppu::createSingleComponentFactory
         , 0
         , 0
@@ -116,9 +93,9 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_model[] =
         , 0
     }
     ,{
-          ::chart::Grid::create
-        , ::chart::Grid::getImplementationName_Static
-        , ::chart::Grid::getSupportedServiceNames_Static
+          ::chart::GridProperties::create
+        , ::chart::GridProperties::getImplementationName_Static
+        , ::chart::GridProperties::getSupportedServiceNames_Static
         , ::cppu::createSingleComponentFactory
         , 0
         , 0
@@ -142,73 +119,9 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_model[] =
     }
 
     ,{
-          ::chart::DataSeriesTree::create
-        , ::chart::DataSeriesTree::getImplementationName_Static
-        , ::chart::DataSeriesTree::getSupportedServiceNames_Static
-        , ::cppu::createSingleComponentFactory
-        , 0
-        , 0
-    }
-    ,{
-          ::chart::ChartTypeGroup::create
-        , ::chart::ChartTypeGroup::getImplementationName_Static
-        , ::chart::ChartTypeGroup::getSupportedServiceNames_Static
-        , ::cppu::createSingleComponentFactory
-        , 0
-        , 0
-    }
-    ,{
-          ::chart::ContinuousScaleGroup::create
-        , ::chart::ContinuousScaleGroup::getImplementationName_Static
-        , ::chart::ContinuousScaleGroup::getSupportedServiceNames_Static
-        , ::cppu::createSingleComponentFactory
-        , 0
-        , 0
-    }
-    ,{
-          ::chart::DiscreteScaleGroup::create
-        , ::chart::DiscreteScaleGroup::getImplementationName_Static
-        , ::chart::DiscreteScaleGroup::getSupportedServiceNames_Static
-        , ::cppu::createSingleComponentFactory
-        , 0
-        , 0
-    }
-    ,{
-          ::chart::ContinuousStackableScaleGroup::create
-        , ::chart::ContinuousStackableScaleGroup::getImplementationName_Static
-        , ::chart::ContinuousStackableScaleGroup::getSupportedServiceNames_Static
-        , ::cppu::createSingleComponentFactory
-        , 0
-        , 0
-    }
-    ,{
-          ::chart::DiscreteStackableScaleGroup::create
-        , ::chart::DiscreteStackableScaleGroup::getImplementationName_Static
-        , ::chart::DiscreteStackableScaleGroup::getSupportedServiceNames_Static
-        , ::cppu::createSingleComponentFactory
-        , 0
-        , 0
-    }
-    ,{
           ::chart::ChartTypeManager::create
         , ::chart::ChartTypeManager::getImplementationName_Static
         , ::chart::ChartTypeManager::getSupportedServiceNames_Static
-        , ::cppu::createSingleComponentFactory
-        , 0
-        , 0
-    }
-//     ,{
-//           ::chart::BoundedCoordinateSystem::create
-//         , ::chart::BoundedCoordinateSystem::getImplementationName_Static
-//         , ::chart::BoundedCoordinateSystem::getSupportedServiceNames_Static
-//         , ::cppu::createSingleComponentFactory
-//         , 0
-//         , 0
-//     }
-    ,{
-          ::chart::Scale::create
-        , ::chart::Scale::getImplementationName_Static
-        , ::chart::Scale::getSupportedServiceNames_Static
         , ::cppu::createSingleComponentFactory
         , 0
         , 0
@@ -217,6 +130,54 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_model[] =
           ::chart::PageBackground::create
         , ::chart::PageBackground::getImplementationName_Static
         , ::chart::PageBackground::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+     ,{
+          ::chart::DataSeries::create
+        , ::chart::DataSeries::getImplementationName_Static
+        , ::chart::DataSeries::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+     ,{
+          ::chart::XMLFilter::create
+        , ::chart::XMLFilter::getImplementationName_Static
+        , ::chart::XMLFilter::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+     ,{
+          ::chart::PolarCoordinateSystem2d::create
+        , ::chart::PolarCoordinateSystem2d::getImplementationName_Static
+        , ::chart::PolarCoordinateSystem2d::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+     ,{
+          ::chart::PolarCoordinateSystem3d::create
+        , ::chart::PolarCoordinateSystem3d::getImplementationName_Static
+        , ::chart::PolarCoordinateSystem3d::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+     ,{
+          ::chart::CartesianCoordinateSystem2d::create
+        , ::chart::CartesianCoordinateSystem2d::getImplementationName_Static
+        , ::chart::CartesianCoordinateSystem2d::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+     ,{
+          ::chart::CartesianCoordinateSystem3d::create
+        , ::chart::CartesianCoordinateSystem3d::getImplementationName_Static
+        , ::chart::CartesianCoordinateSystem3d::getSupportedServiceNames_Static
         , ::cppu::createSingleComponentFactory
         , 0
         , 0
@@ -237,15 +198,25 @@ void SAL_CALL component_getImplementationEnvironment(
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
-    return ::cppu::component_writeInfoHelper(
-        pServiceManager, pRegistryKey, g_entries_chart2_model );
+    return (::cppu::component_writeInfoHelper(
+                pServiceManager, pRegistryKey, g_entries_chart2_model ) &&
+            ::cppu::component_writeInfoHelper(
+                pServiceManager, pRegistryKey,
+                ChartTypeEntriesForServiceRegistration::getImplementationEntries() ));
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    return ::cppu::component_getFactoryHelper(
-        pImplName, pServiceManager, pRegistryKey , g_entries_chart2_model );
+    void * pResult = ::cppu::component_getFactoryHelper(
+        pImplName, pServiceManager, pRegistryKey, g_entries_chart2_model );
+
+    if( ! pResult )
+        pResult = ::cppu::component_getFactoryHelper(
+            pImplName, pServiceManager, pRegistryKey,
+            ChartTypeEntriesForServiceRegistration::getImplementationEntries() );
+
+    return pResult;
 }
 }
 //=========================================================================
