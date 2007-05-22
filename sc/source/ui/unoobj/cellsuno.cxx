@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:58:57 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:10:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,8 +55,6 @@
 #include <svx/unotext.hxx>
 #include <svx/svdpage.hxx>
 #include <sfx2/bindings.hxx>
-#include <sch/schdll.hxx>   // SchMemChart
-#include <sch/memchrt.hxx>
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
 #include <rtl/uuid.h>
@@ -129,6 +127,7 @@
 #include "unowids.hxx"
 #include "paramisc.hxx"
 #include "errorcodes.hxx"
+#include "unoreflist.hxx"
 
 #ifndef __SGI_STL_LIST
 #include <list>
@@ -137,17 +136,6 @@
 using namespace com::sun::star;
 
 //------------------------------------------------------------------------
-
-//! ScLinkListener in anderes File verschieben !!!
-
-class ScLinkListener : public SvtListener
-{
-    Link    aLink;
-public:
-                    ScLinkListener(const Link& rL) : aLink(rL) {}
-    virtual         ~ScLinkListener();
-    virtual void    Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
-};
 
 
 class ScNamedEntry
@@ -176,6 +164,7 @@ const SfxItemPropertyMap* lcl_GetCellsPropertyMap()
 {
     static SfxItemPropertyMap aCellsPropertyMap_Impl[] =
     {
+        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((rtl::OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,    &getCppuType((sal_Int32*)0),            0, MID_BACK_COLOR },
@@ -270,6 +259,7 @@ const SfxItemPropertyMap* lcl_GetRangePropertyMap()
 {
     static SfxItemPropertyMap aRangePropertyMap_Impl[] =
     {
+        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((rtl::OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,    &getCppuType((sal_Int32*)0),            0, MID_BACK_COLOR },
@@ -366,6 +356,7 @@ const SfxItemPropertyMap* lcl_GetCellPropertyMap()
 {
     static SfxItemPropertyMap aCellPropertyMap_Impl[] =
     {
+        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((rtl::OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,    &getCppuType((sal_Int32*)0),            0, MID_BACK_COLOR },
@@ -464,6 +455,7 @@ const SfxItemPropertyMap* lcl_GetColumnPropertyMap()
 {
     static SfxItemPropertyMap aColumnPropertyMap_Impl[] =
     {
+        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((rtl::OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,    &getCppuType((sal_Int32*)0),            0, MID_BACK_COLOR },
@@ -563,6 +555,7 @@ const SfxItemPropertyMap* lcl_GetRowPropertyMap()
 {
     static SfxItemPropertyMap aRowPropertyMap_Impl[] =
     {
+        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((rtl::OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,    &getCppuType((sal_Int32*)0),            0, MID_BACK_COLOR },
@@ -662,6 +655,7 @@ const SfxItemPropertyMap* lcl_GetSheetPropertyMap()
 {
     static SfxItemPropertyMap aSheetPropertyMap_Impl[] =
     {
+        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((rtl::OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_AUTOPRINT),SC_WID_UNO_AUTOPRINT,&getBooleanCppuType(),                 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_BORDCOL),  SC_WID_UNO_BORDCOL, &getCppuType((sal_Int32*)0),            0, 0 },
@@ -1374,6 +1368,7 @@ ScCellRangesBase::ScCellRangesBase() :
     pCurrentDeep( NULL ),
     pCurrentDataSet( NULL ),
     pMarkData( NULL ),
+    nObjectId( 0 ),
     bChartColAsHdr( FALSE ),
     bChartRowAsHdr( FALSE ),
     bCursorOnly( FALSE ),
@@ -1390,6 +1385,7 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR) :
     pCurrentDeep( NULL ),
     pCurrentDataSet( NULL ),
     pMarkData( NULL ),
+    nObjectId( 0 ),
     bChartColAsHdr( FALSE ),
     bChartRowAsHdr( FALSE ),
     bCursorOnly( FALSE ),
@@ -1400,8 +1396,12 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR) :
     aCellRange.Justify();
     aRanges.Append( aCellRange );
 
-    if (pDocShell)  // Null, wenn per createInstance erzeugt...
-        pDocShell->GetDocument()->AddUnoObject(*this);
+    if (pDocShell)  // Null if created with createInstance
+    {
+        ScDocument* pDoc = pDocShell->GetDocument();
+        pDoc->AddUnoObject(*this);
+        nObjectId = pDoc->GetNewUnoId();
+    }
 }
 
 ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRangeList& rR) :
@@ -1413,14 +1413,19 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRangeList& rR) :
     pCurrentDataSet( NULL ),
     pMarkData( NULL ),
     aRanges( rR ),
+    nObjectId( 0 ),
     bChartColAsHdr( FALSE ),
     bChartRowAsHdr( FALSE ),
     bCursorOnly( FALSE ),
     bGotDataChangedHint( FALSE ),
     aValueListeners( 0 )
 {
-    if (pDocShell)  // Null, wenn per createInstance erzeugt...
-        pDocShell->GetDocument()->AddUnoObject(*this);
+    if (pDocShell)  // Null if created with createInstance
+    {
+        ScDocument* pDoc = pDocShell->GetDocument();
+        pDoc->AddUnoObject(*this);
+        nObjectId = pDoc->GetNewUnoId();
+    }
 }
 
 ScCellRangesBase::~ScCellRangesBase()
@@ -1513,7 +1518,12 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
 
-        if ( aRanges.UpdateReference( rRef.GetMode(), pDocShell->GetDocument(), rRef.GetRange(),
+        ScDocument* pDoc = pDocShell->GetDocument();
+        ScRangeList* pUndoRanges = NULL;
+        if ( pDoc->HasUnoRefUndo() )
+            pUndoRanges = new ScRangeList( aRanges );
+
+        if ( aRanges.UpdateReference( rRef.GetMode(), pDoc, rRef.GetRange(),
                                     rRef.GetDx(), rRef.GetDy(), rRef.GetDz() ) )
         {
             if (rRef.GetMode() == URM_INSDEL &&
@@ -1535,7 +1545,12 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
             // #129050# any change of the range address is broadcast to value (modify) listeners
             if ( aValueListeners.Count() )
                 bGotDataChangedHint = TRUE;
+
+            if ( pUndoRanges )
+                pDoc->AddUnoRefChange( nObjectId, *pUndoRanges );
         }
+
+        delete pUndoRanges;
     }
     else if ( rHint.ISA( SfxSimpleHint ) )
     {
@@ -1586,6 +1601,20 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
                 bGotDataChangedHint = FALSE;
             }
+        }
+    }
+    else if ( rHint.ISA( ScUnoRefUndoHint ) )
+    {
+        const ScUnoRefUndoHint& rUndoHint = static_cast<const ScUnoRefUndoHint&>(rHint);
+        if ( rUndoHint.GetObjectId() == nObjectId )
+        {
+            // restore ranges from hint
+
+            aRanges = rUndoHint.GetRanges();
+
+            RefChanged();
+            if ( aValueListeners.Count() )
+                bGotDataChangedHint = TRUE;     // need to broadcast the undo, too
         }
     }
 }
@@ -1862,7 +1891,7 @@ beans::PropertyState ScCellRangesBase::GetOnePropertyState( USHORT nItemWhich, c
     }
     else if ( pMap )
     {
-        if ( pMap->nWID == SC_WID_UNO_CHCOLHDR || pMap->nWID == SC_WID_UNO_CHROWHDR )
+        if ( pMap->nWID == SC_WID_UNO_CHCOLHDR || pMap->nWID == SC_WID_UNO_CHROWHDR || pMap->nWID == SC_WID_UNO_ABSNAME )
             eRet = beans::PropertyState_DIRECT_VALUE;
         else if ( pMap->nWID == SC_WID_UNO_CELLSTYL )
         {
@@ -2474,6 +2503,12 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertyMap* pMap,
                         rAny <<= uno::Reference<container::XIndexReplace>(ScStyleObj::CreateEmptyNumberingRules());
                     }
                     break;
+                case SC_WID_UNO_ABSNAME:
+                    {
+                        String sRet;
+                        aRanges.Format(sRet, SCR_ABS_3D, pDocShell->GetDocument());
+                        rAny <<= rtl::OUString(sRet);
+                    }
             }
     }
 }
@@ -2913,7 +2948,7 @@ void SAL_CALL ScCellRangesBase::incrementIndent() throw(::com::sun::star::uno::R
 
 // XChartData
 
-SchMemChart* ScCellRangesBase::CreateMemChart_Impl() const
+ScMemChart* ScCellRangesBase::CreateMemChart_Impl() const
 {
     if ( pDocShell && aRanges.Count() )
     {
@@ -2966,7 +3001,7 @@ uno::Sequence< uno::Sequence<double> > SAL_CALL ScCellRangesBase::getData()
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    SchMemChart* pMemChart = CreateMemChart_Impl();
+    ScMemChart* pMemChart = CreateMemChart_Impl();
     if ( pMemChart )
     {
         sal_Int32 nColCount = pMemChart->GetColCount();
@@ -3040,8 +3075,8 @@ void SAL_CALL ScCellRangesBase::setData( const uno::Sequence< uno::Sequence<doub
         const ScChartPositionMap* pPosMap = aArr.GetPositionMap();
         if (pPosMap)
         {
-            if ( pPosMap->GetColCount() == static_cast<SCSIZE>(nColCount) &&
-                 pPosMap->GetRowCount() == static_cast<SCSIZE>(nRowCount) )
+            if ( pPosMap->GetColCount() == static_cast<SCCOL>(nColCount) &&
+                 pPosMap->GetRowCount() == static_cast<SCROW>(nRowCount) )
             {
                 for (long nRow=0; nRow<nRowCount; nRow++)
                 {
@@ -3081,7 +3116,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellRangesBase::getRowDescriptions()
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    SchMemChart* pMemChart = CreateMemChart_Impl();
+    ScMemChart* pMemChart = CreateMemChart_Impl();
     if ( pMemChart )
     {
         sal_Int32 nRowCount = static_cast<sal_Int32>(pMemChart->GetRowCount());
@@ -3114,7 +3149,7 @@ void SAL_CALL ScCellRangesBase::setRowDescriptions(
             const ScChartPositionMap* pPosMap = aArr.GetPositionMap();
             if (pPosMap)
             {
-                if ( pPosMap->GetRowCount() == static_cast<SCSIZE>(nRowCount) )
+                if ( pPosMap->GetRowCount() == static_cast<SCROW>(nRowCount) )
                 {
                     const rtl::OUString* pArray = aRowDescriptions.getConstArray();
                     for (long nRow=0; nRow<nRowCount; nRow++)
@@ -3149,7 +3184,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellRangesBase::getColumnDescriptions()
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    SchMemChart* pMemChart = CreateMemChart_Impl();
+    ScMemChart* pMemChart = CreateMemChart_Impl();
     if ( pMemChart )
     {
         sal_Int32 nColCount = pMemChart->GetColCount();
@@ -3182,7 +3217,7 @@ void SAL_CALL ScCellRangesBase::setColumnDescriptions(
             const ScChartPositionMap* pPosMap = aArr.GetPositionMap();
             if (pPosMap)
             {
-                if ( pPosMap->GetColCount() == static_cast<SCSIZE>(nColCount) )
+                if ( pPosMap->GetColCount() == static_cast<SCCOL>(nColCount) )
                 {
                     const rtl::OUString* pArray = aColumnDescriptions.getConstArray();
                     for (long nCol=0; nCol<nColCount; nCol++)
