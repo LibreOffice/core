@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:31:48 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:03:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,22 @@
 
 #include "LifeTime.hxx"
 #include "ServiceMacros.hxx"
+#include "UndoManager.hxx"
+#include "CommandDispatchContainer.hxx"
+#include "SelectionHelper.hxx"
 
+// header for enum SdrDragMode
+#ifndef _SVDTYPES_HXX
+#include <svx/svdtypes.hxx>
+#endif
+// header for class Timer
+#ifndef _SV_TIMER_HXX
+#include <vcl/timer.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
 #endif
@@ -62,15 +77,39 @@
 #ifndef _COM_SUN_STAR_SDBC_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
+#ifndef _COM_SUN_STAR_lang_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFYLISTENER_HPP_
+#include <com/sun/star/util/XModifyListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMODECHANGELISTENER_HPP_
+#include <com/sun/star/util/XModeChangeListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGERLISTENER_HPP_
+#include <com/sun/star/frame/XLayoutManagerListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGEREVENTBROADCASTER_HPP_
+#include <com/sun/star/frame/XLayoutManagerEventBroadcaster.hpp>
+#endif
 
-#ifndef _CPPUHELPER_IMPLBASE8_HXX_
-#include <cppuhelper/implbase8.hxx>
+#ifndef _CPPUHELPER_IMPLBASE12_HXX_
+#include <cppuhelper/implbase12.hxx>
 #endif
 
 // header for class MouseEvent
@@ -78,9 +117,29 @@
 #include <vcl/event.hxx>
 #endif
 
+#include <memory>
+#include <boost/shared_ptr.hpp>
+#include <set>
+
 //=============================================================================
 /** this is an example implementation for the service ::com::sun::star::frame::Controller
 */
+
+class SdrModel;
+
+namespace svt
+{
+    class AcceleratorExecute;
+}
+
+class DropTargetHelper;
+
+namespace com { namespace sun { namespace star {
+namespace graphic {
+    class XGraphic;
+}
+}}}
+
 
 //.............................................................................
 namespace chart
@@ -90,6 +149,8 @@ namespace chart
 class WindowController
 {
 public:
+    virtual ~WindowController() {};
+
     virtual void execute_Paint( const Rectangle& rRect )=0;
     virtual void execute_MouseButtonDown( const MouseEvent& rMEvt )=0;
     virtual void execute_MouseMove( const MouseEvent& rMEvt )=0;
@@ -102,14 +163,37 @@ public:
     virtual void execute_LoseFocus()=0;
     virtual void execute_Command( const CommandEvent& rCEvt )=0;
     virtual bool execute_KeyInput( const KeyEvent& rKEvt )=0;
+
+    /** get help text to be shown in a quick help
+
+        @param aAtLogicPosition the position in logic coordinates (of the
+                                window) of the mouse cursor to determine for
+                                which object help is requested.
+
+        @param bIsBalloonHelp determines whether to return the long text version
+                              (balloon help) or the shorter one (quick help).
+
+        @param rOutQuickHelpText is filled with the quick help text
+
+        @param rOutEqualRect is filled with a rectangle that denotes the region
+                             in which the quick help does not change.
+
+        @return </TRUE>, if a quick help should be shown.
+     */
+    virtual bool requestQuickHelp(
+        ::Point aAtLogicPosition, bool bIsBalloonHelp,
+        ::rtl::OUString & rOutQuickHelpText, ::com::sun::star::awt::Rectangle & rOutEqualRect ) = 0;
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() = 0;
 };
 
 class ChartWindow;
-class ChartView;
 class DrawModelWrapper;
 class DrawViewWrapper;
-class NumberFormatterWrapper;
-class ChartController   : public ::cppu::WeakImplHelper8 <
+class ViewElementListProvider;
+class ReferenceSizeProvider;
+
+class ChartController   : public ::cppu::WeakImplHelper12 <
          ::com::sun::star::frame::XController   //comprehends XComponent (required interface)
         ,::com::sun::star::frame::XDispatchProvider     //(required interface)
         ,::com::sun::star::view::XSelectionSupplier     //(optional interface)
@@ -121,132 +205,13 @@ class ChartController   : public ::cppu::WeakImplHelper8 <
     //  ,public ::com::sun::star::lang::XTypeProvider   // implemented by WeakImplHelper
         ,::com::sun::star::frame::XDispatch
         ,::com::sun::star::awt::XWindow //this is the Window Controller part of this Controller, that will be given to a Frame via setComponent
+        ,::com::sun::star::lang::XMultiServiceFactory
+        ,::com::sun::star::util::XModifyListener
+        ,::com::sun::star::util::XModeChangeListener
+        ,::com::sun::star::frame::XLayoutManagerListener
         >
         , public WindowController
 {
-
-private:
-    class TheModelRef;
-    friend class ChartController::TheModelRef;
-    class RefCountable
-    {
-        public:
-            RefCountable();
-            virtual ~RefCountable();
-            void acquire();
-            void release();
-        private:
-            sal_Int32 volatile      m_nRefCount;
-    };
-    class TheModel : public RefCountable
-    {
-        public:
-            TheModel( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::frame::XModel > & xModel );
-
-            virtual ~TheModel();
-
-            void        SetOwnerShip( sal_Bool bGetsOwnership );
-            void        addListener( ChartController* pController );
-            void        removeListener(  ChartController* pController );
-            void        tryTermination();
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
-                        getModel() { return m_xModel;}
-
-        private:
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >     m_xModel;
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable >  m_xCloseable;
-
-            //the ownership between model and controller is not clear at first
-            //each controller might consider himself as owner of the model first
-            sal_Bool volatile       m_bOwnership;
-            //with a XCloseable::close call and during XCloseListener::queryClosing
-            //the ownership can be regulated more explicit,
-            //if so the ownership is considered to be well known
-            sal_Bool volatile       m_bOwnershipIsWellKnown;
-    };
-    class TheModelRef
-    {
-        public:
-            TheModelRef( TheModel* pTheModel, ::osl::Mutex& rMutex );
-            TheModelRef( const TheModelRef& rTheModel, ::osl::Mutex& rMutex );
-            TheModelRef& operator=(ChartController::TheModel* pTheModel);
-            TheModelRef& operator=(const TheModelRef& rTheModel);
-            virtual ~TheModelRef();
-            sal_Bool is() const;
-                TheModel* operator->() const { return m_pTheModel; }
-        private:
-            TheModel*               m_pTheModel;
-            mutable ::osl::Mutex&   m_rModelMutex;
-    };
-
-private:
-    mutable ::apphelper::LifeTimeManager    m_aLifeTimeManager;
-
-    mutable ::osl::Mutex    m_aControllerMutex;
-    sal_Bool volatile       m_bSuspended;
-    sal_Bool volatile       m_bCanClose;
-
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>        m_xCC;
-
-    //model
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >     m_xFrame;
-    mutable ::osl::Mutex    m_aModelMutex;
-    TheModelRef             m_aModel;
-
-    //view
-    ChartWindow*        m_pChartWindow;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >      m_xViewWindow;
-    ChartView*          m_pChartView;
-    DrawModelWrapper*   m_pDrawModelWrapper;
-    DrawViewWrapper*    m_pDrawViewWrapper;
-
-    ::rtl::OUString     m_aSelectedObjectCID;//only single object selection so far
-
-    bool                m_bViewDirty; //states wether the view needs to be rebuild
-
-    NumberFormatterWrapper*         m_pNumberFormatterWrapper;
-
-private:
-    //private methods
-
-    sal_Bool            impl_isDisposedOrSuspended();
-
-    sal_Bool SAL_CALL   impl_tryInitializeView() throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL       impl_deleteView() throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL       impl_rebuildView() throw(::com::sun::star::uno::RuntimeException);
-
-    //executeDispatch methods
-    void SAL_CALL       executeDispatch_ObjectProperties();
-    void SAL_CALL       executeDispatch_FormatObject(sal_Int32 nSlotId);
-    void SAL_CALL       executeDlg_ObjectProperties( const ::rtl::OUString& rObjectCID );
-
-    void SAL_CALL       executeDispatch_ChartType();
-    void SAL_CALL       executeDispatch_ObjectToDefault();
-
-    void SAL_CALL       executeDispatch_InsertTitle();
-    void SAL_CALL       executeDispatch_InsertLegend();
-    void SAL_CALL       executeDispatch_InsertDataLabel();
-    void SAL_CALL       executeDispatch_InsertAxis();
-    void SAL_CALL       executeDispatch_InsertGrid();
-    void SAL_CALL       executeDispatch_InsertStatistic();
-
-    void SAL_CALL       executeDispatch_InsertSpecialCharacter();
-    void SAL_CALL       executeDispatch_EditText();
-
-    void                StartTextEdit();
-    bool                EndTextEdit();
-
-    void SAL_CALL       executeDispatch_RotateDiagram();
-    void SAL_CALL       executeDispatch_PositionAndSize( const ::rtl::OUString& rObjectCID );
-
-    void                executeDispatch_EditData();
-
-    //
-    void execute_DoubleClick();
-
-
 public:
     //no default constructor
     ChartController(::com::sun::star::uno::Reference<
@@ -374,9 +339,9 @@ public:
         notifyClosing( const ::com::sun::star::lang::EventObject& Source )
                             throw (::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
-    // ::com::sun::star::util::XEventListener (base of XCloseListener)
-    //-----------------------------------------------------------------
+    //-------------------------------------------------------------------------------------
+    // ::com::sun::star::util::XEventListener (base of XCloseListener and XModifyListener)
+    //-------------------------------------------------------------------------------------
     virtual void SAL_CALL
         disposing( const ::com::sun::star::lang::EventObject& Source )
                             throw (::com::sun::star::uno::RuntimeException);
@@ -488,6 +453,46 @@ public:
                     throw (::com::sun::star::uno::RuntimeException);
 
     //-----------------------------------------------------------------
+    // ::com::sun::star::lang XMultiServiceFactory
+    //-----------------------------------------------------------------
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
+        createInstance( const ::rtl::OUString& aServiceSpecifier )
+            throw (::com::sun::star::uno::Exception,
+                   ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
+        createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier,
+                                     const ::com::sun::star::uno::Sequence<
+                                         ::com::sun::star::uno::Any >& Arguments )
+            throw (::com::sun::star::uno::Exception,
+                   ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+        getAvailableServiceNames()
+            throw (::com::sun::star::uno::RuntimeException);
+
+    //-----------------------------------------------------------------
+    // ::com::sun::star::util::XModifyListener
+    //-----------------------------------------------------------------
+    virtual void SAL_CALL modified(
+        const ::com::sun::star::lang::EventObject& aEvent )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    //-----------------------------------------------------------------
+    // ::com::sun::star::util::XModeChangeListener
+    //-----------------------------------------------------------------
+    virtual void SAL_CALL modeChanged(
+        const ::com::sun::star::util::ModeChangeEvent& _rSource )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    //-----------------------------------------------------------------
+    // ::com::sun::star::frame::XLayoutManagerListener
+    //-----------------------------------------------------------------
+    virtual void SAL_CALL layoutEvent(
+        const ::com::sun::star::lang::EventObject& aSource,
+        ::sal_Int16 eLayoutEvent,
+        const ::com::sun::star::uno::Any& aInfo )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    //-----------------------------------------------------------------
     // chart2::WindowController
     //-----------------------------------------------------------------
     virtual void execute_Paint( const Rectangle& rRect );
@@ -502,7 +507,225 @@ public:
     virtual void execute_LoseFocus();
     virtual void execute_Command( const CommandEvent& rCEvt );
     virtual bool execute_KeyInput( const KeyEvent& rKEvt );
+
+    virtual bool requestQuickHelp(
+        ::Point aAtLogicPosition, bool bIsBalloonHelp,
+        ::rtl::OUString & rOutQuickHelpText, ::com::sun::star::awt::Rectangle & rOutEqualRect );
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+
     //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+
+    static bool isObjectDeleteable( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > & xController
+                                  , const ::com::sun::star::uno::Any& rSelection );
+
+public:
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    //private
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+
+
+private:
+    DrawModelWrapper* GetDrawModelWrapper();
+
+private:
+    class TheModelRef;
+    friend class ChartController::TheModelRef;
+    class RefCountable
+    {
+        public:
+            RefCountable();
+            virtual ~RefCountable();
+            void acquire();
+            void release();
+        private:
+            sal_Int32 volatile      m_nRefCount;
+    };
+    class TheModel : public RefCountable
+    {
+        public:
+            TheModel( const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::frame::XModel > & xModel );
+
+            virtual ~TheModel();
+
+            void        SetOwnerShip( sal_Bool bGetsOwnership );
+            void        addListener( ChartController* pController );
+            void        removeListener(  ChartController* pController );
+            void        tryTermination();
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+                        getModel() { return m_xModel;}
+
+        private:
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >     m_xModel;
+            ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable >  m_xCloseable;
+
+            //the ownership between model and controller is not clear at first
+            //each controller might consider himself as owner of the model first
+            sal_Bool volatile       m_bOwnership;
+            //with a XCloseable::close call and during XCloseListener::queryClosing
+            //the ownership can be regulated more explicit,
+            //if so the ownership is considered to be well known
+            sal_Bool volatile       m_bOwnershipIsWellKnown;
+    };
+    class TheModelRef
+    {
+        public:
+            TheModelRef( TheModel* pTheModel, ::osl::Mutex& rMutex );
+            TheModelRef( const TheModelRef& rTheModel, ::osl::Mutex& rMutex );
+            TheModelRef& operator=(ChartController::TheModel* pTheModel);
+            TheModelRef& operator=(const TheModelRef& rTheModel);
+            virtual ~TheModelRef();
+            sal_Bool is() const;
+                TheModel* operator->() const { return m_pTheModel; }
+        private:
+            TheModel*               m_pTheModel;
+            mutable ::osl::Mutex&   m_rModelMutex;
+    };
+
+private:
+    mutable ::apphelper::LifeTimeManager    m_aLifeTimeManager;
+
+    mutable ::osl::Mutex    m_aControllerMutex;
+    sal_Bool volatile       m_bSuspended;
+    sal_Bool volatile       m_bCanClose;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>        m_xCC;
+
+    //model
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >     m_xFrame;
+    mutable ::osl::Mutex    m_aModelMutex;
+    TheModelRef             m_aModel;
+
+    //view
+    ChartWindow*        m_pChartWindow;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >      m_xViewWindow;
+    ::com::sun::star::uno::Reference<
+                       ::com::sun::star::uno::XInterface >                  m_xChartView;
+    ::boost::shared_ptr< DrawModelWrapper > m_pDrawModelWrapper;
+    DrawViewWrapper*    m_pDrawViewWrapper;
+
+    Selection           m_aSelection;
+    SdrDragMode         m_eDragMode;
+
+    Timer               m_aDoubleClickTimer;
+    bool volatile       m_bWaitingForDoubleClick;
+    bool volatile       m_bWaitingForMouseUp;
+
+    bool volatile       m_bConnectingToView;
+
+    UndoManager         m_aUndoManager;
+    /// needed for dispatching URLs in FeatureStateEvents
+    mutable ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xURLTransformer;
+
+    ::std::auto_ptr< ::svt::AcceleratorExecute >  m_apAccelExecute;
+
+    CommandDispatchContainer m_aDispatchContainer;
+
+    ::std::auto_ptr< DropTargetHelper >           m_apDropTargetHelper;
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::frame::XLayoutManagerEventBroadcaster >
+                                                  m_xLayoutManagerEventBroadcaster;
+
+private:
+    //private methods
+
+    sal_Bool            impl_isDisposedOrSuspended() const;
+    ::com::sun::star::awt::Size impl_getDiagramSize( sal_Int32 nDiaIndex = 0 ) const;
+    ::std::auto_ptr< ReferenceSizeProvider > impl_createReferenceSizeProvider() const;
+    void                impl_adaptDataSeriesAutoResize();
+
+    void                impl_createDrawViewController();
+    void                impl_deleteDrawViewController();
+
+    //executeDispatch methods
+    void SAL_CALL       executeDispatch_ObjectProperties();
+    void SAL_CALL       executeDispatch_FormatObject( const ::rtl::OUString& rDispatchCommand );
+    void SAL_CALL       executeDlg_ObjectProperties( const ::rtl::OUString& rObjectCID );
+
+    void SAL_CALL       executeDispatch_ChartType();
+    void SAL_CALL       executeDispatch_ObjectToDefault();
+
+    void SAL_CALL       executeDispatch_InsertTitle();
+    void SAL_CALL       executeDispatch_InsertLegend();
+    void SAL_CALL       executeDispatch_InsertDataLabel();
+    void SAL_CALL       executeDispatch_InsertAxis();
+    void SAL_CALL       executeDispatch_InsertGrid();
+    void SAL_CALL       executeDispatch_InsertStatistic();
+
+    void SAL_CALL       executeDispatch_InsertSpecialCharacter();
+    void SAL_CALL       executeDispatch_EditText();
+    void SAL_CALL       executeDispatch_SourceData();
+    void SAL_CALL       executeDispatch_MoveSeries( sal_Bool bForward );
+
+    void                StartTextEdit();
+    bool                EndTextEdit();
+
+    void SAL_CALL       executeDispatch_View3D();
+    void SAL_CALL       executeDispatch_PositionAndSize();
+
+    void                executeDispatch_EditData();
+
+    void                executeDispatch_NewArrangement();
+    void                executeDispatch_ScaleText();
+
+    void                executeDispatch_Paste();
+    void                executeDispatch_Copy();
+    void                executeDispatch_Cut();
+    bool                executeDispatch_Delete();
+    void                executeDispatch_ToggleLegend();
+    void                executeDispatch_ToggleGridHorizontal();
+
+    //
+    DECL_LINK( DoubleClickWaitingHdl, void* );
+    void execute_DoubleClick();
+    void startDoubleClickWaiting();
+    void stopDoubleClickWaiting();
+
+    void impl_selectObjectAndNotiy();
+    void impl_notifySelectionChangeListeners();
+    void impl_invalidateAccessible();
+    void impl_initializeAccessible();
+    void impl_initializeAccessible( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XInitialization >& xInit );
+
+    //sets the model member to null if it equals the parameter
+    //returns true if successful
+    bool impl_releaseThisModel( const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::uno::XInterface > & xModel );
+
+    enum eMoveOrResizeType
+    {
+        MOVE_OBJECT,
+        CENTERED_RESIZE_OBJECT
+    };
+    /// @return </TRUE>, if resize/move was successful
+    bool impl_moveOrResizeObject(
+        const ::rtl::OUString & rCID, eMoveOrResizeType eType, double fAmountLogicX, double fAmountLogicY );
+    bool impl_DragDataPoint( const ::rtl::OUString & rCID, double fOffset );
+
+    ::std::set< ::rtl::OUString > impl_getAvailableCommands();
+
+    /** Creates a helper accesibility class that must be initialized via XInitialization.  For
+        parameters see
+
+        The returned object should not be used directly.  Instead a proxy object
+        should use this helper to retrieve its children and add them to its own
+        children.
+     */
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::accessibility::XAccessibleContext >
+        impl_createAccessibleTextContext();
+
+    void impl_PasteGraphic( ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > & xGraphic,
+                            const ::Point & aPosition );
+    void impl_SetMousePointer( const MouseEvent & rEvent );
 };
 
 //.............................................................................
