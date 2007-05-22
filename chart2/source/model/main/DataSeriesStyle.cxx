@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeriesStyle.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:10:46 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:35:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include "CharacterProperties.hxx"
 #include "PropertyHelper.hxx"
 #include "macros.hxx"
-#include "algohelper.hxx"
+#include "ContainerHelper.hxx"
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -78,17 +78,15 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
     {
         // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
-        ::chart::DataSeriesProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ false );
-        ::chart::CharacterProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ false );
+        ::chart::DataSeriesProperties::AddPropertiesToVector( aProperties );
+        ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
 
         // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::helper::PropertyNameLess() );
+                     ::chart::PropertyNameLess() );
 
         // transfer result to static Sequence
-        aPropSeq = ::chart::helper::VectorToSequence( aProperties );
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
     return aPropSeq;
@@ -102,9 +100,9 @@ namespace chart
 
 DataSeriesStyle::DataSeriesStyle(
     const uno::Reference< container::XNameAccess > & xStyleFamily,
-    ::osl::Mutex & _rMutex ) :
-        ::property::OStyle( xStyleFamily, _rMutex ),
-    m_rMutex( _rMutex )
+    ::osl::Mutex & par_rMutex ) :
+        ::property::OStyle( xStyleFamily, par_rMutex ),
+    m_rMutex( par_rMutex )
 {}
 
 DataSeriesStyle::~DataSeriesStyle()
@@ -132,22 +130,18 @@ void SAL_CALL DataSeriesStyle::release() throw ()
 uno::Any DataSeriesStyle::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    static helper::tPropertyValueMap aStaticDefaults;
+    static tPropertyValueMap aStaticDefaults;
 
     // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aStaticDefaults.size() )
     {
         // initialize defaults
-        DataSeriesProperties::AddDefaultsToMap(
-            aStaticDefaults,
-            /* bIncludeStyleProperties = */ false );
-        CharacterProperties::AddDefaultsToMap(
-            aStaticDefaults,
-            /* bIncludeStyleProperties = */ false );
+        DataSeriesProperties::AddDefaultsToMap( aStaticDefaults );
+        CharacterProperties::AddDefaultsToMap( aStaticDefaults );
     }
 
-    helper::tPropertyValueMap::const_iterator aFound(
+    tPropertyValueMap::const_iterator aFound(
         aStaticDefaults.find( nHandle ));
 
     if( aFound == aStaticDefaults.end())
