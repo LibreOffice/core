@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 14:01:30 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:26:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -445,6 +445,8 @@ namespace framework
             void implts_reset( sal_Bool bAttach );
             void implts_setMenuBarCloser(sal_Bool bCloserState);
             void implts_updateMenuBarClose();
+            sal_Bool implts_resetMenuBar();
+
             void implts_lock();
             sal_Bool implts_unlock();
 
@@ -467,6 +469,8 @@ namespace framework
             void implts_createCustomToolBars( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& aCustomTbxSeq );
             void implts_createCustomToolBar( const rtl::OUString& aTbxResName, const rtl::OUString& aTitle );
             void implts_toggleFloatingUIElementsVisibility( sal_Bool bActive );
+            void implts_reparentChildWindows();
+
             sal_Bool implts_isEmbeddedLayoutManager() const;
             sal_Int16 implts_getCurrentSymbolsSize();
             sal_Int16 implts_getCurrentSymbolsStyle();
