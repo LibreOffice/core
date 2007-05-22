@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 15:56:41 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:38:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,6 @@ class ScDocumentPool;
 class ScDrawLayer;
 class ScExtDocOptions;
 class ScFormulaCell;
-class SchMemChart;
 class ScMarkData;
 class ScOutlineTable;
 class ScPatternAttr;
@@ -150,6 +149,7 @@ class ScImpExpLogMsg;
 struct ScSortParam;
 class ScRefreshTimerControl;
 class ScUnoListenerCalls;
+class ScUnoRefList;
 class ScRecursionHelper;
 struct RowInfo;
 struct ScTableInfo;
@@ -167,6 +167,9 @@ namespace com { namespace sun { namespace star {
     }
     namespace util {
         class XModifyListener;
+    }
+    namespace embed {
+        class XEmbeddedObject;
     }
 } } }
 
@@ -287,6 +290,7 @@ private:
     ScChangeTrack*      pChangeTrack;
     SfxBroadcaster*     pUnoBroadcaster;
     ScUnoListenerCalls* pUnoListenerCalls;
+    ScUnoRefList*       pUnoRefUndoList;
     ScChangeViewSettings* pChangeViewSettings;
     ScScriptTypeData*   pScriptTypeData;
     ScRefreshTimerControl* pRefreshTimerControl;
@@ -309,6 +313,8 @@ private:
     ScRecursionHelper*  pRecursionHelper;               // information for recursive and iterative cell formulas
 
     ScAutoNameCache*    pAutoNameCache;                 // for automatic name lookup during CompileXML
+
+    sal_Int64           nUnoObjectId;                   // counted up for UNO objects
 
     sal_uInt32          nRangeOverflowType;             // used in (xml) loading for overflow warnings
 
@@ -494,13 +500,15 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     SdrObject*      GetObjectAtPoint( SCTAB nTab, const Point& rPos );
     BOOL            HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pName = NULL );
     void            UpdateChartArea( const String& rChartName, const ScRange& rNewArea,
-                                        BOOL bColHeaders, BOOL bRowHeaders, BOOL bAdd,
-                                        Window* pWindow );
+                                        BOOL bColHeaders, BOOL bRowHeaders, BOOL bAdd );
     void            UpdateChartArea( const String& rChartName,
                                     const ScRangeListRef& rNewList,
-                                    BOOL bColHeaders, BOOL bRowHeaders, BOOL bAdd,
-                                    Window* pWindow );
-    SchMemChart*    FindChartData(const String& rName, BOOL bForModify = FALSE);
+                                    BOOL bColHeaders, BOOL bRowHeaders, BOOL bAdd );
+    void            GetOldChartParameters( const String& rName,
+                                    ScRangeList& rRanges, BOOL& rColHeaders, BOOL& rRowHeaders );
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::embed::XEmbeddedObject >
+                    FindOleObjectByName( const String& rName );
 
     void            MakeTable( SCTAB nTab );
 
@@ -665,10 +673,16 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     SfxBroadcaster* GetDrawBroadcaster();       // zwecks Header-Vermeidung
     void            BeginDrawUndo();
 
+    void            BeginUnoRefUndo();
+    bool            HasUnoRefUndo() const       { return ( pUnoRefUndoList != NULL ); }
+    ScUnoRefList*   EndUnoRefUndo();            // must be deleted by caller!
+    sal_Int64       GetNewUnoId();
+    void            AddUnoRefChange( sal_Int64 nId, const ScRangeList& rOldRanges );
+
     // #109985#
     sal_Bool IsChart( const SdrObject* pObject );
 
-    void            UpdateAllCharts( BOOL bDoUpdate = TRUE );
+    void            UpdateAllCharts();
     void            UpdateChartRef( UpdateRefMode eUpdateRefMode,
                                     SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
@@ -1416,7 +1430,8 @@ SC_DLLPUBLIC    SvNumberFormatter*  GetFormatTable() const;
                         { return pChartListenerCollection; }
     void            SetChartListenerCollection( ScChartListenerCollection*,
                         BOOL bSetChartRangeLists = FALSE );
-    void            UpdateChart( const String& rName, Window* pWin );
+    void            UpdateChart( const String& rName );
+    void            RestoreChartListener( const String& rName );
     void            UpdateChartListenerCollection();
     BOOL            IsChartListenerCollectionNeedsUpdate() const
                         { return bChartListenerCollectionNeedsUpdate; }
