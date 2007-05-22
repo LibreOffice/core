@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unowids.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:02:26 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:40:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,8 @@
 #define SC_WID_UNO_COPYFORM         ( SC_WID_UNO_START + 36 )
 #define SC_WID_UNO_TABLAYOUT        ( SC_WID_UNO_START + 37 )
 #define SC_WID_UNO_AUTOPRINT        ( SC_WID_UNO_START + 38 )
-#define SC_WID_UNO_END              ( SC_WID_UNO_START + 38 )
+#define SC_WID_UNO_ABSNAME          ( SC_WID_UNO_START + 39 )
+#define SC_WID_UNO_END              ( SC_WID_UNO_START + 39 )
 
 
 inline BOOL IsScUnoWid( USHORT nWid )
