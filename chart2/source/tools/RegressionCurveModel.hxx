@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RegressionCurveModel.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:34:10 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:04:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,17 +38,15 @@
 #include "MutexContainer.hxx"
 #include "OPropertySet.hxx"
 #include "ServiceMacros.hxx"
+#include "ModifyListenerHelper.hxx"
 
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE6_HXX_
+#include <cppuhelper/implbase6.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
-#include <com/sun/star/chart2/XIdentifiable.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CHART2_XREGRESSIONCURVE_HPP_
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #endif
@@ -62,22 +60,27 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
 #include <com/sun/star/lang/XServiceName.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
+#include <com/sun/star/util/XCloneable.hpp>
+#endif
 
 namespace chart
 {
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper4<
+typedef ::cppu::WeakImplHelper6<
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::lang::XServiceName,
         ::com::sun::star::chart2::XRegressionCurve,
-        ::com::sun::star::chart2::XIdentifiable >
+        ::com::sun::star::util::XCloneable,
+        ::com::sun::star::util::XModifyBroadcaster,
+        ::com::sun::star::util::XModifyListener >
     RegressionCurveModel_Base;
 }
 
 class RegressionCurveModel :
-        public helper::MutexContainer,
+        public MutexContainer,
         public impl::RegressionCurveModel_Base,
         public ::property::OPropertySet
 {
@@ -88,16 +91,14 @@ public:
         CURVE_TYPE_LINEAR,
         CURVE_TYPE_LOGARITHM,
         CURVE_TYPE_EXPONENTIAL,
-        CURVE_TYPE_POWER,
+        CURVE_TYPE_POWER
     };
 
     RegressionCurveModel( ::com::sun::star::uno::Reference<
                               ::com::sun::star::uno::XComponentContext > const & xContext,
                           tCurveType eCurveType );
+    RegressionCurveModel( const RegressionCurveModel & rOther );
     virtual ~RegressionCurveModel();
-
-    /// XServiceInfo declarations
-    APPHELPER_XSERVICEINFO_DECL()
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
@@ -126,17 +127,144 @@ protected:
     virtual ::rtl::OUString SAL_CALL getServiceName()
         throw (::com::sun::star::uno::RuntimeException);
 
-    // ____ XIdentifiable ____
-    virtual ::rtl::OUString SAL_CALL getIdentifier()
+    // ____ XCloneable ____
+    // not implemented here
+//     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
+//         throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XModifyBroadcaster ____
+    virtual void SAL_CALL addModifyListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
         throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeModifyListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XModifyListener ____
+    virtual void SAL_CALL modified(
+        const ::com::sun::star::lang::EventObject& aEvent )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XEventListener (base of XModifyListener) ____
+    virtual void SAL_CALL disposing(
+        const ::com::sun::star::lang::EventObject& Source )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ OPropertySet ____
+    virtual void firePropertyChangeEvent();
+
+    void fireModifyEvent();
 
 private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext >
                         m_xContext;
 
-    ::rtl::OUString     m_aIdentifier;
     const tCurveType    m_eRegressionCurveType;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xModifyEventForwarder;
+};
+
+// implementations for factory instantiation
+
+class MeanValueRegressionCurve : public RegressionCurveModel
+{
+public:
+    explicit MeanValueRegressionCurve(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::uno::XComponentContext > & xContext );
+    explicit MeanValueRegressionCurve(
+        const MeanValueRegressionCurve & rOther );
+    virtual ~MeanValueRegressionCurve();
+
+    // ____ XCloneable ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /// XServiceInfo declarations
+    APPHELPER_XSERVICEINFO_DECL()
+    /// establish methods for factory instatiation
+    APPHELPER_SERVICE_FACTORY_HELPER( MeanValueRegressionCurve )
+};
+
+class LinearRegressionCurve : public RegressionCurveModel
+{
+public:
+    explicit LinearRegressionCurve(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::uno::XComponentContext > & xContext );
+    explicit LinearRegressionCurve(
+        const LinearRegressionCurve & rOther );
+    virtual ~LinearRegressionCurve();
+
+    // ____ XCloneable ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /// XServiceInfo declarations
+    APPHELPER_XSERVICEINFO_DECL()
+    /// establish methods for factory instatiation
+    APPHELPER_SERVICE_FACTORY_HELPER( LinearRegressionCurve )
+};
+
+class LogarithmicRegressionCurve : public RegressionCurveModel
+{
+public:
+    explicit LogarithmicRegressionCurve(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::uno::XComponentContext > & xContext );
+    explicit LogarithmicRegressionCurve(
+        const LogarithmicRegressionCurve & rOther );
+    virtual ~LogarithmicRegressionCurve();
+
+    // ____ XCloneable ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /// XServiceInfo declarations
+    APPHELPER_XSERVICEINFO_DECL()
+    /// establish methods for factory instatiation
+    APPHELPER_SERVICE_FACTORY_HELPER( LogarithmicRegressionCurve )
+};
+
+class ExponentialRegressionCurve : public RegressionCurveModel
+{
+public:
+    explicit ExponentialRegressionCurve(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::uno::XComponentContext > & xContext );
+    explicit ExponentialRegressionCurve(
+        const ExponentialRegressionCurve & rOther );
+    virtual ~ExponentialRegressionCurve();
+
+    // ____ XCloneable ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /// XServiceInfo declarations
+    APPHELPER_XSERVICEINFO_DECL()
+    /// establish methods for factory instatiation
+    APPHELPER_SERVICE_FACTORY_HELPER( ExponentialRegressionCurve )
+};
+
+class PotentialRegressionCurve : public RegressionCurveModel
+{
+public:
+    explicit PotentialRegressionCurve(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::uno::XComponentContext > & xContext );
+    explicit PotentialRegressionCurve(
+        const PotentialRegressionCurve & rOther );
+    virtual ~PotentialRegressionCurve();
+
+    // ____ XCloneable ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /// XServiceInfo declarations
+    APPHELPER_XSERVICEINFO_DECL()
+    /// establish methods for factory instatiation
+    APPHELPER_SERVICE_FACTORY_HELPER( PotentialRegressionCurve )
 };
 
 } //  namespace chart
