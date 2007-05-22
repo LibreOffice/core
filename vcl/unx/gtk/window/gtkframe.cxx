@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:39:47 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:43:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2720,6 +2720,7 @@ void GtkSalFrame::signalDestroy( GtkObject* pObj, gpointer frame )
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
     if( GTK_WINDOW( pObj ) == pThis->m_pWindow )
     {
+        pThis->m_pFixedContainer = NULL;
         pThis->m_pWindow = NULL;
     }
 }
@@ -2763,8 +2764,10 @@ void GtkSalFrame::IMHandler::createIMContext()
         g_signal_connect( m_pIMContext, "preedit_end",
                           G_CALLBACK (signalIMPreeditEnd), this );
 
+        m_pFrame->getDisplay()->GetXLib()->PushXErrorLevel( true );
         gtk_im_context_set_client_window( m_pIMContext, GTK_WIDGET(m_pFrame->m_pWindow)->window );
         gtk_im_context_focus_in( m_pIMContext );
+        m_pFrame->getDisplay()->GetXLib()->PopXErrorLevel();
         m_bFocused = true;
    }
 }
@@ -2774,7 +2777,9 @@ void GtkSalFrame::IMHandler::deleteIMContext()
     if( m_pIMContext )
     {
         // first give IC a chance to deinitialize
+        m_pFrame->getDisplay()->GetXLib()->PushXErrorLevel( true );
         gtk_im_context_set_client_window( m_pIMContext, NULL );
+        m_pFrame->getDisplay()->GetXLib()->PopXErrorLevel();
         // destroy old IC
         g_object_unref( m_pIMContext );
         m_pIMContext = NULL;
@@ -2845,7 +2850,9 @@ void GtkSalFrame::IMHandler::focusChanged( bool bFocusIn )
     m_bFocused = bFocusIn;
     if( bFocusIn )
     {
+        m_pFrame->getDisplay()->GetXLib()->PushXErrorLevel( true );
         gtk_im_context_focus_in( m_pIMContext );
+        m_pFrame->getDisplay()->GetXLib()->PopXErrorLevel();
         if( m_aInputEvent.mpTextAttr )
         {
             sendEmptyCommit();
@@ -2855,7 +2862,9 @@ void GtkSalFrame::IMHandler::focusChanged( bool bFocusIn )
     }
     else
     {
+        m_pFrame->getDisplay()->GetXLib()->PushXErrorLevel( true );
         gtk_im_context_focus_out( m_pIMContext );
+        m_pFrame->getDisplay()->GetXLib()->PopXErrorLevel();
         // cancel an eventual event posted to begin preedit again
         m_pFrame->getDisplay()->CancelInternalEvent( m_pFrame, &m_aInputEvent, SALEVENT_EXTTEXTINPUT );
     }
