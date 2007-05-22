@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:22:53 $
+#   last change: $Author: vg $ $Date: 2007-05-22 17:13:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,8 @@ LIB1FILES=		\
                 $(SLB)$/chcdrawinglayer.lib \
                 $(SLB)$/chcitemsetwrapper.lib \
                 $(SLB)$/chcdialogs.lib \
-                $(SLB)$/chchartapiwrapper.lib
+                $(SLB)$/chchartapiwrapper.lib \
+                $(SLB)$/chcaccessibility.lib
 
 #--------
 
@@ -65,8 +66,8 @@ SHL1TARGET=		$(TARGET)$(UPD)$(DLLPOSTFIX)
 #indicates dependencies:
 .IF "$(COM)" == "MSC"
 SHL1DEPN = \
-        $(SLB)$/charttools.lib \
-        $(SLB)$/chartview.lib
+        $(LB)$/icharttools.lib \
+        $(LB)$/ichartview.lib
 .ELSE
 SHL1DEPN =
 .ENDIF
@@ -87,8 +88,8 @@ SHL1STDLIBS=	$(CHARTTOOLS)		\
                 $(COMPHELPERLIB)	\
                 $(BASEGFXLIB)		\
                 $(GOODIESLIB)		\
+                $(BASEGFXLIB) 		\
                 $(SALLIB)			\
-                $(VCLLIB)			\
                 $(SVLLIB)			\
                 $(SVTOOLLIB)		\
                 $(SVXLIB)			\
@@ -97,7 +98,8 @@ SHL1STDLIBS=	$(CHARTTOOLS)		\
                 $(I18NISOLANGLIB)   \
                 $(VCLLIB)           \
                 $(SFXLIB)			\
-                $(UNOTOOLSLIB)
+                $(UNOTOOLSLIB)		\
+                $(SOTLIB)
 
 #--------exports
 
@@ -113,9 +115,10 @@ DEF1NAME=		$(SHL1TARGET)
 
 # --- Resources ---------------------------------------------------------------
 
+# sfx.srs is needed for the strings for UNDO and REDO in the UndoCommandDispatch
 RESLIB1LIST=\
-    $(SRS)$/chcmenu.srs	\
-    $(SRS)$/chcdialogs.srs
+    $(SRS)$/chcdialogs.srs \
+    $(SOLARCOMMONRESDIR)$/sfx.srs
 
 RESLIB1NAME=	$(TARGET)
 RESLIB1IMAGES=$(PRJ)$/res
