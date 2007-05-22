@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:31:53 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:37:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,8 @@
 #endif
 
 #include "dlg_ObjectProperties.hxx"
-#include "dlg_ObjectProperties.hrc"
+#include "ResourceIds.hrc"
+#include "Strings.hrc"
 #include "TabPages.hrc"
 #include "tp_AxisLabel.hxx"
 #include "tp_DataLabel.hxx"
@@ -53,13 +54,19 @@
 #include "tp_SeriesStatistic.hxx"
 #include "tp_SeriesToAxis.hxx"
 #include "tp_TitleRotation.hxx"
-#include "SchSlotIds.hxx"
 #include "ResId.hxx"
 #include "ViewElementListProvider.hxx"
 #include "macros.hxx"
 #include "ChartModelHelper.hxx"
 #include "ChartTypeHelper.hxx"
+#include "ObjectNameProvider.hxx"
+#include "DiagramHelper.hxx"
+#include "chartview/NumberFormatterWrapper.hxx"
+#include "AxisIndexDefines.hxx"
 
+#ifndef _COM_SUN_STAR_CHART2_XAXIS_HPP_
+#include <com/sun/star/chart2/XAxis.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CHART2_XCHARTTYPE_HPP_
 #include <com/sun/star/chart2/XChartType.hpp>
 #endif
@@ -111,19 +118,6 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-namespace
-{
-
-sal_Int32 lcl_getDimensionCount( const uno::Reference< frame::XModel >& xChartModel )
-{
-    sal_Int32 nDimensionCount = ChartTypeHelper::getDimensionCount(
-        ChartModelHelper::getFirstChartType(
-            ChartModelHelper::findDiagram( xChartModel ) ) );
-    return nDimensionCount;
-}
-
-}//end anonymous namespace
-
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -132,10 +126,12 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const rtl::OUS
         : m_aObjectCID( rObjectCID )
         , m_eObjectType( ObjectIdentifier::getObjectType( m_aObjectCID ) )
         , m_bAffectsMultipleObjects(false)
+        , m_aLocalizedName()
         , m_bHasGeometryProperties(false)
         , m_bHasStatisticProperties(false)
         , m_bHasRegressionProperties(false)
         , m_bProvidesSecondaryYAxis(false)
+        , m_bProvidesOverlapAndGapWidth(false)
         , m_bHasAreaProperties(false)
         , m_bHasLineProperties(false)
         , m_bHasSymbolProperties(false)
@@ -152,23 +148,30 @@ ObjectType ObjectPropertiesDialogParameter::getObjectType() const
 {
     return m_eObjectType;
 }
+rtl::OUString ObjectPropertiesDialogParameter::getLocalizedName() const
+{
+    return m_aLocalizedName;
+}
 
 void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel >& xChartModel )
 {
+    uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aObjectCID, xChartModel );
     uno::Reference< XChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
+    sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
 
-    m_bHasGeometryProperties = ChartTypeHelper::isSupportingGeometryProperties( xChartType );
-    m_bHasAreaProperties     = ChartTypeHelper::isSupportingAreaProperties( xChartType );
-    m_bHasSymbolProperties   = ChartTypeHelper::isSupportingSymbolProperties( xChartType );
+    m_bHasGeometryProperties = ChartTypeHelper::isSupportingGeometryProperties( xChartType, nDimensionCount );
+    m_bHasAreaProperties     = ChartTypeHelper::isSupportingAreaProperties( xChartType, nDimensionCount );
+    m_bHasSymbolProperties   = ChartTypeHelper::isSupportingSymbolProperties( xChartType, nDimensionCount );
     m_bHasLineProperties     = true; //@todo ask object
 
     if(    OBJECTTYPE_DATA_SERIES==m_eObjectType
         || OBJECTTYPE_DATA_LABELS==m_eObjectType )
     {
-        m_bHasStatisticProperties =  ChartTypeHelper::isSupportingStatisticProperties( xChartType );
-        m_bHasRegressionProperties = ChartTypeHelper::isSupportingRegressionProperties( xChartType );
-        m_bProvidesSecondaryYAxis =  ChartTypeHelper::isSupportingSecondaryAxis( xChartType, 1 );
+        m_bHasStatisticProperties =  ChartTypeHelper::isSupportingStatisticProperties( xChartType, nDimensionCount );
+        m_bHasRegressionProperties = ChartTypeHelper::isSupportingRegressionProperties( xChartType, nDimensionCount );
+        m_bProvidesSecondaryYAxis =  ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimensionCount, 1 );
+        m_bProvidesOverlapAndGapWidth =  ChartTypeHelper::isSupportingOverlapAndGapWidthProperties( xChartType, nDimensionCount );
     }
 
     if( OBJECTTYPE_AXIS == m_eObjectType )
@@ -176,9 +179,37 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
         //show scale properties only for a single axis not for multiselection
         m_bHasScaleProperties = !m_bAffectsMultipleObjects;
 
+        //no scale page for category axis
+        if( m_bHasScaleProperties )
+        {
+            uno::Reference< XAxis > xAxis( ObjectIdentifier::getAxisForCID( m_aObjectCID, xChartModel ) );
+            if( xAxis.is() )
+            {
+                ScaleData aData( xAxis->getScaleData() );
+                if( aData.AxisType == chart2::AxisType::CATEGORY || aData.AxisType == chart2::AxisType::SERIES )
+                    m_bHasScaleProperties = false;
+            }
+        }
+
         //no staggering of labels for 3D axis
-        sal_Int32 nDimensionCount = lcl_getDimensionCount( xChartModel );
         m_bCanAxisLabelsBeStaggered = nDimensionCount==2;
+    }
+
+    //create gui name for this object
+    {
+        if( !m_bAffectsMultipleObjects && OBJECTTYPE_AXIS == m_eObjectType )
+        {
+            m_aLocalizedName = ObjectNameProvider::getAxisName( m_aObjectCID, xChartModel );
+        }
+        else
+        {
+            ObjectType eType = m_eObjectType;
+            if( OBJECTTYPE_DATA_LABEL == eType )
+                 eType = OBJECTTYPE_DATA_POINT;
+            else if( OBJECTTYPE_DATA_LABELS == eType )
+                eType = OBJECTTYPE_DATA_SERIES;
+            m_aLocalizedName = ObjectNameProvider::getName(eType,m_bAffectsMultipleObjects);
+        }
     }
 }
 
@@ -197,6 +228,10 @@ bool ObjectPropertiesDialogParameter::HasRegressionProperties() const
 bool ObjectPropertiesDialogParameter::ProvidesSecondaryYAxis() const
 {
     return m_bProvidesSecondaryYAxis;
+}
+bool ObjectPropertiesDialogParameter::ProvidesOverlapAndGapWidth() const
+{
+    return m_bProvidesOverlapAndGapWidth;
 }
 bool ObjectPropertiesDialogParameter::HasAreaProperties() const
 {
@@ -226,88 +261,6 @@ const USHORT nNoArrowNoShadowDlg    = 1101;
 //-------------------------------------------------------------------
 //-------------------------------------------------------------------
 
-//provide Resource-Id of a tab dialog for the given ObjectType
-USHORT SchAttribTabDlg::GetResId(ObjectType eObjectType)
-{
-    USHORT nRet=0;
-    switch( eObjectType )
-    {
-        case OBJECTTYPE_PAGE:
-                nRet=TAB_DIAGRAM_AREA;
-                break;
-        case OBJECTTYPE_TITLE:
-                nRet=TAB_TITLE;
-                break;
-        case OBJECTTYPE_LEGEND:
-                nRet=TAB_LEGEND;
-                break;
-        case OBJECTTYPE_LEGEND_ENTRY:
-                nRet=0;//@todo there is not tab dialog so far
-                break;
-        case OBJECTTYPE_DIAGRAM:
-                nRet=TAB_DIAGRAM_WALL;//@todo ... maybe size,pos,rotation depth ...?
-                break;
-        case OBJECTTYPE_DIAGRAM_WALL:
-                nRet=TAB_DIAGRAM_WALL;
-                break;
-        case OBJECTTYPE_DIAGRAM_FLOOR:
-                nRet=TAB_DIAGRAM_FLOOR;
-                break;
-        case OBJECTTYPE_AXIS:
-                nRet=TAB_AXIS;//@todo need further specialisation for titles (x,y,z axis)
-                //and for z axis hide pages PAGE_AXISSCALE and PAGE_NUMBERFORMAT
-                break;
-        case OBJECTTYPE_AXIS_UNITLABEL:
-                nRet=0;//@todo there is not tab dialog so far
-                break;
-        case OBJECTTYPE_GRID:
-                nRet=TAB_GRID;
-                break;
-        case OBJECTTYPE_DATA_LABELS:
-        case OBJECTTYPE_DATA_SERIES:
-                nRet=TAB_DATA_ROW;
-                //@todo ( old case ATTR_DATA_LINE - TAB_DATA_LINE )
-                //for line oriented series hide folloing pages: PAGE_AREA PAGE_TRANSPARENCE and PAGE_LAYOUT
-                break;
-        case OBJECTTYPE_DATA_LABEL:
-        case OBJECTTYPE_DATA_POINT:
-                nRet=TAB_DATA_POINT;
-                break;
-        case OBJECTTYPE_DATA_ERRORS:
-                nRet=TAB_LINE;
-                break;
-        case OBJECTTYPE_DATA_ERRORS_X:
-                nRet=TAB_LINE;
-                break;
-        case OBJECTTYPE_DATA_ERRORS_Y:
-                nRet=TAB_LINE;
-                break;
-        case OBJECTTYPE_DATA_ERRORS_Z:
-                nRet=TAB_LINE;
-                break;
-        case OBJECTTYPE_DATA_CURVE:
-                nRet=TAB_LINE;
-                break;
-        case OBJECTTYPE_DATA_STOCK_RANGE:
-                nRet=TAB_LINE;
-                break;
-        case OBJECTTYPE_DATA_STOCK_LOSS:
-                nRet=TAB_DIAGRAM_STOCK_LOSS;
-                break;
-        case OBJECTTYPE_DATA_STOCK_GAIN:
-                nRet=TAB_DIAGRAM_STOCK_PLUS;
-                break;
-        default: //OBJECTTYPE_UNKNOWN
-                nRet=0;
-    }
-    if(nRet==0)
-    {
-        DBG_ERROR("Do not have an associated tab dialog for this ObjectType");
-        nRet=TAB_LINE;
-    }
-    return nRet;
-}
-
 void SchAttribTabDlg::setSymbolInformation( SfxItemSet* pSymbolShapeProperties,
                 Graphic* pAutoSymbolGraphic )
 {
@@ -318,126 +271,97 @@ void SchAttribTabDlg::setSymbolInformation( SfxItemSet* pSymbolShapeProperties,
 SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
                                  const SfxItemSet* pAttr,
                                  const ObjectPropertiesDialogParameter* pDialogParameter,
-                                 const ViewElementListProvider* pViewElementListProvider )
-    : SfxTabDialog(pParent, SchResId(GetResId(pDialogParameter->getObjectType())), pAttr)
+                                 const ViewElementListProvider* pViewElementListProvider,
+                                 const uno::Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier
+                                 )
+    : SfxTabDialog(pParent, SchResId(DLG_OBJECT_PROPERTIES), pAttr)
     , eObjectType(pDialogParameter->getObjectType())
     , nDlgType(nNoArrowNoShadowDlg)
     , nPageType(0)
     , m_pParameter( pDialogParameter )
     , m_pViewElementListProvider( pViewElementListProvider )
+    , m_pNumberFormatter(0)
     , m_pSymbolShapeProperties(NULL)
     , m_pAutoSymbolGraphic(NULL)
-    , nColorTableState(CT_NONE)
-    , nGradientListState(CT_NONE)
-    , nHatchingListState(CT_NONE)
-    , nBitmapListState(CT_NONE)
 {
     FreeResource();
+
+    NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
+    m_pNumberFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
+
+    this->SetText( pDialogParameter->getLocalizedName() );
+
     switch (eObjectType)
     {
-        case OBJECTTYPE_TITLE://ATTR_TITLE:
-            AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_AREA); //, SvxAreaTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_TRANSPARENCE); //, SvxTransparenceTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_NAME );//CHINA001  AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS );//CHINA001 AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
-            AddTabPage(TP_ALIGNMENT, SchAlignmentTabPage::Create, NULL);
+        case OBJECTTYPE_TITLE:
+            AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_BORDER)));
+            AddTabPage(RID_SVXPAGE_AREA, String(SchResId(STR_PAGE_AREA)));
+            AddTabPage(RID_SVXPAGE_TRANSPARENCE, String(SchResId(STR_PAGE_TRANSPARENCY)));
+            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)));
+            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
+            AddTabPage(TP_ALIGNMENT, String(SchResId(STR_PAGE_ALIGNMENT)), SchAlignmentTabPage::Create, NULL);
             break;
 
-        case OBJECTTYPE_LEGEND://ATTR_LEGEND:
-            AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_AREA); //, SvxAreaTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_TRANSPARENCE); //, SvxTransparenceTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_NAME ); //CHINA001 AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS );//CHINA001 AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
-            AddTabPage(TP_LEGEND_POS, SchLegendPosTabPage::Create, NULL);
+        case OBJECTTYPE_LEGEND:
+            AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_BORDER)));
+            AddTabPage(RID_SVXPAGE_AREA, String(SchResId(STR_PAGE_AREA)));
+            AddTabPage(RID_SVXPAGE_TRANSPARENCE, String(SchResId(STR_PAGE_TRANSPARENCY)));
+            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)));
+            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
+            AddTabPage(TP_LEGEND_POS, String(SchResId(STR_PAGE_POSITION)), SchLegendPosTabPage::Create, NULL);
             break;
 
-        case OBJECTTYPE_DATA_SERIES://ATTR_DATA_ROW:
-        case OBJECTTYPE_DATA_POINT://ATTR_DATA_POINT:
+        case OBJECTTYPE_DATA_SERIES:
+        case OBJECTTYPE_DATA_POINT:
         case OBJECTTYPE_DATA_LABEL:
         case OBJECTTYPE_DATA_LABELS:
-            AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_AREA); //, SvxAreaTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_TRANSPARENCE); //, SvxTransparenceTabPage::Create, NULL);
-            if(!m_pParameter->HasAreaProperties())
+            AddTabPage(RID_SVXPAGE_LINE, String(SchResId( m_pParameter->HasAreaProperties() ? STR_PAGE_BORDER : STR_PAGE_LINE )));
+            if(m_pParameter->HasAreaProperties())
             {
-                RemoveTabPage(RID_SVXPAGE_AREA);
-                RemoveTabPage(RID_SVXPAGE_TRANSPARENCE);
+                AddTabPage(RID_SVXPAGE_AREA, String(SchResId(STR_PAGE_AREA)));
+                AddTabPage(RID_SVXPAGE_TRANSPARENCE, String(SchResId(STR_PAGE_TRANSPARENCY)));
             }
-            AddTabPage(RID_SVXPAGE_CHAR_NAME ); //CHINA001 AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS );//CHINA001 AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
-            AddTabPage(TP_DATA_DESCR, SchDataDescrTabPage::Create, NULL);
-            AddTabPage(TP_STAT, SchStatisticTabPage::Create, NULL);
-            if( !m_pParameter->HasStatisticProperties() )
-                RemoveTabPage (TP_STAT);
-            AddTabPage(TP_LAYOUT,SchLayoutTabPage::Create, NULL);
-            if( !m_pParameter->HasGeometryProperties() )
-                RemoveTabPage(TP_LAYOUT);
-
-            AddTabPage(TP_OPTIONS,SchOptionTabPage::Create, NULL);
-            if( !m_pParameter->ProvidesSecondaryYAxis() )
-                RemoveTabPage(TP_OPTIONS);
+            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)));
+            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
+            AddTabPage(TP_DATA_DESCR, String(SchResId(STR_OBJECT_DATALABELS)), SchDataDescrTabPage::Create, NULL);
+            if( m_pParameter->HasStatisticProperties() )
+                AddTabPage(TP_STAT, String(SchResId(STR_PAGE_STATISTICS)), SchStatisticTabPage::Create, NULL);
+            if( m_pParameter->HasGeometryProperties() )
+                AddTabPage(TP_LAYOUT, String(SchResId(STR_PAGE_LAYOUT)),SchLayoutTabPage::Create, NULL);
+            if( m_pParameter->ProvidesSecondaryYAxis() || m_pParameter->ProvidesOverlapAndGapWidth() )
+                AddTabPage(TP_OPTIONS, String(SchResId(STR_PAGE_OPTIONS)),SchOptionTabPage::Create, NULL);
             break;
 
-            /*
-        case OBJECTTYPE_DATA_SERIES://ATTR_DATA_LINE:
-
-            AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
-            AddTabPage(TP_DATA_DESCR, SchDataDescrTabPage::Create, NULL);
-            //if (m_pParameter->HasStatisticProperties())
-            AddTabPage(TP_STAT, SchStatisticTabPage::Create, NULL);
-            AddTabPage(TP_OPTIONS,SchOptionTabPage::Create, NULL);
-            if (!m_pParameter->HasStatisticProperties())
-                RemoveTabPage (TP_STAT);
-            if(!m_pParameter->ProvidesSecondaryYAxis())
-                RemoveTabPage(TP_OPTIONS);
-            break;
-            */
-
-
-        /*
-        case OBJECTTYPE_AXIS://ATTR_AXIS:
-            AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
-            AddTabPage(TP_AXIS_LABEL, SchAxisLabelTabPage::Create, NULL);
-            break;
-
-        case ATTR_X_AXIS_2D:
-        */
         case OBJECTTYPE_AXIS:
         {
-            AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_NAME ); //CHINA001 AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS );//CHINA001 AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
-            AddTabPage(TP_AXIS_LABEL, SchAxisLabelTabPage::Create, NULL);
-            AddTabPage(TP_SCALE_Y, SchScaleYAxisTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_NUMBERFORMAT); //CHINA001 AddTabPage(RID_SVXPAGE_NUMBERFORMAT, SvxNumberFormatTabPage::Create, NULL);
-
-            if( !m_pParameter->HasScaleProperties() )
+            AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_LINE)));
+            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)));
+            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
+            AddTabPage(TP_AXIS_LABEL, String(SchResId(STR_OBJECT_LABEL)), SchAxisLabelTabPage::Create, NULL);
+            if( m_pParameter->HasScaleProperties() )
             {
-                RemoveTabPage (TP_SCALE_Y);
-                RemoveTabPage (RID_SVXPAGE_NUMBERFORMAT);
+                AddTabPage(TP_SCALE_Y, String(SchResId(STR_PAGE_SCALE)), SchScaleYAxisTabPage::Create, NULL);
+                AddTabPage(RID_SVXPAGE_NUMBERFORMAT, String(SchResId(STR_PAGE_NUMBERS)));
             }
-////            ((SfxItemSet * const) pAttr)->ClearItem (SCHATTR_AXISTYPE);
-////            ((SfxItemSet *) pAttr)->Put (SfxInt32Item (SCHATTR_AXISTYPE, CHART_AXIS_X));
-
-////            nAxisType = 1;
             break;
         }
 
+
         /*
+        case OBJECTTYPE_AXIS:
+            AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_LINE)));
+            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)), SvxCharNamePage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)), SvxCharEffectsPage::Create, NULL);
+            AddTabPage(TP_AXIS_LABEL, String(SchResId(STR_OBJECT_LABEL)), SchAxisLabelTabPage::Create, NULL);
+            break;
         case ATTR_Y_AXIS_2D:
         case ATTR_Y_AXIS_3D:
-            AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
-            AddTabPage(TP_SCALE_Y, SchScaleYAxisTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_NUMBERFORMAT, SvxNumberFormatTabPage::Create, NULL);
-            AddTabPage(TP_AXIS_LABEL, SchAxisLabelTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_LINE)));
+            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)), SvxCharNamePage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)), SvxCharEffectsPage::Create, NULL);
+            AddTabPage(TP_SCALE_Y, String(SchResId(STR_PAGE_SCALE)), SchScaleYAxisTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_NUMBERFORMAT, String(SchResId(STR_PAGE_NUMBERS)), SvxNumberFormatTabPage::Create, NULL);
+            AddTabPage(TP_AXIS_LABEL, String(SchResId(STR_OBJECT_LABEL)), SchAxisLabelTabPage::Create, NULL);
 ////            ((SfxItemSet * const) pAttr)->ClearItem (SCHATTR_AXISTYPE);
 ////            ((SfxItemSet *) pAttr)->Put (SfxInt32Item (SCHATTR_AXISTYPE, CHART_AXIS_Y));
 
@@ -445,35 +369,37 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             break;
 
         case ATTR_Z_AXIS:
-            AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
-            AddTabPage(TP_AXIS_LABEL, SchAxisLabelTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_LINE)));
+            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)), SvxCharNamePage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)), SvxCharEffectsPage::Create, NULL);
+            AddTabPage(TP_AXIS_LABEL, String(SchResId(STR_OBJECT_LABEL)), SchAxisLabelTabPage::Create, NULL);
 ////            ((SfxItemSet * const) pAttr)->ClearItem (SCHATTR_AXISTYPE);
 ////            ((SfxItemSet *) pAttr)->Put (SfxInt32Item (SCHATTR_AXISTYPE, CHART_AXIS_Z));
 
 ////            nAxisType = 3;
             break;
         */
-        case OBJECTTYPE_GRID: //ATTR_GRID
+        case OBJECTTYPE_GRID:
+        case OBJECTTYPE_SUBGRID:
         case OBJECTTYPE_DATA_ERRORS:
         case OBJECTTYPE_DATA_ERRORS_X:
         case OBJECTTYPE_DATA_ERRORS_Y:
         case OBJECTTYPE_DATA_ERRORS_Z:
         case OBJECTTYPE_DATA_CURVE:
-        case OBJECTTYPE_DATA_STOCK_RANGE://ATTR_LINE
-            AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
+        case OBJECTTYPE_DATA_AVERAGE_LINE:
+        case OBJECTTYPE_DATA_STOCK_RANGE:
+            AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_LINE)));
             break;
 
-        case OBJECTTYPE_DATA_STOCK_LOSS://ATTR_DIAGRAM_STOCK_LOSS:
-        case OBJECTTYPE_DATA_STOCK_GAIN://ATTR_DIAGRAM_STOCK_PLUS:
-        case OBJECTTYPE_PAGE://ATTR_DIAGRAM_AREA:
-        case OBJECTTYPE_DIAGRAM_FLOOR://ATTR_DIAGRAM_FLOOR:
-        case OBJECTTYPE_DIAGRAM_WALL://ATTR_DIAGRAM_WALL:
-        case OBJECTTYPE_DIAGRAM://ATTR_DIAGRAM_WALL: //@todo
-            AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_AREA); //, SvxAreaTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_TRANSPARENCE); //, SvxTransparenceTabPage::Create, NULL);
+        case OBJECTTYPE_DATA_STOCK_LOSS:
+        case OBJECTTYPE_DATA_STOCK_GAIN:
+        case OBJECTTYPE_PAGE:
+        case OBJECTTYPE_DIAGRAM_FLOOR:
+        case OBJECTTYPE_DIAGRAM_WALL:
+        case OBJECTTYPE_DIAGRAM:
+            AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_BORDER)));
+            AddTabPage(RID_SVXPAGE_AREA, String(SchResId(STR_PAGE_AREA)));
+            AddTabPage(RID_SVXPAGE_TRANSPARENCE, String(SchResId(STR_PAGE_TRANSPARENCY)));
             break;
 
         case OBJECTTYPE_LEGEND_ENTRY:
@@ -498,13 +424,6 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
         case TP_LAYOUT:
         break;
         case RID_SVXPAGE_LINE:
-//          ((SvxLineTabPage&)rPage).SetColorTable(m_pViewElementListProvider->GetColorTable());
-//          ((SvxLineTabPage&)rPage).SetDashList(m_pViewElementListProvider->GetDashList());
-//          ((SvxLineTabPage&)rPage).SetLineEndList(m_pViewElementListProvider->GetLineEndList());
-//          ((SvxLineTabPage&)rPage).SetPageType(&nPageType);
-//          ((SvxLineTabPage&)rPage).SetDlgType(&nDlgType);
-//          ((SvxLineTabPage&)rPage).Construct();
-//          ((SvxLineTabPage&)rPage).ActivatePage(*GetInputSetImpl());
             aSet.Put (SvxColorTableItem(m_pViewElementListProvider->GetColorTable(),SID_COLOR_TABLE));
             aSet.Put (SvxDashListItem(m_pViewElementListProvider->GetDashList(),SID_DASH_LIST));
             aSet.Put (SvxLineEndListItem(m_pViewElementListProvider->GetLineEndList(),SID_LINEEND_LIST));
@@ -518,29 +437,12 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
                     aSet.Put(SfxTabDialogItem(SID_ATTR_SET,*m_pSymbolShapeProperties));
                 if( m_pAutoSymbolGraphic )
                     aSet.Put(SvxGraphicItem(SID_GRAPHIC,*m_pAutoSymbolGraphic));
-//              ((SvxLineTabPage&)rPage).ShowSymbolControls(TRUE);
-//              ((SvxLineTabPage&)rPage).SetSymbolList();
-//                 if( m_pSymbolShapeProperties )
-//                  ((SvxLineTabPage&)rPage).SetSymbolAttr(m_pSymbolShapeProperties);
-//                 if( m_pAutoSymbolGraphic )
-//                  ((SvxLineTabPage&)rPage).SetAutoSymbolGraphic(m_pAutoSymbolGraphic);
             }
             rPage.PageCreated(aSet);
+            //rPage.ActivatePage(*GetInputSetImpl()); //what for?
             break;
 
         case RID_SVXPAGE_AREA:
-//          ((SvxAreaTabPage&)rPage).SetColorTable(m_pViewElementListProvider->GetColorTable());
-//          ((SvxAreaTabPage&)rPage).SetGradientList(m_pViewElementListProvider->GetGradientList());
-//          ((SvxAreaTabPage&)rPage).SetHatchingList(m_pViewElementListProvider->GetHatchList());
-//          ((SvxAreaTabPage&)rPage).SetBitmapList(m_pViewElementListProvider->GetBitmapList());
-//          ((SvxAreaTabPage&)rPage).SetPageType(&nPageType);
-//          ((SvxAreaTabPage&)rPage).SetDlgType(&nDlgType);
-//          ((SvxAreaTabPage&)rPage).SetGrdChgd(&nGradientListState);
-//          ((SvxAreaTabPage&)rPage).SetHtchChgd(&nHatchingListState);
-//          ((SvxAreaTabPage&)rPage).SetBmpChgd(&nBitmapListState);
-//          ((SvxAreaTabPage&)rPage).SetColorChgd(&nColorTableState);
-//          ((SvxAreaTabPage&)rPage).Construct();
-//          ((SvxAreaTabPage&)rPage).ActivatePage(*GetInputSetImpl());
             aSet.Put(SvxColorTableItem(m_pViewElementListProvider->GetColorTable(),SID_COLOR_TABLE));
             aSet.Put(SvxGradientListItem(m_pViewElementListProvider->GetGradientList(),SID_GRADIENT_LIST));
             aSet.Put(SvxHatchListItem(m_pViewElementListProvider->GetHatchList(),SID_HATCH_LIST));
@@ -548,13 +450,10 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
             aSet.Put(SfxUInt16Item(SID_PAGE_TYPE,nPageType));
             aSet.Put(SfxUInt16Item(SID_DLG_TYPE,nDlgType));
             rPage.PageCreated(aSet);
-            rPage.ActivatePage(*GetInputSetImpl());
+            //rPage.ActivatePage(*GetInputSetImpl()); //what for?
             break;
 
         case RID_SVXPAGE_TRANSPARENCE:
-//          ( (SvxTransparenceTabPage&) rPage ).SetPageType( &nPageType );
-//          ( (SvxTransparenceTabPage&) rPage ).SetDlgType( &nDlgType );
-//          ( (SvxTransparenceTabPage&) rPage ).Construct();
             aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
             aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
             rPage.PageCreated(aSet);
@@ -588,14 +487,15 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
             {
                 SchScaleYAxisTabPage & rAxisTabPage = static_cast< SchScaleYAxisTabPage & >( rPage );
 
+                static SvNumberFormatter aNumberFormatter = SvNumberFormatter( LANGUAGE_SYSTEM );
+
                 // #101318# use own number formatter with higher precision for rendering the values in the dialog.
-                rAxisTabPage.SetNumFormatter( m_pViewElementListProvider->GetOwnNumberFormatter() );
+                rAxisTabPage.SetNumFormatter( &aNumberFormatter );
             }
             break;
 
         case RID_SVXPAGE_NUMBERFORMAT:
-           //CHINA001  ((SvxNumberFormatTabPage&)rPage).SetNumberFormatList(SvxNumberInfoItem(m_pViewElementListProvider->GetNumFormatter()));
-            aSet.Put (SvxNumberInfoItem( m_pViewElementListProvider->GetNumFormatter(), (const USHORT)SID_ATTR_NUMBERFORMAT_INFO)); //CHINA001
+               aSet.Put (SvxNumberInfoItem( m_pNumberFormatter, (const USHORT)SID_ATTR_NUMBERFORMAT_INFO));
             rPage.PageCreated(aSet);
             break;
 
