@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLChartStyleContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:16:35 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:08:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,14 @@ XMLChartStyleContext::~XMLChartStyleContext()
 void XMLChartStyleContext::FillPropertySet(
     const uno::Reference< beans::XPropertySet > & rPropSet )
 {
-    XMLShapeStyleContext::FillPropertySet( rPropSet );
+    try
+    {
+        XMLShapeStyleContext::FillPropertySet( rPropSet );
+    }
+    catch( beans::UnknownPropertyException&  )
+    {
+        DBG_ASSERT( false, "unknown property exception -> shape style not completly imported for chart style" );
+    }
     if( msDataStyleName.getLength())
     {
         SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)mrStyles.FindStyleChildContext(
