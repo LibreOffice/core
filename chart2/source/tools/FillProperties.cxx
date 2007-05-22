@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FillProperties.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:24:27 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:58:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,27 +41,14 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_BITMAPMODE_HPP_
+#include <com/sun/star/drawing/BitmapMode.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
 #include <com/sun/star/drawing/FillStyle.hpp>
 #endif
-#ifndef _COM_SUN_STAR_AWT_GRADIENT_HPP_
-#include <com/sun/star/awt/Gradient.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_HATCH_HPP_
-#include <com/sun/star/drawing/Hatch.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_TRANSPARENCYSTYLE_HPP_
-#include <com/sun/star/chart2/TransparencyStyle.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CHART2_FILLBITMAP_HPP_
-#include <com/sun/star/chart2/FillBitmap.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_TRANSPARENCYSTYLE_HPP_
-#include <com/sun/star/chart2/TransparencyStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_NUMBERFORMAT_HPP_
-#include <com/sun/star/chart2/NumberFormat.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_RECTANGLEPOINT_HPP_
+#include <com/sun/star/drawing/RectanglePoint.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -71,22 +58,21 @@ using ::com::sun::star::beans::Property;
 namespace chart
 {
 
-void FillProperties::AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties,
-    bool bIncludeStyleProperties /* = false */ )
+namespace
 {
-    // Fill Properties
-    // ---------------
+
+void lcl_AddPropertiesToVector_without_BitmapProperties( ::std::vector< ::com::sun::star::beans::Property > & rOutProperties )
+{
     rOutProperties.push_back(
         Property( C2U( "FillStyle" ),
-                  PROP_FILL_STYLE,
+                  FillProperties::PROP_FILL_STYLE,
                   ::getCppuType( reinterpret_cast< const drawing::FillStyle * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( C2U( "FillColor" ),
-                  PROP_FILL_COLOR,
+                  FillProperties::PROP_FILL_COLOR,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
@@ -94,60 +80,233 @@ void FillProperties::AddPropertiesToVector(
 
     rOutProperties.push_back(
         Property( C2U( "FillTransparence" ),
-                  PROP_FILL_TRANSPARENCE,
+                  FillProperties::PROP_FILL_TRANSPARENCE,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "FillGradient" ),
-                  PROP_FILL_GRADIENT,
-                  ::getCppuType( reinterpret_cast< const awt::Gradient * >(0)),
+        Property( C2U( "FillTransparenceGradientName" ),
+                  FillProperties::PROP_FILL_TRANSPARENCE_GRADIENT_NAME,
+                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    //optional
+//    rOutProperties.push_back(
+//        Property( C2U( "FillTransparenceGradient" ),
+//                  FillProperties::PROP_FILL_TRANSPARENCE_GRADIENT,
+//                  ::getCppuType( reinterpret_cast< const awt::Gradient * >(0)),
+//                  beans::PropertyAttribute::BOUND
+//                  | beans::PropertyAttribute::MAYBEDEFAULT
+//                  | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "FillHatch" ),
-                  PROP_FILL_HATCH,
-                  ::getCppuType( reinterpret_cast< const drawing::Hatch * >(0)),
+        Property( C2U( "FillGradientName" ),
+                  FillProperties::PROP_FILL_GRADIENT_NAME,
+                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "TransparencyStyle" ),
-                  PROP_FILL_TRANSPARENCY_STYLE,
-                  ::getCppuType( reinterpret_cast< const chart2::TransparencyStyle * >(0)),
+        beans::Property( C2U( "FillGradientStepCount" ),
+                  FillProperties::PROP_FILL_GRADIENT_STEPCOUNT,
+                  ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    //optional
+//    rOutProperties.push_back(
+//        Property( C2U( "FillGradient" ),
+//                  FillProperties::PROP_FILL_GRADIENT,
+//                  ::getCppuType( reinterpret_cast< const awt::Gradient * >(0)),
+//                  beans::PropertyAttribute::BOUND
+//                  | beans::PropertyAttribute::MAYBEDEFAULT
+//                  | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "TransparencyGradient" ),
-                  PROP_FILL_TRANSPARENCY_GRADIENT,
-                  ::getCppuType( reinterpret_cast< const awt::Gradient * >(0)),
+        Property( C2U( "FillHatchName" ),
+                  FillProperties::PROP_FILL_HATCH_NAME,
+                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    //optional
+//    rOutProperties.push_back(
+//        Property( C2U( "FillHatch" ),
+//                  FillProperties::PROP_FILL_HATCH,
+//                  ::getCppuType( reinterpret_cast< const drawing::Hatch * >(0)),
+//                  beans::PropertyAttribute::BOUND
+//                  | beans::PropertyAttribute::MAYBEDEFAULT
+//                  | beans::PropertyAttribute::MAYBEVOID ));
+
+    //bitmap properties see lcl_AddPropertiesToVector_only_BitmapProperties()
+
+    rOutProperties.push_back(
+        Property( C2U( "FillBackground" ),
+                  FillProperties::PROP_FILL_BACKGROUND,
+                  ::getCppuType( reinterpret_cast< const sal_Bool * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+}
+
+//static
+void lcl_AddPropertiesToVector_only_BitmapProperties( ::std::vector< ::com::sun::star::beans::Property > & rOutProperties )
+{
+    rOutProperties.push_back(
+        Property( C2U( "FillBitmapName" ),
+                  FillProperties::PROP_FILL_BITMAP_NAME,
+                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    //optional
+//    rOutProperties.push_back(
+//        Property( C2U( "FillBitmap" ),
+//                  FillProperties::PROP_FILL_BITMAP,
+//                  ::getCppuType( reinterpret_cast< const uno::Reference< awt::XBitmap > * >(0)),
+//                  beans::PropertyAttribute::BOUND
+//                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    //optional
+//    rOutProperties.push_back(
+//        Property( C2U( "FillBitmapURL" ),
+//                  FillProperties::PROP_FILL_BITMAP_URL,
+//                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+//                  beans::PropertyAttribute::BOUND
+//                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "FillBitmapOffsetX" ),
+                  FillProperties::PROP_FILL_BITMAP_OFFSETX,
+                  ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "FillBitmapOffsetY" ),
+                  FillProperties::PROP_FILL_BITMAP_OFFSETY,
+                  ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "FillBitmapPositionOffsetX" ),
+                  FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETX,
+                  ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "FillBitmapPositionOffsetY" ),
+                  FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETY,
+                  ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+
+    rOutProperties.push_back(
+        Property( C2U( "FillBitmapRectanglePoint" ),
+                  FillProperties::PROP_FILL_BITMAP_RECTANGLEPOINT,
+                  ::getCppuType( reinterpret_cast< const drawing::RectanglePoint * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "FillBitmapLogicalSize" ),
+                  FillProperties::PROP_FILL_BITMAP_LOGICALSIZE,
+                  ::getCppuType( reinterpret_cast< const sal_Bool * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "FillBitmapSizeX" ),
+                  FillProperties::PROP_FILL_BITMAP_SIZEX,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "FillBitmapSizeY" ),
+                  FillProperties::PROP_FILL_BITMAP_SIZEY,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "FillBitmapMode" ),
+                  FillProperties::PROP_FILL_BITMAP_MODE,
+                  ::getCppuType( reinterpret_cast< const drawing::BitmapMode * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+}
+
+
+void lcl_AddDefaultsToMap_without_BitmapProperties(
+    ::chart::tPropertyValueMap & rOutMap )
+{
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_STYLE ));
+    rOutMap[ FillProperties::PROP_FILL_STYLE ] =
+        uno::makeAny( drawing::FillStyle_SOLID );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_COLOR ));
+    rOutMap[ FillProperties::PROP_FILL_COLOR ] =
+        uno::makeAny( sal_Int32( 0xd9d9d9 ) ); // gray85
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_TRANSPARENCE ));
+    rOutMap[ FillProperties::PROP_FILL_TRANSPARENCE ] =
+        uno::makeAny( sal_Int16( 0 ) );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_GRADIENT_STEPCOUNT ));
+    rOutMap[ FillProperties::PROP_FILL_GRADIENT_STEPCOUNT ] =
+        uno::makeAny( sal_Int16( 0 ) );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BACKGROUND ));
+    rOutMap[ FillProperties::PROP_FILL_BACKGROUND ] =
+        uno::makeAny( sal_Bool( sal_False ) );
+}
+
+void lcl_AddDefaultsToMap_only_BitmapProperties(
+    ::chart::tPropertyValueMap & rOutMap )
+{
+    uno::Any aSalInt16Zero = uno::makeAny( sal_Int16( 0 ));
+    uno::Any aSalInt32SizeDefault = uno::makeAny( sal_Int32( 0 ));
+
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_OFFSETX ));
+    rOutMap[ FillProperties::PROP_FILL_BITMAP_OFFSETX ] = aSalInt16Zero;
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_OFFSETY ));
+    rOutMap[ FillProperties::PROP_FILL_BITMAP_OFFSETY ] = aSalInt16Zero;
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETX ));
+    rOutMap[ FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETX ] = aSalInt16Zero;
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETY ));
+    rOutMap[ FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETY ] = aSalInt16Zero;
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_RECTANGLEPOINT ));
+    rOutMap[ FillProperties::PROP_FILL_BITMAP_RECTANGLEPOINT ] =
+        uno::makeAny( drawing::RectanglePoint_MIDDLE_MIDDLE );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_LOGICALSIZE ));
+    rOutMap[ FillProperties::PROP_FILL_BITMAP_LOGICALSIZE ] =
+        uno::makeAny( true );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_SIZEX ));
+    rOutMap[ FillProperties::PROP_FILL_BITMAP_SIZEX ] = aSalInt32SizeDefault;
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_SIZEY ));
+    rOutMap[ FillProperties::PROP_FILL_BITMAP_SIZEY ] = aSalInt32SizeDefault;
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_MODE ));
+    rOutMap[ FillProperties::PROP_FILL_BITMAP_MODE ] =
+        uno::makeAny( drawing::BitmapMode_REPEAT );
+}
+
+}//end anonymous namespace
+
+void FillProperties::AddPropertiesToVector(
+    ::std::vector< Property > & rOutProperties )
+{
+    // Fill Properties see service drawing::FillProperties
+    // ---------------
+    lcl_AddPropertiesToVector_without_BitmapProperties( rOutProperties );
+    lcl_AddPropertiesToVector_only_BitmapProperties( rOutProperties );
 }
 
 void FillProperties::AddDefaultsToMap(
-    ::chart::helper::tPropertyValueMap & rOutMap,
-    bool bIncludeStyleProperties /* = false */ )
+    ::chart::tPropertyValueMap & rOutMap )
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_FILL_STYLE ));
-    rOutMap[ PROP_FILL_STYLE ] =
-        uno::makeAny( drawing::FillStyle_SOLID );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_FILL_COLOR ));
-    rOutMap[ PROP_FILL_COLOR ] =
-        uno::makeAny( sal_Int32( 0xe0eeee ) ); // azure2
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_FILL_TRANSPARENCE ));
-    rOutMap[ PROP_FILL_TRANSPARENCE ] =
-        uno::makeAny( sal_Int16( 0 ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_FILL_TRANSPARENCY_STYLE ));
-    rOutMap[ PROP_FILL_TRANSPARENCY_STYLE ] =
-        uno::makeAny( chart2::TransparencyStyle_NONE );
+    lcl_AddDefaultsToMap_without_BitmapProperties( rOutMap );
+    lcl_AddDefaultsToMap_only_BitmapProperties( rOutMap );
 }
 
 } //  namespace chart
