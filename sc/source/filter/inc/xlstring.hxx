@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlstring.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:04:53 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:00:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ const XclStrFlags EXC_STR_DEFAULT           = 0x0000;   /// Default string setti
 const XclStrFlags EXC_STR_FORCEUNICODE      = 0x0001;   /// Always use UCS-2 characters (default: try to compress). BIFF8 only.
 const XclStrFlags EXC_STR_8BITLENGTH        = 0x0002;   /// 8-bit string length field (default: 16-bit).
 const XclStrFlags EXC_STR_SMARTFLAGS        = 0x0004;   /// Omit flags on empty string (default: read/write always). BIFF8 only.
-const XclStrFlags EXC_STR_KEEPFORMATS       = 0x0008;   /// Keep old formats when reading unformatted string (default: clear formats).
+const XclStrFlags EXC_STR_SEPARATEFORMATS   = 0x0008;   /// Import: Keep old formats when reading unformatted string (default: clear formats); Export: Write unformatted string.
 
 // ----------------------------------------------------------------------------
 
