@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.197 $
+ *  $Revision: 1.198 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:24:13 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:34:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2546,6 +2546,16 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = pTextViewMap;
+            }
+            break;
+            case PROPERTY_MAP_CHART2_DATA_SEQUENCE :
+            {
+                static SfxItemPropertyMap aChart2DataSequenceMap[] =
+                {
+                    {SW_PROP_NMID(UNO_NAME_ROLE), 0, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0 },
+                    {0,0,0,0}
+                };
+                aMapArr[nPropertyId] = aChart2DataSequenceMap;
             }
             break;
 
