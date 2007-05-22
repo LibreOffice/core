@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Linear3DTransformation.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:43:24 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:19:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ class Linear3DTransformation : public ::cppu::WeakImplHelper1<
     >
 {
 public:
-    Linear3DTransformation( const ::com::sun::star::drawing::HomogenMatrix& rHomMatrix );
+    Linear3DTransformation( const ::com::sun::star::drawing::HomogenMatrix& rHomMatrix, bool bSwapXAndY  );
     virtual ~Linear3DTransformation();
 
     // ____ XTransformation ____
@@ -73,6 +73,7 @@ public:
 
 private:
     ::com::sun::star::drawing::HomogenMatrix    m_Matrix;
+    bool                                        m_bSwapXAndY;
 };
 
 }  // namespace chart
