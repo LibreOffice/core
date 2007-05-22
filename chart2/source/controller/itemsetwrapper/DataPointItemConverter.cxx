@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPointItemConverter.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:34:14 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:00:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #include "GraphicPropertyItemConverter.hxx"
 #include "CharacterPropertyItemConverter.hxx"
 #include "StatisticsItemConverter.hxx"
+#include "SeriesOptionsItemConverter.hxx"
 
 #ifndef _SVX_CHRTITEM_HXX
 #include <svx/chrtitem.hxx>
@@ -54,11 +55,25 @@
 #include <com/sun/star/chart2/Symbol.hpp>
 #endif
 
+// header for class XFillColorItem
+#ifndef _SVX_XFLCLIT_HXX
+#include <svx/xflclit.hxx>
+#endif
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
 #endif
 #ifndef _SVX_SIZEITEM_HXX
 #include <svx/sizeitem.hxx>
+#endif
+
+#ifndef _SVX_BRSHITEM_HXX
+#include <svx/brshitem.hxx>
+#endif
+#ifndef _SV_GRAPH_HXX
+#include <vcl/graph.hxx>
+#endif
+#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HPP_
+#include <com/sun/star/graphic/XGraphic.hpp>
 #endif
 
 // for SVX_SYMBOLTYPE_...
@@ -77,7 +92,8 @@ namespace
 {
     static ::comphelper::ItemPropertyMapType aDataPointPropertyMap(
         ::comphelper::MakeItemPropertyMap
-        ( CHATTR_PIE_SEGMENT_OFFSET,      C2U( "Offset" ))
+//        IPM_MAP_ENTRY( CHATTR_PIE_SEGMENT_OFFSET, "Offset", 0 )
+        IPM_MAP_ENTRY( SCHATTR_STYLE_SHAPE, "Geometry3D", 0 )
         );
 
     return aDataPointPropertyMap;
@@ -86,7 +102,7 @@ namespace
 sal_Int32 lcl_getSymbolStyleForSymbol( const chart2::Symbol & rSymbol )
 {
     sal_Int32 nStyle = SVX_SYMBOLTYPE_UNKNOWN;
-    switch( rSymbol.aStyle )
+    switch( rSymbol.Style )
     {
         case chart2::SymbolStyle_NONE:
             nStyle = SVX_SYMBOLTYPE_NONE;
@@ -94,11 +110,11 @@ sal_Int32 lcl_getSymbolStyleForSymbol( const chart2::Symbol & rSymbol )
         case chart2::SymbolStyle_AUTO:
             nStyle = SVX_SYMBOLTYPE_AUTO;
             break;
-        case chart2::SymbolStyle_BITMAP:
+        case chart2::SymbolStyle_GRAPHIC:
             nStyle = SVX_SYMBOLTYPE_BRUSHITEM;
             break;
         case chart2::SymbolStyle_STANDARD:
-            nStyle = rSymbol.nStandardSymbol;
+            nStyle = rSymbol.StandardSymbol;
             break;
 
         case chart2::SymbolStyle_POLYGON:
@@ -118,22 +134,33 @@ namespace wrapper
 
 DataPointItemConverter::DataPointItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
+    const uno::Reference< uno::XComponentContext > & xContext,
     const uno::Reference< beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     NumberFormatterWrapper * pNumFormatter,
+    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
     GraphicPropertyItemConverter::eGraphicObjectType eMapTo /* = FILL_PROPERTIES */,
     ::std::auto_ptr< awt::Size > pRefSize /* = NULL */,
-    bool bIncludeStatistics /* = false */ ) :
+    bool bDataSeries /* = false */,
+    bool bUseSpecialFillColor /* = false */,
+    sal_Int32 nSpecialFillColor /* =0 */
+    ) :
         ItemConverter( rPropertySet, rItemPool ),
         m_pNumberFormatterWrapper( pNumFormatter ),
-        m_bIncludeStatistics( bIncludeStatistics )
+        m_bDataSeries( bDataSeries ),
+        m_bUseSpecialFillColor(bUseSpecialFillColor),
+        m_nSpecialFillColor(nSpecialFillColor)
 {
-    m_aConverters.push_back( new GraphicPropertyItemConverter( rPropertySet, rItemPool, rDrawModel, eMapTo ));
+    m_aConverters.push_back( new GraphicPropertyItemConverter(
+                                 rPropertySet, rItemPool, rDrawModel, xNamedPropertyContainerFactory, eMapTo ));
     m_aConverters.push_back( new CharacterPropertyItemConverter( rPropertySet, rItemPool, pRefSize,
                                                                  C2U( "ReferenceDiagramSize" )));
-    if( m_bIncludeStatistics )
+    if( bDataSeries )
+    {
         m_aConverters.push_back( new StatisticsItemConverter( xChartModel, rPropertySet, rItemPool ));
+        m_aConverters.push_back( new SeriesOptionsItemConverter( xChartModel, xContext, rPropertySet, rItemPool ));
+    }
 }
 
 DataPointItemConverter::~DataPointItemConverter()
@@ -149,6 +176,12 @@ void DataPointItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 
     // own items
     ItemConverter::FillItemSet( rOutItemSet );
+
+    if( m_bUseSpecialFillColor )
+    {
+        Color aColor(m_nSpecialFillColor);
+        rOutItemSet.Put( XFillColorItem( String(), aColor ) );
+    }
 }
 
 bool DataPointItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
@@ -165,12 +198,12 @@ bool DataPointItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
 const USHORT * DataPointItemConverter::GetWhichPairs() const
 {
     // must span all used items!
-    if( m_bIncludeStatistics )
+    if( m_bDataSeries )
         return nRowWhichPairs;
     return nDataPointWhichPairs;
 }
 
-bool DataPointItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const
+bool DataPointItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
 {
     ::comphelper::ItemPropertyMapType & rMap( lcl_GetDataPointPropertyMap());
     ::comphelper::ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
@@ -178,7 +211,7 @@ bool DataPointItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUStri
     if( aIt == rMap.end())
         return false;
 
-    rOutName =(*aIt).second;
+    rOutProperty =(*aIt).second;
     return true;
 }
 
@@ -205,6 +238,7 @@ bool DataPointItemConverter::ApplySpecialItem(
                 {
                     case CHDESCR_NONE:
                         aLabel.ShowNumber = sal_False;
+                        aLabel.ShowNumberInPercent = sal_False;
                         aLabel.ShowCategoryName = sal_False;
                         break;
                     case CHDESCR_VALUE:
@@ -213,16 +247,17 @@ bool DataPointItemConverter::ApplySpecialItem(
                         aLabel.ShowCategoryName = sal_False;
                         break;
                     case CHDESCR_PERCENT:
-                        aLabel.ShowNumber = sal_True;
+                        aLabel.ShowNumber = sal_False;
                         aLabel.ShowNumberInPercent = sal_True;
                         aLabel.ShowCategoryName = sal_False;
                         break;
                     case CHDESCR_TEXT:
                         aLabel.ShowNumber = sal_False;
+                        aLabel.ShowNumberInPercent = sal_False;
                         aLabel.ShowCategoryName = sal_True;
                         break;
                     case CHDESCR_TEXTANDPERCENT:
-                        aLabel.ShowNumber = sal_True;
+                        aLabel.ShowNumber = sal_False;
                         aLabel.ShowNumberInPercent = sal_True;
                         aLabel.ShowCategoryName = sal_True;
                         break;
@@ -273,8 +308,7 @@ bool DataPointItemConverter::ApplySpecialItem(
                     reinterpret_cast< const SfxUInt32Item & >(
                         rItemSet.Get( nWhichId )).GetValue());
 
-                aValue = uno::makeAny(
-                    m_pNumberFormatterWrapper->getNumberFormatForKey( nFmt ));
+                aValue = uno::makeAny(nFmt);
                 if( GetPropertySet()->getPropertyValue( C2U( "NumberFormat" )) != aValue )
                 {
                     GetPropertySet()->setPropertyValue( C2U( "NumberFormat" ), aValue );
@@ -304,21 +338,21 @@ bool DataPointItemConverter::ApplySpecialItem(
                 switch( nStyle )
                 {
                     case SVX_SYMBOLTYPE_NONE:
-                        aSymbol.aStyle = chart2::SymbolStyle_NONE;
+                        aSymbol.Style = chart2::SymbolStyle_NONE;
                         break;
                     case SVX_SYMBOLTYPE_AUTO:
-                        aSymbol.aStyle = chart2::SymbolStyle_AUTO;
+                        aSymbol.Style = chart2::SymbolStyle_AUTO;
                         break;
                     case SVX_SYMBOLTYPE_BRUSHITEM:
-                        aSymbol.aStyle = chart2::SymbolStyle_BITMAP;
+                        aSymbol.Style = chart2::SymbolStyle_GRAPHIC;
                         break;
                     case SVX_SYMBOLTYPE_UNKNOWN:
                         bDeleteSymbol = true;
                         break;
 
                     default:
-                        aSymbol.aStyle = chart2::SymbolStyle_STANDARD;
-                        aSymbol.nStandardSymbol = nStyle;
+                        aSymbol.Style = chart2::SymbolStyle_STANDARD;
+                        aSymbol.StandardSymbol = nStyle;
                 }
 
                 if( bDeleteSymbol )
@@ -338,14 +372,39 @@ bool DataPointItemConverter::ApplySpecialItem(
             chart2::Symbol aSymbol;
 
             GetPropertySet()->getPropertyValue( C2U( "Symbol" )) >>= aSymbol;
-            if( aSize.getWidth() != aSymbol.aSize.Width ||
-                aSize.getHeight() != aSymbol.aSize.Height )
+            if( aSize.getWidth() != aSymbol.Size.Width ||
+                aSize.getHeight() != aSymbol.Size.Height )
             {
-                aSymbol.aSize.Width = aSize.getWidth();
-                aSymbol.aSize.Height = aSize.getHeight();
+                aSymbol.Size.Width = aSize.getWidth();
+                aSymbol.Size.Height = aSize.getHeight();
 
                 GetPropertySet()->setPropertyValue( C2U( "Symbol" ), uno::makeAny( aSymbol ));
                 bChanged = true;
+            }
+        }
+        break;
+
+        case SCHATTR_SYMBOL_BRUSH:
+        {
+            const SvxBrushItem & rBrshItem( reinterpret_cast< const SvxBrushItem & >(
+                                                rItemSet.Get( nWhichId )));
+            uno::Any aXGraphicAny;
+            const Graphic *pGraphic( rBrshItem.GetGraphic());
+            if( pGraphic )
+            {
+                uno::Reference< graphic::XGraphic > xGraphic( pGraphic->GetXGraphic());
+                if( xGraphic.is())
+                {
+                    aXGraphicAny <<= xGraphic;
+                    chart2::Symbol aSymbol;
+                    GetPropertySet()->getPropertyValue( C2U( "Symbol" )) >>= aSymbol;
+                    if( aSymbol.Graphic != xGraphic )
+                    {
+                        aSymbol.Graphic = xGraphic;
+                        GetPropertySet()->setPropertyValue( C2U( "Symbol" ), uno::makeAny( aSymbol ));
+                        bChanged = true;
+                    }
+                }
             }
         }
         break;
@@ -370,20 +429,17 @@ void DataPointItemConverter::FillSpecialItem(
 
                 if( aLabel.ShowNumber )
                 {
-                    if( aLabel.ShowNumberInPercent )
-                    {
-                        if( aLabel.ShowCategoryName )
-                            aDescr = CHDESCR_TEXTANDPERCENT;
-                        else
-                            aDescr = CHDESCR_PERCENT;
-                    }
+                    if( aLabel.ShowCategoryName )
+                        aDescr = CHDESCR_TEXTANDVALUE;
                     else
-                    {
-                        if( aLabel.ShowCategoryName )
-                            aDescr = CHDESCR_TEXTANDVALUE;
-                        else
-                            aDescr = CHDESCR_VALUE;
-                    }
+                        aDescr = CHDESCR_VALUE;
+                }
+                else if( aLabel.ShowNumberInPercent )
+                {
+                    if( aLabel.ShowCategoryName )
+                        aDescr = CHDESCR_TEXTANDPERCENT;
+                    else
+                        aDescr = CHDESCR_PERCENT;
                 }
                 else
                 {
@@ -393,7 +449,7 @@ void DataPointItemConverter::FillSpecialItem(
                         aDescr = CHDESCR_NONE;
                 }
 
-                rOutItemSet.Put( SvxChartDataDescrItem( aDescr, CHDESCR_NONE ));
+                rOutItemSet.Put( SvxChartDataDescrItem( aDescr, SCHATTR_DATADESCR_DESCR ));
                 rOutItemSet.Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_SYM, aLabel.ShowLegendSymbol ));
             }
         }
@@ -403,10 +459,9 @@ void DataPointItemConverter::FillSpecialItem(
         {
             if( m_pNumberFormatterWrapper )
             {
-                chart2::NumberFormat aNumFmt;
-                if( GetPropertySet()->getPropertyValue( C2U( "NumberFormat" )) >>= aNumFmt );
+                sal_Int32 nKey;
+                if( GetPropertySet()->getPropertyValue( C2U( "NumberFormat" )) >>= nKey )
                 {
-                    sal_Int32 nKey = m_pNumberFormatterWrapper->getKeyForNumberFormat( aNumFmt );
                     rOutItemSet.Put( SfxUInt32Item( nWhichId, nKey ));
                 }
             }
@@ -430,7 +485,18 @@ void DataPointItemConverter::FillSpecialItem(
             chart2::Symbol aSymbol;
             if( GetPropertySet()->getPropertyValue( C2U( "Symbol" )) >>= aSymbol )
                 rOutItemSet.Put(
-                    SvxSizeItem( nWhichId, Size( aSymbol.aSize.Width, aSymbol.aSize.Height ) ));
+                    SvxSizeItem( nWhichId, Size( aSymbol.Size.Width, aSymbol.Size.Height ) ));
+        }
+        break;
+
+        case SCHATTR_SYMBOL_BRUSH:
+        {
+            chart2::Symbol aSymbol;
+            if(( GetPropertySet()->getPropertyValue( C2U( "Symbol" )) >>= aSymbol )
+               && aSymbol.Graphic.is() )
+            {
+                rOutItemSet.Put( SvxBrushItem( Graphic( aSymbol.Graphic ), GPOS_MM, SCHATTR_SYMBOL_BRUSH ));
+            }
         }
         break;
    }
