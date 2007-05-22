@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchWhichPairs.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:30:39 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:01:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,18 +49,15 @@
 #include <svx/eeitem.hxx>
 #endif
 
-#include "SchSfxItemIds.hxx"
-#include "SchSlotIds.hxx"
+#include "chartview/ChartSfxItemIds.hxx"
 
 namespace
 {
 
 const USHORT nTitleWhichPairs[] =
 {
-//  SCHATTR_TEXT_ORIENT, SCHATTR_TEXT_ORIENT,       //     4          sch/schattr.hxx
     SCHATTR_TEXT_STACKED, SCHATTR_TEXT_STACKED,       //     4          sch/schattr.hxx
     SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,      //    53          sch/schattr.hxx
-    SCHATTR_USER_DEFINED_ATTR, SCHATTR_USER_DEFINED_ATTR, //     100  sch/schattr.hxx
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx
     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,      //  1067 -  1078  svx/svddef.hxx
@@ -79,8 +76,6 @@ const USHORT nAxisWhichPairs[] =
     SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,                  //    53          sch/schattr.hxx
     SCHATTR_TEXT_OVERLAP, SCHATTR_TEXT_OVERLAP,                 //    54          sch/schattr.hxx
     SCHATTR_AXIS_START, SCHATTR_AXIS_END,                       //    70 -    95  sch/schattr.hxx
-    SCHATTR_USER_DEFINED_ATTR, SCHATTR_USER_DEFINED_ATTR,       //   100          sch/schattr.hxx
-    // SID_TEXTBREAK, SID_TEXTBREAK,                                // 30587          sch/app.hrc
     SCHATTR_TEXTBREAK, SCHATTR_TEXTBREAK,                       // 30587          sch/schattr.hxx
     0
 };
@@ -89,12 +84,10 @@ const USHORT nAllAxisWhichPairs[] =
 {
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     EE_ITEMS_START, EE_ITEMS_END,                   //  3994 -  4037  svx/eeitem.hxx
-//  SCHATTR_TEXT_ORIENT, SCHATTR_TEXT_ORIENT,       //    4           sch/schattr.hxx
     SCHATTR_TEXT_START, SCHATTR_TEXT_END,           //     4 -     6  sch/schattr.hxx
     SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,      //    53          sch/schattr.hxx
     SCHATTR_TEXT_OVERLAP, SCHATTR_TEXT_OVERLAP,     //    54          sch/schattr.hxx
     SCHATTR_AXIS_SHOWDESCR, SCHATTR_AXIS_SHOWDESCR, //    85          sch/schattr.hxx
-    // SID_TEXTBREAK, SID_TEXTBREAK,                    // 30587          sch/app.hrc
     SCHATTR_TEXTBREAK, SCHATTR_TEXTBREAK,           // 30587          sch/schattr.hxx
     0
 };
@@ -102,14 +95,12 @@ const USHORT nAllAxisWhichPairs[] =
 const USHORT nGridWhichPairs[] =
 {
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
-    SCHATTR_USER_DEFINED_ATTR, SCHATTR_USER_DEFINED_ATTR, //     100  sch/schattr.hxx
     0
 };
 
 const USHORT nChartWhichPairs[] =
 {
     SCHATTR_STYLE_START,SCHATTR_STYLE_END,          //    59 -    68  sch/schattr.hxx
-    SCHATTR_USER_DEFINED_ATTR, SCHATTR_USER_DEFINED_ATTR, //     100  sch/schattr.hxx
     0
 };
 
@@ -117,7 +108,6 @@ const USHORT nDiagramAreaWhichPairs[] =
 {
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx
-    SCHATTR_USER_DEFINED_ATTR, SCHATTR_USER_DEFINED_ATTR, //     100  sch/schattr.hxx
     0
 };
 
@@ -126,7 +116,6 @@ const USHORT nAreaAndChartWhichPairs[] =   // pairs for chart AND area
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx
     SCHATTR_STYLE_START,SCHATTR_STYLE_END,          //    59 -    68  sch/schattr.hxx
-    SCHATTR_USER_DEFINED_ATTR, SCHATTR_USER_DEFINED_ATTR, //     100  sch/schattr.hxx
     0
 };
 
@@ -137,7 +126,6 @@ const USHORT nLegendWhichPairs[] =
     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,      //  1067 -  1078  svx/svddef.hxx
     EE_ITEMS_START, EE_ITEMS_END,                   //  3994 -  4037  svx/eeitem.hxx
     SCHATTR_LEGEND_START, SCHATTR_LEGEND_END,       //     3 -     3  sch/schattr.hxx
-    SCHATTR_USER_DEFINED_ATTR, SCHATTR_USER_DEFINED_ATTR, //     100  sch/schattr.hxx
     0
 };
 
@@ -155,8 +143,8 @@ const USHORT nDataLabelWhichPairs[] =
     SCHATTR_DUMMY0, SCHATTR_DUMMY0,                 /*    40          sch/schattr.hxx*/ \
     SCHATTR_DUMMY1, SCHATTR_DUMMY1,                 /*    41          sch/schattr.hxx*/ \
     SCHATTR_STYLE_START,SCHATTR_STYLE_END,          /*    59 -    68  sch/schattr.hxx*/ \
-    SCHATTR_SYMBOL_BRUSH,SCHATTR_SYMBOL_BRUSH,      /*    96          sch/schattr.hxx*/ \
-    SCHATTR_SYMBOL_SIZE,SCHATTR_USER_DEFINED_ATTR,  /*    99 -   100  sch/schattr.hxx*/ \
+    SCHATTR_SYMBOL_BRUSH,SCHATTR_SYMBOL_BRUSH,      /*    94          sch/schattr.hxx*/ \
+    SCHATTR_SYMBOL_SIZE,SCHATTR_SYMBOL_SIZE,        /*    97          sch/schattr.hxx*/ \
     SDRATTR_3D_FIRST, SDRATTR_3D_LAST               /*  1244 -  1334  svx/svddef.hxx */
 
 const USHORT nDataPointWhichPairs[] =
@@ -165,11 +153,22 @@ const USHORT nDataPointWhichPairs[] =
     0
 };
 
+#define CHART_SERIES_OPTIONS_WHICHPAIRS \
+    SCHATTR_AXIS,SCHATTR_AXIS,                      /*    69          sch/schattr.hxx*/ \
+    SCHATTR_BAR_OVERLAP,SCHATTR_BAR_CONNECT         /*    98 - 100 (incl. SCHATTR_GAPWIDTH) */  \
+
+
+const USHORT nSeriesOptionsWhichPairs[] =
+{
+    CHART_SERIES_OPTIONS_WHICHPAIRS,
+    0
+};
+
 const USHORT nRowWhichPairs[] =
 {
     CHART_POINT_WHICHPAIRS,
     SCHATTR_STAT_START, SCHATTR_STAT_END,           /*    45 -    52  sch/schattr.hxx*/ \
-    SCHATTR_AXIS,SCHATTR_AXIS,                      /*    69          sch/schattr.hxx*/ \
+    CHART_SERIES_OPTIONS_WHICHPAIRS,
     0
 };
 
@@ -178,24 +177,20 @@ const USHORT nAreaWhichPairs[] =
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1000 -  1016  svx/xdef.hxx
     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,      //  1067 -  1078  svx/svddef.hxx
-    SCHATTR_USER_DEFINED_ATTR, SCHATTR_USER_DEFINED_ATTR, //     100  sch/schattr.hxx
     0
 };
 
 const USHORT nTextWhichPairs[] =
 {
     EE_ITEMS_START, EE_ITEMS_END,                   //  3994 -  4037  svx/eeitem.hxx
-//  SCHATTR_TEXT_ORIENT, SCHATTR_TEXT_ORIENT,       //     4          sch/schattr.hxx
     SCHATTR_TEXT_STACKED, SCHATTR_TEXT_STACKED,       //     4          sch/schattr.hxx
     SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,      //    53          sch/schattr.hxx
-    SCHATTR_USER_DEFINED_ATTR, SCHATTR_USER_DEFINED_ATTR, //     100  sch/schattr.hxx
     0
 };
 
 const USHORT nTextOrientWhichPairs[] =
 {
     EE_ITEMS_START, EE_ITEMS_END,                   //  3994 -  4037  svx/eeitem.hxx
-//  SCHATTR_TEXT_ORIENT, SCHATTR_TEXT_ORIENT,       //     4          sch/schattr.hxx
     SCHATTR_TEXT_STACKED, SCHATTR_TEXT_STACKED,       //     4          sch/schattr.hxx
     SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,      //    53          sch/schattr.hxx
     0
