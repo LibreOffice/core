@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 17:04:56 $
+#   last change: $Author: vg $ $Date: 2007-05-22 20:15:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,13 +80,8 @@ SHL1TARGET= sc$(UPD)$(DLLPOSTFIX)
 SHL1USE_EXPORTS=ordinal
 SHL1IMPLIB= sci
 
-.IF "$(OS)"!="MACOSX"
-# static libraries
-SHL1STDLIBS+= $(SCHLIB)
-.ENDIF
-
 # dynamic libraries
-SHL1STDLIBS+=       \
+SHL1STDLIBS=       \
     $(BASICLIB)	\
     $(SFXLIB)		\
     $(SVTOOLLIB)	\
@@ -109,11 +104,6 @@ SHL1STDLIBS+=       \
     $(XMLOFFLIB)	\
     $(DBTOOLSLIB)	\
     $(AVMEDIALIB)
-
-.IF "$(OS)"=="MACOSX"
-# static libraries at end for OS X
-SHL1STDLIBS+= $(SCHLIB)
-.ENDIF
 
 SHL1LIBS=$(LIB3TARGET) $(LIB4TARGET)
 
