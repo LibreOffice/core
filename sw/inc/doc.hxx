@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:52:52 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:18:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,9 @@
 #ifndef IDOCUMENTTIMERACCESS_HXX_INCLUDED
 #include <IDocumentTimerAccess.hxx>
 #endif
+#ifndef IDOCUMENTCHARTDATAPROVIDER_HXX_INCLUDED
+#include <IDocumentChartDataProviderAccess.hxx>
+#endif
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
@@ -143,6 +146,14 @@
 #endif
 #ifndef _SFXSTYLE_HXX //autogen // #116530#
 #include <svtools/style.hxx>
+#endif
+
+#ifndef _COMPHELPER_IMPLEMENTATIONREFERENCE_HXX
+#include "comphelper/implementationreference.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_CHART2_DATA_XDATAPROVIDER_HPP_
+#include <com/sun/star/chart2/data/XDataProvider.hpp>
 #endif
 
 #include <hash_map>
@@ -273,6 +284,9 @@ class SdrPageView;
 struct SwConversionArgs;
 class SwRewriter;
 class SwMsgPoolItem;
+class SwChartDataProvider;
+class SwChartLockController_Helper;
+
 
 namespace com { namespace sun { namespace star {
 namespace i18n {
@@ -313,7 +327,8 @@ class SwDoc :
     public IDocumentState,
     public IDocumentDrawModelAccess,
     public IDocumentLayoutAccess,
-    public IDocumentTimerAccess
+    public IDocumentTimerAccess,
+    public IDocumentChartDataProviderAccess
 {
 
     friend void _InitCore();
@@ -332,7 +347,6 @@ class SwDoc :
        Timer should not be members of the model
     */
     Timer       aIdleTimer;             // der eigene IdleTimer
-    Timer       aChartTimer;            // der Timer fuers Update aller Charts
     Timer       aOLEModifiedTimer;      // Timer for update modified OLE-Objecs
     SwDBData    aDBData;                // database descriptor
     ::com::sun::star::uno::Sequence <sal_Int8 > aRedlinePasswd;
@@ -423,6 +437,11 @@ class SwDoc :
                                     // document for a faster formatting
 
     SwUnoCallBack   *pUnoCallBack;
+
+    mutable  comphelper::ImplementationReference< SwChartDataProvider
+        , ::com::sun::star::chart2::data::XDataProvider >
+                                aChartDataProviderImplRef;
+    SwChartLockController_Helper  *pChartControllerHelper;
 
     // table of forbidden characters of this document
     vos::ORef<SvxForbiddenCharactersTable>  xForbiddenCharsTable;
@@ -980,6 +999,12 @@ public:
     virtual void StopIdling();
     virtual void BlockIdling();
     virtual void UnblockIdling();
+
+    /** IDocumentChartDataProviderAccess
+    */
+    virtual SwChartDataProvider * GetChartDataProvider( bool bCreate = false ) const;
+    virtual void CreateChartInternalDataProviders( const SwTable *pTable );
+    virtual SwChartLockController_Helper & GetChartControllerHelper();
 
     /** INextInterface here
     */
