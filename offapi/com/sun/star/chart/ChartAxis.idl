@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartAxis.idl,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:03:03 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 14:47:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,6 +233,14 @@ published service ChartAxis
         @see com::sun::star::util::XNumberFormatter
      */
     [property] long NumberFormat;
+
+    //-------------------------------------------------------------------------
+
+    /** determines whether to use the number format given by the
+        container application, e.g.  a spreadsheet document, or from
+        the own property <member>NumberFormat</member>.
+     */
+    [optional, property] boolean LinkNumberFormatToSource;
 
 };
 
