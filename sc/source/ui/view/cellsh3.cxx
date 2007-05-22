@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:56:27 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:12:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
             //  beim Oeffnen eines Referenz-Dialogs darf die SubShell nicht umgeschaltet werden
             //  (beim Schliessen des Dialogs wird StopEditShell gerufen)
             case SID_OPENDLG_FUNCTION:
-            case SID_OPENDLG_CHART:
                     //  #53318# inplace macht die EditShell Aerger...
                     //! kann nicht immer umgeschaltet werden ????
                     if (!pTabViewShell->GetViewFrame()->GetFrame()->IsInPlace())
@@ -298,28 +297,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 //  hier kein GrabFocus, weil sonst auf dem Mac die Tabelle vor die
                 //  Seitenansicht springt, wenn die Eingabe nicht abgeschlossen war
                 //  (GrabFocus passiert in KillEditView)
-            }
-            break;
-
-
-        case SID_OPENDLG_CHART:
-            {
-                BOOL bChartDlgIsEdit = ( nSlot == SID_OPENDLG_MODCHART );
-                pTabViewShell->SetChartDlgEdit(bChartDlgIsEdit);
-
-                if (bChartDlgIsEdit)
-                {
-                    pTabViewShell->SetEditChartName(pTabViewShell->GetSelectedChartName());
-                    pTabViewShell->DrawDeselectAll();       // flackert sonst bei Ref-Input
-                }
-
-                pTabViewShell->ResetChartArea();
-
-                USHORT          nId  = ScChartDlgWrapper::GetChildWindowId();
-                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
-                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
-
-                pScMod->SetRefDialog( nId, pWnd ? FALSE : TRUE );
             }
             break;
 
