@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:47:59 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:03:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,9 @@
 #endif
 #ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
+#endif
+#ifndef SC_RANGEUTL_HXX
+#include "rangeutl.hxx"
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -102,10 +105,17 @@ void ScMyShapeResizer::CreateChartListener(ScDocument* pDoc,
                 if (pCollection)
                 {
                     ScRangeListRef aRangeListRef(new ScRangeList());
-                    ScXMLConverter::GetRangeListFromString(*aRangeListRef, *pRangeList, pDoc);
+                    ScRangeStringConverter::GetRangeListFromString(*aRangeListRef, *pRangeList, pDoc);
                     if (aRangeListRef->Count())
                     {
                         ScChartListener* pCL(new ScChartListener(rName, pDoc, aRangeListRef ));
+
+                        //for loading binary files e.g.
+                        //if we have the flat filter we need to set the dirty flag thus the visible charts get repainted
+                        //otherwise the charts keep their first visual representation which was created at a moment where the calc itself was not loaded completly and is incorect therefor
+                        if( (rImport.getImportFlags() & IMPORT_ALL) == IMPORT_ALL )
+                            pCL->SetDirty( TRUE );
+
                         pCollection->Insert( pCL );
                         pCL->StartListeningTo();
                     }
