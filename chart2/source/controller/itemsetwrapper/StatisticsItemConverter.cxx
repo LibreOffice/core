@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StatisticsItemConverter.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:34:47 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:02:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
 #include "ChartTypeHelper.hxx"
 
 #include "GraphicPropertyItemConverter.hxx"
-#include "CharacterPropertyItemConverter.hxx"
 
 #ifndef _SVX_CHRTITEM_HXX
 #include <svx/chrtitem.hxx>
@@ -98,119 +97,27 @@ uno::Reference< beans::XPropertySet > lcl_GetYErrorBar(
 
     return xResult;
 }
-
-uno::Reference< chart2::XRegressionCurve > lcl_createRegressionCurve(
-    SvxChartRegress eRegress,
-    const uno::Reference< beans::XPropertySet > & xFormerProp,
-    const uno::Reference< beans::XPropertySet > & xSeriesProp,
-    const uno::Reference< frame::XModel > & xModel )
+::chart::RegressionCurveHelper::tRegressionType lcl_convertRegressionType( SvxChartRegress eRegress )
 {
-    uno::Reference< chart2::XRegressionCurve > xResult;
-    ::rtl::OUString aServiceName;
-
+    ::chart::RegressionCurveHelper::tRegressionType eType = ::chart::RegressionCurveHelper::REGRESSION_TYPE_NONE;
     switch( eRegress )
     {
         case CHREGRESS_LINEAR:
-            aServiceName = C2U( "com.sun.star.chart2.LinearRegressionCurve" );
+            eType = ::chart::RegressionCurveHelper::REGRESSION_TYPE_LINEAR;
             break;
         case CHREGRESS_LOG:
-            aServiceName = C2U( "com.sun.star.chart2.LogarithmicRegressionCurve" );
+            eType = ::chart::RegressionCurveHelper::REGRESSION_TYPE_LOG;
             break;
         case CHREGRESS_EXP:
-            aServiceName = C2U( "com.sun.star.chart2.ExponentialRegressionCurve" );
+            eType = ::chart::RegressionCurveHelper::REGRESSION_TYPE_EXP;
             break;
         case CHREGRESS_POWER:
-            aServiceName = C2U( "com.sun.star.chart2.PotentialRegressionCurve" );
+            eType = ::chart::RegressionCurveHelper::REGRESSION_TYPE_POWER;
             break;
-
         case CHREGRESS_NONE:
             break;
     }
-
-    if( aServiceName.getLength())
-    {
-        // todo: use a valid context
-        xResult.set( ::chart::RegressionCurveHelper::createRegressionCurveByServiceName(
-                         uno::Reference< uno::XComponentContext >(), aServiceName ));
-
-        uno::Reference< beans::XPropertySet > xProp( xResult, uno::UNO_QUERY );
-        if( xProp.is())
-        {
-            if( xFormerProp.is())
-                ::chart::PropertyHelper::copyProperties( xFormerProp, xProp );
-            else
-            {
-                if( xSeriesProp.is())
-                {
-                    xProp->setPropertyValue( C2U( "LineColor" ),
-                                             xSeriesProp->getPropertyValue( C2U( "Color" )));
-                }
-                xProp->setPropertyValue( C2U( "LineWidth" ), uno::makeAny( sal_Int32( 100 )));
-            }
-        }
-    }
-
-    return xResult;
-}
-
-/** removes all regression curves that are of type linear, log, exp or pot. (not
-    mean-value) and returns true, if anything was removed
- */
-::std::pair< bool, uno::Reference< beans::XPropertySet > >
-lcl_removeAllKnownRegressionCurves(
-    const uno::Reference< chart2::XRegressionCurveContainer > & xRegCnt )
-{
-    ::std::pair< bool, uno::Reference< beans::XPropertySet > > aResult;
-    aResult.first = false;
-    ::std::vector< sal_Int32 > aDeleteIndexes;
-
-    if( xRegCnt.is())
-    {
-        try
-        {
-            uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(
-                xRegCnt->getRegressionCurves());
-            for( sal_Int32 i = 0; i < aCurves.getLength(); ++i )
-            {
-                uno::Reference< lang::XServiceName > xServName( aCurves[i], uno::UNO_QUERY );
-                if( xServName.is() &&
-                    ( xServName->getServiceName().equals(
-                          C2U( "com.sun.star.chart2.LinearRegressionCurve" )) ||
-                      xServName->getServiceName().equals(
-                          C2U( "com.sun.star.chart2.LogarithmicRegressionCurve" )) ||
-                      xServName->getServiceName().equals(
-                          C2U( "com.sun.star.chart2.ExponentialRegressionCurve" )) ||
-                      xServName->getServiceName().equals(
-                          C2U( "com.sun.star.chart2.PotentialRegressionCurve" ))
-                        ))
-                {
-                    aDeleteIndexes.push_back( i );
-                }
-            }
-
-            if( aDeleteIndexes.size() > 0 )
-            {
-                bool bGotFormerProp = false;
-                for( ::std::vector< sal_Int32 >::const_iterator aIt = aDeleteIndexes.begin();
-                     aIt != aDeleteIndexes.end(); ++aIt )
-                {
-                    if( ! bGotFormerProp )
-                    {
-                        aResult.second.set( aCurves[*aIt], uno::UNO_QUERY );
-                        bGotFormerProp = true;
-                    }
-                    xRegCnt->removeRegressionCurve( aCurves[ *aIt ] );
-                }
-                aResult.first = true;
-            }
-        }
-        catch( uno::Exception & ex )
-        {
-            ASSERT_EXCEPTION( ex );
-        }
-    }
-
-    return aResult;
+    return eType;
 }
 
 uno::Reference< beans::XPropertySet > lcl_GetDefaultErrorBar()
@@ -290,7 +197,7 @@ const USHORT * StatisticsItemConverter::GetWhichPairs() const
     return nStatWhichPairs;
 }
 
-bool StatisticsItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const
+bool StatisticsItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
 {
     return false;
 }
@@ -332,17 +239,14 @@ bool StatisticsItemConverter::ApplySpecialItem(
         {
             uno::Reference< beans::XPropertySet > xOldErrorBarProp(
                 lcl_GetYErrorBar( GetPropertySet() ));
-            bool bOldHasErrorBar = xOldErrorBarProp.is();
 
             SvxChartKindError eErrorKind =
                 reinterpret_cast< const SvxChartKindErrorItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
-            bool bNewHasErrorKind = (eErrorKind != CHERROR_NONE);
 
-            if( bOldHasErrorBar && ! bNewHasErrorKind )
+            if( !xOldErrorBarProp.is() && eErrorKind == CHERROR_NONE)
             {
-                GetPropertySet()->setPropertyValue( C2U( "ErrorBarY" ), uno::Any());
-                bChanged = true;
+                //nothing to do
             }
             else
             {
@@ -350,6 +254,8 @@ bool StatisticsItemConverter::ApplySpecialItem(
 
                 switch( eErrorKind )
                 {
+                    case CHERROR_NONE:
+                        eStyle = chart2::ErrorBarStyle_NONE; break;
                     case CHERROR_VARIANT:
                         eStyle = chart2::ErrorBarStyle_VARIANCE; break;
                     case CHERROR_SIGMA:
@@ -360,29 +266,18 @@ bool StatisticsItemConverter::ApplySpecialItem(
                         eStyle = chart2::ErrorBarStyle_ERROR_MARGIN; break;
                     case CHERROR_CONST:
                         eStyle = chart2::ErrorBarStyle_ABSOLUTE; break;
-
-                    case CHERROR_NONE:
-                        break;
                 }
 
-                if( eErrorKind != CHERROR_NONE )
+                if( !xOldErrorBarProp.is() )
                 {
-                    chart2::ErrorBarStyle eOldErrorBarStyle = chart2::ErrorBarStyle_VARIANCE;
-                    if( bOldHasErrorBar )
-                        xOldErrorBarProp->getPropertyValue( C2U( "ErrorBarStyle" )) >>= eOldErrorBarStyle;
-
-                    if( ! bOldHasErrorBar ||
-                        eOldErrorBarStyle != eStyle )
-                    {
-                        if( ! bOldHasErrorBar )
-                            xOldErrorBarProp = lcl_GetDefaultErrorBar();
-                        xOldErrorBarProp->setPropertyValue( C2U( "ErrorBarStyle" ),
-                                                            uno::makeAny( eStyle ));
-                        GetPropertySet()->setPropertyValue( C2U( "ErrorBarY" ),
-                                                            uno::makeAny( xOldErrorBarProp ));
-                        bChanged = true;
-                    }
+                    xOldErrorBarProp = lcl_GetDefaultErrorBar();
                 }
+
+                xOldErrorBarProp->setPropertyValue( C2U( "ErrorBarStyle" ),
+                                                    uno::makeAny( eStyle ));
+                GetPropertySet()->setPropertyValue( C2U( "ErrorBarY" ),
+                                                    uno::makeAny( xOldErrorBarProp ));
+                bChanged = true;
             }
         }
         break;
@@ -472,20 +367,23 @@ bool StatisticsItemConverter::ApplySpecialItem(
 
             if( eRegress == CHREGRESS_NONE )
             {
-                bChanged = lcl_removeAllKnownRegressionCurves( xRegCnt ).first;
+                bChanged = RegressionCurveHelper::removeAllExceptMeanValueLine( xRegCnt );
             }
             else
             {
                 SvxChartRegress eOldRegress(
                     static_cast< SvxChartRegress >(
                         static_cast< sal_Int32 >(
-                            RegressionCurveHelper::getRegressType( xRegCnt ))));
+                            RegressionCurveHelper::getFirstRegressTypeNotMeanValueLine( xRegCnt ))));
                 if( eOldRegress != eRegress )
                 {
                     uno::Reference< beans::XPropertySet > xFormerProp(
-                        lcl_removeAllKnownRegressionCurves( xRegCnt ).second );
-                    xRegCnt->addRegressionCurve(
-                        lcl_createRegressionCurve( eRegress, xFormerProp, GetPropertySet(), m_xModel ));
+                        RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCnt ), uno::UNO_QUERY );
+
+                    RegressionCurveHelper::removeAllExceptMeanValueLine( xRegCnt );
+
+                    RegressionCurveHelper::addRegressionCurve( lcl_convertRegressionType( eRegress )
+                        , xRegCnt, uno::Reference< uno::XComponentContext >(), xFormerProp );
                     bChanged = true;
                 }
             }
@@ -551,6 +449,8 @@ void StatisticsItemConverter::FillSpecialItem(
                 {
                     switch( eStyle )
                     {
+                        case chart2::ErrorBarStyle_NONE:
+                            break;
                         case chart2::ErrorBarStyle_VARIANCE:
                             eErrorKind = CHERROR_VARIANT; break;
                         case chart2::ErrorBarStyle_STANDARD_DEVIATION:
@@ -628,7 +528,7 @@ void StatisticsItemConverter::FillSpecialItem(
         {
             SvxChartRegress eRegress = static_cast< SvxChartRegress >(
                 static_cast< sal_Int32 >(
-                    RegressionCurveHelper::getRegressType(
+                    RegressionCurveHelper::getFirstRegressTypeNotMeanValueLine(
                         uno::Reference< chart2::XRegressionCurveContainer >(
                             GetPropertySet(), uno::UNO_QUERY ) )));
             rOutItemSet.Put( SvxChartRegressItem( eRegress, SCHATTR_STAT_REGRESSTYPE ));
