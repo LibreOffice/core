@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblrwcl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:57:06 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:25:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -121,7 +122,14 @@
 #ifndef _TBLRWCL_HXX
 #include <tblrwcl.hxx>
 #endif
+#ifndef _UNOCHART_HXX
+#include <unochart.hxx>
+#endif
 #include <boost/shared_ptr.hpp>
+
+using namespace com::sun::star;
+using namespace com::sun::star::uno;
+
 
 #define COLFUZZY 20
 #define ROWFUZZY 10
@@ -606,7 +614,9 @@ BOOL SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     //Lines fuer das Layout-Update herausuchen.
     aFndBox.SetTableLines( *this );
     aFndBox.DelFrms( *this );
-    aFndBox.SaveChartData( *this );
+
+    // TL_CHART2: nothing to be done since chart2 currently does not want to
+    // get notified about new rows/cols.
 
     _CpyTabFrms aTabFrmArr;
     _CpyPara aCpyPara( pTblNd, nCnt, aTabFrmArr );
@@ -619,7 +629,10 @@ BOOL SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 
     //Layout updaten
     aFndBox.MakeFrms( *this );
-    aFndBox.RestoreChartData( *this );
+
+    // TL_CHART2: need to inform chart of probably changed cell names
+    pDoc->UpdateCharts( GetFrmFmt()->GetName() );
+
     CHECKBOXWIDTH
     CHECKTABLELAYOUT
     return TRUE;
@@ -667,7 +680,8 @@ BOOL SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         aFndBox.SetTableLines( *this );
         if( pFndBox != &aFndBox )
             aFndBox.DelFrms( *this );
-        aFndBox.SaveChartData( *this );
+        // TL_CHART2: nothing to be done since chart2 currently does not want to
+        // get notified about new rows/cols.
     }
 
     _CpyTabFrms aTabFrmArr;
@@ -709,8 +723,10 @@ BOOL SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
             aFndBox.MakeFrms( *this );
         else
             aFndBox.MakeNewFrms( *this, nCnt, bBehind );
-        aFndBox.RestoreChartData( *this );
     }
+    // TL_CHART2: need to inform chart of probably changed cell names
+    pDoc->UpdateCharts( GetFrmFmt()->GetName() );
+
     CHECKBOXWIDTH
     CHECKTABLELAYOUT
 
@@ -779,7 +795,8 @@ BOOL SwTable::AppendRow( SwDoc* pDoc, USHORT nCnt )
     if( bLayout )
     {
         aFndBox.SetTableLines( *this );
-        aFndBox.SaveChartData( *this );
+        // TL_CHART2: nothing to be done since chart2 currently does not want to
+        // get notified about new rows/cols.
     }
 
     _CpyTabFrms aTabFrmArr;
@@ -801,8 +818,10 @@ BOOL SwTable::AppendRow( SwDoc* pDoc, USHORT nCnt )
     if ( bLayout )
     {
         aFndBox.MakeNewFrms( *this, nCnt, TRUE );
-        aFndBox.RestoreChartData( *this );
     }
+    // TL_CHART2: need to inform chart of probably changed cell names
+    pDoc->UpdateCharts( GetFrmFmt()->GetName() );
+
     CHECKBOXWIDTH
     CHECKTABLELAYOUT
 
@@ -1115,9 +1134,10 @@ BOOL SwTable::DeleteSel( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     const BOOL bDelMakeFrms, const BOOL bCorrBorder )
 {
     ASSERT( pDoc, "No doc?" );
+    SwTableNode* pTblNd = 0;
     if( rBoxes.Count() )
     {
-        SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+        pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
         if( !pTblNd )
             return FALSE;
     }
@@ -1134,7 +1154,6 @@ BOOL SwTable::DeleteSel( SwDoc* pDoc, const SwSelBoxes& rBoxes,
             aFndBox.SetTableLines( rBoxes, *this );
         aFndBox.DelFrms( *this );
     }
-    aFndBox.SaveChartData( *this );
 
     SwShareBoxFmts aShareFmts;
 
@@ -1150,15 +1169,31 @@ BOOL SwTable::DeleteSel( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 
     PrepareDelBoxes( rBoxes );
 
+    SwChartDataProvider *pPCD = pDoc->GetChartDataProvider();
+    //
+    // delete boxes from last to first
     for( USHORT n = 0; n < rBoxes.Count(); ++n )
-        _DeleteBox( *this, rBoxes[n], pUndo, TRUE, bCorrBorder, &aShareFmts );
+    {
+        USHORT nIdx = rBoxes.Count() - 1 - n;
+
+        // first adapt the data-sequence for chart if necessary
+        // (needed to move the implementation cursor properly to it's new
+        // position which can't be done properly if the cell is already gone)
+        if (pPCD && pTblNd)
+            pPCD->DeleteBox( &pTblNd->GetTable(), *rBoxes[nIdx] );
+
+        // ... then delete the boxes
+        _DeleteBox( *this, rBoxes[nIdx], pUndo, TRUE, bCorrBorder, &aShareFmts );
+    }
 
     // dann raeume die Struktur aller Lines auf
     GCLines();
 
     if( bDelMakeFrms && aFndBox.AreLinesToRestore( *this ) )
         aFndBox.MakeFrms( *this );
-    aFndBox.RestoreChartData( *this );
+
+    // TL_CHART2: now inform chart that sth has changed
+    pDoc->UpdateCharts( GetFrmFmt()->GetName() );
 
     CHECKTABLELAYOUT
     CHECK_TABLE( *this )
@@ -1176,6 +1211,11 @@ BOOL SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt,
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
         return FALSE;
+
+    // TL_CHART2: splitting/merging of a number of cells or rows will usually make
+    // the table to complex to be handled with chart.
+    // Thus we tell the charts to use their own data provider and forget about this table
+    pDoc->CreateChartInternalDataProviders( this );
 
     SetHTMLTableLayout( 0 );    // MIB 9.7.97: HTML-Layout loeschen
 
@@ -1199,7 +1239,6 @@ BOOL SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt,
     _FndBox aFndBox( 0, 0 );
     aFndBox.SetTableLines( rBoxes, *this );
     aFndBox.DelFrms( *this );
-    aFndBox.SaveChartData( *this );
 
     for( USHORT n = 0; n < rBoxes.Count(); ++n )
     {
@@ -1303,7 +1342,7 @@ BOOL SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt,
     GCLines();
 
     aFndBox.MakeFrms( *this );
-    aFndBox.RestoreChartData( *this );
+
     CHECKBOXWIDTH
     CHECKTABLELAYOUT
     return TRUE;
@@ -1316,6 +1355,11 @@ BOOL SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt )
     if( !pTblNd )
         return FALSE;
 
+    // TL_CHART2: splitting/merging of a number of cells or rows will usually make
+    // the table to complex to be handled with chart.
+    // Thus we tell the charts to use their own data provider and forget about this table
+    pDoc->CreateChartInternalDataProviders( this );
+
     SetHTMLTableLayout( 0 );    // MIB 9.7.97: HTML-Layout loeschen
     SwSelBoxes aSelBoxes;
     aSelBoxes.Insert(rBoxes.GetData(), rBoxes.Count());
@@ -1325,7 +1369,6 @@ BOOL SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt )
     _FndBox aFndBox( 0, 0 );
     aFndBox.SetTableLines( aSelBoxes, *this );
     aFndBox.DelFrms( *this );
-    aFndBox.SaveChartData( *this );
 
     _CpyTabFrms aFrmArr;
     SvPtrarr aLastBoxArr;
@@ -1409,7 +1452,7 @@ BOOL SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt )
 
     //Layout updaten
     aFndBox.MakeFrms( *this );
-    aFndBox.RestoreChartData( *this );
+
     CHECKBOXWIDTH
     CHECKTABLELAYOUT
     return TRUE;
@@ -1768,6 +1811,11 @@ BOOL SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     if( !aFndBox.GetLines().Count() )
         return FALSE;
 
+    // TL_CHART2: splitting/merging of a number of cells or rows will usually make
+    // the table to complex to be handled with chart.
+    // Thus we tell the charts to use their own data provider and forget about this table
+    pDoc->CreateChartInternalDataProviders( this );
+
     SetHTMLTableLayout( 0 );    // MIB 9.7.97: HTML-Layout loeschen
 
     if( pUndo )
@@ -1776,7 +1824,6 @@ BOOL SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     //Lines fuer das Layout-Update herausuchen.
     aFndBox.SetTableLines( *this );
     aFndBox.DelFrms( *this );
-    aFndBox.SaveChartData( *this );
 
     _FndBox* pFndBox = &aFndBox;
     while( 1 == pFndBox->GetLines().Count() &&
@@ -1850,7 +1897,7 @@ BOOL SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     GetTabLines()[0]->GetTabBoxes().ForEach( &lcl_BoxSetHeadCondColl, 0 );
 
     aFndBox.MakeFrms( *this );
-    aFndBox.RestoreChartData( *this );
+
     CHECKBOXWIDTH
     CHECKTABLELAYOUT
 
@@ -3557,7 +3604,10 @@ _FndBox* lcl_SaveInsDelData( CR_SetBoxWidth& rParam, SwUndo** ppUndo,
 
     //Lines fuer das Layout-Update herausuchen.
     pFndBox->DelFrms( rTbl );
-    pFndBox->SaveChartData( rTbl );
+
+    // TL_CHART2: this function gest called from SetColWidth exclusively,
+    // thus it is currently speculated that nothing needs to be done here.
+    // Note: that SetColWidth is currently not completely understood though :-(
 
     return pFndBox;
 }
@@ -4031,7 +4081,11 @@ BOOL SwTable::SetColWidth( SwTableBox& rAktBox, USHORT eType,
         //Layout updaten
         if( !bBigger || pFndBox->AreLinesToRestore( *this ) )
             pFndBox->MakeFrms( *this );
-        pFndBox->RestoreChartData( *this );
+
+        // TL_CHART2: it is currently unclear if sth has to be done here.
+        // The function name hints that nothing needs to be done, on the other
+        // hand there is a case where sth gets deleted.  :-(
+
         delete pFndBox;
 
         if( ppUndo && *ppUndo )
@@ -4084,7 +4138,8 @@ _FndBox* lcl_SaveInsDelData( CR_SetLineHeight& rParam, SwUndo** ppUndo,
 
     //Lines fuer das Layout-Update heraussuchen.
     pFndBox->DelFrms( rTbl );
-    pFndBox->SaveChartData( rTbl );
+
+    // TL_CHART2: it is currently unclear if sth has to be done here.
 
     return pFndBox;
 }
@@ -4530,7 +4585,9 @@ BOOL SwTable::SetRowHeight( SwTableBox& rAktBox, USHORT eType,
         //Layout updaten
         if( bBigger || pFndBox->AreLinesToRestore( *this ) )
             pFndBox->MakeFrms( *this );
-        pFndBox->RestoreChartData( *this );
+
+        // TL_CHART2: it is currently unclear if sth has to be done here.
+
         delete pFndBox;
 
         if( ppUndo && *ppUndo )
