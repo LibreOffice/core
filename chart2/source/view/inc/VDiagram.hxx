@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VDiagram.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:45:35 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:21:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,10 @@
 #include "ShapeFactory.hxx"
 #endif
 
+#ifndef _BGFX_RANGE_B2IRECTANGLE_HXX
+#include <basegfx/range/b2irectangle.hxx>
+#endif
+
 //.............................................................................
 namespace chart
 {
@@ -68,8 +72,9 @@ class VDiagram
 {
 public: //methods
     VDiagram( const ::com::sun::star::uno::Reference<
-                  ::com::sun::star::chart2::XDiagram > & xDiagram,
-              sal_Int32 nDimension=3, sal_Bool bPolar=sal_False);
+                  ::com::sun::star::chart2::XDiagram > & xDiagram
+                , const ::com::sun::star::drawing::Direction3D& rPreferredAspectRatio
+                , sal_Int32 nDimension=3, sal_Bool bPolar=sal_False );
     virtual ~VDiagram();
 
     void SAL_CALL init( const ::com::sun::star::uno::Reference<
@@ -84,14 +89,28 @@ public: //methods
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
             getCoordinateRegion();
 
+    ::basegfx::B2IRectangle    getCurrentRectangle();
+
+    void    reduceToMimimumSize();
+
+    ::basegfx::B2IRectangle    adjustPosAndSize( const ::com::sun::star::awt::Point& rPos
+                                    , const ::com::sun::star::awt::Size& rAvailableSize );
+
+    ::basegfx::B2IRectangle    adjustInnerSize( const ::basegfx::B2IRectangle& rConsumedOuterRect );
+
     //    updateShapes(..);
     // const awt::Point& rPos, const awt::Size& rSize );
 
 private: //methods
-    void    createShapes_2d( const ::com::sun::star::awt::Point& rPos
-                        , const ::com::sun::star::awt::Size& rSize );
-    void    createShapes_3d( const ::com::sun::star::awt::Point& rPos
-                        , const ::com::sun::star::awt::Size& rSize );
+    void    createShapes_2d();
+    void    createShapes_3d();
+
+    ::basegfx::B2IRectangle    adjustPosAndSize_2d( const ::com::sun::star::awt::Point& rPos
+                        , const ::com::sun::star::awt::Size& rAvailableSize );
+    ::basegfx::B2IRectangle    adjustPosAndSize_3d( const ::com::sun::star::awt::Point& rPos
+                        , const ::com::sun::star::awt::Size& rAvailableSize );
+
+    void    adjustAspectRatio3d( const ::com::sun::star::awt::Size& rAvailableSize );
 
 private: //members
     VDiagram(const VDiagram& rD);
@@ -108,11 +127,25 @@ private: //members
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   m_xOuterGroupShape;
     // this is an additional inner shape that represents the coordinate region -  that is - where to place data points
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   m_xCoordinateRegionShape;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   m_xWall2D;
 
-    sal_Int32                                                               m_nDimension;
+    sal_Int32                                                               m_nDimensionCount;
     sal_Bool                                                                m_bPolar;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDiagram >                        m_xDiagram;
+        ::com::sun::star::chart2::XDiagram >                                m_xDiagram;
+
+    ::com::sun::star::drawing::Direction3D                                  m_aPreferredAspectRatio;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xAspectRatio3D;
+
+    double m_fXAnglePi;
+    double m_fYAnglePi;
+    double m_fZAnglePi;
+
+    ::com::sun::star::awt::Point    m_aAvailablePosIncludingAxes;
+    ::com::sun::star::awt::Size     m_aAvailableSizeIncludingAxes;
+
+    ::com::sun::star::awt::Point    m_aCurrentPosWithoutAxes;
+    ::com::sun::star::awt::Size     m_aCurrentSizeWithoutAxes;
 };
 
 //.............................................................................
