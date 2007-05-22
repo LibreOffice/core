@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:33:12 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:39:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -633,10 +633,10 @@
 #define SID_OPENDLG_FUNCTION        (SC_MESSAGE_START + 52)
 #define SID_OPENDLG_SOLVE           (SC_MESSAGE_START + 53)
 #define SID_OPENDLG_TABOP           (SC_MESSAGE_START + 54)
-#define SID_OPENDLG_CHART           (SC_MESSAGE_START + 55)
+//#define SID_OPENDLG_CHART         (SC_MESSAGE_START + 55)
 #define SID_OPENDLG_EDITFUNCTION    (SC_MESSAGE_START + 56)
 #define SID_OPENDLG_ARGUMENT        (SC_MESSAGE_START + 57)
-#define SID_OPENDLG_MODCHART        (SC_MESSAGE_START + 58)
+//#define SID_OPENDLG_MODCHART      (SC_MESSAGE_START + 58)
 #define SID_OPENDLG_CONDFRMT        (SC_MESSAGE_START + 59)
 
 #define SC_HINT_NAVIGATOR_UPDATEALL  (SC_MESSAGE_START + 65)
@@ -1500,7 +1500,7 @@
 
 #define RID_SCDLG_CHAR                  (SC_DIALOGS_START + 76)
 #define RID_SCDLG_PARAGRAPH             (SC_DIALOGS_START + 77)
-#define RID_SCDLG_CHARTRANGE            (SC_DIALOGS_START + 78)
+//#define RID_SCDLG_CHARTRANGE          (SC_DIALOGS_START + 78)
 
 #define RID_SCPAGE_STAT                 (SC_DIALOGS_START + 79)
 #define RID_SCDLG_CHARTCOLROW           (SC_DIALOGS_START + 80)
