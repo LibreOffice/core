@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 11:00:45 $
+#   last change: $Author: vg $ $Date: 2007-05-22 16:39:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,9 @@ LIBTARGET=no
 .INCLUDE :  $(PRJ)$/inc$/sw.mk
 
 # --- Files --------------------------------------------------------
+
+EXCEPTIONSFILES=   \
+        $(SLO)$/chartins.obj\
 
 SRS1NAME=$(TARGET)
 SRC1FILES =  \
