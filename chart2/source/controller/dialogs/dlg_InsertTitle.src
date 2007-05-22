@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertTitle.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 16:00:33 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:36:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
  ************************************************************************/
 
 #include "dlg_InsertTitle.hrc"
+#include "res_Titles.src"
 #include "SchSlotIds.hxx"
 #include "CommonResources.hrc"
 
@@ -43,106 +44,8 @@ ModalDialog DLG_TITLE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 240 , 88 ) ;
-    Text [ en-US ] = "Titles" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
     BUTTONS_OK_CANCEL_HELP_STACKED(184)
-    Edit EDT_MAINTITLE
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 78 , 6  ) ;
-        Size = MAP_APPFONT ( 100 , 12 ) ;
-        TabStop = TRUE ;
-    };
-    Edit EDT_SUBTITLE
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 78 , 22  ) ;
-        Size = MAP_APPFONT ( 100 , 12 ) ;
-        TabStop = TRUE ;
-    };
-    Edit EDT_X_AXIS
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 78 , 38  ) ;
-        Size = MAP_APPFONT ( 100 , 12 ) ;
-        TabStop = TRUE ;
-    };
-    Edit EDT_Y_AXIS
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 78 , 54  ) ;
-        Size = MAP_APPFONT ( 100 , 12 ) ;
-        TabStop = TRUE ;
-    };
-    Edit EDT_Z_AXIS
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 78 , 70  ) ;
-        Size = MAP_APPFONT ( 100 , 12 ) ;
-        TabStop = TRUE ;
-    };
-    CheckBox CBX_MAINTITLE
-    {
-        Pos = MAP_APPFONT ( 6 , 6  ) ;
-        Size = MAP_APPFONT ( 68 , 12 ) ;
-        Text [ en-US ] = "~Main Title" ;
-        TabStop = TRUE ;
-    };
-    CheckBox CBX_SUBTITLE
-    {
-        Pos = MAP_APPFONT ( 6 , 22  ) ;
-        Size = MAP_APPFONT ( 68 , 12 ) ;
-        Text [ en-US ] = "~Subtitle" ;
-        TabStop = TRUE ;
-    };
-    CheckBox CBX_TITLE_X_AXIS
-    {
-        Pos = MAP_APPFONT ( 6 , 38  ) ;
-        Size = MAP_APPFONT ( 68 , 12 ) ;
-        Text [ en-US ] = "~X axis" ;
-        TabStop = TRUE ;
-    };
-    CheckBox CBX_TITLE_Y_AXIS
-    {
-        Pos = MAP_APPFONT ( 6 , 54  ) ;
-        Size = MAP_APPFONT ( 68 , 12 ) ;
-        Text [ en-US ] = "~Y axis" ;
-        TabStop = TRUE ;
-    };
-    CheckBox CBX_TITLE_Z_AXIS
-    {
-        Pos = MAP_APPFONT ( 6 , 70  ) ;
-        Size = MAP_APPFONT ( 68 , 12 ) ;
-        Text [ en-US ] = "~Z axis" ;
-        TabStop = TRUE ;
-    };
+    TITLES(6,6,100,30)
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
