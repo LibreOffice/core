@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceleratorexecute.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:49:47 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:34:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -390,9 +390,13 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
 //-----------------------------------------------
 css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st_openDocConfig(const css::uno::Reference< css::frame::XModel >& xModel)
 {
-    css::uno::Reference< css::ui::XUIConfigurationManagerSupplier > xUISupplier(xModel, css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::ui::XUIConfigurationManager >         xUIManager = xUISupplier->getUIConfigurationManager();
-    css::uno::Reference< css::ui::XAcceleratorConfiguration >       xAccCfg    (xUIManager->getShortCutManager(), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::ui::XAcceleratorConfiguration >       xAccCfg;
+    css::uno::Reference< css::ui::XUIConfigurationManagerSupplier > xUISupplier(xModel, css::uno::UNO_QUERY);
+    if (xUISupplier.is())
+    {
+        css::uno::Reference< css::ui::XUIConfigurationManager >     xUIManager = xUISupplier->getUIConfigurationManager();
+        xAccCfg.set(xUIManager->getShortCutManager(), css::uno::UNO_QUERY_THROW);
+    }
     return xAccCfg;
 }
 
