@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:51:44 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:10:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -597,7 +597,9 @@ SvXMLImportContext* SfxXMLMetaElementContext::CreateChildContext( sal_uInt16 nPr
 void SfxXMLMetaElementContext::EndElement()
 {
     uno::Reference<beans::XPropertySet> xInfoProp = rParent.GetInfoProp();
-    if ( !xInfoProp.is() )
+    // BM: #i60323# import generator even if xInfoProp is empty (which is the
+    // case for charts). The generator does not depend on xInfoProp
+    if ( !xInfoProp.is() && nElementType != XML_TOK_META_GENERATOR )
         return;
 
     uno::Any aPropAny;
