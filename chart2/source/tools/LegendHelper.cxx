@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LegendHelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:25:08 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:00:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,10 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
 using namespace ::com::sun::star;
 
 //.............................................................................
@@ -57,15 +61,10 @@ namespace chart
 //.............................................................................
 
 // static
-rtl::OUString LegendHelper::getIdentifierForLegend()
-{
-    static rtl::OUString aIdentifier( C2U( "@legend" ) );
-    return aIdentifier;
-}
-
-// static
 uno::Reference< chart2::XLegend > LegendHelper::getLegend(
-    const uno::Reference< frame::XModel >& xModel )
+      const uno::Reference< frame::XModel >& xModel
+    , const uno::Reference< uno::XComponentContext >& xContext
+    , bool bCreate )
 {
     uno::Reference< chart2::XLegend > xResult;
 
@@ -74,43 +73,20 @@ uno::Reference< chart2::XLegend > LegendHelper::getLegend(
     {
         try
         {
-            uno::Reference< chart2::XDiagram > xDia( xChartDoc->getDiagram());
-            if( xDia.is())
-                xResult.set( xDia->getLegend() );
-        }
-        catch( uno::Exception & ex )
-        {
-            ASSERT_EXCEPTION( ex );
-        }
-
-    }
-
-    return xResult;
-}
-
-// static
-void LegendHelper::defaultFillEmptyLegend(
-    const uno::Reference< chart2::XLegend > & xLegend,
-    const uno::Reference< chart2::XDiagram > & xDiagram )
-{
-    if( xLegend.is() &&
-        xDiagram.is() )
-    {
-        try
-        {
-            uno::Reference< chart2::XDataSeriesTreeParent > xRoot( xDiagram->getTree());
-
-            uno::Sequence< uno::Reference< chart2::XDataSeriesTreeNode > > aChildren( xRoot->getChildren());
-            for( sal_Int32 i = 0; i < aChildren.getLength(); ++i )
+            uno::Reference< chart2::XDiagram > xDia( xChartDoc->getFirstDiagram());
+            if( xDia.is() )
             {
-                uno::Reference< lang::XServiceInfo > xInfo( aChildren[ i ], uno::UNO_QUERY );
-                if( xInfo.is() &&
-                    xInfo->supportsService( C2U( "com.sun.star.chart2.ChartTypeGroup" )))
+                xResult.set( xDia->getLegend() );
+                if( bCreate && !xResult.is() && xContext.is() )
                 {
-                    uno::Reference< chart2::XLegendEntry > xEntry( xInfo, uno::UNO_QUERY );
-                    if( xEntry.is())
-                        xLegend->registerEntry( xEntry );
+                    xResult.set( xContext->getServiceManager()->createInstanceWithContext(
+                        C2U( "com.sun.star.chart2.Legend" ), xContext ), uno::UNO_QUERY );
+                    xDia->setLegend( xResult );
                 }
+            }
+            else if(bCreate)
+            {
+                DBG_ERROR("need diagram for creation of legend");
             }
         }
         catch( uno::Exception & ex )
@@ -118,19 +94,22 @@ void LegendHelper::defaultFillEmptyLegend(
             ASSERT_EXCEPTION( ex );
         }
     }
+
+    return xResult;
 }
 
 // static
-void LegendHelper::flushLegend( const uno::Reference< chart2::XLegend > & xLegend )
+bool LegendHelper::hasLegend( const uno::Reference< chart2::XDiagram > & xDiagram )
 {
-    if( xLegend.is())
+    bool bReturn = false;
+    if( xDiagram.is())
     {
-        uno::Sequence< uno::Reference< chart2::XLegendEntry > > aEntries( xLegend->getEntries());
-        for( sal_Int32 i = 0; i < aEntries.getLength(); ++i )
-        {
-            xLegend->revokeEntry( aEntries[ i ] );
-        }
+        uno::Reference< beans::XPropertySet > xLegendProp( xDiagram->getLegend(), uno::UNO_QUERY );
+        if( xLegendProp.is())
+            xLegendProp->getPropertyValue( C2U("Show")) >>= bReturn;
     }
+
+    return bReturn;
 }
 
 //.............................................................................
