@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:01:36 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:41:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,6 +134,7 @@
 #include "dpobject.hxx"
 #include "unoguard.hxx"
 #include "drwlayer.hxx"
+#include "unoreflist.hxx"
 #include "listenercalls.hxx"
 #ifndef SC_EDITUTIL_HXX
 #include "editutil.hxx"    // ScPostIt EditTextObject
@@ -806,6 +807,32 @@ void ScDocument::AddUnoListenerCall( const uno::Reference<util::XModifyListener>
     if ( !pUnoListenerCalls )
         pUnoListenerCalls = new ScUnoListenerCalls;
     pUnoListenerCalls->Add( rListener, rEvent );
+}
+
+void ScDocument::BeginUnoRefUndo()
+{
+    DBG_ASSERT( !pUnoRefUndoList, "BeginUnoRefUndo twice" );
+    delete pUnoRefUndoList;
+
+    pUnoRefUndoList = new ScUnoRefList;
+}
+
+ScUnoRefList* ScDocument::EndUnoRefUndo()
+{
+    ScUnoRefList* pRet = pUnoRefUndoList;
+    pUnoRefUndoList = NULL;
+    return pRet;                // must be deleted by caller!
+}
+
+void ScDocument::AddUnoRefChange( sal_Int64 nId, const ScRangeList& rOldRanges )
+{
+    if ( pUnoRefUndoList )
+        pUnoRefUndoList->Add( nId, rOldRanges );
+}
+
+sal_Int64 ScDocument::GetNewUnoId()
+{
+    return ++nUnoObjectId;
 }
 
 void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
