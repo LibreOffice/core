@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OPropertySet.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:27:51 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:02:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_chart2.hxx"
 #include "OPropertySet.hxx"
 #include "ImplOPropertySet.hxx"
-#include "algohelper.hxx"
+#include "ContainerHelper.hxx"
 
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
@@ -68,17 +68,35 @@ using ::cppu::OWeakObject;
 namespace property
 {
 
-OPropertySet::OPropertySet( ::osl::Mutex & _rMutex ) :
-        OBroadcastHelper( _rMutex ),
+OPropertySet::OPropertySet( ::osl::Mutex & par_rMutex ) :
+        OBroadcastHelper( par_rMutex ),
         // the following causes a warning; there seems to be no way to avoid it
         OPropertySetHelper( static_cast< OBroadcastHelper & >( *this )),
-        m_rMutex( _rMutex ),
+        m_rMutex( par_rMutex ),
         m_pImplProperties( new impl::ImplOPropertySet() )
 {
 }
 
+OPropertySet::OPropertySet( const OPropertySet & rOther, ::osl::Mutex & rMutex ) :
+        OBroadcastHelper( rMutex ),
+        // the following causes a warning; there seems to be no way to avoid it
+        OPropertySetHelper( static_cast< OBroadcastHelper & >( *this )),
+        m_rMutex( rMutex )
+{
+    // /--
+    MutexGuard aGuard( m_rMutex );
+    if( rOther.m_pImplProperties.get())
+        m_pImplProperties.reset( new impl::ImplOPropertySet( * rOther.m_pImplProperties.get()));
+    // \--
+}
+
 OPropertySet::~OPropertySet()
 {}
+
+void OPropertySet::disposePropertySet()
+{
+    m_pImplProperties.reset( 0 );
+}
 
 Any SAL_CALL OPropertySet::queryInterface( const uno::Type& aType )
     throw (uno::RuntimeException)
@@ -145,7 +163,7 @@ Sequence< uno::Type > SAL_CALL
     static Sequence< uno::Type > aTypeList;
 
     // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    MutexGuard aGuard( m_rMutex );
 
     if( aTypeList.getLength() == 0 )
     {
@@ -162,7 +180,7 @@ Sequence< uno::Type > SAL_CALL
         aTypes.push_back( LCL_PROP_CPPUTYPE( XStyleSupplier ));
 //         aTypes.push_back( LCL_PROP_CPPUTYPE( XFastPropertyState ));
 
-        aTypeList = ::chart::helper::VectorToSequence( aTypes );
+        aTypeList = ::chart::ContainerHelper::ContainerToSequence( aTypes );
     }
 
     return aTypeList;
@@ -219,6 +237,7 @@ void SAL_CALL
     cppu::IPropertyArrayHelper & rPH = getInfoHelper();
 
     m_pImplProperties->SetPropertyToDefault( rPH.getHandleByName( PropertyName ));
+    firePropertyChangeEvent();
 }
 
 Any SAL_CALL
@@ -243,6 +262,7 @@ void SAL_CALL
     throw (uno::RuntimeException)
 {
     m_pImplProperties->SetAllPropertiesToDefault();
+    firePropertyChangeEvent();
 }
 
 void SAL_CALL
@@ -291,6 +311,26 @@ sal_Bool SAL_CALL OPropertySet::convertFastPropertyValue
     throw (lang::IllegalArgumentException)
 {
     getFastPropertyValue( rOldValue, nHandle );
+    //accept longs also for short values
+    {
+        sal_Int16 nValue;
+        if( (rOldValue>>=nValue) && !(rValue>>=nValue) )
+        {
+            sal_Int32 n32Value;
+            if( rValue>>=n32Value )
+            {
+                rConvertedValue = uno::makeAny( static_cast<sal_Int16>(n32Value) );
+                return sal_True;
+            }
+
+            sal_Int64 n64Value;
+            if( rValue>>=n64Value )
+            {
+                rConvertedValue = uno::makeAny( static_cast<sal_Int16>(n64Value) );
+                return sal_True;
+            }
+        }
+    }
     rConvertedValue = rValue;
     return sal_True;
 }
@@ -300,6 +340,17 @@ void SAL_CALL OPropertySet::setFastPropertyValue_NoBroadcast
       const Any& rValue )
     throw (uno::Exception)
 {
+#if OSL_DEBUG_LEVEL > 0
+    if( rValue.hasValue())
+    {
+        cppu::IPropertyArrayHelper & rPH = getInfoHelper();
+        OUString aName;
+        rPH.fillPropertyMembersByHandle( &aName, 0, nHandle );
+        OSL_ENSURE( rValue.isExtractableTo( rPH.getPropertyByName( aName ).Type ),
+                    "Property type is wrong" );
+    }
+#endif
+
     m_pImplProperties->SetPropertyValueByHandle( nHandle, rValue );
 }
 
@@ -383,6 +434,11 @@ void SAL_CALL OPropertySet::getFastPropertyValue
     }
 }
 
+void OPropertySet::firePropertyChangeEvent()
+{
+    // nothing in base class
+}
+
 // ____ XStyleSupplier ____
 Reference< style::XStyle > SAL_CALL OPropertySet::getStyle()
     throw (uno::RuntimeException)
@@ -435,6 +491,31 @@ void SAL_CALL OPropertySet::setStyle( const Reference< style::XStyle >& xStyle )
 // {
 //     return GetDefaultValue( nHandle );
 // }
+
+// ____ XMultiPropertySet ____
+void SAL_CALL OPropertySet::setPropertyValues(
+    const Sequence< OUString >& PropertyNames, const Sequence< Any >& Values )
+    throw(beans::PropertyVetoException,
+          lang::IllegalArgumentException,
+          lang::WrappedTargetException,
+          uno::RuntimeException)
+{
+    ::cppu::OPropertySetHelper::setPropertyValues( PropertyNames, Values );
+
+    firePropertyChangeEvent();
+}
+
+// ____ XFastPropertySet ____
+void SAL_CALL OPropertySet::setFastPropertyValue( sal_Int32 nHandle, const Any& rValue )
+    throw(beans::UnknownPropertyException,
+          beans::PropertyVetoException,
+          lang::IllegalArgumentException,
+          lang::WrappedTargetException, uno::RuntimeException)
+{
+    ::cppu::OPropertySetHelper::setFastPropertyValue( nHandle, rValue );
+
+    firePropertyChangeEvent();
+}
 
 
 } //  namespace property
