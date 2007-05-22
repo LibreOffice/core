@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImplOPropertySet.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:29:30 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:59:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ class ImplOPropertySet
 {
 public:
     ImplOPropertySet();
+    explicit ImplOPropertySet( const ImplOPropertySet & rOther );
 
     /** supports states DIRECT_VALUE and DEFAULT_VALUE
      */
@@ -95,6 +96,8 @@ public:
         tPropertyMap;
 
 private:
+    void cloneInterfaceProperties();
+
     tPropertyMap    m_aProperties;
     ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >
         m_xStyle;
