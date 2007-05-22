@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VTitle.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:52:29 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:27:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,17 +59,19 @@ class VTitle
 {
 public:
     VTitle( const ::com::sun::star::uno::Reference<
-                  ::com::sun::star::chart2::XTitle > & xTitle
-                  , double fAdditionalRotationAngleDegree=0.0 ); //the shape will be rotated by the sum of this value and the rotation given by the title model
+                  ::com::sun::star::chart2::XTitle > & xTitle );
     virtual ~VTitle();
 
     void SAL_CALL init( const ::com::sun::star::uno::Reference<
                      ::com::sun::star::drawing::XShapes >& xTargetPage
-             , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory);
+             , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory
+             , const rtl::OUString& rCID );
 
     void    createShapes( const ::com::sun::star::awt::Point& rPos
                           , const ::com::sun::star::awt::Size& rReferenceSize );
 
+    double getRotationAnglePi() const;
+    ::com::sun::star::awt::Size getUnrotatedSize() const;
     ::com::sun::star::awt::Size getFinalSize() const;
     void    changePosition( const ::com::sun::star::awt::Point& rPos );
 
@@ -82,6 +84,7 @@ private:
         ::com::sun::star::chart2::XTitle >                  m_xTitle;
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape >             m_xShape;
+    rtl::OUString   m_aCID;
 
     double      m_fRotationAngleDegree;
     sal_Int32   m_nXPos;
