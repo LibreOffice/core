@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NumberFormatterWrapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:49:15 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:26:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,13 +35,12 @@
 #ifndef _CHART2_VIEW_NUMBERFORMATTERWRAPPER_HXX
 #define _CHART2_VIEW_NUMBERFORMATTERWRAPPER_HXX
 
-#ifndef _COM_SUN_STAR_CHART2_NUMBERFORMAT_HPP_
-#include <com/sun/star/chart2/NumberFormat.hpp>
-#endif
-
-//only needed for temp numberformatter
 #ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #endif
 
 //.............................................................................
@@ -57,34 +56,35 @@ class FixedNumberFormatter;
 class NumberFormatterWrapper
 {
 public:
-    NumberFormatterWrapper();
+    NumberFormatterWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xSupplier );
     virtual ~NumberFormatterWrapper();
 
-    ::com::sun::star::chart2::NumberFormat    getNumberFormatForKey( sal_Int32 nIndex ) const;
-    sal_Int32  getKeyForNumberFormat( const ::com::sun::star::chart2::NumberFormat& rNumberFormat ) const;
-
-    //this method should only be used by the ViewElementListProvider
     SvNumberFormatter* getSvNumberFormatter() const;
+    ::com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >
+                getNumberFormatsSupplier() { return m_xNumberFormatsSupplier; };
+
+    rtl::OUString getFormattedString( sal_Int32 nNumberFormatKey, double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const;
 
 private: //private member
-    SvNumberFormatter* m_pNumberFormatter;
+    ::com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >
+                        m_xNumberFormatsSupplier;
 
-friend class FixedNumberFormatter;
+    SvNumberFormatter* m_pNumberFormatter;
 };
 
 
 class FixedNumberFormatter
 {
 public:
-    FixedNumberFormatter( NumberFormatterWrapper* pNumberFormatterWrapper
-        , const ::com::sun::star::chart2::NumberFormat& rNumberFormat );
+    FixedNumberFormatter( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xSupplier
+        , sal_Int32 nNumberFormatKey );
     virtual ~FixedNumberFormatter();
 
     rtl::OUString getFormattedString( double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const;
 
 private:
-    NumberFormatterWrapper*     m_pNumberFormatterWrapper;
-    ULONG                       m_nFormatIndex;
+    NumberFormatterWrapper      m_aNumberFormatterWrapper;
+    ULONG                       m_nNumberFormatKey;
 };
 
 //.............................................................................
