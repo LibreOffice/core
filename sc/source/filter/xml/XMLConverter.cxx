@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLConverter.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:44:43 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:01:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,110 +83,6 @@ using namespace xmloff::token;
 
 //___________________________________________________________________
 
-void ScXMLConverter::AssignString(
-        OUString& rString,
-        const OUString& rNewStr,
-        sal_Bool bAppendStr )
-{
-    if( bAppendStr )
-    {
-        if( rNewStr.getLength() )
-        {
-            if( rString.getLength() )
-                rString += GetXMLToken( XML_WS );
-            rString += rNewStr;
-        }
-    }
-    else
-        rString = rNewStr;
-}
-
-sal_Int32 ScXMLConverter::IndexOf(
-        const OUString& rString,
-        sal_Unicode cSearchChar,
-        sal_Int32 nOffset,
-        sal_Unicode cQuote )
-{
-    sal_Int32       nLength     = rString.getLength();
-    sal_Int32       nIndex      = nOffset;
-    sal_Bool        bQuoted     = sal_False;
-    sal_Bool        bExitLoop   = sal_False;
-
-    while( !bExitLoop && (nIndex < nLength) )
-    {
-        sal_Unicode cCode = rString[ nIndex ];
-        bExitLoop = (cCode == cSearchChar) && !bQuoted;
-        bQuoted = (bQuoted != (cCode == cQuote));
-        if( !bExitLoop )
-            ++nIndex;
-    }
-    return (nIndex < nLength) ? nIndex : -1;
-}
-
-sal_Int32 ScXMLConverter::IndexOfDifferent(
-        const OUString& rString,
-        sal_Unicode cSearchChar,
-        sal_Int32 nOffset )
-{
-    sal_Int32       nLength     = rString.getLength();
-    sal_Int32       nIndex      = nOffset;
-    sal_Bool        bExitLoop   = sal_False;
-
-    while( !bExitLoop && (nIndex < nLength) )
-    {
-        bExitLoop = (rString[ nIndex ] != cSearchChar);
-        if( !bExitLoop )
-            ++nIndex;
-    }
-    return (nIndex < nLength) ? nIndex : -1;
-}
-
-
-//___________________________________________________________________
-
-void ScXMLConverter::GetTokenByOffset(
-        OUString& rToken,
-        const OUString& rString,
-        sal_Int32& nOffset,
-        sal_Unicode /* cQuote */ )
-{
-    sal_Int32 nLength = rString.getLength();
-    if( nOffset >= nLength )
-    {
-        rToken = OUString();
-        nOffset = -1;
-    }
-    else
-    {
-        sal_Int32 nTokenEnd = IndexOf( rString, ' ', nOffset );
-        if( nTokenEnd < 0 )
-            nTokenEnd = nLength;
-        rToken = rString.copy( nOffset, nTokenEnd - nOffset );
-
-        sal_Int32 nNextBegin = IndexOfDifferent( rString, ' ', nTokenEnd );
-        nOffset = (nNextBegin < 0) ? nLength : nNextBegin;
-    }
-}
-
-sal_Int32 ScXMLConverter::GetTokenCount( const OUString& rString )
-{
-    OUString    sToken;
-    sal_Int32   nCount = 0;
-    sal_Int32   nOffset = 0;
-    while( nOffset >= 0 )
-    {
-        GetTokenByOffset( sToken, rString, nOffset );
-        if( nOffset >= 0 )
-            ++nCount;
-    }
-    return nCount;
-}
-
-void ScXMLConverter::AppendString( OUString& rString, const OUString& rNewStr )
-{
-    AssignString( rString, rNewStr, sal_True );
-}
-
 ScDocument* ScXMLConverter::GetScDocument( uno::Reference< frame::XModel > xModel )
 {
     if (xModel.is())
@@ -199,258 +95,6 @@ ScDocument* ScXMLConverter::GetScDocument( uno::Reference< frame::XModel > xMode
 
 
 //___________________________________________________________________
-
-sal_Bool ScXMLConverter::GetAddressFromString(
-        ScAddress& rAddress,
-        const OUString& rAddressStr,
-        const ScDocument* pDocument,
-        sal_Int32& nOffset )
-{
-    OUString sToken;
-    GetTokenByOffset( sToken, rAddressStr, nOffset );
-    if( nOffset >= 0 )
-        return ((rAddress.Parse( sToken, (ScDocument*) pDocument ) & SCA_VALID) == SCA_VALID);
-    return sal_False;
-}
-
-sal_Bool ScXMLConverter::GetRangeFromString(
-        ScRange& rRange,
-        const OUString& rRangeStr,
-        const ScDocument* pDocument,
-        sal_Int32& nOffset )
-{
-    OUString sToken;
-    sal_Bool bResult(sal_False);
-    GetTokenByOffset( sToken, rRangeStr, nOffset );
-    if( nOffset >= 0 )
-    {
-        sal_Int32 nIndex = IndexOf( sToken, GetXMLToken(XML__COLON)[0], 0 );
-        if( nIndex < 0 )
-        {
-            bResult = ((rRange.aStart.Parse( sToken, (ScDocument*) pDocument ) & SCA_VALID) == SCA_VALID);
-            rRange.aEnd = rRange.aStart;
-        }
-        else
-        {
-            bResult = (((rRange.aStart.Parse( sToken.copy( 0, nIndex ), (ScDocument*) pDocument ) & SCA_VALID) == SCA_VALID) &&
-                        ((rRange.aEnd.Parse( sToken.copy( nIndex + 1 ), (ScDocument*) pDocument ) & SCA_VALID) == SCA_VALID));
-        }
-    }
-    return bResult;
-}
-
-void ScXMLConverter::GetRangeListFromString(
-        ScRangeList& rRangeList,
-        const OUString& rRangeListStr,
-        const ScDocument* pDocument )
-{
-    DBG_ASSERT( rRangeListStr.getLength(), "ScXMLConverter::GetRangeListFromString - empty string!" );
-    sal_Int32 nOffset = 0;
-    while( nOffset >= 0 )
-    {
-        ScRange* pRange = new ScRange;
-        if( GetRangeFromString( *pRange, rRangeListStr, pDocument, nOffset ) && (nOffset >= 0) )
-            rRangeList.Insert( pRange, LIST_APPEND );
-    }
-}
-
-
-//___________________________________________________________________
-
-sal_Bool ScXMLConverter::GetAreaFromString(
-        ScArea& rArea,
-        const OUString& rRangeStr,
-        const ScDocument* pDocument,
-        sal_Int32& nOffset )
-{
-    ScRange aScRange;
-    sal_Bool bResult(sal_False);
-    if( GetRangeFromString( aScRange, rRangeStr, pDocument, nOffset ) && (nOffset >= 0) )
-    {
-        rArea.nTab = aScRange.aStart.Tab();
-        rArea.nColStart = aScRange.aStart.Col();
-        rArea.nRowStart = aScRange.aStart.Row();
-        rArea.nColEnd = aScRange.aEnd.Col();
-        rArea.nRowEnd = aScRange.aEnd.Row();
-        bResult = sal_True;
-    }
-    return bResult;
-}
-
-
-//___________________________________________________________________
-
-sal_Bool ScXMLConverter::GetAddressFromString(
-        table::CellAddress& rAddress,
-        const OUString& rAddressStr,
-        const ScDocument* pDocument,
-        sal_Int32& nOffset )
-{
-    ScAddress aScAddress;
-    sal_Bool bResult(sal_False);
-    if( GetAddressFromString( aScAddress, rAddressStr, pDocument, nOffset ) && (nOffset >= 0) )
-    {
-        ScUnoConversion::FillApiAddress( rAddress, aScAddress );
-        bResult = sal_True;
-    }
-    return bResult;
-}
-
-sal_Bool ScXMLConverter::GetRangeFromString(
-        table::CellRangeAddress& rRange,
-        const OUString& rRangeStr,
-        const ScDocument* pDocument,
-        sal_Int32& nOffset )
-{
-    ScRange aScRange;
-    sal_Bool bResult(sal_False);
-    if( GetRangeFromString( aScRange, rRangeStr, pDocument, nOffset ) && (nOffset >= 0) )
-    {
-        ScUnoConversion::FillApiRange( rRange, aScRange );
-        bResult = sal_True;
-    }
-    return bResult;
-}
-
-void ScXMLConverter::GetRangeListFromString(
-        uno::Sequence< table::CellRangeAddress >& rRangeSeq,
-        const OUString& rRangeListStr,
-        const ScDocument* pDocument )
-{
-    DBG_ASSERT( rRangeListStr.getLength(), "ScXMLConverter::GetRangeListFromString - empty string!" );
-    table::CellRangeAddress aRange;
-    sal_Int32 nOffset = 0;
-    while( nOffset >= 0 )
-    {
-        if( GetRangeFromString( aRange, rRangeListStr, pDocument, nOffset ) && (nOffset >= 0) )
-        {
-            rRangeSeq.realloc( rRangeSeq.getLength() + 1 );
-            rRangeSeq[ rRangeSeq.getLength() - 1 ] = aRange;
-        }
-    }
-}
-
-
-//___________________________________________________________________
-
-void ScXMLConverter::GetStringFromAddress(
-        OUString& rString,
-        const ScAddress& rAddress,
-        const ScDocument* pDocument,
-        sal_Bool bAppendStr,
-        sal_uInt16 nFormatFlags )
-{
-    if (pDocument && pDocument->HasTable(rAddress.Tab()))
-    {
-        String sAddress;
-        rAddress.Format( sAddress, nFormatFlags, (ScDocument*) pDocument );
-        AssignString( rString, sAddress, bAppendStr );
-    }
-}
-
-void ScXMLConverter::GetStringFromRange(
-        OUString& rString,
-        const ScRange& rRange,
-        const ScDocument* pDocument,
-        sal_Bool bAppendStr,
-        sal_uInt16 nFormatFlags )
-{
-    if (pDocument && pDocument->HasTable(rRange.aStart.Tab()))
-    {
-        ScAddress aStartAddress( rRange.aStart );
-        ScAddress aEndAddress( rRange.aEnd );
-        String sStartAddress;
-        String sEndAddress;
-        aStartAddress.Format( sStartAddress, nFormatFlags, (ScDocument*) pDocument,
-                              ScAddress::CONV_OOO );
-        aEndAddress.Format( sEndAddress, nFormatFlags, (ScDocument*) pDocument,
-                            ScAddress::CONV_OOO );
-        OUString sOUStartAddress( sStartAddress );
-        sOUStartAddress += GetXMLToken( XML__COLON );
-        sOUStartAddress += OUString( sEndAddress );
-        AssignString( rString, sOUStartAddress, bAppendStr );
-    }
-}
-
-void ScXMLConverter::GetStringFromRangeList(
-        OUString& rString,
-        const ScRangeList* pRangeList,
-        const ScDocument* pDocument,
-        sal_uInt16 nFormatFlags )
-{
-    OUString sRangeListStr;
-    if( pRangeList )
-    {
-        sal_Int32 nCount = pRangeList->Count();
-        for( sal_Int32 nIndex = 0; nIndex < nCount; ++nIndex )
-        {
-            const ScRange* pRange = pRangeList->GetObject( nIndex );
-            if( pRange )
-                GetStringFromRange( sRangeListStr, *pRange, pDocument, sal_True, nFormatFlags );
-        }
-    }
-    rString = sRangeListStr;
-}
-
-
-//___________________________________________________________________
-
-void ScXMLConverter::GetStringFromArea(
-        OUString& rString,
-        const ScArea& rArea,
-        const ScDocument* pDocument,
-        sal_Bool bAppendStr,
-        sal_uInt16 nFormatFlags )
-{
-    ScRange aRange( rArea.nColStart, rArea.nRowStart, rArea.nTab, rArea.nColEnd, rArea.nRowEnd, rArea.nTab );
-    GetStringFromRange( rString, aRange, pDocument, bAppendStr, nFormatFlags );
-}
-
-
-//___________________________________________________________________
-
-void ScXMLConverter::GetStringFromAddress(
-        OUString& rString,
-        const table::CellAddress& rAddress,
-        const ScDocument* pDocument,
-        sal_Bool bAppendStr,
-        sal_uInt16 nFormatFlags )
-{
-    ScAddress aScAddress( static_cast<SCCOL>(rAddress.Column), static_cast<SCROW>(rAddress.Row), rAddress.Sheet );
-    GetStringFromAddress( rString, aScAddress, pDocument, bAppendStr, nFormatFlags );
-}
-
-void ScXMLConverter::GetStringFromRange(
-        OUString& rString,
-        const table::CellRangeAddress& rRange,
-        const ScDocument* pDocument,
-        sal_Bool bAppendStr,
-        sal_uInt16 nFormatFlags )
-{
-    ScRange aScRange( static_cast<SCCOL>(rRange.StartColumn), static_cast<SCROW>(rRange.StartRow), rRange.Sheet,
-        static_cast<SCCOL>(rRange.EndColumn), static_cast<SCROW>(rRange.EndRow), rRange.Sheet );
-    GetStringFromRange( rString, aScRange, pDocument, bAppendStr, nFormatFlags );
-}
-
-void ScXMLConverter::GetStringFromRangeList(
-        OUString& rString,
-        const uno::Sequence< table::CellRangeAddress >& rRangeSeq,
-        const ScDocument* pDocument,
-        sal_uInt16 nFormatFlags )
-{
-    OUString sRangeListStr;
-    sal_Int32 nCount = rRangeSeq.getLength();
-    for( sal_Int32 nIndex = 0; nIndex < nCount; ++nIndex )
-    {
-        const table::CellRangeAddress& rRange = rRangeSeq[ nIndex ];
-        GetStringFromRange( sRangeListStr, rRange, pDocument, sal_True, nFormatFlags );
-    }
-    rString = sRangeListStr;
-}
-
-
-//___________________________________________________________________
-
 sheet::GeneralFunction ScXMLConverter::GetFunctionFromString( const OUString& sFunction )
 {
     if( IsXMLToken(sFunction, XML_SUM ) )
@@ -536,7 +180,7 @@ void ScXMLConverter::GetStringFromFunction(
             // added to avoid warnings
         }
     }
-    AssignString( rString, sFuncStr, bAppendStr );
+    ScRangeStringConverter::AssignString( rString, sFuncStr, bAppendStr );
 }
 
 void ScXMLConverter::GetStringFromFunction(
@@ -560,7 +204,7 @@ void ScXMLConverter::GetStringFromFunction(
         case SUBTOTAL_FUNC_VAR:     sFuncStr = GetXMLToken( XML_VAR );          break;
         case SUBTOTAL_FUNC_VARP:    sFuncStr = GetXMLToken( XML_VARP );         break;
     }
-    AssignString( rString, sFuncStr, bAppendStr );
+    ScRangeStringConverter::AssignString( rString, sFuncStr, bAppendStr );
 }
 
 
@@ -611,7 +255,7 @@ void ScXMLConverter::GetStringFromOrientation(
             // added to avoid warnings
         }
     }
-    AssignString( rString, sOrientStr, bAppendStr );
+    ScRangeStringConverter::AssignString( rString, sOrientStr, bAppendStr );
 }
 
 
@@ -670,7 +314,7 @@ void ScXMLConverter::GetStringFromDetObjType(
             // added to avoid warnings
         }
     }
-    AssignString( rString, sTypeStr, bAppendStr );
+    ScRangeStringConverter::AssignString( rString, sTypeStr, bAppendStr );
 }
 
 void ScXMLConverter::GetStringFromDetOpType(
@@ -697,7 +341,7 @@ void ScXMLConverter::GetStringFromDetOpType(
             sTypeStr = GetXMLToken( XML_REMOVE_PRECEDENTS );
         break;
     }
-    AssignString( rString, sTypeStr, bAppendStr );
+    ScRangeStringConverter::AssignString( rString, sTypeStr, bAppendStr );
 }
 
 
