@@ -182,7 +182,7 @@
                     <menu:menuitem menu:id=".uno:InsertObjectStarMath"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:StarChartDialog"/>
+            <menu:menuitem menu:id=".uno:InsertObjectChart"/>
             <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame"/>
         </menu:menupopup>
     </menu:menu>
