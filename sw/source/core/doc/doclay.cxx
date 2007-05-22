@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:55:46 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:24:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1969,9 +1969,6 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
             UpdateExpFlds( 0, sal_False );      // Expression-Felder Updaten
             UpdateTblFlds(NULL);                // Tabellen
             UpdateRefFlds(NULL);                // Referenzen
-
-            if( AUTOUPD_FIELD_AND_CHARTS == nFldUpdFlag )
-                aChartTimer.Start();
 
             GetRootFrm()->EndAllAction();
 
