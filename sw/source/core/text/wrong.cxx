@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrong.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:10:49 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:32:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -432,7 +432,7 @@ void SwWrongList::Remove(USHORT nIdx, USHORT nLen )
     }
 
 #if OSL_DEBUG_LEVEL > 1
-    const nOldSize = Count();
+    const ULONG nOldSize = Count();
 #endif
 
     maList.erase(i1, i2);
