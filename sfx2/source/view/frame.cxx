@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-26 16:00:59 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:18:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1534,7 +1534,7 @@ void SfxFrame::Resize()
             {
                 uno::Reference < lang::XUnoTunnel > xObj( pClient->GetObject()->getComponent(), uno::UNO_QUERY );
                 uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
-                sal_Int64 nHandle = xObj->getSomething( aSeq );
+                sal_Int64 nHandle = (xObj.is()? xObj->getSomething( aSeq ): 0);
                 if ( nHandle )
                 {
                     SfxObjectShell* pDoc = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
