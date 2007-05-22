@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LifeTime.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:42:04 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:18:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,10 +129,9 @@ public:
     sal_Bool    impl_isDisposedOrClosed();
     sal_Bool    g_close_startTryClose(sal_Bool bDeliverOwnership)
                     throw ( ::com::sun::star::uno::Exception );
-    sal_Bool    g_close_isNeedToCancelLongLastingCalls( sal_Bool bDeliverOwnership, ::com::sun::star::uno::Exception& ex )
-                    throw ( ::com::sun::star::uno::Exception );
-    void        g_close_endTryClose(sal_Bool bDeliverOwnership, sal_Bool bMyVeto, ::com::sun::star::uno::Exception& ex)
-                    throw ( ::com::sun::star::uno::Exception );
+    sal_Bool    g_close_isNeedToCancelLongLastingCalls( sal_Bool bDeliverOwnership, ::com::sun::star::util::CloseVetoException& ex )
+                    throw ( ::com::sun::star::util::CloseVetoException );
+    void        g_close_endTryClose(sal_Bool bDeliverOwnership, sal_Bool bMyVeto );
     void        g_close_endTryClose_doClose();
     sal_Bool    g_addCloseListener( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::util::XCloseListener > & xListener )
@@ -178,7 +177,7 @@ if it should do so.
 
     //mutex is acquired; call is not registered
 
-    if(!aGuard.startApiCall())
+    if(!aLifeTimeGuard.startApiCall())
         return ; //behave as passive as possible, if disposed or closed
 
     //mutex is acquired, call is registered
