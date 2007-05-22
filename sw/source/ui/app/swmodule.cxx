@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:14:30 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:37:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -595,7 +595,6 @@ void SwDLL::RegisterControls()
     SwFldDlgWrapper::RegisterChildWindow( sal_False, pMod );
     SwFldDataOnlyDlgWrapper::RegisterChildWindow( sal_False, pMod );
     SvxContourDlgChildWindow::RegisterChildWindow( sal_False, pMod );
-    SwInsertChartChild::RegisterChildWindow( sal_False, pMod );
     SwNavigationChild::RegisterChildWindowContext( pMod );
     SwInputChild::RegisterChildWindow( sal_False, pMod, SFX_CHILDWIN_FORCEDOCK );
     SwRedlineAcceptChild::RegisterChildWindow( sal_False, pMod );
