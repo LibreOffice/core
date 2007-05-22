@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLConsolidationContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:44:30 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:01:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@ ScXMLConsolidationContext::ScXMLConsolidationContext(
             case XML_TOK_CONSOLIDATION_ATTR_TARGET_ADDRESS:
                 {
                     sal_Int32 nOffset(0);
-                    bTargetAddr = ScXMLConverter::GetAddressFromString(
+                    bTargetAddr = ScRangeStringConverter::GetAddressFromString(
                         aTargetAddr, sValue, GetScImport().GetDocument(), nOffset );
                 }
                 break;
@@ -142,7 +142,7 @@ void ScXMLConsolidationContext::EndElement()
         aConsParam.eFunction = eFunction;
 
         sal_Bool bError = sal_False;
-        USHORT nCount = (USHORT) Min( ScXMLConverter::GetTokenCount( sSourceList ), (sal_Int32)0xFFFF );
+        USHORT nCount = (USHORT) Min( ScRangeStringConverter::GetTokenCount( sSourceList ), (sal_Int32)0xFFFF );
         ScArea** ppAreas = nCount ? new ScArea*[ nCount ] : NULL;
         if( ppAreas )
         {
@@ -151,7 +151,7 @@ void ScXMLConsolidationContext::EndElement()
             for( nIndex = 0; nIndex < nCount; ++nIndex )
             {
                 ppAreas[ nIndex ] = new ScArea;
-                if ( !ScXMLConverter::GetAreaFromString(
+                if ( !ScRangeStringConverter::GetAreaFromString(
                     *ppAreas[ nIndex ], sSourceList, GetScImport().GetDocument(), nOffset ) )
                 {
                     bError = sal_True;      //! handle error
