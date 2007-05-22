@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_LegendPosition.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:32:27 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:45:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,34 +36,26 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include "tp_LegendPosition.hxx"
-
 #include "ResId.hxx"
 #include "TabPages.hrc"
-#include "SchSfxItemIds.hxx"
+#include "res_LegendPosition.hxx"
+#include "chartview/ChartSfxItemIds.hxx"
+#include "NoWarningThisInCTOR.hxx"
 
-//#include "schattr.hxx"
-#ifndef _SVX_CHRTITEM_HXX //autogen
+#ifndef _SVX_CHRTITEM_HXX
 #include <svx/chrtitem.hxx>
 #endif
-/*
-#include "schresid.hxx"
-#include "chtmodel.hxx"
-#include "attrib.hxx"
-#include "attrib.hrc"
-*/
+
 //.............................................................................
 namespace chart
 {
 //.............................................................................
 
 SchLegendPosTabPage::SchLegendPosTabPage(Window* pWindow,
-                                         const SfxItemSet& rInAttrs) :
-    SfxTabPage(pWindow, SchResId(TP_LEGEND_POS), rInAttrs),
-    aGrpLegend(this, SchResId(GRP_LEGEND)),
-    aRbtLeft(this, SchResId(RBT_LEFT)),
-    aRbtTop(this, SchResId(RBT_TOP)),
-    aRbtBottom(this, SchResId(RBT_BOTTOM)),
-    aRbtRight(this, SchResId(RBT_RIGHT))
+                                         const SfxItemSet& rInAttrs)
+    : SfxTabPage( pWindow, SchResId(TP_LEGEND_POS), rInAttrs )
+    , aGrpLegend( this, SchResId(GRP_LEGEND) )
+    , m_apLegendPositionResources( new LegendPositionResources(this) )
 {
     FreeResource();
 }
@@ -80,53 +72,13 @@ SfxTabPage* SchLegendPosTabPage::Create(Window* pWindow,
 
 BOOL SchLegendPosTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
-    SvxChartLegendPos ePos;
-
-    if (aRbtLeft.IsChecked())
-        ePos = CHLEGEND_LEFT;
-    else if (aRbtTop.IsChecked())
-        ePos = CHLEGEND_TOP;
-    else if (aRbtRight.IsChecked())
-        ePos = CHLEGEND_RIGHT;
-    else if (aRbtBottom.IsChecked())
-        ePos = CHLEGEND_BOTTOM;
-    else
-        ePos = CHLEGEND_NONE;
-
-    rOutAttrs.Put(SvxChartLegendPosItem(ePos, SCHATTR_LEGEND_POS));
-
+    m_apLegendPositionResources->writeToItemSet(rOutAttrs);
     return TRUE;
 }
 
 void SchLegendPosTabPage::Reset(const SfxItemSet& rInAttrs)
 {
-    SvxChartLegendPos ePos = CHLEGEND_NONE;
-
-    const SfxPoolItem* pPoolItem = NULL;
-    if( rInAttrs.GetItemState( SCHATTR_LEGEND_POS,
-                               TRUE, &pPoolItem ) != SFX_ITEM_SET )
-        pPoolItem = &(rInAttrs.GetPool()->GetDefaultItem( SCHATTR_LEGEND_POS ));
-
-    if( pPoolItem )
-        ePos = ((const SvxChartLegendPosItem*)pPoolItem)->GetValue();
-
-    switch( ePos )
-    {
-        case CHLEGEND_LEFT:
-            aRbtLeft.Check(TRUE);
-            break;
-        case CHLEGEND_TOP:
-            aRbtTop.Check(TRUE);
-            break;
-        case CHLEGEND_RIGHT:
-            aRbtRight.Check(TRUE);
-            break;
-        case CHLEGEND_BOTTOM:
-            aRbtBottom.Check(TRUE);
-            break;
-        default:
-            break;
-    }
+    m_apLegendPositionResources->initFromItemSet(rInAttrs);
 }
 
 //.............................................................................
