@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 12:11:28 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:44:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -510,7 +510,7 @@ void ExcDocument::ReadDoc( void )
 
 void ExcDocument::Write( SvStream& rSvStrm )
 {
-    if( !maTableList.Empty() )
+    if( !maTableList.IsEmpty() )
     {
         InitializeSave();
 
@@ -521,10 +521,10 @@ void ExcDocument::Write( SvStream& rSvStrm )
 
         aHeader.Write( aXclStrm );
 
-        DBG_ASSERT( maTableList.Size() == maBoundsheetList.Size(),
+        DBG_ASSERT( maTableList.GetSize() == maBoundsheetList.GetSize(),
             "ExcDocument::Write - different number of sheets and BOUNDSHEET records" );
 
-        for( size_t nTab = 0, nTabCount = maTableList.Size(); nTab < nTabCount; ++nTab )
+        for( size_t nTab = 0, nTabCount = maTableList.GetSize(); nTab < nTabCount; ++nTab )
         {
             // set current stream position in BOUNDSHEET record
             ExcBoundsheetRef xBoundsheet = maBoundsheetList.GetRecord( nTab );
@@ -535,7 +535,7 @@ void ExcDocument::Write( SvStream& rSvStrm )
         }
 
         // write the table stream positions into the BOUNDSHEET records
-        for( size_t nBSheet = 0, nBSheetCount = maBoundsheetList.Size(); nBSheet < nBSheetCount; ++nBSheet )
+        for( size_t nBSheet = 0, nBSheetCount = maBoundsheetList.GetSize(); nBSheet < nBSheetCount; ++nBSheet )
             maBoundsheetList.GetRecord( nBSheet )->UpdateStreamPos( aXclStrm );
     }
     if( pExpChangeTrack )
