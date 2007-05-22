@@ -1,0 +1,7 @@
+LIBRARY sampleaddin
+DESCRIPTION 'Sample Chart AddIn'
+HEAPSIZE 0
+EXPORTS
+component_getImplementationEnvironment
+component_writeInfo
+component_getFactory
