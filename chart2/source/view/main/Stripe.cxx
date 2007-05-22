@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Stripe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:36:32 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:25:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,18 @@ Stripe::Stripe( const drawing::Position3D& rPoint1
             , m_aPoint4(rPoint1+rDirectionToPoint4)
 {
 
+}
+
+Stripe::Stripe( const drawing::Position3D& rPoint1
+        , const drawing::Position3D& rPoint2
+        , double fDepth )
+        : m_aPoint1(rPoint1)
+        , m_aPoint2(rPoint2)
+        , m_aPoint3(rPoint2)
+        , m_aPoint4(rPoint1)
+{
+    m_aPoint3.PositionZ += fDepth;
+    m_aPoint4.PositionZ += fDepth;
 }
 
 drawing::Direction3D Stripe::GetDirectionTo4() const
@@ -142,7 +154,7 @@ drawing::Direction3D Stripe::getNormal() const
     return B3DVectorToDirection3D(aNormal);
 }
 
-uno::Any Stripe::getNormalsPolyPolygonShape3D() const
+uno::Any Stripe::getNormalsPolygon() const
 {
     drawing::PolyPolygonShape3D aPP;
 
@@ -170,6 +182,45 @@ uno::Any Stripe::getNormalsPolyPolygonShape3D() const
         *pInnerSequenceY++ = aNormal.DirectionY;
         *pInnerSequenceZ++ = aNormal.DirectionZ;
     }
+    return uno::Any( &aPP, ::getCppuType((const drawing::PolyPolygonShape3D*)0) );
+}
+
+uno::Any Stripe::getTexturePolygon() const
+{
+    drawing::PolyPolygonShape3D aPP;
+
+    aPP.SequenceX.realloc(1);
+    aPP.SequenceY.realloc(1);
+    aPP.SequenceZ.realloc(1);
+
+    drawing::DoubleSequence* pOuterSequenceX = aPP.SequenceX.getArray();
+    drawing::DoubleSequence* pOuterSequenceY = aPP.SequenceY.getArray();
+    drawing::DoubleSequence* pOuterSequenceZ = aPP.SequenceZ.getArray();
+
+    pOuterSequenceX->realloc(4);
+    pOuterSequenceY->realloc(4);
+    pOuterSequenceZ->realloc(4);
+
+    double* pInnerSequenceX = pOuterSequenceX->getArray();
+    double* pInnerSequenceY = pOuterSequenceY->getArray();
+    double* pInnerSequenceZ = pOuterSequenceZ->getArray();
+
+    *pInnerSequenceX++ = 0.0;
+    *pInnerSequenceY++ = 0.0;
+    *pInnerSequenceZ++ = 0.0;
+
+    *pInnerSequenceX++ = 1.0;
+    *pInnerSequenceY++ = 0.0;
+    *pInnerSequenceZ++ = 0.0;
+
+    *pInnerSequenceX++ = 1.0;
+    *pInnerSequenceY++ = 1.0;
+    *pInnerSequenceZ++ = 0.0;
+
+    *pInnerSequenceX++ = 0.0;
+    *pInnerSequenceY++ = 1.0;
+    *pInnerSequenceZ++ = 0.0;
+
     return uno::Any( &aPP, ::getCppuType((const drawing::PolyPolygonShape3D*)0) );
 }
 
