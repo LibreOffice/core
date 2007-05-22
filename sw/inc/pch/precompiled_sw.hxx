@@ -4,9 +4,9 @@
  *
  *  $RCSfile: precompiled_sw.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:54:19 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:22:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -553,9 +553,6 @@
 #include "rtl/uuid.h"
 
 #include "salhelper/condition.hxx"
-
-#include "sch/memchrt.hxx"
-#include "sch/schdll.hxx"
 
 #include "sfx2/app.hxx"
 #include "sfx2/appuno.hxx"
