@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLTableContext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:07:31 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:07:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,12 @@
 #include "SchXMLImport.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
-#include <com/sun/star/uno/Sequence.h>
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
 #endif
+// #ifndef _COM_SUN_STAR_CHART_CHARTDATAROWSOURCE_HPP_
+// #include <com/sun/star/chart/ChartDataRowSource.hpp>
+// #endif
 
 #include "transporttypes.hxx"
 
@@ -57,6 +60,7 @@ namespace com { namespace sun { namespace star {
     }}
     namespace chart {
         class XChartDocument;
+        class XChartDataArray;
         struct ChartSeriesAddress;
 }}}}
 
@@ -100,17 +104,16 @@ public:
     /// The data for the ChartDocument is applied linearly
     static void applyTableSimple(
         const SchXMLTable& rTable,
-        com::sun::star::uno::Reference< com::sun::star::chart::XChartDocument > xChartDoc );
+        com::sun::star::uno::Reference< com::sun::star::chart::XChartDataArray > xData );
 
     /** The data for the ChartDocument is applied by reading the
         table, the addresses of series, the addresses of labels,
         the cell-range-address for the categories
      */
     static void applyTable( const SchXMLTable& rTable,
-                            com::sun::star::uno::Sequence<
-                                com::sun::star::chart::ChartSeriesAddress >& rSeriesAddresses,
-                            rtl::OUString& rCategoriesAddress,
-                            com::sun::star::uno::Reference< com::sun::star::chart::XChartDocument > xChartDoc );
+                            const tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
+                            com::sun::star::uno::Reference< com::sun::star::chart2::XChartDocument > xChartDoc );
+//    ::com::sun::star::chart::ChartDataRowSource eDataRowSource );
 };
 
 // ========================================
