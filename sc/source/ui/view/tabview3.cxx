@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:02:56 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:13:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,11 +49,10 @@
 #include <svx/brshitem.hxx>
 #include <svx/editview.hxx>
 #include <svx/fmshell.hxx>
+#include <svx/svdoole2.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/cursor.hxx>
-#include <sch/schdll.hxx>       // ChartSelectionInfo
-#include <sch/memchrt.hxx>
 
 #include "tabview.hxx"
 #include "tabvwsh.hxx"
@@ -83,6 +82,36 @@
 #include "seltrans.hxx"
 #include "fillinfo.hxx"
 #include "AccessibilityHints.hxx"
+#include "rangeutl.hxx"
+#include "client.hxx"
+
+#include <com/sun/star/chart2/data/HighlightedRange.hpp>
+
+namespace
+{
+
+ScRange lcl_getSubRangeByIndex( const ScRange& rRange, sal_Int32 nIndex )
+{
+    ScAddress aResult( rRange.aStart );
+
+    SCCOL nWidth = rRange.aEnd.Col() - rRange.aStart.Col() + 1;
+    SCROW nHeight = rRange.aEnd.Row() - rRange.aStart.Row() + 1;
+    SCTAB nDepth = rRange.aEnd.Tab() - rRange.aStart.Tab() + 1;
+    if( (nWidth > 0) && (nHeight > 0) && (nDepth > 0) )
+    {
+        // row by row from first to last sheet
+        sal_Int32 nArea = nWidth * nHeight;
+        aResult.IncCol( static_cast< SCsCOL >( nIndex % nWidth ) );
+        aResult.IncRow( static_cast< SCsROW >( (nIndex % nArea) / nWidth ) );
+        aResult.IncTab( static_cast< SCsTAB >( nIndex / nArea ) );
+        if( !rRange.In( aResult ) )
+            aResult = rRange.aStart;
+    }
+
+    return ScRange( aResult );
+}
+
+} // anonymous namespace
 
 using namespace com::sun::star;
 
@@ -1634,7 +1663,8 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
         // so the handling of notes still has the sheet selected on which the notes are.
         DrawDeselectAll();
 
-        BOOL bRefMode = SC_MOD()->IsFormulaMode();
+        ScModule* pScMod = SC_MOD();
+        BOOL bRefMode = pScMod->IsFormulaMode();
         if ( !bRefMode ) // Abfrage, damit RefMode bei Tabellenwechsel funktioniert
         {
             DoneBlockMode();
@@ -1693,9 +1723,43 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
             rBindings.Invalidate( FID_FILL_TAB );
         }
 
+        bool bUnoRefDialog = pScMod->IsRefDialogOpen() && pScMod->GetCurRefDlgId() == WID_SIMPLE_REF;
+
         TabChanged();                                       // DrawView
         aViewData.GetViewShell()->WindowChanged();          // falls das aktive Fenster anders ist
-        aViewData.GetViewShell()->DisconnectAllClients();   // wichtig fuer Floating Frames
+        if ( !bUnoRefDialog )
+            aViewData.GetViewShell()->DisconnectAllClients();   // important for floating frames
+        else
+        {
+            // hide / show inplace client
+
+            ScClient* pClient = static_cast<ScClient*>(aViewData.GetViewShell()->GetIPClient());
+            if ( pClient && pClient->IsObjectInPlaceActive() )
+            {
+                Rectangle aObjArea = pClient->GetObjArea();
+                if ( nTab == aViewData.GetRefTabNo() )
+                {
+                    // move to its original position
+
+                    SdrOle2Obj* pDrawObj = pClient->GetDrawObj();
+                    if ( pDrawObj )
+                    {
+                        Rectangle aRect = pDrawObj->GetLogicRect();
+                        MapMode aMapMode( MAP_100TH_MM );
+                        Size aOleSize = pDrawObj->GetOrigObjSize( &aMapMode );
+                        aRect.SetSize( aOleSize );
+                        aObjArea = aRect;
+                    }
+                }
+                else
+                {
+                    // move to an invisible position
+
+                    aObjArea.SetPos( Point( 0, -2*aObjArea.GetHeight() ) );
+                }
+                pClient->SetObjArea( aObjArea );
+            }
+        }
 
         if ( bFocus && aViewData.GetActivePart() != eOldActive && !bRefMode )
             ActiveGrabFocus();      // grab focus to the pane that's active now
@@ -1738,8 +1802,6 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
         rBindings.Invalidate( SID_STYLE_FAMILY2 );  // Gestalter
         rBindings.Invalidate( SID_STYLE_FAMILY4 );  // Gestalter
         rBindings.Invalidate( SID_TABLES_COUNT );
-
-        ScModule* pScMod = SC_MOD();
 
         if(pScMod->IsRefDialogOpen())
         {
@@ -2144,7 +2206,6 @@ void ScTabView::AddHighlightRange( const ScRange& rRange, const Color& rColor )
     if (!pHighlightRanges)
         pHighlightRanges = new ScHighlightRanges;
     pHighlightRanges->Insert( new ScHighlightEntry( rRange, rColor ) );
-    //! auf doppelte testen??
 
     SCTAB nTab = aViewData.GetTabNo();
     if ( nTab >= rRange.aStart.Tab() && nTab <= rRange.aEnd.Tab() )
@@ -2176,123 +2237,27 @@ void ScTabView::ClearHighlightRanges()
     }
 }
 
-long ScTabView::DoChartSelection( ChartSelectionInfo &rInfo, const SchMemChart& rMemChart )
+void ScTabView::DoChartSelection(
+    const uno::Sequence< chart2::data::HighlightedRange > & rHilightRanges )
 {
-    long nFlags = rInfo.nSelection;
-    if ( nFlags & CHART_SEL_QUERYSUPPORT )
-        return nFlags & ( CHART_SEL_NONE | CHART_SEL_ALL   | CHART_SEL_COL |
-                          CHART_SEL_ROW  | CHART_SEL_POINT | CHART_SEL_COLOR );
+    ClearHighlightRanges();
 
-    long nRet = 0;
-    ScChartArray aArr( aViewData.GetDocument(), rMemChart );
-    if (aArr.IsValid())
+    for( sal_Int32 i=0; i<rHilightRanges.getLength(); ++i )
     {
-        if ( nFlags & CHART_SEL_NONE )
+        Color aSelColor( rHilightRanges[i].PreferredColor );
+        ScRangeList aRangeList;
+        if( ScRangeStringConverter::GetRangeListFromString(
+                aRangeList, rHilightRanges[i].RangeRepresentation, aViewData.GetDocShell()->GetDocument(), ';' ))
         {
-            ClearHighlightRanges();
-            nRet |= CHART_SEL_NONE;
-        }
-
-        Color aSelColor( COL_LIGHTBLUE );   // Default
-        BOOL bManualColor = ( ( nFlags & CHART_SEL_COLOR ) != 0 );
-        bManualColor = FALSE;                       //! Test !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        if ( bManualColor )
-        {
-            aSelColor = rInfo.aSelectionColor;
-            nRet |= CHART_SEL_COLOR;
-        }
-
-        if ( nFlags & CHART_SEL_ALL )
-        {
-            ScRangeListRef xRanges = aArr.GetRangeList();
-            if (xRanges.Is())
+            for ( ScRangePtr p = aRangeList.First(); p; p = aRangeList.Next())
             {
-                ULONG nCount = xRanges->Count();
-                ULONG i;
-                if (!bManualColor)
-                {
-                    ScBackgroundCollector aColl( aViewData.GetDocument() );
-                    for (i=0; i<nCount; i++)
-                        aColl.AddRange( *xRanges->GetObject(i) );
-                    aSelColor = aColl.GetHighlightColor();
-                }
-                for (i=0; i<nCount; i++)
-                    AddHighlightRange( *xRanges->GetObject(i), aSelColor );
-                nRet |= CHART_SEL_ALL;
-            }
-        }
-
-        if ( nFlags & ( CHART_SEL_COL | CHART_SEL_ROW | CHART_SEL_POINT ) )
-        {
-            //  irgendwelche Teile selektieren -> PositionMap holen
-            const ScChartPositionMap* pPosMap = aArr.GetPositionMap();
-            if (pPosMap)
-            {
-                if ( nFlags & CHART_SEL_COL )
-                {
-                    ScRangeListRef xRanges =
-                        ((ScChartPositionMap*)pPosMap)->GetColRanges(
-                            static_cast<SCSIZE>(rInfo.nCol));
-                    if (xRanges.Is())
-                    {
-                        ULONG nCount = xRanges->Count();
-                        ULONG i;
-                        if (!bManualColor)
-                        {
-                            ScBackgroundCollector aColl( aViewData.GetDocument() );
-                            for (i=0; i<nCount; i++)
-                                aColl.AddRange( *xRanges->GetObject(i) );
-                            aSelColor = aColl.GetHighlightColor();
-                        }
-                        for (i=0; i<nCount; i++)
-                            AddHighlightRange( *xRanges->GetObject(i), aSelColor );
-                        nRet |= CHART_SEL_COL;
-                    }
-                }
-                if ( nFlags & CHART_SEL_ROW )
-                {
-                    ScRangeListRef xRanges =
-                        ((ScChartPositionMap*)pPosMap)->GetRowRanges(
-                            static_cast<SCSIZE>(rInfo.nRow));
-                    if (xRanges.Is())
-                    {
-                        ULONG nCount = xRanges->Count();
-                        ULONG i;
-                        if (!bManualColor)
-                        {
-                            ScBackgroundCollector aColl( aViewData.GetDocument() );
-                            for (i=0; i<nCount; i++)
-                                aColl.AddRange( *xRanges->GetObject(i) );
-                            aSelColor = aColl.GetHighlightColor();
-                        }
-                        for (i=0; i<nCount; i++)
-                            AddHighlightRange( *xRanges->GetObject(i), aSelColor );
-                        nRet |= CHART_SEL_ROW;
-                    }
-                }
-                if ( nFlags & CHART_SEL_POINT )
-                {
-                    const ScAddress* pPos = pPosMap->GetPosition(
-                            static_cast<SCSIZE>(rInfo.nCol),
-                            static_cast<SCSIZE>(rInfo.nRow));
-
-                    if (pPos)
-                    {
-                        if (!bManualColor)
-                        {
-                            ScBackgroundCollector aColl( aViewData.GetDocument() );
-                            aColl.AddRange( ScRange(*pPos) );
-                            aSelColor = aColl.GetHighlightColor();
-                        }
-                        AddHighlightRange( ScRange(*pPos), aSelColor );
-                        nRet |= CHART_SEL_POINT;
-                    }
-                }
+                if( rHilightRanges[i].Index == - 1 )
+                    AddHighlightRange( *p, aSelColor );
+                else
+                    AddHighlightRange( lcl_getSubRangeByIndex( *p, rHilightRanges[i].Index ), aSelColor );
             }
         }
     }
-
-    return nRet;
 }
 
 //  DrawDragRect - Drag&Drop-Rechteck zeichnen (XOR)
@@ -2757,9 +2722,12 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
         pGridWin[eOld]->ShowCursor();
         pGridWin[eWhich]->ShowCursor();
 
+        SfxInPlaceClient* pClient = aViewData.GetViewShell()->GetIPClient();
+        BOOL bOleActive = ( pClient && pClient->IsObjectInPlaceActive() );
+
         //  #103823# don't switch ViewShell's active window during RefInput, because the focus
         //  might change, and subsequent SetReference calls wouldn't find the right EditView
-        if ( !bRefMode )
+        if ( !bRefMode && !bOleActive )
             aViewData.GetViewShell()->SetWindow( pGridWin[eWhich] );
 
         if ( bFocus && !aViewData.IsAnyFillMode() && !bRefMode )
