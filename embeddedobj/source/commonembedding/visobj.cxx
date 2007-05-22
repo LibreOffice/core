@@ -4,9 +4,9 @@
  *
  *  $RCSfile: visobj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mav $ $Date: 2006-10-16 06:20:55 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:35:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,8 @@ void SAL_CALL OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no persistence!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
+    m_bHasCachedSize = sal_False;
+
     if ( m_nObjectState == embed::EmbedStates::LOADED )
         changeState( embed::EmbedStates::RUNNING );
 
@@ -109,6 +111,9 @@ awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+
+    if ( m_bHasCachedSize )
+        return m_aCachedSize;
 
     if ( m_nObjectState == embed::EmbedStates::LOADED )
         changeState( embed::EmbedStates::RUNNING );
@@ -136,6 +141,9 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getMapUnit( sal_Int64 nAspect )
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no persistence!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+
+    if ( m_bHasCachedSize )
+        return m_nMapUnit;
 
     if ( m_nObjectState == embed::EmbedStates::LOADED )
         changeState( embed::EmbedStates::RUNNING );
@@ -178,17 +186,31 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
 
     // TODO: return for the aspect of the document
     embed::VisualRepresentation aVisualRepresentation;
-    uno::Reference< datatransfer::XTransferable > xTransferable( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
-    if ( !xTransferable.is() )
-        throw uno::RuntimeException();
 
-    datatransfer::DataFlavor aDataFlavor(
-            ::rtl::OUString::createFromAscii( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ),
-            ::rtl::OUString::createFromAscii( "GDIMetaFile" ),
-            ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
+    uno::Reference< embed::XVisualObject > xVisualObject( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
+    if( xVisualObject.is())
+    {
+        aVisualRepresentation = xVisualObject->getPreferredVisualRepresentation( nAspect );
+    }
+    else
+    {
+        uno::Reference< datatransfer::XTransferable > xTransferable( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
+        if (!xTransferable.is() )
+            throw uno::RuntimeException();
 
-    aVisualRepresentation.Data = xTransferable->getTransferData( aDataFlavor );
-    aVisualRepresentation.Flavor = aDataFlavor;
+        datatransfer::DataFlavor aDataFlavor(
+                ::rtl::OUString::createFromAscii( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ),
+                ::rtl::OUString::createFromAscii( "GDIMetaFile" ),
+                ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
+
+        if( xTransferable->isDataFlavorSupported( aDataFlavor ))
+        {
+            aVisualRepresentation.Data = xTransferable->getTransferData( aDataFlavor );
+            aVisualRepresentation.Flavor = aDataFlavor;
+        }
+        else
+            throw uno::RuntimeException();
+    }
 
     return aVisualRepresentation;
 }
