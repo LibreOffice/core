@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 13:34:20 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:04:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,9 @@
 #endif*/
 #ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
+#endif
+#ifndef SC_RANGEUTL_HXX
+#include "rangeutl.hxx"
 #endif
 
 #include <xmloff/xmlnmspe.hxx>
@@ -752,7 +755,7 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_CONDITION, sCondition);
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_APPLY_STYLE_NAME, rScXMLExport.EncodeStyleName( sStyleName ));
                                                 OUString sOUBaseAddress;
-                                                ScXMLConverter::GetStringFromAddress( sOUBaseAddress,
+                                                ScRangeStringConverter::GetStringFromAddress( sOUBaseAddress,
                                                     xSheetCondition->getSourcePosition(), rScXMLExport.GetDocument() );
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_BASE_CELL_ADDRESS, sOUBaseAddress);
                                                 SvXMLElementExport aMElem(rScXMLExport, XML_NAMESPACE_STYLE, XML_MAP, sal_True, sal_True);
@@ -805,7 +808,7 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_CONDITION, sCondition);
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_APPLY_STYLE_NAME, rScXMLExport.EncodeStyleName( sStyleName ));
                                                 OUString sOUBaseAddress;
-                                                ScXMLConverter::GetStringFromAddress( sOUBaseAddress,
+                                                ScRangeStringConverter::GetStringFromAddress( sOUBaseAddress,
                                                     xSheetCondition->getSourcePosition(), rScXMLExport.GetDocument() );
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_BASE_CELL_ADDRESS, sOUBaseAddress);
                                                 SvXMLElementExport aMElem(rScXMLExport, XML_NAMESPACE_STYLE, XML_MAP, sal_True, sal_True);
