@@ -4,9 +4,9 @@
  *
  *  $RCSfile: precompiled_chart2.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:30:58 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:12:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,13 +63,13 @@
 #include "com/sun/star/beans/XPropertyChangeListener.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/beans/XPropertyState.hpp"
-#include "com/sun/star/chart2/XDataProvider.hpp"
-#include "com/sun/star/chart2/XDataReceiver.hpp"
-#include "com/sun/star/chart2/XDataSequence.hpp"
-#include "com/sun/star/chart2/XDataSink.hpp"
-#include "com/sun/star/chart2/XDataSource.hpp"
-#include "com/sun/star/chart2/XNumericalDataSequence.hpp"
-#include "com/sun/star/chart2/XTextualDataSequence.hpp"
+#include "com/sun/star/chart2/data/XDataProvider.hpp"
+#include "com/sun/star/chart2/data/XDataReceiver.hpp"
+#include "com/sun/star/chart2/data/XDataSequence.hpp"
+#include "com/sun/star/chart2/data/XDataSink.hpp"
+#include "com/sun/star/chart2/data/XDataSource.hpp"
+#include "com/sun/star/chart2/data/XNumericalDataSequence.hpp"
+#include "com/sun/star/chart2/data/XTextualDataSequence.hpp"
 #include "com/sun/star/container/NoSuchElementException.hpp"
 #include "com/sun/star/container/XContentEnumerationAccess.hpp"
 #include "com/sun/star/container/XEnumeration.hpp"
