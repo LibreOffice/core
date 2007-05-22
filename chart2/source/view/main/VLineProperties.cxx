@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VLineProperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:39:24 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:27:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ void VLineProperties::initFromPropertySet( const uno::Reference< beans::XPropert
             this->LineStyle = xProp->getPropertyValue( C2U( "BorderStyle" ) );
             this->Transparence = xProp->getPropertyValue( C2U( "BorderTransparency" ) );
             this->Width = xProp->getPropertyValue( C2U( "BorderWidth" ) );
-            this->Dash = xProp->getPropertyValue( C2U( "BorderDash" ) );
+            this->DashName = xProp->getPropertyValue( C2U( "BorderDashName" ) );
         }
         catch( uno::Exception& e )
         {
@@ -85,13 +85,34 @@ void VLineProperties::initFromPropertySet( const uno::Reference< beans::XPropert
             this->LineStyle = xProp->getPropertyValue( C2U( "LineStyle" ) );
             this->Transparence = xProp->getPropertyValue( C2U( "LineTransparence" ) );
             this->Width = xProp->getPropertyValue( C2U( "LineWidth" ) );
-            this->Dash = xProp->getPropertyValue( C2U( "LineDash" ) );
+            this->DashName = xProp->getPropertyValue( C2U( "LineDashName" ) );
         }
         catch( uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
     }
+    else
+        this->LineStyle = uno::makeAny( drawing::LineStyle_NONE );
+}
+
+bool VLineProperties::isLineVisible() const
+{
+    bool bRet = false;
+
+    drawing::LineStyle aLineStyle(drawing::LineStyle_SOLID);
+    this->LineStyle >>= aLineStyle;
+    if( aLineStyle != drawing::LineStyle_NONE )
+    {
+        sal_Int16 nLineTransparence=0;
+        this->Transparence >>= nLineTransparence;
+        if(100!=nLineTransparence)
+        {
+            bRet = true;
+        }
+    }
+
+    return bRet;
 }
 
 //.............................................................................
