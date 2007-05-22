@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:52:26 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:20:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -842,7 +842,12 @@ void SdrOle2Obj::Connect_Impl()
 
                 uno::Reference< container::XChild > xChild( xObjRef.GetObject(), uno::UNO_QUERY );
                 if( xChild.is() )
-                    xChild->setParent( pModel->getUnoModel() );
+                {
+                    uno::Reference< uno::XInterface > xParent( pModel->getUnoModel());
+                    if( xParent.is())
+                        xChild->setParent( pModel->getUnoModel() );
+                }
+
             }
         }
         catch( ::com::sun::star::uno::Exception& e )
@@ -1474,6 +1479,7 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
 
                 Connect();
 
+                /* only needed for MSOLE-Objects, now handled inside implementation of Object
                 if ( xObjRef.is() && rOle2Obj.xObjRef.is() && rOle2Obj.GetAspect() != embed::Aspects::MSOLE_ICON )
                 {
                     try
@@ -1495,7 +1501,7 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
                         (void)e;
                         DBG_ERROR( "SdrOle2Obj::operator=(), unexcpected exception caught!" );
                     }
-                }
+                }                                                                            */
             }
         }
     }
@@ -1586,7 +1592,9 @@ void SdrOle2Obj::ImpSetVisAreaSize()
 
                 // make the new object area known to the client
                 // compared to the "else" branch aRect might have been changed by the object and no additional scaling was applied
-                pClient->SetObjArea(aRect);
+                OSL_ASSERT( pClient );
+                if( pClient )
+                    pClient->SetObjArea(aRect);
 
                 // we need a new replacement image as the object has resized itself
                 xObjRef.UpdateReplacement();
