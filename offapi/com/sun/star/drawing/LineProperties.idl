@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LineProperties.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:39:59 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:10:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,12 @@ published service LineProperties
 
     //-------------------------------------------------------------------------
 
+    /** This property contains the name of the dash of the line.
+     */
+    [optional, property] string LineDashName;
+
+    //-------------------------------------------------------------------------
+
     /** This property contains the line color.
      */
     [property] com::sun::star::util::Color LineColor;
@@ -104,10 +110,17 @@ published service LineProperties
 
     //-------------------------------------------------------------------------
 
-    /** This property contains the name of the line starts poly polygon bezier.
-        <p>If this string is empty, no line end polygon is rendered.
-*/
+    /** This property contains the name of the line start poly polygon bezier.
+        <p>If this string is empty, no line start polygon is rendered.
+     */
     [optional, property] string LineStartName;
+
+    //-------------------------------------------------------------------------
+
+    /** This property contains the name of the line end poly polygon bezier.
+        <p>If this string is empty, no line end polygon is rendered.
+     */
+    [optional, property] string LineEndName;
 
     //-------------------------------------------------------------------------
 
