@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeescher.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:43:03 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:46:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
 #endif
@@ -71,6 +74,9 @@
 #ifndef _SVX_UNOAPI_HXX_
 #include <svx/unoapi.hxx>
 #endif
+#ifndef _SVDOOLE2_HXX
+#include <svx/svdoole2.hxx>
+#endif
 
 #ifndef SC_EDITUTIL_HXX
 #include "editutil.hxx"
@@ -84,6 +90,9 @@
 
 #ifndef SC_FAPIHELPER_HXX
 #include "fapihelper.hxx"
+#endif
+#ifndef SC_XECHART_HXX
+#include "xechart.hxx"
 #endif
 #ifndef SC_XEFORMULA_HXX
 #include "xeformula.hxx"
@@ -105,6 +114,8 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::lang::XServiceInfo;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::drawing::XShape;
+using ::com::sun::star::frame::XModel;
+using ::com::sun::star::embed::XEmbeddedObject;
 using ::com::sun::star::awt::XControlModel;
 using ::com::sun::star::form::binding::XBindableValue;
 using ::com::sun::star::form::binding::XValueBinding;
@@ -399,37 +410,12 @@ XclExpTbxControlObj::XclExpTbxControlObj( const XclExpRoot& rRoot, Reference< XS
         pClientTextbox->UpdateStopPos();
 
         sal_uInt16 nXclFont = EXC_FONT_APP;
-        if( aString.getLength() )
+        if( aString.getLength() > 0 )
         {
-            XclExpFontData aFontData;
-            OUString aFontName;
-            float fFloatVal = 0;
-            sal_Int16 nShortVal = 0;
-
-            if( aCtrlProp.GetProperty( aFontName, CREATE_OUSTRING( "FontName" ) ) )
-                aFontData.maName = XclTools::GetXclFontName( aFontName );
-            if( aCtrlProp.GetProperty( fFloatVal, CREATE_OUSTRING( "FontHeight" ) ) )
-                aFontData.SetApiHeight( fFloatVal );
-            if( aCtrlProp.GetProperty( nShortVal, CREATE_OUSTRING( "FontFamily" ) ) )
-                aFontData.SetApiFamily( nShortVal );
-            if( aCtrlProp.GetProperty( nShortVal, CREATE_OUSTRING( "FontCharset" ) ) )
-                aFontData.SetApiFontEncoding( nShortVal );
-            if( aCtrlProp.GetProperty( nShortVal, CREATE_OUSTRING( "FontSlant" ) ) )
-                aFontData.SetApiPosture( static_cast< ::com::sun::star::awt::FontSlant >( nShortVal ) );
-            if( aCtrlProp.GetProperty( fFloatVal, CREATE_OUSTRING( "FontWeight" ) ) )
-                aFontData.SetApiWeight( fFloatVal );
-            if( aCtrlProp.GetProperty( nShortVal, CREATE_OUSTRING( "FontUnderline" ) ) )
-                aFontData.SetApiUnderline( nShortVal );
-            if( aCtrlProp.GetProperty( nShortVal, CREATE_OUSTRING( "FontStrikeout" ) ) )
-                aFontData.SetApiStrikeout( nShortVal );
-
-            if( aFontData.maName.Len() && aFontData.mnHeight )
-            {
-                Color aColor;
-                if( aCtrlProp.GetColorProperty( aColor, CREATE_OUSTRING( "TextColor" ) ) )
-                    aFontData.SetColorId( GetRoot(), aColor );
-                nXclFont = GetFontBuffer().Insert( aFontData );
-            }
+            XclFontData aFontData;
+            GetFontPropSetHelper().ReadFontProperties( aFontData, aCtrlProp, EXC_FONTPROPSET_CONTROL );
+            if( (aFontData.maName.Len() > 0) && (aFontData.mnHeight > 0) )
+                nXclFont = GetFontBuffer().Insert( aFontData, EXC_COLOR_CTRLTEXT );
         }
 
         pTxo = new XclTxo( aString, nXclFont );
@@ -758,6 +744,63 @@ void XclExpTbxControlObj::WriteSbs( XclExpStream& rStrm )
 }
 
 #endif
+
+// ----------------------------------------------------------------------------
+
+XclExpChartObj::XclExpChartObj( const XclExpRoot& rRoot, Reference< XShape > xShape ) :
+    XclObj( rRoot, EXC_OBJ_CMO_CHART ),
+    XclExpRoot( rRoot )
+{
+    // create the MSODRAWING record contents for the chart object
+    XclEscherEx& rEscherEx = *pMsodrawing->GetEscherEx();
+    rEscherEx.OpenContainer( ESCHER_SpContainer );
+    rEscherEx.AddShape( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
+    EscherPropertyContainer aPropOpt;
+    aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x01040104 );
+    aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x00080008 );
+    aPropOpt.AddOpt( ESCHER_Prop_fillColor, 0x0800004E );
+    aPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0x0800004D );
+    aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x00110010 );
+    aPropOpt.AddOpt( ESCHER_Prop_lineColor, 0x0800004D );
+    aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x00080008 );
+    aPropOpt.AddOpt( ESCHER_Prop_fshadowObscured, 0x00020000 );
+    aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x00080000 );
+    aPropOpt.Commit( rEscherEx.GetStream() );
+
+    // client anchor
+    if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( xShape ) )
+        XclExpEscherAnchor( GetRoot(), *pSdrObj ).WriteData( rEscherEx );
+
+    // client data (the following OBJ record)
+    rEscherEx.AddAtom( 0, ESCHER_ClientData );
+    rEscherEx.CloseContainer();  // ESCHER_SpContainer
+    pMsodrawing->UpdateStopPos();
+
+    // load the chart OLE object
+    if( SdrOle2Obj* pSdrOleObj = dynamic_cast< SdrOle2Obj* >( ::GetSdrObjectFromXShape( xShape ) ) )
+        svt::EmbeddedObjectRef::TryRunningState( pSdrOleObj->GetObjRef() );
+
+    // create the chart substream object
+    ScfPropertySet aShapeProp( xShape );
+    Reference< XModel > xModel;
+    aShapeProp.GetProperty( xModel, CREATE_OUSTRING( "Model" ) );
+    ::com::sun::star::awt::Rectangle aBoundRect;
+    aShapeProp.GetProperty( aBoundRect, CREATE_OUSTRING( "BoundRect" ) );
+    Size aSize( aBoundRect.Width, aBoundRect.Height );
+    mxChart.reset( new XclExpChart( rRoot, xModel, aSize ) );
+}
+
+XclExpChartObj::~XclExpChartObj()
+{
+}
+
+void XclExpChartObj::Save( XclExpStream& rStrm )
+{
+    // content of OBJ record
+    XclObj::Save( rStrm );
+    // chart substream
+    mxChart->Save( rStrm );
+}
 
 // ============================================================================
 
