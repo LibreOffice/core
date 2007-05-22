@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_resource_ooo.scp,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-14 09:50:23 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:28:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,7 @@ STD_RES_FILE_PATCH( gid_File_Res_Bib, bib )
 
 STD_RES_FILE( gid_File_Res_Cal, cal )
 
-// BM: #117495# remove chart2 from setup.  I just comment this
-// out, because it will later be re-added
-// STD_RES_FILE( gid_File_Res_Chartcontroller, chartcontroller )
+STD_RES_FILE_PATCH( gid_File_Res_Chartcontroller, chartcontroller )
 
 STD_RES_FILE( gid_File_Res_Dba, dba)
 
@@ -91,8 +89,6 @@ STD_RES_FILE( gid_File_Res_Productregistration, productregistration)
 STD_RES_FILE( gid_File_Res_San, san )
 
 #endif
-
-STD_RES_FILE_PATCH( gid_File_Res_Sch, sch )
 
 //
 // start binfilter #110743#
