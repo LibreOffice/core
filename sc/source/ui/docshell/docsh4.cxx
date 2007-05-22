@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:55:59 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:05:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,6 @@ using namespace ::com::sun::star;
 #include <svx/pageitem.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
-#include <sch/schdll.hxx>
 #ifndef _SVX_FMSHELL_HXX //autogen
 #include <svx/fmshell.hxx>
 #endif
@@ -400,7 +399,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if (pViewSh && bValid && aChartName.Len() != 0 )
                 {
                     Window* pParent = pViewSh->GetDialogParent();
-                    Window* pDataWin = pViewSh->GetActiveWin();
 
                     SCCOL nCol1 = aSingleRange.aStart.Col();
                     SCROW nRow1 = aSingleRange.aStart.Row();
@@ -460,8 +458,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                                             bColHeaders, bRowHeaders, bAddRange ) );
                             }
                             aDocument.UpdateChartArea( aChartName, aRangeListRef,
-                                                        bColHeaders, bRowHeaders, bAddRange,
-                                                        pDataWin );
+                                                        bColHeaders, bRowHeaders, bAddRange );
                         }
                         else
                         {
@@ -473,8 +470,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                                             bColHeaders, bRowHeaders, bAddRange ) );
                             }
                             aDocument.UpdateChartArea( aChartName, aNewRange,
-                                                        bColHeaders, bRowHeaders, bAddRange,
-                                                        pDataWin );
+                                                        bColHeaders, bRowHeaders, bAddRange );
                         }
                     }
                 }
@@ -2359,40 +2355,6 @@ ScDocShell* ScDocShell::GetShellByNum( USHORT nDocNo )      // static
     }
 
     return pFound;
-}
-
-//------------------------------------------------------------------
-
-IMPL_LINK( ScDocShell, ChartSelectionHdl, ChartSelectionInfo*, pInfo )
-{
-    if (!pInfo)
-        return 0;
-
-    //  die View suchen, auf der das Objekt aktiv ist
-
-    SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this );
-    while (pFrame)
-    {
-        SfxViewShell* pSh = pFrame->GetViewShell();
-        if (pSh && pSh->ISA(ScTabViewShell))
-        {
-            ScTabViewShell* pViewSh = (ScTabViewShell*)pSh;
-            SfxInPlaceClient* pClient = pViewSh->GetIPClient();
-            if ( pClient && pClient->IsObjectInPlaceActive() )
-            {
-                uno::Reference < embed::XEmbeddedObject > xObj = pClient->GetObject();
-                if ( xObj.is() )
-                {
-                    SchMemChart* pMemChart = SchDLL::GetChartData( xObj );
-                    if (pMemChart)
-                        return pViewSh->DoChartSelection( *pInfo, *pMemChart );
-                }
-            }
-        }
-        pFrame = SfxViewFrame::GetNext( *pFrame, this );
-    }
-
-    return 0;
 }
 
 //------------------------------------------------------------------
