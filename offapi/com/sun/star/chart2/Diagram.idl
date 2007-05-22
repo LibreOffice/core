@@ -1,0 +1,97 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: Diagram.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 14:52:32 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart_Diagram_idl
+#define com_sun_star_chart_Diagram_idl
+
+#ifndef com_sun_star_chart2_XDiagram_idl__
+#include <com/sun/star/chart2/XDiagram.idl>
+#endif
+
+#include <com/sun/star/chart2/XCoordinateSystemContainer.idl>
+#include <com/sun/star/chart2/XTitled.idl>
+#include <com/sun/star/chart2/RelativePosition.idl>
+#include <com/sun/star/layout/RelativeSize.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+/**
+ */
+service Diagram
+{
+    /**
+     */
+    interface ::com::sun::star::chart2::XDiagram;
+
+    /**
+     */
+    interface ::com::sun::star::chart2::XCoordinateSystemContainer;
+
+    /** gives access to the sub title of a chart document
+     */
+    interface  XTitled;
+
+    /** The position is as a relative position on the page.
+
+        <p>If a relative position is given the diagam is not automatically placed,
+        but instead is placed relative on the page.</p>
+     */
+    [property, maybevoid] ::com::sun::star::chart2::RelativePosition RelativePosition;
+
+    /** The size of the diagram as relative size of the page size.
+     */
+    [property] ::com::sun::star::layout::RelativeSize RelativeSize;
+
+    /** Sort data points by x values for rendering
+     */
+    [optional, property] boolean                    SortByXValues;
+
+    /** Draw connection lines for stacked bar charts.
+     */
+    [optional, property] boolean                    ConnectBars;
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif
