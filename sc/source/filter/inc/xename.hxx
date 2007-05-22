@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xename.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:55:20 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:55:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,9 @@
 
 #ifndef SC_XLNAME_HXX
 #include "xlname.hxx"
+#endif
+#ifndef SC_XLFORMULA_HXX
+#include "xlformula.hxx"
 #endif
 #ifndef SC_XEROOT_HXX
 #include "xeroot.hxx"
