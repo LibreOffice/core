@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CartesianCoordinateSystem.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:50:30 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:28:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,51 +36,63 @@
 #define _CHART_CARTESIANCOORDINATESYSTEM_HXX
 
 #include "ServiceMacros.hxx"
-
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCOORDINATESYSTEM_HPP_
-#include <com/sun/star/chart2/XCoordinateSystem.hpp>
-#endif
+#include "BaseCoordinateSystem.hxx"
 
 namespace chart
 {
 
-class CartesianCoordinateSystem : public ::cppu::WeakImplHelper2<
-    ::com::sun::star::lang::XServiceInfo,
-    ::com::sun::star::chart2::XCoordinateSystem
-    >
+class CartesianCoordinateSystem : public BaseCoordinateSystem
 {
 public:
-    explicit CartesianCoordinateSystem( sal_Int32 nDim = 2 );
+    explicit CartesianCoordinateSystem(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XComponentContext > & xContext,
+        sal_Int32 nDimensionCount = 2,
+        sal_Bool bSwapXAndYAxis = sal_False );
+    explicit CartesianCoordinateSystem( const CartesianCoordinateSystem & rSource );
     virtual ~CartesianCoordinateSystem();
 
     // ____ XCoordinateSystem ____
-    // ___________________________
-    /// @see ::com::sun::star::chart2::XCoordinateSystem
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation > SAL_CALL getTransformationToCartesian()
+    virtual ::rtl::OUString SAL_CALL getCoordinateSystemType()
         throw (::com::sun::star::uno::RuntimeException);
-    /// @see ::com::sun::star::chart2::XCoordinateSystem
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation > SAL_CALL getTransformationFromCartesian()
+    virtual ::rtl::OUString SAL_CALL getViewServiceName()
         throw (::com::sun::star::uno::RuntimeException);
-    /// @see ::com::sun::star::chart2::XCoordinateSystem
-    virtual sal_Int32 SAL_CALL getDimension() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getCoordinateSystemType() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getViewServiceName() throw (::com::sun::star::uno::RuntimeException);
 
+    // ____ XCloneable ____
+    virtual ::com::sun::star::uno::Reference<
+            ::com::sun::star::util::XCloneable > SAL_CALL createClone()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XServiceInfo ____
     APPHELPER_XSERVICEINFO_DECL()
+};
 
-private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >
-        m_aTransformationToCartesian;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >
-        m_aTransformationFromCartesian;
-    sal_Int32   m_nDim;
+class CartesianCoordinateSystem2d : public CartesianCoordinateSystem
+{
+public:
+    explicit CartesianCoordinateSystem2d(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XComponentContext > & xContext );
+    virtual ~CartesianCoordinateSystem2d();
+
+    /// establish methods for factory instatiation
+    APPHELPER_SERVICE_FACTORY_HELPER( CartesianCoordinateSystem2d )
+    // ____ XServiceInfo ____
+    APPHELPER_XSERVICEINFO_DECL()
+};
+
+class CartesianCoordinateSystem3d : public CartesianCoordinateSystem
+{
+public:
+    explicit CartesianCoordinateSystem3d(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XComponentContext > & xContext );
+    virtual ~CartesianCoordinateSystem3d();
+
+    /// establish methods for factory instatiation
+    APPHELPER_SERVICE_FACTORY_HELPER( CartesianCoordinateSystem3d )
+    // ____ XServiceInfo ____
+    APPHELPER_XSERVICEINFO_DECL()
 };
 
 }  // namespace chart
