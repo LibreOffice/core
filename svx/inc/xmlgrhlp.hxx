@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlgrhlp.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 13:53:28 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:15:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,5 +147,41 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > SAL_CALL createOutputStream(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL resolveOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rxBinaryStream ) throw (::com::sun::star::uno::RuntimeException);
 };
+
+
+// for instantiation via service manager
+namespace svx
+{
+/** Create this with createInstanceWithArguments. service name
+    "com.sun.star.comp.Svx.GraphicImportHelper", one argument which is the
+    XStorage.  Without arguments no helper class is created.  With an empty
+    argument the helper class is created and initialized like in the CTOR to
+    SvXMLGraphicHelper that only gets the create mode.
+
+    You should call dispose after you no longer need this component.
+
+    uses eCreateMode == GRAPHICHELPER_MODE_READ, bDirect == TRUE in
+    SvXMLGraphicHelper
+ */
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvXMLGraphicImportHelper_createInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr) throw( ::com::sun::star::uno::Exception );
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL SvXMLGraphicImportHelper_getSupportedServiceNames() throw();
+::rtl::OUString SAL_CALL SvXMLGraphicImportHelper_getImplementationName() throw();
+
+/** Create this with createInstanceWithArguments. service name
+    "com.sun.star.comp.Svx.GraphicExportHelper", one argument which is the
+    XStorage.  Without arguments no helper class is created.  With an empty
+    argument the helper class is created and initialized like in the CTOR to
+    SvXMLGraphicHelper that only gets the create mode
+
+    To write the Pictures stream, you have to call dispose at this component.
+    Make sure you call dipose before you commit the parent storage.
+
+    uses eCreateMode == GRAPHICHELPER_MODE_WRITE, bDirect == TRUE in
+    SvXMLGraphicHelper
+ */
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvXMLGraphicExportHelper_createInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr) throw( ::com::sun::star::uno::Exception );
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL SvXMLGraphicExportHelper_getSupportedServiceNames() throw();
+::rtl::OUString SAL_CALL SvXMLGraphicExportHelper_getImplementationName() throw();
+}
 
 #endif
