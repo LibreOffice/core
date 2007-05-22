@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:58:05 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:14:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,7 @@
 #include "fusel.hxx"
 #include "futext.hxx"
 #include "fumark.hxx"
+#include "fuinsert.hxx"
 #include "global.hxx"
 #include "sc.hrc"
 #include "scmod.hxx"
@@ -125,6 +126,13 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
     const SfxItemSet *pArgs = rReq.GetArgs();
     USHORT nNewId = rReq.GetSlot();
+
+    if ( nNewId == SID_DRAW_CHART )
+    {
+        // #i71254# directly insert a chart instead of drawing its output rectangle
+        FuInsertChart(this, pWin, pView, pDoc, rReq);
+        return;
+    }
 
     //
     //  Pseudo-Slots von Draw-Toolbox auswerten
