@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfunc4.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:52:49 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:12:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,11 +45,8 @@
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
-#include <sch/schdll.hxx>
-#include <sch/memchrt.hxx>
 
 #include "dbfunc.hxx"
-#include "chartarr.hxx"
 #include "drwlayer.hxx"
 #include "document.hxx"
 
@@ -64,8 +61,7 @@ using namespace com::sun::star;
 //==================================================================
 
 // static
-USHORT ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc,
-                        Window* pActiveWin, BOOL bAllCharts )
+USHORT ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, BOOL bAllCharts )
 {
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
@@ -83,33 +79,22 @@ USHORT ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc,
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
-            if ( pObject->GetObjIdentifier() == OBJ_OLE2 )
+            if ( pObject->GetObjIdentifier() == OBJ_OLE2 && pDoc->IsChart( pObject ) )
             {
-                uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                if (xObj.is())
+                String aName = ((SdrOle2Obj*)pObject)->GetPersistName();
+                BOOL bHit = TRUE;
+                if ( !bAllCharts )
                 {
-                    const SchMemChart* pChartData = SchDLL::GetChartData(xObj);
-                    if ( pChartData )
-                    {
-                        ScChartArray aArray( pDoc, *pChartData );
-                        if (aArray.IsValid())
-                        {
-                            if ( bAllCharts || aArray.IsAtCursor(rPos) )
-                            {
-                                SchMemChart* pMemChart = aArray.CreateMemChart();
-                                ScChartArray::CopySettings( *pMemChart, *pChartData );
-
-                                SchDLL::Update( xObj, pMemChart, pActiveWin );
-                                delete pMemChart;
-                                ++nFound;
-                                ((SdrOle2Obj*)pObject)->GetNewReplacement();
-
-                                // redraw only
-                                pObject->ActionChanged();
-                                // pObject->SendRepaintBroadcast();
-                            }
-                        }
-                    }
+                    ScRangeList aRanges;
+                    BOOL bColHeaders = FALSE;
+                    BOOL bRowHeaders = FALSE;
+                    pDoc->GetOldChartParameters( aName, aRanges, bColHeaders, bRowHeaders );
+                    bHit = aRanges.In( rPos );
+                }
+                if ( bHit )
+                {
+                    pDoc->UpdateChart( aName );
+                    ++nFound;
                 }
             }
             pObject = aIter.Next();
