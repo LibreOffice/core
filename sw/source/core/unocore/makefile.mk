@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 05:23:58 $
+#   last change: $Author: vg $ $Date: 2007-05-22 16:33:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,10 @@ TARGET=unocore
 
 # --- Files --------------------------------------------------------
 EXCEPTIONSFILES=	\
-        $(SLO)$/swunohelper.obj\
-        $(SLO)$/SwXTextDefaults.obj\
+    $(SLO)$/swunohelper.obj\
+    $(SLO)$/SwXTextDefaults.obj\
     $(SLO)$/unobkm.obj\
+    $(SLO)$/unochart.obj\
     $(SLO)$/unoevent.obj\
     $(SLO)$/unocrsrhelper.obj\
     $(SLO)$/unoevtlstnr.obj\
@@ -81,11 +82,16 @@ EXCEPTIONSFILES +=$(SLO)$/unoportenum.obj
 .ENDIF
 
 
+SRS1NAME=$(TARGET)
+SRC1FILES =  \
+        unocore.src
+
 SLOFILES =	\
-        $(SLO)$/swunohelper.obj\
-        $(SLO)$/SwXTextDefaults.obj\
-        $(SLO)$/unoportenum.obj\
+    $(SLO)$/swunohelper.obj\
+    $(SLO)$/SwXTextDefaults.obj\
+    $(SLO)$/unoportenum.obj\
     $(SLO)$/unobkm.obj\
+    $(SLO)$/unochart.obj\
     $(SLO)$/unoevent.obj\
     $(SLO)$/unocrsrhelper.obj\
     $(SLO)$/unoevtlstnr.obj\
@@ -109,9 +115,10 @@ SLOFILES =	\
     $(SLO)$/unotbl.obj \
     $(SLO)$/TextCursorHelper.obj \
     $(SLO)$/unotext.obj\
-        $(SLO)$/unoclbck.obj\
-        $(SLO)$/unomap.obj\
-        $(SLO)$/unoprnms.obj
+    $(SLO)$/unoclbck.obj\
+    $(SLO)$/unomap.obj\
+    $(SLO)$/unoprnms.obj\
+    $(SLO)$/XMLRangeHelper.obj
 
 
 
