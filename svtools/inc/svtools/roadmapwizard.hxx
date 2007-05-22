@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roadmapwizard.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:33:11 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:32:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,9 @@ namespace svt
 
         void            SetRoadmapBitmap( const BitmapEx& _rBitmap );
         const BitmapEx& GetRoadmapBitmap( ) const;
+
+        void            SetRoadmapSmartHelpId( const SmartId& _rId, SmartIdUpdateMode _aMode = SMART_SET_SMART );
+        SmartId         GetRoadmapSmartHelpId() const;
 
         void            SetRoadmapInteractive( sal_Bool _bInteractive );
         sal_Bool        IsRoadmapInteractive();
