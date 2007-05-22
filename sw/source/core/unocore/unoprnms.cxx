@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-16 08:23:09 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:34:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -760,15 +760,16 @@ const SwPropNameTab aPropNameTab = {
 /* 0702 UNO_NAME_BUILDID */             {MAP_CHAR_LEN("BuildId")},
 /* 0703 UNO_NAME_PARA_STYLE_CONDITIONS*/    {MAP_CHAR_LEN("ParaStyleConditions")},
 /* 0704 UNO_NAME_PRINT_EMPTY_PAGES*/    {MAP_CHAR_LEN("PrintEmptyPages")},
-/* 0705 UNO_NAME_FIELD_CODE*/           {MAP_CHAR_LEN("FieldCode")},
-/* 0706 UNO_NAME_HAS_VALID_SIGNATURES*/ {MAP_CHAR_LEN("HasValidSignatures")},
-/* 0707 UNO_CHAR_AUTO_STYLE_NAME */     {MAP_CHAR_LEN("CharAutoStyleName")},
-/* 0708 UNO_PARA_AUTO_STYLE_NAME */     {MAP_CHAR_LEN("ParaAutoStyleName")},
-/* 0709 UNO_NAME_APPLY_WORKAROUND_FOR_B6375613*/ {MAP_CHAR_LEN("ApplyWorkaroundForB6375613")},
-/* 0710 UNO_NAME_LAYOUT_SIZE*/ {MAP_CHAR_LEN("LayoutSize")},
-/* 0711 UNO_NAME_HELP */ {MAP_CHAR_LEN("Help")},
-/* 0712 UNO_NAME_TOOLTIP */ {MAP_CHAR_LEN("Tooltip")},
-/* 0713 UNO_NAME_DIALOG_LIBRARIES*/     {MAP_CHAR_LEN("DialogLibraries")}
+/* 0705 UNO_NAME_ROLE */                {MAP_CHAR_LEN("Role")},
+/* 0706 UNO_NAME_FIELD_CODE*/           {MAP_CHAR_LEN("FieldCode")},
+/* 0707 UNO_NAME_HAS_VALID_SIGNATURES*/ {MAP_CHAR_LEN("HasValidSignatures")},
+/* 0708 UNO_CHAR_AUTO_STYLE_NAME */     {MAP_CHAR_LEN("CharAutoStyleName")},
+/* 0709 UNO_PARA_AUTO_STYLE_NAME */     {MAP_CHAR_LEN("ParaAutoStyleName")},
+/* 0710 UNO_NAME_APPLY_WORKAROUND_FOR_B6375613*/ {MAP_CHAR_LEN("ApplyWorkaroundForB6375613")},
+/* 0711 UNO_NAME_LAYOUT_SIZE*/ {MAP_CHAR_LEN("LayoutSize")},
+/* 0712 UNO_NAME_HELP */ {MAP_CHAR_LEN("Help")},
+/* 0713 UNO_NAME_TOOLTIP */ {MAP_CHAR_LEN("Tooltip")},
+/* 0714 UNO_NAME_DIALOG_LIBRARIES*/     {MAP_CHAR_LEN("DialogLibraries")}
 };
 
 const SwPropNameLen& SwGetPropName( USHORT nId )
