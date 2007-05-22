@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:43:45 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:41:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,6 +283,7 @@
 #include "indexmap.hxx"
 #include "scrdata.hxx"
 #include "poolhelp.hxx"
+#include "unoreflist.hxx"
 #include "listenercalls.hxx"
 #include "recursionhelper.hxx"
 
@@ -314,6 +315,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pChangeTrack( NULL ),
         pUnoBroadcaster( NULL ),
         pUnoListenerCalls( NULL ),
+        pUnoRefUndoList( NULL ),
         pChangeViewSettings( NULL ),
         pScriptTypeData( NULL ),
         pCacheFieldEditEngine( NULL ),
@@ -324,6 +326,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pLoadedSymbolStringCellList( NULL ),
         pRecursionHelper( NULL ),
         pAutoNameCache( NULL ),
+        nUnoObjectId( 0 ),
         nRangeOverflowType( 0 ),
         aCurTextWidthCalcPos(MAXCOL,0,0),
         nFormulaCodeInTree(0),
@@ -534,6 +537,7 @@ ScDocument::~ScDocument()
         pUnoBroadcaster = NULL;
     }
 
+    delete pUnoRefUndoList;
     delete pUnoListenerCalls;
 
     Clear( sal_True );              // TRUE = from destructor (needed for SdrModel::ClearModel)
