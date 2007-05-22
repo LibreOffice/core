@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:25:02 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:59:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,8 +57,6 @@ struct XclAddress;
 struct XclRange;
 class XclRangeList;
 class XclTokenArray;
-
-typedef ScfRef< XclTokenArray > XclTokenArrayRef;
 
 // Global data ================================================================
 
