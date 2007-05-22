@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xecontent.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:48:04 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:46:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -629,8 +629,8 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
         {
             Font aFont;
             ScPatternAttr::GetFont( aFont, rItemSet, SC_AUTOCOL_RAW );
-            maFontData.FillFromFont( aFont );
-            mnFontColorId = GetPalette().InsertColor( aFont.GetColor(), EXC_COLOR_CELLTEXT );
+            maFontData.FillFromVclFont( aFont );
+            mnFontColorId = GetPalette().InsertColor( maFontData.maColor, EXC_COLOR_CELLTEXT );
         }
 
         // border
@@ -808,7 +808,7 @@ XclExpCondfmt::~XclExpCondfmt()
 
 bool XclExpCondfmt::IsValid() const
 {
-    return !maCFList.Empty() && !maXclRanges.empty();
+    return !maCFList.IsEmpty() && !maXclRanges.empty();
 }
 
 void XclExpCondfmt::Save( XclExpStream& rStrm )
@@ -822,10 +822,10 @@ void XclExpCondfmt::Save( XclExpStream& rStrm )
 
 void XclExpCondfmt::WriteBody( XclExpStream& rStrm )
 {
-    DBG_ASSERT( !maCFList.Empty(), "XclExpCondfmt::WriteBody - no CF records to write" );
+    DBG_ASSERT( !maCFList.IsEmpty(), "XclExpCondfmt::WriteBody - no CF records to write" );
     DBG_ASSERT( !maXclRanges.empty(), "XclExpCondfmt::WriteBody - no cell ranges found" );
 
-    rStrm   << static_cast< sal_uInt16 >( maCFList.Size() )
+    rStrm   << static_cast< sal_uInt16 >( maCFList.GetSize() )
             << sal_uInt16( 1 )
             << maXclRanges.GetEnclosingRange()
             << maXclRanges;
@@ -1076,7 +1076,7 @@ void XclExpDval::InsertCellRange( const ScRange& rRange, ULONG nScHandle )
 void XclExpDval::Save( XclExpStream& rStrm )
 {
     // check all records
-    size_t nPos = maDVList.Size();
+    size_t nPos = maDVList.GetSize();
     while( nPos )
     {
         --nPos;     // backwards to keep nPos valid
@@ -1086,7 +1086,7 @@ void XclExpDval::Save( XclExpStream& rStrm )
     }
 
     // write the DVAL and the DV's
-    if( !maDVList.Empty() )
+    if( !maDVList.IsEmpty() )
     {
         XclExpRecord::Save( rStrm );
         maDVList.Save( rStrm );
@@ -1101,10 +1101,10 @@ XclExpDV& XclExpDval::SearchOrCreateDv( ULONG nScHandle )
 
     // binary search
     size_t nCurrPos = 0;
-    if( !maDVList.Empty() )
+    if( !maDVList.IsEmpty() )
     {
         size_t nFirstPos = 0;
-        size_t nLastPos = maDVList.Size() - 1;
+        size_t nLastPos = maDVList.GetSize() - 1;
         bool bLoop = true;
         ULONG nCurrScHandle = ::std::numeric_limits< ULONG >::max();
         while( (nFirstPos <= nLastPos) && bLoop )
@@ -1136,7 +1136,7 @@ XclExpDV& XclExpDval::SearchOrCreateDv( ULONG nScHandle )
 void XclExpDval::WriteBody( XclExpStream& rStrm )
 {
     rStrm.WriteZeroBytes( 10 );
-    rStrm << EXC_DVAL_NOOBJ << static_cast< sal_uInt32 >( maDVList.Size() );
+    rStrm << EXC_DVAL_NOOBJ << static_cast< sal_uInt32 >( maDVList.GetSize() );
 }
 
 // Web Queries ================================================================
