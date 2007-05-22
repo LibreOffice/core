@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblsel.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:37:41 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:20:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,10 +204,6 @@ public:
                                        const BOOL bBehind );
     BOOL AreLinesToRestore( const SwTable &rTable ) const;
 
-    //Auch die Charts zu der Tabelle muessen etwas von den Veraenderungen
-    //mitbekommen.
-    void SaveChartData( const SwTable &rTable );
-    void RestoreChartData( const SwTable &rTable );
     void ClearLineBehind() { pLineBehind = 0; }
 };
 
