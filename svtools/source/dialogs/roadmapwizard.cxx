@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roadmapwizard.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:14:46 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:33:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,6 +224,18 @@ namespace svt
     const BitmapEx& RoadmapWizard::GetRoadmapBitmap( ) const
     {
         return m_pImpl->pRoadmap->GetRoadmapBitmap();
+    }
+
+    //--------------------------------------------------------------------
+    void RoadmapWizard::SetRoadmapSmartHelpId( const SmartId& _rId, SmartIdUpdateMode _aMode )
+    {
+        m_pImpl->pRoadmap->SetSmartHelpId( _rId, _aMode );
+    }
+
+    //--------------------------------------------------------------------
+    SmartId RoadmapWizard::GetRoadmapSmartHelpId() const
+    {
+        return m_pImpl->pRoadmap->GetSmartHelpId();
     }
 
     //--------------------------------------------------------------------
