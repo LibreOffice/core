@@ -1,0 +1,90 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XChartTypeContainer.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 14:59:53 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_XChartTypeContainer_idl
+#define com_sun_star_chart2_XChartTypeContainer_idl
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#ifndef com_sun_star_chart_XChartType_idl
+#include <com/sun/star/chart2/XChartType.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+#ifndef __com_sun_star_container_NoSuchElementException_idl__
+#include <com/sun/star/container/NoSuchElementException.idl>
+#endif
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+interface XChartTypeContainer : com::sun::star::uno::XInterface
+{
+    /** add a chart type to the chart type container
+
+        @throws IllegalArgumentException
+            If the given chart type is already contained in the chart type container.
+     */
+    void addChartType( [in] XChartType aChartType )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    /** removes one data deries from the chart type container.
+     */
+    void removeChartType( [in] XChartType aChartType )
+        raises( com::sun::star::container::NoSuchElementException );
+
+    /** retrieve all chart types
+     */
+    sequence< XChartType > getChartTypes();
+
+    /** set all chart types
+     */
+    void setChartTypes( [in] sequence< XChartType > aChartTypes )
+        raises( com::sun::star::lang::IllegalArgumentException );
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif
