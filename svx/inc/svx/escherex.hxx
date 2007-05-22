@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escherex.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:48:03 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:15:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_BITMAPMODE_HPP_
+#include <com/sun/star/drawing/BitmapMode.hpp>
 #endif
 #ifndef _MSDFFDEF_HXX
 #include <svx/msdffdef.hxx>
@@ -1185,9 +1188,13 @@ class SVX_DLLPUBLIC EscherPropertyContainer
 
         sal_Bool    CreateOLEGraphicProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXOleObject );
 
+        /** Creates a complex ESCHER_Prop_fillBlip, that contains the BLIP directly (for Excel charts). */
+        sal_Bool    CreateEmbeddedBitmapProperties( const ::rtl::OUString& rBitmapUrl,
+                        ::com::sun::star::drawing::BitmapMode eBitmapMode );
+
                     // the GraphicProperties will only be created if a GraphicProvider and PicOutStrm is known
                     // DR: #99897# if no GraphicProvider is present, a complex ESCHER_Prop_fillBlip
-                    //             will be created, containing the BLIP directly (i.e. for Excel charts).
+                    //             will be created, containing the BLIP directly (e.g. for Excel charts).
         sal_Bool    CreateGraphicProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                         const String& rSource, const sal_Bool bCreateFillBitmap, const sal_Bool bCreateCroppingAttributes = sal_False,
                             const sal_Bool bFillBitmapModeAllowed = sal_True );
@@ -1196,6 +1203,8 @@ class SVX_DLLPUBLIC EscherPropertyContainer
                         sal_uInt32 nFlags, sal_Bool bBezier, ::com::sun::star::awt::Rectangle& rGeoRect, Polygon* pPolygon = NULL );
 
         static sal_uInt32 GetGradientColor( const ::com::sun::star::awt::Gradient* pGradient, sal_uInt32 nStartColor );
+
+        void        CreateGradientProperties( const ::com::sun::star::awt::Gradient & rGradient );
         void        CreateGradientProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & );
         void        CreateLineProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &, sal_Bool bEdge );
         void        CreateFillProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &, sal_Bool bEdge );
