@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 23:49:59 $
+#   last change: $Author: vg $ $Date: 2007-05-22 15:19:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,19 +52,20 @@ CFLAGS+=-DDG_DLL
 
 SRS1NAME=$(TARGET)
 SRC1FILES=\
-    optasian.src		\
-    optcolor.src		\
-    optjsearch.src		\
-    optgenrl.src		\
-    optdict.src		\
-    optaccessibility.src	\
-    optsave.src		\
-    optpath.src		\
-    optlingu.src		\
-    optgrid.src		\
-    optinet2.src		\
-    multipat.src		\
-    optctl.src
+    optaccessibility.src    \
+    optasian.src    \
+    optcolor.src    \
+    optjsearch.src  \
+    optgenrl.src    \
+    optdict.src     \
+    optsave.src     \
+    optpath.src     \
+    optlingu.src    \
+    optgrid.src     \
+    optinet2.src    \
+    multipat.src    \
+    optctl.src      \
+    optchart.src
 
 #EXCEPTIONSFILES=\
 #	$(SLO)$/optasian.obj		\
@@ -98,6 +99,7 @@ SLOFILES=\
     $(SLO)$/optitems.obj    \
     $(SLO)$/optgrid.obj \
     $(SLO)$/srchcfg.obj
+
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
