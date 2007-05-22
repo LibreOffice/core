@@ -2,6 +2,51 @@
 <!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
 <module-description xmlns:xlink="http://www.w3.org/1999/xlink">
     <module-name>sw</module-name>
+
+    <component-description>
+        <author>TL</author>
+        <name>SwChartDataProvider</name>
+        <description>
+            This component provides ...
+        </description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="alpha"/>
+        <supported-service>com.sun.star.chart2.DataProvider</supported-service>
+    </component-description>
+    <component-description>
+        <author>TL</author>
+        <name>SwChartDataSource</name>
+        <description>
+            This component provides ...
+        </description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="alpha"/>
+        <supported-service>com.sun.star.chart2.DataSource</supported-service>
+    </component-description>
+    <component-description>
+        <author>TL</author>
+        <name>SwChartDataSequence</name>
+        <description>
+            This component provides ...
+        </description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="alpha"/>
+        <supported-service>com.sun.star.chart2.DataSequence</supported-service>
+    </component-description>
+    <component-description>
+        <author>TL</author>
+        <name>SwChartLabeledDataSequence</name>
+        <description>
+            This component provides ...
+        </description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="alpha"/>
+        <supported-service>com.sun.star.chart2.LabeledDataSequence</supported-service>
+    </component-description>
     <component-description>
         <author>TL</author>
         <name>com.sun.star.style.CharacterStyle</name>
