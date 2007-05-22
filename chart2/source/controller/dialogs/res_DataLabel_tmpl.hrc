@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_DataLabel_tmpl.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 16:02:17 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:39:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,25 +35,28 @@
 #ifndef _CHART2_RESOURCE_DATALABEL_HXX
 #define _CHART2_RESOURCE_DATALABEL_HXX
 
+#include "HelpIds.hrc"
+
 #define RESOURCE_DATALABEL( xpos, ypos ) \
 CheckBox CB_VALUE \
 { \
+    HelpID = HID_SCH_DATALABEL_VALUE; \
     Pos = MAP_APPFONT ( xpos , ypos  ) ; \
     Size = MAP_APPFONT ( 120 , 10 ) ; \
     TabStop = TRUE ; \
     Text [ en-US ] = "Show ~value" ; \
-    Text [ x-comment ] = " "; \
 };   \
 RadioButton RB_NUMBER \
 { \
+    HelpID = HID_SCH_DATALABEL_NUMBER; \
     Pos = MAP_APPFONT ( xpos+9 , ypos+14  ) ; \
     Size = MAP_APPFONT ( 110 , 10 ) ; \
     TabStop = TRUE ; \
     Text [ en-US ] = "as ~number"; \
-    Text [ x-comment ] = " "; \
 }; \
 RadioButton RB_PERCENT \
 { \
+    HelpID = HID_SCH_DATALABEL_PERCENT; \
     Pos = MAP_APPFONT ( xpos+9 , ypos+28  ) ; \
     Size = MAP_APPFONT ( 110 , 10 ) ; \
     TabStop = TRUE ; \
@@ -61,14 +64,15 @@ RadioButton RB_PERCENT \
 }; \
 CheckBox CB_TEXT \
 { \
+    HelpID = HID_SCH_DATALABEL_TEXT; \
     Pos  = MAP_APPFONT ( xpos , ypos+42  ); \
     Size = MAP_APPFONT ( 120 , 10 ); \
     TabStop = TRUE; \
     Text [ en-US ] = "Sho~w label text"; \
-    Text [ x-comment ] = " "; \
 }; \
 CheckBox CB_SYMBOL \
 { \
+    HelpID = HID_SCH_DATALABEL_SYMBOL; \
     Pos  = MAP_APPFONT ( xpos , ypos+56  ) ; \
     Size = MAP_APPFONT ( 182 , 10 ) ; \
     TabStop = TRUE ; \
