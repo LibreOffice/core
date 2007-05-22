@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:03:27 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:35:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,9 @@
 
 
 
+
+// STL includes
+#include <list>
 
 #include <float.h> // for DBL_MIN
 
@@ -118,12 +121,6 @@
 #ifndef _UNOREDLINE_HXX
 #include <unoredline.hxx>
 #endif
-#ifndef _SCH_DLL_HXX
-#include <sch/schdll.hxx>
-#endif
-#ifndef _SCH_MEMCHRT_HXX
-#include <sch/memchrt.hxx>
-#endif
 #ifndef _UNOPRNMS_HXX
 #include <unoprnms.hxx>
 #endif
@@ -154,9 +151,32 @@
 #ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CHART_XCHARTDATACHANGEEVENTLISTENER_HPP_
+#include <com/sun/star/chart/XChartDataChangeEventListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART_CHARTDATACHANGEEVENT_HPP_
+#include <com/sun/star/chart/ChartDataChangeEvent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_DATA_XDATASEQUENCE_HPP_
+#include <com/sun/star/chart2/data/XDataSequence.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_DATA_XLABELEDDATASEQUENCE_HPP_
+#include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
+#endif
 #ifndef _COM_SUN_STAR_TABLE_CELLCONTENTTYPE_HPP_
 #include <com/sun/star/table/CellContentType.hpp>
 #endif
+#ifndef _UNOTBL_HXX
+#include <unotbl.hxx>
+#endif
+#ifndef _UNOOBJ_HXX
+#include <unoobj.hxx>
+#endif
+
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>     // SvNumberFormatter
+#endif
+
 #ifndef _SVX_BRKITEM_HXX //autogen
 #include <svx/brkitem.hxx>
 #endif
@@ -193,6 +213,9 @@
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
 #endif
+#ifndef _UNOCHART_HXX
+#include <unochart.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -201,6 +224,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::chart;
+using namespace ::com::sun::star::chart2::data;
 using namespace ::rtl;
 //collectn.cxx
 BOOL lcl_IsNumeric(const String&);
@@ -408,12 +432,150 @@ uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap )
     }
     return aRet;
 }
+/* -----------------19.10.05 08:32-------------------
+ *
+ * --------------------------------------------------*/
+
+
+// returns the position for the cell with the specified name
+// (note that the indices rColumn and rRow are 0 based here)
+// Also since the implementations of tables does not really have
+// columns using this function is appropriate only for tables
+// that are not complex (i.e. where IsTblComplex() returns false).
+//
+// returns: both indices for column and row (all >= 0) if everything was Ok.
+//          At least one value < 0 if sth was wrong.
+//
+// Sample for naming scheme of cell in a single row (in groups a 26):
+// A1..Z1, a1..z1, AA1..AZ1, Aa1..Az1, BA1..BZ1, Ba1..Bz1, ...
+void lcl_GetCellPosition( const String &rCellName,
+        sal_Int16 &rColumn, sal_Int16 &rRow)
+{
+    rColumn = rRow = -1;    // default return values indicating failure
+    xub_StrLen nLen = rCellName.Len();
+    if (nLen)
+    {
+        const sal_Unicode *pBuf = rCellName.GetBuffer();
+        const sal_Unicode *pEnd = pBuf + nLen;
+        while (pBuf < pEnd && !('0' <= *pBuf && *pBuf <= '9'))
+            ++pBuf;
+        // start of number found?
+        if (pBuf < pEnd && ('0' <= *pBuf && *pBuf <= '9'))
+        {
+            String aColTxt( rCellName.GetBuffer(), pBuf - rCellName.GetBuffer() );
+            String aRowTxt( pBuf, rCellName.GetBuffer() + nLen - pBuf);
+            if (aColTxt.Len() && aRowTxt.Len())
+            {
+                sal_Int16 nColIdx = 0;
+                for (xub_StrLen i = 0;  i < aColTxt.Len();  ++i)
+                {
+                    sal_Unicode cChar = aColTxt.GetBuffer()[i];
+                    if ('A' <= cChar && cChar <= 'Z')
+                        nColIdx = 52 * nColIdx + (cChar - 'A');
+                    else if ('a' <= cChar && cChar <= 'z')
+                        nColIdx = 52 * nColIdx + (26 + cChar - 'a');
+                    else
+                    {
+                        nColIdx = -1;   // sth failed
+                        break;
+                    }
+                }
+
+                rColumn = nColIdx;
+                rRow    = static_cast< sal_Int16 >( aRowTxt.ToInt32() ) - 1;    // - 1 because indices ought to be 0 based
+            }
+        }
+    }
+    DBG_ASSERT( rColumn != -1 && rRow != -1, "failed to get column or row index" );
+}
+
+
+// arguments: must be non-empty strings with valid cell names
+//
+// returns: -1 if first cell < second cell
+//           0 if both cells are equal
+//          +1 if the first cell > second cell
+//
+// Note: this function probably also make sense only
+//      for cell names of non-complex tables
+int lcl_CompareCellsByRowFirst( const String &rCellName1, const String &rCellName2 )
+{
+    sal_Int16 nCol1, nRow1, nCol2, nRow2;
+    lcl_GetCellPosition( rCellName1, nCol1, nRow1 );
+    lcl_GetCellPosition( rCellName2, nCol2, nRow2 );
+
+    if (nRow1 < nRow2 || (nRow1 == nRow2 && nCol1 < nCol2))
+        return -1;
+    else if (nCol1 == nCol2 && nRow1 == nRow2)
+        return 0;
+    else
+        return +1;
+}
+
+
+// arguments: must be non-empty strings with valid cell names
+//
+// returns: -1 if first cell < second cell
+//           0 if both cells are equal
+//          +1 if the first cell > second cell
+//
+// Note: this function probably also make sense only
+//      for cell names of non-complex tables
+int lcl_CompareCellsByColFirst( const String &rCellName1, const String &rCellName2 )
+{
+    sal_Int16 nCol1, nRow1, nCol2, nRow2;
+    lcl_GetCellPosition( rCellName1, nCol1, nRow1 );
+    lcl_GetCellPosition( rCellName2, nCol2, nRow2 );
+
+    if (nCol1 < nCol2 || (nCol1 == nCol2 && nRow1 < nRow2))
+        return -1;
+    else if (nRow1 == nRow2 && nCol1 == nCol2)
+        return 0;
+    else
+        return +1;
+}
+
+
+// arguments: must be non-empty strings with valid cell names
+//
+// returns: -1 if first cell range < second cell range
+//           0 if both cell ranges are identical
+//          +1 if the first cell range > second cell range
+//
+// Note: this function probably also make sense only
+//      for cell names of non-complex tables
+int lcl_CompareCellRanges(
+        const String &rRange1StartCell, const String &rRange1EndCell,
+        const String &rRange2StartCell, const String &rRange2EndCell,
+        sal_Bool bCmpColsFirst )
+{
+    int (*pCompareCells)( const String &, const String & ) =
+            bCmpColsFirst ? &lcl_CompareCellsByColFirst : &lcl_CompareCellsByRowFirst;
+
+    int nCmpResStartCells = pCompareCells( rRange1StartCell, rRange2StartCell );
+    if ((-1 == nCmpResStartCells ) ||
+         ( 0 == nCmpResStartCells &&
+          -1 == pCompareCells( rRange1EndCell, rRange2EndCell ) ))
+        return -1;
+    else if (0 == nCmpResStartCells &&
+             0 == pCompareCells( rRange1EndCell, rRange2EndCell ))
+        return 0;
+    else
+        return +1;
+}
+
+
 /* -----------------25.06.98 08:32-------------------
  *
  * --------------------------------------------------*/
+
+// returns the cell name for the cell at the specified position
+// (note that the indices nColumn and nRow are 0 based here)
 String lcl_GetCellName(sal_Int16 nColumn, sal_Int16 nRow)
 {
         String sCellName;
+        if (nColumn < 0 || nRow < 0)
+            return sCellName;
         sal_uInt16 nDiv = nColumn;
         sal_uInt16 nMod = 0;
         sal_Bool bFirst = sal_True;
@@ -429,6 +591,47 @@ String lcl_GetCellName(sal_Int16 nColumn, sal_Int16 nRow)
         sCellName += String::CreateFromInt32(++nRow);
         return sCellName;
 }
+
+
+/* -----------------21.11.05 14:46-------------------
+
+ --------------------------------------------------*/
+// start cell should be in the upper-left corner of the range and
+// end cell in the lower-right.
+// I.e. from the four possible representation
+//      A1:C5, C5:A1, A5:C1, C1:A5
+// only A1:C5 is the one to use
+void lcl_NormalizeRange(
+    String &rCell1,     // will hold the upper-left cell of the range upon return
+    String &rCell2 )    // will hold the lower-right cell of the range upon return
+{
+    sal_Int16 nCol1, nRow1, nCol2, nRow2;
+    lcl_GetCellPosition( rCell1, nCol1, nRow1 );
+    lcl_GetCellPosition( rCell2, nCol2, nRow2 );
+    if (nCol2 < nCol1 || nRow2 < nRow1)
+    {
+        rCell1  = lcl_GetCellName( Min(nCol1, nCol2), Min(nRow1, nRow2) );
+        rCell2  = lcl_GetCellName( Max(nCol1, nCol2), Max(nRow1, nRow2) );
+    }
+
+}
+
+void SwRangeDescriptor::Normalize()
+{
+    if (nTop > nBottom)
+    {
+        sal_uInt16 nTmp = nTop;
+        nTop = nBottom;
+        nBottom = nTmp;
+    }
+    if (nLeft > nRight)
+    {
+        sal_uInt16 nTmp = nLeft;
+        nLeft = nRight;
+        nRight = nTmp;
+    }
+}
+
 /* -----------------06.10.99 14:46-------------------
 
  --------------------------------------------------*/
@@ -1573,6 +1776,8 @@ OUString SwXTextTableCursor::getRangeName(void) throw( uno::RuntimeException )
     vos::OGuard aGuard(Application::GetSolarMutex());
     OUString aRet;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
+
+    //!! see also SwChartDataSequence::getSourceRangeRepresentation
     if(pUnoCrsr)
     {
         SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
@@ -2657,6 +2862,10 @@ uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByPosition(sal_In
             aDesc.nRight  = (sal_uInt16)nRight;
             String sTLName = lcl_GetCellName(aDesc.nLeft, aDesc.nTop);
             String sBRName = lcl_GetCellName(aDesc.nRight, aDesc.nBottom);
+
+            // please note that according to the 'if' statement at the begin
+            // sTLName:sBRName already denotes the normalized range string
+
             aRef = GetRangeByName(pFmt, pTable, sTLName, sBRName, aDesc);
         }
     }
@@ -2687,6 +2896,14 @@ uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByName(const OUSt
             aDesc.nTop = aDesc.nLeft =  aDesc.nBottom = aDesc.nRight = -1;
             lcl_GetRowCol(sTLName, aDesc.nTop, aDesc.nLeft);
             lcl_GetRowCol(sBRName, aDesc.nBottom, aDesc.nRight);
+
+
+            // we should normalize the range now (e.g. A5:C1 will become A1:C5)
+            // since (depending on what is done later) it will be troublesome
+            // elsewhere when the cursor in the implementation does not
+            // point to the top-left and bottom-right cells
+            aDesc.Normalize();
+
             aRef = GetRangeByName(pFmt, pTable, sTLName, sBRName, aDesc);
         }
     }
@@ -3599,26 +3816,10 @@ void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException )
                 ((SwOLENode*)pNd)->SetChartTblName( sNewTblName );
 
                 SwOLEObj& rOObj = ((SwOLENode*)pNd)->GetOLEObj();
-                SchMemChart *pData = SchDLL::GetChartData( rOObj.GetOleRef() );
-                if ( pData )
-                {
-                    if ( aOldName == pData->GetMainTitle() )
-                    {
-                        pData->SetMainTitle( sNewTblName );
-//Window??
-                        SchDLL::Update( rOObj.GetOleRef(), pData, 0/*GetWin()*/ );
-                        rOObj.GetObject().UpdateReplacement();
-                    }
-                    SwFrm *pFrm;
-                    SwClientIter aIter( *((SwOLENode*)pNd) );
-                    for( pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) ); pFrm;
-                            pFrm = (SwFrm*)aIter.Next() )
-                    {
-//InvalidateWindows?
-//                        if ( pFrm->Frm().HasArea() )
-//                            ((ViewShell*)this)->InvalidateWindows( pFrm->Frm() );
-                    }
-                }
+
+                SwTable* pTable = SwTable::FindTable( pFmt );
+                //TL_CHART2: chart needs to be notfied about name changes
+                pFmt->GetDoc()->UpdateCharts( pTable->GetFrmFmt()->GetName() );
             }
             aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
         }
@@ -3815,7 +4016,7 @@ SwXCellRange::SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt,
     bFirstColumnAsLabel(sal_False),
     _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TABLE_RANGE))
 {
-
+    aRgDesc.Normalize();
 }
 /*-- 11.12.98 14:27:33---------------------------------------------------
 
@@ -3871,6 +4072,7 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
             aNewDesc.nBottom = nBottom + aRgDesc.nTop;
             aNewDesc.nLeft   = nLeft +  aRgDesc.nLeft;
             aNewDesc.nRight  = nRight + aRgDesc.nLeft;
+            aNewDesc.Normalize();
             String sTLName = lcl_GetCellName(aNewDesc.nLeft, aNewDesc.nTop);
             String sBRName = lcl_GetCellName(aNewDesc.nRight, aNewDesc.nBottom);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
@@ -3922,6 +4124,7 @@ Reference< XCellRange >  SwXCellRange::getCellRangeByName(const OUString& rRange
     aDesc.nTop = aDesc.nLeft =  aDesc.nBottom = aDesc.nRight = -1;
     lcl_GetRowCol(sTLName, aDesc.nTop, aDesc.nLeft);
     lcl_GetRowCol(sBRName, aDesc.nBottom, aDesc.nRight);
+    aDesc.Normalize();
     return getCellRangeByPosition(aDesc.nLeft - aRgDesc.nLeft, aDesc.nTop - aRgDesc.nTop,
                 aDesc.nRight - aRgDesc.nLeft, aDesc.nBottom - aRgDesc.nTop);
 }
@@ -4161,6 +4364,293 @@ void SwXCellRange::removeVetoableChangeListener(const OUString& PropertyName, co
 {
     DBG_WARNING("not implemented")
 }
+
+/*-----------------------------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+
+void SwXCellRange::GetDataSequence(
+        uno::Sequence< uno::Any >   *pAnySeq,   //-> first pointer != 0 is used
+        uno::Sequence< OUString >   *pTxtSeq,   //-> as output sequence
+        uno::Sequence< double >     *pDblSeq,   //-> (previous data gets overwritten)
+        sal_Bool bForceNumberResults )          //-> when 'true' requires to make an
+                                                // extra effort to return a value different
+                                                // from 0 even if the cell is formatted to text
+    throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    // compare to SwXCellRange::getDataArray (note different return types though)
+
+    sal_Int16 nRowCount = getRowCount();
+    sal_Int16 nColCount = getColumnCount();
+    //
+    if(!nRowCount || !nColCount)
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U("Table too complex");
+        throw aRuntime;
+    }
+
+    sal_Int32 nSize = nRowCount * nColCount;
+    if (pAnySeq)
+        pAnySeq->realloc( nSize );
+    else if (pTxtSeq)
+        pTxtSeq->realloc( nSize );
+    else if (pDblSeq)
+        pDblSeq->realloc( nSize );
+    else
+    {
+        DBG_ERROR( "argument missing" );
+        return;
+    }
+    uno::Any   *pAnyData = pAnySeq ? pAnySeq->getArray() : 0;
+    OUString   *pTxtData = pTxtSeq ? pTxtSeq->getArray() : 0;
+    double     *pDblData = pDblSeq ? pDblSeq->getArray() : 0;
+
+    sal_Int32 nDtaCnt = 0;
+    SwFrmFmt* pFmt = GetFrmFmt();
+    if(pFmt)
+    {
+        Reference< XCell > xCellRef;
+        for(sal_uInt16 nRow = 0; nRow < nRowCount; nRow++)
+        {
+            for(sal_uInt16 nCol = 0; nCol < nColCount; nCol++)
+            {
+                SwXCell * pXCell = lcl_CreateXCell(pFmt,
+                                    sal_Int16(aRgDesc.nLeft + nCol),
+                                    sal_Int16(aRgDesc.nTop + nRow));
+                //! keep (additional) reference to object to prevent implicit destruction
+                //! in following UNO calls (when object will get referenced)
+                xCellRef = pXCell;
+                SwTableBox * pBox = pXCell ? pXCell->GetTblBox() : 0;
+                if(!pBox)
+                {
+                    throw uno::RuntimeException();
+                }
+                else
+                {
+                    if (pAnyData)
+                    {
+                        // check if table box value item is set
+                        BOOL bIsNum = pBox->GetFrmFmt()->GetItemState( RES_BOXATR_VALUE, FALSE ) == SFX_ITEM_SET;
+                        //ULONG nNdPos = pBox->IsValidNumTxtNd( sal_True );
+                        if (!bIsNum/* && ULONG_MAX == nNdPos*/)
+                            pAnyData[nDtaCnt++] <<= lcl_getString(*pXCell);
+                        else
+                            pAnyData[nDtaCnt++] <<= lcl_getValue(*pXCell);
+                    }
+                    else if (pTxtData)
+                        pTxtData[nDtaCnt++] = lcl_getString(*pXCell);
+                    else if (pDblData)
+                    {
+                        double fVal = 0.0;
+                        if (!bForceNumberResults || table::CellContentType_TEXT != pXCell->getType())
+                            fVal = lcl_getValue(*pXCell);
+                        else
+                        {
+                            DBG_ASSERT( table::CellContentType_TEXT == pXCell->getType(),
+                                    "this branch of 'if' is only for text formatted cells" )
+
+                            // now we'll try to get a useful numerical value
+                            // from the text in the cell...
+
+                            ULONG nFIndex;
+                            SvNumberFormatter* pNumFormatter = pTblCrsr->GetDoc()->GetNumberFormatter();
+
+                            // look for SwTblBoxNumFormat value in parents as well
+                            const SfxPoolItem* pItem;
+                            SwFrmFmt *pBoxFmt = pXCell->GetTblBox()->GetFrmFmt();
+                            SfxItemState eState = pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, sal_True, &pItem);
+
+                            if (eState == SFX_ITEM_SET)
+                            {
+                                // please note that the language of the numberformat
+                                // is implicitly coded into the below value as well
+                                nFIndex = ((SwTblBoxNumFormat*)pItem)->GetValue();
+
+                                // since the current value indicates a text format but the call
+                                // to 'IsNumberFormat' below won't work for text formats
+                                // we need to get rid of the part that indicates the text format.
+                                // According to ER this can be done like this:
+                                nFIndex -= (nFIndex % SV_COUNTRY_LANGUAGE_OFFSET);
+                            }
+                            else
+                            {
+                                // system language is probably not the best possible choice
+                                // but since we have to guess anyway (because the language of at
+                                // the text is NOT the one used for the number format!)
+                                // it is at least conform to to what is used in
+                                // SwTableShell::Execute when
+                                // SID_ATTR_NUMBERFORMAT_VALUE is set...
+                                LanguageType eLang = LANGUAGE_SYSTEM;
+                                nFIndex = pNumFormatter->GetStandardIndex( eLang );
+                            }
+
+                            OUString aTxt( lcl_getString(*pXCell) );
+                            double fTmp;
+                            if (pNumFormatter->IsNumberFormat( aTxt, nFIndex, fTmp ))
+                                fVal = fTmp;
+                        }
+                        pDblData[nDtaCnt++] = fVal;
+                    }
+                    else
+                        DBG_ERROR( "output sequence missing" );
+                }
+            }
+        }
+    }
+    DBG_ASSERT( nDtaCnt == nSize, "size mismatch. Invalid cell range?" );
+    if (pAnySeq)
+        pAnySeq->realloc( nDtaCnt );
+    else if (pTxtSeq)
+        pTxtSeq->realloc( nDtaCnt );
+    else if (pDblSeq)
+        pDblSeq->realloc( nDtaCnt );
+}
+
+/*-- 04.06.04 11:42:47---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+
+SwUnoCrsr * lcl_CreateCursor( SwFrmFmt &rTblFmt,
+        SwTableBox *pStartBox,      // should be top-left cell of cell range
+        SwTableBox *pEndBox )       // should be bottom right-cell cell range
+{
+    // create a *new* UNO cursor spanning the cell range defined by
+    // the start and end box. Both boxes must be belong to the same table!
+
+    SwUnoCrsr *pUnoCrsr = 0;
+    if (pStartBox && pEndBox)
+    {
+        // hier muessen die Actions aufgehoben werden um
+        // (zB dem Layout zu ermöglichen die Tabelle zu formatieren, da
+        // sonst kein Tabellen Cursor aufgespannt werden kann.)
+        UnoActionRemoveContext aRemoveContext(rTblFmt.GetDoc());
+
+        // set point of cursor to top left box of range
+        const SwStartNode* pSttNd = pStartBox->GetSttNd();
+        SwPosition aPos(*pSttNd);
+        pUnoCrsr = rTblFmt.GetDoc()->CreateUnoCrsr(aPos, sal_True);
+        pUnoCrsr->Move( fnMoveForward, fnGoNode );
+        pUnoCrsr->SetRemainInSection( sal_False );
+        pUnoCrsr->SetMark();
+        pUnoCrsr->GetPoint()->nNode = *pEndBox->GetSttNd();
+        pUnoCrsr->Move( fnMoveForward, fnGoNode );
+        SwUnoTableCrsr *pCrsr = *pUnoCrsr;
+        pCrsr->MakeBoxSels();
+    }
+    return pUnoCrsr;
+}
+
+
+uno::Sequence< Reference< XLabeledDataSequence > > SwXCellRange::GetLabeledDataSequences(
+        SwChartDataProvider &rProvider,
+        BOOL bBuildColumnSeqs,      // if false build sequences of rows
+        BOOL bFirstCellIsLabel )
+    throw (uno::RuntimeException)
+{
+    sal_Int16 nRowCount = getRowCount();
+    sal_Int16 nColCount = getColumnCount();
+    //
+    if(!nRowCount || !nColCount)
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U("Table too complex");
+        throw aRuntime;
+    }
+
+    sal_Int16 nNumLabelCells = bFirstCellIsLabel ? 1 : 0;
+    sal_Int16 nNumRowLabelCells = bBuildColumnSeqs ? 0 : nNumLabelCells;
+    sal_Int16 nNumColLabelCells = bBuildColumnSeqs ? nNumLabelCells : 0;
+
+    sal_Int16 nSecondaryCount   = bBuildColumnSeqs ? nColCount : nRowCount;
+    Sequence< Reference< XLabeledDataSequence > > aSecondarySeq( nSecondaryCount );
+    Reference< XLabeledDataSequence > *pSecondaryArray = aSecondarySeq.getArray();
+    SwFrmFmt* pTblFmt = GetFrmFmt();
+    if (pTblFmt)
+    {
+        sal_Int16 nColOff   = 0;
+        sal_Int16 nRowOff   = 0;
+        sal_Int16 &rSecondaryOffset = bBuildColumnSeqs ? nColOff : nRowOff;
+        for(rSecondaryOffset = 0;  rSecondaryOffset < nSecondaryCount;  ++rSecondaryOffset)
+        {
+            SwTableBox * pLabelStartBox     = 0;
+            SwTableBox * pLabelEndBox       = 0;
+            SwTableBox * pValuesStartBox    = 0;
+            SwTableBox * pValuesEndBox      = 0;
+            SwTable* pTable = SwTable::FindTable( pTblFmt );
+            DBG_ASSERT( pTable, "table not found" )
+            if (!pTable)
+                throw RuntimeException();
+            if (nNumLabelCells != 0)
+            {
+                String aLabelStartBoxName = lcl_GetCellName(
+                        aRgDesc.nLeft + nColOff,
+                        aRgDesc.nTop  + nRowOff );
+                pLabelStartBox = (SwTableBox*)pTable->GetTblBox( aLabelStartBoxName );
+                String aLabelEndBoxName = lcl_GetCellName(
+                        aRgDesc.nLeft + nColOff + Max(0, nNumRowLabelCells - 1),
+                        aRgDesc.nTop  + nRowOff + Max(0, nNumColLabelCells - 1) );
+                pLabelEndBox = (SwTableBox*)pTable->GetTblBox( aLabelEndBoxName );
+            }
+            if (nColCount > nNumColLabelCells  &&  nRowCount > nNumRowLabelCells)
+            {
+                String aValuesStartBoxName = lcl_GetCellName(
+                        aRgDesc.nLeft + nColOff + nNumRowLabelCells,
+                        aRgDesc.nTop  + nRowOff + nNumColLabelCells );
+                pValuesStartBox = (SwTableBox*)pTable->GetTblBox( aValuesStartBoxName );
+
+                String aValuesEndBoxName;
+                if (bBuildColumnSeqs)
+                {
+                    aValuesEndBoxName = lcl_GetCellName(
+                            aRgDesc.nLeft + nColOff,
+                            aRgDesc.nTop  + nRowCount - 1 );
+                }
+                else
+                {
+                    aValuesEndBoxName = lcl_GetCellName(
+                            aRgDesc.nLeft + nColCount - 1,
+                            aRgDesc.nTop  + nRowOff );
+                }
+                pValuesEndBox = (SwTableBox*)pTable->GetTblBox( aValuesEndBoxName );
+            }
+
+
+            Reference< XLabeledDataSequence > xLDS;
+            Reference< XDataSequence > xLabelSeq;
+            Reference< XDataSequence > xValuesSeq;
+            if (pValuesStartBox && pValuesEndBox)
+            {
+                SwUnoCrsr *pTblCursor = lcl_CreateCursor( *pTblFmt,
+                                                pValuesStartBox, pValuesEndBox );
+                xValuesSeq = new SwChartDataSequence( rProvider, *pTblFmt, pTblCursor );
+            }
+            if (pLabelStartBox && pLabelEndBox)
+            {
+                SwUnoCrsr *pTblCursor = lcl_CreateCursor( *pTblFmt,
+                                                pLabelStartBox, pLabelEndBox );
+                xLabelSeq =  new SwChartDataSequence( rProvider, *pTblFmt, pTblCursor );
+            }
+            if (!xValuesSeq.is())
+                throw uno::RuntimeException();
+            else
+            {
+                xLDS = new SwChartLabeledDataSequence();
+                xLDS->setLabel( xLabelSeq );
+                xLDS->setValues( xValuesSeq );
+            }
+
+            pSecondaryArray[ rSecondaryOffset ] = xLDS;
+        }
+    }
+    else
+        throw uno::RuntimeException();
+
+    return aSecondarySeq;
+}
+
 /*-- 29.04.02 11:42:47---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -4168,6 +4658,7 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
     throw (uno::RuntimeException)
 {
     // see SwXCellRange::getData also
+    // also see SwXCellRange::GetDataSequence
 
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Int16 nRowCount = getRowCount();
@@ -5149,4 +5640,6 @@ void SwChartEventListenerContainer::ChartDataChanged()
         }
     }
 }
+
+///////////////////////////////////////////////////////////////////////////
 
