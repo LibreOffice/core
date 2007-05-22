@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xestyle.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:36:43 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:56:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,7 @@ enum XclExpColorType
     EXC_COLOR_CHARTTEXT,        /// Text color in a chart.
     EXC_COLOR_CHARTLINE,        /// Line in a chart.
     EXC_COLOR_CHARTAREA,        /// Area in a chart.
+    EXC_COLOR_CTRLTEXT,         /// Text color in a form control.
     EXC_COLOR_GRID              /// Spreadsheet grid color.
 };
 
@@ -104,7 +105,7 @@ class XclExpPaletteImpl;
     GetMixedColors() return the real Excel palette index for all color
     identifiers.
  */
-class XclExpPalette : public XclExpRecordBase
+class XclExpPalette : public XclDefaultPalette, public XclExpRecord
 {
 public:
     explicit            XclExpPalette( const XclExpRoot& rRoot );
@@ -122,9 +123,6 @@ public:
 
     /** Returns the Excel palette index of the color with passed color ID. */
     sal_uInt16          GetColorIndex( sal_uInt32 nColorId ) const;
-    /** Returns the Excel palette index of the passed color (searches for nearest color).
-        @param nAutoDefault  The Excel palette index for automatic color. */
-    sal_uInt16          GetColorIndex( const Color& rColor, sal_uInt16 nAutoDefault = 0 ) const;
 
     /** Returns a foreground and background color for the two passed color IDs.
         @descr  If rnXclPattern contains a solid pattern, this function tries to find
@@ -146,6 +144,10 @@ public:
     virtual void        Save( XclExpStream& rStrm );
 
 private:
+    /** Writes the contents of the PALETTE record. */
+    virtual void        WriteBody( XclExpStream& rStrm );
+
+private:
     typedef ScfRef< XclExpPaletteImpl > XclExpPaletteImplRef;
     XclExpPaletteImplRef mxImpl;
 };
@@ -159,47 +161,28 @@ const size_t EXC_FONTLIST_NOTFOUND = static_cast< size_t >( -1 );
 
 // ----------------------------------------------------------------------------
 
-/** This struct adds a color identifier to XclFontData. */
-struct XclExpFontData : public XclFontData
-{
-    sal_uInt32          mnColorId;      /// Unique color ID for text color.
-
-    /** Constructs an empty font data structure. */
-    explicit            XclExpFontData();
-    /** Constructs a font data structure and fills it with the passed font attributes. */
-    explicit            XclExpFontData( const XclExpRoot& rRoot, const Font& rFont );
-    /** As directly above but also fills in the escapement member. */
-    explicit            XclExpFontData( const XclExpRoot& rRoot, const SvxFont& rFont );
-
-    /** Sets the color identifier from the passed color. */
-    void                SetColorId( const XclExpRoot& rRoot, const Color& rColor );
-
-    /** Calculates a hash value from the current font settings. */
-    sal_uInt32          GetHash() const;
-};
-
-bool operator==( const XclExpFontData& rLeft, const XclExpFontData& rRight );
-
-// ----------------------------------------------------------------------------
-
 /** Stores all data of an Excel font and provides export of FONT records. */
 class XclExpFont : public XclExpRecord, protected XclExpRoot
 {
 public:
-    explicit            XclExpFont( const XclExpRoot& rRoot, const XclExpFontData& rFontData );
+    explicit            XclExpFont( const XclExpRoot& rRoot,
+                            const XclFontData& rFontData, XclExpColorType eColorType );
 
     /** Returns read-only access to font data. */
-    inline const XclExpFontData& GetFontData() const { return maData; }
+    inline const XclFontData& GetFontData() const { return maData; }
+    /** Returns the font color identifier. */
+    inline sal_uInt32   GetFontColorId() const { return mnColorId; }
     /** Compares this font with the passed font data.
         @param nHash  The hash value calculated from the font data. */
-    virtual bool        Equals( const XclExpFontData& rFontData, sal_uInt32 nHash ) const;
+    virtual bool        Equals( const XclFontData& rFontData, sal_uInt32 nHash ) const;
 
 private:
     /** Writes the contents of the FONT record. */
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    XclExpFontData      maData;         /// All font attributes.
+    XclFontData         maData;         /// All font attributes.
+    sal_uInt32          mnColorId;      /// Unique color ID for text color.
     sal_uInt32          mnHash;         /// Hash value for fast comparison.
 };
 
@@ -212,7 +195,7 @@ public:
     explicit            XclExpBlindFont( const XclExpRoot& rRoot );
 
     /** Returns always false to never find this font while searching the font list. */
-    virtual bool        Equals( const XclExpFontData& rFontData, sal_uInt32 nHash ) const;
+    virtual bool        Equals( const XclFontData& rFontData, sal_uInt32 nHash ) const;
 
     /** Skips writing this record. */
     virtual void        Save( XclExpStream& rStrm );
@@ -230,35 +213,36 @@ public:
 
     /** Returns the specified font from font list. */
     const XclExpFont*   GetFont( sal_uInt16 nXclFont ) const;
-    /** Returns the application font data of this file, needed i.e. for column width. */
+    /** Returns the application font data of this file, needed e.g. for column width. */
     const XclFontData&  GetAppFontData() const;
-
-    /** Searches for the passed font data and returns its Excel font index.
-        @return  Excel font index or nDefault, if not found. */
-    sal_uInt16          GetXclIndex( const XclExpFontData& rFontData, sal_uInt16 nDefault = EXC_FONT_APP );
 
     /** Inserts a new font with the passed font data into the buffer if not present.
         @param bAppFont  true = Sets the application font; false = Inserts a new font.
         @return  The resulting Excel font index. */
-    sal_uInt16          Insert( const XclExpFontData& rFontData, bool bAppFont = false );
+    sal_uInt16          Insert( const XclFontData& rFontData,
+                            XclExpColorType eColorType, bool bAppFont = false );
     /** Inserts the font into the buffer if not present.
         @param bAppFont  true = Sets the application font; false = Inserts a new font.
         @return  The resulting Excel font index. */
-    sal_uInt16          Insert( const Font& rFont, bool bAppFont = false );
-    /** Inserts the SvxFont into the buffer if not present i.e. where escapements are used
+    sal_uInt16          Insert( const Font& rFont,
+                            XclExpColorType eColorType, bool bAppFont = false );
+    /** Inserts the SvxFont into the buffer if not present, e.g. where escapements are used.
         @param bAppFont  true = Sets the application font; false = Inserts a new font.
         @return  The resulting Excel font index. */
-    sal_uInt16          Insert( const SvxFont& rFont, bool bAppFont = false );
+    sal_uInt16          Insert( const SvxFont& rFont,
+                            XclExpColorType eColorType, bool bAppFont = false );
     /** Inserts the font contained in the passed item set into the buffer, if not present.
         @param nScript  The script type of the font properties to be used.
         @param bAppFont  true = Sets the application font; false = Inserts a new font.
         @return  The resulting Excel font index. */
-    sal_uInt16          Insert( const SfxItemSet& rItemSet, sal_Int16 nScript, bool bAppFont = false );
+    sal_uInt16          Insert( const SfxItemSet& rItemSet, sal_Int16 nScript,
+                            XclExpColorType eColorType, bool bAppFont = false );
     /** Inserts the font contained in rPattern into the buffer if not present.
         @param nScript  The script type of the font properties to be used.
         @param bAppFont  true = Sets the application font; false = Inserts a new font.
         @return  The resulting Excel font index. */
-    sal_uInt16          Insert( const ScPatternAttr& rPattern, sal_Int16 nScript, bool bAppFont = false );
+    sal_uInt16          Insert( const ScPatternAttr& rPattern, sal_Int16 nScript,
+                            XclExpColorType eColorType, bool bAppFont = false );
 
     /** Writes all FONT records contained in this buffer. */
     virtual void        Save( XclExpStream& rStrm );
@@ -276,7 +260,7 @@ private:
     /** Initializes the default fonts for the current BIFF version. */
     void                InitDefaultFonts();
     /** Tries to find the passed font and returns the current list index. */
-    size_t              Find( const XclExpFontData& rFontData );
+    size_t              Find( const XclFontData& rFontData );
 
 private:
     typedef XclExpRecordList< XclExpFont >  XclExpFontList;
@@ -645,7 +629,7 @@ public:
                             bool bForceLineBreak );
     /** Finds or creates a cell XF record for the passed item set, with custom number format.
         @param nXFFlags  Additional flags allowing to control the creation of an XF.
-        @param nForceScNumFmt  The number format to be exported, i.e. formula
+        @param nForceScNumFmt  The number format to be exported, e.g. formula
             result type. This format will always overwrite the cell's number format.
         @return  A unique XF record ID. */
     sal_uInt32          InsertWithNumFmt(
@@ -654,7 +638,7 @@ public:
     /** Inserts the passed cell style. Creates a style XF record and a STYLE record.
         @return  A unique XF record ID. */
     sal_uInt32          InsertStyle( const SfxStyleSheetBase* pStyleSheet );
-    /** Returns the XF identifier representing a fixed Excel XF index (i.e. for built-in XFs). */
+    /** Returns the XF identifier representing a fixed Excel XF index (e.g. for built-in XFs). */
     static sal_uInt32   GetXFIdFromIndex( sal_uInt16 nXFIndex );
     /** Returns the XF identifier representing the default cell XF. */
     static sal_uInt32   GetDefCellXFId();
