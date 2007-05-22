@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:43:55 $
+#   last change: $Author: vg $ $Date: 2007-05-22 19:08:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,43 +55,80 @@ ENABLE_EXCEPTIONS=	TRUE
 #Specifies object files to bind into linked libraries.
 SLOFILES=	\
     $(SLO)$/ErrorBar.obj \
+    $(SLO)$/TrueGuard.obj \
     $(SLO)$/LifeTime.obj \
     $(SLO)$/MediaDescriptorHelper.obj \
+    $(SLO)$/ConfigColorScheme.obj \
+    $(SLO)$/ColorPerPointHelper.obj \
+    $(SLO)$/ObjectIdentifier.obj \
+    $(SLO)$/CachedDataSequence.obj \
     $(SLO)$/CommonConverters.obj \
     $(SLO)$/ContextHelper.obj \
     $(SLO)$/DataSeriesHelper.obj \
-    $(SLO)$/DataSeriesTreeHelper.obj \
+    $(SLO)$/DataSource.obj \
+    $(SLO)$/DataSourceHelper.obj \
     $(SLO)$/DiagramHelper.obj \
     $(SLO)$/ExponentialRegressionCurveCalculator.obj \
     $(SLO)$/ImplOPropertySet.obj \
-    $(SLO)$/LayoutHelper.obj \
+    $(SLO)$/InternalDataProvider.obj \
+    $(SLO)$/LabeledDataSequence.obj \
     $(SLO)$/LinearRegressionCurveCalculator.obj \
     $(SLO)$/LogarithmicRegressionCurveCalculator.obj \
     $(SLO)$/MeanValueRegressionCurveCalculator.obj \
     $(SLO)$/OEnumeration.obj \
     $(SLO)$/OIndexContainer.obj \
     $(SLO)$/OPropertySet.obj \
+    $(SLO)$/WrappedPropertySet.obj \
+    $(SLO)$/WrappedProperty.obj \
+    $(SLO)$/WrappedIgnoreProperty.obj \
+    $(SLO)$/WrappedDefaultProperty.obj \
+    $(SLO)$/WrappedDirectStateProperty.obj \
     $(SLO)$/OStyle.obj \
     $(SLO)$/PotentialRegressionCurveCalculator.obj \
     $(SLO)$/RegressionCurveHelper.obj \
     $(SLO)$/RegressionCurveModel.obj \
     $(SLO)$/Rotation.obj \
     $(SLO)$/RelativeSizeHelper.obj \
+    $(SLO)$/RelativePositionHelper.obj \
     $(SLO)$/Scaling.obj \
+    $(SLO)$/SceneProperties.obj \
     $(SLO)$/StatisticsHelper.obj \
     $(SLO)$/ChartModelHelper.obj \
+    $(SLO)$/ChartViewHelper.obj \
     $(SLO)$/ChartTypeHelper.obj \
-    $(SLO)$/MeterHelper.obj \
+    $(SLO)$/AxisHelper.obj \
     $(SLO)$/MutexContainer.obj \
     $(SLO)$/PropertyHelper.obj \
+    $(SLO)$/FormattedStringHelper.obj \
     $(SLO)$/TitleHelper.obj \
     $(SLO)$/LegendHelper.obj \
     $(SLO)$/CharacterProperties.obj \
     $(SLO)$/LineProperties.obj \
     $(SLO)$/FillProperties.obj \
-    $(SLO)$/UserDefinedProperties.obj
+    $(SLO)$/UserDefinedProperties.obj \
+    $(SLO)$/NameContainer.obj \
+    $(SLO)$/ChartDebugTrace.obj \
+    $(SLO)$/_serviceregistration_tools.obj \
+    $(SLO)$/UncachedDataSequence.obj \
+    $(SLO)$/UndoManager.obj \
+    $(SLO)$/UndoGuard.obj \
+    $(SLO)$/ImplUndoManager.obj \
+    $(SLO)$/XMLRangeHelper.obj \
+    $(SLO)$/ModifyListenerHelper.obj \
+    $(SLO)$/ModifyListenerCallBack.obj \
+    $(SLO)$/BaseGFXHelper.obj \
+    $(SLO)$/ControllerLockGuard.obj \
+    $(SLO)$/WeakListenerAdapter.obj \
+    $(SLO)$/ResId.obj \
+    $(SLO)$/RessourceManager.obj \
+    $(SLO)$/RangeHighlighter.obj \
+    $(SLO)$/ReferenceSizeProvider.obj \
+    $(SLO)$/ExplicitCategoriesProvider.obj
 
-LIB1OBJFILES = $(SLOFILES)
+DISABLED_SLOFILES=	\
+    $(SLO)$/NamedFillProperties.obj \
+    $(SLO)$/NamedLineProperties.obj \
+    $(SLO)$/NamedProperties.obj
 
 #--------
 
@@ -112,12 +149,12 @@ SHL1LIBS= 		$(SLB)$/$(TARGET).lib
 SHL1STDLIBS=    \
                 $(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
+                $(COMPHELPERLIB)	\
                 $(SALLIB)			\
                 $(TOOLSLIB)			\
-                $(BASEGFXLIB)
+                $(BASEGFXLIB) 		\
+                $(UNOTOOLSLIB)
 
-#				$(COMPHELPERLIB)	\
-#				$(GOODIESLIB)		\
 #				$(SVLIB)			\
 #				$(SVLLIB)			\
 #				$(SVTOOLLIB)		\
@@ -132,9 +169,7 @@ SHL1STDLIBS=    \
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
 #Specifies the library name to parse for symbols. For Win32 only.
-.IF "$(GUI)$(COM)"=="WNTGCC"
 DEFLIB1NAME=	$(TARGET)
-.ENDIF
 
 #A file of symbols to export.
 #DEF1EXPORTFILE=	$(PRJ)$/source$/inc$/exports.dxp
