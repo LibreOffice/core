@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_PointGeometry.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:37:01 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:47:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include "tp_PointGeometry.hxx"
-
-#include "ResId.hxx"
 #include "TabPages.hrc"
-#include "SchSfxItemIds.hxx"
+#include "res_BarGeometry.hxx"
+#include "ResId.hxx"
+
+#include "chartview/ChartSfxItemIds.hxx"
 
 // header for SfxInt32Item
 #ifndef _SFXINTITEM_HXX
@@ -49,40 +50,26 @@
 #ifndef _SVX3DITEMS_HXX
 #include <svx/svx3ditems.hxx>
 #endif
-/*
-#include "schattr.hxx"
-#include "chmod3d.hxx"
-#include "schresid.hxx"
-#include "chtmodel.hxx"
-#include "attrib.hxx"
-#include "attrib.hrc"
-
-#ifndef _SVX_SVXIDS_HRC //autogen
-#include <svx/svxids.hrc>
-#endif
-*/
 
 //.............................................................................
 namespace chart
 {
 //.............................................................................
 
-SchLayoutTabPage::SchLayoutTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
-    SfxTabPage(pWindow, SchResId(TP_LAYOUT), rInAttrs),
-/*  aSquare(this, SchResId(RBT_LY_CUBE)),
-    aCylinder(this, SchResId(RBT_LY_CYLINDER)),
-    aCone(this, SchResId(RBT_LY_CONE)),
-    aPyramid(this, SchResId(RBT_LY_PYRAMID)),
-    aHanoi(this,SchResId(RBT_LY_HANOI)),
-    */
-    aFtLayout(this, SchResId(FT_LY_SHAPE)),
-    aListShapes(this,SchResId(LB_LY_SHAPE))
+SchLayoutTabPage::SchLayoutTabPage(Window* pWindow,const SfxItemSet& rInAttrs)
+                 : SfxTabPage(pWindow, SchResId(TP_LAYOUT), rInAttrs)
+                 , m_pGeometryResources(0)
 {
-    FreeResource();
+    Size aPageSize( this->GetSizePixel() );
+    Point aPos( this->LogicToPixel( Point(6,6), MapMode(MAP_APPFONT) ) );
+    m_pGeometryResources = new BarGeometryResources( this );
+    m_pGeometryResources->SetPosPixel( aPos );
 }
 
 SchLayoutTabPage::~SchLayoutTabPage()
 {
+    if( m_pGeometryResources )
+        delete m_pGeometryResources;
 }
 
 SfxTabPage* SchLayoutTabPage::Create(Window* pWindow,
@@ -94,12 +81,12 @@ SfxTabPage* SchLayoutTabPage::Create(Window* pWindow,
 BOOL SchLayoutTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
 
-    if(aListShapes.GetSelectEntryCount())
+    if(m_pGeometryResources && m_pGeometryResources->GetSelectEntryCount())
     {
         long nShape=CHART_SHAPE3D_SQUARE;
         long nSegs=32;
 
-        nShape = aListShapes.GetSelectEntryPos();
+        nShape = m_pGeometryResources->GetSelectEntryPos();
         if(nShape==CHART_SHAPE3D_PYRAMID)
             nSegs=4;
 
@@ -116,27 +103,12 @@ void SchLayoutTabPage::Reset(const SfxItemSet& rInAttrs)
     if (rInAttrs.GetItemState(SCHATTR_STYLE_SHAPE,TRUE, &pPoolItem) == SFX_ITEM_SET)
     {
         long nVal=((const SfxInt32Item*)pPoolItem)->GetValue();
-        aListShapes.SelectEntryPos(nVal);
+        if(m_pGeometryResources)
+        {
+            m_pGeometryResources->SelectEntryPos(static_cast<USHORT>(nVal));
+            m_pGeometryResources->Show( true );
+        }
     }
-/*  switch (nVal)
-    {
-        case CHART_SHAPE3D_SQUARE:
-            aSquare.Check(TRUE);
-            break;
-        case CHART_SHAPE3D_CYLINDER:
-            aCylinder.Check(TRUE);
-            break;
-        case CHART_SHAPE3D_CONE:
-            aCone.Check(TRUE);
-            break;
-        case CHART_SHAPE3D_PYRAMID:
-            aPyramid.Check(TRUE);
-            break;
-        case CHART_SHAPE3D_HANOI:
-            aHanoi.Check(TRUE);
-            break;
-    }
-*/
 }
 
 //.............................................................................
