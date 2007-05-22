@@ -4,9 +4,9 @@
  *
  *  $RCSfile: constant.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-25 09:30:51 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:22:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,7 @@ extern rtl::OUString pFilterStrings[];
 #define  DOCUMENTSERVICE_CALC           _FILTER_CONFIG_FROM_ASCII_("com.sun.star.sheet.SpreadsheetDocument"        )
 #define  DOCUMENTSERVICE_DRAW           _FILTER_CONFIG_FROM_ASCII_("com.sun.star.drawing.DrawingDocument"          )
 #define  DOCUMENTSERVICE_IMPRESS        _FILTER_CONFIG_FROM_ASCII_("com.sun.star.presentation.PresentationDocument")
-#define  DOCUMENTSERVICE_CHART          _FILTER_CONFIG_FROM_ASCII_("com.sun.star.chart.ChartDocument"              )
+#define  DOCUMENTSERVICE_CHART          _FILTER_CONFIG_FROM_ASCII_("com.sun.star.chart2.ChartDocument"              )
 #define  DOCUMENTSERVICE_MATH           _FILTER_CONFIG_FROM_ASCII_("com.sun.star.formula.FormulaProperties"        )
 
 /** @short  some uno service names.
