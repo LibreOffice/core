@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tokenarray.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:15:38 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:39:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,12 +139,6 @@ public:
     BOOL    IsReference( ScRange& rRange ) const;
     /// Exactly and only one valid range (no #REF!s)
     BOOL    IsValidReference( ScRange& rRange ) const;
-    /// Exactly and only one multiple operation
-    BOOL    GetTableOpRefs(
-                ScAddress& rFormula,
-                ScAddress& rColFirstPos, ScAddress& rColRelPos,
-                ScAddress& rRowFirstPos, ScAddress& rRowRelPos,
-                BOOL& rbIsMode2 ) const;
 
     ScToken** GetArray() const  { return pCode; }
     ScToken** GetCode()  const  { return pRPN; }
