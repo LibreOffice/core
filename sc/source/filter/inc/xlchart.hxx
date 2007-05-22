@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlchart.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:21:59 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:58:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,11 @@
 #ifndef SC_XLCHART_HXX
 #define SC_XLCHART_HXX
 
+// disable/enable support for reversed axes
+#define EXC_CHART2_REVERSE_AXIS 0
+// disable/enable support for varied point colors property
+#define EXC_CHART2_VARYCOLORSBY_PROP 0
+
 #include <map>
 
 #ifndef SC_FAPIHELPER_HXX
@@ -44,129 +49,113 @@
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
-    namespace lang { class XMultiServiceFactory; }
+    namespace lang      { class XMultiServiceFactory; }
+    namespace chart2    { class XChartDocument; }
 } } }
 
 // Property names =============================================================
-
-#define SERVICE_CHART_LINE                  CREATE_OUSTRING( "com.sun.star.chart.LineDiagram" )
-#define SERVICE_CHART_AREA                  CREATE_OUSTRING( "com.sun.star.chart.AreaDiagram" )
-#define SERVICE_CHART_BAR                   CREATE_OUSTRING( "com.sun.star.chart.BarDiagram" )
-#define SERVICE_CHART_PIE                   CREATE_OUSTRING( "com.sun.star.chart.PieDiagram" )
-#define SERVICE_CHART_DONUT                 CREATE_OUSTRING( "com.sun.star.chart.DonutDiagram" )
-#define SERVICE_CHART_NET                   CREATE_OUSTRING( "com.sun.star.chart.NetDiagram" )
-#define SERVICE_CHART_XY                    CREATE_OUSTRING( "com.sun.star.chart.XYDiagram" )
-#define SERVICE_CHART_STOCK                 CREATE_OUSTRING( "com.sun.star.chart.StockDiagram" )
-
-#define EXC_CHPROP_ALIGNMENT                CREATE_OUSTRING( "Alignment" )
-#define EXC_CHPROP_ATTRIBUTEDDP             CREATE_OUSTRING( "AttributedDataPoints" )
-#define EXC_CHPROP_AUTOMAX                  CREATE_OUSTRING( "AutoMax" )
-#define EXC_CHPROP_AUTOMIN                  CREATE_OUSTRING( "AutoMin" )
-#define EXC_CHPROP_AUTOORIG                 CREATE_OUSTRING( "AutoOrigin" )
-#define EXC_CHPROP_AUTOSTHELP               CREATE_OUSTRING( "AutoStepHelp" )
-#define EXC_CHPROP_AUTOSTMAIN               CREATE_OUSTRING( "AutoStepMain" )
-#define EXC_CHPROP_AXIS                     CREATE_OUSTRING( "Axis" )
-#define EXC_CHPROP_CHARCOLOR                CREATE_OUSTRING( "CharColor" )
-#define EXC_CHPROP_CHARCONTOURED            CREATE_OUSTRING( "CharContoured" )
-#define EXC_CHPROP_CHARCROSSEDOUT           CREATE_OUSTRING( "CharCrossedOut" )
-#define EXC_CHPROP_CHARFONTCHARSET          CREATE_OUSTRING( "CharFontCharSet" )
-#define EXC_CHPROP_CHARFONTFAMILY           CREATE_OUSTRING( "CharFontFamily" )
-#define EXC_CHPROP_CHARFONTNAME             CREATE_OUSTRING( "CharFontName" )
-#define EXC_CHPROP_CHARHEIGHT               CREATE_OUSTRING( "CharHeight" )
-#define EXC_CHPROP_CHARPOSTURE              CREATE_OUSTRING( "CharPosture" )
-#define EXC_CHPROP_CHARSHADOWED             CREATE_OUSTRING( "CharShadowed" )
-#define EXC_CHPROP_CHARUNDERL               CREATE_OUSTRING( "CharUnderline" )
-#define EXC_CHPROP_CHARWEIGHT               CREATE_OUSTRING( "CharWeight" )
-#define EXC_CHPROP_CONSTANTERRORHIGH        CREATE_OUSTRING( "ConstantErrorHigh" )
-#define EXC_CHPROP_CONSTANTERRORLOW         CREATE_OUSTRING( "ConstantErrorLow" )
-#define EXC_CHPROP_DATACAPTION              CREATE_OUSTRING( "DataCaption" )
-#define EXC_CHPROP_DATAERRORPROPS           CREATE_OUSTRING( "DataErrorProperties" )
-#define EXC_CHPROP_DATAREGRESSIONPROPS      CREATE_OUSTRING( "DataRegressionProperties" )
-#define EXC_CHPROP_DATAROWSOURCE            CREATE_OUSTRING( "DataRowSource" )
-#define EXC_CHPROP_DEEP                     CREATE_OUSTRING( "Deep" )
-#define EXC_CHPROP_DIM3D                    CREATE_OUSTRING( "Dim3D" )
-#define EXC_CHPROP_ERRORCATEGORY            CREATE_OUSTRING( "ErrorCategory" )
-#define EXC_CHPROP_ERRORINDICATOR           CREATE_OUSTRING( "ErrorIndicator" )
-#define EXC_CHPROP_FILLCOLOR                CREATE_OUSTRING( "FillColor" )
-#define EXC_CHPROP_FILLSTYLE                CREATE_OUSTRING( "FillStyle" )
-#define EXC_CHPROP_GAPWIDTH                 CREATE_OUSTRING( "GapWidth" )
-#define EXC_CHPROP_HASLEGEND                CREATE_OUSTRING( "HasLegend" )
-#define EXC_CHPROP_HASMAINTIT               CREATE_OUSTRING( "HasMainTitle" )
-#define EXC_CHPROP_HASSECYAXIS              CREATE_OUSTRING( "HasSecondaryYAxis" )
-#define EXC_CHPROP_HASSECYAXISDESCR         CREATE_OUSTRING( "HasSecondaryYAxisDescription" )
-#define EXC_CHPROP_HASXAXIS                 CREATE_OUSTRING( "HasXAxis" )
-#define EXC_CHPROP_HASXAXISDESCR            CREATE_OUSTRING( "HasXAxisDescription" )
-#define EXC_CHPROP_HASXAXISHELPGRID         CREATE_OUSTRING( "HasXAxisHelpGrid" )
-#define EXC_CHPROP_HASXAXISGRID             CREATE_OUSTRING( "HasXAxisGrid" )
-#define EXC_CHPROP_HASXAXISTIT              CREATE_OUSTRING( "HasXAxisTitle" )
-#define EXC_CHPROP_HASYAXIS                 CREATE_OUSTRING( "HasYAxis" )
-#define EXC_CHPROP_HASYAXISDESCR            CREATE_OUSTRING( "HasYAxisDescription" )
-#define EXC_CHPROP_HASYAXISHELPGRID         CREATE_OUSTRING( "HasYAxisHelpGrid" )
-#define EXC_CHPROP_HASYAXISGRID             CREATE_OUSTRING( "HasYAxisGrid" )
-#define EXC_CHPROP_HASYAXISTIT              CREATE_OUSTRING( "HasYAxisTitle" )
-#define EXC_CHPROP_HASZAXIS                 CREATE_OUSTRING( "HasZAxis" )
-#define EXC_CHPROP_HASZAXISDESCR            CREATE_OUSTRING( "HasZAxisDescription" )
-#define EXC_CHPROP_HASZAXISHELPGRID         CREATE_OUSTRING( "HasZAxisHelpGrid" )
-#define EXC_CHPROP_HASZAXISGRID             CREATE_OUSTRING( "HasZAxisGrid" )
-#define EXC_CHPROP_HASZAXISTIT              CREATE_OUSTRING( "HasZAxisTitle" )
-#define EXC_CHPROP_HELPMARKS                CREATE_OUSTRING( "HelpMarks" )
-#define EXC_CHPROP_LINECOLOR                CREATE_OUSTRING( "LineColor" )
-#define EXC_CHPROP_LINEDASH                 CREATE_OUSTRING( "LineDash" )
-#define EXC_CHPROP_LINES                    CREATE_OUSTRING( "Lines" )
-#define EXC_CHPROP_LINESTYLE                CREATE_OUSTRING( "LineStyle" )
-#define EXC_CHPROP_LINETRANSPARENCE         CREATE_OUSTRING( "LineTransparence" )
-#define EXC_CHPROP_LINEWIDTH                CREATE_OUSTRING( "LineWidth" )
-#define EXC_CHPROP_LINKNUMFMT               CREATE_OUSTRING( "LinkNumberFormatToSource" )
-#define EXC_CHPROP_LOG                      CREATE_OUSTRING( "Logarithmic" )
-#define EXC_CHPROP_MARKS                    CREATE_OUSTRING( "Marks" )
-#define EXC_CHPROP_MAX                      CREATE_OUSTRING( "Max" )
-#define EXC_CHPROP_MIN                      CREATE_OUSTRING( "Min" )
-#define EXC_CHPROP_NUMFMT                   CREATE_OUSTRING( "NumberFormat" )
-#define EXC_CHPROP_NULLDATE                 CREATE_OUSTRING( "NullDate" )
-#define EXC_CHPROP_ORIGIN                   CREATE_OUSTRING( "Origin" )
-#define EXC_CHPROP_OVERLAP                  CREATE_OUSTRING( "Overlap" )
-#define EXC_CHPROP_PERCENT                  CREATE_OUSTRING( "Percent" )
-#define EXC_CHPROP_PERCENTAGEERROR          CREATE_OUSTRING( "PercentageError" )
-#define EXC_CHPROP_REGRESSIONCURVES         CREATE_OUSTRING( "RegressionCurves" )
-#define EXC_CHPROP_SEGMENTOFFSET            CREATE_OUSTRING( "SegmentOffset" )
-#define EXC_CHPROP_SOLIDTYPE                CREATE_OUSTRING( "SolidType" )
-#define EXC_CHPROP_SPLINETYPE               CREATE_OUSTRING( "SplineType" )
-#define EXC_CHPROP_STACKED                  CREATE_OUSTRING( "Stacked" )
-#define EXC_CHPROP_STEPHELP                 CREATE_OUSTRING( "StepHelp" )
-#define EXC_CHPROP_STEPMAIN                 CREATE_OUSTRING( "StepMain" )
-#define EXC_CHPROP_STRING                   CREATE_OUSTRING( "String" )
-#define EXC_CHPROP_SYMBOLSIZE               CREATE_OUSTRING( "SymbolSize" )
-#define EXC_CHPROP_SYMBOLTYPE               CREATE_OUSTRING( "SymbolType" )
-#define EXC_CHPROP_TEXTBREAK                CREATE_OUSTRING( "TextBreak" )
-#define EXC_CHPROP_TEXTOVERLAP              CREATE_OUSTRING( "TextCanOverlap" )
-#define EXC_CHPROP_TEXTROTATION             CREATE_OUSTRING( "TextRotation" )
-#define EXC_CHPROP_TRANSLATEDCOLS           CREATE_OUSTRING( "TranslatedColumns" )
-#define EXC_CHPROP_TRANSLATEDROWS           CREATE_OUSTRING( "TranslatedRows" )
-#define EXC_CHPROP_UPDOWN                   CREATE_OUSTRING( "UpDown" )
-#define EXC_CHPROP_VERTICAL                 CREATE_OUSTRING( "Vertical" )
-#define EXC_CHPROP_VOLUME                   CREATE_OUSTRING( "Volume" )
 
 // service names
 #define SERVICE_DRAWING_BITMAPTABLE         CREATE_OUSTRING( "com.sun.star.drawing.BitmapTable" )
 #define SERVICE_DRAWING_DASHTABLE           CREATE_OUSTRING( "com.sun.star.drawing.DashTable" )
 #define SERVICE_DRAWING_GRADIENTTABLE       CREATE_OUSTRING( "com.sun.star.drawing.GradientTable" )
 
+#define SERVICE_CHART2_AXIS                 CREATE_OUSTRING( "com.sun.star.chart2.Axis" )
+#define SERVICE_CHART2_CARTESIANCOORDSYS2D  CREATE_OUSTRING( "com.sun.star.chart2.CartesianCoordinateSystem2d" )
+#define SERVICE_CHART2_CARTESIANCOORDSYS3D  CREATE_OUSTRING( "com.sun.star.chart2.CartesianCoordinateSystem3d" )
+#define SERVICE_CHART2_DATAPROVIDER         CREATE_OUSTRING( "com.sun.star.chart2.data.DataProvider" )
+#define SERVICE_CHART2_DATASERIES           CREATE_OUSTRING( "com.sun.star.chart2.DataSeries" )
+#define SERVICE_CHART2_DIAGRAM              CREATE_OUSTRING( "com.sun.star.chart2.Diagram" )
+#define SERVICE_CHART2_ERRORBAR             CREATE_OUSTRING( "com.sun.star.chart2.ErrorBar" )
+#define SERVICE_CHART2_EXPREGCURVE          CREATE_OUSTRING( "com.sun.star.chart2.ExponentialRegressionCurve" )
+#define SERVICE_CHART2_FORMATTEDSTRING      CREATE_OUSTRING( "com.sun.star.chart2.FormattedString" )
+#define SERVICE_CHART2_LABELEDDATASEQ       CREATE_OUSTRING( "com.sun.star.chart2.data.LabeledDataSequence" )
+#define SERVICE_CHART2_LEGEND               CREATE_OUSTRING( "com.sun.star.chart2.Legend" )
+#define SERVICE_CHART2_LINEARREGCURVE       CREATE_OUSTRING( "com.sun.star.chart2.LinearRegressionCurve" )
+#define SERVICE_CHART2_LINEARSCALING        CREATE_OUSTRING( "com.sun.star.chart2.LinearScaling" )
+#define SERVICE_CHART2_LOGREGCURVE          CREATE_OUSTRING( "com.sun.star.chart2.LogarithmicRegressionCurve" )
+#define SERVICE_CHART2_LOGSCALING           CREATE_OUSTRING( "com.sun.star.chart2.LogarithmicScaling" )
+#define SERVICE_CHART2_POLARCOORDSYS2D      CREATE_OUSTRING( "com.sun.star.chart2.PolarCoordinateSystem2d" )
+#define SERVICE_CHART2_POLARCOORDSYS3D      CREATE_OUSTRING( "com.sun.star.chart2.PolarCoordinateSystem3d" )
+#define SERVICE_CHART2_POTREGCURVE          CREATE_OUSTRING( "com.sun.star.chart2.PotentialRegressionCurve" )
+#define SERVICE_CHART2_TITLE                CREATE_OUSTRING( "com.sun.star.chart2.Title" )
+
+// property names
+#define EXC_CHPROP_ATTAXISINDEX             CREATE_OUSTRING( "AttachedAxisIndex" )
+#define EXC_CHPROP_ATTRIBDATAPOINTS         CREATE_OUSTRING( "AttributedDataPoints" )
+#define EXC_CHPROP_AXISPOSITION             CREATE_OUSTRING( "AxisPosition" )
+#define EXC_CHPROP_BLACKDAY                 CREATE_OUSTRING( "BlackDay" )
+#define EXC_CHPROP_COLOR                    CREATE_OUSTRING( "Color" )
+#define EXC_CHPROP_CONNECTBARS              CREATE_OUSTRING( "ConnectBars" )
+#define EXC_CHPROP_CURVESTYLE               CREATE_OUSTRING( "CurveStyle" )
+#define EXC_CHPROP_D3DSCENELIGHTON1         CREATE_OUSTRING( "D3DSceneLightOn1" )
+#define EXC_CHPROP_D3DSCENELIGHTCOLOR2      CREATE_OUSTRING( "D3DSceneLightColor2" )
+#define EXC_CHPROP_D3DSCENELIGHTDIR2        CREATE_OUSTRING( "D3DSceneLightDirection2" )
+#define EXC_CHPROP_D3DSCENELIGHTON2         CREATE_OUSTRING( "D3DSceneLightOn2" )
+#define EXC_CHPROP_D3DSCENESHADEMODE        CREATE_OUSTRING( "D3DSceneShadeMode" )
+#define EXC_CHPROP_DISPLAYLABELS            CREATE_OUSTRING( "DisplayLabels" )
+#define EXC_CHPROP_ERRORBARSTYLE            CREATE_OUSTRING( "ErrorBarStyle" )
+#define EXC_CHPROP_ERRORBARX                CREATE_OUSTRING( "ErrorBarX" )
+#define EXC_CHPROP_ERRORBARY                CREATE_OUSTRING( "ErrorBarY" )
+#define EXC_CHPROP_FILLBITMAPMODE           CREATE_OUSTRING( "FillBitmapMode" )
+#define EXC_CHPROP_FILLSTYLE                CREATE_OUSTRING( "FillStyle" )
+#define EXC_CHPROP_GAPWIDTHSEQ              CREATE_OUSTRING( "GapwidthSequence" )
+#define EXC_CHPROP_GEOMETRY3D               CREATE_OUSTRING( "Geometry3D" )
+#define EXC_CHPROP_JAPANESE                 CREATE_OUSTRING( "Japanese" )
+#define EXC_CHPROP_LABEL                    CREATE_OUSTRING( "Label" )
+#define EXC_CHPROP_MAJORTICKS               CREATE_OUSTRING( "MajorTickmarks" )
+#define EXC_CHPROP_MINORTICKS               CREATE_OUSTRING( "MinorTickmarks" )
+#define EXC_CHPROP_NEGATIVEERROR            CREATE_OUSTRING( "NegativeError" )
+#define EXC_CHPROP_NUMBERFORMAT             CREATE_OUSTRING( "NumberFormat" )
+#define EXC_CHPROP_OFFSET                   CREATE_OUSTRING( "Offset" )
+#define EXC_CHPROP_OVERLAPSEQ               CREATE_OUSTRING( "OverlapSequence" )
+#define EXC_CHPROP_PERCENTDIAGONAL          CREATE_OUSTRING( "PercentDiagonal" )
+#define EXC_CHPROP_POSITIVEERROR            CREATE_OUSTRING( "PositiveError" )
+#define EXC_CHPROP_ROLE                     CREATE_OUSTRING( "Role" )
+#define EXC_CHPROP_SHOW                     CREATE_OUSTRING( "Show" )
+#define EXC_CHPROP_SHOWFIRST                CREATE_OUSTRING( "ShowFirst" )
+#define EXC_CHPROP_SHOWHIGHLOW              CREATE_OUSTRING( "ShowHighLow" )
+#define EXC_CHPROP_SHOWNEGATIVEERROR        CREATE_OUSTRING( "ShowNegativeError" )
+#define EXC_CHPROP_SHOWPOSITIVEERROR        CREATE_OUSTRING( "ShowPositiveError" )
+#define EXC_CHPROP_STACKINGDIR              CREATE_OUSTRING( "StackingDirection" )
+#define EXC_CHPROP_SWAPXANDYAXIS            CREATE_OUSTRING( "SwapXAndYAxis" )
+#define EXC_CHPROP_SYMBOL                   CREATE_OUSTRING( "Symbol" )
+#define EXC_CHPROP_TEXTBREAK                CREATE_OUSTRING( "TextBreak" )
+#define EXC_CHPROP_TEXTOVERLAP              CREATE_OUSTRING( "TextOverlap" )
+#define EXC_CHPROP_USERINGS                 CREATE_OUSTRING( "UseRings" )
+#define EXC_CHPROP_VARYCOLORSBY             CREATE_OUSTRING( "VaryColorsByPoint" )
+#define EXC_CHPROP_WEIGHT                   CREATE_OUSTRING( "Weight" )
+#define EXC_CHPROP_WHITEDAY                 CREATE_OUSTRING( "WhiteDay" )
+
+// data series roles
+#define EXC_CHPROP_ROLE_CATEG               CREATE_OUSTRING( "categories" )
+#define EXC_CHPROP_ROLE_LABEL               CREATE_OUSTRING( "label" )
+#define EXC_CHPROP_ROLE_XVALUES             CREATE_OUSTRING( "values-x" )
+#define EXC_CHPROP_ROLE_YVALUES             CREATE_OUSTRING( "values-y" )
+#define EXC_CHPROP_ROLE_OPENVALUES          CREATE_OUSTRING( "values-first" )
+#define EXC_CHPROP_ROLE_CLOSEVALUES         CREATE_OUSTRING( "values-last" )
+#define EXC_CHPROP_ROLE_LOWVALUES           CREATE_OUSTRING( "values-min" )
+#define EXC_CHPROP_ROLE_HIGHVALUES          CREATE_OUSTRING( "values-max" )
+
 // Constants and Enumerations =================================================
 
 const sal_Size EXC_CHART_PROGRESS_SIZE          = 10;
-const sal_uInt16 EXC_CHART_AUTOROTATION         = 0xFFFF;   /// Automatic rotation, e.g. axis labels.
+const sal_uInt16 EXC_CHART_AUTOROTATION         = 0xFFFF;   /// Automatic rotation, e.g. axis labels (internal use only).
 
-// ----------------------------------------------------------------------------
+const sal_Int32 EXC_CHART_AXIS_NONE             = -1;       /// For internal use only.
+const sal_Int32 EXC_CHART_AXIS_X                = 0;        /// API X axis index.
+const sal_Int32 EXC_CHART_AXIS_Y                = 1;        /// API Y axis index.
+const sal_Int32 EXC_CHART_AXIS_Z                = 2;        /// API Z axis index.
+const sal_Int32 EXC_CHART_AXESSET_NONE          = -1;       /// For internal use only.
+const sal_Int32 EXC_CHART_AXESSET_PRIMARY       = 0;        /// API primary axes set index.
+const sal_Int32 EXC_CHART_AXESSET_SECONDARY     = 1;        /// API secondary axes set index.
 
-/** Enumerates possible orientations for a source range. */
-enum XclChOrientation
-{
-    EXC_CHORIENT_EMPTY,             /// No linked cell found, or invalid link type.
-    EXC_CHORIENT_SINGLE,            /// Single cell linked.
-    EXC_CHORIENT_VERTICAL,          /// Vertical (all cells in one column).
-    EXC_CHORIENT_HORIZONTAL,        /// Horizontal (all cells in one row).
-    EXC_CHORIENT_COMPLEX            /// Range too complex (multiple rows/columns).
-};
+// (0x1001) CHUNITS -----------------------------------------------------------
+
+const sal_uInt16 EXC_ID_CHUNITS                 = 0x1001;
+
+const sal_uInt16 EXC_CHUNITS_TWIPS              = 0;
+const sal_uInt16 EXC_CHUNITS_PIXELS             = 1;
 
 // (0x1002) CHCHART -----------------------------------------------------------
 
@@ -232,12 +221,10 @@ const sal_uInt16 EXC_CHMARKERFORMAT_STDDEV      = 7;
 const sal_uInt16 EXC_CHMARKERFORMAT_CIRCLE      = 8;
 const sal_uInt16 EXC_CHMARKERFORMAT_PLUS        = 9;
 
-const sal_uInt16 EXC_CHMARKERFORMAT_SYMBOLCOUNT = 9;
-
-const sal_uInt32 EXC_CHMARKERFORMAT_HAIRSIZE    = 60;
-const sal_uInt32 EXC_CHMARKERFORMAT_SINGLESIZE  = 100;
-const sal_uInt32 EXC_CHMARKERFORMAT_DOUBLESIZE  = 140;
-const sal_uInt32 EXC_CHMARKERFORMAT_TRIPLESIZE  = 180;
+const sal_uInt32 EXC_CHMARKERFORMAT_HAIRSIZE    = 60;       /// Automatic symbol size for hair lines.
+const sal_uInt32 EXC_CHMARKERFORMAT_SINGLESIZE  = 100;      /// Automatic symbol size for single lines.
+const sal_uInt32 EXC_CHMARKERFORMAT_DOUBLESIZE  = 140;      /// Automatic symbol size for double lines.
+const sal_uInt32 EXC_CHMARKERFORMAT_TRIPLESIZE  = 180;      /// Automatic symbol size for triple lines.
 
 const sal_uInt16 EXC_CHMARKERFORMAT_AUTO        = 0x0001;
 const sal_uInt16 EXC_CHMARKERFORMAT_NOFILL      = 0x0010;
@@ -246,9 +233,6 @@ const sal_uInt16 EXC_CHMARKERFORMAT_NOLINE      = 0x0020;
 // (0x100A) CHAREAFORMAT ------------------------------------------------------
 
 const sal_uInt16 EXC_ID_CHAREAFORMAT            = 0x100A;
-
-const sal_uInt16 EXC_CHAREAFORMAT_NONE          = 0;
-const sal_uInt16 EXC_CHAREAFORMAT_SOLID         = 1;
 
 const sal_uInt16 EXC_CHAREAFORMAT_AUTO          = 0x0001;
 const sal_uInt16 EXC_CHAREAFORMAT_INVERTNEG     = 0x0002;
@@ -276,7 +260,7 @@ const sal_uInt16 EXC_ID_CHSTRING                = 0x100D;
 
 const sal_uInt16 EXC_ID_CHTYPEGROUP             = 0x1014;
 
-const sal_uInt16 EXC_CHTYPEGROUP_VARIED         = 0x0001;   /// Varied colors for points.
+const sal_uInt16 EXC_CHTYPEGROUP_VARIEDCOLORS   = 0x0001;   /// Varied colors for points.
 
 // (0x1015) CHLEGEND ----------------------------------------------------------
 
@@ -303,7 +287,6 @@ const sal_uInt16 EXC_CHLEGEND_DATATABLE         = 0x0020;
 // (0x1017) CHBAR, CHCOLUMN ---------------------------------------------------
 
 const sal_uInt16 EXC_ID_CHBAR                   = 0x1017;
-const sal_uInt16 EXC_ID_CHCOLUMN                = 0xFF17;   /// Column chart - for internal use only.
 
 const sal_uInt16 EXC_CHBAR_HORIZONTAL           = 0x0001;
 const sal_uInt16 EXC_CHBAR_STACKED              = 0x0002;
@@ -314,7 +297,6 @@ const sal_uInt16 EXC_CHBAR_SHADOW               = 0x0008;
 
 const sal_uInt16 EXC_ID_CHLINE                  = 0x1018;
 const sal_uInt16 EXC_ID_CHAREA                  = 0x101A;
-const sal_uInt16 EXC_ID_CHSTOCK                 = 0xFF18;   /// Stock chart - for internal use only.
 
 const sal_uInt16 EXC_CHLINE_STACKED             = 0x0001;
 const sal_uInt16 EXC_CHLINE_PERCENT             = 0x0002;
@@ -323,7 +305,6 @@ const sal_uInt16 EXC_CHLINE_SHADOW              = 0x0004;
 // (0x1019) CHPIE -------------------------------------------------------------
 
 const sal_uInt16 EXC_ID_CHPIE                   = 0x1019;
-const sal_uInt16 EXC_ID_CHDONUT                 = 0xFF19;   /// Donut chart - for internal use only.
 
 const sal_uInt16 EXC_CHPIE_SHADOW               = 0x0001;
 const sal_uInt16 EXC_CHPIE_LINES                = 0x0002;
@@ -331,7 +312,6 @@ const sal_uInt16 EXC_CHPIE_LINES                = 0x0002;
 // (0x101B) CHSCATTER ---------------------------------------------------------
 
 const sal_uInt16 EXC_ID_CHSCATTER               = 0x101B;
-const sal_uInt16 EXC_ID_CHBUBBLES               = 0xFF1B;   /// Bubble chart - for internal use only.
 
 const sal_uInt16 EXC_CHSCATTER_AREA             = 1;        /// Bubble area refers to value.
 const sal_uInt16 EXC_CHSCATTER_WIDTH            = 2;        /// Bubble width refers to value.
@@ -346,7 +326,7 @@ const sal_uInt16 EXC_ID_CHCHARTLINE             = 0x101C;
 
 const sal_uInt16 EXC_CHCHARTLINE_DROP           = 0;        /// Drop lines.
 const sal_uInt16 EXC_CHCHARTLINE_HILO           = 1;        /// Hi-lo lines.
-const sal_uInt16 EXC_CHCHARTLINE_SERIES         = 2;        /// Series lines.
+const sal_uInt16 EXC_CHCHARTLINE_CONNECT        = 2;        /// Connector lines in stacked bar charts.
 
 // (0x101D) CHAXIS ------------------------------------------------------------
 
@@ -355,6 +335,7 @@ const sal_uInt16 EXC_ID_CHAXIS                  = 0x101D;
 const sal_uInt16 EXC_CHAXIS_X                   = 0;
 const sal_uInt16 EXC_CHAXIS_Y                   = 1;
 const sal_uInt16 EXC_CHAXIS_Z                   = 2;
+const sal_uInt16 EXC_CHAXIS_NONE                = 0xFFFF;   /// For internal use only.
 
 // (0x101E) CHTICK ------------------------------------------------------------
 
@@ -431,14 +412,14 @@ const sal_uInt8 EXC_CHTEXT_ALIGN_DISTRIBUTE     = 5;
 const sal_uInt16 EXC_CHTEXT_TRANSPARENT         = 1;
 const sal_uInt16 EXC_CHTEXT_OPAQUE              = 2;
 
-const sal_uInt16 EXC_CHTEXT_AUTOCOLOR           = 0x0001;
+const sal_uInt16 EXC_CHTEXT_AUTOCOLOR           = 0x0001;   /// Automatic text color.
 const sal_uInt16 EXC_CHTEXT_SHOWSYMBOL          = 0x0002;   /// Legend symbol for data point caption.
 const sal_uInt16 EXC_CHTEXT_SHOWVALUE           = 0x0004;   /// Data point caption is the value.
 const sal_uInt16 EXC_CHTEXT_VERTICAL            = 0x0008;
-const sal_uInt16 EXC_CHTEXT_STORED              = 0x0010;
-const sal_uInt16 EXC_CHTEXT_GENERATED           = 0x0020;
+const sal_uInt16 EXC_CHTEXT_AUTOTEXT            = 0x0010;   /// Label text generated from chart data.
+const sal_uInt16 EXC_CHTEXT_AUTOGEN             = 0x0020;   /// Text object is inserted automatically.
 const sal_uInt16 EXC_CHTEXT_DELETED             = 0x0040;   /// Text object is removed.
-const sal_uInt16 EXC_CHTEXT_AUTOMODE            = 0x0080;
+const sal_uInt16 EXC_CHTEXT_AUTOFILL            = 0x0080;   /// Automatic text background mode (transparent/opaque).
 const sal_uInt16 EXC_CHTEXT_SHOWCATEGPERC       = 0x0800;   /// Data point caption is category and percent.
 const sal_uInt16 EXC_CHTEXT_SHOWPERCENT         = 0x1000;   /// Data point caption as percent.
 const sal_uInt16 EXC_CHTEXT_SHOWBUBBLE          = 0x2000;   /// Show bubble size.
@@ -472,9 +453,6 @@ const sal_uInt16 EXC_CHOBJLINK_XAXIS            = 3;        /// Category axis (X
 const sal_uInt16 EXC_CHOBJLINK_DATA             = 4;        /// Data series/point.
 const sal_uInt16 EXC_CHOBJLINK_ZAXIS            = 7;        /// Series axis (Z axis).
 const sal_uInt16 EXC_CHOBJLINK_AXISUNIT         = 12;       /// Unit name for axis labels.
-const sal_uInt16 EXC_CHOBJLINK_BACKGROUND       = 0xFF00;   /// Chart background (internal use only).
-const sal_uInt16 EXC_CHOBJLINK_DIAGRAM          = 0xFF01;   /// Diagram wall/floor (internal use only).
-const sal_uInt16 EXC_CHOBJLINK_LEGEND           = 0xFF02;   /// Legend object (internal use only).
 
 // (0x1032) CHFRAME -----------------------------------------------------------
 
@@ -499,23 +477,29 @@ const sal_uInt16 EXC_ID_CHPLOTFRAME             = 0x1035;
 
 const sal_uInt16 EXC_ID_CHCHART3D               = 0x103A;
 
-const sal_uInt16 EXC_CHCHART3D_PERSP            = 0x0001;
+const sal_uInt16 EXC_CHCHART3D_REAL3D           = 0x0001;   /// true = real 3d perspective.
 const sal_uInt16 EXC_CHCHART3D_CLUSTER          = 0x0002;   /// false = Z axis, true = clustered/stacked.
-const sal_uInt16 EXC_CHCHART3D_AUTOSCALE        = 0x0004;
+const sal_uInt16 EXC_CHCHART3D_AUTOHEIGHT       = 0x0004;   /// true = automatic height to width ratio.
 const sal_uInt16 EXC_CHCHART3D_BIT4             = 0x0010;   /// This bit is always set in BIFF5+.
-const sal_uInt16 EXC_CHCHART3D_2DWALLS          = 0x0020;
+const sal_uInt16 EXC_CHCHART3D_2DWALLS          = 0x0020;   /// true = 2d wall, no floor.
 
 // (0x103C) CHPICFORMAT -------------------------------------------------------
 
 const sal_uInt16 EXC_ID_CHPICFORMAT             = 0x103C;
 
+const sal_uInt16 EXC_CHPICFORMAT_NONE           = 0;        /// For internal use only.
 const sal_uInt16 EXC_CHPICFORMAT_STRETCH        = 1;        /// Bitmap stretched to area.
 const sal_uInt16 EXC_CHPICFORMAT_STACK          = 2;        /// Bitmap stacked.
 const sal_uInt16 EXC_CHPICFORMAT_SCALE          = 3;        /// Bitmap scaled to axis scale.
 
+const sal_uInt16 EXC_CHPICFORMAT_WMF            = 2;
+const sal_uInt16 EXC_CHPICFORMAT_BMP            = 9;
+const sal_uInt16 EXC_CHPICFORMAT_DEFAULT        = 19;
+
 const sal_uInt16 EXC_CHPICFORMAT_WINDOWS        = 0x0001;
 const sal_uInt16 EXC_CHPICFORMAT_MACOS          = 0x0002;
 const sal_uInt16 EXC_CHPICFORMAT_FORMATONLY     = 0x0100;
+const sal_uInt16 EXC_CHPICFORMAT_DEFAULTFLAGS   = 0x0E00;   /// Default flags for export.
 
 // (0x103D) CHDROPBAR ---------------------------------------------------------
 
@@ -552,7 +536,10 @@ const sal_uInt16 EXC_CHAXESSET_NONE             = 0xFFFF;   /// For internal use
 
 const sal_uInt16 EXC_ID_CHPROPERTIES            = 0x1044;
 
-const sal_uInt16 EXC_CHPROPS_CHANGED            = 0x0001;
+const sal_uInt16 EXC_CHPROPS_MANSERIES          = 0x0001;   /// Manual series allocation.
+const sal_uInt16 EXC_CHPROPS_SHOWVISCELLS       = 0x0002;   /// Show visible cells only.
+const sal_uInt16 EXC_CHPROPS_NORESIZE           = 0x0004;   /// Do not resize chart with window.
+const sal_uInt16 EXC_CHPROPS_MANPLOTAREA        = 0x0008;   /// Plot area with CHFRAMEPOS records.
 
 const sal_uInt8 EXC_CHPROPS_EMPTY_SKIP          = 0;        /// Skip empty values.
 const sal_uInt8 EXC_CHPROPS_EMPTY_ZERO          = 1;        /// Plot empty values as zero.
@@ -562,7 +549,7 @@ const sal_uInt8 EXC_CHPROPS_EMPTY_INTERPOLATE   = 2;        /// Interpolate empt
 
 const sal_uInt16 EXC_ID_CHSERGROUP              = 0x1045;
 
-const sal_uInt16 EXC_CHSERGROUP_NONE            = 0xFFFF;   /// For internal use: no chart group.
+const sal_uInt16 EXC_CHSERGROUP_NONE            = 0xFFFF;   /// For internal use: no chart type group.
 
 // (0x1048, 0x0858) CHPIVOTREF ------------------------------------------------
 
@@ -625,8 +612,6 @@ const sal_uInt8 EXC_CHSERERR_XPLUS              = 1;
 const sal_uInt8 EXC_CHSERERR_XMINUS             = 2;
 const sal_uInt8 EXC_CHSERERR_YPLUS              = 3;
 const sal_uInt8 EXC_CHSERERR_YMINUS             = 4;
-const sal_uInt8 EXC_CHSERERR_XBOTH              = 5;    /// For internal use only.
-const sal_uInt8 EXC_CHSERERR_YBOTH              = 6;    /// For internal use only.
 
 const sal_uInt8 EXC_CHSERERR_PERCENT            = 1;
 const sal_uInt8 EXC_CHSERERR_FIXED              = 2;
@@ -668,8 +653,10 @@ const sal_uInt16 EXC_ID_CHESCHERFORMAT          = 0x1066;
 
 const sal_uInt16 EXC_ID_CHWRAPPEDRECORD         = 0x0851;
 const sal_uInt16 EXC_ID_CHUNITPROPERTIES        = 0x0857;
+const sal_uInt16 EXC_ID_CHUSEDAXESSETS          = 0x1046;
 const sal_uInt16 EXC_ID_CHLABELRANGE2           = 0x1062;
 const sal_uInt16 EXC_ID_CHPLOTGROWTH            = 0x1064;
+const sal_uInt16 EXC_ID_CHSERINDEX              = 0x1065;
 const sal_uInt16 EXC_ID_CHUNKNOWN               = 0xFFFF;
 
 // ============================================================================
@@ -699,10 +686,9 @@ struct XclChDataPointPos
     explicit            XclChDataPointPos();
 };
 
-bool operator==( const XclChDataPointPos& rL, const XclChDataPointPos& rR );
 bool operator<( const XclChDataPointPos& rL, const XclChDataPointPos& rR );
 
-// Formatting =================================================================
+// Frame formatting ===========================================================
 
 struct XclChFramePos
 {
@@ -721,7 +707,6 @@ struct XclChLineFormat
     sal_uInt16          mnPattern;          /// Line pattern (solid, dashed, ...).
     sal_Int16           mnWeight;           /// Line weight (hairline, single, ...).
     sal_uInt16          mnFlags;            /// Additional flags.
-    sal_uInt16          mnColorIdx;         /// Palette index of the line color (BIFF8+).
 
     explicit            XclChLineFormat();
 };
@@ -730,14 +715,29 @@ struct XclChLineFormat
 
 struct XclChAreaFormat
 {
-    Color               maForeColor;        /// Pattern color.
+    Color               maPattColor;        /// Pattern color.
     Color               maBackColor;        /// Pattern background color.
-    sal_uInt16          mnPattern;          /// Pattern (none, solid).
+    sal_uInt16          mnPattern;          /// Fill pattern.
     sal_uInt16          mnFlags;            /// Additional flags.
-    sal_uInt16          mnForeColorIdx;     /// Palette index of pattern color (BIFF8+).
-    sal_uInt16          mnBackColorIdx;     /// Palette index of pattern background color (BIFF8+).
 
     explicit            XclChAreaFormat();
+};
+
+// ----------------------------------------------------------------------------
+
+class SfxItemSet;
+class EscherPropertyContainer;
+
+struct XclChEscherFormat
+{
+    typedef ScfRef< SfxItemSet >                SfxItemSetRef;
+    typedef ScfRef< EscherPropertyContainer >   EscherPropSetRef;
+
+    SfxItemSetRef       mxItemSet;          /// Item set for Escher properties import.
+    EscherPropSetRef    mxEscherSet;        /// Container for Escher properties export.
+
+    explicit            XclChEscherFormat();
+                        ~XclChEscherFormat();
 };
 
 // ----------------------------------------------------------------------------
@@ -754,37 +754,24 @@ struct XclChPicFormat
 
 // ----------------------------------------------------------------------------
 
-struct XclChMarkerFormat
-{
-    Color               maLineColor;        /// Border line color.
-    Color               maFillColor;        /// Fill color.
-    sal_uInt32          mnMarkerSize;       /// Size of a marker
-    sal_uInt16          mnMarkerType;       /// Marker type (none, diamond, ...).
-    sal_uInt16          mnFlags;            /// Additional flags.
-    sal_uInt16          mnLineColorIdx;     /// Palette index of border line color (BIFF8).
-    sal_uInt16          mnFillColorIdx;     /// Palette index of fill color (BIFF8).
-
-    explicit            XclChMarkerFormat();
-};
-
-// ----------------------------------------------------------------------------
-
-struct XclCh3dDataFormat
-{
-    sal_uInt8           mnBase;             /// Base form.
-    sal_uInt8           mnTop;              /// Top egde mode.
-
-    explicit            XclCh3dDataFormat();
-};
-
-// ----------------------------------------------------------------------------
-
 struct XclChFrame
 {
     sal_uInt16          mnFormat;           /// Format type of the frame.
     sal_uInt16          mnFlags;            /// Additional flags.
 
     explicit            XclChFrame();
+};
+
+// Source links ===============================================================
+
+struct XclChSourceLink
+{
+    sal_uInt8           mnDestType;         /// Type of the destination (title, values, ...).
+    sal_uInt8           mnLinkType;         /// Link type (directly, linked to worksheet, ...).
+    sal_uInt16          mnFlags;            /// Additional flags.
+    sal_uInt16          mnNumFmtIdx;        /// Number format index.
+
+    explicit            XclChSourceLink();
 };
 
 // Text =======================================================================
@@ -807,23 +794,33 @@ struct XclChText
     sal_uInt8           mnVAlign;           /// Vertical alignment.
     sal_uInt16          mnBackMode;         /// Background mode: transparent, opaque.
     sal_uInt16          mnFlags;            /// Additional flags.
-    sal_uInt16          mnTextColorIdx;     /// Palette index to text color (BIFF8+).
     sal_uInt16          mnPlacement;        /// Text object placement (BIFF8+).
     sal_uInt16          mnRotation;         /// Text object rotation (BIFF8+).
 
     explicit            XclChText();
 };
 
-// Linked source data =========================================================
+// Data series ================================================================
 
-struct XclChSourceLink
+struct XclChMarkerFormat
 {
-    sal_uInt8           mnDestType;         /// Type of the destination (title, values, ...).
-    sal_uInt8           mnLinkType;         /// Link type (directly, linked to worksheet, ...).
+    Color               maLineColor;        /// Border line color.
+    Color               maFillColor;        /// Fill color.
+    sal_uInt32          mnMarkerSize;       /// Size of a marker
+    sal_uInt16          mnMarkerType;       /// Marker type (none, diamond, ...).
     sal_uInt16          mnFlags;            /// Additional flags.
-    sal_uInt16          mnNumFmtIdx;        /// Number format index.
 
-    explicit            XclChSourceLink();
+    explicit            XclChMarkerFormat();
+};
+
+// ----------------------------------------------------------------------------
+
+struct XclCh3dDataFormat
+{
+    sal_uInt8           mnBase;             /// Base form.
+    sal_uInt8           mnTop;              /// Top egde mode.
+
+    explicit            XclCh3dDataFormat();
 };
 
 // ----------------------------------------------------------------------------
@@ -879,7 +876,7 @@ struct XclChSeries
     explicit            XclChSeries();
 };
 
-// Chart structure ============================================================
+// Chart type groups ==========================================================
 
 struct XclChType
 {
@@ -898,12 +895,12 @@ struct XclChType
 
 struct XclChChart3d
 {
-    sal_uInt16          mnRotation;         /// Rotation (0...360deg).
+    sal_uInt16          mnRotation;         /// Rotation (0...359deg).
     sal_Int16           mnElevation;        /// Elevation (-90...+90deg).
-    sal_uInt16          mnDist;             /// View distance to chart (0...100).
-    sal_uInt16          mnHeight;           /// Height relative to width and depth.
-    sal_uInt16          mnDepth;            /// Depth of points relative to width.
-    sal_uInt16          mnGap;              /// Space between series.
+    sal_uInt16          mnEyeDist;          /// Eye distance to chart (0...100).
+    sal_uInt16          mnRelHeight;        /// Height relative to width.
+    sal_uInt16          mnRelDepth;         /// Depth relative to width.
+    sal_uInt16          mnDepthGap;         /// Space between series.
     sal_uInt16          mnFlags;            /// Additional flags.
 
     explicit            XclChChart3d();
@@ -923,13 +920,13 @@ struct XclChLegend
 
 // ----------------------------------------------------------------------------
 
-struct XclChChartGroup
+struct XclChTypeGroup
 {
     XclChRectangle      maRect;             /// Position (not used).
     sal_uInt16          mnFlags;            /// Additional flags.
-    sal_uInt16          mnGroupIdx;         /// Chart group index.
+    sal_uInt16          mnGroupIdx;         /// Chart type group index.
 
-    explicit            XclChChartGroup();
+    explicit            XclChTypeGroup();
 };
 
 // ----------------------------------------------------------------------------
@@ -979,7 +976,6 @@ struct XclChTick
     sal_uInt8           mnLabelPos;         /// Position of labels relative to axis.
     sal_uInt8           mnBackMode;         /// Background mode: transparent, opaque.
     sal_uInt16          mnFlags;            /// Additional flags.
-    sal_uInt16          mnTextColorIdx;     /// Palette index to tick labels color (BIFF8+).
     sal_uInt16          mnRotation;         /// Tick labels angle (BIFF8+).
 
     explicit            XclChTick();
@@ -993,6 +989,9 @@ struct XclChAxis
     sal_uInt16          mnType;             /// Axis type.
 
     explicit            XclChAxis();
+
+    /** Returns the axis dimension index used by the chart API. */
+    sal_Int32           GetApiAxisDimension() const;
 };
 
 // ----------------------------------------------------------------------------
@@ -1003,6 +1002,19 @@ struct XclChAxesSet
     sal_uInt16          mnAxesSetId;        /// Primary/secondary axes set.
 
     explicit            XclChAxesSet();
+
+    /** Returns the axes set index used by the chart API. */
+    sal_Int32           GetApiAxesSetIndex() const;
+};
+
+// Property mode ==============================================================
+
+/** Specifies the type of a formatting. This results in different property names. */
+enum XclChPropertyMode
+{
+    EXC_CHPROPMODE_COMMON,          /// Common objects, no special handling.
+    EXC_CHPROPMODE_LINEARSERIES,    /// Specific to data series drawn as lines.
+    EXC_CHPROPMODE_FILLEDSERIES     /// Specific to data series drawn as areas.
 };
 
 // Static helper functions ====================================================
@@ -1011,25 +1023,176 @@ struct XclChAxesSet
 class XclChartHelper
 {
 public:
-    /** Returns true, if series are shown as lines or areas. */
-    static bool         IsLineChartType( sal_uInt16 nTypeId );
-    /** Returns true, if series are shown as bars. */
-    static bool         IsBarChartType( sal_uInt16 nTypeId );
-    /** Returns true, if series are shown as radar net. */
-    static bool         IsRadarChartType( sal_uInt16 nTypeId );
-    /** Returns true, if series are shown as pies. */
-    static bool         IsPieChartType( sal_uInt16 nTypeId );
-    /** Returns true, if series are shown in an XY diagram. */
-    static bool         IsScatterChartType( sal_uInt16 nTypeId );
+    /** Returns a palette index for automatic series line colors. */
+    static sal_uInt16   GetSeriesLineAutoColorIdx( sal_uInt16 nFormatIdx );
+    /** Returns a palette index for automatic series fill colors. */
+    static sal_uInt16   GetSeriesFillAutoColorIdx( sal_uInt16 nFormatIdx );
+    /** Returns a transparency value for automatic series fill colors. */
+    static sal_uInt8    GetSeriesFillAutoTransp( sal_uInt16 nFormatIdx );
+    /** Returns an automatic symbol index for the passed format index. */
+    static sal_uInt16   GetAutoMarkerType( sal_uInt16 nFormatIdx );
+    /** Returns true, if the passed marker type is filled. */
+    static bool         HasMarkerFillColor( sal_uInt16 nMarkerType );
+};
 
-    /** Returns true, if series are shown in a polar coordinate system. */
-    static bool         HasPolarCoordSystem( sal_uInt16 nTypeId );
-    /** Returns true, if series are shown with lines and symbols and without fill area. */
-    static bool         HasLinearSeries( sal_uInt16 nTypeId );
-    /** Returns true, if data points are grouped into categories. */
-    static bool         HasCategoryAxis( sal_uInt16 nTypeId );
-    /** Returns true, if the X and Y axes are swapped (e.g. horizontal bar chart). */
-    static bool         HasSwappedAxesSet( sal_uInt16 nTypeId );
+// Chart formatting info provider =============================================
+
+/** Enumerates different object types for specific automatic formatting behaviour. */
+enum XclChObjectType
+{
+    EXC_CHOBJTYPE_BACKGROUND,       /// Chart background.
+    EXC_CHOBJTYPE_PLOTFRAME,        /// Wall formatting in 2d charts.
+    EXC_CHOBJTYPE_WALL3D,           /// Wall formatting in 3d charts.
+    EXC_CHOBJTYPE_FLOOR3D,          /// Floor formatting in 3d charts.
+    EXC_CHOBJTYPE_TEXT,             /// Text boxes (titles, data point labels).
+    EXC_CHOBJTYPE_LEGEND,           /// Chart legend.
+    EXC_CHOBJTYPE_LINEARSERIES,     /// Series formatting in a chart supporting line formatting only.
+    EXC_CHOBJTYPE_FILLEDSERIES,     /// Series formatting in a chart supporting area formatting.
+    EXC_CHOBJTYPE_AXISLINE,         /// Axis line format.
+    EXC_CHOBJTYPE_GRIDLINE,         /// Axis grid line format.
+    EXC_CHOBJTYPE_TRENDLINE,        /// Series trend line.
+    EXC_CHOBJTYPE_ERRORBAR,         /// Series error bar.
+    EXC_CHOBJTYPE_CONNECTLINE,      /// Data point connector line.
+    EXC_CHOBJTYPE_HILOLINE,         /// High/low lines in stock charts.
+    EXC_CHOBJTYPE_WHITEDROPBAR,     /// White-day drop bar in stock charts.
+    EXC_CHOBJTYPE_BLACKDROPBAR      /// Black-day drop bar in stock charts.
+};
+
+/** Enumerates different types to handle missing frame objects. */
+enum XclChFrameType
+{
+     EXC_CHFRAMETYPE_AUTO,          /// Missing frame represents automatic formatting.
+     EXC_CHFRAMETYPE_INVISIBLE      /// Missing frame represents invisible formatting.
+};
+
+/** Contains information about auto formatting of a specific chart object type. */
+struct XclChFormatInfo
+{
+    XclChObjectType     meObjType;          /// Object type for automatic format.
+    XclChPropertyMode   mePropMode;         /// Property mode for property set helper.
+    sal_uInt16          mnAutoLineColorIdx; /// Automatic line color index.
+    sal_Int16           mnAutoLineWeight;   /// Automatic line weight (hairline, single, ...).
+    sal_uInt16          mnAutoPattColorIdx; /// Automatic fill pattern color index.
+    XclChFrameType      meDefFrameType;     /// Default format type for missing frame objects.
+    bool                mbCreateDefFrame;   /// true = Create missing frame objects on import.
+    bool                mbDeleteDefFrame;   /// true = Delete default frame formatting on export.
+    bool                mbIsFrame;          /// true = Object is a frame, false = Object is a line.
+};
+
+// ----------------------------------------------------------------------------
+
+/** Provides access to chart auto formatting for all available object types. */
+class XclChFormatInfoProvider
+{
+public:
+    explicit            XclChFormatInfoProvider();
+
+    /** Returns an info struct about auto formatting for the passed object type. */
+    const XclChFormatInfo& GetFormatInfo( XclChObjectType eObjType ) const;
+
+private:
+    typedef ::std::map< XclChObjectType, const XclChFormatInfo* > XclFmtInfoMap;
+    XclFmtInfoMap       maInfoMap;          /// Maps object type to formatting data.
+};
+
+// Chart type info provider ===================================================
+
+/** Enumerates all kinds of different chart types. */
+enum XclChTypeId
+{
+    EXC_CHTYPEID_BAR,               /// Vertical bar chart.
+    EXC_CHTYPEID_HORBAR,            /// Horizontal bar chart.
+    EXC_CHTYPEID_LINE,              /// Line chart.
+    EXC_CHTYPEID_AREA,              /// Area chart.
+    EXC_CHTYPEID_STOCK,             /// Stock chart.
+    EXC_CHTYPEID_RADARLINE,         /// Linear radar chart.
+    EXC_CHTYPEID_RADARAREA,         /// Filled radar chart.
+    EXC_CHTYPEID_PIE,               /// Pie chart.
+    EXC_CHTYPEID_DONUT,             /// Donut chart.
+    EXC_CHTYPEID_PIEEXT,            /// Pie-to-pie or pie-to-bar chart.
+    EXC_CHTYPEID_SCATTER,           /// Scatter (XY) chart.
+    EXC_CHTYPEID_BUBBLES,           /// Bubble chart.
+    EXC_CHTYPEID_SURFACE,           /// Surface chart.
+    EXC_CHTYPEID_UNKNOWN            /// Default for unknown chart types.
+};
+
+/** Enumerates different categories of similar chart types. */
+enum XclChTypeCateg
+{
+    EXC_CHTYPECATEG_BAR,            /// Bar charts (horizontal or vertical).
+    EXC_CHTYPECATEG_LINE,           /// Line charts (line, area, stock charts).
+    EXC_CHTYPECATEG_RADAR,          /// Radar charts (linear or filled).
+    EXC_CHTYPECATEG_PIE,            /// Pie and donut charts.
+    EXC_CHTYPECATEG_SCATTER,        /// Scatter and bubble charts.
+    EXC_CHTYPECATEG_SURFACE         /// Surface charts.
+};
+
+/** Enumerates modes for varying point colors in a series. */
+enum XclChVarPointMode
+{
+    EXC_CHVARPOINT_NONE,            /// No varied colors supported.
+    EXC_CHVARPOINT_SINGLE,          /// Only supported, if type group contains only one series.
+    EXC_CHVARPOINT_MULTI            /// Supported for multiple series in a chart type group.
+};
+
+/** Contains information for a chart type. */
+struct XclChTypeInfo
+{
+    XclChTypeId         meTypeId;               /// Unique chart type identifier.
+    XclChTypeCateg      meTypeCateg;            /// Chart type category this type belongs to.
+    sal_uInt16          mnRecId;                /// Record identifier written to the file.
+    const sal_Char*     mpcServiceName;         /// Service name of the type.
+    XclChVarPointMode   meVarPointMode;         /// Mode for varying point colors.
+    bool                mbCombinable2d;         /// true = Types can be combined in one axes set.
+    bool                mbSupports3d;           /// true = 3d type allowed, false = Only 2d type.
+    bool                mb3dWalls;              /// true = 3d type includes wall and floor format.
+    bool                mbPolarCoordSystem;     /// true = Polar, false = Cartesian.
+    bool                mbSeriesIsFrame2d;      /// true = Series with area formatting (2d charts).
+    bool                mbSeriesIsFrame3d;      /// true = Series with area formatting (3d charts).
+    bool                mbSingleSeriesVis;      /// true = Only first series visible.
+    bool                mbCategoryAxis;         /// true = X axis contains categories.
+    bool                mbSwappedAxesSet;       /// true = X and Y axes are swapped.
+    bool                mbSupportsStacking;     /// true = Series can be stacked on each other.
+    bool                mbReverseSeries;        /// true = Insert unstacked series in reverse order.
+    bool                mbTicksBetweenCateg;    /// true = X axis ticks between categories.
+};
+
+/** Extended chart type information and access functions. */
+struct XclChExtTypeInfo : public XclChTypeInfo
+{
+    bool                mb3dChart;              /// Chart is actually a 3D chart.
+    bool                mbSpline;               /// Series lines are smoothed.
+
+    explicit            XclChExtTypeInfo( const XclChTypeInfo& rTypeInfo );
+
+    void                Set( const XclChTypeInfo& rTypeInfo, bool b3dChart, bool bSpline );
+
+    /** Returns true, if this chart type supports area formatting for its series. */
+    inline bool         IsSeriesFrameFormat() const
+                            { return mb3dChart ? mbSeriesIsFrame3d : mbSeriesIsFrame2d; }
+    /** Returns the correct object type identifier for series and data points. */
+    inline XclChObjectType GetSeriesObjectType() const
+                            { return IsSeriesFrameFormat() ? EXC_CHOBJTYPE_FILLEDSERIES : EXC_CHOBJTYPE_LINEARSERIES; }
+};
+
+// ----------------------------------------------------------------------------
+
+/** Provides access to chart type info structs for all available chart types. */
+class XclChTypeInfoProvider
+{
+public:
+    explicit            XclChTypeInfoProvider();
+
+    /** Returns chart type info for a unique chart type identifier. */
+    const XclChTypeInfo& GetTypeInfo( XclChTypeId eType ) const;
+    /** Returns the first fitting chart type info for an Excel chart type record identifier. */
+    const XclChTypeInfo& GetTypeInfoFromRecId( sal_uInt16 nRecId ) const;
+    /** Returns the first fitting chart type info for the passed service name. */
+    const XclChTypeInfo& GetTypeInfoFromService( const ::rtl::OUString& rServiceName ) const;
+
+private:
+    typedef ::std::map< XclChTypeId, const XclChTypeInfo* > XclChTypeInfoMap;
+    XclChTypeInfoMap    maInfoMap;          /// Maps chart types to type info data.
 };
 
 // Property helpers ===========================================================
@@ -1044,6 +1207,8 @@ public:
     explicit            XclChObjectTable( XServiceFactoryRef xFactory,
                             const ::rtl::OUString& rServiceName, const ::rtl::OUString& rObjNameBase );
 
+    /** Returns a named formatting object from the chart document. */
+    ::com::sun::star::uno::Any GetObject( const ::rtl::OUString& rObjName );
     /** Insertes a named formatting object into the chart document. */
     ::rtl::OUString     InsertObject( const ::com::sun::star::uno::Any& rObj );
 
@@ -1057,17 +1222,6 @@ private:
 
 // ----------------------------------------------------------------------------
 
-/** Specifies the type of a formatting. This results in different property names. */
-enum XclChPropertyMode
-{
-    EXC_CHPROPMODE_COMMON,          /// Common objects, no special handling.
-    EXC_CHPROPMODE_LINEARSERIES,    /// Specific to data series drawn as lines.
-    EXC_CHPROPMODE_FILLEDSERIES     /// Specific to data series drawn as areas.
-};
-
-// ----------------------------------------------------------------------------
-
-class SfxItemSet;
 struct XclFontData;
 
 /** Helper class for usage of property sets. */
@@ -1075,6 +1229,38 @@ class XclChPropSetHelper
 {
 public:
     explicit            XclChPropSetHelper();
+
+    /** Reads all line properties from the passed property set. */
+    void                ReadLineProperties(
+                            XclChLineFormat& rLineFmt,
+                            XclChObjectTable& rDashTable,
+                            const ScfPropertySet& rPropSet,
+                            XclChPropertyMode ePropMode );
+    /** Reads solid area properties from the passed property set. */
+    void                ReadAreaProperties(
+                            XclChAreaFormat& rAreaFmt,
+                            const ScfPropertySet& rPropSet,
+                            XclChPropertyMode ePropMode );
+    /** Reads gradient or bitmap area properties from the passed property set. */
+    void                ReadEscherProperties(
+                            XclChEscherFormat& rEscherFmt,
+                            XclChPicFormat& rPicFmt,
+                            XclChObjectTable& rGradientTable,
+                            XclChObjectTable& rBitmapTable,
+                            const ScfPropertySet& rPropSet,
+                            XclChPropertyMode ePropMode );
+    /** Reads all marker properties from the passed property set. */
+    void                ReadMarkerProperties(
+                            XclChMarkerFormat& rMarkerFmt,
+                            const ScfPropertySet& rPropSet,
+                            sal_uInt16 nFormatIdx );
+    /** Reads rotation properties from the passed property set. */
+    sal_uInt16          ReadRotationProperties(
+                            const ScfPropertySet& rPropSet );
+    /** Reads all legend properties from the passed property set. */
+    void                ReadLegendProperties(
+                            XclChLegend& rLegend,
+                            const ScfPropertySet& rPropSet );
 
     /** Writes all line properties to the passed property set. */
     void                WriteLineProperties(
@@ -1092,19 +1278,83 @@ public:
                             ScfPropertySet& rPropSet,
                             XclChObjectTable& rGradientTable,
                             XclChObjectTable& rBitmapTable,
-                            const SfxItemSet& rItemSet,
-                            const XclChPicFormat& rPicFmt );
+                            const XclChEscherFormat& rEscherFmt,
+                            const XclChPicFormat& rPicFmt,
+                            XclChPropertyMode ePropMode );
     /** Writes all marker properties to the passed property set. */
     void                WriteMarkerProperties(
                             ScfPropertySet& rPropSet,
                             const XclChMarkerFormat& rMarkerFmt );
+    /** Writes rotation properties to the passed property set. */
+    void                WriteRotationProperties(
+                            ScfPropertySet& rPropSet,
+                            sal_uInt16 nRotation );
+    /** Writes all legend properties to the passed property set. */
+    void                WriteLegendProperties(
+                            ScfPropertySet& rPropSet,
+                            const XclChLegend& rLegend );
 
 private:
-    ScfPropSetHelper    maLineHlp;          /// Properties for solid or dashed lines.
-    ScfPropSetHelper    maAreaHlp;          /// Properties for solid areas.
-    ScfPropSetHelper    maGradientHlp;      /// Properties for gradients.
+    /** Returns a line property set helper according to the passed property mode. */
+    ScfPropSetHelper&   GetLineHelper( XclChPropertyMode ePropMode );
+    /** Returns an area property set helper according to the passed property mode. */
+    ScfPropSetHelper&   GetAreaHelper( XclChPropertyMode ePropMode );
+    /** Returns a gradient property set helper according to the passed property mode. */
+    ScfPropSetHelper&   GetGradientHelper( XclChPropertyMode ePropMode );
+
+private:
+    ScfPropSetHelper    maLineHlpCommon;    /// Properties for lines in common objects.
+    ScfPropSetHelper    maLineHlpLinear;    /// Properties for lines in linear series.
+    ScfPropSetHelper    maLineHlpFilled;    /// Properties for lines in filled series.
+    ScfPropSetHelper    maAreaHlpCommon;    /// Properties for areas in common objects.
+    ScfPropSetHelper    maAreaHlpFilled;    /// Properties for areas in filled series.
+    ScfPropSetHelper    maGradHlpCommon;    /// Properties for gradients in common objects.
+    ScfPropSetHelper    maGradHlpFilled;    /// Properties for gradients in filled series.
     ScfPropSetHelper    maBitmapHlp;        /// Properties for bitmaps.
-    ScfPropSetHelper    maMarkerHlp;        /// Properties for symbols.
+    ScfPropSetHelper    maRotationHlp;      /// Properties for text rotation.
+    ScfPropSetHelper    maLegendHlp;        /// Properties for legend.
+};
+
+// ============================================================================
+
+/** Base struct for internal root data structs for import and export. */
+class XclChRootData
+{
+public:
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > XChartDocRef;
+
+public:
+    explicit            XclChRootData();
+    virtual             ~XclChRootData();
+
+    /** Returns the API reference of the chart document. */
+    XChartDocRef        GetChartDoc() const;
+
+    /** Returns the chart type info provider, that contains data about all chart types. */
+    inline XclChTypeInfoProvider& GetTypeInfoProvider() const { return *mxTypeInfoProv; }
+    /** Returns the chart type info provider, that contains data about all chart types. */
+    inline XclChFormatInfoProvider& GetFormatInfoProvider() const { return *mxFmtInfoProv; }
+
+    inline XclChObjectTable& GetLineDashTable() const { return *mxLineDashTable; }
+    inline XclChObjectTable& GetGradientTable() const { return *mxGradientTable; }
+    inline XclChObjectTable& GetBitmapTable() const { return *mxBitmapTable; }
+
+    /** Starts the API chart document conversion. Must be called once before any API access. */
+    void                InitConversion( XChartDocRef xChartDoc );
+    /** Finishes the API chart document conversion. Must be called once before any API access. */
+    void                FinishConversion();
+
+private:
+    typedef ScfRef< XclChTypeInfoProvider >     XclChTypeProvRef;
+    typedef ScfRef< XclChFormatInfoProvider >   XclChFmtInfoProvRef;
+    typedef ScfRef< XclChObjectTable >          XclChObjectTableRef;
+
+    XChartDocRef        mxChartDoc;             /// The chart document.
+    XclChTypeProvRef    mxTypeInfoProv;         /// Provides info about chart types.
+    XclChFmtInfoProvRef mxFmtInfoProv;          /// Provides info about auto formatting.
+    XclChObjectTableRef mxLineDashTable;        /// Container for line dash styles.
+    XclChObjectTableRef mxGradientTable;        /// Container for gradient fill styles.
+    XclChObjectTableRef mxBitmapTable;          /// Container for bitmap fill styles.
 };
 
 // ============================================================================
