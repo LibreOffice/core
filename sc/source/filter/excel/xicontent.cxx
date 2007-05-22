@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:48:28 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:49:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,6 +132,9 @@
 #endif
 #ifndef SC_XISTREAM_HXX
 #include "xistream.hxx"
+#endif
+#ifndef SC_XIHELPER_HXX
+#include "xihelper.hxx"
 #endif
 #ifndef SC_XISTYLE_HXX
 #include "xistyle.hxx"
