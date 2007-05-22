@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:54:35 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:05:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -738,7 +738,7 @@ SfxObjectShell* ScTransferObj::SetDrawClipDoc( BOOL bAnyOle )
     if (bAnyOle)
     {
         ScGlobal::pDrawClipDocShellRef =
-                        new ScDocShellRef(new ScDocShell);      // there must be a ref
+                        new ScDocShellRef(new ScDocShell(SFX_CREATE_MODE_INTERNAL));      // there must be a ref
         (*ScGlobal::pDrawClipDocShellRef)->DoInitNew(NULL);
         return *ScGlobal::pDrawClipDocShellRef;
     }
