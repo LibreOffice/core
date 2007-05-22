@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsort.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:54:44 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:25:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,9 @@
 #endif
 #ifndef _NODE2LAY_HXX
 #include <node2lay.hxx>
+#endif
+#ifndef _UNOCHART_HXX
+#include <unochart.hxx>
 #endif
 
 #if OSL_DEBUG_LEVEL > 1
@@ -622,8 +625,7 @@ BOOL SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
 
     // loesche die Frames der Tabelle
     pTblNd->DelFrms();
-    // und dann noch fuers Chart die Daten sichern
-    aFndBox.SaveChartData( pTblNd->GetTable() );
+    // ? TL_CHART2: ?
 
     // Redo loeschen bevor Undo
     BOOL bUndo = DoesUndo();
@@ -674,7 +676,8 @@ BOOL SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     aNode2Layout.RestoreUpperFrms( GetNodes(), nIdx, nIdx + 1 );
     // <--
 
-    aFndBox.RestoreChartData( pTblNd->GetTable() );
+    // TL_CHART2: need to inform chart of probably changed cell names
+    UpdateCharts( pTblNd->GetTable().GetFrmFmt()->GetName() );
 
     // Alle Elemente aus dem SortArray loeschen
     aSortList.DeleteAndDestroy( 0, aSortList.Count() );
