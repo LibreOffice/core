@@ -1,0 +1,97 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: ChartDocument.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 14:48:44 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_ChartDocument_idl
+#define com_sun_star_chart2_ChartDocument_idl
+
+#include <com/sun/star/style/XStyleFamiliesSupplier.idl>
+#include <com/sun/star/util/XNumberFormatsSupplier.idl>
+
+#include <com/sun/star/chart2/XChartDocument.idl>
+#include <com/sun/star/chart2/data/XDataReceiver.idl>
+
+#include <com/sun/star/chart2/XTitled.idl>
+#include <com/sun/star/lang/XInitialization.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+service ChartDocument
+{
+    /** this interface is derived from
+        <type-scope="com::sun::star::frame">XModel</type>.  Thus model
+        functionality is available via this interface.
+     */
+    interface  XChartDocument;
+
+    /** offers connection to data
+    */
+    interface  data::XDataReceiver;
+
+    /** gives access to the main title of a chart document
+     */
+    interface  XTitled;
+
+    /** maintains all style families applying to any object in the
+        chart.
+     */
+    interface  ::com::sun::star::style::XStyleFamiliesSupplier;
+
+    /** maintains all number formats used anywhere in the chart.
+     */
+    interface  ::com::sun::star::util::XNumberFormatsSupplier;
+
+    /** Allows passing arguments to createInstanceWithArguments.
+
+        <p>The following arguments are allowed in the given order:</p>
+
+        <ol>
+         <li>string  Name</li>
+        </ol>
+     */
+    [optional] interface  ::com::sun::star::lang::XInitialization;
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif
