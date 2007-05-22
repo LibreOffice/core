@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simpref.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:45:25 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:08:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,7 @@ private:
     BOOL            bAutoReOpen;
     BOOL            bCloseOnButtonUp;
     BOOL            bSingleCell;
+    BOOL            bMultiSelection;
 
     void            Init();
 
@@ -127,8 +128,7 @@ public:
     void            SetUnoLinks( const Link& rDone, const Link& rAbort,
                                 const Link& rChange );
 
-    void            SetFlags( BOOL bSetCloseOnButtonUp );
-    void            SetSingleCell( BOOL bFlag );
+    void            SetFlags( BOOL bSetCloseOnButtonUp, BOOL bSetSingleCell, BOOL bSetMultiSelection );
 
     void            SetAutoReOpen(BOOL bFlag) {bAutoReOpen=bFlag;}
 
