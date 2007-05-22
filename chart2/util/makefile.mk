@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:39:10 $
+#   last change: $Author: vg $ $Date: 2007-05-22 19:29:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,8 @@ TARGET=chart_db
 
 #-------------------------------------------------------------------
 
-UNOIDLDBFILES= \
-    $(UCR)$/csschart2.db \
-    $(UCR)$/csslayout.db
+# UNOIDLDBFILES= \
+# 	$(UCR)$/csschart2.db
 
 # --- Targets ------------------------------------------------------
 
