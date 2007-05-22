@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 03:20:33 $
+#   last change: $Author: vg $ $Date: 2007-05-22 16:26:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,9 @@ TARGET=docnode
 .INCLUDE :	$(PRJ)$/inc$/sw.mk
 
 # --- Files --------------------------------------------------------
+
+EXCEPTIONSFILES=    \
+    $(SLO)$/ndtbl.obj
 
 SLOFILES =	\
         $(SLO)$/ndindex.obj \
