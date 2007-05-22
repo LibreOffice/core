@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_ChartType.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:06:17 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:31:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,21 +32,12 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#define DLG_DIAGRAM_TYPE 743
+#include "ResourceIds.hrc"
+
+#define TABCTRL 1
+
+#define FL_BUTTONS 1
+
 #define BTN_OK 1
-#define BTN_CANCEL 1
-#define BTN_HELP 1
-#define BTN_OPTIONS 1
-#define FL_DIMENSION 1
-#define RBT_2D 1
-#define RBT_3D 2
-#define FT_TYPE 1
-#define FT_VARIANT 2
-#define FT_DEEP 3
-#define FT_GRAN 4
-#define FT_NUM_OF_LINES 5
-#define CTL_TYPE 1
-#define CTL_VARIANT 2
-#define MTR_FLD_DEEP 1
-#define MTR_FLD_GRAN 2
-#define MTR_FLD_NUM_OF_LINES 3
+#define BTN_CANCEL 2
+#define BTN_HELP 3
