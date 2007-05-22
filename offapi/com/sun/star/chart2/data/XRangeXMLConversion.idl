@@ -1,0 +1,80 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XRangeXMLConversion.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:09:28 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_data_XRangeXMLConversion_idl
+#define com_sun_star_chart2_data_XRangeXMLConversion_idl
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+module data
+{
+
+/** An application that provides data for a chart must implement this
+    interface.
+ */
+interface XRangeXMLConversion : ::com::sun::star::uno::XInterface
+{
+    /** converts the range to a valid XML syntax.
+
+        <p>For example spreadsheet ranges consisting of more than one
+        consecutive region are usually separated by a semicolon
+        whereas in XML you separate multiple regions by a spacce.</p>
+     */
+    string convertRangeToXML( [in] string aRangeRepresentation )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    /** converts an XML-style range into the internal
+        <type>DataProvider</type>'s format.
+     */
+    string convertRangeFromXML( [in] string aXMLRange )
+        raises( com::sun::star::lang::IllegalArgumentException );
+};
+
+} ; // data
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+
+#endif
