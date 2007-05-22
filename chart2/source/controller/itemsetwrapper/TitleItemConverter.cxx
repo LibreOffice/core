@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TitleItemConverter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:03:47 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:02:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ namespace
 {
     static ::comphelper::ItemPropertyMapType aTitlePropertyMap(
         ::comphelper::MakeItemPropertyMap
-        ( SCHATTR_TEXT_STACKED,   C2U( "StackCharacters" ))
+        IPM_MAP_ENTRY( SCHATTR_TEXT_STACKED, "StackCharacters", 0 )
         );
 
     return aTitlePropertyMap;
@@ -83,7 +83,8 @@ public:
     FormattedStringsConverter(
         const uno::Sequence< uno::Reference< chart2::XFormattedString > > & aStrings,
         SfxItemPool & rItemPool,
-        ::std::auto_ptr< awt::Size > pRefSize = ::std::auto_ptr< awt::Size >() );
+        ::std::auto_ptr< awt::Size > pRefSize,
+        const uno::Reference< beans::XPropertySet > & xParentProp );
     virtual ~FormattedStringsConverter();
 
 protected:
@@ -95,19 +96,22 @@ protected:
 FormattedStringsConverter::FormattedStringsConverter(
     const uno::Sequence< uno::Reference< chart2::XFormattedString > > & aStrings,
     SfxItemPool & rItemPool,
-    ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize ) :
+    ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize,
+    const uno::Reference< beans::XPropertySet > & xParentProp ) :
         MultipleItemConverter( rItemPool )
 {
+    bool bHasRefSize = (pRefSize.get() && xParentProp.is());
     for( sal_Int32 i = 0; i < aStrings.getLength(); ++i )
     {
         uno::Reference< beans::XPropertySet > xProp( aStrings[ i ], uno::UNO_QUERY );
         if( xProp.is())
         {
-            if( pRefSize.get())
+            if( bHasRefSize )
                 m_aConverters.push_back( new CharacterPropertyItemConverter(
                                              xProp, rItemPool,
                                              ::std::auto_ptr< awt::Size >( new awt::Size( *pRefSize )),
-                                             C2U( "ReferencePageSize" )));
+                                             C2U( "ReferencePageSize" ),
+                                             xParentProp ));
             else
                 m_aConverters.push_back( new CharacterPropertyItemConverter( xProp, rItemPool ));
         }
@@ -130,11 +134,13 @@ TitleItemConverter::TitleItemConverter(
     ::com::sun::star::beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
+    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
     ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize ) :
         ItemConverter( rPropertySet, rItemPool )
 {
     m_aConverters.push_back( new GraphicPropertyItemConverter(
                                  rPropertySet, rItemPool, rDrawModel,
+                                 xNamedPropertyContainerFactory,
                                  GraphicPropertyItemConverter::LINE_AND_FILL_PROPERTIES ));
 
     // CharacterProperties are not at the title but at its contained XFormattedString objects
@@ -145,7 +151,8 @@ TitleItemConverter::TitleItemConverter(
         uno::Sequence< uno::Reference< chart2::XFormattedString > > aStringSeq( xTitle->getText());
         if( aStringSeq.getLength() > 0 )
         {
-            m_aConverters.push_back( new FormattedStringsConverter( aStringSeq, rItemPool, pRefSize ));
+            m_aConverters.push_back(
+                new FormattedStringsConverter( aStringSeq, rItemPool, pRefSize, rPropertySet ));
         }
     }
 }
@@ -182,7 +189,7 @@ const USHORT * TitleItemConverter::GetWhichPairs() const
     return nTitleWhichPairs;
 }
 
-bool TitleItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const
+bool TitleItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
 {
     ::comphelper::ItemPropertyMapType & rMap( lcl_GetTitlePropertyMap());
     ::comphelper::ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
@@ -190,7 +197,7 @@ bool TitleItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUString &
     if( aIt == rMap.end())
         return false;
 
-    rOutName =(*aIt).second;
+    rOutProperty =(*aIt).second;
     return true;
 }
 
