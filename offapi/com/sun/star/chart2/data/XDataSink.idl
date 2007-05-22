@@ -1,0 +1,86 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XDataSink.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:08:43 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_data_XDataSink_idl
+#define com_sun_star_chart2_data_XDataSink_idl
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/chart2/data/XLabeledDataSequence.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+module data
+{
+
+/** is a container for sequences of data.  With this interface data
+    can only be written to.
+
+    <p>If you want to be able to also read the data set here, your
+    component must also implement <type>XDataSource</type>.</p>
+  */
+interface XDataSink : ::com::sun::star::uno::XInterface
+{
+    /** sets new data sequences.  The elements set here must support
+        the service <type>DataSequence</type>.
+
+        <p>If the data consist only of floating point numbers (double
+        values), the instances set here should also support the
+        service <type>NumericalDataSequence</type>.</p>
+
+        <p>If the data consist only of strings, the instances set here
+        should also support the service
+        <type>TextualDataSequence</type>.</p>
+
+        <p>If one of the derived services is supported by one element
+        of the sequence, it should be available for all elements in
+        the sequence.</p>
+     */
+    void  setData( [in] sequence< XLabeledDataSequence > aData );
+};
+
+} ; // data
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+
+#endif
