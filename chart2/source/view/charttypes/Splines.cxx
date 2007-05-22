@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Splines.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:34:23 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:16:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
+
 #include "Splines.hxx"
 
 #ifndef INCLUDED_RTL_MATH_HXX
@@ -80,8 +81,8 @@ struct Point3D
     double Y;
     double Z;
 };
-Point3D::Point3D( double _X, double _Y, double _Z )
-: X(_X), Y(_Y), Z(_Z)
+Point3D::Point3D( double fX, double fY, double fZ )
+: X(fX), Y(fY), Z(fZ)
 {
 }
 Point3D::Point3D()
@@ -516,6 +517,8 @@ void SplineCalculater::CalculateBSplines(
             , sal_Int32 nGranularity
             , sal_Int32 nDegree )
 {
+    nDegree = nDegree + 1;
+
     DBG_ASSERT( nGranularity > 0, "Granularity is invalid" );
     rResult.SequenceX.realloc(0);
     rResult.SequenceY.realloc(0);
@@ -565,9 +568,9 @@ void SplineCalculater::CalculateBSplines(
         BVector(x, n, nDegree, b, t);
         BSPoint(n, fY1, fY2, pOldY, b);
 
-        pNewX[j]                   = floor(dXUp);//(sal_Int32)(floor(dXUp)+0.5);
+        pNewX[j]                   = dXUp;
         pNewY[j]                   = fY1;
-        pNewX[nNewSectorCount - j] = floor(dXDown);//(sal_Int32)(floor(dXDown)+0.5);
+        pNewX[nNewSectorCount - j] = dXDown;
         pNewY[nNewSectorCount - j] = fY2;
 
         pNewZ[j]                   = zValue;
