@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablemgr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:21:00 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:39:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,18 +36,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
+#include <com/sun/star/chart/ChartDataRowSource.hpp>
+#include <com/sun/star/chart2/data/XDataProvider.hpp>
+#include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/beans/PropertyState.hpp>
 
 #include <sot/storage.hxx>
-#ifndef _SCH_DLL_HXX
-#include <sch/schdll.hxx>
-#endif
-#ifndef _SCH_MEMCHRT_HXX
-#include <sch/memchrt.hxx>
-#endif
-
 #include <sot/clsids.hxx>
 
+#include "edtwin.hxx"
 #include "errhdl.hxx"
 #include "wrtsh.hxx"
 #include "cmdid.h"
@@ -62,7 +59,11 @@
 #include "swerror.h"
 #include "table.hrc"
 #include "swabstdlg.hxx" //CHINA001
+#include "docsh.hxx"
 
+#include "swcli.hxx"
+
+using namespace com::sun::star;
 
 /*------------------------------------------------------------------------
  Beschreibung:  Zeilenhoehe einstellen (Dialog)
@@ -209,55 +210,6 @@ SwTableFUNC::~SwTableFUNC()
         delete pFmt;
 }
 
-//Sonst GPF mit W95,MSVC40, non product
-#pragma optimize("",off)
-
-
-
-void SwTableFUNC::InsertChart( SchMemChart& rData, const SfxItemSet *pSet )
-{
-    pSh->StartAllAction();
-    pSh->StartUndo( UIUNDO_INSERT_CHART );
-
-    String aName( pSh->GetTableFmt()->GetName() );
-
-    //Vor die Tabelle gehen und einen Node einfuegen.
-    pSh->MoveTable( fnTableCurr, fnTableStart );
-    pSh->Up();
-    if ( pSh->IsCrsrInTbl() )
-    {
-        if ( aName != pSh->GetTableFmt()->GetName() )
-            pSh->Down();    //Zwei Tabellen direkt uebereinander.
-    }
-    pSh->SplitNode();
-
-    //Jetzt das CharObject einfuegen.
-    //Wer das nicht versteht ist selber schuld ;-)
-    ::rtl::OUString aObjName;
-    comphelper::EmbeddedObjectContainer aCnt;
-    com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xObj =
-            aCnt.CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aObjName );
-    if ( xObj.is() )
-    {
-        pSh->InsertOleObject( ::svt::EmbeddedObjectRef( xObj, ::com::sun::star::embed::Aspects::MSOLE_CONTENT ) );
-
-        //Den Namen der Table am OleNode setzen
-        pSh->SetChartName( aName );
-
-        //Und die Daten in's Objekt uebertragen.
-        // TODO/LATER: Looks like there is no need here to update the replacement. But it should be checked.
-        if( pSet )
-            SchDLL::Update( xObj, &rData, *pSet );
-        else
-            SchDLL::Update( xObj, &rData );
-    }
-    pSh->EndUndo( UIUNDO_INSERT_CHART );
-    pSh->EndAllAction();
-}
-
-#pragma optimize("",on)
-
-
 
 void SwTableFUNC::UpdateChart()
 {
@@ -272,7 +224,101 @@ void SwTableFUNC::UpdateChart()
     }
 }
 
+::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > SwTableFUNC::InsertChart(
+        uno::Reference< chart2::data::XDataProvider > &rxDataProvider,
+        sal_Bool bFillWithData,
+        const rtl::OUString &rCellRange,
+        SwFlyFrmFmt** ppFlyFrmFmt )
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xChartModel;
+    pSh->StartUndo( UIUNDO_INSERT_CHART );
+    pSh->StartAllAction();
 
+    String aName;
+
+    if (pSh->IsCrsrInTbl())
+    {
+        aName = pSh->GetTableFmt()->GetName();
+        // insert node before table
+        pSh->MoveTable( fnTableCurr, fnTableStart );
+        pSh->Up();
+        if ( pSh->IsCrsrInTbl() )
+        {
+            if ( aName != pSh->GetTableFmt()->GetName() )
+                pSh->Down(); // two adjacent tables
+        }
+        pSh->SplitNode();
+    }
+
+    // insert chart
+    ::rtl::OUString aObjName;
+    comphelper::EmbeddedObjectContainer aCnt;
+    com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xObj =
+        aCnt.CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aObjName );
+
+    ::svt::EmbeddedObjectRef aEmbObjRef( xObj, ::com::sun::star::embed::Aspects::MSOLE_CONTENT );
+    if ( xObj.is() )
+    {
+
+        SwFlyFrmFmt* pTmp = pSh->InsertOleObject( aEmbObjRef );
+        if (ppFlyFrmFmt)
+            *ppFlyFrmFmt = pTmp;
+
+        ::com::sun::star::uno::Reference<
+              ::com::sun::star::embed::XComponentSupplier > xCompSupp( xObj, ::com::sun::star::uno::UNO_QUERY );
+        if( xCompSupp.is())
+            xChartModel.set( xCompSupp->getComponent(), ::com::sun::star::uno::UNO_QUERY );
+
+        // set the table name at the OLE-node
+        if (aName.Len())
+            pSh->SetChartName( aName );
+    }
+    pSh->EndAllAction();
+
+    if ( xObj.is() )
+    {
+        // Let the chart be activated after the inserting
+        SfxInPlaceClient* pClient = pSh->GetView().FindIPClient( xObj, &pSh->GetView().GetEditWin() );
+        if ( !pClient )
+        {
+            pClient = new SwOleClient( &pSh->GetView(), &pSh->GetView().GetEditWin(), aEmbObjRef );
+            pSh->SetCheckForOLEInCaption( TRUE );
+        }
+        pSh->CalcAndSetScale( aEmbObjRef );
+        //#50270# Error brauchen wir nicht handeln, das erledigt das
+        //DoVerb in der SfxViewShell
+        ErrCode nErr = pClient->DoVerb( SVVERB_SHOW );
+    }
+
+    uno::Reference< chart2::data::XDataReceiver > xDataReceiver( xChartModel, uno::UNO_QUERY );
+    if (bFillWithData && xDataReceiver.is() && rxDataProvider.is())
+    {
+        xDataReceiver->attachDataProvider( rxDataProvider );
+
+        uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pSh->GetView().GetDocShell()->GetModel(), uno::UNO_QUERY );
+        xDataReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
+
+        uno::Sequence< beans::PropertyValue > aArgs( 4 );
+        aArgs[0] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
+            uno::makeAny( rCellRange ), beans::PropertyState_DIRECT_VALUE );
+        // TODO: preset the following three arguments according to the selected range
+        aArgs[1] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("HasCategories"), -1,
+            uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
+        aArgs[2] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
+            uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
+        aArgs[3] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("DataRowSource"), -1,
+            uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
+        xDataReceiver->setArguments( aArgs );
+    }
+
+    pSh->EndUndo( UIUNDO_INSERT_CHART );
+
+    return xChartModel;
+}
 
 USHORT  SwTableFUNC::GetCurColNum() const
 {
