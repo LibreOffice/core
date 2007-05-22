@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_SeriesToAxis.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:37:40 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:49:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,8 @@
 
 #include "ResId.hxx"
 #include "TabPages.hrc"
-#include "SchSfxItemIds.hxx"
+#include "chartview/ChartSfxItemIds.hxx"
+#include "NoWarningThisInCTOR.hxx"
 
 // header for class SfxBoolItem
 #ifndef _SFXENUMITEM_HXX
@@ -49,19 +50,6 @@
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
 #endif
-
-
-/*
-#include "schattr.hxx"
-#include "schresid.hxx"
-#include "chtmodel.hxx"
-#include "attrib.hxx"
-#include "attrib.hrc"
-
-#ifndef _SVX_SVXIDS_HRC //autogen
-#include <svx/svxids.hrc>
-#endif
-*/
 
 //.............................................................................
 namespace chart
@@ -118,13 +106,13 @@ BOOL SchOptionTabPage::FillItemSet(SfxItemSet& rOutAttrs)
         rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS,CHART_AXIS_PRIMARY_Y));
 
     if(aMTGap.IsVisible())
-        rOutAttrs.Put(SfxInt32Item(CHATTR_DIAGRAM_GAPWIDTH,aMTGap.GetValue()));
+        rOutAttrs.Put(SfxInt32Item(SCHATTR_BAR_GAPWIDTH,aMTGap.GetValue()));
 
     if(aMTOverlap.IsVisible())
-        rOutAttrs.Put(SfxInt32Item(CHATTR_DIAGRAM_OVERLAP,aMTOverlap.GetValue()));
+        rOutAttrs.Put(SfxInt32Item(SCHATTR_BAR_OVERLAP,aMTOverlap.GetValue()));
 
     if(aCBConnect.IsVisible())
-        rOutAttrs.Put(SfxBoolItem(CHATTR_BARCONNECT,aCBConnect.IsChecked()));
+        rOutAttrs.Put(SfxBoolItem(SCHATTR_BAR_CONNECT,aCBConnect.IsChecked()));
 
     return TRUE;
 }
@@ -151,7 +139,7 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
     }
 
     long nTmp;
-    if (rInAttrs.GetItemState(CHATTR_DIAGRAM_GAPWIDTH, TRUE, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_BAR_GAPWIDTH, TRUE, &pPoolItem) == SFX_ITEM_SET)
     {
         nTmp = (long)((const SfxInt32Item*)pPoolItem)->GetValue();
         aMTGap.SetValue(nTmp);
@@ -162,7 +150,7 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
         aFTGap.Show(FALSE);
     }
 
-    if (rInAttrs.GetItemState(CHATTR_DIAGRAM_OVERLAP, TRUE, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_BAR_OVERLAP, TRUE, &pPoolItem) == SFX_ITEM_SET)
     {
         nTmp = (long)((const SfxInt32Item*)pPoolItem)->GetValue();
         aMTOverlap.SetValue(nTmp);
@@ -172,10 +160,10 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
         aMTOverlap.Show(FALSE);
         aFTOverlap.Show(FALSE);
     }
-    if (rInAttrs.GetItemState(CHATTR_BARCONNECT, TRUE, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_BAR_CONNECT, TRUE, &pPoolItem) == SFX_ITEM_SET)
     {
         nTmp = (long)((const SfxInt32Item*)pPoolItem)->GetValue();
-        aCBConnect.Check(nTmp);
+        aCBConnect.Check(BOOL(nTmp));
     }
     else
     {
