@@ -1,0 +1,168 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: DataSequence.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:06:42 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_data_DataSequence_idl
+#define com_sun_star_chart2_data_DataSequence_idl
+
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/container/XIndexReplace.idl>
+#include <com/sun/star/util/XCloneable.idl>
+#include <com/sun/star/util/XModifyBroadcaster.idl>
+
+#include <com/sun/star/chart2/data/XDataSequence.idl>
+#include <com/sun/star/chart2/data/XNumericalDataSequence.idl>
+#include <com/sun/star/chart2/data/XTextualDataSequence.idl>
+
+#include <com/sun/star/chart2/data/DataSequenceRole.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+module data
+{
+
+/** describes a container for a sequence of values.
+
+    <p>With the interface <type>XDataSequence</type> it is possible to
+    transfer a complete sequence of values.
+
+    <p>With the optional
+    <type scope="com::sun::star::container">XIndexReplace</type> it is
+    possible to modify single elements, if the corresponding
+    <type>DataProvider</type> supports modification of its values.</p>
+  */
+service DataSequence
+{
+    /** provides read- and write-access to the underlying data.
+     */
+    interface XDataSequence;
+
+    /** you may implement this interface to allow a fast acces to
+        numerical data.  With this interface you can get a
+        <atom>sequence</atom> of <atom>double</atom> values.
+    */
+    [optional] interface   XNumericalDataSequence;
+
+    /** you may implement this interface to allow a fast acces to
+        textual data.  With this interface you can get a
+        <atom>sequence</atom> of <atom>string</atom> values.
+    */
+    [optional] interface   XTextualDataSequence;
+
+    /** provides read- and write-access to single elements of the
+        underlying data.
+
+        <p>Only when supporting this interface, it is possible for
+        client applications to modify the content of the data that is
+        provided by this <type>DataSequence</type>.</p>
+     */
+    [optional] interface ::com::sun::star::container::XIndexReplace;
+
+    /** Allows creating copies of data sequences.  If this interface
+        is not supported, the same object will be shared if used by
+        multiple objects.
+
+        <p>Cloning is especially useful when using identifiers.  A
+        cloned data sequence will get a new identifier while the
+        source range representation is identical to the original
+        one.</p>
+
+        <p>Note that, when this interface is not implemented the
+        releasing of identifiers at the <type>XDataProvider</type>
+        will not work properly, because more than one object may use
+        the same identifier.  So, when an object releases the
+        identifier, another object might use a stale identifier.</p>
+     */
+    [optional] interface ::com::sun::star::util::XCloneable;
+
+    /** is used to broadcast change events whenever the content (data)
+        or the range representations change.
+     */
+    interface com::sun::star::util::XModifyBroadcaster;
+
+    /** the property interface by which the properties of all
+        supported services are exchanged
+    */
+    interface ::com::sun::star::beans::XPropertySet;
+
+    // ----------------------------------------------------------------------
+
+    /** The key (index) of the number format that this sequence should
+        be formatted with.
+
+        <p>The key identifies a number format in an
+        <type scope="com::sun::star::util">XNumberFormats</type>
+        object.  This object can be retrieved by the
+        <type scope="com::sun::star::util">XNumberFormatsSupplier</type>
+        interface supported by
+        <type scope="com::sun::star::chart">ChartDocument</type>.</p>
+
+        @todo use proper number format instead of a transient key.
+     */
+//     [optional, property] long                     NumberFormatKey;
+
+    /** The role of the series inside a data series.  This may be any
+        string.  However some strings are predefined and should always
+        be used in the same way.
+
+        @see DataSequenceRole
+     */
+    [property] DataSequenceRole                   Role;
+
+    /** If <TRUE/>, the values are hidden, and should therefore not be
+        used.  This may result in omitting a complete data series
+        object on rendering.
+     */
+    [optional, property] boolean                  IsHidden;
+
+    /** a sequence of indexes that identify data points that should
+        not be rendered, because they are hidden in the underlying
+        data provider.
+     */
+    [optional, property] sequence< long >         HiddenValues;
+};
+
+} ; // data
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+
+#endif
