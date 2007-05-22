@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilti.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:51:01 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:04:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,9 @@
 #endif
 #ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
+#endif
+#ifndef SC_RANGEUTL_HXX
+#include "rangeutl.hxx"
 #endif
 
 #include <xmloff/xmltkmap.hxx>
@@ -95,7 +98,7 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
             {
                 ScRange aScRange;
                 sal_Int32 nOffset(0);
-                if (ScXMLConverter::GetRangeFromString( aScRange, sValue, pDoc, nOffset ))
+                if (ScRangeStringConverter::GetRangeFromString( aScRange, sValue, pDoc, nOffset ))
                 {
                     ScUnoConversion::FillApiAddress( aOutputPosition, aScRange.aStart );
                     bCopyOutputData = sal_True;
@@ -105,7 +108,7 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
             case XML_TOK_FILTER_ATTR_CONDITION_SOURCE_RANGE_ADDRESS :
             {
                 sal_Int32 nOffset(0);
-                if (ScXMLConverter::GetRangeFromString( aConditionSourceRangeAddress, sValue, pDoc, nOffset ))
+                if (ScRangeStringConverter::GetRangeFromString( aConditionSourceRangeAddress, sValue, pDoc, nOffset ))
                     bConditionSourceRange = sal_True;
             }
             break;
@@ -447,7 +450,7 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
             {
                 ScRange aScRange;
                 sal_Int32 nOffset(0);
-                if (ScXMLConverter::GetRangeFromString( aScRange, sValue, pDoc, nOffset ))
+                if (ScRangeStringConverter::GetRangeFromString( aScRange, sValue, pDoc, nOffset ))
                 {
                     aOutputPosition = aScRange.aStart;
                     bCopyOutputData = sal_True;
@@ -457,7 +460,7 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
             case XML_TOK_FILTER_ATTR_CONDITION_SOURCE_RANGE_ADDRESS :
             {
                 sal_Int32 nOffset(0);
-                if(ScXMLConverter::GetRangeFromString( aConditionSourceRangeAddress, sValue, pDoc, nOffset ))
+                if(ScRangeStringConverter::GetRangeFromString( aConditionSourceRangeAddress, sValue, pDoc, nOffset ))
                     bConditionSourceRange = sal_True;
             }
             break;
