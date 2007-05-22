@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_ChartType.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:59:17 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:32:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,177 +32,34 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-/*
-#include "diagrtyp.hrc"
-#ifndef _SVX_SVXIDS_HRC
-#include <svx/svxids.hrc>
-#endif
-#include "app.hrc"
-#include "schhids.h"
-*/
 
 #include "dlg_ChartType.hrc"
-#include "SchSlotIds.hxx"
+#include "dlg_CreationWizard.hrc"
 #include "HelpIds.hrc"
+#include "SchSlotIds.hxx"
+
+// for BUTTONS_OK_CANCEL_HELP_STACKED
+#include "CommonResources.hrc"
+
+#define CHART_TYPE_DLG_HEIGHT (CHART_WIZARD_PAGEHEIGHT+18)
+#define CHART_TYPE_DLG_WIDTH (CHART_WIZARD_PAGEWIDTH - 7)
 
 ModalDialog DLG_DIAGRAM_TYPE
 {
     HelpID = SID_DIAGRAM_TYPE ;
+
+    Size = MAP_APPFONT ( CHART_TYPE_DLG_WIDTH , CHART_TYPE_DLG_HEIGHT ) ;
+
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 246 ) ;
-    Text [ en-US ] = "Chart Type" ;
     Moveable = TRUE ;
-     // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
-    OKButton BTN_OK
+    Closeable = TRUE ;
+
+    FixedLine FL_BUTTONS
     {
-        Pos = MAP_APPFONT ( 204 , 6  ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
+        Pos = MAP_APPFONT ( 0 , CHART_TYPE_DLG_HEIGHT-24  ) ;
+        Size = MAP_APPFONT ( CHART_TYPE_DLG_WIDTH , 8 ) ;
     };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 204 , 23  ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    HelpButton BTN_HELP
-    {
-        Pos = MAP_APPFONT ( 204 , 43  ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    FixedLine FL_DIMENSION
-    {
-        Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ en-US ] = "Chart category" ;
-    };
-    RadioButton RBT_2D
-    {
-        Pos = MAP_APPFONT ( 12 , 14  ) ;
-        Size = MAP_APPFONT ( 88 , 12 ) ;
-        Text [ en-US ] = "~2D" ;
-        TabStop = TRUE ;
-    };
-    RadioButton RBT_3D
-    {
-        Pos = MAP_APPFONT ( 12 , 30  ) ;
-        Size = MAP_APPFONT ( 88 , 12 ) ;
-        Text [ en-US ] = "~3D" ;
-        TabStop = TRUE ;
-    };
-    FixedText FT_TYPE
-    {
-        Pos = MAP_APPFONT ( 6 , 48  ) ;
-        Size = MAP_APPFONT ( 192 , 10 ) ;
-        Text [ en-US ] = "Chart ~type" ;
-    };
-    Control CTL_TYPE
-    {
-        HelpId = HID_SCH_CTL_TYPE ;
-        Border = TRUE ;
-        Hide = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 61  ) ;
-        Size = MAP_APPFONT ( 188 , 97 ) ;
-        TabStop = TRUE ;
-    };
-    FixedText FT_VARIANT
-    {
-        Pos = MAP_APPFONT ( 6 , 169  ) ;
-        Size = MAP_APPFONT ( 192 , 10 ) ;
-        Text [ en-US ] = "~Variants:" ;
-    };
-    Control CTL_VARIANT
-    {
-        HelpId = HID_SCH_CTL_VARIANT ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 182  ) ;
-        Size = MAP_APPFONT ( 188 , 53 ) ;
-        TabStop = TRUE ;
-    };
-    FixedText FT_DEEP
-    {
-        Pos = MAP_APPFONT ( 114 , 16  ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ en-US ] = "~Data points order" ;
-    };
-    MetricField MTR_FLD_DEEP
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 178 , 14  ) ;
-        Size = MAP_APPFONT ( 20 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 1 ;
-        Maximum = 100 ;
-        StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        First = 1 ;
-        Last = 100 ;
-        SpinSize = 1 ;
-    };
-    FixedText FT_NUM_OF_LINES
-    {
-        Pos = MAP_APPFONT ( 114 , 16  ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ en-US ] = "~Number of lines";
-    };
-    MetricField MTR_FLD_NUM_OF_LINES
-    {
-        HelpId = HID_SCH_NUM_OF_LINES ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 178 , 14  ) ;
-        Size = MAP_APPFONT ( 20 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 1 ;
-         Maximum = 100 ;
-        StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        First = 1 ;
-        Last = 100 ;
-        SpinSize = 1 ;
-    };
-    FixedText FT_GRAN
-    {
-        Pos = MAP_APPFONT ( 114 , 31  ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ en-US ] = "~Resolution" ;
-    };
-    MetricField MTR_FLD_GRAN
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 178 , 30  ) ;
-        Size = MAP_APPFONT ( 20 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 1 ;
-        Maximum = 1000 ;
-        StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        First = 1 ;
-        Last = 1000 ;
-        SpinSize = 1 ;
-    };
+
+    BUTTONS_OK_CANCEL_HELP( CHART_TYPE_DLG_WIDTH-161 ,CHART_TYPE_DLG_HEIGHT-17 , 53, 0 )
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
