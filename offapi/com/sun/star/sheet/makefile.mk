@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:14:51 $
+#   last change: $Author: vg $ $Date: 2007-05-22 15:11:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -240,6 +240,7 @@ IDLFILES=\
     XCalculatable.idl\
     XCellAddressable.idl\
     XCellFormatRangesSupplier.idl\
+    XCellRangesAccess.idl\
     XCellRangeAddressable.idl\
     XCellRangeData.idl\
     XCellRangeFormula.idl\
