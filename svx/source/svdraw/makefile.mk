@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-20 16:37:49 $
+#   last change: $Author: vg $ $Date: 2007-05-22 15:20:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -116,8 +116,9 @@ SLOFILES=\
          $(SLO)$/svdundo.obj         \
      $(SLO)$/svdviter.obj        \
          $(SLO)$/clonelist.obj		 \
-     $(SLO)$/svdedtv.obj         \
-         $(SLO)$/svdomedia.obj		 
+         $(SLO)$/ActionDescriptionProvider.obj \
+         $(SLO)$/svdedtv.obj         \
+         $(SLO)$/svdomedia.obj
 
 SRS1NAME=svdstr
 SRC1FILES= svdstr.src
