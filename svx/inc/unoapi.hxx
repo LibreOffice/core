@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoapi.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:47:11 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:14:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,15 @@ void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String& rInternalNam
     for the current language.
 */
 void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& rApiName, String& rInternalName ) throw();
+
+/** returns the which id for the given property name.  This only works for
+    properties of shapes (map SVXMAP_SHAPE is used for searching)
+
+    Note: As this function has no access to SvxItemPropertySet but only to
+    SfxItemPropertyMap, the search in the map is not done via bsearch, but by
+    linear search.
+ */
+SVX_DLLPUBLIC sal_Int16 SvxUnoGetWhichIdForNamedProperty( const ::rtl::OUString & rPropName );
 
 /** converts the given any with a metric to 100th/mm if needed */
 void SvxUnoConvertToMM( const SfxMapUnit eSourceMapUnit, com::sun::star::uno::Any & rMetric ) throw();
