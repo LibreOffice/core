@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeescher.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:21:02 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:55:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,28 @@ private:
 };
 
 #endif
+
+// ----------------------------------------------------------------------------
+
+class XclExpChart;
+
+/** A chart object. This is the drawing object wrapper for the chart data. */
+class XclExpChartObj : public XclObj, protected XclExpRoot
+{
+public:
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > XShapeRef;
+
+public:
+    explicit            XclExpChartObj( const XclExpRoot& rRoot, XShapeRef xShape );
+    virtual             ~XclExpChartObj();
+
+    /** Writes the OBJ record and the entire chart substream. */
+    virtual void        Save( XclExpStream& rStrm );
+
+private:
+    typedef ScfRef< XclExpChart > XclExpChartRef;
+    XclExpChartRef      mxChart;        /// The chart itself (BOF/EOF substream data).
+};
 
 // ============================================================================
 
