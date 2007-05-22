@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commonembobj.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:50:58 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:36:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,6 +197,10 @@ protected:
     ::rtl::OUString m_aLinkPassword;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xParent;
+
+    sal_Bool m_bHasCachedSize; // the object has cached size
+    ::com::sun::star::awt::Size m_aCachedSize;
+    sal_Int32 m_nMapUnit;
 
 private:
     void CommonInit_Impl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aObjectProps );
