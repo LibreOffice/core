@@ -1,0 +1,103 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: Title.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 14:58:37 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart_Title_idl
+#define com_sun_star_chart_Title_idl
+
+#include <com/sun/star/style/ParagraphProperties.idl>
+#include <com/sun/star/layout/LayoutElement.idl>
+
+#include <com/sun/star/chart2/ReferenceSizeProperties.idl>
+#include <com/sun/star/chart2/XTitle.idl>
+
+#include <com/sun/star/beans/PropertySet.idl>
+#include <com/sun/star/drawing/LineProperties.idl>
+#include <com/sun/star/drawing/FillProperties.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+service Title
+{
+    /** only mandatory properties
+     */
+    service                ::com::sun::star::style::ParagraphProperties;
+    service                ::com::sun::star::drawing::FillProperties;
+    service                ::com::sun::star::drawing::LineProperties;
+    service                ::com::sun::star::beans::PropertySet;
+    [optional] service     ::com::sun::star::layout::LayoutElement;
+
+    /**
+     */
+    interface              XTitle;
+
+    /** the rotation of the title's text in degrees in the range
+        [0,360).
+     */
+    [property] double      TextRotation;
+
+    /** writes the characters of the title on top of each other if set
+        to <TRUE/>.
+     */
+    [property] boolean     StackCharacters;
+
+    /** The position is a relative position on the page.
+
+        <p>If a relative position is given the title is not automatically placed,
+        but instead is placed relative on the page.</p>
+     */
+    [property, maybevoid] ::com::sun::star::chart2::RelativePosition RelativePosition;
+
+
+    /** contains the size of the page at the time when properties were
+        set (e.g. the CharHeight).
+
+        <p>This way it is possible to resize objects (like text) in
+        the view without modifying the model.</p>
+     */
+    [property, maybevoid]  com::sun::star::awt::Size   ReferencePageSize;
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif
