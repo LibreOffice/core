@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:53:05 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:18:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,8 @@ class SwOLEObj;
 class IDocumentDeviceAccess;
 class IDocumentSettingAccess;
 class IDocumentTimerAccess;
+class IDocumentChartDataProviderAccess;
+
 
 class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 {
@@ -190,6 +192,8 @@ public:
     inline SwDoc*                   GetDoc() { return pDoc; }
     IDocumentDeviceAccess*          getIDocumentDeviceAccess();
     const IDocumentSettingAccess*   getIDocumentSettingAccess() const;
+    IDocumentChartDataProviderAccess*       getIDocumentChartDataProviderAccess();
+
 
     void                    UpdateFontList();
     void                    UpdateChildWindows();
@@ -301,8 +305,6 @@ public:
     // read by the binary filter:
     virtual void UpdateLinks();
     // <--
-
-    SW_DLLPRIVATE void  CalcAndSetScaleOfOLEObj( SwOLEObj& rOLEObject );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
                                 GetController();
