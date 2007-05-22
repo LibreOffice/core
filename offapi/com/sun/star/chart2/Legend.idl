@@ -1,0 +1,109 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: Legend.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 14:54:35 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart_Legend_idl
+#define com_sun_star_chart_Legend_idl
+
+#include <com/sun/star/chart2/XLegend.idl>
+#include <com/sun/star/chart2/LegendPosition.idl>
+#include <com/sun/star/chart2/LegendExpansion.idl>
+
+#include <com/sun/star/beans/PropertySet.idl>
+#include <com/sun/star/drawing/LineProperties.idl>
+#include <com/sun/star/drawing/FillProperties.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+/** Describes a legend for a <type>Diagram</type>.
+ */
+service Legend
+{
+    service                ::com::sun::star::drawing::FillProperties;
+    service                ::com::sun::star::drawing::LineProperties;
+    service                ::com::sun::star::beans::PropertySet;
+
+    /** The interface for registering and removing legend entries.
+     */
+    interface ::com::sun::star::chart2::XLegend;
+
+    /** Provides an automated position
+     */
+    [property] LegendPosition AnchorPosition;
+
+    /** Determines how the aspect ratio of the legend should roughly
+        be.
+
+        <p>Set the Expansion to <member>LegendExpansion::HIGH</member>
+        for a legend that is positioned on the right or left hand
+        side.  Use <member>LegendExpansion::WIDE</member> for a legend
+        that is positioned on top or the bottom.</p>
+     */
+    [property] LegendExpansion Expansion;
+
+    /** Determines, whether the legend should be redered by the view.
+     */
+    [property] boolean Show;
+
+    /** contains the size of the page at the time when properties were
+        set (e.g. the CharHeight).
+
+        <p>This way it is possible to resize objects (like text) in
+        the view without modifying the model.</p>
+     */
+    [property, maybevoid]  com::sun::star::awt::Size   ReferencePageSize;
+
+    /** The position is as a relative position on the page.
+
+        <p>If a relative position is given the legend is not automatically placed,
+        but instead is placed relative on the page.</p>
+
+        <p>If <VOID/>, the legend position is solely determined by the
+        <member>AnchorPosition</member>.</p>
+     */
+    [property, maybevoid] ::com::sun::star::chart2::RelativePosition RelativePosition;
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif
