@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LayoutContainer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:13:05 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:39:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include "LayoutContainer.hxx"
-#include "algohelper.hxx"
 #include "macros.hxx"
+#include "ContainerHelper.hxx"
 
 #include <algorithm>
 
@@ -127,7 +127,7 @@ layout::Constraint SAL_CALL LayoutContainer::getConstraintByIdentifier( const ::
 uno::Sequence< ::rtl::OUString > SAL_CALL LayoutContainer::getElementIdentifiers()
     throw (uno::RuntimeException)
 {
-    return ::chart::helper::VectorToSequence( m_aLayoutElements );
+    return ContainerHelper::ContainerToSequence( m_aLayoutElements );
 }
 
 uno::Sequence< ::rtl::OUString > LayoutContainer::getSupportedServiceNames_Static()
