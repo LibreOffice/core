@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Strings.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:58:26 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:30:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,465 +34,457 @@
  ************************************************************************/
 #include "Strings.hrc"
 
-String STR_TITLE_GRID
+String STR_DLG_CHART_WIZARD
 {
-    Text [ en-US ] = "Grid" ;
+    Text [ en-US ] = "Chart Wizard" ;
 };
 
-/*
-String RID_BUILDVERSION
+String STR_DLG_SMOOTH_LINE_PROPERTIES
 {
-    Text [ en-US ] = UPDVER ;
+    Text [ en-US ] = "Smooth Lines" ;
 };
-String STR_NULL
+
+String STR_PAGE_CHARTTYPE
 {
-    Text [ en-US ] = "None" ;
+    Text [ en-US ] = "Chart Type" ;
 };
-String STR_BASIC_IDE
+
+String STR_PAGE_DATA_RANGE
 {
-    Text [ en-US ] = "Basic IDE" ;
+    Text [ en-US ] = "Data Range";
 };
-String STR_INVISIBLE
+
+String STR_PAGE_CHART_ELEMENTS
 {
-    Text [ en-US ] = "Invisible" ;
+    Text [ en-US ] = "Chart Elements";
 };
-String STR_SOLID
+
+String STR_PAGE_CHART_LOCATION
 {
-    Text [ en-US ] = "Continuous" ;
+    Text [ en-US ] = "Chart Location";
 };
-String STR_AREA
-{
-    Text [ en-US ] = "Area" ;
-};
-String STR_LINE
+
+String STR_PAGE_LINE
 {
     Text [ en-US ] = "Line" ;
 };
 
-
-
-String STR_NORMAL_LINES
+String STR_PAGE_BORDER
 {
-    Text [ en-US ] = "Normal with lines" ;
+    Text [ en-US ] = "Borders" ;
 };
 
-
-
-
-
-String STR_2D
+String STR_PAGE_AREA
 {
-    Text [ en-US ] = "2D " ;
-};
-String STR_3D
-{
-    Text [ en-US ] = "3D " ;
-};
-String STR_DIAGRAM_AREA
-{
-    Text [ en-US ] = "Chart Area" ;
-};
-String STR_DIAGRAM
-{
-    Text [ en-US ] = "Chart" ;
-};
-String STR_DIAGRAM_WALL
-{
-    Text [ en-US ] = "Chart Wall" ;
-};
-String STR_DIAGRAM_FLOOR
-{
-    Text [ en-US ] = "Chart Floor" ;
-};
-String STR_DIAGRAM_X_AXIS
-{
-    Text [ en-US ] = "X axis" ;
-};
-String STR_DIAGRAM_Y_AXIS
-{
-    Text [ en-US ] = "Y axis" ;
-};
-String STR_DIAGRAM_Z_AXIS
-{
-    Text [ en-US ] = "Z axis" ;
-};
-String STR_DIAGRAM_X_GRID_MAIN
-{
-    Text [ en-US ] = "X axis main grid" ;
-};
-String STR_DIAGRAM_Y_GRID_MAIN
-{
-    Text [ en-US ] = "Y main grid" ;
-};
-String STR_DIAGRAM_Z_GRID_MAIN
-{
-    Text [ en-US ] = "Z main grid" ;
-};
-String STR_DIAGRAM_X_GRID_HELP
-{
-    Text [ en-US ] = "Minor X Grid" ;
-};
-String STR_DIAGRAM_Y_GRID_HELP
-{
-    Text [ en-US ] = "Y minor grid" ;
-};
-String STR_DIAGRAM_Z_GRID_HELP
-{
-    Text [ en-US ] = "Z minor grid" ;
-};
-String STR_DIAGRAM_ROW
-{
-    // $(ROW) can be a number or the caption of the row in quotes
-
-    Text [ en-US ] = "Data Series $(ROW)" ;
-};
-String STR_DIAGRAM_DESCRGROUP
-{
-    Text [ en-US ] = "Data Labels" ;
-};
-String STR_DIAGRAM_DESCR_ROW
-{
-    Text [ en-US ] = "Data rows label" ;
-};
-String STR_DIAGRAM_DESCR_COL
-{
-    Text [ en-US ] = "Data columns label" ;
-};
-String STR_LEGEND
-{
-    Text [ en-US ] = "Legend" ;
-};
-String STR_LEGEND_SYMBOL_ROW
-{
-    Text [ en-US ] = "Data series symbol" ;
-};
-String STR_LEGEND_SYMBOL_COL
-{
-    Text [ en-US ] = "Data column symbol" ;
+    Text [ en-US ] = "Area" ;
 };
 
-String STR_MARKED
+String STR_PAGE_TRANSPARENCY
 {
-    // $(OBJ) is any chart object, like 'x axis', 'data point', 'grid', etc.
-    // this string is for the status bar.
-    Text [ en-US ] = "$(OBJ) selected" ;
+    Text [ en-US ] = "Transparency";
 };
 
-String STR_UNDO_DRAGDROP
+String STR_PAGE_CHARACTERS
 {
-    Text [ en-US ] = "Drag and Drop" ;
+    Text [ en-US ] = "Characters" ;
 };
-String STR_UNDO_DIAGRAM_LINE
+
+String STR_PAGE_FONT_EFFECTS
 {
-    Text [ en-US ] = "Line Type" ;
+    Text [ en-US ] = "Font Effects" ;
 };
-String STR_UNDO_CUT
+
+String STR_PAGE_NUMBERS
 {
-    Text [ en-US ] = "Cut" ;
+    Text [ en-US ] = "Numbers" ;
 };
-String STR_UNDO_DELETE
+
+String STR_PAGE_POSITION
 {
-    Text [ en-US ] = "Delete" ;
+    Text [ en-US ] = "Position" ;
 };
-String STR_UNDO_DIAGRAM_DATA
+
+String STR_PAGE_LAYOUT
 {
-    Text [ en-US ] = "Edit chart data" ;
+    Text [ en-US ] = "Layout";
 };
-String STR_UNDO_EDIT_TITLE
+
+String STR_PAGE_OPTIONS
 {
-    Text [ en-US ] = "Edit title" ;
+    Text [ en-US ] = "Options";
 };
-String STR_UNDO_STATISTICS
+
+String STR_PAGE_SCALE
+{
+    Text [ en-US ] = "Scale" ;
+};
+
+String STR_PAGE_STATISTICS
 {
     Text [ en-US ] = "Statistics" ;
 };
-String STR_UNDO_INSERT_TITLE
+
+String STR_PAGE_ALIGNMENT
 {
-    Text [ en-US ] = "Insert title" ;
+    Text [ en-US ] = "Alignment" ;
 };
-String STR_UNDO_INSERT_LEGEND
+
+String STR_PAGE_PERSPECTIVE
 {
-    Text [ en-US ] = "Insert legend" ;
+    Text [ en-US ] = "Perspective" ;
 };
-String STR_UNDO_INSERT_DESCR
+String STR_PAGE_APPEARANCE
 {
-    Text [ en-US ] = "Insert data label" ;
+    Text [ en-US ] = "Appearance" ;
 };
-String STR_UNDO_INSERT_AXIS
+String STR_PAGE_ILLUMINATION
 {
-    Text [ en-US ] = "Insert axes" ;
+    Text [ en-US ] = "Illumination" ;
 };
-String STR_UNDO_INSERT_GRID
+
+String STR_OBJECT_AXIS
 {
-    Text [ en-US ] = "Insert grids" ;
+    Text [ en-US ] = "Axis" ;
 };
-String STR_UNDO_DATA_ROW
+String STR_OBJECT_AXIS_X
 {
-    Text [ en-US ] = "Edit data series" ;
+    Text [ en-US ] = "X Axis" ;
 };
-String STR_UNDO_DATA_POINT
+String STR_OBJECT_AXIS_Y
 {
-    Text [ en-US ] = "Edit data point" ;
+    Text [ en-US ] = "Y Axis" ;
 };
-String STR_UNDO_TITLE
+String STR_OBJECT_AXIS_Z
 {
-    Text [ en-US ] = "Edit title" ;
+    Text [ en-US ] = "Z Axis" ;
 };
-String STR_UNDO_LEGEND
+
+String STR_OBJECT_AXES
 {
-    Text [ en-US ] = "Edit legend" ;
+    Text [ en-US ] = "Axes" ;
 };
-String STR_UNDO_DIAGRAM_AXIS
+String STR_OBJECT_GRIDS
 {
-    Text [ en-US ] = "Edit axis" ;
+    Text [ en-US ] = "Grids" ;
 };
-String STR_UNDO_DIAGRAM_GRID
+String STR_OBJECT_GRID
 {
-    Text [ en-US ] = "Edit grid" ;
+    Text [ en-US ] = "Grid" ;
 };
-String STR_UNDO_DIAGRAM_WALL
+String STR_OBJECT_GRID_MAJOR_X
 {
-    Text [ en-US ] = "Edit chart wall" ;
+    Text [ en-US ] = "X Axis Major Grid" ;
 };
-String STR_UNDO_DIAGRAM_FLOOR
+String STR_OBJECT_GRID_MAJOR_Y
 {
-    Text [ en-US ] = "Edit chart floor" ;
+    Text [ en-US ] = "Y Axis Major Grid" ;
 };
-String STR_UNDO_DIAGRAM_AREA
+String STR_OBJECT_GRID_MAJOR_Z
 {
-    Text [ en-US ] = "Edit chart area" ;
+    Text [ en-US ] = "Z Axis Major Grid" ;
 };
-String STR_UNDO_DIAGRAM_TYPE
+String STR_OBJECT_GRID_MINOR_X
+{
+    Text [ en-US ] = "X Axis Minor Grid" ;
+};
+String STR_OBJECT_GRID_MINOR_Y
+{
+    Text [ en-US ] = "Y Axis Minor Grid" ;
+};
+String STR_OBJECT_GRID_MINOR_Z
+{
+    Text [ en-US ] = "Z Axis Minor Grid" ;
+};
+
+String STR_OBJECT_LEGEND
+{
+    Text [ en-US ] = "Legend" ;
+};
+
+String STR_OBJECT_TITLE
+{
+    Text [ en-US ] = "Title" ;
+};
+String STR_OBJECT_TITLES
+{
+    Text [ en-US ] = "Titles" ;
+};
+String STR_OBJECT_TITLE_MAIN
+{
+    Text [ en-US ] = "Main Title" ;
+};
+String STR_OBJECT_TITLE_SUB
+{
+    Text [ en-US ] = "Subtitle" ;
+};
+String STR_OBJECT_TITLE_X_AXIS
+{
+    Text [ en-US ] = "X Axis Title" ;
+};
+String STR_OBJECT_TITLE_Y_AXIS
+{
+    Text [ en-US ] = "Y Axis Title" ;
+};
+String STR_OBJECT_TITLE_Z_AXIS
+{
+    Text [ en-US ] = "Z Axis Title" ;
+};
+String STR_OBJECT_LABEL
+{
+    Text [ en-US ] = "Label" ;
+};
+
+String STR_OBJECT_DATALABELS
+{
+    Text [ en-US ] = "Data Labels" ;
+};
+String STR_OBJECT_DATAPOINT
+{
+    Text [ en-US ] = "Data Point" ;
+};
+String STR_OBJECT_DATAPOINTS
+{
+    Text [ en-US ] = "Data Points" ;
+};
+String STR_OBJECT_LEGEND_SYMBOL
+{
+    Text [ en-US ] = "Legend Key" ;
+};
+String STR_OBJECT_DATASERIES
+{
+    Text [ en-US ] = "Data Series" ;
+};
+String STR_OBJECT_DATASERIES_PLURAL
+{
+    Text [ en-US ] = "Data Series" ;
+};
+
+String STR_OBJECT_CURVE
+{
+    Text [ en-US ] = "Regression Curve";
+};
+String STR_OBJECT_AVERAGE_LINE
+{
+    Text [ en-US ] = "Average Value Line";
+};
+String STR_OBJECT_ERROR_INDICATOR
+{
+    Text [ en-US ] = "Error Indicator";
+};
+String STR_OBJECT_STOCK_LOSS
+{
+    Text [ en-US ] = "Negative Deviation";
+};
+
+String STR_OBJECT_STOCK_GAIN
+{
+    Text [ en-US ] = "Positive Deviation";
+};
+
+String STR_OBJECT_PAGE
+{
+    Text [ en-US ] = "Chart Area" ;
+};
+String STR_OBJECT_DIAGRAM
+{
+    Text [ en-US ] = "Chart" ;
+};
+String STR_OBJECT_DIAGRAM_WALL
+{
+    Text [ en-US ] = "Chart Wall" ;
+};
+String STR_OBJECT_DIAGRAM_FLOOR
+{
+    Text [ en-US ] = "Chart Floor" ;
+};
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+String STR_TIP_SELECT_RANGE
+{
+    Text [ en-US ] = "Select data range" ;
+};
+
+String STR_TIP_CHOOSECOLOR
+{
+    Text [ en-US ] = "Select a color using the color dialog" ;
+};
+
+String STR_TIP_LIGHTSOURCE_X
+{
+    Text [ en-US ] = "Light Source %LIGHTNUMBER" ;
+};
+
+String STR_TIP_DATASERIES
+{
+    Text [ en-US ] = "Data Series '%SERIESNAME'" ;
+};
+
+String STR_TIP_DATAPOINT_INDEX
+{
+    Text [ en-US ] = "Data Point %POINTNUMBER";
+};
+
+String STR_TIP_DATAPOINT_VALUES
+{
+    Text [ en-US ] = "Values: %POINTVALUES";
+};
+
+String STR_TIP_CATEGORY_VALUE
+{
+    Text [ en-US ] = "'%CATEGORYVALUE'";
+};
+
+String STR_TIP_DATAPOINT
+{
+    Text [ en-US ] = "Data Point %POINTNUMBER, data series %SERIESNUMBER, values: %POINTVALUES";
+};
+
+String STR_STATUS_DATAPOINT_MARKED
+{
+    Text [ en-US ] = "Data point %POINTNUMBER in data series %SERIESNUMBER selected, values: %POINTVALUES";
+};
+
+String STR_STATUS_OBJECT_MARKED
+{
+    Text [ en-US ] = "%OBJECTNAME selected" ;
+};
+
+String STR_STATUS_PIE_SEGMENT_EXPLODED
+{
+    Text [ en-US ] = "Pie exploded by %PERCENTVALUE percent";
+};
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+String STR_ACTION_EDIT_CHARTTYPE
 {
     Text [ en-US ] = "Edit chart type" ;
 };
-String STR_UNDO_AUTOFORMAT
+String STR_ACTION_EDIT_DATA_RANGES
 {
-    Text [ en-US ] = "AutoFormat" ;
+    Text [ en-US ] = "Edit data ranges" ;
 };
-String STR_UNDO_3D_VIEW
+String STR_ACTION_EDIT_3D_VIEW
 {
     Text [ en-US ] = "Edit 3D view" ;
 };
-String STR_UNDO_LIGHTING
+String STR_ACTION_EDIT_CHART_DATA
 {
-    Text [ en-US ] = "Set 3D illumination" ;
+    Text [ en-US ] = "Edit chart data";
 };
-String STR_UNDO_TOGGLE_TITLE
-{
-    Text [ en-US ] = "Title on/off" ;
-};
-String STR_UNDO_TOGGLE_LEGEND
+String STR_ACTION_TOGGLE_LEGEND
 {
     Text [ en-US ] = "Legend on/off" ;
 };
-String STR_UNDO_TOGGLE_AXIS_TITLE
-{
-    Text [ en-US ] = "Axis titles on/off" ;
-};
-String STR_UNDO_TOGGLE_AXIS_DESCR
-{
-    Text [ en-US ] = "Axis labels on/off" ;
-};
-String STR_UNDO_TOGGLE_GRID_HORZ
+String STR_ACTION_TOGGLE_GRID_HORZ
 {
     Text [ en-US ] = "Horizontal grid on/off" ;
 };
-String STR_UNDO_TOGGLE_GRID_VERT
+String STR_ACTION_SCALE_TEXT
 {
-    Text [ en-US ] = "Vertical grid on/off" ;
+    Text [ en-US ] = "Scale Text" ;
 };
-String STR_UNDO_DATA_IN_ROWS
+String STR_ACTION_REARRANGE_CHART
 {
-    Text [ en-US ] = "Data in Rows" ;
-};
-String STR_UNDO_DATA_IN_COLUMNS
-{
-    Text [ en-US ] = "Data in Columns" ;
-};
-String STR_DEFAULTVIEW
-{
-    Text [ en-US ] = "Default" ;
-};
-
-
-String STR_OPEN_DOCUMENT
-{
-    Text [ en-US ] = "Load document" ;
-};
-String STR_SAVE_DOCUMENT
-{
-    Text [ en-US ] = "Save document";
-    Text [ en-US ] = "Save document" ;
+    Text [ en-US ] = "Automatic Layout" ;
 };
 String STR_ACTION_NOTPOSSIBLE
 {
     Text [ en-US ] = "This function cannot be completed with the selected objects." ;
 };
-String STR_GRAPHIC
+
+String STR_COLUMN_LABEL
 {
-    Text [ en-US ] = "Chart" ;
+    Text [ en-US ] = "Column %COLUMNNUMBER" ;
 };
-String STR_CHART_DOCUMENT
+String STR_ROW_LABEL
 {
-    Text [ en-US ] = "Chart" ;
-};
-String STR_CHART_DOCUMENT_FULLTYPE_60
-{
-    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Chart" ;
-};
-String STR_CHART_DOCUMENT_FULLTYPE_50
-{
-    Text [ en-US ] = "%PRODUCTNAME 5.0 Chart" ;
-};
-String STR_CHART_DOCUMENT_FULLTYPE_40
-{
-    Text [ en-US ] = "%PRODUCTNAME 4.0 Chart" ;
-};
-String STR_CHART_DOCUMENT_FULLTYPE_31
-{
-    Text [ en-US ] = "%PRODUCTNAME 3.0 Chart" ;
-};
-String STR_BAD_PASSWORD_OR_FILE_CORRUPTED
-{
-    Text [ en-US ] = "The password is incorrect or the file is damaged." ;
-};
-String RID_PLUGINTOOLBOX
-{
-    Text [ en-US ] = "Plug-in Bar" ;
+    Text [ en-US ] = "Row %ROWNUMBER" ;
 };
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
-String STR_SURFACE
+//for range didalog
+String STR_DATA_ROLE_LABEL
 {
-    Text [ en-US ] = "Surfaces" ;
+    Text [ en-US ] = "Name" ;
 };
 
-
-String STR_STATISTICS_IN_LEGEND
+String STR_DATA_ROLE_X
 {
-    // comment
-    // comment
-    Text [ en-US ] = "$(STATTYP), $(ROWNAME) " ;
+    Text [ en-US ] = "X-Values" ;
 };
 
-String STR_UNDO_SCALE
+String STR_DATA_ROLE_Y
 {
-    Text [ en-US ] = "Scale Text" ;
+    Text [ en-US ] = "Y-Values" ;
 };
-String STR_QUERY_SORT
+
+String STR_DATA_ROLE_X_ERROR
 {
-    Text [ en-US ] = "X axis values must be sorted.\nSort them now?" ;
+    Text [ en-US ] = "X-Error-Bars" ;
 };
-String STR_UNDO_REMOVEPOINTATTRS
+
+String STR_DATA_ROLE_Y_ERROR
 {
-    Text [ en-US ] = "Remove data point attributes" ;
+    Text [ en-US ] = "Y-Error-Bars" ;
 };
-String STR_APPNAME
+
+String STR_DATA_ROLE_FIRST
 {
-    Text [ en-US ] = "%PRODUCTNAME Chart" ;
+    Text [ en-US ] = "Open Values" ;
 };
 
-String STR_UNDO_MOREBACK
+String STR_DATA_ROLE_LAST
 {
-    Text [ en-US ] = "Move data series";
+    Text [ en-US ] = "Close Values" ;
 };
-String STR_UNDO_MOREFRONT
+
+String STR_DATA_ROLE_MIN
 {
-    Text [ en-US ] = "Move data series";
+    Text [ en-US ] = "Low Values" ;
 };
 
-String STR_UNDO_DIAGRAM_STOCK_LOSS
+String STR_DATA_ROLE_MAX
 {
-    Text [ en-US ] = "Edit negative deviation";
+    Text [ en-US ] = "High Values" ;
 };
-String STR_UNDO_DIAGRAM_STOCK_PLUS
+
+String STR_DATA_ROLE_CATEGORIES
 {
-    Text [ en-US ] = "Edit positive deviation";
+    Text [ en-US ] = "Categories";
 };
-//-----------------------------------
 
-
-String STR_UNDO_INSERT_SPECCHAR
+String STR_DATA_UNNAMED_SERIES
 {
-    Text [ en-US ] = "Insert special character" ;
+    Text [ en-US ] = "Unnamed Series";
 };
 
-// some strings merged using arguments now
-
-String STR_STATUS_DATAPOINT_MARKED
+String STR_DATA_UNNAMED_SERIES_WITH_INDEX
 {
-    // this string is displayed in the status bar whenever a data point is selected
-
-    Text [ en-US ] = "Data Point $(PT_NUM) in row $(ROW_NUM) selected, value: $(VALUE)";
+    Text [ en-US ] = "Unnamed Series %NUMBER" ;
 };
 
-String STR_QUICKHELP_DATAPOINT
+String STR_DATA_SELECT_RANGE_FOR_SERIES
 {
-    Text [ en-US ] = "Data Point $(PT_NUM), row $(ROW_NUM), value: $(VALUE)";
+    Text [ en-US ] = "Choose range for %VALUETYPE of %SERIESNAME" ;
 };
 
-String STR_BALLOONHELP_DATAPOINT
+String STR_DATA_SELECT_RANGE_FOR_CATEGORIES
 {
-    // $(NEWLINE) begins a new line, $(PT_STR) and $(ROW_STR) are the
-    // row/column captions
-
-    Text [ en-US ] = "Data Point $(PT_STR)$(NEWLINE)row $(ROW_STR)$(NEWLINE)value: $(VALUE)";
+    Text [ en-US ] = "Select Range for Categories" ;
 };
 
-// some more strings for QuickHelp
-
-String STR_AVERAGEVALUE
+String STR_DATA_SELECT_RANGE_FOR_DATALABELS
 {
-    Text [ en-US ] = "average value line";
+    Text [ en-US ] = "Select Range for data labels" ;
 };
 
-String STR_DIAGRAM_ERROR
-{
-    Text [ en-US ] = "error indicator";
-};
-
-String STR_DIAGRAM_REGRESSION
-{
-    Text [ en-US ] = "regression curve";
-};
-
-String STR_CFG_DEFAULT_COLORS
-{
-    Text [ en-US ] = "Default colors";
-};
-
-String STR_PIE_SEGMENT_EXPLODED
-{   // shown in status bar. Parameter $(PERCENT) becomes a floating point number
-    Text [ en-US ] = "Pie exploded by $(PERCENT) percent";
-};
-
-String STR_DIAGRAM_DATA_SAFETY_QUERY
-{
-    Text [ en-US ] = "Data has been changed.\n Do you want to apply the changes?" ;
-};
-
-String STR_UNDO_TRANSFORM
-{
-    Text [ en-US ] = "Transform %O" ;
-};
-
-String STR_UNDO_MOVE
-//== svx STR_EditMove
-{
-    Text [ en-US ] = "Move %O" ;
-};
-
-String STR_UNDO_RESIZE
-//== svx STR_EditResize
-{
-    Text [ en-US ] = "Resize %O" ;
-};
-
-String STR_UNDO_ROTATE
-//== svx STR_EditRotate
-{
-    Text [ en-US ] = "Rotate %O" ;
-};
-*/
-//-----------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
