@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servuno.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:45:27 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:11:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -353,8 +353,8 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             break;
 
         case SC_SERVICE_CHDATAPROV:
-            if (pDocShell)
-                xRet = *new ScChart2DataProvider( pDocShell );
+            if (pDocShell && pDocShell->GetDocument())
+                xRet = *new ScChart2DataProvider( pDocShell->GetDocument() );
             break;
     }
     return xRet;
