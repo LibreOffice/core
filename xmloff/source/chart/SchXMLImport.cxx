@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:15:25 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:06:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,16 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+// header for class ByteString
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
@@ -67,9 +77,6 @@
 #ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORSUPPLIER_HPP_
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UTIL_XSTRINGMAPPING_HPP_
-#include <com/sun/star/util/XStringMapping.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CHART_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart/XChartDocument.hpp>
 #endif
@@ -79,10 +86,77 @@
 #ifndef _COM_SUN_STAR_CHART_CHARTDATAROWSOURCE_HPP_
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CHART2_DATA_XDATARECEIVER_HPP_
+#include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_DATA_XDATAPROVIDER_HPP_
+#include <com/sun/star/chart2/data/XDataProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XCOORDINATESYSTEMCONTAINER_HPP_
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPECONTAINER_HPP_
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XDATASERIESCONTAINER_HPP_
+#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#endif
+
+#include <typeinfo>
 
 using namespace rtl;
 using namespace com::sun::star;
 using namespace ::xmloff::token;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+
+namespace
+{
+Reference< uno::XComponentContext > lcl_getComponentContext()
+{
+    Reference< uno::XComponentContext > xContext;
+    try
+    {
+        Reference< beans::XPropertySet > xFactProp( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
+        if( xFactProp.is())
+            xFactProp->getPropertyValue(OUString::createFromAscii("DefaultContext")) >>= xContext;
+    }
+    catch( uno::Exception& )
+    {}
+
+    return xContext;
+}
+
+class lcl_MatchesChartType : public ::std::unary_function< Reference< chart2::XChartType >, bool >
+{
+public:
+    explicit lcl_MatchesChartType( const OUString & aChartTypeName ) :
+            m_aChartTypeName( aChartTypeName )
+    {}
+
+    bool operator () ( const Reference< chart2::XChartType > & xChartType ) const
+    {
+        return (xChartType.is() &&
+                xChartType->getChartType().equals( m_aChartTypeName ));
+    }
+
+private:
+    OUString m_aChartTypeName;
+};
+} // anonymous namespace
 
 /* ----------------------------------------
    TokenMaps for distinguishing different
@@ -177,7 +251,6 @@ static __FAR_DATA SvXMLTokenMapEntry aPlotAreaAttrTokenMap[] =
     { XML_NAMESPACE_SVG,    XML_HEIGHT,                 XML_TOK_PA_HEIGHT            },
     { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_PA_STYLE_NAME        },
     { XML_NAMESPACE_TABLE,  XML_CELL_RANGE_ADDRESS,     XML_TOK_PA_CHART_ADDRESS     },
-    { XML_NAMESPACE_CHART,  XML_TABLE_NUMBER_LIST,      XML_TOK_PA_TABLE_NUMBER_LIST },
     { XML_NAMESPACE_CHART,  XML_DATA_SOURCE_HAS_LABELS, XML_TOK_PA_DS_HAS_LABELS     },
     { XML_NAMESPACE_DR3D,   XML_TRANSFORM,              XML_TOK_PA_TRANSFORM         },
     { XML_NAMESPACE_DR3D,   XML_VRP,                    XML_TOK_PA_VRP               },
@@ -239,7 +312,7 @@ static __FAR_DATA SvXMLTokenMapEntry aSeriesAttrTokenMap[] =
 SchXMLImportHelper::SchXMLImportHelper() :
         mpAutoStyles( 0 ),
 
-        mpDocElemTokenMap( 0 ),
+        mpChartDocElemTokenMap( 0 ),
         mpTableElemTokenMap( 0 ),
         mpChartElemTokenMap( 0 ),
         mpPlotAreaElemTokenMap( 0 ),
@@ -259,8 +332,8 @@ SchXMLImportHelper::SchXMLImportHelper() :
 SchXMLImportHelper::~SchXMLImportHelper()
 {
         // delete token maps
-    if( mpDocElemTokenMap )
-        delete mpDocElemTokenMap;
+    if( mpChartDocElemTokenMap )
+        delete mpChartDocElemTokenMap;
     if( mpTableElemTokenMap )
         delete mpTableElemTokenMap;
     if( mpChartElemTokenMap )
@@ -290,13 +363,13 @@ SchXMLImportHelper::~SchXMLImportHelper()
 
 SvXMLImportContext* SchXMLImportHelper::CreateChartContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
-    const uno::Reference< frame::XModel > xChartModel,
-    const uno::Reference< xml::sax::XAttributeList >& )
+    sal_uInt16 nPrefix, const OUString& rLocalName,
+    const Reference< frame::XModel > xChartModel,
+    const Reference< xml::sax::XAttributeList >& )
 {
     SvXMLImportContext* pContext = 0;
 
-    uno::Reference< chart::XChartDocument > xDoc( xChartModel, uno::UNO_QUERY );
+    Reference< chart::XChartDocument > xDoc( xChartModel, uno::UNO_QUERY );
     if( xDoc.is())
     {
         mxChartDoc = xDoc;
@@ -317,9 +390,9 @@ SvXMLImportContext* SchXMLImportHelper::CreateChartContext(
 
 const SvXMLTokenMap& SchXMLImportHelper::GetDocElemTokenMap()
 {
-    if( ! mpDocElemTokenMap )
-        mpDocElemTokenMap = new SvXMLTokenMap( aDocElemTokenMap );
-    return *mpDocElemTokenMap;
+    if( ! mpChartDocElemTokenMap )
+        mpChartDocElemTokenMap = new SvXMLTokenMap( aDocElemTokenMap );
+    return *mpChartDocElemTokenMap;
 }
 
 const SvXMLTokenMap& SchXMLImportHelper::GetTableElemTokenMap()
@@ -414,10 +487,10 @@ sal_Int32 SchXMLImportHelper::GetNumberOfSeries()
 {
     if( mxChartDoc.is())
     {
-        uno::Reference< chart::XChartDataArray > xData( mxChartDoc->getData(), uno::UNO_QUERY );
+        Reference< chart::XChartDataArray > xData( mxChartDoc->getData(), uno::UNO_QUERY );
         if( xData.is())
         {
-            uno::Sequence< uno::Sequence< double > > xArray = xData->getData();
+            Sequence< Sequence< double > > xArray = xData->getData();
 
             if( xArray.getLength())
                 return xArray[ 0 ].getLength();
@@ -431,10 +504,10 @@ sal_Int32 SchXMLImportHelper::GetLengthOfSeries()
 {
     if( mxChartDoc.is())
     {
-        uno::Reference< chart::XChartDataArray > xData( mxChartDoc->getData(), uno::UNO_QUERY );
+        Reference< chart::XChartDataArray > xData( mxChartDoc->getData(), uno::UNO_QUERY );
         if( xData.is())
         {
-            uno::Sequence< uno::Sequence< double > > xArray = xData->getData();
+            Sequence< Sequence< double > > xArray = xData->getData();
 
             return xArray.getLength();
         }
@@ -451,18 +524,18 @@ void SchXMLImportHelper::ResizeChartData( sal_Int32 nSeries, sal_Int32 nDataPoin
         sal_Bool bWasChanged = sal_False;
 
         sal_Bool bDataInColumns = sal_True;
-        uno::Reference< beans::XPropertySet > xDiaProp( mxChartDoc->getDiagram(), uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xDiaProp( mxChartDoc->getDiagram(), uno::UNO_QUERY );
         if( xDiaProp.is())
         {
             chart::ChartDataRowSource eRowSource;
-            xDiaProp->getPropertyValue( ::rtl::OUString::createFromAscii( "DataRowSource" )) >>= eRowSource;
+            xDiaProp->getPropertyValue( OUString::createFromAscii( "DataRowSource" )) >>= eRowSource;
             bDataInColumns = ( eRowSource == chart::ChartDataRowSource_COLUMNS );
 
             // the chart core treats donut chart with interchanged rows/columns
-            uno::Reference< chart::XDiagram > xDiagram( xDiaProp, uno::UNO_QUERY );
+            Reference< chart::XDiagram > xDiagram( xDiaProp, uno::UNO_QUERY );
             if( xDiagram.is())
             {
-                rtl::OUString sChartType = xDiagram->getDiagramType();
+                OUString sChartType = xDiagram->getDiagramType();
                 if( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.DonutDiagram" )))
                 {
                     bDataInColumns = ! bDataInColumns;
@@ -472,10 +545,10 @@ void SchXMLImportHelper::ResizeChartData( sal_Int32 nSeries, sal_Int32 nDataPoin
         sal_Int32 nColCount = bDataInColumns ? nSeries : nDataPoints;
         sal_Int32 nRowCount = bDataInColumns ? nDataPoints : nSeries;
 
-        uno::Reference< chart::XChartDataArray > xData( mxChartDoc->getData(), uno::UNO_QUERY );
+        Reference< chart::XChartDataArray > xData( mxChartDoc->getData(), uno::UNO_QUERY );
         if( xData.is())
         {
-            uno::Sequence< uno::Sequence< double > > xArray = xData->getData();
+            Sequence< Sequence< double > > xArray = xData->getData();
 
             // increase number of rows
             if( xArray.getLength() < nRowCount )
@@ -510,39 +583,216 @@ void SchXMLImportHelper::ResizeChartData( sal_Int32 nSeries, sal_Int32 nDataPoin
             if( bWasChanged )
             {
                 xData->setData( xArray );
+                mxChartDoc->attachData(
+                    Reference< chart::XChartData >( xData, uno::UNO_QUERY ));
             }
         }
     }
+}
+
+// static
+Reference< chart2::data::XDataProvider > SchXMLImportHelper::GetDataProvider(
+    const Reference< chart2::XChartDocument > & xDoc )
+{
+    Reference< chart2::data::XDataProvider > xResult;
+    if( xDoc.is())
+    {
+        try
+        {
+            xResult.set( xDoc->getDataProvider());
+//             if( ! xResult.is())
+//             {
+//                 Reference< container::XChild > xChild( xDoc, uno::UNO_QUERY_THROW );
+//                 Reference< lang::XMultiServiceFactory > xFact( xChild->getParent(), uno::UNO_QUERY );
+//                 if( xFact.is())
+//                 {
+//                     Reference< chart2::data::XDataReceiver > xReceiver( xDoc, uno::UNO_QUERY_THROW );
+//                     xResult.set(
+//                         xFact->createInstance( OUString::createFromAscii("com.sun.star.chart2.data.DataProvider")),
+//                         uno::UNO_QUERY_THROW );
+//                     xReceiver->attachDataProvider( xResult );
+//                 }
+//             }
+        }
+        catch( const uno::Exception & )
+        {
+            // didn't get a data provider from  the container
+        }
+    }
+    return xResult;
+}
+
+//static
+void SchXMLImportHelper::DeleteDataSeries(
+                    const Reference< chart2::XDataSeries > & xSeries,
+                    const Reference< chart2::XChartDocument > & xDoc )
+{
+    if( xDoc.is() )
+    try
+    {
+        Reference< chart2::XCoordinateSystemContainer > xCooSysCnt(
+            xDoc->getFirstDiagram(), uno::UNO_QUERY_THROW );
+        Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(
+            xCooSysCnt->getCoordinateSystems());
+
+        sal_Int32 nCooSysIndex = 0;
+        for( nCooSysIndex=0; nCooSysIndex<aCooSysSeq.getLength(); nCooSysIndex++ )
+        {
+            Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[ nCooSysIndex ], uno::UNO_QUERY_THROW );
+            Sequence< Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
+
+            sal_Int32 nChartTypeIndex = 0;
+            for( nChartTypeIndex=0; nChartTypeIndex<aChartTypes.getLength(); nChartTypeIndex++ )
+            {
+                Reference< chart2::XDataSeriesContainer > xSeriesCnt( aChartTypes[nChartTypeIndex], uno::UNO_QUERY_THROW );
+                Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xSeriesCnt->getDataSeries());
+
+                sal_Int32 nSeriesIndex = 0;
+                for( nSeriesIndex=0; nSeriesIndex<aSeriesSeq.getLength(); nSeriesIndex++ )
+                {
+                    if( xSeries==aSeriesSeq[nSeriesIndex] )
+                    {
+                        xSeriesCnt->removeDataSeries(xSeries);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+    catch( uno::Exception & ex )
+    {
+        (void)ex; // avoid warning for pro build
+        OSL_ENSURE( false, OUStringToOString(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
+                        OUString::createFromAscii( typeid( ex ).name()) +
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
+                        ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+    }
+}
+
+// static
+Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
+    const Reference< chart2::XChartDocument > & xDoc,
+    sal_Int32 nCoordinateSystemIndex,
+    const OUString & rChartTypeName,
+    bool bPushLastChartType /* = false */ )
+{
+    Reference< chart2::XDataSeries > xResult;
+    if(!xDoc.is())
+        return xResult;
+
+    try
+    {
+        Reference< chart2::XCoordinateSystemContainer > xCooSysCnt(
+            xDoc->getFirstDiagram(), uno::UNO_QUERY_THROW );
+        Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(
+            xCooSysCnt->getCoordinateSystems());
+        Reference< uno::XComponentContext > xContext( lcl_getComponentContext());
+
+        if( nCoordinateSystemIndex < aCooSysSeq.getLength())
+        {
+            Reference< chart2::XChartType > xCurrentType;
+            {
+                Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[ nCoordinateSystemIndex ], uno::UNO_QUERY_THROW );
+                Sequence< Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
+                // find matching chart type group
+                const Reference< chart2::XChartType > * pBegin = aChartTypes.getConstArray();
+                const Reference< chart2::XChartType > * pEnd = pBegin + aChartTypes.getLength();
+                const Reference< chart2::XChartType > * pIt =
+                    ::std::find_if( pBegin, pEnd, lcl_MatchesChartType( rChartTypeName ));
+                if( pIt != pEnd )
+                    xCurrentType.set( *pIt );
+                // if chart type is set at series and differs from current one,
+                // create a new chart type
+                if( !xCurrentType.is())
+                {
+                    xCurrentType.set(
+                        xContext->getServiceManager()->createInstanceWithContext( rChartTypeName, xContext ),
+                        uno::UNO_QUERY );
+                    if( xCurrentType.is())
+                    {
+                        if( bPushLastChartType && aChartTypes.getLength())
+                        {
+                            sal_Int32 nIndex( aChartTypes.getLength() - 1 );
+                            aChartTypes.realloc( aChartTypes.getLength() + 1 );
+                            aChartTypes[ nIndex + 1 ] = aChartTypes[ nIndex ];
+                            aChartTypes[ nIndex ] = xCurrentType;
+                            xCTCnt->setChartTypes( aChartTypes );
+                        }
+                        else
+                            xCTCnt->addChartType( xCurrentType );
+                    }
+                }
+            }
+
+            if( xCurrentType.is())
+            {
+                Reference< chart2::XDataSeriesContainer > xSeriesCnt( xCurrentType, uno::UNO_QUERY_THROW );
+                Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xSeriesCnt->getDataSeries());
+
+                if( xContext.is() )
+                {
+                    xResult.set(
+                        xContext->getServiceManager()->createInstanceWithContext(
+                            OUString::createFromAscii("com.sun.star.chart2.DataSeries"),
+                            xContext ), uno::UNO_QUERY_THROW );
+                }
+                if( xResult.is() )
+                    xSeriesCnt->addDataSeries( xResult );
+            }
+        }
+    }
+    catch( uno::Exception & ex )
+    {
+        (void)ex; // avoid warning for pro build
+        OSL_ENSURE( false, OUStringToOString(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
+                        OUString::createFromAscii( typeid( ex ).name()) +
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
+                        ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+    }
+    return xResult;
+}
+
+// static
+Reference< chart2::data::XLabeledDataSequence > SchXMLImportHelper::GetNewLabeledDataSequence()
+{
+    // @todo: remove this asap
+    OSL_ENSURE( false, "Do not call this method" );
+    Reference< chart2::data::XLabeledDataSequence >  xResult;
+    // DO NOT USED -- DEPRECATED. Use SchXMLTools::GetNewLabeledDataSequence() instead
+    return xResult;
 }
 
 // ========================================
 
 // #110680#
 SchXMLImport::SchXMLImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-    sal_uInt16 nImportFlags )
-:   SvXMLImport( xServiceFactory, nImportFlags )
+    const Reference< lang::XMultiServiceFactory >& xServiceFactory,
+    sal_uInt16 nImportFlags ) :
+        SvXMLImport( xServiceFactory, nImportFlags )
 {
+    mbIsGraphicLoadOnDemmandSupported = false;
 }
 
 // #110680#
 SchXMLImport::SchXMLImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-    uno::Reference< frame::XModel > xModel,
-    uno::Reference< com::sun::star::document::XGraphicObjectResolver >& rGrfContainer,
+    const Reference< lang::XMultiServiceFactory >& xServiceFactory,
+    Reference< frame::XModel > xModel,
+    Reference< document::XGraphicObjectResolver >& rGrfContainer,
     sal_Bool /*bLoadDoc*/, sal_Bool bShowProgress )
 :   SvXMLImport( xServiceFactory, xModel, rGrfContainer )
 {
     // get status indicator (if requested)
     if( bShowProgress )
     {
-        uno::Reference< frame::XController > xController( xModel->getCurrentController());
+        Reference< frame::XController > xController( xModel->getCurrentController());
         if( xController.is())
         {
-            uno::Reference< frame::XFrame > xFrame( xController->getFrame());
+            Reference< frame::XFrame > xFrame( xController->getFrame());
             if( xFrame.is())
             {
-                uno::Reference< task::XStatusIndicatorSupplier > xFactory( xFrame, uno::UNO_QUERY );
+                Reference< task::XStatusIndicatorSupplier > xFactory( xFrame, uno::UNO_QUERY );
                 if( xFactory.is())
                 {
                     mxStatusIndicator = xFactory->getStatusIndicator();
@@ -554,7 +804,7 @@ SchXMLImport::SchXMLImport(
     // add progress view
     if( mxStatusIndicator.is())
     {
-        const rtl::OUString aText( RTL_CONSTASCII_USTRINGPARAM( "XML Import" ));
+        const OUString aText( RTL_CONSTASCII_USTRINGPARAM( "XML Import" ));
         mxStatusIndicator->start( aText, 100 );     // use percentage as values
     }
 }
@@ -567,12 +817,16 @@ SchXMLImport::~SchXMLImport() throw ()
         mxStatusIndicator->end();
         mxStatusIndicator->reset();
     }
+
+    uno::Reference< chart2::XChartDocument > xChartDoc( GetModel(), uno::UNO_QUERY );
+    if( xChartDoc.is() && xChartDoc->hasControllersLocked() )
+        xChartDoc->unlockControllers();
 }
 
 // create the main context (subcontexts are created
 // by the one created here)
-SvXMLImportContext *SchXMLImport::CreateContext( USHORT nPrefix, const rtl::OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+SvXMLImportContext *SchXMLImport::CreateContext( USHORT nPrefix, const OUString& rLocalName,
+    const Reference< xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = 0;
 
@@ -594,8 +848,8 @@ SvXMLImportContext *SchXMLImport::CreateContext( USHORT nPrefix, const rtl::OUSt
 }
 
 SvXMLImportContext* SchXMLImport::CreateStylesContext(
-    const ::rtl::OUString& rLocalName,
-    const uno::Reference<xml::sax::XAttributeList>& xAttrList )
+    const OUString& rLocalName,
+    const Reference<xml::sax::XAttributeList>& xAttrList )
 {
     SvXMLStylesContext* pStylesCtxt =
         new SvXMLStylesContext( *(this), XML_NAMESPACE_OFFICE, rLocalName, xAttrList );
@@ -607,14 +861,79 @@ SvXMLImportContext* SchXMLImport::CreateStylesContext(
     return pStylesCtxt;
 }
 
+void SAL_CALL SchXMLImport::setTargetDocument( const uno::Reference< lang::XComponent >& xDoc )
+    throw(lang::IllegalArgumentException, uno::RuntimeException)
+{
+    uno::Reference< chart2::XChartDocument > xOldDoc( GetModel(), uno::UNO_QUERY );
+    if( xOldDoc.is() && xOldDoc->hasControllersLocked() )
+        xOldDoc->unlockControllers();
+
+    SvXMLImport::setTargetDocument( xDoc );
+
+    //set data provider and number formatter
+    // try to get an XDataProvider and set it
+    // @todo: if we have our own data, we must not use the parent as data provider
+    uno::Reference< chart2::XChartDocument > xChartDoc( GetModel(), uno::UNO_QUERY );
+
+    if( xChartDoc.is() )
+    try
+    {
+        //prevent rebuild of view during load ( necesarry especially if loaded not via load api, which is the case for example if binary files are loaded )
+        xChartDoc->lockControllers();
+
+        uno::Reference< container::XChild > xChild( xChartDoc, uno::UNO_QUERY );
+        uno::Reference< chart2::data::XDataReceiver > xDataReceiver( xChartDoc, uno::UNO_QUERY );
+        bool bHasOwnData = true;
+        if( xChild.is() && xDataReceiver.is() )
+        {
+            Reference< lang::XMultiServiceFactory > xFact( xChild->getParent(), uno::UNO_QUERY );
+            if( xFact.is() )
+            {
+                //if the parent has a number formatter we will use the numberformatter of the parent
+                Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( xFact, uno::UNO_QUERY );
+                xDataReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
+
+                OUString aDataProviderServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.data.DataProvider"));
+                uno::Sequence< OUString > aServiceNames( xFact->getAvailableServiceNames());
+                const OUString * pBegin = aServiceNames.getConstArray();
+                const OUString * pEnd = pBegin + aServiceNames.getLength();
+                if( ::std::find( pBegin, pEnd, aDataProviderServiceName ) != pEnd )
+                {
+                    Reference< chart2::data::XDataProvider > xProvider(
+                        xFact->createInstance( aDataProviderServiceName ), uno::UNO_QUERY );
+                    if( xProvider.is())
+                    {
+                        xDataReceiver->attachDataProvider( xProvider );
+                        bHasOwnData = false;
+                    }
+                }
+            }
+//             else we have no parent => we have our own data
+
+            if( bHasOwnData && ! xChartDoc->hasInternalDataProvider() )
+                xChartDoc->createInternalDataProvider( sal_False );
+        }
+    }
+    catch( uno::Exception & rEx )
+    {
+#ifdef DBG_UTIL
+        String aStr( rEx.Message );
+        ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR1( "SchXMLChartContext::StartElement(): Exception caught: %s", aBStr.GetBuffer());
+#else
+        (void)rEx; // avoid warning for pro build
+#endif
+    }
+}
+
 // export components ========================================
 
 // first version: everything comes from one storage
 
-uno::Sequence< OUString > SAL_CALL SchXMLImport_getSupportedServiceNames() throw()
+Sequence< OUString > SAL_CALL SchXMLImport_getSupportedServiceNames() throw()
 {
     const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLOasisImporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
@@ -623,7 +942,7 @@ OUString SAL_CALL SchXMLImport_getImplementationName() throw()
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLImport" ) );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+Reference< uno::XInterface > SAL_CALL SchXMLImport_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     // #110680#
     // return (cppu::OWeakObject*)new SchXMLImport();
@@ -634,10 +953,10 @@ uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_createInstance(const uno
 
 // multiple storage version: one for content / styles / meta
 
-uno::Sequence< OUString > SAL_CALL SchXMLImport_Styles_getSupportedServiceNames() throw()
+Sequence< OUString > SAL_CALL SchXMLImport_Styles_getSupportedServiceNames() throw()
 {
     const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLOasisStylesImporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
@@ -646,7 +965,7 @@ OUString SAL_CALL SchXMLImport_Styles_getImplementationName() throw()
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLImport.Styles" ) );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_Styles_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+Reference< uno::XInterface > SAL_CALL SchXMLImport_Styles_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     // #110680#
     // return (cppu::OWeakObject*)new SchXMLImport( IMPORT_STYLES );
@@ -655,10 +974,10 @@ uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_Styles_createInstance(co
 
 // ------------------------------------------------------------
 
-uno::Sequence< OUString > SAL_CALL SchXMLImport_Content_getSupportedServiceNames() throw()
+Sequence< OUString > SAL_CALL SchXMLImport_Content_getSupportedServiceNames() throw()
 {
     const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLOasisContentImporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
@@ -667,7 +986,7 @@ OUString SAL_CALL SchXMLImport_Content_getImplementationName() throw()
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLImport.Content" ) );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+Reference< uno::XInterface > SAL_CALL SchXMLImport_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     // #110680#
     // return (cppu::OWeakObject*)new SchXMLImport( IMPORT_CONTENT | IMPORT_AUTOSTYLES | IMPORT_FONTDECLS );
@@ -676,10 +995,10 @@ uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_Content_createInstance(c
 
 // ------------------------------------------------------------
 
-uno::Sequence< OUString > SAL_CALL SchXMLImport_Meta_getSupportedServiceNames() throw()
+Sequence< OUString > SAL_CALL SchXMLImport_Meta_getSupportedServiceNames() throw()
 {
     const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLOasisMetaImporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
@@ -688,7 +1007,7 @@ OUString SAL_CALL SchXMLImport_Meta_getImplementationName() throw()
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLImport.Meta" ) );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+Reference< uno::XInterface > SAL_CALL SchXMLImport_Meta_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     // #110680#
     // return (cppu::OWeakObject*)new SchXMLImport( IMPORT_META );
