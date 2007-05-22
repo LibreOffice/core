@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_LegendPosition_tmpl.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 16:02:47 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:40:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,38 +35,51 @@
 #ifndef _CHART2_RESOURCE_LEGEND_HXX
 #define _CHART2_RESOURCE_LEGEND_HXX
 
-#define RESOURCE_LEGENDPOSITION( ypos ) \
+#include "HelpIds.hrc"
+#include "res_LegendPosition_IDs.hrc"
+
+#define RESOURCE_LEGENDDISPLAY( xpos , ypos ) \
+CheckBox CBX_SHOWLEGEND \
+{ \
+    HelpID = HID_SCH_LEGEND_SHOW ; \
+    Pos = MAP_APPFONT ( xpos , ypos  ) ; \
+    Size = MAP_APPFONT ( 67 , 12 ) ; \
+    Text [ en-US ] = "~Display legend" ; \
+    TabStop = TRUE ; \
+};
+
+#define RESOURCE_LEGENDPOSITION( xpos , ypos ) \
 RadioButton RBT_LEFT \
 { \
-    Pos = MAP_APPFONT ( 12 , ypos  ) ; \
+    HelpID = HID_SCH_LEGEND_POS_LEFT ; \
+    Pos = MAP_APPFONT ( xpos , ypos  ) ; \
     Size = MAP_APPFONT ( 55 , 10 ) ; \
     Text [ en-US ] = "~Left" ; \
     TabStop = TRUE ; \
-    Text [ x-comment ] = " "; \
-}; \
-RadioButton RBT_TOP \
-{ \
-    Pos = MAP_APPFONT ( 12 , ypos+14  ) ; \
-    Size = MAP_APPFONT ( 55 , 10 ) ; \
-    Text [ en-US ] = "~Top" ; \
-    TabStop = TRUE ; \
-    Text [ x-comment ] = " "; \
 }; \
 RadioButton RBT_RIGHT \
 { \
-    Pos = MAP_APPFONT ( 12 , ypos+28  ) ; \
+    HelpID = HID_SCH_LEGEND_POS_RIGHT ; \
+    Pos = MAP_APPFONT ( xpos , ypos+14  ) ; \
     Size = MAP_APPFONT ( 55 , 10 ) ; \
     Text [ en-US ] = "~Right" ; \
     TabStop = TRUE ; \
-    Text [ x-comment ] = " "; \
+}; \
+RadioButton RBT_TOP \
+{ \
+    HelpID = HID_SCH_LEGEND_POS_TOP ; \
+    Pos = MAP_APPFONT ( xpos , ypos+28  ) ; \
+    Size = MAP_APPFONT ( 55 , 10 ) ; \
+    Text [ en-US ] = "~Top" ; \
+    TabStop = TRUE ; \
 }; \
 RadioButton RBT_BOTTOM \
 { \
-    Pos = MAP_APPFONT ( 12 , ypos+42  ) ; \
+    HelpID = HID_SCH_LEGEND_POS_BOTTOM ; \
+    Pos = MAP_APPFONT ( xpos , ypos+42  ) ; \
     Size = MAP_APPFONT ( 55 , 10 ) ; \
     Text [ en-US ] = "~Bottom" ; \
     TabStop = TRUE ; \
-    Text [ x-comment ] = " "; \
 };
 
 #endif
