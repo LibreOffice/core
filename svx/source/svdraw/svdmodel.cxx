@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:58:00 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:20:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1309,7 +1309,7 @@ void SdrModel::TakeMetricStr(long nVal, XubString& rStr, FASTBOOL bNoUnitChars, 
     if(nKomma > nNumDigits)
     {
         const sal_Int32 nDiff(nKomma - nNumDigits);
-        const double fFactor(pow(10.0, (int)nDiff));
+        const double fFactor(pow(10.0, static_cast<const int>(nDiff)));
 
         fLocalValue /= fFactor;
         nKomma = nNumDigits;
@@ -1317,7 +1317,7 @@ void SdrModel::TakeMetricStr(long nVal, XubString& rStr, FASTBOOL bNoUnitChars, 
     else if(nKomma < nNumDigits)
     {
         const sal_Int32 nDiff(nNumDigits - nKomma);
-        const double fFactor(pow(10.0, (int)nDiff));
+        const double fFactor(pow(10.0, static_cast<const int>(nDiff)));
 
         fLocalValue *= fFactor;
         nKomma = nNumDigits;
