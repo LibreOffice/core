@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-05 12:06:13 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:34:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3116,9 +3116,6 @@ uno::Reference< XComponent >  SwXTextEmbeddedObject::getEmbeddedObject(void) thr
         uno::Reference < embed::XEmbeddedObject > xIP = pOleNode->GetOLEObj().GetOleRef();
         if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )
         {
-            if ( pDoc->GetDocShell() )
-                pDoc->GetDocShell()->CalcAndSetScaleOfOLEObj( pOleNode->GetOLEObj() );
-
             xRet = uno::Reference < lang::XComponent >( xIP->getComponent(), uno::UNO_QUERY );
             uno::Reference< util::XModifyBroadcaster >  xBrdcst( xRet, uno::UNO_QUERY);
             uno::Reference< frame::XModel > xModel( xRet, uno::UNO_QUERY);
@@ -3162,9 +3159,6 @@ uno::Reference< embed::XEmbeddedObject > SAL_CALL SwXTextEmbeddedObject::getExte
         xResult = pOleNode->GetOLEObj().GetOleRef();
         if ( svt::EmbeddedObjectRef::TryRunningState( xResult ) )
         {
-            if ( pDoc->GetDocShell() )
-                pDoc->GetDocShell()->CalcAndSetScaleOfOLEObj( pOleNode->GetOLEObj() );
-
             uno::Reference < lang::XComponent > xComp( xResult->getComponent(), uno::UNO_QUERY );
             uno::Reference< util::XModifyBroadcaster >  xBrdcst( xComp, uno::UNO_QUERY);
             uno::Reference< frame::XModel > xModel( xComp, uno::UNO_QUERY);
