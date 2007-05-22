@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 23:59:15 $
+#   last change: $Author: vg $ $Date: 2007-05-22 17:13:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,8 +47,7 @@ MAXLINELENGTH = 100000
 
 # - rdb ----
 
-RDB 		= $(BIN)$/$(PRJNAME).rdb
-EXTRA_RDB   = $(SOLARBINDIR)$/types.rdb
+RDB 		= $(SOLARBINDIR)$/types.rdb
 JAVADIR 	= $(OUT)$/misc$/java
 JARFILES	= ridl.jar
 
