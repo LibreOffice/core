@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LineChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:21:46 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:49:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,14 +38,12 @@
 #include "ChartTypeTemplate.hxx"
 #include "OPropertySet.hxx"
 #include "MutexContainer.hxx"
+#include "StackMode.hxx"
 
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_CHART2_STACKMODE_HPP_
-#include <com/sun/star/chart2/StackMode.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CHART2_CURVESTYLE_HPP_
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #endif
@@ -54,7 +52,7 @@ namespace chart
 {
 
 class LineChartTypeTemplate :
-        public helper::MutexContainer,
+        public MutexContainer,
         public ChartTypeTemplate,
         public ::property::OPropertySet
 {
@@ -63,11 +61,10 @@ public:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext,
         const ::rtl::OUString & rServiceName,
-        ::com::sun::star::chart2::StackMode eYStackMode,
-        ::com::sun::star::chart2::CurveStyle eCurveStyle,
-        bool bSymbols, sal_Int32 nDim = 2,
-        ::com::sun::star::chart2::StackMode eZStackMode =
-            ::com::sun::star::chart2::StackMode_NONE );
+        StackMode eStackMode,
+        bool bSymbols,
+        bool bHasLines = true,
+        sal_Int32 nDim = 2 );
     virtual ~LineChartTypeTemplate();
 
     /// XServiceInfo declarations
@@ -90,36 +87,32 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XChartTypeTemplate ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram > SAL_CALL
-        createDiagram( const ::com::sun::star::uno::Sequence<
-                           ::com::sun::star::uno::Reference<
-                               ::com::sun::star::chart2::XDataSeries > >& aSeriesSeq )
-        throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL matchesTemplate(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram >& xDiagram )
+            ::com::sun::star::chart2::XDiagram >& xDiagram,
+        sal_Bool bAdaptProperties )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType > SAL_CALL
+        getChartTypeForNewSeries( const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XChartType > >& aFormerlyUsedChartTypes )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL applyStyle(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& xSeries,
+        ::sal_Int32 nChartTypeGroupIndex,
+        ::sal_Int32 nSeriesIndex,
+        ::sal_Int32 nSeriesCount )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ ChartTypeTemplate ____
     virtual sal_Int32 getDimension() const;
-    virtual ::com::sun::star::chart2::StackMode getZStackMode() const;
-    virtual ::com::sun::star::chart2::StackMode getYStackMode() const;
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XChartType > getDefaultChartType()
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const;
 
 private:
-    ::com::sun::star::chart2::StackMode
-                       m_eYStackMode;
-    ::com::sun::star::chart2::CurveStyle
-                       m_eCurveStyle;
+    StackMode          m_eStackMode;
     bool               m_bHasSymbols;
     bool               m_bHasLines;
     sal_Int32          m_nDim;
-
-    // only used if m_nDim == 3
-    ::com::sun::star::chart2::StackMode
-                       m_eZStackMode;
 };
 
 } //  namespace chart
