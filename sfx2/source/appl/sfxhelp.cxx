@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 13:51:02 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:17:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -592,7 +592,9 @@ String SfxHelp::GetHelpModuleName_Impl()
     if ( aFactoryShortName.getLength() > 0 )
     {
         // Map some module identifiers to their "real" help module string.
-        if ( aFactoryShortName.equalsAscii( "BasicIDE" ) )
+        if ( aFactoryShortName.equalsAscii( "chart2" ) )
+            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "schart" ) );
+        else if ( aFactoryShortName.equalsAscii( "BasicIDE" ) )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sbasic" ) );
         else if ( aFactoryShortName.equalsAscii( "sweb" ) )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "swriter" ) );
@@ -615,11 +617,6 @@ String SfxHelp::GetHelpModuleName_Impl()
     }
     else
         aFactoryShortName = sDefaultModule;
-
-    // --> PB 2006/01/18 #i57912# Chart not longer a valid help module
-    if ( aFactoryShortName.equalsAscii( "schart" ) )
-        aFactoryShortName = sDefaultModule;
-    // <---
 
     sModuleName = String( aFactoryShortName );
     return sModuleName;
