@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chartlis.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:12:52 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:43:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,11 @@ using namespace com::sun::star;
 
 
 //2do: DocOption TimeOut?
-#define SC_CHARTTIMEOUT 1000        // eine Sekunde keine Aenderung/KeyEvent
+//#define SC_CHARTTIMEOUT 1000      // eine Sekunde keine Aenderung/KeyEvent
+
+// Update chart listeners quickly, to get a similar behavior to loaded charts
+// which register UNO listeners.
+#define SC_CHARTTIMEOUT 10
 
 
 // ====================================================================
@@ -176,7 +180,7 @@ void ScChartListener::Update()
     else if ( pDoc->GetAutoCalc() )
     {
         bDirty = FALSE;
-        pDoc->UpdateChart( GetString(), NULL );
+        pDoc->UpdateChart( GetString());
     }
 }
 
@@ -235,10 +239,13 @@ void ScChartListener::UpdateScheduledSeriesRanges()
 }
 
 
-void ScChartListener::UpdateSeriesRangesIntersecting( const ScRange& rRange )
+void ScChartListener::UpdateChartIntersecting( const ScRange& rRange )
 {
     if ( aRangeListRef->Intersects( rRange ) )
-        UpdateSeriesRanges();
+    {
+        // force update (chart has to be loaded), don't use ScChartListener::Update
+        pDoc->UpdateChart( GetString());
+    }
 }
 
 
@@ -465,13 +472,13 @@ void ScChartListenerCollection::UpdateScheduledSeriesRanges()
 }
 
 
-void ScChartListenerCollection::UpdateSeriesRangesContainingTab( SCTAB nTab )
+void ScChartListenerCollection::UpdateChartsContainingTab( SCTAB nTab )
 {
     ScRange aRange( 0, 0, nTab, MAXCOL, MAXROW, nTab );
     for ( USHORT nIndex = 0; nIndex < nCount; nIndex++ )
     {
         ScChartListener* pCL = (ScChartListener*) pItems[ nIndex ];
-        pCL->UpdateSeriesRangesIntersecting( aRange );
+        pCL->UpdateChartIntersecting( aRange );
     }
 }
 
