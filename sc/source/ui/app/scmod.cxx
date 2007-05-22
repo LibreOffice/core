@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:54:25 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:05:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1412,7 +1412,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         if ( pViewSh )
             pViewSh->UpdateCharts( TRUE );
         else
-            ScDBFunc::DoUpdateCharts( ScAddress(), pDoc, NULL, TRUE );
+            ScDBFunc::DoUpdateCharts( ScAddress(), pDoc, TRUE );
         if (pBindings)
             pBindings->Invalidate( SID_ATTR_SIZE ); //SvxPosSize-StatusControl-Update
     }
@@ -1497,7 +1497,15 @@ ScInputHandler* ScModule::GetInputHdl( ScTabViewShell* pViewSh, BOOL bUseRef )
 
     ScInputHandler* pHdl = NULL;
     if ( !pViewSh )
-        pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+    {
+        // in case a UIActive embedded object has no ViewShell ( UNO component )
+        // the own calc view shell will be set as current, but no handling should happen
+
+        ScTabViewShell* pCurViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+        if ( pCurViewSh && !pCurViewSh->GetUIActiveClient() )
+            pViewSh = pCurViewSh;
+    }
+
     if ( pViewSh )
         pHdl = pViewSh->GetInputHandler();      // Viewshell hat jetzt immer einen
 
