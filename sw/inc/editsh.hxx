@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:53:29 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:19:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,6 @@ class SwTOXBase;
 class SwTOXType;
 class SwTableAutoFmt;
 class SwPageDesc;
-class SchMemChart;
 class SwTxtINetFmt;
 class SwSeqFldList;
 class SwGlblDocContent;
@@ -642,7 +641,7 @@ public:
             = ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >() );
     //Sucht die Tabelle und liefert ein mit den Daten der Tabelle gefuelltes
     //pData. Wenn pData 0 ist wird eines angelegt.
-    void UpdateChartData( const String &rName, SchMemChart *&pData );
+    void UpdateChartData( const String &rName );
     //Updaten der Inhalte aller Charts zu der Tabelle mit dem angegeben Namen
     void UpdateCharts( const String &rName );
 
