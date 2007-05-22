@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xicontent.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:58:57 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:57:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,11 @@
 #ifndef SC_XLCONTENT_HXX
 #include "xlcontent.hxx"
 #endif
-#ifndef SC_XIHELPER_HXX
-#include "xihelper.hxx"
+#ifndef SC_XISTRING_HXX
+#include "xistring.hxx"
+#endif
+#ifndef SC_XIROOT_HXX
+#include "xiroot.hxx"
 #endif
 
 /* ============================================================================
@@ -63,6 +66,8 @@ globals for the document).
 ============================================================================ */
 
 // Shared string table ========================================================
+
+class ScBaseCell;
 
 /** The SST (shared string table) contains all strings used in a BIFF8 file.
 
