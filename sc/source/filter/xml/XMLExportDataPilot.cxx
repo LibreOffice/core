@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:45:31 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:02:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,9 @@
 #endif
 #ifndef SC_DPGROUP_HXX
 #include "dpgroup.hxx"
+#endif
+#ifndef SC_RANGEUTL_HXX
+#include "rangeutl.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_SHEET_DATAIMPORTMODE_HPP_
@@ -264,7 +267,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                 ScRange aConditionRange(aQueryParam.nCol1, aQueryParam.nRow1, aQueryParam.nTab,
                     aQueryParam.nCol2, aQueryParam.nRow2, aQueryParam.nTab);
                 rtl::OUString sConditionRange;
-                ScXMLConverter::GetStringFromRange( sConditionRange, aConditionRange, pDoc );
+                ScRangeStringConverter::GetStringFromRange( sConditionRange, aConditionRange, pDoc );
                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS, sConditionRange);
             }
             if (!aQueryParam.bDuplicate)
@@ -794,7 +797,7 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
                     {
                         ScRange aOutRange((*pDPs)[i]->GetOutRange());
                         rtl::OUString sTargetRangeAddress;
-                        ScXMLConverter::GetStringFromRange( sTargetRangeAddress, aOutRange, pDoc );
+                        ScRangeStringConverter::GetStringFromRange( sTargetRangeAddress, aOutRange, pDoc );
                         ScDocAttrIterator aAttrItr(pDoc, aOutRange.aStart.Tab(),
                             aOutRange.aStart.Col(), aOutRange.aStart.Row(),
                             aOutRange.aEnd.Col(), aOutRange.aEnd.Row());
@@ -810,7 +813,7 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
                                 for (SCROW nButtonRow = nRow1; nButtonRow <= nRow2; ++nButtonRow)
                                 {
                                     ScAddress aButtonAddr(nCol, nButtonRow, aOutRange.aStart.Tab());
-                                    ScXMLConverter::GetStringFromAddress(
+                                    ScRangeStringConverter::GetStringFromAddress(
                                         sOUButtonList, aButtonAddr, pDoc, sal_True );
                                 }
                             }
@@ -847,7 +850,7 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
                         {
                             const ScSheetSourceDesc* pSheetSource = (*pDPs)[i]->GetSheetDesc();
                             rtl::OUString sCellRangeAddress;
-                            ScXMLConverter::GetStringFromRange( sCellRangeAddress, pSheetSource->aSourceRange, pDoc );
+                            ScRangeStringConverter::GetStringFromRange( sCellRangeAddress, pSheetSource->aSourceRange, pDoc );
                             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, sCellRangeAddress);
                             SvXMLElementExport aElemSCR(rExport, XML_NAMESPACE_TABLE, XML_SOURCE_CELL_RANGE, sal_True, sal_True);
                             rExport.CheckAttrList();
