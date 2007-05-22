@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FillProperties.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:40:38 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:16:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,20 +55,40 @@ public:
     enum
     {
         // com.sun.star.drawing.FillProperties
-        PROP_FILL_STYLE = FAST_PROPERTY_ID_START_FILL_PROP,
-        PROP_FILL_COLOR,
-        PROP_FILL_TRANSPARENCE,
-        PROP_FILL_GRADIENT,
-        PROP_FILL_HATCH,
-        PROP_FILL_TRANSPARENCY_STYLE,
-        PROP_FILL_TRANSPARENCY_GRADIENT
+        // com.sun.star.drawing.FillProperties
+        PROP_FILL_STYLE = FAST_PROPERTY_ID_START_FILL_PROP
+        , PROP_FILL_COLOR
+        , PROP_FILL_TRANSPARENCE
+        , PROP_FILL_TRANSPARENCE_GRADIENT_NAME
+//        , PROP_FILL_TRANSPARENCE_GRADIENT //optional
+        , PROP_FILL_GRADIENT_NAME
+        , PROP_FILL_GRADIENT_STEPCOUNT
+//        , PROP_FILL_GRADIENT   //optional
+        , PROP_FILL_HATCH_NAME
+//        , PROP_FILL_HATCH  //optional
+        //------------------------
+        // bitmap properties start
+        , PROP_FILL_BITMAP_NAME
+//        , PROP_FILL_BITMAP //optional
+//        , PROP_FILL_BITMAP_URL //optional
+        , PROP_FILL_BITMAP_OFFSETX
+        , PROP_FILL_BITMAP_OFFSETY
+        , PROP_FILL_BITMAP_POSITION_OFFSETX
+        , PROP_FILL_BITMAP_POSITION_OFFSETY
+        , PROP_FILL_BITMAP_RECTANGLEPOINT
+        , PROP_FILL_BITMAP_LOGICALSIZE
+        , PROP_FILL_BITMAP_SIZEX
+        , PROP_FILL_BITMAP_SIZEY
+        , PROP_FILL_BITMAP_MODE
+        // bitmap properties end
+        //------------------------
+        , PROP_FILL_BACKGROUND
     };
 
     static void AddPropertiesToVector(
-        ::std::vector< ::com::sun::star::beans::Property > & rOutProperties,
-        bool bIncludeStyleProperties = false );
+        ::std::vector< ::com::sun::star::beans::Property > & rOutProperties );
 
-    static void AddDefaultsToMap( ::chart::helper::tPropertyValueMap & rOutMap, bool bIncludeStyleProperties = false );
+    static void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
 
 private:
     // not implemented
