@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:29:34 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:22:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@
 #ifndef _COM_SUN_STAR_CHART_XCHARTDATAARRAY_HPP_
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CHART2_DATA_XLABELEDDATASEQUENCE_HPP_
+#include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
+#endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXTTABLECURSOR_HPP_
 #include <com/sun/star/text/XTextTableCursor.hpp>
 #endif
@@ -76,6 +79,9 @@ class SwTableCursor;
 class SwTableBoxFmt;
 class SwTableLine;
 class SwTableCursor;
+class SwChartDataProvider;
+
+
 /* -----------------------------22.09.00 11:10--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -297,9 +303,11 @@ public:
 struct SwRangeDescriptor
 {
     sal_uInt16 nTop;
-    sal_uInt16 nBottom;
     sal_uInt16 nLeft;
+    sal_uInt16 nBottom;
     sal_uInt16 nRight;
+
+    void Normalize();
 };
 
 class SwTableProperties_Impl;
@@ -516,6 +524,20 @@ public:
     sal_uInt16      getColumnCount(void);
 
     const SwUnoCrsr* GetTblCrsr() const;
+
+    // for SwChartDataSequence
+    void GetDataSequence(
+            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > *pAnySeq,
+            ::com::sun::star::uno::Sequence< ::rtl::OUString > *pTxtSeq,
+            ::com::sun::star::uno::Sequence< double > *pDblSeq,
+            sal_Bool bForceNumberResults = sal_False ) throw (::com::sun::star::uno::RuntimeException);
+
+    // for SwChartDataSource
+    ::com::sun::star::uno::Sequence<
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::data::XLabeledDataSequence > >
+        GetLabeledDataSequences( SwChartDataProvider &rProvider,
+            BOOL bBuildColumnSeqs, BOOL bFirstCellIsLabel ) throw (::com::sun::star::uno::RuntimeException);
 };
 /* -----------------03.02.99 07:31-------------------
  *
