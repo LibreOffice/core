@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_PointGeometry.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 16:03:56 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:47:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#include "HelpIds.hrc"
+#include "ResourceIds.hrc"
 #include "TabPages.hrc"
 
 TabPage TP_LAYOUT
@@ -40,30 +40,5 @@ TabPage TP_LAYOUT
     Hide = TRUE ;
 //    HelpID = HID_LAYOUT ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
-    FixedText FT_LY_SHAPE
-    {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Bar/column shape";
-    };
-    ListBox LB_LY_SHAPE
-    {
-        Border = TRUE ;
-        AutoHScroll = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 17 ) ;
-        Size = MAP_APPFONT ( 100 , 38 ) ;
-        TabStop = TRUE ;
-        Group = TRUE ;
-        DropDown=FALSE;
-        DDExtraWidth = TRUE ;
-
-    StringList [ en-US ] =
-    {
-             "Rectangular parallelepiped" ;
-         "Cylinder" ;
-         "Cone" ;
-         "Pyramid" ;
-    };
-    };
+    Size   = MAP_APPFONT ( 260 , 185 ) ;
 };
