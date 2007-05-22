@@ -1,0 +1,864 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XMLFilter.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:27:40 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_chart2.hxx"
+
+#include "XMLFilter.hxx"
+#include "macros.hxx"
+#include "ContextHelper.hxx"
+#include "MediaDescriptorHelper.hxx"
+#include "ContainerHelper.hxx"
+
+// for ERRCODE_SFX_GENERAL etc.
+// header contains only macros
+#ifndef _SFXECODE_HXX
+#include <svtools/sfxecode.hxx>
+#endif
+// header for class SvtSaveOptions
+#ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
+#include <svtools/saveopt.hxx>
+#endif
+
+#ifndef _COMPHELPER_GENERICPROPERTYSET_HXX_
+#include <comphelper/genericpropertyset.hxx>
+#endif
+// header for struct PropertyMapEntry
+#ifndef _COMPHELPER_PROPERTSETINFO_HXX_
+#include <comphelper/propertysetinfo.hxx>
+#endif
+#ifndef _COMPHELPER_DOCUMENTCONSTANTS_HXX
+#include <comphelper/documentconstants.hxx>
+#endif
+
+// header for class SotStorage
+#ifndef _SOT_STORAGE_HXX
+#include <sot/storage.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XML_SAX_INPUTSOURCE_HPP_
+#include <com/sun/star/xml/sax/InputSource.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTICOMPONENTFACTORY_HPP_
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
+#include <com/sun/star/embed/XStorage.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XML_SAX_XPARSER_HPP_
+#include <com/sun/star/xml/sax/XParser.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XML_SAX_SAXPARSEEXCEPTION_HPP_
+#include <com/sun/star/xml/sax/SAXParseException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPIOEXCEPTION_HPP_
+#include <com/sun/star/packages/zip/ZipIOException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XGRAPHICOBJECTRESOLVER_HPP_
+#include <com/sun/star/document/XGraphicObjectResolver.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+
+using namespace ::com::sun::star;
+
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::rtl::OUString;
+using ::osl::MutexGuard;
+
+// ----------------------------------------
+namespace
+{
+#define LOCAL_CONST_STR(i, x) sal_Char __READONLY_DATA i[sizeof(x)] = x
+#define MAP_LEN(x) x, sizeof(x) - 1
+
+LOCAL_CONST_STR( sXML_metaStreamName,       "meta.xml");
+LOCAL_CONST_STR( sXML_styleStreamName,      "styles.xml" );
+LOCAL_CONST_STR( sXML_contentStreamName,    "content.xml" );
+LOCAL_CONST_STR( sXML_oldContentStreamName, "Content.xml" );
+
+// soffice 6/7
+// LOCAL_CONST_STR( sXML_export_chart_meta_service,            "com.sun.star.comp.Chart.XMLMetaExporter" );
+LOCAL_CONST_STR( sXML_export_chart_styles_service,          "com.sun.star.comp.Chart.XMLStylesExporter" );
+LOCAL_CONST_STR( sXML_export_chart_content_service,         "com.sun.star.comp.Chart.XMLContentExporter" );
+
+// LOCAL_CONST_STR( sXML_import_chart_meta_service,            "com.sun.star.comp.Chart.XMLMetaImporter" );
+LOCAL_CONST_STR( sXML_import_chart_styles_service,          "com.sun.star.comp.Chart.XMLStylesImporter" );
+LOCAL_CONST_STR( sXML_import_chart_content_service,         "com.sun.star.comp.Chart.XMLContentImporter" );
+LOCAL_CONST_STR( sXML_import_chart_old_content_service,     "com.sun.star.office.sax.importer.Chart" );
+
+// Oasis
+LOCAL_CONST_STR( sXML_export_chart_oasis_styles_service,    "com.sun.star.comp.Chart.XMLOasisStylesExporter" );
+LOCAL_CONST_STR( sXML_export_chart_oasis_content_service,   "com.sun.star.comp.Chart.XMLOasisContentExporter" );
+LOCAL_CONST_STR( sXML_export_chart_oasis_meta_service,      "com.sun.star.comp.Chart.XMLOasisMetaExporter" );
+
+LOCAL_CONST_STR( sXML_import_chart_oasis_styles_service,    "com.sun.star.comp.Chart.XMLOasisStylesImporter" );
+LOCAL_CONST_STR( sXML_import_chart_oasis_content_service,   "com.sun.star.comp.Chart.XMLOasisContentImporter" );
+LOCAL_CONST_STR( sXML_import_chart_oasis_meta_service,      "com.sun.star.comp.Chart.XMLOasisMetaImporter" );
+
+void lcl_isOASIS( apphelper::MediaDescriptorHelper & rMDHelper, bool & rOutOASIS )
+{
+    if( rMDHelper.ISSET_FilterName )
+        rOutOASIS = rMDHelper.FilterName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("chart8"));
+}
+
+uno::Reference< embed::XStorage > lcl_getWriteStorage(
+    const Sequence< beans::PropertyValue >& rMediaDescriptor,
+    const uno::Reference< uno::XComponentContext >& xContext,
+    bool & rOutOASIS )
+{
+    uno::Reference< embed::XStorage > xStorage;
+    try
+    {
+        apphelper::MediaDescriptorHelper aMDHelper( rMediaDescriptor );
+        if( aMDHelper.ISSET_Storage )
+        {
+            xStorage = aMDHelper.Storage;
+        }
+        else
+        {
+            Reference< lang::XSingleServiceFactory > xStorageFact(
+                xContext->getServiceManager()->createInstanceWithContext(
+                    C2U("com.sun.star.embed.StorageFactory"),
+                    xContext ), uno::UNO_QUERY_THROW );
+
+            ::std::vector< beans::PropertyValue > aPropertiesForStorage;
+
+            for( sal_Int32 i=rMediaDescriptor.getLength(); i--; )
+            {
+                // properties understood by storage factory
+                // (see package/source/xstor/xfactory.cxx for details)
+                if ( rMediaDescriptor[i].Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "InteractionHandler" ))
+                    || rMediaDescriptor[i].Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "Password" ))
+                    || rMediaDescriptor[i].Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ))
+    //                  || rMediaDescriptor[i].Name.equalsAsciiL(
+    //                      RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ))
+    //                  || rMediaDescriptor[i].Name.equalsAsciiL(
+    //                      RTL_CONSTASCII_STRINGPARAM( "Unpacked" ))
+                    )
+                {
+                    aPropertiesForStorage.push_back( rMediaDescriptor[i] );
+                }
+            }
+
+            if( aMDHelper.ISSET_Storage )
+                xStorage.set( aMDHelper.Storage );
+            else
+            {
+                Sequence< uno::Any > aStorageArgs( 3 );
+                if( aMDHelper.ISSET_OutputStream  )
+                    aStorageArgs[0] <<= aMDHelper.OutputStream;
+                else
+                    aStorageArgs[0] <<= aMDHelper.URL;
+                aStorageArgs[1] <<= (embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE);
+                aStorageArgs[2] <<= ::chart::ContainerHelper::ContainerToSequence( aPropertiesForStorage );
+
+                xStorage.set(
+                    xStorageFact->createInstanceWithArguments( aStorageArgs ),
+                    uno::UNO_QUERY_THROW );
+            }
+        }
+
+        lcl_isOASIS( aMDHelper, rOutOASIS );
+
+        // set correct media type at storage
+        uno::Reference<beans::XPropertySet> xProp(xStorage,uno::UNO_QUERY);
+        OUString aMediaType;
+        if ( ! xProp.is() ||
+             ! ( xProp->getPropertyValue( C2U("MediaType")) >>= aMediaType ) ||
+             ( aMediaType.getLength() == 0 ))
+        {
+            if( rOutOASIS )
+                xProp->setPropertyValue( C2U("MediaType"), uno::makeAny( MIMETYPE_OASIS_OPENDOCUMENT_CHART ));
+            else
+                xProp->setPropertyValue( C2U("MediaType"), uno::makeAny( MIMETYPE_VND_SUN_XML_CHART ));
+        }
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+    return xStorage;
+}
+
+uno::Reference< embed::XStorage > lcl_getReadStorage(
+    const Sequence< beans::PropertyValue >& rMediaDescriptor,
+    const uno::Reference< uno::XComponentContext >& xContext,
+    bool & rOutOASIS )
+{
+    uno::Reference< embed::XStorage > xStorage;
+
+    try
+    {
+        apphelper::MediaDescriptorHelper aMDHelper( rMediaDescriptor );
+        if( aMDHelper.ISSET_Storage )
+        {
+            xStorage = aMDHelper.Storage;
+        }
+        else
+        {
+            // get XStream from MediaDescriptor
+            uno::Reference< io::XInputStream > xStream;
+            ::std::vector< beans::PropertyValue > aPropertiesForStorage;
+            for( sal_Int32 i=rMediaDescriptor.getLength(); i--; )
+            {
+                if( rMediaDescriptor[i].Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "InputStream" )))
+                    xStream.set( rMediaDescriptor[i].Value, uno::UNO_QUERY );
+
+                // properties understood by storage factory
+                // (see package/source/xstor/xfactory.cxx for details)
+                if ( rMediaDescriptor[i].Name.equalsAsciiL(
+                         RTL_CONSTASCII_STRINGPARAM( "InteractionHandler" ))
+                     || rMediaDescriptor[i].Name.equalsAsciiL(
+                         RTL_CONSTASCII_STRINGPARAM( "Password" ))
+                     || rMediaDescriptor[i].Name.equalsAsciiL(
+                         RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ))
+//                  || rMediaDescriptor[i].Name.equalsAsciiL(
+//                      RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ))
+//                  || rMediaDescriptor[i].Name.equalsAsciiL(
+//                      RTL_CONSTASCII_STRINGPARAM( "Unpacked" ))
+                    )
+                {
+                    aPropertiesForStorage.push_back( rMediaDescriptor[i] );
+                }
+            }
+            OSL_ENSURE( xStream.is(), "No Stream" );
+            if( ! xStream.is())
+                return xStorage;
+
+            // convert XInputStream to XStorage via the storage factory
+            Reference< lang::XSingleServiceFactory > xStorageFact(
+                xContext->getServiceManager()->createInstanceWithContext(
+                    C2U("com.sun.star.embed.StorageFactory"),
+                    xContext ),
+                uno::UNO_QUERY_THROW );
+            Sequence< uno::Any > aStorageArgs( 3 );
+            aStorageArgs[0] <<= xStream;
+            aStorageArgs[1] <<= (embed::ElementModes::READ | embed::ElementModes::NOCREATE);
+            aStorageArgs[2] <<= ::chart::ContainerHelper::ContainerToSequence( aPropertiesForStorage );
+            xStorage.set(
+                xStorageFact->createInstanceWithArguments( aStorageArgs ), uno::UNO_QUERY_THROW );
+        }
+
+        lcl_isOASIS( aMDHelper, rOutOASIS );
+
+        OSL_ENSURE( xStorage.is(), "No Storage" );
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    return xStorage;
+}
+
+
+} // anonymous namespace
+
+// ----------------------------------------
+
+namespace chart
+{
+
+XMLFilter::XMLFilter( Reference< uno::XComponentContext > const & xContext ) :
+        m_xContext( xContext ),
+        m_bCancelOperation( false )
+{}
+
+XMLFilter::~XMLFilter()
+{}
+
+// ____ XFilter ____
+sal_Bool SAL_CALL XMLFilter::filter(
+    const Sequence< beans::PropertyValue >& aDescriptor )
+    throw (uno::RuntimeException)
+{
+    bool bResult = false;
+
+    MutexGuard aGuard( m_aMutex );
+
+    // ignore cancel flag at start of function
+    // note: is currently ignored during import/export
+    if( m_bCancelOperation )
+        m_bCancelOperation = false;
+
+    if( m_xSourceDoc.is())
+    {
+        OSL_ENSURE( ! m_xTargetDoc.is(), "source doc is set -> target document should not be set" );
+        if( impl_Export( m_xSourceDoc,
+                         aDescriptor ) == 0 )
+        {
+            m_xSourceDoc = NULL;
+            bResult = true;
+        }
+    }
+    else if( m_xTargetDoc.is())
+    {
+        if( impl_Import( m_xTargetDoc,
+                         aDescriptor ) == 0 )
+        {
+            m_xTargetDoc = NULL;
+            bResult = true;
+        }
+    }
+    else
+    {
+        OSL_ENSURE( false, "filter() called with no document set" );
+    }
+
+    return bResult;
+}
+
+void SAL_CALL XMLFilter::cancel()
+    throw (uno::RuntimeException)
+{
+    // if mutex is locked set "cancel state"
+    // note: is currently ignored in filter-method
+    if( ! m_aMutex.tryToAcquire())
+    {
+        m_bCancelOperation = true;
+    }
+}
+
+// ____ XImporter ____
+void SAL_CALL XMLFilter::setTargetDocument(
+    const Reference< lang::XComponent >& Document )
+    throw (lang::IllegalArgumentException,
+           uno::RuntimeException)
+{
+    MutexGuard aGuard( m_aMutex );
+    OSL_ENSURE( ! m_xSourceDoc.is(), "Setting target doc while source doc is set" );
+
+    m_xTargetDoc = Document;
+}
+
+
+// ____ XExporter ____
+void SAL_CALL XMLFilter::setSourceDocument(
+    const Reference< lang::XComponent >& Document )
+    throw (lang::IllegalArgumentException,
+           uno::RuntimeException)
+{
+    MutexGuard aGuard( m_aMutex );
+    OSL_ENSURE( ! m_xTargetDoc.is(), "Setting source doc while target doc is set" );
+
+    m_xSourceDoc = Document;
+}
+
+
+sal_Int32 XMLFilter::impl_Import(
+    const Reference< lang::XComponent > & xDocumentComp,
+    const Sequence< beans::PropertyValue > & rMediaDescriptor )
+{
+    sal_Int32 nWarning = 0;
+
+    OSL_ENSURE( xDocumentComp.is(), "Import: No Model" );
+    OSL_ENSURE( m_xContext.is(), "Import: No ComponentContext" );
+
+    if( ! (xDocumentComp.is() &&
+           m_xContext.is()))
+        return nWarning;
+
+    try
+    {
+        Reference< lang::XServiceInfo > xServInfo( xDocumentComp, uno::UNO_QUERY_THROW );
+        if( ! xServInfo->supportsService( C2U( "com.sun.star.chart2.ChartDocument" )))
+        {
+            OSL_ENSURE( false, "Import: No ChartDocument" );
+            return ERRCODE_SFX_GENERAL;
+        }
+
+        Reference< lang::XMultiComponentFactory > xFactory( m_xContext->getServiceManager());
+        OSL_ENSURE( xFactory.is(), "Import: No Factory" );
+        if( ! xFactory.is())
+            return ERRCODE_SFX_GENERAL;
+
+        // create a sax parser
+        Reference< xml::sax::XParser > xSaxParser(
+            xFactory->createInstanceWithContext( C2U( "com.sun.star.xml.sax.Parser" ), m_xContext ),
+            uno::UNO_QUERY_THROW );
+
+        bool bOasis = true;
+        Reference< embed::XStorage > xStorage( lcl_getReadStorage( rMediaDescriptor, m_xContext, bOasis ));
+        if( ! xStorage.is())
+            return ERRCODE_SFX_GENERAL;
+
+//         bool bOasis = (SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60);
+
+        Reference< document::XGraphicObjectResolver > xGraphicObjectResolver;
+        uno::Reference< lang::XMultiServiceFactory > xServiceFactory( xFactory, uno::UNO_QUERY);
+        if( xServiceFactory.is())
+        {
+            uno::Sequence< uno::Any > aArgs(1);
+            aArgs[0] <<= xStorage;
+            xGraphicObjectResolver.set(
+                xServiceFactory->createInstanceWithArguments(
+                    C2U("com.sun.star.comp.Svx.GraphicImportHelper"), aArgs ), uno::UNO_QUERY );
+        }
+
+        // create XPropertySet with extra informatio for the filter
+        /** property map for import info set */
+        comphelper::PropertyMapEntry aImportInfoMap[] =
+        {
+            // #80365# necessary properties for XML progress bar at load time
+            { MAP_LEN( "ProgressRange" ),   0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { MAP_LEN( "ProgressMax" ),     0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { MAP_LEN( "PrivateData" ), 0,
+                &::getCppuType( (Reference<XInterface> *)0 ),
+                ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "BaseURI" ), 0,
+                &::getCppuType( (OUString *)0 ),
+                ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "StreamRelPath" ), 0,
+                &::getCppuType( (OUString *)0 ),
+                ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "StreamName" ), 0,
+                &::getCppuType( (OUString *)0 ),
+                ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "BuildId" ), 0,
+                &::getCppuType( (OUString *)0 ),
+                ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { NULL, 0, 0, NULL, 0, 0 }
+        };
+        uno::Reference< beans::XPropertySet > xImportInfo(
+                    comphelper::GenericPropertySet_CreateInstance(
+                                new comphelper::PropertySetInfo( aImportInfoMap ) ) );
+
+        // Set base URI and Hierarchical Name
+        OUString aHierarchName, aBaseUri;
+        uno::Reference< frame::XModel > xModel( m_xSourceDoc, uno::UNO_QUERY );
+        if( xModel.is() )
+        {
+            uno::Sequence< beans::PropertyValue > aModProps = xModel->getArgs();
+            for( sal_Int32 nInd = 0; nInd < aModProps.getLength(); nInd++ )
+            {
+                if( aModProps[nInd].Name.equals( C2U( "HierarchicalDocumentName" ) ) )
+                {
+                    // Actually this argument only has meaning for embedded documents
+                    aModProps[nInd].Value >>= aHierarchName;
+                }
+                else if( aModProps[nInd].Name.equals( C2U( "DocumentBaseURL" ) ) )
+                {
+                    aModProps[nInd].Value >>= aBaseUri;
+                }
+            }
+        }
+
+        if( aBaseUri.getLength() )
+            xImportInfo->setPropertyValue( C2U("BaseURI"), uno::makeAny( aBaseUri ) );
+
+        if( aHierarchName.getLength() )
+            xImportInfo->setPropertyValue( C2U("StreamRelPath"), uno::makeAny( aHierarchName ) );
+
+        // import meta information
+        if( bOasis )
+            nWarning |= impl_ImportStream(
+                C2U( sXML_metaStreamName ),
+                C2U( sXML_import_chart_oasis_meta_service ),
+                xStorage, xSaxParser, xFactory, xGraphicObjectResolver, xImportInfo );
+
+        // import styles
+        nWarning |= impl_ImportStream(
+            C2U( sXML_styleStreamName ),
+            bOasis
+            ? C2U( sXML_import_chart_oasis_styles_service )
+            : C2U( sXML_import_chart_styles_service ),
+            xStorage, xSaxParser, xFactory, xGraphicObjectResolver, xImportInfo );
+
+        // import content
+        sal_Int32 nContentWarning = impl_ImportStream(
+            C2U( sXML_contentStreamName ),
+            bOasis
+            ? C2U( sXML_import_chart_oasis_content_service )
+            : C2U( sXML_import_chart_content_service ),
+            xStorage, xSaxParser, xFactory, xGraphicObjectResolver, xImportInfo );
+        nWarning |= nContentWarning;
+
+        // import of "content.xml" didn't work - try old "Content.xml" stream
+        if( nContentWarning != 0 )
+        {
+            nWarning = impl_ImportStream(
+                C2U( sXML_oldContentStreamName ),
+                C2U( sXML_import_chart_old_content_service ),
+                xStorage, xSaxParser, xFactory, xGraphicObjectResolver, xImportInfo );
+        }
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+
+        // something went awry
+        nWarning = ERRCODE_SFX_GENERAL;
+    }
+
+    return nWarning;
+}
+
+sal_Int32 XMLFilter::impl_ImportStream(
+    const OUString & rStreamName,
+    const OUString & rServiceName,
+    const Reference< embed::XStorage > & xStorage,
+    const Reference< xml::sax::XParser > & xParser,
+    const Reference< lang::XMultiComponentFactory > & xFactory,
+    const Reference< document::XGraphicObjectResolver > & xGraphicObjectResolver,
+    uno::Reference< beans::XPropertySet >& xImportInfo )
+{
+    sal_Int32 nWarning = ERRCODE_SFX_GENERAL;
+
+    Reference< container::XNameAccess > xNameAcc( xStorage, uno::UNO_QUERY );
+    if( ! (xNameAcc.is() &&
+           xNameAcc->hasByName( rStreamName )))
+        return 0;
+
+    if( xImportInfo.is() )
+        xImportInfo->setPropertyValue( C2U("StreamName"), uno::makeAny( rStreamName ) );
+
+    if( xStorage.is() &&
+        xStorage->isStreamElement( rStreamName ) )
+    {
+        try
+        {
+            xml::sax::InputSource aParserInput;
+            aParserInput.aInputStream.set(
+                xStorage->openStreamElement(
+                    rStreamName,
+                    embed::ElementModes::READ | embed::ElementModes::NOCREATE ),
+                uno::UNO_QUERY );
+
+            // todo: encryption
+
+            if( aParserInput.aInputStream.is())
+            {
+                sal_Int32 nArgs = 0;
+                //if( m_xStatusIndicator.is())
+                //    nArgs++;
+                if( xGraphicObjectResolver.is())
+                    nArgs++;
+                if( xImportInfo.is())
+                    nArgs++;
+
+                uno::Sequence< uno::Any > aFilterCompArgs( nArgs );
+
+                nArgs = 0;
+                //if( m_xStatusIndicator.is())
+                //    aFilterCompArgs[ nArgs++ ] <<= m_xStatusIndicator;
+                if( xGraphicObjectResolver.is())
+                    aFilterCompArgs[nArgs++] <<= xGraphicObjectResolver;
+                if( xImportInfo.is())
+                    aFilterCompArgs[ nArgs++ ] <<= xImportInfo;
+
+                Reference< xml::sax::XDocumentHandler > xDocHandler(
+                    xFactory->createInstanceWithArgumentsAndContext( rServiceName, aFilterCompArgs, m_xContext ),
+                    uno::UNO_QUERY_THROW );
+
+                Reference< document::XImporter > xImporter( xDocHandler, uno::UNO_QUERY_THROW );
+                xImporter->setTargetDocument( Reference< lang::XComponent >( m_xTargetDoc, uno::UNO_QUERY_THROW ));
+                xParser->setDocumentHandler( xDocHandler );
+                xParser->parseStream( aParserInput );
+            }
+
+            // load was successful
+            nWarning = 0;
+        }
+        catch( xml::sax::SAXParseException )
+        {
+            // todo: if encrypted: ERRCODE_SFX_WRONGPASSWORD
+        }
+        catch( xml::sax::SAXException )
+        {
+            // todo: if encrypted: ERRCODE_SFX_WRONGPASSWORD
+        }
+        catch( packages::zip::ZipIOException )
+        {
+            nWarning = ERRCODE_IO_BROKENPACKAGE;
+        }
+        catch( io::IOException )
+        {
+        }
+        catch( uno::Exception& aEx )
+        {
+            ASSERT_EXCEPTION( aEx );
+        }
+    }
+
+    return nWarning;
+}
+
+sal_Int32 XMLFilter::impl_Export(
+    const Reference< lang::XComponent > & xDocumentComp,
+    const Sequence< beans::PropertyValue > & rMediaDescriptor )
+{
+    //save
+
+    sal_Int32 nWarning = 0;
+
+    OSL_ENSURE( xDocumentComp.is(), "Export: No Model" );
+    OSL_ENSURE( m_xContext.is(), "Export: No ComponentContext" );
+
+    if( !xDocumentComp.is() || !m_xContext.is() )
+        return nWarning;
+
+    try
+    {
+        Reference< lang::XServiceInfo > xServInfo( xDocumentComp, uno::UNO_QUERY_THROW );
+        if( ! xServInfo->supportsService( C2U( "com.sun.star.chart2.ChartDocument" )))
+        {
+            OSL_ENSURE( false, "Export: No ChartDocument" );
+            return ERRCODE_SFX_GENERAL;
+        }
+
+        Reference< lang::XMultiComponentFactory > xFactory( m_xContext->getServiceManager());
+        OSL_ENSURE( xFactory.is(), "Export: No Factory" );
+        if( ! xFactory.is())
+            return ERRCODE_SFX_GENERAL;
+        uno::Reference< lang::XMultiServiceFactory > xServiceFactory( m_xContext->getServiceManager(), uno::UNO_QUERY);
+        if( ! xServiceFactory.is())
+            return ERRCODE_SFX_GENERAL;
+
+        uno::Reference< io::XActiveDataSource > xSaxWriter( xServiceFactory->createInstance(
+                C2U("com.sun.star.xml.sax.Writer")), uno::UNO_QUERY );
+        if ( !xSaxWriter.is() )
+            return ERRCODE_SFX_GENERAL;
+
+        bool bOasis = true;
+        uno::Reference< embed::XStorage > xStorage( lcl_getWriteStorage( rMediaDescriptor, m_xContext, bOasis ) );
+        OSL_ENSURE( xStorage.is(), "No Storage" );
+        if( ! xStorage.is())
+            return ERRCODE_SFX_GENERAL;
+
+        uno::Reference< xml::sax::XDocumentHandler> xDocHandler( xSaxWriter, uno::UNO_QUERY );
+
+        uno::Sequence< uno::Any > aGraphicResolverArgs(1);
+        aGraphicResolverArgs[0] <<= xStorage;
+        Reference< document::XGraphicObjectResolver > xGraphicObjectResolver(
+            xServiceFactory->createInstanceWithArguments(
+                C2U("com.sun.star.comp.Svx.GraphicExportHelper"), aGraphicResolverArgs ), uno::UNO_QUERY );
+
+        uno::Reference< beans::XPropertySet > xInfoSet;
+        {
+            // property map for export info set
+            comphelper::PropertyMapEntry aExportInfoMap[] =
+            {
+                { MAP_LEN("UsePrettyPrinting"), 0, &::getBooleanCppuType(), beans::PropertyAttribute::MAYBEVOID, 0},
+                { MAP_LEN("BaseURI"), 0, &::getCppuType( (OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
+                { MAP_LEN("StreamRelPath"), 0, &::getCppuType( (OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
+                { MAP_LEN("StreamName"), 0, &::getCppuType( (OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
+                { MAP_LEN("ExportTableNumberList"), 0, &::getBooleanCppuType(), beans::PropertyAttribute::MAYBEVOID, 0 },
+                { NULL, 0, 0, NULL, 0, 0 }
+            };
+
+            xInfoSet = comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) );
+
+            SvtSaveOptions aSaveOpt;
+            OUString sUsePrettyPrinting(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting"));
+            sal_Bool bUsePrettyPrinting( aSaveOpt.IsPrettyPrinting() );
+            xInfoSet->setPropertyValue( sUsePrettyPrinting, uno::makeAny( bUsePrettyPrinting ) );
+            if( ! bOasis )
+                xInfoSet->setPropertyValue( C2U("ExportTableNumberList"), uno::makeAny( true ));
+        }
+
+        sal_Int32 nArgs = 2;
+        if( xGraphicObjectResolver.is())
+            nArgs++;
+
+        uno::Sequence< uno::Any > aFilterProperties( nArgs );
+        {
+            nArgs = 0;
+            aFilterProperties[ nArgs++ ] <<= xInfoSet;
+            aFilterProperties[ nArgs++ ] <<= xDocHandler;
+            if( xGraphicObjectResolver.is())
+                aFilterProperties[ nArgs++ ] <<= xGraphicObjectResolver;
+        }
+
+//         bool bOasis = (SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60);
+
+        // export meta information
+        if( bOasis )
+            nWarning |= impl_ExportStream(
+                C2U( sXML_metaStreamName ),
+                C2U( sXML_export_chart_oasis_meta_service ),
+                xStorage, xSaxWriter, xServiceFactory, aFilterProperties, sal_False /* bUseCommonEncryption */ );
+
+        // export styles
+        nWarning |= impl_ExportStream(
+            C2U( sXML_styleStreamName ),
+            bOasis
+            ? C2U( sXML_export_chart_oasis_styles_service )
+            : C2U( sXML_export_chart_styles_service ),
+            xStorage, xSaxWriter, xServiceFactory, aFilterProperties, sal_True /* bUseCommonEncryption */ );
+
+        // export content
+        sal_Int32 nContentWarning = impl_ExportStream(
+            C2U( sXML_contentStreamName ),
+            bOasis
+            ? C2U( sXML_export_chart_oasis_content_service )
+            : C2U( sXML_export_chart_content_service ),
+            xStorage, xSaxWriter, xServiceFactory, aFilterProperties, sal_True /* bUseCommonEncryption */ );
+        nWarning |= nContentWarning;
+
+        Reference< lang::XComponent > xComp( xGraphicObjectResolver, uno::UNO_QUERY );
+        if( xComp.is())
+            xComp->dispose();
+
+        uno::Reference<embed::XTransactedObject> xTransact( xStorage ,uno::UNO_QUERY);
+        if ( xTransact.is() )
+            xTransact->commit();
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+
+        // something went awry
+        nWarning = ERRCODE_SFX_GENERAL;
+    }
+
+    return nWarning;
+}
+
+sal_Int32 XMLFilter::impl_ExportStream(
+    const OUString & rStreamName,
+    const OUString & rServiceName,
+    const Reference< embed::XStorage > & xStorage,
+    const uno::Reference< io::XActiveDataSource >& xActiveDataSource,
+    const Reference< lang::XMultiServiceFactory >& xServiceFactory,
+    const Sequence< uno::Any > & rFilterProperties,
+    sal_Bool bUseCommonEncryption )
+{
+    sal_Int32 nWarning = 0;
+
+    try
+    {
+        if( !xServiceFactory.is() )
+            return ERRCODE_SFX_GENERAL;
+        if( !xStorage.is() )
+            return ERRCODE_SFX_GENERAL;
+        if ( !xActiveDataSource.is() )
+            return ERRCODE_SFX_GENERAL;
+
+        uno::Reference< io::XStream > xStream( xStorage->openStreamElement(
+            rStreamName, embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE ) );
+        if ( !xStream.is() )
+            return ERRCODE_SFX_GENERAL;
+        uno::Reference< io::XOutputStream > xOutputStream( xStream->getOutputStream() );
+        if ( !xOutputStream.is() )
+            return ERRCODE_SFX_GENERAL;
+
+        uno::Reference< beans::XPropertySet > xStreamProp( xOutputStream, uno::UNO_QUERY );
+        if(xStreamProp.is()) try
+        {
+            xStreamProp->setPropertyValue( C2U("MediaType"), uno::makeAny( C2U("text/xml") ) );
+            xStreamProp->setPropertyValue( C2U("Compressed"), uno::makeAny( sal_True ) );//@todo?
+            xStreamProp->setPropertyValue( C2U("UseCommonStoragePasswordEncryption"), uno::makeAny( bUseCommonEncryption ) );
+        }
+        catch( uno::Exception& rEx )
+        {
+            ASSERT_EXCEPTION( rEx );
+        }
+
+        xActiveDataSource->setOutputStream(xOutputStream);
+
+        // set Base URL
+        {
+            uno::Reference< beans::XPropertySet > xInfoSet;
+            if( rFilterProperties.getLength() > 0 )
+                rFilterProperties.getConstArray()[0] >>= xInfoSet;
+            OSL_ENSURE( xInfoSet.is(), "missing infoset for export" );
+            if( xInfoSet.is() )
+                xInfoSet->setPropertyValue( C2U("StreamName"), uno::makeAny( rStreamName ) );
+        }
+
+        Reference< XExporter > xExporter( xServiceFactory->createInstanceWithArguments(
+            rServiceName, rFilterProperties ), uno::UNO_QUERY);
+        if ( !xExporter.is() )
+            return ERRCODE_SFX_GENERAL;
+
+        xExporter->setSourceDocument( m_xSourceDoc );
+
+        uno::Reference< document::XFilter > xFilter( xExporter, uno::UNO_QUERY );
+        if ( !xFilter.is() )
+            return ERRCODE_SFX_GENERAL;
+
+        uno::Sequence < beans::PropertyValue > aMediaDesc(0);
+        //@todo? filter properties? ... url? ...
+        xFilter->filter( aMediaDesc );
+    }
+    catch( uno::Exception& rEx )
+    {
+        ASSERT_EXCEPTION( rEx );
+    }
+    return nWarning;
+}
+
+// --------------------------------------------------------------------------------
+
+Sequence< OUString > XMLFilter::getSupportedServiceNames_Static()
+{
+    Sequence< OUString > aServices( 2 );
+    aServices[ 0 ] = C2U( "com.sun.star.document.ImportFilter" );
+    aServices[ 1 ] = C2U( "com.sun.star.document.ExportFilter" );
+
+    // todo: services are incomplete.  Missing:
+    // XInitialization, XNamed
+    return aServices;
+}
+
+APPHELPER_XSERVICEINFO_IMPL( XMLFilter, C2U( "com.sun.star.comp.chart2.XMLFilter" ) );
+
+} //  namespace chart
