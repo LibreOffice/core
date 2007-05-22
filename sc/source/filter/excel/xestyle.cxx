@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xestyle.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:25:36 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:48:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,8 @@ sal_uInt32 lclGetWeighting( XclExpColorType eType )
         case EXC_COLOR_CELLBORDER:
         case EXC_COLOR_CHARTAREA:   return 2;
         case EXC_COLOR_CELLTEXT:
-        case EXC_COLOR_CHARTTEXT:   return 10;
+        case EXC_COLOR_CHARTTEXT:
+        case EXC_COLOR_CTRLTEXT:    return 10;
         case EXC_COLOR_CELLAREA:    return 20;
         case EXC_COLOR_GRID:        return 50;
         default:    DBG_ERRORFILE( "lclGetWeighting - unknown color type" );
@@ -282,10 +283,10 @@ typedef ::std::vector< XclNearest > XclNearestVec;
 
 // ----------------------------------------------------------------------------
 
-class XclExpPaletteImpl : public XclExpRecord, public XclDefaultPalette
+class XclExpPaletteImpl
 {
 public:
-    explicit            XclExpPaletteImpl( const XclExpRoot& rRoot );
+    explicit            XclExpPaletteImpl( const XclDefaultPalette& rDefPal );
 
     /** Inserts the color into the list and updates weighting.
         @param nAutoDefault  The Excel palette index for automatic color.
@@ -299,9 +300,6 @@ public:
 
     /** Returns the Excel palette index of the color with passed color ID. */
     sal_uInt16          GetColorIndex( sal_uInt32 nColorId ) const;
-    /** Returns the Excel palette index of the passed color (searches for nearest color).
-        @param nAutoDefault  The Excel palette index for automatic color. */
-    sal_uInt16          GetColorIndex( const Color& rColor, sal_uInt16 nAutoDefault = 0 ) const;
 
     /** Returns a foreground and background color for the two passed color IDs.
         @descr  If rnXclPattern contains a solid pattern, this function tries to find
@@ -319,12 +317,15 @@ public:
     inline Color        GetColor( sal_uInt16 nXclIndex ) const
                             { return Color( GetColorData( nXclIndex ) ); }
 
-    /** Saves the PALETTE record, if it differs from the default palette. */
-    virtual void        Save( XclExpStream& rStrm );
+    /** Returns true, if all colors of the palette are equal to default palette colors. */
+    bool                IsDefaultPalette() const;
+    /** Writes the color list (contents of the palette record) to the passed stream. */
+    void                WriteBody( XclExpStream& rStrm );
 
 private:
     /** Returns the Excel index of a 0-based color index. */
-    inline sal_uInt16   GetXclIndex( sal_uInt32 nIndex ) const;
+    inline sal_uInt16   GetXclIndex( sal_uInt32 nIndex ) const
+                            { return static_cast< sal_uInt16 >( nIndex + EXC_COLOR_USEROFFSET ); }
 
     /** Returns the original inserted color represented by the color ID nColorId. */
     const Color&        GetOriginalColor( sal_uInt32 nColorId ) const;
@@ -360,44 +361,34 @@ private:
                             sal_uInt32& rnFirst, sal_uInt32& rnSecond,
                             const Color& rColor ) const;
 
-    /** Writes the contents of the PALETTE record. */
-    virtual void        WriteBody( XclExpStream& rStrm );
-
 private:
     typedef ScfDelList< XclListColor >          XclListColorList;
     typedef ScfRef< XclListColorList >          XclListColorListRef;
     typedef ::std::vector< XclColorIdData >     XclColorIdDataVec;
     typedef ::std::vector< XclPaletteColor >    XclPaletteColorVec;
 
+    const XclDefaultPalette& mrDefPal;      /// The default palette for the current BIFF version.
     XclListColorListRef mxColorList;        /// Working color list.
     XclColorIdDataVec   maColorIdDataVec;   /// Data of all CIDs.
     XclPaletteColorVec  maPalette;          /// Contains resulting colors to export.
     sal_uInt32          mnLastIdx;          /// Last insertion index for search opt.
 };
 
-inline sal_uInt16 XclExpPaletteImpl::GetXclIndex( sal_uInt32 nIndex ) const
-{
-    return static_cast< sal_uInt16 >( nIndex + EXC_COLOR_USEROFFSET );
-}
-
 // ----------------------------------------------------------------------------
 
 const sal_uInt32 EXC_PAL_INDEXBASE          = 0xFFFF0000;
 const sal_uInt32 EXC_PAL_MAXRAWSIZE         = 1024;
 
-XclExpPaletteImpl::XclExpPaletteImpl( const XclExpRoot& rRoot ) :
-    XclExpRecord( EXC_ID_PALETTE ),
-    XclDefaultPalette( rRoot ),
+XclExpPaletteImpl::XclExpPaletteImpl( const XclDefaultPalette& rDefPal ) :
+    mrDefPal( rDefPal ),
     mxColorList( new XclListColorList ),
     mnLastIdx( 0 )
 {
-    SetRecSize( GetColorCount() * 4 + 2 );
-
     // initialize maPalette with default colors
-    sal_uInt32 nCount = GetColorCount();
+    sal_uInt16 nCount = mrDefPal.GetColorCount();
     maPalette.reserve( nCount );
-    for( sal_uInt32 nIdx = 0; nIdx < nCount; ++nIdx )
-        maPalette.push_back( XclPaletteColor( GetDefColor( GetXclIndex( nIdx ) ) ) );
+    for( sal_uInt16 nIdx = 0; nIdx < nCount; ++nIdx )
+        maPalette.push_back( XclPaletteColor( mrDefPal.GetDefColor( GetXclIndex( nIdx ) ) ) );
 
     InsertColor( Color( COL_BLACK ), EXC_COLOR_CELLTEXT );
 }
@@ -441,7 +432,7 @@ void XclExpPaletteImpl::Finalize()
         RawReducePalette( nPass++ );
 
     // phase 2: precise reduction using advanced color merging based on color weighting
-    while( mxColorList->Count() > GetColorCount() )
+    while( mxColorList->Count() > mrDefPal.GetColorCount() )
         ReduceLeastUsedColor();
 
 // --- #104865# use default palette and replace colors with nearest used colors ---
@@ -484,16 +475,6 @@ sal_uInt16 XclExpPaletteImpl::GetColorIndex( sal_uInt32 nColorId ) const
     else if( nColorId < maColorIdDataVec.size() )
         nRet = GetXclIndex( maColorIdDataVec[ nColorId ].mnIndex );
     return nRet;
-}
-
-sal_uInt16 XclExpPaletteImpl::GetColorIndex( const Color& rColor, sal_uInt16 nAutoDefault ) const
-{
-    if( rColor.GetColor() == COL_AUTO )
-        return nAutoDefault;
-
-    sal_uInt32 nIndex;
-    GetNearestPaletteColor( nIndex, rColor, false );
-    return GetXclIndex( nIndex );
 }
 
 void XclExpPaletteImpl::GetMixedColors(
@@ -552,16 +533,22 @@ ColorData XclExpPaletteImpl::GetColorData( sal_uInt16 nXclIndex ) const
         if( nIdx < maPalette.size() )
             return maPalette[ nIdx ].maColor.GetColor();
     }
-    return GetDefColorData( nXclIndex );
+    return mrDefPal.GetDefColorData( nXclIndex );
 }
 
-void XclExpPaletteImpl::Save( XclExpStream& rStrm )
+bool XclExpPaletteImpl::IsDefaultPalette() const
 {
     bool bDefault = true;
     for( sal_uInt32 nIdx = 0, nSize = static_cast< sal_uInt32 >( maPalette.size() ); bDefault && (nIdx < nSize); ++nIdx )
-        bDefault = maPalette[ nIdx ].maColor == GetDefColor( GetXclIndex( nIdx ) );
-    if( !bDefault )
-        XclExpRecord::Save( rStrm );
+        bDefault = maPalette[ nIdx ].maColor == mrDefPal.GetDefColor( GetXclIndex( nIdx ) );
+    return bDefault;
+}
+
+void XclExpPaletteImpl::WriteBody( XclExpStream& rStrm )
+{
+    rStrm << static_cast< sal_uInt16 >( maPalette.size() );
+    for( XclPaletteColorVec::const_iterator aIt = maPalette.begin(), aEnd = maPalette.end(); aIt != aEnd; ++aIt )
+        rStrm << aIt->maColor;
 }
 
 const Color& XclExpPaletteImpl::GetOriginalColor( sal_uInt32 nColorId ) const
@@ -802,19 +789,14 @@ sal_Int32 XclExpPaletteImpl::GetNearPaletteColors(
     return nDist1;
 }
 
-void XclExpPaletteImpl::WriteBody( XclExpStream& rStrm )
-{
-    rStrm << static_cast< sal_uInt16 >( maPalette.size() );
-    for( XclPaletteColorVec::const_iterator aIt = maPalette.begin(), aEnd = maPalette.end();
-            aIt != aEnd; ++aIt )
-        rStrm << aIt->maColor;
-}
-
 // ----------------------------------------------------------------------------
 
 XclExpPalette::XclExpPalette( const XclExpRoot& rRoot ) :
-    mxImpl( new XclExpPaletteImpl( rRoot ) )
+    XclDefaultPalette( rRoot ),
+    XclExpRecord( EXC_ID_PALETTE )
 {
+    mxImpl.reset( new XclExpPaletteImpl( *this ) );
+    SetRecSize( GetColorCount() * 4 + 2 );
 }
 
 XclExpPalette::~XclExpPalette()
@@ -828,7 +810,7 @@ sal_uInt32 XclExpPalette::InsertColor( const Color& rColor, XclExpColorType eTyp
 
 sal_uInt32 XclExpPalette::GetColorIdFromIndex( sal_uInt16 nIndex )
 {
-    return EXC_PAL_INDEXBASE | nIndex;
+    return XclExpPaletteImpl::GetColorIdFromIndex( nIndex );
 }
 
 void XclExpPalette::Finalize()
@@ -839,11 +821,6 @@ void XclExpPalette::Finalize()
 sal_uInt16 XclExpPalette::GetColorIndex( sal_uInt32 nColorId ) const
 {
     return mxImpl->GetColorIndex( nColorId );
-}
-
-sal_uInt16 XclExpPalette::GetColorIndex( const Color& rColor, sal_uInt16 nAutoDefault ) const
-{
-    return mxImpl->GetColorIndex( rColor, nAutoDefault );
 }
 
 void XclExpPalette::GetMixedColors(
@@ -860,72 +837,56 @@ ColorData XclExpPalette::GetColorData( sal_uInt16 nXclIndex ) const
 
 void XclExpPalette::Save( XclExpStream& rStrm )
 {
-    mxImpl->Save( rStrm );
+    if( !mxImpl->IsDefaultPalette() )
+        XclExpRecord::Save( rStrm );
+}
+
+void XclExpPalette::WriteBody( XclExpStream& rStrm )
+{
+    mxImpl->WriteBody( rStrm );
 }
 
 // FONT record - font information =============================================
 
-XclExpFontData::XclExpFontData() :
-    mnColorId( XclExpPalette::GetColorIdFromIndex( EXC_COLOR_FONTAUTO ) )
-{
-}
+namespace {
 
-XclExpFontData::XclExpFontData( const XclExpRoot& rRoot, const Font& rFont ) :
-    XclFontData( rFont )
+sal_uInt32 lclCalcHash( const XclFontData& rFontData )
 {
-    SetColorId( rRoot, rFont.GetColor() );
-}
-
-XclExpFontData::XclExpFontData( const XclExpRoot& rRoot, const SvxFont& rFont ) :
-    XclFontData( rFont )
-{
-    SetColorId( rRoot, rFont.GetColor() );
-}
-
-void XclExpFontData::SetColorId( const XclExpRoot& rRoot, const Color& rColor )
-{
-    mnColorId = rRoot.GetPalette().InsertColor( rColor, EXC_COLOR_CELLTEXT, EXC_COLOR_FONTAUTO );
-}
-
-sal_uInt32 XclExpFontData::GetHash() const
-{
-    sal_uInt32 nHash = maName.Len();
-    nHash += mnColorId * 2;
-    nHash += mnWeight * 3;
-    nHash += mnCharSet * 5;
-    nHash += mnFamily * 7;
-    nHash += mnHeight * 11;
-    nHash += mnUnderline * 13;
-    nHash += mnEscapem * 17;
-    if( mbItalic ) nHash += 19;
-    if( mbStrikeout ) nHash += 23;
-    if( mbOutline ) nHash += 29;
-    if( mbShadow ) nHash += 31;
+    sal_uInt32 nHash = rFontData.maName.Len();
+    nHash += rFontData.maColor.GetColor() * 2;
+    nHash += rFontData.mnWeight * 3;
+    nHash += rFontData.mnCharSet * 5;
+    nHash += rFontData.mnFamily * 7;
+    nHash += rFontData.mnHeight * 11;
+    nHash += rFontData.mnUnderline * 13;
+    nHash += rFontData.mnEscapem * 17;
+    if( rFontData.mbItalic ) nHash += 19;
+    if( rFontData.mbStrikeout ) nHash += 23;
+    if( rFontData.mbOutline ) nHash += 29;
+    if( rFontData.mbShadow ) nHash += 31;
     return nHash;
 }
 
-bool operator==( const XclExpFontData& rLeft, const XclExpFontData& rRight )
-{
-    return (rLeft.mnColorId == rRight.mnColorId) &&
-        (static_cast< const XclFontData& >( rLeft ) == static_cast< const XclFontData& >( rRight ));
-}
+} // namespace
 
-// ============================================================================
+// ----------------------------------------------------------------------------
 
-XclExpFont::XclExpFont( const XclExpRoot& rRoot, const XclExpFontData& rFontData ) :
+XclExpFont::XclExpFont( const XclExpRoot& rRoot,
+        const XclFontData& rFontData, XclExpColorType eColorType ) :
     XclExpRecord( EXC_ID2_FONT, 14 ),
     XclExpRoot( rRoot ),
-    maData( rFontData ),
-    mnHash( rFontData.GetHash() )
+    maData( rFontData )
 {
-    sal_Size nRecSize = maData.maName.Len();
-    if( GetBiff() == EXC_BIFF8 )
-        (nRecSize *= 2) += 1;
-    nRecSize += 15;
-    SetRecSize( nRecSize );
+    // insert font color into palette
+    mnColorId = rRoot.GetPalette().InsertColor( rFontData.maColor, eColorType, EXC_COLOR_FONTAUTO );
+    // hash value for faster comparison
+    mnHash = lclCalcHash( maData );
+    // record size
+    sal_Size nStrLen = maData.maName.Len();
+    SetRecSize( ((GetBiff() == EXC_BIFF8) ? (nStrLen * 2 + 1) : nStrLen) + 15 );
 }
 
-bool XclExpFont::Equals( const XclExpFontData& rFontData, sal_uInt32 nHash ) const
+bool XclExpFont::Equals( const XclFontData& rFontData, sal_uInt32 nHash ) const
 {
     return (mnHash == nHash) && (maData == rFontData);
 }
@@ -949,7 +910,7 @@ void XclExpFont::WriteBody( XclExpStream& rStrm )
 
     rStrm   << maData.mnHeight
             << nAttr
-            << GetPalette().GetColorIndex( maData.mnColorId )
+            << GetPalette().GetColorIndex( mnColorId )
             << maData.mnWeight
             << maData.mnEscapem
             << maData.mnUnderline
@@ -962,11 +923,11 @@ void XclExpFont::WriteBody( XclExpStream& rStrm )
 // ----------------------------------------------------------------------------
 
 XclExpBlindFont::XclExpBlindFont( const XclExpRoot& rRoot ) :
-    XclExpFont( rRoot, XclExpFontData() )
+    XclExpFont( rRoot, XclFontData(), EXC_COLOR_CELLTEXT )
 {
 }
 
-bool XclExpBlindFont::Equals( const XclExpFontData& /*rFontData*/, sal_uInt32 /*nHash*/ ) const
+bool XclExpBlindFont::Equals( const XclFontData& /*rFontData*/, sal_uInt32 /*nHash*/ ) const
 {
     return false;
 }
@@ -1002,17 +963,12 @@ const XclFontData& XclExpFontBuffer::GetAppFontData() const
     return maFontList.GetRecord( EXC_FONT_APP )->GetFontData(); // exists always
 }
 
-sal_uInt16 XclExpFontBuffer::GetXclIndex( const XclExpFontData& rFontData, sal_uInt16 nDefault )
-{
-    size_t nPos = Find( rFontData );
-    return (nPos < mnXclMaxSize) ? static_cast< sal_uInt16 >( nPos ) : nDefault;
-}
-
-sal_uInt16 XclExpFontBuffer::Insert( const XclExpFontData& rFontData, bool bAppFont )
+sal_uInt16 XclExpFontBuffer::Insert(
+        const XclFontData& rFontData, XclExpColorType eColorType, bool bAppFont )
 {
     if( bAppFont )
     {
-        XclExpFontRef xFont( new XclExpFont( GetRoot(), rFontData ) );
+        XclExpFontRef xFont( new XclExpFont( GetRoot(), rFontData, eColorType ) );
         maFontList.ReplaceRecord( xFont, EXC_FONT_APP );
         // #108487# set width of '0' character for column width export
         SetCharWidth( xFont->GetFontData() );
@@ -1023,11 +979,11 @@ sal_uInt16 XclExpFontBuffer::Insert( const XclExpFontData& rFontData, bool bAppF
     if( nPos == EXC_FONTLIST_NOTFOUND )
     {
         // not found in buffer - create new font
-        size_t nSize = maFontList.Size();
+        size_t nSize = maFontList.GetSize();
         if( nSize < mnXclMaxSize )
         {
             // possible to insert
-            maFontList.AppendNewRecord( new XclExpFont( GetRoot(), rFontData ) );
+            maFontList.AppendNewRecord( new XclExpFont( GetRoot(), rFontData, eColorType ) );
             nPos = nSize;       // old size is last position now
         }
         else
@@ -1039,25 +995,29 @@ sal_uInt16 XclExpFontBuffer::Insert( const XclExpFontData& rFontData, bool bAppF
     return static_cast< sal_uInt16 >( nPos );
 }
 
-sal_uInt16 XclExpFontBuffer::Insert( const Font& rFont, bool bAppFont )
+sal_uInt16 XclExpFontBuffer::Insert(
+        const Font& rFont, XclExpColorType eColorType, bool bAppFont )
 {
-    return Insert( XclExpFontData( GetRoot(), rFont ), bAppFont );
+    return Insert( XclFontData( rFont ), eColorType, bAppFont );
 }
 
-sal_uInt16 XclExpFontBuffer::Insert( const SvxFont& rFont, bool bAppFont )
+sal_uInt16 XclExpFontBuffer::Insert(
+        const SvxFont& rFont, XclExpColorType eColorType, bool bAppFont )
 {
-    return Insert( XclExpFontData( GetRoot(), rFont ), bAppFont );
+    return Insert( XclFontData( rFont ), eColorType, bAppFont );
 }
 
-sal_uInt16 XclExpFontBuffer::Insert( const SfxItemSet& rItemSet, sal_Int16 nScript, bool bAppFont )
+sal_uInt16 XclExpFontBuffer::Insert( const SfxItemSet& rItemSet,
+        sal_Int16 nScript, XclExpColorType eColorType, bool bAppFont )
 {
     // #i17050# #114008# #115495# script type now provided by caller
-    return Insert( GetFontFromItemSet( rItemSet, nScript ), bAppFont );
+    return Insert( GetFontFromItemSet( rItemSet, nScript ), eColorType, bAppFont );
 }
 
-sal_uInt16 XclExpFontBuffer::Insert( const ScPatternAttr& rPattern, sal_Int16 nScript, bool bAppFont )
+sal_uInt16 XclExpFontBuffer::Insert( const ScPatternAttr& rPattern,
+        sal_Int16 nScript, XclExpColorType eColorType, bool bAppFont )
 {
-    return Insert( rPattern.GetItemSet(), nScript, bAppFont );
+    return Insert( rPattern.GetItemSet(), nScript, eColorType, bAppFont );
 }
 
 void XclExpFontBuffer::Save( XclExpStream& rStrm )
@@ -1153,7 +1113,7 @@ bool XclExpFontBuffer::CheckItems( const SfxItemSet& rItemSet, sal_Int16 nScript
 
 void XclExpFontBuffer::InitDefaultFonts()
 {
-    XclExpFontData aFontData;
+    XclFontData aFontData;
     aFontData.maName.AssignAscii( "Arial" );
     aFontData.SetScFamily( FAMILY_DONTKNOW );
     aFontData.SetFontEncoding( ScfTools::GetSystemTextEncoding() );
@@ -1164,25 +1124,25 @@ void XclExpFontBuffer::InitDefaultFonts()
     {
         case EXC_BIFF5:
         {
-            maFontList.AppendNewRecord( new XclExpFont( GetRoot(), aFontData ) );
+            maFontList.AppendNewRecord( new XclExpFont( GetRoot(), aFontData, EXC_COLOR_CELLTEXT ) );
             aFontData.SetScWeight( WEIGHT_BOLD );
-            maFontList.AppendNewRecord( new XclExpFont( GetRoot(), aFontData ) );
+            maFontList.AppendNewRecord( new XclExpFont( GetRoot(), aFontData, EXC_COLOR_CELLTEXT ) );
             aFontData.SetScWeight( WEIGHT_NORMAL );
             aFontData.SetScPosture( ITALIC_NORMAL );
-            maFontList.AppendNewRecord( new XclExpFont( GetRoot(), aFontData ) );
+            maFontList.AppendNewRecord( new XclExpFont( GetRoot(), aFontData, EXC_COLOR_CELLTEXT ) );
             aFontData.SetScWeight( WEIGHT_BOLD );
-            maFontList.AppendNewRecord( new XclExpFont( GetRoot(), aFontData ) );
+            maFontList.AppendNewRecord( new XclExpFont( GetRoot(), aFontData, EXC_COLOR_CELLTEXT ) );
             // the blind font with index 4
             maFontList.AppendNewRecord( new XclExpBlindFont( GetRoot() ) );
             // already add the first user defined font (Excel does it too)
             aFontData.SetScWeight( WEIGHT_NORMAL );
             aFontData.SetScPosture( ITALIC_NONE );
-            maFontList.AppendNewRecord( new XclExpFont( GetRoot(), aFontData ) );
+            maFontList.AppendNewRecord( new XclExpFont( GetRoot(), aFontData, EXC_COLOR_CELLTEXT ) );
         }
         break;
         case EXC_BIFF8:
         {
-            XclExpFontRef xFont( new XclExpFont( GetRoot(), aFontData ) );
+            XclExpFontRef xFont( new XclExpFont( GetRoot(), aFontData, EXC_COLOR_CELLTEXT ) );
             maFontList.AppendRecord( xFont );
             maFontList.AppendRecord( xFont );
             maFontList.AppendRecord( xFont );
@@ -1196,10 +1156,10 @@ void XclExpFontBuffer::InitDefaultFonts()
     }
 }
 
-size_t XclExpFontBuffer::Find( const XclExpFontData& rFontData )
+size_t XclExpFontBuffer::Find( const XclFontData& rFontData )
 {
-    sal_uInt32 nHash = rFontData.GetHash();
-    for( size_t nPos = 0, nSize = maFontList.Size(); nPos < nSize; ++nPos )
+    sal_uInt32 nHash = lclCalcHash( rFontData );
+    for( size_t nPos = 0, nSize = maFontList.GetSize(); nPos < nSize; ++nPos )
         if( maFontList.GetRecord( nPos )->Equals( rFontData, nHash ) )
             return nPos;
     return EXC_FONTLIST_NOTFOUND;
@@ -1390,32 +1350,20 @@ bool XclExpCellAlign::FillFromItemSet(
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_VER_JUSTIFY, bStyle );
 
             // stacked/rotation
-            BOOL bStacked = GETITEMVALUE( rItemSet, SfxBoolItem, ATTR_STACKED, BOOL );
+            bool bStacked = GETITEMVALUE( rItemSet, SfxBoolItem, ATTR_STACKED, BOOL );
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_STACKED, bStyle );
             if( bStacked )
             {
-                if( eBiff <= EXC_BIFF5 )
-                    mnOrient = EXC_XF_TEXTROT_STACKED;
-                else
-                    mnRotation = EXC_ROT_STACKED;
+                mnRotation = EXC_ROT_STACKED;
             }
             else
             {
                 // rotation
                 sal_Int32 nScRot = GETITEMVALUE( rItemSet, SfxInt32Item, ATTR_ROTATE_VALUE, sal_Int32 );
-                if( eBiff <= EXC_BIFF5 )
-                {
-                    if( (4500 < nScRot) && (nScRot < 13500) )
-                        mnOrient = EXC_XF_TEXTROT_90_CCW;
-                    else if( (22500 < nScRot) && (nScRot < 31500) )
-                        mnOrient = EXC_XF_TEXTROT_90_CW;
-                    else
-                        mnOrient = EXC_XF_TEXTROT_NONE;
-                }
-                else
-                    mnRotation = XclTools::GetXclRotation( nScRot );
+                mnRotation = XclTools::GetXclRotation( nScRot );
                 bUsed |= ScfTools::CheckItem( rItemSet, ATTR_ROTATE_VALUE, bStyle );
             }
+            mnOrient = XclTools::GetXclOrientFromRot( mnRotation );
         }
 
         case EXC_BIFF3: // attributes new in BIFF3
@@ -1455,7 +1403,7 @@ void XclExpCellAlign::FillToXF4( sal_uInt16& rnAlign ) const
 {
     FillToXF3( rnAlign );
     ::insert_value( rnAlign, mnVerAlign, 4, 2 );
-    ::insert_value( rnAlign, meOrient, 6, 2 );
+    ::insert_value( rnAlign, mnOrient, 6, 2 );
 }
 #endif
 
@@ -1823,7 +1771,7 @@ void XclExpXF::Init( const SfxItemSet& rItemSet, sal_Int16 nScript,
     // font
     if( nForceXclFont == EXC_FONT_NOTFOUND )
     {
-        mnXclFont = GetFontBuffer().Insert( rItemSet, nScript, bDefStyle );
+        mnXclFont = GetFontBuffer().Insert( rItemSet, nScript, EXC_COLOR_CELLTEXT, bDefStyle );
         mbFontUsed = XclExpFontBuffer::CheckItems( rItemSet, nScript, IsStyleXF() );
     }
     else
@@ -2094,10 +2042,10 @@ sal_uInt32 XclExpXFBuffer::GetDefCellXFId()
 
 void XclExpXFBuffer::Finalize()
 {
-    for( size_t nPos = 0, nSize = maXFList.Size(); nPos < nSize; ++nPos )
+    for( size_t nPos = 0, nSize = maXFList.GetSize(); nPos < nSize; ++nPos )
         maXFList.GetRecord( nPos )->SetFinalColors();
 
-    sal_uInt32 nTotalCount = static_cast< sal_uInt32 >( maXFList.Size() );
+    sal_uInt32 nTotalCount = static_cast< sal_uInt32 >( maXFList.GetSize() );
     sal_uInt32 nId;
     maXFIndexVec.resize( nTotalCount, EXC_XF_DEFAULTCELL );
 
@@ -2141,11 +2089,11 @@ void XclExpXFBuffer::Finalize()
     // *** insert all cell XF records *** -------------------------------------
 
     // start position to search for equal inserted XF records
-    size_t nSearchStart = maSortedXFList.Size();
+    size_t nSearchStart = maSortedXFList.GetSize();
 
     // break the loop if XF limit reached - maXFIndexVec is already initialized with default index
     XclExpXFRef xDefCellXF = maXFList.GetRecord( EXC_XF_DEFAULTCELL );
-    for( nId = 0; (nId < nTotalCount) && (maSortedXFList.Size() < EXC_XF_MAXCOUNT); ++nId )
+    for( nId = 0; (nId < nTotalCount) && (maSortedXFList.GetSize() < EXC_XF_MAXCOUNT); ++nId )
     {
         XclExpXFRef xXF = maXFList.GetRecord( nId );
         if( xXF->IsCellXF() && ((nId > nMaxBuiltInXFId) || (maBuiltInMap.find( nId ) == aBuiltInEnd)) )
@@ -2158,7 +2106,7 @@ void XclExpXFBuffer::Finalize()
             {
                 nFoundIndex = EXC_XF_DEFAULTCELL;
             }
-            else for( size_t nSearchPos = nSearchStart, nSearchEnd = maSortedXFList.Size();
+            else for( size_t nSearchPos = nSearchStart, nSearchEnd = maSortedXFList.GetSize();
                         (nSearchPos < nSearchEnd) && (nFoundIndex == EXC_XF_NOTFOUND); ++nSearchPos )
             {
                 if( maSortedXFList.GetRecord( nSearchPos )->Equals( *xXF ) )
@@ -2195,7 +2143,7 @@ void XclExpXFBuffer::Save( XclExpStream& rStrm )
 sal_uInt32 XclExpXFBuffer::FindXF( const ScPatternAttr& rPattern,
         ULONG nForceScNumFmt, sal_uInt16 nForceXclFont, bool bForceLineBreak ) const
 {
-    for( size_t nPos = 0, nSize = maXFList.Size(); nPos < nSize; ++nPos )
+    for( size_t nPos = 0, nSize = maXFList.GetSize(); nPos < nSize; ++nPos )
         if( maXFList.GetRecord( nPos )->Equals( rPattern, nForceScNumFmt, nForceXclFont, bForceLineBreak ) )
             return static_cast< sal_uInt32 >( nPos );
     return EXC_XFID_NOTFOUND;
@@ -2203,7 +2151,7 @@ sal_uInt32 XclExpXFBuffer::FindXF( const ScPatternAttr& rPattern,
 
 sal_uInt32 XclExpXFBuffer::FindXF( const SfxStyleSheetBase& rStyleSheet ) const
 {
-    for( size_t nPos = 0, nSize = maXFList.Size(); nPos < nSize; ++nPos )
+    for( size_t nPos = 0, nSize = maXFList.GetSize(); nPos < nSize; ++nPos )
         if( maXFList.GetRecord( nPos )->Equals( rStyleSheet ) )
             return static_cast< sal_uInt32 >( nPos );
     return EXC_XFID_NOTFOUND;
@@ -2245,12 +2193,12 @@ sal_uInt32 XclExpXFBuffer::InsertCellXF( const ScPatternAttr* pPattern, sal_Int1
     if( nXFId == EXC_XFID_NOTFOUND )
     {
         // not found - insert new cell XF
-        if( maXFList.Size() < EXC_XFLIST_HARDLIMIT )
+        if( maXFList.GetSize() < EXC_XFLIST_HARDLIMIT )
         {
             maXFList.AppendNewRecord( new XclExpXF(
                 GetRoot(), *pPattern, nScript, nForceScNumFmt, nForceXclFont, bForceLineBreak ) );
             // do not set nXFId before the AppendNewRecord() call - it may insert 2 XFs (style+cell)
-            nXFId = static_cast< sal_uInt32 >( maXFList.Size() - 1 );
+            nXFId = static_cast< sal_uInt32 >( maXFList.GetSize() - 1 );
         }
         else
         {
@@ -2308,7 +2256,7 @@ sal_uInt32 XclExpXFBuffer::InsertStyleXF( const SfxStyleSheetBase& rStyleSheet )
     if( nXFId == EXC_XFID_NOTFOUND )
     {
         // not found - insert new style XF and STYLE
-        nXFId = static_cast< sal_uInt32 >( maXFList.Size() );
+        nXFId = static_cast< sal_uInt32 >( maXFList.GetSize() );
         if( nXFId < EXC_XFLIST_HARDLIMIT )
         {
             maXFList.AppendNewRecord( new XclExpXF( GetRoot(), rStyleSheet ) );
@@ -2333,7 +2281,7 @@ void XclExpXFBuffer::InsertUserStyles()
 
 sal_uInt32 XclExpXFBuffer::AppendBuiltInXF( XclExpXFRef xXF, sal_uInt8 nStyleId, sal_uInt8 nLevel )
 {
-    sal_uInt32 nXFId = static_cast< sal_uInt32 >( maXFList.Size() );
+    sal_uInt32 nXFId = static_cast< sal_uInt32 >( maXFList.GetSize() );
     maXFList.AppendRecord( xXF );
     XclExpBuiltInInfo& rInfo = maBuiltInMap[ nXFId ];
     rInfo.mnStyleId = nStyleId;
@@ -2414,7 +2362,7 @@ void XclExpXFBuffer::InsertDefaultRecords()
 void XclExpXFBuffer::AppendXFIndex( sal_uInt32 nXFId )
 {
     DBG_ASSERT( nXFId < maXFIndexVec.size(), "XclExpXFBuffer::AppendXFIndex - XF ID out of range" );
-    maXFIndexVec[ nXFId ] = static_cast< sal_uInt16 >( maSortedXFList.Size() );
+    maXFIndexVec[ nXFId ] = static_cast< sal_uInt16 >( maSortedXFList.GetSize() );
     maSortedXFList.AppendRecord( maXFList.GetRecord( nXFId ) );
     DBG_ASSERT( maXFList.HasRecord( nXFId ), "XclExpXFBuffer::AppendXFIndex - XF not found" );
 }
