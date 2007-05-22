@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.189 $
+ *  $Revision: 1.190 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:11:59 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:27:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1073,7 +1073,7 @@ End
 
 File gid_File_Oo_Office_Chart_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Chart.xcs";
 End
@@ -1087,7 +1087,7 @@ End
 
 File gid_File_Oo_Office_Ui_Chartcommands_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/ChartCommands.xcu";
 End
@@ -1368,7 +1368,7 @@ End
 
 File gid_File_Registry_Spool_Oo_Office_Embedding_Chart_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Embedding;
     Name = "/registry/spool/org/openoffice/Office/Embedding-chart.xcu";
 End
@@ -2013,7 +2013,12 @@ File gid_File_Share_Config_Sofficecfg_uiconfig_Zip
     Styles = (ARCHIVE,PATCH);
     Dir = gid_Dir_Share_Config_Sofficecfg;
     Name = "uiconfig.zip";
-    Patchfiles = ("modules/dbbrowser/menubar/menubar.xml",
+    Patchfiles = ("modules/schart/accelerator/en-US/default.xml",
+                  "modules/schart/menubar/menubar.xml",
+                  "modules/schart/statusbar/statusbar.xml",
+                  "modules/schart/toolbar/toolbar.xml",
+                  "modules/schart/toolbar/standardbar.xml",
+                  "modules/dbbrowser/menubar/menubar.xml",
                   "modules/dbapp/menubar/menubar.xml",
                   "modules/dbquery/menubar/menubar.xml",
                   "modules/dbrelation/menubar/menubar.xml",
