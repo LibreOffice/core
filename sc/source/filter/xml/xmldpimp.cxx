@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldpimp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:50:14 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:03:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,9 @@
 #endif
 #ifndef SC_DPDIMSAVE_HXX
 #include "dpdimsave.hxx"
+#endif
+#ifndef SC_RANGEUTL_HXX
+#include "rangeutl.hxx"
 #endif
 
 #include <xmloff/xmltkmap.hxx>
@@ -203,7 +206,7 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
             case XML_TOK_DATA_PILOT_TABLE_ATTR_TARGET_RANGE_ADDRESS :
             {
                 sal_Int32 nOffset(0);
-                bTargetRangeAddress = ScXMLConverter::GetRangeFromString( aTargetRangeAddress, sValue, pDoc, nOffset );
+                bTargetRangeAddress = ScRangeStringConverter::GetRangeFromString( aTargetRangeAddress, sValue, pDoc, nOffset );
             }
             break;
             case XML_TOK_DATA_PILOT_TABLE_ATTR_BUTTONS :
@@ -290,12 +293,12 @@ void ScXMLDataPilotTableContext::SetButtons()
     sal_Int32 nOffset = 0;
     while( nOffset >= 0 )
     {
-        ScXMLConverter::GetTokenByOffset( sAddress, sButtons, nOffset );
+        ScRangeStringConverter::GetTokenByOffset( sAddress, sButtons, nOffset );
         if( nOffset >= 0 )
         {
             ScAddress aScAddress;
             sal_Int32 nAddrOffset(0);
-            if (pDoc && ScXMLConverter::GetAddressFromString( aScAddress, sAddress, pDoc, nAddrOffset ))
+            if (pDoc && ScRangeStringConverter::GetAddressFromString( aScAddress, sAddress, pDoc, nAddrOffset ))
             {
                 ScMergeFlagAttr aAttr( SC_MF_BUTTON );
                 pDoc->ApplyAttr( aScAddress.Col(), aScAddress.Row(), aScAddress.Tab(), aAttr );
@@ -697,7 +700,7 @@ ScXMLSourceCellRangeContext::ScXMLSourceCellRangeContext( ScXMLImport& rImport,
             {
                 ScRange aSourceRangeAddress;
                 sal_Int32 nOffset(0);
-                if (ScXMLConverter::GetRangeFromString( aSourceRangeAddress, sValue, GetScImport().GetDocument(), nOffset ))
+                if (ScRangeStringConverter::GetRangeFromString( aSourceRangeAddress, sValue, GetScImport().GetDocument(), nOffset ))
                     pDataPilotTable->SetSourceCellRangeAddress(aSourceRangeAddress);
             }
             break;
