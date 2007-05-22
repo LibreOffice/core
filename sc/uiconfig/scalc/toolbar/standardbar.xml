@@ -30,7 +30,7 @@
  <toolbar:toolbaritem xlink:href=".uno:SortAscending" toolbar:helpid="helpid:26344"/>
  <toolbar:toolbaritem xlink:href=".uno:SortDescending" toolbar:helpid="helpid:26343"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DrawChart" toolbar:helpid="helpid:26155"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:helpid="helpid:26155"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertDraw" toolbar:helpid="helpid:10244"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SearchDialog" toolbar:helpid="helpid:5961"  />
