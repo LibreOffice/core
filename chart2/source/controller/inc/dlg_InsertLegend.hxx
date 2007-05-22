@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertLegend.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:27:22 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:58:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,17 +39,18 @@
 #ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
 #endif
-// header for class FixedLine
-#ifndef _SV_FIXED_HXX
-#include <vcl/fixed.hxx>
-#endif
 // header for class CheckBox
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
 #endif
-// header for class SfxItemSet
-#ifndef _SFXITEMSET_HXX
-#include <svtools/itemset.hxx>
+//for auto_ptr
+#include <memory>
+
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 
 //.............................................................................
@@ -57,35 +58,25 @@ namespace chart
 {
 //.............................................................................
 
-
-/*************************************************************************
-|*
-|* Legenden-Dialog
-|*
-\************************************************************************/
+class LegendPositionResources;
 class SchLegendDlg : public ModalDialog
 {
 private:
-    CheckBox        aCbxShow;
-    RadioButton     aRbtLeft;
-    RadioButton     aRbtTop;
-    RadioButton     aRbtRight;
-    RadioButton     aRbtBottom;
-    FixedLine       aFlLegend;
+    ::std::auto_ptr< LegendPositionResources >    m_apLegendPositionResources;
+
     OKButton        aBtnOK;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
 
-    const SfxItemSet&   m_rInAttrs;
-
-    void Reset();
-    DECL_LINK (CbxClick, CheckBox *);
-
 public:
-    SchLegendDlg(Window* pParent, const SfxItemSet& rInAttrs);
+    SchLegendDlg( Window* pParent, const ::com::sun::star::uno::Reference<
+                       ::com::sun::star::uno::XComponentContext>& xCC );
     virtual ~SchLegendDlg();
 
-    void GetAttr(SfxItemSet& rOutAttrs);
+    void init( const ::com::sun::star::uno::Reference<
+                       ::com::sun::star::frame::XModel >& xChartModel );
+    bool writeToModel( const ::com::sun::star::uno::Reference<
+                       ::com::sun::star::frame::XModel >& xChartModel ) const;
 };
 
 //.............................................................................
