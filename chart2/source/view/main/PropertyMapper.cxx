@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:37:52 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:25:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include "PropertyMapper.hxx"
+#include "ContainerHelper.hxx"
 #include "macros.hxx"
 
 #ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
@@ -57,49 +58,45 @@ namespace chart
 //.............................................................................
 using namespace ::com::sun::star;
 
+namespace
+{
+
+void lcl_overwriteOrAppendValues(
+    tPropertyNameValueMap &rMap, const tPropertyNameValueMap& rOverwriteMap )
+{
+    tPropertyNameValueMap::const_iterator aIt( rOverwriteMap.begin() );
+    tPropertyNameValueMap::const_iterator aEnd( rOverwriteMap.end() );
+
+    for( ; aIt != aEnd; ++aIt )
+        rMap[ aIt->first ] = aIt->second;
+}
+
+} // anonymous namespace
+
 //static
 void PropertyMapper::setMappedProperties(
           const uno::Reference< beans::XPropertySet >& xTarget
         , const uno::Reference< beans::XPropertySet >& xSource
-        , const tPropertyNameMap& rMap )
+        , const tPropertyNameMap& rMap
+        , tPropertyNameValueMap* pOverwriteMap )
 {
     if( !xTarget.is() || !xSource.is() )
         return;
 
-    uno::Reference< beans::XMultiPropertySet > xMultiProp( xTarget, uno::UNO_QUERY );
-    if( xMultiProp.is() )
+    tNameSequence aNames;
+    tAnySequence  aValues;
+    getMultiPropertyLists(aNames, aValues, xSource, rMap );
+    if(pOverwriteMap && (aNames.getLength() == aValues.getLength()))
     {
-        tNameSequence aNames;
-        tAnySequence  aValues;
-        getMultiPropertyLists(aNames, aValues, xSource, rMap );
-        try
-        {
-            xMultiProp->setPropertyValues( aNames,aValues );
-        }
-        catch( uno::Exception& e )
-        {
-            ASSERT_EXCEPTION( e );
-        }
+        tPropertyNameValueMap aNewMap;
+        for( sal_Int32 nI=0; nI<aNames.getLength(); ++nI )
+            aNewMap[ aNames[nI] ] = aValues[nI];
+        lcl_overwriteOrAppendValues( aNewMap, *pOverwriteMap );
+        aNames = ContainerHelper::MapKeysToSequence( aNewMap );
+        aValues = ContainerHelper::MapValuesToSequence( aNewMap );
     }
-    else
-    {
-        tPropertyNameMap::const_iterator aIt( rMap.begin() );
-        tPropertyNameMap::const_iterator aEnd( rMap.end() );
-        for( ; aIt != aEnd; ++aIt )
-        {
-            rtl::OUString aTarget = aIt->first;
-            rtl::OUString aSource = aIt->second;
-            try
-            {
-                uno::Any aAny( xSource->getPropertyValue(aSource) );
-                xTarget->setPropertyValue( aTarget, aAny );
-            }
-            catch( uno::Exception& e )
-            {
-                ASSERT_EXCEPTION( e );
-            }
-        }
-    }
+
+    PropertyMapper::setMultiProperties( aNames, aValues, xTarget );
 }
 
 void PropertyMapper::getValueMap(
@@ -209,58 +206,60 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProper
     //shape property -- chart model object property
     static tMakePropertyNameMap m_aShapePropertyMapForCharacterProperties =
         tMakePropertyNameMap
-        ( C2U( "CharFontName" ), C2U("CharFontName") )
-        ( C2U( "CharFontStyleName" ), C2U("CharFontStyleName") )
-        ( C2U( "CharFontFamily" ), C2U("CharFontFamily") )
-        ( C2U( "CharFontCharSet" ), C2U("CharFontCharSet") )
-        ( C2U( "CharFontPitch" ), C2U("CharFontPitch") )
-        ( C2U( "CharColor" ), C2U("CharColor") )
-//        ( C2U( "CharBackColor" ), C2U("TextBackgroundColor") )
-        ( C2U( "CharEscapement" ), C2U("CharEscapement") )
-        ( C2U( "CharHeight" ), C2U("CharHeight") )
-        ( C2U( "CharUnderline" ), C2U("CharUnderline") )
-        ( C2U( "CharUnderlineColor" ), C2U("CharUnderlineColor") )
-        ( C2U( "CharUnderlineHasColor" ), C2U("CharUnderlineHasColor") )
-        ( C2U( "CharWeight" ), C2U("CharWeight") )
-        ( C2U( "CharPosture" ), C2U("CharPosture") )
-        ( C2U( "CharKerning" ), C2U("CharKerning") )
-//        ( C2U( "CharCaseMap" ), C2U("CaseMapping") )
-//        ( C2U( "CharRotation" ), C2U("Rotation") ) --> additional feature ...
-//         ( C2U( "CharScaleWidth" ), C2U("CharScaleWidth") )
-//        ( C2U( "CharEscapementHeight" ), C2U("EscapementHeight") ) -> assertion
-///////        ( C2U( "CharCrossedOut" ), C2U("CharCrossedOut") ) //setting this explicitly somehow conflicts with CharStrikeout
-        ( C2U( "CharStrikeout" ), C2U("CharStrikeout") )
-        ( C2U( "CharWordMode" ), C2U("CharWordMode") )
-//        ( C2U( "CharFlash" ), C2U("Flashing") )
-        ( C2U( "CharLocale" ), C2U("CharLocale") )
-        ( C2U( "CharShadowed" ), C2U("CharShadowed") )
-        ( C2U( "CharContoured" ), C2U("CharContoured") )
-        ( C2U( "CharRelief" ), C2U("CharRelief") )
-        ( C2U( "CharEmphasis" ), C2U("CharEmphasis") )//the service style::CharacterProperties  describes a property called 'CharEmphasize' wich is nowhere implemented
-//        ( C2U( "RubyText" ), C2U("RubyText") )
-//        ( C2U( "RubyAdjust" ), C2U("RubyAdjust") )
-//        ( C2U( "RubyCharStyleName" ), C2U("RubyStyleName") )
-//        ( C2U( "RubyIsAbove" ), C2U("RubyIsAbove") )
-//        ( C2U( "CharNoHyphenation" ), C2U("InhibitHyphenation") )
-        ( C2U( "CharFontStyleNameAsian" ), C2U("CharFontNameAsian") )
-        ( C2U( "CharFontStyleNameAsian" ), C2U("CharFontStyleNameAsian") )
-        ( C2U( "CharFontFamilyAsian" ), C2U("CharFontFamilyAsian") )
-        ( C2U( "CharFontCharSetAsian" ), C2U("CharFontCharSetAsian") )
-        ( C2U( "CharFontPitchAsian" ), C2U("CharFontPitchAsian") )
-        ( C2U( "CharHeightAsian" ), C2U("CharHeightAsian") )
-        ( C2U( "CharWeightAsian" ), C2U("CharWeightAsian") )
-        ( C2U( "CharPostureAsian" ), C2U("CharPostureAsian") )
-        ( C2U( "CharLocaleAsian" ), C2U("CharLocaleAsian") )
+//      ( C2U( "CharBackColor" ),           C2U("TextBackgroundColor") )
+//      ( C2U( "CharCaseMap" ),             C2U("CaseMapping") )
+        ( C2U( "CharColor" ),               C2U("CharColor") )
+        ( C2U( "CharContoured" ),           C2U("CharContoured") )
+/////// ( C2U( "CharCrossedOut" ),          C2U("CharCrossedOut") ) //setting this explicitly somehow conflicts with CharStrikeout
+        ( C2U( "CharEmphasis" ),            C2U("CharEmphasis") )//the service style::CharacterProperties  describes a property called 'CharEmphasize' wich is nowhere implemented
+        ( C2U( "CharEscapement" ),          C2U("CharEscapement") )
+//      ( C2U( "CharEscapementHeight" ),    C2U("EscapementHeight") ) -> assertion
+//      ( C2U( "CharFlash" ),               C2U("Flashing") )
 
-        ( C2U( "CharFontStyleNameComplex" ), C2U("CharFontNameComplex") )
-        ( C2U( "CharFontStyleNameComplex" ), C2U("CharFontStyleNameComplex") )
-        ( C2U( "CharFontFamilyComplex" ), C2U("CharFontFamilyComplex") )
-        ( C2U( "CharFontCharSetComplex" ), C2U("CharFontCharSetComplex") )
-        ( C2U( "CharFontPitchComplex" ), C2U("CharFontPitchComplex") )
-        ( C2U( "CharHeightComplex" ), C2U("CharHeightComplex") )
-        ( C2U( "CharWeightComplex" ), C2U("CharWeightComplex") )
-        ( C2U( "CharPostureComplex" ), C2U("CharPostureComplex") )
-        ( C2U( "CharLocaleComplex" ), C2U("CharLocaleComplex") )
+        ( C2U( "CharFontFamily" ),          C2U("CharFontFamily") )
+        ( C2U( "CharFontFamilyAsian" ),     C2U("CharFontFamilyAsian") )
+        ( C2U( "CharFontFamilyComplex" ),   C2U("CharFontFamilyComplex") )
+        ( C2U( "CharFontCharSet" ),         C2U("CharFontCharSet") )
+        ( C2U( "CharFontCharSetAsian" ),    C2U("CharFontCharSetAsian") )
+        ( C2U( "CharFontCharSetComplex" ),  C2U("CharFontCharSetComplex") )
+        ( C2U( "CharFontName" ),            C2U("CharFontName") )
+        ( C2U( "CharFontPitch" ),           C2U("CharFontPitch") )
+        ( C2U( "CharFontPitchAsian" ),      C2U("CharFontPitchAsian") )
+        ( C2U( "CharFontPitchComplex" ),    C2U("CharFontPitchComplex") )
+        ( C2U( "CharFontStyleName" ),       C2U("CharFontStyleName") )
+        ( C2U( "CharFontStyleNameComplex" ),C2U("CharFontNameComplex") )
+        ( C2U( "CharFontStyleNameComplex" ),C2U("CharFontStyleNameComplex") )
+        ( C2U( "CharFontStyleNameAsian" ),  C2U("CharFontNameAsian") )
+        ( C2U( "CharFontStyleNameAsian" ),  C2U("CharFontStyleNameAsian") )
+
+        ( C2U( "CharHeight" ),              C2U("CharHeight") )
+        ( C2U( "CharHeightAsian" ),         C2U("CharHeightAsian") )
+        ( C2U( "CharHeightComplex" ),       C2U("CharHeightComplex") )
+        ( C2U( "CharKerning" ),             C2U("CharKerning") )
+        ( C2U( "CharLocale" ),              C2U("CharLocale") )
+        ( C2U( "CharLocaleAsian" ),         C2U("CharLocaleAsian") )
+        ( C2U( "CharLocaleComplex" ),       C2U("CharLocaleComplex") )
+//      ( C2U( "CharNoHyphenation" ),       C2U("InhibitHyphenation") )
+        ( C2U( "CharPosture" ),             C2U("CharPosture") )
+        ( C2U( "CharPostureAsian" ),        C2U("CharPostureAsian") )
+        ( C2U( "CharPostureComplex" ),      C2U("CharPostureComplex") )
+        ( C2U( "CharRelief" ),              C2U("CharRelief") )
+//      ( C2U( "CharRotation" ),            C2U("Rotation") ) --> additional feature ...
+//      ( C2U( "CharScaleWidth" ),          C2U("CharScaleWidth") )
+        ( C2U( "CharShadowed" ),            C2U("CharShadowed") )
+        ( C2U( "CharStrikeout" ),           C2U("CharStrikeout") )
+        ( C2U( "CharUnderline" ),           C2U("CharUnderline") )
+        ( C2U( "CharUnderlineColor" ),      C2U("CharUnderlineColor") )
+        ( C2U( "CharUnderlineHasColor" ),   C2U("CharUnderlineHasColor") )
+        ( C2U( "CharWeight" ),              C2U("CharWeight") )
+        ( C2U( "CharWeightAsian" ),         C2U("CharWeightAsian") )
+        ( C2U( "CharWeightComplex" ),       C2U("CharWeightComplex") )
+        ( C2U( "CharWordMode" ),            C2U("CharWordMode") )
+
+//      ( C2U( "RubyText" ),                C2U("RubyText") )
+//      ( C2U( "RubyAdjust" ),              C2U("RubyAdjust") )
+//      ( C2U( "RubyCharStyleName" ),       C2U("RubyStyleName") )
+//      ( C2U( "RubyIsAbove" ),             C2U("RubyIsAbove") )
         ;
     return m_aShapePropertyMapForCharacterProperties;
 }
@@ -271,13 +270,13 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForParagraphProper
     //shape property -- chart model object property
     static tMakePropertyNameMap m_aShapePropertyMapForParagraphProperties =
         tMakePropertyNameMap
-        ( C2U( "ParaAdjust" ), C2U("ParaAdjust") )
-        ( C2U( "ParaLastLineAdjust" ), C2U("ParaLastLineAdjust") )
-        ( C2U( "ParaLeftMargin" ), C2U("ParaLeftMargin") )
-        ( C2U( "ParaRightMargin" ), C2U("ParaRightMargin") )
-        ( C2U( "ParaTopMargin" ), C2U("ParaTopMargin") )
-        ( C2U( "ParaBottomMargin" ), C2U("ParaBottomMargin") )
-        ( C2U( "ParaIsHyphenation" ), C2U("ParaIsHyphenation") )
+        ( C2U( "ParaAdjust" ),          C2U("ParaAdjust") )
+        ( C2U( "ParaBottomMargin" ),    C2U("ParaBottomMargin") )
+        ( C2U( "ParaIsHyphenation" ),   C2U("ParaIsHyphenation") )
+        ( C2U( "ParaLastLineAdjust" ),  C2U("ParaLastLineAdjust") )
+        ( C2U( "ParaLeftMargin" ),      C2U("ParaLeftMargin") )
+        ( C2U( "ParaRightMargin" ),     C2U("ParaRightMargin") )
+        ( C2U( "ParaTopMargin" ),       C2U("ParaTopMargin") )
         ;
     return m_aShapePropertyMapForParagraphProperties;
 }
@@ -288,13 +287,25 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFillProperties(
     //shape property -- chart model object property
     static tMakePropertyNameMap m_aShapePropertyMapForFillProperties =
         tMakePropertyNameMap
-        ( C2U( "FillStyle" ), C2U("FillStyle") )
-        ( C2U( "FillColor" ), C2U("FillColor") )
-        ( C2U( "FillTransparence" ), C2U("FillTransparence") )
-        ( C2U( "FillGradient" ), C2U("FillGradient") )
-        ( C2U( "FillHatch" ), C2U("FillHatch") )
-//        ( C2U( "FillTransparenceGradientName" ), C2U("TransparencyStyle") ) //@todo this property name seems to be wrong in chart model
-//        ( C2U( "FillTransparenceGradient" ), C2U("TransparencyGradient") ) //@todo this property name seems to be wrong in chart model
+        ( C2U( "FillBackground" ),        C2U( "FillBackground" ) )
+        ( C2U( "FillBitmapName" ),        C2U( "FillBitmapName" ) )
+        ( C2U( "FillColor" ),             C2U( "FillColor" ) )
+        ( C2U( "FillGradientName" ),      C2U( "FillGradientName" ) )
+        ( C2U( "FillGradientStepCount" ), C2U( "FillGradientStepCount" ) )
+        ( C2U( "FillHatchName" ),         C2U( "FillHatchName" ) )
+        ( C2U( "FillStyle" ),             C2U( "FillStyle" ) )
+        ( C2U( "FillTransparence" ),      C2U( "FillTransparence" ) )
+        ( C2U( "FillTransparenceGradientName" ), C2U("FillTransparenceGradientName") )
+        //bitmap properties
+        ( C2U( "FillBitmapMode" ),        C2U( "FillBitmapMode" ) )
+        ( C2U( "FillBitmapSizeX" ),       C2U( "FillBitmapSizeX" ) )
+        ( C2U( "FillBitmapSizeY" ),       C2U( "FillBitmapSizeY" ) )
+        ( C2U( "FillBitmapLogicalSize" ), C2U( "FillBitmapLogicalSize" ) )
+        ( C2U( "FillBitmapOffsetX" ),     C2U( "FillBitmapOffsetX" ) )
+        ( C2U( "FillBitmapOffsetY" ),     C2U( "FillBitmapOffsetY" ) )
+        ( C2U( "FillBitmapRectanglePoint" ),C2U( "FillBitmapRectanglePoint" ) )
+        ( C2U( "FillBitmapPositionOffsetX" ),C2U( "FillBitmapPositionOffsetX" ) )
+        ( C2U( "FillBitmapPositionOffsetY" ),C2U( "FillBitmapPositionOffsetY" ) )
         ;
     return m_aShapePropertyMapForFillProperties;
 }
@@ -305,14 +316,26 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineProperties(
     //shape property -- chart model object property
     static tMakePropertyNameMap m_aShapePropertyMapForLineProperties =
         tMakePropertyNameMap
-        ( C2U( "LineStyle" ), C2U("LineStyle") )
-        ( C2U( "LineWidth" ), C2U("LineWidth") )
-        ( C2U( "LineDash" ), C2U("LineDash") )
-        ( C2U( "LineColor" ), C2U("LineColor") )
-        ( C2U( "LineTransparence" ), C2U("LineTransparence") )
-        ( C2U( "LineJoint" ), C2U("LineJoint") )
+        ( C2U( "LineColor" ),             C2U( "LineColor" ) )
+        ( C2U( "LineDashName" ),          C2U( "LineDashName" ) )
+        ( C2U( "LineJoint" ),             C2U( "LineJoint" ) )
+        ( C2U( "LineStyle" ),             C2U( "LineStyle" ) )
+        ( C2U( "LineTransparence" ),      C2U( "LineTransparence" ) )
+        ( C2U( "LineWidth" ),             C2U( "LineWidth" ) )
         ;
     return m_aShapePropertyMapForLineProperties;
+}
+
+//static
+const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFillAndLineProperties()
+{
+    static tMakePropertyNameMap m_aShapePropertyMapForFillAndLineProperties =
+        tMakePropertyNameMap
+        ( PropertyMapper::getPropertyNameMapForFillProperties() )
+        ( PropertyMapper::getPropertyNameMapForLineProperties() )
+        ;
+
+    return m_aShapePropertyMapForFillAndLineProperties;
 }
 
 //static
@@ -321,12 +344,13 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesPrope
     //shape property -- chart model object property
     static tMakePropertyNameMap m_aShapePropertyMapForLineSeriesProperties =
         tMakePropertyNameMap
-        ( C2U( "LineStyle" ), C2U("LineStyle") )
-        ( C2U( "LineWidth" ), C2U("LineWidth") )
-        ( C2U( "LineDash" ), C2U("LineDash") )
-        ( C2U( "LineColor" ), C2U("Color") )
-        ( C2U( "LineTransparence" ), C2U("Transparency") )
-//         ( C2U( "LineJoint" ), C2U("LineJoint") )
+        ( C2U( "LineColor" ),           C2U("Color") )
+        ( C2U( "LineDashName" ),        C2U("LineDashName") )
+//      ( C2U( "LineJoint" ),           C2U("LineJoint") )
+        ( C2U( "LineStyle" ),           C2U("LineStyle") )
+        ( C2U( "LineTransparence" ),    C2U("Transparency") )
+        ( C2U( "LineWidth" ),           C2U("LineWidth") )
+
         ;
     return m_aShapePropertyMapForLineSeriesProperties;
 }
@@ -337,18 +361,32 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesPro
     //shape property -- chart model object property
     static tMakePropertyNameMap m_aShapePropertyMapForFilledSeriesProperties =
         tMakePropertyNameMap
-        ( C2U( "FillStyle" ), C2U("FillStyle") )
-        ( C2U( "FillColor" ), C2U("Color") )
-        ( C2U( "FillTransparence" ), C2U("Transparency") )
-        ( C2U( "FillGradient" ), C2U("Gradient") )
-        ( C2U( "FillHatch" ), C2U("Hatch") )
-
-        ( C2U( "LineStyle" ), C2U("BorderStyle") )
-        ( C2U( "LineWidth" ), C2U("BorderWidth") )
-        ( C2U( "LineDash" ), C2U("BorderDash") )
-        ( C2U( "LineColor" ), C2U("BorderColor") )
-        ( C2U( "LineTransparence" ), C2U("BorderTransparency") )
-//         ( C2U( "LineJoint" ), C2U("LineJoint") )
+        ( C2U( "FillBackground"),       C2U("FillBackground") )
+        ( C2U( "FillBitmapName" ),      C2U("FillBitmapName") )
+        ( C2U( "FillColor" ),           C2U("Color") )
+        ( C2U( "FillGradientName" ),    C2U("GradientName") )
+        ( C2U( "FillGradientStepCount" ), C2U( "GradientStepCount" ) )
+        ( C2U( "FillHatchName" ),       C2U("HatchName") )
+        ( C2U( "FillStyle" ),           C2U("FillStyle") )
+        ( C2U( "FillTransparence" ),    C2U("Transparency") )
+        ( C2U( "FillTransparenceGradientName" ), C2U("TransparencyGradientName") )
+        //bitmap properties
+        ( C2U( "FillBitmapMode" ),        C2U( "FillBitmapMode" ) )
+        ( C2U( "FillBitmapSizeX" ),       C2U( "FillBitmapSizeX" ) )
+        ( C2U( "FillBitmapSizeY" ),       C2U( "FillBitmapSizeY" ) )
+        ( C2U( "FillBitmapLogicalSize" ), C2U( "FillBitmapLogicalSize" ) )
+        ( C2U( "FillBitmapOffsetX" ),     C2U( "FillBitmapOffsetX" ) )
+        ( C2U( "FillBitmapOffsetY" ),     C2U( "FillBitmapOffsetY" ) )
+        ( C2U( "FillBitmapRectanglePoint" ),C2U( "FillBitmapRectanglePoint" ) )
+        ( C2U( "FillBitmapPositionOffsetX" ),C2U( "FillBitmapPositionOffsetX" ) )
+        ( C2U( "FillBitmapPositionOffsetY" ),C2U( "FillBitmapPositionOffsetY" ) )
+        //line properties
+        ( C2U( "LineColor" ),           C2U("BorderColor") )
+        ( C2U( "LineDashName" ),        C2U("BorderDashName") )
+//      ( C2U( "LineJoint" ),           C2U("LineJoint") )
+        ( C2U( "LineStyle" ),           C2U("BorderStyle") )
+        ( C2U( "LineTransparence" ),    C2U("BorderTransparency") )
+        ( C2U( "LineWidth" ),           C2U("BorderWidth") )
         ;
     return m_aShapePropertyMapForFilledSeriesProperties;
 }
@@ -360,17 +398,40 @@ void PropertyMapper::setMultiProperties(
                 , const ::com::sun::star::uno::Reference<
                   ::com::sun::star::beans::XPropertySet >& xTarget )
 {
+    bool bSuccess = false;
     try
     {
         uno::Reference< beans::XMultiPropertySet > xShapeMultiProp( xTarget, uno::UNO_QUERY );
         if( xShapeMultiProp.is() )
         {
-            xShapeMultiProp->setPropertyValues( rNames,rValues );
+            xShapeMultiProp->setPropertyValues( rNames, rValues );
+            bSuccess = true;
         }
-        else
+    }
+    catch( uno::Exception& e )
+    {
+        ASSERT_EXCEPTION( e ); //if this occurs more often think of removing the XMultiPropertySet completly for better performance
+    }
+
+    if(!bSuccess)
+    try
+    {
+        sal_Int32 nCount = std::max( rNames.getLength(), rValues.getLength() );
+        rtl::OUString aPropName;
+        uno::Any aValue;
+        for( sal_Int32 nN = 0; nN < nCount; nN++ )
         {
-            OSL_ENSURE( false, "Object does not support XMultiPropertySet" );
-            //@todo: if no multipropertyset is available try the unperformant normal XPropertySet
+            aPropName = rNames[nN];
+            aValue = rValues[nN];
+
+            try
+            {
+                xTarget->setPropertyValue( aPropName, aValue );
+            }
+            catch( uno::Exception& e )
+            {
+                ASSERT_EXCEPTION( e );
+            }
         }
     }
     catch( uno::Exception& e )
@@ -408,6 +469,7 @@ void PropertyMapper::getTextLabelMultiPropertyLists(
             aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextMaximumFrameHeight"), uno::makeAny(nLimitedSpace) ) ); //sal_Int32
         else
             aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextMaximumFrameWidth"), uno::makeAny(nLimitedSpace) ) ); //sal_Int32
+        aValueMap.insert( tPropertyNameValueMap::value_type( C2U("ParaIsHyphenation"), uno::makeAny(sal_True) ) );
     }
 
     /*
