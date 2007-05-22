@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 01:41:33 $
+#   last change: $Author: vg $ $Date: 2007-05-22 19:14:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,16 +51,21 @@ ENABLE_EXCEPTIONS=	TRUE
 
 #object files to build and link together to lib $(SLB)$/$(TARGET).lib
 SLOFILES = \
-    $(SLO)$/VMeterBase.obj \
+    $(SLO)$/VAxisOrGridBase.obj \
+    $(SLO)$/VAxisBase.obj \
     $(SLO)$/TickmarkHelper.obj \
+    $(SLO)$/MinimumAndMaximumSupplier.obj \
     $(SLO)$/ScaleAutomatism.obj \
     $(SLO)$/VAxisProperties.obj \
     $(SLO)$/VCartesianAxis.obj \
     $(SLO)$/VCartesianGrid.obj \
     $(SLO)$/VCartesianCoordinateSystem.obj \
     $(SLO)$/VPolarAxis.obj \
+    $(SLO)$/VPolarAngleAxis.obj \
+    $(SLO)$/VPolarRadiusAxis.obj \
     $(SLO)$/VPolarGrid.obj \
     $(SLO)$/VPolarCoordinateSystem.obj \
+    $(SLO)$/ExplicitCategoriesProvider.obj \
     $(SLO)$/VCoordinateSystem.obj
 
 # --- Targets -----------------------------------------------------------------
