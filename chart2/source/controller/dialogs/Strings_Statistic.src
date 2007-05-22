@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Strings_Statistic.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:59:05 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:30:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,4 +74,9 @@ String STR_REGRESSION_EXP
 String STR_REGRESSION_POWER
 {
     Text [ en-US ] = "Power regression" ;
+};
+
+String STR_STATISTICS_IN_LEGEND
+{
+    Text [ en-US ] = "%REGRESSIONCURVE for %SERIESNAME" ;
 };
