@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 13:49:51 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:40:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,6 +152,12 @@
 #endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
+#endif
+#ifndef _UNOCHART_HXX
+#include <unochart.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
@@ -1847,6 +1853,11 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
                     xRet = Reference < XInterface > ( *new SwXPrintPreviewSettings ( pDocShell->GetDoc() ) );
                 else if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.DocumentSettings") ) )
                     xRet = Reference < XInterface > ( *new SwXDocumentSettings ( this ) );
+            }
+            else if (sCategory == C2U ("chart2") )
+            {
+                if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.data.DataProvider") ) )
+                    xRet = Reference < XInterface > ( dynamic_cast< chart2::data::XDataProvider * >(pDocShell->getIDocumentChartDataProviderAccess()->GetChartDataProvider()) );
             }
             if(!xRet.is())
             {
