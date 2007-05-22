@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Linear3DTransformation.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:35:56 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:24:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include "Linear3DTransformation.hxx"
+#include <algorithm>
 
 using namespace ::com::sun::star;
 
@@ -45,8 +46,9 @@ using ::com::sun::star::uno::RuntimeException;
 namespace chart
 {
 
-    Linear3DTransformation::Linear3DTransformation( const drawing::HomogenMatrix& rHomMatrix )
+    Linear3DTransformation::Linear3DTransformation( const drawing::HomogenMatrix& rHomMatrix, bool bSwapXAndY )
     : m_Matrix(rHomMatrix)
+    , m_bSwapXAndY(bSwapXAndY)
 {}
 
 Linear3DTransformation::~Linear3DTransformation()
@@ -58,6 +60,11 @@ Sequence< double > SAL_CALL Linear3DTransformation::transform(
     throw (RuntimeException,
            lang::IllegalArgumentException)
 {
+    double fX = rSourceValues[0];
+    double fY = rSourceValues[1];
+    double fZ = rSourceValues[2];
+    if(m_bSwapXAndY)
+        std::swap(fX,fY);
     /*
     ::basegfx::B3DPoint aSource( SequenceToB3DPoint( rSourceValues ) );
     ::basegfx::B3DPoint aTarget = m_Matrix*aSource;
@@ -66,27 +73,27 @@ Sequence< double > SAL_CALL Linear3DTransformation::transform(
     Sequence< double > aNewVec(3);
     double fZwi;
 
-    fZwi = m_Matrix.Line1.Column1 * rSourceValues[0]
-         + m_Matrix.Line1.Column2 * rSourceValues[1]
-         + m_Matrix.Line1.Column3 * rSourceValues[2]
+    fZwi = m_Matrix.Line1.Column1 * fX
+         + m_Matrix.Line1.Column2 * fY
+         + m_Matrix.Line1.Column3 * fZ
          + m_Matrix.Line1.Column4;
     aNewVec[0] = fZwi;
 
-    fZwi = m_Matrix.Line2.Column1 * rSourceValues[0]
-         + m_Matrix.Line2.Column2 * rSourceValues[1]
-         + m_Matrix.Line2.Column3 * rSourceValues[2]
+    fZwi = m_Matrix.Line2.Column1 * fX
+         + m_Matrix.Line2.Column2 * fY
+         + m_Matrix.Line2.Column3 * fZ
          + m_Matrix.Line2.Column4;
     aNewVec[1] = fZwi;
 
-    fZwi = m_Matrix.Line3.Column1 * rSourceValues[0]
-         + m_Matrix.Line3.Column2 * rSourceValues[1]
-         + m_Matrix.Line3.Column3 * rSourceValues[2]
+    fZwi = m_Matrix.Line3.Column1 * fX
+         + m_Matrix.Line3.Column2 * fY
+         + m_Matrix.Line3.Column3 * fZ
          + m_Matrix.Line3.Column4;
     aNewVec[2] = fZwi;
 
-    fZwi = m_Matrix.Line4.Column1 * rSourceValues[0]
-         + m_Matrix.Line4.Column2 * rSourceValues[1]
-         + m_Matrix.Line4.Column3 * rSourceValues[2]
+    fZwi = m_Matrix.Line4.Column1 * fX
+         + m_Matrix.Line4.Column2 * fY
+         + m_Matrix.Line4.Column3 * fZ
          + m_Matrix.Line4.Column4;
     if(fZwi != 1.0 && fZwi != 0.0)
     {
