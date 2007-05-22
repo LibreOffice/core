@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_EditData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:04:28 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:03:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,26 +38,28 @@
 #include "ChartController.hxx"
 #include "macros.hxx"
 
-#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include "dlg_DataEditor.hxx"
+#include "DataSourceHelper.hxx"
+#include "DiagramHelper.hxx"
+#include "ControllerLockGuard.hxx"
+#include "UndoGuard.hxx"
+#include "ResId.hxx"
+#include "Strings.hrc"
+
+// for RET_OK
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
 #endif
-#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
-#include <com/sun/star/embed/EmbedStates.hpp>
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
-#ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
-#include <com/sun/star/embed/XVisualObject.hpp>
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
 #endif
-#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
-#include <com/sun/star/embed/Aspects.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XCOMPONENTSUPPLIER_HPP_
-#include <com/sun/star/embed/XComponentSupplier.hpp>
-#endif
+
 #ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XRANGESELECTION_HPP_
-#include <com/sun/star/sheet/XRangeSelection.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -73,34 +75,21 @@ void ChartController::executeDispatch_EditData()
     Reference< chart2::XChartDocument > xChartDoc( m_aModel->getModel(), uno::UNO_QUERY );
     if( xChartDoc.is())
     {
-        Reference< embed::XEmbeddedObject > xEmbObj( xChartDoc->getDataEditorForInternalData() );
-        if( xEmbObj.is())
+        Window* pParent( NULL );
+
+        Reference< ::com::sun::star::chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider());
+
         {
-            try
-            {
-                xEmbObj->setContainerName( C2U( "Chart Data" ));
-                xEmbObj->changeState( embed::EmbedStates::ACTIVE );
-
-                Reference< embed::XVisualObject > xVisObj( xEmbObj, uno::UNO_QUERY );
-                if( xVisObj.is())
-                {
-                    xVisObj->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT,
-                                                awt::Size( 5000, 3000 ));
-                }
-
-                // just a test
-//                 Reference< embed::XComponentSupplier > xCompSupp( xEmbObj, uno::UNO_QUERY );
-//                 Reference< frame::XModel > xCalcModel( xCompSupp->getComponent(), uno::UNO_QUERY_THROW );
-//                 Reference< sheet::XRangeSelection > xRangeSel(
-//                     xCalcModel->getCurrentController(), uno::UNO_QUERY_THROW );
-
-//                 Sequence< beans::PropertyValue > aArgs;
-//                 xRangeSel->startRangeSelection( aArgs );
-            }
-            catch( const uno::Exception & ex )
-            {
-                ASSERT_EXCEPTION( ex );
-            }
+            // /--
+            ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+            UndoLiveUpdateGuardWithData aUndoGuard(
+                ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_CHART_DATA ))),
+                m_aUndoManager, m_aModel->getModel());
+            DataEditor aDataEditorDialog( pParent, xChartDoc, m_xCC );
+            // the dialog has no OK/Cancel
+            aDataEditorDialog.Execute();
+            aUndoGuard.commitAction();
+            // \--
         }
     }
 }
