@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuins2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:12:39 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:06:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,8 +56,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
 #include <svtools/stritem.hxx>
-#include <sch/schdll.hxx>
-#include <sch/memchrt.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdview.hxx>
 #include <svx/pfiledlg.hxx>
@@ -71,8 +69,12 @@
 #include <svtools/soerr.hxx>
 #include <svx/svxdlg.hxx>
 #include <sot/clsids.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdundo.hxx>
 
-// BM --
+
+// BM/IHA --
 #include <cppuhelper/component_context.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -80,13 +82,17 @@
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/chart2/XDataProvider.hpp>
-#include <com/sun/star/chart2/XDataReceiver.hpp>
-
-#include "ScDevChart.hxx"
+#include <com/sun/star/chart2/data/XDataProvider.hpp>
+#include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/chart/ChartDataRowSource.hpp>
+#include <cppuhelper/bootstrap.hxx>
 
 using namespace ::com::sun::star;
-// BM --
+// BM/IHA --
 
 // erAck
 #include "chart2uno.hxx"
@@ -110,120 +116,102 @@ extern SdrObject* pSkipPaintObj;            // output.cxx - dieses Objekt nicht 
 #define IS_AVAILABLE(WhichId,ppItem) \
     (pReqArgs->GetItemState((WhichId), TRUE, ppItem ) == SFX_ITEM_SET)
 
-void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& aIPObj, ScViewData* pViewData, Window* pWin )
+void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScViewData* pViewData,
+                    const rtl::OUString& rRangeParam )
 {
-    SCCOL nCol1 = 0;
-    SCROW nRow1 = 0;
-    SCTAB nTab1 = 0;
-    SCCOL nCol2 = 0;
-    SCROW nRow2 = 0;
-    SCTAB nTab2 = 0;
+    ScDocShell* pDocShell = pViewData->GetDocShell();
+    ScDocument* pScDoc = pDocShell->GetDocument();
 
-    ScMarkData& rMark = pViewData->GetMarkData();
-    if ( !rMark.IsMarked() )
-        pViewData->GetView()->MarkDataArea( TRUE );
-
-    if ( pViewData->GetSimpleArea( nCol1,nRow1,nTab1, nCol2,nRow2,nTab2 ) )
+    rtl::OUString aRangeString( rRangeParam );
+    if ( !aRangeString.getLength() )
     {
-        PutInOrder( nCol1, nCol2 );
-        PutInOrder( nRow1, nRow2 );
-        if ( nCol2>nCol1 || nRow2>nRow1 )
+        SCCOL nCol1 = 0;
+        SCROW nRow1 = 0;
+        SCTAB nTab1 = 0;
+        SCCOL nCol2 = 0;
+        SCROW nRow2 = 0;
+        SCTAB nTab2 = 0;
+
+        ScMarkData& rMark = pViewData->GetMarkData();
+        if ( !rMark.IsMarked() )
+            pViewData->GetView()->MarkDataArea( TRUE );
+
+        if ( pViewData->GetSimpleArea( nCol1,nRow1,nTab1, nCol2,nRow2,nTab2 ) )
         {
-            String aChartName = pViewData->GetDocShell()->GetEmbeddedObjectContainer().GetEmbeddedObjectName( aIPObj );
+            PutInOrder( nCol1, nCol2 );
+            PutInOrder( nRow1, nRow2 );
+            if ( nCol2>nCol1 || nRow2>nRow1 )
+            {
+                ScDocument* pDoc = pViewData->GetDocument();
+                pDoc->LimitChartArea( nTab1, nCol1,nRow1, nCol2,nRow2 );
 
-            ScDocument* pDoc = pViewData->GetDocument();
-            pDoc->LimitChartArea( nTab1, nCol1,nRow1, nCol2,nRow2 );
+                String aStr;
+                ScRange aRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+                aRange.Format( aStr, SCR_ABS_3D, pScDoc );
+                aRangeString = aStr;
+            }
+        }
+    }
 
-                //  Chart-Collection gibt's nicht mehr
+    if ( aRangeString.getLength() )
+    {
+        // connect to Calc data (if no range string, leave chart alone, with its own data)
 
-            ScRange aRange( nCol1,nRow1,nTab1, nCol2,nRow2,nTab1 );
-            ScChartListener* pCL = new ScChartListener( aChartName, pDoc, aRange );
-            pDoc->GetChartListenerCollection()->Insert( pCL );
-            pCL->StartListeningTo();
+        uno::Reference< ::com::sun::star::chart2::data::XDataReceiver > xReceiver;
+        uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
+        if( xCompSupp.is())
+            xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
+        OSL_ASSERT( xReceiver.is());
+        if( xReceiver.is() )
+        {
+            uno::Reference< chart2::data::XDataProvider > xDataProvider = new ScChart2DataProvider( pScDoc );
+            xReceiver->attachDataProvider( xDataProvider );
 
-            ScChartArray aParam( pDoc, nTab1, nCol1,nRow1, nCol2,nRow2, String() );
-            SchMemChart* pMemChart = aParam.CreateMemChart();
-            // TODO/LATER: looks like there is no need to update replacement, but it should be checked.
-            SchDLL::Update( aIPObj, pMemChart, pWin );
-            delete pMemChart;
+            uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pDocShell->GetModel(), uno::UNO_QUERY );
+            xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
+
+            // Same behavior as with old chart: Always assume data series in columns
+            chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
+            bool bHasCategories = false;
+            bool bFirstCellAsLabel = false;
+
+            // use ScChartPositioner to auto-detect column/row headers (like ScChartArray in old version)
+            ScRangeListRef aRangeListRef( new ScRangeList );
+            aRangeListRef->Parse( aRangeString, pScDoc );
+            if ( aRangeListRef->Count() )
+            {
+                ScChartPositioner aChartPositioner( pScDoc, aRangeListRef );
+                if ( eDataRowSource == chart::ChartDataRowSource_COLUMNS )
+                {
+                    bHasCategories = aChartPositioner.HasRowHeaders();
+                    bFirstCellAsLabel = aChartPositioner.HasColHeaders();
+                }
+                else    // in case the default is changed
+                {
+                    bHasCategories = aChartPositioner.HasColHeaders();
+                    bFirstCellAsLabel = aChartPositioner.HasRowHeaders();
+                }
+            }
+
+            uno::Sequence< beans::PropertyValue > aArgs( 4 );
+            aArgs[0] = beans::PropertyValue(
+                ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
+                uno::makeAny( aRangeString ), beans::PropertyState_DIRECT_VALUE );
+            aArgs[1] = beans::PropertyValue(
+                ::rtl::OUString::createFromAscii("HasCategories"), -1,
+                uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
+            aArgs[2] = beans::PropertyValue(
+                ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
+                uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
+            aArgs[3] = beans::PropertyValue(
+                ::rtl::OUString::createFromAscii("DataRowSource"), -1,
+                uno::makeAny( eDataRowSource ), beans::PropertyState_DIRECT_VALUE );
+            xReceiver->setArguments( aArgs );
+
+            // don't create chart listener here (range may be modified in chart dialog)
         }
     }
 }
-
-#ifdef WNT
-#pragma optimize("",off)
-#endif
-
-void lcl_ChartInit2( const uno::Reference < embed::XEmbeddedObject >& aIPObj, ScViewData* pViewData, Window* pWin,
-                        const SfxItemSet* pReqArgs, const String& rChartName )
-{
-    ScDocument* pDoc = pViewData->GetDocument();
-    ScMarkData& rMark = pViewData->GetMarkData();
-
-    const SfxPoolItem* pItem;
-    BOOL    bRowHeader = TRUE;
-    BOOL    bColHeader = TRUE;
-
-    if( IS_AVAILABLE( SID_ATTR_ROWHEADERS, &pItem ) )
-        bRowHeader = ((const SfxBoolItem*)pItem)->GetValue();
-
-    if( IS_AVAILABLE( SID_ATTR_COLHEADERS, &pItem ) )
-        bColHeader = ((const SfxBoolItem*)pItem)->GetValue();
-
-    SchMemChart* pMemChart = 0;
-    ScChartListener* pChartListener = 0;
-    BOOL bMulti;
-    if ( IS_AVAILABLE( FN_PARAM_5, &pItem ) )
-    {
-        String aStr( ((const SfxStringItem*)pItem)->GetValue() );
-        ScRangeListRef aRangeListRef( new ScRangeList() );
-        aRangeListRef->Parse( aStr, pDoc );
-
-        if ( aRangeListRef->Count() )
-        {
-            ScChartArray aParam( pDoc, aRangeListRef, String() );
-            aParam.SetHeaders( bColHeader, bRowHeader );
-            pMemChart = aParam.CreateMemChart();
-
-            pChartListener = new ScChartListener( rChartName, pDoc, aRangeListRef );
-            bMulti = TRUE;
-        }
-        else
-            bMulti = FALSE;
-    }
-    else
-        bMulti = FALSE;
-    if ( !bMulti )
-    {
-        ScRange aMarkRange;
-        rMark.GetMarkArea( aMarkRange );
-        SCCOL nColStart = aMarkRange.aStart.Col();
-        SCROW nRowStart = aMarkRange.aStart.Row();
-        SCCOL nColEnd = aMarkRange.aEnd.Col();
-        SCROW nRowEnd = aMarkRange.aEnd.Row();
-        SCTAB nTab = aMarkRange.aStart.Tab();
-
-        pDoc->LimitChartArea( nTab, nColStart, nRowStart, nColEnd, nRowEnd );
-
-            //  Chart-Collection gibt's nicht mehr
-
-        ScChartArray aParam( pDoc, nTab, nColStart, nRowStart, nColEnd, nRowEnd, String() );
-        aParam.SetHeaders( bColHeader, bRowHeader );
-        pMemChart = aParam.CreateMemChart();
-
-        pChartListener = new ScChartListener( rChartName, pDoc,
-            ScRange( nColStart, nRowStart, nTab, nColEnd, nRowEnd, nTab ) );
-    }
-    pDoc->GetChartListenerCollection()->Insert( pChartListener );
-    pChartListener->StartListeningTo();
-    // TODO/LATER: looks like there is no need to update replacement, but it should be checked.
-    SchDLL::Update( aIPObj, pMemChart, *pReqArgs, pWin );
-    delete pMemChart;
-}
-
-#ifdef WNT
-#pragma optimize("",on)
-#endif
 
 /*************************************************************************
 |*
@@ -395,7 +383,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP,
 
             //  Chart initialisieren ?
             if ( SvtModuleOptions().IsChart() && SotExchange::IsChart( SvGlobalName( xObj->getClassID() ) ) )
-                lcl_ChartInit( xObj, pViewSh->GetViewData(), pWin );
+                lcl_ChartInit( xObj, pViewSh->GetViewData(), rtl::OUString() );
 
             ScViewData* pData = pViewSh->GetViewData();
 
@@ -509,262 +497,322 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
     if( ! rReq.IsAPI() )
         rReq.Done();
 
-    if( ScDevChart::UseDevChart())
+    if( SvtModuleOptions().IsChart() )
     {
-        // BM --
-
-        uno::Reference< chart2::XDataProvider > xDataProvider = new
-            ScChart2DataProvider( pViewSh->GetViewData()->GetDocShell());
+        // ----------------------------------------
+        // BM/IHA --
 
         // get range
         ::rtl::OUString aRangeString;
-        const SfxPoolItem* pItem;
-        if ( IS_AVAILABLE( FN_PARAM_5, &pItem ) )
+        ScRange aPositionRange;             // cell range for chart positioning
+        if( pReqArgs )
+        {
+            const SfxPoolItem* pItem;
+            if( IS_AVAILABLE( FN_PARAM_5, &pItem ) )
             aRangeString = ::rtl::OUString( ((const SfxStringItem*)pItem)->GetValue());
 
-        uno::Reference< lang::XMultiServiceFactory > xMultServFac( ::comphelper::getProcessServiceFactory());
-        OSL_ASSERT( xMultServFac.is());
-        if( xMultServFac.is())
-        {
-            uno::Reference< frame::XComponentLoader > xLoader(
-                xMultServFac->createInstance(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.frame.Desktop" ))),
-                uno::UNO_QUERY );
-
-            OSL_ASSERT( xLoader.is());
-            if( xLoader.is())
-            {
-                uno::Sequence< beans::PropertyValue > aArgs;
-
-                uno::Reference< ::com::sun::star::chart2::XDataReceiver > xReceiver(
-                    xLoader->loadComponentFromURL(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:factory/chart" )),
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" )),
-                        0, // flags
-                        aArgs ),
-                    uno::UNO_QUERY );
-
-                OSL_ASSERT( xReceiver.is());
-                if( xReceiver.is())
-                {
-                    xReceiver->attachDataProvider( xDataProvider );
-                    xReceiver->setRangeRepresentation( aRangeString );
-                }
-            }
+            aPositionRange = pViewSh->GetViewData()->GetCurPos();
         }
         else
-            DBG_ERROR( "Couldn't get XMultiComponentFactory" );
-
-        return;
-        // BM --
-    }
-    else
-    {
-        if ( SvtModuleOptions().IsChart() )
         {
-            pView->UnmarkAll();
-            ::rtl::OUString aName;
+            ScMarkData& rMark = pViewSh->GetViewData()->GetMarkData();
+            bool bAutomaticMark = false;
+            if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
+            {
+                pViewSh->GetViewData()->GetView()->MarkDataArea( TRUE );
+                bAutomaticMark = true;
+            }
 
-            sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-            uno::Reference < embed::XEmbeddedObject > xObj =
-                pViewShell->GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID_60 ).GetByteSequence(), aName );
-            if ( !xObj.is() )
-                pViewSh->ErrorMessage( STR_ERR_INSERTOBJ );
+            ScMarkData aMultiMark( rMark );
+            aMultiMark.MarkToMulti();
+
+            ScRangeList aRanges;
+            aMultiMark.FillRangeListWithMarks( &aRanges, FALSE );
+            String aStr;
+            aRanges.Format( aStr, SCR_ABS_3D, pViewSh->GetViewData()->GetDocument() );
+            aRangeString = aStr;
+
+            // get "total" range for positioning
+            ULONG nCount = aRanges.Count();
+            if ( nCount > 0 )
+            {
+                aPositionRange = *aRanges.GetObject(0);
+                for (ULONG i=1; i<nCount; i++)
+                    aPositionRange.ExtendTo( *aRanges.GetObject(i) );
+            }
+
+            if(bAutomaticMark)
+                pViewSh->GetViewData()->GetView()->Unmark();
+        }
+
+        // ----------------------------------------
+        // adapted old code
+        pView->UnmarkAll();
+
+        ::rtl::OUString aName;
+        const sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+
+        uno::Reference < embed::XEmbeddedObject > xObj =
+            pViewShell->GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID_60 ).GetByteSequence(), aName );
+
+        uno::Reference< ::com::sun::star::chart2::data::XDataReceiver > xReceiver;
+        uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
+        if( xCompSupp.is())
+            xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
+
+        // lock the model to suppress any internal updates
+        uno::Reference< frame::XModel > xChartModel( xReceiver, uno::UNO_QUERY );
+        if( xChartModel.is() )
+            xChartModel->lockControllers();
+
+        ScRangeListRef aDummy;
+        Rectangle aMarkDest;
+        SCTAB nMarkTab;
+        BOOL bDrawRect = pViewShell->GetChartArea( aDummy, aMarkDest, nMarkTab );
+
+        //  Objekt-Groesse
+        awt::Size aSz = xObj->getVisualAreaSize( nAspect );
+        Size aSize( aSz.Width, aSz.Height );
+
+        MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
+
+        BOOL bSizeCh = FALSE;
+        if (bDrawRect && !aMarkDest.IsEmpty())
+        {
+            aSize = aMarkDest.GetSize();
+            bSizeCh = TRUE;
+        }
+        if (aSize.Height() <= 0 || aSize.Width() <= 0)
+        {
+            aSize.Width() = 5000;
+            aSize.Height() = 5000;
+            bSizeCh = TRUE;
+        }
+        if (bSizeCh)
+        {
+            aSize = Window::LogicToLogic( aSize, MapMode( MAP_100TH_MM ), MapMode( aMapUnit ) );
+            aSz.Width = aSize.Width();
+            aSz.Height = aSize.Height();
+            xObj->setVisualAreaSize( nAspect, aSz );
+        }
+
+        ScViewData* pData = pViewSh->GetViewData();
+        ScDocShell* pScDocSh = pData->GetDocShell();
+        ScDocument* pScDoc   = pScDocSh->GetDocument();
+        BOOL bUndo (pScDoc->IsUndoEnabled());
+
+        if( pReqArgs )
+        {
+            const SfxPoolItem* pItem;
+            UINT16 nToTable = 0;
+
+            if( IS_AVAILABLE( FN_PARAM_4, &pItem ) )
+            {
+                if ( pItem->ISA( SfxUInt16Item ) )
+                    nToTable = ((const SfxUInt16Item*)pItem)->GetValue();
+                else if ( pItem->ISA( SfxBoolItem ) )
+                {
+                    //  #46033# in der idl fuer Basic steht FN_PARAM_4 als SfxBoolItem
+                    //  -> wenn gesetzt, neue Tabelle, sonst aktuelle Tabelle
+
+                    if ( ((const SfxBoolItem*)pItem)->GetValue() )
+                        nToTable = static_cast<UINT16>(pScDoc->GetTableCount());
+                    else
+                        nToTable = static_cast<UINT16>(pData->GetTabNo());
+                }
+            }
             else
             {
-                ScRangeListRef aDummy;
-                Rectangle aMarkDest;
-                SCTAB nMarkTab;
-                BOOL bDrawRect = pViewShell->GetChartArea( aDummy, aMarkDest, nMarkTab );
+                if (bDrawRect)
+                    nToTable = static_cast<UINT16>(nMarkTab);
+                rReq.AppendItem( SfxUInt16Item( FN_PARAM_4, nToTable ) );
+            }
 
-                //  Objekt-Groesse
-                awt::Size aSz = xObj->getVisualAreaSize( nAspect );
-                Size aSize( aSz.Width, aSz.Height );
+            // auf neue Tabelle ausgeben?
+            if ( nToTable == pScDoc->GetTableCount() )
+            {
+                // dann los...
+                String      aTabName;
+                SCTAB       nNewTab = pScDoc->GetTableCount();
 
-                MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
+                pScDoc->CreateValidTabName( aTabName );
 
-                BOOL bSizeCh = FALSE;
-                if (bDrawRect && !aMarkDest.IsEmpty())
+                if ( pScDoc->InsertTab( nNewTab, aTabName ) )
                 {
-                    aSize = aMarkDest.GetSize();
-                    bSizeCh = TRUE;
-                }
-                if (aSize.Height() <= 0 || aSize.Width() <= 0)
-                {
-                    aSize.Width() = 5000;
-                    aSize.Height() = 5000;
-                    bSizeCh = TRUE;
-                }
-                if (bSizeCh)
-                {
-                    aSize = Window::LogicToLogic( aSize, MapMode( MAP_100TH_MM ), MapMode( aMapUnit ) );
-                    aSz.Width = aSize.Width();
-                    aSz.Height = aSize.Height();
-                    xObj->setVisualAreaSize( nAspect, aSz );
-                }
+                    BOOL bAppend = TRUE;
 
-                ScViewData* pData = pViewSh->GetViewData();
-                ScDocShell* pScDocSh = pData->GetDocShell();
-                ScDocument* pScDoc   = pScDocSh->GetDocument();
-                BOOL bUndo (pScDoc->IsUndoEnabled());
-
-                if( pReqArgs )
-                {
-                    lcl_ChartInit2( xObj, pData, pWin, pReqArgs, aName );
-                    const SfxPoolItem* pItem;
-                    UINT16 nToTable = 0;
-
-                    if( IS_AVAILABLE( FN_PARAM_4, &pItem ) )
+                    if (bUndo)
                     {
-                        if ( pItem->ISA( SfxUInt16Item ) )
-                            nToTable = ((const SfxUInt16Item*)pItem)->GetValue();
-                        else if ( pItem->ISA( SfxBoolItem ) )
-                        {
-                            //  #46033# in der idl fuer Basic steht FN_PARAM_4 als SfxBoolItem
-                            //  -> wenn gesetzt, neue Tabelle, sonst aktuelle Tabelle
-
-                            if ( ((const SfxBoolItem*)pItem)->GetValue() )
-                                nToTable = static_cast<UINT16>(pScDoc->GetTableCount());
-                            else
-                                nToTable = static_cast<UINT16>(pData->GetTabNo());
-                        }
-                    }
-                    else
-                    {
-                        if (bDrawRect)
-                            nToTable = static_cast<UINT16>(nMarkTab);
-                        rReq.AppendItem( SfxUInt16Item( FN_PARAM_4, nToTable ) );
+                        pScDocSh->GetUndoManager()->AddUndoAction(
+                            new ScUndoInsertTab( pScDocSh, nNewTab,
+                                                 bAppend, aTabName ) );
                     }
 
-                    // auf neue Tabelle ausgeben?
-                    if ( nToTable == pScDoc->GetTableCount() )
+                    pScDocSh->Broadcast( ScTablesHint( SC_TAB_INSERTED, nNewTab ) );
+                    pViewSh->SetTabNo( nNewTab, TRUE );
+                    pScDocSh->PostPaintExtras();            //! erst hinterher ???
+                }
+                else
+                {
+                    DBG_ERROR( "Could not create new table :-/" );
+                }
+            }
+            else if ( nToTable != pData->GetTabNo() )
+            {
+                pViewSh->SetTabNo( nToTable, TRUE );
+            }
+        }
+
+        lcl_ChartInit( xObj, pData, aRangeString );         // set source range, auto-detect column/row headers
+
+        //  Objekt-Position
+
+        Point aStart;
+        if ( bDrawRect )
+            aStart = aMarkDest.TopLeft();                       // marked by hand
+        else
+        {
+            // get chart position (from window size and data range)
+            aStart = pViewSh->GetChartInsertPos( aSize, aPositionRange );
+        }
+
+        Rectangle aRect (aStart, aSize);
+        SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
+
+        // Dieses Objekt nicht vor dem Aktivieren zeichnen
+        // (in MarkListHasChanged kommt ein Update)
+        pSkipPaintObj = pObj;
+
+        SdrPageView* pPV = pView->GetSdrPageView();
+
+//        pView->InsertObjectAtView(pObj, *pPV);//this call leads to an immidiate redraw and asks the chart for a visual representation
+
+        // use the page instead of the view to insert, so no undo action is created yet
+        SdrPage* pInsPage = pPV->GetPage();
+        pInsPage->InsertObject( pObj );
+        pView->UnmarkAllObj();
+        pView->MarkObj( pObj, pPV );
+        bool bAddUndo = true;               // add undo action later, unless the dialog is canceled
+
+        if (rReq.IsAPI())
+        {
+            if( xChartModel.is() )
+                xChartModel->unlockControllers();
+        }
+        else
+        {
+            //the controller will be unlocked by the dialog when the dialog is told to do so
+
+            // only activate object if not called via API (e.g. macro)
+            pViewShell->ActivateObject( (SdrOle2Obj*) pObj, SVVERB_SHOW );
+
+            //open wizard
+            //@todo get context from calc if that has one
+            uno::Reference< uno::XComponentContext > xContext(
+                ::cppu::defaultBootstrap_InitialComponentContext() );
+            if(xContext.is())
+            {
+                uno::Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );
+                if(xMCF.is())
+                {
+                    uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
+                        xMCF->createInstanceWithContext(
+                            rtl::OUString::createFromAscii("com.sun.star.comp.chart2.WizardDialog")
+                            , xContext), uno::UNO_QUERY);
+                    uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
+                    if( xChartModel.is() && xInit.is() )
                     {
-                        // dann los...
-                        String      aTabName;
-                        SCTAB       nNewTab = pScDoc->GetTableCount();
+                        uno::Reference< awt::XWindow > xDialogParentWindow(0);
+                        //  initialize dialog
+                        uno::Sequence<uno::Any> aSeq(2);
+                        uno::Any* pArray = aSeq.getArray();
+                        beans::PropertyValue aParam1;
+                        aParam1.Name = rtl::OUString::createFromAscii("ParentWindow");
+                        aParam1.Value <<= uno::makeAny(xDialogParentWindow);
+                        beans::PropertyValue aParam2;
+                        aParam2.Name = rtl::OUString::createFromAscii("ChartModel");
+                        aParam2.Value <<= uno::makeAny(xChartModel);
+                        pArray[0] <<= uno::makeAny(aParam1);
+                        pArray[1] <<= uno::makeAny(aParam2);
+                        xInit->initialize( aSeq );
 
-                        pScDoc->CreateValidTabName( aTabName );
-
-                        if ( pScDoc->InsertTab( nNewTab, aTabName ) )
+                        // try to set the dialog's position so it doesn't hide the chart
+                        uno::Reference < beans::XPropertySet > xDialogProps( xDialog, uno::UNO_QUERY );
+                        if ( xDialogProps.is() )
                         {
-                            BOOL bAppend = TRUE;
-
-                            if (bUndo)
+                            try
                             {
-                                pScDocSh->GetUndoManager()->AddUndoAction(
-                                    new ScUndoInsertTab( pScDocSh, nNewTab,
-                                                         bAppend, aTabName ) );
-                            }
+                                //get dialog size:
+                                awt::Size aDialogAWTSize;
+                                if( xDialogProps->getPropertyValue( ::rtl::OUString::createFromAscii("Size") )
+                                    >>= aDialogAWTSize )
+                                {
+                                    Size aDialogSize( aDialogAWTSize.Width, aDialogAWTSize.Height );
+                                    if ( aDialogSize.Width() > 0 && aDialogSize.Height() > 0 )
+                                    {
+                                        //calculate and set new position
+                                        Point aDialogPos = pViewShell->GetChartDialogPos( aDialogSize, aRect );
+                                        xDialogProps->setPropertyValue( ::rtl::OUString::createFromAscii("Position"),
+                                            uno::makeAny( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
+                                    }
+                                }
+                                //tell the dialog to unlock controller
+                                xDialogProps->setPropertyValue( ::rtl::OUString::createFromAscii("UnlockControllersOnExecute"),
+                                            uno::makeAny( sal_True ) );
 
-                            pScDocSh->Broadcast( ScTablesHint( SC_TAB_INSERTED, nNewTab ) );
-                            pViewSh->SetTabNo( nNewTab, TRUE );
-                            pScDocSh->PostPaintExtras();            //! erst hinterher ???
+                            }
+                            catch( uno::Exception& )
+                            {
+                                OSL_ASSERT( "Chart wizard couldn't be positioned automatically\n" );
+                            }
+                        }
+
+                        sal_Int16 nDialogRet = xDialog->execute();
+                        if( nDialogRet == ui::dialogs::ExecutableDialogResults::CANCEL )
+                        {
+                            // leave OLE inplace mode and unmark
+                            OSL_ASSERT( pViewShell );
+                            OSL_ASSERT( pView );
+                            pViewShell->DeactivateOle();
+                            pView->UnmarkAll();
+
+                            // old page view pointer is invalid after switching sheets
+                            pPV = pView->GetSdrPageView();
+
+                            // remove the chart
+                            OSL_ASSERT( pPV );
+                            SdrPage * pPage( pPV->GetPage());
+                            OSL_ASSERT( pPage );
+                            OSL_ASSERT( pObj );
+                            if( pPage )
+                                pPage->RemoveObject( pObj->GetOrdNum());
+
+                            bAddUndo = false;       // don't create the undo action for inserting
+
+                            // leave the draw shell
+                            pViewShell->SetDrawShell( FALSE );
                         }
                         else
                         {
-                            DBG_ERROR( "Could not create new table :-/" );
+                            OSL_ASSERT( nDialogRet == ui::dialogs::ExecutableDialogResults::OK );
+                            //@todo maybe move chart to different table
                         }
                     }
-                    else if ( nToTable != pData->GetTabNo() )
-                    {
-                        pViewSh->SetTabNo( nToTable, TRUE );
-                    }
+                    uno::Reference< lang::XComponent > xComponent( xDialog, uno::UNO_QUERY );
+                    if( xComponent.is())
+                        xComponent->dispose();
                 }
-                else
-                    lcl_ChartInit( xObj, pData, pWin );
-
-                //  Objekt-Position
-
-                Point aStart;
-                if ( bDrawRect )
-                    aStart = aMarkDest.TopLeft();                       // marked by hand
-                else
-                {
-                    SCCOL nC0, nC1;
-                    SCROW nR0, nR1;
-                    SCTAB nT0, nT1;
-                    if( pData->GetSimpleArea( nC0, nR0, nT0, nC1, nR1, nT1 )
-                        && ( nT0 == nT1 ) )
-                    {
-                        // Einfache Selektion in der gleichen Tabelle:
-                        // Positionieren 1/2 Spalte rechts
-                        // und 1 1/2 Zeilen unterhalb des Starts
-                        //ScDocument* pScDoc = pData->GetDocument();
-                        long x = 0, y = 0;
-                        SCCOL i;
-                        for( i = 0; i <= nC1; i++ )
-                            x += pScDoc->GetColWidth( i, nT0 );
-                        while( ++i <= MAXCOL )
-                        {
-                            USHORT n = pScDoc->GetColWidth( i, nT0 );
-                            if( n )
-                            {
-                                x += n / 2; break;
-                            }
-                        }
-                        y += pScDoc->FastGetRowHeight( 0, nR0, nT0);
-                        // Find the first non-hidden row with row height >0 and
-                        // add the half of it's height.
-                        SCROW j = pScDoc->FastGetFirstNonHiddenRow( nR0 + 1, nT0 );
-                        if (j <= MAXROW)
-                        {
-                            USHORT n = pScDoc->FastGetOriginalRowHeight( j, nT0);
-                            if (n)
-                                y += n / 2;
-                            else
-                            {   // bad luck, not hidden but height 0
-                                for( ++j; j <= MAXROW; ++j )
-                                {
-                                    n = pScDoc->FastGetRowHeight( j, nT0 );
-                                    if( n )
-                                    {
-                                        y += n / 2;
-                                        break;  // for
-                                    }
-                                }
-                            }
-                        }
-                        // Das ganze von Twips nach 1/100 mm
-                        x = (long) ((double) x * HMM_PER_TWIPS);
-                        y = (long) ((double) y * HMM_PER_TWIPS);
-                        if ( pScDoc->IsNegativePage( nT0 ) )
-                            x = -x;
-                        aStart = Point( x, y );
-                    }
-                    else
-                        aStart = pViewSh->GetInsertPos();
-
-                    // if not from marked rectangle, move position to left edge
-                    if ( pScDoc->IsNegativePage( nT0 ) )
-                        aStart.X() -= aSize.Width();
-                }
-
-                Rectangle aRect (aStart, aSize);
-                SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
-
-                // Dieses Objekt nicht vor dem Aktivieren zeichnen
-                // (in MarkListHasChanged kommt ein Update)
-                pSkipPaintObj = pObj;
-
-                SdrPageView* pPV = pView->GetSdrPageView();
-                pView->InsertObjectAtView(pObj, *pPV);
-
-                // Dies veranlaesst Chart zum sofortigen Update
-                //SvData aEmpty;
-
-                //aIPObj->SendDataChanged( aEmpty );
-
-                if (!rReq.IsAPI())
-                {
-                    // XXX Activate aus Makro ist toedlich !!! ???
-                    pViewShell->ActivateObject( (SdrOle2Obj*) pObj, SVVERB_SHOW );
-                }
-
-                pSkipPaintObj = NULL;
             }
         }
 
-        pViewShell->ResetChartArea();       // Einstellungen nur einmal auslesen
+        if ( bAddUndo )
+        {
+            // add undo action the same way as in SdrEditView::InsertObjectAtView
+            // (using UndoActionHdl etc.)
+            pView->AddUndo(pDoc->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
+        }
+
+        // BM/IHA --
     }
 }
 
