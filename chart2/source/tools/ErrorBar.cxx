@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ErrorBar.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:24:00 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:58:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,8 @@
 #include "precompiled_chart2.hxx"
 #include "ErrorBar.hxx"
 #include "macros.hxx"
-#include "algohelper.hxx"
 #include "LineProperties.hxx"
+#include "ContainerHelper.hxx"
 
 #ifndef CHART_PROPERTYHELPER_HXX
 #include "PropertyHelper.hxx"
@@ -124,11 +124,11 @@ void lcl_AddPropertiesToVector(
 }
 
 void lcl_AddDefaultsToMap(
-    ::chart::helper::tPropertyValueMap & rOutMap )
+    ::chart::tPropertyValueMap & rOutMap )
 {
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_ERROR_BAR_STYLE ));
     rOutMap[ PROP_ERROR_BAR_STYLE ] =
-        uno::makeAny( chart2::ErrorBarStyle_VARIANCE );
+        uno::makeAny( chart2::ErrorBarStyle_NONE );
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_ERROR_BAR_POS_ERROR ));
     rOutMap[ PROP_ERROR_BAR_POS_ERROR ] =
         uno::makeAny( 0.0 );
@@ -157,15 +157,14 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
         // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
-        ::chart::LineProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ true );
+        ::chart::LineProperties::AddPropertiesToVector( aProperties );
 
         // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::helper::PropertyNameLess() );
+                     ::chart::PropertyNameLess() );
 
         // transfer result to static Sequence
-        aPropSeq = ::chart::helper::VectorToSequence( aProperties );
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
     return aPropSeq;
@@ -188,11 +187,24 @@ namespace chart
 ErrorBar::ErrorBar(
     uno::Reference< uno::XComponentContext > const & xContext ) :
         ::property::OPropertySet( m_aMutex ),
-    m_xContext( xContext )
+    m_xContext( xContext ),
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+{}
+
+ErrorBar::ErrorBar( const ErrorBar & rOther ) :
+        ::property::OPropertySet( rOther, m_aMutex ),
+    m_xContext( rOther.m_xContext ),
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
 {}
 
 ErrorBar::~ErrorBar()
 {}
+
+uno::Reference< util::XCloneable > SAL_CALL ErrorBar::createClone()
+    throw (uno::RuntimeException)
+{
+    return uno::Reference< util::XCloneable >( new ErrorBar( *this ));
+}
 
 // ================================================================================
 
@@ -200,7 +212,7 @@ ErrorBar::~ErrorBar()
 uno::Any ErrorBar::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    static helper::tPropertyValueMap aStaticDefaults;
+    static tPropertyValueMap aStaticDefaults;
 
     // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -208,12 +220,10 @@ uno::Any ErrorBar::GetDefaultValue( sal_Int32 nHandle ) const
     {
         // initialize defaults
         lcl_AddDefaultsToMap( aStaticDefaults );
-        LineProperties::AddDefaultsToMap(
-            aStaticDefaults,
-            /* bIncludeStyleProperties = */ true );
+        LineProperties::AddDefaultsToMap( aStaticDefaults );
     }
 
-    helper::tPropertyValueMap::const_iterator aFound(
+    tPropertyValueMap::const_iterator aFound(
         aStaticDefaults.find( nHandle ));
 
     if( aFound == aStaticDefaults.end())
@@ -246,6 +256,60 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 
     return xInfo;
     // \--
+}
+
+// ____ XModifyBroadcaster ____
+void SAL_CALL ErrorBar::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+    throw (uno::RuntimeException)
+{
+    try
+    {
+        uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
+        xBroadcaster->addModifyListener( aListener );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+void SAL_CALL ErrorBar::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+    throw (uno::RuntimeException)
+{
+    try
+    {
+        uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
+        xBroadcaster->removeModifyListener( aListener );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+// ____ XModifyListener ____
+void SAL_CALL ErrorBar::modified( const lang::EventObject& aEvent )
+    throw (uno::RuntimeException)
+{
+    m_xModifyEventForwarder->modified( aEvent );
+}
+
+// ____ XEventListener (base of XModifyListener) ____
+void SAL_CALL ErrorBar::disposing( const lang::EventObject& Source )
+    throw (uno::RuntimeException)
+{
+    // nothing
+}
+
+// ____ OPropertySet ____
+void ErrorBar::firePropertyChangeEvent()
+{
+    fireModifyEvent();
+}
+
+void ErrorBar::fireModifyEvent()
+{
+    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
 // ================================================================================
