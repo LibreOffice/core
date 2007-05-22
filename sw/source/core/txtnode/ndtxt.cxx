@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 08:02:32 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:32:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,6 +187,8 @@
 #endif
 #include <istyleaccess.hxx>
 #include <SwStyleNameMapper.hxx>
+
+#include <swtable.hxx>
 
 SV_DECL_PTRARR( TmpHints, SwTxtAttr*, 0, 4 )
 
