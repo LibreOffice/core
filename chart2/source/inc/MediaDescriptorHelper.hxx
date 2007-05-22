@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MediaDescriptorHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:43:21 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:18:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,19 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
 #include <com/sun/star/awt/Rectangle.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
+#include <com/sun/star/io/XStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
+#include <com/sun/star/io/XOutputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
+#include <com/sun/star/embed/XStorage.hpp>
 #endif
 
 /*
@@ -129,8 +142,15 @@ public:
     sal_Bool            Hidden; //load document, invisible.
     sal_Bool            ISSET_Hidden;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                        InputStream; //content of document. //::com::sun::star::io::XInputStream
+    ::rtl::OUString     HierarchicalDocumentName;
+    sal_Bool            ISSET_HierarchicalDocumentName;
+
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
+                        OutputStream; //a stream to receive the document data for saving
+    sal_Bool            ISSET_OutputStream;
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+                        InputStream; //content of document.
     sal_Bool            ISSET_InputStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                         InteractionHandler; //  //::com::sun::star::task::XInteractionHandler
@@ -178,8 +198,7 @@ public:
     sal_Bool            ISSET_TemplateRegionName;
     sal_Bool            Unpacked;
     sal_Bool            ISSET_Unpacked;
-    ::com::sun::star::util::URL
-                        URL;// FileName, URL of the document.
+    ::rtl::OUString     URL;// FileName, URL of the document.
     sal_Bool            ISSET_URL;
     sal_Int16           Version; //storage version.
     sal_Bool            ISSET_Version;
@@ -189,6 +208,21 @@ public:
     sal_Bool            ISSET_ViewData;
     sal_Int16           ViewId; //id of the initial view.
     sal_Bool            ISSET_ViewId;
+
+    // new framework objects
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+                        Storage;
+    sal_Bool            ISSET_Storage;
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
+                        Stream;
+    sal_Bool            ISSET_Stream;
+
+    // undocumented SFX Properties
+    ::com::sun::star::uno::Sequence< sal_Int32 >
+                        WinExtent;
+    sal_Bool            ISSET_WinExtent;
+    sal_Bool            SetEmbedded;
+    sal_Bool            ISSET_SetEmbedded;
 
 protected:
     void impl_init();
