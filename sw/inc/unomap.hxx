@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:44:55 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:21:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,11 +131,12 @@
 #define PROPERTY_MAP_REDLINE_PORTION                    88
 #define PROPERTY_MAP_MAILMERGE                          89
 #define PROPERTY_MAP_FLDTYP_DROPDOWN                    90
-#define PROPERTY_MAP_TEXT_VIEW                          91
-#define PROPERTY_MAP_CONDITIONAL_PARA_STYLE             92
-#define PROPERTY_MAP_CHAR_AUTO_STYLE                    93
-#define PROPERTY_MAP_RUBY_AUTO_STYLE                    94
-#define PROPERTY_MAP_PARA_AUTO_STYLE                    95
+#define PROPERTY_MAP_CHART2_DATA_SEQUENCE               91
+#define PROPERTY_MAP_TEXT_VIEW                          92
+#define PROPERTY_MAP_CONDITIONAL_PARA_STYLE             93
+#define PROPERTY_MAP_CHAR_AUTO_STYLE                    94
+#define PROPERTY_MAP_RUBY_AUTO_STYLE                    95
+#define PROPERTY_MAP_PARA_AUTO_STYLE                    96
 #define PROPERTY_MAP_END                                97
 
 #define PROPERTY_SET_CHAR_STYLE             1
