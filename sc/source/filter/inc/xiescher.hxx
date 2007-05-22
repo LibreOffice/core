@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:21:45 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:57:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,7 @@ public:
     /** Reads the contents of the specified subrecord of an OBJ record from stream. */
     virtual void        ReadSubRecord( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize );
     /** Reads the client anchor from an msofbtClientAnchor Escher record. */
-    Rectangle           ReadClientAnchor( SvStream& rEscherStrm, const DffRecordHeader& rHeader );
+    void                ReadClientAnchor( SvStream& rEscherStrm, const DffRecordHeader& rHeader );
 
     /** Sets common object data from FTCMO subrecord. */
     void                SetObjData( sal_uInt16 nObjType, sal_uInt16 nObjId, sal_uInt16 nObjFlags );
@@ -111,6 +111,8 @@ public:
     void                SetShapeData( sal_uInt32 nShapeId, sal_uInt32 nShapeFlags, sal_uInt32 nShapeBlipId );
     /** Sets whether this is an area object (then its width and height must be greater than 0). */
     inline void         SetAreaObj( bool bAreaObj ) { mbAreaObj = bAreaObj; }
+    /** Sets the object anchor explicitly. */
+    void                SetClientAnchor( const XclEscherAnchor& rAnchor );
 
     /** If set, the SdrObject will not be created, processed, or inserted into the draw page. */
     inline void         SetInvalid() { mbValid = false; }
@@ -142,6 +144,8 @@ public:
     bool                IsValidSize( const Rectangle& rAnchorRect ) const;
     /** Returns the area in the sheet used by this object. */
     ScRange             GetUsedArea() const;
+    /** Returns the area on the drawing layer for this object. */
+    Rectangle           GetAnchorRect() const;
 
     /** Returns the needed size on the progress bar (calls virtual DoGetProgressSize() function). */
     sal_Size            GetProgressSize() const;
@@ -153,9 +157,6 @@ protected:
     virtual sal_Size    DoGetProgressSize() const;
     /** Derived classes may perform additional processing for the passed SdrObject. */
     virtual void        DoProcessSdrObj( SdrObject& rSdrObj ) const;
-
-    /** Creates an Escher anchor from the passed position (used for sheet charts). */
-    void                CreateEscherAnchor( const Rectangle& rAnchorRect );
 
 private:
     typedef ScfRef< XclEscherAnchor > XclEscherAnchorRef;
@@ -350,6 +351,8 @@ private:
 
 // ----------------------------------------------------------------------------
 
+struct XclChLineFormat;
+struct XclChAreaFormat;
 class XclImpChart;
 
 /** A chart object. This is the drawing object wrapper for the chart data. */
@@ -359,28 +362,31 @@ public:
     /** @param bOwnTab  True = chart is on an own sheet; false = chart is an embedded object. */
     explicit            XclImpChartObj( const XclImpRoot& rRoot, bool bOwnTab );
 
+    /** Reads remaining data from a BIFF5 OBJ record. */
+    void                ReadObj5( XclImpStream& rStrm );
     /** Reads the complete chart substream (BOF/EOF block).
         @descr  The passed stream must be located in the BOF record of the chart substream. */
     void                ReadChartSubStream( XclImpStream& rStrm );
 
-    /** Returns the embedded chart. */
-    inline const XclImpChart* GetChart() const { return mxChart.get(); }
-    /** Returns the object anchor of a sheet chart (chart fills one page). */
-    inline const Rectangle& GetAnchorRect() const { return maAnchorRect; }
+    /** Creates and returns a new SdrObject that contains the chart. Caller takes ownership! */
+    SdrObject*          CreateSdrObject( const Rectangle& rAnchorRect, ScfProgressBar& rProgress ) const;
 
 protected:
     /** Returns the needed size on the progress bar. */
     virtual sal_Size    DoGetProgressSize() const;
 
 private:
-    /** Calculates the anchor position of a sheet chart. */
-    void                CalcTabChartAnchor();
+    /** Calculates the object anchor of a sheet chart (chart fills one page). */
+    void                FinalizeTabChart();
 
 private:
-    typedef ScfRef< XclImpChart > XclImpChartRef;
+    typedef ScfRef< XclImpChart >       XclImpChartRef;
+    typedef ScfRef< XclChLineFormat >   XclChLineFmtRef;
+    typedef ScfRef< XclChAreaFormat >   XclChAreaFmtRef;
 
-    XclImpChartRef      mxChart;        /// The chart itself.
-    Rectangle           maAnchorRect;   /// Anchor position of sheet charts.
+    XclImpChartRef      mxChart;        /// The chart itself (BOF/EOF substream data).
+    XclChLineFmtRef     mxLineFmt;      /// Line formatting for chart frame (BIFF5).
+    XclChAreaFmtRef     mxAreaFmt;      /// Area formatting for chart frame (BIFF5).
     bool                mbOwnTab;       /// true = own sheet; false = embedded object.
 };
 
@@ -523,6 +529,9 @@ public:
 
     // *** Read Excel records *** ---------------------------------------------
 
+    /** Reads the OBJ record (BIFF5 only). */
+    void                ReadObj5( XclImpStream& rStrm );
+
     /** Reads the MSODRAWINGGROUP record. */
     void                ReadMsoDrawingGroup( XclImpStream& rStrm );
     /** Reads the MSODRAWING or MSODRAWINGSELECTION record. */
@@ -531,7 +540,7 @@ public:
     void                ReadNote( XclImpStream& rStrm );
 
     /** Inserts a new chart object and reads the chart substream (BOF/EOF block).
-        @descr  Used to import sheet charts, which do not have a corresponding OBJ record. */
+        @descr  Used to import chart sheets, which do not have a corresponding OBJ record. */
     void                ReadTabChart( XclImpStream& rStrm );
 
     // *** Drawing objects *** ------------------------------------------------
@@ -560,10 +569,13 @@ public:
 private:
     /** Reads contents of an Escher record and append data to internal Escher stream. */
     void                ReadEscherRecord( XclImpStream& rStrm );
-    /** Reads the OBJ record. */
-    void                ReadObj( XclImpStream& rStrm );
+    /** Reads a BIFF8 OBJ record following an MSODRAWING record. */
+    void                ReadObj8( XclImpStream& rStrm );
     /** Reads the TXO record. */
     void                ReadTxo( XclImpStream& rStrm );
+
+    /** Tries to start a complete chart substream by checking if next record is a BOF. */
+    bool                StartChartSubStream( XclImpStream& rStrm );
 
     /** Returns the size of the progress bar shown while processing all objects. */
     sal_Size            GetProgressSize() const;
@@ -585,7 +597,7 @@ private:
     XclImpObjMapById    maObjMapId;         /// Maps drawing objects to sheet index and object ID.
     XclImpTxoMap        maTxoMap;           /// Maps TXO textbox data to sheet index and object ID.
     XclImpChartObjList  maTabCharts;        /// Charts imported from Excel chart sheets.
-    XclImpDffMgrRef     mxDffManager;       /// The Escher stream converter.
+    XclImpDffMgrRef     mxDffManager;   /// The Escher stream converter.
     XclObjIdVec         maInvalidObjs;      /// All Escher objects to skip.
 };
 
@@ -594,10 +606,10 @@ private:
 /** This class reads an Escher property set (msofbtOPT record).
     @descr  It can return separate property values or an item set which contains
     items translated from these properties. */
-class XclImpEscherPropSet
+class XclImpEscherPropSet : protected XclImpRoot
 {
 public:
-    explicit            XclImpEscherPropSet( const XclImpDffManager& rDffManager );
+    explicit            XclImpEscherPropSet( const XclImpRoot& rRoot );
 
     /** Reads an Escher property set from the stream.
         @descr  The stream must point to the start of an Escher record containing properties. */
@@ -612,7 +624,8 @@ public:
 private:
     typedef ::std::auto_ptr< SvMemoryStream > SvMemoryStreamPtr;
 
-    DffPropertyReader   maPropReader;   /// Reads the properties from an SvStream.
+    XclImpObjectManager maObjManager;   /// Local object manager, contains SVX DFF manager.
+    XclImpDffManager&   mrDffManager;   /// Reference to DFF manager contained in object manager.
     SvMemoryStreamPtr   mxMemStrm;      /// Helper stream.
 };
 
