@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Scaling.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:29:41 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:05:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,15 @@ static const ::rtl::OUString lcl_aServiceName_Linear(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.LinearScaling" ));
 static const ::rtl::OUString lcl_aServiceName_Power(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.PowerScaling" ));
+
+static const ::rtl::OUString lcl_aImplementationName_Logarithmic(
+    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.LogarithmicScaling" ));
+static const ::rtl::OUString lcl_aImplementationName_Exponential(
+    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.ExponentialScaling" ));
+static const ::rtl::OUString lcl_aImplementationName_Linear(
+    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.LinearScaling" ));
+static const ::rtl::OUString lcl_aImplementationName_Power(
+    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.PowerScaling" ));
 }
 
 //.............................................................................
@@ -64,9 +73,10 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-LogarithmicScaling::LogarithmicScaling() :
+LogarithmicScaling::LogarithmicScaling( const uno::Reference< uno::XComponentContext > & xContext ) :
         m_fBase( 10.0 ),
-        m_fLogOfBase( log( 10.0 ) )
+        m_fLogOfBase( log( 10.0 ) ),
+        m_xContext( xContext )
 {
 }
 
@@ -106,10 +116,19 @@ LogarithmicScaling::getServiceName()
     return lcl_aServiceName_Logarithmic;
 }
 
+uno::Sequence< ::rtl::OUString > LogarithmicScaling::getSupportedServiceNames_Static()
+{
+    return uno::Sequence< ::rtl::OUString >( & lcl_aServiceName_Logarithmic, 1 );
+}
+
+// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+APPHELPER_XSERVICEINFO_IMPL( LogarithmicScaling, lcl_aServiceName_Logarithmic )
+
 // ----------------------------------------
 
-ExponentialScaling::ExponentialScaling() :
-        m_fBase( 10.0 )
+ExponentialScaling::ExponentialScaling( const uno::Reference< uno::XComponentContext > & xContext ) :
+        m_fBase( 10.0 ),
+        m_xContext( xContext )
 {
 }
 
@@ -148,7 +167,21 @@ ExponentialScaling::getServiceName()
     return lcl_aServiceName_Exponential;
 }
 
+uno::Sequence< ::rtl::OUString > ExponentialScaling::getSupportedServiceNames_Static()
+{
+    return uno::Sequence< ::rtl::OUString >( & lcl_aServiceName_Exponential, 1 );
+}
+
+// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+APPHELPER_XSERVICEINFO_IMPL( ExponentialScaling, lcl_aServiceName_Exponential )
+
 // ----------------------------------------
+
+LinearScaling::LinearScaling( const uno::Reference< uno::XComponentContext > & xContext ) :
+        m_fSlope( 1.0 ),
+        m_fOffset( 0.0 ),
+        m_xContext( xContext )
+{}
 
 LinearScaling::LinearScaling( double fSlope, double fOffset ) :
         m_fSlope( fSlope ),
@@ -187,7 +220,20 @@ LinearScaling::getServiceName()
     return lcl_aServiceName_Linear;
 }
 
+uno::Sequence< ::rtl::OUString > LinearScaling::getSupportedServiceNames_Static()
+{
+    return uno::Sequence< ::rtl::OUString >( & lcl_aServiceName_Linear, 1 );
+}
+
+// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+APPHELPER_XSERVICEINFO_IMPL( LinearScaling, lcl_aServiceName_Linear )
+
 // ----------------------------------------
+
+PowerScaling::PowerScaling( const uno::Reference< uno::XComponentContext > & xContext ) :
+        m_fExponent( 10.0 ),
+        m_xContext( xContext )
+{}
 
 PowerScaling::PowerScaling( double fExponent ) :
         m_fExponent( fExponent )
@@ -224,6 +270,14 @@ PowerScaling::getServiceName()
 {
     return lcl_aServiceName_Power;
 }
+
+uno::Sequence< ::rtl::OUString > PowerScaling::getSupportedServiceNames_Static()
+{
+    return uno::Sequence< ::rtl::OUString >( & lcl_aServiceName_Power, 1 );
+}
+
+// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+APPHELPER_XSERVICEINFO_IMPL( PowerScaling, lcl_aServiceName_Power )
 
 //.............................................................................
 } //namespace chart
