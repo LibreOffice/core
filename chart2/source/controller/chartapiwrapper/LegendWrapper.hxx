@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LegendWrapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:02:08 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:18:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,8 @@
 #ifndef CHART_LEGENDWRAPPER_HXX
 #define CHART_LEGENDWRAPPER_HXX
 
-#include "OPropertySet.hxx"
+#include "WrappedPropertySet.hxx"
+#include "ReferenceSizePropertyProvider.hxx"
 #include "ServiceMacros.hxx"
 
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
@@ -68,77 +69,35 @@
 #include <com/sun/star/chart2/XLegend.hpp>
 #endif
 
-namespace com { namespace sun { namespace star {
-namespace chart2
-{
-    class XTitle;
-}
-}}}
+#include <boost/shared_ptr.hpp>
 
 namespace chart
 {
+
 namespace wrapper
 {
 
-namespace impl
-{
-typedef ::cppu::WeakImplHelper3<
-    com::sun::star::drawing::XShape,
-    com::sun::star::lang::XComponent,
-    com::sun::star::lang::XServiceInfo >
-    LegendWrapper_Base;
-}
+class Chart2ModelContact;
 
-class LegendWrapper :
-        public impl::LegendWrapper_Base,
-        public ::property::OPropertySet
+class LegendWrapper : public ::cppu::ImplInheritanceHelper3<
+                      WrappedPropertySet
+                    , com::sun::star::drawing::XShape
+                    , com::sun::star::lang::XComponent
+                    , com::sun::star::lang::XServiceInfo
+                    >
+                    , public ReferenceSizePropertyProvider
 {
 public:
-    LegendWrapper( const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::chart2::XChartDocument > & xModel,
-                   const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::uno::XComponentContext > & xContext,
-                   ::osl::Mutex & _rMutex );
+    LegendWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~LegendWrapper();
-
-    ::osl::Mutex & GetMutex() const;
 
     /// XServiceInfo declarations
     APPHELPER_XSERVICEINFO_DECL()
 
-    /// merge XInterface implementations
-     DECLARE_XINTERFACE()
-    /// merge XTypeProvider implementations
-     DECLARE_XTYPEPROVIDER()
-
-protected:
-    // ____ OPropertySet ____
-    virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(::com::sun::star::beans::UnknownPropertyException);
-
-    // ____ OPropertySet ____
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-
-    virtual sal_Bool SAL_CALL convertFastPropertyValue
-        ( ::com::sun::star::uno::Any & rConvertedValue,
-          ::com::sun::star::uno::Any & rOldValue,
-          sal_Int32 nHandle,
-          const ::com::sun::star::uno::Any& rValue )
-        throw (::com::sun::star::lang::IllegalArgumentException);
-
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast
-        ( sal_Int32 nHandle,
-          const ::com::sun::star::uno::Any& rValue )
-        throw (::com::sun::star::uno::Exception);
-
-    virtual void SAL_CALL getFastPropertyValue
-        ( ::com::sun::star::uno::Any& rValue,
-          sal_Int32 nHandle ) const;
-
-    // ____ XPropertySet ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
-        getPropertySetInfo()
-        throw (::com::sun::star::uno::RuntimeException);
+    //ReferenceSizePropertyProvider
+    virtual void setCurrentSizeAsReference();
+    virtual ::com::sun::star::uno::Any getReferenceSize();
+    virtual ::com::sun::star::awt::Size getCurrentSizeForReference();
 
     // ____ XShape ____
     virtual ::com::sun::star::awt::Point SAL_CALL getPosition()
@@ -165,29 +124,15 @@ protected:
                                                ::com::sun::star::lang::XEventListener >& aListener )
         throw (::com::sun::star::uno::RuntimeException);
 
+protected:
+    // ____ WrappedPropertySet ____
+    virtual const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& getPropertySequence();
+    virtual const std::vector< WrappedProperty* > createWrappedProperties();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getInnerPropertySet();
+
 private:
-    mutable ::osl::Mutex &    m_rMutex;
-
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext >
-                        m_xContext;
-
-    ::cppu::OInterfaceContainerHelper
-                        m_aEventListenerContainer;
-
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XChartDocument >
-                        m_xChartDoc;
-
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XLegend >
-                        m_xLegend;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
-                        m_xLegendProp;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XFastPropertySet >
-                        m_xLegendFastProp;
+    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
 };
 
 } //  namespace wrapper
