@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ItemConverter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:02:17 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:00:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,9 +104,9 @@ uno::Reference< beans::XPropertySet > ItemConverter::GetPropertySet() const
     return m_xPropertySet;
 }
 
-void ItemConverter::_disposing( const lang::EventObject& _rSource )
+void ItemConverter::_disposing( const lang::EventObject& rSource )
 {
-    if( _rSource.Source == m_xPropertySet )
+    if( rSource.Source == m_xPropertySet )
     {
         m_bIsValid = false;
     }
@@ -115,7 +115,7 @@ void ItemConverter::_disposing( const lang::EventObject& _rSource )
 void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {
     const USHORT * pRanges = rOutItemSet.GetRanges();
-    ::rtl::OUString aPropName;
+    tPropertyNameWithMemberId aProperty;
     SfxItemPool & rPool = GetItemPool();
 
     OSL_ASSERT( pRanges != NULL );
@@ -132,7 +132,7 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
         OSL_ASSERT( nBeg <= nEnd );
         for( USHORT nWhich = nBeg; nWhich <= nEnd; ++nWhich )
         {
-            if( GetItemPropertyName( nWhich, aPropName ))
+            if( GetItemProperty( nWhich, aProperty ))
             {
                 // put the Property into the itemset
                 SfxPoolItem * pItem = rPool.GetDefaultItem( nWhich ).Clone();
@@ -141,8 +141,8 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                 {
                     try
                     {
-                        if( ! pItem->PutValue( m_xPropertySet->getPropertyValue( aPropName ),
-                                               0 // nMemberId
+                        if( ! pItem->PutValue( m_xPropertySet->getPropertyValue( aProperty.first ),
+                                               aProperty.second // nMemberId
                                 ))
                         {
                             delete pItem;
@@ -160,7 +160,7 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                                     ::rtl::OUStringToOString(
                                         ex.Message +
                                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                             " - unknown Property: " )) + aPropName,
+                                                             " - unknown Property: " )) + aProperty.first,
                                         RTL_TEXTENCODING_ASCII_US ).getStr());
                     }
                     catch( uno::Exception ex )
@@ -182,12 +182,6 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
             }
         }
     }
-}
-
-bool ItemConverter::GetItemPropertyName(
-    USHORT nWhichId, ::rtl::OUString & rOutName ) const
-{
-    return false;
 }
 
 void ItemConverter::FillSpecialItem(
@@ -212,22 +206,22 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     bool bItemsChanged = false;
     SfxItemIter aIter( rItemSet );
     const SfxPoolItem * pItem = aIter.FirstItem();
-    ::rtl::OUString aPropName;
+    tPropertyNameWithMemberId aProperty;
     uno::Any aValue;
 
     while( pItem )
     {
         if( rItemSet.GetItemState( pItem->Which(), FALSE ) == SFX_ITEM_SET )
         {
-            if( GetItemPropertyName( pItem->Which(), aPropName ))
+            if( GetItemProperty( pItem->Which(), aProperty ))
             {
-                pItem->QueryValue( aValue, 0 /* nMemberId */ );
+                pItem->QueryValue( aValue, aProperty.second /* nMemberId */ );
 
                 try
                 {
-                    if( aValue != m_xPropertySet->getPropertyValue( aPropName ))
+                    if( aValue != m_xPropertySet->getPropertyValue( aProperty.first ))
                     {
-                        m_xPropertySet->setPropertyValue( aPropName, aValue );
+                        m_xPropertySet->setPropertyValue( aProperty.first, aValue );
                         bItemsChanged = true;
                     }
                 }
@@ -237,7 +231,7 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
                                 ::rtl::OUStringToOString(
                                     ex.Message +
                                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                         " - unknown Property: " )) + aPropName,
+                                                         " - unknown Property: " )) + aProperty.first,
                                     RTL_TEXTENCODING_ASCII_US).getStr());
                 }
                 catch( uno::Exception ex )
