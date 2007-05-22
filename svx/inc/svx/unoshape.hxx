@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:46:09 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:15:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,6 +241,13 @@ class SVX_DLLPUBLIC SvxShape : public SvxShape_UnoImplHelper,
     // styles need this
     static sal_Bool SAL_CALL SetFillAttribute( sal_Int32 nWID, const ::rtl::OUString& rName, SfxItemSet& rSet, SdrModel* pModel );
     static sal_Bool SAL_CALL SetFillAttribute( sal_Int32 nWID, const ::rtl::OUString& rName, SfxItemSet& rSet );
+
+    /** same as SetFillAttribute but for property names instead of which ids,
+        and the property found is returned instead of set at the object
+        directly.
+     */
+    static ::com::sun::star::uno::Any SAL_CALL GetFillAttributeByName(
+        const ::rtl::OUString& rPropertyName, const ::rtl::OUString& rName, SdrModel* pModel );
 
     UNO3_GETIMPLEMENTATION_DECL( SvxShape )
 
