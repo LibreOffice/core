@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ErrorBar.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:39:55 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:16:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,10 @@
 #include "MutexContainer.hxx"
 #include "OPropertySet.hxx"
 #include "ServiceMacros.hxx"
+#include "ModifyListenerHelper.hxx"
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
@@ -48,9 +49,6 @@
 
 #ifndef _COM_SUN_STAR_CHART2_XREGRESSIONCURVE_HPP_
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
-#include <com/sun/star/chart2/XIdentifiable.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
@@ -62,29 +60,38 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
 #include <com/sun/star/lang/XServiceName.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
+#include <com/sun/star/util/XCloneable.hpp>
+#endif
 
 namespace chart
 {
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper1<
-        ::com::sun::star::lang::XServiceInfo >
+typedef ::cppu::WeakImplHelper4<
+        ::com::sun::star::lang::XServiceInfo,
+        ::com::sun::star::util::XCloneable,
+        ::com::sun::star::util::XModifyBroadcaster,
+        ::com::sun::star::util::XModifyListener >
     ErrorBar_Base;
 }
 
 class ErrorBar :
-        public helper::MutexContainer,
+        public MutexContainer,
         public impl::ErrorBar_Base,
         public ::property::OPropertySet
 {
 public:
-    ErrorBar( ::com::sun::star::uno::Reference<
-                  ::com::sun::star::uno::XComponentContext > const & xContext );
+    explicit ErrorBar(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XComponentContext > & xContext );
     virtual ~ErrorBar();
 
     /// XServiceInfo declarations
     APPHELPER_XSERVICEINFO_DECL()
+    /// establish methods for factory instatiation
+    APPHELPER_SERVICE_FACTORY_HELPER( ErrorBar )
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
@@ -92,6 +99,8 @@ public:
      DECLARE_XTYPEPROVIDER()
 
 protected:
+    ErrorBar( const ErrorBar & rOther );
+
     // ____ OPropertySet ____
     virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
         throw(::com::sun::star::beans::UnknownPropertyException);
@@ -104,10 +113,39 @@ protected:
         getPropertySetInfo()
         throw (::com::sun::star::uno::RuntimeException);
 
+    // ____ XCloneable ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XModifyBroadcaster ____
+    virtual void SAL_CALL addModifyListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeModifyListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XModifyListener ____
+    virtual void SAL_CALL modified(
+        const ::com::sun::star::lang::EventObject& aEvent )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XEventListener (base of XModifyListener) ____
+    virtual void SAL_CALL disposing(
+        const ::com::sun::star::lang::EventObject& Source )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ OPropertySet ____
+    virtual void firePropertyChangeEvent();
+
+    void fireModifyEvent();
+
 private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext >
                         m_xContext;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xModifyEventForwarder;
 };
 
 } //  namespace chart
