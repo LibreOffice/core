@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartType.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:10:56 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:46:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,13 +42,14 @@
 #include "OPropertySet.hxx"
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
 #include "ServiceMacros.hxx"
+#include "ModifyListenerHelper.hxx"
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -56,38 +57,108 @@
 #ifndef _COM_SUN_STAR_CHART2_XCHARTTYPE_HPP_
 #include <com/sun/star/chart2/XChartType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XDATASERIESCONTAINER_HPP_
+#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
+#include <com/sun/star/util/XCloneable.hpp>
+#endif
+
+#include <vector>
 
 namespace chart
 {
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper1<
-    ::com::sun::star::chart2::XChartType >
+typedef ::cppu::WeakImplHelper5<
+        ::com::sun::star::chart2::XChartType,
+        ::com::sun::star::chart2::XDataSeriesContainer,
+        ::com::sun::star::util::XCloneable,
+        ::com::sun::star::util::XModifyBroadcaster,
+        ::com::sun::star::util::XModifyListener >
     ChartType_Base;
 }
 
 class ChartType :
-    public helper::MutexContainer,
+    public MutexContainer,
     public impl::ChartType_Base,
     public ::property::OPropertySet
 {
 public:
-    ChartType( sal_Int32 nDim = 2 );
+    explicit ChartType(
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~ChartType();
 
 protected:
+    explicit ChartType( const ChartType & rOther );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+        GetComponentContext() const;
+
     // ____ XChartType ____
     // still abstract ! implement !
     virtual ::rtl::OUString SAL_CALL getChartType()
         throw (::com::sun::star::uno::RuntimeException) = 0;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem > SAL_CALL
+        createCoordinateSystem( ::sal_Int32 DimensionCount )
+        throw (::com::sun::star::lang::IllegalArgumentException,
+               ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+        getSupportedMandatoryRoles()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+        getSupportedOptionalRoles()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getRoleOfSequenceForSeriesLabel()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XDataSeriesContainer ____
+    virtual void SAL_CALL addDataSeries(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& aDataSeries )
+        throw (::com::sun::star::lang::IllegalArgumentException,
+               ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeDataSeries(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& aDataSeries )
+        throw (::com::sun::star::container::NoSuchElementException,
+               ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > > SAL_CALL getDataSeries()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setDataSeries(
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > >& aDataSeries )
+        throw (::com::sun::star::lang::IllegalArgumentException,
+               ::com::sun::star::uno::RuntimeException);
+
+    // ____ XModifyBroadcaster ____
+    virtual void SAL_CALL addModifyListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeModifyListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XModifyListener ____
+    virtual void SAL_CALL modified(
+        const ::com::sun::star::lang::EventObject& aEvent )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XEventListener (base of XModifyListener) ____
+    virtual void SAL_CALL disposing(
+        const ::com::sun::star::lang::EventObject& Source )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    void fireModifyEvent();
 
     // ____ OPropertySet ____
     virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
         throw(::com::sun::star::beans::UnknownPropertyException);
-
-    // ____ OPropertySet ____
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+
+    virtual void firePropertyChangeEvent();
 
     // ____ XPropertySet ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
@@ -101,15 +172,36 @@ protected:
 //           const ::com::sun::star::uno::Any& rValue )
 //      throw (::com::sun::star::lang::IllegalArgumentException);
 
-    // declare this in derived classes !
-    APPHELPER_XSERVICEINFO_DECL()
-
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
     /// merge XTypeProvider implementations
      DECLARE_XTYPEPROVIDER()
 
+    // not implemented
+// ____ XCloneable ____
+//    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
+//         throw (::com::sun::star::uno::RuntimeException);
+
+protected:
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xModifyEventForwarder;
+
 private:
+    void impl_addDataSeriesWithoutNotification(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XDataSeries >& aDataSeries );
+
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+        m_xContext;
+
+    typedef
+        ::std::vector< ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XDataSeries > >
+        tDataSeriesContainerType;
+
+    tDataSeriesContainerType  m_aDataSeries;
+
+    bool  m_bNotifyChanges;
 };
 
 } //  namespace chart
