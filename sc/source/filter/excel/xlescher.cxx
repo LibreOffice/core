@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlescher.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:17:29 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:51:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -434,11 +434,11 @@ String XclControlObjHelper::GetXclMacroName( const OUString& rScMacroName )
 {
     static const OUString saMacroNamePre = CREATE_OUSTRING( EXC_TBX_MACRONAME_PRE );
     static const OUString saMacroNameSuf = CREATE_OUSTRING( EXC_TBX_MACRONAME_SUF );
-    const sal_uInt32 snMacroNamePreLen = sizeof( EXC_TBX_MACRONAME_PRE ) - 1;
-    const sal_uInt32 snMacroNameSufLen = sizeof( EXC_TBX_MACRONAME_SUF ) - 1;
+    const sal_Int32 snMacroNamePreLen = static_cast< sal_Int32 >( sizeof( EXC_TBX_MACRONAME_PRE ) - 1 );
+    const sal_Int32 snMacroNameSufLen = static_cast< sal_Int32 >( sizeof( EXC_TBX_MACRONAME_SUF ) - 1 );
 
-    sal_uInt32 snScMacroNameLen = rScMacroName.getLength();
-    sal_uInt32 snXclMacroNameLen = snScMacroNameLen - snMacroNamePreLen - snMacroNameSufLen;
+    sal_Int32 snScMacroNameLen = rScMacroName.getLength();
+    sal_Int32 snXclMacroNameLen = snScMacroNameLen - snMacroNamePreLen - snMacroNameSufLen;
 
     String aXclMacroName;
     if( (snXclMacroNameLen > 0) && rScMacroName.match( saMacroNamePre, 0 ) &&
