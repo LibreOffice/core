@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valueacc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:13:13 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:32:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,10 +78,10 @@ ValueSetItem::~ValueSetItem()
 
 // -----------------------------------------------------------------------
 
-uno::Reference< accessibility::XAccessible > ValueSetItem::GetAccessible()
+uno::Reference< accessibility::XAccessible > ValueSetItem::GetAccessible( bool bIsTransientChildrenDisabled )
 {
     if( !mpxAcc )
-        mpxAcc = new uno::Reference< accessibility::XAccessible >( new ValueItemAcc( this ) );
+        mpxAcc = new uno::Reference< accessibility::XAccessible >( new ValueItemAcc( this, bIsTransientChildrenDisabled ) );
 
     return *mpxAcc;
 }
@@ -99,9 +99,10 @@ void ValueSetItem::ClearAccessible()
 // - ValueSetAcc -
 // ---------------
 
-ValueSetAcc::ValueSetAcc( ValueSet* pParent ) :
+ValueSetAcc::ValueSetAcc( ValueSet* pParent, bool bIsTransientChildrenDisabled ) :
     ValueSetAccComponentBase (m_aMutex),
-    mpParent( pParent )
+    mpParent( pParent ),
+    mbIsTransientChildrenDisabled( bIsTransientChildrenDisabled )
 {
 }
 
@@ -209,7 +210,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
     ValueSetItem* pItem = getItem (sal::static_int_cast< USHORT >(i));
 
     if( pItem )
-        xRet = pItem->GetAccessible();
+        xRet = pItem->GetAccessible( mbIsTransientChildrenDisabled );
     else
         throw lang::IndexOutOfBoundsException();
 
@@ -324,7 +325,8 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ValueSetAcc::getAc
     pStateSet->AddState (accessibility::AccessibleStateType::SENSITIVE);
     pStateSet->AddState (accessibility::AccessibleStateType::SHOWING);
     pStateSet->AddState (accessibility::AccessibleStateType::VISIBLE);
-    pStateSet->AddState (accessibility::AccessibleStateType::MANAGES_DESCENDANTS);
+    if ( !mbIsTransientChildrenDisabled )
+        pStateSet->AddState (accessibility::AccessibleStateType::MANAGES_DESCENDANTS);
 
     return pStateSet;
 }
@@ -432,10 +434,10 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
 
         if( VALUESET_ITEM_NONEITEM != nItemPos )
         {
-            ValueSetItem* pItem = mpParent->mpItemList->GetObject( nItemPos );
+            ValueSetItem* pItem = mpParent->mpImpl->mpItemList->GetObject( nItemPos );
 
             if( ( pItem->meType != VALUESETITEM_SPACE ) && !pItem->maRect.IsEmpty() )
-               xRet = pItem->GetAccessible();
+               xRet = pItem->GetAccessible( mbIsTransientChildrenDisabled );
         }
     }
 
@@ -635,7 +637,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getSelectedAc
         ValueSetItem* pItem = getItem(i);
 
         if( pItem && mpParent->IsItemSelected( pItem->mnId ) && ( nSelectedChildIndex == static_cast< sal_Int32 >( nSel++ ) ) )
-            xRet = pItem->GetAccessible();
+            xRet = pItem->GetAccessible( mbIsTransientChildrenDisabled );
     }
 
     return xRet;
@@ -775,8 +777,9 @@ bool ValueSetAcc::HasNoneField (void) const
 // - ValueItemAcc -
 // ----------------
 
-ValueItemAcc::ValueItemAcc( ValueSetItem* pParent ) :
-    mpParent( pParent )
+ValueItemAcc::ValueItemAcc( ValueSetItem* pParent, bool bIsTransientChildrenDisabled ) :
+    mpParent( pParent ),
+    mbIsTransientChildrenDisabled( bIsTransientChildrenDisabled )
 {
 }
 
@@ -920,7 +923,7 @@ sal_Int32 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
 
             // Do not create an accessible object for the test.
             if (pItem != NULL && pItem->mpxAcc != NULL)
-                if (pItem->GetAccessible().get() == this )
+                if (pItem->GetAccessible( mbIsTransientChildrenDisabled ).get() == this )
                 {
                     nIndexInParent = i;
                     bDone = true;
@@ -994,7 +997,8 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ValueItemAcc::getA
         pStateSet->AddState (accessibility::AccessibleStateType::SENSITIVE);
         pStateSet->AddState (accessibility::AccessibleStateType::SHOWING);
         pStateSet->AddState (accessibility::AccessibleStateType::VISIBLE);
-        pStateSet->AddState (accessibility::AccessibleStateType::TRANSIENT);
+        if ( !mbIsTransientChildrenDisabled )
+            pStateSet->AddState (accessibility::AccessibleStateType::TRANSIENT);
 
         // SELECTABLE
         pStateSet->AddState( accessibility::AccessibleStateType::SELECTABLE );
