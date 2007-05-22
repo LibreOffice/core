@@ -1,0 +1,137 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: Axis.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 14:47:38 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart_Axis_idl
+#define com_sun_star_chart_Axis_idl
+
+#include <com/sun/star/beans/PropertySet.idl>
+
+#include <com/sun/star/chart/ChartAxisArrangeOrderType.idl>
+
+#include <com/sun/star/chart2/XAxis.idl>
+#include <com/sun/star/chart2/AxisPosition.idl>
+#include <com/sun/star/chart2/XTitled.idl>
+
+#include <com/sun/star/drawing/LineProperties.idl>
+#include <com/sun/star/style/CharacterProperties.idl>
+#include <com/sun/star/style/CharacterPropertiesAsian.idl>
+#include <com/sun/star/style/CharacterPropertiesComplex.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+service Axis
+{
+    service ::com::sun::star::drawing::LineProperties;
+
+    service ::com::sun::star::style::CharacterProperties;
+    service ::com::sun::star::beans::PropertySet;
+    [optional] service ::com::sun::star::style::CharacterPropertiesAsian;
+    [optional] service ::com::sun::star::style::CharacterPropertiesComplex;
+
+    interface ::com::sun::star::chart2::XAxis;
+    [optional] interface ::com::sun::star::chart2::XTitled;
+
+    /** Determines, whether the axis should be rendered by the view.
+     */
+    [property]      boolean   Show;
+
+    /** Describes where to place the axis within a coordinate system -
+    wether it should be placed at the standard position for a main axis or at the standard position for a secondary axis or maybe something else in future.
+     */
+    [property]      AxisPosition   AxisPosition;
+
+    /** Determines whether to display text at the axis or not.
+     */
+    [property]      boolean   DisplayLabels;
+
+    /** Determines how to stagger the labels at the axis (side by side, even, odd, auto )
+    */
+    [property]      ::com::sun::star::chart::ChartAxisArrangeOrderType ArrangeOrder;
+
+    /** Determines wether the labels are allowed to break into more than one line
+    */
+    [property]      boolean   TextBreak;
+
+    /** Determines wether the labels are allowed to overlap
+    */
+    [property]      boolean   TextOverlap;
+
+    /** Determines wether the characters in a single labels should be stacked one upon each other
+    */
+    [property]      boolean   StackCharacters;
+
+    /** Determines the rotation of the text labels in degrees
+     */
+    [property]      double    TextRotation;
+
+    /** A NumberFormat key.
+
+        <p>If this property is not set, it is treated as auto.  This
+        means linked to the source format.</p>
+
+        <p>To determine a source format, the axis can query the
+        <type>XDataSequence</type>s used by the data series attached
+        to it (see <member>XDataSequence::getNumberFormatKeyByIndex</member>).
+        </p>
+     */
+    [property, maybevoid]      long      NumberFormat;
+
+    [property]      ::com::sun::star::awt::Size  ReferenceDiagramSize;
+
+    /** determines what kind of tickmarks should be shown for major ticks.
+
+         @see <type>TickmarkStyle</type>.
+    */
+    [property]      long      MajorTickmarks;
+
+    /** determines what kind of tickmarks should be shown for minor ticks.
+
+        @see <type>TickmarkStyle</type>.
+     */
+    [property]      long      MinorTickmarks;
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif
