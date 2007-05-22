@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:42:07 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:58:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,9 +142,15 @@ const sal_Int32 EXC_RK_INT100               = EXC_RK_100FLAG | EXC_RK_INTFLAG;
 const sal_Int32 EXC_POINTS_PER_INCH         = 72;
 const sal_Int32 EXC_TWIPS_PER_INCH          = EXC_POINTS_PER_INCH * 20;
 
-const sal_uInt8 EXC_ROT_BOTTOM_TOP          = 90;       /// Vertical rotation bottom->top.
-const sal_uInt8 EXC_ROT_TOP_BOTTOM          = 180;      /// Vertical rotation top->bottom.
-const sal_uInt8 EXC_ROT_STACKED             = 0xFF;     /// Characters vertically stacked.
+const sal_uInt8 EXC_ORIENT_NONE             = 0;        /// Text orientation: not rotated.
+const sal_uInt8 EXC_ORIENT_STACKED          = 1;        /// Text orientation: vertically stacked.
+const sal_uInt8 EXC_ORIENT_90CCW            = 2;        /// Text orientation: 90 deg counterclockwise.
+const sal_uInt8 EXC_ORIENT_90CW             = 3;        /// Text orientation: 90 deg clockwise.
+
+const sal_uInt8 EXC_ROT_NONE                = 0;        /// Text rotation: not rotated.
+const sal_uInt8 EXC_ROT_90CCW               = 90;       /// Text rotation: 90 deg counterclockwise.
+const sal_uInt8 EXC_ROT_90CW                = 180;      /// Text rotation: 90 deg clockwise.
+const sal_uInt8 EXC_ROT_STACKED             = 255;      /// Text rotation: vertically stacked.
 
 // Records (ordered by lowest record ID) ======================================
 
