@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_TitleRotation.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 16:04:41 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:50:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,63 +85,4 @@ TabPage TP_ALIGNMENT
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Text direction" ;
     };
-    /*
-    FixedLine FL_ORDER
-    {
-        Pos = MAP_APPFONT ( 6 , 63  ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Arrangement" ;
-    };
-    RadioButton RBT_SIDEBYSIDE
-    {
-        Pos = MAP_APPFONT ( 12 , 74  ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ en-US ] = "~Tile" ;
-        TabStop = TRUE ;
-    };
-    RadioButton RBT_UPDOWN
-    {
-        Pos = MAP_APPFONT ( 12 , 88  ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ en-US ] = "Stagger ~odd" ;
-        TabStop = TRUE ;
-    };
-    RadioButton RBT_DOWNUP
-    {
-        Pos = MAP_APPFONT ( 12 , 102  ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ en-US ] = "Stagger ~even" ;
-        TabStop = TRUE ;
-    };
-    RadioButton RBT_AUTOORDER
-    {
-        Pos = MAP_APPFONT ( 12 , 116  ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ en-US ] = "A~utomatic" ;
-        TabStop = TRUE ;
-    };
-    */
-    /*
-    CheckBox CBX_TEXTBREAK
-    {
-        Pos = MAP_APPFONT ( 12 , 157  ) ;
-        Size = MAP_APPFONT ( 69 , 10 ) ;
-
-        Text [ en-US ] = "~Break" ;
-    };
-    CheckBox CBX_TEXTOVERLAP
-    {
-        Pos = MAP_APPFONT ( 12 , 143  ) ;
-        Size = MAP_APPFONT ( 69 , 10 ) ;
-
-        Text [ en-US ] = "~Overlap" ;
-    };
-    FixedLine FL_TEXTBREAK
-    {
-        Pos = MAP_APPFONT ( 6 , 132  ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-
-        Text [ en-US ] = "Text flow" ;
-    };
-    */
 };
