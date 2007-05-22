@@ -4,9 +4,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:50:13 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:35:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,9 @@
 
 #include <commonembobj.hxx>
 
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XSTORAGEBASEDDOCUMENT_HPP_
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #endif
@@ -96,6 +99,9 @@
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCEESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
@@ -452,9 +458,16 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
 
     uno::Reference< util::XCloseable >  xDocument( m_xFactory->createInstance( GetDocumentServiceName() ), uno::UNO_QUERY );
 
-    uno::Reference < container::XChild > xChild( xDocument, uno::UNO_QUERY );
-    if ( xChild.is() )
-        xChild->setParent( m_xParent );
+    try
+    {
+        uno::Reference < container::XChild > xChild( xDocument, uno::UNO_QUERY );
+        if ( xChild.is() )
+            xChild->setParent( m_xParent );
+    }
+    catch( const lang::NoSupportException & )
+    {
+        OSL_ENSURE( false, "Cannot set parent at document" );
+    }
 
     uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY );
     uno::Reference< document::XStorageBasedDocument > xDoc
@@ -621,6 +634,17 @@ void OCommonEmbeddedObject::SaveObject_Impl()
 {
     if ( m_xClientSite.is() )
     {
+        try
+        {
+            // check whether the component is modified,
+            // if not there is no need for storing
+            uno::Reference< util::XModifiable > xModifiable( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
+            if ( xModifiable.is() && !xModifiable->isModified() )
+                return;
+        }
+        catch( uno::Exception& )
+        {}
+
         try {
             m_xClientSite->saveObject();
         }
@@ -749,7 +773,12 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed:
 
         xDoc->storeToStorage( xStorage, aArgs );
         if ( bAttachToTheStorage )
+        {
             xDoc->switchToStorage( xStorage );
+            uno::Reference< util::XModifiable > xModif( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
+            if ( xModif.is() )
+                xModif->setModified( sal_False );
+        }
     }
     else
 #endif
@@ -984,11 +1013,26 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
         {
             lObjArgs[nObjInd].Value >>= m_aDefaultParentBaseURL;
         }
+        else if ( lObjArgs[nObjInd].Name.equalsAscii( "Parent" ) )
+        {
+            lObjArgs[nObjInd].Value >>= m_xParent;
+        }
         else if ( lObjArgs[nObjInd].Name.equalsAscii( "IndividualMiscStatus" ) )
         {
             sal_Int64 nMiscStatus=0;
             lObjArgs[nObjInd].Value >>= nMiscStatus;
             m_nMiscStatus |= nMiscStatus;
+        }
+        else if ( lObjArgs[nObjInd].Name.equalsAscii( "CloneFrom" ) )
+        {
+            uno::Reference < embed::XEmbeddedObject > xObj;
+            lObjArgs[nObjInd].Value >>= xObj;
+            if ( xObj.is() )
+            {
+                m_bHasCachedSize = sal_True;
+                m_aCachedSize = xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
+                m_nMapUnit = xObj->getMapUnit( embed::Aspects::MSOLE_CONTENT );
+            }
         }
         else if ( lObjArgs[nObjInd].Name.equalsAscii( "OutplaceFrameProperties" ) )
         {
