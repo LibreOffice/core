@@ -1,4 +1,4 @@
-sd	sd	:	svx stoc uui sch slideshow NULL
+sd	sd	:	svx stoc uui slideshow NULL
 sd	sd										usr1	-	all	sd_mkout NULL
 sd	sd\inc									nmake		-	all	sd_inc NULL
 sd	sd\prj									get		-	all	sd_prj NULL
