@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawViewWrapper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:45:16 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:51:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include "DrawViewWrapper.hxx"
-#include "DrawModelWrapper.hxx"
+#include "chartview/DrawModelWrapper.hxx"
 #include "ConfigurationAccess.hxx"
-#include "ViewSingletons.hxx"
 
 // header for class SdrPage
 #ifndef _SVDPAGE_HXX
@@ -51,6 +50,10 @@
 // header for class SdrModel
 #ifndef _SVDMODEL_HXX
 #include <svx/svdmodel.hxx>
+#endif
+// header for class E3dScene
+#ifndef _E3D_SCENE3D_HXX
+#include <svx/scene3d.hxx>
 #endif
 
 #ifndef _SVDETC_HXX
@@ -70,10 +73,73 @@
 #include <svx/svxids.hrc>
 #endif
 
+// header for class SvxShape
+#ifndef _SVX_UNOSHAPE_HXX
+#include <svx/unoshape.hxx>
+#endif
+
+#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+
+#include <sfx2/objsh.hxx>
+
+using namespace ::com::sun::star;
+
 //.............................................................................
 namespace chart
 {
 //.............................................................................
+
+namespace
+{
+    short lcl_getHitTolerance( OutputDevice* pOutDev )
+    {
+        const short HITPIX=2; //hit-tolerance in pixel
+        short nHitTolerance = 50;
+        if(pOutDev)
+            nHitTolerance = static_cast<short>(pOutDev->PixelToLogic(Size(HITPIX,0)).Width());
+        return nHitTolerance;
+    }
+
+// this code is copied from sfx2/source/doc/objembed.cxx
+SfxObjectShell * lcl_GetParentObjectShell( const uno::Reference< frame::XModel > & xModel )
+{
+    SfxObjectShell* pResult = NULL;
+
+    try
+    {
+        uno::Reference< container::XChild > xChildModel( xModel, uno::UNO_QUERY );
+        if ( xChildModel.is() )
+        {
+            uno::Reference< lang::XUnoTunnel > xParentTunnel( xChildModel->getParent(), uno::UNO_QUERY );
+            if ( xParentTunnel.is() )
+            {
+                SvGlobalName aSfxIdent( SFX_GLOBAL_CLASSID );
+                pResult = reinterpret_cast< SfxObjectShell * >(
+                    xParentTunnel->getSomething( uno::Sequence< sal_Int8 >( aSfxIdent.GetByteSequence() ) ) );
+            }
+        }
+    }
+    catch( uno::Exception& )
+    {
+        // TODO: error handling
+    }
+
+    return pResult;
+}
+
+// this code is copied from sfx2/source/doc/objembed.cxx.  It is a workaround to
+// get the reference device (e.g. printer) fromthe parent document
+OutputDevice * lcl_GetParentRefDevice( const uno::Reference< frame::XModel > & xModel )
+{
+    SfxObjectShell * pParent = lcl_GetParentObjectShell( xModel );
+    if ( pParent )
+        return pParent->GetDocumentRefDev();
+    return NULL;
+}
+
+}
+
     /*
 void lcl_initOutliner( SdrOutliner* pTargetOutliner, SdrOutliner* pSourceOutliner )
 {
@@ -111,7 +177,6 @@ void lcl_initOutliner( SdrOutliner* pTargetOutliner, SdrOutliner* pSourceOutline
 
 DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut)
             : E3dView(pSdrModel, pOut)
-            , m_pWrappedDLPageView(NULL)
             , m_pMarkHandleProvider(NULL)
             , m_apOutliner( SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, pSdrModel ) )
 {
@@ -129,8 +194,8 @@ void DrawViewWrapper::ReInit()
     if(pOutDev)
         aOutputSize = pOutDev->GetOutputSize();
 
-    m_pWrappedDLPageView = this->ShowSdrPage(this->GetModel()->GetPage(0));
-    m_pWrappedDLPageView->GetPage()->SetSize( aOutputSize );
+    this->ShowSdrPage(this->GetModel()->GetPage(0));
+
     this->SetPageBorderVisible(false);
     this->SetBordVisible(false);
     this->SetGridVisible(false);
@@ -140,16 +205,21 @@ void DrawViewWrapper::ReInit()
     //this->SetResizeAtCenter(true);//for interactive resize-dragging: keep the object center fix
 
     //a correct work area is at least necessary for correct values in the position and  size dialog
-    //Rectangle aRect = pOutDev->PixelToLogic(Rectangle(Point(0,0), aOutputSize));
     Rectangle aRect(Point(0,0), aOutputSize);
     this->SetWorkArea(aRect);
 }
 
 DrawViewWrapper::~DrawViewWrapper()
 {
-    m_pWrappedDLPageView = NULL;//@ todo: sufficient? or remove necessary
     aComeBackTimer.Stop();//@todo this should be done in destructor of base class
+    UnmarkAllObj();//necessary to aavoid a paint call during the destructor hierarchy
 }
+
+SdrPageView* DrawViewWrapper::GetPageView() const
+{
+    SdrPageView* pSdrPageView = this->GetSdrPageView();
+    return pSdrPageView;
+};
 
 //virtual
 void DrawViewWrapper::SetMarkHandles()
@@ -162,33 +232,43 @@ void DrawViewWrapper::SetMarkHandles()
 
 SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
 {
-    const short HITPIX=2; //hit-tolerance in pixel
-
     SdrObject* pRet = NULL;
     //ULONG nOptions =SDRSEARCH_DEEP|SDRSEARCH_PASS2BOUND|SDRSEARCH_PASS3NEAREST;
-    //ULONG nOptions = SDRSEARCH_TESTMARKABLE;
     ULONG nOptions = SDRSEARCH_DEEP | SDRSEARCH_TESTMARKABLE;
-    //ULONG nOptions = SDRSEARCH_DEEP|SDRSEARCH_ALSOONMASTER|SDRSEARCH_WHOLEPAGE|SDRSEARCH_PASS2BOUND|SDRSEARCH_PASS3NEAREST;
-    //ULONG nOptions = 0;
 
-    short nHitTolerance = 50;
+    SdrPageView* pSdrPageView = this->GetPageView();
+    this->SdrView::PickObj(rPnt, lcl_getHitTolerance( this->GetFirstOutputDevice() ), pRet, pSdrPageView, nOptions);
+
+    if( pRet )
     {
-        OutputDevice* pOutDev = this->GetFirstOutputDevice();
-        if(pOutDev)
-            nHitTolerance = static_cast<short>(pOutDev->PixelToLogic(Size(HITPIX,0)).Width());
+        //3d objects need a special treatment
+        //because the simple PickObj method is not accurate in this case for performance reasons
+        E3dObject* pE3d = dynamic_cast< E3dObject* >(pRet);
+        if( pE3d )
+        {
+            E3dScene* pScene = pE3d->GetScene();
+            if( pScene )
+            {
+                ::std::vector< SdrObject* > aHitList;
+                sal_uInt32 nHitCount = pScene->HitTest( rPnt, aHitList );
+                if( nHitCount )
+                    pRet = aHitList[0];
+            }
+        }
     }
-    this->SdrView::PickObj(rPnt, nHitTolerance, pRet, m_pWrappedDLPageView, nOptions);
     return pRet;
 }
 
 void DrawViewWrapper::MarkObject( SdrObject* pObj )
 {
     bool bFrameDragSingles = true;//true == green == surrounding handles
-    pObj->SetMarkProtect(false);
+    if(pObj)
+        pObj->SetMarkProtect(false);
     if( m_pMarkHandleProvider )
         bFrameDragSingles = m_pMarkHandleProvider->getFrameDragSingles();
+
     this->SetFrameDragSingles(bFrameDragSingles);//decide wether each single object should get handles
-    this->SdrView::MarkObj( pObj, m_pWrappedDLPageView );
+    this->SdrView::MarkObj( pObj, this->GetPageView() );
     this->showMarkHandles();
 }
 
@@ -227,6 +307,16 @@ SdrObject* DrawViewWrapper::getTextEditObject() const
     return pTextObj;
 }
 
+void DrawViewWrapper::attachParentReferenceDevice( const uno::Reference< frame::XModel > & xChartModel )
+{
+    OutputDevice * pParentRefDev( lcl_GetParentRefDevice( xChartModel ));
+    SdrOutliner * pOutliner( getOutliner());
+    if( pParentRefDev && pOutliner )
+    {
+        pOutliner->SetRefDevice( pParentRefDev );
+    }
+}
+
 SdrOutliner* DrawViewWrapper::getOutliner() const
 {
 //    lcl_initOutliner( m_apOutliner.get(), &GetModel()->GetDrawOutliner() );
@@ -243,8 +333,56 @@ SfxItemSet DrawViewWrapper::getPositionAndSizeItemSetFromMarkedObject() const
                     0);
     SfxItemSet aGeoSet( E3dView::GetGeoAttrFromMarked() );
     aFullSet.Put( aGeoSet );
-    aFullSet.Put( SfxUInt16Item(SID_ATTR_METRIC,ViewSingletons::getConfigurationAccess()->getFieldUnit()) );
+    aFullSet.Put( SfxUInt16Item(SID_ATTR_METRIC,ConfigurationAccess::getConfigurationAccess()->getFieldUnit()) );
     return aFullSet;
+}
+
+SdrObject* DrawViewWrapper::getNamedSdrObject( const rtl::OUString& rName ) const
+{
+    if(rName.getLength()==0)
+        return 0;
+    SdrPageView* pSdrPageView = this->GetPageView();
+    if( pSdrPageView )
+    {
+        return DrawModelWrapper::getNamedSdrObject( rName, pSdrPageView->GetObjList() );
+    }
+    return 0;
+}
+
+bool DrawViewWrapper::IsObjectHit( SdrObject* pObj, const Point& rPnt ) const
+{
+    if(pObj)
+    {
+        Rectangle aRect(pObj->GetCurrentBoundRect());
+        return aRect.IsInside(rPnt);
+    }
+    return false;
+}
+
+void DrawViewWrapper::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
+{
+        //prevent wrong reselection of objects
+        SdrModel* pSdrModel( this->GetModel() );
+        if( pSdrModel && pSdrModel->isLocked() )
+            return;
+
+        E3dView::SFX_NOTIFY(rBC, rBCType, rHint, rHintType);
+}
+
+//static
+SdrObject* DrawViewWrapper::getSdrObject( const uno::Reference<
+                    drawing::XShape >& xShape )
+{
+    SdrObject* pRet = 0;
+    uno::Reference< lang::XUnoTunnel > xUnoTunnel( xShape, uno::UNO_QUERY );
+    uno::Reference< lang::XTypeProvider > xTypeProvider( xShape, uno::UNO_QUERY );
+    if(xUnoTunnel.is()&&xTypeProvider.is())
+    {
+        SvxShape* pSvxShape = reinterpret_cast<SvxShape*>(xUnoTunnel->getSomething( SvxShape::getUnoTunnelId() ));
+        if(pSvxShape)
+            pRet = pSvxShape->GetSdrObject();
+    }
+    return pRet;
 }
 
 //.............................................................................
