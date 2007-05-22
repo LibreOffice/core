@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:01:11 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:25:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,6 +206,8 @@
 #endif
 #include <swstylemanager.hxx>
 
+#include <unochart.hxx>
+
 #ifndef _CMDID_H
 #include <cmdid.h>              // fuer den dflt - Printer in SetJob
 #endif
@@ -311,6 +313,8 @@ SwDoc::SwDoc() :
     pStyleAccess( createStyleManager() ),
     pLayoutCache( 0 ),
     pUnoCallBack(new SwUnoCallBack(0)),
+    aChartDataProviderImplRef(),
+    pChartControllerHelper( 0 ),
     nUndoPos( 0 ),
     nUndoSavePos( 0 ),
     nUndoCnt( 0 ),
@@ -454,10 +458,6 @@ SwDoc::SwDoc() :
     aIdleTimer.SetTimeout( 600 );
     aIdleTimer.SetTimeoutHdl( LINK(this, SwDoc, DoIdleJobs) );
 
-    // den CharTimer setzen
-    aChartTimer.SetTimeout( 2000 );
-    aChartTimer.SetTimeoutHdl( LINK( this, SwDoc, DoUpdateAllCharts ));
-
     aOLEModifiedTimer.SetTimeout( 1000 );
     aOLEModifiedTimer.SetTimeoutHdl( LINK( this, SwDoc, DoUpdateModifiedOLE ));
 
@@ -495,6 +495,13 @@ SwDoc::SwDoc() :
 
 SwDoc::~SwDoc()
 {
+    // clean up chart related structures...
+    // Note: the chart data provider gets already diposed in ~SwDocShell
+    // since all UNO API related functionality requires an existing SwDocShell
+    // this assures that dipose gets called if there is need for it.
+    aChartDataProviderImplRef.reset();
+    delete pChartControllerHelper;
+
     //!! needs to be done to destroy a possible SwFmtDrop format that may
     //!! be connected to a char format which may not otherwise be removed
     //!! and thus would leave a unremoved SwFmt object. (TL)
