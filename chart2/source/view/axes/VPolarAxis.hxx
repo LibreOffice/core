@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VPolarAxis.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:40:23 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:12:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,7 @@
 #ifndef _CHART2_VPOLARAXIS_HXX
 #define _CHART2_VPOLARAXIS_HXX
 
-#include "TickmarkHelper.hxx"
-#include "VMeterBase.hxx"
-#include "VAxisProperties.hxx"
+#include "VAxisBase.hxx"
 
 //.............................................................................
 namespace chart
@@ -48,29 +46,28 @@ namespace chart
 /**
 */
 
-class NumberFormatterWrapper;
 class PolarPlottingPositionHelper;
 
-class VPolarAxis : public VMeterBase
+class VPolarAxis : public VAxisBase
 {
 public:
-    VPolarAxis( const AxisProperties& rAxisProperties
-           , NumberFormatterWrapper* pNumberFormatterWrapper
-           , sal_Int32 nDimensionCount );
-    virtual ~VPolarAxis();
-
-    virtual void SAL_CALL createShapes();
+    static VPolarAxis* createAxis( const AxisProperties& rAxisProperties
+           , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
+           , sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount );
 
     void setIncrements( const ::com::sun::star::uno::Sequence<
                         ::com::sun::star::chart2::ExplicitIncrementData >& rIncrements );
 
-private: //methods
-    void create2DAngleAxis( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget, ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos );
-    void create2DRadiusAxis( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget, ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos );
+    virtual sal_Bool SAL_CALL isAnythingToDraw();
 
-private: //member
-    AxisProperties               m_aAxisProperties;
-    NumberFormatterWrapper*      m_pNumberFormatterWrapper;
+    virtual ~VPolarAxis();
+
+protected:
+    VPolarAxis( const AxisProperties& rAxisProperties
+           , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
+           , sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount );
+
+protected: //member
     PolarPlottingPositionHelper* m_pPosHelper;
     ::com::sun::star::uno::Sequence<
         ::com::sun::star::chart2::ExplicitIncrementData >   m_aIncrements;
