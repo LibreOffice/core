@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:20:25 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:22:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,19 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
+
+#ifndef _CPPUHELPER_COMPBASE4_HXX_
+#include <cppuhelper/compbase4.hxx>
+#endif
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
@@ -61,6 +74,7 @@
 #include "impgrf.hxx"
 #include "xmlgrhlp.hxx"
 
+#include <algorithm>
 
 // -----------
 // - Defines -
@@ -70,6 +84,8 @@ using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
+
+using ::com::sun::star::lang::XMultiServiceFactory;
 
 #define XML_GRAPHICSTORAGE_NAME     "Pictures"
 #define XML_PACKAGE_URL_BASE        "vnd.sun.star.Package:"
@@ -912,3 +928,199 @@ OUString SAL_CALL SvXMLGraphicHelper::resolveOutputStream( const Reference< XOut
 
     return aRet;
 }
+
+
+// --------------------------------------------------------------------------------
+
+// for instantiation via service manager
+namespace svx
+{
+
+namespace impl
+{
+typedef ::cppu::WeakComponentImplHelper4<
+        lang::XInitialization,
+        document::XGraphicObjectResolver,
+        document::XBinaryStreamResolver,
+        lang::XServiceInfo >
+    SvXMLGraphicImportExportHelper_Base;
+class MutexContainer
+{
+public:
+    virtual ~MutexContainer();
+
+protected:
+    mutable ::osl::Mutex m_aMutex;
+};
+MutexContainer::~MutexContainer()
+{}
+} // namespace impl
+
+class SvXMLGraphicImportExportHelper :
+    public impl::MutexContainer,
+    public impl::SvXMLGraphicImportExportHelper_Base
+{
+public:
+    SvXMLGraphicImportExportHelper( SvXMLGraphicHelperMode eMode );
+
+protected:
+    // is called from WeakComponentImplHelper when XComponent::dispose() was
+    // called from outside
+    virtual void SAL_CALL disposing();
+
+    // ____ XInitialization ____
+    // one argument is allowed, which is the XStorage
+    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
+        throw (Exception,
+               RuntimeException);
+
+    // ____ XGraphicObjectResolver ____
+    virtual ::rtl::OUString SAL_CALL resolveGraphicObjectURL( const ::rtl::OUString& aURL )
+        throw (RuntimeException);
+
+    // ____ XBinaryStreamResolver ____
+    virtual Reference< io::XInputStream > SAL_CALL getInputStream( const ::rtl::OUString& aURL )
+        throw (RuntimeException);
+    virtual Reference< io::XOutputStream > SAL_CALL createOutputStream()
+        throw (RuntimeException);
+    virtual ::rtl::OUString SAL_CALL resolveOutputStream( const Reference< io::XOutputStream >& aBinaryStream )
+        throw (RuntimeException);
+
+    // ____ XServiceInfo ____
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+        throw (RuntimeException);
+    virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+        throw (RuntimeException);
+    virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+        throw (RuntimeException);
+
+private:
+    SvXMLGraphicHelperMode              m_eGraphicHelperMode;
+    Reference< XGraphicObjectResolver > m_xGraphicObjectResolver;
+    Reference< XBinaryStreamResolver >  m_xBinaryStreamResolver;
+};
+
+SvXMLGraphicImportExportHelper::SvXMLGraphicImportExportHelper( SvXMLGraphicHelperMode eMode ) :
+        impl::SvXMLGraphicImportExportHelper_Base( m_aMutex ),
+        m_eGraphicHelperMode( eMode )
+{}
+
+void SAL_CALL SvXMLGraphicImportExportHelper::disposing()
+{
+    Reference< XComponent > xComp( m_xGraphicObjectResolver, UNO_QUERY );
+    OSL_ASSERT( xComp.is());
+    if( xComp.is())
+        xComp->dispose();
+    // m_xBinaryStreamResolver is a reference to the same object => don't call
+    // dispose() again
+}
+
+// ____ XInitialization ____
+void SAL_CALL SvXMLGraphicImportExportHelper::initialize(
+    const Sequence< Any >& aArguments )
+    throw (Exception, RuntimeException)
+{
+    Reference< embed::XStorage > xStorage;
+    if( aArguments.getLength() > 0 )
+        aArguments[0] >>= xStorage;
+
+    SvXMLGraphicHelper * pHelper( SvXMLGraphicHelper::Create( xStorage, m_eGraphicHelperMode ));
+    m_xGraphicObjectResolver.set( pHelper );
+    m_xBinaryStreamResolver.set( pHelper );
+    // SvXMLGraphicHelper::Create calls acquire.  Since we have two references
+    // now it is safe (and necessary) to undo this acquire
+    pHelper->release();
+}
+
+// ____ XGraphicObjectResolver ____
+OUString SAL_CALL SvXMLGraphicImportExportHelper::resolveGraphicObjectURL( const OUString& aURL )
+    throw (uno::RuntimeException)
+{
+    return m_xGraphicObjectResolver->resolveGraphicObjectURL( aURL );
+}
+
+
+// ____ XBinaryStreamResolver ____
+Reference< io::XInputStream > SAL_CALL SvXMLGraphicImportExportHelper::getInputStream( const OUString& aURL )
+    throw (uno::RuntimeException)
+{
+    return m_xBinaryStreamResolver->getInputStream( aURL );
+}
+Reference< io::XOutputStream > SAL_CALL SvXMLGraphicImportExportHelper::createOutputStream()
+    throw (uno::RuntimeException)
+{
+    return m_xBinaryStreamResolver->createOutputStream();
+}
+OUString SAL_CALL SvXMLGraphicImportExportHelper::resolveOutputStream( const Reference< io::XOutputStream >& aBinaryStream )
+    throw (uno::RuntimeException)
+{
+    return m_xBinaryStreamResolver->resolveOutputStream( aBinaryStream );
+}
+
+// ____ XServiceInfo ____
+OUString SAL_CALL SvXMLGraphicImportExportHelper::getImplementationName()
+    throw (uno::RuntimeException)
+{
+    if( m_eGraphicHelperMode == GRAPHICHELPER_MODE_READ )
+        return SvXMLGraphicImportHelper_getImplementationName();
+    return SvXMLGraphicExportHelper_getImplementationName();
+}
+::sal_Bool SAL_CALL SvXMLGraphicImportExportHelper::supportsService( const OUString& ServiceName )
+    throw (uno::RuntimeException)
+{
+    Sequence< OUString > aServiceNames( getSupportedServiceNames());
+    const OUString * pBegin = aServiceNames.getConstArray();
+    const OUString * pEnd = pBegin + aServiceNames.getLength();
+    return (::std::find( pBegin, pEnd, ServiceName ) != pEnd);
+}
+Sequence< OUString > SAL_CALL SvXMLGraphicImportExportHelper::getSupportedServiceNames()
+    throw (uno::RuntimeException)
+{
+    if( m_eGraphicHelperMode == GRAPHICHELPER_MODE_READ )
+        return SvXMLGraphicImportHelper_getSupportedServiceNames();
+    return SvXMLGraphicExportHelper_getSupportedServiceNames();
+}
+
+// import
+Reference< XInterface > SAL_CALL SvXMLGraphicImportHelper_createInstance(const Reference< XMultiServiceFactory > & /* rSMgr */ )
+    throw( Exception )
+{
+    return static_cast< XWeak* >( new SvXMLGraphicImportExportHelper( GRAPHICHELPER_MODE_READ ));
+}
+OUString SAL_CALL SvXMLGraphicImportHelper_getImplementationName()
+    throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Svx.GraphicImportHelper" ));
+}
+Sequence< OUString > SAL_CALL SvXMLGraphicImportHelper_getSupportedServiceNames()
+    throw()
+{
+    // XGraphicObjectResolver and XBinaryStreamResolver are not part of any service
+    Sequence< OUString > aSupportedServiceNames( 2 );
+    aSupportedServiceNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.GraphicObjectResolver" ) );
+    aSupportedServiceNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.BinaryStreamResolver" ) );
+    return aSupportedServiceNames;
+}
+
+// export
+Reference< XInterface > SAL_CALL SvXMLGraphicExportHelper_createInstance(const Reference< XMultiServiceFactory > & /* rSMgr */ )
+    throw( Exception )
+{
+    return static_cast< XWeak* >( new SvXMLGraphicImportExportHelper( GRAPHICHELPER_MODE_WRITE ));
+}
+OUString SAL_CALL SvXMLGraphicExportHelper_getImplementationName()
+    throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Svx.GraphicExportHelper" ));
+}
+Sequence< OUString > SAL_CALL SvXMLGraphicExportHelper_getSupportedServiceNames()
+    throw()
+{
+    // XGraphicObjectResolver and XBinaryStreamResolver are not part of any service
+    Sequence< OUString > aSupportedServiceNames( 2 );
+    aSupportedServiceNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.GraphicObjectResolver" ) );
+    aSupportedServiceNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.BinaryStreamResolver" ) );
+    return aSupportedServiceNames;
+}
+
+} // namespace svx
