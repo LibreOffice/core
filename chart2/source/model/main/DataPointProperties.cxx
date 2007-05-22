@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPointProperties.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:09:43 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:33:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,12 @@
 #include "precompiled_chart2.hxx"
 #include "DataPointProperties.hxx"
 #include "macros.hxx"
+#include "LineProperties.hxx"
+#include "FillProperties.hxx"
 
-#ifndef _COM_SUN_STAR_AWT_GRADIENT_HPP_
-#include <com/sun/star/awt/Gradient.hpp>
-#endif
+// #ifndef _COM_SUN_STAR_AWT_GRADIENT_HPP_
+// #include <com/sun/star/awt/Gradient.hpp>
+// #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
@@ -56,24 +58,27 @@
 #ifndef _COM_SUN_STAR_DRAWING_POLYPOLYGONBEZIERCOORDS_HPP_
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DRAWING_HATCH_HPP_
-#include <com/sun/star/drawing/Hatch.hpp>
-#endif
+// #ifndef _COM_SUN_STAR_DRAWING_HATCH_HPP_
+// #include <com/sun/star/drawing/Hatch.hpp>
+// #endif
 #ifndef _COM_SUN_STAR_STYLE_XSTYLE_HPP_
 #include <com/sun/star/style/XStyle.hpp>
 #endif
-
-#ifndef _COM_SUN_STAR_CHART2_FILLBITMAP_HPP_
-#include <com/sun/star/chart2/FillBitmap.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_BITMAPMODE_HPP_
+#include <com/sun/star/drawing/BitmapMode.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART2_TRANSPARENCYSTYLE_HPP_
-#include <com/sun/star/chart2/TransparencyStyle.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_RECTANGLEPOINT_HPP_
+#include <com/sun/star/drawing/RectanglePoint.hpp>
+#endif
+
+// #ifndef _COM_SUN_STAR_CHART2_FILLBITMAP_HPP_
+// #include <com/sun/star/chart2/FillBitmap.hpp>
+// #endif
+#ifndef _COM_SUN_STAR_CHART2_DATAPOINTGEOMETRY3D_HPP_
+#include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CHART2_DATAPOINTLABEL_HPP_
 #include <com/sun/star/chart2/DataPointLabel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_NUMBERFORMAT_HPP_
-#include <com/sun/star/chart2/NumberFormat.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CHART2_SYMBOL_HPP_
 #include <com/sun/star/chart2/Symbol.hpp>
@@ -87,19 +92,8 @@ namespace chart
 {
 
 void DataPointProperties::AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties,
-    bool bIncludeStyleProperties /* = false */ )
+    ::std::vector< Property > & rOutProperties )
 {
-    if( bIncludeStyleProperties )
-    {
-        rOutProperties.push_back(
-            Property( C2U( "Style" ),
-                      PROP_DATAPOINT_STYLE,
-                      ::getCppuType( reinterpret_cast< const uno::Reference< ::com::sun::star::style::XStyle > * >(0)),
-                      beans::PropertyAttribute::BOUND
-                      | beans::PropertyAttribute::MAYBEVOID ));
-    }
-
     // DataPointProperties
     // ===================
 
@@ -130,44 +124,51 @@ void DataPointProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "TransparencyStyle" ),
-                  PROP_DATAPOINT_TRANSPARENCY_STYLE,
-                  ::getCppuType( reinterpret_cast< const chart2::TransparencyStyle * >(0)),
+        Property( C2U( "TransparencyGradientName" ),
+                  PROP_DATAPOINT_TRANSPARENCY_GRADIENT_NAME,
+                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "TransparencyGradient" ),
-                  PROP_DATAPOINT_TRANSPARENCY_GRADIENT,
-                  ::getCppuType( reinterpret_cast< const awt::Gradient * >(0)),
+        Property( C2U( "GradientName" ),
+                  PROP_DATAPOINT_GRADIENT_NAME,
+                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT
+                  | beans::PropertyAttribute::MAYBEVOID ));
+
+
+    rOutProperties.push_back(
+        beans::Property( C2U( "GradientStepCount" ),
+                  PROP_DATAPOINT_GRADIENT_STEPCOUNT,
+                  ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "HatchName" ),
+                  PROP_DATAPOINT_HATCH_NAME,
+                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "Gradient" ),
-                  PROP_DATAPOINT_GRADIENT,
-                  ::getCppuType( reinterpret_cast< const awt::Gradient * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT
-                  | beans::PropertyAttribute::MAYBEVOID ));
-
-    rOutProperties.push_back(
-        Property( C2U( "Hatch" ),
-                  PROP_DATAPOINT_HATCH,
-                  ::getCppuType( reinterpret_cast< const drawing::Hatch * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT
-                  | beans::PropertyAttribute::MAYBEVOID ));
-
-    rOutProperties.push_back(
-        Property( C2U( "FillBitmap" ),
-                  PROP_DATAPOINT_FILL_BITMAP,
-                  ::getCppuType( reinterpret_cast< const chart2::FillBitmap * >(0)),
+        Property( C2U( "FillBitmapName" ),
+                  PROP_DATAPOINT_FILL_BITMAP_NAME,
+                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID  ));
+    rOutProperties.push_back(
+        Property( C2U( "FillBackground" ),
+                  PROP_DATAPOINT_FILL_BACKGROUND,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT
+                  | beans::PropertyAttribute::MAYBEVOID ));
 
     // border for filled objects
     rOutProperties.push_back(
@@ -190,9 +191,9 @@ void DataPointProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "BorderDash" ),
-                  PROP_DATAPOINT_BORDER_DASH,
-                  ::getCppuType( reinterpret_cast< const drawing::LineDash * >(0)),
+        Property( C2U( "BorderDashName" ),
+                  PROP_DATAPOINT_BORDER_DASH_NAME,
+                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
@@ -206,22 +207,94 @@ void DataPointProperties::AddPropertiesToVector(
     // ---------------
     rOutProperties.push_back(
         Property( C2U( "LineStyle" ),
-                  PROP_DATAPOINT_LINE_STYLE,
+                  LineProperties::PROP_LINE_STYLE,
                   ::getCppuType( reinterpret_cast< const drawing::LineStyle * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( C2U( "LineWidth" ),
-                  PROP_DATAPOINT_LINE_WIDTH,
+                  LineProperties::PROP_LINE_WIDTH,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "LineDash" ),
-                  PROP_DATAPOINT_LINE_DASH,
-                  ::getCppuType( reinterpret_cast< const drawing::LineDash * >(0)),
+         Property( C2U( "LineDash" ),
+                   LineProperties::PROP_LINE_DASH,
+                   ::getCppuType( reinterpret_cast< const drawing::LineDash * >(0)),
+                   beans::PropertyAttribute::BOUND
+                   | beans::PropertyAttribute::MAYBEVOID ));
+    rOutProperties.push_back(
+        Property( C2U( "LineDashName" ),
+                  LineProperties::PROP_LINE_DASH_NAME,
+                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
+
+    // FillProperties
+    // bitmap properties
+    rOutProperties.push_back(
+        Property( C2U( "FillBitmapOffsetX" ),
+                  FillProperties::PROP_FILL_BITMAP_OFFSETX,
+                  ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "FillBitmapOffsetY" ),
+                  FillProperties::PROP_FILL_BITMAP_OFFSETY,
+                  ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "FillBitmapPositionOffsetX" ),
+                  FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETX,
+                  ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "FillBitmapPositionOffsetY" ),
+                  FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETY,
+                  ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+
+    rOutProperties.push_back(
+        Property( C2U( "FillBitmapRectanglePoint" ),
+                  FillProperties::PROP_FILL_BITMAP_RECTANGLEPOINT,
+                  ::getCppuType( reinterpret_cast< const drawing::RectanglePoint * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "FillBitmapLogicalSize" ),
+                  FillProperties::PROP_FILL_BITMAP_LOGICALSIZE,
+                  ::getCppuType( reinterpret_cast< const sal_Bool * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "FillBitmapSizeX" ),
+                  FillProperties::PROP_FILL_BITMAP_SIZEX,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "FillBitmapSizeY" ),
+                  FillProperties::PROP_FILL_BITMAP_SIZEY,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "FillBitmapMode" ),
+                  FillProperties::PROP_FILL_BITMAP_MODE,
+                  ::getCppuType( reinterpret_cast< const drawing::BitmapMode * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     // others
     rOutProperties.push_back(
@@ -229,11 +302,17 @@ void DataPointProperties::AddPropertiesToVector(
                   PROP_DATAPOINT_SYMBOL_PROP,
                   ::getCppuType( reinterpret_cast< const chart2::Symbol * >(0)),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( C2U( "Offset" ),
                   PROP_DATAPOINT_OFFSET,
                   ::getCppuType( reinterpret_cast< const double * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( C2U( "Geometry3D" ),
+                  PROP_DATAPOINT_GEOMETRY3D,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -247,7 +326,7 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( C2U( "NumberFormat" ),
                   PROP_DATAPOINT_NUMBER_FORMAT,
-                  ::getCppuType( reinterpret_cast< const chart2::NumberFormat * >(0)),
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -279,15 +358,20 @@ void DataPointProperties::AddPropertiesToVector(
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
+    rOutProperties.push_back(
+        Property( C2U( "PercentDiagonal" ),
+                  PROP_DATAPOINT_PERCENT_DIAGONAL,
+                  ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
 }
 
 void DataPointProperties::AddDefaultsToMap(
-    ::chart::helper::tPropertyValueMap & rOutMap,
-    bool bIncludeStyleProperties /* = false */ )
+    ::chart::tPropertyValueMap & rOutMap )
 {
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_COLOR ));
     rOutMap[ PROP_DATAPOINT_COLOR ] =
-        uno::makeAny( sal_Int32( 0x0000b8ff ));  // blue 7
+        uno::makeAny( sal_Int32( 0x0099ccff ));  // blue 8
 
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_TRANSPARENCY ));
     rOutMap[ PROP_DATAPOINT_TRANSPARENCY ] =
@@ -298,22 +382,26 @@ void DataPointProperties::AddDefaultsToMap(
     rOutMap[ PROP_DATAPOINT_FILL_STYLE ] =
         uno::makeAny( drawing::FillStyle_SOLID );
 
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_TRANSPARENCY_STYLE ));
-    rOutMap[ PROP_DATAPOINT_TRANSPARENCY_STYLE ] =
-        uno::makeAny( chart2::TransparencyStyle_NONE );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_TRANSPARENCY_GRADIENT_NAME ));
+    rOutMap[ PROP_DATAPOINT_TRANSPARENCY_GRADIENT_NAME ] =
+        uno::Any();//need this empty default value otherwise get a costly exception in DataSeries::GetDefaultValue
 
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_TRANSPARENCY_GRADIENT ));
-    rOutMap[ PROP_DATAPOINT_TRANSPARENCY_GRADIENT ] =
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_GRADIENT_NAME ));
+    rOutMap[ PROP_DATAPOINT_GRADIENT_NAME ] =
         uno::Any();//need this empty default value otherwise get a costly exception in DataSeries::GetDefaultValue
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_GRADIENT ));
-    rOutMap[ PROP_DATAPOINT_GRADIENT ] =
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_GRADIENT_STEPCOUNT ));
+    rOutMap[ PROP_DATAPOINT_GRADIENT_STEPCOUNT ] =
+        uno::makeAny(sal_Int16(0));
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_HATCH_NAME ));
+    rOutMap[ PROP_DATAPOINT_HATCH_NAME ] =
         uno::Any();//need this empty default value otherwise get a costly exception in DataSeries::GetDefaultValue
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_HATCH ));
-    rOutMap[ PROP_DATAPOINT_HATCH ] =
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_FILL_BITMAP_NAME ));
+    rOutMap[ PROP_DATAPOINT_FILL_BITMAP_NAME ] =
         uno::Any();//need this empty default value otherwise get a costly exception in DataSeries::GetDefaultValue
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_FILL_BITMAP ));
-    rOutMap[ PROP_DATAPOINT_FILL_BITMAP ] =
-        uno::Any();//need this empty default value otherwise get a costly exception in DataSeries::GetDefaultValue
+
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_FILL_BACKGROUND ));
+    rOutMap[ PROP_DATAPOINT_FILL_BACKGROUND ] =
+        uno::makeAny( false );
 
     //border
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_BORDER_COLOR ));
@@ -321,36 +409,66 @@ void DataPointProperties::AddDefaultsToMap(
         uno::makeAny( sal_Int32( 0x00000000 ));  // black
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_BORDER_STYLE ));
     rOutMap[ PROP_DATAPOINT_BORDER_STYLE ] =
-//         uno::makeAny( drawing::LineStyle_SOLID );
-        uno::makeAny( drawing::LineStyle_NONE );
+        uno::makeAny( drawing::LineStyle_SOLID );
+//         uno::makeAny( drawing::LineStyle_NONE );
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_BORDER_WIDTH ));
     rOutMap[ PROP_DATAPOINT_BORDER_WIDTH ] =
         uno::makeAny( sal_Int32( 0 ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_BORDER_DASH ));
-    rOutMap[ PROP_DATAPOINT_BORDER_DASH ] =
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_BORDER_DASH_NAME ));
+    rOutMap[ PROP_DATAPOINT_BORDER_DASH_NAME ] =
         uno::Any();//need this empty default value otherwise get a costly exception in DataSeries::GetDefaultValue
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_BORDER_TRANSPARENCY ));
     rOutMap[ PROP_DATAPOINT_BORDER_TRANSPARENCY ] =
         uno::makeAny( sal_Int16( 0 ) );
 
     //line
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_LINE_STYLE ));
-    rOutMap[ PROP_DATAPOINT_LINE_STYLE ] =
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( LineProperties::PROP_LINE_STYLE ));
+    rOutMap[ LineProperties::PROP_LINE_STYLE ] =
         uno::makeAny( drawing::LineStyle_SOLID );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_LINE_WIDTH ));
-    rOutMap[ PROP_DATAPOINT_LINE_WIDTH ] =
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( LineProperties::PROP_LINE_WIDTH ));
+    rOutMap[ LineProperties::PROP_LINE_WIDTH ] =
         uno::makeAny( sal_Int32( 0 ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_LINE_DASH ));
-    rOutMap[ PROP_DATAPOINT_LINE_DASH ] =
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( LineProperties::PROP_LINE_DASH ));
+    rOutMap[ LineProperties::PROP_LINE_DASH ] =
+        uno::Any( drawing::LineDash() );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( LineProperties::PROP_LINE_DASH_NAME ));
+    rOutMap[ LineProperties::PROP_LINE_DASH_NAME ] =
         uno::Any();//need this empty default value otherwise get a costly exception in DataSeries::GetDefaultValue
 
+    //fill
+    //bitmap
+    uno::Any aSalInt16Zero = uno::makeAny( sal_Int16( 0 ));
+    uno::Any aSalInt32SizeDefault = uno::makeAny( sal_Int32( 0 ));
+
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_OFFSETX ));
+    rOutMap[ FillProperties::PROP_FILL_BITMAP_OFFSETX ] = aSalInt16Zero;
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_OFFSETY ));
+    rOutMap[ FillProperties::PROP_FILL_BITMAP_OFFSETY ] = aSalInt16Zero;
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETX ));
+    rOutMap[ FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETX ] = aSalInt16Zero;
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETY ));
+    rOutMap[ FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETY ] = aSalInt16Zero;
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_RECTANGLEPOINT ));
+    rOutMap[ FillProperties::PROP_FILL_BITMAP_RECTANGLEPOINT ] =
+        uno::makeAny( drawing::RectanglePoint_MIDDLE_MIDDLE );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_LOGICALSIZE ));
+    rOutMap[ FillProperties::PROP_FILL_BITMAP_LOGICALSIZE ] =
+        uno::makeAny( true );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_SIZEX ));
+    rOutMap[ FillProperties::PROP_FILL_BITMAP_SIZEX ] = aSalInt32SizeDefault;
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_SIZEY ));
+    rOutMap[ FillProperties::PROP_FILL_BITMAP_SIZEY ] = aSalInt32SizeDefault;
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_MODE ));
+    rOutMap[ FillProperties::PROP_FILL_BITMAP_MODE ] =
+        uno::makeAny( drawing::BitmapMode_REPEAT );
 
     //others
     chart2::Symbol aSymbProp;
-    aSymbProp.aStyle = chart2::SymbolStyle_NONE;
-    aSymbProp.nStandardSymbol = 0;
-    aSymbProp.aSize = awt::Size( 423, 423 ); // 12pt x 12pt
-    aSymbProp.nFillColor = 0xee4000;         // OrangeRed2
+    aSymbProp.Style = chart2::SymbolStyle_NONE;
+    aSymbProp.StandardSymbol = 0;
+    aSymbProp.Size = awt::Size( 250, 250 ); // ca. 7pt x 7pt (7pt=246.94)
+    aSymbProp.BorderColor = 0x000000;       // Black
+    aSymbProp.FillColor = 0xee4000;         // OrangeRed2
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_SYMBOL_PROP ));
     rOutMap[ PROP_DATAPOINT_SYMBOL_PROP ] =
         uno::makeAny( aSymbProp );
@@ -358,6 +476,10 @@ void DataPointProperties::AddDefaultsToMap(
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_OFFSET ));
     rOutMap[ PROP_DATAPOINT_OFFSET ] =
         uno::makeAny( double( 0.0 ) );
+
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_GEOMETRY3D ));
+    rOutMap[ PROP_DATAPOINT_GEOMETRY3D ] =
+        uno::makeAny( chart2::DataPointGeometry3D::CUBOID );
 
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_LABEL ));
     rOutMap[ PROP_DATAPOINT_LABEL ] =
@@ -368,17 +490,21 @@ void DataPointProperties::AddDefaultsToMap(
                           sal_False // ShowLegendSymbol
                           ));
 
-    chart2::NumberFormat aFormat(
-        C2U( "Standard" ),
-        lang::Locale( C2U( "DE" ), C2U( "de" ), ::rtl::OUString()));
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_NUMBER_FORMAT ));
     rOutMap[ PROP_DATAPOINT_NUMBER_FORMAT ] =
-        uno::makeAny( aFormat );
+        uno::makeAny( sal_Int32(0) ); //todo maybe choose a different one here -> should be dynamically that of the attached axis
 
-    // todo: default is just for testing. should be void
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_REFERENCE_DIAGRAM_SIZE ));
-    rOutMap[ PROP_DATAPOINT_REFERENCE_DIAGRAM_SIZE ] =
-        uno::makeAny( awt::Size( 20000, 15000 ) );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_ERROR_BAR_X ));
+    rOutMap[ PROP_DATAPOINT_ERROR_BAR_X ] =
+        uno::makeAny( uno::Reference< beans::XPropertySet >(0) );
+
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_ERROR_BAR_Y ));
+    rOutMap[ PROP_DATAPOINT_ERROR_BAR_Y ] =
+        uno::makeAny( uno::Reference< beans::XPropertySet >(0) );
+
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_PERCENT_DIAGONAL ));
+    rOutMap[ PROP_DATAPOINT_PERCENT_DIAGONAL ] =
+        uno::makeAny( static_cast< sal_Int16 >(5) );
 }
 
 } //  namespace chart
