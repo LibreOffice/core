@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:00:09 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:13:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -441,8 +441,11 @@ void __EXPORT ScDrawView::MarkListHasChanged()
 
     //  IP deaktivieren
 
+    ScModule* pScMod = SC_MOD();
+    bool bUnoRefDialog = pScMod->IsRefDialogOpen() && pScMod->GetCurRefDlgId() == WID_SIMPLE_REF;
+
     ScClient* pClient = (ScClient*) pViewSh->GetIPClient();
-    if ( pClient && pClient->IsObjectInPlaceActive() )
+    if ( pClient && pClient->IsObjectInPlaceActive() && !bUnoRefDialog )
     {
         //  #41730# beim ViewShell::Activate aus dem Reset2Open nicht die Handles anzeigen
         //HMHbDisableHdl = TRUE;
