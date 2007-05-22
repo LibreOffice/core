@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartModelHelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:38:11 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:12:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,8 @@
 #ifndef _CHART2_CONTROLLER_CHARTMODELHELPER_HXX
 #define _CHART2_CONTROLLER_CHARTMODELHELPER_HXX
 
-#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPEGROUP_HPP_
-#include <com/sun/star/chart2/XChartTypeGroup.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPE_HPP_
+#include <com/sun/star/chart2/XChartType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CHART2_XDATASERIES_HPP_
 #include <com/sun/star/chart2/XDataSeries.hpp>
@@ -44,7 +44,13 @@
 #ifndef _COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
 #include <com/sun/star/chart2/XDiagram.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#endif
 
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
@@ -68,21 +74,17 @@ public:
         findDiagram( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
 
     static ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartType >
-        getFirstChartType( const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram >& xDiagram );
+            ::com::sun::star::chart2::XDiagram >
+        findDiagram( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc );
 
     static ::std::vector< ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XDataSeries > > getDataSeries(
             const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XChartDocument > & xChartDoc );
+    static ::std::vector< ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::XDataSeries > > getDataSeries(
+            const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xModel );
-
-    static ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries >
-        getSeriesByIdentifier(
-            const rtl::OUString& rIdentifier
-            , const ::com::sun::star::uno::Reference<
-              ::com::sun::star::frame::XModel > xModel );
 
     static ::com::sun::star::uno::Reference<
     ::com::sun::star::chart2::XChartType >
@@ -90,7 +92,23 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::frame::XModel >& xModel
             , const ::com::sun::star::uno::Reference<
-    ::com::sun::star::chart2::XDataSeries >& xGivenDataSeries );
+                ::com::sun::star::chart2::XDataSeries >& xGivenDataSeries );
+
+    static ::com::sun::star::uno::Reference<
+    ::com::sun::star::chart2::XCoordinateSystem >
+        getCoordinateSystemOfChartType(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::frame::XModel >& xModel
+            , const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XChartType >& xGivenChartType );
+
+    static ::com::sun::star::awt::Size getPageSize(
+        const ::com::sun::star::uno::Reference<
+                ::com::sun::star::frame::XModel >& xModel );
+
+    static void setPageSize( const ::com::sun::star::awt::Size& rSize
+                           , const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::frame::XModel >& xModel );
 };
 
 //.............................................................................
