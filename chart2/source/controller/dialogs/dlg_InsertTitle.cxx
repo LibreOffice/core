@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertTitle.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:35:56 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:36:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,127 +37,36 @@
 #include "precompiled_chart2.hxx"
 #include "dlg_InsertTitle.hxx"
 #include "dlg_InsertTitle.hrc"
-
+#include "res_Titles.hxx"
 #include "ResId.hxx"
-#include "SchSfxItemIds.hxx"
-
-// header for class SfxBoolItem
-#ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
-#endif
-// header for class SfxStringItem
-#ifndef _SFXSTRITEM_HXX
-#include <svtools/stritem.hxx>
-#endif
+#include "NoWarningThisInCTOR.hxx"
+#include "ObjectNameProvider.hxx"
 
 //.............................................................................
 namespace chart
 {
 //.............................................................................
 
-InsertTitleDialogData::InsertTitleDialogData()
-        : aPossibilityList(5)
-        , aExistenceList(5)
-        , aTextList(5)
-{
-    sal_Int32 nN = 0;
-    for(nN=5;nN--;)
-        aPossibilityList[nN]=true;
-    for(nN=5;nN--;)
-        aExistenceList[nN]=false;
-}
-
-
-SchTitleDlg::SchTitleDlg(Window* pWindow, const InsertTitleDialogData& rInput ) :
-    ModalDialog(pWindow, SchResId(DLG_TITLE)),
-    aCbxMain(this, SchResId(CBX_MAINTITLE)),
-    aEdtMain(this, SchResId(EDT_MAINTITLE)),
-    aCbxSub(this, SchResId(CBX_SUBTITLE)),
-    aEdtSub(this, SchResId(EDT_SUBTITLE)),
-    aCbxXAxis(this, SchResId(CBX_TITLE_X_AXIS)),
-    aEdtXAxis(this, SchResId(EDT_X_AXIS)),
-    aCbxYAxis(this, SchResId(CBX_TITLE_Y_AXIS)),
-    aEdtYAxis(this, SchResId(EDT_Y_AXIS)),
-    aCbxZAxis(this, SchResId(CBX_TITLE_Z_AXIS)),
-    aEdtZAxis(this, SchResId(EDT_Z_AXIS)),
-    aBtnOK(this, SchResId(BTN_OK)),
-    aBtnCancel(this, SchResId(BTN_CANCEL)),
-    aBtnHelp(this, SchResId(BTN_HELP))
+SchTitleDlg::SchTitleDlg(Window* pWindow, const TitleDialogData& rInput )
+    : ModalDialog(pWindow, SchResId(DLG_TITLE))
+    , m_apTitleResources( new TitleResources(this) )
+    , aBtnOK(this, SchResId(BTN_OK))
+    , aBtnCancel(this, SchResId(BTN_CANCEL))
+    , aBtnHelp(this, SchResId(BTN_HELP))
 {
     FreeResource();
 
-    aCbxMain.SetClickHdl(LINK(this, SchTitleDlg, EnableTitleHdl));
-    aCbxSub.SetClickHdl(LINK(this, SchTitleDlg, EnableTitleHdl));
-    aCbxXAxis.SetClickHdl(LINK(this, SchTitleDlg, EnableTitleHdl));
-    aCbxYAxis.SetClickHdl(LINK(this, SchTitleDlg, EnableTitleHdl));
-    aCbxZAxis.SetClickHdl(LINK(this, SchTitleDlg, EnableTitleHdl));
-
-    aCbxMain.Check( rInput.aExistenceList[0] );
-    aCbxSub.Check( rInput.aExistenceList[1] );
-    aCbxXAxis.Check( rInput.aExistenceList[2] );
-    aCbxYAxis.Check( rInput.aExistenceList[3] );
-    aCbxZAxis.Check( rInput.aExistenceList[4] );
-
-    aCbxMain.Enable( rInput.aPossibilityList[0] );
-    aEdtMain.Enable( rInput.aPossibilityList[0] && aCbxMain.IsChecked());
-    aCbxSub.Enable( rInput.aPossibilityList[1] );
-    aEdtSub.Enable( rInput.aPossibilityList[1] && aCbxSub.IsChecked());
-    aCbxXAxis.Enable( rInput.aPossibilityList[2] );
-    aEdtXAxis.Enable( rInput.aPossibilityList[2] && aCbxXAxis.IsChecked());
-    aCbxYAxis.Enable( rInput.aPossibilityList[3] );
-    aEdtYAxis.Enable( rInput.aPossibilityList[3] && aCbxYAxis.IsChecked());
-    aCbxZAxis.Enable( rInput.aPossibilityList[4] );
-    aEdtZAxis.Enable( rInput.aPossibilityList[4] && aCbxZAxis.IsChecked());
-
-    aEdtMain.SetText(rInput.aTextList[0]);
-    aEdtSub.SetText(rInput.aTextList[1]);
-    aEdtXAxis.SetText(rInput.aTextList[2]);
-    aEdtYAxis.SetText(rInput.aTextList[3]);
-    aEdtZAxis.SetText(rInput.aTextList[4]);
+    this->SetText( ObjectNameProvider::getName(OBJECTTYPE_TITLE,true) );
+    m_apTitleResources->writeToResources( rInput );
 }
 
 SchTitleDlg::~SchTitleDlg()
 {
 }
 
-IMPL_LINK( SchTitleDlg, EnableTitleHdl, CheckBox *, pCbx )
+void SchTitleDlg::getResult( TitleDialogData& rOutput )
 {
-    if (pCbx == &aCbxMain)
-    {
-        aEdtMain.Enable(aCbxMain.IsChecked());
-    }
-    else if (pCbx == &aCbxSub)
-    {
-        aEdtSub.Enable(aCbxSub.IsChecked());
-    }
-    else if (pCbx == &aCbxXAxis)
-    {
-        aEdtXAxis.Enable(aCbxXAxis.IsChecked());
-    }
-    else if (pCbx == &aCbxYAxis)
-    {
-        aEdtYAxis.Enable(aCbxYAxis.IsChecked());
-    }
-    else if (pCbx == &aCbxZAxis)
-    {
-        aEdtZAxis.Enable(aCbxZAxis.IsChecked());
-    }
-    return 0;
-}
-
-void SchTitleDlg::getResult( InsertTitleDialogData& rOutput )
-{
-    rOutput.aExistenceList[0] = aCbxMain.IsChecked()  && aEdtMain.GetText().Len();
-    rOutput.aExistenceList[1] = aCbxSub.IsChecked()   && aEdtSub.GetText().Len();
-    rOutput.aExistenceList[2] = aCbxXAxis.IsChecked() && aEdtXAxis.GetText().Len();
-    rOutput.aExistenceList[3] = aCbxYAxis.IsChecked() && aEdtYAxis.GetText().Len();
-    rOutput.aExistenceList[4] = aCbxZAxis.IsChecked() && aEdtZAxis.GetText().Len();
-
-    rOutput.aTextList[0] = aEdtMain.GetText();
-    rOutput.aTextList[1] = aEdtSub.GetText();
-    rOutput.aTextList[2] = aEdtXAxis.GetText();
-    rOutput.aTextList[3] = aEdtYAxis.GetText();
-    rOutput.aTextList[4] = aEdtZAxis.GetText();
+    m_apTitleResources->readFromResources( rOutput );
 }
 
 //.............................................................................
