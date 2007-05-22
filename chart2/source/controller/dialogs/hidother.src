@@ -1,0 +1,91 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: hidother.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:38:42 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#include "HelpIds.hrc"
+#include "SchSlotIds.hxx"
+
+hidspecial SID_INSERT_GRIDS {HelpId= SID_INSERT_GRIDS; };
+
+hidspecial HID_SCH_CB_XAXIS {HelpId= HID_SCH_CB_XAXIS; };
+hidspecial HID_SCH_CB_YAXIS {HelpId= HID_SCH_CB_YAXIS; };
+hidspecial HID_SCH_CB_ZAXIS {HelpId= HID_SCH_CB_ZAXIS; };
+hidspecial HID_SCH_CB_SECONDARY_XAXIS {HelpId= HID_SCH_CB_SECONDARY_XAXIS; };
+hidspecial HID_SCH_CB_SECONDARY_YAXIS {HelpId= HID_SCH_CB_SECONDARY_YAXIS; };
+hidspecial HID_SCH_CB_SECONDARY_ZAXIS {HelpId= HID_SCH_CB_SECONDARY_ZAXIS; };
+
+hidspecial HID_SCH_CB_XGRID {HelpId= HID_SCH_CB_XGRID; };
+hidspecial HID_SCH_CB_YGRID {HelpId= HID_SCH_CB_YGRID; };
+hidspecial HID_SCH_CB_ZGRID {HelpId= HID_SCH_CB_ZGRID; };
+hidspecial HID_SCH_CB_SECONDARY_XGRID {HelpId= HID_SCH_CB_SECONDARY_XGRID; };
+hidspecial HID_SCH_CB_SECONDARY_YGRID {HelpId= HID_SCH_CB_SECONDARY_YGRID; };
+hidspecial HID_SCH_CB_SECONDARY_ZGRID {HelpId= HID_SCH_CB_SECONDARY_ZGRID; };
+
+hidspecial HID_SCH_CT_INDICATE {HelpId= HID_SCH_CT_INDICATE; };
+hidspecial HID_SCH_CT_REGRESS {HelpId= HID_SCH_CT_REGRESS; };
+
+hidspecial HID_SCH_STATISTIK_MEANVALUE {HelpId= HID_SCH_STATISTIK_MEANVALUE; };
+hidspecial HID_SCH_STATISTIK_NO_ERROR {HelpId= HID_SCH_STATISTIK_NO_ERROR; };
+hidspecial HID_SCH_STATISTIK_VARIANT {HelpId= HID_SCH_STATISTIK_VARIANT; };
+hidspecial HID_SCH_STATISTIK_SIGMA {HelpId= HID_SCH_STATISTIK_SIGMA; };
+hidspecial HID_SCH_STATISTIK_PERCENT {HelpId= HID_SCH_STATISTIK_PERCENT; };
+hidspecial HID_SCH_STATISTIK_BIGERROR {HelpId= HID_SCH_STATISTIK_BIGERROR; };
+hidspecial HID_SCH_STATISTIK_CONSTERROR {HelpId= HID_SCH_STATISTIK_CONSTERROR; };
+hidspecial HID_SCH_STATISTIK_PERCENT_VALUE {HelpId= HID_SCH_STATISTIK_PERCENT_VALUE; };
+hidspecial HID_SCH_STATISTIK_BIGERROR_VALUE {HelpId= HID_SCH_STATISTIK_BIGERROR_VALUE; };
+hidspecial HID_SCH_STATISTIK_PLUS_VALUE {HelpId= HID_SCH_STATISTIK_PLUS_VALUE; };
+hidspecial HID_SCH_STATISTIK_MINUS_VALUE {HelpId= HID_SCH_STATISTIK_MINUS_VALUE; };
+
+hidspecial HID_SCH_LEGEND_SHOW          {HelpId= HID_SCH_LEGEND_SHOW; };
+hidspecial HID_SCH_LEGEND_POS_LEFT      {HelpId= HID_SCH_LEGEND_POS_LEFT; };
+hidspecial HID_SCH_LEGEND_POS_TOP       {HelpId= HID_SCH_LEGEND_POS_TOP; };
+hidspecial HID_SCH_LEGEND_POS_RIGHT     {HelpId= HID_SCH_LEGEND_POS_RIGHT; };
+hidspecial HID_SCH_LEGEND_POS_BOTTOM    {HelpId= HID_SCH_LEGEND_POS_BOTTOM; };
+
+hidspecial HID_SCH_DATALABEL_VALUE {HelpId= HID_SCH_DATALABEL_VALUE; };
+hidspecial HID_SCH_DATALABEL_NUMBER {HelpId= HID_SCH_DATALABEL_NUMBER; };
+hidspecial HID_SCH_DATALABEL_PERCENT {HelpId= HID_SCH_DATALABEL_PERCENT; };
+hidspecial HID_SCH_DATALABEL_TEXT {HelpId= HID_SCH_DATALABEL_TEXT; };
+hidspecial HID_SCH_DATALABEL_SYMBOL {HelpId= HID_SCH_DATALABEL_SYMBOL; };
+
+hidspecial HID_SCH_TITLE_MAIN {HelpId= HID_SCH_TITLE_MAIN; };
+hidspecial HID_SCH_TITLE_SUB {HelpId= HID_SCH_TITLE_SUB; };
+hidspecial HID_SCH_TITLE_X {HelpId= HID_SCH_TITLE_X; };
+hidspecial HID_SCH_TITLE_Y {HelpId= HID_SCH_TITLE_Y; };
+hidspecial HID_SCH_TITLE_Z {HelpId= HID_SCH_TITLE_Z; };
+
+hidspecial HID_SCH_NUM_OF_LINES {HelpId= HID_SCH_NUM_OF_LINES; };
+
+hidspecial HID_SCH_WIZARD_ROADMAP {HelpId= HID_SCH_WIZARD_ROADMAP; };
+hidspecial HID_SCH_WIN_DOCUMENT {HelpId= HID_SCH_WIN_DOCUMENT; };
+hidspecial HID_SCH_DATA_SERIES_LABEL {HelpId= HID_SCH_DATA_SERIES_LABEL; };
