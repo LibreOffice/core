@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xerecord.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:25:11 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:48:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,10 @@
 
 #ifndef SC_XERECORD_HXX
 #include "xerecord.hxx"
+#endif
+
+#ifndef SC_XEROOT_HXX
+#include "xeroot.hxx"
 #endif
 
 // Base classes to export Excel records =======================================
@@ -110,6 +114,56 @@ void XclExpDummyRecord::SetData( const void* pRecData, sal_Size nRecSize )
 void XclExpDummyRecord::WriteBody( XclExpStream& rStrm )
 {
     rStrm.Write( mpData, GetRecSize() );
+}
+
+// ============================================================================
+
+XclExpSubStream::XclExpSubStream( sal_uInt16 nSubStrmType ) :
+    mnSubStrmType( nSubStrmType )
+{
+}
+
+void XclExpSubStream::Save( XclExpStream& rStrm )
+{
+    // BOF record
+    switch( rStrm.GetRoot().GetBiff() )
+    {
+        case EXC_BIFF2:
+            rStrm.StartRecord( EXC_ID2_BOF, 4 );
+            rStrm << sal_uInt16( 7 ) << mnSubStrmType;
+            rStrm.EndRecord();
+        break;
+        case EXC_BIFF3:
+            rStrm.StartRecord( EXC_ID3_BOF, 6 );
+            rStrm << sal_uInt16( 0 ) << mnSubStrmType << sal_uInt16( 2104 );
+            rStrm.EndRecord();
+        break;
+        case EXC_BIFF4:
+            rStrm.StartRecord( EXC_ID4_BOF, 6 );
+            rStrm << sal_uInt16( 0 ) << mnSubStrmType << sal_uInt16( 1705 );
+            rStrm.EndRecord();
+        break;
+        case EXC_BIFF5:
+            rStrm.StartRecord( EXC_ID5_BOF, 8 );
+            rStrm << EXC_BOF_BIFF5 << mnSubStrmType << sal_uInt16( 4915 ) << sal_uInt16( 1994 );
+            rStrm.EndRecord();
+        break;
+        case EXC_BIFF8:
+            rStrm.StartRecord( EXC_ID5_BOF, 16 );
+            rStrm << EXC_BOF_BIFF8 << mnSubStrmType << sal_uInt16( 3612 ) << sal_uInt16( 1996 );
+            rStrm << sal_uInt32( 1 ) << sal_uInt32( 6 );
+            rStrm.EndRecord();
+        break;
+        default:
+            DBG_ERROR_BIFF();
+    }
+
+    // substream records
+    XclExpRecordList<>::Save( rStrm );
+
+    // EOF record
+    rStrm.StartRecord( EXC_ID_EOF, 0 );
+    rStrm.EndRecord();
 }
 
 // ============================================================================
