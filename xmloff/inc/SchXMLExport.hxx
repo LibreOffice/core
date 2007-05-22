@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLExport.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:40:40 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:03:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,8 @@ private:
     SchXMLExportHelper maExportHelper;
 
 protected:
+    virtual sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID );
+
     virtual void _ExportStyles( sal_Bool bUsed );
     virtual void _ExportAutoStyles();
     virtual void _ExportMasterStyles();
