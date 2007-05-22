@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertDataLabel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:31:20 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:34:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,10 @@
 #include "precompiled_chart2.hxx"
 #include "dlg_InsertDataLabel.hxx"
 #include "dlg_InsertDataLabel.hrc"
-
 #include "ResId.hxx"
-#include "SchSfxItemIds.hxx"
+#include "chartview/ChartSfxItemIds.hxx"
+#include "NoWarningThisInCTOR.hxx"
+#include "ObjectNameProvider.hxx"
 
 // header for class SfxBoolItem
 #ifndef _SFXENUMITEM_HXX
@@ -75,6 +76,9 @@ SchDataDescrDlg::SchDataDescrDlg(Window* pWindow, const SfxItemSet& rInAttrs) :
     m_rInAttrs(rInAttrs)
 {
     FreeResource();
+
+    SetText( ObjectNameProvider::getName(OBJECTTYPE_DATA_LABELS) );
+    aFlDescr.SetText( ObjectNameProvider::getName(OBJECTTYPE_DATA_LABELS) );
 
     aCbValue.SetClickHdl( LINK( this, SchDataDescrDlg, EnableHdl ));
     aCbText.SetClickHdl(  LINK( this, SchDataDescrDlg, EnableHdl ));
