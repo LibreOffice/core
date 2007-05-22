@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:47:19 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:45:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -806,7 +806,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
             }
 
             // additional tests for conflicts
-            for( size_t nPos = 0, nSize = maFilterList.Size(); !bConflict && (nPos < nSize); ++nPos )
+            for( size_t nPos = 0, nSize = maFilterList.GetSize(); !bConflict && (nPos < nSize); ++nPos )
             {
                 XclExpAutofilterRef xFilter = maFilterList.GetRecord( nPos );
                 bConflict = xFilter->HasCondition() && xFilter->HasTop10();
@@ -815,7 +815,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
             if( bConflict )
                 maFilterList.RemoveAllRecords();
 
-            if( !maFilterList.Empty() )
+            if( !maFilterList.IsEmpty() )
                 pFilterMode = new XclExpFiltermode;
             pFilterInfo = new XclExpAutofilterinfo( aRange.aStart, nColCnt );
         }
@@ -831,7 +831,7 @@ ExcAutoFilterRecs::~ExcAutoFilterRecs()
 XclExpAutofilter* ExcAutoFilterRecs::GetByCol( SCCOL nCol )
 {
     XclExpAutofilterRef xFilter;
-    for( size_t nPos = 0, nSize = maFilterList.Size(); nPos < nSize; ++nPos )
+    for( size_t nPos = 0, nSize = maFilterList.GetSize(); nPos < nSize; ++nPos )
     {
         xFilter = maFilterList.GetRecord( nPos );
         if( xFilter->GetCol() == static_cast<sal_uInt16>(nCol) )
@@ -844,7 +844,7 @@ XclExpAutofilter* ExcAutoFilterRecs::GetByCol( SCCOL nCol )
 
 BOOL ExcAutoFilterRecs::IsFiltered( SCCOL nCol )
 {
-    for( size_t nPos = 0, nSize = maFilterList.Size(); nPos < nSize; ++nPos )
+    for( size_t nPos = 0, nSize = maFilterList.GetSize(); nPos < nSize; ++nPos )
         if( maFilterList.GetRecord( nPos )->GetCol() == static_cast<sal_uInt16>(nCol) )
             return TRUE;
     return FALSE;
