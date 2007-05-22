@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xename.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:58:44 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:47:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -346,7 +346,7 @@ XclExpNameManagerImpl::XclExpNameManagerImpl( const XclExpRoot& rRoot ) :
 void XclExpNameManagerImpl::Initialize()
 {
     CreateBuiltInNames();
-    mnFirstUserIdx = maNameList.Size();
+    mnFirstUserIdx = maNameList.GetSize();
     CreateUserNames();
     CreateDatabaseNames();
 }
@@ -394,7 +394,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertRawName( const String& rName )
         return 0;
 
     // try to find an existing NAME record, regardless of its type
-    for( size_t nListIdx = mnFirstUserIdx, nListSize = maNameList.Size(); nListIdx < nListSize; ++nListIdx )
+    for( size_t nListIdx = mnFirstUserIdx, nListSize = maNameList.GetSize(); nListIdx < nListSize; ++nListIdx )
     {
         XclExpNameRef xName = maNameList.GetRecord( nListIdx );
         if( xName->IsGlobal() && (xName->GetOrigName() == rName) )
@@ -413,7 +413,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertMacroCall( const String& rMacroName, boo
         return 0;
 
     // try to find an existing NAME record
-    for( size_t nListIdx = mnFirstUserIdx, nListSize = maNameList.Size(); nListIdx < nListSize; ++nListIdx )
+    for( size_t nListIdx = mnFirstUserIdx, nListSize = maNameList.GetSize(); nListIdx < nListSize; ++nListIdx )
     {
         XclExpNameRef xName = maNameList.GetRecord( nListIdx );
         if( xName->IsMacroCall( bVBasic, bFunc ) && (xName->GetOrigName() == rMacroName) )
@@ -485,7 +485,7 @@ String XclExpNameManagerImpl::GetUnusedName( const String& rName ) const
     {
         // search the list of user-defined names
         bExist = false;
-        for( size_t nPos = mnFirstUserIdx, nSize = maNameList.Size(); !bExist && (nPos < nSize); ++nPos )
+        for( size_t nPos = mnFirstUserIdx, nSize = maNameList.GetSize(); !bExist && (nPos < nSize); ++nPos )
         {
             XclExpNameRef xName = maNameList.GetRecord( nPos );
             bExist = xName->GetOrigName() == aNewName;
@@ -499,10 +499,10 @@ String XclExpNameManagerImpl::GetUnusedName( const String& rName ) const
 
 sal_uInt16 XclExpNameManagerImpl::Append( XclExpNameRef xName )
 {
-    if( maNameList.Size() == 0xFFFF )
+    if( maNameList.GetSize() == 0xFFFF )
         return 0;
     maNameList.AppendRecord( xName );
-    return static_cast< sal_uInt16 >( maNameList.Size() );  // 1-based
+    return static_cast< sal_uInt16 >( maNameList.GetSize() );  // 1-based
 }
 
 sal_uInt16 XclExpNameManagerImpl::CreateName( const ScRangeData& rRangeData )
@@ -512,7 +512,7 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( const ScRangeData& rRangeData )
     /*  #i38821# recursive names: first insert the (empty) name object,
         otherwise a recursive call of this function from the formula compiler
         with the same defined name will not find it and will create it again. */
-    size_t nOldListSize = maNameList.Size();
+    size_t nOldListSize = maNameList.GetSize();
     XclExpNameRef xName( new XclExpName( GetRoot(), rName ) );
     sal_uInt16 nNameIdx = Append( xName );
     // store the index of the NAME record in the lookup map
@@ -534,8 +534,8 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( const ScRangeData& rRangeData )
         if( nBuiltInIdx != 0 )
         {
             // delete the new NAME records
-            while( maNameList.Size() > nOldListSize )
-                maNameList.RemoveRecord( maNameList.Size() - 1 );
+            while( maNameList.GetSize() > nOldListSize )
+                maNameList.RemoveRecord( maNameList.GetSize() - 1 );
             // use index of the found built-in NAME record
             maNameMap[ rRangeData.GetIndex() ] = nNameIdx = nBuiltInIdx;
         }
