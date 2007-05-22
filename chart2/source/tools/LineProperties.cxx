@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LineProperties.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:25:33 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:00:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,19 +50,6 @@
 #ifndef _COM_SUN_STAR_DRAWING_LINEJOINT_HPP_
 #include <com/sun/star/drawing/LineJoint.hpp>
 #endif
-#ifndef _COM_SUN_STAR_STYLE_XSTYLE_HPP_
-#include <com/sun/star/style/XStyle.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CHART2_FILLBITMAP_HPP_
-#include <com/sun/star/chart2/FillBitmap.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_TRANSPARENCYSTYLE_HPP_
-#include <com/sun/star/chart2/TransparencyStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_NUMBERFORMAT_HPP_
-#include <com/sun/star/chart2/NumberFormat.hpp>
-#endif
 
 using namespace ::com::sun::star;
 
@@ -72,10 +59,9 @@ namespace chart
 {
 
 void LineProperties::AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties,
-    bool bIncludeStyleProperties /* = false */ )
+    ::std::vector< Property > & rOutProperties )
 {
-    // Line Properties
+    // Line Properties see service drawing::LineProperties
     // ---------------
     rOutProperties.push_back(
         Property( C2U( "LineStyle" ),
@@ -83,30 +69,44 @@ void LineProperties::AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const drawing::LineStyle * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+     rOutProperties.push_back(
+         Property( C2U( "LineDash" ),
+                   PROP_LINE_DASH,
+                   ::getCppuType( reinterpret_cast< const drawing::LineDash * >(0)),
+                   beans::PropertyAttribute::BOUND
+                   | beans::PropertyAttribute::MAYBEVOID ));
+
+//not in service description
     rOutProperties.push_back(
-        Property( C2U( "LineWidth" ),
-                  PROP_LINE_WIDTH,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+        Property( C2U( "LineDashName" ),
+                  PROP_LINE_DASH_NAME,
+                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( C2U( "LineDash" ),
-                  PROP_LINE_DASH,
-                  ::getCppuType( reinterpret_cast< const drawing::LineDash * >(0)),
-                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID ));
+
     rOutProperties.push_back(
         Property( C2U( "LineColor" ),
                   PROP_LINE_COLOR,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
     rOutProperties.push_back(
         Property( C2U( "LineTransparence" ),
                   PROP_LINE_TRANSPARENCE,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "LineWidth" ),
+                  PROP_LINE_WIDTH,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
     rOutProperties.push_back(
         Property( C2U( "LineJoint" ),
                   PROP_LINE_JOINT,
@@ -116,8 +116,7 @@ void LineProperties::AddPropertiesToVector(
 }
 
 void LineProperties::AddDefaultsToMap(
-    ::chart::helper::tPropertyValueMap & rOutMap,
-    bool bIncludeStyleProperties /* = false */ )
+    ::chart::tPropertyValueMap & rOutMap )
 {
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINE_STYLE ));
     rOutMap[ PROP_LINE_STYLE ] =
@@ -134,6 +133,80 @@ void LineProperties::AddDefaultsToMap(
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINE_JOINT ));
     rOutMap[ PROP_LINE_JOINT ] =
         uno::makeAny( drawing::LineJoint_NONE );
+}
+
+//static
+bool LineProperties::IsLineVisible( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet >& xLineProperties )
+{
+    bool bRet = false;
+    try
+    {
+        if( xLineProperties.is() )
+        {
+            drawing::LineStyle aLineStyle(drawing::LineStyle_SOLID);
+            xLineProperties->getPropertyValue( C2U( "LineStyle" ) ) >>= aLineStyle;
+            if( aLineStyle != drawing::LineStyle_NONE )
+            {
+                sal_Int16 nLineTransparence=0;
+                xLineProperties->getPropertyValue( C2U( "LineTransparence" ) ) >>= nLineTransparence;
+                if(100!=nLineTransparence)
+                {
+                    bRet = true;
+                }
+            }
+        }
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+    return bRet;
+}
+
+//static
+void LineProperties::SetLineVisible( const ::com::sun::star::uno::Reference<
+    ::com::sun::star::beans::XPropertySet >& xLineProperties )
+{
+    try
+    {
+        if( xLineProperties.is() )
+        {
+            drawing::LineStyle aLineStyle(drawing::LineStyle_SOLID);
+            xLineProperties->getPropertyValue( C2U( "LineStyle" ) ) >>= aLineStyle;
+            if( aLineStyle == drawing::LineStyle_NONE )
+                xLineProperties->setPropertyValue( C2U( "LineStyle" ), uno::makeAny( drawing::LineStyle_SOLID ) );
+
+            sal_Int16 nLineTransparence=0;
+            xLineProperties->getPropertyValue( C2U( "LineTransparence" ) ) >>= nLineTransparence;
+            if(100==nLineTransparence)
+                xLineProperties->setPropertyValue( C2U( "LineTransparence" ), uno::makeAny( sal_Int16(0) ) );
+        }
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+//static
+void LineProperties::SetLineInvisible( const ::com::sun::star::uno::Reference<
+    ::com::sun::star::beans::XPropertySet >& xLineProperties )
+{
+    try
+    {
+        if( xLineProperties.is() )
+        {
+            drawing::LineStyle aLineStyle(drawing::LineStyle_SOLID);
+            xLineProperties->getPropertyValue( C2U( "LineStyle" ) ) >>= aLineStyle;
+            if( aLineStyle != drawing::LineStyle_NONE )
+                xLineProperties->setPropertyValue( C2U( "LineStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
+        }
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
 }
 
 } //  namespace chart
