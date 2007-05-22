@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:48:40 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:49:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XEMBEDPERSIST_HPP_
 #include <com/sun/star/embed/XEmbedPersist.hpp>
@@ -212,13 +215,6 @@
 #include "xichart.hxx"
 #endif
 
-#ifndef _SCH_DLL_HXX
-#include <sch/schdll.hxx>
-#endif
-#ifndef _SCH_MEMCHRT_HXX
-#include <sch/memchrt.hxx>
-#endif
-
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Reference;
@@ -229,6 +225,7 @@ using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::frame::XModel;
 using ::com::sun::star::awt::XControlModel;
 using ::com::sun::star::embed::XEmbeddedObject;
 using ::com::sun::star::embed::XEmbedPersist;
@@ -444,14 +441,13 @@ void XclImpDrawObjBase::ReadSubRecord( XclImpStream& /*rStrm*/, sal_uInt16 /*nSu
 {
 }
 
-Rectangle XclImpDrawObjBase::ReadClientAnchor( SvStream& rEscherStrm, const DffRecordHeader& rHeader )
+void XclImpDrawObjBase::ReadClientAnchor( SvStream& rEscherStrm, const DffRecordHeader& rHeader )
 {
     DBG_ASSERT( rHeader.nRecType == DFF_msofbtClientAnchor, "XclImpDrawObjBase::ReadClientAnchor - no client anchor record" );
     mxAnchor.reset( new XclEscherAnchor( GetScTab() ) );
     rHeader.SeekToContent( rEscherStrm );
     rEscherStrm.SeekRel( 2 );
     rEscherStrm >> *mxAnchor;
-    return mxAnchor->GetRect( GetDoc(), MAP_100TH_MM );
 }
 
 void XclImpDrawObjBase::SetObjData( sal_uInt16 nObjType, sal_uInt16 nObjId, sal_uInt16 nObjFlags )
@@ -466,6 +462,11 @@ void XclImpDrawObjBase::SetShapeData( sal_uInt32 nShapeId, sal_uInt32 nShapeFlag
     mnShapeId = nShapeId;
     mnShapeFlags = nShapeFlags;
     mnShapeBlipId = nShapeBlipId;
+}
+
+void XclImpDrawObjBase::SetClientAnchor( const XclEscherAnchor& rAnchor )
+{
+    mxAnchor.reset( new XclEscherAnchor( rAnchor ) );
 }
 
 bool XclImpDrawObjBase::IsValidSize( const Rectangle& rAnchorRect ) const
@@ -494,6 +495,14 @@ ScRange XclImpDrawObjBase::GetUsedArea() const
     return aScUsedArea;
 }
 
+Rectangle XclImpDrawObjBase::GetAnchorRect() const
+{
+    Rectangle aAnchorRect;
+    if( mxAnchor.is() )
+        aAnchorRect = mxAnchor->GetRect( GetDoc(), MAP_100TH_MM );
+    return aAnchorRect;
+}
+
 sal_Size XclImpDrawObjBase::GetProgressSize() const
 {
     return DoGetProgressSize();
@@ -503,12 +512,6 @@ void XclImpDrawObjBase::ProcessSdrObject( SdrObject& rSdrObj ) const
 {
     // call virtual function for object type specific processing
     DoProcessSdrObj( rSdrObj );
-}
-
-void XclImpDrawObjBase::CreateEscherAnchor( const Rectangle& rAnchorRect )
-{
-    mxAnchor.reset( new XclEscherAnchor( GetScTab() ) );
-    mxAnchor->SetRect( GetDoc(), rAnchorRect, MAP_100TH_MM );
 }
 
 sal_Size XclImpDrawObjBase::DoGetProgressSize() const
@@ -962,8 +965,7 @@ void XclImpTbxControlObj::DoProcessSdrObj( SdrObject& rSdrObj ) const
         case EXC_OBJ_CMO_SCROLLBAR:
         {
             sal_Int32 nApiOrient = mbScrollHor ? AwtScrollOrient::HORIZONTAL : AwtScrollOrient::VERTICAL;
-            sal_Int32 nVisSize = std::min< sal_Int32 >(
-                sal::static_int_cast< sal_Int32 >(mnScrollPage), 1 );
+            sal_Int32 nVisSize = std::min< sal_Int32 >( static_cast< sal_Int32 >( mnScrollPage ), 1 );
 
             // Calc's "Border" property is not the 3D/flat style effect in Excel (#i34712#)
             aPropSet.SetProperty( CREATE_OUSTRING( "Border" ), AwtVisualEffect::NONE );
@@ -1288,6 +1290,48 @@ XclImpChartObj::XclImpChartObj( const XclImpRoot& rRoot, bool bOwnTab ) :
     SetAreaObj( true );
 }
 
+void XclImpChartObj::ReadObj5( XclImpStream& rStrm )
+{
+    const XclImpPalette& rPal = GetPalette();
+
+    // area formatting
+    sal_uInt8 nBackIdx, nPattIdx, nPattern, nAreaFlags;
+    rStrm >> nBackIdx >> nPattIdx >> nPattern >> nAreaFlags;
+    mxAreaFmt.reset( new XclChAreaFormat );
+    mxAreaFmt->maPattColor = rPal.GetColor( nPattIdx );
+    mxAreaFmt->maBackColor = rPal.GetColor( nBackIdx );
+    mxAreaFmt->mnPattern = nPattern;
+    ::set_flag( mxAreaFmt->mnFlags, EXC_CHAREAFORMAT_AUTO, nAreaFlags & 1 );
+
+    // line formatting
+    sal_uInt8 nLineIdx, nLineType, nLineWeight, nLineFlags;
+    rStrm >> nLineIdx >> nLineType >> nLineWeight >> nLineFlags;
+    mxLineFmt.reset( new XclChLineFormat );
+    mxLineFmt->maColor = rPal.GetColor( nLineIdx );
+    switch( nLineType )
+    {
+        case 0:     mxLineFmt->mnPattern = EXC_CHLINEFORMAT_SOLID;      break;
+        case 1:     mxLineFmt->mnPattern = EXC_CHLINEFORMAT_DASH;       break;
+        case 2:     mxLineFmt->mnPattern = EXC_CHLINEFORMAT_DOT;        break;
+        case 3:     mxLineFmt->mnPattern = EXC_CHLINEFORMAT_DASHDOT;    break;
+        case 4:     mxLineFmt->mnPattern = EXC_CHLINEFORMAT_DASHDOTDOT; break;
+        case 5:     mxLineFmt->mnPattern = EXC_CHLINEFORMAT_DARKTRANS;  break;
+        case 6:     mxLineFmt->mnPattern = EXC_CHLINEFORMAT_MEDTRANS;   break;
+        case 7:     mxLineFmt->mnPattern = EXC_CHLINEFORMAT_LIGHTTRANS; break;
+        case 255:   mxLineFmt->mnPattern = EXC_CHLINEFORMAT_NONE;       break;
+        default:    mxLineFmt->mnPattern = EXC_CHLINEFORMAT_SOLID;
+    }
+    switch( nLineWeight )
+    {
+        case 0:     mxLineFmt->mnWeight = EXC_CHLINEFORMAT_HAIR;    break;
+        case 1:     mxLineFmt->mnWeight = EXC_CHLINEFORMAT_SINGLE;  break;
+        case 2:     mxLineFmt->mnWeight = EXC_CHLINEFORMAT_DOUBLE;  break;
+        case 3:     mxLineFmt->mnWeight = EXC_CHLINEFORMAT_TRIPLE;  break;
+        default:    mxLineFmt->mnWeight = EXC_CHLINEFORMAT_HAIR;
+    }
+    ::set_flag( mxLineFmt->mnFlags, EXC_CHLINEFORMAT_AUTO, nLineFlags & 1 );
+}
+
 void XclImpChartObj::ReadChartSubStream( XclImpStream& rStrm )
 {
     DBG_ASSERT( rStrm.GetRecId() == EXC_ID5_BOF, "XclImpChartObj::ReadChartSubStream - no BOF record found" );
@@ -1295,12 +1339,53 @@ void XclImpChartObj::ReadChartSubStream( XclImpStream& rStrm )
     {
         mxChart.reset( new XclImpChart( GetRoot(), mbOwnTab ) );
         mxChart->ReadChartSubStream( rStrm );
-
-        /*  #i44077# Calculate anchor for sheet charts. Needed to get used area
-            if this chart is inserted as OLE object. */
+        if( mxLineFmt.is() && mxAreaFmt.is() )
+            mxChart->SetChartFrameFormat( *mxLineFmt, *mxAreaFmt );
         if( mbOwnTab )
-            CalcTabChartAnchor();
+            FinalizeTabChart();
     }
+}
+
+SdrObject* XclImpChartObj::CreateSdrObject( const Rectangle& rAnchorRect, ScfProgressBar& rProgress ) const
+{
+    SdrObjectPtr xSdrObj;
+    SfxObjectShell* pDocShell = GetDocShell();
+    if( SvtModuleOptions().IsChart() && pDocShell && mxChart.is() )
+    {
+        // create embedded chart object
+        OUString aEmbObjName;
+        Reference< XEmbeddedObject > xEmbObj = pDocShell->GetEmbeddedObjectContainer().
+                CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aEmbObjName );
+
+        /*  Set the size to the embedded object, this prevents that font sizes
+            of text objects are changed in the chart when the object is
+            inserted into the draw page. */
+        sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT;
+        MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xEmbObj->getMapUnit( nAspect ) );
+        Size aSize( Window::LogicToLogic( rAnchorRect.GetSize(), MapMode( MAP_100TH_MM ), MapMode( aUnit ) ) );
+        ::com::sun::star::awt::Size aAwtSize;
+        aAwtSize.Width = aSize.Width();
+        aAwtSize.Height = aSize.Height();
+        xEmbObj->setVisualAreaSize( nAspect, aAwtSize );
+
+        // create the container OLE object
+        SdrOle2Obj* pSdrOleObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xEmbObj, nAspect ), aEmbObjName, rAnchorRect );
+        xSdrObj.reset( pSdrOleObj );
+        xSdrObj->NbcSetLayer( SC_LAYER_FRONT );
+
+        // convert Excel chart to OOo Chart
+        if( svt::EmbeddedObjectRef::TryRunningState( xEmbObj ) )
+        {
+            Reference< XModel > xModel( xEmbObj->getComponent(), UNO_QUERY );
+            mxChart->Convert( xModel, rProgress );
+
+            Reference< XEmbedPersist > xPers( xEmbObj, UNO_QUERY );
+            if( xPers.is() )
+                xPers->storeOwn();
+        }
+    }
+
+    return xSdrObj.release();
 }
 
 sal_Size XclImpChartObj::DoGetProgressSize() const
@@ -1308,10 +1393,14 @@ sal_Size XclImpChartObj::DoGetProgressSize() const
     return mxChart.is() ? mxChart->GetProgressSize() : 0;
 }
 
-void XclImpChartObj::CalcTabChartAnchor()
+void XclImpChartObj::FinalizeTabChart()
 {
+    /*  #i44077# Calculate and store Escher anchor for sheet charts.
+        Needed to get used area if this chart is inserted as OLE object. */
+    DBG_ASSERT( mbOwnTab, "XclImpChartObj::FinalizeTabChart - not allowed for embedded chart objects" );
+
     // set uninitialized page to landscape
-    if ( !GetPageSettings().GetPageData().mbValid )
+    if( !GetPageSettings().GetPageData().mbValid )
         GetPageSettings().SetPaperSize( EXC_PAPERSIZE_DEFAULT, false );
 
     // calculate size of the chart object
@@ -1322,7 +1411,7 @@ void XclImpChartObj::CalcTabChartAnchor()
     long nHeight = XclTools::GetHmmFromTwips( aPaperSize.Height() );
 
     // subtract page margins, give 1cm extra space
-    nWidth -= (XclTools::GetHmmFromInch( rPageData.mfLeftMargin + rPageData.mfRightMargin ) + 1000);
+    nWidth -= (XclTools::GetHmmFromInch( rPageData.mfLeftMargin + rPageData.mfRightMargin ) + 2000);
     nHeight -= (XclTools::GetHmmFromInch( rPageData.mfTopMargin + rPageData.mfBottomMargin ) + 1000);
 
     // print column/row headers?
@@ -1332,8 +1421,10 @@ void XclImpChartObj::CalcTabChartAnchor()
         nHeight -= 1000;
     }
 
-    maAnchorRect = Rectangle( 500, 500, nWidth, nHeight );
-    CreateEscherAnchor( maAnchorRect );
+    // create the Escher anchor
+    XclEscherAnchor aAnchor( GetScTab() );
+    aAnchor.SetRect( GetDoc(), Rectangle( 1000, 500, nWidth, nHeight ), MAP_100TH_MM );
+    SetClientAnchor( aAnchor );
 }
 
 // Escher stream conversion ===================================================
@@ -1452,11 +1543,10 @@ void XclImpDffManager::ProcessDrawing( SvStream& rEscherStrm, sal_Size nStrmPos 
 
 void XclImpDffManager::ProcessTabChart( const XclImpChartObj& rChartObj )
 {
-    // sheet charts store their anchor rectangle internally
-    const Rectangle& rAnchorRect = rChartObj.GetAnchorRect();
-    if( rChartObj.IsValidSize( rAnchorRect ) )
+    Rectangle aAnchorRect = rChartObj.GetAnchorRect();
+    if( rChartObj.IsValidSize( aAnchorRect ) )
     {
-        SdrObjectPtr xSdrObj( CreateSdrObject( rChartObj, rAnchorRect ) );
+        SdrObjectPtr xSdrObj( CreateSdrObject( rChartObj, aAnchorRect ) );
         InsertSdrObject( rChartObj, xSdrObj.release() );
         UpdateUsedArea( rChartObj );
     }
@@ -1479,7 +1569,8 @@ void XclImpDffManager::ProcessClientAnchor2( SvStream& rEscherStrm,
     // find the OBJ record data related to the processed shape
     if( XclImpDrawObjBase* pDrawObj = mrObjManager.FindDrawObj( rObjData.rSpHd ).get() )
     {
-        rObjData.aChildAnchor = pDrawObj->ReadClientAnchor( rEscherStrm, rHeader );
+        pDrawObj->ReadClientAnchor( rEscherStrm, rHeader );
+        rObjData.aChildAnchor = pDrawObj->GetAnchorRect();
         rObjData.bChildAnchor = sal_True;
     }
 }
@@ -1760,59 +1851,12 @@ SdrObject* XclImpDffManager::CreateSdrObject( XclImpTbxControlObj& rTbxCtrlObj, 
 
 SdrObject* XclImpDffManager::CreateSdrObject( const XclImpChartObj& rChartObj, const Rectangle& rAnchorRect )
 {
-    SfxObjectShell* pDocShell = GetDocShell();
-    const XclImpChart* pChart = rChartObj.GetChart();
-    if( !SvtModuleOptions().IsChart() || !pDocShell || !pChart )
-        return 0;
-
-    ScRangeListRef xScRanges = pChart->GetSourceData();
-    if( !xScRanges.Is() )
-        return 0;
-
-    OUString aEmbObjName;
-    Reference< XEmbeddedObject > xEmbObj = pDocShell->GetEmbeddedObjectContainer().
-            CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aEmbObjName );
-
-    /*  Set the size to the embedded object, this prevents that font sizes of
-        text objects are changed in the chart when the object is inserted into
-        the draw page. */
-    sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT;
-    MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xEmbObj->getMapUnit( nAspect ) );
-    Size aSize( Window::LogicToLogic( rAnchorRect.GetSize(), MapMode( MAP_100TH_MM ), MapMode( aUnit ) ) );
-    ::com::sun::star::awt::Size aAwtSize;
-    aAwtSize.Width = aSize.Width();
-    aAwtSize.Height = aSize.Height();
-    xEmbObj->setVisualAreaSize( nAspect, aAwtSize );
-
-    // create the container OLE object
-    SdrOle2Obj* pSdrOleObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xEmbObj, nAspect ), aEmbObjName, rAnchorRect );
-    SdrObjectPtr xSdrObj( pSdrOleObj );
-    xSdrObj->NbcSetLayer( SC_LAYER_FRONT );
-
-    // create the chart array (core representation of source data)
-    ScChartArray aChartArray( GetDocPtr(), xScRanges, aEmbObjName );
-    aChartArray.SetHeaders( pChart->HasHeaderRow(), pChart->HasHeaderColumn() );
-
-    ::std::auto_ptr< SchMemChart > xMemChart( aChartArray.CreateMemChart() );
-    SchDLL::Update( xEmbObj, xMemChart.get() );
-    pSdrOleObj->GetNewReplacement();
-
-    // convert Excel chart to OOo Chart
-    if( svt::EmbeddedObjectRef::TryRunningState( xEmbObj ) )
-    {
-        pChart->Convert( xEmbObj->getComponent(), *mxProgress );
-
-        Reference< XEmbedPersist > xPers( xEmbObj, UNO_QUERY );
-        if( xPers.is() )
-            xPers->storeOwn();
-    }
-
-    return xSdrObj.release();
+    return rChartObj.CreateSdrObject( rAnchorRect, *mxProgress );
 }
 
 void XclImpDffManager::UpdateUsedArea( const XclImpDrawObjBase& rDrawObj )
 {
-    ScRange aScObjArea( rDrawObj.GetUsedArea() );
+    ScRange aScObjArea = rDrawObj.GetUsedArea();
     if( aScObjArea.IsValid() )
     {
         ScRange* pScTabArea = 0;
@@ -1843,6 +1887,31 @@ XclImpObjectManager::~XclImpObjectManager()
 
 // *** Read Excel records *** -------------------------------------------------
 
+void XclImpObjectManager::ReadObj5( XclImpStream& rStrm )
+{
+    DBG_ASSERT_BIFF( GetBiff() == EXC_BIFF5 );
+
+    sal_uInt16 nObjType, nObjId, nFlags, nMacroSize;
+    XclEscherAnchor aAnchor( GetCurrScTab() );
+
+    rStrm.Ignore( 4 );
+    rStrm >> nObjType >> nObjId >> nFlags >> aAnchor >> nMacroSize;
+    rStrm.Ignore( 6 );
+
+    // TODO: currently only charts are supported
+    if( nObjType == EXC_OBJ_CMO_CHART )
+    {
+        // create and read chart object data
+        XclImpChartObjRef xChartObj( new XclImpChartObj( GetRoot(), false ) );
+        xChartObj->SetClientAnchor( aAnchor );
+        xChartObj->ReadObj5( rStrm );
+        if( StartChartSubStream( rStrm ) )
+            xChartObj->ReadChartSubStream( rStrm );
+        // no Escher stream in BIFF5 - abuse sheet chart functionality
+        maTabCharts.push_back( xChartObj );
+    }
+}
+
 void XclImpObjectManager::ReadMsoDrawingGroup( XclImpStream& rStrm )
 {
     DBG_ASSERT_BIFF( GetBiff() == EXC_BIFF8 );
@@ -1859,7 +1928,7 @@ void XclImpObjectManager::ReadMsoDrawing( XclImpStream& rStrm )
     /*  #i60510# real life: MSODRAWINGSELECTION record may contain garbage -
         this makes it impossible to process the Escher stream in one run.
         Store stream start position for every sheet separately, will be used
-        to seek the stream to these positions later, whrn processing the next
+        to seek the stream to these positions later, when processing the next
         sheet. */
     size_t nTabIdx = static_cast< size_t >( GetCurrScTab() );
     if( nTabIdx >= maTabStrmPos.size() )
@@ -1882,7 +1951,7 @@ void XclImpObjectManager::ReadMsoDrawing( XclImpStream& rStrm )
         break;
         case EXC_ID_OBJ:
             rStrm.StartNextRecord();
-            ReadObj( rStrm );
+            ReadObj8( rStrm );
         break;
         case EXC_ID_TXO:
             rStrm.StartNextRecord();
@@ -1915,7 +1984,7 @@ void XclImpObjectManager::ReadNote( XclImpStream& rStrm )
 
 void XclImpObjectManager::ReadTabChart( XclImpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( GetBiff() == EXC_BIFF8 );
+    DBG_ASSERT_BIFF( GetBiff() >= EXC_BIFF5 );
     XclImpChartObjRef xChartObj( new XclImpChartObj( GetRoot(), true ) );
     xChartObj->ReadChartSubStream( rStrm );
     maTabCharts.push_back( xChartObj );
@@ -2033,7 +2102,7 @@ void XclImpObjectManager::ReadEscherRecord( XclImpStream& rStrm )
     }
 }
 
-void XclImpObjectManager::ReadObj( XclImpStream& rStrm )
+void XclImpObjectManager::ReadObj8( XclImpStream& rStrm )
 {
     XclImpDrawObjRef xDrawObj;
     bool bLoop = true;
@@ -2049,12 +2118,12 @@ void XclImpObjectManager::ReadObj( XclImpStream& rStrm )
                 bLoop = false;
             break;
             case EXC_ID_OBJ_FTCMO:
-                DBG_ASSERT( !xDrawObj, "XclImpObjectManager::ReadObj - multiple FTCMO subrecords" );
+                DBG_ASSERT( !xDrawObj, "XclImpObjectManager::ReadObj8 - multiple FTCMO subrecords" );
                 xDrawObj = XclImpDrawObjBase::ReadObjCmo( rStrm );
                 bLoop = xDrawObj.is();
             break;
             default:
-                DBG_ASSERT( xDrawObj.is(), "XclImpObjectManager::ReadObj - missing leading FTCMO subrecord" );
+                DBG_ASSERT( xDrawObj.is(), "XclImpObjectManager::ReadObj8 - missing leading FTCMO subrecord" );
                 if( xDrawObj.is() )
                     xDrawObj->ReadSubRecord( rStrm, nSubRecId, nSubRecSize );
         }
@@ -2067,20 +2136,11 @@ void XclImpObjectManager::ReadObj( XclImpStream& rStrm )
     // try to read the chart substream
     if( XclImpChartObj* pChartObj = dynamic_cast< XclImpChartObj* >( xDrawObj.get() ) )
     {
-        bool bChartSubStrm = (rStrm.GetNextRecId() == EXC_ID5_BOF) && rStrm.StartNextRecord();
-        DBG_ASSERT( bChartSubStrm, "XclImpObjectManager::ReadObj - missing chart substream" );
-        if( bChartSubStrm )
-        {
-            rStrm.ResetRecord( true );
-            sal_uInt16 nBofType;
-            rStrm.Ignore( 2 );
-            rStrm >> nBofType;
-            DBG_ASSERT( nBofType == EXC_BOF_CHART, "XclImpObjectManager::ReadObj - no chart BOF record" );
-            // try to read the substream anyway
+        // read complete chart substream from BOF to EOF records
+        if( StartChartSubStream( rStrm ) )
             pChartObj->ReadChartSubStream( rStrm );
-            // #90118# be able to read following CONTINUE record as MSODRAWING
-            rStrm.ResetRecord( false );
-        }
+        // #90118# be able to read following CONTINUE record as MSODRAWING
+        rStrm.ResetRecord( false );
     }
 
     // store the new object in the internal containers
@@ -2098,6 +2158,22 @@ void XclImpObjectManager::ReadTxo( XclImpStream& rStrm )
     maTxoMap[ maEscherStrm.Tell() ] = xTxo;
 }
 
+bool XclImpObjectManager::StartChartSubStream( XclImpStream& rStrm )
+{
+    bool bChartSubStrm = (rStrm.GetNextRecId() == EXC_ID5_BOF) && rStrm.StartNextRecord();
+    DBG_ASSERT( bChartSubStrm, "XclImpObjectManager::StartChartSubStream - missing chart substream" );
+    if( bChartSubStrm )
+    {
+        rStrm.ResetRecord( true );
+        sal_uInt16 nBofType;
+        rStrm.Ignore( 2 );
+        rStrm >> nBofType;
+        DBG_ASSERT( nBofType == EXC_BOF_CHART, "XclImpObjectManager::StartChartSubStream - no chart BOF record" );
+        // return true, even if BOF record contains wrong substream identifier
+    }
+    return bChartSubStrm;
+}
+
 sal_Size XclImpObjectManager::GetProgressSize() const
 {
     sal_Size nProgressSize = 0;
@@ -2110,8 +2186,10 @@ sal_Size XclImpObjectManager::GetProgressSize() const
 
 // Escher property set helper =================================================
 
-XclImpEscherPropSet::XclImpEscherPropSet( const XclImpDffManager& rDffManager ) :
-    maPropReader( rDffManager )
+XclImpEscherPropSet::XclImpEscherPropSet( const XclImpRoot& rRoot ) :
+    XclImpRoot( rRoot ),
+    maObjManager( rRoot ),
+    mrDffManager( maObjManager.GetDffManager() )
 {
 }
 
@@ -2127,18 +2205,18 @@ void XclImpEscherPropSet::Read( XclImpStream& rStrm )
     mxMemStrm.reset( new SvMemoryStream );
     rStrm.CopyToStream( *mxMemStrm, 8 + nPropSetSize );
     mxMemStrm->Seek( STREAM_SEEK_TO_BEGIN );
-    maPropReader.ReadPropSet( *mxMemStrm, 0 );
+    mrDffManager.ReadPropSet( *mxMemStrm, 0 );
 }
 
 sal_uInt32 XclImpEscherPropSet::GetPropertyValue( sal_uInt16 nPropId, sal_uInt32 nDefault ) const
 {
-    return maPropReader.GetPropertyValue( nPropId, nDefault );
+    return mrDffManager.GetPropertyValue( nPropId, nDefault );
 }
 
 void XclImpEscherPropSet::FillToItemSet( SfxItemSet& rItemSet ) const
 {
     if( mxMemStrm.get() )
-        maPropReader.ApplyAttributes( *mxMemStrm, rItemSet );
+        mrDffManager.ApplyAttributes( *mxMemStrm, rItemSet );
 }
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclImpEscherPropSet& rPropSet )
