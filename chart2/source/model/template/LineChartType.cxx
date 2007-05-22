@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LineChartType.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:18:58 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:49:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,9 @@
 #include "precompiled_chart2.hxx"
 #include "LineChartType.hxx"
 #include "PropertyHelper.hxx"
-#include "algohelper.hxx"
 #include "macros.hxx"
+#include "servicenames_charttypes.hxx"
+#include "ContainerHelper.hxx"
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -61,7 +62,6 @@ namespace
 
 enum
 {
-    PROP_LINECHARTTYPE_DIMENSION,
     PROP_LINECHARTTYPE_CURVE_STYLE,
     PROP_LINECHARTTYPE_CURVE_RESOLUTION,
     PROP_LINECHARTTYPE_SPLINE_ORDER
@@ -70,13 +70,6 @@ enum
 void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( C2U( "Dimension" ),
-                  PROP_LINECHARTTYPE_DIMENSION,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-
     rOutProperties.push_back(
         Property( C2U( "CurveStyle" ),
                   PROP_LINECHARTTYPE_CURVE_STYLE,
@@ -99,13 +92,8 @@ void lcl_AddPropertiesToVector(
 }
 
 void lcl_AddDefaultsToMap(
-    ::chart::helper::tPropertyValueMap & rOutMap )
+    ::chart::tPropertyValueMap & rOutMap )
 {
-    // must match default in CTOR!
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINECHARTTYPE_DIMENSION ));
-    rOutMap[ PROP_LINECHARTTYPE_DIMENSION ] =
-        uno::makeAny( sal_Int32( 2 ) );
-
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINECHARTTYPE_CURVE_STYLE ));
     rOutMap[ PROP_LINECHARTTYPE_CURVE_STYLE ] =
         uno::makeAny( chart2::CurveStyle_LINES );
@@ -135,10 +123,10 @@ const Sequence< Property > & lcl_GetPropertySequence()
 
         // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::helper::PropertyNameLess() );
+                     ::chart::PropertyNameLess() );
 
         // transfer result to static Sequence
-        aPropSeq = ::chart::helper::VectorToSequence( aProperties );
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
     return aPropSeq;
@@ -150,31 +138,31 @@ namespace chart
 {
 
 LineChartType::LineChartType(
-    sal_Int32 nDim /* = 2 */,
-    chart2::CurveStyle eCurveStyle /* chart2::CurveStyle_LINES */,
-    sal_Int32 nResolution /* = 20 */,
-    sal_Int32 nOrder /* = 3 */ ) :
-        ChartType( nDim )
+    const uno::Reference< uno::XComponentContext > & xContext ) :
+        ChartType( xContext )
 {
-    if( eCurveStyle != chart2::CurveStyle_LINES )
-        setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_CURVE_STYLE,
-                                          uno::makeAny( eCurveStyle ));
-    if( nResolution != 20 )
-        setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_CURVE_RESOLUTION,
-                                          uno::makeAny( nResolution ));
-    if( nOrder != 3 )
-        setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_SPLINE_ORDER,
-                                          uno::makeAny( nOrder ));
+}
+
+LineChartType::LineChartType( const LineChartType & rOther ) :
+        ChartType( rOther )
+{
 }
 
 LineChartType::~LineChartType()
 {}
 
+// ____ XCloneable ____
+uno::Reference< util::XCloneable > SAL_CALL LineChartType::createClone()
+    throw (uno::RuntimeException)
+{
+    return uno::Reference< util::XCloneable >( new LineChartType( *this ));
+}
+
 // ____ XChartType ____
 ::rtl::OUString SAL_CALL LineChartType::getChartType()
     throw (uno::RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.LineChart" ));
+    return CHART2_SERVICE_NAME_CHARTTYPE_LINE;
 }
 
 
@@ -182,7 +170,7 @@ LineChartType::~LineChartType()
 uno::Any LineChartType::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    static helper::tPropertyValueMap aStaticDefaults;
+    static tPropertyValueMap aStaticDefaults;
 
     // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -192,7 +180,7 @@ uno::Any LineChartType::GetDefaultValue( sal_Int32 nHandle ) const
         lcl_AddDefaultsToMap( aStaticDefaults );
     }
 
-    helper::tPropertyValueMap::const_iterator aFound(
+    tPropertyValueMap::const_iterator aFound(
         aStaticDefaults.find( nHandle ));
 
     if( aFound == aStaticDefaults.end())
@@ -202,7 +190,6 @@ uno::Any LineChartType::GetDefaultValue( sal_Int32 nHandle ) const
     // \--
 }
 
-// ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL LineChartType::getInfoHelper()
 {
     static ::cppu::OPropertyArrayHelper aArrayHelper( lcl_GetPropertySequence(),
@@ -230,5 +217,18 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
     return xInfo;
     // \--
 }
+
+uno::Sequence< ::rtl::OUString > LineChartType::getSupportedServiceNames_Static()
+{
+    uno::Sequence< ::rtl::OUString > aServices( 3 );
+    aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_LINE;
+    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartType" );
+    aServices[ 2 ] = C2U( "com.sun.star.beans.PropertySet" );
+    return aServices;
+}
+
+// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+APPHELPER_XSERVICEINFO_IMPL( LineChartType,
+                             C2U( "com.sun.star.comp.chart.LineChartType" ));
 
 } //  namespace chart
