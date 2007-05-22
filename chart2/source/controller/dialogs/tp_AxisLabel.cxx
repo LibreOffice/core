@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_AxisLabel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:32:05 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:43:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,42 +39,19 @@
 
 #include "ResId.hxx"
 #include "TabPages.hrc"
-#include "SchSfxItemIds.hxx"
-#include "SchSlotIds.hxx"
+#include "chartview/ChartSfxItemIds.hxx"
+#include "NoWarningThisInCTOR.hxx"
 
 // header for SvxChartTextOrientItem / SvxChartTextOrderItem
 #ifndef _SVX_CHRTITEM_HXX
 #include <svx/chrtitem.hxx>
 #endif
 
-/*
-#ifndef _SFXITEMSET_HXX
-#include <svtools/itemset.hxx>
-#endif
-*/
 // header for SfxInt32Item
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
 #endif
-/*
-// header for SfxBoolItem
-#ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
-#endif
 
-#include "schattr.hxx"
-// header for SvxChartTextOrientItem / SvxChartTextOrderItem
-#ifndef _SVX_CHRTITEM_HXX
-#include <svx/chrtitem.hxx>
-#endif
-
-#include "chtmodel.hxx"
-#include "schresid.hxx"
-#include "app.hrc"
-
-#include "tplabel.hxx"
-#include "tplabel.hrc"
-*/
 //.............................................................................
 namespace chart
 {
@@ -104,7 +81,6 @@ SchAxisLabelTabPage::SchAxisLabelTabPage( Window* pParent, const SfxItemSet& rIn
         aOrientHlp( this, aCtrlDial, aNfRotate, aCbStacked ),
 
         m_bShowStaggeringControls( true ),
-////        bAllowTextOverlap( TRUE ),
 
         m_nInitialDegrees( 0 ),
         m_bHasInitialDegrees( true ),
