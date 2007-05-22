@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CharacterPropertyItemConverter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:21:11 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:52:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,26 +60,36 @@ class CharacterPropertyItemConverter :
 public:
     CharacterPropertyItemConverter(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet > & rPropertySet,
+            ::com::sun::star::beans::XPropertySet > & rPropertySet,
+        SfxItemPool& rItemPool );
+    CharacterPropertyItemConverter(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool,
-        ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
-            ::std::auto_ptr< ::com::sun::star::awt::Size >(),
-        const ::rtl::OUString & rRefSizePropertyName =
-            ::rtl::OUString() );
+        ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize,
+        const ::rtl::OUString & rRefSizePropertyName,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet > & rRefSizePropSet =
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >() );
     virtual ~CharacterPropertyItemConverter();
 
 protected:
     virtual const USHORT * GetWhichPairs() const;
-    virtual bool GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const;
+    virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const;
 
     virtual void FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const
         throw( ::com::sun::star::uno::Exception );
     virtual bool ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet )
         throw( ::com::sun::star::uno::Exception );
 
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet >  GetRefSizePropertySet() const;
+
 private:
     ::std::auto_ptr< ::com::sun::star::awt::Size > m_pRefSize;
     ::rtl::OUString                                m_aRefSizePropertyName;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet >    m_xRefSizePropSet;
 };
 
 } //  namespace wrapper
