@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TitleHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:30:07 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:05:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 #include "TitleHelper.hxx"
 #include "ChartModelHelper.hxx"
 #include "macros.hxx"
-#include "ContextHelper.hxx"
-#include "MeterHelper.hxx"
+#include "AxisHelper.hxx"
+#include "DiagramHelper.hxx"
 
 #ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -52,32 +52,36 @@ namespace chart
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using ::com::sun::star::uno::Reference;
 
-rtl::OUString TitleHelper::getIdentifierForTitle( TitleHelper::eTitleType nTitleIndex )
+namespace
+{
+
+rtl::OUString lcl_getIdentifierForTitle( TitleHelper::eTitleType nTitleIndex )
 {
     switch( nTitleIndex )
     {
-        case MAIN_TITLE:
+        case TitleHelper::MAIN_TITLE:
         {
             static rtl::OUString m_aIdentifier( C2U( "@main-title" ) );
             return m_aIdentifier;
         }
-        case SUB_TITLE:
+        case TitleHelper::SUB_TITLE:
         {
             static rtl::OUString m_aIdentifier( C2U( "@sub-title" ) );
             return m_aIdentifier;
         }
-        case X_AXIS_TITLE:
+        case TitleHelper::X_AXIS_TITLE:
         {
             static rtl::OUString m_aIdentifier( C2U( "@xaxis-title" ) );
             return m_aIdentifier;
         }
-        case Y_AXIS_TITLE:
+        case TitleHelper::Y_AXIS_TITLE:
         {
             static rtl::OUString m_aIdentifier( C2U( "@yaxis-title" ) );
             return m_aIdentifier;
         }
-        case Z_AXIS_TITLE:
+        case TitleHelper::Z_AXIS_TITLE:
         {
             static rtl::OUString m_aIdentifier( C2U( "@zaxis-title" ) );
             return m_aIdentifier;
@@ -88,6 +92,55 @@ rtl::OUString TitleHelper::getIdentifierForTitle( TitleHelper::eTitleType nTitle
     }
 }
 
+} //anonymous namespace
+
+uno::Reference< XTitled > lcl_getTitleParentFromDiagram(
+      TitleHelper::eTitleType nTitleIndex
+    , const uno::Reference< XDiagram >& xDiagram )
+{
+    uno::Reference< XTitled > xResult;
+
+    if( nTitleIndex == TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION ||
+        nTitleIndex == TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION )
+    {
+        bool bDummy = false;
+        bool bIsVertical = DiagramHelper::getVertical( xDiagram, bDummy, bDummy );
+
+        if( nTitleIndex == TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION )
+            nTitleIndex = bIsVertical ? TitleHelper::X_AXIS_TITLE : TitleHelper::Y_AXIS_TITLE;
+        else
+            nTitleIndex = bIsVertical ? TitleHelper::Y_AXIS_TITLE : TitleHelper::X_AXIS_TITLE;
+    }
+
+
+    switch( nTitleIndex )
+    {
+        case TitleHelper::SUB_TITLE:
+            if( xDiagram.is())
+                xResult.set( xDiagram, uno::UNO_QUERY );
+            break;
+        case TitleHelper::X_AXIS_TITLE:
+            if( xDiagram.is())
+                xResult.set( AxisHelper::getAxis( 0, true, xDiagram ), uno::UNO_QUERY );
+            break;
+        case TitleHelper::Y_AXIS_TITLE:
+            if( xDiagram.is())
+                xResult.set( AxisHelper::getAxis( 1, true, xDiagram ), uno::UNO_QUERY );
+            break;
+        case TitleHelper::Z_AXIS_TITLE:
+            if( xDiagram.is())
+                xResult.set( AxisHelper::getAxis( 2, true, xDiagram ), uno::UNO_QUERY );
+            break;
+
+        case TitleHelper::MAIN_TITLE:
+        default:
+            OSL_ENSURE( false, "Unsupported Title-Type requested" );
+            break;
+    }
+
+    return xResult;
+}
+
 uno::Reference< XTitled > lcl_getTitleParent( TitleHelper::eTitleType nTitleIndex
                                               , const uno::Reference< frame::XModel >& xModel )
 {
@@ -95,7 +148,7 @@ uno::Reference< XTitled > lcl_getTitleParent( TitleHelper::eTitleType nTitleInde
     uno::Reference< XChartDocument > xChartDoc( xModel, uno::UNO_QUERY );
     uno::Reference< XDiagram > xDiagram;
     if( xChartDoc.is())
-        xDiagram.set( xChartDoc->getDiagram());
+        xDiagram.set( xChartDoc->getFirstDiagram());
 
     switch( nTitleIndex )
     {
@@ -103,20 +156,12 @@ uno::Reference< XTitled > lcl_getTitleParent( TitleHelper::eTitleType nTitleInde
             xResult.set( xModel, uno::UNO_QUERY );
             break;
         case TitleHelper::SUB_TITLE:
-            if( xDiagram.is())
-                xResult.set( xDiagram, uno::UNO_QUERY );
-            break;
         case TitleHelper::X_AXIS_TITLE:
-            if( xDiagram.is())
-                xResult.set( MeterHelper::getAxis( 0, true, xDiagram ), uno::UNO_QUERY );
-            break;
         case TitleHelper::Y_AXIS_TITLE:
-            if( xDiagram.is())
-                xResult.set( MeterHelper::getAxis( 1, true, xDiagram ), uno::UNO_QUERY );
-            break;
         case TitleHelper::Z_AXIS_TITLE:
-            if( xDiagram.is())
-                xResult.set( MeterHelper::getAxis( 2, true, xDiagram ), uno::UNO_QUERY );
+        case TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION:
+        case TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION:
+            xResult.set( lcl_getTitleParentFromDiagram( nTitleIndex, xDiagram ));
             break;
         default:
             OSL_ENSURE( false, "Unsupported Title-Type requested" );
@@ -136,36 +181,80 @@ uno::Reference< XTitle > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIn
 }
 
 uno::Reference< XTitle > TitleHelper::createTitle(
-      TitleHelper::eTitleType nTitleIndex
+      TitleHelper::eTitleType eTitleType
     , const rtl::OUString& rTitleText
     , const uno::Reference< frame::XModel >& xModel
-    , const uno::Reference< uno::XComponentContext > & xContext )
+    , const uno::Reference< uno::XComponentContext > & xContext
+    , ReferenceSizeProvider * pRefSizeProvider )
 {
-    if( !rTitleText.getLength() )
-        return NULL;
+    uno::Reference< XTitle > xTitle;
+    uno::Reference< XTitled > xTitled( lcl_getTitleParent( eTitleType, xModel ) );
 
-    uno::Reference< XTitle > xTitle(NULL);
-    uno::Reference< XTitled > xTitled( lcl_getTitleParent( nTitleIndex, xModel ) );
-
-    ContextHelper::tContextEntryMapType aContextValues(
-            ContextHelper::MakeContextEntryMap( C2U( "Identifier" )
-            , uno::makeAny( TitleHelper::getIdentifierForTitle(nTitleIndex) )) );
-    uno::Reference< uno::XComponentContext > xNewContext(
-        ContextHelper::createContext( aContextValues, xContext ) );
-
-    if(xNewContext.is() && xTitled.is())
+    if(xTitled.is())
     {
+        uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xModel ) );
+
         xTitle.set( xContext->getServiceManager()->createInstanceWithContext(
-                C2U( "com.sun.star.chart2.Title" ),
-                    xNewContext ), uno::UNO_QUERY );
+                        C2U( "com.sun.star.chart2.Title" ),
+                        xContext ), uno::UNO_QUERY );
 
         if(xTitle.is())
         {
-            setCompleteString( rTitleText, xTitle, xNewContext );
+            // default char height (main: 13.0 == default)
+            float fDefaultCharHeightSub = 11.0;
+            float fDefaultCharHeightAxis = 9.0;
+            switch( eTitleType )
+            {
+                case TitleHelper::SUB_TITLE:
+                    chart::TitleHelper::setCompleteString(
+                        rTitleText, xTitle, xContext, & fDefaultCharHeightSub );
+                    break;
+                case TitleHelper::X_AXIS_TITLE:
+                case TitleHelper::Y_AXIS_TITLE:
+                case TitleHelper::Z_AXIS_TITLE:
+                case TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION:
+                case TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION:
+                    chart::TitleHelper::setCompleteString(
+                        rTitleText, xTitle, xContext, & fDefaultCharHeightAxis );
+                    break;
+                default:
+                    chart::TitleHelper::setCompleteString( rTitleText, xTitle, xContext );
+                    break;
+            }
+
+            // set/clear autoscale
+            if( pRefSizeProvider )
+                pRefSizeProvider->setValuesAtTitle( xTitle );
+
             xTitled->setTitle( xTitle );
+
+            //default rotation 90 degree for y axis title in normal coordinatesystems or for x axis title for swapped coordinatesystems
+            if( eTitleType == TitleHelper::X_AXIS_TITLE ||
+                eTitleType == TitleHelper::Y_AXIS_TITLE )
+            {
+                try
+                {
+                    bool bDummy = false;
+                    bool bIsVertical = DiagramHelper::getVertical( xDiagram, bDummy, bDummy );
+
+                    Reference< beans::XPropertySet > xTitleProps( xTitle, uno::UNO_QUERY );
+                    if( xTitleProps.is() )
+                    {
+                        double fNewAngleDegree = 90.0;
+                        if( (!bIsVertical && eTitleType == TitleHelper::Y_AXIS_TITLE)
+                            || (bIsVertical && eTitleType == TitleHelper::X_AXIS_TITLE) )
+                            xTitleProps->setPropertyValue( C2U( "TextRotation" ), uno::makeAny( fNewAngleDegree ));
+                    }
+                }
+                catch( uno::Exception & ex )
+                {
+                    ASSERT_EXCEPTION( ex );
+                }
+            }
         }
     }
     return xTitle;
+
 }
 
 rtl::OUString TitleHelper::getCompleteString( const uno::Reference< XTitle >& xTitle )
@@ -181,7 +270,8 @@ rtl::OUString TitleHelper::getCompleteString( const uno::Reference< XTitle >& xT
 
 void TitleHelper::setCompleteString( const rtl::OUString& rNewText
                     , const uno::Reference< XTitle >& xTitle
-                    , const uno::Reference< uno::XComponentContext > & xContext )
+                    , const uno::Reference< uno::XComponentContext > & xContext
+                    , float * pDefaultCharHeight /* = 0 */ )
 {
     //the format of the first old text portion will be maintained if there is any
     if(!xTitle.is())
@@ -206,6 +296,22 @@ void TitleHelper::setCompleteString( const rtl::OUString& rNewText
         {
             xFormattedString->setString( rNewText );
             aNewStringList[0].set( xFormattedString );
+            if( pDefaultCharHeight != 0 )
+            {
+                try
+                {
+                    uno::Reference< beans::XPropertySet > xProp( xFormattedString, uno::UNO_QUERY_THROW );
+
+                    uno::Any aFontSize( uno::makeAny( *pDefaultCharHeight ));
+                    xProp->setPropertyValue( C2U("CharHeight"), aFontSize );
+                    xProp->setPropertyValue( C2U("CharHeightAsian"), aFontSize );
+                    xProp->setPropertyValue( C2U("CharHeightComplex"), aFontSize );
+                }
+                catch( uno::Exception & ex )
+                {
+                    ASSERT_EXCEPTION( ex );
+                }
+            }
         }
     }
     xTitle->setText( aNewStringList );
@@ -220,6 +326,29 @@ void TitleHelper::removeTitle( TitleHelper::eTitleType nTitleIndex
     {
         xTitled->setTitle(NULL);
     }
+}
+
+bool TitleHelper::getTitleType( eTitleType& rType
+                    , const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::chart2::XTitle >& xTitle
+                    , const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::frame::XModel >& xModel )
+{
+    if( !xTitle.is() || !xModel.is() )
+        return false;
+
+    Reference< chart2::XTitle > xCurrentTitle;
+    for( sal_Int32 nTitleType = TITLE_BEGIN; nTitleType < NORMAL_TITLE_END; nTitleType++ )
+    {
+        xCurrentTitle = TitleHelper::getTitle( static_cast<eTitleType>(nTitleType), xModel );
+        if( xCurrentTitle == xTitle )
+        {
+            rType = static_cast<eTitleType>(nTitleType);
+            return true;
+        }
+    }
+
+    return false;
 }
 
 //.............................................................................
