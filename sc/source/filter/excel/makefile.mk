@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-27 12:23:32 $
+#   last change: $Author: vg $ $Date: 2007-05-22 19:46:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
+
 PRJ=..$/..$/..
 
 PRJNAME=sc
@@ -53,7 +54,6 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
-        $(SLO)$/XclExpCharts.obj			\
         $(SLO)$/biffdump.obj				\
         $(SLO)$/colrowst.obj				\
         $(SLO)$/excdoc.obj					\
@@ -71,6 +71,7 @@ SLOFILES =	\
         $(SLO)$/namebuff.obj				\
         $(SLO)$/read.obj					\
         $(SLO)$/tokstack.obj				\
+        $(SLO)$/xechart.obj					\
         $(SLO)$/xecontent.obj				\
         $(SLO)$/xeescher.obj				\
         $(SLO)$/xeformula.obj				\
@@ -133,6 +134,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/xename.obj					\
         $(SLO)$/xepage.obj					\
         $(SLO)$/xepivot.obj					\
+        $(SLO)$/xechart.obj					\
         $(SLO)$/xestring.obj				\
         $(SLO)$/xestyle.obj					\
         $(SLO)$/xetable.obj					\
@@ -155,8 +157,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/xlocx.obj					\
         $(SLO)$/xlpivot.obj					\
         $(SLO)$/xlstyle.obj					\
-        $(SLO)$/xlview.obj					\
-        $(SLO)$/XclExpCharts.obj
+        $(SLO)$/xlview.obj
 
 # --- Targets -------------------------------------------------------
 
