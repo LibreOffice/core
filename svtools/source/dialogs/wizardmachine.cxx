@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizardmachine.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:46:30 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:33:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #ifndef _SVTOOLS_WIZARDMACHINE_HXX_
 #include "wizardmachine.hxx"
 #endif
+#include "helpid.hrc"
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -82,14 +83,14 @@ namespace svt
     //= OWizardPage
     //=====================================================================
     //---------------------------------------------------------------------
-    OWizardPage::OWizardPage( OWizardMachine* _pParent, WinBits _nStyle )
+    OWizardPage::OWizardPage( Window* _pParent, WinBits _nStyle )
         :TabPage( _pParent, _nStyle )
         ,m_pImpl( new WizardPageImplData )
     {
     }
 
     //---------------------------------------------------------------------
-    OWizardPage::OWizardPage( OWizardMachine* _pParent, const ResId& _rResId )
+    OWizardPage::OWizardPage( Window* _pParent, const ResId& _rResId )
         :TabPage( _pParent, _rResId )
         ,m_pImpl( new WizardPageImplData )
     {
@@ -173,7 +174,9 @@ namespace svt
     //---------------------------------------------------------------------
     void OWizardPage::implCheckNextButton()
     {
-        static_cast< OWizardMachine* >(GetParent())->enableButtons(WZB_NEXT, determineNextButtonState());
+        OWizardMachine * pWizardMachine = dynamic_cast< OWizardMachine* >(GetParent());
+        if( pWizardMachine )
+            pWizardMachine->enableButtons(WZB_NEXT, determineNextButtonState());
     }
 
     //---------------------------------------------------------------------
@@ -264,6 +267,7 @@ namespace svt
         if (_nButtonFlags & WZB_PREVIOUS)
         {
             m_pPrevPage = new PushButton(this, WB_TABSTOP);
+            m_pPrevPage->SetSmartHelpId( SmartId(HID_WIZARD_PREVIOUS) );
             m_pPrevPage->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
             m_pPrevPage->SetText(String(SvtResId(STR_WIZDLG_PREVIOUS)));
             m_pPrevPage->Show();
@@ -280,6 +284,7 @@ namespace svt
         if (_nButtonFlags & WZB_NEXT)
         {
             m_pNextPage = new PushButton(this, WB_TABSTOP);
+            m_pNextPage->SetSmartHelpId( SmartId(HID_WIZARD_NEXT) );
             m_pNextPage->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
             m_pNextPage->SetText(String(SvtResId(STR_WIZDLG_NEXT)));
             m_pNextPage->Show();
@@ -799,4 +804,3 @@ namespace svt
 //.........................................................................
 }   // namespace svt
 //.........................................................................
-
