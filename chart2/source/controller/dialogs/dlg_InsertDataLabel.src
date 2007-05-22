@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertDataLabel.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:59:41 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:34:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@ ModalDialog DLG_DATA_DESCR
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 200 , 86 ) ;
-    Text [ en-US ] = "Data Labels" ;
     Moveable = TRUE ;
     BUTTONS_OK_CANCEL_HELP_STACKED(144)
     RESOURCE_DATALABEL( 12, 14 )
@@ -52,43 +51,5 @@ ModalDialog DLG_DATA_DESCR
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
-        Text [ en-US ] = "Data labels" ;
     };
-
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
