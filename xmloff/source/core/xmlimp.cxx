@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-30 09:05:54 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:09:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -391,7 +391,8 @@ SvXMLImport::SvXMLImport(
     mpXMLErrors( NULL ),
     mpStyleMap(0),
     mnImportFlags( nImportFlags ),
-    mbIsFormsSupported( sal_True )
+    mbIsFormsSupported( sal_True ),
+    mbIsGraphicLoadOnDemmandSupported( true )
 {
     DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
     _InitCtor();
@@ -1833,5 +1834,10 @@ bool SvXMLImport::getBuildIds( sal_Int32& rUPD, sal_Int32& rBuild ) const
     {
     }
     return bRet;
+}
+
+bool SvXMLImport::isGraphicLoadOnDemmandSupported() const
+{
+    return mbIsGraphicLoadOnDemmandSupported;
 }
 
