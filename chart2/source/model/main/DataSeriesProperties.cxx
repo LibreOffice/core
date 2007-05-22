@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeriesProperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:10:31 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:34:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,9 @@
 #ifndef _COM_SUN_STAR_STYLE_XSTYLE_HPP_
 #include <com/sun/star/style/XStyle.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CHART2_STACKINGDIRECTION_HPP_
+#include <com/sun/star/chart2/StackingDirection.hpp>
+#endif
 
 #include <algorithm>
 
@@ -59,16 +62,8 @@ namespace chart
 {
 
 void DataSeriesProperties::AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties,
-    bool bIncludeStyleProperties /* = false */ )
+    ::std::vector< Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( C2U( "DataPointStyle" ),
-                  PROP_DATASERIES_DATA_POINT_STYLE,
-                  ::getCppuType( reinterpret_cast< const Reference< style::XStyle > * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-
     rOutProperties.push_back(
         Property( C2U( "AttributedDataPoints" ),
                   PROP_DATASERIES_ATTRIBUTED_DATA_POINTS,
@@ -76,36 +71,51 @@ void DataSeriesProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
-     rOutProperties.push_back(
-        Property( C2U( "Identifier" ),
-                  PROP_DATASERIES_IDENTIFIER,
-                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+    rOutProperties.push_back(
+        Property( C2U( "StackingDirection" ),
+                  PROP_DATASERIES_STACKING_DIRECTION,
+                  ::getCppuType( reinterpret_cast< const chart2::StackingDirection * >(0)),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::READONLY
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-     // add properties of service DataPointProperties
-     DataPointProperties::AddPropertiesToVector(
-         rOutProperties, bIncludeStyleProperties );
+    rOutProperties.push_back(
+        Property( C2U( "VaryColorsByPoint" ),
+                  PROP_DATASERIES_VARY_COLORS_BY_POINT,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "AttachedAxisIndex" ),
+                  PROP_DATASERIES_ATTACHED_AXIS_INDEX,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    // add properties of service DataPointProperties
+    DataPointProperties::AddPropertiesToVector( rOutProperties );
 }
 
 void DataSeriesProperties::AddDefaultsToMap(
-    helper::tPropertyValueMap & rOutMap,
-    bool bIncludeStyleProperties /* = false */ )
+    tPropertyValueMap & rOutMap )
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATASERIES_DATA_POINT_STYLE ));
-    rOutMap[ PROP_DATASERIES_DATA_POINT_STYLE ] =
-        uno::makeAny( Reference< style::XStyle >() );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATASERIES_STACKING_DIRECTION ));
+    rOutMap[ PROP_DATASERIES_STACKING_DIRECTION ] =
+        uno::makeAny( chart2::StackingDirection_NO_STACKING );
+
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATASERIES_VARY_COLORS_BY_POINT ));
+    rOutMap[ PROP_DATASERIES_VARY_COLORS_BY_POINT ] =
+        uno::makeAny( false );
+
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATASERIES_ATTACHED_AXIS_INDEX ));
+    rOutMap[ PROP_DATASERIES_ATTACHED_AXIS_INDEX ] =
+        uno::makeAny( sal_Int32(0) );
 
     // PROP_DATASERIES_ATTRIBUTED_DATA_POINTS has no default
 
-    // PROP_DATASERIES_IDENTIFIER has no default
-    // It is read-only.  So there will be a 'static' default handled in
-    // DataSeries
-
     // add properties of service DataPointProperties
-     DataPointProperties::AddDefaultsToMap(
-         rOutMap, bIncludeStyleProperties );
+     DataPointProperties::AddDefaultsToMap( rOutMap );
 }
 
 }  // namespace chart
