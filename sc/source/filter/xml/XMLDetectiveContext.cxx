@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLDetectiveContext.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:45:06 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:02:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,9 @@
 #endif
 #ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
+#endif
+#ifndef SC_RANGEUTL_HXX
+#include "rangeutl.hxx"
 #endif
 
 #include <algorithm>
@@ -178,7 +181,7 @@ ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
             {
                 sal_Int32 nOffset(0);
                 GetScImport().LockSolarMutex();
-                bValid = ScXMLConverter::GetRangeFromString( aDetectiveObj.aSourceRange, sValue, GetScImport().GetDocument(), nOffset );
+                bValid = ScRangeStringConverter::GetRangeFromString( aDetectiveObj.aSourceRange, sValue, GetScImport().GetDocument(), nOffset );
                 GetScImport().UnlockSolarMutex();
             }
             break;
