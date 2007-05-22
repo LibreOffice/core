@@ -4,9 +4,9 @@
  *
  *  $RCSfile: refundo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:47:04 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:08:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@ class ScConditionalFormatList;
 class ScDetOpList;
 class ScChartListenerCollection;
 class ScAreaLinkSaveCollection;
+class ScUnoRefList;
 
 class ScRefUndoData
 {
@@ -64,6 +65,7 @@ private:
     ScDetOpList*                pDetOpList;
     ScChartListenerCollection*  pChartListenerCollection;
     ScAreaLinkSaveCollection*   pAreaLinks;
+    ScUnoRefList*               pUnoRefs;
 
 public:
                 ScRefUndoData( const ScDocument* pDoc );
