@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelativeSizeHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:45:42 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:21:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ public:
         const ::com::sun::star::awt::Size & rNewReferenceSize );
 
     static void adaptFontSizes(
-        ::com::sun::star::uno::Reference<
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & xTargetProperties,
         const ::com::sun::star::awt::Size & rOldReferenceSize,
         const ::com::sun::star::awt::Size & rNewReferenceSize );
