@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob.sdi,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:43:16 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:41:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@ interface TableDrawText
     SID_SPECIAL_FILTER          [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_DEFINE_DBNAME           [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_OPENDLG_CONSOLIDATE     [ StateMethod = StateDisableItems; Export = FALSE; ]
-    SID_OPENDLG_CHART           [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_OPENDLG_EDIT_PRINTAREA  [ StateMethod = StateDisableItems; Export = FALSE; ]
      // andere:
     SID_DRAW_CHART              [ StateMethod = StateDisableItems; Export = FALSE; ]
