@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScaleAutomatism.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:30:34 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:08:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 #include "ScaleAutomatism.hxx"
 #include "macros.hxx"
 #include "TickmarkHelper.hxx"
+#include "Scaling.hxx"
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -58,228 +59,178 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
+const sal_Int32 MAXIMUM_MANUAL_INCREMENT_COUNT = 500;
+const sal_Int32 MAXIMUM_AUTO_INCREMENT_COUNT = 10;
+
 ScaleAutomatism::ScaleAutomatism( const ScaleData& rSourceScale )
-                    : m_fValueMinimum( 0.0 )
+                    : m_aSourceScale( rSourceScale )
+                    , m_fValueMinimum( 0.0 )
                     , m_fValueMaximum( 0.0 )
-                    , m_nMaximumAutomaticMainIncrementCount(10)
-                    , m_aSourceScale( rSourceScale )
-                    , m_aSourceIncrement()
-                    , m_aSourceSubIncrementList()
+                    , m_nMaximumAutoMainIncrementCount( MAXIMUM_AUTO_INCREMENT_COUNT )
+                    , m_bExpandBorderToIncrementRhythm( false )
+                    , m_bExpandIfValuesCloseToBorder( false )
+                    , m_bExpandWideValuesToZero( false )
+                    , m_bExpandNarrowValuesTowardZero( false )
 {
     ::rtl::math::setNan( &m_fValueMinimum );
     ::rtl::math::setNan( &m_fValueMaximum );
-}
 
-ScaleAutomatism::ScaleAutomatism( const ScaleData& rSourceScale
-                    , const IncrementData& rSourceIncrement
-                    , const uno::Sequence< SubIncrement >& rSourceSubIncrementList )
-                    : m_fValueMinimum( 0.0 )
-                    , m_fValueMaximum( 0.0 )
-                    , m_nMaximumAutomaticMainIncrementCount(9)
-                    , m_aSourceScale( rSourceScale )
-                    , m_aSourceIncrement( rSourceIncrement )
-                    , m_aSourceSubIncrementList( rSourceSubIncrementList )
-{
-    ::rtl::math::setNan( &m_fValueMinimum );
-    ::rtl::math::setNan( &m_fValueMaximum );
+    double fExplicitOrigin = 0.0;
+    if( m_aSourceScale.Origin >>= fExplicitOrigin )
+        expandValueRange( fExplicitOrigin, fExplicitOrigin);
 }
-
 ScaleAutomatism::~ScaleAutomatism()
 {
 }
 
-//@todo these method should become part of the scaling interface and implementation somehow
-//@todo problem with outparamters at api
-ExplicitIncrementData getExplicitIncrementAndScaleForLogarithm(
-        bool bChangeMinimumToIncrementRythm, bool bChangeMaximumToIncrementRythm
-        , sal_Int32 nMaximumAutomaticMainIncrementCount
-        , ExplicitScaleData& rExplicitScale
-        , const IncrementData& rSourceIncrement
-        , const uno::Sequence< SubIncrement >& rSourceSubIncrementList )
+void ScaleAutomatism::expandValueRange( double fMinimum, double fMaximum )
 {
-    //minimum and maximum of the ExplicitScaleData may be changed
-    //to suiteable values if allowed
-    //but they will definitly be changed if they are out of allowed borders
-
-    if( nMaximumAutomaticMainIncrementCount <= 0 )
-        nMaximumAutomaticMainIncrementCount = 5;
-
-    //make sure that minimum and maximum are not out of allowed range
-    {
-        if( rExplicitScale.Maximum<=0.0 )
-            rExplicitScale.Maximum = 100.0;
-        if( rExplicitScale.Minimum<=0.0 )
-        {
-            rExplicitScale.Minimum = 0.1;
-            if( rExplicitScale.Minimum >= rExplicitScale.Maximum )
-                rExplicitScale.Minimum =  log(rExplicitScale.Maximum)/10.0;
-        }
-        if( rExplicitScale.Maximum<= rExplicitScale.Minimum )
-            rExplicitScale.Maximum = rExplicitScale.Minimum + 10;
-    }
-
-    ExplicitIncrementData aRet;
-    if(!(rSourceIncrement.PostEquidistant>>=aRet.PostEquidistant))
-    {
-        //maybe scaling dependent
-        aRet.PostEquidistant = sal_True;
-    }
-    if(!(rSourceIncrement.Distance>>=aRet.Distance))
-    {
-        //autocalculate the distance
-        if(aRet.PostEquidistant && rExplicitScale.Scaling.is() )
-        {
-            double fRange = rExplicitScale.Scaling->doScaling( rExplicitScale.Maximum )
-                          - rExplicitScale.Scaling->doScaling( rExplicitScale.Minimum );
-            double fSlice = fRange/nMaximumAutomaticMainIncrementCount;
-            //make a fine value out of fSlice now:
-            //only integers are reasonable as distance values
-            sal_Int32 nDistance = static_cast<sal_Int32>(fSlice);
-            if(nDistance<=0)
-                nDistance=1;
-            aRet.Distance = nDistance;
-        }
-        else
-        {
-            //@todo this was not tested
-            double fRange = rExplicitScale.Maximum - rExplicitScale.Minimum;
-            double fSlice = fRange/nMaximumAutomaticMainIncrementCount;
-            //make a fine value out of fSlice now:
-            double fSliceMagnitude = pow ( (double)10, floor (log10 (fSlice)));
-            aRet.Distance = static_cast<sal_Int32>(fSlice/fSliceMagnitude)*fSliceMagnitude;
-        }
-    }
-
-    if(!(rSourceIncrement.BaseValue>>=aRet.BaseValue))
-    {
-        //scaling dependent
-        //@maybe todo is this default also plotter dependent ??
-        aRet.BaseValue = 1.0;
-    }
-    else if( aRet.BaseValue<=0.0 ) //make sure that BaseValue is not out of allowed ranges
-        aRet.BaseValue = 1.0;
-
-    if(bChangeMinimumToIncrementRythm)
-    {
-        double fMin = rExplicitScale.Minimum;
-        if( aRet.PostEquidistant && rExplicitScale.Scaling.is() )
-            fMin = rExplicitScale.Scaling->doScaling(fMin);
-
-        fMin = TickmarkHelper::getMinimumAtIncrement( fMin, aRet );
-        if( aRet.PostEquidistant && rExplicitScale.Scaling.is() )
-            fMin = rExplicitScale.Scaling->getInverseScaling()->doScaling(fMin);
-        rExplicitScale.Minimum = fMin;
-
-        if( rExplicitScale.Minimum<=0.0 )
-        {
-            rExplicitScale.Minimum = 0.1;
-            if( rExplicitScale.Minimum >= rExplicitScale.Maximum )
-                rExplicitScale.Minimum =  log(rExplicitScale.Maximum)/10.0;
-        }
-    }
-    if(bChangeMaximumToIncrementRythm)
-    {
-        double fMax = rExplicitScale.Maximum;
-        if( aRet.PostEquidistant && rExplicitScale.Scaling.is() )
-            fMax = rExplicitScale.Scaling->doScaling(fMax);
-        fMax = TickmarkHelper::getMaximumAtIncrement( fMax, aRet );
-        if( aRet.PostEquidistant && rExplicitScale.Scaling.is() )
-            fMax = rExplicitScale.Scaling->getInverseScaling()->doScaling(fMax);
-        rExplicitScale.Maximum = fMax;
-    }
-    //---------------------------------------------------------------
-    //fill explicit sub increment
-    sal_Int32 nSubCount = rSourceSubIncrementList.getLength();
-    aRet.SubIncrements.realloc(nSubCount);
-    for( sal_Int32 nN=0; nN<nSubCount; nN++ )
-    {
-        const SubIncrement&     rSubIncrement         = rSourceSubIncrementList[nN];
-        ExplicitSubIncrement&   rExplicitSubIncrement = aRet.SubIncrements[nN];
-
-        if(!(rSubIncrement.IntervalCount>>=rExplicitSubIncrement.IntervalCount))
-        {
-            //scaling dependent
-            //@todo autocalculate IntervalCount dependent on MainIncrement and scaling
-            rExplicitSubIncrement.IntervalCount = 5;
-        }
-        if(!(rSubIncrement.PostEquidistant>>=rExplicitSubIncrement.PostEquidistant))
-        {
-            //scaling dependent
-            rExplicitSubIncrement.PostEquidistant = sal_False;
-        }
-    }
-    return aRet;
+    if( (fMinimum < m_fValueMinimum) || ::rtl::math::isNan( m_fValueMinimum ) )
+        m_fValueMinimum = fMinimum;
+    if( (fMaximum > m_fValueMaximum) || ::rtl::math::isNan( m_fValueMaximum ) )
+        m_fValueMaximum = fMaximum;
 }
 
-ExplicitIncrementData getExplicitIncrementAndScaleForLinear(
-        bool bChangeMinimumToIncrementRythm, bool bChangeMaximumToIncrementRythm
-        , sal_Int32 nMaximumAutomaticMainIncrementCount
-        , ExplicitScaleData& rExplicitScale
-        , const IncrementData& rSourceIncrement
-        , const uno::Sequence< SubIncrement >& rSourceSubIncrementList )
+void ScaleAutomatism::setAutoScalingOptions(
+        bool bExpandBorderToIncrementRhythm,
+        bool bExpandIfValuesCloseToBorder,
+        bool bExpandWideValuesToZero,
+        bool bExpandNarrowValuesTowardZero )
 {
-    //minimum and maximum of the ExplicitScaleData may be changed
-    //to suiteable values if allowed
-    //but they will definitly be changed if they are out of allowed borders
+    // if called multiple times, enable an option, if it is set in at least one call
+    m_bExpandBorderToIncrementRhythm |= bExpandBorderToIncrementRhythm;
+    m_bExpandIfValuesCloseToBorder   |= bExpandIfValuesCloseToBorder;
+    m_bExpandWideValuesToZero        |= bExpandWideValuesToZero;
+    m_bExpandNarrowValuesTowardZero  |= bExpandNarrowValuesTowardZero;
 
-    if( nMaximumAutomaticMainIncrementCount <= 0 )
-        nMaximumAutomaticMainIncrementCount = 5;
+    if( m_aSourceScale.AxisType==AxisType::PERCENT )
+        m_bExpandIfValuesCloseToBorder = false;
+}
 
-    //make sure that minimum and maximum have allowed values
+void ScaleAutomatism::setMaximumAutoMainIncrementCount( sal_Int32 nMaximumAutoMainIncrementCount )
+{
+    if( nMaximumAutoMainIncrementCount < 1 )
+        m_nMaximumAutoMainIncrementCount = 1;
+    else if( nMaximumAutoMainIncrementCount > MAXIMUM_AUTO_INCREMENT_COUNT )
+        m_nMaximumAutoMainIncrementCount = MAXIMUM_AUTO_INCREMENT_COUNT;
+    else
+        m_nMaximumAutoMainIncrementCount = nMaximumAutoMainIncrementCount;
+}
+
+void ScaleAutomatism::calculateExplicitScaleAndIncrement(
+        ExplicitScaleData& rExplicitScale, ExplicitIncrementData& rExplicitIncrement ) const
+{
+    // fill explicit scale
+    rExplicitScale.Orientation = m_aSourceScale.Orientation;
+    rExplicitScale.Scaling = m_aSourceScale.Scaling;
+    rExplicitScale.Breaks = m_aSourceScale.Breaks;
+    rExplicitScale.AxisType = m_aSourceScale.AxisType;
+
+    bool bAutoMinimum  = !(m_aSourceScale.Minimum >>= rExplicitScale.Minimum);
+    bool bAutoMaximum = !(m_aSourceScale.Maximum >>= rExplicitScale.Maximum);
+    bool bAutoOrigin = !(m_aSourceScale.Origin >>= rExplicitScale.Origin);
+
+    // automatic scale minimum
+    if( bAutoMinimum )
     {
-        if( rExplicitScale.Maximum<= rExplicitScale.Minimum )
-            rExplicitScale.Maximum = rExplicitScale.Minimum + 10;
-    }
-
-    ExplicitIncrementData aRet;
-    if(!(rSourceIncrement.PostEquidistant>>=aRet.PostEquidistant))
-    {
-        //maybe scaling dependent
-        aRet.PostEquidistant = sal_True;
-    }
-    if(!(rSourceIncrement.Distance>>=aRet.Distance))
-    {
-        //autocalculate the distance
-        double fRange = rExplicitScale.Maximum - rExplicitScale.Minimum;
-        double fSlice = fRange/nMaximumAutomaticMainIncrementCount;
-
-        //make a fine value out of fSlice now:
-        double fSliceMagnitude = pow ( (double)10, floor (log10 (fSlice)));
-        fSlice /= fSliceMagnitude;
-        if(fSlice<=1.0)
-            fSlice=1.0;
-        else if( fSlice<= 2.0 )
-            fSlice=2.0;
-        else if( fSlice<= 2.5 )
-            fSlice=2.5;
-        else if( fSlice<= 5.0)
-            fSlice=5.0;
+        if( m_aSourceScale.AxisType==AxisType::PERCENT )
+            rExplicitScale.Minimum = 0.0;
+        else if( ::rtl::math::isNan( m_fValueMinimum ) )
+            rExplicitScale.Minimum = 0.0;   //@todo get Minimum from scsaling or from plotter????
         else
-            fSlice=10.0;
+            rExplicitScale.Minimum = m_fValueMinimum;
+    }
 
-        aRet.Distance = fSlice*fSliceMagnitude;
-    }
-    if(!(rSourceIncrement.BaseValue>>=aRet.BaseValue))
+    // automatic scale maximum
+    if( bAutoMaximum )
     {
-        //@maybe todo is this default also plotter dependent ??
-        aRet.BaseValue = 0.0;
+        if( m_aSourceScale.AxisType==AxisType::PERCENT )
+            rExplicitScale.Minimum = 1.0;
+        else if( ::rtl::math::isNan( m_fValueMaximum ) )
+            rExplicitScale.Maximum = 10.0;  //@todo get Maximum from scaling or from plotter????
+        else
+            rExplicitScale.Maximum = m_fValueMaximum;
     }
-    if(bChangeMinimumToIncrementRythm)
+
+    //---------------------------------------------------------------
+    //fill explicit increment
+
+    bool bIsLogarithm = false;
+
+    //minimum and maximum of the ExplicitScaleData may be changed if allowed
+    if( m_aSourceScale.AxisType==AxisType::CATEGORY || m_aSourceScale.AxisType==AxisType::SERIES )
     {
-        rExplicitScale.Minimum = TickmarkHelper::getMinimumAtIncrement( rExplicitScale.Minimum, aRet );
+        calculateExplicitIncrementAndScaleForCategory( rExplicitScale, rExplicitIncrement, bAutoMinimum, bAutoMaximum );
     }
-    if(bChangeMaximumToIncrementRythm)
+    else
     {
-        rExplicitScale.Maximum = TickmarkHelper::getMaximumAtIncrement( rExplicitScale.Maximum, aRet );
+        uno::Reference< lang::XServiceName > xServiceName( rExplicitScale.Scaling, uno::UNO_QUERY );
+        bIsLogarithm = xServiceName.is() && xServiceName->getServiceName().equals(
+                          C2U( "com.sun.star.chart2.LogarithmicScaling" ) );
+
+        if( bIsLogarithm )
+            calculateExplicitIncrementAndScaleForLogarithmic( rExplicitScale, rExplicitIncrement, bAutoMinimum, bAutoMaximum );
+        else
+            calculateExplicitIncrementAndScaleForLinear( rExplicitScale, rExplicitIncrement, bAutoMinimum, bAutoMaximum );
     }
+
+    // automatic origin
+    if( bAutoOrigin )
+    {
+        // #i71415# automatic origin for logarithmic axis
+        double fDefaulOrigin = bIsLogarithm ? 1.0 : 0.0;
+
+        if( fDefaulOrigin < rExplicitScale.Minimum )
+            fDefaulOrigin = rExplicitScale.Minimum;
+        else if( fDefaulOrigin > rExplicitScale.Maximum )
+            fDefaulOrigin = rExplicitScale.Maximum;
+
+        rExplicitScale.Origin = fDefaulOrigin;
+    }
+}
+
+// private --------------------------------------------------------------------
+
+void ScaleAutomatism::calculateExplicitIncrementAndScaleForCategory(
+        ExplicitScaleData& rExplicitScale,
+        ExplicitIncrementData& rExplicitIncrement,
+        bool bAutoMinimum, bool bAutoMaximum ) const
+{
+    // no scaling for categories
+    rExplicitScale.Scaling.clear();
+
+    // ensure that at least one category is visible
+    if( rExplicitScale.Maximum <= rExplicitScale.Minimum )
+        rExplicitScale.Maximum = rExplicitScale.Minimum + 1.0;
+
+    // default increment settings
+    rExplicitIncrement.PostEquidistant = sal_True;  // does not matter anyhow
+    rExplicitIncrement.Distance = 1.0;              // category axis always have a main increment of 1
+    rExplicitIncrement.BaseValue = 0.0;             // category axis always have a base of 0
+
+    // automatic minimum and maximum
+    if( bAutoMinimum && m_bExpandBorderToIncrementRhythm )
+        rExplicitScale.Minimum = TickmarkHelper::getMinimumAtIncrement( rExplicitScale.Minimum, rExplicitIncrement );
+    if( bAutoMaximum && m_bExpandBorderToIncrementRhythm )
+        rExplicitScale.Maximum = TickmarkHelper::getMaximumAtIncrement( rExplicitScale.Maximum, rExplicitIncrement );
+
+    //prevent performace killover
+    double fDistanceCount = ::rtl::math::approxFloor( (rExplicitScale.Maximum-rExplicitScale.Minimum) / rExplicitIncrement.Distance );
+    if( static_cast< sal_Int32 >( fDistanceCount ) > MAXIMUM_MANUAL_INCREMENT_COUNT )
+    {
+        double fMinimumFloor = ::rtl::math::approxFloor( rExplicitScale.Minimum );
+        double fMaximumCeil = ::rtl::math::approxCeil( rExplicitScale.Maximum );
+        rExplicitIncrement.Distance = ::rtl::math::approxCeil( (fMaximumCeil - fMinimumFloor) / MAXIMUM_MANUAL_INCREMENT_COUNT );
+    }
+
     //---------------------------------------------------------------
     //fill explicit sub increment
-    sal_Int32 nSubCount = rSourceSubIncrementList.getLength();
-    aRet.SubIncrements.realloc(nSubCount);
+    sal_Int32 nSubCount = m_aSourceScale.IncrementData.SubIncrements.getLength();
+    rExplicitIncrement.SubIncrements.realloc(nSubCount);
     for( sal_Int32 nN=0; nN<nSubCount; nN++ )
     {
-        const SubIncrement&     rSubIncrement         = rSourceSubIncrementList[nN];
-        ExplicitSubIncrement&   rExplicitSubIncrement = aRet.SubIncrements[nN];
+        const SubIncrement&     rSubIncrement         = m_aSourceScale.IncrementData.SubIncrements[nN];
+        ExplicitSubIncrement&   rExplicitSubIncrement = rExplicitIncrement.SubIncrements[nN];
 
         if(!(rSubIncrement.IntervalCount>>=rExplicitSubIncrement.IntervalCount))
         {
@@ -293,51 +244,479 @@ ExplicitIncrementData getExplicitIncrementAndScaleForLinear(
             rExplicitSubIncrement.PostEquidistant = sal_False;
         }
     }
-    return aRet;
 }
 
-void ScaleAutomatism::calculateExplicitScaleAndIncrement(
-            ExplicitScaleData& rExplicitScale
-            , ExplicitIncrementData& rExplicitIncrement )
+//@todo these method should become part of the scaling interface and implementation somehow
+//@todo problem with outparamters at api
+void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
+        ExplicitScaleData& rExplicitScale,
+        ExplicitIncrementData& rExplicitIncrement,
+        bool bAutoMinimum, bool bAutoMaximum ) const
 {
-    //---------------------------------------------------------------
-    //fill explicit scale
-    bool bChangeMinimumToIncrementRythm=false, bChangeMaximumToIncrementRythm=false;
-    if(!(m_aSourceScale.Minimum>>=rExplicitScale.Minimum))
+    // *** STEP 1: initialize the range data ***
+
+    double fSourceMinimum = rExplicitScale.Minimum;
+    double fSourceMaximum = rExplicitScale.Maximum;
+
+    // set automatic PostEquidistant to true (maybe scaling dependent?)
+    // Note: scaling with PostEquidistant==false is untested and needs review
+    if( !(m_aSourceScale.IncrementData.PostEquidistant >>= rExplicitIncrement.PostEquidistant) )
+        rExplicitIncrement.PostEquidistant = sal_True;
+
+    /*  All following scaling code will operate on the logarithms of the source
+        values. In the last step, the original values will be restored. */
+    uno::Reference< XScaling > xScaling = rExplicitScale.Scaling;
+    if( !xScaling.is() )
+        xScaling.set( new LogarithmicScaling );
+    uno::Reference< XScaling > xInverseScaling = xScaling->getInverseScaling();
+
+    fSourceMinimum = xScaling->doScaling( fSourceMinimum );
+    if( !::rtl::math::isFinite( fSourceMinimum ) )
+        fSourceMinimum = 0.0;
+    else if( ::rtl::math::approxEqual( fSourceMinimum, ::rtl::math::approxFloor( fSourceMinimum ) ) )
+        fSourceMinimum = ::rtl::math::approxFloor( fSourceMinimum );
+
+    fSourceMaximum = xScaling->doScaling( fSourceMaximum );
+    if( !::rtl::math::isFinite( fSourceMaximum ) )
+        fSourceMaximum = 0.0;
+    else if( ::rtl::math::approxEqual( fSourceMaximum, ::rtl::math::approxFloor( fSourceMaximum ) ) )
+        fSourceMaximum = ::rtl::math::approxFloor( fSourceMaximum );
+
+    /*  If range is invalid (minimum greater than maximum), change one of the
+        variable limits to validate the range. In this step, a zero-sized range
+        is still allowed. */
+    if( fSourceMinimum > fSourceMaximum )
     {
-        //autocalculate the minimum in first iteration
-        //the increment is considered below
-        if( !::rtl::math::isNan(m_fValueMinimum) )
-            rExplicitScale.Minimum = m_fValueMinimum;
+        // force changing the maximum, if both limits are fixed
+        if( bAutoMaximum || !bAutoMinimum )
+            fSourceMaximum = fSourceMinimum;
         else
-            rExplicitScale.Minimum = 0.0;//@todo get Minimum from scsaling or from plotter????
-        bChangeMinimumToIncrementRythm = true;
+            fSourceMinimum = fSourceMaximum;
     }
-    if(!(m_aSourceScale.Maximum>>=rExplicitScale.Maximum))
+
+    /*  If maximum is less than 0 (and therefore minimum too), minimum and
+        maximum will be negated and swapped to make the following algorithms
+        easier. Example: Both ranges [2,5] and [-5,-2] will be processed as
+        [2,5], and the latter will be swapped back later. The range [0,0] is
+        explicitly excluded from swapping (this would result in [-1,0] instead
+        of the expected [0,1]). */
+    bool bSwapAndNegateRange = (fSourceMinimum < 0.0) && (fSourceMaximum <= 0.0);
+    if( bSwapAndNegateRange )
     {
-        //autocalculate the maximum in first iteration
-        //the increment is considered below
-        if( !::rtl::math::isNan(m_fValueMaximum) )
-            rExplicitScale.Maximum = m_fValueMaximum;
-        else
-            rExplicitScale.Maximum = 10.0;//@todo get Maximum from scaling or from plotter????
-        bChangeMaximumToIncrementRythm=true;
+        double fTempValue = fSourceMinimum;
+        fSourceMinimum = -fSourceMaximum;
+        fSourceMaximum = -fTempValue;
+        ::std::swap( bAutoMinimum, bAutoMaximum );
     }
-    rExplicitScale.Orientation = m_aSourceScale.Orientation;//AxisOrientation_MATHEMATICAL;
-    rExplicitScale.Scaling = m_aSourceScale.Scaling;
-    rExplicitScale.Breaks = m_aSourceScale.Breaks;
+
+    // *** STEP 2: find temporary (unrounded) axis minimum and maximum ***
+
+    double fTempMinimum = fSourceMinimum;
+    double fTempMaximum = fSourceMaximum;
+
+    /*  If minimum is variable and greater than 0 (and therefore maximum too),
+        means all original values are greater than 1 (or all values are less
+        than 1, and the range has been swapped above), then: */
+    if( bAutoMinimum && (fTempMinimum > 0.0) )
+    {
+        /*  If minimum is less than 5 (i.e. original source values less than
+            B^5, B being the base of the scaling), or if minimum and maximum
+            are in different increment intervals (means, if minimum and maximum
+            are not both in the range [B^n,B^(n+1)] for a whole number n), set
+            minimum to 0, which results in B^0=1 on the axis. */
+        double fMinimumFloor = ::rtl::math::approxFloor( fTempMinimum );
+        double fMaximumFloor = ::rtl::math::approxFloor( fTempMaximum );
+        // handle the exact value B^(n+1) to be in the range [B^n,B^(n+1)]
+        if( ::rtl::math::approxEqual( fTempMaximum, fMaximumFloor ) )
+            fMaximumFloor -= 1.0;
+
+        if( (fMinimumFloor < 5.0) || (fMinimumFloor < fMaximumFloor) )
+        {
+            if( m_bExpandWideValuesToZero )
+                fTempMinimum = 0.0;
+        }
+        /*  Else (minimum and maximum are in one increment interval), expand
+            minimum toward 0 to make the 'shorter' data points visible. */
+        else
+        {
+            if( m_bExpandNarrowValuesTowardZero )
+                fTempMinimum -= 1.0;
+        }
+    }
+
+    /*  If range is still zero-sized (e.g. when minimum is fixed), set minimum
+        to 0, which makes the axis start/stop at the value 1. */
+    if( fTempMinimum == fTempMaximum )
+    {
+        if( bAutoMinimum && (fTempMaximum > 0.0) )
+            fTempMinimum = 0.0;
+        else
+            fTempMaximum += 1.0;    // always add one interval, even if maximum is fixed
+    }
+
+    // *** STEP 3: calculate main interval size ***
+
+    // base value (anchor position of the intervals), already scaled
+    if( !(m_aSourceScale.IncrementData.BaseValue >>= rExplicitIncrement.BaseValue) )
+    {
+        //scaling dependent
+        //@maybe todo is this default also plotter dependent ??
+        if( !bAutoMinimum )
+            rExplicitIncrement.BaseValue = fTempMinimum;
+        else if( !bAutoMaximum )
+            rExplicitIncrement.BaseValue = fTempMaximum;
+        else
+            rExplicitIncrement.BaseValue = 0.0;
+    }
+
+    // calculate automatic interval
+    bool bAutoDistance = !(m_aSourceScale.IncrementData.Distance >>= rExplicitIncrement.Distance);
+    if( bAutoDistance )
+        rExplicitIncrement.Distance = 0.0;
+
+    /*  Restrict number of allowed intervals with user-defined distance to
+        MAXIMUM_MANUAL_INCREMENT_COUNT. */
+    sal_Int32 nMaxMainIncrementCount = bAutoDistance ?
+        m_nMaximumAutoMainIncrementCount : MAXIMUM_MANUAL_INCREMENT_COUNT;
+
+    // repeat calculation until number of intervals are valid
+    bool bNeedIteration = true;
+    bool bHasCalculatedDistance = false;
+    while( bNeedIteration )
+    {
+        if( bAutoDistance )
+        {
+            // first iteration: calculate interval size from axis limits
+            if( !bHasCalculatedDistance )
+            {
+                double fMinimumFloor = ::rtl::math::approxFloor( fTempMinimum );
+                double fMaximumCeil = ::rtl::math::approxCeil( fTempMaximum );
+                rExplicitIncrement.Distance = ::rtl::math::approxCeil( (fMaximumCeil - fMinimumFloor) / nMaxMainIncrementCount );
+            }
+            else
+            {
+                // following iterations: increase distance
+                rExplicitIncrement.Distance += 1.0;
+            }
+
+            // for next iteration: distance calculated -> use else path to increase
+            bHasCalculatedDistance = true;
+        }
+
+        // *** STEP 4: additional space above or below the data points ***
+
+        double fAxisMinimum = fTempMinimum;
+        double fAxisMaximum = fTempMaximum;
+
+        // round to entire multiples of the distance and add additional space
+        if( bAutoMinimum && m_bExpandBorderToIncrementRhythm )
+            fAxisMinimum = TickmarkHelper::getMinimumAtIncrement( fAxisMinimum, rExplicitIncrement );
+        if( bAutoMaximum && m_bExpandBorderToIncrementRhythm )
+            fAxisMaximum = TickmarkHelper::getMaximumAtIncrement( fAxisMaximum, rExplicitIncrement );
+
+        // set the resulting limits (swap back to negative range if needed)
+        if( bSwapAndNegateRange )
+        {
+            rExplicitScale.Minimum = -fAxisMaximum;
+            rExplicitScale.Maximum = -fAxisMinimum;
+        }
+        else
+        {
+            rExplicitScale.Minimum = fAxisMinimum;
+            rExplicitScale.Maximum = fAxisMaximum;
+        }
+
+        /*  If the number of intervals is too high (e.g. due to invalid fixed
+            distance or due to added space above or below data points),
+            calculate again with increased distance. */
+        double fDistanceCount = ::rtl::math::approxFloor( (fAxisMaximum - fAxisMinimum) / rExplicitIncrement.Distance );
+        bNeedIteration = static_cast< sal_Int32 >( fDistanceCount ) > nMaxMainIncrementCount;
+        // if manual distance is invalid, trigger automatic calculation
+        if( bNeedIteration )
+            bAutoDistance = true;
+
+        // convert limits back to logarithmic scale
+        rExplicitScale.Minimum = xInverseScaling->doScaling( rExplicitScale.Minimum );
+        rExplicitScale.Maximum = xInverseScaling->doScaling( rExplicitScale.Maximum );
+    }
+
     //---------------------------------------------------------------
-    //fill explicit increment
-    //minimum and maximum of the ExplicitScaleData may be changed if allowed
-    uno::Reference< lang::XServiceName > xServiceName( rExplicitScale.Scaling, uno::UNO_QUERY );
-    bool bIsLogarithm = ( xServiceName.is() && (xServiceName->getServiceName()).equals(
-                      C2U( "com.sun.star.chart2.LogarithmicScaling" )));
-    if(bIsLogarithm)
-        rExplicitIncrement = getExplicitIncrementAndScaleForLogarithm( bChangeMinimumToIncrementRythm, bChangeMaximumToIncrementRythm, m_nMaximumAutomaticMainIncrementCount
-                            , rExplicitScale, m_aSourceIncrement, m_aSourceSubIncrementList );
-    else
-        rExplicitIncrement = getExplicitIncrementAndScaleForLinear( bChangeMinimumToIncrementRythm, bChangeMaximumToIncrementRythm, m_nMaximumAutomaticMainIncrementCount
-                            , rExplicitScale, m_aSourceIncrement, m_aSourceSubIncrementList );
+    //fill explicit sub increment
+    sal_Int32 nSubCount = m_aSourceScale.IncrementData.SubIncrements.getLength();
+    rExplicitIncrement.SubIncrements.realloc(nSubCount);
+    for( sal_Int32 nN=0; nN<nSubCount; nN++ )
+    {
+        const SubIncrement&     rSubIncrement         = m_aSourceScale.IncrementData.SubIncrements[nN];
+        ExplicitSubIncrement&   rExplicitSubIncrement = rExplicitIncrement.SubIncrements[nN];
+
+        if(!(rSubIncrement.IntervalCount>>=rExplicitSubIncrement.IntervalCount))
+        {
+            //scaling dependent
+            //@todo autocalculate IntervalCount dependent on MainIncrement and scaling
+            rExplicitSubIncrement.IntervalCount = 5;
+        }
+        if(!(rSubIncrement.PostEquidistant>>=rExplicitSubIncrement.PostEquidistant))
+        {
+            //scaling dependent
+            rExplicitSubIncrement.PostEquidistant = sal_False;
+        }
+    }
+
+    /*  Add an unvisible little bit to the maximum to workaround rounding
+        errors (otherwise sometimes the maximum is not shown correctly). */
+    rExplicitScale.Minimum -= rExplicitScale.Minimum * 1.0e-10;
+    rExplicitScale.Maximum += rExplicitScale.Maximum * 1.0e-10;
+}
+
+void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
+        ExplicitScaleData& rExplicitScale,
+        ExplicitIncrementData& rExplicitIncrement,
+        bool bAutoMinimum, bool bAutoMaximum ) const
+{
+    // *** STEP 1: initialize the range data ***
+
+    double fSourceMinimum = rExplicitScale.Minimum;
+    double fSourceMaximum = rExplicitScale.Maximum;
+
+    // set automatic PostEquidistant to true (maybe scaling dependent?)
+    if( !(m_aSourceScale.IncrementData.PostEquidistant >>= rExplicitIncrement.PostEquidistant) )
+        rExplicitIncrement.PostEquidistant = sal_True;
+
+    /*  If range is invalid (minimum greater than maximum), change one of the
+        variable limits to validate the range. In this step, a zero-sized range
+        is still allowed. */
+    if( fSourceMinimum > fSourceMaximum )
+    {
+        // force changing the maximum, if both limits are fixed
+        if( bAutoMaximum || !bAutoMinimum )
+            fSourceMaximum = fSourceMinimum;
+        else
+            fSourceMinimum = fSourceMaximum;
+    }
+
+    /*  If maximum is zero or negative (and therefore minimum too), minimum and
+        maximum will be negated and swapped to make the following algorithms
+        easier. Example: Both ranges [2,5] and [-5,-2] will be processed as
+        [2,5], and the latter will be swapped back later. The range [0,0] is
+        explicitly excluded from swapping (this would result in [-1,0] instead
+        of the expected [0,1]). */
+    bool bSwapAndNegateRange = (fSourceMinimum < 0.0) && (fSourceMaximum <= 0.0);
+    if( bSwapAndNegateRange )
+    {
+        double fTempValue = fSourceMinimum;
+        fSourceMinimum = -fSourceMaximum;
+        fSourceMaximum = -fTempValue;
+        ::std::swap( bAutoMinimum, bAutoMaximum );
+    }
+
+    // *** STEP 2: find temporary (unrounded) axis minimum and maximum ***
+
+    double fTempMinimum = fSourceMinimum;
+    double fTempMaximum = fSourceMaximum;
+
+    /*  If minimum is variable and greater than 0 (and therefore maximum too),
+        means all values are positive (or all values are negative, and the
+        range has been swapped above), then: */
+    if( bAutoMinimum && (fTempMinimum > 0.0) )
+    {
+        /*  If minimum equals maximum, or if minimum is less than 5/6 of
+            maximum, set minimum to 0. */
+        if( (fTempMinimum == fTempMaximum) || (fTempMinimum / fTempMaximum < 5.0 / 6.0) )
+        {
+            if( m_bExpandWideValuesToZero )
+                fTempMinimum = 0.0;
+        }
+        /*  Else (minimum is greater than or equal to 5/6 of maximum), add half
+            of the visible range (expand minimum toward 0) to make the
+            'shorter' data points visible. */
+        else
+        {
+            if( m_bExpandNarrowValuesTowardZero )
+                fTempMinimum -= (fTempMaximum - fTempMinimum) / 2.0;
+        }
+    }
+
+    /*  If range is still zero-sized (e.g. when minimum is fixed), add some
+        space to a variable limit. */
+    if( fTempMinimum == fTempMaximum )
+    {
+        if( bAutoMaximum || !bAutoMinimum )
+        {
+            // change 0 to 1, otherwise double the value
+            if( fTempMaximum == 0.0 )
+                fTempMaximum = 1.0;
+            else
+                fTempMaximum *= 2.0;
+        }
+        else
+        {
+            // change 0 to -1, otherwise halve the value
+            if( fTempMinimum == 0.0 )
+                fTempMinimum = -1.0;
+            else
+                fTempMinimum /= 2.0;
+        }
+    }
+
+    // *** STEP 3: calculate main interval size ***
+
+    // base value (anchor position of the intervals)
+    if( !(m_aSourceScale.IncrementData.BaseValue >>= rExplicitIncrement.BaseValue) )
+    {
+        if( !bAutoMinimum )
+            rExplicitIncrement.BaseValue = fTempMinimum;
+        else if( !bAutoMaximum )
+            rExplicitIncrement.BaseValue = fTempMaximum;
+        else
+            rExplicitIncrement.BaseValue = 0.0;
+    }
+
+    // calculate automatic interval
+    bool bAutoDistance = !(m_aSourceScale.IncrementData.Distance >>= rExplicitIncrement.Distance);
+    /*  Restrict number of allowed intervals with user-defined distance to
+        MAXIMUM_MANUAL_INCREMENT_COUNT. */
+    sal_Int32 nMaxMainIncrementCount = bAutoDistance ?
+        m_nMaximumAutoMainIncrementCount : MAXIMUM_MANUAL_INCREMENT_COUNT;
+
+    double fDistanceMagnitude = 0.0;
+    double fDistanceNormalized = 0.0;
+    bool bHasNormalizedDistance = false;
+
+    // repeat calculation until number of intervals are valid
+    bool bNeedIteration = true;
+    while( bNeedIteration )
+    {
+        if( bAutoDistance )
+        {
+            // first iteration: calculate interval size from axis limits
+            if( !bHasNormalizedDistance )
+            {
+                // raw size of an interval
+                double fDistance = (fTempMaximum - fTempMinimum) / nMaxMainIncrementCount;
+
+                // if distance of is less than 1e-307, do not do anything
+                if( fDistance <= 1.0e-307 )
+                {
+                    fDistanceNormalized = 1.0;
+                    fDistanceMagnitude = 1.0e-307;
+                }
+                else
+                {
+                    // distance magnitude (a power of 10)
+                    int nExponent = static_cast< int >( ::rtl::math::approxFloor( log10( fDistance ) ) );
+                    fDistanceMagnitude = ::rtl::math::pow10Exp( 1.0, nExponent );
+
+                    // stick normalized distance to a few predefined values
+                    fDistanceNormalized = fDistance / fDistanceMagnitude;
+                    if( fDistanceNormalized <= 1.0 )
+                        fDistanceNormalized = 1.0;
+                    else if( fDistanceNormalized <= 2.0 )
+                        fDistanceNormalized = 2.0;
+                    else if( fDistanceNormalized <= 5.0 )
+                        fDistanceNormalized = 5.0;
+                    else
+                    {
+                        fDistanceNormalized = 1.0;
+                        fDistanceMagnitude *= 10;
+                    }
+                }
+                // for next iteration: distance is normalized -> use else path to increase distance
+                bHasNormalizedDistance = true;
+            }
+            // following iterations: increase distance, use only allowed values
+            else
+            {
+                if( fDistanceNormalized == 1.0 )
+                    fDistanceNormalized = 2.0;
+                else if( fDistanceNormalized == 2.0 )
+                    fDistanceNormalized = 5.0;
+                else
+                {
+                    fDistanceNormalized = 1.0;
+                    fDistanceMagnitude *= 10;
+                }
+            }
+
+            // set the resulting distance
+            rExplicitIncrement.Distance = fDistanceNormalized * fDistanceMagnitude;
+        }
+
+        // *** STEP 4: additional space above or below the data points ***
+
+        double fAxisMinimum = fTempMinimum;
+        double fAxisMaximum = fTempMaximum;
+
+        // round to entire multiples of the distance and add additional space
+        if( bAutoMinimum )
+        {
+            // round to entire multiples of the distance, based on the base value
+            if( m_bExpandBorderToIncrementRhythm )
+                fAxisMinimum = TickmarkHelper::getMinimumAtIncrement( fAxisMinimum, rExplicitIncrement );
+            // additional space, if source minimum is to near at axis minimum
+            if( m_bExpandIfValuesCloseToBorder )
+                if( (fAxisMinimum != 0.0) && ((fAxisMaximum - fSourceMinimum) / (fAxisMaximum - fAxisMinimum) > 20.0 / 21.0) )
+                    fAxisMinimum -= rExplicitIncrement.Distance;
+        }
+        if( bAutoMaximum )
+        {
+            // round to entire multiples of the distance, based on the base value
+            if( m_bExpandBorderToIncrementRhythm )
+                fAxisMaximum = TickmarkHelper::getMaximumAtIncrement( fAxisMaximum, rExplicitIncrement );
+            // additional space, if source maximum is to near at axis maximum
+            if( m_bExpandIfValuesCloseToBorder )
+                if( (fAxisMaximum != 0.0) && ((fSourceMaximum - fAxisMinimum) / (fAxisMaximum - fAxisMinimum) > 20.0 / 21.0) )
+                    fAxisMaximum += rExplicitIncrement.Distance;
+        }
+
+        // set the resulting limits (swap back to negative range if needed)
+        if( bSwapAndNegateRange )
+        {
+            rExplicitScale.Minimum = -fAxisMaximum;
+            rExplicitScale.Maximum = -fAxisMinimum;
+        }
+        else
+        {
+            rExplicitScale.Minimum = fAxisMinimum;
+            rExplicitScale.Maximum = fAxisMaximum;
+        }
+
+        /*  If the number of intervals is too high (e.g. due to invalid fixed
+            distance or due to added space above or below data points),
+            calculate again with increased distance. */
+        double fDistanceCount = ::rtl::math::approxFloor( (fAxisMaximum - fAxisMinimum) / rExplicitIncrement.Distance );
+        bNeedIteration = static_cast< sal_Int32 >( fDistanceCount ) > nMaxMainIncrementCount;
+        // if manual distance is invalid, trigger automatic calculation
+        if( bNeedIteration )
+            bAutoDistance = true;
+    }
+
+    //---------------------------------------------------------------
+    //fill explicit sub increment
+    sal_Int32 nSubCount = m_aSourceScale.IncrementData.SubIncrements.getLength();
+    rExplicitIncrement.SubIncrements.realloc(nSubCount);
+    for( sal_Int32 nN=0; nN<nSubCount; nN++ )
+    {
+        const SubIncrement&     rSubIncrement         = m_aSourceScale.IncrementData.SubIncrements[nN];
+        ExplicitSubIncrement&   rExplicitSubIncrement = rExplicitIncrement.SubIncrements[nN];
+
+        if(!(rSubIncrement.IntervalCount>>=rExplicitSubIncrement.IntervalCount))
+        {
+            //scaling dependent
+            //@todo autocalculate IntervalCount dependent on MainIncrement and scaling
+            rExplicitSubIncrement.IntervalCount = 2;
+        }
+        if(!(rSubIncrement.PostEquidistant>>=rExplicitSubIncrement.PostEquidistant))
+        {
+            //scaling dependent
+            rExplicitSubIncrement.PostEquidistant = sal_False;
+        }
+    }
+
+    /*  Add an unvisible little bit to the maximum to workaround rounding
+        errors (otherwise sometimes the maximum is not shown correctly). */
+    double fLittleBit = (rExplicitScale.Maximum - rExplicitScale.Minimum) * 1.0e-10;
+    rExplicitScale.Minimum -= fLittleBit;
+    rExplicitScale.Maximum += fLittleBit;
 }
 
 //.............................................................................
