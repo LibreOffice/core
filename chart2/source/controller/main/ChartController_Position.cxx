@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_Position.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:38:20 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:03:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,16 +37,17 @@
 #include "precompiled_chart2.hxx"
 #include "ChartController.hxx"
 
-#include "dlg_RotateDiagram.hxx"
 #include "macros.hxx"
 #include "ChartWindow.hxx"
-#include "Rotation.hxx"
-#include "ChartModelHelper.hxx"
 #include "DrawViewWrapper.hxx"
 #include "PositionAndSizeHelper.hxx"
+#include "ChartModelHelper.hxx"
+#include "UndoGuard.hxx"
+#include "Strings.hrc"
+#include "ObjectNameProvider.hxx"
 
-#ifndef _COM_SUN_STAR_CHART2_SCENEDESCRIPTOR_HPP_
-#include <com/sun/star/chart2/SceneDescriptor.hpp>
+#ifndef _SVX_ACTIONDESCRIPTIONPROVIDER_HXX
+#include <svx/ActionDescriptionProvider.hxx>
 #endif
 
 // header for define RET_OK
@@ -63,6 +64,12 @@
 #endif
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
 #endif
 
 //.............................................................................
@@ -97,27 +104,35 @@ void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, Rectangle& r
     rPosAndSize = Rectangle(Point(nPosX,nPosY),Size(nSizX,nSizY));
 }
 
-void SAL_CALL ChartController::executeDispatch_PositionAndSize( const ::rtl::OUString& rObjectCID )
+void SAL_CALL ChartController::executeDispatch_PositionAndSize()
 {
-    if( !rObjectCID.getLength() )
+    const ::rtl::OUString aCID( m_aSelection.getSelectedCID() );
+
+    if( !aCID.getLength() )
         return;
 
-    bool bChanged = false;
+    UndoGuard aUndoGuard(
+        ActionDescriptionProvider::createDescription(
+            ActionDescriptionProvider::POS_SIZE,
+            ObjectNameProvider::getName( ObjectIdentifier::getObjectType( aCID ))),
+        m_aUndoManager, m_aModel->getModel() );
+
     SfxAbstractTabDialog * pDlg = NULL;
     try
     {
         SfxItemSet aItemSet = m_pDrawViewWrapper->getPositionAndSizeItemSetFromMarkedObject();
 
         //prepare and open dialog
-        Window* pParent( NULL );
         SdrView* pSdrView = m_pDrawViewWrapper;
         bool bResizePossible=true;
 
+        ::vos::OGuard aGuard( Application::GetSolarMutex());
         SvxAbstractDialogFactory * pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT( pFact, "No dialog factory" );
         pDlg = pFact->CreateSchTransformTabDialog(
-            NULL, &aItemSet, pSdrView, RID_SCH_TransformTabDLG_SVXPAGE_ANGLE, bResizePossible );
+            m_pChartWindow, &aItemSet, pSdrView, RID_SCH_TransformTabDLG_SVXPAGE_ANGLE, bResizePossible );
         DBG_ASSERT( pDlg, "Couldn't create SchTransformTabDialog" );
+
 
         if( pDlg->Execute() == RET_OK )
         {
@@ -127,13 +142,16 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize( const ::rtl::OUS
                 Rectangle aObjectRect;
                 aItemSet.Put(*pOutItemSet);//overwrite old values with new values (-> all items are set)
                 lcl_getPositionAndSizeFromItemSet( aItemSet, aObjectRect );
-                Rectangle aPageRect( Point(0,0),m_pChartWindow->GetOutputSize() );
+                awt::Size aPageSize( ChartModelHelper::getPageSize( m_aModel->getModel() ) );
+                Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
 
-                bChanged = PositionAndSizeHelper::moveObject( m_aSelectedObjectCID
+                bool bChanged = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID()
                             , m_aModel->getModel()
                             , awt::Rectangle(aObjectRect.getX(),aObjectRect.getY(),aObjectRect.getWidth(),aObjectRect.getHeight())
                             , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight())
-                            );
+                            , m_xChartView );
+                if( bChanged )
+                    aUndoGuard.commitAction();
             }
         }
         delete pDlg;
@@ -142,53 +160,6 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize( const ::rtl::OUS
     {
         delete pDlg;
         ASSERT_EXCEPTION( e );
-    }
-    //make sure that all objects using  m_pChartView are already deleted
-    if(bChanged)
-    {
-        m_bViewDirty = true;
-        m_pChartWindow->Invalidate();
-    }
-}
-
-void SAL_CALL ChartController::executeDispatch_RotateDiagram()
-{
-    bool bChanged = false;
-    try
-    {
-        Window* pParent( NULL );
-        double fXAngle, fYAngle, fZAngle;
-        fXAngle=fYAngle=fZAngle=0.0;
-
-        //get angle from model
-        SceneDescriptor aSceneDescriptor;
-        uno::Reference< beans::XPropertySet > xProp( ChartModelHelper::findDiagram( m_aModel->getModel() ), uno::UNO_QUERY );
-        if( xProp.is() && (xProp->getPropertyValue( C2U( "SceneProperties" ) )>>=aSceneDescriptor) )
-        {
-            Rotation::getEulerFromAxisAngleRepresentation( aSceneDescriptor.aDirection, aSceneDescriptor.fRotationAngle
-                , fXAngle, fYAngle, fZAngle );
-        }
-
-        //open dialog
-        RotateDiagramDialog aDlg( pParent, fXAngle, fYAngle, fZAngle );
-        if( aDlg.Execute() == RET_OK )
-        {
-            aDlg.getAngle( fXAngle, fYAngle, fZAngle );
-            Rotation::getAxisAngleFromEulerRepresentation( aSceneDescriptor.aDirection, aSceneDescriptor.fRotationAngle
-                , fXAngle, fYAngle, fZAngle );
-            xProp->setPropertyValue( C2U( "SceneProperties" ), uno::makeAny(aSceneDescriptor) );
-            bChanged = true;
-        }
-    }
-    catch( uno::RuntimeException& e)
-    {
-        ASSERT_EXCEPTION( e );
-    }
-    //make sure that all objects using  m_pChartView are already deleted
-    if(bChanged)
-    {
-        m_bViewDirty = true;
-        m_pChartWindow->Invalidate();
     }
 }
 
