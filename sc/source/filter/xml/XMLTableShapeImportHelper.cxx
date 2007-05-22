@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:47:48 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:03:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,9 @@
 #endif
 #ifndef SC_XMLANNOI_HXX
 #include "xmlannoi.hxx"
+#endif
+#ifndef SC_RANGEUTL_HXX
+#include "rangeutl.hxx"
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
@@ -140,7 +143,7 @@ void XMLTableShapeImportHelper::finishShape(
                     if (IsXMLToken(aLocalName, XML_END_CELL_ADDRESS))
                     {
                         sal_Int32 nOffset(0);
-                        ScXMLConverter::GetAddressFromString(aEndCell, rValue, static_cast<ScXMLImport&>(mrImporter).GetDocument(), nOffset);
+                        ScRangeStringConverter::GetAddressFromString(aEndCell, rValue, static_cast<ScXMLImport&>(mrImporter).GetDocument(), nOffset);
                     }
                     else if (IsXMLToken(aLocalName, XML_END_X))
                         static_cast<ScXMLImport&>(mrImporter).GetMM100UnitConverter().convertMeasure(nEndX, rValue);
