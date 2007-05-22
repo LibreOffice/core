@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:13:53 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:06:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,19 +36,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-#include "SchXMLChartContext.hxx"
 #include "SchXMLPlotAreaContext.hxx"
 #include "SchXMLImport.hxx"
+#include "SchXMLSeries2Context.hxx"
+#include "SchXMLErrorBuildIds.hxx"
+#include "SchXMLTools.hxx"
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifdef DBG_UTIL
+#include <tools/string.hxx>
+#endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
-#endif
-#ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include "xmltoken.hxx"
@@ -72,6 +74,10 @@
 #include "xexptran.hxx"
 #endif
 
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #endif
@@ -93,14 +99,38 @@
 #ifndef _COM_SUN_STAR_CHART_CHARTDATAROWSOURCE_HPP_
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART_CHARTAXISASSIGN_HPP_
-#include <com/sun/star/chart/ChartAxisAssign.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CHART_X3DDISPLAY_HPP_
 #include <com/sun/star/chart/X3DDisplay.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CHART_XSTATISTICDISPLAY_HPP_
 #include <com/sun/star/chart/XStatisticDisplay.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XCOORDINATESYSTEMCONTAINER_HPP_
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_DATA_XRANGEXMLCONVERSION_HPP_
+#include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPECONTAINER_HPP_
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XDATASERIESCONTAINER_HPP_
+#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_AXISTYPE_HPP_
+#include <com/sun/star/chart2/AxisType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_CAMERAGEOMETRY_HPP_
+#include <com/sun/star/drawing/CameraGeometry.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
+#include <com/sun/star/drawing/FillStyle.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
+#include <com/sun/star/drawing/LineStyle.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_POINT_HPP_
@@ -108,10 +138,6 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
-#endif
-
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
 #endif
 
 using namespace com::sun::star;
@@ -127,64 +153,121 @@ static __FAR_DATA SvXMLEnumMapEntry aXMLAxisClassMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-// ========================================
-
-SchXML3DSceneAttributesHelper::SchXML3DSceneAttributesHelper(
-    SvXMLImport& rImporter ) :
-        SdXML3DSceneAttributesHelper( rImporter ),
-        m_bIsDirty( false )
+namespace
 {
-    mnDistance =    4110; // default in base class: 1000
-    mnFocalLength = 800;  // default in base class: 1000
+
+struct lcl_AxisHasCategories : public ::std::unary_function< SchXMLAxis, bool >
+{
+    bool operator() ( const SchXMLAxis & rAxis )
+    {
+        return rAxis.bHasCategories;
+    }
+};
+
+OUString lcl_ConvertRange( const ::rtl::OUString & rRange, const uno::Reference< chart2::XChartDocument > & xDoc )
+{
+    OUString aResult = rRange;
+    uno::Reference< chart2::data::XRangeXMLConversion > xConversion(
+        SchXMLImportHelper::GetDataProvider( xDoc ), uno::UNO_QUERY );
+    if( xConversion.is())
+        aResult = xConversion->convertRangeFromXML( rRange );
+    return aResult;
 }
 
-bool SchXML3DSceneAttributesHelper::IsDirty()
+} // anonymous namespace
+
+SchXML3DSceneAttributesHelper::SchXML3DSceneAttributesHelper( SvXMLImport& rImporter )
+    : SdXML3DSceneAttributesHelper( rImporter )
 {
-    return m_bIsDirty;
 }
 
-void SchXML3DSceneAttributesHelper::SetDirty()
+void SchXML3DSceneAttributesHelper::getCameraDefaultFromDiagram( const uno::Reference< chart::XDiagram >& xDiagram )
 {
-    m_bIsDirty = true;
+    //different defaults for camera geometry necessary to workaround wrong behaviour in old chart
+    //in future make this version dependent if we have versioning (metastream) for ole objects
+
+    try
+    {
+        uno::Reference< beans::XPropertySet > xProp( xDiagram, uno::UNO_QUERY );
+        if( xProp.is() )
+        {
+            drawing::CameraGeometry aCamGeo;
+            xProp->getPropertyValue( ::rtl::OUString::createFromAscii("D3DCameraGeometry")) >>= aCamGeo;
+            maVRP.setX( aCamGeo.vrp.PositionX );
+            maVRP.setY( aCamGeo.vrp.PositionY );
+            maVRP.setZ( aCamGeo.vrp.PositionZ );
+            maVPN.setX( aCamGeo.vpn.DirectionX );
+            maVPN.setY( aCamGeo.vpn.DirectionY );
+            maVPN.setZ( aCamGeo.vpn.DirectionZ );
+            maVUP.setX( aCamGeo.vup.DirectionX );
+            maVUP.setY( aCamGeo.vup.DirectionY );
+            maVUP.setZ( aCamGeo.vup.DirectionZ );
+        }
+    }
+    catch( uno::Exception & rEx )
+    {
+#ifdef DBG_UTIL
+        String aStr( rEx.Message );
+        ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR1( "Exception caught for property NumberOfLines: %s", aBStr.GetBuffer());
+#else
+        (void)rEx; // avoid warning for pro build
+#endif
+    }
 }
 
-void SchXML3DSceneAttributesHelper::SetDistance( sal_Int32 nDistance )
+SchXML3DSceneAttributesHelper::~SchXML3DSceneAttributesHelper()
 {
-    mnDistance = nDistance;
 }
 
-// ========================================
-
-SchXMLPlotAreaContext::SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
-                                              SvXMLImport& rImport, const rtl::OUString& rLocalName,
-                                              uno::Sequence< chart::ChartSeriesAddress >& rSeriesAddresses,
-                                              ::rtl::OUString& rCategoriesAddress,
-                                              ::rtl::OUString& rChartAddress,
-                                              ::rtl::OUString& rTableNumberList) :
+SchXMLPlotAreaContext::SchXMLPlotAreaContext(
+    SchXMLImportHelper& rImpHelper,
+    SvXMLImport& rImport, const rtl::OUString& rLocalName,
+    uno::Sequence< chart::ChartSeriesAddress >& rSeriesAddresses,
+    ::rtl::OUString& rCategoriesAddress,
+    ::rtl::OUString& rChartAddress,
+    sal_Bool & rHasOwnTable,
+    sal_Bool & rAllRangeAddressesAvailable,
+    sal_Bool & rColHasLabels,
+    sal_Bool & rRowHasLabels,
+    chart::ChartDataRowSource & rDataRowSource,
+    SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles,
+    const ::rtl::OUString& aChartTypeServiceName,
+    tSchXMLLSequencesPerIndex & rLSequencesPerIndex ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
         mrImportHelper( rImpHelper ),
         mrSeriesAddresses( rSeriesAddresses ),
         mrCategoriesAddress( rCategoriesAddress ),
-        mnDomainOffset( 0 ),
-        mnNumOfLines( 0 ),
+        mrSeriesDefaultsAndStyles( rSeriesDefaultsAndStyles ),
+        mnNumOfLinesProp( 0 ),
+        mnNumOfLinesReadBySeries( 0 ),
         mbStockHasVolume( sal_False ),
         mnSeries( 0 ),
         mnMaxSeriesLength( 0 ),
         maSceneImportHelper( rImport ),
-        mbSetDiagramSize( false ),
-        mbSetDiagramPosition( false ),
+        mbHasSize(false),
+        mbHasPosition(false),
+        mbPercentStacked(false),
         mrChartAddress( rChartAddress ),
-        mrTableNumberList( rTableNumberList )
+        mrHasOwnTable( rHasOwnTable ),
+        mrAllRangeAddressesAvailable( rAllRangeAddressesAvailable ),
+        mrColHasLabels( rColHasLabels ),
+        mrRowHasLabels( rRowHasLabels ),
+        mrDataRowSource( rDataRowSource ),
+        mnFirstFirstDomainIndex( -1 ),
+        maChartTypeServiceName( aChartTypeServiceName ),
+        mrLSequencesPerIndex( rLSequencesPerIndex ),
+        mnCurrentDataIndex( 0 ),
+        mbGlobalChartTypeUsedBySeries( false )
 {
     // get Diagram
     uno::Reference< chart::XChartDocument > xDoc( rImpHelper.GetChartDocument(), uno::UNO_QUERY );
     if( xDoc.is())
     {
         mxDiagram = xDoc->getDiagram();
-        // other default for distance for pie charts
-        if( mxDiagram.is() &&
-            mxDiagram->getDiagramType().equalsAscii("com.sun.star.chart.PieDiagram"))
-            maSceneImportHelper.SetDistance( 5000 );
+        mxNewDoc.set( xDoc, uno::UNO_QUERY );
+
+        maSceneImportHelper.getCameraDefaultFromDiagram( mxDiagram );
     }
     DBG_ASSERT( mxDiagram.is(), "Couldn't get XDiagram" );
 
@@ -245,7 +328,7 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
             aAny <<= eSource;
             xProp->setPropertyValue( rtl::OUString::createFromAscii( "DataRowSource" ), aAny );
         }
-        catch( beans::UnknownPropertyException )
+        catch( beans::UnknownPropertyException & )
         {
             DBG_ERROR( "Property required by service not supported" );
         }
@@ -254,6 +337,207 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
 
 SchXMLPlotAreaContext::~SchXMLPlotAreaContext()
 {}
+
+void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+{
+    uno::Any aTransMatrixAny;
+
+    // initialize size and position
+    uno::Reference< drawing::XShape > xDiaShape( mxDiagram, uno::UNO_QUERY );
+    bool bHasSizeWidth = false;
+    bool bHasSizeHeight = false;
+    bool bHasPositionX = false;
+    bool bHasPositionY = false;
+
+    // parse attributes
+    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
+    const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetPlotAreaAttrTokenMap();
+    uno::Reference< chart2::XChartDocument > xNewDoc( GetImport().GetModel(), uno::UNO_QUERY );
+
+    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    {
+        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        rtl::OUString aLocalName;
+        rtl::OUString aValue = xAttrList->getValueByIndex( i );
+        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+
+        switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
+        {
+            case XML_TOK_PA_X:
+                GetImport().GetMM100UnitConverter().convertMeasure( maPosition.X, aValue );
+                bHasPositionX = true;
+                break;
+            case XML_TOK_PA_Y:
+                GetImport().GetMM100UnitConverter().convertMeasure( maPosition.Y, aValue );
+                bHasPositionY = true;
+                break;
+            case XML_TOK_PA_WIDTH:
+                GetImport().GetMM100UnitConverter().convertMeasure( maSize.Width, aValue );
+                bHasSizeWidth = true;
+                break;
+            case XML_TOK_PA_HEIGHT:
+                GetImport().GetMM100UnitConverter().convertMeasure( maSize.Height, aValue );
+                bHasSizeHeight = true;
+                break;
+            case XML_TOK_PA_STYLE_NAME:
+                msAutoStyleName = aValue;
+                break;
+            case XML_TOK_PA_CHART_ADDRESS:
+                mrChartAddress = lcl_ConvertRange( aValue, xNewDoc );
+                // indicator for getting data from the outside
+                mrHasOwnTable = sal_False;
+                break;
+            case XML_TOK_PA_DS_HAS_LABELS:
+                {
+                    if( aValue.equals( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_BOTH )))
+                        mrColHasLabels = mrRowHasLabels = sal_True;
+                    else if( aValue.equals( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_ROW )))
+                        mrRowHasLabels = sal_True;
+                    else if( aValue.equals( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_COLUMN )))
+                        mrColHasLabels = sal_True;
+                }
+                break;
+            case XML_TOK_PA_TRANSFORM:
+            case XML_TOK_PA_VRP:
+            case XML_TOK_PA_VPN:
+            case XML_TOK_PA_VUP:
+            case XML_TOK_PA_PROJECTION:
+            case XML_TOK_PA_DISTANCE:
+            case XML_TOK_PA_FOCAL_LENGTH:
+            case XML_TOK_PA_SHADOW_SLANT:
+            case XML_TOK_PA_SHADE_MODE:
+            case XML_TOK_PA_AMBIENT_COLOR:
+            case XML_TOK_PA_LIGHTING_MODE:
+                maSceneImportHelper.processSceneAttribute( nPrefix, aLocalName, aValue );
+                break;
+        }
+    }
+
+    mbHasSize = bHasSizeWidth && bHasSizeHeight;
+    mbHasPosition = bHasPositionX && bHasPositionY;
+
+    if( ! mxNewDoc.is())
+    {
+        uno::Reference< beans::XPropertySet > xDocProp( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
+        if( xDocProp.is())
+        {
+            try
+            {
+                uno::Any aAny;
+                aAny <<= (sal_Bool)(mrColHasLabels);
+                xDocProp->setPropertyValue(
+                    ::rtl::OUString::createFromAscii( "DataSourceLabelsInFirstColumn" ),
+                    aAny );
+
+                aAny <<= (sal_Bool)(mrRowHasLabels);
+                xDocProp->setPropertyValue(
+                    ::rtl::OUString::createFromAscii( "DataSourceLabelsInFirstRow" ),
+                    aAny );
+            }
+            catch( beans::UnknownPropertyException & )
+            {
+                DBG_ERRORFILE( "Properties missing" );
+            }
+        }
+    }
+
+    // set properties
+    uno::Reference< beans::XPropertySet > xProp( mxDiagram, uno::UNO_QUERY );
+    if( msAutoStyleName.getLength())
+    {
+        if( xProp.is())
+        {
+            const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
+            if( pStylesCtxt )
+            {
+                const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
+                    mrImportHelper.GetChartFamilyID(), msAutoStyleName );
+
+                if( pStyle && pStyle->ISA( XMLPropStyleContext ))
+                {
+                    (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
+
+                    // get the data row source that was set without having data
+                    xProp->getPropertyValue( ::rtl::OUString::createFromAscii("DataRowSource"))
+                        >>= mrDataRowSource;
+                }
+            }
+        }
+    }
+
+    //remember default values for dataseries
+    if(xProp.is())
+    try
+    {
+        mrSeriesDefaultsAndStyles.maSymbolTypeDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SymbolType")));
+        mrSeriesDefaultsAndStyles.maDataCaptionDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataCaption")));
+
+        mrSeriesDefaultsAndStyles.maErrorIndicatorDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ErrorIndicator")));
+        mrSeriesDefaultsAndStyles.maErrorCategoryDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ErrorCategory")));
+        mrSeriesDefaultsAndStyles.maConstantErrorLowDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ConstantErrorLow")));
+        mrSeriesDefaultsAndStyles.maConstantErrorHighDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ConstantErrorHigh")));
+        mrSeriesDefaultsAndStyles.maPercentageErrorDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PercentageError")));
+        mrSeriesDefaultsAndStyles.maErrorMarginDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ErrorMargin")));
+
+        mrSeriesDefaultsAndStyles.maMeanValueDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MeanValue")));
+        mrSeriesDefaultsAndStyles.maRegressionCurvesDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RegressionCurves")));
+
+        bool bStacked = false;
+        mrSeriesDefaultsAndStyles.maStackedDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Stacked")));
+        mrSeriesDefaultsAndStyles.maStackedDefault >>= bStacked;
+        mrSeriesDefaultsAndStyles.maPercentDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Percent")));
+        mrSeriesDefaultsAndStyles.maPercentDefault >>= mbPercentStacked;
+        mrSeriesDefaultsAndStyles.maStackedBarsConnectedDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StackedBarsConnected")));
+
+        //lines on/off
+        mrSeriesDefaultsAndStyles.maLinesOnProperty = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Lines")));
+
+        // deep
+        uno::Any aDeepProperty( xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Deep"))));
+        // #124488# old versions store a 3d area and 3D line deep chart with Deep==false => workaround for this
+        if( ! (bStacked || mbPercentStacked ))
+        {
+            sal_Int32 nBuildId = 0;
+            sal_Int32 nUPD;
+            if( !GetImport().getBuildIds( nUPD, nBuildId ) )
+            {
+                bool bIs3d = false;
+                if( ( xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dim3D"))) >>= bIs3d ) &&
+                    bIs3d )
+                {
+                    if( maChartTypeServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.AreaChartType" )) ||
+                        maChartTypeServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.LineChartType" )) )
+                    {
+                        aDeepProperty <<= uno::makeAny( true );
+                    }
+                }
+            }
+        }
+        mrSeriesDefaultsAndStyles.maDeepDefault = aDeepProperty;
+
+        xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberOfLines"))) >>= mnNumOfLinesProp;
+        xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Volume"))) >>= mbStockHasVolume;
+    }
+    catch( uno::Exception & rEx )
+    {
+#ifdef DBG_UTIL
+        String aStr( rEx.Message );
+        ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR1( "PlotAreaContext:EndElement(): Exception caught: %s", aBStr.GetBuffer());
+#else
+        (void)rEx; // avoid warning for pro build
+#endif
+    }
+    //
+
+    if( mrHasOwnTable && mxNewDoc.is())
+    {
+        // we have no complete range => we have own data, so switch the data
+        // provider to internal. Clone is not necessary, as we don't have any
+        // data yet.
+        mxNewDoc->createInternalDataProvider( false /* bCloneExistingData */ );
+    }
+}
 
 SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
     USHORT nPrefix,
@@ -266,18 +550,48 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
     switch( rTokenMap.Get( nPrefix, rLocalName ))
     {
         case XML_TOK_PA_AXIS:
+        {
+            bool bAddMissingXAxisForNetCharts = false;
+            bool bAdaptWrongPercentScaleValues = false;
+            sal_Int32 nBuildId = 0;
+            sal_Int32 nUPD = 0;
+            if( !GetImport().getBuildIds( nUPD, nBuildId ) )
+            {
+                //correct errors from older versions
+
+                // for NetCharts there were no xAxis exported to older files
+                // so we need to add the x axis here for those old NetChart files
+                if( maChartTypeServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.NetChartType" )) )
+                    bAddMissingXAxisForNetCharts = true;
+
+                //Issue 59288
+                if( mbPercentStacked )
+                    bAdaptWrongPercentScaleValues = true;
+            }
+
             pContext = new SchXMLAxisContext( mrImportHelper, GetImport(), rLocalName,
-                                              mxDiagram, maAxes, mrCategoriesAddress );
-            break;
+                                              mxDiagram, maAxes, mrCategoriesAddress, bAddMissingXAxisForNetCharts, bAdaptWrongPercentScaleValues );
+        }
+        break;
 
         case XML_TOK_PA_SERIES:
             {
-                mrSeriesAddresses.realloc( mnSeries + 1 );
-                pContext = new SchXMLSeriesContext( mrImportHelper, GetImport(), rLocalName,
-                                                    mxDiagram, maAxes, mrSeriesAddresses[ mnSeries ],
-                                                    maSeriesStyleList,
-                                                    mnSeries, mnMaxSeriesLength, mnDomainOffset,
-                                                    mnNumOfLines, mbStockHasVolume );
+                if( mxNewDoc.is())
+                {
+                    pContext = new SchXMLSeries2Context(
+                        mrImportHelper, GetImport(), rLocalName,
+                        mxNewDoc, maAxes,
+                        mrSeriesDefaultsAndStyles.maSeriesStyleList,
+                        mnSeries, mnMaxSeriesLength,
+                        mnNumOfLinesReadBySeries, mbStockHasVolume,
+                        maFirstFirstDomainAddress,
+                        mnFirstFirstDomainIndex,
+                        mrAllRangeAddressesAvailable,
+                        maChartTypeServiceName,
+                        mrLSequencesPerIndex,
+                        mnCurrentDataIndex,
+                        mbGlobalChartTypeUsedBySeries );
+                }
                 mnSeries++;
             }
             break;
@@ -293,7 +607,6 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
 
         case XML_TOK_PA_LIGHT_SOURCE:
             pContext = maSceneImportHelper.create3DLightContext( nPrefix, rLocalName, xAttrList );
-            maSceneImportHelper.SetDirty();
             break;
 
         // elements for stock charts
@@ -317,186 +630,87 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
     return pContext;
 }
 
-void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
-{
-    uno::Any aTransMatrixAny;
-
-    // initialize size and position
-    uno::Reference< drawing::XShape > xDiaShape( mxDiagram, uno::UNO_QUERY );
-    if( xDiaShape.is())
-    {
-        maSize = xDiaShape->getSize();
-        maPosition = xDiaShape->getPosition();
-    }
-
-    // parse attributes
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetPlotAreaAttrTokenMap();
-
-    sal_Bool bColHasLabels = sal_False;
-    sal_Bool bRowHasLabels = sal_False;
-
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
-    {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        rtl::OUString aLocalName;
-        rtl::OUString aValue = xAttrList->getValueByIndex( i );
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
-        {
-            case XML_TOK_PA_X:
-                GetImport().GetMM100UnitConverter().convertMeasure( maPosition.X, aValue );
-                mbSetDiagramPosition = true;
-                break;
-            case XML_TOK_PA_Y:
-                GetImport().GetMM100UnitConverter().convertMeasure( maPosition.Y, aValue );
-                mbSetDiagramPosition = true;
-                break;
-            case XML_TOK_PA_WIDTH:
-                GetImport().GetMM100UnitConverter().convertMeasure( maSize.Width, aValue );
-                mbSetDiagramSize = true;
-                break;
-            case XML_TOK_PA_HEIGHT:
-                GetImport().GetMM100UnitConverter().convertMeasure( maSize.Height, aValue );
-                mbSetDiagramSize = true;
-                break;
-            case XML_TOK_PA_STYLE_NAME:
-                msAutoStyleName = aValue;
-                break;
-            case XML_TOK_PA_CHART_ADDRESS:
-                mrChartAddress = aValue;
-                break;
-            case XML_TOK_PA_TABLE_NUMBER_LIST:
-                mrTableNumberList = aValue;
-                break;
-            case XML_TOK_PA_DS_HAS_LABELS:
-                {
-                    if( aValue.equals( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_BOTH )))
-                        bColHasLabels = bRowHasLabels = sal_True;
-                    else if( aValue.equals( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_ROW )))
-                        bRowHasLabels = sal_True;
-                    else if( aValue.equals( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_COLUMN )))
-                        bColHasLabels = sal_True;
-                }
-                break;
-            case XML_TOK_PA_TRANSFORM:
-            case XML_TOK_PA_VRP:
-            case XML_TOK_PA_VPN:
-            case XML_TOK_PA_VUP:
-            case XML_TOK_PA_PROJECTION:
-            case XML_TOK_PA_DISTANCE:
-            case XML_TOK_PA_FOCAL_LENGTH:
-            case XML_TOK_PA_SHADOW_SLANT:
-            case XML_TOK_PA_SHADE_MODE:
-            case XML_TOK_PA_AMBIENT_COLOR:
-            case XML_TOK_PA_LIGHTING_MODE:
-                maSceneImportHelper.processSceneAttribute( nPrefix, aLocalName, aValue );
-                maSceneImportHelper.SetDirty();
-                break;
-        }
-    }
-
-    uno::Reference< beans::XPropertySet > xDocProp( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
-    if( xDocProp.is())
-    {
-        try
-        {
-            uno::Any aAny;
-            aAny <<= (sal_Bool)(bColHasLabels);
-            xDocProp->setPropertyValue(
-                ::rtl::OUString::createFromAscii( "DataSourceLabelsInFirstColumn" ),
-                aAny );
-
-            aAny <<= (sal_Bool)(bRowHasLabels);
-            xDocProp->setPropertyValue(
-                ::rtl::OUString::createFromAscii( "DataSourceLabelsInFirstRow" ),
-                aAny );
-        }
-        catch( beans::UnknownPropertyException )
-        {
-            DBG_ERRORFILE( "Properties missing" );
-        }
-    }
-
-    // set properties
-    uno::Reference< beans::XPropertySet > xProp( mxDiagram, uno::UNO_QUERY );
-    if( msAutoStyleName.getLength())
-    {
-        if( xProp.is())
-        {
-            const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
-            if( pStylesCtxt )
-            {
-                const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                    mrImportHelper.GetChartFamilyID(), msAutoStyleName );
-
-                if( pStyle && pStyle->ISA( XMLPropStyleContext ))
-                    (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
-            }
-
-            // perform BuildChart to make scene etc. available
-            uno::Reference< chart::XChartDocument > xDoc( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
-            if( xDoc.is() &&
-                xDoc->hasControllersLocked())
-            {
-                xDoc->unlockControllers();
-                xDoc->lockControllers();
-            }
-        }
-    }
-}
-
 void SchXMLPlotAreaContext::EndElement()
 {
-    sal_Int32 i;
+    // set categories
+    if( mrCategoriesAddress.getLength() && mxNewDoc.is())
+    {
+        uno::Reference< chart2::data::XDataProvider > xDataProvider(
+            mrImportHelper.GetDataProvider( mxNewDoc ));
+        // @todo: correct coordinate system index
+        sal_Int32 nDimension( 0 );
+        ::std::vector< SchXMLAxis >::const_iterator aIt(
+            ::std::find_if( maAxes.begin(), maAxes.end(), lcl_AxisHasCategories()));
+        if( aIt != maAxes.end())
+            nDimension = static_cast< sal_Int32 >( (*aIt).eClass );
+        SchXMLTools::CreateCategories(
+            xDataProvider, mxNewDoc, mrCategoriesAddress,
+            0 /* nCooSysIndex */,
+            nDimension, &mrLSequencesPerIndex );
+    }
 
-    uno::Reference< beans::XPropertySet > xProp( mxDiagram, uno::UNO_QUERY );
-    if( xProp.is())
+    uno::Reference< beans::XPropertySet > xDiaProp( mxDiagram, uno::UNO_QUERY );
+    if( xDiaProp.is())
     {
         sal_Bool bIsThreeDim = sal_False;
-        uno::Any aAny = xProp->getPropertyValue( ::rtl::OUString::createFromAscii( "Dim3D" ));
+        uno::Any aAny = xDiaProp->getPropertyValue( ::rtl::OUString::createFromAscii( "Dim3D" ));
         aAny >>= bIsThreeDim;
 
         // set 3d scene attributes
-        if( bIsThreeDim && maSceneImportHelper.IsDirty() )
+        if( bIsThreeDim )
         {
             // set scene attributes at diagram
-            maSceneImportHelper.setSceneAttributes( xProp );
+            maSceneImportHelper.setSceneAttributes( xDiaProp );
         }
 
-        // #i32368# number of lines is determined by class-attribute of series
-        if( mnNumOfLines > 0 &&
-            0 == mxDiagram->getDiagramType().reverseCompareToAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.BarDiagram" )))
+        // if the property NumberOfLines and the number of series containing
+        // class="chart:line" as attribute are both different from 0 they must
+        // be equal
+        OSL_ASSERT( mnNumOfLinesProp == 0 || mnNumOfLinesReadBySeries == 0 ||
+                    mnNumOfLinesProp == mnNumOfLinesReadBySeries );
+
+        // set correct number of lines at series
+        if( ! mrAllRangeAddressesAvailable &&
+            mnNumOfLinesReadBySeries == 0 &&
+            mnNumOfLinesProp > 0 &&
+            maChartTypeServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.ColumnChartType" )))
         {
             try
             {
-                xProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NumberOfLines" )),
-                                         uno::makeAny( mnNumOfLines ));
+                xDiaProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NumberOfLines" )),
+                                            uno::makeAny( mnNumOfLinesProp ));
             }
-            catch( uno::Exception & aEx )
+            catch( uno::Exception & rEx )
             {
-                String aStr( aEx.Message );
+#ifdef DBG_UTIL
+                String aStr( rEx.Message );
                 ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
                 DBG_ERROR1( "Exception caught for property NumberOfLines: %s", aBStr.GetBuffer());
+#else
+                (void)rEx; // avoid warning for pro build
+#endif
             }
         }
 
         // #i32366# stock has volume
-        if( 0 == mxDiagram->getDiagramType().reverseCompareToAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.StockDiagram" )))
+        if( ( 0 == mxDiagram->getDiagramType().reverseCompareToAsciiL(
+                  RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.StockDiagram" ))) &&
+            mbStockHasVolume )
         {
             try
             {
-                xProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Volume" )),
-                                         uno::makeAny( mbStockHasVolume ));
+                xDiaProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Volume" )),
+                                            uno::makeAny( true ));
             }
-            catch( uno::Exception & aEx )
+            catch( uno::Exception & rEx )
             {
-                String aStr( aEx.Message );
+#ifdef DBG_UTIL
+                String aStr( rEx.Message );
                 ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-                DBG_ERROR1( "Exception caught for property NumberOfLines: %s", aBStr.GetBuffer());
+                DBG_ERROR1( "Exception caught for property Volume: %s", aBStr.GetBuffer());
+#else
+                (void)rEx; // avoid warning for pro build
+#endif
             }
         }
     }
@@ -505,138 +719,10 @@ void SchXMLPlotAreaContext::EndElement()
     uno::Reference< drawing::XShape > xDiaShape( mxDiagram, uno::UNO_QUERY );
     if( xDiaShape.is())
     {
-        if( mbSetDiagramSize )
+        if( mbHasSize )
             xDiaShape->setSize( maSize );
-        if( mbSetDiagramPosition )
+        if( mbHasPosition )
             xDiaShape->setPosition( maPosition );
-    }
-
-    // resize data so that all series and data point properties can be set
-    mrImportHelper.ResizeChartData( mnSeries + mnDomainOffset, mnMaxSeriesLength );
-
-    // set autostyles for series and data points
-    const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
-    const SvXMLStyleContext* pStyle = NULL;
-    ::rtl::OUString sCurrStyleName;
-
-    if( pStylesCtxt )
-    {
-        ::std::list< ::chartxml::DataRowPointStyle >::iterator iStyle;
-        // iterate over series attributes first ...
-        for( iStyle = maSeriesStyleList.begin(); iStyle != maSeriesStyleList.end(); iStyle++ )
-        {
-            if( iStyle->meType != ::chartxml::DataRowPointStyle::DATA_POINT )
-            {
-                // data row style
-                for( i = 0; i < iStyle->mnRepeat; i++ )
-                {
-                    try
-                    {
-                        xProp = mxDiagram->getDataRowProperties( iStyle->mnSeries + i );
-
-                        if( iStyle->meType != ::chartxml::DataRowPointStyle::DATA_SERIES &&
-                            xProp.is() )
-                        {
-                            // we have a statistical proertyset
-                            uno::Any aAny;
-                            switch( iStyle->meType )
-                            {
-                                case ::chartxml::DataRowPointStyle::MEAN_VALUE:
-                                    aAny = xProp->getPropertyValue(
-                                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                      "DataMeanValueProperties" )));
-                                    break;
-                                case ::chartxml::DataRowPointStyle::REGRESSION:
-                                    aAny = xProp->getPropertyValue(
-                                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                      "DataRegressionProperties" )));
-                                    break;
-                                case ::chartxml::DataRowPointStyle::ERROR_INDICATOR:
-                                    aAny = xProp->getPropertyValue(
-                                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                      "DataErrorProperties" )));
-                                    break;
-                                case ::chartxml::DataRowPointStyle::DATA_POINT:
-                                case ::chartxml::DataRowPointStyle::DATA_SERIES:
-                                    // nothing
-                                    break;
-                            }
-                            aAny >>= xProp;
-                        }
-
-                        if( xProp.is())
-                        {
-                            if( (iStyle->msStyleName).getLength())
-                            {
-                                if( ! sCurrStyleName.equals( iStyle->msStyleName ))
-                                {
-                                    sCurrStyleName = iStyle->msStyleName;
-                                    pStyle = pStylesCtxt->FindStyleChildContext(
-                                        mrImportHelper.GetChartFamilyID(), sCurrStyleName );
-                                }
-
-                                if( pStyle && pStyle->ISA( XMLPropStyleContext ))
-                                    (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
-                            }
-
-                            if( iStyle->meType == ::chartxml::DataRowPointStyle::DATA_SERIES &&
-                                iStyle->mnAttachedAxis != 1 )
-                            {
-                                uno::Any aAny;
-                                aAny <<= chart::ChartAxisAssign::SECONDARY_Y;
-
-                                xProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Axis" )), aAny );
-                            }
-                        }
-                    }
-                    catch( uno::Exception aEx )
-                    {
-#ifdef DBG_UTIL
-                        String aStr( aEx.Message );
-                        ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-                        DBG_ERROR1( "PlotAreaContext:EndElement(): Exception caught: %s", aBStr.GetBuffer());
-#endif
-                    }
-                }
-            }
-        }
-
-        // ... then iterate over data-point attributes, so the latter are not overwritten
-        for( iStyle = maSeriesStyleList.begin(); iStyle != maSeriesStyleList.end(); iStyle++ )
-        {
-            if( iStyle->mnIndex != -1 )
-            {
-                // data point style
-                for( i = 0; i < iStyle->mnRepeat; i++ )
-                {
-                    try
-                    {
-                        xProp = mxDiagram->getDataPointProperties( iStyle->mnIndex + i, iStyle->mnSeries );
-
-                        if( xProp.is())
-                        {
-                            if( ! sCurrStyleName.equals( iStyle->msStyleName ))
-                            {
-                                sCurrStyleName = iStyle->msStyleName;
-                                pStyle = pStylesCtxt->FindStyleChildContext(
-                                    mrImportHelper.GetChartFamilyID(), sCurrStyleName );
-                            }
-
-                            if( pStyle && pStyle->ISA( XMLPropStyleContext ))
-                                (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
-                        }
-                    }
-                    catch( uno::Exception aEx )
-                    {
-#ifdef DBG_UTIL
-                        String aStr( aEx.Message );
-                        ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-                        DBG_ERROR1( "PlotAreaContext:EndElement(): Exception caught: %s", aBStr.GetBuffer());
-#endif
-                    }
-                }
-            }
-        }   // styles iterator
     }
 }
 
@@ -646,12 +732,16 @@ SchXMLAxisContext::SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
                                       SvXMLImport& rImport, const rtl::OUString& rLocalName,
                                       uno::Reference< chart::XDiagram > xDiagram,
                                       std::vector< SchXMLAxis >& aAxes,
-                                      ::rtl::OUString & rCategoriesAddress ) :
+                                      ::rtl::OUString & rCategoriesAddress,
+                                      bool bAddMissingXAxisForNetCharts,
+                                      bool bAdaptWrongPercentScaleValues ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
         mrImportHelper( rImpHelper ),
         mxDiagram( xDiagram ),
         maAxes( aAxes ),
-        mrCategoriesAddress( rCategoriesAddress )
+        mrCategoriesAddress( rCategoriesAddress ),
+        mbAddMissingXAxisForNetCharts( bAddMissingXAxisForNetCharts ),
+        mbAdaptWrongPercentScaleValues( bAdaptWrongPercentScaleValues )
 {
 }
 
@@ -667,12 +757,6 @@ uno::Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
     uno::Any aTrueBool;
     aTrueBool <<= (sal_Bool)(sal_True);
     uno::Reference< beans::XPropertySet > xDiaProp( mxDiagram, uno::UNO_QUERY );
-
-    uno::Reference< chart::XChartDocument > xDoc( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
-    sal_Bool bHasControllersLocked = sal_False;
-    if( xDoc.is() &&
-        (bHasControllersLocked = xDoc->hasControllersLocked()) == sal_True )
-        xDoc->unlockControllers();
 
     switch( maCurrentAxis.eClass )
     {
@@ -716,9 +800,6 @@ uno::Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
             break;
     }
 
-    if( bHasControllersLocked && xDoc.is())
-        xDoc->lockControllers();
-
     return xResult;
 }
 
@@ -730,6 +811,9 @@ void SchXMLAxisContext::CreateGrid( ::rtl::OUString sAutoStyleName,
     ::rtl::OUString sPropertyName;
     DBG_ASSERT( xDia.is(), "diagram object is invalid!" );
 
+    uno::Reference< beans::XPropertySet > xDiaProp( xDia, uno::UNO_QUERY );
+    uno::Any aTrueBool( uno::makeAny( true ));
+
     switch( maCurrentAxis.eClass )
     {
         case SCH_XML_AXIS_X:
@@ -739,13 +823,15 @@ void SchXMLAxisContext::CreateGrid( ::rtl::OUString sAutoStyleName,
                 {
                     if( bIsMajor )
                     {
+                        if( xDiaProp.is())
+                            xDiaProp->setPropertyValue( ::rtl::OUString::createFromAscii("HasXAxisGrid"), aTrueBool );
                         xGridProp = xSuppl->getXMainGrid();
-                        sPropertyName = ::rtl::OUString::createFromAscii( "HasXAxisGrid" );
                     }
                     else
                     {
+                        if( xDiaProp.is())
+                            xDiaProp->setPropertyValue( ::rtl::OUString::createFromAscii("HasXAxisHelpGrid"), aTrueBool );
                         xGridProp = xSuppl->getXHelpGrid();
-                        sPropertyName = ::rtl::OUString::createFromAscii( "HasXAxisHelpGrid" );
                     }
                 }
             }
@@ -757,13 +843,15 @@ void SchXMLAxisContext::CreateGrid( ::rtl::OUString sAutoStyleName,
                 {
                     if( bIsMajor )
                     {
+                        if( xDiaProp.is())
+                            xDiaProp->setPropertyValue( ::rtl::OUString::createFromAscii("HasYAxisGrid"), aTrueBool );
                         xGridProp = xSuppl->getYMainGrid();
-                        sPropertyName = ::rtl::OUString::createFromAscii( "HasYAxisGrid" );
                     }
                     else
                     {
+                        if( xDiaProp.is())
+                            xDiaProp->setPropertyValue( ::rtl::OUString::createFromAscii("HasYAxisHelpGrid"), aTrueBool );
                         xGridProp = xSuppl->getYHelpGrid();
-                        sPropertyName = ::rtl::OUString::createFromAscii( "HasYAxisHelpGrid" );
                     }
                 }
             }
@@ -775,13 +863,15 @@ void SchXMLAxisContext::CreateGrid( ::rtl::OUString sAutoStyleName,
                 {
                     if( bIsMajor )
                     {
+                        if( xDiaProp.is())
+                            xDiaProp->setPropertyValue( ::rtl::OUString::createFromAscii("HasZAxisGrid"), aTrueBool );
                         xGridProp = xSuppl->getZMainGrid();
-                        sPropertyName = ::rtl::OUString::createFromAscii( "HasZAxisGrid" );
                     }
                     else
                     {
+                        if( xDiaProp.is())
+                            xDiaProp->setPropertyValue( ::rtl::OUString::createFromAscii("HasZAxisHelpGrid"), aTrueBool );
                         xGridProp = xSuppl->getZHelpGrid();
-                        sPropertyName = ::rtl::OUString::createFromAscii( "HasZAxisHelpGrid" );
                     }
                 }
             }
@@ -791,37 +881,23 @@ void SchXMLAxisContext::CreateGrid( ::rtl::OUString sAutoStyleName,
             break;
     }
 
-    // enable grid
-    if( sPropertyName.getLength())
-    {
-        uno::Reference< beans::XPropertySet > xDiaProp( xDia, uno::UNO_QUERY );
-        uno::Any aTrueBool;
-        aTrueBool <<= (sal_Bool)(sal_True);
-        if( xDiaProp.is())
-        {
-            try
-            {
-                xDiaProp->setPropertyValue( sPropertyName, aTrueBool );
-            }
-            catch( beans::UnknownPropertyException )
-            {
-                DBG_ERROR( "Cannot enable grid due to missing property" );
-            }
-        }
-    }
-
     // set properties
-    if( sAutoStyleName.getLength() &&
-        xGridProp.is())
+    if( xGridProp.is())
     {
-        const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
-        if( pStylesCtxt )
+        // the line color is black as default, in the model it is a light gray
+        xGridProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LineColor" )),
+                                     uno::makeAny( COL_BLACK ));
+        if( sAutoStyleName.getLength())
         {
-            const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                mrImportHelper.GetChartFamilyID(), sAutoStyleName );
+            const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
+            if( pStylesCtxt )
+            {
+                const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
+                    mrImportHelper.GetChartFamilyID(), sAutoStyleName );
 
-            if( pStyle && pStyle->ISA( XMLPropStyleContext ))
-                (( XMLPropStyleContext* )pStyle )->FillPropertySet( xGridProp );
+                if( pStyle && pStyle->ISA( XMLPropStyleContext ))
+                    (( XMLPropStyleContext* )pStyle )->FillPropertySet( xGridProp );
+            }
         }
     }
 }
@@ -866,9 +942,71 @@ void SchXMLAxisContext::StartElement( const uno::Reference< xml::sax::XAttribute
         if( maAxes[ nCurrent ].eClass == maCurrentAxis.eClass )
             maCurrentAxis.nIndexInCategory++;
     }
+    CreateAxis();
+}
+namespace
+{
+
+uno::Reference< chart2::XAxis > lcl_getAxis( const uno::Reference< frame::XModel >& xChartModel,
+                                            sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
+{
+    uno::Reference< chart2::XAxis > xAxis;
+
+    try
+    {
+        uno::Reference< chart2::XChartDocument > xChart2Document( xChartModel, uno::UNO_QUERY );
+        if( xChart2Document.is() )
+        {
+            uno::Reference< chart2::XDiagram > xDiagram( xChart2Document->getFirstDiagram());
+            uno::Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
+            uno::Sequence< uno::Reference< chart2::XCoordinateSystem > >
+                aCooSysSeq( xCooSysCnt->getCoordinateSystems());
+            sal_Int32 nCooSysIndex = 0;
+            if( nCooSysIndex < aCooSysSeq.getLength() )
+            {
+                uno::Reference< chart2::XCoordinateSystem > xCooSys( aCooSysSeq[nCooSysIndex] );
+                if( xCooSys.is() && nDimensionIndex < xCooSys->getDimension() )
+                {
+                    const sal_Int32 nMaxAxisIndex = xCooSys->getMaximumAxisIndexByDimension(nDimensionIndex);
+                    if( nAxisIndex <= nMaxAxisIndex )
+                        xAxis = xCooSys->getAxisByDimension( nDimensionIndex, nAxisIndex );
+                }
+            }
+        }
+    }
+    catch( uno::Exception & )
+    {
+        DBG_ERROR( "Couldn't get axis" );
+    }
+
+    return xAxis;
 }
 
-void SchXMLAxisContext::EndElement()
+bool lcl_divideBy100( uno::Any& rDoubleAny )
+{
+    bool bChanged = false;
+    double fValue=0.0;
+    if( (rDoubleAny>>=fValue) && (fValue!=0.0) )
+    {
+        fValue/=100.0;
+        rDoubleAny = uno::makeAny(fValue);
+        bChanged = true;
+    }
+    return bChanged;
+}
+
+bool lcl_AdaptWrongPercentScaleValues(chart2::ScaleData& rScaleData)
+{
+    bool bChanged = lcl_divideBy100( rScaleData.Minimum );
+    bChanged = lcl_divideBy100( rScaleData.Maximum ) || bChanged;
+    bChanged = lcl_divideBy100( rScaleData.Origin ) || bChanged;
+    bChanged = lcl_divideBy100( rScaleData.IncrementData.Distance ) || bChanged;
+    return bChanged;
+}
+
+}//end anonymous namespace
+
+void SchXMLAxisContext::CreateAxis()
 {
     // add new Axis to list
     maAxes.push_back( maCurrentAxis );
@@ -878,7 +1016,6 @@ void SchXMLAxisContext::EndElement()
     uno::Reference< beans::XPropertySet > xProp;
     uno::Any aTrueBool;
     aTrueBool <<= (sal_Bool)(sal_True);
-    sal_Bool bHasTitle = ( maCurrentAxis.aTitle.getLength() > 0 );
     uno::Reference< frame::XModel > xDoc( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
 
     switch( maCurrentAxis.eClass )
@@ -891,45 +1028,13 @@ void SchXMLAxisContext::EndElement()
                     xDiaProp->setPropertyValue(
                         rtl::OUString::createFromAscii( "HasXAxis" ), aTrueBool );
                 }
-                catch( beans::UnknownPropertyException )
+                catch( beans::UnknownPropertyException & )
                 {
                     DBG_ERROR( "Couldn't turn on x axis" );
                 }
                 uno::Reference< chart::XAxisXSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
                 if( xSuppl.is())
-                {
                     xProp = xSuppl->getXAxis();
-                    if( bHasTitle )
-                    {
-                        uno::Reference< beans::XPropertySet > xTitleProp( xSuppl->getXAxisTitle(), uno::UNO_QUERY );
-                        if( xTitleProp.is())
-                        {
-                            try
-                            {
-                                uno::Any aAny;
-                                aAny <<= maCurrentAxis.aTitle;
-                                xTitleProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
-                            }
-                            catch( beans::UnknownPropertyException )
-                            {
-                                DBG_ERROR( "Property String for Title not available" );
-                            }
-                            uno::Reference< drawing::XShape > xShape( xTitleProp, uno::UNO_QUERY );
-                            if( xShape.is())
-                            {
-                                // perform build chart with new title string
-                                // so that setting the position works correctly
-                                if( xDoc.is())
-                                {
-                                    xDoc->unlockControllers();
-                                    xDoc->lockControllers();
-                                }
-                                if( maCurrentAxis.bTitleHasMoved )
-                                    xShape->setPosition( maCurrentAxis.aPosition );
-                            }
-                        }
-                    }
-                }
             }
             else
             {
@@ -938,7 +1043,7 @@ void SchXMLAxisContext::EndElement()
                     xDiaProp->setPropertyValue(
                         rtl::OUString::createFromAscii( "HasSecondaryXAxis" ), aTrueBool );
                 }
-                catch( beans::UnknownPropertyException )
+                catch( beans::UnknownPropertyException & )
                 {
                     DBG_ERROR( "Couldn't turn on second x axis" );
                 }
@@ -956,42 +1061,27 @@ void SchXMLAxisContext::EndElement()
                     xDiaProp->setPropertyValue(
                         rtl::OUString::createFromAscii( "HasYAxis" ), aTrueBool );
                 }
-                catch( beans::UnknownPropertyException )
+                catch( beans::UnknownPropertyException & )
                 {
                     DBG_ERROR( "Couldn't turn on y axis" );
                 }
                 uno::Reference< chart::XAxisYSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
                 if( xSuppl.is())
-                {
                     xProp = xSuppl->getYAxis();
-                    if( bHasTitle )
+
+
+                if( mbAddMissingXAxisForNetCharts )
+                {
+                    if( xDiaProp.is() )
                     {
-                        uno::Reference< beans::XPropertySet > xTitleProp( xSuppl->getYAxisTitle(), uno::UNO_QUERY );
-                        if( xTitleProp.is())
+                        try
                         {
-                            try
-                            {
-                                uno::Any aAny;
-                                aAny <<= maCurrentAxis.aTitle;
-                                xTitleProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
-                            }
-                            catch( beans::UnknownPropertyException )
-                            {
-                                DBG_ERROR( "Property String for Title not available" );
-                            }
-                            uno::Reference< drawing::XShape > xShape( xTitleProp, uno::UNO_QUERY );
-                            if( xShape.is())
-                            {
-                                // perform build chart with new title string
-                                // so that setting the position works correctly
-                                if( xDoc.is())
-                                {
-                                    xDoc->unlockControllers();
-                                    xDoc->lockControllers();
-                                }
-                                if( maCurrentAxis.bTitleHasMoved )
-                                    xShape->setPosition( maCurrentAxis.aPosition );
-                            }
+                            xDiaProp->setPropertyValue(
+                                rtl::OUString::createFromAscii( "HasXAxis" ), uno::makeAny(sal_True) );
+                        }
+                        catch( beans::UnknownPropertyException & )
+                        {
+                            DBG_ERROR( "Couldn't turn on x axis" );
                         }
                     }
                 }
@@ -1003,7 +1093,7 @@ void SchXMLAxisContext::EndElement()
                     xDiaProp->setPropertyValue(
                         rtl::OUString::createFromAscii( "HasSecondaryYAxis" ), aTrueBool );
                 }
-                catch( beans::UnknownPropertyException )
+                catch( beans::UnknownPropertyException & )
                 {
                     DBG_ERROR( "Couldn't turn on second y axis" );
                 }
@@ -1020,45 +1110,13 @@ void SchXMLAxisContext::EndElement()
                     xDiaProp->setPropertyValue(
                         rtl::OUString::createFromAscii( "HasZAxis" ), aTrueBool );
                 }
-                catch( beans::UnknownPropertyException )
+                catch( beans::UnknownPropertyException & )
                 {
                     DBG_ERROR( "Couldn't turn on z axis" );
                 }
                 uno::Reference< chart::XAxisZSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
                 if( xSuppl.is())
-                {
                     xProp = xSuppl->getZAxis();
-                    if( bHasTitle )
-                    {
-                        uno::Reference< beans::XPropertySet > xTitleProp( xSuppl->getZAxisTitle(), uno::UNO_QUERY );
-                        if( xTitleProp.is())
-                        {
-                            try
-                            {
-                                uno::Any aAny;
-                                aAny <<= maCurrentAxis.aTitle;
-                                xTitleProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
-                            }
-                            catch( beans::UnknownPropertyException )
-                            {
-                                DBG_ERROR( "Property String for Title not available" );
-                            }
-                            uno::Reference< drawing::XShape > xShape( xTitleProp, uno::UNO_QUERY );
-                            if( xShape.is())
-                            {
-                                // perform build chart with new title string
-                                // so that setting the position works correctly
-                                if( xDoc.is())
-                                {
-                                    xDoc->unlockControllers();
-                                    xDoc->lockControllers();
-                                }
-                                if( maCurrentAxis.bTitleHasMoved )
-                                    xShape->setPosition( maCurrentAxis.aPosition );
-                            }
-                        }
-                    }
-                }
             }
             break;
         case SCH_XML_AXIS_UNDEF:
@@ -1067,21 +1125,159 @@ void SchXMLAxisContext::EndElement()
     }
 
     // set properties
-    if( msAutoStyleName.getLength() &&
-        xProp.is())
+    if( xProp.is())
     {
         // #88077# AutoOrigin 'on' is default
         xProp->setPropertyValue( rtl::OUString::createFromAscii( "AutoOrigin" ), aTrueBool );
 
-        const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
-        if( pStylesCtxt )
+        if( msAutoStyleName.getLength())
         {
-            const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                mrImportHelper.GetChartFamilyID(), msAutoStyleName );
+            const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
+            if( pStylesCtxt )
+            {
+                const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
+                    mrImportHelper.GetChartFamilyID(), msAutoStyleName );
 
-            if( pStyle && pStyle->ISA( XMLPropStyleContext ))
-                (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
+                if( pStyle && pStyle->ISA( XMLPropStyleContext ))
+                {
+                    (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
+
+                    if( mbAdaptWrongPercentScaleValues && maCurrentAxis.eClass==SCH_XML_AXIS_Y )
+                    {
+                        //set scale data of added x axis back to default
+                        uno::Reference< chart2::XAxis > xAxis( lcl_getAxis( GetImport().GetModel(),
+                                            1 /*nDimensionIndex*/, maCurrentAxis.nIndexInCategory /*nAxisIndex*/ ) );
+                        if( xAxis.is() )
+                        {
+                            chart2::ScaleData aScaleData( xAxis->getScaleData());
+                            if( lcl_AdaptWrongPercentScaleValues(aScaleData) )
+                                xAxis->setScaleData( aScaleData );
+                        }
+                    }
+
+                    if( mbAddMissingXAxisForNetCharts )
+                    {
+                        //copy style from y axis to added x axis:
+
+                        uno::Reference< chart::XAxisXSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+                        if( xSuppl.is() )
+                        {
+                            uno::Reference< beans::XPropertySet > xXAxisProp( xSuppl->getXAxis() );
+                            (( XMLPropStyleContext* )pStyle )->FillPropertySet( xXAxisProp );
+                        }
+
+                        //set scale data of added x axis back to default
+                        uno::Reference< chart2::XAxis > xAxis( lcl_getAxis( GetImport().GetModel(),
+                                            0 /*nDimensionIndex*/, 0 /*nAxisIndex*/ ) );
+                        if( xAxis.is() )
+                        {
+                            chart2::ScaleData aScaleData;
+                            aScaleData.AxisType = chart2::AxisType::CATEGORY;
+                            aScaleData.Orientation = chart2::AxisOrientation_MATHEMATICAL;
+                            xAxis->setScaleData( aScaleData );
+                        }
+
+                        //set line style of added x axis to invisible
+                        uno::Reference< beans::XPropertySet > xNewAxisProp( xAxis, uno::UNO_QUERY );
+                        if( xNewAxisProp.is() )
+                        {
+                            xNewAxisProp->setPropertyValue( rtl::OUString::createFromAscii("LineStyle")
+                                , uno::makeAny(drawing::LineStyle_NONE));
+                        }
+                    }
+                }
+            }
         }
+    }
+}
+
+void SchXMLAxisContext::SetAxisTitle()
+{
+    // add new Axis to list
+    maAxes.push_back( maCurrentAxis );
+
+    // set axis at chart
+    sal_Bool bHasTitle = ( maCurrentAxis.aTitle.getLength() > 0 );
+    uno::Reference< frame::XModel > xDoc( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
+
+    switch( maCurrentAxis.eClass )
+    {
+        case SCH_XML_AXIS_X:
+            if( maCurrentAxis.nIndexInCategory == 0 )
+            {
+                uno::Reference< chart::XAxisXSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+                if( xSuppl.is() &&
+                    bHasTitle )
+                {
+                    uno::Reference< beans::XPropertySet > xTitleProp( xSuppl->getXAxisTitle(), uno::UNO_QUERY );
+                    if( xTitleProp.is())
+                    {
+                        try
+                        {
+                            uno::Any aAny;
+                            aAny <<= maCurrentAxis.aTitle;
+                            xTitleProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
+                        }
+                        catch( beans::UnknownPropertyException & )
+                        {
+                            DBG_ERROR( "Property String for Title not available" );
+                        }
+                    }
+                }
+            }
+            break;
+
+        case SCH_XML_AXIS_Y:
+            if( maCurrentAxis.nIndexInCategory == 0 )
+            {
+                uno::Reference< chart::XAxisYSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+                if( xSuppl.is() &&
+                    bHasTitle )
+                {
+                    uno::Reference< beans::XPropertySet > xTitleProp( xSuppl->getYAxisTitle(), uno::UNO_QUERY );
+                    if( xTitleProp.is())
+                    {
+                        try
+                        {
+                            uno::Any aAny;
+                            aAny <<= maCurrentAxis.aTitle;
+                            xTitleProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
+                        }
+                        catch( beans::UnknownPropertyException & )
+                        {
+                                DBG_ERROR( "Property String for Title not available" );
+                        }
+                    }
+                }
+            }
+            break;
+
+        case SCH_XML_AXIS_Z:
+            {
+                uno::Reference< chart::XAxisZSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+                if( xSuppl.is() &&
+                    bHasTitle )
+                {
+                    uno::Reference< beans::XPropertySet > xTitleProp( xSuppl->getZAxisTitle(), uno::UNO_QUERY );
+                    if( xTitleProp.is())
+                    {
+                        try
+                        {
+                            uno::Any aAny;
+                            aAny <<= maCurrentAxis.aTitle;
+                            xTitleProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
+                        }
+                        catch( beans::UnknownPropertyException & )
+                        {
+                            DBG_ERROR( "Property String for Title not available" );
+                        }
+                    }
+                }
+            }
+            break;
+        case SCH_XML_AXIS_UNDEF:
+            // nothing
+            break;
     }
 }
 
@@ -1100,9 +1296,7 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
             uno::Reference< drawing::XShape > xTitleShape = getTitleShape();
             pContext = new SchXMLTitleContext( mrImportHelper, GetImport(), rLocalName,
                                                maCurrentAxis.aTitle,
-                                               xTitleShape,
-                                               maCurrentAxis.aPosition,
-                                               maCurrentAxis.bTitleHasMoved );
+                                               xTitleShape );
         }
         break;
 
@@ -1110,6 +1304,7 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
             pContext = new SchXMLCategoriesDomainContext( mrImportHelper, GetImport(),
                                                           p_nPrefix, rLocalName,
                                                           mrCategoriesAddress );
+            maCurrentAxis.bHasCategories = true;
             break;
 
         case XML_TOK_AXIS_GRID:
@@ -1151,192 +1346,23 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
     return pContext;
 }
 
-// ========================================
-
-SchXMLSeriesContext::SchXMLSeriesContext(
-    SchXMLImportHelper& rImpHelper,
-    SvXMLImport& rImport, const rtl::OUString& rLocalName,
-    uno::Reference< chart::XDiagram >& xDiagram,
-    std::vector< SchXMLAxis >& rAxes,
-    com::sun::star::chart::ChartSeriesAddress& rSeriesAddress,
-    ::std::list< ::chartxml::DataRowPointStyle >& rStyleList,
-    sal_Int32 nSeriesIndex,
-    sal_Int32& rMaxSeriesLength,
-    sal_Int32& rDomainOffset,
-    sal_Int32& rNumOfLines,
-    sal_Bool&  rStockHasVolume ) :
-        SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
-        mrImportHelper( rImpHelper ),
-        mxDiagram( xDiagram ),
-        mrAxes( rAxes ),
-        mrSeriesAddress( rSeriesAddress ),
-        mrStyleList( rStyleList ),
-        mnSeriesIndex( nSeriesIndex ),
-        mnDataPointIndex( 0 ),
-        mrMaxSeriesLength( rMaxSeriesLength ),
-        mrDomainOffset( rDomainOffset ),
-        mrNumOfLines( rNumOfLines ),
-        mrStockHasVolume( rStockHasVolume ),
-        mpAttachedAxis( NULL ),
-        mnAttachedAxis( 0 )
+void SchXMLAxisContext::EndElement()
 {
-}
-
-SchXMLSeriesContext::~SchXMLSeriesContext()
-{
-}
-
-void SchXMLSeriesContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
-{
-    // parse attributes
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetSeriesAttrTokenMap();
-    mnAttachedAxis = 1;
-
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
-    {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        rtl::OUString aLocalName;
-        rtl::OUString aValue = xAttrList->getValueByIndex( i );
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
-        {
-            case XML_TOK_SERIES_CELL_RANGE:
-                mrSeriesAddress.DataRangeAddress = aValue;
-                break;
-            case XML_TOK_SERIES_LABEL_ADDRESS:
-                mrSeriesAddress.LabelAddress = aValue;
-                break;
-            case XML_TOK_SERIES_ATTACHED_AXIS:
-                {
-                    sal_Int32 nNumOfAxes = mrAxes.size();
-                    for( sal_Int32 nCurrent = 0; nCurrent < nNumOfAxes; nCurrent++ )
-                    {
-                        if( aValue.equals( mrAxes[ nCurrent ].aName ) &&
-                            mrAxes[ nCurrent ].eClass == SCH_XML_AXIS_Y )
-                        {
-                            mpAttachedAxis = &( mrAxes[ nCurrent ] );
-                        }
-                    }
-                }
-                break;
-            case XML_TOK_SERIES_STYLE_NAME:
-                msAutoStyleName = aValue;
-                break;
-            case XML_TOK_SERIES_CHART_CLASS:
-                {
-                    rtl::OUString sClassName;
-                    sal_uInt16 nClassPrefix =
-                        GetImport().GetNamespaceMap().GetKeyByAttrName(
-                            aValue, &sClassName );
-                    if( XML_NAMESPACE_CHART == nClassPrefix )
-                    {
-                        // used for bar-line combi chart
-                        if( IsXMLToken( sClassName, XML_LINE ))
-                            ++mrNumOfLines;
-                        if( IsXMLToken( sClassName, XML_BAR ))
-                            mrStockHasVolume = sal_True;
-                    }
-                }
-                break;
-        }
-    }
-
-    if( mpAttachedAxis )
-    {
-        if( mpAttachedAxis->nIndexInCategory > 0 )
-        {
-            // secondary axis => property has to be set (primary is default)
-            mnAttachedAxis = 2;
-        }
-    }
-}
-
-void SchXMLSeriesContext::EndElement()
-{
-    if( mrMaxSeriesLength < mnDataPointIndex )
-        mrMaxSeriesLength = mnDataPointIndex;
-
-    if( msAutoStyleName.getLength() ||
-        mnAttachedAxis != 1 )
-    {
-        ::chartxml::DataRowPointStyle aStyle(
-            ::chartxml::DataRowPointStyle::DATA_SERIES,
-            mnSeriesIndex + mrDomainOffset, -1, 1,
-            msAutoStyleName, mnAttachedAxis );
-        mrStyleList.push_back( aStyle );
-    }
-}
-
-SvXMLImportContext* SchXMLSeriesContext::CreateChildContext(
-    USHORT nPrefix,
-    const rtl::OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& )
-{
-    SvXMLImportContext* pContext = 0;
-    const SvXMLTokenMap& rTokenMap = mrImportHelper.GetSeriesElemTokenMap();
-
-    switch( rTokenMap.Get( nPrefix, rLocalName ))
-    {
-        case XML_TOK_SERIES_DOMAIN:
-            {
-                sal_Int32 nIndex = mrSeriesAddress.DomainRangeAddresses.getLength();
-                mrSeriesAddress.DomainRangeAddresses.realloc( nIndex + 1 );
-                mrDomainOffset++;
-                pContext = new SchXMLCategoriesDomainContext(
-                    mrImportHelper, GetImport(),
-                    nPrefix, rLocalName,
-                    mrSeriesAddress.DomainRangeAddresses[ nIndex ] );
-            }
-            break;
-
-        case XML_TOK_SERIES_MEAN_VALUE_LINE:
-            pContext = new SchXMLStatisticsObjectContext(
-                mrImportHelper, GetImport(),
-                nPrefix, rLocalName,
-                mrStyleList, mnSeriesIndex + mrDomainOffset,
-                SchXMLStatisticsObjectContext::CONTEXT_TYPE_MEAN_VALUE_LINE );
-            break;
-        case XML_TOK_SERIES_REGRESSION_CURVE:
-            pContext = new SchXMLStatisticsObjectContext(
-                mrImportHelper, GetImport(),
-                nPrefix, rLocalName,
-                mrStyleList, mnSeriesIndex + mrDomainOffset,
-                SchXMLStatisticsObjectContext::CONTEXT_TYPE_REGRESSION_CURVE );
-            break;
-        case XML_TOK_SERIES_ERROR_INDICATOR:
-            pContext = new SchXMLStatisticsObjectContext(
-                mrImportHelper, GetImport(),
-                nPrefix, rLocalName,
-                mrStyleList, mnSeriesIndex + mrDomainOffset,
-                SchXMLStatisticsObjectContext::CONTEXT_TYPE_ERROR_INDICATOR );
-            break;
-
-        case XML_TOK_SERIES_DATA_POINT:
-            pContext = new SchXMLDataPointContext( mrImportHelper, GetImport(), rLocalName, mxDiagram,
-                                                   mrStyleList, mnSeriesIndex + mrDomainOffset, mnDataPointIndex );
-            break;
-
-        default:
-            pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-    }
-
-    return pContext;
+    SetAxisTitle();
 }
 
 // ========================================
 
 SchXMLDataPointContext::SchXMLDataPointContext(  SchXMLImportHelper& rImpHelper,
                                                  SvXMLImport& rImport, const rtl::OUString& rLocalName,
-                                                 uno::Reference< chart::XDiagram >& xDiagram,
-                                                 ::std::list< ::chartxml::DataRowPointStyle >& rStyleList,
-                                                 sal_Int32 nSeries, sal_Int32& rIndex ) :
+                                                 ::std::list< DataRowPointStyle >& rStyleList,
+                                                 const ::com::sun::star::uno::Reference<
+                                                    ::com::sun::star::chart2::XDataSeries >& xSeries,
+                                                 sal_Int32& rIndex ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
         mrImportHelper( rImpHelper ),
-        mxDiagram( xDiagram ),
         mrStyleList( rStyleList ),
-        mnSeries( nSeries ),
+        m_xSeries( xSeries ),
         mrIndex( rIndex )
 {
 }
@@ -1369,9 +1395,9 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
 
     if( sAutoStyleName.getLength())
     {
-        ::chartxml::DataRowPointStyle aStyle(
-            ::chartxml::DataRowPointStyle::DATA_POINT,
-            mnSeries, mrIndex, nRepeat, sAutoStyleName );
+        DataRowPointStyle aStyle(
+            DataRowPointStyle::DATA_POINT,
+            m_xSeries, mrIndex, nRepeat, sAutoStyleName );
         mrStyleList.push_back( aStyle );
     }
     mrIndex += nRepeat;
@@ -1408,7 +1434,8 @@ void SchXMLCategoriesDomainContext::StartElement( const uno::Reference< xml::sax
         if( nPrefix == XML_NAMESPACE_TABLE &&
             IsXMLToken( aLocalName, XML_CELL_RANGE_ADDRESS ) )
         {
-            mrAddress = xAttrList->getValueByIndex( i );
+            uno::Reference< chart2::XChartDocument > xNewDoc( GetImport().GetModel(), uno::UNO_QUERY );
+            mrAddress = lcl_ConvertRange( xAttrList->getValueByIndex( i ), xNewDoc );
         }
     }
 }
@@ -1453,14 +1480,14 @@ void SchXMLWallFloorContext::StartElement( const uno::Reference< xml::sax::XAttr
             }
         }
 
-        if( sAutoStyleName.getLength())
+        // set properties
+        uno::Reference< beans::XPropertySet > xProp( ( meContextType == CONTEXT_TYPE_WALL )
+                                                     ? mxWallFloorSupplier->getWall()
+                                                     : mxWallFloorSupplier->getFloor(),
+                                                     uno::UNO_QUERY );
+        if( xProp.is())
         {
-            // set properties
-            uno::Reference< beans::XPropertySet > xProp( ( meContextType == CONTEXT_TYPE_WALL )
-                                                         ? mxWallFloorSupplier->getWall()
-                                                         : mxWallFloorSupplier->getFloor(),
-                                                         uno::UNO_QUERY );
-            if( xProp.is())
+            if( sAutoStyleName.getLength())
             {
                 const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
                 if( pStylesCtxt )
@@ -1556,13 +1583,15 @@ SchXMLStatisticsObjectContext::SchXMLStatisticsObjectContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName,
-    ::std::list< ::chartxml::DataRowPointStyle >& rStyleList,
-    sal_Int32 nSeries, ContextType eContextType ) :
+    ::std::list< DataRowPointStyle >& rStyleList,
+    const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XDataSeries >& xSeries,
+    ContextType eContextType ) :
 
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
         mrImportHelper( rImpHelper ),
         mrStyleList( rStyleList ),
-        mnSeriesIndex( nSeries ),
+        m_xSeries( xSeries ),
         meContextType( eContextType )
 {}
 
@@ -1591,21 +1620,21 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
 
     if( sAutoStyleName.getLength())
     {
-        ::chartxml::DataRowPointStyle::StyleType eType = ::chartxml::DataRowPointStyle::MEAN_VALUE;
+        DataRowPointStyle::StyleType eType = DataRowPointStyle::MEAN_VALUE;
         switch( meContextType )
         {
             case CONTEXT_TYPE_MEAN_VALUE_LINE:
-                eType = ::chartxml::DataRowPointStyle::MEAN_VALUE;
+                eType = DataRowPointStyle::MEAN_VALUE;
                 break;
             case CONTEXT_TYPE_REGRESSION_CURVE:
-                eType = ::chartxml::DataRowPointStyle::REGRESSION;
+                eType = DataRowPointStyle::REGRESSION;
                 break;
             case CONTEXT_TYPE_ERROR_INDICATOR:
-                eType = ::chartxml::DataRowPointStyle::ERROR_INDICATOR;
+                eType = DataRowPointStyle::ERROR_INDICATOR;
                 break;
         }
-        ::chartxml::DataRowPointStyle aStyle(
-            eType, mnSeriesIndex, -1, 1, sAutoStyleName );
+        DataRowPointStyle aStyle(
+            eType, m_xSeries, -1, 1, sAutoStyleName );
         mrStyleList.push_back( aStyle );
     }
 }
