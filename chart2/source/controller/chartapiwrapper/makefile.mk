@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 00:02:53 $
+#   last change: $Author: vg $ $Date: 2007-05-22 17:25:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,13 +49,34 @@ ENABLE_EXCEPTIONS=	TRUE
 
 #Specifies object files to bind into linked libraries.
 SLOFILES=	\
+    $(SLO)$/Chart2ModelContact.obj \
+    $(SLO)$/AreaWrapper.obj \
     $(SLO)$/AxisWrapper.obj \
     $(SLO)$/ChartDataWrapper.obj \
     $(SLO)$/ChartDocumentWrapper.obj \
     $(SLO)$/DataSeriesPointWrapper.obj \
     $(SLO)$/DiagramWrapper.obj \
+    $(SLO)$/GridWrapper.obj \
     $(SLO)$/LegendWrapper.obj \
-    $(SLO)$/TitleWrapper.obj
+    $(SLO)$/TitleWrapper.obj \
+    $(SLO)$/MinMaxLineWrapper.obj \
+    $(SLO)$/UpDownBarWrapper.obj \
+    $(SLO)$/WallFloorWrapper.obj \
+    $(SLO)$/WrappedNamedProperty.obj \
+    $(SLO)$/WrappedCharacterHeightProperty.obj \
+    $(SLO)$/WrappedDataCaptionProperties.obj \
+    $(SLO)$/WrappedTextRotationProperty.obj \
+    $(SLO)$/WrappedGapwidthProperty.obj \
+    $(SLO)$/WrappedScaleProperty.obj \
+    $(SLO)$/WrappedSplineProperties.obj \
+    $(SLO)$/WrappedStockProperties.obj \
+    $(SLO)$/WrappedSymbolProperties.obj \
+    $(SLO)$/WrappedAxisAndGridExistenceProperties.obj \
+    $(SLO)$/WrappedNumberFormatProperty.obj \
+    $(SLO)$/WrappedStatisticProperties.obj \
+    $(SLO)$/WrappedSceneProperty.obj \
+    $(SLO)$/WrappedSeriesAreaOrLineProperty.obj \
+    $(SLO)$/WrappedAddInProperty.obj
 
 # --- Targets -----------------------------------------------------------------
 
