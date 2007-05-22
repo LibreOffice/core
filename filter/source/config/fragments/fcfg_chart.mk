@@ -19,7 +19,6 @@ F4_CHART_BINFILTER =
 T4_CHART = \
     $(T4_CHART_BINFILTER) \
     chart_StarOffice_XML_Chart \
-    chart2_StarOffice_XML_Chart\
     chart8
 
 # -----------------------------------------------
