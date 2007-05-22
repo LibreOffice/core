@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:03:32 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:14:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@ using namespace com::sun::star;
 
 USHORT ScTabViewShell::nInsertCtrlState = SID_INSERT_GRAPHIC;
 USHORT ScTabViewShell::nInsCellsCtrlState = 0;
-USHORT ScTabViewShell::nInsObjCtrlState = SID_DRAW_CHART;
+USHORT ScTabViewShell::nInsObjCtrlState = SID_INSERT_DIAGRAM;
 
 // -----------------------------------------------------------------------
 
@@ -1331,6 +1331,15 @@ void ScTabViewShell::StopEditShell()
 
 IMPL_LINK( ScTabViewShell, SimpleRefClose, String*, EMPTYARG )
 {
+    SfxInPlaceClient* pClient = GetIPClient();
+    if ( pClient && pClient->IsObjectInPlaceActive() )
+    {
+        // If range selection was started with an active embedded object,
+        // switch back to original sheet (while the dialog is still open).
+
+        SetTabNo( GetViewData()->GetRefTabNo() );
+    }
+
     ScSimpleRefDlgWrapper::SetAutoReOpen( TRUE );
     return 0;
 }
@@ -1379,7 +1388,8 @@ IMPL_LINK( ScTabViewShell, SimpleRefChange, String*, pResult )
 }
 
 void ScTabViewShell::StartSimpleRefDialog(
-            const String& rTitle, const String& rInitVal, BOOL bCloseOnButtonUp, BOOL bSingleCell )
+            const String& rTitle, const String& rInitVal,
+            BOOL bCloseOnButtonUp, BOOL bSingleCell, BOOL bMultiSelection )
 {
     SfxViewFrame* pViewFrm = GetViewFrame();
 
@@ -1405,8 +1415,7 @@ void ScTabViewShell::StartSimpleRefDialog(
                            LINK( this, ScTabViewShell, SimpleRefAborted ),
                            LINK( this, ScTabViewShell, SimpleRefChange ) );
         pWnd->SetRefString( rInitVal );
-        pWnd->SetFlags( bCloseOnButtonUp );
-        pWnd->SetSingleCell( bSingleCell );
+        pWnd->SetFlags( bCloseOnButtonUp, bSingleCell, bMultiSelection );
         pWnd->SetAutoReOpen( FALSE );
         Window* pWin = pWnd->GetWindow();
         pWin->SetText( rTitle );
