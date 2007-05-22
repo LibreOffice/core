@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_AxisLabel.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:13:54 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:43:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,8 +56,6 @@
 #include <svx/orienthelper.hxx>
 #endif
 
-//#include "attrib.hxx"
-
 //.............................................................................
 namespace chart
 {
@@ -91,7 +89,6 @@ private:
     svx::OrientationHelper aOrientHlp;
 
     BOOL                m_bShowStaggeringControls;
-////    BOOL                bAllowTextOverlap;
 
     sal_Int32           m_nInitialDegrees;
     bool                m_bHasInitialDegrees;       /// false = DialControl in tristate
@@ -111,7 +108,6 @@ public:
     virtual void Reset( const SfxItemSet& rInAttrs );
 
     void ShowStaggeringControls( BOOL bShowStaggeringControls );
-////    void AllowTextOverlap( BOOL bOverLap )      { bAllowTextOverlap = bOverLap; }
 };
 //.............................................................................
 } //namespace chart
