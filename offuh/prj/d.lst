@@ -11,6 +11,7 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\bridge
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\bridge\oleautomation
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\chart
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\chart2
+mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\chart2\data
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\container
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\configuration
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\configuration\backend
@@ -139,6 +140,8 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\xml\wrapper
 ..\%__SRC%\inc\offuh\com\sun\star\chart\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\chart\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\chart2\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\chart2\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\chart2\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\chart2\*.hdl
+..\%__SRC%\inc\offuh\com\sun\star\chart2\data\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\chart2\data\*.hpp
+..\%__SRC%\inc\offuh\com\sun\star\chart2\data\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\chart2\data\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\configuration\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\configuration\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\configuration\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\configuration\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\configuration\backend\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\configuration\backend\*.hdl
