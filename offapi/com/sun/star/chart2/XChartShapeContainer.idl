@@ -1,0 +1,36 @@
+#ifndef com_sun_star_chart2_XChartShapeContainer_idl
+#define com_sun_star_chart2_XChartShapeContainer_idl
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_XShape_idl__
+#include <com/sun/star/drawing/XShape.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module chart2 {
+
+//=============================================================================
+
+interface XChartShapeContainer : ::com::sun::star::uno::XInterface
+{
+    /** a renderer creates ChartShapes and adds it to this container
+    */
+    void addShape( [in]  com::sun::star::drawing::XShape xShape );
+
+    /** a renderer can remove ChartShapes from this container (e.g. if the visible range has changed)
+    */
+    void removeShape( [in]  com::sun::star::drawing::XShape xShape );
+    com::sun::star::drawing::XShape getShape();
+
+    //... provide something for creation of Transformation ...
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
