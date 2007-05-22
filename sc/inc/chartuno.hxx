@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chartuno.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:26:34 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:38:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,8 +157,8 @@ private:
     SCTAB                   nTab;           // Charts sind pro Sheet
     String                  aChartName;
 
-    void    Update_Impl( const ScRangeListRef& rRanges, BOOL bColHeaders, BOOL bRowHeaders );
-    void    GetData_Impl( ScRangeListRef& rRanges, BOOL& rColHeaders, BOOL& rRowHeaders ) const;
+    void    Update_Impl( const ScRangeListRef& rRanges, bool bColHeaders, bool bRowHeaders );
+    void    GetData_Impl( ScRangeListRef& rRanges, bool& rColHeaders, bool& rRowHeaders ) const;
 
 public:
                             ScChartObj(ScDocShell* pDocSh, SCTAB nT, const String& rN);
