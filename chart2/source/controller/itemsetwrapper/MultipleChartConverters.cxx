@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MultipleChartConverters.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:02:48 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:01:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_chart2.hxx"
 #include "MultipleChartConverters.hxx"
 
-#include "SchSfxItemIds.hxx"
+#include "chartview/ChartSfxItemIds.hxx"
 #include "SchWhichPairs.hxx"
 #include "AxisItemConverter.hxx"
 #include "StatisticsItemConverter.hxx"
@@ -46,18 +46,12 @@
 #include "ChartModelHelper.hxx"
 #include "TitleHelper.hxx"
 #include "TitleItemConverter.hxx"
-
-#ifndef _COM_SUN_STAR_CHART2_XAXISCONTAINER_HPP_
-#include <com/sun/star/chart2/XAxisContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XGRIDCONTAINER_HPP_
-#include <com/sun/star/chart2/XGridContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#endif
+#include "AxisHelper.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::chart2;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
 
 namespace chart
 {
@@ -70,27 +64,24 @@ AllAxisItemConverter::AllAxisItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
+    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
     ::std::auto_ptr< awt::Size > pRefSize )
         : MultipleItemConverter( rItemPool )
 {
-    uno::Reference< chart2::XChartDocument > xChartDocument( xChartModel, uno::UNO_QUERY );
-    if(!xChartDocument.is())
-        return;
-    uno::Reference< chart2::XDiagram > xDiagram = xChartDocument->getDiagram();
-    uno::Reference< chart2::XAxisContainer > xContainer( xDiagram, uno::UNO_QUERY );
-    if(!xContainer.is())
-        return;
-    uno::Sequence< uno::Reference< chart2::XAxis > > aElementList = xContainer->getAxes();
+    Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+    Sequence< Reference< XAxis > > aElementList( AxisHelper::getAllAxisOfDiagram( xDiagram ) );
     for( sal_Int32 nA = 0; nA < aElementList.getLength(); nA++ )
     {
         uno::Reference< beans::XPropertySet > xObjectProperties(aElementList[nA], uno::UNO_QUERY);
         if( pRefSize.get())
             m_aConverters.push_back( new ::chart::wrapper::AxisItemConverter(
-                                         xObjectProperties, rItemPool, rDrawModel, 0, 0, 0, 0,
+                                         xObjectProperties, rItemPool, rDrawModel,
+                                         uno::Reference< chart2::XChartDocument >( xChartModel, uno::UNO_QUERY ), 0, 0,
                                          ::std::auto_ptr< awt::Size >( new awt::Size( *pRefSize )) ));
         else
             m_aConverters.push_back( new ::chart::wrapper::AxisItemConverter(
-                                         xObjectProperties, rItemPool, rDrawModel, 0, 0, 0, 0 ) );
+                                         xObjectProperties, rItemPool, rDrawModel,
+                                         uno::Reference< chart2::XChartDocument >( xChartModel, uno::UNO_QUERY ), 0, 0 ) );
     }
 }
 
@@ -109,22 +100,17 @@ const USHORT * AllAxisItemConverter::GetWhichPairs() const
 AllGridItemConverter::AllGridItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
     SfxItemPool& rItemPool,
-    SdrModel& rDrawModel  )
+    SdrModel& rDrawModel,
+    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory )
         : MultipleItemConverter( rItemPool )
 {
-    uno::Reference< chart2::XChartDocument > xChartDocument( xChartModel, uno::UNO_QUERY );
-    if(!xChartDocument.is())
-        return;
-    uno::Reference< chart2::XDiagram > xDiagram = xChartDocument->getDiagram();
-    uno::Reference< chart2::XGridContainer > xContainer( xDiagram, uno::UNO_QUERY );
-    if(!xContainer.is())
-        return;
-    uno::Sequence< uno::Reference< chart2::XGrid > > aElementList = xContainer->getGrids();
+    Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+    Sequence< Reference< beans::XPropertySet > > aElementList( AxisHelper::getAllGrids( xDiagram ) );
     for( sal_Int32 nA = 0; nA < aElementList.getLength(); nA++ )
     {
-        uno::Reference< beans::XPropertySet > xObjectProperties(aElementList[nA], uno::UNO_QUERY);
+        Reference< beans::XPropertySet > xObjectProperties(aElementList[nA]);
         m_aConverters.push_back( new ::chart::wrapper::GraphicPropertyItemConverter(
-                                        xObjectProperties, rItemPool, rDrawModel,
+                                        xObjectProperties, rItemPool, rDrawModel, xNamedPropertyContainerFactory,
                                         ::chart::wrapper::GraphicPropertyItemConverter::LINE_PROPERTIES ) );
     }
 }
@@ -145,6 +131,7 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
+    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
     ::std::auto_ptr< awt::Size > pRefSize )
         : MultipleItemConverter( rItemPool )
 {
@@ -155,15 +142,18 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
     for( aIt = aSeriesList.begin(); aIt != aSeriesList.end(); ++aIt )
     {
         uno::Reference< beans::XPropertySet > xObjectProperties( *aIt, uno::UNO_QUERY);
+        uno::Reference< uno::XComponentContext> xContext(0);//do not need Context for label properties
         if( pRefSize.get())
             m_aConverters.push_back( new ::chart::wrapper::DataPointItemConverter(
-                                         xChartModel,
+                                         xChartModel, xContext,
                                          xObjectProperties, rItemPool, rDrawModel, NULL,
+                                         xNamedPropertyContainerFactory,
                                          GraphicPropertyItemConverter::FILLED_DATA_POINT,
                                          ::std::auto_ptr< awt::Size >( new awt::Size( *pRefSize )) ));
         else
             m_aConverters.push_back( new ::chart::wrapper::DataPointItemConverter(
-                                         xChartModel, xObjectProperties, rItemPool, rDrawModel, NULL ));
+                                         xChartModel, xContext, xObjectProperties, rItemPool, rDrawModel, NULL,
+                                         xNamedPropertyContainerFactory ));
     }
 }
 
@@ -183,10 +173,11 @@ AllTitleItemConverter::AllTitleItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
+    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
     ::std::auto_ptr< awt::Size > pRefSize )
         : MultipleItemConverter( rItemPool )
 {
-    for(sal_Int32 nTitle = TitleHelper::TITLE_BEGIN; nTitle < TitleHelper::TITLE_END; nTitle++ )
+    for(sal_Int32 nTitle = TitleHelper::TITLE_BEGIN; nTitle < TitleHelper::NORMAL_TITLE_END; nTitle++ )
     {
         uno::Reference< chart2::XTitle > xTitle( TitleHelper::getTitle( TitleHelper::eTitleType(nTitle), xChartModel ) );
         if(!xTitle.is())
@@ -196,7 +187,7 @@ AllTitleItemConverter::AllTitleItemConverter(
         if( pRefSize.get())
             pSingleRefSize = ::std::auto_ptr< awt::Size >( new awt::Size( *pRefSize ));
         m_aConverters.push_back( new ::chart::wrapper::TitleItemConverter(
-                                        xObjectProperties, rItemPool, rDrawModel, pSingleRefSize ));
+                                     xObjectProperties, rItemPool, rDrawModel, xNamedPropertyContainerFactory, pSingleRefSize ));
     }
 }
 
