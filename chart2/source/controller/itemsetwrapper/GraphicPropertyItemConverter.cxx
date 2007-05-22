@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicPropertyItemConverter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:02:03 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:00:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 #include "SchWhichPairs.hxx"
 #include "macros.hxx"
 #include "ItemPropertyMap.hxx"
+#include "PropertyHelper.hxx"
+#include "CommonConverters.hxx"
 
 // #ifndef _SFXINTITEM_HXX
 // #include <svtools/intitem.hxx>
@@ -70,16 +72,15 @@
 #ifndef _SVX_XFLGRIT_HXX
 #include <svx/xflgrit.hxx>
 #endif
+#ifndef _SVX_XFLTRIT_HXX
+#include <svx/xfltrit.hxx>
+#endif
+#ifndef _SVX_XLNTRIT_HXX
+#include <svx/xlntrit.hxx>
+#endif
+
 #ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
-#endif
-#ifndef _SVX_UDLNITEM_HXX
-#define ITEMID_UNDERLINE EE_CHAR_UNDERLINE
-#include <svx/udlnitem.hxx>
-#endif
-#ifndef _SVX_FONTITEM_HXX
-#define ITEMID_FONT EE_CHAR_FONTINFO
-#include <svx/fontitem.hxx>
 #endif
 // for SfxBoolItem
 #ifndef _SFXENUMITEM_HXX
@@ -96,11 +97,11 @@
 #ifndef _COM_SUN_STAR_CHART2_FILLBITMAP_HPP_
 #include <com/sun/star/chart2/FillBitmap.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART2_TRANSPARENCYSTYLE_HPP_
-#include <com/sun/star/chart2/TransparencyStyle.hpp>
-#endif
 #ifndef _COM_SUN_STAR_AWT_GRADIENT_HPP_
 #include <com/sun/star/awt/Gradient.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -111,16 +112,25 @@ namespace
 {
     static ::comphelper::ItemPropertyMapType aDataPointPropertyFilledMap(
         ::comphelper::MakeItemPropertyMap
-        ( XATTR_FILLSTYLE,                C2U( "FillStyle" ))
-        ( XATTR_FILLCOLOR,                C2U( "Color" ))
-        ( XATTR_FILLTRANSPARENCE,         C2U( "Transparency" ))
-//         ( XATTR_FILLGRADIENT,             C2U( "Gradient" ))
-//         ( XATTR_FILLHATCH,                C2U( "Hatch" ))
-        ( XATTR_LINECOLOR,                C2U( "BorderColor" ))
-        ( XATTR_LINESTYLE,                C2U( "BorderStyle" ))
-        ( XATTR_LINEWIDTH,                C2U( "BorderWidth" ))
-//         ( XATTR_LINEDASH,                 C2U( "BorderDash" ))
-        ( XATTR_LINETRANSPARENCE,         C2U( "BorderTransparency" ))
+        IPM_MAP_ENTRY( XATTR_FILLSTYLE, "FillStyle", 0 )
+        IPM_MAP_ENTRY( XATTR_FILLCOLOR, "Color", 0 )
+//         IPM_MAP_ENTRY( XATTR_FILLTRANSPARENCE, "Transparency", 0 )
+//         IPM_MAP_ENTRY( XATTR_FILLGRADIENT, "Gradient", 0 )
+//         IPM_MAP_ENTRY( XATTR_FILLHATCH, "Hatch", 0 )
+        IPM_MAP_ENTRY( XATTR_LINECOLOR, "BorderColor", 0 )
+        IPM_MAP_ENTRY( XATTR_LINESTYLE, "BorderStyle", 0 )
+        IPM_MAP_ENTRY( XATTR_LINEWIDTH, "BorderWidth", 0 )
+//         IPM_MAP_ENTRY( XATTR_LINEDASH, "BorderDash", 0 )
+//         IPM_MAP_ENTRY( XATTR_LINETRANSPARENCE, "BorderTransparency", 0 )
+        IPM_MAP_ENTRY( XATTR_FILLBACKGROUND, "FillBackground", 0 )
+        IPM_MAP_ENTRY( XATTR_FILLBMP_POS, "FillBitmapRectanglePoint", 0 )
+        IPM_MAP_ENTRY( XATTR_FILLBMP_SIZEX, "FillBitmapSizeX", 0 )
+        IPM_MAP_ENTRY( XATTR_FILLBMP_SIZEY, "FillBitmapSizeY", 0 )
+        IPM_MAP_ENTRY( XATTR_FILLBMP_SIZELOG, "FillBitmapLogicalSize", 0 )
+        IPM_MAP_ENTRY( XATTR_FILLBMP_TILEOFFSETX, "FillBitmapOffsetX", 0 )
+        IPM_MAP_ENTRY( XATTR_FILLBMP_TILEOFFSETY, "FillBitmapOffsetY", 0 )
+        IPM_MAP_ENTRY( XATTR_FILLBMP_POSOFFSETX, "FillBitmapPositionOffsetX", 0 )
+        IPM_MAP_ENTRY( XATTR_FILLBMP_POSOFFSETY, "FillBitmapPositionOffsetY", 0 )
         );
 
     return aDataPointPropertyFilledMap;
@@ -129,11 +139,11 @@ namespace
 {
     static ::comphelper::ItemPropertyMapType aDataPointPropertyLineMap(
         ::comphelper::MakeItemPropertyMap
-        ( XATTR_LINECOLOR,                C2U( "Color" ))
-        ( XATTR_LINETRANSPARENCE,         C2U( "Transparency" ))
-        ( XATTR_LINESTYLE,                C2U( "LineStyle" ))
-        ( XATTR_LINEWIDTH,                C2U( "LineWidth" ))
-//         ( XATTR_LINEDASH,                 C2U( "LineDash" ))
+        IPM_MAP_ENTRY( XATTR_LINECOLOR, "Color", 0 )
+//         IPM_MAP_ENTRY( XATTR_LINETRANSPARENCE, "Transparency", 0 )
+        IPM_MAP_ENTRY( XATTR_LINESTYLE, "LineStyle", 0 )
+        IPM_MAP_ENTRY( XATTR_LINEWIDTH, "LineWidth", 0 )
+//         IPM_MAP_ENTRY( XATTR_LINEDASH, "LineDash", 0 )
         );
 
     return aDataPointPropertyLineMap;
@@ -142,12 +152,12 @@ namespace
 {
     static ::comphelper::ItemPropertyMapType aLinePropertyMap(
         ::comphelper::MakeItemPropertyMap
-        ( XATTR_LINESTYLE,                C2U( "LineStyle" ))
-        ( XATTR_LINEWIDTH,                C2U( "LineWidth" ))
-//         ( XATTR_LINEDASH,                 C2U( "LineDash" ))
-        ( XATTR_LINECOLOR,                C2U( "LineColor" ))
-        ( XATTR_LINETRANSPARENCE,         C2U( "LineTransparence" ))
-        ( XATTR_LINEJOINT,                C2U( "LineJoint" ))
+        IPM_MAP_ENTRY( XATTR_LINESTYLE, "LineStyle", 0 )
+        IPM_MAP_ENTRY( XATTR_LINEWIDTH, "LineWidth", 0 )
+//         IPM_MAP_ENTRY( XATTR_LINEDASH, "LineDash", 0 )
+        IPM_MAP_ENTRY( XATTR_LINECOLOR, "LineColor", 0 )
+//         IPM_MAP_ENTRY( XATTR_LINETRANSPARENCE, "LineTransparence", 0 )
+        IPM_MAP_ENTRY( XATTR_LINEJOINT, "LineJoint", 0 )
         );
 
     return aLinePropertyMap;
@@ -156,11 +166,21 @@ namespace
 {
     static ::comphelper::ItemPropertyMapType aFillPropertyMap(
         ::comphelper::MakeItemPropertyMap
-        ( XATTR_FILLSTYLE,                C2U( "FillStyle" ))
-        ( XATTR_FILLCOLOR,                C2U( "FillColor" ))
-        ( XATTR_FILLTRANSPARENCE,         C2U( "FillTransparence" ))
-//         ( XATTR_FILLGRADIENT,             C2U( "FillGradient" ))
-//         ( XATTR_FILLHATCH,                C2U( "FillHatch" ))
+        IPM_MAP_ENTRY( XATTR_FILLSTYLE, "FillStyle", 0 )
+        IPM_MAP_ENTRY( XATTR_FILLCOLOR, "FillColor", 0 )
+//         IPM_MAP_ENTRY( XATTR_FILLTRANSPARENCE, "FillTransparence", 0 )
+//         IPM_MAP_ENTRY( XATTR_FILLBITMAP, "FillBitmapName", MID_NAME )
+//         IPM_MAP_ENTRY( XATTR_FILLGRADIENT, "FillGradient", 0 )
+//         IPM_MAP_ENTRY( XATTR_FILLHATCH, "FillHatch", 0 )
+        IPM_MAP_ENTRY( XATTR_FILLBACKGROUND, "FillBackground", 0 )
+        IPM_MAP_ENTRY( XATTR_FILLBMP_POS, "FillBitmapRectanglePoint", 0 )
+        IPM_MAP_ENTRY( XATTR_FILLBMP_SIZEX, "FillBitmapSizeX", 0 )
+        IPM_MAP_ENTRY( XATTR_FILLBMP_SIZEY, "FillBitmapSizeY", 0 )
+        IPM_MAP_ENTRY( XATTR_FILLBMP_SIZELOG, "FillBitmapLogicalSize", 0 )
+        IPM_MAP_ENTRY( XATTR_FILLBMP_TILEOFFSETX, "FillBitmapOffsetX", 0 )
+        IPM_MAP_ENTRY( XATTR_FILLBMP_TILEOFFSETY, "FillBitmapOffsetY", 0 )
+        IPM_MAP_ENTRY( XATTR_FILLBMP_POSOFFSETX, "FillBitmapPositionOffsetX", 0 )
+        IPM_MAP_ENTRY( XATTR_FILLBMP_POSOFFSETY, "FillBitmapPositionOffsetY", 0 )
         );
 
     return aFillPropertyMap;
@@ -178,6 +198,28 @@ bool lcl_supportsLineProperties( ::chart::wrapper::GraphicPropertyItemConverter:
     return ( eType != ::chart::wrapper::GraphicPropertyItemConverter::FILL_PROPERTIES );
 }
 
+bool lcl_SetContentForNamedProperty(
+    const uno::Reference< lang::XMultiServiceFactory > & xFactory,
+    const ::rtl::OUString & rTableName,
+    NameOrIndex & rItem, BYTE nMemberId )
+{
+    bool bResult = false;
+    if( xFactory.is())
+    {
+        ::rtl::OUString aPropertyValue( rItem.GetName());
+        uno::Reference< container::XNameAccess > xNameAcc(
+            xFactory->createInstance( rTableName ),
+            uno::UNO_QUERY );
+        if( xNameAcc.is() &&
+            xNameAcc->hasByName( aPropertyValue ))
+        {
+            rItem.PutValue( xNameAcc->getByName( aPropertyValue ), nMemberId );
+            bResult = true;
+        }
+    }
+    return bResult;
+}
+
 } // anonymous namespace
 
 // ========================================
@@ -188,14 +230,16 @@ namespace wrapper
 {
 
 GraphicPropertyItemConverter::GraphicPropertyItemConverter(
-    const ::com::sun::star::uno::Reference<
-    ::com::sun::star::beans::XPropertySet > & rPropertySet,
+    const uno::Reference<
+    beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
+    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
     eGraphicObjectType eObjectType /* = FILL_PROPERTIES */ ) :
         ItemConverter( rPropertySet, rItemPool ),
         m_eGraphicObjectType( eObjectType ),
-        m_rDrawModel( rDrawModel )
+        m_rDrawModel( rDrawModel ),
+        m_xNamedPropertyTableFactory( xNamedPropertyContainerFactory )
 {}
 
 GraphicPropertyItemConverter::~GraphicPropertyItemConverter()
@@ -221,7 +265,7 @@ const USHORT * GraphicPropertyItemConverter::GetWhichPairs() const
     return pResult;
 }
 
-bool GraphicPropertyItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const
+bool GraphicPropertyItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
 {
     ::comphelper::ItemPropertyMapType::const_iterator aEndIt;
     ::comphelper::ItemPropertyMapType::const_iterator aIt;
@@ -263,7 +307,7 @@ bool GraphicPropertyItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::
     if( aIt == aEndIt )
         return false;
 
-    rOutName =(*aIt).second;
+    rOutProperty =(*aIt).second;
     return true;
 }
 
@@ -278,19 +322,29 @@ void GraphicPropertyItemConverter::FillSpecialItem(
     switch( nWhichId )
     {
         // bitmap property
-        case XATTR_FILLBITMAP:
         case XATTR_FILLBMP_TILE:
-        case XATTR_FILLBMP_POS:
-        case XATTR_FILLBMP_SIZEX:
-        case XATTR_FILLBMP_SIZEY:
-        case XATTR_FILLBMP_SIZELOG:
-        case XATTR_FILLBMP_TILEOFFSETX:
-        case XATTR_FILLBMP_TILEOFFSETY:
         case XATTR_FILLBMP_STRETCH:
-        case XATTR_FILLBMP_POSOFFSETX:
-        case XATTR_FILLBMP_POSOFFSETY:
-            if( lcl_supportsFillProperties( m_eGraphicObjectType ))
+        {
+            drawing::BitmapMode aMode = drawing::BitmapMode_REPEAT;
+            if( GetPropertySet()->getPropertyValue( C2U("FillBitmapMode")) >>= aMode )
             {
+                rOutItemSet.Put( XFillBmpTileItem( aMode == drawing::BitmapMode_REPEAT ));
+                rOutItemSet.Put( XFillBmpStretchItem( aMode == drawing::BitmapMode_STRETCH ));
+            }
+        }
+        break;
+
+//         case XATTR_FILLBMP_POS:
+//         case XATTR_FILLBMP_SIZEX:
+//         case XATTR_FILLBMP_SIZEY:
+//         case XATTR_FILLBMP_SIZELOG:
+//         case XATTR_FILLBMP_TILEOFFSETX:
+//         case XATTR_FILLBMP_TILEOFFSETY:
+//         case XATTR_FILLBMP_STRETCH:
+//         case XATTR_FILLBMP_POSOFFSETX:
+//         case XATTR_FILLBMP_POSOFFSETY:
+//             if( lcl_supportsFillProperties( m_eGraphicObjectType ))
+//             {
                 // avoid assertions while bitmap stuff is not working
 //             try
 //             {
@@ -300,27 +354,37 @@ void GraphicPropertyItemConverter::FillSpecialItem(
 //             {
 //                 ASSERT_EXCEPTION( ex );
 //             }
-            }
-            break;
+//             }
+//             break;
 
         case XATTR_FILLFLOATTRANSPARENCE:
             try
             {
                 if( lcl_supportsFillProperties( m_eGraphicObjectType ))
                 {
-                    chart2::TransparencyStyle aTranspStyle;
-                    ( GetPropertySet()->getPropertyValue( C2U( "TransparencyStyle" )))
-                        >>= aTranspStyle;
+                    ::rtl::OUString aPropName =
+                          (m_eGraphicObjectType == FILLED_DATA_POINT)
+                          ? C2U( "TransparencyGradientName" )
+                          : C2U( "FillTransparenceGradientName" );
 
-                    uno::Any aValue( GetPropertySet()->getPropertyValue( C2U( "TransparencyGradient" )));
+                    uno::Any aValue( GetPropertySet()->getPropertyValue( aPropName ));
                     if( aValue.hasValue())
                     {
                         XFillFloatTransparenceItem aItem;
-                        aItem.PutValue( aValue );
+                        aItem.PutValue( aValue, MID_NAME );
+
+                        lcl_SetContentForNamedProperty(
+                            m_xNamedPropertyTableFactory, C2U("com.sun.star.drawing.TransparencyGradientTable"),
+                            aItem, MID_FILLGRADIENT );
 
                         // this is important to enable the item
-                        aItem.SetEnabled( ( aTranspStyle == chart2::TransparencyStyle_GRADIENT ));
-                        rOutItemSet.Put( aItem );
+                        ::rtl::OUString aName;
+                        if( (aValue >>= aName) &&
+                            aName.getLength())
+                        {
+                            aItem.SetEnabled( TRUE );
+                            rOutItemSet.Put( aItem );
+                        }
                     }
                 }
             }
@@ -333,22 +397,17 @@ void GraphicPropertyItemConverter::FillSpecialItem(
         case XATTR_GRADIENTSTEPCOUNT:
             if( lcl_supportsFillProperties( m_eGraphicObjectType ))
             {
-
                 ::rtl::OUString aPropName =
                     (m_eGraphicObjectType == FILLED_DATA_POINT)
-                    ? C2U( "Gradient" )
-                    : C2U( "FillGradient" );
-                try
+                    ? C2U( "GradientStepCount" )
+                    : C2U( "FillGradientStepCount" );
+
+                sal_Int16 nStepCount = 0;
+                uno::Any aValue( GetPropertySet()->getPropertyValue( aPropName ) );
+                if( hasLongOrShortValue(aValue) )
                 {
-                    awt::Gradient aGradient;
-                    if( GetPropertySet()->getPropertyValue( aPropName ) >>= aGradient )
-                    {
-                        rOutItemSet.Put( XGradientStepCountItem( aGradient.StepCount ));
-                    }
-                }
-                catch( beans::UnknownPropertyException ex )
-                {
-                    ASSERT_EXCEPTION( ex );
+                    nStepCount = getShortForLongAlso(aValue);
+                    rOutItemSet.Put( XGradientStepCountItem( nStepCount ));
                 }
             }
         break;
@@ -358,13 +417,18 @@ void GraphicPropertyItemConverter::FillSpecialItem(
             {
                 ::rtl::OUString aPropName =
                     (m_eGraphicObjectType == FILLED_DATA_POINT)
-                    ? C2U( "BorderDash" )
-                    : C2U( "LineDash" );
+                    ? C2U( "BorderDashName" )
+                    : C2U( "LineDashName" );
 
                 XLineDashItem aItem;
-                aItem.PutValue( GetPropertySet()->getPropertyValue( aPropName ) );
+                aItem.PutValue( GetPropertySet()->getPropertyValue( aPropName ), MID_NAME );
 
-                // find the name for the dialog table
+                lcl_SetContentForNamedProperty(
+                    m_xNamedPropertyTableFactory, C2U("com.sun.star.drawing.DashTable"),
+                    aItem, MID_LINEDASH );
+
+                // translate model name to UI-name for predefined entries, so
+                // that the correct entry is chosen in the list of UI-names
                 XLineDashItem * pItemToPut = & aItem;
                 pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
 
@@ -377,13 +441,18 @@ void GraphicPropertyItemConverter::FillSpecialItem(
             {
                 ::rtl::OUString aPropName =
                     (m_eGraphicObjectType == FILLED_DATA_POINT)
-                    ? C2U( "Gradient" )
-                    : C2U( "FillGradient" );
+                    ? C2U( "GradientName" )
+                    : C2U( "FillGradientName" );
 
                 XFillGradientItem aItem;
-                aItem.PutValue( GetPropertySet()->getPropertyValue( aPropName ) );
+                aItem.PutValue( GetPropertySet()->getPropertyValue( aPropName ), MID_NAME );
 
-                // find the name for the dialog table
+                lcl_SetContentForNamedProperty(
+                    m_xNamedPropertyTableFactory, C2U("com.sun.star.drawing.GradientTable"),
+                    aItem, MID_FILLGRADIENT );
+
+                // translate model name to UI-name for predefined entries, so
+                // that the correct entry is chosen in the list of UI-names
                 XFillGradientItem * pItemToPut = & aItem;
                 pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
 
@@ -396,13 +465,18 @@ void GraphicPropertyItemConverter::FillSpecialItem(
             {
                 ::rtl::OUString aPropName =
                     (m_eGraphicObjectType == FILLED_DATA_POINT)
-                    ? C2U( "Hatch" )
-                    : C2U( "FillHatch" );
+                    ? C2U( "HatchName" )
+                    : C2U( "FillHatchName" );
 
                 XFillHatchItem aItem;
-                aItem.PutValue( GetPropertySet()->getPropertyValue( aPropName ) );
+                aItem.PutValue( GetPropertySet()->getPropertyValue( aPropName ), MID_NAME );
 
-                // find the name for the dialog table
+                lcl_SetContentForNamedProperty(
+                    m_xNamedPropertyTableFactory, C2U("com.sun.star.drawing.HatchTable"),
+                    aItem, MID_FILLHATCH );
+
+                // translate model name to UI-name for predefined entries, so
+                // that the correct entry is chosen in the list of UI-names
                 XFillHatchItem * pItemToPut = & aItem;
                 pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
 
@@ -410,6 +484,60 @@ void GraphicPropertyItemConverter::FillSpecialItem(
             }
         break;
 
+        case XATTR_FILLBITMAP:
+            if( lcl_supportsFillProperties( m_eGraphicObjectType ))
+            {
+                XFillBitmapItem aItem;
+                aItem.PutValue( GetPropertySet()->getPropertyValue( C2U( "FillBitmapName" ) ), MID_NAME );
+
+                lcl_SetContentForNamedProperty(
+                    m_xNamedPropertyTableFactory, C2U("com.sun.star.drawing.BitmapTable"),
+                    aItem, MID_GRAFURL );
+
+                // translate model name to UI-name for predefined entries, so
+                // that the correct entry is chosen in the list of UI-names
+                XFillBitmapItem * pItemToPut = & aItem;
+                pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
+
+                rOutItemSet.Put( * pItemToPut );
+            }
+        break;
+
+        // hack, because QueryValue of XLineTransparenceItem returns sal_Int32
+        // instead of sal_Int16
+        case XATTR_LINETRANSPARENCE:
+            if( lcl_supportsLineProperties( m_eGraphicObjectType ))
+            {
+                ::rtl::OUString aPropName =
+                      (m_eGraphicObjectType == FILLED_DATA_POINT)
+                      ? C2U( "BorderTransparency" )
+                      : (m_eGraphicObjectType == LINE_DATA_POINT)
+                      ? C2U( "Transparency" )
+                      : C2U( "LineTransparence" );
+
+                XLineTransparenceItem aItem;
+                aItem.PutValue( GetPropertySet()->getPropertyValue( aPropName ) );
+
+                rOutItemSet.Put( aItem );
+            }
+            break;
+
+        // hack, because QueryValue of XFillTransparenceItem returns sal_Int32
+        // instead of sal_Int16
+        case XATTR_FILLTRANSPARENCE:
+            if( lcl_supportsFillProperties( m_eGraphicObjectType ))
+            {
+                ::rtl::OUString aPropName =
+                      (m_eGraphicObjectType == FILLED_DATA_POINT)
+                      ? C2U( "Transparency" )
+                      : C2U( "FillTransparence" );
+
+                XFillTransparenceItem aItem;
+                aItem.PutValue( GetPropertySet()->getPropertyValue( aPropName ) );
+
+                rOutItemSet.Put( aItem );
+            }
+            break;
     }
 }
 
@@ -423,19 +551,53 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
     switch( nWhichId )
     {
         // bitmap property
-        case XATTR_FILLBITMAP:
-        case XATTR_FILLBMP_TILE:
-        case XATTR_FILLBMP_POS:
-        case XATTR_FILLBMP_SIZEX:
-        case XATTR_FILLBMP_SIZEY:
-        case XATTR_FILLBMP_SIZELOG:
-        case XATTR_FILLBMP_TILEOFFSETX:
-        case XATTR_FILLBMP_TILEOFFSETY:
         case XATTR_FILLBMP_STRETCH:
-        case XATTR_FILLBMP_POSOFFSETX:
-        case XATTR_FILLBMP_POSOFFSETY:
             if( lcl_supportsFillProperties( m_eGraphicObjectType ))
             {
+                const ::rtl::OUString aModePropName = C2U("FillBitmapMode");
+                bool bStretched = reinterpret_cast< const XFillBmpStretchItem & >(
+                    rItemSet.Get( XATTR_FILLBMP_STRETCH )).GetValue();
+                drawing::BitmapMode aMode =
+                    (bStretched ? drawing::BitmapMode_STRETCH : drawing::BitmapMode_NO_REPEAT);
+
+                aValue <<= aMode;
+                if( aValue != GetPropertySet()->getPropertyValue( aModePropName ))
+                {
+                    GetPropertySet()->setPropertyValue( aModePropName, aValue );
+                    bChanged = true;
+                }
+            }
+            break;
+
+        case XATTR_FILLBMP_TILE:
+            if( lcl_supportsFillProperties( m_eGraphicObjectType ))
+            {
+                const ::rtl::OUString aModePropName = C2U("FillBitmapMode");
+                bool bTiled = reinterpret_cast< const XFillBmpTileItem & >(
+                    rItemSet.Get( XATTR_FILLBMP_TILE )).GetValue();
+                drawing::BitmapMode aMode =
+                    (bTiled ? drawing::BitmapMode_REPEAT : drawing::BitmapMode_NO_REPEAT);
+
+                aValue <<= aMode;
+                if( aValue != GetPropertySet()->getPropertyValue( aModePropName ))
+                {
+                    GetPropertySet()->setPropertyValue( aModePropName, aValue );
+                    bChanged = true;
+                }
+            }
+            break;
+
+//         case XATTR_FILLBMP_POS:
+//         case XATTR_FILLBMP_SIZEX:
+//         case XATTR_FILLBMP_SIZEY:
+//         case XATTR_FILLBMP_SIZELOG:
+//         case XATTR_FILLBMP_TILEOFFSETX:
+//         case XATTR_FILLBMP_TILEOFFSETY:
+//         case XATTR_FILLBMP_STRETCH:
+//         case XATTR_FILLBMP_POSOFFSETX:
+//         case XATTR_FILLBMP_POSOFFSETY:
+//             if( lcl_supportsFillProperties( m_eGraphicObjectType ))
+//             {
             // avoid assertions while bitmap stuff is not working
 //             try
 //             {
@@ -446,31 +608,53 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
 //             {
 //                 ASSERT_EXCEPTION( ex );
 //             }
-            }
-            break;
+//             }
+//             break;
 
         case XATTR_FILLFLOATTRANSPARENCE:
             try
             {
                 if( lcl_supportsFillProperties( m_eGraphicObjectType ))
                 {
+                    ::rtl::OUString aPropName =
+                          (m_eGraphicObjectType == FILLED_DATA_POINT)
+                          ? C2U( "TransparencyGradientName" )
+                          : C2U( "FillTransparenceGradientName" );
+
                     const XFillFloatTransparenceItem & rItem =
                         reinterpret_cast< const XFillFloatTransparenceItem & >(
                             rItemSet.Get( nWhichId ));
-                    if( rItem.IsEnabled() )
+
+                    if( rItem.IsEnabled() &&
+                        rItem.QueryValue( aValue, MID_NAME ))
                     {
-                        rItem.QueryValue( aValue );
-                        GetPropertySet()->setPropertyValue( C2U( "TransparencyGradient" ), aValue );
-                        GetPropertySet()->setPropertyValue( C2U( "TransparencyStyle" ),
-                                                            uno::makeAny( chart2::TransparencyStyle_GRADIENT ));
+                        uno::Any aGradient;
+                        rItem.QueryValue( aGradient, MID_FILLGRADIENT );
+
+                        // add TransparencyGradient to list if it does not already exist
+                        ::rtl::OUString aPreferredName;
+                        aValue >>= aPreferredName;
+                        aValue <<= PropertyHelper::addTransparencyGradientUniqueNameToTable(
+                            aGradient, m_xNamedPropertyTableFactory, aPreferredName );
+
+                        if( aValue != GetPropertySet()->getPropertyValue( aPropName ))
+                        {
+                            GetPropertySet()->setPropertyValue( aPropName, aValue );
+                            bChanged = true;
+                        }
                     }
                     else
                     {
-                        GetPropertySet()->setPropertyValue(
-                            C2U( "TransparencyStyle" ),
-                            uno::makeAny( chart2::TransparencyStyle_LINEAR ));
+                        ::rtl::OUString aName;
+                        if( ( GetPropertySet()->getPropertyValue( aPropName ) >>= aName )
+                            && aName.getLength() > 0 )
+                        {
+                            uno::Reference< beans::XPropertyState > xState( GetPropertySet(), uno::UNO_QUERY );
+                            if( xState.is())
+                                xState->setPropertyToDefault( aPropName );
+                            bChanged = true;
+                        }
                     }
-                    bChanged = true;
                 }
             }
             catch( beans::UnknownPropertyException ex )
@@ -485,32 +669,20 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
             {
                 ::rtl::OUString aPropName =
                     (m_eGraphicObjectType == FILLED_DATA_POINT)
-                    ? C2U( "Gradient" )
-                    : C2U( "FillGradient" );
-                try
-                {
-                    sal_Int16 nStepCount =
-                        ( reinterpret_cast< const XGradientStepCountItem & >(
+                    ? C2U( "GradientStepCount" )
+                    : C2U( "FillGradientStepCount" );
+
+                sal_Int16 nStepCount = ( reinterpret_cast< const XGradientStepCountItem & >(
                             rItemSet.Get( nWhichId ))).GetValue();
 
-                    awt::Gradient aGradient;
-                    if( GetPropertySet()->getPropertyValue( aPropName ) >>= aGradient )
-                    {
-                        if( aGradient.StepCount != nStepCount )
-                        {
-                            aGradient.StepCount = nStepCount;
-                            GetPropertySet()->setPropertyValue(
-                                aPropName,
-                                uno::makeAny( aGradient ));
-                            bChanged = true;
-                        }
-                    }
-                }
-                catch( beans::UnknownPropertyException ex )
+                aValue <<= nStepCount;
+                if( aValue != GetPropertySet()->getPropertyValue( aPropName ))
                 {
-                    ASSERT_EXCEPTION( ex );
+                    GetPropertySet()->setPropertyValue( aPropName, aValue );
+                    bChanged = true;
                 }
             }
+            break;
         }
         break;
 
@@ -521,17 +693,25 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
 
                 ::rtl::OUString aPropName =
                     (m_eGraphicObjectType == FILLED_DATA_POINT)
-                    ? C2U( "BorderDash" )
-                    : C2U( "LineDash" );
+                    ? C2U( "BorderDashName" )
+                    : C2U( "LineDashName" );
 
                 const XLineDashItem & rItem =
                     reinterpret_cast< const XLineDashItem & >(
                         rItemSet.Get( nWhichId ));
 
-                if( rItem.QueryValue( aValue ))
+                if( rItem.QueryValue( aValue, MID_NAME ))
                 {
                     if( aValue != GetPropertySet()->getPropertyValue( aPropName ))
                     {
+                        // add LineDash to list
+                        uno::Any aLineDash;
+                        rItem.QueryValue( aLineDash, MID_LINEDASH );
+                        ::rtl::OUString aPreferredName;
+                        aValue >>= aPreferredName;
+                        aValue <<= PropertyHelper::addLineDashUniqueNameToTable(
+                            aLineDash, m_xNamedPropertyTableFactory, aPreferredName );
+
                         GetPropertySet()->setPropertyValue( aPropName, aValue );
                         bChanged = true;
                     }
@@ -546,17 +726,25 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
             {
                 ::rtl::OUString aPropName =
                     (m_eGraphicObjectType == FILLED_DATA_POINT)
-                    ? C2U( "Gradient" )
-                    : C2U( "FillGradient" );
+                    ? C2U( "GradientName" )
+                    : C2U( "FillGradientName" );
 
                 const XFillGradientItem & rItem =
                     reinterpret_cast< const XFillGradientItem & >(
                         rItemSet.Get( nWhichId ));
 
-                if( rItem.QueryValue( aValue ))
+                if( rItem.QueryValue( aValue, MID_NAME ))
                 {
                     if( aValue != GetPropertySet()->getPropertyValue( aPropName ))
                     {
+                        // add Gradient to list
+                        uno::Any aGradient;
+                        rItem.QueryValue( aGradient, MID_FILLGRADIENT );
+                        ::rtl::OUString aPreferredName;
+                        aValue >>= aPreferredName;
+                        aValue <<= PropertyHelper::addGradientUniqueNameToTable(
+                            aGradient, m_xNamedPropertyTableFactory, aPreferredName );
+
                         GetPropertySet()->setPropertyValue( aPropName, aValue );
                         bChanged = true;
                     }
@@ -571,17 +759,25 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
             {
                 ::rtl::OUString aPropName =
                     (m_eGraphicObjectType == FILLED_DATA_POINT)
-                    ? C2U( "Hatch" )
-                    : C2U( "FillHatch" );
+                    ? C2U( "HatchName" )
+                    : C2U( "FillHatchName" );
 
                 const XFillHatchItem & rItem =
                     reinterpret_cast< const XFillHatchItem & >(
                         rItemSet.Get( nWhichId ));
 
-                if( rItem.QueryValue( aValue ))
+                if( rItem.QueryValue( aValue, MID_NAME ))
                 {
                     if( aValue != GetPropertySet()->getPropertyValue( aPropName ))
                     {
+                        // add Hatch to list
+                        uno::Any aHatch;
+                        rItem.QueryValue( aHatch, MID_FILLHATCH );
+                        ::rtl::OUString aPreferredName;
+                        aValue >>= aPreferredName;
+                        aValue <<= PropertyHelper::addHatchUniqueNameToTable(
+                            aHatch, m_xNamedPropertyTableFactory, aPreferredName );
+
                         GetPropertySet()->setPropertyValue( aPropName, aValue );
                         bChanged = true;
                     }
@@ -589,6 +785,118 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
             }
         }
         break;
+
+        case XATTR_FILLBITMAP:
+        {
+            if( lcl_supportsFillProperties( m_eGraphicObjectType ))
+            {
+                const XFillBitmapItem & rItem =
+                    reinterpret_cast< const XFillBitmapItem & >(
+                        rItemSet.Get( nWhichId ));
+
+                if( rItem.QueryValue( aValue, MID_NAME ))
+                {
+                    if( aValue != GetPropertySet()->getPropertyValue( C2U( "FillBitmapName" )))
+                    {
+                        // add Bitmap to list
+                        uno::Any aBitmap;
+                        rItem.QueryValue( aBitmap, MID_GRAFURL );
+                        ::rtl::OUString aPreferredName;
+                        aValue >>= aPreferredName;
+                        aValue <<= PropertyHelper::addBitmapUniqueNameToTable(
+                            aBitmap, m_xNamedPropertyTableFactory, aPreferredName );
+
+                        GetPropertySet()->setPropertyValue( C2U( "FillBitmapName" ), aValue );
+                        bChanged = true;
+                    }
+                }
+            }
+        }
+        break;
+
+        // hack, because QueryValue of XLineTransparenceItem returns sal_Int32
+        // instead of sal_Int16
+        case XATTR_LINETRANSPARENCE:
+            if( lcl_supportsLineProperties( m_eGraphicObjectType ))
+            {
+                ::rtl::OUString aPropName =
+                      (m_eGraphicObjectType == FILLED_DATA_POINT)
+                      ? C2U( "BorderTransparency" )
+                      : (m_eGraphicObjectType == LINE_DATA_POINT)
+                      ? C2U( "Transparency" )
+                      : C2U( "LineTransparence" );
+
+                const XLineTransparenceItem & rItem =
+                    reinterpret_cast< const XLineTransparenceItem & >(
+                        rItemSet.Get( nWhichId ));
+
+                if( rItem.QueryValue( aValue ))
+                {
+                    OSL_ENSURE( ! aValue.isExtractableTo(
+                                    ::getCppuType( reinterpret_cast< const sal_Int16 * >(0))),
+                                "TransparenceItem QueryValue bug is fixed. Remove hack." );
+                    sal_Int32 nValue;
+                    if( aValue >>= nValue )
+                    {
+                        OSL_ENSURE( nValue < SAL_MAX_INT16, "Transparency value too large" );
+                        sal_Int16 nValueToSet( static_cast< sal_Int16 >( nValue ));
+                        aValue <<= nValueToSet;
+
+                        GetPropertySet()->setPropertyValue( aPropName, aValue );
+                        bChanged = true;
+                    }
+                    else
+                    {
+                        OSL_ENSURE( false, "Wrong type in Transparency Any" );
+                    }
+                }
+            }
+            break;
+
+        // hack, because QueryValue of XFillTransparenceItem returns sal_Int32
+        // instead of sal_Int16
+        case XATTR_FILLTRANSPARENCE:
+            if( lcl_supportsFillProperties( m_eGraphicObjectType ))
+            {
+                ::rtl::OUString aPropName =
+                      (m_eGraphicObjectType == FILLED_DATA_POINT)
+                      ? C2U( "Transparency" )
+                      : C2U( "FillTransparence" );
+
+                const XFillTransparenceItem & rItem =
+                    reinterpret_cast< const XFillTransparenceItem & >(
+                        rItemSet.Get( nWhichId ));
+
+                if( rItem.QueryValue( aValue ))
+                {
+                    OSL_ENSURE( ! aValue.isExtractableTo(
+                                    ::getCppuType( reinterpret_cast< const sal_Int16 * >(0))),
+                                "TransparenceItem QueryValue bug is fixed. Remove hack." );
+                    sal_Int32 nValue;
+                    if( aValue >>= nValue )
+                    {
+                        OSL_ENSURE( nValue < SAL_MAX_INT16, "Transparency value too large" );
+                        sal_Int16 nValueToSet( static_cast< sal_Int16 >( nValue ));
+                        aValue <<= nValueToSet;
+
+                        GetPropertySet()->setPropertyValue( aPropName, aValue );
+                        // if linear or no transparence is set, delete the gradient
+                        ::rtl::OUString aTransGradPropName =
+                              (m_eGraphicObjectType == FILLED_DATA_POINT)
+                              ? C2U( "TransparencyGradientName" )
+                              : C2U( "FillTransparenceGradientName" );
+                        GetPropertySet()->setPropertyValue(
+                            aTransGradPropName, uno::makeAny( ::rtl::OUString() ));
+
+                        bChanged = true;
+                    }
+                    else
+                    {
+                        OSL_ENSURE( false, "Wrong type in Transparency Any" );
+                    }
+                }
+            }
+            break;
     }
 
     return bChanged;
