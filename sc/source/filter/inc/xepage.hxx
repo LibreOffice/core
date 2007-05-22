@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xepage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:29:30 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:56:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,6 +128,25 @@ class XclExpPageSettings : public XclExpRecordBase, protected XclExpRoot
 public:
     /** Creates all records containing the current page settings. */
     explicit            XclExpPageSettings( const XclExpRoot& rRoot );
+
+    /** Returns read-only access to the page data. */
+    inline const XclPageData& GetPageData() const { return maData; }
+
+    /** Writes all page settings records to the stream. */
+    virtual void        Save( XclExpStream& rStrm );
+
+private:
+    XclPageData         maData;         /// Page settings data.
+};
+
+// ----------------------------------------------------------------------------
+
+/** Contains all page (print) settings records for a chart object. */
+class XclExpChartPageSettings : public XclExpRecordBase, protected XclExpRoot
+{
+public:
+    /** Creates all records containing the current page settings. */
+    explicit            XclExpChartPageSettings( const XclExpRoot& rRoot );
 
     /** Returns read-only access to the page data. */
     inline const XclPageData& GetPageData() const { return maData; }
