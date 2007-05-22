@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:28:32 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:03:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,165 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include "PropertyHelper.hxx"
+#include "ContainerHelper.hxx"
 #include "macros.hxx"
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
 
-using namespace ::com::sun::star::uno;
+#include <vector>
+#include <algorithm>
+#include <functional>
+
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using ::rtl::OUString;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+
+namespace
+{
+struct lcl_EqualsElement : public ::std::unary_function< OUString, bool >
+{
+    explicit lcl_EqualsElement( const Any & rValue, const Reference< container::XNameAccess > & xAccess )
+            : m_aValue( rValue ), m_xAccess( xAccess )
+    {
+        OSL_ASSERT( m_xAccess.is());
+    }
+
+    bool operator() ( const OUString & rName )
+    {
+        try
+        {
+            return (m_xAccess->getByName( rName ) == m_aValue);
+        }
+        catch( const uno::Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
+        }
+        return false;
+    }
+
+private:
+    Any m_aValue;
+    Reference< container::XNameAccess > m_xAccess;
+};
+
+struct lcl_StringMatches : public ::std::unary_function< OUString ,bool >
+{
+    lcl_StringMatches( const OUString & rCmpStr ) :
+            m_aCmpStr( rCmpStr )
+    {}
+
+    bool operator() ( const OUString & rStr )
+    {
+        return rStr.match( m_aCmpStr );
+    }
+
+private:
+    OUString m_aCmpStr;
+};
+
+struct lcl_OUStringRestToInt32 : public ::std::unary_function< OUString, sal_Int32 >
+{
+    lcl_OUStringRestToInt32( sal_Int32 nPrefixLength ) :
+            m_nPrefixLength( nPrefixLength )
+    {}
+    sal_Int32 operator() ( const OUString & rStr )
+    {
+        if( m_nPrefixLength > rStr.getLength() )
+            return 0;
+        return rStr.copy( m_nPrefixLength ).toInt32( 10 /* radix */ );
+    }
+private:
+    sal_Int32 m_nPrefixLength;
+};
+
+/** adds a fill gradient, fill hatch, fill bitmap, fill transparency gradient,
+    line dash or line marker to the corresponding name container with a unique
+    name.
+
+    @param rPrefix
+        The prefix used for automated name generation.
+
+    @param rPreferredName
+        If this string is not empty it is used as name if it is unique in the
+        table. Otherwise a new name is generated using pPrefix.
+
+    @return the new name under which the property was stored in the table
+*/
+OUString lcl_addNamedPropertyUniqueNameToTable(
+    const Any & rValue,
+    const Reference< container::XNameContainer > & xNameContainer,
+    const OUString & rPrefix,
+    const OUString & rPreferredName )
+{
+    if( ! xNameContainer.is() ||
+        ! rValue.hasValue() ||
+        ( rValue.getValueType() != xNameContainer->getElementType()))
+        return rPreferredName;
+
+    try
+    {
+        Reference< container::XNameAccess > xNameAccess( xNameContainer, uno::UNO_QUERY_THROW );
+        ::std::vector< OUString > aNames( ::chart::ContainerHelper::SequenceToVector( xNameAccess->getElementNames()));
+        ::std::vector< OUString >::const_iterator aIt(
+            ::std::find_if( aNames.begin(), aNames.end(), lcl_EqualsElement( rValue, xNameAccess )));
+
+        // element not found in container
+        if( aIt == aNames.end())
+        {
+            OUString aUniqueName;
+
+            // check if preferred name is already used
+            if( rPreferredName.getLength())
+            {
+                aIt = ::std::find( aNames.begin(), aNames.end(), rPreferredName );
+                if( aIt == aNames.end())
+                    aUniqueName = rPreferredName;
+            }
+
+            if( ! aUniqueName.getLength())
+            {
+                // create a unique id using the prefix plus a number
+                ::std::vector< sal_Int32 > aNumbers;
+                ::std::vector< OUString >::iterator aNonConstIt(
+                    ::std::partition( aNames.begin(), aNames.end(), lcl_StringMatches( rPrefix )));
+                ::std::transform( aNames.begin(), aNonConstIt,
+                                  back_inserter( aNumbers ),
+                                  lcl_OUStringRestToInt32( rPrefix.getLength() ));
+                ::std::vector< sal_Int32 >::const_iterator aMaxIt(
+                    ::std::max_element( aNumbers.begin(), aNumbers.end()));
+
+                sal_Int32 nIndex = 1;
+                if( aMaxIt != aNumbers.end())
+                    nIndex = (*aMaxIt) + 1;
+
+                aUniqueName = rPrefix + OUString::valueOf( nIndex );
+            }
+
+            OSL_ASSERT( aUniqueName.getLength());
+            xNameContainer->insertByName( aUniqueName, rValue );
+            return aUniqueName;
+        }
+        else
+            // element found => return name
+            return *aIt;
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    return rPreferredName;
+}
+
+} // anonymous namespace
 
 namespace chart
 {
@@ -52,15 +202,15 @@ namespace chart
 // static
 void PropertyHelper::copyProperties(
     const Reference< XPropertySet > & xSource,
-    Reference< XPropertySet > & xDestination )
+    const Reference< XPropertySet > & xDestination )
 {
     if( ! (xSource.is() && xDestination.is()))
         return;
 
     try
     {
-        Reference< XPropertySetInfo > xSrcInfo( xSource->getPropertySetInfo(), UNO_QUERY_THROW );
-        Reference< XPropertySetInfo > xDestInfo( xDestination->getPropertySetInfo(), UNO_QUERY_THROW );
+        Reference< XPropertySetInfo > xSrcInfo( xSource->getPropertySetInfo(), uno::UNO_QUERY_THROW );
+        Reference< XPropertySetInfo > xDestInfo( xDestination->getPropertySetInfo(), uno::UNO_QUERY_THROW );
         Sequence< Property > aProperties( xSrcInfo->getProperties());
         const sal_Int32 nLength = aProperties.getLength();
         for( sal_Int32 i = 0; i < nLength; ++i )
@@ -75,10 +225,101 @@ void PropertyHelper::copyProperties(
             }
         }
     }
-    catch( Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
+}
+
+// static
+OUString PropertyHelper::addLineDashUniqueNameToTable(
+    const Any & rValue,
+    const Reference< lang::XMultiServiceFactory > & xFact,
+    const OUString & rPreferredName )
+{
+    if( xFact.is())
+    {
+        Reference< container::XNameContainer > xNameCnt(
+            xFact->createInstance( C2U( "com.sun.star.drawing.DashTable" )),
+            uno::UNO_QUERY );
+        if( xNameCnt.is())
+            return lcl_addNamedPropertyUniqueNameToTable(
+                rValue, xNameCnt, C2U( "ChartDash " ), rPreferredName );
+    }
+    return OUString();
+}
+
+// static
+OUString PropertyHelper::addGradientUniqueNameToTable(
+    const Any & rValue,
+    const Reference< lang::XMultiServiceFactory > & xFact,
+    const OUString & rPreferredName )
+{
+    if( xFact.is())
+    {
+        Reference< container::XNameContainer > xNameCnt(
+            xFact->createInstance( C2U( "com.sun.star.drawing.GradientTable" )),
+            uno::UNO_QUERY );
+        if( xNameCnt.is())
+            return lcl_addNamedPropertyUniqueNameToTable(
+                rValue, xNameCnt, C2U( "ChartGradient " ), rPreferredName );
+    }
+    return OUString();
+}
+
+
+// static
+OUString PropertyHelper::addTransparencyGradientUniqueNameToTable(
+    const Any & rValue,
+    const Reference< lang::XMultiServiceFactory > & xFact,
+    const OUString & rPreferredName )
+{
+    if( xFact.is())
+    {
+        Reference< container::XNameContainer > xNameCnt(
+            xFact->createInstance( C2U( "com.sun.star.drawing.TransparencyGradientTable" )),
+            uno::UNO_QUERY );
+        if( xNameCnt.is())
+            return lcl_addNamedPropertyUniqueNameToTable(
+                rValue, xNameCnt, C2U( "ChartTransparencyGradient " ), rPreferredName );
+    }
+    return OUString();
+}
+
+// static
+OUString PropertyHelper::addHatchUniqueNameToTable(
+    const Any & rValue,
+    const Reference< lang::XMultiServiceFactory > & xFact,
+    const OUString & rPreferredName )
+{
+    if( xFact.is())
+    {
+        Reference< container::XNameContainer > xNameCnt(
+            xFact->createInstance( C2U( "com.sun.star.drawing.HatchTable" )),
+            uno::UNO_QUERY );
+        if( xNameCnt.is())
+            return lcl_addNamedPropertyUniqueNameToTable(
+                rValue, xNameCnt, C2U( "ChartHatch " ), rPreferredName );
+    }
+    return OUString();
+}
+
+// static
+OUString PropertyHelper::addBitmapUniqueNameToTable(
+    const Any & rValue,
+    const Reference< lang::XMultiServiceFactory > & xFact,
+    const OUString & rPreferredName )
+{
+    if( xFact.is())
+    {
+        Reference< container::XNameContainer > xNameCnt(
+            xFact->createInstance( C2U( "com.sun.star.drawing.BitmapTable" )),
+            uno::UNO_QUERY );
+        if( xNameCnt.is())
+            return lcl_addNamedPropertyUniqueNameToTable(
+                rValue, xNameCnt, C2U( "ChartBitmap " ), rPreferredName );
+    }
+    return OUString();
 }
 
 } //  namespace chart
