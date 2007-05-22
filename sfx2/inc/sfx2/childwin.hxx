@@ -4,9 +4,9 @@
  *
  *  $RCSfile: childwin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 21:16:57 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:17:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,7 @@ class SfxChildWinContextArr_Impl;
 #define SFX_CHILDWIN_AUTOHIDE     0x08      // DockingWindow im AutoHide-Modus
 #define SFX_CHILDWIN_TASK         0x10      // ChildWindow innerhalb der Task
 #define SFX_CHILDWIN_CANTGETFOCUS 0x20      // ChildWindow kann keinen Focus bekommen
+#define SFX_CHILDWIN_ALWAYSAVAILABLE 0x40   // ChildWindow is never disabled
 #define CHILDWIN_NOPOS            USHRT_MAX
 
 // Konfiguration eines ChildWindows
