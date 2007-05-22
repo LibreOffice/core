@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:47:36 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:25:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,14 +35,25 @@
 #ifndef CHART_MACROS_HXX
 #define CHART_MACROS_HXX
 
+#include <typeinfo>
+
 /// creates a unicode-string from an ASCII string
 #define C2U(constAsciiStr) (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( constAsciiStr ) ))
 
-/// shows an error-box for an exception ex
-#define ASSERT_EXCEPTION(ex) \
+/** shows an error-box for an exception ex
+    else-branch necessary to avoid warning
+*/
+#if OSL_DEBUG_LEVEL > 0
+#define ASSERT_EXCEPTION(ex)                   \
   OSL_ENSURE( false, ::rtl::OUStringToOString( \
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught: " )) + \
-    ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +\
+    ::rtl::OUString::createFromAscii( typeid( ex ).name()) +\
+    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +\
+    ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr())
+#else
+//avoid compilation warnings
+#define ASSERT_EXCEPTION(ex) ex.Context.is();
+#endif
 
 #define U2C(ouString) (::rtl::OUStringToOString(ouString,RTL_TEXTENCODING_ASCII_US).getStr())
 
