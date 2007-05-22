@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 22:47:59 $
+#   last change: $Author: vg $ $Date: 2007-05-22 20:11:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,9 @@ SLO1FILES =  \
         $(SLO)$/listenercalls.obj \
         $(SLO)$/cellvaluebinding.obj \
         $(SLO)$/celllistsource.obj \
-        $(SLO)$/warnpassword.obj
+        $(SLO)$/warnpassword.obj \
+        $(SLO)$/unoreflist.obj \
+        $(SLO)$/ChartRangeSelectionListener.obj
 
 SLO2FILES = \
     $(SLO)$/scdetect.obj								\
