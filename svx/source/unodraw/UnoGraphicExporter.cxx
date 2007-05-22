@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:02:42 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:20:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -634,6 +634,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     sal_Bool bExportOnlyBackground = false;
     sal_Bool bVerboseComments = false;
     sal_Bool bScrollText = false;
+    sal_Bool bUseHighContrast = false;
 
     if( NULL == pFilter || NULL == pPage || NULL == mpDoc )
         return sal_False;
@@ -735,6 +736,10 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                     else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportOnlyBackground" ) ) )
                     {
                         pDataValues->Value >>= bExportOnlyBackground;
+                    }
+                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HighContrast" ) ) )
+                    {
+                        pDataValues->Value >>= bUseHighContrast;
                     }
                     else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PageNumber" ) ) )
                     {
@@ -902,6 +907,9 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                 GDIMetaFile aMtf;
 
                 aVDev.SetMapMode( aMap );
+                if( bUseHighContrast )
+                    aVDev.SetDrawMode( aVDev.GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
+                aVDev.EnableOutput( FALSE );
                 aMtf.Record( &aVDev );
 
                 Size aNewSize;
@@ -1082,6 +1090,8 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 
             aOut.EnableOutput( FALSE );
             aOut.SetMapMode( aMap );
+            if( bUseHighContrast )
+                aOut.SetDrawMode( aVDev.GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
 
             GDIMetaFile aMtf;
             aMtf.Clear();
