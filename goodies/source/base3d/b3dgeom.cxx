@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dgeom.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-23 09:51:33 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:16:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,10 +217,13 @@ void B3dGeometry::EndObject()
 
     // EbenenNormale berechnen und setzen; bei Linien und
     // Punkten wird PlaneNormal auf (0,0,0) gesetzt
-    sal_uInt32 nHigh = aIndexBucket[aIndexBucket.Count()-1].GetIndex();
-    basegfx::B3DVector aPlaneNormal = -CalcNormal(nLow, nHigh);
-    while(nLow < nHigh)
-        aEntityBucket[nLow++].PlaneNormal() = aPlaneNormal;
+    if(aIndexBucket.Count())
+    {
+        sal_uInt32 nHigh = aIndexBucket[aIndexBucket.Count()-1].GetIndex();
+        basegfx::B3DVector aPlaneNormal = -CalcNormal(nLow, nHigh);
+        while(nLow < nHigh)
+            aEntityBucket[nLow++].PlaneNormal() = aPlaneNormal;
+    }
 }
 
 /*************************************************************************
