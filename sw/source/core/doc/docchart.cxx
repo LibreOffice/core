@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docchart.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:50:22 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:24:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,11 @@
 #include "precompiled_sw.hxx"
 
 
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+
+#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <float.h>
 
@@ -44,12 +49,6 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _SCH_DLL_HXX
-#include <sch/schdll.hxx>
-#endif
-#ifndef _SCH_MEMCHRT_HXX
-#include <sch/memchrt.hxx>
-#endif
 #ifndef _WINDOW_HXX //autogen
 #include <vcl/window.hxx>
 #endif
@@ -68,6 +67,9 @@
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
+#endif
+#ifndef _NDOLE_HXX //autogen
+#include <ndole.hxx>
 #endif
 #ifndef _CALC_HXX
 #include <calc.hxx>
@@ -99,184 +101,22 @@
 #ifndef _CELLATR_HXX
 #include <cellatr.hxx>
 #endif
+#ifndef _VOS_MUTEX_HXX_ //autogen
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX //autogen
+#include <vcl/svapp.hxx>
+#endif
+
+#include <unochart.hxx>
+
+using namespace com::sun::star;
+using namespace com::sun::star::uno;
 
 
-SchMemChart *SwTable::UpdateData( SchMemChart* pData,
-                                const String* pSelection ) const
+void SwTable::UpdateCharts() const
 {
-    SwCalc aCalc( *GetFrmFmt()->GetDoc() );
-    SwTblCalcPara aCalcPara( aCalc, *this );
-    String sSelection, sRowColInfo;
-    BOOL bSetChartRange = TRUE;
-
-    // worauf bezieht sich das Chart?
-    if( pData && pData->SomeData1().Len() )
-    {
-        sSelection = pData->SomeData1();
-        sRowColInfo = pData->SomeData2();
-    }
-    else if( pData && pData->GetChartRange().maRanges.size() )
-    {
-        SchDLL::ConvertChartRangeForWriter( *pData, FALSE );
-        sSelection = pData->SomeData1();
-        sRowColInfo = pData->SomeData2();
-        bSetChartRange = FALSE;
-    }
-    else if( pSelection )
-    {
-        sSelection = *pSelection;
-        sRowColInfo.AssignAscii( RTL_CONSTASCII_STRINGPARAM("11") );
-    }
-
-    SwChartLines aLines;
-    if( !IsTblComplexForChart( sSelection, &aLines ))
-    {
-        USHORT nLines = aLines.Count(), nBoxes = aLines[0]->Count();
-
-        if( !pData )
-        {
-            //JP 08.02.99: als default wird mit Spalten/Zeilenueberschrift
-            //              eingefuegt, deshalb das -1
-            pData = SchDLL::NewMemChart( nBoxes-1, nLines-1 );
-            pData->SetSubTitle( aEmptyStr );
-            pData->SetXAxisTitle( aEmptyStr );
-            pData->SetYAxisTitle( aEmptyStr );
-            pData->SetZAxisTitle( aEmptyStr );
-        }
-
-        USHORT nRowStt = 0, nColStt = 0;
-        if( sRowColInfo.Len() )
-        {
-            if( '1' == sRowColInfo.GetChar( 0 ))
-                ++nRowStt;
-            if( '1' == sRowColInfo.GetChar( 1 ))
-                ++nColStt;
-        }
-
-        if( (nBoxes - nColStt) > pData->GetColCount() )
-            SchDLL::MemChartInsertCols( *pData, 0, (nBoxes - nColStt) - pData->GetColCount() );
-        else if( (nBoxes - nColStt) < pData->GetColCount() )
-            SchDLL::MemChartRemoveCols( *pData, 0, pData->GetColCount() - (nBoxes - nColStt) );
-
-        if( (nLines - nRowStt) > pData->GetRowCount() )
-            SchDLL::MemChartInsertRows( *pData, 0, (nLines - nRowStt) - pData->GetRowCount() );
-        else if( (nLines - nRowStt) < pData->GetRowCount() )
-            SchDLL::MemChartRemoveRows( *pData, 0, pData->GetRowCount() - (nLines - nRowStt) );
-
-
-        ASSERT( pData->GetRowCount() >= (nLines - nRowStt ) &&
-                pData->GetColCount() >= (nBoxes - nColStt ),
-                    "Die Struktur fuers Chart ist zu klein,\n"
-                    "es wird irgendwo in den Speicher geschrieben!" );
-
-        // Row-Texte setzen
-        USHORT n;
-        if( nRowStt )
-            for( n = nColStt; n < nBoxes; ++n )
-            {
-                const SwTableBox *pBox = (*aLines[ 0 ])[ n ];
-                ASSERT( pBox->GetSttNd(), "Box without SttIdx" );
-                SwNodeIndex aIdx( *pBox->GetSttNd(), 1 );
-                const SwTxtNode* pTNd = aIdx.GetNode().GetTxtNode();
-                if( !pTNd )
-                    pTNd = aIdx.GetNodes().GoNextSection( &aIdx, TRUE, FALSE )
-                                ->GetTxtNode();
-
-                pData->SetColText( n - nColStt, pTNd->GetExpandTxt() );
-            }
-        else
-        {
-            String aText;
-            for( n = nColStt; n < nBoxes; ++n )
-            {
-                SchDLL::GetDefaultForColumnText( *pData, n - nColStt, aText );
-                pData->SetColText( n - nColStt, aText );
-            }
-        }
-
-        // Col-Texte setzen
-        if( nColStt )
-            for( n = nRowStt; n < nLines; ++n )
-            {
-                const SwTableBox *pBox = (*aLines[ n ])[ 0 ];
-                ASSERT( pBox->GetSttNd(), "Box without SttIdx" );
-                SwNodeIndex aIdx( *pBox->GetSttNd(), 1 );
-                const SwTxtNode* pTNd = aIdx.GetNode().GetTxtNode();
-                if( !pTNd )
-                    pTNd = aIdx.GetNodes().GoNextSection( &aIdx, TRUE, FALSE )
-                                ->GetTxtNode();
-
-                pData->SetRowText( n - nRowStt, pTNd->GetExpandTxt() );
-            }
-        else
-        {
-            String aText;
-            for( n = nRowStt; n < nLines; ++n )
-            {
-                SchDLL::GetDefaultForRowText( *pData, n - nRowStt, aText );
-                pData->SetRowText( n - nRowStt, aText );
-            }
-        }
-
-        // und dann fehlen nur noch die Daten
-        const SwTblBoxNumFormat& rDfltNumFmt = *(SwTblBoxNumFormat*)
-                                        GetDfltAttr( RES_BOXATR_FORMAT );
-        pData->SetNumberFormatter( GetFrmFmt()->GetDoc()->GetNumberFormatter());
-
-        int bFirstRow = TRUE;
-        for( n = nRowStt; n < nLines; ++n )
-        {
-            for( USHORT i = nColStt; i < nBoxes; ++i )
-            {
-                const SwTableBox* pBox = (*aLines[ n ])[ i ];
-                ASSERT( pBox->GetSttNd(), "Box without SttIdx" );
-                SwNodeIndex aIdx( *pBox->GetSttNd(), 1 );
-                const SwTxtNode* pTNd = aIdx.GetNode().GetTxtNode();
-                if( !pTNd )
-                    pTNd = aIdx.GetNodes().GoNextSection( &aIdx, TRUE, FALSE )
-                                ->GetTxtNode();
-
-                pData->SetData( short( i - nColStt ),
-                                short( n - nRowStt ),
-                                pTNd->GetTxt().Len()
-                                        ? pBox->GetValue( aCalcPara )
-                                        : DBL_MIN );
-
-                if( i == nColStt || bFirstRow )
-                {
-                    // first box of row set the numberformat
-                    const SwTblBoxNumFormat& rNumFmt = pBox->GetFrmFmt()->
-                                                        GetTblBoxNumFmt();
-                    if( rNumFmt != rDfltNumFmt )
-                    {
-                        pData->SetNumFormatIdCol( i, rNumFmt.GetValue() );
-                        if( bFirstRow )
-                            pData->SetNumFormatIdRow( n, rNumFmt.GetValue() );
-                    }
-                }
-            }
-            bFirstRow = FALSE;
-        }
-    }
-    else if( pData )
-    {
-        if( pData->GetColCount() )
-            SchDLL::MemChartRemoveCols( *pData, 0, pData->GetColCount() );
-        if( pData->GetRowCount() )
-            SchDLL::MemChartRemoveRows( *pData, 0, pData->GetRowCount() );
-    }
-    else
-        bSetChartRange = FALSE;
-
-    if( bSetChartRange )
-    {
-        // convert the selection string to the SchartRanges
-        pData->SomeData1() = sSelection;
-        pData->SomeData2() = sRowColInfo;
-        SchDLL::ConvertChartRangeForWriter( *pData, TRUE );
-    }
-
-    return pData;
+    GetFrmFmt()->GetDoc()->UpdateCharts( GetFrmFmt()->GetName() );
 }
 
 BOOL SwTable::IsTblComplexForChart( const String& rSelection,
@@ -321,7 +161,7 @@ BOOL SwTable::IsTblComplexForChart( const String& rSelection,
 
 
 
-IMPL_LINK( SwDoc, DoUpdateAllCharts, Timer *, pTimer )
+IMPL_LINK( SwDoc, DoUpdateAllCharts, Timer *, /*pTimer*/ )
 {
     ViewShell* pVSh;
     GetEditShell( &pVSh );
@@ -345,7 +185,7 @@ IMPL_LINK( SwDoc, DoUpdateAllCharts, Timer *, pTimer )
     return 0;
 }
 
-void SwDoc::_UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const
+void SwDoc::_UpdateCharts( const SwTable& rTbl, ViewShell& /*rVSh*/ ) const
 {
     String aName( rTbl.GetFrmFmt()->GetName() );
     SwOLENode *pONd;
@@ -359,30 +199,11 @@ void SwDoc::_UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const
             aName.Equals( pONd->GetChartTblName() ) &&
             0 != ( pFrm = pONd->GetFrm() ) )
         {
-            SwOLEObj& rOObj = pONd->GetOLEObj();
-
-            SchMemChart *pData = SchDLL::GetChartData( rOObj.GetOleRef() );
-            FASTBOOL bDelData = 0 == pData;
-
-            ASSERT( pData, "UpdateChart ohne irgendwelche Daten?" );
-            pData = rTbl.UpdateData( pData );
-
-            if( pData->GetColCount() && pData->GetRowCount() )
-            {
-                SchDLL::Update( rOObj.GetOleRef(), pData, rVSh.GetWin() );
-                rOObj.GetObject().UpdateReplacement();
-
-                SwClientIter aIter( *pONd );
-                for( pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) ); pFrm;
-                        pFrm = (SwFrm*)aIter.Next() )
-                {
-                    if( pFrm->Frm().HasArea() )
-                        rVSh.InvalidateWindows( pFrm->Frm() );
-                }
-            }
-
-            if ( bDelData )
-                delete pData;
+            SwChartDataProvider *pPCD = GetChartDataProvider();
+            if (pPCD)
+                pPCD->InvalidateTable( &rTbl );
+            // following this the framework will now take care of repainting
+            // the chart or it's replacement image...
         }
         aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
     }
@@ -403,6 +224,8 @@ void SwDoc::UpdateCharts( const String &rName ) const
 
 void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const String &rNewName )
 {
+//  BOOL bStop = 1;
+
     const String aOldName( rTblFmt.GetName() );
 
     BOOL bNameFound = 0 == rNewName.Len();
@@ -434,39 +257,74 @@ void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const String &rNewName )
         {
             pNd->SetChartTblName( rNewName );
 
-            SwOLEObj& rOObj = pNd->GetOLEObj();
-            SchMemChart *pData = SchDLL::GetChartData( rOObj.GetOleRef() );
-            if( pData )
-            {
-                ViewShell* pVSh;
-                GetEditShell( &pVSh );
+            ViewShell* pVSh;
+            GetEditShell( &pVSh );
 
-                if( aOldName == pData->GetMainTitle() )
-                {
-                    pData->SetMainTitle( rNewName );
-                    if( pVSh )
-                    {
-                        SchDLL::Update( rOObj.GetOleRef(), pData, pVSh->GetWin() );
-                        rOObj.GetObject().UpdateReplacement();
-                    }
-                }
-
-                if( pVSh )
-                {
-                    SwFrm *pFrm;
-                    SwClientIter aIter( *pNd );
-                    for( pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) ); pFrm;
-                            pFrm = (SwFrm*)aIter.Next() )
-                    {
-                        if( pFrm->Frm().HasArea() )
-                            pVSh->InvalidateWindows( pFrm->Frm() );
-                    }
-                }
-            }
+            SwTable* pTable = SwTable::FindTable( &rTblFmt );
+            SwChartDataProvider *pPCD = GetChartDataProvider();
+            if (pPCD)
+                pPCD->InvalidateTable( pTable );
+            // following this the framework will now take care of repainting
+            // the chart or it's replacement image...
         }
         aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
     }
     SetModified();
 }
 
+
+SwChartDataProvider * SwDoc::GetChartDataProvider( bool bCreate ) const
+{
+    // since there must be only one instance of this object per document
+    // we need a mutex here
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    if (bCreate && !aChartDataProviderImplRef.get())
+    {
+        aChartDataProviderImplRef = comphelper::ImplementationReference< SwChartDataProvider
+            , chart2::data::XDataProvider >( new SwChartDataProvider( this ) );
+    }
+    return aChartDataProviderImplRef.get();
+}
+
+
+void SwDoc::CreateChartInternalDataProviders( const SwTable *pTable )
+{
+    if (pTable)
+    {
+        String aName( pTable->GetFrmFmt()->GetName() );
+        SwOLENode *pONd;
+        SwStartNode *pStNd;
+        SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
+        while (0 != (pStNd = aIdx.GetNode().GetStartNode()))
+        {
+            aIdx++;
+            if( 0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
+                aName.Equals( pONd->GetChartTblName() ) /* OLE node is chart? */ &&
+                0 != (pONd->GetFrm()) /* chart frame is not hidden */ )
+            {
+                uno::Reference < embed::XEmbeddedObject > xIP = pONd->GetOLEObj().GetOleRef();
+                if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )
+                {
+                    uno::Reference< chart2::XChartDocument > xChart( xIP->getComponent(), UNO_QUERY );
+                    if (xChart.is())
+                        xChart->createInternalDataProvider( sal_True );
+
+                    // there may be more than one chart for each table thus we need to continue the loop...
+                }
+            }
+            aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
+        }
+    }
+}
+
+
+SwChartLockController_Helper & SwDoc::GetChartControllerHelper()
+{
+    if (!pChartControllerHelper)
+    {
+        pChartControllerHelper = new SwChartLockController_Helper( this );
+    }
+    return *pChartControllerHelper;
+}
 
