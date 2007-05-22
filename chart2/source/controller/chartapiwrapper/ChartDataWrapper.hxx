@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartDataWrapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:00:24 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:17:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,10 @@
 #define CHART_CHARTDATAWRAPPER_HXX
 
 #include "ServiceMacros.hxx"
+#include "MutexContainer.hxx"
 
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/implbase3.hxx>
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
 #endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
@@ -61,26 +62,25 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 
+#include <boost/shared_ptr.hpp>
+
 namespace chart
 {
 namespace wrapper
 {
 
-class ChartDataWrapper : public
-    ::cppu::WeakImplHelper3<
+class Chart2ModelContact;
+
+class ChartDataWrapper : public MutexContainer, public
+    ::cppu::WeakImplHelper4<
     com::sun::star::chart::XChartDataArray,
     com::sun::star::lang::XServiceInfo,
-    com::sun::star::lang::XEventListener >
+    com::sun::star::lang::XEventListener,
+    com::sun::star::lang::XComponent >
 {
 public:
-    ChartDataWrapper( const ::com::sun::star::uno::Reference<
-                      ::com::sun::star::chart2::XChartDocument > & xModel,
-                  const ::com::sun::star::uno::Reference<
-                      ::com::sun::star::uno::XComponentContext > & xContext,
-                  ::osl::Mutex & rMutex );
+    ChartDataWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~ChartDataWrapper();
-
-    ::osl::Mutex & GetMutex() const;
 
     /// XServiceInfo declarations
     APPHELPER_XSERVICEINFO_DECL()
@@ -120,6 +120,16 @@ protected:
     virtual sal_Bool SAL_CALL isNotANumber( double nNumber )
         throw (::com::sun::star::uno::RuntimeException);
 
+    // ____ XComponent ____
+    virtual void SAL_CALL dispose()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference<
+                                            ::com::sun::star::lang::XEventListener >& xListener )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference<
+                                               ::com::sun::star::lang::XEventListener >& aListener )
+        throw (::com::sun::star::uno::RuntimeException);
+
     // ____ XEventListener ____
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
         throw (::com::sun::star::uno::RuntimeException);
@@ -128,18 +138,19 @@ protected:
     void fireChartDataChangeEvent( ::com::sun::star::chart::ChartDataChangeEvent& aEvent );
 
 private:
-    mutable ::osl::Mutex &    m_rMutex;
+    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext >
-                        m_xContext;
+    ::com::sun::star::uno::Sequence<
+            ::com::sun::star::uno::Sequence< double > > m_aData;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aColumnDescriptions;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aRowDescriptions;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XChartDocument >
-                        m_xChartDoc;
+    /// re-reads the data from the model
+    void refreshData();
 
-    ::cppu::OInterfaceContainerHelper
-                        m_aEventListenerContainer;
+    /// applies changed data to model
+    void applyData( bool bSetValues, bool bSetRowDescriptions, bool bSetColumnDescriptions );
 };
 
 } //  namespace wrapper
