@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:59:41 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:10:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1767,6 +1767,10 @@ OUString SvXMLNumFmtExport::GetStyleName( sal_uInt32 nKey )
 
 void SvXMLNumFmtExport::SetUsed( sal_uInt32 nKey )
 {
+    DBG_ASSERT( pFormatter != NULL, "missing formatter" );
+    if( !pFormatter )
+        return;
+
     if (pFormatter->GetEntry(nKey))
         pUsedList->SetUsed( nKey );
     else
