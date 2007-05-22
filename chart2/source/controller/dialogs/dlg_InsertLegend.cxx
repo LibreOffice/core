@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertLegend.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:31:32 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:35:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,11 @@
 #include "precompiled_chart2.hxx"
 #include "dlg_InsertLegend.hxx"
 #include "dlg_InsertLegend.hrc"
-
+#include "res_LegendPosition.hxx"
+#include "ObjectNameProvider.hxx"
 #include "ResId.hxx"
-#include "SchSfxItemIds.hxx"
+#include "chartview/ChartSfxItemIds.hxx"
+#include "NoWarningThisInCTOR.hxx"
 
 // header for enum SvxChartLegendPos
 #ifndef _SVX_CHRTITEM_HXX
@@ -55,101 +57,32 @@ namespace chart
 {
 //.............................................................................
 
-SchLegendDlg::SchLegendDlg(Window* pWindow, const SfxItemSet& rInAttrs) :
-    ModalDialog(pWindow, SchResId(DLG_LEGEND)),
-    aCbxShow(this, SchResId(CBX_SHOW)),
-    aRbtLeft(this, SchResId(RBT_LEFT)),
-    aRbtTop(this, SchResId(RBT_TOP)),
-    aRbtRight(this, SchResId(RBT_RIGHT)),
-    aRbtBottom(this, SchResId(RBT_BOTTOM)),
-    aFlLegend(this, SchResId(FL_LEGEND)),
-    aBtnOK(this, SchResId(BTN_OK)),
-    aBtnCancel(this, SchResId(BTN_CANCEL)),
-    aBtnHelp(this, SchResId(BTN_HELP)),
-    m_rInAttrs(rInAttrs)
+using namespace ::com::sun::star;
+
+SchLegendDlg::SchLegendDlg(Window* pWindow, const uno::Reference< uno::XComponentContext>& xCC )
+    : ModalDialog(pWindow, SchResId(DLG_LEGEND))
+    , m_apLegendPositionResources( new LegendPositionResources(this,xCC) )
+    , aBtnOK(this, SchResId(BTN_OK))
+    , aBtnCancel(this, SchResId(BTN_CANCEL))
+    , aBtnHelp(this, SchResId(BTN_HELP))
 {
     FreeResource();
-
-    aCbxShow.SetClickHdl (LINK(this, SchLegendDlg, CbxClick));
-
-    Reset();
+    this->SetText( ObjectNameProvider::getName(OBJECTTYPE_LEGEND) );
 }
 
 SchLegendDlg::~SchLegendDlg()
 {
 }
 
-void SchLegendDlg::Reset()
+void SchLegendDlg::init( const uno::Reference< frame::XModel >& xChartModel )
 {
-    SvxChartLegendPos ePos = CHLEGEND_NONE;
-
-    const SfxPoolItem* pPoolItem = NULL;
-    if( m_rInAttrs.GetItemState( SCHATTR_LEGEND_POS,
-                               TRUE, &pPoolItem ) != SFX_ITEM_SET )
-        pPoolItem = &(m_rInAttrs.GetPool()->GetDefaultItem( SCHATTR_LEGEND_POS ));
-
-    if( pPoolItem )
-        ePos = ((const SvxChartLegendPosItem*)pPoolItem)->GetValue();
-
-    switch( ePos )
-    {
-        case CHLEGEND_LEFT:
-            aRbtLeft.Check(TRUE);
-            break;
-        case CHLEGEND_TOP:
-            aRbtTop.Check(TRUE);
-            break;
-        case CHLEGEND_NONE:
-        case CHLEGEND_RIGHT:
-            aRbtRight.Check(TRUE);
-            break;
-        case CHLEGEND_BOTTOM:
-            aRbtBottom.Check(TRUE);
-            break;
-        default:
-            break;
-    }
-
-    aCbxShow.Check (ePos != CHLEGEND_NONE);
-    aRbtLeft.Enable (ePos != CHLEGEND_NONE);
-    aRbtTop.Enable (ePos != CHLEGEND_NONE);
-    aRbtRight.Enable (ePos != CHLEGEND_NONE);
-    aRbtBottom.Enable (ePos != CHLEGEND_NONE);
+    m_apLegendPositionResources->writeToResources( xChartModel );
 }
 
-void SchLegendDlg::GetAttr(SfxItemSet& _rOutAttrs)
+bool SchLegendDlg::writeToModel( const uno::Reference< frame::XModel >& xChartModel ) const
 {
-    SvxChartLegendPos ePos;
-
-    if ( ! aCbxShow.IsChecked())
-        ePos = CHLEGEND_NONE;
-    else if (aRbtLeft.IsChecked())
-        ePos = CHLEGEND_LEFT;
-    else if (aRbtTop.IsChecked())
-        ePos = CHLEGEND_TOP;
-    else if (aRbtRight.IsChecked())
-        ePos = CHLEGEND_RIGHT;
-    else if (aRbtBottom.IsChecked())
-        ePos = CHLEGEND_BOTTOM;
-    else
-        ePos = CHLEGEND_NONE;
-
-    _rOutAttrs.Put(SvxChartLegendPosItem(ePos, SCHATTR_LEGEND_POS));
-}
-
-
-
-
-IMPL_LINK (SchLegendDlg, CbxClick, CheckBox *, pBtn)
-{
-    BOOL    bChecked = aCbxShow.IsChecked();
-
-    aRbtLeft.Enable (bChecked);
-    aRbtTop.Enable (bChecked);
-    aRbtRight.Enable (bChecked);
-    aRbtBottom.Enable (bChecked);
-
-    return 0;
+    m_apLegendPositionResources->writeToModel( xChartModel );
+    return true;
 }
 
 //.............................................................................
