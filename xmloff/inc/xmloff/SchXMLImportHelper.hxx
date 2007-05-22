@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLImportHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 13:21:33 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:04:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,17 @@ namespace com { namespace sun { namespace star {
     namespace xml {
         namespace sax {
             class XAttributeList;
-}}}}}
+        }
+    }
+    namespace chart2 {
+        namespace data {
+            class XDataProvider;
+            class XLabeledDataSequence;
+        }
+        class XChartDocument;
+        class XDataSeries;
+    }
+}}}
 
 class SvXMLUnitConverter;
 class SvXMLStylesContext;
@@ -79,10 +89,9 @@ class SchXMLImportHelper : public UniRefBase
 {
 private:
     com::sun::star::uno::Reference< com::sun::star::chart::XChartDocument > mxChartDoc;
-    com::sun::star::uno::Reference< com::sun::star::util::XStringMapping > mxTableAddressMapper;
     SvXMLStylesContext* mpAutoStyles;
 
-    SvXMLTokenMap* mpDocElemTokenMap;
+    SvXMLTokenMap* mpChartDocElemTokenMap;
     SvXMLTokenMap* mpTableElemTokenMap;
     SvXMLTokenMap* mpChartElemTokenMap;
     SvXMLTokenMap* mpPlotAreaElemTokenMap;
@@ -120,19 +129,6 @@ public:
     void SetAutoStylesContext( SvXMLStylesContext* pAutoStyles ) { mpAutoStyles = pAutoStyles; }
     SvXMLStylesContext* GetAutoStylesContext() const { return mpAutoStyles; }
 
-    /** set the string mapper that is used to convert cell addresses in
-        XML format into the application format
-
-        If the mapper is set it is automatically used for conversion
-      */
-    void SetTableAddressMapper( com::sun::star::uno::Reference<
-                                    com::sun::star::util::XStringMapping >& xMapper )
-        { mxTableAddressMapper = xMapper; }
-
-    const com::sun::star::uno::Reference<
-        com::sun::star::util::XStringMapping >& GetTableAddressMapper()
-        { return mxTableAddressMapper; }
-
     const com::sun::star::uno::Reference<
         com::sun::star::chart::XChartDocument >& GetChartDocument()
         { return mxChartDoc; }
@@ -157,6 +153,42 @@ public:
     sal_Int32   GetNumberOfSeries();
     sal_Int32   GetLengthOfSeries();
     void        ResizeChartData( sal_Int32 nSeries, sal_Int32 nDataPoints = -1 );
+
+    // if no data provider exists by, now the model (as XChild) is asked for its
+    // parent which creates the data provider that is finally set at the chart
+    // document
+    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >
+        GetDataProvider( const ::com::sun::star::uno::Reference<
+                             ::com::sun::star::chart2::XChartDocument > & xChartDoc );
+
+    /** @param bPushLastChartType If </FALSE>, in case a new chart type has to
+               be added (because it does not exist yet), it is appended at the
+               end of the chart-type container.  When </TRUE>, a new chart type
+               is added at one position before the last one, i.e. the formerly
+               last chart type is pushed back, so that it remains the last one.
+
+               This is needed when the global chart type is set to type A, but
+               the first series has type B. Then B should appear before A (done
+               by passing true).  Once a series of type A has been read,
+               following new chart types are again be added at the end (by
+               passing false).
+     */
+    static ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XDataSeries > GetNewDataSeries(
+                    const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::chart2::XChartDocument > & xDoc,
+                    sal_Int32 nCoordinateSystemIndex,
+                    const ::rtl::OUString & rChartTypeName,
+                    bool bPushLastChartType = false );
+
+    static void DeleteDataSeries(
+                    const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::chart2::XDataSeries >& xSeries,
+                    const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::chart2::XChartDocument > & xDoc );
+
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::data::XLabeledDataSequence > GetNewLabeledDataSequence();
 };
 
 #endif  // _XMLOFF_SCH_XMLIMPORTHELPER_HXX_
