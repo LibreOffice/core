@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablemgr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:07:44 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:38:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,16 @@
 class SwFrmFmt;
 class SwWrtShell;
 class Window;
-class SchMemChart;
 class SfxItemSet;
+class SwFlyFrmFmt;
+
+namespace com { namespace sun { namespace star {
+    namespace frame {
+        class XModel; }
+    namespace chart2 {
+    namespace data {
+        class XDataProvider; } }
+}}}
 
 const SwTwips lAutoWidth = INVALID_TWIPS;
 const char cParaDelim = 0x0a;
@@ -83,8 +91,12 @@ public:
 
     SwWrtShell* GetShell() const { return pSh; }
 
-    void InsertChart( SchMemChart& rData, const SfxItemSet* pSet = 0 );
+    // @deprecated
     void UpdateChart();
+
+    /// @return the XModel of the newly inserted chart if successfull
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+        InsertChart( ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > &rxDataProvider, sal_Bool bFillWithData, const rtl::OUString &rCellRange, SwFlyFrmFmt** ppFlyFrmFmt = 0 );
 };
 
 inline SwTableFUNC::SwTableFUNC(SwFrmFmt &rFmt) :
