@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menuconfiguration.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:53:09 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:26:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,11 +61,13 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
 #endif
+#include <com/sun/star/frame/XDispatchProvider.hpp>
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
+#include <cppuhelper/weak.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/toolbox.hxx>
 
@@ -95,11 +97,13 @@ class MenuConfiguration
     public:
         struct Attributes
         {
+            Attributes() {}
             Attributes( const ::rtl::OUString& aFrame, const ::rtl::OUString& aImageIdStr ) :
                 aTargetFrame( aFrame ), aImageId( aImageIdStr ) {}
 
             ::rtl::OUString aTargetFrame;
             ::rtl::OUString aImageId;
+            ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XDispatchProvider > xDispatchProvider;
         };
 
         MenuConfiguration(
