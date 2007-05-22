@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:59:19 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:14:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,9 @@
 
 #ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_DATA_XDATARECEIVER_HPP_
+#include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #endif
 
 
@@ -73,8 +76,6 @@
 #include <svtools/rectitem.hxx>
 #include <svtools/whiter.hxx>
 #include <svtools/moduleoptions.hxx>
-#include <sch/schdll.hxx>
-#include <sch/memchrt.hxx>
 #include <sot/exchange.hxx>
 
 #include "tabvwsh.hxx"
@@ -87,6 +88,7 @@
 #include "docsh.hxx"
 #include "chartarr.hxx"
 #include "drawview.hxx"
+#include "ChartRangeSelectionListener.hxx"
 
 using namespace com::sun::star;
 
@@ -186,55 +188,38 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
 
             ((ScClient*)pClient)->SetGrafEdit( NULL );
 
-            //  Link fuer Daten-Highlighting im Chart setzen
+            nErr = pClient->DoVerb( nVerb );
+            bErrorShown = TRUE;
+            // SfxViewShell::DoVerb zeigt seine Fehlermeldungen selber an
+
+            // attach listener to selection changes in chart that affect cell
+            // ranges, so those can be highlighted
+            // note: do that after DoVerb, so that the chart controller exists
             if ( SvtModuleOptions().IsChart() )
             {
                 SvGlobalName aObjClsId ( xObj->getClassID() );
                 if (SotExchange::IsChart( aObjClsId ))
                 {
-                    SchMemChart* pMemChart = SchDLL::GetChartData(xObj);
-                    if (pMemChart)
+                    try
                     {
-                        // set handler for highlighting cell ranges
-                        // for selection inside the chart
-                        pMemChart->SetSelectionHdl( LINK( GetViewData()->GetDocShell(),
-                                                          ScDocShell, ChartSelectionHdl ) );
-
-                        //  #96148# if an unmodified chart in a 5.2-document is edited
-                        //  after swapping out and in again, the ChartRange has to be set
-                        //  (from SomeData strings) again, or SetReadOnly doesn't work
-                        if ( pMemChart->SomeData1().Len() && pMemChart->GetChartRange().maRanges.size() == 0 )
+                        uno::Reference < embed::XComponentSupplier > xSup( xObj, uno::UNO_QUERY_THROW );
+                        uno::Reference< chart2::data::XDataReceiver > xDataReceiver(
+                            xSup->getComponent(), uno::UNO_QUERY_THROW );
+                        uno::Reference< chart2::data::XRangeHighlighter > xRangeHightlighter(
+                            xDataReceiver->getRangeHighlighter());
+                        if( xRangeHightlighter.is())
                         {
-                            ScChartArray aArray( GetViewData()->GetDocument(), *pMemChart );
-                            if ( aArray.IsValid() )
-                                aArray.SetExtraStrings( *pMemChart );
+                            uno::Reference< view::XSelectionChangeListener > xListener(
+                                new ScChartRangeSelectionListener( this ));
+                            xRangeHightlighter->addSelectionChangeListener( xListener );
                         }
-
-                        // #102706# After loaded, a chart doesn't know our
-                        // number formatter, therefor new formats added in the
-                        // meantime aren't available in the chart's number
-                        // formatter dialog. Set the formatter here. The
-                        // original bug was the SourceFormat checkbox not being
-                        // available, but that is a problem of the chart.
-                        pMemChart->SetNumberFormatter( GetViewData()->GetDocument()->GetFormatTable() );
-
-                        // disable DataBrowseBox for editing chart data
-                        pMemChart->SetReadOnly( TRUE );
-
-                        // #102706# The new NumberFormatter is set at the
-                        // SchMemChart, but not at the corresponding
-                        // ChartModel. Therefore, an Update is needed, because
-                        // the MemChart doesn't know its ChartModel.
-
-                        // TODO/LATER: Looks like there is no need to update the replacement, since the object will be activated.
-                        SchDLL::Update( xObj, pMemChart );
+                    }
+                    catch( const uno::Exception & )
+                    {
+                        DBG_ERROR( "Exception caught while querying chart" );
                     }
                 }
             }
-
-            nErr = pClient->DoVerb( nVerb );
-            bErrorShown = TRUE;
-            // SfxViewShell::DoVerb zeigt seine Fehlermeldungen selber an
         }
     }
     if (nErr != ERRCODE_NONE && !bErrorShown)
@@ -284,8 +269,11 @@ void ScTabViewShell::DeactivateOle()
 {
     // deactivate inplace editing if currently active
 
+    ScModule* pScMod = SC_MOD();
+    bool bUnoRefDialog = pScMod->IsRefDialogOpen() && pScMod->GetCurRefDlgId() == WID_SIMPLE_REF;
+
     ScClient* pClient = (ScClient*) GetIPClient();
-    if ( pClient && pClient->IsObjectInPlaceActive() )
+    if ( pClient && pClient->IsObjectInPlaceActive() && !bUnoRefDialog )
         pClient->DeactivateObject();
 }
 
@@ -465,13 +453,7 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
         switch ( nWhich )
         {
             case SID_INSERT_DIAGRAM:
-            case SID_OPENDLG_CHART:
                 if ( bOle || bTabProt || !SvtModuleOptions().IsChart() )
-                    rSet.DisableItem( nWhich );
-                break;
-
-            case SID_OPENDLG_MODCHART:
-                if ( bTabProt || !GetSelectedChartName().Len() )
                     rSet.DisableItem( nWhich );
                 break;
 
