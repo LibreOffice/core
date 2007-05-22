@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newCHxx.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:57:50 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:31:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,9 @@
  *
  ************************************************************************/
 
-#ifndef _CHART2__HXX
+#ifndef CHART2__HXX
 #define
-_CHART2__HXX
+CHART2__HXX
 
 //.............................................................................
 namespace chart
