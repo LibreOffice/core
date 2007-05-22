@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:23:37 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:18:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,7 +278,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         ItemList [ en-US ] =
         {
             < "Charts" ; 0; > ;
-            < "Default Colors" ;        SID_SCH_TP_DEFCOLORS ; > ;
+            < "Default Colors" ;        RID_OPTPAGE_CHART_DEFCOLORS ; > ;
         };
     };
     StringArray SID_FILTER_DLG
