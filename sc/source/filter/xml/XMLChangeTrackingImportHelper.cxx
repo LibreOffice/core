@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:44:05 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:01:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,9 @@
 #endif
 #ifndef SC_CHGVISET_HXX
 #include "chgviset.hxx"
+#endif
+#ifndef SC_RANGEUTL_HXX
+#include "rangeutl.hxx"
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -110,7 +113,7 @@ ScBaseCell* ScMyCellInfo::CreateCell(ScDocument* pDoc)
         {
             ScAddress aPos;
             sal_Int32 nOffset(0);
-            ScXMLConverter::GetAddressFromString(aPos, sFormulaAddress, pDoc, nOffset);
+            ScRangeStringConverter::GetAddressFromString(aPos, sFormulaAddress, pDoc, nOffset);
             pCell = new ScFormulaCell(pDoc, aPos, sFormula, ScAddress::CONV_OOO, nMatrixFlag);
             static_cast<ScFormulaCell*>(pCell)->SetMatColsRows(static_cast<SCCOL>(nMatrixCols), static_cast<SCROW>(nMatrixRows));
         }
