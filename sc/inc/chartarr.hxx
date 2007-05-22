@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chartarr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:25:57 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:38:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,156 +44,87 @@
 #ifndef SC_RANGELST_HXX
 #include "rangelst.hxx"
 #endif
-
+#ifndef SC_CHARTPOS_HXX
+#include "chartpos.hxx"
+#endif
 
 class ScAddress;
 class Table;
-
-class ScChartPositionMap
-{
-    friend class ScChartArray;
-
-            ScAddress**         ppData;
-            ScAddress**         ppColHeader;
-            ScAddress**         ppRowHeader;
-            SCSIZE              nCount;
-            SCSIZE              nColCount;
-            SCSIZE              nRowCount;
-
-                                ScChartPositionMap( SCSIZE nChartCols, SCSIZE nChartRows,
-                                    SCSIZE nColAdd,     // Header-Spalten
-                                    SCSIZE nRowAdd,     // Header-Zeilen
-                                    Table& rCols        // Table mit Col-Tables mit Address*
-                                    );
-                                ~ScChartPositionMap();  //! deletes all ScAddress*
-
-            const ScAddress*    GetPosition( SCSIZE nIndex ) const
-                                    {
-                                        if ( nIndex < nCount )
-                                            return ppData[ nIndex ];
-                                        return NULL;
-                                    }
-
-                                // not implemented
-                                ScChartPositionMap( const ScChartPositionMap& );
-            ScChartPositionMap& operator=( const ScChartPositionMap& );
-
-public:
-
-            SCSIZE              GetCount() const { return nCount; }
-            SCSIZE              GetColCount() const { return nColCount; }
-            SCSIZE              GetRowCount() const { return nRowCount; }
-
-            BOOL                IsValid( SCSIZE nCol, SCSIZE nRow ) const
-                                    { return nCol < nColCount && nRow < nRowCount; }
-                                // Daten spaltenweise
-            SCSIZE              GetIndex( SCSIZE nCol, SCSIZE nRow ) const
-                                    { return nCol * nRowCount + nRow; }
-
-                                //! kann NULL sein und damit "kein Wert"
-            const ScAddress*    GetPosition( SCSIZE nChartCol, SCSIZE nChartRow ) const
-                                    {
-                                        if ( IsValid( nChartCol, nChartRow ) )
-                                            return ppData[ GetIndex( nChartCol, nChartRow ) ];
-                                        return NULL;
-                                    }
-            const ScAddress*    GetColHeaderPosition( SCSIZE nChartCol ) const
-                                    {
-                                        if ( nChartCol < nColCount )
-                                            return ppColHeader[ nChartCol ];
-                                        return NULL;
-                                    }
-            const ScAddress*    GetRowHeaderPosition( SCSIZE nChartRow ) const
-                                    {
-                                        if ( nChartRow < nRowCount )
-                                            return ppRowHeader[ nChartRow ];
-                                        return NULL;
-                                    }
-            ScRangeListRef      GetColRanges( SCSIZE nChartCol ) const;
-            ScRangeListRef      GetRowRanges( SCSIZE nChartRow ) const;
-};
-
-
-enum ScChartGlue {
-    SC_CHARTGLUE_NA,
-    SC_CHARTGLUE_NONE,      // alte Mimik
-    SC_CHARTGLUE_COLS,      // alte Mimik
-    SC_CHARTGLUE_ROWS,
-    SC_CHARTGLUE_BOTH
-};
-
 class ScDocument;
 class ScMultipleReadHeader;
-class SchMemChart;
+
+
+// ScMemChart is a stripped-down SchMemChart from old chart,
+// used only to transport a rectangular data array for the UNO API,
+// contains only column/row header text and data values.
+
+class ScMemChart
+{
+    short           nRowCnt;
+    short           nColCnt;
+    double*         pData;
+    String*         pColText;
+    String*         pRowText;
+
+    ScMemChart(const ScMemChart& rMemChart);      // not implemented
+
+public:
+    ScMemChart(short nCols, short nRows);
+    ~ScMemChart();
+
+    short GetColCount() const { return nColCnt; }
+    short GetRowCount() const { return nRowCnt; }
+    const String& GetColText(short nCol) const { return pColText[nCol]; }
+    const String& GetRowText(short nRow) const { return pRowText[nRow]; }
+    double GetData(short nCol, short nRow) const { return pData[nCol * nRowCnt + nRow]; }
+    void SetData(short nCol, short nRow, const double& rVal) { pData[nCol * nRowCnt + nRow] = rVal; }
+    void SetColText(short nCol, const String& rText) { pColText[nCol] = rText; }
+    void SetRowText(short nRow, const String& rText) { pRowText[nRow] = rText; }
+};
+
 
 class ScChartArray : public DataObject              // nur noch Parameter-Struct
 {
-    ScRangeListRef  aRangeListRef;
     String      aName;
     ScDocument* pDocument;
-    ScChartPositionMap* pPositionMap;
-    ScChartGlue eGlue;
-    SCCOL       nStartCol;
-    SCROW       nStartRow;
-    BOOL        bColHeaders;
-    BOOL        bRowHeaders;
-    BOOL        bDummyUpperLeft;
+    ScChartPositioner aPositioner;
     BOOL        bValid;             // fuer Erzeugung aus SchMemChart
 
 private:
-    void        CheckColRowHeaders();
-    SchMemChart* CreateMemChartSingle();
-    SchMemChart* CreateMemChartMulti();
-
-    void        GlueState();        // zusammengefasste Bereiche
-    void        CreatePositionMap();
-
+    ScMemChart* CreateMemChartSingle();
+    ScMemChart* CreateMemChartMulti();
 public:
     ScChartArray( ScDocument* pDoc, SCTAB nTab,
-                    SCCOL nStartCol, SCROW nStartRow,
-                    SCCOL nEndCol, SCROW nEndRow,
+                    SCCOL nStartColP, SCROW nStartRowP,
+                    SCCOL nEndColP, SCROW nEndRowP,
                     const String& rChartName );
     ScChartArray( ScDocument* pDoc, const ScRangeListRef& rRangeList,
                     const String& rChartName );
     ScChartArray( const ScChartArray& rArr );
     ScChartArray( ScDocument* pDoc, SvStream& rStream, ScMultipleReadHeader& rHdr );
-    ScChartArray( ScDocument* pDoc, const SchMemChart& rData );
 
     virtual ~ScChartArray();
     virtual DataObject* Clone() const;
 
-    const ScRangeListRef&   GetRangeList() const { return aRangeListRef; }
-    void    SetRangeList( const ScRangeListRef& rNew ) { aRangeListRef = rNew; }
-    void    SetRangeList( const ScRange& rNew );
-    void    AddToRangeList( const ScRange& rRange );
-    void    AddToRangeList( const ScRangeListRef& rAdd );
+    const ScRangeListRef&   GetRangeList() const { return aPositioner.GetRangeList(); }
+    void    SetRangeList( const ScRangeListRef& rNew ) { aPositioner.SetRangeList(rNew); }
+    void    SetRangeList( const ScRange& rNew ) { aPositioner.SetRangeList(rNew); }
+    void    AddToRangeList( const ScRange& rRange ) { aPositioner.AddToRangeList(rRange); }
+    void    AddToRangeList( const ScRangeListRef& rAdd ) { aPositioner.AddToRangeList(rAdd); }
+    const   ScChartPositionMap* GetPositionMap() { return aPositioner.GetPositionMap(); }
 
-    void    SetHeaders(BOOL bCol, BOOL bRow) { bColHeaders=bCol; bRowHeaders=bRow; }
-    BOOL    HasColHeaders() const            { return bColHeaders; }
-    BOOL    HasRowHeaders() const            { return bRowHeaders; }
+    void    SetHeaders(BOOL bCol, BOOL bRow) { aPositioner.SetHeaders(bCol, bRow); }
+    BOOL    HasColHeaders() const            { return aPositioner.HasColHeaders(); }
+    BOOL    HasRowHeaders() const            { return aPositioner.HasRowHeaders(); }
     BOOL    IsValid() const                  { return bValid; }
     void    SetName(const String& rNew)      { aName = rNew; }
     const String& GetName() const            { return aName; }
 
-    BOOL    IsAtCursor(const ScAddress& rPos) const;
+    BOOL    IsAtCursor(const ScAddress& rPos) const { return aPositioner.IsAtCursor(rPos); }
 
     BOOL    operator==(const ScChartArray& rCmp) const;
 
-    SchMemChart* CreateMemChart();
-    void        SetExtraStrings( SchMemChart& rMem );
-
-    void                    InvalidateGlue()
-                                {
-                                    eGlue = SC_CHARTGLUE_NA;
-                                    if ( pPositionMap )
-                                    {
-                                        delete pPositionMap;
-                                        pPositionMap = NULL;
-                                    }
-                                }
-    const ScChartPositionMap*   GetPositionMap();
-
-    static void CopySettings( SchMemChart& rDest, const SchMemChart& rSource );
+    ScMemChart* CreateMemChart();
 };
 
 class ScChartCollection : public Collection
