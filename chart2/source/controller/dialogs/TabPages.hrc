@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TabPages.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:05:42 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:31:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,31 +35,28 @@
 #ifndef CHART_TABPAGES_HRC
 #define CHART_TABPAGES_HRC
 
+#include "ResourceIds.hrc"
+
 //see attrib.hrc in old chart
 
-#define TP_LEGEND_POS 900
+//#define TP_LEGEND_POS 900
 #define GRP_LEGEND 1
-#define RBT_NONE 1
-#define RBT_LEFT 2
-#define RBT_TOP 3
-#define RBT_RIGHT 4
-#define RBT_BOTTOM 5
 
-#define TP_DATA_DESCR 901
+//#define TP_DATA_DESCR 901
 #define CB_VALUE 1
 #define CB_TEXT 2
 #define CB_SYMBOL 3
 #define RB_NUMBER 1
 #define RB_PERCENT 2
 
-#define TP_ALIGNMENT 902
+//#define TP_ALIGNMENT 902
 ////#define FL_ORDER 2
 ////#define RBT_SIDEBYSIDE 1
 ////#define RBT_UPDOWN 2
 ////#define RBT_DOWNUP 3
 ////#define RBT_AUTOORDER 4
 
-#define TP_STAT                   905
+//#define TP_STAT                   905
 #define FL_ERROR                    1
 #define RBT_NONE                    1
 #define RBT_VARIANT                 2
@@ -94,7 +91,7 @@
 
 /*
 //Symbol-Tabpage (zum Teil sehr Aehnlich der SVX_AREA_TABPAGE) (obsolete)
-#define TP_SYMBOL                 906
+//#define TP_SYMBOL                 906
 #define RBT_COLOR                   1
 #define RBT_GRADIENT                2
 #define RBT_HATCHING                3
@@ -108,11 +105,8 @@
 #define GRP_FILL                    1
 #define CTL_BITMAP_PREVIEW          6
 */
-#define TP_LAYOUT                 907
-#define FT_LY_SHAPE                 1
-#define LB_LY_SHAPE                 2
 
-#define TP_OPTIONS                 908
+//#define TP_OPTIONS                 908
 #define GRP_OPT_AXIS                1
 #define RBT_OPT_AXIS_1              2
 #define RBT_OPT_AXIS_2              3
@@ -126,7 +120,7 @@
 //------------
 //from old chart tplabel.hrc
 
-#define TP_AXIS_LABEL                   920
+//#define TP_AXIS_LABEL                 920
 
 #define CB_AXIS_LABEL_SCHOW_DESCR       1
 
@@ -152,7 +146,7 @@
 
 #define FL_SEPARATOR                    18
 
-#define TP_SCALE_Y        903
+//#define TP_SCALE_Y          903
 
 #define FL_SCALE_Y          1
 #define FL_TICKS            2
@@ -178,7 +172,6 @@
 #define EDT_STEP_MAIN       1
 #define EDT_MAX             2
 #define EDT_MIN             3
-// #define EDT_STEP_HELP        4
 #define EDT_ORIGIN          5
 
 #define MT_STEPHELP         10
