@@ -5,11 +5,15 @@
         <node oor:name="Commands">
             <node oor:name=".uno:DiagramData" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
-                    <value xml:lang="en-US">~Chart Data</value>
+                    <value xml:lang="en-US">Chart ~Data Table...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DataRanges" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Data ~Ranges...</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertTitle" oor:op="replace">
@@ -62,26 +66,22 @@
             </node>
             <node oor:name=".uno:DiagramFloor" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
-                    <value xml:lang="en-US">~Chart Floor...</value>
+                    <value xml:lang="en-US">Chart ~Floor...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramArea" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
-                    <value xml:lang="en-US">C~hart Area...</value>
+                    <value xml:lang="en-US">Chart ~Area...</value>
                 </prop>
             </node>
             <node oor:name=".uno:View3D" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
-                    <value xml:lang="en-US">3~D View...</value>
+                    <value xml:lang="en-US">~3D View...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramType" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
-                    <value xml:lang="en-US">Cha~rt Type...</value>
+                    <value xml:lang="en-US">Chart T~ype...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -173,8 +173,7 @@
             </node>
             <node oor:name=".uno:NewArrangement" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
-                    <value xml:lang="en-US">Reorganize Chart</value>
+                    <value xml:lang="en-US">Automatic Layout</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -218,7 +217,6 @@
             </node>
             <node oor:name=".uno:InsertStatistics" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
                     <value xml:lang="en-US">~Statistics...</value>
                 </prop>
             </node>
@@ -230,26 +228,22 @@
             </node>
             <node oor:name=".uno:SubTitle" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
-                    <value xml:lang="en-US">S~ubtitle...</value>
+                    <value xml:lang="en-US">~Subtitle...</value>
                 </prop>
             </node>
             <node oor:name=".uno:XTitle" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
-                    <value xml:lang="en-US">Title (~X Axis)...</value>
+                    <value xml:lang="en-US">~X Axis Title...</value>
                 </prop>
             </node>
             <node oor:name=".uno:YTitle" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
-                    <value xml:lang="en-US">Title (~Y Axis)...</value>
+                    <value xml:lang="en-US">~Y Axis Title...</value>
                 </prop>
             </node>
             <node oor:name=".uno:ZTitle" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
-                    <value xml:lang="en-US">Title (~Z Axis)...</value>
+                    <value xml:lang="en-US">~Z Axis Title...</value>
                 </prop>
             </node>
             <node oor:name=".uno:AllTitles" oor:op="replace">
@@ -260,31 +254,26 @@
             </node>
             <node oor:name=".uno:DiagramGridXMain" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
-                    <value xml:lang="en-US">~Y Axis Main Grid...</value>
+                    <value xml:lang="en-US">~Y Axis Major Grid...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramGridYMain" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
-                    <value xml:lang="en-US">~X Axis Main Grid...</value>
+                    <value xml:lang="en-US">~X Axis Major Grid...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramGridZMain" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
-                    <value xml:lang="en-US">~Z Axis Main Grid...</value>
+                    <value xml:lang="en-US">~Z Axis Major Grid...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramGridAll" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
-                    <value xml:lang="en-US">~All Axis Grids...</value>
+                    <value xml:lang="en-US">~All Grids...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramObjects" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
                     <value xml:lang="en-US">~Object Properties...</value>
                 </prop>
             </node>
@@ -371,7 +360,6 @@
             </node>
             <node oor:name=".uno:DiagramAxisB" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
                     <value xml:lang="en-US">S~econdary Y Axis...</value>
                 </prop>
             </node>
@@ -379,8 +367,7 @@
         <node oor:name="Popups">
             <node oor:name=".uno:ArrangeRow" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
-                    <value xml:lang="en-US">A~rrangement</value>
+                    <value xml:lang="en-US">Arrange~ment</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramAxisMenu" oor:op="replace">
