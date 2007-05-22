@@ -1,0 +1,115 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: LegendSymbolStyle.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 14:55:05 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart_LegendSymbolStyle_idl
+#define com_sun_star_chart_LegendSymbolStyle_idl
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/chart2/XTitle.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+/**
+ */
+enum LegendSymbolStyle
+{
+    /** A square box with border.
+     */
+    BOX,
+
+    /** A rectangle that is wider than high with border.
+     */
+    BAR,
+
+    /** A square box with border, that may change its aspect ratio if
+        the layout of the legend requires this.
+     */
+    RECTANGLE,
+
+    /** A filled rectangle with no border that uses all the space
+        available for the legend entry's symbol, leaving no padding
+        space.  This is especially useful for legends representing a
+        color-scale.
+     */
+    STRETCHED_RECTANGLE,
+
+    /** A line extending from the left edge to the right edge
+     */
+    HORIZONTAL_LINE,
+
+    /** A line extending from the top edge to the bottom edge
+     */
+    VERTICAL_LINE,
+
+    /** A line spanning the diagonal of the box you would get with
+        <member>BOX</member>.
+     */
+    DIAGONAL_LINE,
+
+    /** A line like with <member>LINE</member>, but with a small
+        bordered square box in the middle.
+     */
+    LINE_WITH_BOX,
+
+    /** A line like with <member>LINE</member>, but with the symbol
+        that is returned by <member>XLegendEntry::getSymbol</member>
+        (see also <member>USER_DEFINED</member>).
+     */
+    LINE_WITH_SYMBOL,
+
+    /** A bordered circle which has the same bounding-box as the
+        <member>BOX</member>.
+     */
+    CIRCLE,
+
+    /** Use the symbol that is returned by
+        <member>XLegendEntry::getSymbol</member>.
+    */
+    USER_DEFINED
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif
