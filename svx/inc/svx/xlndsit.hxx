@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlndsit.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:57:24 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:16:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ class SVX_DLLPUBLIC XLineDashItem : public NameOrIndex
 
 public:
                             TYPEINFO();
-                            XLineDashItem() {}
+                            XLineDashItem() : NameOrIndex(XATTR_LINEDASH, -1) {}
                             XLineDashItem(long nIndex, const XDash& rTheDash);
                             XLineDashItem(const String& rName, const XDash& rTheDash);
                             XLineDashItem(SfxItemPool* pPool, const XDash& rTheDash);
