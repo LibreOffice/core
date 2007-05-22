@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:44:45 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:15:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 // Resource-Id's ------------------------------------------------------------
 
 // Bitte FIRSTFREE pflegen!!! (gilt nicht f"ur Strings)
-#define RID_SVX_FIRSTFREE                   298
+#define RID_SVX_FIRSTFREE                   300
 
 // ResId fuer die Hintergrund-TabPage
 #define RID_SVXPAGE_BACKGROUND              (RID_SVX_START +   1)
@@ -149,6 +149,8 @@
 #define RID_SVXIMAGE_LIGHT_OFF              (RID_SVX_START + 211)
 #define RID_SVXIMAGE_LIGHT_ON_H             (RID_SVX_START + 212)
 #define RID_SVXIMAGE_LIGHT_OFF_H            (RID_SVX_START + 213)
+#define RID_SVXIMAGE_COLORDLG               (RID_SVX_START + 214)
+#define RID_SVXIMAGE_COLORDLG_H             (RID_SVX_START + 215)
 
 #define RID_SVXFLOAT3D_FAVORITE             (RID_SVX_START + 73)
 #define RID_SVXFLOAT3D_FIX_X                (RID_SVX_START + 74)
@@ -427,9 +429,9 @@
 #define RID_SVXPAGE_EVENTS                  (RID_SVX_START + 295)
 #define RID_SVXPAGE_MACROASSIGN             (RID_SVX_START + 296)
 #define RID_SVXDLG_ASSIGNCOMPONENT          (RID_SVX_START + 297)
-
-#define RID_SVXPAGE_ONLINEUPDATE            (RID_SVX_START + 297)
-// !!! please use RID_SVX_FIRSTFREE !!! see line 72
+#define RID_SVXPAGE_ONLINEUPDATE            (RID_SVX_START + 298)
+#define RID_OPTPAGE_CHART_DEFCOLORS         (RID_SVX_START + 299)
+// !!! please update RID_SVX_FIRSTFREE !!! see line 46
 
 // Strings ------------------------------------------------------------------
 
@@ -1363,8 +1365,11 @@
 #define RID_SVXSTR_OUTLINENUM_DESCRIPTION_6                 (RID_SVXSTR_OUTLINENUM_DESCRIPTIONS + 6)
 #define RID_SVXSTR_OUTLINENUM_DESCRIPTION_7                 (RID_SVXSTR_OUTLINENUM_DESCRIPTIONS + 7)
 
+#define RID_SVXSTR_DIAGRAM_ROW                              (RID_SVX_START + 1162)
+
 // pb: next free string resource id
-#define RID_SVXSTR_NEXTFREE                 (RID_SVX_START + 1162)
+#define RID_SVXSTR_NEXTFREE                 (RID_SVX_START + 1163)
+
 
 // ----------------------------------------------------------------------------
 // if we have _a_lot_ time, we should group the resource ids by type, instead
