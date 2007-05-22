@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlpage.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:37:34 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:59:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,14 @@ const sal_Int32 EXC_MARGIN_DEFAULT_FLR      = 1900;     /// Left/right footer de
 
 const sal_uInt16 EXC_ID_PRINTHEADERS        = 0x002A;
 const sal_uInt16 EXC_ID_PRINTGRIDLINES      = 0x002B;
+
+// (0x0033) PRINTSIZE ---------------------------------------------------------
+
+const sal_uInt16 EXC_ID_PRINTSIZE           = 0x0033;
+
+const sal_uInt16 EXC_PRINTSIZE_SCREEN       = 1;
+const sal_uInt16 EXC_PRINTSIZE_PAGE         = 2;
+const sal_uInt16 EXC_PRINTSIZE_FULL         = 3;
 
 // (0x0082, 0x0083, 0x0084) GRIDSET, HCENTER, VCENTER -------------------------
 
