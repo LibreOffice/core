@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:19:16 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:46:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 #include <cppuhelper/implbase2.hxx>
 #endif
 #include "ServiceMacros.hxx"
+#include "DataInterpreter.hxx"
+#include "StackMode.hxx"
 
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -46,17 +48,8 @@
 #ifndef _COM_SUN_STAR_CHART2_XCHARTTYPETEMPLATE_HPP_
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART2_XAXISCONTAINER_HPP_
-#include <com/sun/star/chart2/XAxisContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_STACKMODE_HPP_
-#include <com/sun/star/chart2/StackMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XGRIDCONTAINER_HPP_
-#include <com/sun/star/chart2/XGridContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XBOUNDEDCOORDINATESYSTEMCONTAINER_HPP_
-#include <com/sun/star/chart2/XBoundedCoordinateSystemContainer.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCOORDINATESYSTEMCONTAINER_HPP_
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CHART2_XLEGEND_HPP_
 #include <com/sun/star/chart2/XLegend.hpp>
@@ -67,10 +60,50 @@
 #ifndef _COM_SUN_STAR_CHART2_XCHARTTYPE_HPP_
 #include <com/sun/star/chart2/XChartType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CHART2_XDATASERIES_HPP_
+#include <com/sun/star/chart2/XDataSeries.hpp>
+#endif
+
+#include <utility>
 
 namespace chart
 {
 
+/** For creating diagrams and modifying existing diagrams.  A base class that
+    implements XChartTypeTemplate and offers some tooling for classes that
+    derive from this class.
+
+    createDiagramByDataSource
+    -------------------------
+
+    This does the following steps using some virtual helper-methods, that may be
+    overloaded by derived classes:
+
+    * creates an XDiagram via service-factory.
+
+    * convert the given XDataSource to a sequence of XDataSeries using the
+      method createDataSeries().  In this class the DataInterpreter helper class
+      is used to create a standard interpretation (just y-values).
+
+    * call applyDefaultStyle() for all XDataSeries in order to apply default
+      styles.  In this class the series get the system-wide default colors as
+      "Color" property.
+
+    * call applyStyle() for applying chart-type specific styles to all series.
+      The default implementation is empty.
+
+    * call createCoordinateSystems() and apply them to the diagram.  As
+      default one cartesian system with Scales using a linear Scaling is
+      created.
+
+    * createChartTypes() is called in order to define the structure of the
+      diagram.  For details see comment of this function.  As default this
+      method creates a tree where all series appear in one branch with the chart
+      type determined by getChartTypeForNewSeries().  The stacking is determined
+      via the method getStackMode().
+
+    * create an XLegend via the global service factory, set it at the diagram.
+ */
 class ChartTypeTemplate : public ::cppu::WeakImplHelper2<
         ::com::sun::star::chart2::XChartTypeTemplate,
         ::com::sun::star::lang::XServiceName >
@@ -88,14 +121,36 @@ public:
 
 protected:
     // ____ XChartTypeTemplate ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram > SAL_CALL
-        createDiagram( const ::com::sun::star::uno::Sequence<
-                           ::com::sun::star::uno::Reference<
-                               ::com::sun::star::chart2::XDataSeries > >& aSeriesSeq )
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram > SAL_CALL createDiagramByDataSource(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >& xDataSource,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL matchesTemplate(
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableCreationParameterNames()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL changeDiagram(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL changeDiagramData(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >& xDataSource,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL matchesTemplate(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram >& xDiagram )
+        ::com::sun::star::chart2::XDiagram >& xDiagram,
+        ::sal_Bool bAdaptProperties )
+        throw (::com::sun::star::uno::RuntimeException);
+    // still abstract: getChartTypeForNewSeries()
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataInterpreter > SAL_CALL getDataInterpreter()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL applyStyle(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& xSeries,
+        ::sal_Int32 nChartTypeIndex,
+        ::sal_Int32 nSeriesIndex,
+        ::sal_Int32 nSeriesCount )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL resetStyles(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XServiceName ____
@@ -108,64 +163,53 @@ protected:
     /// returns 2 by default.  Supported are 2 and 3
     virtual sal_Int32 getDimension() const;
 
-    /** returns StackMode_NONE by default.  For a column/bar chart you would
-        want to return StackMode_STACKED here.
-     */
-    virtual ::com::sun::star::chart2::StackMode getXStackMode() const;
+    /** returns StackMode_NONE by default.  This is a global flag used for all
+        series of a specific chart type.  If percent stacking is supported, the
+        percent stacking mode is retrieved from the first chart type (index 0)
 
-    /** returns StackMode_NONE by default.  This is a global flag used for all series
-        if createDataSeriesTree() is not overloaded
+        @param nChartTypeIndex denotes the index of the charttype in means
+            defined by the template creation order, i.e., 0 means the first
+            chart type that a template creates.
      */
-    virtual ::com::sun::star::chart2::StackMode getYStackMode() const;
+    virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const;
 
-    /** returns StackMode_NONE by default.  For a column/bar chart you would
-        want to return StackMode_STACKED here.
-     */
-    virtual ::com::sun::star::chart2::StackMode getZStackMode() const;
-
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XChartType > getDefaultChartType()
-        throw (::com::sun::star::uno::RuntimeException);
+    /// denotes if the chart needs categories at the first scale
+    virtual bool supportsCategories() const;
 
     // Methods for creating the diagram piecewise
     // ------------------------------------------
 
+    /** Allows derived classes to manipulate the diagramas whole, like changing
+        the wall color. The default implementation is empty. It is called by
+        FillDiagram which is called by createDiagramByDataSource and
+        changeDiagram
+     */
+    virtual void adaptDiagram(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XDiagram > & xDiagram );
+
     /** Creates a 2d or 3d cartesian coordinate system with mathematically
-        oriented, linear scales with auto-min/max.
+        oriented, linear scales with auto-min/max.  If the given
+        CoordinateSystemContainer is not empty, those coordinate system should
+        be reused.
 
-        <p>The dimension depends on the property "ChartStyle".</p>
-
-        @param xCoordSysCnt
-            If this container is valid, the coordinate system is added to it.
+        <p>The dimension depends on the value returned by getDimension().</p>
      */
-   virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XBoundedCoordinateSystem >
-       createCoordinateSystem(
-           const ::com::sun::star::uno::Reference<
-               ::com::sun::star::chart2::XBoundedCoordinateSystemContainer > & xCoordSysCnt );
+    virtual void createCoordinateSystems(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XCoordinateSystemContainer > & xOutCooSysCnt );
 
-    /** create axes and add them to the given container.
+    /** Sets categories at the scales of dimension 0 and the percent stacking at
+        the scales of dimension 1 of all given coordinate systems.
 
-        <p>As default, this method creates as many axes as there are dimensions
-        in the given coordinate system.  Each of the axis represents one of the
-        dimensions of the coordinate system.</p>
+        <p>Called by FillDiagram.</p>
      */
-    virtual void createAndAddAxes(
+    virtual void adaptScales(
+        const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XCoordinateSystem > > & aCooSysSeq,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XAxisContainer > & rOutAxisCnt );
-
-    /** create grids and add them to the given container.
-
-        <p>As default, this method creates a major grid for the second
-        coordinate of the coordinate system.</p>
-     */
-    virtual void createAndAddGrids(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XGridContainer > & rOutGridCnt );
+            ::com::sun::star::chart2::data::XLabeledDataSequence > & xCategories );
 
     /** create a data series tree, that fits the requirements of the chart type.
 
@@ -174,7 +218,7 @@ protected:
         <pre>
           root
            |
-           +-- chart type
+           +-- chart type (determined by getChartTypeForNewSeries())
                    |
                    +-- category (DiscreteStackableScaleGroup using scale 0)
                           |
@@ -192,72 +236,78 @@ protected:
         <p>If there are less than two scales available the returned tree is
         empty.</p>
      */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeriesTreeParent > createDataSeriesTree(
+    virtual void createChartTypes(
+            const ::com::sun::star::uno::Sequence<
+                ::com::sun::star::uno::Sequence<
+                    ::com::sun::star::uno::Reference<
+                        ::com::sun::star::chart2::XDataSeries > > > & aSeriesSeq,
             const ::com::sun::star::uno::Sequence<
                 ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XDataSeries > >& aSeriesSeq,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys
+                    ::com::sun::star::chart2::XCoordinateSystem > > & rCoordSys,
+            const ::com::sun::star::uno::Sequence<
+                      ::com::sun::star::uno::Reference<
+                          ::com::sun::star::chart2::XChartType > > & aOldChartTypesSeq
             );
 
-    // helper methods
-    // --------------
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeriesTreeParent > createRootNode();
+    /** create axes and add them to the given container. If there are already
+        compatible axes in the container these should be maintained.
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeriesTreeNode >
-        createChartTypeGroup(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartType > & xChartType );
-
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeriesTreeNode >
-        createScaleGroup( bool bIsDiscrete,
-                          bool bIsStackable,
-                          ::com::sun::star::uno::Reference<
-                              ::com::sun::star::chart2::XBoundedCoordinateSystem > xCoordSys,
-                          sal_Int32 nRepresentedDimension,
-                          ::com::sun::star::chart2::StackMode eStackMode =
-                              ::com::sun::star::chart2::StackMode_NONE );
-
-    void addDataSeriesToGroup(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeriesTreeNode > & rParent,
+        <p>As default, this method creates as many axes as there are dimensions
+        in the given first coordinate system.  Each of the axis
+        represents one of the dimensions of the coordinate systems. If there are series
+        requesting asecondary axes a secondary y axes is added</p>
+     */
+    virtual void createAxes(
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries > > & rDataSeries );
+                ::com::sun::star::chart2::XCoordinateSystem > > & rCoordSys );
 
-    /** Finds the first ContinuousScaleGroup in the tree and sets the stacking
-        mode there if it is a stackable group
+    /** Give the number of requested axis per dimension here.  Default is one
+        axis for each dimension
      */
-    void setStackModeAtTree(
-        const  ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeriesTreeParent > & rTree,
-        ::com::sun::star::chart2::StackMode eMode );
+    virtual sal_Int32 getAxisCountByDimension( sal_Int32 nDimension );
 
-    void attachNodeToNode(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeriesTreeNode > & rParent,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeriesTreeNode > & rChild );
+    /** adapt properties of exsisting axes and remove superfluous axes
+    */
+    virtual void adaptAxes(
+        const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XCoordinateSystem > > & rCoordSys );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
         GetComponentContext() const;
 
-private:
+    static void copyPropertiesFromOldToNewCoordianteSystem(
+                    const ::com::sun::star::uno::Sequence<
+                      ::com::sun::star::uno::Reference<
+                          ::com::sun::star::chart2::XChartType > > & rOldChartTypesSeq,
+                    const ::com::sun::star::uno::Reference<
+                          ::com::sun::star::chart2::XChartType > & xNewChartType );
+
+protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
         m_xContext;
+    mutable ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XDataInterpreter > m_xDataInterpreter;
+
+private:
     const ::rtl::OUString m_aServiceName;
 
+private:
     /** modifies the given diagram
      */
     void FillDiagram( const ::com::sun::star::uno::Reference<
                           ::com::sun::star::chart2::XDiagram > & xDiagram,
                       const ::com::sun::star::uno::Sequence<
-                          ::com::sun::star::uno::Reference<
-                              ::com::sun::star::chart2::XDataSeries > >& aSeriesSeq );
+                          ::com::sun::star::uno::Sequence<
+                              ::com::sun::star::uno::Reference<
+                                  ::com::sun::star::chart2::XDataSeries > > > & aSeriesSeq,
+                      ::com::sun::star::uno::Reference<
+                          ::com::sun::star::chart2::data::XLabeledDataSequence > xCategories,
+                      const ::com::sun::star::uno::Sequence<
+                              ::com::sun::star::uno::Reference<
+                                  ::com::sun::star::chart2::XChartType > > & aOldChartTypesSeq,
+                      bool bCreate );
 };
 
 } //  namespace chart
