@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VPolarCoordinateSystem.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:40:50 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:13:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,11 +49,22 @@ class VPolarCoordinateSystem : public VCoordinateSystem
 {
 public:
     VPolarCoordinateSystem( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XBoundedCoordinateSystem >& xCooSys );
+        ::com::sun::star::chart2::XCoordinateSystem >& xCooSys );
     virtual ~VPolarCoordinateSystem();
 
+    //better performance for big data
+    virtual ::com::sun::star::uno::Sequence< sal_Int32 > getCoordinateSystemResolution( const ::com::sun::star::awt::Size& rPageSize
+                                    , const ::com::sun::star::awt::Size& rPageResolution );
+
+    virtual void createVAxisList(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xNumberFormatsSupplier
+            , const ::com::sun::star::awt::Size& rFontReferenceSize
+            , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels );
+
+    virtual void initVAxisInList();
+    virtual void updateScalesAndIncrementsOnAxes();
+
     virtual void createGridShapes();
-    virtual void createAxesShapes( const ::com::sun::star::awt::Size& rReferenceSize, NumberFormatterWrapper* pNumberFormatterWrapper );
 
 private:
     VPolarCoordinateSystem();
