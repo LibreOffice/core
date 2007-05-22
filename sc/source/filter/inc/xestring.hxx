@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xestring.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:24:20 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:56:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,7 +190,9 @@ public:
     /** Sets new formatting runs for the current text. */
     void                SetFormats( const XclFormatRunVec& rFormats );
     /** Appends a formatting run. nChar must be greater than last contained character index. */
-    void                AppendFormat( sal_uInt16 nChar, sal_uInt16 nXclFont );
+    void                AppendFormat( sal_uInt16 nChar, sal_uInt16 nFontIdx, bool bDropDuplicate = true );
+    /** Appends a trailing formatting run with the passed font index. */
+    void                AppendTrailingFormat( sal_uInt16 nFontIdx );
     /** Removes formatting runs at the end, if the string contains too much. */
     void                LimitFormatCount( sal_uInt16 nMaxCount );
     /** Removes and returns the font index for the first char from the formatting runs, otherwise EXC_FONT_NOTFOUND. */
@@ -241,7 +243,7 @@ public:
     /** Writes the raw character buffer. */
     void                WriteBuffer( XclExpStream& rStrm ) const;
     /** Writes the raw formatting run buffer. */
-    void                WriteFormats( XclExpStream& rStrm ) const;
+    void                WriteFormats( XclExpStream& rStrm, bool bWriteSize = false ) const;
     /** Writes the complete Unicode string. */
     void                Write( XclExpStream& rStrm ) const;
 
@@ -318,6 +320,7 @@ private:
     bool                mbIsUnicode;    /// true, if at least one character is >0xFF.
     bool                mb8BitLen;      /// true = write 8-bit string length; false = 16-bit.
     bool                mbSmartFlags;   /// true = omit flags on empty string; false = always write flags.
+    bool                mbSkipFormats;  /// true = skip formats on export; false = write complete formatted string.
     bool                mbWrapped;      /// true = text contains several paragraphs.
 };
 
