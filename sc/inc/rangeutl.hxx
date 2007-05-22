@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangeutl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 11:57:48 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:39:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,17 @@
 #include "scdllapi.h"
 #endif
 
+#ifndef _COM_SUN_STAR_TABLE_CELLADDRESS_HPP_
+#include <com/sun/star/table/CellAddress.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TABLE_CELLRANGEADDRESS_HPP_
+#include <com/sun/star/table/CellRangeAddress.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+
 //------------------------------------------------------------------------
 
 class SvStream;
@@ -56,6 +67,7 @@ class ScArea;
 class ScDocument;
 class ScRange;
 class ScRangeName;
+class ScRangeList;
 class ScDBCollection;
 
 enum RutlNameScope { RUTL_NONE=0, RUTL_NAMES, RUTL_DBASE };
@@ -112,6 +124,152 @@ public:
                                     ScRange&        rRange,
                                   RutlNameScope eScope=RUTL_NAMES,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
+};
+
+//------------------------------------------------------------------------
+
+class ScRangeStringConverter
+{
+public:
+
+// helper methods
+    static void         AssignString(
+                            ::rtl::OUString& rString,
+                            const ::rtl::OUString& rNewStr,
+                            sal_Bool bAppendStr,
+                            sal_Unicode cSeperator = ' ');
+
+    static void         AppendString(
+                            ::rtl::OUString& rString,
+                            const ::rtl::OUString& rNewStr,
+                            sal_Unicode cSeperator = ' ');
+
+    static sal_Int32    IndexOf(
+                            const ::rtl::OUString& rString,
+                            sal_Unicode cSearchChar,
+                            sal_Int32 nOffset,
+                            sal_Unicode cQuote = '\'');
+
+    static sal_Int32    IndexOfDifferent(
+                            const ::rtl::OUString& rString,
+                            sal_Unicode cSearchChar,
+                            sal_Int32 nOffset );
+
+    static sal_Int32    GetTokenCount(
+                            const ::rtl::OUString& rString,
+                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cQuote = '\'');
+
+    static void         GetTokenByOffset(
+                            ::rtl::OUString& rToken,
+                            const ::rtl::OUString& rString,
+                            sal_Int32& nOffset,
+                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cQuote = '\'');
+
+// String to Range core
+    static sal_Bool     GetAddressFromString(
+                            ScAddress& rAddress,
+                            const ::rtl::OUString& rAddressStr,
+                            const ScDocument* pDocument,
+                            sal_Int32& nOffset,
+                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cQuote = '\'');
+    static sal_Bool     GetRangeFromString(
+                            ScRange& rRange,
+                            const ::rtl::OUString& rRangeStr,
+                            const ScDocument* pDocument,
+                            sal_Int32& nOffset,
+                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cQuote = '\'');
+    static sal_Bool     GetRangeListFromString(
+                            ScRangeList& rRangeList,
+                            const ::rtl::OUString& rRangeListStr,
+                            const ScDocument* pDocument,
+                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cQuote = '\'');
+
+    static sal_Bool     GetAreaFromString(
+                            ScArea& rArea,
+                            const ::rtl::OUString& rRangeStr,
+                            const ScDocument* pDocument,
+                            sal_Int32& nOffset,
+                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cQuote = '\'');
+
+// String to Range API
+    static sal_Bool     GetAddressFromString(
+                            ::com::sun::star::table::CellAddress& rAddress,
+                            const ::rtl::OUString& rAddressStr,
+                            const ScDocument* pDocument,
+                            sal_Int32& nOffset,
+                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cQuote = '\'');
+    static sal_Bool     GetRangeFromString(
+                            ::com::sun::star::table::CellRangeAddress& rRange,
+                            const ::rtl::OUString& rRangeStr,
+                            const ScDocument* pDocument,
+                            sal_Int32& nOffset,
+                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cQuote = '\'');
+    static sal_Bool     GetRangeListFromString(
+                            ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress >& rRangeSeq,
+                            const ::rtl::OUString& rRangeListStr,
+                            const ScDocument* pDocument,
+                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cQuote = '\'');
+
+// Range to String core
+    static void         GetStringFromAddress(
+                            ::rtl::OUString& rString,
+                            const ScAddress& rAddress,
+                            const ScDocument* pDocument,
+                            sal_Unicode cSeperator = ' ',
+                            sal_Bool bAppendStr = sal_False,
+                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
+    static void         GetStringFromRange(
+                            ::rtl::OUString& rString,
+                            const ScRange& rRange,
+                            const ScDocument* pDocument,
+                            sal_Unicode cSeperator = ' ',
+                            sal_Bool bAppendStr = sal_False,
+                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
+    static void         GetStringFromRangeList(
+                            ::rtl::OUString& rString,
+                            const ScRangeList* pRangeList,
+                            const ScDocument* pDocument,
+                            sal_Unicode cSeperator = ' ',
+                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D));
+
+    static void         GetStringFromArea(
+                            ::rtl::OUString& rString,
+                            const ScArea& rArea,
+                            const ScDocument* pDocument,
+                            sal_Unicode cSeperator = ' ',
+                            sal_Bool bAppendStr = sal_False,
+                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
+
+// Range to String API
+    static void         GetStringFromAddress(
+                            ::rtl::OUString& rString,
+                            const ::com::sun::star::table::CellAddress& rAddress,
+                            const ScDocument* pDocument,
+                            sal_Unicode cSeperator = ' ',
+                            sal_Bool bAppendStr = sal_False,
+                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
+    static void         GetStringFromRange(
+                            ::rtl::OUString& rString,
+                            const ::com::sun::star::table::CellRangeAddress& rRange,
+                            const ScDocument* pDocument,
+                            sal_Unicode cSeperator = ' ',
+                            sal_Bool bAppendStr = sal_False,
+                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
+    static void         GetStringFromRangeList(
+                            ::rtl::OUString& rString,
+                            const ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress >& rRangeSeq,
+                            const ScDocument* pDocument,
+                            sal_Unicode cSeperator = ' ',
+                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
 };
 
 //------------------------------------------------------------------------
