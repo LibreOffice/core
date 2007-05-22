@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VCartesianGrid.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:31:44 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:11:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,13 +39,11 @@
 #include "TickmarkHelper.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "ShapeFactory.hxx"
-#include "chartview/ObjectIdentifier.hxx"
+#include "ObjectIdentifier.hxx"
 #include "macros.hxx"
 #include "CommonConverters.hxx"
+#include "AxisHelper.hxx"
 
-#ifndef _COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
-#include <com/sun/star/chart2/XIdentifiable.hpp>
-#endif
 #ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCESEQUENCE_HPP_
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #endif
@@ -62,12 +60,14 @@ namespace chart
 //.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
 
 struct GridLinePoints
 {
-    uno::Sequence< double > P0;
-    uno::Sequence< double > P1;
-    uno::Sequence< double > P2;
+    Sequence< double > P0;
+    Sequence< double > P1;
+    Sequence< double > P2;
 
     GridLinePoints( const PlottingPositionHelper* pPosHelper, sal_Int32 nDimensionIndex );
     void update( double fScaledTickValue );
@@ -139,7 +139,7 @@ void GridLinePoints::update( double fScaledTickValue )
 
 void addLine2D( drawing::PointSequenceSequence& rPoints, sal_Int32 nIndex
              , const GridLinePoints& rScaledLogicPoints
-             , const uno::Reference< XTransformation > & xTransformation
+             , const Reference< XTransformation > & xTransformation
               )
 {
     drawing::Position3D aPA = SequenceToPosition3D( xTransformation->transform( rScaledLogicPoints.P0 ) );
@@ -154,7 +154,7 @@ void addLine2D( drawing::PointSequenceSequence& rPoints, sal_Int32 nIndex
 
 void addLine3D( drawing::PolyPolygonShape3D& rPoints, sal_Int32 nIndex
             , const GridLinePoints& rBasePoints
-            , const uno::Reference< XTransformation > & xTransformation )
+            , const Reference< XTransformation > & xTransformation )
 {
     drawing::Position3D aPoint = SequenceToPosition3D( xTransformation->transform( rBasePoints.P0 ) );
     AddPointToPoly( rPoints, aPoint, nIndex );
@@ -169,8 +169,10 @@ void addLine3D( drawing::PolyPolygonShape3D& rPoints, sal_Int32 nIndex
 //---------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------
 
-VCartesianGrid::VCartesianGrid( const uno::Reference< XGrid >& xGrid, sal_Int32 nDimensionCount )
-            : VMeterBase( uno::Reference<XMeter>::query(xGrid), nDimensionCount )
+VCartesianGrid::VCartesianGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
+                               , const Sequence< Reference< beans::XPropertySet > > & rGridPropertiesList )
+            : VAxisOrGridBase( nDimensionIndex, nDimensionCount )
+            , m_aGridPropertiesList( rGridPropertiesList )
 {
     m_pPosHelper = new PlottingPositionHelper();
 }
@@ -183,40 +185,40 @@ VCartesianGrid::~VCartesianGrid()
 
 //static
 void VCartesianGrid::fillLinePropertiesFromGridModel( ::std::vector<VLineProperties>& rLinePropertiesList
-                                     , uno::Reference< beans::XPropertySet > xProps )
+                                     , const Sequence< Reference< beans::XPropertySet > > & rGridPropertiesList )
 {
     rLinePropertiesList.clear();
+    if( !rGridPropertiesList.getLength() )
+        return;
+
     VLineProperties aLineProperties;
-    aLineProperties.initFromPropertySet( xProps );
-    rLinePropertiesList.assign(2,aLineProperties);
+    for( sal_Int32 nN=0; nN < rGridPropertiesList.getLength(); nN++ )
+    {
+        if(!AxisHelper::isGridVisible( rGridPropertiesList[nN] ))
+            aLineProperties.LineStyle = uno::makeAny( drawing::LineStyle_NONE );
+        else
+            aLineProperties.initFromPropertySet( rGridPropertiesList[nN] );
+        rLinePropertiesList.push_back(aLineProperties);
+    }
 };
 
 void SAL_CALL VCartesianGrid::createShapes()
 {
-    if( !m_xMeter.is())
-        return;
-    uno::Reference< beans::XPropertySet > xGridProps( m_xMeter, uno::UNO_QUERY );
-    if(!xGridProps.is())
+    if(!m_aGridPropertiesList.getLength())
         return;
     //somehow equal to axis tickmarks
 
     //-----------------------------------------
     //create named group shape
-    uno::Reference< XIdentifiable > xIdent( m_xMeter, uno::UNO_QUERY );
-    if( ! xIdent.is())
+    Reference< drawing::XShapes > xGroupShape_Shapes(
+        this->createGroupShape( m_xLogicTarget, m_aCID ) );
+
+    if(!xGroupShape_Shapes.is())
         return;
-
-    uno::Reference< drawing::XShapes > xGroupShape_Shapes(
-        this->createGroupShape( m_xLogicTarget
-        , ObjectIdentifier::createClassifiedIdentifier(
-                OBJECTTYPE_GRID, xIdent->getIdentifier() )
-        ) );
-
     //-----------------------------------------
 
-    sal_Int32 nDimensionIndex = m_xMeter->getRepresentedDimension();
     ::std::vector<VLineProperties> aLinePropertiesList;
-    fillLinePropertiesFromGridModel( aLinePropertiesList, xGridProps );
+    fillLinePropertiesFromGridModel( aLinePropertiesList, m_aGridPropertiesList );
 
     //-----------------------------------------
     //create all scaled tickmark values
@@ -233,16 +235,29 @@ void SAL_CALL VCartesianGrid::createShapes()
     if(aDepthIter == aDepthEnd)//no tickmarks at all
         return;
 
-    if(2==m_nDimension)
-    {
-        drawing::PointSequenceSequence aHandlesPoints(1);
 
-        sal_Int32 nLinePropertiesCount = aLinePropertiesList.size();
-        for( sal_Int32 nDepth=0
-            ; aDepthIter != aDepthEnd && nDepth < nLinePropertiesCount
-            ; aDepthIter++, nDepth++ )
+    sal_Int32 nLinePropertiesCount = aLinePropertiesList.size();
+    for( sal_Int32 nDepth=0
+        ; aDepthIter != aDepthEnd && nDepth < nLinePropertiesCount
+        ; aDepthIter++, nDepth++ )
+    {
+        if( !aLinePropertiesList[nDepth].isLineVisible() )
+            continue;
+
+        Reference< drawing::XShapes > xTarget( xGroupShape_Shapes );
+        if( nDepth > 0 )
         {
-            GridLinePoints aGridLinePoints( m_pPosHelper, nDimensionIndex );
+            xTarget.set( this->createGroupShape( m_xLogicTarget
+                , ObjectIdentifier::addChildParticle( m_aCID, ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_SUBGRID, nDepth-1 ) )
+                ) );
+            if(!xTarget.is())
+                xTarget.set( xGroupShape_Shapes );
+        }
+
+        if(2==m_nDimension)
+        {
+
+            GridLinePoints aGridLinePoints( m_pPosHelper, m_nDimensionIndex );
 
             sal_Int32 nPointCount = (*aDepthIter).size();
             drawing::PointSequenceSequence aPoints(nPointCount);
@@ -255,35 +270,30 @@ void SAL_CALL VCartesianGrid::createShapes()
                 if( !(*aTickIter).bPaintIt )
                     continue;
                 aGridLinePoints.update( (*aTickIter).fScaledTickValue );
-                addLine2D( aPoints, nRealPointCount, aGridLinePoints, m_pPosHelper->getTransformationLogicToScene() );
+                addLine2D( aPoints, nRealPointCount, aGridLinePoints, m_pPosHelper->getTransformationScaledLogicToScene() );
                 nRealPointCount++;
             }
             aPoints.realloc(nRealPointCount);
-            m_pShapeFactory->createLine2D( xGroupShape_Shapes, aPoints, aLinePropertiesList[nDepth] );
+            m_pShapeFactory->createLine2D( xTarget, aPoints, &aLinePropertiesList[nDepth] );
 
             //prepare polygon for handle shape:
+            drawing::PointSequenceSequence aHandlesPoints(1);
             sal_Int32 nOldHandleCount = aHandlesPoints[0].getLength();
             aHandlesPoints[0].realloc(nOldHandleCount+nRealPointCount);
             for( sal_Int32 nN = 0; nN<nRealPointCount; nN++)
                 aHandlesPoints[0][nOldHandleCount+nN] = aPoints[nN][1];
-        }
 
-        //create handle shape:
-        VLineProperties aHandleLineProperties;
-        aHandleLineProperties.LineStyle    = uno::makeAny( drawing::LineStyle_NONE );
-        uno::Reference< drawing::XShape > xHandleShape =
-            m_pShapeFactory->createLine2D( xGroupShape_Shapes, aHandlesPoints, aHandleLineProperties );
-        m_pShapeFactory->setShapeName( xHandleShape, C2U("HandlesOnly") );
-    }
-    //-----------------------------------------
-    else //if(2!=m_nDimension)
-    {
-        sal_Int32 nLinePropertiesCount = aLinePropertiesList.size();
-        for( sal_Int32 nDepth=0
-            ; aDepthIter != aDepthEnd && nDepth < nLinePropertiesCount
-            ; aDepthIter++, nDepth++ )
+            //create handle shape:
+            VLineProperties aHandleLineProperties;
+            aHandleLineProperties.LineStyle    = uno::makeAny( drawing::LineStyle_NONE );
+            Reference< drawing::XShape > xHandleShape =
+                m_pShapeFactory->createLine2D( xTarget, aHandlesPoints, &aHandleLineProperties );
+            m_pShapeFactory->setShapeName( xHandleShape, C2U("HandlesOnly") );
+        }
+        //-----------------------------------------
+        else //if(2!=m_nDimension)
         {
-            GridLinePoints aGridLinePoints( m_pPosHelper, nDimensionIndex );
+            GridLinePoints aGridLinePoints( m_pPosHelper, m_nDimensionIndex );
 
             sal_Int32 nPointCount = (*aDepthIter).size();
             drawing::PolyPolygonShape3D aPoints;
@@ -294,19 +304,20 @@ void SAL_CALL VCartesianGrid::createShapes()
             ::std::vector< TickInfo >::const_iterator       aTickIter = (*aDepthIter).begin();
             const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
             sal_Int32 nRealPointCount = 0;
-            for( ; aTickIter != aTickEnd; aTickIter++ )
+            sal_Int32 nPolyIndex = 0;
+            for( ; aTickIter != aTickEnd; aTickIter++, nPolyIndex++ )
             {
                 if( !(*aTickIter).bPaintIt )
                     continue;
 
                 aGridLinePoints.update( (*aTickIter).fScaledTickValue );
-                addLine3D( aPoints, nRealPointCount, aGridLinePoints, m_pPosHelper->getTransformationLogicToScene() );
+                addLine3D( aPoints, nPolyIndex, aGridLinePoints, m_pPosHelper->getTransformationScaledLogicToScene() );
                 nRealPointCount+=3;
             }
             aPoints.SequenceX.realloc(nRealPointCount);
             aPoints.SequenceY.realloc(nRealPointCount);
             aPoints.SequenceZ.realloc(nRealPointCount);
-            m_pShapeFactory->createLine3D( xGroupShape_Shapes, aPoints, aLinePropertiesList[nDepth] );
+            m_pShapeFactory->createLine3D( xTarget, aPoints, aLinePropertiesList[nDepth] );
         }
     }
 }
