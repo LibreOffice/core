@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Legend.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:13:18 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:39:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,13 +37,13 @@
 #include "precompiled_chart2.hxx"
 #include "Legend.hxx"
 #include "macros.hxx"
-#include "algohelper.hxx"
 #include "LineProperties.hxx"
 #include "FillProperties.hxx"
 #include "CharacterProperties.hxx"
 #include "UserDefinedProperties.hxx"
 #include "LegendHelper.hxx"
-#include "LayoutDefaults.hxx"
+#include "ContainerHelper.hxx"
+#include "CloneHelper.hxx"
 
 #ifndef CHART_PROPERTYHELPER_HXX
 #include "PropertyHelper.hxx"
@@ -55,20 +55,14 @@
 #include <com/sun/star/awt/Size.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_LAYOUT_ALIGNMENT_HPP_
-#include <com/sun/star/layout/Alignment.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LAYOUT_STRETCHMODE_HPP_
-#include <com/sun/star/layout/StretchMode.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CHART2_LEGENDPOSITION_HPP_
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CHART2_LEGENDEXPANSION_HPP_
 #include <com/sun/star/chart2/LegendExpansion.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
-#include <com/sun/star/layout/RelativePosition.hpp>
+#ifndef _COM_SUN_STAR_CHART2_RELATIVEPOSITION_HPP_
+#include <com/sun/star/chart2/RelativePosition.hpp>
 #endif
 
 #include <algorithm>
@@ -76,12 +70,16 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans::PropertyAttribute;
 
+using ::rtl::OUString;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Any;
 using ::com::sun::star::beans::Property;
 
 namespace
 {
 
-static const ::rtl::OUString lcl_aServiceName(
+static const OUString lcl_aServiceName(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.Legend" ));
 
 enum
@@ -126,13 +124,13 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( C2U( "RelativePosition" ),
                   PROP_LEGEND_REL_POS,
-                  ::getCppuType( reinterpret_cast< const layout::RelativePosition * >(0)),
+                  ::getCppuType( reinterpret_cast< const chart2::RelativePosition * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 }
 
 void lcl_AddDefaultsToMap(
-    ::chart::helper::tPropertyValueMap & rOutMap )
+    ::chart::tPropertyValueMap & rOutMap )
 {
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LEGEND_ANCHOR_POSITION ));
     rOutMap[ PROP_LEGEND_ANCHOR_POSITION ] =
@@ -142,15 +140,18 @@ void lcl_AddDefaultsToMap(
     rOutMap[ PROP_LEGEND_SHOW ] =
         uno::makeAny( sal_True );
 
-    // todo: default is just for testing. should be void
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LEGEND_REF_PAGE_SIZE ));
-    rOutMap[ PROP_LEGEND_REF_PAGE_SIZE ] =
-        uno::makeAny( awt::Size( 20000, 15000 ) );
+    float fDefaultCharHeight = 8.0;
+    rOutMap[ ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT ] =
+        uno::makeAny( fDefaultCharHeight );
+    rOutMap[ ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT ] =
+        uno::makeAny( fDefaultCharHeight );
+    rOutMap[ ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT ] =
+        uno::makeAny( fDefaultCharHeight );
 }
 
-const uno::Sequence< Property > & lcl_GetPropertySequence()
+const Sequence< Property > & lcl_GetPropertySequence()
 {
-    static uno::Sequence< Property > aPropSeq;
+    static Sequence< Property > aPropSeq;
 
     // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -159,20 +160,17 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
         // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
-        ::chart::LineProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ false );
-        ::chart::FillProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ false );
-        ::chart::CharacterProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ false );
+        ::chart::LineProperties::AddPropertiesToVector( aProperties );
+        ::chart::FillProperties::AddPropertiesToVector( aProperties );
+        ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
         // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::helper::PropertyNameLess() );
+                     ::chart::PropertyNameLess() );
 
         // transfer result to static Sequence
-        aPropSeq = ::chart::helper::VectorToSequence( aProperties );
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
     return aPropSeq;
@@ -192,18 +190,34 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
 namespace chart
 {
 
-Legend::Legend( uno::Reference< uno::XComponentContext > const & xContext ) :
+Legend::Legend( Reference< uno::XComponentContext > const & xContext ) :
         ::property::OPropertySet( m_aMutex ),
-        m_aIdentifier( LegendHelper::getIdentifierForLegend() )
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
 {
+}
+
+Legend::Legend( const Legend & rOther ) :
+        ::property::OPropertySet( rOther, m_aMutex ),
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+{
+    CloneHelper::CloneRefVector< Reference< chart2::XLegendEntry > >( rOther.m_aLegendEntries, m_aLegendEntries );
+    ModifyListenerHelper::addListenerToAllElements( m_aLegendEntries, m_xModifyEventForwarder );
 }
 
 Legend::~Legend()
 {
+    try
+    {
+        ModifyListenerHelper::removeListenerFromAllElements( m_aLegendEntries, m_xModifyEventForwarder );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
 }
 
 // ____ XLegend ____
-void SAL_CALL Legend::registerEntry( const uno::Reference< chart2::XLegendEntry >& xEntry )
+void SAL_CALL Legend::registerEntry( const Reference< chart2::XLegendEntry >& xEntry )
     throw (lang::IllegalArgumentException,
            uno::RuntimeException)
 {
@@ -213,9 +227,11 @@ void SAL_CALL Legend::registerEntry( const uno::Reference< chart2::XLegendEntry 
         throw lang::IllegalArgumentException();
 
     m_aLegendEntries.push_back( xEntry );
+    ModifyListenerHelper::addListener( xEntry, m_xModifyEventForwarder );
+    fireModifyEvent();
 }
 
-void SAL_CALL Legend::revokeEntry( const uno::Reference< chart2::XLegendEntry >& xEntry )
+void SAL_CALL Legend::revokeEntry( const Reference< chart2::XLegendEntry >& xEntry )
     throw (container::NoSuchElementException,
            uno::RuntimeException)
 {
@@ -228,25 +244,82 @@ void SAL_CALL Legend::revokeEntry( const uno::Reference< chart2::XLegendEntry >&
         throw container::NoSuchElementException();
 
     m_aLegendEntries.erase( aIt );
+    ModifyListenerHelper::removeListener( xEntry, m_xModifyEventForwarder );
+    fireModifyEvent();
 }
 
-uno::Sequence< uno::Reference< chart2::XLegendEntry > > SAL_CALL Legend::getEntries()
+Sequence< Reference< chart2::XLegendEntry > > SAL_CALL Legend::getEntries()
     throw (uno::RuntimeException)
 {
-    return ::chart::helper::VectorToSequence( m_aLegendEntries );
+    return ContainerHelper::ContainerToSequence( m_aLegendEntries );
 }
 
-::rtl::OUString SAL_CALL Legend::getIdentifier()
+// ____ XCloneable ____
+Reference< util::XCloneable > SAL_CALL Legend::createClone()
     throw (uno::RuntimeException)
 {
-    return m_aIdentifier;
+    return Reference< util::XCloneable >( new Legend( *this ));
+}
+
+// ____ XModifyBroadcaster ____
+void SAL_CALL Legend::addModifyListener( const Reference< util::XModifyListener >& aListener )
+    throw (uno::RuntimeException)
+{
+    try
+    {
+        Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
+        xBroadcaster->addModifyListener( aListener );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+void SAL_CALL Legend::removeModifyListener( const Reference< util::XModifyListener >& aListener )
+    throw (uno::RuntimeException)
+{
+    try
+    {
+        Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
+        xBroadcaster->removeModifyListener( aListener );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+// ____ XModifyListener ____
+void SAL_CALL Legend::modified( const lang::EventObject& aEvent )
+    throw (uno::RuntimeException)
+{
+    m_xModifyEventForwarder->modified( aEvent );
+}
+
+// ____ XEventListener (base of XModifyListener) ____
+void SAL_CALL Legend::disposing( const lang::EventObject& Source )
+    throw (uno::RuntimeException)
+{
+    // nothing
+}
+
+// ____ OPropertySet ____
+void Legend::firePropertyChangeEvent()
+{
+    fireModifyEvent();
+}
+
+void Legend::fireModifyEvent()
+{
+    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
 // ================================================================================
 
-uno::Sequence< ::rtl::OUString > Legend::getSupportedServiceNames_Static()
+Sequence< OUString > Legend::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 5 );
+    Sequence< OUString > aServices( 5 );
     aServices[ 0 ] = C2U( "com.sun.star.chart2.Legend" );
     aServices[ 1 ] = C2U( "com.sun.star.beans.PropertySet" );
     aServices[ 2 ] = C2U( "com.sun.star.drawing.FillProperties" );
@@ -256,32 +329,27 @@ uno::Sequence< ::rtl::OUString > Legend::getSupportedServiceNames_Static()
 }
 
 // ____ OPropertySet ____
-uno::Any Legend::GetDefaultValue( sal_Int32 nHandle ) const
+Any Legend::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    static helper::tPropertyValueMap aStaticDefaults;
+    static tPropertyValueMap aStaticDefaults;
 
     // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aStaticDefaults.size() )
     {
+        LineProperties::AddDefaultsToMap( aStaticDefaults );
+        FillProperties::AddDefaultsToMap( aStaticDefaults );
+        CharacterProperties::AddDefaultsToMap( aStaticDefaults );
+        // call last to overwrite some character property defaults
         lcl_AddDefaultsToMap( aStaticDefaults );
-        LineProperties::AddDefaultsToMap(
-            aStaticDefaults,
-            /* bIncludeStyleProperties = */ false );
-        FillProperties::AddDefaultsToMap(
-            aStaticDefaults,
-            /* bIncludeStyleProperties = */ false );
-        CharacterProperties::AddDefaultsToMap(
-            aStaticDefaults,
-            /* bIncludeStyleProperties = */ false );
     }
 
-    helper::tPropertyValueMap::const_iterator aFound(
+    tPropertyValueMap::const_iterator aFound(
         aStaticDefaults.find( nHandle ));
 
     if( aFound == aStaticDefaults.end())
-        return uno::Any();
+        return Any();
 
     return (*aFound).second;
     // \--
@@ -294,11 +362,11 @@ uno::Any Legend::GetDefaultValue( sal_Int32 nHandle ) const
 
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
+Reference< beans::XPropertySetInfo > SAL_CALL
     Legend::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
+    static Reference< beans::XPropertySetInfo > xInfo;
 
     // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
