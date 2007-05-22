@@ -1,0 +1,96 @@
+﻿/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: optchart.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:19:46 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "optchart.hrc"
+#include "dialogs.hrc"
+#include "helpid.hrc"
+
+// tab page for setting the default colors used for new charts
+
+TabPage RID_OPTPAGE_CHART_DEFCOLORS
+{
+    HelpID  = HID_OPTIONS_CHART_DEFCOLORS;
+    Size    = MAP_APPFONT ( 260 , 185 ) ;
+    Hide    = TRUE;
+    Text [ de ] = "Grundfarben";
+    Text [ en-US ] = "Default Colors";
+    FixedLine FL_CHART_COLOR_LIST
+    {
+        Pos     = MAP_APPFONT ( 6 , 3  ) ;
+        Size    = MAP_APPFONT ( 80 , 8 ) ;
+        Text [ de ] = "Diagrammfarben";
+        Text [ en-US ] = "Chart colors";
+        Text [ x-comment ] = " ";
+    };
+    ListBox LB_CHART_COLOR_LIST
+    {
+        Border      = TRUE;
+        Pos         = MAP_APPFONT ( 12 , 15  );
+        Size        = MAP_APPFONT ( 68 , 152 );
+        DropDown    = FALSE;
+        TabStop     = TRUE ;
+    };
+    FixedLine FL_COLOR_BOX
+    {
+        Pos     = MAP_APPFONT ( 92 , 3  ) ;
+        Size    = MAP_APPFONT ( 106 , 8 ) ;
+        Text [ de ] = "Farbtabelle" ;
+        Text [ en-US ] = "Color table" ;
+        Text [ x-comment ] = " ";
+    };
+    Control CT_COLOR_BOX
+    {
+        Border      = TRUE;
+        Pos         = MAP_APPFONT ( 98 , 15  );
+        Size        = MAP_APPFONT ( 94 , 152 );
+        TabStop     = TRUE ;
+    };
+    PushButton PB_RESET_TO_DEFAULT
+    {
+        Pos = MAP_APPFONT ( 204 , 165 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ de ] = "~Standard";
+        Text [ en-US ] = "~Default";
+        Text [ x-comment ] = " ";
+    };
+};
+
+String RID_SVXSTR_DIAGRAM_ROW
+{
+    // $(ROW) can be a number or the caption of the row in quotes
+
+    Text [ de ] = "Datenreihe $(ROW)" ;
+    Text [ en-US ] = "Data Series $(ROW)" ;
+};
