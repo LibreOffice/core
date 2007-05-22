@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:48:17 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:47:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -457,17 +457,14 @@ XclExpStringRef lclCreateFormattedString(
         because this function only uses Append() functions that require this. */
     XclExpStringRef xString = XclExpStringHelper::CreateString( rRoot, EMPTY_STRING, nFlags, nMaxLen );
 
-    // font handling
-    XclExpFontBuffer& rFontBuffer = rRoot.GetFontBuffer();
-    sal_uInt16 nLastXclFont = EXC_FONT_APP;
-
     // script type handling
     Reference< XBreakIterator > xBreakIt = rRoot.GetDoc().GetBreakIterator();
     namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
     // #i63255# get script type for leading weak characters
     sal_Int16 nLastScript = XclExpStringHelper::GetLeadingScriptType( rRoot, rText );
 
-    // cell item set
+    // font buffer and cell item set
+    XclExpFontBuffer& rFontBuffer = rRoot.GetFontBuffer();
     const SfxItemSet& rItemSet = pCellAttr ? pCellAttr->GetItemSet() : rRoot.GetDoc().GetDefPattern()->GetItemSet();
 
     // process all script portions
@@ -486,23 +483,21 @@ XclExpStringRef lclCreateFormattedString(
 
         // construct font from current text portion
         SvxFont aFont( XclExpFontBuffer::GetFontFromItemSet( rItemSet, nScript ) );
-        nLastScript = nScript;
 
         // Excel start position of this portion
         sal_uInt16 nXclPortionStart = xString->Len();
         // add portion text to Excel string
         XclExpStringHelper::AppendString( *xString, rRoot, aOUText.copy( nPortionPos, nPortionEnd - nPortionPos ) );
-
-        // insert font into buffer
-        sal_uInt16 nXclFont = rFontBuffer.Insert( aFont );
-        // current portion font differs from last? -> insert into format run vector
-        if( (nXclPortionStart == 0) || ((nXclFont != nLastXclFont) && (nXclPortionStart < xString->Len())) )
+        if( nXclPortionStart < xString->Len() )
         {
-            xString->AppendFormat( nXclPortionStart, nXclFont );
-            nLastXclFont = nXclFont;
+            // insert font into buffer
+            sal_uInt16 nFontIdx = rFontBuffer.Insert( aFont, EXC_COLOR_CELLTEXT );
+            // insert font index into format run vector
+            xString->AppendFormat( nXclPortionStart, nFontIdx );
         }
 
         // go to next script portion
+        nLastScript = nScript;
         nPortionPos = nPortionEnd;
     }
 
@@ -531,12 +526,9 @@ XclExpStringRef lclCreateFormattedString(
         because this function only uses Append() functions that require this. */
     XclExpStringRef xString = XclExpStringHelper::CreateString( rRoot, EMPTY_STRING, nFlags, nMaxLen );
 
-    // helper item set for edit engine -> Calc item conversion
-    SfxItemSet aItemSet( *rRoot.GetDoc().GetPool(), ATTR_PATTERN_START, ATTR_PATTERN_END );
-
-    // font handling
+    // font buffer and helper item set for edit engine -> Calc item conversion
     XclExpFontBuffer& rFontBuffer = rRoot.GetFontBuffer();
-    sal_uInt16 nLastXclFont = EXC_FONT_APP;
+    SfxItemSet aItemSet( *rRoot.GetDoc().GetPool(), ATTR_PATTERN_START, ATTR_PATTERN_END );
 
     // script type handling
     Reference< XBreakIterator > xBreakIt = rRoot.GetDoc().GetBreakIterator();
@@ -598,28 +590,26 @@ XclExpStringRef lclCreateFormattedString(
                 sal_uInt16 nXclPortionStart = xString->Len();
                 // add portion text to Excel string
                 XclExpStringHelper::AppendString( *xString, rRoot, aXclPortionText );
-
-                /*  Construct font from current edit engine text portion. Edit engine
-                    creates different portions for different script types, no need to loop. */
-                sal_Int16 nScript = xBreakIt->getScriptType( aXclPortionText, 0 );
-                if( nScript == ApiScriptType::WEAK )
-                    nScript = nLastScript;
-                SvxFont aFont( XclExpFontBuffer::GetFontFromItemSet( aItemSet, nScript ) );
-                nLastScript = nScript;
-
-                // add escapement
-                aFont.SetEscapement( nEsc );
-                // modify automatic font color for hyperlinks
-                if( bIsHyperlink && (GETITEM( aItemSet, SvxColorItem, ATTR_FONT_COLOR ).GetValue().GetColor() == COL_AUTO) )
-                    aFont.SetColor( Color( COL_LIGHTBLUE ) );
-
-                // insert font into buffer
-                sal_uInt16 nXclFont = rFontBuffer.Insert( aFont );
-                // current portion font differs from last? -> insert into format run vector
-                if( (nXclPortionStart == 0) || ((nXclFont != nLastXclFont) && (nXclPortionStart < xString->Len())) )
+                if( nXclPortionStart < xString->Len() )
                 {
-                    xString->AppendFormat( nXclPortionStart, nXclFont );
-                    nLastXclFont = nXclFont;
+                    /*  Construct font from current edit engine text portion. Edit engine
+                        creates different portions for different script types, no need to loop. */
+                    sal_Int16 nScript = xBreakIt->getScriptType( aXclPortionText, 0 );
+                    if( nScript == ApiScriptType::WEAK )
+                        nScript = nLastScript;
+                    SvxFont aFont( XclExpFontBuffer::GetFontFromItemSet( aItemSet, nScript ) );
+                    nLastScript = nScript;
+
+                    // add escapement
+                    aFont.SetEscapement( nEsc );
+                    // modify automatic font color for hyperlinks
+                    if( bIsHyperlink && (GETITEM( aItemSet, SvxColorItem, ATTR_FONT_COLOR ).GetValue().GetColor() == COL_AUTO) )
+                        aFont.SetColor( Color( COL_LIGHTBLUE ) );
+
+                    // insert font into buffer
+                    sal_uInt16 nFontIdx = rFontBuffer.Insert( aFont, EXC_COLOR_CELLTEXT );
+                    // insert font index into format run vector
+                    xString->AppendFormat( nXclPortionStart, nFontIdx );
                 }
 
                 aSel.nStartPos = aSel.nEndPos;
@@ -730,7 +720,7 @@ XclExpStringRef XclExpStringHelper::CreateString(
         if( !xString->IsEmpty() )
         {
             xString->LimitFormatCount( EXC_MAXRECSIZE_BIFF8 / 8 - 1 );
-            xString->AppendFormat( xString->Len(), EXC_FONT_APP );
+            xString->AppendTrailingFormat( EXC_FONT_APP );
         }
     }
     else
@@ -757,7 +747,7 @@ XclExpStringRef XclExpStringHelper::CreateString(
     if( !xString->IsEmpty() )
     {
         xString->LimitFormatCount( EXC_MAXRECSIZE_BIFF8 / 8 - 1 );
-        xString->AppendFormat( xString->Len(), EXC_FONT_APP );
+        xString->AppendTrailingFormat( EXC_FONT_APP );
     }
     return xString;
 }
