@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.171 $
+ *  $Revision: 1.172 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 10:58:34 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:03:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1515,6 +1515,7 @@ XML_CONSTASCII_ACTION( sXML_sort_by, "sort-by");
 XML_CONSTASCII_ACTION( sXML_sort_by_position, "sort-by-position" );
 XML_CONSTASCII_ACTION( sXML_sort_groups, "sort-groups");
 XML_CONSTASCII_ACTION( sXML_sort_key, "sort-key");
+XML_CONSTASCII_ACTION( sXML_sort_by_x_values, "sort-by-x-values" );
 XML_CONSTASCII_ACTION( sXML_source_cell_range, "source-cell-range");
 XML_CONSTASCII_ACTION( sXML_source_cell_range_addresses, "source-cell-range-addresses");
 XML_CONSTASCII_ACTION( sXML_source_field_name, "source-field-name");
