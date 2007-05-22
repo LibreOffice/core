@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MultipleChartConverters.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:24:01 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:54:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,9 @@
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 
 #include <memory>
 
@@ -58,6 +61,8 @@ public:
             ::com::sun::star::frame::XModel > & xChartModel,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
         ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
             ::std::auto_ptr< ::com::sun::star::awt::Size >() );
     virtual ~AllAxisItemConverter();
@@ -73,7 +78,9 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xChartModel,
         SfxItemPool& rItemPool,
-        SdrModel& rDrawModel  );
+        SdrModel& rDrawModel,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory );
     virtual ~AllGridItemConverter();
 
 protected:
@@ -88,6 +95,8 @@ public:
             ::com::sun::star::frame::XModel > & xChartModel,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
         ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
             ::std::auto_ptr< ::com::sun::star::awt::Size >() );
     virtual ~AllDataLabelItemConverter();
@@ -104,6 +113,8 @@ public:
             ::com::sun::star::frame::XModel > & xChartModel,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
         ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
             ::std::auto_ptr< ::com::sun::star::awt::Size >() );
     virtual ~AllTitleItemConverter();
