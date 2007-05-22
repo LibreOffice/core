@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScatterChartType.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:24:15 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:51:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #define CHART_SCATTERCHARTTYPE_HXX
 
 #include "ChartType.hxx"
+#include "ServiceMacros.hxx"
 
 #ifndef _COM_SUN_STAR_CHART2_CURVESTYLE_HPP_
 #include <com/sun/star/chart2/CurveStyle.hpp>
@@ -47,17 +48,36 @@ namespace chart
 class ScatterChartType : public ChartType
 {
 public:
-    ScatterChartType( sal_Int32 nDim = 2,
-                      ::com::sun::star::chart2::CurveStyle eCurveStyle =
-                          ::com::sun::star::chart2::CurveStyle_LINES,
-                      sal_Int32 nResolution = 20,
-                      sal_Int32 nOrder = 3 );
+    ScatterChartType(
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XComponentContext > const & xContext,
+        ::com::sun::star::chart2::CurveStyle eCurveStyle =
+            ::com::sun::star::chart2::CurveStyle_LINES,
+        sal_Int32 nResolution = 20,
+        sal_Int32 nOrder = 3 );
     virtual ~ScatterChartType();
 
+    APPHELPER_XSERVICEINFO_DECL()
+
+    /// establish methods for factory instatiation
+    APPHELPER_SERVICE_FACTORY_HELPER( ScatterChartType )
+
 protected:
+    explicit ScatterChartType( const ScatterChartType & rOther );
+
     // ____ XChartType ____
     virtual ::rtl::OUString SAL_CALL getChartType()
         throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+        getSupportedMandatoryRoles()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+        getSupportedOptionalRoles()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem > SAL_CALL
+        createCoordinateSystem( ::sal_Int32 DimensionCount )
+        throw (::com::sun::star::lang::IllegalArgumentException,
+               ::com::sun::star::uno::RuntimeException);
 
     // ____ OPropertySet ____
     virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
@@ -69,6 +89,10 @@ protected:
     // ____ XPropertySet ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XCloneable ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
         throw (::com::sun::star::uno::RuntimeException);
 };
 
