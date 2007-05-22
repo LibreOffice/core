@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Embedding.xcu,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 11:15:00 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 13:03:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@
         </node>
         <node oor:name="12DCAE26-281F-416F-A234-C3086127382E" oor:op="replace" install:module="chart">
             <prop oor:name="ObjectFactory"><value>com.sun.star.embed.OOoEmbeddedObjectFactory</value></prop>
-            <prop oor:name="ObjectDocumentServiceName"><value>com.sun.star.comp.Chart.ChartDocument</value></prop>
+            <prop oor:name="ObjectDocumentServiceName"><value>com.sun.star.comp.chart2.ChartModel</value></prop>
             <prop oor:name="ObjectMiscStatus">
                 <value>1</value>
             </prop>
