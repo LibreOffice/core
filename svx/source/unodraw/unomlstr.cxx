@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomlstr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:12:58 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:21:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,14 @@
 #ifndef _SVDOBJ_HXX
 #include <svdobj.hxx>
 #endif
+// header for class OGuard
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+// header for class Application
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 #include "unomlstr.hxx"
 
@@ -56,6 +64,7 @@ SvxUnoShapeModifyListener::~SvxUnoShapeModifyListener() throw()
 // ::com::sun::star::util::XModifyListener
 void SAL_CALL SvxUnoShapeModifyListener::modified(const lang::EventObject& ) throw( uno::RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if( mpObj )
     {
         mpObj->SetChanged();
