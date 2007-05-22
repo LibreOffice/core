@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:44:26 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:42:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -463,9 +463,11 @@ BOOL ScDocument::RenameTab( SCTAB nTab, const String& rName, BOOL /* bUpdateRef 
                 }
             if (bValid)
             {
-                pTab[nTab]->SetName(rName);
+                // #i75258# update charts before renaming, so they can get their live data objects.
+                // Once the charts are live, the sheet can be renamed without problems.
                 if ( pChartListenerCollection )
-                    pChartListenerCollection->UpdateSeriesRangesContainingTab( nTab );
+                    pChartListenerCollection->UpdateChartsContainingTab( nTab );
+                pTab[nTab]->SetName(rName);
             }
         }
     return bValid;
