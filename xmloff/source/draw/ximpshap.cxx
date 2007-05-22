@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 13:12:28 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:10:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2361,7 +2361,7 @@ void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::
                 if( maURL.getLength() )
                 {
                     uno::Any aAny;
-                    aAny <<= GetImport().ResolveGraphicObjectURL( maURL, sal_True );
+                    aAny <<= GetImport().ResolveGraphicObjectURL( maURL, GetImport().isGraphicLoadOnDemmandSupported() );
                     try
                     {
                         xPropset->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL") ), aAny );
