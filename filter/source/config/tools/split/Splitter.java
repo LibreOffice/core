@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Splitter.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:36:28 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:25:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,7 +165,7 @@ public class Splitter
 
         // generate filter fragments for the chart module
         m_aDataSet.m_aDebug.setGlobalInfo("\tfor module chart ...");
-        rRequestedProps.put(Cache.PROPNAME_DOCUMENTSERVICE, "com.sun.star.chart.ChartDocument");
+        rRequestedProps.put(Cache.PROPNAME_DOCUMENTSERVICE, "com.sun.star.chart2.ChartDocument");
         lNames = m_aDataSet.m_aCache.getMatchedItemNames(Cache.E_FILTER, rRequestedProps);
         it     = lNames.elements();
         while(it.hasMoreElements())
