@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LineProperties.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:42:18 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:18:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,18 +56,25 @@ public:
     {
         // com.sun.star.drawing.LineProperties
         PROP_LINE_STYLE = FAST_PROPERTY_ID_START_LINE_PROP,
-        PROP_LINE_WIDTH,
         PROP_LINE_DASH,
+        PROP_LINE_DASH_NAME, //not in service description
         PROP_LINE_COLOR,
         PROP_LINE_TRANSPARENCE,
+        PROP_LINE_WIDTH,
         PROP_LINE_JOINT
     };
 
     static void AddPropertiesToVector(
-        ::std::vector< ::com::sun::star::beans::Property > & rOutProperties,
-        bool bIncludeStyleProperties = false );
+        ::std::vector< ::com::sun::star::beans::Property > & rOutProperties );
 
-    static void AddDefaultsToMap( ::chart::helper::tPropertyValueMap & rOutMap, bool bIncludeStyleProperties = false );
+    static void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
+
+    static bool IsLineVisible( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet >& xLineProperties );
+    static void SetLineVisible( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet >& xLineProperties );
+    static void SetLineInvisible( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet >& xLineProperties );
 
 private:
     // not implemented
