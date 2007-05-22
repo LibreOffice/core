@@ -5,9 +5,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:54:29 $
+#   last change: $Author: vg $ $Date: 2007-05-22 19:29:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,13 +41,13 @@ ENABLE_EXCEPTIONS=TRUE
 
 # define macro for (chart-specific) tools library
 .IF "$(COM)" == "MSC"
-    CHARTTOOLS= charttools.lib
+    CHARTTOOLS= icharttools.lib
 .ELSE
     CHARTTOOLS= -lcharttools$(UPD)$(DLLPOSTFIX)
 .ENDIF
 
 .IF "$(COM)" == "MSC"
-    CHARTVIEW= chartview.lib
+    CHARTVIEW= ichartview.lib
 .ELSE
     CHARTVIEW= -lchartview$(UPD)$(DLLPOSTFIX)
 .ENDIF
