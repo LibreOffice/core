@@ -4,9 +4,9 @@
  *
  *  $RCSfile: format.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:59:49 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:23:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -712,4 +712,5 @@ const IDocumentLayoutAccess* SwFmt::getIDocumentLayoutAccess() const { return Ge
 IDocumentLayoutAccess* SwFmt::getIDocumentLayoutAccess() { return GetDoc(); }
 IDocumentTimerAccess* SwFmt::getIDocumentTimerAccess() { return GetDoc(); }
 IDocumentFieldsAccess* SwFmt::getIDocumentFieldsAccess() { return GetDoc(); }
+IDocumentChartDataProviderAccess* SwFmt::getIDocumentChartDataProviderAccess() { return GetDoc(); }
 
