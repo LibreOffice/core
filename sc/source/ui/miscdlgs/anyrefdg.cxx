@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anyrefdg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:29:13 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:09:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -360,7 +360,17 @@ ScAnyRefDlg::ScAnyRefDlg( SfxBindings* pB, SfxChildWindow* pCW,
     aTimer.SetTimeoutHdl(LINK( this, ScAnyRefDlg, UpdateFocusHdl));
 
     SC_MOD()->InputEnterHandler();
-    ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
+//    ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
+
+    ScTabViewShell* pScViewShell = NULL;
+    SfxDispatcher* pDisp = pB->GetDispatcher();
+    if ( pDisp )
+    {
+        SfxViewFrame* pViewFrm = pDisp->GetFrame();
+        if ( pViewFrm )
+            pScViewShell = PTR_CAST( ScTabViewShell, pViewFrm->GetViewShell() );
+    }
+
     if( pScViewShell )
         pScViewShell->UpdateInputHandler(TRUE);
 
@@ -383,7 +393,7 @@ ScAnyRefDlg::ScAnyRefDlg( SfxBindings* pB, SfxChildWindow* pCW,
     if ( pParentDoc )
         aDocName = pParentDoc->GetTitle();
 
-    ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
+    ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl(pScViewShell);
 
     DBG_ASSERT( pInputHdl, "Missing input handler :-/" );
 
