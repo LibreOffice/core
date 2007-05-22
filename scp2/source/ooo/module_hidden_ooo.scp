@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:18:30 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:28:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,6 +191,10 @@ Module gid_Module_Root_Files_4
 	gid_File_Filter_Itg,
 	gid_File_Filter_Iti,
 	gid_File_Lib_Bib,
+	gid_File_Lib_Chartmodel,
+	gid_File_Lib_Chartview,
+	gid_File_Lib_Chartcontroller,
+	gid_File_Lib_Charttools,
 	gid_File_Lib_Ctl,
 	gid_File_Lib_Cui,
     gid_File_Lib_Sdbt,
@@ -223,8 +227,6 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Psp,
 	gid_File_Lib_Res,
 	gid_File_Lib_Sb,
-	gid_File_Lib_Sch,
-	gid_File_Lib_Schd,
 	gid_File_Lib_Scn,
 	gid_File_Lib_Sd,
 	gid_File_Lib_Sdd,
@@ -858,6 +860,7 @@ Module gid_Module_Root_Files_8
 	gid_File_Res_Basctl,
 	gid_File_Res_Bib,
 	gid_File_Res_Cal,
+	gid_File_Res_Chartcontroller,
     gid_File_Res_Sdbt,
 	gid_File_Res_Dba,
 	gid_File_Res_Dbw,
@@ -879,7 +882,6 @@ Module gid_Module_Root_Files_8
 	gid_File_Res_Pdffilter,
 	gid_File_Res_Preload,
 	gid_File_Res_San,
-	gid_File_Res_Sch,
 	gid_File_Res_Bf_Sch,
 	gid_File_Res_Bf_Svx,
 	gid_File_Res_Bf_Frm,
