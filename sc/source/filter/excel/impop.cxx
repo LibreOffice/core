@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:47:52 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:45:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,8 +155,6 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     maStrm( rStrm, GetRoot() ),
     aIn( maStrm )
 {
-    pChart = pUsedChartFirst = pUsedChartLast = NULL;
-
     nBdshtTab = 0;
     nIxfeIndex = 0;     // zur Sicherheit auf 0
 
@@ -1220,6 +1218,9 @@ void ImportExcel::PostDocLoad( void )
     // document view settings (before visible OLE area)
     GetDocViewSettings().Finalize();
 
+    // process all drawing objects (including OLE, charts, controls; after hiding rows/columns; before visible OLE area)
+    GetObjectManager().ConvertObjects();
+
     // visible area if embedded OLE
     if( ScModelObj* pDocObj = GetDocModelObj() )
     {
@@ -1240,13 +1241,10 @@ void ImportExcel::PostDocLoad( void )
                 // used area of displayed sheet (cell contents)
                 if( const ScExtTabSettings* pTabSett = GetExtDocOptions().GetTabSettings( nDisplScTab ) )
                     aScOleSize = pTabSett->maUsedArea;
-                // add all valid drawing objects (object manager only available in BIFF8)
-                if( GetBiff() == EXC_BIFF8 )
-                {
-                    ScRange aScObjArea = GetObjectManager().GetUsedArea( nDisplScTab );
-                    if( aScObjArea.IsValid() )
-                        aScOleSize.ExtendTo( aScObjArea );
-                }
+                // add all valid drawing objects
+                ScRange aScObjArea = GetObjectManager().GetUsedArea( nDisplScTab );
+                if( aScObjArea.IsValid() )
+                    aScOleSize.ExtendTo( aScObjArea );
             }
 
             // valid size found - set it at the document
@@ -1268,8 +1266,6 @@ void ImportExcel::PostDocLoad( void )
 
     // root data owns the extended document options -> create a new object
     GetDoc().SetExtDocOptions( new ScExtDocOptions( GetExtDocOptions() ) );
-
-    EndAllChartObjects();
 
     const SCTAB     nLast = pD->GetTableCount();
     const ScRange*      p;
