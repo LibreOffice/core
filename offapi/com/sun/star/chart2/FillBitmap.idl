@@ -1,0 +1,126 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: FillBitmap.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 14:53:39 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_FillBitmap_idl
+#define com_sun_star_chart2_FillBitmap_idl
+
+// #ifndef __com_sun_star_awt_XBitmap_idl__
+// #include <com/sun/star/awt/XBitmap.idl>
+// #endif
+#ifndef __com_sun_star_awt_Point_idl__
+#include <com/sun/star/awt/Point.idl>
+#endif
+#ifndef __com_sun_star_awt_Size_idl__
+#include <com/sun/star/awt/Size.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_BitmapMode_idl__
+#include <com/sun/star/drawing/BitmapMode.idl>
+#endif
+#ifndef __com_sun_star_drawing_RectanglePoint_idl__
+#include <com/sun/star/drawing/RectanglePoint.idl>
+#endif
+
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+/** This strucutre contains all properties of a bitmap when used as
+    FillStyle.
+
+    @see com::sun::star::drawing::FillProperties
+  */
+struct FillBitmap
+{
+    /** a URL to the bitmap used.  This may be an internal URL of the
+        graphics manager.
+    */
+    string aURL;
+
+    /** This is the horizontal and vertical offset where the tile
+        starts.
+
+        <p>It is given in percent in relation to the width of the
+        bitmap.</p>
+    */
+    com::sun::star::awt::Point aOffset;
+
+    /** Every second line (X) / row (Y) of tiles is moved the given
+        percent of the witdh of the bitmap.
+    */
+    com::sun::star::awt::Point aPositionOffset;
+
+    /** The RectanglePoint specifies the position inside of the bitmap
+        to use as the top left position for rendering.
+    */
+    com::sun::star::drawing::RectanglePoint aRectanglePoint;
+
+    /** specifies if the size is given in percentage or as an absolute
+        value.
+
+        <p>If this is <TRUE/>, the properties SizeX and
+        SizeY contain the size of the tile in percent of the
+        size of the original bitmap. If this is <FALSE/>, the size of
+        the tile is specified with 1/100th mm.</p>
+    */
+    boolean bLogicalSize;
+
+    /** This is the size of the tile for filling.
+
+        <p>Depending on the property LogicalSize, this is
+        either relative or absolute.</p>
+    */
+    com::sun::star::awt::Size aSize;
+
+    /** this enum selects how a area is filled with a single bitmap.
+
+        <p>It may be repeated, stretched or displayed with blank space
+        around it.</p>
+    */
+    com::sun::star::drawing::BitmapMode aBitmapMode;
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+
+#endif
