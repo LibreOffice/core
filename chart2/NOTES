@@ -4,9 +4,9 @@
 #
 #   $RCSfile: NOTES,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 23:36:31 $
+#   last change: $Author: vg $ $Date: 2007-05-22 16:44:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,10 +50,10 @@ HOW-TO:
 * Open the file Common.xcu of the Registry.
 
 Location on Unix:
-$HOME/StarOffice7/user/registry/data/org/openoffice/Office/Common.xcu 
+$HOME/StarOffice8/user/registry/data/org/openoffice/Office/Common.xcu 
 
 Location on Windows:
-"%UserProfile%\Application Data\StarOffice7\user\registry\data\org\openoffice\Office\Common.xcu"
+"%UserProfile%\Application Data\StarOffice8\user\registry\data\org\openoffice\Office\Common.xcu"
 
 * Under the configuration-node "Internal" (see <node oor:name="Internal"> tag)
   you have to add the property "DevelopmentChart" and set this to "true":
@@ -116,4 +116,18 @@ Testing
 
 * You can also create a chart from spreadsheet data.
 
-* To run a test for the old API run "dmake" in the qa subdirectory.
+* To run a test for the old API run "dmake" in the qa subdirectory.  Note that
+  you have to deliver the private chart2.rdb (just type "deliver") and call the
+  workbench/officeintegration/install.pl script for registering the private
+  Chart API at the global registry in order to run the test.  Currently the test
+  has to use new API, but in the future this will of course no longer be
+  necessary.
+
+  For running the API-test you must have a running office with the correct
+  parameters that allow remote access from external components (like the API
+  test).  Use the following command-line argument:
+
+  "-accept=socket,host=0,port=8100;urp"
+
+  With host=0 you allow access only from your local machine, so this should be
+  no network security problem.
