@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormattedString.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:11:56 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:36:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,17 +36,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include "FormattedString.hxx"
+#include "ContainerHelper.hxx"
 
 #include "CharacterProperties.hxx"
 #include "PropertyHelper.hxx"
-#include "algohelper.hxx"
 #include "macros.hxx"
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
-#include <com/sun/star/awt/Size.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -61,22 +58,6 @@ using ::osl::MutexGuard;
 namespace
 {
 
-enum
-{
-    PROP_FORMATTED_STRING_REF_PAGE_SIZE
-};
-
-void lcl_AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties )
-{
-    rOutProperties.push_back(
-        Property( C2U( "ReferencePageSize" ),
-                  PROP_FORMATTED_STRING_REF_PAGE_SIZE,
-                  ::getCppuType( reinterpret_cast< const awt::Size * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
-}
-
 const Sequence< Property > & lcl_GetPropertySequence()
 {
     static Sequence< Property > aPropSeq;
@@ -87,16 +68,14 @@ const Sequence< Property > & lcl_GetPropertySequence()
     {
         // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-        ::chart::CharacterProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ true );
+        ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
 
         // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::helper::PropertyNameLess() );
+                     ::chart::PropertyNameLess() );
 
         // transfer result to static Sequence
-        aPropSeq = ::chart::helper::VectorToSequence( aProperties );
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
     return aPropSeq;
@@ -118,17 +97,32 @@ namespace chart
 
 FormattedString::FormattedString( const ::rtl::OUString & rString ) :
         ::property::OPropertySet( m_aMutex ),
-    m_aString( rString )
+    m_aString( rString ),
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
 {}
 
 FormattedString::FormattedString(
         uno::Reference< uno::XComponentContext > const & xContext ) :
         ::property::OPropertySet( m_aMutex ),
-    m_aString()
+    m_aString(),
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+{}
+
+FormattedString::FormattedString( const FormattedString & rOther ) :
+        ::property::OPropertySet( rOther, m_aMutex ),
+    m_aString( rOther.m_aString ),
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
 {}
 
 FormattedString::~FormattedString()
 {}
+
+// ____ XCloneable ____
+uno::Reference< util::XCloneable > SAL_CALL FormattedString::createClone()
+    throw (uno::RuntimeException)
+{
+    return uno::Reference< util::XCloneable >( new FormattedString( *this ));
+}
 
 // ____ XFormattedString ____
 ::rtl::OUString SAL_CALL FormattedString::getString()
@@ -146,8 +140,64 @@ void SAL_CALL FormattedString::setString( const ::rtl::OUString& String )
     // /--
     MutexGuard aGuard( GetMutex());
     m_aString = String;
+    fireModifyEvent();
     // \--
 }
+
+// ____ XModifyBroadcaster ____
+void SAL_CALL FormattedString::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+    throw (uno::RuntimeException)
+{
+    try
+    {
+        uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
+        xBroadcaster->addModifyListener( aListener );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+void SAL_CALL FormattedString::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+    throw (uno::RuntimeException)
+{
+    try
+    {
+        uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
+        xBroadcaster->removeModifyListener( aListener );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+// ____ XModifyListener ____
+void SAL_CALL FormattedString::modified( const lang::EventObject& aEvent )
+    throw (uno::RuntimeException)
+{
+    m_xModifyEventForwarder->modified( aEvent );
+}
+
+// ____ XEventListener (base of XModifyListener) ____
+void SAL_CALL FormattedString::disposing( const lang::EventObject& Source )
+    throw (uno::RuntimeException)
+{
+    // nothing
+}
+
+// ____ OPropertySet ____
+void FormattedString::firePropertyChangeEvent()
+{
+    fireModifyEvent();
+}
+
+void FormattedString::fireModifyEvent()
+{
+    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
+}
+
 
 // ----------------------------------------
 
@@ -164,26 +214,17 @@ Sequence< OUString > FormattedString::getSupportedServiceNames_Static()
 uno::Any FormattedString::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    // todo: default is just for testing. should be void
-    if( nHandle == PROP_FORMATTED_STRING_REF_PAGE_SIZE )
-    {
-        return uno::makeAny( awt::Size( 10000, 7500 ) );
-    }
-    // remove till here
-
-    static helper::tPropertyValueMap aStaticDefaults;
+    static tPropertyValueMap aStaticDefaults;
 
     // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aStaticDefaults.size() )
     {
         // initialize defaults
-        CharacterProperties::AddDefaultsToMap(
-            aStaticDefaults,
-            /* bIncludeStyleProperties = */ true );
+        CharacterProperties::AddDefaultsToMap( aStaticDefaults );
     }
 
-    helper::tPropertyValueMap::const_iterator aFound(
+    tPropertyValueMap::const_iterator aFound(
         aStaticDefaults.find( nHandle ));
 
     if( aFound == aStaticDefaults.end())
