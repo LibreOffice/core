@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chartuno.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:42:08 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:11:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,13 +44,19 @@
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CHART2_DATA_XDATARECEIVER_HPP_
+#include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART_CHARTDATAROWSOURCE_HPP_
+#include <com/sun/star/chart/ChartDataRowSource.hpp>
+#endif
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
 
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
-#include <sch/schdll.hxx>
-#include <sch/memchrt.hxx>
 #include <sfx2/app.hxx>
 #include <svtools/moduleoptions.hxx>
 #include <sot/clsids.hxx>
@@ -64,6 +70,7 @@
 #include "chartarr.hxx"
 #include "chartlis.hxx"
 #include "unoguard.hxx"
+#include "chart2uno.hxx"
 
 using namespace com::sun::star;
 
@@ -198,7 +205,7 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
     ScDrawLayer* pModel = pDocShell->MakeDrawLayer();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
     DBG_ASSERT(pPage,"addChart: keine Page");
-    if (!pPage)
+    if (!pPage || !pDoc)
         return;
 
     //  chart can't be inserted if any ole object with that name exists on any table
@@ -252,14 +259,39 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
             aSz.Width = aSize.Width();
             aSz.Height = aSize.Height();
 
-            Window* pWin = NULL;
+            // Calc -> DataProvider
+            uno::Reference< chart2::data::XDataProvider > xDataProvider = new
+                ScChart2DataProvider( pDoc );
+            // Chart -> DataReceiver
+            uno::Reference< chart2::data::XDataReceiver > xReceiver;
+            uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
+            if( xCompSupp.is())
+                xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
+            if( xReceiver.is())
+            {
+                // connect
+                xReceiver->attachDataProvider( xDataProvider );
+                uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pDocShell->GetModel(), uno::UNO_QUERY );
+                xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
 
-            ScChartArray aParam( pDoc, xNewRanges, String() );
-            aParam.SetHeaders( bColumnHeaders, bRowHeaders );
-            SchMemChart* pMemChart = aParam.CreateMemChart();
-            // TODO/LATER: looks like there is no need here to update the replacement. But it should be checked.
-            SchDLL::Update( xObj, pMemChart, pWin );
-            delete pMemChart;
+                // set arguments
+                String sRangeStr;
+                xNewRanges->Format(sRangeStr, SCR_ABS_3D, pDoc);
+                uno::Sequence< beans::PropertyValue > aArgs( 4 );
+                aArgs[0] = beans::PropertyValue(
+                    ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
+                    uno::makeAny( ::rtl::OUString( sRangeStr )), beans::PropertyState_DIRECT_VALUE );
+                aArgs[1] = beans::PropertyValue(
+                    ::rtl::OUString::createFromAscii("HasCategories"), -1,
+                    uno::makeAny( bRowHeaders ), beans::PropertyState_DIRECT_VALUE );
+                aArgs[2] = beans::PropertyValue(
+                    ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
+                    uno::makeAny( bColumnHeaders ), beans::PropertyState_DIRECT_VALUE );
+                aArgs[3] = beans::PropertyValue(
+                    ::rtl::OUString::createFromAscii("DataRowSource"), -1,
+                    uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
+                xReceiver->setArguments( aArgs );
+            }
 
             ScChartListener* pChartListener =
                 new ScChartListener( aObjName, pDoc, xNewRanges );
@@ -267,6 +299,10 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
             pChartListener->StartListeningTo();
 
             SdrOle2Obj* pObj = new SdrOle2Obj( ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), aObjName, aInsRect );
+
+            // set VisArea
+            if( xObj.is())
+                xObj->setVisualAreaSize( nAspect, aSz );
 
             pPage->InsertObject( pObj );
             pModel->AddUndo( new SdrUndoInsertObj( *pObj ) );       //! Undo-Kommentar?
@@ -452,44 +488,47 @@ void ScChartObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-void ScChartObj::GetData_Impl( ScRangeListRef& rRanges, BOOL& rColHeaders, BOOL& rRowHeaders ) const
+void ScChartObj::GetData_Impl( ScRangeListRef& rRanges, bool& rColHeaders, bool& rRowHeaders ) const
 {
-    BOOL bFound = FALSE;
-    if (pDocShell)
+    bool bFound = false;
+    ScDocument* pDoc = (pDocShell? pDocShell->GetDocument(): 0);
+    uno::Reference< embed::XComponentSupplier > xCompSupp;
+    if( pDoc )
+        xCompSupp.set( pDoc->FindOleObjectByName( aChartName ), uno::UNO_QUERY );
+    if( xCompSupp.is())
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        SchMemChart* pOld = pDoc->FindChartData(aChartName);
-        if (pOld)
+        uno::Reference< chart2::data::XDataReceiver > xReceiver( xCompSupp->getComponent(), uno::UNO_QUERY );
+        if( xReceiver.is())
         {
-            ScChartArray aData(pDoc,*pOld);
-            rRanges = aData.GetRangeList();
-            rColHeaders = aData.HasColHeaders();
-            rRowHeaders = aData.HasRowHeaders();
-            bFound = TRUE;
+            uno::Reference< chart2::data::XDataSource > xUsedData( xReceiver->getUsedData());
+
+            ScChart2DataProvider::detectArguments(
+                xUsedData, pDoc,
+                rRanges, rColHeaders, rRowHeaders );
+            bFound = true;
         }
-    }
-    if (!bFound)        // Default
+     }
+    if( !bFound )
     {
-        rRanges = NULL;
-        rColHeaders = FALSE;
-        rRowHeaders = FALSE;
+        rRanges = 0;
+        rColHeaders = false;
+        rRowHeaders = false;
     }
 }
 
-void ScChartObj::Update_Impl( const ScRangeListRef& rRanges, BOOL bColHeaders, BOOL bRowHeaders )
+void ScChartObj::Update_Impl( const ScRangeListRef& rRanges, bool bColHeaders, bool bRowHeaders )
 {
     if (pDocShell)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
         BOOL bUndo(pDoc->IsUndoEnabled());
-        Window* pWin = NULL;
 
         if (bUndo)
         {
             pDocShell->GetUndoManager()->AddUndoAction(
                 new ScUndoChartData( pDocShell, aChartName, rRanges, bColHeaders, bRowHeaders, FALSE ) );
         }
-        pDoc->UpdateChartArea( aChartName, rRanges, bColHeaders, bRowHeaders, FALSE, pWin );
+        pDoc->UpdateChartArea( aChartName, rRanges, bColHeaders, bRowHeaders, FALSE );
     }
 }
 
@@ -498,8 +537,8 @@ void ScChartObj::Update_Impl( const ScRangeListRef& rRanges, BOOL bColHeaders, B
 sal_Bool SAL_CALL ScChartObj::getHasColumnHeaders() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScRangeListRef xRanges;
-    BOOL bColHeaders, bRowHeaders;
+    ScRangeListRef xRanges = new ScRangeList;
+    bool bColHeaders, bRowHeaders;
     GetData_Impl( xRanges, bColHeaders, bRowHeaders );
     return bColHeaders;
 }
@@ -508,18 +547,18 @@ void SAL_CALL ScChartObj::setHasColumnHeaders( sal_Bool bHasColumnHeaders )
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScRangeListRef xRanges;
-    BOOL bOldColHeaders, bOldRowHeaders;
+    ScRangeListRef xRanges = new ScRangeList;
+    bool bOldColHeaders, bOldRowHeaders;
     GetData_Impl( xRanges, bOldColHeaders, bOldRowHeaders );
-    if ( bOldColHeaders != bHasColumnHeaders )
+    if ( bOldColHeaders != (bHasColumnHeaders != sal_False) )
         Update_Impl( xRanges, bHasColumnHeaders, bOldRowHeaders );
 }
 
 sal_Bool SAL_CALL ScChartObj::getHasRowHeaders() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScRangeListRef xRanges;
-    BOOL bColHeaders, bRowHeaders;
+    ScRangeListRef xRanges = new ScRangeList;
+    bool bColHeaders, bRowHeaders;
     GetData_Impl( xRanges, bColHeaders, bRowHeaders );
     return bRowHeaders;
 }
@@ -528,18 +567,18 @@ void SAL_CALL ScChartObj::setHasRowHeaders( sal_Bool bHasRowHeaders )
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScRangeListRef xRanges;
-    BOOL bOldColHeaders, bOldRowHeaders;
+    ScRangeListRef xRanges = new ScRangeList;
+    bool bOldColHeaders, bOldRowHeaders;
     GetData_Impl( xRanges, bOldColHeaders, bOldRowHeaders );
-    if ( bOldRowHeaders != bHasRowHeaders )
+    if ( bOldRowHeaders != (bHasRowHeaders != sal_False) )
         Update_Impl( xRanges, bOldColHeaders, bHasRowHeaders );
 }
 
 uno::Sequence<table::CellRangeAddress> SAL_CALL ScChartObj::getRanges() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScRangeListRef xRanges;
-    BOOL bColHeaders, bRowHeaders;
+    ScRangeListRef xRanges = new ScRangeList;
+    bool bColHeaders, bRowHeaders;
     GetData_Impl( xRanges, bColHeaders, bRowHeaders );
     if ( xRanges.Is() )
     {
@@ -571,8 +610,8 @@ void SAL_CALL ScChartObj::setRanges( const uno::Sequence<table::CellRangeAddress
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScRangeListRef xOldRanges;
-    BOOL bColHeaders, bRowHeaders;
+    ScRangeListRef xOldRanges = new ScRangeList;
+    bool bColHeaders, bRowHeaders;
     GetData_Impl( xOldRanges, bColHeaders, bRowHeaders );
 
     ScRangeList* pList = new ScRangeList;
