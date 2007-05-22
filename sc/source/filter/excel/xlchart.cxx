@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlchart.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:28:29 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:51:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,12 +47,8 @@
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_AWT_GRADIENT_HPP_
 #include <com/sun/star/awt/Gradient.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XBITMAP_HPP_
-#include <com/sun/star/awt/XBitmap.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_LINEDASH_HPP_
@@ -68,8 +64,17 @@
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_CHART_CHARTSYMBOLTYPE_HPP_
-#include <com/sun/star/chart/ChartSymbolType.hpp>
+#ifndef _COM_SUN_STAR_CHART2_RELATIVEPOSITION_HPP_
+#include <com/sun/star/chart2/RelativePosition.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_LEGENDPOSITION_HPP_
+#include <com/sun/star/chart2/LegendPosition.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_LEGENDEXPANSION_HPP_
+#include <com/sun/star/chart2/LegendExpansion.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_SYMBOL_HPP_
+#include <com/sun/star/chart2/Symbol.hpp>
 #endif
 
 #ifndef INCLUDED_RTL_MATH_HXX
@@ -91,6 +96,9 @@
 #ifndef _SVX_UNOMID_HXX
 #include <svx/unomid.hxx>
 #endif
+#ifndef _SVX_ESCHEREX_HXX
+#include <svx/escherex.hxx>
+#endif
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
@@ -98,6 +106,9 @@
 
 #ifndef SC_XLCONST_HXX
 #include "xlconst.hxx"
+#endif
+#ifndef SC_XLSTYLE_HXX
+#include "xlstyle.hxx"
 #endif
 #ifndef SC_XLTOOLS_HXX
 #include "xltools.hxx"
@@ -109,9 +120,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::awt::XBitmap;
-
-typedef ::com::sun::star::awt::Gradient ApiGradient;
+using ::com::sun::star::chart2::XChartDocument;
 
 // Common =====================================================================
 
@@ -131,18 +140,13 @@ XclChDataPointPos::XclChDataPointPos() :
 {
 }
 
-bool operator==( const XclChDataPointPos& rL, const XclChDataPointPos& rR )
-{
-    return (rL.mnSeriesIdx == rR.mnSeriesIdx) && (rL.mnPointIdx == rR.mnPointIdx);
-}
-
 bool operator<( const XclChDataPointPos& rL, const XclChDataPointPos& rR )
 {
     return (rL.mnSeriesIdx < rR.mnSeriesIdx) ||
         ((rL.mnSeriesIdx == rR.mnSeriesIdx) && (rL.mnPointIdx < rR.mnPointIdx));
 }
 
-// Formatting =================================================================
+// Frame formatting ===========================================================
 
 XclChFramePos::XclChFramePos() :
     mnObjType( EXC_CHFRAMEPOS_ANY ),
@@ -153,49 +157,40 @@ XclChFramePos::XclChFramePos() :
 // ----------------------------------------------------------------------------
 
 XclChLineFormat::XclChLineFormat() :
+    maColor( COL_BLACK ),
     mnPattern( EXC_CHLINEFORMAT_SOLID ),
     mnWeight( EXC_CHLINEFORMAT_SINGLE ),
-    mnFlags( EXC_CHLINEFORMAT_AUTO ),
-    mnColorIdx( 0 )
+    mnFlags( EXC_CHLINEFORMAT_AUTO )
 {
 }
 
 // ----------------------------------------------------------------------------
 
 XclChAreaFormat::XclChAreaFormat() :
-    mnPattern( EXC_CHAREAFORMAT_NONE ),
-    mnFlags( EXC_CHAREAFORMAT_AUTO ),
-    mnForeColorIdx( 0 ),
-    mnBackColorIdx( 0 )
+    maPattColor( COL_WHITE ),
+    maBackColor( COL_BLACK ),
+    mnPattern( EXC_PATT_SOLID ),
+    mnFlags( EXC_CHAREAFORMAT_AUTO )
+{
+}
+
+// ----------------------------------------------------------------------------
+
+XclChEscherFormat::XclChEscherFormat()
+{
+}
+
+XclChEscherFormat::~XclChEscherFormat()
 {
 }
 
 // ----------------------------------------------------------------------------
 
 XclChPicFormat::XclChPicFormat() :
-    mnBmpMode( EXC_CHPICFORMAT_STACK ),
-    mnFormat( 0 ),
-    mnFlags( 0 ),
+    mnBmpMode( EXC_CHPICFORMAT_NONE ),
+    mnFormat( EXC_CHPICFORMAT_DEFAULT ),
+    mnFlags( EXC_CHPICFORMAT_DEFAULTFLAGS ),
     mfScale( 0.5 )
-{
-}
-
-// ----------------------------------------------------------------------------
-
-XclChMarkerFormat::XclChMarkerFormat() :
-    mnMarkerSize( EXC_CHMARKERFORMAT_SINGLESIZE ),
-    mnMarkerType( EXC_CHMARKERFORMAT_NOSYMBOL ),
-    mnFlags( EXC_CHMARKERFORMAT_AUTO ),
-    mnLineColorIdx( 0 ),
-    mnFillColorIdx( 0 )
-{
-};
-
-// ----------------------------------------------------------------------------
-
-XclCh3dDataFormat::XclCh3dDataFormat() :
-    mnBase( EXC_CH3DDATAFORMAT_RECT ),
-    mnTop( EXC_CH3DDATAFORMAT_STRAIGHT )
 {
 }
 
@@ -203,7 +198,17 @@ XclCh3dDataFormat::XclCh3dDataFormat() :
 
 XclChFrame::XclChFrame() :
     mnFormat( EXC_CHFRAME_STANDARD ),
-    mnFlags( 0 )
+    mnFlags( EXC_CHFRAME_AUTOSIZE | EXC_CHFRAME_AUTOPOS )
+{
+}
+
+// Source links ===============================================================
+
+XclChSourceLink::XclChSourceLink() :
+    mnDestType( EXC_CHSRCLINK_TITLE ),
+    mnLinkType( EXC_CHSRCLINK_DEFAULT ),
+    mnFlags( 0 ),
+    mnNumFmtIdx( 0 )
 {
 }
 
@@ -217,23 +222,32 @@ XclChObjectLink::XclChObjectLink() :
 // ----------------------------------------------------------------------------
 
 XclChText::XclChText() :
+    maTextColor( COL_BLACK ),
     mnHAlign( EXC_CHTEXT_ALIGN_CENTER ),
     mnVAlign( EXC_CHTEXT_ALIGN_CENTER ),
     mnBackMode( EXC_CHTEXT_TRANSPARENT ),
-    mnFlags( 0 ),
-    mnTextColorIdx( 0 ),
+    mnFlags( EXC_CHTEXT_AUTOCOLOR | EXC_CHTEXT_AUTOFILL ),
     mnPlacement( EXC_CHTEXT_POS_DEFAULT ),
-    mnRotation( 0 )
+    mnRotation( EXC_ROT_NONE )
 {
 }
 
-// Linked source data =========================================================
+// Data series ================================================================
 
-XclChSourceLink::XclChSourceLink() :
-    mnDestType( EXC_CHSRCLINK_TITLE ),
-    mnLinkType( EXC_CHSRCLINK_DIRECTLY ),
-    mnFlags( 0 ),
-    mnNumFmtIdx( 0 )
+XclChMarkerFormat::XclChMarkerFormat() :
+    maLineColor( COL_BLACK ),
+    maFillColor( COL_WHITE ),
+    mnMarkerSize( EXC_CHMARKERFORMAT_SINGLESIZE ),
+    mnMarkerType( EXC_CHMARKERFORMAT_NOSYMBOL ),
+    mnFlags( EXC_CHMARKERFORMAT_AUTO )
+{
+};
+
+// ----------------------------------------------------------------------------
+
+XclCh3dDataFormat::XclCh3dDataFormat() :
+    mnBase( EXC_CH3DDATAFORMAT_RECT ),
+    mnTop( EXC_CH3DDATAFORMAT_STRAIGHT )
 {
 }
 
@@ -255,7 +269,11 @@ XclChSerTrendLine::XclChSerTrendLine() :
     mnShowEquation( 0 ),
     mnShowRSquared( 0 )
 {
-    ::rtl::math::setNan( &mfIntercept );
+    /*  Set all bits in mfIntercept to 1 (that is -1.#NAN) to indicate that
+        there is no interception point. Cannot use ::rtl::math::setNan() here
+        cause it misses the sign bit. */
+    sal_math_Double* pDouble = reinterpret_cast< sal_math_Double* >( &mfIntercept );
+    pDouble->w32_parts.msw = pDouble->w32_parts.lsw = 0xFFFFFFFF;
 }
 
 // ----------------------------------------------------------------------------
@@ -281,11 +299,11 @@ XclChSeries::XclChSeries() :
 {
 }
 
-// Chart structure ============================================================
+// Chart type groups ==========================================================
 
 XclChType::XclChType() :
     mnOverlap( 0 ),
-    mnGap( 50 ),
+    mnGap( 150 ),
     mnRotation( 0 ),
     mnPieHole( 0 ),
     mnBubbleSize( 100 ),
@@ -297,13 +315,13 @@ XclChType::XclChType() :
 // ----------------------------------------------------------------------------
 
 XclChChart3d::XclChChart3d() :
-    mnRotation( 0 ),
-    mnElevation( 0 ),
-    mnDist( 0 ),
-    mnHeight( 0 ),
-    mnDepth( 0 ),
-    mnGap( 0 ),
-    mnFlags( 0 )
+    mnRotation( 20 ),
+    mnElevation( 15 ),
+    mnEyeDist( 30 ),
+    mnRelHeight( 100 ),
+    mnRelDepth( 100 ),
+    mnDepthGap( 150 ),
+    mnFlags( EXC_CHCHART3D_AUTOHEIGHT )
 {
 }
 
@@ -312,13 +330,14 @@ XclChChart3d::XclChChart3d() :
 XclChLegend::XclChLegend() :
     mnDockMode( EXC_CHLEGEND_RIGHT ),
     mnSpacing( EXC_CHLEGEND_MEDIUM ),
-    mnFlags( 0 )
+    mnFlags( EXC_CHLEGEND_DOCKED | EXC_CHLEGEND_AUTOSERIES |
+        EXC_CHLEGEND_AUTOPOSX | EXC_CHLEGEND_AUTOPOSY | EXC_CHLEGEND_STACKED )
 {
 }
 
 // ----------------------------------------------------------------------------
 
-XclChChartGroup::XclChChartGroup() :
+XclChTypeGroup::XclChTypeGroup() :
     mnFlags( 0 ),
     mnGroupIdx( EXC_CHSERGROUP_NONE )
 {
@@ -327,7 +346,7 @@ XclChChartGroup::XclChChartGroup() :
 // ----------------------------------------------------------------------------
 
 XclChProperties::XclChProperties() :
-    mnFlags( 0 ),
+    mnFlags( EXC_CHPROPS_MANSERIES ),
     mnEmptyMode( EXC_CHPROPS_EMPTY_SKIP )
 {
 }
@@ -350,28 +369,41 @@ XclChValueRange::XclChValueRange() :
     mfMajorStep( 0.0 ),
     mfMinorStep( 0.0 ),
     mfCross( 0.0 ),
-    mnFlags( 0 )
+    mnFlags( EXC_CHVALUERANGE_AUTOMIN | EXC_CHVALUERANGE_AUTOMAX |
+        EXC_CHVALUERANGE_AUTOMAJOR | EXC_CHVALUERANGE_AUTOMINOR | EXC_CHVALUERANGE_AUTOCROSS | EXC_CHVALUERANGE_BIT8 )
 {
 }
 
 // ----------------------------------------------------------------------------
 
 XclChTick::XclChTick() :
-    mnMajor( 0 ),
+    maTextColor( COL_BLACK ),
+    mnMajor( EXC_CHTICK_INSIDE | EXC_CHTICK_OUTSIDE ),
     mnMinor( 0 ),
-    mnLabelPos( EXC_CHTICK_NOLABEL ),
+    mnLabelPos( EXC_CHTICK_NEXT ),
     mnBackMode( EXC_CHTICK_TRANSPARENT ),
-    mnFlags( 0 ),
-    mnTextColorIdx( 0 ),
-    mnRotation( 0 )
+    mnFlags( EXC_CHTICK_AUTOCOLOR | EXC_CHTICK_AUTOROT ),
+    mnRotation( EXC_ROT_NONE )
 {
 }
 
 // ----------------------------------------------------------------------------
 
 XclChAxis::XclChAxis() :
-    mnType( EXC_CHAXIS_X )
+    mnType( EXC_CHAXIS_NONE )
 {
+}
+
+sal_Int32 XclChAxis::GetApiAxisDimension() const
+{
+    sal_Int32 nApiAxisDim = EXC_CHART_AXIS_NONE;
+    switch( mnType )
+    {
+        case EXC_CHAXIS_X:  nApiAxisDim = EXC_CHART_AXIS_X; break;
+        case EXC_CHAXIS_Y:  nApiAxisDim = EXC_CHART_AXIS_Y; break;
+        case EXC_CHAXIS_Z:  nApiAxisDim = EXC_CHART_AXIS_Z; break;
+    }
+    return nApiAxisDim;
 }
 
 // ----------------------------------------------------------------------------
@@ -381,67 +413,197 @@ XclChAxesSet::XclChAxesSet() :
 {
 }
 
+sal_Int32 XclChAxesSet::GetApiAxesSetIndex() const
+{
+    sal_Int32 nApiAxesSetIdx = EXC_CHART_AXESSET_NONE;
+    switch( mnAxesSetId )
+    {
+        case EXC_CHAXESSET_PRIMARY:     nApiAxesSetIdx = EXC_CHART_AXESSET_PRIMARY;     break;
+        case EXC_CHAXESSET_SECONDARY:   nApiAxesSetIdx = EXC_CHART_AXESSET_SECONDARY;   break;
+    }
+    return nApiAxesSetIdx;
+}
+
 // Static helper functions ====================================================
 
-bool XclChartHelper::IsLineChartType( sal_uInt16 nTypeId )
+sal_uInt16 XclChartHelper::GetSeriesLineAutoColorIdx( sal_uInt16 nFormatIdx )
 {
-    return
-        (nTypeId == EXC_ID_CHLINE) ||
-        (nTypeId == EXC_ID_CHAREA) ||
-        (nTypeId == EXC_ID_CHSTOCK);
+    static const sal_uInt16 spnLineColors[] =
+    {
+        32, 33, 34, 35, 36, 37, 38, 39,
+        40, 41, 42, 43, 44, 45, 46, 47,
+        48, 49, 50, 51, 52, 53, 54, 55,
+        56, 57, 58, 59, 60, 61, 62,  8,
+         9, 10, 11, 12, 13, 14, 15, 16,
+        17, 18, 19, 20, 21, 22, 23, 24,
+        25, 26, 27, 28, 29, 30, 31, 63
+    };
+    return spnLineColors[ nFormatIdx % STATIC_TABLE_SIZE( spnLineColors ) ];
 }
 
-bool XclChartHelper::IsBarChartType( sal_uInt16 nTypeId )
+sal_uInt16 XclChartHelper::GetSeriesFillAutoColorIdx( sal_uInt16 nFormatIdx )
 {
-    return
-        (nTypeId == EXC_ID_CHBAR) ||
-        (nTypeId == EXC_ID_CHCOLUMN);
+    static const sal_uInt16 spnFillColors[] =
+    {
+        24, 25, 26, 27, 28, 29, 30, 31,
+        32, 33, 34, 35, 36, 37, 38, 39,
+        40, 41, 42, 43, 44, 45, 46, 47,
+        48, 49, 50, 51, 52, 53, 54, 55,
+        56, 57, 58, 59, 60, 61, 62, 63,
+         8,  9, 10, 11, 12, 13, 14, 15,
+        16, 17, 18, 19, 20, 21, 22, 23
+    };
+    return spnFillColors[ nFormatIdx % STATIC_TABLE_SIZE( spnFillColors ) ];
 }
 
-bool XclChartHelper::IsRadarChartType( sal_uInt16 nTypeId )
+sal_uInt8 XclChartHelper::GetSeriesFillAutoTransp( sal_uInt16 nFormatIdx )
 {
-    return
-        (nTypeId == EXC_ID_CHRADARLINE) ||
-        (nTypeId == EXC_ID_CHRADARAREA);
+    static const sal_uInt8 spnTrans[] = { 0x00, 0x40, 0x20, 0x60, 0x70 };
+    return spnTrans[ (nFormatIdx / 56) % STATIC_TABLE_SIZE( spnTrans ) ];
 }
 
-bool XclChartHelper::IsPieChartType( sal_uInt16 nTypeId )
+sal_uInt16 XclChartHelper::GetAutoMarkerType( sal_uInt16 nFormatIdx )
 {
-    return
-        (nTypeId == EXC_ID_CHPIE) ||
-        (nTypeId == EXC_ID_CHDONUT) ||
-        (nTypeId == EXC_ID_CHPIEEXT);
+    static const sal_uInt16 spnSymbols[] = {
+        EXC_CHMARKERFORMAT_DIAMOND, EXC_CHMARKERFORMAT_SQUARE, EXC_CHMARKERFORMAT_TRIANGLE,
+        EXC_CHMARKERFORMAT_CROSS, EXC_CHMARKERFORMAT_STAR, EXC_CHMARKERFORMAT_CIRCLE,
+        EXC_CHMARKERFORMAT_PLUS, EXC_CHMARKERFORMAT_DOWJ, EXC_CHMARKERFORMAT_STDDEV };
+    return spnSymbols[ nFormatIdx % STATIC_TABLE_SIZE( spnSymbols ) ];
 }
 
-bool XclChartHelper::IsScatterChartType( sal_uInt16 nTypeId )
+bool XclChartHelper::HasMarkerFillColor( sal_uInt16 nMarkerType )
 {
-    return
-        (nTypeId == EXC_ID_CHSCATTER) ||
-        (nTypeId == EXC_ID_CHBUBBLES);
+    static const bool spbFilled[] = {
+        false, true, true, true, false, false, false, false, true, false };
+    return (nMarkerType < STATIC_TABLE_SIZE( spbFilled )) && spbFilled[ nMarkerType ];
 }
 
-bool XclChartHelper::HasPolarCoordSystem( sal_uInt16 nTypeId )
+// Chart formatting info provider =============================================
+
+namespace {
+
+static const XclChFormatInfo spFmtInfos[] =
 {
-    return IsRadarChartType( nTypeId ) || IsPieChartType( nTypeId );
+    // object type                  property mode                auto line color         auto line weight         auto pattern color      missing frame type         create delete isframe
+    { EXC_CHOBJTYPE_BACKGROUND,     EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_HAIR,   EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_INVISIBLE, true,  true,  true  },
+    { EXC_CHOBJTYPE_PLOTFRAME,      EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_HAIR,   EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_INVISIBLE, true,  true,  true  },
+    { EXC_CHOBJTYPE_WALL3D,         EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_HAIR,   EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_AUTO,      true,  false, true  },
+    { EXC_CHOBJTYPE_FLOOR3D,        EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_HAIR,   23,                     EXC_CHFRAMETYPE_AUTO,      true,  false, true  },
+    { EXC_CHOBJTYPE_TEXT,           EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_HAIR,   EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_INVISIBLE, false, true,  true  },
+    { EXC_CHOBJTYPE_LEGEND,         EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_HAIR,   EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_AUTO,      true,  true,  true  },
+    { EXC_CHOBJTYPE_LINEARSERIES,   EXC_CHPROPMODE_LINEARSERIES, EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_SINGLE, EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_AUTO,      false, false, false },
+    { EXC_CHOBJTYPE_FILLEDSERIES,   EXC_CHPROPMODE_FILLEDSERIES, EXC_COLOR_CHBORDERAUTO, EXC_CHLINEFORMAT_SINGLE, EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_AUTO,      false, false, true  },
+    { EXC_CHOBJTYPE_AXISLINE,       EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_HAIR,   EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_AUTO,      false, false, false },
+    { EXC_CHOBJTYPE_GRIDLINE,       EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_HAIR,   EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_INVISIBLE, false, true,  false  },
+    { EXC_CHOBJTYPE_TRENDLINE,      EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_DOUBLE, EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_INVISIBLE, false, false, false },
+    { EXC_CHOBJTYPE_ERRORBAR,       EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_SINGLE, EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_INVISIBLE, false, false, false },
+    { EXC_CHOBJTYPE_CONNECTLINE,    EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_HAIR,   EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_INVISIBLE, false, false, false },
+    { EXC_CHOBJTYPE_HILOLINE,       EXC_CHPROPMODE_LINEARSERIES, EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_HAIR,   EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_INVISIBLE, false, false, false },
+    { EXC_CHOBJTYPE_WHITEDROPBAR,   EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_HAIR,   EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_INVISIBLE, false, false, true  },
+    { EXC_CHOBJTYPE_BLACKDROPBAR,   EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_HAIR,   EXC_COLOR_CHWINDOWTEXT, EXC_CHFRAMETYPE_INVISIBLE, false, false, true  }
+};
+
 }
 
-bool XclChartHelper::HasLinearSeries( sal_uInt16 nTypeId )
+// ----------------------------------------------------------------------------
+
+XclChFormatInfoProvider::XclChFormatInfoProvider()
 {
-    return
-        (nTypeId == EXC_ID_CHLINE) ||
-        (nTypeId == EXC_ID_CHSTOCK) ||
-        (nTypeId == EXC_ID_CHSCATTER) ||
-        (nTypeId == EXC_ID_CHRADARLINE);
+    const XclChFormatInfo* pEnd = STATIC_TABLE_END( spFmtInfos );
+    for( const XclChFormatInfo* pIt = spFmtInfos; pIt != pEnd; ++pIt )
+        maInfoMap[ pIt->meObjType ] = pIt;
 }
 
-bool XclChartHelper::HasCategoryAxis( sal_uInt16 nTypeId )
+const XclChFormatInfo& XclChFormatInfoProvider::GetFormatInfo( XclChObjectType eObjType ) const
 {
-    return !IsScatterChartType( nTypeId );
+    XclFmtInfoMap::const_iterator aIt = maInfoMap.find( eObjType );
+    DBG_ASSERT( aIt != maInfoMap.end(), "XclChFormatInfoProvider::GetFormatInfo - unknown object type" );
+    return (aIt == maInfoMap.end()) ? *spFmtInfos : *aIt->second;
 }
 
-bool XclChartHelper::HasSwappedAxesSet( sal_uInt16 nTypeId )
+// Chart type info provider ===================================================
+
+namespace {
+
+// chart type service names
+const sal_Char SERVICE_CHART2_AREA[]    = "com.sun.star.chart2.AreaChartType";
+const sal_Char SERVICE_CHART2_CANDLE[]  = "com.sun.star.chart2.CandleStickChartType";
+const sal_Char SERVICE_CHART2_COLUMN[]  = "com.sun.star.chart2.ColumnChartType";
+const sal_Char SERVICE_CHART2_LINE[]    = "com.sun.star.chart2.LineChartType";
+const sal_Char SERVICE_CHART2_NET[]     = "com.sun.star.chart2.NetChartType";
+const sal_Char SERVICE_CHART2_PIE[]     = "com.sun.star.chart2.PieChartType";
+const sal_Char SERVICE_CHART2_SCATTER[] = "com.sun.star.chart2.ScatterChartType";
+const sal_Char SERVICE_CHART2_SURFACE[] = "com.sun.star.chart2.ColumnChartType";    // Todo
+
+static const XclChTypeInfo spTypeInfos[] =
 {
-    return nTypeId == EXC_ID_CHBAR;
+    // chart type             chart type category      record id           service                 varied point color     combi  3d     3dwall polar  area2d area3d 1stvis xcateg swap   stack  revers betw
+    { EXC_CHTYPEID_BAR,       EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,  EXC_CHVARPOINT_SINGLE, true,  true,  true,  false, true,  true,  false, true,  false, true,  false, true  },
+    { EXC_CHTYPEID_HORBAR,    EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,  EXC_CHVARPOINT_SINGLE, false, true,  true,  false, true,  true,  false, true,  true,  true,  false, true  },
+    { EXC_CHTYPEID_LINE,      EXC_CHTYPECATEG_LINE,    EXC_ID_CHLINE,      SERVICE_CHART2_LINE,    EXC_CHVARPOINT_SINGLE, true,  true,  true,  false, false, true,  false, true,  false, true,  false, true  },
+    { EXC_CHTYPEID_AREA,      EXC_CHTYPECATEG_LINE,    EXC_ID_CHAREA,      SERVICE_CHART2_AREA,    EXC_CHVARPOINT_NONE,   true,  true,  true,  false, true,  true,  false, true,  false, true,  true,  false },
+    { EXC_CHTYPEID_STOCK,     EXC_CHTYPECATEG_LINE,    EXC_ID_CHLINE,      SERVICE_CHART2_CANDLE,  EXC_CHVARPOINT_NONE,   true,  false, false, false, false, false, false, true,  false, true,  false, true  },
+    { EXC_CHTYPEID_RADARLINE, EXC_CHTYPECATEG_RADAR,   EXC_ID_CHRADARLINE, SERVICE_CHART2_NET,     EXC_CHVARPOINT_SINGLE, false, false, false, true,  false, true,  false, true,  false, false, false, false },
+    { EXC_CHTYPEID_RADARAREA, EXC_CHTYPECATEG_RADAR,   EXC_ID_CHRADARAREA, SERVICE_CHART2_NET,     EXC_CHVARPOINT_NONE,   false, false, false, true,  true,  true,  false, true,  false, false, false, false },
+    { EXC_CHTYPEID_PIE,       EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIE,       SERVICE_CHART2_PIE,     EXC_CHVARPOINT_MULTI,  false, true,  false, true,  true,  true,  true,  true,  false, false, false, false },
+    { EXC_CHTYPEID_DONUT,     EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIE,       SERVICE_CHART2_PIE,     EXC_CHVARPOINT_MULTI,  false, true,  false, true,  true,  true,  false, true,  false, false, true,  false },
+    { EXC_CHTYPEID_PIEEXT,    EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIEEXT,    SERVICE_CHART2_PIE,     EXC_CHVARPOINT_MULTI,  false, false, false, true,  true,  true,  true,  true,  false, false, false, false },
+    { EXC_CHTYPEID_SCATTER,   EXC_CHTYPECATEG_SCATTER, EXC_ID_CHSCATTER,   SERVICE_CHART2_SCATTER, EXC_CHVARPOINT_SINGLE, true,  false, false, false, false, true,  false, false, false, false, false, false },
+    { EXC_CHTYPEID_BUBBLES,   EXC_CHTYPECATEG_SCATTER, EXC_ID_CHSCATTER,   SERVICE_CHART2_SCATTER, EXC_CHVARPOINT_SINGLE, false, false, false, false, true,  true,  false, false, false, false, false, false },
+    { EXC_CHTYPEID_SURFACE,   EXC_CHTYPECATEG_SURFACE, EXC_ID_CHSURFACE,   SERVICE_CHART2_SURFACE, EXC_CHVARPOINT_NONE,   false, true,  true,  false, true,  true,  false, true,  false, false, false, false },
+    { EXC_CHTYPEID_UNKNOWN,   EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,  EXC_CHVARPOINT_SINGLE, true,  true,  true,  false, true,  true,  false, true,  false, true,  false, true  }
+};
+
+} // namespace
+
+XclChExtTypeInfo::XclChExtTypeInfo( const XclChTypeInfo& rTypeInfo ) :
+    XclChTypeInfo( rTypeInfo ),
+    mb3dChart( false ),
+    mbSpline( false )
+{
+}
+
+void XclChExtTypeInfo::Set( const XclChTypeInfo& rTypeInfo, bool b3dChart, bool bSpline )
+{
+    static_cast< XclChTypeInfo& >( *this ) = rTypeInfo;
+    mb3dChart = mbSupports3d && b3dChart;
+    mbSpline = bSpline;
+}
+
+// ----------------------------------------------------------------------------
+
+XclChTypeInfoProvider::XclChTypeInfoProvider()
+{
+    const XclChTypeInfo* pEnd = STATIC_TABLE_END( spTypeInfos );
+    for( const XclChTypeInfo* pIt = spTypeInfos; pIt != pEnd; ++pIt )
+        maInfoMap[ pIt->meTypeId ] = pIt;
+}
+
+const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfo( XclChTypeId eTypeId ) const
+{
+    XclChTypeInfoMap::const_iterator aIt = maInfoMap.find( eTypeId );
+    DBG_ASSERT( aIt != maInfoMap.end(), "XclChTypeInfoProvider::GetTypeInfo - unknown chart type" );
+    return (aIt == maInfoMap.end()) ? *maInfoMap.rbegin()->second : *aIt->second;
+}
+
+const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfoFromRecId( sal_uInt16 nRecId ) const
+{
+    const XclChTypeInfo* pEnd = STATIC_TABLE_END( spTypeInfos );
+    for( const XclChTypeInfo* pIt = spTypeInfos; pIt != pEnd; ++pIt )
+        if( pIt->mnRecId == nRecId )
+            return *pIt;
+    DBG_ERRORFILE( "XclChTypeInfoProvider::GetTypeInfoFromRecId - unknown record id" );
+    return GetTypeInfo( EXC_CHTYPEID_UNKNOWN );
+}
+
+const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfoFromService( const OUString& rServiceName ) const
+{
+    const XclChTypeInfo* pEnd = STATIC_TABLE_END( spTypeInfos );
+    for( const XclChTypeInfo* pIt = spTypeInfos; pIt != pEnd; ++pIt )
+        if( rServiceName.equalsAscii( pIt->mpcServiceName ) )
+            return *pIt;
+    DBG_ERRORFILE( "XclChTypeInfoProvider::GetTypeInfoFromService - unknown service name" );
+    return GetTypeInfo( EXC_CHTYPEID_UNKNOWN );
 }
 
 // Property helpers ===========================================================
@@ -455,15 +617,38 @@ XclChObjectTable::XclChObjectTable( Reference< XMultiServiceFactory > xFactory,
 {
 }
 
+Any XclChObjectTable::GetObject( const OUString& rObjName )
+{
+    // get object table
+    if( !mxContainer.is() )
+        mxContainer.set( ScfApiHelper::CreateInstance( mxFactory, maServiceName ), UNO_QUERY );
+    DBG_ASSERT( mxContainer.is(), "XclChObjectTable::GetObject - container not found" );
+
+    Any aObj;
+    if( mxContainer.is() )
+    {
+        // get object from container
+        try
+        {
+            aObj = mxContainer->getByName( rObjName );
+        }
+        catch( Exception& )
+        {
+            DBG_ERRORFILE( "XclChObjectTable::GetObject - object not found" );
+        }
+    }
+    return aObj;
+}
+
 OUString XclChObjectTable::InsertObject( const Any& rObj )
 {
-    OUString aObjName;
-    bool bInserted = false;
 
     // create object table
     if( !mxContainer.is() )
         mxContainer.set( ScfApiHelper::CreateInstance( mxFactory, maServiceName ), UNO_QUERY );
+    DBG_ASSERT( mxContainer.is(), "XclChObjectTable::InsertObject - container not found" );
 
+    OUString aObjName;
     if( mxContainer.is() )
     {
         // create new unused identifier
@@ -477,55 +662,322 @@ OUString XclChObjectTable::InsertObject( const Any& rObj )
         try
         {
             mxContainer->insertByName( aObjName, rObj );
-            bInserted = true;
         }
         catch( Exception& )
         {
+            DBG_ERRORFILE( "XclChObjectTable::InsertObject - cannot insert object" );
+            aObjName = OUString();
         }
     }
-    DBG_ASSERT( bInserted, "XclChObjectTable::InsertObject - cannot insert object" );
-    return bInserted ? aObjName : OUString();
+    return aObjName;
 }
 
 // Property names -------------------------------------------------------------
 
 namespace {
 
-/** Property names for line style. */
-const sal_Char* const sppcLineNames[] =
+/** Property names for line style in common objects. */
+const sal_Char* const sppcLineNamesCommon[] =
     { "LineStyle", "LineWidth", "LineColor", "LineTransparence", "LineDashName", 0 };
+/** Property names for line style in linear series objects. */
+const sal_Char* const sppcLineNamesLinear[] =
+    { "LineStyle", "LineWidth", "Color", "Transparency", "LineDashName", 0 };
+/** Property names for line style in filled series objects. */
+const sal_Char* const sppcLineNamesFilled[] =
+    { "BorderStyle", "BorderWidth", "BorderColor", "BorderTransparency", "BorderDashName", 0 };
 
-/** Property names for solid area style. */
-const sal_Char* const sppcAreaNames[] = { "FillStyle", "FillColor", 0 };
-/** Property names for gradient area style. */
-const sal_Char* const sppcGradientNames[] = {  "FillStyle", "FillGradientName", 0 };
+/** Property names for solid area style in common objects. */
+const sal_Char* const sppcAreaNamesCommon[] = { "FillStyle", "FillColor", 0 };
+/** Property names for solid area style in filled series objects. */
+const sal_Char* const sppcAreaNamesFilled[] = { "FillStyle", "Color", 0 };
+/** Property names for gradient area style in common objects. */
+const sal_Char* const sppcGradNamesCommon[] = {  "FillStyle", "FillGradientName", 0 };
+/** Property names for gradient area style in filled series objects. */
+const sal_Char* const sppcGradNamesFilled[] = {  "FillStyle", "GradientName", 0 };
 /** Property names for bitmap area style. */
 const sal_Char* const sppcBitmapNames[] = { "FillStyle", "FillBitmapName", "FillBitmapMode", 0 };
 
-/** Property names for marker settings. */
-const sal_Char* const sppcMarkerNames[] = { "SymbolType", "SymbolSize", 0 };
+/** Property names for text rotation properties. */
+const sal_Char* const sppcRotationNames[] = { "TextRotation", "StackCharacters", 0 };
+/** Property names for legend properties. */
+const sal_Char* const sppcLegendNames[] =
+    { "Show", "AnchorPosition", "Expansion", "RelativePosition", 0 };
 
 } // namespace
 
 // ----------------------------------------------------------------------------
 
 XclChPropSetHelper::XclChPropSetHelper() :
-    maLineHlp( sppcLineNames ),
-    maAreaHlp( sppcAreaNames ),
-    maGradientHlp( sppcGradientNames ),
+    maLineHlpCommon( sppcLineNamesCommon ),
+    maLineHlpLinear( sppcLineNamesLinear ),
+    maLineHlpFilled( sppcLineNamesFilled ),
+    maAreaHlpCommon( sppcAreaNamesCommon ),
+    maAreaHlpFilled( sppcAreaNamesFilled ),
+    maGradHlpCommon( sppcGradNamesCommon ),
+    maGradHlpFilled( sppcGradNamesFilled ),
     maBitmapHlp( sppcBitmapNames ),
-    maMarkerHlp( sppcMarkerNames )
+    maRotationHlp( sppcRotationNames ),
+    maLegendHlp( sppcLegendNames )
 {
 }
 
+// read properties ------------------------------------------------------------
+
+void XclChPropSetHelper::ReadLineProperties(
+        XclChLineFormat& rLineFmt, XclChObjectTable& rDashTable,
+        const ScfPropertySet& rPropSet, XclChPropertyMode ePropMode )
+{
+    namespace cssd = ::com::sun::star::drawing;
+
+    // read properties from property set
+    cssd::LineStyle eApiStyle = cssd::LineStyle_NONE;
+    sal_Int32 nApiWidth = 0;
+    sal_Int16 nApiTrans = 0;
+    Any aDashNameAny;
+
+    ScfPropSetHelper& rLineHlp = GetLineHelper( ePropMode );
+    rLineHlp.ReadFromPropertySet( rPropSet );
+    rLineHlp >> eApiStyle >> nApiWidth >> rLineFmt.maColor >> nApiTrans >> aDashNameAny;
+
+    // clear automatic flag
+    ::set_flag( rLineFmt.mnFlags, EXC_CHLINEFORMAT_AUTO, false );
+
+    // line width
+    if( nApiWidth <= 0 )        rLineFmt.mnWeight = EXC_CHLINEFORMAT_HAIR;
+    else if( nApiWidth <= 35 )  rLineFmt.mnWeight = EXC_CHLINEFORMAT_SINGLE;
+    else if( nApiWidth <= 70 )  rLineFmt.mnWeight = EXC_CHLINEFORMAT_DOUBLE;
+    else                        rLineFmt.mnWeight = EXC_CHLINEFORMAT_TRIPLE;
+
+    // line style
+    switch( eApiStyle )
+    {
+        case cssd::LineStyle_NONE:
+            rLineFmt.mnPattern = EXC_CHLINEFORMAT_NONE;
+        break;
+        case cssd::LineStyle_SOLID:
+        {
+            if( nApiTrans < 13 )        rLineFmt.mnPattern = EXC_CHLINEFORMAT_SOLID;
+            else if( nApiTrans < 38 )   rLineFmt.mnPattern = EXC_CHLINEFORMAT_DARKTRANS;
+            else if( nApiTrans < 63 )   rLineFmt.mnPattern = EXC_CHLINEFORMAT_MEDTRANS;
+            else if( nApiTrans < 100 )  rLineFmt.mnPattern = EXC_CHLINEFORMAT_LIGHTTRANS;
+            else                        rLineFmt.mnPattern = EXC_CHLINEFORMAT_NONE;
+        }
+        break;
+        case cssd::LineStyle_DASH:
+        {
+            rLineFmt.mnPattern = EXC_CHLINEFORMAT_SOLID;
+            OUString aDashName;
+            cssd::LineDash aApiDash;
+            if( (aDashNameAny >>= aDashName) && (rDashTable.GetObject( aDashName ) >>= aApiDash) )
+            {
+                // reorder dashes that are shorter than dots
+                if( (aApiDash.Dashes == 0) || (aApiDash.DashLen < aApiDash.DotLen) )
+                {
+                    ::std::swap( aApiDash.Dashes, aApiDash.Dots );
+                    ::std::swap( aApiDash.DashLen, aApiDash.DotLen );
+                }
+                // ignore dots that are nearly equal to dashes
+                if( aApiDash.DotLen * 3 > aApiDash.DashLen * 2 )
+                    aApiDash.Dots = 0;
+
+                // convert line dash to predefined Excel dash types
+                if( (aApiDash.Dashes == 1) && (aApiDash.Dots >= 1) )
+                    // one dash and one or more dots
+                    rLineFmt.mnPattern = (aApiDash.Dots == 1) ?
+                        EXC_CHLINEFORMAT_DASHDOT : EXC_CHLINEFORMAT_DASHDOTDOT;
+                else if( aApiDash.Dashes >= 1 )
+                    // one or more dashes and no dots (also: dash-dash-dot)
+                    rLineFmt.mnPattern = (aApiDash.DashLen < 250) ?
+                        EXC_CHLINEFORMAT_DOT : EXC_CHLINEFORMAT_DASH;
+            }
+        }
+        break;
+        default:
+            DBG_ERRORFILE( "XclChPropSetHelper::ReadLineProperties - unknown line style" );
+            rLineFmt.mnPattern = EXC_CHLINEFORMAT_SOLID;
+    }
+}
+
+void XclChPropSetHelper::ReadAreaProperties( XclChAreaFormat& rAreaFmt,
+        const ScfPropertySet& rPropSet, XclChPropertyMode ePropMode )
+{
+    namespace cssd = ::com::sun::star::drawing;
+
+    // read properties from property set
+    cssd::FillStyle eApiStyle = cssd::FillStyle_NONE;
+
+    ScfPropSetHelper& rAreaHlp = GetAreaHelper( ePropMode );
+    rAreaHlp.ReadFromPropertySet( rPropSet );
+    rAreaHlp >> eApiStyle >> rAreaFmt.maPattColor;
+
+    // clear automatic flag
+    ::set_flag( rAreaFmt.mnFlags, EXC_CHAREAFORMAT_AUTO, false );
+
+    // set fill style transparent or solid (set solid for anything but transparent)
+    rAreaFmt.mnPattern = (eApiStyle == cssd::FillStyle_NONE) ? EXC_PATT_NONE : EXC_PATT_SOLID;
+}
+
+void XclChPropSetHelper::ReadEscherProperties(
+        XclChEscherFormat& rEscherFmt, XclChPicFormat& rPicFmt,
+        XclChObjectTable& rGradientTable, XclChObjectTable& rBitmapTable,
+        const ScfPropertySet& rPropSet, XclChPropertyMode ePropMode )
+{
+    namespace cssd = ::com::sun::star::drawing;
+    namespace cssa = ::com::sun::star::awt;
+
+    cssd::FillStyle eApiStyle = cssd::FillStyle_NONE;
+    if( rPropSet.GetProperty( eApiStyle, EXC_CHPROP_FILLSTYLE ) )
+    {
+        switch( eApiStyle )
+        {
+            case cssd::FillStyle_GRADIENT:
+            {
+                // extract gradient from global gradient table
+                OUString aGradientName;
+                ScfPropSetHelper& rGradHlp = GetGradientHelper( ePropMode );
+                rGradHlp.ReadFromPropertySet( rPropSet );
+                rGradHlp >> eApiStyle >> aGradientName;
+                cssa::Gradient aGradient;
+                if( rGradientTable.GetObject( aGradientName ) >>= aGradient )
+                {
+                    // convert to Escher properties
+                    rEscherFmt.mxEscherSet.reset( new EscherPropertyContainer );
+                    rEscherFmt.mxEscherSet->CreateGradientProperties( aGradient );
+                }
+            }
+            break;
+            case cssd::FillStyle_HATCH:
+            case cssd::FillStyle_BITMAP:
+            {
+                // extract bitmap URL from global bitmap table
+                OUString aBitmapName;
+                cssd::BitmapMode eApiBmpMode;
+                maBitmapHlp.ReadFromPropertySet( rPropSet );
+                maBitmapHlp >> eApiStyle >> aBitmapName >> eApiBmpMode;
+                OUString aBitmapUrl;
+                if( rBitmapTable.GetObject( aBitmapName ) >>= aBitmapUrl )
+                {
+                    // convert to Escher properties
+                    rEscherFmt.mxEscherSet.reset( new EscherPropertyContainer );
+                    rEscherFmt.mxEscherSet->CreateEmbeddedBitmapProperties( aBitmapUrl, eApiBmpMode );
+                    rPicFmt.mnBmpMode = (eApiBmpMode == cssd::BitmapMode_REPEAT) ?
+                        EXC_CHPICFORMAT_STACK : EXC_CHPICFORMAT_STRETCH;
+                }
+            }
+            break;
+            default:;
+        }
+    }
+}
+
+void XclChPropSetHelper::ReadMarkerProperties(
+        XclChMarkerFormat& rMarkerFmt, const ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx )
+{
+    namespace cssc = ::com::sun::star::chart2;
+    namespace cssa = ::com::sun::star::awt;
+    cssc::Symbol aApiSymbol;
+    if( rPropSet.GetProperty( aApiSymbol, EXC_CHPROP_SYMBOL ) )
+    {
+        // clear automatic flag
+        ::set_flag( rMarkerFmt.mnFlags, EXC_CHMARKERFORMAT_AUTO, false );
+
+        // symbol style
+        switch( aApiSymbol.Style )
+        {
+            case cssc::SymbolStyle_NONE:
+                rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_NOSYMBOL;
+            break;
+            case cssc::SymbolStyle_STANDARD:
+                switch( aApiSymbol.StandardSymbol )
+                {
+                    case 0:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_SQUARE;    break;  // square
+                    case 1:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_DIAMOND;   break;  // diamond
+                    case 2:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STDDEV;    break;  // arrow down
+                    case 3:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_TRIANGLE;  break;  // arrow up
+                    case 4:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_CIRCLE;    break;  // arrow right
+                    case 5:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_PLUS;      break;  // arrow left
+                    case 6:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_CROSS;     break;  // bow tie
+                    case 7:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STAR;      break;  // sand glass
+                    default:    rMarkerFmt.mnMarkerType = XclChartHelper::GetAutoMarkerType( nFormatIdx );
+                }
+            break;
+            default:
+                rMarkerFmt.mnMarkerType = XclChartHelper::GetAutoMarkerType( nFormatIdx );
+        }
+        bool bHasFillColor = XclChartHelper::HasMarkerFillColor( rMarkerFmt.mnMarkerType );
+        ::set_flag( rMarkerFmt.mnFlags, EXC_CHMARKERFORMAT_NOFILL, !bHasFillColor );
+
+        // symbol size
+        sal_Int32 nApiSize = (aApiSymbol.Size.Width + aApiSymbol.Size.Height + 1) / 2;
+        rMarkerFmt.mnMarkerSize = XclTools::GetTwipsFromHmm( nApiSize );
+
+        // symbol colors
+        rMarkerFmt.maLineColor = ScfApiHelper::ConvertFromApiColor( aApiSymbol.BorderColor );
+        rMarkerFmt.maFillColor = ScfApiHelper::ConvertFromApiColor( aApiSymbol.FillColor );
+    }
+}
+
+sal_uInt16 XclChPropSetHelper::ReadRotationProperties( const ScfPropertySet& rPropSet )
+{
+    // chart2 handles rotation as double in the range [0,360)
+    double fAngle;
+    bool bStacked;
+    maRotationHlp.ReadFromPropertySet( rPropSet );
+    maRotationHlp >> fAngle >> bStacked;
+    return bStacked ? EXC_ROT_STACKED :
+        XclTools::GetXclRotation( static_cast< sal_Int32 >( fAngle * 100.0 + 0.5 ) );
+}
+
+void XclChPropSetHelper::ReadLegendProperties( XclChLegend& rLegend, const ScfPropertySet& rPropSet )
+{
+    namespace cssc = ::com::sun::star::chart2;
+    namespace cssd = ::com::sun::star::drawing;
+
+    // read the properties
+    bool bShow;
+    cssc::LegendPosition eApiPos;
+    cssc::LegendExpansion eApiExpand;
+    Any aRelPosAny;
+    maLegendHlp.ReadFromPropertySet( rPropSet );
+    maLegendHlp >> bShow >> eApiPos >> eApiExpand >> aRelPosAny;
+    DBG_ASSERT( bShow, "XclChPropSetHelper::ReadLegendProperties - legend must be visible" );
+
+    // legend position
+    switch( eApiPos )
+    {
+        case cssc::LegendPosition_LINE_START:   rLegend.mnDockMode = EXC_CHLEGEND_LEFT;     break;
+        case cssc::LegendPosition_LINE_END:     rLegend.mnDockMode = EXC_CHLEGEND_RIGHT;    break;
+        case cssc::LegendPosition_PAGE_START:   rLegend.mnDockMode = EXC_CHLEGEND_TOP;      break;
+        case cssc::LegendPosition_PAGE_END:     rLegend.mnDockMode = EXC_CHLEGEND_BOTTOM;   break;
+        default:                                rLegend.mnDockMode = EXC_CHLEGEND_NOTDOCKED;
+    }
+    // legend expansion
+    ::set_flag( rLegend.mnFlags, EXC_CHLEGEND_STACKED, eApiExpand != cssc::LegendExpansion_WIDE );
+    // legend position
+    if( rLegend.mnDockMode == EXC_CHLEGEND_NOTDOCKED )
+    {
+        cssc::RelativePosition aRelPos;
+        if( aRelPosAny >>= aRelPos )
+        {
+            rLegend.maRect.mnX = limit_cast< sal_Int32 >( aRelPos.Primary * 4000.0, 0, 4000 );
+            rLegend.maRect.mnY = limit_cast< sal_Int32 >( aRelPos.Secondary * 4000.0, 0, 4000 );
+        }
+        else
+            rLegend.mnDockMode = EXC_CHLEGEND_LEFT;
+    }
+    ::set_flag( rLegend.mnFlags, EXC_CHLEGEND_DOCKED, rLegend.mnDockMode != EXC_CHLEGEND_NOTDOCKED );
+}
+
+// write properties -----------------------------------------------------------
+
 void XclChPropSetHelper::WriteLineProperties(
         ScfPropertySet& rPropSet, XclChObjectTable& rDashTable,
-        const XclChLineFormat& rLineFmt, XclChPropertyMode /*ePropMode*/ )
+        const XclChLineFormat& rLineFmt, XclChPropertyMode ePropMode )
 {
     namespace cssd = ::com::sun::star::drawing;
 
     // line width
-    sal_Int32 nApiWidth = 0;
+    sal_Int32 nApiWidth = 0;    // 0 is the width of a hair line
     switch( rLineFmt.mnWeight )
     {
         case EXC_CHLINEFORMAT_SINGLE:   nApiWidth = 35;     break;
@@ -567,7 +1019,7 @@ void XclChPropSetHelper::WriteLineProperties(
         break;
     }
 
-    // color
+    // line color
     sal_Int32 nApiColor = ScfApiHelper::ConvertToApiColor( rLineFmt.maColor );
 
     // try to insert the dash style and receive its name
@@ -580,78 +1032,84 @@ void XclChPropSetHelper::WriteLineProperties(
     }
 
     // write the properties
-    maLineHlp.InitializeWrite();
-    maLineHlp << eApiStyle << nApiWidth << nApiColor << nApiTrans << aDashNameAny;
-    maLineHlp.WriteToPropertySet( rPropSet );
+    ScfPropSetHelper& rLineHlp = GetLineHelper( ePropMode );
+    rLineHlp.InitializeWrite();
+    rLineHlp << eApiStyle << nApiWidth << nApiColor << nApiTrans << aDashNameAny;
+    rLineHlp.WriteToPropertySet( rPropSet );
 }
 
 void XclChPropSetHelper::WriteAreaProperties( ScfPropertySet& rPropSet,
-        const XclChAreaFormat& rAreaFmt, XclChPropertyMode /*ePropMode*/ )
+        const XclChAreaFormat& rAreaFmt, XclChPropertyMode ePropMode )
 {
     namespace cssd = ::com::sun::star::drawing;
-    if( rAreaFmt.mnPattern == EXC_CHAREAFORMAT_NONE )
+    if( rAreaFmt.mnPattern == EXC_PATT_NONE )
     {
         rPropSet.SetProperty( EXC_CHPROP_FILLSTYLE, cssd::FillStyle_NONE );
     }
     else
     {
         // fill color
-        bool bSolid = rAreaFmt.mnPattern == EXC_CHAREAFORMAT_SOLID;
-        const Color& rColor = bSolid ? rAreaFmt.maForeColor : rAreaFmt.maBackColor;
+        Color aColor = XclTools::GetPatternColor( rAreaFmt.maPattColor, rAreaFmt.maBackColor, rAreaFmt.mnPattern );
 
         // write the properties
-        maAreaHlp.InitializeWrite();
-        maAreaHlp << cssd::FillStyle_SOLID << rColor;
-        maAreaHlp.WriteToPropertySet( rPropSet );
+        ScfPropSetHelper& rAreaHlp = GetAreaHelper( ePropMode );
+        rAreaHlp.InitializeWrite();
+        rAreaHlp << cssd::FillStyle_SOLID << aColor;
+        rAreaHlp.WriteToPropertySet( rPropSet );
     }
 }
 
 void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
         XclChObjectTable& rGradientTable, XclChObjectTable& rBitmapTable,
-        const SfxItemSet& rItemSet, const XclChPicFormat& rPicFmt )
+        const XclChEscherFormat& rEscherFmt, const XclChPicFormat& rPicFmt,
+        XclChPropertyMode ePropMode )
 {
-    if( const XFillStyleItem* pStyleItem = static_cast< const XFillStyleItem* >( rItemSet.GetItem( XATTR_FILLSTYLE, FALSE ) ) )
+    if( rEscherFmt.mxItemSet.is() )
     {
-        switch( pStyleItem->GetValue() )
+        if( const XFillStyleItem* pStyleItem = static_cast< const XFillStyleItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLSTYLE, FALSE ) ) )
         {
-            case XFILL_GRADIENT:
-                if( const XFillGradientItem* pGradItem = static_cast< const XFillGradientItem* >( rItemSet.GetItem( XATTR_FILLGRADIENT, FALSE ) ) )
-                {
-                    Any aGradient;
-                    if( pGradItem->QueryValue( aGradient, MID_FILLGRADIENT ) )
+            switch( pStyleItem->GetValue() )
+            {
+                case XFILL_GRADIENT:
+                    if( const XFillGradientItem* pGradItem = static_cast< const XFillGradientItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLGRADIENT, FALSE ) ) )
                     {
-                        OUString aGradName = rGradientTable.InsertObject( aGradient );
-                        if( aGradName.getLength() )
+                        Any aGradientAny;
+                        if( pGradItem->QueryValue( aGradientAny, MID_FILLGRADIENT ) )
                         {
-                            namespace cssd = ::com::sun::star::drawing;
-                            maGradientHlp.InitializeWrite();
-                            maGradientHlp << cssd::FillStyle_GRADIENT << aGradName;
-                            maGradientHlp.WriteToPropertySet( rPropSet );
+                            OUString aGradName = rGradientTable.InsertObject( aGradientAny );
+                            if( aGradName.getLength() )
+                            {
+                                namespace cssd = ::com::sun::star::drawing;
+                                ScfPropSetHelper& rGradHlp = GetGradientHelper( ePropMode );
+                                rGradHlp.InitializeWrite();
+                                rGradHlp << cssd::FillStyle_GRADIENT << aGradName;
+                                rGradHlp.WriteToPropertySet( rPropSet );
+                            }
                         }
                     }
-                }
-            break;
-            case XFILL_BITMAP:
-                if( const XFillBitmapItem* pBmpItem = static_cast< const XFillBitmapItem* >( rItemSet.GetItem( XATTR_FILLBITMAP, FALSE ) ) )
-                {
-                    Any aBitmap;
-                    if( pBmpItem->QueryValue( aBitmap, MID_GRAFURL ) )
+                break;
+                case XFILL_BITMAP:
+                    if( const XFillBitmapItem* pBmpItem = static_cast< const XFillBitmapItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLBITMAP, FALSE ) ) )
                     {
-                        OUString aBmpName = rBitmapTable.InsertObject( aBitmap );
-                        if( aBmpName.getLength() )
+                        Any aBitmapAny;
+                        if( pBmpItem->QueryValue( aBitmapAny, MID_GRAFURL ) )
                         {
-                            namespace cssd = ::com::sun::star::drawing;
-                            cssd::BitmapMode eApiBmpMode = (rPicFmt.mnBmpMode == EXC_CHPICFORMAT_STRETCH) ?
-                                cssd::BitmapMode_STRETCH : cssd::BitmapMode_REPEAT;
-                            maBitmapHlp.InitializeWrite();
-                            maBitmapHlp << cssd::FillStyle_BITMAP << aBmpName << eApiBmpMode;
-                            maBitmapHlp.WriteToPropertySet( rPropSet );
+                            OUString aBmpName = rBitmapTable.InsertObject( aBitmapAny );
+                            if( aBmpName.getLength() )
+                            {
+                                namespace cssd = ::com::sun::star::drawing;
+                                cssd::BitmapMode eApiBmpMode = (rPicFmt.mnBmpMode == EXC_CHPICFORMAT_STRETCH) ?
+                                    cssd::BitmapMode_STRETCH : cssd::BitmapMode_REPEAT;
+                                maBitmapHlp.InitializeWrite();
+                                maBitmapHlp << cssd::FillStyle_BITMAP << aBmpName << eApiBmpMode;
+                                maBitmapHlp.WriteToPropertySet( rPropSet );
+                            }
                         }
                     }
-                }
-            break;
-            default:
-                DBG_ERRORFILE( "XclChPropSetHelper::WriteEscherProperties - unknown fill mode" );
+                break;
+                default:
+                    DBG_ERRORFILE( "XclChPropSetHelper::WriteEscherProperties - unknown fill mode" );
+            }
         }
     }
 }
@@ -659,28 +1117,176 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
 void XclChPropSetHelper::WriteMarkerProperties(
         ScfPropertySet& rPropSet, const XclChMarkerFormat& rMarkerFmt )
 {
-    using namespace ::com::sun::star::chart::ChartSymbolType;
+    namespace cssc = ::com::sun::star::chart2;
     namespace cssa = ::com::sun::star::awt;
-    sal_Int32 nApiType = SYMBOL1;
+
+    // symbol style
+    cssc::Symbol aApiSymbol;
+    aApiSymbol.Style = cssc::SymbolStyle_STANDARD;
     switch( rMarkerFmt.mnMarkerType )
     {
-        case EXC_CHMARKERFORMAT_NOSYMBOL:   nApiType = NONE;    break;
-        case EXC_CHMARKERFORMAT_SQUARE:     nApiType = SYMBOL0; break;  // square
-        case EXC_CHMARKERFORMAT_DIAMOND:    nApiType = SYMBOL1; break;  // diamond
-        case EXC_CHMARKERFORMAT_TRIANGLE:   nApiType = SYMBOL3; break;  // triangle up
-        case EXC_CHMARKERFORMAT_CROSS:      nApiType = SYMBOL6; break;  // bow tie
-        case EXC_CHMARKERFORMAT_STAR:       nApiType = SYMBOL7; break;  // rotated bow tie
-        case EXC_CHMARKERFORMAT_DOWJ:       nApiType = AUTO;    break;
-        case EXC_CHMARKERFORMAT_STDDEV:     nApiType = SYMBOL2; break;  // triangle down
-        case EXC_CHMARKERFORMAT_CIRCLE:     nApiType = SYMBOL4; break;  // triangle right
-        case EXC_CHMARKERFORMAT_PLUS:       nApiType = SYMBOL5; break;  // triangle left
+        case EXC_CHMARKERFORMAT_NOSYMBOL:   aApiSymbol.Style = cssc::SymbolStyle_NONE;  break;
+        case EXC_CHMARKERFORMAT_SQUARE:     aApiSymbol.StandardSymbol = 0;              break;  // square
+        case EXC_CHMARKERFORMAT_DIAMOND:    aApiSymbol.StandardSymbol = 1;              break;  // diamond
+        case EXC_CHMARKERFORMAT_TRIANGLE:   aApiSymbol.StandardSymbol = 3;              break;  // arrow up
+        case EXC_CHMARKERFORMAT_CROSS:      aApiSymbol.StandardSymbol = 6;              break;  // bow tie
+        case EXC_CHMARKERFORMAT_STAR:       aApiSymbol.StandardSymbol = 7;              break;  // sand glass
+        case EXC_CHMARKERFORMAT_DOWJ:       aApiSymbol.StandardSymbol = 4;              break;  // arrow right
+        case EXC_CHMARKERFORMAT_STDDEV:     aApiSymbol.StandardSymbol = 2;              break;  // arrow down
+        case EXC_CHMARKERFORMAT_CIRCLE:     aApiSymbol.StandardSymbol = 4;              break;  // arrow right
+        case EXC_CHMARKERFORMAT_PLUS:       aApiSymbol.StandardSymbol = 5;              break;  // arrow left
     }
-    sal_Int32 nApiSize = XclTools::GetHmmFromTwips( rMarkerFmt.mnMarkerSize );
-    cssa::Size aApiSize( nApiSize, nApiSize );
 
-    maMarkerHlp.InitializeWrite();
-    maMarkerHlp << nApiType << aApiSize;
-    maMarkerHlp.WriteToPropertySet( rPropSet );
+    // symbol size
+    sal_Int32 nApiSize = XclTools::GetHmmFromTwips( rMarkerFmt.mnMarkerSize );
+    aApiSymbol.Size = cssa::Size( nApiSize, nApiSize );
+
+    // symbol colors
+    aApiSymbol.FillColor = ScfApiHelper::ConvertToApiColor( rMarkerFmt.maFillColor );
+    aApiSymbol.BorderColor = ::get_flag( rMarkerFmt.mnFlags, EXC_CHMARKERFORMAT_NOLINE ) ?
+        aApiSymbol.FillColor : ScfApiHelper::ConvertToApiColor( rMarkerFmt.maLineColor );
+
+    // set the property
+    rPropSet.SetProperty( EXC_CHPROP_SYMBOL, aApiSymbol );
+}
+
+void XclChPropSetHelper::WriteRotationProperties(
+        ScfPropertySet& rPropSet, sal_uInt16 nRotation )
+{
+    if( nRotation != EXC_CHART_AUTOROTATION )
+    {
+        // chart2 handles rotation as double in the range [0,360)
+        double fAngle = XclTools::GetScRotation( nRotation, 0 ) / 100.0;
+        bool bStacked = nRotation == EXC_ROT_STACKED;
+        maRotationHlp.InitializeWrite();
+        maRotationHlp << fAngle << bStacked;
+        maRotationHlp.WriteToPropertySet( rPropSet );
+    }
+}
+
+void XclChPropSetHelper::WriteLegendProperties(
+        ScfPropertySet& rPropSet, const XclChLegend& rLegend )
+{
+    namespace cssc = ::com::sun::star::chart2;
+    namespace cssd = ::com::sun::star::drawing;
+
+    // legend position
+    cssc::LegendPosition eApiPos = cssc::LegendPosition_CUSTOM;
+    switch( rLegend.mnDockMode )
+    {
+        case EXC_CHLEGEND_LEFT:     eApiPos = cssc::LegendPosition_LINE_START;  break;
+        case EXC_CHLEGEND_RIGHT:    eApiPos = cssc::LegendPosition_LINE_END;    break;
+        case EXC_CHLEGEND_TOP:      eApiPos = cssc::LegendPosition_PAGE_START;  break;
+        case EXC_CHLEGEND_BOTTOM:   eApiPos = cssc::LegendPosition_PAGE_END;    break;
+    }
+    // legend expansion
+    cssc::LegendExpansion eApiExpand = ::get_flagvalue(
+        rLegend.mnFlags, EXC_CHLEGEND_STACKED, cssc::LegendExpansion_HIGH, cssc::LegendExpansion_WIDE );
+    // legend position
+    Any aRelPosAny;
+    if( eApiPos == cssc::LegendPosition_CUSTOM )
+    {
+        // #i71697# it is not possible to set the size directly, do some magic here
+        double fRatio = ((rLegend.maRect.mnWidth > 0) && (rLegend.maRect.mnHeight > 0)) ?
+            (static_cast< double >( rLegend.maRect.mnWidth ) / rLegend.maRect.mnHeight) : 1.0;
+        if( fRatio > 1.5 )
+            eApiExpand = cssc::LegendExpansion_WIDE;
+        else if( fRatio < 0.75 )
+            eApiExpand = cssc::LegendExpansion_HIGH;
+        else
+            eApiExpand = cssc::LegendExpansion_BALANCED;
+        // set position
+        cssc::RelativePosition aRelPos;
+        aRelPos.Primary = rLegend.maRect.mnX / 4000.0;
+        aRelPos.Secondary = rLegend.maRect.mnY / 4000.0;
+        aRelPos.Anchor = cssd::Alignment_TOP_LEFT;
+        aRelPosAny <<= aRelPos;
+    }
+
+    // write the properties
+    maLegendHlp.InitializeWrite();
+    maLegendHlp << true << eApiPos << eApiExpand << aRelPosAny;
+    maLegendHlp.WriteToPropertySet( rPropSet );
+}
+
+// private --------------------------------------------------------------------
+
+ScfPropSetHelper& XclChPropSetHelper::GetLineHelper( XclChPropertyMode ePropMode )
+{
+    switch( ePropMode )
+    {
+        case EXC_CHPROPMODE_COMMON:         return maLineHlpCommon;
+        case EXC_CHPROPMODE_LINEARSERIES:   return maLineHlpLinear;
+        case EXC_CHPROPMODE_FILLEDSERIES:   return maLineHlpFilled;
+        default: DBG_ERRORFILE( "XclChPropSetHelper::GetLineHelper - unknown property mode" );
+    }
+    return maLineHlpCommon;
+}
+
+ScfPropSetHelper& XclChPropSetHelper::GetAreaHelper( XclChPropertyMode ePropMode )
+{
+    switch( ePropMode )
+    {
+        case EXC_CHPROPMODE_COMMON:         return maAreaHlpCommon;
+        case EXC_CHPROPMODE_FILLEDSERIES:   return maAreaHlpFilled;
+        default:    DBG_ERRORFILE( "XclChPropSetHelper::GetAreaHelper - unknown property mode" );
+    }
+    return maAreaHlpCommon;
+}
+
+ScfPropSetHelper& XclChPropSetHelper::GetGradientHelper( XclChPropertyMode ePropMode )
+{
+    switch( ePropMode )
+    {
+        case EXC_CHPROPMODE_COMMON:         return maGradHlpCommon;
+        case EXC_CHPROPMODE_FILLEDSERIES:   return maGradHlpFilled;
+        default:    DBG_ERRORFILE( "XclChPropSetHelper::GetGradientHelper - unknown property mode" );
+    }
+    return maGradHlpCommon;
+}
+
+// ============================================================================
+
+XclChRootData::XclChRootData() :
+    mxTypeInfoProv( new XclChTypeInfoProvider ),
+    mxFmtInfoProv( new XclChFormatInfoProvider )
+{
+}
+
+XclChRootData::~XclChRootData()
+{
+}
+
+Reference< XChartDocument > XclChRootData::GetChartDoc() const
+{
+    DBG_ASSERT( mxChartDoc.is(), "XclChRootData::GetChartDoc - missing chart document" );
+    return mxChartDoc;
+}
+
+void XclChRootData::InitConversion( XChartDocRef xChartDoc )
+{
+    // remember chart document reference
+    DBG_ASSERT( xChartDoc.is(), "XclChRootData::InitConversion - missing chart document" );
+    mxChartDoc = xChartDoc;
+
+    // create object tables
+    Reference< XMultiServiceFactory > xFactory( mxChartDoc, UNO_QUERY );
+    mxLineDashTable.reset( new XclChObjectTable(
+        xFactory, SERVICE_DRAWING_DASHTABLE, CREATE_OUSTRING( "Excel line dash " ) ) );
+    mxGradientTable.reset( new XclChObjectTable(
+        xFactory, SERVICE_DRAWING_GRADIENTTABLE, CREATE_OUSTRING( "Excel gradient " ) ) );
+    mxBitmapTable.reset( new XclChObjectTable(
+        xFactory, SERVICE_DRAWING_BITMAPTABLE, CREATE_OUSTRING( "Excel bitmap " ) ) );
+}
+
+void XclChRootData::FinishConversion()
+{
+    // forget formatting object tables
+    mxBitmapTable.reset();
+    mxGradientTable.reset();
+    mxLineDashTable.reset();
+    // forget chart document reference
+    mxChartDoc.clear();
 }
 
 // ============================================================================
