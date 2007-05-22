@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizardmachine.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:43:21 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:32:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,7 @@ namespace svt
             GrantAccess() { }
         };
 
+        /// compatibility only. Superseded by CommitPageReason
         enum COMMIT_REASON
         {
             CR_TRAVEL_NEXT = eTravelForward,
@@ -128,8 +129,12 @@ namespace svt
         WizardPageImplData*     m_pImpl;
 
     public:
-        OWizardPage( OWizardMachine* _pParent, WinBits _nStyle = 0 );
-        OWizardPage( OWizardMachine* _pParent, const ResId& _rResId );
+        /** @param _pParent
+                if the OWizardPage is used in an OWizardMachine, this parameter
+                must be the OWizardMachine (which is derived from Window)
+         */
+        OWizardPage( Window* _pParent, WinBits _nStyle = 0 );
+        OWizardPage( Window* _pParent, const ResId& _rResId );
         ~OWizardPage();
 
         // This methods  behave somewhat different than ActivatePage/DeactivatePage
@@ -247,6 +252,7 @@ namespace svt
         /// set the base of the title to use - the title of the current page is appended
         void            setTitleBase(const String& _rTitleBase);
         const String&   getTitleBase() const;
+
 
     protected:
         // WizardDialog overridables
