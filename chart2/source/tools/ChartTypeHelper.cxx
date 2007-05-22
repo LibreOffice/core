@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartTypeHelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:22:39 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:56:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,9 @@
 #include "precompiled_chart2.hxx"
 
 #include "ChartTypeHelper.hxx"
+#include "DiagramHelper.hxx"
 #include "macros.hxx"
+#include "servicenames_charttypes.hxx"
 
 // header for define DBG_ASSERT
 #ifndef _TOOLS_DEBUG_HXX
@@ -49,123 +51,105 @@
 #endif
 
 //.............................................................................
-namespace chart
-{
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-sal_Bool ChartTypeHelper::isSupportingGeometryProperties( const uno::Reference< XChartType >& xChartType )
+
+//.............................................................................
+namespace chart
+{
+
+sal_Bool ChartTypeHelper::isSupportingGeometryProperties( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
 {
     //form tab only for 3D-bar and 3D-column charts.
 
     //@todo ask charttype itself --> need model change first
     if(xChartType.is())
     {
-        sal_Int32 nDimension=2;
-        {
-            uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY );
-            if(xChartTypeProp.is())
-                xChartTypeProp->getPropertyValue( C2U( "Dimension" )) >>= nDimension;
-        }
-        if(nDimension==3)
+        if(nDimensionCount==3)
         {
             rtl::OUString aChartTypeName = xChartType->getChartType();
-            if( aChartTypeName.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.BarChart")) )
+            if( aChartTypeName.equals(CHART2_SERVICE_NAME_CHARTTYPE_BAR) )
                 return sal_True;
-            if( aChartTypeName.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.ColumnChart")) )
+            if( aChartTypeName.equals(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) )
                 return sal_True;
         }
     }
     return sal_False;
 }
 
-sal_Bool ChartTypeHelper::isSupportingStatisticProperties( const uno::Reference< XChartType >& xChartType )
+sal_Bool ChartTypeHelper::isSupportingStatisticProperties( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
 {
     //3D charts, pie, net and stock do not support statistic properties
 
     //@todo ask charttype itself (and series? --> stock chart?)  --> need model change first
     if(xChartType.is())
     {
-        sal_Int32 nDimension=2;
-        {
-            uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY );
-            if(xChartTypeProp.is())
-                xChartTypeProp->getPropertyValue( C2U( "Dimension" )) >>= nDimension;
-        }
-        if(nDimension==3)
+        if(nDimensionCount==3)
             return sal_False;
 
         rtl::OUString aChartTypeName = xChartType->getChartType();
-        if( aChartTypeName.match(C2U("com.sun.star.chart2.PieChart")) )
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
             return sal_False;
-        if( aChartTypeName.match(C2U("com.sun.star.chart2.Net")) )
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
             return sal_False;
-        if( aChartTypeName.match(C2U("com.sun.star.chart2.Stock")) )
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
             return sal_False;
     }
     return sal_True;
 }
 
-sal_Bool ChartTypeHelper::isSupportingRegressionProperties( const uno::Reference< XChartType >& xChartType )
+sal_Bool ChartTypeHelper::isSupportingRegressionProperties( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
 {
     // note: old chart: only scatter chart
-    return isSupportingStatisticProperties( xChartType );
+    return isSupportingStatisticProperties( xChartType, nDimensionCount );
 }
 
-sal_Bool ChartTypeHelper::isSupportingAreaProperties( const uno::Reference< XChartType >& xChartType )
+sal_Bool ChartTypeHelper::isSupportingAreaProperties( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
 {
-    //2D line charts do not support area properties
+    //2D line charts, net and stock do not support area properties
 
     //@todo ask charttype itself --> need model change first
     if(xChartType.is())
     {
-        sal_Int32 nDimension=2;
-        {
-            uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY );
-            if(xChartTypeProp.is())
-                xChartTypeProp->getPropertyValue( C2U( "Dimension" )) >>= nDimension;
-        }
-        if(nDimension==2)
+         if(nDimensionCount==2)
         {
             rtl::OUString aChartTypeName = xChartType->getChartType();
-            if( aChartTypeName.match(C2U("com.sun.star.chart2.LineChart")) )
+            if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE) )
                 return sal_False;
-            if( aChartTypeName.match(C2U("com.sun.star.chart2.ScatterChart")) )
+            if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) )
+                return sal_False;
+            if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
+                return sal_False;
+            if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
                 return sal_False;
         }
     }
     return sal_True;
 }
 
-sal_Bool ChartTypeHelper::isSupportingSymbolProperties( const uno::Reference< XChartType >& xChartType )
+sal_Bool ChartTypeHelper::isSupportingSymbolProperties( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
 {
     //2D line charts, 2D scatter charts and 2D net charts do support symbols
 
     //@todo ask charttype itself --> need model change first
     if(xChartType.is())
     {
-        sal_Int32 nDimension=2;
-        {
-            uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY );
-            if(xChartTypeProp.is())
-                xChartTypeProp->getPropertyValue( C2U( "Dimension" )) >>= nDimension;
-        }
-        if(nDimension==3)
+        if(nDimensionCount==3)
             return sal_False;
 
         rtl::OUString aChartTypeName = xChartType->getChartType();
-        if( aChartTypeName.match(C2U("com.sun.star.chart2.LineChart")) )
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE) )
             return sal_True;
-        if( aChartTypeName.match(C2U("com.sun.star.chart2.ScatterChart")) )
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) )
             return sal_True;
-        if( aChartTypeName.match(C2U("com.sun.star.chart2.Net")) )
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
             return sal_True;
     }
     return sal_False;
 }
 
-sal_Bool ChartTypeHelper::isSupportingMainAxis( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionIndex )
+sal_Bool ChartTypeHelper::isSupportingMainAxis( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex )
 {
     //pie charts do not support axis at all
     //no 3rd axis for 2D charts
@@ -174,87 +158,100 @@ sal_Bool ChartTypeHelper::isSupportingMainAxis( const uno::Reference< XChartType
     if(xChartType.is())
     {
         rtl::OUString aChartTypeName = xChartType->getChartType();
-        if( aChartTypeName.match(C2U("com.sun.star.chart2.PieChart")) )
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
             return sal_False;
 
         if( nDimensionIndex == 2 )
-            return ChartTypeHelper::getDimensionCount( xChartType ) == 3;
+            return nDimensionCount == 3;
     }
     return sal_True;
 }
 
-sal_Bool ChartTypeHelper::isSupportingSecondaryAxis( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionIndex )
+sal_Bool ChartTypeHelper::isSupportingSecondaryAxis( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex )
 {
     //3D, pie and net charts do not support a secondary axis at all
 
     //@todo ask charttype itself --> need model change first
     if(xChartType.is())
     {
-        sal_Int32 nDimension=2;
-        {
-            uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY );
-            if(xChartTypeProp.is())
-                xChartTypeProp->getPropertyValue( C2U( "Dimension" )) >>= nDimension;
-        }
-        if(nDimension==3)
+         if(nDimensionCount==3)
             return sal_False;
 
         rtl::OUString aChartTypeName = xChartType->getChartType();
-        if( aChartTypeName.match(C2U("com.sun.star.chart2.PieChart")) )
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
             return sal_False;
-        if( aChartTypeName.match(C2U("com.sun.star.chart2.Net")) )
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
             return sal_False;
     }
     return sal_True;
 }
 
-AxisType ChartTypeHelper::getAxisType( const uno::Reference<
+sal_Bool ChartTypeHelper::isSupportingOverlapAndGapWidthProperties(
+        const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
+{
+    //2D bar charts do support a this special properties
+
+    //@todo ask charttype itself --> need model change first
+    if(xChartType.is())
+    {
+         if(nDimensionCount==3)
+            return sal_False;
+
+        rtl::OUString aChartTypeName = xChartType->getChartType();
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) )
+            return sal_True;
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) )
+            return sal_True;
+    }
+    return sal_False;
+}
+
+sal_Bool ChartTypeHelper::isSupportingBarConnectors(
+    const uno::Reference< chart2::XChartType >& xChartType, sal_Int32 nDimensionCount )
+{
+    //2D bar charts with stacked series support this
+
+    //@todo ask charttype itself --> need model change first
+    if(xChartType.is())
+    {
+        if(nDimensionCount==3)
+            return sal_False;
+
+        StackMode eStackMode = DiagramHelper::getStackModeFromChartType( xChartType, 0 );
+        if( eStackMode != StackMode_Y_STACKED )
+            return sal_False;
+
+        rtl::OUString aChartTypeName = xChartType->getChartType();
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) )
+            return sal_True;
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) )
+            return sal_True;  // note: old chart was false here
+    }
+    return sal_False;
+}
+
+
+sal_Int32 ChartTypeHelper::getAxisType( const uno::Reference<
             XChartType >& xChartType, sal_Int32 nDimensionIndex )
 {
+    //retruned is a constant from constant group ::com::sun::star::chart2::AxisType
+
     //@todo ask charttype itself --> need model change first
     if(!xChartType.is())
-        return AxisType_CATEGORY;
+        return AxisType::CATEGORY;
 
     rtl::OUString aChartTypeName = xChartType->getChartType();
     if(2==nDimensionIndex)//z-axis
-        return AxisType_CATEGORY;
+        return AxisType::SERIES;
     if(1==nDimensionIndex)//y-axis
-        return AxisType_REALNUMBER;
+        return AxisType::REALNUMBER;
     if(0==nDimensionIndex)//x-axis
     {
-        if( aChartTypeName.match(C2U("com.sun.star.chart2.ScatterChart")) )
-            return AxisType_REALNUMBER;
-        return AxisType_CATEGORY;
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) )
+            return AxisType::REALNUMBER;
+        return AxisType::CATEGORY;
     }
-    return AxisType_CATEGORY;
-}
-
-sal_Int32 ChartTypeHelper::getDimensionCount( const uno::Reference< XChartType >& xChartType )
-{
-    sal_Int32 nDimension = 2;
-    if( xChartType.is() )
-    {
-        uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY );
-        if( xChartTypeProp.is())
-        {
-            try
-            {
-                if( (xChartTypeProp->getPropertyValue( C2U( "Dimension" )) >>= nDimension) )
-                {
-                    return nDimension;
-                }
-                else
-                {
-                    DBG_ERROR( "Couldn't get Dimension from ChartTypeGroup" );
-                }
-            }
-            catch( beans::UnknownPropertyException ex )
-            {
-                ASSERT_EXCEPTION( ex );
-            }
-        }
-    }
-    return nDimension;
+    return AxisType::CATEGORY;
 }
 
 //.............................................................................
