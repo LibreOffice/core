@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartModelHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:22:25 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:56:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,12 +37,26 @@
 #include "precompiled_chart2.hxx"
 #include "ChartModelHelper.hxx"
 #include "macros.hxx"
+#include "DiagramHelper.hxx"
 
 #ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPEGROUP_HPP_
-#include <com/sun/star/chart2/XChartTypeGroup.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPECONTAINER_HPP_
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XCOORDINATESYSTEMCONTAINER_HPP_
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XDATASERIESCONTAINER_HPP_
+#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
+#include <com/sun/star/embed/XVisualObject.hpp>
 #endif
 
 // header for define DBG_ASSERT
@@ -62,157 +76,77 @@ uno::Reference< XDiagram > ChartModelHelper::findDiagram( const uno::Reference< 
 {
     uno::Reference< XChartDocument > xChartDoc( xModel, uno::UNO_QUERY );
     if( xChartDoc.is())
-        return xChartDoc->getDiagram();
+        return ChartModelHelper::findDiagram( xChartDoc );
     return NULL;
 }
 
-//static
-uno::Reference< XChartType > ChartModelHelper::getFirstChartType( const uno::Reference< XDiagram >& xDiagram )
+// static
+uno::Reference< XDiagram > ChartModelHelper::findDiagram( const uno::Reference< chart2::XChartDocument >& xChartDoc )
 {
-    if(!xDiagram.is())
-        return 0;
-    uno::Reference< XDataSeriesTreeParent > xTree = xDiagram->getTree();
-    if(!xTree.is())
-        return 0;
-    uno::Sequence< uno::Reference< XDataSeriesTreeNode > >  aChartTypes( xTree->getChildren() );
-    for( sal_Int32 i = 0; i < aChartTypes.getLength(); ++i )
+    try
     {
-        uno::Reference< XChartTypeGroup > xChartTypeGroup( aChartTypes[i], uno::UNO_QUERY );
-        DBG_ASSERT(xChartTypeGroup.is(),"First node at the diagram tree needs to be a ChartTypeGroup");
-        if( xChartTypeGroup.is() )
-        {
-            uno::Reference< XChartType > xChartType = xChartTypeGroup->getChartType();
-            if( xChartType.is() )
-                return xChartType;
-        }
+        if( xChartDoc.is())
+            return xChartDoc->getFirstDiagram();
     }
-    return 0;
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+    return NULL;
 }
 
-namespace
+// static
+::std::vector< uno::Reference< XDataSeries > > ChartModelHelper::getDataSeries(
+    const uno::Reference< XChartDocument > & xChartDoc )
 {
-void lcl_addSeries( uno::Reference< XDataSeriesTreeParent > xParent,
-                    ::std::vector< uno::Reference< XDataSeries > > & rOutSeriesVec )
-{
-    if( xParent.is())
-    {
-        uno::Sequence< uno::Reference< XDataSeriesTreeNode > > aChildren( xParent->getChildren());
-        for( sal_Int32 i = 0; i < aChildren.getLength(); ++i )
-        {
-            uno::Reference< XDataSeries > aDataSeries( aChildren[ i ], uno::UNO_QUERY );
-            if( aDataSeries.is())
-            {
-                rOutSeriesVec.push_back( aDataSeries );
-            }
-            else
-            {
-                uno::Reference< XDataSeriesTreeParent > xNewParent( aChildren[ i ], uno::UNO_QUERY );
-                if( xNewParent.is())
-                    lcl_addSeries( xNewParent, rOutSeriesVec );
-            }
-        }
-    }
+    ::std::vector< uno::Reference< XDataSeries > > aResult;
+
+    uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xChartDoc );
+    if( xDiagram.is())
+        aResult = DiagramHelper::getDataSeriesFromDiagram( xDiagram );
+
+    return aResult;
 }
-} // anonymous namespace
 
 // static
 ::std::vector< uno::Reference< XDataSeries > > ChartModelHelper::getDataSeries(
     const uno::Reference< frame::XModel > & xModel )
 {
-    ::std::vector< uno::Reference< XDataSeries > > aResult;
-    uno::Reference< XChartDocument > xDocument( xModel, uno::UNO_QUERY );
-    if( xDocument.is())
-    {
-        uno::Reference< XDiagram > xDia( xDocument->getDiagram());
-        if( xDia.is())
-            lcl_addSeries( xDia->getTree(), aResult );
-    }
-
-    return aResult;
+    return getDataSeries( uno::Reference< chart2::XChartDocument >( xModel, uno::UNO_QUERY ));
 }
 
-//static
-uno::Reference< XDataSeries > ChartModelHelper::getSeriesByIdentifier(
-        const rtl::OUString& rIdentifier
-        , const uno::Reference< frame::XModel > xModel )
-{
-    if(!rIdentifier.getLength())
-        return NULL;
-
-    ::std::vector< uno::Reference< XDataSeries > > aSeriesList(
-        getDataSeries( xModel ));
-    uno::Reference< XDataSeries > xRet;
-    uno::Reference< beans::XPropertySet > xProp;
-    rtl::OUString aIdentifier;
-
-    ::std::vector< uno::Reference< XDataSeries > >::const_iterator aIt;
-    for( aIt = aSeriesList.begin(); aIt != aSeriesList.end(); ++aIt )
-    {
-        xProp = uno::Reference< beans::XPropertySet >( *aIt, uno::UNO_QUERY );
-        if(!xProp.is())
-            continue;
-        uno::Any aAIdentifier = xProp->getPropertyValue( C2U( "Identifier" ) );
-        aAIdentifier >>= aIdentifier;
-        if(aIdentifier.getLength() && rIdentifier.equals(aIdentifier))
-        {
-            xRet = *aIt;
-            break;
-        }
-    }
-    return xRet;
-}
 
 uno::Reference< XChartType > ChartModelHelper::getChartTypeOfSeries(
                                 const uno::Reference< frame::XModel >& xModel
                               , const uno::Reference< XDataSeries >&   xGivenDataSeries )
 {
-    uno::Reference< XChartType > xRet(NULL);
+    return DiagramHelper::getChartTypeOfSeries( ChartModelHelper::findDiagram( xModel ), xGivenDataSeries );
+}
 
-    //iterate through the nmodel to find the given xSeries in the tree
-    //the found parent indicates the charttype
-    if( !xGivenDataSeries.is() )
-        return xRet;
-    uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xModel );
-    if(!xDiagram.is())
-        return xRet;
-    uno::Reference< XDataSeriesTreeParent > xTree = xDiagram->getTree();
-    if(!xTree.is())
-        return xRet;
-    uno::Sequence< uno::Reference< XDataSeriesTreeNode > >  aChartTypes( xTree->getChildren() );
-    for( sal_Int32 i = 0; i < aChartTypes.getLength(); ++i )
-    {
-        uno::Reference< XChartTypeGroup > xChartTypeGroup( aChartTypes[i], uno::UNO_QUERY );
-        DBG_ASSERT(xChartTypeGroup.is(),"First node at the diagram tree needs to be a ChartTypeGroup");
-        if( !xChartTypeGroup.is() )
-            continue;
-        uno::Sequence< uno::Reference< XDataSeriesTreeNode > > aXSlots( xChartTypeGroup->getChildren() );
-        for( sal_Int32 nX = 0; nX < aXSlots.getLength(); ++nX )
-        {
-            uno::Reference< XDataSeriesTreeParent > xXSlot = uno::Reference< XDataSeriesTreeParent >::query( aXSlots[nX] );
-            DBG_ASSERT( xXSlot.is(), "a node for the first dimension of a chart tree should always be a parent" );
-            if(!xXSlot.is())
-                continue;
-            uno::Sequence< uno::Reference< XDataSeriesTreeNode > > aYSlots( xXSlot->getChildren() );
-            for( sal_Int32 nY = 0; nY < aYSlots.getLength(); ++nY )
-            {
-                uno::Reference< XDataSeriesTreeParent > xYSlot = uno::Reference< XDataSeriesTreeParent >::query( aYSlots[nY] );
-                DBG_ASSERT( xYSlot.is(), "a node for the second dimension of a chart tree should always be a parent" );
-                if(!xYSlot.is())
-                    continue;
-                uno::Sequence< uno::Reference< XDataSeriesTreeNode > > aSeriesList( xYSlot->getChildren() );
-                for( sal_Int32 nS = 0; nS < aSeriesList.getLength(); ++nS )
-                {
-                    uno::Reference< XDataSeries > xDataSeries( aSeriesList[nS], uno::UNO_QUERY );
-                    if( xGivenDataSeries==xDataSeries )
-                    {
-                        xRet = xChartTypeGroup->getChartType();
-                        return xRet;
-                    }
-                }
-            }
-        }
-    }
-    return xRet;
+//static
+uno::Reference< XCoordinateSystem > ChartModelHelper::getCoordinateSystemOfChartType(
+            const uno::Reference< frame::XModel >& xModel
+            , const uno::Reference< XChartType >& xGivenChartType )
+{
+    return DiagramHelper::getCoordinateSystemOfChartType( ChartModelHelper::findDiagram( xModel ), xGivenChartType );
+}
+
+awt::Size ChartModelHelper::getPageSize( const uno::Reference< frame::XModel >& xModel )
+{
+    awt::Size aPageSize( 8000, 7000 );
+    uno::Reference< embed::XVisualObject > xVisualObject(xModel,uno::UNO_QUERY);
+    DBG_ASSERT(xVisualObject.is(),"need xVisualObject for page size");
+    if( xVisualObject.is() )
+        aPageSize = xVisualObject->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
+    return aPageSize;
+}
+
+void ChartModelHelper::setPageSize( const awt::Size& rSize, const uno::Reference< frame::XModel >& xModel )
+{
+    uno::Reference< embed::XVisualObject > xVisualObject(xModel,uno::UNO_QUERY);
+    DBG_ASSERT(xVisualObject.is(),"need xVisualObject for page size");
+    if( xVisualObject.is() )
+        xVisualObject->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, rSize );
 }
 
 //.............................................................................
