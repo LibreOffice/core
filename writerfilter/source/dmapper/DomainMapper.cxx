@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: os $ $Date: 2007-05-21 14:20:33 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-22 19:40:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,7 @@ struct _Columns
     std::vector<_Column> cols;
 } CT_Columns;
 
+#if 0
 struct _HdrFtrRef
 {
    sal_Int32 type;
@@ -152,6 +153,7 @@ struct _HdrFtrRef
 
 std::map<SectionPropertyMap::PageType, ::rtl::OUString> xHeaderStreamMap;
 std::map<SectionPropertyMap::PageType, ::rtl::OUString> xFooterStreamMap;
+#endif
 
 /* ---- Fridrich's mess (hopefully) ends here ---- */
 
@@ -1694,10 +1696,11 @@ void DomainMapper::attribute(doctok::Id nName, doctok::Value & val)
             CT_Column.space = ConversionHelper::convertToMM100( nIntValue );
             break;
 
+#if 0
         case NS_ooxml::LN_CT_HdrFtrRef_type:
             CT_HdrFtrRef.type = nIntValue;
             break;
-
+#endif
         default:
             {
                 //int nVal = val.getInt();
@@ -3247,70 +3250,6 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         CT_Columns.cols.push_back(CT_Column);
         break;
 
-    case NS_ooxml::LN_EG_HdrFtrReferences_headerReference:
-        resolveSprmProps(sprm_);
-        switch (CT_HdrFtrRef.type)
-        {
-            case NS_ooxml::LN_Value_ST_HrdFtr_even:
-                xHeaderStreamMap[SectionPropertyMap::PAGE_LEFT] = CT_HdrFtrRef.rId;
-                break;
-            case NS_ooxml::LN_Value_ST_HrdFtr_default:
-                {
-                    std::map<SectionPropertyMap::PageType, ::rtl::OUString>::iterator i
-                        = xHeaderStreamMap.lower_bound(SectionPropertyMap::PAGE_LEFT);
-                    if (i == xHeaderStreamMap.end()
-                       || xHeaderStreamMap.key_comp()(SectionPropertyMap::PAGE_LEFT, i->first))
-                           xHeaderStreamMap.insert(i,
-                               std::map<SectionPropertyMap::PageType, ::rtl::OUString>::value_type(SectionPropertyMap::PAGE_LEFT, CT_HdrFtrRef.rId));
-
-                    i = xHeaderStreamMap.lower_bound(SectionPropertyMap::PAGE_FIRST);
-                    if (i == xHeaderStreamMap.end()
-                       || xHeaderStreamMap.key_comp()(SectionPropertyMap::PAGE_FIRST, i->first))
-                           xHeaderStreamMap.insert(i,
-                               std::map<SectionPropertyMap::PageType, ::rtl::OUString>::value_type(SectionPropertyMap::PAGE_FIRST, CT_HdrFtrRef.rId));
-                }
-                xHeaderStreamMap[SectionPropertyMap::PAGE_RIGHT] = CT_HdrFtrRef.rId;
-                break;
-            case NS_ooxml::LN_Value_ST_HrdFtr_first:
-                xHeaderStreamMap[SectionPropertyMap::PAGE_FIRST] = CT_HdrFtrRef.rId;
-                break;
-            default:
-                break;
-        }
-        break;
-
-    case NS_ooxml::LN_EG_HdrFtrReferences_footerReference:
-        resolveSprmProps(sprm_);
-        switch (CT_HdrFtrRef.type)
-        {
-            case NS_ooxml::LN_Value_ST_HrdFtr_even:
-                xFooterStreamMap[SectionPropertyMap::PAGE_LEFT] = CT_HdrFtrRef.rId;
-                break;
-            case NS_ooxml::LN_Value_ST_HrdFtr_default:
-                {
-                    std::map<SectionPropertyMap::PageType, ::rtl::OUString>::iterator i
-                        = xFooterStreamMap.lower_bound(SectionPropertyMap::PAGE_LEFT);
-                    if (i == xFooterStreamMap.end()
-                       || xFooterStreamMap.key_comp()(SectionPropertyMap::PAGE_LEFT, i->first))
-                           xFooterStreamMap.insert(i,
-                               std::map<SectionPropertyMap::PageType, ::rtl::OUString>::value_type(SectionPropertyMap::PAGE_LEFT, CT_HdrFtrRef.rId));
-
-                    i = xFooterStreamMap.lower_bound(SectionPropertyMap::PAGE_FIRST);
-                    if (i == xFooterStreamMap.end()
-                       || xFooterStreamMap.key_comp()(SectionPropertyMap::PAGE_FIRST, i->first))
-                           xFooterStreamMap.insert(i,
-                               std::map<SectionPropertyMap::PageType, ::rtl::OUString>::value_type(SectionPropertyMap::PAGE_FIRST, CT_HdrFtrRef.rId));
-                }
-                xFooterStreamMap[SectionPropertyMap::PAGE_RIGHT] = CT_HdrFtrRef.rId;
-                break;
-            case NS_ooxml::LN_Value_ST_HrdFtr_first:
-                xFooterStreamMap[SectionPropertyMap::PAGE_FIRST] = CT_HdrFtrRef.rId;
-                break;
-            default:
-                break;
-        }
-        break;
-
     default:
         {
             OSL_ASSERT("DomainMapper::sprm()"); //
@@ -3339,8 +3278,6 @@ void DomainMapper::data(const sal_uInt8* /*buf*/, size_t /*len*/,
 void DomainMapper::startSectionGroup()
 {
     m_pImpl->PushProperties(CONTEXT_SECTION);
-    xHeaderStreamMap.clear();
-    xFooterStreamMap.clear();
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
 
@@ -3351,10 +3288,7 @@ void DomainMapper::endSectionGroup()
     SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
     OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
     if(pSectionContext)
-    {
-        appendHeadersFooters();
         pSectionContext->CloseSectionGroup( *m_pImpl );
-    }
     m_pImpl->PopProperties(CONTEXT_SECTION);
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
@@ -3781,29 +3715,6 @@ sal_Unicode DomainMapper::getFillCharFromValue(const sal_Int32 nIntValue)
     default:
         return sal_Unicode(0x0020); // blank space
     }
-}
-
-void DomainMapper::appendHeadersFooters()
-{
-#if 0
-    m_pImpl->getTableManager().startLevel();
-
-    std::map<SectionPropertyMap::PageType, ::rtl::OUString>::iterator i = xHeaderStreamMap.begin();
-    for (; i != xHeaderStreamMap.end(); i++)
-    {
-        m_pImpl->PushPageHeader(i->first);
-        // resolve stream with r:id == i->second;
-        m_pImpl->PopPageHeaderFooter();
-    }
-    for (i = xFooterStreamMap.begin(); i != xHeaderStreamMap.end(); i++)
-    {
-        m_pImpl->PushPageFooter(i->first);
-        // resolve stream with r:id == i->second;
-        m_pImpl->PopPageHeaderFooter();
-    }
-
-    m_pImpl->getTableManager().endLevel();
-#endif
 }
 
 } //namespace dmapper

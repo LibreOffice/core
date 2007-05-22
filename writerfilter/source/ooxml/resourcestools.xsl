@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-05-21 14:43:47 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-22 19:40:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1087,6 +1087,26 @@ bool </xsl:text>
         {
             OOXMLEndnoteHandler aEndnoteHandler(this);
             mpPropertySet->resolve(aEndnoteHandler);
+        }
+        break;
+    default:
+        break;
+    }</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='handleHdrFtr'">
+          <xsl:text>
+    switch (meToken)
+    {
+    case OOXML_ELEMENT_wordprocessingml_footerReference:
+        {
+            OOXMLFooterHandler aFooterHandler(this);
+            mpPropertySet->resolve(aFooterHandler);
+        }
+        break;
+    case OOXML_ELEMENT_wordprocessingml_headerReference:
+        {
+            OOXMLHeaderHandler aHeaderHandler(this);
+            mpPropertySet->resolve(aHeaderHandler);
         }
         break;
     default:

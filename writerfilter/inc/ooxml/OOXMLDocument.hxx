@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocument.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-05-21 14:24:04 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-22 19:40:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,12 @@ public:
                                  const rtl::OUString & rNoteId) = 0;
     virtual void resolveEndnote(Stream & rStream,
                                 const rtl::OUString & rNoteId) = 0;
-
+    virtual void resolveHeader(Stream & rStream,
+                               const sal_Int32 type,
+                               const rtl::OUString & rId) = 0;
+    virtual void resolveFooter(Stream & rStream,
+                               const sal_Int32 type,
+                               const rtl::OUString & rId) = 0;
 };
 
 

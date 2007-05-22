@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocumentImpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-05-21 14:40:21 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-22 19:40:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 #endif
 
 #include <doctok/resourceids.hxx>
+#include <ooxml/resourceids.hxx>
 #include "OOXMLDocumentImpl.hxx"
 #include "OOXMLSaxHandler.hxx"
 
@@ -143,6 +144,51 @@ void OOXMLDocumentImpl::resolveEndnote(Stream & rStream,
 
 
     rStream.substream(NS_rtf::LN_endnote, pStream);
+}
+
+void OOXMLDocumentImpl::resolveHeader(Stream & rStream,
+                               const sal_Int32 type,
+                               const rtl::OUString & rId)
+{
+     doctok::Reference<Stream>::Pointer_t pStream =
+         getSubStream(rId);
+     switch (type)
+     {
+     case NS_ooxml::LN_Value_ST_HrdFtr_even:
+         rStream.substream(NS_rtf::LN_headerl, pStream);
+         break;
+     case NS_ooxml::LN_Value_ST_HrdFtr_default: // here we assume that default is right, but not necessarily true :-(
+         rStream.substream(NS_rtf::LN_headerr, pStream);
+         break;
+     case NS_ooxml::LN_Value_ST_HrdFtr_first:
+         rStream.substream(NS_rtf::LN_headerf, pStream);
+         break;
+     default:
+         break;
+     }
+}
+
+void OOXMLDocumentImpl::resolveFooter(Stream & rStream,
+                               const sal_Int32 type,
+                               const rtl::OUString & rId)
+{
+     doctok::Reference<Stream>::Pointer_t pStream =
+         getSubStream(rId);
+
+     switch (type)
+     {
+     case NS_ooxml::LN_Value_ST_HrdFtr_even:
+         rStream.substream(NS_rtf::LN_footerl, pStream);
+         break;
+     case NS_ooxml::LN_Value_ST_HrdFtr_default: // here we assume that default is right, but not necessarily true :-(
+         rStream.substream(NS_rtf::LN_footerr, pStream);
+         break;
+     case NS_ooxml::LN_Value_ST_HrdFtr_first:
+         rStream.substream(NS_rtf::LN_footerf, pStream);
+         break;
+     default:
+         break;
+     }
 }
 
 void OOXMLDocumentImpl::resolve(Stream & rStream)

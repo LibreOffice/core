@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-18 15:44:42 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-22 19:40:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,6 @@ private:
     sal_Unicode getFillCharFromValue(const sal_Int32 nIntValue);
     void resolveAttributeProperties(doctok::Value & val);
     void resolveSprmProps(doctok::Sprm & sprm_);
-    void appendHeadersFooters();
     sal_Int32 mnBackgroundColor;
     bool mbIsHighlightSet;
 };
