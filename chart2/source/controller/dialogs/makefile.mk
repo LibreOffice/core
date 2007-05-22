@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 00:12:39 $
+#   last change: $Author: vg $ $Date: 2007-05-22 17:38:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@ PRJNAME=			chart2
 TARGET=				chcdialogs
 
 ENABLE_EXCEPTIONS=	TRUE
-#GEN_HID=           TRUE
+GEN_HID_OTHER=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -54,22 +54,51 @@ ENABLE_EXCEPTIONS=	TRUE
 # --- export library -------------------------------------------------
 
 #object files to build and link together to lib $(SLB)$/$(TARGET).lib
-SLOFILES=   	$(SLO)$/tp_AxisLabel.obj \
+SLOFILES=   	\
+                $(SLO)$/ObjectNameProvider.obj \
+                $(SLO)$/TimerTriggeredControllerLock.obj \
+                $(SLO)$/Pseudo3DHelper.obj \
+                $(SLO)$/ChangingResource.obj \
+                $(SLO)$/DataBrowser.obj \
+                $(SLO)$/DataBrowserModel.obj \
+                $(SLO)$/DialogModel.obj \
+                $(SLO)$/TitleDialogData.obj \
+                $(SLO)$/res_Titles.obj \
+                $(SLO)$/res_BarGeometry.obj \
+                $(SLO)$/res_LegendPosition.obj \
+                $(SLO)$/ChartTypeDialogController.obj \
+                $(SLO)$/tp_ChartType.obj \
+                $(SLO)$/tp_RangeChooser.obj \
+                $(SLO)$/tp_Wizard_TitlesAndObjects.obj \
+                $(SLO)$/tp_Location.obj \
+                $(SLO)$/tp_AxisLabel.obj \
                 $(SLO)$/tp_DataLabel.obj \
+                $(SLO)$/tp_DataSource.obj \
+                $(SLO)$/tp_DataSourceControls.obj \
                 $(SLO)$/tp_LegendPosition.obj \
                 $(SLO)$/tp_PointGeometry.obj \
                 $(SLO)$/tp_Scale.obj \
                 $(SLO)$/tp_SeriesStatistic.obj \
                 $(SLO)$/tp_SeriesToAxis.obj \
                 $(SLO)$/tp_TitleRotation.obj \
+                $(SLO)$/tp_3D_SceneGeometry.obj \
+                $(SLO)$/tp_3D_SceneAppearance.obj \
+                $(SLO)$/tp_3D_SceneIllumination.obj \
                 $(SLO)$/dlg_ObjectProperties.obj \
-                $(SLO)$/dlg_ChartType.obj \
-                $(SLO)$/dlg_RotateDiagram.obj \
+                $(SLO)$/dlg_DataEditor.obj \
+                $(SLO)$/dlg_DataSource.obj \
+                $(SLO)$/dlg_View3D.obj \
                 $(SLO)$/dlg_InsertAxis_Grid.obj \
                 $(SLO)$/dlg_InsertDataLabel.obj \
                 $(SLO)$/dlg_InsertLegend.obj \
                 $(SLO)$/dlg_InsertStatistic.obj \
-                $(SLO)$/dlg_InsertTitle.obj
+                $(SLO)$/dlg_InsertTitle.obj \
+                $(SLO)$/dlg_CreationWizard.obj \
+                $(SLO)$/dlg_CreationWizard_UNO.obj \
+                $(SLO)$/dlg_ChartType.obj \
+                $(SLO)$/RangeSelectionButton.obj \
+                $(SLO)$/RangeSelectionHelper.obj \
+                $(SLO)$/RangeSelectionListener.obj
 
 # --- Resources ---------------------------------------------------------------
 
@@ -78,28 +107,41 @@ SLOFILES=   	$(SLO)$/tp_AxisLabel.obj \
 
 
 SRC1FILES=		\
+                res_BarGeometry.src \
+                tp_ChartType.src \
+                tp_RangeChooser.src \
+                tp_Wizard_TitlesAndObjects.src \
+                tp_Location.src \
                 tp_AxisLabel.src \
                 tp_DataLabel.src \
+                tp_DataSource.src \
                 tp_LegendPosition.src \
                 tp_PointGeometry.src \
                 tp_Scale.src \
                 tp_SeriesStatistic.src \
                 tp_SeriesToAxis.src \
                 tp_TitleRotation.src \
+                tp_3D_SceneGeometry.src \
+                tp_3D_SceneAppearance.src \
+                tp_3D_SceneIllumination.src \
                 dlg_ObjectProperties.src \
                 Strings_Statistic.src \
                 Strings_Scale.src \
                 Strings_ChartTypes.src \
+                Strings_AdditionalControls.src \
                 Strings.src \
-                dlg_ChartType.src \
                 Bitmaps.src \
                 Bitmaps_HC.src \
-                dlg_RotateDiagram.src \
+                dlg_DataEditor.src \
+                dlg_DataSource.src \
+                dlg_View3D.src \
                 dlg_InsertAxis_Grid.src \
                 dlg_InsertDataLabel.src \
                 dlg_InsertLegend.src \
                 dlg_InsertStatistic.src \
-                dlg_InsertTitle.src
+                dlg_InsertTitle.src \
+                dlg_ChartType.src \
+                dlg_CreationWizard.src
 
 SRS1NAME=$(TARGET)
 
@@ -109,4 +151,38 @@ LOCALIZE_ME=res_DataLabel_tmpl.hrc res_LegendPosition_tmpl.hrc res_Statistic_tmp
 $(SRS)$/chcdialogs.srs: $(INCCOM)$/res_DataLabel.hrc
 $(SRS)$/chcdialogs.srs: $(INCCOM)$/res_LegendPosition.hrc
 $(SRS)$/chcdialogs.srs: $(INCCOM)$/res_Statistic.hrc
+
+#dependencies:
+
+$(SRS)$/chcdialogs.srs: \
+        Bitmaps.hrc \
+        Bitmaps_HC.hrc \
+        CommonResources.hrc \
+        ResourceIds.hrc \
+        ..$/..$/inc$/Strings.hrc \
+        TabPages.hrc \
+        dlg_CreationWizard.hrc \
+        dlg_DataSource.hrc \
+        dlg_InsertAxis_Grid.hrc \
+        dlg_InsertDataLabel.hrc \
+        dlg_InsertLegend.hrc \
+        dlg_InsertStatistic.hrc \
+        dlg_InsertTitle.hrc \
+        dlg_View3D.hrc \
+        res_SecondaryAxisCheckBoxes.hrc \
+        res_Titles.hrc \
+        tp_3D_SceneAppearance.hrc \
+        tp_3D_SceneGeometry.hrc \
+        tp_3D_SceneIllumination.hrc \
+        tp_ChartType.hrc \
+        tp_DataSource.hrc \
+        tp_Location.hrc \
+        tp_RangeChooser.hrc \
+        tp_Wizard_TitlesAndObjects.hrc
+
+#        res_DataLabel.hrc \
+#        res_LegendPosition.hrc \
+#        res_Statistic.hrc \
+
+#$(SRS)$/chcdialogs.srs: $(SOLARINCDIR)$/svx$/globlmn.hrc
 
