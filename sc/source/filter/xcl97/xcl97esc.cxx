@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xcl97esc.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:43:07 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:01:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,8 +88,8 @@
 #ifndef SC_XEHELPER_HXX
 #include "xehelper.hxx"
 #endif
-#ifndef SC_XCLEXPCHARTS_HXX
-#include "XclExpCharts.hxx"
+#ifndef SC_XECHART_HXX
+#include "xechart.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
@@ -239,7 +239,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const com::sun::star::uno::Referen
                 SvGlobalName aObjClsId( xObj->getClassID() );
                 if ( SotExchange::IsChart( aObjClsId ) )
                 {   // yes, it's a chart diagram
-                    rRootData.pObjRecs->Add( new XclObjChart( rRoot, rShape ) );
+                    rRootData.pObjRecs->Add( new XclExpChartObj( rRoot, rShape ) );
                     pCurrXclObj = NULL;     // no metafile or whatsoever
                 }
                 else    // metafile and OLE object
