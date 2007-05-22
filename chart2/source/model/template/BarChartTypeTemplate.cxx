@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BarChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:17:11 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:45:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include "BarChartTypeTemplate.hxx"
-#include "BarChartType.hxx"
-#include "ColumnChartType.hxx"
-#include "algohelper.hxx"
 #include "macros.hxx"
+#include "DiagramHelper.hxx"
+#include "servicenames_charttypes.hxx"
+#include "ContainerHelper.hxx"
+#include "DataSeriesHelper.hxx"
 
 #ifndef CHART_PROPERTYHELPER_HXX
 #include "PropertyHelper.hxx"
@@ -47,27 +48,33 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART_CHARTSOLIDTYPE_HPP_
-#include <com/sun/star/chart/ChartSolidType.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
+#include <com/sun/star/drawing/LineStyle.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_DATAPOINTGEOMETRY3D_HPP_
+#include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #endif
 
 #include <algorithm>
 
 using namespace ::com::sun::star;
 
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
 using ::osl::MutexGuard;
+using ::rtl::OUString;
 
 namespace
 {
 
-static const ::rtl::OUString lcl_aServiceName(
+static const OUString lcl_aServiceName(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.BarChartTypeTemplate" ));
 
 enum
 {
     PROP_BAR_TEMPLATE_DIMENSION,
-    PROP_BAR_TEMPLATE_SOLID_TYPE
+    PROP_BAR_TEMPLATE_GEOMETRY3D
 };
 
 void lcl_AddPropertiesToVector(
@@ -80,27 +87,27 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "SolidType" ),
-                  PROP_BAR_TEMPLATE_SOLID_TYPE,
+        Property( C2U( "Geometry3D" ),
+                  PROP_BAR_TEMPLATE_GEOMETRY3D,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 void lcl_AddDefaultsToMap(
-    ::chart::helper::tPropertyValueMap & rOutMap )
+    ::chart::tPropertyValueMap & rOutMap )
 {
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_BAR_TEMPLATE_DIMENSION ));
     rOutMap[ PROP_BAR_TEMPLATE_DIMENSION ] =
         uno::makeAny( sal_Int32( 2 ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_BAR_TEMPLATE_SOLID_TYPE ));
-    rOutMap[ PROP_BAR_TEMPLATE_SOLID_TYPE ] =
-        uno::makeAny( ::com::sun::star::chart::ChartSolidType::RECTANGULAR_SOLID );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_BAR_TEMPLATE_GEOMETRY3D ));
+    rOutMap[ PROP_BAR_TEMPLATE_GEOMETRY3D ] =
+        uno::makeAny( chart2::DataPointGeometry3D::CUBOID );
 }
 
-const uno::Sequence< Property > & lcl_GetPropertySequence()
+const Sequence< Property > & lcl_GetPropertySequence()
 {
-    static uno::Sequence< Property > aPropSeq;
+    static Sequence< Property > aPropSeq;
 
     // /--
     MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -112,10 +119,10 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
 
         // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::helper::PropertyNameLess() );
+                     ::chart::PropertyNameLess() );
 
         // transfer result to static Sequence
-        aPropSeq = ::chart::helper::VectorToSequence( aProperties );
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
     return aPropSeq;
@@ -136,19 +143,17 @@ namespace chart
 {
 
 BarChartTypeTemplate::BarChartTypeTemplate(
-    uno::Reference<
+    Reference<
         uno::XComponentContext > const & xContext,
-    const ::rtl::OUString & rServiceName,
-    chart2::StackMode eStackMode,
+    const OUString & rServiceName,
+    StackMode eStackMode,
     BarDirection eDirection,
-    sal_Int32 nDim         /* = 2 */,
-    ThreeDMode eThreeDMode /* = THREE_D_FLAT */ ) :
+    sal_Int32 nDim         /* = 2 */ ) :
         ChartTypeTemplate( xContext, rServiceName ),
         ::property::OPropertySet( m_aMutex ),
         m_eStackMode( eStackMode ),
         m_eBarDirection( eDirection ),
-        m_nDim( nDim ),
-        m_eThreeDMode( eThreeDMode )
+        m_nDim( nDim )
 {}
 
 BarChartTypeTemplate::~BarChartTypeTemplate()
@@ -159,33 +164,112 @@ sal_Int32 BarChartTypeTemplate::getDimension() const
     return m_nDim;
 }
 
-chart2::StackMode BarChartTypeTemplate::getYStackMode() const
+StackMode BarChartTypeTemplate::getStackMode( sal_Int32 nChartTypeIndex ) const
 {
     return m_eStackMode;
 }
 
-chart2::StackMode BarChartTypeTemplate::getXStackMode() const
-{
-    return chart2::StackMode_STACKED;
-}
-
-uno::Reference< chart2::XChartType > BarChartTypeTemplate::getDefaultChartType()
+// ____ XChartTypeTemplate ____
+sal_Bool SAL_CALL BarChartTypeTemplate::matchesTemplate(
+    const Reference< chart2::XDiagram >& xDiagram,
+    sal_Bool bAdaptProperties )
     throw (uno::RuntimeException)
 {
-    uno::Reference< chart2::XChartType > xResult;
-    if( m_eBarDirection == HORIZONTAL )
-        xResult.set( new BarChartType( m_nDim ));
-    else
-        xResult.set( new ColumnChartType( m_nDim ));
+    sal_Bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
+
+    //check BarDirection
+    if( bResult )
+    {
+        bool bFound = false;
+        bool bAmbiguous = false;
+        bool bVertical = DiagramHelper::getVertical( xDiagram, bFound, bAmbiguous );
+        if( m_eBarDirection == HORIZONTAL )
+            bResult = sal_Bool( bVertical );
+        else if( m_eBarDirection == VERTICAL )
+            bResult = sal_Bool( !bVertical );
+    }
+
+    // adapt solid-type of template according to values in series
+    if( bAdaptProperties &&
+        bResult &&
+        getDimension() == 3 )
+    {
+        ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
+            DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
+
+        sal_Int32 aCommonGeom;
+        bool bGeomFound = false, bAdaptGeom = false;
+        for( ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
+                 aSeriesVec.begin(); aIt != aSeriesVec.end(); ++aIt )
+        {
+            try
+            {
+                sal_Int32 aGeom;
+                Reference< beans::XPropertySet > xProp( *aIt, uno::UNO_QUERY_THROW );
+                if( xProp->getPropertyValue( C2U( "Geometry3D" )) >>= aGeom )
+                {
+                    if( ! bGeomFound )
+                    {
+                        // first series
+                        aCommonGeom = aGeom;
+                        bGeomFound = true;
+                        bAdaptGeom = true;
+                    }
+                    else
+                    {
+                        // further series: compare for uniqueness
+                        if( aCommonGeom != aGeom )
+                        {
+                            bAdaptGeom = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            catch( uno::Exception & ex )
+            {
+                ASSERT_EXCEPTION( ex );
+            }
+        }
+
+        if( bAdaptGeom )
+        {
+            setFastPropertyValue_NoBroadcast(
+                PROP_BAR_TEMPLATE_GEOMETRY3D, uno::makeAny( aCommonGeom ));
+        }
+    }
+
+    return bResult;
+}
+
+Reference< chart2::XChartType > SAL_CALL BarChartTypeTemplate::getChartTypeForNewSeries(
+        const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
+    throw (uno::RuntimeException)
+{
+        Reference< chart2::XChartType > xResult;
+
+    try
+    {
+        Reference< lang::XMultiServiceFactory > xFact(
+            GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
+        xResult.set( xFact->createInstance(
+            CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ), uno::UNO_QUERY_THROW );
+        ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem( aFormerlyUsedChartTypes, xResult );
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
 
     return xResult;
 }
+
 
 // ____ OPropertySet ____
 uno::Any BarChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    static helper::tPropertyValueMap aStaticDefaults;
+    static tPropertyValueMap aStaticDefaults;
 
     // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -195,7 +279,7 @@ uno::Any BarChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
         lcl_AddDefaultsToMap( aStaticDefaults );
     }
 
-    helper::tPropertyValueMap::const_iterator aFound(
+    tPropertyValueMap::const_iterator aFound(
         aStaticDefaults.find( nHandle ));
 
     if( aFound == aStaticDefaults.end())
@@ -212,11 +296,11 @@ uno::Any BarChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
 
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
+Reference< beans::XPropertySetInfo > SAL_CALL
     BarChartTypeTemplate::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
+    static Reference< beans::XPropertySetInfo > xInfo;
 
     // /--
     MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -230,11 +314,82 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
     // \--
 }
 
+void SAL_CALL BarChartTypeTemplate::applyStyle(
+    const Reference< chart2::XDataSeries >& xSeries,
+    ::sal_Int32 nChartTypeIndex,
+    ::sal_Int32 nSeriesIndex,
+    ::sal_Int32 nSeriesCount )
+    throw (uno::RuntimeException)
+{
+    ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
+    if( getDimension() == 3 )
+    {
+        try
+        {
+            drawing::LineStyle eStyle = drawing::LineStyle_NONE;
+
+            Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY_THROW );
+            xProp->setPropertyValue( C2U("BorderStyle"),
+                                     uno::makeAny( eStyle ));
+
+            //-------------------------
+            //apply Geometry3D
+            uno::Any aAGeometry3D;
+            this->getFastPropertyValue( aAGeometry3D, PROP_BAR_TEMPLATE_GEOMETRY3D );
+            DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "Geometry3D" ), aAGeometry3D );
+        }
+        catch( uno::Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
+        }
+    }
+}
+
+void SAL_CALL BarChartTypeTemplate::resetStyles(
+    const Reference< chart2::XDiagram >& xDiagram )
+    throw (uno::RuntimeException)
+{
+    ChartTypeTemplate::resetStyles( xDiagram );
+    if( getDimension() == 3 )
+    {
+        ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
+            DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
+        uno::Any aLineStyleAny( uno::makeAny( drawing::LineStyle_NONE ));
+        for( ::std::vector< Reference< chart2::XDataSeries > >::iterator aIt( aSeriesVec.begin());
+             aIt != aSeriesVec.end(); ++aIt )
+        {
+            Reference< beans::XPropertyState > xState( *aIt, uno::UNO_QUERY );
+            if( xState.is())
+            {
+                xState->setPropertyToDefault( C2U("Geometry3D"));
+                Reference< beans::XPropertySet > xProp( xState, uno::UNO_QUERY );
+                if( xProp.is() &&
+                    xProp->getPropertyValue( C2U("BorderStyle")) == aLineStyleAny )
+                {
+                    xState->setPropertyToDefault( C2U("BorderStyle"));
+                }
+            }
+        }
+    }
+
+    DiagramHelper::setVertical( xDiagram, false );
+}
+
+
+void BarChartTypeTemplate::createCoordinateSystems(
+    const Reference< chart2::XCoordinateSystemContainer > & xCooSysCnt )
+{
+    ChartTypeTemplate::createCoordinateSystems( xCooSysCnt );
+
+    Reference< chart2::XDiagram > xDiagram( xCooSysCnt, uno::UNO_QUERY );
+    DiagramHelper::setVertical( xDiagram, m_eBarDirection == HORIZONTAL );
+}
+
 // ----------------------------------------
 
-uno::Sequence< ::rtl::OUString > BarChartTypeTemplate::getSupportedServiceNames_Static()
+Sequence< OUString > BarChartTypeTemplate::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 2 );
+    Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
     aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartTypeTemplate" );
     return aServices;
