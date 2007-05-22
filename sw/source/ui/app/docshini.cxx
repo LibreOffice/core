@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:13:50 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:37:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,6 +225,8 @@
 #ifndef _FMTFOLLOWTEXTFLOW_HXX
 #include <fmtfollowtextflow.hxx>
 #endif
+
+#include <unochart.hxx>
 
 
 using namespace ::com::sun::star::i18n;
@@ -542,6 +544,15 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
 
  SwDocShell::~SwDocShell()
 {
+    // disable chart related objects now because in ~SwDoc it may be to late for this
+    if( pDoc )
+    {
+        pDoc->GetChartControllerHelper().Disconnect();
+        SwChartDataProvider *pPCD = pDoc->GetChartDataProvider();
+        if (pPCD)
+            pPCD->dispose();
+    }
+
     RemoveLink();
     delete pFontList;
 
@@ -918,4 +929,5 @@ void SwDocShell::SubInitNew()
  */
 IDocumentDeviceAccess* SwDocShell::getIDocumentDeviceAccess() { return pDoc; }
 const IDocumentSettingAccess* SwDocShell::getIDocumentSettingAccess() const { return pDoc; }
+IDocumentChartDataProviderAccess* SwDocShell::getIDocumentChartDataProviderAccess() { return pDoc; }
 
