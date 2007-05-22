@@ -1,0 +1,1312 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: DataBrowser.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:27:33 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_chart2.hxx"
+
+// header for class SvNumberformat
+#ifndef _ZFORMAT_HXX
+#ifndef _ZFORLIST_DECLARE_TABLE
+#define _ZFORLIST_DECLARE_TABLE
+#endif
+#include <svtools/zformat.hxx>
+#endif
+// header for SvNumberFormatter
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
+#endif
+
+#include "DataBrowser.hxx"
+#include "DataBrowserModel.hxx"
+#include "Strings.hrc"
+#include "ContainerHelper.hxx"
+#include "DataSeriesHelper.hxx"
+#include "DiagramHelper.hxx"
+#include "ChartModelHelper.hxx"
+#include "chartview/NumberFormatterWrapper.hxx"
+#include "servicenames_charttypes.hxx"
+#include "ResId.hxx"
+#include "Bitmaps.hrc"
+#include "Bitmaps_HC.hrc"
+#include "HelpIds.hrc"
+
+#include <vcl/fixed.hxx>
+#include <vcl/image.hxx>
+#include <vcl/msgbox.hxx>
+#include <rtl/math.hxx>
+
+#include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XChartType.hpp>
+
+#include <com/sun/star/container/XIndexReplace.hpp>
+
+#include <algorithm>
+#include <functional>
+
+#define SELECT_IMAGE(name,hc) Image( SchResId( hc ? name ## _HC : name ))
+
+/*  BROWSER_COLUMNSELECTION :  single cells may be selected rather than only
+                               entire rows
+    BROWSER_(H|V)LINES :       show horizontal or vertical grid-lines
+
+    BROWSER_AUTO_(H|V)SCROLL : scroll automated horizontally or vertically when
+                               cursor is moved beyond the edge of the dialog
+    BROWSER_HIGHLIGHT_NONE :   Do not mark the current row with selection color
+                               (usually blue)
+
+ */
+#define BROWSER_STANDARD_FLAGS  \
+    BROWSER_COLUMNSELECTION | \
+    BROWSER_HLINES | BROWSER_VLINES | \
+    BROWSER_AUTO_HSCROLL | BROWSER_AUTO_VSCROLL | \
+    BROWSER_HIGHLIGHT_NONE
+
+// BROWSER_HIDECURSOR would prevent flickering in edit fields, but navigating
+// with shift up/down, and entering non-editable cells would be problematic,
+// e.g.  the first cell, or when being in read-only mode
+
+
+using namespace ::com::sun::star;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::Reference;
+using ::rtl::OUString;
+
+using namespace ::svt;
+
+namespace
+{
+void lcl_setNumberFormat(
+    SvNumberFormatter * pNumFormatter, long nFmt,
+    double fData, String & rOutString )
+{
+    short eType = pNumFormatter->GetType( nFmt );
+
+    // change nFmt to an editable format (without loss of information)
+    if( eType == NUMBERFORMAT_CURRENCY )    // for currencies just display decimals
+    {
+        nFmt = pNumFormatter->GetStandardIndex();
+    }
+    else
+    {
+        const SvNumberformat* pFormat = pNumFormatter->GetEntry( nFmt );
+        if( pFormat )
+        {
+            LanguageType eLanguage = pFormat->GetLanguage();
+            nFmt = pNumFormatter->GetStandardFormat( nFmt, eType, eLanguage );
+        }
+        // else: format is 'standard'
+    }
+
+    // format string to an editable format (without loss of information)
+    Color* pDummy = NULL;
+    pNumFormatter->GetOutputString( fData, nFmt, rOutString, &pDummy );
+}
+
+sal_Int32 lcl_getRowInData( long nRow )
+{
+    return static_cast< sal_Int32 >( nRow );
+}
+
+sal_Int32 lcl_getColumnInData( USHORT nCol )
+{
+    return static_cast< sal_Int32 >( nCol ) - 1;
+}
+
+} // anonymous namespace
+
+// --------------------------------------------------------------------------------
+
+namespace chart
+{
+
+// ----------------------------------------
+namespace impl
+{
+
+class SeriesHeaderEdit : public Edit
+{
+public:
+    SeriesHeaderEdit( Window * pParent );
+    virtual ~SeriesHeaderEdit();
+
+    void setStartColumn( sal_Int32 nStartColumn );
+    sal_Int32 getStartColumn() const;
+
+private:
+    sal_Int32 m_nStartColumn;
+};
+
+SeriesHeaderEdit::SeriesHeaderEdit( Window * pParent ) :
+        Edit( pParent ),
+        m_nStartColumn( 0 )
+{}
+SeriesHeaderEdit::~SeriesHeaderEdit()
+{}
+
+void SeriesHeaderEdit::setStartColumn( sal_Int32 nStartColumn )
+{
+    m_nStartColumn = nStartColumn;
+}
+
+sal_Int32 SeriesHeaderEdit::getStartColumn() const
+{
+    return m_nStartColumn;
+}
+
+class SeriesHeader
+{
+public:
+    explicit SeriesHeader( Window * pParent );
+
+    void SetColor( const Color & rCol );
+    void SetPos( const Point & rPos );
+    void SetWidth( sal_Int32 nWidth );
+    void SetChartType( const Reference< chart2::XChartType > & xChartType,
+                       bool bSwapXAndYAxis,
+                       bool bIsHighContrast );
+    void SetSeriesName( const String & rName );
+    void SetRange( sal_Int32 nStartCol, sal_Int32 nEndCol );
+
+    void SetPixelPosX( sal_Int32 nPos );
+    void SetPixelWidth( sal_Int32 nWidth );
+
+    sal_Int32 GetStartColumn() const;
+    sal_Int32 GetEndColumn() const;
+
+    void Show();
+    void Hide();
+
+    /** call this before destroying the class.  This notifies the listeners to
+        changes of the edit field for the series name.
+     */
+    void applyChanges();
+
+    void SetGetFocusHdl( const Link& rLink );
+
+    void SetEditChangedHdl( const Link & rLink );
+    const Link & GetEditChangedHdl() const;
+
+    ::boost::shared_ptr< SeriesHeaderEdit >  GetSeriesNameEditField() const;
+
+    bool HasFocus() const;
+
+private:
+    ::boost::shared_ptr< FixedImage >        m_spSymbol;
+    ::boost::shared_ptr< SeriesHeaderEdit >  m_spSeriesName;
+    ::boost::shared_ptr< FixedText >         m_spColorBar;
+    OutputDevice *                           m_pDevice;
+    Link                                     m_aChangeLink;
+
+    void notifyChanges();
+    DECL_LINK( SeriesNameChanged, void * );
+    DECL_LINK( SeriesNameEdited, void * );
+
+    /// @param bHC </TRUE> for hight-contrast image
+    static Image GetChartTypeImage(
+        const Reference< chart2::XChartType > & xChartType,
+        bool bSwapXAndYAxis,
+        bool bHC );
+
+    sal_Int32 m_nStartCol, m_nEndCol;
+    sal_Int32 m_nWidth;
+    Point     m_aPos;
+    bool      m_bSeriesNameChangePending;
+};
+
+SeriesHeader::SeriesHeader( Window * pParent ) :
+        m_spSymbol( new FixedImage( pParent, WB_NOBORDER )),
+        m_spSeriesName( new SeriesHeaderEdit( pParent )),
+        m_spColorBar( new FixedText( pParent, WB_NOBORDER )),
+        m_pDevice( pParent ),
+        m_nStartCol( 0 ),
+        m_nEndCol( 0 ),
+        m_nWidth( 42 ),
+        m_aPos( 0, 22 ),
+        m_bSeriesNameChangePending( false )
+{
+    m_spSeriesName->EnableUpdateData( 4 * EDIT_UPDATEDATA_TIMEOUT ); // define is in vcl/edit.hxx
+    m_spSeriesName->SetUpdateDataHdl( LINK( this, SeriesHeader, SeriesNameChanged ));
+    m_spSeriesName->SetModifyHdl( LINK( this, SeriesHeader, SeriesNameEdited ));
+    m_spSeriesName->SetSmartHelpId( SmartId( HID_SCH_DATA_SERIES_LABEL ));
+    Show();
+}
+
+void SeriesHeader::notifyChanges()
+{
+    if( m_aChangeLink.IsSet())
+        m_aChangeLink.Call( m_spSeriesName.get());
+
+    m_bSeriesNameChangePending = false;
+}
+
+void SeriesHeader::applyChanges()
+{
+    if( m_bSeriesNameChangePending )
+    {
+        notifyChanges();
+    }
+}
+
+void SeriesHeader::SetColor( const Color & rCol )
+{
+    m_spColorBar->SetControlBackground( rCol );
+}
+
+void SeriesHeader::SetPos( const Point & rPos )
+{
+    m_aPos = rPos;
+
+    // chart type symbol
+    sal_Int32 nHeight = 10;
+    Point aPos( rPos );
+    aPos.setY( aPos.getY() + 2 );
+    Size aSize( nHeight, nHeight );
+    m_spSymbol->SetPosPixel( m_pDevice->LogicToPixel( aPos, MAP_APPFONT ));
+    m_spSymbol->SetSizePixel( m_pDevice->LogicToPixel( aSize, MAP_APPFONT ));
+    aPos.setY( aPos.getY() - 2 );
+
+    // series name edit field
+    aPos.setX( aPos.getX() + nHeight + 2 );
+    aSize.setWidth( m_nWidth - nHeight - 2 );
+    nHeight = 12;
+    aSize.setHeight( nHeight );
+    m_spSeriesName->SetPosPixel( m_pDevice->LogicToPixel( aPos, MAP_APPFONT ));
+    m_spSeriesName->SetSizePixel( m_pDevice->LogicToPixel( aSize, MAP_APPFONT ));
+
+    // color bar
+    aPos.setX( rPos.getX() + 1 );
+    aPos.setY( aPos.getY() + nHeight + 2 );
+    nHeight = 3;
+    aSize.setWidth( m_nWidth - 1 );
+    aSize.setHeight( nHeight );
+    m_spColorBar->SetPosPixel( m_pDevice->LogicToPixel( aPos, MAP_APPFONT ));
+    m_spColorBar->SetSizePixel( m_pDevice->LogicToPixel( aSize, MAP_APPFONT ));
+}
+
+void SeriesHeader::SetWidth( sal_Int32 nWidth )
+{
+    m_nWidth = nWidth;
+    SetPos( m_aPos );
+}
+
+
+void SeriesHeader::SetPixelPosX( sal_Int32 nPos )
+{
+    Point aPos( m_pDevice->LogicToPixel( m_aPos, MAP_APPFONT ));
+    aPos.setX( nPos );
+    SetPos( m_pDevice->PixelToLogic( aPos, MAP_APPFONT ));
+}
+
+void SeriesHeader::SetPixelWidth( sal_Int32 nWidth )
+{
+    SetWidth( m_pDevice->PixelToLogic( Size( nWidth, 0 ), MAP_APPFONT ).getWidth());
+}
+
+void SeriesHeader::SetChartType(
+    const Reference< chart2::XChartType > & xChartType,
+    bool bSwapXAndYAxis,
+    bool bIsHighContrast )
+{
+    m_spSymbol->SetImage( GetChartTypeImage( xChartType, bSwapXAndYAxis, bIsHighContrast ));
+}
+
+void SeriesHeader::SetSeriesName( const String & rName )
+{
+    m_spSeriesName->SetText( rName );
+}
+
+void SeriesHeader::SetRange( sal_Int32 nStartCol, sal_Int32 nEndCol )
+{
+    m_nStartCol = nStartCol;
+    m_nEndCol = (nEndCol > nStartCol) ? nEndCol : nStartCol;
+    m_spSeriesName->setStartColumn( nStartCol );
+}
+
+sal_Int32 SeriesHeader::GetStartColumn() const
+{
+    return m_nStartCol;
+}
+
+sal_Int32 SeriesHeader::GetEndColumn() const
+{
+    return m_nEndCol;
+}
+
+void SeriesHeader::Show()
+{
+    m_spSymbol->Show();
+    m_spSeriesName->Show();
+    m_spColorBar->Show();
+}
+
+void SeriesHeader::Hide()
+{
+    m_spSymbol->Hide();
+    m_spSeriesName->Hide();
+    m_spColorBar->Hide();
+}
+
+void SeriesHeader::SetEditChangedHdl( const Link & rLink )
+{
+    m_aChangeLink = rLink;
+}
+
+const Link & SeriesHeader::GetEditChangedHdl() const
+{
+    return m_aChangeLink;
+}
+
+IMPL_LINK( SeriesHeader, SeriesNameChanged, void * , EMPTYARG )
+{
+    notifyChanges();
+    return 0;
+}
+
+IMPL_LINK( SeriesHeader, SeriesNameEdited, void * , EMPTYARG )
+{
+    m_bSeriesNameChangePending = true;
+    return 0;
+}
+
+void SeriesHeader::SetGetFocusHdl( const Link& rLink )
+{
+    m_spSeriesName->SetGetFocusHdl( rLink );
+}
+
+::boost::shared_ptr< SeriesHeaderEdit > SeriesHeader::GetSeriesNameEditField() const
+{
+    return m_spSeriesName;
+}
+
+bool SeriesHeader::HasFocus() const
+{
+    return m_spSeriesName->HasFocus();
+}
+
+// static
+Image SeriesHeader::GetChartTypeImage(
+    const Reference< chart2::XChartType > & xChartType,
+    bool bSwapXAndYAxis,
+    bool bHC )
+{
+    Image aResult;
+    if( !xChartType.is())
+        return aResult;
+    OUString aChartTypeName( xChartType->getChartType());
+
+    if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_AREA ))
+    {
+        aResult = SELECT_IMAGE( IMG_TYPE_AREA, bHC );
+    }
+    else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ))
+    {
+        if( bSwapXAndYAxis )
+            aResult = SELECT_IMAGE( IMG_TYPE_BAR, bHC );
+        else
+            aResult = SELECT_IMAGE( IMG_TYPE_COLUMN, bHC );
+    }
+    else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_LINE ))
+    {
+        aResult = SELECT_IMAGE( IMG_TYPE_LINE, bHC );
+    }
+    else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_SCATTER ))
+    {
+        // @todo: correct image for scatter chart type
+        aResult = SELECT_IMAGE( IMG_TYPE_LINE, bHC );
+    }
+    else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_PIE ))
+    {
+        aResult = SELECT_IMAGE( IMG_TYPE_PIE, bHC );
+    }
+    else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_NET ))
+    {
+        aResult = SELECT_IMAGE( IMG_TYPE_NET, bHC );
+    }
+    else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK ))
+    {
+        // @todo: correct image for candle-stick type
+        aResult = SELECT_IMAGE( IMG_TYPE_STOCK, bHC );
+    }
+
+    return aResult;
+}
+
+struct applyChangesFunctor : public ::std::unary_function< ::boost::shared_ptr< SeriesHeader >, void >
+{
+    void operator() ( ::boost::shared_ptr< SeriesHeader > spHeader )
+    {
+        spHeader->applyChanges();
+    }
+};
+
+} // namespace impl
+// ----------------------------------------
+
+namespace
+{
+
+sal_Int32 lcl_getColumnInDataOrHeader(
+    USHORT nCol, const ::std::vector< ::boost::shared_ptr< ::chart::impl::SeriesHeader > > & rSeriesHeader )
+{
+    bool bHeaderHasFocus( false );
+    sal_Int32 nColIdx = 0;
+
+    for( ::std::vector< ::boost::shared_ptr< ::chart::impl::SeriesHeader > >::const_iterator aIt( rSeriesHeader.begin());
+         aIt != rSeriesHeader.end(); ++aIt )
+    {
+        if( (*aIt)->HasFocus())
+        {
+            bHeaderHasFocus = true;
+            nColIdx = lcl_getColumnInData( static_cast< USHORT >( (*aIt)->GetStartColumn()));
+            break;
+        }
+    }
+    if( !bHeaderHasFocus )
+        nColIdx = lcl_getColumnInData( nCol );
+
+    return nColIdx;
+}
+
+} // anonymous namespace
+
+
+DataBrowser::DataBrowser( Window* pParent, const ResId& rId, bool bLiveUpdate ) :
+    ::svt::EditBrowseBox( pParent, rId, EBBF_SMART_TAB_TRAVEL | EBBF_HANDLE_COLUMN_TEXT, BROWSER_STANDARD_FLAGS ),
+    m_nSeekRow( 0 ),
+    m_bIsReadOnly( false ),
+    m_bIsDirty( false ),
+    m_bLiveUpdate( bLiveUpdate ),
+    m_aNumberEditField( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ),
+    m_aTextEditField( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ),
+    m_rNumberEditController( new ::svt::FormattedFieldCellController( & m_aNumberEditField )),
+    m_rTextEditController( new ::svt::EditCellController( & m_aTextEditField ))
+{
+    double fNan;
+    ::rtl::math::setNan( & fNan );
+    m_aNumberEditField.SetDefaultValue( fNan );
+    m_aNumberEditField.TreatAsNumber( TRUE );
+    RenewTable();
+    SetClean();
+}
+
+DataBrowser::~DataBrowser()
+{
+}
+
+bool DataBrowser::MayInsertRow() const
+{
+    return ! IsReadOnly();
+}
+
+bool DataBrowser::MayInsertColumn() const
+{
+    return ! IsReadOnly();
+}
+
+bool DataBrowser::MayDeleteRow() const
+{
+    return ! IsReadOnly()
+        && ( GetCurRow() >= 0 )
+        && ( GetRowCount() > 1 );
+}
+
+bool DataBrowser::MayDeleteColumn() const
+{
+    // if a series header has the focus
+    for( tSeriesHeaderContainer::const_iterator aIt( m_aSeriesHeaders.begin());
+         aIt != m_aSeriesHeaders.end(); ++aIt )
+    {
+        if( (*aIt)->HasFocus())
+            return true;
+    }
+
+    return ! IsReadOnly()
+        && ( GetCurColumnId() > 1 )
+        && ( ColCount() > 2 );
+}
+
+bool DataBrowser::MaySwapRows() const
+{
+    return ! IsReadOnly()
+        && ( GetCurRow() >= 0 )
+        && ( GetCurRow() < GetRowCount() - 1 );
+}
+
+bool DataBrowser::MaySwapColumns() const
+{
+    // if a series header (except the last one) has the focus
+    for( tSeriesHeaderContainer::const_iterator aIt( m_aSeriesHeaders.begin());
+         aIt != m_aSeriesHeaders.end(); )
+    {
+        bool bHasFocus = false;
+        if( (*aIt)->HasFocus())
+            bHasFocus = true;
+        ++aIt;
+        if( bHasFocus )
+            return (aIt != m_aSeriesHeaders.end());
+    }
+
+    return ! IsReadOnly()
+        && ( GetCurColumnId() > 1 )
+        && ( GetCurColumnId() < ColCount() - 1 );
+}
+
+// bool DataBrowser::MaySortRow() const
+// {
+//     // not implemented
+//     return false;
+// //     return ! IsReadOnly() && ( GetCurRow() >= 0 );
+// }
+
+// bool DataBrowser::MaySortColumn() const
+// {
+//     // not implemented
+//     return false;
+// //     return ! IsReadOnly() && ( GetCurColumnId() > 1 );
+// }
+
+void DataBrowser::clearHeaders()
+{
+    ::std::for_each( m_aSeriesHeaders.begin(), m_aSeriesHeaders.end(), impl::applyChangesFunctor());
+    m_aSeriesHeaders.clear();
+}
+
+void DataBrowser::RenewTable()
+{
+    if( ! m_apDataBrowserModel.get())
+        return;
+
+    long   nOldRow     = GetCurRow();
+    USHORT nOldColId   = GetCurColumnId();
+
+    BOOL bLastUpdateMode = GetUpdateMode();
+    SetUpdateMode( FALSE );
+
+    if( IsModified() )
+        SaveModified();
+
+    DeactivateCell();
+
+    RemoveColumns();
+    RowRemoved( 1, GetRowCount() );
+
+    // for row numbers
+    InsertHandleColumn( static_cast< sal_uInt16 >(
+                            GetDataWindow().LogicToPixel( Size( 42, 0 )).getWidth() ));
+
+    const sal_Int32 nDefaultColumnWidth = 94;
+
+    sal_Int32 nColumnWidth( GetDataWindow().LogicToPixel( Size( nDefaultColumnWidth, 0 )).getWidth());
+    sal_Int32 nColumnCount = m_apDataBrowserModel->getColumnCount();
+    sal_Int32 nRowCount = m_apDataBrowserModel->getMaxRowCount();
+    for( sal_Int32 nColIdx=1; nColIdx<=nColumnCount; ++nColIdx )
+    {
+        InsertDataColumn( static_cast< sal_uInt16 >( nColIdx ), GetColString( nColIdx ), nColumnWidth );
+    }
+
+    RowInserted( 1, nRowCount );
+    GoToRow( ::std::min( nOldRow, GetRowCount() - 1 ));
+    GoToColumnId( ::std::min( nOldColId, static_cast< USHORT >( ColCount() - 1 )));
+
+    Window * pWin = this->GetParent();
+    if( !pWin )
+        pWin = this;
+
+    // fill series headers
+    clearHeaders();
+    DataBrowserModel::tDataHeaderVector aHeaders( m_apDataBrowserModel->getDataHeaders());
+    Link aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
+    Link aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
+    bool bIsHighContrast = pWin ? (pWin->GetDisplayBackground().GetColor().IsDark()) : false;
+
+    for( DataBrowserModel::tDataHeaderVector::const_iterator aIt( aHeaders.begin());
+         aIt != aHeaders.end(); ++aIt )
+    {
+        ::boost::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( pWin ));
+        Reference< beans::XPropertySet > xSeriesProp( aIt->m_xDataSeries, uno::UNO_QUERY );
+        sal_Int32 nColor = 0;
+        // @todo: Set "DraftColor", i.e. interpolated colors for gradients, bitmaps, etc.
+        if( xSeriesProp.is() &&
+            ( xSeriesProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Color"))) >>= nColor ))
+            spHeader->SetColor( Color( nColor ));
+        spHeader->SetChartType( aIt->m_xChartType, aIt->m_bSwapXAndYAxis, bIsHighContrast );
+        spHeader->SetSeriesName(
+            String( DataSeriesHelper::getDataSeriesLabel(
+                        aIt->m_xDataSeries,
+                        (aIt->m_xChartType.is() ?
+                         aIt->m_xChartType->getRoleOfSequenceForSeriesLabel() :
+                         OUString( RTL_CONSTASCII_USTRINGPARAM("values-y"))))));
+        // index is 1-based, as 0 is for the column that contains the row-numbers
+        spHeader->SetRange( aIt->m_nStartColumn + 1, aIt->m_nEndColumn + 1 );
+        spHeader->SetGetFocusHdl( aFocusLink );
+        spHeader->SetEditChangedHdl( aSeriesHeaderChangedLink );
+        m_aSeriesHeaders.push_back( spHeader );
+    }
+
+    ImplAdjustHeaderControls();
+    SetDirty();
+    SetUpdateMode( bLastUpdateMode );
+    ActivateCell();
+    Invalidate();
+}
+
+String DataBrowser::GetColString( sal_Int32 nColumnId ) const
+{
+    OSL_ASSERT( m_apDataBrowserModel.get());
+    if( nColumnId > 0 )
+        return String( m_apDataBrowserModel->getRoleOfColumn( nColumnId - 1 ));
+    return String();
+}
+
+String DataBrowser::GetRowString( sal_Int32 nRow ) const
+{
+    return String::CreateFromInt32( nRow + 1 );
+}
+
+String DataBrowser::GetCellText( long nRow, USHORT nColumnId ) const
+{
+    String aResult;
+
+    if( nColumnId == 0 )
+    {
+        aResult = GetRowString( static_cast< sal_Int32 >( nRow ));
+    }
+    else if( nRow >= 0 &&
+             m_apDataBrowserModel.get())
+    {
+        sal_Int32 nColIndex = static_cast< sal_Int32 >( nColumnId ) - 1;
+
+        if( m_apDataBrowserModel->getCellType( nColIndex, nRow ) == DataBrowserModel::NUMBER )
+        {
+            double fData( m_apDataBrowserModel->getCellNumber( nColIndex, nRow ));
+            sal_Int32 nLabelColor;
+            bool bColorChanged = false;
+
+            if( ! ::rtl::math::isNan( fData ) &&
+                m_spNumberFormatterWrapper.get() )
+                aResult = String( m_spNumberFormatterWrapper->getFormattedString(
+                                      GetNumberFormatKey( nRow, nColumnId ),
+                                      fData, nLabelColor, bColorChanged ));
+        }
+        else
+        {
+            OSL_ASSERT( m_apDataBrowserModel->getCellType( nColIndex, nRow ) == DataBrowserModel::TEXT );
+            aResult = m_apDataBrowserModel->getCellText( nColIndex, nRow );
+        }
+    }
+
+    return aResult;
+}
+
+double DataBrowser::GetCellNumber( long nRow, USHORT nColumnId ) const
+{
+    double fResult;
+    ::rtl::math::setNan( & fResult );
+
+    if(( nColumnId >= 1 ) && ( nRow >= 0 ) &&
+        m_apDataBrowserModel.get())
+    {
+        fResult = m_apDataBrowserModel->getCellNumber( nColumnId - 1, nRow );
+    }
+
+    return fResult;
+}
+
+void DataBrowser::Resize()
+{
+    BOOL bLastUpdateMode = GetUpdateMode();
+    SetUpdateMode( FALSE );
+
+    ::svt::EditBrowseBox::Resize();
+    ImplAdjustHeaderControls();
+    SetUpdateMode( bLastUpdateMode );
+}
+
+bool DataBrowser::SetReadOnly( bool bNewState )
+{
+    bool bResult = m_bIsReadOnly;
+
+    if( m_bIsReadOnly != bNewState )
+    {
+        m_bIsReadOnly = bNewState;
+        Invalidate();
+        DeactivateCell();
+    }
+
+    return bResult;
+}
+
+bool DataBrowser::IsReadOnly() const
+{
+    return m_bIsReadOnly;
+}
+
+
+bool DataBrowser::IsDirty() const
+{
+    return m_bIsDirty;
+}
+
+void DataBrowser::SetClean()
+{
+    m_bIsDirty = false;
+}
+
+void DataBrowser::SetDirty()
+{
+    if( !m_bLiveUpdate )
+        m_bIsDirty = true;
+}
+
+void DataBrowser::CursorMoved()
+{
+    EditBrowseBox::CursorMoved();
+
+    if( GetUpdateMode() && m_aCursorMovedHdlLink.IsSet())
+        m_aCursorMovedHdlLink.Call( this );
+}
+
+void DataBrowser::SetCellModifiedHdl( const Link& rLink )
+{
+    m_aCellModifiedLink = rLink;
+}
+
+void DataBrowser::CellModified()
+{
+    SetDirty();
+    if( m_aCellModifiedLink.IsSet())
+        m_aCursorMovedHdlLink.Call( this );
+}
+
+void DataBrowser::SetDataFromModel(
+    const Reference< chart2::XChartDocument > & xChartDoc,
+    const Reference< uno::XComponentContext > & xContext )
+{
+    if( m_bLiveUpdate )
+    {
+        m_xChartDoc.set( xChartDoc );
+    }
+    else
+    {
+        Reference< util::XCloneable > xCloneable( xChartDoc, uno::UNO_QUERY );
+        if( xCloneable.is())
+            m_xChartDoc.set( xCloneable->createClone(), uno::UNO_QUERY );
+    }
+
+    m_apDataBrowserModel.reset( new DataBrowserModel( m_xChartDoc, xContext ));
+    m_spNumberFormatterWrapper.reset(
+        new NumberFormatterWrapper(
+            Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY )));
+
+    RenewTable();
+
+    const sal_Int32 nColCnt  = m_apDataBrowserModel->getColumnCount();
+    const sal_Int32 nRowCnt =  m_apDataBrowserModel->getMaxRowCount();
+    if( nRowCnt && nColCnt )
+    {
+        GoToRow( 0 );
+        GoToColumnId( 1 );
+    }
+    SetClean();
+}
+
+void DataBrowser::InsertColumn()
+{
+    sal_Int32 nColIdx = lcl_getColumnInDataOrHeader( GetCurColumnId(), m_aSeriesHeaders );
+
+    if( nColIdx >= 0 &&
+        m_apDataBrowserModel.get())
+    {
+        // save changes made to edit-field
+        if( IsModified() )
+            SaveModified();
+
+        m_apDataBrowserModel->insertDataSeries( nColIdx );
+        RenewTable();
+    }
+}
+
+void DataBrowser::RemoveColumn()
+{
+    sal_Int32 nColIdx = lcl_getColumnInDataOrHeader( GetCurColumnId(), m_aSeriesHeaders );
+
+    if( nColIdx >= 0 &&
+        m_apDataBrowserModel.get())
+    {
+        // save changes made to edit-field
+        if( IsModified() )
+            SaveModified();
+
+        m_apDataBrowserModel->removeDataSeries( nColIdx );
+        RenewTable();
+    }
+}
+
+void DataBrowser::InsertRow()
+{
+     sal_Int32 nRowIdx = lcl_getRowInData( GetCurRow());
+
+     if( nRowIdx >= 0 &&
+        m_apDataBrowserModel.get())
+    {
+        // save changes made to edit-field
+        if( IsModified() )
+            SaveModified();
+
+        m_apDataBrowserModel->insertDataPointForAllSeries( nRowIdx );
+        RenewTable();
+    }
+}
+
+void DataBrowser::RemoveRow()
+{
+     sal_Int32 nRowIdx = lcl_getRowInData( GetCurRow());
+
+     if( nRowIdx >= 0 &&
+        m_apDataBrowserModel.get())
+    {
+        // save changes made to edit-field
+        if( IsModified() )
+            SaveModified();
+
+        m_apDataBrowserModel->removeDataPointForAllSeries( nRowIdx );
+        RenewTable();
+    }
+}
+
+void DataBrowser::SwapColumn()
+{
+    sal_Int32 nColIdx = lcl_getColumnInDataOrHeader( GetCurColumnId(), m_aSeriesHeaders );
+
+    if( nColIdx >= 0 &&
+        m_apDataBrowserModel.get())
+    {
+        // save changes made to edit-field
+        if( IsModified() )
+            SaveModified();
+
+        m_apDataBrowserModel->swapDataSeries( nColIdx );
+
+        // keep cursor in swapped column
+        if( GetCurColumnId() < ColCount() - 1 )
+        {
+            Dispatch( BROWSER_CURSORRIGHT );
+        }
+        RenewTable();
+    }
+}
+
+void DataBrowser::SwapRow()
+{
+     sal_Int32 nRowIdx = lcl_getRowInData( GetCurRow());
+
+     if( nRowIdx >= 0 &&
+        m_apDataBrowserModel.get())
+    {
+        // save changes made to edit-field
+        if( IsModified() )
+            SaveModified();
+
+        m_apDataBrowserModel->swapDataPointForAllSeries( nRowIdx );
+
+        // keep cursor in swapped row
+        if( GetCurRow() < GetRowCount() - 1 )
+        {
+            Dispatch( BROWSER_CURSORDOWN );
+        }
+        RenewTable();
+    }
+}
+
+void DataBrowser::SetCursorMovedHdl( const Link& rLink )
+{
+    m_aCursorMovedHdlLink = rLink;
+}
+
+const Link& DataBrowser::GetCursorMovedHdl() const
+{
+    return m_aCursorMovedHdlLink;
+}
+
+// void DataBrowser::QuickSortCol()
+// {
+//     DeactivateCell();
+//  m_apMemChart->SortCols( GetCurRow () - 1 );
+//  m_pLogBook->SetValid( FALSE );
+//  Invalidate();
+//     ActivateCell();
+//     SetDirty();
+// }
+
+// void DataBrowser::QuickSortRow()
+// {
+//     DeactivateCell();
+//  m_apMemChart->SortRows( GetCurColumnId () - 2 );
+//  m_pLogBook->SetValid( FALSE );
+//  Invalidate();
+//     ActivateCell();
+//     SetDirty();
+// }
+
+// void DataBrowser::QuickSortTableCols ()
+// {
+//     DeactivateCell();
+//  m_apMemChart->SortTableRows( GetCurColumnId () - 2 );
+//  m_pLogBook->SetValid( FALSE );
+//  Invalidate();
+//     ActivateCell();
+//     SetDirty();
+// }
+
+// void DataBrowser::QuickSortTableRows ()
+// {
+//  m_apMemChart->SortTableCols( GetCurRow () - 1 );
+//  m_pLogBook->SetValid( FALSE );
+//  Invalidate();
+//     ActivateCell();
+//     SetDirty();
+// }
+
+// implementations for ::svt::EditBrowseBox (pure virtual methods)
+void DataBrowser::PaintCell(
+    OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const
+{
+    Point aPos( rRect.TopLeft());
+    aPos.X() += 1;
+
+    String aText = GetCellText( m_nSeekRow, nColumnId );
+    Size TxtSize( GetDataWindow().GetTextWidth( aText ), GetDataWindow().GetTextHeight());
+
+    // clipping
+    if( aPos.X() < rRect.Right() || aPos.X() + TxtSize.Width() > rRect.Right() ||
+        aPos.Y() < rRect.Top() || aPos.Y() + TxtSize.Height() > rRect.Bottom())
+        rDev.SetClipRegion( rRect );
+
+    // allow for a disabled control ...
+    sal_Bool bEnabled = IsEnabled();
+    Color aOriginalColor = rDev.GetTextColor();
+    if( ! bEnabled )
+        rDev.SetTextColor( GetSettings().GetStyleSettings().GetDisableColor() );
+
+    // TEST
+//     if( nColumnId == 1 )
+//         // categories
+//         rDev.SetFillColor( Color( 0xff, 0xff, 0xff ));
+//     else if( nColumnId == 2 )
+//         // x-values
+//         rDev.SetFillColor( Color( 0xf0, 0xf0, 0xff ));
+//     else
+//         // y-values
+//         rDev.SetFillColor( Color( 0xff, 0xff, 0xf0 ));
+
+//     rDev.DrawRect( rRect );
+
+    // draw the text
+    rDev.DrawText( aPos, aText );
+
+    // reset the color (if necessary)
+    if( ! bEnabled )
+        rDev.SetTextColor( aOriginalColor );
+
+    if( rDev.IsClipRegion())
+        rDev.SetClipRegion();
+}
+
+sal_Bool DataBrowser::SeekRow( long nRow )
+{
+    if( ! EditBrowseBox::SeekRow( nRow ))
+        return sal_False;
+
+    if( nRow < 0 )
+        m_nSeekRow = - 1;
+    else
+        m_nSeekRow = nRow;
+
+    return sal_True;
+}
+
+sal_Bool DataBrowser::IsTabAllowed( sal_Bool bForward ) const
+{
+    long nRow = GetCurRow();
+    long nCol = GetCurColumnId();
+
+    // column 0 is header-column
+    long nBadCol = bForward
+        ? GetColumnCount() - 1
+        : 1;
+    long nBadRow = bForward
+        ? GetRowCount() - 1
+        : 0;
+
+    return ( nRow != nBadRow ||
+             nCol != nBadCol );
+}
+
+::svt::CellController* DataBrowser::GetController( long nRow, sal_uInt16 nCol )
+{
+    if( m_bIsReadOnly )
+        return 0;
+
+    if( CellContainsNumbers( nRow, nCol ))
+    {
+        m_aNumberEditField.SetFormatKey( GetNumberFormatKey( nRow, nCol ));
+        return m_rNumberEditController;
+    }
+
+    return m_rTextEditController;
+}
+
+void DataBrowser::InitController(
+    ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol )
+{
+    if( rController == m_rTextEditController )
+    {
+        String aText( GetCellText( nRow, nCol ) );
+        m_aTextEditField.SetText( aText );
+        m_aTextEditField.SetSelection( Selection( 0, aText.Len() ));
+    }
+    else if( rController == m_rNumberEditController )
+    {
+        // treat invalid and empty text as Nan
+        m_aNumberEditField.EnableNotANumber( true );
+        if( ::rtl::math::isNan( GetCellNumber( nRow, nCol )))
+            m_aNumberEditField.SetTextValue( String());
+        else
+            m_aNumberEditField.SetValue( GetCellNumber( nRow, nCol ) );
+        String aText( m_aNumberEditField.GetText());
+        m_aNumberEditField.SetSelection( Selection( 0, aText.Len()));
+    }
+    else
+    {
+        DBG_ERROR( "Invalid Controller" );
+    }
+}
+
+bool DataBrowser::CellContainsNumbers( sal_Int32 nRow, sal_uInt16 nCol ) const
+{
+    if( ! m_apDataBrowserModel.get())
+        return false;
+    return (m_apDataBrowserModel->getCellType( lcl_getColumnInData( nCol ), lcl_getRowInData( nRow )) ==
+            DataBrowserModel::NUMBER);
+}
+
+sal_uInt32 DataBrowser::GetNumberFormatKey( sal_Int32 nRow, sal_uInt16 nCol ) const
+{
+    if( ! m_apDataBrowserModel.get())
+        return 0;
+    return m_apDataBrowserModel->getNumberFormatKey( lcl_getColumnInData( nCol ), lcl_getRowInData( nRow ));
+}
+
+sal_Bool DataBrowser::SaveModified()
+{
+    if( ! IsModified() )
+        return sal_True;
+
+    sal_Bool bChangeValid = sal_True;
+
+    const sal_Int32 nRow = lcl_getRowInData( GetCurRow());
+    const sal_Int32 nCol = lcl_getColumnInData( GetCurColumnId());
+
+    DBG_ASSERT( nRow >= 0 || nCol >= 0, "This cell should not be modified!" );
+
+    switch( m_apDataBrowserModel->getCellType( nCol, nRow ))
+    {
+        case DataBrowserModel::NUMBER:
+        {
+            sal_uInt32 nDummy = 0;
+            double fDummy = 0.0;
+            String aText( m_aNumberEditField.GetText());
+            // an empty string is valid, if no numberformatter exists, all
+            // values are treated as valid
+            if( aText.Len() > 0 &&
+                m_spNumberFormatterWrapper.get() &&
+                m_spNumberFormatterWrapper->getSvNumberFormatter() &&
+                ! m_spNumberFormatterWrapper->getSvNumberFormatter()->IsNumberFormat(
+                    aText, nDummy, fDummy ))
+            {
+                WarningBox( this, WinBits( WB_OK ),
+                            String( SchResId( STR_INVALID_NUMBER ))).Execute();
+                bChangeValid = sal_False;
+            }
+            else
+            {
+                double fData = m_aNumberEditField.GetValue();
+                bChangeValid = m_apDataBrowserModel->setCellNumber( nCol, nRow, fData );
+            }
+        }
+        break;
+        case DataBrowserModel::TEXT:
+        {
+            OUString aText( m_aTextEditField.GetText());
+            bChangeValid = m_apDataBrowserModel->setCellText( nCol, nRow, aText );
+        }
+        break;
+    }
+
+    // the first valid change changes this to true
+    if( bChangeValid )
+    {
+        RowModified( GetCurRow(), GetCurColumnId());
+        ::svt::CellController* pCtrl = GetController( GetCurRow(), GetCurColumnId());
+        if( pCtrl )
+            pCtrl->ClearModified();
+        SetDirty();
+    }
+
+    return bChangeValid;
+}
+
+void DataBrowser::EndEditing()
+{
+    if( IsModified())
+        SaveModified();
+
+    // apply changes made to series headers
+    ::std::for_each( m_aSeriesHeaders.begin(), m_aSeriesHeaders.end(), impl::applyChangesFunctor());
+}
+
+sal_Int16 DataBrowser::GetFirstVisibleColumNumber() const
+{
+    return GetFirstVisibleColNumber();
+}
+
+void DataBrowser::ColumnResized( USHORT nColId )
+{
+    BOOL bLastUpdateMode = GetUpdateMode();
+    SetUpdateMode( FALSE );
+
+    EditBrowseBox::ColumnResized( nColId );
+    ImplAdjustHeaderControls();
+    SetUpdateMode( bLastUpdateMode );
+}
+
+//  virtual void    MouseMove( const MouseEvent& rEvt );
+
+void DataBrowser::EndScroll()
+{
+    BOOL bLastUpdateMode = GetUpdateMode();
+    SetUpdateMode( FALSE );
+
+    EditBrowseBox::EndScroll();
+    ImplAdjustHeaderControls();
+    SetUpdateMode( bLastUpdateMode );
+}
+
+void DataBrowser::ImplAdjustHeaderControls()
+{
+    sal_uInt16 nColCount = this->GetColumnCount();
+    sal_uInt32 nCurrentPos = this->GetPosPixel().getX();
+    sal_uInt32 nMaxPos = nCurrentPos + this->GetOutputSizePixel().getWidth();
+    sal_uInt32 nStartPos = nCurrentPos;
+
+    // width of header column
+    nCurrentPos +=  this->GetColumnWidth( 0 );
+    tSeriesHeaderContainer::iterator aIt( m_aSeriesHeaders.begin());
+    sal_uInt16 i = this->GetFirstVisibleColumNumber();
+    while( (aIt != m_aSeriesHeaders.end()) && ((*aIt)->GetStartColumn() < i) )
+        ++aIt;
+    for( ; i < nColCount && aIt != m_aSeriesHeaders.end(); ++i )
+    {
+        if( (*aIt)->GetStartColumn() == i )
+            nStartPos = nCurrentPos;
+
+        nCurrentPos += (this->GetColumnWidth( i ));
+
+        if( (*aIt)->GetEndColumn() == i )
+        {
+            if( nStartPos < nMaxPos )
+            {
+                (*aIt)->SetPixelPosX( nStartPos + 2 );
+                (*aIt)->SetPixelWidth( nCurrentPos - nStartPos - 3 );
+//                 (*aIt)->Show();
+            }
+            else
+                // do not hide, to get focus events. Move outside the dialog for "hiding"
+                (*aIt)->SetPixelPosX( nMaxPos + 42 );
+//                 (*aIt)->Hide();
+            ++aIt;
+        }
+    }
+}
+
+IMPL_LINK( DataBrowser, SeriesHeaderGotFocus, impl::SeriesHeaderEdit*, pEdit )
+{
+    if( pEdit )
+    {
+        DeactivateCell();
+        MakeFieldVisible( GetCurRow(), static_cast< sal_uInt16 >( pEdit->getStartColumn()), true /* bComplete */ );
+        m_aCursorMovedHdlLink.Call( this );
+    }
+    return 0;
+}
+
+IMPL_LINK( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit*, pEdit )
+{
+    if( pEdit )
+    {
+        Reference< chart2::XDataSeries > xSeries(
+            m_apDataBrowserModel->getDataSeriesByColumn( pEdit->getStartColumn() - 1 ));
+        Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
+        if( xSource.is())
+        {
+            Reference< chart2::XChartType > xChartType(
+                m_apDataBrowserModel->getHeaderForSeries( xSeries ).m_xChartType );
+            if( xChartType.is())
+            {
+                Reference< chart2::data::XLabeledDataSequence > xLabeledSeq(
+                    DataSeriesHelper::getDataSequenceByRole( xSource, xChartType->getRoleOfSequenceForSeriesLabel()));
+                if( xLabeledSeq.is())
+                {
+                    Reference< container::XIndexReplace > xIndexReplace( xLabeledSeq->getLabel(), uno::UNO_QUERY );
+                    if( xIndexReplace.is())
+                        xIndexReplace->replaceByIndex(
+                            0, uno::makeAny( OUString( pEdit->GetText())));
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+sal_Int32 DataBrowser::GetTotalWidth() const
+{
+    ULONG nWidth = 0;
+    for ( USHORT nCol = 0; nCol < ColCount(); ++nCol )
+        nWidth += GetColumnWidth( nCol );
+    return static_cast< sal_Int32 >( nWidth );
+}
+
+} // namespace chart
