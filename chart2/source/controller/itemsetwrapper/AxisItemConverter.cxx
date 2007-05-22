@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AxisItemConverter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:01:19 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:00:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,19 +39,20 @@
 #include "ItemPropertyMap.hxx"
 #include "CharacterPropertyItemConverter.hxx"
 #include "GraphicPropertyItemConverter.hxx"
-#include "SchSfxItemIds.hxx"
+#include "chartview/ChartSfxItemIds.hxx"
+#include "chartview/ExplicitValueProvider.hxx"
 #include "SchWhichPairs.hxx"
 #include "macros.hxx"
 #include "Scaling.hxx"
+#include "ChartModelHelper.hxx"
+#include "AxisHelper.hxx"
+#include "CommonConverters.hxx"
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
 #include <com/sun/star/lang/XServiceName.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CHART2_XAXIS_HPP_
 #include <com/sun/star/chart2/XAxis.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XBOUNDEDCOORDINATESYSTEM_HPP_
-#include <com/sun/star/chart2/XBoundedCoordinateSystem.hpp>
 #endif
 
 // #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -63,7 +64,6 @@
 #endif
 // for SvxDoubleItem
 #ifndef _SVX_CHRTITEM_HXX
-#define ITEMID_DOUBLE 0
 #include <svx/chrtitem.hxx>
 #endif
 // for SfxInt32Item
@@ -77,6 +77,8 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::chart2;
+using ::com::sun::star::uno::Reference;
 
 namespace
 {
@@ -84,13 +86,13 @@ namespace
 {
     static ::comphelper::ItemPropertyMapType aAxisPropertyMap(
         ::comphelper::MakeItemPropertyMap
-        ( SCHATTR_AXIS_SHOWDESCR, C2U( "DisplayLabels" ))
-        ( SCHATTR_AXIS_TICKS,     C2U( "MajorTickmarks" ))
-        ( SCHATTR_AXIS_HELPTICKS, C2U( "MinorTickmarks" ))
-        ( SCHATTR_TEXT_ORDER,     C2U( "ArrangeOrder" ))
-        ( SCHATTR_TEXT_STACKED,   C2U( "StackCharacters" ))
-        ( SCHATTR_TEXTBREAK,      C2U( "TextBreak" ))
-        ( SCHATTR_TEXT_OVERLAP,   C2U( "TextOverlap" ))
+        IPM_MAP_ENTRY( SCHATTR_AXIS_SHOWDESCR, "DisplayLabels",    0 )
+        IPM_MAP_ENTRY( SCHATTR_AXIS_TICKS,     "MajorTickmarks",   0 )
+        IPM_MAP_ENTRY( SCHATTR_AXIS_HELPTICKS, "MinorTickmarks",   0 )
+        IPM_MAP_ENTRY( SCHATTR_TEXT_ORDER,     "ArrangeOrder",     0 )
+        IPM_MAP_ENTRY( SCHATTR_TEXT_STACKED,   "StackCharacters",  0 )
+        IPM_MAP_ENTRY( SCHATTR_TEXTBREAK,      "TextBreak",        0 )
+        IPM_MAP_ENTRY( SCHATTR_TEXT_OVERLAP,   "TextOverlap",      0 )
         );
 
     return aAxisPropertyMap;
@@ -103,56 +105,40 @@ namespace wrapper
 {
 
 AxisItemConverter::AxisItemConverter(
-    const uno::Reference< beans::XPropertySet > & rPropertySet,
+    const Reference< beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
-    NumberFormatterWrapper * pNumFormatter,
+    const Reference< chart2::XChartDocument > & xChartDoc,
     chart2::ExplicitScaleData * pScale /* = NULL */,
     chart2::ExplicitIncrementData * pIncrement /* = NULL */,
-    double * pExplicitOrigin /* = NULL */,
     ::std::auto_ptr< awt::Size > pRefSize /* = NULL */ ) :
         ItemConverter( rPropertySet, rItemPool ),
-        m_pNumberFormatterWrapper( pNumFormatter ),
+        m_xChartDoc( xChartDoc ),
         m_pExplicitScale( NULL ),
-        m_pExplicitIncrement( NULL ),
-        m_pExplicitOrigin( NULL )
+        m_pExplicitIncrement( NULL )
 {
+    Reference< lang::XMultiServiceFactory > xNamedPropertyContainerFactory( xChartDoc, uno::UNO_QUERY );
+
     if( pScale )
         m_pExplicitScale = new chart2::ExplicitScaleData( *pScale );
     if( pIncrement )
         m_pExplicitIncrement = new chart2::ExplicitIncrementData( *pIncrement );
-    if( pExplicitOrigin )
-        m_pExplicitOrigin = new double( *pExplicitOrigin );
 
     m_aConverters.push_back( new GraphicPropertyItemConverter(
                                  rPropertySet, rItemPool, rDrawModel,
+                                 xNamedPropertyContainerFactory,
                                  GraphicPropertyItemConverter::LINE_PROPERTIES ));
     m_aConverters.push_back( new CharacterPropertyItemConverter( rPropertySet, rItemPool, pRefSize,
                                                                  C2U( "ReferenceDiagramSize" ) ));
 
-    uno::Reference< chart2::XAxis > xAxis( rPropertySet, uno::UNO_QUERY );
-    OSL_ASSERT( xAxis.is());
-    if( xAxis.is())
-    {
-        m_xAxis = xAxis;
-
-        m_xCoordinateSystem.set( xAxis->getCoordinateSystem());
-        if( m_xCoordinateSystem.is())
-        {
-            m_nDimension = xAxis->getRepresentedDimension();
-        }
-        else
-        {
-            OSL_ENSURE( false, "No coordinate system found at axis!" );
-        }
-    }
+    m_xAxis.set( Reference< chart2::XAxis >( rPropertySet, uno::UNO_QUERY ) );
+    OSL_ASSERT( m_xAxis.is());
 }
 
 AxisItemConverter::~AxisItemConverter()
 {
     delete m_pExplicitScale;
     delete m_pExplicitIncrement;
-    delete m_pExplicitOrigin;
 
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
                      ::comphelper::DeleteItemConverterPtr() );
@@ -184,19 +170,15 @@ const USHORT * AxisItemConverter::GetWhichPairs() const
     return nAxisWhichPairs;
 }
 
-bool AxisItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const
+bool AxisItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
 {
     ::comphelper::ItemPropertyMapType & rMap( lcl_GetAxisPropertyMap());
     ::comphelper::ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
 
-//     OSL_TRACE( "Which-Id: %d", nWhichId );
-
     if( aIt == rMap.end())
         return false;
 
-    rOutName =(*aIt).second;
-//     OSL_TRACE( "Which-Id: %d, Entry found in map: %s.", nWhichId,
-//                ::rtl::OUStringToOString( rOutName, RTL_TEXTENCODING_ASCII_US ).getStr());
+    rOutProperty =(*aIt).second;
 
     return true;
 }
@@ -204,21 +186,12 @@ bool AxisItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & 
 void AxisItemConverter::FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
-    if( ! m_xAxis.is() ||
-        ! m_xCoordinateSystem.is() )
+    if( ! m_xAxis.is() )
         return;
 
-    uno::Reference< chart2::XScale > xScale( m_xCoordinateSystem->getScaleByDimension( m_nDimension ));
-    OSL_ASSERT( xScale.is());
-    uno::Reference< chart2::XIncrement > xIncrement( m_xAxis->getIncrement() );
-    OSL_ASSERT( xIncrement.is());
-    if( ! xScale.is() ||
-        ! xIncrement.is() )
-        return;
-
-    const chart2::ScaleData     aScale( xScale->getScaleData() );
-    const chart2::IncrementData aInc( xIncrement->getIncrementData() );
-    const uno::Sequence< chart2::SubIncrement > aSubIncs( xIncrement->getSubIncrements() );
+    const chart2::ScaleData     aScale( m_xAxis->getScaleData() );
+    const chart2::IncrementData aInc( aScale.IncrementData );
+    const uno::Sequence< chart2::SubIncrement > aSubIncs( aScale.IncrementData.SubIncrements );
 
     switch( nWhichId )
     {
@@ -268,7 +241,7 @@ void AxisItemConverter::FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemS
 
         case SCHATTR_AXIS_LOGARITHM:
         {
-            uno::Reference< lang::XServiceName > xServiceName( aScale.Scaling, uno::UNO_QUERY );
+            Reference< lang::XServiceName > xServiceName( aScale.Scaling, uno::UNO_QUERY );
             BOOL bValue =
                 // if the following is true, we have logarithmic scaling,
                 // otherwise not (per definition)
@@ -341,33 +314,20 @@ void AxisItemConverter::FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemS
 
         case SCHATTR_AXIS_AUTO_ORIGIN:
         {
-            uno::Sequence< uno::Any > aCoord( m_xCoordinateSystem->getOrigin() );
-            OSL_ASSERT( m_nDimension <= aCoord.getLength());
-            rOutItemSet.Put(
-                SfxBoolItem(
-                    nWhichId,
-                    ! ( aCoord.getLength() > m_nDimension &&
-                        aCoord[ m_nDimension ].hasValue() ) ));
+            // if the any has no double value => auto is on
+            rOutItemSet.Put( SfxBoolItem( nWhichId, ( !hasDoubleValue(aScale.Origin) )));
         }
         break;
 
         case SCHATTR_AXIS_ORIGIN:
         {
-            bool bIsAuto = true;
-            uno::Sequence< uno::Any > aCoord( m_xCoordinateSystem->getOrigin() );
-            if( aCoord.getLength() > m_nDimension &&
-                aCoord[ m_nDimension ].hasValue() )
+            double fOrigin = 0.0;
+            if( !(aScale.Origin >>= fOrigin) )
             {
-                OSL_ASSERT( aCoord[ m_nDimension ].getValueTypeClass() == uno::TypeClass_DOUBLE );
-                rOutItemSet.Put(
-                    SvxDoubleItem(
-                        *reinterpret_cast< const double * >(aCoord[ m_nDimension ].getValue()),
-                        nWhichId ));
-                bIsAuto = false;
+                if( m_pExplicitScale )
+                    fOrigin = m_pExplicitScale->Origin;
             }
-
-            if( bIsAuto && m_pExplicitOrigin )
-                rOutItemSet.Put( SvxDoubleItem( *m_pExplicitOrigin, nWhichId ));
+            rOutItemSet.Put( SvxDoubleItem( fOrigin, nWhichId ));
         }
         break;
 
@@ -387,57 +347,38 @@ void AxisItemConverter::FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemS
         case SID_ATTR_NUMBERFORMAT_VALUE:
 //         case SCHATTR_AXIS_NUMFMT:
         {
-            if( m_pNumberFormatterWrapper )
+            if( m_pExplicitScale )
             {
-                chart2::NumberFormat aNumFmt;
-                if( GetPropertySet()->getPropertyValue( C2U( "NumberFormat" )) >>= aNumFmt )
-                {
-                    sal_Int32 nKey = m_pNumberFormatterWrapper->getKeyForNumberFormat( aNumFmt );
+                Reference< chart2::XCoordinateSystem > xCooSys(
+                        AxisHelper::getCoordinateSystemOfAxis(
+                              m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
 
-                    OSL_TRACE( "NumberFormat: ""%s"", Locale: %s_%s@%s, Key: %d",
-                               U2C( aNumFmt.aFormat ),
-                               U2C( aNumFmt.aLocale.Language ),
-                               U2C( aNumFmt.aLocale.Country ),
-                               U2C( aNumFmt.aLocale.Variant ),
-                               nKey );
-                    rOutItemSet.Put( SfxUInt32Item( nWhichId, nKey ));
-                }
-            }
-            else
-            {
-                OSL_ENSURE( false, "No NumberFormatterWrapper !" );
+                sal_Int32 nFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
+                    m_xAxis, xCooSys, Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY ) );
+
+                rOutItemSet.Put( SfxUInt32Item( nWhichId, nFormatKey ));
             }
         }
         break;
 
-//         case SID_ATTR_NUMBERFORMAT_SOURCE:
+        case SID_ATTR_NUMBERFORMAT_SOURCE:
+        {
+            bool bNumberFormatIsSet = ( GetPropertySet()->getPropertyValue( C2U( "NumberFormat" )).hasValue());
+            rOutItemSet.Put( SfxBoolItem( nWhichId, ! bNumberFormatIsSet ));
+        }
+        break;
     }
 }
 
 bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
-    if( ! ( m_xAxis.is() &&
-            m_xCoordinateSystem.is()))
+    if( !m_xAxis.is() )
         return false;
 
-    uno::Reference< chart2::XScale > xScale( m_xCoordinateSystem->getScaleByDimension( m_nDimension ));
-    OSL_ASSERT( xScale.is());
-    uno::Reference< chart2::XIncrement > xIncrement( m_xAxis->getIncrement() );
-    OSL_ASSERT( xIncrement.is());
-    if( ! xScale.is() ||
-        ! xIncrement.is() )
-        return false;
+    chart2::ScaleData     aScale( m_xAxis->getScaleData() );
 
-    chart2::ScaleData     aScale( xScale->getScaleData() );
-    chart2::IncrementData aInc( xIncrement->getIncrementData() );
-    uno::Sequence< chart2::SubIncrement > aSubIncs( xIncrement->getSubIncrements() );
-    uno::Sequence< uno::Any > aOrigin( m_xCoordinateSystem->getOrigin());
-
-    bool bSetScale         = false;
-    bool bSetIncrement     = false;
-    bool bSetSubIncrement  = false;
-    bool bSetOrigin   = false;
+    bool bSetScale    = false;
     bool bChangedOtherwise = false;
 
     uno::Any aValue;
@@ -496,7 +437,7 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
 
         case SCHATTR_AXIS_LOGARITHM:
         {
-            uno::Reference< lang::XServiceName > xServiceName( aScale.Scaling, uno::UNO_QUERY );
+            Reference< lang::XServiceName > xServiceName( aScale.Scaling, uno::UNO_QUERY );
             bool bWasLogarithm =
                 // if the following is true, we have logarithmic scaling,
                 // otherwise not (per definition)
@@ -531,8 +472,8 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
             if( (reinterpret_cast< const SfxBoolItem & >(
                      rItemSet.Get( nWhichId )).GetValue() ))
             {
-                aInc.Distance.clear();
-                bSetIncrement = true;
+                aScale.IncrementData.Distance.clear();
+                bSetScale = true;
             }
             // else SCHATTR_AXIS_STEP_MAIN must have some value
             break;
@@ -544,10 +485,10 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
             {
                 rItemSet.Get( nWhichId ).QueryValue( aValue );
 
-                if( aInc.Distance != aValue )
+                if( aScale.IncrementData.Distance != aValue )
                 {
-                    aInc.Distance = aValue;
-                    bSetIncrement = true;
+                    aScale.IncrementData.Distance = aValue;
+                    bSetScale = true;
                 }
             }
             break;
@@ -556,11 +497,11 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
         case SCHATTR_AXIS_AUTO_STEP_HELP:
             if( (reinterpret_cast< const SfxBoolItem & >(
                      rItemSet.Get( nWhichId )).GetValue() ) &&
-                aSubIncs.getLength() > 0 &&
-                aSubIncs[0].IntervalCount.hasValue() )
+                aScale.IncrementData.SubIncrements.getLength() > 0 &&
+                aScale.IncrementData.SubIncrements[0].IntervalCount.hasValue() )
             {
-                    aSubIncs[0].IntervalCount.clear();
-                    bSetSubIncrement = true;
+                    aScale.IncrementData.SubIncrements[0].IntervalCount.clear();
+                    bSetScale = true;
             }
             // else SCHATTR_AXIS_STEP_MAIN must have some value
             break;
@@ -569,16 +510,16 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
             // only if auto if false
             if( ! (reinterpret_cast< const SfxBoolItem & >(
                        rItemSet.Get( SCHATTR_AXIS_AUTO_STEP_HELP )).GetValue() ) &&
-                aSubIncs.getLength() > 0 )
+                aScale.IncrementData.SubIncrements.getLength() > 0 )
             {
                 rItemSet.Get( nWhichId ).QueryValue( aValue );
 
-                if( ! aSubIncs[0].IntervalCount.hasValue() ||
-                    aSubIncs[0].IntervalCount != aValue )
+                if( ! aScale.IncrementData.SubIncrements[0].IntervalCount.hasValue() ||
+                    aScale.IncrementData.SubIncrements[0].IntervalCount != aValue )
                 {
                     OSL_ASSERT( aValue.getValueTypeClass() == uno::TypeClass_LONG );
-                    aSubIncs[0].IntervalCount = aValue;
-                    bSetSubIncrement = true;
+                    aScale.IncrementData.SubIncrements[0].IntervalCount = aValue;
+                    bSetScale = true;
                 }
             }
             break;
@@ -586,29 +527,26 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
         case SCHATTR_AXIS_AUTO_ORIGIN:
         {
             if( (reinterpret_cast< const SfxBoolItem & >(
-                     rItemSet.Get( nWhichId )).GetValue() ) &&
-                ( aOrigin.getLength() > m_nDimension &&
-                  aOrigin[ m_nDimension ].hasValue() ))
+                     rItemSet.Get( nWhichId )).GetValue() ))
             {
-                aOrigin[ m_nDimension ].clear();
-                bSetOrigin = true;
+                aScale.Origin.clear();
+                bSetScale = true;
             }
         }
         break;
 
         case SCHATTR_AXIS_ORIGIN:
         {
+            // only if auto is false
             if( ! (reinterpret_cast< const SfxBoolItem & >(
                        rItemSet.Get( SCHATTR_AXIS_AUTO_ORIGIN )).GetValue() ))
             {
-                if( aOrigin.getLength() > m_nDimension )
+                rItemSet.Get( nWhichId ).QueryValue( aValue );
+
+                if( aScale.Origin != aValue )
                 {
-                    rItemSet.Get( nWhichId ).QueryValue( aValue );
-                    if( aValue != aOrigin[ m_nDimension ] )
-                    {
-                        aOrigin[ m_nDimension ] = aValue;
-                        bSetOrigin = true;
-                    }
+                    aScale.Origin = aValue;
+                    bSetScale = true;
                 }
             }
         }
@@ -636,44 +574,74 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
         case SID_ATTR_NUMBERFORMAT_VALUE:
 //         case SCHATTR_AXIS_NUMFMT:
         {
-            if( m_pNumberFormatterWrapper )
+            if( m_pExplicitScale )
             {
-                sal_Int32 nFmt = static_cast< sal_Int32 >(
-                    reinterpret_cast< const SfxUInt32Item & >(
-                        rItemSet.Get( nWhichId )).GetValue());
+                bool bUseSourceFormat =
+                    (reinterpret_cast< const SfxBoolItem & >(
+                        rItemSet.Get( SID_ATTR_NUMBERFORMAT_SOURCE )).GetValue() );
 
-                aValue = uno::makeAny(
-                    m_pNumberFormatterWrapper->getNumberFormatForKey( nFmt ));
-                if( GetPropertySet()->getPropertyValue( C2U( "NumberFormat" )) != aValue )
+                if( ! bUseSourceFormat )
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "NumberFormat" ), aValue );
-                    bChangedOtherwise = true;
+                    sal_Int32 nFmt = static_cast< sal_Int32 >(
+                        reinterpret_cast< const SfxUInt32Item & >(
+                            rItemSet.Get( nWhichId )).GetValue());
+
+                    aValue = uno::makeAny(nFmt);
+                    if( GetPropertySet()->getPropertyValue( C2U( "NumberFormat" )) != aValue )
+                    {
+                        GetPropertySet()->setPropertyValue( C2U( "NumberFormat" ), aValue );
+                        bChangedOtherwise = true;
+                    }
                 }
-            }
-            else
-            {
-                OSL_ENSURE( false, "No NumberFormatterWrapper !" );
             }
         }
         break;
 
-//         case SID_ATTR_NUMBERFORMAT_SOURCE:
+        case SID_ATTR_NUMBERFORMAT_SOURCE:
+        {
+            bool bUseSourceFormat =
+                (reinterpret_cast< const SfxBoolItem & >(
+                    rItemSet.Get( nWhichId )).GetValue() );
+            bool bNumberFormatIsSet = ( GetPropertySet()->getPropertyValue( C2U( "NumberFormat" )).hasValue());
+
+            bChangedOtherwise = (bUseSourceFormat == bNumberFormatIsSet);
+            if( bChangedOtherwise )
+            {
+                if( ! bUseSourceFormat )
+                {
+                    sal_Int32 nTest = 0;
+
+                    SfxItemState aState = rItemSet.GetItemState( SID_ATTR_NUMBERFORMAT_VALUE );
+                    if( aState == SFX_ITEM_SET )
+                    {
+                        sal_Int32 nFormatKey = static_cast< sal_Int32 >(
+                        reinterpret_cast< const SfxUInt32Item & >(
+                            rItemSet.Get( SID_ATTR_NUMBERFORMAT_VALUE )).GetValue());
+                        aValue <<= nFormatKey;
+                    }
+                    else
+                    {
+                        Reference< chart2::XCoordinateSystem > xCooSys(
+                        AxisHelper::getCoordinateSystemOfAxis(
+                              m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
+
+                        sal_Int32 nFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
+                            m_xAxis, xCooSys, Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY ) );
+
+                        aValue <<= nFormatKey;
+                    }
+                }
+                // else set a void Any
+                GetPropertySet()->setPropertyValue( C2U( "NumberFormat" ), aValue );
+            }
+        }
+        break;
     }
 
-    if( bSetScale &&
-        xScale.is() )
-        xScale->setScaleData( aScale );
-    if( bSetIncrement &&
-        xIncrement.is() )
-        xIncrement->setIncrementData( aInc );
-    if( bSetSubIncrement &&
-        xIncrement.is() )
-        xIncrement->setSubIncrements( aSubIncs );
-    if( bSetOrigin )
-        m_xCoordinateSystem->setOrigin( aOrigin );
+    if( bSetScale )
+        m_xAxis->setScaleData( aScale );
 
-    return (bSetScale || bSetIncrement || bSetSubIncrement ||
-            bSetOrigin || bChangedOtherwise);
+    return (bSetScale || bChangedOtherwise);
 }
 
 } //  namespace wrapper
