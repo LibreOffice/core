@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Strings_ChartTypes.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:58:52 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:30:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,141 +34,81 @@
  ************************************************************************/
 #include "Strings.hrc"
 
-String STR_LINES
+String STR_TYPE_COLUMN
 {
-    Text [ en-US ] = "Lines" ;
+    Text [ en-US ] = "Column" ;
 };
-String STR_COLUMNS
+String STR_TYPE_BAR
 {
-    Text [ en-US ] = "Columns" ;
+    Text [ en-US ] = "Bar" ;
 };
-String STR_BARS
+String STR_TYPE_AREA
 {
-    Text [ en-US ] = "Bars" ;
+    Text [ en-US ] = "Area" ;
 };
-String STR_AREAS
+String STR_TYPE_PIE
 {
-    Text [ en-US ] = "Areas" ;
+    Text [ en-US ] = "Pie" ;
 };
-String STR_CIRCLES
+String STR_PIE_EXPLODED
 {
-    Text [ en-US ] = "Pies" ;
+    Text [ en-US ] = "Exploded Pie Chart" ;
 };
-
-String STR_DONUT1
+String STR_DONUT_EXPLODED
 {
-    Text [ en-US ] = "Rings" ;
+    Text [ en-US ] = "Exploded Donut Chart" ;
 };
-/*
-String STR_DONUT2
+String STR_DONUT
 {
-    Text [ en-US ] = "Rings" ;
+    Text [ en-US ] = "Donut" ;
 };
-*/
-
-//-----------------------------------------------------------------------------
-
-String STR_NORMAL
+String STR_TYPE_LINE
 {
-    Text [ en-US ] = "Normal" ;
+    Text [ en-US ] = "Line" ;
 };
-String STR_STACKED
+String STR_TYPE_XY
 {
-    Text [ en-US ] = "Stacked" ;
+    Text [ en-US ] = "XY (Scatter)" ;
 };
-String STR_PERCENT
+String STR_POINTS_AND_LINES
 {
-    Text [ en-US ] = "Percent" ;
+    Text [ en-US ] = "Points and Lines" ;
 };
-
-String STR_DEEP
+String STR_POINTS_ONLY
 {
-    Text [ en-US ] = "Deep" ;
+    //@todo or symbols instead of points??
+    Text [ en-US ] = "Points Only" ;
 };
-
-String STR_OFS
-{
-    // comment
-    // comment
-    Text [ en-US ] = "Offset $(N)" ;
-};
-
-//-----------------------------------------------------------------------------
-/*
-String STR_LINESYMB
-{
-    Text [ en-US ] = "Lines with Symbols" ;
-};
-*/
-String STR_XY
-{
-    Text [ en-US ] = "XY Chart" ;
-};
-/*
-String STR_XYZ
-{
-    Text [ en-US ] = "XYZ Chart" ;
-};
-*/
-String STR_ONLY_SYMBOLS
-{
-    Text [ en-US ] = "Symbols Only" ;
-};
-String STR_ONLY_LINES
+String STR_LINES_ONLY
 {
     Text [ en-US ] = "Lines Only" ;
 };
-String STR_LINE_SYMBOLS
+String STR_LINES_3D
 {
-    Text [ en-US ] = "Lines with Symbols" ;
+    Text [ en-US ] = "3D Lines" ;
 };
-
+//-----------------------------------------------------------------------------
+String STR_TYPE_COMBI_COLUMN_LINE
+{
+    Text [ en-US ] = "Column and Line" ;
+};
 String STR_LINE_COLUMN
 {
-    Text [ en-US ] = "Combination Chart: Lines and Columns" ;
+    Text [ en-US ] = "Columns and Lines" ;
 };
 String STR_LINE_STACKEDCOLUMN
 {
-    Text [ en-US ] = "Combination Chart: Lines and stacked columns" ;
+    Text [ en-US ] = "Stacked Columns and Lines" ;
 };
-String STR_NET
+//-----------------------------------------------------------------------------
+String STR_TYPE_NET
 {
     Text [ en-US ] = "Net" ;
 };
-String STR_SYMBOL
+//-----------------------------------------------------------------------------
+String STR_TYPE_STOCK
 {
-    Text [ en-US ] = "Symbols" ;
-};
-
-String STR_SYMBOL_STACK
-{
-    Text [ en-US ] = "Stacked with symbols" ;
-};
-String STR_SYMBOL_PERCENT
-{
-    Text [ en-US ] = "Percent with symbols" ;
-};
-
-String STR_SPLINE_CUBIC
-{
-    Text [ en-US ] = "Cubic Spline" ;
-};
-String STR_SPLINE_CUBIC_SYMBOL
-{
-    Text [ en-US ] = "Cubic Spline with Symbols" ;
-};
-String STR_SPLINE_B
-{
-    Text [ en-US ] = "B-Spline" ;
-};
-String STR_SPLINE_B_SYMBOL
-{
-    Text [ en-US ] = "B-Spline with Symbols" ;
-};
-
-String STR_STOCK
-{
-    Text [ en-US ] = "Stock Chart";
+    Text [ en-US ] = "Stock";
 };
 String STR_STOCK_1
 {
@@ -186,107 +126,23 @@ String STR_STOCK_4
 {
     Text [ en-US ] = "Stock Chart 4";
 };
+//-----------------------------------------------------------------------------
+String STR_NORMAL
+{
+    Text [ en-US ] = "Normal" ;
+};
+String STR_STACKED
+{
+    Text [ en-US ] = "Stacked" ;
+};
+String STR_PERCENT
+{
+    Text [ en-US ] = "Percent stacked" ;
+};
 
-//-----------------------------------
-String STR_SAEULE_3D_1
+String STR_DEEP
 {
-    Text [ en-US ] = "Cylinder";
+    Text [ en-US ] = "Deep" ;
 };
-String STR_SAEULE_3D_2
-{
-    Text [ en-US ] = "Cylinder, stacked";
-};
-String STR_SAEULE_3D_3
-{
-    Text [ en-US ] = "Cylinder, percent";
-};
-String STR_SAEULE_3D_4
-{
-    Text [ en-US ] = "Cylinder, deep";
-};
-//-----------------------------------
-String STR_ROEHRE_3D_1
-{
-    Text [ en-US ] = "Tubes";
-};
-String STR_ROEHRE_3D_2
-{
-    Text [ en-US ] = "Tubes, stacked";
-};
-String STR_ROEHRE_3D_3
-{
-    Text [ en-US ] = "Tubes, percent";
-};
-String STR_ROEHRE_3D_4
-{
-    Text [ en-US ] = "Tubes, deep";
-};
-String STR_PYRAMID_3D_1
-{
-    Text [ en-US ] = "Pyramids";
-};
-String STR_PYRAMID_3D_2
-{
-    Text [ en-US ] = "Pyramids, stacked";
-};
-String STR_PYRAMID_3D_3
-{
-    Text [ en-US ] = "Pyramids percent";
-};
-String STR_PYRAMID_3D_4
-{
-    Text [ en-US ] = "Pyramids, deep";
-};
-//-----------------------------------
-String STR_PYRAMIDQ_3D_1
-{
-    Text [ en-US ] = "Horizontal pyramids";
-};
-String STR_PYRAMIDQ_3D_2
-{
-    Text [ en-US ] = "Horizontal pyramids, stacked";
-};
-String STR_PYRAMIDQ_3D_3
-{
-    Text [ en-US ] = "Horizontal pyramids, percent";
-};
-String STR_PYRAMIDQ_3D_4
-{
-    Text [ en-US ] = "Horizontal pyramids, deep";
-};
-//-----------------------------------
-
-String STR_KEGEL_3D_1
-{
-    Text [ en-US ] = "Cones";
-};
-String STR_KEGEL_3D_2
-{
-    Text [ en-US ] = "Cones, stacked";
-};
-String STR_KEGEL_3D_3
-{
-    Text [ en-US ] = "Cones, percent";
-};
-String STR_KEGEL_3D_4
-{
-    Text [ en-US ] = "Cones, deep";
-};
-//-----------------------------------
-String STR_KEGELQ_3D_1
-{
-    Text [ en-US ] = "Horizontal cones";
-};
-String STR_KEGELQ_3D_2
-{
-    Text [ en-US ] = "Horizontal, stacked cones";
-};
-String STR_KEGELQ_3D_3
-{
-    Text [ en-US ] = "Horizintal cones, percent";
-};
-String STR_KEGELQ_3D_4
-{
-    Text [ en-US ] = "Horizontal cones, deep";
-};
-//-----------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
