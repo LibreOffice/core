@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undodat.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:39:28 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:10:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2112,21 +2112,8 @@ BOOL __EXPORT ScUndoConsolidate::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 void ScUndoChartData::Init()
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-
-    SchMemChart* pOld = pDoc->FindChartData(aChartName);
-    if (pOld)
-    {
-        ScChartArray aData(pDoc,*pOld);
-        aOldRangeListRef = aData.GetRangeList();
-        bOldColHeaders = aData.HasColHeaders();
-        bOldRowHeaders = aData.HasRowHeaders();
-    }
-    else                                //  war vorher nicht initialisiert
-    {                                   //! bei Undo zuruecksetzen ?
-        aOldRangeListRef = aNewRangeListRef;
-        bOldColHeaders = bNewColHeaders;
-        bOldRowHeaders = bNewRowHeaders;
-    }
+    aOldRangeListRef = new ScRangeList;
+    pDoc->GetOldChartParameters( aChartName, *aOldRangeListRef, bOldColHeaders, bOldRowHeaders );
 }
 
 ScUndoChartData::ScUndoChartData( ScDocShell* pNewDocShell, const String& rName,
@@ -2170,13 +2157,8 @@ void __EXPORT ScUndoChartData::Undo()
 {
     BeginUndo();
 
-    Window* pDataWin = NULL;
-    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-    if (pViewSh)
-        pDataWin = pViewSh->GetActiveWin();
-
     pDocShell->GetDocument()->UpdateChartArea( aChartName, aOldRangeListRef,
-                                bOldColHeaders, bOldRowHeaders, FALSE, pDataWin );
+                                bOldColHeaders, bOldRowHeaders, FALSE );
 
     EndUndo();
 }
@@ -2185,13 +2167,8 @@ void __EXPORT ScUndoChartData::Redo()
 {
     BeginRedo();
 
-    Window* pDataWin = NULL;
-    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-    if (pViewSh)
-        pDataWin = pViewSh->GetActiveWin();
-
     pDocShell->GetDocument()->UpdateChartArea( aChartName, aNewRangeListRef,
-                                bNewColHeaders, bNewRowHeaders, bAddRange, pDataWin );
+                                bNewColHeaders, bNewRowHeaders, bAddRange );
 
     EndRedo();
 }
