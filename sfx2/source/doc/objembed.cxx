@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objembed.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:42:39 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:17:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,7 +322,7 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
 comphelper::EmbeddedObjectContainer& SfxObjectShell::GetEmbeddedObjectContainer() const
 {
     if ( !pImp->mpObjectContainer )
-        pImp->mpObjectContainer = new comphelper::EmbeddedObjectContainer( ((SfxObjectShell*)this)->GetStorage() );
+        pImp->mpObjectContainer = new comphelper::EmbeddedObjectContainer( ((SfxObjectShell*)this)->GetStorage(), pImp->xModel );
     return *pImp->mpObjectContainer;
 }
 
