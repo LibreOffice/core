@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:46:34 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:02:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,9 @@
 #endif
 #ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
+#endif
+#ifndef SC_RANGEUTL_HXX
+#include "rangeutl.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
@@ -346,7 +349,7 @@ rtl::OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const
 rtl::OUString ScMyValidationsContainer::GetBaseCellAddress(ScDocument* pDoc, const table::CellAddress& aCell)
 {
     rtl::OUString sAddress;
-    ScXMLConverter::GetStringFromAddress( sAddress, aCell, pDoc );
+    ScRangeStringConverter::GetStringFromAddress( sAddress, aCell, pDoc );
     return sAddress;
 }
 
