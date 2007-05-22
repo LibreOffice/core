@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:51:25 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:04:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,9 @@
 #endif
 #ifndef SC_UNONAMES_HXX
 #include "unonames.hxx"
+#endif
+#ifndef SC_RANGEUTL_HXX
+#include "rangeutl.hxx"
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -1945,7 +1948,7 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
                     if ((rChangeProps[i].Value >>= sRanges) && sRanges.getLength())
                     {
                         ScRangeList aRangeList;
-                        ScXMLConverter::GetRangeListFromString(aRangeList, sRanges, GetDocument());
+                        ScRangeStringConverter::GetRangeListFromString(aRangeList, sRanges, GetDocument());
                         pViewSettings->SetTheRangeList(aRangeList);
                     }
                 }
@@ -2444,8 +2447,8 @@ void ScXMLImport::SetLabelRanges()
                     sal_Int32 nOffset1(0);
                     sal_Int32 nOffset2(0);
 
-                    if (ScXMLConverter::GetRangeFromString( aLabelRange, (*aItr)->sLabelRangeStr, GetDocument(), nOffset1 ) &&
-                        ScXMLConverter::GetRangeFromString( aDataRange, (*aItr)->sDataRangeStr, GetDocument(), nOffset2 ))
+                    if (ScRangeStringConverter::GetRangeFromString( aLabelRange, (*aItr)->sLabelRangeStr, GetDocument(), nOffset1 ) &&
+                        ScRangeStringConverter::GetRangeFromString( aDataRange, (*aItr)->sDataRangeStr, GetDocument(), nOffset2 ))
                     {
                         if ( (*aItr)->bColumnOrientation )
                             xColRanges->addNew( aLabelRange, aDataRange );
@@ -2479,7 +2482,7 @@ void ScXMLImport::SetNamedRanges()
                 while (aItr != aEndItr)
                 {
                     sal_Int32 nOffset(0);
-                    if (ScXMLConverter::GetAddressFromString(
+                    if (ScRangeStringConverter::GetAddressFromString(
                         aCellAddress, (*aItr)->sBaseCellAddress, GetDocument(), nOffset ))
                     {
                         try
@@ -2520,7 +2523,7 @@ void ScXMLImport::SetNamedRanges()
                 while (aItr != aEndItr)
                 {
                     sal_Int32 nOffset(0);
-                    if (ScXMLConverter::GetAddressFromString(
+                    if (ScRangeStringConverter::GetAddressFromString(
                         aCellAddress, (*aItr)->sBaseCellAddress, GetDocument(), nOffset ))
                     {
                         sTempContent = (*aItr)->sContent;
