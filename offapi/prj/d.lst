@@ -19,6 +19,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\accessibility
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\awt
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\chart
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\chart2
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\chart2\data
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\configuration
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\configuration\bootstrap
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\configuration\backend
@@ -124,6 +125,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 ..\com\sun\star\awt\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\awt
 ..\com\sun\star\chart\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\chart
 ..\com\sun\star\chart2\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\chart2
+..\com\sun\star\chart2\data\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\chart2\data
 ..\com\sun\star\configuration\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\configuration
 ..\com\sun\star\configuration\bootstrap\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\configuration\bootstrap
 ..\com\sun\star\configuration\backend\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\configuration\backend
