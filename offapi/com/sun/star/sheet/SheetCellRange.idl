@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SheetCellRange.idl,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:49:16 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:10:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -427,6 +427,11 @@ published service SheetCellRange
      */
     [optional, property] com::sun::star::beans::XPropertySet ValidationLocal;
 
+    //-------------------------------------------------------------------------
+
+    /** Returns the absolute adress of the range as string, e.g. "$Sheet1.$B$2:$D$5".
+     */
+    [optional, readonly, property] string AbsoluteName;
 };
 
 //=============================================================================
