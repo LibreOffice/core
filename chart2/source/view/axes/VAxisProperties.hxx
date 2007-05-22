@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VAxisProperties.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:37:47 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:10:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,13 +39,19 @@
 #include "PlottingPositionHelper.hxx"
 #include "LabelAlignment.hxx"
 
-#ifndef _COM_SUN_STAR_CHART2_NUMBERFORMAT_HPP_
-#include <com/sun/star/chart2/NumberFormat.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CHART2_XAXIS_HPP_
 #include <com/sun/star/chart2/XAxis.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CHART2_AXISTYPE_HPP_
+#include <com/sun/star/chart2/AxisType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_DATA_XTEXTUALDATASEQUENCE_HPP_
+#include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
+#endif
 
+#ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
+#include <com/sun/star/awt/Rectangle.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
 #endif
@@ -86,7 +92,10 @@ struct AxisLabelProperties
 {
     AxisLabelProperties();
 
-    ::com::sun::star::chart2::NumberFormat        aNumberFormat;
+    ::com::sun::star::awt::Size         m_aFontReferenceSize;//reference size to calculate the font height
+    ::com::sun::star::awt::Rectangle    m_aMaximumSpaceForLabels;//Labels need to be clipped in order to fit into this rectangle
+
+    sal_Int32            nNumberFormatKey;
 
     AxisLabelStaggering  eStaggering;
 
@@ -109,9 +118,10 @@ struct AxisLabelProperties
 struct AxisProperties
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis > m_xAxisModel;
-    ::com::sun::star::awt::Size m_aReferenceSize;
 
+    sal_Int32   m_nDimensionIndex;
     bool        m_bIsMainAxis;//not secondary axis
+    bool        m_bSwapXAndY;
     double*     m_pfMainLinePositionAtOtherAxis;
     double*     m_pfExrtaLinePositionAtOtherAxis;
 
@@ -120,6 +130,8 @@ struct AxisProperties
     bool            m_bLabelsOutside;
     LabelAlignment  m_aLabelAlignment;
     sal_Bool        m_bDisplayLabels;
+
+    sal_Int32       m_nNumberFormatKey;
 
 
 //    enum RelativeLabelPosition { NONE, LEFTORBOTTOM_OF_DIAGRAM, RIGHTORTOP_OF_DIAGRAM,
@@ -134,12 +146,22 @@ struct AxisProperties
     sal_Int32                           m_nMinorTickmarks;
     ::std::vector<TickmarkProperties>   m_aTickmarkPropertiesList;
 
-    VLineProperties                      m_aLineProperties;
+    VLineProperties                     m_aLineProperties;
+
+    //for category axes ->
+    sal_Int32                                        m_nAxisType;//REALNUMBER, CATEGORY etc. type ::com::sun::star::chart2::AxisType
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::data::XTextualDataSequence >
+                                                    m_xAxisTextProvider; //for categries or series names
+    //position of main tickmarks in respect to the indicated value: at value or between neighboured indicated values
+    bool                                             m_bTickmarksAtIndicatedValue;
+    //<- category axes
 
     //methods:
 
     AxisProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxisModel
-                  , const ::com::sun::star::awt::Size& rReferenceSize );
+                  , const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::chart2::data::XTextualDataSequence >& xAxisTextProvider );
     AxisProperties( const AxisProperties& rAxisProperties );
     virtual ~AxisProperties();
     virtual void init(bool bCartesian=false);//init from model data (m_xAxisModel)
