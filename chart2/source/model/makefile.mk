@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 00:50:01 $
+#   last change: $Author: vg $ $Date: 2007-05-22 18:27:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,8 @@ LIB1TARGET=		$(SLB)$/_$(TARGET).lib
 
 LIB1FILES=		\
                 $(SLB)$/chmodelmain.lib \
-                $(SLB)$/chmodeltree.lib \
-                $(SLB)$/chmodeltemplate.lib
+                $(SLB)$/chmodeltemplate.lib \
+                $(SLB)$/chmodelfilter.lib
 
 #--------
 
@@ -61,8 +61,12 @@ LIB1FILES=		\
 SHL1TARGET=		$(TARGET)$(UPD)$(DLLPOSTFIX)
 
 #indicates dependencies:
-# SHL1DEPN = \
-#         $(SLB)$/charttools.lib
+.IF "$(COM)" == "MSC"
+SHL1DEPN = \
+        $(LB)$/icharttools.lib
+.ELSE
+SHL1DEPN =
+.ENDIF
 
 #Specifies an import library to create. For Win32 only.
 SHL1IMPLIB=		i$(TARGET)
@@ -74,12 +78,18 @@ SHL1LIBS= 		$(LIB1TARGET)
 #Links import libraries.
 
 SHL1STDLIBS=	$(CHARTTOOLS) 		\
+                $(BASEGFXLIB) 		\
                 $(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
                 $(COMPHELPERLIB)	\
                 $(UNOTOOLSLIB)		\
-                $(TOOLSLIB)			\
-                $(SALLIB)
+                $(VCLLIB)			\
+                $(SVLLIB)			\
+                $(SVTOOLLIB)		\
+                $(GOODIESLIB)		\
+                $(SOTLIB)			\
+                $(SALLIB)			\
+                $(UCBHELPERLIB)
 
 #--------exports
 
