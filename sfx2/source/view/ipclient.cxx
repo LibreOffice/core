@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:22:32 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:18:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -426,10 +426,6 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingInplace()
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
 
-    uno::Reference < container::XChild > xChild( m_xObject->getComponent(), uno::UNO_QUERY );
-    if ( xChild.is() && !xChild->getParent().is() )
-        xChild->setParent( m_pClient->GetViewShell()->GetObjectShell()->GetModel() );
-
     m_pClient->GetViewShell()->InplaceActivating( m_pClient );
 }
 
@@ -455,9 +451,6 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedInplace()
         throw uno::RuntimeException();
 
     m_pClient->GetViewShell()->InplaceDeactivated( m_pClient );
-    uno::Reference < container::XChild > xChild( m_xObject->getComponent(), uno::UNO_QUERY );
-    if ( xChild.is() && xChild->getParent().is() )
-        xChild->setParent( uno::Reference < uno::XInterface >() );
 }
 
 //--------------------------------------------------------------------
