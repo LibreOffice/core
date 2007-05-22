@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xestring.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:21:09 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:48:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,11 +260,17 @@ void XclExpString::SetFormats( const XclFormatRunVec& rFormats )
     LimitFormatCount( mbIsBiff8 ? EXC_STR_MAXLEN : EXC_STR_MAXLEN_8BIT );
 }
 
-void XclExpString::AppendFormat( sal_uInt16 nChar, sal_uInt16 nFontIdx )
+void XclExpString::AppendFormat( sal_uInt16 nChar, sal_uInt16 nFontIdx, bool bDropDuplicate )
 {
     DBG_ASSERT( maFormats.empty() || (maFormats.back().mnChar < nChar), "XclExpString::AppendFormat - invalid char index" );
-    if( maFormats.size() < static_cast< size_t >( mbIsBiff8 ? EXC_STR_MAXLEN : EXC_STR_MAXLEN_8BIT ) )
+    size_t nMaxSize = static_cast< size_t >( mbIsBiff8 ? EXC_STR_MAXLEN : EXC_STR_MAXLEN_8BIT );
+    if( maFormats.empty() || ((maFormats.size() < nMaxSize) && (!bDropDuplicate || (maFormats.back().mnFontIdx != nFontIdx))) )
         maFormats.push_back( XclFormatRun( nChar, nFontIdx ) );
+}
+
+void XclExpString::AppendTrailingFormat( sal_uInt16 nFontIdx )
+{
+    AppendFormat( mnLen, nFontIdx, false );
 }
 
 void XclExpString::LimitFormatCount( sal_uInt16 nMaxCount )
@@ -315,7 +321,7 @@ sal_uInt16 XclExpString::GetFormatsCount() const
 
 sal_uInt8 XclExpString::GetFlagField() const
 {
-    return (mbIsUnicode ? EXC_STRF_16BIT : 0) | (IsRich() ? EXC_STRF_RICH : 0);
+    return (mbIsUnicode ? EXC_STRF_16BIT : 0) | (IsWriteFormats() ? EXC_STRF_RICH : 0);
 }
 
 sal_uInt16 XclExpString::GetHeaderSize() const
@@ -395,19 +401,23 @@ void XclExpString::WriteBuffer( XclExpStream& rStrm ) const
         rStrm.WriteCharBuffer( maCharBuffer );
 }
 
-void XclExpString::WriteFormats( XclExpStream& rStrm ) const
+void XclExpString::WriteFormats( XclExpStream& rStrm, bool bWriteSize ) const
 {
     if( IsRich() )
     {
         XclFormatRunVec::const_iterator aIt = maFormats.begin(), aEnd = maFormats.end();
         if( mbIsBiff8 )
         {
+            if( bWriteSize )
+                rStrm << GetFormatsCount();
             rStrm.SetSliceSize( 4 );
             for( ; aIt != aEnd; ++aIt )
                 rStrm << aIt->mnChar << aIt->mnFontIdx;
         }
         else
         {
+            if( bWriteSize )
+                rStrm << static_cast< sal_uInt8 >( GetFormatsCount() );
             rStrm.SetSliceSize( 2 );
             for( ; aIt != aEnd; ++aIt )
                 rStrm << static_cast< sal_uInt8 >( aIt->mnChar ) << static_cast< sal_uInt8 >( aIt->mnFontIdx );
@@ -484,7 +494,7 @@ bool XclExpString::IsWriteFlags() const
 
 bool XclExpString::IsWriteFormats() const
 {
-    return mbIsBiff8 && IsRich();
+    return mbIsBiff8 && !mbSkipFormats && IsRich();
 }
 
 void XclExpString::SetStrLen( sal_Int32 nNewLen )
@@ -530,6 +540,7 @@ void XclExpString::Init( sal_Int32 nCurrLen, XclStrFlags nFlags, sal_uInt16 nMax
     mbIsUnicode = bBiff8 && ::get_flag( nFlags, EXC_STR_FORCEUNICODE );
     mb8BitLen = ::get_flag( nFlags, EXC_STR_8BITLENGTH );
     mbSmartFlags = bBiff8 && ::get_flag( nFlags, EXC_STR_SMARTFLAGS );
+    mbSkipFormats = ::get_flag( nFlags, EXC_STR_SEPARATEFORMATS );
     mbWrapped = false;
     mnMaxLen = nMaxLen;
     SetStrLen( nCurrLen );
