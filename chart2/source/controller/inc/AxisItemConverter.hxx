@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AxisItemConverter.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:20:55 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:52:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,21 +35,24 @@
 #ifndef CHART_AXISITEMCONVERTER_HXX
 #define CHART_AXISITEMCONVERTER_HXX
 
-#ifndef _COM_SUN_STAR_CHART2_XAXIS_HPP_
-#include <com/sun/star/chart2/XAxis.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CHART2_EXPLICITSCALEDATA_HPP_
 #include <com/sun/star/chart2/ExplicitScaleData.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CHART2_EXPLICITINCREMENTDATA_HPP_
 #include <com/sun/star/chart2/ExplicitIncrementData.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CHART2_XAXIS_HPP_
+#include <com/sun/star/chart2/XAxis.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
 #endif
 
 #include "ItemConverter.hxx"
-#include "chartview/NumberFormatterWrapper.hxx"
 
 #include <vector>
 #include <memory>
@@ -69,10 +72,10 @@ public:
             ::com::sun::star::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
-        NumberFormatterWrapper * pNumFormatter,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XChartDocument > & xChartDoc,
         ::com::sun::star::chart2::ExplicitScaleData * pScale = NULL,
         ::com::sun::star::chart2::ExplicitIncrementData * pIncrement = NULL,
-        double * pExplicitOrigin = NULL,
         ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
             ::std::auto_ptr< ::com::sun::star::awt::Size >() );
     virtual ~AxisItemConverter();
@@ -82,7 +85,7 @@ public:
 
 protected:
     virtual const USHORT * GetWhichPairs() const;
-    virtual bool GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const;
+    virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const;
 
     virtual void FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const
         throw( ::com::sun::star::uno::Exception );
@@ -93,15 +96,12 @@ private:
     ::std::vector< ItemConverter * >               m_aConverters;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XAxis >  m_xAxis;
+
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XBoundedCoordinateSystem >
-                                                   m_xCoordinateSystem;
-    sal_Int32                                      m_nDimension;
-    NumberFormatterWrapper *                       m_pNumberFormatterWrapper;
+        ::com::sun::star::chart2::XChartDocument >      m_xChartDoc;
 
     ::com::sun::star::chart2::ExplicitScaleData *       m_pExplicitScale;
     ::com::sun::star::chart2::ExplicitIncrementData *   m_pExplicitIncrement;
-    double *                                                m_pExplicitOrigin;
 };
 
 } //  namespace wrapper
