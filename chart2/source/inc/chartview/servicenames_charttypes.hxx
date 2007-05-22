@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servicenames_charttypes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:49:46 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:27:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,14 +40,14 @@ namespace chart
 {
 //.............................................................................
 
-#define CHART2_VIEW_BARCHART_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.BarChart_Impl")
-#define CHART2_VIEW_BARCHART_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.BarChart")
+#define CHART2_VIEW_BARCHART_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.view.BarChart_Impl")
+#define CHART2_VIEW_BARCHART_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.view.BarChart")
 
-#define CHART2_VIEW_PIECHART_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.PieChart_Impl")
-#define CHART2_VIEW_PIECHART_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.PieChart")
+#define CHART2_VIEW_PIECHART_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.view.PieChart_Impl")
+#define CHART2_VIEW_PIECHART_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.view.PieChart")
 
-#define CHART2_VIEW_AREACHART_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.AreaChart_Impl")
-#define CHART2_VIEW_AREACHART_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.AreaChart")
+#define CHART2_VIEW_AREACHART_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.view.AreaChart_Impl")
+#define CHART2_VIEW_AREACHART_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.view.AreaChart")
 
 //.............................................................................
 } //namespace chart
