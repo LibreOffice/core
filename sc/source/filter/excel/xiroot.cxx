@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiroot.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:27:54 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:50:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,9 @@
 
 #ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
+#endif
+#ifndef SC_XIHELPER_HXX
+#include "xihelper.hxx"
 #endif
 #ifndef SC_XIFORMULA_HXX
 #include "xiformula.hxx"
