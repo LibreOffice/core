@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScDevChart.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:10:47 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:06:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,8 +80,12 @@ bool DevChartConfigItem::UseDevelopmentChart()
  */
 bool UseDevChart()
 {
-    static DevChartConfigItem aCfgItem;
-    return aCfgItem.UseDevelopmentChart();
+//     static DevChartConfigItem aCfgItem;
+//     return aCfgItem.UseDevelopmentChart();
+
+    // ignore configuration
+    //@todo: get rid of this class
+    return true;
 }
 
 } // namespace ScDevChart
