@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:19:11 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:52:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -268,6 +268,31 @@ sal_uInt8 XclTools::GetXclRotation( sal_Int32 nScRot )
     return 0;
 }
 
+sal_uInt8 XclTools::GetXclRotFromOrient( sal_uInt8 nXclOrient )
+{
+    switch( nXclOrient )
+    {
+        case EXC_ORIENT_NONE:       return EXC_ROT_NONE;
+        case EXC_ORIENT_STACKED:    return EXC_ROT_STACKED;
+        case EXC_ORIENT_90CCW:      return EXC_ROT_90CCW;
+        case EXC_ORIENT_90CW:       return EXC_ROT_90CW;
+        default:    DBG_ERRORFILE( "XclTools::GetXclRotFromOrient - unknown text orientation" );
+    }
+    return EXC_ROT_NONE;
+}
+
+sal_uInt8 XclTools::GetXclOrientFromRot( sal_uInt16 nXclRot )
+{
+    if( nXclRot == EXC_ROT_STACKED )
+        return EXC_ORIENT_STACKED;
+    DBG_ASSERT( nXclRot <= 180, "XclTools::GetXclOrientFromRot - unknown text rotation" );
+    if( (45 < nXclRot) && (nXclRot <= 90) )
+        return EXC_ORIENT_90CCW;
+    if( (135 < nXclRot) && (nXclRot <= 180) )
+        return EXC_ORIENT_90CW;
+    return EXC_ORIENT_NONE;
+}
+
 
 XclBoolError XclTools::ErrorToEnum( double& rfDblValue, sal_uInt8 bErrOrBool, sal_uInt8 nValue )
 {
@@ -344,6 +369,22 @@ sal_uInt16 XclTools::GetXclColumnWidth( USHORT nScWidth, long nScCharWidth )
 double XclTools::GetXclDefColWidthCorrection( long nXclDefFontHeight )
 {
     return 40960.0 / ::std::max( nXclDefFontHeight - 15L, 60L ) + 50.0;
+}
+
+// formatting -----------------------------------------------------------------
+
+Color XclTools::GetPatternColor( const Color& rPattColor, const Color& rBackColor, sal_uInt16 nXclPattern )
+{
+    // 0x00 == 0% transparence (full rPattColor)
+    // 0x80 == 100% transparence (full rBackColor)
+    static const sal_uInt8 pnRatioTable[] =
+    {
+        0x80, 0x00, 0x40, 0x20, 0x60, 0x40, 0x40, 0x40,     // 00 - 07
+        0x40, 0x40, 0x20, 0x60, 0x60, 0x60, 0x60, 0x48,     // 08 - 15
+        0x50, 0x70, 0x78                                    // 16 - 18
+    };
+    return (nXclPattern < STATIC_TABLE_SIZE( pnRatioTable )) ?
+        ScfTools::GetMixedColor( rPattColor, rBackColor, pnRatioTable[ nXclPattern ] ) : rPattColor;
 }
 
 // text encoding --------------------------------------------------------------
@@ -469,7 +510,7 @@ static const sal_Char* const ppcDefNames[] =
 
 String XclTools::GetXclBuiltInDefName( sal_Unicode cBuiltIn )
 {
-    DBG_ASSERT( STATIC_TABLE_SIZE( ppcDefNames ) == EXC_BUILTIN_UNKNOWN, \
+    DBG_ASSERT( STATIC_TABLE_SIZE( ppcDefNames ) == EXC_BUILTIN_UNKNOWN,
         "XclTools::GetXclBuiltInDefName - built-in defined name list modified" );
     String aDefName;
     if( cBuiltIn < STATIC_TABLE_SIZE( ppcDefNames ) )
