@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MediaDescriptorHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:26:39 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:01:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,6 +106,8 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         else WRITE_PROPERTY( FilterOptions, FLAG_MODEL )
         else WRITE_PROPERTY( FrameName, FLAG_MODEL )
         else WRITE_PROPERTY( Hidden, FLAG_MODEL )
+        else WRITE_PROPERTY( HierarchicalDocumentName, FLAG_MODEL )
+        else WRITE_PROPERTY( OutputStream, 0 )
         else WRITE_PROPERTY( InputStream, 0 )
         else WRITE_PROPERTY( InteractionHandler, 0 )
         else WRITE_PROPERTY( JumpMark, 0 )
@@ -120,8 +122,11 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         else WRITE_PROPERTY( Preview, FLAG_MODEL )
         else WRITE_PROPERTY( ReadOnly, 0 )
         else WRITE_PROPERTY( Referer, FLAG_MODEL )
+        else WRITE_PROPERTY( SetEmbedded, 0 )
         else WRITE_PROPERTY( Silent, 0 )
         else WRITE_PROPERTY( StatusIndicator, 0 )
+        else WRITE_PROPERTY( Storage, FLAG_MODEL )
+        else WRITE_PROPERTY( Stream, FLAG_MODEL )
         else WRITE_PROPERTY( TemplateName, FLAG_DEPRECATED )
         else WRITE_PROPERTY( TemplateRegionName, FLAG_DEPRECATED )
         else WRITE_PROPERTY( Unpacked, FLAG_MODEL )
@@ -129,6 +134,7 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         else WRITE_PROPERTY( Version, FLAG_MODEL )
         else WRITE_PROPERTY( ViewData, FLAG_MODEL )
         else WRITE_PROPERTY( ViewId, FLAG_MODEL )
+        else WRITE_PROPERTY( WinExtent, FLAG_DEPRECATED )
         else
         {
             m_aAdditionalProperties[nAdditionalCount]=rProp;
@@ -164,6 +170,8 @@ void MediaDescriptorHelper::impl_init()
 
     Hidden = sal_False;
     ISSET_Hidden = sal_False;
+    ISSET_HierarchicalDocumentName = sal_False;
+    ISSET_OutputStream = sal_False;
     ISSET_InputStream = sal_False;
     ISSET_InteractionHandler = sal_False;
     ISSET_JumpMark = sal_False;
@@ -201,6 +209,11 @@ void MediaDescriptorHelper::impl_init()
     ISSET_ViewData = sal_False;
     ViewId = 0;
     ISSET_ViewId = sal_False;
+
+    ISSET_WinExtent = sal_False;
+
+    ISSET_Storage = sal_False;
+    ISSET_Stream = sal_False;
 }
 
 MediaDescriptorHelper::~MediaDescriptorHelper()
@@ -215,15 +228,15 @@ MediaDescriptorHelper::~MediaDescriptorHelper()
     //write properties to aAll
     if( m_aDeprecatedProperties.getLength() )
     {
-        sal_Int32 nCount = m_aRegularProperties.getLength();
-        m_aRegularProperties.realloc( nCount + m_aDeprecatedProperties.getLength());
+        sal_Int32 nCount = aAll.getLength();
+        aAll.realloc( nCount + m_aDeprecatedProperties.getLength());
         for(sal_Int32 i=0;i<m_aDeprecatedProperties.getLength();i++)
             aAll[nCount+i]=m_aDeprecatedProperties[i];
     }
     if( m_aAdditionalProperties.getLength() )
     {
-        sal_Int32 nCount = m_aRegularProperties.getLength();
-        m_aRegularProperties.realloc(nCount + m_aAdditionalProperties.getLength());
+        sal_Int32 nCount = aAll.getLength();
+        aAll.realloc(nCount + m_aAdditionalProperties.getLength());
         for(sal_Int32 i=0;i<m_aAdditionalProperties.getLength();i++)
             aAll[nCount+i]=m_aAdditionalProperties[i];
     }
