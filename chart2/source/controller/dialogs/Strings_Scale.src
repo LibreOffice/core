@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Strings_Scale.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:05:12 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:30:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,56 +36,17 @@
 
 String STR_INVALID_NUMBER
 {
-};
-String STR_MINVALUE_LT_MAXVALUE
-{
+    Text [ en-US ] = "Numbers are required. Check your input." ;
 };
 String STR_STEP_GT_ZERO
 {
+    Text [ en-US ] = "The major interval requires a positive number. Check your input." ;
 };
-/*
-String STR_STEPMAIN_LT_MAXVALUE
-{
-};
-*/
-// String STR_STEPHELP_LT_STEPMAIN
-// {
-//  Text = "Teilintervall muss kleiner als Hauptintervall sein." ;
-//  Text [ ENGLISH ] = "Help step must be lower than Main Step." ;
-//  Text [ norwegian ] = "Hjelpetrinnet må være lavere enn Hovedtrinnet." ;
-//  Text [ italian ] = "L'intervallo ausiliario deve essere inferiore all'intervallo principale." ;
-//  Text [ portuguese_brazilian ] = "O intervalo auxiliar deve ser menor que o intervalo principal." ;
-//  Text [ portuguese ] = "O intervalo auxiliar deve ser menor que o intervalo principal." ;
-//  Text [ finnish ] = "Ohjevälin on oltava pienempi kuin päävälin." ;
-//  Text [ danish ] = "Underintervallet skal være større end hovedintervallet." ;
-//  Text [ french ] = "L'intervalle secondaire doit être inférieur à l'intervalle principal." ;
-//  Text [ swedish ] = "Delintervall måste vara mindre än huvudintervall." ;
-//  Text [ dutch ] = "Hulpinverval moet kleiner zijn dan hoofdinterval" ;
-//  Text [ spanish ] = "El intervalo auxiliar debe ser inferior al intervalo principal." ;
-//  Text [ english_us ] = "Minor interval must be smaller than the major interval." ;
-//  Text[ chinese_simplified ] = "æ¬¡åŒºé—´å€¼å¿…é¡»å°äºä¸»åŒºé—´å€¼ã€‚";
-//  Text[ russian ] = "Äîïîëíèòåëüíûé èíòåğâàë äîëæåí áûòü ìåíüøå îñíîâíîãî èíòåğâàëà.";
-//  Text[ polish ] = "Przedzia³ pomocniczy musi byæ mniejszy ni¿ przedzia³ g³ówny.";
-//  Text[ japanese ] = "è£œåŠ©ç›®ç››é–“éš”ã¯ã€ä¸»ç›®ç››é–“éš”ã‚ˆã‚Šå°ã•ããªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“ã€‚";
-//  Text[ chinese_traditional ] = "æ¬¡å€é–“å€¼å¿…é ˆå°æ–¼ä¸»å€é–“å€¼ã€‚";
-//  Text[ arabic ] = "íÌÈ Ãä íßæä ÇáİÇÕá ÇáãÓÇÚÏ ÃÕÛÑ ãä ÇáİÇÕá ÇáÑÆíÓí.";
-//  Text[ greek ] = "Ôï âïçèçôéêü äéÜóôçìá ğñİğåé íá åßíáé ìéêñüôåñï áğü ôï êıñéï äéÜóôçìá.";
-//  Text[ korean ] = "ë³´ì¡° ê°„ê²©ì€ ì£¼ ê°„ê²©ë³´ë‹¤ ì‘ì•„ì•¼ í•©ë‹ˆë‹¤.";
-//  Text[ turkish ] = "Küçük zaman aralığı büyük zaman aralığından küçük olmalıdır.";
-//  Text[ catalan ] = "L'intèrval auxiliar ha de ser més petit que l'intèrval principal.";
-//  Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡à¸Šà¹ˆà¸§à¸¢à¹€à¸«à¸¥à¸·à¸­à¸•à¹‰à¸­à¸‡à¸™à¹‰à¸­à¸¢à¸à¸§à¹ˆà¸²à¸Šà¹ˆà¸§à¸‡à¸«à¸¥à¸±à¸";
-//  Text[ czech ] = "PomocnÃ½ interval musÃ­ bÃ½t menÅ¡Ã­ neÅ¾ hlavnÃ­ interval.";
-//  Text[ hebrew ] = "Teilintervall muss kleiner als Hauptintervall sein.";
-//  Text[ hindi ] = "Help interval must be smaller than the main interval.";
-//  Text[ slovak ] = "PomocnÃ½ interval musÃ­ byÅ¥ menÅ¡Ã­ ako hlavnÃ½ interval.";
-// };
-/*
-String STR_WRONG_ORIGIN
-{
-};
-*/
-/*
 String STR_BAD_LOGARITHM
 {
+    Text [ en-US ] = "The logarithmic scale requires positive numbers. Check your input." ;
 };
-*/
+String STR_MIN_GREATER_MAX
+{
+    Text [ en-US ] = "The minimum must be lower than the maximum. Check your input." ;
+};
