@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:53:41 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:19:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -589,7 +589,7 @@ public:
                 const SfxItemSet* pGrfAttrSet = 0,
                 SwFrmFmt* = 0 );
 
-    void InsertObject( const svt::EmbeddedObjectRef&,
+    SwFlyFrmFmt* InsertObject( const svt::EmbeddedObjectRef&,
                 const SfxItemSet* pFlyAttrSet = 0,
                 const SfxItemSet* pGrfAttrSet = 0,
                 SwFrmFmt* = 0 );
