@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fapihelper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:19:34 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:54:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,9 @@ public:
     static ::com::sun::star::uno::Sequence< Type >
                             VectorToSequence( const ::std::vector< Type >& rVector );
 
+    /** Returns the service name provided via the XServiceName interface, or an empty string on error. */
+    static ::rtl::OUString GetServiceName( XInterfaceRef xInt );
+
     /** Returns the multi service factory from a document shell. */
     static XServiceFactoryRef GetServiceFactory( SfxObjectShell* pShell );
 
@@ -140,12 +143,12 @@ template< typename Type >
 
 // Property sets ==============================================================
 
-/** A wrapper for an UNO property set.
+/** A wrapper for a UNO property set.
 
     This class provides functions to silently get and set properties (without
-    exceptions, without checking for validity of the UNO property set).
+    exceptions, without the need to check validity of the UNO property set).
 
-    An instance is constructed with the reference to an UNO property set or any
+    An instance is constructed with the reference to a UNO property set or any
     other interface (the constructor will query for the XPropertySet interface
     then). The reference to the property set will be kept as long as the
     instance of this class is alive.
@@ -183,8 +186,12 @@ public:
 
     /** Returns true, if the contained XPropertySet interface is valid. */
     inline bool         Is() const { return mxPropSet.is(); }
+
     /** Returns the contained XPropertySet interface. */
     inline XPropertySetRef GetApiPropertySet() const { return mxPropSet; }
+
+    /** Returns the service name provided via the XServiceName interface, or an empty string on error. */
+    ::rtl::OUString     GetServiceName() const;
 
     // Get properties ---------------------------------------------------------
 
@@ -199,14 +206,8 @@ public:
                             { UnoAny aAny; return GetAnyProperty( aAny, rPropName ) && (aAny >>= rValue); }
 
     /** Gets the specified Boolean property from the property set.
-        @return  true, if the passed Boolean variable could be filled with the property value. */
-    bool                GetBoolProperty( bool& rbValue, const ::rtl::OUString& rPropName ) const;
-
-    /** Gets the specified Boolean property from the property set.
-        @descr  This is the short version, returning false for a false value and on error.
         @return  true = property contains true; false = property contains false or error occured. */
-    inline bool         GetBoolProperty( const ::rtl::OUString& rPropName ) const
-                            { bool bValue; return GetBoolProperty( bValue, rPropName ) && bValue; }
+    bool                GetBoolProperty( const ::rtl::OUString& rPropName ) const;
 
     /** Gets the specified Boolean property from the property set.
         @return  true, if the passed Boolean variable could be filled with the property value. */
@@ -261,13 +262,14 @@ private:
     Usage:
     1)  Call the constructor with a null-terminated array of ASCII strings.
     2a) Read properties from a property set: Call the ReadFromPropertySet()
-        function, then get the properties with the ReadValue() function or the
-        >> stream operator. The properties are returned in order of the array
-        of property names passed in the constructor.
-    2b) Write properties to a property set: Set the values with the
-        WriteValue() function or the << stream operator. The order of the
-        properties is equal to the array of property names passed in the
-        constructor. Finally, call the WriteToPropertySet() function.
+        function, then get the properties with the ReadValue() functions or the
+        operator>> stream operator. The properties are returned in order of the
+        array of property names passed in the constructor.
+    2b) Write properties to a property set: Call InitializeWrite() to start a
+        new cycle. Set the values with the WriteValue() functions or the
+        operator<< stream operator. The order of the properties is equal to the
+        array of property names passed in the constructor. Finally, call the
+        WriteToPropertySet() function.
  */
 class ScfPropSetHelper
 {
@@ -282,6 +284,18 @@ public:
 
     /** Reads all values from the passed property set. */
     void                ReadFromPropertySet( const ScfPropertySet& rPropSet );
+
+    /** Reads the next value from the value sequence. */
+    template< typename Type >
+    bool                ReadValue( Type& rValue );
+    /** Reads an Any from the value sequence. */
+    bool                ReadValue( UnoAny& rAny );
+    /** Reads a tools string from the value sequence. */
+    bool                ReadValue( String& rString );
+    /** Reads a color value from the value sequence. */
+    bool                ReadValue( Color& rColor );
+    /** Reads a C++ boolean value from the value sequence. */
+    bool                ReadValue( bool& rbValue );
 
     // write properties -------------------------------------------------------
 
@@ -320,11 +334,27 @@ private:
     size_t              mnNextIdx;          /// Counter for next Any to be processed.
 };
 
+// ----------------------------------------------------------------------------
+
+template< typename Type >
+bool ScfPropSetHelper::ReadValue( Type& rValue )
+{
+    UnoAny* pAny = GetNextAny();
+    return pAny && (*pAny >>= rValue);
+}
+
 template< typename Type >
 void ScfPropSetHelper::WriteValue( const Type& rValue )
 {
     if( UnoAny* pAny = GetNextAny() )
         *pAny <<= rValue;
+}
+
+template< typename Type >
+ScfPropSetHelper& operator>>( ScfPropSetHelper& rPropSetHelper, Type& rValue )
+{
+    rPropSetHelper.ReadValue( rValue );
+    return rPropSetHelper;
 }
 
 template< typename Type >
