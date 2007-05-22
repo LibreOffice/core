@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AxisWrapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:59:57 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:16:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,17 +35,25 @@
 #ifndef CHART_AXISWRAPPER_HXX
 #define CHART_AXISWRAPPER_HXX
 
-#include "OPropertySet.hxx"
+#include "WrappedPropertySet.hxx"
+#include "ReferenceSizePropertyProvider.hxx"
 #include "ServiceMacros.hxx"
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_CHART2_XAXIS_HPP_
+#include <com/sun/star/chart2/XAxis.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
@@ -57,40 +65,34 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-
-#ifndef _COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
-#include <com/sun/star/chart2/XDiagram.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#endif
 
-namespace com { namespace sun { namespace star {
-namespace chart2
-{
-    class XAxis;
-}
-}}}
+#include <boost/shared_ptr.hpp>
 
 namespace chart
 {
+
 namespace wrapper
 {
 
-namespace impl
-{
-typedef ::cppu::WeakImplHelper2<
-    com::sun::star::lang::XComponent,
-    com::sun::star::lang::XServiceInfo >
-    AxisWrapper_Base;
-}
+class Chart2ModelContact;
 
-class AxisWrapper :
-        public impl::AxisWrapper_Base,
-        public ::property::OPropertySet
+class AxisWrapper : public ::cppu::ImplInheritanceHelper4<
+                      WrappedPropertySet
+                    , com::sun::star::drawing::XShape
+                    , com::sun::star::lang::XComponent
+                    , com::sun::star::lang::XServiceInfo
+                    , com::sun::star::util::XNumberFormatsSupplier
+                    >
+                    , public ReferenceSizePropertyProvider
 {
 public:
-    enum eAxisType
+    enum tAxisType
     {
         X_AXIS,
         Y_AXIS,
@@ -99,52 +101,18 @@ public:
         SECOND_Y_AXIS
     };
 
-    AxisWrapper( eAxisType eType,
-                  const ::com::sun::star::uno::Reference<
-                      ::com::sun::star::chart2::XDiagram > & xDia,
-                  const ::com::sun::star::uno::Reference<
-                      ::com::sun::star::uno::XComponentContext > & xContext,
-                  ::osl::Mutex & _rMutex );
+    AxisWrapper( tAxisType eType, ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~AxisWrapper();
 
-    ::osl::Mutex & GetMutex() const;
+    static void getDimensionAndMainAxisBool( tAxisType eType, sal_Int32& rnDimensionIndex, sal_Bool& rbMainAxis );
 
     /// XServiceInfo declarations
     APPHELPER_XSERVICEINFO_DECL()
 
-    /// merge XInterface implementations
-     DECLARE_XINTERFACE()
-    /// merge XTypeProvider implementations
-     DECLARE_XTYPEPROVIDER()
-
-protected:
-    // ____ OPropertySet ____
-    virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(::com::sun::star::beans::UnknownPropertyException);
-
-    // ____ OPropertySet ____
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-
-    virtual sal_Bool SAL_CALL convertFastPropertyValue
-        ( ::com::sun::star::uno::Any & rConvertedValue,
-          ::com::sun::star::uno::Any & rOldValue,
-          sal_Int32 nHandle,
-          const ::com::sun::star::uno::Any& rValue )
-        throw (::com::sun::star::lang::IllegalArgumentException);
-
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast
-        ( sal_Int32 nHandle,
-          const ::com::sun::star::uno::Any& rValue )
-        throw (::com::sun::star::uno::Exception);
-
-    virtual void SAL_CALL getFastPropertyValue
-        ( ::com::sun::star::uno::Any& rValue,
-          sal_Int32 nHandle ) const;
-
-    // ____ XPropertySet ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
-        getPropertySetInfo()
-        throw (::com::sun::star::uno::RuntimeException);
+    //ReferenceSizePropertyProvider
+    virtual void setCurrentSizeAsReference();
+    virtual ::com::sun::star::uno::Any getReferenceSize();
+    virtual ::com::sun::star::awt::Size getCurrentSizeForReference();
 
     // ____ XComponent ____
     virtual void SAL_CALL dispose()
@@ -156,41 +124,45 @@ protected:
                                                ::com::sun::star::lang::XEventListener >& aListener )
         throw (::com::sun::star::uno::RuntimeException);
 
-private:
-    mutable ::osl::Mutex &    m_rMutex;
+    // ____ XShape ____
+    virtual ::com::sun::star::awt::Point SAL_CALL getPosition()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPosition( const ::com::sun::star::awt::Point& aPosition )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Size SAL_CALL getSize()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setSize( const ::com::sun::star::awt::Size& aSize )
+        throw (::com::sun::star::beans::PropertyVetoException,
+               ::com::sun::star::uno::RuntimeException);
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext >
-                        m_xContext;
+    // ____ XShapeDescriptor (base of XShape) ____
+    virtual ::rtl::OUString SAL_CALL getShapeType()
+        throw (::com::sun::star::uno::RuntimeException);
 
-    eAxisType           m_eType;
+    // ____ XNumberFormatsSupplier ____
+    virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySet > SAL_CALL getNumberFormatSettings()
+            throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::util::XNumberFormats > SAL_CALL getNumberFormats()
+            throw (::com::sun::star::uno::RuntimeException);
 
-    ::cppu::OInterfaceContainerHelper
-                        m_aEventListenerContainer;
+protected:
+    // ____ WrappedPropertySet ____
+    virtual const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& getPropertySequence();
+    virtual const std::vector< WrappedProperty* > createWrappedProperties();
+    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getInnerPropertySet();
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDiagram >
-                        m_xDiagram;
+private: //methods
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis > getAxis();
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XAxis >
-                        m_xAxis;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
-                        m_xAxisProperties;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XFastPropertySet >
-                        m_xAxisFastProperties;
+private: //member
+    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
 
-    /** precondition: m_xAxis.is(), mutex is locked
-    */
-    void getFastMeterPropertyValue( ::com::sun::star::uno::Any & rValue, sal_Int32 nHandle ) const;
-
-    /** precondition: m_xAxis.is(), mutex is locked
-     */
-    void setFastMeterPropertyValue_NoBroadcast(
-        sal_Int32 nHandle,
-        const ::com::sun::star::uno::Any& rValue );
+    tAxisType           m_eType;
+    ::com::sun::star::uno::Any m_aTemporaryHelpStepValue;
 };
 
 } //  namespace wrapper
