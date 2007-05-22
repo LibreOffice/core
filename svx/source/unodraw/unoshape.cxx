@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.155 $
+ *  $Revision: 1.156 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:17:02 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:21:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1617,6 +1617,192 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
 
 //----------------------------------------------------------------------
 
+// static
+uno::Any SAL_CALL SvxShape::GetFillAttributeByName(
+    const ::rtl::OUString& rPropertyName, const ::rtl::OUString& rName, SdrModel* pModel )
+{
+    uno::Any aResult;
+    DBG_ASSERT( pModel, "Invalid Model in GetFillAttributeByName()" );
+    if( ! pModel )
+        return aResult;
+
+    sal_Int16 nWhich = SvxUnoGetWhichIdForNamedProperty( rPropertyName );
+
+    // search pool for item
+    const SfxItemPool& rPool = pModel->GetItemPool();
+
+    const String aSearchName( rName );
+    const USHORT nCount = rPool.GetItemCount((USHORT)nWhich);
+    const NameOrIndex *pItem = 0;
+    bool bFound = false;
+
+    for( USHORT nSurrogate = 0; ! bFound && nSurrogate < nCount; nSurrogate++ )
+    {
+        pItem = (NameOrIndex*)rPool.GetItem((USHORT)nWhich, nSurrogate);
+        if( pItem && ( pItem->GetName() == aSearchName ) )
+        {
+            bFound = true;
+        }
+    }
+
+    // check the property lists that are loaded for the model for items that
+    // support such.
+    String aStrName;
+    SvxUnogetInternalNameForItem( nWhich, rName, aStrName );
+
+    switch( nWhich )
+    {
+        case XATTR_FILLBITMAP:
+        {
+            XFillBitmapItem aBmpItem;
+            if( ! bFound )
+            {
+                XBitmapList* pBitmapList = pModel->GetBitmapList();
+
+                if( !pBitmapList )
+                    break;
+
+                long nPos = ((XPropertyList*)pBitmapList)->Get(aStrName);
+                if( nPos == -1 )
+                    break;
+
+                XBitmapEntry* pEntry = pBitmapList->GetBitmap( nPos );
+                aBmpItem.SetWhich( XATTR_FILLBITMAP );
+                aBmpItem.SetName( rName );
+                aBmpItem.SetBitmapValue( pEntry->GetXBitmap() );
+                pItem = & aBmpItem;
+            }
+            DBG_ASSERT( pItem, "Invalid Item" );
+            if( pItem )
+                pItem->QueryValue( aResult ); // default: XBitmap. MID_GRAFURL instead?
+        }
+        break;
+
+        case XATTR_FILLGRADIENT:
+        {
+            XFillGradientItem aGrdItem;
+            if( ! bFound )
+            {
+                XGradientList* pGradientList = pModel->GetGradientList();
+
+                if( !pGradientList )
+                    break;
+
+                long nPos = ((XPropertyList*)pGradientList)->Get(aStrName);
+                if( nPos == -1 )
+                    break;
+
+                XGradientEntry* pEntry = pGradientList->GetGradient( nPos );
+                aGrdItem.SetWhich( XATTR_FILLGRADIENT );
+                aGrdItem.SetName( rName );
+                aGrdItem.SetGradientValue( pEntry->GetGradient() );
+                pItem = & aGrdItem;
+            }
+            DBG_ASSERT( pItem, "Invalid Item" );
+            if( pItem )
+                pItem->QueryValue( aResult, MID_FILLGRADIENT );
+        }
+        break;
+
+        case XATTR_FILLHATCH:
+        {
+            XFillHatchItem aHatchItem;
+            if( ! bFound )
+            {
+                XHatchList* pHatchList = pModel->GetHatchList();
+
+                if( !pHatchList )
+                    break;
+
+                long nPos = ((XPropertyList*)pHatchList)->Get(aStrName);
+                if( nPos == -1 )
+                    break;
+
+                XHatchEntry* pEntry = pHatchList->GetHatch( nPos );
+                aHatchItem.SetWhich( XATTR_FILLHATCH );
+                aHatchItem.SetName( rName );
+                aHatchItem.SetHatchValue( pEntry->GetHatch() );
+                pItem = & aHatchItem;
+            }
+            DBG_ASSERT( pItem, "Invalid Item" );
+            if( pItem )
+                pItem->QueryValue( aResult, MID_FILLHATCH );
+        }
+        break;
+
+        case XATTR_LINEEND:
+        case XATTR_LINESTART:
+        {
+            if( ! bFound )
+            {
+                XLineEndList* pLineEndList = pModel->GetLineEndList();
+
+                if( !pLineEndList )
+                    break;
+
+                long nPos = ((XPropertyList*)pLineEndList)->Get(aStrName);
+                if( nPos == -1 )
+                    break;
+
+                XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nPos );
+                if( nWhich == XATTR_LINEEND )
+                {
+                    XLineEndItem aLEItem;
+                    aLEItem.SetWhich( XATTR_LINEEND );
+                    aLEItem.SetName( rName );
+                    aLEItem.SetLineEndValue( pEntry->GetLineEnd() );
+                    aLEItem.QueryValue( aResult );
+                }
+                else
+                {
+                    XLineStartItem aLSItem;
+                    aLSItem.SetWhich( XATTR_LINESTART );
+                    aLSItem.SetName( rName );
+                    aLSItem.SetLineStartValue( pEntry->GetLineEnd() );
+                    aLSItem.QueryValue( aResult );
+                }
+            }
+            else
+            {
+                DBG_ASSERT( pItem, "Invalid Item" );
+                if( pItem )
+                    pItem->QueryValue( aResult );
+            }
+        }
+        break;
+
+        case XATTR_LINEDASH:
+        {
+            XLineDashItem aDashItem;
+            if( ! bFound )
+            {
+                XDashList* pDashList = pModel->GetDashList();
+
+                if( !pDashList )
+                    break;
+
+                long nPos = ((XPropertyList*)pDashList)->Get(aStrName);
+                if( nPos == -1 )
+                    break;
+
+                XDashEntry* pEntry = pDashList->GetDash( nPos );
+                aDashItem.SetWhich( XATTR_LINEDASH );
+                aDashItem.SetName( rName );
+                aDashItem.SetDashValue( pEntry->GetDash() );
+                pItem = & aDashItem;
+            }
+            DBG_ASSERT( pItem, "Invalid Item" );
+            if( pItem )
+                pItem->QueryValue( aResult, MID_LINEDASH );
+        }
+        break;
+    }
+
+    return aResult;
+}
+
+//----------------------------------------------------------------------
+
 void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const uno::Any& rVal )
     throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -2809,6 +2995,11 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
                 (void)e;
                 DBG_ERROR("svx::SvxShape::setPropertyValues(), unknown property!" );
             }
+            catch( uno::Exception& ex )
+            {
+                (void)ex;
+                DBG_ERROR("svx::SvxShape::setPropertyValues(), uno::Exception caught!" );
+            }
         }
     }
     else
@@ -2826,6 +3017,11 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
             {
                 (void)e;
                 DBG_ERROR("svx::SvxShape::setPropertyValues(), unknown property!" );
+            }
+            catch( uno::Exception& ex )
+            {
+                (void)ex;
+                DBG_ERROR("svx::SvxShape::setPropertyValues(), uno::Exception caught!" );
             }
         }
     }
@@ -4301,6 +4497,7 @@ void SvxShapeText::unlock()
 // ::com::sun::star::text::XTextRange
 uno::Reference< text::XTextRange > SAL_CALL SvxShapeText::getStart() throw(uno::RuntimeException)
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
         ::GetSelection( maSelection, pForwarder );
@@ -4310,6 +4507,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxShapeText::getStart() throw(uno::
 
 uno::Reference< text::XTextRange > SAL_CALL SvxShapeText::getEnd() throw(uno::RuntimeException)
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
         ::GetSelection( maSelection, pForwarder );
@@ -4318,6 +4516,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxShapeText::getEnd() throw(uno::Ru
 
 OUString SAL_CALL SvxShapeText::getString() throw(uno::RuntimeException)
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
         ::GetSelection( maSelection, pForwarder );
@@ -4327,6 +4526,7 @@ OUString SAL_CALL SvxShapeText::getString() throw(uno::RuntimeException)
 
 void SAL_CALL SvxShapeText::setString( const OUString& aString ) throw(uno::RuntimeException)
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
         ::GetSelection( maSelection, pForwarder );
