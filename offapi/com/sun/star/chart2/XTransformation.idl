@@ -1,0 +1,109 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XTransformation.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:06:00 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_XTransformation_idl
+#define com_sun_star_chart2_XTransformation_idl
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+    // NOTES
+
+    //... provide help for creating the right transfomation
+    //
+    // ... access to source and destination coordinate system ?
+
+/** allows the transformation of numeric values from one
+    coordinate-system into an other.  Values may be transformed using
+    any mapping.
+ */
+interface XTransformation : ::com::sun::star::uno::XInterface
+{
+    /** transforms the given input data tuple, given in the source
+        coordinate system, according to the internal transformation
+        rules, into a tuple of transformed coordinates in the
+        destination coordinate system.
+
+        <p>Note that both coordinate systems may have different
+        dimensions, e.g., if a transformation does simply a projection
+        into a lower-dimensional space.</p>
+
+        @param aValues a source tuple of data that is to be
+               transformed.  The length of this sequence must be
+               equivalent to the dimension of the source coordinate
+               system.
+
+        @return the transformed data tuple.  The length of this
+                sequence is equal to the dimension of the output
+                coordinate system.
+
+        @throw ::com::sun::star::lang::IllegalArgumentException if the
+               dimension of the input vector is not equal to the
+               dimension given in <member>getSourceDimension</member>.
+     */
+    sequence< double > transform( [in] sequence< double > aValues )
+        raises( ::com::sun::star::lang::IllegalArgumentException );
+
+    /** the dimension of the input coordinate sequence that is to be
+        transformed by the <member>transform</member> method.
+     */
+    long getSourceDimension();
+
+    /** the dimension of the output coordinate sequence that is the
+        result of the <member>transform</member> method.
+     */
+    long getTargetDimension();
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+
+#endif
