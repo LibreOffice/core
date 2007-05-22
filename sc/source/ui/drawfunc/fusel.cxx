@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:57:07 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:06:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@
 #include "drawpage.hxx"
 #include "globstr.hrc"
 #include "drwlayer.hxx"
+#include "scmod.hxx"
 
 // -----------------------------------------------------------------------
 
@@ -394,7 +395,10 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
     if (pIPClient)
     {
-        if ( pIPClient->IsObjectInPlaceActive() )
+        ScModule* pScMod = SC_MOD();
+        bool bUnoRefDialog = pScMod->IsRefDialogOpen() && pScMod->GetCurRefDlgId() == WID_SIMPLE_REF;
+
+        if ( pIPClient->IsObjectInPlaceActive() && !bUnoRefDialog )
             pIPClient->DeactivateObject();
     }
 
