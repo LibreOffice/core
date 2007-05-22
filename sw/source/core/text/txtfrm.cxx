@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:51:38 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:32:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,6 +183,9 @@
 #endif
 // <--
 #include <SmartTagMgr.hxx>
+
+#include <swtable.hxx>
+#include <fldupde.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #ifndef _TXTPAINT_HXX
