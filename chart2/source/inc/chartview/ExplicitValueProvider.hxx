@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ExplicitValueProvider.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:49:01 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:26:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,14 +35,32 @@
 #ifndef _CHART2_EXPLICITVALUEPROVIDER_HXX
 #define _CHART2_EXPLICITVALUEPROVIDER_HXX
 
+#include <boost/shared_ptr.hpp>
+
 #ifndef _COM_SUN_STAR_CHART2_EXPLICITINCREMENTDATA_HPP_
 #include <com/sun/star/chart2/ExplicitIncrementData.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CHART2_EXPLICITSCALEDATA_HPP_
 #include <com/sun/star/chart2/ExplicitScaleData.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART2_XMETER_HPP_
-#include <com/sun/star/chart2/XMeter.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XAXIS_HPP_
+#include <com/sun/star/chart2/XAxis.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XCOORDINATESYSTEM_HPP_
+#include <com/sun/star/chart2/XCoordinateSystem.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
+#include <com/sun/star/awt/Rectangle.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
+#include <com/sun/star/drawing/XShape.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #endif
 
 //.............................................................................
@@ -54,14 +72,48 @@ namespace chart
 /**
 */
 
+class DrawModelWrapper;
 class ExplicitValueProvider
 {
 public:
-    virtual void getExplicitValuesForMeter(
-        ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XMeter > xMeter
+    /** Gives calculated scale and increment values for a given xAxis in the current view.
+        In contrast to the model data these explicit values are always complete as misssing auto properties are calculated.
+        If the given Axis could not be found or for another reason no correct output can be given false is returned.
+     */
+    virtual sal_Bool getExplicitValuesForAxis(
+        ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis > xAxis
         , ::com::sun::star::chart2::ExplicitScaleData&  rExplicitScale
-        , ::com::sun::star::chart2::ExplicitIncrementData& rExplicitIncrement
-        , double& rfExplicitOrigin )=0;
+        , ::com::sun::star::chart2::ExplicitIncrementData& rExplicitIncrement )=0;
+
+    /** for rotated objects the shape size and position differs from the visible rectangle
+        if bSnapRect is set to true you get the resulting visible position (left-top) and size
+    */
+    virtual ::com::sun::star::awt::Rectangle
+        getRectangleOfObject( const rtl::OUString& rObjectCID, bool bSnapRect=false )=0;
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+        getShapeForCID( const rtl::OUString& rObjectCID )=0;
+
+    virtual ::boost::shared_ptr< DrawModelWrapper > getDrawModelWrapper() = 0;
+
+    static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
+    static ExplicitValueProvider* getExplicitValueProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xChartView );
+
+    static ::com::sun::star::awt::Rectangle
+        calculateDiagramPositionAndSizeInclusiveTitle(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::frame::XModel >& xChartModel
+            , const ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::XInterface >& xChartView
+            , const ::com::sun::star::awt::Rectangle& rExclusivePositionAndSize );
+
+    static sal_Int32 getExplicitNumberFormatKeyForAxis(
+              const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis
+            , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
+            , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
+
+    static sal_Int32 getPercentNumberFormat( const ::com::sun::star::uno::Reference<
+                ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
 };
 
 //.............................................................................
