@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Axis.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:52:59 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,14 +46,15 @@
 #include "OPropertySet.hxx"
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE6_HXX_
+#include <cppuhelper/implbase6.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
 
 #include "ServiceMacros.hxx"
+#include "ModifyListenerHelper.hxx"
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -61,11 +62,17 @@
 #ifndef _COM_SUN_STAR_CHART2_XAXIS_HPP_
 #include <com/sun/star/chart2/XAxis.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
-#include <com/sun/star/chart2/XIdentifiable.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CHART2_XTITLED_HPP_
 #include <com/sun/star/chart2/XTitled.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
+#include <com/sun/star/util/XCloneable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFYBROADCASTER_HPP_
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFYLISTENER_HPP_
+#include <com/sun/star/util/XModifyListener.hpp>
 #endif
 
 namespace chart
@@ -73,16 +80,18 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper4<
-    ::com::sun::star::chart2::XAxis,
-    ::com::sun::star::chart2::XIdentifiable,
-    ::com::sun::star::chart2::XTitled,
-    ::com::sun::star::lang::XServiceInfo >
+typedef ::cppu::WeakImplHelper6<
+        ::com::sun::star::chart2::XAxis,
+        ::com::sun::star::chart2::XTitled,
+        ::com::sun::star::lang::XServiceInfo,
+        ::com::sun::star::util::XCloneable,
+        ::com::sun::star::util::XModifyBroadcaster,
+        ::com::sun::star::util::XModifyListener >
     Axis_Base;
 }
 
 class Axis :
-    public helper::MutexContainer,
+    public MutexContainer,
     public impl::Axis_Base,
     public ::property::OPropertySet
 {
@@ -102,6 +111,11 @@ public:
      DECLARE_XTYPEPROVIDER()
 
 protected:
+    explicit Axis( const Axis & rOther );
+
+    // late initialization to call after copy-constructing
+    void Init( const Axis & rOther );
+
     // ____ OPropertySet ____
     virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
         throw(::com::sun::star::beans::UnknownPropertyException);
@@ -122,34 +136,21 @@ protected:
 //      throw (::com::sun::star::lang::IllegalArgumentException);
 
     // ____ XAxis ____
+    virtual void SAL_CALL setScaleData( const ::com::sun::star::chart2::ScaleData& rScaleData )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::chart2::ScaleData SAL_CALL getScaleData()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySet > SAL_CALL getGridProperties()
+                    throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::Reference<
+                        ::com::sun::star::beans::XPropertySet > > SAL_CALL getSubGridProperties()
+                    throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence<
+                ::com::sun::star::uno::Reference<
                     ::com::sun::star::beans::XPropertySet > > SAL_CALL getSubTickProperties()
-        throw (::com::sun::star::uno::RuntimeException);
-
-// ____ XMeter ____
-    virtual void SAL_CALL attachCoordinateSystem(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XBoundedCoordinateSystem >& xCoordSys,
-        sal_Int32 nRepresentedDimension )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-               ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XBoundedCoordinateSystem > SAL_CALL getCoordinateSystem()
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getRepresentedDimension()
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setIncrement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XIncrement >& aIncrement )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XIncrement > SAL_CALL getIncrement()
-        throw (::com::sun::star::uno::RuntimeException);
-
-    // ____ XIdentifiable ____
-    virtual ::rtl::OUString SAL_CALL getIdentifier()
-        throw (::com::sun::star::uno::RuntimeException);
+                    throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XTitled ____
     virtual ::com::sun::star::uno::Reference<
@@ -160,20 +161,53 @@ protected:
             ::com::sun::star::chart2::XTitle >& Title )
         throw (::com::sun::star::uno::RuntimeException);
 
-private:
-    ::rtl::OUString m_aIdentifier;
+    // ____ XCloneable ____
+    // Note: the coordinate systems are not cloned!
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XModifyBroadcaster ____
+    virtual void SAL_CALL addModifyListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeModifyListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XModifyListener ____
+    virtual void SAL_CALL modified(
+        const ::com::sun::star::lang::EventObject& aEvent )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XEventListener (base of XModifyListener) ____
+    virtual void SAL_CALL disposing(
+        const ::com::sun::star::lang::EventObject& Source )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ OPropertySet ____
+    virtual void firePropertyChangeEvent();
+
+    void fireModifyEvent();
+
+private: //methods
+    void AllocateSubGrids();
+
+private: //member
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XBoundedCoordinateSystem >
-                       m_xCoordinateSystem;
-    sal_Int32          m_nRepresentedDimension;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XIncrement >
-                       m_xIncrement;
+        ::com::sun::star::util::XModifyListener >   m_xModifyEventForwarder;
+
+    ::com::sun::star::chart2::ScaleData             m_aScaleData;
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XTitle >
-                       m_xTitle;
+        ::com::sun::star::beans::XPropertySet >     m_xGrid;
+
+    ::com::sun::star::uno::Sequence<
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet > >     m_aSubGridProperties;
+
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::XTitle >          m_xTitle;
 };
 
 } //  namespace chart
