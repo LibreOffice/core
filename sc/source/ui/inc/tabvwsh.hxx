@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:26:18 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:08:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -445,7 +445,7 @@ public:
     BOOL    GetFunction( String& rFuncStr );
 
     void    StartSimpleRefDialog( const String& rTitle, const String& rInitVal,
-                                    BOOL bCloseOnButtonUp, BOOL bSingleCell );
+                                    BOOL bCloseOnButtonUp, BOOL bSingleCell, BOOL bMultiSelection );
     void    StopSimpleRefDialog();
 
     void    SetCurRefDlgId( USHORT nNew );
