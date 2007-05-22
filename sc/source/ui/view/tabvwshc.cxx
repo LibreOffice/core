@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwshc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:17:07 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:15:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,6 @@
 #include "filtdlg.hxx"
 #include "dbnamdlg.hxx"
 #include "pvlaydlg.hxx"
-#include "chartdlg.hxx"
 #include "areasdlg.hxx"
 #include "condfrmt.hxx"
 #include "rangeutl.hxx"
@@ -135,12 +134,6 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         case SID_DEFINE_COLROWNAMERANGES:
         {
             pResult = new ScColRowNameRangesDlg( pB, pCW, pParent, GetViewData() );
-        }
-        break;
-
-        case SID_OPENDLG_CHART:
-        {
-            pResult = new ScChartDlg( pB, pCW, pParent, GetViewData() );
         }
         break;
 
@@ -418,7 +411,9 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         {
             //  Dialog schaut selber, was in der Zelle steht
 
-            pResult = new ScSimpleRefDlg( pB, pCW, pParent, GetViewData() );
+            ScViewData* pViewData = GetViewData();
+            pViewData->SetRefTabNo( pViewData->GetTabNo() );
+            pResult = new ScSimpleRefDlg( pB, pCW, pParent, pViewData );
         }
         break;
 
