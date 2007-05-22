@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LineChartType.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:21:13 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:49:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #define CHART_LINECHARTTYPE_HXX
 
 #include "ChartType.hxx"
+#include "ServiceMacros.hxx"
 
 #ifndef _COM_SUN_STAR_CHART2_CURVESTYLE_HPP_
 #include <com/sun/star/chart2/CurveStyle.hpp>
@@ -47,14 +48,19 @@ namespace chart
 class LineChartType : public ChartType
 {
 public:
-    LineChartType( sal_Int32 nDim = 2,
-                   ::com::sun::star::chart2::CurveStyle eCurveStyle =
-                       ::com::sun::star::chart2::CurveStyle_LINES,
-                   sal_Int32 nResolution = 20,
-                   sal_Int32 nOrder = 3 );
+    LineChartType(
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~LineChartType();
 
+    APPHELPER_XSERVICEINFO_DECL()
+
+    /// establish methods for factory instatiation
+    APPHELPER_SERVICE_FACTORY_HELPER( LineChartType )
+
 protected:
+    explicit LineChartType( const LineChartType & rOther );
+
     // ____ XChartType ____
     virtual ::rtl::OUString SAL_CALL getChartType()
         throw (::com::sun::star::uno::RuntimeException);
@@ -62,13 +68,15 @@ protected:
     // ____ OPropertySet ____
     virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
         throw(::com::sun::star::beans::UnknownPropertyException);
-
-    // ____ OPropertySet ____
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
 
     // ____ XPropertySet ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XCloneable ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
         throw (::com::sun::star::uno::RuntimeException);
 };
 
