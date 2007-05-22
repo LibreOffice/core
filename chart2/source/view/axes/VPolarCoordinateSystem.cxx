@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VPolarCoordinateSystem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:32:40 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:13:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,8 @@
 #include "VPolarCoordinateSystem.hxx"
 #include "VPolarGrid.hxx"
 #include "VPolarAxis.hxx"
+#include "AxisIndexDefines.hxx"
+#include "AxisHelper.hxx"
 
 //.............................................................................
 namespace chart
@@ -45,8 +47,9 @@ namespace chart
 //.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using ::com::sun::star::uno::Reference;
 
-VPolarCoordinateSystem::VPolarCoordinateSystem( const uno::Reference< XBoundedCoordinateSystem >& xCooSys )
+VPolarCoordinateSystem::VPolarCoordinateSystem( const Reference< XCoordinateSystem >& xCooSys )
     : VCoordinateSystem(xCooSys)
 {
 }
@@ -55,50 +58,159 @@ VPolarCoordinateSystem::~VPolarCoordinateSystem()
 {
 }
 
-void VPolarCoordinateSystem::createGridShapes()
+//better performance for big data
+uno::Sequence< sal_Int32 > VPolarCoordinateSystem::getCoordinateSystemResolution(
+            const awt::Size& rPageSize, const awt::Size& rPageResolution )
 {
-    sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
-    for( sal_Int32 nDim=0; nDim<3; nDim++)
+    uno::Sequence< sal_Int32 > aResolution( VCoordinateSystem::getCoordinateSystemResolution( rPageSize, rPageResolution) );
+
+    if( aResolution.getLength() >= 2 )
     {
-        uno::Sequence< uno::Reference< XGrid > >& rGridList
-            = getGridListByDimension( nDim );
-        for( sal_Int32 nN=0; nN<rGridList.getLength(); nN++ )
+        if( this->getPropertySwapXAndYAxis() )
         {
-            VPolarGrid aGrid(rGridList[nN],nDimensionCount);
-            aGrid.setIncrements( m_aExplicitIncrements );
-            aGrid.init(m_xLogicTargetForGrids,m_xFinalTarget,m_xShapeFactory);
-            if(2==nDimensionCount)
-                aGrid.setTransformationSceneToScreen( m_aMatrixSceneToScreen );
-            aGrid.setScales( m_aExplicitScales );
-            aGrid.createShapes();
+            aResolution[0]/=2;//radius
+            aResolution[1]*=4;//outer circle resolution
+        }
+        else
+        {
+            aResolution[0]*=4;//outer circle resolution
+            aResolution[1]/=2;//radius
+        }
+    }
+
+    return aResolution;
+}
+
+void VPolarCoordinateSystem::createVAxisList(
+              const uno::Reference< util::XNumberFormatsSupplier > & xNumberFormatsSupplier
+            , const awt::Size& rFontReferenceSize
+            , const awt::Rectangle& rMaximumSpaceForLabels
+            )
+{
+    m_aAxisMap.clear();
+
+    //if(!m_xLogicTargetForAxes.is() || !m_xFinalTarget.is() || !m_xCooSysModel.is() )
+    //    return;
+
+    sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
+    bool bSwapXAndY = this->getPropertySwapXAndYAxis();
+
+    sal_Int32 nDimensionIndex = 0;
+
+    //create angle axis (dimension index 0)
+    for( nDimensionIndex = 0; nDimensionIndex < nDimensionCount; nDimensionIndex++ )
+    {
+        sal_Int32 nMaxAxisIndex = m_xCooSysModel->getMaximumAxisIndexByDimension(nDimensionIndex);
+        for( sal_Int32 nAxisIndex = 0; nAxisIndex <= nMaxAxisIndex; nAxisIndex++ )
+        {
+            Reference< XAxis > xAxis( this->getAxisByDimension(nDimensionIndex,nAxisIndex) );
+            if(!xAxis.is() || !AxisHelper::shouldAxisBeDisplayed( xAxis, m_xCooSysModel ))
+                continue;
+            AxisProperties aAxisProperties(xAxis,this->getExplicitCategoriesProvider());
+            aAxisProperties.init();
+            if(aAxisProperties.m_bDisplayLabels)
+                aAxisProperties.m_nNumberFormatKey = this->getNumberFormatKeyForAxis( xAxis, xNumberFormatsSupplier );
+            //-------------------
+            ::boost::shared_ptr< VAxisBase > apVAxis( VPolarAxis::createAxis( aAxisProperties,xNumberFormatsSupplier,nDimensionIndex,nDimensionCount) );
+            tFullAxisIndex aFullAxisIndex( nDimensionIndex, nAxisIndex );
+            m_aAxisMap[aFullAxisIndex] = apVAxis;
+
+            //apVAxis->setExplicitScaleAndIncrement( this->getExplicitScale( nDimensionIndex, nAxisIndex ), this->getExplicitIncrement(nDimensionIndex, nAxisIndex) );
+            //apVAxis->initPlotter(m_xLogicTargetForAxes,m_xFinalTarget,m_xShapeFactory
+            //    , this->createCIDForAxis( xAxis, nDimensionIndex, nAxisIndex ) );
+            //VPolarAxis* pVPolarAxis = dynamic_cast< VPolarAxis* >( apVAxis.get() );
+            //if( pVPolarAxis )
+            //    pVPolarAxis->setIncrements( this->getExplicitIncrements( nDimensionIndex, nAxisIndex ) );
+            //if(2==nDimensionCount)
+            //    apVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
+            //apVAxis->setScales( this->getExplicitScales( nDimensionIndex, nAxisIndex ), bSwapXAndY );
+            apVAxis->initAxisLabelProperties(rFontReferenceSize,rMaximumSpaceForLabels);
         }
     }
 }
 
-void VPolarCoordinateSystem::createAxesShapes( const awt::Size& rReferenceSize, NumberFormatterWrapper* pNumberFormatterWrapper )
+void VPolarCoordinateSystem::initVAxisInList()
 {
+    if(!m_xLogicTargetForAxes.is() || !m_xFinalTarget.is() || !m_xCooSysModel.is() )
+        return;
+
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
-    double fCoordinateOrigin[3] = { 0.0, 0.0, 0.0 };
-    sal_Int32 nDim = 0;
-    for( nDim = 0; nDim < 3; nDim++ )
-        fCoordinateOrigin[nDim] = this->getOriginByDimension( nDim );
-    //create angle axis (dimension index 0)
-    for( nDim = 0; nDim < 3; nDim++ )
+    bool bSwapXAndY = this->getPropertySwapXAndYAxis();
+
+    tVAxisMap::iterator aIt( m_aAxisMap.begin() );
+    tVAxisMap::const_iterator aEnd( m_aAxisMap.end() );
+    for( ; aIt != aEnd; ++aIt )
     {
-        uno::Reference< XAxis > xAxis = this->getAxisByDimension(nDim);
-        if(!xAxis.is())
+        VAxisBase* pVAxis = aIt->second.get();
+        if( pVAxis )
+        {
+            sal_Int32 nDimensionIndex = aIt->first.first;
+            sal_Int32 nAxisIndex = aIt->first.second;
+            pVAxis->setExplicitScaleAndIncrement( this->getExplicitScale( nDimensionIndex, nAxisIndex ), this->getExplicitIncrement(nDimensionIndex, nAxisIndex) );
+            pVAxis->initPlotter(m_xLogicTargetForAxes,m_xFinalTarget,m_xShapeFactory
+                , this->createCIDForAxis( getAxisByDimension( nDimensionIndex, nAxisIndex ), nDimensionIndex, nAxisIndex ) );
+            VPolarAxis* pVPolarAxis = dynamic_cast< VPolarAxis* >( pVAxis );
+            if( pVPolarAxis )
+                pVPolarAxis->setIncrements( this->getExplicitIncrements( nDimensionIndex, nAxisIndex ) );
+            if(2==nDimensionCount)
+                pVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
+            pVAxis->setScales( this->getExplicitScales( nDimensionIndex, nAxisIndex ), bSwapXAndY );
+        }
+    }
+}
+
+void VPolarCoordinateSystem::updateScalesAndIncrementsOnAxes()
+{
+    if(!m_xLogicTargetForAxes.is() || !m_xFinalTarget.is() || !m_xCooSysModel.is() )
+        return;
+
+    sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
+    bool bSwapXAndY = this->getPropertySwapXAndYAxis();
+
+    tVAxisMap::iterator aIt( m_aAxisMap.begin() );
+    tVAxisMap::const_iterator aEnd( m_aAxisMap.end() );
+    for( ; aIt != aEnd; ++aIt )
+    {
+        VAxisBase* pVAxis = aIt->second.get();
+        if( pVAxis )
+        {
+            sal_Int32 nDimensionIndex = aIt->first.first;
+            sal_Int32 nAxisIndex = aIt->first.second;
+            pVAxis->setExplicitScaleAndIncrement( this->getExplicitScale( nDimensionIndex, nAxisIndex ), this->getExplicitIncrement(nDimensionIndex, nAxisIndex) );
+            VPolarAxis* pVPolarAxis = dynamic_cast< VPolarAxis* >( pVAxis );
+            if( pVPolarAxis )
+                pVPolarAxis->setIncrements( this->getExplicitIncrements( nDimensionIndex, nAxisIndex ) );
+            if(2==nDimensionCount)
+                pVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
+            pVAxis->setScales( this->getExplicitScales( nDimensionIndex, nAxisIndex ), bSwapXAndY );
+        }
+    }
+}
+
+void VPolarCoordinateSystem::createGridShapes()
+{
+    if(!m_xLogicTargetForGrids.is() || !m_xFinalTarget.is() )
+        return;
+
+    sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
+    bool bSwapXAndY = this->getPropertySwapXAndYAxis();
+
+    for( sal_Int32 nDimensionIndex=0; nDimensionIndex<3; nDimensionIndex++)
+    {
+        sal_Int32 nAxisIndex = MAIN_AXIS_INDEX;
+
+        Reference< XAxis > xAxis( AxisHelper::getAxis( nDimensionIndex, nAxisIndex, m_xCooSysModel ) );
+        if(!xAxis.is() || !AxisHelper::shouldAxisBeDisplayed( xAxis, m_xCooSysModel ))
             continue;
-        AxisProperties aAxisProperties(xAxis,rReferenceSize);
-        aAxisProperties.init();
-        //-------------------
-        VPolarAxis aAxis(aAxisProperties,pNumberFormatterWrapper,nDimensionCount);
-        aAxis.setMeterData( m_aExplicitScales[nDim], m_aExplicitIncrements[nDim] );
-        aAxis.init(m_xLogicTargetForAxes,m_xFinalTarget,m_xShapeFactory);
-        aAxis.setIncrements( m_aExplicitIncrements );
+
+        VPolarGrid aGrid(nDimensionIndex,nDimensionCount,this->getGridListFromAxis( xAxis ));
+        aGrid.setIncrements( this->getExplicitIncrements( nDimensionIndex, nAxisIndex ) );
+        aGrid.initPlotter(m_xLogicTargetForGrids,m_xFinalTarget,m_xShapeFactory
+            , this->createCIDForGrid( xAxis, nDimensionIndex, nAxisIndex ) );
         if(2==nDimensionCount)
-            aAxis.setTransformationSceneToScreen( m_aMatrixSceneToScreen );
-        aAxis.setScales( m_aExplicitScales );
-        aAxis.createShapes();
+            aGrid.setTransformationSceneToScreen( m_aMatrixSceneToScreen );
+        aGrid.setScales( this->getExplicitScales( nDimensionIndex, nAxisIndex), bSwapXAndY );
+        aGrid.createShapes();
     }
 }
 
