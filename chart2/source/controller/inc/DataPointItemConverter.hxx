@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPointItemConverter.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:22:09 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:53:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,11 +39,14 @@
 #include "GraphicPropertyItemConverter.hxx"
 #include "chartview/NumberFormatterWrapper.hxx"
 
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
-#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
-#include <com/sun/star/awt/Size.hpp>
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 
 #include <memory>
@@ -64,15 +67,22 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xChartModel,
         const ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XComponentContext > & xContext,
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
         NumberFormatterWrapper * pNumFormatter,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
         GraphicPropertyItemConverter::eGraphicObjectType eMapTo =
             GraphicPropertyItemConverter::FILLED_DATA_POINT,
         ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
             ::std::auto_ptr< ::com::sun::star::awt::Size >(),
-        bool bIncludeStatistics = false );
+        bool bDataSeries = false,
+        bool bUseSpecialFillColor = false,
+        sal_Int32 nSpecialFillColor = 0 );
+
     virtual ~DataPointItemConverter();
 
     virtual void FillItemSet( SfxItemSet & rOutItemSet ) const;
@@ -80,7 +90,7 @@ public:
 
 protected:
     virtual const USHORT * GetWhichPairs() const;
-    virtual bool GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const;
+    virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const;
 
     virtual void FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const
         throw( ::com::sun::star::uno::Exception );
@@ -90,7 +100,10 @@ protected:
 private:
     ::std::vector< ItemConverter * >    m_aConverters;
     NumberFormatterWrapper *            m_pNumberFormatterWrapper;
-    bool                                m_bIncludeStatistics;
+    bool                                m_bDataSeries;
+    bool                                m_bColorPerPoint;
+    bool                                m_bUseSpecialFillColor;
+    sal_Int32                           m_nSpecialFillColor;
 };
 
 } //  namespace wrapper
