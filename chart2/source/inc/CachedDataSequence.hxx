@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CachedDataSequence.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:37:45 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:12:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #define _CHART_CACHEDDATASEQUENCE_HXX
 
 // helper classes
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
-#include <cppuhelper/compbase3.hxx>
+#ifndef _CPPUHELPER_COMPBASE6_HXX_
+#include <cppuhelper/compbase6.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
@@ -64,12 +64,20 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 
-//
-#ifndef _COM_SUN_STAR_CHART2_XNUMERICALDATASEQUENCE_HPP_
-#include <com/sun/star/chart2/XNumericalDataSequence.hpp>
+#ifndef _COM_SUN_STAR_CHART2_DATA_XDATASEQUENCE_HPP_
+#include <com/sun/star/chart2/data/XDataSequence.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART2_XTEXTUALDATASEQUENCE_HPP_
-#include <com/sun/star/chart2/XTextualDataSequence.hpp>
+#ifndef _COM_SUN_STAR_CHART2_DATA_XNUMERICALDATASEQUENCE_HPP_
+#include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_DATA_XTEXTUALDATASEQUENCE_HPP_
+#include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
+#include <com/sun/star/util/XCloneable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFYBROADCASTER_HPP_
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
 #endif
 
 #include <vector>
@@ -80,9 +88,12 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakComponentImplHelper3<
-    ::com::sun::star::chart2::XNumericalDataSequence,
-    ::com::sun::star::chart2::XTextualDataSequence,
+typedef ::cppu::WeakComponentImplHelper6<
+    ::com::sun::star::chart2::data::XDataSequence,
+    ::com::sun::star::chart2::data::XNumericalDataSequence,
+    ::com::sun::star::chart2::data::XTextualDataSequence,
+    ::com::sun::star::util::XCloneable,
+    ::com::sun::star::util::XModifyBroadcaster,
     ::com::sun::star::lang::XServiceInfo >
     CachedDataSequence_Base;
 }
@@ -107,10 +118,18 @@ public:
      */
     explicit CachedDataSequence( const ::std::vector< ::rtl::OUString > & rVector );
 
+    /** creates a sequence and initializes it with the given string.  This is
+        especially useful for labels, which only have one element.
+     */
+    explicit CachedDataSequence( const ::rtl::OUString & rSingleText );
+
     /** creates a sequence and initializes it with the given vector of arbitrary
         content
      */
     explicit CachedDataSequence( const ::std::vector< ::com::sun::star::uno::Any > & rVector );
+
+    /// Copy CTOR
+    explicit CachedDataSequence( const CachedDataSequence & rSource );
 
     virtual ~CachedDataSequence();
 
@@ -127,6 +146,10 @@ public:
      */
     void PreferTextualData();
 
+    /** Allows setting the source-identifier.  This should only be called once.
+        (Late initialization)
+     */
+//     void SetSourceIdentifier( const ::rtl::OUString & aId );
 
     /// declare XServiceInfo methods
     APPHELPER_XSERVICEINFO_DECL()
@@ -146,29 +169,47 @@ protected:
     /// @see ::comphelper::OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
 
+    // ____ XDataSequence ____
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getData()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getSourceRangeRepresentation()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL generateLabel(
+        ::com::sun::star::chart2::data::LabelOrigin nLabelOrigin )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getNumberFormatKeyByIndex( ::sal_Int32 nIndex )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+               ::com::sun::star::uno::RuntimeException);
+
     // ____ XNumericalDataSequence ____
-    /// @see ::com::sun::star::chart::XNumericalDataSequence
+    /// @see ::com::sun::star::chart::data::XNumericalDataSequence
     virtual ::com::sun::star::uno::Sequence< double > SAL_CALL getNumericalData() throw (::com::sun::star::uno::RuntimeException);
-    /// @see ::com::sun::star::chart::XNumericalDataSequence
-//     virtual void SAL_CALL setNumericalData( const ::com::sun::star::uno::Sequence< double >& aData ) throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XTextualDataSequence ____
-    /// @see ::com::sun::star::chart::XTextualDataSequence
+    /// @see ::com::sun::star::chart::data::XTextualDataSequence
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getTextualData() throw (::com::sun::star::uno::RuntimeException);
-    /// @see ::com::sun::star::chart::XNumericalDataSequence
-//     virtual void SAL_CALL setTextualData( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aData ) throw (::com::sun::star::uno::RuntimeException);
 
-    // ____ XDataSequence ____
-    /// @see ::com::sun::star::chart::XDataSequence
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getData() throw (::com::sun::star::uno::RuntimeException);
-    /// @see ::com::sun::star::chart::XDataSequence
-    virtual ::rtl::OUString SAL_CALL getSourceIdentifier() throw (::com::sun::star::uno::RuntimeException);
+    // ____ XCloneable ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XModifyBroadcaster ____
+    virtual void SAL_CALL addModifyListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeModifyListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    void fireModifyEvent();
 
     mutable ::osl::Mutex                  m_aMutex;
 
     // <properties>
-    sal_Int32          m_nNumberFormatKey;
-    ::rtl::OUString    m_sRole;
+    sal_Int32                                       m_nNumberFormatKey;
+    ::rtl::OUString                                 m_sRole;
+    sal_Bool                                        m_bIsHidden;
+    ::com::sun::star::uno::Sequence< sal_Int32 >    m_aHiddenValues;
     // </properties>
 
     enum DataType
@@ -206,17 +247,14 @@ protected:
     void Impl_setMixedData( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > & rSeq );
 
 private:
-    ::rtl::OUString                                     m_sSourceIdentifier;
-
     enum DataType                                       m_eCurrentDataType;
 
     ::com::sun::star::uno::Sequence< double >           m_aNumericalSequence;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTextualSequence;
     ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Any >                    m_aMixedSequence;
-
-    sal_Bool                                            m_bIsHidden;
-    ::com::sun::star::uno::Sequence< sal_Int32 >        m_aHiddenValues;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >
+        m_xModifyEventForwarder;
 };
 
 }  // namespace chart
