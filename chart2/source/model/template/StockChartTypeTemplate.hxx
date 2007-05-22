@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StockChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:25:05 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:52:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ namespace chart
 {
 
 class StockChartTypeTemplate :
-        public helper::MutexContainer,
+        public MutexContainer,
         public ChartTypeTemplate,
         public ::property::OPropertySet
 {
@@ -60,11 +60,20 @@ public:
         VOL_OPEN_LOW_HI_CLOSE
     };
 
+    /** CTOR
+
+        @param bJapaneseStyle
+            If true, the candlesticks are drawn as solid white or black boxes
+            depending on rising or falling stock-values.  Otherwise the
+            open-value will be drawn as a small line at the left side of a
+            straight vertical line, and the close-value on the right hand side.
+     */
     explicit StockChartTypeTemplate(
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext,
         const ::rtl::OUString & rServiceName,
-        StockVariant eVariant );
+        StockVariant eVariant,
+        bool bJapaneseStyle );
     virtual ~StockChartTypeTemplate();
 
     /// XServiceInfo declarations
@@ -89,23 +98,46 @@ protected:
     // ____ XChartTypeTemplate ____
     virtual sal_Bool SAL_CALL matchesTemplate(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram >& xDiagram )
+            ::com::sun::star::chart2::XDiagram >& xDiagram,
+        sal_Bool bAdaptProperties )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType > SAL_CALL
+        getChartTypeForNewSeries( const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XChartType > >& aFormerlyUsedChartTypes )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataInterpreter > SAL_CALL getDataInterpreter()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL applyStyle(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& xSeries,
+        ::sal_Int32 nChartTypeIndex,
+        ::sal_Int32 nSeriesIndex,
+        ::sal_Int32 nSeriesCount )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL resetStyles(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram )
         throw (::com::sun::star::uno::RuntimeException);
 
+    // ChartTypeTemplate
+    virtual sal_Int32 getAxisCountByDimension( sal_Int32 nDimension );
+
     // ____ ChartTypeTemplate ____
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XChartType > getDefaultChartType()
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeriesTreeParent > createDataSeriesTree(
+    virtual void createChartTypes(
+            const ::com::sun::star::uno::Sequence<
+                 ::com::sun::star::uno::Sequence<
+                    ::com::sun::star::uno::Reference<
+                        ::com::sun::star::chart2::XDataSeries > > >& aSeriesSeq,
             const ::com::sun::star::uno::Sequence<
                 ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XDataSeries > >& aSeriesSeq,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys
+                    ::com::sun::star::chart2::XCoordinateSystem > > & rCoordSys,
+            const ::com::sun::star::uno::Sequence<
+                  ::com::sun::star::uno::Reference<
+                      ::com::sun::star::chart2::XChartType > > & aOldChartTypesSeq
             );
 
 private:
+    // todo: deprecate this variable
+    StockVariant  m_eStockVariant;
 };
 
 } //  namespace chart
