@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ColumnLineChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:20:14 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:47:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #define CHART_COLUMNLINECHARTTYPETEMPLATE_HXX
 
 #include "ChartTypeTemplate.hxx"
+#include "StackMode.hxx"
 
 #include "OPropertySet.hxx"
 #include "MutexContainer.hxx"
@@ -44,15 +45,11 @@
 #include <comphelper/uno3.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_CHART2_STACKMODE_HPP_
-#include <com/sun/star/chart2/StackMode.hpp>
-#endif
-
 namespace chart
 {
 
 class ColumnLineChartTypeTemplate :
-        public helper::MutexContainer,
+        public MutexContainer,
         public ChartTypeTemplate,
         public ::property::OPropertySet
 {
@@ -61,7 +58,7 @@ public:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext,
         const ::rtl::OUString & rServiceName,
-        ::com::sun::star::chart2::StackMode eStackMode,
+        StackMode eStackMode,
         sal_Int32 nNumberOfLines );
     virtual ~ColumnLineChartTypeTemplate();
 
@@ -87,28 +84,35 @@ protected:
     // ____ XChartTypeTemplate ____
     virtual sal_Bool SAL_CALL matchesTemplate(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram >& xDiagram )
+            ::com::sun::star::chart2::XDiagram >& xDiagram,
+        sal_Bool bAdaptProperties )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType > SAL_CALL
+        getChartTypeForNewSeries( const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XChartType > >& aFormerlyUsedChartTypes )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataInterpreter > SAL_CALL getDataInterpreter()
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ ChartTypeTemplate ____
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeriesTreeParent > createDataSeriesTree(
+    virtual void createChartTypes(
+            const ::com::sun::star::uno::Sequence<
+                ::com::sun::star::uno::Sequence<
+                    ::com::sun::star::uno::Reference<
+                        ::com::sun::star::chart2::XDataSeries > > > & aSeriesSeq,
             const ::com::sun::star::uno::Sequence<
                 ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XDataSeries > >& aSeriesSeq,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys
+                    ::com::sun::star::chart2::XCoordinateSystem > > & rCoordSys,
+            const ::com::sun::star::uno::Sequence<
+                  ::com::sun::star::uno::Reference<
+                      ::com::sun::star::chart2::XChartType > > & aOldChartTypesSeq
             );
 
-    virtual ::com::sun::star::chart2::StackMode getYStackMode() const;
-
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XChartType > getDefaultChartType()
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const;
 
 private:
-    ::com::sun::star::chart2::StackMode
-                       m_eStackMode;
+    StackMode          m_eStackMode;
 };
 
 } //  namespace chart
