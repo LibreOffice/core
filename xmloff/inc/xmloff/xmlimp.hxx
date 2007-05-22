@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 13:32:48 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:04:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,6 +150,8 @@ class String;
 #define IMPORT_OOO_NAMESPACES   0x0100
 #define IMPORT_ALL          0xffff
 
+
+
 class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper6<
              ::com::sun::star::xml::sax::XExtendedDocumentHandler,
              ::com::sun::star::lang::XServiceInfo,
@@ -209,6 +211,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper6<
 protected:
     ::com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > mxStatusIndicator;
     sal_Bool                    mbIsFormsSupported;
+    bool                        mbIsGraphicLoadOnDemmandSupported;
 
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
@@ -234,6 +237,7 @@ protected:
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver >& GetGraphicResolver() const { return mxGraphicResolver; }
     void SetGraphicResolver( com::sun::star::uno::Reference< com::sun::star::document::XGraphicObjectResolver >& _xGraphicResolver );
+
 
     void _CreateNumberFormatsSupplier();
     void _CreateDataStylesImport();
@@ -401,6 +405,7 @@ public:
     sal_Unicode ConvStarBatsCharToStarSymbol( sal_Unicode c );
     sal_Unicode ConvStarMathCharToStarSymbol( sal_Unicode c );
 
+
     /**
      * Record an error condition that occured during import. The
      * behavior of SetError can be modified using the error flag
@@ -464,6 +469,14 @@ public:
         If false is returned the build ids are not available (yet).
     **/
     bool getBuildIds( sal_Int32& rUPD, sal_Int32& rBuild ) const;
+
+    /** If true, the URL for graphic shapes may be stored as a package URL and
+        loaded later (on demmand) by the application. Otherwise graphics are
+        loaded immediately and the graphic shape gets the graphic manager URL.
+
+        @see <member>mbIsGraphicLoadOnDemmandSupported</member>
+     */
+    bool isGraphicLoadOnDemmandSupported() const;
 };
 
 inline UniReference< XMLTextImportHelper > SvXMLImport::GetTextImport()
@@ -525,5 +538,6 @@ inline SvXMLNumFmtHelper* SvXMLImport::GetDataStylesImport()
 
     return mpNumImport;
 }
+
 
 #endif  //  _XMLOFF_XMLIMP_HXX
