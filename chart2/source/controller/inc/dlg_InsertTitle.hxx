@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertTitle.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:27:49 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:59:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,67 +35,36 @@
 #ifndef _CHART2_DLG_INSERT_TITLE_GRID_HXX
 #define _CHART2_DLG_INSERT_TITLE_GRID_HXX
 
-// header for class ModalDialog
+#include "TitleDialogData.hxx"
+
 #ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
 #endif
-// header for class Edit
-#ifndef _SV_EDIT_HXX
-#include <vcl/edit.hxx>
-#endif
-// header for class CheckBox
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
 #endif
-
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include <com/sun/star/uno/Sequence.hxx>
-#endif
+//for auto_ptr
+#include <memory>
 
 //.............................................................................
 namespace chart
 {
 //.............................................................................
-
-struct InsertTitleDialogData
-{
-    ::com::sun::star::uno::Sequence< sal_Bool > aPossibilityList;
-    ::com::sun::star::uno::Sequence< sal_Bool > aExistenceList;
-    ::com::sun::star::uno::Sequence< rtl::OUString > aTextList;
-
-    InsertTitleDialogData();
-};
-
-/*************************************************************************
-|*
-|* Titel-Dialog
-|*
-\************************************************************************/
-
+class TitleResources;
 class SchTitleDlg : public ModalDialog
 {
 private:
-    CheckBox            aCbxMain;
-    Edit                aEdtMain;
-    CheckBox            aCbxSub;
-    Edit                aEdtSub;
-    CheckBox            aCbxXAxis;
-    Edit                aEdtXAxis;
-    CheckBox            aCbxYAxis;
-    Edit                aEdtYAxis;
-    CheckBox            aCbxZAxis;
-    Edit                aEdtZAxis;
+    ::std::auto_ptr< TitleResources >  m_apTitleResources;
+
     OKButton            aBtnOK;
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;
 
-    DECL_LINK(EnableTitleHdl, CheckBox*);
-
 public:
-    SchTitleDlg( Window* pParent, const InsertTitleDialogData& rInput );
+    SchTitleDlg( Window* pParent, const TitleDialogData& rInput );
     virtual ~SchTitleDlg();
 
-    void getResult( InsertTitleDialogData& rOutput );
+    void getResult( TitleDialogData& rOutput );
 };
 
 //.............................................................................
