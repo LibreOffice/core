@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:51:47 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:37:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,6 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
         aTabFT.Hide();
         aTabMF.Hide();
     }
-    aAutoUpdateFields.SetClickHdl(LINK(this, SwLoadOptPage, UpdateHdl));
 }
 
 /*-----------------18.01.97 12.43-------------------
@@ -172,14 +171,6 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
 
 SwLoadOptPage::~SwLoadOptPage()
 {
-}
-/* -----------------09.02.99 12:10-------------------
- *
- * --------------------------------------------------*/
-IMPL_LINK(  SwLoadOptPage, UpdateHdl, CheckBox*, pBox )
-{
-    aAutoUpdateCharts.Enable(pBox->IsChecked());
-    return 0;
 }
 
 /*-----------------18.01.97 12.43-------------------
@@ -278,7 +269,6 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
 
     aAutoUpdateFields.Check(nFldFlags != AUTOUPD_OFF);
     aAutoUpdateCharts.Check(nFldFlags == AUTOUPD_FIELD_AND_CHARTS);
-    aAutoUpdateCharts.Enable(nFldFlags != AUTOUPD_OFF);
 
     switch (nOldLinkMode)
     {
