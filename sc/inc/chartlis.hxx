@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chartlis.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 11:53:22 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:38:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,10 +104,11 @@ public:
     BOOL            IsDirty() const { return bDirty; }
     void            SetDirty( BOOL bFlg ) { bDirty = bFlg; }
 
+    void            UpdateChartIntersecting( const ScRange& rRange );
+
     // if chart series ranges are to be updated later on (e.g. DeleteTab, InsertTab)
     void            ScheduleSeriesRanges()      { bSeriesRangesScheduled = TRUE; }
     void            UpdateScheduledSeriesRanges();
-    void            UpdateSeriesRangesIntersecting( const ScRange& rRange );
     void            UpdateSeriesRanges();
 
     BOOL            operator==( const ScChartListener& );
@@ -154,7 +155,7 @@ public:
     void            SetRangeDirty( const ScRange& rRange );     // z.B. Zeilen/Spalten
 
     void            UpdateScheduledSeriesRanges();
-    void            UpdateSeriesRangesContainingTab( SCTAB nTab );
+    void            UpdateChartsContainingTab( SCTAB nTab );
 
     BOOL            operator==( const ScChartListenerCollection& );
 };
