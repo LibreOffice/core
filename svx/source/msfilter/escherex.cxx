@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:31:22 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:19:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,9 +209,6 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_COLORMODE_HPP_
 #include <com/sun/star/drawing/ColorMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_BITMAPMODE_HPP_
-#include <com/sun/star/drawing/BitmapMode.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_POSITION3D_HPP_
 #include <com/sun/star/drawing/Position3D.hpp>
@@ -524,11 +521,8 @@ sal_uInt32 EscherPropertyContainer::GetGradientColor(
 }
 
 void EscherPropertyContainer::CreateGradientProperties(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet )
+    const ::com::sun::star::awt::Gradient & rGradient )
 {
-    ::com::sun::star::uno::Any          aAny;
-    ::com::sun::star::awt::Gradient*    pGradient = NULL;
-
     sal_uInt32  nFillType = ESCHER_FillShadeScale;
     sal_uInt32  nAngle = 0;
     sal_uInt32  nFillFocus = 0;
@@ -537,44 +531,38 @@ void EscherPropertyContainer::CreateGradientProperties(
     sal_uInt32  nFirstColor = 0;
     bool        bWriteFillTo = false;
 
-    if ( EscherPropertyValueHelper::GetPropertyValue(
-            aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillGradient" ) ), sal_False ) )
+    switch ( rGradient.Style )
     {
-        pGradient = (::com::sun::star::awt::Gradient*)aAny.getValue();
-
-        switch ( pGradient->Style )
+        case ::com::sun::star::awt::GradientStyle_LINEAR :
+        case ::com::sun::star::awt::GradientStyle_AXIAL :
         {
-            case ::com::sun::star::awt::GradientStyle_LINEAR :
-            case ::com::sun::star::awt::GradientStyle_AXIAL :
-            {
-                nFillType = ESCHER_FillShadeScale;
-                nAngle = (pGradient->Angle * 0x10000) / 10;
-                nFillFocus = ( sal::static_int_cast<int>(pGradient->Style) ==
-                                sal::static_int_cast<int>(GradientStyle_LINEAR)) ? 0 : 50;
-            }
-            break;
-            case ::com::sun::star::awt::GradientStyle_RADIAL :
-            case ::com::sun::star::awt::GradientStyle_ELLIPTICAL :
-            case ::com::sun::star::awt::GradientStyle_SQUARE :
-            case ::com::sun::star::awt::GradientStyle_RECT :
-            {
-                nFillLR = (pGradient->XOffset * 0x10000) / 100;
-                nFillTB = (pGradient->YOffset * 0x10000) / 100;
-                if ( ((nFillLR > 0) && (nFillLR < 0x10000)) || ((nFillTB > 0) && (nFillTB < 0x10000)) )
-                    nFillType = ESCHER_FillShadeShape;
-                else
-                    nFillType = ESCHER_FillShadeCenter;
-                nFirstColor = 1;
-                bWriteFillTo = true;
-            }
-            break;
-            case ::com::sun::star::awt::GradientStyle_MAKE_FIXED_SIZE : break;
+            nFillType = ESCHER_FillShadeScale;
+            nAngle = (rGradient.Angle * 0x10000) / 10;
+            nFillFocus = (sal::static_int_cast<int>(rGradient.Style) ==
+                          sal::static_int_cast<int>(GradientStyle_LINEAR)) ? 0 : 50;
         }
+        break;
+        case ::com::sun::star::awt::GradientStyle_RADIAL :
+        case ::com::sun::star::awt::GradientStyle_ELLIPTICAL :
+        case ::com::sun::star::awt::GradientStyle_SQUARE :
+        case ::com::sun::star::awt::GradientStyle_RECT :
+        {
+            nFillLR = (rGradient.XOffset * 0x10000) / 100;
+            nFillTB = (rGradient.YOffset * 0x10000) / 100;
+            if ( ((nFillLR > 0) && (nFillLR < 0x10000)) || ((nFillTB > 0) && (nFillTB < 0x10000)) )
+                nFillType = ESCHER_FillShadeShape;
+            else
+                nFillType = ESCHER_FillShadeCenter;
+            nFirstColor = 1;
+            bWriteFillTo = true;
+        }
+        break;
+        case ::com::sun::star::awt::GradientStyle_MAKE_FIXED_SIZE : break;
     }
     AddOpt( ESCHER_Prop_fillType, nFillType );
     AddOpt( ESCHER_Prop_fillAngle, nAngle );
-    AddOpt( ESCHER_Prop_fillColor, GetGradientColor( pGradient, nFirstColor ) );
-    AddOpt( ESCHER_Prop_fillBackColor, GetGradientColor( pGradient, nFirstColor ^ 1 ) );
+    AddOpt( ESCHER_Prop_fillColor, GetGradientColor( &rGradient, nFirstColor ) );
+    AddOpt( ESCHER_Prop_fillBackColor, GetGradientColor( &rGradient, nFirstColor ^ 1 ) );
     AddOpt( ESCHER_Prop_fillFocus, nFillFocus );
     if ( bWriteFillTo )
     {
@@ -583,6 +571,19 @@ void EscherPropertyContainer::CreateGradientProperties(
         AddOpt( ESCHER_Prop_fillToRight, nFillLR );
         AddOpt( ESCHER_Prop_fillToBottom, nFillTB );
     }
+}
+
+void EscherPropertyContainer::CreateGradientProperties(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet )
+{
+    ::com::sun::star::uno::Any aAny;
+    ::com::sun::star::awt::Gradient aGradient;
+    if ( EscherPropertyValueHelper::GetPropertyValue(
+            aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillGradient" ) ), sal_False ) )
+    {
+        aGradient = *static_cast< const ::com::sun::star::awt::Gradient* >( aAny.getValue() );
+    }
+    CreateGradientProperties( aGradient );
 };
 
 void EscherPropertyContainer::CreateFillProperties(
@@ -1273,6 +1274,45 @@ sal_Bool EscherPropertyContainer::CreateOLEGraphicProperties(
                         delete pVisArea;
                     }
                 }
+            }
+        }
+    }
+    return bRetValue;
+}
+
+
+sal_Bool EscherPropertyContainer::CreateEmbeddedBitmapProperties(
+    const ::rtl::OUString& rBitmapUrl, ::com::sun::star::drawing::BitmapMode eBitmapMode )
+{
+    sal_Bool bRetValue = sal_False;
+    String aVndUrl( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
+    String aBmpUrl( rBitmapUrl );
+    xub_StrLen nIndex = aBmpUrl.Search( aVndUrl, 0 );
+    if( nIndex != STRING_NOTFOUND )
+    {
+        // note: += ist not defined for xub_StrLen -> conversion to int and back to xub_StrLen
+        nIndex = nIndex + aVndUrl.Len();
+        if( aBmpUrl.Len() > nIndex )
+        {
+            ByteString aUniqueId( aBmpUrl, nIndex, aBmpUrl.Len() - nIndex, RTL_TEXTENCODING_UTF8 );
+            if( aUniqueId.Len() > 0 )
+            {
+                EscherGraphicProvider aProvider;
+                SvMemoryStream aMemStrm;
+                Rectangle aRect;
+                if ( aProvider.GetBlibID( aMemStrm, aUniqueId, aRect ) )
+                {
+                    // grab BLIP from stream and insert directly as complex property
+                    // ownership of stream memory goes to complex property
+                    aMemStrm.ObjectOwnsMemory( FALSE );
+                    sal_uInt8* pBuf = (sal_uInt8*) aMemStrm.GetData();
+                    sal_uInt32 nSize = aMemStrm.Seek( STREAM_SEEK_TO_END );
+                    AddOpt( ESCHER_Prop_fillBlip, sal_True, nSize, pBuf, nSize );
+                    bRetValue = sal_True;
+                }
+                // bitmap mode property
+                bool bRepeat = eBitmapMode == ::com::sun::star::drawing::BitmapMode_REPEAT;
+                AddOpt( ESCHER_Prop_fillType, bRepeat ? ESCHER_FillTexture : ESCHER_FillPicture );
             }
         }
     }
