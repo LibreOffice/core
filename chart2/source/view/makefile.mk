@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:44:05 $
+#   last change: $Author: vg $ $Date: 2007-05-22 19:08:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,13 @@ LIB1FILES=		\
 SHL1TARGET=		$(TARGET)$(UPD)$(DLLPOSTFIX)
 
 #indicates dependencies:
-SHL1DEPN=
+.IF "$(COM)" == "MSC"
+SHL1DEPN = \
+        $(LB)$/icharttools.lib
+.ELSE
+SHL1DEPN =
+.ENDIF
+
 #Specifies an import library to create. For Win32 only.
 SHL1IMPLIB=		i$(TARGET)
 
@@ -83,7 +89,9 @@ SHL1STDLIBS=	$(CHARTTOOLS)		\
                 $(SVXLIB)			\
                 $(TKLIB)			\
                 $(TOOLSLIB) 		\
+                $(UNOTOOLSLIB)      \
                 $(I18NISOLANGLIB)   \
+                $(BASEGFXLIB) 		\
                 $(VCLLIB)           \
                 $(SFXLIB)			\
                 $(BASEGFXLIB)
@@ -94,12 +102,10 @@ SHL1STDLIBS=	$(CHARTTOOLS)		\
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
 #Specifies the library name to parse for symbols. For Win32 only.
-.IF "$(GUI)$(COM)"=="WNTGCC"
 DEFLIB1NAME=	$(TARGET)
-.ENDIF
 
 #A file of symbols to export.
-DEF1EXPORTFILE=	$(PRJ)$/source$/inc$/exports.dxp
+#DEF1EXPORTFILE=	$(PRJ)$/source$/inc$/exports.dxp
 
 #--------definition file
 
