@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlformula.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:28:54 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:51:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -510,9 +510,26 @@ XclImpStream& operator>>( XclImpStream& rStrm, XclTokenArray& rTokArr )
     return rStrm;
 }
 
+XclImpStream& operator>>( XclImpStream& rStrm, XclTokenArrayRef& rxTokArr )
+{
+    if( !rxTokArr )
+        rxTokArr.reset( new XclTokenArray );
+    rxTokArr->Read( rStrm );
+    return rStrm;
+}
+
 XclExpStream& operator<<( XclExpStream& rStrm, const XclTokenArray& rTokArr )
 {
     rTokArr.Write( rStrm );
+    return rStrm;
+}
+
+XclExpStream& operator<<( XclExpStream& rStrm, const XclTokenArrayRef& rxTokArr )
+{
+    if( rxTokArr.is() )
+        rxTokArr->Write( rStrm );
+    else
+        rStrm << sal_uInt16( 0 );
     return rStrm;
 }
 
