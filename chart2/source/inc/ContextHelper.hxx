@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ContextHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:38:57 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:14:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,9 @@
 #ifndef CHART_CONTEXTHELPER_HXX
 #define CHART_CONTEXTHELPER_HXX
 
-#include "InlineContainer.hxx"
+#ifndef INCLUDED_COMPHELPER_INLINE_CONTAINER_HXX
+#include <comphelper/InlineContainer.hxx>
+#endif
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/Any.hxx>
