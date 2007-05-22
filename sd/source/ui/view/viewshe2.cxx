@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:37:00 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:13:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,15 @@
 #ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
+#include <com/sun/star/drawing/FillStyle.hpp>
+#endif
 
 #include "ViewShell.hxx"
 #include "ViewShellHint.hxx"
@@ -60,9 +69,6 @@
 #endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
-#endif
-#ifndef _SCH_DLL_HXX //autogen
-#include <sch/schdll.hxx>
 #endif
 #ifndef _SVX_RULER_HXX //autogen
 #include <svx/ruler.hxx>
@@ -148,6 +154,34 @@
 using namespace com::sun::star;
 
 const String aEmptyStr;
+
+namespace
+{
+void lcl_setTransparentBackgroundAtChart(
+    const uno::Reference < embed::XEmbeddedObject > & xEmbObj )
+{
+    if( xEmbObj.is())
+    {
+        uno::Reference< chart2::XChartDocument > xChartDoc( xEmbObj->getComponent(), uno::UNO_QUERY );
+        OSL_ENSURE( xChartDoc.is(), "Trying to set chart property to non-chart OLE" );
+        if( !xChartDoc.is())
+            return;
+
+        try
+        {
+            uno::Reference< beans::XPropertySet > xPageProp( xChartDoc->getPageBackground());
+            if( xPageProp.is())
+                xPageProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FillStyle")),
+                                             uno::makeAny( drawing::FillStyle_NONE ));
+        }
+        catch( const uno::Exception & )
+        {
+            OSL_ENSURE( false, "Exception caught in lcl_setTransparentBackgroundAtChart" );
+        }
+    }
+}
+
+} // anonymous namespace
 
 namespace sd {
 
@@ -924,10 +958,10 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
     SfxErrorContext aEC(ERRCTX_SO_DOVERB, GetActiveWindow(), RID_SO_ERRCTX);
     BOOL bAbort = FALSE;
-    BOOL bChartActive = FALSE;
     GetDocSh()->SetWaitCursor( TRUE );
     SfxViewShell* pViewShell = GetViewShell();
     OSL_ASSERT (pViewShell!=NULL);
+    bool bSetTransparentChartBackground = false;
 
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     if ( !xObj.is() )
@@ -942,7 +976,10 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         if( aName.EqualsAscii( "StarChart" ) || aName.EqualsAscii("StarOrg") )
         {
             if( SvtModuleOptions().IsChart() )
+            {
                 aClass = SvGlobalName( SO3_SCH_CLASSID );
+                bSetTransparentChartBackground = true;
+            }
         }
         else if( aName.EqualsAscii( "StarCalc" ))
         {
@@ -1012,13 +1049,6 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
             GetViewShellBase().SetVerbs( xObj->getSupportedVerbs() );
 
-            if( aName.EqualsAscii( "StarChart" ))
-            {
-                bChartActive = TRUE;
-                // TODO/LATER: looks like there is no need to update graphical replacement, but it should be checked.
-                SchDLL::Update(xObj, NULL, GetActiveWindow());      // BM: use different DLL-call
-            }
-
             nVerb = SVVERB_SHOW;
         }
         else
@@ -1061,6 +1091,11 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         aRect.SetSize(aObjAreaSize);
         // the object area size must be set after scaling, since it triggers the resizing
         pSdClient->SetObjArea(aRect);
+
+        if( bSetTransparentChartBackground && xObj.is())
+        {
+            lcl_setTransparentBackgroundAtChart( xObj );
+        }
 
         pSdClient->DoVerb(nVerb);   // ErrCode wird ggf. vom Sfx ausgegeben
         pViewShell->GetViewFrame()->GetBindings().Invalidate(
