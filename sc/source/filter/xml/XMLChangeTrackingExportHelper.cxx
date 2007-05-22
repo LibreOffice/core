@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:43:54 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:01:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,9 @@
 #endif
 #ifndef SC_TEXTSUNO_HXX
 #include "textuno.hxx"
+#endif
+#ifndef SC_RANGEUTL_HXX
+#include "rangeutl.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
@@ -426,7 +429,7 @@ void ScChangeTrackingExportHelper::WriteFormulaCell(const ScBaseCell* pCell, con
     if (pFormulaCell)
     {
         rtl::OUString sAddress;
-        ScXMLConverter::GetStringFromAddress(sAddress, pFormulaCell->aPos, rExport.GetDocument());
+        ScRangeStringConverter::GetStringFromAddress(sAddress, pFormulaCell->aPos, rExport.GetDocument());
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CELL_ADDRESS, sAddress);
         String sFormula;
         pFormulaCell->GetEnglishFormula(sFormula, sal_True);
@@ -911,7 +914,7 @@ void ScChangeTrackingExportHelper::WriteChangeViewSettings()
                     SvXMLElementExport aEqualCommentElem(rExport, XML_NAMESPACE_TABLE, XML_EQUAL_COMMENT, sal_True, sal_True);
                 }
                 rtl::OUString sRangeList;
-                ScXMLConverter::GetStringFromRangeList(sRangeList, &(pViewSettings->GetTheRangeList()), rExport.GetDocument());
+                ScRangeStringConverter::GetStringFromRangeList(sRangeList, &(pViewSettings->GetTheRangeList()), rExport.GetDocument());
                 if (sRangeList.getLength() && !pViewSettings->HasRange())
                 {
                     if (pViewSettings->HasRange())
