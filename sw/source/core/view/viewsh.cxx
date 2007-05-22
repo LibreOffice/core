@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:12:00 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:35:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2453,3 +2453,5 @@ const IDocumentFieldsAccess* ViewShell::getIDocumentFieldsAccess() const { retur
 IDocumentContentOperations* ViewShell::getIDocumentContentOperations() { return pDoc; }
 IDocumentStylePoolAccess* ViewShell::getIDocumentStylePoolAccess() { return pDoc; }
 const IDocumentStatistics* ViewShell::getIDocumentStatistics() const { return pDoc; }
+IDocumentUndoRedo* ViewShell::getIDocumentUndoRedoAccess() { return pDoc; }
+
