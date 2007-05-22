@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StatisticsItemConverter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:25:37 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:56:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ public:
 
 protected:
     virtual const USHORT * GetWhichPairs() const;
-    virtual bool GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const;
+    virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const;
 
     virtual void FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const
         throw( ::com::sun::star::uno::Exception );
