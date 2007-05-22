@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewElementListProvider.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:26:05 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:57:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@
 #endif
 
 class FontList;
-class SvNumberFormatter;
 
 //.............................................................................
 namespace chart
@@ -51,20 +50,19 @@ namespace chart
 //.............................................................................
 
 class DrawModelWrapper;
-class NumberFormatterWrapper;
 
 class ViewElementListProvider
 {
 public:
-    ViewElementListProvider( DrawModelWrapper* pDrawModelWrapper, NumberFormatterWrapper* pNumberFormatterWrapper );
+    ViewElementListProvider( DrawModelWrapper* pDrawModelWrapper );
     virtual ~ViewElementListProvider();
 
-    XColorTable*    GetColorTable() const;//from class SdrModel
-    XDashList*      GetDashList() const;//from class SdrModel
-    XLineEndList*   GetLineEndList() const;//from class SdrModel
-    XGradientList*  GetGradientList() const;//from class SdrModel
-    XHatchList*     GetHatchList() const;//from class SdrModel
-    XBitmapList*    GetBitmapList() const;//from class SdrModel
+    XColorTable*    GetColorTable() const;
+    XDashList*      GetDashList() const;
+    XLineEndList*   GetLineEndList() const;
+    XGradientList*  GetGradientList() const;
+    XHatchList*     GetHatchList() const;
+    XBitmapList*    GetBitmapList() const;
 
     //create chartspecific symbols for linecharts
     SdrObjList*     GetSymbolList() const;
@@ -73,29 +71,9 @@ public:
     FontList*       getFontList() const;
     //SfxPrinter*   getPrinter();
 
-        //infrastructure
-    /** introduced for #101318#:
-
-        The chart-internal number formatter is necessary to render values for
-        the UI with a higher standard precision than the one you might get
-        externally (from Calc).  As you should not modify the precision of an
-        external number formatter, this one comes in handy.
-
-        Note that for the dialog only the standard format is used, i.e., any
-        user-defined formats that are only available in the external formatter
-        are not required here.
-
-        This method is used by SchAttribTabDlg::PageCreated (attrib.cxx)
-
-        @returns the chart internal number formatter
-     */
-    SvNumberFormatter * GetOwnNumberFormatter() const;
-    SvNumberFormatter * GetNumFormatter() const;
-
 private:
     DrawModelWrapper*   m_pDrawModelWrapper;
     mutable FontList*   m_pFontList;
-    mutable NumberFormatterWrapper* m_pNumberFormatterWrapper;
 };
 
 //.............................................................................
