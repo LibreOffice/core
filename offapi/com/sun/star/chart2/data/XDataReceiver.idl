@@ -1,0 +1,148 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XDataReceiver.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:08:24 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_data_XDataReceiver_idl
+#define com_sun_star_chart2_data_XDataReceiver_idl
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef com_sun_star_chart2_data_XDataProvider_idl
+#include <com/sun/star/chart2/data/XDataProvider.idl>
+#endif
+
+#ifndef com_sun_star_chart2_data_XRangeHighlighter_idl
+#include <com/sun/star/chart2/data/XRangeHighlighter.idl>
+#endif
+
+#ifndef com_sun_star_beans_PropertyValue_idl
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+
+#ifndef __com_sun_star_util_XNumberFormatsSupplier_idl__
+#include <com/sun/star/util/XNumberFormatsSupplier.idl>
+#endif
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+module data
+{
+
+interface XDataReceiver : ::com::sun::star::uno::XInterface
+{
+    /** attaches a component that provides data for the document.
+
+        <p>The previously set data provider will be released.</p>
+
+        @param xProvider
+              The new DataProvider.  If it is an empty reference, the
+              ChartDocument will have no data.
+     */
+    void attachDataProvider( [in] XDataProvider xProvider );
+
+    /** Sets the data for the chart as a whole.  When this method is
+        called, all currently set data is removed.  It is replaced by
+        the data that is returned by the current
+        <type>XDataProvider</type> by using the given range
+        representation.
+
+        @param aRangeRepresentation
+            This range representation must be in a format that is
+            understood by the currently attached
+            <type>XDataProvider</type>.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            If the range representation could not dealt with by the
+            current data provider, or there is currently no data
+            provider at all.
+     */
+//     void setRangeRepresentation( [in] string aRangeRepresentation )
+//         raises( com::sun::star::lang::IllegalArgumentException );
+    void setArguments( [in] sequence< com::sun::star::beans::PropertyValue > aArguments )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    /** returns a list of all range strings for which data has been
+        requested by the most recently attached data provider, and
+        which is still used.
+
+        <p>This list may be used by the data provider to swap charts
+        out of memory, but still get informed by changes of ranges
+        while the chart is not loaded.</p>
+        @return a list of used range strings.
+     */
+    sequence< string > getUsedRangeRepresentations();
+
+    /** Returns the data requested by the most recently attached data
+        provider, that is still used.
+     */
+    XDataSource getUsedData();
+
+    /** attaches an <type>XNumberFormatsSupplier</type> to this
+        <type>XDataReceiver</type>.
+
+        <p>The given number formats will be used for display purposes.</p>
+     */
+    void attachNumberFormatsSupplier( [in] com::sun::star::util::XNumberFormatsSupplier xSupplier );
+
+    /** Returns a component at which a view representing the data of
+        the attached data provider may listen for highlighting the
+        data ranges used by the currently selected objects in the data
+        receiver component.
+
+        <p>This is typically used by a spreadsheet to hightlight the
+        ranges used by the currently selected object in a chart.</p>
+
+        <p>The range hightlighter is optional, i.e., this method may
+        return an empty object.</p>
+     */
+    XRangeHighlighter getRangeHighlighter();
+};
+
+} ; // data
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif
