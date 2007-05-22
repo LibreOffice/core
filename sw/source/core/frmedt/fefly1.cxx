@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:38:21 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:27:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -951,7 +951,7 @@ void SwFEShell::Insert( const String& rGrfName, const String& rFltName,
     }
 }
 
-void SwFEShell::InsertObject( const svt::EmbeddedObjectRef&  xObj,
+SwFlyFrmFmt* SwFEShell::InsertObject( const svt::EmbeddedObjectRef&  xObj,
                         const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet,
                         SwFrmFmt* pFrmFmt )
@@ -977,6 +977,8 @@ void SwFEShell::InsertObject( const svt::EmbeddedObjectRef&  xObj,
         else
             GetLayout()->SetAssertFlyPages();
     }
+
+    return pFmt;
 }
 
 
