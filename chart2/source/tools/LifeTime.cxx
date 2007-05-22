@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LifeTime.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:25:21 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:00:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include "LifeTime.hxx"
+#include "macros.hxx"
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -140,7 +141,7 @@ LifeTimeManager::~LifeTimeManager()
 
         if( m_bDisposed || m_bInDispose )
         {
-            OSL_ENSURE( sal_False, "This component is already disposed " );
+            OSL_TRACE( "This component is already disposed " );
             return sal_False; //behave passive if already disposed
         }
 
@@ -258,22 +259,25 @@ CloseableLifeTimeManager::~CloseableLifeTimeManager()
                 lang::EventObject aEvent( xCloseable );
                 ::cppu::OInterfaceIteratorHelper aIt( *pIC );
                 while( aIt.hasMoreElements() )
-                    (static_cast< util::XCloseListener*>(aIt.next()))->queryClosing( aEvent, bDeliverOwnership );
+                {
+                    uno::Reference< util::XCloseListener > xCloseListener( aIt.next(), uno::UNO_QUERY );
+                    if(xCloseListener.is())
+                        xCloseListener->queryClosing( aEvent, bDeliverOwnership );
+                }
             }
         }
     }
     catch( uno::Exception& ex )
     {
         //no mutex is acquired
-        g_close_endTryClose(bDeliverOwnership, sal_False, ex);
-        //the exception is thrown in the above method
+        g_close_endTryClose(bDeliverOwnership, sal_False);
+        throw;
     }
     return sal_True;
 }
 
     void CloseableLifeTimeManager
-::g_close_endTryClose(sal_Bool bDeliverOwnership, sal_Bool bMyVeto, uno::Exception& ex)
-    throw ( uno::Exception )
+::g_close_endTryClose(sal_Bool bDeliverOwnership, sal_Bool bMyVeto)
 {
     //this method is called, if the try to close was not successfull
     osl::Guard< osl::Mutex > aGuard( m_aAccessMutex );
@@ -285,14 +289,11 @@ CloseableLifeTimeManager::~CloseableLifeTimeManager()
     //Mutex needs to be acquired exactly ones
     //mutex may be released inbetween in special case of impl_apiCallCountReachedNull()
     impl_unregisterApiCall(sal_False);
-
-    //this exception must be thrown to the caller
-    throw ex;
 }
 
     sal_Bool CloseableLifeTimeManager
-::g_close_isNeedToCancelLongLastingCalls( sal_Bool bDeliverOwnership, uno::Exception& ex )
-    throw ( uno::Exception )
+::g_close_isNeedToCancelLongLastingCalls( sal_Bool bDeliverOwnership, util::CloseVetoException& ex )
+    throw ( util::CloseVetoException )
 {
     //this method is called when no closelistener has had a veto during queryclosing
     //the method returns false, if nothing stands against closing anymore
@@ -392,7 +393,7 @@ CloseableLifeTimeManager::~CloseableLifeTimeManager()
     }
     catch( uno::Exception& ex )
     {
-        OSL_ENSURE( sal_False, "Exception during notifyClosing of XCloseListener" );
+        ASSERT_EXCEPTION( ex );
     }
 
     if(xCloseable.is())
@@ -491,6 +492,7 @@ LifeTimeGuard::~LifeTimeGuard()
     catch( uno::Exception& ex )
     {
         //@todo ? allow a uno::RuntimeException from dispose to travel through??
+        ex.Context.is(); //to avoid compilation warnings
     }
 }
 
@@ -517,7 +519,7 @@ the XCloseable::close method has to be implemented in the following way:
                         "the model itself could not be closed" ) )
                         , static_cast< ::cppu::OWeakObject* >(this));
 
-        if( m_aLifeTimeManager.g_close_isNeedToCancelLongLastingCalls( bDeliverOwnership, aVetoException) )
+        if( m_aLifeTimeManager.g_close_isNeedToCancelLongLastingCalls( bDeliverOwnership, aVetoException ) )
         {
             ////you can empty this block, if you never start longlasting calls or
             ////if your longlasting calls are per default not cancelable (check how you have constructed your LifeTimeManager)
@@ -536,8 +538,8 @@ the XCloseable::close method has to be implemented in the following way:
             //if not successful canceled
             if(!bLongLastingCallsAreCanceled)
             {
-                m_aLifeTimeManager.g_close_endTryClose(bDeliverOwnership, sal_True, aVetoException);
-                //the exception is thrown in the above method
+                m_aLifeTimeManager.g_close_endTryClose( bDeliverOwnership, sal_True );
+                throw aVetoException;
             }
         }
 
