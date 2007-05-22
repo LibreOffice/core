@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:34:36 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:55:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,32 +96,6 @@ public:
     virtual FltError    Read( void );
 };
 
-
-
-
-class SvInPlaceObjectRef;
-
-
-
-
-struct ExcelChartData
-{
-    Rectangle               aRect;              // Ecken
-    String                  aTitle, aXTitle, aYTitle, aZTitle;
-    String                  aLastLabel;         // letzter SERIESTEXT-Label
-    SfxItemSet*             pAttrs;             // Attribute
-    ExcelChartData*         pNext;              // wer weiss schon...
-    SCCOL                   nCol1, nCol2;
-    SCROW                   nRow1, nRow2;
-    SCTAB                   nTab1, nTab2;   // Quellbereich
-    SCTAB                   nBaseTab;
-    UINT32                  nObjNum;
-
-                            ExcelChartData( ScDocument*, const Point&, const Point&,
-                                            const SCTAB nBaseTab );
-                            ~ExcelChartData();
-};
-
 class XclImpOutlineDataBuffer : protected XclImpRoot
 {
 public:
@@ -145,11 +119,6 @@ private:
 
 class ImportExcel : public ImportTyp, protected XclImpRoot
 {
-private:
-    ExcelChartData*         pChart;             // aktuelle Chart-Daten
-    ExcelChartData*         pUsedChartFirst;    // benutzte Chart-Daten, erster
-    ExcelChartData*         pUsedChartLast;     // benutzte Chart-Daten, letzter
-
 protected:
     static const double     fExcToTwips;        // Umrechnung 1/256 Zeichen -> Twips
 
@@ -236,16 +205,10 @@ protected:
     void                    Bof4( void );                   // 0x0409
     void                    Bof5( void );                   // 0x0809
     // ---------------------------------------------------------------
-    void                    SetLineStyle( SfxItemSet&, short, short, short );
-    void                    SetFillStyle( SfxItemSet&, short, short, short );
+    void                    SetLineStyle( SfxItemSet&, sal_uInt16, sal_uInt16, sal_uInt16 );
+    void                    SetFillStyle( SfxItemSet&, sal_uInt16, sal_uInt16, sal_uInt16 );
     SdrObject*              LineObj( SfxItemSet&, const Point&, const Point& );
     SdrObject*              RectObj( SfxItemSet&, const Point&, const Point& );
-    SdrObject*              BeginChartObj( SfxItemSet&, const Point&, const Point& );
-    void                    EndChartObj( void );
-    void                    ChartSelection( void );
-    void                    ChartSeriesText( void );
-    void                    ChartObjectLink( void );
-    void                    ChartAi( void );
 
     // ---------------------------------------------------------------
     void                    Formula( const XclAddress& rXclPos,
@@ -256,8 +219,6 @@ protected:
     void                    NeueTabelle( void );
     const ScTokenArray*     ErrorToFormula( BYTE bErrOrVal, BYTE nError,
                                 double& rVal );
-
-    virtual void            EndAllChartObjects( void );     // -> excobj.cxx
 
     virtual void            AdjustRowHeight();
     virtual void            PostDocLoad( void );
