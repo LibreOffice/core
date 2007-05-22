@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:44:18 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:17:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -996,9 +996,6 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
         SVX_TRACE( 213, aStr );
 #endif
         bPrevSym=TRUE;
-        bEnable=FALSE;
-        bIgnoreGraphic=TRUE;
-        bIgnoreSize=TRUE;
     }
     else if(nSymType == SVX_SYMBOLTYPE_NONE)
     {
@@ -1502,7 +1499,8 @@ IMPL_LINK( SvxLineTabPage, ClickInvisibleHdl_Impl, void *, EMPTYARG )
     if( aLbLineStyle.GetSelectEntryPos() == 0 ) // unsichtbar
     {
         aFtColor.Disable();
-        aLbColor.Disable();
+        if(!bSymbols)
+            aLbColor.Disable();
         aFtLineWidth.Disable();
         aMtrLineWidth.Disable();
 
@@ -1849,7 +1847,6 @@ IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton )
             bDontSetSize=TRUE;
             bNewSize=false; //fr�here �nderungen gelten nicht in diesem Fall!
             nSymbolType=SVX_SYMBOLTYPE_AUTO;
-            bEnable=FALSE;
         }
         break;
 
