@@ -18,7 +18,7 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertIndexesEntry" toolbar:helpid="20335"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertFieldCtrl" toolbar:helpid="52824"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:visible="false" toolbar:helpid="10140"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:visible="true" toolbar:helpid="10140"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObjCtrl" toolbar:visible="false" toolbar:helpid="52823"/>
  <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:visible="false" toolbar:helpid="10593"/>
  <toolbar:toolbarseparator/>
