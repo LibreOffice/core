@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLExportHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 13:21:18 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:03:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,8 @@
 #include <xmloff/xmlprmap.hxx>
 #endif
 
-#include "queue"
+#include <queue>
+#include <vector>
 
 namespace com { namespace sun { namespace star {
     namespace chart {
@@ -68,6 +69,16 @@ namespace com { namespace sun { namespace star {
         class XChartDocument;
         class XChartDataArray;
         struct ChartSeriesAddress;
+    }
+    namespace chart2 {
+        class XDiagram;
+        class XChartDocument;
+        class XDataSeries;
+        namespace data
+        {
+            class XDataProvider;
+            class XDataSequence;
+        }
     }
     namespace drawing {
         class XShape;
@@ -96,29 +107,36 @@ class XMLPropertyHandlerFactory;
  */
 class XMLOFF_DLLPUBLIC SchXMLExportHelper : public UniRefBase
 {
+public:
+    // first: data sequence for label, second: data sequence for values.
+    typedef ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >,
+            ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > > tLabelValuesDataPair;
+    typedef ::std::vector< tLabelValuesDataPair > tDataSequenceCont;
+
 private:
     SvXMLExport& mrExport;
     SvXMLAutoStylePoolP& mrAutoStylePool;
     UniReference< XMLPropertyHandlerFactory > mxPropertyHandlerFactory;
     UniReference< XMLPropertySetMapper > mxPropertySetMapper;
     UniReference< XMLChartExportPropertyMapper > mxExpPropMapper;
-    com::sun::star::uno::Reference< com::sun::star::util::XStringMapping > mxTableAddressMapper;
 
     rtl::OUString msTableName;
     rtl::OUStringBuffer msStringBuffer;
     rtl::OUString msString;
-    sal_Int32 mnSeriesCount;
-    sal_Int32 mnSeriesLength;
-    sal_Int32 mnDomainAxes;
-    sal_Bool mbHasSeriesLabels, mbHasCategoryLabels;
-    sal_Bool mbRowSourceColumns;
 
+    // members filled by InitRangeSegmentationProperties (retrieved from DataProvider)
+    sal_Bool mbHasSeriesLabels;
+    sal_Bool mbHasCategoryLabels; //if the categories are only automatically generated this will be false
+    sal_Bool mbRowSourceColumns;
     rtl::OUString msChartAddress;
     rtl::OUString msTableNumberList;
+    ::com::sun::star::uno::Sequence< sal_Int32 > maSequenceMapping;
 
     rtl::OUString msCLSID;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > mxAdditionalShapes;
+
+    tDataSequenceCont m_aDataSequencesToExport;
 
     /** first parseDocument: collect autostyles and store names in this queue
         second parseDocument: export content and use names from this queue
@@ -137,13 +155,35 @@ private:
                             com::sun::star::chart::XChartDocument >& rChartDoc,
                         sal_Bool bExportContent,
                         sal_Bool bIncludeTable = sal_False );
-    SAL_DLLPRIVATE void exportTable( com::sun::star::uno::Reference<
-                          com::sun::star::chart::XChartDataArray >& rData );
-    SAL_DLLPRIVATE void exportPlotArea( com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > xDiagram,
-                         sal_Bool bExportContent,
-                         sal_Bool bIncludeTable );
-    SAL_DLLPRIVATE void exportAxes( com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > xDiagram,
-                     sal_Bool bExportContent );
+    SAL_DLLPRIVATE void exportTable();
+    SAL_DLLPRIVATE void exportPlotArea(
+        com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > xDiagram,
+        com::sun::star::uno::Reference< com::sun::star::chart2::XDiagram > xNewDiagram,
+        sal_Bool bExportContent,
+        sal_Bool bIncludeTable );
+    SAL_DLLPRIVATE void exportAxes( const com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > & xDiagram,
+                                    const com::sun::star::uno::Reference< com::sun::star::chart2::XDiagram > & xNewDiagram,
+                                    sal_Bool bExportContent );
+
+    SAL_DLLPRIVATE void exportSeries(
+        const com::sun::star::uno::Reference< com::sun::star::chart2::XDiagram > & xNewDiagram,
+        sal_Bool bExportContent,
+        sal_Bool bHasTwoYAxes );
+    SAL_DLLPRIVATE void exportCandleStickSeries(
+        const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XDataSeries > > & aSeriesSeq,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XDiagram > & xDiagram,
+        sal_Bool bJapaneseCandleSticks,
+        sal_Bool bExportContent );
+    SAL_DLLPRIVATE void exportDataPoints(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet > & xSeriesProperties,
+        sal_Int32 nSeriesLength,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XDiagram > & xDiagram,
+        sal_Bool bExportContent );
 
     /// add svg position as attribute for current element
     SAL_DLLPRIVATE void addPosition( com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape );
@@ -172,16 +212,6 @@ public:
     /// write the styles collected into the current pool as <style:style> elements
     void exportAutoStyles();
 
-    // content
-    /** set the string mapper that is used to convert the application format
-        for cell addresses and cell range addresses into XML format
-
-        If the mapper is set it is automatically used for conversion
-        @deprecated
-      */
-    void setTableAddressMapper( com::sun::star::uno::Reference<
-                                    com::sun::star::util::XStringMapping > xMapper )
-        { mxTableAddressMapper = xMapper; }
     /** export the <chart:chart> element corresponding to rChartDoc
         if bIncludeTable is true, the chart data is exported as <table:table>
         element (inside the chart element).
@@ -206,6 +236,17 @@ public:
         { msChartAddress = rAddress; }
     void SetTableNumberList( const ::rtl::OUString& rList )
         { msTableNumberList = rList; }
+
+    void InitRangeSegmentationProperties(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XChartDocument > & xChartDoc );
+
+    // if no data provider exists by, now the model (as XChild) is asked for its
+    // parent which creates the data provider that is finally set at the chart
+    // document
+    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >
+        GetDataProvider( const ::com::sun::star::uno::Reference<
+                             ::com::sun::star::chart2::XChartDocument > & xChartDoc );
 };
 
 #endif  // _XMLOFF_SCH_XMLEXPORTHELPER_HXX_
