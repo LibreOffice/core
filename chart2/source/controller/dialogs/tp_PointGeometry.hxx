@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_PointGeometry.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:16:14 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:47:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,26 +39,15 @@
 #ifndef _SFXTABDLG_HXX
 #include <sfx2/tabdlg.hxx>
 #endif
-// header for FixedText
-#ifndef _SV_FIXED_HXX
-#include <vcl/fixed.hxx>
-#endif
-// header for class ListBox
-#ifndef _SV_LSTBOX_HXX
-#include <vcl/lstbox.hxx>
-#endif
 
 //.............................................................................
 namespace chart
 {
 //.............................................................................
 
+class BarGeometryResources;
 class SchLayoutTabPage : public SfxTabPage
 {
-private:
-    FixedText   aFtLayout;
-    ListBox     aListShapes;
-
 public:
     SchLayoutTabPage(Window* pParent, const SfxItemSet& rInAttrs);
     virtual ~SchLayoutTabPage();
@@ -66,6 +55,9 @@ public:
     static SfxTabPage* Create(Window* pParent, const SfxItemSet& rInAttrs);
     virtual BOOL FillItemSet(SfxItemSet& rOutAttrs);
     virtual void Reset(const SfxItemSet& rInAttrs);
+
+private:
+    BarGeometryResources*   m_pGeometryResources;
 };
 
 //.............................................................................
