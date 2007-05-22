@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:57:29 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:20:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,6 @@ struct SwPosition;
 class SwNodeIndex;
 class SwNode;
 class SfxPoolItem;
-class SchMemChart;
 class SwUndoTblMerge;
 class SwUndo;
 class SwPaM;
@@ -311,8 +310,7 @@ public:
           SwServerObject* GetObject()           {  return &refObj; }
 
     //Daten fuer das Chart fuellen.
-    SchMemChart *UpdateData( SchMemChart *pData,
-                            const String* pSelection = 0 ) const;
+    void UpdateCharts() const;
 
     TblChgMode GetTblChgMode() const        { return eTblChgMode; }
     void SetTblChgMode( TblChgMode eMode )  { eTblChgMode = eMode; }
