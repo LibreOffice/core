@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:44:53 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:42:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,8 +104,6 @@
 #include <svtools/pathoptions.hxx>
 #include <svtools/itempool.hxx>
 #include <vcl/virdev.hxx>
-#include <sch/schdll.hxx>
-#include <sch/memchrt.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
@@ -1638,89 +1636,77 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
 
                 if ( xIPObj.is() && SotExchange::IsChart( aObjectClassName ) )
                 {
-                    SchMemChart* pChartData = SchDLL::GetChartData(xIPObj);
-                    if ( pChartData )
+                    String aNewName = ((SdrOle2Obj*)pNewObject)->GetPersistName();
+
+                    //! need to set new DataProvider, or does Chart handle this itself?
+
+                    ScRangeListRef xRanges( new ScRangeList );
+                    BOOL bColHeaders = FALSE;
+                    BOOL bRowHeaders = FALSE;
+                    pDoc->GetOldChartParameters( aNewName, *xRanges, bColHeaders, bRowHeaders );
+
+                    if ( xRanges->Count() > 0 )
                     {
-                        ScChartArray aArray( pDoc, *pChartData );   // parses range description
-                        ScRangeListRef xRanges = aArray.GetRangeList();
-                        if ( aArray.IsValid() && xRanges.Is() )
+                        ScDocument* pClipDoc = pClipModel->GetDocument();
+
+                        //  a clipboard document and its source share the same document item pool,
+                        //  so the pointers can be compared to see if this is copy&paste within
+                        //  the same document
+                        BOOL bSameDoc = pDoc && pClipDoc && pDoc->GetPool() == pClipDoc->GetPool();
+
+                        BOOL bDestClip = pDoc && pDoc->IsClipboard();
+
+                        BOOL bInSourceRange = FALSE;
+                        ScRange aClipRange;
+                        if ( pClipDoc )
                         {
-                            ScDocument* pClipDoc = pClipModel->GetDocument();
+                            SCCOL nClipStartX;
+                            SCROW nClipStartY;
+                            SCCOL nClipEndX;
+                            SCROW nClipEndY;
+                            pClipDoc->GetClipStart( nClipStartX, nClipStartY );
+                            pClipDoc->GetClipArea( nClipEndX, nClipEndY, TRUE );
+                            nClipEndX += nClipStartX;
+                            nClipEndY += nClipStartY;   // GetClipArea returns the difference
 
-                            //  a clipboard document and its source share the same document item pool,
-                            //  so the pointers can be compared to see if this is copy&paste within
-                            //  the same document
-                            BOOL bSameDoc = pDoc && pClipDoc && pDoc->GetPool() == pClipDoc->GetPool();
+                            aClipRange = ScRange( nClipStartX, nClipStartY, nSourceTab,
+                                                    nClipEndX, nClipEndY, nSourceTab );
 
-                            BOOL bDestClip = pDoc && pDoc->IsClipboard();
+                            bInSourceRange = lcl_IsAllInRange( *xRanges, aClipRange );
+                        }
 
-                            BOOL bInSourceRange = FALSE;
-                            ScRange aClipRange;
-                            if ( pClipDoc )
+                        // always lose references when pasting into a clipboard document (transpose)
+                        if ( ( bInSourceRange || bSameDoc ) && !bDestClip )
+                        {
+                            if ( bInSourceRange )
                             {
-                                SCCOL nClipStartX;
-                                SCROW nClipStartY;
-                                SCCOL nClipEndX;
-                                SCROW nClipEndY;
-                                pClipDoc->GetClipStart( nClipStartX, nClipStartY );
-                                pClipDoc->GetClipArea( nClipEndX, nClipEndY, TRUE );
-                                // GetClipArea returns the difference
-                                nClipEndX = sal::static_int_cast<SCCOL>( nClipEndX + nClipStartX );
-                                nClipEndY = sal::static_int_cast<SCROW>( nClipEndY + nClipStartY );
-
-                                aClipRange = ScRange( nClipStartX, nClipStartY, nSourceTab,
-                                                        nClipEndX, nClipEndY, nSourceTab );
-
-                                bInSourceRange = lcl_IsAllInRange( *xRanges, aClipRange );
-                            }
-
-                            // always lose references when pasting into a clipboard document (transpose)
-                            if ( ( bInSourceRange || bSameDoc ) && !bDestClip )
-                            {
-                                if ( bInSourceRange )
+                                if ( rDestPos != aClipRange.aStart )
                                 {
-                                    if ( rDestPos != aClipRange.aStart )
+                                    //  update the data ranges to the new (copied) position
+                                    ScRangeListRef xNewRanges = new ScRangeList( *xRanges );
+                                    if ( lcl_MoveRanges( *xNewRanges, aClipRange, rDestPos ) )
                                     {
-                                        //  update the data ranges to the new (copied) position
-                                        ScRangeListRef xNewRanges = new ScRangeList( *xRanges );
-                                        if ( lcl_MoveRanges( *xNewRanges, aClipRange, rDestPos ) )
-                                        {
-                                            aArray.SetRangeList( xNewRanges );
-                                        }
+                                        pDoc->UpdateChartArea( aNewName, xNewRanges, bColHeaders, bRowHeaders, FALSE );
                                     }
                                 }
-                                else
-                                {
-                                    //  leave the ranges unchanged
-                                    //  Update has to be called anyway because parts of the data may have changed
-                                }
-
-                                SchMemChart* pMemChart = aArray.CreateMemChart();
-                                ScChartArray::CopySettings( *pMemChart, *pChartData );
-                                SchDLL::Update( xIPObj, pMemChart );
-                                delete pMemChart;
                             }
                             else
                             {
-                                //  pasting into a new document without the complete source data
-                                //  -> break connection to source data
-
-                                //  (see ScDocument::UpdateChartListenerCollection, PastingDrawFromOtherDoc)
-
-                                pChartData->SomeData1().Erase();
-                                pChartData->SomeData2().Erase();
-                                pChartData->SomeData3().Erase();
-                                pChartData->SomeData4().Erase();
-                                SchChartRange aChartRange;
-                                pChartData->SetChartRange( aChartRange );
-                                pChartData->SetReadOnly( FALSE );
-                                SchDLL::Update( xIPObj, pChartData );
+                                //  leave the ranges unchanged
                             }
+                        }
+                        else
+                        {
+                            //  pasting into a new document without the complete source data
+                            //  -> break connection to source data
+
+                            //  (see ScDocument::UpdateChartListenerCollection, PastingDrawFromOtherDoc)
+
+                            //! need chart interface to switch to own data
                         }
                     }
                 }
             }
-
         }
 
         pOldObject = aIter.Next();
