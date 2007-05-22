@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.103 $
+#   $Revision: 1.104 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-03 16:49:25 $
+#   last change: $Author: vg $ $Date: 2007-05-22 15:12:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssawt.db \
     $(UCR)$/csschart.db \
     $(UCR)$/csschart2.db \
+    $(UCR)$/csschart2data.db \
     $(UCR)$/cssconfiguration.db \
     $(UCR)$/csscbootstrap.db\
     $(UCR)$/csscbackend.db\
