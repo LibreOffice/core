@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_Scale.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 16:04:14 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:48:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ TabPage TP_SCALE_Y
     {
         Pos = MAP_APPFONT ( 5 , 4  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Scale axes" ;
+        Text [ en-US ] = "Axis scale" ;
     };
         FixedText TXT_MIN
         {
@@ -96,7 +96,7 @@ TabPage TP_SCALE_Y
         {
             Pos = MAP_APPFONT ( 11 , 48  ) ;
             Size = MAP_APPFONT ( 88 , 8 ) ;
-            Text [ en-US ] = "Major ~interval:" ;
+            Text [ en-US ] = "Ma~jor interval:" ;
     };
         SpinField EDT_STEP_MAIN
         {
@@ -117,16 +117,8 @@ TabPage TP_SCALE_Y
         {
             Pos = MAP_APPFONT ( 11 , 64  ) ;
             Size = MAP_APPFONT ( 88 , 8 ) ;
-            Text [ en-US ] = "Mi~nor interval:" ;
+            Text [ en-US ] = "Minor inter~val:" ;
     };
-//      SpinField EDT_STEP_HELP
-//      {
-//          Border = TRUE ;
-//          SVLook = TRUE ;
-//          Pos = MAP_APPFONT ( 103 , 62  ) ;
-//          Size = MAP_APPFONT ( 50 , 12 ) ;
-//          TabStop = TRUE ;
-//      };
         MetricField MT_STEPHELP
         {
             Border = TRUE ;
@@ -155,7 +147,7 @@ TabPage TP_SCALE_Y
         {
             Pos = MAP_APPFONT ( 11 , 80  ) ;
             Size = MAP_APPFONT ( 88 , 8 ) ;
-            Text [ en-US ] = "~Axis at:" ;
+            Text [ en-US ] = "Axi~s at:" ;
     };
         SpinField EDT_ORIGIN
         {
@@ -177,8 +169,8 @@ TabPage TP_SCALE_Y
         {
             Pos = MAP_APPFONT ( 11 , 97  ) ;
             Size = MAP_APPFONT ( 236 , 10 ) ;
-            Text [ en-US ] = "Logarithmic ~scale" ;
             TabStop = TRUE ;
+            Text [ en-US ] = "~Logarithmic scale" ;
     };
 
     FixedLine FL_TICKS
@@ -192,13 +184,13 @@ TabPage TP_SCALE_Y
         {
             Pos = MAP_APPFONT ( 11 , 127  ) ;
             Size = MAP_APPFONT ( 78 , 10 ) ;
-            Text [ en-US ] = "inn~er";
+            Text [ en-US ] = "I~nner";
     };
         CheckBox CBX_TICKS_OUTER
         {
             Pos = MAP_APPFONT ( 93 , 127  ) ;
             Size = MAP_APPFONT ( 78 , 10 ) ;
-            Text [ en-US ] = "~outer";
+            Text [ en-US ] = "~Outer";
     };
 
     FixedLine FL_HELPTICKS
@@ -212,45 +204,12 @@ TabPage TP_SCALE_Y
         {
             Pos = MAP_APPFONT ( 11 , 160  );
             Size = MAP_APPFONT ( 78 , 10 ) ;
-            Text [ en-US ] = "i~nner";
+            Text [ en-US ] = "Inne~r";
     };
         CheckBox CBX_HELPTICKS_OUTER
         {
             Pos = MAP_APPFONT ( 93 , 160  ) ;
             Size = MAP_APPFONT ( 78 , 10 ) ;
-            Text [ en-US ] = "o~uter";
+            Text [ en-US ] = "Out~er";
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
