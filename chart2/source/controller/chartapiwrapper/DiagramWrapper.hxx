@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DiagramWrapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:01:33 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:18:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,17 +35,37 @@
 #ifndef CHART_DIAGRAMWRAPPER_HXX
 #define CHART_DIAGRAMWRAPPER_HXX
 
-#include "OPropertySet.hxx"
+#include "WrappedPropertySet.hxx"
 #include "ServiceMacros.hxx"
+#include "DiagramHelper.hxx"
 
-#ifndef _CPPUHELPER_IMPLBASE10_HXX_
-#include <cppuhelper/implbase10.hxx>
+#ifndef _CPPUHELPER_IMPLBASE9_HXX_
+#include <cppuhelper/implbase9.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
+#include <com/sun/star/chart2/XDiagram.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XDIAGRAMPROVIDER_HPP_
+#include <com/sun/star/chart2/XDiagramProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPETEMPLATE_HPP_
+#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPEMANAGER_HPP_
+#include <com/sun/star/chart2/XChartTypeManager.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_CHART_XDIAGRAM_HPP_
@@ -76,98 +96,36 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
-#include <com/sun/star/chart2/XDiagram.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
-#include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XDIAGRAMPROVIDER_HPP_
-#include <com/sun/star/chart2/XDiagramProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPETEMPLATE_HPP_
-#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
-#endif
-
-namespace com { namespace sun { namespace star {
-namespace chart2
-{
-    class XTitle;
-}
-}}}
+#include <boost/shared_ptr.hpp>
 
 namespace chart
 {
+
 namespace wrapper
 {
 
-namespace impl
-{
-typedef ::cppu::WeakImplHelper10<
-    ::com::sun::star::chart::XDiagram,
-    ::com::sun::star::chart::XAxisZSupplier,
-    ::com::sun::star::chart::XTwoAxisXSupplier, //  : XAxisXSupplier
-    ::com::sun::star::chart::XTwoAxisYSupplier, //  : XAxisYSupplier
-    ::com::sun::star::chart::XStatisticDisplay,
-    ::com::sun::star::chart::X3DDisplay,
-    ::com::sun::star::lang::XServiceInfo,
-       ::com::sun::star::lang::XComponent,
-    ::com::sun::star::lang::XEventListener,
-    ::com::sun::star::chart2::XDiagramProvider >
-    DiagramWrapper_Base;
-}
+class Chart2ModelContact;
 
-class DiagramWrapper :
-        public impl::DiagramWrapper_Base,
-        public ::property::OPropertySet
+class DiagramWrapper : public ::cppu::ImplInheritanceHelper9<
+                      WrappedPropertySet
+                     , ::com::sun::star::chart::XDiagram
+                     , ::com::sun::star::chart::XAxisZSupplier
+                     , ::com::sun::star::chart::XTwoAxisXSupplier   //  : XAxisXSupplier
+                     , ::com::sun::star::chart::XTwoAxisYSupplier   //  : XAxisYSupplier
+                     , ::com::sun::star::chart::XStatisticDisplay
+                     , ::com::sun::star::chart::X3DDisplay
+                     , ::com::sun::star::lang::XServiceInfo
+                        , ::com::sun::star::lang::XComponent
+//                      , ::com::sun::star::lang::XEventListener
+                     , ::com::sun::star::chart2::XDiagramProvider
+                    >
 {
 public:
-
-    DiagramWrapper( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::chart2::XDiagram > & xDia,
-                    const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::uno::XComponentContext > & xContext,
-                    ::osl::Mutex & _rMutex );
+    DiagramWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~DiagramWrapper();
-
-    ::osl::Mutex & GetMutex() const;
 
     /// XServiceInfo declarations
     APPHELPER_XSERVICEINFO_DECL()
-
-    /// merge XInterface implementations
-     DECLARE_XINTERFACE()
-    /// merge XTypeProvider implementations
-     DECLARE_XTYPEPROVIDER()
-
-protected:
-    // ____ OPropertySet ____
-    virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(::com::sun::star::beans::UnknownPropertyException);
-
-    // ____ OPropertySet ____
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-
-//     virtual sal_Bool SAL_CALL convertFastPropertyValue
-//         ( ::com::sun::star::uno::Any & rConvertedValue,
-//           ::com::sun::star::uno::Any & rOldValue,
-//           sal_Int32 nHandle,
-//           const ::com::sun::star::uno::Any& rValue )
-//      throw (::com::sun::star::lang::IllegalArgumentException);
-
-    virtual void SAL_CALL getFastPropertyValue
-        ( ::com::sun::star::uno::Any& rValue,
-          sal_Int32 nHandle ) const;
-
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-        sal_Int32 nHandle,
-        const ::com::sun::star::uno::Any& rValue )
-        throw (::com::sun::star::uno::Exception);
-
-    // ____ XPropertySet ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
-        getPropertySetInfo()
-        throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XComponent ____
     virtual void SAL_CALL dispose()
@@ -277,9 +235,9 @@ protected:
         ::com::sun::star::beans::XPropertySet > SAL_CALL getFloor()
         throw (::com::sun::star::uno::RuntimeException);
 
-    // ____ XEventListener ____
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException);
+//     // ____ XEventListener ____
+//     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
+//         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XDiagramProvider ____
     virtual ::com::sun::star::uno::Reference<
@@ -289,19 +247,20 @@ protected:
                                       ::com::sun::star::chart2::XDiagram >& xDiagram )
         throw (::com::sun::star::uno::RuntimeException);
 
+protected:
+    // ____ WrappedPropertySet ____
+    virtual const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& getPropertySequence();
+    virtual const std::vector< WrappedProperty* > createWrappedProperties();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getInnerPropertySet();
+
+    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
 private:
-    mutable ::osl::Mutex &    m_rMutex;
+    void updateFromModel();
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext >
-                        m_xContext;
-
-    ::cppu::OInterfaceContainerHelper
-                        m_aEventListenerContainer;
-
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDiagram >
-                        m_xDiagram;
+    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape >
@@ -328,6 +287,44 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >
                         m_xSecondYAxis;
+
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet >
+                        m_xXMainGrid;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet >
+                        m_xYMainGrid;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet >
+                        m_xZMainGrid;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet >
+                        m_xXHelpGrid;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet >
+                        m_xYHelpGrid;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet >
+                        m_xZHelpGrid;
+
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet >
+                        m_xWall;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet >
+                        m_xFloor;
+
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet >
+                        m_xMinMaxLineWrapper;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet >
+                        m_xUpBarWrapper;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet >
+                        m_xDownBarWrapper;
+
+    sal_Bool m_bLinesAllowed;
 };
 
 } //  namespace wrapper
