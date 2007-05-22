@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlstyle.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:25:13 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:00:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,11 +202,6 @@ const sal_uInt8 EXC_XF_VER_BOTTOM           = 0x02;
 const sal_uInt8 EXC_XF_VER_JUSTIFY          = 0x03;
 const sal_uInt8 EXC_XF_VER_DISTRIB          = 0x04;
 
-const sal_uInt8 EXC_XF_TEXTROT_NONE         = 0x00;
-const sal_uInt8 EXC_XF_TEXTROT_STACKED      = 0x01;     /// Stacked top to bottom.
-const sal_uInt8 EXC_XF_TEXTROT_90_CCW       = 0x02;     /// 90 degr. counterclockwise.
-const sal_uInt8 EXC_XF_TEXTROT_90_CW        = 0x03;     /// 90 degr. clockwise.
-
 const sal_uInt8 EXC_XF_TEXTDIR_CONTEXT      = 0x00;
 const sal_uInt8 EXC_XF_TEXTDIR_LTR          = 0x01;
 const sal_uInt8 EXC_XF_TEXTDIR_RTL          = 0x02;
@@ -246,7 +241,7 @@ const sal_uInt16 EXC_COLOR_WINDOWBACK       = 65;       /// System window backgr
 const sal_uInt16 EXC_COLOR_BUTTONBACK       = 67;       /// System button background color (face color).
 const sal_uInt16 EXC_COLOR_CHWINDOWTEXT     = 77;       /// System window text color (BIFF8 charts).
 const sal_uInt16 EXC_COLOR_CHWINDOWBACK     = 78;       /// System window background color (BIFF8 charts).
-const sal_uInt16 EXC_COLOR_CHBORDERAUTO     = 79;       /// Automatic frame border (BIFF8 charts).
+const sal_uInt16 EXC_COLOR_CHBORDERAUTO     = 79;       /// Automatic frame border for series (BIFF8 charts).
 const sal_uInt16 EXC_COLOR_NOTEBACK         = 80;       /// Note background color.
 const sal_uInt16 EXC_COLOR_NOTETEXT         = 81;       /// Note text color.
 const sal_uInt16 EXC_COLOR_FONTAUTO         = 0x7FFF;   /// Font auto color (system window text color).
@@ -292,6 +287,9 @@ public:
     inline Color        GetDefColor( sal_uInt16 nXclIndex ) const
                             { return Color( GetDefColorData( nXclIndex ) ); }
 
+    /** Returns true, if the passed Excel color index is a system color. */
+    inline bool         IsSystemColor( sal_uInt16 nXclIndex ) const { return nXclIndex >= mnTableSize; }
+
 private:
     const ColorData*    mpnColorTable;      /// The table with RGB values.
     ColorData           mnWindowText;       /// System window text color.
@@ -308,15 +306,17 @@ class Font;
 class SvxFont;
 
 /** This struct helps reading and writing Excel fonts.
-    @descr  It stores all Excel compatible properties of a font. In detail this is the
-    name, family, character set, height, color, boldness, posture, script, underline,
-    strikeout, outline and shadow of the font. */
+
+    It stores all Excel compatible properties of a font. In detail this is the
+    name, family, character set, height, color, boldness, posture, script,
+    underline, strikeout, outline and shadow of the font.
+ */
 struct XclFontData
 {
     String              maName;         /// Font name.
     String              maStyle;        /// String with styles (bold, italic).
+    Color               maColor;        /// Font color.
     sal_uInt16          mnHeight;       /// Font height in twips (1/20 of a point).
-    sal_uInt16          mnColor;        /// Index to color palette.
     sal_uInt16          mnWeight;       /// Boldness: 400=normal, 700=bold.
     sal_uInt16          mnEscapem;      /// Escapement type.
     sal_uInt8           mnFamily;       /// Windows font family.
@@ -337,7 +337,7 @@ struct XclFontData
     /** Resets all members to default (empty) values. */
     void                Clear();
     /** Fills all members (except color and escapement) from the passed font. */
-    void                FillFromFont( const Font& rFont );
+    void                FillFromVclFont( const Font& rFont );
     /** Fills all members (except color) from the passed SVX font. */
     void                FillFromSvxFont( const SvxFont& rFont );
 
@@ -440,19 +440,30 @@ class XclFontPropSetHelper
 public:
     explicit            XclFontPropSetHelper();
 
+    /** Reads all font properties from the passed property set. */
+    void                ReadFontProperties( XclFontData& rFontData,
+                            const ScfPropertySet& rPropSet, XclFontPropSetType eType,
+                            sal_Int16 nScript = -1 );
+
     /** Writes all font properties to the passed property set, uses passed color as font color. */
     void                WriteFontProperties(
                             ScfPropertySet& rPropSet, XclFontPropSetType eType,
-                            const XclFontData& rFontData, const Color& rFontColor,
-                            bool bHasWstrn, bool bHasAsian, bool bHasCmplx );
+                            const XclFontData& rFontData,
+                            bool bHasWstrn, bool bHasAsian, bool bHasCmplx,
+                            const Color* pFontColor = 0 );
 
 private:
-    ScfPropSetHelper    maHlpWstrn;         /// Properties for Western script.
-    ScfPropSetHelper    maHlpAsian;         /// Properties for Asian script.
-    ScfPropSetHelper    maHlpCmplx;         /// Properties for Complex script.
-    ScfPropSetHelper    maHlpWstrnNoName;   /// Properties for Western script, no font name.
-    ScfPropSetHelper    maHlpAsianNoName;   /// Properties for Asian script, no font name.
-    ScfPropSetHelper    maHlpCmplxNoName;   /// Properties for Complex script, no font name.
+    /** Returns a chart property set helper according to the passed script type. */
+    ScfPropSetHelper&   GetChartHelper( sal_Int16 nScript );
+
+private:
+    ScfPropSetHelper    maHlpChCommon;      /// Chart properties for all scripts.
+    ScfPropSetHelper    maHlpChWstrn;       /// Chart properties for Western script.
+    ScfPropSetHelper    maHlpChAsian;       /// Chart properties for Asian script.
+    ScfPropSetHelper    maHlpChCmplx;       /// Chart properties for Complex script.
+    ScfPropSetHelper    maHlpChWstrnNoName; /// Chart properties for Western script, no font name.
+    ScfPropSetHelper    maHlpChAsianNoName; /// Chart properties for Asian script, no font name.
+    ScfPropSetHelper    maHlpChCmplxNoName; /// Chart properties for Complex script, no font name.
     ScfPropSetHelper    maHlpControl;       /// Properties for form controls.
 };
 
