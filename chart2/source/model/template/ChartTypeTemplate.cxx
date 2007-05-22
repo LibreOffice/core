@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:17:52 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:46:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,42 +38,50 @@
 #include "ChartTypeTemplate.hxx"
 #include "PropertyHelper.hxx"
 #include "macros.hxx"
-#include "ContextHelper.hxx"
-#include "Scale.hxx"
-#include "DataSeriesTreeHelper.hxx"
+#include "DataSeriesHelper.hxx"
+#include "DataInterpreter.hxx"
+#include "CommonConverters.hxx"
+#include "ContainerHelper.hxx"
 
 #include "Scaling.hxx"
 #include "CartesianCoordinateSystem.hxx"
-#include "BoundedCoordinateSystem.hxx"
-#include "MeterHelper.hxx"
+#include "AxisHelper.hxx"
 #include "LegendHelper.hxx"
-#include "BarChartType.hxx"
+#include "DiagramHelper.hxx"
+#include "ChartDebugTrace.hxx"
+#include "AxisIndexDefines.hxx"
 
 #ifndef _CPPUHELPER_COMPONENT_CONTEXT_HXX_
 #include <cppuhelper/component_context.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CHART_CHARTSOLIDTYPE_HPP_
 #include <com/sun/star/chart/ChartSolidType.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPEGROUP_HPP_
-#include <com/sun/star/chart2/XChartTypeGroup.hpp>
+
+#ifndef _COM_SUN_STAR_CHART2_AXISTYPE_HPP_
+#include <com/sun/star/chart2/AxisType.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART2_XSTACKABLESCALEGROUP_HPP_
-#include <com/sun/star/chart2/XStackableScaleGroup.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDATASERIESCONTAINER_HPP_
+#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPECONTAINER_HPP_
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_AXISPOSITION_HPP_
+#include <com/sun/star/chart2/AxisPosition.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_AXISTYPE_HPP_
+#include <com/sun/star/chart2/AxisType.hpp>
 #endif
 
 #include <algorithm>
 #include <iterator>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::beans::PropertyAttribute;
+using namespace ::com::sun::star::chart2;
 
 using ::rtl::OUString;
-using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
@@ -82,15 +90,45 @@ using ::com::sun::star::uno::Any;
 
 namespace
 {
-#if OSL_DEBUG_LEVEL > 1
 
-#include <com/sun/star/chart2/XChartTypeGroup.hpp>
-#include <com/sun/star/chart2/XScaleGroup.hpp>
+sal_Int32 lcl_getSeriesLength( const Reference< XDataSeries > & xSeries )
+{
+    sal_Int32 nResult = 0;
+    try
+    {
+        Reference< data::XDataSource > xDataSource( xSeries, uno::UNO_QUERY_THROW );
+        Sequence< Reference< data::XLabeledDataSequence > > aLabSeq( xDataSource->getDataSequences());
+        if( aLabSeq.getLength())
+        {
+            Reference< data::XDataSequence > xSeq( aLabSeq[0]->getValues());
+            if( xSeq.is())
+                nResult = xSeq->getData().getLength();
+        }
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+    return nResult;
+}
 
-// forward declatation
-void lcl_ShowTree( const Reference< chart2::XDataSeriesTreeParent > & xParent, sal_Int32 nLevel = 0 );
-
-#endif
+void lcl_applyDefaultStyle(
+    const Reference< XDataSeries > & xSeries,
+    sal_Int32 nIndex,
+    const Reference< XDiagram > & xDiagram )
+{
+    // @deprecated: correct default color should be found by view without
+    // setting color as hard attribute
+    if( xSeries.is() && xDiagram.is())
+    {
+        Reference< beans::XPropertySet > xSeriesProp( xSeries, uno::UNO_QUERY );
+        Reference< chart2::XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
+        if( xSeriesProp.is() && xColorScheme.is() )
+            xSeriesProp->setPropertyValue(
+                C2U("Color"),
+                uno::makeAny( xColorScheme->getColorByIndex( nIndex )));
+    }
+}
 
 } // anonymous namespace
 
@@ -109,34 +147,38 @@ ChartTypeTemplate::~ChartTypeTemplate()
 {}
 
 // ____ XChartTypeTemplate ____
-
-Reference< chart2::XDiagram > SAL_CALL ChartTypeTemplate::createDiagram(
-    const Sequence< Reference< chart2::XDataSeries > >& aSeriesSeq )
+uno::Reference< XDiagram > SAL_CALL ChartTypeTemplate::createDiagramByDataSource(
+    const uno::Reference< data::XDataSource >& xDataSource,
+    const uno::Sequence< beans::PropertyValue >& aArguments )
     throw (uno::RuntimeException)
 {
-    Reference< chart2::XDiagram > xDia;
+    Reference< XDiagram > xDia;
 
     try
     {
         // create diagram
         xDia.set(
-            m_xContext->getServiceManager()->createInstanceWithContext(
+            GetComponentContext()->getServiceManager()->createInstanceWithContext(
                 C2U( "com.sun.star.chart2.Diagram" ),
-                m_xContext ),
+                GetComponentContext() ),
             uno::UNO_QUERY_THROW );
 
         // modify diagram
-        FillDiagram( xDia, aSeriesSeq );
+        Reference< chart2::XDataInterpreter > xInterpreter( getDataInterpreter());
+        chart2::InterpretedData aData(
+            xInterpreter->interpretDataSource(
+                xDataSource, aArguments, Sequence< Reference< XDataSeries > >() ));
 
-        // create and attach legend
-        Reference< chart2::XLegend > xLegend(
-            m_xContext->getServiceManager()->createInstanceWithContext(
-                C2U( "com.sun.star.chart2.Legend" ),
-                m_xContext ),
-            uno::UNO_QUERY_THROW );
+        Sequence< Sequence< Reference< XDataSeries > > > aSeries( aData.Series );
+        sal_Int32 i, j, nCount = 0;
+        for( i=0; i<aSeries.getLength(); ++i )
+        {
+            for( j=0; j<aSeries[i].getLength(); ++j, ++nCount )
+                lcl_applyDefaultStyle( aSeries[i][j], nCount, xDia );
+        }
 
-        xDia->setLegend( xLegend );
-        LegendHelper::defaultFillEmptyLegend( xLegend, xDia );
+        Sequence< Reference< XChartType > > aOldChartTypesSeq;
+        FillDiagram( xDia, aData.Series, aData.Categories, aOldChartTypesSeq, true );
     }
     catch( uno::Exception & ex )
     {
@@ -146,8 +188,176 @@ Reference< chart2::XDiagram > SAL_CALL ChartTypeTemplate::createDiagram(
     return xDia;
 }
 
+Sequence< OUString > SAL_CALL ChartTypeTemplate::getAvailableCreationParameterNames()
+    throw (uno::RuntimeException)
+{
+    OUString aHasCat( C2U("HasCategories"));
+    return Sequence< OUString >( & aHasCat, 1 );
+}
+
+void SAL_CALL ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >& xDiagram )
+    throw (uno::RuntimeException)
+{
+    if( ! xDiagram.is())
+        return;
+
+    try
+    {
+        Sequence< Sequence< Reference< XDataSeries > > > aSeriesSeq(
+            DiagramHelper::getDataSeriesGroups( xDiagram ));
+        Sequence< Reference< XDataSeries > > aFlatSeriesSeq( FlattenSequence( aSeriesSeq ));
+        const sal_Int32 nFormerSeriesCount = aFlatSeriesSeq.getLength();
+
+        // chart-type specific interpretation of existing data series
+        Reference< chart2::XDataInterpreter > xInterpreter( getDataInterpreter());
+        chart2::InterpretedData aData;
+        aData.Series = aSeriesSeq;
+        aData.Categories = DiagramHelper::getCategoriesFromDiagram( xDiagram );
+        aData.UnusedData = xDiagram->getUnusedData();
+
+        if( (aData.UnusedData.getLength() == 0) &&
+            xInterpreter->isDataCompatible( aData ))
+        {
+            aData = xInterpreter->reinterpretDataSeries( aData );
+        }
+        else
+        {
+            Reference< data::XDataSource > xSource( xInterpreter->mergeInterpretedData( aData ));
+            // todo: get a "range-union" from the data provider by calling
+            // OUString aRange = getRangeRepresentationByData( xSource );
+            // xSource.set( getDataByRangeRepresentation( aRange, aParam ));
+            // where aParam == ??
+            Sequence< beans::PropertyValue > aParam;
+            if( aData.Categories.is())
+            {
+                aParam.realloc( 1 );
+                aParam[0] = beans::PropertyValue( C2U("HasCategories"), -1, uno::makeAny( true ),
+                                                  beans::PropertyState_DIRECT_VALUE );
+            }
+            else if( aData.UnusedData.getLength())
+            {
+                for( sal_Int32 i=0; i<aData.UnusedData.getLength(); ++i )
+                    try
+                    {
+                        Reference< beans::XPropertySet > xProp( aData.UnusedData[i]->getValues(), uno::UNO_QUERY_THROW );
+                        OUString aRole;
+                        if( (xProp->getPropertyValue(C2U("Role")) >>= aRole) &
+                            aRole.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("categories")) )
+                        {
+                            aData.Categories = aData.UnusedData[i];
+                            for( ++i; i<aData.UnusedData.getLength(); ++i  )
+                                aData.UnusedData[i-1] = aData.UnusedData[i];
+                            aData.UnusedData.realloc( aData.UnusedData.getLength() - 1 );
+                            break;
+                        }
+                    }
+                    catch( const uno::Exception & ex )
+                    {
+                        ASSERT_EXCEPTION( ex );
+                    }
+            }
+            aData = xInterpreter->interpretDataSource( xSource, aParam, aFlatSeriesSeq );
+        }
+        aSeriesSeq = aData.Series;
+        xDiagram->setUnusedData( aData.UnusedData );
+
+        sal_Int32 i, j, nIndex = 0;
+        for( i=0; i<aSeriesSeq.getLength(); ++i )
+            for( j=0; j<aSeriesSeq[i].getLength(); ++j, ++nIndex )
+            {
+                if( nIndex >= nFormerSeriesCount )
+                    lcl_applyDefaultStyle( aSeriesSeq[i][j], nIndex, xDiagram );
+            }
+
+        // remove charttype groups from all coordinate systems
+            Sequence< Reference< XChartType > > aOldChartTypesSeq(
+                DiagramHelper::getChartTypesFromDiagram(xDiagram) );
+
+        Reference< XCoordinateSystemContainer > xCoordSysCnt( xDiagram, uno::UNO_QUERY );
+        OSL_ASSERT( xCoordSysCnt.is());
+        if( xCoordSysCnt.is())
+        {
+            Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
+                xCoordSysCnt->getCoordinateSystems());
+            for( sal_Int32 nCooSysIdx = 0; nCooSysIdx < aCooSysSeq.getLength(); ++nCooSysIdx )
+            {
+                Reference< XChartTypeContainer > xContainer( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY );
+                if( xContainer.is() )
+                    xContainer->setChartTypes( Sequence< Reference< XChartType > >() );
+            }
+        }
+
+        FillDiagram( xDiagram, aSeriesSeq, aData.Categories, aOldChartTypesSeq, false );
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+void SAL_CALL ChartTypeTemplate::changeDiagramData(
+    const Reference< chart2::XDiagram >& xDiagram,
+    const Reference< chart2::data::XDataSource >& xDataSource,
+    const Sequence< beans::PropertyValue >& aArguments )
+    throw (uno::RuntimeException)
+{
+    if( ! (xDiagram.is() &&
+           xDataSource.is()) )
+        return;
+
+    try
+    {
+        // interpret new data and re-use existing series
+        Sequence< Reference< XDataSeries > > aFlatSeriesSeq(
+            ::chart::ContainerHelper::ContainerToSequence( DiagramHelper::getDataSeriesFromDiagram( xDiagram )));
+        const sal_Int32 nFormerSeriesCount = aFlatSeriesSeq.getLength();
+        Reference< chart2::XDataInterpreter > xInterpreter( getDataInterpreter());
+        chart2::InterpretedData aData =
+            xInterpreter->interpretDataSource( xDataSource, aArguments, aFlatSeriesSeq );
+
+        // data series
+        Sequence< Sequence< Reference< XDataSeries > > > aSeriesSeq( aData.Series );
+
+        sal_Int32 i, j, nIndex = 0;
+        sal_Int32 nFirstSeriesLength = 0;
+        for( i=0; i<aSeriesSeq.getLength(); ++i )
+            for( j=0; j<aSeriesSeq[i].getLength(); ++j, ++nIndex )
+            {
+                if( i==0 && j==0 )
+                    nFirstSeriesLength = lcl_getSeriesLength( aSeriesSeq[0][0] );
+                if( nIndex >= nFormerSeriesCount )
+                {
+                    lcl_applyDefaultStyle( aSeriesSeq[i][j], nIndex, xDiagram );
+                    applyStyle( aSeriesSeq[i][j], i, j, aSeriesSeq[i].getLength() );
+                }
+            }
+
+        // categories
+        DiagramHelper::setCategoriesToDiagram( aData.Categories, xDiagram, true, supportsCategories() );
+
+        Sequence< Reference< XChartType > > aChartTypes(
+            DiagramHelper::getChartTypesFromDiagram( xDiagram ));
+        sal_Int32 nMax = ::std::min( aChartTypes.getLength(), aSeriesSeq.getLength());
+        for( i=0; i<nMax; ++i )
+        {
+            Reference< XDataSeriesContainer > xDSCnt( aChartTypes[i], uno::UNO_QUERY_THROW );
+            xDSCnt->setDataSeries( aSeriesSeq[i] );
+        }
+#if OSL_DEBUG_LEVEL >= CHART_TRACE_OSL_DEBUG_LEVEL
+    OSL_TRACE( "ChartTypeTemplate::changeDiagramData: Showing Diagram structure" );
+    OSL_TRACE( "---------------------------------------------------------------" );
+    debug::ChartDebugTraceDiagram( xDiagram );
+#endif
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
 sal_Bool SAL_CALL ChartTypeTemplate::matchesTemplate(
-    const uno::Reference< chart2::XDiagram >& xDiagram )
+    const Reference< chart2::XDiagram >& xDiagram,
+    sal_Bool bAdaptProperties )
     throw (uno::RuntimeException)
 {
     sal_Bool bResult = sal_False;
@@ -157,42 +367,36 @@ sal_Bool SAL_CALL ChartTypeTemplate::matchesTemplate(
 
     try
     {
-        uno::Reference< chart2::XDataSeriesTreeParent > xParent( xDiagram->getTree(), uno::UNO_QUERY_THROW );
+        Reference< XCoordinateSystemContainer > xCooSysCnt(
+            xDiagram, uno::UNO_QUERY_THROW );
+        Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
+            xCooSysCnt->getCoordinateSystems());
 
-        ::std::vector< uno::Reference< chart2::XChartTypeGroup > > aChartTypes(
-            helper::DataSeriesTreeHelper::getChartTypes( xParent ));
-
-        if( aChartTypes.size() == 1 &&
-            aChartTypes[0].is() &&
-            aChartTypes[0]->getChartType().is() )
+        // need to have at least one coordinate system
+        bResult = (aCooSysSeq.getLength() > 0);
+        if( bResult )
         {
-            if( aChartTypes[0]->getChartType()->getChartType().equals(
-                    getDefaultChartType()->getChartType()))
+            Sequence< Reference< XChartType > > aFormerlyUsedChartTypes;
+            const OUString aChartTypeToMatch( getChartTypeForNewSeries(aFormerlyUsedChartTypes)->getChartType());
+            const sal_Int32 nDimensionToMatch = getDimension();
+            for( sal_Int32 nCooSysIdx=0; bResult && (nCooSysIdx < aCooSysSeq.getLength()); ++nCooSysIdx )
             {
-                try
-                {
-                    uno::Reference< beans::XPropertySet > xProp( aChartTypes[0]->getChartType(),
-                                                                 uno::UNO_QUERY_THROW );
-                    uno::Reference< beans::XPropertySetInfo > xInfo( xProp->getPropertySetInfo() );
-                    sal_Int32 nDim;
-                    if( xInfo.is() &&
-                        xInfo->hasPropertyByName( C2U( "Dimension" )) &&
-                        (xProp->getPropertyValue( C2U( "Dimension" )) >>= nDim ))
-                    {
-                        bResult = (nDim == getDimension());
-                    }
-                    else
-                        // correct chart type, but without Dimension property
-                        bResult = sal_True;
-                }
-                catch( uno::Exception & ex )
-                {
-                    ASSERT_EXCEPTION( ex );
-                }
+                // match dimension
+                bResult = bResult && (aCooSysSeq[nCooSysIdx]->getDimension() == nDimensionToMatch);
 
-                if( bResult )
-                    bResult = ( helper::DataSeriesTreeHelper::getStackMode( xParent ) ==
-                                getYStackMode() );
+                Reference< XChartTypeContainer > xCTCnt( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY_THROW );
+                Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
+                for( sal_Int32 nCTIdx=0; bResult && (nCTIdx < aChartTypeSeq.getLength()); ++nCTIdx )
+                {
+                    // match chart type
+                    bResult = bResult && aChartTypeSeq[nCTIdx]->getChartType().equals( aChartTypeToMatch );
+                    // match stacking mode
+                    bResult = bResult &&
+                        ( DiagramHelper::getStackModeFromChartType(
+                            aChartTypeSeq[nCTIdx],
+                            aCooSysSeq[nCooSysIdx] )
+                          == getStackMode( nCTIdx ) );
+                }
             }
         }
     }
@@ -202,6 +406,71 @@ sal_Bool SAL_CALL ChartTypeTemplate::matchesTemplate(
     }
 
     return bResult;
+}
+
+Reference< chart2::XDataInterpreter > SAL_CALL ChartTypeTemplate::getDataInterpreter()
+    throw (uno::RuntimeException)
+{
+    if( ! m_xDataInterpreter.is())
+        m_xDataInterpreter.set( new DataInterpreter( GetComponentContext() ) );
+
+    return m_xDataInterpreter;
+}
+
+void SAL_CALL ChartTypeTemplate::applyStyle(
+    const Reference< chart2::XDataSeries >& xSeries,
+    ::sal_Int32 nChartTypeIndex,
+    ::sal_Int32 nSeriesIndex,
+    ::sal_Int32 nSeriesCount )
+    throw (uno::RuntimeException)
+{
+    // sset stacking mode
+    Reference< beans::XPropertySet > xSeriesProp( xSeries, uno::UNO_QUERY );
+    if( xSeriesProp.is())
+    {
+        try
+        {
+            StackMode eStackMode = getStackMode( nChartTypeIndex );
+            const uno::Any aPropValue = uno::makeAny(
+                ( (eStackMode == StackMode_Y_STACKED) ||
+                  (eStackMode == StackMode_Y_STACKED_PERCENT) )
+                ? chart2::StackingDirection_Y_STACKING
+                : (eStackMode == StackMode_Z_STACKED )
+                ? chart2::StackingDirection_Z_STACKING
+                : chart2::StackingDirection_NO_STACKING );
+            xSeriesProp->setPropertyValue( C2U("StackingDirection"), aPropValue );
+        }
+        catch( const uno::Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
+        }
+    }
+}
+
+void SAL_CALL ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram >& xDiagram )
+    throw (uno::RuntimeException)
+{
+    // reset number format if we had percent stacking on
+    sal_Bool bPercent = (getStackMode(0) == StackMode_Y_STACKED_PERCENT);
+    if( bPercent )
+    {
+        Sequence< Reference< chart2::XAxis > > aAxisSeq( AxisHelper::getAllAxisOfDiagram( xDiagram ) );
+        for( sal_Int32 i=0; i<aAxisSeq.getLength(); ++i )
+        {
+            if( 1== AxisHelper::getDimensionIndexOfAxis( aAxisSeq[i], xDiagram ) )
+            {
+                Reference< beans::XPropertySet > xAxisProp( aAxisSeq[i], uno::UNO_QUERY );
+                if( xAxisProp.is())
+                {
+                    // set number format to source format
+                    uno::Any aValue( xAxisProp->getPropertyValue(C2U("NumberFormat")));
+                    if( aValue.hasValue())
+                        xAxisProp->setPropertyValue(C2U("NumberFormat"), uno::Any());
+                }
+            }
+        }
+    }
+    return;
 }
 
 // ____ XServiceName ____
@@ -218,329 +487,375 @@ sal_Int32 ChartTypeTemplate::getDimension() const
     return 2;
 }
 
-chart2::StackMode ChartTypeTemplate::getXStackMode() const
+StackMode ChartTypeTemplate::getStackMode( sal_Int32 nChartTypeIndex ) const
 {
-    return chart2::StackMode_NONE;
+    return StackMode_NONE;
 }
 
-chart2::StackMode ChartTypeTemplate::getYStackMode() const
+bool ChartTypeTemplate::supportsCategories() const
 {
-    return chart2::StackMode_NONE;
-}
-
-chart2::StackMode ChartTypeTemplate::getZStackMode() const
-{
-    return chart2::StackMode_NONE;
-}
-
-uno::Reference< chart2::XChartType > ChartTypeTemplate::getDefaultChartType()
-    throw (uno::RuntimeException)
-{
-    return new BarChartType( 2 );
+    return true;
 }
 
 // ________________________________________
 
-Reference< chart2::XBoundedCoordinateSystem > ChartTypeTemplate::createCoordinateSystem(
-    const Reference< chart2::XBoundedCoordinateSystemContainer > & xCoordSysCnt )
+void ChartTypeTemplate::createCoordinateSystems(
+    const Reference< chart2::XCoordinateSystemContainer > & xOutCooSysCnt )
 {
-    Reference< chart2::XCoordinateSystem > xCoordSys( new CartesianCoordinateSystem( getDimension() ));
-    Reference< chart2::XBoundedCoordinateSystem > xResult(
-        new BoundedCoordinateSystem( xCoordSys ));
+    if( ! xOutCooSysCnt.is())
+        return;
+    Sequence< Reference< XChartType > > aFormerlyUsedChartTypes;
+    Reference< XChartType > xChartType( getChartTypeForNewSeries(aFormerlyUsedChartTypes));
+    if( ! xChartType.is())
+        return;
+    Reference< XCoordinateSystem > xCooSys( xChartType->createCoordinateSystem( getDimension()));
+    if( ! xCooSys.is())
+    {
+        // chart type wants no coordinate systems
+        xOutCooSysCnt->setCoordinateSystems( Sequence< Reference< XCoordinateSystem > >());
+        return;
+    }
+    // #i69680# make grid of first y-axis visible (was in the CooSys CTOR before)
+    if( xCooSys->getDimension() >= 2 )
+    {
+        Reference< chart2::XAxis > xAxis( xCooSys->getAxisByDimension( 1, 0 ));
+        if( xAxis.is())
+            AxisHelper::makeGridVisible( xAxis->getGridProperties() );
+    }
 
-    chart2::ScaleData aScale;
-    aScale.Orientation = chart2::AxisOrientation_MATHEMATICAL;
-    aScale.Scaling = new LinearScaling( 1.0, 0.0 );
+    Sequence< Reference< XCoordinateSystem > > aCoordinateSystems(
+        xOutCooSysCnt->getCoordinateSystems());
 
-    for( sal_Int32 i = 0; i < getDimension(); ++i )
-        xResult->setScaleByDimension(
-            i, Reference< chart2::XScale >( new Scale( m_xContext, aScale ) ));
+    if( aCoordinateSystems.getLength())
+    {
+        bool bOk = true;
+        for( sal_Int32 i=0; bOk && i<aCoordinateSystems.getLength(); ++i )
+            bOk = bOk && ( xCooSys->getCoordinateSystemType().equals( aCoordinateSystems[i]->getCoordinateSystemType()) &&
+                           (xCooSys->getDimension() == aCoordinateSystems[i]->getDimension()) );
+        // coordinate systems are ok
+        if( bOk )
+            return;
+        // there are coordinate systems but they do not fit.  So overwrite them.
+    }
+
+    //copy as much info from former coordinate system as possible:
+    if( aCoordinateSystems.getLength() )
+    {
+        Reference< XCoordinateSystem > xOldCooSys( aCoordinateSystems[0] );
+        sal_Int32 nMaxDimensionCount = std::min( xCooSys->getDimension(), xOldCooSys->getDimension() );
+
+        for(sal_Int32 nDimensionIndex=0; nDimensionIndex<nMaxDimensionCount; nDimensionIndex++)
+        {
+            const sal_Int32 nMaximumAxisIndex = xOldCooSys->getMaximumAxisIndexByDimension(nDimensionIndex);
+            for(sal_Int32 nAxisIndex=0; nAxisIndex<=nMaximumAxisIndex; ++nAxisIndex)
+            {
+                uno::Reference< XAxis > xAxis( xOldCooSys->getAxisByDimension( nDimensionIndex, nAxisIndex ) );
+                if( xAxis.is())
+                {
+                    xCooSys->setAxisByDimension( nDimensionIndex, xAxis, nAxisIndex );
+                }
+            }
+        }
+    }
+
+    // set new coordinate systems
+    aCoordinateSystems.realloc( 1 );
+    aCoordinateSystems[0] = xCooSys;
+
+    xOutCooSysCnt->setCoordinateSystems( aCoordinateSystems );
+}
+
+void ChartTypeTemplate::adaptScales(
+    const Sequence< Reference< chart2::XCoordinateSystem > > & aCooSysSeq,
+    const Reference< data::XLabeledDataSequence > & xCategories //@todo: in future there may be more than one sequence of categories (e.g. charttype with categories at x and y axis )
+    )
+{
+    bool bSupportsCategories( supportsCategories());
+    for( sal_Int32 nCooSysIdx=0; nCooSysIdx<aCooSysSeq.getLength(); ++nCooSysIdx )
+    {
+        try
+        {
+            Reference< XCoordinateSystem > xCooSys( aCooSysSeq[nCooSysIdx] );
+            if( !xCooSys.is() )
+                continue;
+
+            // attach categories to first axis
+            sal_Int32 nDim( xCooSys->getDimension());
+            if( nDim > 0 )
+            {
+                const sal_Int32 nMaxIndex = xCooSys->getMaximumAxisIndexByDimension(0);
+                for(sal_Int32 nI=0; nI<=nMaxIndex; ++nI)
+                {
+                    Reference< XAxis > xAxis( xCooSys->getAxisByDimension(0,nI) );
+                    if( xAxis.is())
+                    {
+                        ScaleData aData( xAxis->getScaleData() );
+                        aData.Categories = xCategories;
+                        aData.AxisType = bSupportsCategories ? AxisType::CATEGORY : AxisType::REALNUMBER;
+                        if( bSupportsCategories )
+                            AxisHelper::removeExplicitScaling( aData );
+                        xAxis->setScaleData( aData );
+                    }
+                }
+            }
+            // set percent stacking mode at second axis
+            if( nDim > 1 )
+            {
+                const sal_Int32 nMaxIndex = xCooSys->getMaximumAxisIndexByDimension(1);
+                for(sal_Int32 nI=0; nI<=nMaxIndex; ++nI)
+                {
+                    Reference< chart2::XAxis > xAxis( xCooSys->getAxisByDimension( 1,nI ));
+                    if( xAxis.is())
+                    {
+                        sal_Bool bPercent = (getStackMode(0) == StackMode_Y_STACKED_PERCENT);
+                        chart2::ScaleData aScaleData = xAxis->getScaleData();
+
+                        if( bPercent != (aScaleData.AxisType==AxisType::PERCENT) )
+                        {
+                            if( bPercent )
+                                aScaleData.AxisType = AxisType::PERCENT;
+                            else
+                                aScaleData.AxisType = AxisType::REALNUMBER;
+                            xAxis->setScaleData( aScaleData );
+                        }
+                    }
+                }
+            }
+        }
+        catch( const uno::Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
+        }
+    }
+}
+
+void ChartTypeTemplate::adaptDiagram( const Reference< XDiagram > & xDiagram )
+{
+    return;
+}
+
+void ChartTypeTemplate::createAxes(
+    const Sequence< Reference< XCoordinateSystem > > & rCoordSys )
+{
+    //create missing axes
+    if( rCoordSys.getLength() > 0 )
+    {
+        sal_Int32 nCooSysIdx = 0;
+        Reference< XCoordinateSystem > xCooSys( rCoordSys[nCooSysIdx] );
+        if(!xCooSys.is())
+            return;
+
+        //create main axis in first coordinate system
+        sal_Int32 nDimCount = xCooSys->getDimension();
+        sal_Int32 nDim=0;
+        for( nDim=0; nDim<nDimCount; ++nDim )
+        {
+            sal_Int32 nAxisCount = getAxisCountByDimension( nDim );
+            if( nDim == 1 &&
+                nAxisCount < 2 && AxisHelper::isSecondaryYAxisNeeded( xCooSys ))
+                nAxisCount = 2;
+            for( sal_Int32 nAxisIndex = 0; nAxisIndex < nAxisCount; ++nAxisIndex )
+            {
+                Reference< XAxis > xAxis = AxisHelper::getAxis( nDim, nAxisIndex, xCooSys );
+                if( !xAxis.is())
+                {
+                    // create and add axis
+                    xAxis.set( AxisHelper::createAxis(
+                                   nDim, nAxisIndex, xCooSys, GetComponentContext() ));
+                }
+            }
+        }
+    }
+}
+
+void ChartTypeTemplate::adaptAxes(
+    const Sequence< Reference< XCoordinateSystem > > & rCoordSys )
+{
+    //adapt properties of exsisting axes and remove superfluous axes
+
+    if( rCoordSys.getLength() > 0 )
+    {
+        for( sal_Int32 nCooSysIdx=0; nCooSysIdx < rCoordSys.getLength(); ++nCooSysIdx )
+        {
+            Reference< XCoordinateSystem > xCooSys( rCoordSys[nCooSysIdx] );
+            if( !xCooSys.is() )
+                continue;
+            sal_Int32 nDimCount = xCooSys->getDimension();
+            for( sal_Int32 nDim=0; nDim<nDimCount; ++nDim )
+            {
+                sal_Int32 nMaxAxisIndex = xCooSys->getMaximumAxisIndexByDimension( nDim );
+                for( sal_Int32 nAxisIndex=0; nAxisIndex<=nMaxAxisIndex; nAxisIndex++ )
+                {
+                    Reference< XAxis > xAxis( AxisHelper::getAxis( nDim, nAxisIndex, xCooSys ) );
+                    if( !xAxis.is() )
+                        continue;
+
+                    if( nAxisIndex == MAIN_AXIS_INDEX || nAxisIndex == SECONDARY_AXIS_INDEX )
+                    {
+                        // adapt scales
+                        sal_Bool bPercent = (getStackMode(0) == StackMode_Y_STACKED_PERCENT);
+                        if( bPercent && nDim == 1 )
+                        {
+                            Reference< beans::XPropertySet > xAxisProp( xAxis, uno::UNO_QUERY );
+                            if( xAxisProp.is())
+                            {
+                                // set number format to source format
+                                uno::Any aValue( xAxisProp->getPropertyValue(C2U("NumberFormat")));
+                                if( aValue.hasValue())
+                                    xAxisProp->setPropertyValue(C2U("NumberFormat"), uno::Any());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+sal_Int32 ChartTypeTemplate::getAxisCountByDimension( sal_Int32 nDimension )
+{
+    return (nDimension < getDimension()) ? 1 : 0;
+}
+
+void ChartTypeTemplate::FillDiagram(
+    const Reference< XDiagram >& xDiagram,
+    const Sequence< Sequence< Reference< XDataSeries > > >& aSeriesSeq,
+    Reference< data::XLabeledDataSequence > xCategories,
+    const Sequence< Reference< XChartType > >& aOldChartTypesSeq,
+    bool bCreate )
+{
+    adaptDiagram( xDiagram );
 
     try
     {
-        if( xCoordSys.is())
-            xCoordSysCnt->addCoordinateSystem( xResult );
+        // create coordinate systems and scales
+        Reference< XCoordinateSystemContainer > xCoordSysCnt( xDiagram, uno::UNO_QUERY_THROW );
+        createCoordinateSystems( xCoordSysCnt );
+        Sequence< Reference< XCoordinateSystem > > aCoordinateSystems( xCoordSysCnt->getCoordinateSystems());
+        createAxes( aCoordinateSystems );
+        adaptAxes( aCoordinateSystems );
+        adaptScales( aCoordinateSystems, xCategories );
+
+        // chart types
+        createChartTypes( aSeriesSeq, aCoordinateSystems, aOldChartTypesSeq );
+
+        // apply chart-type specific styles, like "symbols on"
+        Sequence< Sequence< Reference< XDataSeries > > > aNewSeriesSeq(
+            DiagramHelper::getDataSeriesGroups( xDiagram ));
+        for( sal_Int32 i=0; i<aNewSeriesSeq.getLength(); ++i )
+        {
+            const sal_Int32 nNumSeries = aNewSeriesSeq[i].getLength();
+            for( sal_Int32 j=0; j<nNumSeries; ++j )
+                applyStyle( aNewSeriesSeq[i][j], i, j, nNumSeries );
+        }
     }
-    catch( lang::IllegalArgumentException ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
 
-    return xResult;
-}
-
-void ChartTypeTemplate::createAndAddAxes(
-    const Reference< chart2::XBoundedCoordinateSystem > & rCoordSys,
-    const Reference< chart2::XAxisContainer > & rOutAxisCnt )
-{
-    if( rCoordSys.is() && rOutAxisCnt.is())
-    {
-        // create axes
-        Reference< chart2::XAxis > aAxis;
-        sal_Int32 nDim = rCoordSys->getDimension(),
-            i = 0;
-
-        for( ; i < nDim; ++i )
-            MeterHelper::createAxis( i, rCoordSys, rOutAxisCnt, m_xContext );
-    }
-}
-
-void ChartTypeTemplate::createAndAddGrids(
-    const Reference< chart2::XBoundedCoordinateSystem > & rCoordSys,
-    const Reference< chart2::XGridContainer > & rOutGridCnt )
-{
-    // just add one y-grid
-    static const sal_Int32 nGridDim = 1;
-
-    if( rOutGridCnt.is() &&
-        rCoordSys.is() &&
-        rCoordSys->getDimension() >= 2 )
-    {
-        ContextHelper::tContextEntryMapType aContextValues(
-            ContextHelper::MakeContextEntryMap
-            ( C2U( "Identifier" ), uno::makeAny( MeterHelper::makeGridIdentifier( 1, 0, true ) ))
-            );
-
-        Reference< chart2::XGrid > xGrid(
-            m_xContext->getServiceManager()->createInstanceWithContext(
-                C2U( "com.sun.star.chart2.Grid" ),
-                ContextHelper::createContext( aContextValues, m_xContext ) ),
-            uno::UNO_QUERY );
-
-        if( xGrid.is())
-        {
-            // try to share XIncrement with axis
-            Reference< chart2::XAxisContainer > xAxisCnt( rOutGridCnt, uno::UNO_QUERY );
-            if( xAxisCnt.is())
-            {
-                Sequence< Reference< chart2::XAxis > > aAxes( xAxisCnt->getAxes());
-                for( sal_Int32 i = 0; i < aAxes.getLength(); ++i )
-                {
-                    if( aAxes[i].is() &&
-                        aAxes[i]->getRepresentedDimension() == nGridDim &&
-                        aAxes[i]->getCoordinateSystem() == rCoordSys )
-                    {
-                        xGrid->setIncrement( aAxes[i]->getIncrement());
-                        break;
-                    }
-                }
-            }
-
-            xGrid->attachCoordinateSystem( rCoordSys, nGridDim );
-            rOutGridCnt->addGrid( xGrid );
-        }
-    }
-}
-
-void ChartTypeTemplate::FillDiagram(
-    const Reference< chart2::XDiagram >& xDiagram,
-    const Sequence< Reference< chart2::XDataSeries > >& aSeriesSeq )
-{
-    Reference< chart2::XBoundedCoordinateSystemContainer > xCoordSysCnt( xDiagram, uno::UNO_QUERY );
-    // scales
-    Reference< chart2::XBoundedCoordinateSystem > xCoordSys( createCoordinateSystem( xCoordSysCnt ));
-
-    // data series tree
-    Reference< chart2::XDataSeriesTreeParent > xTree(
-        createDataSeriesTree( aSeriesSeq, xCoordSys));
-    xDiagram->setTree( xTree );
-
-#if OSL_DEBUG_LEVEL > 1
-    lcl_ShowTree( xTree );
+#if OSL_DEBUG_LEVEL >= CHART_TRACE_OSL_DEBUG_LEVEL
+    OSL_TRACE( "ChartTypeTemplate::FillDiagram: Showing Diagram structure" );
+    OSL_TRACE( "---------------------------------------------------------" );
+    debug::ChartDebugTraceDiagram( xDiagram );
 #endif
+}
 
-    // set stacking mode
-//     sal_Int32 nStyle = CHSTYLE_ADDIN;
-//     getFastPropertyValue( PROP_CHARTTYPE_CHART_TEMPLATE_NAME ) >>= nStyle;
-//     SetStackModeAtTree( xTree, lcl_GetStackModeForChartStyle(
-//                             static_cast< ChartStyle >( nStyle ) ));
+void ChartTypeTemplate::createChartTypes(
+    const Sequence< Sequence< Reference< XDataSeries > > > & aSeriesSeq,
+    const Sequence< Reference< XCoordinateSystem > > & rCoordSys,
+    const Sequence< Reference< XChartType > >& aOldChartTypesSeq )
+{
+    if( rCoordSys.getLength() == 0 ||
+        ! rCoordSys[0].is() )
+        return;
 
-    // axes
-    Reference< chart2::XAxisContainer > xAxisCnt( xDiagram, uno::UNO_QUERY );
-    OSL_ASSERT( xAxisCnt.is());
-    if( xAxisCnt.is())
+    try
     {
-        // remove formerly existing axes
-        Sequence< Reference< chart2::XAxis > > aAxes( xAxisCnt->getAxes() );
-        sal_Int32 i = 0;
-        for( ; i < aAxes.getLength(); ++i )
+        sal_Int32 nCooSysIdx=0;
+        Reference< XChartType > xCT;
+        if( aSeriesSeq.getLength() == 0 )
         {
-            xAxisCnt->removeAxis( aAxes[ i ] );
+            // we need a new chart type
+            xCT.set( getChartTypeForNewSeries( aOldChartTypesSeq ));
+            Reference< XChartTypeContainer > xCTCnt( rCoordSys[nCooSysIdx], uno::UNO_QUERY_THROW );
+            Sequence< Reference< XChartType > > aCTSeq( xCTCnt->getChartTypes());
+            aCTSeq.realloc( 1 );
+            aCTSeq[0] = xCT;
+            xCTCnt->setChartTypes( aCTSeq );
         }
-
-        createAndAddAxes( xCoordSys, xAxisCnt );
-    }
-
-    // grid
-    Reference< chart2::XGridContainer > xGridCnt( xDiagram, uno::UNO_QUERY );
-    if( xGridCnt.is())
-    {
-        Sequence< Reference< chart2::XGrid > > aGrids( xGridCnt->getGrids() );
-        sal_Int32 i = 0;
-        for( ; i < aGrids.getLength(); ++i )
-        {
-            xGridCnt->removeGrid( aGrids[ i ] );
-        }
-
-        createAndAddGrids( xCoordSys, xGridCnt );
-    }
-}
-
-Reference< chart2::XDataSeriesTreeParent > ChartTypeTemplate::createRootNode()
-{
-    Reference< chart2::XDataSeriesTreeParent > aRoot(
-        m_xContext->getServiceManager()->createInstanceWithContext(
-            C2U( "com.sun.star.chart2.DataSeriesTree" ), m_xContext ),
-        uno::UNO_QUERY );
-    OSL_ASSERT( aRoot.is());
-
-    return aRoot;
-}
-
-Reference< chart2::XDataSeriesTreeNode > ChartTypeTemplate::createChartTypeGroup(
-    const Reference< chart2::XChartType > & xChartType )
-{
-    Reference< chart2::XDataSeriesTreeNode > aChartTypeNode(
-        m_xContext->getServiceManager()->createInstanceWithContext(
-            C2U( "com.sun.star.chart2.ChartTypeGroup" ), m_xContext ),
-        uno::UNO_QUERY );
-    OSL_ASSERT( aChartTypeNode.is());
-    Reference< chart2::XChartTypeGroup > aChartTypeGroup( aChartTypeNode, uno::UNO_QUERY );
-    OSL_ASSERT( aChartTypeGroup.is());
-    aChartTypeGroup->setChartType( xChartType );
-
-    return aChartTypeNode;
-}
-
-void ChartTypeTemplate::addDataSeriesToGroup(
-    const Reference< chart2::XDataSeriesTreeNode > & rParent,
-    const Sequence< Reference< chart2::XDataSeries > > & rDataSeries )
-{
-    Reference< chart2::XDataSeriesTreeParent > xParent( rParent, uno::UNO_QUERY );
-    OSL_ASSERT( xParent.is());
-    if( xParent.is())
-    {
-        const sal_Int32 nSeriesCount = rDataSeries.getLength();
-        sal_Int32 i = 0;
-        for( i = 0; i < nSeriesCount; ++i )
-        {
-            Reference< chart2::XDataSeriesTreeNode > xNode( rDataSeries[ i ], uno::UNO_QUERY );
-            xParent->addChild( xNode );
-        }
-    }
-}
-
-
-Reference< chart2::XDataSeriesTreeNode > ChartTypeTemplate::createScaleGroup(
-    bool bIsDiscrete,
-    bool bIsStackable,
-    Reference< chart2::XBoundedCoordinateSystem > xCoordSys,
-    sal_Int32 nRepresentedDimension,
-    chart2::StackMode eStackMode /* = chart2::StackMode_NONE */ )
-{
-    ContextHelper::tContextEntryMapType aContextValues(
-        ContextHelper::MakeContextEntryMap
-        ( C2U( "CoordinateSystem" ),      uno::makeAny( xCoordSys ) )
-        ( C2U( "RepresentedDimension" ),  uno::makeAny( sal_Int32( nRepresentedDimension ) ) )
-        );
-
-    Reference< chart2::XDataSeriesTreeNode > aNode;
-    ::rtl::OUString aServiceName;
-
-    if( bIsDiscrete )
-    {
-        if( bIsStackable )
-            aServiceName = C2U( "com.sun.star.chart2.DiscreteStackableScaleGroup" );
         else
-            aServiceName = C2U( "com.sun.star.chart2.DiscreteScaleGroup" );
+        {
+            for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeriesSeq.getLength(); ++nSeriesIdx )
+            {
+                if( nSeriesIdx == nCooSysIdx )
+                {
+                    // we need a new chart type
+                    xCT.set( getChartTypeForNewSeries( aOldChartTypesSeq ));
+                    Reference< XChartTypeContainer > xCTCnt( rCoordSys[nCooSysIdx], uno::UNO_QUERY_THROW );
+                    Sequence< Reference< XChartType > > aCTSeq( xCTCnt->getChartTypes());
+                    if( aCTSeq.getLength())
+                    {
+                        aCTSeq[0] = xCT;
+                        xCTCnt->setChartTypes( aCTSeq );
+                    }
+                    else
+                        xCTCnt->addChartType( xCT );
+
+                    Reference< chart2::XDataSeriesContainer > xDSCnt( xCT, uno::UNO_QUERY_THROW );
+                    xDSCnt->setDataSeries( aSeriesSeq[nSeriesIdx] );
+                }
+                else
+                {
+                    // reuse existing chart type
+                    OSL_ASSERT( xCT.is());
+                    Reference< chart2::XDataSeriesContainer > xDSCnt( xCT, uno::UNO_QUERY_THROW );
+                    Sequence< Reference< XDataSeries > > aNewSeriesSeq( xDSCnt->getDataSeries());
+                    sal_Int32 nNewStartIndex = aNewSeriesSeq.getLength();
+                    aNewSeriesSeq.realloc( nNewStartIndex + aSeriesSeq[nSeriesIdx].getLength() );
+                    ::std::copy( aSeriesSeq[nSeriesIdx].getConstArray(),
+                                 aSeriesSeq[nSeriesIdx].getConstArray() + aSeriesSeq[nSeriesIdx].getLength(),
+                                 aNewSeriesSeq.getArray() + nNewStartIndex );
+                    xDSCnt->setDataSeries( aNewSeriesSeq );
+                }
+
+                // spread the series over the available coordinate systems
+                if( rCoordSys.getLength() > (nCooSysIdx + 1) )
+                    ++nCooSysIdx;
+            }
+        }
     }
-    else
+    catch( uno::Exception & ex )
     {
-        if( bIsStackable )
-            aServiceName = C2U( "com.sun.star.chart2.ContinuousStackableScaleGroup" );
-        else
-            aServiceName = C2U( "com.sun.star.chart2.ContinuousScaleGroup" );
+        ASSERT_EXCEPTION( ex );
     }
-
-    aNode.set(
-        m_xContext->getServiceManager()->createInstanceWithContext(
-            aServiceName,
-            ContextHelper::createContext( aContextValues, m_xContext )),
-        uno::UNO_QUERY );
-
-    OSL_ASSERT( aNode.is());
-
-    Reference< chart2::XStackableScaleGroup > aStackGroup( aNode, uno::UNO_QUERY );
-    if( aStackGroup.is())
-        aStackGroup->setStackMode( eStackMode );
-
-    return aNode;
 }
 
-void ChartTypeTemplate::attachNodeToNode(
-    const Reference< chart2::XDataSeriesTreeNode > & rParent,
-    const Reference< chart2::XDataSeriesTreeNode > & rChild )
+//static
+void ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem(
+                    const Sequence< Reference< XChartType > > & rOldChartTypesSeq,
+                    const Reference< XChartType > & xNewChartType )
 {
-    Reference< chart2::XDataSeriesTreeParent > xParent( rParent, uno::UNO_QUERY );
-    OSL_ASSERT( xParent.is());
-    if( xParent.is())
-        xParent->addChild( rChild );
-}
+    Reference< beans::XPropertySet > xDestination( xNewChartType, uno::UNO_QUERY );
+    if( !xDestination.is() )
+        return;
 
-Reference< chart2::XDataSeriesTreeParent > ChartTypeTemplate::createDataSeriesTree(
-    const Sequence< Reference< chart2::XDataSeries > > & aSeriesSeq,
-    const Reference< chart2::XBoundedCoordinateSystem > & rCoordSys )
-{
-    // create series tree nodes
-    // root
-    Reference< chart2::XDataSeriesTreeParent > aRoot( createRootNode());
+    OUString aNewChartType( xNewChartType->getChartType() );
 
-    // chart type group
-    Reference< chart2::XDataSeriesTreeNode > aChartTypeNode(
-        createChartTypeGroup( getDefaultChartType()));
-
-    // 'x-axis' group
-    Reference< chart2::XDataSeriesTreeNode > aCategoryNode(
-        createScaleGroup( true, true, rCoordSys, 0, getXStackMode() ));
-
-    Reference< chart2::XDataSeriesTreeNode > aFirstCatNode( aCategoryNode );
-
-    // 'z-axis' group for 3d-charts
-    if( getDimension() == 3 )
+    Reference< beans::XPropertySet > xSource;
+    sal_Int32 nN=0;
+    for( nN=0; nN<rOldChartTypesSeq.getLength();++nN)
     {
-        Reference< chart2::XDataSeriesTreeNode > aDepthNode(
-            createScaleGroup( true, true, rCoordSys, 2, getZStackMode() ));
-        // add value node to category node
-        attachNodeToNode( aDepthNode, aCategoryNode );
-        aFirstCatNode.set( aDepthNode );
+        Reference< XChartType > xOldType( rOldChartTypesSeq[nN] );
+        if( xOldType.is() && xOldType->getChartType().equals( aNewChartType ) )
+        {
+            xSource.set( Reference< beans::XPropertySet >(xOldType, uno::UNO_QUERY ) );
+            if( xSource.is() )
+                break;
+        }
     }
-
-    // 'y-axis' group
-    Reference< chart2::XDataSeriesTreeNode > aValueNode(
-        createScaleGroup( false, true, rCoordSys, 1, getYStackMode() ));
-
-    // build tree
-    // add series node to value node
-    addDataSeriesToGroup( aValueNode, aSeriesSeq );
-
-    // add value node to category node
-    attachNodeToNode( aCategoryNode, aValueNode );
-
-    // add category node to chart type node
-    attachNodeToNode( aChartTypeNode, aFirstCatNode );
-
-    // add chart type node to root of tree
-    aRoot->addChild( aChartTypeNode );
-
-    return aRoot;
-}
-
-void ChartTypeTemplate::setStackModeAtTree(
-    const Reference< chart2::XDataSeriesTreeParent > & rTree,
-    chart2::StackMode eMode )
-{
-    bool bResult = helper::DataSeriesTreeHelper::setStackMode( rTree, eMode );
-    OSL_ENSURE( bResult, "stack-mode could not be set" );
+    if( xSource.is() )
+        PropertyHelper::copyProperties( xSource, xDestination );
 }
 
 // ________
@@ -565,119 +880,3 @@ Reference< uno::XComponentContext > ChartTypeTemplate::GetComponentContext() con
 APPHELPER_XSERVICEINFO_IMPL( ChartTypeTemplate,
                              C2U( "com.sun.star.comp.chart.ChartTypeTemplate" ));
 } //  namespace chart
-
-// ____ DEBUG helper ____
-
-#if OSL_DEBUG_LEVEL > 1
-namespace
-{
-
-// prints the data series tree
-void lcl_ShowTree( const Reference< chart2::XDataSeriesTreeParent > & xParent, sal_Int32 nLevel )
-{
-    if( nLevel == 0 )
-    {
-        OSL_TRACE( "DataSeriesTree" );
-        OSL_TRACE( "--------------" );
-    }
-
-    if( xParent.is())
-    {
-//        char aIndent[ nLevel * 4  + 1];
-        char aIndent[ 200 ];
-        int j;
-        // avoids including any C-headers
-        for( j = 0; j < nLevel * 4; ++j )
-            aIndent[j] = ' ';
-        aIndent[j] = '\0';
-
-        Sequence< Reference< chart2::XDataSeriesTreeNode > > aChildren( xParent->getChildren());
-        for( sal_Int32 i = 0; i < aChildren.getLength(); ++i )
-        {
-            Reference< lang::XServiceInfo > xInfo( aChildren[ i ], uno::UNO_QUERY );
-            if( xInfo.is())
-            {
-                Reference< chart2::XStackableScaleGroup > xStackableGroup( xInfo, uno::UNO_QUERY );
-                Reference< chart2::XScaleGroup > xScaleGroup( xInfo, uno::UNO_QUERY );
-                bool bIsDiscrete = ( xInfo->supportsService(
-                                         C2U( "com.sun.star.chart2.DiscreteScaleGroup" )) ||
-                                     xInfo->supportsService(
-                                         C2U( "com.sun.star.chart2.DiscreteStackableScaleGroup" )));
-
-                if( xStackableGroup.is())
-                {
-                    if( xStackableGroup.is())
-                    {
-                        OSL_TRACE( "%s<%s stackable scale group> (Dim %d, %s)",
-                                   aIndent,
-                                   bIsDiscrete ? "discrete" : "continuous",
-                                   xStackableGroup->getRepresentedDimension(),
-                                   ( xStackableGroup->getStackMode() == chart2::StackMode_NONE )
-                                   ? "unstacked"
-                                   : ( xStackableGroup->getStackMode() == chart2::StackMode_STACKED )
-                                   ? "stacked"
-                                   : "percent stacked" );
-                    }
-                    else
-                    {
-                        OSL_TRACE( "%s<stackable scale group>", aIndent );
-                    }
-                }
-                else if( xScaleGroup.is())
-                {
-                    if( xStackableGroup.is())
-                    {
-                        OSL_TRACE( "%s<%s scale group> (Dim %d)",
-                                   aIndent,
-                                   bIsDiscrete ? "discrete" : "continuous",
-                                   xScaleGroup->getRepresentedDimension() );
-                    }
-                    else
-                    {
-                        OSL_TRACE( "%s<scale group>", aIndent );
-                    }
-                }
-                else if( xInfo->supportsService( C2U( "com.sun.star.chart2.ChartTypeGroup" )))
-                {
-                    Reference< chart2::XChartTypeGroup > xGroup( xInfo, uno::UNO_QUERY );
-                    if( xGroup.is() )
-                    {
-                        OSL_TRACE( "%s<chart type group> (%s)", aIndent, U2C( xGroup->getChartType()->getChartType()) );
-                    }
-                    else
-                    {
-                        OSL_TRACE( "%s<chart type group>", aIndent );
-                    }
-                }
-                else if( xInfo->supportsService( C2U( "com.sun.star.chart2.DataSeries" )))
-                {
-                    Reference< beans::XPropertySet > xProp( xInfo, uno::UNO_QUERY );
-                    ::rtl::OUString aId;
-                    if( xProp.is() &&
-                        ( xProp->getPropertyValue( C2U( "Identifier" )) >>= aId ))
-                    {
-                        OSL_TRACE( "%s<data series> (%s)", aIndent, U2C( aId ));
-                    }
-                    else
-                    {
-                        OSL_TRACE( "%s<data series>", aIndent );
-                    }
-                }
-                else
-                {
-                    OSL_TRACE( "%s<unknown Node>", aIndent );
-                }
-            }
-            else
-            {
-                OSL_TRACE( "%s<unknown Node>", aIndent );
-            }
-
-            Reference< chart2::XDataSeriesTreeParent > xNewParent( aChildren[ i ], uno::UNO_QUERY );
-            if( xNewParent.is())
-                lcl_ShowTree( xNewParent, nLevel + 1 );
-        }
-    }
-}
-} // anonymous namespace
-#endif
