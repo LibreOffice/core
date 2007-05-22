@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PieChartType.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:20:01 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:50:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,20 @@
 #include "precompiled_chart2.hxx"
 #include "PieChartType.hxx"
 #include "PropertyHelper.hxx"
-#include "algohelper.hxx"
 #include "macros.hxx"
+#include "PolarCoordinateSystem.hxx"
+#include "Scaling.hxx"
+#include "servicenames_charttypes.hxx"
+#include "ContainerHelper.hxx"
+#include "AxisIndexDefines.hxx"
+#include "AxisHelper.hxx"
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CHART2_AXISTYPE_HPP_
+#include <com/sun/star/chart2/AxisType.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -58,39 +67,26 @@ namespace
 
 enum
 {
-    PROP_PIECHARTTYPE_DIMENSION,
-    PROP_PIECHARTTYPE_OFFSET
+    PROP_PIECHARTTYPE_USE_RINGS
 };
 
 void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "Dimension" ),
-                  PROP_PIECHARTTYPE_DIMENSION,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-
-    rOutProperties.push_back(
-        Property( C2U( "Offset" ),
-                  PROP_PIECHARTTYPE_OFFSET,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+        Property( C2U( "UseRings" ),
+                  PROP_PIECHARTTYPE_USE_RINGS,
+                  ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 void lcl_AddDefaultsToMap(
-    ::chart::helper::tPropertyValueMap & rOutMap )
+    ::chart::tPropertyValueMap & rOutMap )
 {
-    // must match default in CTOR!
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_PIECHARTTYPE_DIMENSION ));
-    rOutMap[ PROP_PIECHARTTYPE_DIMENSION ] =
-        uno::makeAny( sal_Int32( 2 ) );
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_PIECHARTTYPE_OFFSET ));
-    rOutMap[ PROP_PIECHARTTYPE_OFFSET ] =
-        uno::makeAny( sal_Int32( 0 ) );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_PIECHARTTYPE_USE_RINGS ));
+    rOutMap[ PROP_PIECHARTTYPE_USE_RINGS ] =
+        uno::makeAny( sal_False );
 }
 
 const Sequence< Property > & lcl_GetPropertySequence()
@@ -107,10 +103,10 @@ const Sequence< Property > & lcl_GetPropertySequence()
 
         // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::helper::PropertyNameLess() );
+                     ::chart::PropertyNameLess() );
 
         // transfer result to static Sequence
-        aPropSeq = ::chart::helper::VectorToSequence( aProperties );
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
     return aPropSeq;
@@ -122,32 +118,79 @@ namespace chart
 {
 
 PieChartType::PieChartType(
-    sal_Int32 nDim    /* = 2 */,
-    sal_Int32 nOffset /* = 0 */ ) :
-        ChartType( nDim )
+    const uno::Reference< uno::XComponentContext > & xContext,
+    sal_Bool bUseRings  /* = sal_False */) :
+        ChartType( xContext )
 {
-    if( nDim != 2 )
-        setFastPropertyValue_NoBroadcast( PROP_PIECHARTTYPE_DIMENSION, uno::makeAny( nDim ));
-    if( nOffset != 0 )
-        setFastPropertyValue_NoBroadcast( PROP_PIECHARTTYPE_OFFSET, uno::makeAny( nOffset ));
+    if( bUseRings )
+        setFastPropertyValue_NoBroadcast( PROP_PIECHARTTYPE_USE_RINGS, uno::makeAny( bUseRings ));
+}
+
+PieChartType::PieChartType( const PieChartType & rOther ) :
+        ChartType( rOther )
+{
 }
 
 PieChartType::~PieChartType()
 {}
 
+// ____ XCloneable ____
+uno::Reference< util::XCloneable > SAL_CALL PieChartType::createClone()
+    throw (uno::RuntimeException)
+{
+    return uno::Reference< util::XCloneable >( new PieChartType( *this ));
+}
+
 // ____ XChartType ____
 ::rtl::OUString SAL_CALL PieChartType::getChartType()
     throw (uno::RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.PieChart" ));
+    return CHART2_SERVICE_NAME_CHARTTYPE_PIE;
 }
 
+Reference< chart2::XCoordinateSystem > SAL_CALL
+    PieChartType::createCoordinateSystem( ::sal_Int32 DimensionCount )
+    throw (lang::IllegalArgumentException,
+           uno::RuntimeException)
+{
+    Reference< chart2::XCoordinateSystem > xResult(
+        new PolarCoordinateSystem(
+            GetComponentContext(), DimensionCount, /* bSwapXAndYAxis */ sal_False ));
+
+    for( sal_Int32 i=0; i<DimensionCount; ++i )
+    {
+        Reference< chart2::XAxis > xAxis( xResult->getAxisByDimension( i, MAIN_AXIS_INDEX ) );
+        if( !xAxis.is() )
+        {
+            OSL_ENSURE(false,"a created coordinate system should have an axis for each dimension");
+            continue;
+        }
+
+        //hhhh todo make axis invisible
+
+        chart2::ScaleData aScaleData = xAxis->getScaleData();
+        aScaleData.Scaling = new LinearScaling( 1.0, 0.0 );
+        aScaleData.AxisType = chart2::AxisType::REALNUMBER;
+
+        if( i == 0 )
+            aScaleData.Orientation = chart2::AxisOrientation_REVERSE;
+        else
+            aScaleData.Orientation = chart2::AxisOrientation_MATHEMATICAL;
+
+        //remove explicit scalings from all axes
+        AxisHelper::removeExplicitScaling( aScaleData );
+
+        xAxis->setScaleData( aScaleData );
+    }
+
+    return xResult;
+}
 
 // ____ OPropertySet ____
 uno::Any PieChartType::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    static helper::tPropertyValueMap aStaticDefaults;
+    static tPropertyValueMap aStaticDefaults;
 
     // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -157,7 +200,7 @@ uno::Any PieChartType::GetDefaultValue( sal_Int32 nHandle ) const
         lcl_AddDefaultsToMap( aStaticDefaults );
     }
 
-    helper::tPropertyValueMap::const_iterator aFound(
+    tPropertyValueMap::const_iterator aFound(
         aStaticDefaults.find( nHandle ));
 
     if( aFound == aStaticDefaults.end())
@@ -195,5 +238,18 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
     return xInfo;
     // \--
 }
+
+uno::Sequence< ::rtl::OUString > PieChartType::getSupportedServiceNames_Static()
+{
+    uno::Sequence< ::rtl::OUString > aServices( 3 );
+    aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_PIE;
+    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartType" );
+    aServices[ 2 ] = C2U( "com.sun.star.beans.PropertySet" );
+    return aServices;
+}
+
+// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+APPHELPER_XSERVICEINFO_IMPL( PieChartType,
+                             C2U( "com.sun.star.comp.chart.PieChartType" ));
 
 } //  namespace chart
