@@ -4,9 +4,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:23:54 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:46:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
 #endif
 #ifndef SC_XLTABLE_HXX
 #include "xltable.hxx"
+#endif
+#ifndef SC_XIHELPER_HXX
+#include "xihelper.hxx"
 #endif
 #ifndef SC_XIPAGE_HXX
 #include "xipage.hxx"
@@ -111,23 +114,19 @@ FltError ImportExcel::Read( void )
     enum Zustand {
         Z_BiffNull, // Nicht in gueltigem Biff-Format
         Z_Biff2,    // Biff2: nur eine Tabelle
-        Z_Biff2C,   // Biff2: Chart
 
         Z_Biff3,    // Biff3: nur eine Tabelle
-        Z_Biff3C,   // Biff3: Chart
 
         Z_Biff4,    // Biff4: nur eine Tabelle
         Z_Biff4W,   // Biff4 Workbook: Globals
         Z_Biff4T,   // Biff4 Workbook: eine Tabelle selbst
         Z_Biff4E,   // Biff4 Workbook: zwischen den Tabellen
-        Z_Biff4C,   // Biff4: Chart
 
         Z_Biff5WPre,// Biff5: Prefetch Workbook
         Z_Biff5W,   // Biff5: Globals
         Z_Biff5TPre,// Biff5: Prefetch fuer Shrfmla/Array Formula
         Z_Biff5T,   // Biff5: eine Tabelle selbst
         Z_Biff5E,   // Biff5: zwischen den Tabellen
-        Z_Biff5C,   // Biff5: Chart
         Z_Biffn0,   // Alle Biffs: Tabelle bis naechstesss EOF ueberlesen
         Z_Ende };
 
@@ -154,15 +153,11 @@ FltError ImportExcel::Read( void )
             switch( eAkt )
             {
                 case Z_Biff2:
-                case Z_Biff2C:
                 case Z_Biff3:
-                case Z_Biff3C:
                 case Z_Biff4:
                 case Z_Biff4T:
-                case Z_Biff4C:
                 case Z_Biff5TPre:
                 case Z_Biff5T:
-                case Z_Biff5C:
                     rNumFmtBfr.CreateScFormats();
                     Eof();
                 break;
@@ -309,6 +304,12 @@ FltError ImportExcel::Read( void )
             {
                 switch( nOpcode )
                 {
+                    // skip chart substream
+                    case EXC_ID2_BOF:
+                    case EXC_ID3_BOF:
+                    case EXC_ID4_BOF:
+                    case EXC_ID5_BOF:           XclTools::SkipSubStream( maStrm );  break;
+
                     case EXC_ID2_DIMENSIONS:
                     case EXC_ID3_DIMENSIONS:    ReadDimensions();       break;
                     case EXC_ID2_BLANK:
@@ -371,6 +372,12 @@ FltError ImportExcel::Read( void )
             {
                 switch( nOpcode )
                 {
+                    // skip chart substream
+                    case EXC_ID2_BOF:
+                    case EXC_ID3_BOF:
+                    case EXC_ID4_BOF:
+                    case EXC_ID5_BOF:           XclTools::SkipSubStream( maStrm );  break;
+
                     case EXC_ID2_DIMENSIONS:
                     case EXC_ID3_DIMENSIONS:    ReadDimensions();       break;
                     case EXC_ID2_BLANK:
@@ -480,6 +487,12 @@ FltError ImportExcel::Read( void )
             {
                 switch( nOpcode )
                 {
+                    // skip chart substream
+                    case EXC_ID2_BOF:
+                    case EXC_ID3_BOF:
+                    case EXC_ID4_BOF:
+                    case EXC_ID5_BOF:           XclTools::SkipSubStream( maStrm );  break;
+
                     case EXC_ID2_DIMENSIONS:
                     case EXC_ID3_DIMENSIONS:    ReadDimensions();       break;
                     case EXC_ID2_BLANK:
@@ -695,18 +708,8 @@ FltError ImportExcel::Read( void )
                     case 0x00E5: Cellmerging();          break;  // #i62300#
                     case 0x0236: TableOp(); break;      // TABLE        [    5]
                     case 0x0809:                        // BOF          [    5]
-                        Bof5();
-                        if( pExcRoot->eDateiTyp == Biff5C )
-                        {
-                            ePrev = eAkt;
-                            eAkt = Z_Biff5C;
-                        }
-                        else
-                        {
-                            ePrev = eAkt;
-                            eAkt = Z_Biffn0;
-                        }
-                    break;
+                        XclTools::SkipSubStream( maStrm );
+                        break;
                 }
 
             }
@@ -722,19 +725,18 @@ FltError ImportExcel::Read( void )
                         switch( pExcRoot->eDateiTyp )
                         {
                             case Biff5:
+                            case Biff5M4:
                                 eAkt = Z_Biff5TPre; // Shrfmla Prefetch, Row-Prefetch
                                 nBofLevel = 0;
-
                                 aIn.StoreGlobalPosition(); // und Position merken
-                                break;
-                            case Biff5C:
-                                eAkt = Z_Biff5C;
-                                ePrev = Z_Biff5E;
-                                break;
-                            case Biff5M4:
+                            break;
+                            case Biff5C:    // chart sheet
+                                GetObjectManager().ReadTabChart( maStrm );
+                                Eof();
+                                GetTracer().TraceChartOnlySheet();
+                            break;
                             case Biff5V:
                             default:
-                                NeueTabelle();
                                 pD->SetVisible( GetCurrScTab(), FALSE );
                                 ePrev = eAkt;
                                 eAkt = Z_Biffn0;
@@ -745,24 +747,6 @@ FltError ImportExcel::Read( void )
                         break;
                 }
 
-            }
-                break;
-            case Z_Biff5C:  // ------------------------------------- Z_Biff5C -
-            {
-                if( bWithDrawLayer )
-                {
-                    switch( nOpcode )
-                    {
-                        case 0x0A:                                          // EOF          [ 2345]
-                            EndChartObj();
-                            eAkt = ePrev;   // und retur (zur Tabelle?)
-                            break;
-                        case 0x1027:    ChartObjectLink();          break;  // OBJECTLINK   [ 2345]
-                        case 0x1051:    ChartSelection();           break;  // AI           [    5]
-                    }
-                }
-                else if( nOpcode == 0x0A )
-                    eAkt = ePrev;
             }
                 break;
             case Z_Biffn0:      // --------------------------------- Z_Biffn0 -
