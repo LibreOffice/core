@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VPolarGrid.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:32:54 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:13:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,13 +40,10 @@
 #include "TickmarkHelper.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "ShapeFactory.hxx"
-#include "chartview/ObjectIdentifier.hxx"
+#include "ObjectIdentifier.hxx"
 #include "macros.hxx"
 #include "CommonConverters.hxx"
 
-#ifndef _COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
-#include <com/sun/star/chart2/XIdentifiable.hpp>
-#endif
 #ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
 #endif
@@ -60,10 +57,13 @@ namespace chart
 //.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using ::com::sun::star::uno::Reference;
 
-VPolarGrid::VPolarGrid( const uno::Reference< XGrid >& xGrid, sal_Int32 nDimensionCount )
-            : VMeterBase( uno::Reference<XMeter>::query(xGrid), nDimensionCount )
-            , m_pPosHelper( new PolarPlottingPositionHelper(false) )
+VPolarGrid::VPolarGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
+                       , const uno::Sequence< Reference< beans::XPropertySet > > & rGridPropertiesList )
+            : VAxisOrGridBase( nDimensionIndex, nDimensionCount )
+            , m_aGridPropertiesList( rGridPropertiesList )
+            , m_pPosHelper( new PolarPlottingPositionHelper() )
             , m_aIncrements()
 {
     PlotterBase::m_pPosHelper = m_pPosHelper;
@@ -96,7 +96,7 @@ void VPolarGrid::createLinePointSequence_ForAngleAxis(
         , PolarPlottingPositionHelper* pPosHelper
         , double fLogicRadius, double fLogicZ )
 {
-    uno::Reference< XScaling > xInverseScaling( NULL );
+    Reference< XScaling > xInverseScaling( NULL );
     if( rScale.Scaling.is() )
         xInverseScaling = rScale.Scaling->getInverseScaling();
 
@@ -112,7 +112,7 @@ void VPolarGrid::createLinePointSequence_ForAngleAxis(
         pTickInfo->updateUnscaledValue( xInverseScaling );
         double fLogicAngle = pTickInfo->fUnscaledTickValue;
 
-        drawing::Position3D aScenePosition3D( pPosHelper->transformLogicToScene( fLogicAngle, fLogicRadius, fLogicZ ) );
+        drawing::Position3D aScenePosition3D( pPosHelper->transformAngleRadiusToScene( fLogicAngle, fLogicRadius, fLogicZ ) );
         rPoints[0][nTick].X = static_cast<sal_Int32>(aScenePosition3D.PositionX);
         rPoints[0][nTick].Y = static_cast<sal_Int32>(aScenePosition3D.PositionY);
     }
@@ -126,14 +126,16 @@ void VPolarGrid::createLinePointSequence_ForAngleAxis(
         rPoints[0].realloc(0);
 }
 
-void VPolarGrid::create2DAngleGrid( const uno::Reference< drawing::XShapes >& xTarget
+void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicTarget
         , ::std::vector< ::std::vector< TickInfo > >& rRadiusTickInfos
         , ::std::vector< ::std::vector< TickInfo > >& rAngleTickInfos
         , const ::std::vector<VLineProperties>& rLinePropertiesList )
 {
+    Reference< drawing::XShapes > xMainTarget(
+        this->createGroupShape( xLogicTarget, m_aCID ) );
+
     const ExplicitScaleData&     rAngleScale = m_pPosHelper->getScales()[0];
-    const ExplicitIncrementData& rAngleIncrement = m_aIncrements[0];
-    uno::Reference< XScaling > xInverseScaling( NULL );
+    Reference< XScaling > xInverseScaling( NULL );
     if( rAngleScale.Scaling.is() )
         xInverseScaling = rAngleScale.Scaling->getInverseScaling();
 
@@ -156,7 +158,6 @@ void VPolarGrid::create2DAngleGrid( const uno::Reference< drawing::XShapes >& xT
         drawing::PointSequenceSequence aAllPoints;
         ::std::vector< TickInfo >::iterator             aTickIter = (*aDepthIter).begin();
         const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
-        sal_Int32 nRealPointCount = 0;
         for( ; aTickIter != aTickEnd; aTickIter++ )
         {
             TickInfo& rTickInfo = *aTickIter;
@@ -168,8 +169,8 @@ void VPolarGrid::create2DAngleGrid( const uno::Reference< drawing::XShapes >& xT
 
             drawing::PointSequenceSequence aPoints(1);
             aPoints[0].realloc(2);
-            drawing::Position3D aScenePositionStart( m_pPosHelper->transformLogicToScene( fLogicAngle, fLogicInnerRadius, fLogicZ ) );
-            drawing::Position3D aScenePositionEnd(   m_pPosHelper->transformLogicToScene( fLogicAngle, fLogicOuterRadius, fLogicZ ) );
+            drawing::Position3D aScenePositionStart( m_pPosHelper->transformAngleRadiusToScene( fLogicAngle, fLogicInnerRadius, fLogicZ ) );
+            drawing::Position3D aScenePositionEnd(   m_pPosHelper->transformAngleRadiusToScene( fLogicAngle, fLogicOuterRadius, fLogicZ ) );
             aPoints[0][0].X = static_cast<sal_Int32>(aScenePositionStart.PositionX);
             aPoints[0][0].Y = static_cast<sal_Int32>(aScenePositionStart.PositionY);
             aPoints[0][1].X = static_cast<sal_Int32>(aScenePositionEnd.PositionX);
@@ -177,22 +178,25 @@ void VPolarGrid::create2DAngleGrid( const uno::Reference< drawing::XShapes >& xT
             appendPointSequence( aAllPoints, aPoints );
         }
 
-        uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
-                xTarget, aAllPoints, rLinePropertiesList[nDepth] );
+        Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
+                xMainTarget, aAllPoints, &rLinePropertiesList[nDepth] );
         //because of this name this line will be used for marking
         m_pShapeFactory->setShapeName( xShape, C2U("MarkHandles") );
     }
 }
 
-void VPolarGrid::create2DRadiusGrid( const uno::Reference< drawing::XShapes >& xTarget
+void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogicTarget
         , ::std::vector< ::std::vector< TickInfo > >& rRadiusTickInfos
         , ::std::vector< ::std::vector< TickInfo > >& rAngleTickInfos
         , const ::std::vector<VLineProperties>& rLinePropertiesList )
 {
+    Reference< drawing::XShapes > xMainTarget(
+        this->createGroupShape( xLogicTarget, m_aCID ) );
+
     const ExplicitScaleData&     rRadiusScale = m_pPosHelper->getScales()[1];
     const ExplicitScaleData&     rAngleScale = m_pPosHelper->getScales()[0];
     const ExplicitIncrementData& rAngleIncrement = m_aIncrements[0];
-    uno::Reference< XScaling > xInverseRadiusScaling( NULL );
+    Reference< XScaling > xInverseRadiusScaling( NULL );
     if( rRadiusScale.Scaling.is() )
         xInverseRadiusScaling = rRadiusScale.Scaling->getInverseScaling();
 
@@ -203,11 +207,23 @@ void VPolarGrid::create2DRadiusGrid( const uno::Reference< drawing::XShapes >& x
         ; aDepthIter != aDepthEnd && nDepth < nLinePropertiesCount
         ; aDepthIter++, nDepth++ )
     {
+        if( !rLinePropertiesList[nDepth].isLineVisible() )
+            continue;
+
+        Reference< drawing::XShapes > xTarget( xMainTarget );
+        if( nDepth > 0 )
+        {
+            xTarget.set( this->createGroupShape( xLogicTarget
+                , ObjectIdentifier::addChildParticle( m_aCID, ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_SUBGRID, nDepth-1 ) )
+                ) );
+            if(!xTarget.is())
+                xTarget.set( xMainTarget );
+        }
+
         //create axis main lines
         drawing::PointSequenceSequence aAllPoints;
         ::std::vector< TickInfo >::iterator             aTickIter = (*aDepthIter).begin();
         const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
-        sal_Int32 nRealPointCount = 0;
         for( ; aTickIter != aTickEnd; aTickIter++ )
         {
             TickInfo& rTickInfo = *aTickIter;
@@ -225,8 +241,8 @@ void VPolarGrid::create2DRadiusGrid( const uno::Reference< drawing::XShapes >& x
                 appendPointSequence( aAllPoints, aPoints );
         }
 
-        uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
-                xTarget, aAllPoints, rLinePropertiesList[nDepth] );
+        Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
+                xTarget, aAllPoints, &rLinePropertiesList[nDepth] );
         //because of this name this line will be used for marking
         m_pShapeFactory->setShapeName( xShape, C2U("MarkHandles") );
     }
@@ -237,23 +253,8 @@ void SAL_CALL VPolarGrid::createShapes()
     DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"Axis is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
-    if( !m_xMeter.is())
+    if(!m_aGridPropertiesList.getLength())
         return;
-    uno::Reference< beans::XPropertySet > xGridProps( m_xMeter, uno::UNO_QUERY );
-    if(!xGridProps.is())
-        return;
-
-    //-----------------------------------------
-    //create named group shape
-    uno::Reference< XIdentifiable > xIdent( m_xMeter, uno::UNO_QUERY );
-    if( ! xIdent.is())
-        return;
-
-    uno::Reference< drawing::XShapes > xTarget(
-        this->createGroupShape( m_xLogicTarget
-        , ObjectIdentifier::createClassifiedIdentifier(
-                OBJECTTYPE_GRID, xIdent->getIdentifier() )
-        ) );
 
     //-----------------------------------------
     //create all scaled tickmark values
@@ -264,17 +265,16 @@ void SAL_CALL VPolarGrid::createShapes()
 
     //-----------------------------------------
     ::std::vector<VLineProperties> aLinePropertiesList;
-    VCartesianGrid::fillLinePropertiesFromGridModel( aLinePropertiesList, xGridProps );
+    VCartesianGrid::fillLinePropertiesFromGridModel( aLinePropertiesList, m_aGridPropertiesList );
 
     //-----------------------------------------
     //create tick mark line shapes
     if(2==m_nDimension)
     {
-        sal_Int32 nDimensionIndex = m_xMeter->getRepresentedDimension();
-        if(nDimensionIndex==1)
-            this->create2DRadiusGrid( xTarget, aRadiusTickInfos, aAngleTickInfos, aLinePropertiesList );
-        else
-            this->create2DAngleGrid( xTarget, aRadiusTickInfos, aAngleTickInfos, aLinePropertiesList );
+        if(m_nDimensionIndex==1)
+            this->create2DRadiusGrid( m_xLogicTarget, aRadiusTickInfos, aAngleTickInfos, aLinePropertiesList );
+        //else //no Angle Grid so far as this equals exactly the y axis positions
+        //    this->create2DAngleGrid( m_xLogicTarget, aRadiusTickInfos, aAngleTickInfos, aLinePropertiesList );
     }
 }
 
