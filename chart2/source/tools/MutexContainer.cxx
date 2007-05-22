@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MutexContainer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:27:05 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:02:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,6 @@
 
 namespace chart
 {
-namespace helper
-{
 
 MutexContainer::~MutexContainer()
 {}
@@ -50,5 +48,4 @@ MutexContainer::~MutexContainer()
     return m_aMutex;
 }
 
-} // namespace helper
 } //  namespace chart
