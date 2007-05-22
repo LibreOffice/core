@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:50:44 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:35:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -388,6 +388,14 @@ void DocumentHolder::CloseDocument( sal_Bool bDeliverOwnership, sal_Bool bWaitFo
         uno::Reference< document::XEventBroadcaster > xEventBroadcaster( m_xComponent, uno::UNO_QUERY );
         if ( xEventBroadcaster.is() )
             xEventBroadcaster->removeEventListener( ( document::XEventListener* )this );
+        else
+        {
+            // the object does not support document::XEventBroadcaster interface
+            // use the workaround, register for modified events
+            uno::Reference< util::XModifyBroadcaster > xModifyBroadcaster( m_xComponent, uno::UNO_QUERY );
+            if ( xModifyBroadcaster.is() )
+                xModifyBroadcaster->removeModifyListener( ( util::XModifyListener* )this );
+        }
 
         uno::Reference< util::XCloseable > xCloseable( xBroadcaster, uno::UNO_QUERY );
         if ( xCloseable.is() )
@@ -1041,6 +1049,14 @@ void DocumentHolder::SetComponent( const uno::Reference< util::XCloseable >& xDo
     uno::Reference< document::XEventBroadcaster > xEventBroadcaster( m_xComponent, uno::UNO_QUERY );
     if ( xEventBroadcaster.is() )
         xEventBroadcaster->addEventListener( ( document::XEventListener* )this );
+    else
+    {
+        // the object does not support document::XEventBroadcaster interface
+        // use the workaround, register for modified events
+        uno::Reference< util::XModifyBroadcaster > xModifyBroadcaster( m_xComponent, uno::UNO_QUERY );
+        if ( xModifyBroadcaster.is() )
+            xModifyBroadcaster->addModifyListener( ( util::XModifyListener* )this );
+    }
 
     if ( m_xFrame.is() )
         LoadDocToFrame(sal_False);
@@ -1070,13 +1086,33 @@ sal_Bool DocumentHolder::LoadDocToFrame( sal_Bool bInPlace )
                 aArgs[2].Value <<= sal_Int16(1);
             }
 
-            xComponentLoader->loadComponentFromURL( rtl::OUString::createFromAscii( "private:object" ),
-                                                    rtl::OUString::createFromAscii( "_self" ),
-                                                    0,
-                                                    aArgs );
+            bool bIsChart = false;
+            uno::Reference< lang::XServiceInfo > xInfo( xDoc, uno::UNO_QUERY );
+            if( xInfo.is())
+            {
+                bIsChart = xInfo->supportsService(
+                    ::rtl::OUString::createFromAscii("com.sun.star.chart2.ChartDocument"));
+            }
 
-            ::rtl::OUString aDocumentName;
-            uno::Reference < frame::XModel > xDocument( m_xComponent, uno::UNO_QUERY );
+            if( bIsChart )
+            {
+                xComponentLoader->loadComponentFromURL(
+                    ::rtl::OUString::createFromAscii( "private:factory/schart" ),
+                    ::rtl::OUString::createFromAscii( "_self" ),
+                    0,
+                    aArgs );
+            }
+            else
+            {
+                xComponentLoader->loadComponentFromURL( rtl::OUString::createFromAscii( "private:object" ),
+                                                        rtl::OUString::createFromAscii( "_self" ),
+                                                        0,
+                                                        aArgs );
+            }
+
+
+//             ::rtl::OUString aDocumentName;
+//             uno::Reference < frame::XModel > xDocument( m_xComponent, uno::UNO_QUERY );
 
 //REMOVE                uno::Sequence< beans::PropertyValue > aDocArgs = xDocument->getArgs();
 //REMOVE                for ( sal_Int32 nInd = 0; nInd < aDocArgs.getLength(); nInd++ )
@@ -1417,11 +1453,13 @@ void SAL_CALL DocumentHolder::notifyTermination( const lang::EventObject& aSourc
 }
 
 //---------------------------------------------------------------------------
-void SAL_CALL DocumentHolder::modified( const lang::EventObject& )
+void SAL_CALL DocumentHolder::modified( const lang::EventObject& aEvent )
     throw ( uno::RuntimeException )
 {
-    if( m_pEmbedObj )
-        m_pEmbedObj->update(); // TODO ???
+    // if the component does not support document::XEventBroadcaster
+    // the modify notifications are used as workaround, but only for running state
+    if( aEvent.Source == m_xComponent && m_pEmbedObj && m_pEmbedObj->getCurrentState() == embed::EmbedStates::RUNNING )
+        m_pEmbedObj->PostEvent_Impl( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnVisAreaChanged" ) ), aEvent.Source );
 }
 
 //---------------------------------------------------------------------------
