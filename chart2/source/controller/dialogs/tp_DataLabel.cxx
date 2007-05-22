@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_DataLabel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:32:15 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:44:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,8 @@
 #include "tp_DataLabel.hxx"
 #include "TabPages.hrc"
 #include "ResId.hxx"
-#include "SchSfxItemIds.hxx"
+#include "chartview/ChartSfxItemIds.hxx"
+#include "NoWarningThisInCTOR.hxx"
 
 #ifndef _SFXENUMITEM_HXX
 #include <svtools/eitem.hxx>
