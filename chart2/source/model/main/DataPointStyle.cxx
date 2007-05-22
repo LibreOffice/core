@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPointStyle.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:09:57 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:34:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include "DataPointProperties.hxx"
 #include "PropertyHelper.hxx"
 #include "macros.hxx"
-#include "algohelper.hxx"
+#include "ContainerHelper.hxx"
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -77,15 +77,14 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
     {
         // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
-        ::chart::DataPointProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ false );
+        ::chart::DataPointProperties::AddPropertiesToVector( aProperties );
 
         // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::helper::PropertyNameLess() );
+                     ::chart::PropertyNameLess() );
 
         // transfer result to static Sequence
-        aPropSeq = ::chart::helper::VectorToSequence( aProperties );
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
     return aPropSeq;
@@ -99,9 +98,9 @@ namespace chart
 
 DataPointStyle::DataPointStyle(
     const uno::Reference< container::XNameAccess > & xStyleFamily,
-    ::osl::Mutex & _rMutex ) :
-        ::property::OStyle( xStyleFamily, _rMutex ),
-    m_rMutex( _rMutex )
+    ::osl::Mutex & par_rMutex ) :
+        ::property::OStyle( xStyleFamily, par_rMutex ),
+    m_rMutex( par_rMutex )
 {}
 
 DataPointStyle::~DataPointStyle()
@@ -129,19 +128,17 @@ void SAL_CALL DataPointStyle::release() throw ()
 uno::Any DataPointStyle::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    static helper::tPropertyValueMap aStaticDefaults;
+    static tPropertyValueMap aStaticDefaults;
 
     // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aStaticDefaults.size() )
     {
         // initialize defaults
-        DataPointProperties::AddDefaultsToMap(
-            aStaticDefaults,
-            /* bIncludeStyleProperties = */ false );
+        DataPointProperties::AddDefaultsToMap( aStaticDefaults );
     }
 
-    helper::tPropertyValueMap::const_iterator aFound(
+    tPropertyValueMap::const_iterator aFound(
         aStaticDefaults.find( nHandle ));
 
     if( aFound == aStaticDefaults.end())
