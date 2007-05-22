@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPoint.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:09:31 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:33:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include "UserDefinedProperties.hxx"
 #include "PropertyHelper.hxx"
 #include "macros.hxx"
-#include "algohelper.hxx"
+#include "ContainerHelper.hxx"
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -62,16 +62,18 @@
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
 using ::osl::MutexGuard;
+using ::rtl::OUString;
 
 // ____________________________________________________________
 
 namespace
 {
-const uno::Sequence< Property > & lcl_GetPropertySequence()
+const Sequence< Property > & lcl_GetPropertySequence()
 {
-    static uno::Sequence< Property > aPropSeq;
+    static Sequence< Property > aPropSeq;
 
     // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -79,18 +81,16 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
     {
         // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
-        ::chart::DataPointProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ true );
-        ::chart::CharacterProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ true );
+        ::chart::DataPointProperties::AddPropertiesToVector( aProperties );
+        ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
         // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::helper::PropertyNameLess() );
+                     ::chart::PropertyNameLess() );
 
         // transfer result to static Sequence
-        aPropSeq = ::chart::helper::VectorToSequence( aProperties );
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
     return aPropSeq;
@@ -102,44 +102,83 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
 namespace chart
 {
 
-DataPoint::DataPoint( ::osl::Mutex & _rMutex ) :
-        ::property::OPropertySet( _rMutex ),
-    m_rMutex( _rMutex )
+DataPoint::DataPoint() :
+        ::property::OPropertySet( m_aMutex ),
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
 {}
 
-DataPoint::DataPoint( ::osl::Mutex & _rMutex,
-                      const uno::Reference<
-                          beans::XPropertySet > & rParentProperties ) :
-        ::property::OPropertySet( _rMutex ),
-    m_rMutex( _rMutex ),
-    m_xParentProperties( rParentProperties )
+DataPoint::DataPoint( const uno::Reference< beans::XPropertySet > & rParentProperties ) :
+        ::property::OPropertySet( m_aMutex ),
+        m_xParentProperties( rParentProperties ),
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
 {}
+
+DataPoint::DataPoint( const DataPoint & rOther ) :
+        ::property::OPropertySet( rOther, m_aMutex ),
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+{
+    // m_xParentProperties has to be set from outside, like in the method
+    // DataSeries::createClone
+
+    // add as listener to XPropertySet properties
+    Reference< beans::XPropertySet > xPropertySet;
+    uno::Any aValue;
+
+    getFastPropertyValue( aValue, DataPointProperties::PROP_DATAPOINT_ERROR_BAR_X );
+    if( ( aValue >>= xPropertySet )
+        && xPropertySet.is())
+        ModifyListenerHelper::addListener( xPropertySet, m_xModifyEventForwarder );
+
+    getFastPropertyValue( aValue, DataPointProperties::PROP_DATAPOINT_ERROR_BAR_Y );
+    if( ( aValue >>= xPropertySet )
+        && xPropertySet.is())
+        ModifyListenerHelper::addListener( xPropertySet, m_xModifyEventForwarder );
+}
 
 DataPoint::~DataPoint()
-{}
+{
+    try
+    {
+        // remove listener from XPropertySet properties
+        Reference< beans::XPropertySet > xPropertySet;
+        uno::Any aValue;
 
-// ____ XInterface ____
-uno::Any SAL_CALL DataPoint::queryInterface(
-    const uno::Type & rType )
+        getFastPropertyValue( aValue, DataPointProperties::PROP_DATAPOINT_ERROR_BAR_X );
+        if( ( aValue >>= xPropertySet )
+            && xPropertySet.is())
+            ModifyListenerHelper::removeListener( xPropertySet, m_xModifyEventForwarder );
+
+        getFastPropertyValue( aValue, DataPointProperties::PROP_DATAPOINT_ERROR_BAR_Y );
+        if( ( aValue >>= xPropertySet )
+            && xPropertySet.is())
+            ModifyListenerHelper::removeListener( xPropertySet, m_xModifyEventForwarder );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+// ____ XCloneable ____
+uno::Reference< util::XCloneable > SAL_CALL DataPoint::createClone()
     throw (uno::RuntimeException)
 {
-    // OPropertySet interfaces
-    uno::Any aAny = ::property::OPropertySet::queryInterface( rType );
-    if( aAny.hasValue() )
-        return aAny;
-
-    // OWeakObject interfaces
-    return ::cppu::OWeakObject::queryInterface( rType );
+    return uno::Reference< util::XCloneable >( new DataPoint( *this ));
 }
 
-void SAL_CALL DataPoint::acquire() throw ()
+// ____ XChild ____
+Reference< uno::XInterface > SAL_CALL DataPoint::getParent()
+    throw (uno::RuntimeException)
 {
-    ::cppu::OWeakObject::acquire();
+    return Reference< uno::XInterface >( m_xParentProperties, uno::UNO_QUERY );
 }
 
-void SAL_CALL DataPoint::release() throw ()
+void SAL_CALL DataPoint::setParent(
+    const Reference< uno::XInterface >& Parent )
+    throw (lang::NoSupportException,
+           uno::RuntimeException)
 {
-    ::cppu::OWeakObject::release();
+    m_xParentProperties.set( Parent, uno::UNO_QUERY );
 }
 
 // ____ OPropertySet ____
@@ -148,8 +187,42 @@ uno::Any DataPoint::GetDefaultValue( sal_Int32 nHandle ) const
 {
     // the value set at the data series is the default
     uno::Reference< beans::XFastPropertySet > xFast( m_xParentProperties, uno::UNO_QUERY );
-    OSL_ASSERT( xFast.is());
+    if( !xFast.is())
+    {
+        OSL_ENSURE( false, "data point needs a parent property set to provide values correctly" );
+        return uno::Any();
+    }
+
     return xFast->getFastPropertyValue( nHandle );
+}
+
+void SAL_CALL DataPoint::setFastPropertyValue_NoBroadcast(
+    sal_Int32 nHandle, const uno::Any& rValue )
+    throw (uno::Exception)
+{
+    if(    nHandle == DataPointProperties::PROP_DATAPOINT_ERROR_BAR_Y
+        || nHandle == DataPointProperties::PROP_DATAPOINT_ERROR_BAR_X )
+    {
+        uno::Any aOldValue;
+        Reference< util::XModifyBroadcaster > xBroadcaster;
+        this->getFastPropertyValue( aOldValue, nHandle );
+        if( aOldValue.hasValue() &&
+            (aOldValue >>= xBroadcaster) &&
+            xBroadcaster.is())
+        {
+            ModifyListenerHelper::removeListener( xBroadcaster, m_xModifyEventForwarder );
+        }
+
+        OSL_ASSERT( rValue.getValueType().getTypeClass() == uno::TypeClass_INTERFACE );
+        if( rValue.hasValue() &&
+            (rValue >>= xBroadcaster) &&
+            xBroadcaster.is())
+        {
+            ModifyListenerHelper::addListener( xBroadcaster, m_xModifyEventForwarder );
+        }
+    }
+
+    ::property::OPropertySet::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL DataPoint::getInfoHelper()
@@ -185,9 +258,75 @@ Reference< beans::XPropertySetInfo > SAL_CALL
     // \--
 }
 
-::osl::Mutex & DataPoint::GetMutex()
+// ____ XModifyBroadcaster ____
+void SAL_CALL DataPoint::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+    throw (uno::RuntimeException)
 {
-    return m_rMutex;
+    try
+    {
+        uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
+        xBroadcaster->addModifyListener( aListener );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
 }
+
+void SAL_CALL DataPoint::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+    throw (uno::RuntimeException)
+{
+    try
+    {
+        uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
+        xBroadcaster->removeModifyListener( aListener );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+// ____ XModifyListener ____
+void SAL_CALL DataPoint::modified( const lang::EventObject& aEvent )
+    throw (uno::RuntimeException)
+{
+    m_xModifyEventForwarder->modified( aEvent );
+}
+
+// ____ XEventListener (base of XModifyListener) ____
+void SAL_CALL DataPoint::disposing( const lang::EventObject& )
+    throw (uno::RuntimeException)
+{
+    // nothing
+}
+
+// ____ OPropertySet ____
+void DataPoint::firePropertyChangeEvent()
+{
+    fireModifyEvent();
+}
+
+void DataPoint::fireModifyEvent()
+{
+    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
+}
+
+Sequence< OUString > DataPoint::getSupportedServiceNames_Static()
+{
+    Sequence< OUString > aServices( 3 );
+    aServices[ 0 ] = C2U( "com.sun.star.chart2.DataPoint" );
+    aServices[ 1 ] = C2U( "com.sun.star.chart2.DataPointProperties" );
+    aServices[ 2 ] = C2U( "com.sun.star.beans.PropertySet" );
+    return aServices;
+}
+
+// needed by MSC compiler
+using impl::DataPoint_Base;
+
+IMPLEMENT_FORWARD_XINTERFACE2( DataPoint, DataPoint_Base, ::property::OPropertySet )
+
+// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+APPHELPER_XSERVICEINFO_IMPL( DataPoint, C2U( "com.sun.star.comp.chart.DataPoint" ));
 
 } //  namespace chart
