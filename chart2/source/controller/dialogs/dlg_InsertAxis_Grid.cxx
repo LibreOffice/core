@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertAxis_Grid.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:34:49 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:33:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,11 @@
 #include "dlg_InsertAxis_Grid.hrc"
 
 #include "ResId.hxx"
-#include "SchSfxItemIds.hxx"
-#include "Strings.hrc"
+#include "chartview/ChartSfxItemIds.hxx"
 #include "SchSlotIds.hxx"
+#include "HelpIds.hrc"
+#include "NoWarningThisInCTOR.hxx"
+#include "ObjectNameProvider.hxx"
 
 // header for class SfxBoolItem
 #ifndef _SFXENUMITEM_HXX
@@ -53,7 +55,7 @@ namespace chart
 {
 //.............................................................................
 
-InsertMeterDialogData::InsertMeterDialogData()
+InsertAxisOrGridDialogData::InsertAxisOrGridDialogData()
         : aPossibilityList(6)
         , aExistenceList(6)
 {
@@ -71,7 +73,7 @@ InsertMeterDialogData::InsertMeterDialogData()
 //==============================
 
 SchAxisDlg::SchAxisDlg( Window* pWindow
-                       , const InsertMeterDialogData& rInput, BOOL bAxisDlg )
+                       , const InsertAxisOrGridDialogData& rInput, BOOL bAxisDlg )
                        :
         ModalDialog( pWindow, SchResId( DLG_AXIS_OR_GRID )),
 
@@ -93,17 +95,38 @@ SchAxisDlg::SchAxisDlg( Window* pWindow
 
         //rOutAttrs( rInAttrs )
 {
+    FreeResource();
     if(!bAxisDlg)
     {
         SetHelpId( SID_INSERT_GRIDS );
-        SetText( String( SchResId( STR_TITLE_GRID ) ) );
+        SetText( ObjectNameProvider::getName(OBJECTTYPE_GRID,true) );
+
+        aCbPrimaryX.SetHelpId( HID_SCH_CB_XGRID );
+        aCbPrimaryY.SetHelpId( HID_SCH_CB_YGRID );
+        aCbPrimaryZ.SetHelpId( HID_SCH_CB_ZGRID );
+        aCbSecondaryX.SetHelpId( HID_SCH_CB_SECONDARY_XGRID );
+        aCbSecondaryY.SetHelpId( HID_SCH_CB_SECONDARY_YGRID );
+        aCbSecondaryZ.SetHelpId( HID_SCH_CB_SECONDARY_ZGRID );
 
         aFlPrimary.Hide();
         aFlSecondary.Hide();
         aFlPrimaryGrid.Show();
         aFlSecondaryGrid.Show();
     }
-    FreeResource();
+    else
+    {
+        SetText( ObjectNameProvider::getName(OBJECTTYPE_AXIS,true) );
+
+        //todo: remove if secondary z axis are possible somewhere
+        {
+            aCbSecondaryZ.Hide();
+
+            Size aSize( GetSizePixel() );
+            //aSize.Height() -= aCbSecondaryZ.GetSizePixel().Height();
+            aSize.Height() -= ( aCbSecondaryZ.GetPosPixel().Y() - aCbSecondaryY.GetPosPixel().Y() );
+            SetSizePixel(aSize);
+        }
+    }
 
     aCbPrimaryX.Check( rInput.aExistenceList[0] );
     aCbPrimaryY.Check( rInput.aExistenceList[1] );
@@ -124,7 +147,7 @@ SchAxisDlg::~SchAxisDlg()
 {
 }
 
-void SchAxisDlg::getResult( InsertMeterDialogData& rOutput )
+void SchAxisDlg::getResult( InsertAxisOrGridDialogData& rOutput )
 {
     rOutput.aExistenceList[0]=aCbPrimaryX.IsChecked();
     rOutput.aExistenceList[1]=aCbPrimaryY.IsChecked();
@@ -134,7 +157,7 @@ void SchAxisDlg::getResult( InsertMeterDialogData& rOutput )
     rOutput.aExistenceList[5]=aCbSecondaryZ.IsChecked();
 }
 
-SchGridDlg::SchGridDlg( Window* pParent, const InsertMeterDialogData& rInput )
+SchGridDlg::SchGridDlg( Window* pParent, const InsertAxisOrGridDialogData& rInput )
                 : SchAxisDlg( pParent, rInput, false )//rInAttrs, b3D, bNet, bSecondaryX, bSecondaryY, false )
 {
 }
