@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_SeriesToAxis.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 16:04:27 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:49:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ TabPage TP_OPTIONS
 
     CheckBox CB_CONNECTOR
     {
-        Pos = MAP_APPFONT ( 12 , 87 ) ;
+        Pos = MAP_APPFONT ( 12 , 90 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Connection Lines";
