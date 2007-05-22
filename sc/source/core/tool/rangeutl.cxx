@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangeutl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:18:25 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:43:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,12 @@
 #include "rangenam.hxx"
 #include "scresid.hxx"
 #include "globstr.hrc"
+#ifndef SC_CONVUNO_HXX
+#include "convuno.hxx"
+#endif
 
+using namespace ::rtl;
+using namespace ::com::sun::star;
 
 //------------------------------------------------------------------------
 
@@ -350,6 +355,400 @@ BOOL ScRangeUtil::MakeRangeFromName (
     }
 
     return bResult;
+}
+
+//========================================================================
+
+void ScRangeStringConverter::AssignString(
+        OUString& rString,
+        const OUString& rNewStr,
+        sal_Bool bAppendStr,
+        sal_Unicode cSeperator)
+{
+    if( bAppendStr )
+    {
+        if( rNewStr.getLength() )
+        {
+            if( rString.getLength() )
+                rString += rtl::OUString(cSeperator);
+            rString += rNewStr;
+        }
+    }
+    else
+        rString = rNewStr;
+}
+
+sal_Int32 ScRangeStringConverter::IndexOf(
+        const OUString& rString,
+        sal_Unicode cSearchChar,
+        sal_Int32 nOffset,
+        sal_Unicode cQuote )
+{
+    sal_Int32       nLength     = rString.getLength();
+    sal_Int32       nIndex      = nOffset;
+    sal_Bool        bQuoted     = sal_False;
+    sal_Bool        bExitLoop   = sal_False;
+
+    while( !bExitLoop && (nIndex < nLength) )
+    {
+        sal_Unicode cCode = rString[ nIndex ];
+        bExitLoop = (cCode == cSearchChar) && !bQuoted;
+        bQuoted = (bQuoted != (cCode == cQuote));
+        if( !bExitLoop )
+            nIndex++;
+    }
+    return (nIndex < nLength) ? nIndex : -1;
+}
+
+sal_Int32 ScRangeStringConverter::IndexOfDifferent(
+        const OUString& rString,
+        sal_Unicode cSearchChar,
+        sal_Int32 nOffset )
+{
+    sal_Int32       nLength     = rString.getLength();
+    sal_Int32       nIndex      = nOffset;
+    sal_Bool        bExitLoop   = sal_False;
+
+    while( !bExitLoop && (nIndex < nLength) )
+    {
+        bExitLoop = (rString[ nIndex ] != cSearchChar);
+        if( !bExitLoop )
+            nIndex++;
+    }
+    return (nIndex < nLength) ? nIndex : -1;
+}
+
+void ScRangeStringConverter::GetTokenByOffset(
+        OUString& rToken,
+        const OUString& rString,
+        sal_Int32& nOffset,
+        sal_Unicode cSeperator,
+        sal_Unicode cQuote)
+{
+    sal_Int32 nLength = rString.getLength();
+    if( nOffset >= nLength )
+    {
+        rToken = OUString();
+        nOffset = -1;
+    }
+    else
+    {
+        sal_Int32 nTokenEnd = IndexOf( rString, cSeperator, nOffset, cQuote );
+        if( nTokenEnd < 0 )
+            nTokenEnd = nLength;
+        rToken = rString.copy( nOffset, nTokenEnd - nOffset );
+
+        sal_Int32 nNextBegin = IndexOfDifferent( rString, cSeperator, nTokenEnd );
+        nOffset = (nNextBegin < 0) ? nLength : nNextBegin;
+    }
+}
+
+sal_Int32 ScRangeStringConverter::GetTokenCount( const OUString& rString, sal_Unicode cSeperator, sal_Unicode cQuote )
+{
+    OUString    sToken;
+    sal_Int32   nCount = 0;
+    sal_Int32   nOffset = 0;
+    while( nOffset >= 0 )
+    {
+        GetTokenByOffset( sToken, rString, nOffset, cQuote, cSeperator );
+        if( nOffset >= 0 )
+            nCount++;
+    }
+    return nCount;
+}
+
+void ScRangeStringConverter::AppendString( OUString& rString, const OUString& rNewStr, sal_Unicode cSeperator )
+{
+    AssignString( rString, rNewStr, sal_True, cSeperator );
+}
+
+//___________________________________________________________________
+
+sal_Bool ScRangeStringConverter::GetAddressFromString(
+        ScAddress& rAddress,
+        const OUString& rAddressStr,
+        const ScDocument* pDocument,
+        sal_Int32& nOffset,
+        sal_Unicode cSeperator,
+        sal_Unicode cQuote )
+{
+    OUString sToken;
+    GetTokenByOffset( sToken, rAddressStr, nOffset, cSeperator, cQuote );
+    if( nOffset >= 0 )
+        return ((rAddress.Parse( sToken, (ScDocument*) pDocument ) & SCA_VALID) == SCA_VALID);
+    return sal_False;
+}
+
+sal_Bool ScRangeStringConverter::GetRangeFromString(
+        ScRange& rRange,
+        const OUString& rRangeStr,
+        const ScDocument* pDocument,
+        sal_Int32& nOffset,
+        sal_Unicode cSeperator,
+        sal_Unicode cQuote )
+{
+    OUString sToken;
+    sal_Bool bResult(sal_False);
+    GetTokenByOffset( sToken, rRangeStr, nOffset, cSeperator, cQuote );
+    if( nOffset >= 0 )
+    {
+        sal_Int32 nIndex = IndexOf( sToken, ':', 0, cQuote );
+        String aUIString(sToken);
+
+        if( nIndex < 0 )
+        {
+            if ( aUIString.GetChar(0) == (sal_Unicode) '.' )
+                aUIString.Erase( 0, 1 );
+            bResult = ((rRange.aStart.Parse( aUIString, const_cast<ScDocument*> (pDocument)) & SCA_VALID) == SCA_VALID);
+            rRange.aEnd = rRange.aStart;
+        }
+        else
+        {
+            if ( aUIString.GetChar(0) == (sal_Unicode) '.' )
+                aUIString.Erase( 0, 1 );
+
+            if ( nIndex < aUIString.Len() - 1 &&
+                    aUIString.GetChar((xub_StrLen)nIndex + 1) == (sal_Unicode) '.' )
+                aUIString.Erase( (xub_StrLen)nIndex + 1, 1 );
+
+            bResult = ((rRange.Parse(aUIString, const_cast<ScDocument*> (pDocument)) & SCA_VALID) == SCA_VALID);
+        }
+    }
+    return bResult;
+}
+
+sal_Bool ScRangeStringConverter::GetRangeListFromString(
+        ScRangeList& rRangeList,
+        const OUString& rRangeListStr,
+        const ScDocument* pDocument,
+        sal_Unicode cSeperator,
+        sal_Unicode cQuote )
+{
+    sal_Bool bRet = sal_True;
+    DBG_ASSERT( rRangeListStr.getLength(), "ScXMLConverter::GetRangeListFromString - empty string!" );
+    sal_Int32 nOffset = 0;
+    while( nOffset >= 0 )
+    {
+        ScRange* pRange = new ScRange;
+        if( GetRangeFromString( *pRange, rRangeListStr, pDocument, nOffset, cSeperator, cQuote ) && (nOffset >= 0) )
+            rRangeList.Insert( pRange, LIST_APPEND );
+        else if (nOffset > -1)
+            bRet = sal_False;
+    }
+    return bRet;
+}
+
+
+//___________________________________________________________________
+
+sal_Bool ScRangeStringConverter::GetAreaFromString(
+        ScArea& rArea,
+        const OUString& rRangeStr,
+        const ScDocument* pDocument,
+        sal_Int32& nOffset,
+        sal_Unicode cSeperator,
+        sal_Unicode cQuote )
+{
+    ScRange aScRange;
+    sal_Bool bResult(sal_False);
+    if( GetRangeFromString( aScRange, rRangeStr, pDocument, nOffset, cSeperator, cQuote ) && (nOffset >= 0) )
+    {
+        rArea.nTab = aScRange.aStart.Tab();
+        rArea.nColStart = aScRange.aStart.Col();
+        rArea.nRowStart = aScRange.aStart.Row();
+        rArea.nColEnd = aScRange.aEnd.Col();
+        rArea.nRowEnd = aScRange.aEnd.Row();
+        bResult = sal_True;
+    }
+    return bResult;
+}
+
+
+//___________________________________________________________________
+
+sal_Bool ScRangeStringConverter::GetAddressFromString(
+        table::CellAddress& rAddress,
+        const OUString& rAddressStr,
+        const ScDocument* pDocument,
+        sal_Int32& nOffset,
+        sal_Unicode cSeperator,
+        sal_Unicode cQuote )
+{
+    ScAddress aScAddress;
+    sal_Bool bResult(sal_False);
+    if( GetAddressFromString( aScAddress, rAddressStr, pDocument, nOffset, cSeperator, cQuote ) && (nOffset >= 0) )
+    {
+        ScUnoConversion::FillApiAddress( rAddress, aScAddress );
+        bResult = sal_True;
+    }
+    return bResult;
+}
+
+sal_Bool ScRangeStringConverter::GetRangeFromString(
+        table::CellRangeAddress& rRange,
+        const OUString& rRangeStr,
+        const ScDocument* pDocument,
+        sal_Int32& nOffset,
+        sal_Unicode cSeperator,
+        sal_Unicode cQuote )
+{
+    ScRange aScRange;
+    sal_Bool bResult(sal_False);
+    if( GetRangeFromString( aScRange, rRangeStr, pDocument, nOffset, cSeperator, cQuote ) && (nOffset >= 0) )
+    {
+        ScUnoConversion::FillApiRange( rRange, aScRange );
+        bResult = sal_True;
+    }
+    return bResult;
+}
+
+sal_Bool ScRangeStringConverter::GetRangeListFromString(
+        uno::Sequence< table::CellRangeAddress >& rRangeSeq,
+        const OUString& rRangeListStr,
+        const ScDocument* pDocument,
+        sal_Unicode cSeperator,
+        sal_Unicode cQuote )
+{
+    sal_Bool bRet = sal_True;
+    DBG_ASSERT( rRangeListStr.getLength(), "ScXMLConverter::GetRangeListFromString - empty string!" );
+    table::CellRangeAddress aRange;
+    sal_Int32 nOffset = 0;
+    while( nOffset >= 0 )
+    {
+        if( GetRangeFromString( aRange, rRangeListStr, pDocument, nOffset, cSeperator, cQuote ) && (nOffset >= 0) )
+        {
+            rRangeSeq.realloc( rRangeSeq.getLength() + 1 );
+            rRangeSeq[ rRangeSeq.getLength() - 1 ] = aRange;
+        }
+        else
+            bRet = sal_False;
+    }
+    return bRet;
+}
+
+
+//___________________________________________________________________
+
+void ScRangeStringConverter::GetStringFromAddress(
+        OUString& rString,
+        const ScAddress& rAddress,
+        const ScDocument* pDocument,
+        sal_Unicode cSeperator,
+        sal_Bool bAppendStr,
+        sal_uInt16 nFormatFlags )
+{
+    if (pDocument && pDocument->HasTable(rAddress.Tab()))
+    {
+        String sAddress;
+        rAddress.Format( sAddress, nFormatFlags, (ScDocument*) pDocument );
+        AssignString( rString, sAddress, bAppendStr, cSeperator );
+    }
+}
+
+void ScRangeStringConverter::GetStringFromRange(
+        OUString& rString,
+        const ScRange& rRange,
+        const ScDocument* pDocument,
+        sal_Unicode cSeperator,
+        sal_Bool bAppendStr,
+        sal_uInt16 nFormatFlags )
+{
+    if (pDocument && pDocument->HasTable(rRange.aStart.Tab()))
+    {
+        ScAddress aStartAddress( rRange.aStart );
+        ScAddress aEndAddress( rRange.aEnd );
+        String sStartAddress;
+        String sEndAddress;
+        aStartAddress.Format( sStartAddress, nFormatFlags, (ScDocument*) pDocument,
+                              ScAddress::CONV_OOO );
+        aEndAddress.Format( sEndAddress, nFormatFlags, (ScDocument*) pDocument,
+                            ScAddress::CONV_OOO );
+        OUString sOUStartAddress( sStartAddress );
+        sOUStartAddress += OUString(':');
+        sOUStartAddress += OUString( sEndAddress );
+        AssignString( rString, sOUStartAddress, bAppendStr, cSeperator );
+    }
+}
+
+void ScRangeStringConverter::GetStringFromRangeList(
+        OUString& rString,
+        const ScRangeList* pRangeList,
+        const ScDocument* pDocument,
+        sal_Unicode cSeperator,
+        sal_uInt16 nFormatFlags )
+{
+    OUString sRangeListStr;
+    if( pRangeList )
+    {
+        sal_Int32 nCount = pRangeList->Count();
+        for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+        {
+            const ScRange* pRange = pRangeList->GetObject( nIndex );
+            if( pRange )
+                GetStringFromRange( sRangeListStr, *pRange, pDocument, cSeperator, sal_True, nFormatFlags );
+        }
+    }
+    rString = sRangeListStr;
+}
+
+
+//___________________________________________________________________
+
+void ScRangeStringConverter::GetStringFromArea(
+        OUString& rString,
+        const ScArea& rArea,
+        const ScDocument* pDocument,
+        sal_Unicode cSeperator,
+        sal_Bool bAppendStr,
+        sal_uInt16 nFormatFlags )
+{
+    ScRange aRange( rArea.nColStart, rArea.nRowStart, rArea.nTab, rArea.nColEnd, rArea.nRowEnd, rArea.nTab );
+    GetStringFromRange( rString, aRange, pDocument, cSeperator, bAppendStr, nFormatFlags );
+}
+
+
+//___________________________________________________________________
+
+void ScRangeStringConverter::GetStringFromAddress(
+        OUString& rString,
+        const table::CellAddress& rAddress,
+        const ScDocument* pDocument,
+        sal_Unicode cSeperator,
+        sal_Bool bAppendStr,
+        sal_uInt16 nFormatFlags )
+{
+    ScAddress aScAddress( static_cast<SCCOL>(rAddress.Column), static_cast<SCROW>(rAddress.Row), rAddress.Sheet );
+    GetStringFromAddress( rString, aScAddress, pDocument, cSeperator, bAppendStr, nFormatFlags );
+}
+
+void ScRangeStringConverter::GetStringFromRange(
+        OUString& rString,
+        const table::CellRangeAddress& rRange,
+        const ScDocument* pDocument,
+        sal_Unicode cSeperator,
+        sal_Bool bAppendStr,
+        sal_uInt16 nFormatFlags )
+{
+    ScRange aScRange( static_cast<SCCOL>(rRange.StartColumn), static_cast<SCROW>(rRange.StartRow), rRange.Sheet,
+        static_cast<SCCOL>(rRange.EndColumn), static_cast<SCROW>(rRange.EndRow), rRange.Sheet );
+    GetStringFromRange( rString, aScRange, pDocument, cSeperator, bAppendStr, nFormatFlags );
+}
+
+void ScRangeStringConverter::GetStringFromRangeList(
+        OUString& rString,
+        const uno::Sequence< table::CellRangeAddress >& rRangeSeq,
+        const ScDocument* pDocument,
+        sal_Unicode cSeperator,
+        sal_uInt16 nFormatFlags )
+{
+    OUString sRangeListStr;
+    sal_Int32 nCount = rRangeSeq.getLength();
+    for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+    {
+        const table::CellRangeAddress& rRange = rRangeSeq[ nIndex ];
+        GetStringFromRange( sRangeListStr, rRange, pDocument, cSeperator, sal_True, nFormatFlags );
+    }
+    rString = sRangeListStr;
 }
 
 //========================================================================
