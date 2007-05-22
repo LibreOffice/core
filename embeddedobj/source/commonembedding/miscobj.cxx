@@ -4,9 +4,9 @@
  *
  *  $RCSfile: miscobj.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:20:29 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:35:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< lang::XMulti
 , m_bWaitSaveCompleted( sal_False )
 , m_bIsLink( sal_False )
 , m_bLinkHasPassword( sal_False )
+, m_bHasCachedSize( sal_False )
 {
     CommonInit_Impl( aObjProps );
 }
@@ -113,6 +114,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject(
 , m_bWaitSaveCompleted( sal_False )
 , m_bIsLink( sal_True )
 , m_bLinkHasPassword( sal_False )
+, m_bHasCachedSize( sal_False )
 {
     // linked object has no own persistence so it is in loaded state starting from creation
     LinkInit_Impl( aObjProps, aMediaDescr, aObjectDescr );
@@ -263,6 +265,10 @@ void OCommonEmbeddedObject::LinkInit_Impl(
         {
             aObjectDescr[nObjInd].Value >>= xDispatchInterceptor;
             break;
+        }
+        else if ( aObjectDescr[nObjInd].Name.equalsAscii( "Parent" ) )
+        {
+            aObjectDescr[nObjInd].Value >>= m_xParent;
         }
 
     CommonInit_Impl( aObjectProps );
