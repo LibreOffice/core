@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:24:25 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:39:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,12 +118,6 @@
 #ifndef _FILTER_HXX //autogen
 #include <svtools/filter.hxx>
 #endif
-#ifndef _SCH_DLL_HXX
-#include <sch/schdll.hxx>
-#endif
-#ifndef _SCH_MEMCHRT_HXX
-#include <sch/memchrt.hxx>
-#endif
 #ifndef _SVX_HTMLMODE_HXX
 #include <svx/htmlmode.hxx>
 #endif
@@ -164,6 +158,9 @@
 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
 #endif
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
@@ -240,6 +237,11 @@
 #ifndef _SW_APPLET_IMPL_HXX
 #include <SwAppletImpl.hxx>
 #endif
+#ifndef _UNOCHART_HXX
+#include <unochart.hxx>
+#endif
+
+#include <chartins.hxx>
 
 #define SwTextShell
 #define Paragraph
@@ -263,6 +265,7 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::rtl;
 
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
@@ -281,7 +284,6 @@ SFX_IMPL_INTERFACE(SwTextShell, SwBaseShell, SW_RES(STR_SHELLNAME_TEXT))
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_TEXT_POPUPMENU));
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_TEXT_TOOLBOX));
     SFX_CHILDWINDOW_REGISTRATION(FN_EDIT_FORMULA);
-    SFX_CHILDWINDOW_REGISTRATION(SID_INSERT_DIAGRAM);
     SFX_CHILDWINDOW_REGISTRATION(FN_INSERT_FIELD);
     SFX_CHILDWINDOW_REGISTRATION(FN_INSERT_IDX_ENTRY_DLG);
     SFX_CHILDWINDOW_REGISTRATION(FN_INSERT_AUTH_ENTRY_DLG);
@@ -602,26 +604,32 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             if(!rReq.IsAPI())
             {
                 SfxViewFrame* pVFrame = GetView().GetViewFrame();
-                pVFrame->ToggleChildWindow( SID_INSERT_DIAGRAM );
+                SwInsertChart( &GetView().GetEditWin(), &GetView().GetViewFrame()->GetBindings() );
             }
             else
             {
-                const SwFrmFmt* pTFmt = rSh.GetTableFmt();
-                if( pTFmt && !rSh.IsTblComplexForChart() )
+                uno::Reference< chart2::data::XDataProvider > xDataProvider;
+                sal_Bool bFillWithData = sal_True;
+                OUString aRangeString;
+                if (!GetShell().IsTblComplexForChart())
                 {
-                    SchMemChart* pData = 0;
-                    rSh.UpdateChartData( pTFmt->GetName(), pData );
+                    SwFrmFmt* pTblFmt = GetShell().GetTableFmt();
+                    String aCurrentTblName = pTblFmt->GetName();
+        //             String aText( String::CreateFromAscii("<.>") );   // was used for UI
+        //             aText.Insert( rWrtShell.GetBoxNms(), 2);
+        //             aText.Insert( aCurrentTblName, 1 );
+                    aRangeString = aCurrentTblName;
+                    aRangeString += OUString::valueOf( sal_Unicode('.') );
+                    aRangeString += GetShell().GetBoxNms();
 
-                    SwTableFUNC( &rSh, FALSE ).InsertChart( *pData );
-                    rSh.LaunchOLEObj();
-
-                    delete pData;
+                    // get table data provider
+                    xDataProvider.set( GetView().GetDocShell()->getIDocumentChartDataProviderAccess()->GetChartDataProvider() );
                 }
                 else
-                {
-                    SvGlobalName aGlobalName( SO3_SCH_CLASSID );
-                    rSh.InsertObject( svt::EmbeddedObjectRef(), &aGlobalName, TRUE, 0, &rReq );
-                }
+                    bFillWithData = sal_False;  // will create chart with only it's default image
+
+                SwTableFUNC( &rSh, FALSE ).InsertChart( xDataProvider, bFillWithData, aRangeString );
+                rSh.LaunchOLEObj();
 
                 svt::EmbeddedObjectRef& xObj = rSh.GetOLEObject();
                 if(pItem && xObj.is())
@@ -945,15 +953,15 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                 if( !aMOpt.IsChart() )
                 {
                     rSet.DisableItem( nWhich );
-                    break;
                 }
+                break;
 
             case FN_INSERT_SMA:
                 if( FN_INSERT_SMA == nWhich && !aMOpt.IsMath() )
                 {
                     rSet.DisableItem( nWhich );
-                    break;
                 }
+                break;
 
             case SID_INSERT_FLOATINGFRAME:
             case SID_INSERT_OBJECT:
@@ -967,12 +975,10 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
 #ifndef SOLAR_JAVA
                     nWhich == SID_INSERT_APPLET ||
 #endif
-                    eMode == SFX_CREATE_MODE_EMBEDDED ||
-                    (nWhich == SID_INSERT_DIAGRAM && rSh.IsCrsrInTbl() &&
-                     rSh.IsTblComplexForChart() &&
-                     !GetView().GetViewFrame()->GetChildWindow(
-                            SID_INSERT_DIAGRAM)) )
+                    eMode == SFX_CREATE_MODE_EMBEDDED)
+                {
                     rSet.DisableItem( nWhich );
+                }
                 else if( GetShell().IsSelFrmMode())
                     rSet.DisableItem( nWhich );
                 else if(SID_INSERT_FLOATINGFRAME == nWhich && nHtmlMode&HTMLMODE_ON)
