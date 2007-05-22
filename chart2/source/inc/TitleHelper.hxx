@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TitleHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:46:55 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:23:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 #ifndef _CHART2_TOOLS_TITLEHELPER_HXX
 #define _CHART2_TOOLS_TITLEHELPER_HXX
 
+#include "ReferenceSizeProvider.hxx"
+
 #ifndef _COM_SUN_STAR_CHART2_XTITLED_HPP_
 #include <com/sun/star/chart2/XTitled.hpp>
 #endif
@@ -44,6 +46,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
+#include <com/sun/star/chart2/XDiagram.hpp>
 #endif
 
 //.............................................................................
@@ -64,10 +69,12 @@ public:
         Z_AXIS_TITLE,
 //         SECOND_X_AXIS_TITLE,
 //         SECOND_Y_AXIS_TITLE,
-        TITLE_END
-    };
+        NORMAL_TITLE_END,
 
-    static rtl::OUString getIdentifierForTitle( eTitleType nTitleIndex );
+        //it is intended that this both types are after NORMAL_TITLE_END
+        TITLE_AT_STANDARD_X_AXIS_POSITION, //equals the Y_AXIS_TITLE for barchart
+        TITLE_AT_STANDARD_Y_AXIS_POSITION  //equals the X_AXIS_TITLE for barchart
+    };
 
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XTitle >
@@ -82,7 +89,8 @@ public:
                     , const ::com::sun::star::uno::Reference<
                             ::com::sun::star::frame::XModel >& xModel
                     , const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::uno::XComponentContext > & xContext );
+                            ::com::sun::star::uno::XComponentContext > & xContext
+                    , ReferenceSizeProvider * pRefSizeProvider = 0 );
 
     static void removeTitle( eTitleType nTitleIndex
                     , const ::com::sun::star::uno::Reference<
@@ -94,7 +102,14 @@ public:
         , const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XTitle >& xTitle
         , const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext );
+            ::com::sun::star::uno::XComponentContext > & xContext
+        , float * pDefaultCharHeight = 0 );
+
+    static bool getTitleType( eTitleType& rType
+                    , const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::chart2::XTitle >& xTitle
+                    , const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::frame::XModel >& xModel );
 };
 
 //.............................................................................
