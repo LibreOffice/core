@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeriesPointWrapper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:01:05 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:17:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,11 +35,12 @@
 #ifndef CHART_DATASERIESPOINTWRAPPER_HXX
 #define CHART_DATASERIESPOINTWRAPPER_HXX
 
-#include "OPropertySet.hxx"
 #include "ServiceMacros.hxx"
+#include "WrappedPropertySet.hxx"
+#include "ReferenceSizePropertyProvider.hxx"
 
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/implbase3.hxx>
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
@@ -48,8 +49,12 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDATASERIES_HPP_
+#include <com/sun/star/chart2/XDataSeries.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
@@ -57,87 +62,69 @@
 #ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_CHART2_XDATASERIES_HPP_
-#include <com/sun/star/chart2/XDataSeries.hpp>
-#endif
+#include <boost/shared_ptr.hpp>
 
 namespace chart
 {
+
 namespace wrapper
 {
 
-namespace impl
-{
-typedef ::cppu::WeakImplHelper3<
-    com::sun::star::lang::XServiceInfo,
-       com::sun::star::lang::XComponent,
-       com::sun::star::lang::XEventListener >
-    DataSeriesPointWrapper_Base;
-}
+class Chart2ModelContact;
 
-class DataSeriesPointWrapper :
-        public impl::DataSeriesPointWrapper_Base,
-        public ::property::OPropertySet
+class DataSeriesPointWrapper : public ::cppu::ImplInheritanceHelper4<
+                                          WrappedPropertySet
+                                        , com::sun::star::lang::XServiceInfo
+                                        , com::sun::star::lang::XInitialization
+                                           , com::sun::star::lang::XComponent
+                                           , com::sun::star::lang::XEventListener
+                                        >
+                                        , public ReferenceSizePropertyProvider
+
 {
 public:
-    enum eParentType
+    enum eType
     {
         DATA_SERIES,
         DATA_POINT
     };
 
-    DataSeriesPointWrapper( eParentType eType,
-                            const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::beans::XPropertySet > & xParentProperties,
-                            const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::uno::XComponentContext > & xContext,
-                            ::osl::Mutex & _rMutex );
+    //this constructor needs an initialize call afterwards
+    DataSeriesPointWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+
+    DataSeriesPointWrapper( eType eType
+            , sal_Int32 nSeriesIndexInNewAPI
+            , sal_Int32 nPointIndex //ignored for series
+            , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact  );
+
     virtual ~DataSeriesPointWrapper();
 
-    ::osl::Mutex & GetMutex() const;
+    bool isSupportingAreaProperties();
+    bool isLinesForbidden();
 
     /// XServiceInfo declarations
     APPHELPER_XSERVICEINFO_DECL()
 
-    /// merge XInterface implementations
-     DECLARE_XINTERFACE()
-    /// merge XTypeProvider implementations
-     DECLARE_XTYPEPROVIDER()
+    // ___lang::XInitialization___
+    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
+                throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+
+    //ReferenceSizePropertyProvider
+    virtual void setCurrentSizeAsReference();
+    virtual ::com::sun::star::uno::Any getReferenceSize();
+    virtual ::com::sun::star::awt::Size getCurrentSizeForReference();
 
 protected:
-    // ____ OPropertySet ____
-    virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(::com::sun::star::beans::UnknownPropertyException);
-
-    // ____ OPropertySet ____
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-
-    virtual sal_Bool SAL_CALL convertFastPropertyValue
-        ( ::com::sun::star::uno::Any & rConvertedValue,
-          ::com::sun::star::uno::Any & rOldValue,
-          sal_Int32 nHandle,
-          const ::com::sun::star::uno::Any& rValue )
-        throw (::com::sun::star::lang::IllegalArgumentException);
-
-    virtual void SAL_CALL getFastPropertyValue
-        ( ::com::sun::star::uno::Any& rValue,
-          sal_Int32 nHandle ) const;
-
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-        sal_Int32 nHandle,
-        const ::com::sun::star::uno::Any& rValue )
-        throw (::com::sun::star::uno::Exception);
-
-    // ____ XPropertySet ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
-        getPropertySetInfo()
-        throw (::com::sun::star::uno::RuntimeException);
-
     // ____ XComponent ____
     virtual void SAL_CALL dispose()
         throw (::com::sun::star::uno::RuntimeException);
@@ -152,6 +139,23 @@ protected:
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
         throw (::com::sun::star::uno::RuntimeException);
 
+protected:
+    // ____ WrappedPropertySet ____
+    virtual const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& getPropertySequence();
+    virtual const std::vector< WrappedProperty* > createWrappedProperties();
+    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+                        ::com::sun::star::beans::XPropertySet > getInnerPropertySet();
+
+    virtual ::com::sun::star::beans::PropertyState SAL_CALL getPropertyState( const ::rtl::OUString& PropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPropertyToDefault( const ::rtl::OUString& PropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const ::rtl::OUString& aPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    //own methods
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > getDataSeries();
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getDataPointProperties();
+
 private:
 
     void SAL_CALL getStatisticsPropertyValue
@@ -164,23 +168,18 @@ private:
 
     // ----------------------------------------
 
-    mutable ::osl::Mutex &    m_rMutex;
+    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
 
+    eType               m_eType;
+    sal_Int32           m_nSeriesIndexInNewAPI;
+    sal_Int32           m_nPointIndex;
+
+    //this should only be used, if the DataSeriesPointWrapper is initialized via the XInitialize interface
+    //because a big change in the chartmodel may leed to an dataseriespointer thats not connected to the model anymore
+    //with the indizes instead we are can aleays get the new dataseries
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext >
-                        m_xContext;
-
-    ::cppu::OInterfaceContainerHelper
-                        m_aEventListenerContainer;
-
-    eParentType         m_eParentType;
-
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
-                        m_xParentProperties;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XFastPropertySet >
-                        m_xParentFastProperties;
+        ::com::sun::star::chart2::XDataSeries >     m_xDataSeries;
 };
 
 } //  namespace wrapper
