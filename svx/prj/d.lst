@@ -228,7 +228,6 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\strarray.hxx %_DEST%\inc%_EXT%\svx\strarray.hxx
 ..\inc\svx\svdattr.hxx %_DEST%\inc%_EXT%\svx\svdattr.hxx
 ..\inc\svx\svdattrx.hxx %_DEST%\inc%_EXT%\svx\svdattrx.hxx
-..\inc\svdattrx.hxx %_DEST%\inc%_EXT%\svx\svdattrx.hxx
 ..\inc\svx\svdcrtv.hxx %_DEST%\inc%_EXT%\svx\svdcrtv.hxx
 ..\inc\svx\svddrag.hxx %_DEST%\inc%_EXT%\svx\svddrag.hxx
 ..\inc\svx\svddrgmt.hxx %_DEST%\inc%_EXT%\svx\svddrgmt.hxx
@@ -393,7 +392,6 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\xgrad.hxx %_DEST%\inc%_EXT%\svx\xgrad.hxx
 ..\inc\svx\xgrscit.hxx %_DEST%\inc%_EXT%\svx\xgrscit.hxx
 ..\inc\svx\xhatch.hxx %_DEST%\inc%_EXT%\svx\xhatch.hxx
-..\inc\xhatch.hxx %_DEST%\inc%_EXT%\svx\xhatch.hxx
 ..\inc\svx\xit.hxx %_DEST%\inc%_EXT%\svx\xit.hxx
 ..\inc\xit.hxx %_DEST%\inc%_EXT%\svx\xit.hxx
 ..\inc\svx\xlineit.hxx %_DEST%\inc%_EXT%\svx\xlineit.hxx
@@ -414,11 +412,10 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\xlnwtit.hxx %_DEST%\inc%_EXT%\svx\xlnwtit.hxx
 ..\inc\xoutbmp.hxx %_DEST%\inc%_EXT%\svx\xoutbmp.hxx
 ..\inc\svx\xoutx.hxx %_DEST%\inc%_EXT%\svx\xoutx.hxx
-..\inc\xoutx.hxx %_DEST%\inc%_EXT%\svx\xoutx.hxx
 ..\inc\svx\xpoly.hxx %_DEST%\inc%_EXT%\svx\xpoly.hxx
-..\inc\xpoly.hxx %_DEST%\inc%_EXT%\svx\xpoly.hxx
 ..\inc\svx\xpool.hxx %_DEST%\inc%_EXT%\svx\xpool.hxx
 ..\inc\svx\xpool.hxx %_DEST%\inc%_EXT%\xpool.hxx
+..\inc\XPropertyTable.hxx %_DEST%\inc%_EXT%\svx\XPropertyTable.hxx
 ..\inc\svx\xsetit.hxx %_DEST%\inc%_EXT%\svx\xsetit.hxx
 ..\inc\svx\xsetit.hxx %_DEST%\inc%_EXT%\xsetit.hxx
 ..\inc\svx\xtable.hxx %_DEST%\inc%_EXT%\svx\xtable.hxx
@@ -545,6 +542,7 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\ShapeTypeHandler.hxx %_DEST%\inc%_EXT%\svx\ShapeTypeHandler.hxx
 ..\inc\svx\SvxShapeTypes.hxx %_DEST%\inc%_EXT%\svx\SvxShapeTypes.hxx
 ..\inc\DescriptionGenerator.hxx %_DEST%\inc%_EXT%\svx\DescriptionGenerator.hxx
+..\inc\ActionDescriptionProvider.hxx %_DEST%\inc%_EXT%\svx\ActionDescriptionProvider.hxx
 ..\inc\pgrditem.hxx %_DEST%\inc%_EXT%\svx\pgrditem.hxx
 ..\inc\svx\writingmodeitem.hxx %_DEST%\inc%_EXT%\svx\writingmodeitem.hxx
 ..\inc\ParseContext.hxx %_DEST%\inc%_EXT%\svx\ParseContext.hxx
