@@ -1,0 +1,70 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: tp_ChartType.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:44:15 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "ResourceIds.hrc"
+
+#define BTN_OK      1
+#define BTN_CANCEL  1
+#define BTN_HELP    1
+
+#define LB_3D_SCHEME        1
+#define LB_CHARTTYPE        2
+#define CT_CHARTVARIANT     3
+
+#define FL_SPLINE_SEPARATOR 2
+#define FL_SPLINE_DIALOGBUTTONS 3
+
+#define FT_CHARTTYPE            1
+#define FT_SPLINE_ORDER         3
+#define FT_SPLINE_RESOLUTION    4
+
+#define CB_X_AXIS_CATEGORIES 1
+#define CB_3D_LOOK           2
+#define CB_STACKED           3
+#define CB_SPLINES           4
+#define CB_XVALUE_SORTING    5
+
+#define PB_SPLINE_DIALOG    1
+
+#define RB_STACK_Y          2
+#define RB_STACK_Y_PERCENT  3
+#define RB_STACK_Z          4
+
+#define RB_SPLINES_CUBIC    5
+#define RB_SPLINES_B        6
+
+#define MF_SPLINE_ORDER         1
+#define MF_SPLINE_RESOLUTION    2
+
