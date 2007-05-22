@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RectangularDataSource.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:14:12 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:40:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,11 +39,11 @@
 #include "CachedDataSequence.hxx"
 #include "StandardNaNHelper.hxx"
 
-#ifndef _COM_SUN_STAR_CHART2_XNUMERICALDATASEQUENCE_HPP_
-#include <com/sun/star/chart2/XNumericalDataSequence.hpp>
+#ifndef _COM_SUN_STAR_CHART2_DATA_XNUMERICALDATASEQUENCE_HPP_
+#include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART2_XTEXTUALDATASEQUENCE_HPP_
-#include <com/sun/star/chart2/XTextualDataSequence.hpp>
+#ifndef _COM_SUN_STAR_CHART2_DATA_XTEXTUALDATASEQUENCE_HPP_
+#include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -116,21 +116,21 @@ Sequence< OUString > RectangularDataSource::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 4 );
     aServices[ 0 ] = C2U( "com.sun.star.chart2.RectangularDataSource" );
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.DataFilter" );
-    aServices[ 2 ] = C2U( "com.sun.star.chart2.DataSource" );
-    aServices[ 3 ] = C2U( "com.sun.star.chart2.DataSink" );
+    aServices[ 1 ] = C2U( "com.sun.star.chart2.data.DataFilter" );
+    aServices[ 2 ] = C2U( "com.sun.star.chart2.data.DataSource" );
+    aServices[ 3 ] = C2U( "com.sun.star.chart2.data.DataSink" );
     return aServices;
 }
 
 // ____ XDataSink ____
-void SAL_CALL RectangularDataSource::setData( const uno::Sequence< Reference< chart2::XDataSequence > >& aData )
+void SAL_CALL RectangularDataSource::setData( const uno::Sequence< Reference< chart2::data::XDataSequence > >& aData )
     throw (RuntimeException)
 {
     m_aDataSequences = aData;
 }
 
 // ____ XDataSource ____
-uno::Sequence< Reference< chart2::XDataSequence > > SAL_CALL RectangularDataSource::getDataSequences()
+uno::Sequence< Reference< chart2::data::XDataSequence > > SAL_CALL RectangularDataSource::getDataSequences()
     throw (RuntimeException)
 {
     return m_aDataSequences;
@@ -139,13 +139,13 @@ uno::Sequence< Reference< chart2::XDataSequence > > SAL_CALL RectangularDataSour
 double SAL_CALL RectangularDataSource::getNotANumber()
     throw (uno::RuntimeException)
 {
-    return helper::StandardNaNHelper::getNotANumber();
+    return StandardNaNHelper::getNotANumber();
 }
 
 sal_Bool SAL_CALL RectangularDataSource::isNotANumber( double fNumber )
     throw (uno::RuntimeException)
 {
-    return helper::StandardNaNHelper::isNotANumber( fNumber );
+    return StandardNaNHelper::isNotANumber( fNumber );
 }
 
 // ____ XIndexAccess ____
@@ -173,7 +173,7 @@ sal_Bool SAL_CALL RectangularDataSource::isNotANumber( double fNumber )
  uno::Type SAL_CALL RectangularDataSource::getElementType()
         throw (RuntimeException)
 {
-    return ::getCppuType((const Reference< chart2::XDataSequence >*)0);
+    return ::getCppuType((const Reference< chart2::data::XDataSequence >*)0);
 }
 
 sal_Bool SAL_CALL RectangularDataSource::hasElements()
@@ -185,7 +185,7 @@ sal_Bool SAL_CALL RectangularDataSource::hasElements()
     // \--
 }
 
-Reference< chart2::XDataSequence > RectangularDataSource::GetDataByIndex( sal_Int32 Index ) const
+Reference< chart2::data::XDataSequence > RectangularDataSource::GetDataByIndex( sal_Int32 Index ) const
     throw (lang::IndexOutOfBoundsException)
 {
     if( 0 > Index || Index >= m_aDataSequences.getLength() )
@@ -263,7 +263,7 @@ void RectangularDataSource::SwapData()
     try
     {
         // assume that there are always text labels
-        Reference< chart2::XTextualDataSequence > xCategories( GetDataByIndex( 0 ), uno::UNO_QUERY );
+        Reference< chart2::data::XTextualDataSequence > xCategories( GetDataByIndex( 0 ), uno::UNO_QUERY );
 
         // -1: the first sequence contains labels
         sal_Int32 nNewSequenceSize = m_aDataSequences.getLength() - 1;
@@ -271,7 +271,7 @@ void RectangularDataSource::SwapData()
         {
             // +1: one series more for labels
             sal_Int32 nNewNumOfSequences = GetDataByIndex( 0 )->getData().getLength() + 1;
-            Sequence< Reference< chart2::XDataSequence > > aResult( nNewNumOfSequences );
+            Sequence< Reference< chart2::data::XDataSequence > > aResult( nNewNumOfSequences );
             ::std::vector< OUString > aCategoryVector( nNewSequenceSize );
             sal_Int32 nIdx = 0;
 
@@ -280,8 +280,8 @@ void RectangularDataSource::SwapData()
             {
                 aCategoryVector.push_back( GetDataByIndex( nIdx )->getLabel() );
             }
-            aResult[ 0 ] = Reference< chart2::XDataSequence >(
-                static_cast< chart2::XTextualDataSequence * >(
+            aResult[ 0 ] = Reference< chart2::data::XDataSequence >(
+                static_cast< chart2::data::XTextualDataSequence * >(
                     new ::chart::CachedDataSequence( aCategoryVector )));
 
             // fill new data sequences.  The label is set by the former categories
@@ -291,12 +291,12 @@ void RectangularDataSource::SwapData()
                 for( nIdx = 0; nIdx < nNewSequenceSize; ++nIdx )
                 {
                     aDataVector.push_back(
-                        Reference< chart2::XNumericalDataSequence >(
+                        Reference< chart2::data::XNumericalDataSequence >(
                             GetDataByIndex( nIdx ),
                             uno::UNO_QUERY )->getNumericalData().getConstArray()[ nSeqIdx - 1 ] );
                 }
-                aResult[ nSeqIdx ] = Reference< chart2::XDataSequence >(
-                    static_cast< chart2::XNumericalDataSequence * >(
+                aResult[ nSeqIdx ] = Reference< chart2::data::XDataSequence >(
+                    static_cast< chart2::data::XNumericalDataSequence * >(
                         new ::chart::CachedDataSequence( aDataVector )));
             }
 
