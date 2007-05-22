@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XPropertyTable.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:13:20 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:20:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#include "XPropertyTable.hxx"
+
 #ifndef _COM_SUN_STAR_DRAWING_POLYPOLYGONBEZIERCOORDS_HPP_
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #endif
@@ -63,10 +65,6 @@
 #endif
 
 #include <cppuhelper/implbase2.hxx>
-
-#ifndef _XTABLE_HXX
-#include "xtable.hxx"
-#endif
 
 #ifndef _SVX_UNOPOLYHELPER_HXX
 #include "unopolyhelper.hxx"
@@ -349,7 +347,7 @@ public:
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException);
 };
 
-Reference< XInterface > SvxUnoXColorTable_createInstance( XPropertyTable* pTable ) throw()
+uno::Reference< XInterface > SAL_CALL SvxUnoXColorTable_createInstance( XPropertyTable* pTable ) throw()
 {
     return (OWeakObject*) new SvxUnoXColorTable( pTable );
 }
@@ -412,7 +410,7 @@ public:
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException);
 };
 
-Reference< XInterface > SvxUnoXLineEndTable_createInstance( XPropertyList* pTable ) throw()
+uno::Reference< XInterface > SAL_CALL SvxUnoXLineEndTable_createInstance( XPropertyList* pTable ) throw()
 {
     return (OWeakObject*)new SvxUnoXLineEndTable( pTable );
 }
@@ -485,7 +483,7 @@ public:
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException);
 };
 
-Reference< XInterface > SvxUnoXDashTable_createInstance( XPropertyList* pTable ) throw()
+uno::Reference< XInterface > SAL_CALL SvxUnoXDashTable_createInstance( XPropertyList* pTable ) throw()
 {
     return (OWeakObject*)new SvxUnoXDashTable( pTable );
 }
@@ -567,7 +565,7 @@ public:
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException);
 };
 
-Reference< XInterface > SvxUnoXHatchTable_createInstance( XPropertyList* pTable ) throw()
+uno::Reference< XInterface > SAL_CALL SvxUnoXHatchTable_createInstance( XPropertyList* pTable ) throw()
 {
     return (OWeakObject*)new SvxUnoXHatchTable( pTable );
 }
@@ -644,7 +642,7 @@ public:
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException);
 };
 
-Reference< XInterface > SvxUnoXGradientTable_createInstance( XPropertyList* pTable ) throw()
+uno::Reference< XInterface > SAL_CALL SvxUnoXGradientTable_createInstance( XPropertyList* pTable ) throw()
 {
     return (OWeakObject*)new SvxUnoXGradientTable( pTable );
 }
@@ -733,7 +731,7 @@ public:
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException);
 };
 
-Reference< XInterface > SvxUnoXBitmapTable_createInstance( XPropertyList* pTable ) throw()
+uno::Reference< XInterface > SAL_CALL SvxUnoXBitmapTable_createInstance( XPropertyList* pTable ) throw()
 {
     return (OWeakObject*)new SvxUnoXBitmapTable( pTable );
 }
