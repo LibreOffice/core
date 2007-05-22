@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TitleItemConverter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:25:51 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:57:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,9 @@
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 
 #include <vector>
 #include <memory>
@@ -60,6 +63,8 @@ public:
         ::com::sun::star::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
         ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
             ::std::auto_ptr< ::com::sun::star::awt::Size >() );
 
@@ -70,7 +75,7 @@ public:
 
 protected:
     virtual const USHORT * GetWhichPairs() const;
-    virtual bool GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const;
+    virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const;
 
     virtual void FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const
         throw( ::com::sun::star::uno::Exception );
