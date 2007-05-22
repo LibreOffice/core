@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MultipleItemConverter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:03:03 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:01:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ bool MultipleItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     return bResult;
 }
 
-bool MultipleItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const
+bool MultipleItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
 {
     return false;
 }
