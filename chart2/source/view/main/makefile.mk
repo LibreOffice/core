@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 01:52:42 $
+#   last change: $Author: vg $ $Date: 2007-05-22 19:28:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,16 +48,17 @@ ENABLE_EXCEPTIONS=	TRUE
 
 #object files to build and link together to lib $(SLB)$/$(TARGET).lib
 SLOFILES =  \
-            $(SLO)$/DoubleRectangle.obj \
+            $(SLO)$/ChartItemPool.obj \
+            $(SLO)$/DrawModelWrapper.obj \
             $(SLO)$/NumberFormatterWrapper.obj \
-            $(SLO)$/ObjectIdentifier.obj \
             $(SLO)$/PropertyMapper.obj \
             $(SLO)$/Stripe.obj \
-            $(SLO)$/DatapointGeometry.obj	\
             $(SLO)$/VLineProperties.obj \
             $(SLO)$/ShapeFactory.obj \
+            $(SLO)$/VLegendSymbolFactory.obj \
             $(SLO)$/DataPointSymbolSupplier.obj \
             $(SLO)$/Linear3DTransformation.obj \
+            $(SLO)$/VPolarTransformation.obj \
             $(SLO)$/Clipping.obj \
             $(SLO)$/PlottingPositionHelper.obj \
             $(SLO)$/LabelPositionHelper.obj \
@@ -65,9 +66,9 @@ SLOFILES =  \
             $(SLO)$/PlotterBase.obj \
             $(SLO)$/VDataSeries.obj \
             $(SLO)$/VLegend.obj \
-            $(SLO)$/VLegendSymbolFactory.obj \
             $(SLO)$/VTitle.obj \
-            $(SLO)$/ChartView.obj
+            $(SLO)$/ChartView.obj \
+            $(SLO)$/_serviceregistration_view.obj
 
 # --- Targets -----------------------------------------------------------------
 
