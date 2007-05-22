@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:33:49 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:54:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #define SC_FTOOLS_HXX
 
 #include <vector>
+#include <map>
 #include <limits>
 #include <memory>
 
@@ -171,7 +172,7 @@ class ScfNoInstance : private ScfNoCopy {};
 template< typename Type >
 class ScfRef
 {
-    template< typename Type2 > friend class ScfRef;
+    template< typename > friend class ScfRef;
 
 public:
     typedef Type        element_type;
@@ -241,6 +242,33 @@ inline bool operator>=( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRe
     return rxRef1.get() >= rxRef2.get();
 }
 
+// ----------------------------------------------------------------------------
+
+/** Template for a map of ref-counted objects with additional accessor functions. */
+template< typename KeyType, typename ObjType >
+class ScfRefMap : public ::std::map< KeyType, ScfRef< ObjType > >
+{
+public:
+    typedef KeyType                             key_type;
+    typedef ScfRef< ObjType >                   ref_type;
+    typedef ::std::map< key_type, ref_type >    map_type;
+
+    /** Returns true, if the object accossiated to the passed key exists. */
+    inline bool         has( key_type nKey ) const
+                        {
+                            typename map_type::const_iterator aIt = find( nKey );
+                            return (aIt != this->end()) && aIt->second.is();
+                        }
+
+    /** Returns a reference to the object accossiated to the passed key, or 0 on error. */
+    inline ref_type     get( key_type nKey ) const
+                        {
+                            typename map_type::const_iterator aIt = find( nKey );
+                            if( aIt != this->end() ) return aIt->second;
+                            return ref_type();
+                        }
+};
+
 // ============================================================================
 
 class Color;
@@ -268,11 +296,11 @@ public:
     static String       GetHexStr( sal_uInt16 nValue );
 
     /** Mixes RGB components with given transparence.
-        @param nTrans  Foreground transparence (0x0000 == full nFore ... 0x8000 = full nBack). */
-    static sal_uInt8    GetMixedColorComp( sal_uInt8 nFore, sal_uInt8 nBack, sal_uInt16 nTrans );
+        @param nTrans  Foreground transparence (0x00 == full nFore ... 0x80 = full nBack). */
+    static sal_uInt8    GetMixedColorComp( sal_uInt8 nFore, sal_uInt8 nBack, sal_uInt8 nTrans );
     /** Mixes colors with given transparence.
-        @param nTrans  Foreground transparence (0x0000 == full rFore ... 0x8000 = full rBack). */
-    static Color        GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt16 nTrans );
+        @param nTrans  Foreground transparence (0x00 == full rFore ... 0x80 = full rBack). */
+    static Color        GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt8 nTrans );
 
 // *** conversion of names *** ------------------------------------------------
 
