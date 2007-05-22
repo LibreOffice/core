@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:27:49 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:40:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,9 @@
 #ifndef _SFX_FRMDESCRHXX
 #include <sfx2/frmdescr.hxx>
 #endif
+#ifndef _SFX_IPCLIENT_HXX
+#include <sfx2/ipclient.hxx>
+#endif
 #ifndef _EHDL_HXX //autogen
 #include <svtools/ehdl.hxx>
 #endif
@@ -99,12 +102,6 @@
 #endif
 #ifndef _SVX_BRKITEM_HXX //autogen
 #include <svx/brkitem.hxx>
-#endif
-#ifndef _SCH_DLL_HXX
-#include <sch/schdll.hxx>
-#endif
-#ifndef _SCH_MEMCHRT_HXX
-#include <sch/memchrt.hxx>
 #endif
 #ifndef _MySVXACORR_HXX
 #include <svx/svxacorr.hxx>
@@ -640,8 +637,9 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                  Vom ClipBoard oder Insert
 ------------------------------------------------------------------------*/
 
-BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef&  xRef )
+SwFlyFrmFmt* SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef&  xRef )
 {
+    SwFlyFrmFmt *pFmt = 0;
     {
         ResetCursorStack();
         StartAllAction();
@@ -716,7 +714,7 @@ BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef&  xRef )
             aSz.Width() = aBound.Width();
         }
         aFrmMgr.SetSize( aSz );
-        SwFEShell::InsertObject( xRef, &aFrmMgr.GetAttrSet() );
+        pFmt = SwFEShell::InsertObject( xRef, &aFrmMgr.GetAttrSet() );
 
         EndAllAction();
         GetView().AutoCaption(OLE_CAP, &aCLSID);
@@ -732,10 +730,8 @@ BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef&  xRef )
 
 
         EndUndo(UNDO_INSERT, &aRewriter);
-
-        return bActivate;
     }
-    return FALSE;
+    return pFmt;
 }
 
 /*------------------------------------------------------------------------
@@ -753,29 +749,6 @@ void SwWrtShell::LaunchOLEObj( long nVerb )
         svt::EmbeddedObjectRef& xRef = GetOLEObject();
         ASSERT( xRef.is(), "OLE not found" );
         SfxInPlaceClient* pCli=0;
-
-        //  Link fuer Daten-Highlighting im Chart zuruecksetzen
-        SvtModuleOptions aMOpt;
-        if( aMOpt.IsChart() )
-        {
-            SchMemChart* pMemChart=0;
-            if( SotExchange::IsChart( SvGlobalName( xRef->getClassID() ) ) &&
-                0 != (pMemChart = SchDLL::GetChartData( xRef.GetObject() ) ))
-            {
-                pMemChart->SetSelectionHdl( LINK( this, SwWrtShell,
-                                            ChartSelectionHdl ) );
-                //#60043# Damit die DataBrowseBox nicht erscheint wird das
-                //Chart auf Readonly gesetzt wenn es eine Verbindung
-                //zu einer Tabelle hat.
-                if ( GetChartName( xRef.GetObject() ).Len() )
-                {
-                    pMemChart->SetReadOnly( TRUE );
-                    pMemChart->SetNumberFormatter(GetDoc()->GetNumberFormatter( sal_True ));
-                    SchDLL::Update(xRef.GetObject(), pMemChart);
-                    xRef.UpdateReplacement();
-                }
-            }
-        }
 
         pCli = GetView().FindIPClient( xRef.GetObject(), &GetView().GetEditWin() );
         if ( !pCli )
@@ -856,15 +829,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     SfxInPlaceClient* pCli = GetView().FindIPClient( xObj.GetObject(), &GetView().GetEditWin() );
     if ( !pCli )
     {
-        if ( (embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY & nMisc)
-            // TODO/LATER: ResizeOnPrinterChange
-             //|| SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xObj->GetMiscStatus()
-             )
-        {
-            pCli = new SwOleClient( &GetView(), &GetView().GetEditWin(), xObj );
-        }
-        else
-            return;
+        pCli = new SwOleClient( &GetView(), &GetView().GetEditWin(), xObj );
     }
 
     // TODO/LEAN: getMapUnit can switch object to running state
@@ -985,12 +950,6 @@ void SwWrtShell::ConnectObj( svt::EmbeddedObjectRef& xObj, const SwRect &rPrt,
     if ( !pCli )
         pCli = new SwOleClient( &GetView(), &GetView().GetEditWin(), xObj );
     CalcAndSetScale( xObj, &rPrt, &rFrm );
-}
-
-IMPL_LINK( SwWrtShell, ChartSelectionHdl, ChartSelectionInfo *, pInfo )
-{
-    long nRet = 0;
-    return nRet;
 }
 
 /*------------------------------------------------------------------------
