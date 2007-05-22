@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valueimp.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:58:19 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:33:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
 
+#include <memory>
 #include <vector>
 
 // -----------
@@ -131,16 +132,30 @@ struct ValueSetItem
     Rectangle           maRect;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >* mpxAcc;
 
-                        ValueSetItem( ValueSet& rParent );
-                        ~ValueSetItem();
+    ValueSetItem( ValueSet& rParent );
+    ~ValueSetItem();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >    GetAccessible();
-     void                                                                                       ClearAccessible();
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+                        GetAccessible( bool bIsTransientChildrenDisabled );
+     void               ClearAccessible();
 };
 
 // -----------------------------------------------------------------------------
 
 DECLARE_LIST( ValueItemList, ValueSetItem* )
+
+// -----------------------------------------------------------------------------
+
+struct ValueSet_Impl
+{
+    ::std::auto_ptr< ValueItemList >    mpItemList;
+    bool                                mbIsTransientChildrenDisabled;
+
+    ValueSet_Impl() :   mpItemList( ::std::auto_ptr< ValueItemList >( new ValueItemList() ) ),
+                        mbIsTransientChildrenDisabled( false )
+    {
+    }
+};
 
 // ---------------
 // - ValueSetAcc -
@@ -161,8 +176,8 @@ class ValueSetAcc :
 {
 public:
 
-                        ValueSetAcc( ValueSet* pParent );
-                        ~ValueSetAcc();
+    ValueSetAcc( ValueSet* pParent, bool bIsTransientChildrenDisabled );
+    ~ValueSetAcc();
 
     void                FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
     BOOL                HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
@@ -218,8 +233,10 @@ public:
 
 private:
     //    ::vos::OMutex                                                                                                           maMutex;
-    ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener > >  mxEventListeners;
-    ValueSet*                                                                                                               mpParent;
+    ::std::vector< ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessibleEventListener > >   mxEventListeners;
+    ValueSet*                                                           mpParent;
+    bool                                                                mbIsTransientChildrenDisabled;
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
@@ -280,16 +297,18 @@ class ValueItemAcc : public ::cppu::WeakImplHelper5< ::com::sun::star::accessibi
 {
 private:
 
-    ::vos::OMutex                                                                                                           maMutex;
-    ValueSetItem*                                                                                                           mpParent;
-    ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener > >  mxEventListeners;
+    ::std::vector< ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessibleEventListener > >   mxEventListeners;
+    ::vos::OMutex                                                       maMutex;
+    ValueSetItem*                                                       mpParent;
+    bool                                                                mbIsTransientChildrenDisabled;
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
 public:
 
-            ValueItemAcc( ValueSetItem* pParent );
-            ~ValueItemAcc();
+    ValueItemAcc( ValueSetItem* pParent, bool bIsTransientChildrenDisabled );
+    ~ValueItemAcc();
 
     void    ParentDestroyed();
 
