@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 16:58:36 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:39:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,8 @@
 #define SC_SERVICENAME_LISTSOURCE   "com.sun.star.table.CellRangeListSource"
 #define SC_SERVICENAME_CELLADDRESS  "com.sun.star.table.CellAddressConversion"
 #define SC_SERVICENAME_RANGEADDRESS "com.sun.star.table.CellRangeAddressConversion"
-#define SC_SERVICENAME_CHDATAPROV   "com.sun.star.chart2.DataProvider"
+#define SC_SERVICENAME_CHDATAPROV   "com.sun.star.chart2.data.DataProvider"
+#define SC_SERVICENAME_CHRANGEHILIGHT "com.sun.star.chart2.data.RangeHighlightListener"
 
 //  document
 #define SC_UNO_AREALINKS            "AreaLinks"
@@ -150,6 +151,7 @@
 //  SheetCellRange
 #define SC_UNONAME_POS              "Position"
 #define SC_UNONAME_SIZE             "Size"
+#define SC_UNONAME_ABSNAME          "AbsolutName"
 
 //  column/row/sheet
 #define SC_UNONAME_CELLHGT          "Height"
@@ -558,6 +560,7 @@
 #define SC_UNONAME_TITLE            "Title"
 #define SC_UNONAME_CLOSEONUP        "CloseOnMouseRelease"
 #define SC_UNONAME_SINGLECELL       "SingleCellMode"
+#define SC_UNONAME_MULTISEL         "MultiSelectionMode"
 
 //  XRenderable
 #define SC_UNONAME_PAGESIZE         "PageSize"
@@ -575,10 +578,13 @@
 #define SC_UNONAME_PERSREPR         "PersistentRepresentation"
 #define SC_UNONAME_REFSHEET         "ReferenceSheet"
 
-
 // --> PB 2004-08-23 #i33095# Security Options
 #define SC_UNO_LOADREADONLY         "LoadReadonly"
 // <--
+
+// Chart2
+#define SC_UNONAME_ISHIDDEN         "IsHidden"
+#define SC_UNONAME_ROLE             "Role"
 
 #endif
 
