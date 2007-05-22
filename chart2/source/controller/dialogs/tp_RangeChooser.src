@@ -1,0 +1,102 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: tp_RangeChooser.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:48:10 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#include "HelpIds.hrc"
+#include "tp_RangeChooser.hrc"
+#include "SchSlotIds.hxx"
+#include "dlg_CreationWizard.hrc"
+
+#ifndef _SVT_CONTROLDIMS_HRC_
+#include <svtools/controldims.hrc>
+#endif
+
+#define MASKCOLOR MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; }
+
+TabPage TP_RANGECHOOSER
+{
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 248, 140 ) ;
+
+    FixedText FT_CAPTION_FOR_WIZARD
+    {
+        Pos = MAP_APPFONT ( 5 , 8  ) ;
+        Size = MAP_APPFONT ( 238 , 10 ) ;
+        Text [ en-US ] = "Choose a data range" ;
+    };
+    FixedText FT_RANGE
+    {
+        Pos = MAP_APPFONT ( 6 , 22  ) ;
+        Size = MAP_APPFONT ( 236 , 8 ) ;
+        Text [ en-US ] = "~Data range" ;
+    };
+    Edit ED_RANGE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 32  ) ;
+        Size = MAP_APPFONT ( 220 , 12 ) ;
+    };
+    ImageButton IB_RANGE
+    {
+        Pos = MAP_APPFONT ( 228 , 31  ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        TabStop = FALSE ;
+    };
+    RadioButton RB_DATAROWS
+    {
+        Pos = MAP_APPFONT ( 6 , 52  ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Data series in ~rows" ;
+    };
+    RadioButton RB_DATACOLS
+    {
+        Pos = MAP_APPFONT ( 6 , 66  ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Data series in ~columns" ;
+    };
+    CheckBox CB_FIRST_ROW_ASLABELS
+    {
+        Pos = MAP_APPFONT ( 6 , 84  ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Text [ en-US ] = "~First row as label" ;
+    };
+    CheckBox CB_FIRST_COLUMN_ASLABELS
+    {
+        Pos = MAP_APPFONT ( 6 , 98  ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Text [ en-US ] = "F~irst column as label" ;
+    };
+};
