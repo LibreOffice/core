@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ColumnChartType.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:19:44 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:47:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #define CHART_COLUMNCHARTTYPE_HXX
 
 #include "ChartType.hxx"
+#include "ServiceMacros.hxx"
 
 namespace chart
 {
@@ -43,12 +44,35 @@ namespace chart
 class ColumnChartType : public ChartType
 {
 public:
-    ColumnChartType( sal_Int32 nDim = 2 );
+    ColumnChartType(
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~ColumnChartType();
 
+    APPHELPER_XSERVICEINFO_DECL()
+
+    /// establish methods for factory instatiation
+    APPHELPER_SERVICE_FACTORY_HELPER( ColumnChartType )
+
 protected:
+    explicit ColumnChartType( const ColumnChartType & rOther );
+
     // ____ XChartType ____
     virtual ::rtl::OUString SAL_CALL getChartType()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ OPropertySet ____
+    virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
+        throw(::com::sun::star::beans::UnknownPropertyException);
+    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+
+    // ____ XPropertySet ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
+        getPropertySetInfo()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XCloneable ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
         throw (::com::sun::star::uno::RuntimeException);
 };
 
