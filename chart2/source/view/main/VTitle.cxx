@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VTitle.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:36:52 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:27:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,14 +40,10 @@
 #include "macros.hxx"
 #include "PropertyMapper.hxx"
 #include "ShapeFactory.hxx"
-#include "chartview/ObjectIdentifier.hxx"
 #include "RelativeSizeHelper.hxx"
 
 #ifndef _COM_SUN_STAR_CHART2_XFORMATTEDSTRING_HPP_
 #include <com/sun/star/chart2/XFormattedString.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
-#include <com/sun/star/chart2/XIdentifiable.hpp>
 #endif
 
 #ifndef INCLUDED_RTL_MATH_HXX
@@ -80,13 +76,13 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-VTitle::VTitle( const uno::Reference< XTitle > & xTitle
-               , double fAdditionalRotationAngleDegree )
+VTitle::VTitle( const uno::Reference< XTitle > & xTitle )
                 : m_xTarget(NULL)
                 , m_xShapeFactory(NULL)
                 , m_xTitle(xTitle)
                 , m_xShape(NULL)
-                , m_fRotationAngleDegree(fAdditionalRotationAngleDegree)
+                , m_aCID()
+                , m_fRotationAngleDegree(0.0)
                 , m_nXPos(0)
                 , m_nYPos(0)
 {
@@ -98,40 +94,31 @@ VTitle::~VTitle()
 
 void SAL_CALL VTitle::init(
               const uno::Reference< drawing::XShapes >& xTargetPage
-            , const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+            , const uno::Reference< lang::XMultiServiceFactory >& xFactory
+            , const rtl::OUString& rCID )
 {
     m_xTarget = xTargetPage;
     m_xShapeFactory = xFactory;
+    m_aCID = rCID;
 }
 
+double VTitle::getRotationAnglePi() const
+{
+    return m_fRotationAngleDegree*F_PI/180.0;
+}
 
-awt::Size VTitle::getFinalSize() const //size after rotation
+awt::Size VTitle::getUnrotatedSize() const //size before rotation
 {
     awt::Size aRet;
     if(m_xShape.is())
-    {
-        double fAngleDegree = m_fRotationAngleDegree;
-        {
-            while(fAngleDegree>=360.0)
-                fAngleDegree-=360.0;
-            while(fAngleDegree<0.0)
-                fAngleDegree+=360.0;
-            if(fAngleDegree>270.0)
-                fAngleDegree=360.0-fAngleDegree;
-            else if(fAngleDegree>180.0)
-                fAngleDegree=fAngleDegree-180.0;
-            else if(fAngleDegree>90.0)
-                fAngleDegree=180.0-fAngleDegree;
-        }
-
-        const double fAnglePi = fAngleDegree*F_PI/180.0;
-        const awt::Size aSize = m_xShape->getSize();
-        aRet.Height = aSize.Width*rtl::math::sin( fAnglePi )
-            + aSize.Height*rtl::math::cos( fAnglePi );
-        aRet.Width = aSize.Width*rtl::math::cos( fAnglePi )
-            + aSize.Height*rtl::math::sin( fAnglePi );
-    }
+        aRet = m_xShape->getSize();
     return aRet;
+}
+
+awt::Size VTitle::getFinalSize() const //size after rotation
+{
+    return ShapeFactory::getSizeAfterRotation(
+         m_xShape, m_fRotationAngleDegree );
 }
 
 void VTitle::changePosition( const awt::Point& rPos )
@@ -148,11 +135,11 @@ void VTitle::changePosition( const awt::Point& rPos )
 
         //set position matrix
         //the matrix needs to be set at the end behind autogrow and such position influencing properties
-        ::basegfx::B2DHomMatrix aM3;
-        // aM3.Scale( 1, 1 ); Oops? A scale with this parameters is neutral, line commented out
-        aM3.rotate( m_fRotationAngleDegree*F_PI/180.0 );
-        aM3.translate( m_nXPos, m_nYPos);
-        xShapeProp->setPropertyValue( C2U( "Transformation" ), uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM3) ) );
+        ::basegfx::B2DHomMatrix aM;
+        // aM.Scale( 1, 1 ); Oops? A scale with this parameters is neutral, line commented out
+        aM.rotate( m_fRotationAngleDegree*F_PI/180.0 );
+        aM.translate( m_nXPos, m_nYPos);
+        xShapeProp->setPropertyValue( C2U( "Transformation" ), uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM) ) );
     }
     catch( uno::Exception& e )
     {
@@ -182,8 +169,8 @@ void VTitle::createShapes(
 
         //set text and text properties
         uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
-        uno::Reference< text::XTextRange > xTextRange( xShape, uno::UNO_QUERY );
         uno::Reference< text::XTextCursor > xTextCursor( xText->createTextCursor() );
+        uno::Reference< text::XTextRange > xTextRange( xTextCursor, uno::UNO_QUERY );
         uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
         uno::Reference< beans::XPropertySet > xTitleProperties( m_xTitle, uno::UNO_QUERY );
         if( !xText.is() || !xTextRange.is() || !xTextCursor.is() || !xShapeProp.is() || !xTitleProperties.is() )
@@ -193,10 +180,7 @@ void VTitle::createShapes(
         //fill line-, fill- and paragraph-properties into the ValueMap
         {
             tMakePropertyNameMap aNameMap = PropertyMapper::getPropertyNameMapForParagraphProperties();
-            const tMakePropertyNameMap& rFillPropMap = PropertyMapper::getPropertyNameMapForFillProperties();
-            const tMakePropertyNameMap& rLinePropMap = PropertyMapper::getPropertyNameMapForLineProperties();
-            aNameMap.insert(rFillPropMap.begin(),rFillPropMap.end());
-            aNameMap.insert(rLinePropMap.begin(),rLinePropMap.end());
+            aNameMap( PropertyMapper::getPropertyNameMapForFillAndLineProperties() );
 
             PropertyMapper::getValueMap( aValueMap, aNameMap, xTitleProperties );
         }
@@ -217,12 +201,8 @@ void VTitle::createShapes(
             ////aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextMaximumFrameHeight"), uno::makeAny(rSize.Height) ) ); //sal_Int32
 
             //set name/classified ObjectID (CID)
-            uno::Reference< XIdentifiable > xIdent( m_xTitle, uno::UNO_QUERY );
-            if( xIdent.is())
-            {
-                rtl::OUString aCID = ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_TITLE, xIdent->getIdentifier() );
-                aValueMap.insert( tPropertyNameValueMap::value_type( C2U("Name"), uno::makeAny( aCID ) ) ); //CID rtl::OUString
-            }
+            if( m_aCID.getLength() )
+                aValueMap.insert( tPropertyNameValueMap::value_type( C2U("Name"), uno::makeAny( m_aCID ) ) ); //CID rtl::OUString
         }
 
         //set global title properties
@@ -251,10 +231,11 @@ void VTitle::createShapes(
                 for( sal_Int32 nN=0; nN<aStringList.getLength();nN++ )
                     aLabel += aStringList[nN]->getString();
                 aLabel = ShapeFactory::getStackedString( aLabel, bStackCharacters );
+
                 xTextCursor->gotoEnd(false);
                 xText->insertString( xTextRange, aLabel, false );
                 xTextCursor->gotoEnd(true);
-                uno::Reference< beans::XPropertySet > xTargetProps( xTextCursor, uno::UNO_QUERY );
+                uno::Reference< beans::XPropertySet > xTargetProps( xShape, uno::UNO_QUERY );
                 uno::Reference< beans::XPropertySet > xSourceProps( aStringList[0], uno::UNO_QUERY );
 
                 PropertyMapper::setMappedProperties( xTargetProps, xSourceProps
@@ -262,12 +243,9 @@ void VTitle::createShapes(
 
                 // adapt font size according to page size
                 awt::Size aOldRefSize;
-                if( xSourceProps->getPropertyValue( C2U("ReferencePageSize")) >>= aOldRefSize )
+                if( xTitleProperties->getPropertyValue( C2U("ReferencePageSize")) >>= aOldRefSize )
                 {
-                    RelativeSizeHelper::adaptFontSizes(
-                        xTargetProps
-                        , aOldRefSize
-                        , rReferenceSize );
+                    RelativeSizeHelper::adaptFontSizes( xTargetProps, aOldRefSize, rReferenceSize );
                 }
             }
         }
@@ -282,20 +260,23 @@ void VTitle::createShapes(
                 xTextCursor->gotoEnd(true);
                 aCursorList[nN] = xText->createTextCursorByRange( uno::Reference< text::XTextRange >(xTextCursor,uno::UNO_QUERY) );
             }
-            for( nN=0; nN<aStringList.getLength();nN++ )
+            awt::Size aOldRefSize;
+            bool bHasRefPageSize =
+                ( xTitleProperties->getPropertyValue( C2U("ReferencePageSize")) >>= aOldRefSize );
+
+            //for( nN=0; nN<aStringList.getLength();nN++ ) //portion wise fromatting does not work still
+            if( aStringList.getLength()>0 )
             {
-                uno::Reference< beans::XPropertySet > xTargetProps( aCursorList[nN], uno::UNO_QUERY );
-                uno::Reference< beans::XPropertySet > xSourceProps( aStringList[nN], uno::UNO_QUERY );
+                //uno::Reference< beans::XPropertySet > xTargetProps( aCursorList[nN], uno::UNO_QUERY );
+                //uno::Reference< beans::XPropertySet > xSourceProps( aStringList[nN], uno::UNO_QUERY );
+                uno::Reference< beans::XPropertySet > xTargetProps( xShape, uno::UNO_QUERY );
+                uno::Reference< beans::XPropertySet > xSourceProps( aStringList[0], uno::UNO_QUERY );
                 PropertyMapper::setMappedProperties( xTargetProps, xSourceProps, PropertyMapper::getPropertyNameMapForCharacterProperties() );
 
                 // adapt font size according to page size
-                awt::Size aOldRefSize;
-                if( xSourceProps->getPropertyValue( C2U("ReferencePageSize")) >>= aOldRefSize )
+                if( bHasRefPageSize )
                 {
-                    RelativeSizeHelper::adaptFontSizes(
-                        xTargetProps
-                        , aOldRefSize
-                        , rReferenceSize );
+                    RelativeSizeHelper::adaptFontSizes( xTargetProps, aOldRefSize, rReferenceSize );
                 }
             }
         }
@@ -315,11 +296,11 @@ void VTitle::createShapes(
 
         //set position matrix
         //the matrix needs to be set at the end behind autogrow and such position influencing properties
-        ::basegfx::B2DHomMatrix aM3;
-        // aM3.Scale( 1, 1 ); Oops? A scale with this parameters is neutral, line commented out
-        aM3.rotate( m_fRotationAngleDegree*F_PI/180.0 );
-        aM3.translate( m_nXPos, m_nYPos );
-        xShapeProp->setPropertyValue( C2U( "Transformation" ), uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM3) ) );
+        ::basegfx::B2DHomMatrix aM;
+        // aM.Scale( 1, 1 ); Oops? A scale with this parameters is neutral, line commented out
+        aM.rotate( m_fRotationAngleDegree*F_PI/180.0 );
+        aM.translate( m_nXPos, m_nYPos );
+        xShapeProp->setPropertyValue( C2U( "Transformation" ), uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM) ) );
     }
     catch( uno::Exception& e )
     {
