@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImplOPropertySet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:24:41 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:59:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include "ImplOPropertySet.hxx"
+#include "CloneHelper.hxx"
 
 #include <algorithm>
 #include <functional>
@@ -46,11 +47,16 @@
 
 using namespace ::com::sun::star;
 
+using ::rtl::OUString;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Any;
+
 namespace
 {
 
 struct lcl_getPropertyStateByHandle :
-        public ::std::unary_function< beans::PropertyState, sal_Int32 >
+        public ::std::unary_function< sal_Int32,  beans::PropertyState >
 {
     lcl_getPropertyStateByHandle(
         const ::property::impl::ImplOPropertySet::tPropertyMap & rMap )
@@ -70,7 +76,7 @@ private:
 
 template< typename K, typename V >
 struct lcl_eraseMapEntry :
-        public ::std::unary_function< void, K >
+        public ::std::unary_function< K, void >
 {
     lcl_eraseMapEntry( ::std::map< K, V > & rMap )
             : m_rMap( rMap )
@@ -85,6 +91,21 @@ private:
     ::std::map< K, V > m_rMap;
 };
 
+struct lcl_replaceInterfacePropertiesByClones :
+    public ::std::unary_function< ::property::impl::ImplOPropertySet::tPropertyMap::value_type, void >
+{
+    inline void operator() ( ::property::impl::ImplOPropertySet::tPropertyMap::value_type & rProp )
+    {
+        if( rProp.second.hasValue() &&
+            rProp.second.getValueType().getTypeClass() == uno::TypeClass_INTERFACE )
+        {
+            Reference< util::XCloneable > xCloneable;
+            if( rProp.second >>= xCloneable )
+                rProp.second <<= xCloneable->createClone();
+        }
+    }
+};
+
 } //  anonymous namespace
 
 namespace property
@@ -95,15 +116,23 @@ namespace impl
 ImplOPropertySet::ImplOPropertySet()
 {}
 
+ImplOPropertySet::ImplOPropertySet( const ImplOPropertySet & rOther )
+{
+    ::std::copy( rOther.m_aProperties.begin(), rOther.m_aProperties.end(),
+                 ::std::inserter( m_aProperties, m_aProperties.begin() ));
+    cloneInterfaceProperties();
+    m_xStyle.set( ::chart::CloneHelper::CreateRefClone< Reference< style::XStyle > >()( rOther.m_xStyle ));
+}
+
 beans::PropertyState ImplOPropertySet::GetPropertyStateByHandle( sal_Int32 nHandle ) const
 {
     return lcl_getPropertyStateByHandle( m_aProperties ) ( nHandle );
 }
 
-uno::Sequence< beans::PropertyState > ImplOPropertySet::GetPropertyStatesByHandle(
+Sequence< beans::PropertyState > ImplOPropertySet::GetPropertyStatesByHandle(
     const ::std::vector< sal_Int32 > & aHandles ) const
 {
-    uno::Sequence< beans::PropertyState > aResult( aHandles.size());
+    Sequence< beans::PropertyState > aResult( aHandles.size());
 
     ::std::transform( aHandles.begin(), aHandles.end(),
                       aResult.getArray(),
@@ -126,7 +155,7 @@ void ImplOPropertySet::SetPropertiesToDefault(
     const ::std::vector< sal_Int32 > & aHandles )
 {
     ::std::for_each( aHandles.begin(), aHandles.end(),
-                     lcl_eraseMapEntry< sal_Int32, uno::Any >( m_aProperties ) );
+                     lcl_eraseMapEntry< sal_Int32, Any >( m_aProperties ) );
 }
 
 void ImplOPropertySet::SetAllPropertiesToDefault()
@@ -135,7 +164,7 @@ void ImplOPropertySet::SetAllPropertiesToDefault()
 }
 
 bool ImplOPropertySet::GetPropertyValueByHandle(
-    uno::Any & rValue,
+    Any & rValue,
     sal_Int32 nHandle ) const
 {
     bool bResult = false;
@@ -152,7 +181,7 @@ bool ImplOPropertySet::GetPropertyValueByHandle(
 }
 
 void ImplOPropertySet::SetPropertyValueByHandle(
-    sal_Int32 nHandle, const uno::Any & rValue, uno::Any * pOldValue )
+    sal_Int32 nHandle, const Any & rValue, Any * pOldValue )
 {
     if( pOldValue != NULL )
     {
@@ -164,7 +193,7 @@ void ImplOPropertySet::SetPropertyValueByHandle(
     m_aProperties[ nHandle ] = rValue;
 }
 
-bool ImplOPropertySet::SetStyle( const uno::Reference< style::XStyle > & xStyle )
+bool ImplOPropertySet::SetStyle( const Reference< style::XStyle > & xStyle )
 {
     if( ! xStyle.is())
         return false;
@@ -173,9 +202,15 @@ bool ImplOPropertySet::SetStyle( const uno::Reference< style::XStyle > & xStyle 
     return true;
 }
 
-uno::Reference< style::XStyle > ImplOPropertySet::GetStyle() const
+Reference< style::XStyle > ImplOPropertySet::GetStyle() const
 {
     return m_xStyle;
+}
+
+void ImplOPropertySet::cloneInterfaceProperties()
+{
+    ::std::for_each( m_aProperties.begin(), m_aProperties.end(),
+                     lcl_replaceInterfacePropertiesByClones());
 }
 
 
