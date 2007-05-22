@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:45:16 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:21:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,14 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
 #include <com/sun/star/beans/Property.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
 #include <map>
@@ -56,17 +62,69 @@ public:
     static void copyProperties(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & xSource,
-        ::com::sun::star::uno::Reference<
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & xDestination
         );
+
+    /** adds a line dash with a unique name to the gradient obtained by the given
+        factory.
+
+        @return The name used for storing this element in the table
+     */
+    static ::rtl::OUString addLineDashUniqueNameToTable(
+        const ::com::sun::star::uno::Any & rValue,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > & xFact,
+        const ::rtl::OUString & rPreferredName );
+
+    /** adds a gradient with a unique name to the gradient obtained by the given
+        factory.
+
+        @return The name used for storing this element in the table
+     */
+    static ::rtl::OUString addGradientUniqueNameToTable(
+        const ::com::sun::star::uno::Any & rValue,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > & xFact,
+        const ::rtl::OUString & rPreferredName );
+
+    /** adds a transparency gradient with a unique name to the gradient obtained
+        by the given factory.
+
+        @return The name used for storing this element in the table
+     */
+    static ::rtl::OUString addTransparencyGradientUniqueNameToTable(
+        const ::com::sun::star::uno::Any & rValue,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > & xFact,
+        const ::rtl::OUString & rPreferredName );
+
+    /** adds a hatch with a unique name to the gradient obtained by the given
+        factory.
+
+        @return The name used for storing this element in the table
+     */
+    static ::rtl::OUString addHatchUniqueNameToTable(
+        const ::com::sun::star::uno::Any & rValue,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > & xFact,
+        const ::rtl::OUString & rPreferredName );
+
+    /** adds a bitmap with a unique name to the gradient obtained by the given
+        factory.
+
+        @return The name used for storing this element in the table
+     */
+    static ::rtl::OUString addBitmapUniqueNameToTable(
+        const ::com::sun::star::uno::Any & rValue,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > & xFact,
+        const ::rtl::OUString & rPreferredName );
 
 private:
     // not implemented
     PropertyHelper();
 };
-
-namespace helper
-{
 
 struct PropertyNameLess
 {
@@ -77,10 +135,36 @@ struct PropertyNameLess
     }
 };
 
+struct PropertyLess : public ::std::binary_function<
+        ::com::sun::star::beans::Property,
+        ::com::sun::star::beans::Property,
+        bool >
+{
+    bool operator() ( const ::com::sun::star::beans::Property & rFirst,
+                      const ::com::sun::star::beans::Property & rSecond )
+    {
+        return ( rFirst.Name.compareTo( rSecond.Name ) < 0 );
+    }
+};
+
+struct PropertyValueNameEquals : public ::std::unary_function< ::com::sun::star::beans::PropertyValue, bool >
+{
+    explicit PropertyValueNameEquals( const ::rtl::OUString & rName ) :
+            m_aName( rName )
+    {}
+
+    bool operator() ( const ::com::sun::star::beans::PropertyValue & rPropValue )
+    {
+        return rPropValue.Name.equals( m_aName );
+    }
+
+private:
+    ::rtl::OUString m_aName;
+};
+
 typedef ::std::map< sal_Int32, ::com::sun::star::uno::Any >
     tPropertyValueMap;
 
-} //  namespace helper
 } //  namespace chart
 
 // CHART_PROPERTYHELPER_HXX
