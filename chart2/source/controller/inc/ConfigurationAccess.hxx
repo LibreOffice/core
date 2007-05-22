@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConfigurationAccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:21:55 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:52:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,8 +54,10 @@ class CalcConfigItem;
 class ConfigurationAccess
 {
 public:
-    ConfigurationAccess();
-    virtual ~ConfigurationAccess();
+    // use this to get the singleton ConfigurationAccess (CTOR is private)
+    static ConfigurationAccess *  getConfigurationAccess();
+
+    ~ConfigurationAccess();
 
     /** @descr Retrieve the FieldUnit to be used for the UI.  This unit is retrieved
     from the registry settings of the Calc application.
@@ -68,6 +70,9 @@ public:
     FieldUnit getFieldUnit();
 
 private:
+    ConfigurationAccess();
+
+    static ConfigurationAccess *  m_pThis;
     CalcConfigItem* m_pCalcConfigItem;
 };
 
