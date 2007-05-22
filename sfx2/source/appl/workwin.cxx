@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:08:17 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:17:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -713,10 +713,9 @@ void SfxWorkWindow::SaveStatus_Impl()
         SfxChildWindow *pChild = pCW->pWin;
         if (pChild)
         {
-            BOOL bTask = ( pCW->aInfo.nFlags & SFX_CHILDWIN_TASK ) != 0;
+            USHORT nFlags = pCW->aInfo.nFlags;
             pCW->aInfo = pChild->GetInfo();
-            if ( bTask )
-                pCW->aInfo.nFlags |= SFX_CHILDWIN_TASK;
+            pCW->aInfo.nFlags |= nFlags;
             SaveStatus_Impl(pChild, pCW->aInfo);
         }
     }
@@ -751,10 +750,9 @@ void SfxWorkWindow::DeleteControllers_Impl()
         if (pChild)
         {
 /*
-            BOOL bTask = ( pCW->aInfo.nFlags & SFX_CHILDWIN_TASK ) != 0;
+            USHORT nFlags = pCW->aInfo.nFlags;
             pCW->aInfo = pChild->GetInfo();
-            if ( bTask )
-            pCW->aInfo.nFlags |= SFX_CHILDWIN_TASK;
+            pCW->aInfo.nFlags |= nFlags;
             SaveStatus_Impl(pChild, pCW->aInfo);
 */
             pChild->Hide();
@@ -1034,10 +1032,9 @@ void SfxWorkWindow::Close_Impl()
         SfxChildWindow *pChild = pCW->pWin;
         if (pChild)
         {
-            BOOL bTask = ( pCW->aInfo.nFlags & SFX_CHILDWIN_TASK ) != 0;
+            USHORT nFlags = pCW->aInfo.nFlags;
             pCW->aInfo = pChild->GetInfo();
-            if ( bTask )
-                pCW->aInfo.nFlags |= SFX_CHILDWIN_TASK;
+            pCW->aInfo.nFlags |= nFlags;
             SaveStatus_Impl(pChild, pCW->aInfo);
         }
     }
@@ -1538,7 +1535,7 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
         SfxChildWin_Impl *pCW = (*pChildWins)[n];
         SfxChildWindow *pChildWin = pCW->pWin;
         BOOL bCreate = FALSE;
-        if ( pCW->nId && !pCW->bDisabled  && IsVisible_Impl( pCW->nVisibility ) )
+        if ( pCW->nId && !pCW->bDisabled  && (pCW->aInfo.nFlags & SFX_CHILDWIN_ALWAYSAVAILABLE || IsVisible_Impl( pCW->nVisibility ) ) )
         {
             // Im Kontext ist ein geeignetes ChildWindow erlaubt;
             // ist es auch eingeschaltet ?
@@ -1632,13 +1629,10 @@ void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW, BOOL bSetFocus )
             ( pWorkWin->IsInputEnabled() /* || pChildWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT */ ) );
 #endif
         // Zumindest der ExtraString wird beim Auswerten ver"andert, also neu holen
-        BOOL bTask = ( pCW->aInfo.nFlags & SFX_CHILDWIN_TASK ) != 0;
         SfxChildWinInfo aInfo = pChildWin->GetInfo();
         pCW->aInfo.aExtraString = aInfo.aExtraString;
         pCW->aInfo.bVisible = aInfo.bVisible;
-        pCW->aInfo.nFlags = aInfo.nFlags;
-        if ( bTask )
-            pCW->aInfo.nFlags |= SFX_CHILDWIN_TASK;
+        pCW->aInfo.nFlags |= aInfo.nFlags;
 
         // Nein !! Sonst kann man keine Fenster defaultmaessig ausschalten ( Partwindow! )
 //      pCW->aInfo.bVisible = TRUE;
@@ -1714,10 +1708,9 @@ void SfxWorkWindow::RemoveChildWin_Impl( SfxChildWin_Impl *pCW )
     }
 
     // Information in der INI-Datei sichern
-    BOOL bTask = ( pCW->aInfo.nFlags & SFX_CHILDWIN_TASK ) != 0;
+    USHORT nFlags = pCW->aInfo.nFlags;
     pCW->aInfo = pChildWin->GetInfo();
-    if ( bTask )
-        pCW->aInfo.nFlags |= SFX_CHILDWIN_TASK;
+    pCW->aInfo.nFlags |= nFlags;
     SaveStatus_Impl(pChildWin, pCW->aInfo);
 
     pChildWin->Hide();
@@ -2126,10 +2119,9 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             if ( pCW && pCW->pWin )
             {
                 // store changed configuration
-                BOOL bTask = ( pCW->aInfo.nFlags & SFX_CHILDWIN_TASK ) != 0;
+                USHORT nFlags = pCW->aInfo.nFlags;
                 pCW->aInfo = pCW->pWin->GetInfo();
-                if ( bTask )
-                    pCW->aInfo.nFlags |= SFX_CHILDWIN_TASK;
+                pCW->aInfo.nFlags |= nFlags;
                 if ( eConfig != SFX_MOVEDOCKINGWINDOW )
                     SaveStatus_Impl( pCW->pWin, pCW->aInfo);
             }
@@ -2404,7 +2396,7 @@ BOOL SfxWorkWindow::KnowsChildWindow_Impl(USHORT nId)
 
     if (n<nCount)
     {
-        if ( !IsVisible_Impl(  pCW->nVisibility ) )
+        if ( !(pCW->aInfo.nFlags & SFX_CHILDWIN_ALWAYSAVAILABLE) && !IsVisible_Impl(  pCW->nVisibility ) )
             return FALSE;
         return pCW->bEnable;
     }
@@ -2522,10 +2514,9 @@ void SfxWorkWindow::ShowChildWindow_Impl(USHORT nId, BOOL bVisible, BOOL bSetFoc
         if ( pChildWin )
         {
             pChildWin->SetVisible_Impl( bVisible );
-            BOOL bTask = ( pCW->aInfo.nFlags & SFX_CHILDWIN_TASK ) != 0;
+            USHORT nFlags = pCW->aInfo.nFlags;
             pCW->aInfo = pChildWin->GetInfo();
-            if ( bTask )
-                pCW->aInfo.nFlags |= SFX_CHILDWIN_TASK;
+            pCW->aInfo.nFlags |= nFlags;
             if ( !pCW->bCreate )
                 SaveStatus_Impl( pChildWin, pCW->aInfo );
         }
@@ -2680,6 +2671,8 @@ void SfxWorkWindow::InitializeChild_Impl(SfxChildWin_Impl *pCW)
                         pCW->aInfo.nFlags |= SFX_CHILDWIN_CANTGETFOCUS;
                     if ( nFlags & SFX_CHILDWIN_FORCEDOCK )
                         pCW->aInfo.nFlags |= SFX_CHILDWIN_FORCEDOCK;
+                    if ( nFlags & SFX_CHILDWIN_ALWAYSAVAILABLE )
+                        pCW->aInfo.nFlags |= SFX_CHILDWIN_ALWAYSAVAILABLE;
                     pFact->aInfo = pCW->aInfo;
                     return;
                 }
