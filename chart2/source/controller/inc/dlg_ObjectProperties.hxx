@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:28:02 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:59:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 #ifndef _CHART2_DLG_OBJECTPROPERTIES_HXX
 #define _CHART2_DLG_OBJECTPROPERTIES_HXX
 
-#include "chartview/ObjectIdentifier.hxx"
+#include "ObjectIdentifier.hxx"
 
 #ifndef _SFXTABDLG_HXX
 #include <sfx2/tabdlg.hxx>
@@ -43,6 +43,10 @@
 // header for typedef ChangeType
 #ifndef _SVX_TAB_AREA_HXX
 #include <svx/tabarea.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #endif
 
 //.............................................................................
@@ -56,13 +60,15 @@ public:
     ObjectPropertiesDialogParameter( const rtl::OUString& rObjectCID );
     virtual ~ObjectPropertiesDialogParameter();
 
-    void        init( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
-    ObjectType  getObjectType() const;
+    void            init( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
+    ObjectType      getObjectType() const;
+    rtl::OUString   getLocalizedName() const;
 
     bool HasGeometryProperties() const;
     bool HasStatisticProperties() const;
     bool HasRegressionProperties() const;
     bool ProvidesSecondaryYAxis() const;
+    bool ProvidesOverlapAndGapWidth() const;
     bool HasAreaProperties() const;
     bool HasLineProperties() const;
     bool HasSymbolProperties() const;
@@ -74,10 +80,13 @@ private:
     ObjectType      m_eObjectType;
     bool m_bAffectsMultipleObjects;//is true if more than one object of the given type will be changed (e.g. all axes or all titles)
 
+    rtl::OUString   m_aLocalizedName;
+
     bool m_bHasGeometryProperties;
     bool m_bHasStatisticProperties;
     bool m_bHasRegressionProperties;
     bool m_bProvidesSecondaryYAxis;
+    bool m_bProvidesOverlapAndGapWidth;
     bool m_bHasAreaProperties;
     bool m_bHasLineProperties;
     bool m_bHasSymbolProperties;
@@ -103,22 +112,19 @@ private:
 
     const ObjectPropertiesDialogParameter * const        m_pParameter;
     const ViewElementListProvider* const                 m_pViewElementListProvider;
+    SvNumberFormatter* m_pNumberFormatter;
 
     SfxItemSet*     m_pSymbolShapeProperties;
     Graphic*        m_pAutoSymbolGraphic;
 
-    ChangeType      nColorTableState;
-    ChangeType      nGradientListState;
-    ChangeType      nHatchingListState;
-    ChangeType      nBitmapListState;
-
-    static USHORT GetResId(ObjectType eObjectType);
     virtual void PageCreated(USHORT nId, SfxTabPage& rPage);
 
 public:
     SchAttribTabDlg(Window* pParent, const SfxItemSet* pAttr,
                     const ObjectPropertiesDialogParameter* pDialogParameter,
-                    const ViewElementListProvider* pViewElementListProvider );
+                    const ViewElementListProvider* pViewElementListProvider,
+                    const ::com::sun::star::uno::Reference<
+                            ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
     virtual ~SchAttribTabDlg();
 
     //pSymbolShapeProperties: Properties to be set on the symbollist shapes
