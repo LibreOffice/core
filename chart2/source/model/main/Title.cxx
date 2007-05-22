@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Title.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:15:32 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:41:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,11 @@
 #include "precompiled_chart2.hxx"
 #include "Title.hxx"
 #include "macros.hxx"
-#include "algohelper.hxx"
 #include "FormattedString.hxx"
 #include "LineProperties.hxx"
 #include "FillProperties.hxx"
+#include "ContainerHelper.hxx"
+#include "CloneHelper.hxx"
 
 #ifndef CHART_PROPERTYHELPER_HXX
 #include "PropertyHelper.hxx"
@@ -58,8 +59,11 @@
 #ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
-#include <com/sun/star/layout/RelativePosition.hpp>
+#ifndef _COM_SUN_STAR_CHART2_RELATIVEPOSITION_HPP_
+#include <com/sun/star/chart2/RelativePosition.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
 #endif
 
 #ifndef _RTL_UUID_H_
@@ -96,7 +100,9 @@ enum
 
     PROP_TITLE_TEXT_ROTATION,
     PROP_TITLE_TEXT_STACKED,
-    PROP_TITLE_REL_POS
+    PROP_TITLE_REL_POS,
+
+    PROP_TITLE_REF_PAGE_SIZE
 };
 
 void lcl_AddPropertiesToVector(
@@ -167,13 +173,20 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( C2U( "RelativePosition" ),
                   PROP_TITLE_REL_POS,
-                  ::getCppuType( reinterpret_cast< const layout::RelativePosition * >(0)),
+                  ::getCppuType( reinterpret_cast< const chart2::RelativePosition * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( C2U( "ReferencePageSize" ),
+                  PROP_TITLE_REF_PAGE_SIZE,
+                  ::getCppuType( reinterpret_cast< const awt::Size * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 }
 
 void lcl_AddDefaultsToMap(
-    ::chart::helper::tPropertyValueMap & rOutMap )
+    ::chart::tPropertyValueMap & rOutMap )
 {
     // ParagraphProperties
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_TITLE_PARA_ADJUST ));
@@ -224,17 +237,15 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
         // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
-        ::chart::LineProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ true );
-        ::chart::FillProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ true );
+        ::chart::LineProperties::AddPropertiesToVector( aProperties );
+        ::chart::FillProperties::AddPropertiesToVector( aProperties );
 
         // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::helper::PropertyNameLess() );
+                     ::chart::PropertyNameLess() );
 
         // transfer result to static Sequence
-        aPropSeq = ::chart::helper::VectorToSequence( aProperties );
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
     return aPropSeq;
@@ -257,16 +268,29 @@ namespace chart
 {
 
 Title::Title( uno::Reference< uno::XComponentContext > const & xContext ) :
-        ::property::OPropertySet( m_aMutex )
+        ::property::OPropertySet( m_aMutex ),
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+{}
+
+Title::Title( const Title & rOther ) :
+        ::property::OPropertySet( rOther, m_aMutex ),
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
 {
-    if( ! ( xContext->getValueByName( C2U( "Identifier" )) >>= m_aIdentifier ))
-    {
-        OSL_ENSURE( false, "Missing Title identifier" );
-    }
+    CloneHelper::CloneRefSequence< uno::Reference< chart2::XFormattedString > >(
+        rOther.m_aStrings, m_aStrings );
+    ModifyListenerHelper::addListenerToAllElements(
+        ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
 }
 
 Title::~Title()
 {}
+
+// ____ XCloneable ____
+uno::Reference< util::XCloneable > SAL_CALL Title::createClone()
+    throw (uno::RuntimeException)
+{
+    return uno::Reference< util::XCloneable >( new Title( *this ));
+}
 
 // --------------------------------------------------------------------------------
 
@@ -285,15 +309,13 @@ void SAL_CALL Title::setText( const uno::Sequence< uno::Reference< chart2::XForm
 {
     // /--
     MutexGuard aGuard( GetMutex() );
+    ModifyListenerHelper::removeListenerFromAllElements(
+        ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
     m_aStrings = Strings;
+    ModifyListenerHelper::addListenerToAllElements(
+        ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
+    fireModifyEvent();
     // \--
-}
-
-// ____ XIdentifiable ____
-::rtl::OUString SAL_CALL Title::getIdentifier()
-    throw (uno::RuntimeException)
-{
-    return m_aIdentifier;
 }
 
 // ================================================================================
@@ -302,18 +324,14 @@ void SAL_CALL Title::setText( const uno::Sequence< uno::Reference< chart2::XForm
 uno::Any Title::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    static helper::tPropertyValueMap aStaticDefaults;
+    static tPropertyValueMap aStaticDefaults;
 
     // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aStaticDefaults.size() )
     {
-        LineProperties::AddDefaultsToMap(
-            aStaticDefaults,
-            /* bIncludeStyleProperties = */ true );
-        FillProperties::AddDefaultsToMap(
-            aStaticDefaults,
-            /* bIncludeStyleProperties = */ true );
+        LineProperties::AddDefaultsToMap( aStaticDefaults );
+        FillProperties::AddDefaultsToMap( aStaticDefaults );
 
         // initialize defaults
         // Note: this should be last to override defaults of the previously
@@ -321,7 +339,7 @@ uno::Any Title::GetDefaultValue( sal_Int32 nHandle ) const
         lcl_AddDefaultsToMap( aStaticDefaults );
     }
 
-    helper::tPropertyValueMap::const_iterator aFound(
+    tPropertyValueMap::const_iterator aFound(
         aStaticDefaults.find( nHandle ));
 
     if( aFound == aStaticDefaults.end())
@@ -355,6 +373,61 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
     return xInfo;
     // \--
 }
+
+// ____ XModifyBroadcaster ____
+void SAL_CALL Title::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+    throw (uno::RuntimeException)
+{
+    try
+    {
+        uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
+        xBroadcaster->addModifyListener( aListener );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+void SAL_CALL Title::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+    throw (uno::RuntimeException)
+{
+    try
+    {
+        uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
+        xBroadcaster->removeModifyListener( aListener );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+// ____ XModifyListener ____
+void SAL_CALL Title::modified( const lang::EventObject& aEvent )
+    throw (uno::RuntimeException)
+{
+    m_xModifyEventForwarder->modified( aEvent );
+}
+
+// ____ XEventListener (base of XModifyListener) ____
+void SAL_CALL Title::disposing( const lang::EventObject& Source )
+    throw (uno::RuntimeException)
+{
+    // nothing
+}
+
+// ____ OPropertySet ____
+void Title::firePropertyChangeEvent()
+{
+    fireModifyEvent();
+}
+
+void Title::fireModifyEvent()
+{
+    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
+}
+
 
 // ================================================================================
 
