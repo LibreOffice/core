@@ -4,9 +4,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:18:40 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:44:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -6722,8 +6722,8 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 STARTTOKEN( "Isect" );
                 aStack.PushBinary( " " );
             break;
-            case 0x10: // Union                                 [314 265]
-                STARTTOKEN( "Union" );
+            case 0x10: // List                                  [314 265]
+                STARTTOKEN( "List" );
                 aStack.PushBinary( ";" );
             break;
             case 0x11: // Range                                 [314 265]
@@ -6775,7 +6775,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
             break;
             case 0x18:
             {
-                STARTTOKEN( "NatFmla" );
+                STARTTOKEN( "Extended" );
                 UINT8   nEptg;
                 *pIn >> nEptg;
 
