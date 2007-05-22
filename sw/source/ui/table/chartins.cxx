@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chartins.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:19:12 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:39:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,6 @@
 #include "precompiled_sw.hxx"
 
 
-
-#define _CHARTINS_CXX
-
 #ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
 #endif
@@ -49,12 +46,10 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
-#ifndef _SCH_DLL_HXX //autogen
-#include <sch/schdll.hxx>
+#ifndef _BASEDLGS_HXX
+#include <sfx2/basedlgs.hxx>
 #endif
-#ifndef _SCH_MEMCHRT_HXX
-#include <sch/memchrt.hxx>
-#endif
+#include <IDocumentUndoRedo.hxx>
 
 #include <sfx2/app.hxx>
 
@@ -66,6 +61,9 @@
 #endif
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
+#endif
+#ifndef _SWDOCSH_HXX
+#include <docsh.hxx>
 #endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
@@ -85,6 +83,20 @@
 #ifndef _TBLSEL_HXX
 #include <tblsel.hxx>
 #endif
+#ifndef _UNOOBJ_HXX
+#include <unoobj.hxx>
+#endif
+#ifndef _UNOCHART_HXX
+#include <unochart.hxx>
+#endif
+#ifndef _AUTOEDIT_HXX
+#include <autoedit.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+
+#include <edtwin.hxx>
 
 #ifndef _CMDID_H
 #include <cmdid.h>
@@ -92,376 +104,98 @@
 #ifndef _CHARTINS_HRC
 #include <chartins.hrc>
 #endif
-
+#include <anchoredobject.hxx>
 
 #include <sot/clsids.hxx>
 
-SFX_IMPL_MODELESSDIALOG( SwInsertChartChild, SID_INSERT_DIAGRAM )
+#include <cppuhelper/bootstrap.hxx>
+#include <cppuhelper/component_context.hxx>
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/chart2/data/XDataProvider.hpp>
+#include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/chart/ChartDataRowSource.hpp>
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::rtl;
 
 
-/*------------------------------------------------------------------------
-    Beschreibung: AutoPilot fuer StarChart
-------------------------------------------------------------------------*/
 
-
-SwInsertChartDlg::SwInsertChartDlg( SfxBindings* pBindings,
-                                    SfxChildWindow* pChild,
-                                    Window *pParent,
-                                    SwWrtShell* pSh ) :
-    SfxModelessDialog( pBindings, pChild, pParent, SW_RES(DLG_INSERT_CHART) ),
-    aTextFt     (this, SW_RES(FT_TEXT    )),
-    aRangeEd    (this, SW_RES(ED_RANGE   )),
-    aRangeFt    (this, SW_RES(FT_RANGE    )),
-    aFinish     (this, SW_RES(BT_FINISH   )),
-    aHelp       (this, SW_RES(BT_HELP     )),
-    aCancel     (this, SW_RES(BT_CANCEL   )),
-    aHLine      (this, SW_RES(FL_HLINE   )),
-    aPrev       (this, SW_RES(BT_PREV    )),
-    aNext       (this, SW_RES(BT_NEXT    )),
-    aFirstRow   (this, SW_RES(CB_FIRST_ROW)),
-    aFirstCol   (this, SW_RES(CB_FIRST_COL)),
-    aFL1     (this, SW_RES(FL_1       )),
-    pChartDlg(0),
-    pWrtShell(pSh),
-    pInItemSet(0),
-    pOutItemSet(0),
-    pChartData(0),
-    bUpdateChartData(TRUE),
-    bChartInserted(FALSE),
-    bChildOpen(FALSE)
+Point SwGetChartDialogPos( const Window *pParentWin, const Size& rDialogSize, const Rectangle& rLogicChart )
 {
-    FreeResource();
-    pSh->Push();
+    // !! positioning code according to spepc; similar to Calc fuins2.cxx
 
-    aRangeEd.   SetModifyHdl(LINK(this, SwInsertChartDlg, ModifyHdl));
-    aNext.      SetClickHdl(LINK(this,  SwInsertChartDlg, NextHdl));
-    aFinish.    SetClickHdl(LINK(this,  SwInsertChartDlg, FinishHdl));
-    aCancel.    SetClickHdl(LINK(this,  SwInsertChartDlg, CloseHdl));
-    aFirstRow.  SetClickHdl(LINK(this,  SwInsertChartDlg, ClickHdl));
-    aFirstCol.  SetClickHdl(LINK(this,  SwInsertChartDlg, ClickHdl));
+    Point aRet;
 
-    if( pWrtShell->IsCrsrInTbl() )
+    DBG_ASSERT( pParentWin, "Window not found" );
+    if (pParentWin)
     {
-        SwFrmFmt* pTblFmt = pWrtShell->GetTableFmt();
-        aAktTableName = pTblFmt->GetName();
-        if( !pWrtShell->IsTableMode() )
+        Rectangle aObjPixel = pParentWin->LogicToPixel( rLogicChart, pParentWin->GetMapMode() );
+        Rectangle aObjAbs( pParentWin->OutputToAbsoluteScreenPixel( aObjPixel.TopLeft() ),
+                           pParentWin->OutputToAbsoluteScreenPixel( aObjPixel.BottomRight() ) );
+
+        Rectangle aDesktop = pParentWin->GetDesktopRectPixel();
+        Size aSpace = pParentWin->LogicToPixel( Size( 8, 12 ), MAP_APPFONT );
+
+        BOOL bLayoutRTL = ::GetActiveView()->GetWrtShell().IsTableRightToLeft();
+        bool bCenterHor = false;
+
+        if ( aDesktop.Bottom() - aObjAbs.Bottom() >= rDialogSize.Height() + aSpace.Height() )
         {
-            pWrtShell->GetView().GetViewFrame()->GetDispatcher()->
-                    Execute(FN_TABLE_SELECT_ALL, SFX_CALLMODE_SYNCHRON);
+            // first preference: below the chart
+            aRet.Y() = aObjAbs.Bottom() + aSpace.Height();
+            bCenterHor = true;
         }
-
-        pWrtShell->UpdateChartData( aAktTableName, pChartData );
-
-        String sText( String::CreateFromAscii("<.>") );
-        sText.Insert( pWrtShell->GetBoxNms(), 2);
-        sText.Insert( aAktTableName, 1 );
-        if(sText.GetTokenCount(':') == 2)
-            aRangeEd.SetText(sText);
-
-        ModifyHdl( &aRangeEd );
-    }
-    pInItemSet =  new SfxItemSet( pWrtShell->GetAttrPool(),
-                                            CHATTR_START, CHATTR_END, 0 );
-    pOutItemSet =  new SfxItemSet( pWrtShell->GetAttrPool(),
-                                            CHATTR_START, CHATTR_END, 0 );
-    SfxViewFrame* pVFrame = pWrtShell->GetView().GetViewFrame();
-    pVFrame->GetDispatcher()->Lock(TRUE);
-    pWrtShell->SelTblCells( LINK( this, SwInsertChartDlg,
-                                            SelTblCellsNotify) );
-}
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
-
-__EXPORT SwInsertChartDlg::~SwInsertChartDlg()
-{
-    SfxApplication* pSfxApp = SFX_APP();
-    SfxViewFrame* pVFrame = pWrtShell->GetView().GetViewFrame();
-    if ( pVFrame->GetDispatcher()->IsLocked() )
-        pVFrame->GetDispatcher()->Lock(FALSE);
-    pWrtShell->EndSelTblCells();
-    pWrtShell->Pop(bChartInserted);
-    delete pInItemSet;
-    delete pOutItemSet;
-    delete pChartDlg;
-    delete pChartData;
-}
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
-
-BOOL SwInsertChartDlg::Close()
-{
-    SfxViewFrame* pVFrame = pWrtShell->GetView().GetViewFrame();
-    if ( pVFrame->GetDispatcher()->IsLocked() )
-        pVFrame->GetDispatcher()->Lock(FALSE);
-    return SfxModelessDialog::Close();
-}
-
-
-void SwInsertChartDlg::Activate()
-{
-    SfxModelessDialog::Activate();
-
-    if ( bChildOpen && pChartDlg )
-    {
-        //  #107337# The ChildWindow's "hidden" state is reset if the view is activated,
-        //  so it is hidden again on activating if the child dialog is open.
-
-        SfxViewFrame* pVFrame = pWrtShell->GetView().GetViewFrame();
-        pVFrame->ShowChildWindow(SID_INSERT_DIAGRAM, FALSE);
-
-        pChartDlg->GrabFocus();     // child dialog should have focus
-    }
-}
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
-//OS: WNTMSCI4 optimiert sonst SetPosPixel und Hide weg!
-#pragma optimize("",off)
-
-
-IMPL_LINK( SwInsertChartDlg, NextHdl, Button *, pBtn )
-{
-
-    if ( bUpdateChartData )
-        UpdateData();
-
-    if( !pChartData )
-        return 0;
-    if(!pChartDlg)
-    {
-        pChartDlg = SchDLL::CreateAutoPilotDlg( GetParent(),    pChartData,
-                                     *pInItemSet, *pOutItemSet, TRUE);
-    }
-    else if(bUpdateChartData)
-    {
-        SchDLL::ChangeChartData(pChartDlg,
-                            pChartData);
-    }
-    bUpdateChartData = FALSE;
-    pChartDlg->SetPosPixel(GetPosPixel());
-    SfxViewFrame* pVFrame = pWrtShell->GetView().GetViewFrame();
-    pVFrame->ShowChildWindow(SID_INSERT_DIAGRAM, FALSE);
-    bChildOpen = TRUE;
-    bool bEnabled = IsEnabled();
-    /* #i35390# prevent focus from wandering into this dialog
-     * while pScChartTestDlg is executing. Else the strange "fix"
-     * for #107337# in :Activate can easily produce and endless
-     * loop of activation/deactivation. It's a rather strange idea
-     * to Hide() in Activate()
-     */
-    Enable( FALSE );
-    USHORT nResult = pChartDlg->Execute();
-    Enable( bEnabled );
-    bChildOpen = FALSE;
-    switch( nResult )
-    {
-        case RET_OK:
-            FinishHdl( &aFinish );
-        break;
-        case RET_CANCEL:
-            SetPosPixel(pChartDlg->GetPosPixel());
-            Close();
-        break;
-        default:
-            SetPosPixel(pChartDlg->GetPosPixel());
-            pVFrame->ShowChildWindow(SID_INSERT_DIAGRAM, TRUE);
-        break;
-    }
-    return 0;
-}
-
-#pragma optimize("",on)
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
-
-IMPL_LINK( SwInsertChartDlg, FinishHdl, Button *, EMPTYARG )
-{
-    pWrtShell->GotoTable(aAktTableName);
-    pWrtShell->GetView().GetViewFrame()->ToTop();
-    SwWrtShell* pShell = pWrtShell; // Member auf den Stack wg. Close()
-    SfxItemSet* pOutSet = pOutItemSet;
-    pOutItemSet = 0;
-    bChartInserted = TRUE;
-    BOOL bCrsrInTbl = pShell->IsCrsrInTbl() != 0;
-    BOOL bTblCplx = pShell->IsTblComplexForChart();
-    if( bCrsrInTbl && !bTblCplx && bUpdateChartData )
-        UpdateData();
-    SchMemChart *pChData = pChartData; // Member auf den Stack wg. Close() -> aber erst nach UpdateData()
-    pChartData = 0;
-
-    Close();
-
-    if( bCrsrInTbl && !bTblCplx )
-    {
-        SwTableFUNC( pShell, FALSE ).InsertChart( *pChData, pOutSet );
-    }
-    else
-    {
-        SvGlobalName aGlobalName( SO3_SCH_CLASSID );
-        pShell->InsertObject( ::svt::EmbeddedObjectRef(), &aGlobalName, FALSE );
-    }
-    delete pOutSet;
-    delete pChData;
-    return 0;
-}
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
-
-IMPL_LINK( SwInsertChartDlg, ClickHdl, CheckBox *, EMPTYARG )
-{
-    bUpdateChartData = TRUE;
-    return 0;
-}
-
-/*------------------------------------------------------------------------
-    Beschreibung: Handler fuer die Tabellenselektion
-------------------------------------------------------------------------*/
-
-IMPL_LINK( SwInsertChartDlg, SelTblCellsNotify, SwWrtShell *, pCaller )
-{
-    SwFrmFmt* pTblFmt = pCaller->GetTableFmt();
-    SwTable* pTbl = 0;
-    if(pTblFmt)
-    {
-        SwClientIter aIter(*pTblFmt);
-        pTbl = (SwTable*)aIter.First(TYPE(SwTable));
-        DBG_ASSERT(pTbl, "keine Tabelle gefunden")
-    }
-    if( pTbl && !pCaller->IsTblComplexForChart() )
-    {
-        String sCommand = String::CreateFromAscii("<.>");
-        sCommand.Insert(pCaller->GetBoxNms(),2);
-        aAktTableName = pTblFmt->GetName();
-        sCommand.Insert(pTblFmt->GetName(), 1);
-        aRangeEd.SetText(sCommand);
-    }
-    else
-    {
-        aRangeEd.SetText(aEmptyStr);
-    }
-    ModifyHdl( &aRangeEd );
-    return 0;
-}
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
-IMPL_LINK( SwInsertChartDlg, CloseHdl, Button*, EMPTYARG )
-{
-    Close();
-    return 0;
-}
-
-/*------------------------------------------------------------------------
-    Beschreibung: Handler fuer Edit
-------------------------------------------------------------------------*/
-
-IMPL_LINK( SwInsertChartDlg, ModifyHdl, Edit*, pEdit )
-{
-//  hier muss getestet werden, ob mit dem aktuellen Eintrag eine
-//  gueltige Selektion einer Tabelle aufgebaut werden kann
-
-    BOOL bCorrect = FALSE;
-    BOOL bFinish = FALSE;
-    BOOL bChkFirstRow = TRUE, bChkFirstCol = TRUE;
-
-    String sContent = pEdit->GetText();
-    if( !sContent.Len() )
-    {
-        aAktTableName = sContent;
-        bFinish = TRUE;
-    }
-    else if( sContent.GetChar( 0 ) == '<'   &&
-        sContent.GetTokenCount(':') == 2    &&
-        sContent.GetChar( sContent.Len() - 1 ) == '>')
-    {
-        USHORT nFndPos = sContent.Search( '.' );
-        String aTable( sContent.Copy( 1, nFndPos - 1 ));
-        SwFrmFmt* pFmt = pWrtShell->GetTableFmt();
-        if( ( pFmt && pFmt->GetName() == aTable ) ||
-            pWrtShell->GotoTable( aTable ) )
+        else if ( aObjAbs.Top() - aDesktop.Top() >= rDialogSize.Height() + aSpace.Height() )
         {
-            aAktTableName = aTable;
+            // second preference: above the chart
+            aRet.Y() = aObjAbs.Top() - rDialogSize.Height() - aSpace.Height();
+            bCenterHor = true;
+        }
+        else
+        {
+            bool bFitLeft = ( aObjAbs.Left() - aDesktop.Left() >= rDialogSize.Width() + aSpace.Width() );
+            bool bFitRight = ( aDesktop.Right() - aObjAbs.Right() >= rDialogSize.Width() + aSpace.Width() );
 
-            sContent.Erase( 0, nFndPos + 1 );
-            sContent.Erase( sContent.Len() - 1 );
-
-            SwTable* pTable = SwTable::FindTable( pWrtShell->GetTableFmt() );
-            SwChartLines aLines;
-            if( !pTable->IsTblComplexForChart( sContent, &aLines ))
+            if ( bFitLeft || bFitRight )
             {
-                bChkFirstCol = 1 < aLines[ 0 ]->Count();
-                bChkFirstRow = 1 < aLines.Count();
+                // if both fit, prefer right in RTL mode, left otherwise
+                bool bPutRight = bFitRight && ( bLayoutRTL || !bFitLeft );
+                if ( bPutRight )
+                    aRet.X() = aObjAbs.Right() + aSpace.Width();
+                else
+                    aRet.X() = aObjAbs.Left() - rDialogSize.Width() - aSpace.Width();
 
-                bFinish = bCorrect = TRUE;
+                // center vertically
+                aRet.Y() = aObjAbs.Top() + ( aObjAbs.GetHeight() - rDialogSize.Height() ) / 2;
+            }
+            else
+            {
+                // doesn't fit on any edge - put at the bottom of the screen
+                aRet.Y() = aDesktop.Bottom() - rDialogSize.Height();
+                bCenterHor = true;
             }
         }
+        if ( bCenterHor )
+            aRet.X() = aObjAbs.Left() + ( aObjAbs.GetWidth() - rDialogSize.Width() ) / 2;
+
+        // limit to screen (centering might lead to invalid positions)
+        if ( aRet.X() + rDialogSize.Width() - 1 > aDesktop.Right() )
+            aRet.X() = aDesktop.Right() - rDialogSize.Width() + 1;
+        if ( aRet.X() < aDesktop.Left() )
+            aRet.X() = aDesktop.Left();
+        if ( aRet.Y() + rDialogSize.Height() - 1 > aDesktop.Bottom() )
+            aRet.Y() = aDesktop.Bottom() - rDialogSize.Height() + 1;
+        if ( aRet.Y() < aDesktop.Top() )
+            aRet.Y() = aDesktop.Top();
     }
 
-    aNext.Enable( bCorrect );
-    aFinish.Enable( bFinish );
-
-    if( bChkFirstRow != aFirstRow.IsEnabled() )
-    {
-        if( bChkFirstRow )
-            aFirstRow.Check( aFirstRow.GetSavedValue() );
-        else
-        {
-            aFirstRow.SaveValue();
-            aFirstRow.Check( FALSE );
-        }
-
-        aFirstRow.Enable( bChkFirstRow );
-    }
-
-    if( bChkFirstCol != aFirstCol.IsEnabled() )
-    {
-        if( bChkFirstCol )
-            aFirstCol.Check( aFirstCol.GetSavedValue() );
-        else
-        {
-            aFirstCol.SaveValue();
-            aFirstCol.Check( FALSE );
-        }
-
-        aFirstCol.Enable( bChkFirstCol );
-    }
-
-    bUpdateChartData = TRUE;
-    return 0;
-}
-
-
-void SwInsertChartDlg::UpdateData()
-{
-    if( !pChartData )
-        pWrtShell->UpdateChartData( aAktTableName, pChartData );
-
-    if( pChartData )
-    {
-        String aData = aFirstRow.IsChecked() ? '1' : '0';
-        aData += aFirstCol.IsChecked() ? '1': '0';
-        pChartData->SomeData2() = aData;
-        aData = aRangeEd.GetText();
-        aData.Erase(1, aAktTableName.Len() +1 );
-        pChartData->SomeData1() = aData;
-        pWrtShell->UpdateChartData( aAktTableName, pChartData );
-    }
+    return aRet;
 }
 
 
@@ -470,20 +204,121 @@ void SwInsertChartDlg::UpdateData()
 ------------------------------------------------------------------------*/
 
 
-SwInsertChartChild::SwInsertChartChild(Window* pParent,
-                        USHORT nId,
-                        SfxBindings* pBindings,
-                        SfxChildWinInfo* pInfo ) :
-                        SfxChildWindow( pParent, nId )
+void SwInsertChart(Window* pParent, SfxBindings* pBindings )
 {
-
     SwView *pView = ::GetActiveView();
-    SwWrtShell &rSh = pView->GetWrtShell();
 
-    pWindow = new SwInsertChartDlg( pBindings, this, pParent, &rSh );
-    pWindow->SetPosPixel(pInfo->aPos);
-    pWindow->Show();
+    // get range string of marked data
+    SwWrtShell &rWrtShell = pView->GetWrtShell();
+    uno::Reference< chart2::data::XDataProvider > xDataProvider;
+    uno::Reference< frame::XModel > xChartModel;
+    OUString aRangeString;
 
+    if( rWrtShell.IsCrsrInTbl())
+    {
+        if (!rWrtShell.IsTableMode())
+        {
+            // select whole table
+            rWrtShell.GetView().GetViewFrame()->GetDispatcher()->
+                Execute(FN_TABLE_SELECT_ALL, SFX_CALLMODE_SYNCHRON);
+        }
+        if( ! rWrtShell.IsTblComplexForChart())
+        {
+            SwFrmFmt* pTblFmt = rWrtShell.GetTableFmt();
+            String aCurrentTblName = pTblFmt->GetName();
+//             String aText( String::CreateFromAscii("<.>") );   // was used for UI
+//             aText.Insert( rWrtShell.GetBoxNms(), 2);
+//             aText.Insert( aCurrentTblName, 1 );
+            aRangeString = aCurrentTblName;
+            aRangeString += OUString::valueOf( sal_Unicode('.') );
+            aRangeString += rWrtShell.GetBoxNms();
+
+            // get table data provider
+            xDataProvider.set( pView->GetDocShell()->getIDocumentChartDataProviderAccess()->GetChartDataProvider( true ) );
+        }
+    }
+
+    SwFlyFrmFmt *pFlyFrmFmt = 0;
+    xChartModel.set( SwTableFUNC( &rWrtShell, FALSE ).InsertChart( xDataProvider, (sal_True == xDataProvider.is()), aRangeString, &pFlyFrmFmt ));
+
+    //open wizard
+    //@todo get context from writer if that has one
+    uno::Reference< uno::XComponentContext > xContext(
+        ::cppu::defaultBootstrap_InitialComponentContext() );
+    if( xContext.is() && xChartModel.is() && xDataProvider.is())
+    {
+        uno::Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );
+        if(xMCF.is())
+        {
+            uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
+                xMCF->createInstanceWithContext(
+                    C2U("com.sun.star.comp.chart2.WizardDialog")
+                    , xContext), uno::UNO_QUERY);
+            uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
+            if( xInit.is() )
+            {
+                uno::Reference< awt::XWindow > xDialogParentWindow(0);
+                //  initialize dialog
+                uno::Sequence<uno::Any> aSeq(2);
+                uno::Any* pArray = aSeq.getArray();
+                beans::PropertyValue aParam1;
+                aParam1.Name = C2U("ParentWindow");
+                aParam1.Value <<= uno::makeAny(xDialogParentWindow);
+                beans::PropertyValue aParam2;
+                aParam2.Name = C2U("ChartModel");
+                aParam2.Value <<= uno::makeAny(xChartModel);
+                pArray[0] <<= uno::makeAny(aParam1);
+                pArray[1] <<= uno::makeAny(aParam2);
+                xInit->initialize( aSeq );
+
+                // try to set the dialog's position so it doesn't hide the chart
+                uno::Reference < beans::XPropertySet > xDialogProps( xDialog, uno::UNO_QUERY );
+                if ( xDialogProps.is() )
+                {
+                    try
+                    {
+                        //get dialog size:
+                        awt::Size aDialogAWTSize;
+                        if( xDialogProps->getPropertyValue( ::rtl::OUString::createFromAscii("Size") )
+                            >>= aDialogAWTSize )
+                        {
+                            Size aDialogSize( aDialogAWTSize.Width, aDialogAWTSize.Height );
+                            if ( aDialogSize.Width() > 0 && aDialogSize.Height() > 0 )
+                            {
+                                //calculate and set new position
+                                SwRect aSwRect;
+                                if (pFlyFrmFmt)
+                                    aSwRect = pFlyFrmFmt->GetAnchoredObj()->GetObjRectWithSpaces();
+                                Rectangle aRect( aSwRect.SVRect() );
+                                Point aDialogPos = SwGetChartDialogPos( &rWrtShell.GetView().GetEditWin(), aDialogSize, aRect );
+                                xDialogProps->setPropertyValue( ::rtl::OUString::createFromAscii("Position"),
+                                    uno::makeAny( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
+                            }
+                        }
+                    }
+                    catch( uno::Exception& )
+                    {
+                        DBG_ERROR( "Chart wizard couldn't be positioned automatically\n" );
+                    }
+                }
+
+                sal_Int16 nDialogRet = xDialog->execute();
+                if( nDialogRet == ui::dialogs::ExecutableDialogResults::CANCEL )
+                {
+                    rWrtShell.Undo();
+                    rWrtShell.getIDocumentUndoRedoAccess()->ClearRedo();
+                }
+                else
+                {
+                    DBG_ASSERT( nDialogRet == ui::dialogs::ExecutableDialogResults::OK,
+                        "dialog execution failed" );
+                }
+            }
+            uno::Reference< lang::XComponent > xComponent( xDialog, uno::UNO_QUERY );
+            if( xComponent.is())
+                xComponent->dispose();
+        }
+    }
 }
 
 
