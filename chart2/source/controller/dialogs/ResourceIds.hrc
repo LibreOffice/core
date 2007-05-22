@@ -1,0 +1,86 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: ResourceIds.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:29:46 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef _CHART2_RESOURCE_IDS_HRC
+#define _CHART2_RESOURCE_IDS_HRC
+
+//-----------------------------------------------------------------------------
+//for strings see Strings.hrc
+
+//-----------------------------------------------------------------------------
+//for Bimaps see Bimaps.hrc and Bimaps_HC.hrc
+
+//-----------------------------------------------------------------------------
+//Dialog Ids:
+#define DLG_DIAGRAM_TYPE    743
+#define DLG_CHART_WIZARD    902
+#define DLG_DATA_SOURCE     901
+#define DLG_AXIS_OR_GRID    839
+#define DLG_DATA_DESCR      836
+#define DLG_LEGEND          835
+#define DLG_DATA_STAT       840
+#define DLG_TITLE           834
+#define DLG_3D_VIEW         752
+#define DLG_OBJECT_PROPERTIES 903
+#define DLG_SPLINE_PROPERTIES 904
+
+//-----------------------------------------------------------------------------
+//TabPage Ids:
+#define TP_LEGEND_POS   900
+#define TP_DATA_DESCR   901
+#define TP_ALIGNMENT    902
+#define TP_STAT         905
+//#define TP_SYMBOL     906
+#define TP_LAYOUT       907
+#define TP_OPTIONS      908
+#define TP_AXIS_LABEL   920
+#define TP_SCALE_Y      903
+#define TP_CHARTTYPE    910
+#define TP_RANGECHOOSER 911
+#define TP_WIZARD_TITLEANDOBJECTS 912
+#define TP_LOCATION     913
+#define TP_DATA_SOURCE  914
+
+#define TP_3D_SCENEGEOMETRY     915
+#define TP_3D_SCENEAPPEARANCE   916
+#define TP_3D_SCENEILLUMINATION 917
+
+//-----------------------------------------------------------------------------
+//listbox Ids:
+#define LB_BAR_GEOMETRY 1000
+
+//-----------------------------------------------------------------------------
+
+#endif
