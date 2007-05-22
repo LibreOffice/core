@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:54:08 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:14:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -791,18 +791,15 @@
 // please adjust ACT_SVX_HID_END2 below if you add entries here!
 
 // -----------------------------------------------------------------------
-// "Uberlaufpr"ufung -----------------------------------------------------
+// Overrun check ---------------------------------------------------------
 // -----------------------------------------------------------------------
 
 #define ACT_SVX_HID_END     HID_OPTIONS_ACCESSIBILITYCONFIG
-
 #if ACT_SVX_HID_END > HID_SVX_END
 #error Resource-Ueberlauf in #line, #file
 #endif
 
-// overrun check 2
-#define ACT_SVX_HID_END2        HID_OPTIONS_MULTIPATH_LIST
-
+#define ACT_SVX_HID_END2    HID_OPTIONS_MULTIPATH_LIST
 #if ACT_SVX_HID_END2 > HID_SVX_EXT0_END
 #error resource overrun in #line, #file
 #endif
