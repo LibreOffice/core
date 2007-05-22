@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NetChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:19:40 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:50:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include "NetChartTypeTemplate.hxx"
-#include "NetChartType.hxx"
 #include "macros.hxx"
-#include "algohelper.hxx"
-#include "DataSeriesTreeHelper.hxx"
 #include "PolarCoordinateSystem.hxx"
-#include "BoundedCoordinateSystem.hxx"
 #include "Scaling.hxx"
-#include "Scale.hxx"
+#include "DiagramHelper.hxx"
+#include "servicenames_charttypes.hxx"
+#include "DataSeriesHelper.hxx"
 
 #ifndef _COM_SUN_STAR_CHART2_SYMBOLSTYLE_HPP_
 #include <com/sun/star/chart2/SymbolStyle.hpp>
@@ -77,122 +75,88 @@ namespace chart
 NetChartTypeTemplate::NetChartTypeTemplate(
     Reference< uno::XComponentContext > const & xContext,
     const ::rtl::OUString & rServiceName,
-    chart2::StackMode eStackMode,
-    bool bSymbols ) :
+    StackMode eStackMode,
+    bool bSymbols,
+    bool bHasLines ) :
         ChartTypeTemplate( xContext, rServiceName ),
         m_eStackMode( eStackMode ),
-        m_bHasSymbols( bSymbols )
+        m_bHasSymbols( bSymbols ),
+        m_bHasLines( bHasLines )
 {}
 
 NetChartTypeTemplate::~NetChartTypeTemplate()
 {}
 
-chart2::StackMode NetChartTypeTemplate::getYStackMode() const
+StackMode NetChartTypeTemplate::getStackMode( sal_Int32 nChartTypeIndex ) const
 {
     return m_eStackMode;
 }
 
-Reference< chart2::XBoundedCoordinateSystem > NetChartTypeTemplate::createCoordinateSystem(
-    const Reference< chart2::XBoundedCoordinateSystemContainer > & xCoordSysCnt )
+void SAL_CALL NetChartTypeTemplate::applyStyle(
+    const Reference< chart2::XDataSeries >& xSeries,
+    ::sal_Int32 nChartTypeIndex,
+    ::sal_Int32 nSeriesIndex,
+    ::sal_Int32 nSeriesCount )
+    throw (uno::RuntimeException)
 {
-    Reference< chart2::XCoordinateSystem > xCoordSys(
-        new PolarCoordinateSystem( getDimension() ));
-    Reference< chart2::XBoundedCoordinateSystem > xResult(
-        new BoundedCoordinateSystem( xCoordSys ));
-
-    chart2::ScaleData aScale;
-    aScale.Scaling = new LinearScaling( 1.0, 0.0 );
-
-    aScale.Orientation = chart2::AxisOrientation_REVERSE;
-    xResult->setScaleByDimension(
-        0, Reference< chart2::XScale >( new Scale( GetComponentContext(), aScale ) ));
-    aScale.Orientation = chart2::AxisOrientation_MATHEMATICAL;
-    xResult->setScaleByDimension(
-        1, Reference< chart2::XScale >( new Scale( GetComponentContext(), aScale ) ));
+    ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
 
     try
     {
-        if( xCoordSys.is())
-            xCoordSysCnt->addCoordinateSystem( xResult );
+        Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY_THROW );
+
+        DataSeriesHelper::switchSymbolsOnOrOff( xProp, m_bHasSymbols, nSeriesIndex );
+        DataSeriesHelper::switchLinesOnOrOff( xProp, m_bHasLines );
     }
-    catch( lang::IllegalArgumentException ex )
+    catch( uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
-
-    return xResult;
-}
-
-Reference< chart2::XChartType > NetChartTypeTemplate::getDefaultChartType()
-    throw (uno::RuntimeException)
-{
-    return new NetChartType();
 }
 
 // ____ XChartTypeTemplate ____
-Reference< chart2::XDiagram > SAL_CALL
-    NetChartTypeTemplate::createDiagram(
-        const uno::Sequence< Reference< chart2::XDataSeries > >& aSeriesSeq )
-    throw (uno::RuntimeException)
-{
-    // set symbol type at data series
-    chart2::SymbolStyle eStyle = m_bHasSymbols
-        ? chart2::SymbolStyle_STANDARD
-        : chart2::SymbolStyle_NONE;
-
-    for( sal_Int32 i = 0; i < aSeriesSeq.getLength(); ++i )
-    {
-        try
-        {
-            chart2::Symbol aSymbProp;
-            Reference< beans::XPropertySet > xProp( aSeriesSeq[i], uno::UNO_QUERY_THROW );
-            if( (xProp->getPropertyValue( C2U( "Symbol" )) >>= aSymbProp ) )
-            {
-                aSymbProp.aStyle = eStyle;
-                if( m_bHasSymbols )
-                    aSymbProp.nStandardSymbol = i;
-                xProp->setPropertyValue( C2U( "Symbol" ), uno::makeAny( aSymbProp ));
-            }
-        }
-        catch( uno::Exception & ex )
-        {
-            ASSERT_EXCEPTION( ex );
-        }
-    }
-
-    // todo: set symbol type at data points
-
-    return ChartTypeTemplate::createDiagram( aSeriesSeq );
-}
-
 sal_Bool SAL_CALL NetChartTypeTemplate::matchesTemplate(
-    const Reference< chart2::XDiagram >& xDiagram )
+    const Reference< chart2::XDiagram >& xDiagram,
+    sal_Bool bAdaptProperties )
     throw (uno::RuntimeException)
 {
-    sal_Bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram );
+    sal_Bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
 
     // check symbol-style
+    // for a template with symbols it is ok, if there is at least one series
+    // with symbols, otherwise an unknown template is too easy to achieve
+    bool bSymbolsFound = false;
     if( bResult )
     {
-        uno::Sequence< Reference< chart2::XDataSeries > > aSeriesSeq(
-            helper::DataSeriesTreeHelper::getDataSeriesFromDiagram( xDiagram ));
+        ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
+            DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
         chart2::SymbolStyle eStyle = m_bHasSymbols
             ? chart2::SymbolStyle_STANDARD
             : chart2::SymbolStyle_NONE;
 
-        for( sal_Int32 i = 0; i < aSeriesSeq.getLength(); ++i )
+        for( ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
+                 aSeriesVec.begin(); aIt != aSeriesVec.end(); ++aIt )
         {
             try
             {
                 chart2::Symbol aSymbProp;
-                Reference< beans::XPropertySet > xProp( aSeriesSeq[i], uno::UNO_QUERY_THROW );
-                if( (xProp->getPropertyValue( C2U( "Symbol" )) >>= aSymbProp ) )
+                drawing::LineStyle eLineStyle;
+                Reference< beans::XPropertySet > xProp( *aIt, uno::UNO_QUERY_THROW );
+                if( (xProp->getPropertyValue( C2U( "Symbol" )) >>= aSymbProp) &&
+                    (aSymbProp.Style != chart2::SymbolStyle_NONE ) &&
+                    (! m_bHasSymbols) )
                 {
-                    if( aSymbProp.aStyle != eStyle )
-                    {
-                        bResult = false;
-                        break;
-                    }
+                    bResult = false;
+                    break;
+                }
+                if( m_bHasSymbols )
+                    bSymbolsFound = bSymbolsFound || (aSymbProp.Style != chart2::SymbolStyle_NONE);
+
+                if( (xProp->getPropertyValue( C2U( "LineStyle" )) >>= eLineStyle) &&
+                    (m_bHasLines != ( eLineStyle != drawing::LineStyle_NONE )) )
+                {
+                    bResult = false;
+                    break;
                 }
             }
             catch( uno::Exception & ex )
@@ -200,9 +164,35 @@ sal_Bool SAL_CALL NetChartTypeTemplate::matchesTemplate(
                 ASSERT_EXCEPTION( ex );
             }
         }
+
+        if( m_bHasSymbols )
+            bResult = bResult && bSymbolsFound;
     }
 
     return bResult;
+}
+
+Reference< chart2::XChartType > SAL_CALL NetChartTypeTemplate::getChartTypeForNewSeries(
+        const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
+    throw (uno::RuntimeException)
+{
+    Reference< chart2::XChartType > xResult;
+
+    try
+    {
+        Reference< lang::XMultiServiceFactory > xFact(
+            GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
+        xResult.set( xFact->createInstance(
+                         CHART2_SERVICE_NAME_CHARTTYPE_NET ), uno::UNO_QUERY_THROW );
+        ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem( aFormerlyUsedChartTypes, xResult );
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    return xResult;
+
 }
 
 // ----------------------------------------
