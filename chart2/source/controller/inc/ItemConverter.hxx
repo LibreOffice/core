@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ItemConverter.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:23:17 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:54:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
-class SfxItemPropertyMap;
+// for pair
+#include <utility>
+
+struct SfxItemPropertyMap;
 
 namespace comphelper
 {
@@ -64,8 +67,9 @@ namespace comphelper
     You must implement GetWhichPairs() such that an SfxItemSet created with
     CreateEmptyItemSet() is able to hold all items that may be mapped.
 
-    You also have to implement GetItemPropertyName(), in order to return the
-    property name for a given which-id.
+    You also have to implement GetItemProperty(), in order to return the
+    property name for a given which-id together with the corresponding member-id
+    that has to be used for conversion in QueryValue/PutValue.
 
     FillSpecialItem and ApplySpecialItem may be used for special handling of
     individual item, e.g. if you need member-ids in QueryValue/PutValue
@@ -102,6 +106,16 @@ public:
             ::com::sun::star::beans::XPropertySet > & rPropertySet ,
             SfxItemPool& rItemPool );
     virtual ~ItemConverter();
+
+    // typedefs -------------------------------
+
+    typedef USHORT          tWhichIdType;
+    typedef ::rtl::OUString tPropertyNameType;
+    typedef BYTE            tMemberIdType;
+
+    typedef ::std::pair< tPropertyNameType, tMemberIdType > tPropertyNameWithMemberId;
+
+    // ----------------------------------------
 
     /** applies all properties that can be mapped to items into the given item
         set.
@@ -163,16 +177,17 @@ protected:
 
     /** implement this method to return a Property object for a given which id.
 
-        @param rOutName
-            If true is returned, this contains the property name.
+        @param rOutProperty
+            If true is returned, this contains the property name and the
+            corresponding Member-Id.
 
         @return true, if the item can be mapped to a property.
      */
-    virtual bool GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const = 0;
+    virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const = 0;
 
     /** for items that can not be mapped directly to a property.
 
-        This method is called from FillItemSet(), if GetItemPropertyName() returns
+        This method is called from FillItemSet(), if GetItemProperty() returns
         false.
 
         The default implementation does nothing except showing an assertion
@@ -182,7 +197,7 @@ protected:
 
     /** for items that can not be mapped directly to a property.
 
-        This method is called from ApplyItemSet(), if GetItemPropertyName() returns
+        This method is called from ApplyItemSet(), if GetItemProperty() returns
         false.
 
         The default implementation returns just false and shows an assertion
@@ -204,7 +219,7 @@ protected:
         ::com::sun::star::beans::XPropertySet >  GetPropertySet() const;
 
     // ____ ::utl::OEventListenerAdapter ____
-    virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource );
+    virtual void _disposing( const ::com::sun::star::lang::EventObject& rSource );
 
 private:
     ::com::sun::star::uno::Reference<
