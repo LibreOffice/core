@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Axis.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:08:02 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:30:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,29 +36,29 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include "Axis.hxx"
+#include "GridProperties.hxx"
 #include "macros.hxx"
 #include "CharacterProperties.hxx"
 #include "LineProperties.hxx"
 #include "UserDefinedProperties.hxx"
-#include "algohelper.hxx"
 #include "PropertyHelper.hxx"
-#include "Increment.hxx"
+#include "ContainerHelper.hxx"
+#include "CloneHelper.hxx"
+#include "AxisHelper.hxx"
+#include "EventListenerHelper.hxx"
+
+#ifndef _COM_SUN_STAR_CHART2_AXISTYPE_HPP_
+#include <com/sun/star/chart2/AxisType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XAXISPOSITION_HPP_
+#include <com/sun/star/chart2/AxisPosition.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LAYOUT_ALIGNMENT_HPP_
-#include <com/sun/star/layout/Alignment.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LAYOUT_STRETCHMODE_HPP_
-#include <com/sun/star/layout/StretchMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_NUMBERFORMAT_HPP_
-#include <com/sun/star/chart2/NumberFormat.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
@@ -90,17 +90,23 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans::PropertyAttribute;
 
+using ::rtl::OUString;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Any;
 using ::com::sun::star::beans::Property;
 using ::osl::MutexGuard;
 
 namespace
 {
 
-static const ::rtl::OUString lcl_aServiceName(
+static const OUString lcl_aServiceName(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.Axis" ));
 
 enum
 {
+    PROP_AXIS_SHOW,
+    PROP_AXIS_POSITION,
     PROP_AXIS_DISPLAY_LABELS,
     PROP_AXIS_TEXT_ROTATION,
     PROP_AXIS_TEXT_BREAK,
@@ -119,6 +125,20 @@ enum
 void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
+    rOutProperties.push_back(
+        Property( C2U( "Show" ),
+                  PROP_AXIS_SHOW,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "AxisPosition" ),
+                  PROP_AXIS_POSITION,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
     rOutProperties.push_back(
         Property( C2U( "DisplayLabels" ),
                   PROP_AXIS_DISPLAY_LABELS,
@@ -164,9 +184,9 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( C2U( "NumberFormat" ),
                   PROP_AXIS_NUMBER_FORMAT,
-                  ::getCppuType( reinterpret_cast< const chart2::NumberFormat * >(0)),
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( C2U( "ReferenceDiagramSize" ),
@@ -193,8 +213,16 @@ void lcl_AddPropertiesToVector(
 }
 
 void lcl_AddDefaultsToMap(
-    ::chart::helper::tPropertyValueMap & rOutMap )
+    ::chart::tPropertyValueMap & rOutMap )
 {
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_SHOW ));
+    rOutMap[ PROP_AXIS_SHOW ] =
+        uno::makeAny( sal_True );
+
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_POSITION ));
+    rOutMap[ PROP_AXIS_POSITION ] =
+        uno::makeAny( chart2::AxisPosition::MAIN );
+
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_DISPLAY_LABELS ));
     rOutMap[ PROP_AXIS_DISPLAY_LABELS ] =
         uno::makeAny( sal_Bool( sal_True ) );
@@ -204,7 +232,7 @@ void lcl_AddDefaultsToMap(
         uno::makeAny( double( 0.0 ) );
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_TEXT_BREAK ));
     rOutMap[ PROP_AXIS_TEXT_BREAK ] =
-        uno::makeAny( sal_Bool( sal_True ) );
+        uno::makeAny( sal_Bool( sal_False ) );
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_TEXT_OVERLAP ));
     rOutMap[ PROP_AXIS_TEXT_OVERLAP ] =
         uno::makeAny( sal_Bool( sal_False ) );
@@ -214,16 +242,14 @@ void lcl_AddDefaultsToMap(
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_TEXT_ARRANGE_ORDER ));
     rOutMap[ PROP_AXIS_TEXT_ARRANGE_ORDER ] =
         uno::makeAny( ::com::sun::star::chart::ChartAxisArrangeOrderType_AUTO );
-    chart2::NumberFormat aFormat( C2U( "Standard" ),
-                                  lang::Locale( C2U( "DE" ), C2U( "de" ), ::rtl::OUString()));
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_NUMBER_FORMAT ));
-    rOutMap[ PROP_AXIS_NUMBER_FORMAT ] =
-        uno::makeAny( aFormat );
 
-    // todo: default is just for testing. should be void
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_REFERENCE_DIAGRAM_SIZE ));
-    rOutMap[ PROP_AXIS_REFERENCE_DIAGRAM_SIZE ] =
-        uno::makeAny( awt::Size( 20000, 15000 ) );
+    float fDefaultCharHeight = 8.0;
+    rOutMap[ ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT ] =
+        uno::makeAny( fDefaultCharHeight );
+    rOutMap[ ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT ] =
+        uno::makeAny( fDefaultCharHeight );
+    rOutMap[ ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT ] =
+        uno::makeAny( fDefaultCharHeight );
 
     // for Testing only!
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_MAJOR_TICKMARKS ));
@@ -235,9 +261,9 @@ void lcl_AddDefaultsToMap(
         uno::makeAny( sal_Int32( 0 /* CHAXIS_MARK_NONE */ ) );
 }
 
-const uno::Sequence< Property > & lcl_GetPropertySequence()
+const Sequence< Property > & lcl_GetPropertySequence()
 {
-    static uno::Sequence< Property > aPropSeq;
+    static Sequence< Property > aPropSeq;
 
     // /--
     MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -246,18 +272,16 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
         // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
-        ::chart::CharacterProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ true );
-        ::chart::LineProperties::AddPropertiesToVector(
-            aProperties, /* bIncludeStyleProperties = */ true );
+        ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
+        ::chart::LineProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
         // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::helper::PropertyNameLess() );
+                     ::chart::PropertyNameLess() );
 
         // transfer result to static Sequence
-        aPropSeq = ::chart::helper::VectorToSequence( aProperties );
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
     return aPropSeq;
@@ -272,6 +296,37 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
     return aArrayHelper;
 }
 
+typedef uno::Reference< beans::XPropertySet > lcl_tSubGridType;
+typedef uno::Sequence< lcl_tSubGridType >     lcl_tSubGridSeq;
+
+void lcl_CloneSubGrids(
+    const lcl_tSubGridSeq & rSource, lcl_tSubGridSeq & rDestination )
+{
+    const lcl_tSubGridType * pBegin = rSource.getConstArray();
+    const lcl_tSubGridType * pEnd = pBegin + rSource.getLength();
+
+    rDestination.realloc( rSource.getLength());
+    lcl_tSubGridType * pDestBegin = rDestination.getArray();
+    lcl_tSubGridType * pDestEnd   = pDestBegin + rDestination.getLength();
+    lcl_tSubGridType * pDestIt    = pDestBegin;
+
+    for( const lcl_tSubGridType * pIt = pBegin; pIt != pEnd; ++pIt )
+    {
+        Reference< beans::XPropertySet > xSubGrid( *pIt );
+        if( xSubGrid.is())
+        {
+            Reference< util::XCloneable > xCloneable( xSubGrid, uno::UNO_QUERY );
+            if( xCloneable.is())
+                xSubGrid.set( xCloneable->createClone(), uno::UNO_QUERY );
+        }
+
+        (*pDestIt) = xSubGrid;
+        OSL_ASSERT( pDestIt != pDestEnd );
+        ++pDestIt;
+    }
+    OSL_ASSERT( pDestIt == pDestEnd );
+}
+
 } // anonymous namespace
 
 // ================================================================================
@@ -279,101 +334,159 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
 namespace chart
 {
 
-Axis::Axis( uno::Reference< uno::XComponentContext > const & xContext ) :
-        ::property::OPropertySet( m_aMutex )
+Axis::Axis( Reference< uno::XComponentContext > const & /* xContext */ ) :
+        ::property::OPropertySet( m_aMutex ),
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex )),
+        m_aScaleData( AxisHelper::createDefaultScale() ),
+        m_xGrid( new GridProperties() ),
+        m_aSubGridProperties(),
+        m_xTitle()
 {
-    m_xIncrement = new Increment();
+    if( m_xGrid.is())
+        ModifyListenerHelper::addListener( m_xGrid, m_xModifyEventForwarder );
+    if( m_aScaleData.Categories.is())
+        ModifyListenerHelper::addListener( m_aScaleData.Categories, m_xModifyEventForwarder );
 
-    if( ! ( xContext->getValueByName( C2U( "Identifier" )) >>= m_aIdentifier ))
-    {
-        OSL_ENSURE( false, "Missing Axis identifier" );
-    }
+    AllocateSubGrids();
+}
 
-#if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "Axis CTOR: Id=%s", U2C( m_aIdentifier ));
-#endif
+Axis::Axis( const Axis & rOther ) :
+        ::property::OPropertySet( rOther, m_aMutex ),
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex )),
+    m_aScaleData( rOther.m_aScaleData )
+{
+    m_xGrid.set( CloneHelper::CreateRefClone< Reference< beans::XPropertySet > >()( rOther.m_xGrid ));
+    if( m_xGrid.is())
+        ModifyListenerHelper::addListener( m_xGrid, m_xModifyEventForwarder );
+
+    if( m_aScaleData.Categories.is())
+        ModifyListenerHelper::addListener( m_aScaleData.Categories, m_xModifyEventForwarder );
+
+    if( rOther.m_aSubGridProperties.getLength() != 0 )
+        lcl_CloneSubGrids( rOther.m_aSubGridProperties, m_aSubGridProperties );
+    ModifyListenerHelper::addListenerToAllSequenceElements( m_aSubGridProperties, m_xModifyEventForwarder );
+
+    m_xTitle.set( CloneHelper::CreateRefClone< Reference< chart2::XTitle > >()( rOther.m_xTitle ));
+    if( m_xTitle.is())
+        ModifyListenerHelper::addListener( m_xTitle, m_xModifyEventForwarder );
+}
+
+// late initialization to call after copy-constructing
+void Axis::Init( const Axis & rOther )
+{
+    if( m_aScaleData.Categories.is())
+        EventListenerHelper::addListener( m_aScaleData.Categories, this );
 }
 
 Axis::~Axis()
 {
+    try
+    {
+        ModifyListenerHelper::removeListener( m_xGrid, m_xModifyEventForwarder );
+        ModifyListenerHelper::removeListenerFromAllSequenceElements( m_aSubGridProperties, m_xModifyEventForwarder );
+        ModifyListenerHelper::removeListener( m_xTitle, m_xModifyEventForwarder );
+        if( m_aScaleData.Categories.is())
+        {
+            ModifyListenerHelper::removeListener( m_aScaleData.Categories, m_xModifyEventForwarder );
+            m_aScaleData.Categories.set(0);
+        }
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    m_aSubGridProperties.realloc(0);
+    m_xGrid = 0;
+    m_xTitle = 0;
+}
+
+void Axis::AllocateSubGrids()
+{
+    sal_Int32 nNewSubIncCount = m_aScaleData.IncrementData.SubIncrements.getLength();
+    sal_Int32 nOldSubIncCount = m_aSubGridProperties.getLength();
+
+    if( nOldSubIncCount > nNewSubIncCount )
+    {
+        // remove superfluous entries
+        for( sal_Int32 i = nNewSubIncCount; i < nOldSubIncCount; ++i )
+            ModifyListenerHelper::removeListener( m_aSubGridProperties[ i ], m_xModifyEventForwarder );
+        m_aSubGridProperties.realloc( nNewSubIncCount );
+    }
+    else if( nOldSubIncCount < nNewSubIncCount )
+    {
+        m_aSubGridProperties.realloc( nNewSubIncCount );
+
+        // allocate new entries
+        for( sal_Int32 i = nOldSubIncCount; i < nNewSubIncCount; ++i )
+        {
+            m_aSubGridProperties[ i ] = new GridProperties();
+            LineProperties::SetLineInvisible( m_aSubGridProperties[ i ] );
+            ModifyListenerHelper::addListener( m_aSubGridProperties[ i ], m_xModifyEventForwarder );
+        }
+    }
 }
 
 // --------------------------------------------------------------------------------
 
 // ____ XAxis ____
-uno::Sequence< uno::Reference< beans::XPropertySet > > SAL_CALL Axis::getSubTickProperties()
+void SAL_CALL Axis::setScaleData( const chart2::ScaleData& rScaleData )
+    throw (uno::RuntimeException)
+{
+    {
+        // /--
+        MutexGuard aGuard( m_aMutex );
+        if( m_aScaleData.Categories.is())
+        {
+            ModifyListenerHelper::removeListener( m_aScaleData.Categories, m_xModifyEventForwarder );
+            EventListenerHelper::removeListener( m_aScaleData.Categories, this );
+        }
+        m_aScaleData = rScaleData;
+        ModifyListenerHelper::addListener( m_aScaleData.Categories, m_xModifyEventForwarder );
+        EventListenerHelper::addListener( m_aScaleData.Categories, this );
+
+        AllocateSubGrids();
+        // \--
+    }
+    fireModifyEvent();
+}
+
+chart2::ScaleData SAL_CALL Axis::getScaleData()
+    throw (uno::RuntimeException)
+{
+    // /--
+    MutexGuard aGuard( m_aMutex );
+    return m_aScaleData;
+    // \--
+}
+
+Reference< beans::XPropertySet > SAL_CALL Axis::getGridProperties()
+    throw (uno::RuntimeException)
+{
+    // /--
+    MutexGuard aGuard( m_aMutex );
+    return m_xGrid;
+    // \--
+}
+Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubGridProperties()
+    throw (uno::RuntimeException)
+{
+    // /--
+    MutexGuard aGuard( m_aMutex );
+    return m_aSubGridProperties;
+    // \--
+}
+
+Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubTickProperties()
     throw (uno::RuntimeException)
 {
     OSL_ENSURE( false, "Not implemented yet" );
-    return uno::Sequence< uno::Reference< beans::XPropertySet > >();
+    return Sequence< Reference< beans::XPropertySet > >();
 }
 
-
-// ____ XMeter ____
-void SAL_CALL Axis::attachCoordinateSystem(
-    const uno::Reference< chart2::XBoundedCoordinateSystem >& xCoordSys,
-    sal_Int32 nRepresentedDimension )
-    throw (lang::IndexOutOfBoundsException,
-           uno::RuntimeException)
-{
-    // /--
-    MutexGuard aGuard( GetMutex());
-    if( nRepresentedDimension >= xCoordSys->getDimension())
-        throw lang::IndexOutOfBoundsException();
-
-    m_xCoordinateSystem = xCoordSys;
-    m_nRepresentedDimension = nRepresentedDimension;
-    // \--
-}
-
-uno::Reference< chart2::XBoundedCoordinateSystem > SAL_CALL Axis::getCoordinateSystem()
-    throw (uno::RuntimeException)
-{
-    // /--
-    MutexGuard aGuard( GetMutex());
-    return m_xCoordinateSystem;
-    // \--
-}
-
-sal_Int32 SAL_CALL Axis::getRepresentedDimension()
-    throw (uno::RuntimeException)
-{
-    // /--
-    MutexGuard aGuard( GetMutex());
-    return m_nRepresentedDimension;
-    // \--
-}
-
-void SAL_CALL Axis::setIncrement( const uno::Reference< chart2::XIncrement >& aIncrement )
-    throw (uno::RuntimeException)
-{
-    // /--
-    MutexGuard aGuard( GetMutex());
-    m_xIncrement = aIncrement;
-    // \--
-}
-
-uno::Reference< chart2::XIncrement > SAL_CALL Axis::getIncrement()
-    throw (uno::RuntimeException)
-{
-    // /--
-    MutexGuard aGuard( GetMutex());
-    return m_xIncrement;
-    // \--
-}
-
-// ____ XIdentifiable ____
-::rtl::OUString SAL_CALL Axis::getIdentifier()
-    throw (uno::RuntimeException)
-{
-    // /--
-    MutexGuard aGuard( GetMutex());
-    return m_aIdentifier;
-    // \--
-}
 
 // ____ XTitled ____
-uno::Reference< chart2::XTitle > SAL_CALL Axis::getTitle()
+Reference< chart2::XTitle > SAL_CALL Axis::getTitle()
     throw (uno::RuntimeException)
 {
     // /--
@@ -382,13 +495,87 @@ uno::Reference< chart2::XTitle > SAL_CALL Axis::getTitle()
     // \--
 }
 
-void SAL_CALL Axis::setTitle( const uno::Reference< chart2::XTitle >& Title )
+void SAL_CALL Axis::setTitle( const Reference< chart2::XTitle >& Title )
     throw (uno::RuntimeException)
 {
-    // /--
-    MutexGuard aGuard( GetMutex() );
-    m_xTitle = Title;
-    // \--
+    {
+        // /--
+        MutexGuard aGuard( GetMutex() );
+        if( m_xTitle.is())
+            ModifyListenerHelper::removeListener( m_xTitle, m_xModifyEventForwarder );
+        m_xTitle = Title;
+        if( m_xTitle.is())
+            ModifyListenerHelper::addListener( m_xTitle, m_xModifyEventForwarder );
+        // \--
+    }
+    fireModifyEvent();
+}
+
+// ____ XCloneable ____
+Reference< util::XCloneable > SAL_CALL Axis::createClone()
+    throw (uno::RuntimeException)
+{
+    Axis * pNewAxis( new Axis( *this ));
+    // hold a reference to the clone
+    Reference< util::XCloneable > xResult( pNewAxis );
+    // do initialization that uses uno references to the clone
+    pNewAxis->Init( *this );
+    return xResult;
+}
+
+// ____ XModifyBroadcaster ____
+void SAL_CALL Axis::addModifyListener( const Reference< util::XModifyListener >& aListener )
+    throw (uno::RuntimeException)
+{
+    try
+    {
+        Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
+        xBroadcaster->addModifyListener( aListener );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+void SAL_CALL Axis::removeModifyListener( const Reference< util::XModifyListener >& aListener )
+    throw (uno::RuntimeException)
+{
+    try
+    {
+        Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
+        xBroadcaster->removeModifyListener( aListener );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+// ____ XModifyListener ____
+void SAL_CALL Axis::modified( const lang::EventObject& aEvent )
+    throw (uno::RuntimeException)
+{
+    m_xModifyEventForwarder->modified( aEvent );
+}
+
+// ____ XEventListener (base of XModifyListener) ____
+void SAL_CALL Axis::disposing( const lang::EventObject& Source )
+    throw (uno::RuntimeException)
+{
+    if( Source.Source == m_aScaleData.Categories )
+        m_aScaleData.Categories = 0;
+}
+
+// ____ OPropertySet ____
+void Axis::firePropertyChangeEvent()
+{
+    fireModifyEvent();
+}
+
+void Axis::fireModifyEvent()
+{
+    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
 // ================================================================================
@@ -397,23 +584,20 @@ void SAL_CALL Axis::setTitle( const uno::Reference< chart2::XTitle >& Title )
 uno::Any Axis::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    static helper::tPropertyValueMap aStaticDefaults;
+    static tPropertyValueMap aStaticDefaults;
 
     // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aStaticDefaults.size() )
     {
+        CharacterProperties::AddDefaultsToMap( aStaticDefaults );
+        LineProperties::AddDefaultsToMap( aStaticDefaults );
+
         // initialize defaults
         lcl_AddDefaultsToMap( aStaticDefaults );
-        CharacterProperties::AddDefaultsToMap(
-            aStaticDefaults,
-            /* bIncludeStyleProperties = */ true );
-        LineProperties::AddDefaultsToMap(
-            aStaticDefaults,
-            /* bIncludeStyleProperties = */ true );
     }
 
-    helper::tPropertyValueMap::const_iterator aFound(
+    tPropertyValueMap::const_iterator aFound(
         aStaticDefaults.find( nHandle ));
 
     if( aFound == aStaticDefaults.end())
@@ -430,11 +614,11 @@ uno::Any Axis::GetDefaultValue( sal_Int32 nHandle ) const
 
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
+Reference< beans::XPropertySetInfo > SAL_CALL
     Axis::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
+    static Reference< beans::XPropertySetInfo > xInfo;
 
     // /--
     MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -450,9 +634,9 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 
 // ================================================================================
 
-uno::Sequence< ::rtl::OUString > Axis::getSupportedServiceNames_Static()
+Sequence< OUString > Axis::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 2 );
+    Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = C2U( "com.sun.star.chart2.Axis" );
     aServices[ 1 ] = C2U( "com.sun.star.beans.PropertySet" );
     return aServices;
