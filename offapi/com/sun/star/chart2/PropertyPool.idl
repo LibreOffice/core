@@ -1,0 +1,76 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: PropertyPool.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 14:56:21 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_PropertyPool_idl
+#define com_sun_star_chart2_PropertyPool_idl
+
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/style/Style.idl>
+#include <com/sun/star/style/XDefaultsSupplier.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+service PropertyPool
+{
+    /** must be usable as a style
+     */
+    service  ::com::sun::star::style::Style;
+
+    /** must provide defaults for all properties
+
+        <p>As the service
+        <type scope="com::sun::star::style">Style</type> implies the
+        implementation of
+        <type scope="com::sun::star::beans">XPropertySet</type>, the
+        method
+        <member scope="com::sun::star::style">XDefaultsSupplier::getDefaults</member>
+        should return itself.
+     */
+    interface  ::com::sun::star::style::XDefaultsSupplier;
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+
+#endif
