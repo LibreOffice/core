@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartWindow.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:34:07 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:05:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,8 @@ public:
     ChartWindow( WindowController* pWindowController, Window* pParent, WinBits nStyle );
     virtual ~ChartWindow();
 
+    void clear();
+
     //from base class Window:
     virtual void Paint( const Rectangle& rRect );
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
@@ -71,9 +73,15 @@ public:
     virtual void LoseFocus();
     virtual void Command( const CommandEvent& rCEvt );
     virtual void KeyInput( const KeyEvent& rKEvt );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void RequestHelp( const HelpEvent& rHEvt );
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
 private:
     WindowController*    m_pWindowController;
+
+    void adjustHighContrastMode();
 };
 
 //.............................................................................
