@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:59:33 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:28:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,12 +45,6 @@
 #endif
 #ifndef _SVX_PROTITEM_HXX //autogen
 #include <svx/protitem.hxx>
-#endif
-#ifndef _SCH_DLL_HXX //autogen
-#include <sch/schdll.hxx>
-#endif
-#ifndef _SCH_MEMCHRT_HXX
-#include <sch/memchrt.hxx>
 #endif
 
 #ifndef _FMTANCHR_HXX //autogen
@@ -2873,107 +2867,4 @@ const SwTableBox *lcl_FindLastBox( const SwTable &rTable )
 
     return pBox;
 }
-
-
-//GPF bei Tab in letzer Zelle mit MSC4
-#pragma optimize("",off)
-
-void _FndBox::SaveChartData( const SwTable &rTable )
-{
-    SwDoc *pDoc = rTable.GetFrmFmt()->GetDoc();
-    SwClientIter aIter( *(SwModify*)pDoc->GetDfltGrfFmtColl() );
-    SwClient *pCli;
-    if ( 0 != (pCli = aIter.First( TYPE(SwCntntNode) )) )
-        do
-        {   if ( !((SwCntntNode*)pCli)->GetOLENode() )
-                continue;
-            SwOLENode *pONd = (SwOLENode*)pCli;
-            if ( rTable.GetFrmFmt()->GetName() == pONd->GetChartTblName() )
-            {
-                SwOLEObj& rOObj = pONd->GetOLEObj();
-                SchMemChart *pData = SchDLL::GetChartData( rOObj.GetOleRef() );
-                if ( pData )
-                {
-                    String &rStr = pData->SomeData1();
-                    xub_StrLen nTmp = rStr.Search( ':' );
-                    String aBox( rStr.Copy( 1, nTmp - 1 ) );
-                    //const this, weil Borland so dumm ist!
-                    const SwTableBox *pSttBox = rTable.GetTblBox( aBox );
-                    if ( !pSttBox )
-                        pSttBox = rTable.GetTabLines()[0]->GetTabBoxes()[0];
-                    aBox = rStr.Copy( nTmp + 1, rStr.Len()-2 - nTmp);
-                    const SwTableBox *pEndBox = rTable.GetTblBox( aBox );
-                    if ( !pEndBox )
-                    {
-                        SwTableLine *pLine =
-                            rTable.GetTabLines()[rTable.GetTabLines().Count()-1];
-                        pEndBox = pLine->GetTabBoxes()[pLine->GetTabBoxes().Count()-1];
-                    }
-                    pData->SomeData3() = String::CreateFromInt32(
-                                        pSttBox != ::lcl_FindFirstBox(rTable)
-                                            ? long(pSttBox)
-                                            : LONG_MAX );
-                    pData->SomeData4() = String::CreateFromInt32(
-                                        pEndBox != ::lcl_FindLastBox(rTable)
-                                            ? long(pEndBox)
-                                            : LONG_MAX );
-                }
-            }
-        } while ( 0 != (pCli = aIter.Next()) );
-}
-
-void _FndBox::RestoreChartData( const SwTable &rTable )
-{
-    SwDoc *pDoc = rTable.GetFrmFmt()->GetDoc();
-    SwClientIter aIter( *(SwModify*)pDoc->GetDfltGrfFmtColl() );
-    SwClient *pCli;
-    if ( 0 != (pCli = aIter.First( TYPE(SwCntntNode) )) )
-        do
-        {   if ( !((SwCntntNode*)pCli)->GetOLENode() )
-                continue;
-            SwOLENode *pONd = (SwOLENode*)pCli;
-            if ( rTable.GetFrmFmt()->GetName() == pONd->GetChartTblName() )
-            {
-                SwOLEObj& rOObj = pONd->GetOLEObj();
-                SchMemChart *pData = SchDLL::GetChartData( rOObj.GetOleRef() );
-                if ( pData )
-                {
-                    const SwTableBox *pSttBox = (SwTableBox*)
-                                                pData->SomeData3().ToInt32();
-                    if ( long(pSttBox) == LONG_MAX )
-                        pSttBox = ::lcl_FindFirstBox( rTable );
-                    const SwTableBox *pEndBox = (SwTableBox*)
-                                                pData->SomeData4().ToInt32();
-                    if ( long(pEndBox) == LONG_MAX )
-                        pEndBox = ::lcl_FindLastBox( rTable );
-                    FASTBOOL bSttFound = FALSE, bEndFound = FALSE;
-                    const SwTableSortBoxes &rBoxes = rTable.GetTabSortBoxes();
-                    for ( USHORT i = 0; i < rBoxes.Count(); ++i )
-                    {
-                        const SwTableBox *pTmp = rBoxes[i];
-                        if ( pTmp == pSttBox )
-                            bSttFound = TRUE;
-                        if ( pTmp == pEndBox )
-                            bEndFound = TRUE;
-                    }
-                    if ( !bSttFound )
-                        pSttBox = rTable.GetTabLines()[0]->GetTabBoxes()[0];
-                    if ( !bEndFound )
-                    {
-                        SwTableLine *pLine =
-                            rTable.GetTabLines()[rTable.GetTabLines().Count()-1];
-                        pEndBox = pLine->GetTabBoxes()[pLine->GetTabBoxes().Count()-1];
-                    }
-                    String &rStr = pData->SomeData1();
-                    rStr = '<'; rStr += pSttBox->GetName(); rStr += ':';
-                    rStr += pEndBox->GetName(); rStr += '>';
-                    pData->SomeData3().Erase(); pData->SomeData4().Erase();
-                    SchDLL::Update( rOObj.GetOleRef(), pData );
-                    rOObj.GetObject().UpdateReplacement();
-                }
-            }
-        } while ( 0 != (pCli = aIter.Next()) );
-}
-
-#pragma optimize("",on)
 
