@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reffact.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:55:39 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:13:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,8 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include "reffact.hxx"
@@ -61,7 +63,6 @@ SFX_IMPL_MODELESSDIALOG(ScFilterDlgWrapper, SID_FILTER )
 SFX_IMPL_MODELESSDIALOG(ScSpecialFilterDlgWrapper, SID_SPECIAL_FILTER )
 SFX_IMPL_MODELESSDIALOG(ScDbNameDlgWrapper, SID_DEFINE_DBNAME )
 SFX_IMPL_MODELESSDIALOG(ScConsolidateDlgWrapper, SID_OPENDLG_CONSOLIDATE )
-SFX_IMPL_MODELESSDIALOG(ScChartDlgWrapper, SID_OPENDLG_CHART )
 SFX_IMPL_MODELESSDIALOG(ScPrintAreasDlgWrapper, SID_OPENDLG_EDIT_PRINTAREA )
 SFX_IMPL_MODELESSDIALOG(ScCondFormatDlgWrapper, SID_OPENDLG_CONDFRMT )
 SFX_IMPL_MODELESSDIALOG(ScColRowNameRangesDlgWrapper, SID_DEFINE_COLROWNAMERANGES )
@@ -149,12 +150,6 @@ IMPL_CHILD_CTOR( ScColRowNameRangesDlgWrapper, SID_DEFINE_COLROWNAMERANGES )
 IMPL_CHILD_CTOR( ScConsolidateDlgWrapper, SID_OPENDLG_CONSOLIDATE )
 
 //-------------------------------------------------------------------------
-// ScChartDlgWrapper
-//-------------------------------------------------------------------------
-
-IMPL_CHILD_CTOR( ScChartDlgWrapper, SID_OPENDLG_CHART )
-
-//-------------------------------------------------------------------------
 // ScPrintAreasDlgWrapper
 //-------------------------------------------------------------------------
 
@@ -190,8 +185,18 @@ ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( Window* pParentP,
                                 SfxChildWinInfo*    pInfo )
         : SfxChildWindow(pParentP, nId)
 {
-    ScTabViewShell* pViewShell =
-        PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+//  ScTabViewShell* pViewShell =
+//      PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+
+    ScTabViewShell* pViewShell = NULL;
+    SfxDispatcher* pDisp = p->GetDispatcher();
+    if ( pDisp )
+    {
+        SfxViewFrame* pViewFrm = pDisp->GetFrame();
+        if ( pViewFrm )
+            pViewShell = PTR_CAST( ScTabViewShell, pViewFrm->GetViewShell() );
+    }
+
     DBG_ASSERT( pViewShell, "missing view shell :-(" );
 
     if(pInfo!=NULL && bScSimpleRefFlag)
@@ -265,19 +270,11 @@ void ScSimpleRefDlgWrapper::SetUnoLinks( const Link& rDone,
     }
 }
 
-void ScSimpleRefDlgWrapper::SetFlags( BOOL bCloseOnButtonUp )
+void ScSimpleRefDlgWrapper::SetFlags( BOOL bCloseOnButtonUp, BOOL bSingleCell, BOOL bMultiSelection )
 {
     if(pWindow!=NULL)
     {
-        ((ScSimpleRefDlg*)pWindow)->SetFlags( bCloseOnButtonUp );
-    }
-}
-
-void ScSimpleRefDlgWrapper::SetSingleCell( BOOL bSingleCell )
-{
-    if(pWindow!=NULL)
-    {
-        ((ScSimpleRefDlg*)pWindow)->SetSingleCell( bSingleCell );
+        ((ScSimpleRefDlg*)pWindow)->SetFlags( bCloseOnButtonUp, bSingleCell, bMultiSelection );
     }
 }
 
