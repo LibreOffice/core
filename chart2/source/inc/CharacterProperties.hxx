@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CharacterProperties.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:37:58 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:12:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,12 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
 #include <com/sun/star/beans/Property.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
+#include <com/sun/star/awt/FontDescriptor.hpp>
+#endif
 
 #include <vector>
 
@@ -57,10 +63,8 @@ public:
     // FastProperty Ids for properties
     enum
     {
-        PROP_CHAR_STYLE = FAST_PROPERTY_ID_START_CHAR_PROP, // ?
-
         // com.sun.star.style.CharacterProperties
-        PROP_CHAR_FONT_NAME,
+        PROP_CHAR_FONT_NAME = FAST_PROPERTY_ID_START_CHAR_PROP, // ?
         PROP_CHAR_FONT_STYLE_NAME,
         PROP_CHAR_FONT_FAMILY,
         PROP_CHAR_FONT_CHAR_SET,
@@ -80,7 +84,7 @@ public:
 //         PROP_CHAR_CASE_MAPPING,
 //         PROP_CHAR_ROTATION,
 //--         PROP_CHAR_ROTATION_IS_FIT_TO_LINE,
-        PROP_CHAR_SCALE_WIDTH,
+//        PROP_CHAR_SCALE_WIDTH,
         PROP_CHAR_ESCAPEMENT_HEIGHT,
 
 //         PROP_CHAR_CROSSED_OUT,
@@ -134,10 +138,14 @@ public:
     };
 
     static void AddPropertiesToVector(
-        ::std::vector< ::com::sun::star::beans::Property > & rOutProperties,
-        bool bIncludeStyleProperties = false );
+        ::std::vector< ::com::sun::star::beans::Property > & rOutProperties );
 
-    static void AddDefaultsToMap( ::chart::helper::tPropertyValueMap & rOutMap, bool bIncludeStyleProperties = false );
+    static void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
+
+    static bool IsCharacterPropertyHandle( sal_Int32 nHandle );
+
+    static ::com::sun::star::awt::FontDescriptor createFontDescriptorFromPropertySet(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet > & xMultiPropSet );
 
 private:
     // not implemented
