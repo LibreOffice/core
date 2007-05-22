@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 22:11:51 $
+#   last change: $Author: vg $ $Date: 2007-05-22 20:09:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,6 @@ SLOFILES =  \
     $(SLO)$/namepast.obj		\
     $(SLO)$/teamdlg.obj			\
     $(SLO)$/textdlgs.obj		\
-    $(SLO)$/chartdlg.obj		\
     $(SLO)$/anyrefdg.obj		\
     $(SLO)$/crnrdlg.obj			\
     $(SLO)$/shtabdlg.obj		\
@@ -92,9 +91,6 @@ SRC1FILES = \
     highred.src					\
     linkarea.src
 
-NOOPTFILES=\
-    $(SLO)$/chartdlg.obj
-    
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 
 LIB1OBJFILES =  \
@@ -102,7 +98,6 @@ LIB1OBJFILES =  \
     $(SLO)$/solvrdlg.obj		\
     $(SLO)$/tabopdlg.obj		\
     $(SLO)$/teamdlg.obj			\
-    $(SLO)$/chartdlg.obj		\
     $(SLO)$/anyrefdg.obj		\
     $(SLO)$/crnrdlg.obj			\
     $(SLO)$/acredlin.obj		\
