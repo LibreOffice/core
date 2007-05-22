@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 16:58:54 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:11:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,7 @@
 #include "printfun.hxx"
 #include "pfuncache.hxx"
 #include "scmod.hxx"
+#include "rangeutl.hxx"
 #ifndef _SC_VIEWSETTINGSSEQUENCEDEFINES_HXX
 #include "ViewSettingsSequenceDefines.hxx"
 #endif
@@ -1348,6 +1349,13 @@ void SAL_CALL ScModelObj::setPropertyValue(
         {
             aValue >>= maBuildId;
         }
+        else if ( aString.EqualsAscii( "SavedObject" ) )    // set from chart after saving
+        {
+            rtl::OUString aObjName;
+            aValue >>= aObjName;
+            if ( aObjName.getLength() )
+                pDoc->RestoreChartListener( aObjName );
+        }
 
         if ( aNewOpt != rOldOpt )
         {
@@ -1476,6 +1484,10 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         {
             aRet <<= maBuildId;
         }
+        else if ( aString.EqualsAscii( "InternalDocument" ) )
+        {
+            ScUnoHelpFunctions::SetBoolInAny( aRet, (pDocShell->GetCreateMode() == SFX_CREATE_MODE_INTERNAL) );
+        }
     }
 
     return aRet;
@@ -1505,10 +1517,19 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
             case SC_SERVICE_TRGRADTAB:  xRet.set(xDrawTrGradTab);   break;
             case SC_SERVICE_MARKERTAB:  xRet.set(xDrawMarkerTab);   break;
             case SC_SERVICE_DASHTAB:    xRet.set(xDrawDashTab);     break;
-            case SC_SERVICE_CHDATAPROV: xRet.set(xChartDataProv);  break;
+            case SC_SERVICE_CHDATAPROV: xRet.set(xChartDataProv);   break;
         }
 
-        if ( !xRet.is() )
+        // #i64497# If a chart is in a temporary document during clipoard paste,
+        // there should be no data provider, so that own data is used
+        bool bCreate =
+            ! ( nType == SC_SERVICE_CHDATAPROV &&
+                ( pDocShell->GetCreateMode() == SFX_CREATE_MODE_INTERNAL ));
+        // this should never happen, i.e. the temporary document should never be
+        // loaded, becuase this unlinks the data
+        OSL_ASSERT( bCreate );
+
+        if ( !xRet.is() && bCreate )
         {
             xRet.set(ScServiceProvider::MakeInstance( nType, pDocShell ));
 
@@ -1521,7 +1542,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
                 case SC_SERVICE_TRGRADTAB:  xDrawTrGradTab.set(xRet);   break;
                 case SC_SERVICE_MARKERTAB:  xDrawMarkerTab.set(xRet);   break;
                 case SC_SERVICE_DASHTAB:    xDrawDashTab.set(xRet);     break;
-                case SC_SERVICE_CHDATAPROV: xChartDataProv.set(xRet);  break;
+                case SC_SERVICE_CHDATAPROV: xChartDataProv.set(xRet);   break;
             }
         }
     }
@@ -2019,6 +2040,58 @@ void SAL_CALL ScTableSheetsObj::removeByName( const rtl::OUString& aName )
 
     if (!bDone)
         throw uno::RuntimeException();      // NoSuchElementException is handled above
+}
+
+// XCellRangesAccess
+
+uno::Reference< table::XCell > SAL_CALL ScTableSheetsObj::getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow, sal_Int32 nSheet )
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    uno::Reference<table::XCellRange> xSheet(static_cast<ScCellRangeObj*>(GetObjectByIndex_Impl((USHORT)nSheet)));
+    if (! xSheet.is())
+        throw lang::IndexOutOfBoundsException();
+
+    return xSheet->getCellByPosition(nColumn, nRow);
+}
+
+uno::Reference< table::XCellRange > SAL_CALL ScTableSheetsObj::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom, sal_Int32 nSheet )
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    uno::Reference<table::XCellRange> xSheet(static_cast<ScCellRangeObj*>(GetObjectByIndex_Impl((USHORT)nSheet)));
+    if (! xSheet.is())
+        throw lang::IndexOutOfBoundsException();
+
+    return xSheet->getCellRangeByPosition(nLeft, nTop, nRight, nBottom);
+}
+
+uno::Sequence < uno::Reference< table::XCellRange > > SAL_CALL ScTableSheetsObj::getCellRangesByName( const rtl::OUString& aRange )
+    throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    uno::Sequence < uno::Reference < table::XCellRange > > xRet;
+
+    ScRangeList aRangeList;
+    if (ScRangeStringConverter::GetRangeListFromString( aRangeList, aRange, pDocShell->GetDocument(), ';' ))
+    {
+        sal_Int32 nCount = aRangeList.Count();
+        if (nCount)
+        {
+            xRet.realloc(nCount);
+            for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+            {
+                const ScRange* pRange = aRangeList.GetObject( nIndex );
+                if( pRange )
+                    xRet[nIndex] = new ScCellRangeObj(pDocShell, *pRange);
+            }
+        }
+        else
+            throw lang::IllegalArgumentException();
+    }
+    else
+        throw lang::IllegalArgumentException();
+    return xRet;
 }
 
 // XEnumerationAccess
