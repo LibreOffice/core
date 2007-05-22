@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LineChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:19:11 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:49:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include "LineChartTypeTemplate.hxx"
-#include "LineChartType.hxx"
 #include "macros.hxx"
-#include "algohelper.hxx"
-#include "DataSeriesTreeHelper.hxx"
+#include "DiagramHelper.hxx"
+#include "servicenames_charttypes.hxx"
+#include "ContainerHelper.hxx"
+#include "DataSeriesHelper.hxx"
 
 #ifndef _COM_SUN_STAR_CHART2_SYMBOLSTYLE_HPP_
 #include <com/sun/star/chart2/SymbolStyle.hpp>
@@ -78,6 +79,7 @@ static const OUString lcl_aServiceName(
 
 enum
 {
+    PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE,
     PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION,
     PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER
 
@@ -86,6 +88,12 @@ enum
 void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
+    rOutProperties.push_back(
+        Property( C2U( "CurveStyle" ),
+                  PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE,
+                  ::getCppuType( reinterpret_cast< const chart2::CurveStyle * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( C2U( "CurveResolution" ),
                   PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION,
@@ -101,8 +109,12 @@ void lcl_AddPropertiesToVector(
 }
 
 void lcl_AddDefaultsToMap(
-    ::chart::helper::tPropertyValueMap & rOutMap )
+    ::chart::tPropertyValueMap & rOutMap )
 {
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE ));
+    rOutMap[ PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE ] =
+        uno::makeAny( chart2::CurveStyle_LINES );
+
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
     rOutMap[ PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION ] =
         uno::makeAny( sal_Int32( 20 ) );
@@ -128,10 +140,10 @@ const Sequence< Property > & lcl_GetPropertySequence()
 
         // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::helper::PropertyNameLess() );
+                     ::chart::PropertyNameLess() );
 
         // transfer result to static Sequence
-        aPropSeq = ::chart::helper::VectorToSequence( aProperties );
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
     return aPropSeq;
@@ -155,20 +167,20 @@ LineChartTypeTemplate::LineChartTypeTemplate(
     uno::Reference<
         uno::XComponentContext > const & xContext,
     const ::rtl::OUString & rServiceName,
-    chart2::StackMode eYStackMode,
-    chart2::CurveStyle eCurveStyle,
+    StackMode eStackMode,
     bool bSymbols,
-    sal_Int32 nDim /* = 2 */,
-    chart2::StackMode eZStackMode /* = NONE */ ) :
+    bool bHasLines /* = true */,
+    sal_Int32 nDim /* = 2 */ ) :
         ChartTypeTemplate( xContext, rServiceName ),
         ::property::OPropertySet( m_aMutex ),
-        m_eYStackMode( eYStackMode ),
-        m_eCurveStyle( eCurveStyle ),
+        m_eStackMode( eStackMode ),
         m_bHasSymbols( bSymbols ),
-        m_bHasLines( true ),
-        m_nDim( nDim ),
-        m_eZStackMode( eZStackMode )
-{}
+        m_bHasLines( bHasLines ),
+        m_nDim( nDim )
+{
+    if( nDim == 3 )
+        m_bHasSymbols = false;
+}
 
 LineChartTypeTemplate::~LineChartTypeTemplate()
 {}
@@ -176,7 +188,7 @@ LineChartTypeTemplate::~LineChartTypeTemplate()
 uno::Any LineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    static helper::tPropertyValueMap aStaticDefaults;
+    static tPropertyValueMap aStaticDefaults;
 
     // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -186,7 +198,7 @@ uno::Any LineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
         lcl_AddDefaultsToMap( aStaticDefaults );
     }
 
-    helper::tPropertyValueMap::const_iterator aFound(
+    tPropertyValueMap::const_iterator aFound(
         aStaticDefaults.find( nHandle ));
 
     if( aFound == aStaticDefaults.end())
@@ -226,135 +238,49 @@ sal_Int32 LineChartTypeTemplate::getDimension() const
     return m_nDim;
 }
 
-chart2::StackMode LineChartTypeTemplate::getYStackMode() const
+StackMode LineChartTypeTemplate::getStackMode( sal_Int32 nChartTypeIndex ) const
 {
-    return m_eYStackMode;
-}
-
-chart2::StackMode LineChartTypeTemplate::getZStackMode() const
-{
-    if( m_nDim == 2 )
-        return chart2::StackMode_NONE;
-
-    return m_eZStackMode;
-}
-
-uno::Reference< chart2::XChartType > LineChartTypeTemplate::getDefaultChartType()
-    throw (uno::RuntimeException)
-{
-    sal_Int32 nRes;
-    sal_Int32 nOrder;
-
-    if( ( getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION ) >>= nRes ) &&
-        ( getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER ) >>= nOrder ) )
-    {
-        return new LineChartType( m_nDim, m_eCurveStyle, nRes, nOrder );
-    }
-
-    return new LineChartType( m_nDim, m_eCurveStyle );
+    return m_eStackMode;
 }
 
 // ____ XChartTypeTemplate ____
-uno::Reference< chart2::XDiagram > SAL_CALL
-    LineChartTypeTemplate::createDiagram(
-        const uno::Sequence< uno::Reference< chart2::XDataSeries > >& aSeriesSeq )
-    throw (uno::RuntimeException)
-{
-    // set symbol type at data series
-    chart2::SymbolStyle eStyle = m_bHasSymbols
-        ? chart2::SymbolStyle_STANDARD
-        : chart2::SymbolStyle_NONE;
-
-    uno::Any aLineStyleToSet( uno::makeAny(
-                                  m_bHasLines
-                                  ? drawing::LineStyle_SOLID
-                                  : drawing::LineStyle_NONE ));
-    for( sal_Int32 i = 0; i < aSeriesSeq.getLength(); ++i )
-    {
-        try
-        {
-            chart2::Symbol aSymbProp;
-            Reference< beans::XPropertySet > xProp( aSeriesSeq[i], uno::UNO_QUERY_THROW );
-            if( (xProp->getPropertyValue( C2U( "Symbol" )) >>= aSymbProp ) )
-            {
-                aSymbProp.aStyle = eStyle;
-                if( m_bHasSymbols )
-                    aSymbProp.nStandardSymbol = i;
-                xProp->setPropertyValue( C2U( "Symbol" ), uno::makeAny( aSymbProp ));
-            }
-
-            if( m_bHasLines )
-            {
-                // keep line-styles that are not NONE
-                drawing::LineStyle eLineStyle;
-                if( (xProp->getPropertyValue( C2U( "LineStyle" )) >>= eLineStyle ) &&
-                    eLineStyle == drawing::LineStyle_NONE )
-                {
-                    xProp->setPropertyValue( C2U( "LineStyle" ), aLineStyleToSet );
-                }
-            }
-            else
-                xProp->setPropertyValue( C2U( "LineStyle" ), aLineStyleToSet );
-        }
-        catch( uno::Exception & ex )
-        {
-            ASSERT_EXCEPTION( ex );
-        }
-    }
-
-    // todo: set symbol type at data points
-
-    return ChartTypeTemplate::createDiagram( aSeriesSeq );
-}
-
 sal_Bool SAL_CALL LineChartTypeTemplate::matchesTemplate(
-    const uno::Reference< chart2::XDiagram >& xDiagram )
+    const uno::Reference< chart2::XDiagram >& xDiagram,
+    sal_Bool bAdaptProperties )
     throw (uno::RuntimeException)
 {
-    sal_Bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram );
+    sal_Bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
 
-    // check curve-style
+    // check symbol-style and line-style
+    // for a template with symbols (or with lines) it is ok, if there is at least one series
+    // with symbols (or with lines)
     if( bResult )
     {
-        try
-        {
-            uno::Reference< beans::XPropertySet > xCTProp(
-                helper::DataSeriesTreeHelper::getChartTypeByIndex( xDiagram->getTree(), 0 ),
-                uno::UNO_QUERY_THROW );
-            chart2::CurveStyle eCurveStyle;
-            if( xCTProp->getPropertyValue( C2U( "CurveStyle" )) >>= eCurveStyle )
-            {
-                bResult = ( eCurveStyle == m_eCurveStyle );
-            }
-        }
-        catch( uno::Exception & ex )
-        {
-            ASSERT_EXCEPTION( ex );
-        }
-    }
+        ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
+            DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
 
-    // check symbol-style
-    if( bResult )
-    {
-        uno::Sequence< uno::Reference< chart2::XDataSeries > > aSeriesSeq(
-            helper::DataSeriesTreeHelper::getDataSeriesFromDiagram( xDiagram ));
-        chart2::SymbolStyle eStyle = m_bHasSymbols
-            ? chart2::SymbolStyle_STANDARD
-            : chart2::SymbolStyle_NONE;
-
-        for( sal_Int32 i = 0; i < aSeriesSeq.getLength(); ++i )
+        for( ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
+                 aSeriesVec.begin(); aIt != aSeriesVec.end(); ++aIt )
         {
             try
             {
                 chart2::Symbol aSymbProp;
-                uno::Reference< beans::XPropertySet > xProp( aSeriesSeq[i], uno::UNO_QUERY_THROW );
-                if( (xProp->getPropertyValue( C2U( "Symbol" )) >>= aSymbProp ) )
+                drawing::LineStyle eLineStyle;
+                Reference< beans::XPropertySet > xProp( *aIt, uno::UNO_QUERY_THROW );
+
+                if( (xProp->getPropertyValue( C2U( "Symbol" )) >>= aSymbProp) &&
+                    (aSymbProp.Style != chart2::SymbolStyle_NONE) &&
+                    (!m_bHasSymbols) )
                 {
-                    if( aSymbProp.aStyle != eStyle )
-                    {
-                        bResult = false;
-                        break;
-                    }
+                    bResult = false;
+                    break;
+                }
+
+                if( (xProp->getPropertyValue( C2U( "LineStyle" )) >>= eLineStyle) &&
+                    (m_bHasLines != ( eLineStyle != drawing::LineStyle_NONE )) )
+                {
+                    bResult = false;
+                    break;
                 }
             }
             catch( uno::Exception & ex )
@@ -364,7 +290,81 @@ sal_Bool SAL_CALL LineChartTypeTemplate::matchesTemplate(
         }
     }
 
+    // adapt curve style, spline order and resolution
+    if( bResult && bAdaptProperties )
+    {
+        try
+        {
+            uno::Reference< beans::XPropertySet > xChartTypeProp(
+                DiagramHelper::getChartTypeByIndex( xDiagram, 0 ),
+                uno::UNO_QUERY_THROW );
+            setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE, xChartTypeProp->getPropertyValue(C2U("CurveStyle" )) );
+            setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION, xChartTypeProp->getPropertyValue(C2U("CurveResolution" )) );
+            setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER, xChartTypeProp->getPropertyValue(C2U("SplineOrder" )) );
+        }
+        catch( uno::Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
+        }
+    }
+
     return bResult;
+}
+
+Reference< chart2::XChartType > SAL_CALL LineChartTypeTemplate::getChartTypeForNewSeries(
+        const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
+    throw (uno::RuntimeException)
+{
+    Reference< chart2::XChartType > xResult;
+
+    try
+    {
+        Reference< lang::XMultiServiceFactory > xFact(
+            GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
+        xResult.set( xFact->createInstance(
+                         CHART2_SERVICE_NAME_CHARTTYPE_LINE ), uno::UNO_QUERY_THROW );
+
+        ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem( aFormerlyUsedChartTypes, xResult );
+
+        Reference< beans::XPropertySet > xCTProp( xResult, uno::UNO_QUERY );
+        if( xCTProp.is())
+        {
+            xCTProp->setPropertyValue(
+                C2U( "CurveStyle" ), getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE ));
+            xCTProp->setPropertyValue(
+                C2U( "CurveResolution" ), getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
+            xCTProp->setPropertyValue(
+                C2U( "SplineOrder" ), getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER ));
+        }
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    return xResult;
+}
+
+void SAL_CALL LineChartTypeTemplate::applyStyle(
+    const Reference< chart2::XDataSeries >& xSeries,
+    ::sal_Int32 nChartTypeIndex,
+    ::sal_Int32 nSeriesIndex,
+    ::sal_Int32 nSeriesCount )
+    throw (uno::RuntimeException)
+{
+    ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
+
+    try
+    {
+        Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY_THROW );
+
+        DataSeriesHelper::switchSymbolsOnOrOff( xProp, m_bHasSymbols, nSeriesIndex );
+        DataSeriesHelper::switchLinesOnOrOff( xProp, m_bHasLines );
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
 }
 
 // ----------------------------------------
