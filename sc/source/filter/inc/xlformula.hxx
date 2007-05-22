@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlformula.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:37:41 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:59:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -327,10 +327,16 @@ private:
     bool                mbVolatile;     /// True = Formula contains volatile function.
 };
 
+typedef ScfRef< XclTokenArray > XclTokenArrayRef;
+
 /** Calls the Read() function at the passed token array. */
 XclImpStream& operator>>( XclImpStream& rStrm, XclTokenArray& rTokArr );
+/** Calls the Read() function at the passed token array. */
+XclImpStream& operator>>( XclImpStream& rStrm, XclTokenArrayRef& rxTokArr );
 /** Calls the Write() function at the passed token array. */
 XclExpStream& operator<<( XclExpStream& rStrm, const XclTokenArray& rTokArr );
+/** Calls the Write() function at the passed token array. */
+XclExpStream& operator<<( XclExpStream& rStrm, const XclTokenArrayRef& rxTokArr );
 
 // ----------------------------------------------------------------------------
 
