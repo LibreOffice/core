@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LabelPositionHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:36:15 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:24:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,11 +44,6 @@
 #include "macros.hxx"
 #include "RelativeSizeHelper.hxx"
 
-// header for class Vector2D
-#ifndef _VECTOR2D_HXX
-#include <tools/vector2d.hxx>
-#endif
-
 #ifndef _COM_SUN_STAR_DRAWING_TEXTVERTICALADJUST_HPP_
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #endif
@@ -81,34 +76,22 @@ LabelPositionHelper::~LabelPositionHelper()
 
 awt::Point LabelPositionHelper::transformSceneToScreenPosition( const drawing::Position3D& rScenePosition3D ) const
 {
-    //@todo would like to have a cheaper method to do this transformation
-    awt::Point aScreenPoint( static_cast<sal_Int32>(rScenePosition3D.PositionX), static_cast<sal_Int32>(rScenePosition3D.PositionY) );
-
-    //transformation from scene to screen (only neccessary for 3D):
-    if(3==m_nDimensionCount)
-    {
-        //create 3D anchor shape
-        tPropertyNameMap aDummyPropertyNameMap;
-        uno::Reference< drawing::XShape > xShape3DAnchor = m_pShapeFactory->createCube( m_xLogicTarget
-                , DataPointGeometry( rScenePosition3D,drawing::Direction3D(1,1,1) )
-                , 0, aDummyPropertyNameMap);
-        //get 2D position from xShape3DAnchor
-        aScreenPoint = xShape3DAnchor->getPosition();
-        m_xLogicTarget->remove(xShape3DAnchor);
-    }
-    return aScreenPoint;
+    return PlottingPositionHelper::transformSceneToScreenPosition(
+                  rScenePosition3D, m_xLogicTarget, m_pShapeFactory, m_nDimensionCount );
 }
 
-awt::Point LabelPositionHelper::transformLogicToScreenPosition( const drawing::Position3D& rLogicPosition3D ) const
+awt::Point LabelPositionHelper::transformScaledLogicToScreenPosition( const drawing::Position3D& rLogicPosition3D ) const
 {
     drawing::Position3D aScenePosition3D( SequenceToPosition3D(
-        m_pPosHelper->getTransformationLogicToScene()->transform(
+        m_pPosHelper->getTransformationScaledLogicToScene()->transform(
             Position3DToSequence(rLogicPosition3D) ) ) );
+    /*
     if(3==m_nDimensionCount)
     {
         drawing::Position3D aScenePosition3D_rotated( aScenePosition3D.PositionX, -aScenePosition3D.PositionZ, aScenePosition3D.PositionY );
         aScenePosition3D = aScenePosition3D_rotated;
     }
+    */
     awt::Point aScreenPosition2D( this->transformSceneToScreenPosition( aScenePosition3D ) );
     return aScreenPosition2D;
 }
@@ -141,15 +124,15 @@ void LabelPositionHelper::changeTextAdjustment( tAnySequence& rPropValues, const
     }
 }
 
-void lcl_doDynamicFontResize( uno::Any* pAOldFontHeightAny
+void lcl_doDynamicFontResize( uno::Any* pAOldAndNewFontHeightAny
                           , const awt::Size& rOldReferenceSize
                           , const awt::Size& rNewReferenceSize  )
 {
     double fOldFontHeight, fNewFontHeight;
-    if( pAOldFontHeightAny && ( *pAOldFontHeightAny >>= fOldFontHeight ) )
+    if( pAOldAndNewFontHeightAny && ( *pAOldAndNewFontHeightAny >>= fOldFontHeight ) )
     {
         fNewFontHeight = RelativeSizeHelper::calculate( fOldFontHeight, rOldReferenceSize, rNewReferenceSize );
-        *pAOldFontHeightAny = uno::makeAny(fNewFontHeight);
+        *pAOldAndNewFontHeightAny = uno::makeAny(fNewFontHeight);
     }
 }
 
@@ -165,12 +148,12 @@ void LabelPositionHelper::doDynamicFontResize( tAnySequence& rPropValues
     awt::Size aOldReferenceSize;
     if( xAxisModelProps->getPropertyValue( C2U("ReferenceDiagramSize")) >>= aOldReferenceSize )
     {
-        uno::Any* pAOldFontHeightAny = PropertyMapper::getValuePointer( rPropValues, rPropNames, C2U("CharHeight") );
-        lcl_doDynamicFontResize( pAOldFontHeightAny, aOldReferenceSize, rNewReferenceSize );
-        pAOldFontHeightAny = PropertyMapper::getValuePointer( rPropValues, rPropNames, C2U("CharHeightAsian") );
-        lcl_doDynamicFontResize( pAOldFontHeightAny, aOldReferenceSize, rNewReferenceSize );
-        pAOldFontHeightAny = PropertyMapper::getValuePointer( rPropValues, rPropNames, C2U("CharHeightComplex") );
-        lcl_doDynamicFontResize( pAOldFontHeightAny, aOldReferenceSize, rNewReferenceSize );
+        uno::Any* pAOldAndNewFontHeightAny = PropertyMapper::getValuePointer( rPropValues, rPropNames, C2U("CharHeight") );
+        lcl_doDynamicFontResize( pAOldAndNewFontHeightAny, aOldReferenceSize, rNewReferenceSize );
+        pAOldAndNewFontHeightAny = PropertyMapper::getValuePointer( rPropValues, rPropNames, C2U("CharHeightAsian") );
+        lcl_doDynamicFontResize( pAOldAndNewFontHeightAny, aOldReferenceSize, rNewReferenceSize );
+        pAOldAndNewFontHeightAny = PropertyMapper::getValuePointer( rPropValues, rPropNames, C2U("CharHeightComplex") );
+        lcl_doDynamicFontResize( pAOldAndNewFontHeightAny, aOldReferenceSize, rNewReferenceSize );
     }
 }
 
