@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartDocumentWrapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:21:40 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 17:52:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,18 +35,19 @@
 #ifndef CHART_CHARTDOCUMENTWRAPPER_HXX
 #define CHART_CHARTDOCUMENTWRAPPER_HXX
 
-#include "MutexContainer.hxx"
-#include "OPropertySet.hxx"
+#include "WrappedPropertySet.hxx"
+//#include "OPropertySet.hxx"
 #include "ServiceMacros.hxx"
+
+#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_CHART_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart/XChartDocument.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -60,9 +61,12 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XREFRESHABLE_HPP_
+#include <com/sun/star/util/XRefreshable.hpp>
+#endif
 
-#ifndef _CPPUHELPER_IMPLBASE6_HXX_
-#include <cppuhelper/implbase6.hxx>
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -70,64 +74,61 @@
 #ifndef _UNOTOOLS_EVENTLISTENERADAPTER_HXX_
 #include <unotools/eventlisteneradapter.hxx>
 #endif
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
+#endif
 
-namespace com { namespace sun { namespace star {
-namespace chart2
-{
-    class XChartDocument;
-}
-}}}
-
-namespace com { namespace sun { namespace star {
-namespace drawing
-{
-    class XShape;
-}
-namespace chart
-{
-    class XDiagram;
-}
-}}}
-
-
+#include <boost/shared_ptr.hpp>
 
 namespace chart
 {
+
 namespace wrapper
 {
 
-namespace impl
-{
-typedef
-    ::cppu::WeakImplHelper6<
-        ::com::sun::star::chart::XChartDocument,
-        ::com::sun::star::util::XNumberFormatsSupplier,
-        ::com::sun::star::drawing::XDrawPageSupplier,
-        ::com::sun::star::lang::XMultiServiceFactory,
-        ::com::sun::star::lang::XServiceInfo,
-        ::com::sun::star::uno::XAggregation >
-    ChartDocumentWrapper_Base;
-}
+class Chart2ModelContact;
 
-class ChartDocumentWrapper :
-        public impl::ChartDocumentWrapper_Base,
-        public ::utl::OEventListenerAdapter
+class ChartDocumentWrapper_Base : public ::cppu::ImplInheritanceHelper5
+                                < WrappedPropertySet
+                                , ::com::sun::star::chart::XChartDocument
+                                , ::com::sun::star::drawing::XDrawPageSupplier
+                                , ::com::sun::star::lang::XMultiServiceFactory
+                                , ::com::sun::star::lang::XServiceInfo
+                                , ::com::sun::star::uno::XAggregation
+                                >
+{
+};
+
+class ChartDocumentWrapper : public ChartDocumentWrapper_Base
+                           , public ::utl::OEventListenerAdapter
 {
 public:
-    ChartDocumentWrapper(
+    explicit ChartDocumentWrapper(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > & xContext );
     virtual ~ChartDocumentWrapper();
 
-    ::osl::Mutex & GetMutex() const;
-
-    /// establish methods for factory instatiation
-    APPHELPER_SERVICE_FACTORY_HELPER( ChartDocumentWrapper )
-
     /// XServiceInfo declarations
     APPHELPER_XSERVICEINFO_DECL()
+    APPHELPER_SERVICE_FACTORY_HELPER(ChartDocumentWrapper)
+
+    void setAddIn( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshable >& xAddIn );
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshable > getAddIn() const;
+
+    void setUpdateAddIn( sal_Bool bUpdateAddIn );
+    sal_Bool getUpdateAddIn() const;
+
+    void setBaseDiagram( const rtl::OUString& rBaseDiagram );
+    rtl::OUString getBaseDiagram() const;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > getAdditionalShapes() const;
+
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::drawing::XDrawPage > impl_getDrawPage() const
+        throw (::com::sun::star::uno::RuntimeException);
 
 protected:
+
     // ____ chart::XChartDocument ____
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape > SAL_CALL getTitle()
@@ -201,15 +202,7 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ ::utl::OEventListenerAdapter ____
-    virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource );
-
-    // ____ XNumberFormatsSupplier ____
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > SAL_CALL getNumberFormatSettings()
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::util::XNumberFormats > SAL_CALL getNumberFormats()
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual void _disposing( const ::com::sun::star::lang::EventObject& rSource );
 
     // ____ XDrawPageSupplier ____
     virtual ::com::sun::star::uno::Reference<
@@ -239,33 +232,35 @@ protected:
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType )
         throw (::com::sun::star::uno::RuntimeException);
 
-private:
-    mutable ::osl::Mutex      m_aMutex;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext >
-                        m_xContext;
+    // ____ WrappedPropertySet ____
+    virtual const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& getPropertySequence();
+    virtual const std::vector< WrappedProperty* > createWrappedProperties();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getInnerPropertySet();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                        m_xDelegator;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XChartDocument >
-                        m_xChartDoc;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XModel >
-                        m_xModel;
+private: //methods
+    void impl_resetAddIn();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                        m_xTitle;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                        m_xSubTitle;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                        m_xLegend;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartData >
-                        m_xChartData;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart::XDiagram >
-                        m_xDiagram;
+private: //member
+    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
 
-    bool                m_bIsDisposed;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   m_xDelegator;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   m_xTitle;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   m_xSubTitle;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   m_xLegend;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartData > m_xChartData;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart::XDiagram >   m_xDiagram;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xArea;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshable > m_xAddIn;
+    rtl::OUString   m_aBaseDiagram;
+    sal_Bool        m_bUpdateAddIn;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   m_xChartView;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>
+                                                                            m_xShapeFactory;
+
+    bool                                                                    m_bIsDisposed;
 };
 
 } //  namespace wrapper
