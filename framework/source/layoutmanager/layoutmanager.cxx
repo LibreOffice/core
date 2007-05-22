@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:42:16 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:26:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3706,6 +3706,9 @@ sal_Bool SAL_CALL LayoutManager::setMergedMenuBar(
 throw (::com::sun::star::uno::RuntimeException)
 {
     implts_setInplaceMenuBar( xMergedMenuBar );
+
+    css::uno::Any a;
+    implts_notifyListeners( css::frame::LayoutManagerEvents::MERGEDMENUBAR, a );
     return sal_True;
 }
 
@@ -3748,6 +3751,9 @@ throw ( RuntimeException )
     sal_Bool bAutomaticToolbars( m_bAutomaticToolbars );
     std::vector< Reference< css::awt::XWindow > > oldDockingAreaWindows;
 
+    if ( !xDockingAreaAcceptor.is() )
+        m_aAsyncLayoutTimer.Stop();
+
     // Remove listener from old docking area acceptor
     if ( m_xDockingAreaAcceptor.is() )
     {
@@ -3778,6 +3784,7 @@ throw ( RuntimeException )
     css::uno::Reference< css::awt::XWindow > xLeftDockWindow;
     css::uno::Reference< css::awt::XWindow > xRightDockWindow;
 
+    Reference< ::com::sun::star::ui::XDockingAreaAcceptor > xOldDockingAreaAcceptor( m_xDockingAreaAcceptor );
     m_xDockingAreaAcceptor = xDockingAreaAcceptor;
     if ( m_xDockingAreaAcceptor.is() )
     {
@@ -3829,9 +3836,12 @@ throw ( RuntimeException )
         Window* pContainerWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
         if ( pContainerWindow )
             pContainerWindow->AddChildEventListener( LINK( this, LayoutManager, WindowEventListener ) );
-    }
 
-    implts_destroyElements(); // remove all elements
+        // We have now a new container window, reparent all child windows!
+        implts_reparentChildWindows();
+    }
+    else
+        implts_destroyElements(); // remove all elements
 
     if ( oldDockingAreaWindows.size() > 0 )
     {
@@ -3848,9 +3858,13 @@ throw ( RuntimeException )
                 }
             }
         }
+
+        // Reset docking area size for our old docking area acceptor
+        css::awt::Rectangle aEmptyRect;
+        xOldDockingAreaAcceptor->setDockingAreaSpace( aEmptyRect );
     }
 
-    if ( m_xDockingAreaAcceptor.is() )
+    if ( xDockingAreaAcceptor.is() )
     {
         if ( bAutomaticToolbars )
         {
@@ -3860,6 +3874,105 @@ throw ( RuntimeException )
         }
         implts_sortUIElements();
         implts_doLayout( sal_True );
+    }
+}
+
+void LayoutManager::implts_reparentChildWindows()
+{
+    UIElementVector aUIElementVector;
+    UIElement       aStatusBarElement;
+    css::uno::Reference< css::awt::XWindow > xTopDockWindow;
+    css::uno::Reference< css::awt::XWindow > xBottomDockWindow;
+    css::uno::Reference< css::awt::XWindow > xLeftDockWindow;
+    css::uno::Reference< css::awt::XWindow > xRightDockWindow;
+    css::uno::Reference< css::awt::XWindow > xContainerWindow;
+    css::uno::Reference< css::awt::XWindow > xStatusBarWindow;
+
+    WriteGuard aWriteLock( m_aLock );
+    aUIElementVector    = m_aUIElements;
+    xTopDockWindow      = m_xDockAreaWindows[DockingArea_DOCKINGAREA_TOP];
+    xBottomDockWindow   = m_xDockAreaWindows[DockingArea_DOCKINGAREA_BOTTOM];
+    xLeftDockWindow     = m_xDockAreaWindows[DockingArea_DOCKINGAREA_LEFT];
+    xRightDockWindow    = m_xDockAreaWindows[DockingArea_DOCKINGAREA_RIGHT];
+    xContainerWindow    = m_xContainerWindow;
+    aStatusBarElement   = m_aStatusBarElement;
+    aWriteLock.unlock();
+
+    if ( aStatusBarElement.m_xUIElement.is() )
+    {
+        try
+        {
+            xStatusBarWindow = Reference< css::awt::XWindow >(
+                                    aStatusBarElement.m_xUIElement->getRealInterface(),
+                               UNO_QUERY );
+        }
+        catch ( RuntimeException& )
+        {
+            throw;
+        }
+        catch ( Exception& )
+        {
+        }
+    }
+
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+    Window* pContainerWindow    = VCLUnoHelper::GetWindow( xContainerWindow );
+    Window* pTopDockWindow      = VCLUnoHelper::GetWindow( xTopDockWindow );
+    Window* pBottomDockWindow   = VCLUnoHelper::GetWindow( xBottomDockWindow );
+    Window* pLeftDockWindow     = VCLUnoHelper::GetWindow( xLeftDockWindow );
+    Window* pRightDockWindow    = VCLUnoHelper::GetWindow( xRightDockWindow );
+    if ( pContainerWindow )
+    {
+        UIElementVector::iterator pIter;
+        for ( pIter = aUIElementVector.begin(); pIter != aUIElementVector.end(); pIter++ )
+        {
+            Reference< XUIElement > xUIElement( pIter->m_xUIElement );
+            if ( xUIElement.is() )
+            {
+                Reference< css::awt::XWindow > xWindow;
+                try
+                {
+                    // We have to retreive the window reference with try/catch as it is
+                    // possible that all elements has been disposed!
+                    xWindow = Reference< css::awt::XWindow >( xUIElement->getRealInterface(), UNO_QUERY );
+                }
+                catch ( RuntimeException& )
+                {
+                    throw;
+                }
+                catch ( Exception& )
+                {
+                }
+
+                Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+                if ( pWindow )
+                {
+                    // Reparent our child windows acording to their current state.
+                    if ( pIter->m_bFloating )
+                        pWindow->SetParent( pContainerWindow );
+                    else
+                    {
+                        if ( pIter->m_aDockedData.m_nDockedArea == DockingArea_DOCKINGAREA_TOP )
+                            pWindow->SetParent( pTopDockWindow );
+                        else if ( pIter->m_aDockedData.m_nDockedArea == DockingArea_DOCKINGAREA_BOTTOM )
+                            pWindow->SetParent( pBottomDockWindow );
+                        else if ( pIter->m_aDockedData.m_nDockedArea == DockingArea_DOCKINGAREA_LEFT )
+                            pWindow->SetParent( pLeftDockWindow );
+                        else
+                            pWindow->SetParent( pRightDockWindow );
+                    }
+                }
+            }
+        }
+
+        if ( xStatusBarWindow.is() )
+        {
+            Window* pWindow = VCLUnoHelper::GetWindow( xStatusBarWindow );
+            if ( pWindow )
+                pWindow->SetParent( pContainerWindow );
+        }
+
+        implts_resetMenuBar();
     }
 }
 
@@ -4434,38 +4547,10 @@ throw (RuntimeException)
              aElementName.equalsIgnoreAsciiCaseAscii( "menubar" ))
         {
             WriteGuard aWriteLock( m_aLock );
+            m_bMenuVisible = sal_True;
+            aWriteLock.unlock();
 
-            if ( m_xContainerWindow.is() )
-            {
-                vos::OGuard aGuard( Application::GetSolarMutex() );
-                Window* pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
-                while ( pWindow && !pWindow->IsSystemWindow() )
-                    pWindow = pWindow->GetParent();
-
-                m_bMenuVisible = sal_True;
-                if ( pWindow )
-                {
-                    MenuBar* pSetMenuBar = 0;
-                    if ( m_xInplaceMenuBar.is() )
-                    {
-                        pSetMenuBar = (MenuBar *)m_pInplaceMenuBar->GetMenuBar();
-                        ((SystemWindow *)pWindow)->SetMenuBar( pSetMenuBar );
-                        pSetMenuBar->SetDisplayable( sal_True );
-                        return sal_True;
-                    }
-                    else
-                    {
-                        MenuBarWrapper* pMenuBarWrapper = SAL_STATIC_CAST( MenuBarWrapper*, m_xMenuBar.get() );
-                        if ( pMenuBarWrapper )
-                        {
-                            pSetMenuBar = (MenuBar *)pMenuBarWrapper->GetMenuBarManager()->GetMenuBar();
-                            ((SystemWindow *)pWindow)->SetMenuBar( pSetMenuBar );
-                            pSetMenuBar->SetDisplayable( sal_True );
-                            return sal_True;
-                        }
-                    }
-                }
-            }
+            return implts_resetMenuBar();
         }
         else if (( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) &&
                    aElementName.equalsIgnoreAsciiCaseAscii( "statusbar" )) ||
@@ -5872,6 +5957,39 @@ void LayoutManager::implts_updateMenuBarClose()
     }
 }
 
+sal_Bool LayoutManager::implts_resetMenuBar()
+{
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+    sal_Bool bMenuVisible( m_bMenuVisible );
+    Reference< css::awt::XWindow > xContainerWindow( m_xContainerWindow );
+
+    MenuBar* pSetMenuBar = 0;
+    if ( m_xInplaceMenuBar.is() )
+        pSetMenuBar = (MenuBar *)m_pInplaceMenuBar->GetMenuBar();
+    else
+    {
+        MenuBarWrapper* pMenuBarWrapper = SAL_STATIC_CAST( MenuBarWrapper*, m_xMenuBar.get() );
+        if ( pMenuBarWrapper )
+            pSetMenuBar = (MenuBar *)pMenuBarWrapper->GetMenuBarManager()->GetMenuBar();
+    }
+    aWriteLock.unlock();
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+    Window* pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
+    while ( pWindow && !pWindow->IsSystemWindow() )
+        pWindow = pWindow->GetParent();
+
+    if ( pWindow && bMenuVisible && pSetMenuBar )
+    {
+        ((SystemWindow *)pWindow)->SetMenuBar( pSetMenuBar );
+        pSetMenuBar->SetDisplayable( sal_True );
+        return sal_True;
+    }
+
+    return sal_False;
+}
 
 void LayoutManager::implts_setMenuBarCloser(sal_Bool bCloserState)
 {
