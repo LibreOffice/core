@@ -9,5 +9,5 @@
         <prop oor:name="FileFormatVersion"><value>3580</value></prop>
         <prop oor:name="Type"><value>chart_StarChart_40</value></prop>
         <prop oor:name="TemplateName"/>
-        <prop oor:name="DocumentService"><value>com.sun.star.chart.ChartDocument</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.chart2.ChartDocument</value></prop>
     </node>
