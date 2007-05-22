@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valueset.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:42:53 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:32:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@ class DataChangedEvent;
 class ScrollBar;
 class ValueItemList;
 struct ValueSetItem;
+struct ValueSet_Impl;
 #ifdef _SV_VALUESET_CXX
 class ValueSetAcc;
 class ValueItemAcc;
@@ -257,7 +258,7 @@ private:
 
     VirtualDevice   maVirDev;
     Timer           maTimer;
-    ValueItemList*  mpItemList;
+    ValueSet_Impl*  mpImpl;
     ValueSetItem*   mpNoneItem;
     ScrollBar*      mpScrBar;
     long            mnTextOffset;
@@ -435,6 +436,11 @@ public:
     const Link&     GetSelectHdl() const { return maSelectHdl; }
     void            SetDoubleClickHdl( const Link& rLink ) { maDoubleClickHdl = rLink; }
     const Link&     GetDoubleClickHdl() const { return maDoubleClickHdl; }
+
+    /** Disable the transient state (accessibility::AccessibleStateType::TRANSIENT)
+        of the accessible items.
+     */
+    void            DisableTransientChildren();
 
 private:
     /** Determine whether RTL (right to left writing) is active.  For this
