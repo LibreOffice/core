@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Title.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:06:56 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:42:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #define CHART_TITLE_HXX
 
 #include "ServiceMacros.hxx"
+#include "ModifyListenerHelper.hxx"
 
 #ifndef CHART_OPROPERTYSET_HXX
 #include "OPropertySet.hxx"
@@ -43,8 +44,8 @@
 #ifndef CHART_MUTEXCONTAINER_HXX
 #include "MutexContainer.hxx"
 #endif
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/implbase3.hxx>
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
@@ -56,11 +57,11 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
-#include <com/sun/star/chart2/XIdentifiable.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
+#include <com/sun/star/util/XCloneable.hpp>
 #endif
 
 namespace chart
@@ -68,15 +69,17 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper3<
+typedef ::cppu::WeakImplHelper5<
     ::com::sun::star::chart2::XTitle,
     ::com::sun::star::lang::XServiceInfo,
-    ::com::sun::star::chart2::XIdentifiable >
+    ::com::sun::star::util::XCloneable,
+    ::com::sun::star::util::XModifyBroadcaster,
+    ::com::sun::star::util::XModifyListener >
     Title_Base;
 }
 
 class Title :
-    public helper::MutexContainer,
+    public MutexContainer,
     public impl::Title_Base,
     public ::property::OPropertySet
 {
@@ -97,6 +100,8 @@ public:
      DECLARE_XTYPEPROVIDER()
 
 protected:
+    explicit Title( const Title & rOther );
+
     // ____ OPropertySet ____
     virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
         throw(::com::sun::star::beans::UnknownPropertyException);
@@ -126,16 +131,39 @@ protected:
                                    ::com::sun::star::chart2::XFormattedString > >& Strings )
         throw (::com::sun::star::uno::RuntimeException);
 
-    // ____ XIdentifiable ____
-    virtual ::rtl::OUString SAL_CALL getIdentifier()
+    // ____ XCloneable ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
         throw (::com::sun::star::uno::RuntimeException);
 
-private:
-    ::rtl::OUString m_aIdentifier;
+    // ____ XModifyBroadcaster ____
+    virtual void SAL_CALL addModifyListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeModifyListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
+        throw (::com::sun::star::uno::RuntimeException);
 
+    // ____ XModifyListener ____
+    virtual void SAL_CALL modified(
+        const ::com::sun::star::lang::EventObject& aEvent )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XEventListener (base of XModifyListener) ____
+    virtual void SAL_CALL disposing(
+        const ::com::sun::star::lang::EventObject& Source )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ OPropertySet ____
+    virtual void firePropertyChangeEvent();
+
+    void fireModifyEvent();
+
+private:
     ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XFormattedString > > m_aStrings;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xModifyEventForwarder;
 };
 
 } //  namespace chart
