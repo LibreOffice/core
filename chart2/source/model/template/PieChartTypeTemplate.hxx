@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PieChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:23:43 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:51:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ namespace chart
 {
 
 class PieChartTypeTemplate :
-        public helper::MutexContainer,
+        public MutexContainer,
         public ChartTypeTemplate,
         public ::property::OPropertySet
 {
@@ -85,44 +85,64 @@ protected:
         getPropertySetInfo()
         throw (::com::sun::star::uno::RuntimeException);
 
+    // ____ XChartTypeTemplate ____
+    virtual sal_Bool SAL_CALL matchesTemplate(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XDiagram >& xDiagram,
+        sal_Bool bAdaptProperties )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType > SAL_CALL
+        getChartTypeForNewSeries( const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XChartType > >& aFormerlyUsedChartTypes )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL applyStyle(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& xSeries,
+        ::sal_Int32 nChartTypeGroupIndex,
+        ::sal_Int32 nSeriesIndex,
+        ::sal_Int32 nSeriesCount )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL resetStyles(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram )
+        throw (::com::sun::star::uno::RuntimeException);
+
     // ____ ChartTypeTemplate ____
     virtual sal_Int32 getDimension() const;
 
-    virtual void createAndAddAxes(
+    virtual void adaptDiagram(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XAxisContainer > & rOutAxisCnt );
+            ::com::sun::star::chart2::XDiagram > & xDiagram );
 
-    virtual void createAndAddGrids(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XGridContainer > & rOutGridCnt );
+    virtual sal_Int32 getAxisCountByDimension( sal_Int32 nDimension );
+//     virtual void createAxes(
+//         const ::com::sun::star::uno::Sequence<
+//             ::com::sun::star::uno::Reference<
+//                 ::com::sun::star::chart2::XCoordinateSystem > > & rCoordSys );
 
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XBoundedCoordinateSystem >
-        createCoordinateSystem(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XBoundedCoordinateSystemContainer > & xCoordSysCnt );
+    virtual void adaptAxes(
+        const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XCoordinateSystem > > & rCoordSys );
 
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeriesTreeParent > createDataSeriesTree(
+    virtual void adaptScales(
+        const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XCoordinateSystem > > & aCooSysSeq,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::data::XLabeledDataSequence > & xCategories );
+
+    virtual void createChartTypes(
+            const ::com::sun::star::uno::Sequence<
+                ::com::sun::star::uno::Sequence<
+                    ::com::sun::star::uno::Reference<
+                        ::com::sun::star::chart2::XDataSeries > > >& aSeriesSeq,
             const ::com::sun::star::uno::Sequence<
                 ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XDataSeries > >& aSeriesSeq,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys
+                    ::com::sun::star::chart2::XCoordinateSystem > > & rCoordSys,
+            const ::com::sun::star::uno::Sequence<
+                  ::com::sun::star::uno::Reference<
+                      ::com::sun::star::chart2::XChartType > > & aOldChartTypesSeq
             );
-
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XChartType > getDefaultChartType()
-        throw (::com::sun::star::uno::RuntimeException);
-
-private:
-    ::com::sun::star::chart2::PieChartOffsetMode
-                    m_ePieOffsetMode;
-    bool            m_bIsRingChart;
 };
 
 } //  namespace chart
