@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 00:31:19 $
+#   last change: $Author: vg $ $Date: 2007-05-22 18:02:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,12 +46,12 @@ ENABLE_EXCEPTIONS=	TRUE
 # --- export library -------------------------------------------------
 
 #object files to build and link together to lib $(SLB)$/$(TARGET).lib
-SLOFILES=   	$(SLO)$/SchItemPool.obj \
-                $(SLO)$/ItemConverter.obj \
+SLOFILES=   	$(SLO)$/ItemConverter.obj \
                 $(SLO)$/AxisItemConverter.obj \
                 $(SLO)$/MultipleItemConverter.obj \
                 $(SLO)$/MultipleChartConverters.obj \
                 $(SLO)$/CharacterPropertyItemConverter.obj \
+                $(SLO)$/SeriesOptionsItemConverter.obj \
                 $(SLO)$/DataPointItemConverter.obj \
                 $(SLO)$/GraphicPropertyItemConverter.obj \
                 $(SLO)$/LegendItemConverter.obj \
