@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xerecord.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:36:29 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:56:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,9 +230,9 @@ public:
     typedef ScfRef< RecType > RecordRefType;
 
     /** Returns pointer to an existing record or 0 on error. */
-    inline bool         Empty() const { return maRecs.empty(); }
+    inline bool         IsEmpty() const { return maRecs.empty(); }
     /** Returns pointer to an existing record or 0 on error. */
-    inline size_t       Size() const { return maRecs.size(); }
+    inline size_t       GetSize() const { return maRecs.size(); }
 
     /** Returns true, if the passed index points to an exiting record. */
     inline bool         HasRecord( size_t nPos ) const
@@ -284,6 +284,21 @@ public:
 private:
     typedef ::std::vector< RecordRefType > RecordVec;
     RecordVec           maRecs;
+};
+
+// ============================================================================
+
+/** Represents a complete substream of records enclosed into a pair of BOF/EOF records. */
+class XclExpSubStream : public XclExpRecordList<>
+{
+public:
+    explicit            XclExpSubStream( sal_uInt16 nSubStrmType );
+
+    /** Writes the complete substream, including leading BOF and trailing EOF. */
+    virtual void        Save( XclExpStream& rStrm );
+
+private:
+    sal_uInt16          mnSubStrmType;  /// Substream type, stored in leading BOF record.
 };
 
 // ============================================================================
