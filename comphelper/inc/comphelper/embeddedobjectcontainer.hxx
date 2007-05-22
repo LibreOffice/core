@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:30:36 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 20:19:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
 #ifndef INCLUDED_COMPHELPERDLLAPI_H
 #include "comphelper/comphelperdllapi.h"
 #endif
@@ -67,6 +70,9 @@ class COMPHELPER_DLLPUBLIC EmbeddedObjectContainer
 {
     EmbedImpl*  pImpl;
 
+    ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > Get_Impl( const ::rtl::OUString&,
+            const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xCopy);
+
 public:
     // add an embedded object to the container storage
     sal_Bool            StoreEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, ::rtl::OUString&, sal_Bool );
@@ -76,6 +82,8 @@ public:
 
                         EmbeddedObjectContainer();
                         EmbeddedObjectContainer( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& );
+                        EmbeddedObjectContainer( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
+                                                 const com::sun::star::uno::Reference < com::sun::star::uno::XInterface >& );
                         ~EmbeddedObjectContainer();
 
     void                SwitchPersistence( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& );
