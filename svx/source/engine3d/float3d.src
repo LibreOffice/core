@@ -4,9 +4,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:24:59 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:18:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1338,6 +1338,18 @@ Image RID_SVXIMAGE_LIGHT_ON_H
 Image RID_SVXIMAGE_LIGHT_OFF_H
 {
     ImageBitmap = Bitmap { File = "light_h.bmp" ; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMAGE_COLORDLG
+{
+    ImageBitmap = Bitmap { File = "colordlg.bmp" ; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMAGE_COLORDLG_H
+{
+    ImageBitmap = Bitmap { File = "colordlg_h.bmp" ; };
     MASKCOLOR
 };
 
