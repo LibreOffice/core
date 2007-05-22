@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 13:32:16 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:05:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,6 +160,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
 
     // plot-area properties
     MAP_ENTRY( "DataRowSource", CHART, XML_SERIES_SOURCE, XML_SCH_TYPE_DATAROWSOURCE ),
+    MAP_ENTRY( "SortByXValues", CHART, XML_SORT_BY_X_VALUES, XML_TYPE_BOOL ),
 
     // axis properties
     MAP_ENTRY( "DisplayLabels", CHART, XML_DISPLAY_LABEL, XML_TYPE_BOOL ),
