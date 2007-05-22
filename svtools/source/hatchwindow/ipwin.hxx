@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipwin.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:19:14 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:34:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,14 +113,14 @@ public:
     SvBorder GetAllBorderPixel() const;
 
     void    SelectMouse( const Point & rPos );
-    void    MouseButtonUp( const MouseEvent & rEvt );
-    void    MouseMove( const MouseEvent & rEvt );
-    void    MouseButtonDown( const MouseEvent & rEvt );
-    void    KeyInput( const KeyEvent & rEvt );
-    void    Resize();
-    void    Paint( const Rectangle & );
-    long    Notify( NotifyEvent& rNEvt );
-    long    PreNotify( NotifyEvent& rNEvt );
+    virtual void    MouseButtonUp( const MouseEvent & rEvt );
+    virtual void    MouseMove( const MouseEvent & rEvt );
+    virtual void    MouseButtonDown( const MouseEvent & rEvt );
+    virtual void    KeyInput( const KeyEvent & rEvt );
+    virtual void    Resize();
+    virtual void    Paint( const Rectangle & );
+    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual long    PreNotify( NotifyEvent& rNEvt );
 
     void    QueryObjAreaPixel( Rectangle & );
     void    RequestObjAreaPixel( const Rectangle & );
