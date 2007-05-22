@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImplChartModel.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:12:37 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 18:38:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,102 +38,169 @@
 #include "ImplChartModel.hxx"
 #include "CachedDataSequence.hxx"
 #include "DataSeries.hxx"
-#include "DataInterpreter.hxx"
-#include "XYDataInterpreter.hxx"
 #include "StyleFamilies.hxx"
 #include "StyleFamily.hxx"
 #include "macros.hxx"
-#include "algohelper.hxx"
 #include "ContextHelper.hxx"
-// #include "SplitLayoutContainer.hxx"
-#include "LayoutDefaults.hxx"
 #include "PageBackground.hxx"
-#include "DataSeriesTreeHelper.hxx"
+#include "DiagramHelper.hxx"
+#include "NameContainer.hxx"
+#include "CloneHelper.hxx"
+#include "ModifyListenerHelper.hxx"
+#include "DataSourceHelper.hxx"
+#include "DisposeHelper.hxx"
+
+// header for class SvNumberFormatter
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
+#endif
+// header for class SvNumberFormatsSupplierObj
+#ifndef _NUMUNO_HXX
+#include <svtools/numuno.hxx>
+#endif
 
 #ifndef _CPPUHELPER_COMPONENT_CONTEXT_HXX_
 #include <cppuhelper/component_context.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_CHART2_XDATASINK_HPP_
-#include <com/sun/star/chart2/XDataSink.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XDATASEQUENCE_HPP_
-#include <com/sun/star/chart2/XDataSequence.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CHART2_XDATASERIES_HPP_
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART2_XAXIS_HPP_
-#include <com/sun/star/chart2/XAxis.hpp>
+#ifndef _COM_SUN_STAR_CHART_CHARTDATAROWSOURCE_HPP_
+#include <com/sun/star/chart/ChartDataRowSource.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
-#include <com/sun/star/lang/XInitialization.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
-#include <com/sun/star/lang/DisposedException.hpp>
+
+// #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETS_HPP_
+// #include <com/sun/star/sheet/XSpreadsheets.hpp>
+// #endif
+// #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEET_HPP_
+// #include <com/sun/star/sheet/XSpreadsheet.hpp>
+// #endif
+// #ifndef _COM_SUN_STAR_SHEET_XSHEETCELLRANGECONTAINER_HPP_
+// #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
+// #endif
+#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
+#include <com/sun/star/embed/XStorage.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XFILTER_HPP_
+#include <com/sun/star/document/XFilter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFYBROADCASTER_HPP_
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETDOCUMENT_HPP_
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_HATCH_HPP_
+#include <com/sun/star/drawing/Hatch.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETS_HPP_
-#include <com/sun/star/sheet/XSpreadsheets.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_LINEDASH_HPP_
+#include <com/sun/star/drawing/LineDash.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEET_HPP_
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETCELLRANGECONTAINER_HPP_
-#include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
+#ifndef _COM_SUN_STAR_AWT_GRADIENT_HPP_
+#include <com/sun/star/awt/Gradient.hpp>
 #endif
 
 #include <vector>
 #include <algorithm>
+#include <functional>
 
 using namespace ::com::sun::star;
+using namespace ::chart::CloneHelper;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
 using ::rtl::OUString;
 
-// enable this to get x-values in the data-series
-#define USE_XY_DATA
+namespace
+{
+
+struct lcl_removeListener : public ::std::unary_function< Reference< chart2::XDiagram >, void >
+{
+    explicit lcl_removeListener( const Reference< util::XModifyListener > & xListener ) :
+            m_xListener( xListener )
+    {}
+
+    void operator() ( const Reference< chart2::XDiagram > & xDia )
+    {
+        Reference< util::XModifyBroadcaster > xBroadcaster( xDia, uno::UNO_QUERY );
+        if( xBroadcaster.is() && m_xListener.is())
+            xBroadcaster->removeModifyListener( m_xListener );
+    }
+private:
+    Reference< util::XModifyListener > m_xListener;
+};
+
+} // anonymous namespace
 
 namespace chart
 {
 namespace impl
 {
 
-ImplChartModel::ImplChartModel( Reference< uno::XComponentContext > const & xContext ) :
+ImplChartModel::ImplChartModel(
+    Reference< uno::XComponentContext > const & xContext,
+    const Reference< util::XModifyListener > & xListener ) :
         m_xContext( xContext ),
-        m_xChartTypeManager(
-            xContext->getServiceManager()->createInstanceWithContext(
-                C2U( "com.sun.star.chart2.ChartTypeManager" ),
-                xContext ), uno::UNO_QUERY ),
-        m_bIsDisposed( false )
-//         m_xLayoutContainer( new SplitLayoutContainer() )
+        m_bIsDisposed( false ),
+        m_xDashTable( new NameContainer( ::getCppuType( reinterpret_cast< const drawing::LineDash * >(0)),
+                C2U( "com.sun.star.drawing.DashTable" ), C2U( "com.sun.star.comp.chart.DashTable" ) )),
+        m_xGradientTable( new NameContainer( ::getCppuType( reinterpret_cast< const awt::Gradient * >(0)),
+                C2U( "com.sun.star.drawing.GradientTable" ), C2U( "com.sun.star.comp.chart.GradientTable" ) )),
+        m_xHatchTable( new NameContainer( ::getCppuType( reinterpret_cast< const drawing::Hatch * >(0)),
+                C2U( "com.sun.star.drawing.HatchTable" ), C2U( "com.sun.star.comp.chart.HatchTable" ) )),
+        m_xBitmapTable( new NameContainer( ::getCppuType( reinterpret_cast< const OUString * >(0)), // URL
+                C2U( "com.sun.star.drawing.BitmapTable" ), C2U( "com.sun.star.comp.chart.BitmapTable" ) )),
+        m_xTransparencyGradientTable( new NameContainer( ::getCppuType( reinterpret_cast< const awt::Gradient * >(0)),
+                C2U( "com.sun.star.drawing.TransparencyGradientTable" ), C2U( "com.sun.star.comp.chart.TransparencyGradientTable" ) )),
+        m_xModifyListener( xListener )
 {
+    m_spChartData.reset( new ChartData( m_xContext ));
+    m_xPageBackground.set( new PageBackground( m_xContext ));
+    ModifyListenerHelper::addListener( m_xPageBackground, m_xModifyListener );
+    m_xChartTypeManager.set(
+        xContext->getServiceManager()->createInstanceWithContext(
+            C2U( "com.sun.star.chart2.ChartTypeManager" ),
+            xContext ), uno::UNO_QUERY );
+
     GetStyleFamilies();
-
-
-    uno::Reference< beans::XPropertySet > xProp( m_xChartTypeManager, uno::UNO_QUERY );
-    uno::Reference< lang::XMultiServiceFactory > xFact( m_xChartTypeManager, uno::UNO_QUERY );
-    if( xProp.is() &&
-        xFact.is() )
-    {
-        OUString aServiceName;
-        if( xProp->getPropertyValue( C2U( "ChartStyleTemplateServiceName" )) >>= aServiceName )
-        {
-            m_xChartTypeTemplate.set( xFact->createInstance( aServiceName ), uno::UNO_QUERY );
-        }
-    }
-
-    m_xPageBackground = new PageBackground( m_xContext );
+    CreateDefaultChartTypeTemplate();
 }
+
+ImplChartModel::ImplChartModel( const ImplChartModel & rOther, const Reference< util::XModifyListener > & xListener ) :
+        m_xContext( rOther.m_xContext ),
+        m_spChartData( rOther.m_spChartData ),
+        m_bIsDisposed( rOther.m_bIsDisposed ),
+        m_xModifyListener( xListener )
+{
+    m_xFamilies.set( CreateRefClone< Reference< container::XNameAccess > >()( rOther.m_xFamilies ));
+    m_xChartTypeManager.set( CreateRefClone< Reference< chart2::XChartTypeManager > >()( rOther.m_xChartTypeManager ));
+    m_xChartTypeTemplate.set( CreateRefClone< Reference< chart2::XChartTypeTemplate > >()( rOther.m_xChartTypeTemplate ));
+    m_xTitle.set( CreateRefClone< Reference< chart2::XTitle > >()( rOther.m_xTitle ));
+    ModifyListenerHelper::addListener( m_xTitle, m_xModifyListener );
+    m_xPageBackground.set( CreateRefClone< Reference< beans::XPropertySet > >()( rOther.m_xPageBackground ));
+    ModifyListenerHelper::addListener( m_xPageBackground, m_xModifyListener );
+
+    m_xDashTable.set( CreateRefClone< Reference< container::XNameContainer > >()( rOther.m_xDashTable ));
+    m_xGradientTable.set( CreateRefClone< Reference< container::XNameContainer > >()( rOther.m_xGradientTable ));
+    m_xHatchTable.set( CreateRefClone< Reference< container::XNameContainer > >()( rOther.m_xHatchTable ));
+    m_xBitmapTable.set( CreateRefClone< Reference< container::XNameContainer > >()( rOther.m_xBitmapTable ));
+    m_xTransparencyGradientTable.set( CreateRefClone< Reference< container::XNameContainer > >()( rOther.m_xTransparencyGradientTable ));
+
+    CloneRefVector< Reference< chart2::XDiagram > >( rOther.m_aDiagrams, m_aDiagrams );
+}
+
+ImplChartModel::~ImplChartModel()
+{}
 
 // ImplChartModel::CreateStyles()
 // {
@@ -180,67 +247,6 @@ ImplChartModel::ImplChartModel( Reference< uno::XComponentContext > const & xCon
 //     }
 // }
 
-
-void ImplChartModel::ReadData( const ::rtl::OUString & rRangeRepresentation )
-{
-    static sal_Int32 nDefaultColors[] =  {
-        0xd43b3a,
-        0xd0976d,
-        0x76934b,
-        0x386a53,
-        0x14816b,
-        0x103841,
-        0x12406c,
-        0x5929ba,
-        0xda42c0,
-        0xc179a2,
-        0x31181b,
-        0x4e6129
-    };
-    static const sal_Int32 nMaxDefaultColors = sizeof( nDefaultColors ) / sizeof( sal_Int32 );
-
-    if( m_xDataProvider.is())
-    {
-        m_xChartData = m_xDataProvider->getDataByRangeRepresentation( rRangeRepresentation );
-
-        InterpretData();
-
-        const size_t nMaxSeries = m_aInterpretedData.size();
-        const OUString aStyleNameStub( RTL_CONSTASCII_USTRINGPARAM( "Series " ));
-
-        for( size_t nI = 0; nI < nMaxSeries; ++nI )
-        {
-            try
-            {
-                Reference< beans::XPropertySet > xSeriesProp(
-                    m_aInterpretedData[ nI ], uno::UNO_QUERY );
-
-                if( xSeriesProp.is())
-                {
-                    xSeriesProp->setPropertyValue(
-                        C2U( "Color" ),
-                        uno::makeAny( nDefaultColors[ sal_Int32( nI % nMaxDefaultColors ) ]));
-                }
-            }
-            catch( uno::Exception ex )
-            {
-                OSL_ENSURE( false, "Couldn't set style" );
-            }
-        }
-    }
-}
-
-void ImplChartModel::InterpretData()
-{
-    // create DataSeries objects using the standard data interpreter
-    // todo: interpret data depending on selected chart type
-
-#ifdef USE_XY_DATA
-        m_aInterpretedData = XYDataInterpreter::InterpretData( m_xChartData );
-#else
-        m_aInterpretedData = DataInterpreter::InterpretData( m_xChartData );
-#endif
-}
 
 Reference< container::XNameAccess > ImplChartModel::GetStyleFamilies()
 {
@@ -290,6 +296,7 @@ Reference< container::XNameAccess > ImplChartModel::GetStyleFamilies()
 
 void ImplChartModel::RemoveAllDiagrams()
 {
+    ModifyListenerHelper::removeListenerFromAllElements( m_aDiagrams, m_xModifyListener );
     m_aDiagrams.clear();
 }
 
@@ -301,12 +308,15 @@ bool ImplChartModel::RemoveDiagram( const Reference< chart2::XDiagram > & xDiagr
     if( aIt == m_aDiagrams.end() )
         return false;
 
+    ModifyListenerHelper::removeListener( *aIt, m_xModifyListener );
     m_aDiagrams.erase( aIt );
     return true;
 }
 
 void ImplChartModel::AppendDiagram( const Reference< chart2::XDiagram > & xDiagram )
 {
+    Reference< util::XModifyBroadcaster > xBroadcaster( xDiagram, uno::UNO_QUERY );
+    ModifyListenerHelper::addListener( xDiagram, m_xModifyListener );
     m_aDiagrams.push_back( xDiagram );
 }
 
@@ -320,25 +330,115 @@ Reference< chart2::XDiagram > ImplChartModel::GetDiagram( size_t nIndex ) const
 }
 
 void ImplChartModel::SetDataProvider(
-    const Reference< chart2::XDataProvider > & xProvider )
+    const Reference< chart2::data::XDataProvider > & xProvider )
 {
-    m_xDataProvider = xProvider;
+    OSL_ASSERT( m_spChartData.get() );
+
+    m_spChartData->setDataProvider( xProvider );
+
+    //the numberformatter is kept independent of the data provider!
 
     // release other ressources
-    m_xChartData = 0;
-    m_aInterpretedData.clear();
+
+    // @todo: maybe we need to save some properties of the old diagrams.  When
+    // the data provider changes from an outside Calc to an internal Calc,
+    // e.g. when copying a chart into the clipboard as "standalone" format
+//     if( bDeleteDiagrams && ! m_aDiagrams.empty())
+//         m_aDiagrams.clear();
 }
 
-void SAL_CALL ImplChartModel::SetRangeRepresentation( const ::rtl::OUString& aRangeRepresentation )
+Reference< chart2::data::XDataProvider > ImplChartModel::GetDataProvider() const
+{
+    OSL_ASSERT( m_spChartData.get() );
+
+    return m_spChartData->getDataProvider();
+}
+
+void ImplChartModel::CreateInternalDataProvider(
+    bool bCloneExistingData,
+    const Reference< chart2::XChartDocument > & xChartDoc )
+{
+    m_spChartData->createInternalData( bCloneExistingData, xChartDoc );
+}
+
+bool ImplChartModel::HasInternalDataProvider() const
+{
+    OSL_ASSERT( m_spChartData.get() );
+
+    return m_spChartData->hasInternalData();
+}
+
+Reference< chart2::data::XDataSource > SAL_CALL ImplChartModel::SetArguments(
+    const Sequence< beans::PropertyValue > & aArguments,
+    bool bSetData )
     throw (lang::IllegalArgumentException)
 {
-    OSL_TRACE( ::rtl::OUStringToOString(
-                   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Chart Range: \"" )) +
-                   aRangeRepresentation +
-                   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\"")),
-                   RTL_TEXTENCODING_ASCII_US ).getStr() );
-    ReadData( aRangeRepresentation );
-    CreateDefaultChart();
+    Reference< chart2::data::XDataSource > xResult;
+    try
+    {
+        OSL_ASSERT( m_spChartData.get() );
+
+        Reference< chart2::data::XDataProvider > xDataProvider(
+            m_spChartData->getDataProvider());
+        if( xDataProvider.is() )
+        {
+            xResult.set( xDataProvider->createDataSource( aArguments ));
+
+            if( bSetData && xResult.is())
+                SetNewData( xResult, aArguments );
+        }
+    }
+    catch( lang::IllegalArgumentException & )
+    {
+        throw;
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    return xResult;
+}
+
+Reference< chart2::data::XDataSource > SAL_CALL ImplChartModel::SetRangeRepresentation(
+    const OUString & rRangeRepresentation, bool bSetData )
+    throw (::com::sun::star::lang::IllegalArgumentException)
+{
+    uno::Sequence< beans::PropertyValue > aArgs( 4 );
+    aArgs[0] = beans::PropertyValue(
+        ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
+        uno::makeAny( rRangeRepresentation ), beans::PropertyState_DIRECT_VALUE );
+    aArgs[1] = beans::PropertyValue(
+        ::rtl::OUString::createFromAscii("HasCategories"), -1,
+        uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
+    aArgs[2] = beans::PropertyValue(
+        ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
+        uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
+    aArgs[3] = beans::PropertyValue(
+        ::rtl::OUString::createFromAscii("DataRowSource"), -1,
+        uno::makeAny( ::com::sun::star::chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
+    return SetArguments( aArgs, bSetData );
+    /*
+    uno::Sequence< beans::PropertyValue > aArgs();
+
+    Reference< chart2::data::XDataProvider > xDataProvider( this->GetDataProvider() );
+    if( xDataProvider.is() )
+        aArgs = xDataProvider->detectArguments( DataSourceHelper::getUsedData( xChartModel ) ),
+
+    ::rtl::OUString aRangeString;
+    uno::Sequence< sal_Int32 > aSequenceMapping;
+    bool bUseColumns = true;
+    bool bFirstCellAsLabel = true;
+    bool bHasCategories = true;
+
+    DataSourceHelper::detectRangeSegmentation(
+        uno::Reference< frame::XModel >( m_xChartDoc, uno::UNO_QUERY ),
+        aRangeString, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories );
+
+    aArgs = createArguments( rRangeRepresentation, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories ) );
+
+    return SetArguments( aArgs, bSetData );
+    */
 }
 
 void ImplChartModel::SetChartTypeManager(
@@ -365,24 +465,58 @@ Reference< chart2::XChartTypeTemplate > ImplChartModel::GetChartTypeTemplate()
 
 void ImplChartModel::CreateDefaultChart()
 {
+    CreateDefaultChartTypeTemplate();
+
     // clean up
     RemoveAllDiagrams();
 
-    if( GetChartTypeTemplate().is())
+    Reference< chart2::XChartTypeTemplate > xTemplate( GetChartTypeTemplate());
+    if( xTemplate.is())
     {
-        AppendDiagram(
-            GetChartTypeTemplate()->createDiagram( helper::VectorToSequence( m_aInterpretedData )));
+        try
+        {
+            Reference< chart2::data::XDataSource > xDataSource( CreateDefaultData());
+            Sequence< beans::PropertyValue > aParam;
+
+            Sequence< OUString > aParamNames( xTemplate->getAvailableCreationParameterNames());
+            const OUString * pBeg = aParamNames.getConstArray();
+            const OUString * pEnd = pBeg + aParamNames.getLength();
+            const OUString * pFound( ::std::find( pBeg, pEnd, C2U("HasCategories")));
+            if( pFound != pEnd )
+            {
+                aParam.realloc( 1 );
+                aParam[0] = beans::PropertyValue( C2U("HasCategories"), -1, uno::makeAny( true ),
+                                                  beans::PropertyState_DIRECT_VALUE );
+            }
+
+            Reference< chart2::XDiagram > xDiagram( xTemplate->createDiagramByDataSource( xDataSource, aParam ) );
+
+            AppendDiagram( xDiagram );
+
+            // create and attach legend
+            Reference< chart2::XLegend > xLegend(
+                m_xContext->getServiceManager()->createInstanceWithContext(
+                    C2U( "com.sun.star.chart2.Legend" ), m_xContext ), uno::UNO_QUERY_THROW );
+            xDiagram->setLegend( xLegend );
+        }
+        catch( uno::Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
+        }
     }
 }
 
-uno::Reference< chart2::XTitle > ImplChartModel::GetTitle()
+Reference< chart2::XTitle > ImplChartModel::GetTitle()
 {
     return m_xTitle;
 }
 
-void ImplChartModel::SetTitle( const uno::Reference< chart2::XTitle >& rTitle )
+void ImplChartModel::SetTitle( const Reference< chart2::XTitle >& rTitle )
 {
+    if( m_xTitle.is())
+        ModifyListenerHelper::removeListener( m_xTitle, m_xModifyListener );
     m_xTitle = rTitle;
+    ModifyListenerHelper::addListener( m_xTitle, m_xModifyListener );
 }
 
 void ImplChartModel::dispose()
@@ -391,170 +525,183 @@ void ImplChartModel::dispose()
     if( m_bIsDisposed )
         return;
 
+    m_spChartData.reset();
+    m_xNumberFormatsSupplier.clear();
+
+    DisposeHelper::DisposeAndClear( m_xOwnNumberFormatsSupplier );
+    DisposeHelper::DisposeAndClear( m_xChartTypeManager );
+    DisposeHelper::DisposeAndClear( m_xChartTypeTemplate );
+    DisposeHelper::DisposeAllElements( m_aDiagrams );
+    m_aDiagrams.clear();
+    DisposeHelper::DisposeAndClear( m_xTitle );
+    DisposeHelper::DisposeAndClear( m_xPageBackground );
+    DisposeHelper::DisposeAndClear( m_xDashTable );
+    DisposeHelper::DisposeAndClear( m_xGradientTable );
+    DisposeHelper::DisposeAndClear( m_xHatchTable );
+    DisposeHelper::DisposeAndClear( m_xBitmapTable );
+    DisposeHelper::DisposeAndClear( m_xTransparencyGradientTable );
+
+    // note: m_xModifyListener is the ChartModel, so don't call dispose()
+    m_xModifyListener.clear();
+
     m_bIsDisposed = true;
 }
 
-uno::Reference< beans::XPropertySet > ImplChartModel::GetPageBackground()
+Reference< beans::XPropertySet > ImplChartModel::GetPageBackground()
 {
     return m_xPageBackground;
 }
 
-void ImplChartModel::CloneData(
-    const uno::Reference< sheet::XSpreadsheetDocument > & xCalcDoc )
+// OUString
+::std::vector< Reference< chart2::data::XLabeledDataSequence > > ImplChartModel::GetData()
 {
-    if( ! xCalcDoc.is())
-        return;
-    Reference< chart2::XDiagram > xDia( GetDiagram(0));
-    if( ! xDia.is())
-        return;
+    ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aResult;
 
-    Sequence< Reference< chart2::XDataSeries > > aSeq(
-        helper::DataSeriesTreeHelper::getDataSeriesFromDiagram( xDia ));
+    Reference< chart2::XDiagram > xDia;
+    if( m_aDiagrams.size() > 0 )
+        xDia.set( GetDiagram(0) );
 
-    try
+    if( xDia.is())
     {
-        // insert new sheet
-        Reference< sheet::XSpreadsheets > xSheets( xCalcDoc->getSheets() );
-        xSheets->insertNewByName( C2U( "Chart Data" ), 0 );
-        Reference< sheet::XSpreadsheet > xDataSheet( xSheets->getByName( C2U( "Chart Data" ) ), uno::UNO_QUERY );
-        OSL_ASSERT( xDataSheet.is());
-
-        // delete all except one of the existing sheets
-        Reference< container::XNameAccess > xNameAccess( xSheets, uno::UNO_QUERY_THROW );
-        OSL_ASSERT( xNameAccess.is());
-        Reference< container::XNameContainer > xNameContainer( xNameAccess, uno::UNO_QUERY_THROW );
-        OSL_ASSERT( xNameContainer.is());
-        Sequence< ::rtl::OUString > aNames( xNameAccess->getElementNames());
-        for( sal_Int32 nNameIdx = 1; nNameIdx < aNames.getLength(); ++nNameIdx )
+        try
         {
-            OSL_TRACE( "Removing %s", U2C( aNames[nNameIdx] ));
-            xNameContainer->removeByName( aNames[nNameIdx] );
-        }
+            // categories
+            Reference< chart2::data::XLabeledDataSequence > xCategories(
+                DiagramHelper::getCategoriesFromDiagram( xDia ));
+            aResult.push_back( xCategories );
 
-        // fill data sheet
-        static const uno::Type aDoubleType = ::getCppuType( reinterpret_cast< const double * >(0));
-        double fVal = 0.0;
-        ::rtl::OUString aStrVal;
-
-        sal_Int32 nCol = 0;
-        sal_Int32 nMaxRow = 0;
-        for( sal_Int32 nSeries = 0; nSeries < aSeq.getLength(); ++nSeries )
-        {
-            Reference< chart2::XDataSource > xSource( aSeq[nSeries], uno::UNO_QUERY );
-            OSL_ASSERT( xSource.is());
-            Sequence< Reference< chart2::XDataSequence > > aDataSeq( xSource->getDataSequences());
-            for( sal_Int32 nSeqIdx = 0; nSeqIdx < aDataSeq.getLength(); ++nSeqIdx )
+            // data series
+            ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
+                DiagramHelper::getDataSeriesFromDiagram( xDia ));
+            for( ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
+                     aSeriesVec.begin(); aIt != aSeriesVec.end(); ++aIt )
             {
-                Reference< beans::XPropertySet > xProp( aDataSeq[nSeqIdx],uno::UNO_QUERY );
-                ::rtl::OUString aRole;
-                if( xProp.is() &&
-                    (xProp->getPropertyValue( C2U( "Role" )) >>= aRole ) &&
-                    aRole.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "y-values" )) )
-                {
-                    Sequence< uno::Any > aData( aDataSeq[nSeqIdx]->getData());
-                    sal_Int32 nMaxData = aData.getLength();
-                    nMaxRow = ::std::max( nMaxRow, nMaxData );
-                    for( sal_Int32 nRow = 0; nRow < nMaxData; ++nRow )
-                    {
-                        Reference< table::XCell > xCell( xDataSheet->getCellByPosition( nCol, nRow ));
-                        OSL_ASSERT( xCell.is());
-                        if( aData[nRow].isExtractableTo( aDoubleType ))
-                        {
-                            bool bCouldExtract = (aData[nRow] >>= fVal);
-                            OSL_ASSERT( bCouldExtract );
-                            xCell->setValue( fVal );
-                        }
-                        else
-                        {
-                            bool bCouldExtract = (aData[nRow] >>= aStrVal);
-                            OSL_ASSERT( bCouldExtract );
-                            xCell->setFormula( aStrVal );
-                        }
-                    }
-                    ++nCol;
-                }
+                Reference< chart2::data::XDataSource > xSource( *aIt, uno::UNO_QUERY_THROW );
+                Sequence< Reference< chart2::data::XLabeledDataSequence > > aDataSeq( xSource->getDataSequences());
+                ::std::copy( aDataSeq.getConstArray(), aDataSeq.getConstArray() + aDataSeq.getLength(),
+                             back_inserter( aResult ));
             }
         }
-
-        // set new data
-        if( nCol > 0 )
+        catch( uno::Exception & ex )
         {
-            Reference< lang::XMultiServiceFactory > xCalcFact( xCalcDoc, uno::UNO_QUERY_THROW );
-            Reference< sheet::XSheetCellRangeContainer > xRangeCnt(
-                xCalcFact->createInstance( C2U( "com.sun.star.sheet.SheetCellRanges" )), uno::UNO_QUERY_THROW );
-            xRangeCnt->addRangeAddress(
-                table::CellRangeAddress( 0, 0, 0, nCol, nMaxRow ), sal_Bool( sal_False ) );
-            ::rtl::OUString aRangeStr( xRangeCnt->getRangeAddressesAsString());
-
-            SetRangeRepresentation( aRangeStr );
+            ASSERT_EXCEPTION( ex );
         }
     }
-    catch( uno::Exception & ex )
+
+    return aResult;
+}
+
+void ImplChartModel::SetNewData( const Reference< chart2::data::XDataSource > & xDataSource,
+                                 const Sequence< beans::PropertyValue > & rArgs )
+{
+    Reference< chart2::XDiagram > xDia;
+    if( m_aDiagrams.size() > 0 )
+        xDia.set( GetDiagram(0));
+    Reference< chart2::XChartTypeTemplate > xTemplate;
+
+    if( xDia.is())
     {
-        ASSERT_EXCEPTION( ex );
+        // apply new data
+        DiagramHelper::tTemplateWithServiceName aTemplateAndService =
+            DiagramHelper::getTemplateForDiagram(
+                xDia, Reference< lang::XMultiServiceFactory >( m_xChartTypeManager, uno::UNO_QUERY ));
+        xTemplate.set( aTemplateAndService.first );
+    }
+
+    if( !xTemplate.is())
+        xTemplate.set( GetChartTypeTemplate());
+
+    if( xTemplate.is())
+    {
+        if( xDia.is())
+            xTemplate->changeDiagramData( xDia, xDataSource, rArgs );
+        else
+        {
+            RemoveAllDiagrams();
+            AppendDiagram( xTemplate->createDiagramByDataSource( xDataSource, rArgs ));
+        }
     }
 }
 
-void ImplChartModel::CreateDefaultData(
-    const uno::Reference< sheet::XSpreadsheetDocument > & xCalcDoc )
+Reference< chart2::data::XDataSource > ImplChartModel::CreateDefaultData()
 {
-    if( ! xCalcDoc.is())
+    Reference< chart2::data::XDataSource > xResult;
+    if( m_spChartData->createDefaultData())
+        xResult.set( SetRangeRepresentation( C2U("all"), false /* bSetData */ ));
+    return xResult;
+}
+
+void ImplChartModel::CreateDefaultChartTypeTemplate()
+{
+    // set default chart type
+    Reference< lang::XMultiServiceFactory > xFact( m_xChartTypeManager, uno::UNO_QUERY );
+    if( xFact.is() )
+    {
+        m_xChartTypeTemplate.set(
+            xFact->createInstance( C2U( "com.sun.star.chart2.template.Column" ) ), uno::UNO_QUERY );
+    }
+}
+
+Reference< uno::XInterface > ImplChartModel::GetDashTable()
+{
+    return Reference< uno::XInterface >( m_xDashTable );
+}
+Reference< uno::XInterface > ImplChartModel::GetGradientTable()
+{
+    return Reference< uno::XInterface >( m_xGradientTable );
+}
+Reference< uno::XInterface > ImplChartModel::GetHatchTable()
+{
+    return Reference< uno::XInterface >( m_xHatchTable );
+}
+Reference< uno::XInterface > ImplChartModel::GetBitmapTable()
+{
+    return Reference< uno::XInterface >( m_xBitmapTable );
+}
+Reference< uno::XInterface > ImplChartModel::GetTransparencyGradientTable()
+{
+    return Reference< uno::XInterface >( m_xTransparencyGradientTable );
+}
+
+void ImplChartModel::SetNumberFormatsSupplier(
+    const Reference< util::XNumberFormatsSupplier > & xNew )
+{
+    if( xNew==m_xNumberFormatsSupplier )
         return;
-
-    const sal_Int32 nNumRows = 4;
-    const sal_Int32 nNumColumns = 3;
-
-    const double fDefaultData[ nNumColumns ][ nNumRows ] =
-        {
-            { 9.10,  2.40,  3.10,  4.30 },
-            { 3.20,  8.80,  1.50,  9.02 },
-            { 4.54,  9.65,  3.70,  6.20 }
-        };
-
-    try
+    if( xNew==m_xOwnNumberFormatsSupplier )
+        return;
+    if( m_xOwnNumberFormatsSupplier.is() && xNew.is() )
     {
-        // insert new sheet
-        Reference< sheet::XSpreadsheets > xSheets( xCalcDoc->getSheets() );
-        xSheets->insertNewByName( C2U( "Chart Data" ), 0 );
-        Reference< sheet::XSpreadsheet > xDataSheet( xSheets->getByName( C2U( "Chart Data" ) ), uno::UNO_QUERY );
-        OSL_ASSERT( xDataSheet.is());
-
-        // delete all except one of the existing sheets
-        Reference< container::XNameAccess > xNameAccess( xSheets, uno::UNO_QUERY_THROW );
-        OSL_ASSERT( xNameAccess.is());
-        Reference< container::XNameContainer > xNameContainer( xNameAccess, uno::UNO_QUERY_THROW );
-        OSL_ASSERT( xNameContainer.is());
-        Sequence< ::rtl::OUString > aNames( xNameAccess->getElementNames());
-        for( sal_Int32 nNameIdx = 1; nNameIdx < aNames.getLength(); ++nNameIdx )
-        {
-            OSL_TRACE( "Removing %s", U2C( aNames[nNameIdx] ));
-            xNameContainer->removeByName( aNames[nNameIdx] );
-        }
-
-        // fill data sheet
-        for( sal_Int32 nCol = 0; nCol < nNumColumns; ++nCol )
-        {
-            for( sal_Int32 nRow = 0; nRow < nNumRows; ++nRow )
-            {
-                Reference< table::XCell > xCell( xDataSheet->getCellByPosition( nCol, nRow ));
-                OSL_ASSERT( xCell.is());
-                xCell->setValue( fDefaultData[ nCol ][ nRow ]  );
-            }
-        }
-
-        Reference< lang::XMultiServiceFactory > xCalcFact( xCalcDoc, uno::UNO_QUERY_THROW );
-        Reference< sheet::XSheetCellRangeContainer > xRangeCnt(
-            xCalcFact->createInstance( C2U( "com.sun.star.sheet.SheetCellRanges" )), uno::UNO_QUERY_THROW );
-        xRangeCnt->addRangeAddress(
-            table::CellRangeAddress( 0, 0, 0, nNumColumns, nNumColumns ), sal_Bool( sal_False ) );
-        ::rtl::OUString aRangeStr( xRangeCnt->getRangeAddressesAsString());
-
-        SetRangeRepresentation( aRangeStr );
+        //@todo
+        //merge missing numberformats from own to new formatter
     }
-    catch( uno::Exception & ex )
+    else if( !xNew.is() )
     {
-        ASSERT_EXCEPTION( ex );
+        if( m_xNumberFormatsSupplier.is() )
+        {
+            //@todo
+            //merge missing numberformats from old numberformatter to own numberformatter
+            //create own numberformatter if necessary
+        }
     }
+
+    m_xNumberFormatsSupplier.set( xNew );
+    m_xOwnNumberFormatsSupplier.clear();
+}
+
+Reference< util::XNumberFormatsSupplier > ImplChartModel::GetNumberFormatsSupplier()
+{
+    if( !m_xNumberFormatsSupplier.is() )
+    {
+        if( !m_xOwnNumberFormatsSupplier.is() )
+        {
+            Reference< lang::XMultiServiceFactory > xFactory( m_xContext->getServiceManager(), uno::UNO_QUERY );
+            m_xOwnNumberFormatsSupplier = new SvNumberFormatsSupplierObj( new SvNumberFormatter( xFactory, LANGUAGE_SYSTEM ) );
+            //pOwnNumberFormatter->ChangeStandardPrec( 15 ); todo?
+        }
+        m_xNumberFormatsSupplier = m_xOwnNumberFormatsSupplier;
+    }
+    return m_xNumberFormatsSupplier;
 }
 
 }  // namespace impl
