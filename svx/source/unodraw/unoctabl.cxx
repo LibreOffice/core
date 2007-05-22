@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoctabl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 16:10:21 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:21:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@
 #include "xtable.hxx"
 #include "unoshcol.hxx"
 #include "recoveryui.hxx"
+#include "xmlgrhlp.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -314,6 +315,8 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
             writeInfo( pKey, svx::GraphicExporter_getImplementationName(), svx::GraphicExporter_getSupportedServiceNames() );
 #endif
             writeInfo( pKey, ::unogallery::GalleryThemeProvider_getImplementationName(),::unogallery::GalleryThemeProvider_getSupportedServiceNames() );
+            writeInfo( pKey, ::svx::SvXMLGraphicImportHelper_getImplementationName(),::svx::SvXMLGraphicImportHelper_getSupportedServiceNames() );
+            writeInfo( pKey, ::svx::SvXMLGraphicExportHelper_getImplementationName(),::svx::SvXMLGraphicExportHelper_getSupportedServiceNames() );
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -376,6 +379,23 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
                 ::unogallery::GalleryThemeProvider_createInstance,
                 ::unogallery::GalleryThemeProvider_getSupportedServiceNames() );
         }
+        else if( ::svx::SvXMLGraphicImportHelper_getImplementationName().equalsAscii( pImplName ) )
+        {
+            xFactory = ::cppu::createSingleFactory(
+                reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+                ::svx::SvXMLGraphicImportHelper_getImplementationName(),
+                ::svx::SvXMLGraphicImportHelper_createInstance,
+                ::svx::SvXMLGraphicImportHelper_getSupportedServiceNames() );
+        }
+        else if( ::svx::SvXMLGraphicExportHelper_getImplementationName().equalsAscii( pImplName ) )
+        {
+            xFactory = ::cppu::createSingleFactory(
+                reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+                ::svx::SvXMLGraphicExportHelper_getImplementationName(),
+                ::svx::SvXMLGraphicExportHelper_createInstance,
+                ::svx::SvXMLGraphicExportHelper_getSupportedServiceNames() );
+        }
+
         if( xFactory.is())
         {
             xFactory->acquire();
