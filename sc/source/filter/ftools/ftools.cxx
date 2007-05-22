@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftools.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:19:08 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:53:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,13 +174,13 @@ String ScfTools::GetHexStr( sal_uInt16 nValue )
     return aStr;
 }
 
-sal_uInt8 ScfTools::GetMixedColorComp( sal_uInt8 nFore, sal_uInt8 nBack, sal_uInt16 nTrans )
+sal_uInt8 ScfTools::GetMixedColorComp( sal_uInt8 nFore, sal_uInt8 nBack, sal_uInt8 nTrans )
 {
-    sal_Int32 nTemp = ((static_cast< sal_Int32 >( nBack ) - nFore) * nTrans) / 0x8000 + nFore;
+    sal_Int32 nTemp = ((static_cast< sal_Int32 >( nBack ) - nFore) * nTrans) / 0x80 + nFore;
     return static_cast< sal_uInt8 >( nTemp );
 }
 
-Color ScfTools::GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt16 nTrans )
+Color ScfTools::GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt8 nTrans )
 {
     return Color(
         GetMixedColorComp( rFore.GetRed(), rBack.GetRed(), nTrans ),
