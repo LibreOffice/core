@@ -1,0 +1,82 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: HighlightedRange.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-05-22 15:07:18 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_data_HighlightedRange_idl
+#define com_sun_star_chart2_data_HighlightedRange_idl
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+module data
+{
+
+/**
+ */
+struct HighlightedRange
+{
+    /** The range representation string of the highlighted range.
+     */
+    string    RangeRepresentation;
+
+    /** Only take the cell at position Index out of the given
+        Range. If this value is -1 take the whole sequence.
+     */
+    long      Index;
+
+    /** Use this color for marking the range.  This color may be
+        ignored and replaced by a better fitting color, if it would be
+        otherwise not well visible.
+     */
+    long      PreferredColor;
+
+    /** If the highlighted range is visually highlighted and this
+        member is </TRUE>, the range given in
+        <member>RangeRepresentation</mamber> may be included in a
+        merged range rectangle spanning a bigger range.
+     */
+    boolean   AllowMerginigWithOtherRanges;
+};
+
+} ; // data
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif
