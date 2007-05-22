@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xetable.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:25:48 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:48:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -445,7 +445,7 @@ XclExpTableopRef XclExpTableopBuffer::CreateOrExtendTableop(
     if( XclTokenArrayHelper::GetMultipleOpRefs( aRefs, rScTokArr ) )
     {
         // try to find an existing TABLEOP record for this cell position
-        for( size_t nPos = 0, nSize = maTableopList.Size(); !xRec && (nPos < nSize); ++nPos )
+        for( size_t nPos = 0, nSize = maTableopList.GetSize(); !xRec && (nPos < nSize); ++nPos )
         {
             XclExpTableopRef xTempRec = maTableopList.GetRecord( nPos );
             if( xTempRec->TryExtend( rScPos, aRefs ) )
@@ -462,7 +462,7 @@ XclExpTableopRef XclExpTableopBuffer::CreateOrExtendTableop(
 
 void XclExpTableopBuffer::Finalize()
 {
-    for( size_t nPos = 0, nSize = maTableopList.Size(); nPos < nSize; ++nPos )
+    for( size_t nPos = 0, nSize = maTableopList.GetSize(); nPos < nSize; ++nPos )
         maTableopList.GetRecord( nPos )->Finalize();
 }
 
@@ -1421,12 +1421,12 @@ void XclExpColinfoBuffer::Initialize( SCROW nLastScRow )
 void XclExpColinfoBuffer::Finalize( ScfUInt16Vec& rXFIndexes )
 {
     rXFIndexes.clear();
-    rXFIndexes.reserve( maColInfos.Size() );
+    rXFIndexes.reserve( maColInfos.GetSize() );
 
     size_t nPos, nSize;
 
     // do not cache the record list size, it may change in the loop
-    for( nPos = 0; nPos < maColInfos.Size(); ++nPos )
+    for( nPos = 0; nPos < maColInfos.GetSize(); ++nPos )
     {
         XclExpColinfoRef xRec = maColInfos.GetRecord( nPos );
         xRec->ConvertXFIndexes();
@@ -1446,7 +1446,7 @@ void XclExpColinfoBuffer::Finalize( ScfUInt16Vec& rXFIndexes )
     XclExpWidthMap aWidthMap;
     sal_uInt16 nMaxColCount = 0;
     sal_uInt16 nMaxUsedWidth = 0;
-    for( nPos = 0, nSize = maColInfos.Size(); nPos < nSize; ++nPos )
+    for( nPos = 0, nSize = maColInfos.GetSize(); nPos < nSize; ++nPos )
     {
         XclExpColinfoRef xRec = maColInfos.GetRecord( nPos );
         sal_uInt16 nColCount = xRec->GetColCount();
@@ -1468,7 +1468,7 @@ void XclExpColinfoBuffer::Finalize( ScfUInt16Vec& rXFIndexes )
 
     // remove all default COLINFO records
     nPos = 0;
-    while( nPos < maColInfos.Size() )
+    while( nPos < maColInfos.GetSize() )
     {
         XclExpColinfoRef xRec = maColInfos.GetRecord( nPos );
         if( xRec->IsDefault( maDefcolwidth ) )
@@ -1583,7 +1583,7 @@ void XclExpRow::AppendCell( XclExpCellRef xCell )
 {
     DBG_ASSERT( !mbAlwaysEmpty, "XclExpRow::AppendCell - row is marked to be always empty" );
     // try to merge with last existing cell
-    InsertCell( xCell, maCellList.Size() );
+    InsertCell( xCell, maCellList.GetSize() );
 }
 
 void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes )
@@ -1597,7 +1597,7 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes )
     DBG_ASSERT( rColXFIndexes.size() == nColCount, "XclExpRow::Finalize - wrong column XF index count" );
 
     ScfUInt16Vec aXFIndexes( nColCount, EXC_XF_NOTFOUND );
-    for( nPos = 0, nSize = maCellList.Size(); nPos < nSize; ++nPos )
+    for( nPos = 0, nSize = maCellList.GetSize(); nPos < nSize; ++nPos )
     {
         XclExpCellRef xCell = maCellList.GetRecord( nPos );
         xCell->ConvertXFIndexes( GetRoot() );
@@ -1616,12 +1616,12 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes )
         aXFId.ConvertXFIndex( GetRoot() );
 
         nPos = 0;
-        while( nPos <= maCellList.Size() )  // don't cache list size, may change in the loop
+        while( nPos <= maCellList.GetSize() )  // don't cache list size, may change in the loop
         {
             // get column index that follows previous cell
             sal_uInt16 nFirstFreeXclCol = (nPos > 0) ? (maCellList.GetRecord( nPos - 1 )->GetLastXclCol() + 1) : 0;
             // get own column index
-            sal_uInt16 nNextUsedXclCol = (nPos < maCellList.Size()) ? maCellList.GetRecord( nPos )->GetXclCol() : (GetMaxPos().Col() + 1);
+            sal_uInt16 nNextUsedXclCol = (nPos < maCellList.GetSize()) ? maCellList.GetRecord( nPos )->GetXclCol() : (GetMaxPos().Col() + 1);
 
             // is there a gap?
             if( nFirstFreeXclCol < nNextUsedXclCol )
@@ -1710,7 +1710,7 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes )
 
     // remove unused parts of BLANK/MULBLANK cell records
     nPos = 0;
-    while( nPos < maCellList.Size() )   // do not cache list size, may change in the loop
+    while( nPos < maCellList.GetSize() )   // do not cache list size, may change in the loop
     {
         XclExpCellRef xCell = maCellList.GetRecord( nPos );
         xCell->RemoveUnusedBlankCells( aXFIndexes );
@@ -1726,12 +1726,12 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes )
 
 sal_uInt16 XclExpRow::GetFirstUsedXclCol() const
 {
-    return maCellList.Empty() ? 0 : maCellList.GetFirstRecord()->GetXclCol();
+    return maCellList.IsEmpty() ? 0 : maCellList.GetFirstRecord()->GetXclCol();
 }
 
 sal_uInt16 XclExpRow::GetFirstFreeXclCol() const
 {
-    return maCellList.Empty() ? 0 : (maCellList.GetLastRecord()->GetLastXclCol() + 1);
+    return maCellList.IsEmpty() ? 0 : (maCellList.GetLastRecord()->GetLastXclCol() + 1);
 }
 
 bool XclExpRow::IsDefaultable() const
@@ -1750,7 +1750,7 @@ void XclExpRow::DisableIfDefault( const XclExpDefaultRowData& rDefRowData )
 
 void XclExpRow::WriteCellList( XclExpStream& rStrm )
 {
-    DBG_ASSERT( mbEnabled || maCellList.Empty(), "XclExpRow::WriteCellList - cells in disabled row" );
+    DBG_ASSERT( mbEnabled || maCellList.IsEmpty(), "XclExpRow::WriteCellList - cells in disabled row" );
     maCellList.Save( rStrm );
 }
 
@@ -1827,7 +1827,7 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     GetProgressBar().ActivateFinalRowsSegment();
 
     // unused blank cell records will be removed
-    for( nPos = 0, nSize = maRowList.Size(); nPos < nSize; ++nPos )
+    for( nPos = 0, nSize = maRowList.GetSize(); nPos < nSize; ++nPos )
         maRowList.GetRecord( nPos )->Finalize( rColXFIndexes );
 
     // *** Default row format *** ---------------------------------------------
@@ -1836,7 +1836,7 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     XclExpDefRowDataMap aDefRowMap;
 
     // find default row format for rows beyond used area
-    sal_uInt32 nDefaultXclRow = maRowList.Empty() ? 0 : (maRowList.GetLastRecord()->GetXclRow() + 1);
+    sal_uInt32 nDefaultXclRow = maRowList.IsEmpty() ? 0 : (maRowList.GetLastRecord()->GetXclRow() + 1);
     XclExpDefaultRowData aMaxDefData;
     size_t nMaxDefCount = 0;
     /*  #i30411# Files saved with SO7/OOo1.x with nonstandard default column
@@ -1859,7 +1859,7 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     }
 
     // only look for default format in existing rows, if there are more than unused
-    nSize = maRowList.Size();
+    nSize = maRowList.GetSize();
     if( nMaxDefCount < nSize )
     {
         for( nPos = 0; nPos < nSize; ++nPos )
@@ -1891,7 +1891,7 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     sal_uInt32 nFirstUsedXclRow = SAL_MAX_UINT32;
     sal_uInt32 nFirstFreeXclRow = 0;
 
-    for( nPos = 0, nSize = maRowList.Size(); nPos < nSize; ++nPos )
+    for( nPos = 0, nSize = maRowList.GetSize(); nPos < nSize; ++nPos )
     {
         XclExpRowRef xRow = maRowList.GetRecord( nPos );
 
@@ -1929,7 +1929,7 @@ void XclExpRowBuffer::Save( XclExpStream& rStrm )
     maDimensions.Save( rStrm );
 
     // save in blocks of 32 rows, each block contains first all ROWs, then all cells
-    size_t nSize = maRowList.Size();
+    size_t nSize = maRowList.GetSize();
     size_t nBlockStart = 0;
     sal_uInt16 nStartXclRow = (nSize == 0) ? 0 : maRowList.GetRecord( 0 )->GetXclRow();
 
@@ -1960,7 +1960,7 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt16 nXclRow, bool bRowAlwaysE
     {
         // fill up missing ROW records
         // do not use sal_uInt16 for nFirstFreeXclRow, would cause loop in full sheets
-        for( size_t nFirstFreeXclRow = maRowList.Size(); nFirstFreeXclRow <= nXclRow; ++nFirstFreeXclRow )
+        for( size_t nFirstFreeXclRow = maRowList.GetSize(); nFirstFreeXclRow <= nXclRow; ++nFirstFreeXclRow )
             maRowList.AppendNewRecord( new XclExpRow(
                 GetRoot(), static_cast< sal_uInt16 >( nFirstFreeXclRow ), maOutlineBfr, bRowAlwaysEmpty ) );
 
