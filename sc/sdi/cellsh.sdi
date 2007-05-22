@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh.sdi,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 15:28:14 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:40:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@ interface CellSelection
     SID_SPECIAL_FILTER          [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_DEFINE_DBNAME           [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_OPENDLG_CONSOLIDATE     [ ExecMethod = Execute; StateMethod = GetState; ]
-    SID_OPENDLG_CHART           [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_VIEW_DATA_SOURCE_BROWSER [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_OPENDLG_FUNCTION        [ ExecMethod = Execute; StateMethod = GetCellState; ]
     SID_INS_FUNCTION            [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
