@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xepage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:20:47 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 19:47:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ void XclExpSetup::WriteBody( XclExpStream& rStrm )
         /*  Set the Comments/Notes to "At end of sheet" if Print Notes is true.
             We don't currently support "as displayed on sheet". Thus this value
             will be re-interpreted to "At end of sheet". */
-        sal_uInt16 nNotes = EXC_SETUP_PRINTNOTES | EXC_SETUP_NOTES_END;
+        const sal_uInt16 nNotes = EXC_SETUP_PRINTNOTES | EXC_SETUP_NOTES_END;
         ::set_flag( nFlags, nNotes,                 mrData.mbPrintNotes );
         ::set_flag( nFlags, EXC_SETUP_STARTPAGE,    mrData.mbManualStart );
     }
@@ -366,6 +366,23 @@ void XclExpPageSettings::Save( XclExpStream& rStrm )
     if( (GetBiff() == EXC_BIFF8) && maData.mxBrushItem.get() )
         if( const Graphic* pGraphic = maData.mxBrushItem->GetGraphic() )
             XclExpBitmap( *pGraphic ).Save( rStrm );
+}
+
+// ----------------------------------------------------------------------------
+
+XclExpChartPageSettings::XclExpChartPageSettings( const XclExpRoot& rRoot ) :
+    XclExpRoot( rRoot )
+{
+}
+
+void XclExpChartPageSettings::Save( XclExpStream& rStrm )
+{
+    XclExpHeaderFooter( EXC_ID_HEADER, maData.maHeader ).Save( rStrm );
+    XclExpHeaderFooter( EXC_ID_FOOTER, maData.maFooter ).Save( rStrm );
+    XclExpBoolRecord( EXC_ID_HCENTER, maData.mbHorCenter ).Save( rStrm );
+    XclExpBoolRecord( EXC_ID_VCENTER, maData.mbVerCenter ).Save( rStrm );
+    XclExpSetup( maData ).Save( rStrm );
+    XclExpUInt16Record( EXC_ID_PRINTSIZE, EXC_PRINTSIZE_FULL ).Save( rStrm );
 }
 
 // ============================================================================
