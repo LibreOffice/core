@@ -4,9 +4,9 @@
  *
  *  $RCSfile: feflyole.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:08:06 $
+ *  last change: $Author: vg $ $Date: 2007-05-22 16:27:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,12 +48,6 @@
 #endif
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
-#endif
-#ifndef _SCH_DLL_HXX
-#include <sch/schdll.hxx>
-#endif
-#ifndef _SCH_MEMCHRT_HXX
-#include <sch/memchrt.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
@@ -182,25 +176,6 @@ BOOL SwFEShell::FinishOLEObj()                      // Server wird beendet
         uno::Reference < embed::XEmbeddedObject > xObj = pIPClient->GetObject();
         if( CNT_OLE == GetCntType() )
             ClearAutomaticContour();
-
-        //  Link fuer Daten-Highlighting im Chart zuruecksetzen
-        SvtModuleOptions aMOpt;
-        if( aMOpt.IsChart() )
-        {
-            uno::Reference < embed::XClassifiedObject > xClass( xObj, uno::UNO_QUERY );
-            SvGlobalName aObjClsId( xClass->getClassID() );
-            SchMemChart* pMemChart;
-            if( SotExchange::IsChart( aObjClsId ) &&
-                0 != (pMemChart = SchDLL::GetChartData( xObj ) ))
-            {
-                pMemChart->SetSelectionHdl( Link() );
-
-//ggfs. auch die Selektion restaurieren
-                LockView( TRUE );   //Scrollen im EndAction verhindern
-                ClearMark();
-                LockView( FALSE );
-            }
-        }
 
         if( ((SwOleClient*)pIPClient)->IsCheckForOLEInCaption() !=
             IsCheckForOLEInCaption() )
