@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-22 19:40:48 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-05-23 15:37:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -439,9 +439,11 @@ public:
     <xsl:text>
     virtual OOXMLContext::Pointer_t element(TokenEnum_t nToken);
     virtual OOXMLContext::Pointer_t elementFromRefs(TokenEnum_t nToken);
-    virtual bool attribute(TokenEnum_t nToken, const rtl::OUString &amp; rValue);    virtual doctok::Id getId(TokenEnum_t nToken);
+    virtual bool lcl_attribute(TokenEnum_t nToken, 
+                               const rtl::OUString &amp; rValue);
+    virtual doctok::Id getId(TokenEnum_t nToken);
     virtual doctok::Id getIdFromRefs(TokenEnum_t nToken);
-    virtual void  characters(const rtl::OUString &amp; str); 
+    virtual void lcl_characters(const rtl::OUString &amp; str); 
 
     virtual string getType() const { return "</xsl:text>
     <xsl:value-of select="$classname"/>
@@ -589,7 +591,7 @@ OOXMLContext::Pointer_t </xsl:text>
     <xsl:text>
 void </xsl:text>
     <xsl:value-of select="$classname"/>
-    <xsl:text>::characters(const rtl::OUString &amp; sText) 
+    <xsl:text>::lcl_characters(const rtl::OUString &amp; sText) 
 {
 </xsl:text>
     <xsl:choose>
@@ -601,7 +603,7 @@ void </xsl:text>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="contextparent"/>
-        <xsl:text>::characters(sText);</xsl:text>
+        <xsl:text>::lcl_characters(sText);</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
     <xsl:text>
@@ -809,6 +811,20 @@ doctok::Id
         break;</xsl:text>
   </xsl:template>
 
+  <xsl:template name="contextattributeimplxnote">
+    <xsl:variable name="mynsid" select="generate-id(ancestor::namespace)"/>
+    <xsl:variable name="definename" select="ancestor::rng:define/@name"/>
+    <xsl:variable name="resource" select="key('context-resource', $definename)[generate-id(ancestor::namespace)=$mynsid]"/>
+    <xsl:variable name="name" select="@name"/>
+    <xsl:call-template name="caselabelattribute"/>
+    <xsl:if test="$resource//attribute[@name=$name]">
+      <xsl:text>
+        checkId(rValue);</xsl:text>
+    </xsl:if>
+    <xsl:text>
+        break;</xsl:text>
+  </xsl:template>
+
   <xsl:template name="contextattributeimplhex">
     <xsl:call-template name="caselabelattribute"/>
     <xsl:text>
@@ -921,6 +937,9 @@ doctok::Id
           <xsl:when test="$resource = 'SingleElement'">
             <xsl:call-template name="contextattributeimplprops"/>
           </xsl:when>
+          <xsl:when test="$resource = 'XNote'">
+            <xsl:call-template name="contextattributeimplxnote"/>
+          </xsl:when>
           <xsl:otherwise/>
         </xsl:choose>
       </xsl:for-each>
@@ -930,10 +949,10 @@ bool </xsl:text>
     <xsl:value-of select="$classname"/>
     <xsl:choose>
       <xsl:when test="string-length($switchbody) > 0">
-    <xsl:text>::attribute(TokenEnum_t nToken, const rtl::OUString &amp; rValue)</xsl:text>
+    <xsl:text>::lcl_attribute(TokenEnum_t nToken, const rtl::OUString &amp; rValue)</xsl:text>
     </xsl:when>
     <xsl:otherwise>
-    <xsl:text>::attribute(TokenEnum_t /*nToken*/, const rtl::OUString &amp; /*rValue*/)</xsl:text>
+    <xsl:text>::lcl_attribute(TokenEnum_t /*nToken*/, const rtl::OUString &amp; /*rValue*/)</xsl:text>
     </xsl:otherwise>
     </xsl:choose>
     <xsl:text>
@@ -945,10 +964,8 @@ bool </xsl:text>
     {</xsl:text>
     <xsl:value-of select="$switchbody"/>
     <xsl:text>
-    case OOXML_TOKENS_END: // prevent warning
-      break;
     default:
-      break;
+      ;
     }</xsl:text>
     </xsl:if>
     <xsl:text>
@@ -1049,9 +1066,35 @@ bool </xsl:text>
 {</xsl:text>
     <xsl:for-each select="$resource/action[@name='end']">
       <xsl:choose>
+        <xsl:when test="@action='ftnednref'">
+          <xsl:text>
+    if (isForwardEvents())        
+        mrStream.utext(sFtnEdnRef, 1);</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='ftnednsep'">
+          <xsl:text>
+    if (isForwardEvents())        
+        mrStream.utext(sFtnEdnSep, 1);</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='ftnedncont'">
+          <xsl:text>
+    if (isForwardEvents())        
+        mrStream.utext(sFtnEdnCont, 1);</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='pgNum'">
+          <xsl:text>
+    if (isForwardEvents())        
+        mrStream.utext(sPgNum, 1);</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='tab'">
+          <xsl:text>
+    if (isForwardEvents())        
+        mrStream.utext(sTab, 1);</xsl:text>
+        </xsl:when>
         <xsl:when test="@action='endOfParagraph'">
           <xsl:text>
-    mrStream.utext(reinterpret_cast&lt;const sal_uInt8 *&gt;(sCR.getStr()), sCR.getLength());</xsl:text>
+    if (isForwardEvents())        
+        mrStream.utext(sCR, 1);</xsl:text>
         </xsl:when>
         <xsl:when test="@action='setLastParagraphInSection'">
       <xsl:text>
