@@ -9219,6 +9219,24 @@
           <attribute name="xml:space"/>
         </optional>
       </define>
+      <define name="CT_FtnEdnRefChar">
+        <empty/>
+      </define>
+      <define name="CT_FtnEdnSep">
+        <empty/>
+      </define>
+      <define name="CT_FtnEdnCont">
+        <empty/>
+      </define>
+      <define name="CT_PgNum">
+        <empty/>
+      </define>
+      <define name="CT_Cr">
+        <empty/>
+      </define>
+      <define name="CT_Tab">
+        <empty/>
+      </define>
       <define name="EG_RunInnerContent">
         <choice>
           <element name="br">
@@ -9281,22 +9299,22 @@
           </optional>
           <optional>
             <element name="footnoteRef">
-              <ref name="CT_Empty"/>
+              <ref name="CT_FtnEdnRefChar"/>
             </element>
           </optional>
           <optional>
             <element name="endnoteRef">
-              <ref name="CT_Empty"/>
+              <ref name="CT_FtnEdnRefChar"/>
             </element>
           </optional>
           <optional>
             <element name="separator">
-              <ref name="CT_Empty"/>
+              <ref name="CT_FtnEdnSep"/>
             </element>
           </optional>
           <optional>
             <element name="continuationSeparator">
-              <ref name="CT_Empty"/>
+              <ref name="CT_FtnEdnCont"/>
             </element>
           </optional>
           <optional>
@@ -9306,17 +9324,17 @@
           </optional>
           <optional>
             <element name="pgNum">
-              <ref name="CT_Empty"/>
+              <ref name="CT_PgNum"/>
             </element>
           </optional>
           <optional>
             <element name="cr">
-              <ref name="CT_Empty"/>
+              <ref name="CT_Cr"/>
             </element>
           </optional>
           <optional>
             <element name="tab">
-              <ref name="CT_Empty"/>
+              <ref name="CT_Tab"/>
             </element>
           </optional>
           <element name="object">
@@ -14840,6 +14858,24 @@
     <resource name="CT_Text" resource="Stream">
       <action name="characters" action="text"/>
     </resource>
+    <resource name="CT_FtnEdnRefChar" resource="Stream">
+      <action name="end" action="ftnednref"/>
+    </resource>
+    <resource name="CT_FtnEdnSep" resource="Stream">
+      <action name="end" action="ftnednsep"/>
+    </resource>
+    <resource name="CT_FtnEdnCont" resource="Stream">
+      <action name="end" action="ftnedncont"/>
+    </resource>
+    <resource name="CT_PgNum" resource="Stream">
+      <action name="end" action="pgNum"/>
+    </resource>
+    <resource name="CT_Cr" resource="Stream">
+      <action name="end" action="endOfParagraph"/>
+    </resource>
+    <resource name="CT_Tab" resource="Stream">
+      <action name="end" action="tab"/>
+    </resource>
     <resource name="EG_RunInnerContent" resource="Stream">
     </resource>
     <resource name="CT_R" resource="Stream">
@@ -14927,6 +14963,7 @@
     <resource name="CT_P" resource="Stream">
       <action name="start" action="startParagraphGroup"/>
       <action name="start" action="sendTableDepth"/>
+      <action name="end" action="endOfCharacterGroup"/>
       <action name="end" action="endOfParagraph"/>
     </resource>
     <resource name="ST_TblWidth" resource="List">
@@ -15077,7 +15114,9 @@
       <attribute name="id" tokenid="ooxml:CT_FtnEdnRef_id"/>
       <action name="end" action="handleXNotes"/>
     </resource>
-    <resource name="CT_FtnEdn" resource="XNote"/>
+    <resource name="CT_FtnEdn" resource="XNote">
+      <attribute name="id"/>
+    </resource>
     <resource name="EG_FtnEdnNumProps" resource="Properties">
       <attribute name="numStart" tokenid="ooxml:EG_FtnEdnNumProps_numStart"/>
       <attribute name="numRestart" tokenid="ooxml:EG_FtnEdnNumProps_numRestart"/>
