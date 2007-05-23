@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xldumper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:28:41 $
+ *  last change: $Author: rt $ $Date: 2007-05-23 15:57:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1647,7 +1647,7 @@ void RecordStreamObject::Construct( const OleStorageObject& rParentStrg, const S
 
 bool RecordStreamObject::ImplIsValid() const
 {
-    return IsValid( mxHdrObj ) && IsValid( mxFmlaObj ) && IsValid( mxDffObj ) && RootObjectBase::ImplIsValid();
+    return IsValid( mxHdrObj ) && IsValid( mxFmlaObj ) &&  IsValid( mxDffObj ) && RootObjectBase::ImplIsValid();
 }
 
 void RecordStreamObject::ImplDumpBody()
@@ -2496,7 +2496,7 @@ void WorkbookStreamObject::DumpFontRec()
     aFontData.mnWeight = ::get_flagvalue( nFlags, EXC_FONTATTR_BOLD, EXC_FONTWGHT_BOLD, EXC_FONTWGHT_NORMAL );
     aFontData.mnUnderline = ::get_flagvalue( nFlags, EXC_FONTATTR_UNDERLINE, EXC_FONTUNDERL_SINGLE, EXC_FONTUNDERL_NONE );
     if( GetBiff() >= EXC_BIFF3 )
-        aFontData.mnColor = DumpColorIdx< sal_uInt16 >();
+        DumpColorIdx< sal_uInt16 >();
     if( GetBiff() >= EXC_BIFF5 )
     {
         aFontData.mnWeight = DumpDec< sal_uInt16 >( "weight", "FONT-WEIGHT" );

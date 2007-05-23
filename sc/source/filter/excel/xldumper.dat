@@ -477,8 +477,8 @@ begin
   0x01B0=CONDFMT,CF,DVAL,,,DCONBIN,TXO,REFRESHALL
   0x01B8=HLINK,NLRDELNAME,CODENAME,SXFDBTYPE,PROT4REVPASS,,DV,
   0x0800=SCREENTIP,,,WEBQRYSETTINGS,WEBQRYTABLES,,,
- 	0x0850=,CHWRAPPEDRECORD,,,,,,CHUNITPROPERTIES
-	0x0858=CHPIVOTREF,,,,,,,
+  0x0850=,CHWRAPPEDRECORD,,,,,,CHUNITPROPERTIES
+  0x0858=CHPIVOTREF,,,,,,,
   0x0860=,,SHEETLAYOUT,,,,,SHEETPROTECTION
   # chart records
   0x1058=,,,,,,,CH3DDATAFORMAT
@@ -553,7 +553,7 @@ end
 constlist=SIMPLE-RECORDS-BIFF5
 begin
   include=SIMPLE-RECORDS-BIFF4
-  0x00C9=double,dec,value
+	0x00C9=double,dec,value
   0x00CA=uint16,bool,value
   0x00CB=uint16,hex,error-code,ERRORCODES
   0x00CC=int16,dec,value
@@ -561,7 +561,7 @@ begin
   0x00D8=uint16,hex,flags,SXNUMGROUP-FLAGS
   0x00DA=uint16,bool,strip-cached-values
   0x00DD=uint16,bool,scenarios-protected
-  0x00E3=uint16,dec,source-type,SXVS-TYPE
+	0x00E3=uint16,dec,source-type,SXVS-TYPE
   0x1040=uint16,hex,flags,CHRADAR-FLAGS
   0x105D=uint16,hex,flags,CHSERIESFORMAT-FLAGS
 end

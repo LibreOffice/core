@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistring.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-27 09:46:25 $
+ *  last change: $Author: rt $ $Date: 2007-05-23 15:56:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 // Byte/Unicode strings =======================================================
 
 /** All allowed flags for import. */
-const XclStrFlags nAllowedFlags = EXC_STR_8BITLENGTH | EXC_STR_SMARTFLAGS | EXC_STR_KEEPFORMATS;
+const XclStrFlags nAllowedFlags = EXC_STR_8BITLENGTH | EXC_STR_SMARTFLAGS | EXC_STR_SEPARATEFORMATS;
 
 // ----------------------------------------------------------------------------
 
@@ -71,7 +71,7 @@ XclImpString::~XclImpString()
 
 void XclImpString::Read( XclImpStream& rStrm, XclStrFlags nFlags )
 {
-    if( !::get_flag( nFlags, EXC_STR_KEEPFORMATS ) )
+    if( !::get_flag( nFlags, EXC_STR_SEPARATEFORMATS ) )
         maFormats.clear();
 
     DBG_ASSERT( (nFlags & ~nAllowedFlags) == 0, "XclImpString::Read - unknown flag" );
@@ -118,52 +118,46 @@ void XclImpString::Read( XclImpStream& rStrm, XclStrFlags nFlags )
     }
 }
 
-void XclImpString::AppendFormat( sal_uInt16 nChar, sal_uInt16 nFontIdx )
+void XclImpString::AppendFormat( XclFormatRunVec& rFormats, sal_uInt16 nChar, sal_uInt16 nFontIdx )
 {
     // #i33341# real life -- same character index may occur several times
-    DBG_ASSERT( maFormats.empty() || (maFormats.back().mnChar <= nChar), "XclImpString::AppendFormat - wrong char order" );
-    if( maFormats.empty() || (maFormats.back().mnChar < nChar) )
-        maFormats.push_back( XclFormatRun( nChar, nFontIdx ) );
+    DBG_ASSERT( rFormats.empty() || (rFormats.back().mnChar <= nChar), "XclImpString::AppendFormat - wrong char order" );
+    if( rFormats.empty() || (rFormats.back().mnChar < nChar) )
+        rFormats.push_back( XclFormatRun( nChar, nFontIdx ) );
     else
-        maFormats.back().mnFontIdx = nFontIdx;
+        rFormats.back().mnFontIdx = nFontIdx;
 }
 
-void XclImpString::ReadFormats( XclImpStream& rStrm )
+void XclImpString::ReadFormats( XclImpStream& rStrm, XclFormatRunVec& rFormats )
 {
     bool bBiff8 = rStrm.GetRoot().GetBiff() == EXC_BIFF8;
-    sal_uInt16 nCount = bBiff8 ? rStrm.ReaduInt16() : rStrm.ReaduInt8();
-    ReadFormats( rStrm, nCount );
+    sal_uInt16 nRunCount = bBiff8 ? rStrm.ReaduInt16() : rStrm.ReaduInt8();
+    ReadFormats( rStrm, rFormats, nRunCount );
 }
 
-void XclImpString::ReadFormats( XclImpStream& rStrm, sal_uInt16 nRunCount )
+void XclImpString::ReadFormats( XclImpStream& rStrm, XclFormatRunVec& rFormats, sal_uInt16 nRunCount )
 {
-    maFormats.clear();
-    maFormats.reserve( nRunCount );
+    rFormats.clear();
+    rFormats.reserve( nRunCount );
     /*  #i33341# real life -- same character index may occur several times
         -> use AppendFormat() to validate formats */
-    switch( rStrm.GetRoot().GetBiff() )
+    if( rStrm.GetRoot().GetBiff() == EXC_BIFF8 )
     {
-        case EXC_BIFF2:
-        case EXC_BIFF3:
-        case EXC_BIFF4:
-        case EXC_BIFF5:
-            for( sal_uInt16 nIdx = 0; nIdx < nRunCount; ++nIdx )
-            {
-                sal_uInt8 nChar, nFontIdx;
-                rStrm >> nChar >> nFontIdx;
-                AppendFormat( nChar, nFontIdx );
-            }
-        break;
-        case EXC_BIFF8:
-            for( sal_uInt16 nIdx = 0; nIdx < nRunCount; ++nIdx )
-            {
-                sal_uInt16 nChar, nFontIdx;
-                rStrm >> nChar >> nFontIdx;
-                AppendFormat( nChar, nFontIdx );
-            }
-        break;
-        default:
-            DBG_ERROR_BIFF();
+        for( sal_uInt16 nIdx = 0; nIdx < nRunCount; ++nIdx )
+        {
+            sal_uInt16 nChar, nFontIdx;
+            rStrm >> nChar >> nFontIdx;
+            AppendFormat( rFormats, nChar, nFontIdx );
+        }
+    }
+    else
+    {
+        for( sal_uInt16 nIdx = 0; nIdx < nRunCount; ++nIdx )
+        {
+            sal_uInt8 nChar, nFontIdx;
+            rStrm >> nChar >> nFontIdx;
+            AppendFormat( rFormats, nChar, nFontIdx );
+        }
     }
 }
 
