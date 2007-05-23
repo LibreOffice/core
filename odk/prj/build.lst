@@ -1,4 +1,4 @@
-od	odk	::	cppuhelper cpputools io jurt jut javaunohelper sandbox remotebridges stoc udkapi ridljar offapi unoil autodoc unodevtools external SUN:officenames NULL
+od	odk	::	cppuhelper cpputools io jurt jut javaunohelper sandbox remotebridges stoc udkapi ridljar offapi unoil autodoc unodevtools external SUN:officenames cli_ure NULL
 od	odk					usr1	-	all	od_mkout NULL
 od	odk\inc				nmake	-	all	od_inc NULL
 od	odk\source\com\sun\star\lib\loader	nmake	-	all	od_loader od_inc NULL
