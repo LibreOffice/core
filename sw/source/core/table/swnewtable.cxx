@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swnewtable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:10:16 $
+ *  last change: $Author: rt $ $Date: 2007-05-23 14:34:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -679,7 +679,7 @@ BOOL SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     _FndBox aFndBox( 0, 0 );
     aFndBox.SetTableLines( rBoxes, *this );
     aFndBox.DelFrms( *this );
-    aFndBox.SaveChartData( *this );
+//  aFndBox.SaveChartData( *this );
 
     nNew = nOld - nAddWidth;
     nAddWidth /= nCnt;
@@ -764,7 +764,7 @@ BOOL SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     }
 
     aFndBox.MakeFrms( *this );
-    aFndBox.RestoreChartData( *this );
+//  aFndBox.RestoreChartData( *this );
 #ifndef PRODUCT
     {
         const SwTableBoxes &rTabBoxes = aLines[0]->GetTabBoxes();
@@ -1357,7 +1357,7 @@ BOOL SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt,
     _FndBox aFndBox( 0, 0 );
     aFndBox.SetTableLines( rBoxes, *this );
     aFndBox.DelFrms( *this );
-    aFndBox.SaveChartData( *this );
+//  aFndBox.SaveChartData( *this );
 
     if( bSameHeight && pDoc->GetRootFrm() )
     {
@@ -1425,7 +1425,7 @@ BOOL SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt,
     CHECK_TABLE( *this )
     //Layout updaten
     aFndBox.MakeFrms( *this );
-    aFndBox.RestoreChartData( *this );
+//  aFndBox.RestoreChartData( *this );
 
     return TRUE;
 }
@@ -1443,7 +1443,7 @@ BOOL SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
             _FndBox aFndBox( 0, 0 );
             aFndBox.SetTableLines( rBoxes, *this );
             aFndBox.DelFrms( *this );
-            aFndBox.SaveChartData( *this );
+//             aFndBox.SaveChartData( *this );
 
             bRet = true;
             SwTableLine *pLine = GetTabLines()[ nRowIdx ];
@@ -1481,7 +1481,7 @@ BOOL SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                 lcl_ChangeRowSpan( *this, nCnt, --nRowIdx, true );
             //Layout update
             aFndBox.MakeFrms( *this );
-            aFndBox.RestoreChartData( *this );
+//             aFndBox.RestoreChartData( *this );
         }
         CHECK_TABLE( *this )
     }
