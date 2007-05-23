@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocumentImpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-22 19:40:47 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-05-23 15:32:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,12 +116,12 @@ OOXMLDocumentImpl::getSubStream(const rtl::OUString & rId)
 }
 
 doctok::Reference<Stream>::Pointer_t
-OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const rtl::OUString & /* rId */)
+OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const rtl::OUString & rId)
 {
     OOXMLStream::Pointer_t pStream =
         (OOXMLDocumentFactory::createStream(mpStream, nType));
     OOXMLDocumentImpl * pDocument = new OOXMLDocumentImpl(pStream);
-    pDocument->setXNoteId(msXNoteId);
+    pDocument->setXNoteId(rId);
 
     return doctok::Reference<Stream>::Pointer_t(pDocument);
 }
@@ -132,7 +132,6 @@ void OOXMLDocumentImpl::resolveFootnote(Stream & rStream,
     doctok::Reference<Stream>::Pointer_t pStream =
         getXNoteStream(OOXMLStream::FOOTNOTES, rNoteId);
 
-
     rStream.substream(NS_rtf::LN_footnote, pStream);
 }
 
@@ -141,7 +140,6 @@ void OOXMLDocumentImpl::resolveEndnote(Stream & rStream,
 {
     doctok::Reference<Stream>::Pointer_t pStream =
         getXNoteStream(OOXMLStream::ENDNOTES, rNoteId);
-
 
     rStream.substream(NS_rtf::LN_endnote, pStream);
 }
@@ -193,33 +191,31 @@ void OOXMLDocumentImpl::resolveFooter(Stream & rStream,
 
 void OOXMLDocumentImpl::resolve(Stream & rStream)
 {
+    uno::Reference < xml::sax::XParser > oSaxParser = mpStream->getParser();
+
+    if (oSaxParser.is())
     {
-        uno::Reference < xml::sax::XParser > oSaxParser = mpStream->getParser();
+        OOXMLSaxHandler * pSaxHandler = new OOXMLSaxHandler(rStream, this);
+        pSaxHandler->setXNoteId(msXNoteId);
 
-        if (oSaxParser.is())
-        {
-            OOXMLSaxHandler * pSaxHandler = new OOXMLSaxHandler(rStream, this);
-            pSaxHandler->setXNoteId(msXNoteId);
+        uno::Reference<xml::sax::XDocumentHandler>
+            xDocumentHandler
+            (static_cast<cppu::OWeakObject *>
+             (pSaxHandler), uno::UNO_QUERY);
+        oSaxParser->setDocumentHandler( xDocumentHandler );
 
-            uno::Reference<xml::sax::XDocumentHandler>
-                xDocumentHandler
-                (static_cast<cppu::OWeakObject *>
-                 (pSaxHandler), uno::UNO_QUERY);
-            oSaxParser->setDocumentHandler( xDocumentHandler );
+        resolveSubStream(rStream, OOXMLStream::NUMBERING);
+        resolveSubStream(rStream, OOXMLStream::FONTTABLE);
+        resolveSubStream(rStream, OOXMLStream::STYLES);
 
-            resolveSubStream(rStream, OOXMLStream::NUMBERING);
-            resolveSubStream(rStream, OOXMLStream::FONTTABLE);
-            resolveSubStream(rStream, OOXMLStream::STYLES);
+        uno::Reference<io::XInputStream> xInputStream
+            (mpStream->getInputStream());
 
-            uno::Reference<io::XInputStream> xInputStream
-                (mpStream->getInputStream());
+        struct xml::sax::InputSource oInputSource;
+        oInputSource.aInputStream = xInputStream;
+        oSaxParser->parseStream(oInputSource);
 
-            struct xml::sax::InputSource oInputSource;
-            oInputSource.aInputStream = xInputStream;
-            oSaxParser->parseStream(oInputSource);
-
-            xInputStream->closeInput();
-        }
+        xInputStream->closeInput();
     }
 }
 
