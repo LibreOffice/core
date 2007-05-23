@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistring.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:01:08 $
+ *  last change: $Author: rt $ $Date: 2007-05-23 15:21:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,12 +58,16 @@ public:
     /** Reads a complete string from the passed stream. */
     void                Read( XclImpStream& rStrm, XclStrFlags nFlags = EXC_STR_DEFAULT );
 
+    /** Sets the passed string data. */
+    inline void         SetText( const String& rText ) { maString = rText; }
+    /** Sets the passed formatting buffer. */
+    inline void         SetFormats( const XclFormatRunVec& rFormats ) { maFormats = rFormats; }
     /** Insert a formatting run to the format buffer. */
-    void                AppendFormat( sal_uInt16 nChar, sal_uInt16 nFontIdx );
+    inline void         AppendFormat( sal_uInt16 nChar, sal_uInt16 nFontIdx ) { AppendFormat( maFormats, nChar, nFontIdx ); }
     /** Reads and appends the formatting information (run count and runs) from stream. */
-    void                ReadFormats( XclImpStream& rStrm );
+    inline void         ReadFormats( XclImpStream& rStrm ) { ReadFormats( rStrm, maFormats ); }
     /** Reads and appends nRunCount formatting runs from stream. */
-    void                ReadFormats( XclImpStream& rStrm, sal_uInt16 nRunCount );
+    inline void         ReadFormats( XclImpStream& rStrm, sal_uInt16 nRunCount ) { ReadFormats( rStrm, maFormats, nRunCount ); }
 
     /** Returns true, if the string is empty. */
     inline bool         IsEmpty() const { return maString.Len() == 0; }
@@ -74,6 +78,13 @@ public:
     inline bool         IsRich() const { return !maFormats.empty(); }
     /** Returns the formatting run vector. */
     inline const XclFormatRunVec& GetFormats() const { return maFormats; }
+
+    /** Insert a formatting run to the passed format buffer. */
+    static void         AppendFormat( XclFormatRunVec& rFormats, sal_uInt16 nChar, sal_uInt16 nFontIdx );
+    /** Reads and appends the formatting information (run count and runs) from stream. */
+    static void         ReadFormats( XclImpStream& rStrm, XclFormatRunVec& rFormats );
+    /** Reads and appends nRunCount formatting runs from stream. */
+    static void         ReadFormats( XclImpStream& rStrm, XclFormatRunVec& rFormats, sal_uInt16 nRunCount );
 
 private:
     String              maString;       /// The text data of the string.
