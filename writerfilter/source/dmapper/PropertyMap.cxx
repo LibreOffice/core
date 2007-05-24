@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2007-05-03 06:25:38 $
+ *  last change: $Author: os $ $Date: 2007-05-24 11:33:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,11 +160,12 @@ template<class T>
 /*-- 13.12.2006 10:46:42---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void PropertyMap::insert( PropertyMapPtr pMap )
+void PropertyMap::insert( PropertyMapPtr pMap, bool bOverwrite )
 {
     if( pMap.get() )
     {
-        ::std::for_each( pMap->begin(), pMap->end(), removeExistingElements<PropertyMap::value_type>(*this) );
+        if( bOverwrite )
+            ::std::for_each( pMap->begin(), pMap->end(), removeExistingElements<PropertyMap::value_type>(*this) );
         _PropertyMap::insert(pMap->begin(), pMap->end());
     }
 }
