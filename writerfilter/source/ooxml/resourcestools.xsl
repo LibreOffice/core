@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-05-23 15:37:21 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-05-24 13:29:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -444,6 +444,8 @@ public:
     virtual doctok::Id getId(TokenEnum_t nToken);
     virtual doctok::Id getIdFromRefs(TokenEnum_t nToken);
     virtual void lcl_characters(const rtl::OUString &amp; str); 
+    virtual void startAction();
+    virtual void endAction();
 
     virtual string getType() const { return "</xsl:text>
     <xsl:value-of select="$classname"/>
@@ -997,6 +999,22 @@ bool </xsl:text>
     <xsl:call-template name="contextparent"/>
     <xsl:text>(rContext)
 {</xsl:text>
+    <xsl:text>
+}&#xa;</xsl:text>
+  </xsl:template>
+
+  <xsl:template name="contextstartimpl">
+    <xsl:param name="prefix"/>
+    <xsl:variable name="me" select="node()"/>
+    <xsl:variable name="classname">
+      <xsl:call-template name="contextnamefordefine"/>
+    </xsl:variable>
+    <xsl:variable name="resource" select="key('context-resource', @name)"/>
+    <xsl:text>
+void </xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>::startAction()
+{</xsl:text>
     <xsl:for-each select="$resource/action[@name='start']">
       <xsl:choose>
         <xsl:when test="@action='sendTableDepth'">
@@ -1048,21 +1066,21 @@ bool </xsl:text>
       <xsl:with-param name="id" select="$resource/@tokenid"/>
     </xsl:call-template>
     <xsl:text>);</xsl:text>
-    </xsl:if>
+    </xsl:if>    
     <xsl:text>
-}&#xa;</xsl:text>
+}</xsl:text>
   </xsl:template>
 
-  <xsl:template name="contextdestructorimpl">
+  <xsl:template name="contextendimpl">
     <xsl:param name="prefix"/>
     <xsl:variable name="classname">
       <xsl:call-template name="contextnamefordefine"/>
     </xsl:variable>
     <xsl:variable name="resource" select="key('context-resource', @name)"/>
+    <xsl:text>
+void </xsl:text>
     <xsl:value-of select="$classname"/>
-    <xsl:text>::~</xsl:text>
-    <xsl:value-of select="$classname"/>
-    <xsl:text>()
+    <xsl:text>::endAction()
 {</xsl:text>
     <xsl:for-each select="$resource/action[@name='end']">
       <xsl:choose>
@@ -1159,6 +1177,21 @@ bool </xsl:text>
       </xsl:choose>
     </xsl:for-each>
     <xsl:text>
+}</xsl:text>
+  </xsl:template>
+
+  <xsl:template name="contextdestructorimpl">
+    <xsl:param name="prefix"/>
+    <xsl:variable name="classname">
+      <xsl:call-template name="contextnamefordefine"/>
+    </xsl:variable>
+    <xsl:variable name="resource" select="key('context-resource', @name)"/>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>::~</xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>()
+{</xsl:text>
+    <xsl:text>
 }&#xa;</xsl:text>
   </xsl:template>
 
@@ -1190,6 +1223,8 @@ bool </xsl:text>
         <xsl:call-template name="contextgetid"/>
         <xsl:call-template name="contextrefsidimpl"/>
         <xsl:call-template name="contextcharactersimpl"/>
+        <xsl:call-template name="contextstartimpl"/>
+        <xsl:call-template name="contextendimpl"/>
       </xsl:if>
     </xsl:for-each>
   </xsl:template>
