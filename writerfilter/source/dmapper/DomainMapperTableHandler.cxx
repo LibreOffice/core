@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableHandler.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2007-05-21 14:21:17 $
+ *  last change: $Author: os $ $Date: 2007-05-24 11:34:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,9 @@ void DomainMapperTableHandler::endTable()
         PropertyMapVector1::const_iterator aCellIterator = aRowOfCellsIterator->begin();
         PropertyMapVector1::const_iterator aCellIteratorEnd = aRowOfCellsIterator->end();
 
+        //contains the default border of the line
+        PropertyMapPtr aCellBorders( new PropertyMap );
+
         sal_Int32 nCell = 0;
         pCellProperties[nRow].realloc( aRowOfCellsIterator->size() );
         beans::PropertyValues* pSingleCellProperties = pCellProperties[nRow].getArray();
@@ -134,6 +137,13 @@ void DomainMapperTableHandler::endTable()
             //aCellIterator points to a PropertyMapPtr;
             if( aCellIterator->get() )
             {
+                if( nCell && aCellBorders->size() )
+                {
+                    //now apply the default border
+                    //TODO: This overwrites the existing values!
+                    aCellIterator->get()->insert( aCellBorders, false );
+                }
+
 
                 const PropertyMap::iterator aVerticalIter =
                                 aCellIterator->get()->find( rPropSupplier.GetName(META_PROP_VERTICAL_BORDER) );
@@ -143,10 +153,36 @@ void DomainMapperTableHandler::endTable()
                                 aCellIterator->get()->find( rPropSupplier.GetName(PROP_RIGHT_BORDER) );
                 const PropertyMap::const_iterator aBottomIter =
                                 aCellIterator->get()->find( rPropSupplier.GetName(PROP_BOTTOM_BORDER) );
+
                 if( aVerticalIter != aCellIterator->get()->end())
+                {
+                    if( !nCell )
+                        aCellBorders->insert(*aVerticalIter);
                     aCellIterator->get()->erase( aVerticalIter );
+                }
                 if( aHorizontalIter != aCellIterator->get()->end())
+                {
+                    if( !nCell )
+                        aCellBorders->insert(*aHorizontalIter);
                     aCellIterator->get()->erase( aHorizontalIter );
+                }
+                //fill the additional borders into the line default border
+                if( !nCell )
+                {
+                    const PropertyMap::const_iterator aLeftIter =
+                                    aCellIterator->get()->find( rPropSupplier.GetName(PROP_RIGHT_BORDER) );
+                    if(aLeftIter != aCellIterator->get()->end())
+                        aCellBorders->insert(*aLeftIter);
+                    if(aRightIter != aCellIterator->get()->end())
+                        aCellBorders->insert(*aRightIter);
+                    const PropertyMap::const_iterator aTopIter =
+                                    aCellIterator->get()->find( rPropSupplier.GetName(PROP_TOP_BORDER) );
+                    if(aTopIter != aCellIterator->get()->end())
+                        aCellBorders->insert(*aTopIter);
+                    if(aBottomIter != aCellIterator->get()->end())
+                        aCellBorders->insert(*aBottomIter);
+                }
+
                 //now set the default left+right border distance TODO: there's an sprm containing the default distance!
                 const PropertyMap::const_iterator aLeftDistanceIter =
                                 aCellIterator->get()->find( rPropSupplier.GetName(PROP_LEFT_BORDER_DISTANCE) );

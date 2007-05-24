@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TDefTableHandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2007-05-21 14:23:22 $
+ *  last change: $Author: os $ $Date: 2007-05-24 11:32:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,11 +40,13 @@
 #endif
 #include <doctok/WW8ResourceModel.hxx>
 #include <boost/shared_ptr.hpp>
-//#include <com/sun/star/table/TableBorder.hpp>
 #ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
 #include <com/sun/star/table/BorderLine.hpp>
 #endif
 #include <vector>
+namespace com{ namespace sun{ namespace star{namespace table {
+    struct BorderLine;
+}}}}
 namespace dmapper
 {
 class PropertyMap;
@@ -53,8 +55,20 @@ class WRITERFILTER_DLLPRIVATE TDefTableHandler : public doctok::Properties
 public:
 
 private:
-    ::std::vector<sal_Int32> m_aCellBorders;
-    ::std::vector<sal_Int32> m_aCellVertAlign;
+    ::std::vector<sal_Int32>                                m_aCellBorderPositions;
+    ::std::vector<sal_Int32>                                m_aCellVertAlign;
+
+    ::std::vector< ::com::sun::star::table::BorderLine >    m_aLeftBorderLines;
+    ::std::vector< ::com::sun::star::table::BorderLine >    m_aRightBorderLines;
+    ::std::vector< ::com::sun::star::table::BorderLine >    m_aTopBorderLines;
+    ::std::vector< ::com::sun::star::table::BorderLine >    m_aBottomBorderLines;
+
+    //values of the current border
+    sal_Int32                                           m_nLineWidth;
+    sal_Int32                                           m_nLineType;
+    sal_Int32                                           m_nLineColor;
+    sal_Int32                                           m_nLineDistance;
+
 public:
     TDefTableHandler( );
     virtual ~TDefTableHandler();
