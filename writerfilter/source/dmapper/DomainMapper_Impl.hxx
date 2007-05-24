@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2007-05-07 06:18:56 $
+ *  last change: $Author: os $ $Date: 2007-05-24 12:44:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,6 +317,9 @@ public:
     void PushPageFooter(SectionPropertyMap::PageType eType);
 
     void PopPageHeaderFooter();
+
+    void PushFootOrEndnote( bool bIsFootnote );
+    void PopFootOrEndnote();
 
     //field context starts with a 0x13
     void PushFieldContext();

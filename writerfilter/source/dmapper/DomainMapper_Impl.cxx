@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-16 14:35:30 $
+ *  last change: $Author: os $ $Date: 2007-05-24 12:44:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -850,6 +850,31 @@ void DomainMapper_Impl::PushPageFooter(SectionPropertyMap::PageType eType)
 
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::PopPageHeaderFooter()
+{
+    m_aTextAppendStack.pop();
+}
+/*-- 24.05.2007 14:22:28---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
+{
+    try
+    {
+        uno::Reference< text::XText > xFootnoteText( GetTextFactory()->createInstance(
+            bIsFootnote ?
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Footnote") ) : ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Endnote") )),
+            uno::UNO_QUERY_THROW );
+        appendTextContent( uno::Reference< text::XTextContent >( xFootnoteText, uno::UNO_QUERY_THROW ) );
+        m_aTextAppendStack.push(uno::Reference< text::XTextAppendAndConvert >( xFootnoteText, uno::UNO_QUERY_THROW ));
+    }
+    catch( uno::Exception& )
+    {
+    }
+}
+/*-- 24.05.2007 14:22:29---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void DomainMapper_Impl::PopFootOrEndnote()
 {
     m_aTextAppendStack.pop();
 }

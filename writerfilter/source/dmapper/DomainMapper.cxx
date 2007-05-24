@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-22 19:40:46 $
+ *  last change: $Author: os $ $Date: 2007-05-24 12:44:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3466,17 +3466,17 @@ void DomainMapper::table(doctok::Id name, doctok::Reference<Table>::Pointer_t re
 /*-- 09.06.2006 09:52:16---------------------------------------------------
 
 -----------------------------------------------------------------------*/
-void DomainMapper::substream(doctok::Id name, ::doctok::Reference<Stream>::Pointer_t ref)
+void DomainMapper::substream(doctok::Id rName, ::doctok::Reference<Stream>::Pointer_t ref)
 {
     m_pImpl->getTableManager().startLevel();
 
     //->debug
-    //string sName = (*doctok::QNameToString::Instance())(name);
+    //string sName = (*doctok::QNameToString::Instance())(rName);
     //--<debug
     //import of page header/footer
 
     /* WRITERFILTERSTATUS: table: attributedata */
-    switch( name )
+    switch( rName )
     {
     case NS_rtf::LN_headerl:
         /* WRITERFILTERSTATUS: done: 50, planned: 2, spent: 0 */
@@ -3508,9 +3508,13 @@ void DomainMapper::substream(doctok::Id name, ::doctok::Reference<Stream>::Point
 
         m_pImpl->PushPageFooter(SectionPropertyMap::PAGE_FIRST);
         break;
+    case NS_rtf::LN_footnote:
+    case NS_rtf::LN_endnote:
+        m_pImpl->PushFootOrEndnote( NS_rtf::LN_footnote == rName );
+    break;
     }
     ref->resolve(*this);
-    switch( name )
+    switch( rName )
     {
     case NS_rtf::LN_headerl:
     case NS_rtf::LN_headerr:
@@ -3519,7 +3523,11 @@ void DomainMapper::substream(doctok::Id name, ::doctok::Reference<Stream>::Point
     case NS_rtf::LN_footerr:
     case NS_rtf::LN_footerf:
         m_pImpl->PopPageHeaderFooter();
-        break;
+    break;
+    case NS_rtf::LN_footnote:
+    case NS_rtf::LN_endnote:
+        m_pImpl->PopFootOrEndnote();
+    break;
     }
 
     m_pImpl->getTableManager().endLevel();
