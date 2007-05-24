@@ -10,7 +10,7 @@ ch	chart2\source\model\template				nmake	-	all ch_source_model_template ch_inc N
 ch	chart2\source\model\filter					nmake	-	all ch_source_model_filter ch_inc NULL
 ch	chart2\source\view							nmake	-	all	ch_source_view ch_source_tools ch_source_view_charttypes ch_source_view_axes ch_source_view_diagram ch_source_view_main ch_inc NULL
 ch	chart2\source\view\inc						get		-	all	ch_source_view_inc NULL
-ch	chart2\source\view\axes						nmake	-	all	ch_source_view_axes ch_inc NULL
+ch	chart2\source\view\axes						nmake	-	all	ch_source_view_axes ch_source_tools ch_inc NULL
 ch	chart2\source\view\charttypes				nmake	-	all	ch_source_view_charttypes ch_inc NULL
 ch	chart2\source\view\diagram					nmake	-	all	ch_source_view_diagram ch_inc NULL
 ch	chart2\source\view\main						nmake	-	all	ch_source_view_main ch_inc NULL
