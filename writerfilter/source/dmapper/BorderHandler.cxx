@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BorderHandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2007-05-03 06:25:37 $
+ *  last change: $Author: os $ $Date: 2007-05-24 11:31:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,8 +166,12 @@ PropertyMapPtr  BorderHandler::getProperties()
         META_PROP_VERTICAL_BORDER
     };
     PropertyMapPtr pPropertyMap(new PropertyMap);
-    for( sal_Int32 nProp = 0; nProp < BORDER_COUNT; ++nProp)
-        pPropertyMap->Insert( aPropNames[nProp], uno::makeAny( m_aBorderLines[nProp] ) );
+    // don't fill in default properties
+    if( m_nCurrentBorderPosition )
+    {
+        for( sal_Int32 nProp = 0; nProp < BORDER_COUNT; ++nProp)
+            pPropertyMap->Insert( aPropNames[nProp], uno::makeAny( m_aBorderLines[nProp] ) );
+    }
     return pPropertyMap;
 }
 } //namespace dmapper
