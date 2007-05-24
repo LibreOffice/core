@@ -4,9 +4,9 @@
  *
  *  $RCSfile: informationdialog.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-22 16:53:24 $
+ *  last change: $Author: sj $ $Date: 2007-05-24 10:08:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,8 +99,8 @@ class InformationDialog : public UnoDialog, public ConfigurationAccess
 public :
 
     InformationDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxMSF,
-                        com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rxFrame,
-                        sal_Bool& bOpenNewDocument, const sal_Int64& nSourceSize, const sal_Int64& nDestSize, const sal_Int64& nApproxDest );
+            com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rxFrame, const rtl::OUString& rSaveAsURL,
+                sal_Bool& bOpenNewDocument, const sal_Int64& nSourceSize, const sal_Int64& nDestSize, const sal_Int64& nApproxDest );
     ~InformationDialog();
 
     sal_Bool                execute();
@@ -113,12 +113,14 @@ private :
 
     com::sun::star::uno::Reference< com::sun::star::awt::XActionListener >  mxActionListener;
 
+    rtl::OUString ImpGetStandardImage( const rtl::OUString& rPrivateURL );
     void InitDialog();
 
     sal_Int64 mnSourceSize;
     sal_Int64 mnDestSize;
     sal_Int64 mnApproxSize;
     sal_Bool& mrbOpenNewDocument;
+    const rtl::OUString& maSaveAsURL;
 
 public :
 

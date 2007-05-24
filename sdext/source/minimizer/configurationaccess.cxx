@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configurationaccess.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-16 15:07:46 $
+ *  last change: $Author: sj $ $Date: 2007-05-24 10:08:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -438,6 +438,7 @@ com::sun::star::uno::Any ConfigurationAccess::GetConfigProperty( const PPPOptimi
             case TK_SaveAsURL :                 aRetValue <<= rSettings.maSaveAsURL; break;
             case TK_FilterName :                aRetValue <<= rSettings.maFilterName; break;
             case TK_OpenNewDocument :           aRetValue <<= rSettings.mbOpenNewDocument; break;
+            case TK_EstimatedFileSize :         aRetValue <<= rSettings.mnEstimatedFileSize; break;
             default:
                 break;
         }
@@ -471,6 +472,7 @@ void ConfigurationAccess::SetConfigProperty( const PPPOptimizerTokenEnum eProper
             case TK_SaveAsURL :                 rValue >>= rSettings.maSaveAsURL; break;
             case TK_FilterName :                rValue >>= rSettings.maFilterName; break;
             case TK_OpenNewDocument :           rValue >>= rSettings.mbOpenNewDocument; break;
+            case TK_EstimatedFileSize :         rValue >>= rSettings.mnEstimatedFileSize; break;
             default:
                 break;
         }
@@ -506,7 +508,7 @@ sal_Int32 ConfigurationAccess::GetConfigProperty( const PPPOptimizerTokenEnum eP
 
 Sequence< PropertyValue > ConfigurationAccess::GetConfigurationSequence()
 {
-    Sequence< PropertyValue > aRet( 14 );
+    Sequence< PropertyValue > aRet( 15 );
     OptimizerSettings& rSettings( maSettings.front() );
     aRet[ 0 ].Name = TKGet( TK_JPEGCompression );
     aRet[ 0 ].Value= Any( rSettings.mbJPEGCompression );
@@ -536,6 +538,8 @@ Sequence< PropertyValue > ConfigurationAccess::GetConfigurationSequence()
     aRet[ 12].Value= Any( rSettings.maFilterName );
     aRet[ 13].Name = TKGet( TK_OpenNewDocument );
     aRet[ 13].Value= Any( rSettings.mbOpenNewDocument );
+    aRet[ 14].Name = TKGet( TK_EstimatedFileSize );
+    aRet[ 14].Value= Any( rSettings.mnEstimatedFileSize );
     return aRet;
 }
 

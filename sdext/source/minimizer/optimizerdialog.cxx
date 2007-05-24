@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optimizerdialog.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-11 13:57:22 $
+ *  last change: $Author: sj $ $Date: 2007-05-24 10:08:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@ void OptimizerDialog::InitDialog()
         Any( sal_Int32( 200 ) ),
         Any( sal_Int32( 52 ) ),
         Any( getString( STR_SUN_OPTIMIZATION_WIZARD ) ),
-        Any( sal_Int32( DIALOG_WIDTH ) ) };
+        Any( sal_Int32( OD_DIALOG_WIDTH ) ) };
 
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
@@ -740,7 +740,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                 lArguments[ 1 ].Name = TKGet( TK_StatusDispatcher );
                 lArguments[ 1 ].Value <<= mrOptimizerDialog.GetStatusDispatcher();
                 lArguments[ 2 ].Name = TKGet( TK_InformationDialog );
-                lArguments[ 2 ].Value <<= sal_True;
+                lArguments[ 2 ].Value <<= mrOptimizerDialog.GetFrame();
 
                 if( xDispatch.is() )
                     xDispatch->dispatch( aURL, lArguments );

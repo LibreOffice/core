@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impoptimizer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-11 13:51:02 $
+ *  last change: $Author: sj $ $Date: 2007-05-24 10:08:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,8 @@ private:
     rtl::OUString   maSaveAsURL;
     rtl::OUString   maFilterName;
     sal_Bool        mbOpenNewDocument;
-    sal_Bool        mbInformationDialog;
+
+    com::sun::star::uno::Reference< com::sun::star::frame::XFrame > mxInformationDialog;
 
     sal_Bool Optimize();
 

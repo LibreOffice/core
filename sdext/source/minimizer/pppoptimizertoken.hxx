@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pppoptimizertoken.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-22 16:53:24 $
+ *  last change: $Author: sj $ $Date: 2007-05-24 10:08:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,6 +206,7 @@ enum PPPOptimizerTokenEnum
     TK_SaveAs,
     TK_SaveAsURL,
     TK_OpenNewDocument,
+    TK_EstimatedFileSize,
 
     TK_Status,
     TK_Pages,

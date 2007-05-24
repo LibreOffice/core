@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optimizerdialogcontrols.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-16 15:29:31 $
+ *  last change: $Author: sj $ $Date: 2007-05-24 10:08:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -398,12 +398,12 @@ rtl::OUString InsertListBox( OptimizerDialog& rOptimizerDialog, const OUString& 
 
 void OptimizerDialog::InitNavigationBar()
 {
-    sal_Int32   nCancelPosX = DIALOG_WIDTH - BUTTON_WIDTH - 6;
+    sal_Int32   nCancelPosX = OD_DIALOG_WIDTH - BUTTON_WIDTH - 6;
     sal_Int32   nFinishPosX = nCancelPosX - 6 - BUTTON_WIDTH;
     sal_Int32   nNextPosX = nFinishPosX - 6 - BUTTON_WIDTH;
     sal_Int32   nBackPosX = nNextPosX - 3 - BUTTON_WIDTH;
 
-    InsertSeparator( *this, TKGet( TK_lnNavSep1 ), 0, 0, DIALOG_HEIGHT - 26, DIALOG_WIDTH, 1 );
+    InsertSeparator( *this, TKGet( TK_lnNavSep1 ), 0, 0, DIALOG_HEIGHT - 26, OD_DIALOG_WIDTH, 1 );
     InsertSeparator( *this, TKGet( TK_lnNavSep2 ), 1, 85, 0, 1, BUTTON_POS_Y - 6 );
 
     InsertButton( *this, TKGet( TK_btnNavHelp ), mxActionListener, 8, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, mnTabIndex++, sal_True, STR_HELP, PushButtonType_STANDARD );
@@ -457,8 +457,8 @@ void OptimizerDialog::InitPage0()
     aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText1Pg0 ), getString( STR_INTRODUCTION_T ), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, 100, sal_True, sal_False, mnTabIndex++ ) );
     aControlList.push_back( InsertSeparator( *this, TKGet( TK_Separator1Pg0 ), 0, PAGE_POS_X + 6, DIALOG_HEIGHT - 66, PAGE_WIDTH - 12, 1 ) );
     aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText2Pg0 ), getString( STR_CHOSE_SETTINGS ), PAGE_POS_X + 6, DIALOG_HEIGHT - 60, PAGE_WIDTH - 12, 8, sal_True, sal_False, mnTabIndex++ ) );
-    aControlList.push_back( InsertListBox(  *this, TKGet( TK_ListBox0Pg0 ), mxActionListenerListBox0Pg0, sal_True, aItemList, PAGE_POS_X + 6, DIALOG_HEIGHT - 48, ( DIALOG_WIDTH - 50 ) - ( PAGE_POS_X + 6 ), 12, mnTabIndex++ ) );
-    aControlList.push_back( InsertButton( *this, TKGet( TK_Button0Pg0 ), mxActionListener, DIALOG_WIDTH - 46, DIALOG_HEIGHT - 48, 40, 14, mnTabIndex++, sal_True, STR_REMOVE, PushButtonType_STANDARD ) );
+    aControlList.push_back( InsertListBox(  *this, TKGet( TK_ListBox0Pg0 ), mxActionListenerListBox0Pg0, sal_True, aItemList, PAGE_POS_X + 6, DIALOG_HEIGHT - 48, ( OD_DIALOG_WIDTH - 50 ) - ( PAGE_POS_X + 6 ), 12, mnTabIndex++ ) );
+    aControlList.push_back( InsertButton( *this, TKGet( TK_Button0Pg0 ), mxActionListener, OD_DIALOG_WIDTH - 46, DIALOG_HEIGHT - 48, 40, 14, mnTabIndex++, sal_True, STR_REMOVE, PushButtonType_STANDARD ) );
     maControlPages.push_back( aControlList );
     DeactivatePage( 0 );
     UpdateControlStatesPage0();
@@ -615,6 +615,19 @@ void OptimizerDialog::InitPage3()
 }
 
 // -----------------------------------------------------------------------------
+
+static OUString ImpValueOfInMB( const sal_Int64& rVal )
+{
+    double fVal( static_cast<double>( rVal ) );
+    fVal /= ( 1 << 20 );
+    fVal += 0.05;
+    rtl::OUStringBuffer aVal( OUString::valueOf( fVal ) );
+    sal_Int32 nX( OUString( aVal.getStr() ).indexOf( '.', 0 ) );
+    if ( nX > 0 )
+        aVal.setLength( nX + 2 );
+    aVal.append( OUString::createFromAscii( " MB" ) );
+    return aVal.makeStringAndClear();
+}
 
 void OptimizerDialog::UpdateControlStatesPage4()
 {
@@ -819,19 +832,32 @@ void OptimizerDialog::UpdateControlStatesPage4()
     setControlProperty( TKGet( TK_FixedText4Pg4 ), TKGet( TK_Label ), Any( aSummaryStrings[ 0 ] ) );
     setControlProperty( TKGet( TK_FixedText5Pg4 ), TKGet( TK_Label ), Any( aSummaryStrings[ 1 ] ) );
     setControlProperty( TKGet( TK_FixedText6Pg4 ), TKGet( TK_Label ), Any( aSummaryStrings[ 2 ] ) );
-}
 
-static OUString ImpValueOfInMB( const sal_Int64& rVal )
-{
-    double fVal( static_cast<double>( rVal ) );
-    fVal /= ( 1 << 20 );
-    fVal += 0.05;
-    rtl::OUStringBuffer aVal( OUString::valueOf( fVal ) );
-    sal_Int32 nX( OUString( aVal.getStr() ).indexOf( '.', 0 ) );
-    if ( nX > 0 )
-        aVal.setLength( nX + 2 );
-    aVal.append( OUString::createFromAscii( " MB" ) );
-    return aVal.makeStringAndClear();
+    sal_Int64 nCurrentFileSize = 0;
+    sal_Int64 nEstimatedFileSize = 0;
+    Reference< XStorable > xStorable( mxController->getModel(), UNO_QUERY );
+    if ( xStorable.is() && xStorable->hasLocation() )
+        nCurrentFileSize = PPPOptimizer::GetFileSize( xStorable->getLocation() );
+
+    if ( nCurrentFileSize )
+    {
+        double fE = static_cast< double >( nCurrentFileSize );
+        if ( nImageResolution )
+        {
+            double v = ( static_cast< double >( nImageResolution ) + 75.0 ) / 300.0;
+            if ( v < 1.0 )
+                fE *= v;
+        }
+        if ( bJPEGCompression )
+        {
+            double v = 0.75 - ( ( 100.0 - static_cast< double >( nJPEGQuality ) ) / 400.0 ) ;
+            fE *= v;
+        }
+        nEstimatedFileSize = static_cast< sal_Int64 >( fE );
+    }
+    setControlProperty( TKGet( TK_FixedText7Pg4 ), TKGet( TK_Label ), Any( ImpValueOfInMB( nCurrentFileSize ) ) );
+    setControlProperty( TKGet( TK_FixedText8Pg4 ), TKGet( TK_Label ), Any( ImpValueOfInMB( nEstimatedFileSize ) ) );
+    SetConfigProperty( TK_EstimatedFileSize, Any( nEstimatedFileSize ) );
 }
 
 void OptimizerDialog::InitPage4()
@@ -865,12 +891,6 @@ void OptimizerDialog::InitPage4()
         Reference< XMultiPropertySet > xMultiPropertySet( insertControlModel( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlProgressBarModel" ) ),
             TKGet( TK_Progress ), aNames, aValues ), UNO_QUERY );
     }
-    sal_Int64 nCurrentFileSize = 0;
-    sal_Int64 nEstimatedFileSize = 0;
-    Reference< XStorable > xStorable( mxController->getModel(), UNO_QUERY );
-    if ( xStorable.is() && xStorable->hasLocation() )
-        nCurrentFileSize = PPPOptimizer::GetFileSize( xStorable->getLocation() );
-
     Reference< XTextListener > xTextListener;
     Sequence< OUString > aItemList;
     std::vector< rtl::OUString > aControlList;
@@ -882,11 +902,11 @@ void OptimizerDialog::InitPage4()
     aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText5Pg4 ), OUString(), PAGE_POS_X + 6, PAGE_POS_Y + 22, PAGE_WIDTH - 12, 8, sal_False, sal_False, mnTabIndex++ ) );
     aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText6Pg4 ), OUString(), PAGE_POS_X + 6, PAGE_POS_Y + 30, PAGE_WIDTH - 12, 8, sal_False, sal_False, mnTabIndex++ ) );
 
-    aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText2Pg4 ), getString( STR_CURRENT_FILESIZE ), PAGE_POS_X + 6, PAGE_POS_Y + 50, 58, 8, sal_False, sal_False, mnTabIndex++ ) );
-    aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText7Pg4 ), ImpValueOfInMB( nCurrentFileSize ), PAGE_POS_X + 70, PAGE_POS_Y + 50, 30, 8, sal_False, sal_False, mnTabIndex++ ) );
+    aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText2Pg4 ), getString( STR_CURRENT_FILESIZE ), PAGE_POS_X + 6, PAGE_POS_Y + 50, 88, 8, sal_False, sal_False, mnTabIndex++ ) );
+    aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText7Pg4 ), OUString(), PAGE_POS_X + 100, PAGE_POS_Y + 50, 30, 8, sal_False, sal_False, mnTabIndex++ ) );
     setControlProperty( TKGet( TK_FixedText7Pg4 ), TKGet( TK_Align ), Any( static_cast< short >( 2 ) ) );
-    aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText3Pg4 ), getString( STR_ESTIMATED_FILESIZE ), PAGE_POS_X + 6, PAGE_POS_Y + 58, 58, 8, sal_False, sal_False, mnTabIndex++ ) );
-    aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText8Pg4 ), ImpValueOfInMB( nEstimatedFileSize ), PAGE_POS_X + 70, PAGE_POS_Y + 58, 30, 8, sal_False, sal_False, mnTabIndex++ ) );
+    aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText3Pg4 ), getString( STR_ESTIMATED_FILESIZE ), PAGE_POS_X + 6, PAGE_POS_Y + 58, 88, 8, sal_False, sal_False, mnTabIndex++ ) );
+    aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText8Pg4 ), OUString(), PAGE_POS_X + 100, PAGE_POS_Y + 58, 30, 8, sal_False, sal_False, mnTabIndex++ ) );
     setControlProperty( TKGet( TK_FixedText8Pg4 ), TKGet( TK_Align ), Any( static_cast< short >( 2 ) ) );
 
     aControlList.push_back( InsertRadioButton( *this, TKGet( TK_RadioButton0Pg4 ), mxItemListener, getString(  STR_APPLY_TO_CURRENT ), PAGE_POS_X + 6, PAGE_POS_Y + 78, PAGE_WIDTH - 12, 8, sal_False, mnTabIndex++ ) );
@@ -894,8 +914,8 @@ void OptimizerDialog::InitPage4()
     aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText1Pg4 ), OUString(), PAGE_POS_X + 6, DIALOG_HEIGHT - 86, PAGE_WIDTH - 12, 8, sal_True, sal_False, mnTabIndex++ ) );
     aControlList.push_back( TKGet( TK_Progress ) );
     aControlList.push_back( InsertSeparator( *this, TKGet( TK_Separator1Pg4 ), 0, PAGE_POS_X + 6, DIALOG_HEIGHT - 58, PAGE_WIDTH - 12, 1 ) );
-    aControlList.push_back( InsertCheckBox(  *this, TKGet( TK_CheckBox1Pg4 ), mxItemListener, getString( STR_SAVE_SETTINGS ), PAGE_POS_X + 6, DIALOG_HEIGHT - 48, 70, 8, mnTabIndex++ ) );
-    aControlList.push_back( InsertComboBox(  *this, TKGet( TK_ComboBox0Pg4 ), xTextListener, sal_True, aItemList, PAGE_POS_X + 76, DIALOG_HEIGHT - 48, 100, 12, mnTabIndex++ ) );
+    aControlList.push_back( InsertCheckBox(  *this, TKGet( TK_CheckBox1Pg4 ), mxItemListener, getString( STR_SAVE_SETTINGS ), PAGE_POS_X + 6, DIALOG_HEIGHT - 48, 100, 8, mnTabIndex++ ) );
+    aControlList.push_back( InsertComboBox(  *this, TKGet( TK_ComboBox0Pg4 ), xTextListener, sal_True, aItemList, PAGE_POS_X + 106, DIALOG_HEIGHT - 48, 100, 12, mnTabIndex++ ) );
     maControlPages.push_back( aControlList );
     DeactivatePage( 4 );
 

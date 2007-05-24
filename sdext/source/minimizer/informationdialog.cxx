@@ -4,9 +4,9 @@
  *
  *  $RCSfile: informationdialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-22 16:53:24 $
+ *  last change: $Author: sj $ $Date: 2007-05-24 10:08:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,11 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+#include "com/sun/star/util/URL.hpp"
+#include "com/sun/star/util/XURLTransformer.hpp"
 
 #define DIALOG_WIDTH    240
-#define DIALOG_HEIGHT   84
+#define DIALOG_HEIGHT   80
 #define PAGE_POS_X      35
 #define PAGE_WIDTH      ( DIALOG_WIDTH - PAGE_POS_X ) - 6
 
@@ -223,8 +225,47 @@ static OUString ImpValueOfInMB( const sal_Int64& rVal )
     return aVal.makeStringAndClear();
 }
 
+OUString InformationDialog::ImpGetStandardImage( const OUString& sPrivateURL )
+{
+    rtl::OUString sURL;
+    try
+    {
+        mxTempFile = Reference< XStream >( mxMSF->getServiceManager()->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.io.TempFile" ), mxMSF ), UNO_QUERY_THROW );
+        Reference< XPropertySet > xPropSet( mxTempFile, UNO_QUERY );
+        Reference< XOutputStream > xOutputStream( mxTempFile->getOutputStream() );
+        if ( xOutputStream.is() && xPropSet.is() )
+        {
+            Reference< graphic::XGraphicProvider > xGraphicProvider( mxMSF->getServiceManager()->createInstanceWithContext(
+                        OUString::createFromAscii( "com.sun.star.graphic.GraphicProvider" ), mxMSF ), UNO_QUERY_THROW );
+            Sequence< PropertyValue > aArgs( 1 );
+            aArgs[ 0 ].Name = OUString::createFromAscii( "URL" );
+            aArgs[ 0 ].Value <<= sPrivateURL;
+            Reference< graphic::XGraphic > xGraphic( xGraphicProvider->queryGraphic( aArgs ) );
+            if ( xGraphic.is() )
+            {
+                OUString aDestMimeType( RTL_CONSTASCII_USTRINGPARAM( "image/png" ) );
+                Sequence< PropertyValue > aArgs2( 2 );
+                aArgs2[ 0 ].Name = TKGet( TK_MimeType );                // the GraphicProvider is using "MimeType", the GraphicExporter "MediaType"...
+                aArgs2[ 0 ].Value <<= aDestMimeType;
+                aArgs2[ 1 ].Name = TKGet( TK_OutputStream );
+                aArgs2[ 1 ].Value <<= xOutputStream;
+                xGraphicProvider->storeGraphic( xGraphic, aArgs2 );
+            }
+            xPropSet->getPropertyValue( OUString::createFromAscii( "Uri" ) ) >>= sURL;
+        }
+    }
+    catch( Exception& )
+    {
+    }
+    return sURL;
+}
+
 void InformationDialog::InitDialog()
 {
+    sal_Int32 nDialogHeight = DIALOG_HEIGHT;
+    if ( !maSaveAsURL.getLength() )
+        nDialogHeight -= 22;
+
    // setting the dialog properties
     OUString pNames[] = {
         TKGet( TK_Closeable ),
@@ -237,10 +278,10 @@ void InformationDialog::InitDialog()
 
     Any pValues[] = {
         Any( sal_True ),
-        Any( sal_Int32( DIALOG_HEIGHT ) ),
+        Any( nDialogHeight ),
         Any( sal_True ),
-        Any( sal_Int32( 113 ) ),
-        Any( sal_Int32( 42 ) ),
+        Any( sal_Int32( 245 ) ),
+        Any( sal_Int32( 115 ) ),
         Any( getString( STR_ABOUT ) ),
         Any( sal_Int32( DIALOG_WIDTH ) ) };
 
@@ -249,31 +290,6 @@ void InformationDialog::InitDialog()
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
 
-
-    rtl::OUString sURL( rtl::OUString::createFromAscii( "private:standardimage/query" ) );
-    mxTempFile = Reference< XStream >( mxMSF->getServiceManager()->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.io.TempFile" ), mxMSF ), UNO_QUERY_THROW );
-    Reference< XPropertySet > xPropSet( mxTempFile, UNO_QUERY );
-    Reference< XOutputStream > xOutputStream( mxTempFile->getOutputStream() );
-    if ( xOutputStream.is() && xPropSet.is() )
-    {
-        Reference< graphic::XGraphicProvider > xGraphicProvider( mxMSF->getServiceManager()->createInstanceWithContext(
-                    OUString::createFromAscii( "com.sun.star.graphic.GraphicProvider" ), mxMSF ), UNO_QUERY_THROW );
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[ 0 ].Name = OUString::createFromAscii( "URL" );
-        aArgs[ 0 ].Value <<= sURL;
-        Reference< graphic::XGraphic > xGraphic( xGraphicProvider->queryGraphic( aArgs ) );
-        if ( xGraphic.is() )
-        {
-            OUString aDestMimeType( RTL_CONSTASCII_USTRINGPARAM( "image/png" ) );
-            Sequence< PropertyValue > aArgs2( 2 );
-            aArgs2[ 0 ].Name = TKGet( TK_MimeType );                // the GraphicProvider is using "MimeType", the GraphicExporter "MediaType"...
-            aArgs2[ 0 ].Value <<= aDestMimeType;
-            aArgs2[ 1 ].Name = TKGet( TK_OutputStream );
-            aArgs2[ 1 ].Value <<= xOutputStream;
-            xGraphicProvider->storeGraphic( xGraphic, aArgs2 );
-        }
-        xPropSet->getPropertyValue( OUString::createFromAscii( "Uri" ) ) >>= sURL;
-    }
     sal_Bool bOpenNewDocument = mrbOpenNewDocument;
     setControlProperty( TKGet( TK_OpenNewDocument ), TKGet( TK_State ), Any( (sal_Int16)bOpenNewDocument ) );
 
@@ -288,17 +304,37 @@ void InformationDialog::InitDialog()
         if ( mnDestSize )
             eInfoString = STR_INFO_1;
         else
+        {
             eInfoString = STR_INFO_2;
+            nDest = mnApproxSize;
+        }
     }
     else if ( mnDestSize )
         eInfoString = STR_INFO_3;
     else
+    {
         eInfoString = STR_INFO_4;
+        nDest = mnApproxSize;
+    }
+
+    rtl::OUString aTitle;
+    if ( maSaveAsURL.getLength() )
+    {
+        Reference< XURLTransformer > xURLTransformer( mxMSF->getServiceManager()->createInstanceWithContext(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ) ), mxMSF ), UNO_QUERY );
+        if ( xURLTransformer.is() )
+        {
+            util::URL aURL;
+            aURL.Complete = maSaveAsURL;
+            xURLTransformer->parseSmart( aURL, rtl::OUString() );
+            aTitle = aURL.Name;
+        }
+    }
 
     OUString aInfoString( getString( eInfoString ) );
     const OUString aOldSizePlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%OLDFILESIZE" ) );
     const OUString aNewSizePlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%NEWFILESIZE" ) );
-    const OUString aTitlePlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%TITLE" ) );
+    const OUString aTitlePlaceholder( aTitle.getLength() ? OUString::createFromAscii( "%TITLE" ) : OUString::createFromAscii( "'%TITLE'" ) );
     const OUString aExtensionPlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%EXTENSIONNAME" ) );
 
     sal_Int32 i = aInfoString.indexOf( aOldSizePlaceholder, 0 );
@@ -311,22 +347,23 @@ void InformationDialog::InitDialog()
 
     sal_Int32 k = aInfoString.indexOf( aTitlePlaceholder, 0 );
     if ( k >= 0 )
-        aInfoString = aInfoString.replaceAt( k, aTitlePlaceholder.getLength(), rtl::OUString() );
+        aInfoString = aInfoString.replaceAt( k, aTitlePlaceholder.getLength(), aTitle );
 
     sal_Int32 l = aInfoString.indexOf( aExtensionPlaceholder, 0 );
     if ( l >= 0 )
         aInfoString = aInfoString.replaceAt( l, aExtensionPlaceholder.getLength(), getString( STR_SUN_OPTIMIZATION_WIZARD ) );
 
     com::sun::star::uno::Reference< com::sun::star::awt::XItemListener > xItemListener;
-    InsertImage( *this, rtl::OUString( rtl::OUString::createFromAscii( "aboutimage" ) ), sURL, 5, 5, 25, 25 );
+    InsertImage( *this, rtl::OUString( rtl::OUString::createFromAscii( "aboutimage" ) ), ImpGetStandardImage( rtl::OUString::createFromAscii( "private:standardimage/query" ) ), 5, 5, 25, 25 );
     InsertFixedText( *this, rtl::OUString( rtl::OUString::createFromAscii( "fixedtext" ) ), aInfoString, PAGE_POS_X, 6, PAGE_WIDTH, 24, sal_True, 0 );
-    InsertCheckBox(  *this, TKGet( TK_OpenNewDocument ), xItemListener, getString( STR_AUTOMATICALLY_OPEN ), PAGE_POS_X, 42, PAGE_WIDTH, 8, 1 );
-    InsertButton( *this, rtl::OUString( rtl::OUString::createFromAscii( "button" ) ), mxActionListener, DIALOG_WIDTH / 2 - 25, DIALOG_HEIGHT - 20, 50, 14, 2, STR_OK );
+    if ( maSaveAsURL.getLength() )
+        InsertCheckBox(  *this, TKGet( TK_OpenNewDocument ), xItemListener, getString( STR_AUTOMATICALLY_OPEN ), PAGE_POS_X, 42, PAGE_WIDTH, 8, 1 );
+    InsertButton( *this, rtl::OUString( rtl::OUString::createFromAscii( "button" ) ), mxActionListener, DIALOG_WIDTH / 2 - 25, nDialogHeight - 20, 50, 14, 2, STR_OK );
 }
 
 // -----------------------------------------------------------------------------
 
-InformationDialog::InformationDialog( const Reference< XComponentContext > &rxMSF, Reference< XFrame >& rxFrame, sal_Bool& rbOpenNewDocument, const sal_Int64& rSourceSize, const sal_Int64& rDestSize, const sal_Int64& rApproxSize ) :
+InformationDialog::InformationDialog( const Reference< XComponentContext > &rxMSF, Reference< XFrame >& rxFrame, const rtl::OUString& rSaveAsURL, sal_Bool& rbOpenNewDocument, const sal_Int64& rSourceSize, const sal_Int64& rDestSize, const sal_Int64& rApproxSize ) :
     UnoDialog( rxMSF, rxFrame ),
     ConfigurationAccess( rxMSF, NULL ),
     mxMSF( rxMSF ),
@@ -335,7 +372,8 @@ InformationDialog::InformationDialog( const Reference< XComponentContext > &rxMS
     mnSourceSize( rSourceSize ),
     mnDestSize( rDestSize ),
     mnApproxSize( rApproxSize ),
-    mrbOpenNewDocument( rbOpenNewDocument )
+    mrbOpenNewDocument( rbOpenNewDocument ),
+    maSaveAsURL( rSaveAsURL )
 {
     Reference< XFrame > xFrame( mxController->getFrame() );
     Reference< XWindow > xContainerWindow( xFrame->getContainerWindow() );
@@ -357,12 +395,15 @@ sal_Bool InformationDialog::execute()
 {
     UnoDialog::execute();
 
-    sal_Int16 nInt16;
-    Any aAny( getControlProperty( TKGet( TK_OpenNewDocument ), TKGet( TK_State ) ) );
-    if ( aAny >>= nInt16 )
+    if ( maSaveAsURL.getLength() )
     {
-        sal_Bool bOpenNewDocument = static_cast< sal_Bool >( nInt16 );
-        mrbOpenNewDocument = bOpenNewDocument;
+        sal_Int16 nInt16;
+        Any aAny( getControlProperty( TKGet( TK_OpenNewDocument ), TKGet( TK_State ) ) );
+        if ( aAny >>= nInt16 )
+        {
+            sal_Bool bOpenNewDocument = static_cast< sal_Bool >( nInt16 );
+            mrbOpenNewDocument = bOpenNewDocument;
+        }
     }
     return mbStatus;
 }

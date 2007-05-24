@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impoptimizer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-22 16:53:24 $
+ *  last change: $Author: sj $ $Date: 2007-05-24 10:08:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -578,8 +578,7 @@ ImpOptimizer::ImpOptimizer( const Reference< XComponentContext >& rxMSF, const R
     mbDeleteUnusedMasterPages   ( sal_False ),
     mbDeleteHiddenSlides        ( sal_False ),
     mbDeleteNotesPages          ( sal_False ),
-    mbOpenNewDocument           ( sal_False ),
-    mbInformationDialog         ( sal_False )
+    mbOpenNewDocument           ( sal_False )
 {
 }
 
@@ -665,6 +664,7 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
 
     if ( mxModel.is() )
     {
+        sal_Int64 nEstimatedFileSize = 0;
         SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 0 ) ) );
         DispatchStatus();
 
@@ -674,7 +674,7 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
             switch( TKGet( rArguments[ i ].Name ) )
             {
                 case TK_StatusDispatcher : rArguments[ i ].Value >>= mxStatusDispatcher; break;
-                case TK_InformationDialog: rArguments[ i ].Value >>= mbInformationDialog; break;
+                case TK_InformationDialog: rArguments[ i ].Value >>= mxInformationDialog; break;
                 case TK_Settings :
                 {
                     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aSettings;
@@ -698,6 +698,7 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
                             case TK_SaveAsURL               : aSettings[ j ].Value >>= maSaveAsURL; break;
                             case TK_FilterName              : aSettings[ j ].Value >>= maFilterName; break;
                             case TK_OpenNewDocument         : aSettings[ j ].Value >>= mbOpenNewDocument; break;
+                            case TK_EstimatedFileSize       : aSettings[ j ].Value >>= nEstimatedFileSize; break;
                             default: break;
                         }
                     }
@@ -763,13 +764,16 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
                 xStorable->store();
                 nDestSize = PPPOptimizer::GetFileSize( maSaveAsURL );
             }
-            sal_Bool bInformationDialog = sal_True;
-            if ( bInformationDialog )
-            {
-                sal_Int64 nApproxSize = nDestSize;
-                InformationDialog aInformationDialog( mxMSF, xSelf, mbOpenNewDocument, nSourceSize, nDestSize, nApproxSize );
-                aInformationDialog.execute();
-            }
+        }
+
+        if ( mxInformationDialog.is() )
+        {
+            InformationDialog aInformationDialog( mxMSF, mxInformationDialog, maSaveAsURL, mbOpenNewDocument, nSourceSize, nDestSize, nEstimatedFileSize );
+            aInformationDialog.execute();
+        }
+
+        if ( maSaveAsURL.getLength() )
+        {
             if ( mbOpenNewDocument && xSelf.is() )
             {
                 Reference< awt::XWindow > xContainerWindow( xSelf->getContainerWindow() );

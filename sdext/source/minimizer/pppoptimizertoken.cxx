@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pppoptimizertoken.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-22 16:53:24 $
+ *  last change: $Author: sj $ $Date: 2007-05-24 10:08:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,6 +230,7 @@ static const TokenTable pTokenTableArray[] =
     { "SaveAs",             TK_SaveAs },
     { "SaveAsURL",          TK_SaveAsURL },
     { "OpenNewDocument",    TK_OpenNewDocument },
+    { "EstimatedFileSize",  TK_EstimatedFileSize },
 
     { "Status",             TK_Status },
     { "Pages",              TK_Pages },

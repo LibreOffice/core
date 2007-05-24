@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configurationaccess.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-11 13:49:50 $
+ *  last change: $Author: sj $ $Date: 2007-05-24 10:08:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,7 @@ struct OptimizerSettings
     rtl::OUString   maSaveAsURL;
     rtl::OUString   maFilterName;
     sal_Bool        mbOpenNewDocument;
+    sal_Int64       mnEstimatedFileSize;
 
     OptimizerSettings() :
         mbJPEGCompression( sal_False ),
@@ -103,7 +104,8 @@ struct OptimizerSettings
         mbDeleteHiddenSlides( sal_False ),
         mbDeleteNotesPages( sal_False ),
         mbSaveAs( sal_True ),
-        mbOpenNewDocument( sal_True ){};
+        mbOpenNewDocument( sal_True ),
+        mnEstimatedFileSize( 0 ){};
         ~OptimizerSettings(){};
 
         void LoadSettingsFromConfiguration( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& rSettings );

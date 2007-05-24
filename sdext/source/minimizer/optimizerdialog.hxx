@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optimizerdialog.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-11 13:57:39 $
+ *  last change: $Author: sj $ $Date: 2007-05-24 10:08:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@
 #endif
 
 #define MAX_STEP        4
-#define DIALOG_WIDTH    310
+#define OD_DIALOG_WIDTH 330
 #define DIALOG_HEIGHT   210
 #define BUTTON_WIDTH    50
 #define BUTTON_HEIGHT   14
@@ -109,7 +109,7 @@
 
 #define PAGE_POS_X      91
 #define PAGE_POS_Y      8
-#define PAGE_WIDTH      DIALOG_WIDTH - PAGE_POS_X
+#define PAGE_WIDTH      OD_DIALOG_WIDTH - PAGE_POS_X
 
 // -------------------
 // - OPTIMIZERDIALOG -
