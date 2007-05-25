@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:06:36 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:19:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1148,7 +1148,7 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
             GetExport(), bIsUICharStyle &&
                          GetExport().GetTextParagraphExport()
                              ->GetCharStyleNamesPropInfoCache().hasProperty(
-                                        xRangePropSet, xRangePropSetInfo ), sal_False,
+                                        xRangePropSet, xRangePropSetInfo ), bHasAutoStyle,
             xRangePropSet, sPropertyCharStyleNames );
 
         // export span with style (if necessary)
