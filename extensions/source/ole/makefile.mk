@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:06:49 $
+#   last change: $Author: vg $ $Date: 2007-05-25 10:49:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -104,10 +104,10 @@ SHL2STDLIBS=\
     $(VOSLIB)	\
     $(CPPULIB)	\
     $(CPPUHELPERLIB)	\
-    ole32.lib 	\
-    uuid.lib 	\
-    advapi32.lib	\
-    oleaut32.lib
+    $(OLE32LIB) 	\
+    $(UUIDLIB) 	\
+    $(ADVAPI32LIB)	\
+    $(OLEAUT32LIB)
 
 .IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
 .IF "$(USE_STLP_DEBUG)" != ""
