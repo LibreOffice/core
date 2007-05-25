@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rect.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:54:27 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:14:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,8 +210,16 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 
     // get GlyphBoundRect
     Rectangle  aGlyphRect;
-    BOOL       bSuccess = SmGetGlyphBoundRect(rDev, rText, aGlyphRect);
-    DBG_ASSERT(bSuccess, "Sm : Ooops... (fehlt evtl. der Font?)");
+#if OSL_DEBUG_LEVEL > 1
+    BOOL bSuccess =
+#endif
+                SmGetGlyphBoundRect(rDev, rText, aGlyphRect);
+#if OSL_DEBUG_LEVEL > 1
+    if (!bSuccess)
+    {
+        DBG_ERROR( "Sm : Ooops... (fehlt evtl. der Font?)");
+    }
+#endif
 
     nItalicLeftSpace  = GetLeft() - aGlyphRect.Left() + nBorderWidth;
     nItalicRightSpace = aGlyphRect.Right() - GetRight() + nBorderWidth;
@@ -251,20 +259,20 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 
 
 void SmRect::Init(const OutputDevice &rDev, const SmFormat *pFormat,
-                  const XubString &rText, USHORT nBorderWidth)
+                  const XubString &rText, USHORT nEBorderWidth)
     // get rectangle fitting for drawing 'rText' on OutputDevice 'rDev'
 {
-    BuildRect(rDev, pFormat, rText, nBorderWidth);
+    BuildRect(rDev, pFormat, rText, nEBorderWidth);
 }
 
 
 SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
-               const XubString &rText, long nBorderWidth)
+               const XubString &rText, long nEBorderWidth)
 {
-    DBG_ASSERT( nBorderWidth >= 0, "BorderWidth negativ" );
-    if (nBorderWidth < 0)
-        nBorderWidth = 0;
-    Init(rDev, pFormat, rText, (USHORT) nBorderWidth);
+    DBG_ASSERT( nEBorderWidth >= 0, "BorderWidth negativ" );
+    if (nEBorderWidth < 0)
+        nEBorderWidth = 0;
+    Init(rDev, pFormat, rText, (USHORT) nEBorderWidth);
 }
 
 
