@@ -4,9 +4,9 @@
  *
  *  $RCSfile: supplang.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:46:07 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:20:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,11 +80,11 @@
 namespace com { namespace sun { namespace star { namespace beans {
     class XPropertySet;
     class XFastPropertySet;
-}}}};
+}}}}
 
 namespace com { namespace sun { namespace star { namespace frame {
     class XDesktop;
-}}}};
+}}}}
 
 
 namespace linguistic
@@ -125,7 +125,7 @@ protected:
 
 public:
     SuppLanguages( LanguageState *pState, USHORT nCount );
-    ~SuppLanguages();
+    virtual ~SuppLanguages();
 
     BOOL    HasLanguage( INT16 nLanguage ) const;
     const com::sun::star::uno::Sequence< INT16 >
