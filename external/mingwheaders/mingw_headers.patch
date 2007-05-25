@@ -29,7 +29,7 @@
 +#define IDC_STATIC (-1)
 +#endif
 --- include/excpt.h.orig	2005-01-14 05:19:52.000000000 +0900
-+++ include/excpt.h	2006-09-17 10:13:37.796875000 +0900
++++ include/excpt.h	2006-12-31 09:21:56.000000000 +0900
 @@ -16,8 +16,11 @@
  
  /* All the headers include this file. */
@@ -51,7 +51,7 @@
  		(struct _EXCEPTION_RECORD*, void*, struct _CONTEXT*, void*);
  
  /*
-@@ -93,10 +96,125 @@
+@@ -93,8 +96,122 @@
  	__asm__ ("movl (%%esp),%%eax;movl %%eax,%%fs:0;addl $8,%%esp;" \
  	 : : : "%eax");
  
@@ -128,7 +128,7 @@
 +		     struct _EXCEPTION_RECORD *pExceptionRecord,
 +		     void * EstablisherFrame,
 +		     struct _CONTEXT *ContextRecord,
-+		     void * DispatcherContext)
++		     void * /*DispatcherContext*/)
 +    {
 +      __SEHandler* pThis = reinterpret_cast< _ER * >(EstablisherFrame)->pHandlerClass;
 +      if ( pExceptionRecord->ExceptionFlags & EH_UNWINDING )
@@ -152,6 +152,7 @@
 +	case EXCEPTION_CONTINUE_EXECUTION:
 +	  return ExceptionContinueExecution;
 +	}
++	  return ExceptionContinueExecution;
 +    }
 +  static int DefaultFilterContinueSearch(void *, LPEXCEPTION_POINTERS) { return EXCEPTION_CONTINUE_SEARCH; }
 +  static int DefaultFilterContinueExecution(void *, LPEXCEPTION_POINTERS) { return EXCEPTION_CONTINUE_EXECUTION; }
@@ -173,10 +174,6 @@
  #endif
  
  #endif	/* Not RC_INVOKED */
- 
- #endif	/* _EXCPT_H_ not defined */
-+
-+
 --- include/tchar.h.orig	2006-03-26 09:21:36.000000000 +0900
 +++ include/tchar.h	2006-03-26 09:21:42.000000000 +0900
 @@ -221,6 +221,9 @@
@@ -198,9 +195,26 @@
  #endif	/* Not _UNICODE */
  
  /*
---- include/basetyps.h.orig	2006-01-18 04:12:06.000000000 +0900
-+++ include/basetyps.h	2006-09-17 12:12:05.812500000 +0900
-@@ -117,7 +117,10 @@
+--- include/amvideo.h.orig	2006-11-19 08:08:30.000000000 +0900
++++ include/amvideo.h	2007-01-16 23:11:24.656250000 +0900
+@@ -52,10 +52,10 @@
+ 	BITMAPINFOHEADER bmiHeader;
+ } VIDEOINFOHEADER;
+ typedef struct tagVIDEOINFO {
+-	RECT rcSource,
+-	RECT rcTarget,
+-	DWORD dwBitRate,
+-	DWORD dwBitErrorRate,
++	RECT rcSource;
++	RECT rcTarget;
++	DWORD dwBitRate;
++	DWORD dwBitErrorRate;
+ 	REFERENCE_TIME AvgTimePerFrame;
+ 	BITMAPINFOHEADER bmiHeader;
+ 	union {
+--- include/basetyps.h.orig	2006-11-19 08:08:30.000000000 +0900
++++ include/basetyps.h	2006-09-17 12:12:06.000000000 +0900
+@@ -124,7 +124,10 @@
  #define UUID_DEFINED
  typedef GUID UUID;
  #endif /* UUID_DEFINED */
@@ -211,40 +225,162 @@
  typedef GUID CLSID;
  typedef CLSID *LPCLSID;
  typedef IID *LPIID;
+--- include/bdatypes.h.orig	2006-11-19 08:08:30.000000000 +0900
++++ include/bdatypes.h	2007-01-16 23:21:10.062500000 +0900
+@@ -17,9 +17,9 @@
+ } MEDIA_SAMPLE_CONTENT;
+ /*--- DirectShow Reference - DirectShow Structures */
+ typedef struct {
+-	DWORD dwOffset
+-	DWORD dwPacketLength
+-	DWORD dwStride
++	DWORD dwOffset;
++	DWORD dwPacketLength;
++	DWORD dwStride;
+ } MPEG2_TRANSPORT_STRIDE;
+ typedef struct {
+ 	ULONG ulPID;
+--- include/oaidl.h.orig	2006-11-19 08:08:33.000000000 +0900
++++ include/oaidl.h	2007-01-20 09:08:24.625000000 +0900
+@@ -73,6 +73,8 @@
+ typedef _COM_interface ICreateErrorInfo *LPCREATEERRORINFO;
+ typedef _COM_interface ISupportErrorInfo *LPSUPPORTERRORINFO;
+ typedef _COM_interface IRecordInfo *LPRECORDINFO;
++typedef _COM_interface IErrorLog *LPERRORLOG;
++typedef _COM_interface IPropertyBag *LPPROPERTYBAG;
+ 
+ extern const IID IID_ITypeLib;
+ extern const IID IID_ITypeLib2;
+@@ -765,6 +767,29 @@
+ };
+ #undef INTERFACE
+ 
++EXTERN_C const IID IID_IErrorLog;
++#define INTERFACE IErrorLog
++DECLARE_INTERFACE_(IErrorLog,IUnknown)
++{
++	STDMETHOD(QueryInterface)(THIS_ REFIID,PVOID*) PURE;
++	STDMETHOD_(ULONG,AddRef)(THIS) PURE;
++	STDMETHOD_(ULONG,Release)(THIS) PURE;
++	STDMETHOD(AddError)(THIS_ LPCOLESTR,LPEXCEPINFO) PURE;
++};
++#undef INTERFACE
++
++EXTERN_C const IID IID_IPropertyBag;
++#define INTERFACE IPropertyBag
++DECLARE_INTERFACE_(IPropertyBag,IUnknown)
++{
++	STDMETHOD(QueryInterface)(THIS_ REFIID,PVOID*) PURE;
++	STDMETHOD_(ULONG,AddRef)(THIS) PURE;
++	STDMETHOD_(ULONG,Release)(THIS) PURE;
++	STDMETHOD(Read)(THIS_ LPCOLESTR,LPVARIANT,LPERRORLOG) PURE;
++	STDMETHOD(Write)(THIS_ LPCOLESTR,LPVARIANT) PURE;
++};
++#undef INTERFACE
++
+ #ifdef __cplusplus
+ }
+ #endif
+--- include/objidl.h.orig	2006-11-19 08:08:34.000000000 +0900
++++ include/objidl.h	2007-01-20 11:56:53.875000000 +0900
+@@ -1,3 +1,4 @@
++#include <ole2.h>
+ #ifndef _OBJIDL_H
+ #define _OBJIDL_H
+ #if __GNUC__ >= 3
+@@ -127,6 +128,7 @@
+ 	struct IAdviseSink *pAdvSink;
+ 	DWORD dwConnection;
+ } STATDATA;
++#if 0
+ typedef struct tagSTATPROPSETSTG {
+ 	FMTID fmtid;
+ 	CLSID clsid;
+@@ -135,6 +137,7 @@
+ 	FILETIME ctime;
+ 	FILETIME atime;
+ } STATPROPSETSTG;
++#endif
+ typedef enum tagEXTCONN {
+ 	EXTCONN_STRONG=1,
+ 	EXTCONN_WEAK=2,
+@@ -247,6 +250,7 @@
+ typedef enum tagSERVERCALL {
+ 	SERVERCALL_ISHANDLED,SERVERCALL_REJECTED,SERVERCALL_RETRYLATER
+ } SERVERCALL;
++#if 0
+ typedef struct tagCAUB {
+ 	ULONG cElems;
+ 	unsigned char *pElems;
+@@ -406,6 +410,7 @@
+ 	PROPSETFLAG_DEFAULT,PROPSETFLAG_NONSIMPLE,PROPSETFLAG_ANSI,
+ 	PROPSETFLAG_UNBUFFERED=4
+ } PROPSETFLAG;
++#endif
+ typedef struct tagSTORAGELAYOUT {
+ 	DWORD LayoutType;
+ 	OLECHAR* pwcsElementName;
+@@ -454,8 +459,10 @@
+ DECLARE_ENUMERATOR(FORMATETC);
+ DECLARE_ENUMERATOR(HLITEM);
+ DECLARE_ENUMERATOR(STATDATA);
++#if 0
+ DECLARE_ENUMERATOR(STATPROPSETSTG);
+ DECLARE_ENUMERATOR(STATPROPSTG);
++#endif
+ DECLARE_ENUMERATOR(STATSTG);
+ DECLARE_ENUMERATOR_(IEnumString,LPOLESTR);
+ DECLARE_ENUMERATOR_(IEnumMoniker,_COM_interface IMoniker*);
+@@ -927,6 +934,7 @@
+ };
+ #undef INTERFACE
+ 
++#if 0
+ EXTERN_C const IID IID_IPropertyStorage;
+ #define INTERFACE IPropertyStorage
+ DECLARE_INTERFACE_(IPropertyStorage,IUnknown)
+@@ -962,6 +970,7 @@
+ 	STDMETHOD(Enum)(THIS_ IEnumSTATPROPSETSTG**) PURE;
+ };
+ #undef INTERFACE
++#endif
+ 
+ EXTERN_C const IID IID_IClientSecurity;
+ #define INTERFACE IClientSecurity
 --- include/objfwd.h.orig	2006-03-26 09:21:36.000000000 +0900
 +++ include/objfwd.h	2006-03-26 09:21:42.000000000 +0900
 @@ -27,7 +27,7 @@
- typedef interface IEnumFORMATETC *LPENUMFORMATETC;
- typedef interface IEnumSTATDATA *LPENUMSTATDATA;
- typedef interface IEnumSTATSTG *LPENUMSTATSTG;
--typedef interface IEnumSTATPROPSTG LPENUMSTATPROPSTG;
-+typedef interface IEnumSTATPROPSTG *LPENUMSTATPROPSTG;
- typedef interface IEnumString *LPENUMSTRING;
- typedef interface IEnumUnknown *LPENUMUNKNOWN;
- typedef interface IStorage *LPSTORAGE;
---- include/rpcndr.h.orig	2006-03-26 09:21:36.000000000 +0900
-+++ include/rpcndr.h	2006-03-26 09:21:42.000000000 +0900
-@@ -48,6 +48,7 @@
+ typedef _COM_interface IEnumFORMATETC *LPENUMFORMATETC;
+ typedef _COM_interface IEnumSTATDATA *LPENUMSTATDATA;
+ typedef _COM_interface IEnumSTATSTG *LPENUMSTATSTG;
+-typedef _COM_interface IEnumSTATPROPSTG LPENUMSTATPROPSTG;
++typedef _COM_interface IEnumSTATPROPSTG *LPENUMSTATPROPSTG;
+ typedef _COM_interface IEnumString *LPENUMSTRING;
+ typedef _COM_interface IEnumUnknown *LPENUMUNKNOWN;
+ typedef _COM_interface IStorage *LPSTORAGE;
+--- include/uxtheme.h.orig	2006-11-19 08:08:36.000000000 +0900
++++ include/uxtheme.h	2007-01-18 18:51:37.125000000 +0900
+@@ -10,7 +10,7 @@
+ extern "C" {
  #endif
- #define small char
- typedef unsigned char byte;
-+typedef unsigned char boolean;
- #define NDRSContextValue(hContext) (&(hContext)->userContext)
- #define cbNDRContext 20
- #define byte_from_ndr(source, target) { *(target) = *(*(char**)&(source)->Buffer)++; }
---- include/wininet.h.orig	2006-03-26 09:21:36.000000000 +0900
-+++ include/wininet.h	2006-04-04 23:18:14.000000000 +0900
-@@ -868,6 +868,7 @@
- BOOL WINAPI InternetAutodial(DWORD,DWORD);
- BOOL WINAPI InternetAutodialHangup(DWORD);
- BOOL WINAPI InternetGetConnectedState(LPDWORD,DWORD);
-+BOOL WINAPI InternetGetConnectedStateEx(LPDWORD,LPTSTR,DWORD,DWORD);
- BOOL WINAPI InternetSetDialState(LPCTSTR,DWORD,DWORD);
- BOOL WINAPI InternetReadFileExA(HINTERNET,LPINTERNET_BUFFERSA,DWORD,DWORD_PTR);
- BOOL WINAPI InternetReadFileExW(HINTERNET,LPINTERNET_BUFFERSW,DWORD,DWORD_PTR);
---- include/winbase.h.orig	2006-03-26 09:21:36.000000000 +0900
-+++ include/winbase.h	2006-04-04 23:18:14.000000000 +0900
-@@ -980,12 +980,14 @@
+ 
+-#if (_WIN32_WINNT >= 0x0501)
++//#if (_WIN32_WINNT >= 0x0501)
+ #define DTBG_CLIPRECT 0x00000001
+ #define DTBG_DRAWSOLID 0x00000002
+ #define DTBG_OMITBORDER 0x00000004
+@@ -265,7 +265,7 @@
+ HTHEME WINAPI OpenThemeData(HWND,LPCWSTR);
+ void WINAPI SetThemeAppProperties(DWORD);
+ HRESULT WINAPI SetWindowTheme(HWND,LPCWSTR,LPCWSTR);
+-#endif
++//#endif
+ 
+ #ifdef __cplusplus
+ }
+--- include/winbase.h.orig	2006-11-19 08:08:36.000000000 +0900
++++ include/winbase.h	2007-01-20 00:16:33.484375000 +0900
+@@ -993,12 +993,14 @@
  	WORD Reserved2;
  	CHAR szPathName[OFS_MAXPATHNAME];
  } OFSTRUCT,*LPOFSTRUCT,*POFSTRUCT;
@@ -259,7 +395,7 @@
  #if (_WIN32_WINNT >= 0x0501)
  typedef struct tagACTCTXA {
  	ULONG cbSize;
-@@ -1303,8 +1305,8 @@
+@@ -1337,8 +1337,8 @@
  WINBASEAPI HANDLE WINAPI FindFirstFileExW(LPCWSTR,FINDEX_INFO_LEVELS,PVOID,FINDEX_SEARCH_OPS,PVOID,DWORD);
  WINBASEAPI BOOL WINAPI FindFirstFreeAce(PACL,PVOID*);
  #if (_WIN32_WINNT >= 0x0500)
@@ -270,7 +406,7 @@
  WINBASEAPI HANDLE WINAPI FindFirstVolumeMountPointA(LPSTR,LPSTR,DWORD);
  WINBASEAPI HANDLE WINAPI FindFirstVolumeMountPointW(LPWSTR,LPWSTR,DWORD);
  #endif
-@@ -1312,7 +1314,7 @@
+@@ -1346,7 +1346,7 @@
  WINBASEAPI BOOL WINAPI FindNextFileA(HANDLE,LPWIN32_FIND_DATAA);
  WINBASEAPI BOOL WINAPI FindNextFileW(HANDLE,LPWIN32_FIND_DATAW);
  #if (_WIN32_WINNT >= 0x0500)
@@ -279,16 +415,176 @@
  WINBASEAPI BOOL WINAPI FindNextVolumeW(HANDLE,LPWSTR,DWORD);
  WINBASEAPI BOOL WINAPI FindNextVolumeMountPointA(HANDLE,LPSTR,DWORD);
  WINBASEAPI BOOL WINAPI FindNextVolumeMountPointW(HANDLE,LPWSTR,DWORD);
---- include/winnt.h.orig	2006-03-26 09:21:36.000000000 +0900
-+++ include/winnt.h	2006-03-26 09:21:42.000000000 +0900
-@@ -2567,6 +2567,7 @@
- 	IMAGE_FILE_HEADER FileHeader;
- 	IMAGE_OPTIONAL_HEADER OptionalHeader;
- } IMAGE_NT_HEADERS,*PIMAGE_NT_HEADERS;
-+#define PIMAGE_NT_HEADERS32 PIMAGE_NT_HEADERS
- typedef struct _IMAGE_ROM_HEADERS {
- 	IMAGE_FILE_HEADER FileHeader;
- 	IMAGE_ROM_OPTIONAL_HEADER OptionalHeader;
+@@ -1458,10 +1458,10 @@
+ WINBASEAPI DWORD WINAPI GetLogicalDrives(void);
+ WINBASEAPI DWORD WINAPI GetLogicalDriveStringsA(DWORD,LPSTR);
+ WINBASEAPI DWORD WINAPI GetLogicalDriveStringsW(DWORD,LPWSTR);
+-#if (_WIN32_WINNT >= 0x0500 || _WIN32_WINDOWS >= 0x0410)
++//#if (_WIN32_WINNT >= 0x0500 || _WIN32_WINDOWS >= 0x0410)
+ WINBASEAPI DWORD WINAPI GetLongPathNameA(LPCSTR,LPSTR,DWORD);
+ WINBASEAPI DWORD WINAPI GetLongPathNameW(LPCWSTR,LPWSTR,DWORD);
+-#endif
++//#endif
+ WINBASEAPI BOOL WINAPI GetMailslotInfo(HANDLE,PDWORD,PDWORD,PDWORD,PDWORD);
+ WINBASEAPI DWORD WINAPI GetModuleFileNameA(HINSTANCE,LPSTR,DWORD);
+ WINBASEAPI DWORD WINAPI GetModuleFileNameW(HINSTANCE,LPWSTR,DWORD);
+@@ -1499,9 +1499,9 @@
+ #endif
+ WINBASEAPI HANDLE WINAPI GetProcessHeap(VOID);
+ WINBASEAPI DWORD WINAPI GetProcessHeaps(DWORD,PHANDLE);
+-#if (_WIN32_WINNT >= 0x0501)
++//#if (_WIN32_WINNT >= 0x0501)
+ WINBASEAPI DWORD WINAPI GetProcessId(HANDLE);
+-#endif
++//#endif
+ #if (_WIN32_WINNT >= 0x0500)
+ WINBASEAPI BOOL WINAPI GetProcessIoCounters(HANDLE,PIO_COUNTERS);
+ #endif
+@@ -1779,9 +1779,9 @@
+ WINBASEAPI BOOL WINAPI OpenProcessToken(HANDLE,DWORD,PHANDLE);
+ WINBASEAPI HANDLE WINAPI OpenSemaphoreA(DWORD,BOOL,LPCSTR);
+ WINBASEAPI HANDLE WINAPI OpenSemaphoreW(DWORD,BOOL,LPCWSTR);
+-#if (_WIN32_WINNT >= 0x0500) || (_WIN32_WINDOWS >= 0x0490)
++//#if (_WIN32_WINNT >= 0x0500) || (_WIN32_WINDOWS >= 0x0490)
+ WINBASEAPI HANDLE WINAPI OpenThread(DWORD,BOOL,DWORD);
+-#endif
++//#endif
+ WINBASEAPI BOOL WINAPI OpenThreadToken(HANDLE,DWORD,BOOL,PHANDLE);
+ WINBASEAPI HANDLE WINAPI OpenWaitableTimerA(DWORD,BOOL,LPCSTR);
+ WINBASEAPI HANDLE WINAPI OpenWaitableTimerW(DWORD,BOOL,LPCWSTR);
+@@ -2122,9 +2122,9 @@
+ #define GetFileAttributesEx GetFileAttributesExW
+ #define GetFullPathName GetFullPathNameW
+ #define GetLogicalDriveStrings GetLogicalDriveStringsW
+-#if (_WIN32_WINNT >= 0x0500 || _WIN32_WINDOWS >= 0x0410)
++//#if (_WIN32_WINNT >= 0x0500 || _WIN32_WINDOWS >= 0x0410)
+ #define GetLongPathName GetLongPathNameW
+-#endif
++//#endif
+ #define GetModuleFileName GetModuleFileNameW
+ #define GetModuleHandle GetModuleHandleW
+ #if (_WIN32_WINNT >= 0x0500)
+@@ -2317,9 +2317,9 @@
+ #define GetFileAttributesEx GetFileAttributesExA
+ #define GetFullPathName GetFullPathNameA
+ #define GetLogicalDriveStrings GetLogicalDriveStringsA
+-#if (_WIN32_WINNT >= 0x0500 || _WIN32_WINDOWS >= 0x0410)
++//#if (_WIN32_WINNT >= 0x0500 || _WIN32_WINDOWS >= 0x0410)
+ #define GetLongPathName GetLongPathNameA
+-#endif
++//#endif
+ #define GetNamedPipeHandleState GetNamedPipeHandleStateA
+ #define GetModuleHandle GetModuleHandleA
+ #if (_WIN32_WINNT >= 0x0500)
+--- include/wininet.h.orig	2006-03-26 09:21:36.000000000 +0900
++++ include/wininet.h	2006-04-04 23:18:14.000000000 +0900
+@@ -868,6 +868,7 @@
+ BOOL WINAPI InternetAutodial(DWORD,DWORD);
+ BOOL WINAPI InternetAutodialHangup(DWORD);
+ BOOL WINAPI InternetGetConnectedState(LPDWORD,DWORD);
++BOOL WINAPI InternetGetConnectedStateEx(LPDWORD,LPTSTR,DWORD,DWORD);
+ BOOL WINAPI InternetSetDialState(LPCTSTR,DWORD,DWORD);
+ BOOL WINAPI InternetReadFileExA(HINTERNET,LPINTERNET_BUFFERSA,DWORD,DWORD_PTR);
+ BOOL WINAPI InternetReadFileExW(HINTERNET,LPINTERNET_BUFFERSW,DWORD,DWORD_PTR);
+--- include/winnt.h.orig	2006-11-19 08:08:37.000000000 +0900
++++ include/winnt.h	2007-01-16 07:06:57.796875000 +0900
+@@ -67,9 +67,9 @@
+ #endif
+ #endif
+ 
+-#ifndef C_ASSERT
+-#define C_ASSERT(expr) typedef char __C_ASSERT__[(expr)?1:-1]
+-#endif
++//#ifndef C_ASSERT
++//#define C_ASSERT(expr) typedef char __C_ASSERT__[(expr)?1:-1]
++//#endif
+ 
+ #ifndef VOID
+ #define VOID void
+--- include/winuser.h.orig	2006-11-19 08:08:37.000000000 +0900
++++ include/winuser.h	2007-01-20 00:22:52.765625000 +0900
+@@ -950,12 +950,14 @@
+ #define SM_SLOWMACHINE 73
+ #define SM_MIDEASTENABLED 74
+ #define SM_MOUSEWHEELPRESENT 75
++#if (WINVER >= 0x0500)
+ #define SM_XVIRTUALSCREEN 76
+ #define SM_YVIRTUALSCREEN 77
+ #define SM_CXVIRTUALSCREEN 78
+ #define SM_CYVIRTUALSCREEN 79
+ #define SM_CMONITORS 80
+ #define SM_SAMEDISPLAYFORMAT 81
++#endif
+ #define SM_IMMENABLED 82
+ #define SM_CXFOCUSBORDER 83
+ #define SM_CYFOCUSBORDER 84
+@@ -2451,7 +2453,9 @@
+ typedef BOOL(CALLBACK *DRAWSTATEPROC)(HDC,LPARAM,WPARAM,int,int);
+ typedef BOOL(CALLBACK *WNDENUMPROC)(HWND,LPARAM);
+ typedef BOOL(CALLBACK *ENUMWINDOWSPROC)(HWND,LPARAM);
++#if (WINVER >= 0x0500)
+ typedef BOOL(CALLBACK* MONITORENUMPROC)(HMONITOR,HDC,LPRECT,LPARAM);
++#endif
+ typedef BOOL(CALLBACK *NAMEENUMPROCA)(LPSTR,LPARAM);
+ typedef BOOL(CALLBACK *NAMEENUMPROCW)(LPWSTR,LPARAM);
+ typedef NAMEENUMPROCA DESKTOPENUMPROCA;
+@@ -3125,6 +3129,7 @@
+ 	UINT cbSize;
+ 	DWORD dwTime;
+ } LASTINPUTINFO,*PLASTINPUTINFO;
++#if (WINVER >= 0x0500)
+ typedef struct tagMONITORINFO {
+ 	DWORD cbSize;
+ 	RECT rcMonitor;
+@@ -3157,6 +3162,7 @@
+ 	WCHAR	szDevice[CCHDEVICENAME];
+ } MONITORINFOEXW,*LPMONITORINFOEXW;
+ #endif /* __cplusplus */
++#endif
+ typedef struct tagKBDLLHOOKSTRUCT {
+ 	DWORD vkCode;
+ 	DWORD scanCode;
+@@ -3525,7 +3531,9 @@
+ WINUSERAPI BOOL WINAPI EnumDesktopsA(HWINSTA,DESKTOPENUMPROCA,LPARAM);
+ WINUSERAPI BOOL WINAPI EnumDesktopsW(HWINSTA,DESKTOPENUMPROCW,LPARAM);
+ WINUSERAPI BOOL WINAPI EnumDesktopWindows(HDESK,ENUMWINDOWSPROC,LPARAM);
++#if (WINVER >= 0x0500)
+ WINUSERAPI BOOL WINAPI EnumDisplayMonitors(HDC,LPCRECT,MONITORENUMPROC,LPARAM);
++#endif
+ #ifndef NOGDI
+ WINUSERAPI BOOL WINAPI EnumDisplaySettingsA(LPCSTR,DWORD,PDEVMODEA);
+ WINUSERAPI BOOL WINAPI EnumDisplaySettingsW(LPCWSTR,DWORD,PDEVMODEW);
+@@ -3715,8 +3723,10 @@
+ WINUSERAPI BOOL WINAPI GetScrollBarInfo(HWND,LONG,PSCROLLBARINFO);
+ WINUSERAPI BOOL WINAPI GetTitleBarInfo(HWND,PTITLEBARINFO);
+ WINUSERAPI BOOL WINAPI GetWindowInfo(HWND,PWINDOWINFO);
++#if (WINVER >= 0x0500)
+ WINUSERAPI BOOL WINAPI GetMonitorInfoA(HMONITOR,LPMONITORINFO);
+ WINUSERAPI BOOL WINAPI GetMonitorInfoW(HMONITOR,LPMONITORINFO);
++#endif
+ WINUSERAPI UINT WINAPI GetWindowModuleFileNameA(HWND,LPSTR,UINT);
+ WINUSERAPI UINT WINAPI GetWindowModuleFileNameW(HWND,LPWSTR,UINT);
+ WINUSERAPI BOOL WINAPI GrayStringA(HDC,HBRUSH,GRAYSTRINGPROC,LPARAM,int,int,int,int,int);
+@@ -4067,7 +4077,9 @@
+ typedef CBT_CREATEWNDW CBT_CREATEWND, *LPCBT_CREATEWND;
+ typedef MDICREATESTRUCTW MDICREATESTRUCT,*LPMDICREATESTRUCT;
+ typedef MULTIKEYHELPW MULTIKEYHELP,*PMULTIKEYHELP,*LPMULTIKEYHELP;
++#if (WINVER >= 0x0500)
+ typedef MONITORINFOEXW MONITORINFOEX, *LPMONITORINFOEX;
++#endif
+ #define AppendMenu AppendMenuW
+ #define BroadcastSystemMessage BroadcastSystemMessageW
+ #define BroadcastSystemMessageEx BroadcastSystemMessageExW
+@@ -4232,7 +4244,9 @@
+ typedef CBT_CREATEWNDA CBT_CREATEWND, *LPCBT_CREATEWND;
+ typedef MDICREATESTRUCTA MDICREATESTRUCT,*LPMDICREATESTRUCT;
+ typedef MULTIKEYHELPA MULTIKEYHELP,*PMULTIKEYHELP,*LPMULTIKEYHELP;
++#if (WINVER >= 0x0500)
+ typedef MONITORINFOEXA MONITORINFOEX, *LPMONITORINFOEX;
++#endif
+ #define AppendMenu AppendMenuA
+ #define BroadcastSystemMessage BroadcastSystemMessageA
+ #define BroadcastSystemMessageEx BroadcastSystemMessageExA
 --- include/winver.h.orig	2006-03-26 09:21:36.000000000 +0900
 +++ include/winver.h	2006-03-26 09:21:42.000000000 +0900
 @@ -101,10 +101,10 @@
@@ -306,9 +602,9 @@
  DWORD WINAPI VerLanguageNameA(DWORD,LPSTR,DWORD);
  DWORD WINAPI VerLanguageNameW(DWORD,LPWSTR,DWORD);
  BOOL WINAPI VerQueryValueA(const LPVOID,LPSTR,LPVOID*,PUINT);
---- include/wtypes.h.orig	2006-01-18 04:12:12.000000000 +0900
-+++ include/wtypes.h	2006-04-08 22:05:48.000000000 +0900
-@@ -72,6 +72,29 @@
+--- include/wtypes.h.orig	2006-11-19 08:08:37.000000000 +0900
++++ include/wtypes.h	2007-01-19 23:05:02.531250000 +0900
+@@ -72,6 +72,19 @@
  	unsigned short asData[1];
  }FLAGGED_WORD_BLOB;
  
@@ -323,22 +619,12 @@
 +    ULONG Flags;
 +    } 	COAUTHIDENTITY;
 +
-+typedef struct _COAUTHINFO
-+    {
-+    DWORD dwAuthnSvc;
-+    DWORD dwAuthzSvc;
-+    LPWSTR pwszServerPrincName;
-+    DWORD dwAuthnLevel;
-+    DWORD dwImpersonationLevel;
-+    COAUTHIDENTITY *pAuthIdentityData;
-+    DWORD dwCapabilities;
-+    } 	COAUTHINFO;
 +typedef WORD CLIPFORMAT,*LPCLIPFORMAT;
 +
  #ifndef OLE2ANSI
  typedef WCHAR OLECHAR;
  typedef LPWSTR LPOLESTR;
-@@ -100,6 +123,7 @@
+@@ -100,6 +113,7 @@
  	}_STRUCT_NAME(s);
  	LONGLONG int64;
  } CY;
@@ -346,7 +632,7 @@
  typedef double DATE;
  typedef struct  tagBSTRBLOB {
  	ULONG cbSize;
-@@ -163,7 +187,49 @@
+@@ -163,7 +177,49 @@
  		ULONGLONG Lo64;
  	} DUMMYUNIONNAME2;
  } DECIMAL;
@@ -396,9 +682,31 @@
  #ifdef __cplusplus
  }
  #endif
---- include/adoctint.h.orig	2006-02-26 07:54:34.000000000 +0900
-+++ include/adoctint.h	2006-03-11 15:18:50.000000000 +0900
-@@ -3310,11 +3310,11 @@
+--- include/sys/stat.h.orig	2006-06-25 19:45:42.000000000 +0900
++++ include/sys/stat.h	2006-12-30 18:26:27.578125000 +0900
+@@ -11,6 +11,9 @@
+ 
+ #ifndef _STAT_H_
+ #define _STAT_H_
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ /* All the headers include this file. */
+ #include <_mingw.h>
+--- include/adoctint.h.orig	2005-04-04 18:50:18.000000000 +0900
++++ include/adoctint.h	2007-01-02 17:41:58.437500000 +0900
+@@ -11,6 +11,9 @@
+ //--------------------------------------------------------------------
+ #ifndef _ADOCTINT_H_
+ #define _ADOCTINT_H_
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ #ifndef _INC_TCHAR
+ #include <tchar.h>
+@@ -3310,11 +3313,11 @@
  #endif 	/* __Procedure_INTERFACE_DEFINED__ */
  EXTERN_C const CLSID CLSID_Catalog;
  #ifdef __cplusplus
@@ -412,7 +720,7 @@
  #endif
  #ifndef __Property_INTERFACE_DEFINED__
  #define __Property_INTERFACE_DEFINED__
-@@ -3503,23 +3503,23 @@
+@@ -3503,23 +3506,23 @@
  #endif 	/* __Property_INTERFACE_DEFINED__ */
  EXTERN_C const CLSID CLSID_Group;
  #ifdef __cplusplus
@@ -441,9 +749,57 @@
  #endif
  #ifndef __Tables_INTERFACE_DEFINED__
  #define __Tables_INTERFACE_DEFINED__
+--- include/adodef.h.orig	2005-04-04 18:50:18.000000000 +0900
++++ include/adodef.h	2007-01-05 21:48:51.265625000 +0900
+@@ -12,6 +12,9 @@
+ 
+ #ifndef _ADODEF_H_
+ #define _ADODEF_H_
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ // TYPELIB MAJOR VERSIONS
+ #define ADO_MAJOR			2
+@@ -47,4 +50,4 @@
+ #define ADOMD_TYPELIB_UUID	uuid(22813728-8BD3-11D0-B4EF-00A0C9138CA4)
+ #define JRO_TYPELIB_UUID	uuid(AC3B8B4C-B6CA-11d1-9F31-00C04FC29D52)
+ 
+-#endif // _ADODEF_H_
+\ No newline at end of file
++#endif // _ADODEF_H_
+--- include/adoguids.h.orig	2005-04-04 18:50:18.000000000 +0900
++++ include/adoguids.h	2007-01-05 21:50:10.265625000 +0900
+@@ -11,6 +11,9 @@
+ 
+ #ifndef __ADOGUIDS_H__
+ #define __ADOGUIDS_H__
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ #define STRING_GUID(l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) l##-##w1##-##w2##-##b1##b2##-##b3##b4##b5##b6##b7##b8
+ 
+@@ -27,4 +30,4 @@
+ 
+ #undef IMMEDIATE_GUID_USE
+ 
+-#endif //__ADOGUIDS_H__
+\ No newline at end of file
++#endif //__ADOGUIDS_H__
 --- include/adoint.h.orig	2005-04-04 18:50:18.000000000 +0900
-+++ include/adoint.h	2006-03-11 15:06:04.000000000 +0900
-@@ -4273,7 +4273,7 @@
++++ include/adoint.h	2007-01-02 17:36:43.593750000 +0900
+@@ -11,6 +11,9 @@
+ //--------------------------------------------------------------------
+ #ifndef _ADOINT_H_
+ #define _ADOINT_H_
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ #ifndef _INC_TCHAR
+ #include <tchar.h>
+@@ -4273,7 +4276,7 @@
  #endif 	/* __ADOConnectionConstruction_INTERFACE_DEFINED__ */
  EXTERN_C const CLSID CLSID_Connection;
  #ifdef __cplusplus
@@ -452,7 +808,7 @@
  #endif
  #ifndef ___Record_INTERFACE_DEFINED__
  #define ___Record_INTERFACE_DEFINED__
-@@ -4740,7 +4740,7 @@
+@@ -4740,7 +4743,7 @@
  #endif 	/* ___Record_INTERFACE_DEFINED__ */
  EXTERN_C const CLSID CLSID_Record;
  #ifdef __cplusplus
@@ -461,7 +817,7 @@
  #endif
  #ifndef ___Stream_INTERFACE_DEFINED__
  #define ___Stream_INTERFACE_DEFINED__
-@@ -5281,7 +5281,7 @@
+@@ -5281,7 +5284,7 @@
  #endif 	/* ___Stream_INTERFACE_DEFINED__ */
  EXTERN_C const CLSID CLSID_Stream;
  #ifdef __cplusplus
@@ -470,7 +826,7 @@
  #endif
  #ifndef __ADORecordConstruction_INTERFACE_DEFINED__
  #define __ADORecordConstruction_INTERFACE_DEFINED__
-@@ -5616,11 +5616,11 @@
+@@ -5616,11 +5619,11 @@
  #endif 	/* __ADOCommandConstruction_INTERFACE_DEFINED__ */
  EXTERN_C const CLSID CLSID_Command;
  #ifdef __cplusplus
@@ -484,7 +840,7 @@
  #endif
  #ifndef __Recordset15_INTERFACE_DEFINED__
  #define __Recordset15_INTERFACE_DEFINED__
-@@ -10662,7 +10662,7 @@
+@@ -10662,7 +10665,7 @@
  #endif 	/* ___Parameter_INTERFACE_DEFINED__ */
  EXTERN_C const CLSID CLSID_Parameter;
  #ifdef __cplusplus
@@ -493,7 +849,7 @@
  #endif
  #ifndef __Parameters_INTERFACE_DEFINED__
  #define __Parameters_INTERFACE_DEFINED__
-@@ -11124,4 +11124,4 @@
+@@ -11124,4 +11127,4 @@
  #define ADOStream _ADOStream
  
  
@@ -501,8 +857,30 @@
 \ No newline at end of file
 +#endif // _ADOINT_H_
 --- include/commctrl.h.orig	2005-04-14 17:54:38.000000000 +0900
-+++ include/commctrl.h	2006-04-01 00:40:44.000000000 +0900
-@@ -7319,6 +7319,7 @@
++++ include/commctrl.h	2006-12-31 17:17:40.093750000 +0900
+@@ -349,8 +349,10 @@
+ 
+ // Shell reserved               (0U-580U) -  (0U-589U)
+ 
++#ifndef CDN_FIRST
+ #define CDN_FIRST               (0U-601U)       // common dialog (new)
+ #define CDN_LAST                (0U-699U)
++#endif
+ 
+ #define TBN_FIRST               (0U-700U)       // toolbar
+ #define TBN_LAST                (0U-720U)
+@@ -7005,8 +7007,10 @@
+ #if (_WIN32_WINNT >= 0x501)
+ 
+ // custom combobox control messages
++#ifndef CB_SETMINVISIBLE
+ #define	CB_SETMINVISIBLE        (CBM_FIRST + 1)
+ #define CB_GETMINVISIBLE        (CBM_FIRST + 2)
++#endif
+ 
+ #define ComboBox_SetMinVisible(hwnd, iMinVisible) \
+             (BOOL)SNDMSG((hwnd), CB_SETMINVISIBLE, (WPARAM)iMinVisible, 0)
+@@ -7319,6 +7323,7 @@
  #if defined(ISOLATION_AWARE_ENABLED) && (ISOLATION_AWARE_ENABLED != 0)
  
  
@@ -510,7 +888,7 @@
  #if !defined(ISOLATION_AWARE_USE_STATIC_LIBRARY)
  #define ISOLATION_AWARE_USE_STATIC_LIBRARY 0
  #endif
-@@ -10499,6 +10500,7 @@
+@@ -10499,6 +10504,7 @@
  #define Str_SetPtrW IsolationAwareStr_SetPtrW
  #define UninitializeFlatSB IsolationAwareUninitializeFlatSB
  #define _TrackMouseEvent IsolationAware_TrackMouseEvent
@@ -518,6 +896,42 @@
  
  #endif /* ISOLATION_AWARE_ENABLED */
  #endif /* RC */
+--- include/control.h.orig	2005-04-14 17:54:38.000000000 +0900
++++ include/control.h	2007-01-02 22:16:33.031250000 +0900
+@@ -1,3 +1,6 @@
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ 
+ /* this ALWAYS GENERATED file contains the definitions for the interfaces */
+--- include/filter.h.orig	2005-04-14 17:54:44.000000000 +0900
++++ include/filter.h	2007-01-02 11:15:03.671875000 +0900
+@@ -1,3 +1,6 @@
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ 
+ /* this ALWAYS GENERATED file contains the definitions for the interfaces */
+--- include/gdiplusbitmap.h.orig	2005-04-14 17:54:44.000000000 +0900
++++ include/gdiplusbitmap.h	2007-01-02 11:17:13.125000000 +0900
+@@ -1,3 +1,6 @@
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ /**************************************************************************\
+ *
+ * Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
+--- include/gdiplusbrush.h.orig	2005-04-14 17:54:44.000000000 +0900
++++ include/gdiplusbrush.h	2007-01-02 10:33:22.734375000 +0900
+@@ -1,3 +1,6 @@
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ /**************************************************************************\
+ * 
+ * Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
 --- include/gdiplusenums.h.orig	2003-03-26 16:34:34.000000000 +0900
 +++ include/gdiplusenums.h	2004-12-30 20:42:34.000000000 +0900
 @@ -531,11 +531,11 @@
@@ -534,6 +948,15 @@
  #define GDIP_EMFPLUS_RECORD_TO_WMF(n)   ((n) & (~GDIP_WMF_RECORD_BASE))
  #define GDIP_IS_WMF_RECORDTYPE(n)       (((n) & GDIP_WMF_RECORD_BASE) != 0)
  
+--- include/gdiplusfont.h.orig	2005-04-14 17:54:44.000000000 +0900
++++ include/gdiplusfont.h	2007-01-02 10:35:57.671875000 +0900
+@@ -1,3 +1,6 @@
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ /**************************************************************************\
+ *
+ * Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
 --- include/gdiplusheaders.h.orig	2003-03-26 16:34:34.000000000 +0900
 +++ include/gdiplusheaders.h	2004-12-30 20:58:22.000000000 +0900
 @@ -650,7 +650,7 @@
@@ -545,6 +968,18 @@
  
  public:
      CachedBitmap(IN Bitmap *bitmap,
+--- include/gdiplusimageattributes.h.orig	2005-04-14 17:54:44.000000000 +0900
++++ include/gdiplusimageattributes.h	2007-01-02 10:21:23.031250000 +0900
+@@ -32,6 +32,9 @@
+ 
+ #ifndef _GDIPLUSIMAGEATTRIBUTES_H
+ #define _GDIPLUSIMAGEATTRIBUTES_H
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ class GpImageAttributes;
+ 
 --- include/gdiplusimaging.h.orig	2003-03-26 16:34:34.000000000 +0900
 +++ include/gdiplusimaging.h	2004-12-30 21:15:38.000000000 +0900
 @@ -153,7 +153,7 @@
@@ -556,6 +991,42 @@
      VOID* Scan0;
      UINT_PTR Reserved;
  };
+--- include/gdiplusmatrix.h.orig	2005-04-14 17:54:44.000000000 +0900
++++ include/gdiplusmatrix.h	2007-01-02 10:32:35.203125000 +0900
+@@ -1,3 +1,6 @@
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ /**************************************************************************\
+ * 
+ * Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
+--- include/gdipluspath.h.orig	2005-04-14 17:54:44.000000000 +0900
++++ include/gdipluspath.h	2007-01-02 10:34:33.125000000 +0900
+@@ -1,3 +1,6 @@
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ /**************************************************************************\
+ *
+ * Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
+--- include/gdipluspen.h.orig	2005-04-14 17:54:44.000000000 +0900
++++ include/gdipluspen.h	2007-01-02 10:34:12.593750000 +0900
+@@ -1,3 +1,6 @@
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ /**************************************************************************\
+ * 
+ * Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
+--- include/gdiplusregion.h.orig	2005-04-14 17:54:44.000000000 +0900
++++ include/gdiplusregion.h	2007-01-02 10:35:23.453125000 +0900
+@@ -1,3 +1,6 @@
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ /**************************************************************************\
+ *
+ * Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
 --- include/imagehlp.h.orig	2005-04-14 17:54:44.000000000 +0900
 +++ include/imagehlp.h	2006-04-04 23:22:28.000000000 +0900
 @@ -376,7 +376,7 @@
@@ -576,6 +1047,39 @@
  
  typedef struct _MINIDUMP_THREAD {
      ULONG32 ThreadId;
+--- include/mapinls.h.orig	2005-04-14 17:54:46.000000000 +0900
++++ include/mapinls.h	2006-12-30 20:46:11.125000000 +0900
+@@ -72,7 +72,7 @@
+ typedef const void FAR *				LPCVOID;
+ 
+ #ifndef _MAC
+-#ifndef LPOLESTR
++#ifndef OLESTR
+ #if !defined (_WIN32)
+ 
+ #define LPOLESTR        LPSTR
+@@ -88,9 +88,11 @@
+ #define OLESTR(str)     L##str
+ 
+ #endif /* !_WIN32 */
+-#endif /* LPOLESTR */
++#endif /* OLESTR */
+ #endif /* _MAC */
+ 
++#ifndef NORM_IGNORECASE
++
+ #define NORM_IGNORECASE      			0x00000001     /* ignore case */
+ #define NORM_IGNORENONSPACE  			0x00000002     /* ignore diacritics */
+ #define NORM_IGNORESYMBOLS   			0x00000004     /* ignore symbols */
+@@ -103,6 +105,8 @@
+ #define NORM_IGNOREKANATYPE				0x00000040		/* ignore kanatype */
+ #endif
+ 
++#endif /* NORM_IGNORECASE */
++
+ #if defined(WIN16)
+ 
+ #define	lstrcpyA						lstrcpy
 --- include/mapiwin.h.orig	2003-03-26 16:34:38.000000000 +0900
 +++ include/mapiwin.h	2004-12-28 21:41:14.000000000 +0900
 @@ -428,4 +428,4 @@
@@ -584,78 +1088,36 @@
  #endif /* __MAPIWIN_H__ */
 -
 +
---- include/oaidl.h.orig	2005-04-14 17:54:54.000000000 +0900
-+++ include/oaidl.h	2006-09-17 11:50:46.750000000 +0900
-@@ -405,7 +405,7 @@
-  *    UINT *         VT_BYREF|VT_UINT
-  *  }
-  */
--#if (__STDC__ && !defined(_FORCENAMELESSUNION)) || defined(NONAMELESSUNION)
-+#if (defined(NONAMELESSUNION))
- #define __VARIANT_NAME_1 n1
- #define __VARIANT_NAME_2 n2
- #define __VARIANT_NAME_3 n3
-@@ -420,8 +420,12 @@
- #endif
- typedef /* [wire_marshal] */ struct tagVARIANT VARIANT;
- 
-+#if defined (__GNUC__) && !defined (NONAMELESSUNION)
-+__extension__   /* no named members  */
-+#endif
- struct tagVARIANT
-     {
-+    _ANONYMOUS_UNION
-     union 
-         {
-         struct __tagVARIANT
-@@ -430,6 +434,7 @@
-             WORD wReserved1;
-             WORD wReserved2;
-             WORD wReserved3;
-+            _ANONYMOUS_UNION
-             union 
-                 {
-                 LONGLONG llVal;
---- include/objidl.h.orig	2005-04-14 17:54:54.000000000 +0900
-+++ include/objidl.h	2006-03-30 23:50:30.000000000 +0900
-@@ -6594,6 +6594,7 @@
-     } 	uSTGMEDIUM;
- 
- #endif /* !NONAMELESSUNION */
-+#if 0
- typedef struct _GDI_OBJECT
-     {
-     DWORD ObjectType;
-@@ -6626,15 +6627,17 @@
-     } 	userSTGMEDIUM;
- 
- typedef /* [unique] */ userSTGMEDIUM *wireSTGMEDIUM;
+--- include/msdasc.h.orig	2005-04-04 18:50:18.000000000 +0900
++++ include/msdasc.h	2007-01-05 21:47:51.515625000 +0900
+@@ -1,3 +1,6 @@
++#if __GNUC__ >=3
++#pragma GCC system_header
 +#endif
  
- typedef /* [wire_marshal] */ uSTGMEDIUM STGMEDIUM;
  
--typedef /* [unique] */ userSTGMEDIUM *wireASYNC_STGMEDIUM;
-+//typedef /* [unique] */ userSTGMEDIUM *wireASYNC_STGMEDIUM;
+ /* this ALWAYS GENERATED file contains the definitions for the interfaces */
+--- include/multimon.h.orig	2005-04-14 17:54:52.000000000 +0900
++++ include/multimon.h	2006-12-31 18:00:37.203125000 +0900
+@@ -175,7 +175,7 @@
  
- typedef /* [wire_marshal] */ STGMEDIUM ASYNC_STGMEDIUM;
- 
- typedef STGMEDIUM *LPSTGMEDIUM;
- 
-+#if 0
- typedef struct _userFLAG_STGMEDIUM
-     {
-     long ContextFlags;
-@@ -6643,6 +6646,7 @@
-     } 	userFLAG_STGMEDIUM;
- 
- typedef /* [unique] */ userFLAG_STGMEDIUM *wireFLAG_STGMEDIUM;
-+#endif
- 
- typedef /* [wire_marshal] */ struct _FLAG_STGMEDIUM
-     {
+ BOOL IsPlatformNT()
+ { 
+-    OSVERSIONINFOA osvi = {0};
++    OSVERSIONINFOA osvi;
+     osvi.dwOSVersionInfoSize = sizeof(osvi);
+     GetVersionExA((OSVERSIONINFOA*)&osvi);
+     return (VER_PLATFORM_WIN32_NT == osvi.dwPlatformId);    
 --- include/ocidl.h.orig	2005-04-14 17:54:54.000000000 +0900
-+++ include/ocidl.h	2006-09-02 21:54:34.562500000 +0900
-@@ -5767,11 +5767,13 @@
++++ include/ocidl.h	2007-01-02 17:17:24.328125000 +0900
+@@ -1,3 +1,6 @@
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ 
+ /* this ALWAYS GENERATED file contains the definitions for the interfaces */
+@@ -5767,11 +5770,13 @@
  	HITRESULT_HIT	= 3
      } 	HITRESULT;
  
@@ -711,8 +1173,15 @@
  #define V_VT(X)         ((X)->n1.n2.vt)
  #define V_RECORDINFO(X) ((X)->n1.n2.n3.brecVal.pRecInfo)
 --- include/oledb.h.orig	2005-04-04 18:50:18.000000000 +0900
-+++ include/oledb.h	2006-04-03 06:41:04.000000000 +0900
-@@ -788,7 +788,7 @@
++++ include/oledb.h	2007-01-02 17:16:30.656250000 +0900
+@@ -1,3 +1,6 @@
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ 
+ /* this ALWAYS GENERATED file contains the definitions for the interfaces */
+@@ -788,7 +791,7 @@
  
  //@@@+ V2.0
  #if( OLEDBVER >= 0x0200 )
@@ -721,6 +1190,15 @@
  #define _FILETIME_
  typedef struct _FILETIME {
  		DWORD dwLowDateTime;
+--- include/oleidl.h.orig	2005-04-14 17:54:54.000000000 +0900
++++ include/oleidl.h	2006-12-31 08:27:03.031250000 +0900
+@@ -1,3 +1,6 @@
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ 
+ /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 --- include/propidl.h.orig	2005-04-14 17:54:56.000000000 +0900
 +++ include/propidl.h	2006-04-01 08:26:46.000000000 +0900
 @@ -307,7 +307,7 @@
@@ -733,8 +1211,15 @@
          /* [case()] */ CY cyVal;
          /* [case()] */ DATE date;
 --- include/qedit.h.orig	2005-04-14 17:54:56.000000000 +0900
-+++ include/qedit.h	2006-05-12 22:25:46.000000000 +0900
-@@ -10205,10 +10205,10 @@
++++ include/qedit.h	2007-01-02 22:11:05.140625000 +0900
+@@ -1,3 +1,6 @@
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ 
+ /* this ALWAYS GENERATED file contains the definitions for the interfaces */
+@@ -10205,10 +10208,10 @@
  #define DEX_IDS_GRAPH_ERROR        1427
  #define DEX_IDS_GRID_ERROR        1428
  #define DEX_IDS_INTERFACE_ERROR    1429
@@ -760,9 +1245,25 @@
  
  #endif // FO_MOVE
  
---- include/shtypes.h.orig	2005-04-14 17:54:58.000000000 +0900
-+++ include/shtypes.h	2006-03-31 06:51:02.000000000 +0900
-@@ -122,7 +122,7 @@
+--- include/shobjidl.h	2006-12-30 18:12:26.718750000 +0900
++++ include/shobjidl.h	2006-12-30 18:23:17.281250000 +0900
+@@ -1,3 +1,6 @@
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ 
+ /* this ALWAYS GENERATED file contains the definitions for the interfaces */
+--- include/shtypes.h.orig	2006-12-30 18:12:26.093750000 +0900
++++ include/shtypes.h	2006-12-30 18:24:10.953125000 +0900
+@@ -1,3 +1,6 @@
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ 
+ /* this ALWAYS GENERATED file contains the definitions for the interfaces */
+@@ -122,7 +125,7 @@
      } 	ITEMIDLIST;
  
  #include <poppack.h>
@@ -792,8 +1293,15 @@
      #define __maybenull
      #define __readonly
 --- include/strmif.h.orig	2005-04-14 17:54:58.000000000 +0900
-+++ include/strmif.h	2006-04-05 19:36:02.000000000 +0900
-@@ -20566,7 +20566,7 @@
++++ include/strmif.h	2007-01-02 22:04:39.312500000 +0900
+@@ -1,3 +1,6 @@
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ 
+ /* this ALWAYS GENERATED file contains the definitions for the interfaces */
+@@ -20566,7 +20569,7 @@
  #define _IAMFilterGraphCallback_
  // Note: Because this interface was not defined as a proper interface it is
  //       supported under C++ only. Methods aren't stdcall.
@@ -802,7 +1310,7 @@
  interface IAMFilterGraphCallback : public IUnknown
  {
      // S_OK means rendering complete, S_FALSE means retry now.
-@@ -28962,7 +28962,7 @@
+@@ -28962,7 +28965,7 @@
  typedef struct tagVMRGUID
      {
      GUID *pGUID;
@@ -811,6 +1319,27 @@
      } 	VMRGUID;
  
  typedef struct tagVMRMONITORINFO
+--- include/strsafe.h.orig	2005-04-14 17:54:58.000000000 +0900
++++ include/strsafe.h	2007-01-02 22:20:15.218750000 +0900
+@@ -11,6 +11,9 @@
+ #ifndef _STRSAFE_H_INCLUDED_
+ #define _STRSAFE_H_INCLUDED_
+ #pragma once
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ #include <stdio.h>          // for _vsnprintf, _vsnwprintf, getc, getwc
+ #include <string.h>         // for memset
+--- include/urlmon.h.orig	2005-04-14 17:55:00.000000000 +0900
++++ include/urlmon.h	2006-12-31 08:26:09.921875000 +0900
+@@ -1,3 +1,6 @@
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ 
+ /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 --- include/wincrypt.h.orig	2005-04-14 17:55:02.000000000 +0900
 +++ include/wincrypt.h	2006-03-29 00:13:26.000000000 +0900
 @@ -14713,8 +14713,8 @@
@@ -927,8 +1456,18 @@
  
  // structure for IPV6_PKTINFO option
 --- include/wspiapi.h.orig	2005-04-14 17:55:04.000000000 +0900
-+++ include/wspiapi.h	2006-05-03 12:32:14.000000000 +0900
-@@ -76,6 +76,11 @@
++++ include/wspiapi.h	2006-12-30 18:25:01.375000000 +0900
+@@ -15,6 +15,9 @@
+ 
+ #ifndef _WSPIAPI_H_
+ #define _WSPIAPI_H_
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ #include <stdio.h>              // sprintf()
+ #include <stdlib.h>             // calloc(), strtoul()
+@@ -76,6 +79,11 @@
  
  #ifdef __cplusplus
  extern "C" {
@@ -940,7 +1479,7 @@
  #endif
      
  ////////////////////////////////////////////////////////////
-@@ -1043,6 +1048,8 @@
+@@ -1043,6 +1051,8 @@
      (*pfFreeAddrInfo)(ai);
  }
  
@@ -950,8 +1489,25 @@
  }
  #endif
 --- include/atl/atlbase.h.orig	2005-04-14 17:54:32.000000000 +0900
-+++ include/atl/atlbase.h	2006-10-07 13:55:07.859375000 +0900
-@@ -79,13 +79,41 @@
++++ include/atl/atlbase.h	2006-12-31 08:24:46.640625000 +0900
+@@ -10,6 +10,9 @@
+ 
+ #ifndef __ATLBASE_H__
+ #define __ATLBASE_H__
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ #ifndef __cplusplus
+         #error ATL requires C++ compilation (use a .cpp suffix)
+@@ -73,19 +76,47 @@
+ #define _ATL_TYPELIB_INDEX_LENGTH 10
+ #define _ATL_QUOTES_SPACE 2
+ 
+-#pragma pack(push, _ATL_PACKING)
++#pragma pack(push, 8)
+ 
+ #if defined(_ATL_DLL)
          #pragma comment(lib, "atl.lib")
  #endif
  
@@ -1000,7 +1556,7 @@
  
  #ifndef _ATL_DLL_IMPL
  namespace ATL
-@@ -135,7 +163,7 @@
+@@ -135,7 +166,7 @@
                  IUnknown* p = NULL;
                  if (pfnGetClassObject == NULL)
                          return S_OK;
@@ -1009,7 +1565,7 @@
                  if (SUCCEEDED(hRes))
                          hRes = CoRegisterClassObject(*pclsid, p, dwClsContext, dwFlags, &dwRegister);
                  if (p != NULL)
-@@ -284,13 +312,15 @@
+@@ -284,13 +315,15 @@
  };
  #pragma pack(pop)
  
@@ -1030,7 +1586,7 @@
  
  #elif defined (_M_AMD64)
  #pragma pack(push,2)
-@@ -658,6 +688,7 @@
+@@ -658,6 +691,7 @@
  class _NoAddRefReleaseOnCComPtr : public T
  {
          private:
@@ -1038,7 +1594,7 @@
                  STDMETHOD_(ULONG, AddRef)()=0;
                  STDMETHOD_(ULONG, Release)()=0;
  };
-@@ -781,6 +812,7 @@
+@@ -781,6 +815,7 @@
          {
                  return AtlAdvise(p, pUnk, iid, pdw);
          }
@@ -1046,7 +1602,7 @@
          HRESULT CoCreateInstance(REFCLSID rclsid, LPUNKNOWN pUnkOuter = NULL, DWORD dwClsContext = CLSCTX_ALL)
          {
                  ATLASSERT(p == NULL);
-@@ -801,11 +833,12 @@
+@@ -801,11 +836,12 @@
                  ATLASSERT(pp != NULL && *pp == NULL);
                  return p->QueryInterface(__uuidof(Q), (void**)pp);
          }
@@ -1060,7 +1616,7 @@
  class CComQIPtr
  {
  public:
-@@ -933,6 +966,7 @@
+@@ -933,6 +969,7 @@
          {
                  return AtlAdvise(p, pUnk, iid, pdw);
          }
@@ -1068,7 +1624,7 @@
          HRESULT CoCreateInstance(REFCLSID rclsid, LPUNKNOWN pUnkOuter = NULL, DWORD dwClsContext = CLSCTX_ALL)
          {
                  ATLASSERT(p == NULL);
-@@ -953,6 +987,7 @@
+@@ -953,6 +990,7 @@
                  ATLASSERT(pp != NULL && *pp == NULL);
                  return p->QueryInterface(__uuidof(Q), (void**)pp);
          }
@@ -1076,7 +1632,7 @@
          T* p;
  };
  
-@@ -1087,12 +1122,14 @@
+@@ -1087,12 +1125,14 @@
                          hr = ::CoCreateInstance(clsid, pUnkOuter, dwClsContext, __uuidof(IUnknown), (void**)&p);
                  return hr;
          }
@@ -1091,7 +1647,7 @@
          IUnknown* p;
  };
  
-@@ -1257,21 +1294,26 @@
+@@ -1257,21 +1297,26 @@
  		LeaveCriticalSection(&m_sec);
  		return S_OK;
  	}
@@ -1128,7 +1684,7 @@
  		return hRes;
  	}
  
-@@ -2799,10 +2841,19 @@
+@@ -2799,10 +2844,19 @@
  
  
  class CComModule;
@@ -1150,7 +1706,7 @@
  
  class CComModule : public _ATL_MODULE
  {
-@@ -4286,7 +4337,9 @@
+@@ -4286,7 +4340,9 @@
  
  #endif
  
@@ -1161,7 +1717,7 @@
  
  #ifdef _ATL_STATIC_REGISTRY
  #define UpdateRegistryFromResource UpdateRegistryFromResourceS
-@@ -4355,7 +4408,9 @@
+@@ -4355,7 +4411,9 @@
          LONG m_nLockCnt;
  };
  
@@ -1172,7 +1728,7 @@
  
  class CComSimpleThreadAllocator
  {
-@@ -5855,6 +5910,10 @@
+@@ -5855,6 +5913,10 @@
                  }
  
          }
@@ -1183,7 +1739,7 @@
          void Seek(int nElement)
          {
                  if(nElement < 0 || nElement >= m_nMaxElements)
-@@ -5866,41 +5925,53 @@
+@@ -5866,41 +5928,53 @@
          {
                  if(nElement < 0 || nElement >= m_nMaxElements)
                          _AtlRaiseException((DWORD)EXCEPTION_ARRAY_BOUNDS_EXCEEDED);                
@@ -1243,7 +1799,7 @@
              }
          }
          T& Read()
-@@ -5910,14 +5981,18 @@
+@@ -5910,14 +5984,18 @@
          operator BSTR()
          {
                  BSTR bstrTemp = NULL ;
@@ -1264,7 +1820,7 @@
                  return bstrTemp;
          }
          const T& operator[](int nElement) const
-@@ -6336,6 +6411,11 @@
+@@ -6336,6 +6414,11 @@
  //Although these functions are big, they are only used once in a module
  //so we should make them inline.
  
@@ -1276,7 +1832,7 @@
  ATLINLINE ATLAPI AtlModuleInit(_ATL_MODULE* pM, _ATL_OBJMAP_ENTRY* p, HINSTANCE h)
  {
          ATLASSERT(pM != NULL);
-@@ -6352,32 +6432,43 @@
+@@ -6352,32 +6435,43 @@
          pM->m_hInst = pM->m_hInstTypeLib = pM->m_hInstResource = h;
          pM->m_nLockCnt=0L;
          pM->m_hHeap = NULL;
@@ -1327,7 +1883,7 @@
  #ifdef _ATL_DLL_IMPL
          if (pM->cbSize > _nAtlModuleVer21Size)
  #endif
-@@ -6450,6 +6541,11 @@
+@@ -6450,6 +6544,11 @@
          return hRes;
  }
  
@@ -1339,7 +1895,7 @@
  ATLINLINE ATLAPI AtlModuleGetClassObject(_ATL_MODULE* pM, REFCLSID rclsid, REFIID riid, LPVOID* ppv)
  {
          ATLASSERT(pM != NULL);
-@@ -6473,15 +6569,15 @@
+@@ -6473,15 +6572,15 @@
                          if (pEntry->pCF == NULL)
                          {
                                  EnterCriticalSection(&pM->m_csObjMap);
@@ -1362,8 +1918,27 @@
                          if (pEntry->pCF != NULL)
                                  hRes = pEntry->pCF->QueryInterface(riid, ppv);
 --- include/atl/atlcom.h.orig	2005-04-14 17:54:32.000000000 +0900
-+++ include/atl/atlcom.h	2006-10-07 16:36:44.000000000 +0900
-@@ -2191,19 +2191,23 @@
++++ include/atl/atlcom.h	2006-12-31 09:17:56.984375000 +0900
+@@ -10,6 +10,9 @@
+ 
+ #ifndef __ATLCOM_H__
+ #define __ATLCOM_H__
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ #ifndef __cplusplus
+         #error ATL requires C++ compilation (use a .cpp suffix)
+@@ -19,7 +22,7 @@
+         #error atlcom.h requires atlbase.h to be included first
+ #endif
+ 
+-#pragma pack(push, _ATL_PACKING)
++#pragma pack(push, 8)
+ 
+ EXTERN_C const IID IID_ITargetFrame;
+ 
+@@ -2191,19 +2194,23 @@
  // override it in your class and call each base class' version of this
  #define BEGIN_COM_MAP(x) public: \
          typedef x _ComMapClass; \
@@ -1392,7 +1967,16 @@
                  return hRes;\
          }\
          IUnknown* _GetRawUnknown() \
-@@ -2492,9 +2496,9 @@
+@@ -2339,7 +2346,7 @@
+    return( pMap ); }
+ 
+ #define BEGIN_OBJECT_MAP(x) static _ATL_OBJMAP_ENTRY x[] = {
+-#define END_OBJECT_MAP()   {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL}};
++#define END_OBJECT_MAP()   {NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL}};
+ #define OBJECT_ENTRY(clsid, class) {&clsid, class::UpdateRegistry, class::_ClassFactoryCreatorClass::CreateInstance, class::_CreatorClass::CreateInstance, NULL, 0, class::GetObjectDescription, class::GetCategoryMap, class::ObjectMain },
+ #define OBJECT_ENTRY_NON_CREATEABLE(class) {&CLSID_NULL, class::UpdateRegistry, NULL, NULL, NULL, 0, NULL, class::GetCategoryMap, class::ObjectMain },
+ 
+@@ -2492,9 +2499,9 @@
  public:
          typedef ThreadModel _ThreadModel;
  #ifdef OLD_ATL_CRITSEC_CODE
@@ -1404,7 +1988,7 @@
  #endif  /* OLD_ATL_CRITSEC_CODE */
          typedef CComObjectLockT<_ThreadModel> ObjectLock;
  
-@@ -2638,8 +2642,8 @@
+@@ -2638,8 +2645,8 @@
          // Set refcount to 1 to protect destruction
          ~CComObject()
          {
@@ -1415,7 +1999,7 @@
  #ifdef _ATL_DEBUG_INTERFACES
                  _Module.DeleteNonAddRefThunk(_GetRawUnknown());
  #endif
-@@ -2647,22 +2651,24 @@
+@@ -2647,22 +2654,24 @@
          }
          //If InternalAddRef or InternalRelease is undefined then your class
          //doesn't derive from CComObjectRoot
@@ -1443,7 +2027,7 @@
  
          static HRESULT WINAPI CreateInstance(CComObject<Base>** pp);
  };
-@@ -2719,8 +2725,8 @@
+@@ -2719,8 +2728,8 @@
  #endif  /* OLD_ATL_CRITSEC_CODE */
          ~CComObjectCached()
          {
@@ -1454,7 +2038,7 @@
  #ifdef _ATL_DEBUG_INTERFACES
                  _Module.DeleteNonAddRefThunk(_GetRawUnknown());
  #endif
-@@ -2729,14 +2735,14 @@
+@@ -2729,14 +2738,14 @@
          //doesn't derive from CComObjectRoot
          STDMETHOD_(ULONG, AddRef)()
          {
@@ -1471,7 +2055,7 @@
                  if (l == 0)
                          delete this;
                  else if (l == 1)
-@@ -2745,7 +2751,7 @@
+@@ -2745,7 +2754,7 @@
          }
          //if _InternalQueryInterface is undefined then you forgot BEGIN_COM_MAP
          STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject)
@@ -1480,7 +2064,7 @@
  #ifndef OLD_ATL_CRITSEC_CODE
      	CComGlobalsThreadModel::AutoDeleteCriticalSection m_csCached;
  #endif  /* OLD_ATL_CRITSEC_CODE */
-@@ -2762,8 +2768,8 @@
+@@ -2762,8 +2771,8 @@
          // Set refcount to 1 to protect destruction
          ~CComObjectNoLock()
          {
@@ -1491,7 +2075,7 @@
  #ifdef _ATL_DEBUG_INTERFACES
                  _Module.DeleteNonAddRefThunk(_GetRawUnknown());
  #endif
-@@ -2771,17 +2777,17 @@
+@@ -2771,17 +2780,17 @@
  
          //If InternalAddRef or InternalRelease is undefined then your class
          //doesn't derive from CComObjectRoot
@@ -1512,7 +2096,7 @@
  };
  
  // It is possible for Base not to derive from CComObjectRoot
-@@ -2794,14 +2800,14 @@
+@@ -2794,14 +2803,14 @@
          CComObjectGlobal(void* = NULL)
          {
  #ifndef OLD_ATL_CRITSEC_CODE
@@ -1530,7 +2114,7 @@
  #ifdef _ATL_DEBUG_INTERFACES
                  _Module.DeleteNonAddRefThunk(_GetRawUnknown());
  #endif
-@@ -2810,7 +2816,7 @@
+@@ -2810,7 +2819,7 @@
          STDMETHOD_(ULONG, AddRef)() {return _Module.Lock();}
          STDMETHOD_(ULONG, Release)(){return _Module.Unlock();}
          STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject)
@@ -1539,7 +2123,7 @@
          HRESULT m_hResFinalConstruct;
  };
  
-@@ -2824,14 +2830,14 @@
+@@ -2824,14 +2833,14 @@
          CComObjectStack(void* = NULL)
          {
  #ifndef OLD_ATL_CRITSEC_CODE
@@ -1557,7 +2141,7 @@
  #ifdef _ATL_DEBUG_INTERFACES
                  _Module.DeleteNonAddRefThunk(_GetRawUnknown());
  #endif
-@@ -2850,6 +2856,8 @@
+@@ -2850,6 +2859,8 @@
  {
  public:
          typedef Base _BaseClass;
@@ -1566,7 +2150,7 @@
          CComContainedObject(void* pv) {m_pOuterUnknown = (IUnknown*)pv;}
  #ifdef _ATL_DEBUG_INTERFACES
          ~CComContainedObject()
-@@ -2859,20 +2867,22 @@
+@@ -2859,20 +2870,22 @@
          }
  #endif
  
@@ -1593,7 +2177,7 @@
          //GetControllingUnknown may be virtual if the Base class has declared
          //DECLARE_GET_CONTROLLING_UNKNOWN()
          IUnknown* GetControllingUnknown()
-@@ -2915,18 +2925,18 @@
+@@ -2915,18 +2928,18 @@
          // override it in your class and call each base class' version of this
          HRESULT FinalConstruct()
          {
@@ -1615,7 +2199,7 @@
                  FinalRelease();
  #ifdef _ATL_DEBUG_INTERFACES
                  _Module.DeleteNonAddRefThunk(this);
-@@ -2934,10 +2944,10 @@
+@@ -2934,10 +2947,10 @@
                  _Module.Unlock();
          }
  
@@ -1628,7 +2212,7 @@
                  if (l == 0)
                          delete this;
                  return l;
-@@ -2959,11 +2969,13 @@
+@@ -2959,11 +2972,13 @@
                          hRes = m_contained._InternalQueryInterface(iid, ppvObject);
                  return hRes;
          }
@@ -1642,7 +2226,7 @@
          static HRESULT WINAPI CreateInstance(LPUNKNOWN pUnkOuter, CComAggObject<contained>** pp)
          {
                  _ATL_VALIDATE_OUT_POINTER(pp);
-@@ -3023,21 +3035,21 @@
+@@ -3023,21 +3038,21 @@
          // override it in your class and call each base class' version of this
          HRESULT FinalConstruct()
          {
@@ -1669,7 +2253,7 @@
                  FinalRelease();
  #ifdef _ATL_DEBUG_INTERFACES
                  _Module.DeleteNonAddRefThunk(this);
-@@ -3045,10 +3057,10 @@
+@@ -3045,10 +3060,10 @@
                  _Module.Unlock();
          }
  
@@ -1682,7 +2266,7 @@
                  if (l == 0)
                          delete this;
                  return l;
-@@ -3072,11 +3084,13 @@
+@@ -3072,11 +3087,13 @@
                          hRes = m_contained._InternalQueryInterface(iid, ppvObject);
                  return hRes;
          }
@@ -1696,7 +2280,7 @@
          static HRESULT WINAPI CreateInstance(LPUNKNOWN pUnkOuter, CComPolyObject<contained>** pp)
          {
                  _ATL_VALIDATE_OUT_POINTER(pp);
-@@ -3111,27 +3125,28 @@
+@@ -3111,27 +3128,28 @@
  class CComTearOffObject : public Base
  {
  public:
@@ -1730,7 +2314,7 @@
                  if (l == 0)
                          delete this;
                  return l;
-@@ -3150,27 +3165,27 @@
+@@ -3150,27 +3168,27 @@
  public:
          typedef contained _BaseClass;
          CComCachedTearOffObject(void* pv) :
@@ -1763,7 +2347,7 @@
                  FinalRelease();
  #ifdef _ATL_DEBUG_INTERFACES
                  _Module.DeleteNonAddRefThunk(this);
-@@ -3178,10 +3193,10 @@
+@@ -3178,10 +3196,10 @@
          }
  
  
@@ -1776,7 +2360,7 @@
                  if (l == 0)
                          delete this;
                  return l;
-@@ -3260,6 +3275,8 @@
+@@ -3260,6 +3278,8 @@
  {
  public:
          typedef license _LicenseClass;
@@ -1785,7 +2369,7 @@
          typedef CComClassFactory2<license> _ComMapClass;
  BEGIN_COM_MAP(CComClassFactory2<license>)
          COM_INTERFACE_ENTRY(IClassFactory)
-@@ -3297,7 +3314,7 @@
+@@ -3297,7 +3317,7 @@
                  if (ppvObject == NULL)
                          return E_POINTER;
                  *ppvObject = NULL;
@@ -1794,7 +2378,7 @@
                           ((bstrKey == NULL) && !IsLicenseValid()) )
                          return CLASS_E_NOTLICENSED;
                  if ((pUnkOuter != NULL) && !InlineIsEqualUnknown(riid))
-@@ -3363,7 +3380,7 @@
+@@ -3363,7 +3383,7 @@
                          if (pUnkOuter != NULL)
                                  hRes = CLASS_E_NOAGGREGATION;
                          else
@@ -1803,7 +2387,7 @@
                  }
                  return hRes;
          }
-@@ -3454,6 +3471,7 @@
+@@ -3454,6 +3474,7 @@
                          lpszHelpFile, iid, hRes);
          }
  #endif
@@ -1811,7 +2395,7 @@
          template <class Q>
          static HRESULT CreateInstance(IUnknown* punkOuter, Q** pp)
          {
-@@ -3464,6 +3482,7 @@
+@@ -3464,6 +3485,7 @@
          {
                  return T::_CreatorClass::CreateInstance(NULL, __uuidof(Q), (void**) pp);
          }
@@ -1819,7 +2403,7 @@
  };
  
  // ATL doesn't support multiple LCID's at the same time
-@@ -3651,7 +3670,7 @@
+@@ -3651,7 +3673,7 @@
                          {
                                  CComPtr<ITypeInfo> spInfo(spTypeInfo);
                                  CComPtr<ITypeInfo2> spTypeInfo2;
@@ -1828,7 +2412,7 @@
                                          spInfo = spTypeInfo2;
  
                                  m_pInfo = spInfo.Detach();
-@@ -3760,6 +3779,9 @@
+@@ -3760,6 +3782,9 @@
  /////////////////////////////////////////////////////////////////////////////
  // IDispEventImpl
  
@@ -1838,7 +2422,7 @@
  #ifdef _ATL_DLL
  ATLAPI AtlGetObjectSourceInterface(IUnknown* punkObj, GUID* plibid, IID* piid, unsigned short* pdwMajor, unsigned short* pdwMinor);
  #else
-@@ -3909,16 +3931,17 @@
+@@ -3909,16 +3934,17 @@
  #else
  
  #pragma warning(disable:4740)       // flow in/out of inline disables global opts
@@ -1865,7 +2449,7 @@
  }
  #pragma warning(default:4740)
  #endif
-@@ -3985,6 +4008,7 @@
+@@ -3985,6 +4011,7 @@
  class ATL_NO_VTABLE IDispEventSimpleImpl : public _IDispEventLocator<nID, pdiid>
  {
  public:
@@ -1873,7 +2457,7 @@
          STDMETHOD(_LocDEQueryInterface)(REFIID riid, void ** ppvObject)
          {
                  _ATL_VALIDATE_OUT_POINTER(ppvObject);
-@@ -3992,7 +4016,7 @@
+@@ -3992,7 +4019,7 @@
                  if (InlineIsEqualGUID(riid, *pdiid) || 
                          InlineIsEqualUnknown(riid) ||
                          InlineIsEqualGUID(riid, IID_IDispatch) ||
@@ -1882,7 +2466,7 @@
                  {
                          *ppvObject = this;
                          AddRef();
-@@ -4186,6 +4210,10 @@
+@@ -4186,6 +4213,10 @@
  {
  public:
          typedef tihclass _tihclass;
@@ -1893,7 +2477,7 @@
  
          IDispEventImpl()
          {
-@@ -4475,6 +4503,11 @@
+@@ -4475,6 +4506,11 @@
          }
  };
  
@@ -1905,7 +2489,7 @@
  
  /////////////////////////////////////////////////////////////////////////////
  // CComEnumImpl
-@@ -4746,7 +4779,7 @@
+@@ -4746,7 +4782,7 @@
          return S_OK;
  }
  
@@ -1914,7 +2498,7 @@
  class ATL_NO_VTABLE CComEnum :
          public CComEnumImpl<Base, piid, T, Copy>,
          public CComObjectRootEx< ThreadModel >
-@@ -4868,7 +4901,7 @@
+@@ -4868,7 +4904,7 @@
          return hRes;
  }
  
@@ -1923,7 +2507,7 @@
  class ATL_NO_VTABLE CComEnumOnSTL :
          public IEnumOnSTLImpl<Base, piid, T, Copy, CollType>,
          public CComObjectRootEx< ThreadModel >
-@@ -4901,7 +4934,7 @@
+@@ -4901,7 +4937,7 @@
                          return E_INVALIDARG;                        
                  HRESULT hr = E_FAIL;
                  Index--;
@@ -1932,7 +2516,7 @@
                  while (iter != m_coll.end() && Index > 0)
                  {
                          iter++;
-@@ -5314,7 +5347,7 @@
+@@ -5314,7 +5350,7 @@
                  if (InlineIsEqualGUID(riid, IID_IConnectionPoint) || InlineIsEqualUnknown(riid))
                  {
                          *ppvObject = this;
@@ -1975,8 +2559,27 @@
  
  #pragma prefast(pop)
 --- include/atl/atlctl.h.orig	2005-04-14 17:54:32.000000000 +0900
-+++ include/atl/atlctl.h	2006-10-07 15:47:14.250000000 +0900
-@@ -142,7 +142,7 @@
++++ include/atl/atlctl.h	2006-12-31 08:25:53.890625000 +0900
+@@ -10,6 +10,9 @@
+ 
+ #ifndef __ATLCTL_H__
+ #define __ATLCTL_H__
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ #ifndef __cplusplus
+         #error ATL requires C++ compilation (use a .cpp suffix)
+@@ -57,7 +60,7 @@
+ namespace ATL
+ {
+ 
+-#pragma pack(push, _ATL_PACKING)
++#pragma pack(push, 8)
+ 
+ // Forward declarations
+ //
+@@ -142,7 +145,7 @@
          CComControlBase(HWND& h) : m_hWndCD(h)
          {
                  memset(this, 0, sizeof(CComControlBase));
@@ -1985,7 +2588,7 @@
                  m_sizeExtent.cx = 2*2540;
                  m_sizeExtent.cy = 2*2540;
                  m_sizeNatural = m_sizeExtent;
-@@ -530,13 +530,13 @@
+@@ -530,13 +533,13 @@
          SIZE m_sizeNatural; //unscaled size in himetric
          SIZE m_sizeExtent;  //current extents in himetric
          RECT m_rcPos; // position in pixels
@@ -2005,7 +2608,7 @@
          union
          {
                  // m_nFreezeEvents is the only one actually used
-@@ -1362,7 +1362,7 @@
+@@ -1362,7 +1365,7 @@
  class ATL_NO_VTABLE CComControl :  public CComControlBase, public WinBase
  {
  public:
@@ -2014,7 +2617,7 @@
          HRESULT FireOnRequestEdit(DISPID dispID)
          {
                  T* pT = static_cast<T*>(this);
-@@ -1401,6 +1401,8 @@
+@@ -1401,6 +1404,8 @@
  class CComCompositeControl : public CComControl< T, CAxDialogImpl< T > >
  {
  public:
@@ -2023,7 +2626,7 @@
          CComCompositeControl()
          {
                  m_hbrBackground = NULL;
-@@ -1429,7 +1431,7 @@
+@@ -1429,7 +1434,7 @@
                          m_hbrBackground = NULL;
                  }
                  OLE_COLOR clr;
@@ -2032,7 +2635,7 @@
                  if (SUCCEEDED(hr))
                  {
                          COLORREF rgb;
-@@ -1458,10 +1460,10 @@
+@@ -1458,10 +1463,10 @@
          }
          HWND Create(HWND hWndParent, RECT& /*rcPos*/, LPARAM dwInitParam = NULL)
          {
@@ -2045,7 +2648,7 @@
                  return m_hWnd;
          }
          BOOL CalcExtent(SIZE& size)
-@@ -1488,7 +1490,7 @@
+@@ -1488,7 +1493,7 @@
                          return FALSE;
                  // find a direct child of the dialog from the window that has focus
                  HWND hWndCtl = ::GetFocus();
@@ -2054,7 +2657,7 @@
                  {
                          do
                          {
-@@ -1546,7 +1548,7 @@
+@@ -1546,7 +1551,7 @@
                          break;
                  }
  
@@ -2063,7 +2666,7 @@
          }
          HRESULT IOleInPlaceObject_InPlaceDeactivate(void)
          {
-@@ -1563,7 +1565,7 @@
+@@ -1563,7 +1568,7 @@
          }
          virtual HRESULT OnDraw(ATL_DRAWINFO& di)
          {
@@ -2073,8 +2676,18 @@
                          HPEN hPen = (HPEN)::GetStockObject(BLACK_PEN);
                          HBRUSH hBrush = (HBRUSH)::GetStockObject(GRAY_BRUSH);
 --- include/atl/atlwin.h.orig	2005-04-14 17:54:32.000000000 +0900
-+++ include/atl/atlwin.h	2006-10-07 16:35:28.406250000 +0900
-@@ -99,6 +99,8 @@
++++ include/atl/atlwin.h	2006-12-30 22:59:02.312500000 +0900
+@@ -10,6 +10,9 @@
+ 
+ #ifndef __ATLWIN_H__
+ #define __ATLWIN_H__
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ #ifndef __cplusplus
+         #error ATL requires C++ compilation (use a .cpp suffix)
+@@ -99,6 +102,8 @@
  #else
  #define CWndClassInfo CWndClassInfoA
  #endif
@@ -2083,7 +2696,7 @@
  template <class T, class TBase = CWindow, class TWinTraits = CControlWinTraits> class CWindowImpl;
  template <class T, class TBase = CWindow> class CDialogImpl;
  #ifndef _ATL_NO_HOSTING
-@@ -658,6 +660,13 @@
+@@ -658,6 +663,13 @@
                  ATLASSERT(::IsWindow(m_hWnd));
                  return ::GetDlgItemText(m_hWnd, nID, lpStr, nMaxCount);
          }
@@ -2097,7 +2710,7 @@
          BOOL GetDlgItemText(int nID, BSTR& bstrText) const
          {
                  ATLASSERT(::IsWindow(m_hWnd));
-@@ -847,12 +856,6 @@
+@@ -847,12 +859,6 @@
                  return (int)::SetWindowLong(m_hWnd, GWL_ID, nID);
          }
  
@@ -2110,7 +2723,7 @@
  // Alert Functions
  
          BOOL FlashWindow(BOOL bInvert)
-@@ -1319,7 +1322,9 @@
+@@ -1319,7 +1325,9 @@
          }
  };
  
@@ -2121,7 +2734,7 @@
  
  /////////////////////////////////////////////////////////////////////////////
  // CAxWindow - client side for an ActiveX host window
-@@ -1330,6 +1335,7 @@
+@@ -1330,6 +1338,7 @@
  class CAxWindowT : public TBase
  {
  public:
@@ -2129,7 +2742,7 @@
  // Constructors
          CAxWindowT(HWND hWnd = NULL) : TBase(hWnd)
          { }
-@@ -1439,11 +1445,13 @@
+@@ -1439,11 +1448,13 @@
                          hr = spUnk->QueryInterface(iid, ppUnk);
                  return hr;
          }
@@ -2143,7 +2756,7 @@
          HRESULT QueryControl(REFIID iid, void** ppUnk)
          {
                  ATLASSERT(ppUnk != NULL);
-@@ -1459,11 +1467,13 @@
+@@ -1459,11 +1470,13 @@
                          hr = spUnk->QueryInterface(iid, ppUnk);
                  return hr;
          }
@@ -2157,7 +2770,7 @@
          HRESULT SetExternalDispatch(IDispatch* pDisp)
          {
                  HRESULT hr;
-@@ -1750,7 +1760,7 @@
+@@ -1750,7 +1763,7 @@
  
          // search for an empty one
  
@@ -2166,7 +2779,7 @@
                  {
                          if(m_aChainEntry[i] == NULL)
                          {
-@@ -1841,7 +1851,7 @@
+@@ -1841,7 +1854,7 @@
  /////////////////////////////////////////////////////////////////////////////
  // CWinTraits - Defines various default values for a window
  
@@ -2175,7 +2788,7 @@
  class CWinTraits
  {
  public:
-@@ -1855,7 +1865,7 @@
+@@ -1855,7 +1868,7 @@
          }
  };
  
@@ -2184,7 +2797,7 @@
  typedef CWinTraits<WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, WS_EX_APPWINDOW | WS_EX_WINDOWEDGE>                CFrameWinTraits;
  typedef CWinTraits<WS_OVERLAPPEDWINDOW | WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, WS_EX_MDICHILD>        CMDIChildWinTraits;
  
-@@ -1882,6 +1892,7 @@
+@@ -1882,6 +1895,7 @@
  class ATL_NO_VTABLE CWindowImplRoot : public TBase, public CMessageMap
  {
  public:
@@ -2192,7 +2805,7 @@
          CWndProcThunk m_thunk;
          const MSG* m_pCurrentMsg;
  
-@@ -1892,7 +1903,7 @@
+@@ -1892,7 +1906,7 @@
          ~CWindowImplRoot()
          {
  #ifdef _DEBUG
@@ -2201,7 +2814,7 @@
                  {
                          ATLTRACE2(atlTraceWindowing, 0, _T("ERROR - Object deleted before window was destroyed\n"));
                          ATLASSERT(FALSE);
-@@ -2017,6 +2028,8 @@
+@@ -2017,6 +2031,8 @@
  class ATL_NO_VTABLE CWindowImplBaseT : public CWindowImplRoot< TBase >
  {
  public:
@@ -2210,7 +2823,7 @@
          WNDPROC m_pfnSuperWindowProc;
  
          CWindowImplBaseT() : m_pfnSuperWindowProc(::DefWindowProc)
-@@ -2049,7 +2062,7 @@
+@@ -2049,7 +2065,7 @@
  
          LRESULT DefWindowProc()
          {
@@ -2219,7 +2832,7 @@
                  LRESULT lRes = 0;
                  if (pMsg != NULL)
                          lRes = DefWindowProc(pMsg->message, pMsg->wParam, pMsg->lParam);
-@@ -2219,6 +2232,7 @@
+@@ -2219,6 +2235,7 @@
  class ATL_NO_VTABLE CWindowImpl : public CWindowImplBaseT< TBase, TWinTraits >
  {
  public:
@@ -2227,7 +2840,7 @@
          DECLARE_WND_CLASS(NULL)
  
          HWND Create(HWND hWndParent, RECT& rcPos, LPCTSTR szWindowName = NULL,
-@@ -2226,8 +2240,8 @@
+@@ -2226,8 +2243,8 @@
                          UINT nID = 0, LPVOID lpCreateParam = NULL)
          {
                  if (T::GetWndClassInfo().m_lpszOrigName == NULL)
@@ -2238,7 +2851,7 @@
  
                  dwStyle = T::GetWndStyle(dwStyle);
                  dwExStyle = T::GetWndExStyle(dwExStyle);
-@@ -2244,6 +2258,7 @@
+@@ -2244,6 +2261,7 @@
  class ATL_NO_VTABLE CDialogImplBaseT : public CWindowImplRoot< TBase >
  {
  public:
@@ -2246,7 +2859,7 @@
  	virtual DLGPROC GetDialogProc()
  	{
  		return DialogProc;
-@@ -2344,6 +2359,9 @@
+@@ -2344,6 +2362,9 @@
  class ATL_NO_VTABLE CDialogImpl : public CDialogImplBaseT< TBase >
  {
  public:
@@ -2256,7 +2869,7 @@
  #ifdef _DEBUG
          bool m_bModal;
          CDialogImpl() : m_bModal(false) { }
-@@ -2422,6 +2440,8 @@
+@@ -2422,6 +2443,8 @@
  class ATL_NO_VTABLE CAxDialogImpl : public CDialogImplBaseT< TBase >
  {
  public:
@@ -2265,7 +2878,7 @@
  #ifdef _DEBUG
          bool m_bModal;
          CAxDialogImpl() : m_bModal(false) { }
-@@ -2515,6 +2535,8 @@
+@@ -2515,6 +2538,8 @@
  class CContainedWindowT : public TBase
  {
  public:
@@ -2274,7 +2887,7 @@
          CWndProcThunk m_thunk;
          LPCTSTR m_lpszClassName;
          WNDPROC m_pfnSuperWindowProc;
-@@ -2536,7 +2558,7 @@
+@@ -2536,7 +2561,7 @@
          { }
  
          CContainedWindowT(CMessageMap* pObject, DWORD dwMsgMapID = 0)
@@ -2283,7 +2896,7 @@
                  m_pfnSuperWindowProc(::DefWindowProc),
                  m_pObject(pObject), m_dwMsgMapID(dwMsgMapID),
                  m_pCurrentMsg(NULL)
-@@ -2666,7 +2688,7 @@
+@@ -2666,7 +2691,7 @@
                  LPCTSTR szWindowName = NULL, DWORD dwStyle = 0, DWORD dwExStyle = 0,
                  UINT nID = 0, LPVOID lpCreateParam = NULL)
          {
@@ -2292,7 +2905,7 @@
                  m_pfnSuperWindowProc = ::DefWindowProc;
                  m_pObject = pObject;
                  m_dwMsgMapID = dwMsgMapID;
-@@ -2959,8 +2981,11 @@
+@@ -2959,8 +2984,11 @@
          {
  
                  ::EnterCriticalSection(&pM->m_csWindowCreate);
@@ -2305,7 +2918,7 @@
                          if(p->m_atom == 0)
                          {
                                  HINSTANCE hInst = pM->m_hInst;
-@@ -2979,7 +3004,7 @@
+@@ -2979,7 +3007,7 @@
                                                  if(!::GetClassInfoExA(_Module.GetModuleInstance(), p->m_lpszOrigName, &wc))
                                                  {
                                                          fFail = TRUE;
@@ -2314,7 +2927,7 @@
                                                  }
                                          }
                                          memcpy(&p->m_wc, &wc, sizeof(WNDCLASSEX));
-@@ -3011,10 +3036,7 @@
+@@ -3011,10 +3039,7 @@
                                          p->m_atom = ::RegisterClassExA(&p->m_wc);
                          }
                  }
@@ -2326,7 +2939,7 @@
          }
  
          if (fFail)
-@@ -3038,8 +3060,11 @@
+@@ -3038,8 +3063,11 @@
          if (p->m_atom == 0)
          {
                  ::EnterCriticalSection(&pM->m_csWindowCreate);        
@@ -2339,7 +2952,7 @@
                          if(p->m_atom == 0)
                          {
                                  HINSTANCE hInst = pM->m_hInst;
-@@ -3058,7 +3083,7 @@
+@@ -3058,7 +3086,7 @@
                                                  if(!::GetClassInfoExW(_Module.GetModuleInstance(), p->m_lpszOrigName, &wc))
                                                  {
                                                          fFail = TRUE;
@@ -2348,7 +2961,7 @@
                                                  }
                                          }
                                          memcpy(&p->m_wc, &wc, sizeof(WNDCLASSEX));
-@@ -3090,10 +3115,7 @@
+@@ -3090,10 +3118,7 @@
                                          p->m_atom = ::RegisterClassExW(&p->m_wc);
                          }
                  }
@@ -2384,697 +2997,12 @@
  
  inline BOOL CRegParser::VTFromRegType(LPCTSTR szValueType, VARTYPE& vt)
  {
---- include/objfwd.h.orig	2006-03-26 09:21:36.000000000 +0900
-+++ include/objfwd.h	2006-03-26 09:21:42.000000000 +0900
-@@ -27,7 +27,7 @@
- typedef interface IEnumFORMATETC *LPENUMFORMATETC;
- typedef interface IEnumSTATDATA *LPENUMSTATDATA;
- typedef interface IEnumSTATSTG *LPENUMSTATSTG;
--typedef interface IEnumSTATPROPSTG LPENUMSTATPROPSTG;
-+typedef interface IEnumSTATPROPSTG *LPENUMSTATPROPSTG;
- typedef interface IEnumString *LPENUMSTRING;
- typedef interface IEnumUnknown *LPENUMUNKNOWN;
- typedef interface IStorage *LPSTORAGE;
---- include/ocidl.h.orig	2006-01-18 04:12:08.000000000 +0900
-+++ include/ocidl.h	2006-04-03 07:04:58.000000000 +0900
-@@ -9,6 +9,7 @@
- #endif
- 
- #include <ole2.h>
-+#include <urlmon.h>
- 
- typedef interface IErrorLog *LPERRORLOG;
- typedef interface IPropertyBag *LPPROPERTYBAG;
---- include/rpcndr.h.orig	2006-03-26 09:21:36.000000000 +0900
-+++ include/rpcndr.h	2006-03-26 09:21:42.000000000 +0900
-@@ -48,6 +48,7 @@
- #endif
- #define small char
- typedef unsigned char byte;
-+typedef unsigned char boolean;
- #define NDRSContextValue(hContext) (&(hContext)->userContext)
- #define cbNDRContext 20
- #define byte_from_ndr(source, target) { *(target) = *(*(char**)&(source)->Buffer)++; }
---- include/tchar.h.orig	2006-03-26 09:21:36.000000000 +0900
-+++ include/tchar.h	2006-03-26 09:21:42.000000000 +0900
-@@ -210,6 +210,9 @@
- #define _trewinddir	_wrewinddir
- #define _ttelldir	_wtelldir
- #define _tseekdir	_wseekdir
-+
-+#define _ttempnam	_wtempnam
-+
- #else	/* Not _UNICODE */
- 
- /*
-@@ -386,6 +389,8 @@
- #define _ttelldir	telldir
- #define _tseekdir	seekdir
- 
-+#define _ttempnam	_tempnam
-+
- #endif	/* Not _UNICODE */
- 
- /*
---- include/winbase.h.orig	2006-03-26 09:21:36.000000000 +0900
-+++ include/winbase.h	2006-04-04 23:18:14.000000000 +0900
-@@ -963,12 +963,14 @@
- 	WORD Reserved2;
- 	CHAR szPathName[OFS_MAXPATHNAME];
- } OFSTRUCT,*LPOFSTRUCT,*POFSTRUCT;
-+#if 0
- typedef struct _WIN_CERTIFICATE {
-       DWORD dwLength;
-       WORD wRevision;
-       WORD wCertificateType;
-       BYTE bCertificate[1];
- } WIN_CERTIFICATE, *LPWIN_CERTIFICATE;
-+#endif
- #if (_WIN32_WINNT >= 0x0501)
- typedef struct tagACTCTXA {
- 	ULONG cbSize;
-@@ -1286,8 +1288,8 @@
- WINBASEAPI HANDLE WINAPI FindFirstFileExW(LPCWSTR,FINDEX_INFO_LEVELS,PVOID,FINDEX_SEARCH_OPS,PVOID,DWORD);
- WINBASEAPI BOOL WINAPI FindFirstFreeAce(PACL,PVOID*);
- #if (_WIN32_WINNT >= 0x0500)
--WINBASEAPI HANDLE WINAPI FindFirstVolumeA(LPCSTR,DWORD);
--WINBASEAPI HANDLE WINAPI FindFirstVolumeW(LPCWSTR,DWORD);
-+WINBASEAPI HANDLE WINAPI FindFirstVolumeA(LPSTR,DWORD);
-+WINBASEAPI HANDLE WINAPI FindFirstVolumeW(LPWSTR,DWORD);
- WINBASEAPI HANDLE WINAPI FindFirstVolumeMountPointA(LPSTR,LPSTR,DWORD);
- WINBASEAPI HANDLE WINAPI FindFirstVolumeMountPointW(LPWSTR,LPWSTR,DWORD);
- #endif
-@@ -1295,7 +1297,7 @@
- WINBASEAPI BOOL WINAPI FindNextFileA(HANDLE,LPWIN32_FIND_DATAA);
- WINBASEAPI BOOL WINAPI FindNextFileW(HANDLE,LPWIN32_FIND_DATAW);
- #if (_WIN32_WINNT >= 0x0500)
--WINBASEAPI BOOL WINAPI FindNextVolumeA(HANDLE,LPCSTR,DWORD);
-+WINBASEAPI BOOL WINAPI FindNextVolumeA(HANDLE,LPSTR,DWORD);
- WINBASEAPI BOOL WINAPI FindNextVolumeW(HANDLE,LPWSTR,DWORD);
- WINBASEAPI BOOL WINAPI FindNextVolumeMountPointA(HANDLE,LPSTR,DWORD);
- WINBASEAPI BOOL WINAPI FindNextVolumeMountPointW(HANDLE,LPWSTR,DWORD);
---- include/winnt.h.orig	2006-03-26 09:21:36.000000000 +0900
-+++ include/winnt.h	2006-03-26 09:21:42.000000000 +0900
-@@ -2536,6 +2536,7 @@
- 	IMAGE_FILE_HEADER FileHeader;
- 	IMAGE_OPTIONAL_HEADER OptionalHeader;
- } IMAGE_NT_HEADERS,*PIMAGE_NT_HEADERS;
-+#define PIMAGE_NT_HEADERS32 PIMAGE_NT_HEADERS
- typedef struct _IMAGE_ROM_HEADERS {
- 	IMAGE_FILE_HEADER FileHeader;
- 	IMAGE_ROM_OPTIONAL_HEADER OptionalHeader;
---- include/wtypes.h.orig	2006-01-18 04:12:12.000000000 +0900
-+++ include/wtypes.h	2006-04-08 22:05:48.000000000 +0900
-@@ -72,6 +72,29 @@
- 	unsigned short asData[1];
- }FLAGGED_WORD_BLOB;
- 
-+typedef struct _COAUTHIDENTITY
-+    {
-+    /* [size_is] */ USHORT *User;
-+    /* [range] */ ULONG UserLength;
-+    /* [size_is] */ USHORT *Domain;
-+    /* [range] */ ULONG DomainLength;
-+    /* [size_is] */ USHORT *Password;
-+    /* [range] */ ULONG PasswordLength;
-+    ULONG Flags;
-+    } 	COAUTHIDENTITY;
-+
-+typedef struct _COAUTHINFO
-+    {
-+    DWORD dwAuthnSvc;
-+    DWORD dwAuthzSvc;
-+    LPWSTR pwszServerPrincName;
-+    DWORD dwAuthnLevel;
-+    DWORD dwImpersonationLevel;
-+    COAUTHIDENTITY *pAuthIdentityData;
-+    DWORD dwCapabilities;
-+    } 	COAUTHINFO;
-+typedef WORD CLIPFORMAT,*LPCLIPFORMAT;
-+
- #ifndef OLE2ANSI
- typedef WCHAR OLECHAR;
- typedef LPWSTR LPOLESTR;
-@@ -100,6 +123,7 @@
- 	}_STRUCT_NAME(s);
- 	LONGLONG int64;
- } CY;
-+typedef union tagCY *LPCY;
- typedef double DATE;
- typedef struct  tagBSTRBLOB {
- 	ULONG cbSize;
-@@ -163,7 +187,49 @@
- 		ULONGLONG Lo64;
- 	} DUMMYUNIONNAME2;
- } DECIMAL;
-+typedef DECIMAL *LPDECIMAL;
- typedef void *HMETAFILEPICT;
-+
-+typedef enum tagTYSPEC {
-+    TYSPEC_CLSID, 
-+    TYSPEC_FILEEXT,
-+    TYSPEC_MIMETYPE,
-+    TYSPEC_FILENAME,
-+    TYSPEC_PROGID,
-+    TYSPEC_PACKAGENAME,
-+    TYSPEC_OBJECTID
-+} TYSPEC;
-+
-+typedef union {
-+        CLSID clsid;
-+        LPOLESTR pFileExt;
-+        LPOLESTR pMimeType;
-+        LPOLESTR pProgId;
-+        LPOLESTR pFileName;
-+        struct {
-+        LPOLESTR pPackageName;
-+        GUID PolicyId;
-+        } ByName;
-+        struct {
-+        GUID ObjectId;
-+        GUID PolicyId;
-+        } ByObjectId;
-+} uCLSSPEC;
-+
-+typedef struct tagCSPLATFORM {
-+   DWORD dwContext;
-+   DWORD dwVersionHi;
-+   DWORD dwVersionLo;
-+   DWORD dwProcessorArch;
-+} CSPLATFORM;
-+
-+typedef struct tagQUERYCONTEXT {
-+  DWORD dwContext;
-+  CSPLATFORM Platform;
-+  LCID Locale;
-+  DWORD dwVersionHi;
-+  DWORD dwVersionLo;
-+} QUERYCONTEXT;
- #ifdef __cplusplus
- }
- #endif
---- include/adoint.h.orig	2005-04-04 18:50:18.000000000 +0900
-+++ include/adoint.h	2006-03-11 15:06:04.000000000 +0900
-@@ -4273,7 +4273,7 @@
- #endif 	/* __ADOConnectionConstruction_INTERFACE_DEFINED__ */
- EXTERN_C const CLSID CLSID_Connection;
- #ifdef __cplusplus
--Connection;
-+//Connection;
- #endif
- #ifndef ___Record_INTERFACE_DEFINED__
- #define ___Record_INTERFACE_DEFINED__
-@@ -4740,7 +4740,7 @@
- #endif 	/* ___Record_INTERFACE_DEFINED__ */
- EXTERN_C const CLSID CLSID_Record;
- #ifdef __cplusplus
--Record;
-+//Record;
- #endif
- #ifndef ___Stream_INTERFACE_DEFINED__
- #define ___Stream_INTERFACE_DEFINED__
-@@ -5281,7 +5281,7 @@
- #endif 	/* ___Stream_INTERFACE_DEFINED__ */
- EXTERN_C const CLSID CLSID_Stream;
- #ifdef __cplusplus
--Stream;
-+//Stream;
- #endif
- #ifndef __ADORecordConstruction_INTERFACE_DEFINED__
- #define __ADORecordConstruction_INTERFACE_DEFINED__
-@@ -5616,11 +5616,11 @@
- #endif 	/* __ADOCommandConstruction_INTERFACE_DEFINED__ */
- EXTERN_C const CLSID CLSID_Command;
- #ifdef __cplusplus
--Command;
-+//Command;
- #endif
- EXTERN_C const CLSID CLSID_Recordset;
- #ifdef __cplusplus
--Recordset;
-+//Recordset;
- #endif
- #ifndef __Recordset15_INTERFACE_DEFINED__
- #define __Recordset15_INTERFACE_DEFINED__
-@@ -10662,7 +10662,7 @@
- #endif 	/* ___Parameter_INTERFACE_DEFINED__ */
- EXTERN_C const CLSID CLSID_Parameter;
- #ifdef __cplusplus
--Parameter;
-+//Parameter;
- #endif
- #ifndef __Parameters_INTERFACE_DEFINED__
- #define __Parameters_INTERFACE_DEFINED__
-@@ -11124,4 +11124,4 @@
- #define ADOStream _ADOStream
- 
- 
--#endif // _ADOINT_H_
-\ No newline at end of file
-+#endif // _ADOINT_H_
---- include/commctrl.h.orig	2005-04-14 17:54:38.000000000 +0900
-+++ include/commctrl.h	2006-04-01 00:40:44.000000000 +0900
-@@ -7319,6 +7319,7 @@
- #if defined(ISOLATION_AWARE_ENABLED) && (ISOLATION_AWARE_ENABLED != 0)
- 
- 
-+#if 0
- #if !defined(ISOLATION_AWARE_USE_STATIC_LIBRARY)
- #define ISOLATION_AWARE_USE_STATIC_LIBRARY 0
- #endif
-@@ -10499,6 +10500,7 @@
- #define Str_SetPtrW IsolationAwareStr_SetPtrW
- #define UninitializeFlatSB IsolationAwareUninitializeFlatSB
- #define _TrackMouseEvent IsolationAware_TrackMouseEvent
+--- icnlude/dxtrans.h.orig	2004-09-28 00:18:32.000000000 +0900
++++ include/dxtrans.h	2007-01-02 22:08:41.640625000 +0900
+@@ -1,3 +1,6 @@
++#if __GNUC__ >=3
++#pragma GCC system_header
 +#endif
  
- #endif /* ISOLATION_AWARE_ENABLED */
- #endif /* RC */
---- include/gdiplusenums.h.orig	2003-03-26 16:34:34.000000000 +0900
-+++ include/gdiplusenums.h	2004-12-30 20:42:34.000000000 +0900
-@@ -531,11 +531,11 @@
- // We have to change the WMF record numbers so that they don't conflict with
- // the EMF and EMF+ record numbers.
+ #pragma warning( disable: 4049 )  /* more than 64k source lines */
  
--enum EmfPlusRecordType;
-+// enum EmfPlusRecordType;
- 
- #define GDIP_EMFPLUS_RECORD_BASE        0x00004000
- #define GDIP_WMF_RECORD_BASE            0x00010000
--#define GDIP_WMF_RECORD_TO_EMFPLUS(n)   ((EmfPlusRecordType)((n) | GDIP_WMF_RECORD_BASE))
-+#define GDIP_WMF_RECORD_TO_EMFPLUS(n)   ((n) | GDIP_WMF_RECORD_BASE)
- #define GDIP_EMFPLUS_RECORD_TO_WMF(n)   ((n) & (~GDIP_WMF_RECORD_BASE))
- #define GDIP_IS_WMF_RECORDTYPE(n)       (((n) & GDIP_WMF_RECORD_BASE) != 0)
- 
---- include/gdiplusheaders.h.orig	2003-03-26 16:34:34.000000000 +0900
-+++ include/gdiplusheaders.h	2004-12-30 20:58:22.000000000 +0900
-@@ -650,7 +650,7 @@
- 
- class CachedBitmap : public GdiplusBase
- {
--    friend Graphics;
-+    friend class Graphics;
- 
- public:
-     CachedBitmap(IN Bitmap *bitmap,
---- include/gdiplusimaging.h.orig	2003-03-26 16:34:34.000000000 +0900
-+++ include/gdiplusimaging.h	2004-12-30 21:15:38.000000000 +0900
-@@ -153,7 +153,7 @@
-     UINT Width;
-     UINT Height;
-     INT Stride;
--    PixelFormat PixelFormat;
-+    PixelFormat aPixelFormat;
-     VOID* Scan0;
-     UINT_PTR Reserved;
- };
---- include/imagehlp.h.orig	2005-04-14 17:54:44.000000000 +0900
-+++ include/imagehlp.h	2006-04-04 23:22:28.000000000 +0900
-@@ -376,7 +376,7 @@
- IMAGEAPI
- TouchFileTimes (
-     HANDLE FileHandle,
--    PSYSTEMTIME pSystemTime
-+    LPSYSTEMTIME pSystemTime
-     );
- 
- BOOL
-@@ -2592,7 +2592,7 @@
- // ThreadId must be 4 bytes on all architectures.
- //
- 
--C_ASSERT (sizeof ( ((PPROCESS_INFORMATION)0)->dwThreadId ) == 4);
-+//C_ASSERT (sizeof ( ((PPROCESS_INFORMATION)0)->dwThreadId ) == 4);
- 
- typedef struct _MINIDUMP_THREAD {
-     ULONG32 ThreadId;
---- include/mapiwin.h.orig	2003-03-26 16:34:38.000000000 +0900
-+++ include/mapiwin.h	2004-12-28 21:41:14.000000000 +0900
-@@ -428,4 +428,4 @@
- #endif
- 
- #endif /* __MAPIWIN_H__ */
--
-+
---- include/objidl.h.orig	2005-04-14 17:54:54.000000000 +0900
-+++ include/objidl.h	2006-03-30 23:50:30.000000000 +0900
-@@ -6594,6 +6594,7 @@
-     } 	uSTGMEDIUM;
- 
- #endif /* !NONAMELESSUNION */
-+#if 0
- typedef struct _GDI_OBJECT
-     {
-     DWORD ObjectType;
-@@ -6626,15 +6627,17 @@
-     } 	userSTGMEDIUM;
- 
- typedef /* [unique] */ userSTGMEDIUM *wireSTGMEDIUM;
-+#endif
- 
- typedef /* [wire_marshal] */ uSTGMEDIUM STGMEDIUM;
- 
--typedef /* [unique] */ userSTGMEDIUM *wireASYNC_STGMEDIUM;
-+//typedef /* [unique] */ userSTGMEDIUM *wireASYNC_STGMEDIUM;
- 
- typedef /* [wire_marshal] */ STGMEDIUM ASYNC_STGMEDIUM;
- 
- typedef STGMEDIUM *LPSTGMEDIUM;
- 
-+#if 0
- typedef struct _userFLAG_STGMEDIUM
-     {
-     long ContextFlags;
-@@ -6643,6 +6646,7 @@
-     } 	userFLAG_STGMEDIUM;
- 
- typedef /* [unique] */ userFLAG_STGMEDIUM *wireFLAG_STGMEDIUM;
-+#endif
- 
- typedef /* [wire_marshal] */ struct _FLAG_STGMEDIUM
-     {
---- include/oleauto.h.orig	2005-04-14 17:54:54.000000000 +0900
-+++ include/oleauto.h	2006-04-08 22:33:24.000000000 +0900
-@@ -392,6 +392,9 @@
- WINOLEAUTAPI VarBoolFromUI8(ULONG64 i64In, VARIANT_BOOL FAR* pboolOut);
- WINOLEAUTAPI VarBoolFromDec(DECIMAL *pdecIn, VARIANT_BOOL *pboolOut);
- 
-+#define __in
-+#define __out
-+
- WINOLEAUTAPI 
- VarI1FromUI1(
-     __in BYTE bIn,
-@@ -485,6 +488,9 @@
-     __out CHAR *pcOut
-     );
- 
-+#undef __in
-+#undef __out
-+
- WINOLEAUTAPI VarUI2FromUI1(BYTE bIn, USHORT *puiOut);
- WINOLEAUTAPI VarUI2FromI2(SHORT uiIn, USHORT *puiOut);
- WINOLEAUTAPI VarUI2FromI4(LONG lIn, USHORT *puiOut);
-@@ -880,6 +886,9 @@
- /*             ICreateTypeLib                                          */
- /*---------------------------------------------------------------------*/
- 
-+typedef interface ICreateTypeLib ICreateTypeLib;
-+typedef interface ICreateTypeLib2 ICreateTypeLib2;
-+typedef interface ICreateTypeInfo ICreateTypeInfo;
- typedef ICreateTypeLib * LPCREATETYPELIB;
- 
- typedef ICreateTypeInfo * LPCREATETYPEINFO;
-@@ -1068,7 +1077,7 @@
- 
- // Declare variant access functions.
- 
--#if __STDC__ || defined(NONAMELESSUNION)
-+#ifdef NONAMELESSUNION
- #define V_UNION(X, Y)   ((X)->n1.n2.n3.Y)
- #define V_VT(X)         ((X)->n1.n2.vt)
- #define V_RECORDINFO(X) ((X)->n1.n2.n3.brecVal.pRecInfo)
---- include/oledb.h.orig	2005-04-04 18:50:18.000000000 +0900
-+++ include/oledb.h	2006-04-03 06:41:04.000000000 +0900
-@@ -788,7 +788,7 @@
- 
- //@@@+ V2.0
- #if( OLEDBVER >= 0x0200 )
--#if !defined(_WINBASE_) && !defined(_FILETIME_)
-+#if !defined(_WINBASE_H) && !defined(_FILETIME_)
- #define _FILETIME_
- typedef struct _FILETIME {
- 		DWORD dwLowDateTime;
---- include/propidl.h.orig	2005-04-14 17:54:56.000000000 +0900
-+++ include/propidl.h	2006-04-01 08:26:46.000000000 +0900
-@@ -307,7 +307,7 @@
-         /* [case()] */ FLOAT fltVal;
-         /* [case()] */ DOUBLE dblVal;
-         /* [case()] */ VARIANT_BOOL boolVal;
--        /* [case()] */ _VARIANT_BOOL bool;
-+//        /* [case()] */ _VARIANT_BOOL bool;
-         /* [case()] */ SCODE scode;
-         /* [case()] */ CY cyVal;
-         /* [case()] */ DATE date;
---- include/qedit.h.orig	2005-04-14 17:54:56.000000000 +0900
-+++ include/qedit.h	2006-05-12 22:25:46.000000000 +0900
-@@ -10205,10 +10205,10 @@
- #define DEX_IDS_GRAPH_ERROR        1427
- #define DEX_IDS_GRID_ERROR        1428
- #define DEX_IDS_INTERFACE_ERROR    1429
--EXTERN_GUID(CLSID_VideoEffects1Category, 0xcc7bfb42, 0xf175, 0x11d1, 0xa3, 0x92, 0x0, 0xe0, 0x29, 0x1f, 0x39, 0x59);
--EXTERN_GUID(CLSID_VideoEffects2Category, 0xcc7bfb43, 0xf175, 0x11d1, 0xa3, 0x92, 0x0, 0xe0, 0x29, 0x1f, 0x39, 0x59);
--EXTERN_GUID(CLSID_AudioEffects1Category, 0xcc7bfb44, 0xf175, 0x11d1, 0xa3, 0x92, 0x0, 0xe0, 0x29, 0x1f, 0x39, 0x59);
--EXTERN_GUID(CLSID_AudioEffects2Category, 0xcc7bfb45, 0xf175, 0x11d1, 0xa3, 0x92, 0x0, 0xe0, 0x29, 0x1f, 0x39, 0x59);
-+DEFINE_GUID(CLSID_VideoEffects1Category, 0xcc7bfb42, 0xf175, 0x11d1, 0xa3, 0x92, 0x0, 0xe0, 0x29, 0x1f, 0x39, 0x59);
-+DEFINE_GUID(CLSID_VideoEffects2Category, 0xcc7bfb43, 0xf175, 0x11d1, 0xa3, 0x92, 0x0, 0xe0, 0x29, 0x1f, 0x39, 0x59);
-+DEFINE_GUID(CLSID_AudioEffects1Category, 0xcc7bfb44, 0xf175, 0x11d1, 0xa3, 0x92, 0x0, 0xe0, 0x29, 0x1f, 0x39, 0x59);
-+DEFINE_GUID(CLSID_AudioEffects2Category, 0xcc7bfb45, 0xf175, 0x11d1, 0xa3, 0x92, 0x0, 0xe0, 0x29, 0x1f, 0x39, 0x59);
- 
- 
- extern RPC_IF_HANDLE __MIDL_itf_qedit_0495_v0_0_c_ifspec;
---- include/shlobj.h.orig	2005-04-14 17:54:58.000000000 +0900
-+++ include/shlobj.h	2006-04-01 15:49:26.000000000 +0900
-@@ -1383,7 +1383,7 @@
- 
- // no POF_ flags currently defined
- 
--typedef UINT PRINTEROP_FLAGS;
-+//typedef UINT PRINTEROP_FLAGS;
- 
- #endif // FO_MOVE
- 
---- include/shtypes.h.orig	2005-04-14 17:54:58.000000000 +0900
-+++ include/shtypes.h	2006-03-31 06:51:02.000000000 +0900
-@@ -122,7 +122,7 @@
-     } 	ITEMIDLIST;
- 
- #include <poppack.h>
--typedef /* [unique] */ BYTE_BLOB *wirePIDL;
-+//typedef /* [unique] */ BYTE_BLOB *wirePIDL;
- 
- typedef /* [wire_marshal] */ ITEMIDLIST __unaligned *LPITEMIDLIST;
- 
---- include/specstrings.h.orig	2005-04-14 17:54:58.000000000 +0900
-+++ include/specstrings.h	2005-05-25 06:42:00.000000000 +0900
-@@ -8,6 +8,8 @@
- *                                                               *
- \***************************************************************/
- 
-+#include <wchar.h>
-+
- // @@BEGIN_DDKSPLIT
- 
- // -------------------------------------------------------------------------------
-@@ -445,7 +447,7 @@
- 
- // @@END_DDKSPLIT
- 
--    #define __null
-+//    #define __null
-     #define __notnull
-     #define __maybenull
-     #define __readonly
---- include/strmif.h.orig	2005-04-14 17:54:58.000000000 +0900
-+++ include/strmif.h	2006-04-05 19:36:02.000000000 +0900
-@@ -20566,7 +20566,7 @@
- #define _IAMFilterGraphCallback_
- // Note: Because this interface was not defined as a proper interface it is
- //       supported under C++ only. Methods aren't stdcall.
--EXTERN_GUID(IID_IAMFilterGraphCallback,0x56a868fd,0x0ad4,0x11ce,0xb0,0xa3,0x0,0x20,0xaf,0x0b,0xa7,0x70);
-+DEFINE_GUID(IID_IAMFilterGraphCallback,0x56a868fd,0x0ad4,0x11ce,0xb0,0xa3,0x0,0x20,0xaf,0x0b,0xa7,0x70);
- interface IAMFilterGraphCallback : public IUnknown
- {
-     // S_OK means rendering complete, S_FALSE means retry now.
-@@ -28962,7 +28962,7 @@
- typedef struct tagVMRGUID
-     {
-     GUID *pGUID;
--    GUID GUID;
-+    GUID aGUID;
-     } 	VMRGUID;
- 
- typedef struct tagVMRMONITORINFO
---- include/wincrypt.h.orig	2005-04-14 17:55:02.000000000 +0900
-+++ include/wincrypt.h	2006-03-29 00:13:26.000000000 +0900
-@@ -14713,8 +14713,8 @@
-     IN          DWORD                       dwFlags,
-     OPTIONAL    PCRYPT_KEY_PROV_INFO        pKeyProvInfo,
-     OPTIONAL    PCRYPT_ALGORITHM_IDENTIFIER pSignatureAlgorithm,
--    OPTIONAL    PSYSTEMTIME                 pStartTime,
--    OPTIONAL    PSYSTEMTIME                 pEndTime,
-+    OPTIONAL    LPSYSTEMTIME                 pStartTime,
-+    OPTIONAL    LPSYSTEMTIME                 pEndTime,
-     OPTIONAL    PCERT_EXTENSIONS            pExtensions
-     );
- 
---- include/wingdi.h.orig	2005-04-14 17:55:02.000000000 +0900
-+++ include/wingdi.h	2006-03-31 23:27:00.000000000 +0900
-@@ -2751,7 +2751,26 @@
- typedef FARPROC LINEDDAPROC;
- #endif
- 
--
-+#define __in
-+#define __in_ecount(x)
-+#define __in_bcount(x)
-+#define __in_opt
-+#define __in_ecount_opt(x)
-+#define __in_bcount_opt(x)
-+#define __out
-+#define __out_ecount(x)
-+#define __out_bcount(x)
-+#define __out_opt
-+#define __out_ecount_opt(x)
-+#define __out_bcount_opt(x)
-+#define __out_bcount_part_opt(x,y)
-+#define __out_ecount_part_opt(x,y)
-+#define __inout
-+#define __inout_ecount(x)
-+#define __reserved
-+#define __deref_opt_out
-+#define __typefix(x)
-+WINGDIAPI int WINAPI FillRect(HDC,LPCRECT,HBRUSH);
- 
- WINGDIAPI int WINAPI AddFontResourceA(__in LPCSTR);
- WINGDIAPI int WINAPI AddFontResourceW(__in LPCWSTR);
-@@ -4140,6 +4159,26 @@
- WINGDIAPI BOOL        WINAPI ColorCorrectPalette( __in HDC hdc, __in HPALETTE hPal, __in DWORD deFirst, __in DWORD num);
- #endif
- 
-+#undef __in
-+#undef __in_ecount(x)
-+#undef __in_bcount(x)
-+#undef __in_opt
-+#undef __in_ecount_opt(x)
-+#undef __in_bcount_opt(x)
-+#undef __out
-+#undef __out_ecount(x)
-+#undef __out_bcount(x)
-+#undef __out_opt
-+#undef __out_ecount_opt(x)
-+#undef __out_bcount_opt(x)
-+#undef __out_bcount_part_opt(x,y)
-+#undef __out_ecount_part_opt(x,y)
-+#undef __inout
-+#undef __inout_ecount(x)
-+#undef __reserved
-+#undef __deref_opt_out
-+#undef __typefix(x)
-+
- #ifndef NOMETAFILE
- 
- // Enhanced metafile constants.
---- include/winsock2.h.orig	2005-04-14 17:55:02.000000000 +0900
-+++ include/winsock2.h	2006-04-08 23:36:00.000000000 +0900
-@@ -10,9 +10,9 @@
-  * conditions for redistribution.
-  */
- 
--#ifndef _WINSOCK2API_
--#define _WINSOCK2API_
--#define _WINSOCKAPI_   /* Prevent inclusion of winsock.h in windows.h */
-+#ifndef _WINSOCK2_H
-+#define _WINSOCK2_H
-+#define _WINSOCK_H /* to prevent later inclusion of winsock.h */
- 
- /*
-  * Ensure structures are packed consistently.
-@@ -1293,10 +1293,8 @@
-  * registration (RNR) API
-  */
- 
--#ifndef _tagBLOB_DEFINED
--#define _tagBLOB_DEFINED
--#define _BLOB_DEFINED
--#define _LPBLOB_DEFINED
-+#ifndef __BLOB_T_DEFINED
-+#define __BLOB_T_DEFINED
- typedef struct _BLOB {
-     ULONG cbSize ;
- #ifdef MIDL_PASS
-@@ -3858,4 +3856,4 @@
- #include <wsipv6ok.h>
- #endif // IPV6STRICT
- 
--#endif  /* _WINSOCK2API_ */
-+#endif  /* _WINSOCK2_H */
---- include/ws2tcpip.h.orig	2005-04-14 17:55:04.000000000 +0900
-+++ include/ws2tcpip.h	2006-04-01 01:37:10.000000000 +0900
-@@ -396,6 +396,8 @@
-     UINT    ipi_ifindex; // received interface index
- } IN_PKTINFO;
- 
-+#define C_ASSERT(x)
-+
- C_ASSERT(sizeof(IN_PKTINFO) == 8);
- 
- // structure for IPV6_PKTINFO option
---- include/wspiapi.h.orig	2005-04-14 17:55:04.000000000 +0900
-+++ include/wspiapi.h	2006-05-03 12:32:14.000000000 +0900
-@@ -76,6 +76,11 @@
- 
- #ifdef __cplusplus
- extern "C" {
-+#define _inline inline
-+#define __inline inline
-+#else
-+#define _inline static
-+#define __inline static
- #endif
-     
- ////////////////////////////////////////////////////////////
-@@ -1043,6 +1048,8 @@
-     (*pfFreeAddrInfo)(ai);
- }
- 
-+#undef _inline
-+#undef __inline
- #ifdef  __cplusplus
- }
- #endif
---- include/adoctint.h.orig	2006-02-26 07:54:34.000000000 +0900
-+++ include/adoctint.h	2006-03-11 15:18:50.000000000 +0900
-@@ -3312,11 +3312,11 @@
- #endif 	/* __Procedure_INTERFACE_DEFINED__ */
- EXTERN_C const CLSID CLSID_Catalog;
- #ifdef __cplusplus
--Catalog;
-+//Catalog;
- #endif
- EXTERN_C const CLSID CLSID_Table;
- #ifdef __cplusplus
--Table;
-+//Table;
- #endif
- #ifndef __Property_INTERFACE_DEFINED__
- #define __Property_INTERFACE_DEFINED__
-@@ -3505,23 +3505,23 @@
- #endif 	/* __Property_INTERFACE_DEFINED__ */
- EXTERN_C const CLSID CLSID_Group;
- #ifdef __cplusplus
--Group;
-+//Group;
- #endif
- EXTERN_C const CLSID CLSID_User;
- #ifdef __cplusplus
--User;
-+//User;
- #endif
- EXTERN_C const CLSID CLSID_Column;
- #ifdef __cplusplus
--Column;
-+//Column;
- #endif
- EXTERN_C const CLSID CLSID_Index;
- #ifdef __cplusplus
--Index;
-+//Index;
- #endif
- EXTERN_C const CLSID CLSID_Key;
- #ifdef __cplusplus
--Key;
-+//Key;
- #endif
- #ifndef __Tables_INTERFACE_DEFINED__
- #define __Tables_INTERFACE_DEFINED__
