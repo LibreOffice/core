@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interlck.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:23:00 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 10:57:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,18 +54,27 @@ extern int osl_isSingleCPU;
 /*****************************************************************************/
 oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
 #ifdef _M_IX86
-#pragma warning(disable: 4035)
-{
 #ifdef __MINGW32__
+{
     asm
     (
      "  movl        %0, %%ecx\n"
      "      movl        $1, %%eax\n"
+     "  movl        %1, %%edx\n"
+     "  cmpl        $0, %%edx\n"
+     "  je          1f\n"
+     "      xadd        %%eax, (%%ecx)\n"
+     "  jmp         2f\n"
+     "1:\n"
      "      lock xadd   %%eax, (%%ecx)\n"
+     "2:\n"
      "      incl        %%eax\n"
-     ::"m"(pCount)
+     ::"m"(pCount),"m"(osl_isSingleCPU)
     );
+}
 #else
+#pragma warning(disable: 4035)
+{
     __asm
     {
         mov         ecx, pCount
@@ -80,9 +89,9 @@ oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* 
     cont:
         inc         eax
     }
-#endif
 }
 #pragma warning(default: 4035)
+#endif
 #else
 #pragma message("WARNING: Using system InterlockedIncrement")
 {
@@ -95,18 +104,27 @@ oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* 
 /*****************************************************************************/
 oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount)
 #ifdef _M_IX86
-#pragma warning(disable: 4035)
-{
 #ifdef __MINGW32__
+{
     asm
     (
      "  movl        %0, %%ecx\n"
-     "      movl        $-1, %%eax\n"
+     "      orl         $-1, %%eax\n"
+     "  movl        %1, %%edx\n"
+     "  cmpl        $0, %%edx\n"
+     "  je          1f\n"
+     "      xadd        %%eax, (%%ecx)\n"
+     "  jmp         2f\n"
+     "1:\n"
      "      lock xadd   %%eax, (%%ecx)\n"
+     "2:\n"
      "      decl        %%eax\n"
-     ::"m"(pCount)
+     ::"m"(pCount),"m"(osl_isSingleCPU)
     );
+}
 #else
+#pragma warning(disable: 4035)
+{
     __asm
     {
         mov         ecx, pCount
@@ -121,9 +139,9 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
     cont:
         dec         eax
     }
-#endif
 }
 #pragma warning(default: 4035)
+#endif
 #else
 #pragma message("WARNING: Using system InterlockedDecrement")
 {
