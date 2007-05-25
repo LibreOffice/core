@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:18:43 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:59:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -831,6 +831,9 @@ public:
     virtual String GetRepeatIdsStr(String* pStr, SwUndoIds *pRedoIds) const;
     virtual void AppendUndo(SwUndo*);
     virtual void ClearRedo();
+    virtual void setUndoNoModifiedPosition( SwUndoNoModifiedPosition );
+    virtual SwUndoNoModifiedPosition getUndoNoModifiedPosition() const;
+
 
     /** abfragen/setzen der Anzahl von wiederherstellbaren Undo-Actions */
     static sal_uInt16 GetUndoActionCount();
