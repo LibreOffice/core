@@ -4,9 +4,9 @@
  *
  *  $RCSfile: supplang.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:04:40 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:25:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,7 +217,7 @@ const Sequence< INT16 > SuppLanguages::GetLanguages() const
     USHORT nCnt = 0;
     for (INT32 i = 0;  i < nLen;  ++i)
     {
-        INT16 nLanguage = aLanguages.GetObjectKey( i );
+        INT16 nLanguage = sal::static_int_cast< INT16 >(aLanguages.GetObjectKey( i ));
         if (HasLanguage( nLanguage ))
             pRes[ nCnt++ ] = nLanguage;
     }
