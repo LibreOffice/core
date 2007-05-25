@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:31:11 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:22:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,9 +249,29 @@ int Put( boost::shared_ptr<const SfxItemSet>& mrpAttrSet, const SwCntntNode& rNo
          const SfxItemSet& rSet )
 {
     SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
+
+    // --> FME 2007-4-12 #i76273# Robust: Save the style name items:
+    SfxItemSet* pStyleNames = 0;
+    if ( SFX_ITEM_SET == rSet.GetItemState( RES_FRMATR_STYLE_NAME, FALSE ) )
+    {
+        pStyleNames = new SfxItemSet( *aNewSet.GetPool(), RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME );
+        pStyleNames->Put( aNewSet );
+    }
+    // <--
+
     const int nRet = aNewSet.Put( rSet );
+
+    // --> FME 2007-4-12 #i76273# Robust: Save the style name items:
+    if ( pStyleNames )
+    {
+        aNewSet.Put( *pStyleNames );
+        delete pStyleNames;
+    }
+    // <--
+
     if ( nRet )
         GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
+
     return nRet;
 }
 
@@ -260,11 +280,17 @@ int Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
             SwAttrSet* pOld, SwAttrSet* pNew )
 {
     SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
+
+    // for a correct broadcast, we need to do a SetModifyAtAttr with the items
+    // from aNewSet. The 'regular' SetModifyAtAttr is done in GetNewAutoStyle
     if( rNode.GetModifyAtAttr() )
         aNewSet.SetModifyAtAttr( &rNode );
+
     const int nRet = aNewSet.Put_BC( rAttr, pOld, pNew );
+
     if ( nRet )
         GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
+
     return nRet;
 }
 
@@ -273,11 +299,34 @@ int Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
             SwAttrSet* pOld, SwAttrSet* pNew )
 {
     SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
+
+    // --> FME 2007-4-12 #i76273# Robust: Save the style name items:
+    SfxItemSet* pStyleNames = 0;
+    if ( SFX_ITEM_SET == rSet.GetItemState( RES_FRMATR_STYLE_NAME, FALSE ) )
+    {
+        pStyleNames = new SfxItemSet( *aNewSet.GetPool(), RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME );
+        pStyleNames->Put( aNewSet );
+    }
+    // <--
+
+    // for a correct broadcast, we need to do a SetModifyAtAttr with the items
+    // from aNewSet. The 'regular' SetModifyAtAttr is done in GetNewAutoStyle
     if( rNode.GetModifyAtAttr() )
         aNewSet.SetModifyAtAttr( &rNode );
+
     const int nRet = aNewSet.Put_BC( rSet, pOld, pNew );
+
+    // --> FME 2007-4-12 #i76273# Robust: Save the style name items:
+    if ( pStyleNames )
+    {
+        aNewSet.Put( *pStyleNames );
+        delete pStyleNames;
+    }
+    // <--
+
     if ( nRet )
         GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
+
     return nRet;
 }
 
@@ -1683,6 +1732,9 @@ BOOL SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
     return bRet;
 }
 
+#ifndef _SFXITEMITER_HXX //autogen
+#include <svtools/itemiter.hxx>
+#endif
 
 BOOL SwCntntNode::SetAttr( const SfxItemSet& rSet )
 {
