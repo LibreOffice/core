@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:15:22 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:08:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,7 +187,8 @@ class SmDocShell : public SfxObjectShell, public SfxListener
 
 public:
     TYPEINFO();
-    SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START+1);
+    SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START+1)
+    using SotObject::GetInterface;
     SFX_DECL_OBJECTFACTORY();
 
                 SmDocShell(SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED);
@@ -206,7 +207,6 @@ public:
     SfxPrinter *GetPrinter()    { GetPrt(); return pPrinter; }
     void        SetPrinter( SfxPrinter * );
 
-    const String &GetTitle() const;
     const String &GetComment() const;
 
     void        UpdateText();
@@ -232,7 +232,7 @@ public:
 
     virtual     SfxUndoManager *GetUndoManager ();
 
-    virtual     SfxItemPool& GetPool();
+    virtual     SfxItemPool& GetPool() const;
 
     void        Execute( SfxRequest& rReq );
     void        GetState(SfxItemSet &);
