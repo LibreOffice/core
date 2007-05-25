@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:15:07 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:35:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,11 @@ static USHORT  GetCategoryRID( USHORT nResId )
         case RID_ILH_MISC           : nRes = RID_MISC_CAT; break;
         default :
             if (nResId != RID_IL_CATALOG  &&  nResId != RID_ILH_CATALOG)
+            {
+#if OSL_DEBUG_LEVEL > 1
                 DBG_ERROR( "unkown category" );
+#endif
+            }
     }
     return nRes;
 }
@@ -155,19 +159,19 @@ static USHORT  GetCategoryRID( USHORT nResId )
 ////////////////////////////////////////////////////////////
 
 
-SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pBindings,
+SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pTmpBindings,
                                  SfxChildWindow *pChildWindow,
                                  Window *pParent) :
-    SfxFloatingWindow(pBindings, pChildWindow, pParent, SmResId(RID_TOOLBOXWINDOW)),
-    aToolBoxCat(this, SmResId(NUM_TBX_CATEGORIES + 1)),
-    aToolBoxCat_Delim(this, SmResId( FL_TOOLBOX_CAT_DELIM ))
+    SfxFloatingWindow(pTmpBindings, pChildWindow, pParent, SmResId(RID_TOOLBOXWINDOW)),
+    aToolBoxCat(this, ResId(NUM_TBX_CATEGORIES + 1)),
+    aToolBoxCat_Delim(this, ResId( FL_TOOLBOX_CAT_DELIM ))
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmToolBoxWindow::SmToolBoxWindow" );
 
     // allow for cursor travelling between toolbox and sub-categories
     SetStyle( GetStyle() | WB_DIALOGCONTROL );
 
-    nActiveCategoryRID = -1;
+    nActiveCategoryRID = sal::static_int_cast< USHORT >(-1);
 
     aToolBoxCat.SetClickHdl(LINK(this, SmToolBoxWindow, CategoryClickHdl));
 
@@ -401,7 +405,7 @@ IMPL_LINK_INLINE_START( SmToolBoxWindow, CategoryClickHdl, ToolBox*, pToolBox)
 {
     int nItemId = pToolBox->GetCurItemId();
     if (nItemId != 0)
-        SetCategory( nItemId );
+        SetCategory( sal::static_int_cast< USHORT >(nItemId) );
     return 0;
 }
 IMPL_LINK_INLINE_END( SmToolBoxWindow, CategoryClickHdl, ToolBox*, pToolBox)
