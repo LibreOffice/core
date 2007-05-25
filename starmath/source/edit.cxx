@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 15:20:53 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:12:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,9 +145,9 @@ void SmGetLeftSelectionPart(const ESelection aSel,
 ////////////////////////////////////////
 
 SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
-    pAccessible         (0),
     Window              (&rMyCmdBoxWin),
     DropTargetHelper    ( this ),
+    pAccessible         (0),
     rCmdBox             (rMyCmdBoxWin),
     pEditView           (0),
     pHScrollBar         (0),
@@ -246,7 +246,7 @@ void SmEditWindow::ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg
 {
     // Note: SetBackground still done in SmEditWindow::DataChanged
 #if OSL_DEBUG_LEVEL > 1
-    ColorData nVal = rColorCfg.GetColorValue(svtools::FONTCOLOR).nColor;
+//   ColorData nVal = rColorCfg.GetColorValue(svtools::FONTCOLOR).nColor;
 #endif
     SetTextColor( rColorCfg.GetColorValue(svtools::FONTCOLOR).nColor );
     Invalidate();
@@ -288,7 +288,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
     Resize();
 }
 
-IMPL_LINK( SmEditWindow, ModifyTimerHdl, Timer *, pTimer )
+IMPL_LINK( SmEditWindow, ModifyTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
 {
     SmModule *pp = SM_MOD1();
     if (pp->GetConfig()->IsAutoRedraw())
@@ -298,7 +298,7 @@ IMPL_LINK( SmEditWindow, ModifyTimerHdl, Timer *, pTimer )
 }
 
 
-IMPL_LINK(SmEditWindow, CursorMoveTimerHdl, Timer *, pTimer)
+IMPL_LINK(SmEditWindow, CursorMoveTimerHdl, Timer *, EMPTYARG /*pTimer*/)
     // every once in a while check cursor position (selection) of edit
     // window and if it has changed (try to) set the formula-cursor
     // according to that.
@@ -551,7 +551,7 @@ void SmEditWindow::CreateEditView()
 }
 
 
-IMPL_LINK( SmEditWindow, EditStatusHdl, EditStatus *, pStat )
+IMPL_LINK( SmEditWindow, EditStatusHdl, EditStatus *, EMPTYARG /*pStat*/ )
 {
     if (!pEditView)
         return 1;
@@ -562,7 +562,7 @@ IMPL_LINK( SmEditWindow, EditStatusHdl, EditStatus *, pStat )
     }
 }
 
-IMPL_LINK_INLINE_START( SmEditWindow, ScrollHdl, ScrollBar *, pScrollBar )
+IMPL_LINK_INLINE_START( SmEditWindow, ScrollHdl, ScrollBar *, EMPTYARG /*pScrollBar*/ )
 {
     DBG_ASSERT(pEditView, "EditView missing");
     if (pEditView)
@@ -639,10 +639,10 @@ void SmEditWindow::InitScrollBars()
 }
 
 
-XubString SmEditWindow::GetText()
+String SmEditWindow::GetText() const
 {
     String aText;
-    EditEngine *pEditEngine = GetEditEngine();
+    EditEngine *pEditEngine = const_cast< SmEditWindow* >(this)->GetEditEngine();
     DBG_ASSERT( pEditEngine, "EditEngine missing" );
     if (pEditEngine)
         aText = pEditEngine->GetText( LINEEND_LF );
@@ -745,7 +745,7 @@ void SmEditWindow::SelectAll()
     }
 }
 
-void SmEditWindow::InsertCommand(USHORT Command)
+void SmEditWindow::InsertCommand(USHORT nCommand)
 {
     DBG_ASSERT( pEditView, "EditView missing" );
     if (pEditView)
@@ -757,7 +757,7 @@ void SmEditWindow::InsertCommand(USHORT Command)
         aSelection.nEndPara = aSelection.nStartPara;
 
         DBG_ASSERT( pEditView, "NULL pointer" );
-        String  aText = String(SmResId(Command));
+        String  aText = String(SmResId(nCommand));
         pEditView->InsertText(aText);
 
         if (HasMark(aText))
@@ -767,8 +767,8 @@ void SmEditWindow::InsertCommand(USHORT Command)
         }
         else
         {   // set selection after inserted text
-            aSelection.nStartPos  =
-            aSelection.nEndPos   += aText.Len();
+            aSelection.nEndPos    = aSelection.nEndPos + sal::static_int_cast< xub_StrLen >(aText.Len());
+            aSelection.nStartPos  = aSelection.nEndPos;
             pEditView->SetSelection(aSelection);
         }
 
@@ -781,10 +781,10 @@ void SmEditWindow::MarkError(const Point &rPos)
     DBG_ASSERT( pEditView, "EditView missing" );
     if (pEditView)
     {
-        const int Col = rPos.X();
-        const int Row = rPos.Y() - 1;
+        const xub_StrLen    nCol = sal::static_int_cast< xub_StrLen >(rPos.X());
+        const USHORT        nRow = sal::static_int_cast< USHORT >(rPos.Y() - 1);
 
-        pEditView->SetSelection(ESelection (Row, Col - 1, Row, Col));
+        pEditView->SetSelection(ESelection(nRow, nCol - 1, nRow, nCol));
         GrabFocus();
     }
 }
@@ -872,12 +872,12 @@ void SmEditWindow::MouseMove(const MouseEvent &rEvt)
         pEditView->MouseMove(rEvt);
 }
 
-sal_Int8 SmEditWindow::AcceptDrop( const AcceptDropEvent& rEvt )
+sal_Int8 SmEditWindow::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 {
     return pEditView ? /*pEditView->QueryDrop( rEvt )*/DND_ACTION_NONE: DND_ACTION_NONE;
 }
 
-sal_Int8 SmEditWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
+sal_Int8 SmEditWindow::ExecuteDrop( const ExecuteDropEvent& /*rEvt*/ )
 {
     return pEditView ? /*pEditView->Drop( rEvt )*/DND_ACTION_NONE : DND_ACTION_NONE;
 }
@@ -903,7 +903,9 @@ void SmEditWindow::SetSelection(const ESelection &rSel)
 BOOL SmEditWindow::IsEmpty() const
 {
     EditEngine *pEditEngine = ((SmEditWindow *) this)->GetEditEngine();
-    return pEditEngine ? pEditEngine->GetTextLen() == 0 : FALSE;
+    BOOL bEmpty = sal::static_int_cast< BOOL >(
+                    pEditEngine ? pEditEngine->GetTextLen() == 0 : FALSE);
+    return bEmpty;
 }
 
 BOOL SmEditWindow::IsSelected() const
@@ -968,7 +970,7 @@ void SmEditWindow::Flush()
 }
 
 
-void SmEditWindow::DeleteEditView( SmViewShell &rView )
+void SmEditWindow::DeleteEditView( SmViewShell & /*rView*/ )
 {
     if (pEditView)
     {
