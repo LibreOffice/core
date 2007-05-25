@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docundo.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:28:05 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:01:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,6 +342,18 @@ BOOL SwDoc::DelUndoObj( USHORT nEnde )
 }
 
 /**************** UNDO ******************/
+
+void SwDoc::setUndoNoModifiedPosition( SwUndoNoModifiedPosition nNew )
+{
+    nUndoSavePos = nNew;
+    if( !pUndos->Count() || nUndoSavePos > pUndos->Count() - 1 )
+        nUndoSavePos = USHRT_MAX;
+}
+
+SwUndoNoModifiedPosition SwDoc::getUndoNoModifiedPosition() const
+{
+    return nUndoSavePos;
+}
 
 
 bool SwDoc::HasUndoId(sal_uInt16 nId) const
