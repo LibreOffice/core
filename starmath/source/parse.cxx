@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:54:15 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:14:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@ SmToken::SmToken() :
     eType       (TUNKNOWN),
     cMathChar   ('\0')
 {
-    nRow = nCol = nGroup = nLevel = 0;
+    nGroup = nCol = nRow = nLevel = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -418,8 +418,8 @@ void SmParser::Insert(const String &rText, USHORT nPos)
     BufferString.Insert(rText, nPos);
 
     xub_StrLen  nLen = rText.Len();
-    BufferIndex += nLen;
-    nTokenIndex += nLen;
+    BufferIndex = BufferIndex + nLen;
+    nTokenIndex = nTokenIndex + nLen;
 }
 
 
@@ -429,8 +429,8 @@ void SmParser::Replace( USHORT nPos, USHORT nLen, const String &rText )
 
     BufferString.Replace( nPos, nLen, rText );
     INT16  nChg = rText.Len() - nLen;
-    BufferIndex += nChg;
-    nTokenIndex += nChg;
+    BufferIndex = BufferIndex + nChg;
+    nTokenIndex = nTokenIndex + nChg;
 }
 
 
@@ -507,7 +507,7 @@ void SmParser::NextToken()
                 aRes.TokenType = aTmpRes.TokenType;
         }
 
-        nRealStart = BufferIndex + (xub_StrLen) aRes.LeadingWhiteSpace;
+        nRealStart = BufferIndex + sal::static_int_cast< xub_StrLen >(aRes.LeadingWhiteSpace);
         BufferIndex = nRealStart;
 
         bCont = FALSE;
@@ -560,7 +560,7 @@ void SmParser::NextToken()
         CurToken.cMathChar  = '\0';
         CurToken.nGroup     = 0;
         CurToken.nLevel     = 5;
-        CurToken.aText      = BufferString.Copy( nRealStart, (xub_StrLen) n );
+        CurToken.aText      = BufferString.Copy( nRealStart, sal::static_int_cast< xub_StrLen >(n) );
 
 #if OSL_DEBUG_LEVEL > 1
             if (!IsDelimiter( BufferString, aRes.EndPos ))
@@ -581,7 +581,7 @@ void SmParser::NextToken()
     {
         INT32 n = aRes.EndPos - nRealStart;
         DBG_ASSERT( n >= 0, "length < 0" );
-        String aName( BufferString.Copy( nRealStart, (xub_StrLen) n ) );
+        String aName( BufferString.Copy( nRealStart, sal::static_int_cast< xub_StrLen >(n) ) );
         const SmTokenTableEntry *pEntry = GetTokenTableEntry( aName );
 
         if (pEntry)
@@ -619,7 +619,8 @@ void SmParser::NextToken()
     else if (aRes.TokenType & KParseType::BOOLEAN)
     {
         sal_Int32   &rnEndPos = aRes.EndPos;
-        String  aName( BufferString.Copy( nRealStart, rnEndPos - nRealStart ) );
+        String  aName( BufferString.Copy( nRealStart,
+                        sal::static_int_cast< xub_StrLen >(rnEndPos - nRealStart) ));
         if (2 >= aName.Len())
         {
             sal_Unicode ch = aName.GetChar( 0 );
@@ -723,7 +724,8 @@ void SmParser::NextToken()
     else if (aRes.TokenType & KParseType::ONE_SINGLE_CHAR)
     {
         sal_Int32   &rnEndPos = aRes.EndPos;
-        String  aName( BufferString.Copy( nRealStart, rnEndPos - nRealStart ) );
+        String  aName( BufferString.Copy( nRealStart,
+                            sal::static_int_cast< xub_StrLen >(rnEndPos - nRealStart) ) );
 
         if (1 == aName.Len())
         {
@@ -735,7 +737,7 @@ void SmParser::NextToken()
                         //! modifies aRes.EndPos
 
                         DBG_ASSERT( rnEndPos >= nBufLen  ||
-                                    '%' != BufferString.GetChar( rnEndPos ),
+                                    '%' != BufferString.GetChar( sal::static_int_cast< xub_StrLen >(rnEndPos) ),
                                 "unexpected comment start" );
 
                         // get identifier of user-defined character
@@ -746,8 +748,8 @@ void SmParser::NextToken()
                                 coContFlags,
                                 aEmptyStr );
 
-                        xub_StrLen nTmpStart = rnEndPos +
-                                (xub_StrLen) aTmpRes.LeadingWhiteSpace;
+                        xub_StrLen nTmpStart = sal::static_int_cast< xub_StrLen >(rnEndPos +
+                                                    aTmpRes.LeadingWhiteSpace);
 
                         // default setting fo the case that no identifier
                         // i.e. a valid symbol-name is following the '%'
@@ -757,15 +759,15 @@ void SmParser::NextToken()
                         CurToken.nGroup     = 0;
                         CurToken.nLevel     = 5;
                         CurToken.aText      = String();
-                        CurToken.nRow       = Row;
+                        CurToken.nRow       = sal::static_int_cast< xub_StrLen >(Row);
                         CurToken.nCol       = nTmpStart - ColOff + 1;
 
                         if (aTmpRes.TokenType & KParseType::IDENTNAME)
                         {
 
-                            INT32 n = aTmpRes.EndPos - nTmpStart;
+                            xub_StrLen n = sal::static_int_cast< xub_StrLen >(aTmpRes.EndPos - nTmpStart);
                             CurToken.eType      = TSPECIAL;
-                            CurToken.aText      = BufferString.Copy( nTmpStart, n );
+                            CurToken.aText      = BufferString.Copy( sal::static_int_cast< xub_StrLen >(nTmpStart), n );
 
                             DBG_ASSERT( aTmpRes.EndPos > rnEndPos,
                                     "empty identifier" );
@@ -984,7 +986,8 @@ void SmParser::NextToken()
                         }
                         while ( cChar == '.' || IsDigit( cChar ) );
 
-                        CurToken.aText = BufferString.Copy( nTxtStart, BufferIndex - nTxtStart );
+                        CurToken.aText = BufferString.Copy( sal::static_int_cast< xub_StrLen >(nTxtStart),
+                                                            sal::static_int_cast< xub_StrLen >(BufferIndex - nTxtStart) );
                         aRes.EndPos = BufferIndex;
                     }
                     break;
@@ -1026,7 +1029,7 @@ void SmParser::NextToken()
     }
 
     if (TEND != CurToken.eType)
-        BufferIndex = (xub_StrLen)aRes.EndPos;
+        BufferIndex = sal::static_int_cast< xub_StrLen >(aRes.EndPos);
 }
 
 
@@ -1302,7 +1305,7 @@ void SmParser::SubSup(ULONG nActiveGroup)
         aSubNodes.Put(i, NULL);
 
     // process all sub-/supscripts
-    int  nIndex;
+    int  nIndex = 0;
     while (TokenInGroup(nActiveGroup))
     {   SmTokenType  eType (CurToken.eType);
 
@@ -1511,7 +1514,7 @@ void SmParser::Term()
 
                 BOOL    bIsAttr;
                 USHORT  n = 0;
-                while ((bIsAttr = TokenInGroup(TGATTRIBUT))
+                while (TRUE == (bIsAttr = TokenInGroup(TGATTRIBUT))
                        ||  TokenInGroup(TGFONTATTR))
                 {   aArray.SetSize(n + 1);
 
@@ -1661,6 +1664,8 @@ void SmParser::Oper()
                     case TLIM :     pLim = "lim";       break;
                     case TLIMSUP :  pLim = "lim sup";   break;
                     case TLIMINF :  pLim = "lim inf";   break;
+                    default:
+                        break;
                 }
                 if( pLim )
                     CurToken.aText.AssignAscii( pLim );
@@ -1698,8 +1703,8 @@ void SmParser::UnOper()
     BOOL         bIsPostfix = eType == TFACT;
 
     SmStructureNode *pSNode;
-    SmNode *pOper,
-           *pExtra = 0,
+    SmNode *pOper   = 0,
+           *pExtra  = 0,
            *pArg;
 
     switch (eType)
@@ -2031,7 +2036,7 @@ void SmParser::Brace()
             Bracebody(FALSE);
             pBody = NodeStack.Pop();
 
-            SmTokenType  eExpectedType;
+            SmTokenType  eExpectedType = TUNKNOWN;
             switch (pLeft->GetToken().eType)
             {   case TLPARENT :     eExpectedType = TRPARENT;   break;
                 case TLBRACKET :    eExpectedType = TRBRACKET;  break;
@@ -2312,25 +2317,25 @@ void SmParser::Special()
     }
     else    // 5.0 <-> 6.0 formula text (symbol name) conversion
     {
-        LanguageType nLang = GetLanguage();
+        LanguageType nLanguage = GetLanguage();
         SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
         const ResStringArray *pFrom = 0;
         const ResStringArray *pTo   = 0;
         if (CONVERT_50_TO_60 == GetConversion())
         {
-            pFrom = rData.Get50NamesArray( nLang );
-            pTo   = rData.Get60NamesArray( nLang );
+            pFrom = rData.Get50NamesArray( nLanguage );
+            pTo   = rData.Get60NamesArray( nLanguage );
         }
         else if (CONVERT_60_TO_50 == GetConversion())
         {
-            pFrom = rData.Get60NamesArray( nLang );
-            pTo   = rData.Get50NamesArray( nLang );
+            pFrom = rData.Get60NamesArray( nLanguage );
+            pTo   = rData.Get50NamesArray( nLanguage );
         }
         if (pFrom  &&  pTo)
         {
             DBG_ASSERT( pFrom->Count() == pTo->Count(),
                     "array length mismatch" );
-            USHORT nCount = pFrom->Count();
+            USHORT nCount = sal::static_int_cast< USHORT >(pFrom->Count());
             for (USHORT i = 0;  i < nCount;  ++i)
             {
                 if (pFrom->GetString(i) == rName)
@@ -2480,7 +2485,7 @@ const SmErrorDesc  *SmParser::PrevError()
 
 const SmErrorDesc  *SmParser::GetError(USHORT i)
 {
-    return (i >= 0  &&  i < ErrDescList.Count())
+    return (/*i >= 0  &&*/  i < ErrDescList.Count())
                ? ErrDescList.Seek(i)
                : ErrDescList.Seek(CurError);
 }
