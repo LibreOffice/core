@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci11.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 15:12:27 $
+#   last change: $Author: vg $ $Date: 2007-05-25 10:52:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -415,4 +415,5 @@ URLMONLIB=urlmon.lib
 UNICOWSLIB=unicows.lib
 WININETLIB=wininet.lib
 OLDNAMESLIB=oldnames.lib
+MSIMG32LIB=msimg32.lib
 
