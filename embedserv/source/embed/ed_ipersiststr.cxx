@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ed_ipersiststr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-27 10:00:38 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 11:08:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -906,8 +906,7 @@ STDMETHODIMP EmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRemember )
         else
         {
             util::URL aURL;
-            USES_CONVERSION;
-            aURL.Complete = ::rtl::OUString( OLE2CW( pszFileName ) );
+            aURL.Complete = ::rtl::OUString( reinterpret_cast<const sal_Unicode*>( pszFileName ) );
 
             ::rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.util.URLTransformer" ) );
             uno::Reference< util::XURLTransformer > aTransformer( m_xFactory->createInstance( aServiceName ),
