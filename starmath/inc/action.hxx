@@ -4,9 +4,9 @@
  *
  *  $RCSfile: action.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 14:56:44 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:08:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,8 +57,8 @@ public:
 
     virtual void Undo();
     virtual void Redo();
-    virtual void Repeat(SmDocShell *pDocSh);
-    virtual String GetComment() const;
+    virtual void Repeat(SfxRepeatTarget& rDocSh);
+    virtual UniString GetComment() const;
 };
 
 #endif
