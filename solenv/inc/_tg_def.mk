@@ -73,7 +73,7 @@ $(DEF1TARGETN) .PHONY :
     @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo LIBRARY	  $(SHL1TARGETN:f) 								 >$@.tmpfile
+    @echo LIBRARY	  $(EMQ)"$(SHL1TARGETN:f)$(EMQ)" 								 >$@.tmpfile
 .IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
@@ -85,11 +85,11 @@ $(DEF1TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL1DESCRIPTION)"==""
 .IF "$(DEFLIB1NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-+$(EXPORT1_PROTECT) $(RM) $(MISC)$/$(SHL1TARGET).exp
+    @-$(EXPORT1_PROTECT) $(RM) $(MISC)$/$(SHL1TARGET).exp
     dlltool --output-def $(MISC)$/$(SHL1TARGET).exp --export-all-symbols \
         `$(TYPE) $(SLB)$/$(DEFLIB1NAME).lib | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
     tail --lines +3 $(MISC)$/$(SHL1TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-+$(EXPORT1_PROTECT) $(RM) $(MISC)$/$(SHL1TARGET).exp
+    @-$(EXPORT1_PROTECT) $(RM) $(MISC)$/$(SHL1TARGET).exp
 .ELSE
 .IF "$(SHL1USE_EXPORTS)"!="ordinal"
     @-$(EXPORT1_PROTECT) $(RMHACK1) $(MISC)$/$(SHL1TARGET).exp
@@ -281,7 +281,7 @@ $(DEF2TARGETN) .PHONY :
     @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo LIBRARY	  $(SHL2TARGETN:f) 								 >$@.tmpfile
+    @echo LIBRARY	  $(EMQ)"$(SHL2TARGETN:f)$(EMQ)" 								 >$@.tmpfile
 .IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
@@ -293,11 +293,11 @@ $(DEF2TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL2DESCRIPTION)"==""
 .IF "$(DEFLIB2NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-+$(EXPORT2_PROTECT) $(RM) $(MISC)$/$(SHL2TARGET).exp
+    @-$(EXPORT2_PROTECT) $(RM) $(MISC)$/$(SHL2TARGET).exp
     dlltool --output-def $(MISC)$/$(SHL2TARGET).exp --export-all-symbols \
         `$(TYPE) $(SLB)$/$(DEFLIB2NAME).lib | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
     tail --lines +3 $(MISC)$/$(SHL2TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-+$(EXPORT2_PROTECT) $(RM) $(MISC)$/$(SHL2TARGET).exp
+    @-$(EXPORT2_PROTECT) $(RM) $(MISC)$/$(SHL2TARGET).exp
 .ELSE
 .IF "$(SHL2USE_EXPORTS)"!="ordinal"
     @-$(EXPORT2_PROTECT) $(RMHACK2) $(MISC)$/$(SHL2TARGET).exp
@@ -489,7 +489,7 @@ $(DEF3TARGETN) .PHONY :
     @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo LIBRARY	  $(SHL3TARGETN:f) 								 >$@.tmpfile
+    @echo LIBRARY	  $(EMQ)"$(SHL3TARGETN:f)$(EMQ)" 								 >$@.tmpfile
 .IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
@@ -501,11 +501,11 @@ $(DEF3TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL3DESCRIPTION)"==""
 .IF "$(DEFLIB3NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-+$(EXPORT3_PROTECT) $(RM) $(MISC)$/$(SHL3TARGET).exp
+    @-$(EXPORT3_PROTECT) $(RM) $(MISC)$/$(SHL3TARGET).exp
     dlltool --output-def $(MISC)$/$(SHL3TARGET).exp --export-all-symbols \
         `$(TYPE) $(SLB)$/$(DEFLIB3NAME).lib | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
     tail --lines +3 $(MISC)$/$(SHL3TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-+$(EXPORT3_PROTECT) $(RM) $(MISC)$/$(SHL3TARGET).exp
+    @-$(EXPORT3_PROTECT) $(RM) $(MISC)$/$(SHL3TARGET).exp
 .ELSE
 .IF "$(SHL3USE_EXPORTS)"!="ordinal"
     @-$(EXPORT3_PROTECT) $(RMHACK3) $(MISC)$/$(SHL3TARGET).exp
@@ -697,7 +697,7 @@ $(DEF4TARGETN) .PHONY :
     @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo LIBRARY	  $(SHL4TARGETN:f) 								 >$@.tmpfile
+    @echo LIBRARY	  $(EMQ)"$(SHL4TARGETN:f)$(EMQ)" 								 >$@.tmpfile
 .IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
@@ -709,11 +709,11 @@ $(DEF4TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL4DESCRIPTION)"==""
 .IF "$(DEFLIB4NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-+$(EXPORT4_PROTECT) $(RM) $(MISC)$/$(SHL4TARGET).exp
+    @-$(EXPORT4_PROTECT) $(RM) $(MISC)$/$(SHL4TARGET).exp
     dlltool --output-def $(MISC)$/$(SHL4TARGET).exp --export-all-symbols \
         `$(TYPE) $(SLB)$/$(DEFLIB4NAME).lib | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
     tail --lines +3 $(MISC)$/$(SHL4TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-+$(EXPORT4_PROTECT) $(RM) $(MISC)$/$(SHL4TARGET).exp
+    @-$(EXPORT4_PROTECT) $(RM) $(MISC)$/$(SHL4TARGET).exp
 .ELSE
 .IF "$(SHL4USE_EXPORTS)"!="ordinal"
     @-$(EXPORT4_PROTECT) $(RMHACK4) $(MISC)$/$(SHL4TARGET).exp
@@ -905,7 +905,7 @@ $(DEF5TARGETN) .PHONY :
     @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo LIBRARY	  $(SHL5TARGETN:f) 								 >$@.tmpfile
+    @echo LIBRARY	  $(EMQ)"$(SHL5TARGETN:f)$(EMQ)" 								 >$@.tmpfile
 .IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
@@ -917,11 +917,11 @@ $(DEF5TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL5DESCRIPTION)"==""
 .IF "$(DEFLIB5NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-+$(EXPORT5_PROTECT) $(RM) $(MISC)$/$(SHL5TARGET).exp
+    @-$(EXPORT5_PROTECT) $(RM) $(MISC)$/$(SHL5TARGET).exp
     dlltool --output-def $(MISC)$/$(SHL5TARGET).exp --export-all-symbols \
         `$(TYPE) $(SLB)$/$(DEFLIB5NAME).lib | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
     tail --lines +3 $(MISC)$/$(SHL5TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-+$(EXPORT5_PROTECT) $(RM) $(MISC)$/$(SHL5TARGET).exp
+    @-$(EXPORT5_PROTECT) $(RM) $(MISC)$/$(SHL5TARGET).exp
 .ELSE
 .IF "$(SHL5USE_EXPORTS)"!="ordinal"
     @-$(EXPORT5_PROTECT) $(RMHACK5) $(MISC)$/$(SHL5TARGET).exp
@@ -1113,7 +1113,7 @@ $(DEF6TARGETN) .PHONY :
     @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo LIBRARY	  $(SHL6TARGETN:f) 								 >$@.tmpfile
+    @echo LIBRARY	  $(EMQ)"$(SHL6TARGETN:f)$(EMQ)" 								 >$@.tmpfile
 .IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
@@ -1125,11 +1125,11 @@ $(DEF6TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL6DESCRIPTION)"==""
 .IF "$(DEFLIB6NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-+$(EXPORT6_PROTECT) $(RM) $(MISC)$/$(SHL6TARGET).exp
+    @-$(EXPORT6_PROTECT) $(RM) $(MISC)$/$(SHL6TARGET).exp
     dlltool --output-def $(MISC)$/$(SHL6TARGET).exp --export-all-symbols \
         `$(TYPE) $(SLB)$/$(DEFLIB6NAME).lib | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
     tail --lines +3 $(MISC)$/$(SHL6TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-+$(EXPORT6_PROTECT) $(RM) $(MISC)$/$(SHL6TARGET).exp
+    @-$(EXPORT6_PROTECT) $(RM) $(MISC)$/$(SHL6TARGET).exp
 .ELSE
 .IF "$(SHL6USE_EXPORTS)"!="ordinal"
     @-$(EXPORT6_PROTECT) $(RMHACK6) $(MISC)$/$(SHL6TARGET).exp
@@ -1321,7 +1321,7 @@ $(DEF7TARGETN) .PHONY :
     @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo LIBRARY	  $(SHL7TARGETN:f) 								 >$@.tmpfile
+    @echo LIBRARY	  $(EMQ)"$(SHL7TARGETN:f)$(EMQ)" 								 >$@.tmpfile
 .IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
@@ -1333,11 +1333,11 @@ $(DEF7TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL7DESCRIPTION)"==""
 .IF "$(DEFLIB7NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-+$(EXPORT7_PROTECT) $(RM) $(MISC)$/$(SHL7TARGET).exp
+    @-$(EXPORT7_PROTECT) $(RM) $(MISC)$/$(SHL7TARGET).exp
     dlltool --output-def $(MISC)$/$(SHL7TARGET).exp --export-all-symbols \
         `$(TYPE) $(SLB)$/$(DEFLIB7NAME).lib | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
     tail --lines +3 $(MISC)$/$(SHL7TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-+$(EXPORT7_PROTECT) $(RM) $(MISC)$/$(SHL7TARGET).exp
+    @-$(EXPORT7_PROTECT) $(RM) $(MISC)$/$(SHL7TARGET).exp
 .ELSE
 .IF "$(SHL7USE_EXPORTS)"!="ordinal"
     @-$(EXPORT7_PROTECT) $(RMHACK7) $(MISC)$/$(SHL7TARGET).exp
@@ -1529,7 +1529,7 @@ $(DEF8TARGETN) .PHONY :
     @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo LIBRARY	  $(SHL8TARGETN:f) 								 >$@.tmpfile
+    @echo LIBRARY	  $(EMQ)"$(SHL8TARGETN:f)$(EMQ)" 								 >$@.tmpfile
 .IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
@@ -1541,11 +1541,11 @@ $(DEF8TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL8DESCRIPTION)"==""
 .IF "$(DEFLIB8NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-+$(EXPORT8_PROTECT) $(RM) $(MISC)$/$(SHL8TARGET).exp
+    @-$(EXPORT8_PROTECT) $(RM) $(MISC)$/$(SHL8TARGET).exp
     dlltool --output-def $(MISC)$/$(SHL8TARGET).exp --export-all-symbols \
         `$(TYPE) $(SLB)$/$(DEFLIB8NAME).lib | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
     tail --lines +3 $(MISC)$/$(SHL8TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-+$(EXPORT8_PROTECT) $(RM) $(MISC)$/$(SHL8TARGET).exp
+    @-$(EXPORT8_PROTECT) $(RM) $(MISC)$/$(SHL8TARGET).exp
 .ELSE
 .IF "$(SHL8USE_EXPORTS)"!="ordinal"
     @-$(EXPORT8_PROTECT) $(RMHACK8) $(MISC)$/$(SHL8TARGET).exp
@@ -1737,7 +1737,7 @@ $(DEF9TARGETN) .PHONY :
     @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo LIBRARY	  $(SHL9TARGETN:f) 								 >$@.tmpfile
+    @echo LIBRARY	  $(EMQ)"$(SHL9TARGETN:f)$(EMQ)" 								 >$@.tmpfile
 .IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
@@ -1749,11 +1749,11 @@ $(DEF9TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL9DESCRIPTION)"==""
 .IF "$(DEFLIB9NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-+$(EXPORT9_PROTECT) $(RM) $(MISC)$/$(SHL9TARGET).exp
+    @-$(EXPORT9_PROTECT) $(RM) $(MISC)$/$(SHL9TARGET).exp
     dlltool --output-def $(MISC)$/$(SHL9TARGET).exp --export-all-symbols \
         `$(TYPE) $(SLB)$/$(DEFLIB9NAME).lib | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
     tail --lines +3 $(MISC)$/$(SHL9TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-+$(EXPORT9_PROTECT) $(RM) $(MISC)$/$(SHL9TARGET).exp
+    @-$(EXPORT9_PROTECT) $(RM) $(MISC)$/$(SHL9TARGET).exp
 .ELSE
 .IF "$(SHL9USE_EXPORTS)"!="ordinal"
     @-$(EXPORT9_PROTECT) $(RMHACK9) $(MISC)$/$(SHL9TARGET).exp
@@ -1945,7 +1945,7 @@ $(DEF10TARGETN) .PHONY :
     @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo LIBRARY	  $(SHL10TARGETN:f) 								 >$@.tmpfile
+    @echo LIBRARY	  $(EMQ)"$(SHL10TARGETN:f)$(EMQ)" 								 >$@.tmpfile
 .IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
@@ -1957,11 +1957,11 @@ $(DEF10TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL10DESCRIPTION)"==""
 .IF "$(DEFLIB10NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-+$(EXPORT10_PROTECT) $(RM) $(MISC)$/$(SHL10TARGET).exp
+    @-$(EXPORT10_PROTECT) $(RM) $(MISC)$/$(SHL10TARGET).exp
     dlltool --output-def $(MISC)$/$(SHL10TARGET).exp --export-all-symbols \
         `$(TYPE) $(SLB)$/$(DEFLIB10NAME).lib | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
     tail --lines +3 $(MISC)$/$(SHL10TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-+$(EXPORT10_PROTECT) $(RM) $(MISC)$/$(SHL10TARGET).exp
+    @-$(EXPORT10_PROTECT) $(RM) $(MISC)$/$(SHL10TARGET).exp
 .ELSE
 .IF "$(SHL10USE_EXPORTS)"!="ordinal"
     @-$(EXPORT10_PROTECT) $(RMHACK10) $(MISC)$/$(SHL10TARGET).exp
