@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.111 $
+#   $Revision: 1.112 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 13:14:18 $
+#   last change: $Author: vg $ $Date: 2007-05-25 11:22:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.111 $$"
+LIBSMKREV!:="$$Revision: 1.112 $$"
 
 .IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC" || "$(COM)"=="GCC"
 
@@ -45,9 +45,16 @@ AWTLIB*=$(JAVA_HOME)$/lib$/jawt.lib
 AWTLIB*=-ljawt
 .ENDIF
 AVMEDIALIB=-lavmedia$(OFFICEUPD)$(DLLPOSTFIX)
+.IF "$(GUI)$(COM)"=="WNTGCC"
+.INCLUDE .IGNORE : icuversion.mk
+ICUINLIB=-licuin$(ICU_MAJOR)$(ICU_MINOR)
+ICULELIB=-licule$(ICU_MAJOR)$(ICU_MINOR)
+ICUUCLIB=-licuuc$(ICU_MAJOR)$(ICU_MINOR)
+.ELSE
 ICUINLIB=-licui18n
 ICULELIB=-licule
 ICUUCLIB=-licuuc
+.ENDIF
 I18NUTILLIB=-li18nutil$(COMID)
 .INCLUDE .IGNORE : i18npool$/version.mk
 I18NISOLANGLIB=-li18nisolang$(ISOLANG_MAJOR)$(COMID)
@@ -256,6 +263,7 @@ JVMACCESSLIB = -ljvmaccess$(COMID)
 CPPUNITLIB = -lcppunit$(DLLPOSTFIX)
 .IF "$(GUI)$(COM)"=="WNTGCC"
 XML2LIB=-lxml2-2
+JVMFWKLIB = -ljvmfwk$(UDK_MAJOR)
 .ELSE
 .IF "$(SYSTEM_LIBXML)"=="YES"
 XML2LIB=$(LIBXML_LIBS)
@@ -267,10 +275,6 @@ XML2LIB=-lxml2
 XSLTLIB=$(LIBXSLT_LIBS)
 .ELSE
 XSLTLIB=-lxslt $(ZLIB3RD) $(XML2LIB)
-.ENDIF
-.IF "$(GUI)$(COM)"=="WNTGCC"
-JVMFWKLIB = -ljvmfwk$(UDK_MAJOR)
-.ELSE
 JVMFWKLIB = -ljvmfwk
 .ENDIF
 
@@ -477,4 +481,3 @@ MYTHESLIB=libmythes.lib
 PYUNOLIB=ipyuno.lib
 
 .ENDIF              # "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
-
