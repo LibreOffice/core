@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:10:03 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 14:48:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -419,26 +419,38 @@ ULONG SwXMLTextBlocks::PutBlock( SwPaM& rPam, const String& rLong )
         // TODO/LATER: it is only a temporary solution, that should be changed soon, the used methods should be
         // called without optimization
 
-        try
+        sal_Bool bOK = sal_False;
+
+        if ( xRoot.is() )
         {
+            SfxMedium* pTmpMedium = NULL;
+            try
+            {
+                uno::Reference< embed::XStorage > xTempStorage =
+                    ::comphelper::OStorageHelper::GetTemporaryStorage();
 
-        uno::Reference< embed::XStorage > xTempStorage =
-                ::comphelper::OStorageHelper::GetTemporaryStorage();
+                xRoot->copyToStorage( xTempStorage );
 
-        // TODO/LATER: no progress bar?!
-        // TODO/MBA: strange construct
-        xMedium = new SfxMedium( xTempStorage, GetBaseURL() );
-        sal_Bool bOK = pDocSh->SaveAsChildren( *xMedium );
-        if( bOK )
-            bOK = pDocSh->SaveCompletedChildren( sal_True );
+                // TODO/LATER: no progress bar?!
+                // TODO/MBA: strange construct
+                pTmpMedium = new SfxMedium( xTempStorage, GetBaseURL() );
+                sal_Bool bTmpOK = pDocSh->SaveAsChildren( *pTmpMedium );
+                if( bTmpOK )
+                    bTmpOK = pDocSh->SaveCompletedChildren( sal_False );
+
+                xTempStorage->copyToStorage( xRoot );
+                bOK = bTmpOK;
+            }
+            catch( uno::Exception& )
+            {
+            }
+
+            if ( pTmpMedium )
+                DELETEZ( pTmpMedium );
+        }
+
         if( !bOK )
             nRes = ERR_SWG_WRITE_ERROR;
-
-        xTempStorage->copyToStorage( xRoot );
-
-        }
-        catch( uno::Exception& )
-        {}
     }
 
     try
