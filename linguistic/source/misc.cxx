@@ -4,9 +4,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:54:53 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:24:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,21 +222,21 @@ static inline sal_Int32 Minimum( sal_Int32 n1, sal_Int32 n2, sal_Int32 n3 )
 class IntArray2D
 {
 private:
-    xub_StrLen *pData;
+    sal_Int32  *pData;
     int         n1, n2;
 
 public:
     IntArray2D( int nDim1, int nDim2 );
     ~IntArray2D();
 
-    xub_StrLen &    Value( int i, int k  );
+    sal_Int32 & Value( int i, int k  );
 };
 
 IntArray2D::IntArray2D( int nDim1, int nDim2 )
 {
     n1 = nDim1;
     n2 = nDim2;
-    pData = new xub_StrLen[n1 * n2];
+    pData = new sal_Int32[n1 * n2];
 }
 
 IntArray2D::~IntArray2D()
@@ -244,7 +244,7 @@ IntArray2D::~IntArray2D()
     delete[] pData;
 }
 
-xub_StrLen & IntArray2D::Value( int i, int k  )
+sal_Int32 & IntArray2D::Value( int i, int k  )
 {
     DBG_ASSERT( 0 <= i && i < n1, "first index out of range" );
     DBG_ASSERT( 0 <= k && k < n2, "first index out of range" );
@@ -255,8 +255,8 @@ xub_StrLen & IntArray2D::Value( int i, int k  )
 
 sal_Int32 LevDistance( const OUString &rTxt1, const OUString &rTxt2 )
 {
-    xub_StrLen nLen1 = (xub_StrLen) rTxt1.getLength();
-    xub_StrLen nLen2 = (xub_StrLen) rTxt2.getLength();
+    sal_Int32 nLen1 = rTxt1.getLength();
+    sal_Int32 nLen2 = rTxt2.getLength();
 
     if (nLen1 == 0)
         return nLen2;
@@ -265,7 +265,7 @@ sal_Int32 LevDistance( const OUString &rTxt1, const OUString &rTxt2 )
 
     IntArray2D aData( nLen1 + 1, nLen2 + 1 );
 
-    xub_StrLen i, k;
+    sal_Int32 i, k;
     for (i = 0;  i <= nLen1;  ++i)
         aData.Value(i, 0) = i;
     for (k = 0;  k <= nLen2;  ++k)
@@ -276,8 +276,8 @@ sal_Int32 LevDistance( const OUString &rTxt1, const OUString &rTxt2 )
         {
             sal_Unicode c1i = rTxt1.getStr()[i - 1];
             sal_Unicode c2k = rTxt2.getStr()[k - 1];
-            xub_StrLen nCost = c1i == c2k ? 0 : 1;
-            xub_StrLen nNew = Minimum( aData.Value(i-1, k  ) + 1,
+            sal_Int32 nCost = c1i == c2k ? 0 : 1;
+            sal_Int32 nNew = Minimum( aData.Value(i-1, k  ) + 1,
                                        aData.Value(i  , k-1) + 1,
                                        aData.Value(i-1, k-1) + nCost );
             // take transposition (exchange with left or right char) in account
@@ -295,7 +295,7 @@ sal_Int32 LevDistance( const OUString &rTxt1, const OUString &rTxt2 )
             aData.Value(i, k) = nNew;
         }
     }
-    xub_StrLen nDist = aData.Value(nLen1, nLen2);
+    sal_Int32 nDist = aData.Value(nLen1, nLen2);
     return nDist;
  }
 
@@ -524,8 +524,8 @@ static BOOL GetAltSpelling( INT16 &rnChgPos, INT16 &rnChgLen, OUString &rRplc,
     {
         OUString aWord( rxHyphWord->getWord() ),
                  aHyphenatedWord( rxHyphWord->getHyphenatedWord() );
-        INT16   nHyphenationPos     = rxHyphWord->getHyphenationPos(),
-                nHyphenPos          = rxHyphWord->getHyphenPos();
+        INT16   nHyphenationPos     = rxHyphWord->getHyphenationPos();
+        /*INT16   nHyphenPos          = rxHyphWord->getHyphenPos()*/;
         const sal_Unicode *pWord    = aWord.getStr(),
                           *pAltWord = aHyphenatedWord.getStr();
 
@@ -557,8 +557,8 @@ static BOOL GetAltSpelling( INT16 &rnChgPos, INT16 &rnChgLen, OUString &rRplc,
                 nPosR--, nAltPosR--)
             ;
 
-        rnChgPos = (INT16) nPosL;
-        rnChgLen = nPosR - nPosL + 1;
+        rnChgPos = sal::static_int_cast< INT16 >(nPosL);
+        rnChgLen = sal::static_int_cast< INT16 >(nPosR - nPosL + 1);
         DBG_ASSERT( rnChgLen >= 0, "nChgLen < 0");
 
         sal_Int32 nTxtStart = nPosL;
@@ -580,7 +580,7 @@ static INT16 GetOrigWordPos( const OUString &rOrigWord, INT16 nPos )
         if (!bSkip)
             --nPos;
     }
-    return (0 <= i  &&  i < nLen) ? i : -1;
+    return sal::static_int_cast< INT16 >((0 <= i  &&  i < nLen) ? i : -1);
 }
 
 
@@ -647,8 +647,8 @@ Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
             aOrigHyphenatedWord += aRplc;
             aOrigHyphenatedWord += aRight;
 
-            nOrigHyphenPos      = aLeft.getLength() +
-                                  rxHyphWord->getHyphenPos() - nChgPos;
+            nOrigHyphenPos      = sal::static_int_cast< INT16 >(aLeft.getLength() +
+                                  rxHyphWord->getHyphenPos() - nChgPos);
             nOrigHyphenationPos = GetOrigWordPos( rOrigWord, nHyphenationPos );
         }
 
@@ -882,7 +882,7 @@ void SAL_CALL
 
 
 void SAL_CALL
-    AppExitListener::queryTermination( const EventObject& rEvtSource )
+    AppExitListener::queryTermination( const EventObject& /*rEvtSource*/ )
         throw(frame::TerminationVetoException, RuntimeException)
 {
     //MutexGuard    aGuard( GetLinguMutex() );
