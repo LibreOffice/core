@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lngsvcmgr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:04:27 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:24:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 
-SV_DECL_VARARR_SORT( SortedINT16Array, INT16, 32, 32);
+SV_DECL_VARARR_SORT( SortedINT16Array, INT16, 32, 32)
 SV_IMPL_VARARR_SORT( SortedINT16Array, INT16 );
 
 // forward declarations
@@ -214,7 +214,7 @@ BOOL SvcInfo::HasLanguage( INT16 nLanguage ) const
 
 
 typedef SvcInfo * PTR_SVCINFO;
-SV_DECL_PTRARR_DEL( SvcInfoArray, PTR_SVCINFO, 16, 16 );
+SV_DECL_PTRARR_DEL( SvcInfoArray, PTR_SVCINFO, 16, 16 )
 SV_IMPL_PTRARR( SvcInfoArray, PTR_SVCINFO * );
 
 
@@ -1044,8 +1044,8 @@ void LngSvcMgr::SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp )
             if (pValues[i] >>= aSvcImplNames)
             {
 #if OSL_DEBUG_LEVEL > 1
-                INT32 nSvcs = aSvcImplNames.getLength();
-                const OUString *pSvcImplNames = aSvcImplNames.getConstArray();
+//                INT32 nSvcs = aSvcImplNames.getLength();
+//                const OUString *pSvcImplNames = aSvcImplNames.getConstArray();
 #endif
                 String aLocaleStr( pNames[i] );
                 xub_StrLen nSeperatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
@@ -1093,8 +1093,8 @@ void LngSvcMgr::SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp )
                     aSvcImplNames.realloc(1);
 
 #if OSL_DEBUG_LEVEL > 1
-                INT32 nSvcs = aSvcImplNames.getLength();
-                const OUString *pSvcImplNames = aSvcImplNames.getConstArray();
+//                INT32 nSvcs = aSvcImplNames.getLength();
+//                const OUString *pSvcImplNames = aSvcImplNames.getConstArray();
 #endif
                 String aLocaleStr( pNames[i] );
                 xub_StrLen nSeperatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
@@ -1138,8 +1138,8 @@ void LngSvcMgr::SetCfgServiceLists( ThesaurusDispatcher &rThesDsp )
             if (pValues[i] >>= aSvcImplNames)
             {
 #if OSL_DEBUG_LEVEL > 1
-                INT32 nSvcs = aSvcImplNames.getLength();
-                const OUString *pSvcImplNames = aSvcImplNames.getConstArray();
+//                INT32 nSvcs = aSvcImplNames.getLength();
+//                const OUString *pSvcImplNames = aSvcImplNames.getConstArray();
 #endif
                 String aLocaleStr( pNames[i] );
                 xub_StrLen nSeperatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
@@ -1394,7 +1394,7 @@ void SAL_CALL
     MutexGuard  aGuard( GetLinguMutex() );
 
 #if OSL_DEBUG_LEVEL > 1
-    const OUString *pImplNames = rServiceImplNames.getConstArray();
+//    const OUString *pImplNames = rServiceImplNames.getConstArray();
 #endif
 
     INT16 nLanguage = LocaleToLanguage( rLocale );
@@ -1667,7 +1667,7 @@ Sequence< OUString > SAL_CALL
     }
 
 #if OSL_DEBUG_LEVEL > 1
-    const OUString *pImplNames = aSvcImplNames.getConstArray();
+//    const OUString *pImplNames = aSvcImplNames.getConstArray();
 #endif
     return aSvcImplNames;
 }
@@ -1801,7 +1801,7 @@ uno::Sequence< OUString > LngSvcMgr::getSupportedServiceNames_Static()
 
 
 Reference< XInterface > SAL_CALL LngSvcMgr_CreateInstance(
-            const Reference< XMultiServiceFactory > & rSMgr )
+            const Reference< XMultiServiceFactory > & /*rSMgr*/ )
         throw(Exception)
 {
     Reference< XInterface > xService = (cppu::OWeakObject*) new LngSvcMgr;
