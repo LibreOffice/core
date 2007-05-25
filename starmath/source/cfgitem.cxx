@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgitem.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:51:29 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:11:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -493,13 +493,12 @@ void SmMathConfig::ReadSymbol( SmSym &rSymbol,
     {
         const Any * pValue = aValues.getConstArray();
         Font        aFont;
-        sal_Unicode cChar;
+        sal_Unicode cChar = '\0';
         String      aSet;
-        BOOL        bPredefined;
+        BOOL        bPredefined = FALSE;
 
         OUString    aTmpStr;
         INT32       nTmp32 = 0;
-        INT16       nTmp16 = 0;
         BOOL        bTmp = FALSE;
 
         BOOL bOK = TRUE;
@@ -612,11 +611,11 @@ void SmMathConfig::GetSymbols( std::vector< SmSym > &rSymbols ) const
 
 void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
 {
-    size_t nCount = rNewSymbols.size();
+    sal_uIntPtr nCount = rNewSymbols.size();
 
     Sequence< OUString > aNames = lcl_GetSymbolPropertyNames();
     const OUString *pNames = aNames.getConstArray();
-    INT32 nSymbolProps = aNames.getLength();
+    sal_uIntPtr nSymbolProps = sal::static_int_cast< UINT32 >(aNames.getLength());
 
     Sequence< PropertyValue > aValues( nCount * nSymbolProps );
     PropertyValue *pValues = aValues.getArray();
@@ -628,7 +627,7 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
     while (aIt != aEnd)
     {
         const SmSym &rSymbol = *aIt++;
-        const Font  &rFont = rSymbol.GetFace();
+        //const Font  &rFont = rSymbol.GetFace();
         OUString  aNodeNameDelim( A2OU( SYMBOL_LIST ) );
         aNodeNameDelim += aDelim;
         aNodeNameDelim += rSymbol.GetExportName();
@@ -663,7 +662,7 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
         pVal->Value <<= OUString( aFntFmtId );
         pVal++;
     }
-    DBG_ASSERT( pVal - pValues == nCount * nSymbolProps, "properties missing" );
+    DBG_ASSERT( pVal - pValues == sal::static_int_cast< ptrdiff_t >(nCount * nSymbolProps), "properties missing" );
     ReplaceSetProperties( A2OU( SYMBOL_LIST ) , aValues );
 
     StripFontFormatList( rNewSymbols );
@@ -861,23 +860,23 @@ void SmMathConfig::StripFontFormatList( const std::vector< SmSym > &rSymbols )
     // remove unused font-formats from list
     SmFontFormatList &rFntFmtList = GetFontFormatList();
     USHORT nCnt = rFntFmtList.GetCount();
-    SmFontFormat *pFormat = new SmFontFormat[ nCnt ];
+    SmFontFormat *pTmpFormat = new SmFontFormat[ nCnt ];
     String       *pId     = new String      [ nCnt ];
     INT32 k;
     for (k = 0;  k < nCnt;  ++k)
     {
-        pFormat[k] = *rFntFmtList.GetFontFormat( (USHORT) k );
+        pTmpFormat[k] = *rFntFmtList.GetFontFormat( (USHORT) k );
         pId[k]     = rFntFmtList.GetFontFormatId( (USHORT) k );
     }
     for (k = 0;  k < nCnt;  ++k)
     {
-        if (0 == aUsedList.GetFontFormatId( pFormat[k] ).Len())
+        if (0 == aUsedList.GetFontFormatId( pTmpFormat[k] ).Len())
         {
             rFntFmtList.RemoveFontFormat( pId[k] );
         }
     }
     delete [] pId;
-    delete [] pFormat;
+    delete [] pTmpFormat;
 }
 
 
