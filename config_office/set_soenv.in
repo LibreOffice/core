@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.145 $
-# Date:        $Date: 2007-05-25 11:10:05 $
+# Version:     $Revision: 1.146 $
+# Date:        $Date: 2007-05-25 14:35:21 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1549,6 +1549,7 @@ ToFile( "JITC_PROCESSOR_TYPE","6",                 "e" );
 }
 ToFile( "DEFAULT_TO_ENGLISH_FOR_PACKING",  "yes", "e" );
 ToFile( "ENABLE_GTK",        "@ENABLE_GTK@",       "e" );
+ToFile( "ENABLE_HEADLESS",   "@ENABLE_HEADLESS@",  "e" );
 ToFile( "GTK_CFLAGS",        "@GTK_CFLAGS@",       "e" );
 ToFile( "GTK_LIBS",          "@GTK_LIBS@",         "e" );
 ToFile( "ENABLE_SYSTRAY_GTK", "@ENABLE_SYSTRAY_GTK@", "e" );
