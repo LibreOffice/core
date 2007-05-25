@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:01:22 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:01:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1571,21 +1571,30 @@ SwTableBox* SwTable::GetTblBox( ULONG nSttIdx )
     SwNodes& rNds = GetFrmFmt()->GetDoc()->GetNodes();
     ULONG nIndex = nSttIdx + 1;
     SwCntntNode* pCNd = 0;
+    SwTableNode* pTblNd = 0;
 
     while ( nIndex < rNds.Count() )
     {
-        SwTableNode* pTblNd = rNds[ nIndex ]->GetTableNode();
-        if ( 0 != pTblNd ) // TABLE IN TABLE
+        pTblNd = rNds[ nIndex ]->GetTableNode();
+        if ( pTblNd )
             break;
-        else if ( 0 == (pCNd = rNds[nIndex]->GetCntntNode() ) )
-            ++nIndex;
-        else
+
+        pCNd = rNds[ nIndex ]->GetCntntNode();
+        if ( pCNd )
             break;
+
+        ++nIndex;
     }
 
-    if ( pCNd )
+    if ( pCNd || pTblNd )
     {
-        SwClientIter aIter( *pCNd );
+        SwModify* pModify = pCNd;
+        // --> FME 2007-3-26 #144862# Better handling of table in table:
+        if ( pTblNd && pTblNd->GetTable().GetFrmFmt() )
+            pModify = pTblNd->GetTable().GetFrmFmt();
+        // <--
+
+        SwClientIter aIter( *pModify );
         SwFrm *pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) );
         while ( pFrm && !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
@@ -1729,9 +1738,10 @@ void SwTableLine::ChgFrmFmt( SwTableLineFmt *pNewFmt )
         delete pOld;
 }
 
-SwTwips SwTableLine::GetTableLineHeight() const
+SwTwips SwTableLine::GetTableLineHeight( bool& bLayoutAvailable ) const
 {
     SwTwips nRet = 0;
+    bLayoutAvailable = false;
     SwClientIter aIter( *GetFrmFmt() );
     // A row could appear several times in headers/footers so only one chain of master/follow tables
     // will be accepted...
@@ -1742,6 +1752,10 @@ SwTwips SwTableLine::GetTableLineHeight() const
         if( ((SwRowFrm*)pLast)->GetTabLine() == this )
         {
             const SwTabFrm* pTab = static_cast<SwRowFrm*>(pLast)->FindTabFrm();
+            bLayoutAvailable = ( pTab && pTab->IsVertical() ) ?
+                               ( 0 < pTab->Frm().Height() ) :
+                               ( 0 < pTab->Frm().Width() );
+
             // The first one defines the chain, if a chain is defined, only members of the chain
             // will be added.
             if( !pChain || pChain->IsAnFollow( pTab ) || pTab->IsAnFollow( pChain ) )
