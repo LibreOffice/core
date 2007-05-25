@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:37:16 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:03:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -675,6 +675,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
         // Modified-Flag merken und erhalten ohne den Link zu Callen
         // (fuer OLE; nach Anweisung von MM)
         BOOL bIsModified = pDoc->IsModified();
+        SwUndoNoModifiedPosition aOldPos = pDoc->getUndoNoModifiedPosition();
         Link aOldOLELnk( pDoc->GetOle2Link() );
         pDoc->SetOle2Link( Link() );
 
@@ -699,7 +700,10 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
             pWrtShell->LockView( bLockedView );
 
         if( bIsModified )
+        {
             pDoc->SetModified();
+            pDoc->setUndoNoModifiedPosition( aOldPos );
+        }
         pDoc->SetOle2Link( aOldOLELnk );
 
         SW_MOD()->SetEmbeddedLoadSave( FALSE );
