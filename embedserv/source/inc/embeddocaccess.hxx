@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddocaccess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:32:00 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 11:09:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,11 +41,13 @@
 #endif
 
 #include <oleidl.h>
+#ifndef __MINGW32__
 #if defined(_MSC_VER) && (_MSC_VER > 1310)
 #pragma warning(disable : 4265)
 #include <atldbcli.h>
 #else
 #include <atlcomcli.h>
+#endif
 #endif
 #include <cppuhelper/weak.hxx>
 
