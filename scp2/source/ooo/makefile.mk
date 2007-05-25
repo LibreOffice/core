@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 14:37:27 $
+#   last change: $Author: vg $ $Date: 2007-05-25 15:22:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,10 @@ SCPDEFS+=-DENABLE_SYSTRAY_GTK
 
 .IF "$(ENABLE_PASF)" != ""
 SCPDEFS+=-DUSE_PASF
+.ENDIF
+
+.IF "$(ENABLE_HEADLESS)" != ""
+SCPDEFS+=-DENABLE_HEADLESS
 .ENDIF
 
 .IF "$(ENABLE_KDE)" != ""
