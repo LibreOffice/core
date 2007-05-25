@@ -4,9 +4,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:14:54 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 10:53:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_bridges.hxx"
 
 #include <stdio.h>
 #include <cxxabi.h>
