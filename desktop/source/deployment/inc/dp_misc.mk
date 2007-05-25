@@ -4,9 +4,9 @@
 #
 #   $RCSfile: dp_misc.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-20 14:26:58 $
+#   last change: $Author: vg $ $Date: 2007-05-25 11:00:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,11 @@
 # Although the deployment shared library is a UNO component, it also exports
 # some C++ functionality:
 .IF "$(OS)" == "WNT"
+.IF "$(COM)" == "GCC"
+DEPLOYMENTMISCLIB = -ldeploymentmisc$(UPD)$(DLLPOSTFIX)
+.ELSE
 DEPLOYMENTMISCLIB = ideploymentmisc$(UPD)$(DLLPOSTFIX).lib
+.ENDIF
 .ELSE
 DEPLOYMENTMISCLIB = -ldeploymentmisc$(UPD)$(DLLPOSTFIX)
 .ENDIF
