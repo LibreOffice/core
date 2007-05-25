@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doccomp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:25:02 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:00:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1009,15 +1009,18 @@ BOOL SwCompareLine::Compare( const CompareLine& rLine ) const
 
 BOOL SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
 {
+    if( rSrcNd.GetNodeType() != rDstNd.GetNodeType() )
+        return FALSE;
+
     BOOL bRet = FALSE;
 
-    switch( ( rSrcNd.GetNodeType() * 256 ) + rDstNd.GetNodeType() )
+    switch( rDstNd.GetNodeType() )
     {
-    case ( ND_TEXTNODE * 256 ) + ND_TEXTNODE:
+    case ND_TEXTNODE:
         bRet = CompareTxtNd( (SwTxtNode&)rDstNd, (SwTxtNode&)rSrcNd );
         break;
 
-    case ( ND_TABLENODE * 256 ) + ND_TABLENODE:
+    case ND_TABLENODE:
         {
             const SwTableNode& rTSrcNd = (SwTableNode&)rSrcNd;
             const SwTableNode& rTDstNd = (SwTableNode&)rDstNd;
@@ -1027,7 +1030,7 @@ BOOL SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
         }
         break;
 
-    case ( ND_SECTIONNODE * 256 ) + ND_SECTIONNODE:
+    case ND_SECTIONNODE:
         {
             const SwSectionNode& rSSrcNd = (SwSectionNode&)rSrcNd,
                                & rSDstNd = (SwSectionNode&)rDstNd;
@@ -1075,17 +1078,10 @@ BOOL SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
         }
         break;
 
-    case ( ND_ENDNODE * 256 ) + ND_ENDNODE:
-/*      if( rSrcNd.StartOfSectionNode()->IsTableNode() &&
-            rDstNd.StartOfSectionNode()->IsTableNode() )
-        {
-
-        }
-        else if( rSrcNd.StartOfSectionNode()->IsTableNode() &&
-                 rDstNd.StartOfSectionNode()->IsTableNode() )
-        {
-        }
-*/      break;
+    case ND_ENDNODE:
+        bRet = rSrcNd.StartOfSectionNode()->GetNodeType() ==
+               rDstNd.StartOfSectionNode()->GetNodeType();
+        break;
     }
     return bRet;
 }
