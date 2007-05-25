@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtswtbl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:53:54 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:02:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,15 +153,20 @@ long SwWriteTable::GetLineHeight( const SwTableLine *pLine )
     if( bUseLayoutHeights )
     {
         // Erstmal versuchen wir die Hoehe ueber das Layout zu bekommen
-        long nHeight = pLine->GetTableLineHeight();
+        bool bLayoutAvailable;
+        long nHeight = pLine->GetTableLineHeight( bLayoutAvailable );
         if( nHeight > 0 )
             return nHeight;
 
         // Wenn kein Layout gefunden wurde, gehen wir von festen Hoehen aus.
-        bUseLayoutHeights = FALSE;
+        // --> FME 2007-3-26 #i60390# in some cases we still want to continue
+        // to use the layout heights even if one of the rows has a height of 0
+        // ('hidden' rows)
+        // <--
+        bUseLayoutHeights = bLayoutAvailable; /*FALSE;*/
 
 #ifndef PRODUCT
-        ASSERT( !bOldGetLineHeightCalled, "Layout ungueltig?" );
+        ASSERT( bLayoutAvailable || !bOldGetLineHeightCalled, "Layout ungueltig?" );
 #endif
     }
 
