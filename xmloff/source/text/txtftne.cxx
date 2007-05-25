@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtftne.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:29:06 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:19:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,7 +207,7 @@ void XMLTextParagraphExport::exportTextFootnote(
             XMLTextCharStyleNamesElementExport aCharStylesExport(
                 GetExport(), bIsUICharStyle &&
                              aCharStyleNamesPropInfoCache.hasProperty(
-                                                    rPropSet ), sal_False,
+                                                    rPropSet ), bHasAutoStyle,
                 rPropSet, sCharStyleNames );
             if( sStyle.getLength() )
             {
