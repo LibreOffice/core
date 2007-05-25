@@ -4,9 +4,9 @@
  *
  *  $RCSfile: symbol.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:58:29 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:10:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,8 +138,8 @@ public:
     void            SetDocSymbol( BOOL bVal )   { bDocSymbol = bVal; }
 };
 
-DECLARE_LIST(SmListSym, SmSym *);
-SV_DECL_PTRARR( SymbolArray, SmSym *, 32, 32 );
+DECLARE_LIST(SmListSym, SmSym *)
+SV_DECL_PTRARR( SymbolArray, SmSym *, 32, 32 )
 
 /**************************************************************************/
 
