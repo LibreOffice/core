@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 15:59:47 $
+#   last change: $Author: vg $ $Date: 2007-05-25 11:02:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,12 +58,6 @@ CFLAGS+=$(PYTHON_CFLAGS)
 .INCLUDE :  pyversion.mk
 
 CFLAGS+=-I$(SOLARINCDIR)$/python
-.ENDIF
-
-.IF "$(GUI)" == "UNX"
-PYUNOLIB=-lpyuno
-.ELSE
-PYUNOLIB=ipyuno.lib
 .ENDIF
 
 SHL1TARGET=	$(TARGET)
@@ -126,7 +120,7 @@ $(DLLDEST)$/pyuno_services.rdb : makefile.mk $(DLLDEST)$/$(DLLPRE)$(TARGET)$(DLL
     cd $(DLLDEST) && sh -c "export PATH='$(PATH):$(OUT)$/bin'; regcomp -register -r pyuno_services.tmp $(foreach,i,$(COMPONENTS) -c $(i))"
 .ELSE
     cd $(DLLDEST) && regcomp -register -r pyuno_services.tmp $(foreach,i,$(COMPONENTS) -c $(i))
-.ENDIF   "$(GUI)$(COM)"=="WNTGCC" 
+.ENDIF    # "$(GUI)$(COM)"=="WNTGCC" 
 .ENDIF    # $(OS)=="MACOSX"
     cd $(DLLDEST) && mv pyuno_services.tmp pyuno_services.rdb
 
