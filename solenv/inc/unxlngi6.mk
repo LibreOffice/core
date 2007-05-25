@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 15:11:27 $
+#   last change: $Author: vg $ $Date: 2007-05-25 12:32:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -143,11 +143,10 @@ MODULES_WITH_WARNINGS := \
     chart2 \
     devtools \
     extensions \
-    lingu \
     r_tools \
     soldep \
-    starmath \
-    sw
+    sw \
+    xmlsecurity
 
 # switches for dynamic and static linking
 STATIC		= -Wl,-Bstatic
