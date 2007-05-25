@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 15:03:39 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 11:14:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -963,7 +963,7 @@ void ShutdownIcon::EnableAutostartW32( const rtl::OUString &aShortcut )
             MultiByteToWideChar( CP_ACP, 0, szPathA, -1, aPath, nNeededWStrBuffSize );
     }
 
-    OUString aOfficepath( aPath );
+    OUString aOfficepath( reinterpret_cast<const sal_Unicode*>(aPath) );
     int i = aOfficepath.lastIndexOf((sal_Char) '\\');
     if( i != -1 )
         aOfficepath = aOfficepath.copy(0, i);
