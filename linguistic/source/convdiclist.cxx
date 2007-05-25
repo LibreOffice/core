@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convdiclist.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:52:19 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:20:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -620,7 +620,7 @@ uno::Sequence< OUString > SAL_CALL ConvDicList::queryConversions(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    INT16 nLang = LocaleToLanguage( rLocale );
+    /*INT16 nLang = LocaleToLanguage( rLocale );*/
 
     INT32 nCount = 0;
     uno::Sequence< OUString > aRes( 20 );
@@ -761,7 +761,7 @@ uno::Sequence< OUString > ConvDicList::getSupportedServiceNames_Static()
 ///////////////////////////////////////////////////////////////////////////
 
 Reference< XInterface > SAL_CALL ConvDicList_CreateInstance(
-        const Reference< XMultiServiceFactory > & rSMgr )
+        const Reference< XMultiServiceFactory > & /*rSMgr*/ )
     throw(Exception)
 {
     return StaticConvDicList::get();
