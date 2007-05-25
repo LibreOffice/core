@@ -4,9 +4,9 @@
  *
  *  $RCSfile: solar.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 20:17:46 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 11:08:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,6 +342,7 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #define SYSTEM_UNXSOGS      31
 #define SYSTEM_UNXSOGI      32
 #define SYSTEM_UNXMACXI     33
+#define SYSTEM_WNTGCCI      99
 
 #if defined WNT
 #if defined(__MINGW32__)
