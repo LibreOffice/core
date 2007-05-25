@@ -4,9 +4,9 @@
  *
  *  $RCSfile: alloc_arena.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:28:24 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:09:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -464,27 +464,30 @@ rtl_arena_hash_remove (
         segpp = &(segment->m_fnext);
     }
 
-    OSL_ASSERT(segment != 0); /* bad free */
-    OSL_ASSERT(segment->m_size == size); /* wrong size */
-
-    arena->m_stats.m_free      += 1;
-    arena->m_stats.m_mem_alloc -= segment->m_size;
-
-    if (lookups > 1)
+    OSL_POSTCOND(segment != 0, "rtl_arena_hash_remove(): bad free.");
+    if (segment != 0)
     {
-        sal_Size nseg = (sal_Size)(arena->m_stats.m_alloc - arena->m_stats.m_free);
-        if (nseg > 4 * arena->m_hash_size)
-        {
-            if (!(arena->m_flags & RTL_ARENA_FLAG_RESCALE))
-            {
-                sal_Size ave = nseg >> arena->m_hash_shift;
-                sal_Size new_size = arena->m_hash_size << (highbit(ave) - 1);
+        OSL_POSTCOND(segment->m_size == size, "rtl_arena_hash_remove(): wrong size.");
 
-                arena->m_flags |= RTL_ARENA_FLAG_RESCALE;
-                RTL_MEMORY_LOCK_RELEASE(&(arena->m_lock));
-                rtl_arena_hash_rescale (arena, new_size);
-                RTL_MEMORY_LOCK_ACQUIRE(&(arena->m_lock));
-                arena->m_flags &= ~RTL_ARENA_FLAG_RESCALE;
+        arena->m_stats.m_free      += 1;
+        arena->m_stats.m_mem_alloc -= segment->m_size;
+
+        if (lookups > 1)
+        {
+            sal_Size nseg = (sal_Size)(arena->m_stats.m_alloc - arena->m_stats.m_free);
+            if (nseg > 4 * arena->m_hash_size)
+            {
+                if (!(arena->m_flags & RTL_ARENA_FLAG_RESCALE))
+                {
+                    sal_Size ave = nseg >> arena->m_hash_shift;
+                    sal_Size new_size = arena->m_hash_size << (highbit(ave) - 1);
+
+                    arena->m_flags |= RTL_ARENA_FLAG_RESCALE;
+                    RTL_MEMORY_LOCK_RELEASE(&(arena->m_lock));
+                    rtl_arena_hash_rescale (arena, new_size);
+                    RTL_MEMORY_LOCK_ACQUIRE(&(arena->m_lock));
+                    arena->m_flags &= ~RTL_ARENA_FLAG_RESCALE;
+                }
             }
         }
     }
@@ -507,15 +510,32 @@ rtl_arena_segment_alloc (
     rtl_arena_segment_type ** ppSegment
 )
 {
-    int index;
+    int index = 0;
 
     OSL_ASSERT(*ppSegment == 0);
     if (!RTL_MEMORY_ISP2(size))
     {
-        /* roundup to next power of 2 */
         int msb = highbit(size);
-        OSL_ASSERT(RTL_ARENA_FREELIST_SIZE > SAL_INT_CAST(unsigned, msb));
-        size = (sal_Size)(1 << msb);
+        if (RTL_ARENA_FREELIST_SIZE == SAL_INT_CAST(size_t, msb))
+        {
+            /* highest possible freelist: fall back to first fit */
+            rtl_arena_segment_type *head, *segment;
+
+            head = &(arena->m_freelist_head[msb - 1]);
+            for (segment = head->m_fnext; segment != head; segment = segment->m_fnext)
+            {
+                if (segment->m_size >= size)
+                {
+                    /* allocate first fit segment */
+                    (*ppSegment) = segment;
+                    break;
+                }
+            }
+            goto dequeue_and_leave;
+        }
+
+        /* roundup to next power of 2 */
+        size = (1UL << msb);
     }
 
     index = lowbit(RTL_MEMORY_P2ALIGN(arena->m_freelist_bitmap, size));
@@ -527,7 +547,11 @@ rtl_arena_segment_alloc (
         head = &(arena->m_freelist_head[index - 1]);
         (*ppSegment) = head->m_fnext;
         OSL_ASSERT((*ppSegment) != head);
+    }
 
+dequeue_and_leave:
+    if (*ppSegment != 0)
+    {
         /* remove from freelist */
         rtl_arena_freelist_remove (arena, (*ppSegment));
     }
