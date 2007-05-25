@@ -4,9 +4,9 @@
  *
  *  $RCSfile: action.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:51:16 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:11:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,12 +62,12 @@ void SmFormatAction::Redo()
     pDoc->SetFormat(aNewFormat);
 }
 
-void SmFormatAction::Repeat(SmDocShell *pDocSh)
+void SmFormatAction::Repeat(SfxRepeatTarget& rDocSh)
 {
-    pDocSh->SetFormat(aNewFormat);
+    dynamic_cast< SmDocShell & >(rDocSh).SetFormat(aNewFormat);
 }
 
-String SmFormatAction::GetComment() const
+UniString SmFormatAction::GetComment() const
 {
     return (SmResId(RID_UNDOFORMATNAME));
 }
