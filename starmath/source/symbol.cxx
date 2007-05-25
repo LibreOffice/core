@@ -4,9 +4,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:55:33 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:15:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,12 +111,12 @@ long                SF_Ident = SF_IDENT;
 
 SmSym::SmSym() :
     Name(C2S("unknown")),
-    Character('\0'),
+    aSetName(C2S("unknown")),
     pHashNext(0),
     pSymSetManager(0),
+    Character('\0'),
     bPredefined(FALSE),
-    bDocSymbol(FALSE),
-    aSetName(C2S("unknown"))
+    bDocSymbol(FALSE)
 {
     aExportName = Name;
     Face.SetTransparent(TRUE);
@@ -204,13 +204,13 @@ SmSymSet::SmSymSet(const String& rName)
 
 SmSymSet::~SmSymSet()
 {
-    for (int i = 0; i < GetCount(); i++)
+    for (USHORT i = 0; i < GetCount(); i++)
         delete SymbolList.GetObject(i);
 }
 
 SmSymSet& SmSymSet::operator = (const SmSymSet& rSymbolSet)
 {
-    int i;
+    USHORT i;
     for (i = 0; i < GetCount(); i++)
         delete SymbolList.GetObject(i);
 
@@ -333,8 +333,8 @@ SmSymSetManager_Impl & SmSymSetManager_Impl::operator = ( const SmSymSetManager_
 
 /**************************************************************************/
 
-void SmSymSetManager::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
-                              const SfxHint& rHint, const TypeId& rHintType)
+void SmSymSetManager::SFX_NOTIFY(SfxBroadcaster& /*rBC*/, const TypeId& rBCType,
+                              const SfxHint& /*rHint*/, const TypeId& rHintType)
 {
 }
 
@@ -367,7 +367,7 @@ void SmSymSetManager::EnterHashTable(SmSym& rSymbol)
 
 void SmSymSetManager::EnterHashTable(SmSymSet& rSymbolSet)
 {
-    for (int i = 0; i < rSymbolSet.GetCount(); i++)
+    for (USHORT i = 0; i < rSymbolSet.GetCount(); i++)
         EnterHashTable( *rSymbolSet.SymbolList.GetObject(i) );
 }
 
@@ -402,7 +402,8 @@ SmSymSetManager::SmSymSetManager(USHORT HashTableSize)
 }
 
 
-SmSymSetManager::SmSymSetManager(const SmSymSetManager& rSymbolSetManager)
+SmSymSetManager::SmSymSetManager(const SmSymSetManager& rSymbolSetManager) :
+    SfxListener()
 {
     pImpl = new SmSymSetManager_Impl( *this, rSymbolSetManager.pImpl->NoHashEntries );
     *pImpl = *rSymbolSetManager.pImpl;
@@ -430,7 +431,7 @@ USHORT SmSymSetManager::AddSymbolSet(SmSymSet* pSymbolSet)
 
     pSymbolSet->pSymSetManager = this;
 
-    for (int i = 0; i < pSymbolSet->GetCount(); i++)
+    for (USHORT i = 0; i < pSymbolSet->GetCount(); i++)
         pSymbolSet->SymbolList.GetObject(i)->pSymSetManager = this;
 
     FillHashTable();
@@ -501,9 +502,9 @@ void SmSymSetManager::AddReplaceSymbol( const SmSym &rSymbol )
             nPos = GetSymbolSetPos( rSymbol.GetSetName() );
         }
         DBG_ASSERT( nPos != SYMBOLSET_NONE, "SymbolSet not found");
-        SmSym *pSym = new SmSym( rSymbol );
-        GetSymbolSet( nPos )->AddSymbol( pSym );
-        EnterHashTable( *pSym );
+        SmSym *pTmpSym = new SmSym( rSymbol );
+        GetSymbolSet( nPos )->AddSymbol( pTmpSym );
+        EnterHashTable( *pTmpSym );
     }
     SetModified( TRUE );
 }
@@ -514,7 +515,7 @@ USHORT SmSymSetManager::GetSymbolCount() const
     USHORT nRes = 0;
     USHORT nSets = GetSymbolSetCount();
     for (USHORT i = 0;  i < nSets;  ++i)
-        nRes += GetSymbolSet(i)->GetCount();
+        nRes = nRes + GetSymbolSet(i)->GetCount();
     return nRes;
 }
 
@@ -532,7 +533,7 @@ const SmSym * SmSymSetManager::GetSymbolByPos( USHORT nPos ) const
         if (nPos < nIdx + nEntries)
             pRes = &GetSymbolSet(i)->GetSymbol( nPos - nIdx );
         else
-            nIdx += nEntries;
+            nIdx = nIdx + nEntries;
         ++i;
     }
 
@@ -607,7 +608,7 @@ void SmSymSetManager::Save()
     USHORT nSetCount = GetSymbolSetCount();
     USHORT i;
     for (i = 0;  i < nSetCount;  ++i)
-        nSymbolCount += GetSymbolSet( i )->GetCount();
+        nSymbolCount = nSymbolCount + GetSymbolSet( i )->GetCount();
 
     if (nSymbolCount)
     {
