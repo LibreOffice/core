@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:36:51 $
+#   last change: $Author: vg $ $Date: 2007-05-25 11:01:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -127,11 +127,11 @@ BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) ; $(GNUMAKE) install ; c
 .IF "$(COM)"=="GCC"
 BUILD_DIR=
 MYCWD=$(shell pwd)/$(INPATH)/misc/build
-CC:=$(CC:s/guw.pl //)
-CXX:=$(CXX:s/guw.pl //)
+CC:=$(CC:s/guw.exe //)
+CXX:=$(CXX:s/guw.exe //)
 LDFLAGS:=-mno-cygwin
 .EXPORT : LDFLAGS
-CONFIGURE_ACTION= ./configure --prefix=$(MYCWD)/python-inst --enable-shared LN="cp -p"
+CONFIGURE_ACTION= ./configure --prefix=$(MYCWD)/python-inst --enable-shared LN="cp -p" LDFLAGS=-mno-cygwin
 BUILD_ACTION=$(ENV_BUILD) make ; make install
 .ELSE
 PYTHONPATH:=..$/Lib
