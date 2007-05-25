@@ -4,9 +4,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.87 $
+#   $Revision: 1.88 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 15:10:49 $
+#   last change: $Author: vg $ $Date: 2007-05-25 10:51:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -233,7 +233,7 @@ $(OBJ)$/%.obj : %.c
     $(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
 .ENDIF
 .ELSE
-    @$(TYPE) $(mktmp $(CXX) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $*.c )
+    @$(TYPE) $(mktmp $(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $*.c )
     @$(ECHONL)
 .IF "$(COM)"=="GCC"
     $(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $*.c
@@ -276,7 +276,7 @@ $(SLO)$/%.obj : $(MISC)$/%.c
      $(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
 .ELSE
     @@-$(RM) $@
-    @$(TYPE) $(mktmp $(CXX) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(MISC)$/$*.c )
+    @$(TYPE) $(mktmp $(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(MISC)$/$*.c )
     @$(ECHONL)
 .IF "$(COM)"=="GCC"
     $(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(MISC)$/$*.c 
@@ -538,9 +538,9 @@ $(SLO)$/%.obj : %.asm
 .IF "$(COM)"=="GCC"
 .IF "$(ASM)"=="ml"
        $(ASM) $(AFLAGS) -D$(COM) /Fo$(SLO)$/$*.obj $*.asm
-       @+-$(RM) $*.err >& $(NULLDEV)
+       @@-$(RM) $*.err
 .ELSE			# "$(ASM)"=="ml"
-        @+-$(RM) $@ >&  $(NULLDEV)
+        @@-$(RM) $@
         $(ASM) $(AFLAGS) $*.asm,$(SLO)$/$*.obj;
 .ENDIF			# "$(ASM)"=="ml"
 .ELSE
@@ -566,9 +566,9 @@ $(OBJ)$/%.obj : %.asm
 .IF "$(COM)"=="GCC"
 .IF "$(ASM)"=="ml"
        $(ASM) $(AFLAGS) -D$(COM) /Fo$(OBJ)$/$*.obj $*.asm
-       @+-$(RM) $*.err >& $(NULLDEV)
+       @@-$(RM) $*.err
 .ELSE			# "$(ASM)"=="ml"
-        @+-$(RM) $@ >&  $(NULLDEV)
+        @@-$(RM) $@
         $(ASM) $(AFLAGS) $*.asm,$(OBJ)$/$*.obj;
 .ENDIF			# "$(ASM)"=="ml"
 .ELSE
