@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:09:32 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:03:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2185,11 +2185,11 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     }
 
     const SwFrmFmt *pDefaultFmt = 0;
-    // WW6 / 8 can not have more then 31 / 64 cells
-    const BYTE nMaxCols = rWW8Wrt.bWrtWW8 ? 64 : 31;
+    // WW6 / 8 can not have more then 31 / 63 cells
+    const BYTE nMaxCols = rWW8Wrt.bWrtWW8 ? 63 : 31;
     // rCols are the array of all cols of the table
     const SwWriteTableCols& rCols = pTableWrt->GetCols();
-    USHORT nColCnt = nMaxCols; // #125415# rCols.Count();
+    USHORT nColCnt = rCols.Count();
     SwWriteTableCellPtr* pBoxArr = new SwWriteTableCellPtr[ nColCnt ];
     USHORT* pRowSpans = new USHORT[ nColCnt ];
     memset( pBoxArr, 0, sizeof( pBoxArr[0] ) * nColCnt );
@@ -2256,7 +2256,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
                 rWW8Wrt);
         }
 
-        //Winword column export limited to 31/64 cells
+        //Winword column export limited to 31/63 cells
         sal_uInt8 nWWColMax = nRealColCnt > nMaxCols ?
             nMaxCols : msword_cast<sal_uInt8>(nRealColCnt);
 
