@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-09 13:20:58 $
+#   last change: $Author: vg $ $Date: 2007-05-25 10:48:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -141,9 +141,9 @@ CFLAGS+=-nostdinc -D_MT
 CONFIGURE_ACTION=..$/dist$/configure
 CONFIGURE_FLAGS=--enable-cxx --enable-dynamic --enable-shared --build=i586-pc-mingw32 --host=i586-pc-mingw32 --enable-mingw LN_S=ln NM="$(WRAPCMD) nm" OBJDUMP="$(WRAPCMD) objdump" JAVA="$(WRAPCMD) -env java" JAVAC="$(WRAPCMD) -env javac" CFLAGS="$(CFLAGS)" CPPFLAGS="$(INCLUDE)" LIBS="-lmingwthrd" LIBSO_LIBS="-lmingwthrd" LIBJSO_LIBS="-lmingwthrd" LIBXSO_LIBS="-lmingwthrd $(LIBSTLPORT)"
 .IF "$(USE_MINGW)"=="cygwin"
-CONFIGURE_FLAGS+=LDFLAGS="-no-undefined -L$(SOLARVER)/$(UPD)/$(INPATH)/lib -L$(SOLARVER)/$(UPD)/$(INPATH)/bin -L$(COMPATH)/lib/mingw -L$(COMPATH)/lib/w32api -L$(COMPATH)/lib"
+CONFIGURE_FLAGS+=LDFLAGS="-no-undefined -L$(SOLARVER)/$(INPATH)/lib -L$(SOLARVER)/$(INPATH)/bin -L$(COMPATH)/lib/mingw -L$(COMPATH)/lib/w32api -L$(COMPATH)/lib"
 .ELSE
-CONFIGURE_FLAGS+=LDFLAGS="-no-undefined -L$(SOLARVER)/$(UPD)/$(INPATH)/lib -L$(SOLARVER)/$(UPD)/$(INPATH)/bin -L$(COMPATH)/lib"
+CONFIGURE_FLAGS+=LDFLAGS="-no-undefined -L$(SOLARVER)/$(INPATH)/lib -L$(SOLARVER)/$(INPATH)/bin -L$(COMPATH)/lib"
 .ENDIF
 .IF "$(SOLAR_JAVA)"!=""
 CONFIGURE_FLAGS+=--enable-java
