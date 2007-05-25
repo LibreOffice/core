@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.109 $
+#   $Revision: 1.110 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-26 13:57:33 $
+#   last change: $Author: vg $ $Date: 2007-05-25 10:52:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -321,25 +321,28 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL$(TNR)ALLRES)"!=""
-.IF "$(COM)"=="GCC"
-.IF "$(USE_DEFFILE)"!=""
-    dlltool --input-def $(SHL$(TNR)DEF) --dllname $(SHL$(TNR)TARGET)$(DLLPOST) --kill-at --output-exp $(MISC)$/$(@:b).exp
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(DEFLIB$(TNR)NAME)"!=""	# do not have to include objs
+    @echo dlltool --input-def $(SHL$(TNR)DEF) \
+        --dllname $(SHL$(TNR)TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)$/$(@:b)_exp.o > $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+.ELSE			# "$(DEFLIB$(TNR)NAME)"!=""	# do not have to include objs
+    @echo dlltool --input-def $(SHL$(TNR)DEF) \
+        --dllname $(SHL$(TNR)TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)$/$(@:b)_exp.o \
+        $(STDOBJ) $(SHL$(TNR)OBJS) $(SHL$(TNR)LINKRESO) \
+        `$(TYPE) /dev/null $(SHL$(TNR)LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+.ENDIF			# "$(DEFLIB$(TNR)NAME)"!=""
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) $(SHL$(TNR)OBJS) $(SHL$(TNR)LINKRESO) \
         `$(TYPE) /dev/null $(SHL$(TNR)LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,$(MISC)$/$(@:b).exp,--exclude-libs,ALL $(SHL$(TNR)STDLIBS) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) \
-        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
-.ELSE			# "$(USE_DEFFILE)"!=""
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) $(SHL$(TNR)OBJS) $(SHL$(TNR)LINKRESO) \
-        `$(TYPE) /dev/null $(SHL$(TNR)LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,--export-all-symbols,--exclude-libs,ALL $(SHL$(TNR)STDLIBS) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) \
-        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
-.ENDIF			# "$(USE_DEFFILE)"!=""
+        -Wl,--exclude-libs,ALL $(SHL$(TNR)STDLIBS) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) \
+        $(MISC)$/$(@:b)_exp.o \
+        -Wl,-Map,$(MISC)$/$(@:b).map >> $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL$(TNR)USE_EXPORTS)"!="name"
@@ -511,7 +514,7 @@ $(SHL$(TNR)IMPLIBN):	\
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
     @echo no ImportLibs on mingw
-    @+-$(RM) $@
+    @-$(RM) $@
     @$(TOUCH) $@
 .ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
