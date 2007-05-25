@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:40:25 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:00:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2433,11 +2433,19 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
             rPam.Exchange();
         rPam.GetPoint()->nNode++;
 
-        rPam.GetPoint()->nContent.Assign( 0, 0 );
-        rPam.GetMark()->nContent.Assign( 0, 0 );
+        SwCntntNode *pTmpNode = rPam.GetPoint()->nNode.GetNode().GetCntntNode();
+        rPam.GetPoint()->nContent.Assign( pTmpNode, 0 );
+        pTmpNode = rPam.GetMark()->nNode.GetNode().GetCntntNode();
+        rPam.GetMark()->nContent.Assign( pTmpNode, 0 );
 
         ClearRedo();
-        SwUndoDelete* pUndo = new SwUndoDelete( rPam, sal_True );
+
+        SwPaM aDelPam( *rPam.GetMark(), *rPam.GetPoint() );
+        ::PaMCorrAbs( aDelPam, *aDelPam.GetPoint() );
+
+        SwUndoDelete* pUndo = new SwUndoDelete( aDelPam, sal_True );
+
+        *rPam.GetPoint() = *aDelPam.GetPoint();
         pUndo->SetPgBrkFlags( bSavePageBreak, bSavePageDesc );
         AppendUndo( pUndo );
     }
@@ -2480,8 +2488,10 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
             }
         }
 
-        rPam.GetBound( TRUE ).nContent.Assign( 0, 0 );
-        rPam.GetBound( FALSE ).nContent.Assign( 0, 0 );
+        SwCntntNode *pTmpNode = rPam.GetBound( TRUE ).nNode.GetNode().GetCntntNode();
+        rPam.GetBound( TRUE ).nContent.Assign( pTmpNode, 0 );
+        pTmpNode = rPam.GetBound( FALSE ).nNode.GetNode().GetCntntNode();
+        rPam.GetBound( FALSE ).nContent.Assign( pTmpNode, 0 );
         GetNodes().Delete( aRg.aStart, nNodeDiff+1 );
     }
     rPam.DeleteMark();
