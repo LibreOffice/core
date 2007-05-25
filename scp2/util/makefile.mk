@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-22 14:50:30 $
+#   last change: $Author: vg $ $Date: 2007-05-25 14:38:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -149,6 +149,10 @@ SCP1FILES += \
              module_kde.par     \
              file_kde.par
 .ENDIF
+
+.IF "$(ENABLE_HEADLESS)" == "TRUE"
+SCP1FILES += module_headless.par
+.ENDIF
 .ENDIF
 
 .IF "$(ENABLE_CRASHDUMP)" != ""
@@ -274,6 +278,10 @@ SCP2FILES += \
 SCP2FILES += \
              module_kde.par     \
              file_kde.par
+.ENDIF
+
+.IF "$(ENABLE_HEADLESS)" == "TRUE"
+SCP2FILES += module_headless.par
 .ENDIF
 .ENDIF
 
