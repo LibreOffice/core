@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prophelp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:55:07 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:24:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,10 +85,11 @@ PropertyChgHelper::PropertyChgHelper(
         const Reference< XInterface > &rxSource,
         Reference< XPropertySet > &rxPropSet,
         int nAllowedEvents ) :
-    xMyEvtObj           (rxSource),
-    xPropSet            (rxPropSet),
+    PropertyChgHelperBase(),
     aPropNames          (nCHCount),
+    xMyEvtObj           (rxSource),
     aLngSvcEvtListeners (GetLinguMutex()),
+    xPropSet            (rxPropSet),
     nEvtFlags           (nAllowedEvents)
 {
     OUString *pName = aPropNames.getArray();
@@ -102,14 +103,14 @@ PropertyChgHelper::PropertyChgHelper(
 
 
 PropertyChgHelper::PropertyChgHelper( const PropertyChgHelper &rHelper ) :
+    PropertyChgHelperBase(),
     aLngSvcEvtListeners (GetLinguMutex())
 {
     RemoveAsPropListener();
-    xPropSet    = rHelper.xPropSet;
     aPropNames  = rHelper.aPropNames;
     xMyEvtObj   = rHelper.xMyEvtObj;
+    xPropSet    = rHelper.xPropSet;
     nEvtFlags   = rHelper.nEvtFlags;
-    //aLngSvcEvtListeners   = rHelper.aLngSvcEvtListeners;
     AddAsPropListener();
 
     SetDefaultValues();
@@ -396,8 +397,7 @@ void SAL_CALL
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    BOOL bRes = PropertyChgHelper::propertyChange_Impl( rEvt );
-    DBG_ASSERT( bRes, "unknown property" );
+    PropertyChgHelper::propertyChange_Impl( rEvt );
 }
 
 
