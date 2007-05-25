@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:23:42 $
+#   last change: $Author: vg $ $Date: 2007-05-25 10:50:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ LIBTARGET=NO
 .INCLUDE :  settings.mk
 DLLPRE =
 
-.IF "$(COM)$(COMEX)" == "MSC11" || "$(COM)$(COMEX)"=="MSC10"
+.IF "$(COM)" == "MSC"
 
 # ------------------------------------------------------------------
 .IF "$(GUI)"=="WNT"
@@ -102,7 +102,11 @@ DEF1NAME = $(SHL1TARGET)
 
 # --- Targets ------------------------------------------------------
 
+.ENDIF
+
 .INCLUDE :	target.mk
+
+.IF "$(COM)" == "MSC"
 
 ALLTAR : $(DESTDIR)$/cli_bridgetest_inprocess.exe
 
