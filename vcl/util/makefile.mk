@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.89 $
+#   $Revision: 1.90 $
 #
-#   last change: $Author: vg $ $Date: 2007-04-12 15:17:41 $
+#   last change: $Author: vg $ $Date: 2007-05-25 11:03:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -211,15 +211,24 @@ DEFLIB1NAME =vcl
 
 .IF "$(GUI)" == "WNT"
 
+.IF "$(COM)" == "GCC"
+SHL1STDLIBS += $(PSPLIB)
+.ENDIF
+
 SHL1STDLIBS += $(UWINAPILIB)      \
                $(GDI32LIB)        \
-               msimg32.lib        \
+               $(MSIMG32LIB)        \
                $(WINSPOOLLIB)     \
                $(OLE32LIB)        \
                $(SHELL32LIB)      \
-               $(ADVAPI32LIB)     \
-               $(PSPLIB)         \
+               $(ADVAPI32LIB)
+
+.IF "$(COM)" == "GCC"
+SHL1STDLIBS += $(IMM32LIB)
+.ELSE
+SHL1STDLIBS += $(PSPLIB)         \
                $(IMM32LIB)
+.ENDIF
 
 .IF "$(GUI)$(COM)$(CPU)" == "WNTMSCI"
 LINKFLAGSSHL += /ENTRY:LibMain@12
