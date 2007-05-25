@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spelldta.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:55:35 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:25:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,14 +160,16 @@ void SearchSimilarText( const OUString &rText, INT16 nLanguage,
     {
         Reference< XDictionary1 > xDic( pDic[i], UNO_QUERY );
 
-        DictionaryType  eType = xDic->getDictionaryType();
+        /*DictionaryType  eType = xDic->getDictionaryType();*/
         INT16           nLang = xDic->getLanguage();
 
         if ( xDic.is() && xDic->isActive()
             && (nLang == nLanguage  ||  nLang == LANGUAGE_NONE) )
         {
+#if OSL_DEBUG_LEVEL > 1
             DBG_ASSERT( eType != DictionaryType_MIXED,
                     "unexpected dictionary type" );
+#endif
             const Sequence< Reference< XDictionaryEntry > > aEntries = xDic->getEntries();
             const Reference< XDictionaryEntry > *pEntries = aEntries.getConstArray();
             INT32 nLen = aEntries.getLength();
@@ -271,10 +273,10 @@ SpellAlternatives::SpellAlternatives()
 SpellAlternatives::SpellAlternatives(
             const OUString &rWord, INT16 nLang,
             INT16 nFailureType, const OUString &rRplcWord ) :
+    aAlt        ( Sequence< OUString >(1) ),
     aWord       (rWord),
-    nLanguage   (nLang),
     nType       (nFailureType),
-    aAlt        ( Sequence< OUString >(1) )
+    nLanguage   (nLang)
 {
     if (rRplcWord.getLength())
         aAlt.getArray()[ 0 ] = rRplcWord;
@@ -286,10 +288,10 @@ SpellAlternatives::SpellAlternatives(
 SpellAlternatives::SpellAlternatives(
         const OUString &rWord, INT16 nLang, INT16 nFailureType,
         const Sequence< OUString > &rAlternatives ) :
+    aAlt        (rAlternatives),
     aWord       (rWord),
-    nLanguage   (nLang),
     nType       (nFailureType),
-    aAlt        (rAlternatives)
+    nLanguage   (nLang)
 {
 }
 
