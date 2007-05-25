@@ -1,5 +1,5 @@
 *** misc/xmlsec1-1.2.6/apps/Makefile.in	Thu Aug 26 08:00:30 2004
---- misc/build/xmlsec1-1.2.6/apps/Makefile.in	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/apps/Makefile.in	Fri May 11 14:47:19 2007
 ***************
 *** 370,376 ****
   	$(CRYPTO_DEPS) \
@@ -18,7 +18,7 @@
   .SUFFIXES:
   .SUFFIXES: .c .lo .o .obj
 *** misc/xmlsec1-1.2.6/configure	Thu Aug 26 08:00:34 2004
---- misc/build/xmlsec1-1.2.6/configure	Tue Mar 27 11:26:19 2007
+--- misc/build/xmlsec1-1.2.6/configure	Fri May 11 14:47:19 2007
 ***************
 *** 463,469 ****
   # include <unistd.h>
@@ -333,7 +333,7 @@
   LIBXML_LIBS=""
   LIBXML_FOUND="no"
 ***************
-*** 25678,25688 ****
+*** 25678,25689 ****
   
   XMLSEC_NO_NSS="1"
   MOZILLA_MIN_VERSION="1.4"
@@ -342,10 +342,11 @@
   NSS_CFLAGS=""
   NSS_LIBS=""
 ! NSS_LIBS_LIST="-lnss3 -lsmime3"
-  NSPR_LIBS_LIST="-lnspr4 -lplds4 -lplc4"
+! NSPR_LIBS_LIST="-lnspr4 -lplds4 -lplc4"
   NSS_CRYPTO_LIB="$PACKAGE-nss"
   NSS_FOUND="no"
---- 25679,25692 ----
+  
+--- 25679,25704 ----
   
   XMLSEC_NO_NSS="1"
   MOZILLA_MIN_VERSION="1.4"
@@ -356,10 +357,22 @@
   NSPR_MIN_VERSION="4.0"
   NSS_CFLAGS=""
   NSS_LIBS=""
-! NSS_LIBS_LIST="-lnss3 -lsoftokn3 -lsmime3"
-  NSPR_LIBS_LIST="-lnspr4 -lplds4 -lplc4"
+!  
+! case $host_os in
+! cygwin* | mingw* | pw32*)
+!   NSS_LIBS_LIST="-lnss3 -lsmime3"
+!   NSPR_LIBS_LIST="-lnspr4"
+!   ;;
+! 
+! *)
+!   NSS_LIBS_LIST="-lnss3 -lsoftokn3 -lsmime3"
+!   NSPR_LIBS_LIST="-lnspr4 -lplds4 -lplc4"
+!   ;;
+! esac
+! 
   NSS_CRYPTO_LIB="$PACKAGE-nss"
   NSS_FOUND="no"
+  
 ***************
 *** 25766,25788 ****
     else
@@ -385,7 +398,7 @@
               echo "$as_me:$LINENO: result: $NSS_LIBS" >&5
   echo "${ECHO_T}$NSS_LIBS" >&6
           else
---- 25770,25792 ----
+--- 25781,25803 ----
     else
        PKG_CONFIG_MIN_VERSION=0.9.0
        if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
@@ -418,7 +431,7 @@
   
           fi
   
---- 25794,25800 ----
+--- 25805,25811 ----
               NSS_LIBS=""
               ## If we have a custom action on failure, don't print errors, but
               ## do set a variable so people can do so.
@@ -436,7 +449,7 @@
   
       echo "$as_me:$LINENO: checking for nspr libraries >= $NSPR_MIN_VERSION" >&5
   echo $ECHO_N "checking for nspr libraries >= $NSPR_MIN_VERSION... $ECHO_C" >&6
---- 25821,25828 ----
+--- 25832,25839 ----
           ac_mozilla_name=mozilla-$MOZILLA_MIN_VERSION
       fi
   
@@ -446,42 +459,124 @@
       echo "$as_me:$LINENO: checking for nspr libraries >= $NSPR_MIN_VERSION" >&5
   echo $ECHO_N "checking for nspr libraries >= $NSPR_MIN_VERSION... $ECHO_C" >&6
 ***************
-*** 25853,25859 ****
+*** 25853,25860 ****
   	done
   
   	for dir in $ac_nss_lib_dir ; do
 !     	    if test -f $dir/libnspr4.so ; then
-  		        	if test "z$dir" = "z/usr/lib" ; then
+! 		        	if test "z$dir" = "z/usr/lib" ; then
               	    NSPR_LIBS="$NSPR_LIBS_LIST"
       		else
---- 25857,25863 ----
+      		    if test "z$with_gnu_ld" = "zyes" ; then
+--- 25868,25878 ----
   	done
   
   	for dir in $ac_nss_lib_dir ; do
-!     	    if test -f $dir/libnspr4.so -o -f $dir/libnspr4.dylib ; then
-  		        	if test "z$dir" = "z/usr/lib" ; then
+!             case $host_os in
+!             cygwin* | mingw* | pw32*)
+!     	      if test -f $dir/libnspr4.so -o -f $dir/libnspr4.dylib -o -f $dir/libnspr4.a ; then
+! 		dnl do not add -L/usr/lib because compiler does it anyway
+!         	if test "z$dir" = "z/usr/lib" ; then
               	    NSPR_LIBS="$NSPR_LIBS_LIST"
       		else
+      		    if test "z$with_gnu_ld" = "zyes" ; then
 ***************
-*** 25939,25945 ****
+*** 25865,25871 ****
+  		fi
+  		NSPR_LIBS_FOUND="yes"
+  		break
+! 	    fi
+  	done
+      fi
+  
+--- 25883,25908 ----
+  		fi
+  		NSPR_LIBS_FOUND="yes"
+  		break
+! 	      fi
+!               ;;
+! 
+!             *)
+!     	      if test -f $dir/libnspr4.so -o -f $dir/libnspr4.dylib ; then
+! 		dnl do not add -L/usr/lib because compiler does it anyway
+!         	if test "z$dir" = "z/usr/lib" ; then
+!             	    NSPR_LIBS="$NSPR_LIBS_LIST"
+!     		else
+!     		    if test "z$with_gnu_ld" = "zyes" ; then
+!     			NSPR_LIBS="-Wl,-rpath-link -Wl,$dir -L$dir $NSPR_LIBS_LIST"
+!     		    else
+!     			NSPR_LIBS="-L$dir $NSPR_LIBS_LIST"
+! 		    fi
+! 		fi
+! 		NSPR_LIBS_FOUND="yes"
+! 		break
+! 	      fi
+!               ;;
+!             esac
+  	done
+      fi
+  
+***************
+*** 25939,25946 ****
           done
   
           for dir in $ac_nss_lib_dir ; do
 !     	    if test -f $dir/libnss3.so ; then
-          	    		if test "z$dir" = "z/usr/lib" ; then
+!         	    		if test "z$dir" = "z/usr/lib" ; then
           	    NSS_LIBS="$NSS_LIBS_LIST"
                   else
---- 25943,25949 ----
+              	    if test "z$with_gnu_ld" = "zyes" ; then
+--- 25976,25986 ----
           done
   
           for dir in $ac_nss_lib_dir ; do
-!     	    if test -f $dir/libnss3.so -o -f $dir/libnss3.dylib ; then
-          	    		if test "z$dir" = "z/usr/lib" ; then
+!             case $host_os in
+!             cygwin* | mingw* | pw32*)
+!     	      if test -f $dir/libnss3.so -o -f $dir/libnss3.dylib -o -f $dir/libnss3.a ; then
+!         	dnl do not add -L/usr/lib because compiler does it anyway
+!     		if test "z$dir" = "z/usr/lib" ; then
           	    NSS_LIBS="$NSS_LIBS_LIST"
                   else
+              	    if test "z$with_gnu_ld" = "zyes" ; then
+***************
+*** 25951,25957 ****
+  		fi
+      		NSS_LIBS_FOUND="yes"
+      		break
+! 	    fi
+  	done
+      fi
+  
+--- 25991,26016 ----
+  		fi
+      		NSS_LIBS_FOUND="yes"
+      		break
+! 	      fi
+!               ;;
+! 
+!             *)
+!     	      if test -f $dir/libnss3.so -o -f $dir/libnss3.dylib ; then
+!         	dnl do not add -L/usr/lib because compiler does it anyway
+!     		if test "z$dir" = "z/usr/lib" ; then
+!         	    NSS_LIBS="$NSS_LIBS_LIST"
+!                 else
+!             	    if test "z$with_gnu_ld" = "zyes" ; then
+!     			NSS_LIBS="-Wl,-rpath-link -Wl,$dir -L$dir $NSS_LIBS_LIST"
+!             	    else
+!         		NSS_LIBS="-L$dir $NSS_LIBS_LIST"
+! 		    fi
+! 		fi
+!     		NSS_LIBS_FOUND="yes"
+!     		break
+! 	      fi
+!               ;;
+!             esac
+  	done
+      fi
+  
 ***************
 *** 26037,26042 ****
---- 26041,26149 ----
+--- 26096,26204 ----
   
   
   
@@ -600,7 +695,7 @@
   cat >confcache <<\_ACEOF
   # This file is a shell script that caches the results of configure
   # tests run on this system so they can be shared between configure
---- 26711,26717 ----
+--- 26766,26772 ----
   done
   
   
@@ -610,7 +705,7 @@
   # tests run on this system so they can be shared between configure
 ***************
 *** 27521,27526 ****
---- 27628,27635 ----
+--- 27683,27690 ----
   s,@NSS_MIN_VERSION@,$NSS_MIN_VERSION,;t t
   s,@NSPR_MIN_VERSION@,$NSPR_MIN_VERSION,;t t
   s,@MOZILLA_MIN_VERSION@,$MOZILLA_MIN_VERSION,;t t
@@ -621,7 +716,7 @@
   s,@XMLSEC_NO_SHA1@,$XMLSEC_NO_SHA1,;t t
 ***************
 *** 29231,29236 ****
---- 29340,29347 ----
+--- 29395,29402 ----
   s,@NSS_MIN_VERSION@,$NSS_MIN_VERSION,;t t
   s,@NSPR_MIN_VERSION@,$NSPR_MIN_VERSION,;t t
   s,@MOZILLA_MIN_VERSION@,$MOZILLA_MIN_VERSION,;t t
@@ -632,7 +727,7 @@
   s,@XMLSEC_NO_SHA1@,$XMLSEC_NO_SHA1,;t t
 ***************
 *** 30941,30946 ****
---- 31052,31059 ----
+--- 31107,31114 ----
   s,@NSS_MIN_VERSION@,$NSS_MIN_VERSION,;t t
   s,@NSPR_MIN_VERSION@,$NSPR_MIN_VERSION,;t t
   s,@MOZILLA_MIN_VERSION@,$MOZILLA_MIN_VERSION,;t t
@@ -643,7 +738,7 @@
   s,@XMLSEC_NO_SHA1@,$XMLSEC_NO_SHA1,;t t
 ***************
 *** 32653,32658 ****
---- 32766,34489 ----
+--- 32821,34544 ----
   s,@NSS_MIN_VERSION@,$NSS_MIN_VERSION,;t t
   s,@NSPR_MIN_VERSION@,$NSPR_MIN_VERSION,;t t
   s,@MOZILLA_MIN_VERSION@,$MOZILLA_MIN_VERSION,;t t
@@ -2370,7 +2465,7 @@
   s,@XMLSEC_NO_SHA1@,$XMLSEC_NO_SHA1,;t t
 ***************
 *** 34368,34373 ****
---- 36199,36206 ----
+--- 36254,36261 ----
   s,@NSS_MIN_VERSION@,$NSS_MIN_VERSION,;t t
   s,@NSPR_MIN_VERSION@,$NSPR_MIN_VERSION,;t t
   s,@MOZILLA_MIN_VERSION@,$MOZILLA_MIN_VERSION,;t t
@@ -2380,7 +2475,7 @@
   s,@XMLSEC_NO_SHA1_FALSE@,$XMLSEC_NO_SHA1_FALSE,;t t
   s,@XMLSEC_NO_SHA1@,$XMLSEC_NO_SHA1,;t t
 *** misc/xmlsec1-1.2.6/configure.in	Thu Aug 26 04:49:24 2004
---- misc/build/xmlsec1-1.2.6/configure.in	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/configure.in	Fri May 11 14:47:19 2007
 ***************
 *** 143,149 ****
   dnl find libxml
@@ -2399,7 +2494,7 @@
   LIBXML_LIBS=""
   LIBXML_FOUND="no"
 ***************
-*** 503,513 ****
+*** 503,514 ****
       
   XMLSEC_NO_NSS="1"
   MOZILLA_MIN_VERSION="1.4"
@@ -2408,10 +2503,11 @@
   NSS_CFLAGS=""
   NSS_LIBS=""
 ! NSS_LIBS_LIST="-lnss3 -lsmime3"
-  NSPR_LIBS_LIST="-lnspr4 -lplds4 -lplc4"
+! NSPR_LIBS_LIST="-lnspr4 -lplds4 -lplc4"
   NSS_CRYPTO_LIB="$PACKAGE-nss"
   NSS_FOUND="no"
---- 503,516 ----
+  
+--- 503,528 ----
       
   XMLSEC_NO_NSS="1"
   MOZILLA_MIN_VERSION="1.4"
@@ -2422,10 +2518,22 @@
   NSPR_MIN_VERSION="4.0"
   NSS_CFLAGS=""
   NSS_LIBS=""
-! NSS_LIBS_LIST="-lnss3 -lsoftokn3 -lsmime3"
-  NSPR_LIBS_LIST="-lnspr4 -lplds4 -lplc4"
+!  
+! case $host_os in
+! cygwin* | mingw* | pw32*)
+!   NSS_LIBS_LIST="-lnss3 -lsmime3"
+!   NSPR_LIBS_LIST="-lnspr4"
+!   ;;
+! 
+! *)
+!   NSS_LIBS_LIST="-lnss3 -lsoftokn3 -lsmime3"
+!   NSPR_LIBS_LIST="-lnspr4 -lplds4 -lplc4"
+!   ;;
+! esac
+! 
   NSS_CRYPTO_LIB="$PACKAGE-nss"
   NSS_FOUND="no"
+  
 ***************
 *** 521,527 ****
       AC_MSG_RESULT(no)
@@ -2435,7 +2543,7 @@
   	[NSS_FOUND=yes],
   	[NSS_FOUND=no])
   fi
---- 524,530 ----
+--- 535,541 ----
       AC_MSG_RESULT(no)
       NSS_FOUND="without"
   elif test "z$with_nss" = "z" -a "z$with_nspr" = "z" -a "z$with_mozilla_ver" = "z" -a "z$PKG_CONFIG_ENABLED" = "zyes" ; then
@@ -2453,7 +2561,7 @@
   
       AC_MSG_CHECKING(for nspr libraries >= $NSPR_MIN_VERSION)
       NSPR_INCLUDES_FOUND="no"
---- 537,544 ----
+--- 548,555 ----
           ac_mozilla_name=mozilla-$MOZILLA_MIN_VERSION
       fi
   
@@ -2471,14 +2579,52 @@
   		dnl do not add -L/usr/lib because compiler does it anyway
           	if test "z$dir" = "z/usr/lib" ; then
               	    NSPR_LIBS="$NSPR_LIBS_LIST"
---- 573,579 ----
+--- 584,592 ----
   	done
   	
   	for dir in $ac_nss_lib_dir ; do
-!     	    if test -f $dir/libnspr4.so -o -f $dir/libnspr4.dylib ; then
+!             case $host_os in
+!             cygwin* | mingw* | pw32*)
+!     	      if test -f $dir/libnspr4.so -o -f $dir/libnspr4.dylib -o -f $dir/libnspr4.a ; then
   		dnl do not add -L/usr/lib because compiler does it anyway
           	if test "z$dir" = "z/usr/lib" ; then
               	    NSPR_LIBS="$NSPR_LIBS_LIST"
+***************
+*** 583,589 ****
+  		fi
+  		NSPR_LIBS_FOUND="yes"
+  		break
+! 	    fi
+  	done
+      fi
+  
+--- 599,624 ----
+  		fi
+  		NSPR_LIBS_FOUND="yes"
+  		break
+! 	      fi
+!               ;;
+! 
+!             *)
+!     	      if test -f $dir/libnspr4.so -o -f $dir/libnspr4.dylib ; then
+! 		dnl do not add -L/usr/lib because compiler does it anyway
+!         	if test "z$dir" = "z/usr/lib" ; then
+!             	    NSPR_LIBS="$NSPR_LIBS_LIST"
+!     		else
+!     		    if test "z$with_gnu_ld" = "zyes" ; then
+!     			NSPR_LIBS="-Wl,-rpath-link -Wl,$dir -L$dir $NSPR_LIBS_LIST"
+!     		    else
+!     			NSPR_LIBS="-L$dir $NSPR_LIBS_LIST"
+! 		    fi
+! 		fi
+! 		NSPR_LIBS_FOUND="yes"
+! 		break
+! 	      fi
+!               ;;
+!             esac
+  	done
+      fi
+  
 ***************
 *** 641,647 ****
           done
@@ -2488,16 +2634,54 @@
           	dnl do not add -L/usr/lib because compiler does it anyway
       		if test "z$dir" = "z/usr/lib" ; then
           	    NSS_LIBS="$NSS_LIBS_LIST"
---- 644,650 ----
+--- 676,684 ----
           done
          
           for dir in $ac_nss_lib_dir ; do
-!     	    if test -f $dir/libnss3.so -o -f $dir/libnss3.dylib ; then
+!             case $host_os in
+!             cygwin* | mingw* | pw32*)
+!     	      if test -f $dir/libnss3.so -o -f $dir/libnss3.dylib -o -f $dir/libnss3.a ; then
           	dnl do not add -L/usr/lib because compiler does it anyway
       		if test "z$dir" = "z/usr/lib" ; then
           	    NSS_LIBS="$NSS_LIBS_LIST"
-*** misc/xmlsec1-1.2.6/include/xmlsec/mscrypto/Makefile.in	Tue Mar 27 11:34:32 2007
---- misc/build/xmlsec1-1.2.6/include/xmlsec/mscrypto/Makefile.in	Tue Mar 27 11:21:29 2007
+***************
+*** 654,660 ****
+  		fi
+      		NSS_LIBS_FOUND="yes"
+      		break
+! 	    fi
+  	done
+      fi
+  
+--- 691,716 ----
+  		fi
+      		NSS_LIBS_FOUND="yes"
+      		break
+! 	      fi
+!               ;;
+! 
+!             *)
+!     	      if test -f $dir/libnss3.so -o -f $dir/libnss3.dylib ; then
+!         	dnl do not add -L/usr/lib because compiler does it anyway
+!     		if test "z$dir" = "z/usr/lib" ; then
+!         	    NSS_LIBS="$NSS_LIBS_LIST"
+!                 else
+!             	    if test "z$with_gnu_ld" = "zyes" ; then
+!     			NSS_LIBS="-Wl,-rpath-link -Wl,$dir -L$dir $NSS_LIBS_LIST"
+!             	    else
+!         		NSS_LIBS="-L$dir $NSS_LIBS_LIST"
+! 		    fi
+! 		fi
+!     		NSS_LIBS_FOUND="yes"
+!     		break
+! 	      fi
+!               ;;
+!             esac
+  	done
+      fi
+  
+*** misc/xmlsec1-1.2.6/include/xmlsec/mscrypto/Makefile.in	Fri May 11 14:47:48 2007
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/mscrypto/Makefile.in	Fri May 11 14:47:19 2007
 ***************
 *** 1 ****
 ! dummy
@@ -2560,8 +2744,8 @@
 ! # Tell versions [3.59,3.63) of GNU make to not export all variables.
 ! # Otherwise a system limit (for SysV at least) may be exceeded.
 ! .NOEXPORT:
-*** misc/xmlsec1-1.2.6/include/xmlsec/mscrypto/akmngr.h	Tue Mar 27 11:34:32 2007
---- misc/build/xmlsec1-1.2.6/include/xmlsec/mscrypto/akmngr.h	Tue Mar 27 11:21:29 2007
+*** misc/xmlsec1-1.2.6/include/xmlsec/mscrypto/akmngr.h	Fri May 11 14:47:43 2007
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/mscrypto/akmngr.h	Fri May 11 14:47:19 2007
 ***************
 *** 1 ****
 ! dummy
@@ -2638,7 +2822,7 @@
 ! 
 ! 
 *** misc/xmlsec1-1.2.6/include/xmlsec/mscrypto/x509.h	Fri Sep 26 08:12:46 2003
---- misc/build/xmlsec1-1.2.6/include/xmlsec/mscrypto/x509.h	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/mscrypto/x509.h	Fri May 11 14:47:19 2007
 ***************
 *** 77,82 ****
 --- 77,97 ----
@@ -2664,7 +2848,7 @@
   #endif /* XMLSEC_NO_X509 */
   
 *** misc/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.am	Wed Jul 30 04:46:35 2003
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.am	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.am	Fri May 11 14:47:19 2007
 ***************
 *** 3,8 ****
 --- 3,9 ----
@@ -2687,7 +2871,7 @@
   
   install-exec-hook:
 *** misc/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.in	Thu Aug 26 08:00:31 2004
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.in	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.in	Fri May 11 14:47:19 2007
 ***************
 *** 273,278 ****
 --- 273,279 ----
@@ -2709,8 +2893,8 @@
   $(NULL)
   
   all: all-am
-*** misc/xmlsec1-1.2.6/include/xmlsec/nss/akmngr.h	Tue Mar 27 11:34:32 2007
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/akmngr.h	Tue Mar 27 11:21:29 2007
+*** misc/xmlsec1-1.2.6/include/xmlsec/nss/akmngr.h	Fri May 11 14:47:41 2007
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/akmngr.h	Fri May 11 14:47:19 2007
 ***************
 *** 1 ****
 ! dummy
@@ -2772,7 +2956,7 @@
 ! 
 ! 
 *** misc/xmlsec1-1.2.6/include/xmlsec/nss/app.h	Mon Jan 12 22:06:14 2004
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/app.h	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/app.h	Fri May 11 14:47:19 2007
 ***************
 *** 22,27 ****
 --- 22,30 ----
@@ -2796,8 +2980,8 @@
   XMLSEC_CRYPTO_EXPORT int 		xmlSecNssAppDefaultKeysMngrLoad	(xmlSecKeysMngrPtr mngr,
   									 const char* uri);
   XMLSEC_CRYPTO_EXPORT int 		xmlSecNssAppDefaultKeysMngrSave	(xmlSecKeysMngrPtr mngr,
-*** misc/xmlsec1-1.2.6/include/xmlsec/nss/ciphers.h	Tue Mar 27 11:34:32 2007
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/ciphers.h	Tue Mar 27 11:21:29 2007
+*** misc/xmlsec1-1.2.6/include/xmlsec/nss/ciphers.h	Fri May 11 14:47:41 2007
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/ciphers.h	Fri May 11 14:47:19 2007
 ***************
 *** 1 ****
 ! dummy
@@ -2838,7 +3022,7 @@
 ! 
 ! 
 *** misc/xmlsec1-1.2.6/include/xmlsec/nss/crypto.h	Mon Jan 12 22:06:14 2004
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/crypto.h	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/crypto.h	Fri May 11 14:47:19 2007
 ***************
 *** 264,269 ****
 --- 264,278 ----
@@ -2858,7 +3042,7 @@
   
   
 *** misc/xmlsec1-1.2.6/include/xmlsec/nss/keysstore.h	Wed Jul 30 04:46:35 2003
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/keysstore.h	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/keysstore.h	Fri May 11 14:47:19 2007
 ***************
 *** 16,21 ****
 --- 16,23 ----
@@ -2881,8 +3065,8 @@
   XMLSEC_CRYPTO_EXPORT int		xmlSecNssKeysStoreLoad 	(xmlSecKeyStorePtr store,
   								 const char *uri,
   								 xmlSecKeysMngrPtr keysMngr);
-*** misc/xmlsec1-1.2.6/include/xmlsec/nss/tokens.h	Tue Mar 27 11:34:32 2007
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/tokens.h	Tue Mar 27 11:21:29 2007
+*** misc/xmlsec1-1.2.6/include/xmlsec/nss/tokens.h	Fri May 11 14:47:42 2007
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/tokens.h	Fri May 11 14:47:19 2007
 ***************
 *** 1 ****
 ! dummy
@@ -3069,8 +3253,8 @@
 ! 
 ! #endif	/* __XMLSEC_NSS_TOKENS_H__ */
 ! 
-*** misc/xmlsec1-1.2.6/libxml2-config	Tue Mar 27 11:34:32 2007
---- misc/build/xmlsec1-1.2.6/libxml2-config	Tue Mar 27 11:21:29 2007
+*** misc/xmlsec1-1.2.6/libxml2-config	Fri May 11 14:47:49 2007
+--- misc/build/xmlsec1-1.2.6/libxml2-config	Fri May 11 14:47:19 2007
 ***************
 *** 1 ****
 ! dummy
@@ -3112,7 +3296,7 @@
 !        	;;
 ! 
 !     --libs)
-!        	echo -L${libdir} -lxml2 -lz   -lm  
+!        	echo -L${libdir} ${LIBXML2LIB} ${ZLIB3RDLIB}   -lm  
 !        	;;
 ! 
 !     *)
@@ -3124,7 +3308,7 @@
 ! 
 ! exit 0
 *** misc/xmlsec1-1.2.6/ltmain.sh	Thu Aug 26 08:00:15 2004
---- misc/build/xmlsec1-1.2.6/ltmain.sh	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/ltmain.sh	Fri May 11 14:47:19 2007
 ***************
 *** 1661,1666 ****
 --- 1661,1671 ----
@@ -3200,7 +3384,7 @@
   	    elif test -n "$runpath_var"; then
   	      case "$perm_rpath " in
 *** misc/xmlsec1-1.2.6/src/bn.c	Mon Jun 21 20:33:27 2004
---- misc/build/xmlsec1-1.2.6/src/bn.c	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/src/bn.c	Fri May 11 14:47:19 2007
 ***************
 *** 170,177 ****
    */
@@ -3767,7 +3951,7 @@
   
       return(0);
 *** misc/xmlsec1-1.2.6/src/dl.c	Wed Oct 29 16:57:20 2003
---- misc/build/xmlsec1-1.2.6/src/dl.c	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/src/dl.c	Fri May 11 14:47:19 2007
 ***************
 *** 329,334 ****
 --- 329,338 ----
@@ -3793,8 +3977,8 @@
   }
   
 --- 354,359 ----
-*** misc/xmlsec1-1.2.6/src/mscrypto/Makefile.in	Tue Mar 27 11:34:32 2007
---- misc/build/xmlsec1-1.2.6/src/mscrypto/Makefile.in	Tue Mar 27 11:21:29 2007
+*** misc/xmlsec1-1.2.6/src/mscrypto/Makefile.in	Fri May 11 14:47:49 2007
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/Makefile.in	Fri May 11 14:47:19 2007
 ***************
 *** 1 ****
 ! dummy
@@ -3977,8 +4161,8 @@
 ! # Tell versions [3.59,3.63) of GNU make to not export all variables.
 ! # Otherwise a system limit (for SysV at least) may be exceeded.
 ! .NOEXPORT:
-*** misc/xmlsec1-1.2.6/src/mscrypto/akmngr.c	Tue Mar 27 11:34:32 2007
---- misc/build/xmlsec1-1.2.6/src/mscrypto/akmngr.c	Tue Mar 27 11:21:29 2007
+*** misc/xmlsec1-1.2.6/src/mscrypto/akmngr.c	Fri May 11 14:47:44 2007
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/akmngr.c	Fri May 11 14:47:19 2007
 ***************
 *** 1 ****
 ! dummy
@@ -4219,7 +4403,7 @@
 ! }
 ! 
 *** misc/xmlsec1-1.2.6/src/mscrypto/certkeys.c	Wed Mar 17 06:06:43 2004
---- misc/build/xmlsec1-1.2.6/src/mscrypto/certkeys.c	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/certkeys.c	Fri May 11 14:47:19 2007
 ***************
 *** 41,46 ****
 --- 41,47 ----
@@ -4736,6 +4920,20 @@
   			XMLSEC_ERRORS_NO_MESSAGE);
   	    return(0);
 ***************
+*** 581,587 ****
+--- 697,707 ----
+  static void	            xmlSecMSCryptoKeyDataRsaDebugDump(xmlSecKeyDataPtr data, FILE* output);
+  static void	            xmlSecMSCryptoKeyDataRsaDebugXmlDump(xmlSecKeyDataPtr data, FILE* output);
+  
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecKeyDataKlass xmlSecMSCryptoKeyDataRsaKlass = {
++ #else
+  static xmlSecKeyDataKlass xmlSecMSCryptoKeyDataRsaKlass = {
++ #endif
+      sizeof(xmlSecKeyDataKlass),
+      xmlSecMSCryptoKeyDataSize,
+  
+***************
 *** 938,946 ****
   
       ctx = xmlSecMSCryptoKeyDataGetCtx(xmlSecKeyGetValue(key));
@@ -4746,7 +4944,7 @@
   	xmlSecError(XMLSEC_ERRORS_HERE,
   		    xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
   		    "CryptExportKey",
---- 1054,1063 ----
+--- 1058,1067 ----
   
       ctx = xmlSecMSCryptoKeyDataGetCtx(xmlSecKeyGetValue(key));
       xmlSecAssert2(ctx != NULL, -1);
@@ -4766,7 +4964,7 @@
   	xmlSecError(XMLSEC_ERRORS_HERE,
   		    xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
   		    "CryptExportKey",
---- 1077,1083 ----
+--- 1081,1087 ----
       }
   
       blob = xmlSecBufferGetData(&buf);
@@ -4774,6 +4972,20 @@
   	xmlSecError(XMLSEC_ERRORS_HERE,
   		    xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
   		    "CryptExportKey",
+***************
+*** 1295,1301 ****
+--- 1416,1426 ----
+  static void		xmlSecMSCryptoKeyDataDsaDebugXmlDump(xmlSecKeyDataPtr data,
+  							 FILE* output);
+  
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecKeyDataKlass xmlSecMSCryptoKeyDataDsaKlass = {
++ #else
+  static xmlSecKeyDataKlass xmlSecMSCryptoKeyDataDsaKlass = {
++ #endif
+      sizeof(xmlSecKeyDataKlass),
+      xmlSecMSCryptoKeyDataSize,
+  
 ***************
 *** 1797,1805 ****
   
@@ -4785,7 +4997,7 @@
   	xmlSecError(XMLSEC_ERRORS_HERE,
   		    xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
   		    "CryptExportKey",
---- 1914,1923 ----
+--- 1922,1931 ----
   
       ctx = xmlSecMSCryptoKeyDataGetCtx(xmlSecKeyGetValue(key));
       xmlSecAssert2(ctx != NULL, -1);
@@ -4805,7 +5017,7 @@
   	xmlSecError(XMLSEC_ERRORS_HERE,
   		    xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
   		    "CryptExportKey",
---- 1937,1943 ----
+--- 1945,1951 ----
       }
   
       blob = xmlSecBufferGetData(&buf);
@@ -4822,7 +5034,7 @@
       int ret;
   
       xmlSecAssert2(xmlSecKeyDataIsValid(data), xmlSecKeyDataTypeUnknown);
---- 2128,2133 ----
+--- 2136,2141 ----
 ***************
 *** 2043,2054 ****
       dwKeySpec = AT_SIGNATURE;
@@ -4837,7 +5049,7 @@
       }
   
       ret = xmlSecMSCryptoKeyDataAdoptKey(data, hProv, TRUE, hKey, dwKeySpec, 
---- 2160,2173 ----
+--- 2168,2181 ----
       dwKeySpec = AT_SIGNATURE;
       dwSize = ((sizeBits << 16) | CRYPT_EXPORTABLE);
       if (!CryptGenKey(hProv, CALG_DSS_SIGN, dwSize, &hKey)) {
@@ -4878,7 +5090,7 @@
   }
   
   static xmlSecKeyDataType
---- 2178,2194 ----
+--- 2186,2202 ----
   		    "xmlSecMSCryptoKeyDataAdoptKey",
   		    XMLSEC_ERRORS_R_XMLSEC_FAILED,
   		    XMLSEC_ERRORS_NO_MESSAGE);
@@ -4897,77 +5109,65 @@
   
   static xmlSecKeyDataType
 *** misc/xmlsec1-1.2.6/src/mscrypto/ciphers.c	Fri Sep 26 08:12:51 2003
---- misc/build/xmlsec1-1.2.6/src/mscrypto/ciphers.c	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/ciphers.c	Fri May 11 14:47:19 2007
 ***************
 *** 785,791 ****
+--- 785,795 ----
    * AES CBC cipher transforms
    *
    ********************************************************************/
-! static xmlSecTransformKlass xmlSecMSCryptoAes128CbcKlass = {
-      /* klass/object sizes */
-      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
-      xmlSecMSCryptoBlockCipherSize,		/* xmlSecSize objSize */
---- 785,791 ----
-   * AES CBC cipher transforms
-   *
-   ********************************************************************/
-! static struct _xmlSecTransformKlass xmlSecMSCryptoAes128CbcKlass = {
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecTransformKlass xmlSecMSCryptoAes128CbcKlass = {
++ #else
+  static xmlSecTransformKlass xmlSecMSCryptoAes128CbcKlass = {
++ #endif
       /* klass/object sizes */
       sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
       xmlSecMSCryptoBlockCipherSize,		/* xmlSecSize objSize */
 ***************
 *** 824,830 ****
+--- 828,838 ----
       return(&xmlSecMSCryptoAes128CbcKlass);
   }
   
-! static xmlSecTransformKlass xmlSecMSCryptoAes192CbcKlass = {
-      /* klass/object sizes */
-      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
-      xmlSecMSCryptoBlockCipherSize,		/* xmlSecSize objSize */
---- 824,830 ----
-      return(&xmlSecMSCryptoAes128CbcKlass);
-  }
-  
-! static struct _xmlSecTransformKlass xmlSecMSCryptoAes192CbcKlass = {
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecTransformKlass xmlSecMSCryptoAes192CbcKlass = {
++ #else
+  static xmlSecTransformKlass xmlSecMSCryptoAes192CbcKlass = {
++ #endif
       /* klass/object sizes */
       sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
       xmlSecMSCryptoBlockCipherSize,		/* xmlSecSize objSize */
 ***************
 *** 863,869 ****
+--- 871,881 ----
       return(&xmlSecMSCryptoAes192CbcKlass);
   }
   
-! static xmlSecTransformKlass xmlSecMSCryptoAes256CbcKlass = {
-      /* klass/object sizes */
-      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
-      xmlSecMSCryptoBlockCipherSize,		/* xmlSecSize objSize */
---- 863,869 ----
-      return(&xmlSecMSCryptoAes192CbcKlass);
-  }
-  
-! static struct _xmlSecTransformKlass xmlSecMSCryptoAes256CbcKlass = {
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecTransformKlass xmlSecMSCryptoAes256CbcKlass = {
++ #else
+  static xmlSecTransformKlass xmlSecMSCryptoAes256CbcKlass = {
++ #endif
       /* klass/object sizes */
       sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
       xmlSecMSCryptoBlockCipherSize,		/* xmlSecSize objSize */
 ***************
 *** 906,912 ****
+--- 918,928 ----
   
   
   #ifndef XMLSEC_NO_DES
-! static xmlSecTransformKlass xmlSecMSCryptoDes3CbcKlass = {
-      /* klass/object sizes */
-      sizeof(xmlSecTransformKlass),	/* size_t klassSize */
-      xmlSecMSCryptoBlockCipherSize,	/* size_t objSize */
---- 906,912 ----
-  
-  
-  #ifndef XMLSEC_NO_DES
-! static struct _xmlSecTransformKlass xmlSecMSCryptoDes3CbcKlass = {
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecTransformKlass xmlSecMSCryptoDes3CbcKlass = {
++ #else
+  static xmlSecTransformKlass xmlSecMSCryptoDes3CbcKlass = {
++ #endif
       /* klass/object sizes */
       sizeof(xmlSecTransformKlass),	/* size_t klassSize */
       xmlSecMSCryptoBlockCipherSize,	/* size_t objSize */
 *** misc/xmlsec1-1.2.6/src/mscrypto/crypto.c	Wed Nov 12 03:38:51 2003
---- misc/build/xmlsec1-1.2.6/src/mscrypto/crypto.c	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/crypto.c	Fri May 11 14:47:19 2007
 ***************
 *** 330,342 ****
   BYTE* 
@@ -5000,7 +5200,7 @@
       }
   	
 *** misc/xmlsec1-1.2.6/src/mscrypto/digests.c	Tue Sep 30 04:09:51 2003
---- misc/build/xmlsec1-1.2.6/src/mscrypto/digests.c	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/digests.c	Fri May 11 14:47:19 2007
 ***************
 *** 96,107 ****
   
@@ -5031,119 +5231,131 @@
       }
   
       return(0);
+***************
+*** 298,304 ****
+--- 301,311 ----
+   * SHA1
+   *
+   *****************************************************************************/
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecTransformKlass xmlSecMSCryptoSha1Klass = {
++ #else
+  static xmlSecTransformKlass xmlSecMSCryptoSha1Klass = {
++ #endif
+      /* klass/object sizes */
+      sizeof(xmlSecTransformKlass),		/* size_t klassSize */
+      xmlSecMSCryptoDigestSize,			/* size_t objSize */
+*** misc/xmlsec1-1.2.6/src/mscrypto/keysstore.c	Sat Sep 27 05:12:22 2003
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/keysstore.c	Fri May 11 14:47:19 2007
+***************
+*** 62,68 ****
+--- 62,72 ----
+  								     const xmlChar* name, 
+  								     xmlSecKeyInfoCtxPtr keyInfoCtx);
+  
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecKeyStoreKlass xmlSecMSCryptoKeysStoreKlass = {
++ #else
+  static xmlSecKeyStoreKlass xmlSecMSCryptoKeysStoreKlass = {
++ #endif
+      sizeof(xmlSecKeyStoreKlass),
+      xmlSecMSCryptoKeysStoreSize,
+  
 *** misc/xmlsec1-1.2.6/src/mscrypto/kt_rsa.c	Fri Sep 26 22:29:25 2003
---- misc/build/xmlsec1-1.2.6/src/mscrypto/kt_rsa.c	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/kt_rsa.c	Fri May 11 14:47:19 2007
 ***************
 *** 66,72 ****
+--- 66,76 ----
   static int  	xmlSecMSCryptoRsaPkcs1Process			(xmlSecTransformPtr transform, 
   								 xmlSecTransformCtxPtr transformCtx);
   
-! static xmlSecTransformKlass xmlSecMSCryptoRsaPkcs1Klass = {
-      /* klass/object sizes */
-      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
-      xmlSecMSCryptoRsaPkcs1Size,			/* xmlSecSize objSize */
---- 66,72 ----
-  static int  	xmlSecMSCryptoRsaPkcs1Process			(xmlSecTransformPtr transform, 
-  								 xmlSecTransformCtxPtr transformCtx);
-  
-! static struct _xmlSecTransformKlass xmlSecMSCryptoRsaPkcs1Klass = {
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecTransformKlass xmlSecMSCryptoRsaPkcs1Klass = {
++ #else
+  static xmlSecTransformKlass xmlSecMSCryptoRsaPkcs1Klass = {
++ #endif
       /* klass/object sizes */
       sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
       xmlSecMSCryptoRsaPkcs1Size,			/* xmlSecSize objSize */
 *** misc/xmlsec1-1.2.6/src/mscrypto/signatures.c	Fri Sep 26 22:29:25 2003
---- misc/build/xmlsec1-1.2.6/src/mscrypto/signatures.c	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/signatures.c	Fri May 11 14:47:19 2007
 ***************
 *** 483,489 ****
+--- 483,493 ----
    * RSA-SHA1 signature transform
    *
    ***************************************************************************/
-! static xmlSecTransformKlass xmlSecMSCryptoRsaSha1Klass = {
-      /* klass/object sizes */
-      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
-      xmlSecMSCryptoSignatureSize,		/* xmlSecSize objSize */
---- 483,489 ----
-   * RSA-SHA1 signature transform
-   *
-   ***************************************************************************/
-! static struct _xmlSecTransformKlass xmlSecMSCryptoRsaSha1Klass = {
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecTransformKlass xmlSecMSCryptoRsaSha1Klass = {
++ #else
+  static xmlSecTransformKlass xmlSecMSCryptoRsaSha1Klass = {
++ #endif
       /* klass/object sizes */
       sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
       xmlSecMSCryptoSignatureSize,		/* xmlSecSize objSize */
 ***************
 *** 531,537 ****
+--- 535,545 ----
    *
    ***************************************************************************/
   
-! static xmlSecTransformKlass xmlSecMSCryptoDsaSha1Klass = {
-      /* klass/object sizes */
-      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
-      xmlSecMSCryptoSignatureSize,	        /* xmlSecSize objSize */
---- 531,537 ----
-   *
-   ***************************************************************************/
-  
-! static struct _xmlSecTransformKlass xmlSecMSCryptoDsaSha1Klass = {
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecTransformKlass xmlSecMSCryptoDsaSha1Klass = {
++ #else
+  static xmlSecTransformKlass xmlSecMSCryptoDsaSha1Klass = {
++ #endif
       /* klass/object sizes */
       sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
       xmlSecMSCryptoSignatureSize,	        /* xmlSecSize objSize */
 *** misc/xmlsec1-1.2.6/src/mscrypto/symkeys.c	Fri Sep 26 02:58:13 2003
---- misc/build/xmlsec1-1.2.6/src/mscrypto/symkeys.c	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/symkeys.c	Fri May 11 14:47:19 2007
 ***************
 *** 72,78 ****
+--- 72,82 ----
    * <xmlsec:AESKeyValue> processing
    *
    *************************************************************************/
-! static xmlSecKeyDataKlass xmlSecMSCryptoKeyDataAesKlass = {
-      sizeof(xmlSecKeyDataKlass),
-      xmlSecKeyDataBinarySize,
-  
---- 72,78 ----
-   * <xmlsec:AESKeyValue> processing
-   *
-   *************************************************************************/
-! static struct _xmlSecKeyDataKlass xmlSecMSCryptoKeyDataAesKlass = {
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecKeyDataKlass xmlSecMSCryptoKeyDataAesKlass = {
++ #else
+  static xmlSecKeyDataKlass xmlSecMSCryptoKeyDataAesKlass = {
++ #endif
       sizeof(xmlSecKeyDataKlass),
       xmlSecKeyDataBinarySize,
   
 ***************
 *** 153,159 ****
+--- 157,167 ----
    * <xmlsec:DESKeyValue> processing
    *
    *************************************************************************/
-! static xmlSecKeyDataKlass xmlSecMSCryptoKeyDataDesKlass = {
-      sizeof(xmlSecKeyDataKlass),
-      xmlSecKeyDataBinarySize,
-  
---- 153,159 ----
-   * <xmlsec:DESKeyValue> processing
-   *
-   *************************************************************************/
-! static struct _xmlSecKeyDataKlass xmlSecMSCryptoKeyDataDesKlass = {
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecKeyDataKlass xmlSecMSCryptoKeyDataDesKlass = {
++ #else
+  static xmlSecKeyDataKlass xmlSecMSCryptoKeyDataDesKlass = {
++ #endif
       sizeof(xmlSecKeyDataKlass),
       xmlSecKeyDataBinarySize,
   
 *** misc/xmlsec1-1.2.6/src/mscrypto/x509.c	Fri Sep 26 02:58:13 2003
---- misc/build/xmlsec1-1.2.6/src/mscrypto/x509.c	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/x509.c	Fri May 11 14:47:19 2007
 ***************
 *** 240,246 ****
+--- 240,250 ----
   
   
   
-! static xmlSecKeyDataKlass xmlSecMSCryptoKeyDataX509Klass = {
-      sizeof(xmlSecKeyDataKlass),
-      xmlSecMSCryptoX509DataSize,
-  
---- 240,246 ----
-  
-  
-  
-! static struct _xmlSecKeyDataKlass xmlSecMSCryptoKeyDataX509Klass = {
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecKeyDataKlass xmlSecMSCryptoKeyDataX509Klass = {
++ #else
+  static xmlSecKeyDataKlass xmlSecMSCryptoKeyDataX509Klass = {
++ #endif
       sizeof(xmlSecKeyDataKlass),
       xmlSecMSCryptoX509DataSize,
   
 ***************
 *** 1572,1577 ****
---- 1572,1578 ----
+--- 1576,1582 ----
   					     xmlSecKeyInfoCtxPtr keyInfoCtx) {
       xmlSecMSCryptoX509DataCtxPtr ctx;
       xmlSecKeyDataStorePtr x509Store;
@@ -5153,7 +5365,7 @@
       xmlSecAssert2(xmlSecKeyDataCheckId(data, xmlSecMSCryptoKeyDataX509Id), -1);
 ***************
 *** 1610,1615 ****
---- 1611,1663 ----
+--- 1615,1667 ----
   		return(-1);
   	    }
   
@@ -5209,7 +5421,7 @@
   		xmlSecError(XMLSEC_ERRORS_HERE,
 ***************
 *** 1619,1624 ****
---- 1667,1717 ----
+--- 1671,1721 ----
   			    XMLSEC_ERRORS_NO_MESSAGE);
   		return(-1);
   	    }
@@ -5270,7 +5482,7 @@
       str = (char *)xmlMalloc(csz);
       if (NULL == str) {
   	xmlSecError(XMLSEC_ERRORS_HERE,
---- 1975,1981 ----
+--- 1979,1985 ----
       xmlSecAssert2(nm->pbData != NULL, NULL);
       xmlSecAssert2(nm->cbData > 0, NULL);
   
@@ -5287,7 +5499,7 @@
       if (csz < 1) {
   	xmlSecError(XMLSEC_ERRORS_HERE,
   		    NULL,
---- 1986,1992 ----
+--- 1990,1996 ----
   	return (NULL);
       }
   
@@ -5314,7 +5526,7 @@
       xmlFree(str);
       return(res);
   }
---- 1997,2033 ----
+--- 2001,2037 ----
   	return(NULL);
       }
   
@@ -5354,43 +5566,37 @@
   }
 ***************
 *** 2153,2159 ****
+--- 2270,2280 ----
   								 xmlSecSize bufSize,
   								 xmlSecKeyInfoCtxPtr keyInfoCtx);
   
-! static xmlSecKeyDataKlass xmlSecMSCryptoKeyDataRawX509CertKlass = {
-      sizeof(xmlSecKeyDataKlass),
-      sizeof(xmlSecKeyData),
-  
---- 2266,2272 ----
-  								 xmlSecSize bufSize,
-  								 xmlSecKeyInfoCtxPtr keyInfoCtx);
-  
-! static struct _xmlSecKeyDataKlass xmlSecMSCryptoKeyDataRawX509CertKlass = {
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecKeyDataKlass xmlSecMSCryptoKeyDataRawX509CertKlass = {
++ #else
+  static xmlSecKeyDataKlass xmlSecMSCryptoKeyDataRawX509CertKlass = {
++ #endif
       sizeof(xmlSecKeyDataKlass),
       sizeof(xmlSecKeyData),
   
 *** misc/xmlsec1-1.2.6/src/mscrypto/x509vfy.c	Sat Sep 27 05:12:22 2003
---- misc/build/xmlsec1-1.2.6/src/mscrypto/x509vfy.c	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/x509vfy.c	Fri May 11 14:47:19 2007
 ***************
 *** 70,76 ****
+--- 70,80 ----
   static xmlSecByte * 	xmlSecMSCryptoX509NameRead	(xmlSecByte *str, 
   							 int len);
   
-! static xmlSecKeyDataStoreKlass xmlSecMSCryptoX509StoreKlass = {
-      sizeof(xmlSecKeyDataStoreKlass),
-      xmlSecMSCryptoX509StoreSize,
-  
---- 70,76 ----
-  static xmlSecByte * 	xmlSecMSCryptoX509NameRead	(xmlSecByte *str, 
-  							 int len);
-  
-! static struct _xmlSecKeyDataStoreKlass xmlSecMSCryptoX509StoreKlass = {
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecKeyDataStoreKlass xmlSecMSCryptoX509StoreKlass = {
++ #else
+  static xmlSecKeyDataStoreKlass xmlSecMSCryptoX509StoreKlass = {
++ #endif
       sizeof(xmlSecKeyDataStoreKlass),
       xmlSecMSCryptoX509StoreSize,
   
 ***************
 *** 125,130 ****
---- 125,131 ----
+--- 129,135 ----
   				xmlChar *issuerName, xmlChar *issuerSerial,
   				xmlChar *ski, xmlSecKeyInfoCtx* keyInfoCtx) {
       xmlSecMSCryptoX509StoreCtxPtr ctx;
@@ -5410,7 +5616,7 @@
   
   static void 
   xmlSecMSCryptoUnixTimeToFileTime(time_t t, LPFILETIME pft) {
---- 133,149 ----
+--- 137,153 ----
       ctx = xmlSecMSCryptoX509StoreGetCtx(store);
       xmlSecAssert2(ctx != NULL, NULL);
       xmlSecAssert2(ctx->untrusted != NULL, NULL);
@@ -5447,7 +5653,7 @@
       xmlSecAssert2(keyInfoCtx != NULL, FALSE);
   
       ctx = xmlSecMSCryptoX509StoreGetCtx(store);
---- 260,281 ----
+--- 264,285 ----
   }
   
   static BOOL
@@ -5532,7 +5738,7 @@
   
       /* try to find issuer cert in the trusted cert in the store */
       issuerCert = CertFindCertificateInStore(ctx->trusted, 
---- 296,380 ----
+--- 300,384 ----
   	return(FALSE);
       }
   
@@ -5646,7 +5852,7 @@
       }
   
       return (NULL);
---- 417,477 ----
+--- 421,481 ----
       xmlSecAssert2(certs != NULL, NULL);
       xmlSecAssert2(keyInfoCtx != NULL, NULL);
   
@@ -5710,7 +5916,7 @@
       return (NULL);
 ***************
 *** 458,466 ****
---- 531,656 ----
+--- 535,660 ----
       return(0);
   }
   
@@ -5875,7 +6081,7 @@
       return(0);    
   }
   
---- 658,761 ----
+--- 662,765 ----
   
       memset(ctx, 0, sizeof(xmlSecMSCryptoX509StoreCtx));
   
@@ -5982,7 +6188,7 @@
   
 ***************
 *** 567,576 ****
---- 825,865 ----
+--- 829,869 ----
   
       if((pCert == NULL) && (NULL != issuerName) && (NULL != issuerSerial)) {
   	xmlSecBn issuerSerialBn;	
@@ -6026,7 +6232,7 @@
   	    xmlSecError(XMLSEC_ERRORS_HERE,
 ***************
 *** 578,583 ****
---- 867,873 ----
+--- 871,877 ----
   			"xmlSecBnInitialize",
   			XMLSEC_ERRORS_R_XMLSEC_FAILED,
   			XMLSEC_ERRORS_NO_MESSAGE);
@@ -6062,7 +6268,7 @@
   						  PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
   						  0,
   						  CERT_FIND_ISSUER_NAME,
---- 879,908 ----
+--- 883,912 ----
   			XMLSEC_ERRORS_R_XMLSEC_FAILED,
   			XMLSEC_ERRORS_NO_MESSAGE);
   	    xmlSecBnFinalize(&issuerSerialBn);
@@ -6105,7 +6311,7 @@
   	    }
   	}
   	xmlFree(cName);
---- 916,924 ----
+--- 920,928 ----
   	    if((pCert->pCertInfo != NULL) && 
   	       (pCert->pCertInfo->SerialNumber.pbData != NULL) && 
   	       (pCert->pCertInfo->SerialNumber.cbData > 0) && 
@@ -6116,7 +6322,7 @@
   	}
   	xmlFree(cName);
 *** misc/xmlsec1-1.2.6/src/nss/Makefile.am	Tue Sep 16 11:43:03 2003
---- misc/build/xmlsec1-1.2.6/src/nss/Makefile.am	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/src/nss/Makefile.am	Fri May 11 14:47:19 2007
 ***************
 *** 20,40 ****
   	$(NULL)
@@ -6164,7 +6370,7 @@
   
   libxmlsec1_nss_la_LIBADD = \
 *** misc/xmlsec1-1.2.6/src/nss/Makefile.in	Thu Aug 26 08:00:32 2004
---- misc/build/xmlsec1-1.2.6/src/nss/Makefile.in	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/src/nss/Makefile.in	Fri May 11 14:47:19 2007
 ***************
 *** 54,62 ****
   	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
@@ -6288,8 +6494,8 @@
   @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pkikeys.Plo@am__quote@
   @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/signatures.Plo@am__quote@
   @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/symkeys.Plo@am__quote@
-*** misc/xmlsec1-1.2.6/src/nss/akmngr.c	Tue Mar 27 11:34:32 2007
---- misc/build/xmlsec1-1.2.6/src/nss/akmngr.c	Tue Mar 27 11:21:29 2007
+*** misc/xmlsec1-1.2.6/src/nss/akmngr.c	Fri May 11 14:47:44 2007
+--- misc/build/xmlsec1-1.2.6/src/nss/akmngr.c	Fri May 11 14:47:19 2007
 ***************
 *** 1 ****
 ! dummy
@@ -6679,7 +6885,7 @@
 ! }
 ! 
 *** misc/xmlsec1-1.2.6/src/nss/ciphers.c	Fri Sep 26 02:58:15 2003
---- misc/build/xmlsec1-1.2.6/src/nss/ciphers.c	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/src/nss/ciphers.c	Fri May 11 14:47:19 2007
 ***************
 *** 1,838 ****
 ! /** 
@@ -7112,9 +7318,9 @@
 ! 							 xmlSecTransformCtxPtr transformCtx);
 ! static int	xmlSecNssBlockCipherCheckId		(xmlSecTransformPtr transform);
 ! 							 
+! 
   
-  
-  static int
+! static int
 ! xmlSecNssBlockCipherCheckId(xmlSecTransformPtr transform) {
 ! #ifndef XMLSEC_NO_DES
 !     if(xmlSecTransformCheckId(transform, xmlSecNssTransformDes3CbcId)) {
@@ -7134,7 +7340,7 @@
 !     return(0);
   }
   
-  static int 
+! static int 
 ! xmlSecNssBlockCipherInitialize(xmlSecTransformPtr transform) {
 !     xmlSecNssBlockCipherCtxPtr ctx;
 !     
@@ -7185,7 +7391,7 @@
 ! static void 
 ! xmlSecNssBlockCipherFinalize(xmlSecTransformPtr transform) {
 !     xmlSecNssBlockCipherCtxPtr ctx;
-  
+! 
 !     xmlSecAssert(xmlSecNssBlockCipherCheckId(transform));
 !     xmlSecAssert(xmlSecTransformCheckSize(transform, xmlSecNssBlockCipherSize));
   
@@ -7199,31 +7405,31 @@
 !     memset(ctx, 0, sizeof(xmlSecNssBlockCipherCtx));
   }
   
-- static int  
-- xmlSecNssBlockCipherSetKeyReq(xmlSecTransformPtr transform,  xmlSecKeyReqPtr keyReq) {
--     xmlSecNssBlockCipherCtxPtr ctx;
+! static int  
+! xmlSecNssBlockCipherSetKeyReq(xmlSecTransformPtr transform,  xmlSecKeyReqPtr keyReq) {
+!     xmlSecNssBlockCipherCtxPtr ctx;
+! 
+!     xmlSecAssert2(xmlSecNssBlockCipherCheckId(transform), -1);
+!     xmlSecAssert2((transform->operation == xmlSecTransformOperationEncrypt) || (transform->operation == xmlSecTransformOperationDecrypt), -1);
+!     xmlSecAssert2(xmlSecTransformCheckSize(transform, xmlSecNssBlockCipherSize), -1);
+!     xmlSecAssert2(keyReq != NULL, -1);
+! 
+!     ctx = xmlSecNssBlockCipherGetCtx(transform);
+!     xmlSecAssert2(ctx != NULL, -1);
+!     xmlSecAssert2(ctx->keyId != NULL, -1);
+! 
+!     keyReq->keyId 	= ctx->keyId;
+!     keyReq->keyType 	= xmlSecKeyDataTypeSymmetric;
+!     if(transform->operation == xmlSecTransformOperationEncrypt) {
+! 	keyReq->keyUsage = xmlSecKeyUsageEncrypt;
+!     } else {
+! 	keyReq->keyUsage = xmlSecKeyUsageDecrypt;
+!     }
+!     keyReq->keyBitsSize = 8 * ctx->keySize;
+!     return(0);
+! }
   
--     xmlSecAssert2(xmlSecNssBlockCipherCheckId(transform), -1);
--     xmlSecAssert2((transform->operation == xmlSecTransformOperationEncrypt) || (transform->operation == xmlSecTransformOperationDecrypt), -1);
--     xmlSecAssert2(xmlSecTransformCheckSize(transform, xmlSecNssBlockCipherSize), -1);
--     xmlSecAssert2(keyReq != NULL, -1);
-- 
--     ctx = xmlSecNssBlockCipherGetCtx(transform);
--     xmlSecAssert2(ctx != NULL, -1);
--     xmlSecAssert2(ctx->keyId != NULL, -1);
-- 
--     keyReq->keyId 	= ctx->keyId;
--     keyReq->keyType 	= xmlSecKeyDataTypeSymmetric;
--     if(transform->operation == xmlSecTransformOperationEncrypt) {
-- 	keyReq->keyUsage = xmlSecKeyUsageEncrypt;
--     } else {
-- 	keyReq->keyUsage = xmlSecKeyUsageDecrypt;
--     }
--     keyReq->keyBitsSize = 8 * ctx->keySize;
--     return(0);
-- }
-  
-  static int
+! static int
 ! xmlSecNssBlockCipherSetKey(xmlSecTransformPtr transform, xmlSecKeyPtr key) {
 !     xmlSecNssBlockCipherCtxPtr ctx;
 !     xmlSecBufferPtr buffer;
@@ -7263,7 +7469,7 @@
 !     return(0);
   }
   
-! static int 
+  static int 
 ! xmlSecNssBlockCipherExecute(xmlSecTransformPtr transform, int last, xmlSecTransformCtxPtr transformCtx) {
 !     xmlSecNssBlockCipherCtxPtr ctx;
 !     xmlSecBufferPtr in, out;
@@ -7273,17 +7479,17 @@
 !     xmlSecAssert2((transform->operation == xmlSecTransformOperationEncrypt) || (transform->operation == xmlSecTransformOperationDecrypt), -1);
 !     xmlSecAssert2(xmlSecTransformCheckSize(transform, xmlSecNssBlockCipherSize), -1);
 !     xmlSecAssert2(transformCtx != NULL, -1);
-  
+! 
 !     in = &(transform->inBuf);
 !     out = &(transform->outBuf);
-  
--     ctx = xmlSecNssBlockCipherGetCtx(transform);
--     xmlSecAssert2(ctx != NULL, -1);
+! 
+!     ctx = xmlSecNssBlockCipherGetCtx(transform);
+!     xmlSecAssert2(ctx != NULL, -1);
   
 !     if(transform->status == xmlSecTransformStatusNone) {
 ! 	transform->status = xmlSecTransformStatusWorking;
 !     }
-  
+! 
 !     if(transform->status == xmlSecTransformStatusWorking) {
 ! 	if(ctx->ctxInitialized == 0) {
 ! 	    ret = xmlSecNssBlockCipherCtxInit(ctx, in, out, 
@@ -7351,16 +7557,16 @@
 !     }
 !     
 !     return(0);
-! }
+  }
   
   
 ! #ifndef XMLSEC_NO_AES
 ! /*********************************************************************
-!  *
+   *
 !  * AES CBC cipher transforms
-!  *
+   *
 !  ********************************************************************/
-! static xmlSecTransformKlass xmlSecNssAes128CbcKlass = {
+  static xmlSecTransformKlass xmlSecNssAes128CbcKlass = {
 !     /* klass/object sizes */
 !     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
 !     xmlSecNssBlockCipherSize,		/* xmlSecSize objSize */
@@ -7387,7 +7593,7 @@
 !     NULL,					/* void* reserved1; */
 ! };
   
-! /**
+  /**
 !  * xmlSecNssTransformAes128CbcGetKlass:
 !  * 
 !  * AES 128 CBC encryption transform klass.
@@ -7397,35 +7603,35 @@
 ! xmlSecTransformId 
 ! xmlSecNssTransformAes128CbcGetKlass(void) {
 !     return(&xmlSecNssAes128CbcKlass);
-! }
+  }
   
-! static xmlSecTransformKlass xmlSecNssAes192CbcKlass = {
-!     /* klass/object sizes */
-!     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
-!     xmlSecNssBlockCipherSize,		/* xmlSecSize objSize */
-! 
-!     xmlSecNameAes192Cbc,			/* const xmlChar* name; */
-!     xmlSecHrefAes192Cbc,			/* const xmlChar* href; */
-!     xmlSecTransformUsageEncryptionMethod,	/* xmlSecAlgorithmUsage usage; */
-! 
-!     xmlSecNssBlockCipherInitialize, 		/* xmlSecTransformInitializeMethod initialize; */
-!     xmlSecNssBlockCipherFinalize,		/* xmlSecTransformFinalizeMethod finalize; */
-!     NULL,					/* xmlSecTransformNodeReadMethod readNode; */
-!     NULL,					/* xmlSecTransformNodeWriteMethod writeNode; */
-!     xmlSecNssBlockCipherSetKeyReq,		/* xmlSecTransformSetKeyMethod setKeyReq; */
-!     xmlSecNssBlockCipherSetKey,		/* xmlSecTransformSetKeyMethod setKey; */
-!     NULL,					/* xmlSecTransformValidateMethod validate; */
-!     xmlSecTransformDefaultGetDataType,		/* xmlSecTransformGetDataTypeMethod getDataType; */
-!     xmlSecTransformDefaultPushBin,		/* xmlSecTransformPushBinMethod pushBin; */
-!     xmlSecTransformDefaultPopBin,		/* xmlSecTransformPopBinMethod popBin; */
-!     NULL,					/* xmlSecTransformPushXmlMethod pushXml; */
-!     NULL,					/* xmlSecTransformPopXmlMethod popXml; */
-!     xmlSecNssBlockCipherExecute,		/* xmlSecTransformExecuteMethod execute; */
-!     
-!     NULL,					/* void* reserved0; */
-!     NULL,					/* void* reserved1; */
-! };
-  
+- static xmlSecTransformKlass xmlSecNssAes192CbcKlass = {
+-     /* klass/object sizes */
+-     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+-     xmlSecNssBlockCipherSize,		/* xmlSecSize objSize */
+- 
+-     xmlSecNameAes192Cbc,			/* const xmlChar* name; */
+-     xmlSecHrefAes192Cbc,			/* const xmlChar* href; */
+-     xmlSecTransformUsageEncryptionMethod,	/* xmlSecAlgorithmUsage usage; */
+- 
+-     xmlSecNssBlockCipherInitialize, 		/* xmlSecTransformInitializeMethod initialize; */
+-     xmlSecNssBlockCipherFinalize,		/* xmlSecTransformFinalizeMethod finalize; */
+-     NULL,					/* xmlSecTransformNodeReadMethod readNode; */
+-     NULL,					/* xmlSecTransformNodeWriteMethod writeNode; */
+-     xmlSecNssBlockCipherSetKeyReq,		/* xmlSecTransformSetKeyMethod setKeyReq; */
+-     xmlSecNssBlockCipherSetKey,		/* xmlSecTransformSetKeyMethod setKey; */
+-     NULL,					/* xmlSecTransformValidateMethod validate; */
+-     xmlSecTransformDefaultGetDataType,		/* xmlSecTransformGetDataTypeMethod getDataType; */
+-     xmlSecTransformDefaultPushBin,		/* xmlSecTransformPushBinMethod pushBin; */
+-     xmlSecTransformDefaultPopBin,		/* xmlSecTransformPopBinMethod popBin; */
+-     NULL,					/* xmlSecTransformPushXmlMethod pushXml; */
+-     NULL,					/* xmlSecTransformPopXmlMethod popXml; */
+-     xmlSecNssBlockCipherExecute,		/* xmlSecTransformExecuteMethod execute; */
+-     
+-     NULL,					/* void* reserved0; */
+-     NULL,					/* void* reserved1; */
+- };
+- 
   /**
 !  * xmlSecNssTransformAes192CbcGetKlass:
 !  * 
@@ -7506,7 +7712,7 @@
 !     NULL,					/* void* reserved0; */
 !     NULL,					/* void* reserved1; */
 ! };
-  
+! 
 ! /** 
 !  * xmlSecNssTransformDes3CbcGetKlass:
    *
@@ -7520,7 +7726,7 @@
   }
 ! #endif /* XMLSEC_NO_DES */
   
---- 1,951 ----
+--- 1,967 ----
 ! /* -- C Source File -- **/
   #include "globals.h"
   
@@ -7750,23 +7956,23 @@
 ! 	/*
 ! 	if( context->symkey != NULL )
 ! 		cipherSize = PK11_GetKeyLength( context->symkey ) ; 
-! 
+  
 ! 	keyReq->keyBitsSize = cipherSize * 8 ;
 ! 	*/
   
-+ 	return 0 ;
-+ }
+! 	return 0 ;
+  }
   
-+ /**
-+  * xmlSecTransformSetKeyMethod:
-+  * @transform:			the pointer to transform object.
-+  * @key: 				the pointer to key.
-+  *
-+  * The transform specific method to set the key for use.
-+  * 
-+  * Returns 0 on success or a negative value otherwise.
-+  */
-  static int
+! /**
+!  * xmlSecTransformSetKeyMethod:
+!  * @transform:			the pointer to transform object.
+!  * @key: 				the pointer to key.
+!  *
+!  * The transform specific method to set the key for use.
+!  * 
+!  * Returns 0 on success or a negative value otherwise.
+!  */
+! static int
 ! xmlSecNssBlockCipherSetKey(
 ! 	xmlSecTransformPtr transform ,
 ! 	xmlSecKeyPtr key
@@ -7813,14 +8019,14 @@
 ! 	}
   
 ! 	context->symkey = symkey ;
-! 
+  
 ! 	return 0 ;
   }
   
-+ /**
-+  * Block cipher transform init
-+  */
-  static int 
+! /**
+!  * Block cipher transform init
+!  */
+! static int 
 ! xmlSecNssBlockCipherCtxInit(
 ! 	xmlSecNssBlockCipherCtxPtr	ctx ,
 ! 	xmlSecBufferPtr 			in ,
@@ -8028,12 +8234,12 @@
 ! 	}
   
 ! 	return 0 ;
-! }
+  }
   
-! /**
-!  * Block cipher transform final
-!  */
-! static int 
++ /**
++  * Block cipher transform final
++  */
+  static int 
 ! xmlSecNssBlockCipherCtxFinal(
 ! 	xmlSecNssBlockCipherCtxPtr	ctx ,
 ! 	xmlSecBufferPtr 			in ,
@@ -8193,18 +8399,18 @@
   }
   
   
-  
-+ /**
-+  * xmlSecTransformExecuteMethod:
-+  * @transform:			the pointer to transform object.
-+  * @last:			the flag: if set to 1 then it's the last data chunk.
-+  * @transformCtx:		the pointer to transform context object.
-+  *
-+  * Transform specific method to process a chunk of data.
-+  *
-+  * Returns 0 on success or a negative value otherwise.
-+  */
-  static int
+! 
+! /**
+!  * xmlSecTransformExecuteMethod:
+!  * @transform:			the pointer to transform object.
+!  * @last:			the flag: if set to 1 then it's the last data chunk.
+!  * @transformCtx:		the pointer to transform context object.
+   *
+!  * Transform specific method to process a chunk of data.
+   *
+!  * Returns 0 on success or a negative value otherwise.
+!  */
+! static int
 ! xmlSecNssBlockCipherExecute(
 ! 	xmlSecTransformPtr transform ,
 ! 	int last ,
@@ -8307,12 +8513,16 @@
 ! 	}
 ! 
 ! 	return 0 ;
-  }
-  
-! static xmlSecTransformKlass xmlSecNssAes128CbcKlass = {
+! }
+! 
+! #ifdef __MINGW32__ // for runtime-pseudo-reloc
+! static struct _xmlSecTransformKlass xmlSecNssAes128CbcKlass = {
+! #else
+  static xmlSecTransformKlass xmlSecNssAes128CbcKlass = {
+! #endif
 ! 	sizeof( xmlSecTransformKlass ) ,
 ! 	xmlSecNssBlockCipherSize ,
-  
+! 
 ! 	xmlSecNameAes128Cbc ,
 ! 	xmlSecHrefAes128Cbc ,
 ! 	xmlSecTransformUsageEncryptionMethod ,
@@ -8336,12 +8546,16 @@
 ! 	NULL ,
 ! 	NULL
 ! } ;
-  
-  
+! 
+! 
+! #ifdef __MINGW32__ // for runtime-pseudo-reloc
+! static struct _xmlSecTransformKlass xmlSecNssAes192CbcKlass = {
+! #else
 ! static xmlSecTransformKlass xmlSecNssAes192CbcKlass = {
+! #endif
 ! 	sizeof( xmlSecTransformKlass ) ,
 ! 	xmlSecNssBlockCipherSize ,
-  
+! 
 ! 	xmlSecNameAes192Cbc ,
 ! 	xmlSecHrefAes192Cbc ,
 ! 	xmlSecTransformUsageEncryptionMethod ,
@@ -8365,12 +8579,16 @@
 ! 	NULL ,
 ! 	NULL
 ! } ;
-  
-  
+! 
+! 
+! #ifdef __MINGW32__ // for runtime-pseudo-reloc
+! static struct _xmlSecTransformKlass xmlSecNssAes256CbcKlass = {
+! #else
 ! static xmlSecTransformKlass xmlSecNssAes256CbcKlass = {
+! #endif
 ! 	sizeof( xmlSecTransformKlass ) ,
 ! 	xmlSecNssBlockCipherSize ,
-  
+! 
 ! 	xmlSecNameAes256Cbc ,
 ! 	xmlSecHrefAes256Cbc ,
 ! 	xmlSecTransformUsageEncryptionMethod ,
@@ -8394,8 +8612,12 @@
 ! 	NULL ,
 ! 	NULL
 ! } ;
-  
+! 
+! #ifdef __MINGW32__ // for runtime-pseudo-reloc
+! static struct _xmlSecTransformKlass xmlSecNssDes3CbcKlass = {
+! #else
 ! static xmlSecTransformKlass xmlSecNssDes3CbcKlass = {
+! #endif
 ! 	sizeof( xmlSecTransformKlass ) ,
 ! 	xmlSecNssBlockCipherSize ,
 ! 
@@ -8447,7 +8669,7 @@
 ! 	return ( &xmlSecNssAes192CbcKlass ) ;
   }
   
-! /**
+  /**
 !  * xmlSecNssTransformAes256CbcGetKlass
 !  *
 !  * Get the AES256_CBC transform klass
@@ -8457,7 +8679,7 @@
 ! xmlSecTransformId
 ! xmlSecNssTransformAes256CbcGetKlass( void ) {
 ! 	return ( &xmlSecNssAes256CbcKlass ) ;
-! }
+  }
   
 ! /**
 !  * xmlSecNssTransformDes3CbcGetKlass
@@ -8473,7 +8695,7 @@
 ! 
   
 *** misc/xmlsec1-1.2.6/src/nss/crypto.c	Wed Oct 29 16:57:25 2003
---- misc/build/xmlsec1-1.2.6/src/nss/crypto.c	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/src/nss/crypto.c	Fri May 11 14:47:20 2007
 ***************
 *** 130,135 ****
 --- 130,136 ----
@@ -8527,7 +8749,7 @@
       return(gXmlSecNssFunctions);
   }
 *** misc/xmlsec1-1.2.6/src/nss/digests.c	Fri Sep 26 02:58:15 2003
---- misc/build/xmlsec1-1.2.6/src/nss/digests.c	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/src/nss/digests.c	Fri May 11 14:47:20 2007
 ***************
 *** 21,27 ****
   #include <xmlsec/transforms.h>
@@ -8623,8 +8845,22 @@
   		return(-1);
   	    }
   	    xmlSecAssert2(ctx->dgstSize > 0, -1);
+***************
+*** 285,291 ****
+--- 284,294 ----
+   * SHA1 Digest transforms
+   *
+   *****************************************************************************/
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecTransformKlass xmlSecNssSha1Klass = {
++ #else
+  static xmlSecTransformKlass xmlSecNssSha1Klass = {
++ #endif
+      /* klass/object sizes */
+      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+      xmlSecNssDigestSize,			/* xmlSecSize objSize */
 *** misc/xmlsec1-1.2.6/src/nss/hmac.c	Fri Sep 26 02:58:15 2003
---- misc/build/xmlsec1-1.2.6/src/nss/hmac.c	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/src/nss/hmac.c	Fri May 11 14:47:20 2007
 ***************
 *** 23,30 ****
   #include <xmlsec/transforms.h>
@@ -8758,8 +8994,50 @@
   		return(-1);
   	    }
   	    xmlSecAssert2(dgstSize > 0, -1);
+***************
+*** 459,465 ****
+--- 459,469 ----
+  /** 
+   * HMAC SHA1
+   */
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecTransformKlass xmlSecNssHmacSha1Klass = {
++ #else
+  static xmlSecTransformKlass xmlSecNssHmacSha1Klass = {
++ #endif
+      /* klass/object sizes */
+      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+      xmlSecNssHmacSize,				/* xmlSecSize objSize */
+***************
+*** 501,507 ****
+--- 505,515 ----
+  /** 
+   * HMAC Ripemd160
+   */
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecTransformKlass xmlSecNssHmacRipemd160Klass = {
++ #else
+  static xmlSecTransformKlass xmlSecNssHmacRipemd160Klass = {
++ #endif
+      /* klass/object sizes */
+      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+      xmlSecNssHmacSize,				/* xmlSecSize objSize */
+***************
+*** 543,549 ****
+--- 551,561 ----
+  /** 
+   * HMAC Md5
+   */
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecTransformKlass xmlSecNssHmacMd5Klass = {
++ #else
+  static xmlSecTransformKlass xmlSecNssHmacMd5Klass = {
++ #endif
+      /* klass/object sizes */
+      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+      xmlSecNssHmacSize,				/* xmlSecSize objSize */
 *** misc/xmlsec1-1.2.6/src/nss/keysstore.c	Fri Sep 26 02:58:15 2003
---- misc/build/xmlsec1-1.2.6/src/nss/keysstore.c	Tue Mar 27 11:21:29 2007
+--- misc/build/xmlsec1-1.2.6/src/nss/keysstore.c	Fri May 11 14:47:20 2007
 ***************
 *** 1,119 ****
   /** 
@@ -8881,7 +9159,7 @@
   /** 
    * xmlSecNssKeysStoreLoad:
    * @store:		the pointer to Nss keys store.
---- 1,518 ----
+--- 1,522 ----
   /** 
    * XMLSec library
    * 
@@ -9370,7 +9648,11 @@
 ! 	return NULL ;
 ! }
   
+! #ifdef __MINGW32__ // for runtime-pseudo-reloc
+! static struct _xmlSecKeyStoreKlass xmlSecNssKeysStoreKlass = {
+! #else
 ! static xmlSecKeyStoreKlass xmlSecNssKeysStoreKlass = {
+! #endif
 ! 	sizeof( xmlSecKeyStoreKlass ) ,
 ! 	xmlSecNssKeysStoreSize ,
 ! 	BAD_CAST "implicit_nss_keys_store" ,
@@ -9410,7 +9692,7 @@
       xmlDocPtr doc;
       xmlNodePtr root;
       xmlNodePtr cur;
---- 524,534 ----
+--- 528,538 ----
    * Returns 0 on success or a negative value if an error occurs.
    */
   int
@@ -9678,7 +9960,7 @@
 ! 
 !     return (retval);
   }
---- 654,800 ----
+--- 658,804 ----
    */
   int
   xmlSecNssKeysStoreSave(xmlSecKeyStorePtr store, const char *filename, xmlSecKeyDataType type) {
@@ -9826,12 +10108,12 @@
 !     return(0);
   }
 + 
-*** misc/xmlsec1-1.2.6/src/nss/keytrans.c	Tue Mar 27 11:34:32 2007
---- misc/build/xmlsec1-1.2.6/src/nss/keytrans.c	Tue Mar 27 11:21:29 2007
+*** misc/xmlsec1-1.2.6/src/nss/keytrans.c	Fri May 11 14:47:46 2007
+--- misc/build/xmlsec1-1.2.6/src/nss/keytrans.c	Fri May 11 14:47:20 2007
 ***************
 *** 1 ****
 ! dummy
---- 1,744 ----
+--- 1,752 ----
 ! /** 
 !  *
 !  * XMLSec library
@@ -10496,7 +10778,11 @@
 ! 
 ! #ifndef XMLSEC_NO_RSA
 ! 
+! #ifdef __MINGW32__ // for runtime-pseudo-reloc
+! static struct _xmlSecTransformKlass xmlSecNssRsaPkcs1Klass = {
+! #else
 ! static xmlSecTransformKlass xmlSecNssRsaPkcs1Klass = {
+! #endif
 !     /* klass/object sizes */
 !     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
 !     xmlSecNssKeyTransportSize,				/* xmlSecSize objSize */
@@ -10523,7 +10809,11 @@
 !     NULL,					/* void* reserved1; */
 ! };
 ! 
+! #ifdef __MINGW32__ // for runtime-pseudo-reloc
+! static struct _xmlSecTransformKlass xmlSecNssRsaOaepKlass = {
+! #else
 ! static xmlSecTransformKlass xmlSecNssRsaOaepKlass = {
+! #endif
 !     /* klass/object sizes */
 !     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
 !     xmlSecNssKeyTransportSize,				/* xmlSecSize objSize */
@@ -10576,12 +10866,12 @@
 ! 
 ! #endif /* XMLSEC_NO_RSA */
 ! 
-*** misc/xmlsec1-1.2.6/src/nss/keywrapers.c	Tue Mar 27 11:34:32 2007
---- misc/build/xmlsec1-1.2.6/src/nss/keywrapers.c	Tue Mar 27 11:21:29 2007
+*** misc/xmlsec1-1.2.6/src/nss/keywrapers.c	Fri May 11 14:47:46 2007
+--- misc/build/xmlsec1-1.2.6/src/nss/keywrapers.c	Fri May 11 14:47:20 2007
 ***************
 *** 1 ****
 ! dummy
---- 1,1197 ----
+--- 1,1213 ----
 ! /** 
 !  *
 !  * XMLSec library
@@ -11617,7 +11907,11 @@
 ! #ifndef XMLSEC_NO_AES
 ! 
 ! 
+! #ifdef __MINGW32__ // for runtime-pseudo-reloc
+! static struct _xmlSecTransformKlass xmlSecNssKWAes128Klass = {
+! #else
 ! static xmlSecTransformKlass xmlSecNssKWAes128Klass = {
+! #endif
 !     /* klass/object sizes */
 !     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
 !     xmlSecNssKeyWrapSize,				/* xmlSecSize objSize */
@@ -11644,7 +11938,11 @@
 !     NULL,					/* void* reserved1; */
 ! };
 ! 
+! #ifdef __MINGW32__ // for runtime-pseudo-reloc
+! static struct _xmlSecTransformKlass xmlSecNssKWAes192Klass = {
+! #else
 ! static xmlSecTransformKlass xmlSecNssKWAes192Klass = {
+! #endif
 !     /* klass/object sizes */
 !     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
 !     xmlSecNssKeyWrapSize,				/* xmlSecSize objSize */
@@ -11671,7 +11969,11 @@
 !     NULL,					/* void* reserved1; */
 ! };
 ! 
+! #ifdef __MINGW32__ // for runtime-pseudo-reloc
+! static struct _xmlSecTransformKlass xmlSecNssKWAes256Klass = {
+! #else
 ! static xmlSecTransformKlass xmlSecNssKWAes256Klass = {
+! #endif
 !     /* klass/object sizes */
 !     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
 !     xmlSecNssKeyWrapSize,				/* xmlSecSize objSize */
@@ -11738,7 +12040,11 @@
 ! 
 ! #ifndef XMLSEC_NO_DES
 ! 
+! #ifdef __MINGW32__ // for runtime-pseudo-reloc
+! static struct _xmlSecTransformKlass xmlSecNssKWDes3Klass = {
+! #else
 ! static xmlSecTransformKlass xmlSecNssKWDes3Klass = {
+! #endif
 !     /* klass/object sizes */
 !     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
 !     xmlSecNssKeyWrapSize,			/* xmlSecSize objSize */
@@ -11780,7 +12086,7 @@
 ! #endif /* XMLSEC_NO_DES */
 ! 
 *** misc/xmlsec1-1.2.6/src/nss/pkikeys.c	Wed Mar 17 06:06:45 2004
---- misc/build/xmlsec1-1.2.6/src/nss/pkikeys.c	Tue Mar 27 11:21:30 2007
+--- misc/build/xmlsec1-1.2.6/src/nss/pkikeys.c	Fri May 11 14:47:20 2007
 ***************
 *** 5,10 ****
 --- 5,11 ----
@@ -12137,6 +12443,20 @@
       return(kt);
   }
 ***************
+*** 453,459 ****
+--- 492,502 ----
+  static void		xmlSecNssKeyDataDsaDebugXmlDump	(xmlSecKeyDataPtr data,
+  							 FILE* output);
+  
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecKeyDataKlass xmlSecNssKeyDataDsaKlass = {
++ #else
+  static xmlSecKeyDataKlass xmlSecNssKeyDataDsaKlass = {
++ #endif
+      sizeof(xmlSecKeyDataKlass),
+      xmlSecNssPKIKeyDataSize,
+  
+***************
 *** 553,565 ****
   	goto done;
       }
@@ -12151,7 +12471,7 @@
   	ret = -1;
   	goto done;
       }
---- 592,604 ----
+--- 596,608 ----
   	goto done;
       }
   
@@ -12174,7 +12494,7 @@
   	ret = -1;
   	goto done;
       }
---- 609,615 ----
+--- 613,619 ----
   		    xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
   		    "PORT_NewArena",
   		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -12191,7 +12511,7 @@
   	PORT_FreeArena(arena, PR_FALSE);
   	ret = -1;
   	goto done;
---- 621,627 ----
+--- 625,631 ----
   		    xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
   		    "PORT_ArenaZAlloc",
   		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -12222,7 +12542,7 @@
       return(ret);
   }
   
---- 789,809 ----
+--- 793,813 ----
   	goto done;
       }
       data = NULL;
@@ -12253,7 +12573,7 @@
   
       if(((xmlSecKeyDataTypePublic | xmlSecKeyDataTypePrivate) & keyInfoCtx->keyReq.keyType) == 0) {
   	/* we can have only private key or public key */
---- 822,828 ----
+--- 826,832 ----
   
       ctx = xmlSecNssPKIKeyDataGetCtx(xmlSecKeyGetValue(key));
       xmlSecAssert2(ctx != NULL, -1);
@@ -12270,7 +12590,7 @@
   	goto done;
       }
   
---- 944,951 ----
+--- 948,955 ----
   		    xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
   		    "PK11_PQG_ParamGen",
   		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -12292,7 +12612,7 @@
       PK11_Authenticate(slot, PR_TRUE, NULL /* default pwd callback */);
       privkey = PK11_GenerateKeyPair(slot, CKM_DSA_KEY_PAIR_GEN, pqgParams,
   				   &pubkey, PR_FALSE, PR_TRUE, NULL);
---- 955,966 ----
+--- 959,970 ----
   		    xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
   		    "PK11_PQG_VerifyParams",
   		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -12315,7 +12635,7 @@
   	goto done;
       }
   
---- 970,978 ----
+--- 974,982 ----
   		    xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
   		    "PK11_GenerateKeyPair",
   		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -12356,7 +12676,7 @@
   }
   
   static xmlSecKeyDataType
---- 985,1016 ----
+--- 989,1020 ----
   		    XMLSEC_ERRORS_NO_MESSAGE);
   	goto done;
       }
@@ -12402,7 +12722,7 @@
       }
          
       return(xmlSecKeyDataTypeUnknown);
---- 1020,1030 ----
+--- 1024,1034 ----
       xmlSecAssert2(xmlSecKeyDataCheckId(data, xmlSecNssKeyDataDsaId), xmlSecKeyDataTypeUnknown);
       ctx = xmlSecNssPKIKeyDataGetCtx(data);
       xmlSecAssert2(ctx != NULL, -1);
@@ -12423,7 +12743,7 @@
   
       return(8 * SECKEY_PublicKeyStrength(ctx->pubkey));
   }
---- 1037,1043 ----
+--- 1041,1047 ----
       xmlSecAssert2(xmlSecKeyDataCheckId(data, xmlSecNssKeyDataDsaId), 0);
       ctx = xmlSecNssPKIKeyDataGetCtx(data);
       xmlSecAssert2(ctx != NULL, -1);
@@ -12431,6 +12751,20 @@
   
       return(8 * SECKEY_PublicKeyStrength(ctx->pubkey));
   }
+***************
+*** 1084,1090 ****
+--- 1133,1143 ----
+  static void		xmlSecNssKeyDataRsaDebugXmlDump	(xmlSecKeyDataPtr data,
+  							 FILE* output);
+  
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecKeyDataKlass xmlSecNssKeyDataRsaKlass = {
++ #else
+  static xmlSecKeyDataKlass xmlSecNssKeyDataRsaKlass = {
++ #endif
+      sizeof(xmlSecKeyDataKlass),
+      xmlSecNssPKIKeyDataSize,
+  
 ***************
 *** 1181,1193 ****
   	goto done;
@@ -12446,7 +12780,7 @@
           ret = -1;
           goto done;
       }
---- 1226,1238 ----
+--- 1234,1246 ----
   	goto done;
       }
   
@@ -12469,7 +12803,7 @@
           ret = -1;
           goto done;
       }
---- 1243,1249 ----
+--- 1251,1257 ----
                       xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
                       "PORT_NewArena",
                       XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -12486,7 +12820,7 @@
   	PORT_FreeArena(arena, PR_FALSE);
           ret = -1;
           goto done;
---- 1255,1261 ----
+--- 1263,1269 ----
                       xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
                       "PORT_ArenaZAlloc",
                       XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -12503,7 +12837,7 @@
   
   
       if(((xmlSecKeyDataTypePublic | xmlSecKeyDataTypePrivate) & keyInfoCtx->keyReq.keyType) == 0) {
---- 1394,1400 ----
+--- 1402,1408 ----
   
       ctx = xmlSecNssPKIKeyDataGetCtx(xmlSecKeyGetValue(key));
       xmlSecAssert2(ctx != NULL, -1);
@@ -12520,7 +12854,7 @@
       PK11_Authenticate(slot, PR_TRUE, NULL /* default pwd callback */);
       privkey = PK11_GenerateKeyPair(slot, CKM_RSA_PKCS_KEY_PAIR_GEN, &params,
   				   &pubkey, PR_FALSE, PR_TRUE, NULL);
---- 1465,1471 ----
+--- 1473,1479 ----
       params.keySizeInBits = sizeBits;
       params.pe = 65537;
   
@@ -12537,7 +12871,7 @@
           
   	goto done;
       }
---- 1475,1481 ----
+--- 1483,1489 ----
   		    xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
   		    "PK11_GenerateKeyPair",
   		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -12554,7 +12888,7 @@
       if (ctx->privkey != NULL) {
   	return(xmlSecKeyDataTypePrivate | xmlSecKeyDataTypePublic);
       } else {
---- 1517,1523 ----
+--- 1525,1531 ----
       
       ctx = xmlSecNssPKIKeyDataGetCtx(data);
       xmlSecAssert2(ctx != NULL, -1);
@@ -12571,7 +12905,7 @@
   
       return(8 * SECKEY_PublicKeyStrength(ctx->pubkey));
   }
---- 1535,1541 ----
+--- 1543,1549 ----
   
       ctx = xmlSecNssPKIKeyDataGetCtx(data);
       xmlSecAssert2(ctx != NULL, -1);
@@ -12580,7 +12914,7 @@
       return(8 * SECKEY_PublicKeyStrength(ctx->pubkey));
   }
 *** misc/xmlsec1-1.2.6/src/nss/signatures.c	Fri Sep 26 02:58:15 2003
---- misc/build/xmlsec1-1.2.6/src/nss/signatures.c	Tue Mar 27 11:21:30 2007
+--- misc/build/xmlsec1-1.2.6/src/nss/signatures.c	Fri May 11 14:47:20 2007
 ***************
 *** 199,205 ****
   			xmlSecErrorsSafeString(xmlSecTransformGetName(transform)),
@@ -12717,8 +13051,36 @@
   		return(-1);
   	    }
   
+***************
+*** 459,465 ****
+--- 459,469 ----
+   *
+   ***************************************************************************/
+  
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecTransformKlass xmlSecNssDsaSha1Klass = {
++ #else
+  static xmlSecTransformKlass xmlSecNssDsaSha1Klass = {
++ #endif
+      /* klass/object sizes */
+      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+      xmlSecNssSignatureSize,		/* xmlSecSize objSize */
+***************
+*** 506,512 ****
+--- 510,520 ----
+   * RSA-SHA1 signature transform
+   *
+   ***************************************************************************/
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecTransformKlass xmlSecNssRsaSha1Klass = {
++ #else
+  static xmlSecTransformKlass xmlSecNssRsaSha1Klass = {
++ #endif
+      /* klass/object sizes */
+      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+      xmlSecNssSignatureSize,		/* xmlSecSize objSize */
 *** misc/xmlsec1-1.2.6/src/nss/symkeys.c	Mon Jul 21 05:12:52 2003
---- misc/build/xmlsec1-1.2.6/src/nss/symkeys.c	Tue Mar 27 11:21:30 2007
+--- misc/build/xmlsec1-1.2.6/src/nss/symkeys.c	Fri May 11 14:47:20 2007
 ***************
 *** 15,192 ****
   #include <stdio.h>
@@ -13738,7 +14100,9 @@
   #endif /* XMLSEC_NO_HMAC */
   
 ***************
-*** 201,240 ****
+*** 199,240 ****
+   * <xmlsec:AESKeyValue> processing
+   *
    *************************************************************************/
   static xmlSecKeyDataKlass xmlSecNssKeyDataAesKlass = {
       sizeof(xmlSecKeyDataKlass),
@@ -13779,9 +14143,15 @@
   };
   
   /** 
---- 860,899 ----
+--- 858,903 ----
+   * <xmlsec:AESKeyValue> processing
+   *
    *************************************************************************/
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecKeyDataKlass xmlSecNssKeyDataAesKlass = {
++ #else
   static xmlSecKeyDataKlass xmlSecNssKeyDataAesKlass = {
++ #endif
       sizeof(xmlSecKeyDataKlass),
 !     xmlSecNssSymKeyDataSize,
   
@@ -13831,7 +14201,7 @@
    *
    * Sets the value of AES key data.
    *
---- 910,918 ----
+--- 914,922 ----
   
   /**
    * xmlSecNssKeyDataAesSet:
@@ -13842,7 +14212,9 @@
    * Sets the value of AES key data.
    *
 ***************
-*** 282,321 ****
+*** 280,321 ****
+   * <xmlsec:DESKeyValue> processing
+   *
    *************************************************************************/
   static xmlSecKeyDataKlass xmlSecNssKeyDataDesKlass = {
       sizeof(xmlSecKeyDataKlass),
@@ -13883,9 +14255,15 @@
   };
   
   /** 
---- 941,980 ----
+--- 943,988 ----
+   * <xmlsec:DESKeyValue> processing
+   *
    *************************************************************************/
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecKeyDataKlass xmlSecNssKeyDataDesKlass = {
++ #else
   static xmlSecKeyDataKlass xmlSecNssKeyDataDesKlass = {
++ #endif
       sizeof(xmlSecKeyDataKlass),
 !     xmlSecNssSymKeyDataSize,
   
@@ -13935,7 +14313,7 @@
    *
    * Sets the value of DES key data.
    *
---- 991,999 ----
+--- 999,1007 ----
   
   /**
    * xmlSecNssKeyDataDesSet:
@@ -13946,7 +14324,9 @@
    * Sets the value of DES key data.
    *
 ***************
-*** 364,403 ****
+*** 362,403 ****
+   * <xmlsec:HMACKeyValue> processing
+   *
    *************************************************************************/
   static xmlSecKeyDataKlass xmlSecNssKeyDataHmacKlass = {
       sizeof(xmlSecKeyDataKlass),
@@ -13987,9 +14367,15 @@
   };
   
   /** 
---- 1023,1062 ----
+--- 1029,1074 ----
+   * <xmlsec:HMACKeyValue> processing
+   *
    *************************************************************************/
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecKeyDataKlass xmlSecNssKeyDataHmacKlass = {
++ #else
   static xmlSecKeyDataKlass xmlSecNssKeyDataHmacKlass = {
++ #endif
       sizeof(xmlSecKeyDataKlass),
 !     xmlSecNssSymKeyDataSize,
   
@@ -14039,7 +14425,7 @@
    *
    * Sets the value of HMAC key data.
    *
---- 1073,1081 ----
+--- 1085,1093 ----
   
   /**
    * xmlSecNssKeyDataHmacSet:
@@ -14049,12 +14435,12 @@
    *
    * Sets the value of HMAC key data.
    *
-*** misc/xmlsec1-1.2.6/src/nss/tokens.c	Tue Mar 27 11:34:32 2007
---- misc/build/xmlsec1-1.2.6/src/nss/tokens.c	Tue Mar 27 11:21:30 2007
+*** misc/xmlsec1-1.2.6/src/nss/tokens.c	Fri May 11 14:47:47 2007
+--- misc/build/xmlsec1-1.2.6/src/nss/tokens.c	Fri May 11 14:47:20 2007
 ***************
 *** 1 ****
 ! dummy
---- 1,544 ----
+--- 1,548 ----
 ! /**
 !  * XMLSec library
 !  *
@@ -14406,7 +14792,11 @@
 ! /**
 !  * Key Slot List
 !  */
+! #ifdef __MINGW32__ // for runtime-pseudo-reloc
+! static struct _xmlSecPtrListKlass xmlSecNssKeySlotPtrListKlass = {
+! #else
 ! static xmlSecPtrListKlass xmlSecNssKeySlotPtrListKlass = {
+! #endif
 !     BAD_CAST "mechanism-list",
 !     (xmlSecPtrDuplicateItemMethod)xmlSecNssKeySlotDuplicate,
 !     (xmlSecPtrDestroyItemMethod)xmlSecNssKeySlotDestroy,
@@ -14600,7 +14990,7 @@
 ! }
 ! 
 *** misc/xmlsec1-1.2.6/src/nss/x509.c	Fri Sep 26 05:53:09 2003
---- misc/build/xmlsec1-1.2.6/src/nss/x509.c	Tue Mar 27 11:21:30 2007
+--- misc/build/xmlsec1-1.2.6/src/nss/x509.c	Fri May 11 14:47:20 2007
 ***************
 *** 34,40 ****
   #include <xmlsec/keys.h>
@@ -14664,6 +15054,20 @@
   static void		xmlSecNssX509CertDebugXmlDump		(CERTCertificate* cert, 
 --- 87,92 ----
 ***************
+*** 254,260 ****
+--- 234,244 ----
+  
+  
+  
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecKeyDataKlass xmlSecNssKeyDataX509Klass = {
++ #else
+  static xmlSecKeyDataKlass xmlSecNssKeyDataX509Klass = {
++ #endif
+      sizeof(xmlSecKeyDataKlass),
+      xmlSecNssX509DataSize,
+  
+***************
 *** 378,384 ****
   			xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
   			"CERT_NewCertList",
@@ -14672,7 +15076,7 @@
   	    return(-1);	
   	}
       }
---- 358,364 ----
+--- 362,368 ----
   			xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
   			"CERT_NewCertList",
   			XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -14689,7 +15093,7 @@
   	return(-1);	
       }
       ctx->numCerts++;
---- 369,375 ----
+--- 373,379 ----
   		    xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
   		    "CERT_AddCertToListTail",
   		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -14706,7 +15110,7 @@
   	    return(-1);
   	}
   	
---- 568,574 ----
+--- 572,578 ----
   			xmlSecErrorsSafeString(xmlSecKeyDataGetName(dst)),
   			"CERT_DupCertificate",
   			XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -14723,7 +15127,7 @@
               return(-1);
           }
   
---- 607,613 ----
+--- 611,617 ----
                           xmlSecErrorsSafeString(xmlSecKeyDataGetName(dst)),
                           "SEC_DupCrl",
                           XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -14740,7 +15144,7 @@
   	    return(-1);
   	}
   	ret = xmlSecNssKeyDataX509AdoptKeyCert(dst, certDst);
---- 632,638 ----
+--- 636,642 ----
   			xmlSecErrorsSafeString(xmlSecKeyDataGetName(dst)),
   			"CERT_DupCertificate",
   			XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -14781,7 +15185,7 @@
       data = xmlSecKeyGetData(key, id);
       if(data == NULL) {
   	/* no x509 data in the key */
---- 732,753 ----
+--- 736,757 ----
   xmlSecNssKeyDataX509XmlWrite(xmlSecKeyDataId id, xmlSecKeyPtr key,
   				xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {
       xmlSecKeyDataPtr data;
@@ -14886,7 +15290,7 @@
       }
   
       return(0);
---- 766,840 ----
+--- 770,844 ----
   			"pos=%d", pos);
   	    return(-1);
   	}
@@ -14983,7 +15387,7 @@
       }
   
       cert = xmlSecNssX509CertBase64DerRead(content);
---- 981,993 ----
+--- 985,997 ----
       xmlSecAssert2(keyInfoCtx != NULL, -1);
   
       content = xmlNodeGetContent(node);
@@ -15045,7 +15449,7 @@
   static int		
   xmlSecNssX509SubjectNameNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {	
       xmlSecKeyDataStorePtr x509Store;
---- 1017,1022 ----
+--- 1021,1026 ----
 ***************
 *** 1120,1138 ****
       }
@@ -15067,7 +15471,7 @@
       }
   
       cert = xmlSecNssX509StoreFindCert(x509Store, subject, NULL, NULL, NULL, keyInfoCtx);
---- 1040,1052 ----
+--- 1044,1056 ----
       }
   
       subject = xmlNodeGetContent(node);
@@ -15123,7 +15527,7 @@
   static int 
   xmlSecNssX509IssuerSerialNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {
       xmlSecKeyDataStorePtr x509Store;
---- 1081,1086 ----
+--- 1085,1090 ----
 ***************
 *** 1226,1246 ****
       }
@@ -15147,7 +15551,7 @@
   	xmlSecError(XMLSEC_ERRORS_HERE,
   		    xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
   		    xmlSecErrorsSafeString(xmlSecNodeX509IssuerName),
---- 1106,1114 ----
+--- 1110,1118 ----
       }
   
       cur = xmlSecGetNextElementNode(node->children);
@@ -15237,7 +15641,7 @@
   static int 
   xmlSecNssX509SKINodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {
       xmlSecKeyDataStorePtr x509Store;
---- 1200,1205 ----
+--- 1204,1209 ----
 ***************
 *** 1427,1446 ****
       }
@@ -15260,7 +15664,7 @@
       }
   
       cert = xmlSecNssX509StoreFindCert(x509Store, NULL, NULL, NULL, ski, keyInfoCtx);
---- 1223,1236 ----
+--- 1227,1240 ----
       }
       
       ski = xmlNodeGetContent(node);
@@ -15318,7 +15722,7 @@
   static int 
   xmlSecNssX509CRLNodeRead(xmlSecKeyDataPtr data, xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {
       xmlChar *content;
---- 1265,1270 ----
+--- 1269,1274 ----
 ***************
 *** 1520,1538 ****
       xmlSecAssert2(keyInfoCtx != NULL, -1);
@@ -15340,7 +15744,7 @@
       }
   
       crl = xmlSecNssX509CrlBase64DerRead(content, keyInfoCtx);
---- 1275,1287 ----
+--- 1279,1291 ----
       xmlSecAssert2(keyInfoCtx != NULL, -1);
   
       content = xmlNodeGetContent(node);
@@ -15403,10 +15807,10 @@
   xmlSecNssKeyDataX509VerifyAndExtractKey(xmlSecKeyDataPtr data, xmlSecKeyPtr key,
   				    xmlSecKeyInfoCtxPtr keyInfoCtx) {
       xmlSecNssX509DataCtxPtr ctx;
---- 1301,1306 ----
+--- 1305,1310 ----
 ***************
 *** 1600,1605 ****
---- 1308,1317 ----
+--- 1312,1321 ----
       int ret;
       SECStatus status;
       PRTime notBefore, notAfter;
@@ -15429,7 +15833,7 @@
   	    keyValue = xmlSecNssX509CertGetKey(ctx->keyCert);
   	    if(keyValue == NULL) {
   		xmlSecError(XMLSEC_ERRORS_HERE,
---- 1344,1356 ----
+--- 1348,1360 ----
   			    xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
   			    "CERT_DupCertificate",
   			    XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -15445,7 +15849,7 @@
   		xmlSecError(XMLSEC_ERRORS_HERE,
 ***************
 *** 1645,1650 ****
---- 1360,1413 ----
+--- 1364,1417 ----
   			    XMLSEC_ERRORS_NO_MESSAGE);
   		return(-1);
   	    }
@@ -15516,7 +15920,7 @@
   xmlSecKeyDataPtr	
   xmlSecNssX509CertGetKey(CERTCertificate* cert) {
       xmlSecKeyDataPtr data;
---- 1488,1493 ----
+--- 1492,1497 ----
 ***************
 *** 1746,1752 ****
   		    NULL,
@@ -15526,7 +15930,7 @@
   	return(NULL);
       }    
   
---- 1501,1507 ----
+--- 1505,1511 ----
   		    NULL,
   		    "CERT_ExtractPublicKey",
   		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -15543,7 +15947,7 @@
   	return(NULL);
       }
   
---- 1559,1565 ----
+--- 1563,1569 ----
   		    NULL,
   		    "__CERT_NewTempCertificate",
   		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -15560,7 +15964,7 @@
   	return(NULL);
       }
       
---- 1582,1588 ----
+--- 1586,1592 ----
   		    NULL,
   		    "cert->derCert",
   		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -15577,7 +15981,7 @@
   	return NULL;
       }
   
---- 1645,1651 ----
+--- 1649,1655 ----
                       NULL,
                       "PK11_GetInternalKeySlot",
                       XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -15594,7 +15998,7 @@
   	PK11_FreeSlot(slot);
   	return(NULL);
       }
---- 1660,1666 ----
+--- 1664,1670 ----
   		    NULL,
   		    "PK11_ImportCRL",
   		    XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -15611,7 +16015,7 @@
           return(NULL);
       }
   
---- 1684,1690 ----
+--- 1688,1694 ----
                       NULL,
                       "crl->derCrl",
                       XMLSEC_ERRORS_R_CRYPTO_FAILED,
@@ -15620,11 +16024,10 @@
       }
   
 ***************
-*** 1945,2030 ****
-  
+*** 1946,2031 ****
       return(res);
   }
-- 
+  
 - static xmlChar*
 - xmlSecNssX509NameWrite(CERTName* nm) {
 -     xmlChar *res = NULL;
@@ -15704,12 +16107,27 @@
 -     return(res);
 - }
 - 
-  
+- 
   static void 
   xmlSecNssX509CertDebugDump(CERTCertificate* cert, FILE* output) {
---- 1700,1705 ----
+      SECItem *sn;
+--- 1705,1710 ----
+***************
+*** 2084,2090 ****
+--- 1763,1773 ----
+  								 xmlSecSize bufSize,
+  								 xmlSecKeyInfoCtxPtr keyInfoCtx);
+  
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecKeyDataKlass xmlSecNssKeyDataRawX509CertKlass = {
++ #else
+  static xmlSecKeyDataKlass xmlSecNssKeyDataRawX509CertKlass = {
++ #endif
+      sizeof(xmlSecKeyDataKlass),
+      sizeof(xmlSecKeyData),
+  
 *** misc/xmlsec1-1.2.6/src/nss/x509vfy.c	Fri Sep 26 02:58:15 2003
---- misc/build/xmlsec1-1.2.6/src/nss/x509vfy.c	Tue Mar 27 11:21:30 2007
+--- misc/build/xmlsec1-1.2.6/src/nss/x509vfy.c	Fri May 11 14:47:20 2007
 ***************
 *** 30,35 ****
 --- 30,36 ----
@@ -15766,7 +16184,7 @@
   static xmlSecKeyDataStoreKlass xmlSecNssX509StoreKlass = {
 !     sizeof(xmlSecKeyDataStoreKlass),
 !     xmlSecNssX509StoreSize,
-  
+! 
 !     /* data */
 !     xmlSecNameX509Store,			/* const xmlChar* name; */ 
 !         
@@ -15786,7 +16204,7 @@
   
   
   /** 
---- 55,90 ----
+--- 55,94 ----
    *
    ***************************************************************************/
   #define xmlSecNssX509StoreGetCtx(store) \
@@ -15800,10 +16218,14 @@
   
 + static int 		xmlSecNssIntegerToItem( const xmlChar* integer , SECItem *it ) ;
   
++ #ifdef __MINGW32__ // for runtime-pseudo-reloc
++ static struct _xmlSecKeyDataStoreKlass xmlSecNssX509StoreKlass = {
++ #else
   static xmlSecKeyDataStoreKlass xmlSecNssX509StoreKlass = {
+! #endif
 ! 	sizeof(xmlSecKeyDataStoreKlass),
 ! 	xmlSecNssX509StoreSize,
-  
+! 
 ! 	/* data */
 ! 	xmlSecNameX509Store,			/* const xmlChar* name; */ 
 ! 		
@@ -15832,7 +16254,7 @@
   }
   
   /**
---- 96,102 ----
+--- 100,106 ----
    */
   xmlSecKeyDataStoreId 
   xmlSecNssX509StoreGetKlass(void) {
@@ -15857,7 +16279,7 @@
   }
   
   /**
---- 117,131 ----
+--- 121,135 ----
   xmlSecNssX509StoreFindCert(xmlSecKeyDataStorePtr store, xmlChar *subjectName,
   				xmlChar *issuerName, xmlChar *issuerSerial,
   				xmlChar *ski, xmlSecKeyInfoCtx* keyInfoCtx) {
@@ -15991,7 +16413,7 @@
    *
    * Adds trusted (root) or untrusted certificate to the store.
    *
---- 140,269 ----
+--- 144,273 ----
    */ 
   CERTCertificate * 	
   xmlSecNssX509StoreVerify(xmlSecKeyDataStorePtr store, CERTCertList* certs,
@@ -16191,13 +16613,13 @@
   }
   
   
---- 271,337 ----
+--- 275,341 ----
    */
   int
   xmlSecNssX509StoreAdoptCert(xmlSecKeyDataStorePtr store, CERTCertificate* cert, xmlSecKeyDataType type ATTRIBUTE_UNUSED) {
 ! 	xmlSecNssX509StoreCtxPtr ctx;
 ! 	int ret;
-! 
+  
 ! 	xmlSecAssert2(xmlSecKeyDataStoreCheckId(store, xmlSecNssX509StoreId), -1);
 ! 	xmlSecAssert2(cert != NULL, -1);
   
@@ -16225,7 +16647,7 @@
 ! 					"error code=%d", PORT_GetError());
 ! 		return(-1);
 ! 	}
-  
+! 
 ! 	return(0);
   }
   
@@ -16472,7 +16894,7 @@
 ! 		/* skip spaces before comma or semicolon */
 ! 		while((len > 0) && isspace(*str)) {
 ! 		    ++str; --len;
-! 		}
+  		}
 ! 		if((len > 0) && ((*str) != ',')) {
 ! 		    xmlSecError(XMLSEC_ERRORS_HERE,
 ! 				NULL,
@@ -16480,7 +16902,7 @@
 ! 				XMLSEC_ERRORS_R_INVALID_DATA,
 ! 				"comma is expected");
 ! 		    goto done;
-  		}
+! 		}
 ! 		if(len > 0) {
 ! 		    ++str; --len;
   		}
@@ -16637,7 +17059,7 @@
 - #endif /* XMLSEC_NO_X509 */
   
   
---- 346,558 ----
+--- 350,562 ----
    */
   static CERTCertificate*		
   xmlSecNssX509FindCert(xmlChar *subjectName, xmlChar *issuerName, 
@@ -16852,7 +17274,7 @@
 + #endif /* XMLSEC_NO_X509 */
   
 *** misc/xmlsec1-1.2.6/win32/Makefile.msvc	Wed Jun  9 16:35:12 2004
---- misc/build/xmlsec1-1.2.6/win32/Makefile.msvc	Tue Mar 27 11:21:30 2007
+--- misc/build/xmlsec1-1.2.6/win32/Makefile.msvc	Fri May 11 14:47:20 2007
 ***************
 *** 223,228 ****
 --- 223,232 ----
