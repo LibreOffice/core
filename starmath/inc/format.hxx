@@ -4,9 +4,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 14:58:35 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:09:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@ class SmFormat : public SfxBroadcaster
 
 public:
     SmFormat();
-    SmFormat(const SmFormat &rFormat) { *this = rFormat; }
+    SmFormat(const SmFormat &rFormat) : SfxBroadcaster() { *this = rFormat; }
 
     const Size &    GetBaseSize() const             { return aBaseSize; }
     void            SetBaseSize(const Size &rSize)  { aBaseSize = rSize; }
