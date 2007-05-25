@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findattr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:37:18 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:22:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1206,7 +1206,12 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
             else if( !pSet->Count() )
                 return FIND_NOT_FOUND;      // nur Text und nicht gefunden
 
-            // und wieder neu aufsetzen, aber eine Position weiter
+/*          // --> FME 2007-4-12 #i74765 # Why should we move the position?
+            Moving the position results in bugs when there are two adjacent
+            portions which both have the requested attributes set. I suspect this
+            should be only be an optimization. Therefore I boldly remove it now!
+
+            // JP: und wieder neu aufsetzen, aber eine Position weiter
             //JP 04.11.97: Bug 44897 - aber den Mark wieder aufheben, damit
             //              weiterbewegt werden kann!
             {
@@ -1230,7 +1235,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
                 }
                 if( !bCheckRegion || *aRegion.GetPoint() <= *pPos )
                     return FIND_NOT_FOUND;      // nicht gefunden
-            }
+            }*/
             *aRegion.GetMark() = *aSrchPam.GetPoint();
         }
 
