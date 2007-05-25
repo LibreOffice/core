@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgitem.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-07 10:14:44 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:11:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,9 @@
  *
  ************************************************************************/
 
+#ifdef _MSC_VER
 #pragma hdrstop
+#endif
 
 #ifndef _MATH_CFGITEM_HXX_
 #define _MATH_CFGITEM_HXX_
@@ -101,7 +103,7 @@ struct SmFntFmtListEntry
 };
 
 
-SV_DECL_OBJARR( SmFntFmtListEntryArr, SmFntFmtListEntry, 8, 8 );
+SV_DECL_OBJARR( SmFntFmtListEntryArr, SmFntFmtListEntry, 8, 8 )
 
 
 class SmFontFormatList
