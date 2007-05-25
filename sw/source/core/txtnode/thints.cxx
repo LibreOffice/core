@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:26:31 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:22:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -525,54 +525,123 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint, USHORT nMod
         else
         {
             // Find the current autostyle. Mix attributes if necessary.
-            SwTxtAttr* pCurrentHint = 0;
+            SwTxtAttr* pCurrentAutoStyle = 0;
+            SwTxtAttr* pCurrentCharFmt = 0;
             aIter = aInsDelHints.begin();
             while ( aIter != aInsDelHints.end() )
             {
                 if ( RES_TXTATR_AUTOFMT == (*aIter)->Which() )
-                {
-                    pCurrentHint = *aIter;
-                    break;
-                }
+                    pCurrentAutoStyle = *aIter;
+                else if ( RES_TXTATR_CHARFMT == (*aIter)->Which() )
+                    pCurrentCharFmt = *aIter;
                 ++aIter;
             }
 
             boost::shared_ptr<SfxItemSet> pNewStyle = static_cast<const SwFmtAutoFmt&>(rNewHint.GetAttr()).GetStyleHandle();
-            if ( pCurrentHint )
+            if ( pCurrentAutoStyle )
             {
-                boost::shared_ptr<SfxItemSet> pCurrentStyle = static_cast<const SwFmtAutoFmt&>(pCurrentHint->GetAttr()).GetStyleHandle();
+                boost::shared_ptr<SfxItemSet> pCurrentStyle = static_cast<const SwFmtAutoFmt&>(pCurrentAutoStyle->GetAttr()).GetStyleHandle();
 
                 // Merge attributes
                 SfxItemSet aNewSet( *pCurrentStyle );
                 aNewSet.Put( *pNewStyle );
 
+                // --> FME 2007-4-11 #i75750# Remove attributes already set at whole paragraph
+                if ( rNode.HasSwAttrSet() && aNewSet.Count() )
+                {
+                    SfxItemIter aIter( aNewSet );
+                    const SfxPoolItem* pItem = aIter.GetCurItem();
+                    const SfxItemSet& rWholeParaAttrSet = rNode.GetSwAttrSet();
+
+                    do
+                    {
+                        const SfxPoolItem* pTmpItem = 0;
+                        if ( SFX_ITEM_SET == rWholeParaAttrSet.GetItemState( pItem->Which(), FALSE, &pTmpItem ) &&
+                             pTmpItem == pItem )
+                        {
+                            // Do not clear item if the attribute is set in a character format:
+                            if ( !pCurrentCharFmt || 0 == CharFmt::GetItem( *pCurrentCharFmt, pItem->Which() ) )
+                                aNewSet.ClearItem( pItem->Which() );
+                        }
+                    }
+                    while (!aIter.IsAtEnd() && 0 != (pItem = aIter.NextItem()));
+                }
+                // <--
+
                 // Remove old hint
-                Delete( pCurrentHint );
-                rNode.DestroyAttr( pCurrentHint );
+                Delete( pCurrentAutoStyle );
+                rNode.DestroyAttr( pCurrentAutoStyle );
 
                 // Create new AutoStyle
-                pNewAttr = rNode.MakeTxtAttr( aNewSet, nPorStart, nPorEnd );
+                if ( aNewSet.Count() )
+                    pNewAttr = rNode.MakeTxtAttr( aNewSet, nPorStart, nPorEnd );
             }
             else
             {
+                // Remove any attributes which are already set at the whole paragraph:
+                bool bOptimizeAllowed = true;
+
+                SfxItemSet* pNewSet = 0;
+                // --> FME 2007-4-11 #i75750# Remove attributes already set at whole paragraph
+                if ( rNode.HasSwAttrSet() && pNewStyle->Count() )
+                {
+                    SfxItemIter aIter( *pNewStyle );
+                    const SfxPoolItem* pItem = aIter.GetCurItem();
+                    const SfxItemSet& rWholeParaAttrSet = rNode.GetSwAttrSet();
+
+                    do
+                    {
+                        const SfxPoolItem* pTmpItem = 0;
+                        if ( SFX_ITEM_SET == rWholeParaAttrSet.GetItemState( pItem->Which(), FALSE, &pTmpItem ) &&
+                             pTmpItem == pItem )
+                        {
+                            // Do not clear item if the attribute is set in a character format:
+                            if ( !pCurrentCharFmt || 0 == CharFmt::GetItem( *pCurrentCharFmt, pItem->Which() ) )
+                            {
+                                if ( !pNewSet )
+                                    pNewSet = pNewStyle->Clone( TRUE );
+                                pNewSet->ClearItem( pItem->Which() );
+                            }
+                        }
+                    }
+                    while (!aIter.IsAtEnd() && 0 != (pItem = aIter.NextItem()));
+
+                    if ( pNewSet )
+                    {
+                        bOptimizeAllowed = false;
+                        if ( pNewSet->Count() )
+                            pNewStyle = rNode.getIDocumentStyleAccess().getAutomaticStyle( *pNewSet, IStyleAccess::AUTO_STYLE_CHAR );
+                        else
+                            pNewStyle.reset();
+
+                        delete pNewSet;
+                    }
+                }
+                // <--
+
                 // Create new AutoStyle
                 // If there is no current hint and start and end of rNewHint
                 // is ok, we do not need to create a new txtattr.
-                if ( nPorStart == nThisStart &&
+                if ( bOptimizeAllowed &&
+                     nPorStart == nThisStart &&
                      nPorEnd == nThisEnd )
                 {
                     pNewAttr = &rNewHint;
                     bDestroyHint = false;
                 }
-                else
+                else if ( pNewStyle.get() )
                 {
                     pNewAttr = rNode.MakeTxtAttr( *pNewStyle, nPorStart, nPorEnd );
                 }
             }
         }
 
-        SwpHintsArr::Insert( pNewAttr );
-        if ( pHistory /* && bDestroyHint*/ ) pHistory->Add( pNewAttr, TRUE );
+        if ( pNewAttr )
+        {
+            SwpHintsArr::Insert( pNewAttr );
+            if ( pHistory /* && bDestroyHint*/ )
+                pHistory->Add( pNewAttr, TRUE );
+        }
 
         if ( !bNoLengthAttribute )
         {
