@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndhints.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:46:30 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:22:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,8 @@ static BOOL lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
                     const USHORT nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
                     const USHORT nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
                     ASSERT( nS1 != nS2, "AUTOSTYLES: lcl_IsLessStart trouble" )
-                    return nS1 < nS2;
+                    if ( nS1 != nS2 ) // robust
+                        return nS1 < nS2;
                 }
 
                 return (long)&rHt1 < (long)&rHt2;
@@ -151,7 +152,8 @@ static BOOL lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
                     const USHORT nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
                     const USHORT nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
                     ASSERT( nS1 != nS2, "AUTOSTYLES: lcl_IsLessEnd trouble" )
-                    return nS1 > nS2;
+                    if ( nS1 != nS2 ) // robust
+                        return nS1 > nS2;
                 }
 
                 return (long)&rHt1 > (long)&rHt2;
