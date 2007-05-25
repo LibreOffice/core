@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:33:00 $
+#   last change: $Author: vg $ $Date: 2007-05-25 12:13:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -99,12 +99,15 @@ SLOFILES = \
 
 EXCEPTIONSFILES =   \
         $(SLO)$/accessibility.obj \
+        $(SLO)$/cfgitem.obj \
         $(SLO)$/document.obj \
         $(SLO)$/mathml.obj \
+        $(SLO)$/mathtype.obj \
         $(SLO)$/view.obj \
         $(SLO)$/viewhdl.obj \
         $(SLO)$/unomodel.obj \
         $(SLO)$/smdetect.obj \
+        $(SLO)$/symbol.obj \
         $(SLO)$/unodoc.obj
 
 LIB1TARGET = \
