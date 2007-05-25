@@ -4,9 +4,9 @@
 #
 #   $RCSfile: strip.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:15:15 $
+#   last change: $Author: vg $ $Date: 2007-05-25 10:51:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ sub need_to_strip
     my $nmoutput = <FILE>;
     close (FILE);
 
-    if (!( $nmoutput =~ /no symbols/i || $nmoutput =~ /not recognized/i )) { $strip = 1; }
+    if ( $nmoutput && !( $nmoutput =~ /no symbols/i || $nmoutput =~ /not recognized/i )) { $strip = 1; }
 
     return $strip
 }
