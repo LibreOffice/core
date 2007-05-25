@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.116 $
+#   $Revision: 1.117 $
 #
-#   last change: $Author: vg $ $Date: 2007-04-11 19:47:27 $
+#   last change: $Author: vg $ $Date: 2007-05-25 10:50:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.116 $ ';
+$id_str = ' $Revision: 1.117 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -727,7 +727,7 @@ sub is_unstripped {
     if (-f $file_name.$maybedot) {
         my $file_type = `file $file_name`;
         # OS X file command doesn't know if a file is stripped or not
-        if (($file_type =~ /not stripped/o) || ($file_type =~ /Mach-O/o)) {
+        if (($file_type =~ /not stripped/o) || ($file_type =~ /Mach-O/o) || ($file_type =~ /PE/o)) {
             return '1' if ($file_name =~ /\.bin$/o);
             return '1' if ($file_name =~ /\.so\.*/o);
             return '1' if ($file_name =~ /\.dylib\.*/o);
