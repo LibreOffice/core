@@ -4,9 +4,9 @@
  *
  *  $RCSfile: utility.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:58:48 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:10:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,15 +200,18 @@ protected:
 
 public:
     SmPickList(USHORT nInitSize = 0, USHORT nMaxSize = 5);
-    ~SmPickList();
+    virtual ~SmPickList();
 
     SmPickList&   operator = (const SmPickList& rList);
 
     void       *Get(USHORT nPos = 0) const { return GetPtr(nPos); }
+    using   SfxPtrArr::Insert;
     void        Insert(const void* pItem);
     void        Update(const void* pItem, const void *pNewItem);
+    using   SfxPtrArr::Remove;
     void        Remove(const void* pItem);
 
+    using   SfxPtrArr::operator [];
     void       *operator [] (USHORT nPos) const { return GetPtr(nPos); }
 
     void        SetSize(USHORT nNewSize);
@@ -243,7 +246,7 @@ public:
         : SmPickList(nInitSize, nMaxSize) {}
     SmStringPickList(const SmPickList& rOrig )
         : SmPickList(rOrig) {}
-    ~SmStringPickList() { Clear(); }
+    virtual ~SmStringPickList() { Clear(); }
 
     virtual void    Insert(const String &rString);
     virtual void    Update(const String &rString, const String &rNewString);
@@ -302,16 +305,21 @@ public:
         : SmPickList(nInitSize, nMaxSize) {}
     SmFontPickList(const SmPickList& rOrig )
         : SmPickList(rOrig) {}
-    ~SmFontPickList() { Clear(); }
+    virtual ~SmFontPickList() { Clear(); }
 
+    using   SfxPtrArr::Insert;
     virtual void    Insert(const Font &rFont);
+    using   SmPickList::Update;
     virtual void    Update(const Font &rFont, const Font &rNewFont);
+    using   SfxPtrArr::Remove;
     virtual void    Remove(const Font &rFont);
 
+    using   SmPickList::Contains;
     inline BOOL     Contains(const Font &rFont) const;
     inline Font     Get(USHORT nPos = 0) const;
 
     inline SmFontPickList&  operator = (const SmFontPickList& rList);
+    using   SfxPtrArr::operator [];
     inline Font             operator [] (USHORT nPos) const;
 
     void            ReadFrom(const SmFontDialog& rDialog);
@@ -381,8 +389,11 @@ public:
 
     SmFontPickListBox& operator = (const SmFontPickList& rList);
 
+    using   SfxPtrArr::Insert;
     virtual void    Insert(const Font &rFont);
+    using   Window::Update;
     virtual void    Update(const Font &rFont, const Font &rNewFont);
+    using   SfxPtrArr::Remove;
     virtual void    Remove(const Font &rFont);
 };
 
