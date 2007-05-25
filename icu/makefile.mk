@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:41:41 $
+#   last change: $Author: vg $ $Date: 2007-05-25 11:06:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,11 @@ OUT2BIN= \
 .IF "$(GUI)"=="WNT"
 CONFIGURE_DIR=source
 .IF "$(COM)"=="GCC"
-CONFIGURE_ACTION=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="$(SOLARLIB) -L$(COMPATH)$/lib" LIBS="-lmingwthrd" ./configure --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
+.IF "$(USE_MINGW)"=="cygwin"
+CONFIGURE_ACTION=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="-L$(COMPATH)/lib/mingw -L$(COMPATH)/lib/w32api -L$(COMPATH)$/lib" LIBS="-lmingwthrd" ./configure --build=i586-pc-mingw32 --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
+.ELSE
+CONFIGURE_ACTION=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="-L$(COMPATH)$/lib" LIBS="-lmingwthrd" ./configure --build=i586-pc-mingw32 --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
+.ENDIF
 
 #CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no
 CONFIGURE_FLAGS=
@@ -142,32 +146,17 @@ CONFIGURE_FLAGS=
 
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=$(GNUMAKE)
-OUT2LIB= \
-    $(BUILD_DIR)$/data$/out$/libicudata_static.a \
-    $(BUILD_DIR)$/common$/libicuuc_static.a \
-    $(BUILD_DIR)$/i18n$/libicui18n_static.a \
-    $(BUILD_DIR)$/layout$/libicule_static.a \
-    $(BUILD_DIR)$/tools$/toolutil$/libicutoolutil_static.a
+OUT2LIB=
 
 OUT2BIN= \
-    $(BUILD_DIR)$/data$/out$/libicudata26.0$(DLLPOST) \
-    $(BUILD_DIR)$/data$/out$/libicudata26$(DLLPOST) \
-    $(BUILD_DIR)$/data$/out$/libicudata$(DLLPOST) \
-    $(BUILD_DIR)$/common$/libicuuc26.0$(DLLPOST) \
-    $(BUILD_DIR)$/common$/libicuuc26$(DLLPOST) \
-    $(BUILD_DIR)$/common$/libicuuc$(DLLPOST) \
-    $(BUILD_DIR)$/i18n$/libicui18n26.0$(DLLPOST) \
-    $(BUILD_DIR)$/i18n$/libicui18n26$(DLLPOST) \
-    $(BUILD_DIR)$/i18n$/libicui18n$(DLLPOST) \
-    $(BUILD_DIR)$/layout$/libicule26.0$(DLLPOST) \
-    $(BUILD_DIR)$/layout$/libicule26$(DLLPOST) \
-    $(BUILD_DIR)$/layout$/libicule$(DLLPOST) \
-    $(BUILD_DIR)$/tools$/toolutil$/libicutoolutil26.0$(DLLPOST) \
-    $(BUILD_DIR)$/tools$/toolutil$/libicutoolutil26$(DLLPOST) \
-    $(BUILD_DIR)$/tools$/toolutil$/libicutoolutil$(DLLPOST) \
-    $(BUILD_DIR)$/tools$/genccode$/genccode.exe \
-    $(BUILD_DIR)$/tools$/genbrk$/genbrk.exe \
-    $(BUILD_DIR)$/tools$/gencmn$/gencmn.exe
+    $(BUILD_DIR)$/lib$/icudt$(ICU_MAJOR)$(ICU_MINOR)$(DLLPOST) \
+    $(BUILD_DIR)$/lib$/icuuc$(ICU_MAJOR)$(ICU_MINOR)$(DLLPOST) \
+    $(BUILD_DIR)$/lib$/icuin$(ICU_MAJOR)$(ICU_MINOR)$(DLLPOST) \
+    $(BUILD_DIR)$/lib$/icule$(ICU_MAJOR)$(ICU_MINOR)$(DLLPOST) \
+    $(BUILD_DIR)$/lib$/icutu$(ICU_MAJOR)$(ICU_MINOR)$(DLLPOST) \
+    $(BUILD_DIR)$/bin$/genccode.exe \
+    $(BUILD_DIR)$/bin$/genbrk.exe \
+    $(BUILD_DIR)$/bin$/gencmn.exe
 
 .ELSE
 .IF "$(USE_SHELL)"=="4nt"
