@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IDocumentUndoRedo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:45:25 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:59:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,9 @@
  class SwUndoIds;
  class SwNodes;
  class SwUndo;
+
+
+ typedef sal_uInt16 SwUndoNoModifiedPosition;
 
  /** IDocumentUndoRedo
  */
@@ -181,6 +184,14 @@
         bis zum Ende des Undo-Arrays
     */
     virtual void ClearRedo() = 0;
+
+    /** Manipulates the position of the undo stack which reset the modified flag
+    */
+    virtual void setUndoNoModifiedPosition( SwUndoNoModifiedPosition ) = 0;
+
+    /** Gets the position of the undo stack which reset the modified flag
+    */
+    virtual SwUndoNoModifiedPosition getUndoNoModifiedPosition() const = 0;
 
  protected:
      virtual ~IDocumentUndoRedo() {};
