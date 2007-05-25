@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:22:35 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 10:57:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,7 @@
 #include <tchar.h>
 #ifdef __MINGW32__
 #include <wchar.h>
+#include <ctype.h>
 #endif
 #include <malloc.h>
 #include <algorithm>
