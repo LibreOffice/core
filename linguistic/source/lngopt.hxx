@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lngopt.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 15:46:04 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:23:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ namespace com { namespace sun { namespace star {
     namespace registry {
         class XRegistryKey;
     }
-}}};
+}}}
 
 
 
