@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphdsp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-07 10:17:38 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:22:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ public:
     void    SetDoWarnAgain(BOOL bVal)   { aFlags.bDoWarnAgain = 0 != bVal; }
 };
 
-DECLARE_TABLE( HyphSvcList, LangSvcEntry_Hyph * );
+DECLARE_TABLE( HyphSvcList, LangSvcEntry_Hyph * )
 
 
 class HyphenatorDispatcher :
