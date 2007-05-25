@@ -4,9 +4,9 @@
 #
 #   $RCSfile: MAKEFILE.MK,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:41:47 $
+#   last change: $Author: vg $ $Date: 2007-05-25 11:04:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,11 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile2.pmk
 
 # --- #105371#
+.IF "$(COM)"=="GCC"
+CDEFS += -UWINVER -DWINVER=0x0400
+.ELSE
 CFLAGS += -DWINVER=0x0400
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
