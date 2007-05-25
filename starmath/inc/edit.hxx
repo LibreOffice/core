@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 14:58:20 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:09:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,7 @@ public:
 
     // Window
     virtual void        SetText(const XubString &rText);
-    virtual XubString   GetText();
+    virtual String      GetText() const;
     virtual void        GetFocus();
     virtual void        LoseFocus();
 
@@ -159,6 +159,7 @@ public:
     // for Accessibility
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
+    using Window::GetAccessible;
     SmEditAccessible *   GetAccessible()  { return pAccessible; }
 };
 
