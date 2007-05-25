@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntgcci6.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:18:33 $
+#   last change: $Author: vg $ $Date: 2007-05-25 10:52:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,21 +54,20 @@ CXX*=$(WRAPCMD) gcc
 #CFLAGS=-c -Wall -I$(INCLUDE) $(OLE2DEF)
 # new:
 #CYGINC=$(INCLUDE:s/-I /-I/:+"  ":s/;/ -I/:s/-I  //:s/   / /)
-CFLAGS=-c -Wall -nostdinc $(OLE2DEF)
+CFLAGS=-fmessage-length=0 -c -nostdinc -fpcc-struct-return $(OLE2DEF)
 ###
-PICSWITCH:=
-CFLAGS+=-fpcc-struct-return $(PICSWITCH)
 CFLAGSCC=-pipe $(ARCH_FLAGS)
 CFLAGSCXX=-pipe $(ARCH_FLAGS)
-CFLAGSEXCEPTIONS=-fexceptions
+CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
+PICSWITCH:=
 
-CFLAGSOBJGUIST=-DWIN32 -DWINVER=0x500 -D_WIN32_IE=0x400 -D_DLL
-CFLAGSOBJCUIST=-DWIN32 -DWINVER=0x500 -D_WIN32_IE=0x400 -D_DLL
-CFLAGSOBJGUIMT=-DWIN32 -DWINVER=0x500 -D_WIN32_IE=0x400 -D_DLL -D_MT
-CFLAGSOBJCUIMT=-DWIN32 -DWINVER=0x500 -D_WIN32_IE=0x400 -D_DLL -D_MT
-CFLAGSSLOGUIMT=-DWIN32 -DWINVER=0x500 -D_WIN32_IE=0x400 -D_DLL -D_MT $(PICSWITCH)
-CFLAGSSLOCUIMT=-DWIN32 -DWINVER=0x500 -D_WIN32_IE=0x400 -D_DLL -D_MT $(PICSWITCH)
+CFLAGSOBJGUIST=
+CFLAGSOBJCUIST=
+CFLAGSOBJGUIMT=-D_MT
+CFLAGSOBJCUIMT=-D_MT
+CFLAGSSLOGUIMT=-D_MT $(PICSWITCH)
+CFLAGSSLOCUIMT=-D_MT $(PICSWITCH)
 CFLAGSPROF=
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
@@ -76,9 +75,28 @@ CFLAGSOPT=-O3
 CFLAGSNOOPT=-O
 CFLAGSOUTOBJ=-o
 #plattform hart setzen
-CDEFS+=-D_M_IX86
-CDEFS+=-DSTLPORT_VERSION=450
-CDEFS+=-D_NATIVE_WCHAR_T_DEFINED
+CDEFS+=-DWIN32 -DWINVER=0x400 -D_WIN32_IE=0x400 -D_DLL -D_M_IX86 -DSTLPORT_VERSION=450 -D_NATIVE_WCHAR_T_DEFINED
+
+# -Wshadow does not work for C with nested uses of pthread_cleanup_push:
+CFLAGSWARNCC=-Wall -Wextra -Wendif-labels
+CFLAGSWARNCXX=$(CFLAGSWARNCC) -Wshadow -Wno-ctor-dtor-privacy \
+    -Wno-non-virtual-dtor -Wno-uninitialized
+CFLAGSWALLCC=$(CFLAGSWARNCC)
+CFLAGSWALLCXX=$(CFLAGSWARNCXX)
+CFLAGSWERRCC=-Werror
+CFLAGSWERRCXX=-Werror
+
+MODULES_WITH_WARNINGS := \
+    b_server \
+    chart2 \
+    devtools \
+    extensions \
+    lingu \
+    r_tools \
+    soldep \
+    starmath \
+    sw \
+    xmlsecurity
 
 STATIC= -static
 DYNAMIC= -dynamic
@@ -157,7 +175,7 @@ OLEAUT32LIB=-loleaut32
 UUIDLIB=$(PSDK_HOME)$/lib$/uuid.lib
 WINSPOOLLIB=-lwinspool
 IMM32LIB=-limm32
-PSPLIB=-lpsp$(VERSION)$(DLLPOSTFIX)
+PSPLIB=-lpsp
 VERSIONLIB=-lversion
 WINMMLIB=-lwinmm
 WSOCK32LIB=-lwsock32
@@ -178,3 +196,4 @@ URLMONLIB=$(PSDK_HOME)$/lib$/urlmon.lib
 UNICOWSLIB=$(PSDK_HOME)$/lib$/unicows.lib
 WININETLIB=-lwininet
 OLDNAMESLIB=-lmoldname
+MSIMG32LIB=$(PSDK_HOME)$/lib$/msimg32.lib
