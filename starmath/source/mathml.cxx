@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 16:04:22 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:13:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,8 +231,9 @@ ULONG SmXMLWrapper::ReadThroughComponent(
         uno::Reference<lang::XUnoTunnel> xFilterTunnel;
         xFilterTunnel = uno::Reference<lang::XUnoTunnel>
             ( xFilter, uno::UNO_QUERY );
-        SmXMLImport *pFilter = (SmXMLImport *)xFilterTunnel->getSomething(
-            SmXMLImport::getUnoTunnelId() );
+        SmXMLImport *pFilter = reinterpret_cast< SmXMLImport * >(
+                sal::static_int_cast< sal_uIntPtr >(
+                xFilterTunnel->getSomething( SmXMLImport::getUnoTunnelId() )));
         if( pFilter && pFilter->GetSuccess() )
             nError = 0;
     }
@@ -482,14 +483,14 @@ SmXMLImport::SmXMLImport(
     sal_uInt16 nImportFlags)
 :   SvXMLImport( xServiceFactory, nImportFlags ),
     pPresLayoutElemTokenMap(0),
-    pPresElemTokenMap(0),
-    pPresScriptEmptyElemTokenMap(0),
-    pPresTableElemTokenMap(0),
     pPresLayoutAttrTokenMap(0),
     pFencedAttrTokenMap(0),
     pOperatorAttrTokenMap(0),
-    pColorTokenMap(0),
     pAnnotationAttrTokenMap(0),
+    pPresElemTokenMap(0),
+    pPresScriptEmptyElemTokenMap(0),
+    pPresTableElemTokenMap(0),
+    pColorTokenMap(0),
     bSuccess(sal_False)
 {
 }
@@ -497,17 +498,17 @@ SmXMLImport::SmXMLImport(
 SmXMLImport::SmXMLImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
-    const rtl::OUString &rFileName)
+    const rtl::OUString & /*rFileName*/ )
 :   SvXMLImport( xServiceFactory, rModel ) ,
     pPresLayoutElemTokenMap(0),
-    pPresElemTokenMap(0),
-    pPresScriptEmptyElemTokenMap(0),
-    pPresTableElemTokenMap(0),
     pPresLayoutAttrTokenMap(0),
     pFencedAttrTokenMap(0),
     pOperatorAttrTokenMap(0),
-    pColorTokenMap(0),
     pAnnotationAttrTokenMap(0),
+    pPresElemTokenMap(0),
+    pPresScriptEmptyElemTokenMap(0),
+    pPresTableElemTokenMap(0),
+    pColorTokenMap(0),
     bSuccess(sal_False)
 {
 }
@@ -795,22 +796,24 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportContent_createInstance(
 rtl::OUString SAL_CALL SmXMLExport::getImplementationName()
     throw(uno::RuntimeException)
 {
+    OUString aTxt;
     switch( getExportFlags() )
     {
-        default:
-        case EXPORT_ALL:
-            return SmXMLExport_getImplementationName();
-            break;
         case EXPORT_META:
-            return SmXMLExportMeta_getImplementationName();
+            aTxt = SmXMLExportMeta_getImplementationName();
             break;
         case EXPORT_SETTINGS:
-            return SmXMLExportSettings_getImplementationName();
+            aTxt = SmXMLExportSettings_getImplementationName();
             break;
         case EXPORT_CONTENT:
-            return SmXMLExportContent_getImplementationName();
+            aTxt = SmXMLExportContent_getImplementationName();
+            break;
+        case EXPORT_ALL:
+        default:
+            aTxt = SmXMLExport_getImplementationName();
             break;
     }
+    return aTxt;
 }
 
 // XServiceInfo
@@ -818,19 +821,21 @@ rtl::OUString SAL_CALL SmXMLExport::getImplementationName()
 rtl::OUString SAL_CALL SmXMLImport::getImplementationName()
     throw(uno::RuntimeException)
 {
+    OUString aTxt;
     switch( getImportFlags() )
     {
-        default:
-        case IMPORT_ALL:
-            return SmXMLImport_getImplementationName();
-            break;
         case IMPORT_META:
-            return SmXMLImportMeta_getImplementationName();
+            aTxt = SmXMLImportMeta_getImplementationName();
             break;
         case IMPORT_SETTINGS:
-            return SmXMLImportSettings_getImplementationName();
+            aTxt = SmXMLImportSettings_getImplementationName();
+            break;
+        case IMPORT_ALL:
+        default:
+            aTxt = SmXMLImport_getImplementationName();
             break;
     }
+    return aTxt;
 }
 
 
@@ -840,7 +845,7 @@ sal_Int64 SAL_CALL SmXMLImport::getSomething( const uno::Sequence< sal_Int8 >&
     if( rId.getLength() == 16 &&
         0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
         rId.getConstArray(), 16 ) )
-    return (sal_Int64)this;
+    return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_uIntPtr >(this));
 
     return SvXMLImport::getSomething( rId );
 }
@@ -851,7 +856,7 @@ sal_Int64 SAL_CALL SmXMLExport::getSomething( const uno::Sequence< sal_Int8 >&
     if( rId.getLength() == 16 &&
         0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
         rId.getConstArray(), 16 ) )
-    return (sal_Int64)this;
+    return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_uIntPtr >(this));
 
     return SvXMLExport::getSomething( rId );
 }
@@ -862,7 +867,7 @@ void SmXMLImport::endDocument(void)
 {
     //Set the resulted tree into the SmDocShell where it belongs
     SmNode *pTree;
-    if (pTree = GetTree())
+    if (NULL != (pTree = GetTree()))
     {
         uno::Reference <frame::XModel> xModel = GetModel();
         uno::Reference <lang::XUnoTunnel> xTunnel;
@@ -894,9 +899,9 @@ void SmXMLImport::endDocument(void)
             SmParser &rParser = pDocShell->GetParser();
             BOOL bVal = rParser.IsImportSymbolNames();
             rParser.SetImportSymbolNames( TRUE );
-            SmNode *pTree = rParser.Parse( aText );
+            SmNode *pTmpTree = rParser.Parse( aText );
             aText = rParser.GetText();
-            delete pTree;
+            delete pTmpTree;
             rParser.SetImportSymbolNames( bVal );
 
             pDocShell->SetText( aText );
@@ -961,8 +966,9 @@ sal_Bool SmXMLWrapper::WriteThroughComponent(
     uno::Reference<lang::XUnoTunnel> xFilterTunnel;
     xFilterTunnel = uno::Reference<lang::XUnoTunnel>
         ( xFilter, uno::UNO_QUERY );
-    SmXMLExport *pFilter = (SmXMLExport *)xFilterTunnel->getSomething(
-        SmXMLExport::getUnoTunnelId() );
+    SmXMLExport *pFilter = reinterpret_cast< SmXMLExport * >(
+                sal::static_int_cast< sal_uIntPtr >(
+                xFilterTunnel->getSomething( SmXMLExport::getUnoTunnelId() )));
     return pFilter ? pFilter->GetSuccess() : sal_True;
 }
 
@@ -1012,10 +1018,10 @@ sal_Bool SmXMLWrapper::WriteThroughComponent(
     else
     {
 //REMOVE            OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("Encrypted") );
-        OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
+        OUString aTmpPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
         sal_Bool bTrue = sal_True;
         aAny.setValue( &bTrue, ::getBooleanCppuType() );
-        xSet->setPropertyValue( aPropName, aAny );
+        xSet->setPropertyValue( aTmpPropName, aAny );
     }
 
     // set Base URL
@@ -1257,7 +1263,7 @@ public:
     {
         return (SmXMLImport&)GetImport();
     }
-    virtual void TCharacters(const OUString &rChars) {}
+    virtual void TCharacters(const OUString & /*rChars*/) {}
     virtual void Characters(const OUString &rChars)
     {
         /*
@@ -1271,9 +1277,9 @@ public:
         if (rChars2.getLength())
             TCharacters(rChars2/*.collapse()*/);
     }
-    virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > &xAttrList) {return 0;}
+    virtual SvXMLImportContext *CreateChildContext(sal_uInt16 /*nPrefix*/,
+        const OUString& /*rLocalName*/,
+        const uno::Reference< xml::sax::XAttributeList > & /*xAttrList*/) {return 0;}
 };
 
 class SmXMLDocContext_Impl : public SmXMLImportContext
@@ -1337,10 +1343,10 @@ public:
 
 struct SmXMLContext_Helper
 {
-    SmXMLContext_Helper(SmXMLImportContext &rImport) : rContext(rImport),
-    nIsBold(-1), nIsItalic(-1),nFontSize(0.0) {}
-    void RetrieveAttrs(const uno::Reference< xml::sax::XAttributeList > &
-        xAttrList );
+    SmXMLContext_Helper(SmXMLImportContext &rImport) :
+        nIsBold(-1), nIsItalic(-1),nFontSize(0.0), rContext(rImport)  {}
+
+    void RetrieveAttrs(const uno::Reference< xml::sax::XAttributeList > &xAttrList );
     void ApplyAttrs();
 
     sal_Int8 nIsBold;
@@ -2131,7 +2137,7 @@ public:
 };
 
 void SmXMLSpaceContext_Impl::StartElement(
-    const uno::Reference<xml::sax::XAttributeList > &xAttrList )
+    const uno::Reference<xml::sax::XAttributeList > & /*xAttrList*/ )
 {
     SmToken aToken;
     aToken.cMathChar = '\0';
@@ -2666,7 +2672,7 @@ SvXMLImportContext *SmXMLDocContext_Impl::CreateChildContext(
 
     const SvXMLTokenMap& rTokenMap = GetSmImport().GetPresLayoutElemTokenMap();
 
-    UINT32 nTest = rTokenMap.Get(nPrefix, rLocalName);
+    //UINT32 nTest = rTokenMap.Get(nPrefix, rLocalName);
 
     switch(rTokenMap.Get(nPrefix, rLocalName))
     {
@@ -3273,7 +3279,7 @@ void SmXMLActionContext_Impl::EndElement()
 
 SvXMLImportContext *SmXMLImport::CreateContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
     if( XML_NAMESPACE_OFFICE == nPrefix )
         return new SmXMLOfficeContext_Impl( *this,nPrefix,rLocalName);
@@ -3283,56 +3289,56 @@ SvXMLImportContext *SmXMLImport::CreateContext(sal_uInt16 nPrefix,
 
 SvXMLImportContext *SmXMLImport::CreateRowContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLRowContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateTextContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLTextContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateAnnotationContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLAnnotationContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateStringContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLStringContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateNumberContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLNumberContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateIdentifierContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLIdentifierContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateOperatorContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
     return new SmXMLOperatorContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateSpaceContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
     return new SmXMLSpaceContext_Impl(*this,nPrefix,rLocalName);
 }
@@ -3340,152 +3346,152 @@ SvXMLImportContext *SmXMLImport::CreateSpaceContext(sal_uInt16 nPrefix,
 
 SvXMLImportContext *SmXMLImport::CreateFracContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLFracContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateSqrtContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLSqrtContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateRootContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLRootContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateStyleContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLStyleContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreatePaddedContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLPaddedContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreatePhantomContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLPhantomContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateFencedContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLFencedContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateErrorContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLErrorContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateSubContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLSubContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateSubSupContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLSubSupContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateSupContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLSupContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateUnderContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLUnderContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateOverContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLOverContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateUnderOverContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLUnderOverContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateMultiScriptsContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLMultiScriptsContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateTableContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLTableContext_Impl(*this,nPrefix,rLocalName);
 }
 SvXMLImportContext *SmXMLImport::CreateTableRowContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLTableRowContext_Impl(*this,nPrefix,rLocalName);
 }
 SvXMLImportContext *SmXMLImport::CreateTableCellContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLTableCellContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateNoneContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLNoneContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreatePrescriptsContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLPrescriptsContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateAlignGroupContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLAlignGroupContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateActionContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
         return new SmXMLActionContext_Impl(*this,nPrefix,rLocalName);
 }
@@ -3528,7 +3534,7 @@ void SmXMLImport::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
     const PropertyValue *pValue = aViewProps.getConstArray();
 
     long nTmp;
-    sal_Bool bShowDeletes = sal_False, bShowInserts = sal_False, bShowFooter = sal_False, bShowHeader = sal_False;
+    //sal_Bool bShowDeletes = sal_False, bShowInserts = sal_False, bShowFooter = sal_False, bShowHeader = sal_False;
 
     for (sal_Int32 i = 0; i < nCount ; i++)
     {
@@ -3628,9 +3634,9 @@ void SmXMLExport::_ExportContent()
             SmParser &rParser = pDocShell->GetParser();
             BOOL bVal = rParser.IsExportSymbolNames();
             rParser.SetExportSymbolNames( TRUE );
-            SmNode *pTree = rParser.Parse( aText );
+            SmNode *pTmpTree = rParser.Parse( aText );
             aText = rParser.GetText();
-            delete pTree;
+            delete pTmpTree;
             rParser.SetExportSymbolNames( bVal );
         }
 
@@ -3805,7 +3811,7 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
     delete pTable;
 }
 
-void SmXMLExport::ExportMath(const SmNode *pNode, int nLevel)
+void SmXMLExport::ExportMath(const SmNode *pNode, int /*nLevel*/)
 {
     const SmMathSymbolNode *pTemp = static_cast<const SmMathSymbolNode *>
         (pNode);
@@ -3821,9 +3827,9 @@ void SmXMLExport::ExportMath(const SmNode *pNode, int nLevel)
     GetDocHandler()->characters(nArse);
 }
 
-void SmXMLExport::ExportText(const SmNode *pNode, int nLevel)
+void SmXMLExport::ExportText(const SmNode *pNode, int /*nLevel*/)
 {
-    SvXMLElementExport *aText;
+    SvXMLElementExport *pText;
     const SmTextNode *pTemp = static_cast<const SmTextNode *>(pNode);
     switch (pNode->GetToken().eType)
     {
@@ -3839,43 +3845,48 @@ void SmXMLExport::ExportText(const SmNode *pNode, int nLevel)
             else if ((pTemp->GetText().Len() == 1) && !bIsItalic)
                 AddAttribute(XML_NAMESPACE_MATH,XML_FONTSTYLE,
                 XML_NORMAL);
-            aText = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,XML_MI,
+            pText = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,XML_MI,
             sal_True,sal_False);
             break;
         }
         case TNUMBER:
-            aText = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,XML_MN,
+            pText = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,XML_MN,
             sal_True,sal_False);
             break;
         case TTEXT:
-            aText = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,XML_MTEXT,
+            pText = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,XML_MTEXT,
             sal_True,sal_False);
             break;
         }
     GetDocHandler()->characters(OUString(pTemp->GetText().GetBuffer()));
-    delete aText;
+    delete pText;
 }
 
-void SmXMLExport::ExportBlank(const SmNode *pNode, int nLevel)
+void SmXMLExport::ExportBlank(const SmNode * /*pNode*/, int /*nLevel*/)
 {
     //!! exports an empty <mi> tag since for example "~_~" is allowed in
     //!! Math (so it has no sense at all) but must not result in an empty
     //!! <msub> tag in MathML !!
 
-    SvXMLElementExport *aText;
+    SvXMLElementExport *pText;
     //const SmBlankNode *pTemp = static_cast<const SmBlankNode *>(pNode);
 
-    aText = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,XML_MI,
+    pText = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,XML_MI,
                     sal_True,sal_False);
 
     GetDocHandler()->characters( OUString() );
-    delete aText;
+    delete pText;
 }
 
 void SmXMLExport::ExportSubSupScript(const SmNode *pNode,int nLevel)
 {
-    const SmNode *pSub,*pSup,*pCSub,*pCSup,*pLSub,*pLSup;
-    SvXMLElementExport *pThing=0,*pThing2=0;
+    const SmNode *pSub  = 0;
+    const SmNode *pSup  = 0;
+    const SmNode *pCSub = 0;
+    const SmNode *pCSup = 0;
+    const SmNode *pLSub = 0;
+    const SmNode *pLSup = 0;
+    SvXMLElementExport *pThing = 0, *pThing2 = 0;
 
     //if we have prescripts at all then we must use the tensor notation
 
@@ -3890,18 +3901,18 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode,int nLevel)
             XML_MMULTISCRIPTS, sal_True, sal_True);
 
 
-        if ((pCSub = pNode->GetSubNode(CSUB+1))
-            && (pCSup=pNode->GetSubNode(CSUP+1)))
+        if (NULL != (pCSub = pNode->GetSubNode(CSUB+1))
+            && NULL != (pCSup = pNode->GetSubNode(CSUP+1)))
         {
             pThing2 = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,
                 XML_MUNDEROVER, sal_True,sal_True);
         }
-        else if (pCSub = pNode->GetSubNode(CSUB+1))
+        else if (NULL != (pCSub = pNode->GetSubNode(CSUB+1)))
         {
             pThing2 = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,
                 XML_MUNDER, sal_True,sal_True);
         }
-        else if (pCSup = pNode->GetSubNode(CSUP+1))
+        else if (NULL != (pCSup = pNode->GetSubNode(CSUP+1)))
         {
             pThing2 = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,
                 XML_MOVER, sal_True,sal_True);
@@ -3960,35 +3971,35 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode,int nLevel)
     }
     else
     {
-        if ((pSub = pNode->GetSubNode(RSUB+1)) &&
-            (pSup = pNode->GetSubNode(RSUP+1)))
+        if (NULL != (pSub = pNode->GetSubNode(RSUB+1)) &&
+            NULL != (pSup = pNode->GetSubNode(RSUP+1)))
         {
             pThing = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,
                 XML_MSUBSUP, sal_True,sal_True);
         }
-        else if (pSub = pNode->GetSubNode(RSUB+1))
+        else if (NULL != (pSub = pNode->GetSubNode(RSUB+1)))
         {
             pThing = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,XML_MSUB,
                 sal_True,sal_True);
         }
-        else if (pSup = pNode->GetSubNode(RSUP+1))
+        else if (NULL != (pSup = pNode->GetSubNode(RSUP+1)))
         {
             pThing = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,XML_MSUP,
                 sal_True,sal_True);
         }
 
-        if ((pCSub = pNode->GetSubNode(CSUB+1))
-            && (pCSup=pNode->GetSubNode(CSUP+1)))
+        if (NULL != (pCSub = pNode->GetSubNode(CSUB+1))
+            && NULL != (pCSup=pNode->GetSubNode(CSUP+1)))
         {
             pThing2 = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,
                 XML_MUNDEROVER, sal_True,sal_True);
         }
-        else if (pCSub = pNode->GetSubNode(CSUB+1))
+        else if (NULL != (pCSub = pNode->GetSubNode(CSUB+1)))
         {
             pThing2 = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,
                 XML_MUNDER, sal_True,sal_True);
         }
-        else if (pCSup = pNode->GetSubNode(CSUP+1))
+        else if (NULL != (pCSup = pNode->GetSubNode(CSUP+1)))
         {
             pThing2 = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,
                 XML_MOVER, sal_True,sal_True);
@@ -4046,7 +4057,7 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
         pRow = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,XML_MROW,
             sal_True, sal_True);
 
-    if (pTemp = pNode->GetSubNode(1))
+    if (NULL != (pTemp = pNode->GetSubNode(1)))
         ExportNodes(pTemp,nLevel+1);
     if (pFences)
         delete pFences;
@@ -4273,6 +4284,8 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
             AddAttribute(XML_NAMESPACE_MATH,XML_FONTFAMILY,
                 OUString(pNode->GetToken().aText.GetBuffer()));
             break;
+        default:
+            break;
 
     }
 #if 0
@@ -4434,6 +4447,9 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
         case NBLANK:
             ExportBlank(pNode,nLevel);
             break;
+       default:
+            break;
+
 #if 0
         default:
             {
