@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-03 11:32:19 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:03:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1669,8 +1669,15 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
             pStr->SeekRel( nLen );              // ueberlies nicht-Grpprl
     }
     // lies Piece Table PLCF ein
-    INT32 nPLCFfLen;
-    *pStr >> nPLCFfLen;
+    sal_Int32 nPLCFfLen;
+    if (pWwF->GetFIBVersion() <= ww::eWW2)
+    {
+        sal_Int16 nWordTwoLen;
+        *pStr >> nWordTwoLen;
+        nPLCFfLen = nWordTwoLen;
+    }
+    else
+        *pStr >> nPLCFfLen;
     ASSERT( 65536 > nPLCFfLen, "PLCFfpcd ueber 64 k" );
     return new WW8PLCFpcd( pStr, pStr->Tell(), nPLCFfLen, 8 );
 }
