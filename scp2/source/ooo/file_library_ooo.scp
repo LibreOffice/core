@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.234 $
+ *  $Revision: 1.235 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:27:48 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 10:59:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1081,11 +1081,7 @@ File gid_File_Lib_Icudata
   #ifdef UNX
     Name = STRING(CONCAT7(libicudata,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO));
   #else
-   #ifdef _gcc3
-    Name = STRING(CONCAT6(libicudata,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO,.dll));
-   #else
     Name = STRING(CONCAT5(icudt,ICU_MAJOR,ICU_MINOR,l,.dll));
-   #endif
   #endif
     Dir = gid_Dir_Program;
     Styles = (PACKED,PATCH);
@@ -1096,11 +1092,7 @@ File gid_File_Lib_Icui18n
   #ifdef UNX
     Name = STRING(CONCAT7(libicui18n,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO));
   #else
-   #ifdef _gcc3
-    Name = STRING(CONCAT6(libicui18n,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO,.dll));
-   #else
     Name = STRING(CONCAT4(icuin,ICU_MAJOR,ICU_MINOR,.dll));
-   #endif
   #endif
     Dir = gid_Dir_Program;
     Styles = (PACKED,PATCH);
@@ -1111,11 +1103,7 @@ File gid_File_Lib_Icule
   #ifdef UNX
     Name = STRING(CONCAT7(libicule,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO));
   #else
-   #ifdef _gcc3
-    Name = STRING(CONCAT6(libicule,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO,.dll));
-   #else
     Name = STRING(CONCAT4(icule,ICU_MAJOR,ICU_MINOR,.dll));
-   #endif
   #endif
     Dir = gid_Dir_Program;
     Styles = (PACKED,PATCH);
@@ -1126,11 +1114,7 @@ File gid_File_Lib_Icuuc
   #ifdef UNX
     Name = STRING(CONCAT7(libicuuc,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO));
   #else
-   #ifdef _gcc3
-    Name = STRING(CONCAT6(libicuuc,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO,.dll));
-   #else
     Name = STRING(CONCAT4(icuuc,ICU_MAJOR,ICU_MINOR,.dll));
-   #endif
   #endif
     Dir = gid_Dir_Program;
     Styles = (PACKED,PATCH);
@@ -1539,7 +1523,7 @@ End
 
 #endif
 
-#ifdef WNT
+#if defined(WNT)
 
 #if defined(M1310) || (defined(M1400) && (!defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA)))
 
@@ -1615,7 +1599,7 @@ End
 #endif
 #endif
 
-#if defined(WNT) && !defined(_gcc3)
+#if defined(WNT)
 
 File gid_File_Lib_Ole
     TXT_FILE_BODY;
@@ -1682,12 +1666,6 @@ File gid_File_Lib_Psp
     Styles = (PACKED,PATCH);
     Dir = gid_Dir_Program;
 End
-#endif
-
-#if defined(WNT) && defined(_gcc3)
-
-STD_SETUPZIP_LIB_FILE( GID_FILE_LIB_PSP, psp )
-
 #endif
 
 #ifdef UNX
