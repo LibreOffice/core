@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 13:18:20 $
+#   last change: $Author: vg $ $Date: 2007-05-25 14:37:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -256,6 +256,13 @@ ULFFILES=                          \
         module_java.ulf            \
         registryitem_ooo.ulf       \
         module_systemint.ulf
+
+.IF "$(GUI)"=="UNX"
+.IF "$(ENABLE_HEADLESS)" == "TRUE"
+    PARFILES+=module_headless.par
+    ULFFILES+=module_headless.ulf
+.ENDIF
+.ENDIF
 
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk
