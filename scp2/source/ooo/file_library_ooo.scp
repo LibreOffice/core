@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.236 $
+ *  $Revision: 1.237 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 14:37:14 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 15:23:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1699,12 +1699,14 @@ End
 #endif
 
 #ifdef UNX
+#ifdef ENABLE_HEADLESS
 File gid_File_Lib_Vclplug_Hidden
     Name = LIBNAME(vclplug_svp);
     TXT_FILE_BODY;
     Styles = (PACKED,PATCH);
     Dir = gid_Dir_Program;
 End
+#endif
 #endif
 
 File gid_File_Lib_Rdbtdp
