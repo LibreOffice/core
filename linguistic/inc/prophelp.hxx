@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prophelp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:45:45 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:20:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,11 +56,11 @@
 
 namespace com { namespace sun { namespace star { namespace beans {
     class   XPropertySet;
-}}}};
+}}}}
 
 namespace com { namespace sun { namespace star { namespace linguistic2 {
     struct  LinguServiceEvent;
-}}}};
+}}}}
 
 
 namespace linguistic
@@ -77,12 +77,14 @@ namespace linguistic
 #define AE_HYPHENATOR   2
 //#define   AE_THESAURUS    4
 
+typedef cppu::WeakImplHelper2
+<
+    ::com::sun::star::beans::XPropertyChangeListener,
+    ::com::sun::star::linguistic2::XLinguServiceEventBroadcaster
+> PropertyChgHelperBase;
+
 class PropertyChgHelper :
-    public cppu::WeakImplHelper2
-    <
-        ::com::sun::star::beans::XPropertyChangeListener,
-        ::com::sun::star::linguistic2::XLinguServiceEventBroadcaster
-    >
+    public PropertyChgHelperBase
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  aPropNames;
     ::com::sun::star::uno::Reference<
