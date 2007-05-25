@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convdic.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:52:05 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:20:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,7 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
     Reference< io::XInputStream > xIn = new utl::OInputStreamWrapper( *pStream );
     DBG_ASSERT( xIn.is(), "input stream missing" );
 
-    ULONG nError = -1;
+    ULONG nError = sal::static_int_cast< ULONG >(-1);
 
     // prepare ParserInputSource
     xml::sax::InputSource aParserInput;
@@ -510,7 +510,7 @@ uno::Sequence< OUString > SAL_CALL ConvDic::getConversions(
         sal_Int32 nStartPos,
         sal_Int32 nLength,
         ConversionDirection eDirection,
-        sal_Int32 nTextConversionOptions )
+        sal_Int32 /*nTextConversionOptions*/ )
     throw (IllegalArgumentException, RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
