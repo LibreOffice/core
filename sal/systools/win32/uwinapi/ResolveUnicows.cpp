@@ -1,5 +1,6 @@
-#include "macros.h"
 #ifdef __MINGW32__
+#include "macros.h"
+#include <multimon.h>
 extern "C" {
 extern HMODULE hModuleUnicowsDLL;
 }
