@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:21:16 $
+#   last change: $Author: vg $ $Date: 2007-05-25 11:01:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,13 +37,16 @@ PRJ=..$/..$/..
 PRJNAME=fpicker
 TARGET=utils
 LIBTARGET=NO
-ENABLE_EXCEPTIONS=YES
 
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
 
+.IF "$(COM)"=="GCC"
+CFLAGSAPPEND+=-fexceptions -fno-enforce-eh-specs -DUNICODE -D_UNICODE
+.ELSE
 CFLAGS+=-GX -DUNICODE -D_UNICODE
+.ENDIF
 
 # --- Files -------------------------------------
 
