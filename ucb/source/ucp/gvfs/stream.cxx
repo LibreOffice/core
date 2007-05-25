@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:54:55 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:09:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,7 +165,7 @@ sal_Int32 SAL_CALL Stream::readSomeBytes(
 {
     // Again - having 2 methods here just sucks; cf. filinpstr.cxx
     // This can never be an effective non-blocking API - so why bother ?
-    return readSomeBytes( aData, nMaxBytesToRead );
+    return readBytes( aData, nMaxBytesToRead );
 }
 
 void SAL_CALL Stream::skipBytes( sal_Int32 nBytesToSkip )
