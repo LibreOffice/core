@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.90 $
+#   $Revision: 1.91 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 11:03:31 $
+#   last change: $Author: vg $ $Date: 2007-05-25 14:36:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -387,6 +387,44 @@ SHL5STDLIBS+=-l$(SHL2TARGET)
 SHL5STDLIBS+=$(SHL3STDLIBS)
 .ENDIF # "$(ENABLE_KDE)" != ""
 
+# headless plugin
+.IF "$(ENABLE_HEADLESS)" != ""
+LIB6TARGET=$(SLB)$/iheadless_plug_
+LIB6FILES= \
+            $(SLB)$/headless.lib
+SHL6TARGET=vclplug_svp$(UPD)$(DLLPOSTFIX)
+SHL6IMPLIB=iheadless_plug_
+SHL6LIBS=$(LIB6TARGET)
+SHL6DEPN=$(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2IMPLIBN) $(SHL2TARGETN)
+
+# libs for dummy plugin
+SHL6STDLIBS=\
+        $(VCLLIB)\
+        -lpsp$(VERSION)$(DLLPOSTFIX)\
+            $(SOTLIB)           \
+            $(UNOTOOLSLIB)      \
+            $(TOOLSLIB)         \
+            $(COMPHELPERLIB)	\
+            $(UCBHELPERLIB)     \
+            $(CPPUHELPERLIB)    \
+            $(CPPULIB)          \
+            $(VOSLIB)           \
+            $(SALLIB)
+
+SHL6STDLIBS+=-l$(SHL2TARGET)
+.IF "$(PKGCONFIG)" == ""
+PKGCONFIG_MODULES=glib-2.0
+.INCLUDE: pkg_config.mk
+.ENDIF
+PKG6CONFIG_LIBS:=$(shell $(PKGCONFIG) $(PKGCONFIG_PREFIX) --libs glib-2.0)
+SHL6STDLIBS+=$(PKG6CONFIG_LIBS)
+
+.IF "$(PKGCONFIG_ROOT)"!=""
+SHL6SONAME+=-z nodefs
+SHL6NOCHECK=TRUE
+.ENDIF          # "$(PKGCONFIG_ROOT)"!=""
+
+.ENDIF
 .ENDIF # UNX
 
 # --- Allgemein ----------------------------------------------------------
