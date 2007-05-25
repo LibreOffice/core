@@ -4,9 +4,9 @@
  *
  *  $RCSfile: types.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:56:15 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:15:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,29 +64,29 @@ static MathConversionEntry aMathConvTbl[] =
 {
 //    MS_UNDERBRACE,  0xF613,       // only Math-ML code-point available !
 //    MS_OVERBRACE,   0xF612,       // only Math-ML code-point available !
-    MS_PLUS,        0x002B,     0,
-    MS_LT,          0x003C,     0,
-    MS_GT,          0x003E,     0,
-    MS_LESLANT,     0x2264,     0,
-    MS_GESLANT,     0x2265,     0,
-    MS_DOTSLOW,     0x2026,     0,
-    MS_RIGHTARROW,  0x2192,     0,
-    MS_SQRT,        0x221A,     0,
-    MS_HAT,         0x02C6,     0,
-    MS_CHECK,       0x02C7,     0,
-    MS_BREVE,       0x02D8,     0,
-    MS_ACUTE,       0x00B4,     0,
-    MS_GRAVE,       0x0060,     0,
-    MS_TILDE,       0x02DC,     0,
-    MS_BAR,         0x02C9,     0,
-    MS_VEC,         0x2192,     0,
-    MS_DDDOT,       0x22EF,     0,
-    MS_LPARENT,     0x0028,     0,
-    MS_RPARENT,     0x0029,     0,
-    MS_PLACE,       0x25A1,     0,
-    MS_LEFTARROW,   0x2190,     0,
-    MS_UPARROW,     0x2191,     0,
-    MS_DOWNARROW,   0x2193,     0,
+    { MS_PLUS,        0x002B,     0 },
+    { MS_LT,          0x003C,     0 },
+    { MS_GT,          0x003E,     0 },
+    { MS_LESLANT,     0x2264,     0 },
+    { MS_GESLANT,     0x2265,     0 },
+    { MS_DOTSLOW,     0x2026,     0 },
+    { MS_RIGHTARROW,  0x2192,     0 },
+    { MS_SQRT,        0x221A,     0 },
+    { MS_HAT,         0x02C6,     0 },
+    { MS_CHECK,       0x02C7,     0 },
+    { MS_BREVE,       0x02D8,     0 },
+    { MS_ACUTE,       0x00B4,     0 },
+    { MS_GRAVE,       0x0060,     0 },
+    { MS_TILDE,       0x02DC,     0 },
+    { MS_BAR,         0x02C9,     0 },
+    { MS_VEC,         0x2192,     0 },
+    { MS_DDDOT,       0x22EF,     0 },
+    { MS_LPARENT,     0x0028,     0 },
+    { MS_RPARENT,     0x0029,     0 },
+    { MS_PLACE,       0x25A1,     0 },
+    { MS_LEFTARROW,   0x2190,     0 },
+    { MS_UPARROW,     0x2191,     0 },
+    { MS_DOWNARROW,   0x2193,     0 },
 
     // predefined-user-defined symbols
     // (code-points on the left as defined in 'officecfg' for SO8,
@@ -94,60 +94,60 @@ static MathConversionEntry aMathConvTbl[] =
 
 //    0x0041,         0x0391,     0,     // %ALPHA
 //    0x0042,         0x0392,     0,     // %BETA
-    0xE0AC,         0x0393,     0,      // %GAMMA
-    0xE0AD,         0x0394,     0,      // %DELTA
+    { 0xE0AC,         0x0393,     0 },      // %GAMMA
+    { 0xE0AD,         0x0394,     0 },      // %DELTA
 //    0x0045,         0x0395,     0,     // %EPSILON
 //    0x005A,         0x0396,     0,     // %ZETA
 //    0x0048,         0x0397,     0,     // %ETA
-    0xE0AE,         0x0398,     0,      // %THETA
+    { 0xE0AE,         0x0398,     0 },      // %THETA
 //    0x0049,         0x0399,     0,     // %IOTA
 //    0x004B,         0x039A,     0,     // %KAPPA
-    0xE0AF,         0x039B,     0,      // %LAMBDA
+    { 0xE0AF,         0x039B,     0 },      // %LAMBDA
 //    0x004D,         0x039C,     0,     // %MU
 //    0x004E,         0x039D,     0,     // %NU
-    0xE0B0,         0x039E,     0,      // %XI
+    { 0xE0B0,         0x039E,     0 },      // %XI
 //    0x004F,         0x039F,     0,     // %OMICRON
-    0xE0B1,         0x03A0,     0,      // %PI
+    { 0xE0B1,         0x03A0,     0 },      // %PI
 //    0x0050,         0x03A1,     0,     // %RHO
-    0xE0B2,         0x03A3,     0,      // %SIGMA
+    { 0xE0B2,         0x03A3,     0 },      // %SIGMA
 //    0x0054,         0x03A4,     0,     // %TAU
-    0xE0B3,         0x03A5,     0,      // %UPSILON
-    0xE0B4,         0x03A6,     0,      // %PHI
+    { 0xE0B3,         0x03A5,     0 },      // %UPSILON
+    { 0xE0B4,         0x03A6,     0 },      // %PHI
 //    0x0058,         0x03A7,     0,     // %CHI
-    0xE0B5,         0x03A8,     0,      // %PSI
-    0xE0B6,         0x03A9,     0,      // %OMEGA
+    { 0xE0B5,         0x03A8,     0 },      // %PSI
+    { 0xE0B6,         0x03A9,     0 },      // %OMEGA
 
-    0xE0B7,         0x03B1,     0,      // %alpha
-    0xE0B8,         0x03B2,     0,      // %beta
-    0xE0B9,         0x03B3,     0,      // %gamma
-    0xE0BA,         0x03B4,     0,      // %delta
-    0xE0BB,         0x03B5,     0,      // %epsilon
-    0xE0BC,         0x03B6,     0,      // %zeta
-    0xE0BD,         0x03B7,     0,      // %eta
-    0xE0BE,         0x03B8,     0,      // %theta
-    0xE0BF,         0x03B9,     0,      // %iota
-    0xE0C0,         0x03BA,     0,      // %kappa
-    0xE0C1,         0x03BB,     0,      // %lambda
-    0xE0C2,         0x03BC,     0,      // %mu
-    0xE0C3,         0x03BD,     0,      // %nu
-    0xE0C4,         0x03BE,     0,      // %xi
-    0xE0C5,         0x03BF,     0,      // %omicron
-    0xE0C6,         0x03C0,     0,      // %pi
-    0xE0C7,         0x03C1,     0,      // %rho
-    0xE0C8,         0x03C3,     0,      // %sigma
-    0xE0C9,         0x03C4,     0,      // %tau
-    0xE0CA,         0x03C5,     0,      // %upsilon
-    0xE0CB,         0x03C6,     0,      // %phi
-    0xE0CC,         0x03C7,     0,      // %chi
-    0xE0CD,         0x03C8,     0,      // %psi
-    0xE0CE,         0x03C9,     0,      // %omega
+    { 0xE0B7,         0x03B1,     0 },      // %alpha
+    { 0xE0B8,         0x03B2,     0 },      // %beta
+    { 0xE0B9,         0x03B3,     0 },      // %gamma
+    { 0xE0BA,         0x03B4,     0 },      // %delta
+    { 0xE0BB,         0x03B5,     0 },      // %epsilon
+    { 0xE0BC,         0x03B6,     0 },      // %zeta
+    { 0xE0BD,         0x03B7,     0 },      // %eta
+    { 0xE0BE,         0x03B8,     0 },      // %theta
+    { 0xE0BF,         0x03B9,     0 },      // %iota
+    { 0xE0C0,         0x03BA,     0 },      // %kappa
+    { 0xE0C1,         0x03BB,     0 },      // %lambda
+    { 0xE0C2,         0x03BC,     0 },      // %mu
+    { 0xE0C3,         0x03BD,     0 },      // %nu
+    { 0xE0C4,         0x03BE,     0 },      // %xi
+    { 0xE0C5,         0x03BF,     0 },      // %omicron
+    { 0xE0C6,         0x03C0,     0 },      // %pi
+    { 0xE0C7,         0x03C1,     0 },      // %rho
+    { 0xE0C8,         0x03C3,     0 },      // %sigma
+    { 0xE0C9,         0x03C4,     0 },      // %tau
+    { 0xE0CA,         0x03C5,     0 },      // %upsilon
+    { 0xE0CB,         0x03C6,     0 },      // %phi
+    { 0xE0CC,         0x03C7,     0 },      // %chi
+    { 0xE0CD,         0x03C8,     0 },      // %psi
+    { 0xE0CE,         0x03C9,     0 },      // %omega
 
-    0xE0CF,         0x025B,     0/*x03B5*/, // %varepsilon
-    0xE0D0,         0x03D1,     0,      // %vartheta
-    0xE0D4,         0x03D5,     0,      // %varphi
-    0xE0D1,         0x03D6,     0,      // %varpi
+    { 0xE0CF,         0x025B,     0,/*x03B5*/}, // %varepsilon
+    { 0xE0D0,         0x03D1,     0 },      // %vartheta
+    { 0xE0D4,         0x03D5,     0 },      // %varphi
+    { 0xE0D1,         0x03D6,     0 },      // %varpi
 //    0x03F1,         0x03F1,     0/*x03C1*/, // %varrho
-    0xE0D3,         0x03C2,     0,      // %varsigma
+    { 0xE0D3,         0x03C2,     0 },      // %varsigma
 
 //    0x2227,         0x2227,     0,     // %and
 //    0x2228,         0x2228,     0,     // %or
@@ -158,9 +158,9 @@ static MathConversionEntry aMathConvTbl[] =
 //    0x2261,         0x2261,     0,     // %identical
 //    0x221E,         0x221E,     0,     // %infinite
 //    0x2260,         0x2260,     0,     // %notequal
-    0xE080,         0x2030,     0,      // %perthousand
+    { 0xE080,         0x2030,     0 },      // %perthousand
 //    0x2222,         0x2222,     0,      // %angle
-    0xE08C,         0x2192,     0       // %tendto
+    { 0xE08C,         0x2192,     0 }       // %tendto
 };
 
 
