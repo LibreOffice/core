@@ -4,9 +4,9 @@
  *
  *  $RCSfile: smmod.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:14:22 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:33:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,8 +90,8 @@ class SmNamesArray : public Resource
 public:
     SmNamesArray( LanguageType nLang, int nRID ) :
         Resource( SmResId(RID_LOCALIZED_NAMES) ),
-        nLanguage   (nLang),
-        aNamesAry   (SmResId(nRID))
+        aNamesAry   (ResId(nRID)),
+        nLanguage   (nLang)
     {
         FreeResource();
     }
@@ -149,7 +149,7 @@ class SmModule : public SfxModule, public SfxListener
 
 public:
     TYPEINFO();
-    SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START + 0);
+    SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START + 0)
 
     SmModule(SfxObjectFactory* pObjFact);
     virtual ~SmModule();
