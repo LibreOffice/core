@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:01:20 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 14:43:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -408,7 +408,8 @@ void __EXPORT ScGridWindow::Paint( const Rectangle& rRect )
 
     Draw( nX1,nY1,nX2,nY2, SC_UPDATE_MARKS );           // nicht weiterzeichnen
 
-    OutlinerViewPaint( rRect );
+    // no own paint for outliner view - it's handled by the drawing layer now
+//  OutlinerViewPaint( rRect );
 
 //  if (!aInvertRect.IsEmpty())
 //      Invert( PixelToLogic(aInvertRect) );    // auf das Clipping verlassen...
