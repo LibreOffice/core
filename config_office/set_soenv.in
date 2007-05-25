@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.144 $
-# Date:        $Date: 2007-05-10 16:40:35 $
+# Version:     $Revision: 1.145 $
+# Date:        $Date: 2007-05-25 11:10:05 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -41,7 +41,7 @@ use File::Basename;
 my ( $outfile, $outfile_sh, $outfile_bat, $outfile_jam, $bootfile, $newline, $comment, $comment4nt, $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps, $cur_dir, 
      $par_dir, $I, $L, $D, $buildenv, $answer, $tmp, $MINGW, $USE_MINGW, $platform,
      $cygwinver, $empty, $no_ant, $no_stl, $no_gcc_include, 
-     $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $unsetvarssh, $unsetvarsbat, $unsetvarsjam, $exportvars, $win_format_var, $perl_os, @lib_include_paths, $lib_include_path);
+     $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $unsetvarssh, $unsetvarsbat, $unsetvarsjam, $exportvars, $win_format_var, $perl_os, @mingw_lib_include_paths, $mingw_lib_include_path);
 #
 #-------------------------------------------------
 # IIb. Declaring environment values (constants).
@@ -582,7 +582,7 @@ elsif ( $platform =~ m/cygwin/ )
       $INPATH         = $OUTPATH.$PROEXT;
       $GVERDIR        = $INPATH;
       $PATH_SEPERATOR = ':';
-      $ATL_INCLUDE = '$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$ds."inc".$ds."external".$ds."mingw".$ds."include".$ds."atl". " ".'$PSDK_HOME'.$ds."include".$ds."atl";
+      $ATL_INCLUDE = '$SOLARVER'.$ds.'$INPATH'.$ds."inc".$ds."external".$ds."mingw".$ds."include".$ds."atl". " ".'$PSDK_HOME'.$ds."include".$ds."atl";
   }
   else # The MSVC section starts here
   {   $outfile        = "winenv.set";
@@ -1052,10 +1052,8 @@ if ($platform =~ m/cygwin/)
       }
    }
    elsif ( $COM eq "GCC" )
-   {  $ILIB       .=    $ps.$SOLARVER.$ds.$UPD.$ds.$INPATH.$LIB.
-                        $ps.$SOLARVER.$ds.$INPATH.$LIB.
-                        $ps.$SOLARVER.$ds.$UPD.$ds.$INPATH.$BIN.
-                        $ps.$SOLARENV.$ds.$OUTPATH.$LIB.
+   {  $ILIB       .=    $ps.$SOLARVER.$ds.$INPATH.$LIB.
+                        $ps.$SOLARVER.$ds.$INPATH.$BIN.
                         $ps.$JAVA_HOME.$LIB;
       if ( $USE_MINGW eq "cygwin" )
       {  $ILIB    .= $ps.'$COMPATH'.$LIB.$ds."mingw".
@@ -1372,17 +1370,17 @@ elsif ($platform =~ m/cygwin/)
       }
    }
    elsif ( $COM eq "GCC" )
-   {  $SOLARINC       .= $I.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$INC.$ds."external".$ds."mingw".$ds."include";
+   {  $SOLARINC       .= $I.'$SOLARVER'.$ds.'$INPATH'.$INC.$ds."external".$ds."mingw".$ds."include";
      if ( $USE_MINGW eq "cygwin" )
      {  $SOLARINC    .= $I.'$COMPATH'.$ds."include".$ds."mingw".$ds."include".
                         $I.'$COMPATH'.$ds."include".$ds."w32api"; }
         $SOLARINC    .= $I.'$COMPATH'.$ds."include";
-     @lib_include_paths = split( / /, "@LIB_INCLUDE_PATH@" );
-     foreach $lib_include_path (@lib_include_paths)
-       {   chomp $lib_include_path;
-           if ( $lib_include_path ne $COMPATH.$ds."include" && $lib_include_path ne "" )
+     @mingw_lib_include_paths = split( / /, "@MINGW_LIB_INCLUDE_PATH@" );
+     foreach $mingw_lib_include_path (@mingw_lib_include_paths)
+       {   chomp $mingw_lib_include_path;
+           if ( $mingw_lib_include_path ne $COMPATH.$ds."include" && $mingw_lib_include_path ne "" )
            {
-              $SOLARINC   .= $I.$lib_include_path;
+              $SOLARINC   .= $I.$mingw_lib_include_path;
            }
        }
      $SOLARINC .= $I."@GXX_INCLUDE_PATH@".$I."@GXX_INCLUDE_PATH@".$ds."mingw32".
@@ -1897,6 +1895,7 @@ if ( $platform =~ m/cygwin/ )
       $tempstring =~ s/:/;/g;
       ToFile( "ILIB",              $tempstring,              "e" );
       ToFile( "ATL_INCLUDE",       $ATL_INCLUDE,       "e" );
+      ToFile( "DIRECTXSDK_HOME",    "@DIRECTXSDK_HOME@",    "e" );
       ToFile( "USE_MINGW",         $USE_MINGW,              "e" ); }
    else
    {  ToFile( "ILIB",              $ILIB,              "j" ); }
