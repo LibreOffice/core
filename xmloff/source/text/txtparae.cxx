@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-18 07:50:17 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:20:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2558,17 +2558,22 @@ void XMLTextParagraphExport::exportAnyTextFrame(
         {
             sal_Bool bAddCharStyles = pRangePropSet &&
                 lcl_txtpara_isBoundAsChar( xPropSet, xPropSetInfo );
+
             sal_Bool bIsUICharStyle;
+            sal_Bool bHasAutoStyle = sal_False;
+            sal_Bool bDummy;
+
             OUString sStyle;
+
             if( bAddCharStyles )
-                   sStyle = FindTextStyle( *pRangePropSet, bIsUICharStyle );
+                   sStyle = FindTextStyleAndHyperlink( *pRangePropSet, bDummy, bIsUICharStyle, bHasAutoStyle );
             else
                 bIsUICharStyle = sal_False;
 
             XMLTextCharStyleNamesElementExport aCharStylesExport(
                 GetExport(), bIsUICharStyle &&
                              aCharStyleNamesPropInfoCache.hasProperty(
-                                            *pRangePropSet ), sal_False,
+                                            *pRangePropSet ), bHasAutoStyle,
                 *pRangePropSet, sCharStyleNames );
 
             if( sStyle.getLength() )
