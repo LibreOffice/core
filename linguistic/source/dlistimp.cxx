@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlistimp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:53:03 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:22:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ SV_IMPL_OBJARR(ActDicArray, ActDic);
 
 static BOOL IsVers2OrNewer( const String& rFileURL, USHORT& nLng, BOOL& bNeg );
 
-static void AddInternal( Reference< XDictionary > &rDic,
+static void AddInternal( const Reference< XDictionary > &rDic,
                          const OUString& rNew );
 static void AddUserData( const Reference< XDictionary > &rDic );
 
@@ -206,7 +206,7 @@ void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
                 || xDicEntry.is(),
                 "lng : missing dictionary entry" );
 
-    BOOL bActiveDicsModified = FALSE;
+    /*BOOL bActiveDicsModified = FALSE;*/
     //
     // evaluate DictionaryEvents and update data for next DictionaryListEvent
     //
@@ -255,7 +255,7 @@ void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
 
 BOOL DicEvtListenerHelper::AddDicListEvtListener(
             const Reference< XDictionaryListEventListener >& xListener,
-            BOOL bReceiveVerbose )
+            BOOL /*bReceiveVerbose*/ )
 {
     DBG_ASSERT( xListener.is(), "empty reference" );
     INT32   nCount = aDicListEvtListeners.getLength();
@@ -435,7 +435,7 @@ INT32 DicList::getDicPos(const Reference< XDictionary > &xDic)
 
 
 Reference< XInterface > SAL_CALL
-    DicList_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr )
+    DicList_CreateInstance( const Reference< XMultiServiceFactory > & /*rSMgr*/ )
             throw(Exception)
 {
     Reference< XInterface > xService = (cppu::OWeakObject *) new DicList;
@@ -881,7 +881,7 @@ xub_StrLen lcl_GetToken( String &rToken,
         if (i >= rText.Len())   // delimeter not found
             rToken  = rText.Copy( nPos );
         else
-            rToken  = rText.Copy( nPos, (INT32) i - nPos );
+            rToken  = rText.Copy( nPos, sal::static_int_cast< xub_StrLen >((INT32) i - nPos) );
         nRes    = i + 1;    // continue after found delimeter
     }
 
@@ -932,7 +932,9 @@ static void AddUserData( const Reference< XDictionary > &rDic )
 
 ///////////////////////////////////////////////////////////////////////////
 
-#pragma optimize("ge",off)
+#if defined _MSC_VER
+#pragma optimize("g",off)
+#endif
 
 static BOOL IsVers2OrNewer( const String& rFileURL, USHORT& nLng, BOOL& bNeg )
 {
