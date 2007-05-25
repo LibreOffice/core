@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 10:52:41 $
+#   last change: $Author: vg $ $Date: 2007-05-25 12:19:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -212,10 +212,8 @@ CFLAGSWERRCC=-WX
 MODULES_WITH_WARNINGS := \
     chart2 \
     extensions \
-    lingu \
     lingucomponent \
     soldep \
-    starmath \
     sw \
     writerperfect
 
