@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 07:57:53 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:08:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -318,6 +318,7 @@ class SmDistanceDialog : public ModalDialog
     DECL_LINK(DefaultButtonClickHdl, Button *);
     DECL_LINK(CheckBoxClickHdl, CheckBox *);
 
+    using   Window::SetHelpId;
     void    SetHelpId(MetricField &rField, ULONG nHelpId);
     void    SetCategory(USHORT Category);
 
@@ -546,6 +547,8 @@ class SmSymDefineDialog : public ModalDialog
 public:
     SmSymDefineDialog(Window *pParent, OutputDevice *pFntListDevice, SmSymSetManager &rMgr, BOOL bFreeRes = TRUE);
     ~SmSymDefineDialog();
+
+    using OutputDevice::SetFont;
 
     // Dialog
     virtual short   Execute();
