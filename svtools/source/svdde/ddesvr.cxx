@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddesvr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:46:52 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 11:07:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -985,7 +985,7 @@ String DdeService::SysItems()
     DdeTopic* t;
     for ( t = aTopics.First(); t; t = aTopics.Next() )
     {
-        if ( t->GetName() == SZDDESYS_TOPIC )
+        if ( t->GetName() == reinterpret_cast<const sal_Unicode*>(SZDDESYS_TOPIC) )
         {
             short n = 0;
             DdeItem* pi;
