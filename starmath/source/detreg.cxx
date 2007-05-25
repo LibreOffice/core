@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detreg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:51:55 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:12:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,12 +60,12 @@ extern "C" {
 
 void SAL_CALL component_getImplementationEnvironment(
         const  sal_Char**   ppEnvironmentTypeName,
-        uno_Environment**   ppEnvironment           )
+        uno_Environment**  /*ppEnvironment*/           )
 {
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
-sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
+sal_Bool SAL_CALL component_writeInfo(  void*   /*pServiceManager*/,
                                         void*   pRegistryKey    )
 {
     Reference< ::registry::XRegistryKey >
@@ -90,7 +90,7 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
 
 void* SAL_CALL component_getFactory( const sal_Char* pImplementationName,
                                      void* pServiceManager,
-                                     void* pRegistryKey )
+                                     void* /*pRegistryKey*/ )
 {
     // Set default return value for this operation - if it failed.
     void* pReturn = NULL ;
