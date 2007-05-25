@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swnewtable.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-05-23 14:34:20 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:10:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,13 +67,13 @@
 
 // ---------------------------------------------------------------
 
-/*
-SwBoxSelection is a small helperclass (structure),
-it contains an "array" of table boxes, a rectangulare selection of table boxes.
-To be more specific, it contains
-a vector of box selections, every box selection (SwSelBoxes) contains the
-selected boxes in on row.
-The member mnMergeWidth contains the width of the selected boxes
+/** SwBoxSelection is a small helperclass (structure) to handle selections
+    of cells (boxes) between table functions
+
+    It contains an "array" of table boxes, a rectangulare selection of table boxes.
+    To be more specific, it contains a vector of box selections,
+    every box selection (SwSelBoxes) contains the selected boxes inside one row.
+    The member mnMergeWidth contains the width of the selected boxes
 */
 
 class SwBoxSelection
@@ -90,7 +90,7 @@ public:
 
 SwTable::NewMerge(..) does some cleaning up,
 it simply deletes the superfluous cells ("cell span")
-ands notifies the Undo about it.
+and notifies the Undo about it.
 The main work has been done by SwTable::PrepareMerge(..) already.
 
 @param rBoxes
@@ -326,6 +326,10 @@ void lcl_ChangeRowSpan( const SwTable& rTable, const long nDiff,
             bGoOn = false; //robust
     } while( bGoOn );
 }
+
+/** CollectBoxSelection(..) create a rectangulare selection based on the given SwPaM
+    and prepares the selected cells for merging
+*/
 
 SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
 {
@@ -589,6 +593,10 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
     return pRet;
 }
 
+/** lcl_InvalidateCellFrm(..) invalidates all layout representations of a given cell
+    to initiate a reformatting
+*/
+
 void lcl_InvalidateCellFrm( const SwTableBox& rBox )
 {
     SwClientIter aIter( *rBox.GetFrmFmt() );
@@ -605,6 +613,10 @@ void lcl_InvalidateCellFrm( const SwTableBox& rBox )
         }
     }
 }
+
+/** lcl_InsertPosition(..) evaluates the insert positions in every table line,
+    when a selection of cells is given and returns the average cell widths
+*/
 
 long lcl_InsertPosition( SwTable &rTable, std::vector<USHORT>& rInsPos,
     const SwSelBoxes& rBoxes, BOOL bBehind )
@@ -951,6 +963,10 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
     return bMerge;
 }
 
+/** SwTable::_FindSuperfluousRows(..) is looking for superfluous rows, i.e. rows
+    containing overlapped cells only.
+*/
+
 void SwTable::_FindSuperfluousRows( SwSelBoxes& rBoxes,
     SwTableLine* pFirstLn, SwTableLine* pLastLn )
 {
@@ -990,6 +1006,10 @@ void SwTable::_FindSuperfluousRows( SwSelBoxes& rBoxes,
     }
 }
 
+/** SwTableBox::FindStartOfRowSpan(..) retruns the "master" cell, the cell which
+    overlaps the given cell, it maybe the cell itself.
+*/
+
 SwTableBox& SwTableBox::FindStartOfRowSpan( const SwTable& rTable, USHORT nMaxStep )
 {
     if( getRowSpan() > 0 || !nMaxStep )
@@ -1014,6 +1034,10 @@ SwTableBox& SwTableBox::FindStartOfRowSpan( const SwTable& rTable, USHORT nMaxSt
 
     return *pBox;
 }
+
+/** SwTableBox::FindEndOfRowSpan(..) returns the last overlapped cell if there is
+    any. Otherwise the cell itself will returned.
+*/
 
 SwTableBox& SwTableBox::FindEndOfRowSpan( const SwTable& rTable, USHORT nMaxStep )
 {
@@ -1041,6 +1065,9 @@ SwTableBox& SwTableBox::FindEndOfRowSpan( const SwTable& rTable, USHORT nMaxStep
     return *pBox;
 }
 
+/** lcl_getAllMergedBoxes(..) collects all overlapped boxes to a given (master) box
+*/
+
 void lcl_getAllMergedBoxes( const SwTable& rTable, SwSelBoxes& rBoxes, SwTableBox& rBox )
 {
     SwTableBox* pBox = &rBox;
@@ -1059,6 +1086,10 @@ void lcl_getAllMergedBoxes( const SwTable& rTable, SwSelBoxes& rBoxes, SwTableBo
             rBoxes.Insert( pBox );
     };
 }
+
+/** lcl_UnMerge(..) manipulates the row span attribute of a given master cell
+    and its overlapped cells to split them into several pieces.
+*/
 
 void lcl_UnMerge( const SwTable& rTable, SwTableBox& rBox, USHORT nCnt,
     BOOL bSameHeight )
@@ -1110,6 +1141,9 @@ void lcl_UnMerge( const SwTable& rTable, SwTableBox& rBox, USHORT nCnt,
     delete[] pSplitIdx;
 }
 
+/** lcl_FillSelBoxes(..) puts all boxes of a given line into the selection structure
+*/
+
 void lcl_FillSelBoxes( SwSelBoxes &rBoxes, SwTableLine &rLine )
 {
     USHORT nBoxCount = rLine.GetTabBoxes().Count();
@@ -1117,6 +1151,10 @@ void lcl_FillSelBoxes( SwSelBoxes &rBoxes, SwTableLine &rLine )
     for( nCurrBox = 0; nCurrBox < nBoxCount; ++nCurrBox )
         rBoxes.Insert( rLine.GetTabBoxes()[nCurrBox] );
 }
+
+/** SwTable::InsertSpannedRow(..) inserts "superfluous" rows, i.e. rows containig
+    overlapped cells only. This is a preparation for an upcoming split.
+*/
 
 void SwTable::InsertSpannedRow( SwDoc* pDoc, USHORT nRowIdx, USHORT nCnt )
 {
@@ -1259,6 +1297,10 @@ void lcl_SophisticatedFillLineIndices( SwLineOffsetArray &rArr,
 
 typedef std::set< SwTwips > SwSplitLines;
 
+/** lcl_CalculateSplitLineHeights(..) delivers all y-positions where table rows have
+    to be splitted to fulfill the requested "split same height"
+*/
+
 USHORT lcl_CalculateSplitLineHeights( SwSplitLines &rCurr, SwSplitLines &rNew,
     const SwTable& rTable, const SwSelBoxes& rBoxes, USHORT nCnt )
 {
@@ -1294,7 +1336,8 @@ USHORT lcl_CalculateSplitLineHeights( SwSplitLines &rCurr, SwSplitLines &rNew,
     SwTwips* pLines = new SwTwips[ nLast + 1 - nFirst ];
     for( USHORT i = nFirst; i <= nLast; ++i )
     {
-        nHeight += rTable.GetTabLines()[ i ]->GetTableLineHeight();
+        bool bLayoutAvailable;
+        nHeight += rTable.GetTabLines()[ i ]->GetTableLineHeight( bLayoutAvailable );
         rCurr.insert( rCurr.end(), nHeight );
         pLines[ i - nFirst ] = nHeight;
     }
@@ -1311,8 +1354,13 @@ USHORT lcl_CalculateSplitLineHeights( SwSplitLines &rCurr, SwSplitLines &rNew,
         }
         ++pSplit;
     }
+    delete[] pLines;
     return nFirst;
 }
+
+/** lcl_LineIndex(..) delivers the line index of the line behind or above
+    the box selection.
+*/
 
 USHORT lcl_LineIndex( const SwTable& rTable, const SwSelBoxes& rBoxes,
                       bool bBehind )
@@ -1349,6 +1397,9 @@ USHORT lcl_LineIndex( const SwTable& rTable, const SwSelBoxes& rBoxes,
     return nDirect;
 }
 
+/** SwTable::NewSplitRow(..) splits all selected boxes horizontally.
+*/
+
 BOOL SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt,
     BOOL bSameHeight )
 {
@@ -1357,7 +1408,6 @@ BOOL SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt,
     _FndBox aFndBox( 0, 0 );
     aFndBox.SetTableLines( rBoxes, *this );
     aFndBox.DelFrms( *this );
-//  aFndBox.SaveChartData( *this );
 
     if( bSameHeight && pDoc->GetRootFrm() )
     {
@@ -1365,6 +1415,7 @@ BOOL SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt,
         SwSplitLines aSplitLines;
         USHORT nFirst = lcl_CalculateSplitLineHeights( aRowLines, aSplitLines,
             *this, rBoxes, nCnt );
+        aFndBox.DelFrms( *this );
         SwTwips nLast = 0;
         SwSplitLines::iterator pSplit = aSplitLines.begin();
         SwSplitLines::iterator pCurr = aRowLines.begin();
@@ -1383,7 +1434,7 @@ BOOL SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt,
                 ++pSplit;
                 ++nFirst;
             }
-            if( pSplit != aSplitLines.end() && nLast == *pSplit )
+            if( pSplit != aSplitLines.end() && *pCurr == *pSplit )
                 ++pSplit;
             SwTableLine* pRow = GetTabLines()[ nFirst ];
             SwFrmFmt* pRowFmt = pRow->ClaimFrmFmt();
@@ -1397,7 +1448,10 @@ BOOL SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt,
         }
     }
     else
+    {
+        aFndBox.DelFrms( *this );
         bSameHeight = FALSE;
+    }
     if( !bSameHeight )
     {
         SwLineOffsetArray aLineOffs;
@@ -1425,10 +1479,13 @@ BOOL SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt,
     CHECK_TABLE( *this )
     //Layout updaten
     aFndBox.MakeFrms( *this );
-//  aFndBox.RestoreChartData( *this );
 
     return TRUE;
 }
+
+/** SwTable::InsertRow(..) inserts one or more rows before or behind the selected
+    boxes.
+*/
 
 BOOL SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                         USHORT nCnt, BOOL bBehind )
@@ -1490,6 +1547,10 @@ BOOL SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     return bRet;
 }
 
+/** SwTable::PrepareDelBoxes(..) adjusts the row span attributes for an upcoming
+    deletion of table cells and invalidates the layout of these cells.
+*/
+
 void SwTable::PrepareDelBoxes( const SwSelBoxes& rBoxes )
 {
     if( IsNewModel() )
@@ -1544,6 +1605,10 @@ void SwTable::PrepareDelBoxes( const SwSelBoxes& rBoxes )
     }
 }
 
+/** lcl_SearchSelBox(..) adds cells of a given table row to the selection structure
+    if it overlaps with the given x-position range
+*/
+
 void lcl_SearchSelBox( const SwTable &rTable, SwSelBoxes& rBoxes, long nMin, long nMax,
                        SwTableLine& rLine, bool bChkProtected, bool bColumn )
 {
@@ -1587,6 +1652,9 @@ void lcl_SearchSelBox( const SwTable &rTable, SwSelBoxes& rBoxes, long nMin, lon
     }
 }
 
+/** void SwTable::CreateSelection(..) fills the selection structure with table cells
+    for a given SwPaM, ie. start and end position inside a table
+*/
 
 void SwTable::CreateSelection(  const SwPaM& rPam, SwSelBoxes& rBoxes,
     const SearchType eSearch, bool bChkProtected ) const
@@ -1601,6 +1669,9 @@ void SwTable::CreateSelection(  const SwPaM& rPam, SwSelBoxes& rBoxes,
     CreateSelection( pStartNd, pEndNd, rBoxes, eSearch, bChkProtected );
 }
 
+/** void SwTable::CreateSelection(..) fills the selection structure with table cells
+    for given start and end nodes inside a table
+*/
 void SwTable::CreateSelection( const SwNode* pStartNd, const SwNode* pEndNd,
     SwSelBoxes& rBoxes, const SearchType eSearch, bool bChkProtected ) const
 {
@@ -1773,6 +1844,10 @@ void SwTable::CreateSelection( const SwNode* pStartNd, const SwNode* pEndNd,
     }
 }
 
+/** void SwTable::ExpandColumnSelection(..) adds cell to the give selection to
+    assure that at least one cell of every row is part of the selection.
+*/
+
 void SwTable::ExpandColumnSelection( SwSelBoxes& rBoxes, long &rMin, long &rMax ) const
 {
     ASSERT( bNewModel, "Don't call me for old tables" );
@@ -1819,6 +1894,9 @@ void SwTable::ExpandColumnSelection( SwSelBoxes& rBoxes, long &rMin, long &rMax 
     }
 }
 
+/** SwTable::PrepareDeleteCol(..) adjusts the widths of the neighbour cells of
+    a cell selection for an upcoming (column) deletion
+*/
 void SwTable::PrepareDeleteCol( long nMin, long nMax )
 {
     ASSERT( bNewModel, "Don't call me for old tables" );
@@ -1865,6 +1943,70 @@ void SwTable::PrepareDeleteCol( long nMin, long nMax )
     }
 }
 
+/** SwTable::IsSelectionRectangular(..) checks if the selected table cells
+    forms a rectangle, which e.g. would allow to merge it.
+*/
+
+bool SwTable::IsSelectionRectangular( const SwSelBoxes& rBoxes ) const
+{
+    ASSERT( IsNewModel(), "Don't call me for old tables" );
+    if( !aLines.Count() || !rBoxes.Count() || !IsNewModel() )
+        return true;
+    bool bRet = true;
+    long nMin = -1;
+    long nMax = -1;
+    USHORT nBox = 0;
+    USHORT nLineCnt = aLines.Count();
+    USHORT nBoxCnt = rBoxes.Count();
+    SwTableLine* pLine = rBoxes[0]->GetUpper();
+    USHORT nLinePos = aLines.C40_GETPOS( SwTableLine, pLine );
+
+    for( USHORT nRow = nLinePos; bRet && nRow < nLineCnt && nBox < nBoxCnt; ++nRow )
+    {
+        pLine = aLines[nRow];
+        USHORT nCols = pLine->GetTabBoxes().Count();
+        long nLeft = 0;
+        long nRight = 0;
+        for( USHORT nCurrBox = 0; bRet && nCurrBox < nCols; ++nCurrBox )
+        {
+            nLeft = nRight;
+            SwTableBox* pBox = pLine->GetTabBoxes()[nCurrBox];
+            nRight += pBox->GetFrmFmt()->GetFrmSize().GetWidth();
+            if( pBox == rBoxes[nBox] )
+            {
+                if( nRow == nLinePos )
+                {
+                    if( nMin < 0 )
+                    {
+                        nMin = nLeft;
+                        nMax = nRight;
+                    }
+                    else
+                    {
+                        bRet = nLeft == nMax;
+                        nMax = nRight;
+                    }
+                }
+                else
+                    bRet = nLeft >= nMin && nRight <= nMax;
+                if( ++nBox >= nBoxCnt )
+                {
+                    if( nRight != nMax )
+                        bRet = false;
+                    break;
+                }
+            }
+            else if( nMin >= 0 )
+                bRet = nLeft >= nMax || nRight <= nMin;
+        }
+    }
+    return bRet;
+}
+
+/** SwTable::ExpandSelection(..) adds all boxes to the box selections which are
+    overlapped by it.
+*/
+
 void SwTable::ExpandSelection( SwSelBoxes& rBoxes ) const
 {
     for( USHORT i = 0; i < rBoxes.Count(); ++i )
@@ -1879,6 +2021,10 @@ void SwTable::ExpandSelection( SwSelBoxes& rBoxes ) const
         }
     }
 }
+
+/** SwTable::CheckRowSpan(..) looks for the next line without an overlapping to
+    the previous line.
+*/
 
 void SwTable::CheckRowSpan( SwTableLinePtr &rpLine, bool bUp ) const
 {
