@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lngopt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:54:11 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:23:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@ LinguOptions::LinguOptions()
 }
 
 
-LinguOptions::LinguOptions(const LinguOptions &rOpt)
+LinguOptions::LinguOptions(const LinguOptions & /*rOpt*/)
 {
     DBG_ASSERT( pData, "lng : data missing" );
     ++aRefCount;
@@ -283,30 +283,30 @@ struct WID_Name
 //! since the WID is used as index in this table!
 WID_Name aWID_Name[] =
 {
-    WID_IS_GERMAN_PRE_REFORM,           UPN_IS_GERMAN_PRE_REFORM,
-    WID_IS_USE_DICTIONARY_LIST,         UPN_IS_USE_DICTIONARY_LIST,
-    WID_IS_IGNORE_CONTROL_CHARACTERS,   UPN_IS_IGNORE_CONTROL_CHARACTERS,
-    WID_IS_SPELL_UPPER_CASE,            UPN_IS_SPELL_UPPER_CASE,
-    WID_IS_SPELL_WITH_DIGITS,           UPN_IS_SPELL_WITH_DIGITS,
-    WID_IS_SPELL_CAPITALIZATION,        UPN_IS_SPELL_CAPITALIZATION,
-    WID_HYPH_MIN_LEADING,               UPN_HYPH_MIN_LEADING,
-    WID_HYPH_MIN_TRAILING,              UPN_HYPH_MIN_TRAILING,
-    WID_HYPH_MIN_WORD_LENGTH,           UPN_HYPH_MIN_WORD_LENGTH,
-    WID_DEFAULT_LOCALE,                 UPN_DEFAULT_LOCALE,
-    WID_IS_SPELL_AUTO,                  UPN_IS_SPELL_AUTO,
-    WID_IS_SPELL_HIDE,                  UPN_IS_SPELL_HIDE,
-    WID_IS_SPELL_IN_ALL_LANGUAGES,      UPN_IS_SPELL_IN_ALL_LANGUAGES,
-    WID_IS_SPELL_SPECIAL,               UPN_IS_SPELL_SPECIAL,
-    WID_IS_HYPH_AUTO,                   UPN_IS_HYPH_AUTO,
-    WID_IS_HYPH_SPECIAL,                UPN_IS_HYPH_SPECIAL,
-    WID_IS_WRAP_REVERSE,                UPN_IS_WRAP_REVERSE,
-    0,                                  0,
-    0,                                  0,
-    0,                                  0,
-    0,                                  0,
-    WID_DEFAULT_LANGUAGE,               UPN_DEFAULT_LANGUAGE,
-    WID_DEFAULT_LOCALE_CJK,             UPN_DEFAULT_LOCALE_CJK,
-    WID_DEFAULT_LOCALE_CTL,             UPN_DEFAULT_LOCALE_CTL
+    { WID_IS_GERMAN_PRE_REFORM,           UPN_IS_GERMAN_PRE_REFORM },
+    { WID_IS_USE_DICTIONARY_LIST,         UPN_IS_USE_DICTIONARY_LIST },
+    { WID_IS_IGNORE_CONTROL_CHARACTERS,   UPN_IS_IGNORE_CONTROL_CHARACTERS },
+    { WID_IS_SPELL_UPPER_CASE,            UPN_IS_SPELL_UPPER_CASE },
+    { WID_IS_SPELL_WITH_DIGITS,           UPN_IS_SPELL_WITH_DIGITS },
+    { WID_IS_SPELL_CAPITALIZATION,        UPN_IS_SPELL_CAPITALIZATION },
+    { WID_HYPH_MIN_LEADING,               UPN_HYPH_MIN_LEADING },
+    { WID_HYPH_MIN_TRAILING,              UPN_HYPH_MIN_TRAILING },
+    { WID_HYPH_MIN_WORD_LENGTH,           UPN_HYPH_MIN_WORD_LENGTH },
+    { WID_DEFAULT_LOCALE,                 UPN_DEFAULT_LOCALE },
+    { WID_IS_SPELL_AUTO,                  UPN_IS_SPELL_AUTO },
+    { WID_IS_SPELL_HIDE,                  UPN_IS_SPELL_HIDE },
+    { WID_IS_SPELL_IN_ALL_LANGUAGES,      UPN_IS_SPELL_IN_ALL_LANGUAGES },
+    { WID_IS_SPELL_SPECIAL,               UPN_IS_SPELL_SPECIAL },
+    { WID_IS_HYPH_AUTO,                   UPN_IS_HYPH_AUTO },
+    { WID_IS_HYPH_SPECIAL,                UPN_IS_HYPH_SPECIAL },
+    { WID_IS_WRAP_REVERSE,                UPN_IS_WRAP_REVERSE },
+    { 0,                                  0 },
+    { 0,                                  0 },
+    { 0,                                  0 },
+    { 0,                                  0 },
+    { WID_DEFAULT_LANGUAGE,               UPN_DEFAULT_LANGUAGE },
+    { WID_DEFAULT_LOCALE_CJK,             UPN_DEFAULT_LOCALE_CJK },
+    { WID_DEFAULT_LOCALE_CTL,             UPN_DEFAULT_LOCALE_CTL }
 };
 
 
@@ -377,7 +377,7 @@ static SfxItemPropertyMap aLinguProps[] =
             &::getBooleanCppuType(),            0, 0 },
     { MAP_CHAR_LEN(UPN_IS_WRAP_REVERSE),            WID_IS_WRAP_REVERSE,
             &::getBooleanCppuType(),            0, 0 },
-    { 0,0,0,0 }
+    { 0,0,0,0,0,0 }
 };
 
 LinguProps::LinguProps() :
@@ -405,7 +405,7 @@ void LinguProps::launchEvent( const PropertyChangeEvent &rEvt ) const
 }
 
 Reference< XInterface > SAL_CALL LinguProps_CreateInstance(
-            const Reference< XMultiServiceFactory > & rSMgr )
+            const Reference< XMultiServiceFactory > & /*rSMgr*/ )
         throw(Exception)
 {
     Reference< XInterface > xService = (cppu::OWeakObject*)new LinguProps;
@@ -516,16 +516,16 @@ void SAL_CALL LinguProps::removePropertyChangeListener(
 }
 
 void SAL_CALL LinguProps::addVetoableChangeListener(
-            const OUString& PropertyName,
-            const Reference< XVetoableChangeListener >& aListener )
+            const OUString& /*rPropertyName*/,
+            const Reference< XVetoableChangeListener >& /*rListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 //  MutexGuard  aGuard( GetLinguMutex() );
 }
 
 void SAL_CALL LinguProps::removeVetoableChangeListener(
-            const OUString& PropertyName,
-            const Reference< XVetoableChangeListener >& aListener )
+            const OUString& /*rPropertyName*/,
+            const Reference< XVetoableChangeListener > & /*rListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 //  MutexGuard  aGuard( GetLinguMutex() );
