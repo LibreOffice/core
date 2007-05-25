@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:08:42 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:12:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,22 +278,12 @@ void SmDocShell::LoadSymbols()
 }
 
 
-const String &SmDocShell::GetTitle() const
-{
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetTitle" );
-
-    return ((SmDocShell *) this)->GetDocInfo().GetTitle();
-}
-
-
-
 const String &SmDocShell::GetComment() const
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetComment" );
 
     return ((SmDocShell *) this)->GetDocInfo().GetComment();
 }
-
 
 
 void SmDocShell::SetText(const String& rBuffer)
@@ -327,7 +317,7 @@ void SmDocShell::SetText(const String& rBuffer)
         SetModified(TRUE);
 
         // launch accessible event if necessary
-        SmGraphicAccessible *pAcc = pViewSh ? pViewSh->GetGraphicWindow().GetAccessible() : 0;
+        SmGraphicAccessible *pAcc = pViewSh ? pViewSh->GetGraphicWindow().GetAccessible_Impl() : 0;
         if (pAcc)
         {
             Any aOldValue, aNewValue;
@@ -396,7 +386,11 @@ void SmDocShell::ArrangeFormula()
     OutputDevice* pOutDev = aPrtAcc.GetRefDev();
 
     if (!pOutDev)
+    {
+#if OSL_DEBUG_LEVEL > 1
         DBG_ERROR("!! SmDocShell::ArrangeFormula: reference device missing !!");
+#endif
+    }
 
     // falls nötig ein anderes OutputDevice holen für das formatiert wird
     if (!pOutDev)
@@ -436,7 +430,7 @@ void SmDocShell::ArrangeFormula()
 
 
 void SetEditEngineDefaultFonts(
-        EditEngine &rEditEngine,
+        EditEngine &/*rEditEngine*/,
         SfxItemPool &rEditEngineItemPool )
 {
         //
@@ -811,10 +805,10 @@ void SmDocShell::Repaint()
 SmDocShell::SmDocShell(SfxObjectCreateMode eMode) :
     SfxObjectShell(eMode),
     pTree               ( 0 ),
-    pPrinter            ( 0 ),
-    pTmpPrinter         ( 0 ),
     pEditEngineItemPool ( 0 ),
     pEditEngine         ( 0 ),
+    pPrinter            ( 0 ),
+    pTmpPrinter         ( 0 ),
     nModifyCount        ( 0 ),
     bIsFormulaArranged  ( FALSE )
 {
@@ -892,7 +886,7 @@ BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
                 {
                     // is this a MathType Storage?
                     MathType aEquation( aText );
-                    if ( bSuccess = ( 1 == aEquation.Parse( aStorage ) ) )
+                    if ( TRUE == (bSuccess = (1 == aEquation.Parse( aStorage )) ))
                         Parse();
                 }
             }
@@ -1081,9 +1075,9 @@ void SmDocShell::Execute(SfxRequest& rReq)
             SmFormat aNewFormat( aOldFormat );
             aNewFormat.SetTextmode(!aOldFormat.IsTextmode());
 
-            SfxUndoManager *pUndoMgr = GetUndoManager();
-            if (pUndoMgr)
-                pUndoMgr->AddUndoAction(
+            SfxUndoManager *pTmpUndoMgr = GetUndoManager();
+            if (pTmpUndoMgr)
+                pTmpUndoMgr->AddUndoAction(
                     new SmFormatAction(this, aOldFormat, aNewFormat));
 
             SetFormat( aNewFormat );
@@ -1124,9 +1118,9 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 SmFormat aNewFormat( aOldFormat );
 
                 pFontTypeDialog->WriteTo(aNewFormat);
-                SfxUndoManager *pUndoMgr = GetUndoManager();
-                if (pUndoMgr)
-                    pUndoMgr->AddUndoAction(
+                SfxUndoManager *pTmpUndoMgr = GetUndoManager();
+                if (pTmpUndoMgr)
+                    pTmpUndoMgr->AddUndoAction(
                         new SmFormatAction(this, aOldFormat, aNewFormat));
 
                 SetFormat( aNewFormat );
@@ -1148,9 +1142,9 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
                 pFontSizeDialog->WriteTo(aNewFormat);
 
-                SfxUndoManager *pUndoMgr = GetUndoManager();
-                if (pUndoMgr)
-                    pUndoMgr->AddUndoAction(
+                SfxUndoManager *pTmpUndoMgr = GetUndoManager();
+                if (pTmpUndoMgr)
+                    pTmpUndoMgr->AddUndoAction(
                         new SmFormatAction(this, aOldFormat, aNewFormat));
 
                 SetFormat( aNewFormat );
@@ -1172,9 +1166,9 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
                 pDistanceDialog->WriteTo(aNewFormat);
 
-                SfxUndoManager *pUndoMgr = GetUndoManager();
-                if (pUndoMgr)
-                    pUndoMgr->AddUndoAction(
+                SfxUndoManager *pTmpUndoMgr = GetUndoManager();
+                if (pTmpUndoMgr)
+                    pTmpUndoMgr->AddUndoAction(
                         new SmFormatAction(this, aOldFormat, aNewFormat));
 
                 SetFormat( aNewFormat );
@@ -1201,9 +1195,9 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 pAlignDialog->WriteTo( aFmt );
                 pp->GetConfig()->SetStandardFormat( aFmt );
 
-                SfxUndoManager *pUndoMgr = GetUndoManager();
-                if (pUndoMgr)
-                    pUndoMgr->AddUndoAction(
+                SfxUndoManager *pTmpUndoMgr = GetUndoManager();
+                if (pTmpUndoMgr)
+                    pTmpUndoMgr->AddUndoAction(
                         new SmFormatAction(this, aOldFormat, aNewFormat));
 
                 SetFormat( aNewFormat );
@@ -1228,8 +1222,8 @@ void SmDocShell::Execute(SfxRequest& rReq)
         case SID_UNDO:
         case SID_REDO:
         {
-            SfxUndoManager* pUndoMgr = GetUndoManager();
-            if( pUndoMgr )
+            SfxUndoManager* pTmpUndoMgr = GetUndoManager();
+            if( pTmpUndoMgr )
             {
                 USHORT nId = rReq.GetSlot(), nCnt = 1;
                 const SfxItemSet* pArgs = rReq.GetArgs();
@@ -1242,17 +1236,17 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 sal_uInt16 nCount;
                 if( SID_UNDO == rReq.GetSlot() )
                 {
-                    nCount = pUndoMgr->GetUndoActionCount();
+                    nCount = pTmpUndoMgr->GetUndoActionCount();
                     fnDo = &SfxUndoManager::Undo;
                 }
                 else
                 {
-                    nCount = pUndoMgr->GetRedoActionCount();
+                    nCount = pTmpUndoMgr->GetRedoActionCount();
                     fnDo = &SfxUndoManager::Redo;
                 }
 
                 for( ; nCnt && nCount; --nCnt, --nCount )
-                    (pUndoMgr->*fnDo)( 0 );
+                    (pTmpUndoMgr->*fnDo)( 0 );
             }
             Repaint();
         }
@@ -1319,27 +1313,27 @@ void SmDocShell::GetState(SfxItemSet &rSet)
         case SID_GETUNDOSTRINGS:
         case SID_GETREDOSTRINGS:
             {
-                SfxUndoManager* pUndoMgr = GetUndoManager();
-                if( pUndoMgr )
+                SfxUndoManager* pTmpUndoMgr = GetUndoManager();
+                if( pTmpUndoMgr )
                 {
                     UniString(SfxUndoManager:: *fnGetComment)( USHORT ) const;
 
                     sal_uInt16 nCount;
                     if( SID_GETUNDOSTRINGS == nWh )
                     {
-                        nCount = pUndoMgr->GetUndoActionCount();
+                        nCount = pTmpUndoMgr->GetUndoActionCount();
                         fnGetComment = &SfxUndoManager::GetUndoActionComment;
                     }
                     else
                     {
-                        nCount = pUndoMgr->GetRedoActionCount();
+                        nCount = pTmpUndoMgr->GetRedoActionCount();
                         fnGetComment = &SfxUndoManager::GetRedoActionComment;
                     }
                     if( nCount )
                     {
                         String sList;
                         for( sal_uInt16 n = 0; n < nCount; ++n )
-                            ( sList += (pUndoMgr->*fnGetComment)( n ) )
+                            ( sList += (pTmpUndoMgr->*fnGetComment)( n ) )
                                     += '\n';
 
                         SfxStringListItem aItem( nWh );
@@ -1377,7 +1371,7 @@ void SmDocShell::SaveSymbols()
 
 void SmDocShell::Draw(OutputDevice *pDevice,
                       const JobSetup &,
-                      USHORT nAspect)
+                      USHORT /*nAspect*/)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Draw" );
 
@@ -1386,7 +1380,7 @@ void SmDocShell::Draw(OutputDevice *pDevice,
     Draw(*pDevice, atmppoint);
 }
 
-SfxItemPool& SmDocShell::GetPool()
+SfxItemPool& SmDocShell::GetPool() const
 {
     return SFX_APP()->GetPool();
 }
@@ -1430,7 +1424,7 @@ void SmDocShell::SetVisArea(const Rectangle & rVisArea)
 
 void SmDocShell::FillClass(SvGlobalName* pClassName,
                            sal_uInt32*  pFormat,
-                           String* pAppName,
+                           String* /*pAppName*/,
                            String* pFullTypeName,
                            String* pShortTypeName,
                            sal_Int32 nFileFormat ) const
