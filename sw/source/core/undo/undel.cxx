@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undel.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:48:41 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:01:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -977,6 +977,7 @@ void SwUndoDelete::Redo( SwUndoIter& rUndoIter )
             pTblNd->DelFrms();
         }
 
+        rPam.SetMark();
         rPam.DeleteMark();
 
         rDoc.GetNodes().Delete( aSttIdx, nEndNode - nSttNode );
