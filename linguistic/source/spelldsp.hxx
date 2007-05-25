@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spelldsp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:55:12 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:25:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ public:
     void    SetDoWarnAgain(BOOL bVal)   { aFlags.bDoWarnAgain = 0 != bVal; }
 };
 
-DECLARE_TABLE( SpellSvcList, SeqLangSvcEntry_Spell * );
+DECLARE_TABLE( SpellSvcList, SeqLangSvcEntry_Spell * )
 
 
 class SpellCheckerDispatcher :
