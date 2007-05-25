@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphdta.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:53:44 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:23:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,10 +75,10 @@ namespace linguistic
 HyphenatedWord::HyphenatedWord(const OUString &rWord, INT16 nLang, INT16 nHPos,
                                const OUString &rHyphWord, INT16 nPos ) :
     aWord           (rWord),
-    nLanguage       (nLang),
     aHyphenatedWord (rHyphWord),
+    nHyphPos        (nPos),
     nHyphenationPos (nHPos),
-    nHyphPos        (nPos)
+    nLanguage       (nLang)
 {
     String aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
     DBG_ASSERT( 1 == aSingleQuote.Len(), "unexpectend length of quotation mark" );
