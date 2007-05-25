@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adodatalinks.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:36:51 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 10:48:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,10 +64,10 @@ BSTR PromptNew(long hWnd);
     ::rtl::OUString dataLink;
     if (oldLink.getLength())
     {
-        dataLink=PromptEdit(hWnd,(BSTR)oldLink.getStr());
+        dataLink=reinterpret_cast<sal_Unicode *>(PromptEdit(hWnd,(BSTR)oldLink.getStr()));
     }
     else
-        dataLink=PromptNew(hWnd);
+        dataLink=reinterpret_cast<sal_Unicode *>(PromptNew(hWnd));
     return dataLink;
 }
 BSTR PromptNew(long hWnd)
