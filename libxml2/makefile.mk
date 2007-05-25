@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:29:01 $
+#   last change: $Author: vg $ $Date: 2007-05-25 15:02:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -104,16 +104,20 @@ OUTDIR2INC=include$/libxml
 
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=.libs$/libxml2.*.dylib
+OUT2BIN+=.libs$/xmllint
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 OUT2LIB+=.libs$/libxml2*.a
 OUT2BIN+=.libs$/libxml2*.dll
+OUT2BIN+=.libs$/xmllint.exe
 .ELSE
 OUT2LIB+=win32$/bin.msvc$/*.lib
 OUT2BIN+=win32$/bin.msvc$/*.dll
+OUT2BIN+=win32$/bin.msvc$/xmllint.exe
 .ENDIF
 .ELSE
 OUT2LIB+=.libs$/libxml2.so*
+OUT2BIN+=.libs$/xmllint
 .ENDIF
 
 # --- Targets ------------------------------------------------------
