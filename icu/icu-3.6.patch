@@ -1,5 +1,5 @@
 *** misc/icu/source/common/putil.c	Mon Jul 31 20:14:28 2006
---- misc/build/icu/source/common/putil.c	Wed Jan  3 09:40:21 2007
+--- misc/build/icu/source/common/putil.c	Mon Apr 30 17:32:58 2007
 ***************
 *** 48,54 ****
   #endif
@@ -18,8 +18,64 @@
   #define _XOPEN_SOURCE_EXTENDED 1
   #endif
   
+*** misc/icu/source/common/unicode/pwin32.h	Tue Aug 29 23:34:38 2006
+--- misc/build/icu/source/common/unicode/pwin32.h	Mon Apr 30 17:32:58 2007
+***************
+*** 266,273 ****
+--- 266,278 ----
+  #else
+  #define U_EXPORT __declspec(dllexport)
+  #endif
++ #ifdef __MINGW32__
++ #define U_EXPORT2
++ #define U_IMPORT
++ #else
+  #define U_EXPORT2 __cdecl
+  #define U_IMPORT __declspec(dllimport)
++ #endif
+  
+  /*===========================================================================*/
+  /* Code alignment and C function inlining                                    */
+*** misc/icu/source/common/unicode/umachine.h	Tue Feb  7 02:54:16 2006
+--- misc/build/icu/source/common/unicode/umachine.h	Mon Apr 30 17:32:58 2007
+***************
+*** 322,328 ****
+   */
+  
+  /* Define UChar to be compatible with wchar_t if possible. */
+! #if U_SIZEOF_WCHAR_T==2
+      typedef wchar_t UChar;
+  #else
+      typedef uint16_t UChar;
+--- 322,328 ----
+   */
+  
+  /* Define UChar to be compatible with wchar_t if possible. */
+! #if U_SIZEOF_WCHAR_T==2 && !defined(__MINGW32__)
+      typedef wchar_t UChar;
+  #else
+      typedef uint16_t UChar;
+*** misc/icu/source/common/unicode/ustring.h	Tue Aug 29 23:52:50 2006
+--- misc/build/icu/source/common/unicode/ustring.h	Mon Apr 30 17:32:58 2007
+***************
+*** 918,924 ****
+   * </pre>
+   * @stable ICU 2.0
+   */
+! #if U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && (U_CHARSET_FAMILY==U_ASCII_FAMILY || (U_SIZEOF_UCHAR == 2 && defined(U_WCHAR_IS_UTF16)))
+  #   define U_STRING_DECL(var, cs, length) static const wchar_t var[(length)+1]={ L ## cs }
+      /**@stable ICU 2.0 */
+  #   define U_STRING_INIT(var, cs, length)
+--- 918,924 ----
+   * </pre>
+   * @stable ICU 2.0
+   */
+! #if U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && (U_CHARSET_FAMILY==U_ASCII_FAMILY || (U_SIZEOF_UCHAR == 2 && defined(U_WCHAR_IS_UTF16))) && !defined(__MINGW32__)
+  #   define U_STRING_DECL(var, cs, length) static const wchar_t var[(length)+1]={ L ## cs }
+      /**@stable ICU 2.0 */
+  #   define U_STRING_INIT(var, cs, length)
 *** misc/icu/source/config/mh-darwin	Wed Feb  1 08:52:42 2006
---- misc/build/icu/source/config/mh-darwin	Wed Jan  3 09:41:43 2007
+--- misc/build/icu/source/config/mh-darwin	Mon Apr 30 17:32:58 2007
 ***************
 *** 25,31 ****
   SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(CXXFLAGS) $(LDFLAGS)
@@ -38,7 +94,7 @@
   ## Compiler switch to embed a runtime search path
   LD_RPATH=
 *** misc/icu/source/config/mh-irix	Thu Mar 23 19:51:52 2006
---- misc/build/icu/source/config/mh-irix	Wed Jan  3 09:40:21 2007
+--- misc/build/icu/source/config/mh-irix	Mon Apr 30 17:32:58 2007
 ***************
 *** 23,28 ****
 --- 23,31 ----
@@ -52,7 +108,7 @@
   THREADSCPPFLAGS = -D_REENTRANT -D_PTHREADS
   LIBCPPFLAGS =
 *** misc/icu/source/config/mh-linux	Thu Mar 23 19:51:52 2006
---- misc/build/icu/source/config/mh-linux	Wed Jan  3 09:40:21 2007
+--- misc/build/icu/source/config/mh-linux	Mon Apr 30 17:32:58 2007
 ***************
 *** 20,25 ****
 --- 20,32 ----
@@ -69,10 +125,41 @@
   ## These are the library specific LDFLAGS
   LDFLAGSICUDT=-nodefaultlibs -nostdlib
   
-*** misc/icu/source/config/mh-solaris	Fri Feb 24 20:31:14 2006
---- misc/build/icu/source/config/mh-solaris	Wed Jan  3 09:40:21 2007
+*** misc/icu/source/config/mh-mingw	Tue Aug 15 10:24:14 2006
+--- misc/build/icu/source/config/mh-mingw	Mon Apr 30 17:32:58 2007
 ***************
-*** 18,34 ****
+*** 54,59 ****
+--- 54,62 ----
+  STATIC_O = ao
+  SO_TARGET_VERSION_SUFFIX = $(SO_TARGET_VERSION_MAJOR)
+  
++ STUB_SUFFIX=l
++ LIBICUDT=       -L$(LIBDIR) -L$(top_builddir)/stubdata -l$(STATIC_PREFIX_WHEN_USED)$(ICUPREFIX)$(DATA_STUBNAME)$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)l
++ 
+  # Static library prefix and file extension
+  LIBSICU = $(STATIC_PREFIX)$(ICUPREFIX)
+  A = lib
+***************
+*** 71,77 ****
+  
+  # The #M# is used to delete lines for icu-config
+  # Current full path directory.
+! CURR_FULL_DIR=$(shell pwd -W)#M#
+  # Current full path directory for use in source code in a -D compiler option.
+  CURR_SRCCODE_FULL_DIR=$(subst /,\\\\,$(shell pwd -W))#M#
+  
+--- 74,80 ----
+  
+  # The #M# is used to delete lines for icu-config
+  # Current full path directory.
+! CURR_FULL_DIR=$(subst \,/,$(shell cygpath -aw .))#M#
+  # Current full path directory for use in source code in a -D compiler option.
+  CURR_SRCCODE_FULL_DIR=$(subst /,\\\\,$(shell pwd -W))#M#
+  
+*** misc/icu/source/config/mh-solaris	Fri Feb 24 20:31:14 2006
+--- misc/build/icu/source/config/mh-solaris	Mon Apr 30 17:32:58 2007
+***************
+*** 18,33 ****
   
   ## Commands to link
   ## For Sun Workshop, use CC to link to bring in C++ runtime
@@ -89,8 +176,7 @@
   
   #LIBRARY_PATH_PREFIX=/usr/lib/lwp:
   
-  ## Compiler switch to embed a library name
---- 18,42 ----
+--- 18,41 ----
   
   ## Commands to link
   ## For Sun Workshop, use CC to link to bring in C++ runtime
@@ -105,19 +191,18 @@
   ## Compiler switch to embed a runtime search path
   LD_RPATH=	-R
   LD_RPATH_PRE=	
-  
++ 
 + ## Force RPATH=$ORIGIN to locate own dependencies w/o need for LD_LIBRARY_PATH
 + ENABLE_RPATH=YES
 + RPATHLDFLAGS=${LD_RPATH}'$$ORIGIN'
 + 
 + #SH#  ENABLE_RPATH=YES
 + #SH#  RPATHLDFLAGS="${LD_RPATH}'$$ORIGIN'"
-+ 
+  
   #LIBRARY_PATH_PREFIX=/usr/lib/lwp:
   
-  ## Compiler switch to embed a library name
 *** misc/icu/source/data/Makefile.in	Sat Aug 12 00:22:24 2006
---- misc/build/icu/source/data/Makefile.in	Wed Jan  3 09:40:21 2007
+--- misc/build/icu/source/data/Makefile.in	Mon Apr 30 17:32:58 2007
 ***************
 *** 344,350 ****
   ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
@@ -135,8 +220,226 @@
   else
   	@echo "$@" > $@
   endif
+*** misc/icu/source/i18n/windtfmt.cpp	Tue Aug 15 08:48:02 2006
+--- misc/build/icu/source/i18n/windtfmt.cpp	Mon Apr 30 17:32:58 2007
+***************
+*** 232,249 ****
+      UChar stackBuffer[STACK_BUFFER_SIZE];
+      UChar *buffer = stackBuffer;
+  
+!     result = GetDateFormatW(fLCID, dfFlags[fDateStyle - kDateOffset], st, NULL, buffer, STACK_BUFFER_SIZE);
+  
+      if (result == 0) {
+          if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
+              int newLength = GetDateFormatW(fLCID, dfFlags[fDateStyle - kDateOffset], st, NULL, NULL, 0);
+  
+              buffer = NEW_ARRAY(UChar, newLength);
+!             GetDateFormatW(fLCID, dfFlags[fDateStyle - kDateOffset], st, NULL, buffer, newLength);
+          }
+      }
+  
+!     appendTo.append(buffer, (int32_t) wcslen(buffer));
+  
+      if (buffer != stackBuffer) {
+          DELETE_ARRAY(buffer);
+--- 232,249 ----
+      UChar stackBuffer[STACK_BUFFER_SIZE];
+      UChar *buffer = stackBuffer;
+  
+!     result = GetDateFormatW(fLCID, dfFlags[fDateStyle - kDateOffset], st, NULL, reinterpret_cast<LPWSTR>(buffer), STACK_BUFFER_SIZE);
+  
+      if (result == 0) {
+          if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
+              int newLength = GetDateFormatW(fLCID, dfFlags[fDateStyle - kDateOffset], st, NULL, NULL, 0);
+  
+              buffer = NEW_ARRAY(UChar, newLength);
+!             GetDateFormatW(fLCID, dfFlags[fDateStyle - kDateOffset], st, NULL, reinterpret_cast<LPWSTR>(buffer), newLength);
+          }
+      }
+  
+!     appendTo.append(buffer, (int32_t) u_strlen(buffer));
+  
+      if (buffer != stackBuffer) {
+          DELETE_ARRAY(buffer);
+***************
+*** 258,275 ****
+      UChar stackBuffer[STACK_BUFFER_SIZE];
+      UChar *buffer = stackBuffer;
+  
+!     result = GetTimeFormatW(fLCID, tfFlags[fTimeStyle], st, NULL, buffer, STACK_BUFFER_SIZE);
+  
+      if (result == 0) {
+          if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
+              int newLength = GetTimeFormatW(fLCID, tfFlags[fTimeStyle], st, NULL, NULL, 0);
+  
+              buffer = NEW_ARRAY(UChar, newLength);
+!             GetDateFormatW(fLCID, tfFlags[fTimeStyle], st, NULL, buffer, newLength);
+          }
+      }
+  
+!     appendTo.append(buffer, (int32_t) wcslen(buffer));
+  
+      if (buffer != stackBuffer) {
+          DELETE_ARRAY(buffer);
+--- 258,275 ----
+      UChar stackBuffer[STACK_BUFFER_SIZE];
+      UChar *buffer = stackBuffer;
+  
+!     result = GetTimeFormatW(fLCID, tfFlags[fTimeStyle], st, NULL, reinterpret_cast<LPWSTR>(buffer), STACK_BUFFER_SIZE);
+  
+      if (result == 0) {
+          if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
+              int newLength = GetTimeFormatW(fLCID, tfFlags[fTimeStyle], st, NULL, NULL, 0);
+  
+              buffer = NEW_ARRAY(UChar, newLength);
+!             GetDateFormatW(fLCID, tfFlags[fTimeStyle], st, NULL, reinterpret_cast<LPWSTR>(buffer), newLength);
+          }
+      }
+  
+!     appendTo.append(buffer, (int32_t) u_strlen(buffer));
+  
+      if (buffer != stackBuffer) {
+          DELETE_ARRAY(buffer);
+*** misc/icu/source/i18n/winnmfmt.cpp	Thu Aug 17 07:21:06 2006
+--- misc/build/icu/source/i18n/winnmfmt.cpp	Mon Apr 30 17:32:58 2007
+***************
+*** 86,95 ****
+      GetLocaleInfoA(lcid, LOCALE_SGROUPING, buf, 10);
+      fmt->Grouping = getGrouping(buf);
+  
+!     fmt->lpDecimalSep = NEW_ARRAY(UChar, 6);
+      GetLocaleInfoW(lcid, LOCALE_SDECIMAL,  fmt->lpDecimalSep,  6);
+  
+!     fmt->lpThousandSep = NEW_ARRAY(UChar, 6);
+      GetLocaleInfoW(lcid, LOCALE_STHOUSAND, fmt->lpThousandSep, 6);
+  
+      GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_INEGNUMBER, (LPWSTR) &fmt->NegativeOrder, sizeof(UINT));
+--- 86,95 ----
+      GetLocaleInfoA(lcid, LOCALE_SGROUPING, buf, 10);
+      fmt->Grouping = getGrouping(buf);
+  
+!     fmt->lpDecimalSep = reinterpret_cast<LPWSTR>(NEW_ARRAY(UChar, 6));
+      GetLocaleInfoW(lcid, LOCALE_SDECIMAL,  fmt->lpDecimalSep,  6);
+  
+!     fmt->lpThousandSep = reinterpret_cast<LPWSTR>(NEW_ARRAY(UChar, 6));
+      GetLocaleInfoW(lcid, LOCALE_STHOUSAND, fmt->lpThousandSep, 6);
+  
+      GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_INEGNUMBER, (LPWSTR) &fmt->NegativeOrder, sizeof(UINT));
+***************
+*** 111,126 ****
+      GetLocaleInfoA(lcid, LOCALE_SMONGROUPING, buf, sizeof(buf));
+      fmt->Grouping = getGrouping(buf);
+  
+!     fmt->lpDecimalSep = NEW_ARRAY(UChar, 6);
+      GetLocaleInfoW(lcid, LOCALE_SMONDECIMALSEP,  fmt->lpDecimalSep,  6);
+  
+!     fmt->lpThousandSep = NEW_ARRAY(UChar, 6);
+      GetLocaleInfoW(lcid, LOCALE_SMONTHOUSANDSEP, fmt->lpThousandSep, 6);
+  
+      GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_INEGCURR,  (LPWSTR) &fmt->NegativeOrder, sizeof(UINT));
+      GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_ICURRENCY, (LPWSTR) &fmt->PositiveOrder, sizeof(UINT));
+  
+!     fmt->lpCurrencySymbol = NEW_ARRAY(UChar, 8);
+      GetLocaleInfoW(lcid, LOCALE_SCURRENCY, (LPWSTR) fmt->lpCurrencySymbol, 8);
+  }
+  
+--- 111,126 ----
+      GetLocaleInfoA(lcid, LOCALE_SMONGROUPING, buf, sizeof(buf));
+      fmt->Grouping = getGrouping(buf);
+  
+!     fmt->lpDecimalSep = reinterpret_cast<LPWSTR>(NEW_ARRAY(UChar, 6));
+      GetLocaleInfoW(lcid, LOCALE_SMONDECIMALSEP,  fmt->lpDecimalSep,  6);
+  
+!     fmt->lpThousandSep = reinterpret_cast<LPWSTR>(NEW_ARRAY(UChar, 6));
+      GetLocaleInfoW(lcid, LOCALE_SMONTHOUSANDSEP, fmt->lpThousandSep, 6);
+  
+      GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_INEGCURR,  (LPWSTR) &fmt->NegativeOrder, sizeof(UINT));
+      GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_ICURRENCY, (LPWSTR) &fmt->PositiveOrder, sizeof(UINT));
+  
+!     fmt->lpCurrencySymbol = reinterpret_cast<LPWSTR>(NEW_ARRAY(UChar, 8));
+      GetLocaleInfoW(lcid, LOCALE_SCURRENCY, (LPWSTR) fmt->lpCurrencySymbol, 8);
+  }
+  
+***************
+*** 290,296 ****
+              formatInfo.currency.Grouping = 0;
+          }
+  
+!         result = GetCurrencyFormatW(fLCID, 0, nBuffer, &formatInfo.currency, buffer, STACK_BUFFER_SIZE);
+  
+          if (result == 0) {
+              DWORD lastError = GetLastError();
+--- 290,296 ----
+              formatInfo.currency.Grouping = 0;
+          }
+  
+!         result = GetCurrencyFormatW(fLCID, 0, nBuffer, &formatInfo.currency, reinterpret_cast<LPWSTR>(buffer), STACK_BUFFER_SIZE);
+  
+          if (result == 0) {
+              DWORD lastError = GetLastError();
+***************
+*** 300,306 ****
+  
+                  buffer = NEW_ARRAY(UChar, newLength);
+                  buffer[0] = 0x0000;
+!                 GetCurrencyFormatW(fLCID, 0, nBuffer,  &formatInfo.currency, buffer, newLength);
+              }
+          }
+      } else {
+--- 300,306 ----
+  
+                  buffer = NEW_ARRAY(UChar, newLength);
+                  buffer[0] = 0x0000;
+!                 GetCurrencyFormatW(fLCID, 0, nBuffer,  &formatInfo.currency, reinterpret_cast<LPWSTR>(buffer), newLength);
+              }
+          }
+      } else {
+***************
+*** 312,318 ****
+              formatInfo.number.Grouping = 0;
+          }
+  
+!         result = GetNumberFormatW(fLCID, 0, nBuffer, &formatInfo.number, buffer, STACK_BUFFER_SIZE);
+  
+          if (result == 0) {
+              if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
+--- 312,318 ----
+              formatInfo.number.Grouping = 0;
+          }
+  
+!         result = GetNumberFormatW(fLCID, 0, nBuffer, &formatInfo.number, reinterpret_cast<LPWSTR>(buffer), STACK_BUFFER_SIZE);
+  
+          if (result == 0) {
+              if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
+***************
+*** 320,331 ****
+  
+                  buffer = NEW_ARRAY(UChar, newLength);
+                  buffer[0] = 0x0000;
+!                 GetNumberFormatW(fLCID, 0, nBuffer, &formatInfo.number, buffer, newLength);
+              }
+          }
+      }
+  
+!     appendTo.append(buffer, (int32_t) wcslen(buffer));
+  
+      if (buffer != stackBuffer) {
+          DELETE_ARRAY(buffer);
+--- 320,331 ----
+  
+                  buffer = NEW_ARRAY(UChar, newLength);
+                  buffer[0] = 0x0000;
+!                 GetNumberFormatW(fLCID, 0, nBuffer, &formatInfo.number, reinterpret_cast<LPWSTR>(buffer), newLength);
+              }
+          }
+      }
+  
+!     appendTo.append(buffer, (int32_t) u_strlen(buffer));
+  
+      if (buffer != stackBuffer) {
+          DELETE_ARRAY(buffer);
 *** misc/icu/source/layout/CoverageTables.cpp	Sat May  8 01:28:42 2004
---- misc/build/icu/source/layout/CoverageTables.cpp	Fri Jan 19 16:03:21 2007
+--- misc/build/icu/source/layout/CoverageTables.cpp	Mon Apr 30 17:32:58 2007
 ***************
 *** 44,49 ****
 --- 44,53 ----
@@ -151,7 +454,7 @@
       le_uint16 probe = power;
       le_uint16 index = 0;
 *** misc/icu/source/layout/DeviceTables.cpp	Fri Jan 14 18:25:12 2005
---- misc/build/icu/source/layout/DeviceTables.cpp	Fri Jan 19 16:03:20 2007
+--- misc/build/icu/source/layout/DeviceTables.cpp	Mon Apr 30 17:32:58 2007
 ***************
 *** 22,28 ****
       le_uint16 format = SWAPW(deltaFormat) - 1;
@@ -171,7 +474,7 @@
           le_uint16 bits = fieldBits[format];
           le_uint16 count = 16 / bits;
 *** misc/icu/source/layout/GXLayoutEngine.cpp	Fri Sep  2 20:22:10 2005
---- misc/build/icu/source/layout/GXLayoutEngine.cpp	Wed Jan  3 09:40:21 2007
+--- misc/build/icu/source/layout/GXLayoutEngine.cpp	Mon Apr 30 17:32:58 2007
 ***************
 *** 39,45 ****
           return 0;
@@ -190,7 +493,7 @@
       if (LE_FAILURE(success)) {
           return 0;
 *** misc/icu/source/layout/IndicClassTables.cpp	Wed Aug 23 02:12:40 2006
---- misc/build/icu/source/layout/IndicClassTables.cpp	Fri Jan 19 16:03:21 2007
+--- misc/build/icu/source/layout/IndicClassTables.cpp	Mon Apr 30 17:32:58 2007
 ***************
 *** 94,100 ****
       _dr, _db, _db, _db, _db, _xx, _xx, _l1, _dl, _xx, _xx, _s1, _s2, _vr, _xx, _xx, // 09C0 - 09CF
@@ -324,7 +627,7 @@
   //
   // IndicClassTable addresses
 *** misc/icu/source/layout/IndicReordering.cpp	Tue Apr 25 21:08:12 2006
---- misc/build/icu/source/layout/IndicReordering.cpp	Fri Jan 19 16:03:20 2007
+--- misc/build/icu/source/layout/IndicReordering.cpp	Mon Apr 30 17:32:58 2007
 ***************
 *** 50,55 ****
 --- 50,63 ----
@@ -406,11 +709,13 @@
       {-1, -1, -1, -1, -1, -1,  3,  2, -1, -1, -1, -1, -1, -1, -1}, //  7 - consonant virama ZWJ, consonant ZWJ virama
       {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  4, -1}, //  8 - independent vowels that can take a virama
 ***************
-*** 629,634 ****
---- 651,670 ----
+*** 627,632 ****
+--- 649,668 ----
+              // write base consonant
+              for (i = baseConsonant; i < bcSpan; i += 1) {
                   output.writeChar(chars[i], i, tagArray4);
-              }
-  
++             }
++ 
 +             /* for the special conjuction of Cons+0x0d4d+0x0d31 or Cons+0x0d4d+0x0d30 of Malayalam */
 +             if ((baseConsonant - 2 >= 0) &&
 +                 (chars[baseConsonant - 1] == 0x0d4d) &&
@@ -423,13 +728,11 @@
 + 
 + 		if (mpreFixups)
 + 			mpreFixups->reduce();
-+             }
-+ 
+              }
+  
               if ((classTable->scriptFlags & SF_MATRAS_AFTER_BASE) != 0) {
-                  output.writeMbelow();
-                  output.writeSMbelow(); // FIXME: there are no SMs in these scripts...
 *** misc/icu/source/layout/LESwaps.h	Thu Jun 23 00:39:36 2005
---- misc/build/icu/source/layout/LESwaps.h	Wed Jan  3 09:40:21 2007
+--- misc/build/icu/source/layout/LESwaps.h	Mon Apr 30 17:32:58 2007
 ***************
 *** 2,7 ****
 --- 2,8 ----
@@ -477,11 +780,12 @@
       #if U_IS_BIG_ENDIAN
           #define SWAPW(value) (value)
 ***************
-*** 49,54 ****
---- 59,83 ----
+*** 48,53 ****
+--- 58,82 ----
+  #else
       #define SWAPL(value) (LESwaps::isBigEndian() ? (value) : LESwaps::swapLong(value))
   #endif
-  
++ 
 + #else // ALLOW_UNALIGNED_HACK
 + 
 + #define SWAPW(rValue) loadBigEndianWord(reinterpret_cast<const le_uint16&>(rValue))
@@ -500,12 +804,11 @@
 + }
 + 
 + #endif // ALLOW_UNALIGNED_HACK
-+ 
+  
   /**
    * This class is used to access data which stored in big endian order
-   * regardless of the conventions of the platform. It has been designed
 *** misc/icu/source/layout/MPreFixups.cpp	Sat May  8 01:28:44 2004
---- misc/build/icu/source/layout/MPreFixups.cpp	Fri Jan 19 16:03:20 2007
+--- misc/build/icu/source/layout/MPreFixups.cpp	Mon Apr 30 17:32:58 2007
 ***************
 *** 40,45 ****
 --- 40,51 ----
@@ -522,7 +825,7 @@
   {
       for (le_int32 fixup = 0; fixup < fFixupCount; fixup += 1) {
 *** misc/icu/source/layout/MPreFixups.h	Mon Apr 12 20:51:32 2004
---- misc/build/icu/source/layout/MPreFixups.h	Fri Jan 19 16:03:20 2007
+--- misc/build/icu/source/layout/MPreFixups.h	Mon Apr 30 17:32:58 2007
 ***************
 *** 31,36 ****
 --- 31,38 ----
@@ -534,8 +837,25 @@
   private:
       FixupData *fFixupData;
       le_int32   fFixupCount;
+*** misc/icu/source/stubdata/Makefile.in	Fri Dec  2 11:21:34 2005
+--- misc/build/icu/source/stubdata/Makefile.in	Mon Apr 30 17:32:58 2007
+***************
+*** 25,30 ****
+--- 25,36 ----
+  ## Target information
+  
+  TARGET_STUBNAME=$(DATA_STUBNAME)
++ ifeq (@platform_make_fragment_name@,mh-mingw)
++ FINAL_SO_TARGET=$(STUBDATA_LIBDIR)$(LIBICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)$(STUB_SUFFIX).$(SO)
++ %$(STUB_SUFFIX).$(SO): %$(SO_TARGET_VERSION_MAJOR)$(STUB_SUFFIX).$(SO)
++ 	$(RM) $@ && ln $< $@
++ 
++ endif
+  
+  ifneq ($(ENABLE_STATIC),)
+  TARGET = $(STUBDATA_LIBDIR)$(LIBSICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX).$(A)
 *** misc/icu/source/test/intltest/loctest.cpp	Thu Jul  6 03:50:04 2006
---- misc/build/icu/source/test/intltest/loctest.cpp	Wed Jan  3 09:40:21 2007
+--- misc/build/icu/source/test/intltest/loctest.cpp	Mon Apr 30 17:32:58 2007
 ***************
 *** 4,9 ****
 --- 4,10 ----
@@ -547,7 +867,7 @@
   #include "unicode/decimfmt.h"
   #include "unicode/ucurr.h"
 *** misc/icu/source/test/intltest/tsputil.cpp	Wed Jul 19 00:18:10 2006
---- misc/build/icu/source/test/intltest/tsputil.cpp	Wed Jan  3 09:40:21 2007
+--- misc/build/icu/source/test/intltest/tsputil.cpp	Mon Apr 30 17:32:58 2007
 ***************
 *** 4,9 ****
 --- 4,10 ----
@@ -559,7 +879,7 @@
   
   #include <float.h> // DBL_MAX, DBL_MIN
 *** misc/icu/source/test/intltest/uobjtest.cpp	Thu Mar 23 01:54:12 2006
---- misc/build/icu/source/test/intltest/uobjtest.cpp	Wed Jan  3 09:40:21 2007
+--- misc/build/icu/source/test/intltest/uobjtest.cpp	Mon Apr 30 17:32:58 2007
 ***************
 *** 4,9 ****
 --- 4,10 ----
@@ -571,7 +891,7 @@
   #include "cmemory.h" // UAlignedMemory
   #include <string.h>
 *** misc/icu/source/test/intltest/ustrtest.cpp	Tue Dec 28 22:13:54 2004
---- misc/build/icu/source/test/intltest/ustrtest.cpp	Wed Jan  3 09:40:21 2007
+--- misc/build/icu/source/test/intltest/ustrtest.cpp	Mon Apr 30 17:32:58 2007
 ***************
 *** 4,9 ****
 --- 4,10 ----
@@ -582,3 +902,18 @@
   #include "ustrtest.h"
   #include "unicode/unistr.h"
   #include "unicode/uchar.h"
+*** misc/icu/source/tools/icupkg/icupkg.cpp	Fri Jul 21 23:17:52 2006
+--- misc/build/icu/source/tools/icupkg/icupkg.cpp	Mon Apr 30 17:32:58 2007
+***************
+*** 332,337 ****
+--- 332,341 ----
+      return (UBool)(len>0 && 0==strcmp(filename+len, ".dat"));
+  }
+  
++ #ifdef __MINGW32__
++ int _CRT_glob=0;
++ #endif
++ 
+  extern int
+  main(int argc, char *argv[]) {
+      const char *pname, *sourcePath, *destPath, *inFilename, *outFilename, *outComment;
