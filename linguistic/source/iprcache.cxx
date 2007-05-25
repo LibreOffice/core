@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iprcache.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:53:57 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:23:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,12 +101,12 @@ static const struct
     INT32       nPropHdl;
 } aFlushProperties[ NUM_FLUSH_PROPS ] =
 {
-    UPN_IS_GERMAN_PRE_REFORM,           UPH_IS_GERMAN_PRE_REFORM,
-    UPN_IS_USE_DICTIONARY_LIST,         UPH_IS_USE_DICTIONARY_LIST,
-    UPN_IS_IGNORE_CONTROL_CHARACTERS,   UPH_IS_IGNORE_CONTROL_CHARACTERS,
-    UPN_IS_SPELL_UPPER_CASE,            UPH_IS_SPELL_UPPER_CASE,
-    UPN_IS_SPELL_WITH_DIGITS,           UPH_IS_SPELL_WITH_DIGITS,
-    UPN_IS_SPELL_CAPITALIZATION,        UPH_IS_SPELL_CAPITALIZATION
+    { UPN_IS_GERMAN_PRE_REFORM,           UPH_IS_GERMAN_PRE_REFORM },
+    { UPN_IS_USE_DICTIONARY_LIST,         UPH_IS_USE_DICTIONARY_LIST },
+    { UPN_IS_IGNORE_CONTROL_CHARACTERS,   UPH_IS_IGNORE_CONTROL_CHARACTERS },
+    { UPN_IS_SPELL_UPPER_CASE,            UPH_IS_SPELL_UPPER_CASE },
+    { UPN_IS_SPELL_WITH_DIGITS,           UPH_IS_SPELL_WITH_DIGITS },
+    { UPN_IS_SPELL_CAPITALIZATION,        UPH_IS_SPELL_CAPITALIZATION }
 };
 
 
@@ -269,8 +269,8 @@ class IPRCachedWord
     IPRCachedWord & operator = (const IPRCachedWord &);
 
 public:
-    IPRCachedWord( const String& rWord, IPRCachedWord* pFollow, INT16 nLang )
-        : aWord( rWord ), pNext( 0 ), pPrev( 0 ), pFollow( pFollow ),
+    IPRCachedWord( const String& rWord, IPRCachedWord* pFollowPtr,  INT16 nLang )
+        : aWord( rWord ), pNext( 0 ), pPrev( 0 ), pFollow( pFollowPtr ),
           nLanguage( nLang ), nFound( 0 ) {}
     ~IPRCachedWord(){}
 
@@ -427,11 +427,11 @@ BOOL IPRSpellCache::CheckWord( const String& rWord, INT16 nLang, BOOL bAllLang )
     {
         pRun = *(ppHash + nIndex);
 
-        if( pRun && !( bRet = (rWord == pRun->GetWord() &&
+        if( pRun && FALSE == ( bRet = (rWord == pRun->GetWord() &&
             (nLang == pRun->GetLang() || bAllLang)) ) )
         {
             IPRCachedWord* pTmp = pRun->GetNext();
-            while( pTmp && !( bRet = ( rWord == pTmp->GetWord() &&
+            while( pTmp && FALSE ==( bRet = ( rWord == pTmp->GetWord() &&
                 (nLang == pTmp->GetLang() || bAllLang) ) ) )
             {
                 pRun = pTmp;
@@ -451,7 +451,7 @@ BOOL IPRSpellCache::CheckWord( const String& rWord, INT16 nLang, BOOL bAllLang )
             {   // Wenn wir noch nicht erster sind, werden wir es jetzt:
                 if ( ( pRun->GetFound() <= nInputValue ) &&
                          ( ++nInputPos > IPR_CACHE_MAXINPUT )
-                    || ( pInput == pRun ) && !( pInput = pRun->GetFollow() ) )
+                    || ( pInput == pRun ) && NULL == ( pInput = pRun->GetFollow() ) )
 
                 {   // Wenn die Input-Stelle am Maximum anlangt, erhoehen
                     ++nInputValue; // wir den InputValue und gehen wieder
@@ -538,7 +538,7 @@ void IPRSpellCache::AddWord( const String& rWord, INT16 nLang )
         else
             pLast = pTmp; // wir waren letzter
         // Einfuegen vor pInput
-        if( pTmp = pInput->GetPrev() )
+        if( NULL != (pTmp = pInput->GetPrev()) )
             pTmp->SetFollow( pRun );
         else
             pFirst = pRun; // pInput war erster
