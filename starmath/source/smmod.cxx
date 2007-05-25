@@ -4,9 +4,9 @@
  *
  *  $RCSfile: smmod.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:14:44 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:15:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,7 @@ const String SmLocalizedSymbolData::GetUiSymbolName( const String &rExportName )
     const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolNamesArray();
-    USHORT nCount = rExportNames.Count();
+    USHORT nCount = sal::static_int_cast< xub_StrLen >(rExportNames.Count());
     for (USHORT i = 0;  i < nCount  &&  !aRes.Len();  ++i)
     {
         if (rExportName == rExportNames.GetString(i))
@@ -170,7 +170,7 @@ const String SmLocalizedSymbolData::GetExportSymbolName( const String &rUiName )
     const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolNamesArray();
-    USHORT nCount = rUiNames.Count();
+    USHORT nCount = sal::static_int_cast< xub_StrLen >(rUiNames.Count());
     for (USHORT i = 0;  i < nCount  &&  !aRes.Len();  ++i)
     {
         if (rUiName == rUiNames.GetString(i))
@@ -191,7 +191,7 @@ const String SmLocalizedSymbolData::GetUiSymbolSetName( const String &rExportNam
     const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolSetNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolSetNamesArray();
-    USHORT nCount = rExportNames.Count();
+    USHORT nCount = sal::static_int_cast< xub_StrLen >(rExportNames.Count());
     for (USHORT i = 0;  i < nCount  &&  !aRes.Len();  ++i)
     {
         if (rExportName == rExportNames.GetString(i))
@@ -212,7 +212,7 @@ const String SmLocalizedSymbolData::GetExportSymbolSetName( const String &rUiNam
     const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolSetNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolSetNamesArray();
-    USHORT nCount = rUiNames.Count();
+    USHORT nCount = sal::static_int_cast< xub_StrLen >(rUiNames.Count());
     for (USHORT i = 0;  i < nCount  &&  !aRes.Len();  ++i)
     {
         if (rUiName == rUiNames.GetString(i))
@@ -283,8 +283,8 @@ SFX_IMPL_INTERFACE(SmModule, SfxModule, SmResId(RID_APPLICATION))
 
 SmModule::SmModule(SfxObjectFactory* pObjFact) :
     SfxModule(SfxApplication::CreateResManager("sm"), FALSE, pObjFact, NULL),
-    pConfig( 0 ),
     pColorConfig( 0 ),
+    pConfig( 0 ),
     pLocSymbolData( 0 ),
     pSysLocale( 0 ),
     pVirtualDev( 0 )
@@ -345,7 +345,7 @@ svtools::ColorConfig & SmModule::GetColorConfig()
     return *pColorConfig;
 }
 
-void SmModule::Notify( SfxBroadcaster &rBC, const SfxHint &rHint )
+void SmModule::Notify( SfxBroadcaster & /*rBC*/, const SfxHint &rHint )
 {
     if (rHint.ISA(SfxSimpleHint))
     {
