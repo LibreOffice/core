@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spelldsp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:55:21 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:25:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -381,7 +381,7 @@ BOOL SpellCheckerDispatcher::isValidInAny(
         // Bug 71632
         if( LANGUAGE_NONE != pLang[i] )
         {
-            if ((bRes = isValid_Impl( rWord, pLang[i], rProperties, bCheckDics )))
+            if (sal_True == (bRes = isValid_Impl( rWord, pLang[i], rProperties, bCheckDics )))
                 break;
             bCheckDics = FALSE;
         }
@@ -550,14 +550,14 @@ BOOL SpellCheckerDispatcher::isValid_Impl(
         if (bCheckDics  &&
             GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
         {
-            Reference< XDictionaryList > xDicList( GetDicList(), UNO_QUERY );
-            Reference< XDictionaryEntry > xPosEntry( SearchDicList( xDicList,
+            Reference< XDictionaryList > xDList( GetDicList(), UNO_QUERY );
+            Reference< XDictionaryEntry > xPosEntry( SearchDicList( xDList,
                     aChkWord, nLanguage, TRUE, TRUE ) );
             if (xPosEntry.is())
                 bRes = TRUE;
             else
             {
-                Reference< XDictionaryEntry > xNegEntry( SearchDicList( xDicList,
+                Reference< XDictionaryEntry > xNegEntry( SearchDicList( xDList,
                         aChkWord, nLanguage, FALSE, TRUE ) );
                 if (xNegEntry.is())
                     bRes = FALSE;
@@ -820,14 +820,14 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
 //            aProposals = xRes->getAlternatives();
             eFailureType = xRes->getFailureType();
         }
-        Reference< XDictionaryList > xDicList;
+        Reference< XDictionaryList > xDList;
         if (GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
-            xDicList = Reference< XDictionaryList >( GetDicList(), UNO_QUERY );
+            xDList = Reference< XDictionaryList >( GetDicList(), UNO_QUERY );
 
         // countercheck against results from dictionary which have precedence!
-        if (bCheckDics  &&  xDicList.is())
+        if (bCheckDics  &&  xDList.is())
         {
-            Reference< XDictionaryEntry > xPosEntry( SearchDicList( xDicList,
+            Reference< XDictionaryEntry > xPosEntry( SearchDicList( xDList,
                     aChkWord, nLanguage, TRUE, TRUE ) );
 
             if (xPosEntry.is())
@@ -837,7 +837,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             }
             else
             {
-                Reference< XDictionaryEntry > xNegEntry( SearchDicList( xDicList,
+                Reference< XDictionaryEntry > xNegEntry( SearchDicList( xDList,
                         aChkWord, nLanguage, FALSE, TRUE ) );
                 if (xNegEntry.is())
                 {
@@ -848,7 +848,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
 
                     // replacement text must not be in negative dictionary itself
                     if (aAddRplcTxt.getLength() &&
-                        !SearchDicList( xDicList, aAddRplcTxt, nLanguage, FALSE, TRUE ).is())
+                        !SearchDicList( xDList, aAddRplcTxt, nLanguage, FALSE, TRUE ).is())
                     {
                         aProposalList.Append( aAddRplcTxt );
 //                        // add suggestion if not already part of proposals
@@ -868,13 +868,13 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             // search suitable user-dictionaries for suggestions that are
             // similar to the misspelled word
             std::vector< OUString > aDicListProps;   // list of proposals from user-dictionaries
-            SearchSimilarText( aChkWord, nLanguage, xDicList, aDicListProps );
+            SearchSimilarText( aChkWord, nLanguage, xDList, aDicListProps );
             aProposalList.Append( aDicListProps );
             Sequence< OUString > aProposals = aProposalList.GetSequence();
 
             // remove entries listed in negative dictionaries
-            if (bCheckDics  &&  xDicList.is())
-                SeqRemoveNegEntries( aProposals, xDicList, nLanguage );
+            if (bCheckDics  &&  xDList.is())
+                SeqRemoveNegEntries( aProposals, xDList, nLanguage );
 
             xRes = new SpellAlternatives( aChkWord, nLanguage,
                             eFailureType, aProposals );
