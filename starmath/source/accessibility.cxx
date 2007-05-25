@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:50:59 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:10:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,8 +184,8 @@ static awt::Point lcl_GetLocationOnScreen( Window *pWin )
 
 SmGraphicAccessible::SmGraphicAccessible( SmGraphicWindow *pGraphicWin ) :
     aAccName            ( String(SmResId(RID_DOCUMENTSTR)) ),
-    pWin                (pGraphicWin),
-    nClientId           (0)
+    nClientId           (0),
+    pWin                (pGraphicWin)
 {
     DBG_ASSERT( pWin, "SmGraphicAccessible: window missing" );
     //++aRefCount;
@@ -193,6 +193,7 @@ SmGraphicAccessible::SmGraphicAccessible( SmGraphicWindow *pGraphicWin ) :
 
 
 SmGraphicAccessible::SmGraphicAccessible( const SmGraphicAccessible &rSmAcc ) :
+    SmGraphicAccessibleBaseClass(),
     aAccName            ( String(SmResId(RID_DOCUMENTSTR)) ),
     nClientId           (0)
 {
@@ -385,12 +386,12 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getAccessibleChildCount()
 }
 
 Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleChild(
-        sal_Int32 i )
+        sal_Int32 /*i*/ )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     throw IndexOutOfBoundsException();  // there is no child...
-    return 0;
+    /*return 0;*/
 }
 
 Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleParent()
@@ -542,7 +543,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::setCaretPosition( sal_Int32 nIndex )
 {
     xub_StrLen nIdx = (xub_StrLen) nIndex;
     String aTxt( GetAccessibleText_Impl() );
-    if (!(0 <= nIdx  &&  nIdx < aTxt.Len()))
+    if (!(/*0 <= nIdx  &&*/  nIdx < aTxt.Len()))
         throw IndexOutOfBoundsException();
     return sal_False;
 }
@@ -554,13 +555,14 @@ sal_Unicode SAL_CALL SmGraphicAccessible::getCharacter( sal_Int32 nIndex )
 
     xub_StrLen nIdx = (xub_StrLen) nIndex;
     String aTxt( GetAccessibleText_Impl() );
-    if (!(0 <= nIdx  &&  nIdx < aTxt.Len()))
+    if (!(/*0 <= nIdx  &&*/  nIdx < aTxt.Len()))
         throw IndexOutOfBoundsException();
     return aTxt.GetChar( nIdx );
 }
 
 Sequence< beans::PropertyValue > SAL_CALL SmGraphicAccessible::getCharacterAttributes(
-        sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes )
+        sal_Int32 nIndex,
+        const uno::Sequence< ::rtl::OUString > & /*rRequestedAttributes*/ )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -775,8 +777,8 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
     String aTxt( GetAccessibleText_Impl() );
     xub_StrLen nStart = (xub_StrLen) Min(nStartIndex, nEndIndex);
     xub_StrLen nEnd   = (xub_StrLen) Max(nStartIndex, nEndIndex);
-    if (!(0 <= nStart  &&  nStart <= aTxt.Len()) ||
-        !(0 <= nEnd    &&  nEnd   <= aTxt.Len()))
+    if (!(/*0 <= nStart  &&*/  nStart <= aTxt.Len()) ||
+        !(/*0 <= nEnd    &&*/  nEnd   <= aTxt.Len()))
         throw IndexOutOfBoundsException();
     return aTxt.Copy( nStart, nEnd - nStart );
 }
@@ -787,7 +789,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
     String aTxt( GetAccessibleText_Impl() );
     xub_StrLen nIdx = (xub_StrLen) nIndex;
     //!! nIndex is allowed to be the string length
-    if (!(0 <= nIdx  &&  nIdx <= aTxt.Len()))
+    if (!(/*0 <= nIdx  &&*/  nIdx <= aTxt.Len()))
         throw IndexOutOfBoundsException();
 
     ::com::sun::star::accessibility::TextSegment aResult;
@@ -808,7 +810,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
     String aTxt( GetAccessibleText_Impl() );
     xub_StrLen nIdx = (xub_StrLen) nIndex;
     //!! nIndex is allowed to be the string length
-    if (!(0 <= nIdx  &&  nIdx <= aTxt.Len()))
+    if (!(/*0 <= nIdx  &&*/  nIdx <= aTxt.Len()))
         throw IndexOutOfBoundsException();
 
     ::com::sun::star::accessibility::TextSegment aResult;
@@ -830,7 +832,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
     String aTxt( GetAccessibleText_Impl() );
     xub_StrLen nIdx = (xub_StrLen) nIndex;
     //!! nIndex is allowed to be the string length
-    if (!(0 <= nIdx  &&  nIdx <= aTxt.Len()))
+    if (!(/*0 <= nIdx  &&*/  nIdx <= aTxt.Len()))
         throw IndexOutOfBoundsException();
 
     ::com::sun::star::accessibility::TextSegment aResult;
@@ -916,7 +918,7 @@ Sequence< OUString > SAL_CALL SmGraphicAccessible::getSupportedServiceNames()
 
 //------------------------------------------------------------------------
 
-SmEditSource::SmEditSource( SmEditWindow *pWin, SmEditAccessible &rAcc ) :
+SmEditSource::SmEditSource( SmEditWindow * /*pWin*/, SmEditAccessible &rAcc ) :
     aViewFwd    (rAcc),
     aTextFwd    (rAcc, *this),
     aEditViewFwd(rAcc),
@@ -925,6 +927,7 @@ SmEditSource::SmEditSource( SmEditWindow *pWin, SmEditAccessible &rAcc ) :
 }
 
 SmEditSource::SmEditSource( const SmEditSource &rSrc ) :
+    SvxEditSource(),
     aViewFwd    (rSrc.rEditAcc),
     aTextFwd    (rSrc.rEditAcc, *this),
     aEditViewFwd(rSrc.rEditAcc),
@@ -952,7 +955,7 @@ SvxViewForwarder* SmEditSource::GetViewForwarder()
     return &aViewFwd;
 }
 
-SvxEditViewForwarder* SmEditSource::GetEditViewForwarder( sal_Bool bCreate )
+SvxEditViewForwarder* SmEditSource::GetEditViewForwarder( sal_Bool /*bCreate*/ )
 {
     return &aEditViewFwd;
 }
@@ -1385,7 +1388,7 @@ EFieldInfo SmTextForwarder::GetFieldInfo( USHORT nPara, USHORT nField ) const
     return pEditEngine ? pEditEngine->GetFieldInfo( nPara, nField ) : EFieldInfo();
 }
 
-EBulletInfo SmTextForwarder::GetBulletInfo( USHORT nPara ) const
+EBulletInfo SmTextForwarder::GetBulletInfo( USHORT /*nPara*/ ) const
 {
     return EBulletInfo();
 }
@@ -1497,7 +1500,7 @@ USHORT SmTextForwarder::GetLineLen( USHORT nPara, USHORT nLine ) const
     return pEditEngine ? pEditEngine->GetLineLen(nPara, nLine) : 0;
 }
 
-sal_Bool SmTextForwarder::QuickFormatDoc( BOOL bFull )
+sal_Bool SmTextForwarder::QuickFormatDoc( BOOL /*bFull*/ )
 {
     sal_Bool bRes = sal_False;
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
@@ -1509,13 +1512,13 @@ sal_Bool SmTextForwarder::QuickFormatDoc( BOOL bFull )
     return bRes;
 }
 
-USHORT SmTextForwarder::GetDepth( USHORT nPara ) const
+USHORT SmTextForwarder::GetDepth( USHORT /*nPara*/ ) const
 {
     // math has no outliner...
     return 0;
 }
 
-sal_Bool SmTextForwarder::SetDepth( USHORT nPara, USHORT nNewDepth )
+sal_Bool SmTextForwarder::SetDepth( USHORT /*nPara*/, USHORT nNewDepth )
 {
     // math has no outliner...
     return 0 == nNewDepth;  // is it the value from 'GetDepth' ?
@@ -1690,8 +1693,8 @@ sal_Bool SmEditViewForwarder::Paste()
 
 SmEditAccessible::SmEditAccessible( SmEditWindow *pEditWin ) :
     aAccName            ( String(SmResId(STR_CMDBOXWINDOW)) ),
-    pWin                (pEditWin),
-    pTextHelper         (0)
+    pTextHelper         (0),
+    pWin                (pEditWin)
 {
     DBG_ASSERT( pWin, "SmEditAccessible: window missing" );
     //++aRefCount;
@@ -1699,6 +1702,7 @@ SmEditAccessible::SmEditAccessible( SmEditWindow *pEditWin ) :
 
 
 SmEditAccessible::SmEditAccessible( const SmEditAccessible &rSmAcc ) :
+    SmEditAccessibleBaseClass(),
     aAccName            ( String(SmResId(STR_CMDBOXWINDOW)) )
 {
     //vos::OGuard aGuard(Application::GetSolarMutex());
