@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinfo.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-27 09:50:23 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 11:03:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
-#include <multimon.h>
 #include <tools/postsys.h>
 
 #include <tools/string.hxx>
@@ -93,7 +92,7 @@ BOOL WinSalSystem::handleMonitorCallback( sal_IntPtr hMonitor, sal_IntPtr, sal_I
     if( GetMonitorInfoW( reinterpret_cast<HMONITOR>(hMonitor), &aInfo ) )
     {
         aInfo.szDevice[CCHDEVICENAME-1] = 0;
-        rtl::OUString aDeviceName( aInfo.szDevice );
+        rtl::OUString aDeviceName( reinterpret_cast<const sal_Unicode *>(aInfo.szDevice) );
         std::map< rtl::OUString, unsigned int >::const_iterator it =
             m_aDeviceNameToMonitor.find( aDeviceName );
         if( it != m_aDeviceNameToMonitor.end() )
@@ -168,8 +167,8 @@ bool WinSalSystem::initMonitors()
                 {
                     aDev.DeviceName[31] = 0;
                     aDev.DeviceString[127] = 0;
-                    rtl::OUString aDeviceName( aDev.DeviceName );
-                    rtl::OUString aDeviceString( aDev.DeviceString );
+                    rtl::OUString aDeviceName( reinterpret_cast<const sal_Unicode *>(aDev.DeviceName) );
+                    rtl::OUString aDeviceString( reinterpret_cast<const sal_Unicode *>(aDev.DeviceString) );
                     m_aDeviceNameToMonitor[ aDeviceName ] = m_aMonitors.size();
                     m_aMonitors.push_back( DisplayMonitor( aDeviceString,
                                                            aDeviceName,
