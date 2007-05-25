@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:11:43 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:03:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -669,7 +669,15 @@ String GetWordDefaultDateStringAsUS(SvNumberFormatter* pFormatter, USHORT nLang)
     aFormat.ConvertLanguage(*pFormatter, nLang, LANGUAGE_ENGLISH_US);
 
     String sParams(aFormat.GetFormatstring());
-    sParams.SearchAndReplace(CREATE_CONST_ASC("YY"), CREATE_CONST_ASC("YYYY"));
+    // --> OD 2007-02-09 #i36594#
+    // Fix provided by mloiseleur@openoffice.org.
+    // A default date can have already 4 year digits, in some case
+    const xub_StrLen pos = sParams.Search( CREATE_CONST_ASC("YYYY") );
+    if ( pos == STRING_NOTFOUND )
+    {
+        sParams.SearchAndReplace(CREATE_CONST_ASC("YY"), CREATE_CONST_ASC("YYYY"));
+    }
+    // <--
     return sParams;
 }
 
