@@ -4,9 +4,9 @@
  *
  *  $RCSfile: smdetect.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:54:54 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:15:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::rtl;
 
-SmFilterDetect::SmFilterDetect( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
+SmFilterDetect::SmFilterDetect( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& /*xFactory*/ )
 {
 }
 
@@ -296,10 +296,10 @@ SmFilterDetect::~SmFilterDetect()
                         const SfxFilter* pFilter = aPreselectedFilterName.Len() ?
                                 SfxFilterMatcher().GetFilter4FilterName( aPreselectedFilterName ) : aTypeName.Len() ?
                                 SfxFilterMatcher(String::CreateFromAscii("smath")).GetFilter4EA( aTypeName ) : 0;
-                        String aFilterName;
+                        String aTmpFilterName;
                         if ( pFilter )
-                            aFilterName = pFilter->GetName();
-                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsAllowedAsTemplate() : FALSE, &aFilterName );
+                            aTmpFilterName = pFilter->GetName();
+                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsAllowedAsTemplate() : FALSE, &aTmpFilterName );
                     }
                     catch( lang::WrappedTargetException& aWrap )
                     {
@@ -379,7 +379,7 @@ SmFilterDetect::~SmFilterDetect()
                     }
                     else
                     {
-                        const int nSize = 5;
+                        const USHORT nSize = 5;
                         sal_Char aBuffer[nSize+1];
                         aBuffer[nSize] = 0;
                         pStrm->Seek( STREAM_SEEK_TO_BEGIN );
