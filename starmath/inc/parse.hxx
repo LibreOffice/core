@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parse.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 14:59:12 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:09:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,8 +138,8 @@ struct SmToken
     ULONG       nGroup;
     USHORT      nLevel;
     // token position
-    INT32       nRow;
-    INT32       nCol;
+    USHORT      nRow;
+    xub_StrLen  nCol;
 
     SmToken();
 };
@@ -168,8 +168,8 @@ struct SmErrorDesc
     String        Text;
 };
 
-DECLARE_STACK(SmNodeStack,  SmNode *);
-DECLARE_LIST(SmErrDescList, SmErrorDesc *);
+DECLARE_STACK(SmNodeStack,  SmNode *)
+DECLARE_LIST(SmErrDescList, SmErrorDesc *)
 
 /**************************************************************************/
 
