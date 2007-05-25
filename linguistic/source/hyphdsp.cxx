@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphdsp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:53:30 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:22:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,9 +189,9 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
                             aShorter = rOrigWord;
                             aLonger  = aText;
                         }
-                        xub_StrLen nS = aShorter.getLength();
-                        xub_StrLen nL = aLonger.getLength();
-                        if (nS > 0)
+                        xub_StrLen nS = sal::static_int_cast< xub_StrLen >( aShorter.getLength() );
+                        xub_StrLen nL = sal::static_int_cast< xub_StrLen >( aLonger.getLength() );
+                        if (nS > 0 && nL > 0)
                         {
                             DBG_ASSERT( (nS + 1 == nL) && aLonger[nL-1] == (sal_Unicode) '.',
                                 "HyphenatorDispatcher::buildHyphWord: unexpected difference between words!" );
