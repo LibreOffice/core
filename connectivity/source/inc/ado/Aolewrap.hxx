@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Aolewrap.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:02:26 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 10:43:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,6 +158,7 @@ namespace connectivity
         {
         public:
             using WpOLEBase<Ts>::pInterface;
+            using WpOLEBase<Ts>::IsValid;
             // Konstruktoren, operator=
             // diese rufen nur die Oberklasse
             WpOLECollection(Ts* pInt=NULL):WpOLEBase<Ts>(pInt){}
@@ -212,7 +213,7 @@ namespace connectivity
             }
             inline void fillElementNames(TStringVector& _rVector)
             {
-                if(WpOLEBase<Ts>::IsValid())
+                if(IsValid())
                 {
                     Refresh();
                     sal_Int32 nCount = GetItemCount();
