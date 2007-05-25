@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svarray.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:36:02 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:19:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,7 @@ inline void* operator new( size_t, DummyType* pPtr )
 {
     return pPtr;
 }
+inline void operator delete( void*, DummyType* ) {}
 
 #if defined(PRODUCT)
 
