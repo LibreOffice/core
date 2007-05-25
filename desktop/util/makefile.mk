@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.70 $
+#   $Revision: 1.71 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:31:35 $
+#   last change: $Author: vg $ $Date: 2007-05-25 11:00:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,11 +81,11 @@ RCFILES=verinfo.rc
 .IF "$(GUI)" == "WNT"
 
 LIB1TARGET=$(SLB)$/$(TARGET).lib
-LIB1FILES=$(TARGETOBJS)
-LIB1FILES += $(OBJ)$/copyright_ascii_sun.obj
+LIB1OBJFILES=$(TARGETOBJS)
+LIB1OBJFILES += $(OBJ)$/copyright_ascii_sun.obj
 
 #LIB2TARGET=$(SLB)$/officeloader.lib
-#LIB2FILES=$(OBJ)$/officeloader.obj
+#LIB2OBJFILES=$(OBJ)$/officeloader.obj
 
 
 .ENDIF
