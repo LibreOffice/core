@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:35:16 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:10:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,7 @@ class SmGraphicWindow : public ScrollableWindow
 protected:
     void        SetFormulaDrawPos(const Point &rPos) { aFormulaDrawPos = rPos; }
     void        SetIsCursorVisible(BOOL bVis) { bIsCursorVisible = bVis; }
+    using   Window::SetCursor;
     void        SetCursor(const SmNode *pNode);
     void        SetCursor(const Rectangle &rRect);
 
@@ -116,12 +117,15 @@ public:
 
     SmViewShell *   GetView()   { return pViewShell; }
 
+    using   Window::SetZoom;
     void   SetZoom(USHORT Factor);
+    using   Window::GetZoom;
     USHORT GetZoom() const { return nZoom; }
 
     const Point &   GetFormulaDrawPos() const { return aFormulaDrawPos; }
 
     void ZoomToFitInWindow();
+    using   ScrollableWindow::SetTotalSize;
     void SetTotalSize();
 
     BOOL IsCursorVisible() const { return bIsCursorVisible; }
@@ -133,7 +137,8 @@ public:
     // for Accessibility
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
-    SmGraphicAccessible *   GetAccessible()  { return pAccessible; }
+    using   Window::GetAccessible;
+    SmGraphicAccessible *   GetAccessible_Impl()  { return pAccessible; }
 };
 
 /**************************************************************************/
@@ -306,7 +311,7 @@ public:
     void        NextError();
     void        PrevError();
 
-    SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START+2);
+    SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START+2)
     SFX_DECL_VIEWFACTORY(SmViewShell);
 
     virtual void Execute( SfxRequest& rReq );
