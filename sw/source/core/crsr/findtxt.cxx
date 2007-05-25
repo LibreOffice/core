@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findtxt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 15:08:48 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:00:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,8 @@ using namespace com::sun::star::util;
 
 
 String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
-                      xub_StrLen& rEnde, SvULongs& rArr, String& rRet )
+                      xub_StrLen& rEnde, SvULongs& rArr, String& rRet,
+                      bool bRemoveSoftHyphen )
 {
     rRet = rNd.GetTxt();
     if( rArr.Count() )
@@ -115,7 +116,9 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
                          STRING_LEN;
 
         if ( bNewSoftHyphen )
-            nSoftHyphen = rNd.GetTxt().Search( CHAR_SOFTHYPHEN, nSoftHyphen );
+            nSoftHyphen = bRemoveSoftHyphen ?
+                          rNd.GetTxt().Search( CHAR_SOFTHYPHEN, nSoftHyphen ) :
+                          STRING_LEN;
 
         bNewHint       = false;
         bNewSoftHyphen = false;
@@ -285,12 +288,27 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                 nEnde = bSrchForward ? nTxtLen : 0;
             nStart = rCntntIdx.GetIndex();
 
+            // if the search string contains a soft hypen, we don't strip them from the text:
+            bool bRemoveSoftHyphens = true;
+            if ( bRegSearch )
+            {
+                const rtl::OUString a00AD( rtl::OUString::createFromAscii( "\\x00AD" ) );
+                if ( -1 != rSearchOpt.searchString.indexOf( a00AD ) )
+                     bRemoveSoftHyphens = false;
+            }
+            else
+            {
+                if ( 1 == rSearchOpt.searchString.getLength() &&
+                     CHAR_SOFTHYPHEN == rSearchOpt.searchString.toChar() )
+                     bRemoveSoftHyphens = false;
+            }
+
             if( bSrchForward )
                 lcl_CleanStr( *(SwTxtNode*)pNode, nStart, nEnde,
-                                aFltArr, sCleanStr );
+                                aFltArr, sCleanStr, bRemoveSoftHyphens );
             else
                 lcl_CleanStr( *(SwTxtNode*)pNode, nEnde, nStart,
-                                aFltArr, sCleanStr );
+                                aFltArr, sCleanStr, bRemoveSoftHyphens );
 
             SwScriptIterator* pScriptIter = 0;
             USHORT nSearchScript = 0;
