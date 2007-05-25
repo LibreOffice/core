@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 08:02:46 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:23:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,29 +278,42 @@ USHORT lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, XubString& rText,
 }
 
 static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
-                                      const SfxItemSet& rSet1,
+                                      const SfxItemSet* pSet1,
+                                      USHORT nWhichId,
                                       const SfxItemSet& rSet2,
                                       boost::shared_ptr<SfxItemSet>& pStyleHandle )
 {
     bool bRet = false;
 
-    SfxItemIter aIter( rSet1 );
     SfxItemSet* pNewSet = 0;
 
-    const SfxPoolItem* pItem = aIter.GetCurItem();
-    while( TRUE )
+    if ( !pSet1 )
     {
-        if ( SFX_ITEM_SET == rSet2.GetItemState( pItem->Which(), FALSE ) )
+        ASSERT( nWhichId, "lcl_HaveCommonAttributes not used correctly" )
+        if ( SFX_ITEM_SET == rSet2.GetItemState( nWhichId, FALSE ) )
         {
-            if ( !pNewSet )
-                pNewSet = rSet2.Clone( TRUE );
-            pNewSet->ClearItem( pItem->Which() );
+            pNewSet = rSet2.Clone( TRUE );
+            pNewSet->ClearItem( nWhichId );
         }
+    }
+    else if ( pSet1->Count() )
+    {
+        SfxItemIter aIter( *pSet1 );
+        const SfxPoolItem* pItem = aIter.GetCurItem();
+        while( TRUE )
+        {
+            if ( SFX_ITEM_SET == rSet2.GetItemState( pItem->Which(), FALSE ) )
+            {
+                if ( !pNewSet )
+                    pNewSet = rSet2.Clone( TRUE );
+                pNewSet->ClearItem( pItem->Which() );
+            }
 
-        if( aIter.IsAtEnd() )
-            break;
+            if( aIter.IsAtEnd() )
+                break;
 
-        pItem = aIter.NextItem();
+            pItem = aIter.NextItem();
+        }
     }
 
     if ( pNewSet )
@@ -432,8 +445,11 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
             continue;
         }
 
-        bool bSkipAttr;
+        // Default behavior is to process all attributes:
+        bool bSkipAttr = false;;
         boost::shared_ptr<SfxItemSet> pStyleHandle;
+
+        // 1. case: We want to reset only the attributes listed in pSet:
         if ( pSet )
         {
             bSkipAttr = SFX_ITEM_SET != pSet->GetItemState( pHt->Which(), FALSE );
@@ -442,16 +458,23 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
                 // if the current attribute is an autostyle, we have to check if the autostyle
                 // and pSet have any attributes in common. If so, pStyleHandle will contain
                 // a handle to AutoStyle / pSet:
-                bSkipAttr = !lcl_HaveCommonAttributes( getIDocumentStyleAccess(), *pSet, *static_cast<const SwFmtAutoFmt&>(pHt->GetAttr()).GetStyleHandle(), pStyleHandle );
+                bSkipAttr = !lcl_HaveCommonAttributes( getIDocumentStyleAccess(), pSet, 0, *static_cast<const SwFmtAutoFmt&>(pHt->GetAttr()).GetStyleHandle(), pStyleHandle );
             }
         }
-        else
+        else if ( nWhich )
         {
-            bSkipAttr = nWhich ?
-                        nWhich != pHt->Which() :
-                          (!bInclRefToxMark &&
-                                ( RES_TXTATR_REFMARK == pHt->Which() ||
-                                  RES_TXTATR_TOXMARK == pHt->Which() ) );
+            // 2. case: We want to reset only the attributes with WhichId nWhich:
+            bSkipAttr = nWhich != pHt->Which();
+            if ( bSkipAttr && RES_TXTATR_AUTOFMT == pHt->Which() )
+            {
+                bSkipAttr = !lcl_HaveCommonAttributes( getIDocumentStyleAccess(), 0, nWhich, *static_cast<const SwFmtAutoFmt&>(pHt->GetAttr()).GetStyleHandle(), pStyleHandle );
+            }
+        }
+        else if ( !bInclRefToxMark )
+        {
+            // 3. case: Reset all attributes except from ref/toxmarks:
+            bSkipAttr = RES_TXTATR_REFMARK == pHt->Which() ||
+                        RES_TXTATR_TOXMARK == pHt->Which();
         }
 
         if( bSkipAttr )
@@ -509,6 +532,13 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
                     pSwpHints->NoteInHistory( pHt );
                     *pHt->GetStart() = nEnd;
                     pSwpHints->NoteInHistory( pHt, TRUE );
+
+                    if ( pStyleHandle.get() && nAttrStart < nEnd )
+                    {
+                        SwTxtAttr* pNew = MakeTxtAttr( *pStyleHandle, nAttrStart, nEnd );
+                        Insert( pNew, SETATTR_NOHINTADJUST );
+                    }
+
                     bChanged = TRUE;
                 }
             }
@@ -523,9 +553,18 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
                     if ( nMax < *pAttrEnd )
                         nMax = *pAttrEnd;
                     bChanged = TRUE;
+
+                    const xub_StrLen nAttrEnd = *pAttrEnd;
+
                     pSwpHints->NoteInHistory( pHt );
                     *pAttrEnd = nStart;
                     pSwpHints->NoteInHistory( pHt, TRUE );
+
+                    if ( pStyleHandle.get() )
+                    {
+                        SwTxtAttr* pNew = MakeTxtAttr( *pStyleHandle, nStart, nAttrEnd );
+                        Insert( pNew, SETATTR_NOHINTADJUST );
+                    }
                 }
                 else if( nLen )             // Fall: 4
                 {       // bei Lange 0 werden beide Hints vom Insert(Ht)
@@ -539,6 +578,12 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
                     pSwpHints->NoteInHistory( pHt );
                     *pAttrEnd = nStart;
                     pSwpHints->NoteInHistory( pHt, TRUE );
+
+                    if ( pStyleHandle.get() && nStart < nEnd )
+                    {
+                        SwTxtAttr* pNew = MakeTxtAttr( *pStyleHandle, nStart, nEnd );
+                        Insert( pNew, SETATTR_NOHINTADJUST );
+                    }
 
                     if( nEnd < nTmpEnd )
                     {
