@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:33:07 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:02:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,7 +206,7 @@ public:
                 BOOL bSaveFml = TRUE );
     ~_SaveTable();
 
-    USHORT AddFmt( SwFrmFmt* pFmt );
+    USHORT AddFmt( SwFrmFmt* pFmt, bool bIsLine );
     void NewFrmFmt( const SwClient* pLnBx, BOOL bIsLine, USHORT nFmtPos,
                     SwFrmFmt* pOldFmt );
 
@@ -975,14 +975,14 @@ _SaveTable::~_SaveTable()
 }
 
 
-USHORT _SaveTable::AddFmt( SwFrmFmt* pFmt )
+USHORT _SaveTable::AddFmt( SwFrmFmt* pFmt, bool bIsLine )
 {
     USHORT nRet = aFrmFmts.GetPos( pFmt );
     if( USHRT_MAX == nRet )
     {
         // Kopie vom ItemSet anlegen
         SfxItemSet* pSet = new SfxItemSet( *pFmt->GetAttrSet().GetPool(),
-                                            aTableBoxSetRange );
+            bIsLine ? aTableLineSetRange : aTableBoxSetRange );
         pSet->Put( pFmt->GetAttrSet() );
         //JP 20.04.98: Bug 49502 - wenn eine Formel gesetzt ist, nie den
         //              Value mit sichern. Der muss gegebenfalls neu
@@ -1222,7 +1222,7 @@ _SaveLine::_SaveLine( _SaveLine* pPrev, const SwTableLine& rLine, _SaveTable& rS
     if( pPrev )
         pPrev->pNext = this;
 
-    nItemSet = rSTbl.AddFmt( rLine.GetFrmFmt() );
+    nItemSet = rSTbl.AddFmt( rLine.GetFrmFmt(), true );
 
     pBox = new _SaveBox( 0, *rLine.GetTabBoxes()[ 0 ], rSTbl );
     _SaveBox* pBx = pBox;
@@ -1300,7 +1300,7 @@ _SaveBox::_SaveBox( _SaveBox* pPrev, const SwTableBox& rBox, _SaveTable& rSTbl )
     if( pPrev )
         pPrev->pNext = this;
 
-    nItemSet = rSTbl.AddFmt( rBox.GetFrmFmt() );
+    nItemSet = rSTbl.AddFmt( rBox.GetFrmFmt(), false );
 
     if( rBox.GetSttNd() )
     {
