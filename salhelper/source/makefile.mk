@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 15:39:51 $
+#   last change: $Author: vg $ $Date: 2007-05-25 10:55:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ SHL1VERSIONMAP=gcc3_linux_intel.map
 .ELIF "$(OS)$(CPU)$(COMNAME)"=="MACOSXIgcc3"
 SHL1VERSIONMAP=gcc3_linux_intel.map
 .ELIF "$(GUI)$(COM)"=="WNTGCC"
-SHL1VERSIONMAP=gcc3_linux_intel.map
+SHL1VERSIONMAP=mingw_intel.map
 .ENDIF
 
 # --- Targets ------------------------------------------------------
