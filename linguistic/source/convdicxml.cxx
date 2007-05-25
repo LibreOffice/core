@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convdicxml.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:52:33 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:21:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,8 +223,8 @@ public:
             sal_uInt16 nPrefix, const OUString& rLName,
             ConvDicXMLDictionaryContext_Impl &rParentContext ) :
         ConvDicXMLImportContext( rImport, nPrefix, rLName ),
-        rDicContext( rParentContext ),
-        nPropertyType( ConversionPropertyType::NOT_DEFINED )
+        nPropertyType( ConversionPropertyType::NOT_DEFINED ),
+        rDicContext( rParentContext )
     {
     }
 
@@ -266,7 +266,7 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////
 
-void ConvDicXMLImportContext::Characters(const OUString &rChars)
+void ConvDicXMLImportContext::Characters(const OUString & /*rChars*/)
 {
     /*
     Whitespace occurring within the content of token elements is "trimmed"
@@ -275,12 +275,14 @@ void ConvDicXMLImportContext::Characters(const OUString &rChars)
     1 or more whitespace characters is replaced with one blank character).
     */
     //collapsing not done yet!
-    const OUString &rChars2 = rChars.trim();
+
+    // warning-free code: since the result is not used there is no need for trimming...
+    //const OUString &rChars2 = rChars.trim();
 }
 
 SvXMLImportContext * ConvDicXMLImportContext::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > &rxAttrList )
+        const uno::Reference< xml::sax::XAttributeList > & /*rxAttrList*/ )
 {
     SvXMLImportContext *pContext = 0;
     if (nPrefix == XML_NAMESPACE_TCD && rLocalName.equalsAscii( "text-conversion-dictionary" ))
@@ -293,7 +295,7 @@ SvXMLImportContext * ConvDicXMLImportContext::CreateChildContext(
 ////////////////////////////////////////
 
 void ConvDicXMLDictionaryContext_Impl::StartElement(
-    const Reference< xml::sax::XAttributeList >& rxAttrList )
+    const Reference< xml::sax::XAttributeList > &rxAttrList )
 {
     sal_Int16 nAttrCount = rxAttrList.is() ? rxAttrList->getLength() : 0;
     for (sal_Int16 i = 0;  i < nAttrCount;  ++i)
@@ -320,7 +322,7 @@ void ConvDicXMLDictionaryContext_Impl::StartElement(
 
 SvXMLImportContext * ConvDicXMLDictionaryContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > &rxAttrList )
+        const uno::Reference< xml::sax::XAttributeList > & /*rxAttrList*/ )
 {
     SvXMLImportContext *pContext = 0;
     if (nPrefix == XML_NAMESPACE_TCD  &&  rLocalName.equalsAscii( "entry" ))
@@ -334,7 +336,7 @@ SvXMLImportContext * ConvDicXMLDictionaryContext_Impl::CreateChildContext(
 
 SvXMLImportContext * ConvDicXMLEntryTextContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > &rxAttrList )
+        const uno::Reference< xml::sax::XAttributeList > & /*rxAttrList*/ )
 {
     SvXMLImportContext *pContext = 0;
     if (nPrefix == XML_NAMESPACE_TCD  &&  rLocalName.equalsAscii( "right-text" ))
@@ -367,7 +369,7 @@ void ConvDicXMLEntryTextContext_Impl::StartElement(
 
 SvXMLImportContext * ConvDicXMLRightTextContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > &rxAttrList )
+        const uno::Reference< xml::sax::XAttributeList > & /*rxAttrList*/ )
 {
     // leaf: return default (empty) context
     SvXMLImportContext *pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
@@ -389,7 +391,7 @@ void ConvDicXMLRightTextContext_Impl::EndElement()
 
 ///////////////////////////////////////////////////////////////////////////
 
-sal_Bool ConvDicXMLExport::Export( SfxMedium &rMedium )
+sal_Bool ConvDicXMLExport::Export( SfxMedium & /*rMedium*/ )
 {
     sal_Bool bRet = sal_False;
 
@@ -402,7 +404,7 @@ sal_Bool ConvDicXMLExport::Export( SfxMedium &rMedium )
 }
 
 
-sal_uInt32 ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
+sal_uInt32 ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum /*eClass*/ )
 {
     _GetNamespaceMap().Add( A2OU( "tcd" ),
             A2OU( XML_NAMESPACE_TCD_STRING ), XML_NAMESPACE_TCD );
@@ -440,9 +442,6 @@ void ConvDicXMLExport::_ExportContent()
     ConvMap::iterator aIt;
     for (aIt = rDic.aFromLeft.begin();  aIt != rDic.aFromLeft.end();  ++aIt)
         aKeySet.insert( (*aIt).first );
-#ifdef DEBUG
-    size_t nSz = aKeySet.size();
-#endif
 
     ConvMapKeySet::iterator aKeyIt;
     for (aKeyIt = aKeySet.begin();  aKeyIt != aKeySet.end();  ++aKeyIt)
@@ -452,9 +451,9 @@ void ConvDicXMLExport::_ExportContent()
         if (rDic.pConvPropType.get())   // property-type list available?
         {
             sal_Int16 nPropertyType = -1;
-            PropTypeMap::iterator aIt = rDic.pConvPropType->find( aLeftText );
-            if (aIt != rDic.pConvPropType->end())
-                nPropertyType = (*aIt).second;
+            PropTypeMap::iterator aIt2 = rDic.pConvPropType->find( aLeftText );
+            if (aIt2 != rDic.pConvPropType->end())
+                nPropertyType = (*aIt2).second;
             DBG_ASSERT( nPropertyType, "property-type not found" );
             if (nPropertyType == -1)
                 nPropertyType = ConversionPropertyType::NOT_DEFINED;
@@ -502,7 +501,7 @@ void SAL_CALL ConvDicXMLImport::endDocument(void)
 SvXMLImportContext * ConvDicXMLImport::CreateContext(
         sal_uInt16 nPrefix,
         const rtl::OUString &rLocalName,
-        const com::sun::star::uno::Reference < com::sun::star::xml::sax::XAttributeList > &rxAttrList )
+        const uno::Reference < xml::sax::XAttributeList > & /*rxAttrList*/ )
 {
     SvXMLImportContext *pContext = 0;
     if (nPrefix == XML_NAMESPACE_TCD && rLocalName.equalsAscii( "text-conversion-dictionary" ))
