@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 16:04:38 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:16:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -301,7 +301,7 @@ uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType ) throw(uno::R
 {
     uno::Any aRet =  ::cppu::queryInterface ( rType,
                                     // OWeakObject interfaces
-                                    reinterpret_cast< XInterface* > ( this ),
+                                    dynamic_cast< XInterface* > ( static_cast< XUnoTunnel* > ( this )),
                                     static_cast< XWeak* > ( this ),
                                     // PropertySetHelper interfaces
                                     static_cast< XPropertySet* > ( this ),
@@ -376,7 +376,7 @@ sal_Int64 SAL_CALL SmModel::getSomething( const uno::Sequence< sal_Int8 >& rId )
         && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                         rId.getConstArray(), 16 ) )
     {
-            return (sal_Int64)this;
+            return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_uIntPtr >(this));
     }
 
     return SfxBaseModel::getSomething( rId );
@@ -873,11 +873,11 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
 
                     Font rFont = (*aIter)->GetFace();
                     pDescriptor->sFontName = rFont.GetName();
-                    pDescriptor->nCharSet  = rFont.GetCharSet();
-                    pDescriptor->nFamily   = rFont.GetFamily();
-                    pDescriptor->nPitch    = rFont.GetPitch();
-                    pDescriptor->nWeight   = rFont.GetWeight();
-                    pDescriptor->nItalic   = rFont.GetItalic();
+                    pDescriptor->nCharSet  = sal::static_int_cast< sal_Int16 >(rFont.GetCharSet());
+                    pDescriptor->nFamily   = sal::static_int_cast< sal_Int16 >(rFont.GetFamily());
+                    pDescriptor->nPitch    = sal::static_int_cast< sal_Int16 >(rFont.GetPitch());
+                    pDescriptor->nWeight   = sal::static_int_cast< sal_Int16 >(rFont.GetWeight());
+                    pDescriptor->nItalic   = sal::static_int_cast< sal_Int16 >(rFont.GetItalic());
                 }
                 *pValue <<= aSequence;
             }
@@ -905,8 +905,8 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
 //////////////////////////////////////////////////////////////////////
 
 sal_Int32 SAL_CALL SmModel::getRendererCount(
-        const uno::Any& rSelection,
-        const uno::Sequence< beans::PropertyValue >& xOptions )
+        const uno::Any& /*rSelection*/,
+        const uno::Sequence< beans::PropertyValue >& /*xOptions*/ )
     throw (IllegalArgumentException, RuntimeException)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -939,8 +939,8 @@ static Size lcl_GuessPaperSize()
 
 uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
         sal_Int32 nRenderer,
-        const uno::Any& rSelection,
-        const uno::Sequence< beans::PropertyValue >& xOptions )
+        const uno::Any& /*rSelection*/,
+        const uno::Sequence< beans::PropertyValue >& /*xOptions*/ )
     throw (IllegalArgumentException, RuntimeException)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1062,7 +1062,7 @@ void SAL_CALL SmModel::render(
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SmModel_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+                const uno::Reference< lang::XMultiServiceFactory > & /*rSMgr*/ ) throw( uno::Exception )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     SmDLL::Init();
