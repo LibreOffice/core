@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-16 16:04:22 $
+#   last change: $Author: vg $ $Date: 2007-05-25 10:58:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,10 +79,10 @@ SHL1OBJS=$(SLOFILES)
 #STDSHL=
 
 SHL1STDLIBS=\
-        unicows.lib\
-        kernel32.lib\
-        msvcrt.lib\
-        wininet.lib
+        $(UNICOWSLIB)\
+        $(KERNEL32LIB)\
+        $(MSVCRTLIB)\
+        $(WININETLIB)
 
         
 .ENDIF
