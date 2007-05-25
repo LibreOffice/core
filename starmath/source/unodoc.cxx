@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodoc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:56:28 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:16:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ uno::Sequence< rtl::OUString > SAL_CALL SmDocument_getSupportedServiceNames() th
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SmDocument_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+                const uno::Reference< lang::XMultiServiceFactory > & /*rSMgr*/ ) throw( uno::Exception )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( !SM_MOD() )
