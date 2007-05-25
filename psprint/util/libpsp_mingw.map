@@ -1,7 +1,7 @@
 UDK_3_0_0 {
     global:
         *psp*;
-        OpenTTFont;
+        OpenTTFontBuffer;
         MapChar;
         GetTTGlobalFontInfo;
         GetTTSimpleGlyphMetrics;
