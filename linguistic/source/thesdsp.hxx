@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thesdsp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:56:23 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:25:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ class LinguOptions;
 
 namespace com { namespace sun { namespace star { namespace beans {
     class XPropertySet;
-}}}};
+}}}}
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -111,7 +111,7 @@ public:
 
 
 
-DECLARE_TABLE( ThesSvcList, SeqLangSvcEntry_Thes * );
+DECLARE_TABLE( ThesSvcList, SeqLangSvcEntry_Thes * )
 
 class ThesaurusDispatcher :
     public cppu::WeakImplHelper1
