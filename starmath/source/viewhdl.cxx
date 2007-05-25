@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewhdl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:57:21 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:16:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ SmClipboardChangeListener::~SmClipboardChangeListener()
 }
 
 void SAL_CALL SmClipboardChangeListener::disposing(
-                                    const lang::EventObject& rEventObject ) throw ( ::com::sun::star::uno::RuntimeException)
+                                    const lang::EventObject& /*rEventObject*/ ) throw ( ::com::sun::star::uno::RuntimeException)
 {
 }
 
