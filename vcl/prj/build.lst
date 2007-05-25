@@ -18,10 +18,11 @@ vc	vcl\unx\source\app						nmake	-	u	vc__appu vc_inc NULL
 vc	vcl\unx\source\gdi						nmake	-	u	vc__gdiu vc_inc NULL
 vc	vcl\unx\source\window					nmake	-	u	vc__winu vc_inc NULL
 vc  vcl\unx\dummy							nmake   -   u   vc__du   vc_inc NULL
-vc  vcl\unx\gtk\a11y							nmake   -   u   vc__gtky vc_inc NULL
+vc  vcl\unx\gtk\a11y						nmake   -   u   vc__gtky vc_inc NULL
 vc  vcl\unx\gtk\app							nmake   -   u   vc__gtka vc_inc NULL
 vc  vcl\unx\gtk\window						nmake   -   u   vc__gtkw vc_inc NULL
 vc  vcl\unx\gtk\gdi 						nmake   -   u   vc__gtkg vc_inc NULL
+vc  vcl\unx\headless						nmake   -   u   vc__hl   vc_inc NULL
 vc  vcl\unx\kde							nmake   -   u   vc__kde  vc_inc NULL
 vc	vcl\aqua\source\app						nmake	-	u	vc__appa vc_inc NULL
 vc	vcl\aqua\source\gdi						nmake	-	u	vc__gdia vc_inc NULL
@@ -30,5 +31,5 @@ vc	vcl\mac\source\app						nmake	-	m	vc__appm vc_inc NULL
 vc	vcl\mac\source\gdi						nmake	-	m	vc__gdim vc_inc NULL
 vc	vcl\mac\source\window					nmake	-	m	vc__winm vc_inc NULL
 vc	vcl\mac\source\src						nmake	-	m	vc__srcm vc_inc NULL
-vc	vcl\util								nmake	-	all	vc_util vc__plug.u vc__appa.u vc__appm.m vc__appu.u vc__appw.w vc__gdim.m vc__gdiu.u vc__gdiw.w vc__srcm.m vc__srcw.w vc__wina.u vc__winm.m vc__winu.u vc__winw.w vc__du.u vc__gtka.u vc__gtky.u vc__gtkw.u vc__gtkg.u vc__kde.u vc_app vc_ctrl vc_gdi vc_hlp vc_src vc_win vc_glyphs vc_components NULL
+vc	vcl\util								nmake	-	all	vc_util vc__plug.u vc__appa.u vc__appm.m vc__appu.u vc__appw.w vc__gdim.m vc__gdiu.u vc__gdiw.w vc__srcm.m vc__srcw.w vc__wina.u vc__winm.m vc__winu.u vc__winw.w vc__du.u vc__gtka.u vc__gtky.u vc__gtkw.u vc__gtkg.u vc__kde.u vc__hl.u vc_app vc_ctrl vc_gdi vc_hlp vc_src vc_win vc_glyphs vc_components NULL
 vc	vcl\workben								nmake	-	all	vc_wrkb vc_util NULL
