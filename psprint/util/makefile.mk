@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: ihi $ $Date: 2007-04-16 14:17:35 $
+#   last change: $Author: vg $ $Date: 2007-05-25 10:47:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,30 +52,9 @@ dummy:
 .ELSE		# "$(GUIBASE)"=="aqua"
 
 .IF "$(OS)"=="WNT"
-.IF "$(COM)"=="GCC"
-
-LIB1TARGET= $(SLB)$/$(TARGET).lib
-LIB1FILES=	$(SLB)$/fontsubset.lib
-
-SHL1TARGET= psp$(UPD)$(DLLPOSTFIX)
-SHL1IMPLIB= ipsp
-SHL1LIBS=$(LIB1FILES)
-
-SHL1STDLIBS=$(SALLIB)
-
-SHL1VERSIONMAP=libpsp_mingw.map
-
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-
-# --- Def-File ---
-
-DEF1NAME=	$(SHL1TARGET)
-DEF1DES=PSPrint
-
-.ELSE
+LIB1ARCHIV=$(LB)$/lib$(TARGET).a
 LIB1TARGET= $(SLB)$/a$(TARGET).lib
 LIB1FILES=	$(SLB)$/fontsubset.lib
-.ENDIF
 .ELSE
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
