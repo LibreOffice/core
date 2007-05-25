@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:30:00 $
+#   last change: $Author: vg $ $Date: 2007-05-25 11:12:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -92,8 +92,10 @@ $(MISC)$/$(SHL1TARGET).def:  makefile.mk
     @echo ------------------------------
     @echo Making: $@
     @echo LIBRARY     $(SHL1TARGET)                                  >$@
+.IF "$(COM)"!="GCC"
     @echo DESCRIPTION 'StarOne Test-DLL'                            >>$@
     @echo DATA        READ WRITE NONSHARED                          >>$@
+.ENDIF
     @echo EXPORTS                                                   >>$@
     @echo   component_getImplementationEnvironment @24              >>$@
     @echo   component_writeInfo @25                                 >>$@
