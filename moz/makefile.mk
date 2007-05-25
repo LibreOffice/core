@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: ihi $ $Date: 2007-04-17 08:54:13 $
+#   last change: $Author: vg $ $Date: 2007-05-25 11:37:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -188,6 +188,8 @@ PATH!:=$(shell cygpath $(MOZ_TOOLS_DOS))/vc71/bin:$(shell cygpath $(MOZ_TOOLS_DO
 .ENDIF
 .IF "$(USE_SHELL)"=="tcsh"
 SET_MOZ_TOOLS_INSTALL_BAT:=setenv MOZ_TOOLS "$(MOZ_TOOLS_DOS)"
+.ELIF "$(USE_SHELL)"=="bash"
+SET_MOZ_TOOLS_INSTALL_BAT:=export "MOZ_TOOLS=$(MOZ_TOOLS_DOS)"
 .ELSE
 SET_MOZ_TOOLS_INSTALL_BAT:=MOZ_TOOLS="$(MOZ_TOOLS_DOS)"; export MOZ_TOOLS
 .ENDIF
