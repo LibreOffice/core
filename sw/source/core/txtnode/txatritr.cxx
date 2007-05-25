@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txatritr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:47:46 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 13:23:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,8 +241,7 @@ void SwTxtAttrIterator::SearchNextChg()
                                           aSIter.GetCurrScript() ) : nWhichId;
         }
 
-        const SfxPoolItem* pItem;
-        SwFmt* pFmt;
+        const SfxPoolItem* pItem = 0;
         for( ; nAttrPos < pHts->Count(); ++nAttrPos )
         {
             const SwTxtAttr* pHt = (*pHts)[ nAttrPos ];
@@ -254,10 +253,8 @@ void SwTxtAttrIterator::SearchNextChg()
             if( nHtStt >= nChgPos )
                 break;
 
-            if( ( nWh == pHt->Which() && 0 != (pItem = &pHt->GetAttr()) ) ||
-                ( RES_TXTATR_CHARFMT == pHt->Which() &&
-                  0 != (pFmt = pHt->GetCharFmt().GetCharFmt()) &&
-                  SFX_ITEM_SET == pFmt->GetItemState( nWh, TRUE, &pItem )) )
+            pItem = CharFmt::GetItem( *pHt, nWh );
+            if ( pItem )
             {
                 if( nHtStt > nStt )
                 {
