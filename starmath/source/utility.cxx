@@ -4,9 +4,9 @@
  *
  *  $RCSfile: utility.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:56:54 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:16:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,7 +182,7 @@ void SmPickList::Clear()
 /**************************************************************************/
 /**************************************************************************/
 
-void * SmFontPickList::CreateItem(const String& rString)
+void * SmFontPickList::CreateItem(const String& /*rString*/)
 {
     return new Font();
 }
@@ -270,7 +270,7 @@ void SmFontPickList::WriteTo(SmFontDialog& rDialog) const
 
 /**************************************************************************/
 
-IMPL_LINK( SmFontPickListBox, SelectHdl, ListBox *, pListBox )
+IMPL_LINK( SmFontPickListBox, SelectHdl, ListBox *, /*pListBox*/ )
 {
     USHORT  nPos;
     String  aString;
