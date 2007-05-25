@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 08:21:48 $
+ *  last change: $Author: vg $ $Date: 2007-05-25 12:09:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ extern SmFormat *pActiveFormat;
 class SmDocShell;
 
 class SmNode;
-DECLARE_DYNARRAY(SmNodeArray, SmNode *);
+DECLARE_DYNARRAY(SmNodeArray, SmNode *)
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -164,6 +164,7 @@ public:
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     virtual void CreateTextFromNode(String &rText);
 
+    using   SmRect::Draw;
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
 
     virtual void    GetAccessibleText( String &rText ) const;
@@ -191,7 +192,7 @@ public:
 
 class SmStructureNode;
 
-DECLARE_DYNARRAY(SmStructureNodeArray, SmStructureNode *);
+DECLARE_DYNARRAY(SmStructureNodeArray, SmStructureNode *)
 
 class SmStructureNode : public SmNode
 {
@@ -211,6 +212,7 @@ public:
     virtual USHORT      GetNumSubNodes() const;
             void        SetNumSubNodes(USHORT nSize) { aSubNodes.SetSize(nSize); }
 
+    using   SmNode::GetSubNode;
     virtual SmNode *    GetSubNode(USHORT nIndex);
             void SetSubNodes(SmNode *pFirst, SmNode *pSecond,
                                 SmNode *pThird = NULL);
@@ -236,6 +238,7 @@ public:
 
     virtual BOOL        IsVisible() const;
     virtual USHORT      GetNumSubNodes() const;
+    using   SmNode::GetSubNode;
     virtual SmNode *    GetSubNode(USHORT nIndex);
 };
 
@@ -272,6 +275,7 @@ public:
     virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    using   SmRect::Draw;
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
     void CreateTextFromNode(String &rText);
 };
@@ -295,6 +299,7 @@ public:
     virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    using   SmRect::Draw;
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
 };
 
@@ -330,6 +335,7 @@ public:
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     virtual void CreateTextFromNode(String &rText);
 
+    using   SmRect::Draw;
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
 
     virtual void  GetAccessibleText( String &rText ) const;
@@ -342,8 +348,8 @@ public:
 class SmSpecialNode : public SmTextNode
 {
 protected:
-    SmSpecialNode(SmNodeType eNodeType, const SmToken &rNodeToken, USHORT nFontDesc)
-    :   SmTextNode(eNodeType, rNodeToken, nFontDesc)
+    SmSpecialNode(SmNodeType eNodeType, const SmToken &rNodeToken, USHORT _nFontDesc)
+    :   SmTextNode(eNodeType, rNodeToken, _nFontDesc)
     {}
 
 public:
@@ -353,6 +359,7 @@ public:
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    using   SmRect::Draw;
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
 };
 
@@ -412,6 +419,7 @@ public:
     virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth);
     virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
 
+    using   SmRect::Draw;
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
 };
 
@@ -438,7 +446,7 @@ public:
 class SmErrorNode : public SmMathSymbolNode
 {
 public:
-    SmErrorNode(SmParseError eError, const SmToken &rNodeToken)
+    SmErrorNode(SmParseError /*eError*/, const SmToken &rNodeToken)
     :   SmMathSymbolNode(NERROR, rNodeToken)
     {
         SetText((xub_Unicode) MS_ERROR);
@@ -459,6 +467,7 @@ public:
     :   SmStructureNode(NTABLE, rNodeToken)
     {}
 
+    using   SmNode::GetLeftMost;
     virtual SmNode * GetLeftMost();
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
@@ -566,6 +575,7 @@ public:
         SetNumSubNodes(3);
     }
 
+    using   SmNode::GetLeftMost;
     virtual SmNode * GetLeftMost();
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
@@ -640,7 +650,7 @@ public:
     void  SetUseLimits(BOOL bVal) { bUseLimits = bVal; }
     BOOL  IsUseLimits() const { return bUseLimits; };
 
-    SmNode * GetSubSup(SmSubSup eSubSup) { return GetSubNode(1 + eSubSup); };
+    SmNode * GetSubSup(SmSubSup eSubSup) { return GetSubNode( sal::static_int_cast< USHORT >(1 + eSubSup) ); };
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void CreateTextFromNode(String &rText);
@@ -804,6 +814,7 @@ public:
     USHORT GetNumCols() const {return nNumCols;}
     void SetRowCol(USHORT nMatrixRows, USHORT nMatrixCols);
 
+    using   SmNode::GetLeftMost;
     virtual SmNode * GetLeftMost();
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
