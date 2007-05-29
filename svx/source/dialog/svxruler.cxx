@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:42:08 $
+ *  last change: $Author: rt $ $Date: 2007-05-29 15:57:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,9 @@
 #include "tstpitem.hxx"
 #include "lrspitem.hxx"
 #include "protitem.hxx"
+#ifndef _APP_HXX
+#include <vcl/svapp.hxx>
+#endif
 #ifndef RULER_TAB_RTL
 #define RULER_TAB_RTL           ((USHORT)0x0010)
 #endif
@@ -1084,8 +1087,23 @@ void SvxRuler::UpdatePage()
     else
         SetPagePos();
 
-    Point aPos(pEditWin->GetPosPixel()-GetPosPixel());
-    long lPos= bHorz ? aPos.X() : aPos.Y();
+    long lPos = 0;
+    Point aOwnPos = GetPosPixel();
+    Point aEdtWinPos = pEditWin->GetPosPixel();
+    if( Application::GetSettings().GetLayoutRTL() && bHorz )
+    {
+        //#i73321# in RTL the window and the ruler is not mirrored but the
+        // influence of the vertical ruler is inverted
+        Size aOwnSize = GetSizePixel();
+        Size aEdtWinSize = pEditWin->GetSizePixel();
+        lPos = aOwnSize.Width() - aEdtWinSize.Width();
+        lPos -= (aEdtWinPos - aOwnPos).X();
+    }
+    else
+    {
+        Point aPos(aEdtWinPos - aOwnPos);
+        lPos= bHorz ? aPos.X() : aPos.Y();
+    }
 
 // Leider bekommen wir den Offset des Editfensters zum Lineal nie
 // per Statusmeldung. Also setzen wir ihn selbst, wenn noetig.
