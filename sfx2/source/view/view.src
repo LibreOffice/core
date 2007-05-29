@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2007-05-29 14:58:27 $
+ *  last change: $Author: rt $ $Date: 2007-05-29 15:13:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,7 +179,6 @@ ErrorBox MSG_ERROR_NO_WEBBROWSER_FOUND
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "%PRODUCTNAME konnte auf Ihrem Rechner keinen Web-Browser finden. Bitte überprüfen Sie Ihre Arbeitsplatz-Einstellungen, oder installieren Sie einen Web-Browser (z.B. Mozilla) an die von dem Web-Browser vorgeschriebene Stelle." ;
     Message[ en-US ] = "%PRODUCTNAME could not find a web browser on your system. Please check your Desktop Preferences or install a web browser (for example, Mozilla) in the default  location requested during the browser installation." ;
 };
 
