@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:40:23 $
+ *  last change: $Author: rt $ $Date: 2007-05-29 15:42:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2102,14 +2102,14 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
             switch(nSet)
             {
                 case RedlineDisplayType::NONE: break;
-                case RedlineDisplayType::INSERTED: nSet |= IDocumentRedlineAccess::REDLINE_SHOW_INSERT; break;
-                case RedlineDisplayType::REMOVED: nSet |= IDocumentRedlineAccess::REDLINE_SHOW_DELETE;  break;
+                case RedlineDisplayType::INSERTED: eRedMode |= IDocumentRedlineAccess::REDLINE_SHOW_INSERT; break;
+                case RedlineDisplayType::REMOVED: eRedMode |= IDocumentRedlineAccess::REDLINE_SHOW_DELETE;  break;
                 case RedlineDisplayType::
-                        INSERTED_AND_REMOVED: nSet |= IDocumentRedlineAccess::REDLINE_SHOW_INSERT|IDocumentRedlineAccess::REDLINE_SHOW_DELETE;
+                        INSERTED_AND_REMOVED: eRedMode |= IDocumentRedlineAccess::REDLINE_SHOW_INSERT|IDocumentRedlineAccess::REDLINE_SHOW_DELETE;
                 break;
                 default: throw IllegalArgumentException();
             }
-            pDocShell->GetDoc()->SetRedlineMode((IDocumentRedlineAccess::RedlineMode_t)(nSet));
+            pDocShell->GetDoc()->SetRedlineMode((IDocumentRedlineAccess::RedlineMode_t)(eRedMode));
         }
         break;
         case WID_DOC_TWO_DIGIT_YEAR:
