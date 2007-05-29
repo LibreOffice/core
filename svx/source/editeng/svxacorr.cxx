@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:46:42 $
+ *  last change: $Author: rt $ $Date: 2007-05-29 15:46:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -657,6 +657,9 @@ BOOL SvxAutoCorrect::FnChgToEnEmDash(
 {
     BOOL bRet = FALSE;
     CharClass& rCC = GetCharClass( eLang );
+    if (eLang == LANGUAGE_SYSTEM)
+        eLang = GetAppLang();
+    bool bAlwaysUseEmDash = (cEmDash && (eLang == LANGUAGE_RUSSIAN || eLang == LANGUAGE_UKRAINIAN));
 
     // ersetze " - " oder " --" durch "enDash"
     if( cEnDash && 1 < nSttPos && 1 <= nEndPos - nSttPos )
@@ -684,7 +687,7 @@ BOOL SvxAutoCorrect::FnChgToEnEmDash(
                     if( rCC.isLetterNumeric( cCh ))
                     {
                         rDoc.Delete( nSttPos, nSttPos + 2 );
-                        rDoc.Insert( nSttPos, cEnDash );
+                        rDoc.Insert( nSttPos, bAlwaysUseEmDash ? cEmDash : cEnDash );
                         bRet = TRUE;
                     }
                 }
@@ -719,7 +722,7 @@ BOOL SvxAutoCorrect::FnChgToEnEmDash(
                     if( rCC.isLetterNumeric( cCh ))
                     {
                         rDoc.Delete( nTmpPos, nTmpPos + nLen );
-                        rDoc.Insert( nTmpPos, cEnDash );
+                        rDoc.Insert( nTmpPos, bAlwaysUseEmDash ? cEmDash : cEnDash );
                         bRet = TRUE;
                     }
                 }
@@ -729,9 +732,7 @@ BOOL SvxAutoCorrect::FnChgToEnEmDash(
 
     // Replace [A-z0-9]--[A-z0-9] double dash with "emDash" or "enDash".
     // Finnish and Hungarian use enDash instead of emDash.
-    bool bEnDash = (((eLang == LANGUAGE_SYSTEM ? (eLang = GetAppLang()) :
-                    eLang) == LANGUAGE_HUNGARIAN) || eLang ==
-            LANGUAGE_FINNISH);
+    bool bEnDash = (eLang == LANGUAGE_HUNGARIAN || eLang == LANGUAGE_FINNISH);
     if( ((cEmDash && !bEnDash) || (cEnDash && bEnDash)) && 4 <= nEndPos - nSttPos )
     {
         String sTmp( rTxt.Copy( nSttPos, nEndPos - nSttPos ) );
