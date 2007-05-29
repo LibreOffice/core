@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmap.cpp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:52:34 $
+ *  last change: $Author: rt $ $Date: 2007-05-29 15:52:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,88 +53,88 @@ struct FontEntry
      double ratio;
 };
 /**
- * ratio는 한글 70%, 숫자 10% 영문 20%의 비율로 구성되었다는 가정하에 정해진다.
+ * ratio\xb4\xc2 \xc7\xd1\xb1\xdb 70%, \xbc\xfd\xc0\xda 10% \xbf\xb5\xb9\xae 20%\xc0\xc7 \xba\xf1\xc0\xb2\xb7\xce \xb1\xb8\xbc\xba\xb5\xc7\xbe\xfa\xb4\xd9\xb4\xc2 \xb0\xa1\xc1\xa4\xc7\xcf\xbf\xa1 \xc1\xa4\xc7\xd8\xc1\xf8\xb4\xd9.
  */
 const struct FontEntry FontMapTab[] =
 {
-    {"명조",0, 0.97},
-    {"고딕",1, 0.97},
-    {"샘물",1, 0.97},
-    {"필기",0, 0.97},
-    {"시스템",1, 0.84},
-    {"시스템 약자",1, 0.84},
-    {"시스템 간자",1, 0.84},
-    {"HY둥근 고딕",2, 0.97},
-    {"옛한글",0, 0.97},
-    {"가는공한",0, 0.72},
-    {"중간공한",0, 0.72},
-    {"굵은공한",0, 0.72},
-    {"가는한",0, 0.72},
-    {"중간한",0, 0.72},
-    {"굵은한",0, 0.72},
-    {"휴먼명조",0, 0.97},
-    {"휴먼고딕",1, 0.97},
-    {"가는안상수체",0, 0.55},
-    {"중간안상수체",0, 0.637},
-    {"굵은안상수체",0, 0.63},
-    {"휴먼가는샘체",0, 0.666},
-    {"휴먼중간샘체",0, 0.685},
-    {"휴먼굵은샘체",0, 0.727},
-    {"휴먼가는팸체",0, 0.666},
-    {"휴먼중간팸체",0, 0.685},
-    {"휴먼굵은팸체",0, 0.727},
-    {"휴먼옛체",3, 0.97},
-    {"한양신명조",0, 0.97},
-    {"한양견명조",1, 0.97},
-    {"한양중고딕",1, 0.97},
-    {"한양견고딕",1, 0.97},
-    {"한양그래픽",0, 0.97},
-    {"한양궁서",3, 0.97},
-    {"문화바탕",0, 0.97},
-    {"문화바탕제목",1, 0.97},
-    {"문화돋움",1, 0.97},
-    {"문화돋움제목",0, 0.97},
-    {"문화쓰기",0, 0.97},
-    {"문화쓰기흘림",0, 0.97},
-    {"펜흘림",0, 0.97},
-    {"복숭아",0, 0.827},
-    {"옥수수",0, 0.97},
-    {"오이",0, 0.97},
-    {"가지",0, 0.97},
-    {"강낭콩",2, 0.97},
-    {"딸기",3, 0.97},
-    {"타이프",0, 0.987},
-    {"태 나무",1, 0.97},
-    {"태 헤드라인",0, 0.97},
-    {"태 가는 헤드라인",0, 0.97},
-    {"태 헤드라인T",0, 0.97},
-    {"태 가는 헤드라인T",0, 0.97},
-    {"양재 다운명조M",0, 0.97},
-    {"양재 본목각M",0, 0.97},
-    {"양재 소슬",1, 0.97},
-    {"양재 매화",1, 0.987},
-    {"양재 튼튼",0, 0.97},
-    {"양재 참숯",1, 0.97},
-    {"양재 둘기",0, 0.97},
-    {"양재 샤넬",1, 0.97},
-    {"양재 와당",1, 0.97},
-    {"신명 세명조",0, 0.97},
-    {"신명 신명조",0, 0.97},
-    {"신명 신신명조",0, 0.97},
-    {"신명 중명조",0, 0.97},
-    {"신명 태명조",0, 0.97},
-    {"신명 견명조",0, 0.97},
-    {"신명 신문명조",0, 0.97},
-    {"신명 순명조",0, 0.97},
-    {"신명 세고딕",1, 0.97},
-    {"신명 중고딕",1, 0.97},
-    {"신명 태고딕",1, 0.97},
-    {"신명 견고딕",1, 0.97},
-    {"신명 세나루",2, 0.97},
-    {"신명 디나루",2, 0.97},
-    {"신명 신그래픽",2, 0.97},
-    {"신명 태그래픽",2, 0.97},
-    {"신명 궁서",3, 0.97}
+    {"\xb8\xed\xc1\xb6",0, 0.97},
+    {"\xb0\xed\xb5\xf1",1, 0.97},
+    {"\xbb\xf9\xb9\xb0",1, 0.97},
+    {"\xc7\xca\xb1\xe2",0, 0.97},
+    {"\xbd\xc3\xbd\xba\xc5\xdb",1, 0.84},
+    {"\xbd\xc3\xbd\xba\xc5\xdb \xbe\xe0\xc0\xda",1, 0.84},
+    {"\xbd\xc3\xbd\xba\xc5\xdb \xb0\xa3\xc0\xda",1, 0.84},
+    {"HY\xb5\xd5\xb1\xd9 \xb0\xed\xb5\xf1",2, 0.97},
+    {"\xbf\xbe\xc7\xd1\xb1\xdb",0, 0.97},
+    {"\xb0\xa1\xb4\xc2\xb0\xf8\xc7\xd1",0, 0.72},
+    {"\xc1\xdf\xb0\xa3\xb0\xf8\xc7\xd1",0, 0.72},
+    {"\xb1\xbd\xc0\xba\xb0\xf8\xc7\xd1",0, 0.72},
+    {"\xb0\xa1\xb4\xc2\xc7\xd1",0, 0.72},
+    {"\xc1\xdf\xb0\xa3\xc7\xd1",0, 0.72},
+    {"\xb1\xbd\xc0\xba\xc7\xd1",0, 0.72},
+    {"\xc8\xde\xb8\xd5\xb8\xed\xc1\xb6",0, 0.97},
+    {"\xc8\xde\xb8\xd5\xb0\xed\xb5\xf1",1, 0.97},
+    {"\xb0\xa1\xb4\xc2\xbe\xc8\xbb\xf3\xbc\xf6\xc3\xbc",0, 0.55},
+    {"\xc1\xdf\xb0\xa3\xbe\xc8\xbb\xf3\xbc\xf6\xc3\xbc",0, 0.637},
+    {"\xb1\xbd\xc0\xba\xbe\xc8\xbb\xf3\xbc\xf6\xc3\xbc",0, 0.63},
+    {"\xc8\xde\xb8\xd5\xb0\xa1\xb4\xc2\xbb\xf9\xc3\xbc",0, 0.666},
+    {"\xc8\xde\xb8\xd5\xc1\xdf\xb0\xa3\xbb\xf9\xc3\xbc",0, 0.685},
+    {"\xc8\xde\xb8\xd5\xb1\xbd\xc0\xba\xbb\xf9\xc3\xbc",0, 0.727},
+    {"\xc8\xde\xb8\xd5\xb0\xa1\xb4\xc2\xc6\xd4\xc3\xbc",0, 0.666},
+    {"\xc8\xde\xb8\xd5\xc1\xdf\xb0\xa3\xc6\xd4\xc3\xbc",0, 0.685},
+    {"\xc8\xde\xb8\xd5\xb1\xbd\xc0\xba\xc6\xd4\xc3\xbc",0, 0.727},
+    {"\xc8\xde\xb8\xd5\xbf\xbe\xc3\xbc",3, 0.97},
+    {"\xc7\xd1\xbe\xe7\xbd\xc5\xb8\xed\xc1\xb6",0, 0.97},
+    {"\xc7\xd1\xbe\xe7\xb0\xdf\xb8\xed\xc1\xb6",1, 0.97},
+    {"\xc7\xd1\xbe\xe7\xc1\xdf\xb0\xed\xb5\xf1",1, 0.97},
+    {"\xc7\xd1\xbe\xe7\xb0\xdf\xb0\xed\xb5\xf1",1, 0.97},
+    {"\xc7\xd1\xbe\xe7\xb1\xd7\xb7\xa1\xc7\xc8",0, 0.97},
+    {"\xc7\xd1\xbe\xe7\xb1\xc3\xbc\xad",3, 0.97},
+    {"\xb9\xae\xc8\xad\xb9\xd9\xc5\xc1",0, 0.97},
+    {"\xb9\xae\xc8\xad\xb9\xd9\xc5\xc1\xc1\xa6\xb8\xf1",1, 0.97},
+    {"\xb9\xae\xc8\xad\xb5\xb8\xbf\xf2",1, 0.97},
+    {"\xb9\xae\xc8\xad\xb5\xb8\xbf\xf2\xc1\xa6\xb8\xf1",0, 0.97},
+    {"\xb9\xae\xc8\xad\xbe\xb2\xb1\xe2",0, 0.97},
+    {"\xb9\xae\xc8\xad\xbe\xb2\xb1\xe2\xc8\xea\xb8\xb2",0, 0.97},
+    {"\xc6\xe6\xc8\xea\xb8\xb2",0, 0.97},
+    {"\xba\xb9\xbc\xfe\xbe\xc6",0, 0.827},
+    {"\xbf\xc1\xbc\xf6\xbc\xf6",0, 0.97},
+    {"\xbf\xc0\xc0\xcc",0, 0.97},
+    {"\xb0\xa1\xc1\xf6",0, 0.97},
+    {"\xb0\xad\xb3\xb6\xc4\xe1",2, 0.97},
+    {"\xb5\xfe\xb1\xe2",3, 0.97},
+    {"\xc5\xb8\xc0\xcc\xc7\xc1",0, 0.987},
+    {"\xc5\xc2 \xb3\xaa\xb9\xab",1, 0.97},
+    {"\xc5\xc2 \xc7\xec\xb5\xe5\xb6\xf3\xc0\xce",0, 0.97},
+    {"\xc5\xc2 \xb0\xa1\xb4\xc2 \xc7\xec\xb5\xe5\xb6\xf3\xc0\xce",0, 0.97},
+    {"\xc5\xc2 \xc7\xec\xb5\xe5\xb6\xf3\xc0\xceT",0, 0.97},
+    {"\xc5\xc2 \xb0\xa1\xb4\xc2 \xc7\xec\xb5\xe5\xb6\xf3\xc0\xceT",0, 0.97},
+    {"\xbe\xe7\xc0\xe7 \xb4\xd9\xbf\xee\xb8\xed\xc1\xb6M",0, 0.97},
+    {"\xbe\xe7\xc0\xe7 \xba\xbb\xb8\xf1\xb0\xa2M",0, 0.97},
+    {"\xbe\xe7\xc0\xe7 \xbc\xd2\xbd\xbd",1, 0.97},
+    {"\xbe\xe7\xc0\xe7 \xb8\xc5\xc8\xad",1, 0.987},
+    {"\xbe\xe7\xc0\xe7 \xc6\xb0\xc6\xb0",0, 0.97},
+    {"\xbe\xe7\xc0\xe7 \xc2\xfc\xbd\xa1",1, 0.97},
+    {"\xbe\xe7\xc0\xe7 \xb5\xd1\xb1\xe2",0, 0.97},
+    {"\xbe\xe7\xc0\xe7 \xbb\xfe\xb3\xda",1, 0.97},
+    {"\xbe\xe7\xc0\xe7 \xbf\xcd\xb4\xe7",1, 0.97},
+    {"\xbd\xc5\xb8\xed \xbc\xbc\xb8\xed\xc1\xb6",0, 0.97},
+    {"\xbd\xc5\xb8\xed \xbd\xc5\xb8\xed\xc1\xb6",0, 0.97},
+    {"\xbd\xc5\xb8\xed \xbd\xc5\xbd\xc5\xb8\xed\xc1\xb6",0, 0.97},
+    {"\xbd\xc5\xb8\xed \xc1\xdf\xb8\xed\xc1\xb6",0, 0.97},
+    {"\xbd\xc5\xb8\xed \xc5\xc2\xb8\xed\xc1\xb6",0, 0.97},
+    {"\xbd\xc5\xb8\xed \xb0\xdf\xb8\xed\xc1\xb6",0, 0.97},
+    {"\xbd\xc5\xb8\xed \xbd\xc5\xb9\xae\xb8\xed\xc1\xb6",0, 0.97},
+    {"\xbd\xc5\xb8\xed \xbc\xf8\xb8\xed\xc1\xb6",0, 0.97},
+    {"\xbd\xc5\xb8\xed \xbc\xbc\xb0\xed\xb5\xf1",1, 0.97},
+    {"\xbd\xc5\xb8\xed \xc1\xdf\xb0\xed\xb5\xf1",1, 0.97},
+    {"\xbd\xc5\xb8\xed \xc5\xc2\xb0\xed\xb5\xf1",1, 0.97},
+    {"\xbd\xc5\xb8\xed \xb0\xdf\xb0\xed\xb5\xf1",1, 0.97},
+    {"\xbd\xc5\xb8\xed \xbc\xbc\xb3\xaa\xb7\xe7",2, 0.97},
+    {"\xbd\xc5\xb8\xed \xb5\xf0\xb3\xaa\xb7\xe7",2, 0.97},
+    {"\xbd\xc5\xb8\xed \xbd\xc5\xb1\xd7\xb7\xa1\xc7\xc8",2, 0.97},
+    {"\xbd\xc5\xb8\xed \xc5\xc2\xb1\xd7\xb7\xa1\xc7\xc8",2, 0.97},
+    {"\xbd\xc5\xb8\xed \xb1\xc3\xbc\xad",3, 0.97}
 };
 
 #define FONTCOUNT 4
@@ -142,10 +142,10 @@ const struct FontEntry FontMapTab[] =
 #if defined(LINUX)
 char* RepFontTab[] =
 {
-    "백묵 바탕",                                     /* 0 */
-    "백묵 돋움",                                      /* 1 */
-    "백묵 굴림",                                      /* 2 */
-    "백묵 헤드라인"                                      /* 3 */
+    "\xb9\xe9\xb9\xac \xb9\xd9\xc5\xc1",                                     /* 0 */
+    "\xb9\xe9\xb9\xac \xb5\xb8\xbf\xf2",                                      /* 1 */
+    "\xb9\xe9\xb9\xac \xb1\xbc\xb8\xb2",                                      /* 2 */
+    "\xb9\xe9\xb9\xac \xc7\xec\xb5\xe5\xb6\xf3\xc0\xce"                                      /* 3 */
 };
 #else
 const char* RepFontTab[] =
@@ -159,10 +159,10 @@ const char* RepFontTab[] =
 #else
 char* RepFontTab[] =
 {
-    "바탕",                                       /* 0 */
-    "돋움",                                       /* 1 */
-    "굴림",                                       /* 2 */
-    "궁서"                                        /* 3 */
+    "\xb9\xd9\xc5\xc1",                                       /* 0 */
+    "\xb5\xb8\xbf\xf2",                                       /* 1 */
+    "\xb1\xbc\xb8\xb2",                                       /* 2 */
+    "\xb1\xc3\xbc\xad"                                        /* 3 */
 };
 #endif
 
