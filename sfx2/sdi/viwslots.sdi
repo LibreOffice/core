@@ -3,7 +3,7 @@
  // shell SfxViewShell
  //
  // (C) 1996 StarDivision GmbH, Hamburg, Germany
- // $Author: rt $ $Date: 2006-05-02 16:12:44 $  $Revision: 1.7 $
+ // $Author: rt $ $Date: 2007-05-29 14:56:01 $  $Revision: 1.8 $
  // $Logfile:   T:/sfx2/sdi/viwslots.sdv  $ $Workfile:   viwslots.sdi  $
  //-------------------------------------------------------------------------
 interface View
@@ -18,6 +18,11 @@ interface View
         StateMethod = GetState_Impl ;
     ]
     SID_MAIL_SENDDOCASPDF // ole(no) api(todo)
+    [
+        ExecMethod = ExecMisc_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_WEBHTML // ole(no) api(todo)
     [
         ExecMethod = ExecMisc_Impl ;
         StateMethod = GetState_Impl ;
