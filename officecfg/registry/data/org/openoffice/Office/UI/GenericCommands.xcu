@@ -5,9 +5,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 11:23:56 $
+ *  last change: $Author: rt $ $Date: 2007-05-29 14:34:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,13 @@
 <oor:component-data oor:name="GenericCommands" oor:package="org.openoffice.Office.UI" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <node oor:name="UserInterface">
         <node oor:name="Commands">
-            <node oor:name=".uno:NewPresentation" oor:op="replace">
+      <node oor:name=".uno:WebHtml" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Vorschau in Web-Browser</value>
+                    <value xml:lang="en-US">Preview in Web Browser</value>
+                </prop>
+            </node>
+      <node oor:name=".uno:NewPresentation" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">New Presentation</value>
                 </prop>
