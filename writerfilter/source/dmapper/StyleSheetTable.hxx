@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-15 11:23:34 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-29 10:07:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,7 @@ public:
     const StyleSheetEntry* FindParentStyleSheet(sal_Int32 nBaseStyleIdentifier);
 
     ::rtl::OUString ConvertStyleName( const ::rtl::OUString& rWWName/*, bool bParagraphStyle*/ );
+    ::rtl::OUString GetStyleIdFromIndex(const sal_uInt32 sti);
 private:
     void resolveAttributeProperties(doctok::Value & val);
     void resolveSprmProps(doctok::Sprm & sprm_);
