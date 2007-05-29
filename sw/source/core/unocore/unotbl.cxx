@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:35:06 $
+ *  last change: $Author: gm $ $Date: 2007-05-29 09:11:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4455,7 +4455,7 @@ void SwXCellRange::GetDataSequence(
                             // now we'll try to get a useful numerical value
                             // from the text in the cell...
 
-                            ULONG nFIndex;
+                            sal_uInt32 nFIndex;
                             SvNumberFormatter* pNumFormatter = pTblCrsr->GetDoc()->GetNumberFormatter();
 
                             // look for SwTblBoxNumFormat value in parents as well
