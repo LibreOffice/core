@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:30:09 $
+ *  last change: $Author: rt $ $Date: 2007-05-29 14:59:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,8 +73,17 @@
 #ifndef _COM_SUN_STAR_EMBED_EMBEDMISC_HPP_
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SYSTEM_XSYSTEMSHELLEXECUTE_HPP_
+#include <com/sun/star/system/XSystemShellExecute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SYSTEM_SYSTEMSHELLEXECUTEFLAGS_HPP_
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#endif
 
+#include <osl/file.hxx>
+#include <vos/mutex.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/tempfile.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/soerr.hxx>
@@ -92,6 +101,7 @@
 #endif
 
 #include "app.hxx"
+#include "view.hrc"
 #include "viewsh.hxx"
 #include "viewimp.hxx"
 #include "sfxresid.hxx"
@@ -113,6 +123,7 @@
 #include "ipclient.hxx"
 #include "workwin.hxx"
 #include "objface.hxx"
+#include "docfilt.hxx"
 
 // #110897#
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
@@ -123,6 +134,9 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::system;
+using namespace ::cppu;
 namespace css = ::com::sun::star;
 
 //=========================================================================
@@ -308,8 +322,98 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             break;
         }
 
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        case SID_WEBHTML:
+        {
+            String aHTMLExtension = String::CreateFromAscii( ".htm" );
+            const SfxFilter* pFilter = NULL;
+            SfxFilterContainer* pFilterContainer =GetObjectShell()-> GetFactory().GetFilterContainer();
 
+            if ( pFilterContainer )
+                pFilter = pFilterContainer->GetFilter4Extension( aHTMLExtension, SFX_FILTER_EXPORT );
+
+            if ( NULL == pFilter )
+            {
+                OSL_ASSERT("ERROR: cannot get filter for \"htm\"\n");
+                break;
+            }
+
+            SfxObjectShellRef xDocShell = SfxObjectShell::Current();
+            SfxDispatcher*    pDisp = xDocShell->GetFrame()->GetDispatcher();
+            String            rFileName;
+
+            // save the document as HTML format
+            BOOL bRet( FALSE );
+            if ( xDocShell.Is() && xDocShell->GetMedium() )
+            {
+                // save old settings
+                BOOL bModified = xDocShell->IsModified();
+
+                // detect filter
+                sal_Bool bHasFilter = pFilter ? sal_True : sal_False;
+
+                // create temp file name with leading chars and extension
+                sal_Bool    bHasName = xDocShell->HasName();
+                String      aLeadingStr;
+
+                if ( !bHasName )
+                    aLeadingStr = String( DEFINE_CONST_UNICODE( "noname" ) );
+
+                ::utl::TempFile aTempFile( aLeadingStr, &aHTMLExtension );
+
+                rFileName = aTempFile.GetURL();
+
+                // save document to temp file
+                SfxStringItem aFileName( SID_FILE_NAME, rFileName );
+                SfxBoolItem   aPicklist( SID_PICKLIST, FALSE );
+                SfxBoolItem   aSaveTo( SID_SAVETO, TRUE );
+
+                SfxStringItem* pFilterName = NULL;
+                String sFilterName = ((class SfxFilter*) pFilter)->GetFilterName();
+
+                if ( pFilter && bHasFilter )
+                    pFilterName = new SfxStringItem( SID_FILTER_NAME, sFilterName);
+
+                const SfxBoolItem *pRet = (const SfxBoolItem*)pDisp->Execute(
+                    SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, &aFileName, &aPicklist, &aSaveTo,
+                    pFilterName , 0L, 0L );
+                bRet = pRet ? pRet->GetValue() : FALSE;
+
+                delete pFilterName;
+
+                // restore old settings
+                if ( !bModified && xDocShell->IsEnableSetModified() )
+                    xDocShell->SetModified( FALSE );
+            }
+            else
+            {
+                rReq.Done(FALSE);
+                return;
+            }
+
+            ::com::sun::star::uno::Reference< XSystemShellExecute > xSystemShellExecute(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" )), UNO_QUERY );
+
+            if ( xSystemShellExecute.is() && bRet )
+            {
+                try
+                {
+                    xSystemShellExecute->execute(
+                        rFileName, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
+                }
+                catch ( uno::Exception& )
+                {
+                    vos::OGuard aGuard( Application::GetSolarMutex() );
+                    Window *pParent = SFX_APP()->GetTopWindow();
+                    ErrorBox( pParent, SfxResId( MSG_ERROR_NO_WEBBROWSER_FOUND )).Execute();
+                    bRet = FALSE;
+                }
+            }
+
+            rReq.Done(bRet);
+            break;
+        }
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_PLUGINS_ACTIVE:
         {
             SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nId, FALSE);
