@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ruler.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:40:12 $
+ *  last change: $Author: rt $ $Date: 2007-05-29 15:38:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,6 @@
 #define RULER_UNIT_PICA     8
 #define RULER_UNIT_COUNT    9
 
-#define ROWFUZZY            40 //expanded find area for border lines
 // -----------------
 // - ImplRulerData -
 // -----------------
@@ -1776,8 +1775,7 @@ BOOL Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
     int nBorderTolerance = 1;
     if(pHitTest->bExpandTest)
     {
-        Size aSize = maVirDev.LogicToPixel( Size( ROWFUZZY, ROWFUZZY ), maMapMode );
-        nBorderTolerance = aSize.Width();
+        nBorderTolerance++;
     }
 
     for ( i = mpData->nBorders; i; i-- )
