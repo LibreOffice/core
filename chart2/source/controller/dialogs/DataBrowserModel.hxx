@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataBrowserModel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:27:59 $
+ *  last change: $Author: gm $ $Date: 2007-05-29 09:17:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ public:
     bool setCellNumber( sal_Int32 nAtColumn, sal_Int32 nAtRow, double fValue );
     /// returns </TRUE> if the text could successfully be set at the given position
     bool setCellText( sal_Int32 nAtColumn, sal_Int32 nAtRow, const ::rtl::OUString & rText );
-    bool DataBrowserModel::setCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow,
+    bool setCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow,
                                        const ::com::sun::star::uno::Any & aValue );
 
     sal_Int32 getColumnCount() const;
