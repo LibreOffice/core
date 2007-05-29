@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layctrl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:21:24 $
+ *  last change: $Author: rt $ $Date: 2007-05-29 15:50:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -433,7 +433,12 @@ void TableWindow::Paint( const Rectangle& )
         aText = Button::GetStandardText( BUTTON_CANCEL );
     Size aTextSize( GetTextWidth( aText ), GetTextHeight() );
 
+    //#i72805# prevent damaged table dimension text
+    sal_Bool bWasRTL = IsRTLEnabled();
+    EnableRTL( sal_False );
     DrawText( Point( (aSize.Width() - aTextSize.Width()) / 2, aSize.Height() - nTextHeight + 2 ), aText );
+    EnableRTL( bWasRTL );
+
     DrawRect( Rectangle( 0, aSize.Height()-nTextHeight+2, (aSize.Width()-aTextSize.Width())/2-1, aSize.Height() ) );
     DrawRect( Rectangle( (aSize.Width()-aTextSize.Width())/2+aTextSize.Width(), aSize.Height()-nTextHeight+2, aSize.Width(), aSize.Height() ) );
 
