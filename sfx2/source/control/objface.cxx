@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objface.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:09:25 $
+ *  last change: $Author: rt $ $Date: 2007-05-29 15:55:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -324,7 +324,7 @@ SfxInterface::~SfxInterface()
     SfxModule *pMod = pImpData->pModule;
     BOOL bRegistered = pImpData->bRegistered;
     delete pImpData;
-    DBG_ASSERT( pImpData->bRegistered, "Interface not registered!" );
+    DBG_ASSERT( bRegistered, "Interface not registered!" );
     if ( bRegistered )
     {
         if ( pMod )
