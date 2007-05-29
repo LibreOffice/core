@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:59:59 $
+ *  last change: $Author: rt $ $Date: 2007-05-29 15:49:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1165,6 +1165,19 @@ ATTR_SETEMPHASIS:
                             {
                                 nToken = SkipToken( -2 );
                                 ReadTabAttr( nToken, *pSet );
+
+                                /*
+                                cmc: #i76140, he who reads the { must read the }
+                                We rewound to a state of { being the current
+                                token so it is our responsibility to read the }
+                                token.
+                                */
+                                if (nToken == BRACELEFT)
+                                {
+                                    nToken = GetNextToken();
+                                    DBG_ASSERT( nToken == BRACERIGHT,
+                                        "} did not follow { as expected\n");
+                                }
                             }
                             else if( (nToken & ~(0xff| RTF_SWGDEFS)) == RTF_BRDRDEF)
                             {
