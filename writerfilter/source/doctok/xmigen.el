@@ -117,3 +117,11 @@
   (insert "    <UML:Class xmi.idref=\"" parent "\" />\n")
   (insert "  </UML:Generalization.parent>\n")
   (insert "</UML:Generalization>\n"))
+
+(defun insert-uml-sprm (name sprmcode kind)
+  (insert-uml-class-begin name) 
+  (insert-uml-stereotype "ww8sprm")
+  (insert-uml-taggedvalue sprmcode "sprmcode")
+  (insert-uml-taggedvalue (concat "rtf:" name) "sprmid")
+  (insert-uml-taggedvalue kind "kind")
+  (insert-uml-class-end))

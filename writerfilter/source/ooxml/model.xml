@@ -14488,11 +14488,11 @@
       <kind name="paragraph"/>
       <attribute name="dropCap" tokenid="ooxml:CT_FramePr_dropCap"/>
       <attribute name="lines" tokenid="ooxml:CT_FramePr_lines"/>
-      <sprm name="w" tokenid="0x841a"/>
-      <sprm name="h" tokenid="0x442b"/>
-      <sprm name="vSpace" tokenid="0x842e"/>
-      <sprm name="hSpace" tokenid="0x842f"/>
-      <sprm name="wrap" tokenid="0x2423"/>
+      <sprm name="w" tokenid="sprm:PDxaWidth"/>
+      <sprm name="h" tokenid="sprm:PWHeightAbs"/>
+      <sprm name="vSpace" tokenid="sprm:PDyaFromText"/>
+      <sprm name="hSpace" tokenid="sprm:PDxaFromText"/>
+      <sprm name="wrap" tokenid="sprm:PWr"/>
       <attribute name="hAnchor" tokenid="ooxml:CT_FramePr_hAnchor"/>
       <attribute name="vAnchor" tokenid="ooxml:CT_FramePr_vAnchor"/>
       <attribute name="x" tokenid="ooxml:CT_FramePr_x"/>
@@ -14500,7 +14500,7 @@
       <attribute name="y" tokenid="ooxml:CT_FramePr_y"/>
       <attribute name="yAlign" tokenid="ooxml:CT_FramePr_yAlign"/>
       <attribute name="hRule" tokenid="ooxml:CT_FramePr_hRule"/>
-      <sprm name="anchorLock" tokenid="0x2430"/>
+      <sprm name="anchorLock" tokenid="sprm:PFLocked"/>
     </resource>
     <resource name="ST_TabJc" resource="List">
       <value tokenid="ooxml:Value_ST_TabJc_clear">clear</value>
@@ -14581,19 +14581,19 @@
     </resource>
     <resource name="CT_NumPr" resource="Properties">
       <kind name="paragraph"/>
-      <sprm name="ilvl" tokenid="0x260a"/>
-      <sprm name="numId" tokenid="0x460b"/>
+      <sprm name="ilvl" tokenid="sprm:PIlvl"/>
+      <sprm name="numId" tokenid="sprm:PIlfo"/>
       <attribute name="numberingChange" tokenid="ooxml:CT_NumPr_numberingChange"/>
       <attribute name="ins" tokenid="ooxml:CT_NumPr_ins"/>
     </resource>
     <resource name="CT_PBdr" resource="Properties">
       <kind name="paragraph"/>
-      <sprm name="top" tokenid="0x6424"/>
-      <sprm name="left" tokenid="0x6425"/>
-      <sprm name="bottom" tokenid="0x6426"/>
-      <sprm name="right" tokenid="0x6427"/>
-      <sprm name="between" tokenid="0x6428"/>
-      <sprm name="bar" tokenid="0x6429"/>
+      <sprm name="top" tokenid="sprm:PBrcTop"/>
+      <sprm name="left" tokenid="sprm:PBrcLeft"/>
+      <sprm name="bottom" tokenid="sprm:PBrcBottom"/>
+      <sprm name="right" tokenid="sprm:PBrcRight"/>
+      <sprm name="between" tokenid="sprm:PBrcBetween"/>
+      <sprm name="bar" tokenid="sprm:PBrcBar"/>
     </resource>
     <resource name="CT_Tabs" resource="Properties">
       <attribute name="tab" tokenid="ooxml:CT_Tabs_tab"/>
@@ -14602,24 +14602,24 @@
     <resource name="CT_PPrBase" resource="Properties">
       <kind name="paragraph"/>
       <sprm name="pStyle" tokenid="ooxml:CT_PPrBase_pStyle"/>
-      <sprm name="keepNext" tokenid="0x2406"/>
-      <sprm name="keepLines" tokenid="0x2405"/>
-      <sprm name="pageBreakBefore" tokenid="0x2407"/>
+      <sprm name="keepNext" tokenid="sprm:PFKeepFollow"/>
+      <sprm name="keepLines" tokenid="sprm:PFKeep"/>
+      <sprm name="pageBreakBefore" tokenid="sprm:PFPageBreakBefore"/>
       <sprm name="framePr" tokenid="ooxml:CT_PPrBase_framePr"/>
       <sprm name="widowControl" tokenid="ooxml:CT_PPrBase_windowControl"/>
       <sprm name="numPr" tokenid="ooxml:CT_PPrBase_numPr"/>
-      <sprm name="suppressLineNumbers" tokenid="0x240c"/>
+      <sprm name="suppressLineNumbers" tokenid="sprm:PFNoLineNumb"/>
       <sprm name="pBdr" tokenid="ooxml:CT_PrBase_pBdr"/>
-      <sprm name="shd" tokenid="0x442d"/>
+      <sprm name="shd" tokenid="sprm:PShd"/>
       <attribute name="tabs" tokenid="ooxml:CT_PPrBase_tabs"/>
-      <sprm name="suppressAutoHyphens" tokenid="0x242a"/>
+      <sprm name="suppressAutoHyphens" tokenid="sprm:PFNoAutoHyph"/>
       <sprm name="kinsoku" tokenid="ooxml:CT_PPrBase_kinsoku"/>
       <sprm name="wordWrap" tokenid="ooxml:CT_PPrBase_wordWrap"/>
-      <sprm name="overflowPunct" tokenid="0x2435"/>
-      <sprm name="topLinePunct" tokenid="0x2436"/>
-      <sprm name="autoSpaceDE" tokenid="0x2437"/>
-      <sprm name="autoSpaceDN" tokenid="0x2438"/>
-      <sprm name="bidi" tokenid="0x2441"/>
+      <sprm name="overflowPunct" tokenid="sprm:PFOverflowPunct"/>
+      <sprm name="topLinePunct" tokenid="sprm:PFTopLinePunct"/>
+      <sprm name="autoSpaceDE" tokenid="sprm:PFAutoSpaceDE"/>
+      <sprm name="autoSpaceDN" tokenid="sprm:PFAutoSpaceDN"/>
+      <sprm name="bidi" tokenid="sprm:PFBiDi"/>
       <sprm name="adjustRightInd" tokenid="ooxml:CT_PPrBase_adjustRightInd"/>
       <sprm name="snapToGrid" tokenid="ooxml:CT_PPrBase_snapToGrid"/>
       <sprm name="spacing" tokenid="ooxml:CT_PPrBase_spacing"/>
@@ -14627,11 +14627,11 @@
       <sprm name="contextualSpacing" tokenid="0x246d"/>
       <sprm name="mirrorIndents" tokenid="0x2470"/>
       <sprm name="suppressOverlap" tokenid="0x2462"/>
-      <sprm name="jc" tokenid="0x2403"/>
-      <sprm name="textDirection" tokenid="0x443a"/>
-      <sprm name="textAlignment" tokenid="0x4439"/>
-      <sprm name="textboxTightWrap" tokenid="0x2471"/>
-      <sprm name="outlineLvl" tokenid="0x2640"/>
+      <sprm name="jc" tokenid="sprm:PJc"/>
+      <sprm name="textDirection" tokenid="sprm:PFrameTextFlow"/>
+      <sprm name="textAlignment" tokenid="sprm:PWAlignFont"/>
+      <sprm name="textboxTightWrap" tokenid="sprm:PTightWrap"/>
+      <sprm name="outlineLvl" tokenid="sprm:POutLvl"/>
       <sprm name="divId" tokenid="ooxml:CT_PPrBase_divId"/>
       <sprm name="cnfStyle" tokenid="ooxml:CT_PPrBase_cnfStyle"/>
     </resource>
@@ -14808,7 +14808,7 @@
       <attribute name="rtlGutter" tokenid="ooxml:EG_SectPrContents_rtlGutter"/>
       <attribute name="textDirection" tokenid="ooxml:EG_SectPrContents_textDirection"/>
       <attribute name="titlePg" tokenid="ooxml:EG_SectPrContents_titlePg"/>
-      <attribute name="type" tokenid="0x3009"/>
+      <attribute name="type" tokenid="sprm:SBkc"/>
       <attribute name="vAlign" tokenid="ooxml:EG_SectPrContents_vAlign"/>
     </resource>
     <resource name="CT_SectPr" resource="Properties">
@@ -14911,39 +14911,39 @@
       <kind name="paragraph"/>
       <sprm name="rStyle" tokenid="ooxml:EG_RPrBase_rStyle"/>
       <sprm name="rFonts" tokenid="ooxml:EG_RPrBase_rFonts"/>
-      <sprm name="b" tokenid="0x835"/>
-      <sprm name="bCs" tokenid="0x85c"/>
-      <sprm name="i" tokenid="0x836"/>
-      <sprm name="iCs" tokenid="0x85d"/>
-      <sprm name="caps" tokenid="0x83b"/>
-      <sprm name="smallCaps" tokenid="0x83a"/>
-      <sprm name="strike" tokenid="0x837"/>
-      <sprm name="dstrike" tokenid="0x2a53"/>
-      <sprm name="outline" tokenid="0x838"/>
-      <sprm name="shadow" tokenid="0x839"/>
-      <sprm name="emboss" tokenid="0x858"/>
-      <sprm name="imprint" tokenid="0x854"/>
-      <sprm name="noProof" tokenid="0x875"/>
+      <sprm name="b" tokenid="sprm:CFBold"/>
+      <sprm name="bCs" tokenid="sprm:CFBoldBi"/>
+      <sprm name="i" tokenid="sprm:CFItalic"/>
+      <sprm name="iCs" tokenid="sprm:CFItalicBi"/>
+      <sprm name="caps" tokenid="sprm:CFCaps"/>
+      <sprm name="smallCaps" tokenid="sprm:CFSmallCaps"/>
+      <sprm name="strike" tokenid="sprm:CFStrike"/>
+      <sprm name="dstrike" tokenid="sprm:CFDStrike"/>
+      <sprm name="outline" tokenid="sprm:CFOutline"/>
+      <sprm name="shadow" tokenid="sprm:CFShadow"/>
+      <sprm name="emboss" tokenid="sprm:CFEmboss"/>
+      <sprm name="imprint" tokenid="sprm:CFImprint"/>
+      <sprm name="noProof" tokenid="sprm:CFNoProof"/>
       <sprm name="snapToGrid" tokenid="ooxml:EG_RPrBase_snapToGrid"/>
-      <sprm name="vanish" tokenid="0x83c"/>
-      <sprm name="webHidden" tokenid="0x83c"/>
+      <sprm name="vanish" tokenid="sprm:CFVanish"/>
+      <sprm name="webHidden" tokenid="sprm:CFVanish"/>
       <sprm name="color" tokenid="ooxml:EG_RPrBase_color"/>
-      <sprm name="spacing" tokenid="0x8840"/>
-      <sprm name="w" tokenid="0x4852"/>
-      <sprm name="kern" tokenid="0x484b"/>
-      <sprm name="position" tokenid="0x4845"/>
-      <sprm name="sz" tokenid="0x4a43"/>
-      <sprm name="szCs" tokenid="0x4a61"/>
-      <sprm name="highlight" tokenid="0x2a0c"/>
+      <sprm name="spacing" tokenid="sprm:CDxaSpace"/>
+      <sprm name="w" tokenid="sprm:CCharScale"/>
+      <sprm name="kern" tokenid="sprm:CHpsKern"/>
+      <sprm name="position" tokenid="sprm:CHpsPos"/>
+      <sprm name="sz" tokenid="sprm:CHps"/>
+      <sprm name="szCs" tokenid="sprm:CHpsBi"/>
+      <sprm name="highlight" tokenid="sprm:CHighlight"/>
       <sprm name="u" tokenid="ooxml:EG_RPrBase_u"/>
-      <sprm name="effect" tokenid="0x2859"/>
+      <sprm name="effect" tokenid="sprm:CSfxText"/>
       <sprm name="bdr" tokenid="ooxml:EG_RPrBase_bdr"/>
       <sprm name="shd" tokenid="ooxml:EG_RPrBase_shd"/>
       <sprm name="fitText" tokenid="ooxml:EG_RPrBase_fitText"/>
       <sprm name="vertAlign" tokenid="ooxml:EG_RPrBase_vertAlign"/>
       <sprm name="rtl" tokenid="ooxml:EG_RPrBase_rtl"/>
-      <sprm name="cs" tokenid="0x882"/>
-      <sprm name="em" tokenid="0x2a34"/>
+      <sprm name="cs" tokenid="sprm:CComplexScript"/>
+      <sprm name="em" tokenid="sprm:CKcd"/>
       <sprm name="lang" tokenid="ooxml:EG_RPrBase_lang"/>
       <sprm name="eastAsianLayout" tokenid="ooxml:EG_RPrBase_eastAsianLayout"/>
       <sprm name="specVanish" tokenid="0x818"/>
@@ -15036,7 +15036,7 @@
       <sprm name="gridAfter" tokenid="ooxml:CT_TrPrBase_gridAfter"/>
       <sprm name="wBefore" tokenid="ooxml:CT_TrPrBase_wBefore"/>
       <sprm name="wAfter" tokenid="ooxml:CT_TrPrBase_wAfter"/>
-      <sprm name="cantSplit" tokenid="0x3644"/>
+      <sprm name="cantSplit" tokenid="sprm:TCantSplit"/>
       <sprm name="trHeight" tokenid="ooxml:CT_TrPrBase_trHeight"/>
       <sprm name="tblHeader" tokenid="ooxml:CT_TrPrBase_tblHeader"/>
       <sprm name="tblCellSpacing" tokenid="ooxml:CT_TrPrBase_tblCellSpacing"/>

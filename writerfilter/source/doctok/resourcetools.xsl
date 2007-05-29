@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcetools.xsl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-24 12:44:42 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-05-29 15:33:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,6 +210,65 @@ Sprm::Kind SprmKind(sal_uInt32 sprmCode)
     return nResult;
 }
 </xsl:text>
+</xsl:template>
+
+<xsl:template match="UML:Model" mode='sprmids'>
+  <xsl:text>
+namespace NS_sprm { </xsl:text>
+  <xsl:for-each select=".//UML:Class[.//UML:Stereotype/@xmi.idref='ww8sprm']">
+    <xsl:variable name="sprmcode">
+      <xsl:value-of select=".//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref = 'sprmcode']/UML:TaggedValue.dataValue"/>
+    </xsl:variable>
+    <xsl:variable name="sprmcodelower">
+      <xsl:value-of select="translate($sprmcode, 'ABCDEF', 'abcdef')"/>
+    </xsl:variable>
+    <xsl:variable name="sprmidname">
+      <xsl:text>LN_</xsl:text>
+      <xsl:value-of select="substring-after(@name, 'sprm')"/>
+    </xsl:variable>
+    <xsl:text>
+    const sal_uInt16 </xsl:text>
+    <xsl:value-of select="$sprmidname"/>
+    <xsl:text> = </xsl:text>
+    <xsl:value-of select="$sprmcodelower"/>
+    <xsl:text>;</xsl:text>
+  </xsl:for-each>
+  <xsl:text>
+}
+</xsl:text>
+</xsl:template>
+
+<xsl:template match="UML:Model" mode='sprmreplace'>
+  <xsl:for-each select=".//UML:Class[.//UML:Stereotype/@xmi.idref='ww8sprm']">
+    <xsl:variable name="pattern">
+      <xsl:value-of select=".//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref = 'sprmcode']/UML:TaggedValue.dataValue"/>
+    </xsl:variable>
+    <xsl:variable name="lowerpattern">
+      <xsl:value-of select="translate($pattern, 'ABCDEF', 'abcdef')"/>
+    </xsl:variable>
+    <xsl:variable name="upperpattern">
+      <xsl:value-of select="translate($pattern, 'abcdef', 'ABCDEF')"/>
+    </xsl:variable>
+    <xsl:variable name="constname">
+      <xsl:text>sprm:</xsl:text>
+      <xsl:value-of select="substring-after(@name, 'sprm')"/>
+    </xsl:variable>
+    <xsl:text>
+sed "s/</xsl:text>
+    <xsl:value-of select="$lowerpattern"/>
+    <xsl:text>/</xsl:text>
+    <xsl:value-of select="$constname"/>
+    <xsl:text>/g" &lt; $1 > $1.out &amp;&amp; mv $1.out $1 </xsl:text>
+    <xsl:text>
+sed "s/</xsl:text>
+    <xsl:value-of select="$upperpattern"/>
+    <xsl:text>/</xsl:text>
+    <xsl:value-of select="$constname"/>
+    <xsl:text>/g" &lt; $1 > $1.out &amp;&amp; mv $1.out $1 </xsl:text>
+  </xsl:for-each>
+  <xsl:text>
+}
+  </xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>
