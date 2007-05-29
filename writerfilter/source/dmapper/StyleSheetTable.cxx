@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-29 10:07:58 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-29 15:48:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,8 +82,9 @@ typedef ::std::map< ::rtl::OUString, ::rtl::OUString> StringPairMap_t;
 
   -----------------------------------------------------------------------*/
 StyleSheetEntry::StyleSheetEntry() :
-        nStyleIdentifierI(0)
+        sStyleIdentifierI()
         ,nStyleIdentifierD(0)
+        ,bIsDefaultStyle(false)
         ,bInvalidHeight(false)
         ,bHasUPE(false)
         ,nStyleTypeCode(STYLE_TYPE_UNKNOWN)
@@ -181,7 +182,9 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
 //        case NS_rtf::LN_PANOSE: break;
 //        case NS_rtf::LN_FS: break;
         case NS_rtf::LN_STI:
-            m_pImpl->m_pCurrentEntry->nStyleIdentifierI = nIntValue;
+            m_pImpl->m_pCurrentEntry->sStyleIdentifierI = GetStyleIdFromIndex(static_cast<sal_uInt32>(nIntValue));
+            if (nIntValue == 0 || nIntValue == 65)
+                m_pImpl->m_pCurrentEntry->bIsDefaultStyle = true;
         break;
         case NS_rtf::LN_SGC:
             m_pImpl->m_pCurrentEntry->nStyleTypeCode = (StyleType)nIntValue;
@@ -547,10 +550,12 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
 //        case NS_rtf::LN_ALTFONTNAME: break;
 //        case NS_rtf::LN_XSZFFN: break;
         case NS_rtf::LN_XSTZNAME:
-            m_pImpl->m_pCurrentEntry->sStyleName1 = sValue;
+            m_pImpl->m_pCurrentEntry->sStyleName = sValue;
+            if (m_pImpl->m_pCurrentEntry->sStyleIdentifierI.equals(::rtl::OUString()))
+                m_pImpl->m_pCurrentEntry->sStyleIdentifierI = sValue;
         break;
         case NS_rtf::LN_XSTZNAME1:
-            m_pImpl->m_pCurrentEntry->sStyleName = sValue;
+            m_pImpl->m_pCurrentEntry->sStyleName1 = sValue;
         break;
 //        case NS_rtf::LN_UPXSTART: break;
         case NS_rtf::LN_UPX:
@@ -578,6 +583,11 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
                 *(m_pImpl->m_pCurrentEntry->pProperties) = *(m_pImpl->m_pDefaultCharProps);
             m_pImpl->m_pCurrentEntry->nStyleTypeCode = (StyleType)nIntValue;
         break;
+        case NS_ooxml::LN_CT_Style_default:
+            m_pImpl->m_pCurrentEntry->bIsDefaultStyle = (nIntValue != 0);
+        break;
+        case NS_ooxml::LN_CT_Style_customStyle:
+        break;
         default:
         {
             //----> debug
@@ -585,6 +595,7 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
             ++nVal;
             //<---- debug
         }
+        break;
     }
 }
 /*-- 19.06.2006 12:04:33---------------------------------------------------
@@ -906,97 +917,97 @@ const StyleSheetEntry* StyleSheetTable::FindParentStyleSheet(sal_Int32 nBaseStyl
   -----------------------------------------------------------------------*/
 static const sal_Char *aStyleNamePairs[] =
 {
-    "Normal",                     "Standard",               //0
-    "Heading 1",                  "Heading 1",              //1
-    "Heading 2",                  "Heading 2",              //2
-    "Heading 3",                  "Heading 3",              //3
-    "Heading 4",                  "Heading 4",              //4
-    "Heading 5",                  "Heading 5",              //5
-    "Heading 6",                  "Heading 6",              //6
-    "Heading 7",                  "Heading 7",              //7
-    "Heading 8",                  "Heading 8",              //8
-    "Heading 9",                  "Heading 9",              //9
-    "Index 1",                   "Index 1",               //10
-    "Index 2",                   "Index 2",               //11
-    "Index 3",                   "Index 3",               //12
-    "Index 4",                   0,                       //13
-    "Index 5",                   0,                       //14
-    "Index 6",                   0,                       //15
-    "Index 7",                   0,                       //16
-    "Index 8",                   0,                       //17
-    "Index 9",                   0,                       //18
-    "TOC 1",                     "Contents 1",            //19
-    "TOC 2",                     "Contents 2",            //20
-    "TOC 3",                     "Contents 3",            //21
-    "TOC 4",                     "Contents 4",            //22
-    "TOC 5",                     "Contents 5",            //23
-    "TOC 6",                     "Contents 6",            //24
-    "TOC 7",                     "Contents 7",            //25
-    "TOC 8",                     "Contents 8",            //26
-    "TOC 9",                     "Contents 9",            //27
-    "Normal Indent",             0,                        //28
-    "Footnote Text",             "Footnote",              //29
-    "Annotation Text",           0,                       //30
-    "Header",                    "Header"                 //31
-    "Footer",                    "Footer"                 //32
-    "Index Heading",             "Index Heading"          //33
-    "Caption",                   0,                       //34
-    "Table of Figures",          0,                       //35
-    "Envelope Address",          "Addressee",             //36
-    "Envelope Return",           "Sender",                //37
-    "Footnote Reference",        "Footnote anchor",      //38
-    "Annotation Reference",      0,                    //39
-    "Line Number",               "Line numbering",         //40
-    "Page Number",               "Page Number",            //41
-    "Endnote Reference",         "Endnote anchor"         //42
-    "Endnote Text",              "Endnote Symbol",        //43
-    "Table of Authorities",      0,                    //44
-    "Macro Text",                0,                      //45
-    "TOA Heading",               0,                      //46
-    "List",                      "List",                   //47
-    "List 2",                    0,                        //48
-    "List 3",                    0,                        //49
-    "List 4",                    0,                        //50
-    "List 5",                    0,                        //51
-    "List Bullet",               0,                        //52
-    "List Bullet 2",             0,                        //53
-    "List Bullet 3",             0,                        //54
-    "List Bullet 4",             0,                        //55
-    "List Bullet 5",             0,                        //56
-    "List Number",               0,                        //57
-    "List Number 2",             0,                        //58
-    "List Number 3",             0,                        //59
-    "List Number 4",             0,                        //60
-    "List Number 5",             0,                        //61
-    "Title",                     "Title",                  //62
-    "Closing",                   0,                        //63
-    "Signature",                 "Signature",      //64
-    "Default Paragraph Font",    0,                //65
-    "Body Text",                 "Text body",      //66
-    "Body Text Indent",          "Text body indent",//67
-    "List Continue",             0,                //68
-    "List Continue 2",           0,                //69
-    "List Continue 3",           0,                //70
-    "List Continue 4",           0,                //71
-    "List Continue 5",           0,                //72
-    "Message Header",            0,                //73
-    "Subtitle",                  "Subtitle",       //74
-    "Salutation",                0,                //75
-    "Date",                      0,                //76
-    "Body Text First Indent",    "Body Text Indent",//77
-    "Body Text First Indent 2",  0,                //78
-    "Note Heading",              0,                //79
-    "Body Text 2",               0,                //80
-    "Body Text 3",               0,                //81
-    "Body Text Indent 2",        0,                //82
-    "Body Text Indent 3",        0,                //83
-    "Block Text",                0,                //84
-    "Hyperlink",                 "Internet link",   //85
+    "Normal",                     "Standard",        //0
+    "Heading 1",                  "Heading 1",       //1
+    "Heading 2",                  "Heading 2",       //2
+    "Heading 3",                  "Heading 3",       //3
+    "Heading 4",                  "Heading 4",       //4
+    "Heading 5",                  "Heading 5",       //5
+    "Heading 6",                  "Heading 6",       //6
+    "Heading 7",                  "Heading 7",       //7
+    "Heading 8",                  "Heading 8",       //8
+    "Heading 9",                  "Heading 9",       //9
+    "Index 1",                   "Index 1",          //10
+    "Index 2",                   "Index 2",          //11
+    "Index 3",                   "Index 3",          //12
+    "Index 4",                   0,                  //13
+    "Index 5",                   0,                  //14
+    "Index 6",                   0,                  //15
+    "Index 7",                   0,                  //16
+    "Index 8",                   0,                  //17
+    "Index 9",                   0,                  //18
+    "TOC 1",                     "Contents 1",       //19
+    "TOC 2",                     "Contents 2",       //20
+    "TOC 3",                     "Contents 3",       //21
+    "TOC 4",                     "Contents 4",       //22
+    "TOC 5",                     "Contents 5",       //23
+    "TOC 6",                     "Contents 6",       //24
+    "TOC 7",                     "Contents 7",       //25
+    "TOC 8",                     "Contents 8",       //26
+    "TOC 9",                     "Contents 9",       //27
+    "Normal Indent",             0,                  //28
+    "Footnote Text",             "Footnote",         //29
+    "Annotation Text",           0,                  //30
+    "Header",                    "Header"            //31
+    "Footer",                    "Footer"            //32
+    "Index Heading",             "Index Heading"     //33
+    "Caption",                   0,                  //34
+    "Table of Figures",          0,                  //35
+    "Envelope Address",          "Addressee",        //36
+    "Envelope Return",           "Sender",           //37
+    "Footnote Reference",        "Footnote anchor",  //38
+    "Annotation Reference",      0,                  //39
+    "Line Number",               "Line numbering",   //40
+    "Page Number",               "Page Number",      //41
+    "Endnote Reference",         "Endnote anchor"    //42
+    "Endnote Text",              "Endnote Symbol",   //43
+    "Table of Authorities",      0,                  //44
+    "Macro Text",                0,                  //45
+    "TOA Heading",               0,                  //46
+    "List",                      "List",             //47
+    "List 2",                    0,                  //48
+    "List 3",                    0,                  //49
+    "List 4",                    0,                  //50
+    "List 5",                    0,                  //51
+    "List Bullet",               0,                  //52
+    "List Bullet 2",             0,                  //53
+    "List Bullet 3",             0,                  //54
+    "List Bullet 4",             0,                  //55
+    "List Bullet 5",             0,                  //56
+    "List Number",               0,                  //57
+    "List Number 2",             0,                  //58
+    "List Number 3",             0,                  //59
+    "List Number 4",             0,                  //60
+    "List Number 5",             0,                  //61
+    "Title",                     "Title",            //62
+    "Closing",                   0,                  //63
+    "Signature",                 "Signature",        //64
+    "Default Paragraph Font",    0,                  //65
+    "Body Text",                 "Text body",        //66
+    "Body Text Indent",          "Text body indent", //67
+    "List Continue",             0,                  //68
+    "List Continue 2",           0,                  //69
+    "List Continue 3",           0,                  //70
+    "List Continue 4",           0,                  //71
+    "List Continue 5",           0,                  //72
+    "Message Header",            0,                  //73
+    "Subtitle",                  "Subtitle",         //74
+    "Salutation",                0,                  //75
+    "Date",                      0,                  //76
+    "Body Text First Indent",    "Body Text Indent", //77
+    "Body Text First Indent 2",  0,                  //78
+    "Note Heading",              0,                  //79
+    "Body Text 2",               0,                  //80
+    "Body Text 3",               0,                  //81
+    "Body Text Indent 2",        0,                  //82
+    "Body Text Indent 3",        0,                  //83
+    "Block Text",                0,                  //84
+    "Hyperlink",                 "Internet link",    //85
     "Followed Hyperlink",        "Visited Internet Link", //86
-    "Strong",                    "Strong Emphasis",    //87
-    "Emphasis",                  "Emphasis",           //88
-    "Document Map",              0,                //89
-    "Plain Text",                0                 //90
+    "Strong",                    "Strong Emphasis",  //87
+    "Emphasis",                  "Emphasis",         //88
+    "Document Map",              0,                  //89
+    "Plain Text",                0                   //90
 };
 
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-29 10:07:58 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-29 15:48:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,9 @@ enum StyleType
 struct StyleSheetTable_Impl;
 struct StyleSheetEntry
 {
-    sal_Int32       nStyleIdentifierI;
+    ::rtl::OUString sStyleIdentifierI;
     sal_Int32       nStyleIdentifierD;
+    bool            bIsDefaultStyle;
     bool            bInvalidHeight;
     bool            bHasUPE; //universal property expansion
     StyleType       nStyleTypeCode; //sgc
