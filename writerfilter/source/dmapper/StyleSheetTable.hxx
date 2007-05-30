@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-29 15:48:29 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 10:43:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,13 +69,13 @@ struct StyleSheetTable_Impl;
 struct StyleSheetEntry
 {
     ::rtl::OUString sStyleIdentifierI;
-    sal_Int32       nStyleIdentifierD;
+    ::rtl::OUString sStyleIdentifierD;
     bool            bIsDefaultStyle;
     bool            bInvalidHeight;
     bool            bHasUPE; //universal property expansion
     StyleType       nStyleTypeCode; //sgc
-    sal_Int32       nBaseStyleIdentifier;
-    sal_Int32       nNextStyleIdentifier;
+    ::rtl::OUString sBaseStyleIdentifier;
+    ::rtl::OUString sNextStyleIdentifier;
     ::rtl::OUString sStyleName;
     ::rtl::OUString sStyleName1;
     PropertyMapPtr  pProperties;
@@ -100,9 +100,9 @@ public:
     virtual void entry(int pos, doctok::Reference<Properties>::Pointer_t ref);
 
     void ApplyStyleSheets(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument> xTextDocument, FontTablePtr rFontTable);
-    const StyleSheetEntry* FindStyleSheetByISTD(sal_Int32 nIndex);
+    const StyleSheetEntry* FindStyleSheetByISTD(const ::rtl::OUString sIndex);
     // returns the parent of the one with the given name - if empty the parent of the current style sheet is returned
-    const StyleSheetEntry* FindParentStyleSheet(sal_Int32 nBaseStyleIdentifier);
+    const StyleSheetEntry* FindParentStyleSheet(::rtl::OUString sBaseStyle);
 
     ::rtl::OUString ConvertStyleName( const ::rtl::OUString& rWWName/*, bool bParagraphStyle*/ );
     ::rtl::OUString GetStyleIdFromIndex(const sal_uInt32 sti);

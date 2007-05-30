@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: os $ $Date: 2007-05-24 12:44:46 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 10:43:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -526,7 +526,8 @@ void DomainMapper::attribute(doctok::Id nName, doctok::Value & val)
             {
             //search for the style with the given id and apply it
             //as CharStyleName or ParaStyleName
-            const StyleSheetEntry* pEntry = m_pImpl->GetStyleSheetTable()->FindStyleSheetByISTD(nIntValue);
+            const StyleSheetEntry* pEntry = m_pImpl->GetStyleSheetTable()->FindStyleSheetByISTD(
+                                              ::rtl::OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16));
             if(pEntry)
             {
                 bool bParaStyle = (pEntry->nStyleTypeCode == STYLE_TYPE_PARA);

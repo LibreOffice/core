@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2007-05-24 12:44:46 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 10:43:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,7 +224,7 @@ private:
 
     ::std::vector<DeletableTabStop> m_aCurrentTabStops;
     sal_uInt32                      m_nCurrentTabStopIndex;
-    sal_Int32                       m_nCurrentParaStyleId;
+    ::rtl::OUString                 m_sCurrentParaStyleId;
     bool                            m_bInStyleSheetImport;
 
     bool                            m_bLineNumberingSet;
@@ -306,8 +306,8 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >     GetCurrentTabStopAndClear();
     void                                NextTabStop() {++m_nCurrentTabStopIndex;}
 
-    void        SetCurrentParaStyleId(sal_Int32 nIntValue) {m_nCurrentParaStyleId = nIntValue;}
-    sal_Int32   GetCurrentParaStyleId() const {return m_nCurrentParaStyleId;}
+    void        SetCurrentParaStyleId(sal_Int32 nIntValue) {m_sCurrentParaStyleId = ::rtl::OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16);}
+    ::rtl::OUString   GetCurrentParaStyleId() const {return m_sCurrentParaStyleId;}
 
     ::com::sun::star::uno::Any    GetPropertyFromStyleSheet(PropertyIds eId);
     void        SetStyleSheetImport( bool bSet ) { m_bInStyleSheetImport = bSet;}

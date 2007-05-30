@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2007-05-24 12:44:46 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 10:43:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -358,7 +358,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bSetUserFieldContent( false ),
         m_bIsFirstSection( true ),
         m_nCurrentTabStopIndex( 0 ),
-        m_nCurrentParaStyleId( -1 ),
+        m_sCurrentParaStyleId(),
         m_bInStyleSheetImport( false ),
         m_bLineNumberingSet( false )
 {
@@ -602,7 +602,7 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
 {
     const StyleSheetEntry* pEntry = 0;
     if( m_bInStyleSheetImport )
-        pEntry = GetStyleSheetTable()->FindParentStyleSheet(-1);
+        pEntry = GetStyleSheetTable()->FindParentStyleSheet(::rtl::OUString());
     else
         pEntry =
                 GetStyleSheetTable()->FindStyleSheetByISTD(GetCurrentParaStyleId());
@@ -619,7 +619,7 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
             }
         }
         //search until the property is set or no parent is available
-        pEntry = GetStyleSheetTable()->FindParentStyleSheet(pEntry->nBaseStyleIdentifier);
+        pEntry = GetStyleSheetTable()->FindParentStyleSheet(pEntry->sBaseStyleIdentifier);
     }
     return uno::Any();
 }

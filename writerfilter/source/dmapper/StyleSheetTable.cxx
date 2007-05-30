@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-29 15:48:29 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 10:43:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,13 +83,13 @@ typedef ::std::map< ::rtl::OUString, ::rtl::OUString> StringPairMap_t;
   -----------------------------------------------------------------------*/
 StyleSheetEntry::StyleSheetEntry() :
         sStyleIdentifierI()
-        ,nStyleIdentifierD(0)
+        ,sStyleIdentifierD()
         ,bIsDefaultStyle(false)
         ,bInvalidHeight(false)
         ,bHasUPE(false)
         ,nStyleTypeCode(STYLE_TYPE_UNKNOWN)
-        ,nBaseStyleIdentifier(0xfff)
-        ,nNextStyleIdentifier(-1)
+        ,sBaseStyleIdentifier()
+        ,sNextStyleIdentifier()
         ,pProperties(new PropertyMap)
         {
         }
@@ -140,7 +140,7 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
     switch(Name)
     {
         case NS_rtf::LN_ISTD:
-            m_pImpl->m_pCurrentEntry->nStyleIdentifierD = nIntValue;
+            m_pImpl->m_pCurrentEntry->sStyleIdentifierD = ::rtl::OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16);
         break;
 //        case NS_rtf::LN_ISTARTAT: break;
 //        case NS_rtf::LN_NFC: break;
@@ -190,10 +190,11 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
             m_pImpl->m_pCurrentEntry->nStyleTypeCode = (StyleType)nIntValue;
         break;
         case NS_rtf::LN_ISTDBASE:
-            m_pImpl->m_pCurrentEntry->nBaseStyleIdentifier = nIntValue;
+            m_pImpl->m_pCurrentEntry->sBaseStyleIdentifier = ::rtl::OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16);
         break;
         case NS_rtf::LN_ISTDNEXT:
-            m_pImpl->m_pCurrentEntry->nNextStyleIdentifier = nIntValue;
+            if (static_cast<sal_uInt32>(nIntValue) != 0xfff)
+                m_pImpl->m_pCurrentEntry->sNextStyleIdentifier = ::rtl::OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16);
         break;
         case NS_rtf::LN_FSCRATCH:
         case NS_rtf::LN_FINVALHEIGHT:
@@ -769,12 +770,12 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
                                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.CharacterStyle"))),
                                     uno::UNO_QUERY_THROW);
                 }
-                if(aIt->nBaseStyleIdentifier != 0xfff )
+                if(aIt->sBaseStyleIdentifier.compareTo(::rtl::OUString()) )
                 {
                     //find the name of the base style
                     std::vector< StyleSheetEntry >::iterator aBaseStyleIt = m_pImpl->m_aStyleSheetEntries.begin();
                     for( ; aBaseStyleIt !=  m_pImpl->m_aStyleSheetEntries.end(); ++aBaseStyleIt )
-                        if(aBaseStyleIt->nStyleIdentifierD == aIt->nBaseStyleIdentifier)
+                        if(aBaseStyleIt->sStyleIdentifierD == aIt->sBaseStyleIdentifier)
                         {
                             xStyle->setParentStyle(ConvertStyleName( aBaseStyleIt->sStyleName/*, bParaStyle*/ ));
                             break;
@@ -820,7 +821,7 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
 
                 uno::Sequence< beans::PropertyValue > aPropValues = aIt->pProperties->GetPropertyValues();
                 bool bAddFollowStyle = false;
-                if(bParaStyle && aIt->nNextStyleIdentifier >= 0 )
+                if(bParaStyle && aIt->sNextStyleIdentifier.compareTo(::rtl::OUString()) )
                 {
                         bAddFollowStyle = true;
                 }
@@ -848,7 +849,7 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
                         //find the name of the Next style
                         std::vector< StyleSheetEntry >::iterator aNextStyleIt = m_pImpl->m_aStyleSheetEntries.begin();
                         for( ; aNextStyleIt !=  m_pImpl->m_aStyleSheetEntries.end(); ++aNextStyleIt )
-                            if(aNextStyleIt->nStyleIdentifierD == aIt->nNextStyleIdentifier)
+                            if(aNextStyleIt->sStyleIdentifierD == aIt->sNextStyleIdentifier)
                             {
                                 beans::PropertyValue aNew;
                                 aNew.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FollowStyle"));
@@ -879,12 +880,12 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
 /*-- 22.06.2006 15:56:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-const StyleSheetEntry* StyleSheetTable::FindStyleSheetByISTD(sal_Int32 nIndex)
+const StyleSheetEntry* StyleSheetTable::FindStyleSheetByISTD(const ::rtl::OUString sIndex)
 {
     const StyleSheetEntry* pRet = 0;
     for( sal_uInt32 nPos = 0; nPos < m_pImpl->m_aStyleSheetEntries.size(); ++nPos )
     {
-        if( m_pImpl->m_aStyleSheetEntries[nPos].nStyleIdentifierD == nIndex)
+        if( m_pImpl->m_aStyleSheetEntries[nPos].sStyleIdentifierD == sIndex)
         {
             pRet = &m_pImpl->m_aStyleSheetEntries[nPos];
             break;
@@ -896,15 +897,15 @@ const StyleSheetEntry* StyleSheetTable::FindStyleSheetByISTD(sal_Int32 nIndex)
 /*-- 17.07.2006 11:47:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-const StyleSheetEntry* StyleSheetTable::FindParentStyleSheet(sal_Int32 nBaseStyle)
+const StyleSheetEntry* StyleSheetTable::FindParentStyleSheet(::rtl::OUString sBaseStyle)
 {
-    if(nBaseStyle < 0 && m_pImpl->m_pCurrentEntry)
-        nBaseStyle = m_pImpl->m_pCurrentEntry->nBaseStyleIdentifier;
+    if(sBaseStyle.compareTo(::rtl::OUString()) == 0 && m_pImpl->m_pCurrentEntry)
+        sBaseStyle = m_pImpl->m_pCurrentEntry->sBaseStyleIdentifier;
 
     const StyleSheetEntry* pRet = 0;
     for( sal_uInt32 nPos = 0; nPos < m_pImpl->m_aStyleSheetEntries.size(); ++nPos )
     {
-        if( m_pImpl->m_aStyleSheetEntries[nPos].nStyleIdentifierD == nBaseStyle)
+        if( m_pImpl->m_aStyleSheetEntries[nPos].sStyleIdentifierD == sBaseStyle)
         {
             pRet = &m_pImpl->m_aStyleSheetEntries[nPos];
             break;
