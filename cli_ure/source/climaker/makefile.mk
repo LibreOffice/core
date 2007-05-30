@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:43:43 $
+#   last change: $Author: rt $ $Date: 2007-05-30 14:03:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,6 @@ UNOTYPES = \
     com.sun.star.reflection.XInterfaceMethodTypeDescription		\
     com.sun.star.reflection.XInterfaceAttributeTypeDescription2	\
     com.sun.star.reflection.XCompoundTypeDescription		\
-    com.sun.star.reflection.XEnumTypeDescription			\
     com.sun.star.reflection.XServiceTypeDescription2		\
     com.sun.star.reflection.XSingletonTypeDescription2		\
     com.sun.star.reflection.XStructTypeDescription
