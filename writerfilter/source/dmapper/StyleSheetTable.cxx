@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 12:11:05 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 12:39:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -617,7 +617,8 @@ void StyleSheetTable::sprm(doctok::Sprm & sprm_)
     switch(nId)
     {
     case NS_ooxml::LN_CT_Style_name:
-        m_pImpl->m_pCurrentEntry->sStyleName == sStringValue;
+        m_pImpl->m_pCurrentEntry->sStyleName = sStringValue;
+        m_pImpl->m_pCurrentEntry->sStyleName1 = sStringValue;
         if (m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_PARA)
             m_pImpl->m_pCurrentEntry->pProperties->Insert(PROP_PARA_STYLE_NAME, uno::makeAny(sStringValue));
         else if (m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_CHAR)
@@ -763,7 +764,7 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
                 bool bInsert = false;
                 uno::Reference< container::XNameContainer > xStyles = bParaStyle ? xParaStyles : xCharStyles;
                 uno::Reference< style::XStyle > xStyle;
-                ::rtl::OUString sConvertedStyleName = ConvertStyleName( aIt->sStyleName/*, bParaStyle*/ );
+                ::rtl::OUString sConvertedStyleName = ConvertStyleName( aIt->sStyleName );
                 if(xStyles->hasByName( sConvertedStyleName ))
                     xStyles->getByName( sConvertedStyleName ) >>= xStyle;
                 else
@@ -782,7 +783,7 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
                     for( ; aBaseStyleIt !=  m_pImpl->m_aStyleSheetEntries.end(); ++aBaseStyleIt )
                         if(aBaseStyleIt->sStyleIdentifierD == aIt->sBaseStyleIdentifier)
                         {
-                            xStyle->setParentStyle(ConvertStyleName( aBaseStyleIt->sStyleName/*, bParaStyle*/ ));
+                            xStyle->setParentStyle(ConvertStyleName( aBaseStyleIt->sStyleName ));
                             break;
                         }
                 }
@@ -832,22 +833,11 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
                 }
                 if(bAddFollowStyle || aPropValues.getLength())
                 {
-//                    sal_Int32 nSetProperties = aPropValues.getLength();
-//                    if(bAddFollowStyle)
-//                        ++nSetProperties;
-
-//                    uno::Sequence< ::rtl::OUString > aNames( nSetProperties );
-//                    ::rtl::OUString* pNames = aNames.getArray();
-//                    uno::Sequence< uno::Any > aValues( nSetProperties );
-//                    uno::Any* pValues = aValues.getArray();
                     const beans::PropertyValue* pPropValues = aPropValues.getConstArray();
                     PropValVector aSortedPropVals;
                     for( sal_Int32 nProp = 0; nProp < aPropValues.getLength(); ++nProp)
                     {
                         aSortedPropVals.Insert( pPropValues[nProp] );
-
-//                        pNames[nProp] = pPropValues[nProp].Name;
-//                        pValues[nProp] = pPropValues[nProp].Value;
                     }
                     if(bAddFollowStyle)
                     {
@@ -858,17 +848,13 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
                             {
                                 beans::PropertyValue aNew;
                                 aNew.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FollowStyle"));
-                                aNew.Value = uno::makeAny(ConvertStyleName( aNextStyleIt->sStyleName/*, bParaStyle*/ ));
+                                aNew.Value = uno::makeAny(ConvertStyleName( aNextStyleIt->sStyleName));
                                 aSortedPropVals.Insert( aNew );
                                 break;
                             }
-//                        pNames[--nSetProperties] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FollowStyle"));
-//                        pValues[nSetProperties] =  uno::makeAny(
-//                                m_pImpl->m_aStyleSheetEntries[aIt->nNextStyleIdentifier].sStyleName);
                     }
 
                     uno::Reference< beans::XMultiPropertySet > xMultiPropertySet( xStyle, uno::UNO_QUERY_THROW);
-//                    xMultiPropertySet->setPropertyValues( aNames, aValues );
                     xMultiPropertySet->setPropertyValues( aSortedPropVals.getNames(), aSortedPropVals.getValues() );
                 }
                 if(bInsert)
@@ -954,9 +940,9 @@ static const sal_Char *aStyleNamePairs[] =
     "Normal Indent",             0,                  //28
     "Footnote Text",             "Footnote",         //29
     "Annotation Text",           0,                  //30
-    "Header",                    "Header"            //31
-    "Footer",                    "Footer"            //32
-    "Index Heading",             "Index Heading"     //33
+    "Header",                    "Header",           //31
+    "Footer",                    "Footer",           //32
+    "Index Heading",             "Index Heading",    //33
     "Caption",                   0,                  //34
     "Table of Figures",          0,                  //35
     "Envelope Address",          "Addressee",        //36
@@ -965,7 +951,7 @@ static const sal_Char *aStyleNamePairs[] =
     "Annotation Reference",      0,                  //39
     "Line Number",               "Line numbering",   //40
     "Page Number",               "Page Number",      //41
-    "Endnote Reference",         "Endnote anchor"    //42
+    "Endnote Reference",         "Endnote anchor",   //42
     "Endnote Text",              "Endnote Symbol",   //43
     "Table of Authorities",      0,                  //44
     "Macro Text",                0,                  //45
@@ -1017,14 +1003,14 @@ static const sal_Char *aStyleNamePairs[] =
 };
 
 
-::rtl::OUString StyleSheetTable::ConvertStyleName( const ::rtl::OUString& rWWName/*, bool bParagraphStyle*/ )
+::rtl::OUString StyleSheetTable::ConvertStyleName( const ::rtl::OUString& rWWName)
 {
     ::rtl::OUString sRet( rWWName );
+    // printf("Before conversion: %s\n", ::rtl::OUStringToOString(sRet, RTL_TEXTENCODING_DONTKNOW).getStr());
     if(!m_pImpl->m_aStyleNameMap.size())
     {
         for( sal_uInt32 nPair = 0; nPair < sizeof(aStyleNamePairs) / sizeof( sal_Char*) / 2; ++nPair)
         {
-            //::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->m_aStyleNameMap.insert( StringPairMap_t::value_type(
                     ::rtl::OUString::createFromAscii(aStyleNamePairs[2 * nPair]),
                     ::rtl::OUString::createFromAscii(aStyleNamePairs[2 * nPair + 1]) ));
@@ -1033,6 +1019,7 @@ static const sal_Char *aStyleNamePairs[] =
     StringPairMap_t::iterator aIt = m_pImpl->m_aStyleNameMap.find( rWWName );
     if(aIt != m_pImpl->m_aStyleNameMap.end() && aIt->second.getLength())
         sRet = aIt->second;
+    // printf("After conversion: %s\n", ::rtl::OUStringToOString(sRet, RTL_TEXTENCODING_DONTKNOW).getStr());
     return sRet;
 }
 
