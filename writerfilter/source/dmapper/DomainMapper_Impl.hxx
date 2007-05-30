@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 10:43:21 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 11:28:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -306,7 +306,7 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >     GetCurrentTabStopAndClear();
     void                                NextTabStop() {++m_nCurrentTabStopIndex;}
 
-    void        SetCurrentParaStyleId(sal_Int32 nIntValue) {m_sCurrentParaStyleId = ::rtl::OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16);}
+    void        SetCurrentParaStyleId(::rtl::OUString sStringValue) {m_sCurrentParaStyleId = sStringValue;}
     ::rtl::OUString   GetCurrentParaStyleId() const {return m_sCurrentParaStyleId;}
 
     ::com::sun::star::uno::Any    GetPropertyFromStyleSheet(PropertyIds eId);

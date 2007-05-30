@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 10:43:20 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 11:28:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -532,7 +532,7 @@ void DomainMapper::attribute(doctok::Id nName, doctok::Value & val)
             {
                 bool bParaStyle = (pEntry->nStyleTypeCode == STYLE_TYPE_PARA);
                 if(bParaStyle)
-                    m_pImpl->SetCurrentParaStyleId(nIntValue);
+                    m_pImpl->SetCurrentParaStyleId(::rtl::OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16));
                 m_pImpl->GetTopContext()->Insert(
                                                  bParaStyle ?
                                                  PROP_PARA_STYLE_NAME  : PROP_CHAR_STYLE_NAME,
