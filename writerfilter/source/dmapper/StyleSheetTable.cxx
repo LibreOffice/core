@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 10:43:21 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 11:23:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -551,12 +551,12 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
 //        case NS_rtf::LN_ALTFONTNAME: break;
 //        case NS_rtf::LN_XSZFFN: break;
         case NS_rtf::LN_XSTZNAME:
+            m_pImpl->m_pCurrentEntry->sStyleName1 = sValue;
+        break;
+        case NS_rtf::LN_XSTZNAME1:
             m_pImpl->m_pCurrentEntry->sStyleName = sValue;
             if (m_pImpl->m_pCurrentEntry->sStyleIdentifierI.equals(::rtl::OUString()))
                 m_pImpl->m_pCurrentEntry->sStyleIdentifierI = sValue;
-        break;
-        case NS_rtf::LN_XSTZNAME1:
-            m_pImpl->m_pCurrentEntry->sStyleName1 = sValue;
         break;
 //        case NS_rtf::LN_UPXSTART: break;
         case NS_rtf::LN_UPX:
