@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsoli4.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 12:32:21 $
+#   last change: $Author: rt $ $Date: 2007-05-30 10:17:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -113,8 +113,7 @@ MODULES_WITH_WARNINGS := \
     extensions \
     r_tools \
     soldep \
-    sw \
-    xmlsecurity
+    sw
 
 STDOBJVCL=$(L)$/salmain.o
 
