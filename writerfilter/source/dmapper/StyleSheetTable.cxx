@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 11:23:23 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 12:11:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -589,6 +589,9 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
         break;
         case NS_ooxml::LN_CT_Style_customStyle:
         break;
+        case NS_ooxml::LN_CT_Style_styleId:
+            m_pImpl->m_pCurrentEntry->sStyleIdentifierD = sValue;
+        break;
         default:
         {
             //----> debug
@@ -621,8 +624,10 @@ void StyleSheetTable::sprm(doctok::Sprm & sprm_)
             m_pImpl->m_pCurrentEntry->pProperties->Insert(PROP_CHAR_STYLE_NAME, uno::makeAny(sStringValue));
         break;
     case NS_ooxml::LN_CT_Style_basedOn:
+        m_pImpl->m_pCurrentEntry->sBaseStyleIdentifier = sStringValue;
         break;
     case NS_ooxml::LN_CT_Style_next:
+        m_pImpl->m_pCurrentEntry->sNextStyleIdentifier = sStringValue;
         break;
     case NS_ooxml::LN_CT_Style_aliases:
     case NS_ooxml::LN_CT_Style_link:

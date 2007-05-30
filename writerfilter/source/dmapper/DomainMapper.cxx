@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 11:28:00 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 12:11:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1697,14 +1697,15 @@ void DomainMapper::attribute(doctok::Id nName, doctok::Value & val)
             CT_Column.space = ConversionHelper::convertToMM100( nIntValue );
             break;
 
-#if 0
-        case NS_ooxml::LN_CT_HdrFtrRef_type:
-            CT_HdrFtrRef.type = nIntValue;
+        case NS_ooxml::LN_CT_PPrBase_pStyle:
+            m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, uno::makeAny( m_pImpl->GetStyleSheetTable()->ConvertStyleName( sStringValue )));
             break;
-#endif
+        case NS_ooxml::LN_EG_RPrBase_rStyle:
+            m_pImpl->GetTopContext()->Insert( PROP_CHAR_STYLE_NAME, uno::makeAny( m_pImpl->GetStyleSheetTable()->ConvertStyleName( sStringValue )));
+            break;
+
         default:
             {
-                //int nVal = val.getInt();
                 OSL_ASSERT("unknown attribute");
             }
         }
