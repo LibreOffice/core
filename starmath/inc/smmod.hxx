@@ -4,9 +4,9 @@
  *
  *  $RCSfile: smmod.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-05-31 10:02:39 $
+ *  last change: $Author: rt $ $Date: 2007-05-31 10:33:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ class SmNamesArray : public Resource
 public:
     SmNamesArray( LanguageType nLang, int nRID ) :
         Resource( SmResId(RID_LOCALIZED_NAMES) ),
-        aNamesAry   (SmResId(nRID)),
+        aNamesAry   (SmResId( static_cast < USHORT > ( nRID ))),
         nLanguage   (nLang)
     {
         FreeResource();
