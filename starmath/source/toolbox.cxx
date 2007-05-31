@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-05-31 10:04:48 $
+ *  last change: $Author: vg $ $Date: 2007-05-31 11:22:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,7 +175,7 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pTmpBindings,
 
     aToolBoxCat.SetClickHdl(LINK(this, SmToolBoxWindow, CategoryClickHdl));
 
-    int i;
+    USHORT i;
     for (i = 0;  i < NUM_TBX_CATEGORIES;  i++)
     {
         ToolBox *pBox = new ToolBox(this, SmResId (i+1));
