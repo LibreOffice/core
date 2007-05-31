@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swnewtable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 13:10:43 $
+ *  last change: $Author: rt $ $Date: 2007-05-31 09:45:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1943,65 +1943,7 @@ void SwTable::PrepareDeleteCol( long nMin, long nMax )
     }
 }
 
-/** SwTable::IsSelectionRectangular(..) checks if the selected table cells
-    forms a rectangle, which e.g. would allow to merge it.
-*/
 
-bool SwTable::IsSelectionRectangular( const SwSelBoxes& rBoxes ) const
-{
-    ASSERT( IsNewModel(), "Don't call me for old tables" );
-    if( !aLines.Count() || !rBoxes.Count() || !IsNewModel() )
-        return true;
-    bool bRet = true;
-    long nMin = -1;
-    long nMax = -1;
-    USHORT nBox = 0;
-    USHORT nLineCnt = aLines.Count();
-    USHORT nBoxCnt = rBoxes.Count();
-    SwTableLine* pLine = rBoxes[0]->GetUpper();
-    USHORT nLinePos = aLines.C40_GETPOS( SwTableLine, pLine );
-
-    for( USHORT nRow = nLinePos; bRet && nRow < nLineCnt && nBox < nBoxCnt; ++nRow )
-    {
-        pLine = aLines[nRow];
-        USHORT nCols = pLine->GetTabBoxes().Count();
-        long nLeft = 0;
-        long nRight = 0;
-        for( USHORT nCurrBox = 0; bRet && nCurrBox < nCols; ++nCurrBox )
-        {
-            nLeft = nRight;
-            SwTableBox* pBox = pLine->GetTabBoxes()[nCurrBox];
-            nRight += pBox->GetFrmFmt()->GetFrmSize().GetWidth();
-            if( pBox == rBoxes[nBox] )
-            {
-                if( nRow == nLinePos )
-                {
-                    if( nMin < 0 )
-                    {
-                        nMin = nLeft;
-                        nMax = nRight;
-                    }
-                    else
-                    {
-                        bRet = nLeft == nMax;
-                        nMax = nRight;
-                    }
-                }
-                else
-                    bRet = nLeft >= nMin && nRight <= nMax;
-                if( ++nBox >= nBoxCnt )
-                {
-                    if( nRight != nMax )
-                        bRet = false;
-                    break;
-                }
-            }
-            else if( nMin >= 0 )
-                bRet = nLeft >= nMax || nRight <= nMin;
-        }
-    }
-    return bRet;
-}
 
 /** SwTable::ExpandSelection(..) adds all boxes to the box selections which are
     overlapped by it.
