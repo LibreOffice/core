@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:34:55 $
+ *  last change: $Author: rt $ $Date: 2007-05-31 10:03:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1000,21 +1000,21 @@ void SmDistanceDialog::SetCategory(USHORT nCategory)
 
 SmDistanceDialog::SmDistanceDialog(Window *pParent, BOOL bFreeRes)
     : ModalDialog(pParent, SmResId(RID_DISTANCEDIALOG)),
-    aFixedText1    (this, ResId(1)),
-    aMetricField1  (this, ResId(1)),
-    aFixedText2    (this, ResId(2)),
-    aMetricField2  (this, ResId(2)),
-    aFixedText3    (this, ResId(3)),
-    aMetricField3  (this, ResId(3)),
-    aCheckBox1     (this, ResId(1)),
-    aFixedText4    (this, ResId(4)),
-    aMetricField4  (this, ResId(4)),
-    aOKButton1     (this, ResId(1)),
-    aCancelButton1 (this, ResId(1)),
-    aMenuButton    (this, ResId(1)),
-    aDefaultButton (this, ResId(1)),
-    aBitmap        (this, ResId(1)),
-    aFixedLine     (this, ResId(1))
+    aFixedText1    (this, SmResId(1)),
+    aMetricField1  (this, SmResId(1)),
+    aFixedText2    (this, SmResId(2)),
+    aMetricField2  (this, SmResId(2)),
+    aFixedText3    (this, SmResId(3)),
+    aMetricField3  (this, SmResId(3)),
+    aCheckBox1     (this, SmResId(1)),
+    aFixedText4    (this, SmResId(4)),
+    aMetricField4  (this, SmResId(4)),
+    aOKButton1     (this, SmResId(1)),
+    aCancelButton1 (this, SmResId(1)),
+    aMenuButton    (this, SmResId(1)),
+    aDefaultButton (this, SmResId(1)),
+    aBitmap        (this, SmResId(1)),
+    aFixedLine     (this, SmResId(1))
 {
     for (USHORT i = 0; i < NOCATEGORIES; i++)
         Categories[i] = new SmCategoryDesc(SmResId(i + 1), i);
@@ -1580,14 +1580,14 @@ IMPL_LINK_INLINE_END( SmSymbolDialog, CloseClickHdl, Button *, pButton )
 SmSymbolDialog::SmSymbolDialog(Window *pParent, OutputDevice *pFntListDevice,
         SmSymSetManager &rMgr, SmViewShell &rViewShell, BOOL bFreeRes) :
     ModalDialog         (pParent, SmResId(RID_SYMBOLDIALOG)),
-    aSymbolSetText      (this, ResId(1)),
-    aSymbolSets         (this, ResId(1)),
-    aSymbolSetDisplay   (this, ResId(1)),
-    aSymbolName         (this, ResId(2)),
-    aSymbolDisplay      (this, ResId(2)),
-    aGetBtn             (this, ResId(2)),
-    aCloseBtn           (this, ResId(3)),
-    aEditBtn            (this, ResId(1)),
+    aSymbolSetText      (this, SmResId(1)),
+    aSymbolSets         (this, SmResId(1)),
+    aSymbolSetDisplay   (this, SmResId(1)),
+    aSymbolName         (this, SmResId(2)),
+    aSymbolDisplay      (this, SmResId(2)),
+    aGetBtn             (this, SmResId(2)),
+    aCloseBtn           (this, SmResId(3)),
+    aEditBtn            (this, SmResId(1)),
     rViewSh             (rViewShell),
     rSymSetMgr          (rMgr),
     pFontListDev        (pFntListDevice)
@@ -2162,33 +2162,33 @@ void SmSymDefineDialog::UpdateButtons()
 SmSymDefineDialog::SmSymDefineDialog(Window * pParent,
         OutputDevice *pFntListDevice, SmSymSetManager &rMgr, BOOL bFreeRes) :
     ModalDialog         (pParent, SmResId(RID_SYMDEFINEDIALOG)),
-    aOldSymbolText      (this, ResId(1)),
-    aOldSymbols         (this, ResId(1)),
-    aOldSymbolSetText   (this, ResId(2)),
-    aOldSymbolSets      (this, ResId(2)),
-    aCharsetDisplay     (this, ResId(1)),
-    aSymbolText         (this, ResId(9)),
-    aSymbols            (this, ResId(4)),
-    aSymbolSetText      (this, ResId(10)),
-    aSymbolSets         (this, ResId(5)),
-    aFontText           (this, ResId(3)),
-    aFonts              (this, ResId(1)),
-    aFontsSubsetFT      (this, ResId( FT_FONTS_SUBSET )),
-    aFontsSubsetLB      (this, ResId( LB_FONTS_SUBSET )),
-    aStyleText          (this, ResId(4)),
-    aStyles             (this, ResId(3)),
-    aOldSymbolName      (this, ResId(7)),
-    aOldSymbolDisplay   (this, ResId(3)),
-    aOldSymbolSetName   (this, ResId(8)),
-    aSymbolName         (this, ResId(5)),
-    aSymbolDisplay      (this, ResId(2)),
-    aSymbolSetName      (this, ResId(6)),
-    aOkBtn              (this, ResId(1)),
-    aCancelBtn          (this, ResId(1)),
-    aAddBtn             (this, ResId(1)),
-    aChangeBtn          (this, ResId(2)),
-    aDeleteBtn          (this, ResId(3)),
-    aRightArrow         (this, ResId(1)),
+    aOldSymbolText      (this, SmResId(1)),
+    aOldSymbols         (this, SmResId(1)),
+    aOldSymbolSetText   (this, SmResId(2)),
+    aOldSymbolSets      (this, SmResId(2)),
+    aCharsetDisplay     (this, SmResId(1)),
+    aSymbolText         (this, SmResId(9)),
+    aSymbols            (this, SmResId(4)),
+    aSymbolSetText      (this, SmResId(10)),
+    aSymbolSets         (this, SmResId(5)),
+    aFontText           (this, SmResId(3)),
+    aFonts              (this, SmResId(1)),
+    aFontsSubsetFT      (this, SmResId( FT_FONTS_SUBSET )),
+    aFontsSubsetLB      (this, SmResId( LB_FONTS_SUBSET )),
+    aStyleText          (this, SmResId(4)),
+    aStyles             (this, SmResId(3)),
+    aOldSymbolName      (this, SmResId(7)),
+    aOldSymbolDisplay   (this, SmResId(3)),
+    aOldSymbolSetName   (this, SmResId(8)),
+    aSymbolName         (this, SmResId(5)),
+    aSymbolDisplay      (this, SmResId(2)),
+    aSymbolSetName      (this, SmResId(6)),
+    aOkBtn              (this, SmResId(1)),
+    aCancelBtn          (this, SmResId(1)),
+    aAddBtn             (this, SmResId(1)),
+    aChangeBtn          (this, SmResId(2)),
+    aDeleteBtn          (this, SmResId(3)),
+    aRightArrow         (this, SmResId(1)),
     rSymSetMgr          (rMgr),
     pSubsetMap          (NULL),
     pFontList           (NULL)

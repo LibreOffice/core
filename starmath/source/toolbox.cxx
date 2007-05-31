@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:35:48 $
+ *  last change: $Author: rt $ $Date: 2007-05-31 10:04:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,8 +163,8 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pTmpBindings,
                                  SfxChildWindow *pChildWindow,
                                  Window *pParent) :
     SfxFloatingWindow(pTmpBindings, pChildWindow, pParent, SmResId(RID_TOOLBOXWINDOW)),
-    aToolBoxCat(this, ResId(NUM_TBX_CATEGORIES + 1)),
-    aToolBoxCat_Delim(this, ResId( FL_TOOLBOX_CAT_DELIM ))
+    aToolBoxCat(this, SmResId(NUM_TBX_CATEGORIES + 1)),
+    aToolBoxCat_Delim(this, SmResId( FL_TOOLBOX_CAT_DELIM ))
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmToolBoxWindow::SmToolBoxWindow" );
 
