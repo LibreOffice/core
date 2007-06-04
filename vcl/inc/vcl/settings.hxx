@@ -4,9 +4,9 @@
  *
  *  $RCSfile: settings.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:10:17 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 14:57:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -447,6 +447,7 @@ private:
     ULONG                           mnUseFlatBorders;
     long                            mnMinThumbSize;
     ULONG                           mnSymbolsStyle;
+    ULONG                           mnPreferredSymbolsStyle;
     USHORT                          mnSkipDisabledInMenus;
 };
 
@@ -527,6 +528,8 @@ private:
 #define STYLE_SYMBOLS_HICONTRAST    ((ULONG)2)
 #define STYLE_SYMBOLS_INDUSTRIAL    ((ULONG)3)
 #define STYLE_SYMBOLS_CRYSTAL       ((ULONG)4)
+#define STYLE_SYMBOLS_TANGO     ((ULONG)5)
+#define STYLE_SYMBOLS_THEMES_MAX    ((ULONG)5)
 
 #define STYLE_CURSOR_NOBLINKTIME    ((ULONG)0xFFFFFFFF)
 
@@ -931,6 +934,13 @@ public:
                                         { CopyData(); mpData->mnSymbolsStyle = nStyle; }
     ULONG                           GetSymbolsStyle() const
                                         { return mpData->mnSymbolsStyle; }
+
+    void                            SetPreferredSymbolsStyle( ULONG nStyle )
+                                        { CopyData(); mpData->mnPreferredSymbolsStyle = nStyle; }
+    void                            SetPreferredSymbolsStyleName( const ::rtl::OUString &rName );
+    ULONG                           GetPreferredSymbolsStyle() const
+                                        { return mpData->mnPreferredSymbolsStyle; }
+
     ULONG                           GetCurrentSymbolsStyle() const;
 
     void                            SetSymbolsStyleName( const ::rtl::OUString &rName )
