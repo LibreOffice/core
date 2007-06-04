@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-21 14:10:50 $
+#   last change: $Author: ihi $ $Date: 2007-06-04 13:31:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,8 @@ JAVAFILES = \
  DB.java\
  ValueNotFoundException.java \
  GlobalLogWriter.java \
- CrashLoopTest.java 
+ CrashLoopTest.java \
+ SimpleFileSemaphore.java
 
 
 
