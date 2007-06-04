@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2004 by Henrik Just
+ *  Copyright: 2002-2006 by Henrik Just
  *
  *  All Rights Reserved.
  *
- *  Version 0.3.3i (2004-12-14)
+ *  Version 0.4b (2006-11-03)
  *
  */
 
@@ -158,7 +158,11 @@ public class DrawConverter extends ConverterHelper {
         String sFileName = null;
         boolean bCommentOut = true;
         String sHref = node.getAttribute(XMLString.XLINK_HREF);
-        if (sHref!=null && sHref.length()>0 && !sHref.startsWith("#")) {
+        if (sHref!=null && sHref.length()>0) {
+            // Workaround for bug in OOo's flat sxw export: The xlink:href starts
+            // with a # if the image is in the same directory or a subdirectory.
+            // We simply ignore that, which is o.k. because we only handle flat xml.
+            if (sHref.startsWith("#")) { sHref=sHref.substring(1); }
             // Linked image is not yet handled by ImageLoader. This is a temp.
             // solution (will go away when ImageLoader is finished)
             sFileName = sHref;
