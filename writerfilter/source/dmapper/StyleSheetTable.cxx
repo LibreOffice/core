@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 12:39:56 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-06-04 09:40:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,15 +182,20 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
 //        case NS_rtf::LN_PANOSE: break;
 //        case NS_rtf::LN_FS: break;
         case NS_rtf::LN_STI:
-            m_pImpl->m_pCurrentEntry->sStyleIdentifierI = GetStyleIdFromIndex(static_cast<sal_uInt32>(nIntValue));
+        {
+            ::rtl::OUString tempStyleIdentifier = GetStyleIdFromIndex(static_cast<sal_uInt32>(nIntValue));
+            if (!tempStyleIdentifier.getLength())
+                m_pImpl->m_pCurrentEntry->sStyleIdentifierI = tempStyleIdentifier;
             if (nIntValue == 0 || nIntValue == 65)
                 m_pImpl->m_pCurrentEntry->bIsDefaultStyle = true;
+        }
         break;
         case NS_rtf::LN_SGC:
             m_pImpl->m_pCurrentEntry->nStyleTypeCode = (StyleType)nIntValue;
         break;
         case NS_rtf::LN_ISTDBASE:
-            m_pImpl->m_pCurrentEntry->sBaseStyleIdentifier = ::rtl::OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16);
+            if (static_cast<sal_uInt32>(nIntValue) != 0xfff)
+                m_pImpl->m_pCurrentEntry->sBaseStyleIdentifier = ::rtl::OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16);
         break;
         case NS_rtf::LN_ISTDNEXT:
             if (static_cast<sal_uInt32>(nIntValue) != 0xfff)
@@ -552,10 +557,12 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
 //        case NS_rtf::LN_XSZFFN: break;
         case NS_rtf::LN_XSTZNAME:
             m_pImpl->m_pCurrentEntry->sStyleName1 = sValue;
+            if (m_pImpl->m_pCurrentEntry->sStyleIdentifierI.getLength())
+                m_pImpl->m_pCurrentEntry->sStyleIdentifierI = sValue;
         break;
         case NS_rtf::LN_XSTZNAME1:
             m_pImpl->m_pCurrentEntry->sStyleName = sValue;
-            if (m_pImpl->m_pCurrentEntry->sStyleIdentifierI.equals(::rtl::OUString()))
+            if (m_pImpl->m_pCurrentEntry->sStyleIdentifierI.getLength())
                 m_pImpl->m_pCurrentEntry->sStyleIdentifierI = sValue;
         break;
 //        case NS_rtf::LN_UPXSTART: break;
@@ -564,6 +571,7 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
         break;
 //        case NS_rtf::LN_sed: break;
 //        case NS_rtf::LN_picf: break;
+
 //        case NS_rtf::LN_rgbrc: break;
 //        case NS_rtf::LN_shd: break;
 //        case NS_rtf::LN_cellShd: break;
@@ -590,6 +598,7 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
         case NS_ooxml::LN_CT_Style_customStyle:
         break;
         case NS_ooxml::LN_CT_Style_styleId:
+            m_pImpl->m_pCurrentEntry->sStyleIdentifierI = sValue;
             m_pImpl->m_pCurrentEntry->sStyleIdentifierD = sValue;
         break;
         default:
@@ -679,7 +688,7 @@ void StyleSheetTable::sprm(doctok::Sprm & sprm_)
 void StyleSheetTable::entry(int /*pos*/, doctok::Reference<Properties>::Pointer_t ref)
 {
     //create a new style entry
-//    printf("StyleSheetTable::entry(...)\n");
+    // printf("StyleSheetTable::entry(...)\n");
     OSL_ENSURE( !m_pImpl->m_pCurrentEntry, "current entry has to be NULL here");
     m_pImpl->m_pCurrentEntry = new StyleSheetEntry;
     ref->resolve(*this);
@@ -776,7 +785,7 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
                                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.CharacterStyle"))),
                                     uno::UNO_QUERY_THROW);
                 }
-                if(aIt->sBaseStyleIdentifier.compareTo(::rtl::OUString()) )
+                if(!(aIt->sBaseStyleIdentifier.getLength()) )
                 {
                     //find the name of the base style
                     std::vector< StyleSheetEntry >::iterator aBaseStyleIt = m_pImpl->m_aStyleSheetEntries.begin();
@@ -827,7 +836,7 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
 
                 uno::Sequence< beans::PropertyValue > aPropValues = aIt->pProperties->GetPropertyValues();
                 bool bAddFollowStyle = false;
-                if(bParaStyle && aIt->sNextStyleIdentifier.compareTo(::rtl::OUString()) )
+                if(bParaStyle && !aIt->sNextStyleIdentifier.getLength() )
                 {
                         bAddFollowStyle = true;
                 }
@@ -890,7 +899,7 @@ const StyleSheetEntry* StyleSheetTable::FindStyleSheetByISTD(const ::rtl::OUStri
   -----------------------------------------------------------------------*/
 const StyleSheetEntry* StyleSheetTable::FindParentStyleSheet(::rtl::OUString sBaseStyle)
 {
-    if(sBaseStyle.compareTo(::rtl::OUString()) == 0 && m_pImpl->m_pCurrentEntry)
+    if(sBaseStyle.getLength() && m_pImpl->m_pCurrentEntry)
         sBaseStyle = m_pImpl->m_pCurrentEntry->sBaseStyleIdentifier;
 
     const StyleSheetEntry* pRet = 0;
@@ -1006,7 +1015,6 @@ static const sal_Char *aStyleNamePairs[] =
 ::rtl::OUString StyleSheetTable::ConvertStyleName( const ::rtl::OUString& rWWName)
 {
     ::rtl::OUString sRet( rWWName );
-    // printf("Before conversion: %s\n", ::rtl::OUStringToOString(sRet, RTL_TEXTENCODING_DONTKNOW).getStr());
     if(!m_pImpl->m_aStyleNameMap.size())
     {
         for( sal_uInt32 nPair = 0; nPair < sizeof(aStyleNamePairs) / sizeof( sal_Char*) / 2; ++nPair)
@@ -1019,14 +1027,15 @@ static const sal_Char *aStyleNamePairs[] =
     StringPairMap_t::iterator aIt = m_pImpl->m_aStyleNameMap.find( rWWName );
     if(aIt != m_pImpl->m_aStyleNameMap.end() && aIt->second.getLength())
         sRet = aIt->second;
-    // printf("After conversion: %s\n", ::rtl::OUStringToOString(sRet, RTL_TEXTENCODING_DONTKNOW).getStr());
     return sRet;
 }
 
 ::rtl::OUString StyleSheetTable::GetStyleIdFromIndex(const sal_uInt32 sti)
 {
     ::rtl::OUString sRet;
-    if (sti < sizeof(aStyleNamePairs) / sizeof( sal_Char*) / 2)
+    if (sti >= (sizeof(aStyleNamePairs) / sizeof( sal_Char*) / 2))
+        sRet = ::rtl::OUString();
+    else
         sRet = ::rtl::OUString::createFromAscii(aStyleNamePairs[2 * sti]);
     return sRet;
 }
