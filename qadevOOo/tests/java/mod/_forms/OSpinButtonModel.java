@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OSpinButtonModel.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:15:59 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:38:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 package mod._forms;
 
+import com.sun.star.beans.PropertyValue;
 import com.sun.star.drawing.XControlShape;
 import com.sun.star.drawing.XShape;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -54,8 +55,8 @@ public class OSpinButtonModel extends TestCase {
     XTextDocument xTextDoc;
 
     /**
-    * Creates a Writer document.
-    */
+     * Creates a Writer document.
+     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         log.println( "creating a textdocument" );
@@ -63,14 +64,14 @@ public class OSpinButtonModel extends TestCase {
     }
 
     /**
-    * Disposes the Writer document.
-    */
+     * Disposes the Writer document.
+     */
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
 
         try {
             XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                        XCloseable.class, xTextDoc);
+                XCloseable.class, xTextDoc);
             closer.close(true);
         } catch (com.sun.star.util.CloseVetoException e) {
             log.println("couldn't close document");
@@ -81,21 +82,27 @@ public class OSpinButtonModel extends TestCase {
 
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
-    * Adds spin button into text and retrieves it's control model.
-    */
+     * Creating a Testenvironment for the interfaces to be tested.
+     * Adds spin button into text and retrieves it's control model.
+     */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;
 
         XControlShape aShape = FormTools.createControlShape(
-                                xTextDoc,3000,4500,15000,10000,"SpinButton");
+            xTextDoc,3000,4500,15000,10000,"SpinButton");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
         oObj = aShape.getControl();
         log.println( "creating a new environment for OButtonModel object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
         tEnv.addObjRelation("OBJNAME", "com.sun.star.form.component.SpinButton");
+        PropertyValue prop = new PropertyValue();
+        prop.Name = "HelpText";
+        prop.Value = "new Help Text since XPropertyAccess";
+        tEnv.addObjRelation("XPropertyAccess.propertyToChange", prop);
+        tEnv.addObjRelation("XPropertyContainer.propertyNotRemovable", "HelpText");
+
         System.out.println("Implementation name: "+util.utils.getImplName(oObj));
         return tEnv;
     } // finish method getTestEnvironment
