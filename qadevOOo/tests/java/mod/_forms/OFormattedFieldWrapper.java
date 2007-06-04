@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OFormattedFieldWrapper.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:10:58 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:35:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,8 @@ import util.DBTools;
  *  <li> <code>com::sun::star::container::XNamed</code></li>
  *  <li> <code>com::sun::star::lang::XComponent</code></li>
  *  <li> <code>com::sun::star::lang::XEventListener</code></li>
+ *  <li> <code>com::sun::star::beans::XPropertyAccess</code></li>
+ *  <li> <code>com::sun::star::beans::XPropertyContainer</code></li>
  *  <li> <code>com::sun::star::beans::XPropertySet</code></li>
  *  <li> <code>com::sun::star::form::XLoadListener</code></li>
  *  <li> <code>com::sun::star::awt::UnoControlFormattedFieldModel</code></li>
@@ -103,6 +105,8 @@ import util.DBTools;
  * @see ifc.container._XNamed
  * @see ifc.lang._XComponent
  * @see ifc.lang._XEventListener
+ * @see ifc.beans._XPropertyAccess
+ * @see ifc.beans._XPropertyContainer
  * @see ifc.beans._XPropertySet
  * @see ifc.form._XLoadListener
  * @see ifc.awt._UnoControlFormattedFieldModel
@@ -128,6 +132,8 @@ public class OFormattedFieldWrapper extends GenericModelTest {
      */
     protected void initialize(TestParameters tParam, PrintWriter log) {
 
+        super.initialize(tParam, log);
+
         super.m_ChangePropertyName = "Text";
 
         super.m_kindOfControl="DatabaseFormattedField";
@@ -141,10 +147,7 @@ public class OFormattedFieldWrapper extends GenericModelTest {
 
         super.m_LCShape_Type = "FixedText";
 
-        super.initialize(tParam, log);
-
-    }
-    /**
+    }    /**
      * calls <CODE>cleanup()</CODE> from it's super class
      * @param tParam the test parameter
      * @param log the log writer
