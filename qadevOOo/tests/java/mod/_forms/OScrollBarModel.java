@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OScrollBarModel.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:15:46 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:37:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 package mod._forms;
 
+import com.sun.star.beans.PropertyValue;
 import com.sun.star.drawing.XControlShape;
 import com.sun.star.drawing.XShape;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -95,6 +96,11 @@ public class OScrollBarModel extends TestCase {
 
         String objName = "ScrollBar";
         tEnv.addObjRelation("OBJNAME", "com.sun.star.form.component." + objName);
+        PropertyValue prop = new PropertyValue();
+        prop.Name = "HelpText";
+        prop.Value = "new Help Text since XPropertyAccess";
+        tEnv.addObjRelation("XPropertyAccess.propertyToChange", prop);
+        tEnv.addObjRelation("XPropertyContainer.propertyNotRemovable", "HelpText");
         return tEnv;
     }
 
