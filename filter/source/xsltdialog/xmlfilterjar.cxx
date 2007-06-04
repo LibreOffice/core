@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilterjar.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:34:26 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 11:49:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,9 +243,17 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
 
                     if( pFilter->maExportXSLT.getLength() )
                         addFile( xFilterRoot, xFactory, pFilter->maExportXSLT );
-
-                    if( pFilter->maImportXSLT.getLength() )
-                        addFile( xFilterRoot, xFactory, pFilter->maImportXSLT );
+                    try
+                    {
+                        if( pFilter->maImportXSLT.getLength() )
+                            addFile( xFilterRoot, xFactory, pFilter->maImportXSLT );
+                    }
+                    catch( com::sun::star::container::ElementExistException&)
+                    {
+                    // in case of same named import / export XSLT the latter
+                    // is ignored
+                        DBG_ERROR( "XMLFilterJarHelper::same named xslt filter exception!" );
+                    }
 
                     if( pFilter->maImportTemplate.getLength() )
                         addFile( xFilterRoot, xFactory, pFilter->maImportTemplate );
