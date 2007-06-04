@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ONavigationBarModel.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:14:01 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:37:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,61 +36,54 @@
 package mod._forms;
 
 import java.io.PrintWriter;
-
-import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-import util.FormTools;
-import util.WriterTools;
-import util.DesktopTools;
 
-import com.sun.star.drawing.XControlShape;
-import com.sun.star.drawing.XShape;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.util.XCloseable;
-
-
-public class ONavigationBarModel extends TestCase {
-
-    XTextDocument xTextDoc;
+public class ONavigationBarModel extends GenericModelTest {
 
     /**
-    * Creates StarWriter document.
-    */
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
+     * Set some member variable of the super class <CODE>GenericModelTest</CODE>:
+     * <pre>
+     *    super.m_kindOfControl="NavigationToolBar";
+     *    super.m_ObjectName = "om.sun.star.form.component.NavigationToolBar";
+     *    super.m_LCShape_Type = "NavigationToolBar";
+     * </pre>
+     * Then <CODE>super.initialize()</CODE> was called.
+     * @param tParam the test parameter
+     * @param log the log writer
+     */
 
-        log.println( "creating a textdocument" );
-        xTextDoc = WriterTools.createTextDoc(((XMultiServiceFactory) tParam.getMSF()));
+    protected void initialize(TestParameters tParam, PrintWriter log) {
+
+        super.initialize(tParam, log);
+
+        super.m_kindOfControl="NavigationToolBar";
+
+        super.m_ObjectName = "com.sun.star.form.component.NavigationToolBar";
+
+        super.m_LCShape_Type = "NavigationToolBar";
+
     }
-
     /**
-    * Disposes Writer document.
-    */
+     * calls <CODE>cleanup()</CODE> from it's super class
+     * @param tParam the test parameter
+     * @param log the log writer
+     */
     protected void cleanup(TestParameters tParam, PrintWriter log) {
-        log.println("    disposing xTextDoc ");
-
-        DesktopTools.closeDoc(xTextDoc);
+        super.cleanup(tParam, log);
     }
 
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
-        XInterface oObj = null;
-
-        XControlShape aShape = FormTools.createControlShape(
-                                xTextDoc,3000,4500,15000,10000,"NavigationToolBar");
-
-        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
-        oObj = aShape.getControl();
-        log.println( "creating a new environment for ONavigationBarModel object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
-        tEnv.addObjRelation("OBJNAME", "com.sun.star.form.component.NavigationToolBar");
-        //adding ObjRelation for XPersistObject
-        tEnv.addObjRelation("PSEUDOPERSISTENT", new Boolean(true));
-        return tEnv;
-    } // finish method getTestEnvironment
+    /**
+     * calls <CODE>createTestEnvironment()</CODE> from it's super class
+     * @param Param the test parameter
+     * @param log the log writer
+     * @return lib.TestEnvironment
+     */
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+            PrintWriter log) {
+        return super.createTestEnvironment(Param, log);
+    }
 
 }    // finish class ONavigationBarModel
 
