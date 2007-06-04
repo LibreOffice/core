@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.190 $
+ *  $Revision: 1.191 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:27:59 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 11:53:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2406,14 +2406,14 @@ End
 
 File gid_File_Xsl_Export_Common_Styles_Styles_Collector
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Xslt_Export_Common_Styles;
     Name = "/xslt/export/common/styles/style_collector.xsl";
 End
 
 File gid_File_Xsl_Export_Common_Styles_Style_Mapping_Css
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Xslt_Export_Common_Styles;
     Name = "/xslt/export/common/styles/style_mapping_css.xsl";
 End
@@ -2434,7 +2434,7 @@ End
 
 File gid_File_Xsl_Export_Common_Table_Table_Cells
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Xslt_Export_Common_Table;
     Name = "/xslt/export/common/table/table_cells.xsl";
 End
