@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PluginFactoryImpl.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 13:33:16 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 11:53:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ public final class PluginFactoryImpl extends PluginFactory
      *  which is an implementation of the <code>DocumentDeserializer</code>
      *  interface.
      *
-     *  @param  is   <code>ConvertData</code> object.
+     *  @param  cd   <code>ConvertData</code> object.
      *
      *  @return  A DocumentDeserializerImpl object.
      */
