@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ODatabaseForm.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 17:50:10 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:34:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,8 @@ import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertyAccess;
+import com.sun.star.beans.XPropertyContainer;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameContainer;
@@ -136,6 +138,8 @@ import ifc.sdb._XCompletedExecution;
  *  <li> <code>com::sun::star::sdbcx::XRowLocate</code></li>
  *  <li> <code>com::sun::star::sdbc::XWarningsSupplier</code></li>
  *  <li> <code>com::sun::star::container::XNameContainer</code></li>
+ *  <li> <code>com::sun::star::beans::XPropertyAccess</code></li>
+ *  <li> <code>com::sun::star::beans::XPropertyContainer</code></li>
  *  <li> <code>com::sun::star::beans::XPropertySet</code></li>
  *  <li> <code>com::sun::star::sdbc::RowSet</code></li>
  * </ul> <p>
@@ -230,6 +234,8 @@ import ifc.sdb._XCompletedExecution;
  * @see ifc.sdbcx._XRowLocate
  * @see ifc.sdbc._XWarningsSupplier
  * @see ifc.container._XNameContainer
+ * @see ifc.beans._XPropertyAccess
+ * @see ifc.beans._XPropertyContainer
  * @see ifc.beans._XPropertySet
  * @see ifc.sdbc._RowSet
  */
@@ -736,6 +742,15 @@ public class ODatabaseForm extends TestCase {
         // Adding relation for XRowUpdate
         XRow row = (XRow) UnoRuntime.queryInterface(XRow.class, oObj);
         tEnv.addObjRelation("XRowUpdate.XRow", row);
+
+
+        tEnv.addObjRelation("XPropertyContainer.propertyNotRemovable", "Cycle");
+
+        PropertyValue propVal = new PropertyValue();
+        propVal.Name = "Name";
+        propVal.Value = "Text since XPropertyAccess";
+
+        tEnv.addObjRelation("XPropertyAccess.propertyToChange", propVal);
 
         return tEnv;
     } // finish method getTestEnvironment
