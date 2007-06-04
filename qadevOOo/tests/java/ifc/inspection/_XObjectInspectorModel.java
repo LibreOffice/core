@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XObjectInspectorModel.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 11:54:02 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:32:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,7 @@ public class _XObjectInspectorModel extends MultiMethodTest {
         boolean result = (minHelpTextLines.intValue() == getMinHelpTextLines);
 
         if (!result)
-            log.println("expected value:" + minHelpTextLines + " getted value:" + getMinHelpTextLines);
+            log.println("FAILED: value:" + minHelpTextLines + " getted value:" + getMinHelpTextLines);
 
         tRes.tested("MinHelpTextLines()", result) ;
     }
@@ -141,9 +141,29 @@ public class _XObjectInspectorModel extends MultiMethodTest {
         boolean result = (maxHelpTextLines.intValue() == getMaxHelpTextLines);
 
         if (!result)
-            log.println("expected value:" + maxHelpTextLines + " getted value:" + getMaxHelpTextLines);
+            log.println("FAILED: expected value:" + maxHelpTextLines + " getted value:" + getMaxHelpTextLines);
 
         tRes.tested("MaxHelpTextLines()", result);
+    }
+
+    public void _IsReadOnly() {
+        boolean readOnly = oObj.getIsReadOnly();
+
+        oObj.setIsReadOnly(!readOnly);
+
+        boolean result = (readOnly != oObj.getIsReadOnly());
+        if (!result){
+            log.println("FAILED: could not change 'IsReadOnly' to value '" + !readOnly + "'");
+        }
+
+        oObj.setIsReadOnly(readOnly);
+
+        result &= (readOnly == oObj.getIsReadOnly());
+        if (!result){
+            log.println("FAILED: could not change back 'IsReadOnly' to value '" + !readOnly + "'");
+        }
+
+        tRes.tested("IsReadOnly()", result);
     }
 
 }
