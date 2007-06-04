@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 14:11:51 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:31:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 package util;
 
+import com.sun.star.awt.Point;
 import com.sun.star.awt.XTopWindow;
 import com.sun.star.awt.XWindow;
 import com.sun.star.uno.UnoRuntime;
@@ -55,6 +56,8 @@ import com.sun.star.accessibility.XAccessibleText;
 import com.sun.star.accessibility.XAccessibleValue;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
+import java.awt.Robot;
+import java.awt.event.InputEvent;
 import java.io.PrintWriter;
 import java.util.Vector;
 import share.LogWriter;
@@ -739,6 +742,74 @@ public class UITools {
             System.out.println("<- getTopWindow ");
         }
         return (XWindow) UnoRuntime.queryInterface(XWindow.class, retWindow);
+    }
+
+    public void clickMiddleOfAccessibleObject(short role, String name){
+
+        XAccessibleContext xAcc =mAT.getAccessibleObjectForRole(mXRoot, role, name);
+        XAccessibleComponent aComp = (XAccessibleComponent) UnoRuntime.queryInterface(
+                                             XAccessibleComponent.class, xAcc);
+
+        System.out.println(xAcc.getAccessibleRole() + "," +
+                    xAcc.getAccessibleName() + "(" +
+                    xAcc.getAccessibleDescription() + "):" +
+                    utils.getImplName(xAcc));
+
+        if (aComp != null) {
+            Point location = aComp.getLocationOnScreen();
+            String bounds = "(" + aComp.getBounds().X + "," +
+                            aComp.getBounds().Y + ")" + " (" +
+                            aComp.getBounds().Width + "," +
+                            aComp.getBounds().Height + ")";
+            System.out.println("The boundary Rectangle is " + bounds);
+                try {
+                    Robot rob = new Robot();
+                    int x = aComp.getLocationOnScreen().X + (aComp.getBounds().Width / 2);
+                    int y = aComp.getLocationOnScreen().Y + (aComp.getBounds().Height / 2);
+                    System.out.println("try to click mouse button on x/y " + x + "/" + y);
+                    rob.mouseMove(x, y);
+                    rob.mousePress(InputEvent.BUTTON1_MASK);
+                    rob.mouseRelease(InputEvent.BUTTON1_MASK);
+                } catch (java.awt.AWTException e) {
+                    System.out.println("couldn't press mouse button");
+                }
+
+        }
+    }
+
+    public void doubleClickMiddleOfAccessibleObject(short role, String name) {
+        XAccessibleContext xAcc =mAT.getAccessibleObjectForRole(mXRoot, role, name);
+        XAccessibleComponent aComp = (XAccessibleComponent) UnoRuntime.queryInterface(
+                                             XAccessibleComponent.class, xAcc);
+
+        System.out.println(xAcc.getAccessibleRole() + "," +
+                    xAcc.getAccessibleName() + "(" +
+                    xAcc.getAccessibleDescription() + "):" +
+                    utils.getImplName(xAcc));
+
+        if (aComp != null) {
+            Point location = aComp.getLocationOnScreen();
+            String bounds = "(" + aComp.getBounds().X + "," +
+                            aComp.getBounds().Y + ")" + " (" +
+                            aComp.getBounds().Width + "," +
+                            aComp.getBounds().Height + ")";
+            System.out.println("The boundary Rectangle is " + bounds);
+                try {
+                    Robot rob = new Robot();
+                    int x = aComp.getLocationOnScreen().X + (aComp.getBounds().Width / 2);
+                    int y = aComp.getLocationOnScreen().Y + (aComp.getBounds().Height / 2);
+                    System.out.println("try to double click mouse button on x/y " + x + "/" + y);
+                    rob.mouseMove(x, y);
+                    rob.mousePress(InputEvent.BUTTON1_MASK);
+                    rob.mouseRelease(InputEvent.BUTTON1_MASK);
+                    utils.shortWait(100);
+                    rob.mousePress(InputEvent.BUTTON1_MASK);
+                    rob.mouseRelease(InputEvent.BUTTON1_MASK);
+                } catch (java.awt.AWTException e) {
+                    System.out.println("couldn't press mouse button");
+                }
+
+        }
     }
 
     /**
