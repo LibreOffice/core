@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resources.xsl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-12-01 10:17:21 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-04 08:42:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,9 @@
  *
  *  $RCSfile: resources.xsl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-12-01 10:17:21 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-04 08:42:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -647,7 +647,7 @@ class </xsl:text>
         <xsl:text> return get</xsl:text>
         <xsl:value-of select='$type'/>
         <xsl:text>(</xsl:text><xsl:value-of select='$offset'/>
-        <xsl:text>+ nIndex * sizeof(</xsl:text>
+        <xsl:text> + nIndex * sizeof(</xsl:text>
         <xsl:value-of select='$saltype'/>
         <xsl:text>))</xsl:text>
       </xsl:otherwise>
