@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXTextView.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:04:00 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:39:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,11 @@
 
 package mod._sw;
 
+import com.sun.star.container.NoSuchElementException;
+import com.sun.star.container.XNameContainer;
+import com.sun.star.drawing.XDrawPage;
+import com.sun.star.drawing.XShape;
+import com.sun.star.lang.WrappedTargetException;
 import java.io.PrintWriter;
 import java.util.Comparator;
 
@@ -45,6 +50,7 @@ import lib.TestParameters;
 import util.SOfficeFactory;
 
 import com.sun.star.container.XIndexAccess;
+import com.sun.star.form.XForm;
 import com.sun.star.frame.XController;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
@@ -53,10 +59,14 @@ import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextFrame;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XSearchDescriptor;
 import com.sun.star.util.XSearchable;
 import com.sun.star.view.XSelectionSupplier;
+import util.FormTools;
+import util.WriterTools;
 
 /**
  *
@@ -70,6 +80,8 @@ import com.sun.star.view.XSelectionSupplier;
 public class SwXTextView extends TestCase {
 
     XTextDocument xTextDoc;
+
+    boolean debug = false;
 
     /**
      * in general this method creates a testdocument
@@ -88,6 +100,8 @@ public class SwXTextView extends TestCase {
         try {
             log.println( "creating a textdocument" );
             xTextDoc = SOF.createTextDoc( null );
+            debug = tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE);
+
         } catch ( com.sun.star.uno.Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
@@ -227,6 +241,63 @@ public class SwXTextView extends TestCase {
         }
 
         tEnv.addObjRelation("DOCUMENT",xTextDoc);
+        XForm myForm = null;
+        String kindOfControl="CommandButton";
+        XShape aShape = null;
+        try{
+            log.println("adding contol shape '" + kindOfControl + "'");
+            aShape = FormTools.createControlShape(xTextDoc, 3000,
+                                                            4500, 15000, 10000,
+                                                            kindOfControl);
+        } catch (Exception e){
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create following control shape : '" +
+                                        kindOfControl + "': ", e);
+
+        }
+
+
+        log.println("adding relation for com.sun.star.view.XFormLayerAccess: XForm");
+
+        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
+
+        try {
+
+            XDrawPage xDP = WriterTools.getDrawPage(xTextDoc);
+            if (xDP == null)
+                log.println("ERROR: could not get DrawPage");
+
+            XNameContainer xForms = FormTools.getForms(xDP);
+            if (xForms == null)
+                log.println("ERROR: could not get Forms");
+
+                log.println("the draw page contains folowing elemtens:");
+                String[] elements = FormTools.getForms(WriterTools.getDrawPage(xTextDoc)).getElementNames();
+                for (int i = 0; i< elements.length; i++){
+                    log.println("Element[" + i + "] :" + elements[i]);
+                }
+
+            myForm = (XForm) AnyConverter.toObject(new Type(XForm.class), xForms.getByName("Standard"));
+                if (myForm == null){
+                    log.println("ERROR: could not get 'Standard' from drawpage!");
+            if (debug){
+                log.println("the draw page contains folowing elemtens:");
+//                String[] elements = FormTools.getForms(WriterTools.getDrawPage(xTextDoc)).getElementNames();
+//                for (int i = 0; i< elements.length; i++){
+//                    log.println("Element[" + i + "] :" + elements[i]);
+//                }
+            }
+            }
+            else
+                tEnv.addObjRelation("XFormLayerAccess.XForm", myForm);
+        } catch (WrappedTargetException ex) {
+            log.println("ERROR: could not add ObjectRelation 'XFormLayerAccess.XForm': " + ex.toString());
+        } catch (com.sun.star.lang.IllegalArgumentException ex) {
+            log.println("ERROR: could not add ObjectRelation 'XFormLayerAccess.XForm': " + ex.toString());
+        } catch (NoSuchElementException ex) {
+            log.println("ERROR: could not add ObjectRelation 'XFormLayerAccess.XForm': " + ex.toString());
+        }
+
 
         return tEnv;
 
