@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReferenceBuilder.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 14:10:38 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:30:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,8 +236,13 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
             {
             // start a fresh Office
                 OfficeProvider aProvider = null;
+                SimpleFileSemaphore aSemaphore = new SimpleFileSemaphore();
                 if (aGTA.shouldOfficeStart())
                 {
+                    if (OSHelper.isWindows())
+                    {
+                        aSemaphore.P(aSemaphore.getSemaphoreFile());
+                    }
                     aGTA.getPerformance().startTime(PerformanceContainer.OfficeStart);
                     aProvider = new OfficeProvider();
                     XMultiServiceFactory xMSF = (XMultiServiceFactory) aProvider.getManager(param);
@@ -248,6 +253,14 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
                     aGTA = getGraphicalTestArguments();
                     aGTA.getPerformance().setTime(PerformanceContainer.OfficeStart, nStartTime);
                 }
+
+                // Watcher Object is need in log object to give a simple way to say if a running office is alive.
+                // As long as a log comes, it pings the Watcher and says the office is alive, if not an
+                // internal counter increase and at a given point (300 seconds) the office is killed.
+                GlobalLogWriter.get().println("Set office watcher");
+                Object aWatcher = param.get("Watcher");
+                GlobalLogWriter.get().setWatcher(aWatcher);
+                // initializeWatcher(param);
 
                 try
                 {
@@ -278,6 +291,13 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
                     boolean bClosed = aProvider.closeExistingOffice(param, true);
                     // Hope I can check that the close of the office fails
                     assure("Office closed", bClosed, true);
+                    if (OSHelper.isWindows())
+                    {
+                        aSemaphore.V(aSemaphore.getSemaphoreFile());
+                        aSemaphore.sleep(6);
+                        // wait some time maybe an other process will take the semaphore
+                        // I know, this is absolutly dirty, but the whole convwatch is dirty and need a big cleanup.
+                    }
                 }
             }
             else
