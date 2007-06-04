@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSLTransformer.java,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:30:59 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 11:49:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,12 +80,10 @@ public class XSLTransformer
      *
      */
 
-    private XInputStream xistream;
-    private XOutputStream xostream;
-    private BufferedOutputStream ostream;
+    private XInputStream m_xis;
+    private XOutputStream m_xos;
 
     // private static HashMap templatecache;
-
     private static final int STREAM_BUFFER_SIZE = 4000;
     private static final String STATSPROP = "XSLTransformer.statsfile";
     private static PrintStream statsp;
@@ -185,25 +183,22 @@ public class XSLTransformer
     // --- XActiveDataSink        xistream = aStream;
     public void setInputStream(XInputStream aStream)
     {
-        xistream = aStream;
+        m_xis = aStream;
     }
 
     public com.sun.star.io.XInputStream getInputStream()
     {
-        return xistream;
+        return m_xis;
     }
 
     // --- XActiveDataSource
     public void setOutputStream(XOutputStream aStream)
     {
-        xostream = aStream;
-        ostream = new BufferedOutputStream(
-            new XOutputStreamToOutputStreamAdapter(xostream), STREAM_BUFFER_SIZE);
-
+        m_xos = aStream;
     }
     public com.sun.star.io.XOutputStream getOutputStream()
     {
-        return xostream;
+        return m_xos;
     }
 
     // --- XActiveDataControl
@@ -225,49 +220,36 @@ public class XSLTransformer
     public void start()
     {
         // notify listeners
-        t = new Thread(){
-            public void run() {
+          t = new Thread(){
+              public void run() {
                 try {
                     debug("\n\nStarting transformation...");
+
+                    // Set up context class loader for SAXParserFactory and
+                    // TransformerFactory calls below:
+                    setContextClassLoader(this.getClass().getClassLoader());
+
                     for (Enumeration e = listeners.elements(); e.hasMoreElements();)
                     {
                         XStreamListener l = (XStreamListener)e.nextElement();
                         l.started();
                     }
 
-                    // buffer input and modify doctype declaration
-                    // remove any dtd references but keep localy defined
-                    // entities
-
-                    // ByteArrayOutputStream bufstream = new ByteArrayOutputStream();
-                    // File buffile = File.createTempFile("xsltfilter",".tmp");
-                    // buffile.deleteOnExit();
-                    // OutputStream bufstream = new FileOutputStream(buffile);
-
-                    // final int bsize = 4000;
-                    // int rbytes = 0;
-                    // byte[][] byteBuffer = new byte[1][bsize];
-
-                    XSeekable xseek = (XSeekable)UnoRuntime.queryInterface(XSeekable.class, xistream);
+                    XSeekable xseek = (XSeekable)UnoRuntime.queryInterface(XSeekable.class, m_xis);
                     if (xseek != null) {
                         xseek.seek(0);
                     }
 
-
-
-                    InputStream xmlinput = new BufferedInputStream(
-                            new XInputStreamToInputStreamAdapter(xistream));
+                    InputStream is = new BufferedInputStream(
+                            new XInputStreamToInputStreamAdapter(m_xis));
                     //Source xmlsource = new StreamSource(xmlinput);
                     SAXParserFactory spf = SAXParserFactory.newInstance();
                     spf.setValidating(false);
                     spf.setNamespaceAware(true);
                     XMLReader xmlReader = spf.newSAXParser().getXMLReader();
                     xmlReader.setEntityResolver(XSLTransformer.this);
-                    Source xmlsource = new SAXSource(xmlReader, new InputSource(xmlinput));
+                    Source source = new SAXSource(xmlReader, new InputSource(is));
 
-                    BufferedOutputStream output = new BufferedOutputStream(
-                        new XOutputStreamToOutputStreamAdapter(xostream));
-                    StreamResult xmlresult = new StreamResult(output);
 
                     // in order to help performance and to remedy a a possible memory
                     // leak in xalan, where it seems, that Transformer instances cannot
@@ -334,24 +316,22 @@ public class XSLTransformer
 
                     long tstart = System.currentTimeMillis();
 
-                    // StringWriter sw = new StringWriter();
-                    // StreamResult sr = new StreamResult(sw);
-                    StreamResult sr = new StreamResult(output);
-                    transformer.transform(xmlsource, sr);
-
-                    // String s = sw.toString();
-                    // OutputStreamWriter ow = new OutputStreamWriter(output, "UTF-8");
-                    // ow.write(s);
-                    // ow.close();
+                    BufferedOutputStream os = new BufferedOutputStream(
+                        new XOutputStreamToOutputStreamAdapter(m_xos));
+                    StreamResult sr = new StreamResult(os);
+                    transformer.transform(source, sr);
                     debug("finished transformation in "+ (System.currentTimeMillis() - tstart) +"ms");
                     // dereference input buffer
-                    xmlsource = null;
-
-                    output.close();
-                    xostream.closeOutput();
-                    // try to release reference asap...
-                    xostream = null;
-
+                    source = null;
+                    is.close();
+                    os.close();
+                    m_xis.closeInput();
+                    m_xos.closeOutput();
+                    // try to release references asap...
+                    m_xos = null;
+                    m_xis = null;
+                    is = null;
+                    os = null;
                     // notify any listeners about close
                     for (Enumeration e = listeners.elements(); e.hasMoreElements();)
                     {
@@ -364,6 +344,7 @@ public class XSLTransformer
                     // notify any listeners about close
                     for (Enumeration e = listeners.elements(); e.hasMoreElements();)
                     {
+
                         XStreamListener l = (XStreamListener)e.nextElement();
                         l.error(new com.sun.star.uno.Exception(ex.getClass().getName()+": "+ex.getMessage()));
                     }
@@ -374,9 +355,9 @@ public class XSLTransformer
                     }
                 }
             }
-        };
-        t.start();
-    }
+          };
+          t.start();
+      }
 
     /* a statsfile have to be created as precondition to use this function */
     private static final void debug(String s){
@@ -389,14 +370,14 @@ public class XSLTransformer
     {
         try {
             debug("terminate called");
-            if(t.isAlive()){
-                t.interrupt();
+              if(t.isAlive()){
+                  t.interrupt();
                 for (Enumeration e = listeners.elements(); e.hasMoreElements();)
                 {
                     XStreamListener l = (XStreamListener)e.nextElement();
                     l.terminated();
                 }
-            }
+              }
         } catch (java.lang.Exception ex) {
             if (statsp != null){
                 statsp.println(ex.getClass().getName()+": "+ex.getMessage());
