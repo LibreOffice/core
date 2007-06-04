@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DesktopTools.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 14:11:38 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:31:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,6 +181,8 @@ public class DesktopTools {
             return "swriter";
         } else if (sInfo.supportsService("com.sun.star.drawing.DrawingDocument")) {
             return "sdraw";
+        } else if (sInfo.supportsService("com.sun.star.presentation.PresentationDocument")) {
+            return "simpress";
         } else if (sInfo.supportsService("com.sun.star.formula.FormulaProperties")) {
             return "smath";
         } else {
