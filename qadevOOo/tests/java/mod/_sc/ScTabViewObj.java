@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScTabViewObj.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 18:09:29 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:38:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,14 @@
 
 package mod._sc;
 
+import com.sun.star.container.NoSuchElementException;
+import com.sun.star.container.XNameContainer;
+import com.sun.star.drawing.XDrawPage;
+import com.sun.star.drawing.XDrawPages;
+import com.sun.star.drawing.XDrawPagesSupplier;
+import com.sun.star.drawing.XShape;
+import com.sun.star.form.XForm;
+import com.sun.star.lang.WrappedTargetException;
 import java.io.PrintWriter;
 import java.util.Comparator;
 
@@ -42,6 +50,7 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
+import util.FormTools;
 import util.SOfficeFactory;
 import util.ValueComparer;
 
@@ -61,43 +70,43 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
 /**
-* Test for object which is represented by service
-* <code>com.sun.star.sheet.SpreadsheetView</code>. <p>
-* Object implements the following interfaces :
-* <ul>
-*  <li> <code>com::sun::star::sheet::XViewSplitable</code></li>
-*  <li> <code>com::sun::star::sheet::XViewFreezable</code></li>
-*  <li> <code>com::sun::star::sheet::SpreadsheetViewSettings</code></li>
-*  <li> <code>com::sun::star::beans::XPropertySet</code></li>
-*  <li> <code>com::sun::star::container::XIndexAccess</code></li>
-*  <li> <code>com::sun::star::container::XElementAccess</code></li>
-*  <li> <code>com::sun::star::sheet::XSpreadsheetView</code></li>
-*  <li> <code>com::sun::star::view::XSelectionSupplier</code></li>
-* </ul>
-* @see com.sun.star.sheet.XViewSplitable
-* @see com.sun.star.sheet.XViewFreezable
-* @see com.sun.star.sheet.SpreadsheetViewSettings
-* @see com.sun.star.beans.XPropertySet
-* @see com.sun.star.container.XIndexAccess
-* @see com.sun.star.container.XElementAccess
-* @see com.sun.star.sheet.XSpreadsheetView
-* @see com.sun.star.view.XSelectionSupplier
-* @see ifc.sheet._XViewSplitable
-* @see ifc.sheet._XViewFreezable
-* @see ifc.sheet._SpreadsheetViewSettings
-* @see ifc.beans._XPropertySet
-* @see ifc.container._XIndexAccess
-* @see ifc.container._XElementAccess
-* @see ifc.sheet._XSpreadsheetView
-* @see ifc.view._XSelectionSupplier
-*/
+ * Test for object which is represented by service
+ * <code>com.sun.star.sheet.SpreadsheetView</code>. <p>
+ * Object implements the following interfaces :
+ * <ul>
+ *  <li> <code>com::sun::star::sheet::XViewSplitable</code></li>
+ *  <li> <code>com::sun::star::sheet::XViewFreezable</code></li>
+ *  <li> <code>com::sun::star::sheet::SpreadsheetViewSettings</code></li>
+ *  <li> <code>com::sun::star::beans::XPropertySet</code></li>
+ *  <li> <code>com::sun::star::container::XIndexAccess</code></li>
+ *  <li> <code>com::sun::star::container::XElementAccess</code></li>
+ *  <li> <code>com::sun::star::sheet::XSpreadsheetView</code></li>
+ *  <li> <code>com::sun::star::view::XSelectionSupplier</code></li>
+ * </ul>
+ * @see com.sun.star.sheet.XViewSplitable
+ * @see com.sun.star.sheet.XViewFreezable
+ * @see com.sun.star.sheet.SpreadsheetViewSettings
+ * @see com.sun.star.beans.XPropertySet
+ * @see com.sun.star.container.XIndexAccess
+ * @see com.sun.star.container.XElementAccess
+ * @see com.sun.star.sheet.XSpreadsheetView
+ * @see com.sun.star.view.XSelectionSupplier
+ * @see ifc.sheet._XViewSplitable
+ * @see ifc.sheet._XViewFreezable
+ * @see ifc.sheet._SpreadsheetViewSettings
+ * @see ifc.beans._XPropertySet
+ * @see ifc.container._XIndexAccess
+ * @see ifc.container._XElementAccess
+ * @see ifc.sheet._XSpreadsheetView
+ * @see ifc.view._XSelectionSupplier
+ */
 public class ScTabViewObj extends TestCase {
     public static XSpreadsheetDocument xSpreadsheetDoc;
     public static XSpreadsheetDocument xSpreadsheetDoc2;
 
     /**
-    * Creates Spreadsheet document.
-    */
+     * Creates Spreadsheet document.
+     */
     public void initialize( TestParameters Param, PrintWriter log ) {
         // get a soffice factory object
 
@@ -117,40 +126,41 @@ public class ScTabViewObj extends TestCase {
     }
 
     /**
-    * Disposes Spreadsheet document.
-    */
+     * Disposes Spreadsheet document.
+     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
+        UnoRuntime.queryInterface(XComponent.class, xSpreadsheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
         XComponent oComp2 = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc2) ;
+        UnoRuntime.queryInterface(XComponent.class, xSpreadsheetDoc2) ;
         util.DesktopTools.closeDoc(oComp2);
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
-    * Retieves the current controller of the spreadsheet document using the
-    * interface <code>XModel</code>. The controller is the instance of the
-    * service <code>com.sun.star.sheet.SpreadsheetView</code>. Retrieves
-    * a collection of spreadsheets from the document and takes one of  them.
-    * Fills two cells in the spreadsheet.
-    * Object relations created :
-    * <ul>
-    *  <li> <code>'Sheet'</code> for
-    *      {@link ifc.sheet._XSpreadsheetView}(the retrieved spreadsheet)</li>
-    * </ul>
-    * @see com.sun.star.frame.XModel
-    * @see com.sun.star.sheet.SpreadsheetView
-    */
+     * Creating a Testenvironment for the interfaces to be tested.
+     * Retieves the current controller of the spreadsheet document using the
+     * interface <code>XModel</code>. The controller is the instance of the
+     * service <code>com.sun.star.sheet.SpreadsheetView</code>. Retrieves
+     * a collection of spreadsheets from the document and takes one of  them.
+     * Fills two cells in the spreadsheet.
+     * Object relations created :
+     * <ul>
+     *  <li> <code>'Sheet'</code> for
+     *      {@link ifc.sheet._XSpreadsheetView}(the retrieved spreadsheet)</li>
+     * </ul>
+     * @see com.sun.star.frame.XModel
+     * @see com.sun.star.sheet.SpreadsheetView
+     */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+        XDrawPage oDrawPage = null;
 
         XModel aModel = (XModel)
-                    UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
+        UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
 
         XModel aSecondModel = (XModel)
-                    UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc2);
+        UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc2);
 
         XInterface oObj = aModel.getCurrentController();
 
@@ -160,10 +170,10 @@ public class ScTabViewObj extends TestCase {
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
         XIndexAccess oIndexAccess = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
+        UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
         try {
             oSheet = (XSpreadsheet) AnyConverter.toObject(
-                    new Type(XSpreadsheet.class), oIndexAccess.getByIndex(1));
+                new Type(XSpreadsheet.class), oIndexAccess.getByIndex(1));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException( "Couldn't get a spreadsheet", e);
@@ -209,9 +219,9 @@ public class ScTabViewObj extends TestCase {
         tEnv.addObjRelation("Comparer", new Comparator() {
             public int compare(Object o1, Object o2) {
                 XCellRangeAddressable adr1 = (XCellRangeAddressable)
-                    UnoRuntime.queryInterface(XCellRangeAddressable.class, o1);
+                UnoRuntime.queryInterface(XCellRangeAddressable.class, o1);
                 XCellRangeAddressable adr2 = (XCellRangeAddressable)
-                    UnoRuntime.queryInterface(XCellRangeAddressable.class, o2);
+                UnoRuntime.queryInterface(XCellRangeAddressable.class, o2);
                 if (adr1 == null || adr2 == null) return -1;
                 CellRangeAddress range1 = adr1.getRangeAddress();
                 CellRangeAddress range2 = adr2.getRangeAddress();
@@ -221,9 +231,61 @@ public class ScTabViewObj extends TestCase {
                 return compare(this, obj) == 0;
             } });
 
-        tEnv.addObjRelation("XUserInputInterception.XModel", aModel);
+            tEnv.addObjRelation("XUserInputInterception.XModel", aModel);
 
-        return tEnv;
+            // XForm for com.sun.star.view.XFormLayerAccess
+
+            XForm myForm = null;
+            String kindOfControl="CommandButton";
+            XShape aShape = null;
+            try{
+                log.println("adding contol shape '" + kindOfControl + "'");
+                XComponent oComp = (XComponent) UnoRuntime.queryInterface(XComponent.class, xSpreadsheetDoc) ;
+
+                aShape = FormTools.createControlShape(oComp, 3000, 4500, 15000, 10000, kindOfControl);
+
+            } catch (Exception e){
+                e.printStackTrace(log);
+                throw new StatusException("Couldn't create following control shape : '" +
+                    kindOfControl + "': ", e);
+            }
+
+            log.println("adding relation for com.sun.star.view.XFormLayerAccess: XForm");
+            try {
+                log.println( "getting Drawpages" );
+                XDrawPagesSupplier oDPS = (XDrawPagesSupplier)
+                UnoRuntime.queryInterface(XDrawPagesSupplier.class,xSpreadsheetDoc);
+                XDrawPages oDP = (XDrawPages) oDPS.getDrawPages();
+                oDP.insertNewByIndex(1);
+                oDP.insertNewByIndex(2);
+                oDrawPage = (XDrawPage) AnyConverter.toObject(
+                    new Type(XDrawPage.class),oDP.getByIndex(0));
+                if (oDrawPage == null)
+                    log.println("ERROR: could not get DrawPage: null");
+
+                oDrawPage.add(aShape);
+                log.println("getting XForm");
+                XNameContainer xForm = FormTools.getForms(oDrawPage);
+                try {
+                    myForm = (XForm) AnyConverter.toObject(new Type(XForm.class),xForm.getByName("Standard"));
+                } catch (WrappedTargetException ex) {
+                    log.println("ERROR: could not XFormm 'Standard': " + ex.toString());
+                } catch (com.sun.star.lang.IllegalArgumentException ex) {
+                    log.println("ERROR: could not XFormm 'Standard': " + ex.toString());
+                } catch (NoSuchElementException ex) {
+                    log.println("ERROR: could not XFormm 'Standard': " + ex.toString());
+                }
+                if (myForm == null)
+                    log.println("ERROR: could not get XForm: null");
+                tEnv.addObjRelation("XFormLayerAccess.XForm", myForm);
+            } catch (com.sun.star.lang.IndexOutOfBoundsException ex) {
+                log.println("ERROR: could not add ObjectRelation 'XFormLayerAccess.XForm': " + ex.toString());
+            } catch (WrappedTargetException ex) {
+                log.println("ERROR: could not add ObjectRelation 'XFormLayerAccess.XForm': " + ex.toString());
+            } catch (com.sun.star.lang.IllegalArgumentException ex) {
+                log.println("ERROR: could not add ObjectRelation 'XFormLayerAccess.XForm': " + ex.toString());
+            }
+            return tEnv;
     }
 
 }    // finish class ScTabViewObj
