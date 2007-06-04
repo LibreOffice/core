@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConvWatchStarter.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-17 13:27:52 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:29:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -304,8 +304,14 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
             GraphicalTestArguments aGTA = getGraphicalTestArguments();
 
             OfficeProvider aProvider = null;
+            SimpleFileSemaphore aSemaphore = new SimpleFileSemaphore();
             if (aGTA.shouldOfficeStart())
             {
+                if (OSHelper.isWindows())
+                {
+                    aSemaphore.P(aSemaphore.getSemaphoreFile());
+                }
+
                 aGTA.getPerformance().startTime(PerformanceContainer.OfficeStart);
                 aProvider = new OfficeProvider();
                 XMultiServiceFactory xMSF = (XMultiServiceFactory) aProvider.getManager(param);
@@ -317,11 +323,23 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
                 aGTA.getPerformance().setTime(PerformanceContainer.OfficeStart, nStartTime);
             }
 
+            // Watcher Object is need in log object to give a simple way to say if a running office is alive.
+            // As long as a log comes, it pings the Watcher and says the office is alive, if not an
+            // internal counter increase and at a given point (300 seconds) the office is killed.
+            GlobalLogWriter.get().println("Set office watcher");
+            Object aWatcher = param.get("Watcher");
+            GlobalLogWriter.get().setWatcher(aWatcher);
+            // initializeWatcher(param);
+
             String sStatusRunThrough = "";
             String sStatusMessage = "";
             try
             {
                 DB.startFile(aGTA.getDBInfoString(), _sInputFile);
+                // better was:
+                // load document
+                // create postscript from document
+                // check file
                 GraphicalDifferenceCheck.checkOneFile(_sInputFile, _sOutputPath, _sReferencePath, _sDiffPath, aGTA);
                 sStatusRunThrough = "PASSED, OK";
                 DB.finishedFile(aGTA.getDBInfoString(), _sInputFile);
@@ -346,6 +364,19 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
                 sStatusMessage = e.getMessage();
                 sStatusRunThrough = "FAILED, FAILED";
                 DB.reallyfailedFile(aGTA.getDBInfoString(), _sInputFile);
+            }
+
+            // Office shutdown
+            if (aProvider != null)
+            {
+                aProvider.closeExistingOffice(param, true);
+                if (OSHelper.isWindows())
+                {
+                    aSemaphore.V(aSemaphore.getSemaphoreFile());
+                    aSemaphore.sleep(6);
+                    // wait some time maybe an other process will take the semaphore
+                    // I know, this is absolutly dirty, but the whole convwatch is dirty and need a big cleanup.
+                }
             }
 
             // -------------------- Status --------------------
@@ -400,11 +431,6 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
                 _aHTMLoutput.indexLine( sLink, sLinkName, "", "", sStatusRunThrough, sStatusMessage );
             }
 
-            // Office shutdown
-            if (aProvider != null)
-            {
-                aProvider.closeExistingOffice(param, true);
-            }
         }
 
 
