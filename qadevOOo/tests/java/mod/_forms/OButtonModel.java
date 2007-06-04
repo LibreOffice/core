@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OButtonModel.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:06:55 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:33:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,130 +36,107 @@
 package mod._forms;
 
 import java.io.PrintWriter;
-
-import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-import util.FormTools;
-import util.WriterTools;
-
-import com.sun.star.drawing.XControlShape;
-import com.sun.star.drawing.XShape;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.util.XCloseable;
-
 
 /**
-* Test for object which is represented by service
-* <code>com.sun.star.com.sun.star.form.component.CommandButton</code>.
-* <p>
-* Object implements the following interfaces :
-* <ul>
-*  <li> <code>com::sun::star::io::XPersistObject</code></li>
-*  <li> <code>com::sun::star::container::XChild</code></li>
-*  <li> <code>com::sun::star::form::FormControlModel</code></li>
-*  <li> <code>com::sun::star::form::XImageProducerSupplier</code></li>
-*  <li> <code>com::sun::star::form::FormComponent</code></li>
+ * Test for object which is represented by service
+ * <code>com.sun.star.com.sun.star.form.component.CommandButton</code>.
+ * <p>
+ * Object implements the following interfaces :
+ * <ul>
+ *  <li> <code>com::sun::star::io::XPersistObject</code></li>
+ *  <li> <code>com::sun::star::container::XChild</code></li>
+ *  <li> <code>com::sun::star::form::FormControlModel</code></li>
+ *  <li> <code>com::sun::star::form::XImageProducerSupplier</code></li>
+ *  <li> <code>com::sun::star::form::FormComponent</code></li>
+ *  <li> <code>com::sun::star::beans::XPropertyAccess</code></li>
+*  <li> <code>com::sun::star::beans::XPropertyContainer</code></li>
 *  <li> <code>com::sun::star::beans::XPropertySet</code></li>
-*  <li> <code>com::sun::star::beans::XFastPropertySet</code></li>
-*  <li> <code>com::sun::star::beans::XPropertyState</code></li>
-*  <li> <code>com::sun::star::awt::UnoControlButtonModel</code></li>
-*  <li> <code>com::sun::star::form::component::CommandButton</code></li>
-*  <li> <code>com::sun::star::container::XNamed</code></li>
-*  <li> <code>com::sun::star::beans::XMultiPropertySet</code></li>
-*  <li> <code>com::sun::star::lang::XComponent</code></li>
-* </ul>
-* This object test <b> is NOT </b> designed to be run in several
-* threads concurently.
-*
-* @see com.sun.star.io.XPersistObject
-* @see com.sun.star.container.XChild
-* @see com.sun.star.form.FormControlModel
-* @see com.sun.star.form.XImageProducerSupplier
-* @see com.sun.star.form.FormComponent
+ *  <li> <code>com::sun::star::beans::XFastPropertySet</code></li>
+ *  <li> <code>com::sun::star::beans::XPropertyState</code></li>
+ *  <li> <code>com::sun::star::awt::UnoControlButtonModel</code></li>
+ *  <li> <code>com::sun::star::form::component::CommandButton</code></li>
+ *  <li> <code>com::sun::star::container::XNamed</code></li>
+ *  <li> <code>com::sun::star::beans::XMultiPropertySet</code></li>
+ *  <li> <code>com::sun::star::lang::XComponent</code></li>
+ * </ul>
+ * This object test <b> is NOT </b> designed to be run in several
+ * threads concurently.
+ *
+ * @see com.sun.star.io.XPersistObject
+ * @see com.sun.star.container.XChild
+ * @see com.sun.star.form.FormControlModel
+ * @see com.sun.star.form.XImageProducerSupplier
+ * @see com.sun.star.form.FormComponent
+ * @see com.sun.star.beans.XPropertyAccess
+* @see com.sun.star.beans.XPropertyContainer
 * @see com.sun.star.beans.XPropertySet
-* @see com.sun.star.beans.XFastPropertySet
-* @see com.sun.star.beans.XPropertyState
-* @see com.sun.star.awt.UnoControlButtonModel
-* @see com.sun.star.form.component.CommandButton
-* @see com.sun.star.container.XNamed
-* @see com.sun.star.beans.XMultiPropertySet
-* @see com.sun.star.lang.XComponent
-* @see ifc.io._XPersistObject
-* @see ifc.container._XChild
-* @see ifc.form._FormControlModel
-* @see ifc.form._XImageProducerSupplier
-* @see ifc.form._FormComponent
-* @see ifc.beans._XPropertySet
-* @see ifc.beans._XFastPropertySet
-* @see ifc.beans._XPropertyState
-* @see ifc.awt._UnoControlButtonModel
-* @see ifc.form.component._CommandButton
-* @see ifc.container._XNamed
-* @see ifc.beans._XMultiPropertySet
-* @see ifc.lang._XComponent
-*/
-public class OButtonModel extends TestCase {
-
-    XTextDocument xTextDoc;
+ * @see com.sun.star.beans.XFastPropertySet
+ * @see com.sun.star.beans.XPropertyState
+ * @see com.sun.star.awt.UnoControlButtonModel
+ * @see com.sun.star.form.component.CommandButton
+ * @see com.sun.star.container.XNamed
+ * @see com.sun.star.beans.XMultiPropertySet
+ * @see com.sun.star.lang.XComponent
+ * @see ifc.io._XPersistObject
+ * @see ifc.container._XChild
+ * @see ifc.form._FormControlModel
+ * @see ifc.form._XImageProducerSupplier
+ * @see ifc.form._FormComponent
+ * @see ifc.beans._XPropertySet
+ * @see ifc.beans._XFastPropertySet
+ * @see ifc.beans._XPropertyState
+ * @see ifc.awt._UnoControlButtonModel
+ * @see ifc.form.component._CommandButton
+ * @see ifc.container._XNamed
+ * @see ifc.beans._XMultiPropertySet
+ * @see ifc.lang._XComponent
+ */
+public class OButtonModel extends GenericModelTest {
 
     /**
-    * Creates StarWriter document.
-    */
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
+     * Set some member variable of the super class <CODE>GenericModelTest</CODE>:
+     * <pre>
+     *    super.m_kindOfControl="CommandButton";
+     *    super.m_ObjectName = "com.sun.star.form.component.CommandButton";
+     *    super.m_LCShape_Type = "CommandButton";
+     * </pre>
+     * Then <CODE>super.initialize()</CODE> was called.
+     * @param tParam the test parameter
+     * @param log the log writer
+     */
 
-        log.println( "creating a textdocument" );
-        xTextDoc = WriterTools.createTextDoc(((XMultiServiceFactory) tParam.getMSF()));
+    protected void initialize(TestParameters tParam, PrintWriter log) {
+
+        super.initialize(tParam, log);
+
+        super.m_kindOfControl="CommandButton";
+
+        super.m_ObjectName = "stardiv.one.form.component.CommandButton";
+
+        super.m_LCShape_Type = "CommandButton";
+
     }
-
     /**
-    * Disposes StarWriter document.
-    */
+     * calls <CODE>cleanup()</CODE> from it's super class
+     * @param tParam the test parameter
+     * @param log the log writer
+     */
     protected void cleanup(TestParameters tParam, PrintWriter log) {
-        log.println("    disposing xTextDoc ");
-
-        try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                        XCloseable.class, xTextDoc);
-            closer.close(true);
-        } catch (com.sun.star.util.CloseVetoException e) {
-            log.println("couldn't close document");
-        } catch (com.sun.star.lang.DisposedException e) {
-            log.println("couldn't close document");
-        }
+        super.cleanup(tParam, log);
     }
 
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
-    * Adds button into text and retrieves it's control model.
-    *     Object relations created :
-    * <ul>
-    *  <li> <code>'OBJNAME'</code> for
-    *      {@link ifc.io._XPersistObject} : name of service which is
-    *    represented by this object. </li>
-    * </ul>
-    */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+     * calls <CODE>createTestEnvironment()</CODE> from it's super class
+     * @param Param the test parameter
+     * @param log the log writer
+     * @return lib.TestEnvironment
+     */
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+            PrintWriter log) {
+        return super.createTestEnvironment(Param, log);
+    }
 
-        XInterface oObj = null;
-
-        XControlShape aShape = FormTools.createControlShape(
-                                xTextDoc,3000,4500,15000,10000,"CommandButton");
-
-        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
-        oObj = aShape.getControl();
-        log.println( "creating a new environment for OButtonModel object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
-        String objName = "CommandButton";
-        tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component." + objName);
-        //adding ObjRelation for XPersistObject
-        tEnv.addObjRelation("PSEUDOPERSISTENT", new Boolean(true));
-        return tEnv;
-    } // finish method getTestEnvironment
-
-}    // finish class OButtonModel
-
+}    // finish class OButtonModelold
