@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:08:00 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:54:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,9 +233,14 @@ STDMETHODIMP ProviderOleWrapper_Impl::LockServer(int fLock)
 *****************************************************************************/
 
 OneInstanceOleWrapper_Impl::OneInstanceOleWrapper_Impl(  const Reference<XMultiServiceFactory>& smgr,
-                                                         const Reference<XInterface>& xInst, GUID* pGuid)
+                                                         const Reference<XInterface>& xInst,
+                                                         GUID* pGuid,
+                                                         sal_Bool bAsApplication )
     : m_xInst(xInst), m_refCount(0),
-      m_smgr( smgr)
+      m_smgr( smgr),
+      m_factoryHandle( 0 ),
+      m_bAsApplication( bAsApplication ),
+      m_nApplRegHandle( 0 )
 {
     m_guid = *pGuid;
 
@@ -266,14 +271,21 @@ sal_Bool OneInstanceOleWrapper_Impl::registerClass()
             REGCLS_MULTIPLEUSE,
             &m_factoryHandle);
 
+    if ( hresult == NOERROR && m_bAsApplication )
+        hresult = RegisterActiveObject( this, m_guid, ACTIVEOBJECT_WEAK, &m_nApplRegHandle );
+
     return (hresult == NOERROR);
 }
 
 sal_Bool OneInstanceOleWrapper_Impl::deregisterClass()
 {
-    HRESULT hresult = CoRevokeClassObject(m_factoryHandle);
+    HRESULT hresult1 = NOERROR;
+    if ( m_bAsApplication )
+        hresult1 = RevokeActiveObject( m_nApplRegHandle, NULL );
 
-    return (hresult == NOERROR);
+    HRESULT hresult2 = CoRevokeClassObject(m_factoryHandle);
+
+    return (hresult1 == NOERROR && hresult2 == NOERROR);
 }
 
 STDMETHODIMP OneInstanceOleWrapper_Impl::QueryInterface(REFIID riid, void FAR* FAR* ppv)
@@ -652,7 +664,12 @@ OleServer_Impl::OleServer_Impl( const Reference<XMultiServiceFactory>& smgr):
         a >>= m_bridgeSupplier;
     }
 
-    sal_Bool ret = provideInstance( m_smgr, (GUID*)&OID_ServiceManager);
+#ifndef OWNGUID
+    sal_Bool bOLERegister = sal_False;
+#else
+    sal_Bool bOLERegister = sal_True;
+#endif
+    sal_Bool ret = provideInstance( m_smgr, (GUID*)&OID_ServiceManager, bOLERegister );
 }
 
 OleServer_Impl::~OleServer_Impl()
@@ -731,11 +748,11 @@ sal_Bool OleServer_Impl::provideService(const Reference<XSingleServiceFactory>& 
     return pFac->registerClass();
 }
 
-sal_Bool OleServer_Impl::provideInstance(const Reference<XInterface>& xInst, GUID* guid)
+sal_Bool OleServer_Impl::provideInstance(const Reference<XInterface>& xInst, GUID* guid, sal_Bool bAsApplication )
 {
     sal_Bool    ret = FALSE;
 
-    IClassFactoryWrapper* pFac = new OneInstanceOleWrapper_Impl( m_smgr, xInst, guid);
+    IClassFactoryWrapper* pFac = new OneInstanceOleWrapper_Impl( m_smgr, xInst, guid, bAsApplication );
 
     pFac->AddRef();
     m_wrapperList.push_back(pFac);
