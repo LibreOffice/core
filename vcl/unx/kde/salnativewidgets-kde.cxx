@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-kde.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 08:33:36 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 14:58:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1718,6 +1718,13 @@ static Color toColor( const QColor &rColor )
     return Color( rColor.red(), rColor.green(), rColor.blue() );
 }
 
+/** Helper function to read untranslated text entry from KConfig configuration repository.
+*/
+static OUString readEntryUntranslated( KConfig *pConfig, const char *pKey )
+{
+    return OUString::createFromAscii( pConfig->readEntryUntranslated( pKey ).ascii() );
+}
+
 /** Helper function to read color from KConfig configuration repository.
 */
 static Color readColor( KConfig *pConfig, const char *pKey )
@@ -1862,6 +1869,12 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
             aStyleSettings.SetTitleFont( aFont );
             bSetTitleFont = true;
         }
+
+        pConfig->setGroup( "Icons" );
+
+        pKey = "Theme";
+        if ( pConfig->hasKey( pKey ) )
+            aStyleSettings.SetPreferredSymbolsStyleName( readEntryUntranslated( pConfig, pKey ) );
     }
 
     // General settings
