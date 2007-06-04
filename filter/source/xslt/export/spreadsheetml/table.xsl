@@ -3,9 +3,9 @@
 
    $RCSfile: table.xsl,v $
 
-   $Revision: 1.5 $
+   $Revision: 1.6 $
 
-   last change: $Author: rt $ $Date: 2005-11-10 16:53:23 $
+   last change: $Author: ihi $ $Date: 2007-06-04 11:48:46 $
 
 	The Contents of this file are made available subject to
 	the terms of GNU Lesser General Public License Version 2.1.
@@ -54,13 +54,20 @@
 	xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
 	xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
 	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:xt="http://www.jclark.com/xt"
+	xmlns:common="http://exslt.org/common"
+	xmlns:xalan="http://xml.apache.org/xalan"
 	xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:c="urn:schemas-microsoft-com:office:component:spreadsheet" xmlns:html="http://www.w3.org/TR/REC-html40" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:x2="http://schemas.microsoft.com/office/excel/2003/xml" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	exclude-result-prefixes="chart config dc dom dr3d draw fo form math meta number office ooo oooc ooow script style svg table text xlink">
+	exclude-result-prefixes="chart config dc dom dr3d draw fo form math meta number office ooo oooc ooow script style svg table text xlink xt common xalan">
 
 
 	<!-- ************** -->
 	<!-- *** Table  *** -->
 	<!-- ************** -->
+
+	<!-- check existence of default cell style -->
+	<xsl:variable name="firstDefaultCellStyle" select="descendant::table:table-column/@table:default-cell-style-name" />
+
 
 	<xsl:template match="table:table" name="table:table">
 		<xsl:element name="Table">
@@ -68,7 +75,6 @@
 
 			<!-- find all columns in the table -->
 			<xsl:variable name="columnNodes" select="descendant::table:table-column" />
-
 			<!-- calculate the overall column amount -->
 			<xsl:variable name="maxColumnNo">
 				<xsl:choose>
@@ -89,9 +95,43 @@
 			</xsl:apply-templates>
 
 			<!-- create rows -->
-			<xsl:call-template name="optimized-row-handling">
-				<xsl:with-param name="rowNodes"  	select="descendant::table:table-row" />
-			</xsl:call-template>
+			<xsl:choose>
+				<xsl:when test="not($columnNodes/@table:number-columns-repeated)">
+					<xsl:call-template name="optimized-row-handling">
+						<xsl:with-param name="rowNodes"  		select="descendant::table:table-row" />
+						<xsl:with-param name="columnNodes"      select="$columnNodes" />
+					</xsl:call-template>
+				</xsl:when>
+				<xsl:otherwise>
+					<!-- To be able to match from a cell to the corresponding column to match @table:default-cell-style-name,
+						the repeated columns are being resolved by copying them in a helper variable -->
+					<xsl:variable name="columnNodes-RTF">
+						<xsl:for-each select="$columnNodes">
+							<xsl:call-template name="adding-column-styles-entries" />
+						</xsl:for-each>
+					</xsl:variable>
+					<xsl:choose>
+						<xsl:when test="function-available('xalan:nodeset')">
+							<xsl:call-template name="optimized-row-handling">
+								<xsl:with-param name="rowNodes"  		select="descendant::table:table-row" />
+								<xsl:with-param name="columnNodes"      select="xalan:nodeset($columnNodes-RTF)" />
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:when test="function-available('common:node-set')">
+							<xsl:call-template name="optimized-row-handling">
+								<xsl:with-param name="rowNodes"  		select="descendant::table:table-row" />
+								<xsl:with-param name="columnNodes"      select="common:node-set($columnNodes-RTF)" />
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:when test="function-available('xt:node-set')">
+							<xsl:call-template name="optimized-row-handling">
+								<xsl:with-param name="rowNodes"  		select="descendant::table:table-row" />
+								<xsl:with-param name="columnNodes"      select="xt:node-set($columnNodes-RTF)" />
+							</xsl:call-template>
+						</xsl:when>
+					</xsl:choose>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:element>
 	</xsl:template>
 
@@ -107,10 +147,6 @@
 		<xsl:param name="maxColumnNo" />
 
 		<xsl:element name="Column">
-			<xsl:if test="@table:default-cell-style-name">
-				<xsl:attribute name="ss:StyleID"><xsl:value-of select="@table:default-cell-style-name"/></xsl:attribute>
-			</xsl:if>
-
 			<xsl:if test="@table:visibility = 'collapse' or @table:visibility = 'filter'">
 				<xsl:attribute name="ss:Hidden">1</xsl:attribute>
 			</xsl:if>
@@ -183,6 +219,45 @@
 		</xsl:if>
 	</xsl:template>
 
+	<!-- current node is a table:table-column -->
+	<xsl:template name="adding-column-styles-entries">
+		<xsl:choose>
+			<xsl:when test="not(@table:number-columns-repeated and @table:number-columns-repeated > 1)">
+				<!-- writes an entry of a column in the columns-variable -->
+				<xsl:copy-of select="." />
+			</xsl:when>
+			<xsl:otherwise>
+				<!-- repeated colums will be written explicit several times in the variable-->
+				<xsl:call-template name="repeat-adding-table-column">
+					<xsl:with-param name="numberColumnsRepeated"  select="@table:number-columns-repeated" />
+				</xsl:call-template>
+			</xsl:otherwise>
+		</xsl:choose>
+	 </xsl:template>
+
+
+	<!-- current node is a table:table-column -->
+	<!-- dublicates column elements in case of column-repeated attribute  -->
+	<xsl:template name="repeat-adding-table-column">
+		<xsl:param name="table:table-column" />
+		<xsl:param name="numberColumnsRepeated" />
+
+		<xsl:choose>
+			<xsl:when test="$numberColumnsRepeated > 1">
+				<!-- writes an entry of a column in the columns-variable -->
+				<xsl:copy-of select="." />
+				<!-- repeat calling this method until all elements written out -->
+				<xsl:call-template name="repeat-adding-table-column">
+					<xsl:with-param name="numberColumnsRepeated"    select="$numberColumnsRepeated - 1" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<!-- writes an entry of a column in the columns-variable -->
+				<xsl:copy-of select="." />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
 
 	<!-- ************* -->
 	<!-- *** Rows  *** -->
@@ -192,6 +267,7 @@
 	<!-- Recursions are much faster when the stack size is small 	-->
 	<xsl:template name="optimized-row-handling">
 		<xsl:param name="rowNodes" />
+		<xsl:param name="columnNodes"  />
 		<xsl:param name="offset" select="0"/>
 		<xsl:param name="threshold" select="10"/>
 
@@ -201,6 +277,7 @@
 				<xsl:apply-templates select="$rowNodes[1]">
 					<xsl:with-param name="rowNodes" select="$rowNodes" />
 					<xsl:with-param name="offset" select="$offset" />
+					<xsl:with-param name="columnNodes" select="$columnNodes" />
 				</xsl:apply-templates>
 			</xsl:when>
 			<xsl:otherwise>
@@ -222,20 +299,24 @@
 						<xsl:call-template name="optimized-row-handling">
 							<xsl:with-param name="rowNodes" select="$rowNodesSetA"/>
 							<xsl:with-param name="offset" select="$offset" />
+							<xsl:with-param name="columnNodes" select="$columnNodes" />
 						</xsl:call-template>
 						<xsl:call-template name="optimized-row-handling">
 							<xsl:with-param name="rowNodes" select="$rowNodesSetB"/>
 							<xsl:with-param name="offset" select="$offset + $rowCountHalf + $rowsCreatedByRepetition" />
+							<xsl:with-param name="columnNodes" select="$columnNodes" />
 						</xsl:call-template>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:apply-templates select="$rowNodesSetA[1]">
 							<xsl:with-param name="rowNodes" select="$rowNodesSetA"/>
 							<xsl:with-param name="offset" select="$offset" />
+							<xsl:with-param name="columnNodes" select="$columnNodes" />
 						</xsl:apply-templates>
 						<xsl:apply-templates select="$rowNodesSetB[1]">
 							<xsl:with-param name="rowNodes" select="$rowNodesSetB" />
 							<xsl:with-param name="offset" select="$offset + $rowCountHalf + $rowsCreatedByRepetition" />
+							<xsl:with-param name="columnNodes" select="$columnNodes" />
 						</xsl:apply-templates>
 					</xsl:otherwise>
 				</xsl:choose>
@@ -259,22 +340,27 @@
 		<xsl:param name="offset" />
 		<xsl:param name="calculatedRowPosition" select="$offset + 1" />
 		<xsl:param name="rowNodes" />
+		<xsl:param name="columnNodes"  />
 
 		<xsl:choose>
 			<xsl:when test="@table:number-rows-repeated &gt; 1">
 				<xsl:call-template name="write-table-row">
 					<xsl:with-param name="earlierRowNumber"  select="$earlierRowNumber" />
 					<xsl:with-param name="calculatedRowPosition"  select="$calculatedRowPosition" />
+					<xsl:with-param name="columnNodes" select="$columnNodes" />
 				</xsl:call-template>
-				<xsl:if test="@table:number-rows-repeated &gt; 2 and table:table-cell/@office:value-type">
+				<xsl:if test="@table:number-rows-repeated &gt; 2 and (table:table-cell/@office:value-type or $firstDefaultCellStyle != '')">
 					<!-- In case a cell is being repeated, the cell will be created
 					in a variabel, which is as many times given out, as being repeated -->
 					<xsl:variable name="tableRow">
-						<xsl:call-template name="write-table-row" />
+						<xsl:call-template name="write-table-row">
+							<xsl:with-param name="columnNodes" select="$columnNodes" />
+						</xsl:call-template>
 					</xsl:variable>
-					<xsl:call-template name="repeat-write-table-row">
+					<xsl:call-template name="optimized-row-repeating">
 						<xsl:with-param name="tableRow"     select="$tableRow" />
 						<xsl:with-param name="repetition"   select="@table:number-rows-repeated - 1" />
+						<xsl:with-param name="columnNodes" select="$columnNodes" />
 				   </xsl:call-template>
 			   </xsl:if>
 			</xsl:when>
@@ -282,6 +368,7 @@
 				<xsl:call-template name="write-table-row">
 					<xsl:with-param name="earlierRowNumber"  select="$earlierRowNumber" />
 					<xsl:with-param name="calculatedRowPosition"  select="$calculatedRowPosition" />
+					<xsl:with-param name="columnNodes" select="$columnNodes" />
 				</xsl:call-template>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -293,6 +380,7 @@
 					<xsl:with-param name="earlierRowNumber"  select="$calculatedRowPosition" />
 					<xsl:with-param name="calculatedRowPosition"  select="$calculatedRowPosition + @table:number-rows-repeated" />
 					<xsl:with-param name="rowNodes" select="$nextRowNodes" />
+					<xsl:with-param name="columnNodes" select="$columnNodes" />
 			   </xsl:apply-templates>
 			</xsl:when>
 			<xsl:otherwise>
@@ -300,6 +388,7 @@
 					<xsl:with-param name="earlierRowNumber"  select="$calculatedRowPosition" />
 					<xsl:with-param name="calculatedRowPosition"  select="$calculatedRowPosition + 1" />
 					<xsl:with-param name="rowNodes" select="$nextRowNodes" />
+					<xsl:with-param name="columnNodes" select="$columnNodes" />
 				</xsl:apply-templates>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -308,6 +397,7 @@
 	<xsl:template name="write-table-row">
 		<xsl:param name="earlierRowNumber" select="0" />
 		<xsl:param name="calculatedRowPosition" select="1" />
+		<xsl:param name="columnNodes"  />
 
 		<xsl:element name="Row">
 			<xsl:if test="@table:visibility = 'collapse' or @table:visibility = 'filter'">
@@ -338,23 +428,47 @@
 			<xsl:apply-templates select="table:table-cell[1]">
 				<xsl:with-param name="calculatedRowPosition"  select="$calculatedRowPosition" />
 				<xsl:with-param name="cellNodes"  select="table:table-cell" />
+				<xsl:with-param name="columnNodes" select="$columnNodes" />
 			</xsl:apply-templates>
 		</xsl:element>
 	</xsl:template>
 
 
-	<xsl:template name="repeat-write-table-row">
+	<!-- Recursions are much faster when the stack size is small 	-->
+	<xsl:template name="optimized-row-repeating">
 		<xsl:param name="tableRow" />
 		<xsl:param name="repetition" />
+		<!-- resource optimation: instead of '1' it will be '1000' and the column is not full -->
+		<xsl:param name="thresholdmax" select="512"/>
+		<xsl:param name="thresholdmin" select="256"/>
 
-		<xsl:copy-of select="$tableRow" />
-		<xsl:if test="$repetition &gt; 1">
-			<xsl:call-template name="repeat-write-table-row">
-				<xsl:with-param name="tableRow"   select="$tableRow" />
-				<xsl:with-param name="repetition"  select="$repetition - 1" />
-			</xsl:call-template>
-		</xsl:if>
+		<xsl:choose>
+			<xsl:when test="$repetition &lt;= $thresholdmax">
+				<xsl:copy-of select="$tableRow" />
+				<xsl:if test="$repetition &lt;= $thresholdmin">
+					<xsl:call-template name="optimized-row-repeating">
+						<xsl:with-param name="repetition" select="$repetition - 1"/>
+						<xsl:with-param name="tableRow" select="$tableRow" />
+					</xsl:call-template>
+				</xsl:if>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:if test="$repetition mod 2 = 1">
+					<xsl:copy-of select="$tableRow" />
+				</xsl:if>
+				<xsl:variable name="repetitionHalf" select="floor($repetition div 2)"/>
+				<xsl:call-template name="optimized-row-repeating">
+					<xsl:with-param name="repetition" select="$repetitionHalf"/>
+					<xsl:with-param name="tableRow" select="$tableRow" />
+				</xsl:call-template>
+				<xsl:call-template name="optimized-row-repeating">
+					<xsl:with-param name="repetition" select="$repetitionHalf"/>
+					<xsl:with-param name="tableRow" select="$tableRow" />
+				</xsl:call-template>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
+
 
 
 	<!-- ************** -->
@@ -386,6 +500,7 @@
 		</xsl:choose>
 		</xsl:param>
 		<xsl:param name="cellNodes" /><!-- cells to be handled  -->
+		<xsl:param name="columnNodes" />
 
 		<xsl:choose>
 			<!-- in case a repetition took place -->
@@ -399,6 +514,7 @@
 									<xsl:with-param name="setIndex" select="true()" />
 									<xsl:with-param name="calculatedCellPosition" select="$nextMatchedCellPosition - 1" />
 									<xsl:with-param name="calculatedRowPosition"  select="$calculatedRowPosition" />
+									<xsl:with-param name="columnNodes"  		  select="$columnNodes" />
 								</xsl:call-template>
 							</xsl:when>
 							<xsl:otherwise>
@@ -407,6 +523,7 @@
 									<xsl:with-param name="calculatedRowPosition"  select="$calculatedRowPosition" />
 									<xsl:with-param name="setIndex" select="true()" />
 									<xsl:with-param name="cellNodes" select="$cellNodes[position() != 1]" />
+									<xsl:with-param name="columnNodes"  		  select="$columnNodes" />
 								</xsl:apply-templates>
 							</xsl:otherwise>
 						</xsl:choose>
@@ -420,16 +537,19 @@
 						<xsl:variable name="tableCell">
 							<xsl:call-template name="create-table-cell">
 								<xsl:with-param name="setIndex" select="false()" /><!-- copied cells may not have indices -->
+								<xsl:with-param name="columnNodes" select="$columnNodes" />
 							</xsl:call-template>
 						</xsl:variable>
 						<xsl:call-template name="repeat-copy-table-cell">
 							<xsl:with-param name="tableCell"   select="$tableCell" />
 							<xsl:with-param name="repetition"  select="$repetition" />
+							<xsl:with-param name="columnNodes" select="$columnNodes" />
 					   </xsl:call-template>
 						<xsl:apply-templates select="$cellNodes[2]">
 							<xsl:with-param name="calculatedCellPosition" select="$nextMatchedCellPosition" />
 							<xsl:with-param name="calculatedRowPosition"  select="$calculatedRowPosition" />
 							<xsl:with-param name="cellNodes" select="$cellNodes[position() != 1]" />
+							<xsl:with-param name="columnNodes" select="$columnNodes" />
 						</xsl:apply-templates>
 					</xsl:when>
 					<!-- explicit writing (instead of copying) of cell for the cases mentioned above -->
@@ -438,6 +558,7 @@
 							<xsl:with-param name="setIndex" select="$setIndex" /><!-- a possible Index will be created -->
 							<xsl:with-param name="calculatedCellPosition" select="$repetitionCellPosition" />
 							<xsl:with-param name="calculatedRowPosition" select="$calculatedRowPosition" />
+							<xsl:with-param name="columnNodes" select="$columnNodes" />
 						</xsl:call-template>
 						<xsl:choose>
 							<!-- as long there is a repetition (higher '1') stay on the same cell node  -->
@@ -458,6 +579,7 @@
 									<xsl:with-param name="nextMatchedCellPosition" select="$nextMatchedCellPosition" />
 									<xsl:with-param name="repetition" select="$repetition - 1" />
 									<xsl:with-param name="cellNodes" select="$cellNodes" />
+									<xsl:with-param name="columnNodes" select="$columnNodes" />
 								</xsl:call-template>
 							</xsl:when>
 							<xsl:otherwise>
@@ -465,6 +587,7 @@
 									<xsl:with-param name="calculatedCellPosition" select="$nextMatchedCellPosition" />
 									<xsl:with-param name="calculatedRowPosition"  select="$calculatedRowPosition" />
 									<xsl:with-param name="cellNodes" select="$cellNodes[position() != 1]" />
+									<xsl:with-param name="columnNodes" select="$columnNodes" />
 								</xsl:apply-templates>
 							</xsl:otherwise>
 						</xsl:choose>
@@ -483,6 +606,7 @@
 									<xsl:with-param name="setIndex" select="true()" />
 									<xsl:with-param name="calculatedCellPosition" select="$nextMatchedCellPosition - 1" />
 									<xsl:with-param name="calculatedRowPosition"  select="$calculatedRowPosition" />
+									<xsl:with-param name="columnNodes" select="$columnNodes" />
 								</xsl:call-template>
 							</xsl:when>
 							<xsl:otherwise>
@@ -491,6 +615,7 @@
 									<xsl:with-param name="calculatedCellPosition" select="$nextMatchedCellPosition" />
 									<xsl:with-param name="calculatedRowPosition"  select="$calculatedRowPosition" />
 									<xsl:with-param name="cellNodes" select="$cellNodes[position() != 1]" />
+									<xsl:with-param name="columnNodes" select="$columnNodes" />
 								</xsl:apply-templates>
 							</xsl:otherwise>
 						</xsl:choose>
@@ -501,11 +626,13 @@
 							<xsl:with-param name="setIndex" select="$setIndex" />
 							<xsl:with-param name="calculatedCellPosition" select="$calculatedCellPosition" />
 							<xsl:with-param name="calculatedRowPosition"  select="$calculatedRowPosition" />
+							<xsl:with-param name="columnNodes" select="$columnNodes" />
 						</xsl:call-template>
 						<xsl:apply-templates select="$cellNodes[2]">
 							<xsl:with-param name="calculatedCellPosition" select="$nextMatchedCellPosition" />
 							<xsl:with-param name="calculatedRowPosition"  select="$calculatedRowPosition" />
 							<xsl:with-param name="cellNodes" select="$cellNodes[position() != 1]" />
+							<xsl:with-param name="columnNodes" select="$columnNodes" />
 						</xsl:apply-templates>
 					</xsl:otherwise>
 				</xsl:choose>
@@ -531,6 +658,7 @@
 		<xsl:param name="setIndex" select="false()" />
 		<xsl:param name="calculatedCellPosition" />
 		<xsl:param name="calculatedRowPosition" />
+		<xsl:param name="columnNodes"  />
 
 		<xsl:element name="Cell" namespace="urn:schemas-microsoft-com:office:spreadsheet">
 			<xsl:if test="$setIndex">
@@ -554,14 +682,25 @@
 					<xsl:value-of select="$link" />
 				</xsl:attribute>
 			</xsl:if>
-			<xsl:if test="@table:style-name">
-				<xsl:apply-templates select="@table:style-name" />
-			</xsl:if>
+			<xsl:choose>
+				<xsl:when test="@table:style-name">
+					<xsl:apply-templates select="@table:style-name" />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:if test="$firstDefaultCellStyle != ''">
+						<xsl:variable name="defaultCellStyle" select="$columnNodes/table:table-column[position() = $calculatedCellPosition]/@table:default-cell-style-name" />
+						<xsl:if test="$defaultCellStyle">
+							<xsl:if test="not($defaultCellStyle = 'Default')">
+									<xsl:attribute name="ss:StyleID"><xsl:value-of select="$defaultCellStyle"/></xsl:attribute>
+							</xsl:if>
+						</xsl:if>
+					</xsl:if>
+				</xsl:otherwise>
+			</xsl:choose>
 			<xsl:apply-templates select="@table:formula">
 				<xsl:with-param name="calculatedCellPosition" select="$calculatedCellPosition" />
 				<xsl:with-param name="calculatedRowPosition"  select="$calculatedRowPosition" />
 			</xsl:apply-templates>
-
 			<xsl:choose>
 				<xsl:when test="*">
 				<!-- in case it is not an empty cell
@@ -769,6 +908,8 @@
 	<xsl:template match="*">
 		<xsl:param name="cellStyleName" />
 
+<!-- 	LineBreak in Cell -->
+		<xsl:if test="preceding-sibling::text:p[1]"><xsl:text>&#10;</xsl:text></xsl:if>
 		<xsl:call-template name="style-and-contents">
 			<xsl:with-param name="cellStyleName" select="$cellStyleName" />
 		</xsl:call-template>
