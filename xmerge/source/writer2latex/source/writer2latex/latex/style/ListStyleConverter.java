@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2004 by Henrik Just
+ *  Copyright: 2002-2006 by Henrik Just
  *
  *  All Rights Reserved.
  *
- *  Version 0.3.3g (2004-11-04)
+ *  Version 0.4b (2006-11-03)
  *
  */
 
@@ -79,6 +79,10 @@ public class ListStyleConverter extends StyleConverter {
         // Step 2: The list style may not exist, or the user wants to ignore it.
         // In this case we create default lists
         ListStyle style = wsc.getListStyle(sStyleName);
+        if (style!=null) {
+            // if possible, let the style choose between ordered and unordered list
+            bOrdered = style.isNumber(nLevel);
+        }
         if (style==null || config.formatting()<=Config.IGNORE_MOST) {
             if (nLevel<=4) {
                 if (bOrdered) {

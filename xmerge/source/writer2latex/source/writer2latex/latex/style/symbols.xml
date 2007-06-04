@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- This is a datafile used by Writer2LaTeX
-     Version 0.3.3i (2004-12-29)
+     Version 0.4b (2006-11-03)
 
      The definitions for greek characters are contributed by interzone, info@interzone.gr
      and extended by Johannis Likos. Additional bugfixes by Alexej Kryukov
@@ -282,7 +282,7 @@ PART I: Common symbols, ascii only
 <symbol char="012E" text="\k{I}" />
 <symbol char="012F" text="\k{i}" />
 <symbol char="0130" text="\.I" />
-<symbol char="0131" text="\i" />
+<symbol char="0131" text="{\i}" />
 <symbol char="0132" text="{\IJ}" />
 <symbol char="0133" text="{\ij}" />
 <symbol char="0134" text="\^J" />
@@ -1372,6 +1372,43 @@ PART I: Common symbols, ascii only
 <symbol char="22EF" math="{\cdots}"/>
 <symbol char="22F0" math="{\ddotsup}"/>
 <symbol char="22F1" math="{\ddots}"/>
+
+<!-- Unicode block: Geometric Shapes -->
+<symbol char="25A0" math="{\blacksquare}" />
+<symbol char="25A1" math="{\square}" />
+<symbol char="25AA" math="{\blacksquare}" />
+<symbol char="25AB" math="{\square}" />
+<symbol char="25B2" math="{\blacktriangle}" />
+<symbol char="25B3" math="{\bigtriangleup}" />
+<symbol char="25B4" math="{\blacktriangle}" />
+<symbol char="25B5" math="{\triangle}" />
+<symbol char="25B6" math="{\blacktriangleright}" />
+<symbol char="25B7" math="{\triangleright}" />
+<symbol char="25B8" math="{\blacktriangleright}" />
+<symbol char="25B9" math="{\triangleright}" />
+<symbol char="25BA" math="{\blacktriangleright}" />
+<symbol char="25BB" math="{\triangleright}" />
+<symbol char="25BC" math="{\blacktriangledown}" />
+<symbol char="25BD" math="{\bigtriangledown}" />
+<symbol char="25BE" math="{\blacktriangledown}" />
+<symbol char="25BF" math="{\triangledown}" />
+<symbol char="25C0" math="{\blacktriangleleft}" />
+<symbol char="25C1" math="{\triangleleft}" />
+<symbol char="25C2" math="{\blacktriangleleft}" />
+<symbol char="25C3" math="{\triangleleft}" />
+<symbol char="25C4" math="{\blacktriangleleft}" />
+<symbol char="25C5" math="{\triangleleft}" />
+<symbol char="25C6" math="{\blacklozenge}" />
+<symbol char="25C7" math="{\lozenge}" />
+<symbol char="25CA" math="{\lozenge}" />
+<symbol char="25CB" math="{\circ}" />
+<symbol char="25CF" math="{\bullet}" />
+<symbol char="25E6" math="{\circ}" />
+<symbol char="25EF" math="{\bigcirc}" />
+<symbol char="25FB" math="{\square}" />
+<symbol char="25FC" math="{\blacksquare}" />
+<symbol char="25FD" math="{\square}" />
+<symbol char="25FE" math="{\blacksquare}" />
 
 <!-- Unicode block: Miscellaneous symbols -->
 <symbol char="2660" math="{\spadesuit}" />
