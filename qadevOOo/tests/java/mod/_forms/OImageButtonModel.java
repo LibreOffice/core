@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OImageButtonModel.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-17 13:35:58 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:36:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,21 +35,8 @@
 package mod._forms;
 
 import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-import util.FormTools;
-import util.SOfficeFactory;
-
-import com.sun.star.drawing.XControlShape;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.util.XCloseable;
-
 
 /**
 * Test for object which is represented by service
@@ -62,6 +49,8 @@ import com.sun.star.util.XCloseable;
 *  <li> <code>com::sun::star::form::FormControlModel</code></li>
 *  <li> <code>com::sun::star::form::FormComponent</code></li>
 *  <li> <code>com::sun::star::form::XImageProducerSupplier</code></li>
+*  <li> <code>com::sun::star::beans::XPropertyAccess</code></li>
+*  <li> <code>com::sun::star::beans::XPropertyContainer</code></li>
 *  <li> <code>com::sun::star::beans::XPropertySet</code></li>
 *  <li> <code>com::sun::star::beans::XFastPropertySet</code></li>
 *  <li> <code>com::sun::star::beans::XPropertyState</code></li>
@@ -78,6 +67,8 @@ import com.sun.star.util.XCloseable;
 * @see com.sun.star.form.FormControlModel
 * @see com.sun.star.form.FormComponent
 * @see com.sun.star.form.XImageProducerSupplier
+* @see com.sun.star.beans.XPropertyAccess
+* @see com.sun.star.beans.XPropertyContainer
 * @see com.sun.star.beans.XPropertySet
 * @see com.sun.star.beans.XFastPropertySet
 * @see com.sun.star.beans.XPropertyState
@@ -99,80 +90,51 @@ import com.sun.star.util.XCloseable;
 * @see ifc.beans._XMultiPropertySet
 * @see ifc.lang._XComponent
 */
-public class OImageButtonModel extends TestCase {
-    XComponent xDrawDoc;
+
+public class OImageButtonModel extends GenericModelTest {
 
     /**
-    * Creates Draw document.
-    */
+     * Set some member variable of the super class <CODE>GenericModelTest</CODE>:
+     * <pre>
+     *    super.m_kindOfControl="ImageButton";
+     *    super.m_ObjectName = "stardiv.one.form.component.ImageButton";
+     *    super.m_LCShape_Type = "ImageButton";
+     * </pre>
+     * Then <CODE>super.initialize()</CODE> was called.
+     * @param tParam the test parameter
+     * @param log the log writer
+     */
+
     protected void initialize(TestParameters tParam, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory(((XMultiServiceFactory) tParam.getMSF()));
 
-        try {
-            log.println("creating a draw document");
-            xDrawDoc = SOF.createDrawDoc(null);
-            ;
-        } catch (com.sun.star.uno.Exception e) {
-            // Some exception occures.FAILED
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document", e);
-        }
+        super.initialize(tParam, log);
+
+        super.m_kindOfControl="ImageButton";
+
+        super.m_ObjectName = "stardiv.one.form.component.ImageButton";
+
+        super.m_LCShape_Type = "ImageButton";
+
     }
-
     /**
-    * Disposes Draw document.
-    */
+     * calls <CODE>cleanup()</CODE> from it's super class
+     * @param tParam the test parameter
+     * @param log the log writer
+     */
     protected void cleanup(TestParameters tParam, PrintWriter log) {
-        log.println("    disposing xDrawDoc ");
-
-        try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                        XCloseable.class, xDrawDoc);
-            closer.close(true);
-        } catch (com.sun.star.util.CloseVetoException e) {
-            log.println("couldn't close document: " + e.toString());
-        } catch (com.sun.star.lang.DisposedException e) {
-            log.println("couldn't close document: " + e.toString());
-        }
+        super.cleanup(tParam, log);
     }
 
+
     /**
-    * Creates Image button and adds it to the document.
-    *     Object relations created :
-    * <ul>
-    *  <li> <code>'OBJNAME'</code> for
-    *      {@link ifc.io._XPersistObject} : name of service which is
-    *    represented by this object. </li>
-    * </ul>
-    */
+     * calls <CODE>createTestEnvironment()</CODE> from it's super class
+     * @param Param the test parameter
+     * @param log the log writer
+     * @return lib.TestEnvironment
+     */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) {
-        XInterface oObj = null;
+        return super.createTestEnvironment(Param, log);
+    }
 
-
-        // creation of testobject here
-        // first we write what we are intend to do to log file
-        log.println("creating a test environment");
-
-        String objName = "ImageButton";
-
-        //get ImageButtonModel
-        XControlShape shape = FormTools.insertControlShape(xDrawDoc, 5000,
-                                                           7000, 2000, 2000,
-                                                           objName);
-        oObj = shape.getControl();
-
-        log.println("creating a new environment for drawpage object");
-
-        TestEnvironment tEnv = new TestEnvironment(oObj);
-
-        tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component." +
-                            objName);
-
-
-        //adding ObjRelation for XPersistObject
-        tEnv.addObjRelation("PSEUDOPERSISTENT", new Boolean(true));
-
-        return tEnv;
-    } // finish method getTestEnvironment
 } // finish class OImageButtonModel
