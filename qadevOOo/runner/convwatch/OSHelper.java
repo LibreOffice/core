@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OSHelper.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:15:00 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:30:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,5 +48,45 @@ class OSHelper
         }
     // not need
     // public static boolean isUnix()
+    public static boolean isSolarisIntel()
+        {
+            if ( ( System.getProperty("os.name").toLowerCase().startsWith("solaris") ||
+                   System.getProperty("os.name").toLowerCase().startsWith("sunos") ) &&
+                 System.getProperty("os.arch").equals("x86"))
+            {
+                return true;
+            }
+            return false;
+        }
+    public static boolean isSolarisSparc()
+        {
+            if ( ( System.getProperty("os.name").toLowerCase().startsWith("solaris") ||
+                   System.getProperty("os.name").toLowerCase().startsWith("sunos") ) &&
+                 System.getProperty("os.arch").equals("sparc"))
+            {
+                return true;
+            }
+            return false;
+        }
+    public static boolean isLinuxIntel()
+        {
+            if (System.getProperty("os.name").toLowerCase().startsWith("linux") &&
+                System.getProperty("os.arch").equals("i386"))
+            {
+                return true;
+            }
+            return false;
+        }
+
+    public static boolean isUnix()
+        {
+            if (isLinuxIntel() ||
+                isSolarisIntel() ||
+                isSolarisSparc())
+            {
+                return true;
+            }
+            return false;
+        }
 
 }
