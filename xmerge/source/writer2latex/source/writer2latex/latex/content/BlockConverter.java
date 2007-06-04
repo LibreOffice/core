@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2004 by Henrik Just
+ *  Copyright: 2002-2006 by Henrik Just
  *
  *  All Rights Reserved.
  *
- *  Version 0.3.3g (2004-11-11)
+ *  Version 0.4b (2006-11-03)
  *
  */
 
@@ -446,6 +446,8 @@ public class BlockConverter extends ConverterHelper {
             BeforeAfter baHardPage = new BeforeAfter();
             BeforeAfter baHardChar = new BeforeAfter();
             Context ic = (Context) oc.clone();
+            // Footnotes with multiple paragraphs does not work in sections
+            ic.setNoFootnotes(true);
             palette.getParSc().applyHardHeadingStyle(nLevel, sStyleName,
                 baHardPage, baHardChar, ic);
 
@@ -462,6 +464,9 @@ public class BlockConverter extends ConverterHelper {
             palette.getInlineCv().traverseInlineText(node,ldp,ic,false);
             ldp.append(baHardChar.getAfter()).append("}").nl();
             ldp.append(baHardPage.getAfter());
+
+            // Flush pending footnotes
+            palette.getNoteCv().flushFootnotes(ldp,oc);
 
             // Include any floating frames
             palette.getDrawCv().flushFloatingFrames(ldp,ic);

@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2005 by Henrik Just
+ *  Copyright: 2002-2006 by Henrik Just
  *
  *  All Rights Reserved.
  *
- *  Version 0.3.3j (2005-07-01)
+ *  Version 0.4b (2006-11-03)
  *
  */
 
@@ -55,8 +55,8 @@ import writer2latex.latex.*;
  */
 public final class Application {
     // Version number and date of Writer2LaTeX
-    private static final String VERSION = "0.4";
-    private static final String DATE = "2005-07-01";
+    private static final String VERSION = "0.4b";
+    private static final String DATE = "2006-11-03";
 
     public static String getVersion() { return VERSION; }
     public static String getDate() { return DATE; }
