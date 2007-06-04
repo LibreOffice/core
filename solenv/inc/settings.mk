@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.214 $
+#   $Revision: 1.215 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 15:11:02 $
+#   last change: $Author: ihi $ $Date: 2007-06-04 14:49:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -973,7 +973,7 @@ RSCDEFS+= -DDEBUG
 .ENDIF
 
 # additional image sets
-CUSTOM_IMAGE_SETS=hicontrast industrial crystal
+CUSTOM_IMAGE_SETS=hicontrast industrial crystal tango
 
 # settings for mozilla idl compiler
 XPIDL=xpidl
