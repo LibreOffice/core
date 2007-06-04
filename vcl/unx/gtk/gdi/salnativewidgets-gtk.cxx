@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:39:32 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 14:58:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3179,6 +3179,12 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     gint magic = trough_border ? 1 : 0;
     aStyleSet.SetScrollBarSize( slider_width + 2*trough_border );
     aStyleSet.SetMinThumbSize( min_slider_length - magic );
+
+    // preferred icon style
+    gchar* pIconThemeName = NULL;
+    g_object_get( gtk_settings_get_default(), "gtk-icon-theme-name", &pIconThemeName, (char *)NULL );
+    aStyleSet.SetPreferredSymbolsStyleName( OUString::createFromAscii(pIconThemeName) );
+    g_free (pIconThemeName);
 
     //  FIXME: need some way of fetching toolbar icon size.
 //  aStyleSet.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_SMALL );
