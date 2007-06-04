@@ -4,9 +4,9 @@
  *
  *  $RCSfile: miscopt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:12:32 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 14:48:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -285,6 +285,7 @@ static sal_Int16 implSymbolsStyleFromVCL( ULONG nStyle )
         case STYLE_SYMBOLS_HICONTRAST: return SFX_SYMBOLS_STYLE_HICONTRAST;
         case STYLE_SYMBOLS_INDUSTRIAL: return SFX_SYMBOLS_STYLE_INDUSTRIAL;
         case STYLE_SYMBOLS_CRYSTAL:    return SFX_SYMBOLS_STYLE_CRYSTAL;
+        case STYLE_SYMBOLS_TANGO:      return SFX_SYMBOLS_STYLE_TANGO;
     }
 
     return SFX_SYMBOLS_STYLE_AUTO;
@@ -299,6 +300,7 @@ static ULONG implSymbolsStyleToVCL( sal_Int16 nStyle )
         case SFX_SYMBOLS_STYLE_HICONTRAST: return STYLE_SYMBOLS_HICONTRAST;
         case SFX_SYMBOLS_STYLE_INDUSTRIAL: return STYLE_SYMBOLS_INDUSTRIAL;
         case SFX_SYMBOLS_STYLE_CRYSTAL:    return STYLE_SYMBOLS_CRYSTAL;
+        case SFX_SYMBOLS_STYLE_TANGO:      return STYLE_SYMBOLS_TANGO;
     }
 
     return STYLE_SYMBOLS_AUTO;
