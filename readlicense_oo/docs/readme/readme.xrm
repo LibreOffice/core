@@ -6,7 +6,7 @@
 			<Text id="a" xml:lang="en-US">Welcome</Text>
 					</Paragraph>
 		<Paragraph id="A3" style="H1">
-			<Text id="a" xml:lang="en-US">OpenOffice.org 2.0 ReadMe</Text>
+            <Text id="a" xml:lang="en-US">${PRODUCTNAME} ${PRODUCTVERSION} ReadMe</Text>
 					</Paragraph>
 		<Paragraph id="A4">
 			<Text id="a" xml:lang="en-US" url="ahead">For latest updates to this readme file, see </Text>
@@ -20,7 +20,7 @@
 		  <Text id="d" xml:lang="en-US">This file contains important information about this program. Please read this information very carefully before starting work.</Text>
 						</Paragraph>
 		<Paragraph id="A7">
-            <Text id="a" xml:lang="en-US" url="ahead">The OpenOffice.org Community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the OpenOffice.org site with helpful user information at </Text>
+            <Text id="a" xml:lang="en-US" url="ahead">The OpenOffice.org Community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the ${PRODUCTNAME} site with helpful user information at </Text>
         				</Paragraph>
         <Paragraph id="A8">
             <Text id="empty" xml:lang="en-US"/><Text id="b" xml:lang="en-US" url="true">http://www.openoffice.org/about_us/introduction.html </Text>
@@ -43,10 +43,10 @@
 						<Text id="ertert3434534" xml:lang="en-US">Sun Microsystems is committed to respecting your online privacy and recognizes your need for appropriate protection and management of any personally identifiable information you share with us. See the statement at http://www.sun.com/privacy/ on your online data privacy at Sun Microsystems.</Text>
 		</Paragraph>
 		<Paragraph id="B3" style="H3" os="none">
-						<Text id="sdf3e3" xml:lang="en-US">Known Limitations of the Error Report Tool for OpenOffice.org</Text>
+						<Text id="sdf3e3" xml:lang="en-US">Known Limitations of the Error Report Tool for ${PRODUCTNAME}</Text>
 		</Paragraph>
 		<Paragraph id="B4" os="none">
-						<Text id="sdf3sd2" xml:lang="en-US">The following limitations are only valid for OpenOffice.org. Please read this information very carefully.</Text>
+						<Text id="sdf3sd2" xml:lang="en-US">The following limitations are only valid for ${PRODUCTNAME}. Please read this information very carefully.</Text>
 		</Paragraph>
 		<Paragraph id="B5Win" os="none" gui="WNT">
 						<Text id="sdf3sd24" xml:lang="en-US">You need Microsoft Outlook Express or Microsoft Outlook installed and configured as your default (MAPI) e-mail client to send these error messages. Mozilla 1.0, 1.2, 1.3 and Netscape 6.x do not send the created error message correctly and will not display any error message.</Text>
@@ -58,7 +58,7 @@
 						<Text id="sdf3sd24" xml:lang="en-US">Starting the Error Report Tool</Text>
 		</Paragraph>
 		<Paragraph id="B6" os="none">
-						<Text id="sdf3sd24" xml:lang="en-US">With most program crashes, the Error Report Tool will start automatically. However, if the program seems to be stuck and the tool does not start automatically, you can start the tool manually: Go to the OpenOffice.org program folder and start the &apos;crashrep.exe&apos; file.</Text>
+						<Text id="sdf3sd24" xml:lang="en-US">With most program crashes, the Error Report Tool will start automatically. However, if the program seems to be stuck and the tool does not start automatically, you can start the tool manually: Go to the ${PRODUCTNAME} program folder and start the &apos;crashrep.exe&apos; file.</Text>
 		</Paragraph>
 		<Paragraph id="B7u" style="H3" os="none">
 						<Text id="sdf3sd24" xml:lang="en-US">Completing the Report</Text>
@@ -161,13 +161,13 @@
 		</Paragraph>
 		<Paragraph id="B763ef" os="WNT">
 						<Text id="edssc3d" xml:lang="en-US">Note: Please be aware that administrator rights are needed for the installation process.</Text>
-					<Text id="dsdsdf33" xml:lang="en-US" Wrap="true">Note for Windows 98 users only: If you choose to install Java during the OpenOffice.org installation program, the installer will ask you to reboot your system. You should either ignore this message or open the OpenOffice.org installation program again after the reboot.</Text>
+					<Text id="dsdsdf33" xml:lang="en-US" Wrap="true">Note for Windows 98 users only: If you choose to install Java during the ${PRODUCTNAME} installation program, the installer will ask you to reboot your system. You should either ignore this message or open the ${PRODUCTNAME} installation program again after the reboot.</Text>
 		</Paragraph>
 		<Paragraph id="Grafik" os="all">
-						<Text id="abcdef" xml:lang="en-US">Difficulties starting OpenOffice.org (e.g. applications hang) as well as problems with the screen display are often caused by the graphics card driver. If these problems occur, please update your graphics card driver or try using the graphics driver delivered with your operating system. Difficulties displaying 3D objects can often be solved by deactivating the option &quot;Use OpenGL&quot; under &apos;Tools - Options - View - 3D view&apos;.</Text>
+						<Text id="abcdef" xml:lang="en-US">Difficulties starting ${PRODUCTNAME} (e.g. applications hang) as well as problems with the screen display are often caused by the graphics card driver. If these problems occur, please update your graphics card driver or try using the graphics driver delivered with your operating system. Difficulties displaying 3D objects can often be solved by deactivating the option &quot;Use OpenGL&quot; under &apos;Tools - Options - View - 3D view&apos;.</Text>
 		</Paragraph>
 		<Paragraph id="b4tz" os="SOLARIS">
-						<Text id="ghtz5" xml:lang="en-US">Before installing OpenOffice.org, one or more operating system patches from SUN Microsystems must be installed. You can find them on the program CD in the following directories or download them at http://sunsolve.sun.com</Text>
+						<Text id="ghtz5" xml:lang="en-US">Before installing ${PRODUCTNAME}, one or more operating system patches from SUN Microsystems must be installed. You can find them on the program CD in the following directories or download them at http://sunsolve.sun.com</Text>
 		</Paragraph>
 		<Paragraph id="Sols3" os="SOLARIS">
 						<Text id="dfg4tr" xml:lang="en-US">Operating system patches required:</Text>
@@ -191,8 +191,8 @@
 						<Text id="dfgferd34" xml:lang="en-US">The versions mentioned above are the minimum requirements, newer (higher) version numbers are also allowed.</Text>
 		</Paragraph>
 		<Paragraph id="B2l3">
-						<Text id="erter343534" xml:lang="en-US">You can install OpenOffice.org 2.0 alongside of an older version of OpenOffice.org. If you later choose to deinstall the older version of OpenOffice.org, you must call the installation program of the newer version and choose &apos;Repair&apos;. This ensures that the new version is correctly registered in your system.</Text>
-					<Text id="erter34353ew4" xml:lang="en-US" Wrap="true">Please note that copy and paste via clipboard between OpenOffice.org 1.x and OpenOffice.org 2.0 might not work in OpenOffice.org format. If that happens, choose &apos;Edit - Paste Special&apos; and choose a format other than OpenOffice.org, or open the document in OpenOffice.org 2.0 directly.</Text>
+						<Text id="erter343534" xml:lang="en-US">You can install ${PRODUCTNAME} ${PRODUCTVERSION} alongside of an older version of ${PRODUCTNAME}. If you later choose to deinstall the older version of ${PRODUCTNAME}, you must call the installation program of the newer version and choose &apos;Repair&apos;. This ensures that the new version is correctly registered in your system.</Text>
+					<Text id="erter34353ew4" xml:lang="en-US" Wrap="true">Please note that copy and paste via clipboard between ${PRODUCTNAME} 1.x and ${PRODUCTNAME} ${PRODUCTVERSION} might not work in OpenOffice.org format. If that happens, choose &apos;Edit - Paste Special&apos; and choose a format other than ${PRODUCTNAME}, or open the document in ${PRODUCTNAME} ${PRODUCTVERSION} directly.</Text>
 		</Paragraph>
 		<Paragraph id="B3">
 						<Text id="erte53t434534" xml:lang="en-US">Please make sure you have enough free memory in the temporary directory on your system and that read, write and run access rights have been granted. Close all other programs before starting the installation.</Text>
@@ -200,7 +200,7 @@
 	</Section>
 	<Section id="Networkinstallation">
 		<Paragraph id="a2" style="H2" os="WNT">
-						<Text id="sddf3f" xml:lang="en-US">Network Installation: Error When Calling the OpenOffice.org Quickstarter</Text>
+						<Text id="sddf3f" xml:lang="en-US">Network Installation: Error When Calling the ${PRODUCTNAME} Quickstarter</Text>
 		</Paragraph>
 		<Paragraph id="s2" os="WNT">
 						<Text id="dew32f" xml:lang="en-US">If, when starting the system, problems should occur in calling the OpenOffice.org Quickstarter (e.g. invalid link), this is probably due to the fact that the network drive on which the network installation is installed is not yet available.</Text>
@@ -217,10 +217,10 @@
 						<Text id="asas" xml:lang="en-US">Deinstalling a Network Installation Under Common Desktop Environment (CDE)</Text>
 		</Paragraph>
 		<Paragraph id="saw" os="SOLARIS">
-						<Text id="asd3" xml:lang="en-US">The shortcuts set in the CDE in a network installation are not automatically removed during deinstallation. Before deinstallation, enter as Administrator (root) the following command line to remove the shortcuts from the CDE: /usr/dt/bin/dtappintegrate -u -s [path to OpenOffice.org].</Text>
+						<Text id="asd3" xml:lang="en-US">The shortcuts set in the CDE in a network installation are not automatically removed during deinstallation. Before deinstallation, enter as Administrator (root) the following command line to remove the shortcuts from the CDE: /usr/dt/bin/dtappintegrate -u -s [path to ${PRODUCTNAME}].</Text>
 		</Paragraph>
 		<Paragraph id="df3d" os="SOLARIS">
-						<Text id="ef3s" xml:lang="en-US">Example: /usr/dt/bin/dtappintegrate -u -s /usr/local/OpenOffice.org2.0</Text>
+            <Text id="ef3s" xml:lang="en-US">Example: /usr/dt/bin/dtappintegrate -u -s /usr/local/${PRODUCTNAME}${PRODUCTVERSION}</Text>
 		</Paragraph>
 	</Section>
 	<Section id="SessionManager">
@@ -228,7 +228,7 @@
 						<Text id="naso" xml:lang="en-US">Problems During Program Startup on Gnome</Text>
 		</Paragraph>
 		<Paragraph id="F1b" gui="UNX">
-						<Text id="naso2" xml:lang="en-US">If you experience OpenOffice.org startup problems (most notably while using Gnome) please &apos;unset&apos; the SESSION_MANAGER environment variable inside the shell you use to start OpenOffice.org. This can be done by adding the line &quot;unset SESSION_MANAGER&quot; to the beginning of the soffice shell script found in the &quot;[office folder]/program&quot; directory.</Text>
+						<Text id="naso2" xml:lang="en-US">If you experience ${PRODUCTNAME} startup problems (most notably while using Gnome) please &apos;unset&apos; the SESSION_MANAGER environment variable inside the shell you use to start ${PRODUCTNAME}. This can be done by adding the line &quot;unset SESSION_MANAGER&quot; to the beginning of the soffice shell script found in the &quot;[office folder]/program&quot; directory.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="Scroll">
@@ -236,13 +236,13 @@
                         <Text id="naso" xml:lang="en-US">ALPS/Synaptics notebook touchpads in Windows</Text>
 		</Paragraph>
 		<Paragraph id="F1b" gui="WNT">
-                        <Text id="naso2" xml:lang="en-US">Due to a Windows driver issue, you cannot scroll through OpenOffice.org documents when you slide your finger across an ALPS/Synaptics touchpad.</Text>
+                        <Text id="naso2" xml:lang="en-US">Due to a Windows driver issue, you cannot scroll through ${PRODUCTNAME} documents when you slide your finger across an ALPS/Synaptics touchpad.</Text>
         </Paragraph>
     		<Paragraph id="F1c" gui="WNT">
                 <Text id="naso2" xml:lang="en-US">To enable touchpad scrolling, add the following lines to the &quot;C:\Program Files\Synaptics\SynTP\SynTPEnh.ini&quot; configuration file, and restart your computer:</Text>
                             </Paragraph>
     		<Paragraph id="F1d" gui="WNT">
-                <Text id="naso2" xml:lang="en-US">[OpenOffice.org]</Text>
+                <Text id="naso2" xml:lang="en-US">[${PRODUCTNAME}]</Text>
                                 <Text id="naso3" xml:lang="en-US">FC = &quot;SALFRAME&quot;</Text>
                                 <Text id="naso4" xml:lang="en-US">SF = 0x10000000</Text>
                                 <Text id="naso5" xml:lang="en-US">SF |= 0x00004000</Text>
@@ -258,7 +258,7 @@
 						<Text id="abdfe" xml:lang="en-US">Important Information for Arabic and Hebrew Versions</Text>
 		</Paragraph>
 		<Paragraph id="F2b" os="none" gui="UNX">
-						<Text id="abdfe2" xml:lang="en-US">If the user interface of the Arabic or Hebrew versions shows blanks or squares instead of text, please install the most recent Java Runtime Environment (JRE 1.4.1) before running the OpenOffice.org Installation Program. The JRE will install the fonts required for Arabic and Hebrew versions.</Text>
+						<Text id="abdfe2" xml:lang="en-US">If the user interface of the Arabic or Hebrew versions shows blanks or squares instead of text, please install the most recent Java Runtime Environment (JRE 1.4.1) before running the ${PRODUCTNAME} Installation Program. The JRE will install the fonts required for Arabic and Hebrew versions.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="Zoomtext">
@@ -266,7 +266,7 @@
 						<Text id="aw2" xml:lang="en-US">Ai Squared ZoomText 7.11</Text>
 		</Paragraph>
 		<Paragraph id="aw3" os="WNT">
-						<Text id="aw4" xml:lang="en-US">If you want to use Ai Squared ZoomText with OpenOffice.org 2.0 , you need version 7.11 or higher. The date of the Ai Squared ZoomText download must be after June 12, 2002 for it to contain all the necessary program enhancements.</Text>
+						<Text id="aw4" xml:lang="en-US">If you want to use Ai Squared ZoomText with ${PRODUCTNAME} ${PRODUCTVERSION} , you need version 7.11 or higher. The date of the Ai Squared ZoomText download must be after June 12, 2002 for it to contain all the necessary program enhancements.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="Netscape">
@@ -282,13 +282,13 @@
 						<Text id="awe" xml:lang="en-US">Changing the User Interface Font</Text>
 		</Paragraph>
 		<Paragraph id="abc1">
-						<Text id="w32e" xml:lang="en-US">In OpenOffice.org you can change the font used for screen display and printing by replacing it with a different font installed on your system. This can be done using the font replacement function. Choose &apos;Tools - Options - OpenOffice.org - Fonts&apos; to access the font replacement table.</Text>
+						<Text id="w32e" xml:lang="en-US">In ${PRODUCTNAME} you can change the font used for screen display and printing by replacing it with a different font installed on your system. This can be done using the font replacement function. Choose &apos;Tools - Options - ${PRODUCTNAME} - Fonts&apos; to access the font replacement table.</Text>
 		</Paragraph>
 		<Paragraph id="abc2">
-						<Text id="asw3" xml:lang="en-US">To change the font of the OpenOffice.org user interface, you have to replace the default font &quot;Andale Sans UI&quot; with another font and mark the &quot;always&quot; setting for this replacement.</Text>
+						<Text id="asw3" xml:lang="en-US">To change the font of the ${PRODUCTNAME} user interface, you have to replace the default font &quot;Andale Sans UI&quot; with another font and mark the &quot;always&quot; setting for this replacement.</Text>
 		</Paragraph>
 		<Paragraph id="abc3">
-						<Text id="sdf3" xml:lang="en-US">Refer to the OpenOffice.org Help for a detailed explanation of the dialog.</Text>
+						<Text id="sdf3" xml:lang="en-US">Refer to the ${PRODUCTNAME} Help for a detailed explanation of the dialog.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="Keyboard">
@@ -296,7 +296,7 @@
 						<Text id="awe1" xml:lang="en-US">Shortcut Keys</Text>
 		</Paragraph>
 		<Paragraph id="abc12">
-						<Text id="w32e1" xml:lang="en-US">Only shortcut keys (key combinations) not used by the operating system can be used in OpenOffice.org. If a key combination in OpenOffice.org does not work as described in the OpenOffice.org Help, check if that shortcut is already used by the operating system. To rectify such conflicts, you can change the keys assigned by your operating system. Alternatively, you can change almost any key assignment in OpenOffice.org. For more information on this topic, refer to the OpenOffice.org Help or the Help documentation of your operating system.</Text>
+						<Text id="w32e1" xml:lang="en-US">Only shortcut keys (key combinations) not used by the operating system can be used in ${PRODUCTNAME}. If a key combination in ${PRODUCTNAME} does not work as described in the ${PRODUCTNAME} Help, check if that shortcut is already used by the operating system. To rectify such conflicts, you can change the keys assigned by your operating system. Alternatively, you can change almost any key assignment in ${PRODUCTNAME}. For more information on this topic, refer to the ${PRODUCTNAME} Help or the Help documentation of your operating system.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="FileLocking">
@@ -304,15 +304,15 @@
 						<Text id="gfh6w" xml:lang="en-US">File Locking</Text>
 		</Paragraph>
 		<Paragraph id="G2" gui="UNX">
-						<Text id="pji76w" xml:lang="en-US">In the default setting, file locking is turned on in OpenOffice.org. To deactivate it, you have to set the appropriate environment variables SAL_ENABLE_FILE_LOCKING=0 and export SAL_ENABLE_FILE_LOCKING. These entries are already in enabled form in the soffice script file.</Text>
+						<Text id="pji76w" xml:lang="en-US">In the default setting, file locking is turned on in ${PRODUCTNAME}. To deactivate it, you have to set the appropriate environment variables SAL_ENABLE_FILE_LOCKING=0 and export SAL_ENABLE_FILE_LOCKING. These entries are already in enabled form in the soffice script file.</Text>
 		</Paragraph>
 		<Paragraph id="G3" gui="UNX">
-						<Text id="pji76wsdf" xml:lang="en-US">Warning: The activated file locking feature can cause problems with Solaris 2.5.1 and 2.7 used in conjunction with Linux NFS 2.0. If your system environment has these parameters, we strongly recommend that you avoid using the file locking feature. Otherwise, OpenOffice.org will hang when you try to open a file from a NFS mounted directory from a Linux computer.</Text>
+						<Text id="pji76wsdf" xml:lang="en-US">Warning: The activated file locking feature can cause problems with Solaris 2.5.1 and 2.7 used in conjunction with Linux NFS 2.0. If your system environment has these parameters, we strongly recommend that you avoid using the file locking feature. Otherwise, ${PRODUCTNAME} will hang when you try to open a file from a NFS mounted directory from a Linux computer.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="Mapi">
 		<Paragraph id="G1a" style="H2" gui="WNT">
-						<Text id="gfh6w" xml:lang="en-US">Problems When Sending Documents as E-mails From OpenOffice.org</Text>
+						<Text id="gfh6w" xml:lang="en-US">Problems When Sending Documents as E-mails From ${PRODUCTNAME}</Text>
 		</Paragraph>
 		<Paragraph id="G2a" gui="WNT">
 						<Text id="pji76w" xml:lang="en-US">When sending a document via &apos;File - Send - Document as E-mail&apos; or &apos;Document as PDF Attachment&apos; problems might occur (program crashes or hangs). This is due to the Windows system file &quot;Mapi&quot; (Messaging Application Programming Interface) which causes problems in some file versions. Unfortunately, the problem cannot be narrowed down to a certain version number. For more information visit http://www.microsoft.com to search the Microsoft Knowledge Base for &quot;mapi dll&quot;.</Text>
@@ -405,7 +405,7 @@
 			<Text id="a" xml:lang="en-US">User Support</Text>
 					</Paragraph>
 		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US" url="ahead">For help with the OpenOffice.org 2.0 office suite, take a look at the archives to find questions already answered on the &apos;users@openoffice.org&apos; mailing list at </Text>
+			<Text id="a" xml:lang="en-US" url="ahead">For help with the ${PRODUCTNAME} ${PRODUCTVERSION} office suite, take a look at the archives to find questions already answered on the &apos;users@openoffice.org&apos; mailing list at </Text>
 			            <Text id="b" xml:lang="en-US" url="true" >http://www.openoffice.org/mail_list.html</Text>
 					<Text id="c" xml:lang="en-US">. Alternatively, you can send in your questions to users@openoffice.org. Remember to subscribe to the list to get an email response.</Text>
 					</Paragraph>
@@ -420,7 +420,7 @@
 			<Text id="a" xml:lang="en-US">Way to Start</Text>
 					</Paragraph>
 		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US" url="ahead">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the OpenOffice.org source code was released back in October 2000. When you&apos;re comfortable, all you need to do is send an email self-introduction and jump right in. If you are familiar with Open Source Projects, check out our To-Dos list and see if there is anything you would like to help with at </Text>
+			<Text id="a" xml:lang="en-US" url="ahead">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the ${PRODUCTNAME} source code was released back in October 2000. When you&apos;re comfortable, all you need to do is send an email self-introduction and jump right in. If you are familiar with Open Source Projects, check out our To-Dos list and see if there is anything you would like to help with at </Text>
             			<Text id="b" xml:lang="en-US" url="true" >http://development.openoffice.org/todo.html</Text>
 					<Text id="c" xml:lang="en-US">.</Text>
 					</Paragraph>
@@ -428,10 +428,10 @@
 	<Section id="Credits">
 		<Paragraph id="emptyparagraph" localized="false"/>
 		<Paragraph id="A1">
-			<Text id="a" xml:lang="en-US">We hope you enjoy working with the new OpenOffice.org 2.0 and will join us online.</Text>
+			<Text id="a" xml:lang="en-US">We hope you enjoy working with the new ${PRODUCTNAME} ${PRODUCTVERSION} and will join us online.</Text>
 							</Paragraph>
 		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">The OpenOffice.org Community</Text>
+			<Text id="a" xml:lang="en-US">The ${PRODUCTNAME} Community</Text>
 							</Paragraph>
 		<Paragraph id="A3" localized="false">
 			<Text id="a" xml:lang="en-US"/>
