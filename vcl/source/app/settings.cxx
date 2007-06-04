@@ -4,9 +4,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:19:40 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 14:57:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -474,6 +474,7 @@ ImplStyleData::ImplStyleData()
     mnAutoMnemonic              = 1;
     mnToolbarIconSize           = STYLE_TOOLBAR_ICONSIZE_UNKNOWN;
     mnSymbolsStyle              = STYLE_SYMBOLS_AUTO;
+    mnPreferredSymbolsStyle         = STYLE_SYMBOLS_AUTO;
 
     SetStandardStyles();
 }
@@ -575,6 +576,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnSkipDisabledInMenus       = rData.mnSkipDisabledInMenus;
     mnToolbarIconSize           = rData.mnToolbarIconSize;
     mnSymbolsStyle              = rData.mnSymbolsStyle;
+    mnPreferredSymbolsStyle         = rData.mnPreferredSymbolsStyle;
 }
 
 // -----------------------------------------------------------------------
@@ -734,6 +736,7 @@ void StyleSettings::Set3DColors( const Color& rColor )
         case STYLE_SYMBOLS_HICONTRAST: return ::rtl::OUString::createFromAscii( "hicontrast" );
         case STYLE_SYMBOLS_INDUSTRIAL: return ::rtl::OUString::createFromAscii( "industrial" );
         case STYLE_SYMBOLS_CRYSTAL:    return ::rtl::OUString::createFromAscii( "crystal" );
+        case STYLE_SYMBOLS_TANGO:      return ::rtl::OUString::createFromAscii( "tango" );
     }
 
     return ::rtl::OUString::createFromAscii( "auto" );
@@ -751,34 +754,67 @@ ULONG StyleSettings::ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) cons
         return STYLE_SYMBOLS_INDUSTRIAL;
     else if ( rName == ::rtl::OUString::createFromAscii( "crystal" ) )
         return STYLE_SYMBOLS_CRYSTAL;
+    else if ( rName == ::rtl::OUString::createFromAscii( "tango" ) )
+        return STYLE_SYMBOLS_TANGO;
 
     return STYLE_SYMBOLS_AUTO;
 }
 
 // -----------------------------------------------------------------------
 
+/**
+    The preferred style name can be read from the desktop setting. We
+    need to find the closest theme name registered in OOo. Therefore
+    we check if any registered style name is a case-insensitive
+    substring of the preferred style name.
+*/
+void StyleSettings::SetPreferredSymbolsStyleName( const ::rtl::OUString &rName )
+{
+    if ( rName.getLength() > 0 )
+    {
+        ::rtl::OUString rNameLowCase( rName.toAsciiLowerCase() );
+
+        for( sal_Int32 n = 0; n <= STYLE_SYMBOLS_THEMES_MAX; n++ )
+            if ( rNameLowCase.indexOf( ImplSymbolsStyleToName( n ) ) != -1 )
+                SetPreferredSymbolsStyle( n );
+    }
+}
+
+// -----------------------------------------------------------------------
+
 ULONG StyleSettings::GetCurrentSymbolsStyle() const
 {
+    // style selected in Tools -> Options... -> OpenOffice.org -> View
     ULONG nStyle = GetSymbolsStyle();
 
     if ( nStyle == STYLE_SYMBOLS_AUTO )
     {
-        static bool sbDesktopChecked = false;
-        static ULONG snDesktopStyle = STYLE_SYMBOLS_DEFAULT;
+        // the preferred style can be read from the desktop setting by the desktop native widgets modules
+        ULONG nPreferredStyle = GetPreferredSymbolsStyle();
 
-        if ( !sbDesktopChecked )
+        if ( nPreferredStyle == STYLE_SYMBOLS_AUTO )
         {
-            const ::rtl::OUString &rDesktopEnvironment = Application::GetDesktopEnvironment();
 
-            if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "gnome" ) )
-                snDesktopStyle = STYLE_SYMBOLS_INDUSTRIAL;
-            else if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde" ) )
-                snDesktopStyle = STYLE_SYMBOLS_CRYSTAL;
+            // use a hardcoded desktop-specific fallback if no preferred style has been detected
+            static bool sbFallbackDesktopChecked = false;
+            static ULONG snFallbackDesktopStyle = STYLE_SYMBOLS_DEFAULT;
 
-            sbDesktopChecked = true;
+            if ( !sbFallbackDesktopChecked )
+            {
+                const ::rtl::OUString &rDesktopEnvironment = Application::GetDesktopEnvironment();
+
+                if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "gnome" ) )
+                    snFallbackDesktopStyle = STYLE_SYMBOLS_TANGO;
+                else if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde" ) )
+                    snFallbackDesktopStyle = STYLE_SYMBOLS_CRYSTAL;
+
+                sbFallbackDesktopChecked = true;
+            }
+
+            nPreferredStyle = snFallbackDesktopStyle;
         }
 
-        nStyle = GetHighContrastMode()? STYLE_SYMBOLS_HICONTRAST: snDesktopStyle;
+        nStyle = GetHighContrastMode()? STYLE_SYMBOLS_HICONTRAST: nPreferredStyle;
     }
 
     return nStyle;
