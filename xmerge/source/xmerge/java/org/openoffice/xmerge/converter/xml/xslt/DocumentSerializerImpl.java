@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentSerializerImpl.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 13:32:45 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 11:52:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ public final class DocumentSerializerImpl
      *  with the Xslt processer. A <code>ConvertData </code> object is
      *  constructed and returned.
      *
-     *  @returns cd     A <code>ConvertData</code> object.
+     *  @return cd     A <code>ConvertData</code> object.
      *  @throws  ConvertException  If any I/O error occurs.
      *  @throws  IOException       If any I/O error occurs.
      */
@@ -239,7 +239,7 @@ public final class DocumentSerializerImpl
      *
      *  Xslt transformation code
      *
-     * @returns baos A <code>ByteArrayOutputStream</code> object containing
+     * @return baos A <code>ByteArrayOutputStream</code> object containing
      *               the result of the Xslt transformation.
      * @throws TransformerException,TransformerConfigurationException
      *        , FileNotFoundException,IOException
