@@ -4,9 +4,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: rt $ $Date: 2007-02-19 13:49:07 $
+#   last change: $Author: ihi $ $Date: 2007-06-04 13:52:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -454,6 +454,7 @@ sub replace_setup_variables
 
     # $updateid
     my $updateid = $productname . "_" . $userdirproductversion . "_" . $$languagestringref;
+    $updateid =~ s/ /_/g;
 
     # $useragent
     # OpenOffice.org/2.2 (680m212 (Build:9263); Solaris; SPARC; BundledLanguages=en-US_fr)
