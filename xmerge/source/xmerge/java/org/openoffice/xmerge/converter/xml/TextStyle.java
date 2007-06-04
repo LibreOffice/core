@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextStyle.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 13:26:39 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 11:52:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,7 @@ public class TextStyle extends Style implements Cloneable {
      *
      *  @param  value  <code>Color</code> specification to parse.
      *
-     *  @returns  The <code>Color</code> associated the value.
+     *  @return  The <code>Color</code> associated the value.
      */
     private Color parseColorString(String value) {
         // Assume color value is of form #rrggbb
