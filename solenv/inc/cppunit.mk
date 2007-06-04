@@ -4,9 +4,9 @@
 #
 #   $RCSfile: cppunit.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-22 14:48:20 $
+#   last change: $Author: ihi $ $Date: 2007-06-04 13:19:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ TEST$(TNR)LIB=$(SHL$(TNR)TARGETN)
 .IF "$(TESTOPT)"==""
     TEST$(TNR)OPT="-jobexclude"
     TEST$(TNR)OPT+=$(SHL$(TNR)TARGET).xsce
-    TEST$(TNR)OPT="-sf"
+    TEST$(TNR)OPT+="-sf"
     TEST$(TNR)OPT+=$(mktmp "foo")
     TEST$(TNR)OPT+="-onlyerrors"
     TEST$(TNR)OPT+=" "
