@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:21:43 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 14:02:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,10 +163,17 @@ USHORT SwWW8Writer::GetId( const SwNumRule& rNumRule ) const
     USHORT nRet = pUsedNumTbl->GetPos(p);
 
     //Is this list now duplicated into a new list which we should use
-    ::std::map<USHORT,USHORT>::const_iterator aResult =
-        aRuleDuplicates.find(nRet);
-    if (aResult != aRuleDuplicates.end())
-        nRet = (*aResult).second;
+    // --> OD 2007-05-30 #i77812#
+    // perform 'deep' search in duplication map
+    ::std::map<USHORT,USHORT>::const_iterator aResult = aRuleDuplicates.end();
+    do {
+        aResult = aRuleDuplicates.find(nRet);
+        if ( aResult != aRuleDuplicates.end() )
+        {
+            nRet = (*aResult).second;
+        }
+    } while ( aResult != aRuleDuplicates.end() );
+    // <--
 
     return nRet;
 }
