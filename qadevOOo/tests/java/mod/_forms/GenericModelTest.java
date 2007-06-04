@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GenericModelTest.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-17 13:35:37 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:33:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
  ************************************************************************/
 package mod._forms;
 import com.sun.star.beans.NamedValue;
+import com.sun.star.beans.PropertyValue;
 import java.io.PrintWriter;
 
 import lib.StatusException;
@@ -62,9 +63,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import lib.Status;
-import util.PropertyName;
 import util.utils;
 
 
@@ -88,6 +87,8 @@ import util.utils;
 *  <li> <code>com::sun::star::container::XNamed</code></li>
 *  <li> <code>com::sun::star::lang::XComponent</code></li>
 *  <li> <code>com::sun::star::lang::XEventListener</code></li>
+*  <li> <code>com::sun::star::beans::XPropertyAccess</code></li>
+*  <li> <code>com::sun::star::beans::XPropertyContainer</code></li>
 *  <li> <code>com::sun::star::beans::XPropertySet</code></li>
 *  <li> <code>com::sun::star::form::XLoadListener</code></li>
 *  <li> <code>com::sun::star::container::XChild</code></li>
@@ -115,6 +116,8 @@ import util.utils;
 * @see com.sun.star.container.XNamed
 * @see com.sun.star.lang.XComponent
 * @see com.sun.star.lang.XEventListener
+* @see com.sun.star.beans.XPropertyAccess
+* @see com.sun.star.beans.XPropertyContainer
 * @see com.sun.star.beans.XPropertySet
 * @see com.sun.star.form.XLoadListener
 * @see com.sun.star.container.XChild
@@ -216,6 +219,10 @@ public class GenericModelTest extends TestCase {
      * @see ifc.form._DataAwareControlModel
      */
     protected static String m_LCShape_Type = null;
+
+    protected static String m_XPropertyAccess_propertyToChange = "HelpText";
+
+    protected static String m_XPropertyContainer_propertyNotRemovable = "HelpText";
     /**
      * If this variable is true some more debug info was logged. It was setted by the parameter variable
      * <code>debug_is_active</code>
@@ -232,6 +239,7 @@ public class GenericModelTest extends TestCase {
         m_xTextDoc = WriterTools.createTextDoc(((XMultiServiceFactory) tParam.getMSF()));
         m_ConnectionColsed = false;
         debug = tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE);
+        m_propertiesToSet.clear();
     }
 
     /**
@@ -446,7 +454,7 @@ public class GenericModelTest extends TestCase {
             for (i = 0; i < m_propertiesToSet.size(); i++){
                 prop = (NamedValue) m_propertiesToSet.get(i);
 
-                log.println("stting property: '"+prop.Name+"' to value '"+prop.Value.toString()+"'");
+                log.println("setting property: '"+prop.Name+"' to value '"+prop.Value.toString()+"'");
 
                 m_XPS.setPropertyValue(prop.Name, prop.Value);
             }
@@ -467,26 +475,21 @@ public class GenericModelTest extends TestCase {
             throw new StatusException("Couldn't get property on index '" + i + "': ", e);
         }
 
-
         // added LabelControl for 'DataAwareControlModel'
         tEnv.addObjRelation("LC", aShape.getControl());
-
 
         // added FormLoader for 'DataAwareControlModel'
         tEnv.addObjRelation("FL", m_XFormLoader);
 
-
         // adding relation for XUpdateBroadcaster
         m_XCtrl = oObj;
 
-        tEnv.addObjRelation("XUpdateBroadcaster.Checker",
+    tEnv.addObjRelation("XUpdateBroadcaster.Checker",
                             new Checker(m_XFormLoader, m_XPS, m_XCtrl, m_ChangePropertyName, m_ChangePropertyValue));
-
 
         // adding relation for DataAwareControlModel service
         tEnv.addObjRelation("DataAwareControlModel.NewFieldName",
                             DBTools.TST_DATE_F);
-
 
         //adding ObjRelation for XPersistObject
         tEnv.addObjRelation("PSEUDOPERSISTENT", new Boolean(true));
@@ -495,6 +498,13 @@ public class GenericModelTest extends TestCase {
         java.util.HashSet exclude = new java.util.HashSet();
         exclude.add("FormatKey");
         tEnv.addObjRelation("XFastPropertySet.ExcludeProps", exclude);
+
+        PropertyValue propVal = new PropertyValue();
+        propVal.Name = m_XPropertyAccess_propertyToChange;
+        propVal.Value = "Text since XPropertyAccess";
+        tEnv.addObjRelation("XPropertyAccess.propertyToChange", propVal);
+        tEnv.addObjRelation("XPropertyContainer.propertyNotRemovable", m_XPropertyContainer_propertyNotRemovable);
+
 
         return tEnv;
     } // finish method getTestEnvironment
