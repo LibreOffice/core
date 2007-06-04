@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ORadioButtonModel.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:15:28 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:37:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 package mod._forms;
 
 import com.sun.star.beans.NamedValue;
+import com.sun.star.beans.PropertyValue;
 import java.io.PrintWriter;
 
 import lib.TestEnvironment;
@@ -64,6 +65,8 @@ import util.DBTools;
 *  <li> <code>com::sun::star::container::XNamed</code></li>
 *  <li> <code>com::sun::star::lang::XComponent</code></li>
 *  <li> <code>com::sun::star::lang::XEventListener</code></li>
+*  <li> <code>com::sun::star::beans::XPropertyAccess</code></li>
+*  <li> <code>com::sun::star::beans::XPropertyContainer</code></li>
 *  <li> <code>com::sun::star::beans::XPropertySet</code></li>
 *  <li> <code>com::sun::star::form::XLoadListener</code></li>
 *  <li> <code>com::sun::star::container::XChild</code></li>
@@ -85,6 +88,8 @@ import util.DBTools;
 * @see com.sun.star.container.XNamed
 * @see com.sun.star.lang.XComponent
 * @see com.sun.star.lang.XEventListener
+* @see com.sun.star.beans.XPropertyAccess
+* @see com.sun.star.beans.XPropertyContainer
 * @see com.sun.star.beans.XPropertySet
 * @see com.sun.star.form.XLoadListener
 * @see com.sun.star.container.XChild
@@ -127,6 +132,8 @@ public class ORadioButtonModel extends GenericModelTest {
      */
 
     protected void initialize(TestParameters tParam, PrintWriter log) {
+
+        super.initialize(tParam, log);
         super.m_ChangePropertyName = "State";
 
         super.m_kindOfControl="RadioButton";
@@ -140,9 +147,7 @@ public class ORadioButtonModel extends GenericModelTest {
 
         super.m_LCShape_Type = "GroupBox";
 
-        super.initialize(tParam, log);
     }
-
     /**
      * calls <CODE>cleanup()</CODE> from it's super class
      * @param tParam the test parameter
@@ -164,6 +169,11 @@ public class ORadioButtonModel extends GenericModelTest {
         TestEnvironment tEnv = super.createTestEnvironment(Param, log);
         tEnv.addObjRelation("DataAwareControlModel.NewFieldName",
                             DBTools.TST_INT_F);
+        PropertyValue prop = new PropertyValue();
+        prop.Name = "HelpText";
+        prop.Value = "new Help Text since XPropertyAccess";
+        tEnv.addObjRelation("XPropertyAccess.propertyToChange", prop);
+        tEnv.addObjRelation("XPropertyContainer.propertyNotRemovable", "HelpText");
 
         return tEnv;
     }
