@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-05-24 13:29:05 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-04 08:48:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -799,6 +799,7 @@ doctok::Id
           mbValue = </xsl:text>
           <xsl:call-template name="valuenamefordefine"/>
           <xsl:text>(rValue).getBool();
+          bResult = true;
       }</xsl:text>
       </xsl:for-each>
     </xsl:for-each>
@@ -810,7 +811,35 @@ doctok::Id
     <xsl:call-template name="caselabelattribute"/>
     <xsl:text>
         mnValue = rValue.toInt32();
+        bResult = true;
         break;</xsl:text>
+  </xsl:template>
+
+  <xsl:template name="contextattributeimplpropcaseinner">
+    <xsl:variable name="mynsid" select="generate-id(ancestor::namespace)"/>
+    <xsl:if test=".//rng:text">
+      <xsl:text>
+        {
+            OOXMLValue::Pointer_t pVal(new OOXMLStringValue(rValue));
+            newProperty(nToken, pVal);
+        }</xsl:text>
+    </xsl:if>
+    <xsl:for-each select=".//rng:ref">
+      <xsl:variable name="refclassname">
+        <xsl:for-each select="key('defines-with-name', @name)[generate-id(ancestor::namespace) = $mynsid]">
+          <xsl:call-template name="valuenamefordefine"/>
+        </xsl:for-each>
+      </xsl:variable>
+      <xsl:text>
+        {
+          OOXMLValue::Pointer_t pVal(new </xsl:text>
+          <xsl:value-of select="$refclassname"/>
+          <xsl:text>(rValue));
+          newProperty(nToken, pVal);
+
+          bResult = true;
+        }</xsl:text>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template name="contextattributeimplxnote">
@@ -819,11 +848,14 @@ doctok::Id
     <xsl:variable name="resource" select="key('context-resource', $definename)[generate-id(ancestor::namespace)=$mynsid]"/>
     <xsl:variable name="name" select="@name"/>
     <xsl:call-template name="caselabelattribute"/>
-    <xsl:if test="$resource//attribute[@name=$name]">
+    <xsl:if test="$resource//attribute[@name=$name and @action='checkId']">
+      <xsl:value-of select="@action"/>
       <xsl:text>
         checkId(rValue);</xsl:text>
     </xsl:if>
+    <xsl:call-template name="contextattributeimplpropcaseinner"/>
     <xsl:text>
+        bResult = true;
         break;</xsl:text>
   </xsl:template>
 
@@ -831,6 +863,7 @@ doctok::Id
     <xsl:call-template name="caselabelattribute"/>
     <xsl:text>
         mnValue = rValue.toInt32(16);
+        bResult = true;
         break;</xsl:text>
   </xsl:template>
 
@@ -838,6 +871,7 @@ doctok::Id
     <xsl:call-template name="caselabelattribute"/>
     <xsl:text>
         msValue = OOXMLStringValue(rValue).getString();
+        bResult = true;
         break;</xsl:text>
   </xsl:template>
 
@@ -852,6 +886,7 @@ doctok::Id
           mnValue = </xsl:text>
           <xsl:call-template name="valuenamefordefine"/>
           <xsl:text>(rValue).getInt();
+          bResult = true;
       }</xsl:text>
       </xsl:for-each>
     </xsl:for-each>
@@ -882,29 +917,103 @@ doctok::Id
       <xsl:call-template name="attributeproptype"/>
     </xsl:variable>
     <xsl:call-template name="caselabelattribute"/>
-    <xsl:if test=".//rng:text">
-      <xsl:text>
-        {
-            OOXMLValue::Pointer_t pVal(new OOXMLStringValue(rValue));
-            newProperty(nToken, pVal);
-        }</xsl:text>
-    </xsl:if>
-    <xsl:for-each select=".//rng:ref">
-      <xsl:variable name="refclassname">
-        <xsl:for-each select="key('defines-with-name', @name)[generate-id(ancestor::namespace) = $mynsid]">
-          <xsl:call-template name="valuenamefordefine"/>
-        </xsl:for-each>
-      </xsl:variable>
-      <xsl:text>
-        {
-          OOXMLValue::Pointer_t pVal(new </xsl:text>
-          <xsl:value-of select="$refclassname"/>
-          <xsl:text>(rValue));
-          newProperty(nToken, pVal);
-        }</xsl:text>
-    </xsl:for-each>
+    <xsl:call-template name="contextattributeimplpropcaseinner"/>
     <xsl:text>
       break;</xsl:text>
+  </xsl:template>
+
+  <xsl:template name="contextattributeswitchbody">
+    <xsl:variable name="resource">
+      <xsl:call-template name="contextresource"/>
+    </xsl:variable>
+    <xsl:for-each select=".//rng:attribute[@name]">
+      <xsl:choose>
+        <xsl:when test="$resource = 'BooleanValue'">
+          <xsl:call-template name="contextattributeimplbool"/>
+        </xsl:when>
+        <xsl:when test="$resource = 'IntegerValue'">
+          <xsl:call-template name="contextattributeimplint"/>
+        </xsl:when>
+        <xsl:when test="$resource = 'HexValue'">
+          <xsl:call-template name="contextattributeimplhex"/>
+        </xsl:when>
+        <xsl:when test="$resource = 'StringValue'">
+          <xsl:call-template name="contextattributeimplstring"/>
+        </xsl:when>
+        <xsl:when test="$resource = 'ListValue'">
+          <xsl:call-template name="contextattributeimpllist"/>
+        </xsl:when>
+        <xsl:when test="$resource = 'Properties'">
+          <xsl:call-template name="contextattributeimplprops"/>
+        </xsl:when>
+        <xsl:when test="$resource = 'SingleElement'">
+          <xsl:call-template name="contextattributeimplprops"/>
+        </xsl:when>
+        <xsl:when test="$resource = 'XNote'">
+          <xsl:call-template name="contextattributeimplxnote"/>
+        </xsl:when>
+        <xsl:otherwise/>
+      </xsl:choose>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="contextattributerefs">
+    <xsl:variable name="resource">
+      <xsl:call-template name="contextresource"/>
+    </xsl:variable>
+      <xsl:for-each select="./rng:ref">
+        <xsl:choose>
+          <xsl:when test="ancestor::rng:attribute|ancestor::rng:element"/>
+          <xsl:otherwise>
+            <xsl:variable name="do">
+              <xsl:call-template name="classfordefine"/>
+            </xsl:variable>
+            <xsl:if test="$do = '1'">
+              <xsl:text>
+    if (! bResult)
+    {</xsl:text>
+    <xsl:variable name="refresource">
+      <xsl:call-template name="contextresource"/>
+    </xsl:variable>
+    <xsl:variable name="refclass">
+      <xsl:choose>
+        <xsl:when test="$refresource = 'Properties'">
+          <xsl:text>OOXMLContextProperties</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>OOXMLContext</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+      <xsl:text>
+        </xsl:text>
+        <xsl:value-of select="$refclass"/>
+        <xsl:text>::Pointer_t pRefContext(</xsl:text>
+        <xsl:call-template name="contextnew"/>
+        <xsl:text>);
+        pRefContext->setParentResource(getResource());
+        </xsl:text>
+        <xsl:if test="$refresource='Properties'">
+          <xsl:choose>
+            <xsl:when test="$resource = 'Properties'">
+              <xsl:text>
+        pRefContext->setPropertySet(mpPropertySet);</xsl:text>
+            </xsl:when>
+            <xsl:when test="$resource='Stream' or $resource='XNote'">
+              <xsl:text>
+        pRefContext->setPropertySet(getPropertySetAttrs());</xsl:text>
+            </xsl:when>
+          </xsl:choose>
+        </xsl:if>
+        <xsl:text>
+        bResult = pRefContext->attribute(nToken, rValue);
+        </xsl:text>
+        <xsl:text>
+    }</xsl:text>
+            </xsl:if>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:for-each>
   </xsl:template>
 
   <xsl:template name="contextattributeimpl">
@@ -912,45 +1021,17 @@ doctok::Id
     <xsl:variable name="classname">
       <xsl:call-template name="contextnamefordefine"/>
     </xsl:variable>
-    <xsl:variable name="resource">
-      <xsl:call-template name="contextresource"/>
-    </xsl:variable>
     <xsl:variable name="switchbody">
-      <xsl:for-each select=".//rng:attribute[@name]">
-        <xsl:choose>
-          <xsl:when test="$resource = 'BooleanValue'">
-            <xsl:call-template name="contextattributeimplbool"/>
-          </xsl:when>
-          <xsl:when test="$resource = 'IntegerValue'">
-            <xsl:call-template name="contextattributeimplint"/>
-          </xsl:when>
-          <xsl:when test="$resource = 'HexValue'">
-            <xsl:call-template name="contextattributeimplhex"/>
-          </xsl:when>
-          <xsl:when test="$resource = 'StringValue'">
-            <xsl:call-template name="contextattributeimplstring"/>
-          </xsl:when>
-          <xsl:when test="$resource = 'ListValue'">
-            <xsl:call-template name="contextattributeimpllist"/>
-          </xsl:when>
-          <xsl:when test="$resource = 'Properties'">
-            <xsl:call-template name="contextattributeimplprops"/>
-          </xsl:when>
-          <xsl:when test="$resource = 'SingleElement'">
-            <xsl:call-template name="contextattributeimplprops"/>
-          </xsl:when>
-          <xsl:when test="$resource = 'XNote'">
-            <xsl:call-template name="contextattributeimplxnote"/>
-          </xsl:when>
-          <xsl:otherwise/>
-        </xsl:choose>
-      </xsl:for-each>
+      <xsl:call-template name="contextattributeswitchbody"/>
+    </xsl:variable>
+    <xsl:variable name="refshandling">
+      <xsl:call-template name="contextattributerefs"/>
     </xsl:variable>
     <xsl:text>
 bool </xsl:text>
     <xsl:value-of select="$classname"/>
     <xsl:choose>
-      <xsl:when test="string-length($switchbody) > 0">
+      <xsl:when test="string-length($switchbody) > 0 or string-length($refshandling) > 0">
     <xsl:text>::lcl_attribute(TokenEnum_t nToken, const rtl::OUString &amp; rValue)</xsl:text>
     </xsl:when>
     <xsl:otherwise>
@@ -970,6 +1051,7 @@ bool </xsl:text>
       ;
     }</xsl:text>
     </xsl:if>
+    <xsl:value-of select="$refshandling"/>
     <xsl:text>
     
     return bResult;
@@ -1173,6 +1255,12 @@ void </xsl:text>
     default:
         break;
     }</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='handleComment'">
+    {
+        OOXMLCommentHandler aCommentHandler(this);
+        mpPropertySet->resolve(aCommentHandler);
+    }
         </xsl:when>
       </xsl:choose>
     </xsl:for-each>

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocumentImpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-22 19:40:47 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-04 08:45:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,7 @@ public:
                                const sal_Int32 type,
                                const rtl::OUString & rId);
 
+    virtual void resolveComment(Stream & rStream, const rtl::OUString & rId);
 };
 }
 #endif // OOXML_DOCUMENT_IMPL_HXX

@@ -7518,6 +7518,10 @@
         </attribute>
       </define>
       <define name="CT_Comment">
+        <attribute name="id">
+          <text/>
+          <xs:documentation>Annotation Identifier</xs:documentation>
+        </attribute>
         <ref name="CT_TrackChange"/>
         <zeroOrMore>
           <ref name="EG_BlockLevelElts"/>
@@ -9356,7 +9360,7 @@
             <ref name="CT_FtnEdnRef"/>
           </element>
           <element name="commentReference">
-            <ref name="CT_Markup"/>
+            <ref name="CT_CommentRef"/>
           </element>
           <element name="drawing">
             <ref name="CT_Drawing"/>
@@ -11214,6 +11218,9 @@
           <text/>
           <xs:documentation>Footnote/Endnote ID</xs:documentation>
         </attribute>
+      </define>
+      <define name="CT_CommentRef">
+        <ref name="CT_Markup"/>
       </define>
       <define name="EG_FtnEdnNumProps">
         <optional>
@@ -14576,6 +14583,17 @@
     </resource>
     <resource name="CT_TextDirection" resource="ListValue"/>
     <resource name="CT_TextAlignment" resource="StringValue" generated="yes"/>
+    <resource name="CT_Markup" resource="Properties">
+      <attribute name="id" tokenid="ooxml:CT_Markup_id"/>
+    </resource>
+    <resource name="CT_TrackChange" resource="Properties">
+      <attribute name="author" tokenid="ooxml:CT_TrackChange_author"/>
+      <attribute name="date" tokenid="ooxml:CT_TrackChange_date"/>
+    </resource>
+    <resource name="CT_Comment" resource="XNote">
+      <attribute name="id" action="checkId"/>
+      <attribute name="initials" tokenid="ooxml:CT_Comment_initials"/>
+    </resource>
     <resource name="CT_SectPrChange" resource="Properties">
       <attribute name="sectPr" tokenid="ooxml:CT_SectPrChange_sectPr"/>
     </resource>
@@ -14639,6 +14657,9 @@
       <attribute name="rPr" tokenid="ooxml:CT_PPr_rPr"/>
       <attribute name="sectPr" tokenid="ooxml:CT_PPr_sectPr"/>
       <attribute name="pPrChange" tokenid="ooxml:CT_PPr_pPrChange"/>
+    </resource>
+    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_Rel" resource="Properties">
+      <attribute name="r:id" tokenid="ooxml:CT_Rel_id"/>
     </resource>
     <resource name="CT_FFTextType" resource="StringValue" generated="yes"/>
     <resource name="CT_FFName" resource="StringValue" generated="yes"/>
@@ -15021,6 +15042,7 @@
       <sprm name="hideMark" tokenid="ooxml:CT_TcPrBase_hideMark"/>
     </resource>
     <resource name="CT_TcPr" resource="Properties"/>
+    <resource name="CT_TcPrInner" resource="Properties"/>
     <resource name="CT_Tc" resource="TextTableCell">
       <action name="start" action="startCell"/>
       <action name="end" action="endCell"/>
@@ -15115,7 +15137,10 @@
       <action name="end" action="handleXNotes"/>
     </resource>
     <resource name="CT_FtnEdn" resource="XNote">
-      <attribute name="id"/>
+      <attribute name="id" action="checkId"/>
+    </resource>
+    <resource name="CT_CommentRef" resource="Properties">
+      <action name="end" action="handleComment"/>
     </resource>
     <resource name="EG_FtnEdnNumProps" resource="Properties">
       <attribute name="numStart" tokenid="ooxml:EG_FtnEdnNumProps_numStart"/>

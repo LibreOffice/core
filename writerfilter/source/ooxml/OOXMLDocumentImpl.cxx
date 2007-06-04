@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocumentImpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-05-23 15:32:05 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-04 08:45:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,6 +142,14 @@ void OOXMLDocumentImpl::resolveEndnote(Stream & rStream,
         getXNoteStream(OOXMLStream::ENDNOTES, rNoteId);
 
     rStream.substream(NS_rtf::LN_endnote, pStream);
+}
+
+void OOXMLDocumentImpl::resolveComment(Stream & rStream, const rtl::OUString & rId)
+{
+    doctok::Reference<Stream>::Pointer_t pStream =
+        getXNoteStream(OOXMLStream::COMMENTS, rId);
+
+    rStream.substream(NS_rtf::LN_annotation, pStream);
 }
 
 void OOXMLDocumentImpl::resolveHeader(Stream & rStream,

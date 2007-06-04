@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLStreamImpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-05-21 14:42:15 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-04 08:46:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,7 @@ void OOXMLStreamImpl::init()
     static rtl::OUString sFonttableType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable"));
     static rtl::OUString sFootnotesType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes"));
     static rtl::OUString sEndnotesType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes"));
+    static rtl::OUString sCommentsType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments"));
     static rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("Target"));
 
     rtl::OUString sStreamType(sDocumentType);
@@ -131,6 +132,9 @@ void OOXMLStreamImpl::init()
         break;
     case ENDNOTES:
         sStreamType = sEndnotesType;
+        break;
+    case COMMENTS:
+        sStreamType = sCommentsType;
         break;
     default:
         break;
