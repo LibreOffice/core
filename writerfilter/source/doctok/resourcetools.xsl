@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcetools.xsl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-05-29 15:33:16 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-04 08:41:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,19 +150,37 @@
 </xsl:template>
 
 <xsl:template match='UML:Model' mode='sprmcodetostr'>
+<xsl:text>
 SprmIdToString::SprmIdToString()
-{
+{</xsl:text>
 <xsl:variable name='tmp'>map &lt; sal_uInt32, string &gt; </xsl:variable>
 <xsl:for-each select='.//UML:Class[.//UML:Stereotype/@xmi.idref="ww8sprm"]'>
-    mMap[<xsl:value-of select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="sprmcode"]//UML:TaggedValue.dataValue'/>] = "<xsl:value-of select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="sprmid"]//UML:TaggedValue.dataValue'/>";</xsl:for-each>
+  <xsl:variable name="sprmconst">
+    <xsl:call-template name="sprmCodeOfClass"/>
+  </xsl:variable>
+  <xsl:text>
+    mMap[</xsl:text>    
+  <xsl:value-of select="$sprmconst"/>
+  <xsl:text>] = "</xsl:text>
+  <xsl:value-of select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="sprmid"]//UML:TaggedValue.dataValue'/>
+  <xsl:text>";</xsl:text>
+</xsl:for-each>
+<xsl:text>
 }
+</xsl:text>
 </xsl:template>
 
 <xsl:key name="classes-with-kind" match="UML:TagDefinition[@xmi.idref='kind']"
          use="ancestor::UML:TaggedValue/UML:TaggedValue.dataValue"/>
 
 <xsl:template name="sprmCodeOfClass">
-  <xsl:value-of select=".//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref='sprmcode']/UML:TaggedValue.dataValue"/>
+  <xsl:variable name="tmp">
+    <xsl:text>sprm:</xsl:text>
+    <xsl:value-of select="substring-after(@name, 'sprm')"/>
+  </xsl:variable>
+  <xsl:call-template name="idtoqname">
+    <xsl:with-param name="id" select="$tmp"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="sprmkindcase">
@@ -171,8 +189,7 @@ SprmIdToString::SprmIdToString()
     <xsl:text>
     case </xsl:text>
     <xsl:call-template name="sprmCodeOfClass"/>
-    <xsl:text>: //</xsl:text>
-    <xsl:value-of select="@xmi.id"/>
+    <xsl:text>:</xsl:text>
   </xsl:for-each>
 </xsl:template>
 
@@ -249,9 +266,14 @@ namespace NS_sprm { </xsl:text>
     <xsl:variable name="upperpattern">
       <xsl:value-of select="translate($pattern, 'abcdef', 'ABCDEF')"/>
     </xsl:variable>
-    <xsl:variable name="constname">
+    <xsl:variable name="tmp">
       <xsl:text>sprm:</xsl:text>
       <xsl:value-of select="substring-after(@name, 'sprm')"/>
+    </xsl:variable>
+    <xsl:variable name="constname">
+      <xsl:call-template name="idtoqname">
+        <xsl:with-param name="id" select="$tmp"/>
+      </xsl:call-template>
     </xsl:variable>
     <xsl:text>
 sed "s/</xsl:text>
@@ -266,9 +288,7 @@ sed "s/</xsl:text>
     <xsl:value-of select="$constname"/>
     <xsl:text>/g" &lt; $1 > $1.out &amp;&amp; mv $1.out $1 </xsl:text>
   </xsl:for-each>
-  <xsl:text>
-}
-  </xsl:text>
+  <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>

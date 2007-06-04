@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcesimpl.xsl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-24 12:44:42 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-04 08:41:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,9 +49,9 @@
  *
  *  $RCSfile: resourcesimpl.xsl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-24 12:44:42 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-04 08:41:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,10 @@
 
 #ifndef WW8_OUTPUT_WITH_DEPTH
 #include &lt;WW8OutputWithDepth.hxx&gt;
+#endif
+
+#ifndef INCLUDED_SPRMIDS_HXX
+#include &lt;resourcemodel/sprmids.hxx&gt;
 #endif
 
 namespace doctok {
@@ -178,10 +182,10 @@ using namespace ::std;
     </xsl:text>
     <xsl:if test="$needsinit='true'">
       <xsl:text>
-      void </xsl:text>
+    void </xsl:text>
       <xsl:value-of select="$classname"/>
       <xsl:text>::init()
-      {
+    {
       </xsl:text>    
       <xsl:if test='.//UML:Stereotype[@xmi.idref ="withmembers"]'>
         <xsl:for-each select='.//UML:Attribute[@name!="reserved"]'>
@@ -192,7 +196,7 @@ using namespace ::std;
         <xsl:text>    initImpl();&#xa;</xsl:text>
       </xsl:if>
       <xsl:text>
-      }&#xa;</xsl:text>
+    }&#xa;</xsl:text>
     </xsl:if>
 
     <xsl:choose>
@@ -225,27 +229,30 @@ using namespace ::std;
         </xsl:when>
       </xsl:choose>
     </xsl:variable>
-    <xsl:text>void </xsl:text>
+    <xsl:text>
+    void </xsl:text>
     <xsl:value-of select="$classname"/>
     <xsl:choose>
       <xsl:when test=".//UML:Stereotype[@xmi.idref='ww8resource']">
         <xsl:text>::resolve(Properties &amp; </xsl:text>
         <xsl:value-of select="$rHandler"/>
-        <xsl:text>)&#xa;</xsl:text>
+        <xsl:text>)</xsl:text>
       </xsl:when>
       <xsl:when test=".//UML:Stereotype[@xmi.idref='dffrecord']">
         <xsl:text>::resolveLocal(Properties &amp; </xsl:text>
         <xsl:value-of select="$rHandler"/>
-        <xsl:text>)&#xa;</xsl:text>
+        <xsl:text>)</xsl:text>
       </xsl:when>
     </xsl:choose>
     <xsl:text>
-    {
-    </xsl:text>
+    {</xsl:text>
     <xsl:if test='.//UML:Stereotype[@xmi.idref="debug"]'>
-        dump(output);
+      <xsl:text>
+        dump(output);</xsl:text>
     </xsl:if>
-    <xsl:text>try {&#xa;</xsl:text>
+    <xsl:text>
+        try 
+        {</xsl:text>
     <xsl:for-each select='.//UML:Attribute[@name!="reserved"]'>
       <xsl:choose>
         <xsl:when test='.//UML:Stereotype[@xmi.idref="noresolve"]'>
@@ -283,7 +290,7 @@ using namespace ::std;
         <xsl:value-of select='@name'/>
         <xsl:text>'&gt;");
         
-        WW8StructBase::dump(o);&#xa;</xsl:text>
+        WW8StructBase::dump(o);</xsl:text>
         <xsl:for-each select='.//UML:Attribute[@name!="reserved"]'>
           <xsl:apply-templates select='.' mode='dumpAttribute'/>
         </xsl:for-each>
@@ -298,17 +305,16 @@ using namespace ::std;
     <xsl:choose>
       <xsl:when test='.//UML:Stereotype/@xmi.idref = "attribute"'>
         <xsl:text>
-          {
-              WW8Value::Pointer_t pVal = createValue(get_</xsl:text>
+            {
+                WW8Value::Pointer_t pVal = createValue(get_</xsl:text>
               <xsl:value-of select="@name"/>
               <xsl:text>());
-              rHandler.attribute(</xsl:text>
+                rHandler.attribute(</xsl:text>
               <xsl:call-template name='idtoqname'>
                 <xsl:with-param name='id'><xsl:value-of select='$attrid'/></xsl:with-param>
               </xsl:call-template>
               <xsl:text>, *pVal);
-          }
-         </xsl:text>
+            }</xsl:text>
       </xsl:when>
       <xsl:when test='.//UML:Stereotype/@xmi.idref = "array"'>
         <xsl:variable name="elementtype">
@@ -322,37 +328,36 @@ using namespace ::std;
           </xsl:call-template>
         </xsl:variable>
         <xsl:text>
-          {
-              sal_uInt32 nCount = get_</xsl:text>
+            {
+                sal_uInt32 nCount = get_</xsl:text>
               <xsl:value-of select="@name"/>
-              <xsl:text>_count();
-              
-              for (sal_uInt32 n = 0; n &lt; nCount; ++n)
-              {
-                  WW8Value::Pointer_t pVal = createValue(get_</xsl:text>
-                  <xsl:value-of select="@name"/>
-                  <xsl:text>(n));
-                  rHandler.attribute(</xsl:text>
-                  <xsl:call-template name='idtoqname'>
-                    <xsl:with-param name='id'><xsl:value-of select='$attrid'/></xsl:with-param>
-                  </xsl:call-template>
-                  <xsl:text>, *pVal);
-              }
-          }&#xa;</xsl:text>
+              <xsl:text>_count();              
+                for (sal_uInt32 n = 0; n &lt; nCount; ++n)
+                {
+                    WW8Value::Pointer_t pVal = createValue(get_</xsl:text>
+                    <xsl:value-of select="@name"/>
+                    <xsl:text>(n));
+                    rHandler.attribute(</xsl:text>
+                    <xsl:call-template name='idtoqname'>
+                      <xsl:with-param name='id'><xsl:value-of select='$attrid'/></xsl:with-param>
+                    </xsl:call-template>
+                    <xsl:text>, *pVal);
+                }
+            }</xsl:text>
       </xsl:when>
       <xsl:when test='.//UML:Stereotype/@xmi.idref = "string"'>
         <xsl:text>
-          {
-            WW8StringValue aVal(get_</xsl:text>
-            <xsl:value-of select='@name'/>
-            <xsl:text>());
-            rHandler.attribute(</xsl:text>
-            <xsl:call-template name='idtoqname'>
-              <xsl:with-param name='id'><xsl:value-of select='$attrid'/></xsl:with-param>
-            </xsl:call-template>
-            <xsl:text>, aVal);
-            }&#xa;
-            </xsl:text>
+            {
+                WW8StringValue aVal(get_</xsl:text>
+                <xsl:value-of select='@name'/>
+                <xsl:text>());
+                rHandler.attribute(</xsl:text>
+                <xsl:call-template name='idtoqname'>
+                  <xsl:with-param name='id'>
+                  <xsl:value-of select='$attrid'/></xsl:with-param>
+                </xsl:call-template>
+                <xsl:text>, aVal);
+            }</xsl:text>
       </xsl:when>
     </xsl:choose>
   </xsl:template>
@@ -385,7 +390,7 @@ using namespace ::std;
                 <xsl:value-of select="@name"/>
                 <xsl:text>(n));
             }
-        }&#xa;</xsl:text>
+        }</xsl:text>
     </xsl:when>
     <xsl:when test='.//UML:Stereotype/@xmi.idref = "string"'>
       <xsl:text>
@@ -397,10 +402,15 @@ using namespace ::std;
             o.addItem("</xsl:text>
             <xsl:value-of select='@name'/>
             <xsl:text>" &lt;&lt; "=\"" + aVal.toString() + "\"");
-        }&#xa;</xsl:text>
+        }</xsl:text>
     </xsl:when>
     <xsl:otherwise>
-      doctok::dump(o, "<xsl:value-of select='@name'/>", get_<xsl:value-of select="@name"/>());
+      <xsl:text>
+        doctok::dump(o, "</xsl:text>
+      <xsl:value-of select='@name'/>
+      <xsl:text>", get_</xsl:text>
+      <xsl:value-of select="@name"/>
+      <xsl:text>());</xsl:text>
     </xsl:otherwise>
   </xsl:choose>
   </xsl:template>
