@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servprov.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:08:13 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:54:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,7 @@ class OneInstanceOleWrapper_Impl : public IClassFactoryWrapper
 {
 public:
 
-    OneInstanceOleWrapper_Impl( const Reference<XMultiServiceFactory>& smgr, const Reference<XInterface>& xInst, GUID* pGuid);
+    OneInstanceOleWrapper_Impl( const Reference<XMultiServiceFactory>& smgr, const Reference<XInterface>& xInst, GUID* pGuid, sal_Bool bAsApplication );
     ~OneInstanceOleWrapper_Impl();
 
     sal_Bool registerClass();
@@ -166,6 +166,8 @@ protected:
     DWORD               m_factoryHandle;
     Reference<XBridgeSupplier2> m_bridgeSupplier;
     Reference<XMultiServiceFactory> m_smgr;
+    unsigned long       m_nApplRegHandle;
+    sal_Bool            m_bAsApplication;
 };
 
 /*****************************************************************************
@@ -273,7 +275,7 @@ public:
 protected:
 
     sal_Bool provideService(const Reference<XSingleServiceFactory>& xMulFact, GUID* guid);
-    sal_Bool provideInstance(const Reference<XInterface>& xInst, GUID* guid);
+    sal_Bool provideInstance(const Reference<XInterface>& xInst, GUID* guid, sal_Bool bAsApplication );
 
     list< IClassFactoryWrapper* > m_wrapperList;
     Reference< XBridgeSupplier2 >   m_bridgeSupplier;
