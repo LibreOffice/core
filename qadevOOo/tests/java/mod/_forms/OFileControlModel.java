@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OFileControlModel.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:10:10 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:34:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@ import util.SOfficeFactory;
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Size;
 import com.sun.star.awt.XControlModel;
+import com.sun.star.beans.PropertyValue;
 import com.sun.star.drawing.XControlShape;
 import com.sun.star.drawing.XShape;
 import com.sun.star.lang.XComponent;
@@ -57,56 +58,60 @@ import com.sun.star.util.XCloseable;
 
 
 /**
-* Test for object which is represented by service
-* <code>com.sun.star.form.component.FileControl</code>. <p>
-* Object implements the following interfaces :
-* <ul>
-*  <li> <code>com::sun::star::io::XPersistObject</code></li>
-*  <li> <code>com::sun::star::container::XChild</code></li>
-*  <li> <code>com::sun::star::form::FormControlModel</code></li>
-*  <li> <code>com::sun::star::awt::UnoControlFileControlModel</code></li>
-*  <li> <code>com::sun::star::form::FormComponent</code></li>
+ * Test for object which is represented by service
+ * <code>com.sun.star.form.component.FileControl</code>. <p>
+ * Object implements the following interfaces :
+ * <ul>
+ *  <li> <code>com::sun::star::io::XPersistObject</code></li>
+ *  <li> <code>com::sun::star::container::XChild</code></li>
+ *  <li> <code>com::sun::star::form::FormControlModel</code></li>
+ *  <li> <code>com::sun::star::awt::UnoControlFileControlModel</code></li>
+ *  <li> <code>com::sun::star::form::FormComponent</code></li>
+ *  <li> <code>com::sun::star::beans::XPropertyAccess</code></li>
+*  <li> <code>com::sun::star::beans::XPropertyContainer</code></li>
 *  <li> <code>com::sun::star::beans::XPropertySet</code></li>
-*  <li> <code>com::sun::star::beans::XFastPropertySet</code></li>
-*  <li> <code>com::sun::star::beans::XPropertyState</code></li>
-*  <li> <code>com::sun::star::container::XNamed</code></li>
-*  <li> <code>com::sun::star::beans::XMultiPropertySet</code></li>
-*  <li> <code>com::sun::star::lang::XComponent</code></li>
-*  <li> <code>com::sun::star::form::component::FileControl</code></li>
-* </ul>
-* This object test <b> is NOT </b> designed to be run in several
-* threads concurently.
-* @see com.sun.star.io.XPersistObject
-* @see com.sun.star.container.XChild
-* @see com.sun.star.form.FormControlModel
-* @see com.sun.star.awt.UnoControlFileControlModel
-* @see com.sun.star.form.FormComponent
+ *  <li> <code>com::sun::star::beans::XFastPropertySet</code></li>
+ *  <li> <code>com::sun::star::beans::XPropertyState</code></li>
+ *  <li> <code>com::sun::star::container::XNamed</code></li>
+ *  <li> <code>com::sun::star::beans::XMultiPropertySet</code></li>
+ *  <li> <code>com::sun::star::lang::XComponent</code></li>
+ *  <li> <code>com::sun::star::form::component::FileControl</code></li>
+ * </ul>
+ * This object test <b> is NOT </b> designed to be run in several
+ * threads concurently.
+ * @see com.sun.star.io.XPersistObject
+ * @see com.sun.star.container.XChild
+ * @see com.sun.star.form.FormControlModel
+ * @see com.sun.star.awt.UnoControlFileControlModel
+ * @see com.sun.star.form.FormComponent
+ * @see com.sun.star.beans.XPropertyAccess
+* @see com.sun.star.beans.XPropertyContainer
 * @see com.sun.star.beans.XPropertySet
-* @see com.sun.star.beans.XFastPropertySet
-* @see com.sun.star.beans.XPropertyState
-* @see com.sun.star.container.XNamed
-* @see com.sun.star.beans.XMultiPropertySet
-* @see com.sun.star.lang.XComponent
-* @see com.sun.star.form.component.FileControl
-* @see ifc.io._XPersistObject
-* @see ifc.container._XChild
-* @see ifc.form._FormControlModel
-* @see ifc.awt._UnoControlFileControlModel
-* @see ifc.form._FormComponent
-* @see ifc.beans._XPropertySet
-* @see ifc.beans._XFastPropertySet
-* @see ifc.beans._XPropertyState
-* @see ifc.container._XNamed
-* @see ifc.beans._XMultiPropertySet
-* @see ifc.lang._XComponent
-* @see ifc.form.component._FileControl
-*/
+ * @see com.sun.star.beans.XFastPropertySet
+ * @see com.sun.star.beans.XPropertyState
+ * @see com.sun.star.container.XNamed
+ * @see com.sun.star.beans.XMultiPropertySet
+ * @see com.sun.star.lang.XComponent
+ * @see com.sun.star.form.component.FileControl
+ * @see ifc.io._XPersistObject
+ * @see ifc.container._XChild
+ * @see ifc.form._FormControlModel
+ * @see ifc.awt._UnoControlFileControlModel
+ * @see ifc.form._FormComponent
+ * @see ifc.beans._XPropertySet
+ * @see ifc.beans._XFastPropertySet
+ * @see ifc.beans._XPropertyState
+ * @see ifc.container._XNamed
+ * @see ifc.beans._XMultiPropertySet
+ * @see ifc.lang._XComponent
+ * @see ifc.form.component._FileControl
+ */
 public class OFileControlModel extends TestCase {
     XComponent xDrawDoc;
 
     /**
-    * Creates Draw document where controls are placed.
-    */
+     * Creates Draw document where controls are placed.
+     */
     protected void initialize(TestParameters tParam, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(((XMultiServiceFactory) tParam.getMSF()));
 
@@ -121,14 +126,14 @@ public class OFileControlModel extends TestCase {
     }
 
     /**
-    * Disposes Draw document.
-    */
+     * Disposes Draw document.
+     */
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xDrawDoc ");
 
         try {
             XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                        XCloseable.class, xDrawDoc);
+                XCloseable.class, xDrawDoc);
             closer.close(true);
         } catch (com.sun.star.util.CloseVetoException e) {
             log.println("couldn't close document");
@@ -138,17 +143,17 @@ public class OFileControlModel extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
-    * Creates FileControl in the Form. <p>
-    *     Object relations created :
-    * <ul>
-    *  <li> <code>'OBJNAME'</code> for
-    *      {@link ifc.io._XPersistObject} : name of service which is
-    *    represented by this object. </li>
-    * </ul>
-    */
+     * Creating a Testenvironment for the interfaces to be tested.
+     * Creates FileControl in the Form. <p>
+     *     Object relations created :
+     * <ul>
+     *  <li> <code>'OBJNAME'</code> for
+     *      {@link ifc.io._XPersistObject} : name of service which is
+     *    represented by this object. </li>
+     * </ul>
+     */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-                                                                 PrintWriter log) {
+        PrintWriter log) {
         XInterface oObj = null;
 
 
@@ -167,18 +172,18 @@ public class OFileControlModel extends TestCase {
 
         //get MSF
         XMultiServiceFactory oDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(
-                                               XMultiServiceFactory.class,
-                                               xDrawDoc);
+            XMultiServiceFactory.class,
+            xDrawDoc);
 
         try {
             Object oInt = oDocMSF.createInstance(
-                                  "com.sun.star.drawing.ControlShape");
+                "com.sun.star.drawing.ControlShape");
             Object aCon = oDocMSF.createInstance(
-                                  "com.sun.star.form.component." + objName);
+                "com.sun.star.form.component." + objName);
             aControl = (XControlModel) UnoRuntime.queryInterface(
-                               XControlModel.class, aCon);
+                XControlModel.class, aCon);
             aShape = (XControlShape) UnoRuntime.queryInterface(
-                             XControlShape.class, oInt);
+                XControlShape.class, oInt);
             size.Height = 1500;
             size.Width = 3000;
             position.X = 1000;
@@ -201,7 +206,12 @@ public class OFileControlModel extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component." +
-                            objName);
+            objName);
+        PropertyValue prop = new PropertyValue();
+        prop.Name = "HelpText";
+        prop.Value = "new Help Text since XPropertyAccess";
+        tEnv.addObjRelation("XPropertyAccess.propertyToChange", prop);
+        tEnv.addObjRelation("XPropertyContainer.propertyNotRemovable", "HelpText");
 
         return tEnv;
     } // finish method getTestEnvironment
