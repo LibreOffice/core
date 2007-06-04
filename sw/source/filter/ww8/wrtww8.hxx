@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:15:30 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 14:03:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -630,6 +630,16 @@ public:
         USHORT nScript);
     void Out_SfxBreakItems(const SfxItemSet *pSet, const SwNode& rNd);
     bool SetAktPageDescFromNode(const SwNode &rNd);
+    // --> OD 2007-05-29 #i76300#
+    // return value indicates, if a follow page desc is written.
+    bool Out_FollowPageDesc( const SfxItemSet* pSet,
+                             const SwTxtNode* pNd );
+    // helper method for <Out_SfxBreakItems(..)> and <Out_FollowPageDesc(..)>
+    void PrepareNewPageDesc( const SfxItemSet* pSet,
+                             const SwNode& rNd,
+                             const SwFmtPageDesc* pNewPgDescFmt = 0,
+                             const SwPageDesc* pNewPgDesc = 0 );
+    // <--
 
     void Out_SwFmtBox(const SvxBoxItem& rBox, bool bShadow);
     void Out_SwFmtTableBox( WW8Bytes& rO, const SvxBoxItem& rBox );
