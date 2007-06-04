@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentSerializer.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 13:19:55 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 11:52:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ public interface DocumentSerializer {
      *  that the user code does not call this method in more than one
      *  thread.  And for most cases, this method is only done once.</p>
      *
-     *  @return  <code>ConvertData</code> object to pass back the
+     *  @return <code>ConvertData</code> object to pass back the
      *           converted data.
      *
      *  @throws  ConvertException  If any conversion error occurs.
