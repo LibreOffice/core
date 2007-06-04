@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OGridControlModel.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:11:26 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:35:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
  ************************************************************************/
 package mod._forms;
 
+import com.sun.star.beans.PropertyValue;
 import java.io.PrintWriter;
 import java.util.Comparator;
 
@@ -81,6 +82,8 @@ import com.sun.star.util.XCloseable;
 *  <li> <code>com::sun::star::form::XGridColumnFactory</code></li>
 *  <li> <code>com::sun::star::lang::XComponent</code></li>
 *  <li> <code>com::sun::star::container::XNameAccess</code></li>
+*  <li> <code>com::sun::star::beans::XPropertyAccess</code></li>
+*  <li> <code>com::sun::star::beans::XPropertyContainer</code></li>
 *  <li> <code>com::sun::star::beans::XPropertySet</code></li>
 *  <li> <code>com::sun::star::container::XIndexContainer</code></li>
 *  <li> <code>com::sun::star::container::XChild</code></li>
@@ -109,6 +112,8 @@ import com.sun.star.util.XCloseable;
 * @see com.sun.star.form.XGridColumnFactory
 * @see com.sun.star.lang.XComponent
 * @see com.sun.star.container.XNameAccess
+* @see com.sun.star.beans.XPropertyAccess
+* @see com.sun.star.beans.XPropertyContainer
 * @see com.sun.star.beans.XPropertySet
 * @see com.sun.star.container.XIndexContainer
 * @see com.sun.star.container.XChild
@@ -138,7 +143,141 @@ import com.sun.star.util.XCloseable;
 * @see ifc.container._XChild
 * @see ifc.container._XContainer
 */
-public class OGridControlModel extends TestCase {
+
+public class OGridControlModel extends GenericModelTest {
+
+    /**
+     * Set some member variable of the super class <CODE>GenericModelTest</CODE>:
+     * <pre>
+     *    super.m_kindOfControl="CommandButton";
+     *    super.m_ObjectName = "com.sun.star.form.component.CommandButton";
+     *    super.m_LCShape_Type = "CommandButton";
+     * </pre>
+     * Then <CODE>super.initialize()</CODE> was called.
+     * @param tParam the test parameter
+     * @param log the log writer
+     */
+
+    protected void initialize(TestParameters tParam, PrintWriter log) {
+
+        super.initialize(tParam, log);
+
+        super.m_kindOfControl="GridControl";
+
+        super.m_ObjectName = "stardiv.one.form.component.Grid";
+
+        super.m_LCShape_Type = "GridControl";
+
+    }
+    /**
+     * calls <CODE>cleanup()</CODE> from it's super class
+     * @param tParam the test parameter
+     * @param log the log writer
+     */
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        super.cleanup(tParam, log);
+    }
+
+
+    /**
+     * calls <CODE>createTestEnvironment()</CODE> from it's super class
+     * @param Param the test parameter
+     * @param log the log writer
+     * @return lib.TestEnvironment
+     */
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+            PrintWriter log) {
+        TestEnvironment tEnv = super.createTestEnvironment(Param, log);
+
+        XInterface oObj = tEnv.getTestObject();
+
+        XPropertySet aControl = null;
+        XPropertySet aControl2 = null;
+        XPropertySet aControl3 = null;
+        XPropertySet aControl4 = null;
+        XPropertySet aControl5 = null;
+
+        try {
+            XGridColumnFactory columns = (XGridColumnFactory) UnoRuntime.queryInterface(
+                              XGridColumnFactory.class, oObj);
+            aControl = columns.createColumn("TextField");
+            aControl2 = columns.createColumn("DateField");
+            aControl3 = columns.createColumn("TextField");
+            aControl4 = columns.createColumn("TextField");
+            aControl5 = columns.createColumn("TextField");
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
+            // Some exception occures.FAILED
+            log.println("!!! Couldn't create instance : " + e);
+            throw new StatusException("Can't create column instances.", e);
+        }
+
+        XNameContainer aContainer = (XNameContainer) UnoRuntime.queryInterface(
+                                            XNameContainer.class, oObj);
+
+        try {
+            aContainer.insertByName("First", aControl);
+            aContainer.insertByName("Second", aControl2);
+        } catch (com.sun.star.lang.WrappedTargetException e) {
+            log.println("!!! Could't insert column Instance");
+            e.printStackTrace(log);
+            throw new StatusException("Can't insert columns", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
+            log.println("!!! Could't insert column Instance");
+            e.printStackTrace(log);
+            throw new StatusException("Can't insert columns", e);
+        } catch (com.sun.star.container.ElementExistException e) {
+            log.println("!!! Could't insert column Instance");
+            e.printStackTrace(log);
+            throw new StatusException("Can't insert columns", e);
+        }
+
+        //Relations for XSelectionSupplier
+        tEnv.addObjRelation("Selections", new Object[] { aControl, aControl2 });
+
+        // adding relation for XNameContainer
+        tEnv.addObjRelation("XNameContainer.AllowDuplicateNames", new Object());
+
+
+        // adding relation for XContainer
+        tEnv.addObjRelation("INSTANCE", aControl3);
+        tEnv.addObjRelation("INSTANCE1", aControl4);
+        tEnv.addObjRelation("INSTANCE2", aControl5);
+
+
+        tEnv.addObjRelation("Comparer",
+                            new Comparator() {
+            public int compare(Object o1, Object o2) {
+                XNamed named1 = (XNamed) UnoRuntime.queryInterface(
+                                        XNamed.class, o1);
+                XNamed named2 = (XNamed) UnoRuntime.queryInterface(
+                                        XNamed.class, o2);
+
+                if (named1.getName().equals(named2.getName())) {
+                    return 0;
+                }
+
+                return -1;
+            }
+
+            public boolean equals(Object obj) {
+                return compare(this, obj) == 0;
+            }
+        });
+
+
+//        HashSet exclude = new HashSet();
+//
+//        exclude.add("FormatKey");
+//
+//        tEnv.addObjRelation("XUpdateBroadcaster.Checker",
+//                            new Checker(m_XFormLoader, m_XPS, m_XCtrl, m_ChangePropertyName, m_ChangePropertyValue));
+        return tEnv;
+    }
+
+}    // finish class OButtonModelold
+
+
+class OGridControlModelold extends TestCase {
     XComponent xDrawDoc = null;
 
     /**
@@ -202,6 +341,7 @@ public class OGridControlModel extends TestCase {
         XPropertySet aControl2 = null;
         XPropertySet aControl3 = null;
         XPropertySet aControl4 = null;
+        XPropertySet aControl5 = null;
         XGridColumnFactory columns = null;
 
 
@@ -227,6 +367,7 @@ public class OGridControlModel extends TestCase {
             aControl2 = columns.createColumn("DateField");
             aControl3 = columns.createColumn("TextField");
             aControl4 = columns.createColumn("TextField");
+            aControl5 = columns.createColumn("TextField");
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             // Some exception occures.FAILED
             log.println("!!! Couldn't create instance : " + e);
@@ -253,28 +394,10 @@ public class OGridControlModel extends TestCase {
             throw new StatusException("Can't insert columns", e);
         }
 
-
         //Relations for XSelectionSupplier
         tEnv.addObjRelation("Selections", new Object[] { aControl, aControl2 });
-        tEnv.addObjRelation("Comparer",
-                            new Comparator() {
-            public int compare(Object o1, Object o2) {
-                XNamed named1 = (XNamed) UnoRuntime.queryInterface(
-                                        XNamed.class, o1);
-                XNamed named2 = (XNamed) UnoRuntime.queryInterface(
-                                        XNamed.class, o2);
 
-                if (named1.getName().equals(named2.getName())) {
-                    return 0;
-                }
-
-                return -1;
-            }
-
-            public boolean equals(Object obj) {
-                return compare(this, obj) == 0;
-            }
-        });
+        // COMPARER
 
         int THRCNT = 1;
         String count = (String)Param.get("THRCNT");
@@ -301,8 +424,7 @@ public class OGridControlModel extends TestCase {
         // adding relation for XNameContainer
         tEnv.addObjRelation("XNameContainer.AllowDuplicateNames", new Object());
 
-        tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component." +
-                            objName);
+       // OK tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component." + objName);
 
 
         // adding relation for XContainer
@@ -311,7 +433,7 @@ public class OGridControlModel extends TestCase {
 
 
         //adding ObjRelation for XPersistObject
-        tEnv.addObjRelation("PSEUDOPERSISTENT", new Boolean(true));
+        // OK tEnv.addObjRelation("PSEUDOPERSISTENT", new Boolean(true)); // OK
 
         return tEnv;
     } // finish method getTestEnvironment
