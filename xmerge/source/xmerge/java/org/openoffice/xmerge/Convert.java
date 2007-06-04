@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Convert.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 13:17:36 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 11:51:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,14 +144,11 @@ public class Convert implements Cloneable {
 
 
     /**
-     *  Adds the original Document to the Convert Class. This
-     *  is to be used for merges. If this Document is added then
-     *  it is assumed that a convert with merge is the desired
-     *  operation.
+     *  Returns a <code>DocumentMerger</code> for the given <code>Document</code>.
      *
-     *  @param  name  The <code>Document</code> name.
-     *  @param  is    <code>InputStream</code> object corresponding
-     *                to the <code>Document</code>.
+     *  @param  origDoc The <code>Document</code> were later changes will be merged to
+     *
+     *  @return  The <code>DocumentMerger</code> object for the given document.
      *
      *  @throws  IOException  If any I/O error occurs.
      */
