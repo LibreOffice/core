@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OPatternModel.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:14:59 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:37:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,9 @@ import util.DBTools;
  *  <li> <code>com::sun::star::container::XNamed</code></li>
  *  <li> <code>com::sun::star::lang::XComponent</code></li>
  *  <li> <code>com::sun::star::lang::XEventListener</code></li>
- *  <li> <code>com::sun::star::beans::XPropertySet</code></li>
+ *  <li> <code>com::sun::star::beans::XPropertyAccess</code></li>
+*  <li> <code>com::sun::star::beans::XPropertyContainer</code></li>
+*  <li> <code>com::sun::star::beans::XPropertySet</code></li>
  *  <li> <code>com::sun::star::form::XLoadListener</code></li>
  *  <li> <code>com::sun::star::container::XChild</code></li>
  * </ul> <p>
@@ -88,7 +90,9 @@ import util.DBTools;
  * @see com.sun.star.container.XNamed
  * @see com.sun.star.lang.XComponent
  * @see com.sun.star.lang.XEventListener
- * @see com.sun.star.beans.XPropertySet
+ * @see com.sun.star.beans.XPropertyAccess
+* @see com.sun.star.beans.XPropertyContainer
+* @see com.sun.star.beans.XPropertySet
  * @see com.sun.star.form.XLoadListener
  * @see com.sun.star.container.XChild
  * @see ifc.io._XPersistObject
@@ -131,6 +135,8 @@ public class OPatternModel extends GenericModelTest {
      */
     protected void initialize(TestParameters tParam, PrintWriter log) {
 
+        super.initialize(tParam, log);
+
         super.m_ChangePropertyName = "Text";
 
         super.m_kindOfControl="PatternField";
@@ -144,10 +150,7 @@ public class OPatternModel extends GenericModelTest {
 
         super.m_LCShape_Type = "FixedText";
 
-        super.initialize(tParam, log);
-
-    }
-    /**
+    }    /**
      * calls <CODE>cleanup()</CODE> from it's super class
      * @param tParam the test parameter
      * @param log the log writer
