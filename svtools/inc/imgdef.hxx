@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imgdef.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:19:59 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 14:47:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,8 @@ enum SfxSymbolsStyle
     SFX_SYMBOLS_STYLE_DEFAULT,
     SFX_SYMBOLS_STYLE_HICONTRAST,
     SFX_SYMBOLS_STYLE_INDUSTRIAL,
-    SFX_SYMBOLS_STYLE_CRYSTAL
+    SFX_SYMBOLS_STYLE_CRYSTAL,
+    SFX_SYMBOLS_STYLE_TANGO
 };
 
 #define SFX_TOOLBOX_CHANGESYMBOLSET     0x0001
