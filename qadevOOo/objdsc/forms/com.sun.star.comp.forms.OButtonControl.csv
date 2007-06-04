@@ -10,6 +10,7 @@
 "OButtonControl";"com::sun::star::lang::XComponent";"addEventListener()"
 "OButtonControl";"com::sun::star::lang::XComponent";"removeEventListener()"
 "OButtonControl";"com::sun::star::form::submission::XSubmission";"submit()"
+"OButtonControl";"com::sun::star::form::submission::XSubmission";"submitWithInteraction()"
 "OButtonControl";"com::sun::star::form::submission::XSubmission";"addSubmissionVetoListener()"
 "OButtonControl";"com::sun::star::form::submission::XSubmission";"removeSubmissionVetoListener()"
 "OButtonControl";"com::sun::star::awt::XControl";"setContext()"
