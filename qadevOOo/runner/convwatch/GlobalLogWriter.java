@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GlobalLogWriter.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 14:09:48 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:30:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,11 @@ public class GlobalLogWriter
             }
             return m_aGlobalLogWriter;
         }
+
+//     public static synchronized void initialize()
+//         {
+//             get().initialize(null, true);
+//         }
 
     public static synchronized void set(LogWriter _aLog)
         {

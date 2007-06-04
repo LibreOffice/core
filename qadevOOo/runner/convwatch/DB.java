@@ -75,22 +75,19 @@ public class DB extends DBHelper
 
     private static String getEnvironment()
         {
-            if (System.getProperty("os.name").toLowerCase().startsWith("windows"))
+            if (OSHelper.isWindows())
             {
                 return "wntmsci";
             }
-            else if (System.getProperty("os.name").toLowerCase().startsWith("solaris") &&
-                System.getProperty("os.arch").equals("x86"))
+            else if ( OSHelper.isSolarisIntel())
             {
                 return "unxsoli";
             }
-            else if (System.getProperty("os.name").toLowerCase().startsWith("solaris") &&
-                System.getProperty("os.arch").equals("sparc"))
+            else if ( OSHelper.isSolarisSparc())
             {
                 return "unxsols";
             }
-            else if (System.getProperty("os.name").toLowerCase().startsWith("linux") &&
-                     System.getProperty("os.arch").equals("i386"))
+            else if ( OSHelper.isLinuxIntel())
             {
                 return "unxlngi";
             }
