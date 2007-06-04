@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 13:03:05 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 14:02:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,9 @@
 #ifndef _SVX_FONTITEM_HXX //autogen wg. SvxFontItem
 #include <svx/fontitem.hxx>
 #endif
+#ifndef _SVX_KEEPITEM_HXX
+#include <svx/keepitem.hxx>
+#endif
 #ifndef _SVX_FHGTITEM_HXX
 #include <svx/fhgtitem.hxx>
 #endif
@@ -97,6 +100,9 @@
 #endif
 #ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
+#endif
+#ifndef _FMTTSPLT_HXX
+#include <fmtlsplt.hxx>
 #endif
 #ifndef _FMTFLCNT_HXX //autogen
 #include <fmtflcnt.hxx>
@@ -1482,6 +1488,37 @@ String WW8_SwAttrIter::GetSnippet(const String &rStr, xub_StrLen nAktPos,
     return aSnippet;
 }
 
+/** Delivers the right paragraph style
+
+    Because of the different style handling for delete operations,
+    the track changes have to be analysed. A deletion, starting in paragraph A
+    with style A, ending in paragraph B with style B, needs a hack.
+*/
+
+SwTxtFmtColl& lcl_getFormatCollection( Writer& rWrt, SwTxtNode* pTxtNode )
+{
+    USHORT nPos = 0;
+    USHORT nMax = rWrt.pDoc->GetRedlineTbl().Count();
+    while( nPos < nMax )
+    {
+        const SwRedline* pRedl = rWrt.pDoc->GetRedlineTbl()[ nPos++ ];
+        const SwPosition* pStt = pRedl->Start();
+        const SwPosition* pEnd = pStt == pRedl->GetPoint()
+                                    ? pRedl->GetMark()
+                                    : pRedl->GetPoint();
+        // Looking for deletions, which ends in current pTxtNode
+        if( IDocumentRedlineAccess::REDLINE_DELETE == pRedl->GetRedlineData().GetType() &&
+            pEnd->nNode == *pTxtNode && pStt->nNode != *pTxtNode &&
+            pStt->nNode.GetNode().IsTxtNode() )
+        {
+            pTxtNode = pStt->nNode.GetNode().GetTxtNode();
+            nMax = nPos;
+            nPos = 0;
+        }
+    }
+    return static_cast<SwTxtFmtColl&>( pTxtNode->GetAnyFmtColl() );
+}
+
 Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 {
     SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
@@ -1493,7 +1530,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     if( !bFlyInTable )
     {
         rWW8Wrt.nStyleBeforeFly
-            = rWW8Wrt.GetId( (SwTxtFmtColl&)pNd->GetAnyFmtColl() );
+            = rWW8Wrt.GetId( lcl_getFormatCollection( rWrt, pNd ) );
     }
 
     SVBT16 nSty;
@@ -1947,6 +1984,61 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                 }
             }
         }
+
+        // --> FME 2007-05-30 #i76520# Emulate non-splitting tables
+        if ( rWW8Wrt.bOutTable )
+        {
+            const SwTableNode* pTableNode = pNd->FindTableNode();
+
+            if ( pTableNode )
+            {
+                const SwTable& rTable = pTableNode->GetTable();
+                const SvxFmtKeepItem& rKeep = rTable.GetFrmFmt()->GetKeep();
+                const bool bKeep = rKeep.GetValue();
+                const bool bDontSplit = !bKeep ?
+                                        !rTable.GetFrmFmt()->GetLayoutSplit().GetValue() :
+                                        false;
+
+                if ( bKeep || bDontSplit )
+                {
+                    // bKeep: set keep at first paragraphs in all lines
+                    // bDontSplit : set keep at first paragraphs in all lines except from last line
+                    // but only for non-complex tables
+                    const SwTableBox* pBox = pNd->GetTblBox();
+                    const SwTableLine* pLine = pBox ? pBox->GetUpper() : 0;
+
+                    if ( pLine && !pLine->GetUpper() )
+                    {
+                        // check if box is first in that line:
+                        if ( 0 == pLine->GetTabBoxes().GetPos( pBox ) && pBox->GetSttNd() )
+                        {
+                            // check if paragraph is first in that line:
+                            if ( 1 == ( pNd->GetIndex() - pBox->GetSttNd()->GetIndex() ) )
+                            {
+                                bool bSetAtPara = false;
+                                if ( bKeep )
+                                    bSetAtPara = true;
+                                else if ( bDontSplit )
+                                {
+                                    // check if pLine isn't last line in table
+                                    if ( rTable.GetTabLines().Count() - rTable.GetTabLines().GetPos( pLine ) != 1 )
+                                        bSetAtPara = true;
+                                }
+
+                                if ( bSetAtPara )
+                                {
+                                    if ( !pTmpSet )
+                                        pTmpSet = new SfxItemSet(pNd->GetSwAttrSet());
+
+                                    pTmpSet->Put( SvxFmtKeepItem( TRUE ) );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // <--
 
         const SfxItemSet* pNewSet = pTmpSet ? pTmpSet : pNd->GetpSwAttrSet();
         if( pNewSet )
