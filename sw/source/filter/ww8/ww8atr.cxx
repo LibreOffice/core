@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:10:29 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 14:03:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,6 +210,9 @@
 #endif
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
+#endif
+#ifndef _SWTABLE_HXX //autogen
+#include <swtable.hxx>
 #endif
 #ifndef _FMTINFMT_HXX //autogen wg. SwFmtINetFmt
 #include <fmtinfmt.hxx>
@@ -657,6 +660,7 @@ void SwWW8Writer::Out_SfxBreakItems(const SfxItemSet *pSet, const SwNode& rNd)
     //style) is different to the current one, in which case plump for a
     //section.
     bool bBreakSet = false;
+
     if (pSet && pSet->Count())
     {
         if (SFX_ITEM_SET == pSet->GetItemState(RES_PAGEDESC, false, &pItem)
@@ -669,20 +673,56 @@ void SwWW8Writer::Out_SfxBreakItems(const SfxItemSet *pSet, const SwNode& rNd)
         }
         else if (SFX_ITEM_SET == pSet->GetItemState(RES_BREAK, false, &pItem))
         {
+            // --> FME 2007-05-30 #146867# Word does not like hard break attributes in some table cells
+            bool bRemoveHardBreakInsideTable = false;
+            if ( bOutTable )
+            {
+                const SwTableNode* pTableNode = rNd.FindTableNode();
+                if ( pTableNode )
+                {
+                    const SwTableBox* pBox = rNd.GetTblBox();
+                    const SwTableLine* pLine = pBox ? pBox->GetUpper() : 0;
+                    // but only for non-complex tables
+                    if ( pLine && !pLine->GetUpper() )
+                    {
+                        // check if box is not first in that line:
+                        if ( 0 < pLine->GetTabBoxes().GetPos( pBox ) && pBox->GetSttNd() )
+                        {
+                            bRemoveHardBreakInsideTable = true;
+                        }
+                    }
+                }
+            }
+            // <--
+
             bBreakSet = true;
-            ASSERT(pAktPageDesc, "should not be possible");
-            /*
-             If because of this pagebreak the page desc following the page
-             break is the follow style of the current page desc then output a
-             section break using that style instead.  At least in those cases
-             we end up with the same style in word and writer, nothing can be
-             done when it happens when we get a new pagedesc because we
-             overflow from the first page style.
-            */
-            if (pAktPageDesc)
-                bNewPageDesc = SetAktPageDescFromNode(rNd);
-            if (!bNewPageDesc)
-                OutWW8_SwFmtBreak( *this, *pItem );
+
+            if ( !bRemoveHardBreakInsideTable )
+            {
+                ASSERT(pAktPageDesc, "should not be possible");
+                /*
+                 If because of this pagebreak the page desc following the page
+                 break is the follow style of the current page desc then output a
+                 section break using that style instead.  At least in those cases
+                 we end up with the same style in word and writer, nothing can be
+                 done when it happens when we get a new pagedesc because we
+                 overflow from the first page style.
+                */
+                if (pAktPageDesc)
+                {
+                    // --> OD 2007-05-30 #i76301#
+                    // assure that there is a page break before set at the node.
+                    const SvxFmtBreakItem* pBreak = dynamic_cast<const SvxFmtBreakItem*>(pItem);
+                    if ( pBreak &&
+                         pBreak->GetBreak() == SVX_BREAK_PAGE_BEFORE )
+                    {
+                        bNewPageDesc = SetAktPageDescFromNode(rNd);
+                    }
+                    // <--
+                }
+                if (!bNewPageDesc)
+                    OutWW8_SwFmtBreak( *this, *pItem );
+            }
         }
     }
 
@@ -714,37 +754,110 @@ void SwWW8Writer::Out_SfxBreakItems(const SfxItemSet *pSet, const SwNode& rNd)
 
     if (bNewPageDesc && pAktPageDesc)
     {
-        // Die PageDescs werden beim Auftreten von PageDesc-Attributen nur in
-        // WW8Writer::pSepx mit der entsprechenden Position eingetragen.  Das
-        // Aufbauen und die Ausgabe der am PageDesc haengenden Attribute und
-        // Kopf/Fusszeilen passiert nach dem Haupttext und seinen Attributen.
+        // --> OD 2007-05-29 #i76300#
+        // code moved code to method <SwWW8Writer::PrepareNewPageDesc(..)>
+//        // Die PageDescs werden beim Auftreten von PageDesc-Attributen nur in
+//        // WW8Writer::pSepx mit der entsprechenden Position eingetragen.  Das
+//        // Aufbauen und die Ausgabe der am PageDesc haengenden Attribute und
+//        // Kopf/Fusszeilen passiert nach dem Haupttext und seinen Attributen.
 
-        ULONG nFcPos = ReplaceCr(0x0c); // Page/Section-Break
+//        ULONG nFcPos = ReplaceCr(0x0c); // Page/Section-Break
 
-        const SwSectionFmt *pFmt = 0;
-        const SwSectionNode* pSect = rNd.FindSectionNode();
-        if (pSect && CONTENT_SECTION == pSect->GetSection().GetType())
-            pFmt = pSect->GetSection().GetFmt();
+//        const SwSectionFmt *pFmt = 0;
+//        const SwSectionNode* pSect = rNd.FindSectionNode();
+//        if (pSect && CONTENT_SECTION == pSect->GetSection().GetType())
+//            pFmt = pSect->GetSection().GetFmt();
 
-        // tatsaechlich wird hier NOCH NICHTS ausgegeben, sondern
-        // nur die Merk-Arrays aCps, aSects entsprechend ergaenzt
-        if (nFcPos)
-        {
-            const SwFmtLineNumber *pNItem = 0;
-            if (pSet)
-                pNItem = &(ItemGet<SwFmtLineNumber>(*pSet,RES_LINENUMBER));
-            else if (const SwCntntNode *pNd = rNd.GetCntntNode())
-                pNItem = &(ItemGet<SwFmtLineNumber>(*pNd,RES_LINENUMBER));
-            ULONG nLnNm = pNItem ? pNItem->GetStartValue() : 0;
+//        // tatsaechlich wird hier NOCH NICHTS ausgegeben, sondern
+//        // nur die Merk-Arrays aCps, aSects entsprechend ergaenzt
+//        if (nFcPos)
+//        {
+//            const SwFmtLineNumber *pNItem = 0;
+//            if (pSet)
+//                pNItem = &(ItemGet<SwFmtLineNumber>(*pSet,RES_LINENUMBER));
+//            else if (const SwCntntNode *pNd = rNd.GetCntntNode())
+//                pNItem = &(ItemGet<SwFmtLineNumber>(*pNd,RES_LINENUMBER));
+//            ULONG nLnNm = pNItem ? pNItem->GetStartValue() : 0;
 
-            if (pPgDesc)
-                pSepx->AppendSep(Fc2Cp(nFcPos), *pPgDesc, rNd, pFmt, nLnNm);
-            else
-                pSepx->AppendSep(Fc2Cp(nFcPos), pAktPageDesc, rNd, pFmt, nLnNm);
-        }
+//            if (pPgDesc)
+//                pSepx->AppendSep(Fc2Cp(nFcPos), *pPgDesc, rNd, pFmt, nLnNm);
+//            else
+//                pSepx->AppendSep(Fc2Cp(nFcPos), pAktPageDesc, rNd, pFmt, nLnNm);
+//        }
+        PrepareNewPageDesc( pSet, rNd, pPgDesc, pAktPageDesc );
     }
     bBreakBefore = false;
 }
+
+// --> OD 2007-05-29 #i76300#
+bool SwWW8Writer::Out_FollowPageDesc( const SfxItemSet* pSet,
+                                      const SwTxtNode* pNd )
+{
+    bool bRet = false;
+
+    if ( pNd &&
+         pAktPageDesc &&
+         pAktPageDesc != pAktPageDesc->GetFollow() )
+    {
+        PrepareNewPageDesc( pSet, *pNd, 0, pAktPageDesc->GetFollow() );
+        bRet = true;
+    }
+
+    return bRet;
+}
+
+// initial version by extracting corresponding code from method <SwWW8Writer::Out_SfxBreakItems(..)>
+void SwWW8Writer::PrepareNewPageDesc( const SfxItemSet*pSet,
+                                      const SwNode& rNd,
+                                      const SwFmtPageDesc* pNewPgDescFmt,
+                                      const SwPageDesc* pNewPgDesc )
+{
+    // Die PageDescs werden beim Auftreten von PageDesc-Attributen nur in
+    // WW8Writer::pSepx mit der entsprechenden Position eingetragen.  Das
+    // Aufbauen und die Ausgabe der am PageDesc haengenden Attribute und
+    // Kopf/Fusszeilen passiert nach dem Haupttext und seinen Attributen.
+
+    ULONG nFcPos = ReplaceCr(0x0c); // Page/Section-Break
+
+    const SwSectionFmt* pFmt = 0;
+    const SwSectionNode* pSect = rNd.FindSectionNode();
+    if ( pSect &&
+         CONTENT_SECTION == pSect->GetSection().GetType() )
+    {
+        pFmt = pSect->GetSection().GetFmt();
+    }
+
+    // tatsaechlich wird hier NOCH NICHTS ausgegeben, sondern
+    // nur die Merk-Arrays aCps, aSects entsprechend ergaenzt
+    if ( nFcPos )
+    {
+        const SwFmtLineNumber* pNItem = 0;
+        if ( pSet )
+        {
+            pNItem = &(ItemGet<SwFmtLineNumber>(*pSet,RES_LINENUMBER));
+        }
+        else if (const SwCntntNode *pNd = rNd.GetCntntNode())
+        {
+            pNItem = &(ItemGet<SwFmtLineNumber>(*pNd,RES_LINENUMBER));
+        }
+        const ULONG nLnNm = pNItem ? pNItem->GetStartValue() : 0;
+
+        if ( pNewPgDescFmt )
+        {
+            pSepx->AppendSep(Fc2Cp(nFcPos), *pNewPgDescFmt, rNd, pFmt, nLnNm);
+        }
+        else if ( pNewPgDesc )
+        {
+            pSepx->AppendSep(Fc2Cp(nFcPos), pNewPgDesc, rNd, pFmt, nLnNm);
+        }
+        else
+        {
+            ASSERT( false, "<SwWW8Writer::PrepareNewPageDesc(..)> - misusage: neither page desc format nor page desc provided." );
+        }
+    }
+}
+// <--
+
 
 void SwWW8Writer::CorrTabStopInSet(SfxItemSet& rSet, USHORT nAbsLeft)
 {
@@ -3520,8 +3633,15 @@ static Writer& OutWW8_SwFmtBreak( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else if (!rWW8Wrt.mpParentFrame)
     {
+        static const BYTE cColBreak = 0xe;
+        static const BYTE cPageBreak = 0xc;
+
         BYTE nC = 0;
         bool bBefore = false;
+        // --> OD 2007-05-29 #i76300#
+        // Note: Can only be <true>, if <bBefore> equals <false>.
+        bool bCheckForFollowPageDesc = false;
+        // <--
 
         switch( rBreak.GetBreak() )
         {
@@ -3546,23 +3666,47 @@ static Writer& OutWW8_SwFmtBreak( Writer& rWrt, const SfxPoolItem& rHt )
             if (rWW8Wrt.pSepx &&
                 rWW8Wrt.pSepx->CurrentNoColumns(*rWW8Wrt.pDoc) > 1)
             {
-                nC = 0xe;
+                nC = cColBreak;
             }
             break;
 
         case SVX_BREAK_PAGE_BEFORE:                         // PageBreak
             bBefore = true;
-            // no break;
+            nC = cPageBreak;
+            break;
         case SVX_BREAK_PAGE_AFTER:
         case SVX_BREAK_PAGE_BOTH:
-            nC = 0xc;
+            nC = cPageBreak;
+            // --> OD 2007-05-29 #i76300#
+            // check for follow page description, if current writing attributes
+            // of a paragraph.
+            if ( dynamic_cast<const SwTxtNode*>(rWW8Wrt.pOutFmtNode) &&
+                 rWW8Wrt.GetCurItemSet() )
+            {
+                bCheckForFollowPageDesc = true;
+            }
+            // <--
             break;
         default:
             break;
         }
 
-        if( (bBefore == rWW8Wrt.bBreakBefore ) && nC )  // #49917#
-            rWW8Wrt.ReplaceCr( nC );
+        if ( (bBefore == rWW8Wrt.bBreakBefore ) && nC )  // #49917#
+        {
+            // --> OD 2007-05-29 #i76300#
+            bool bFollowPageDescWritten( false );
+            if ( bCheckForFollowPageDesc && !bBefore )
+            {
+                bFollowPageDescWritten =
+                    rWW8Wrt.Out_FollowPageDesc( rWW8Wrt.GetCurItemSet(),
+                            dynamic_cast<const SwTxtNode*>(rWW8Wrt.pOutFmtNode) );
+            }
+            if ( !bFollowPageDescWritten )
+            {
+                rWW8Wrt.ReplaceCr( nC );
+            }
+            // <--
+        }
     }
     return rWrt;
 }
