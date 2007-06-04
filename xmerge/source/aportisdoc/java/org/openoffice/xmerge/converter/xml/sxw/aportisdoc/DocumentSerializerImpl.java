@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentSerializerImpl.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-08-02 10:32:39 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 11:50:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 
 import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.ConvertData;
@@ -48,6 +49,7 @@ import org.openoffice.xmerge.ConvertException;
 import org.openoffice.xmerge.DocumentSerializer;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.converter.xml.sxw.SxwDocument;
+import org.openoffice.xmerge.converter.xml.sxw.aportisdoc.DocConstants;
 import org.openoffice.xmerge.converter.palm.PdbEncoder;
 import org.openoffice.xmerge.converter.palm.PdbDecoder;
 import org.openoffice.xmerge.converter.palm.PalmDB;
@@ -112,7 +114,7 @@ public final class DocumentSerializerImpl
 
         // get the server document name
 
-        String docName = sxwDoc.getName();
+        String docName = URLDecoder.decode(sxwDoc.getName(), DocConstants.ENCODING);
 
         // get DOM document
 
