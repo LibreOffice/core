@@ -4,3 +4,7 @@
 "ChXChartView";"com::sun::star::view::XSelectionSupplier";"addSelectionChangeListener()"
 "ChXChartView";"com::sun::star::view::XSelectionSupplier";"removeSelectionChangeListener()"
 "ChXChartView";"com::sun::star::view::XControlAccess#optional";"getControl()"
+"ChXChartView";"com::sun::star::view::XFormLayerAccess#optional";"getFromController()"
+"ChXChartView";"com::sun::star::view::XFormLayerAccess#optional";"isFormDesignMode()"
+"ChXChartView";"com::sun::star::view::XFormLayerAccess#optional";"setFormDesignMode()"
+
