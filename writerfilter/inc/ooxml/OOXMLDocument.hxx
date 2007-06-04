@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocument.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-22 19:40:46 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-04 08:15:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ using namespace com::sun::star;
 class WRITERFILTER_DLLPUBLIC OOXMLStream
 {
 public:
-    enum StreamType_t { UNKNOWN, DOCUMENT, STYLES, FONTTABLE, NUMBERING, FOOTNOTES, ENDNOTES };
+    enum StreamType_t { UNKNOWN, DOCUMENT, STYLES, FONTTABLE, NUMBERING, FOOTNOTES, ENDNOTES, COMMENTS };
     typedef boost::shared_ptr<OOXMLStream> Pointer_t;
 
     virtual ~OOXMLStream() {}
@@ -91,6 +91,8 @@ public:
     virtual void resolveFootnote(Stream & rStream,
                                  const rtl::OUString & rNoteId) = 0;
     virtual void resolveEndnote(Stream & rStream,
+                                const rtl::OUString & rNoteId) = 0;
+    virtual void resolveComment(Stream & rStream,
                                 const rtl::OUString & rNoteId) = 0;
     virtual void resolveHeader(Stream & rStream,
                                const sal_Int32 type,
