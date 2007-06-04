@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OFixedTextModel.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:10:24 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 13:35:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,8 @@ import com.sun.star.util.XCloseable;
 *  <li> <code>com::sun::star::container::XChild</code></li>
 *  <li> <code>com::sun::star::form::FormControlModel</code></li>
 *  <li> <code>com::sun::star::form::FormComponent</code></li>
+*  <li> <code>com::sun::star::beans::XPropertyAccess</code></li>
+*  <li> <code>com::sun::star::beans::XPropertyContainer</code></li>
 *  <li> <code>com::sun::star::beans::XPropertySet</code></li>
 *  <li> <code>com::sun::star::beans::XFastPropertySet</code></li>
 *  <li> <code>com::sun::star::beans::XPropertyState</code></li>
@@ -76,6 +78,8 @@ import com.sun.star.util.XCloseable;
 * @see com.sun.star.container.XChild
 * @see com.sun.star.form.FormControlModel
 * @see com.sun.star.form.FormComponent
+* @see com.sun.star.beans.XPropertyAccess
+* @see com.sun.star.beans.XPropertyContainer
 * @see com.sun.star.beans.XPropertySet
 * @see com.sun.star.beans.XFastPropertySet
 * @see com.sun.star.beans.XPropertyState
@@ -95,83 +99,51 @@ import com.sun.star.util.XCloseable;
 * @see ifc.awt._UnoControlFixedTextModel
 * @see ifc.lang._XComponent
 */
-public class OFixedTextModel extends TestCase {
-    XComponent xDrawDoc;
+
+public class OFixedTextModel extends GenericModelTest {
 
     /**
-    * Creates Draw document where controls are placed.
-    */
+     * Set some member variable of the super class <CODE>GenericModelTest</CODE>:
+     * <pre>
+     *    super.m_kindOfControl="CommandButton";
+     *    super.m_ObjectName = "com.sun.star.form.component.CommandButton";
+     *    super.m_LCShape_Type = "CommandButton";
+     * </pre>
+     * Then <CODE>super.initialize()</CODE> was called.
+     * @param tParam the test parameter
+     * @param log the log writer
+     */
+
     protected void initialize(TestParameters tParam, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory(((XMultiServiceFactory) tParam.getMSF()));
 
-        try {
-            log.println("creating a draw document");
-            xDrawDoc = SOF.createDrawDoc(null);
-            ;
-        } catch (com.sun.star.uno.Exception e) {
-            // Some exception occures.FAILED
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't create document", e);
-        }
+        super.initialize(tParam, log);
+
+        super.m_kindOfControl="FixedText";
+
+        super.m_ObjectName = "stardiv.one.form.component.FixedText";
+
+        super.m_LCShape_Type = "FixedText";
+
     }
-
     /**
-    * Disposes Draw document.
-    */
+     * calls <CODE>cleanup()</CODE> from it's super class
+     * @param tParam the test parameter
+     * @param log the log writer
+     */
     protected void cleanup(TestParameters tParam, PrintWriter log) {
-        log.println("    disposing xDrawDoc ");
-
-        try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                        XCloseable.class, xDrawDoc);
-            closer.close(true);
-        } catch (com.sun.star.util.CloseVetoException e) {
-            log.println("couldn't close document");
-        } catch (com.sun.star.lang.DisposedException e) {
-            log.println("couldn't close document");
-        }
+        super.cleanup(tParam, log);
     }
 
+
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
-    * Creates FixedText in the Form. <p>
-    *     Object relations created :
-    * <ul>
-    *  <li> <code>'OBJNAME'</code> for
-    *      {@link ifc.io._XPersistObject} : name of service which is
-    *    represented by this object. </li>
-    * </ul>
-    */
+     * calls <CODE>createTestEnvironment()</CODE> from it's super class
+     * @param Param the test parameter
+     * @param log the log writer
+     * @return lib.TestEnvironment
+     */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
-                                                                 PrintWriter log) {
-        XInterface oObj = null;
+            PrintWriter log) {
+        return super.createTestEnvironment(Param, log);
+    }
 
-
-        // creation of testobject here
-        // first we write what we are intend to do to log file
-        log.println("creating a test environment");
-
-        //get TextModel
-        String objName = "FixedText";
-
-        XControlShape aShape = FormTools.createControlShape(xDrawDoc, 3000,
-                                                            4500, 15000, 10000,
-                                                            objName);
-
-        DrawTools.getDrawPage(xDrawDoc, 0).add((XShape) aShape);
-        oObj = aShape.getControl();
-
-        log.println("creating a new environment for drawpage object");
-
-        TestEnvironment tEnv = new TestEnvironment(oObj);
-
-        tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component." +
-                            objName);
-
-
-        //adding ObjRelation for XPersistObject
-        tEnv.addObjRelation("PSEUDOPERSISTENT", new Boolean(true));
-
-        return tEnv;
-    } // finish method getTestEnvironment
 } // finish class OFixedTextModel
