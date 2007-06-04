@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_xsltfilter.scp,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 09:36:01 $
+ *  last change: $Author: ihi $ $Date: 2007-06-04 11:53:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,7 @@ End
 
 File gid_File_Xsl_Export_Xhtml_Table
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Xslt_Export_Xhtml;
     Name = "/xslt/export/xhtml/table.xsl";
 End
