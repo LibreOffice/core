@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:15:01 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:34:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,13 +154,13 @@ using namespace ::com::sun::star::linguistic2;
 ///////////////////////////////////////////////////////////////////////////
 
 
-static Reference< XLinguServiceManager > GetLngSvcMgr_Impl()
+static uno::Reference< XLinguServiceManager > GetLngSvcMgr_Impl()
 {
-    Reference< XLinguServiceManager > xRes;
-    Reference< XMultiServiceFactory >  xMgr = getProcessServiceFactory();
+    uno::Reference< XLinguServiceManager > xRes;
+    uno::Reference< XMultiServiceFactory >  xMgr = getProcessServiceFactory();
     if (xMgr.is())
     {
-        xRes = Reference< XLinguServiceManager > ( xMgr->createInstance(
+        xRes = uno::Reference< XLinguServiceManager > ( xMgr->createInstance(
                 OUString( RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.linguistic2.LinguServiceManager" ) ) ), UNO_QUERY ) ;
     }
@@ -315,7 +315,7 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
 
         DBG_ASSERT( nNeedUpdating == 1, "SvxLinguConfigUpdate::UpdateAll already updated!" );
 
-        Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
+        uno::Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
         DBG_ASSERT( xLngSvcMgr.is(), "service manager missing")
         if (!xLngSvcMgr.is())
             return;
@@ -358,7 +358,7 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
             //
             // add new available language/servcice entries
             //
-            Reference< XAvailableLocales > xAvail( xLngSvcMgr, UNO_QUERY );
+            uno::Reference< XAvailableLocales > xAvail( xLngSvcMgr, UNO_QUERY );
             Sequence< Locale > aAvailLocales( xAvail->getAvailableLocales(aService) );
             INT32 nAvailLocales = aAvailLocales.getLength();
             const Locale *pAvailLocale = aAvailLocales.getConstArray();
@@ -549,12 +549,12 @@ INT32 SvxLinguConfigUpdate::CalcDataFilesChangedCheckValue()
 
         try
         {
-            Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+            uno::Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
 
-            ::ucb::Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ),
-                          new ::ucb::CommandEnvironment( Reference< task::XInteractionHandler >(),
-                                                         Reference< CSS::ucb::XProgressHandler >() ) );
-            Reference< sdbc::XResultSet > xResultSet;
+            ::ucbhelper::Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ),
+                          new ::ucbhelper::CommandEnvironment( uno::Reference< task::XInteractionHandler >(),
+                                                         uno::Reference< CSS::ucb::XProgressHandler >() ) );
+            uno::Reference< sdbc::XResultSet > xResultSet;
             Sequence< OUString > aProps(3);
             OUString* pProps = aProps.getArray();
             pProps[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
@@ -563,12 +563,12 @@ INT32 SvxLinguConfigUpdate::CalcDataFilesChangedCheckValue()
 
             try
             {
-                Reference< CSS::ucb::XDynamicResultSet > xDynResultSet;
-                ::ucb::ResultSetInclude eInclude = ::ucb::INCLUDE_DOCUMENTS_ONLY;
+                uno::Reference< CSS::ucb::XDynamicResultSet > xDynResultSet;
+                ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_DOCUMENTS_ONLY;
                 xDynResultSet = aCnt.createDynamicCursor( aProps, eInclude );
 
-                Reference < CSS::ucb::XAnyCompareFactory > xCompare;
-                Reference < CSS::ucb::XSortedDynamicResultSetFactory > xSRSFac(
+                uno::Reference < CSS::ucb::XAnyCompareFactory > xCompare;
+                uno::Reference < CSS::ucb::XSortedDynamicResultSetFactory > xSRSFac(
                     xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SortedDynamicResultSetFactory") ) ), UNO_QUERY );
 
                 uno::Sequence< CSS::ucb::NumberedSortingInfo > aSortInfo( 2 );
@@ -578,7 +578,7 @@ INT32 SvxLinguConfigUpdate::CalcDataFilesChangedCheckValue()
                 pInfo[ 1 ].ColumnIndex = 1;
                 pInfo[ 1 ].Ascending   = sal_True;
 
-                Reference< CSS::ucb::XDynamicResultSet > xDynamicResultSet;
+                uno::Reference< CSS::ucb::XDynamicResultSet > xDynamicResultSet;
                 xDynamicResultSet =
                         xSRSFac->createSortedDynamicResultSet( xDynResultSet, aSortInfo, xCompare );
 
@@ -591,8 +591,8 @@ INT32 SvxLinguConfigUpdate::CalcDataFilesChangedCheckValue()
 
             if (xResultSet.is())
             {
-                Reference< sdbc::XRow > xRow( xResultSet, UNO_QUERY );
-                Reference< CSS::ucb::XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+                uno::Reference< sdbc::XRow > xRow( xResultSet, UNO_QUERY );
+                uno::Reference< CSS::ucb::XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
 
                 try
                 {
@@ -681,7 +681,7 @@ BOOL SvxLinguConfigUpdate::IsNeedUpdateAll( sal_Bool bForceCheck )
 class ThesDummy_Impl :
     public cppu::WeakImplHelper1< XThesaurus >
 {
-    Reference< XThesaurus >     xThes;      // the real one...
+    uno::Reference< XThesaurus >     xThes;      // the real one...
     Sequence< Locale >         *pLocaleSeq;
 
     void GetCfgLocales();
@@ -747,7 +747,7 @@ void ThesDummy_Impl::GetThes_Impl()
 
     if (!xThes.is())
     {
-        Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
+        uno::Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
         if (xLngSvcMgr.is())
             xThes = xLngSvcMgr->getThesaurus();
 
@@ -825,7 +825,7 @@ uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL
 class SpellDummy_Impl :
     public cppu::WeakImplHelper1< XSpellChecker1 >
 {
-    Reference< XSpellChecker1 >     xSpell;      // the real one...
+    uno::Reference< XSpellChecker1 >     xSpell;      // the real one...
 
     void    GetSpell_Impl();
 
@@ -862,9 +862,9 @@ void SpellDummy_Impl::GetSpell_Impl()
 
     if (!xSpell.is())
     {
-        Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
+        uno::Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
         if (xLngSvcMgr.is())
-            xSpell = Reference< XSpellChecker1 >( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
+            xSpell = uno::Reference< XSpellChecker1 >( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
     }
 }
 
@@ -930,7 +930,7 @@ uno::Reference< linguistic2::XSpellAlternatives > SAL_CALL
 class HyphDummy_Impl :
     public cppu::WeakImplHelper1< XHyphenator >
 {
-    Reference< XHyphenator >     xHyph;      // the real one...
+    uno::Reference< XHyphenator >     xHyph;      // the real one...
 
     void    GetHyph_Impl();
 
@@ -981,7 +981,7 @@ void HyphDummy_Impl::GetHyph_Impl()
 
     if (!xHyph.is())
     {
-        Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
+        uno::Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
         if (xLngSvcMgr.is())
             xHyph = xLngSvcMgr->getHyphenator();
     }
@@ -1069,7 +1069,7 @@ typedef cppu::WeakImplHelper1 < XEventListener > LinguMgrAppExitLstnrBaseClass;
 
 class LinguMgrAppExitLstnr : public LinguMgrAppExitLstnrBaseClass
 {
-    Reference< XComponent >         xDesktop;
+    uno::Reference< XComponent >        xDesktop;
 
 public:
     LinguMgrAppExitLstnr();
@@ -1088,10 +1088,10 @@ LinguMgrAppExitLstnr::LinguMgrAppExitLstnr()
     // add object to frame::Desktop EventListeners in order to properly call
     // the AtExit function at appliction exit.
 
-    Reference< XMultiServiceFactory >  xMgr = getProcessServiceFactory();
+    uno::Reference< XMultiServiceFactory >  xMgr = getProcessServiceFactory();
     if ( xMgr.is() )
     {
-        xDesktop = Reference< XComponent > ( xMgr->createInstance(
+        xDesktop = uno::Reference< XComponent > ( xMgr->createInstance(
                 OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) ) ), UNO_QUERY ) ;
         if (xDesktop.is())
             xDesktop->addEventListener( this );
@@ -1154,17 +1154,17 @@ void LinguMgrExitLstnr::AtExit()
 // static member initialization
 LinguMgrExitLstnr *             LinguMgr::pExitLstnr    = 0;
 sal_Bool                        LinguMgr::bExiting      = sal_False;
-Reference< XLinguServiceManager >   LinguMgr::xLngSvcMgr    = 0;
-Reference< XSpellChecker1 >     LinguMgr::xSpell        = 0;
-Reference< XHyphenator >        LinguMgr::xHyph         = 0;
-Reference< XThesaurus >         LinguMgr::xThes         = 0;
-Reference< XDictionaryList >    LinguMgr::xDicList      = 0;
-Reference< XPropertySet >       LinguMgr::xProp         = 0;
-Reference< XDictionary1 >       LinguMgr::xIgnoreAll    = 0;
-Reference< XDictionary1 >       LinguMgr::xChangeAll    = 0;
+uno::Reference< XLinguServiceManager >  LinguMgr::xLngSvcMgr    = 0;
+uno::Reference< XSpellChecker1 >    LinguMgr::xSpell        = 0;
+uno::Reference< XHyphenator >       LinguMgr::xHyph         = 0;
+uno::Reference< XThesaurus >        LinguMgr::xThes         = 0;
+uno::Reference< XDictionaryList >   LinguMgr::xDicList      = 0;
+uno::Reference< XPropertySet >      LinguMgr::xProp         = 0;
+uno::Reference< XDictionary1 >      LinguMgr::xIgnoreAll    = 0;
+uno::Reference< XDictionary1 >      LinguMgr::xChangeAll    = 0;
 
 
-Reference< XLinguServiceManager > LinguMgr::GetLngSvcMgr()
+uno::Reference< XLinguServiceManager > LinguMgr::GetLngSvcMgr()
 {
     if (bExiting)
         return 0;
@@ -1179,32 +1179,32 @@ Reference< XLinguServiceManager > LinguMgr::GetLngSvcMgr()
 }
 
 
-Reference< XSpellChecker1 > LinguMgr::GetSpellChecker()
+uno::Reference< XSpellChecker1 > LinguMgr::GetSpellChecker()
 {
     return xSpell.is() ? xSpell : GetSpell();
 }
 
-Reference< XHyphenator > LinguMgr::GetHyphenator()
+uno::Reference< XHyphenator > LinguMgr::GetHyphenator()
 {
     return xHyph.is() ? xHyph : GetHyph();
 }
 
-Reference< XThesaurus > LinguMgr::GetThesaurus()
+uno::Reference< XThesaurus > LinguMgr::GetThesaurus()
 {
     return xThes.is() ? xThes : GetThes();
 }
 
-Reference< XDictionaryList > LinguMgr::GetDictionaryList()
+uno::Reference< XDictionaryList > LinguMgr::GetDictionaryList()
 {
     return xDicList.is() ? xDicList : GetDicList();
 }
 
-Reference< XPropertySet > LinguMgr::GetLinguPropertySet()
+uno::Reference< XPropertySet > LinguMgr::GetLinguPropertySet()
 {
     return xProp.is() ? xProp : GetProp();
 }
 
-Reference< XDictionary1 > LinguMgr::GetStandardDic()
+uno::Reference< XDictionary1 > LinguMgr::GetStandardDic()
 {
     //! don't hold reference to this
     //! (it may be removed from dictionary list and needs to be
@@ -1212,17 +1212,17 @@ Reference< XDictionary1 > LinguMgr::GetStandardDic()
     return GetStandard();
 }
 
-Reference< XDictionary1 > LinguMgr::GetIgnoreAllList()
+uno::Reference< XDictionary1 > LinguMgr::GetIgnoreAllList()
 {
     return xIgnoreAll.is() ? xIgnoreAll : GetIgnoreAll();
 }
 
-Reference< XDictionary1 > LinguMgr::GetChangeAllList()
+uno::Reference< XDictionary1 > LinguMgr::GetChangeAllList()
 {
     return xChangeAll.is() ? xChangeAll : GetChangeAll();
 }
 
-Reference< XSpellChecker1 > LinguMgr::GetSpell()
+uno::Reference< XSpellChecker1 > LinguMgr::GetSpell()
 {
     if (bExiting)
         return 0;
@@ -1238,14 +1238,14 @@ Reference< XSpellChecker1 > LinguMgr::GetSpell()
 
     if (xLngSvcMgr.is())
     {
-        xSpell = Reference< XSpellChecker1 > (
+        xSpell = uno::Reference< XSpellChecker1 > (
                         xLngSvcMgr->getSpellChecker(), UNO_QUERY );
     }
 */
     return xSpell;
 }
 
-Reference< XHyphenator > LinguMgr::GetHyph()
+uno::Reference< XHyphenator > LinguMgr::GetHyph()
 {
     if (bExiting)
         return 0;
@@ -1268,7 +1268,7 @@ Reference< XHyphenator > LinguMgr::GetHyph()
     return xHyph;
 }
 
-Reference< XThesaurus > LinguMgr::GetThes()
+uno::Reference< XThesaurus > LinguMgr::GetThes()
 {
     if (bExiting)
         return 0;
@@ -1299,7 +1299,7 @@ void LinguMgr::UpdateAll()
 }
 
 
-Reference< XDictionaryList > LinguMgr::GetDicList()
+uno::Reference< XDictionaryList > LinguMgr::GetDicList()
 {
     if (bExiting)
         return 0;
@@ -1307,16 +1307,16 @@ Reference< XDictionaryList > LinguMgr::GetDicList()
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
 
-    Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
+    uno::Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
     if (xMgr.is())
     {
-        xDicList = Reference< XDictionaryList > ( xMgr->createInstance(
+        xDicList = uno::Reference< XDictionaryList > ( xMgr->createInstance(
                     A2OU("com.sun.star.linguistic2.DictionaryList") ), UNO_QUERY );
     }
     return xDicList;
 }
 
-Reference< XPropertySet > LinguMgr::GetProp()
+uno::Reference< XPropertySet > LinguMgr::GetProp()
 {
     if (bExiting)
         return 0;
@@ -1324,16 +1324,16 @@ Reference< XPropertySet > LinguMgr::GetProp()
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
 
-    Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
+    uno::Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
     if (xMgr.is())
     {
-        xProp = Reference< XPropertySet > ( xMgr->createInstance(
+        xProp = uno::Reference< XPropertySet > ( xMgr->createInstance(
                     A2OU("com.sun.star.linguistic2.LinguProperties") ), UNO_QUERY );
     }
     return xProp;
 }
 
-Reference< XDictionary1 > LinguMgr::GetIgnoreAll()
+uno::Reference< XDictionary1 > LinguMgr::GetIgnoreAll()
 {
     if (bExiting)
         return 0;
@@ -1341,16 +1341,16 @@ Reference< XDictionary1 > LinguMgr::GetIgnoreAll()
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
 
-    Reference< XDictionaryList >  xTmpDicList( GetDictionaryList() );
+    uno::Reference< XDictionaryList >  xTmpDicList( GetDictionaryList() );
     if (xTmpDicList.is())
     {
-        xIgnoreAll = Reference< XDictionary1 > ( xTmpDicList->getDictionaryByName(
+        xIgnoreAll = uno::Reference< XDictionary1 > ( xTmpDicList->getDictionaryByName(
                     A2OU("IgnoreAllList") ), UNO_QUERY );
     }
     return xIgnoreAll;
 }
 
-Reference< XDictionary1 > LinguMgr::GetChangeAll()
+uno::Reference< XDictionary1 > LinguMgr::GetChangeAll()
 {
     if (bExiting)
         return 0;
@@ -1358,10 +1358,10 @@ Reference< XDictionary1 > LinguMgr::GetChangeAll()
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
 
-    Reference< XDictionaryList > _xDicList( GetDictionaryList() , UNO_QUERY );
+    uno::Reference< XDictionaryList > _xDicList( GetDictionaryList() , UNO_QUERY );
     if (_xDicList.is())
     {
-        xChangeAll = Reference< XDictionary1 > (
+        xChangeAll = uno::Reference< XDictionary1 > (
                         _xDicList->createDictionary(
                             A2OU("ChangeAllList"),
                             SvxCreateLocale( LANGUAGE_NONE ),
@@ -1370,7 +1370,7 @@ Reference< XDictionary1 > LinguMgr::GetChangeAll()
     return xChangeAll;
 }
 
-Reference< XDictionary1 > LinguMgr::GetStandard()
+uno::Reference< XDictionary1 > LinguMgr::GetStandard()
 {
     // Tries to return a dictionary which may hold positive entries is
     // persistent and not read-only.
@@ -1378,17 +1378,17 @@ Reference< XDictionary1 > LinguMgr::GetStandard()
     if (bExiting)
         return 0;
 
-    Reference< XDictionaryList >  xTmpDicList( GetDictionaryList() );
+    uno::Reference< XDictionaryList >  xTmpDicList( GetDictionaryList() );
     if (!xTmpDicList.is())
         return NULL;
 
     const OUString aDicName( RTL_CONSTASCII_USTRINGPARAM( "standard.dic" ) );
-    Reference< XDictionary1 >   xDic( xTmpDicList->getDictionaryByName( aDicName ),
+    uno::Reference< XDictionary1 >  xDic( xTmpDicList->getDictionaryByName( aDicName ),
                                       UNO_QUERY );
     if (!xDic.is())
     {
         // try to create standard dictionary
-        Reference< XDictionary >    xTmp;
+        uno::Reference< XDictionary >    xTmp;
         try
         {
             xTmp =  xTmpDicList->createDictionary( aDicName,
@@ -1403,10 +1403,10 @@ Reference< XDictionary1 > LinguMgr::GetStandard()
         // add new dictionary to list
         if (xTmp.is())
             xTmpDicList->addDictionary( xTmp );
-        xDic = Reference< XDictionary1 > ( xTmp, UNO_QUERY );
+        xDic = uno::Reference< XDictionary1 > ( xTmp, UNO_QUERY );
     }
 #if OSL_DEBUG_LEVEL > 1
-    Reference< XStorable >      xStor( xDic, UNO_QUERY );
+    uno::Reference< XStorable >      xStor( xDic, UNO_QUERY );
     DBG_ASSERT( xDic.is() && xDic->getDictionaryType() == DictionaryType_POSITIVE,
             "wrong dictionary type");
     DBG_ASSERT( xDic.is() && xDic->getLanguage() == LANGUAGE_NONE,
@@ -1420,44 +1420,44 @@ Reference< XDictionary1 > LinguMgr::GetStandard()
 
 ///////////////////////////////////////////////////////////////////////////
 
-Reference< XSpellChecker1 >  SvxGetSpellChecker()
+uno::Reference< XSpellChecker1 >  SvxGetSpellChecker()
 {
     return LinguMgr::GetSpellChecker();
 }
 
-Reference< XHyphenator >  SvxGetHyphenator()
+uno::Reference< XHyphenator >  SvxGetHyphenator()
 {
     return LinguMgr::GetHyphenator();
 }
 
-Reference< XThesaurus >  SvxGetThesaurus()
+uno::Reference< XThesaurus >  SvxGetThesaurus()
 {
     return LinguMgr::GetThesaurus();
 }
 
-Reference< XDictionaryList >  SvxGetDictionaryList()
+uno::Reference< XDictionaryList >  SvxGetDictionaryList()
 {
     return LinguMgr::GetDictionaryList();
 }
 
-Reference< XPropertySet >   SvxGetLinguPropertySet()
+uno::Reference< XPropertySet >  SvxGetLinguPropertySet()
 {
     return LinguMgr::GetLinguPropertySet();
 }
 
 //TL:TODO: remove argument or provide SvxGetIgnoreAllList with the same one
-Reference< XDictionary1 >  SvxGetOrCreatePosDic(
-        Reference< XDictionaryList >  /* xDicList */ )
+uno::Reference< XDictionary1 >  SvxGetOrCreatePosDic(
+        uno::Reference< XDictionaryList >  /* xDicList */ )
 {
     return LinguMgr::GetStandardDic();
 }
 
-Reference< XDictionary1 >  SvxGetIgnoreAllList()
+uno::Reference< XDictionary1 >  SvxGetIgnoreAllList()
 {
     return LinguMgr::GetIgnoreAllList();
 }
 
-Reference< XDictionary1 >  SvxGetChangeAllList()
+uno::Reference< XDictionary1 >  SvxGetChangeAllList()
 {
     return LinguMgr::GetChangeAllList();
 }
@@ -1512,7 +1512,7 @@ SvxAlternativeSpelling SvxGetAltSpelling(
 
 ///////////////////////////////////////////////////////////////////////////
 
-SvxDicListChgClamp::SvxDicListChgClamp( Reference< XDictionaryList >  &rxDicList ) :
+SvxDicListChgClamp::SvxDicListChgClamp( uno::Reference< XDictionaryList >  &rxDicList ) :
     xDicList    ( rxDicList )
 {
     if (xDicList.is())
@@ -1550,7 +1550,7 @@ String SvxGetDictionaryURL(const String &rDicName, sal_Bool bIsUserDic)
 }
 
 sal_uInt8 SvxAddEntryToDic(
-        Reference< XDictionary >  &rxDic,
+        uno::Reference< XDictionary >  &rxDic,
         const OUString &rWord, sal_Bool bIsNeg,
         const OUString &rRplcTxt, sal_Int16 /* nRplcLang */,
         sal_Bool bStripDot )
@@ -1578,7 +1578,7 @@ sal_uInt8 SvxAddEntryToDic(
             nRes = DIC_ERR_FULL;
         else
         {
-            Reference< XStorable >  xStor( rxDic, UNO_QUERY );
+            uno::Reference< XStorable >  xStor( rxDic, UNO_QUERY );
             if (xStor.is() && xStor->isReadonly())
                 nRes = DIC_ERR_READONLY;
             else
@@ -1608,21 +1608,21 @@ short SvxDicError( Window *pParent, sal_Int16 nError )
     return nRes;
 }
 
-sal_Bool SvxSaveDictionaries( const Reference< XDictionaryList >  &xDicList )
+sal_Bool SvxSaveDictionaries( const uno::Reference< XDictionaryList >  &xDicList )
 {
     if (!xDicList.is())
         return sal_True;
 
     sal_Bool bRet = sal_True;
 
-    Sequence< Reference< XDictionary >  > aDics( xDicList->getDictionaries() );
-    const Reference< XDictionary >  *pDic = aDics.getConstArray();
+    Sequence< uno::Reference< XDictionary >  > aDics( xDicList->getDictionaries() );
+    const uno::Reference< XDictionary >  *pDic = aDics.getConstArray();
     INT32 nCount = aDics.getLength();
     for (INT32 i = 0;  i < nCount;  i++)
     {
         try
         {
-            Reference< XStorable >  xStor( pDic[i], UNO_QUERY );
+            uno::Reference< XStorable >  xStor( pDic[i], UNO_QUERY );
             if (xStor.is())
             {
                 if (!xStor->isReadonly() && xStor->hasLocation())
