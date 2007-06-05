@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gallery1.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:59:41 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:35:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,10 +61,8 @@
 // - Namespaces -
 // --------------
 
-using namespace ::ucb;
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::ucb;
 
 // ---------------------
 // - GalleryThemeEntry -
@@ -295,13 +293,13 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
 
     try
     {
-        uno::Reference< XCommandEnvironment >   xEnv;
-        Content                                 aCnt( rBaseURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
+        uno::Reference< ucb::XCommandEnvironment > xEnv;
+        ::ucbhelper::Content                       aCnt( rBaseURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
 
         uno::Sequence< OUString > aProps( 1 );
         aProps.getArray()[ 0 ] = OUString::createFromAscii( "Url" );
 
-        uno::Reference< sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, INCLUDE_DOCUMENTS_ONLY ) );
+        uno::Reference< sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
 
         try
         {
@@ -325,19 +323,19 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
             else
                 rbDirIsReadOnly = sal_True;
         }
-        catch( const ContentCreationException& )
+        catch( const ucb::ContentCreationException& )
         {
         }
-        catch( const ::com::sun::star::uno::RuntimeException& )
+        catch( const uno::RuntimeException& )
         {
         }
-        catch( const ::com::sun::star::uno::Exception& )
+        catch( const uno::Exception& )
         {
         }
 
         if( xResultSet.is() )
         {
-            uno::Reference< XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
+            uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
 
             if( xContentAccess.is() )
             {
@@ -356,18 +354,18 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
 
                         try
                         {
-                            Content aThmCnt( aThmURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
-                            Content aSdgCnt( aSdgURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
-                            Content aSdvCnt( aSdvURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
+                            ::ucbhelper::Content aThmCnt( aThmURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
+                            ::ucbhelper::Content aSdgCnt( aSdgURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
+                            ::ucbhelper::Content aSdvCnt( aSdvURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
 
                             try
                             {
                                 aThmCnt.getPropertyValue( aTitleProp ) >>= aTitle;
                             }
-                            catch( const ::com::sun::star::uno::RuntimeException& )
+                            catch( const uno::RuntimeException& )
                             {
                             }
-                            catch( const ::com::sun::star::uno::Exception& )
+                            catch( const uno::Exception& )
                             {
                             }
 
@@ -377,10 +375,10 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
                                 {
                                     aThmCnt.getPropertyValue( aReadOnlyProp ) >>= bReadOnly;
                                 }
-                                catch( const ::com::sun::star::uno::RuntimeException& )
+                                catch( const uno::RuntimeException& )
                                 {
                                 }
-                                catch( const ::com::sun::star::uno::Exception& )
+                                catch( const uno::Exception& )
                                 {
                                 }
 
@@ -403,10 +401,10 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
                                         {
                                             aSdgCnt.getPropertyValue( aReadOnlyProp ) >>= bReadOnly;
                                         }
-                                        catch( const ::com::sun::star::uno::RuntimeException& )
+                                        catch( const uno::RuntimeException& )
                                         {
                                         }
-                                        catch( const ::com::sun::star::uno::Exception& )
+                                        catch( const uno::Exception& )
                                         {
                                         }
                                     }
@@ -431,10 +429,10 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
                                         {
                                             aSdvCnt.getPropertyValue( aReadOnlyProp ) >>= bReadOnly;
                                         }
-                                        catch( const ::com::sun::star::uno::RuntimeException& )
+                                        catch( const uno::RuntimeException& )
                                         {
                                         }
-                                        catch( const ::com::sun::star::uno::Exception& )
+                                        catch( const uno::Exception& )
                                         {
                                         }
                                     }
@@ -453,13 +451,13 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
                                 }
                             }
                         }
-                        catch( const ContentCreationException& )
+                        catch( const ucb::ContentCreationException& )
                         {
                         }
-                        catch( const ::com::sun::star::uno::RuntimeException& )
+                        catch( const uno::RuntimeException& )
                         {
                         }
-                        catch( const ::com::sun::star::uno::Exception& )
+                        catch( const uno::Exception& )
                         {
                         }
                     }
@@ -467,13 +465,13 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
             }
         }
     }
-    catch( const ContentCreationException& )
+    catch( const ucb::ContentCreationException& )
     {
     }
-    catch( const ::com::sun::star::uno::RuntimeException& )
+    catch( const uno::RuntimeException& )
     {
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const uno::Exception& )
     {
     }
 }
