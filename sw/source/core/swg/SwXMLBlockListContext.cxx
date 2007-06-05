@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLBlockListContext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:28:24 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:30:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ SwXMLBlockListContext::~SwXMLBlockListContext ( void )
 SvXMLImportContext *SwXMLBlockListContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference< xml::sax::XAttributeList > & xAttrList )
+    const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
     if (nPrefix == XML_NAMESPACE_BLOCKLIST &&
@@ -174,7 +174,7 @@ SwXMLTextBlockDocumentContext::SwXMLTextBlockDocumentContext(
 SvXMLImportContext *SwXMLTextBlockDocumentContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference< xml::sax::XAttributeList > & xAttrList )
+    const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
     if (nPrefix == XML_NAMESPACE_OFFICE &&
@@ -203,7 +203,7 @@ SwXMLTextBlockTextContext::SwXMLTextBlockTextContext(
 SvXMLImportContext *SwXMLTextBlockTextContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference< xml::sax::XAttributeList > & xAttrList )
+    const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
     if (nPrefix == XML_NAMESPACE_TEXT &&
@@ -232,7 +232,7 @@ SwXMLTextBlockBodyContext::SwXMLTextBlockBodyContext(
 SvXMLImportContext *SwXMLTextBlockBodyContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference< xml::sax::XAttributeList > & xAttrList )
+    const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
     if (nPrefix == XML_NAMESPACE_OFFICE &&
