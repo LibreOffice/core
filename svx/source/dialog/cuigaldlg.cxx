@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuigaldlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:28:05 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:32:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@
 // - Namespaces -
 // --------------
 
-using namespace ::ucb;
+using namespace ::ucbhelper;
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star::lang;
