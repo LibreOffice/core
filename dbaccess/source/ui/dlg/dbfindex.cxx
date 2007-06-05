@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfindex.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:58:18 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:41:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -369,11 +369,11 @@ void ODbaseIndexDialog::Init()
 
     //  String aFileName = aURL.PathToFileName();
     m_aDSN = aURL.GetMainURL(INetURLObject::NO_DECODE);
-    ::ucb::Content aFile;
+    ::ucbhelper::Content aFile;
     sal_Bool bFolder=sal_True;
     try
     {
-        aFile = ::ucb::Content(m_aDSN,Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+        aFile = ::ucbhelper::Content(m_aDSN,Reference< ::com::sun::star::ucb::XCommandEnvironment >());
         bFolder = aFile.isFolder();
     }
     catch(Exception&)
@@ -572,7 +572,7 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
     {
         try
         {
-            ::ucb::Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
+            ::ucbhelper::Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
             aContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),makeAny( sal_Bool( sal_True ) ) );
         }
         catch (const Exception& e )
