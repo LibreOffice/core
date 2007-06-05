@@ -71,14 +71,12 @@
     <project-build-dependency> salhelper          </project-build-dependency>
     <project-build-dependency> cppu               </project-build-dependency>
     <project-build-dependency> cppuhelper         </project-build-dependency>
-    <project-build-dependency> vos                </project-build-dependency>
     <project-build-dependency> ucbhelper          </project-build-dependency>
 
     <runtime-module-dependency> sal3              </runtime-module-dependency>
     <runtime-module-dependency> cppu3             </runtime-module-dependency>
     <runtime-module-dependency> cppuhelper3$(COM) </runtime-module-dependency>
-    <runtime-module-dependency> vos3$(COM)        </runtime-module-dependency>
-    <runtime-module-dependency> ucbhelper3$(COM)  </runtime-module-dependency>
+    <runtime-module-dependency> ucbhelper4$(COM)  </runtime-module-dependency>
 
     <type> com.sun.star.beans.Property                                  </type>
     <type> com.sun.star.beans.PropertyAttribute                         </type>
