@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultsetbase.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:17:41 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:29:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,14 +63,12 @@
 
 using namespace chelp;
 using namespace com::sun::star;
-using namespace com::sun::star::ucb;
-
 
 ResultSetBase::ResultSetBase( const uno::Reference< lang::XMultiServiceFactory >&  xMSF,
-                              const uno::Reference< XContentProvider >&  xProvider,
+                              const uno::Reference< ucb::XContentProvider >&  xProvider,
                               sal_Int32 nOpenMode,
                               const uno::Sequence< beans::Property >& seq,
-                              const uno::Sequence< NumberedSortingInfo >& seqSort )
+                              const uno::Sequence< ucb::NumberedSortingInfo >& seqSort )
     : m_xMSF( xMSF ),
       m_xProvider( xProvider ),
       m_nRow( -1 ),
@@ -125,7 +123,7 @@ ResultSetBase::queryInterface(
                                           SAL_STATIC_CAST( sdbc::XResultSet*, this),
                                           SAL_STATIC_CAST( sdbc::XResultSetMetaDataSupplier*, this),
                                           SAL_STATIC_CAST( beans::XPropertySet*, this ),
-                                          SAL_STATIC_CAST( XContentAccess*, this) );
+                                          SAL_STATIC_CAST( ucb::XContentAccess*, this) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
@@ -429,7 +427,7 @@ ResultSetBase::queryContentIdentifierString(
 }
 
 
-uno::Reference< XContentIdentifier > SAL_CALL
+uno::Reference< ucb::XContentIdentifier > SAL_CALL
 ResultSetBase::queryContentIdentifier(
     void )
     throw( uno::RuntimeException )
@@ -438,15 +436,16 @@ ResultSetBase::queryContentIdentifier(
     {
         rtl::OUString url = queryContentIdentifierString();
         if( ! m_aIdents[m_nRow].is() && url.getLength() )
-            m_aIdents[m_nRow] = uno::Reference< XContentIdentifier >( new ::ucb::ContentIdentifier( m_xMSF,url ) );
+            m_aIdents[m_nRow] = uno::Reference< ucb::XContentIdentifier >(
+                new ::ucbhelper::ContentIdentifier( m_xMSF,url ) );
         return m_aIdents[m_nRow];
     }
 
-    return uno::Reference< XContentIdentifier >();
+    return uno::Reference< ucb::XContentIdentifier >();
 }
 
 
-uno::Reference< XContent > SAL_CALL
+uno::Reference< ucb::XContent > SAL_CALL
 ResultSetBase::queryContent(
     void )
     throw( uno::RuntimeException )
@@ -454,7 +453,7 @@ ResultSetBase::queryContent(
     if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
         return m_xProvider->queryContent( queryContentIdentifier() );
     else
-        return uno::Reference< XContent >();
+        return uno::Reference< ucb::XContent >();
 }
 
 
@@ -672,8 +671,8 @@ ResultSetBase::getMetaData(
     throw( sdbc::SQLException,
            uno::RuntimeException )
 {
-    ::ucb::ResultSetMetaData* p =
-          new ::ucb::ResultSetMetaData(
+    ::ucbhelper::ResultSetMetaData* p =
+          new ::ucbhelper::ResultSetMetaData(
               m_xMSF, m_sProperty );
     return uno::Reference< sdbc::XResultSetMetaData >( p );
 }
