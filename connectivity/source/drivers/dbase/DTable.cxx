@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:00:44 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:21:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,7 @@ using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace connectivity::dbase;
 using namespace connectivity::file;
-using namespace ::ucb;
+using namespace ::ucbhelper;
 using namespace ::utl;
 using namespace ::cppu;
 using namespace ::dbtools;
@@ -1197,7 +1197,7 @@ BOOL ODbaseTable::Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMemoFie
             // 89711 - 16.07.2001 - frank.schoenheit@sun.com
             try
             {
-                ::ucb::Content aDeleteContent( aURL.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+                ::ucbhelper::Content aDeleteContent( aURL.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment > () );
                 aDeleteContent.executeCommand( ::rtl::OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
             }
             catch(Exception&)
