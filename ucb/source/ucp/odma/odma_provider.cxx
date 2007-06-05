@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odma_provider.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 10:12:58 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:11:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,6 @@
 
  *************************************************************************/
 
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
-#endif
 #ifndef _UCBHELPER_CONTENTIDENTIFIER_HXX
 #include <ucbhelper/contentidentifier.hxx>
 #endif
@@ -71,7 +68,6 @@
 #include <osl/file.hxx>
 #endif
 
-using namespace com::sun;
 using namespace com::sun::star;
 using namespace odma;
 
@@ -86,7 +82,7 @@ ODMHANDLE ContentProvider::m_aOdmHandle = NULL;
 
 ContentProvider::ContentProvider(
                 const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
-: ::ucb::ContentProviderImplHelper( rSMgr )
+: ::ucbhelper::ContentProviderImplHelper( rSMgr )
 {
 
 }
@@ -141,7 +137,7 @@ ODMHANDLE ContentProvider::getHandle()
 XINTERFACE_IMPL_3( ContentProvider,
                    lang::XTypeProvider,
                    lang::XServiceInfo,
-                   star::ucb::XContentProvider );
+                   ucb::XContentProvider );
 
 //=========================================================================
 //
@@ -153,7 +149,7 @@ XINTERFACE_IMPL_3( ContentProvider,
 XTYPEPROVIDER_IMPL_3( ContentProvider,
                       lang::XTypeProvider,
                       lang::XServiceInfo,
-                      star::ucb::XContentProvider );
+                      ucb::XContentProvider );
 
 //=========================================================================
 //
@@ -183,13 +179,13 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 //=========================================================================
 
 // virtual
-uno::Reference< star::ucb::XContent > SAL_CALL ContentProvider::queryContent(
-        const uno::Reference< star::ucb::XContentIdentifier >& Identifier )
-    throw( star::ucb::IllegalIdentifierException, uno::RuntimeException )
+uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
+        const uno::Reference< ucb::XContentIdentifier >& Identifier )
+    throw( ucb::IllegalIdentifierException, uno::RuntimeException )
 {
     // Check URL scheme...
     if(!getHandle())
-        throw star::ucb::IllegalIdentifierException();
+        throw ucb::IllegalIdentifierException();
 
     rtl::OUString aScheme( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(ODMA_URL_SCHEME) ) );
     sal_Int32 nIndex = 0;
@@ -198,33 +194,33 @@ uno::Reference< star::ucb::XContent > SAL_CALL ContentProvider::queryContent(
     // check if url starts with odma
     if ( !(Identifier->getContentProviderScheme().equalsIgnoreAsciiCase( aScheme ) ||
            Identifier->getContentProviderScheme().equalsIgnoreAsciiCase( sOdma )) )
-        throw star::ucb::IllegalIdentifierException();
+        throw ucb::IllegalIdentifierException();
 
     if(!(   sCanonicURL.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(ODMA_URL_SCHEME_SHORT ODMA_URL_SHORT)) ||
             sCanonicURL.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(ODMA_URL_SCHEME ODMA_URL_SHORT))))
-        throw star::ucb::IllegalIdentifierException();
+        throw ucb::IllegalIdentifierException();
 
     // @@@ Further id checks may go here...
 #if 0
     if ( id-check-failes )
-        throw star::ucb::IllegalIdentifierException();
+        throw ucb::IllegalIdentifierException();
 #endif
 
     // @@@ Id normalization may go here...
 #if 0
     // Normalize URL and create new Id.
     rtl::OUString aCanonicURL = ( Identifier->getContentIdentifier() );
-    uno::Reference< star::ucb::XContentIdentifier > xCanonicId
+    uno::Reference< ucb::XContentIdentifier > xCanonicId
         = new ::ucb::ContentIdentifier( m_xSMgr, aCanonicURL );
 #else
-    uno::Reference< star::ucb::XContentIdentifier > xCanonicId = Identifier;
+    uno::Reference< ucb::XContentIdentifier > xCanonicId = Identifier;
 #endif
 
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     // Check, if a content with given id already exists...
-    uno::Reference< star::ucb::XContent > xContent
-        = queryExistingContent( xCanonicId ).getBodyPtr();
+    uno::Reference< ucb::XContent > xContent
+        = queryExistingContent( xCanonicId ).get();
     if ( xContent.is() )
         return xContent;
 
@@ -236,7 +232,7 @@ uno::Reference< star::ucb::XContent > SAL_CALL ContentProvider::queryContent(
 
     sCanonicURL = convertURL(sCanonicURL);
 
-    ::vos::ORef<ContentProperties> aProp;
+    ::rtl::Reference<ContentProperties> aProp;
     // first check if we got an ODMA ID from outside
     if( sCanonicURL.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(ODMA_URL_ODMAID)))
     {// we get an orignal ODMA id so we have to look for the name
@@ -263,9 +259,9 @@ uno::Reference< star::ucb::XContent > SAL_CALL ContentProvider::queryContent(
     {
         // we have a valid document name
         aProp = getContentPropertyWithTitle(sCanonicURL);
-        if(!aProp.isValid())
+        if(!aProp.is())
             aProp = getContentPropertyWithSavedAsName(sCanonicURL);
-        if(!aProp.isValid())
+        if(!aProp.is())
         {
             if(sCanonicURL.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("/")))
             { // found only the scheme
@@ -280,13 +276,13 @@ uno::Reference< star::ucb::XContent > SAL_CALL ContentProvider::queryContent(
                 aProp = queryContentProperty(sCanonicURL);
         }
     }
-    if(!aProp.isValid())
-        throw star::ucb::IllegalIdentifierException();
+    if(!aProp.is())
+        throw ucb::IllegalIdentifierException();
 
     xContent = new Content( m_xSMgr, this, xCanonicId ,aProp);
 
     if ( !xContent->getIdentifier().is() )
-        throw star::ucb::IllegalIdentifierException();
+        throw ucb::IllegalIdentifierException();
 
     return xContent;
 }
@@ -364,7 +360,7 @@ util::DateTime toDateTime(const ::rtl::OString& _sSQLString)
     return util::DateTime(0,aTime.Seconds,aTime.Minutes,aTime.Hours,aDate.Day,aDate.Month,aDate.Year);
 }
 // -----------------------------------------------------------------------------
-void ContentProvider::fillDocumentProperties(const ::vos::ORef<ContentProperties>& _rProp)
+void ContentProvider::fillDocumentProperties(const ::rtl::Reference<ContentProperties>& _rProp)
 {
     // read some properties from the DMS
     sal_Char* lpszDocInfo = new sal_Char[ODM_DOCID_MAX];
@@ -443,7 +439,7 @@ void ContentProvider::fillDocumentProperties(const ::vos::ORef<ContentProperties
     delete lpszDocInfo;
 }
 // -----------------------------------------------------------------------------
-void ContentProvider::append(const ::vos::ORef<ContentProperties>& _rProp)
+void ContentProvider::append(const ::rtl::Reference<ContentProperties>& _rProp)
 {
     // now fill some more properties
     fillDocumentProperties(_rProp);
@@ -451,9 +447,9 @@ void ContentProvider::append(const ::vos::ORef<ContentProperties>& _rProp)
     m_aContents.insert(ContentsMap::value_type(_rProp->m_sDocumentId,_rProp));
 }
 // -----------------------------------------------------------------------------
-::vos::ORef<ContentProperties> ContentProvider::queryContentProperty(const ::rtl::OUString& _sDocumentName)
+::rtl::Reference<ContentProperties> ContentProvider::queryContentProperty(const ::rtl::OUString& _sDocumentName)
 {
-    ::vos::ORef<ContentProperties> aReturn;
+    ::rtl::Reference<ContentProperties> aReturn;
     sal_Char* lpszDMSList   = new sal_Char[ODM_DMSID_MAX];
 
     ODMSTATUS odm = NODMGetDMS(ODMA_ODMA_REGNAME, lpszDMSList);
@@ -523,10 +519,10 @@ void ContentProvider::append(const ::vos::ORef<ContentProperties>& _rProp)
     return aReturn;
 }
 // -----------------------------------------------------------------------------
-::vos::ORef<ContentProperties> ContentProvider::getContentProperty(const ::rtl::OUString& _sName,
+::rtl::Reference<ContentProperties> ContentProvider::getContentProperty(const ::rtl::OUString& _sName,
                                                                    const ContentPropertiesMemberFunctor& _aFunctor) const
 {
-    ::vos::ORef<ContentProperties> aReturn;
+    ::rtl::Reference<ContentProperties> aReturn;
     ContentsMap::const_iterator aFind = ::std::find_if( m_aContents.begin(),
                                                         m_aContents.end(),
                                                         ::std::compose1(
@@ -539,21 +535,21 @@ void ContentProvider::append(const ::vos::ORef<ContentProperties>& _rProp)
     return aReturn;
 }
 // -----------------------------------------------------------------------------
-::vos::ORef<ContentProperties> ContentProvider::getContentPropertyWithSavedAsName(const ::rtl::OUString& _sSaveAsName) const
+::rtl::Reference<ContentProperties> ContentProvider::getContentPropertyWithSavedAsName(const ::rtl::OUString& _sSaveAsName) const
 {
     ContentPropertiesMemberFunctor aFunc(::std::mem_fun(&ContentProperties::getSavedAsName));
     return getContentProperty(_sSaveAsName,aFunc);
 }
 // -----------------------------------------------------------------------------
-::vos::ORef<ContentProperties> ContentProvider::getContentPropertyWithTitle(const ::rtl::OUString& _sTitle) const
+::rtl::Reference<ContentProperties> ContentProvider::getContentPropertyWithTitle(const ::rtl::OUString& _sTitle) const
 {
     ContentPropertiesMemberFunctor aFunc(::std::mem_fun(&ContentProperties::getTitle));
     return getContentProperty(_sTitle,aFunc);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString ContentProvider::openDoc(const ::vos::ORef<ContentProperties>& _rProp)  throw (::com::sun::star::uno::Exception)
+::rtl::OUString ContentProvider::openDoc(const ::rtl::Reference<ContentProperties>& _rProp)  throw (uno::Exception)
 {
-    OSL_ENSURE(_rProp.isValid(),"No valid content properties!");
+    OSL_ENSURE(_rProp.is(),"No valid content properties!");
     if(!_rProp->m_bIsOpen)
     {
         sal_Char *pFileName = new sal_Char[ODM_FILENAME_MAX];
@@ -614,7 +610,7 @@ void ContentProvider::append(const ::vos::ORef<ContentProperties>& _rProp)
     return sCanonicURL;
 }
 // -----------------------------------------------------------------------------
-sal_Bool ContentProvider::deleteDocument(const ::vos::ORef<ContentProperties>& _rProp)
+sal_Bool ContentProvider::deleteDocument(const ::rtl::Reference<ContentProperties>& _rProp)
 {
     closeDocument(_rProp->m_sDocumentId);
     ODMSTATUS odm = NODMActivate(ContentProvider::getHandle(),
