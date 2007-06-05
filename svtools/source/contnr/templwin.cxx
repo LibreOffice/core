@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:42:15 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:25:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1920,9 +1920,9 @@ sal_Bool SvtDocumentTemplateDialog::CanEnableEditBtn() const
         ::rtl::OUString aFileTargetURL = pImpl->pWin->GetSelectedFile();
         ::rtl::OUString aFolderTargetURL;
 
-        ::ucb::Content aFolderContent;
+        ::ucbhelper::Content aFolderContent;
         Reference< XCommandEnvironment > xEnv;
-        if ( ::ucb::Content::create( aFolderURL, xEnv, aFolderContent ) )
+        if ( ::ucbhelper::Content::create( aFolderURL, xEnv, aFolderContent ) )
         try
         {
             ::rtl::OUString aTmpURL;
