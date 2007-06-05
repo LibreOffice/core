@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultsetmetadata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:24:03 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:56:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,7 @@
 
  *************************************************************************/
 
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
-#endif
+#include "osl/diagnose.h"
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
 #include <com/sun/star/beans/Property.hpp>
@@ -94,29 +92,31 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 using namespace rtl;
-using namespace ucb;
 
-namespace ucb
-{
+namespace ucbhelper_impl {
 
 struct ResultSetMetaData_Impl
 {
-    osl::Mutex                          m_aMutex;
-    std::vector< ResultSetColumnData >  m_aColumnData;
-    sal_Bool                            m_bObtainedTypes;
-    sal_Bool                            m_bGlobalReadOnlyValue;
+    osl::Mutex                                      m_aMutex;
+    std::vector< ::ucbhelper::ResultSetColumnData > m_aColumnData;
+    sal_Bool                                        m_bObtainedTypes;
+    sal_Bool                                        m_bGlobalReadOnlyValue;
 
     ResultSetMetaData_Impl( sal_Int32 nSize )
     : m_aColumnData( nSize ), m_bObtainedTypes( sal_False ),
       m_bGlobalReadOnlyValue( sal_True ) {}
 
     ResultSetMetaData_Impl(
-        const std::vector< ResultSetColumnData >& rColumnData )
+        const std::vector< ::ucbhelper::ResultSetColumnData >& rColumnData )
     : m_aColumnData( rColumnData ), m_bObtainedTypes( sal_False ),
       m_bGlobalReadOnlyValue( sal_False ) {}
 };
 
 }
+
+using namespace ucbhelper_impl;
+
+namespace ucbhelper {
 
 //=========================================================================
 //=========================================================================
@@ -147,7 +147,7 @@ ResultSetMetaData::ResultSetMetaData(
   m_aProps( rProps ),
   m_bReadOnly( sal_True )
 {
-    VOS_ENSURE( rColumnData.size() == sal_uInt32( rProps.getLength() ),
+    OSL_ENSURE( rColumnData.size() == sal_uInt32( rProps.getLength() ),
                 "ResultSetMetaData ctor - different array sizes!" );
 }
 
@@ -635,3 +635,4 @@ OUString SAL_CALL ResultSetMetaData::getColumnServiceName( sal_Int32 column )
     return m_pImpl->m_aColumnData[ column - 1 ].columnServiceName;
 }
 
+} // namespace ucbhelper
