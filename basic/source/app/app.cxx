@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-11 09:04:47 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:09:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,9 +117,9 @@
 #endif
 
 using namespace comphelper;
-using namespace ucb;
 using namespace cppu;
 using namespace rtl;
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
@@ -260,7 +260,7 @@ static const char * const components[] =
     , 0
 };
 
-Reference< XContentProviderManager > InitializeUCB( void )
+uno::Reference< XContentProviderManager > InitializeUCB( void )
 {
     OUString path;
     if( osl_Process_E_None != osl_getExecutableFile( (rtl_uString**)&path ) )
@@ -280,7 +280,7 @@ Reference< XContentProviderManager > InitializeUCB( void )
     OUString types = bufTypes.makeStringAndClear();
 
 
-    Reference< XMultiServiceFactory > xSMgr;
+    uno::Reference< XMultiServiceFactory > xSMgr;
     try
     {
         xSMgr = createRegistryServiceFactory( types, services, sal_True );
@@ -290,14 +290,14 @@ Reference< XContentProviderManager > InitializeUCB( void )
         try
         {
             {
-                Reference< XMultiServiceFactory > interimSmgr =
+                uno::Reference< XMultiServiceFactory > interimSmgr =
                     createRegistryServiceFactory( types, sal_True );
-                Reference< XImplementationRegistration > xIR(
+                uno::Reference< XImplementationRegistration > xIR(
                     interimSmgr->createInstance(
                         OUString::createFromAscii(
                             "com.sun.star.registry.ImplementationRegistration" ) ), UNO_QUERY );
 
-                Reference< XSimpleRegistry > xReg(
+                uno::Reference< XSimpleRegistry > xReg(
                     interimSmgr->createInstance(
                         OUString::createFromAscii(
                             "com.sun.star.registry.SimpleRegistry" ) ), UNO_QUERY );
@@ -322,7 +322,7 @@ Reference< XContentProviderManager > InitializeUCB( void )
                     }
                 }
 
-                Reference< XComponent > xComp( interimSmgr, UNO_QUERY );
+                uno::Reference< XComponent > xComp( interimSmgr, UNO_QUERY );
                 if( xComp.is() )
                     xComp->dispose();
             }
@@ -351,7 +351,7 @@ Reference< XContentProviderManager > InitializeUCB( void )
     aConfArgs[1] <<= PropertyValue( OUString::createFromAscii("sourcepath"), 0, makeAny( OUString::createFromAscii("g:\\") ), ::com::sun::star::beans::PropertyState_DIRECT_VALUE );
     aConfArgs[2] <<= PropertyValue( OUString::createFromAscii("updatepath"), 0, makeAny( OUString::createFromAscii("g:\\") ), ::com::sun::star::beans::PropertyState_DIRECT_VALUE );
 
-    Reference< XContentProvider > xConfProvider
+    uno::Reference< XContentProvider > xConfProvider
         ( xSMgr->createInstanceWithArguments( OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" ), aConfArgs), UNO_QUERY );
 */
 
@@ -360,16 +360,16 @@ Reference< XContentProviderManager > InitializeUCB( void )
 /*  Sequence< Any > aArgs(1);
     aArgs[1] = makeAny ( xConfProvider );*/
     Sequence< Any > aArgs;
-    ucb::ContentBroker::initialize( xSMgr, aArgs );
-    Reference< XContentProviderManager > xUcb =
-        ucb::ContentBroker::get()->getContentProviderManagerInterface();
+    ::ucbhelper::ContentBroker::initialize( xSMgr, aArgs );
+    uno::Reference< XContentProviderManager > xUcb =
+        ::ucbhelper::ContentBroker::get()->getContentProviderManagerInterface();
 
-    Reference< XContentProvider > xFileProvider
+    uno::Reference< XContentProvider > xFileProvider
         ( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.ucb.FileContentProvider" ) ), UNO_QUERY );
     xUcb->registerContentProvider( xFileProvider, OUString::createFromAscii( "file" ), sal_True );
 
 
-/*  Reference< XContentProvider > xPackageProvider
+/*  uno::Reference< XContentProvider > xPackageProvider
         ( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.ucb.PackageContentProvider" ) ), UNO_QUERY );
     xUcb->registerContentProvider( xPackageProvider, OUString::createFromAscii( "vnd.sun.star.pkg" ), sal_True );
     */
@@ -392,7 +392,7 @@ void BasicApp::Main( )
     try
     {
 #ifdef _USE_UNO
-    Reference< XContentProviderManager > xUcb = InitializeUCB();
+    uno::Reference< XContentProviderManager > xUcb = InitializeUCB();
 #endif
 
     {
