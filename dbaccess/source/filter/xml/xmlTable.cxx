@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlTable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:48:23 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:40:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,7 @@
 namespace dbaxml
 {
     using namespace ::rtl;
+    using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::xml::sax;
@@ -89,8 +90,8 @@ DBG_NAME(OXMLTable)
 OXMLTable::OXMLTable( ODBFilter& _rImport
                 ,sal_uInt16 nPrfx
                 ,const OUString& _sLocalName
-                ,const Reference< XAttributeList > & _xAttrList
-                ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xParentContainer
+                ,const uno::Reference< XAttributeList > & _xAttrList
+                ,const uno::Reference< ::com::sun::star::container::XNameAccess >& _xParentContainer
                 ,const ::rtl::OUString& _sServiceName
                 )
     :SvXMLImportContext( _rImport, nPrfx, _sLocalName )
@@ -158,7 +159,7 @@ OXMLTable::~OXMLTable()
 SvXMLImportContext* OXMLTable::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+        const uno::Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
     const SvXMLTokenMap&    rTokenMap   = GetOwnImport().GetQueryElemTokenMap();
@@ -183,8 +184,8 @@ SvXMLImportContext* OXMLTable::CreateChildContext(
         case XML_TOK_COLUMNS:
             {
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                Reference< XColumnsSupplier > xColumnsSup(m_xTable,UNO_QUERY);
-                Reference< XNameAccess > xColumns;
+                uno::Reference< XColumnsSupplier > xColumnsSup(m_xTable,UNO_QUERY);
+                uno::Reference< XNameAccess > xColumns;
                 if ( xColumnsSup.is() )
                 {
                     xColumns = xColumnsSup->getColumns();
@@ -205,7 +206,7 @@ ODBFilter& OXMLTable::GetOwnImport()
     return static_cast<ODBFilter&>(GetImport());
 }
 // -----------------------------------------------------------------------------
-void OXMLTable::setProperties(Reference< XPropertySet > & _xProp )
+void OXMLTable::setProperties(uno::Reference< XPropertySet > & _xProp )
 {
     try
     {
@@ -227,7 +228,7 @@ void OXMLTable::setProperties(Reference< XPropertySet > & _xProp )
 // -----------------------------------------------------------------------------
 void OXMLTable::EndElement()
 {
-    Reference<XNameContainer> xNameContainer(m_xParentContainer,UNO_QUERY);
+    uno::Reference<XNameContainer> xNameContainer(m_xParentContainer,UNO_QUERY);
     if ( xNameContainer.is() )
     {
         try
@@ -262,7 +263,7 @@ void OXMLTable::EndElement()
 // -----------------------------------------------------------------------------
 void OXMLTable::fillAttributes(sal_uInt16 /*nPrfx*/
                                 ,const ::rtl::OUString& /*_sLocalName*/
-                                ,const Reference< XAttributeList > & _xAttrList
+                                ,const uno::Reference< XAttributeList > & _xAttrList
                                 , ::rtl::OUString& _rsCommand
                                 ,::rtl::OUString& _rsTableName
                                 ,::rtl::OUString& _rsTableSchema
