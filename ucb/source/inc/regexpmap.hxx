@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regexpmap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:18:30 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:53:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include <sal/types.h>
 #endif
 
-namespace ucb {
+namespace ucb_impl {
 
 template< typename Val > class RegexpMap;
 template< typename Val > class RegexpMapIter;
@@ -183,15 +183,15 @@ private:
 
 //============================================================================
 template< typename Val >
-inline bool operator ==(ucb::RegexpMapConstIter< Val > const & rIter1,
-                        ucb::RegexpMapConstIter< Val > const & rIter2)
+inline bool operator ==(ucb_impl::RegexpMapConstIter< Val > const & rIter1,
+                        ucb_impl::RegexpMapConstIter< Val > const & rIter2)
 {
     return rIter1.equals(rIter2);
 }
 
 template< typename Val >
-inline bool operator !=(ucb::RegexpMapConstIter< Val > const & rIter1,
-                        ucb::RegexpMapConstIter< Val > const & rIter2)
+inline bool operator !=(ucb_impl::RegexpMapConstIter< Val > const & rIter1,
+                        ucb_impl::RegexpMapConstIter< Val > const & rIter2)
 {
     return !rIter1.equals(rIter2);
 }
