@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gengal.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:59:53 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:35:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -280,7 +280,7 @@ void GalApp::Main()
     aArgs[4] <<= rtl::OUString::createFromAscii("PORTAL");
     aArgs[5] <<= aEmpty;
 
-    if (! ::ucb::ContentBroker::initialize( xMSF, aArgs ) )
+    if (! ::ucbhelper::ContentBroker::initialize( xMSF, aArgs ) )
         fprintf( stderr, "Failed to init content broker\n" );
 
     bool bHelp = false;
