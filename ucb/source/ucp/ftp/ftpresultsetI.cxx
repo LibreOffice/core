@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftpresultsetI.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:52:17 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:01:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-#include <ucbhelper/propertyvalueset.hxx>
-#include <vos/ref.hxx>
-#include <com/sun/star/ucb/Command.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/ucb/XCommandProcessor.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
+#include "ucbhelper/propertyvalueset.hxx"
+#include "rtl/ref.hxx"
+#include "com/sun/star/ucb/Command.hpp"
+#include "com/sun/star/ucb/XCommandEnvironment.hpp"
+#include "com/sun/star/ucb/XCommandProcessor.hpp"
+#include "com/sun/star/sdbc/XRow.hpp"
 #include "ftpresultsetI.hxx"
 
 
@@ -72,8 +72,8 @@ ResultSetI::ResultSetI(const Reference<XMultiServiceFactory>&  xMSF,
     m_aIdents.resize( m_aPath.size() );
 
     for(unsigned n = 0; n < m_aItems.size(); ++n) {
-        vos::ORef<ucb::PropertyValueSet> xRow =
-            new ucb::PropertyValueSet(xMSF);
+        rtl::Reference<ucbhelper::PropertyValueSet> xRow =
+            new ucbhelper::PropertyValueSet(xMSF);
 
         for( int i = 0; i < seqProp.getLength(); ++i) {
             const rtl::OUString& Name = seqProp[i].Name;
@@ -104,6 +104,6 @@ ResultSetI::ResultSetI(const Reference<XMultiServiceFactory>&  xMSF,
             else
                 xRow->appendVoid(seqProp[i]);
         }
-        m_aItems[n] = Reference<XRow>(xRow.getBodyPtr());
+        m_aItems[n] = Reference<XRow>(xRow.get());
     }
 }
