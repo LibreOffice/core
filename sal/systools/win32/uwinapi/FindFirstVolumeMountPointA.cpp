@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FindFirstVolumeMountPointA.cpp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:12:59 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 11:01:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,4 +35,4 @@
 
 #include "macros.h"
 
-DEFINE_DEFAULT_THUNK( kernel32, TRYLOAD, HANDLE, WINAPI, FindFirstVolumeMountPointA, (LPSTR lpszRootPathName, LPSTR lpszVolumeMountPoint, DWORD cchBufferLength) )
+DEFINE_DEFAULT_THUNK( kernel32, TRYLOAD, HANDLE, WINAPI, FindFirstVolumeMountPointA, (LPCSTR lpszRootPathName, LPSTR lpszVolumeMountPoint, DWORD cchBufferLength) )
