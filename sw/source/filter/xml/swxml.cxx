@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 12:06:06 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:39:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,10 +238,10 @@ int XMLReader::GetReaderType()
 
 /// read a component (file + filter version)
 sal_Int32 ReadThroughComponent(
-    Reference<io::XInputStream> xInputStream,
-    Reference<XComponent> xModelComponent,
+    uno::Reference<io::XInputStream> xInputStream,
+    uno::Reference<XComponent> xModelComponent,
     const String& rStreamName,
-    Reference<lang::XMultiServiceFactory> & rFactory,
+    uno::Reference<lang::XMultiServiceFactory> & rFactory,
     const sal_Char* pFilterName,
     Sequence<Any> rFilterArguments,
     const OUString& rName,
@@ -261,7 +261,7 @@ sal_Int32 ReadThroughComponent(
     aParserInput.aInputStream = xInputStream;
 
     // get parser
-    Reference< xml::sax::XParser > xParser(
+    uno::Reference< xml::sax::XParser > xParser(
         rFactory->createInstance(
             OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
         UNO_QUERY );
@@ -271,7 +271,7 @@ sal_Int32 ReadThroughComponent(
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
 
     // get filter
-    Reference< xml::sax::XDocumentHandler > xFilter(
+    uno::Reference< xml::sax::XDocumentHandler > xFilter(
         rFactory->createInstanceWithArguments(
             OUString::createFromAscii(pFilterName), rFilterArguments),
         UNO_QUERY );
@@ -284,7 +284,7 @@ sal_Int32 ReadThroughComponent(
     xParser->setDocumentHandler( xFilter );
 
     // connect model and filter
-    Reference < XImporter > xImporter( xFilter, UNO_QUERY );
+    uno::Reference < XImporter > xImporter( xFilter, UNO_QUERY );
     xImporter->setTargetDocument( xModelComponent );
 
 
@@ -376,11 +376,11 @@ sal_Int32 ReadThroughComponent(
 
 /// read a component (storage version)
 sal_Int32 ReadThroughComponent(
-    Reference<embed::XStorage> xStorage,
-    Reference<XComponent> xModelComponent,
+    uno::Reference<embed::XStorage> xStorage,
+    uno::Reference<XComponent> xModelComponent,
     const sal_Char* pStreamName,
     const sal_Char* pCompatibilityStreamName,
-    Reference<lang::XMultiServiceFactory> & rFactory,
+    uno::Reference<lang::XMultiServiceFactory> & rFactory,
     const sal_Char* pFilterName,
     Sequence<Any> rFilterArguments,
     const OUString& rName,
@@ -437,8 +437,8 @@ sal_Int32 ReadThroughComponent(
     try
     {
         // get input stream
-        Reference <io::XStream> xStream = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
-        Reference <beans::XPropertySet > xProps( xStream, uno::UNO_QUERY );
+        uno::Reference <io::XStream> xStream = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
+        uno::Reference <beans::XPropertySet > xProps( xStream, uno::UNO_QUERY );
 
         Any aAny = xProps->getPropertyValue(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ) );
@@ -446,7 +446,7 @@ sal_Int32 ReadThroughComponent(
         sal_Bool bEncrypted = aAny.getValueType() == ::getBooleanCppuType() &&
                 *(sal_Bool *)aAny.getValue();
 
-        Reference <io::XInputStream> xInputStream = xStream->getInputStream();
+        uno::Reference <io::XInputStream> xInputStream = xStream->getInputStream();
 
         // read from the stream
         return ReadThroughComponent(
@@ -596,23 +596,23 @@ void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
 ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const String & rName )
 {
     // Get service factory
-    Reference< lang::XMultiServiceFactory > xServiceFactory =
+    uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
     ASSERT( xServiceFactory.is(),
             "XMLReader::Read: got no service manager" );
     if( !xServiceFactory.is() )
         return ERR_SWG_READ_ERROR;
 
-    Reference< io::XActiveDataSource > xSource;
-    Reference< XInterface > xPipe;
-    Reference< document::XGraphicObjectResolver > xGraphicResolver;
+    uno::Reference< io::XActiveDataSource > xSource;
+    uno::Reference< XInterface > xPipe;
+    uno::Reference< document::XGraphicObjectResolver > xGraphicResolver;
     SvXMLGraphicHelper *pGraphicHelper = 0;
-    Reference< document::XEmbeddedObjectResolver > xObjectResolver;
+    uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
     SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
 
     // get the input stream (storage or stream)
-    Reference<io::XInputStream> xInputStream;
-    Reference<embed::XStorage> xStorage;
+    uno::Reference<io::XInputStream> xInputStream;
+    uno::Reference<embed::XStorage> xStorage;
     if( pMedium )
         xStorage = pMedium->GetStorage();
     else
@@ -640,7 +640,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     ASSERT( pDocSh, "XMLReader::Read: got no doc shell" );
     if( !pDocSh )
         return ERR_SWG_READ_ERROR;
-    Reference< lang::XComponent > xModelComp( pDocSh->GetModel(), UNO_QUERY );
+    uno::Reference< lang::XComponent > xModelComp( pDocSh->GetModel(), UNO_QUERY );
     ASSERT( xModelComp.is(),
             "XMLReader::Read: got no model" );
     if( !xModelComp.is() )
@@ -664,7 +664,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
               &::getCppuType((sal_Int32*)0),
               beans::PropertyAttribute::MAYBEVOID, 0},
         { "NumberStyles", sizeof("NumberStyles")-1, 0,
-              &::getCppuType( (Reference<container::XNameContainer> *) 0),
+              &::getCppuType( (uno::Reference<container::XNameContainer> *) 0),
               beans::PropertyAttribute::MAYBEVOID, 0},
         { "RecordChanges", sizeof("RecordChanges")-1, 0,
               &::getBooleanCppuType(),
@@ -680,7 +680,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
 #endif
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { "PrivateData", sizeof("PrivateData")-1, 0,
-              &::getCppuType( (Reference<XInterface> *)0 ),
+              &::getCppuType( (uno::Reference<XInterface> *)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { "BaseURI", sizeof("BaseURI")-1, 0,
               &::getCppuType( (OUString *)0 ),
@@ -699,7 +699,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { "TextInsertModeRange", sizeof("TextInsertModeRange")-1, 0,
-              &::getCppuType( (Reference<text::XTextRange> *) 0),
+              &::getCppuType( (uno::Reference<text::XTextRange> *) 0),
               beans::PropertyAttribute::MAYBEVOID, 0},
         { "AutoTextMode", sizeof("AutoTextMode")-1, 0,
               &::getBooleanCppuType(),
@@ -822,7 +822,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     }
     else if( bInsertMode )
     {
-        Reference<XTextRange> xInsertTextRange =
+        uno::Reference<XTextRange> xInsertTextRange =
             SwXTextRange::CreateTextRangeFromPosition( &rDoc, *rPaM.GetPoint(),
                                                            0 );
         OUString sTextInsertModeRange(
@@ -955,7 +955,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
         OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("layout-cache") );
         try
         {
-            Reference < io::XStream > xStm = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
+            uno::Reference < io::XStream > xStm = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
             SvStream* pStrm = utl::UcbStreamHelper::CreateStream( xStm );
             if( !pStrm->GetError() )
                 rDoc.ReadLayoutCache( *pStrm );
@@ -1076,11 +1076,11 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
 USHORT XMLReader::GetSectionList( SfxMedium& rMedium,
                                     SvStrings& rStrings ) const
 {
-    Reference< lang::XMultiServiceFactory > xServiceFactory =
+    uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
     ASSERT( xServiceFactory.is(),
             "XMLReader::Read: got no service manager" );
-    Reference < embed::XStorage > xStg;
+    uno::Reference < embed::XStorage > xStg;
     if( xServiceFactory.is() && ( xStg = rMedium.GetStorage() ).is() )
     {
         try
@@ -1090,11 +1090,11 @@ USHORT XMLReader::GetSectionList( SfxMedium& rMedium,
             OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "content.xml" ) );
             aParserInput.sSystemId = sDocName;
 
-            Reference < io::XStream > xStm = xStg->openStreamElement( sDocName, embed::ElementModes::READ );
+            uno::Reference < io::XStream > xStm = xStg->openStreamElement( sDocName, embed::ElementModes::READ );
             aParserInput.aInputStream = xStm->getInputStream();
 
             // get parser
-            Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
+            uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
                 OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
             ASSERT( xXMLParser.is(),
                 "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
@@ -1102,11 +1102,11 @@ USHORT XMLReader::GetSectionList( SfxMedium& rMedium,
             {
                 // get filter
                 // #110680#
-                // Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( rStrings );
-                Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( xServiceFactory, rStrings );
+                // uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( rStrings );
+                uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( xServiceFactory, rStrings );
 
                 // connect parser and filter
-                Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
+                uno::Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
                 xParser->setDocumentHandler( xFilter );
 
                 // parse
