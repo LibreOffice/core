@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 13:16:27 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 18:29:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,11 +65,10 @@ SHL1STDLIBS=                     \
     $(CPPUHELPERLIB)         \
     $(CPPULIB)               \
     $(SALLIB)                \
-    $(VOSLIB)                \
     $(EXPATASCII3RDLIB)      \
     $(UCBHELPERLIB)          \
     $(SVLLIB)             	 \
-    $(BERKELEYLIB)		 \
+    $(BERKELEYLIB)		 	 \
     $(XSLTLIB)
 
 SHL1LIBS =                       \
@@ -81,8 +80,6 @@ SHL1LIBS =                       \
 # --- Def-File ---------------------------------------------------------
 
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=exports.dxp
-DEF1DES=UCB Help Content Provider
 
 # --- Targets ----------------------------------------------------------
 
