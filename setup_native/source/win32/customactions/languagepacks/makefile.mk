@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: gm $ $Date: 2007-05-10 11:02:30 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 10:48:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,9 @@ USE_DEFFILE=TRUE
 .INCLUDE : settings.mk
 
 CFLAGS+=-D_STLP_USE_STATIC_LIB
+
+#Disable precompiled header
+CDEFS+=-Dnot_used_define_to_disable_pch
 
 # --- Files --------------------------------------------------------
 
