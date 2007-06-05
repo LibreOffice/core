@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convdic.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:20:46 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:28:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,7 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
     if (!xServiceFactory.is())
         return;
 
-    Reference< io::XInputStream > xIn = new utl::OInputStreamWrapper( *pStream );
+    uno::Reference< io::XInputStream > xIn = new utl::OInputStreamWrapper( *pStream );
     DBG_ASSERT( xIn.is(), "input stream missing" );
 
     ULONG nError = sal::static_int_cast< ULONG >(-1);
@@ -177,7 +177,7 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
     aParserInput.aInputStream = xIn;
 
     // get parser
-    Reference< xml::sax::XParser > xParser( xServiceFactory->createInstance(
+    uno::Reference< xml::sax::XParser > xParser( xServiceFactory->createInstance(
             A2OU( "com.sun.star.xml.sax.Parser" ) ), UNO_QUERY );
     DBG_ASSERT( xParser.is(), "Can't create parser" );
     if (!xParser.is())
@@ -187,7 +187,7 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
     //ConvDicXMLImport *pImport = new ConvDicXMLImport( this, rMainURL );
     //!! keep a reference until everything is done to
     //!! ensure the proper lifetime of the object
-    Reference < xml::sax::XDocumentHandler > xFilter(
+    uno::Reference < xml::sax::XDocumentHandler > xFilter(
             (xml::sax::XExtendedDocumentHandler *) &rImport, UNO_QUERY );
 
     // connect parser and filter
@@ -238,7 +238,7 @@ BOOL IsConvDic( const String &rFileURL, INT16 &nLang, sal_Int16 &nConvType )
     ConvDicXMLImport *pImport = new ConvDicXMLImport( 0, rFileURL );
 
     //!! keep a first reference to ensure the lifetime of the object !!
-    Reference< XInterface > xRef( (document::XFilter *) pImport, UNO_QUERY );
+    uno::Reference< XInterface > xRef( (document::XFilter *) pImport, UNO_QUERY );
 
     ReadThroughDic( rFileURL, *pImport );    // will implicitly add the entries
     bRes =  pImport->GetLanguage() != LANGUAGE_NONE &&
@@ -318,7 +318,7 @@ void ConvDic::Load()
 
     ConvDicXMLImport *pImport = new ConvDicXMLImport( this, aMainURL );
     //!! keep a first reference to ensure the lifetime of the object !!
-    Reference< XInterface > xRef( (document::XFilter *) pImport, UNO_QUERY );
+    uno::Reference< XInterface > xRef( (document::XFilter *) pImport, UNO_QUERY );
     ReadThroughDic( aMainURL, *pImport );    // will implicitly add the entries
 
     bIsModified = FALSE;
@@ -347,10 +347,10 @@ void ConvDic::Save()
     // get XML writer
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory(
             utl::getProcessServiceFactory() );
-    Reference< io::XActiveDataSource > xSaxWriter;
+    uno::Reference< io::XActiveDataSource > xSaxWriter;
     if (xServiceFactory.is())
     {
-        xSaxWriter = Reference< io::XActiveDataSource >(
+        xSaxWriter = uno::Reference< io::XActiveDataSource >(
                 xServiceFactory->createInstance(
                 OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) ), UNO_QUERY );
     }
@@ -362,12 +362,12 @@ void ConvDic::Save()
         xSaxWriter->setOutputStream( xOut );
 
         // prepare arguments (prepend doc handler to given arguments)
-        Reference< xml::sax::XDocumentHandler > xDocHandler( xSaxWriter, UNO_QUERY );
+        uno::Reference< xml::sax::XDocumentHandler > xDocHandler( xSaxWriter, UNO_QUERY );
 
         ConvDicXMLExport *pExport = new ConvDicXMLExport( *this, aMainURL, xDocHandler );
         //!! keep a first(!) reference until everything is done to
         //!! ensure the proper lifetime of the object
-        Reference< document::XFilter > aRef( (document::XFilter *) pExport );
+        uno::Reference< document::XFilter > aRef( (document::XFilter *) pExport );
         sal_Bool bRet = pExport->Export( aMedium );     // write entries to file
         DBG_ASSERT( !pStream->GetError(), "I/O error while writing to stream" );
         if (bRet)
@@ -723,11 +723,11 @@ void SAL_CALL ConvDic::flush(  )
 
     // notify listeners
     EventObject aEvtObj;
-    aEvtObj.Source = Reference< XFlushable >( this );
+    aEvtObj.Source = uno::Reference< XFlushable >( this );
     cppu::OInterfaceIteratorHelper aIt( aFlushListeners );
     while (aIt.hasMoreElements())
     {
-        Reference< util::XFlushListener > xRef( aIt.next(), UNO_QUERY );
+        uno::Reference< util::XFlushListener > xRef( aIt.next(), UNO_QUERY );
         if (xRef.is())
             xRef->flushed( aEvtObj );
     }
@@ -735,7 +735,7 @@ void SAL_CALL ConvDic::flush(  )
 
 
 void SAL_CALL ConvDic::addFlushListener(
-        const Reference< util::XFlushListener >& rxListener )
+        const uno::Reference< util::XFlushListener >& rxListener )
     throw (RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -745,7 +745,7 @@ void SAL_CALL ConvDic::addFlushListener(
 
 
 void SAL_CALL ConvDic::removeFlushListener(
-        const Reference< util::XFlushListener >& rxListener )
+        const uno::Reference< util::XFlushListener >& rxListener )
     throw (RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
