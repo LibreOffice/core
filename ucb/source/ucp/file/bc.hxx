@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bc.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:19:10 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:54:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,8 @@
 #ifndef _BC_HXX_
 #define _BC_HXX_
 
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
-#endif
+#include "osl/mutex.hxx"
+
 #ifndef _RTL_USTRING_HXX_
 #include "rtl/ustring.hxx"
 #endif
@@ -354,7 +353,7 @@ namespace fileaccess {
         sal_Bool                                                                    m_bFolder;
         sal_uInt16                                                                  m_nState;
 
-        vos::OMutex                         m_aMutex;
+        osl::Mutex                         m_aMutex;
 
         osl::Mutex                          m_aEventListenerMutex;
         cppu::OInterfaceContainerHelper*    m_pDisposeEventListeners;
