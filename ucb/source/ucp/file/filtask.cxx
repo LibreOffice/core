@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtask.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:48:30 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:56:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ TaskManager::startTask(
     const uno::Reference< XCommandEnvironment >& xCommandEnv )
     throw( DuplicateCommandIdentifierException )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
     if( it != m_aTaskMap.end() )
     {
@@ -91,7 +91,7 @@ TaskManager::endTask( sal_Int32 CommandId,
                       const rtl::OUString& aUncPath,
                       BaseContent* pContent)
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
     if( it == m_aTaskMap.end() )
         return;
@@ -121,7 +121,7 @@ TaskManager::abort( sal_Int32 CommandId )
 {
     if( CommandId )
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::MutexGuard aGuard( m_aMutex );
         TaskMap::iterator it = m_aTaskMap.find( CommandId );
         if( it == m_aTaskMap.end() )
             return;
@@ -133,7 +133,7 @@ TaskManager::abort( sal_Int32 CommandId )
 
 bool SAL_CALL TaskManager::isAborted( sal_Int32 CommandId )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
     if( it == m_aTaskMap.end() || it->second.isAborted() )
         return false;
@@ -144,7 +144,7 @@ bool SAL_CALL TaskManager::isAborted( sal_Int32 CommandId )
 
 void SAL_CALL TaskManager::clearError( sal_Int32 CommandId )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
     if( it != m_aTaskMap.end() )
         it->second.clearError();
@@ -155,7 +155,7 @@ void SAL_CALL TaskManager::retrieveError( sal_Int32 CommandId,
                                           sal_Int32 &ErrorCode,
                                           sal_Int32 &minorCode)
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
     if( it != m_aTaskMap.end() )
     {
@@ -170,7 +170,7 @@ void SAL_CALL TaskManager::installError( sal_Int32 CommandId,
                                          sal_Int32 ErrorCode,
                                          sal_Int32 MinorCode )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
     if( it != m_aTaskMap.end() )
         it->second.installError( ErrorCode,MinorCode );
@@ -181,7 +181,7 @@ void SAL_CALL TaskManager::installError( sal_Int32 CommandId,
 sal_Int32 SAL_CALL
 TaskManager::getCommandId( void )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     return ++m_nCommandId;
 }
 
@@ -190,7 +190,7 @@ TaskManager::getCommandId( void )
 uno::Reference< task::XInteractionHandler > SAL_CALL
 TaskManager::getInteractionHandler( sal_Int32 CommandId )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
     if( it == m_aTaskMap.end() )
         return uno::Reference< task::XInteractionHandler >( 0 );
@@ -203,7 +203,7 @@ TaskManager::getInteractionHandler( sal_Int32 CommandId )
 uno::Reference< XProgressHandler > SAL_CALL
 TaskManager::getProgressHandler( sal_Int32 CommandId )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
     if( it == m_aTaskMap.end() )
         return uno::Reference< XProgressHandler >( 0 );
@@ -215,7 +215,7 @@ TaskManager::getProgressHandler( sal_Int32 CommandId )
 uno::Reference< XCommandEnvironment > SAL_CALL
 TaskManager::getCommandEnvironment( sal_Int32 CommandId )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
     if( it == m_aTaskMap.end() )
         return uno::Reference< XCommandEnvironment >( 0 );
@@ -227,7 +227,7 @@ TaskManager::getCommandEnvironment( sal_Int32 CommandId )
 void SAL_CALL TaskManager::handleTask( sal_Int32 CommandId,
                                        const uno::Reference< task::XInteractionRequest >& request )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
     uno::Reference< task::XInteractionHandler > xInt;
     if( it != m_aTaskMap.end() )
