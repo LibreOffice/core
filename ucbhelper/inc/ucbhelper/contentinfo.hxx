@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contentinfo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:27:55 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:49:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,14 +54,14 @@
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
-#endif
+
+#include "osl/mutex.hxx"
+
 #ifndef _UCBHELPER_MACROS_HXX
 #include <ucbhelper/macros.hxx>
 #endif
 
-namespace ucb {
+namespace ucbhelper {
 
 //============================================================================
 //
@@ -88,7 +88,7 @@ class PropertySetInfo :
                                 m_xEnv;
     com::sun::star::uno::Sequence< com::sun::star::beans::Property >*
                                 m_pProps;
-    vos::OMutex                 m_aMutex;
+    osl::Mutex                  m_aMutex;
     ContentImplHelper*          m_pContent;
 
 private:
@@ -148,7 +148,7 @@ class CommandProcessorInfo :
                                 m_xEnv;
     com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >*
                                 m_pCommands;
-    vos::OMutex                 m_aMutex;
+    osl::Mutex                  m_aMutex;
     ContentImplHelper*          m_pContent;
 
 private:
@@ -195,6 +195,6 @@ public:
     void reset();
 };
 
-} // namespace ucb
+} // namespace ucbhelper
 
 #endif /* !_UCBHELPER_CONTENTINFO_HXX */
