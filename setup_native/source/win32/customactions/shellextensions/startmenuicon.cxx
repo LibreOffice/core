@@ -4,9 +4,9 @@
  *
  *  $RCSfile: startmenuicon.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:12:03 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 10:50:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,8 @@
  *
  ************************************************************************/
 
+#define _WIN32_WINDOWS 0x0410
+
 #pragma warning(push, 1) /* disable warnings within system headers */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -49,10 +51,6 @@
 #endif
 #include <tchar.h>
 #include <string>
-
-#if defined(_WIN32_WINNT) && !defined(__MINGW32__)
-#error YES
-#endif
 
 
 std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
