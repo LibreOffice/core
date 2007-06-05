@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unorefmk.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:00:19 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:35:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,11 +66,6 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::beans;
 using namespace ::rtl;
 
 /******************************************************************
@@ -102,14 +97,14 @@ sal_Int64 SAL_CALL SwXReferenceMark::getSomething( const uno::Sequence< sal_Int8
 /* -----------------------------06.04.00 16:41--------------------------------
 
  ---------------------------------------------------------------------------*/
-OUString SwXReferenceMark::getImplementationName(void) throw( RuntimeException )
+OUString SwXReferenceMark::getImplementationName(void) throw( uno::RuntimeException )
 {
     return C2U("SwXReferenceMark");
 }
 /* -----------------------------06.04.00 16:41--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwXReferenceMark::supportsService(const OUString& rServiceName) throw( RuntimeException )
+BOOL SwXReferenceMark::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return !rServiceName.compareToAscii("com.sun.star.text.ReferenceMark")||
                 !rServiceName.compareToAscii("com.sun.star.text.TextContent");
@@ -117,9 +112,9 @@ BOOL SwXReferenceMark::supportsService(const OUString& rServiceName) throw( Runt
 /* -----------------------------06.04.00 16:41--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence< OUString > SwXReferenceMark::getSupportedServiceNames(void) throw( RuntimeException )
+uno::Sequence< OUString > SwXReferenceMark::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
-    Sequence< OUString > aRet(2);
+    uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = C2U("com.sun.star.text.ReferenceMark");
     pArray[1] = C2U("com.sun.star.text.TextContent");
@@ -387,7 +382,7 @@ void SwXReferenceMark::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 /*-- 12.09.00 12:58:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< XPropertySetInfo > SwXReferenceMark::getPropertySetInfo(  ) throw(RuntimeException)
+uno::Reference< beans::XPropertySetInfo > SwXReferenceMark::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo >  xRef =
         SfxItemPropertySet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PARAGRAPH_EXTENSIONS)).
@@ -398,52 +393,52 @@ Reference< XPropertySetInfo > SwXReferenceMark::getPropertySetInfo(  ) throw(Run
 
   -----------------------------------------------------------------------*/
 void SwXReferenceMark::setPropertyValue(
-    const OUString& aPropertyName, const Any& aValue )
-        throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+    const OUString& aPropertyName, const uno::Any& aValue )
+        throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    throw IllegalArgumentException();
+    throw lang::IllegalArgumentException();
 }
 /*-- 12.09.00 12:58:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Any SwXReferenceMark::getPropertyValue( const OUString& rPropertyName )
-    throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+uno::Any SwXReferenceMark::getPropertyValue( const OUString& rPropertyName )
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    Any aRet;
+    uno::Any aRet;
     if(!SwXParagraph::getDefaultTextContentValue(aRet, rPropertyName))
-        throw UnknownPropertyException();
+        throw beans::UnknownPropertyException();
     return aRet;
 }
 /*-- 12.09.00 12:58:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXReferenceMark::addPropertyChangeListener(
-    const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
-            throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+    const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener )
+            throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
 /*-- 12.09.00 12:58:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXReferenceMark::removePropertyChangeListener(
-    const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener )
-            throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+    const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener )
+            throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
 /*-- 12.09.00 12:58:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXReferenceMark::addVetoableChangeListener( const OUString& PropertyName,
-    const Reference< XVetoableChangeListener >& aListener )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+    const uno::Reference< beans::XVetoableChangeListener >& aListener )
+        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
 /*-- 12.09.00 12:58:21---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXReferenceMark::removeVetoableChangeListener(
-    const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+    const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
+        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
 
