@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:34:24 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:26:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,6 @@ const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleDoc
 
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 using namespace ::rtl;
 
@@ -170,7 +169,7 @@ void SwAccessibleDocumentBase::RemoveChild( Window *pWin )
 }
 
 sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleChildCount( void )
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -183,10 +182,9 @@ sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleChildCount( void )
     return nChildren;
 }
 
-Reference< XAccessible> SAL_CALL
+uno::Reference< XAccessible> SAL_CALL
     SwAccessibleDocumentBase::getAccessibleChild( sal_Int32 nIndex )
-        throw (::com::sun::star::uno::RuntimeException,
-                ::com::sun::star::lang::IndexOutOfBoundsException)
+        throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -201,19 +199,19 @@ Reference< XAccessible> SAL_CALL
 }
 
 
-Reference< XAccessible> SAL_CALL SwAccessibleDocumentBase::getAccessibleParent (void)
-        throw (::com::sun::star::uno::RuntimeException)
+uno::Reference< XAccessible> SAL_CALL SwAccessibleDocumentBase::getAccessibleParent (void)
+        throw (uno::RuntimeException)
 {
     return xParent;
 }
 
 sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleIndexInParent (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    Reference < XAccessibleContext > xAcc( xParent->getAccessibleContext() );
-    Reference < XAccessible > xThis( this );
+    uno::Reference < XAccessibleContext > xAcc( xParent->getAccessibleContext() );
+    uno::Reference < XAccessible > xThis( this );
     sal_Int32 nCount = xAcc->getAccessibleChildCount();
 
     for( sal_Int32 i=0; i < nCount; i++ )
@@ -224,13 +222,14 @@ sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleIndexInParent (void)
     return -1L;
 }
 
-OUString SAL_CALL SwAccessibleDocumentBase::getAccessibleDescription (void) throw (com::sun::star::uno::RuntimeException)
+OUString SAL_CALL SwAccessibleDocumentBase::getAccessibleDescription (void)
+    throw (uno::RuntimeException)
 {
     return GetResource( STR_ACCESS_DOC_DESC );
 }
 
 awt::Rectangle SAL_CALL SwAccessibleDocumentBase::getBounds()
-        throw (RuntimeException)
+        throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -247,7 +246,7 @@ awt::Rectangle SAL_CALL SwAccessibleDocumentBase::getBounds()
 
 
 awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
-        throw (RuntimeException)
+        throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -263,7 +262,7 @@ awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
 
 
 ::com::sun::star::awt::Point SAL_CALL SwAccessibleDocumentBase::getLocationOnScreen()
-        throw (RuntimeException)
+        throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -279,7 +278,7 @@ awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
 
 
 ::com::sun::star::awt::Size SAL_CALL SwAccessibleDocumentBase::getSize()
-        throw (RuntimeException)
+        throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -294,8 +293,8 @@ awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
 }
 
 sal_Bool SAL_CALL SwAccessibleDocumentBase::containsPoint(
-            const ::com::sun::star::awt::Point& aPoint )
-        throw (RuntimeException)
+            const awt::Point& aPoint )
+        throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -310,9 +309,9 @@ sal_Bool SAL_CALL SwAccessibleDocumentBase::containsPoint(
     return aPixBounds.IsInside( aPixPoint );
 }
 
-Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAtPoint(
+uno::Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAtPoint(
                 const awt::Point& aPoint )
-        throw (RuntimeException)
+        throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -425,14 +424,14 @@ IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEve
 
 
 OUString SAL_CALL SwAccessibleDocument::getImplementationName()
-        throw( RuntimeException )
+        throw( uno::RuntimeException )
 {
     return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplementationName));
 }
 
 sal_Bool SAL_CALL SwAccessibleDocument::supportsService(
         const ::rtl::OUString& sTestServiceName)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (uno::RuntimeException)
 {
     return sTestServiceName.equalsAsciiL( sServiceName,
                                           sizeof(sServiceName)-1 ) ||
@@ -440,10 +439,10 @@ sal_Bool SAL_CALL SwAccessibleDocument::supportsService(
                                              sizeof(sAccessibleServiceName)-1 );
 }
 
-Sequence< OUString > SAL_CALL SwAccessibleDocument::getSupportedServiceNames()
-        throw( ::com::sun::star::uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL SwAccessibleDocument::getSupportedServiceNames()
+        throw( uno::RuntimeException )
 {
-    Sequence< OUString > aRet(2);
+    uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceName) );
     pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
@@ -452,14 +451,14 @@ Sequence< OUString > SAL_CALL SwAccessibleDocument::getSupportedServiceNames()
 
 //=====  XInterface  ======================================================
 
-Any SwAccessibleDocument::queryInterface(
-    const Type& rType )
-    throw ( RuntimeException )
+uno::Any SwAccessibleDocument::queryInterface(
+    const uno::Type& rType )
+    throw ( uno::RuntimeException )
 {
-    Any aRet;
-    if ( rType == ::getCppuType((Reference<XAccessibleSelection> *)NULL) )
+    uno::Any aRet;
+    if ( rType == ::getCppuType( static_cast< uno::Reference< XAccessibleSelection > * >( 0 ) ) )
     {
-        Reference<XAccessibleSelection> aSelect = this;
+        uno::Reference<XAccessibleSelection> aSelect = this;
         aRet <<= aSelect;
     }
     else
@@ -468,24 +467,25 @@ Any SwAccessibleDocument::queryInterface(
 }
 
 //====== XTypeProvider ====================================================
-Sequence< Type > SAL_CALL SwAccessibleDocument::getTypes() throw(RuntimeException)
+uno::Sequence< uno::Type > SAL_CALL SwAccessibleDocument::getTypes()
+    throw(uno::RuntimeException)
 {
-    Sequence< Type > aTypes( SwAccessibleDocumentBase::getTypes() );
+    uno::Sequence< uno::Type > aTypes( SwAccessibleDocumentBase::getTypes() );
 
     sal_Int32 nIndex = aTypes.getLength();
     aTypes.realloc( nIndex + 1 );
 
-    Type* pTypes = aTypes.getArray();
-    pTypes[nIndex] = ::getCppuType( static_cast< Reference< XAccessibleSelection > * >( 0 ) );
+    uno::Type* pTypes = aTypes.getArray();
+    pTypes[nIndex] = ::getCppuType( static_cast< uno::Reference< XAccessibleSelection > * >( 0 ) );
 
     return aTypes;
 }
 
-Sequence< sal_Int8 > SAL_CALL SwAccessibleDocument::getImplementationId()
-        throw(RuntimeException)
+uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleDocument::getImplementationId()
+        throw(uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    static Sequence< sal_Int8 > aId( 16 );
+    static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
     {
@@ -499,42 +499,42 @@ Sequence< sal_Int8 > SAL_CALL SwAccessibleDocument::getImplementationId()
 
 void SwAccessibleDocument::selectAccessibleChild(
     sal_Int32 nChildIndex )
-    throw ( IndexOutOfBoundsException,
-            RuntimeException )
+    throw ( lang::IndexOutOfBoundsException,
+            uno::RuntimeException )
 {
     aSelectionHelper.selectAccessibleChild(nChildIndex);
 }
 
 sal_Bool SwAccessibleDocument::isAccessibleChildSelected(
     sal_Int32 nChildIndex )
-    throw ( IndexOutOfBoundsException,
-            RuntimeException )
+    throw ( lang::IndexOutOfBoundsException,
+            uno::RuntimeException )
 {
     return aSelectionHelper.isAccessibleChildSelected(nChildIndex);
 }
 
 void SwAccessibleDocument::clearAccessibleSelection(  )
-    throw ( RuntimeException )
+    throw ( uno::RuntimeException )
 {
     aSelectionHelper.clearAccessibleSelection();
 }
 
 void SwAccessibleDocument::selectAllAccessibleChildren(  )
-    throw ( RuntimeException )
+    throw ( uno::RuntimeException )
 {
     aSelectionHelper.selectAllAccessibleChildren();
 }
 
 sal_Int32 SwAccessibleDocument::getSelectedAccessibleChildCount(  )
-    throw ( RuntimeException )
+    throw ( uno::RuntimeException )
 {
     return aSelectionHelper.getSelectedAccessibleChildCount();
 }
 
-Reference<XAccessible> SwAccessibleDocument::getSelectedAccessibleChild(
+uno::Reference<XAccessible> SwAccessibleDocument::getSelectedAccessibleChild(
     sal_Int32 nSelectedChildIndex )
-    throw ( IndexOutOfBoundsException,
-            RuntimeException)
+    throw ( lang::IndexOutOfBoundsException,
+            uno::RuntimeException)
 {
     return aSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
 }
@@ -542,8 +542,8 @@ Reference<XAccessible> SwAccessibleDocument::getSelectedAccessibleChild(
 // --> OD 2004-11-16 #111714# - index has to be treated as global child index.
 void SwAccessibleDocument::deselectAccessibleChild(
     sal_Int32 nChildIndex )
-    throw ( IndexOutOfBoundsException,
-            RuntimeException )
+    throw ( lang::IndexOutOfBoundsException,
+            uno::RuntimeException )
 {
     aSelectionHelper.deselectAccessibleChild( nChildIndex );
 }
