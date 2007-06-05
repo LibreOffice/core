@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localfilehelper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:29:27 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:32:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ sal_Bool LocalFileHelper::ConvertSystemPathToURL( const String& rName, const Str
 {
     rReturn = ::rtl::OUString();
 
-    ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
+    ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
     if ( !pBroker )
     {
         rtl::OUString aRet;
@@ -81,7 +81,7 @@ sal_Bool LocalFileHelper::ConvertSystemPathToURL( const String& rName, const Str
                 pBroker->getContentProviderManagerInterface();
         try
         {
-            rReturn = ::ucb::getFileURLFromSystemPath( xManager, rBaseURL, rName );
+            rReturn = ::ucbhelper::getFileURLFromSystemPath( xManager, rBaseURL, rName );
         }
         catch ( ::com::sun::star::uno::RuntimeException& )
         {
@@ -95,7 +95,7 @@ sal_Bool LocalFileHelper::ConvertSystemPathToURL( const String& rName, const Str
 sal_Bool LocalFileHelper::ConvertURLToSystemPath( const String& rName, String& rReturn )
 {
     rReturn = ::rtl::OUString();
-    ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
+    ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
     if ( !pBroker )
     {
         rtl::OUString aRet;
@@ -108,7 +108,7 @@ sal_Bool LocalFileHelper::ConvertURLToSystemPath( const String& rName, String& r
                 pBroker->getContentProviderManagerInterface();
         try
         {
-            rReturn = ::ucb::getSystemPathFromFileURL( xManager, rName );
+            rReturn = ::ucbhelper::getSystemPathFromFileURL( xManager, rName );
         }
         catch ( ::com::sun::star::uno::RuntimeException& )
         {
@@ -121,7 +121,7 @@ sal_Bool LocalFileHelper::ConvertURLToSystemPath( const String& rName, String& r
 sal_Bool LocalFileHelper::ConvertPhysicalNameToURL( const String& rName, String& rReturn )
 {
     rReturn = ::rtl::OUString();
-    ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
+    ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
     if ( !pBroker )
     {
         rtl::OUString aRet;
@@ -135,8 +135,8 @@ sal_Bool LocalFileHelper::ConvertPhysicalNameToURL( const String& rName, String&
 
         try
         {
-            rtl::OUString aBase( ::ucb::getLocalFileURL( xManager ) );
-            rReturn = ::ucb::getFileURLFromSystemPath( xManager, aBase, rName );
+            rtl::OUString aBase( ::ucbhelper::getLocalFileURL( xManager ) );
+            rReturn = ::ucbhelper::getFileURLFromSystemPath( xManager, aBase, rName );
         }
         catch ( ::com::sun::star::uno::RuntimeException& )
         {
@@ -149,7 +149,7 @@ sal_Bool LocalFileHelper::ConvertPhysicalNameToURL( const String& rName, String&
 sal_Bool LocalFileHelper::ConvertURLToPhysicalName( const String& rName, String& rReturn )
 {
     rReturn = ::rtl::OUString();
-    ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
+    ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
     if ( !pBroker )
     {
         ::rtl::OUString aRet;
@@ -163,9 +163,9 @@ sal_Bool LocalFileHelper::ConvertURLToPhysicalName( const String& rName, String&
         try
         {
             INetURLObject aObj( rName );
-            INetURLObject aLocal( ::ucb::getLocalFileURL( xManager ) );
+            INetURLObject aLocal( ::ucbhelper::getLocalFileURL( xManager ) );
             if ( aObj.GetProtocol() == aLocal.GetProtocol() )
-                rReturn = ::ucb::getSystemPathFromFileURL( xManager, rName );
+                rReturn = ::ucbhelper::getSystemPathFromFileURL( xManager, rName );
         }
         catch ( ::com::sun::star::uno::RuntimeException& )
         {
@@ -194,7 +194,7 @@ DECLARE_LIST( StringList_Impl, ::rtl::OUString* )
     StringList_Impl* pFiles = NULL;
     try
     {
-        ::ucb::Content aCnt( rFolder, Reference< XCommandEnvironment > () );
+        ::ucbhelper::Content aCnt( rFolder, Reference< XCommandEnvironment > () );
         Reference< ::com::sun::star::sdbc::XResultSet > xResultSet;
         ::com::sun::star::uno::Sequence< ::rtl::OUString > aProps(1);
         ::rtl::OUString* pProps = aProps.getArray();
@@ -202,7 +202,7 @@ DECLARE_LIST( StringList_Impl, ::rtl::OUString* )
 
         try
         {
-            ::ucb::ResultSetInclude eInclude = bFolder ? ::ucb::INCLUDE_FOLDERS_AND_DOCUMENTS : ::ucb::INCLUDE_DOCUMENTS_ONLY;
+            ::ucbhelper::ResultSetInclude eInclude = bFolder ? ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS : ::ucbhelper::INCLUDE_DOCUMENTS_ONLY;
             xResultSet = aCnt.createCursor( aProps, eInclude );
         }
         catch( ::com::sun::star::ucb::CommandAbortedException& )
