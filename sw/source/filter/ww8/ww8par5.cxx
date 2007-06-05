@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 13:03:18 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:38:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2215,7 +2215,7 @@ bool CanUseRemoteLink(const String &rGrfName)
     bool bUseRemote = false;
     try
     {
-        ::ucb::Content aCnt(rGrfName,
+        ::ucbhelper::Content aCnt(rGrfName,
             ::com::sun::star::uno::Reference<
             ::com::sun::star::ucb::XCommandEnvironment >() );
         rtl::OUString   aTitle;
