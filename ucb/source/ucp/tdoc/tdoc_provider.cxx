@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_provider.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:02:32 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:17:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,9 +55,7 @@
 #include "tdoc_docmgr.hxx"
 #include "tdoc_storage.hxx"
 
-using namespace com::sun;
 using namespace com::sun::star;
-
 using namespace tdoc_ucp;
 
 //=========================================================================
@@ -70,7 +68,7 @@ using namespace tdoc_ucp;
 
 ContentProvider::ContentProvider(
             const uno::Reference< lang::XMultiServiceFactory >& xSMgr )
-: ::ucb::ContentProviderImplHelper( xSMgr ),
+: ::ucbhelper::ContentProviderImplHelper( xSMgr ),
   m_xDocsMgr( new OfficeDocumentsManager( xSMgr, this ) ),
   m_xStgElemFac( new StorageElementFactory( xSMgr, m_xDocsMgr ) )
 {
@@ -93,7 +91,7 @@ ContentProvider::~ContentProvider()
 XINTERFACE_IMPL_4( ContentProvider,
                    lang::XTypeProvider,
                    lang::XServiceInfo,
-                   star::ucb::XContentProvider,
+                   ucb::XContentProvider,
                    frame::XTransientDocumentsDocumentContentFactory );
 
 //=========================================================================
@@ -105,7 +103,7 @@ XINTERFACE_IMPL_4( ContentProvider,
 XTYPEPROVIDER_IMPL_4( ContentProvider,
                       lang::XTypeProvider,
                       lang::XServiceInfo,
-                      star::ucb::XContentProvider,
+                      ucb::XContentProvider,
                       frame::XTransientDocumentsDocumentContentFactory );
 
 //=========================================================================
@@ -136,26 +134,26 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 //=========================================================================
 
 // virtual
-uno::Reference< star::ucb::XContent > SAL_CALL
+uno::Reference< ucb::XContent > SAL_CALL
 ContentProvider::queryContent(
-        const uno::Reference< star::ucb::XContentIdentifier >& Identifier )
-    throw( star::ucb::IllegalIdentifierException, uno::RuntimeException )
+        const uno::Reference< ucb::XContentIdentifier >& Identifier )
+    throw( ucb::IllegalIdentifierException, uno::RuntimeException )
 {
     Uri aUri( Identifier->getContentIdentifier() );
     if ( !aUri.isValid() )
-        throw star::ucb::IllegalIdentifierException(
+        throw ucb::IllegalIdentifierException(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid URL!" ) ),
             Identifier );
 
     // Normalize URI.
-    uno::Reference< star::ucb::XContentIdentifier > xCanonicId
-        = new ::ucb::ContentIdentifier( m_xSMgr, aUri.getUri() );
+    uno::Reference< ucb::XContentIdentifier > xCanonicId
+        = new ::ucbhelper::ContentIdentifier( m_xSMgr, aUri.getUri() );
 
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     // Check, if a content with given id already exists...
-    uno::Reference< star::ucb::XContent > xContent
-        = queryExistingContent( xCanonicId ).getBodyPtr();
+    uno::Reference< ucb::XContent > xContent
+        = queryExistingContent( xCanonicId ).get();
 
     if ( !xContent.is() )
     {
@@ -173,7 +171,7 @@ ContentProvider::queryContent(
 //=========================================================================
 
 // virtual
-uno::Reference< star::ucb::XContent > SAL_CALL
+uno::Reference< ucb::XContent > SAL_CALL
 ContentProvider::createDocumentContent(
         const uno::Reference< frame::XModel >& Model )
     throw ( lang::IllegalArgumentException, uno::RuntimeException )
@@ -188,15 +186,15 @@ ContentProvider::createDocumentContent(
             aBuffer.appendAscii( TDOC_URL_SCHEME ":/" );
             aBuffer.append( aDocId );
 
-            uno::Reference< star::ucb::XContentIdentifier > xId
-                = new ::ucb::ContentIdentifier(
+            uno::Reference< ucb::XContentIdentifier > xId
+                = new ::ucbhelper::ContentIdentifier(
                     m_xSMgr, aBuffer.makeStringAndClear() );
 
-            vos::OGuard aGuard( m_aMutex );
+            osl::MutexGuard aGuard( m_aMutex );
 
             // Check, if a content with given id already exists...
-            uno::Reference< star::ucb::XContent > xContent
-                = queryExistingContent( xId ).getBodyPtr();
+            uno::Reference< ucb::XContent > xContent
+                = queryExistingContent( xId ).get();
 
             if ( !xContent.is() )
             {
@@ -242,13 +240,13 @@ ContentProvider::createDocumentContent(
 // virtual
 void ContentProvider::notifyDocumentClosed( const rtl::OUString & rDocId )
 {
-    vos::OGuard aGuard( getContentListMutex() );
+    osl::MutexGuard aGuard( getContentListMutex() );
 
-    ::ucb::ContentRefList aAllContents;
+    ::ucbhelper::ContentRefList aAllContents;
     queryExistingContents( aAllContents );
 
-    ::ucb::ContentRefList::const_iterator it  = aAllContents.begin();
-    ::ucb::ContentRefList::const_iterator end = aAllContents.end();
+    ::ucbhelper::ContentRefList::const_iterator it  = aAllContents.begin();
+    ::ucbhelper::ContentRefList::const_iterator end = aAllContents.end();
 
     // Notify all content objects related to the closed doc.
 
@@ -265,7 +263,7 @@ void ContentProvider::notifyDocumentClosed( const rtl::OUString & rDocId )
         {
             if ( aUri.isRoot() )
             {
-                xRoot = static_cast< Content * >( (*it).getBodyPtr() );
+                xRoot = static_cast< Content * >( (*it).get() );
             }
             else if ( aUri.isDocument() )
             {
@@ -284,7 +282,7 @@ void ContentProvider::notifyDocumentClosed( const rtl::OUString & rDocId )
         {
             // Inform content.
             rtl::Reference< Content > xContent
-                = static_cast< Content * >( (*it).getBodyPtr() );
+                = static_cast< Content * >( (*it).get() );
 
             xContent->notifyDocumentClosed();
         }
@@ -305,13 +303,13 @@ void ContentProvider::notifyDocumentClosed( const rtl::OUString & rDocId )
 // virtual
 void ContentProvider::notifyDocumentOpened( const rtl::OUString & rDocId )
 {
-    vos::OGuard aGuard( getContentListMutex() );
+    osl::MutexGuard aGuard( getContentListMutex() );
 
-    ::ucb::ContentRefList aAllContents;
+    ::ucbhelper::ContentRefList aAllContents;
     queryExistingContents( aAllContents );
 
-    ::ucb::ContentRefList::const_iterator it  = aAllContents.begin();
-    ::ucb::ContentRefList::const_iterator end = aAllContents.end();
+    ::ucbhelper::ContentRefList::const_iterator it  = aAllContents.begin();
+    ::ucbhelper::ContentRefList::const_iterator end = aAllContents.end();
 
     // Find root content. If instanciated let it propagate document insertion.
 
@@ -324,7 +322,7 @@ void ContentProvider::notifyDocumentOpened( const rtl::OUString & rDocId )
         if ( aUri.isRoot() )
         {
             rtl::Reference< Content > xRoot
-                = static_cast< Content * >( (*it).getBodyPtr() );
+                = static_cast< Content * >( (*it).get() );
             xRoot->notifyChildInserted( rDocId );
 
             // Done.
