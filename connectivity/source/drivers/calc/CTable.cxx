@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:59:46 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:20:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,9 @@
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_XCONTENTACCESS_HPP_
-#include <com/sun/star/ucb/XContentAccess.hpp>
-#endif
+//#ifndef _COM_SUN_STAR_UCB_XCONTENTACCESS_HPP_
+//#include <com/sun/star/ucb/XContentAccess.hpp>
+//#endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
@@ -117,14 +117,8 @@
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
 #endif
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
-#endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
-#include <unotools/ucbstreamhelper.hxx>
 #endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
@@ -136,11 +130,9 @@
 using namespace connectivity;
 using namespace connectivity::calc;
 using namespace connectivity::file;
-using namespace ::ucb;
 using namespace ::cppu;
 using namespace ::dbtools;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
