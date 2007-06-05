@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ContentHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:37:36 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:39:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,7 @@ Reference< XContentIdentifier > SAL_CALL OContentHelper::getIdentifier(  ) throw
     }
 
     sContentId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:")) + sContentId;
-    return new ::ucb::ContentIdentifier(m_xORB,sContentId);
+    return new ::ucbhelper::ContentIdentifier(m_xORB,sContentId);
     //  return Reference< XContentIdentifier >();
 }
 // -----------------------------------------------------------------------------
@@ -481,7 +481,7 @@ Reference< XRow > OContentHelper::getPropertyValues( const Sequence< Property >&
 {
     // Note: Empty sequence means "get values of all supported properties".
 
-    rtl::Reference< ::ucb::PropertyValueSet > xRow = new ::ucb::PropertyValueSet( m_xORB );
+    rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( m_xORB );
 
     sal_Int32 nCount = rProperties.getLength();
     if ( nCount )
