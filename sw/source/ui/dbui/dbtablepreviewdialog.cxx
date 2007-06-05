@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtablepreviewdialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:02:15 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:41:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,18 +68,14 @@
 #include <dbui.hrc>
 #include <dbtablepreviewdialog.hrc>
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::frame;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::util;
+using namespace com::sun::star;
 using namespace rtl;
 
 #define C2U(cChar) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 /*-- 08.04.2004 15:12:24---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, Sequence< PropertyValue>& rValues ) :
+SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, uno::Sequence< beans::PropertyValue>& rValues ) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_DBTABLEPREVIEWDIALOG)),
 #pragma warning (disable : 4355)
     m_aDescriptionFI( this, SW_RES(        FI_DESCRIPTION)),
@@ -88,7 +84,7 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, Sequence< Proper
 #pragma warning (default : 4355)
 {
     FreeResource();
-    const PropertyValue* pValues = rValues.getConstArray();
+    const beans::PropertyValue* pValues = rValues.getConstArray();
     for(sal_Int32 nValue = 0; nValue < rValues.getLength(); ++nValue        )
     {
         if(pValues[nValue].Name.equalsAscii("Command"))
@@ -105,24 +101,24 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, Sequence< Proper
     try
     {
         // create a frame wrapper for myself
-        Reference< XMultiServiceFactory >
+        uno::Reference< lang::XMultiServiceFactory >
                                     xMgr = comphelper::getProcessServiceFactory();
-        m_xFrame = Reference< XFrame >(xMgr->createInstance(C2U("com.sun.star.frame.Frame")), UNO_QUERY);
+        m_xFrame = uno::Reference< frame::XFrame >(xMgr->createInstance(C2U("com.sun.star.frame.Frame")), uno::UNO_QUERY);
         if(m_xFrame.is())
         {
             m_xFrame->initialize( VCLUnoHelper::GetInterface ( m_pBeamerWIN ) );
         }
     }
-    catch (Exception&)
+    catch (uno::Exception const &)
     {
         m_xFrame.clear();
     }
     if(m_xFrame.is())
     {
-        Reference<XDispatchProvider> xDP(m_xFrame, UNO_QUERY);
-        URL aURL;
+        uno::Reference<frame::XDispatchProvider> xDP(m_xFrame, uno::UNO_QUERY);
+        util::URL aURL;
         aURL.Complete = C2U(".component:DB/DataSourceBrowser");
-        Reference<XDispatch> xD = xDP->queryDispatch(aURL,
+        uno::Reference<frame::XDispatch> xD = xDP->queryDispatch(aURL,
                     C2U(""),
                     0x0C);
         if(xD.is())
@@ -130,12 +126,12 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, Sequence< Proper
             xD->dispatch(aURL, rValues);
             m_pBeamerWIN->Show();
         }
-/*        Reference<XController> xController = m_xFrame->getController();
-        pImpl->xFController = Reference<XFormController>(xController, UNO_QUERY);
+/*        uno::Reference<???::XController> xController = m_xFrame->getController();
+        pImpl->xFController = uno::Reference<???::XFormController>(xController, uno::UNO_QUERY);
         if(pImpl->xFController.is())
         {
-            Reference< awt::XControl > xCtrl = pImpl->xFController->getCurrentControl(  );
-            pImpl->xSelSupp = Reference<XSelectionSupplier>(xCtrl, UNO_QUERY);
+            uno::Reference< awt::XControl > xCtrl = pImpl->xFController->getCurrentControl(  );
+            pImpl->xSelSupp = uno::Reference<???::XSelectionSupplier>(xCtrl, uno::UNO_QUERY);
             if(pImpl->xSelSupp.is())
             {
                 pImpl->xChgLstnr = new SwXSelChgLstnr_Impl(*this);
