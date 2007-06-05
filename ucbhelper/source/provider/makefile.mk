@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:06:54 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 14:54:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,15 +62,14 @@ SLOFILES=\
         $(SLO)$/resultset.obj          \
         $(SLO)$/resultsethelper.obj    \
         $(SLO)$/provconf.obj	       \
-                $(SLO)$/commandenvironmentproxy.obj     \
-                $(SLO)$/interactionrequest.obj          \
-                $(SLO)$/simpleinteractionrequest.obj    \
-                $(SLO)$/simpleauthenticationrequest.obj \
-                $(SLO)$/simplenameclashresolverequest.obj \
-                $(SLO)$/simpleioerrorrequest.obj        \
-                $(SLO)$/cancelcommandexecution.obj \
-        $(SLO)$/handleinteractionrequest.obj       \
-        $(SLO)$/backgrounddownload.obj
+        $(SLO)$/commandenvironmentproxy.obj     \
+        $(SLO)$/interactionrequest.obj          \
+        $(SLO)$/simpleinteractionrequest.obj    \
+        $(SLO)$/simpleauthenticationrequest.obj \
+        $(SLO)$/simplenameclashresolverequest.obj \
+        $(SLO)$/simpleioerrorrequest.obj        \
+        $(SLO)$/cancelcommandexecution.obj \
+        $(SLO)$/handleinteractionrequest.obj
 
 .ENDIF
 
