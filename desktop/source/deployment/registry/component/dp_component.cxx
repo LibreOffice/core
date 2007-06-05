@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_component.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-12 11:02:40 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:06:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ bool jarManifestHeaderPresent(
             url, rtl_UriCharClassRegName, rtl_UriEncodeIgnoreEscapes,
             RTL_TEXTENCODING_UTF8 ) );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("/META-INF/MANIFEST.MF") );
-    ::ucb::Content manifestContent;
+    ::ucbhelper::Content manifestContent;
     OUString line;
     return
         create_ucb_content(
@@ -376,8 +376,8 @@ BackendImpl::BackendImpl(
         unorc_verify_init( xCmdEnv );
 
         if (! m_readOnly) {
-            ::ucb::Content cacheDir( getCachePath(), xCmdEnv );
-            ::ucb::Content oldRDB;
+            ::ucbhelper::Content cacheDir( getCachePath(), xCmdEnv );
+            ::ucbhelper::Content oldRDB;
             // switch common rdb:
             if (m_commonRDB.getLength() > 0)
                 create_ucb_content(
@@ -389,11 +389,11 @@ BackendImpl::BackendImpl(
             if (oldRDB.get().is())
             {
                 if (! cacheDir.transferContent(
-                        oldRDB, ::ucb::InsertOperation_COPY,
+                        oldRDB, ::ucbhelper::InsertOperation_COPY,
                         m_commonRDB, NameClash::OVERWRITE ))
                     throw RuntimeException(
                         OUSTR("UCB transferContent() failed!"), 0 );
-                oldRDB = ::ucb::Content();
+                oldRDB = ::ucbhelper::Content();
             }
             // switch native rdb:
             if (m_nativeRDB.getLength() > 0)
@@ -406,7 +406,7 @@ BackendImpl::BackendImpl(
             if (oldRDB.get().is())
             {
                 if (! cacheDir.transferContent(
-                        oldRDB, ::ucb::InsertOperation_COPY,
+                        oldRDB, ::ucbhelper::InsertOperation_COPY,
                         m_nativeRDB, NameClash::OVERWRITE ))
                     throw RuntimeException(
                         OUSTR("UCB transferContent() failed!"), 0 );
@@ -465,7 +465,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 "application/vnd.sun.star.uno-typelibrary") ))
     {
         // detect exact media-type:
-        ::ucb::Content ucbContent;
+        ::ucbhelper::Content ucbContent;
         if (create_ucb_content( &ucbContent, url, xCmdEnv )) {
             const OUString title( ucbContent.getPropertyValue(
                                       StrTitle::get() ).get<OUString>() );
@@ -508,7 +508,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     {
         if (type.EqualsIgnoreCaseAscii("application"))
         {
-            ::ucb::Content ucbContent( url, xCmdEnv );
+            ::ucbhelper::Content ucbContent( url, xCmdEnv );
             const OUString name( ucbContent.getPropertyValue(
                                      StrTitle::get() ).get<OUString>() );
             if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.uno-component"))
@@ -580,7 +580,7 @@ void BackendImpl::unorc_verify_init(
     if (! m_unorc_inited)
     {
         // common rc:
-        ::ucb::Content ucb_content;
+        ::ucbhelper::Content ucb_content;
         if (create_ucb_content(
                 &ucb_content,
                 makeURL( getCachePath(), OUSTR("unorc") ),
@@ -731,7 +731,7 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
                     ::rtl::ByteSequence(
                         reinterpret_cast<sal_Int8 const *>(buf2.getStr()),
                         buf2.getLength() ) ) );
-            ::ucb::Content ucb_content(
+            ::ucbhelper::Content ucb_content(
                 makeURL( getCachePath(), getPlatformString() + OUSTR("rc") ),
                 xCmdEnv );
             ucb_content.writeStream( xData, true /* replace existing */ );
@@ -744,7 +744,7 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
             ::rtl::ByteSequence(
                 reinterpret_cast<sal_Int8 const *>(buf.getStr()),
                 buf.getLength() ) ) );
-    ::ucb::Content ucb_content(
+    ::ucbhelper::Content ucb_content(
         makeURL( getCachePath(), OUSTR("unorc") ), xCmdEnv );
     ucb_content.writeStream( xData, true /* replace existing */ );
 
