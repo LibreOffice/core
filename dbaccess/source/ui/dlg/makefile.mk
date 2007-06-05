@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:06:46 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 10:47:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,10 @@ TARGET=uidlg
 
 .IF "$(SYSTEM_ODBC_HEADERS)" == "YES"
 CFLAGS+=-DSYSTEM_ODBC_HEADERS
+.ENDIF
+
+.IF "$(WINDOWS_VISTA_PSDK)"!="" && "$(PROF_EDITION)"==""
+CDEFS+=-DWINDOWS_VISTA_PSDK
 .ENDIF
 
 .IF "$(GUI)$(COM)"=="WNTGCC" # for adoint.h
@@ -124,7 +128,11 @@ SLOFILES=								\
         $(SLO)$/dlgsize.obj				\
         $(SLO)$/dlgattr.obj
 
-.IF "$(GUI)"=="WNT"
+.IF "$(WINDOWS_VISTA_PSDK)"!="" && "$(PROF_EDITION)"==""
+DISABLE_ADO=TRUE
+.ENDIF # "$(WINDOWS_VISTA_PSDK)"!="" && "$(PROF_EDITION)"==""
+
+.IF "$(GUI)"=="WNT" && "$(DISABLE_ADO)"==""
 SLOFILES+=		$(SLO)$/adodatalinks.obj
 .ENDIF
 
