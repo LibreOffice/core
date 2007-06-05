@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updateinstalldialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:24:06 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:04:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -597,14 +597,14 @@ void UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
     destFolder = dp_misc::makeURL( m_sDownloadFolder, tempEntry );
     destFolder += OUSTR("_");
 
-    ::ucb::Content destFolderContent;
+    ::ucbhelper::Content destFolderContent;
     dp_misc::create_folder( &destFolderContent, destFolder, m_updateCmdEnv.get() );
 
-    ::ucb::Content sourceContent;
+    ::ucbhelper::Content sourceContent;
     dp_misc::create_ucb_content( &sourceContent, sDownloadURL, m_updateCmdEnv.get() );
 
     if (destFolderContent.transferContent(
-            sourceContent, ::ucb::InsertOperation_COPY,
+            sourceContent, ::ucbhelper::InsertOperation_COPY,
             OUSTR(""), css::ucb::NameClash::OVERWRITE ))
     {
         //the user may have been cancelled the dialog because downloading took to look
