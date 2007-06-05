@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 15:00:22 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:05:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,9 +78,10 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
     void initActivationLayer(
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
     ::rtl::OUString detectMediaType(
-        ::ucb::Content const & ucbContent, bool throw_exc = true );
+        ::ucbhelper::Content const & ucbContent, bool throw_exc = true );
     ::rtl::OUString insertToActivationLayer(
-        ::rtl::OUString const & mediaType, ::ucb::Content const & sourceContent,
+        ::rtl::OUString const & mediaType,
+        ::ucbhelper::Content const & sourceContent,
         ::rtl::OUString const & title, ActivePackages::Data * dbData );
     void insertToActivationLayerDB(
         ::rtl::OUString const & id, ActivePackages::Data const & dbData );
