@@ -4,9 +4,9 @@
  *
  *  $RCSfile: myucp_provider.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:45:39 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:00:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,7 @@
 #ifndef _MYUCP_PROVIDER_HXX
 #define _MYUCP_PROVIDER_HXX
 
-#ifndef _UCBHELPER_PROVIDERHELPER_HXX
-#include <ucbhelper/providerhelper.hxx>
-#endif
+#include "ucbhelper/providerhelper.hxx"
 
 // @@@ Adjust namespace name.
 namespace myucp {
@@ -49,7 +47,7 @@ namespace myucp {
 // @@@ Adjust defines.
 
 // UNO service name for the provider. This name will be used by the UCB to
-// create instances of the provider.
+// create instances of the provider. Prefix with reversed company domain name.
 #define MYUCP_CONTENT_PROVIDER_SERVICE_NAME \
                 "com.sun.star.ucb.MyContentProvider"
 #define MYUCP_CONTENT_PROVIDER_SERVICE_NAME_LENGTH  34
@@ -67,7 +65,7 @@ namespace myucp {
 
 //=========================================================================
 
-class ContentProvider : public ::ucb::ContentProviderImplHelper
+class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
 {
 public:
     ContentProvider( const ::com::sun::star::uno::Reference<
