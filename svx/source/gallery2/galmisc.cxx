@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:26:34 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:35:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,10 +82,8 @@
 // - Namespaces -
 // --------------
 
-using namespace ::ucb;
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::ucb;
 
 // ----------
 // - ResMgr -
@@ -304,19 +302,19 @@ BOOL FileExists( const INetURLObject& rURL )
     {
         try
         {
-            Content     aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< XCommandEnvironment >() );
+            ::ucbhelper::Content        aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
             OUString    aTitle;
 
             aCnt.getPropertyValue( OUString::createFromAscii( "Title" ) ) >>= aTitle;
             bRet = ( aTitle.getLength() > 0 );
         }
-        catch( const ContentCreationException& )
+        catch( const ucb::ContentCreationException& )
         {
         }
-        catch( const ::com::sun::star::uno::RuntimeException& )
+        catch( const uno::RuntimeException& )
         {
         }
-        catch( const ::com::sun::star::uno::Exception& )
+        catch( const uno::Exception& )
         {
         }
     }
@@ -334,26 +332,26 @@ BOOL CreateDir( const INetURLObject& rURL )
     {
         try
         {
-            uno::Reference< XCommandEnvironment >   aCmdEnv;
+            uno::Reference< ucb::XCommandEnvironment >  aCmdEnv;
             INetURLObject                           aNewFolderURL( rURL );
             INetURLObject                           aParentURL( aNewFolderURL ); aParentURL.removeSegment();
-            Content                                 aParent( aParentURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
+            ::ucbhelper::Content                    aParent( aParentURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
             uno::Sequence< OUString >               aProps( 1 );
             uno::Sequence< uno::Any >               aValues( 1 );
 
             aProps.getArray()[ 0 ] = OUString::createFromAscii( "Title" );
             aValues.getArray()[ 0 ] = uno::makeAny( OUString( aNewFolderURL.GetName() ) );
 
-        Content aContent( aNewFolderURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
+        ::ucbhelper::Content aContent( aNewFolderURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
         bRet = aParent.insertNewContent( OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-folder" ), aProps, aValues, aContent );
         }
-        catch( const ContentCreationException& )
+        catch( const ucb::ContentCreationException& )
         {
         }
-        catch( const ::com::sun::star::uno::RuntimeException& )
+        catch( const uno::RuntimeException& )
         {
         }
-        catch( const ::com::sun::star::uno::Exception& )
+        catch( const uno::Exception& )
         {
         }
     }
@@ -369,20 +367,20 @@ BOOL CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
 
     try
     {
-        Content aDestPath( rDstURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< XCommandEnvironment >() );
+        ::ucbhelper::Content aDestPath( rDstURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
 
         aDestPath.executeCommand( OUString::createFromAscii( "transfer" ),
-                                  uno::makeAny( TransferInfo( sal_False, rSrcURL.GetMainURL( INetURLObject::NO_DECODE ),
-                                                rDstURL.GetName(), NameClash::OVERWRITE ) ) );
+                                  uno::makeAny( ucb::TransferInfo( sal_False, rSrcURL.GetMainURL( INetURLObject::NO_DECODE ),
+                                                rDstURL.GetName(), ucb::NameClash::OVERWRITE ) ) );
         bRet = TRUE;
     }
-    catch( const ContentCreationException& )
+    catch( const ucb::ContentCreationException& )
     {
     }
-    catch( const ::com::sun::star::uno::RuntimeException& )
+    catch( const uno::RuntimeException& )
     {
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const uno::Exception& )
     {
     }
 
@@ -399,18 +397,18 @@ BOOL KillFile( const INetURLObject& rURL )
     {
         try
         {
-            Content aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< XCommandEnvironment >() );
+            ::ucbhelper::Content aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
             aCnt.executeCommand( OUString::createFromAscii( "delete" ), uno::makeAny( sal_Bool( sal_True ) ) );
         }
-        catch( const ContentCreationException& )
+        catch( const ucb::ContentCreationException& )
         {
             bRet = FALSE;
         }
-        catch( const ::com::sun::star::uno::RuntimeException& )
+        catch( const uno::RuntimeException& )
         {
             bRet = FALSE;
         }
-        catch( const ::com::sun::star::uno::Exception& )
+        catch( const uno::Exception& )
         {
             bRet = FALSE;
         }
@@ -426,18 +424,17 @@ BOOL KillFile( const INetURLObject& rURL )
 GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
     mpFilter( pFilter )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+    uno::Reference< lang::XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
 
     if( xMgr.is() )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XProgressMonitor > xMonitor( xMgr->createInstance(
+        uno::Reference< awt::XProgressMonitor > xMonitor( xMgr->createInstance(
                                                       ::rtl::OUString::createFromAscii( "com.sun.star.awt.XProgressMonitor" ) ),
-                                                      ::com::sun::star::uno::UNO_QUERY );
+                                                      uno::UNO_QUERY );
 
         if ( xMonitor.is() )
         {
-            mxProgressBar = ::com::sun::star::uno::Reference< ::com::sun::star::awt::XProgressBar >( xMonitor,
-                                                                                                     ::com::sun::star::uno::UNO_QUERY );
+            mxProgressBar = uno::Reference< awt::XProgressBar >( xMonitor, uno::UNO_QUERY );
 
             if( mxProgressBar.is() )
             {
@@ -594,7 +591,7 @@ void GalleryTransferable::AddSupportedFormats()
 
 // ------------------------------------------------------------------------
 
-sal_Bool GalleryTransferable::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+sal_Bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor )
 {
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
     sal_Bool    bRet = sal_False;
@@ -633,7 +630,7 @@ sal_Bool GalleryTransferable::GetData( const ::com::sun::star::datatransfer::Dat
 // ------------------------------------------------------------------------
 
 sal_Bool GalleryTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject,
-                                           sal_uInt32, const ::com::sun::star::datatransfer::DataFlavor& )
+                                           sal_uInt32, const datatransfer::DataFlavor& )
 {
     sal_Bool bRet = sal_False;
 
