@@ -4,9 +4,9 @@
  *
  *  $RCSfile: webdavresultset.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:08:41 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:22:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,9 +66,8 @@ using namespace webdav_ucp;
 DynamicResultSet::DynamicResultSet(
                 const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
                 const rtl::Reference< Content >& rxContent,
-                const com::sun::star::ucb::OpenCommandArgument2& rCommand,
-                const uno::Reference<
-                    com::sun::star::ucb::XCommandEnvironment >& rxEnv )
+                const ucb::OpenCommandArgument2& rCommand,
+                const uno::Reference< ucb::XCommandEnvironment >& rxEnv )
 : ResultSetImplHelper( rxSMgr, rCommand ),
   m_xContent( rxContent ),
   m_xEnv( rxEnv )
@@ -84,24 +83,24 @@ DynamicResultSet::DynamicResultSet(
 void DynamicResultSet::initStatic()
 {
     m_xResultSet1
-        = new ::ucb::ResultSet( m_xSMgr,
-                                m_aCommand.Properties,
-                                new DataSupplier( m_xSMgr,
-                                                  m_xContent,
-                                                  m_aCommand.Mode ),
-                                m_xEnv );
+        = new ::ucbhelper::ResultSet( m_xSMgr,
+                                      m_aCommand.Properties,
+                                      new DataSupplier( m_xSMgr,
+                                                        m_xContent,
+                                                        m_aCommand.Mode ),
+                                      m_xEnv );
 }
 
 //=========================================================================
 void DynamicResultSet::initDynamic()
 {
     m_xResultSet1
-        = new ::ucb::ResultSet( m_xSMgr,
-                                m_aCommand.Properties,
-                                new DataSupplier( m_xSMgr,
-                                                  m_xContent,
-                                                  m_aCommand.Mode ),
-                                m_xEnv );
+        = new ::ucbhelper::ResultSet( m_xSMgr,
+                                      m_aCommand.Properties,
+                                      new DataSupplier( m_xSMgr,
+                                                        m_xContent,
+                                                        m_aCommand.Mode ),
+                                      m_xEnv );
     m_xResultSet2 = m_xResultSet1;
 }
 
