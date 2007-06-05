@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templatefoldercache.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:23:38 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:26:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -685,8 +685,8 @@ namespace svt
             {
                 Reference< XDynamicResultSet > xDynResultSet;
 
-                ::ucb::Content aTemplateRoot( _rxRoot->getURL(), Reference< XCommandEnvironment >() );
-                xDynResultSet = aTemplateRoot.createDynamicCursor( aContentProperties, ::ucb::INCLUDE_FOLDERS_AND_DOCUMENTS );
+                ::ucbhelper::Content aTemplateRoot( _rxRoot->getURL(), Reference< XCommandEnvironment >() );
+                xDynResultSet = aTemplateRoot.createDynamicCursor( aContentProperties, ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS );
                 if ( xDynResultSet.is() )
                     xResultSet = xDynResultSet->getStaticResultSet();
             }
