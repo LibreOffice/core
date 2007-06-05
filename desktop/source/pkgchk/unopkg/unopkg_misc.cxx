@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg_misc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:25:22 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:08:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -374,7 +374,7 @@ Reference<XComponentContext> bootstrapStandAlone(
     Sequence<Any> ucb_args( 2 );
     ucb_args[ 0 ] <<= OUSTR(UCB_CONFIGURATION_KEY1_LOCAL);
     ucb_args[ 1 ] <<= OUSTR(UCB_CONFIGURATION_KEY2_OFFICE);
-    if (! ::ucb::ContentBroker::initialize( xServiceManager, ucb_args ))
+    if (! ::ucbhelper::ContentBroker::initialize( xServiceManager, ucb_args ))
         throw RuntimeException( OUSTR("cannot initialize UCB!"), 0 );
 
     return xContext;
