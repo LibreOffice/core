@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.238 $
+ *  $Revision: 1.239 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 11:28:22 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 11:53:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -881,7 +881,7 @@ End
 
 #endif
 
-#ifdef UNX
+#if defined UNX && ! defined MACOSX
 
 File gid_File_Lib_Desktopbe
     TXT_FILE_BODY;
