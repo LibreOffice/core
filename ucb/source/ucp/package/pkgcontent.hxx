@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pkgcontent.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:55:24 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:13:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ struct ContentProperties
 
 class ContentProvider;
 
-class Content : public ::ucb::ContentImplHelper,
+class Content : public ::ucbhelper::ContentImplHelper,
                 public com::sun::star::ucb::XContentCreator
 {
     enum ContentState { TRANSIENT,  // created via CreateNewContent,
@@ -174,7 +174,7 @@ private:
                            ::com::sun::star::beans::Property >& rProperties,
                        const ContentProperties& rData,
                        const rtl::Reference<
-                            ::ucb::ContentProviderImplHelper >& rProvider,
+                            ::ucbhelper::ContentProviderImplHelper >& rProvider,
                        const ::rtl::OUString& rContentId );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
