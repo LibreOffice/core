@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dynamicresultset.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:55:08 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:05:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@
 #include "dynamicresultset.hxx"
 #endif
 
-using namespace com::sun;
 using namespace com::sun::star;
 using namespace hierarchy_ucp;
 
@@ -67,7 +66,7 @@ using namespace hierarchy_ucp;
 DynamicResultSet::DynamicResultSet(
             const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
             const rtl::Reference< HierarchyContent >& rxContent,
-            const star::ucb::OpenCommandArgument2& rCommand )
+            const ucb::OpenCommandArgument2& rCommand )
 : ResultSetImplHelper( rxSMgr, rCommand ),
   m_xContent( rxContent )
 {
@@ -82,24 +81,24 @@ DynamicResultSet::DynamicResultSet(
 void DynamicResultSet::initStatic()
 {
     m_xResultSet1
-        = new ::ucb::ResultSet(
-                    m_xSMgr,
-                    m_aCommand.Properties,
-                    new  HierarchyResultSetDataSupplier( m_xSMgr,
-                                                         m_xContent,
-                                                         m_aCommand.Mode ) );
+        = new ::ucbhelper::ResultSet(
+            m_xSMgr,
+            m_aCommand.Properties,
+            new  HierarchyResultSetDataSupplier( m_xSMgr,
+                                                 m_xContent,
+                                                 m_aCommand.Mode ) );
 }
 
 //=========================================================================
 void DynamicResultSet::initDynamic()
 {
     m_xResultSet1
-        = new ::ucb::ResultSet(
-                    m_xSMgr,
-                    m_aCommand.Properties,
-                    new  HierarchyResultSetDataSupplier( m_xSMgr,
-                                                         m_xContent,
-                                                         m_aCommand.Mode ) );
+        = new ::ucbhelper::ResultSet(
+            m_xSMgr,
+            m_aCommand.Properties,
+            new  HierarchyResultSetDataSupplier( m_xSMgr,
+                                                 m_xContent,
+                                                 m_aCommand.Mode ) );
     m_xResultSet2 = m_xResultSet1;
 }
 
