@@ -4,9 +4,9 @@
  *
  *  $RCSfile: myucp_resultset.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:46:13 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:00:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,22 +37,15 @@
 #ifndef _MYUCP_RESULTSET_HXX
 #define _MYUCP_RESULTSET_HXX
 
-#ifndef _RTL_REF_HXX_
-#include <rtl/ref.hxx>
-#endif
-#ifndef _UCBHELPER_RESULTSETHELPER_HXX
-#include <ucbhelper/resultsethelper.hxx>
-#endif
+#include "rtl/ref.hxx"
+#include "ucbhelper/resultsethelper.hxx"
 
-// @@@ Adjust multi-include-protection-ifdef and header file name.
-#ifndef _MYUCP_CONTENT_HXX
 #include "myucp_content.hxx"
-#endif
 
 // @@@ Adjust namespace name.
 namespace myucp {
 
-class DynamicResultSet : public ::ucb::ResultSetImplHelper
+class DynamicResultSet : public ::ucbhelper::ResultSetImplHelper
 {
       rtl::Reference< Content > m_xContent;
     com::sun::star::uno::Reference<
