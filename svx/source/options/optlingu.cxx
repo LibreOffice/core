@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:55:32 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:36:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,7 @@
 
 #include <ucbhelper/content.hxx>
 
-using namespace ::ucb;
+using namespace ::ucbhelper;
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -235,7 +235,7 @@ sal_Bool KillFile_Impl( const String& rURL )
     sal_Bool bRet = sal_True;
     try
     {
-        Content aCnt( rURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( rURL, uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         aCnt.executeCommand( OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -576,9 +576,9 @@ struct ServiceInfo_Impl
     OUString                    sSpellImplName;
     OUString                    sHyphImplName;
     OUString                    sThesImplName;
-    Reference <XSpellChecker>   xSpell;
-    Reference <XHyphenator>     xHyph;
-    Reference <XThesaurus>      xThes;
+    uno::Reference <XSpellChecker> xSpell;
+    uno::Reference <XHyphenator>   xHyph;
+    uno::Reference <XThesaurus>    xThes;
     BOOL                        bConfigured;
 
     ServiceInfo_Impl() : bConfigured(sal_False) {}
@@ -600,8 +600,8 @@ class SvxLinguData_Impl
     LangImplNameTable                   aCfgSpellTable;
     LangImplNameTable                   aCfgHyphTable;
     LangImplNameTable                   aCfgThesTable;
-    Reference< XMultiServiceFactory >   xMSF;
-    Reference< XLinguServiceManager >   xLinguSrvcMgr;
+    uno::Reference< XMultiServiceFactory >   xMSF;
+    uno::Reference< XLinguServiceManager >   xLinguSrvcMgr;
 
 
     sal_Bool    AddRemove( Sequence< OUString > &rConfigured,
@@ -614,7 +614,7 @@ public:
 
     SvxLinguData_Impl & operator = (const SvxLinguData_Impl &rData);
 
-    Reference<XLinguServiceManager> &   GetManager() { return xLinguSrvcMgr; }
+    uno::Reference<XLinguServiceManager> &   GetManager() { return xLinguSrvcMgr; }
 
     void SetChecked( const Sequence< OUString > &rConfiguredServices );
     void Reconfigure( const OUString &rDisplayName, BOOL bEnable );
@@ -812,9 +812,9 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
     nDisplayServices    (0)
 {
     xMSF = ::comphelper::getProcessServiceFactory();
-    Reference < XInterface > xI = xMSF->createInstance(
+    uno::Reference < XInterface > xI = xMSF->createInstance(
         C2U( "com.sun.star.linguistic2.LinguServiceManager" ) );
-    xLinguSrvcMgr = Reference<XLinguServiceManager>(xI, UNO_QUERY);
+    xLinguSrvcMgr = uno::Reference<XLinguServiceManager>(xI, UNO_QUERY);
     DBG_ASSERT(xLinguSrvcMgr.is(), "No linguistic service available!")
     if(xLinguSrvcMgr.is())
     {
@@ -834,10 +834,10 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
         {
             ServiceInfo_Impl* pInfo = new ServiceInfo_Impl;
             pInfo->sSpellImplName = pSpellNames[nIdx];
-            pInfo->xSpell = Reference<XSpellChecker>(
+            pInfo->xSpell = uno::Reference<XSpellChecker>(
                             xMSF->createInstanceWithArguments(pInfo->sSpellImplName, aArgs), UNO_QUERY);
 
-            Reference<XServiceDisplayName> xDispName(pInfo->xSpell, UNO_QUERY);
+            uno::Reference<XServiceDisplayName> xDispName(pInfo->xSpell, UNO_QUERY);
             if(xDispName.is())
                 pInfo->sDisplayName = xDispName->getServiceDisplayName( aCurrentLocale );
 
@@ -858,10 +858,10 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
         {
             ServiceInfo_Impl* pInfo = new ServiceInfo_Impl;
             pInfo->sHyphImplName = pHyphNames[nIdx];
-            pInfo->xHyph = Reference<XHyphenator>(
+            pInfo->xHyph = uno::Reference<XHyphenator>(
                             xMSF->createInstanceWithArguments(pInfo->sHyphImplName, aArgs), UNO_QUERY);
 
-            Reference<XServiceDisplayName> xDispName(pInfo->xHyph, UNO_QUERY);
+            uno::Reference<XServiceDisplayName> xDispName(pInfo->xHyph, UNO_QUERY);
             if(xDispName.is())
                 pInfo->sDisplayName = xDispName->getServiceDisplayName( aCurrentLocale );
 
@@ -882,10 +882,10 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
         {
             ServiceInfo_Impl* pInfo = new ServiceInfo_Impl;
             pInfo->sThesImplName = pThesNames[nIdx];
-            pInfo->xThes = Reference<XThesaurus>(
+            pInfo->xThes = uno::Reference<XThesaurus>(
                             xMSF->createInstanceWithArguments(pInfo->sThesImplName, aArgs), UNO_QUERY);
 
-            Reference<XServiceDisplayName> xDispName(pInfo->xThes, UNO_QUERY);
+            uno::Reference<XServiceDisplayName> xDispName(pInfo->xThes, UNO_QUERY);
             if(xDispName.is())
                 pInfo->sDisplayName = xDispName->getServiceDisplayName( aCurrentLocale );
 
@@ -1179,9 +1179,9 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
     aLinguOptionsCLB.SetSelectHdl( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
     aLinguOptionsCLB.SetDoubleClickHdl(LINK(this, SvxLinguTabPage, BoxDoubleClickHdl_Impl));
 
-    xProp = Reference< XPropertySet >( SvxGetLinguPropertySet(), UNO_QUERY );
+    xProp = uno::Reference< XPropertySet >( SvxGetLinguPropertySet(), UNO_QUERY );
 
-    xDicList = Reference< XDictionaryList >( SvxGetDictionaryList(), UNO_QUERY );
+    xDicList = uno::Reference< XDictionaryList >( SvxGetDictionaryList(), UNO_QUERY );
     if (xDicList.is())
     {
         // keep references to all **currently** available dictionaries,
@@ -1290,7 +1290,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
                 const OUString *pTmpStr;
                 pTmpStr = pImplNames->getConstArray();
 #endif
-                Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
+                uno::Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
                 Locale aLocale( SvxCreateLocale(nLang) );
                 if (xMgr.is())
                     xMgr->setConfiguredServices( C2U(cSpell), aLocale, *pImplNames );
@@ -1306,7 +1306,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
             DBG_ASSERT( pImplNames, "service implementation names missing" )
             if (pImplNames)
             {
-                Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
+                uno::Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
                 Locale aLocale( SvxCreateLocale(nLang) );
                 if (xMgr.is())
                     xMgr->setConfiguredServices( C2U(cHyph), aLocale, *pImplNames );
@@ -1322,7 +1322,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
             DBG_ASSERT( pImplNames, "service implementation names missing" )
             if (pImplNames)
             {
-                Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
+                uno::Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
                 Locale aLocale( SvxCreateLocale(nLang) );
                 if (xMgr.is())
                     xMgr->setConfiguredServices( C2U(cThes), aLocale, *pImplNames );
@@ -1340,7 +1340,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
     for (ULONG i = 0;  i < nEntries;  ++i)
     {
         INT32 nDics = aDics.getLength();
-//        const Reference< XDictionary > *pDic = aDics.getConstArray();
+//        const uno::Reference< XDictionary > *pDic = aDics.getConstArray();
 
         aActiveDics.realloc( nDics );
         OUString *pActiveDic = aActiveDics.getArray();
@@ -1352,7 +1352,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
             if (aData.GetEntryId() < nDics)
             {
                 BOOL bChecked = aLinguDicsCLB.IsChecked( (USHORT) i );
-                Reference< XDictionary > xDic( aDics.getConstArray()[ i ] );
+                uno::Reference< XDictionary > xDic( aDics.getConstArray()[ i ] );
                 if (xDic.is())
                 {
                     if (SvxGetIgnoreAllList() == xDic)
@@ -1453,13 +1453,13 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
 
 // ----------------------------------------------------------------------
 
-ULONG SvxLinguTabPage::GetDicUserData( const Reference< XDictionary > &rxDic, USHORT nIdx )
+ULONG SvxLinguTabPage::GetDicUserData( const uno::Reference< XDictionary > &rxDic, USHORT nIdx )
 {
     ULONG nRes = 0;
     DBG_ASSERT( rxDic.is(), "dictionary not supplied" );
     if (rxDic.is())
     {
-        Reference< frame::XStorable > xStor( rxDic, UNO_QUERY );
+        uno::Reference< frame::XStorable > xStor( rxDic, UNO_QUERY );
 
 //        ULONG nUserData = 0;
         BOOL bChecked = rxDic->isActive();
@@ -1475,7 +1475,7 @@ ULONG SvxLinguTabPage::GetDicUserData( const Reference< XDictionary > &rxDic, US
 
 
 void SvxLinguTabPage::AddDicBoxEntry(
-        const Reference< XDictionary > &rxDic,
+        const uno::Reference< XDictionary > &rxDic,
         USHORT nIdx )
 {
     aLinguDicsCLB.SetUpdateMode(FALSE);
@@ -1504,10 +1504,10 @@ void SvxLinguTabPage::UpdateDicBox_Impl()
     aLinguDicsCLB.Clear();
 
     INT32 nDics  = aDics.getLength();
-    const Reference< XDictionary > *pDic = aDics.getConstArray();
+    const uno::Reference< XDictionary > *pDic = aDics.getConstArray();
     for (INT32 i = 0;  i < nDics;  ++i)
     {
-        const Reference< XDictionary > &rDic = pDic[i];
+        const uno::Reference< XDictionary > &rDic = pDic[i];
         if (rDic.is())
             AddDicBoxEntry( rDic, (USHORT)i );
     }
@@ -1721,7 +1721,7 @@ IMPL_LINK( SvxLinguTabPage, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox )
         USHORT nPos = aLinguDicsCLB.GetSelectEntryPos();
         if (nPos != LISTBOX_ENTRY_NOTFOUND)
         {
-            const Reference< XDictionary > &rDic = aDics.getConstArray()[ nPos ];
+            const uno::Reference< XDictionary > &rDic = aDics.getConstArray()[ nPos ];
             if (SvxGetIgnoreAllList() == rDic)
             {
                 SvLBoxEntry* pEntry = aLinguDicsCLB.GetEntry( nPos );
@@ -1773,16 +1773,16 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
     }
     else if (&aLinguDicsNewPB == pBtn)
     {
-        Reference< XSpellChecker1 > xSpellChecker1;
+        uno::Reference< XSpellChecker1 > xSpellChecker1;
         //CHINA001 SvxNewDictionaryDialog aDlg( this,  xSpellChecker1);
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
             AbstractSvxNewDictionaryDialog* aDlg = pFact->CreateSvxNewDictionaryDialog( this, xSpellChecker1, RID_SFXDLG_NEWDICT );
             DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
-            Reference< XDictionary >  xNewDic;
+            uno::Reference< XDictionary >  xNewDic;
             if ( aDlg->Execute() == RET_OK ) //CHINA001 if ( aDlg.Execute() == RET_OK )
-                xNewDic = Reference< XDictionary >( aDlg->GetNewDictionary(), UNO_QUERY ); //CHINA001 xNewDic = Reference< XDictionary >( aDlg.GetNewDictionary(), UNO_QUERY );
+                xNewDic = uno::Reference< XDictionary >( aDlg->GetNewDictionary(), UNO_QUERY ); //CHINA001 xNewDic = uno::Reference< XDictionary >( aDlg.GetNewDictionary(), UNO_QUERY );
             if ( xNewDic.is() )
             {
                 // add new dics to the end
@@ -1806,11 +1806,11 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
             INT32 nDics = aDics.getLength();
             if (nDicPos < nDics)
             {
-                Reference< XDictionary > xDic;
+                uno::Reference< XDictionary > xDic;
                 xDic = aDics.getConstArray()[ nDicPos ];
                 if (xDic.is())
                 {
-                    Reference< XSpellChecker1 > xSpellChecker1;
+                    uno::Reference< XSpellChecker1 > xSpellChecker1;
                     //CHINA001 SvxEditDictionaryDialog aDlg( this,
                     //CHINA001      xDic->getName(), xSpellChecker1 );
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -1839,7 +1839,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
             INT32 nDics = aDics.getLength();
             if (nDicPos < nDics)
             {
-                Reference< XDictionary > xDic;
+                uno::Reference< XDictionary > xDic;
                 xDic = aDics.getConstArray()[ nDicPos ];
                 if (xDic.is())
                 {
@@ -1850,7 +1850,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
                         if (xDicList.is())
                             xDicList->removeDictionary( xDic );
 
-                        Reference< frame::XStorable > xStor( xDic, UNO_QUERY );
+                        uno::Reference< frame::XStorable > xStor( xDic, UNO_QUERY );
                         if ( xStor->hasLocation() && !xStor->isReadonly() )
                         {
                             String sURL = xStor->getLocation();
@@ -2074,7 +2074,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
     //fill language box
     //
     Sequence< INT16 > aAvailLang;
-    Reference< XAvailableLocales > xAvail( rLinguData.GetManager(), UNO_QUERY );
+    uno::Reference< XAvailableLocales > xAvail( rLinguData.GetManager(), UNO_QUERY );
     if (xAvail.is())
     {
         aAvailLang = lcl_LocaleSeqToLangSeq(
@@ -2219,7 +2219,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
     Locale aCurLocale;
     SvxLanguageToLocale(aCurLocale, eCurLanguage);
     SvLBoxTreeList *pModel = aModulesCLB.GetModel();
-//  Reference<XLinguServiceManager>&   xMgr = rLinguData.GetManager();
+//  uno::Reference<XLinguServiceManager>&   xMgr = rLinguData.GetManager();
 
     if (pBox)
     {
