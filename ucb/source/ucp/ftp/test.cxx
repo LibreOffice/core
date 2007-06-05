@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:53:16 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:02:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,10 +46,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-//  #include <vos/process.hxx>
 //  #include <osl/process.h>
-
-
 //  #include <osl/thread.hxx>
 
 //  #include <ucbhelper/configurationkeys.hxx>
