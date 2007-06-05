@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:19:19 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:42:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,6 +197,7 @@
 
 #include <sfx2/app.hxx>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace com::sun::star::ui::dialogs;
@@ -232,9 +233,9 @@ String lcl_CreateAutoMarkFileDlg( Window* pParent, const String& rURL,
 
     FileDialogHelper aDlgHelper( bOpen ?
                 TemplateDescription::FILEOPEN_SIMPLE : TemplateDescription::FILESAVE_AUTOEXTENSION, 0 );
-    Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+    uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
-    Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
+    uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
     String sCurFltr( IDX_FILE_EXTENSION );
     xFltMgr->appendFilter( rFileString, sCurFltr );
     xFltMgr->setCurrentFilter( rFileString ) ;
