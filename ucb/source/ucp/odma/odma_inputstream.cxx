@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odma_inputstream.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:57:56 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:10:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,24 +67,24 @@
 using namespace odma;
 using namespace com::sun::star;
 
-class OActiveDataStreamer : public ::cppu::WeakImplHelper1< ::com::sun::star::io::XActiveDataStreamer>
+class OActiveDataStreamer : public ::cppu::WeakImplHelper1< io::XActiveDataStreamer>
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > m_xStream;
+    uno::Reference< io::XStream > m_xStream;
 public:
     OActiveDataStreamer(){}
-    virtual void SAL_CALL setStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& _rStream ) throw (::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setStream( const uno::Reference< io::XStream >& _rStream ) throw (uno::RuntimeException)
     {
         m_xStream = _rStream;
     }
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > SAL_CALL getStream(  ) throw (::com::sun::star::uno::RuntimeException)
+    virtual uno::Reference< io::XStream > SAL_CALL getStream(  ) throw (uno::RuntimeException)
     {
         return m_xStream;
     }
 };
 // -----------------------------------------------------------------------------
-OOdmaStream::OOdmaStream(::ucb::Content* _pContent,
+OOdmaStream::OOdmaStream(::ucbhelper::Content* _pContent,
                          ContentProvider* _pProvider,
-                         const ::vos::ORef<ContentProperties>& _rProp)
+                         const ::rtl::Reference<ContentProperties>& _rProp)
  :m_pContent(_pContent)
  ,m_bInputStreamCalled(sal_False)
  ,m_bOutputStreamCalled(sal_False)
@@ -254,8 +254,8 @@ void OOdmaStream::ensureOutputStream() throw( io::IOException )
     {
         if(!m_xOutput.is())
         {
-            ::com::sun::star::ucb::OpenCommandArgument2 aCommand;
-            aCommand.Mode = ::com::sun::star::ucb::OpenMode::DOCUMENT;
+            ucb::OpenCommandArgument2 aCommand;
+            aCommand.Mode = ucb::OpenMode::DOCUMENT;
             uno::Reference< io::XActiveDataStreamer > xActiveStreamer = new OActiveDataStreamer();
             aCommand.Sink = xActiveStreamer;
             m_pContent->executeCommand(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open")),uno::makeAny(aCommand));
@@ -277,8 +277,8 @@ void OOdmaStream::ensureOutputStream() throw( io::IOException )
 // -----------------------------------------------------------------------------
 // XTruncate
 void SAL_CALL OOdmaStream::truncate( void )
-    throw( com::sun::star::io::IOException,
-           com::sun::star::uno::RuntimeException )
+    throw( io::IOException,
+           uno::RuntimeException )
 {
     if(m_xTruncate.is())
         m_xTruncate->truncate();
@@ -286,9 +286,9 @@ void SAL_CALL OOdmaStream::truncate( void )
 // -----------------------------------------------------------------------------
 // XSeekable
 void SAL_CALL OOdmaStream::seek(sal_Int64 location )
-    throw( com::sun::star::lang::IllegalArgumentException,
-           com::sun::star::io::IOException,
-           com::sun::star::uno::RuntimeException )
+    throw( lang::IllegalArgumentException,
+           io::IOException,
+           uno::RuntimeException )
 {
     ensureInputStream();
     if(m_xInputSeek.is())
@@ -296,16 +296,16 @@ void SAL_CALL OOdmaStream::seek(sal_Int64 location )
 }
 // -----------------------------------------------------------------------------
 sal_Int64 SAL_CALL OOdmaStream::getPosition()
-    throw( com::sun::star::io::IOException,
-           com::sun::star::uno::RuntimeException )
+    throw( io::IOException,
+           uno::RuntimeException )
 {
     ensureInputStream();
     return m_xInputSeek.is() ? m_xInputSeek->getPosition() : sal_Int64(0);
 }
 // -----------------------------------------------------------------------------
 sal_Int64 SAL_CALL OOdmaStream::getLength()
-    throw( com::sun::star::io::IOException,
-           com::sun::star::uno::RuntimeException )
+    throw( io::IOException,
+           uno::RuntimeException )
 {
     ensureInputStream();
     return m_xInputSeek.is() ? m_xInputSeek->getLength() : sal_Int64(0);
