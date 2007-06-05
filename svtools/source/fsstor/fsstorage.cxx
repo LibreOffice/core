@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fsstorage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:26:30 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:26:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,15 +157,15 @@ using namespace ::com::sun::star;
 sal_Bool isLocalFile_Impl( ::rtl::OUString aURL )
 {
     ::rtl::OUString aSystemPath;
-    ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
+    ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
     if ( !pBroker )
         throw uno::RuntimeException();
 
-    uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
+    uno::Reference< ucb::XContentProviderManager > xManager =
                 pBroker->getContentProviderManagerInterface();
     try
     {
-        aSystemPath = ::ucb::getSystemPathFromFileURL( xManager, aURL );
+        aSystemPath = ::ucbhelper::getSystemPathFromFileURL( xManager, aURL );
     }
     catch ( uno::Exception& )
     {
@@ -181,7 +181,7 @@ struct FSStorage_Impl
 {
     ::rtl::OUString m_aURL;
 
-    ::ucb::Content* m_pContent;
+    ::ucbhelper::Content* m_pContent;
     sal_Int32 m_nMode;
 
     ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
@@ -201,9 +201,9 @@ struct FSStorage_Impl
         OSL_ENSURE( m_aURL.getLength(), "The URL must not be empty" );
     }
 
-    FSStorage_Impl( const ::ucb::Content& aContent, sal_Int32 nMode, uno::Reference< lang::XMultiServiceFactory > xFactory )
+    FSStorage_Impl( const ::ucbhelper::Content& aContent, sal_Int32 nMode, uno::Reference< lang::XMultiServiceFactory > xFactory )
     : m_aURL( aContent.getURL() )
-    , m_pContent( new ::ucb::Content( aContent ) )
+    , m_pContent( new ::ucbhelper::Content( aContent ) )
     , m_nMode( nMode )
     , m_pListenersContainer( NULL )
     , m_pTypeCollection( NULL )
@@ -232,7 +232,7 @@ FSStorage_Impl::~FSStorage_Impl()
 //=====================================================
 
 //-----------------------------------------------
-FSStorage::FSStorage( const ::ucb::Content& aContent,
+FSStorage::FSStorage( const ::ucbhelper::Content& aContent,
                     sal_Int32 nMode,
                     uno::Sequence< beans::PropertyValue >,
                     uno::Reference< lang::XMultiServiceFactory > xFactory )
@@ -265,11 +265,11 @@ sal_Bool FSStorage::MakeFolderNoUI( const String& rFolder, sal_Bool )
        INetURLObject aURL( rFolder );
     ::rtl::OUString aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
     aURL.removeSegment();
-    ::ucb::Content aParent;
-    ::ucb::Content aResultContent;
+    ::ucbhelper::Content aParent;
+    ::ucbhelper::Content aResultContent;
 
-       if ( ::ucb::Content::create( aURL.GetMainURL( INetURLObject::NO_DECODE ),
-                                 uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+       if ( ::ucbhelper::Content::create( aURL.GetMainURL( INetURLObject::NO_DECODE ),
+                                 uno::Reference< ucb::XCommandEnvironment >(),
                                  aParent ) )
         return ::utl::UCBContentHelper::MakeFolder( aParent, aTitle, aResultContent, sal_False );
 
@@ -277,16 +277,16 @@ sal_Bool FSStorage::MakeFolderNoUI( const String& rFolder, sal_Bool )
 }
 
 //-----------------------------------------------
-::ucb::Content* FSStorage::GetContent()
+::ucbhelper::Content* FSStorage::GetContent()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !m_pImpl->m_pContent )
     {
-        uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
+        uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
 
         try
         {
-            m_pImpl->m_pContent = new ::ucb::Content( m_pImpl->m_aURL, xDummyEnv );
+            m_pImpl->m_pContent = new ::ucbhelper::Content( m_pImpl->m_aURL, xDummyEnv );
         }
         catch( uno::Exception& )
         {
@@ -304,8 +304,8 @@ void FSStorage::CopyStreamToSubStream( const ::rtl::OUString& aSourceURL,
     if ( !xDest.is() )
         throw uno::RuntimeException();
 
-    uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
-    ::ucb::Content aSourceContent( aSourceURL, xDummyEnv );
+    uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
+    ::ucbhelper::Content aSourceContent( aSourceURL, xDummyEnv );
     uno::Reference< io::XInputStream > xSourceInput = aSourceContent.openStream();
 
     if ( !xSourceInput.is() )
@@ -326,7 +326,7 @@ void FSStorage::CopyStreamToSubStream( const ::rtl::OUString& aSourceURL,
 }
 
 //-----------------------------------------------
-void FSStorage::CopyContentToStorage_Impl( ::ucb::Content* pContent, const uno::Reference< embed::XStorage >& xDest )
+void FSStorage::CopyContentToStorage_Impl( ::ucbhelper::Content* pContent, const uno::Reference< embed::XStorage >& xDest )
 {
     if ( !pContent )
         throw uno::RuntimeException();
@@ -337,12 +337,12 @@ void FSStorage::CopyContentToStorage_Impl( ::ucb::Content* pContent, const uno::
     ::rtl::OUString* pProps = aProps.getArray();
     pProps[0] = ::rtl::OUString::createFromAscii( "TargetURL" );
     pProps[1] = ::rtl::OUString::createFromAscii( "IsFolder" );
-    ::ucb::ResultSetInclude eInclude = ::ucb::INCLUDE_FOLDERS_AND_DOCUMENTS;
+    ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
     try
     {
         uno::Reference< sdbc::XResultSet > xResultSet = pContent->createCursor( aProps, eInclude );
-        uno::Reference< ::com::sun::star::ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
+        uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
         uno::Reference< sdbc::XRow > xRow( xResultSet, uno::UNO_QUERY );
         if ( xResultSet.is() )
         {
@@ -363,8 +363,8 @@ void FSStorage::CopyContentToStorage_Impl( ::ucb::Content* pContent, const uno::
                     if ( !xSubStorage.is() )
                         throw uno::RuntimeException();
 
-                    uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
-                    ::ucb::Content aSourceContent( aSourceURL, xDummyEnv );
+                    uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
+                    ::ucbhelper::Content aSourceContent( aSourceURL, xDummyEnv );
                     CopyContentToStorage_Impl( &aSourceContent, xSubStorage );
                 }
                 else
@@ -378,9 +378,9 @@ void FSStorage::CopyContentToStorage_Impl( ::ucb::Content* pContent, const uno::
         if ( xTransact.is() )
             xTransact->commit();
     }
-    catch( ::com::sun::star::ucb::InteractiveIOException& r )
+    catch( ucb::InteractiveIOException& r )
     {
-        if ( r.Code == ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING )
+        if ( r.Code == ucb::IOErrorCode_NOT_EXISTING )
             OSL_ENSURE( sal_False, "The folder does not exist!\n" );
         else
             throw;
@@ -555,7 +555,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
       && !::utl::UCBContentHelper::IsDocument( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
         throw io::IOException(); // TODO:
 
-    uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv; // TODO: provide InteractionHandler if any
+    uno::Reference< ucb::XCommandEnvironment > xDummyEnv; // TODO: provide InteractionHandler if any
     uno::Reference< io::XStream > xResult;
     try
     {
@@ -563,7 +563,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
         {
             if ( isLocalFile_Impl( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
             {
-                uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleFileAccess(
+                uno::Reference< ucb::XSimpleFileAccess > xSimpleFileAccess(
                     m_pImpl->m_xFactory->createInstance(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" ) ) ),
                     uno::UNO_QUERY_THROW );
@@ -598,7 +598,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
               || !::utl::UCBContentHelper::IsDocument( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
                 throw io::IOException(); // TODO: access denied
 
-            ::ucb::Content aResultContent( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
+            ::ucbhelper::Content aResultContent( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
             uno::Reference< io::XInputStream > xInStream = aResultContent.openStream();
             xResult = static_cast< io::XStream* >( new OFSInputStreamContainer( xInStream ) );
         }
@@ -684,7 +684,7 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
     if ( ( nStorageMode & embed::ElementModes::NOCREATE ) && !bFolderExists )
         throw io::IOException(); // TODO:
 
-    uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv; // TODO: provide InteractionHandler if any
+    uno::Reference< ucb::XCommandEnvironment > xDummyEnv; // TODO: provide InteractionHandler if any
     uno::Reference< embed::XStorage > xResult;
     try
     {
@@ -708,7 +708,7 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
         if ( !bFolderExists )
             throw io::IOException(); // there is no such folder
 
-        ::ucb::Content aResultContent( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
+        ::ucbhelper::Content aResultContent( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
         xResult = uno::Reference< embed::XStorage >(
                             static_cast< OWeakObject* >( new FSStorage( aResultContent,
                                                                         nStorageMode,
@@ -771,8 +771,8 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::cloneStreamElement( const ::rt
     uno::Reference < io::XStream > xTempResult;
     try
     {
-        uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
-        ::ucb::Content aResultContent( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
+        uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
+        ::ucbhelper::Content aResultContent( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
         uno::Reference< io::XInputStream > xInStream = aResultContent.openStream();
 
         xTempResult = uno::Reference < io::XStream >(
@@ -972,13 +972,13 @@ void SAL_CALL FSStorage::renameElement( const ::rtl::OUString& aElementName, con
 
     try
     {
-        uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
-        ::ucb::Content aSourceContent( aOldURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
+        uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
+        ::ucbhelper::Content aSourceContent( aOldURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
 
         if ( !GetContent()->transferContent( aSourceContent,
-                                            ::ucb::InsertOperation_MOVE,
+                                            ::ucbhelper::InsertOperation_MOVE,
                                             aNewName,
-                                            ::com::sun::star::ucb::NameClash::ERROR ) )
+                                            ucb::NameClash::ERROR ) )
             throw io::IOException(); // TODO: error handling
     }
     catch( embed::InvalidStorageException& )
@@ -1049,10 +1049,10 @@ void SAL_CALL FSStorage::copyElementTo( const ::rtl::OUString& aElementName,
 
     try
     {
-        uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
+        uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
         if ( ::utl::UCBContentHelper::IsFolder( aOwnURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
         {
-            ::ucb::Content aSourceContent( aOwnURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
+            ::ucbhelper::Content aSourceContent( aOwnURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
             uno::Reference< embed::XStorage > xDestSubStor(
                                     xDest->openStorageElement( aNewName, embed::ElementModes::READWRITE ),
                                     uno::UNO_QUERY_THROW );
@@ -1202,7 +1202,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL FSStorage::getElementNames()
     uno::Sequence< ::rtl::OUString > aProps( 1 );
     ::rtl::OUString* pProps = aProps.getArray();
     pProps[0] = ::rtl::OUString::createFromAscii( "Title" );
-    ::ucb::ResultSetInclude eInclude = ::ucb::INCLUDE_FOLDERS_AND_DOCUMENTS;
+    ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
     uno::Sequence< ::rtl::OUString > aResult;
     sal_Int32 nSize = 0;
@@ -1210,7 +1210,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL FSStorage::getElementNames()
     try
     {
         uno::Reference< sdbc::XResultSet > xResultSet = GetContent()->createCursor( aProps, eInclude );
-        uno::Reference< ::com::sun::star::ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
+        uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
         uno::Reference< sdbc::XRow > xRow( xResultSet, uno::UNO_QUERY );
         if ( xResultSet.is() )
         {
@@ -1223,9 +1223,9 @@ uno::Sequence< ::rtl::OUString > SAL_CALL FSStorage::getElementNames()
             }
         }
     }
-    catch( ::com::sun::star::ucb::InteractiveIOException& r )
+    catch( ucb::InteractiveIOException& r )
     {
-        if ( r.Code == ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING )
+        if ( r.Code == ucb::IOErrorCode_NOT_EXISTING )
             OSL_ENSURE( sal_False, "The folder does not exist!\n" );
         else
         {
@@ -1317,7 +1317,7 @@ sal_Bool SAL_CALL FSStorage::hasElements()
 
     uno::Sequence< ::rtl::OUString > aProps( 1 );
     aProps[0] = ::rtl::OUString::createFromAscii( "TargetURL" );
-    ::ucb::ResultSetInclude eInclude = ::ucb::INCLUDE_FOLDERS_AND_DOCUMENTS;
+    ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
     try
     {
@@ -1547,7 +1547,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
       && !::utl::UCBContentHelper::IsDocument( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
         throw io::IOException(); // TODO:
 
-    uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv; // TODO: provide InteractionHandler if any
+    uno::Reference< ucb::XCommandEnvironment > xDummyEnv; // TODO: provide InteractionHandler if any
     uno::Reference< io::XStream > xResult;
     try
     {
@@ -1555,7 +1555,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
         {
             if ( isLocalFile_Impl( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
             {
-                uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleFileAccess(
+                uno::Reference< ucb::XSimpleFileAccess > xSimpleFileAccess(
                     m_pImpl->m_xFactory->createInstance(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" ) ) ),
                     uno::UNO_QUERY_THROW );
@@ -1597,7 +1597,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
               || !::utl::UCBContentHelper::IsDocument( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
                 throw io::IOException(); // TODO: access denied
 
-            ::ucb::Content aResultContent( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
+            ::ucbhelper::Content aResultContent( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
             uno::Reference< io::XInputStream > xInStream = aResultContent.openStream();
             xResult = static_cast< io::XStream* >( new OFSInputStreamContainer( xInStream ) );
         }
