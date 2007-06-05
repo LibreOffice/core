@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:34:10 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:25:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,9 +139,6 @@ void lcl_SwAccessibleContext_DbgMsg( SwAccessibleContext *pThisAcc,
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 using namespace ::rtl;
 
@@ -159,15 +156,15 @@ void SwAccessibleContext::SetParent( SwAccessibleContext *pParent )
 {
     vos::OGuard aGuard( aMutex );
 
-    ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > xParent( pParent );
+    uno::Reference < XAccessible > xParent( pParent );
     xWeakParent = xParent;
 }
 
-Reference< XAccessible > SwAccessibleContext::GetWeakParent() const
+uno::Reference< XAccessible > SwAccessibleContext::GetWeakParent() const
 {
     vos::OGuard aGuard( aMutex );
 
-    Reference< XAccessible > xParent( xWeakParent );
+    uno::Reference< XAccessible > xParent( xWeakParent );
     return xParent;
 }
 
@@ -227,7 +224,7 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
     SwFrmOrObj aFrm( pFrm );
     sal_Bool bVisibleOnly = aFrm.IsVisibleChildrenOnly();
 
-    Reference < XAccessible > xAcc;
+    uno::Reference < XAccessible > xAcc;
 
     const SwFrmOrObjSList aList( pFrm );
     SwFrmOrObjSList::const_iterator aIter( aList.begin() );
@@ -386,7 +383,7 @@ void SwAccessibleContext::ScrolledIn()
     const SwFrm *pParent = GetParent();
     ::vos::ORef< SwAccessibleContext > xParentImpl(
          GetMap()->GetContextImpl( pParent, sal_False ) );
-    Reference < XAccessibleContext > xThis( this );
+    uno::Reference < XAccessibleContext > xThis( this );
     if( xParentImpl.isValid() )
     {
         SetParent( xParentImpl.getBodyPtr() );
@@ -512,7 +509,7 @@ void SwAccessibleContext::FireAccessibleEvent( AccessibleEventObject& rEvent )
 
     if( !rEvent.Source.is() )
     {
-        Reference < XAccessibleContext > xThis( this );
+        uno::Reference < XAccessibleContext > xThis( this );
         rEvent.Source = xThis;
     }
 
@@ -605,16 +602,16 @@ SwAccessibleContext::~SwAccessibleContext()
         GetMap()->RemoveContext( GetFrm() );
 }
 
-Reference< XAccessibleContext > SAL_CALL
+uno::Reference< XAccessibleContext > SAL_CALL
     SwAccessibleContext::getAccessibleContext( void )
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (uno::RuntimeException)
 {
-    Reference < XAccessibleContext > xRet( this );
+    uno::Reference < XAccessibleContext > xRet( this );
     return xRet;
 }
 
 sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleChildCount( void )
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -623,10 +620,9 @@ sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleChildCount( void )
     return bDisposing ? 0 : GetChildCount();
 }
 
-Reference< XAccessible> SAL_CALL
+uno::Reference< XAccessible> SAL_CALL
     SwAccessibleContext::getAccessibleChild( sal_Int32 nIndex )
-        throw (::com::sun::star::uno::RuntimeException,
-                ::com::sun::star::lang::IndexOutOfBoundsException)
+        throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -635,14 +631,14 @@ Reference< XAccessible> SAL_CALL
     const SwFrmOrObj aChild( GetChild( nIndex ) );
     if( !aChild.IsValid() )
     {
-        Reference < XAccessibleContext > xThis( this );
-        IndexOutOfBoundsException aExcept(
+        uno::Reference < XAccessibleContext > xThis( this );
+        lang::IndexOutOfBoundsException aExcept(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("index out of bounds") ),
-                xThis );                                        \
+                xThis );
         throw aExcept;
     }
 
-    Reference< XAccessible > xChild;
+    uno::Reference< XAccessible > xChild;
     if( aChild.GetSwFrm() )
     {
         ::vos::ORef < SwAccessibleContext > xChildImpl(
@@ -665,8 +661,8 @@ Reference< XAccessible> SAL_CALL
     return xChild;
 }
 
-Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent (void)
-        throw (::com::sun::star::uno::RuntimeException)
+uno::Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent (void)
+        throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -675,7 +671,7 @@ Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent (void)
     const SwFrm *pUpper = GetParent();
     ASSERT( pUpper != 0 || bDisposing, "no upper found" );
 
-    Reference< XAccessible > xAcc;
+    uno::Reference< XAccessible > xAcc;
     if( pUpper )
         xAcc = GetMap()->GetContext( pUpper, !bDisposing );
 
@@ -691,7 +687,7 @@ Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent (void)
 }
 
 sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleIndexInParent (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -714,36 +710,36 @@ sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleIndexInParent (void)
 }
 
 sal_Int16 SAL_CALL SwAccessibleContext::getAccessibleRole (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (uno::RuntimeException)
 {
     return nRole;
 }
 
 OUString SAL_CALL SwAccessibleContext::getAccessibleDescription (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (uno::RuntimeException)
 {
     ASSERT( !this, "description needs to be overloaded" );
     THROW_RUNTIME_EXCEPTION( XAccessibleContext, "internal error (method must be overloaded)" );
 }
 
 OUString SAL_CALL SwAccessibleContext::getAccessibleName (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (uno::RuntimeException)
 {
     return sName;
 }
 
-Reference< XAccessibleRelationSet> SAL_CALL
+uno::Reference< XAccessibleRelationSet> SAL_CALL
     SwAccessibleContext::getAccessibleRelationSet (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (uno::RuntimeException)
 {
     // by default there are no relations
-    Reference< XAccessibleRelationSet> xRet( new utl::AccessibleRelationSetHelper() );
+    uno::Reference< XAccessibleRelationSet> xRet( new utl::AccessibleRelationSetHelper() );
     return xRet;
 }
 
-Reference<XAccessibleStateSet> SAL_CALL
+uno::Reference<XAccessibleStateSet> SAL_CALL
     SwAccessibleContext::getAccessibleStateSet (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -752,24 +748,24 @@ Reference<XAccessibleStateSet> SAL_CALL
     ::utl::AccessibleStateSetHelper *pStateSet =
         new ::utl::AccessibleStateSetHelper;
 
-    Reference<XAccessibleStateSet> xStateSet( pStateSet );
+    uno::Reference<XAccessibleStateSet> xStateSet( pStateSet );
     GetStates( *pStateSet );
 
     return xStateSet;
 }
 
-Locale SAL_CALL SwAccessibleContext::getLocale (void)
-        throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException)
+lang::Locale SAL_CALL SwAccessibleContext::getLocale (void)
+        throw (IllegalAccessibleComponentStateException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    Locale aLoc( Application::GetSettings().GetLocale() );
+    lang::Locale aLoc( Application::GetSettings().GetLocale() );
     return aLoc;
 }
 
 void SAL_CALL SwAccessibleContext::addEventListener(
-            const Reference< XAccessibleEventListener >& xListener )
-        throw (::com::sun::star::uno::RuntimeException)
+            const uno::Reference< XAccessibleEventListener >& xListener )
+        throw (uno::RuntimeException)
 {
     DBG_MSG( "accessible event listener added" )
 
@@ -783,8 +779,8 @@ void SAL_CALL SwAccessibleContext::addEventListener(
 }
 
 void SAL_CALL SwAccessibleContext::removeEventListener(
-            const Reference< XAccessibleEventListener >& xListener )
-        throw (::com::sun::star::uno::RuntimeException)
+            const uno::Reference< XAccessibleEventListener >& xListener )
+        throw (uno::RuntimeException)
 {
     DBG_MSG( "accessible event listener removed" )
 
@@ -817,8 +813,8 @@ static sal_Bool lcl_PointInRectangle(const awt::Point & aPoint,
 }
 
 sal_Bool SAL_CALL SwAccessibleContext::containsPoint(
-            const ::com::sun::star::awt::Point& aPoint )
-        throw (RuntimeException)
+            const awt::Point& aPoint )
+        throw (uno::RuntimeException)
 {
     awt::Rectangle aPixBounds = getBoundsImpl(sal_True);
     aPixBounds.X = 0;
@@ -827,15 +823,15 @@ sal_Bool SAL_CALL SwAccessibleContext::containsPoint(
     return lcl_PointInRectangle(aPoint, aPixBounds);
 }
 
-Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAtPoint(
+uno::Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAtPoint(
                 const awt::Point& aPoint )
-        throw (RuntimeException)
+        throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     CHECK_FOR_DEFUNC( XAccessibleComponent )
 
-    Reference< XAccessible > xAcc;
+    uno::Reference< XAccessible > xAcc;
 
     Window *pWin = GetWindow();
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
@@ -882,7 +878,7 @@ Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAtPoint(
    false: Use absolute mode.
 */
 awt::Rectangle SAL_CALL SwAccessibleContext::getBoundsImpl(sal_Bool bRelative)
-        throw (RuntimeException)
+        throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -927,13 +923,13 @@ awt::Rectangle SAL_CALL SwAccessibleContext::getBoundsImpl(sal_Bool bRelative)
 
 
 awt::Rectangle SAL_CALL SwAccessibleContext::getBounds()
-        throw (RuntimeException)
+        throw (uno::RuntimeException)
 {
     return getBoundsImpl(sal_True);
 }
 
 awt::Point SAL_CALL SwAccessibleContext::getLocation()
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
     awt::Rectangle aRect = getBoundsImpl(sal_True);
     awt::Point aPoint(aRect.X, aRect.Y);
@@ -944,7 +940,7 @@ awt::Point SAL_CALL SwAccessibleContext::getLocation()
 
 
 awt::Point SAL_CALL SwAccessibleContext::getLocationOnScreen()
-        throw (RuntimeException)
+        throw (uno::RuntimeException)
 {
     awt::Rectangle aRect = getBoundsImpl(sal_False);
 
@@ -959,7 +955,7 @@ awt::Point SAL_CALL SwAccessibleContext::getLocationOnScreen()
 
 
 awt::Size SAL_CALL SwAccessibleContext::getSize()
-        throw (RuntimeException)
+        throw (uno::RuntimeException)
 {
     awt::Rectangle aRect = getBoundsImpl(sal_False);
     awt::Size aSize( aRect.Width, aRect.Height );
@@ -968,7 +964,7 @@ awt::Size SAL_CALL SwAccessibleContext::getSize()
 }
 
 void SAL_CALL SwAccessibleContext::grabFocus()
-        throw (RuntimeException)
+        throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -1009,48 +1005,47 @@ void SAL_CALL SwAccessibleContext::grabFocus()
 }
 
 
-Any SAL_CALL SwAccessibleContext::getAccessibleKeyBinding()
-        throw (RuntimeException)
+uno::Any SAL_CALL SwAccessibleContext::getAccessibleKeyBinding()
+        throw (uno::RuntimeException)
 {
     // There are no key bindings
-    Any aAny;
-    return aAny;
+    return uno::Any();
 }
 
 sal_Int32 SAL_CALL SwAccessibleContext::getForeground()
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (uno::RuntimeException)
 {
     return 0;
 }
 
 sal_Int32 SAL_CALL SwAccessibleContext::getBackground()
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (uno::RuntimeException)
 {
     return 0xffffff;
 }
 
 
 OUString SAL_CALL SwAccessibleContext::getImplementationName()
-        throw( RuntimeException )
+        throw( uno::RuntimeException )
 {
     ASSERT( !this, "implementation name needs to be overloaded" );
 
-    THROW_RUNTIME_EXCEPTION( XServiceInfo, "implementation name needs to be overloaded" )
+    THROW_RUNTIME_EXCEPTION( lang::XServiceInfo, "implementation name needs to be overloaded" )
 }
 
 sal_Bool SAL_CALL
     SwAccessibleContext::supportsService (const ::rtl::OUString& sServiceName)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (uno::RuntimeException)
 {
     ASSERT( !this, "supports service needs to be overloaded" );
-    THROW_RUNTIME_EXCEPTION( XServiceInfo, "supports service needs to be overloaded" )
+    THROW_RUNTIME_EXCEPTION( lang::XServiceInfo, "supports service needs to be overloaded" )
 }
 
-Sequence< OUString > SAL_CALL SwAccessibleContext::getSupportedServiceNames()
-        throw( ::com::sun::star::uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL SwAccessibleContext::getSupportedServiceNames()
+        throw( uno::RuntimeException )
 {
     ASSERT( !this, "supported services names needs to be overloaded" );
-    THROW_RUNTIME_EXCEPTION( XServiceInfo, "supported services needs to be overloaded" )
+    THROW_RUNTIME_EXCEPTION( lang::XServiceInfo, "supported services needs to be overloaded" )
 }
 
 void SwAccessibleContext::DisposeShape( const SdrObject *pObj,
@@ -1062,7 +1057,7 @@ void SwAccessibleContext::DisposeShape( const SdrObject *pObj,
 
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::CHILD;
-    Reference< XAccessible > xAcc( xAccImpl.getBodyPtr() );
+    uno::Reference< XAccessible > xAcc( xAccImpl.getBodyPtr() );
     aEvent.OldValue <<= xAcc;
     FireAccessibleEvent( aEvent );
 
@@ -1075,7 +1070,7 @@ void SwAccessibleContext::ScrolledInShape( const SdrObject *pObj,
 {
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::CHILD;
-    Reference< XAccessible > xAcc( pAccImpl );
+    uno::Reference< XAccessible > xAcc( pAccImpl );
     aEvent.NewValue <<= xAcc;
     FireAccessibleEvent( aEvent );
 
@@ -1109,8 +1104,8 @@ void SwAccessibleContext::Dispose( sal_Bool bRecursive )
         DisposeChildren( GetFrm(), bRecursive );
 
     // get parent
-    Reference< XAccessible > xParent( GetWeakParent() );
-    Reference < XAccessibleContext > xThis( this );
+    uno::Reference< XAccessible > xParent( GetWeakParent() );
+    uno::Reference < XAccessibleContext > xThis( this );
 
     // send child event at parent
     if( xParent.is() )
