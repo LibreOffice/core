@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:54:24 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:37:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,7 +188,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::document;
 using namespace ::rtl;
-using namespace ::ucb;
+using namespace ::ucbhelper;
 
 
 #include "doctempl.hxx"
@@ -327,8 +327,8 @@ DECLARE_LIST( RegionList_Impl, RegionData_Impl* )
 
 class SfxDocTemplate_Impl : public SvRefBase
 {
-    Reference< XPersist >               mxInfo;
-    Reference< XDocumentTemplates >     mxTemplates;
+    uno::Reference< XPersist >               mxInfo;
+    uno::Reference< XDocumentTemplates >     mxTemplates;
 
     ::osl::Mutex        maMutex;
     OUString            maRootURL;
@@ -336,7 +336,7 @@ class SfxDocTemplate_Impl : public SvRefBase
     RegionList_Impl     maRegions;
     sal_Bool            mbConstructed;
 
-    Reference< XAnyCompareFactory > m_rCompareFactory;
+    uno::Reference< XAnyCompareFactory > m_rCompareFactory;
 
     // the following member is intended to prevent clearing of the global data when it is in use
     // TODO/LATER: it still does not make the implementation complete thread-safe
@@ -377,7 +377,7 @@ public:
     sal_Bool            InsertRegion( RegionData_Impl *pData, ULONG nPos = LIST_APPEND );
     OUString            GetRootURL() const { return maRootURL; }
 
-    Reference< XDocumentTemplates >     getDocTemplates() { return mxTemplates; }
+    uno::Reference< XDocumentTemplates >     getDocTemplates() { return mxTemplates; }
 };
 
 // ------------------------------------------------------------------------
@@ -906,7 +906,7 @@ String SfxDocumentTemplates::GetDefaultTemplatePath
 
     ::rtl::OUString aResult;
     Content aTemplate;
-    Reference< XCommandEnvironment > aCmdEnv;
+    uno::Reference< XCommandEnvironment > aCmdEnv;
     if ( Content::create( aTemplateObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv, aTemplate ) )
     {
         OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_URL ) );
@@ -981,7 +981,7 @@ void SfxDocumentTemplates::NewTemplate
     if ( pEntry )
         return;
 
-    Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
+    uno::Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
 
     if ( xTemplates->addTemplate( pRegion->GetTitle(), rLongName, rFileName ) )
         pRegion->AddEntry( rLongName, rFileName );
@@ -1070,7 +1070,7 @@ sal_Bool SfxDocumentTemplates::CopyOrMove
 
     OUString aTitle = pSource->GetTitle();
 
-    Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
+    uno::Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
 
     if ( xTemplates->addTemplate( pTargetRgn->GetTitle(),
                                   aTitle,
@@ -1236,7 +1236,7 @@ sal_Bool SfxDocumentTemplates::CopyTo
 
     OUString aParentURL = aTargetURL.GetMainURL( INetURLObject::NO_DECODE );
 
-    Reference< XCommandEnvironment > aCmdEnv;
+    uno::Reference< XCommandEnvironment > aCmdEnv;
     Content aTarget;
 
     try
@@ -1304,7 +1304,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
     if ( !pTargetRgn )
         return sal_False;
 
-    Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
+    uno::Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
     if ( !xTemplates.is() )
         return sal_False;
 
@@ -1318,7 +1318,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
     else
     {
         OUString aService( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_DESKTOP ) );
-        Reference< XComponentLoader > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( aService ),
+        uno::Reference< XComponentLoader > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( aService ),
                                                 UNO_QUERY );
 
         Sequence< PropertyValue > aArgs( 1 );
@@ -1326,18 +1326,18 @@ sal_Bool SfxDocumentTemplates::CopyFrom
         aArgs[0].Value <<= sal_True;
 
         INetURLObject   aTemplURL( rName );
-        Reference< XDocumentInfoSupplier > xDocInfoSupplier;
-        Reference< XStorable > xStorable;
+        uno::Reference< XDocumentInfoSupplier > xDocInfoSupplier;
+        uno::Reference< XStorable > xStorable;
         try
         {
-            xStorable = Reference< XStorable >(
+            xStorable = uno::Reference< XStorable >(
                 xDesktop->loadComponentFromURL( aTemplURL.GetMainURL(INetURLObject::NO_DECODE),
                                                 OUString::createFromAscii( "_blank" ),
                                                 0,
                                                 aArgs ),
                 UNO_QUERY );
 
-            xDocInfoSupplier = Reference< XDocumentInfoSupplier >( xStorable, UNO_QUERY );
+            xDocInfoSupplier = uno::Reference< XDocumentInfoSupplier >( xStorable, UNO_QUERY );
         }
         catch( Exception& )
         {
@@ -1348,7 +1348,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
             // get a Titel from XDocumentInfoSupplier
             if( xDocInfoSupplier.is() )
             {
-                Reference< XDocumentInfo > xDocInfo = xDocInfoSupplier->getDocumentInfo();
+                uno::Reference< XDocumentInfo > xDocInfo = xDocInfoSupplier->getDocumentInfo();
                 if( xDocInfo.is() )
                 {
                     try
@@ -1389,7 +1389,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
                               INetURLObject::ENCODE_ALL );
         OUString aTemplURL = aTemplObj.GetMainURL( INetURLObject::NO_DECODE );
 
-        Reference< XCommandEnvironment > aCmdEnv;
+        uno::Reference< XCommandEnvironment > aCmdEnv;
         Content aTemplCont;
 
         if( Content::create( aTemplURL, aCmdEnv, aTemplCont ) )
@@ -1468,7 +1468,7 @@ sal_Bool SfxDocumentTemplates::Delete
         return sal_False;
 
     sal_Bool bRet;
-    Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
+    uno::Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
 
     if ( nIdx == USHRT_MAX )
     {
@@ -1529,7 +1529,7 @@ sal_Bool SfxDocumentTemplates::InsertDir
     if ( pRegion )
         return sal_False;
 
-    Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
+    uno::Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
 
     if ( xTemplates->addGroup( rText ) )
     {
@@ -1583,7 +1583,7 @@ sal_Bool SfxDocumentTemplates::SetName
     if ( !pRegion )
         return sal_False;
 
-    Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
+    uno::Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
     OUString aEmpty;
 
     if ( nIdx == USHRT_MAX )
@@ -2136,7 +2136,7 @@ const OUString& DocTempl_EntryData_Impl::GetTargetURL()
 {
     if ( !maTargetURL.getLength() )
     {
-        Reference< XCommandEnvironment > aCmdEnv;
+        uno::Reference< XCommandEnvironment > aCmdEnv;
         Content aRegion;
 
         if ( Content::create( GetHierarchyURL(), aCmdEnv, aRegion ) )
@@ -2299,7 +2299,7 @@ const OUString& RegionData_Impl::GetTargetURL()
 {
     if ( !maTargetURL.getLength() )
     {
-        Reference< XCommandEnvironment > aCmdEnv;
+        uno::Reference< XCommandEnvironment > aCmdEnv;
         Content aRegion;
 
         if ( Content::create( GetHierarchyURL(), aCmdEnv, aRegion ) )
@@ -2460,7 +2460,7 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
     }
 
     // now get the content of the region
-    Reference< XResultSet > xResultSet;
+    uno::Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(2);
     aProps[0] = OUString::createFromAscii( TITLE );
     aProps[1] = OUString::createFromAscii( TARGET_URL );
@@ -2477,8 +2477,8 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
 
     if ( xResultSet.is() )
     {
-        Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
-        Reference< XRow > xRow( xResultSet, UNO_QUERY );
+        uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+        uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
 
         try
         {
@@ -2497,7 +2497,7 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
 // -----------------------------------------------------------------------
 void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
 {
-    Reference< XResultSet > xResultSet;
+    uno::Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(1);
     aProps[0] = OUString::createFromAscii( TITLE );
 
@@ -2513,9 +2513,9 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
 
     if ( xResultSet.is() )
     {
-        Reference< XCommandEnvironment > aCmdEnv;
-        Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
-        Reference< XRow > xRow( xResultSet, UNO_QUERY );
+        uno::Reference< XCommandEnvironment > aCmdEnv;
+        uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+        uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
 
         try
         {
@@ -2541,32 +2541,32 @@ sal_Bool SfxDocTemplate_Impl::Construct( )
     if ( mbConstructed )
         return sal_True;
 
-    Reference< XMultiServiceFactory >   xFactory;
+    uno::Reference< XMultiServiceFactory >   xFactory;
     xFactory = ::comphelper::getProcessServiceFactory();
 
     OUString aService( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_DOCINFO ) );
-    Reference< XPersist > xInfo( xFactory->createInstance( aService ), UNO_QUERY );
+    uno::Reference< XPersist > xInfo( xFactory->createInstance( aService ), UNO_QUERY );
     mxInfo = xInfo;
 
     aService = OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_DOCTEMPLATES ) );
-    Reference< XDocumentTemplates > xTemplates( xFactory->createInstance( aService ), UNO_QUERY );
+    uno::Reference< XDocumentTemplates > xTemplates( xFactory->createInstance( aService ), UNO_QUERY );
 
     if ( xTemplates.is() )
         mxTemplates = xTemplates;
     else
         return sal_False;
 
-    Reference< XLocalizable > xLocalizable( xTemplates, UNO_QUERY );
+    uno::Reference< XLocalizable > xLocalizable( xTemplates, UNO_QUERY );
 
     Sequence< Any > aCompareArg(1);
     *(aCompareArg.getArray()) <<= xLocalizable->getLocale();;
-    m_rCompareFactory = Reference< XAnyCompareFactory >(
+    m_rCompareFactory = uno::Reference< XAnyCompareFactory >(
                     xFactory->createInstanceWithArguments( OUString::createFromAscii( "com.sun.star.ucb.AnyCompareFactory" ),
                                                            aCompareArg ),
                     UNO_QUERY );
 
-    Reference < XContent > aRootContent = xTemplates->getContent();
-    Reference < XCommandEnvironment > aCmdEnv;
+    uno::Reference < XContent > aRootContent = xTemplates->getContent();
+    uno::Reference < XCommandEnvironment > aCmdEnv;
 
     if ( ! aRootContent.is() )
         return sal_False;
@@ -2588,11 +2588,11 @@ sal_Bool SfxDocTemplate_Impl::Construct( )
 // -----------------------------------------------------------------------
 void SfxDocTemplate_Impl::ReInitFromComponent()
 {
-    Reference< XDocumentTemplates > xTemplates = getDocTemplates();
+    uno::Reference< XDocumentTemplates > xTemplates = getDocTemplates();
     if ( xTemplates.is() )
     {
-        Reference < XContent > aRootContent = xTemplates->getContent();
-        Reference < XCommandEnvironment > aCmdEnv;
+        uno::Reference < XContent > aRootContent = xTemplates->getContent();
+        uno::Reference < XCommandEnvironment > aCmdEnv;
         Content aTemplRoot( aRootContent, aCmdEnv );
         Clear();
         CreateFromHierarchy( aTemplRoot );
@@ -2604,7 +2604,7 @@ void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
                                         Content& /*rParentFolder*/,
                                         RegionData_Impl* pRegion )
 {
-    Reference< XResultSet > xResultSet;
+    uno::Reference< XResultSet > xResultSet;
     Sequence< OUString >    aProps(1);
 
     aProps[0] = OUString::createFromAscii( TITLE );
@@ -2621,8 +2621,8 @@ void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
 
     if ( xResultSet.is() )
     {
-        Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
-        Reference< XRow > xRow( xResultSet, UNO_QUERY );
+        uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+        uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
 
         try
         {
@@ -2726,14 +2726,14 @@ void SfxDocTemplate_Impl::Rescan()
 
     try
     {
-        Reference< XDocumentTemplates > xTemplates = getDocTemplates();
+        uno::Reference< XDocumentTemplates > xTemplates = getDocTemplates();
         DBG_ASSERT( xTemplates.is(), "SfxDocTemplate_Impl::Rescan:invalid template instance!" );
         if ( xTemplates.is() )
         {
             xTemplates->update();
 
-            Reference < XContent > aRootContent = xTemplates->getContent();
-            Reference < XCommandEnvironment > aCmdEnv;
+            uno::Reference < XContent > aRootContent = xTemplates->getContent();
+            uno::Reference < XCommandEnvironment > aCmdEnv;
 
             Content aTemplRoot( aRootContent, aCmdEnv );
             CreateFromHierarchy( aTemplRoot );
@@ -2764,7 +2764,7 @@ sal_Bool SfxDocTemplate_Impl::GetTitleFromURL( const OUString& rURL,
 
         try
         {
-            Reference< XPropertySet > aPropSet( mxInfo, UNO_QUERY );
+            uno::Reference< XPropertySet > aPropSet( mxInfo, UNO_QUERY );
             if ( aPropSet.is() )
             {
                 OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
@@ -2819,7 +2819,7 @@ sal_Bool getTextProperty_Impl( Content& rContent,
     // Get the property
     try
     {
-        Reference< XPropertySetInfo > aPropInfo = rContent.getProperties();
+        uno::Reference< XPropertySetInfo > aPropInfo = rContent.getProperties();
 
         // check, wether or not the property exists
         if ( !aPropInfo.is() || !aPropInfo->hasPropertyByName( rPropName ) )
