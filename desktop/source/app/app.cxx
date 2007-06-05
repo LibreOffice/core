@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.202 $
+ *  $Revision: 1.203 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:21:55 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:03:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1842,7 +1842,7 @@ void Desktop::Main()
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- dispose path/language options" );
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "-> deinit ucb" );
-    ::ucb::ContentBroker::deinitialize();
+    ::ucbhelper::ContentBroker::deinitialize();
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- deinit ucb" );
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "FINISHED WITH Destop::Main" );
