@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pkgprovider.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:56:38 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:14:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ namespace package_ucp {
 
 class Packages;
 
-class ContentProvider : public ::ucb::ContentProviderImplHelper
+class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
 {
     Packages* m_pPackages;
 
