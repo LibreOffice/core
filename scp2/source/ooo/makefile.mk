@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 11:03:21 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 11:53:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -260,6 +260,10 @@ PARFILES +=                        \
         folderitem_ooo.par         \
         registryitem_ooo.par       \
         windowscustomaction_ooo.par
+.ENDIF
+
+.IF "$(OS)"=="MACOSX" && "$(GUIBASE)"=="aqua"
+PARFILES += aqua_ooo.par
 .ENDIF
 
 ULFFILES=                          \
