@@ -4,9 +4,9 @@
  *
  *  $RCSfile: myucp_datasupplier.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:13:49 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:59:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,12 +37,8 @@
 #ifndef _MYUCP_DATASUPPLIER_HXX
 #define _MYUCP_DATASUPPLIER_HXX
 
-#ifndef _RTL_REF_HXX_
-#include <rtl/ref.hxx>
-#endif
-#ifndef _UCBHELPER_RESULTSET_HXX
-#include <ucbhelper/resultset.hxx>
-#endif
+#include "rtl/ref.hxx"
+#include "ucbhelper/resultset.hxx"
 
 // @@@ Adjust namespace name.
 namespace myucp {
@@ -50,7 +46,7 @@ namespace myucp {
 struct DataSupplier_Impl;
 class Content;
 
-class DataSupplier : public ucb::ResultSetDataSupplier
+class DataSupplier : public ucbhelper::ResultSetDataSupplier
 {
     DataSupplier_Impl* m_pImpl;
 
@@ -61,22 +57,22 @@ public:
                   sal_Int32 nOpenMode );
     virtual ~DataSupplier();
 
-    virtual rtl::OUString queryContentIdentifierString( sal_Int32 nIndex );
+    virtual rtl::OUString queryContentIdentifierString( sal_uInt32 nIndex );
     virtual com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >
-    queryContentIdentifier( sal_Int32 nIndex );
+    queryContentIdentifier( sal_uInt32 nIndex );
     virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent >
-    queryContent( sal_Int32 nIndex );
+    queryContent( sal_uInt32 nIndex );
 
-    virtual sal_Bool getResult( sal_Int32 nIndex );
+    virtual sal_Bool getResult( sal_uInt32 nIndex );
 
-    virtual sal_Int32 totalCount();
-    virtual sal_Int32 currentCount();
+    virtual sal_uInt32 totalCount();
+    virtual sal_uInt32 currentCount();
     virtual sal_Bool isCountFinal();
 
     virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XRow >
-    queryPropertyValues( sal_Int32 nIndex  );
-    virtual void releasePropertyValues( sal_Int32 nIndex );
+    queryPropertyValues( sal_uInt32 nIndex  );
+    virtual void releasePropertyValues( sal_uInt32 nIndex );
 
     virtual void close();
 
