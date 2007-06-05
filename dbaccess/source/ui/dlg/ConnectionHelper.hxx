@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionHelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:21:25 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:41:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ namespace dbaui
         void        setURL( const String& _rURL );
         String      implGetURL( sal_Bool _bPrefix ) const;
         void        implSetURL( const String& _rURL, sal_Bool _bPrefix );
-        StringBag getInstalledAdabasDBDirs(const String &_rPath,const ::ucb::ResultSetInclude& _reResultSetInclude);
+        StringBag getInstalledAdabasDBDirs(const String &_rPath,const ::ucbhelper::ResultSetInclude& _reResultSetInclude);
         StringBag getInstalledAdabasDBs(const String &_rConfigDir,const String &_rWorkDir);
         virtual bool checkTestConnection();
 
