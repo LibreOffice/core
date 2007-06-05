@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filterdetect.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:33:02 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:44:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,7 +212,7 @@ Reference< com::sun::star::frame::XModel > xModel;
             Reference< com::sun::star::ucb::XCommandEnvironment > xEnv;
             if (!xInStream.is())
              {
-                ::ucb::Content aContent(sUrl,xEnv);
+                ::ucbhelper::Content aContent(sUrl,xEnv);
                 xInStream = aContent.openStream();
                  if (!xInStream.is())
                  {
