@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:26:12 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:08:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,9 +147,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDERMANAGER_HPP_
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_UCB_XREMOTECONTENTPROVIDERSUPPLIER_HPP_
-#include <com/sun/star/ucb/XRemoteContentProviderSupplier.hpp>
 #endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_COMMONFILEPICKERELEMENTIDS_HPP_
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
@@ -420,7 +417,7 @@ namespace
         try
         {
             // get the content provider manager
-            ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
+            ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
             Reference< XContentProviderManager > xProviderManager;
             if ( pBroker )
                 xProviderManager = pBroker->getContentProviderManagerInterface();
@@ -2103,7 +2100,7 @@ void SvtFileDialog::onAsyncOperationFinished()
 }
 
 //-------------------------------------------------------------------------
-void SvtFileDialog::displayIOException( const String& _rURL, ::com::sun::star::ucb::IOErrorCode _eCode )
+void SvtFileDialog::displayIOException( const String& _rURL, IOErrorCode _eCode )
 {
     try
     {
@@ -2112,7 +2109,7 @@ void SvtFileDialog::displayIOException( const String& _rURL, ::com::sun::star::u
         ::utl::LocalFileHelper::ConvertURLToSystemPath( _rURL, sDisplayPath );
 
         // build an own exception which tells "access denied"
-        ::com::sun::star::ucb::InteractiveAugmentedIOException aException;
+        InteractiveAugmentedIOException aException;
         aException.Arguments.realloc( 2 );
         aException.Arguments[ 0 ] <<= ::rtl::OUString( sDisplayPath );
         aException.Arguments[ 1 ] <<= PropertyValue(
@@ -2194,7 +2191,7 @@ short SvtFileDialog::PrepareExecute()
         try
         {
             INetURLObject aStdDir( GetStandardDir() );
-            ::ucb::Content aCnt( rtl::OUString( aStdDir.GetMainURL(
+            ::ucbhelper::Content aCnt( rtl::OUString( aStdDir.GetMainURL(
                                                     INetURLObject::NO_DECODE ) ),
                                  Reference< XCommandEnvironment >() );
             Sequence< rtl::OUString > aProps(2);
@@ -2202,7 +2199,7 @@ short SvtFileDialog::PrepareExecute()
             aProps[1] = rtl::OUString::createFromAscii( "IsRemoveable" );
 
             Reference< XResultSet > xResultSet
-                = aCnt.createCursor( aProps, ::ucb::INCLUDE_FOLDERS_ONLY );
+                = aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_FOLDERS_ONLY );
             if ( xResultSet.is() )
             {
                 Reference< XRow > xRow( xResultSet, UNO_QUERY );
