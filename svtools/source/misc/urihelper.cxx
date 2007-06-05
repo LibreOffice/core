@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urihelper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:24:22 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:27:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,6 @@ using namespace unnamed_svtools_urihelper;
     // unnamed namespaces don't work well yet...
 
 namespace css = com::sun::star;
-using namespace com::sun;
 using namespace com::sun::star;
 
 //============================================================================
@@ -926,8 +925,8 @@ INetURLObject::FSysStyle URIHelper::queryFSysStyle(UniString const & rFileUrl,
                                                    bool bAddConvenienceStyles)
     throw (uno::RuntimeException)
 {
-    ::ucb::ContentBroker const * pBroker = ::ucb::ContentBroker::get();
-    uno::Reference< star::ucb::XContentProviderManager > xManager;
+    ::ucbhelper::ContentBroker const * pBroker = ::ucbhelper::ContentBroker::get();
+    uno::Reference< ucb::XContentProviderManager > xManager;
     if (pBroker)
         xManager = pBroker->getContentProviderManagerInterface();
     uno::Reference< beans::XPropertySet > xProperties;
@@ -935,7 +934,7 @@ INetURLObject::FSysStyle URIHelper::queryFSysStyle(UniString const & rFileUrl,
         xProperties
             = uno::Reference< beans::XPropertySet >(
                   xManager->queryContentProvider(rFileUrl), uno::UNO_QUERY);
-    sal_Int32 nNotation = star::ucb::FileSystemNotation::UNKNOWN_NOTATION;
+    sal_Int32 nNotation = ucb::FileSystemNotation::UNKNOWN_NOTATION;
     if (xProperties.is())
         try
         {
@@ -969,10 +968,10 @@ INetURLObject::FSysStyle URIHelper::queryFSysStyle(UniString const & rFileUrl,
               INetURLObject::FSysStyle(INetURLObject::FSYS_VOS
                                            | INetURLObject::FSYS_UNX
                                            | INetURLObject::FSYS_MAC) } };
-    return aMap[nNotation < star::ucb::FileSystemNotation::UNKNOWN_NOTATION
-                || nNotation > star::ucb::FileSystemNotation::MAC_NOTATION ?
+    return aMap[nNotation < ucb::FileSystemNotation::UNKNOWN_NOTATION
+                || nNotation > ucb::FileSystemNotation::MAC_NOTATION ?
                         0 :
                         nNotation
-                            - star::ucb::FileSystemNotation::UNKNOWN_NOTATION]
+                            - ucb::FileSystemNotation::UNKNOWN_NOTATION]
                    [bAddConvenienceStyles];
 }
