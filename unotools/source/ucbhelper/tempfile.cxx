@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:29:54 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:32:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,7 @@ String ConstructTempDir_Impl( const String* pParent )
     String aName;
     if ( pParent && pParent->Len() )
     {
-        ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
+        ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
         if ( pBroker )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
@@ -161,7 +161,7 @@ String ConstructTempDir_Impl( const String* pParent )
             // test for valid filename
             rtl::OUString aRet;
             ::osl::FileBase::getFileURLFromSystemPath(
-                ::ucb::getSystemPathFromFileURL( xManager, aTmp ),
+                ::ucbhelper::getSystemPathFromFileURL( xManager, aTmp ),
                 aRet );
             if ( aRet.getLength() )
             {
