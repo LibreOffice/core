@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:44:54 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:25:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,7 +187,7 @@ BOOL ImplDirEntryHelper::Exists( const INetURLObject& rObj )
     try
     {
         ::rtl::OUString aTitle;
-        ::ucb::Content  aCnt( rObj.GetMainURL( INetURLObject::NO_DECODE ),
+        ::ucbhelper::Content    aCnt( rObj.GetMainURL( INetURLObject::NO_DECODE ),
                               ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
         bExists = aCnt.isDocument();
@@ -213,7 +213,7 @@ void ImplDirEntryHelper::Kill( const String& rMainUrl )
 {
     try
     {
-        ::ucb::Content aCnt( rMainUrl,
+        ::ucbhelper::Content aCnt( rMainUrl,
                              ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
         aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
