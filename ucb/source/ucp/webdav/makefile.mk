@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 13:08:02 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 10:56:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -130,6 +130,9 @@ SHL1STDLIBS=\
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= $(WSOCK32LIB)
 .ENDIF # WNT
+.IF "WINDOWS_VISTA_PSDK" != ""
+SHL1STDLIBS+= ws2_32.lib
+.ENDIF
 .IF "$(OS)"=="SOLARIS"
 SHL1STDLIBS+= -lnsl -lsocket
 .ENDIF # SOLARIS
