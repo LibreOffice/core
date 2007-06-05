@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testapp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:39:47 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:50:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -333,9 +333,9 @@ Reference< XContentProviderManager > InitializeUCB( void )
 
 //  Create unconfigured Ucb:
     Sequence< Any > aArgs;
-    ucb::ContentBroker::initialize( xSMgr, aArgs );
+    ucbhelper::ContentBroker::initialize( xSMgr, aArgs );
     Reference< XContentProviderManager > xUcb =
-        ucb::ContentBroker::get()->getContentProviderManagerInterface();
+        ucbhelper::ContentBroker::get()->getContentProviderManagerInterface();
 
     Reference< XContentProvider > xFileProvider
         ( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.ucb.FileContentProvider" ) ), UNO_QUERY );
