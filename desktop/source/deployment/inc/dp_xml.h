@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_xml.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:19:55 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:04:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #include "com/sun/star/xml/sax/XDocumentHandler.hpp"
 
 
-namespace ucb
+namespace ucbhelper
 {
 class Content;
 }
@@ -57,13 +57,13 @@ namespace dp_misc
 //==============================================================================
 void xml_parse(
     css::uno::Reference< css::xml::sax::XDocumentHandler > const & xDocHandler,
-    ::ucb::Content & ucb_content,
+    ::ucbhelper::Content & ucb_content,
     css::uno::Reference< css::uno::XComponentContext > const & xContext );
 
 //==============================================================================
 void xml_parse(
     css::uno::Reference< css::xml::input::XRoot > const & xRoot,
-    ::ucb::Content & ucb_content,
+    ::ucbhelper::Content & ucb_content,
     css::uno::Reference< css::uno::XComponentContext > const & xContext );
 
 //==============================================================================
