@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:13:26 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 13:56:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,7 +278,7 @@ using namespace com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::sfx2;
 
 extern FASTBOOL FindPhyStyle( SwDoc& , const String& , SfxStyleFamily );
