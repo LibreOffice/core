@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlform.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 13:44:50 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:38:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -296,18 +296,18 @@ class SwHTMLForm_Impl
     SvKeyValueIterator          *pHeaderAttrs;
 
     // gecachte Interfaces
-    Reference< drawing::XDrawPage >             xDrawPage;
-    Reference< container::XIndexContainer >     xForms;
-    Reference< drawing::XShapes >               xShapes;
-    Reference< XMultiServiceFactory >           xServiceFactory;
+    uno::Reference< drawing::XDrawPage >            xDrawPage;
+    uno::Reference< container::XIndexContainer >    xForms;
+    uno::Reference< drawing::XShapes >              xShapes;
+    uno::Reference< XMultiServiceFactory >          xServiceFactory;
 
-    Reference< script::XEventAttacherManager >  xControlEventManager;
-    Reference< script::XEventAttacherManager >  xFormEventManager;
+    uno::Reference< script::XEventAttacherManager >     xControlEventManager;
+    uno::Reference< script::XEventAttacherManager >     xFormEventManager;
 
     // Kontext-Informationen
-    Reference< container::XIndexContainer >     xFormComps;
-    Reference< beans::XPropertySet >            xFCompPropSet;
-    Reference< drawing::XShape >                xShape;
+    uno::Reference< container::XIndexContainer >    xFormComps;
+    uno::Reference< beans::XPropertySet >           xFCompPropSet;
+    uno::Reference< drawing::XShape >               xShape;
 
     String                      sText;
     SvStringsDtor               aStringList;
@@ -323,39 +323,39 @@ public:
         ASSERT( pDocSh, "Keine DocShell, keine Controls" );
     }
 
-    const Reference< XMultiServiceFactory >& GetServiceFactory();
-    const Reference< drawing::XDrawPage >& GetDrawPage();
-    const Reference< drawing::XShapes >& GetShapes();
-    const Reference< script::XEventAttacherManager >& GetControlEventManager();
-    const Reference< script::XEventAttacherManager >& GetFormEventManager();
-    const Reference< container::XIndexContainer >& GetForms();
+    const uno::Reference< XMultiServiceFactory >& GetServiceFactory();
+    const uno::Reference< drawing::XDrawPage >& GetDrawPage();
+    const uno::Reference< drawing::XShapes >& GetShapes();
+    const uno::Reference< script::XEventAttacherManager >& GetControlEventManager();
+    const uno::Reference< script::XEventAttacherManager >& GetFormEventManager();
+    const uno::Reference< container::XIndexContainer >& GetForms();
 
-    const Reference< container::XIndexContainer >& GetFormComps() const
+    const uno::Reference< container::XIndexContainer >& GetFormComps() const
     {
         return xFormComps;
     }
 
-    void SetFormComps( const Reference< container::XIndexContainer >& r )
+    void SetFormComps( const uno::Reference< container::XIndexContainer >& r )
     {
         xFormComps = r;
     }
 
     void ReleaseFormComps() { xFormComps = 0; xControlEventManager = 0; }
 
-    const Reference< beans::XPropertySet >& GetFCompPropSet() const
+    const uno::Reference< beans::XPropertySet >& GetFCompPropSet() const
     {
         return xFCompPropSet;
     }
 
-    void SetFCompPropSet( const Reference< beans::XPropertySet >& r )
+    void SetFCompPropSet( const uno::Reference< beans::XPropertySet >& r )
     {
         xFCompPropSet = r;
     }
 
     void ReleaseFCompPropSet() { xFCompPropSet = 0; }
 
-    const Reference< drawing::XShape >& GetShape() const { return xShape; }
-    void SetShape( const Reference< drawing::XShape >& r ) { xShape = r; }
+    const uno::Reference< drawing::XShape >& GetShape() const { return xShape; }
+    void SetShape( const uno::Reference< drawing::XShape >& r ) { xShape = r; }
     void ReleaseShape() { xShape = 0; }
 
     String& GetText() { return sText; }
@@ -382,12 +382,12 @@ public:
     SvKeyValueIterator *GetHeaderAttrs() const { return pHeaderAttrs; }
 };
 
-const Reference< XMultiServiceFactory >& SwHTMLForm_Impl::GetServiceFactory()
+const uno::Reference< XMultiServiceFactory >& SwHTMLForm_Impl::GetServiceFactory()
 {
     if( !xServiceFactory.is() && pDocSh )
     {
         xServiceFactory =
-            Reference< XMultiServiceFactory >( pDocSh->GetBaseModel(),
+            uno::Reference< XMultiServiceFactory >( pDocSh->GetBaseModel(),
                                                UNO_QUERY );
         ASSERT( xServiceFactory.is(),
                 "XServiceFactory nicht vom Model erhalten" );
@@ -396,11 +396,11 @@ const Reference< XMultiServiceFactory >& SwHTMLForm_Impl::GetServiceFactory()
 }
 
 
-const Reference< drawing::XDrawPage >& SwHTMLForm_Impl::GetDrawPage()
+const uno::Reference< drawing::XDrawPage >& SwHTMLForm_Impl::GetDrawPage()
 {
     if( !xDrawPage.is() && pDocSh )
     {
-        Reference< drawing::XDrawPageSupplier > xTxtDoc( pDocSh->GetBaseModel(),
+        uno::Reference< drawing::XDrawPageSupplier > xTxtDoc( pDocSh->GetBaseModel(),
                                                          UNO_QUERY );
         ASSERT( xTxtDoc.is(),
                 "drawing::XDrawPageSupplier nicht vom XModel erhalten" );
@@ -410,20 +410,20 @@ const Reference< drawing::XDrawPage >& SwHTMLForm_Impl::GetDrawPage()
     return xDrawPage;
 }
 
-const Reference< container::XIndexContainer >& SwHTMLForm_Impl::GetForms()
+const uno::Reference< container::XIndexContainer >& SwHTMLForm_Impl::GetForms()
 {
     if( !xForms.is() )
     {
         GetDrawPage();
         if( xDrawPage.is() )
         {
-            Reference< XFormsSupplier > xFormsSupplier( xDrawPage, UNO_QUERY );
+            uno::Reference< XFormsSupplier > xFormsSupplier( xDrawPage, UNO_QUERY );
             ASSERT( xFormsSupplier.is(),
                     "XFormsSupplier nicht vom drawing::XDrawPage erhalten" );
 
-            Reference< container::XNameContainer > xNameCont =
+            uno::Reference< container::XNameContainer > xNameCont =
                 xFormsSupplier->getForms();
-            xForms = Reference< container::XIndexContainer >( xNameCont,
+            xForms = uno::Reference< container::XIndexContainer >( xNameCont,
                                                               UNO_QUERY );
 
             ASSERT( xForms.is(), "XForms nicht erhalten" );
@@ -433,14 +433,14 @@ const Reference< container::XIndexContainer >& SwHTMLForm_Impl::GetForms()
 }
 
 
-const Reference< drawing::XShapes > & SwHTMLForm_Impl::GetShapes()
+const uno::Reference< drawing::XShapes > & SwHTMLForm_Impl::GetShapes()
 {
     if( !xShapes.is() )
     {
         GetDrawPage();
         if( xDrawPage.is() )
         {
-            xShapes = Reference< drawing::XShapes >( xDrawPage, UNO_QUERY );
+            xShapes = uno::Reference< drawing::XShapes >( xDrawPage, UNO_QUERY );
             ASSERT( xShapes.is(),
                     "XShapes nicht vom drawing::XDrawPage erhalten" );
         }
@@ -448,21 +448,21 @@ const Reference< drawing::XShapes > & SwHTMLForm_Impl::GetShapes()
     return xShapes;
 }
 
-const Reference< script::XEventAttacherManager >&
+const uno::Reference< script::XEventAttacherManager >&
                                     SwHTMLForm_Impl::GetControlEventManager()
 {
     if( !xControlEventManager.is() && xFormComps.is() )
     {
         xControlEventManager =
-            Reference< script::XEventAttacherManager >( xFormComps, UNO_QUERY );
+            uno::Reference< script::XEventAttacherManager >( xFormComps, UNO_QUERY );
         ASSERT( xControlEventManager.is(),
-    "Reference< XEventAttacherManager > nicht von xFormComps erhalten" );
+    "uno::Reference< XEventAttacherManager > nicht von xFormComps erhalten" );
     }
 
     return xControlEventManager;
 }
 
-const Reference< script::XEventAttacherManager >&
+const uno::Reference< script::XEventAttacherManager >&
     SwHTMLForm_Impl::GetFormEventManager()
 {
     if( !xFormEventManager.is() )
@@ -471,9 +471,9 @@ const Reference< script::XEventAttacherManager >&
         if( xForms.is() )
         {
             xFormEventManager =
-                Reference< script::XEventAttacherManager >( xForms, UNO_QUERY );
+                uno::Reference< script::XEventAttacherManager >( xForms, UNO_QUERY );
             ASSERT( xFormEventManager.is(),
-        "Reference< XEventAttacherManager > nicht von xForms erhalten" );
+        "uno::Reference< XEventAttacherManager > nicht von xForms erhalten" );
         }
     }
 
@@ -483,9 +483,9 @@ const Reference< script::XEventAttacherManager >&
 class SwHTMLImageWatcher :
     public cppu::WeakImplHelper2< awt::XImageConsumer, XEventListener >
 {
-    Reference< drawing::XShape >        xShape;     // das control
-    Reference< XImageProducerSupplier > xSrc;
-    Reference< awt::XImageConsumer >    xThis;      // man selbst
+    uno::Reference< drawing::XShape >       xShape;     // das control
+    uno::Reference< XImageProducerSupplier >    xSrc;
+    uno::Reference< awt::XImageConsumer >   xThis;      // man selbst
     sal_Bool                            bSetWidth;
     sal_Bool                            bSetHeight;
 
@@ -493,7 +493,7 @@ class SwHTMLImageWatcher :
 
 public:
 
-    SwHTMLImageWatcher( const Reference< drawing::XShape > & rShape,
+    SwHTMLImageWatcher( const uno::Reference< drawing::XShape > & rShape,
                         sal_Bool bWidth, sal_Bool bHeight );
     ~SwHTMLImageWatcher();
 
@@ -523,7 +523,7 @@ public:
         throw( uno::RuntimeException );
     virtual void SAL_CALL complete(
             sal_Int32 Status,
-            const Reference< awt::XImageProducer > & Producer)
+            const uno::Reference< awt::XImageProducer > & Producer)
         throw( uno::RuntimeException );
 
     // XEventListener
@@ -531,22 +531,22 @@ public:
 };
 
 SwHTMLImageWatcher::SwHTMLImageWatcher(
-        const Reference< drawing::XShape >& rShape,
+        const uno::Reference< drawing::XShape >& rShape,
         sal_Bool bWidth, sal_Bool bHeight ) :
     xShape( rShape ),
     bSetWidth( bWidth ), bSetHeight( bHeight )
 {
     // Die Quelle des Images merken
-    Reference< drawing::XControlShape > xControlShape( xShape, UNO_QUERY );
-    Reference< awt::XControlModel > xControlModel(
+    uno::Reference< drawing::XControlShape > xControlShape( xShape, UNO_QUERY );
+    uno::Reference< awt::XControlModel > xControlModel(
             xControlShape->getControl() );
-    xSrc = Reference< XImageProducerSupplier >( xControlModel, UNO_QUERY );
+    xSrc = uno::Reference< XImageProducerSupplier >( xControlModel, UNO_QUERY );
     ASSERT( xSrc.is(), "Kein XImageProducerSupplier" );
 
     // Als Event-Listener am Shape anmelden, damit wir es beim dispose
     // loslassen k”nnen ...
-    Reference< XEventListener > xEvtLstnr = (XEventListener *)this;
-    Reference< XComponent > xComp( xShape, UNO_QUERY );
+    uno::Reference< XEventListener > xEvtLstnr = (XEventListener *)this;
+    uno::Reference< XComponent > xComp( xShape, UNO_QUERY );
     xComp->addEventListener( xEvtLstnr );
 
     // Zum Schluss halten wir noch eine Referenz auf uns selbst, damit
@@ -565,12 +565,12 @@ SwHTMLImageWatcher::~SwHTMLImageWatcher()
 void SwHTMLImageWatcher::clear()
 {
     // Am Shape als Event-Listener abmelden
-    Reference< XEventListener > xEvtLstnr = (XEventListener *)this;
-    Reference< XComponent > xComp( xShape, UNO_QUERY );
+    uno::Reference< XEventListener > xEvtLstnr = (XEventListener *)this;
+    uno::Reference< XComponent > xComp( xShape, UNO_QUERY );
     xComp->removeEventListener( xEvtLstnr );
 
     // Am ImageProducer abmelden
-    Reference<awt::XImageProducer> xProd = xSrc->getImageProducer();
+    uno::Reference<awt::XImageProducer> xProd = xSrc->getImageProducer();
     if( xProd.is() )
         xProd->removeConsumer( xThis );
 }
@@ -631,9 +631,9 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
         // Um an den SwXShape* zu gelangen, brauchen wir ein Interface,
         // das auch vom SwXShape implementiert wird.
 
-        Reference< beans::XPropertySet > xPropSet( xShape, UNO_QUERY );
+        uno::Reference< beans::XPropertySet > xPropSet( xShape, UNO_QUERY );
 
-        Reference< XUnoTunnel> xTunnel( xPropSet, UNO_QUERY );
+        uno::Reference< XUnoTunnel> xTunnel( xPropSet, UNO_QUERY );
         SwXShape *pSwShape = xTunnel.is()
                 ? (SwXShape *)xTunnel->getSomething(SwXShape::getUnoTunnelId())
                 : 0;
@@ -670,7 +670,7 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
 
     // uns selbst abmelden und loeschen
     clear();
-    Reference< awt::XImageConsumer >  xTmp = (awt::XImageConsumer*)this;
+    uno::Reference< awt::XImageConsumer >  xTmp = (awt::XImageConsumer*)this;
     xThis = 0;
 }
 
@@ -698,24 +698,24 @@ void SwHTMLImageWatcher::setPixelsByLongs(
 
 
 void SwHTMLImageWatcher::complete( sal_Int32 Status,
-        const Reference< awt::XImageProducer >& )
+        const uno::Reference< awt::XImageProducer >& )
     throw( uno::RuntimeException )
 {
     if( IMAGEERROR == Status || IMAGEABORTED == Status )
     {
         // uns selbst abmelden und loeschen
         clear();
-        Reference< awt::XImageConsumer > xTmp = (awt::XImageConsumer*)this;
+        uno::Reference< awt::XImageConsumer > xTmp = (awt::XImageConsumer*)this;
         xThis = 0;
     }
 }
 
 void SwHTMLImageWatcher::disposing(const lang::EventObject& evt) throw ( ::com::sun::star::uno::RuntimeException)
 {
-    Reference< awt::XImageConsumer > xTmp;
+    uno::Reference< awt::XImageConsumer > xTmp;
 
     // Wenn das Shape verschwindet soll muessen wir es loslassen
-    Reference< drawing::XShape > xTmpShape;
+    uno::Reference< drawing::XShape > xTmpShape;
     if( evt.Source == xShape )
     {
         clear();
@@ -731,7 +731,7 @@ void SwHTMLParser::DeleteFormImpl()
 }
 
 static void lcl_html_setFixedFontProperty(
-        const Reference< beans::XPropertySet >& rPropSet )
+        const uno::Reference< beans::XPropertySet >& rPropSet )
 {
     Font aFixedFont( OutputDevice::GetDefaultFont(
                                     DEFAULTFONT_FIXED, LANGUAGE_ENGLISH_US,
@@ -761,7 +761,7 @@ static void lcl_html_setFixedFontProperty(
 
 class SwHTMLFormPendingStackData_Impl: public SwPendingStackData
 {
-    Reference< drawing::XShape >    xShape;
+    uno::Reference< drawing::XShape >   xShape;
     Size            aTextSz;
     sal_Bool        bMinWidth;
     sal_Bool        bMinHeight;
@@ -769,7 +769,7 @@ class SwHTMLFormPendingStackData_Impl: public SwPendingStackData
 public:
 
     SwHTMLFormPendingStackData_Impl(
-            const Reference< drawing::XShape > & rShape, const Size& rTextSz,
+            const uno::Reference< drawing::XShape > & rShape, const Size& rTextSz,
             sal_Bool bMinW, sal_Bool bMinH ) :
         xShape( rShape ),
         aTextSz( rTextSz ),
@@ -777,7 +777,7 @@ public:
         bMinHeight( bMinH )
     {}
 
-    const Reference< drawing::XShape >& GetShape() const { return xShape; }
+    const uno::Reference< drawing::XShape >& GetShape() const { return xShape; }
     const Size& GetTextSize() const { return aTextSz; }
     sal_Bool IsMinWidth() const { return bMinWidth; }
     sal_Bool IsMinHeight() const { return bMinHeight; }
@@ -800,7 +800,7 @@ void SwHTMLParser::SetPendingControlSize( int nToken )
     delete pData;
 }
 
-void SwHTMLParser::SetControlSize( const Reference< drawing::XShape >& rShape,
+void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rShape,
                                    const Size& rTextSz,
                                    sal_Bool bMinWidth,
                                    sal_Bool bMinHeight,
@@ -811,7 +811,7 @@ void SwHTMLParser::SetControlSize( const Reference< drawing::XShape >& rShape,
 
     // Um an den SwXShape* zu gelangen, brauchen wir ein Interface,
     // das auch vom SwXShape implementiert wird.
-    Reference< beans::XPropertySet > xPropSet( rShape, UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xPropSet( rShape, UNO_QUERY );
 
     ViewShell *pVSh;
     pDoc->GetEditShell( &pVSh );
@@ -851,7 +851,7 @@ void SwHTMLParser::SetControlSize( const Reference< drawing::XShape >& rShape,
         return;
     }
 
-    Reference< XUnoTunnel> xTunnel( xPropSet, UNO_QUERY );
+    uno::Reference< XUnoTunnel> xTunnel( xPropSet, UNO_QUERY );
     SwXShape *pSwShape = xTunnel.is()
         ? (SwXShape *)xTunnel->getSomething(SwXShape::getUnoTunnelId())
         : 0;
@@ -871,7 +871,7 @@ void SwHTMLParser::SetControlSize( const Reference< drawing::XShape >& rShape,
     ASSERT( pDrawView, "DrawView not found" );
 
     SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pObj );
-    Reference< awt::XControl > xControl;
+    uno::Reference< awt::XControl > xControl;
     if ( pDrawView && pVSh->GetWin() )
         xControl = pFormObj->GetUnoControl( *pDrawView, *pVSh->GetWin() );
 
@@ -883,7 +883,7 @@ void SwHTMLParser::SetControlSize( const Reference< drawing::XShape >& rShape,
     {
         if( bMinWidth || bMinHeight )
         {
-            Reference< awt::XLayoutConstrains > xLC( xControl, UNO_QUERY );
+            uno::Reference< awt::XLayoutConstrains > xLC( xControl, UNO_QUERY );
             awt::Size aTmpSz( xLC->getPreferredSize() );
             if( bMinWidth )
                 aNewSz.Width = aTmpSz.Width;
@@ -892,7 +892,7 @@ void SwHTMLParser::SetControlSize( const Reference< drawing::XShape >& rShape,
         }
         if( rTextSz.Width() || rTextSz.Height())
         {
-            Reference< awt::XTextLayoutConstrains > xLC( xControl, UNO_QUERY );
+            uno::Reference< awt::XTextLayoutConstrains > xLC( xControl, UNO_QUERY );
             ASSERT( xLC.is(), "kein XTextLayoutConstrains" );
             if( xLC.is() )
             {
@@ -936,7 +936,7 @@ void SwHTMLParser::SetControlSize( const Reference< drawing::XShape >& rShape,
 }
 
 static void lcl_html_setEvents(
-        const Reference< script::XEventAttacherManager > & rEvtMn,
+        const uno::Reference< script::XEventAttacherManager > & rEvtMn,
         sal_uInt32 nPos, const SvxMacroTableDtor& rMacroTbl,
         const SvStringsDtor& rUnoMacroTbl,
         const SvStringsDtor& rUnoMacroParamTbl,
@@ -1055,20 +1055,20 @@ static void lcl_html_getEvents( const String& rOption, const String& rValue,
     }
 }
 
-Reference< drawing::XShape > SwHTMLParser::InsertControl(
-        const Reference< XFormComponent > & rFComp,
-        const Reference< beans::XPropertySet > & rFCompPropSet,
+uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
+        const uno::Reference< XFormComponent > & rFComp,
+        const uno::Reference< beans::XPropertySet > & rFCompPropSet,
         const Size& rSize, SwVertOrient eVertOri, SwHoriOrient eHoriOri,
         SfxItemSet& rCSS1ItemSet, SvxCSS1PropertyInfo& rCSS1PropInfo,
         const SvxMacroTableDtor& rMacroTbl, const SvStringsDtor& rUnoMacroTbl,
         const SvStringsDtor& rUnoMacroParamTbl, sal_Bool bSetFCompPropSet,
         sal_Bool bHidden )
 {
-    Reference< drawing::XShape >  xShape;
+    uno::Reference< drawing::XShape >  xShape;
 
-    const Reference< container::XIndexContainer > & rFormComps =
+    const uno::Reference< container::XIndexContainer > & rFormComps =
         pFormImpl->GetFormComps();
-    Any aAny( &rFComp, ::getCppuType( (Reference< XFormComponent>*)0 ) );
+    Any aAny( &rFComp, ::getCppuType( (uno::Reference< XFormComponent>*)0 ) );
     rFormComps->insertByIndex( rFormComps->getCount(), aAny );
 
     if( !bHidden )
@@ -1077,18 +1077,18 @@ Reference< drawing::XShape > SwHTMLParser::InsertControl(
         sal_uInt16 nLeftSpace = 0, nRightSpace = 0,
                       nUpperSpace = 0, nLowerSpace = 0;
 
-        const Reference< XMultiServiceFactory > & rServiceFactory =
+        const uno::Reference< XMultiServiceFactory > & rServiceFactory =
             pFormImpl->GetServiceFactory();
         if( !rServiceFactory.is() )
             return xShape;
 
-        Reference< XInterface > xCreate =
+        uno::Reference< XInterface > xCreate =
             rServiceFactory ->createInstance(
                 OUString::createFromAscii("com.sun.star.drawing.ControlShape"));
         if( !xCreate.is() )
             return xShape;
 
-        xShape = Reference< drawing::XShape >( xCreate, UNO_QUERY );
+        xShape = uno::Reference< drawing::XShape >( xCreate, UNO_QUERY );
 
         DBG_ASSERT( xShape.is(), "XShape nicht erhalten" );
         awt::Size aTmpSz;
@@ -1096,7 +1096,7 @@ Reference< drawing::XShape > SwHTMLParser::InsertControl(
         aTmpSz.Height = rSize.Height();
         xShape->setSize( aTmpSz );
 
-        Reference< beans::XPropertySet > xShapePropSet( xCreate, UNO_QUERY );
+        uno::Reference< beans::XPropertySet > xShapePropSet( xCreate, UNO_QUERY );
 
         // linken/rechten Rand setzen
         const SfxPoolItem *pItem;
@@ -1162,7 +1162,7 @@ Reference< drawing::XShape > SwHTMLParser::InsertControl(
                     OUString::createFromAscii( "BottomMargin" ), aTmp );
         }
 
-        Reference< beans::XPropertySetInfo > xPropSetInfo =
+        uno::Reference< beans::XPropertySetInfo > xPropSetInfo =
             rFCompPropSet->getPropertySetInfo();
         OUString sPropName = OUString::createFromAscii( "BackgroundColor" );
         if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_BACKGROUND, sal_True,
@@ -1277,7 +1277,7 @@ Reference< drawing::XShape > SwHTMLParser::InsertControl(
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
-        Reference< text::XTextRange >  xTxtRg;
+        uno::Reference< text::XTextRange >  xTxtRg;
         sal_Int16 nAnchorType = text::TextContentAnchorType_AS_CHARACTER;
         sal_Int16 nSurround;
         sal_Bool bSetPos = sal_False, bSetSurround = sal_False;
@@ -1294,7 +1294,7 @@ Reference< drawing::XShape > SwHTMLParser::InsertControl(
                 nAnchorType = text::TextContentAnchorType_AT_FRAME;
                 SwPaM aPaM( *pFlySttNd );
 
-                Reference< text::XText >  xDummyTxtRef; // unsauber, aber laut OS geht das ...
+                uno::Reference< text::XText >  xDummyTxtRef; // unsauber, aber laut OS geht das ...
                 xTxtRg = new SwXTextRange( aPaM, xDummyTxtRef );
             }
             else
@@ -1373,12 +1373,12 @@ Reference< drawing::XShape > SwHTMLParser::InsertControl(
         {
             if( !xTxtRg.is() )
             {
-                Reference< text::XText >  xDummyTxtRef; // unsauber, aber laut OS geht das ...
+                uno::Reference< text::XText >  xDummyTxtRef; // unsauber, aber laut OS geht das ...
                 xTxtRg = new SwXTextRange( *pPam, xDummyTxtRef );
             }
 
             aTmp.setValue( &xTxtRg,
-                           ::getCppuType((Reference< text::XTextRange>*)0));
+                           ::getCppuType((uno::Reference< text::XTextRange>*)0));
             xShapePropSet->setPropertyValue(
                     OUString::createFromAscii( "TextRange" ), aTmp );
         }
@@ -1409,8 +1409,8 @@ Reference< drawing::XShape > SwHTMLParser::InsertControl(
         pFormImpl->GetShapes()->add(xShape);
 
         // Das Control-Model am Control-Shape setzen
-        Reference< drawing::XControlShape > xControlShape( xShape, UNO_QUERY );
-        Reference< awt::XControlModel >  xControlModel( rFComp, UNO_QUERY );
+        uno::Reference< drawing::XControlShape > xControlShape( xShape, UNO_QUERY );
+        uno::Reference< awt::XControlModel >  xControlModel( rFComp, UNO_QUERY );
         xControlShape->setControl( xControlModel );
     }
 
@@ -1524,23 +1524,23 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
         }
     }
 
-    const Reference< XMultiServiceFactory > & rSrvcMgr =
+    const uno::Reference< XMultiServiceFactory > & rSrvcMgr =
         pFormImpl->GetServiceFactory();
     if( !rSrvcMgr.is() )
         return;
 
-    Reference< XInterface > xInt = rSrvcMgr->createInstance(
+    uno::Reference< XInterface > xInt = rSrvcMgr->createInstance(
             OUString::createFromAscii( "com.sun.star.form.component.Form" ) );
     if( !xInt.is() )
         return;
 
-    Reference< XForm >  xForm( xInt, UNO_QUERY );
+    uno::Reference< XForm >  xForm( xInt, UNO_QUERY );
     DBG_ASSERT( xForm.is(), "keine Form?" );
 
-    Reference< container::XIndexContainer > xFormComps( xForm, UNO_QUERY );
+    uno::Reference< container::XIndexContainer > xFormComps( xForm, UNO_QUERY );
     pFormImpl->SetFormComps( xFormComps );
 
-    Reference< beans::XPropertySet > xFormPropSet( xForm, UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xFormPropSet( xForm, UNO_QUERY );
 
     Any aTmp;
     aTmp <<= OUString(sName);
@@ -1577,9 +1577,9 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
                 OUString::createFromAscii( "TargetFrame" ), aTmp );
     }
 
-    const Reference< container::XIndexContainer > & rForms =
+    const uno::Reference< container::XIndexContainer > & rForms =
         pFormImpl->GetForms();
-    Any aAny( &xForm, ::getCppuType((Reference< XForm>*)0) );
+    Any aAny( &xForm, ::getCppuType((uno::Reference< XForm>*)0) );
     rForms->insertByIndex( rForms->getCount(), aAny );
     if( aMacroTbl.Count() )
         lcl_html_setEvents( pFormImpl->GetFormEventManager(),
@@ -1822,7 +1822,7 @@ void SwHTMLParser::InsertInput()
         sText.EraseAllChars( _LF );
     }
 
-    const Reference< XMultiServiceFactory > & rServiceFactory =
+    const uno::Reference< XMultiServiceFactory > & rServiceFactory =
         pFormImpl->GetServiceFactory();
     if( !rServiceFactory.is() )
         return;
@@ -1830,16 +1830,16 @@ void SwHTMLParser::InsertInput()
     String sServiceName(
             OUString::createFromAscii("com.sun.star.form.component.") );
     sServiceName.AppendAscii( pType );
-    Reference< XInterface > xInt =
+    uno::Reference< XInterface > xInt =
         rServiceFactory->createInstance( sServiceName );
     if( !xInt.is() )
         return;
 
-    Reference< XFormComponent > xFComp( xInt, UNO_QUERY );
+    uno::Reference< XFormComponent > xFComp( xInt, UNO_QUERY );
     if( !xFComp.is() )
         return;
 
-    Reference< beans::XPropertySet > xPropSet( xFComp, UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xPropSet( xFComp, UNO_QUERY );
 
     Any aTmp;
     aTmp <<= OUString(sName);
@@ -2054,7 +2054,7 @@ void SwHTMLParser::InsertInput()
     if( aSz.Height() < MINFLY )
         aSz.Height() = MINFLY;
 
-    Reference< drawing::XShape > xShape = InsertControl(
+    uno::Reference< drawing::XShape > xShape = InsertControl(
                                              xFComp, xPropSet, aSz,
                                              eVertOri, eHoriOri,
                                              aCSS1ItemSet, aCSS1PropInfo,
@@ -2087,7 +2087,7 @@ void SwHTMLParser::InsertInput()
     {
         SwHTMLImageWatcher* pWatcher =
             new SwHTMLImageWatcher( xShape, bSetGrfWidth, bSetGrfHeight );
-        Reference< awt::XImageConsumer > xCons = pWatcher;
+        uno::Reference< awt::XImageConsumer > xCons = pWatcher;
         pWatcher->start();
     }
 }
@@ -2220,14 +2220,14 @@ void SwHTMLParser::NewTextArea()
     }
 
 
-    const Reference< lang::XMultiServiceFactory > & rSrvcMgr =
+    const uno::Reference< lang::XMultiServiceFactory > & rSrvcMgr =
         pFormImpl->GetServiceFactory();
     if( !rSrvcMgr.is() )
     {
         FinishTextArea();
         return;
     }
-    Reference< uno::XInterface >  xInt = rSrvcMgr->createInstance(
+    uno::Reference< uno::XInterface >  xInt = rSrvcMgr->createInstance(
         OUString::createFromAscii( "com.sun.star.form.component.TextField" ) );
     if( !xInt.is() )
     {
@@ -2235,10 +2235,10 @@ void SwHTMLParser::NewTextArea()
         return;
     }
 
-    Reference< XFormComponent > xFComp( xInt, UNO_QUERY );
+    uno::Reference< XFormComponent > xFComp( xInt, UNO_QUERY );
     DBG_ASSERT( xFComp.is(), "keine FormComponent?" );
 
-    Reference< beans::XPropertySet > xPropSet( xFComp, UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xPropSet( xFComp, UNO_QUERY );
 
     Any aTmp;
     aTmp <<= OUString(sName);
@@ -2307,7 +2307,7 @@ void SwHTMLParser::NewTextArea()
     if( aSz.Height() < MINFLY )
         aSz.Height() = MINFLY;
 
-    Reference< drawing::XShape > xShape = InsertControl( xFComp, xPropSet, aSz,
+    uno::Reference< drawing::XShape > xShape = InsertControl( xFComp, xPropSet, aSz,
                                       VERT_TOP, HORI_NONE,
                                       aCSS1ItemSet, aCSS1PropInfo,
                                       aMacroTbl, aUnoMacroTbl,
@@ -2333,7 +2333,7 @@ void SwHTMLParser::EndTextArea()
     ASSERT( pFormImpl && pFormImpl->GetFCompPropSet().is(),
             "TextArea fehlt" );
 
-    const Reference< beans::XPropertySet > & rPropSet =
+    const uno::Reference< beans::XPropertySet > & rPropSet =
         pFormImpl->GetFCompPropSet();
 
     Any aTmp;
@@ -2500,14 +2500,14 @@ void SwHTMLParser::NewSelect()
         }
     }
 
-    const Reference< lang::XMultiServiceFactory > & rSrvcMgr =
+    const uno::Reference< lang::XMultiServiceFactory > & rSrvcMgr =
         pFormImpl->GetServiceFactory();
     if( !rSrvcMgr.is() )
     {
         FinishTextArea();
         return;
     }
-    Reference< uno::XInterface >  xInt = rSrvcMgr->createInstance(
+    uno::Reference< uno::XInterface >  xInt = rSrvcMgr->createInstance(
         OUString::createFromAscii( "com.sun.star.form.component.ListBox" ) );
     if( !xInt.is() )
     {
@@ -2515,10 +2515,10 @@ void SwHTMLParser::NewSelect()
         return;
     }
 
-    Reference< XFormComponent > xFComp( xInt, UNO_QUERY );
+    uno::Reference< XFormComponent > xFComp( xInt, UNO_QUERY );
     DBG_ASSERT(xFComp.is(), "keine FormComponent?")
 
-    Reference< beans::XPropertySet >  xPropSet( xFComp, UNO_QUERY );
+    uno::Reference< beans::XPropertySet >  xPropSet( xFComp, UNO_QUERY );
 
     Any aTmp;
     aTmp <<= OUString(sName);
@@ -2592,7 +2592,7 @@ void SwHTMLParser::NewSelect()
     if( aSz.Height() < MINFLY )
         aSz.Height() = MINFLY;
 
-    Reference< drawing::XShape >  xShape = InsertControl( xFComp, xPropSet, aSz,
+    uno::Reference< drawing::XShape >  xShape = InsertControl( xFComp, xPropSet, aSz,
                                       VERT_TOP, HORI_NONE,
                                       aCSS1ItemSet, aCSS1PropInfo,
                                       aMacroTbl, aUnoMacroTbl,
@@ -2625,7 +2625,7 @@ void SwHTMLParser::EndSelect()
     ASSERT( pFormImpl && pFormImpl->GetFCompPropSet().is(),
             "kein Select-Control" );
 
-    const Reference< beans::XPropertySet > & rPropSet =
+    const uno::Reference< beans::XPropertySet > & rPropSet =
         pFormImpl->GetFCompPropSet();
 
     // die Groesse anpassen
