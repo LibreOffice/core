@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_migration.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:40:37 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:05:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ Any MigrationImpl::execute( Sequence<beans::NamedValue> const & )
     const Reference<deployment::XPackageManager> xManager(
         deployment::thePackageManagerFactory::get(
             m_xContext )->getPackageManager( OUSTR("user") ) );
-    ::ucb::Content packagesDir;
+    ::ucbhelper::Content packagesDir;
     if (create_ucb_content( &packagesDir,
                             makeURL( m_userData, OUSTR("user/uno_packages") ),
                             Reference<XCommandEnvironment>(),
@@ -130,7 +130,7 @@ Any MigrationImpl::execute( Sequence<beans::NamedValue> const & )
         OUString const & strTitle = StrTitle::get();
         const Reference<sdbc::XResultSet> xResultSet(
             packagesDir.createCursor( Sequence<OUString>( &strTitle, 1 ),
-                                      ::ucb::INCLUDE_DOCUMENTS_ONLY ) );
+                                      ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
         while (xResultSet->next())
         {
             Reference<sdbc::XRow> xRow( xResultSet, UNO_QUERY_THROW );
