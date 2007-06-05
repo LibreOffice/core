@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 10:49:50 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 10:55:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ INCPRE+= -I$(ATL_INCLUDE)
 
 # --- Settings -----------------------------------------------------
 
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)" == "WNT" && "$(DISABLE_ATL)"==""
 
 SLOFILES= \
             $(SLO)$/servreg.obj		\
@@ -83,13 +83,15 @@ SHL1STDLIBS=\
     $(ADVAPI32LIB)	\
     $(OLEAUT32LIB)
 
-.IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
+.IF "$(COM)"=="MSC"
+.IF "$(WINDOWS_VISTA_PSDK)"!="" || "$(CCNUMVER)"<="001399999999"
 .IF "$(USE_STLP_DEBUG)" != ""
     SHL1STDLIBS+= $(ATL_LIB)$/atlsd.lib
 .ELSE
     SHL1STDLIBS+= $(ATL_LIB)$/atls.lib
 .ENDIF
-.ENDIF
+.ENDIF # "$(WINDOWS_VISTA_PSDK)"!="" || "$(CCNUMVER)"<="001399999999"
+.ENDIF # "$(COM)"=="MSC"
 
 SHL1LIBS=
 SHL1OBJS=$(SLOFILES)
@@ -109,13 +111,15 @@ SHL2STDLIBS=\
     $(ADVAPI32LIB)	\
     $(OLEAUT32LIB)
 
-.IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
+.IF "$(COM)"=="MSC"
+.IF "$(WINDOWS_VISTA_PSDK)"!="" || "$(CCNUMVER)"<="001399999999"
 .IF "$(USE_STLP_DEBUG)" != ""
     SHL2STDLIBS+= $(ATL_LIB)$/atlsd.lib
 .ELSE
     SHL2STDLIBS+= $(ATL_LIB)$/atls.lib
 .ENDIF
-.ENDIF
+.ENDIF # "$(WINDOWS_VISTA_PSDK)"!="" || "$(CCNUMVER)"<="001399999999"
+.ENDIF # "$(COM)"=="MSC"
 
 SHL2LIBS=
 SHL2OBJS=$(REAL_OWNGUID_SLOFILES)
@@ -128,3 +132,4 @@ DEF2EXPORTFILE=$(TARGET).dxp
 #----------------------------------------------------------------
 
 .INCLUDE :  target.mk
+
