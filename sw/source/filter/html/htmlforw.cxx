@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlforw.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:05:00 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:38:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,6 @@
 #include "htmlform.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 /*  */
 
@@ -182,11 +181,11 @@ const sal_uInt32 HTML_FRMOPTS_IMG_CONTROL_CSS1 =
 struct HTMLControl
 {
     // die Form, zu der das Control gehoert
-    Reference< container::XIndexContainer > xFormComps;
+    uno::Reference< container::XIndexContainer > xFormComps;
     ULONG nNdIdx;                   // der Node, in dem es verankert ist
     xub_StrLen nCount;              // wie viele Controls sind in dem Node
 
-    HTMLControl( const Reference< container::XIndexContainer > & rForm,
+    HTMLControl( const uno::Reference< container::XIndexContainer > & rForm,
                  sal_uInt32 nIdx );
     ~HTMLControl();
 
@@ -206,19 +205,19 @@ SV_IMPL_OP_PTRARR_SORT( HTMLControls, HTMLControl* )
 /*  */
 
 void lcl_html_outEvents( SvStream& rStrm,
-                         const Reference< form::XFormComponent > rFormComp,
+                         const uno::Reference< form::XFormComponent > rFormComp,
                          sal_Bool bCfgStarBasic,
                          rtl_TextEncoding eDestEnc,
                            String *pNonConvertableChars )
 {
-    Reference< container::XChild > xChild( rFormComp, UNO_QUERY );
-    Reference< XInterface > xParentIfc = xChild->getParent();
+    uno::Reference< container::XChild > xChild( rFormComp, uno::UNO_QUERY );
+    uno::Reference< uno::XInterface > xParentIfc = xChild->getParent();
     ASSERT( xParentIfc.is(), "lcl_html_outEvents: no parent interface" );
     if( !xParentIfc.is() )
         return;
-    Reference< container::XIndexAccess > xIndexAcc( xParentIfc, UNO_QUERY );
-    Reference< script::XEventAttacherManager > xEventManager( xParentIfc,
-                                                              UNO_QUERY );
+    uno::Reference< container::XIndexAccess > xIndexAcc( xParentIfc, uno::UNO_QUERY );
+    uno::Reference< script::XEventAttacherManager > xEventManager( xParentIfc,
+                                                              uno::UNO_QUERY );
     if( !xIndexAcc.is() || !xEventManager.is() )
         return;
 
@@ -226,25 +225,25 @@ void lcl_html_outEvents( SvStream& rStrm,
     sal_Int32 nCount = xIndexAcc->getCount(), nPos;
     for( nPos = 0 ; nPos < nCount; nPos++ )
     {
-        Any aTmp = xIndexAcc->getByIndex(nPos);
+        uno::Any aTmp = xIndexAcc->getByIndex(nPos);
         ASSERT( aTmp.getValueType() ==
-                        ::getCppuType( (Reference<form::XFormComponent>*)0 ) ||
+                        ::getCppuType( (uno::Reference<form::XFormComponent>*)0 ) ||
                 aTmp.getValueType() ==
-                        ::getCppuType( (Reference<form::XForm>*)0 ),
+                        ::getCppuType( (uno::Reference<form::XForm>*)0 ),
                 "lcl_html_outEvents: falsche Reflection" );
         if( aTmp.getValueType() ==
-                    ::getCppuType( (Reference< form::XFormComponent >*)0) )
+                    ::getCppuType( (uno::Reference< form::XFormComponent >*)0) )
 
         {
             if( rFormComp ==
-                    *(Reference< form::XFormComponent > *)aTmp.getValue() )
+                    *(uno::Reference< form::XFormComponent > *)aTmp.getValue() )
                 break;
         }
         else if( aTmp.getValueType() ==
-                            ::getCppuType( (Reference< form::XForm>*)0) )
+                            ::getCppuType( (uno::Reference< form::XForm>*)0) )
         {
-            Reference< form::XFormComponent > xFC(
-                *(Reference< form::XForm > *)aTmp.getValue(), UNO_QUERY );
+            uno::Reference< form::XFormComponent > xFC(
+                *(uno::Reference< form::XForm > *)aTmp.getValue(), uno::UNO_QUERY );
             if( rFormComp == xFC )
                 break;
         }
@@ -253,7 +252,7 @@ void lcl_html_outEvents( SvStream& rStrm,
     if( nPos == nCount )
         return;
 
-    Sequence< script::ScriptEventDescriptor > aDescs =
+    uno::Sequence< script::ScriptEventDescriptor > aDescs =
             xEventManager->getScriptEvents( nPos );
     nCount = aDescs.getLength();
     if( !nCount )
@@ -366,7 +365,7 @@ void SwHTMLWriter::OutForm( sal_Bool bTagOn, const SwStartNode *pStartNd )
         return;
     }
 
-    Reference< container::XIndexContainer > xNewFormComps;  // die neue Form
+    uno::Reference< container::XIndexContainer > xNewFormComps;  // die neue Form
     sal_uInt32 nStartIdx = pStartNd ? pStartNd->GetIndex()
                                     : pCurPam->GetPoint()->nNode.GetIndex();
 
@@ -391,7 +390,7 @@ void SwHTMLWriter::OutForm( sal_Bool bTagOn, const SwStartNode *pStartNd )
         // - ob es eine Form gibt, fuer die nicht alle Controls in der
         //   Tabelle/dem Bereich liegen
 
-        Reference< container::XIndexContainer > xCurrentFormComps;// die aktuelle Form in der Tabelle
+        uno::Reference< container::XIndexContainer > xCurrentFormComps;// die aktuelle Form in der Tabelle
         const SwStartNode *pCurrentStNd = 0; // und der Start-Node eines Ctrls
         xub_StrLen nCurrentCtrls = 0;   // und die in ihr gefundenen Controls
         sal_uInt32 nEndIdx =  pStartNd->EndOfSectionIndex();
@@ -461,11 +460,11 @@ void SwHTMLWriter::OutForm( sal_Bool bTagOn, const SwStartNode *pStartNd )
         }
 
         if( !pxFormComps )
-            pxFormComps = new Reference< container::XIndexContainer > ;
+            pxFormComps = new uno::Reference< container::XIndexContainer > ;
         *pxFormComps = xNewFormComps;
 
         OutForm( sal_True, *pxFormComps );
-        Reference< beans::XPropertySet >  xTmp;
+        uno::Reference< beans::XPropertySet >  xTmp;
         OutHiddenControls( *pxFormComps, xTmp );
     }
 }
@@ -482,40 +481,40 @@ void SwHTMLWriter::OutHiddenForms()
     if( !pDocSh )
         return;
 
-    Reference< drawing::XDrawPageSupplier > xDPSupp( pDocSh->GetBaseModel(),
-                                                     UNO_QUERY );
+    uno::Reference< drawing::XDrawPageSupplier > xDPSupp( pDocSh->GetBaseModel(),
+                                                     uno::UNO_QUERY );
     ASSERT( xDPSupp.is(), "XTextDocument nicht vom XModel erhalten" );
-    Reference< drawing::XDrawPage > xDrawPage = xDPSupp->getDrawPage();
+    uno::Reference< drawing::XDrawPage > xDrawPage = xDPSupp->getDrawPage();
 
     ASSERT( xDrawPage.is(), "XDrawPage nicht erhalten" );
     if( !xDrawPage.is() )
         return;
 
-    Reference< form::XFormsSupplier > xFormsSupplier( xDrawPage, UNO_QUERY );
+    uno::Reference< form::XFormsSupplier > xFormsSupplier( xDrawPage, uno::UNO_QUERY );
     ASSERT( xFormsSupplier.is(),
             "XFormsSupplier nicht vom XDrawPage erhalten" );
 
-    Reference< container::XNameContainer > xTmp = xFormsSupplier->getForms();
+    uno::Reference< container::XNameContainer > xTmp = xFormsSupplier->getForms();
     ASSERT( xTmp.is(), "XForms nicht erhalten" );
-    Reference< container::XIndexContainer > xForms( xTmp, UNO_QUERY );
+    uno::Reference< container::XIndexContainer > xForms( xTmp, uno::UNO_QUERY );
     ASSERT( xForms.is(), "XForms ohne container::XIndexContainer?" );
 
     sal_Int32 nCount = xForms->getCount();
     for( sal_Int32 i=0; i<nCount; i++)
     {
-        Any aTmp = xForms->getByIndex( i );
+        uno::Any aTmp = xForms->getByIndex( i );
         ASSERT( aTmp.getValueType() ==
-                        ::getCppuType((Reference< form::XForm >*)0),
+                        ::getCppuType((uno::Reference< form::XForm >*)0),
                 "OutHiddenForms: falsche Reflection" );
         if( aTmp.getValueType() ==
-                    ::getCppuType((Reference< form::XForm >*)0) )
-            OutHiddenForm( *(Reference< form::XForm > *)aTmp.getValue() );
+                    ::getCppuType((uno::Reference< form::XForm >*)0) )
+            OutHiddenForm( *(uno::Reference< form::XForm > *)aTmp.getValue() );
     }
 }
 
-void SwHTMLWriter::OutHiddenForm( const Reference< form::XForm > & rForm )
+void SwHTMLWriter::OutHiddenForm( const uno::Reference< form::XForm > & rForm )
 {
-    Reference< container::XIndexContainer > xFormComps( rForm, UNO_QUERY );
+    uno::Reference< container::XIndexContainer > xFormComps( rForm, uno::UNO_QUERY );
     if( !xFormComps.is() )
         return;
 
@@ -523,27 +522,27 @@ void SwHTMLWriter::OutHiddenForm( const Reference< form::XForm > & rForm )
     sal_Bool bHiddenOnly = nCount > 0, bHidden = sal_False;
     for( sal_Int32 i=0; i<nCount; i++ )
     {
-        Any aTmp = xFormComps->getByIndex( i );
+        uno::Any aTmp = xFormComps->getByIndex( i );
         ASSERT( aTmp.getValueType() ==
-                        ::getCppuType((Reference<form::XFormComponent>*)0),
+                        ::getCppuType((uno::Reference<form::XFormComponent>*)0),
                 "OutHiddenForm: falsche Reflection" );
         if( aTmp.getValueType() !=
-                    ::getCppuType((Reference<form::XFormComponent>*)0) )
+                    ::getCppuType((uno::Reference<form::XFormComponent>*)0) )
             continue;
 
-        Reference< form::XFormComponent > xFormComp =
-            *(Reference< form::XFormComponent > *)aTmp.getValue();
-        Reference< form::XForm > xForm( xFormComp, UNO_QUERY );
+        uno::Reference< form::XFormComponent > xFormComp =
+            *(uno::Reference< form::XFormComponent > *)aTmp.getValue();
+        uno::Reference< form::XForm > xForm( xFormComp, uno::UNO_QUERY );
         if( xForm.is() )
             OutHiddenForm( xForm );
 
         if( bHiddenOnly )
         {
-            Reference< beans::XPropertySet >  xPropSet( xFormComp, UNO_QUERY );
+            uno::Reference< beans::XPropertySet >  xPropSet( xFormComp, uno::UNO_QUERY );
             OUString sPropName = OUString::createFromAscii( "ClassId" );
             if( xPropSet->getPropertySetInfo()->hasPropertyByName( sPropName ) )
             {
-                Any aTmp = xPropSet->getPropertyValue( sPropName );
+                uno::Any aTmp = xPropSet->getPropertyValue( sPropName );
                 if( aTmp.getValueType() == ::getCppuType((sal_Int16*)0) )
                 {
                     if( form::FormComponentType::HIDDENCONTROL ==
@@ -560,14 +559,14 @@ void SwHTMLWriter::OutHiddenForm( const Reference< form::XForm > & rForm )
     if( bHidden && bHiddenOnly )
     {
         OutForm( sal_True, xFormComps );
-        Reference< beans::XPropertySet > xTmp;
+        uno::Reference< beans::XPropertySet > xTmp;
         OutHiddenControls( xFormComps, xTmp );
         OutForm( sal_False, xFormComps );
     }
 }
 
 void SwHTMLWriter::OutForm( sal_Bool bOn,
-                const Reference< container::XIndexContainer > & rFormComps )
+                const uno::Reference< container::XIndexContainer > & rFormComps )
 {
     nFormCntrlCnt = 0;
 
@@ -588,9 +587,9 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
     ByteString sOut( '<' );
     sOut += sHTML_form;
 
-    Reference< beans::XPropertySet > xFormPropSet( rFormComps, UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xFormPropSet( rFormComps, uno::UNO_QUERY );
 
-    Any aTmp = xFormPropSet->getPropertyValue(
+    uno::Any aTmp = xFormPropSet->getPropertyValue(
                                     OUString::createFromAscii( "Name" ) );
     if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
         ((OUString*)aTmp.getValue())->getLength() )
@@ -666,7 +665,7 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
     }
 
     Strm() << sOut.GetBuffer();
-    Reference< form::XFormComponent > xFormComp( rFormComps, UNO_QUERY );
+    uno::Reference< form::XFormComponent > xFormComp( rFormComps, uno::UNO_QUERY );
     lcl_html_outEvents( Strm(), xFormComp, bCfgStarBasic, eDestEnc, &aNonConvertableCharacters );
     Strm() << '>';
 
@@ -675,40 +674,40 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
 }
 
 void SwHTMLWriter::OutHiddenControls(
-        const Reference< container::XIndexContainer > & rFormComps,
-        const Reference< beans::XPropertySet > & rPropSet )
+        const uno::Reference< container::XIndexContainer > & rFormComps,
+        const uno::Reference< beans::XPropertySet > & rPropSet )
 {
     sal_Int32 nCount = rFormComps->getCount();
     sal_Int32 nPos = 0;
     sal_Bool bDone = sal_False;
     if( rPropSet.is() )
     {
-        Reference< form::XFormComponent > xFC( rPropSet, UNO_QUERY );
+        uno::Reference< form::XFormComponent > xFC( rPropSet, uno::UNO_QUERY );
         for( nPos=0; !bDone && nPos < nCount; nPos++ )
         {
-            Any aTmp = rFormComps->getByIndex( nPos );
+            uno::Any aTmp = rFormComps->getByIndex( nPos );
             ASSERT( aTmp.getValueType() ==
-                        ::getCppuType((Reference< form::XFormComponent>*)0),
+                        ::getCppuType((uno::Reference< form::XFormComponent>*)0),
                     "OutHiddenControls: falsche Reflection" );
             bDone = aTmp.getValueType() ==
-                        ::getCppuType((Reference< form::XFormComponent>*)0) &&
-                    *(Reference< form::XFormComponent > *)aTmp.getValue() ==
+                        ::getCppuType((uno::Reference< form::XFormComponent>*)0) &&
+                    *(uno::Reference< form::XFormComponent > *)aTmp.getValue() ==
                         xFC;
         }
     }
 
     for( ; nPos < nCount; nPos++ )
     {
-        Any aTmp = rFormComps->getByIndex( nPos );
+        uno::Any aTmp = rFormComps->getByIndex( nPos );
         ASSERT( aTmp.getValueType() ==
-                        ::getCppuType((Reference< form::XFormComponent>*)0),
+                        ::getCppuType((uno::Reference< form::XFormComponent>*)0),
                 "OutHiddenControls: falsche Reflection" );
         if( aTmp.getValueType() !=
-                    ::getCppuType((Reference< form::XFormComponent>*)0) )
+                    ::getCppuType((uno::Reference< form::XFormComponent>*)0) )
             continue;
-        Reference< form::XFormComponent > xFC =
-                *(Reference< form::XFormComponent > *)aTmp.getValue();
-        Reference< beans::XPropertySet > xPropSet( xFC, UNO_QUERY );
+        uno::Reference< form::XFormComponent > xFC =
+                *(uno::Reference< form::XFormComponent > *)aTmp.getValue();
+        uno::Reference< beans::XPropertySet > xPropSet( xFC, uno::UNO_QUERY );
 
         OUString sPropName = OUString::createFromAscii( "ClassId" );
         if( !xPropSet->getPropertySetInfo()->hasPropertyByName( sPropName ) )
@@ -777,20 +776,20 @@ const SdrObject *SwHTMLWriter::GetHTMLControl( const SwDrawFrmFmt& rFmt )
         return 0;
 
     SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pObj );
-    Reference< awt::XControlModel >  xControlModel =
+    uno::Reference< awt::XControlModel >  xControlModel =
             pFormObj->GetUnoControlModel();
 
     ASSERT( xControlModel.is(), "UNO-Control ohne Model" );
     if( !xControlModel.is() )
         return 0;
 
-    Reference< beans::XPropertySet >  xPropSet( xControlModel, UNO_QUERY );
+    uno::Reference< beans::XPropertySet >  xPropSet( xControlModel, uno::UNO_QUERY );
 
     OUString sPropName = OUString::createFromAscii( "ClassId" );
     if( !xPropSet->getPropertySetInfo()->hasPropertyByName( sPropName ) )
         return 0;
 
-    Any aTmp = xPropSet->getPropertyValue( sPropName );
+    uno::Any aTmp = xPropSet->getPropertyValue( sPropName );
     if( aTmp.getValueType() == ::getCppuType((const sal_Int16*)0)&&
         lcl_html_isHTMLControl( *(sal_Int16*) aTmp.getValue() ) )
     {
@@ -809,12 +808,12 @@ static void GetControlSize( const SdrObject& rSdrObj, Size& rSz,
         return;
 
     SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, &rSdrObj );
-    Reference< awt::XControl >  xControl;
+    uno::Reference< awt::XControl >  xControl;
     SdrView* pDrawView = pVSh->GetDrawView();
     ASSERT( pDrawView && pVSh->GetWin(), "no DrawView or window!" );
     if ( pDrawView && pVSh->GetWin() )
         xControl = pFormObj->GetUnoControl( *pDrawView, *pVSh->GetWin() );
-    Reference< awt::XTextLayoutConstrains > xLC( xControl, UNO_QUERY );
+    uno::Reference< awt::XTextLayoutConstrains > xLC( xControl, uno::UNO_QUERY );
     ASSERT( xLC.is(), "kein XTextLayoutConstrains" );
     if( !xLC.is() )
         return;
@@ -833,15 +832,15 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
     SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, &rSdrObject );
-    Reference< awt::XControlModel > xControlModel =
+    uno::Reference< awt::XControlModel > xControlModel =
         pFormObj->GetUnoControlModel();
 
     ASSERT( xControlModel.is(), "UNO-Control ohne Model" );
     if( !xControlModel.is() )
         return rWrt;
 
-    Reference< beans::XPropertySet > xPropSet( xControlModel, UNO_QUERY );
-    Reference< beans::XPropertySetInfo > xPropSetInfo =
+    uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
 
 //!!!   if( rHTMLWrt.pForm != pVCSbxCtrl->GetVCForm() )
@@ -852,7 +851,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     OUString sValue;
     ByteString sOptions;
     sal_Bool bEmptyValue = sal_False;
-    Any aTmp = xPropSet->getPropertyValue(
+    uno::Any aTmp = xPropSet->getPropertyValue(
                     OUString::createFromAscii( "ClassId" ) );
     sal_Int16 nClassId = *(sal_Int16*) aTmp.getValue();
     sal_uInt32 nFrmOpts = HTML_FRMOPTS_CONTROL;
@@ -1279,7 +1278,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                                         &aItemSet );
     }
 
-    Reference< form::XFormComponent >  xFormComp( xControlModel, UNO_QUERY );
+    uno::Reference< form::XFormComponent >  xFormComp( xControlModel, uno::UNO_QUERY );
     lcl_html_outEvents( rWrt.Strm(), xFormComp, rHTMLWrt.bCfgStarBasic,
                         rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
 
@@ -1289,11 +1288,11 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     {
         aTmp = xPropSet->getPropertyValue(
                     OUString::createFromAscii( "StringItemList" ) );
-        if( aTmp.getValueType() == ::getCppuType((Sequence<OUString>*)0) )
+        if( aTmp.getValueType() == ::getCppuType((uno::Sequence<OUString>*)0) )
         {
             rHTMLWrt.IncIndentLevel(); // der Inhalt von Select darf
                                        // eingerueckt werden
-            Sequence<OUString> aList( *(Sequence<OUString>*)aTmp.getValue() );
+            uno::Sequence<OUString> aList( *(uno::Sequence<OUString>*)aTmp.getValue() );
             sal_Int32 nCnt = aList.getLength();
             const OUString *pStrings = aList.getConstArray();
 
@@ -1301,23 +1300,23 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             sal_Int32 nValCnt = 0;
             aTmp = xPropSet->getPropertyValue(
                             OUString::createFromAscii( "ListSource" ) );
-            Sequence<OUString> aValList;
-            if( aTmp.getValueType() == ::getCppuType((Sequence<OUString>*)0) )
+            uno::Sequence<OUString> aValList;
+            if( aTmp.getValueType() == ::getCppuType((uno::Sequence<OUString>*)0) )
             {
-                aValList = *(Sequence<OUString>*)aTmp.getValue();
+                aValList = *(uno::Sequence<OUString>*)aTmp.getValue();
                 nValCnt = aValList.getLength();
                 pValues = aValList.getConstArray();
             }
 
-            Any aSelTmp = xPropSet->getPropertyValue(
+            uno::Any aSelTmp = xPropSet->getPropertyValue(
                             OUString::createFromAscii( "DefaultSelection" ) );
             const sal_Int16 *pSels = 0;
             sal_Int32 nSel = 0;
             sal_Int32 nSelCnt = 0;
-            Sequence<sal_Int16> aSelList;
-            if( aSelTmp.getValueType() ==::getCppuType((Sequence<sal_Int16>*)0))
+            uno::Sequence<sal_Int16> aSelList;
+            if( aSelTmp.getValueType() ==::getCppuType((uno::Sequence<sal_Int16>*)0))
             {
-                aSelList = *(Sequence<sal_Int16>*)aSelTmp.getValue();
+                aSelList = *(uno::Sequence<sal_Int16>*)aSelTmp.getValue();
                 nSelCnt = aSelList.getLength();
                 pSels = aSelList.getConstArray();
             }
@@ -1425,19 +1424,19 @@ static void AddControl( HTMLControls& rControls,
 {
     SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pSdrObj );
     ASSERT( pFormObj, "Doch kein FormObj" );
-    Reference< awt::XControlModel > xControlModel =
+    uno::Reference< awt::XControlModel > xControlModel =
             pFormObj->GetUnoControlModel();
     if( !xControlModel.is() )
         return;
 
-    Reference< form::XFormComponent >  xFormComp( xControlModel, UNO_QUERY );
-    Reference< XInterface >  xIfc = xFormComp->getParent();
-    Reference< form::XForm >  xForm(xIfc, UNO_QUERY);
+    uno::Reference< form::XFormComponent >  xFormComp( xControlModel, uno::UNO_QUERY );
+    uno::Reference< uno::XInterface >  xIfc = xFormComp->getParent();
+    uno::Reference< form::XForm >  xForm(xIfc, uno::UNO_QUERY);
 
     ASSERT( xForm.is(), "Wo ist die Form?" );
     if( xForm.is() )
     {
-        Reference< container::XIndexContainer >  xFormComps( xForm, UNO_QUERY );
+        uno::Reference< container::XIndexContainer >  xFormComps( xForm, uno::UNO_QUERY );
         HTMLControl *pHCntrl = new HTMLControl( xFormComps, nNodeIdx );
         if( !rControls.C40_PTR_INSERT( HTMLControl, pHCntrl ) )
         {
@@ -1503,7 +1502,7 @@ void SwHTMLWriter::GetControls()
 /*  */
 
 HTMLControl::HTMLControl(
-        const Reference< container::XIndexContainer > & rFormComps,
+        const uno::Reference< container::XIndexContainer > & rFormComps,
         sal_uInt32 nIdx ) :
     xFormComps( rFormComps ), nNdIdx( nIdx ), nCount( 1 )
 {}
