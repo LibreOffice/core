@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucb.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:43:48 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:52:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,7 @@ using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
+using namespace ucb_impl;
 
 //=========================================================================
 //
@@ -226,7 +227,7 @@ void SAL_CALL UniversalContentBroker::initialize(
     // called several times:
     oslInterlockedCount nCount = osl_incrementInterlockedCount(&m_nInitCount);
     if (nCount == 1)
-        ::ucb::configureUcb(this, m_xSMgr, aArguments, 0);
+        ::ucbhelper::configureUcb(this, m_xSMgr, aArguments, 0);
     else
         osl_decrementInterlockedCount(&m_nInitCount);
             // make the possibility of overflow less likely...
