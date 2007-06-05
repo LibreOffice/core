@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:37:38 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:33:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@
 #include "svxdlg.hxx" //CHINA001
 #include <dialogs.hrc> //CHINA001
 
-using namespace ucb;
+using namespace ::ucbhelper;
 
 //########################################################################
 //#                                                                      #
