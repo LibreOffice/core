@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccell.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:07:45 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:25:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,8 +99,7 @@
 
 #include <limits.h>
 
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::rtl;
 
@@ -267,20 +266,20 @@ SwAccessibleCell::~SwAccessibleCell()
 }
 
 OUString SAL_CALL SwAccessibleCell::getAccessibleDescription (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (uno::RuntimeException)
 {
     return GetName();
 }
 
 OUString SAL_CALL SwAccessibleCell::getImplementationName()
-        throw( RuntimeException )
+        throw( uno::RuntimeException )
 {
     return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplementationName));
 }
 
 sal_Bool SAL_CALL SwAccessibleCell::supportsService(
         const ::rtl::OUString& sTestServiceName)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (uno::RuntimeException)
 {
     return sTestServiceName.equalsAsciiL( sServiceName,
                                           sizeof(sServiceName)-1 ) ||
@@ -288,10 +287,10 @@ sal_Bool SAL_CALL SwAccessibleCell::supportsService(
                                              sizeof(sAccessibleServiceName)-1 );
 }
 
-Sequence< OUString > SAL_CALL SwAccessibleCell::getSupportedServiceNames()
-        throw( ::com::sun::star::uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL SwAccessibleCell::getSupportedServiceNames()
+        throw( uno::RuntimeException )
 {
-    Sequence< OUString > aRet(2);
+    uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceName) );
     pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
@@ -321,13 +320,13 @@ void SwAccessibleCell::InvalidatePosOrSize( const SwRect& rOldBox )
 
 // =====  XAccessibleInterface  ===========================================
 
-Any SwAccessibleCell::queryInterface( const Type& rType )
-    throw( RuntimeException )
+uno::Any SwAccessibleCell::queryInterface( const uno::Type& rType )
+    throw( uno::RuntimeException )
 {
-    if ( rType == ::getCppuType((Reference<XAccessibleValue> *)0) )
+    if ( rType == ::getCppuType( static_cast< uno::Reference< XAccessibleValue > * >( 0 ) ) )
     {
-        Reference<XAccessibleValue> xValue = this;
-        Any aRet;
+        uno::Reference<XAccessibleValue> xValue = this;
+        uno::Any aRet;
         aRet <<= xValue;
         return aRet;
     }
@@ -338,24 +337,25 @@ Any SwAccessibleCell::queryInterface( const Type& rType )
 }
 
 //====== XTypeProvider ====================================================
-Sequence< Type > SAL_CALL SwAccessibleCell::getTypes() throw(RuntimeException)
+uno::Sequence< uno::Type > SAL_CALL SwAccessibleCell::getTypes()
+    throw(uno::RuntimeException)
 {
-    Sequence< Type > aTypes( SwAccessibleContext::getTypes() );
+    uno::Sequence< uno::Type > aTypes( SwAccessibleContext::getTypes() );
 
     sal_Int32 nIndex = aTypes.getLength();
     aTypes.realloc( nIndex + 1 );
 
-    Type* pTypes = aTypes.getArray();
-    pTypes[nIndex] = ::getCppuType( static_cast< Reference< XAccessibleValue > * >( 0 ) );
+    uno::Type* pTypes = aTypes.getArray();
+    pTypes[nIndex] = ::getCppuType( static_cast< uno::Reference< XAccessibleValue > * >( 0 ) );
 
     return aTypes;
 }
 
-Sequence< sal_Int8 > SAL_CALL SwAccessibleCell::getImplementationId()
-        throw(RuntimeException)
+uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleCell::getImplementationId()
+        throw(uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    static Sequence< sal_Int8 > aId( 16 );
+    static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
     {
@@ -377,19 +377,19 @@ SwFrmFmt* SwAccessibleCell::GetTblBoxFormat() const
 }
 
 
-Any SwAccessibleCell::getCurrentValue( )
-    throw( RuntimeException )
+uno::Any SwAccessibleCell::getCurrentValue( )
+    throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     CHECK_FOR_DEFUNC( XAccessibleValue );
 
-    Any aAny;
+    uno::Any aAny;
     aAny <<= GetTblBoxFormat()->GetTblBoxValue().GetValue();
     return aAny;
 }
 
-sal_Bool SwAccessibleCell::setCurrentValue( const Any& aNumber )
-    throw( RuntimeException )
+sal_Bool SwAccessibleCell::setCurrentValue( const uno::Any& aNumber )
+    throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     CHECK_FOR_DEFUNC( XAccessibleValue );
@@ -404,18 +404,18 @@ sal_Bool SwAccessibleCell::setCurrentValue( const Any& aNumber )
     return bValid;
 }
 
-Any SwAccessibleCell::getMaximumValue( )
-    throw( RuntimeException )
+uno::Any SwAccessibleCell::getMaximumValue( )
+    throw( uno::RuntimeException )
 {
-    Any aAny;
+    uno::Any aAny;
     aAny <<= DBL_MAX;
     return aAny;
 }
 
-Any SwAccessibleCell::getMinimumValue(  )
-    throw( RuntimeException )
+uno::Any SwAccessibleCell::getMinimumValue(  )
+    throw( uno::RuntimeException )
 {
-    Any aAny;
+    uno::Any aAny;
     aAny <<= -DBL_MAX;
     return aAny;
 }
