@@ -4,9 +4,9 @@
  *
  *  $RCSfile: main.applescript,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:15:16 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 11:52:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,7 @@
 (*==== (global variables as get-functions) ====*)
 
 on getOOInstallPath()
-	-- return (((path to applications folder from system domain) as string) & "OpenOffice %PRODUCTVERSION.app:" & "Contents:MacOS:")
-	return (((path to me) as string) & "Contents:MacOS:")
+	return (((path to me) as string) & "Contents:")
 end getOOInstallPath
 
 on getOOResourcesPath()
@@ -45,7 +44,7 @@ on getOOResourcesPath()
 end getOOResourcesPath
 
 on getOOProgramPath()
-	return (getOOInstallPath() & "program:")
+	return (getOOInstallPath() & "MacOS:")
 end getOOProgramPath
 
 on getScriptPath()
