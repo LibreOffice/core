@@ -4,9 +4,9 @@
  *
  *  $RCSfile: webdavcontent.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:38:19 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:21:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ namespace webdav_ucp
 class ContentProvider;
 class ContentProperties;
 
-class Content : public ::ucb::ContentImplHelper,
+class Content : public ::ucbhelper::ContentImplHelper,
                 public com::sun::star::ucb::XContentCreator
 {
     enum ResourceType
@@ -295,7 +295,7 @@ public:
                               ::com::sun::star::beans::Property >& rProperties,
                           const ContentProperties& rData,
                        const rtl::Reference<
-                           ::ucb::ContentProviderImplHelper >&  rProvider,
+                           ::ucbhelper::ContentProviderImplHelper >& rProvider,
                           const ::rtl::OUString& rContentId );
 };
 
