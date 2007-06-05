@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucbstreamhelper.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:30:42 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:33:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ static SvStream* lcl_CreateStream( const String& rFileName, StreamMode eOpenMode
         UcbLockBytesHandler* pHandler, sal_Bool /*bForceSynchron*/, sal_Bool bEnsureFileExists )
 {
     SvStream* pStream = NULL;
-    ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
+    ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
     if ( pBroker )
     {
         UcbLockBytesRef xLockBytes;
@@ -88,7 +88,7 @@ static SvStream* lcl_CreateStream( const String& rFileName, StreamMode eOpenMode
                 try
                 {
                     // truncate is implemented with deleting the original file
-                    ::ucb::Content aCnt( rFileName, Reference < XCommandEnvironment >() );
+                    ::ucbhelper::Content aCnt( rFileName, Reference < XCommandEnvironment >() );
                     aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
                 }
 
@@ -113,7 +113,7 @@ static SvStream* lcl_CreateStream( const String& rFileName, StreamMode eOpenMode
                     ::utl::OInputStreamWrapper* pInput = new ::utl::OInputStreamWrapper( aStream );
                     Reference< XInputStream > xInput( pInput );
 
-                    ::ucb::Content aContent( rFileName, Reference < XCommandEnvironment >() );
+                    ::ucbhelper::Content aContent( rFileName, Reference < XCommandEnvironment >() );
                     InsertCommandArgument aInsertArg;
                     aInsertArg.Data = xInput;
 
@@ -140,7 +140,7 @@ static SvStream* lcl_CreateStream( const String& rFileName, StreamMode eOpenMode
         try
         {
             // create LockBytes using UCB
-            ::ucb::Content aContent( rFileName, Reference < XCommandEnvironment >() );
+            ::ucbhelper::Content aContent( rFileName, Reference < XCommandEnvironment >() );
             xLockBytes = UcbLockBytes::CreateLockBytes( aContent.get(), Sequence < PropertyValue >(),
                                                 eOpenMode, xInteractionHandler, pHandler );
             if ( xLockBytes.Is() )
