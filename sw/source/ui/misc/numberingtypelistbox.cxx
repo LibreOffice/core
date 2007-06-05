@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numberingtypelistbox.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:08:24 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:43:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,10 +62,7 @@
 //#include <svtools/languageoptions.hxx>
 //#endif
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::text;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::style;
+using namespace com::sun::star;
 using namespace rtl;
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
@@ -74,7 +71,7 @@ using namespace rtl;
  ---------------------------------------------------------------------------*/
 struct SwNumberingTypeListBox_Impl
 {
-    Reference<XNumberingTypeInfo> xInfo;
+    uno::Reference<text::XNumberingTypeInfo> xInfo;
 };
 /* -----------------------------01.03.01 14:46--------------------------------
 
@@ -84,13 +81,13 @@ SwNumberingTypeListBox::SwNumberingTypeListBox( Window* pWin, const ResId& rResI
     ListBox(pWin, rResId),
     pImpl(new SwNumberingTypeListBox_Impl)
 {
-    Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    Reference < XInterface > xI = xMSF->createInstance(
+    uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+    uno::Reference < uno::XInterface > xI = xMSF->createInstance(
         ::rtl::OUString::createFromAscii( "com.sun.star.text.DefaultNumberingProvider" ) );
-    Reference<XDefaultNumberingProvider> xDefNum(xI, UNO_QUERY);
+    uno::Reference<text::XDefaultNumberingProvider> xDefNum(xI, uno::UNO_QUERY);
     DBG_ASSERT(xDefNum.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"")
 
-    pImpl->xInfo = Reference<XNumberingTypeInfo>(xDefNum, UNO_QUERY);
+    pImpl->xInfo = uno::Reference<text::XNumberingTypeInfo>(xDefNum, uno::UNO_QUERY);
     Reload(nTypeFlags);
 }
 /* -----------------------------01.03.01 14:46--------------------------------
@@ -106,7 +103,7 @@ SwNumberingTypeListBox::~SwNumberingTypeListBox()
 void SwNumberingTypeListBox::Reload(USHORT nTypeFlags)
 {
     Clear();
-    Sequence<sal_Int16> aTypes;
+    uno::Sequence<sal_Int16> aTypes;
     const sal_Int16* pTypes = NULL;
     if(0 != (nTypeFlags&INSERT_NUM_EXTENDED_TYPES) )
     {
@@ -125,15 +122,15 @@ void SwNumberingTypeListBox::Reload(USHORT nTypeFlags)
         USHORT nPos = LISTBOX_APPEND;
         switch(nValue)
         {
-            case  NumberingType::NUMBER_NONE:
+            case  style::NumberingType::NUMBER_NONE:
                 bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_NO_NUMBERING);
                 nPos = 0;
              break;
-            case  NumberingType::CHAR_SPECIAL:  bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_BULLET); break;
-            case  NumberingType::PAGE_DESCRIPTOR:bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_PAGE_STYLE_NUMBERING); break;
-            case  NumberingType::BITMAP:bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_BITMAP ); break;
+            case  style::NumberingType::CHAR_SPECIAL:   bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_BULLET); break;
+            case  style::NumberingType::PAGE_DESCRIPTOR:bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_PAGE_STYLE_NUMBERING); break;
+            case  style::NumberingType::BITMAP:bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_BITMAP ); break;
             default:
-                if (nValue >  NumberingType::CHARS_LOWER_LETTER_N)
+                if (nValue >  style::NumberingType::CHARS_LOWER_LETTER_N)
                 {
                     // Insert only if offered by i18n framework per configuration.
                     bInsert = sal_False;
@@ -163,7 +160,7 @@ void SwNumberingTypeListBox::Reload(USHORT nTypeFlags)
             for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
             {
                 sal_Int16 nCurrent = pTypes[nType];
-                if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
+                if(nCurrent > style::NumberingType::CHARS_LOWER_LETTER_N)
                 {
                     if(LISTBOX_ENTRY_NOTFOUND == GetEntryPos((void*)(ULONG)nCurrent))
                     {
