@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fsstorage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:26:44 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:26:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,20 +104,20 @@ protected:
 
 public:
 
-    FSStorage(  const ::ucb::Content& aContent,
+    FSStorage(  const ::ucbhelper::Content& aContent,
                 sal_Int32 nMode,
                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > xProperties,
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory );
 
     virtual ~FSStorage();
 
-    ::ucb::Content* GetContent();
+    ::ucbhelper::Content* GetContent();
 
     void CopyStreamToSubStream( const ::rtl::OUString& aSourceURL,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xDest,
                                 const ::rtl::OUString& aNewEntryName );
 
-    void CopyContentToStorage_Impl( ::ucb::Content* pContent,
+    void CopyContentToStorage_Impl( ::ucbhelper::Content* pContent,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xDest );
 
     static sal_Bool MakeFolderNoUI( const String& rFolder, sal_Bool bNewOnly );
