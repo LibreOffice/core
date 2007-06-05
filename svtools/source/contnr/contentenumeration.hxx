@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contentenumeration.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:09:15 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:24:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,14 +176,14 @@ namespace svt
         /** a content object describing the folder. Can be <NULL/>, in this case <member>sURL</member>
             is relevant.
         */
-        ::ucb::Content  aContent;
+        ::ucbhelper::Content  aContent;
         /** the URL of a folder. Will be ignored if <member>aContent</member> is not <NULL/>.
         */
         String          sURL;
 
         FolderDescriptor() { }
 
-        FolderDescriptor( const ::ucb::Content& _rContent )
+        FolderDescriptor( const ::ucbhelper::Content& _rContent )
             :aContent( _rContent )
         {
         }
