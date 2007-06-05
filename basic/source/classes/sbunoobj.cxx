@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 15:05:07 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:10:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,7 @@
 #include <com/sun/star/bridge/oleautomation/Currency.hpp>
 
 
+using com::sun::star::uno::Reference;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::reflection;
