@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultsetmetadata.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:31:10 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:51:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,11 @@ namespace com { namespace sun { namespace star {
     namespace beans { struct Property; }
 } } }
 
-namespace ucb
+namespace ucbhelper_impl {
+    struct ResultSetMetaData_Impl;
+}
+
+namespace ucbhelper
 {
 
 //=========================================================================
@@ -161,8 +165,6 @@ ResultSetColumnData::ResultSetColumnData()
 
 //=========================================================================
 
-struct ResultSetMetaData_Impl;
-
 /**
  * This is an implementation of the interface XResultSetMetaData. It can be
  * used to implement the interface
@@ -175,7 +177,7 @@ class UCBHELPER_DLLPUBLIC ResultSetMetaData :
                 public ::com::sun::star::sdbc::XResultSetMetaData
 {
 private:
-    ResultSetMetaData_Impl* m_pImpl;
+    ucbhelper_impl::ResultSetMetaData_Impl* m_pImpl;
 
 protected:
     ::com::sun::star::uno::Reference<
@@ -497,6 +499,6 @@ public:
                ::com::sun::star::uno::RuntimeException );
 };
 
-} // namespace ucb
+} // namespace ucbhelper
 
 #endif /* !_UCBHELPER_RESULTSETMETADATA_HXX */
