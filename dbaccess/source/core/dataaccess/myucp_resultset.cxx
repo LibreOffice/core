@@ -4,9 +4,9 @@
  *
  *  $RCSfile: myucp_resultset.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:41:05 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:39:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,24 +91,24 @@ DynamicResultSet::DynamicResultSet(
 void DynamicResultSet::initStatic()
 {
     m_xResultSet1
-        = new ::ucb::ResultSet( m_xSMgr,
-                                m_aCommand.Properties,
-                                new DataSupplier(   m_xSMgr,
-                                                    m_xContent,
-                                                    m_aCommand.Mode ),
-                                m_xEnv );
+        = new ::ucbhelper::ResultSet( m_xSMgr,
+                                      m_aCommand.Properties,
+                                      new DataSupplier( m_xSMgr,
+                                                        m_xContent,
+                                                        m_aCommand.Mode ),
+                                      m_xEnv );
 }
 
 //=========================================================================
 void DynamicResultSet::initDynamic()
 {
     m_xResultSet1
-        = new ::ucb::ResultSet( m_xSMgr,
-                                m_aCommand.Properties,
-                                new DataSupplier(   m_xSMgr,
-                                                    m_xContent,
-                                                    m_aCommand.Mode ),
-                                m_xEnv );
+        = new ::ucbhelper::ResultSet( m_xSMgr,
+                                      m_aCommand.Properties,
+                                      new DataSupplier( m_xSMgr,
+                                                        m_xContent,
+                                                        m_aCommand.Mode ),
+                                      m_xEnv );
     m_xResultSet2 = m_xResultSet1;
 }
 
