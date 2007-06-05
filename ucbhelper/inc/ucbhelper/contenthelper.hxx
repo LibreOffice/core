@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contenthelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:27:14 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:48:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,12 +76,9 @@
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
-#ifndef _OSL_MUTEX_HXX_
-#include <osl/mutex.hxx>
-#endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
-#endif
+
+#include "osl/mutex.hxx"
+#include "rtl/ref.hxx"
 
 #ifndef _UCBHELPER_MACROS_HXX
 #include <ucbhelper/macros.hxx>
@@ -102,9 +99,9 @@ namespace com { namespace sun { namespace star { namespace beans {
     class XPropertySetInfo;
 } } } }
 
-namespace ucb_impl { struct ContentImplHelper_Impl; }
+namespace ucbhelper_impl { struct ContentImplHelper_Impl; }
 
-namespace ucb
+namespace ucbhelper
 {
 
 //=========================================================================
@@ -147,7 +144,7 @@ class UCBHELPER_DLLPUBLIC ContentImplHelper :
     friend class PropertySetInfo;
     friend class CommandProcessorInfo;
 
-    ucb_impl::ContentImplHelper_Impl* m_pImpl;
+    ucbhelper_impl::ContentImplHelper_Impl* m_pImpl;
 
 protected:
     osl::Mutex                       m_aMutex;
@@ -155,7 +152,7 @@ protected:
                                      m_xSMgr;
     com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >
                                      m_xIdentifier;
-    vos::ORef< ContentProviderImplHelper >
+    rtl::Reference< ContentProviderImplHelper >
                                      m_xProvider;
     sal_uInt32                       m_nCommandId;
 
@@ -378,7 +375,7 @@ public:
     ContentImplHelper(
             const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-            const vos::ORef< ContentProviderImplHelper >& rxProvider,
+            const rtl::Reference< ContentProviderImplHelper >& rxProvider,
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier,
             sal_Bool bRegisterAtProvider = sal_True );
@@ -562,10 +559,10 @@ public:
       *
       * @return the provider of the content.
       */
-    const vos::ORef< ContentProviderImplHelper >& getProvider() const
+    const rtl::Reference< ContentProviderImplHelper >& getProvider() const
     { return m_xProvider; }
 };
 
-} // namespace ucb
+} // namespace ucbhelper
 
 #endif /* !_UCBHELPER_CONTENTHELPER_HXX */
