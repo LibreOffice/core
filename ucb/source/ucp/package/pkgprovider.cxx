@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pkgprovider.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:00:01 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:14:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,6 @@
 #include "pkguri.hxx"
 #endif
 
-using namespace com::sun;
 using namespace com::sun::star;
 
 namespace package_ucp
@@ -82,7 +81,7 @@ namespace package_ucp
 //=========================================================================
 
 class Package : public cppu::OWeakObject,
-                public com::sun::star::container::XHierarchicalNameAccess
+                public container::XHierarchicalNameAccess
 {
     friend class ContentProvider;
 
@@ -168,7 +167,7 @@ using namespace package_ucp;
 
 ContentProvider::ContentProvider(
             const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
-: ::ucb::ContentProviderImplHelper( rSMgr ),
+: ::ucbhelper::ContentProviderImplHelper( rSMgr ),
   m_pPackages( 0 )
 {
 }
@@ -189,7 +188,7 @@ ContentProvider::~ContentProvider()
 XINTERFACE_IMPL_3( ContentProvider,
                    lang::XTypeProvider,
                    lang::XServiceInfo,
-                   star::ucb::XContentProvider );
+                   ucb::XContentProvider );
 
 //=========================================================================
 //
@@ -200,7 +199,7 @@ XINTERFACE_IMPL_3( ContentProvider,
 XTYPEPROVIDER_IMPL_3( ContentProvider,
                       lang::XTypeProvider,
                       lang::XServiceInfo,
-                      star::ucb::XContentProvider );
+                      ucb::XContentProvider );
 
 //=========================================================================
 //
@@ -229,27 +228,27 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 //=========================================================================
 
 // virtual
-uno::Reference< star::ucb::XContent > SAL_CALL ContentProvider::queryContent(
-            const uno::Reference< star::ucb::XContentIdentifier >& Identifier )
-    throw( star::ucb::IllegalIdentifierException, uno::RuntimeException )
+uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
+            const uno::Reference< ucb::XContentIdentifier >& Identifier )
+    throw( ucb::IllegalIdentifierException, uno::RuntimeException )
 {
     if ( !Identifier.is() )
-        return uno::Reference< star::ucb::XContent >();
+        return uno::Reference< ucb::XContent >();
 
     PackageUri aUri( Identifier->getContentIdentifier() );
     if ( !aUri.isValid() )
-        throw star::ucb::IllegalIdentifierException();
+        throw ucb::IllegalIdentifierException();
 
     // Create a new identifier for the mormalized URL returned by
     // PackageUri::getUri().
-    uno::Reference< star::ucb::XContentIdentifier > xId
-                = new ::ucb::ContentIdentifier( m_xSMgr, aUri.getUri() );
+    uno::Reference< ucb::XContentIdentifier > xId
+                = new ::ucbhelper::ContentIdentifier( m_xSMgr, aUri.getUri() );
 
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     // Check, if a content with given id already exists...
-    uno::Reference< star::ucb::XContent > xContent
-        = queryExistingContent( xId ).getBodyPtr();
+    uno::Reference< ucb::XContent > xContent
+        = queryExistingContent( xId ).get();
     if ( xContent.is() )
         return xContent;
 
@@ -259,7 +258,7 @@ uno::Reference< star::ucb::XContent > SAL_CALL ContentProvider::queryContent(
     xContent = Content::create( m_xSMgr, this, Identifier ); // not xId!!!
 
     if ( xContent.is() && !xContent->getIdentifier().is() )
-        throw star::ucb::IllegalIdentifierException();
+        throw ucb::IllegalIdentifierException();
 
     return xContent;
 }
@@ -273,7 +272,7 @@ uno::Reference< star::ucb::XContent > SAL_CALL ContentProvider::queryContent(
 uno::Reference< container::XHierarchicalNameAccess >
 ContentProvider::createPackage( const rtl::OUString & rName, const rtl::OUString & rParam )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     if ( !rName.getLength() )
     {
@@ -341,7 +340,7 @@ ContentProvider::createPackage( const rtl::OUString & rName, const rtl::OUString
 //=========================================================================
 sal_Bool ContentProvider::removePackage( const rtl::OUString & rName )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     if ( m_pPackages )
     {
