@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:32:40 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:32:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -501,8 +501,8 @@ void SvxHyperlinkNewDocTp::DoApply ()
 IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
 {
     rtl::OUString                       aService( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );
-    Reference < XMultiServiceFactory >  xFactory( ::comphelper::getProcessServiceFactory() );
-    Reference < XFolderPicker >         xFolderPicker( xFactory->createInstance( aService ), UNO_QUERY );
+    uno::Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+    uno::Reference < XFolderPicker >            xFolderPicker( xFactory->createInstance( aService ), UNO_QUERY );
 
     String              aStrURL;
     String              aTempStrURL( maCbbPath.GetText() );
