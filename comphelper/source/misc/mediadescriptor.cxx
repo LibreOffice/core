@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediadescriptor.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:25:30 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:38:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -500,7 +500,7 @@ sal_Bool MediaDescriptor::isStreamReadOnly() const
                 bReadOnly = sal_True;
             else
             {
-                ::ucb::Content aContent(xContent, css::uno::Reference< css::ucb::XCommandEnvironment >());
+                ::ucbhelper::Content aContent(xContent, css::uno::Reference< css::ucb::XCommandEnvironment >());
                 aContent.getPropertyValue(CONTENTPROP_ISREADONLY) >>= bReadOnly;
             }
         }
@@ -583,7 +583,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference
         MediaDescriptor::PROP_INTERACTIONHANDLER(),
         css::uno::Reference< css::task::XInteractionHandler >());
     css::uno::Reference< css::ucb::XProgressHandler > xProgress;
-    ::ucb::CommandEnvironment* pCommandEnv = new ::ucb::CommandEnvironment(xInteraction, xProgress);
+    ::ucbhelper::CommandEnvironment* pCommandEnv = new ::ucbhelper::CommandEnvironment(xInteraction, xProgress);
     css::uno::Reference< css::ucb::XCommandEnvironment > xCommandEnv(static_cast< css::ucb::XCommandEnvironment* >(pCommandEnv), css::uno::UNO_QUERY);
 
     // media type
@@ -606,12 +606,12 @@ sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference
             xSeek->seek( 0 );
 
         // a content for the URL
-        ::ucb::Content aContent( sURL, xCommandEnv );
+        ::ucbhelper::Content aContent( sURL, xCommandEnv );
 
         // use post command
         css::ucb::PostCommandArgument2 aPostArgument;
         aPostArgument.Source = _rxPostData;
-        css::uno::Reference< css::io::XActiveDataSink > xSink( new ucb::ActiveDataSink );
+        css::uno::Reference< css::io::XActiveDataSink > xSink( new ucbhelper::ActiveDataSink );
         aPostArgument.Sink = xSink;
         aPostArgument.MediaType = sMediaType;
         aPostArgument.Referer = getUnpackedValueOrDefault( PROP_REFERRER(), ::rtl::OUString() );
@@ -757,16 +757,16 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL(const ::rtl::OUString& sURL)
     css::uno::Reference< css::task::XInteractionHandler > xInteraction(static_cast< css::task::XInteractionHandler* >(pInteraction), css::uno::UNO_QUERY);
 
     css::uno::Reference< css::ucb::XProgressHandler > xProgress;
-    ::ucb::CommandEnvironment* pCommandEnv = new ::ucb::CommandEnvironment(xInteraction, xProgress);
+    ::ucbhelper::CommandEnvironment* pCommandEnv = new ::ucbhelper::CommandEnvironment(xInteraction, xProgress);
     css::uno::Reference< css::ucb::XCommandEnvironment > xCommandEnv(static_cast< css::ucb::XCommandEnvironment* >(pCommandEnv), css::uno::UNO_QUERY);
 
     // try to create the content
     // no content -> no stream => return immediatly with FALSE
-    ::ucb::Content                            aContent;
+    ::ucbhelper::Content                      aContent;
     css::uno::Reference< css::ucb::XContent > xContent;
     try
     {
-        aContent = ::ucb::Content(sURL, xCommandEnv);
+        aContent = ::ucbhelper::Content(sURL, xCommandEnv);
         xContent = aContent.get();
     }
     catch(const css::uno::RuntimeException&)
