@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-17 10:31:45 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:05:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ void PackageManagerImpl::initActivationLayer(
         OSL_ASSERT( m_registryCache.getLength() == 0 );
         // documents temp activation:
         m_activePackagesDB.reset( new ActivePackages );
-        ::ucb::Content ucbContent;
+        ::ucbhelper::Content ucbContent;
         if (create_ucb_content( &ucbContent, m_context, xCmdEnv,
                                 false /* no throw */ ))
         {
@@ -115,7 +115,7 @@ void PackageManagerImpl::initActivationLayer(
             Reference<sdbc::XResultSet> xResultSet(
                 ucbContent.createCursor(
                     Sequence<OUString>( &StrTitle::get(), 1 ),
-                    ::ucb::INCLUDE_FOLDERS_AND_DOCUMENTS ) );
+                    ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS ) );
             while (xResultSet->next())
             {
                 Reference<sdbc::XRow> xRow( xResultSet, UNO_QUERY_THROW );
@@ -131,7 +131,7 @@ void PackageManagerImpl::initActivationLayer(
                                              "META-INF") ) )
                     continue;
 
-                ::ucb::Content sourceContent(
+                ::ucbhelper::Content sourceContent(
                     Reference<XContentAccess>(
                         xResultSet, UNO_QUERY_THROW )->queryContent(),
                     xCmdEnv );
@@ -168,11 +168,12 @@ void PackageManagerImpl::initActivationLayer(
             // clean up activation layer, scan for zombie temp dirs:
             ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
 
-            ::ucb::Content tempFolder( m_activePackages_expanded, xCmdEnv );
+            ::ucbhelper::Content tempFolder(
+                m_activePackages_expanded, xCmdEnv );
             Reference<sdbc::XResultSet> xResultSet(
                 tempFolder.createCursor(
                     Sequence<OUString>( &StrTitle::get(), 1 ),
-                    ::ucb::INCLUDE_DOCUMENTS_ONLY ) );
+                    ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
             // get all temp directories:
             ::std::vector<OUString> tempEntries;
             while (xResultSet->next()) {
@@ -268,7 +269,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
 #define CURRENT_STAMP "1"
 //             renewal = true;
 //             {
-//             ::ucb::Content ucbStamp;
+//             ::ucbhelper::Content ucbStamp;
 //             if (create_ucb_content(
 //                     &ucbStamp, stampURL, xCmdEnv, false /* no throw */ ))
 //             {
@@ -281,7 +282,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
             try {
                 // probe writing:
                 erase_path( stampURL, xCmdEnv );
-                ::ucb::Content ucbStamp( stampURL, xCmdEnv );
+                ::ucbhelper::Content ucbStamp( stampURL, xCmdEnv );
                 ::rtl::OString stamp(
                     RTL_CONSTASCII_STRINGPARAM(CURRENT_STAMP) );
                 Reference<io::XInputStream> xData(
@@ -461,9 +462,9 @@ void PackageManagerImpl::removeModifyListener(
 
 //______________________________________________________________________________
 OUString PackageManagerImpl::detectMediaType(
-    ::ucb::Content const & ucbContent_, bool throw_exc )
+    ::ucbhelper::Content const & ucbContent_, bool throw_exc )
 {
-    ::ucb::Content ucbContent(ucbContent_);
+    ::ucbhelper::Content ucbContent(ucbContent_);
     OUString url( ucbContent.getURL() );
     OUString mediaType;
     if (url.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.tdoc:") ) ||
@@ -501,10 +502,10 @@ OUString PackageManagerImpl::detectMediaType(
 
 //______________________________________________________________________________
 OUString PackageManagerImpl::insertToActivationLayer(
-    OUString const & mediaType, ::ucb::Content const & sourceContent_,
+    OUString const & mediaType, ::ucbhelper::Content const & sourceContent_,
     OUString const & title, ActivePackages::Data * dbData )
 {
-    ::ucb::Content sourceContent(sourceContent_);
+    ::ucbhelper::Content sourceContent(sourceContent_);
     Reference<XCommandEnvironment> xCmdEnv(
         sourceContent.getCommandEnvironment() );
     OUString destFolder, tempEntry;
@@ -525,7 +526,7 @@ OUString PackageManagerImpl::insertToActivationLayer(
     destFolder += OUSTR("_");
 
     // prepare activation folder:
-    ::ucb::Content destFolderContent;
+    ::ucbhelper::Content destFolderContent;
     create_folder( &destFolderContent, destFolder, xCmdEnv );
 
     // copy content into activation temp dir:
@@ -545,10 +546,11 @@ OUString PackageManagerImpl::insertToActivationLayer(
                                         rtl_UriEncodeIgnoreEscapes,
                                         RTL_TEXTENCODING_UTF8 ) );
         buf.append( static_cast<sal_Unicode>('/') );
-        sourceContent = ::ucb::Content( buf.makeStringAndClear(), xCmdEnv );
+        sourceContent = ::ucbhelper::Content(
+            buf.makeStringAndClear(), xCmdEnv );
     }
     if (! destFolderContent.transferContent(
-            sourceContent, ::ucb::InsertOperation_COPY,
+            sourceContent, ::ucbhelper::InsertOperation_COPY,
             OUString(), NameClash::OVERWRITE ))
         throw RuntimeException( OUSTR("UCB transferContent() failed!"), 0 );
 
@@ -664,7 +666,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
         xCmdEnv.set( xCmdEnv_ );
 
     try {
-        ::ucb::Content sourceContent;
+        ::ucbhelper::Content sourceContent;
         create_ucb_content( &sourceContent, url, xCmdEnv ); // throws exc
         const OUString title(sourceContent.getPropertyValue(
                              StrTitle::get() ).get<OUString>() );
@@ -687,17 +689,17 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
                 getResourceString(RID_STR_COPYING_PACKAGE) + title, xCmdEnv );
             if (m_activePackages.getLength() == 0)
             {
-                ::ucb::Content docFolderContent;
+                ::ucbhelper::Content docFolderContent;
                 create_folder( &docFolderContent, m_context, xCmdEnv );
                 // copy into document, first:
                 if (! docFolderContent.transferContent(
-                        sourceContent, ::ucb::InsertOperation_COPY,
+                        sourceContent, ::ucbhelper::InsertOperation_COPY,
                         OUString(),
                         NameClash::ASK /* xxx todo: ASK not needed? */))
                     throw RuntimeException(
                         OUSTR("UCB transferContent() failed!"), 0 );
                 // set media-type:
-                ::ucb::Content docContent(
+                ::ucbhelper::Content docContent(
                     makeURL( m_context, title_enc ), xCmdEnv );
                     //TODO #i73136#: using title instead of id can lead to
                     // clashes, but the whole m_activePackages.getLength()==0
