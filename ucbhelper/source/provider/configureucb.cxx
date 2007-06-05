@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configureucb.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:21:20 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:53:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,9 +58,8 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
-#ifndef _VOS_DIAGNOSE_H_
-#include <vos/diagnose.hxx>
-#endif
+
+#include "osl/diagnose.h"
 
 #ifndef _UCBHELPER_PROVCONF_HXX_
 #include <provconf.hxx>
@@ -69,14 +68,9 @@
 #include <registerucb.hxx>
 #endif
 
-namespace unnamed_ucbhelper_configureucb {}
-using namespace unnamed_ucbhelper_configureucb;
-    // unnamed namespaces don't work well yet...
-
-using namespace com::sun;
 using namespace com::sun::star;
 
-namespace unnamed_ucbhelper_configureucb {
+namespace {
 
 bool fillPlaceholders(rtl::OUString const & rInput,
                       uno::Sequence< uno::Any > const & rReplacements,
@@ -153,7 +147,7 @@ bool fillPlaceholders(rtl::OUString const & rInput,
 
 }
 
-namespace ucb {
+namespace ucbhelper {
 
 //============================================================================
 //
@@ -163,7 +157,7 @@ namespace ucb {
 
 bool
 configureUcb(
-    uno::Reference< star::ucb::XContentProviderManager > const & rManager,
+    uno::Reference< ucb::XContentProviderManager > const & rManager,
     uno::Reference< lang::XMultiServiceFactory > const & rServiceFactory,
     ContentProviderDataList const & rData,
     ContentProviderRegistrationInfoList * pInfos)
@@ -196,7 +190,7 @@ configureUcb(
 
 bool
 configureUcb(
-    uno::Reference< star::ucb::XContentProviderManager > const & rManager,
+    uno::Reference< ucb::XContentProviderManager > const & rManager,
     uno::Reference< lang::XMultiServiceFactory > const & rServiceFactory,
     uno::Sequence< uno::Any > const & rArguments,
     std::vector< ContentProviderRegistrationInfo > * pInfos)
@@ -207,14 +201,14 @@ configureUcb(
     if (rArguments.getLength() < 2
         || !(rArguments[0] >>= aKey1) || !(rArguments[1] >>= aKey2))
     {
-        VOS_ENSURE(false, "ucb::configureUcb(): Bad arguments");
+        OSL_ENSURE(false, "ucb::configureUcb(): Bad arguments");
         return false;
     }
 
     ContentProviderDataList aData;
     if (!getContentProviderData(rServiceFactory, aKey1, aKey2, aData))
     {
-        VOS_ENSURE(false, "ucb::configureUcb(): No configuration");
+        OSL_ENSURE(false, "ucb::configureUcb(): No configuration");
         return false;
     }
 
@@ -234,13 +228,13 @@ configureUcb(
                                           aProviderArguments,
                                           aIt->URLTemplate,
                                           &aInfo);
-            VOS_ENSURE(bSuccess, "ucb::configureUcb(): Bad content provider");
+            OSL_ENSURE(bSuccess, "ucb::configureUcb(): Bad content provider");
 
             if (bSuccess && pInfos)
                 pInfos->push_back(aInfo);
         }
         else
-            VOS_ENSURE(false,
+            OSL_ENSURE(false,
                        "ucb::configureUcb(): Bad argument placeholders");
     }
 
@@ -255,11 +249,11 @@ configureUcb(
 //
 //============================================================================
 
-namespace ucb {
+namespace ucbhelper {
 
 void
 unconfigureUcb(
-    uno::Reference< star::ucb::XContentProviderManager > const & rManager,
+    uno::Reference< ucb::XContentProviderManager > const & rManager,
     std::vector< ContentProviderRegistrationInfo > const & rInfos)
     throw (uno::RuntimeException)
 {

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registerucb.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:23:22 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:55:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,18 +55,16 @@
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
 #endif
-#ifndef _VOS_DIAGNOSE_H_
-#include <vos/diagnose.hxx>
-#endif
+
+#include "osl/diagnose.h"
 
 #ifndef _UCBHELPER_CONFIGUREUCB_HXX_
 #include <ucbhelper/configureucb.hxx>
 #endif
 
-using namespace com::sun;
 using namespace com::sun::star;
 
-namespace ucb {
+namespace ucbhelper {
 
 //============================================================================
 //
@@ -76,7 +74,7 @@ namespace ucb {
 
 bool
 registerAtUcb(
-    uno::Reference< star::ucb::XContentProviderManager > const & rManager,
+    uno::Reference< ucb::XContentProviderManager > const & rManager,
     uno::Reference< lang::XMultiServiceFactory > const & rServiceFactory,
     rtl::OUString const & rName,
     rtl::OUString const & rArguments,
@@ -84,7 +82,7 @@ registerAtUcb(
     ContentProviderRegistrationInfo * pInfo)
     throw (uno::RuntimeException)
 {
-    VOS_ENSURE(rServiceFactory.is(),
+    OSL_ENSURE(rServiceFactory.is(),
                "ucb::registerAtUcb(): No service factory");
 
     bool bNoProxy
@@ -97,14 +95,14 @@ registerAtUcb(
                                rArguments);
 
     // First, try to instantiate proxy for provider:
-    uno::Reference< star::ucb::XContentProvider > xProvider;
+    uno::Reference< ucb::XContentProvider > xProvider;
     if (!bNoProxy)
     {
-        uno::Reference< star::ucb::XContentProviderFactory > xProxyFactory;
+        uno::Reference< ucb::XContentProviderFactory > xProxyFactory;
         try
         {
             xProxyFactory
-                = uno::Reference< star::ucb::XContentProviderFactory >(
+                = uno::Reference< ucb::XContentProviderFactory >(
                       rServiceFactory->
                           createInstance(
                               rtl::OUString(
@@ -113,7 +111,7 @@ registerAtUcb(
                       uno::UNO_QUERY);
         }
         catch (uno::Exception const &) {}
-        VOS_ENSURE(xProxyFactory.is(), "No ContentProviderProxyFactory");
+        OSL_ENSURE(xProxyFactory.is(), "No ContentProviderProxyFactory");
         if (xProxyFactory.is())
             xProvider = xProxyFactory->createContentProvider(rName);
     }
@@ -122,20 +120,20 @@ registerAtUcb(
     if (!xProvider.is())
         try
         {
-            xProvider = uno::Reference< star::ucb::XContentProvider >(
+            xProvider = uno::Reference< ucb::XContentProvider >(
                             rServiceFactory->createInstance(rName),
                             uno::UNO_QUERY);
         }
         catch (uno::RuntimeException const &) { throw; }
         catch (uno::Exception const &) {}
 
-    uno::Reference< star::ucb::XContentProvider >
+    uno::Reference< ucb::XContentProvider >
         xOriginalProvider(xProvider);
-    uno::Reference< star::ucb::XParameterizedContentProvider >
+    uno::Reference< ucb::XParameterizedContentProvider >
         xParameterized(xProvider, uno::UNO_QUERY);
     if (xParameterized.is())
     {
-        uno::Reference< star::ucb::XContentProvider > xInstance;
+        uno::Reference< ucb::XContentProvider > xInstance;
         try
         {
             xInstance = xParameterized->registerInstance(rTemplate,
@@ -157,7 +155,7 @@ registerAtUcb(
             rManager->registerContentProvider(xProvider, rTemplate, true);
             bSuccess = true;
         }
-        catch (star::ucb::DuplicateProviderException const &)
+        catch (ucb::DuplicateProviderException const &)
         {
             if (xParameterized.is())
                 try
@@ -197,17 +195,17 @@ registerAtUcb(
 
 void
 deregisterFromUcb(
-    uno::Reference< star::ucb::XContentProviderManager > const & rManager,
+    uno::Reference< ucb::XContentProviderManager > const & rManager,
     ContentProviderRegistrationInfo const & rInfo)
     throw (uno::RuntimeException)
 {
-    uno::Reference< star::ucb::XContentProvider >
+    uno::Reference< ucb::XContentProvider >
         xProvider(rInfo.m_xProvider);
-    uno::Reference< star::ucb::XParameterizedContentProvider >
+    uno::Reference< ucb::XParameterizedContentProvider >
         xParameterized(xProvider, uno::UNO_QUERY);
     if (xParameterized.is())
     {
-        uno::Reference< star::ucb::XContentProvider > xInstance;
+        uno::Reference< ucb::XContentProvider > xInstance;
         try
         {
             xInstance
