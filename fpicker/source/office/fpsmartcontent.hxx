@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fpsmartcontent.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:39:47 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:08:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ namespace svt
 
     private:
         ::rtl::OUString                                                                  m_sURL;
-        ::ucb::Content*                                                                  m_pContent;
+        ::ucbhelper::Content*                                                                  m_pContent;
         State                                                                            m_eState;
         ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XCommandEnvironment >  m_xCmdEnv;
         ::com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionHandler > m_xOwnInteraction;
