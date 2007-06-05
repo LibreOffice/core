@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_configuration.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:55:37 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:06:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,7 +195,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     if (mediaType.getLength() == 0)
     {
         // detect media-type:
-        ::ucb::Content ucbContent;
+        ::ucbhelper::Content ucbContent;
         if (create_ucb_content( &ucbContent, url, xCmdEnv ))
         {
             const OUString title( ucbContent.getPropertyValue(
@@ -223,7 +223,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     {
         if (type.EqualsIgnoreCaseAscii("application"))
         {
-            ::ucb::Content ucbContent( url, xCmdEnv );
+            ::ucbhelper::Content ucbContent( url, xCmdEnv );
             if (subType.EqualsIgnoreCaseAscii(
                     "vnd.sun.star.configuration-data")) {
                 return new PackageImpl(
@@ -317,7 +317,7 @@ void BackendImpl::xcs_merge_in(
     // parse out schema package:
     SchemaFileRoot * root = new SchemaFileRoot;
     Reference<xml::input::XRoot> xRoot( root );
-    ::ucb::Content ucb_content( url, xCmdEnv );
+    ::ucbhelper::Content ucb_content( url, xCmdEnv );
     xml_parse( xRoot, ucb_content, getComponentContext() );
 
     OUString dest_folder(
@@ -331,11 +331,11 @@ void BackendImpl::xcs_merge_in(
                                     rtl_UriEncodeIgnoreEscapes,
                                     RTL_TEXTENCODING_UTF8 ) ) );
     // assure dest folder is existing:
-    ::ucb::Content ucb_dest_folder;
+    ::ucbhelper::Content ucb_dest_folder;
     create_folder( &ucb_dest_folder, dest_folder, xCmdEnv );
     if (! ucb_dest_folder.transferContent(
-            ::ucb::Content( url, xCmdEnv ),
-            ::ucb::InsertOperation_COPY,
+            ::ucbhelper::Content( url, xCmdEnv ),
+            ::ucbhelper::InsertOperation_COPY,
             title, NameClash::OVERWRITE ))
         throw RuntimeException(
             OUSTR("::ucb::Content::transferContent() failed!"), 0 );
@@ -381,7 +381,7 @@ void BackendImpl::xcu_merge_in(
     OUString const & url, Reference< XCommandEnvironment > const & xCmdEnv )
 {
     // looking for %origin%:
-    ::ucb::Content ucb_content( url, xCmdEnv );
+    ::ucbhelper::Content ucb_content( url, xCmdEnv );
     ::rtl::ByteSequence bytes( readFile( ucb_content ) );
     ::rtl::ByteSequence filtered( bytes.getLength() * 2,
                                   ::rtl::BYTESEQ_NODEFAULT );
@@ -538,7 +538,7 @@ void BackendImpl::PackageImpl::processPackage_(
         {
             if (! that->transientMode())
             {
-                ::ucb::Content ucbSaveLayer(
+                ::ucbhelper::Content ucbSaveLayer(
                     makeURL( that->getConfigLayer(), OUSTR("schema") ),
                     xCmdEnv );
                 ucbSaveLayer.setPropertyValue(
@@ -576,7 +576,7 @@ void BackendImpl::PackageImpl::processPackage_(
         {
             if (! that->transientMode())
             {
-                ::ucb::Content ucbSaveLayer(
+                ::ucbhelper::Content ucbSaveLayer(
                     makeURL( that->getConfigLayer(), OUSTR("data") ),
                     xCmdEnv );
                 ucbSaveLayer.setPropertyValue(
