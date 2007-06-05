@@ -4,9 +4,9 @@
  *
  *  $RCSfile: submission_get.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:15:32 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:45:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ using namespace CSS::task;
 using namespace CSS::io;
 using namespace rtl;
 using namespace osl;
-using namespace ucb;
+using namespace ucbhelper;
 using namespace std;
 
 
@@ -71,21 +71,21 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const CSS::uno::Reference< 
     apSerialization->setSource(m_aFragment);
     apSerialization->serialize();
 
-    Reference< XInputStream > aInStream = apSerialization->getInputStream();
+    CSS::uno::Reference< XInputStream > aInStream = apSerialization->getInputStream();
 
     // create a commandEnvironment and use the default interaction handler
     CCommandEnvironmentHelper *pHelper = new CCommandEnvironmentHelper;
     if( aInteractionHandler.is() )
         pHelper->m_aInteractionHandler = aInteractionHandler;
     else
-        pHelper->m_aInteractionHandler = Reference< XInteractionHandler >(m_aFactory->createInstance(
+        pHelper->m_aInteractionHandler = CSS::uno::Reference< XInteractionHandler >(m_aFactory->createInstance(
             OUString::createFromAscii("com.sun.star.task.InteractionHandler")), UNO_QUERY);
     OSL_ENSURE(pHelper->m_aInteractionHandler.is(), "failed to create IntreractionHandler");
     CProgressHandlerHelper *pProgressHelper = new CProgressHandlerHelper;
-    pHelper->m_aProgressHandler = Reference< XProgressHandler >(pProgressHelper);
+    pHelper->m_aProgressHandler = CSS::uno::Reference< XProgressHandler >(pProgressHelper);
 
     // UCB has ownership of environment...
-    Reference< XCommandEnvironment > aEnvironment(pHelper);
+    CSS::uno::Reference< XCommandEnvironment > aEnvironment(pHelper);
 
     // append query string to the URL
     try {
@@ -104,8 +104,8 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const CSS::uno::Reference< 
             aUTF8QueryURL.append(aQueryString.makeStringAndClear());
         }
         OUString aQueryURL = OStringToOUString(aUTF8QueryURL.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
-        ucb::Content aContent(aQueryURL, aEnvironment);
-        Reference< XOutputStream > aPipe(m_aFactory->createInstance(
+        ucbhelper::Content aContent(aQueryURL, aEnvironment);
+        CSS::uno::Reference< XOutputStream > aPipe(m_aFactory->createInstance(
             OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY_THROW);
         aContent.openStream(aPipe);
         // get reply
