@@ -66,7 +66,6 @@ __CT
 ?insert_unique@?$_Rb_tree@
 ?reserve@?$vector@
 ??1?$Guard@VMutex@osl@@@osl@@
-??1OGuard@vos@@
 ??1?$ClearableGuard@VMutex@osl@@@osl@@
 ??1Mutex@osl@@
 ??1OUString@rtl@@
