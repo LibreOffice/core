@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:07:07 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 14:58:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,9 @@ UCP_NAME=myucp
 PRJ=..$/..
 
 # @@@ Name of the project your UCP code recides it.
-PRJNAME=UCBHELPER
+PRJNAME=ucbhelper
 
-TARGET=ucp$(UCP_NAME)
+TARGET=ucp$(UCP_NAME)$(UCP_VERSION).uno
 
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
@@ -57,24 +57,24 @@ NO_BSYMBOLIC=TRUE
 
 # --- General -----------------------------------------------------
 
+# no "lib" prefix
+DLLPRE =
+
 # @@@ Adjust template file names. Add own files here.
 SLOFILES=\
     $(SLO)$/myucp_services.obj    	\
     $(SLO)$/myucp_provider.obj    	\
     $(SLO)$/myucp_content.obj     	\
-    $(SLO)$/myucp_contentcaps.obj
-
-# You need these only if you implement a folder content,
-# which supports the command "open" returning a result set.
-#	$(SLO)$/myucp_resultset.obj
-#	$(SLO)$/myucp_datasupplier.obj
+    $(SLO)$/myucp_contentcaps.obj   \
+    $(SLO)$/myucp_resultset.obj    	\
+    $(SLO)$/myucp_datasupplier.obj
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES)
 
 # --- Shared-Library ---------------------------------------------------
 
-SHL1TARGET=$(TARGET)$(UCP_VERSION)
+SHL1TARGET=$(TARGET)
 SHL1IMPLIB=i$(TARGET)
 SHL1VERSIONMAP=exports.map
 
@@ -83,19 +83,13 @@ SHL1STDLIBS=\
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALLIB)  \
-    $(VOSLIB)  \
+    $(SALHELPERLIB) \
     $(UCBHELPERLIB)
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=$(LIB1TARGET)
 
-# --- Def-File ---------------------------------------------------------
-
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=exports.dxp
-
-# @@@ A description string for you UCP.
-DEF1DES=UCB Content Provider
 
 # --- Targets ----------------------------------------------------------
 
