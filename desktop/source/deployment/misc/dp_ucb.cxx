@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_ucb.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:42:29 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:05:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ const OUString StrTitle::operator () ()
 
 //==============================================================================
 bool create_ucb_content(
-    ::ucb::Content * ret_ucbContent, OUString const & url,
+    ::ucbhelper::Content * ret_ucbContent, OUString const & url,
     Reference<XCommandEnvironment> const & xCmdEnv,
     bool throw_exc )
 {
@@ -73,11 +73,12 @@ bool create_ucb_content(
         // dilemma: no chance to use the given iahandler here, because it would
         //          raise no such file dialogs, else no interaction for
         //          passwords, ...? xxx todo
-        ::ucb::Content ucbContent( url, Reference<XCommandEnvironment>() );
+        ::ucbhelper::Content ucbContent(
+            url, Reference<XCommandEnvironment>() );
         if (! ucbContent.isFolder())
             ucbContent.openStream()->closeInput();
         if (ret_ucbContent != 0)
-            *ret_ucbContent = ::ucb::Content( url, xCmdEnv );
+            *ret_ucbContent = ::ucbhelper::Content( url, xCmdEnv );
         return true;
     }
     catch (RuntimeException &) {
@@ -92,10 +93,10 @@ bool create_ucb_content(
 
 //==============================================================================
 bool create_folder(
-    ::ucb::Content * ret_ucb_content, OUString const & url_,
+    ::ucbhelper::Content * ret_ucb_content, OUString const & url_,
     Reference<XCommandEnvironment> const & xCmdEnv, bool throw_exc )
 {
-    ::ucb::Content ucb_content;
+    ::ucbhelper::Content ucb_content;
     if (create_ucb_content(
             &ucb_content, url_, xCmdEnv, false /* no throw */ ))
     {
@@ -122,7 +123,7 @@ bool create_folder(
                 Reference<XInterface>(), ContentCreationError_UNKNOWN );
         return false;
     }
-    ::ucb::Content parentContent;
+    ::ucbhelper::Content parentContent;
     if (! create_folder(
             &parentContent, url.copy( 0, slash ), xCmdEnv, throw_exc ))
         return false;
@@ -185,7 +186,7 @@ bool erase_path( OUString const & url,
                  Reference<XCommandEnvironment> const & xCmdEnv,
                  bool throw_exc )
 {
-    ::ucb::Content ucb_content;
+    ::ucbhelper::Content ucb_content;
     if (create_ucb_content( &ucb_content, url, xCmdEnv, false /* no throw */ ))
     {
         try {
@@ -205,20 +206,22 @@ bool erase_path( OUString const & url,
 }
 
 //==============================================================================
-::rtl::ByteSequence readFile( ::ucb::Content & ucb_content )
+::rtl::ByteSequence readFile( ::ucbhelper::Content & ucb_content )
 {
     ::rtl::ByteSequence bytes;
     Reference<io::XOutputStream> xStream(
         ::xmlscript::createOutputStream( &bytes ) );
     if (! ucb_content.openStream( xStream ))
         throw RuntimeException(
-            OUSTR("::ucb::Content::openStream( XOutputStream ) failed!"), 0 );
+            OUSTR(
+                "::ucbhelper::Content::openStream( XOutputStream ) failed!"),
+            0 );
     return bytes;
 }
 
 //==============================================================================
 bool readLine( OUString * res, OUString const & startingWith,
-               ::ucb::Content & ucb_content, rtl_TextEncoding textenc )
+               ::ucbhelper::Content & ucb_content, rtl_TextEncoding textenc )
 {
     // read whole file:
     ::rtl::ByteSequence bytes( readFile( ucb_content ) );
