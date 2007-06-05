@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 15:23:24 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:34:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,11 +98,6 @@
 //#endif
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::beans;
 using namespace ::rtl;
 
 
@@ -133,13 +128,13 @@ SwFmtFld*   SwXTextPortion::GetFldFmt(sal_Bool bInit)
 
   -----------------------------------------------------------------------*/
 SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
-        uno::Reference< XText > & rParent,
+        uno::Reference< text::XText > & rParent,
         SwTextPortionType eType) :
     aPropSet(aSwMapProvider.GetPropertyMap(
                 (PORTION_REDLINE_START == eType ||
                  PORTION_REDLINE_END   == eType) ?
                     PROPERTY_MAP_REDLINE_PORTION : PROPERTY_MAP_TEXTPORTION_EXTENSIONS)),
-    aLstnrCntnr( (XTextRange*)this),
+    aLstnrCntnr( (text::XTextRange*)this),
     pFmtFld(0),
     xParentText(rParent),
     ePortionType(eType),
@@ -168,10 +163,10 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
 /* -----------------24.03.99 16:30-------------------
  *
  * --------------------------------------------------*/
-SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr, uno::Reference< XText > & rParent,
+SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr, uno::Reference< text::XText > & rParent,
                         SwFrmFmt& rFmt ) :
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXTPORTION_EXTENSIONS)),
-    aLstnrCntnr( (XTextRange*)this),
+    aLstnrCntnr( (text::XTextRange*)this),
     pFrameFmt(&rFmt),
     xParentText(rParent),
     ePortionType(PORTION_FRAME),
@@ -209,22 +204,22 @@ SwXTextPortion::~SwXTextPortion()
 /*-- 11.12.98 09:56:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< XText >  SwXTextPortion::getText(void) throw( uno::RuntimeException )
+uno::Reference< text::XText >  SwXTextPortion::getText(void) throw( uno::RuntimeException )
 {
     return xParentText;
 }
 /*-- 11.12.98 09:56:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< XTextRange >  SwXTextPortion::getStart(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextRange >  SwXTextPortion::getStart(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Reference< XTextRange >  xRet;
+    uno::Reference< text::XTextRange >  xRet;
     SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
     if(pUnoCrsr)
     {
         SwPaM aPam(*pUnoCrsr->Start());
-        uno::Reference< XText >  xParent = getText();
+        uno::Reference< text::XText >  xParent = getText();
         xRet = new SwXTextRange(aPam, xParent);
     }
     else
@@ -234,15 +229,15 @@ uno::Reference< XTextRange >  SwXTextPortion::getStart(void) throw( uno::Runtime
 /*-- 11.12.98 09:56:57---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< XTextRange >  SwXTextPortion::getEnd(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextRange >  SwXTextPortion::getEnd(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Reference< XTextRange >  xRet;
+    uno::Reference< text::XTextRange >  xRet;
     SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
     if(pUnoCrsr)
     {
         SwPaM aPam(*pUnoCrsr->End());
-        uno::Reference< XText >  xParent = getText();
+        uno::Reference< text::XText >  xParent = getText();
         xRet = new SwXTextRange(aPam, xParent);
     }
     else
@@ -322,7 +317,7 @@ void SwXTextPortion::setPropertyValue(const OUString& rPropertyName,
 
   -----------------------------------------------------------------------*/
 void SwXTextPortion::GetPropertyValue(
-        Any &rVal,
+        uno::Any &rVal,
         const SfxItemPropertyMap *pEntry,
         SwUnoCrsr *pUnoCrsr,
         SfxItemSet *&pSet )
@@ -432,7 +427,7 @@ void SwXTextPortion::GetPropertyValue(
             break;
             case RES_TXTATR_CJK_RUBY:
             {
-                Any* pToSet = 0;
+                uno::Any* pToSet = 0;
                 switch(pEntry->nMemberId)
                 {
                     case MID_RUBY_TEXT :    pToSet = pRubyText;     break;
@@ -445,7 +440,7 @@ void SwXTextPortion::GetPropertyValue(
             }
             break;
             default:
-                PropertyState eTemp;
+                beans::PropertyState eTemp;
                 BOOL bDone = SwUnoCursorHelper::getCrsrPropertyValue(
                                     pEntry, *pUnoCrsr, &(rVal), eTemp );
                 if(!bDone)
@@ -466,14 +461,14 @@ void SwXTextPortion::GetPropertyValue(
 }
 
 
-uno::Sequence< Any > SAL_CALL SwXTextPortion::GetPropertyValues_Impl(
+uno::Sequence< uno::Any > SAL_CALL SwXTextPortion::GetPropertyValues_Impl(
         const uno::Sequence< OUString >& rPropertyNames )
-    throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     sal_Int32 nLength = rPropertyNames.getLength();
     const OUString *pPropertyNames = rPropertyNames.getConstArray();
-    Sequence< Any > aValues(rPropertyNames.getLength());
-    Any *pValues = aValues.getArray();
+    uno::Sequence< uno::Any > aValues(rPropertyNames.getLength());
+    uno::Any *pValues = aValues.getArray();
     SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
     if(pUnoCrsr)
     {
@@ -490,7 +485,7 @@ uno::Sequence< Any > SAL_CALL SwXTextPortion::GetPropertyValues_Impl(
                 pMap++;
             }
             else
-                throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         }
         delete pSet;
     }
@@ -503,10 +498,10 @@ uno::Sequence< Any > SAL_CALL SwXTextPortion::GetPropertyValues_Impl(
   -----------------------------------------------------------------------*/
 uno::Any SwXTextPortion::getPropertyValue(
     const OUString& rPropertyName)
-        throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
+        throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    Sequence< ::rtl::OUString > aPropertyNames(1);
+    uno::Sequence< ::rtl::OUString > aPropertyNames(1);
     aPropertyNames.getArray()[0] = rPropertyName;
     return GetPropertyValues_Impl(aPropertyNames).getConstArray()[0];
 }
@@ -515,24 +510,24 @@ uno::Any SwXTextPortion::getPropertyValue(
  ---------------------------------------------------------------------------*/
 void SAL_CALL SwXTextPortion::SetPropertyValues_Impl(
     const uno::Sequence< OUString >& rPropertyNames,
-    const uno::Sequence< Any >& rValues )
-    throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException,
-            WrappedTargetException, RuntimeException)
+    const uno::Sequence< uno::Any >& rValues )
+    throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
+            lang::WrappedTargetException, uno::RuntimeException)
 {
     SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
     if(pUnoCrsr)
     {
         const OUString* pPropertyNames = rPropertyNames.getConstArray();
-        const Any* pValues = rValues.getConstArray();
+        const uno::Any* pValues = rValues.getConstArray();
         const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMap();
         OUString sTmp;
         for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
         {
             pMap = SfxItemPropertyMap::GetByName(pMap, pPropertyNames[nProp]);
             if (!pMap)
-                throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
-            if ( pMap->nFlags & PropertyAttribute::READONLY)
-                throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+            if ( pMap->nFlags & beans::PropertyAttribute::READONLY)
+                throw beans::PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
             SwXTextCursor::SetPropertyValue( *pUnoCrsr, aPropSet, sTmp, pValues[nProp], pMap);
         }
@@ -542,10 +537,10 @@ void SAL_CALL SwXTextPortion::SetPropertyValues_Impl(
 }
 
 void SwXTextPortion::setPropertyValues(
-    const Sequence< OUString >& rPropertyNames,
-    const Sequence< Any >& rValues )
-        throw(PropertyVetoException, IllegalArgumentException,
-            WrappedTargetException, RuntimeException)
+    const uno::Sequence< OUString >& rPropertyNames,
+    const uno::Sequence< uno::Any >& rValues )
+        throw(beans::PropertyVetoException, lang::IllegalArgumentException,
+            lang::WrappedTargetException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -554,11 +549,11 @@ void SwXTextPortion::setPropertyValues(
     {
         SetPropertyValues_Impl( rPropertyNames, rValues );
     }
-    catch (UnknownPropertyException &rException)
+    catch (beans::UnknownPropertyException &rException)
     {
         // wrap the original (here not allowed) exception in
-        // a WrappedTargetException that gets thrown instead.
-        WrappedTargetException aWExc;
+        // a lang::WrappedTargetException that gets thrown instead.
+        lang::WrappedTargetException aWExc;
         aWExc.TargetException <<= rException;
         throw aWExc;
     }
@@ -566,25 +561,25 @@ void SwXTextPortion::setPropertyValues(
 /* -----------------------------02.04.01 11:44--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence< Any > SwXTextPortion::getPropertyValues(
-    const Sequence< OUString >& rPropertyNames )
-        throw(RuntimeException)
+uno::Sequence< uno::Any > SwXTextPortion::getPropertyValues(
+    const uno::Sequence< OUString >& rPropertyNames )
+        throw(uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    Sequence< Any > aValues;
+    uno::Sequence< uno::Any > aValues;
 
     // workaround for bad designed API
     try
     {
         aValues = GetPropertyValues_Impl( rPropertyNames );
     }
-    catch (UnknownPropertyException &)
+    catch (beans::UnknownPropertyException &)
     {
-        throw RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property exception caught" ) ), static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property exception caught" ) ), static_cast < cppu::OWeakObject * > ( this ) );
     }
-    catch (WrappedTargetException &)
+    catch (lang::WrappedTargetException &)
     {
-        throw RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "WrappedTargetException caught" ) ), static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "WrappedTargetException caught" ) ), static_cast < cppu::OWeakObject * > ( this ) );
     }
 
     return aValues;
@@ -597,22 +592,22 @@ Sequence< Any > SwXTextPortion::getPropertyValues(
 
 uno::Sequence< SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPropertyValuesTolerant(
         const uno::Sequence< OUString >& rPropertyNames,
-        const uno::Sequence< Any >& rValues )
+        const uno::Sequence< uno::Any >& rValues )
     throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     if (rPropertyNames.getLength() != rValues.getLength())
-        throw IllegalArgumentException();
+        throw lang::IllegalArgumentException();
     SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
     if (!pUnoCrsr)
-        throw RuntimeException();
+        throw uno::RuntimeException();
 
     sal_Int32 nProps = rPropertyNames.getLength();
     const OUString *pProp = rPropertyNames.getConstArray();
 
     sal_Int32 nVals = rValues.getLength();
-    const Any *pValue = rValues.getConstArray();
+    const uno::Any *pValue = rValues.getConstArray();
 
     sal_Int32 nFailed = 0;
     uno::Sequence< SetPropertyTolerantFailed > aFailed( nProps );
@@ -636,7 +631,7 @@ uno::Sequence< SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPropertyV
             {
                 // set property value
                 // (compare to SwXTextPortion::setPropertyValues)
-                if (pEntry->nFlags & PropertyAttribute::READONLY)
+                if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
                     pFailed[ nFailed++ ].Result  = TolerantPropertySetResultType::PROPERTY_VETO;
                 else
                 {
@@ -649,21 +644,21 @@ uno::Sequence< SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPropertyV
                 pStartEntry = ++pEntry;
             }
         }
-        catch (UnknownPropertyException &)
+        catch (beans::UnknownPropertyException &)
         {
             // should not occur because property was searched for before
             DBG_ERROR( "unexpected exception catched" );
             pFailed[ nFailed++ ].Result = TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
-        catch (IllegalArgumentException &)
+        catch (lang::IllegalArgumentException &)
         {
             pFailed[ nFailed++ ].Result = TolerantPropertySetResultType::ILLEGAL_ARGUMENT;
         }
-        catch (PropertyVetoException &)
+        catch (beans::PropertyVetoException &)
         {
             pFailed[ nFailed++ ].Result = TolerantPropertySetResultType::PROPERTY_VETO;
         }
-        catch (WrappedTargetException &)
+        catch (lang::WrappedTargetException &)
         {
             pFailed[ nFailed++ ].Result = TolerantPropertySetResultType::WRAPPED_TARGET;
         }
@@ -712,7 +707,7 @@ uno::Sequence< GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion::GetPro
 
     SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
     if(!pUnoCrsr)
-        throw RuntimeException();
+        throw uno::RuntimeException();
 
     sal_Int32 nProps = rPropertyNames.getLength();
     const OUString *pProp = rPropertyNames.getConstArray();
@@ -743,7 +738,7 @@ uno::Sequence< GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion::GetPro
             {
                 // get property state
                 // (compare to SwXTextPortion::getPropertyState)
-                PropertyState eState;
+                beans::PropertyState eState;
                 if (GetTextPortionType() == PORTION_RUBY_START &&
                     !pProp[i].compareToAscii( RTL_CONSTASCII_STRINGPARAM( "Ruby" ) ))
                     eState = beans::PropertyState_DIRECT_VALUE;
@@ -751,11 +746,11 @@ uno::Sequence< GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion::GetPro
                     eState = SwXTextCursor::GetPropertyState( *pUnoCrsr, aPropSet, pProp[i] );
                 rResult.State  = eState;
 
-//                if (bDirectValuesOnly  &&  PropertyState_DIRECT_VALUE != eState)
+//                if (bDirectValuesOnly  &&  beans::PropertyState_DIRECT_VALUE != eState)
 //                    rResult.Result = TolerantPropertySetResultType::NO_DIRECT_VALUE;
 //                else
                 rResult.Result = TolerantPropertySetResultType::UNKNOWN_FAILURE;
-                if (!bDirectValuesOnly  ||  PropertyState_DIRECT_VALUE == eState)
+                if (!bDirectValuesOnly  ||  beans::PropertyState_DIRECT_VALUE == eState)
                 {
                     // get property value
                     // (compare to SwXTextPortion::getPropertyValue(s))
@@ -773,21 +768,21 @@ uno::Sequence< GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion::GetPro
                 pStartEntry = ++pEntry;
             }
         }
-        catch (UnknownPropertyException &)
+        catch (beans::UnknownPropertyException &)
         {
             // should not occur because property was searched for before
             DBG_ERROR( "unexpected exception catched" );
             rResult.Result = TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
-        catch (IllegalArgumentException &)
+        catch (lang::IllegalArgumentException &)
         {
             rResult.Result = TolerantPropertySetResultType::ILLEGAL_ARGUMENT;
         }
-        catch (PropertyVetoException &)
+        catch (beans::PropertyVetoException &)
         {
             rResult.Result = TolerantPropertySetResultType::PROPERTY_VETO;
         }
-        catch (WrappedTargetException &)
+        catch (lang::WrappedTargetException &)
         {
             rResult.Result = TolerantPropertySetResultType::WRAPPED_TARGET;
         }
@@ -808,32 +803,32 @@ uno::Sequence< GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion::GetPro
 
  ---------------------------------------------------------------------------*/
 void SwXTextPortion::addPropertiesChangeListener(
-    const Sequence< OUString >& aPropertyNames,
-    const Reference< XPropertiesChangeListener >& xListener )
-        throw(RuntimeException)
+    const uno::Sequence< OUString >& aPropertyNames,
+    const uno::Reference< beans::XPropertiesChangeListener >& xListener )
+        throw(uno::RuntimeException)
 {}
 /* -----------------------------02.04.01 11:44--------------------------------
 
  ---------------------------------------------------------------------------*/
 void SwXTextPortion::removePropertiesChangeListener(
-    const Reference< XPropertiesChangeListener >& xListener )
-        throw(RuntimeException)
+    const uno::Reference< beans::XPropertiesChangeListener >& xListener )
+        throw(uno::RuntimeException)
 {}
 /* -----------------------------02.04.01 11:44--------------------------------
 
  ---------------------------------------------------------------------------*/
 void SwXTextPortion::firePropertiesChangeEvent(
-    const Sequence< OUString >& aPropertyNames,
-    const Reference< XPropertiesChangeListener >& xListener )
-        throw(RuntimeException)
+    const uno::Sequence< OUString >& aPropertyNames,
+    const uno::Reference< beans::XPropertiesChangeListener >& xListener )
+        throw(uno::RuntimeException)
 {}
 /*-- 11.12.98 09:56:58---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXTextPortion::addPropertyChangeListener(
     const OUString& PropertyName,
-    const Reference< XPropertyChangeListener > & aListener)
-        throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
+    const uno::Reference< beans::XPropertyChangeListener > & aListener)
+        throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
@@ -876,7 +871,7 @@ beans::PropertyState SwXTextPortion::getPropertyState(const OUString& rPropertyN
             eRet = SwXTextCursor::GetPropertyState(*pUnoCrsr, aPropSet, rPropertyName);
     }
     else
-        throw RuntimeException();
+        throw uno::RuntimeException();
     return eRet;
 }
 /*-- 08.03.99 09:41:47---------------------------------------------------
@@ -889,13 +884,13 @@ uno::Sequence< beans::PropertyState > SwXTextPortion::getPropertyStates(
     vos::OGuard aGuard(Application::GetSolarMutex());
     SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
     if(!pUnoCrsr)
-        throw RuntimeException();
-    Sequence< PropertyState > aRet = SwXTextCursor::GetPropertyStates(*pUnoCrsr, aPropSet, rPropertyNames, SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION);
+        throw uno::RuntimeException();
+    uno::Sequence< beans::PropertyState > aRet = SwXTextCursor::GetPropertyStates(*pUnoCrsr, aPropSet, rPropertyNames, SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION);
 
     if(GetTextPortionType() == PORTION_RUBY_START)
     {
         const OUString* pNames = rPropertyNames.getConstArray();
-        PropertyState* pStates = aRet.getArray();
+        beans::PropertyState* pStates = aRet.getArray();
         for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength();nProp++)
         {
            if(!pNames[nProp].compareToAscii( RTL_CONSTASCII_STRINGPARAM("Ruby") ))
@@ -955,7 +950,7 @@ OUString SwXTextPortion::getPresentation(sal_Bool bShowCommand) throw( uno::Runt
 /*-- 11.12.98 09:56:59---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextPortion::attach(const uno::Reference< XTextRange > & xTextRange)
+void SwXTextPortion::attach(const uno::Reference< text::XTextRange > & xTextRange)
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -966,10 +961,10 @@ void SwXTextPortion::attach(const uno::Reference< XTextRange > & xTextRange)
 /*-- 11.12.98 09:57:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< XTextRange >  SwXTextPortion::getAnchor(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextRange >  SwXTextPortion::getAnchor(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Reference< XTextRange >  aRet;
+    uno::Reference< text::XTextRange >  aRet;
     SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
     if(pUnoCrsr)
         aRet = new SwXTextRange(*pUnoCrsr, xParentText);
@@ -1128,17 +1123,17 @@ void SwXTextPortion::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
  ---------------------------------------------------------------------------*/
 SwXRubyPortion::SwXRubyPortion(const SwUnoCrsr* pPortionCrsr,
                     SwTxtRuby& rAttr,
-                    Reference< XText > & rParent,
+                    uno::Reference< text::XText > & rParent,
                     sal_Bool bEnd   ) :
         SwXTextPortion(pPortionCrsr, rParent, bEnd ? PORTION_RUBY_END : PORTION_RUBY_START  )
 {
     if(!bEnd)
     {
         const SfxPoolItem& rItem = rAttr.GetAttr();
-        pRubyText = new Any;
-        pRubyStyle = new Any;
-        pRubyAdjust = new Any;
-        pRubyIsAbove = new Any;
+        pRubyText = new uno::Any;
+        pRubyStyle = new uno::Any;
+        pRubyAdjust = new uno::Any;
+        pRubyIsAbove = new uno::Any;
         rItem.QueryValue(*pRubyText, MID_RUBY_TEXT);
         rItem.QueryValue(*pRubyStyle, MID_RUBY_CHARSTYLE);
         rItem.QueryValue(*pRubyAdjust, MID_RUBY_ADJUST);
