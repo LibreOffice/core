@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:04:22 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:58:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,14 +51,12 @@
 #include "ftpresultsetI.hxx"
 #include "ftpcontent.hxx"
 #include "ftpcontentprovider.hxx"
-#include "ftploaderthread.hxx"
 #include "ftpinpstr.hxx"
 #include "ftpdirp.hxx"
 #include "ftpcontentidentifier.hxx"
 #include "ftpcfunc.hxx"
 #include "ftpstrcont.hxx"
 #include "ftpintreq.hxx"
-#include "ftpdownloadthread.hxx"
 
 #include <memory>
 #include <vector>
@@ -220,7 +218,7 @@ XSERVICEINFO_IMPL_1( FTPContent,
 rtl::OUString SAL_CALL FTPContent::getContentType()
     throw( RuntimeException )
 {
-    return rtl::OUString::createFromAscii(MYUCP_CONTENT_TYPE);
+    return rtl::OUString::createFromAscii(FTP_CONTENT_TYPE);
 }
 
 
@@ -293,8 +291,6 @@ public:
 // XCommandProcessor methods.
 //
 //=========================================================================
-
-#include "debughelper.hxx"
 
 enum ACTION { NOACTION,
               THROWAUTHENTICATIONREQUEST,
@@ -377,13 +373,13 @@ Any SAL_CALL FTPContent::execute(
 //                 action != NOACTION) {
 //                  // It is not allowed to throw if
 //                  // command is getPropertyValues
-//                  vos::ORef<ucb::PropertyValueSet> xRow =
-//                      new ucb::PropertyValueSet(m_xSMgr);
+//                  rtl::Reference<ucbhelper::PropertyValueSet> xRow =
+//                      new ucbhelper::PropertyValueSet(m_xSMgr);
 //                  Sequence<Property> Properties;
 //                  aCommand.Argument >>= Properties;
 //                  for(int i = 0; i < Properties.getLength(); ++i)
 //                      xRow->appendVoid(Properties[i]);
-//                  aRet <<= Reference<XRow>(xRow.getBodyPtr());
+//                  aRet <<= Reference<XRow>(xRow.get());
 //                  return aRet;
 //              }
 
@@ -499,22 +495,8 @@ Any SAL_CALL FTPContent::execute(
                         xOutputStream(aOpenCommand.Sink,UNO_QUERY);
 
                     if(xActiveDataSink.is()) {
-#if 1
-                        // fill inpustream async; return immediately
-                        FTPDownloadThread* p =
-                            new FTPDownloadThread(
-                                m_xIdentifier->getContentIdentifier(),
-                                m_pFCP);
-                        if(!p->Get(xActiveDataSink)) {
-                            curl_exception e = p->GetException();
-                            delete p;
-                            throw e;
-                        }
-#else
-                        // fill inputsream sync; return if all data present
                         xActiveDataSink->setInputStream(
                             new FTPInputStream(m_aFTPURL.open()));
-#endif
                     }
                     else if(xOutputStream.is()) {
                         Reference<XInputStream> xStream(
@@ -570,7 +552,7 @@ Any SAL_CALL FTPContent::execute(
                             aOpenCommand,
                             Environment,
                             new ResultSetFactoryI(m_xSMgr,
-                                                  m_xProvider.getBodyPtr(),
+                                                  m_xProvider.get(),
                                                   aOpenCommand.Mode,
                                                   aOpenCommand.Properties,
                                                   aOpenCommand.SortingInfo,
@@ -814,8 +796,8 @@ Reference< XRow > FTPContent::getPropertyValues(
     const Reference<XCommandEnvironment>& /*environment*/
 )
 {
-    vos::ORef<ucb::PropertyValueSet> xRow =
-        new ucb::PropertyValueSet(m_xSMgr);
+    rtl::Reference<ucbhelper::PropertyValueSet> xRow =
+        new ucbhelper::PropertyValueSet(m_xSMgr);
 
     FTPDirentry aDirEntry = m_aFTPURL.direntry();
 
@@ -855,7 +837,7 @@ Reference< XRow > FTPContent::getPropertyValues(
             xRow->appendVoid(seqProp[i]);
     }
 
-    return Reference<XRow>(xRow.getBodyPtr());
+    return Reference<XRow>(xRow.get());
 }
 
 
