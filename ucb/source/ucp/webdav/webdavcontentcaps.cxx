@@ -4,9 +4,9 @@
  *
  *  $RCSfile: webdavcontentcaps.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:07:54 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:21:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ bool ContentProvider::getProperty(
 {
     if ( !m_pProps )
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::MutexGuard aGuard( m_aMutex );
         if ( !m_pProps )
         {
             m_pProps = new PropertyMap;
