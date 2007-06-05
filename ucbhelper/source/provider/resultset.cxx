@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultset.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:23:35 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:56:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,21 +55,11 @@
 #include <ucbhelper/resultsetmetadata.hxx>
 #endif
 
-using namespace cppu;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::container;
-using namespace com::sun::star::io;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::sdbc;
-using namespace com::sun::star::ucb;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::util;
-using namespace rtl;
-using namespace ucb;
+using namespace com::sun::star;
 
 //=========================================================================
 
-namespace ucb_impl
+namespace ucbhelper_impl
 {
 
 struct PropertyInfo
@@ -77,29 +67,29 @@ struct PropertyInfo
     const char* pName;
     sal_Int32   nHandle;
     sal_Int16   nAttributes;
-    const com::sun::star::uno::Type& (*pGetCppuType)();
+    const uno::Type& (*pGetCppuType)();
 };
 
-static const com::sun::star::uno::Type& sal_Int32_getCppuType()
+static const uno::Type& sal_Int32_getCppuType()
 {
     return getCppuType( static_cast< const sal_Int32 * >( 0 ) );
 }
 
-static const com::sun::star::uno::Type& sal_Bool_getCppuType()
+static const uno::Type& sal_Bool_getCppuType()
 {
     return getCppuBooleanType();
 }
 
-static PropertyInfo aPropertyTable[] =
+static const PropertyInfo aPropertyTable[] =
 {
     { "IsRowCountFinal",
       1000,
-      PropertyAttribute::BOUND | PropertyAttribute::READONLY,
+      beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY,
       &sal_Bool_getCppuType
     },
     { "RowCount",
       1001,
-      PropertyAttribute::BOUND | PropertyAttribute::READONLY,
+      beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY,
       &sal_Int32_getCppuType
     },
     { 0,
@@ -118,18 +108,22 @@ static PropertyInfo aPropertyTable[] =
 //=========================================================================
 
 class PropertySetInfo :
-        public OWeakObject, public XTypeProvider, public XPropertySetInfo
+        public cppu::OWeakObject,
+        public lang::XTypeProvider,
+        public beans::XPropertySetInfo
 {
-    Reference< XMultiServiceFactory > m_xSMgr;
-    Sequence< Property >*             m_pProps;
+    uno::Reference< lang::XMultiServiceFactory > m_xSMgr;
+    uno::Sequence< beans::Property >*            m_pProps;
 
 private:
-    sal_Bool queryProperty( const rtl::OUString& aName, Property& rProp );
+    sal_Bool queryProperty(
+        const rtl::OUString& aName, beans::Property& rProp );
 
 public:
-    PropertySetInfo( const Reference< XMultiServiceFactory >& rxSMgr,
-                     const PropertyInfo* pProps,
-                     sal_Int32 nProps );
+    PropertySetInfo(
+        const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+        const PropertyInfo* pProps,
+        sal_Int32 nProps );
     virtual ~PropertySetInfo();
 
     // XInterface
@@ -139,12 +133,13 @@ public:
     XTYPEPROVIDER_DECL()
 
     // XPropertySetInfo
-    virtual Sequence< Property > SAL_CALL getProperties()
-        throw( RuntimeException );
-    virtual Property SAL_CALL getPropertyByName( const rtl::OUString& aName )
-        throw( UnknownPropertyException, RuntimeException );
+    virtual uno::Sequence< beans::Property > SAL_CALL getProperties()
+        throw( uno::RuntimeException );
+    virtual beans::Property SAL_CALL getPropertyByName(
+            const rtl::OUString& aName )
+        throw( beans::UnknownPropertyException, uno::RuntimeException );
     virtual sal_Bool SAL_CALL hasPropertyByName( const rtl::OUString& Name )
-        throw( RuntimeException );
+        throw( uno::RuntimeException );
 };
 
 //=========================================================================
@@ -155,7 +150,7 @@ public:
 
 struct equalStr_Impl
 {
-    bool operator()( const OUString& s1, const OUString& s2 ) const
+    bool operator()( const rtl::OUString& s1, const rtl::OUString& s2 ) const
       {
         return !!( s1 == s2 );
     }
@@ -163,15 +158,15 @@ struct equalStr_Impl
 
 struct hashStr_Impl
 {
-    size_t operator()( const OUString& rName ) const
+    size_t operator()( const rtl::OUString& rName ) const
     {
         return rName.hashCode();
     }
 };
 
-typedef OMultiTypeInterfaceContainerHelperVar
+typedef cppu::OMultiTypeInterfaceContainerHelperVar
 <
-    OUString,
+    rtl::OUString,
     hashStr_Impl,
     equalStr_Impl
 > PropertyChangeListenerContainer;
@@ -189,11 +184,11 @@ public:
     : PropertyChangeListenerContainer( rMtx ) {}
 };
 
-} // namespace ucb_impl
+} // namespace ucbhelper_impl
 
-using namespace ucb_impl;
+using namespace ucbhelper_impl;
 
-namespace ucb
+namespace ucbhelper
 {
 
 //=========================================================================
@@ -204,12 +199,12 @@ namespace ucb
 
 struct ResultSet_Impl
 {
-    Reference< XMultiServiceFactory >   m_xSMgr;
-    Reference< XCommandEnvironment >    m_xEnv;
-    Reference< XPropertySetInfo >       m_xPropSetInfo;
-    Reference< XResultSetMetaData >     m_xMetaData;
-    Sequence< Property >                m_aProperties;
-    vos::ORef< ResultSetDataSupplier >  m_xDataSupplier;
+    uno::Reference< lang::XMultiServiceFactory >    m_xSMgr;
+    uno::Reference< com::sun::star::ucb::XCommandEnvironment >  m_xEnv;
+    uno::Reference< beans::XPropertySetInfo >       m_xPropSetInfo;
+    uno::Reference< sdbc::XResultSetMetaData >      m_xMetaData;
+    uno::Sequence< beans::Property >                m_aProperties;
+    rtl::Reference< ResultSetDataSupplier >         m_xDataSupplier;
     osl::Mutex                          m_aMutex;
     cppu::OInterfaceContainerHelper*    m_pDisposeEventListeners;
     PropertyChangeListeners*            m_pPropertyChangeListeners;
@@ -217,21 +212,20 @@ struct ResultSet_Impl
     sal_Bool                            m_bWasNull;
     sal_Bool                            m_bAfterLast;
 
-    inline ResultSet_Impl( const Reference< XMultiServiceFactory >& rxSMgr,
-                           const Sequence< Property >& rProperties,
-                           const vos::ORef<
-                                       ResultSetDataSupplier >& rDataSupplier,
-                           const Reference< XCommandEnvironment >& rxEnv );
+    inline ResultSet_Impl(
+        const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+        const uno::Sequence< beans::Property >& rProperties,
+        const rtl::Reference< ResultSetDataSupplier >& rDataSupplier,
+        const uno::Reference< com::sun::star::ucb::XCommandEnvironment >&
+            rxEnv );
     inline ~ResultSet_Impl();
 };
 
-} // namespace ucb
-
 inline ResultSet_Impl::ResultSet_Impl(
-                    const Reference< XMultiServiceFactory >& rxSMgr,
-                    const Sequence< Property >& rProperties,
-                    const vos::ORef< ResultSetDataSupplier >& rDataSupplier,
-                    const Reference< XCommandEnvironment >& rxEnv )
+    const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+    const uno::Sequence< beans::Property >& rProperties,
+    const rtl::Reference< ResultSetDataSupplier >& rDataSupplier,
+    const uno::Reference< com::sun::star::ucb::XCommandEnvironment >& rxEnv )
 : m_xSMgr( rxSMgr ),
   m_xEnv( rxEnv ),
   m_aProperties( rProperties ),
@@ -259,22 +253,25 @@ inline ResultSet_Impl::~ResultSet_Impl()
 //=========================================================================
 //=========================================================================
 
-ResultSet::ResultSet( const Reference< XMultiServiceFactory >& rxSMgr,
-                      const Sequence< Property >& rProperties,
-                      const vos::ORef< ResultSetDataSupplier >& rDataSupplier )
-: m_pImpl( new ResultSet_Impl( rxSMgr,
-                               rProperties,
-                               rDataSupplier,
-                               Reference< XCommandEnvironment >() ) )
+ResultSet::ResultSet(
+    const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+    const uno::Sequence< beans::Property >& rProperties,
+    const rtl::Reference< ResultSetDataSupplier >& rDataSupplier )
+: m_pImpl( new ResultSet_Impl(
+               rxSMgr,
+               rProperties,
+               rDataSupplier,
+               uno::Reference< com::sun::star::ucb::XCommandEnvironment >() ) )
 {
     rDataSupplier->m_pResultSet = this;
 }
 
 //=========================================================================
-ResultSet::ResultSet( const Reference< XMultiServiceFactory >& rxSMgr,
-                      const Sequence< Property >& rProperties,
-                      const vos::ORef< ResultSetDataSupplier >& rDataSupplier,
-                      const Reference< XCommandEnvironment >& rxEnv )
+ResultSet::ResultSet(
+    const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+    const uno::Sequence< beans::Property >& rProperties,
+    const rtl::Reference< ResultSetDataSupplier >& rDataSupplier,
+    const uno::Reference< com::sun::star::ucb::XCommandEnvironment >& rxEnv )
 : m_pImpl( new ResultSet_Impl( rxSMgr, rProperties, rDataSupplier, rxEnv ) )
 {
     rDataSupplier->m_pResultSet = this;
@@ -294,15 +291,15 @@ ResultSet::~ResultSet()
 //=========================================================================
 
 XINTERFACE_IMPL_9( ResultSet,
-                   XTypeProvider,
-                   XServiceInfo,
-                   XComponent,
-                   XContentAccess,
-                   XResultSet,
-                   XResultSetMetaDataSupplier,
-                   XRow,
-                   XCloseable,
-                   XPropertySet );
+                   lang::XTypeProvider,
+                   lang::XServiceInfo,
+                   lang::XComponent,
+                   com::sun::star::ucb::XContentAccess,
+                   sdbc::XResultSet,
+                   sdbc::XResultSetMetaDataSupplier,
+                   sdbc::XRow,
+                   sdbc::XCloseable,
+                   beans::XPropertySet );
 
 //=========================================================================
 //
@@ -311,15 +308,15 @@ XINTERFACE_IMPL_9( ResultSet,
 //=========================================================================
 
 XTYPEPROVIDER_IMPL_9( ResultSet,
-                      XTypeProvider,
-                         XServiceInfo,
-                      XComponent,
-                      XContentAccess,
-                      XResultSet,
-                      XResultSetMetaDataSupplier,
-                      XRow,
-                      XCloseable,
-                      XPropertySet );
+                      lang::XTypeProvider,
+                         lang::XServiceInfo,
+                      lang::XComponent,
+                      com::sun::star::ucb::XContentAccess,
+                      sdbc::XResultSet,
+                      sdbc::XResultSetMetaDataSupplier,
+                      sdbc::XRow,
+                      sdbc::XCloseable,
+                      beans::XPropertySet );
 
 //=========================================================================
 //
@@ -328,8 +325,8 @@ XTYPEPROVIDER_IMPL_9( ResultSet,
 //=========================================================================
 
 XSERVICEINFO_NOFACTORY_IMPL_1( ResultSet,
-                    OUString::createFromAscii( "ResultSet" ),
-                    OUString::createFromAscii( RESULTSET_SERVICE_NAME ) );
+                    rtl::OUString::createFromAscii( "ResultSet" ),
+                    rtl::OUString::createFromAscii( RESULTSET_SERVICE_NAME ) );
 
 //=========================================================================
 //
@@ -339,22 +336,22 @@ XSERVICEINFO_NOFACTORY_IMPL_1( ResultSet,
 
 // virtual
 void SAL_CALL ResultSet::dispose()
-    throw( RuntimeException )
+    throw( uno::RuntimeException )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     if ( m_pImpl->m_pDisposeEventListeners &&
          m_pImpl->m_pDisposeEventListeners->getLength() )
     {
-        EventObject aEvt;
-        aEvt.Source = static_cast< XComponent * >( this );
+        lang::EventObject aEvt;
+        aEvt.Source = static_cast< lang::XComponent * >( this );
         m_pImpl->m_pDisposeEventListeners->disposeAndClear( aEvt );
     }
 
     if ( m_pImpl->m_pPropertyChangeListeners )
     {
-        EventObject aEvt;
-        aEvt.Source = static_cast< XPropertySet * >( this );
+        lang::EventObject aEvt;
+        aEvt.Source = static_cast< beans::XPropertySet * >( this );
         m_pImpl->m_pPropertyChangeListeners->disposeAndClear( aEvt );
     }
 
@@ -364,14 +361,14 @@ void SAL_CALL ResultSet::dispose()
 //=========================================================================
 // virtual
 void SAL_CALL ResultSet::addEventListener(
-                            const Reference< XEventListener >& Listener )
-    throw( RuntimeException )
+        const uno::Reference< lang::XEventListener >& Listener )
+    throw( uno::RuntimeException )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     if ( !m_pImpl->m_pDisposeEventListeners )
         m_pImpl->m_pDisposeEventListeners =
-                    new OInterfaceContainerHelper( m_pImpl->m_aMutex );
+            new cppu::OInterfaceContainerHelper( m_pImpl->m_aMutex );
 
     m_pImpl->m_pDisposeEventListeners->addInterface( Listener );
 }
@@ -379,10 +376,10 @@ void SAL_CALL ResultSet::addEventListener(
 //=========================================================================
 // virtual
 void SAL_CALL ResultSet::removeEventListener(
-                            const Reference< XEventListener >& Listener )
-    throw( RuntimeException )
+        const uno::Reference< lang::XEventListener >& Listener )
+    throw( uno::RuntimeException )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     if ( m_pImpl->m_pDisposeEventListeners )
         m_pImpl->m_pDisposeEventListeners->removeInterface( Listener );
@@ -395,10 +392,10 @@ void SAL_CALL ResultSet::removeEventListener(
 //=========================================================================
 
 // virtual
-Reference< XResultSetMetaData > SAL_CALL ResultSet::getMetaData()
-    throw( SQLException, RuntimeException )
+uno::Reference< sdbc::XResultSetMetaData > SAL_CALL ResultSet::getMetaData()
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     if ( !m_pImpl->m_xMetaData.is() )
         m_pImpl->m_xMetaData = new ResultSetMetaData( m_pImpl->m_xSMgr,
@@ -415,12 +412,12 @@ Reference< XResultSetMetaData > SAL_CALL ResultSet::getMetaData()
 
 // virtual
 sal_Bool SAL_CALL ResultSet::next()
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     // Note: Cursor is initially positioned before the first row.
     //       First call to 'next()' moves it to first row.
 
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     if ( m_pImpl->m_bAfterLast )
     {
@@ -444,7 +441,7 @@ sal_Bool SAL_CALL ResultSet::next()
 //=========================================================================
 // virtual
 sal_Bool SAL_CALL ResultSet::isBeforeFirst()
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_bAfterLast )
     {
@@ -466,7 +463,7 @@ sal_Bool SAL_CALL ResultSet::isBeforeFirst()
 //=========================================================================
 // virtual
 sal_Bool SAL_CALL ResultSet::isAfterLast()
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     m_pImpl->m_xDataSupplier->validate();
     return m_pImpl->m_bAfterLast;
@@ -475,7 +472,7 @@ sal_Bool SAL_CALL ResultSet::isAfterLast()
 //=========================================================================
 // virtual
 sal_Bool SAL_CALL ResultSet::isFirst()
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_bAfterLast )
     {
@@ -490,7 +487,7 @@ sal_Bool SAL_CALL ResultSet::isFirst()
 //=========================================================================
 // virtual
 sal_Bool SAL_CALL ResultSet::isLast()
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_bAfterLast )
     {
@@ -512,9 +509,9 @@ sal_Bool SAL_CALL ResultSet::isLast()
 //=========================================================================
 // virtual
 void SAL_CALL ResultSet::beforeFirst()
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
     m_pImpl->m_bAfterLast = sal_False;
     m_pImpl->m_nPos = 0;
     m_pImpl->m_xDataSupplier->validate();
@@ -523,9 +520,9 @@ void SAL_CALL ResultSet::beforeFirst()
 //=========================================================================
 // virtual
 void SAL_CALL ResultSet::afterLast()
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
     m_pImpl->m_bAfterLast = sal_True;
     m_pImpl->m_xDataSupplier->validate();
 }
@@ -533,12 +530,12 @@ void SAL_CALL ResultSet::afterLast()
 //=========================================================================
 // virtual
 sal_Bool SAL_CALL ResultSet::first()
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     // getResult works zero-based!
     if ( m_pImpl->m_xDataSupplier->getResult( 0 ) )
     {
-        osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+        osl::MutexGuard aGuard( m_pImpl->m_aMutex );
         m_pImpl->m_bAfterLast = sal_False;
         m_pImpl->m_nPos = 1;
         m_pImpl->m_xDataSupplier->validate();
@@ -552,12 +549,12 @@ sal_Bool SAL_CALL ResultSet::first()
 //=========================================================================
 // virtual
 sal_Bool SAL_CALL ResultSet::last()
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount();
     if ( nCount )
     {
-        osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+        osl::MutexGuard aGuard( m_pImpl->m_aMutex );
         m_pImpl->m_bAfterLast = sal_False;
         m_pImpl->m_nPos = nCount;
         m_pImpl->m_xDataSupplier->validate();
@@ -571,7 +568,7 @@ sal_Bool SAL_CALL ResultSet::last()
 //=========================================================================
 // virtual
 sal_Int32 SAL_CALL ResultSet::getRow()
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_bAfterLast )
     {
@@ -586,7 +583,7 @@ sal_Int32 SAL_CALL ResultSet::getRow()
 //=========================================================================
 // virtual
 sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
 /*
     If the row number is positive, the cursor moves to the given row number
@@ -611,7 +608,7 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
 
         if ( ( row * -1 ) > nCount )
         {
-            osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+            osl::MutexGuard aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = sal_False;
             m_pImpl->m_nPos = 0;
             m_pImpl->m_xDataSupplier->validate();
@@ -619,7 +616,7 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
         }
         else // |row| <= nCount
         {
-            osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+            osl::MutexGuard aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = sal_False;
             m_pImpl->m_nPos = ( nCount + row + 1 );
             m_pImpl->m_xDataSupplier->validate();
@@ -630,7 +627,7 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
     {
         // @throws SQLException
         //      ... if row is 0 ...
-        throw SQLException();
+        throw sdbc::SQLException();
     }
     else // row > 0
     {
@@ -638,7 +635,7 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
 
         if ( row <= nCount )
         {
-            osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+            osl::MutexGuard aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = sal_False;
             m_pImpl->m_nPos = row;
             m_pImpl->m_xDataSupplier->validate();
@@ -646,7 +643,7 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
         }
         else // row > nCount
         {
-            osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+            osl::MutexGuard aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = sal_True;
             m_pImpl->m_xDataSupplier->validate();
             return sal_False;
@@ -659,7 +656,7 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
 //=========================================================================
 // virtual
 sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
 /*
     Attempting to move beyond the first/last row in the result set
@@ -675,14 +672,14 @@ sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
     if ( m_pImpl->m_bAfterLast || ( m_pImpl->m_nPos == 0 ) )
     {
         // "No current row".
-        throw SQLException();
+        throw sdbc::SQLException();
     }
 
     if ( rows < 0 )
     {
         if ( ( m_pImpl->m_nPos + rows ) > 0 )
         {
-            osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+            osl::MutexGuard aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = sal_False;
             m_pImpl->m_nPos = ( m_pImpl->m_nPos + rows );
             m_pImpl->m_xDataSupplier->validate();
@@ -690,7 +687,7 @@ sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
         }
         else
         {
-            osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+            osl::MutexGuard aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = sal_False;
             m_pImpl->m_nPos = 0;
             m_pImpl->m_xDataSupplier->validate();
@@ -708,7 +705,7 @@ sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
         sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount();
         if ( ( m_pImpl->m_nPos + rows ) <= nCount )
         {
-            osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+            osl::MutexGuard aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = sal_False;
             m_pImpl->m_nPos = ( m_pImpl->m_nPos + rows );
             m_pImpl->m_xDataSupplier->validate();
@@ -716,7 +713,7 @@ sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
         }
         else
         {
-            osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+            osl::MutexGuard aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = sal_True;
             m_pImpl->m_xDataSupplier->validate();
             return sal_False;
@@ -729,13 +726,13 @@ sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
 //=========================================================================
 // virtual
 sal_Bool SAL_CALL ResultSet::previous()
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
 /*
     previous() is not the same as relative( -1 ) because it makes sense
     to call previous() when there is no current row.
 */
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     if ( m_pImpl->m_bAfterLast )
     {
@@ -759,9 +756,9 @@ sal_Bool SAL_CALL ResultSet::previous()
 //=========================================================================
 // virtual
 void SAL_CALL ResultSet::refreshRow()
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
     if ( m_pImpl->m_bAfterLast || ( m_pImpl->m_nPos == 0 ) )
         return;
 
@@ -772,7 +769,7 @@ void SAL_CALL ResultSet::refreshRow()
 //=========================================================================
 // virtual
 sal_Bool SAL_CALL ResultSet::rowUpdated()
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     m_pImpl->m_xDataSupplier->validate();
     return sal_False;
@@ -781,7 +778,7 @@ sal_Bool SAL_CALL ResultSet::rowUpdated()
 //=========================================================================
 // virtual
 sal_Bool SAL_CALL ResultSet::rowInserted()
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     m_pImpl->m_xDataSupplier->validate();
     return sal_False;
@@ -790,7 +787,7 @@ sal_Bool SAL_CALL ResultSet::rowInserted()
 //=========================================================================
 // virtual
 sal_Bool SAL_CALL ResultSet::rowDeleted()
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     m_pImpl->m_xDataSupplier->validate();
     return sal_False;
@@ -798,15 +795,15 @@ sal_Bool SAL_CALL ResultSet::rowDeleted()
 
 //=========================================================================
 // virtual
-Reference< XInterface > SAL_CALL ResultSet::getStatement()
-    throw( SQLException, RuntimeException )
+uno::Reference< uno::XInterface > SAL_CALL ResultSet::getStatement()
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
 /*
     returns the Statement that produced this ResultSet object. If the
     result set was generated some other way, ... this method returns null.
 */
     m_pImpl->m_xDataSupplier->validate();
-    return Reference< XInterface >();
+    return uno::Reference< uno::XInterface >();
 }
 
 //=========================================================================
@@ -817,7 +814,7 @@ Reference< XInterface > SAL_CALL ResultSet::getStatement()
 
 // virtual
 sal_Bool SAL_CALL ResultSet::wasNull()
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     // This method can not be implemented correctly!!! Imagine different
     // threads doing a getXYZ - wasNull calling sequence on the same
@@ -825,7 +822,7 @@ sal_Bool SAL_CALL ResultSet::wasNull()
 
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
-        Reference< XRow > xValues
+        uno::Reference< sdbc::XRow > xValues
             = m_pImpl->m_xDataSupplier->queryPropertyValues(
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
@@ -841,12 +838,12 @@ sal_Bool SAL_CALL ResultSet::wasNull()
 
 //=========================================================================
 // virtual
-OUString SAL_CALL ResultSet::getString( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException )
+rtl::OUString SAL_CALL ResultSet::getString( sal_Int32 columnIndex )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
-        Reference< XRow > xValues
+        uno::Reference< sdbc::XRow > xValues
             = m_pImpl->m_xDataSupplier->queryPropertyValues(
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
@@ -859,17 +856,17 @@ OUString SAL_CALL ResultSet::getString( sal_Int32 columnIndex )
 
     m_pImpl->m_bWasNull = sal_True;
     m_pImpl->m_xDataSupplier->validate();
-    return OUString();
+    return rtl::OUString();
 }
 
 //=========================================================================
 // virtual
 sal_Bool SAL_CALL ResultSet::getBoolean( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
-        Reference< XRow > xValues
+        uno::Reference< sdbc::XRow > xValues
             = m_pImpl->m_xDataSupplier->queryPropertyValues(
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
@@ -888,11 +885,11 @@ sal_Bool SAL_CALL ResultSet::getBoolean( sal_Int32 columnIndex )
 //=========================================================================
 // virtual
 sal_Int8 SAL_CALL ResultSet::getByte( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
-        Reference< XRow > xValues
+        uno::Reference< sdbc::XRow > xValues
             = m_pImpl->m_xDataSupplier->queryPropertyValues(
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
@@ -911,11 +908,11 @@ sal_Int8 SAL_CALL ResultSet::getByte( sal_Int32 columnIndex )
 //=========================================================================
 // virtual
 sal_Int16 SAL_CALL ResultSet::getShort( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
-        Reference< XRow > xValues
+        uno::Reference< sdbc::XRow > xValues
             = m_pImpl->m_xDataSupplier->queryPropertyValues(
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
@@ -934,11 +931,11 @@ sal_Int16 SAL_CALL ResultSet::getShort( sal_Int32 columnIndex )
 //=========================================================================
 // virtual
 sal_Int32 SAL_CALL ResultSet::getInt( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
-        Reference< XRow > xValues
+        uno::Reference< sdbc::XRow > xValues
             = m_pImpl->m_xDataSupplier->queryPropertyValues(
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
@@ -957,11 +954,11 @@ sal_Int32 SAL_CALL ResultSet::getInt( sal_Int32 columnIndex )
 //=========================================================================
 // virtual
 sal_Int64 SAL_CALL ResultSet::getLong( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
-        Reference< XRow > xValues
+        uno::Reference< sdbc::XRow > xValues
             = m_pImpl->m_xDataSupplier->queryPropertyValues(
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
@@ -980,11 +977,11 @@ sal_Int64 SAL_CALL ResultSet::getLong( sal_Int32 columnIndex )
 //=========================================================================
 // virtual
 float SAL_CALL ResultSet::getFloat( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
-        Reference< XRow > xValues
+        uno::Reference< sdbc::XRow > xValues
             = m_pImpl->m_xDataSupplier->queryPropertyValues(
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
@@ -1003,11 +1000,11 @@ float SAL_CALL ResultSet::getFloat( sal_Int32 columnIndex )
 //=========================================================================
 // virtual
 double SAL_CALL ResultSet::getDouble( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
-        Reference< XRow > xValues
+        uno::Reference< sdbc::XRow > xValues
             = m_pImpl->m_xDataSupplier->queryPropertyValues(
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
@@ -1025,13 +1022,13 @@ double SAL_CALL ResultSet::getDouble( sal_Int32 columnIndex )
 
 //=========================================================================
 // virtual
-Sequence< sal_Int8 > SAL_CALL
+uno::Sequence< sal_Int8 > SAL_CALL
 ResultSet::getBytes( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
-        Reference< XRow > xValues
+        uno::Reference< sdbc::XRow > xValues
             = m_pImpl->m_xDataSupplier->queryPropertyValues(
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
@@ -1044,17 +1041,17 @@ ResultSet::getBytes( sal_Int32 columnIndex )
 
     m_pImpl->m_bWasNull = sal_True;
     m_pImpl->m_xDataSupplier->validate();
-    return Sequence< sal_Int8 >();
+    return uno::Sequence< sal_Int8 >();
 }
 
 //=========================================================================
 // virtual
-Date SAL_CALL ResultSet::getDate( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException )
+util::Date SAL_CALL ResultSet::getDate( sal_Int32 columnIndex )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
-        Reference< XRow > xValues
+        uno::Reference< sdbc::XRow > xValues
             = m_pImpl->m_xDataSupplier->queryPropertyValues(
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
@@ -1067,17 +1064,17 @@ Date SAL_CALL ResultSet::getDate( sal_Int32 columnIndex )
 
     m_pImpl->m_bWasNull = sal_True;
     m_pImpl->m_xDataSupplier->validate();
-    return Date();
+    return util::Date();
 }
 
 //=========================================================================
 // virtual
-Time SAL_CALL ResultSet::getTime( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException )
+util::Time SAL_CALL ResultSet::getTime( sal_Int32 columnIndex )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
-        Reference< XRow > xValues
+        uno::Reference< sdbc::XRow > xValues
             = m_pImpl->m_xDataSupplier->queryPropertyValues(
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
@@ -1090,18 +1087,18 @@ Time SAL_CALL ResultSet::getTime( sal_Int32 columnIndex )
 
     m_pImpl->m_bWasNull = sal_True;
     m_pImpl->m_xDataSupplier->validate();
-    return Time();
+    return util::Time();
 }
 
 //=========================================================================
 // virtual
-com::sun::star::util::DateTime SAL_CALL
+util::DateTime SAL_CALL
 ResultSet::getTimestamp( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
-        Reference< XRow > xValues
+        uno::Reference< sdbc::XRow > xValues
             = m_pImpl->m_xDataSupplier->queryPropertyValues(
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
@@ -1114,18 +1111,18 @@ ResultSet::getTimestamp( sal_Int32 columnIndex )
 
     m_pImpl->m_bWasNull = sal_True;
     m_pImpl->m_xDataSupplier->validate();
-    return com::sun::star::util::DateTime();
+    return util::DateTime();
 }
 
 //=========================================================================
 // virtual
-Reference< XInputStream > SAL_CALL
+uno::Reference< io::XInputStream > SAL_CALL
 ResultSet::getBinaryStream( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
-        Reference< XRow > xValues
+        uno::Reference< sdbc::XRow > xValues
             = m_pImpl->m_xDataSupplier->queryPropertyValues(
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
@@ -1138,18 +1135,18 @@ ResultSet::getBinaryStream( sal_Int32 columnIndex )
 
     m_pImpl->m_bWasNull = sal_True;
     m_pImpl->m_xDataSupplier->validate();
-    return Reference< XInputStream >();
+    return uno::Reference< io::XInputStream >();
 }
 
 //=========================================================================
 // virtual
-Reference< XInputStream > SAL_CALL
+uno::Reference< io::XInputStream > SAL_CALL
 ResultSet::getCharacterStream( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
-        Reference< XRow > xValues
+        uno::Reference< sdbc::XRow > xValues
             = m_pImpl->m_xDataSupplier->queryPropertyValues(
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
@@ -1162,18 +1159,19 @@ ResultSet::getCharacterStream( sal_Int32 columnIndex )
 
     m_pImpl->m_bWasNull = sal_True;
     m_pImpl->m_xDataSupplier->validate();
-    return Reference< XInputStream >();
+    return uno::Reference< io::XInputStream >();
 }
 
 //=========================================================================
 // virtual
-Any SAL_CALL ResultSet::getObject( sal_Int32 columnIndex,
-                                       const Reference< XNameAccess >& typeMap )
-    throw( SQLException, RuntimeException )
+uno::Any SAL_CALL ResultSet::getObject(
+        sal_Int32 columnIndex,
+        const uno::Reference< container::XNameAccess >& typeMap )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
-        Reference< XRow > xValues
+        uno::Reference< sdbc::XRow > xValues
             = m_pImpl->m_xDataSupplier->queryPropertyValues(
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
@@ -1186,17 +1184,18 @@ Any SAL_CALL ResultSet::getObject( sal_Int32 columnIndex,
 
     m_pImpl->m_bWasNull = sal_True;
     m_pImpl->m_xDataSupplier->validate();
-    return Any();
+    return uno::Any();
 }
 
 //=========================================================================
 // virtual
-Reference< XRef > SAL_CALL ResultSet::getRef( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException )
+uno::Reference< sdbc::XRef > SAL_CALL
+ResultSet::getRef( sal_Int32 columnIndex )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
-        Reference< XRow > xValues
+        uno::Reference< sdbc::XRow > xValues
             = m_pImpl->m_xDataSupplier->queryPropertyValues(
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
@@ -1209,17 +1208,18 @@ Reference< XRef > SAL_CALL ResultSet::getRef( sal_Int32 columnIndex )
 
     m_pImpl->m_bWasNull = sal_True;
     m_pImpl->m_xDataSupplier->validate();
-    return Reference< XRef >();
+    return uno::Reference< sdbc::XRef >();
 }
 
 //=========================================================================
 // virtual
-Reference< XBlob > SAL_CALL ResultSet::getBlob( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException )
+uno::Reference< sdbc::XBlob > SAL_CALL
+ResultSet::getBlob( sal_Int32 columnIndex )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
-        Reference< XRow > xValues
+        uno::Reference< sdbc::XRow > xValues
             = m_pImpl->m_xDataSupplier->queryPropertyValues(
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
@@ -1232,17 +1232,18 @@ Reference< XBlob > SAL_CALL ResultSet::getBlob( sal_Int32 columnIndex )
 
     m_pImpl->m_bWasNull = sal_True;
     m_pImpl->m_xDataSupplier->validate();
-    return Reference< XBlob >();
+    return uno::Reference< sdbc::XBlob >();
 }
 
 //=========================================================================
 // virtual
-Reference< XClob > SAL_CALL ResultSet::getClob( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException )
+uno::Reference< sdbc::XClob > SAL_CALL
+ResultSet::getClob( sal_Int32 columnIndex )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
-        Reference< XRow > xValues
+        uno::Reference< sdbc::XRow > xValues
             = m_pImpl->m_xDataSupplier->queryPropertyValues(
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
@@ -1255,17 +1256,18 @@ Reference< XClob > SAL_CALL ResultSet::getClob( sal_Int32 columnIndex )
 
     m_pImpl->m_bWasNull = sal_True;
     m_pImpl->m_xDataSupplier->validate();
-    return Reference< XClob >();
+    return uno::Reference< sdbc::XClob >();
 }
 
 //=========================================================================
 // virtual
-Reference< XArray > SAL_CALL ResultSet::getArray( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException )
+uno::Reference< sdbc::XArray > SAL_CALL
+ResultSet::getArray( sal_Int32 columnIndex )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
-        Reference< XRow > xValues
+        uno::Reference< sdbc::XRow > xValues
             = m_pImpl->m_xDataSupplier->queryPropertyValues(
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
@@ -1278,7 +1280,7 @@ Reference< XArray > SAL_CALL ResultSet::getArray( sal_Int32 columnIndex )
 
     m_pImpl->m_bWasNull = sal_True;
     m_pImpl->m_xDataSupplier->validate();
-    return Reference< XArray >();
+    return uno::Reference< sdbc::XArray >();
 }
 
 //=========================================================================
@@ -1289,7 +1291,7 @@ Reference< XArray > SAL_CALL ResultSet::getArray( sal_Int32 columnIndex )
 
 // virtual
 void SAL_CALL ResultSet::close()
-    throw( SQLException, RuntimeException )
+    throw( sdbc::SQLException, uno::RuntimeException )
 {
     m_pImpl->m_xDataSupplier->close();
     m_pImpl->m_xDataSupplier->validate();
@@ -1302,37 +1304,39 @@ void SAL_CALL ResultSet::close()
 //=========================================================================
 
 // virtual
-OUString SAL_CALL ResultSet::queryContentIdentifierString()
-    throw( RuntimeException )
+rtl::OUString SAL_CALL ResultSet::queryContentIdentifierString()
+    throw( uno::RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
         return m_pImpl->m_xDataSupplier->queryContentIdentifierString(
                                                         m_pImpl->m_nPos - 1 );
 
-    return OUString();
+    return rtl::OUString();
 }
 
 //=========================================================================
 // virtual
-Reference< XContentIdentifier > SAL_CALL ResultSet::queryContentIdentifier()
-    throw( RuntimeException )
+uno::Reference< com::sun::star::ucb::XContentIdentifier > SAL_CALL
+ResultSet::queryContentIdentifier()
+    throw( uno::RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
         return m_pImpl->m_xDataSupplier->queryContentIdentifier(
                                                         m_pImpl->m_nPos - 1 );
 
-    return Reference< XContentIdentifier >();
+    return uno::Reference< com::sun::star::ucb::XContentIdentifier >();
 }
 
 //=========================================================================
 // virtual
-Reference< XContent > SAL_CALL ResultSet::queryContent()
-    throw( RuntimeException )
+uno::Reference< com::sun::star::ucb::XContent > SAL_CALL
+ResultSet::queryContent()
+    throw( uno::RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
         return m_pImpl->m_xDataSupplier->queryContent( m_pImpl->m_nPos - 1 );
 
-    return Reference< XContent >();
+    return uno::Reference< com::sun::star::ucb::XContent >();
 }
 
 //=========================================================================
@@ -1342,10 +1346,11 @@ Reference< XContent > SAL_CALL ResultSet::queryContent()
 //=========================================================================
 
 // virtual
-Reference< XPropertySetInfo > SAL_CALL ResultSet::getPropertySetInfo()
-    throw( RuntimeException )
+uno::Reference< beans::XPropertySetInfo > SAL_CALL
+ResultSet::getPropertySetInfo()
+    throw( uno::RuntimeException )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     if ( !m_pImpl->m_xPropSetInfo.is() )
         m_pImpl->m_xPropSetInfo
@@ -1357,60 +1362,61 @@ Reference< XPropertySetInfo > SAL_CALL ResultSet::getPropertySetInfo()
 
 //=========================================================================
 // virtual
-void SAL_CALL ResultSet::setPropertyValue( const OUString& aPropertyName,
-                                           const Any& )
-    throw( UnknownPropertyException,
-           PropertyVetoException,
-           IllegalArgumentException,
-           WrappedTargetException,
-           RuntimeException )
+void SAL_CALL ResultSet::setPropertyValue( const rtl::OUString& aPropertyName,
+                                           const uno::Any& )
+    throw( beans::UnknownPropertyException,
+           beans::PropertyVetoException,
+           lang::IllegalArgumentException,
+           lang::WrappedTargetException,
+           uno::RuntimeException )
 {
     if ( !aPropertyName.getLength() )
-        throw UnknownPropertyException();
+        throw beans::UnknownPropertyException();
 
     if ( aPropertyName.equals(
-                OUString::createFromAscii( "RowCount" ) ) )
+                rtl::OUString::createFromAscii( "RowCount" ) ) )
     {
         // property is read-only.
-        throw IllegalArgumentException();
+        throw lang::IllegalArgumentException();
     }
     else if ( aPropertyName.equals(
-                OUString::createFromAscii( "IsRowCountFinal" ) ) )
+                rtl::OUString::createFromAscii( "IsRowCountFinal" ) ) )
     {
         // property is read-only.
-        throw IllegalArgumentException();
+        throw lang::IllegalArgumentException();
     }
     else
     {
-        throw UnknownPropertyException();
+        throw beans::UnknownPropertyException();
     }
 }
 
 //=========================================================================
 // virtual
-Any SAL_CALL ResultSet::getPropertyValue( const OUString& PropertyName )
-    throw( UnknownPropertyException,
-           WrappedTargetException,
-           RuntimeException )
+uno::Any SAL_CALL ResultSet::getPropertyValue(
+        const rtl::OUString& PropertyName )
+    throw( beans::UnknownPropertyException,
+           lang::WrappedTargetException,
+           uno::RuntimeException )
 {
     if ( !PropertyName.getLength() )
-        throw UnknownPropertyException();
+        throw beans::UnknownPropertyException();
 
-    Any aValue;
+    uno::Any aValue;
 
     if ( PropertyName.equals(
-                OUString::createFromAscii( "RowCount" ) ) )
+                rtl::OUString::createFromAscii( "RowCount" ) ) )
     {
         aValue <<= m_pImpl->m_xDataSupplier->currentCount();
     }
     else if ( PropertyName.equals(
-                OUString::createFromAscii( "IsRowCountFinal" ) ) )
+                rtl::OUString::createFromAscii( "IsRowCountFinal" ) ) )
     {
         aValue <<= m_pImpl->m_xDataSupplier->isCountFinal();
     }
     else
     {
-        throw UnknownPropertyException();
+        throw beans::UnknownPropertyException();
     }
 
     return aValue;
@@ -1419,22 +1425,22 @@ Any SAL_CALL ResultSet::getPropertyValue( const OUString& PropertyName )
 //=========================================================================
 // virtual
 void SAL_CALL ResultSet::addPropertyChangeListener(
-                        const OUString& aPropertyName,
-                           const Reference< XPropertyChangeListener >& xListener )
-    throw( UnknownPropertyException,
-           WrappedTargetException,
-           RuntimeException )
+        const rtl::OUString& aPropertyName,
+        const uno::Reference< beans::XPropertyChangeListener >& xListener )
+    throw( beans::UnknownPropertyException,
+           lang::WrappedTargetException,
+           uno::RuntimeException )
 {
     // Note: An empty property name means a listener for "all" properties.
 
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     if ( aPropertyName.getLength() &&
          !aPropertyName.equals(
-                OUString::createFromAscii( "RowCount" ) ) &&
+                rtl::OUString::createFromAscii( "RowCount" ) ) &&
          !aPropertyName.equals(
-                OUString::createFromAscii( "IsRowCountFinal" ) ) )
-        throw UnknownPropertyException();
+                rtl::OUString::createFromAscii( "IsRowCountFinal" ) ) )
+        throw beans::UnknownPropertyException();
 
     if ( !m_pImpl->m_pPropertyChangeListeners )
         m_pImpl->m_pPropertyChangeListeners
@@ -1447,20 +1453,20 @@ void SAL_CALL ResultSet::addPropertyChangeListener(
 //=========================================================================
 // virtual
 void SAL_CALL ResultSet::removePropertyChangeListener(
-                        const OUString& aPropertyName,
-                        const Reference< XPropertyChangeListener >& xListener )
-    throw( UnknownPropertyException,
-           WrappedTargetException,
-           RuntimeException )
+        const rtl::OUString& aPropertyName,
+        const uno::Reference< beans::XPropertyChangeListener >& xListener )
+    throw( beans::UnknownPropertyException,
+           lang::WrappedTargetException,
+           uno::RuntimeException )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     if ( aPropertyName.getLength() &&
          !aPropertyName.equals(
-                OUString::createFromAscii( "RowCount" ) ) &&
+                rtl::OUString::createFromAscii( "RowCount" ) ) &&
          !aPropertyName.equals(
-                OUString::createFromAscii( "IsRowCountFinal" ) ) )
-        throw UnknownPropertyException();
+                rtl::OUString::createFromAscii( "IsRowCountFinal" ) ) )
+        throw beans::UnknownPropertyException();
 
     if ( m_pImpl->m_pPropertyChangeListeners )
         m_pImpl->m_pPropertyChangeListeners->removeInterface(
@@ -1471,25 +1477,25 @@ void SAL_CALL ResultSet::removePropertyChangeListener(
 //=========================================================================
 // virtual
 void SAL_CALL ResultSet::addVetoableChangeListener(
-                        const OUString&,
-                        const Reference< XVetoableChangeListener >& )
-    throw( UnknownPropertyException,
-           WrappedTargetException,
-           RuntimeException )
+        const rtl::OUString&,
+        const uno::Reference< beans::XVetoableChangeListener >& )
+    throw( beans::UnknownPropertyException,
+           lang::WrappedTargetException,
+           uno::RuntimeException )
 {
-    //  No constrained props. at the moment.
+    //  No constrained props, at the moment.
 }
 
 //=========================================================================
 // virtual
 void SAL_CALL ResultSet::removeVetoableChangeListener(
-                        const OUString&,
-                        const Reference< XVetoableChangeListener >& )
-    throw( UnknownPropertyException,
-           WrappedTargetException,
-           RuntimeException )
+        const rtl::OUString&,
+        const uno::Reference< beans::XVetoableChangeListener >& )
+    throw( beans::UnknownPropertyException,
+           lang::WrappedTargetException,
+           uno::RuntimeException )
 {
-    //  No constrained props. at the moment.
+    //  No constrained props, at the moment.
 }
 
 //=========================================================================
@@ -1498,24 +1504,22 @@ void SAL_CALL ResultSet::removeVetoableChangeListener(
 //
 //=========================================================================
 
-void ResultSet::propertyChanged( const PropertyChangeEvent& rEvt )
+void ResultSet::propertyChanged( const beans::PropertyChangeEvent& rEvt )
 {
-//  osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
-
     if ( !m_pImpl->m_pPropertyChangeListeners )
         return;
 
     // Notify listeners interested especially in the changed property.
-    OInterfaceContainerHelper* pPropsContainer
+    cppu::OInterfaceContainerHelper* pPropsContainer
         = m_pImpl->m_pPropertyChangeListeners->getContainer(
                                                         rEvt.PropertyName );
     if ( pPropsContainer )
     {
-        OInterfaceIteratorHelper aIter( *pPropsContainer );
+        cppu::OInterfaceIteratorHelper aIter( *pPropsContainer );
         while ( aIter.hasMoreElements() )
         {
-            Reference< XPropertyChangeListener > xListener(
-                                                    aIter.next(), UNO_QUERY );
+            uno::Reference< beans::XPropertyChangeListener > xListener(
+                aIter.next(), uno::UNO_QUERY );
             if ( xListener.is() )
                 xListener->propertyChange( rEvt );
         }
@@ -1523,14 +1527,14 @@ void ResultSet::propertyChanged( const PropertyChangeEvent& rEvt )
 
     // Notify listeners interested in all properties.
     pPropsContainer
-        = m_pImpl->m_pPropertyChangeListeners->getContainer( OUString() );
+        = m_pImpl->m_pPropertyChangeListeners->getContainer( rtl::OUString() );
     if ( pPropsContainer )
     {
-        OInterfaceIteratorHelper aIter( *pPropsContainer );
+        cppu::OInterfaceIteratorHelper aIter( *pPropsContainer );
         while ( aIter.hasMoreElements() )
         {
-            Reference< XPropertyChangeListener > xListener(
-                                                    aIter.next(), UNO_QUERY );
+            uno::Reference< beans::XPropertyChangeListener > xListener(
+                aIter.next(), uno::UNO_QUERY );
             if ( xListener.is() )
                 xListener->propertyChange( rEvt );
         }
@@ -1538,52 +1542,55 @@ void ResultSet::propertyChanged( const PropertyChangeEvent& rEvt )
 }
 
 //=========================================================================
-void ResultSet::rowCountChanged( sal_Int32 nOld, sal_Int32 nNew )
+void ResultSet::rowCountChanged( sal_uInt32 nOld, sal_uInt32 nNew )
 {
-    VOS_ENSURE( nOld < nNew, "ResultSet::rowCountChanged - nOld >= nNew!" );
-
-//  osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    OSL_ENSURE( nOld < nNew, "ResultSet::rowCountChanged - nOld >= nNew!" );
 
     if ( !m_pImpl->m_pPropertyChangeListeners )
         return;
 
     propertyChanged(
-        PropertyChangeEvent( static_cast< OWeakObject * >( this ),
-                              OUString::createFromAscii( "RowCount" ),
-                              sal_False,
-                              1001,
-                              makeAny( nOld ),    // old value
-                              makeAny( nNew ) ) ); // new value
+        beans::PropertyChangeEvent(
+            static_cast< cppu::OWeakObject * >( this ),
+            rtl::OUString::createFromAscii( "RowCount" ),
+            sal_False,
+            1001,
+            uno::makeAny( nOld ),     // old value
+            uno::makeAny( nNew ) ) ); // new value
 }
 
 //=========================================================================
 void ResultSet::rowCountFinal()
 {
-//  osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
-
     if ( !m_pImpl->m_pPropertyChangeListeners )
         return;
 
     propertyChanged(
-        PropertyChangeEvent( static_cast< OWeakObject * >( this ),
-                              OUString::createFromAscii( "IsRowCountFinal" ),
-                              sal_False,
-                              1000,
-                              makeAny( sal_False ),   // old value
-                              makeAny( sal_True ) ) ); // new value
+        beans::PropertyChangeEvent(
+            static_cast< cppu::OWeakObject * >( this ),
+            rtl::OUString::createFromAscii( "IsRowCountFinal" ),
+            sal_False,
+            1000,
+            uno:: makeAny( sal_False ),   // old value
+            uno::makeAny( sal_True ) ) ); // new value
 }
 
 //=========================================================================
-const Sequence< Property >& ResultSet::getProperties()
+const uno::Sequence< beans::Property >& ResultSet::getProperties()
 {
     return m_pImpl->m_aProperties;
 }
 
 //=========================================================================
-const Reference< XCommandEnvironment >& ResultSet::getEnvironment()
+const uno::Reference< com::sun::star::ucb::XCommandEnvironment >&
+ResultSet::getEnvironment()
 {
     return m_pImpl->m_xEnv;
 }
+
+} // namespace ucbhelper
+
+namespace ucbhelper_impl {
 
 //=========================================================================
 //=========================================================================
@@ -1594,21 +1601,21 @@ const Reference< XCommandEnvironment >& ResultSet::getEnvironment()
 //=========================================================================
 
 PropertySetInfo::PropertySetInfo(
-                        const Reference< XMultiServiceFactory >& rxSMgr,
-                        const PropertyInfo* pProps,
-                        sal_Int32 nProps )
+    const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+    const PropertyInfo* pProps,
+    sal_Int32 nProps )
 : m_xSMgr( rxSMgr )
 {
-    m_pProps = new Sequence< Property >( nProps );
+    m_pProps = new uno::Sequence< beans::Property >( nProps );
 
     if ( nProps )
     {
         const PropertyInfo* pEntry = pProps;
-        Property* pProperties = m_pProps->getArray();
+        beans::Property* pProperties = m_pProps->getArray();
 
         for ( sal_Int32 n = 0; n < nProps; ++n )
         {
-            Property& rProp = pProperties[ n ];
+            beans::Property& rProp = pProperties[ n ];
 
             rProp.Name       = rtl::OUString::createFromAscii( pEntry->pName );
             rProp.Handle     = pEntry->nHandle;
@@ -1634,8 +1641,8 @@ PropertySetInfo::~PropertySetInfo()
 //=========================================================================
 
 XINTERFACE_IMPL_2( PropertySetInfo,
-                   XTypeProvider,
-                   XPropertySetInfo );
+                   lang::XTypeProvider,
+                   beans::XPropertySetInfo );
 
 //=========================================================================
 //
@@ -1644,8 +1651,8 @@ XINTERFACE_IMPL_2( PropertySetInfo,
 //=========================================================================
 
 XTYPEPROVIDER_IMPL_2( PropertySetInfo,
-                         XTypeProvider,
-                         XPropertySetInfo );
+                         lang::XTypeProvider,
+                         beans::XPropertySetInfo );
 
 //=========================================================================
 //
@@ -1654,42 +1661,44 @@ XTYPEPROVIDER_IMPL_2( PropertySetInfo,
 //=========================================================================
 
 // virtual
-Sequence< Property > SAL_CALL PropertySetInfo::getProperties()
-    throw( RuntimeException )
+uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
+    throw( uno::RuntimeException )
 {
-    return Sequence< Property >( *m_pProps );
+    return uno::Sequence< beans::Property >( *m_pProps );
 }
 
 //=========================================================================
 // virtual
-Property SAL_CALL PropertySetInfo::getPropertyByName( const OUString& aName )
-    throw( UnknownPropertyException, RuntimeException )
+beans::Property SAL_CALL PropertySetInfo::getPropertyByName(
+        const rtl::OUString& aName )
+    throw( beans::UnknownPropertyException, uno::RuntimeException )
 {
-    Property aProp;
+    beans::Property aProp;
     if ( queryProperty( aName, aProp ) )
         return aProp;
 
-    throw UnknownPropertyException();
+    throw beans::UnknownPropertyException();
 }
 
 //=========================================================================
 // virtual
-sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName( const OUString& Name )
-    throw( RuntimeException )
+sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName(
+        const rtl::OUString& Name )
+    throw( uno::RuntimeException )
 {
-    Property aProp;
+    beans::Property aProp;
     return queryProperty( Name, aProp );
 }
 
 //=========================================================================
 sal_Bool PropertySetInfo::queryProperty(
-                                const OUString& aName, Property& rProp )
+    const rtl::OUString& aName, beans::Property& rProp )
 {
     sal_Int32 nCount = m_pProps->getLength();
-    const Property* pProps = m_pProps->getConstArray();
+    const beans::Property* pProps = m_pProps->getConstArray();
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
-        const Property& rCurr = pProps[ n ];
+        const beans::Property& rCurr = pProps[ n ];
         if ( rCurr.Name == aName )
         {
             rProp = rCurr;
@@ -1700,3 +1709,4 @@ sal_Bool PropertySetInfo::queryProperty(
     return sal_False;
 }
 
+} // namespace ucbhelper_impl
