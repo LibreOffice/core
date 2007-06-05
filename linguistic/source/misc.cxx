@@ -4,9 +4,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:24:38 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:29:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,6 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-//#ifndef _RTL_USTRBUF_HXX_
-//#include <rtl/ustrbuf.hxx>
-//#endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
@@ -302,7 +299,7 @@ sal_Int32 LevDistance( const OUString &rTxt1, const OUString &rTxt2 )
 ///////////////////////////////////////////////////////////////////////////
 
 BOOL IsUseDicList( const PropertyValues &rProperties,
-        const Reference< XPropertySet > &rxProp )
+        const uno::Reference< XPropertySet > &rxProp )
 {
     BOOL bRes = TRUE;
 
@@ -320,7 +317,7 @@ BOOL IsUseDicList( const PropertyValues &rProperties,
     }
     if (i >= nLen)  // no temporary value found in 'rProperties'
     {
-        Reference< XFastPropertySet > xFast( rxProp, UNO_QUERY );
+        uno::Reference< XFastPropertySet > xFast( rxProp, UNO_QUERY );
         if (xFast.is())
             xFast->getFastPropertyValue( UPH_IS_USE_DICTIONARY_LIST ) >>= bRes;
     }
@@ -330,7 +327,7 @@ BOOL IsUseDicList( const PropertyValues &rProperties,
 
 
 BOOL IsIgnoreControlChars( const PropertyValues &rProperties,
-        const Reference< XPropertySet > &rxProp )
+        const uno::Reference< XPropertySet > &rxProp )
 {
     BOOL bRes = TRUE;
 
@@ -348,7 +345,7 @@ BOOL IsIgnoreControlChars( const PropertyValues &rProperties,
     }
     if (i >= nLen)  // no temporary value found in 'rProperties'
     {
-        Reference< XFastPropertySet > xFast( rxProp, UNO_QUERY );
+        uno::Reference< XFastPropertySet > xFast( rxProp, UNO_QUERY );
         if (xFast.is())
             xFast->getFastPropertyValue( UPH_IS_IGNORE_CONTROL_CHARACTERS ) >>= bRes;
     }
@@ -357,7 +354,7 @@ BOOL IsIgnoreControlChars( const PropertyValues &rProperties,
 }
 
 
-static BOOL lcl_HasHyphInfo( const Reference<XDictionaryEntry> &xEntry )
+static BOOL lcl_HasHyphInfo( const uno::Reference<XDictionaryEntry> &xEntry )
 {
     BOOL bRes = FALSE;
     if (xEntry.is())
@@ -371,28 +368,28 @@ static BOOL lcl_HasHyphInfo( const Reference<XDictionaryEntry> &xEntry )
 }
 
 
-Reference< XDictionaryEntry > SearchDicList(
-        const Reference< XDictionaryList > &xDicList,
+uno::Reference< XDictionaryEntry > SearchDicList(
+        const uno::Reference< XDictionaryList > &xDicList,
         const OUString &rWord, INT16 nLanguage,
         BOOL bSearchPosDics, BOOL bSearchSpellEntry )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    Reference< XDictionaryEntry > xEntry;
+    uno::Reference< XDictionaryEntry > xEntry;
 
     if (!xDicList.is())
         return xEntry;
 
-    const uno::Sequence< Reference< XDictionary > >
+    const uno::Sequence< uno::Reference< XDictionary > >
             aDics( xDicList->getDictionaries() );
-    const Reference< XDictionary >
+    const uno::Reference< XDictionary >
             *pDic = aDics.getConstArray();
     INT32 nDics = xDicList->getCount();
 
     INT32 i;
     for (i = 0;  i < nDics;  i++)
     {
-        Reference< XDictionary1 > axDic( pDic[i], UNO_QUERY );
+        uno::Reference< XDictionary1 > axDic( pDic[i], UNO_QUERY );
 
         DictionaryType  eType = axDic->getDictionaryType();
         INT16           nLang = axDic->getLanguage();
@@ -492,8 +489,8 @@ BOOL    IsReadOnly( const String &rURL, BOOL *pbExist )
     {
         try
         {
-            Reference< ::com::sun::star::ucb::XCommandEnvironment > xCmdEnv;
-            ::ucb::Content aContent( rURL, xCmdEnv );
+            uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xCmdEnv;
+            ::ucbhelper::Content aContent( rURL, xCmdEnv );
 
             bExists = aContent.isDocument();
             if (bExists)
@@ -517,7 +514,7 @@ BOOL    IsReadOnly( const String &rURL, BOOL *pbExist )
 
 
 static BOOL GetAltSpelling( INT16 &rnChgPos, INT16 &rnChgLen, OUString &rRplc,
-        Reference< XHyphenatedWord > &rxHyphWord )
+        uno::Reference< XHyphenatedWord > &rxHyphWord )
 {
     BOOL bRes = rxHyphWord->isAlternativeSpelling();
     if (bRes)
@@ -603,11 +600,11 @@ INT32 GetPosInWordToCheck( const OUString &rTxt, INT32 nPos )
 }
 
 
-Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
+uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
         const OUString &rOrigWord,
-        Reference< XHyphenatedWord > &rxHyphWord )
+        uno::Reference< XHyphenatedWord > &rxHyphWord )
 {
-    Reference< XHyphenatedWord > xRes;
+    uno::Reference< XHyphenatedWord > xRes;
     if (rOrigWord.getLength() && rxHyphWord.is())
     {
         INT16    nChgPos = 0,
@@ -799,13 +796,13 @@ BOOL IsNumeric( const String &rText )
 
 ///////////////////////////////////////////////////////////////////////////
 
-Reference< XInterface > GetOneInstanceService( const char *pServiceName )
+uno::Reference< XInterface > GetOneInstanceService( const char *pServiceName )
 {
-    Reference< XInterface > xRef;
+    uno::Reference< XInterface > xRef;
 
     if (pServiceName)
     {
-        Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
+        uno::Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
         if (xMgr.is())
         {
             xRef = xMgr->createInstance( A2OU( pServiceName ) );
@@ -815,21 +812,21 @@ Reference< XInterface > GetOneInstanceService( const char *pServiceName )
     return xRef;
 }
 
-Reference< XPropertySet > GetLinguProperties()
+uno::Reference< XPropertySet > GetLinguProperties()
 {
-    return Reference< XPropertySet > (
+    return uno::Reference< XPropertySet > (
         GetOneInstanceService( SN_LINGU_PROPERTIES ), UNO_QUERY );
 }
 
-Reference< XSearchableDictionaryList > GetSearchableDictionaryList()
+uno::Reference< XSearchableDictionaryList > GetSearchableDictionaryList()
 {
-    return Reference< XSearchableDictionaryList > (
+    return uno::Reference< XSearchableDictionaryList > (
         GetOneInstanceService( SN_DICTIONARY_LIST ), UNO_QUERY );
 }
 
-Reference< XDictionaryList > GetDictionaryList()
+uno::Reference< XDictionaryList > GetDictionaryList()
 {
-    return Reference< XDictionaryList > (
+    return uno::Reference< XDictionaryList > (
         GetOneInstanceService( SN_DICTIONARY_LIST ), UNO_QUERY );
 }
 
@@ -839,12 +836,12 @@ AppExitListener::AppExitListener()
 {
     // add object to Desktop EventListeners in order to properly call
     // the AtExit function at appliction exit.
-    Reference< XMultiServiceFactory >
+    uno::Reference< XMultiServiceFactory >
         xMgr = getProcessServiceFactory();
 
     if (xMgr.is())
     {
-        xDesktop = Reference< frame::XDesktop >(
+        xDesktop = uno::Reference< frame::XDesktop >(
                 xMgr->createInstance( A2OU( SN_DESKTOP ) ), UNO_QUERY );
     }
 }
