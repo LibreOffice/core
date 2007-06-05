@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pkguri.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:05:52 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:15:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,7 +181,8 @@ void PackageUri::init() const
 
                 aPureUri = aPureUri.replaceAt(
                     nStart, aPureUri.getLength() - nStart, aNormPackage );
-                m_aPackage = ::ucb::urihelper::decodeSegment( aNormPackage );
+                m_aPackage
+                    = ::ucb_impl::urihelper::decodeSegment( aNormPackage );
                 m_aPath = rtl::OUString::createFromAscii( "/" );
                 m_aUri = m_aUri.replaceAt( 0,
                                            ( nParam >= 0 )
@@ -190,10 +191,11 @@ void PackageUri::init() const
 
                 sal_Int32 nLastSlash = m_aPackage.lastIndexOf( '/' );
                 if ( nLastSlash != -1 )
-                    m_aName = ::ucb::urihelper::decodeSegment(
+                    m_aName = ::ucb_impl::urihelper::decodeSegment(
                         m_aPackage.copy( nLastSlash + 1 ) );
                 else
-                    m_aName = ::ucb::urihelper::decodeSegment( m_aPackage );
+                    m_aName
+                        = ::ucb_impl::urihelper::decodeSegment( m_aPackage );
             }
             else
             {
@@ -220,10 +222,11 @@ void PackageUri::init() const
                 aPureUri = aPureUri.replaceAt(
                     nEnd + 1,
                     aPureUri.getLength() - nEnd - 1,
-                    ::ucb::urihelper::encodeURI( m_aPath ) );
+                    ::ucb_impl::urihelper::encodeURI( m_aPath ) );
 
-                m_aPackage = ::ucb::urihelper::decodeSegment( aNormPackage );
-                m_aPath = ::ucb::urihelper::decodeSegment( m_aPath );
+                m_aPackage
+                    = ::ucb_impl::urihelper::decodeSegment( aNormPackage );
+                m_aPath = ::ucb_impl::urihelper::decodeSegment( m_aPath );
                 m_aUri = m_aUri.replaceAt( 0,
                                            ( nParam >= 0 )
                                            ? nParam
@@ -233,7 +236,7 @@ void PackageUri::init() const
                 if ( nLastSlash != -1 )
                 {
                     m_aParentUri = aPureUri.copy( 0, nLastSlash );
-                    m_aName = ::ucb::urihelper::decodeSegment(
+                    m_aName = ::ucb_impl::urihelper::decodeSegment(
                         aPureUri.copy( nLastSlash + 1 ) );
                 }
             }
