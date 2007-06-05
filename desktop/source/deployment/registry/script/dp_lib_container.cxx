@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_lib_container.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:11:14 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:07:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ OUString LibraryContainer::get_libname(
     Reference<XComponentContext> const & xContext )
 {
     ::xmlscript::LibDescriptor import;
-    ::ucb::Content ucb_content( url, xCmdEnv );
+    ::ucbhelper::Content ucb_content( url, xCmdEnv );
     xml_parse( ::xmlscript::importLibrary( import ), ucb_content, xContext );
 
     if (import.aName.getLength() == 0) {
@@ -134,7 +134,7 @@ void LibraryContainer::init(
     if (! m_inited)
     {
         m_modified = false;
-        ::ucb::Content ucb_content;
+        ::ucbhelper::Content ucb_content;
         if (create_ucb_content( &ucb_content, m_container_url,
                                 xCmdEnv, false /* no throw */ ))
         {
