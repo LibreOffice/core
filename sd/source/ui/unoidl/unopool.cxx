@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopool.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:28:04 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:14:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,9 +55,6 @@
 #include "drawdoc.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::comphelper;
@@ -82,7 +79,7 @@ public:
     virtual ~SdUnoDrawPool() throw();
 
 protected:
-    virtual void putAny( SfxItemPool* pPool, const PropertyMapEntry* pEntry, const Any& rValue ) throw( UnknownPropertyException, IllegalArgumentException);
+    virtual void putAny( SfxItemPool* pPool, const PropertyMapEntry* pEntry, const uno::Any& rValue ) throw( beans::UnknownPropertyException, lang::IllegalArgumentException);
 
 private:
     SdDrawDocument* mpDrawModel;
@@ -97,8 +94,8 @@ SdUnoDrawPool::~SdUnoDrawPool() throw()
 {
 }
 
-void SdUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, const Any& rValue )
-    throw(UnknownPropertyException, IllegalArgumentException)
+void SdUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, const uno::Any& rValue )
+    throw(beans::UnknownPropertyException, lang::IllegalArgumentException)
 {
     switch( pEntry->mnHandle )
     {
@@ -116,7 +113,7 @@ void SdUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEnt
     SvxUnoDrawPool::putAny( pPool, pEntry, rValue );
 }
 
-Reference< XInterface > SdUnoCreatePool( SdDrawDocument* pDrawModel )
+uno::Reference< uno::XInterface > SdUnoCreatePool( SdDrawDocument* pDrawModel )
 {
     return (uno::XAggregation*)new SdUnoDrawPool( pDrawModel );
 }
