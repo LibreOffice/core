@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unochart.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:33:44 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:31:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,12 +122,6 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::chart2::data;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::util;
 using namespace ::rtl;
 
 // from unotbl.cxx
@@ -243,13 +237,13 @@ static osl::Mutex &    GetChartMutex()
 
 static void LaunchModifiedEvent(
         ::cppu::OInterfaceContainerHelper &rICH,
-        const Reference< XInterface > &rxI )
+        const uno::Reference< uno::XInterface > &rxI )
 {
-    EventObject aEvtObj( rxI );
+    lang::EventObject aEvtObj( rxI );
     cppu::OInterfaceIteratorHelper aIt( rICH );
     while (aIt.hasMoreElements())
     {
-        Reference< XModifyListener > xRef( aIt.next(), UNO_QUERY );
+        uno::Reference< util::XModifyListener > xRef( aIt.next(), uno::UNO_QUERY );
         if (xRef.is())
             xRef->modified( aEvtObj );
     }
@@ -506,12 +500,12 @@ static void GetFormatAndCreateCursorFromRangeRep(
 
 
 static sal_Bool GetSubranges( const OUString &rRangeRepresentation,
-        Sequence< OUString > &rSubRanges, sal_Bool bNormalize )
+        uno::Sequence< OUString > &rSubRanges, sal_Bool bNormalize )
 {
     sal_Bool bRes = sal_True;
     String aRangesStr( rRangeRepresentation );
     xub_StrLen nLen = aRangesStr.GetTokenCount( ';' );
-    Sequence< OUString > aRanges( nLen );
+    uno::Sequence< OUString > aRanges( nLen );
 
     sal_Int32 nCnt = 0;
     if (nLen != 0)
@@ -553,7 +547,7 @@ static sal_Bool GetSubranges( const OUString &rRangeRepresentation,
 }
 
 
-static void SortSubranges( Sequence< OUString > &rSubRanges, sal_Bool bCmpByColumn )
+static void SortSubranges( uno::Sequence< OUString > &rSubRanges, sal_Bool bCmpByColumn )
 {
     sal_Int32 nLen = rSubRanges.getLength();
     OUString *pSubRanges = rSubRanges.getArray();
@@ -614,22 +608,22 @@ SwChartDataProvider::~SwChartDataProvider()
 }
 
 
-Reference< XDataSource > SAL_CALL SwChartDataProvider::createDataSource(
-        const Sequence< PropertyValue >& rArguments )
-    throw (lang::IllegalArgumentException, RuntimeException)
+uno::Reference< chart2::data::XDataSource > SAL_CALL SwChartDataProvider::createDataSource(
+        const uno::Sequence< beans::PropertyValue >& rArguments )
+    throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     if (bDisposed)
         throw lang::DisposedException();
 
-    Reference< XDataSource > xRes;
+    uno::Reference< chart2::data::XDataSource > xRes;
 
     if (!pDoc)
-        throw RuntimeException();
+        throw uno::RuntimeException();
 
     // get arguments
     OUString aRangeRepresentation;
-    Sequence< sal_Int32 > aSequenceMapping;
+    uno::Sequence< sal_Int32 > aSequenceMapping;
     sal_Bool bFirstIsLabel      = sal_False;
     sal_Bool bDtaSrcIsColumns   = sal_True; // true : DataSource will be sequence of columns
                                             // false: DataSource will be sequence of rows
@@ -638,7 +632,7 @@ Reference< XDataSource > SAL_CALL SwChartDataProvider::createDataSource(
     DBG_ASSERT( nArgs != 0, "no properties provided" );
     if (nArgs == 0)
         return xRes;
-    const PropertyValue *pArg = rArguments.getConstArray();
+    const beans::PropertyValue *pArg = rArguments.getConstArray();
     for (sal_Int32 i = 0;  i < nArgs;  ++i)
     {
         if (pArg[i].Name.equalsAscii( "DataRowSource" ))
@@ -648,7 +642,7 @@ Reference< XDataSource > SAL_CALL SwChartDataProvider::createDataSource(
             {
                 sal_Int32 nTmp;
                 if (!(pArg[i].Value >>= nTmp))
-                    throw IllegalArgumentException();
+                    throw lang::IllegalArgumentException();
                 eSource = static_cast< chart::ChartDataRowSource >( nTmp );
             }
             bDtaSrcIsColumns = eSource == chart::ChartDataRowSource_COLUMNS;
@@ -688,7 +682,7 @@ Reference< XDataSource > SAL_CALL SwChartDataProvider::createDataSource(
     }
 #endif
 
-    Sequence< OUString > aSubRanges;
+    uno::Sequence< OUString > aSubRanges;
     // get sub-ranges and check that they all are from the very same table
     sal_Bool bOk = GetSubranges( aRangeRepresentation, aSubRanges, sal_True );
 
@@ -911,10 +905,10 @@ Reference< XDataSource > SAL_CALL SwChartDataProvider::createDataSource(
                 throw uno::RuntimeException();
 
             // create data source from found label and data sequences
-            Sequence< Reference< XDataSequence > > aLabelSeqs( nNumLDS );
-            Reference< XDataSequence > *pLabelSeqs = aLabelSeqs.getArray();
-            Sequence< Reference< XDataSequence > > aDataSeqs( nNumLDS );
-            Reference< XDataSequence > *pDataSeqs = aDataSeqs.getArray();
+            uno::Sequence< uno::Reference< chart2::data::XDataSequence > > aLabelSeqs( nNumLDS );
+            uno::Reference< chart2::data::XDataSequence > *pLabelSeqs = aLabelSeqs.getArray();
+            uno::Sequence< uno::Reference< chart2::data::XDataSequence > > aDataSeqs( nNumLDS );
+            uno::Reference< chart2::data::XDataSequence > *pDataSeqs = aDataSeqs.getArray();
             sal_Int32 nSeqsIdx = 0;
             for (oi = 0;  oi < oiEnd;  ++oi)
             {
@@ -991,8 +985,8 @@ Reference< XDataSource > SAL_CALL SwChartDataProvider::createDataSource(
                     "mismatch between sequence size and num,ber of entries" );
 
             // build data source from data and label sequences
-            Sequence< Reference< XLabeledDataSequence > > aLDS( nNumLDS );
-            Reference< XLabeledDataSequence > *pLDS = aLDS.getArray();
+            uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLDS( nNumLDS );
+            uno::Reference< chart2::data::XLabeledDataSequence > *pLDS = aLDS.getArray();
             for (sal_Int32 i = 0;  i < nNumLDS;  ++i)
             {
                 SwChartLabeledDataSequence *pLabeledDtaSeq = new SwChartLabeledDataSequence;
@@ -1006,8 +1000,8 @@ Reference< XDataSource > SAL_CALL SwChartDataProvider::createDataSource(
             if (nSequenceMappingLen)
             {
                 sal_Int32 *pSequenceMapping = aSequenceMapping.getArray();
-                Sequence< Reference< XLabeledDataSequence > > aOld_LDS( aLDS );
-                Reference< XLabeledDataSequence > *pOld_LDS = aOld_LDS.getArray();
+                uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aOld_LDS( aLDS );
+                uno::Reference< chart2::data::XLabeledDataSequence > *pOld_LDS = aOld_LDS.getArray();
 
                 sal_Int32 nNewCnt = 0;
                 for (sal_Int32 i = 0;  i < nSequenceMappingLen;  ++i)
@@ -1020,7 +1014,7 @@ Reference< XDataSource > SAL_CALL SwChartDataProvider::createDataSource(
                         pLDS[nNewCnt++] = pOld_LDS[nIdx];
 
                         // mark index as being used already (avoids duplicate entries)
-                        pOld_LDS[nIdx] = Reference< XLabeledDataSequence >();
+                        pOld_LDS[nIdx].clear();
                     }
                 }
                 // add not yet used 'old' sequences to new one
@@ -1044,20 +1038,20 @@ Reference< XDataSource > SAL_CALL SwChartDataProvider::createDataSource(
 }
 
 
-Sequence< PropertyValue > SAL_CALL SwChartDataProvider::detectArguments(
-        const Reference< XDataSource >& xDataSource )
-    throw (RuntimeException)
+uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArguments(
+        const uno::Reference< chart2::data::XDataSource >& xDataSource )
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     if (bDisposed)
         throw lang::DisposedException();
 
-    Sequence< PropertyValue > aResult;
+    uno::Sequence< beans::PropertyValue > aResult;
     if (!xDataSource.is())
         return aResult;
 
-    const Sequence< Reference< XLabeledDataSequence > > aDS_LDS( xDataSource->getDataSequences() );
-    const Reference< XLabeledDataSequence > *pDS_LDS = aDS_LDS.getConstArray();
+    const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aDS_LDS( xDataSource->getDataSequences() );
+    const uno::Reference< chart2::data::XLabeledDataSequence > *pDS_LDS = aDS_LDS.getConstArray();
     sal_Int32 nNumDS_LDS = aDS_LDS.getLength();
 
     DBG_ASSERT( nNumDS_LDS != 0, "data source contains no XLabeledDataSequence" );
@@ -1073,7 +1067,7 @@ Sequence< PropertyValue > SAL_CALL SwChartDataProvider::detectArguments(
     // data used to build 'CellRangeRepresentation' from later on
     std::vector< std::vector< sal_Char > > aMap;
 
-    Sequence< sal_Int32 > aSequenceMapping( nNumDS_LDS );
+    uno::Sequence< sal_Int32 > aSequenceMapping( nNumDS_LDS );
     sal_Int32 *pSequenceMapping = aSequenceMapping.getArray();
 
     String aCellRanges;
@@ -1086,14 +1080,14 @@ Sequence< PropertyValue > SAL_CALL SwChartDataProvider::detectArguments(
 //     sal_Int32 nValuesSeqLen = -1;   // used to see if all value sequences have the same size
     for (sal_Int32 i = 0;  i < nNumDS_LDS;  ++i)
     {
-        Reference< XLabeledDataSequence > xLabeledDataSequence( pDS_LDS[i] );
+        uno::Reference< chart2::data::XLabeledDataSequence > xLabeledDataSequence( pDS_LDS[i] );
         if( !xLabeledDataSequence.is() )
         {
             DBG_ERROR("got NULL for XLabeledDataSequence from Data source");
             continue;
         }
-        const Reference< XDataSequence > xCurLabel( xLabeledDataSequence->getLabel(), UNO_QUERY );
-        const Reference< XDataSequence > xCurValues( xLabeledDataSequence->getValues(), UNO_QUERY );
+        const uno::Reference< chart2::data::XDataSequence > xCurLabel( xLabeledDataSequence->getLabel(), uno::UNO_QUERY );
+        const uno::Reference< chart2::data::XDataSequence > xCurValues( xLabeledDataSequence->getValues(), uno::UNO_QUERY );
 
         // get sequence lengths for label and values.
         // (0 length is Ok)
@@ -1313,7 +1307,7 @@ Sequence< PropertyValue > SAL_CALL SwChartDataProvider::detectArguments(
     }
     // to be nice to the user we now sort the cell ranges according to
     // rows or columns depending on the direction used in the data source
-    Sequence< OUString > aSortedRanges;
+    uno::Sequence< OUString > aSortedRanges;
     GetSubranges( aCellRanges, aSortedRanges, sal_False /*sub ranges should already be normalized*/ );
     SortSubranges( aSortedRanges, (nDtaSrcIsColumns == 1) );
     sal_Int32 nSortedRanges = aSortedRanges.getLength();
@@ -1329,7 +1323,7 @@ Sequence< PropertyValue > SAL_CALL SwChartDataProvider::detectArguments(
 
     // build value for 'SequenceMapping'
     //
-    Sequence< sal_Int32 > aSortedMapping( aSequenceMapping );
+    uno::Sequence< sal_Int32 > aSortedMapping( aSequenceMapping );
     sal_Int32 *pSortedMapping = aSortedMapping.getArray();
     std::sort( pSortedMapping, pSortedMapping + aSortedMapping.getLength() );
     DBG_ASSERT( aSortedMapping.getLength() == nNumDS_LDS, "unexpected size of sequence" );
@@ -1389,9 +1383,9 @@ Sequence< PropertyValue > SAL_CALL SwChartDataProvider::detectArguments(
     return aResult;
 }
 
-Reference< XDataSequence > SAL_CALL SwChartDataProvider::createDataSequenceByRangeRepresentation(
+uno::Reference< chart2::data::XDataSequence > SAL_CALL SwChartDataProvider::createDataSequenceByRangeRepresentation(
         const OUString& rRangeRepresentation )
-    throw (lang::IllegalArgumentException, RuntimeException)
+    throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     if (bDisposed)
@@ -1409,16 +1403,16 @@ Reference< XDataSequence > SAL_CALL SwChartDataProvider::createDataSequenceByRan
 }
 
 
-Reference< sheet::XRangeSelection > SAL_CALL SwChartDataProvider::getRangeSelection(  )
-    throw (RuntimeException)
+uno::Reference< sheet::XRangeSelection > SAL_CALL SwChartDataProvider::getRangeSelection(  )
+    throw (uno::RuntimeException)
 {
     // note: it is no error to return nothing here
-    return Reference< sheet::XRangeSelection >();
+    return uno::Reference< sheet::XRangeSelection >();
 }
 
 
 void SAL_CALL SwChartDataProvider::dispose(  )
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
     sal_Bool bMustDispose( sal_False );
     {
@@ -1440,15 +1434,15 @@ void SAL_CALL SwChartDataProvider::dispose(  )
         aDataSequences.clear();
 
         // require listeners to release references to this object
-        EventObject aEvtObj( dynamic_cast< chart2::data::XDataSequence * >(this) );
+        lang::EventObject aEvtObj( dynamic_cast< chart2::data::XDataSequence * >(this) );
         aEvtListeners.disposeAndClear( aEvtObj );
     }
 }
 
 
 void SAL_CALL SwChartDataProvider::addEventListener(
-        const Reference< lang::XEventListener >& rxListener )
-    throw (RuntimeException)
+        const uno::Reference< lang::XEventListener >& rxListener )
+    throw (uno::RuntimeException)
 {
     osl::MutexGuard  aGuard( GetChartMutex() );
     if (!bDisposed && rxListener.is())
@@ -1457,8 +1451,8 @@ void SAL_CALL SwChartDataProvider::addEventListener(
 
 
 void SAL_CALL SwChartDataProvider::removeEventListener(
-        const Reference< lang::XEventListener >& rxListener )
-    throw (RuntimeException)
+        const uno::Reference< lang::XEventListener >& rxListener )
+    throw (uno::RuntimeException)
 {
     osl::MutexGuard  aGuard( GetChartMutex() );
     if (!bDisposed && rxListener.is())
@@ -1468,7 +1462,7 @@ void SAL_CALL SwChartDataProvider::removeEventListener(
 
 
 OUString SAL_CALL SwChartDataProvider::getImplementationName(  )
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
     return C2U("SwChartDataProvider");
 }
@@ -1476,18 +1470,18 @@ OUString SAL_CALL SwChartDataProvider::getImplementationName(  )
 
 sal_Bool SAL_CALL SwChartDataProvider::supportsService(
         const OUString& rServiceName )
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     return rServiceName.equalsAscii( SN_DATA_PROVIDER );
 }
 
 
-Sequence< OUString > SAL_CALL SwChartDataProvider::getSupportedServiceNames(  )
-    throw (RuntimeException)
+uno::Sequence< OUString > SAL_CALL SwChartDataProvider::getSupportedServiceNames(  )
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
-    Sequence< OUString > aRes(1);
+    uno::Sequence< OUString > aRes(1);
     aRes.getArray()[0] = C2U( SN_DATA_PROVIDER );
     return aRes;
 }
@@ -1500,13 +1494,13 @@ void SwChartDataProvider::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 }
 
 
-void SwChartDataProvider::AddDataSequence( const SwTable &rTable, Reference< chart2::data::XDataSequence > &rxDataSequence )
+void SwChartDataProvider::AddDataSequence( const SwTable &rTable, uno::Reference< chart2::data::XDataSequence > &rxDataSequence )
 {
     aDataSequences[ &rTable ].insert( rxDataSequence );
 }
 
 
-void SwChartDataProvider::RemoveDataSequence( const SwTable &rTable, Reference< chart2::data::XDataSequence > &rxDataSequence )
+void SwChartDataProvider::RemoveDataSequence( const SwTable &rTable, uno::Reference< chart2::data::XDataSequence > &rxDataSequence )
 {
     aDataSequences[ &rTable ].erase( rxDataSequence );
 }
@@ -1524,7 +1518,7 @@ void SwChartDataProvider::InvalidateTable( const SwTable *pTable )
         Set_DataSequenceRef_t::iterator aIt( rSet.begin() );
         while (aIt != rSet.end())
         {
-            Reference< util::XModifiable > xRef( Reference< chart2::data::XDataSequence >(*aIt), UNO_QUERY );
+            uno::Reference< util::XModifiable > xRef( uno::Reference< chart2::data::XDataSequence >(*aIt), uno::UNO_QUERY );
             if (xRef.is())
             {
                 // mark the sequence as 'dirty' and notify listeners
@@ -1557,7 +1551,7 @@ sal_Bool SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox
             sal_Bool bNowEmpty = sal_False;
 
             // check if weak reference is still valid...
-            Reference< chart2::data::XDataSequence > xRef( Reference< chart2::data::XDataSequence>(*aIt), UNO_QUERY );
+            uno::Reference< chart2::data::XDataSequence > xRef( uno::Reference< chart2::data::XDataSequence>(*aIt), uno::UNO_QUERY );
             if (xRef.is())
             {
                 // then delete that table box (check if implementation cursor needs to be adjusted)
@@ -1599,7 +1593,7 @@ void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
         Set_DataSequenceRef_t::iterator aEndIt( rSet.end() );
         while (aIt != aEndIt)
         {
-            Reference< lang::XComponent > xRef( Reference< chart2::data::XDataSequence >(*aIt), UNO_QUERY );
+            uno::Reference< lang::XComponent > xRef( uno::Reference< chart2::data::XDataSequence >(*aIt), uno::UNO_QUERY );
             if (xRef.is())
             {
                 xRef->dispose();
@@ -1613,7 +1607,7 @@ void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
 // XRangeXMLConversion ---------------------------------------------------
 
 rtl::OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const rtl::OUString& rRangeRepresentation )
-    throw ( RuntimeException, IllegalArgumentException )
+    throw ( uno::RuntimeException, lang::IllegalArgumentException )
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     if (bDisposed)
@@ -1624,23 +1618,23 @@ rtl::OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const rtl::OUStri
     GetFormatAndCreateCursorFromRangeRep( pDoc, rRangeRepresentation,
                                           &pTblFmt, /*&pUnoCrsr*/ NULL );
     if (!pTblFmt)
-        throw IllegalArgumentException();
+        throw lang::IllegalArgumentException();
 //    if (!pUnoCrsr)
-//        throw RuntimeException();
+//        throw uno::RuntimeException();
     SwTable* pTable = SwTable::FindTable( pTblFmt );
     if  (pTable->IsTblComplex())
-        throw RuntimeException();
+        throw uno::RuntimeException();
 
     String aTblName;
     String aStartCell;
     String aEndCell;
     if (!GetTableAndCellsFromRangeRep( rRangeRepresentation, aTblName, aStartCell, aEndCell ))
-        throw IllegalArgumentException();
+        throw lang::IllegalArgumentException();
 
     sal_Int16 nCol, nRow;
     lcl_GetCellPosition( aStartCell, nCol, nRow );
     if (nCol < 0 || nRow < 0)
-        throw RuntimeException();
+        throw uno::RuntimeException();
 
     //!! following objects/functions are implemented in XMLRangeHelper.?xx
     //!! which is a copy of the respective file from chart2 !!
@@ -1653,7 +1647,7 @@ rtl::OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const rtl::OUStri
     {
         lcl_GetCellPosition( aEndCell, nCol, nRow );
         if (nCol < 0 || nRow < 0)
-            throw RuntimeException();
+            throw uno::RuntimeException();
 
         aCellRange.aLowerRight.nColumn   = nCol;
         aCellRange.aLowerRight.nRow      = nRow;
@@ -1665,7 +1659,7 @@ rtl::OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const rtl::OUStri
 }
 
 rtl::OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const rtl::OUString& rXMLRange )
-    throw ( RuntimeException, IllegalArgumentException )
+    throw ( uno::RuntimeException, lang::IllegalArgumentException )
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     if (bDisposed)
@@ -1694,7 +1688,7 @@ rtl::OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const rtl::OUSt
 //////////////////////////////////////////////////////////////////////
 
 SwChartDataSource::SwChartDataSource(
-        const Sequence< Reference< XLabeledDataSequence > > &rLDS ) :
+        const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > &rLDS ) :
     aLDS( rLDS )
 {
 }
@@ -1706,8 +1700,8 @@ SwChartDataSource::~SwChartDataSource()
 }
 
 
-Sequence< Reference< XLabeledDataSequence > > SAL_CALL SwChartDataSource::getDataSequences(  )
-    throw (RuntimeException)
+uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SAL_CALL SwChartDataSource::getDataSequences(  )
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     return aLDS;
@@ -1715,7 +1709,7 @@ Sequence< Reference< XLabeledDataSequence > > SAL_CALL SwChartDataSource::getDat
 
 
 OUString SAL_CALL SwChartDataSource::getImplementationName(  )
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     return C2U("SwChartDataSource");
@@ -1724,18 +1718,18 @@ OUString SAL_CALL SwChartDataSource::getImplementationName(  )
 
 sal_Bool SAL_CALL SwChartDataSource::supportsService(
         const OUString& rServiceName )
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     return rServiceName.equalsAscii( SN_DATA_SOURCE );
 }
 
 
-Sequence< OUString > SAL_CALL SwChartDataSource::getSupportedServiceNames(  )
-    throw (RuntimeException)
+uno::Sequence< OUString > SAL_CALL SwChartDataSource::getSupportedServiceNames(  )
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
-    Sequence< OUString > aRes(1);
+    uno::Sequence< OUString > aRes(1);
     aRes.getArray()[0] = C2U( SN_DATA_SOURCE );
     return aRes;
 }
@@ -1765,7 +1759,7 @@ SwChartDataSequence::SwChartDataSequence(
         const SwTable* pTable = SwTable::FindTable( &rTblFmt );
         if (pTable)
         {
-            Reference< chart2::data::XDataSequence > xRef( dynamic_cast< chart2::data::XDataSequence * >(this), UNO_QUERY );
+            uno::Reference< chart2::data::XDataSequence > xRef( dynamic_cast< chart2::data::XDataSequence * >(this), uno::UNO_QUERY );
             pDataProvider->AddDataSequence( *pTable, xRef );
             pDataProvider->addEventListener( dynamic_cast< lang::XEventListener * >(this) );
         }
@@ -1814,7 +1808,7 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
         const SwTable* pTable = SwTable::FindTable( GetFrmFmt() );
         if (pTable)
         {
-            Reference< chart2::data::XDataSequence > xRef( dynamic_cast< chart2::data::XDataSequence * >(this), UNO_QUERY );
+            uno::Reference< chart2::data::XDataSequence > xRef( dynamic_cast< chart2::data::XDataSequence * >(this), uno::UNO_QUERY );
             pDataProvider->AddDataSequence( *pTable, xRef );
             pDataProvider->addEventListener( dynamic_cast< lang::XEventListener * >(this) );
         }
@@ -1851,15 +1845,15 @@ SwChartDataSequence::~SwChartDataSequence()
 }
 
 
-const Sequence< sal_Int8 > & SwChartDataSequence::getUnoTunnelId()
+const uno::Sequence< sal_Int8 > & SwChartDataSequence::getUnoTunnelId()
 {
     static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
     return aSeq;
 }
 
 
-sal_Int64 SAL_CALL SwChartDataSequence::getSomething( const Sequence< sal_Int8 > &rId )
-    throw(RuntimeException)
+sal_Int64 SAL_CALL SwChartDataSequence::getSomething( const uno::Sequence< sal_Int8 > &rId )
+    throw(uno::RuntimeException)
 {
     if( rId.getLength() == 16
         && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
@@ -1871,14 +1865,14 @@ sal_Int64 SAL_CALL SwChartDataSequence::getSomething( const Sequence< sal_Int8 >
 }
 
 
-Sequence< Any > SAL_CALL SwChartDataSequence::getData(  )
-    throw (RuntimeException)
+uno::Sequence< uno::Any > SAL_CALL SwChartDataSequence::getData(  )
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     if (bDisposed)
         throw lang::DisposedException();
 
-    Sequence< Any > aRes;
+    uno::Sequence< uno::Any > aRes;
     SwFrmFmt* pTblFmt = GetFrmFmt();
     if(pTblFmt)
     {
@@ -1902,7 +1896,7 @@ Sequence< Any > SAL_CALL SwChartDataSequence::getData(  )
 
 
 OUString SAL_CALL SwChartDataSequence::getSourceRangeRepresentation(  )
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     if (bDisposed)
@@ -1921,15 +1915,15 @@ OUString SAL_CALL SwChartDataSequence::getSourceRangeRepresentation(  )
     return aRes;
 }
 
-Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
-        LabelOrigin eLabelOrigin )
-    throw (RuntimeException)
+uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
+        chart2::data::LabelOrigin eLabelOrigin )
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     if (bDisposed)
         throw lang::DisposedException();
 
-    Sequence< OUString > aLabels;
+    uno::Sequence< OUString > aLabels;
 
     {
         SwRangeDescriptor aDesc;
@@ -1956,16 +1950,16 @@ Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
             String aTxt;    // label text to be returned
             sal_Bool bReturnEmptyTxt = sal_False;
             sal_Bool bUseCol = sal_True;
-            if (eLabelOrigin == LabelOrigin_COLUMN)
+            if (eLabelOrigin == chart2::data::LabelOrigin_COLUMN)
                 bUseCol = sal_True;
-            else if (eLabelOrigin == LabelOrigin_ROW)
+            else if (eLabelOrigin == chart2::data::LabelOrigin_ROW)
                 bUseCol = sal_False;
-            else if (eLabelOrigin == LabelOrigin_SHORT_SIDE)
+            else if (eLabelOrigin == chart2::data::LabelOrigin_SHORT_SIDE)
             {
                 bUseCol = nColSpan < nRowSpan;
                 bReturnEmptyTxt = nColSpan == nRowSpan;
             }
-            else if (eLabelOrigin == LabelOrigin_LONG_SIDE)
+            else if (eLabelOrigin == chart2::data::LabelOrigin_LONG_SIDE)
             {
                 bUseCol = nColSpan > nRowSpan;
                 bReturnEmptyTxt = nColSpan == nRowSpan;
@@ -2037,14 +2031,14 @@ Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
 
 
 
-Sequence< OUString > SAL_CALL SwChartDataSequence::getTextualData(  )
-    throw (RuntimeException)
+uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getTextualData(  )
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     if (bDisposed)
         throw lang::DisposedException();
 
-    Sequence< OUString > aRes;
+    uno::Sequence< OUString > aRes;
     SwFrmFmt* pTblFmt = GetFrmFmt();
     if(pTblFmt)
     {
@@ -2067,14 +2061,14 @@ Sequence< OUString > SAL_CALL SwChartDataSequence::getTextualData(  )
 }
 
 
-Sequence< double > SAL_CALL SwChartDataSequence::getNumericalData(  )
-    throw (RuntimeException)
+uno::Sequence< double > SAL_CALL SwChartDataSequence::getNumericalData(  )
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     if (bDisposed)
         throw lang::DisposedException();
 
-    Sequence< double > aRes;
+    uno::Sequence< double > aRes;
     SwFrmFmt* pTblFmt = GetFrmFmt();
     if(pTblFmt)
     {
@@ -2100,8 +2094,8 @@ Sequence< double > SAL_CALL SwChartDataSequence::getNumericalData(  )
 }
 
 
-Reference< util::XCloneable > SAL_CALL SwChartDataSequence::createClone(  )
-    throw (RuntimeException)
+uno::Reference< util::XCloneable > SAL_CALL SwChartDataSequence::createClone(  )
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     if (bDisposed)
@@ -2110,22 +2104,22 @@ Reference< util::XCloneable > SAL_CALL SwChartDataSequence::createClone(  )
 }
 
 
-Reference< XPropertySetInfo > SAL_CALL SwChartDataSequence::getPropertySetInfo(  )
-    throw (RuntimeException)
+uno::Reference< beans::XPropertySetInfo > SAL_CALL SwChartDataSequence::getPropertySetInfo(  )
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     if (bDisposed)
         throw lang::DisposedException();
 
-    static Reference< XPropertySetInfo > xRes = new SfxItemPropertySetInfo( pMap );
+    static uno::Reference< beans::XPropertySetInfo > xRes = new SfxItemPropertySetInfo( pMap );
     return xRes;
 }
 
 
 void SAL_CALL SwChartDataSequence::setPropertyValue(
         const OUString& rPropertyName,
-        const Any& rValue )
-    throw (UnknownPropertyException, PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, RuntimeException)
+        const uno::Any& rValue )
+    throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     if (bDisposed)
@@ -2141,9 +2135,9 @@ void SAL_CALL SwChartDataSequence::setPropertyValue(
 }
 
 
-Any SAL_CALL SwChartDataSequence::getPropertyValue(
+uno::Any SAL_CALL SwChartDataSequence::getPropertyValue(
         const OUString& rPropertyName )
-    throw (UnknownPropertyException, lang::WrappedTargetException, RuntimeException)
+    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     if (bDisposed)
@@ -2161,66 +2155,64 @@ Any SAL_CALL SwChartDataSequence::getPropertyValue(
 
 void SAL_CALL SwChartDataSequence::addPropertyChangeListener(
         const OUString& /*rPropertyName*/,
-        const Reference< XPropertyChangeListener >& /*xListener*/ )
-    throw (UnknownPropertyException, lang::WrappedTargetException, RuntimeException)
+        const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
+    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    //vos::OGuard aGuard( Application::GetSolarMutex() );
     DBG_ERROR( "not implemented" );
 }
 
 
 void SAL_CALL SwChartDataSequence::removePropertyChangeListener(
         const OUString& /*rPropertyName*/,
-        const Reference< XPropertyChangeListener >& /*xListener*/ )
-    throw (UnknownPropertyException, lang::WrappedTargetException, RuntimeException)
+        const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
+    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    //vos::OGuard aGuard( Application::GetSolarMutex() );
     DBG_ERROR( "not implemented" );
 }
 
 
 void SAL_CALL SwChartDataSequence::addVetoableChangeListener(
         const OUString& /*rPropertyName*/,
-        const Reference< XVetoableChangeListener >& /*xListener*/ )
-    throw (UnknownPropertyException, lang::WrappedTargetException, RuntimeException)
+        const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
+    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    //vos::OGuard aGuard( Application::GetSolarMutex() );
     DBG_ERROR( "not implemented" );
 }
 
 
 void SAL_CALL SwChartDataSequence::removeVetoableChangeListener(
         const OUString& /*rPropertyName*/,
-        const Reference< XVetoableChangeListener >& /*xListener*/ )
-    throw (UnknownPropertyException, lang::WrappedTargetException, RuntimeException)
+        const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
+    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    //vos::OGuard aGuard( Application::GetSolarMutex() );
     DBG_ERROR( "not implemented" );
 }
 
 
 OUString SAL_CALL SwChartDataSequence::getImplementationName(  )
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
     return C2U("SwChartDataSequence");
 }
 
 
 sal_Bool SAL_CALL SwChartDataSequence::supportsService(
         const OUString& rServiceName )
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
     return rServiceName.equalsAscii( SN_DATA_SEQUENCE );
 }
 
 
-Sequence< OUString > SAL_CALL SwChartDataSequence::getSupportedServiceNames(  )
-    throw (RuntimeException)
+uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getSupportedServiceNames(  )
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
-    Sequence< OUString > aRes(1);
+    uno::Sequence< OUString > aRes(1);
     aRes.getArray()[0] = C2U( SN_DATA_SEQUENCE );
     return aRes;
 }
@@ -2244,7 +2236,7 @@ void SwChartDataSequence::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 
 
 sal_Bool SAL_CALL SwChartDataSequence::isModified(  )
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     if (bDisposed)
@@ -2256,7 +2248,7 @@ sal_Bool SAL_CALL SwChartDataSequence::isModified(  )
 
 void SAL_CALL SwChartDataSequence::setModified(
         ::sal_Bool bModified )
-    throw (beans::PropertyVetoException, RuntimeException)
+    throw (beans::PropertyVetoException, uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     if (bDisposed)
@@ -2268,8 +2260,8 @@ void SAL_CALL SwChartDataSequence::setModified(
 
 
 void SAL_CALL SwChartDataSequence::addModifyListener(
-        const Reference< util::XModifyListener >& rxListener )
-    throw (RuntimeException)
+        const uno::Reference< util::XModifyListener >& rxListener )
+    throw (uno::RuntimeException)
 {
     osl::MutexGuard  aGuard( GetChartMutex() );
     if (!bDisposed && rxListener.is())
@@ -2278,8 +2270,8 @@ void SAL_CALL SwChartDataSequence::addModifyListener(
 
 
 void SAL_CALL SwChartDataSequence::removeModifyListener(
-        const Reference< util::XModifyListener >& rxListener )
-    throw (RuntimeException)
+        const uno::Reference< util::XModifyListener >& rxListener )
+    throw (uno::RuntimeException)
 {
     osl::MutexGuard  aGuard( GetChartMutex() );
     if (!bDisposed && rxListener.is())
@@ -2288,7 +2280,7 @@ void SAL_CALL SwChartDataSequence::removeModifyListener(
 
 
 void SAL_CALL SwChartDataSequence::disposing( const lang::EventObject& rSource )
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
     if (bDisposed)
         throw lang::DisposedException();
@@ -2301,7 +2293,7 @@ void SAL_CALL SwChartDataSequence::disposing( const lang::EventObject& rSource )
 
 
 void SAL_CALL SwChartDataSequence::dispose(  )
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
     sal_Bool bMustDispose( sal_False );
     {
@@ -2318,7 +2310,7 @@ void SAL_CALL SwChartDataSequence::dispose(  )
             const SwTable* pTable = SwTable::FindTable( GetFrmFmt() );
             if (pTable)
             {
-                Reference< chart2::data::XDataSequence > xRef( dynamic_cast< chart2::data::XDataSequence * >(this), UNO_QUERY );
+                uno::Reference< chart2::data::XDataSequence > xRef( dynamic_cast< chart2::data::XDataSequence * >(this), uno::UNO_QUERY );
                 pDataProvider->RemoveDataSequence( *pTable, xRef );
             }
             else
@@ -2326,7 +2318,7 @@ void SAL_CALL SwChartDataSequence::dispose(  )
         }
 
         // require listeners to release references to this object
-        EventObject aEvtObj( dynamic_cast< chart2::data::XDataSequence * >(this) );
+        lang::EventObject aEvtObj( dynamic_cast< chart2::data::XDataSequence * >(this) );
         aModifyListeners.disposeAndClear( aEvtObj );
         aEvtListeners.disposeAndClear( aEvtObj );
     }
@@ -2334,8 +2326,8 @@ void SAL_CALL SwChartDataSequence::dispose(  )
 
 
 void SAL_CALL SwChartDataSequence::addEventListener(
-        const Reference< lang::XEventListener >& rxListener )
-    throw (RuntimeException)
+        const uno::Reference< lang::XEventListener >& rxListener )
+    throw (uno::RuntimeException)
 {
     osl::MutexGuard  aGuard( GetChartMutex() );
     if (!bDisposed && rxListener.is())
@@ -2344,8 +2336,8 @@ void SAL_CALL SwChartDataSequence::addEventListener(
 
 
 void SAL_CALL SwChartDataSequence::removeEventListener(
-        const Reference< lang::XEventListener >& rxListener )
-    throw (RuntimeException)
+        const uno::Reference< lang::XEventListener >& rxListener )
+    throw (uno::RuntimeException)
 {
     osl::MutexGuard  aGuard( GetChartMutex() );
     if (!bDisposed && rxListener.is())
@@ -2475,8 +2467,8 @@ SwChartLabeledDataSequence::~SwChartLabeledDataSequence()
 }
 
 
-Reference< XDataSequence > SAL_CALL SwChartLabeledDataSequence::getValues(  )
-    throw (RuntimeException)
+uno::Reference< chart2::data::XDataSequence > SAL_CALL SwChartLabeledDataSequence::getValues(  )
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     if (bDisposed)
@@ -2486,35 +2478,35 @@ Reference< XDataSequence > SAL_CALL SwChartLabeledDataSequence::getValues(  )
 
 
 void SwChartLabeledDataSequence::SetDataSequence(
-        Reference< XDataSequence >& rxDest,
-        const Reference< XDataSequence >& rxSource)
+        uno::Reference< chart2::data::XDataSequence >& rxDest,
+        const uno::Reference< chart2::data::XDataSequence >& rxSource)
 {
-    Reference< util::XModifyListener >  xML( dynamic_cast< util::XModifyListener* >(this), UNO_QUERY );
-    Reference< lang::XEventListener >   xEL( dynamic_cast< lang::XEventListener* >(this), UNO_QUERY );
+    uno::Reference< util::XModifyListener >  xML( dynamic_cast< util::XModifyListener* >(this), uno::UNO_QUERY );
+    uno::Reference< lang::XEventListener >   xEL( dynamic_cast< lang::XEventListener* >(this), uno::UNO_QUERY );
 
     // stop listening to old data-sequence
-    Reference< util::XModifyBroadcaster > xMB( rxDest, UNO_QUERY );
+    uno::Reference< util::XModifyBroadcaster > xMB( rxDest, uno::UNO_QUERY );
     if (xMB.is())
         xMB->removeModifyListener( xML );
-    Reference< lang::XComponent > xC( rxDest, UNO_QUERY );
+    uno::Reference< lang::XComponent > xC( rxDest, uno::UNO_QUERY );
     if (xC.is())
         xC->removeEventListener( xEL );
 
     rxDest = rxSource;
 
     // start listening to new data-sequence
-    xC = Reference< lang::XComponent >( rxDest, UNO_QUERY );
+    xC = uno::Reference< lang::XComponent >( rxDest, uno::UNO_QUERY );
     if (xC.is())
         xC->addEventListener( xEL );
-    xMB = Reference< util::XModifyBroadcaster >( rxDest, UNO_QUERY );
+    xMB = uno::Reference< util::XModifyBroadcaster >( rxDest, uno::UNO_QUERY );
     if (xMB.is())
         xMB->addModifyListener( xML );
 }
 
 
 void SAL_CALL SwChartLabeledDataSequence::setValues(
-        const Reference< XDataSequence >& rxSequence )
-    throw (RuntimeException)
+        const uno::Reference< chart2::data::XDataSequence >& rxSequence )
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     if (bDisposed)
@@ -2529,8 +2521,8 @@ void SAL_CALL SwChartLabeledDataSequence::setValues(
 }
 
 
-Reference< XDataSequence > SAL_CALL SwChartLabeledDataSequence::getLabel(  )
-    throw (RuntimeException)
+uno::Reference< chart2::data::XDataSequence > SAL_CALL SwChartLabeledDataSequence::getLabel(  )
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     if (bDisposed)
@@ -2540,8 +2532,8 @@ Reference< XDataSequence > SAL_CALL SwChartLabeledDataSequence::getLabel(  )
 
 
 void SAL_CALL SwChartLabeledDataSequence::setLabel(
-        const Reference< XDataSequence >& rxSequence )
-    throw (RuntimeException)
+        const uno::Reference< chart2::data::XDataSequence >& rxSequence )
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     if (bDisposed)
@@ -2556,27 +2548,27 @@ void SAL_CALL SwChartLabeledDataSequence::setLabel(
 }
 
 
-Reference< util::XCloneable > SAL_CALL SwChartLabeledDataSequence::createClone(  )
-    throw (RuntimeException)
+uno::Reference< util::XCloneable > SAL_CALL SwChartLabeledDataSequence::createClone(  )
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     if (bDisposed)
         throw lang::DisposedException();
 
-    Reference< util::XCloneable > xRes;
+    uno::Reference< util::XCloneable > xRes;
 
-    uno::Reference< util::XCloneable > xDataCloneable( xData, UNO_QUERY );
-    uno::Reference< util::XCloneable > xLabelsCloneable( xLabels, UNO_QUERY );
+    uno::Reference< util::XCloneable > xDataCloneable( xData, uno::UNO_QUERY );
+    uno::Reference< util::XCloneable > xLabelsCloneable( xLabels, uno::UNO_QUERY );
     SwChartLabeledDataSequence *pRes = new SwChartLabeledDataSequence();
     if (xDataCloneable.is())
     {
-        Reference< XDataSequence > xDataClone( xDataCloneable->createClone(), UNO_QUERY );
+        uno::Reference< chart2::data::XDataSequence > xDataClone( xDataCloneable->createClone(), uno::UNO_QUERY );
         pRes->setValues( xDataClone );
     }
 
     if (xLabelsCloneable.is())
     {
-        Reference< XDataSequence > xLabelsClone( xLabelsCloneable->createClone(), UNO_QUERY );
+        uno::Reference< chart2::data::XDataSequence > xLabelsClone( xLabelsCloneable->createClone(), uno::UNO_QUERY );
         pRes->setLabel( xLabelsClone );
     }
     xRes = pRes;
@@ -2585,27 +2577,25 @@ Reference< util::XCloneable > SAL_CALL SwChartLabeledDataSequence::createClone( 
 
 
 OUString SAL_CALL SwChartLabeledDataSequence::getImplementationName(  )
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
     return C2U("SwChartLabeledDataSequence");
 }
 
 
 sal_Bool SAL_CALL SwChartLabeledDataSequence::supportsService(
         const OUString& rServiceName )
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
     return rServiceName.equalsAscii( SN_LABELED_DATA_SEQUENCE );
 }
 
 
-Sequence< OUString > SAL_CALL SwChartLabeledDataSequence::getSupportedServiceNames(  )
-    throw (RuntimeException)
+uno::Sequence< OUString > SAL_CALL SwChartLabeledDataSequence::getSupportedServiceNames(  )
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
-    Sequence< OUString > aRes(1);
+    uno::Sequence< OUString > aRes(1);
     aRes.getArray()[0] = C2U( SN_LABELED_DATA_SEQUENCE );
     return aRes;
 }
@@ -2613,14 +2603,14 @@ Sequence< OUString > SAL_CALL SwChartLabeledDataSequence::getSupportedServiceNam
 
 void SAL_CALL SwChartLabeledDataSequence::disposing(
         const lang::EventObject& rSource )
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
     osl::MutexGuard  aGuard( GetChartMutex() );
-    Reference< XInterface > xRef( rSource.Source );
+    uno::Reference< uno::XInterface > xRef( rSource.Source );
     if (xRef == xData)
-        xData = Reference< chart2::data::XDataSequence >();
+        xData.clear();
     if (xRef == xLabels)
-        xLabels = Reference< chart2::data::XDataSequence >();
+        xLabels.clear();
     if (!xData.is() && !xLabels.is())
         dispose();
 }
@@ -2628,7 +2618,7 @@ void SAL_CALL SwChartLabeledDataSequence::disposing(
 
 void SAL_CALL SwChartLabeledDataSequence::modified(
         const lang::EventObject& rEvent )
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
     if (rEvent.Source == xData || rEvent.Source == xLabels)
     {
@@ -2638,8 +2628,8 @@ void SAL_CALL SwChartLabeledDataSequence::modified(
 
 
 void SAL_CALL SwChartLabeledDataSequence::addModifyListener(
-        const Reference< util::XModifyListener >& rxListener )
-    throw (RuntimeException)
+        const uno::Reference< util::XModifyListener >& rxListener )
+    throw (uno::RuntimeException)
 {
     osl::MutexGuard  aGuard( GetChartMutex() );
     if (!bDisposed && rxListener.is())
@@ -2648,8 +2638,8 @@ void SAL_CALL SwChartLabeledDataSequence::addModifyListener(
 
 
 void SAL_CALL SwChartLabeledDataSequence::removeModifyListener(
-        const Reference< util::XModifyListener >& rxListener )
-    throw (RuntimeException)
+        const uno::Reference< util::XModifyListener >& rxListener )
+    throw (uno::RuntimeException)
 {
     osl::MutexGuard  aGuard( GetChartMutex() );
     if (!bDisposed && rxListener.is())
@@ -2658,7 +2648,7 @@ void SAL_CALL SwChartLabeledDataSequence::removeModifyListener(
 
 
 void SAL_CALL SwChartLabeledDataSequence::dispose(  )
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
     sal_Bool bMustDispose( sal_False );
     {
@@ -2672,7 +2662,7 @@ void SAL_CALL SwChartLabeledDataSequence::dispose(  )
         bDisposed = sal_True;
 
         // require listeners to release references to this object
-        EventObject aEvtObj( dynamic_cast< chart2::data::XLabeledDataSequence * >(this) );
+        lang::EventObject aEvtObj( dynamic_cast< chart2::data::XLabeledDataSequence * >(this) );
         aModifyListeners.disposeAndClear( aEvtObj );
         aEvtListeners.disposeAndClear( aEvtObj );
     }
@@ -2680,8 +2670,8 @@ void SAL_CALL SwChartLabeledDataSequence::dispose(  )
 
 
 void SAL_CALL SwChartLabeledDataSequence::addEventListener(
-        const Reference< lang::XEventListener >& rxListener )
-    throw (RuntimeException)
+        const uno::Reference< lang::XEventListener >& rxListener )
+    throw (uno::RuntimeException)
 {
     osl::MutexGuard  aGuard( GetChartMutex() );
     if (!bDisposed && rxListener.is())
@@ -2690,8 +2680,8 @@ void SAL_CALL SwChartLabeledDataSequence::addEventListener(
 
 
 void SAL_CALL SwChartLabeledDataSequence::removeEventListener(
-        const Reference< lang::XEventListener >& rxListener )
-    throw (RuntimeException)
+        const uno::Reference< lang::XEventListener >& rxListener )
+    throw (uno::RuntimeException)
 {
     osl::MutexGuard  aGuard( GetChartMutex() );
     if (!bDisposed && rxListener.is())
@@ -2699,5 +2689,3 @@ void SAL_CALL SwChartLabeledDataSequence::removeEventListener(
 }
 
 //////////////////////////////////////////////////////////////////////
-
-
