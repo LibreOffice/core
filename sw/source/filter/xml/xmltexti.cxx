@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:11:56 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:40:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,9 +235,9 @@ static void lcl_setObjectVisualArea( const uno::Reference< embed::XEmbeddedObjec
 }
 
 SwXMLTextImportHelper::SwXMLTextImportHelper(
-        const Reference < XModel>& rModel,
+        const uno::Reference < XModel>& rModel,
         SvXMLImport& rImport,
-        const Reference<XPropertySet> & rInfoSet,
+        const uno::Reference<XPropertySet> & rInfoSet,
         sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool bProgress,
         sal_Bool bBlockM, sal_Bool bOrganizerM,
         sal_Bool bPreserveRedlineMode ) :
@@ -245,7 +245,7 @@ SwXMLTextImportHelper::SwXMLTextImportHelper(
                          bBlockM, bOrganizerM ),
     pRedlineHelper( NULL )
 {
-    Reference<XPropertySet> xDocPropSet( rModel, UNO_QUERY );
+    uno::Reference<XPropertySet> xDocPropSet( rModel, UNO_QUERY );
     pRedlineHelper = new XMLRedlineImportHelper(
         bInsertM || bBlockM, xDocPropSet, rInfoSet );
 }
@@ -267,7 +267,7 @@ SwXMLTextImportHelper::~SwXMLTextImportHelper()
 SvXMLImportContext *SwXMLTextImportHelper::CreateTableChildContext(
                 SvXMLImport& rImport,
                 sal_uInt16 nPrefix, const OUString& rLocalName,
-                const Reference< XAttributeList > & xAttrList )
+                const uno::Reference< XAttributeList > & xAttrList )
 {
     return new SwXMLTableContext(
                 (SwXMLImport&)rImport, nPrefix, rLocalName, xAttrList );
@@ -275,7 +275,7 @@ SvXMLImportContext *SwXMLTextImportHelper::CreateTableChildContext(
 
 sal_Bool SwXMLTextImportHelper::IsInHeaderFooter() const
 {
-    Reference<XUnoTunnel> xCrsrTunnel(
+    uno::Reference<XUnoTunnel> xCrsrTunnel(
             ((SwXMLTextImportHelper *)this)->GetCursor(), UNO_QUERY );
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
     OTextCursorHelper *pTxtCrsr =
@@ -300,7 +300,7 @@ SwOLENode *lcl_GetOLENode( const SwFrmFmt *pFrmFmt )
     return pOLENd;
 }
 
-Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
+uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
            SvXMLImport& rImport,
         const OUString& rHRef,
         const OUString& rStyleName,
@@ -310,7 +310,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     // this method will modify the document directly -> lock SolarMutex
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    Reference < XPropertySet > xPropSet;
+    uno::Reference < XPropertySet > xPropSet;
 
     sal_Int32 nPos = rHRef.indexOf( ':' );
     if( -1 == nPos )
@@ -321,7 +321,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     if( !aObjName.getLength() )
         return xPropSet;
 
-    Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
+    uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
     OTextCursorHelper *pTxtCrsr =
                 (OTextCursorHelper*)xCrsrTunnel->getSomething(
@@ -362,7 +362,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
 
         if( bInsert )
         {
-            Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
+            uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
             try
             {
                 // create object with desired ClassId
@@ -607,7 +607,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
 
     if ( bHasSizeProps )
     {
-        Reference < embed::XEmbeddedObject > xObj =
+        uno::Reference < embed::XEmbeddedObject > xObj =
                     pDoc->GetPersist()->GetEmbeddedObjectContainer().GetEmbeddedObject( aObjName );
         if( xObj.is() )
             lcl_setObjectVisualArea( xObj, ( nDrawAspect ? nDrawAspect : embed::Aspects::MSOLE_CONTENT ),
@@ -617,7 +617,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     return xPropSet;
 }
 
-Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
+uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
            SvXMLImport& rImport,
         const OUString& rHRef,
         const OUString& rStyleName,
@@ -627,9 +627,9 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
     // this method will modify the document directly -> lock SolarMutex
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    Reference < XPropertySet > xPropSet;
+    uno::Reference < XPropertySet > xPropSet;
 
-    Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
+    uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
     OTextCursorHelper *pTxtCrsr =
                 (OTextCursorHelper*)xCrsrTunnel->getSomething(
@@ -653,7 +653,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
     if( !bValidURL )
         return xPropSet;
 
-    Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
+    uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
     try
     {
         // create object with desired ClassId
@@ -707,7 +707,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
     return xPropSet;
 }
 
-Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
+uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
         const OUString &rName,
         const OUString &rCode,
         sal_Bool bMayScript,
@@ -717,8 +717,8 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
     // this method will modify the document directly -> lock SolarMutex
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    Reference < XPropertySet > xPropSet;
-    Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
+    uno::Reference < XPropertySet > xPropSet;
+    uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
     OTextCursorHelper *pTxtCrsr =
                 (OTextCursorHelper*)xCrsrTunnel->getSomething(
@@ -758,13 +758,13 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
     return xPropSet;
 }
 
-Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
+uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
         const OUString &rMimeType,
         const OUString& rHRef,
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
-    Reference < XPropertySet > xPropSet;
-    Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
+    uno::Reference < XPropertySet > xPropSet;
+    uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
     OTextCursorHelper *pTxtCrsr =
                 (OTextCursorHelper*)xCrsrTunnel->getSomething(
@@ -787,7 +787,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
     if( !bValidURL && !bValidMimeType )
         return xPropSet;
 
-    Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
+    uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
     try
     {
         // create object with desired ClassId
@@ -837,7 +837,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
 
     return xPropSet;
 }
-Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFrame(
+uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFrame(
         const OUString& rName,
         const OUString& rHRef,
         const OUString& rStyleName,
@@ -846,8 +846,8 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFrame(
     // this method will modify the document directly -> lock SolarMutex
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    Reference < XPropertySet > xPropSet;
-    Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
+    uno::Reference < XPropertySet > xPropSet;
+    uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
     OTextCursorHelper *pTxtCrsr =
                 (OTextCursorHelper*)xCrsrTunnel->getSomething(
@@ -920,7 +920,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFrame(
         }
     }
 
-    Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
+    uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
     try
     {
         // create object with desired ClassId
@@ -992,13 +992,13 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFrame(
 }
 
 void SwXMLTextImportHelper::endAppletOrPlugin(
-        const Reference < XPropertySet > &rPropSet,
+        const uno::Reference < XPropertySet > &rPropSet,
         ::std::map < const ::rtl::OUString, ::rtl::OUString, ::comphelper::UStringLess > &rParamMap)
 {
     // this method will modify the document directly -> lock SolarMutex
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    Reference<XUnoTunnel> xCrsrTunnel( rPropSet, UNO_QUERY );
+    uno::Reference<XUnoTunnel> xCrsrTunnel( rPropSet, UNO_QUERY );
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for embedded" );
     SwXFrame *pFrame =
                 (SwXFrame *)xCrsrTunnel->getSomething(
@@ -1080,11 +1080,11 @@ void SwXMLTextImportHelper::RedlineAdd(
                             bMergeLastPara);
 }
 
-Reference<XTextCursor> SwXMLTextImportHelper::RedlineCreateText(
-    Reference<XTextCursor> & rOldCursor,
+uno::Reference<XTextCursor> SwXMLTextImportHelper::RedlineCreateText(
+    uno::Reference<XTextCursor> & rOldCursor,
     const OUString& rId)
 {
-    Reference<XTextCursor> xRet;
+    uno::Reference<XTextCursor> xRet;
 
     if (NULL != pRedlineHelper)
     {
@@ -1100,7 +1100,7 @@ void SwXMLTextImportHelper::RedlineSetCursor(
     sal_Bool bIsOutsideOfParagraph)
 {
     if (NULL != pRedlineHelper) {
-        Reference<XTextRange> xTextRange( GetCursor()->getStart() );
+        uno::Reference<XTextRange> xTextRange( GetCursor()->getStart() );
         pRedlineHelper->SetCursor(rId, bStart, xTextRange,
                                   bIsOutsideOfParagraph);
     }
@@ -1113,7 +1113,7 @@ void SwXMLTextImportHelper::RedlineAdjustStartNodeCursor(
     OUString rId = GetOpenRedlineId();
     if ((NULL != pRedlineHelper) && (rId.getLength() > 0))
     {
-        Reference<XTextRange> xTextRange( GetCursor()->getStart() );
+        uno::Reference<XTextRange> xTextRange( GetCursor()->getStart() );
         pRedlineHelper->AdjustStartNodeCursor(rId, bStart, xTextRange );
         ResetOpenRedlineId();
     }
