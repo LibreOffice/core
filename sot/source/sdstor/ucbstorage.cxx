@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:11:10 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:34:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::sdbc;
-using namespace ::ucb;
+using namespace ::ucbhelper;
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
@@ -514,7 +514,7 @@ public:
     String                      m_aContentType;
     String                      m_aOriginalContentType;
     ByteString                  m_aKey;
-    ::ucb::Content*             m_pContent;     // the content that provides the data
+    ::ucbhelper::Content*       m_pContent;     // the content that provides the data
     Reference<XInputStream>     m_rSource;      // the stream covering the original data of the content
     SvStream*                   m_pStream;      // the stream worked on; for readonly streams it is the original stream of the content
                                                 // for read/write streams it's a copy into a temporary file
@@ -577,7 +577,7 @@ public:
     String                      m_aURL;         // the full path name to create the content
     String                      m_aContentType;
     String                      m_aOriginalContentType;
-    ::ucb::Content*             m_pContent;     // the content that provides the storage elements
+    ::ucbhelper::Content*       m_pContent;     // the content that provides the storage elements
     ::utl::TempFile*            m_pTempFile;    // temporary file, only for storages on stream
     SvStream*                   m_pSource;      // original stream, only for storages on a stream
     //SvStream*                   m_pStream;      // the corresponding editable stream, only for storage on a stream
@@ -602,13 +602,13 @@ public:
     Reference< XProgressHandler > m_xProgressHandler;
 
     UNOStorageHolderList*       m_pUNOStorageHolderList;
-                                UCBStorage_Impl( const ::ucb::Content&, const String&, StreamMode, UCBStorage*, BOOL, BOOL, BOOL = FALSE, Reference< XProgressHandler > = Reference< XProgressHandler >() );
+                                UCBStorage_Impl( const ::ucbhelper::Content&, const String&, StreamMode, UCBStorage*, BOOL, BOOL, BOOL = FALSE, Reference< XProgressHandler > = Reference< XProgressHandler >() );
                                 UCBStorage_Impl( const String&, StreamMode, UCBStorage*, BOOL, BOOL, BOOL = FALSE, Reference< XProgressHandler > = Reference< XProgressHandler >() );
                                 UCBStorage_Impl( SvStream&, UCBStorage*, BOOL );
     void                        Init();
     sal_Int16                   Commit();
     BOOL                        Revert();
-    BOOL                        Insert( ::ucb::Content *pContent );
+    BOOL                        Insert( ::ucbhelper::Content *pContent );
     UCBStorage_Impl*            OpenStorage( UCBStorageElement_Impl* pElement, StreamMode nMode, BOOL bDirect );
     UCBStorageStream_Impl*      OpenStream( UCBStorageElement_Impl*, StreamMode, BOOL, const ByteString* pKey=0 );
     void                        SetProps( const Sequence < Sequence < PropertyValue > >& rSequence, const String& );
@@ -616,7 +616,7 @@ public:
     sal_Int32                   GetObjectCount();
     void                        ReadContent();
     void                        CreateContent();
-    ::ucb::Content*             GetContent()
+    ::ucbhelper::Content*       GetContent()
                                 { if ( !m_pContent ) CreateContent(); return m_pContent; }
     UCBStorageElementList_Impl& GetChildrenList()
                                 {
@@ -665,7 +665,7 @@ struct UCBStorageElement_Impl
                                 {
                                 }
 
-    ::ucb::Content*             GetContent();
+    ::ucbhelper::Content*       GetContent();
     BOOL                        IsModified();
     String                      GetContentType();
     void                        SetContentType( const String& );
@@ -674,7 +674,7 @@ struct UCBStorageElement_Impl
                                 { return m_xStream.Is() || m_xStorage.Is(); }
 };
 
-::ucb::Content* UCBStorageElement_Impl::GetContent()
+::ucbhelper::Content* UCBStorageElement_Impl::GetContent()
 {
     if ( m_xStream.Is() )
         return m_xStream->m_pContent;
@@ -757,12 +757,12 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
 
         if ( bRepair )
         {
-            xComEnv = new ::ucb::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(),
+            xComEnv = new ::ucbhelper::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(),
                                                      xProgress );
             aTemp += rtl::OUString::createFromAscii("?repairpackage");
         }
 
-        m_pContent = new ::ucb::Content( aTemp, xComEnv );
+        m_pContent = new ::ucbhelper::Content( aTemp, xComEnv );
 
         if ( pKey )
         {
@@ -1692,7 +1692,7 @@ UCBStorage::UCBStorage( SvStream& rStrm, BOOL bDirect )
         if( rStrm.IsWritable() )
             nMode = STREAM_READ | STREAM_WRITE;
 
-        ::ucb::Content aContent( aURL, Reference < XCommandEnvironment >() );
+        ::ucbhelper::Content aContent( aURL, Reference < XCommandEnvironment >() );
         pImp = new UCBStorage_Impl( aContent, aURL, nMode, this, bDirect, TRUE );
     }
     else
@@ -1707,7 +1707,7 @@ UCBStorage::UCBStorage( SvStream& rStrm, BOOL bDirect )
     StorageBase::m_nMode = pImp->m_nMode;
 }
 
-UCBStorage::UCBStorage( const ::ucb::Content& rContent, const String& rName, StreamMode nMode, BOOL bDirect, BOOL bIsRoot )
+UCBStorage::UCBStorage( const ::ucbhelper::Content& rContent, const String& rName, StreamMode nMode, BOOL bDirect, BOOL bIsRoot )
 {
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
     // to class UCBStorage !
@@ -1756,9 +1756,9 @@ UCBStorage::~UCBStorage()
     pImp->ReleaseRef();
 }
 
-UCBStorage_Impl::UCBStorage_Impl( const ::ucb::Content& rContent, const String& rName, StreamMode nMode, UCBStorage* pStorage, BOOL bDirect, BOOL bIsRoot, BOOL bIsRepair, Reference< XProgressHandler > xProgressHandler  )
+UCBStorage_Impl::UCBStorage_Impl( const ::ucbhelper::Content& rContent, const String& rName, StreamMode nMode, UCBStorage* pStorage, BOOL bDirect, BOOL bIsRoot, BOOL bIsRepair, Reference< XProgressHandler > xProgressHandler  )
     : m_pAntiImpl( pStorage )
-    , m_pContent( new ::ucb::Content( rContent ) )
+    , m_pContent( new ::ucbhelper::Content( rContent ) )
     , m_pTempFile( NULL )
     , m_pSource( NULL )
     //, m_pStream( NULL )
@@ -2002,12 +2002,12 @@ void UCBStorage_Impl::CreateContent()
 
         if ( m_bRepairPackage )
         {
-            xComEnv = new ::ucb::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(),
+            xComEnv = new ::ucbhelper::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(),
                                                      m_xProgressHandler );
             aTemp += rtl::OUString::createFromAscii("?repairpackage");
         }
 
-        m_pContent = new ::ucb::Content( aTemp, xComEnv );
+        m_pContent = new ::ucbhelper::Content( aTemp, xComEnv );
     }
     catch ( ContentCreationException& )
     {
@@ -2035,7 +2035,7 @@ void UCBStorage_Impl::ReadContent()
     pProps[1] = ::rtl::OUString::createFromAscii( "IsFolder" );
     pProps[2] = ::rtl::OUString::createFromAscii( "MediaType" );
     pProps[3] = ::rtl::OUString::createFromAscii( "Size" );
-    ::ucb::ResultSetInclude eInclude = ::ucb::INCLUDE_FOLDERS_AND_DOCUMENTS;
+    ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
     try
     {
@@ -2087,12 +2087,12 @@ void UCBStorage_Impl::ReadContent()
                     Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
                     if ( m_bRepairPackage )
                     {
-                        xComEnv = new ::ucb::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(),
+                        xComEnv = new ::ucbhelper::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(),
                                                                  m_xProgressHandler );
                            aName += String( RTL_CONSTASCII_USTRINGPARAM( "?repairpackage" ) );
                     }
 
-                    ::ucb::Content aContent( aName, xComEnv );
+                    ::ucbhelper::Content aContent( aName, xComEnv );
 
                     ::rtl::OUString aMediaType;
                     Any aAny = aContent.getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) );
@@ -2322,7 +2322,7 @@ UCBStorage_Impl::~UCBStorage_Impl()
     delete m_pTempFile;
 }
 
-BOOL UCBStorage_Impl::Insert( ::ucb::Content *pContent )
+BOOL UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
 {
     // a new substorage is inserted into a UCBStorage ( given by the parameter pContent )
     // it must be inserted with a title and a type
@@ -2365,7 +2365,7 @@ BOOL UCBStorage_Impl::Insert( ::ucb::Content *pContent )
 
                 // remove old content, create an "empty" new one and initialize it with the new inserted
                 DELETEZ( m_pContent );
-                m_pContent = new ::ucb::Content( aNewFolder );
+                m_pContent = new ::ucbhelper::Content( aNewFolder );
                 bRet = TRUE;
             }
         }
@@ -2404,7 +2404,7 @@ sal_Int16 UCBStorage_Impl::Commit()
             // all errors will be caught in the "catch" statement outside the loop
             while ( pElement && nRet )
             {
-                ::ucb::Content* pContent = pElement->GetContent();
+                ::ucbhelper::Content* pContent = pElement->GetContent();
                 BOOL bDeleteContent = FALSE;
                 if ( !pContent && pElement->IsModified() )
                 {
@@ -2413,7 +2413,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                     String aName( m_aURL );
                     aName += '/';
                     aName += pElement->m_aOriginalName;
-                    pContent = new ::ucb::Content( aName, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+                    pContent = new ::ucbhelper::Content( aName, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
                 }
 
                 if ( pElement->m_bIsRemoved )
