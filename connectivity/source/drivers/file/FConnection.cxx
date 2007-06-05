@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:17:03 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:22:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 using namespace com::sun::star::ucb;
-using namespace ::ucb;
+using namespace ::ucbhelper;
 using rtl::OUString;
 typedef connectivity::OMetaConnection OConnection_BASE;
 // --------------------------------------------------------------------------------
@@ -210,10 +210,10 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 
     try
     {
-        ::ucb::Content aFile;
+        ::ucbhelper::Content aFile;
         try
         {
-            aFile = ::ucb::Content(getURL(),Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+            aFile = ::ucbhelper::Content(getURL(),Reference< XCommandEnvironment >());
         }
         catch(ContentCreationException& e)
         {
@@ -229,7 +229,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         {
             if (aFile.isFolder())
             {
-                m_xDir = aFile.createDynamicCursor(aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
+                m_xDir = aFile.createDynamicCursor(aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY );
                 m_xContent = aFile.get();
             }
             else if (aFile.isDocument())
@@ -238,12 +238,12 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
                 Reference<XContentIdentifier> xIdent = xParent->getIdentifier();
                 m_xContent = xParent;
 
-                ::ucb::Content aParent(xIdent->getContentIdentifier(),Reference< XCommandEnvironment >());
-                m_xDir = aParent.createDynamicCursor(aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
+                ::ucbhelper::Content aParent(xIdent->getContentIdentifier(),Reference< XCommandEnvironment >());
+                m_xDir = aParent.createDynamicCursor(aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY );
             }
             else
             {
-                OSL_ENSURE(0,"OConnection::construct: ::ucb::Content isn't a folde nor a document! How that?!");
+                OSL_ENSURE(0,"OConnection::construct: ::ucbhelper::Content isn't a folde nor a document! How that?!");
                 throw SQLException();
             }
         }
@@ -390,12 +390,12 @@ sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, 
     return 0;
 }
 // --------------------------------------------------------------------------------
-Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getTypeMap(  ) throw(SQLException, RuntimeException)
+Reference< XNameAccess > SAL_CALL OConnection::getTypeMap(  ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL OConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OConnection::setTypeMap( const Reference< XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
 }
 // --------------------------------------------------------------------------------
@@ -435,17 +435,17 @@ void OConnection::disposing()
     m_aStatements.clear();
 
     m_bClosed   = sal_True;
-    m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
+    m_xMetaData = WeakReference< XDatabaseMetaData>();
     m_xDir      = NULL;
     m_xContent  = NULL;
     //  ::comphelper::disposeComponent(m_xCatalog);
-    m_xCatalog  = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbcx::XTablesSupplier>();
+    m_xCatalog  = WeakReference< XTablesSupplier>();
 
     dispose_ChildImpl();
     OConnection_BASE::disposing();
 }
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< XTablesSupplier > OConnection::createCatalog()
+Reference< XTablesSupplier > OConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< XTablesSupplier > xTab = m_xCatalog;
@@ -457,7 +457,7 @@ void OConnection::disposing()
     return xTab;
 }
 // -----------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::ucb::XDynamicResultSet > OConnection::getDir() const
+Reference< XDynamicResultSet > OConnection::getDir() const
 {
     Reference<XDynamicResultSet> xContent;
     Sequence< ::rtl::OUString > aProps(1);
@@ -466,8 +466,8 @@ void OConnection::disposing()
     try
     {
         Reference<XContentIdentifier> xIdent = getContent()->getIdentifier();
-        ::ucb::Content aParent(xIdent->getContentIdentifier(),Reference< XCommandEnvironment >());
-        xContent = aParent.createDynamicCursor(aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
+        ::ucbhelper::Content aParent(xIdent->getContentIdentifier(),Reference< XCommandEnvironment >());
+        xContent = aParent.createDynamicCursor(aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY );
     }
     catch(Exception&)
     {
@@ -475,7 +475,7 @@ void OConnection::disposing()
     return xContent;
 }
 // -----------------------------------------------------------------------------
-sal_Int64 SAL_CALL OConnection::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw (::com::sun::star::uno::RuntimeException)
+sal_Int64 SAL_CALL OConnection::getSomething( const Sequence< sal_Int8 >& rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         ? reinterpret_cast< sal_Int64 >( this )
