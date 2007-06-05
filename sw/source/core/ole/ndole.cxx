@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:44:38 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:29:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -462,7 +462,7 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
 
     // set parent if XChild is supported
     //!! needed to supply Math objects with a valid reference device
-    Reference< container::XChild > xChild( pNode->GetOLEObj().GetObject().GetObject(), UNO_QUERY );
+    uno::Reference< container::XChild > xChild( pNode->GetOLEObj().GetObject().GetObject(), UNO_QUERY );
     if (xChild.is())
     {
         SwDocShell *pDocSh = GetDoc()->GetDocShell();
@@ -484,7 +484,7 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
 
     // set parent if XChild is supported
     //!! needed to supply Math objects with a valid reference device
-    Reference< container::XChild > xChild( pNode->GetOLEObj().GetObject().GetObject(), UNO_QUERY );
+    uno::Reference< container::XChild > xChild( pNode->GetOLEObj().GetObject().GetObject(), UNO_QUERY );
     if (xChild.is())
     {
         SwDocShell *pDocSh= GetDoc()->GetDocShell();
