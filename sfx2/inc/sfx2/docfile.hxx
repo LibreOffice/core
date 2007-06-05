@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:07:19 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:35:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -360,13 +360,13 @@ public:
     SAL_DLLPRIVATE sal_Bool WillDisposeStorageOnClose_Impl();
 
     SAL_DLLPRIVATE void DoBackup_Impl();
-    SAL_DLLPRIVATE void DoInternalBackup_Impl( const ::ucb::Content& aOriginalContent );
-    SAL_DLLPRIVATE void DoInternalBackup_Impl( const ::ucb::Content& aOriginalContent,
+    SAL_DLLPRIVATE void DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalContent );
+    SAL_DLLPRIVATE void DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalContent,
                                                 const String& aPrefix,
                                                 const String& aExtension,
                                                 const String& aDestDir );
 
-    SAL_DLLPRIVATE sal_Bool UseBackupToRestore_Impl( ::ucb::Content& aOriginalContent,
+    SAL_DLLPRIVATE sal_Bool UseBackupToRestore_Impl( ::ucbhelper::Content& aOriginalContent,
                              const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& xComEnv );
 
     SAL_DLLPRIVATE sal_Bool StorageCommit_Impl();
