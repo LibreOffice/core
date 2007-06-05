@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftpurl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 10:12:33 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:01:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@
 #include "ftphandleprovider.hxx"
 #include "ftpinpstr.hxx"
 #include "ftpcfunc.hxx"
-#include "debughelper.hxx"
 #include "ftpcontainer.hxx"
 
 using namespace ftp;
