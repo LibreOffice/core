@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contentidentifier.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:27:32 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:49:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ namespace rtl {
     class OUString;
 }
 
-namespace ucb
+namespace ucbhelper
 {
 
 struct ContentIdentifier_Impl;
@@ -113,6 +113,6 @@ private:
     ContentIdentifier_Impl* m_pImpl;
 };
 
-} /* namespace ucb */
+} /* namespace ucbhelper */
 
 #endif /* !_UCBHELPER_CONTENTIDENTIFIER_HXX */
