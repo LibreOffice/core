@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_docmgr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 10:13:14 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:17:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,9 +57,7 @@
 
 #include "tdoc_docmgr.hxx"
 
-using namespace com::sun;
 using namespace com::sun::star;
-
 using namespace tdoc_ucp;
 
 //=========================================================================
@@ -586,7 +584,7 @@ rtl::OUString OfficeDocumentsManager::queryDocumentId(
 }
 
 //=========================================================================
-star::uno::Reference< frame::XModel >
+uno::Reference< frame::XModel >
 OfficeDocumentsManager::queryDocumentModel( const rtl::OUString & rDocId )
 {
     osl::MutexGuard aGuard( m_aMtx );
@@ -666,7 +664,7 @@ bool OfficeDocumentsManager::isOfficeDocument(
             {
                 m_xModuleMgr
                     = uno::Reference<
-                        ::com::sun::star::frame::XModuleManager >(
+                        frame::XModuleManager >(
                             m_xSMgr->createInstance(
                                 rtl::OUString(
                                     RTL_CONSTASCII_USTRINGPARAM(
@@ -694,7 +692,7 @@ bool OfficeDocumentsManager::isOfficeDocument(
         {
             OSL_ENSURE( false, "Caught IllegalArgumentException!" );
         }
-        catch ( ::com::sun::star::frame::UnknownModuleException const & )
+        catch ( frame::UnknownModuleException const & )
         {
             OSL_ENSURE( false, "Caught UnknownModuleException!" );
         }
