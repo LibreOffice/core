@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edfldexp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:05:42 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:29:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,9 +75,7 @@
 #include <flddat.hxx>
 #endif
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::container;
-using namespace com::sun::star::lang;
+using namespace com::sun::star;
 using namespace ::rtl;
 
 /* -----------------28.11.2002 17:53-----------------
@@ -87,11 +85,11 @@ BOOL SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
 {
     const SwFldTypes * pFldTypes = GetDoc()->GetFldTypes();
     const USHORT nSize = pFldTypes->Count();
-    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+    uno::Reference< lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     if( !xMgr.is() )
         return FALSE;
-    Reference<XInterface> xInstance = xMgr->createInstance( OUString::createFromAscii( "com.sun.star.sdb.DatabaseContext" ));
-    Reference<XNameAccess>  xDBContext = Reference<XNameAccess>(xInstance, UNO_QUERY) ;
+    uno::Reference<uno::XInterface> xInstance = xMgr->createInstance( OUString::createFromAscii( "com.sun.star.sdb.DatabaseContext" ));
+    uno::Reference<container::XNameAccess> xDBContext(xInstance, uno::UNO_QUERY) ;
     if(!xDBContext.is())
         return FALSE;
     for(USHORT i = 0; i < nSize; ++i)
@@ -116,7 +114,7 @@ BOOL SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
                             {
                                 return xDBContext->getByName(rData.sDataSource).hasValue();
                             }
-                            catch(Exception)
+                            catch(uno::Exception const &)
                             {
                                 rUsedDataSource = rData.sDataSource;
                                 return FALSE;
