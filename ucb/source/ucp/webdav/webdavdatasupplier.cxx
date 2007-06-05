@@ -4,9 +4,9 @@
  *
  *  $RCSfile: webdavdatasupplier.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:08:14 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:21:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,11 +87,11 @@ namespace webdav_ucp
 
 struct ResultListEntry
 {
-    rtl::OUString                                             aId;
-    uno::Reference< com::sun::star::ucb::XContentIdentifier > xId;
-    uno::Reference< com::sun::star::ucb::XContent >           xContent;
-    uno::Reference< sdbc::XRow >                              xRow;
-    const ContentProperties*                                  pData;
+    rtl::OUString                             aId;
+    uno::Reference< ucb::XContentIdentifier > xId;
+    uno::Reference< ucb::XContent >           xContent;
+    uno::Reference< sdbc::XRow >              xRow;
+    const ContentProperties*                  pData;
 
     ResultListEntry( const ContentProperties* pEntry ) : pData( pEntry ) {};
      ~ResultListEntry() { delete pData; }
@@ -170,11 +170,11 @@ DataSupplier::~DataSupplier()
 
 //=========================================================================
 // virtual
-rtl::OUString DataSupplier::queryContentIdentifierString( sal_Int32 nIndex )
+rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( nIndex < sal::static_int_cast<sal_Int32>(m_pImpl->m_aResults.size()) )
+    if ( nIndex < m_pImpl->m_aResults.size() )
     {
         rtl::OUString aId = m_pImpl->m_aResults[ nIndex ]->aId;
         if ( aId.getLength() )
@@ -207,14 +207,14 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_Int32 nIndex )
 
 //=========================================================================
 // virtual
-uno::Reference< com::sun::star::ucb::XContentIdentifier >
-DataSupplier::queryContentIdentifier( sal_Int32 nIndex )
+uno::Reference< ucb::XContentIdentifier >
+DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( nIndex < sal::static_int_cast<sal_Int32>(m_pImpl->m_aResults.size()) )
+    if ( nIndex < m_pImpl->m_aResults.size() )
     {
-        uno::Reference< com::sun::star::ucb::XContentIdentifier > xId
+        uno::Reference< ucb::XContentIdentifier > xId
             = m_pImpl->m_aResults[ nIndex ]->xId;
         if ( xId.is() )
         {
@@ -226,24 +226,24 @@ DataSupplier::queryContentIdentifier( sal_Int32 nIndex )
     rtl::OUString aId = queryContentIdentifierString( nIndex );
     if ( aId.getLength() )
     {
-        uno::Reference< com::sun::star::ucb::XContentIdentifier > xId
-            = new ::ucb::ContentIdentifier( aId );
+        uno::Reference< ucb::XContentIdentifier > xId
+            = new ::ucbhelper::ContentIdentifier( aId );
         m_pImpl->m_aResults[ nIndex ]->xId = xId;
         return xId;
     }
-    return uno::Reference< com::sun::star::ucb::XContentIdentifier >();
+    return uno::Reference< ucb::XContentIdentifier >();
 }
 
 //=========================================================================
 // virtual
-uno::Reference< com::sun::star::ucb::XContent >
-DataSupplier::queryContent( sal_Int32 nIndex )
+uno::Reference< ucb::XContent >
+DataSupplier::queryContent( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( nIndex < sal::static_int_cast<sal_Int32>(m_pImpl->m_aResults.size()) )
+    if ( nIndex < m_pImpl->m_aResults.size() )
     {
-        uno::Reference< com::sun::star::ucb::XContent > xContent
+        uno::Reference< ucb::XContent > xContent
             = m_pImpl->m_aResults[ nIndex ]->xContent;
         if ( xContent.is() )
         {
@@ -252,32 +252,32 @@ DataSupplier::queryContent( sal_Int32 nIndex )
         }
     }
 
-    uno::Reference< com::sun::star::ucb::XContentIdentifier > xId
+    uno::Reference< ucb::XContentIdentifier > xId
         = queryContentIdentifier( nIndex );
     if ( xId.is() )
     {
         try
         {
-            uno::Reference< com::sun::star::ucb::XContent > xContent
+            uno::Reference< ucb::XContent > xContent
                 = m_pImpl->m_xContent->getProvider()->queryContent( xId );
             m_pImpl->m_aResults[ nIndex ]->xContent = xContent;
             return xContent;
 
         }
-        catch ( com::sun::star::ucb::IllegalIdentifierException& )
+        catch ( ucb::IllegalIdentifierException& )
         {
         }
     }
-    return uno::Reference< com::sun::star::ucb::XContent >();
+    return uno::Reference< ucb::XContent >();
 }
 
 //=========================================================================
 // virtual
-sal_Bool DataSupplier::getResult( sal_Int32 nIndex )
+sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( sal::static_int_cast<sal_Int32>(m_pImpl->m_aResults.size()) > nIndex )
+    if ( m_pImpl->m_aResults.size() > nIndex )
     {
         // Result already present.
         return sal_True;
@@ -286,7 +286,7 @@ sal_Bool DataSupplier::getResult( sal_Int32 nIndex )
     // Obtain values...
     if ( getData() )
     {
-        if ( sal::static_int_cast<sal_Int32>(m_pImpl->m_aResults.size()) > nIndex )
+        if ( m_pImpl->m_aResults.size() > nIndex )
         {
             // Result already present.
             return sal_True;
@@ -298,7 +298,7 @@ sal_Bool DataSupplier::getResult( sal_Int32 nIndex )
 
 //=========================================================================
 // virtual
-sal_Int32 DataSupplier::totalCount()
+sal_uInt32 DataSupplier::totalCount()
 {
   // Obtain values...
   getData();
@@ -308,7 +308,7 @@ sal_Int32 DataSupplier::totalCount()
 
 //=========================================================================
 // virtual
-sal_Int32 DataSupplier::currentCount()
+sal_uInt32 DataSupplier::currentCount()
 {
     return m_pImpl->m_aResults.size();
 }
@@ -323,11 +323,11 @@ sal_Bool DataSupplier::isCountFinal()
 //=========================================================================
 // virtual
 uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
-                                                    sal_Int32 nIndex  )
+                                                    sal_uInt32 nIndex  )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( nIndex < sal::static_int_cast<sal_Int32>(m_pImpl->m_aResults.size()) )
+    if ( nIndex < m_pImpl->m_aResults.size() )
     {
         uno::Reference< sdbc::XRow > xRow = m_pImpl->m_aResults[ nIndex ]->xRow;
         if ( xRow.is() )
@@ -341,12 +341,12 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
     {
         uno::Reference< sdbc::XRow > xRow
             = Content::getPropertyValues(
-                        m_pImpl->m_xSMgr,
-                        getResultSet()->getProperties(),
-                        *(m_pImpl->m_aResults[ nIndex ]->pData),
-                        rtl::Reference< ::ucb::ContentProviderImplHelper >(
-                            m_pImpl->m_xContent->getProvider().getBodyPtr() ),
-                        queryContentIdentifierString( nIndex ) );
+                m_pImpl->m_xSMgr,
+                getResultSet()->getProperties(),
+                *(m_pImpl->m_aResults[ nIndex ]->pData),
+                rtl::Reference< ::ucbhelper::ContentProviderImplHelper >(
+                    m_pImpl->m_xContent->getProvider().get() ),
+                queryContentIdentifierString( nIndex ) );
         m_pImpl->m_aResults[ nIndex ]->xRow = xRow;
         return xRow;
     }
@@ -356,11 +356,11 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
 
 //=========================================================================
 // virtual
-void DataSupplier::releasePropertyValues( sal_Int32 nIndex )
+void DataSupplier::releasePropertyValues( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( nIndex < sal::static_int_cast<sal_Int32>(m_pImpl->m_aResults.size()) )
+    if ( nIndex < m_pImpl->m_aResults.size() )
         m_pImpl->m_aResults[ nIndex ]->xRow = uno::Reference< sdbc::XRow >();
 }
 
@@ -373,10 +373,10 @@ void DataSupplier::close()
 //=========================================================================
 // virtual
 void DataSupplier::validate()
-    throw( com::sun::star::ucb::ResultSetException )
+    throw( ucb::ResultSetException )
 {
     if ( m_pImpl->m_bThrowException )
-        throw com::sun::star::ucb::ResultSetException();
+        throw ucb::ResultSetException();
 }
 
 //=========================================================================
@@ -465,7 +465,7 @@ sal_Bool DataSupplier::getData()
                 // Check resource against open mode.
                 switch ( m_pImpl->m_nOpenMode )
                 {
-                    case com::sun::star::ucb::OpenMode::FOLDERS:
+                    case ucb::OpenMode::FOLDERS:
                     {
                         sal_Bool bFolder = sal_False;
 
@@ -482,7 +482,7 @@ sal_Bool DataSupplier::getData()
                         break;
                     }
 
-                    case com::sun::star::ucb::OpenMode::DOCUMENTS:
+                    case ucb::OpenMode::DOCUMENTS:
                     {
                         sal_Bool bDocument = sal_False;
 
@@ -499,7 +499,7 @@ sal_Bool DataSupplier::getData()
                         break;
                     }
 
-                    case com::sun::star::ucb::OpenMode::ALL:
+                    case ucb::OpenMode::ALL:
                     default:
                         break;
                 }
