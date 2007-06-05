@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fstathelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:15:36 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:27:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ sal_Bool FStatHelper::GetModifiedDateTimeOfFile( const UniString& rURL,
     sal_Bool bRet = FALSE;
     try
     {
-        ::ucb::Content aTestContent( rURL,
+        ::ucbhelper::Content aTestContent( rURL,
                                 uno::Reference< XCommandEnvironment > ());
         uno::Any aAny = aTestContent.getPropertyValue(
             OUString::createFromAscii(  "DateModified" ) );
@@ -92,7 +92,7 @@ sal_Bool FStatHelper::IsDocument( const UniString& rURL )
     BOOL bExist = FALSE;
     try
     {
-        ::ucb::Content aTestContent( rURL,
+        ::ucbhelper::Content aTestContent( rURL,
                                 uno::Reference< XCommandEnvironment > ());
         bExist = aTestContent.isDocument();
     }
@@ -107,7 +107,7 @@ sal_Bool FStatHelper::IsFolder( const UniString& rURL )
     BOOL bExist = FALSE;
     try
     {
-        ::ucb::Content aTestContent( rURL,
+        ::ucbhelper::Content aTestContent( rURL,
                                 uno::Reference< XCommandEnvironment > ());
         bExist = aTestContent.isFolder();
     }
