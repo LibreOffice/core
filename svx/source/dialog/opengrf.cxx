@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opengrf.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:28:51 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:34:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,7 @@
 
 //-----------------------------------------------------------------------------
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
@@ -159,15 +160,15 @@ struct SvxOpenGrf_Impl
     SvxOpenGrf_Impl         ();
 
     sfx2::FileDialogHelper                  aFileDlg;
-    Reference < XFilePickerControlAccess >  xCtrlAcc;
+    uno::Reference < XFilePickerControlAccess > xCtrlAcc;
 };
 
 
 SvxOpenGrf_Impl::SvxOpenGrf_Impl() :
     aFileDlg(SFXWB_GRAPHIC)
 {
-    Reference < XFilePicker > xFP = aFileDlg.GetFilePicker();
-    xCtrlAcc = Reference < XFilePickerControlAccess >(xFP, UNO_QUERY);
+    uno::Reference < XFilePicker > xFP = aFileDlg.GetFilePicker();
+    xCtrlAcc = uno::Reference < XFilePickerControlAccess >(xFP, UNO_QUERY);
 }
 
 
