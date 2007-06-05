@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swappatchfiles.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: gm $ $Date: 2007-05-10 11:03:07 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 10:49:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,8 @@
  *
  ************************************************************************/
 
+#define _WIN32_WINDOWS 0x0410
+
 #pragma warning(push, 1) /* disable warnings within system headers */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -52,10 +54,6 @@
 #include <string>
 #include <queue>
 #include <stdio.h>
-
-#if defined(_WIN32_WINNT) && !defined(__MINGW32__)
-#error YES
-#endif
 
 #include <systools/win32/uwinapi.h>
 #include <../tools/seterror.hxx>
