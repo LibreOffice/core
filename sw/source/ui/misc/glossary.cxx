@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:19:56 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:43:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,7 +196,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::comphelper;
-using namespace ::ucb;
+using namespace ::ucbhelper;
 using namespace ::rtl;
 using namespace ::sfx2;
 
@@ -750,13 +750,13 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
         {
             // call the FileOpenDialog do find WinWord - Files with templates
             FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
-            Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+            uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
             SvtPathOptions aPathOpt;
             xFP->setDisplayDirectory(aPathOpt.GetWorkPath() );
             String sWW8( C2S(GetFILTER_WW8()) );
 
-            Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
+            uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
             SfxFilterMatcher aMatcher( String::CreateFromAscii(SwDocShell::Factory().GetShortName()) );
             SfxFilterMatcherIter aIter( &aMatcher );
             const SfxFilter* pFilter = aIter.First();
