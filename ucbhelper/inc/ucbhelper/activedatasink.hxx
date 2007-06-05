@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activedatasink.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:37:41 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:47:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,8 @@
 #ifndef INCLUDED_UCBHELPERDLLAPI_H
 #include "ucbhelper/ucbhelperdllapi.h"
 #endif
-namespace ucb
+
+namespace ucbhelper
 {
 
 //=========================================================================
@@ -88,6 +89,6 @@ public:
         throw( com::sun::star::uno::RuntimeException );
 };
 
-} /* namespace ucb */
+} /* namespace ucbhelper */
 
 #endif /* !_UCBHELPER_ACTIVEDATASINK_HXX */
