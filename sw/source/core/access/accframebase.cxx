@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accframebase.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:35:19 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:26:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,8 +91,7 @@
 #include "accframebase.hxx"
 #endif
 
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::rtl;
 
@@ -219,7 +218,7 @@ void SwAccessibleFrameBase::_InvalidateCursorPos()
         if( pWin && pWin->HasFocus() && !bNewSelected )
             FireStateChangedEvent( AccessibleStateType::FOCUSED, bNewSelected );
 
-        Reference< XAccessible > xParent( GetWeakParent() );
+        uno::Reference< XAccessible > xParent( GetWeakParent() );
         if( xParent.is() )
         {
             SwAccessibleContext *pAcc =

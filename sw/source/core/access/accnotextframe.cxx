@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accnotextframe.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:37:26 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:27:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,7 @@
 #include "accnotextframe.hxx"
 #endif
 
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::rtl;
 
@@ -169,7 +168,7 @@ void SwAccessibleNoTextFrame::Dispose( sal_Bool bRecursive )
 }
 
 OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleDescription (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -184,15 +183,14 @@ OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleDescription (void)
 // XInterface
 //
 
-Any SAL_CALL SwAccessibleNoTextFrame::queryInterface(
-    const ::com::sun::star::uno::Type& aType )
-    throw (RuntimeException)
+uno::Any SAL_CALL SwAccessibleNoTextFrame::queryInterface( const uno::Type& aType )
+    throw (uno::RuntimeException)
 {
     if( aType ==
-        ::getCppuType( static_cast<Reference<XAccessibleImage>*>( NULL ) ) )
+        ::getCppuType( static_cast<uno::Reference<XAccessibleImage>*>( NULL ) ) )
     {
-        Reference<XAccessibleImage> xImage = this;
-        Any aAny;
+        uno::Reference<XAccessibleImage> xImage = this;
+        uno::Any aAny;
         aAny <<= xImage;
         return aAny;
     }
@@ -202,15 +200,15 @@ Any SAL_CALL SwAccessibleNoTextFrame::queryInterface(
 
 
 //====== XTypeProvider ====================================================
-Sequence< Type > SAL_CALL SwAccessibleNoTextFrame::getTypes() throw(RuntimeException)
+uno::Sequence< uno::Type > SAL_CALL SwAccessibleNoTextFrame::getTypes() throw(uno::RuntimeException)
 {
-    Sequence< ::com::sun::star::uno::Type > aTypes( SwAccessibleFrameBase::getTypes() );
+    uno::Sequence< uno::Type > aTypes( SwAccessibleFrameBase::getTypes() );
 
     sal_Int32 nIndex = aTypes.getLength();
     aTypes.realloc( nIndex + 1 );
 
-    ::com::sun::star::uno::Type* pTypes = aTypes.getArray();
-    pTypes[nIndex] = ::getCppuType( static_cast< Reference< XAccessibleImage > * >( 0 ) );
+    uno::Type* pTypes = aTypes.getArray();
+    pTypes[nIndex] = ::getCppuType( static_cast< uno::Reference< XAccessibleImage > * >( 0 ) );
 
     return aTypes;
 }
@@ -225,19 +223,19 @@ Sequence< Type > SAL_CALL SwAccessibleNoTextFrame::getTypes() throw(RuntimeExcep
 // methods. So we just delegate to those.
 
 OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleImageDescription()
-    throw ( RuntimeException )
+    throw ( uno::RuntimeException )
 {
     return getAccessibleDescription();
 }
 
 sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getAccessibleImageHeight(  )
-    throw ( RuntimeException )
+    throw ( uno::RuntimeException )
 {
     return getSize().Height;
 }
 
 sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getAccessibleImageWidth(  )
-    throw ( RuntimeException )
+    throw ( uno::RuntimeException )
 {
     return getSize().Width;
 }
