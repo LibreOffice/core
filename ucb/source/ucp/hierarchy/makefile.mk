@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:22:16 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 18:07:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ SHL1STDLIBS=\
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALLIB)  \
-    $(VOSLIB)  \
+    $(SALHELPERLIB)  \
     $(UCBHELPERLIB)
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
@@ -83,8 +83,6 @@ SHL1LIBS=$(LIB1TARGET)
 # --- Def-File ---------------------------------------------------------
 
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=	$(TARGET).dxp
-DEF1DES=UCB Hierarchy Content Provider
 
 # --- Targets ----------------------------------------------------------
 
