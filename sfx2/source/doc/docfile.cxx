@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.189 $
+ *  $Revision: 1.190 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:27:46 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:37:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,12 +196,8 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 
-#ifndef GCC
-#endif
-
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
-//#include <so3/transbnd.hxx> // SvKeyValueIterator
 #include <tools/urlobj.hxx>
 #include <tools/inetmime.hxx>
 #include <unotools/ucblockbytes.hxx>
@@ -350,7 +346,7 @@ void SfxPoolCancelManager_Impl::Cancel()
 class SfxMedium_Impl : public SvCompatWeakBase
 {
 public:
-    ::ucb::Content aContent;
+    ::ucbhelper::Content aContent;
     sal_Bool bUpdatePickList : 1;
     sal_Bool bIsTemp        : 1;
     sal_Bool bForceSynchron : 1;
@@ -559,7 +555,7 @@ Reference < XContent > SfxMedium::GetContent() const
         {
             try
             {
-                pImp->aContent = ::ucb::Content( xContent, xEnv );
+                pImp->aContent = ::ucbhelper::Content( xContent, xEnv );
             }
             catch ( Exception& )
             {
@@ -574,7 +570,7 @@ Reference < XContent > SfxMedium::GetContent() const
             else if ( aLogicName.Len() )
                 aURL = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
             if ( aURL.Len() )
-                ::ucb::Content::create( aURL, xEnv, pImp->aContent );
+                ::ucbhelper::Content::create( aURL, xEnv, pImp->aContent );
         }
     }
 
@@ -924,10 +920,10 @@ sal_Bool SfxMedium::BasedOnOriginalFile_Impl()
 //------------------------------------------------------------------
 void SfxMedium::StorageBackup_Impl()
 {
-    ::ucb::Content aOriginalContent;
+    ::ucbhelper::Content aOriginalContent;
     Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
     if ( BasedOnOriginalFile_Impl() && !pImp->m_aBackupURL.getLength()
-      && ::ucb::Content::create( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, aOriginalContent ) )
+      && ::ucbhelper::Content::create( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, aOriginalContent ) )
     {
         DoInternalBackup_Impl( aOriginalContent );
         if( !pImp->m_aBackupURL.getLength() )
@@ -1466,12 +1462,12 @@ void SfxMedium::SetOpenMode( StreamMode nStorOpen,
 }
 
 //------------------------------------------------------------------
-sal_Bool SfxMedium::UseBackupToRestore_Impl( ::ucb::Content& aOriginalContent,
+sal_Bool SfxMedium::UseBackupToRestore_Impl( ::ucbhelper::Content& aOriginalContent,
                                             const Reference< ::com::sun::star::ucb::XCommandEnvironment >& xComEnv )
 {
     try
     {
-        ::ucb::Content aTransactCont( pImp->m_aBackupURL, xComEnv );
+        ::ucbhelper::Content aTransactCont( pImp->m_aBackupURL, xComEnv );
 
         Reference< XInputStream > aOrigInput = aTransactCont.openStream();
         aOriginalContent.writeStream( aOrigInput, sal_True );
@@ -1494,7 +1490,7 @@ sal_Bool SfxMedium::StorageCommit_Impl()
 {
     sal_Bool bResult = sal_False;
     Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
-    ::ucb::Content aOriginalContent;
+    ::ucbhelper::Content aOriginalContent;
 
     if ( pImp->xStorage.is() )
     {
@@ -1517,7 +1513,7 @@ sal_Bool SfxMedium::StorageCommit_Impl()
                     {
                         OSL_ENSURE( pImp->m_aBackupURL.getLength(), "No backup on storage commit!\n" );
                         if ( pImp->m_aBackupURL.getLength()
-                            && ::ucb::Content::create( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ),
+                            && ::ucbhelper::Content::create( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ),
                                                         xDummyEnv,
                                                         aOriginalContent ) )
                         {
@@ -1527,7 +1523,7 @@ sal_Bool SfxMedium::StorageCommit_Impl()
                             if ( !UseBackupToRestore_Impl( aOriginalContent, xDummyEnv ) )
                             {
                                 // connect the medium to the temporary file of the storage
-                                pImp->aContent = ::ucb::Content();
+                                pImp->aContent = ::ucbhelper::Content();
                                 aName = aBackupExc.TemporaryFileURL;
                                 OSL_ENSURE( aName.Len(), "The exception _must_ contain the temporary URL!\n" );
                             }
@@ -1558,14 +1554,14 @@ sal_Bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
     Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
     Reference< XOutputStream > aDestStream;
     Reference< XSimpleFileAccess > aSimpleAccess;
-    ::ucb::Content aOriginalContent;
+    ::ucbhelper::Content aOriginalContent;
 
 //  actualy it should work even for contents different from file content
 //  DBG_ASSERT( ::utl::LocalFileHelper::IsLocalFile( aDest.GetMainURL( INetURLObject::NO_DECODE ) ),
 //              "SfxMedium::TransactedTransferForFS() should be used only for local contents!" );
     try
     {
-        aOriginalContent = ::ucb::Content( aDest.GetMainURL( INetURLObject::NO_DECODE ), xComEnv );
+        aOriginalContent = ::ucbhelper::Content( aDest.GetMainURL( INetURLObject::NO_DECODE ), xComEnv );
     }
     catch ( ::com::sun::star::ucb::CommandAbortedException& )
     {
@@ -1594,8 +1590,8 @@ sal_Bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
     if( !eError || (eError & ERRCODE_WARNING_MASK) )
     {
         Close();
-        ::ucb::Content aTempCont;
-        if( ::ucb::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, aTempCont ) )
+        ::ucbhelper::Content aTempCont;
+        if( ::ucbhelper::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, aTempCont ) )
         {
             sal_Bool bTransactStarted = sal_False;
             SFX_ITEMSET_ARG( GetItemSet(), pOverWrite, SfxBoolItem, SID_OVERWRITE, sal_False );
@@ -1713,7 +1709,7 @@ sal_Bool SfxMedium::TryDirectTransfer( const ::rtl::OUString& aURL, SfxItemSet& 
                     }
 
                     uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
-                    ::ucb::Content aTargetContent( aURL, xEnv );
+                    ::ucbhelper::Content aTargetContent( aURL, xEnv );
 
                     InsertCommandArgument aInsertArg;
                     aInsertArg.Data = xInStream;
@@ -1777,8 +1773,8 @@ void SfxMedium::Transfer_Impl()
                 Close();
 
                 INetURLObject aSource( aNameURL );
-                ::ucb::Content aTempCont;
-                if( ::ucb::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aTempCont ) )
+                ::ucbhelper::Content aTempCont;
+                if( ::ucbhelper::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aTempCont ) )
                 {
                     try
                     {
@@ -1916,7 +1912,7 @@ void SfxMedium::Transfer_Impl()
         Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
            Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler = GetInteractionHandler();
         if (xInteractionHandler.is())
-            xComEnv = new ::ucb::CommandEnvironment( xInteractionHandler,
+            xComEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler,
                                                       Reference< ::com::sun::star::ucb::XProgressHandler >() );
 
         if ( ::utl::LocalFileHelper::IsLocalFile( aDest.GetMainURL( INetURLObject::NO_DECODE ) ) || !aDest.removeSegment() )
@@ -1927,8 +1923,8 @@ void SfxMedium::Transfer_Impl()
         {
             // create content for the parent folder and call transfer on that content with the source content
             // and the destination file name as parameters
-            ::ucb::Content aSourceContent;
-            ::ucb::Content aTransferContent;
+            ::ucbhelper::Content aSourceContent;
+            ::ucbhelper::Content aTransferContent;
 
             String aFileName = GetLongName();
             if ( !aFileName.Len() )
@@ -1936,7 +1932,7 @@ void SfxMedium::Transfer_Impl()
 
             try
             {
-                aTransferContent = ::ucb::Content( aDest.GetMainURL( INetURLObject::NO_DECODE ), xComEnv );
+                aTransferContent = ::ucbhelper::Content( aDest.GetMainURL( INetURLObject::NO_DECODE ), xComEnv );
             }
             catch (const ::com::sun::star::ucb::ContentCreationException& ex)
             {
@@ -1960,9 +1956,9 @@ void SfxMedium::Transfer_Impl()
                 Close();
                 // don't create content before Close(), because if the storage was opened in direct mode, it will be flushed
                 // in Close() and this leads to a transfer command executed in the package, which currently is implemented as
-                // remove+move in the file FCP. The "remove" is notified to the ::ucb::Content, that clears its URL and its
+                // remove+move in the file FCP. The "remove" is notified to the ::ucbhelper::Content, that clears its URL and its
                 // content reference in this notification and thus will never get back any URL, so my transfer will fail!
-                ::ucb::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aSourceContent );
+                ::ucbhelper::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aSourceContent );
 
                 // check for external parameters that may customize the handling of NameClash situations
                 SFX_ITEMSET_ARG( GetItemSet(), pRename, SfxBoolItem, SID_RENAME, sal_False );
@@ -1980,7 +1976,7 @@ void SfxMedium::Transfer_Impl()
 
                 try
                 {
-                    if (!aTransferContent.transferContent( aSourceContent, ::ucb::InsertOperation_COPY, aFileName, nNameClash ))
+                    if (!aTransferContent.transferContent( aSourceContent, ::ucbhelper::InsertOperation_COPY, aFileName, nNameClash ))
                         eError = ERRCODE_IO_GENERAL;
                 }
                 catch ( ::com::sun::star::ucb::CommandAbortedException& )
@@ -2022,7 +2018,7 @@ void SfxMedium::Transfer_Impl()
 }
 
 //------------------------------------------------------------------
-void SfxMedium::DoInternalBackup_Impl( const ::ucb::Content& aOriginalContent,
+void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalContent,
                                        const String& aPrefix,
                                        const String& aExtension,
                                        const String& aDestDir )
@@ -2039,13 +2035,13 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucb::Content& aOriginalContent,
     ::rtl::OUString aBackupName = aBackObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
 
     Reference < ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
-    ::ucb::Content aBackupCont;
-    if( ::ucb::Content::create( aDestDir, xDummyEnv, aBackupCont ) )
+    ::ucbhelper::Content aBackupCont;
+    if( ::ucbhelper::Content::create( aDestDir, xDummyEnv, aBackupCont ) )
     {
         try
         {
             if( aBackupCont.transferContent( aOriginalContent,
-                                            ::ucb::InsertOperation_COPY,
+                                            ::ucbhelper::InsertOperation_COPY,
                                             aBackupName,
                                             NameClash::OVERWRITE ) )
             {
@@ -2062,7 +2058,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucb::Content& aOriginalContent,
 }
 
 //------------------------------------------------------------------
-void SfxMedium::DoInternalBackup_Impl( const ::ucb::Content& aOriginalContent )
+void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalContent )
 {
     if ( pImp->m_aBackupURL.getLength() )
         return; // the backup was done already
@@ -2113,9 +2109,9 @@ void SfxMedium::DoBackup_Impl()
     if( aBakDir.Len() )
     {
         // create content for the parent folder ( = backup folder )
-        ::ucb::Content  aContent;
+        ::ucbhelper::Content  aContent;
         Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
-        if( ::ucb::Content::create( aBakDir, xEnv, aContent ) )
+        if( ::ucbhelper::Content::create( aBakDir, xEnv, aContent ) )
         {
             // save as ".bak" file
             INetURLObject aDest( aBakDir );
@@ -2124,14 +2120,14 @@ void SfxMedium::DoBackup_Impl()
             String aFileName = aDest.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
 
             // create a content for the source file
-            ::ucb::Content aSourceContent;
-            if ( ::ucb::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aSourceContent ) )
+            ::ucbhelper::Content aSourceContent;
+            if ( ::ucbhelper::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aSourceContent ) )
             {
                 try
                 {
                     // do the transfer ( copy source file to backup dir )
                     bSuccess = aContent.transferContent( aSourceContent,
-                                                        ::ucb::InsertOperation_COPY,
+                                                        ::ucbhelper::InsertOperation_COPY,
                                                         aFileName,
                                                         NameClash::OVERWRITE );
                     if( bSuccess )
@@ -2672,7 +2668,7 @@ void SfxMedium::CloseStreams_Impl()
     if ( pSet )
         pSet->ClearItem( SID_CONTENT );
 
-    pImp->aContent = ::ucb::Content();
+    pImp->aContent = ::ucbhelper::Content();
 }
 
 //------------------------------------------------------------------
@@ -2728,7 +2724,7 @@ void SfxMedium::SetName( const String& aNameP, sal_Bool bSetOrigURL )
         pImp->aOrigURL = aNameP;
     aLogicName = aNameP;
     DELETEZ( pURLObj );
-    pImp->aContent = ::ucb::Content();
+    pImp->aContent = ::ucbhelper::Content();
     Init_Impl();
 }
 
@@ -2751,7 +2747,7 @@ void SfxMedium::SetPhysicalName_Impl( const String& rNameP )
         }
 
         if ( aName.Len() || rNameP.Len() )
-            pImp->aContent = ::ucb::Content();
+            pImp->aContent = ::ucbhelper::Content();
 
         aName = rNameP;
         bTriedStorage = sal_False;
@@ -2795,7 +2791,7 @@ void SfxMedium::MoveTempTo_Impl( SfxMedium* pMedium )
 
         pMedium->CloseInStream();
         pMedium->CloseStorage();
-        pMedium->pImp->aContent = ::ucb::Content();
+        pMedium->pImp->aContent = ::ucbhelper::Content();
     }
 }
 
@@ -3598,7 +3594,7 @@ sal_Bool SfxMedium::EqualURLs( const ::rtl::OUString& aFirstURL, const ::rtl::OU
         {
             try
             {
-                ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
+                ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
                 if ( !pBroker )
                     throw uno::RuntimeException();
 
@@ -3718,10 +3714,10 @@ BOOL SfxMedium::IsOpen() const
                 try
                 {
                     uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
-                    ::ucb::Content aTargetContent( aDest.GetMainURL( INetURLObject::NO_DECODE ), xComEnv );
-                    ::ucb::Content aSourceContent( aSource.GetMainURL( INetURLObject::NO_DECODE ), xComEnv );
+                    ::ucbhelper::Content aTargetContent( aDest.GetMainURL( INetURLObject::NO_DECODE ), xComEnv );
+                    ::ucbhelper::Content aSourceContent( aSource.GetMainURL( INetURLObject::NO_DECODE ), xComEnv );
                     if ( aTargetContent.transferContent( aSourceContent,
-                                                        ::ucb::InsertOperation_COPY,
+                                                        ::ucbhelper::InsertOperation_COPY,
                                                         aFileName,
                                                         NameClash::OVERWRITE ) )
                     {
