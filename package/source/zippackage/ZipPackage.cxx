@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:52:08 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:39:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,10 +176,10 @@
 #include <comphelper/ofopxmlhelper.hxx>
 
 using namespace rtl;
-using namespace ucb;
 using namespace std;
 using namespace osl;
 using namespace cppu;
+using namespace ucbhelper;
 using namespace com::sun::star;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
@@ -200,7 +200,7 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 sal_Bool isLocalFile_Impl( ::rtl::OUString aURL )
 {
     ::rtl::OUString aSystemPath;
-    ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
+    ContentBroker* pBroker = ContentBroker::get();
     if ( !pBroker )
     {
         ::rtl::OUString aRet;
@@ -209,11 +209,11 @@ sal_Bool isLocalFile_Impl( ::rtl::OUString aURL )
     }
     else
     {
-        Reference< XContentProviderManager > xManager =
+        uno::Reference< XContentProviderManager > xManager =
                 pBroker->getContentProviderManagerInterface();
         try
         {
-               aSystemPath = ::ucb::getSystemPathFromFileURL( xManager, aURL );
+               aSystemPath = getSystemPathFromFileURL( xManager, aURL );
         }
         catch ( Exception& )
         {
@@ -227,14 +227,14 @@ sal_Bool isLocalFile_Impl( ::rtl::OUString aURL )
 
 class ActiveDataStreamer : public ::cppu::WeakImplHelper1< XActiveDataStreamer >
 {
-    Reference< XStream > mStream;
+    uno::Reference< XStream > mStream;
 public:
 
-    virtual Reference< XStream > SAL_CALL getStream()
+    virtual uno::Reference< XStream > SAL_CALL getStream()
             throw( RuntimeException )
             { return mStream; }
 
-    virtual void SAL_CALL setStream( const Reference< XStream >& stream )
+    virtual void SAL_CALL setStream( const uno::Reference< XStream >& stream )
             throw( RuntimeException )
             { mStream = stream; }
 };
@@ -264,7 +264,7 @@ class DummyInputStream : public ::cppu::WeakImplHelper1< XInputStream >
 
 //===========================================================================
 
-ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
+ZipPackage::ZipPackage (const uno::Reference < XMultiServiceFactory > &xNewFactory)
 : bHasEncryptedEntries ( sal_False )
 , bUseManifest ( sal_True )
 , bForceRecovery ( sal_False )
@@ -312,19 +312,19 @@ void ZipPackage::parseManifest()
             const OUString sManifest (RTL_CONSTASCII_USTRINGPARAM( "manifest.xml") );
 
             try {
-                Reference< XUnoTunnel > xTunnel;
+                uno::Reference< XUnoTunnel > xTunnel;
                 Any aAny = xRootFolder->getByName( sMeta );
                 aAny >>= xTunnel;
-                Reference< XNameContainer > xMetaInfFolder( xTunnel, UNO_QUERY );
+                uno::Reference< XNameContainer > xMetaInfFolder( xTunnel, UNO_QUERY );
                 if ( xMetaInfFolder.is() && xMetaInfFolder->hasByName( sManifest ) )
                 {
                     aAny = xMetaInfFolder->getByName( sManifest );
                     aAny >>= xTunnel;
-                    Reference < XActiveDataSink > xSink (xTunnel, UNO_QUERY);
+                    uno::Reference < XActiveDataSink > xSink (xTunnel, UNO_QUERY);
                     if (xSink.is())
                     {
                         OUString sManifestReader ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.ManifestReader" ) );
-                        Reference < XManifestReader > xReader (xFactory->createInstance( sManifestReader ), UNO_QUERY );
+                        uno::Reference < XManifestReader > xReader (xFactory->createInstance( sManifestReader ), UNO_QUERY );
                         if ( xReader.is() )
                         {
                             const OUString sPropFullPath ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
@@ -366,7 +366,7 @@ void ZipPackage::parseManifest()
                                 if (sPath.getLength() && hasByHierarchicalName ( sPath ) )
                                 {
                                     aAny = getByHierarchicalName( sPath );
-                                    Reference < XUnoTunnel > xUnoTunnel;
+                                    uno::Reference < XUnoTunnel > xUnoTunnel;
                                     aAny >>= xUnoTunnel;
                                     sal_Int64 nTest=0;
                                     if ((nTest = xUnoTunnel->getSomething(ZipPackageFolder::static_getImplementationId())) != 0)
@@ -606,7 +606,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
 {
     RTL_LOGFILE_TRACE_AUTHOR ( "package", LOGFILE_AUTHOR, "{ ZipPackage::initialize" );
     sal_Bool bBadZipFile = sal_False, bHaveZipFile = sal_True;
-    Reference< XProgressHandler > xProgressHandler;
+    uno::Reference< XProgressHandler > xProgressHandler;
     beans::NamedValue aNamedValue;
 
     if ( aArguments.getLength() )
@@ -652,14 +652,14 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                     else
                         sURL = aParamUrl;
 
-                    Content aContent ( sURL, Reference < XCommandEnvironment >() );
+                    Content aContent ( sURL, uno::Reference < XCommandEnvironment >() );
                     Any aAny = aContent.getPropertyValue( OUString::createFromAscii( "Size" ) );
                     sal_uInt64 aSize = 0;
                     // kind of optimisation: treat empty files as nonexistent files
                     // and write to such files directly
                     if( ( aAny >>= aSize ) && aSize )
                     {
-                        Reference < XActiveDataSink > xSink = new ZipPackageSink;
+                        uno::Reference < XActiveDataSink > xSink = new ZipPackageSink;
                         if (aContent.openStream ( xSink ) )
                             xContentStream = xSink->getInputStream();
                     }
@@ -738,7 +738,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
             {
                 // the stream must be seekable, if it is not it will be wrapped
                 xContentStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( xContentStream, xFactory );
-                xContentSeek = Reference < XSeekable > ( xContentStream, UNO_QUERY );
+                xContentSeek = uno::Reference < XSeekable > ( xContentStream, UNO_QUERY );
                 if ( ! xContentSeek.is() )
                     throw com::sun::star::uno::Exception ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "The package component _requires_ an XSeekable interface!" ) ),
                             static_cast < ::cppu::OWeakObject * > ( this ) );
@@ -800,7 +800,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
     FolderHash::iterator aIter;
 
     if ( (nIndex = aName.getLength() ) == 1 && *aName.getStr() == '/' )
-        return makeAny ( Reference < XUnoTunnel > (pRootFolder) );
+        return makeAny ( uno::Reference < XUnoTunnel > (pRootFolder) );
     else
     {
         nStreamIndex = aName.lastIndexOf ( '/' );
@@ -816,7 +816,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
                     sal_Int32 nDirIndex = aName.lastIndexOf ( '/', nStreamIndex );
                     sTemp = aName.copy ( nDirIndex == -1 ? 0 : nDirIndex+1, nStreamIndex-nDirIndex-1 );
                     if ( sTemp == (*aIter).second->getName() )
-                        return makeAny ( Reference < XUnoTunnel > ( (*aIter).second ) );
+                        return makeAny ( uno::Reference < XUnoTunnel > ( (*aIter).second ) );
                     else
                         aRecent.erase ( aIter );
                 }
@@ -856,7 +856,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
         {
             if (nStreamIndex != -1 )
                 aRecent[sDirName] = pPrevious;
-            return makeAny ( Reference < XUnoTunnel > ( pCurrent ) );
+            return makeAny ( uno::Reference < XUnoTunnel > ( pCurrent ) );
         }
         else
         {
@@ -953,17 +953,17 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
 }
 
 // XSingleServiceFactory
-Reference< XInterface > SAL_CALL ZipPackage::createInstance(  )
+uno::Reference< XInterface > SAL_CALL ZipPackage::createInstance(  )
         throw(Exception, RuntimeException)
 {
-    Reference < XInterface > xRef = *(new ZipPackageStream ( *this, xFactory, m_bAllowRemoveOnInsert ));
+    uno::Reference < XInterface > xRef = *(new ZipPackageStream ( *this, xFactory, m_bAllowRemoveOnInsert ));
     return xRef;
 }
-Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const Sequence< Any >& aArguments )
+uno::Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const Sequence< Any >& aArguments )
         throw(Exception, RuntimeException)
 {
     sal_Bool bArg = sal_False;
-    Reference < XInterface > xRef;
+    uno::Reference < XInterface > xRef;
     if ( aArguments.getLength() )
         aArguments[0] >>= bArg;
     if (bArg)
@@ -1019,15 +1019,15 @@ sal_Bool ZipPackage::writeFileIsTemp()
     // write directly to it otherwize create a temporary file to write to
 
     sal_Bool bUseTemp = sal_True;
-    Reference < XOutputStream > xTempOut;
-    Reference< XActiveDataStreamer > xSink;
+    uno::Reference < XOutputStream > xTempOut;
+    uno::Reference< XActiveDataStreamer > xSink;
 
     if ( eMode == e_IMode_URL && !pZipFile && isLocalFile_Impl( sURL ) )
     {
         xSink = openOriginalForOutput();
         if( xSink.is() )
         {
-            Reference< XStream > xStr = xSink->getStream();
+            uno::Reference< XStream > xStr = xSink->getStream();
             if( xStr.is() )
             {
                 xTempOut = xStr->getOutputStream();
@@ -1048,7 +1048,7 @@ sal_Bool ZipPackage::writeFileIsTemp()
     {
         // create temporary file
         const OUString sServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
-        xTempOut = Reference < XOutputStream > ( xFactory->createInstance ( sServiceName ), UNO_QUERY );
+        xTempOut = uno::Reference < XOutputStream > ( xFactory->createInstance ( sServiceName ), UNO_QUERY );
     }
 
     // Hand it to the ZipOutputStream:
@@ -1069,10 +1069,10 @@ sal_Bool ZipPackage::writeFileIsTemp()
             {
                 const OUString sManifest (RTL_CONSTASCII_USTRINGPARAM( "manifest.xml") );
 
-                Reference< XUnoTunnel > xTunnel;
+                uno::Reference< XUnoTunnel > xTunnel;
                 Any aAny = xRootFolder->getByName( sMeta );
                 aAny >>= xTunnel;
-                Reference< XNameContainer > xMetaInfFolder( xTunnel, UNO_QUERY );
+                uno::Reference< XNameContainer > xMetaInfFolder( xTunnel, UNO_QUERY );
                 if ( xMetaInfFolder.is() && xMetaInfFolder->hasByName( sManifest ) )
                     xMetaInfFolder->removeByName( sManifest );
             }
@@ -1096,7 +1096,7 @@ sal_Bool ZipPackage::writeFileIsTemp()
 
         // Make a reference to the manifest output stream so it persists
         // until the call to ZipOutputStream->finish()
-        Reference < XOutputStream > xManOutStream;
+        uno::Reference < XOutputStream > xManOutStream;
         const OUString sMediaType ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
         const OUString sFullPath ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
 
@@ -1131,12 +1131,12 @@ sal_Bool ZipPackage::writeFileIsTemp()
         {
             // Write the manifest
             OUString sManifestWriter( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.ManifestWriter" ) );
-            Reference < XManifestWriter > xWriter ( xFactory->createInstance( sManifestWriter ), UNO_QUERY );
+            uno::Reference < XManifestWriter > xWriter ( xFactory->createInstance( sManifestWriter ), UNO_QUERY );
             if ( xWriter.is() )
             {
                 ZipEntry * pEntry = new ZipEntry;
                 ZipPackageBuffer *pBuffer = new ZipPackageBuffer( n_ConstBufferSize );
-                xManOutStream = Reference < XOutputStream > (*pBuffer, UNO_QUERY);
+                xManOutStream = uno::Reference < XOutputStream > (*pBuffer, UNO_QUERY);
 
                 pEntry->sName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "META-INF/manifest.xml") );
                 pEntry->nMethod = DEFLATED;
@@ -1226,8 +1226,8 @@ sal_Bool ZipPackage::writeFileIsTemp()
         // Update our References to point to the new temp file
         if( bUseTemp )
         {
-            xContentStream = Reference < XInputStream > ( xTempOut, UNO_QUERY_THROW );
-            xContentSeek = Reference < XSeekable > ( xTempOut, UNO_QUERY_THROW );
+            xContentStream = uno::Reference < XInputStream > ( xTempOut, UNO_QUERY_THROW );
+            xContentSeek = uno::Reference < XSeekable > ( xTempOut, UNO_QUERY_THROW );
         }
         else
         {
@@ -1245,7 +1245,7 @@ sal_Bool ZipPackage::writeFileIsTemp()
             else if ( eMode == e_IMode_XStream )
                 xContentStream = xStream->getInputStream();
 
-            xContentSeek = Reference < XSeekable > ( xContentStream, UNO_QUERY_THROW );
+            xContentSeek = uno::Reference < XSeekable > ( xContentStream, UNO_QUERY_THROW );
 
             OSL_ENSURE( xContentStream.is() && xContentSeek.is(), "XSeekable interface is required!" );
         }
@@ -1289,11 +1289,11 @@ sal_Bool ZipPackage::writeFileIsTemp()
     return bUseTemp;
 }
 
-Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
+uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
 {
     // open and truncate the original file
-    Content aOriginalContent (sURL, Reference < XCommandEnvironment >() );
-    Reference< XActiveDataStreamer > xSink = new ActiveDataStreamer;
+    Content aOriginalContent (sURL, uno::Reference < XCommandEnvironment >() );
+    uno::Reference< XActiveDataStreamer > xSink = new ActiveDataStreamer;
 
     if ( eMode == e_IMode_URL )
     {
@@ -1318,7 +1318,7 @@ Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
                 // the file is not accessible
                 // just try to write an empty stream to it
 
-                Reference< XInputStream > xTempIn = new DummyInputStream; //Reference< XInputStream >( xTempOut, UNO_QUERY );
+                uno::Reference< XInputStream > xTempIn = new DummyInputStream; //uno::Reference< XInputStream >( xTempOut, UNO_QUERY );
                 aOriginalContent.writeStream( xTempIn , sal_True );
             }
 
@@ -1361,7 +1361,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
         if ( eMode == e_IMode_XStream )
         {
             // First truncate our output stream
-            Reference < XOutputStream > xOutputStream;
+            uno::Reference < XOutputStream > xOutputStream;
 
             // preparation for copy step
             try
@@ -1369,7 +1369,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
                 xContentSeek->seek( 0 );
 
                 xOutputStream = xStream->getOutputStream();
-                Reference < XTruncate > xTruncate ( xOutputStream, UNO_QUERY );
+                uno::Reference < XTruncate > xTruncate ( xOutputStream, UNO_QUERY );
                 if ( !xTruncate.is() )
                     throw uno::RuntimeException();
 
@@ -1403,7 +1403,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
         }
         else if ( eMode == e_IMode_URL )
         {
-            Reference< XOutputStream > aOrigFileStream;
+            uno::Reference< XOutputStream > aOrigFileStream;
             sal_Bool bCanBeCorrupted = sal_False;
 
             if( isLocalFile_Impl( sURL ) )
@@ -1451,13 +1451,13 @@ void SAL_CALL ZipPackage::commitChanges(  )
             {
                 try
                 {
-                    Reference < XPropertySet > xPropSet ( xContentStream, UNO_QUERY );
+                    uno::Reference < XPropertySet > xPropSet ( xContentStream, UNO_QUERY );
                     OSL_ENSURE( xPropSet.is(), "This is a temporary file that must implement XPropertySet!\n" );
                     if ( !xPropSet.is() )
                         throw uno::RuntimeException();
 
                     OUString sTargetFolder = sURL.copy ( 0, sURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) );
-                    Content aContent ( sTargetFolder, Reference < XCommandEnvironment > () );
+                    Content aContent ( sTargetFolder, uno::Reference < XCommandEnvironment > () );
 
                     OUString sTempURL;
                     Any aAny = xPropSet->getPropertyValue ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Uri" ) ) );
@@ -1538,10 +1538,10 @@ Sequence< ElementChange > SAL_CALL ZipPackage::getPendingChanges(  )
  * Function to create a new component instance; is needed by factory helper implementation.
  * @param xMgr service manager to if the components needs other component instances
  */
-Reference < XInterface >SAL_CALL ZipPackage_createInstance(
-    const Reference< XMultiServiceFactory > & xMgr )
+uno::Reference < XInterface >SAL_CALL ZipPackage_createInstance(
+    const uno::Reference< XMultiServiceFactory > & xMgr )
 {
-    return Reference< XInterface >( *new ZipPackage(xMgr) );
+    return uno::Reference< XInterface >( *new ZipPackage(xMgr) );
 }
 
 OUString ZipPackage::static_getImplementationName()
@@ -1580,7 +1580,7 @@ sal_Bool SAL_CALL ZipPackage::supportsService( OUString const & rServiceName )
 {
     return static_supportsService ( rServiceName );
 }
-Reference < XSingleServiceFactory > ZipPackage::createServiceFactory( Reference < XMultiServiceFactory > const & rServiceFactory )
+uno::Reference < XSingleServiceFactory > ZipPackage::createServiceFactory( uno::Reference < XMultiServiceFactory > const & rServiceFactory )
 {
     return cppu::createSingleFactory (rServiceFactory,
                                            static_getImplementationName(),
@@ -1613,10 +1613,10 @@ sal_Int64 SAL_CALL ZipPackage::getSomething( const Sequence< sal_Int8 >& aIdenti
     return 0;
 }
 
-Reference< XPropertySetInfo > SAL_CALL ZipPackage::getPropertySetInfo(  )
+uno::Reference< XPropertySetInfo > SAL_CALL ZipPackage::getPropertySetInfo(  )
         throw(RuntimeException)
 {
-    return Reference < XPropertySetInfo > (NULL);
+    return uno::Reference < XPropertySetInfo > ();
 }
 void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
         throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
@@ -1670,19 +1670,19 @@ Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
     }
     throw UnknownPropertyException();
 }
-void SAL_CALL ZipPackage::addPropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ )
+void SAL_CALL ZipPackage::addPropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference< XPropertyChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
-void SAL_CALL ZipPackage::removePropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*aListener*/ )
+void SAL_CALL ZipPackage::removePropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference< XPropertyChangeListener >& /*aListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
-void SAL_CALL ZipPackage::addVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ )
+void SAL_CALL ZipPackage::addVetoableChangeListener( const OUString& /*PropertyName*/, const uno::Reference< XVetoableChangeListener >& /*aListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
-void SAL_CALL ZipPackage::removeVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ )
+void SAL_CALL ZipPackage::removeVetoableChangeListener( const OUString& /*PropertyName*/, const uno::Reference< XVetoableChangeListener >& /*aListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
