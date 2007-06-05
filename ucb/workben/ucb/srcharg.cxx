@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srcharg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:10:04 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:23:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -437,7 +437,7 @@ bool parseSearchArgument(String const & rInput, ucb::SearchInfo & rInfo)
                     bNegative = true;
                     ++r;
                 }
-                sal_uInt64 nNumber = 0;
+                sal_Int64 nNumber = 0;
                 bool bDigits = false;
                 while (r != pEnd && INetMIME::isDigit(*r))
                 {
