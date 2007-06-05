@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multifil.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:34:51 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:33:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ class SvxMultiFileDialog : public SvxMultiPathDialog
 {
 private:
     // #97807# -------------------------------------
-    std::map< String, ::ucb::Content >   aFileContentMap;
+    std::map< String, ::ucbhelper::Content >   aFileContentMap;
 
     DECL_LINK( AddHdl_Impl, PushButton * );
     DECL_LINK( DelHdl_Impl, PushButton * );
