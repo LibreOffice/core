@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucbhelper.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:30:10 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:32:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,8 @@
 
 #include "unotools/localfilehelper.hxx"
 
-using namespace ::ucb;
+using namespace ucbhelper;
+using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
@@ -166,8 +167,8 @@ sal_Bool UCBContentHelper::Transfer_Impl( const String& rSource, const String& r
 
     try
     {
-        Content aDestPath( aDestObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-        Reference< ::com::sun::star::ucb::XCommandInfo > xInfo = aDestPath.getCommands();
+        Content aDestPath( aDestObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        uno::Reference< ::com::sun::star::ucb::XCommandInfo > xInfo = aDestPath.getCommands();
         OUString aTransferName = OUString::createFromAscii( "transfer" );
         if ( xInfo->hasCommandByName( aTransferName ) )
         {
@@ -204,7 +205,7 @@ sal_Bool UCBContentHelper::IsDocument( const String& rContent )
 
     try
     {
-        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         bRet = aCnt.isDocument();
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -235,7 +236,7 @@ Any UCBContentHelper::GetProperty( const String& rContent, const ::rtl::OUString
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         return aCnt.getPropertyValue( rName );
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -265,7 +266,7 @@ sal_Bool UCBContentHelper::IsFolder( const String& rContent )
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         bRet = aCnt.isFolder();
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -297,7 +298,7 @@ sal_Bool UCBContentHelper::GetTitle( const String& rContent, String& rTitle )
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         OUString aTemp;
         if ( aCnt.getPropertyValue( OUString::createFromAscii( "Title" ) ) >>= aTemp )
         {
@@ -324,7 +325,7 @@ sal_Bool UCBContentHelper::Kill( const String& rContent )
 
     try
     {
-        Content aCnt( aDeleteObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( aDeleteObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         aCnt.executeCommand( OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -350,8 +351,8 @@ Sequence < OUString > UCBContentHelper::GetFolderContents( const String& rFolder
     DBG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-        Reference< XResultSet > xResultSet;
+        Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        uno::Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps( bSorted ? 2 : 1 );
         OUString* pProps = aProps.getArray();
         pProps[0] = OUString::createFromAscii( "Title" );
@@ -367,12 +368,12 @@ Sequence < OUString > UCBContentHelper::GetFolderContents( const String& rFolder
             }
             else
             {
-                Reference< com::sun::star::ucb::XDynamicResultSet > xDynResultSet;
+                uno::Reference< com::sun::star::ucb::XDynamicResultSet > xDynResultSet;
                 xDynResultSet = aCnt.createDynamicCursor( aProps, eInclude );
 
-                Reference < com::sun::star::ucb::XAnyCompareFactory > xFactory;
-                Reference < XMultiServiceFactory > xMgr = getProcessServiceFactory();
-                Reference < com::sun::star::ucb::XSortedDynamicResultSetFactory > xSRSFac(
+                uno::Reference < com::sun::star::ucb::XAnyCompareFactory > xFactory;
+                uno::Reference < XMultiServiceFactory > xMgr = getProcessServiceFactory();
+                uno::Reference < com::sun::star::ucb::XSortedDynamicResultSetFactory > xSRSFac(
                     xMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SortedDynamicResultSetFactory") ), UNO_QUERY );
 
                 Sequence< com::sun::star::ucb::NumberedSortingInfo > aSortInfo( 2 );
@@ -382,7 +383,7 @@ Sequence < OUString > UCBContentHelper::GetFolderContents( const String& rFolder
                 pInfo[ 1 ].ColumnIndex = 1;
                 pInfo[ 1 ].Ascending   = sal_True;
 
-                Reference< com::sun::star::ucb::XDynamicResultSet > xDynamicResultSet;
+                uno::Reference< com::sun::star::ucb::XDynamicResultSet > xDynamicResultSet;
                 xDynamicResultSet =
                     xSRSFac->createSortedDynamicResultSet( xDynResultSet, aSortInfo, xFactory );
                 if ( xDynamicResultSet.is() )
@@ -402,7 +403,7 @@ Sequence < OUString > UCBContentHelper::GetFolderContents( const String& rFolder
         if ( xResultSet.is() )
         {
             pFiles = new StringList_Impl;
-            Reference< com::sun::star::ucb::XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+            uno::Reference< com::sun::star::ucb::XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
             try
             {
                 while ( xResultSet->next() )
@@ -449,9 +450,9 @@ Sequence < OUString > UCBContentHelper::GetResultSet( const String& rURL )
     StringList_Impl* pList = NULL;
     try
     {
-        Content aCnt( rURL, Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
-        Reference< XResultSet > xResultSet;
-        Reference< com::sun::star::ucb::XDynamicResultSet > xDynResultSet;
+        Content aCnt( rURL, uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+        uno::Reference< XResultSet > xResultSet;
+        uno::Reference< com::sun::star::ucb::XDynamicResultSet > xDynResultSet;
         Sequence< OUString > aProps(3);
         OUString* pProps = aProps.getArray();
         pProps[0] = OUString::createFromAscii( "Title" );
@@ -475,8 +476,8 @@ Sequence < OUString > UCBContentHelper::GetResultSet( const String& rURL )
         if ( xResultSet.is() )
         {
             pList = new StringList_Impl;
-            Reference< com::sun::star::sdbc::XRow > xRow( xResultSet, UNO_QUERY );
-            Reference< com::sun::star::ucb::XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+            uno::Reference< com::sun::star::sdbc::XRow > xRow( xResultSet, UNO_QUERY );
+            uno::Reference< com::sun::star::ucb::XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
 
             try
             {
@@ -543,8 +544,8 @@ sal_Bool UCBContentHelper::CanMakeFolder( const String& rFolder )
 {
     try
     {
-        Content aCnt( rFolder, Reference< XCommandEnvironment > () );
-        Reference< XContentCreator > xCreator = Reference< XContentCreator >( aCnt.get(), UNO_QUERY );
+        Content aCnt( rFolder, uno::Reference< XCommandEnvironment > () );
+        uno::Reference< XContentCreator > xCreator = uno::Reference< XContentCreator >( aCnt.get(), UNO_QUERY );
         if ( !xCreator.is() )
             return sal_False;
 
@@ -578,10 +579,10 @@ sal_Bool UCBContentHelper::MakeFolder( const String& rFolder, sal_Bool bNewOnly 
     aURL.removeSegment();
     Content aCnt;
     Content aNew;
-    Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-    Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
+    uno::Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+    uno::Reference< XInteractionHandler > xInteractionHandler = uno::Reference< XInteractionHandler > (
                xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), UNO_QUERY );
-    if ( Content::create( aURL.GetMainURL( INetURLObject::NO_DECODE ), new CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() ), aCnt ) )
+    if ( Content::create( aURL.GetMainURL( INetURLObject::NO_DECODE ), new CommandEnvironment( xInteractionHandler, uno::Reference< XProgressHandler >() ), aCnt ) )
         return MakeFolder( aCnt, aTitle, aNew, bNewOnly );
     else
         return sal_False;
@@ -593,7 +594,7 @@ sal_Bool UCBContentHelper::MakeFolder( Content& aCnt, const String& aTitle, Cont
 
     try
     {
-        Reference< XContentCreator > xCreator = Reference< XContentCreator >( aCnt.get(), UNO_QUERY );
+        uno::Reference< XContentCreator > xCreator( aCnt.get(), UNO_QUERY );
         if ( !xCreator.is() )
             return sal_False;
 
@@ -656,7 +657,7 @@ sal_Bool UCBContentHelper::MakeFolder( Content& aCnt, const String& aTitle, Cont
     {
         INetURLObject aObj( aCnt.getURL() );
         aObj.Append( aTitle );
-        rNew = Content( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference < XCommandEnvironment >() );
+        rNew = Content( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference < XCommandEnvironment >() );
         return sal_True;
     }
 
@@ -670,11 +671,11 @@ sal_Bool UCBContentHelper::HasParentFolder( const String& rFolder )
     sal_Bool bRet = sal_False;
     try
     {
-        Content aCnt( rFolder, Reference< XCommandEnvironment > () );
-        Reference< XChild > xChild( aCnt.get(), UNO_QUERY );
+        Content aCnt( rFolder, uno::Reference< XCommandEnvironment > () );
+        uno::Reference< XChild > xChild( aCnt.get(), UNO_QUERY );
         if ( xChild.is() )
         {
-            Reference< XContent > xParent( xChild->getParent(), UNO_QUERY );
+            uno::Reference< XContent > xParent( xChild->getParent(), UNO_QUERY );
             if ( xParent.is() )
             {
                 String aParentURL = String( xParent->getIdentifier()->getContentIdentifier() );
@@ -702,7 +703,7 @@ ULONG UCBContentHelper::GetSize( const String& rContent )
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         aCnt.getPropertyValue( OUString::createFromAscii( "Size" ) ) >>= nTemp;
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -726,7 +727,7 @@ sal_Bool UCBContentHelper::IsYounger( const String& rIsYoung, const String& rIsO
     DBG_ASSERT( aOlderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Reference< ::com::sun::star::ucb::XCommandEnvironment > aCmdEnv;
+        uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > aCmdEnv;
         Content aYoung( aYoungObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
         ::com::sun::star::util::DateTime aTempYoungDate;
         aYoung.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aTempYoungDate;
@@ -842,11 +843,11 @@ sal_Bool UCBContentHelper::FindInPath( const String& rPath, const String& rName,
 }
 
 // -----------------------------------------------------------------------
-sal_Bool UCBContentHelper::IsSubPath( const ::rtl::OUString& rPath, const ::rtl::OUString& rSubfolderCandidate, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProvider >& xProv )
+sal_Bool UCBContentHelper::IsSubPath( const ::rtl::OUString& rPath, const ::rtl::OUString& rSubfolderCandidate, const uno::Reference< ::com::sun::star::ucb::XContentProvider >& xProv )
 {
     sal_Bool bResult = sal_False;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProvider > xContentProvider = xProv;
+    uno::Reference< ::com::sun::star::ucb::XContentProvider > xContentProvider = xProv;
 
     // the comparing is done in the following way:
     // - first compare in case sensitive way
@@ -863,10 +864,10 @@ sal_Bool UCBContentHelper::IsSubPath( const ::rtl::OUString& rPath, const ::rtl:
     {
         if ( !xContentProvider.is() )
         {
-            ::ucb::ContentBroker* pBroker = NULL;
+            ::ucbhelper::ContentBroker* pBroker = NULL;
             if ( aCandidate.GetProtocol() == INET_PROT_FILE )
             {
-                        pBroker = ::ucb::ContentBroker::get();
+                pBroker = ::ucbhelper::ContentBroker::get();
                 if ( pBroker )
                     xContentProvider = pBroker->getContentProviderInterface();
             }
@@ -887,15 +888,15 @@ sal_Bool UCBContentHelper::IsSubPath( const ::rtl::OUString& rPath, const ::rtl:
                 // the normalized urls must be retrieved
                 try
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > xSecCont =
+                    uno::Reference< ::com::sun::star::ucb::XContent > xSecCont =
                         xContentProvider->queryContent(
-                            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifierFactory >(
+                            uno::Reference< ::com::sun::star::ucb::XContentIdentifierFactory >(
                                 xContentProvider, ::com::sun::star::uno::UNO_QUERY_THROW )->createContentIdentifier(
                                     aParentFolder.GetMainURL( INetURLObject::NO_DECODE ) ) );
 
-                    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > xLocCont =
+                    uno::Reference< ::com::sun::star::ucb::XContent > xLocCont =
                         xContentProvider->queryContent(
-                            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifierFactory >(
+                            uno::Reference< ::com::sun::star::ucb::XContentIdentifierFactory >(
                                 xContentProvider, ::com::sun::star::uno::UNO_QUERY_THROW )->createContentIdentifier(
                                     aCandidate.GetMainURL( INetURLObject::NO_DECODE ) ) );
 
@@ -906,23 +907,23 @@ sal_Bool UCBContentHelper::IsSubPath( const ::rtl::OUString& rPath, const ::rtl:
                     ::rtl::OUString aLocNormStr;
 
                     bResult =
-                    ( ( ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandProcessor >(
+                    ( ( uno::Reference< ::com::sun::star::ucb::XCommandProcessor >(
                             xSecCont, ::com::sun::star::uno::UNO_QUERY_THROW )->execute(
                                 ::com::sun::star::ucb::Command(
                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getCasePreservingURL" ) ),
                                     -1,
                                     ::com::sun::star::uno::Any() ),
                                 0,
-                                ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() )
+                                uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() )
                         >>= aSecNormStr )
-                    && ( ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandProcessor >(
+                    && ( uno::Reference< ::com::sun::star::ucb::XCommandProcessor >(
                             xLocCont, ::com::sun::star::uno::UNO_QUERY_THROW )->execute(
                                 ::com::sun::star::ucb::Command(
                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getCasePreservingURL" ) ),
                                     -1,
                                     ::com::sun::star::uno::Any() ),
                                 0,
-                                ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() )
+                                uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() )
                         >>= aLocNormStr )
                     && aLocNormStr.equals( aSecNormStr ) );
                 }
