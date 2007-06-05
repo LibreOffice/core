@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_stgelems.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:03:14 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:18:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,7 @@
 
 #include "tdoc_stgelems.hxx"
 
-using namespace com::sun;
 using namespace com::sun::star;
-
 using namespace tdoc_ucp;
 
 //=========================================================================
