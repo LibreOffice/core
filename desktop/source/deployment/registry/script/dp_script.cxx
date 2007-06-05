@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_script.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:11:55 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:07:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,7 +261,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     if (mediaType.getLength() == 0)
     {
         // detect media-type:
-        ::ucb::Content ucbContent;
+        ::ucbhelper::Content ucbContent;
         if (create_ucb_content( &ucbContent, url, xCmdEnv ) &&
             ucbContent.isFolder())
         {
