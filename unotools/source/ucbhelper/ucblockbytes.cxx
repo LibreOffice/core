@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:30:25 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:32:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -465,7 +465,7 @@ private:
     ReplyType         m_aReplyType;
 
     Command                           m_aArg;
-    ::ucb::Content                    m_aContent;
+    ::ucbhelper::Content              m_aContent;
 };
 
 
@@ -1257,7 +1257,7 @@ static sal_Bool _UCBOpenContentSync(
     Reference < XProgressHandler > xProgress,
     UcbLockBytesHandlerRef xHandler )
 {
-    ::ucb::Content aContent( xContent, new UcbTaskEnvironment( xInteract, xProgress ) );
+    ::ucbhelper::Content aContent( xContent, new UcbTaskEnvironment( xInteract, xProgress ) );
     Reference < XContentIdentifier > xIdent = xContent->getIdentifier();
     ::rtl::OUString aScheme = xIdent->getContentProviderScheme();
 
