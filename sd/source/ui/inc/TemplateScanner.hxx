@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TemplateScanner.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:46:11 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:13:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,7 @@ private:
     };
     State meState;
 
-    ::ucb::Content maFolderContent;
+    ::ucbhelper::Content maFolderContent;
     TemplateDir* mpTemplateDirectory;
 
     /** The data structure that is to be filled with information about the
