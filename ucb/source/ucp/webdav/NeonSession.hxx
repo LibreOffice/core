@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 09:35:52 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:19:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,12 +148,6 @@ class NeonSession : public DAVSession
             throw ( DAVException );
 
         virtual void
-        GET( void* userData,
-             const ::rtl::OUString & inPath,
-             const DAVRequestEnvironment & rEnv )
-            throw( DAVException );
-
-        virtual void
         GET( const ::rtl::OUString & inPath,
              com::sun::star::uno::Reference<
                 com::sun::star::io::XOutputStream > &  ioOutputStream,
@@ -167,14 +161,6 @@ class NeonSession : public DAVSession
              DAVResource & ioResource,
              const DAVRequestEnvironment & rEnv )
             throw ( DAVException );
-
-        virtual void
-        GET( void* userData,
-             const ::rtl::OUString & inPath,
-             const std::vector< ::rtl::OUString > & inHeaderNames,
-             DAVResource & ioResource,
-             const DAVRequestEnvironment & rEnv )
-            throw( DAVException );
 
         virtual void
         GET( const ::rtl::OUString & inPath,
