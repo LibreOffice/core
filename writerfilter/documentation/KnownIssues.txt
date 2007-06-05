@@ -1,0 +1,2 @@
+- foonotes/endnotes: font index cannot be applied to Writer's footnote symbol 
+in the footnote area
