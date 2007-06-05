@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlotStateListener.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:24:33 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:13:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
@@ -75,7 +74,7 @@ SlotStateListener::SlotStateListener (void)
 
 SlotStateListener::SlotStateListener (
     Link& rCallback,
-    const Reference<frame::XDispatchProvider>& rxDispatchProvider,
+    const uno::Reference<frame::XDispatchProvider>& rxDispatchProvider,
     const ::rtl::OUString& rSlotName)
     : SlotStateListenerInterfaceBase(maMutex),
       maCallback(),
@@ -108,7 +107,7 @@ void SlotStateListener::SetCallback (const Link& rCallback)
 
 
 void SlotStateListener::ConnectToDispatchProvider (
-    const Reference<frame::XDispatchProvider>& rxDispatchProvider)
+    const uno::Reference<frame::XDispatchProvider>& rxDispatchProvider)
 {
     ThrowIfDisposed();
 
@@ -131,7 +130,7 @@ void SlotStateListener::ObserveSlot (const ::rtl::OUString& rSlotName)
     {
         // Connect the state change listener.
         util::URL aURL (MakeURL(rSlotName));
-        Reference<frame::XDispatch> xDispatch (GetDispatch(aURL));
+        uno::Reference<frame::XDispatch> xDispatch (GetDispatch(aURL));
         if (xDispatch.is())
         {
             maRegisteredURLList.push_back(aURL);
@@ -154,7 +153,7 @@ bool SlotStateListener::IsValid (void) const
 void SlotStateListener::disposing (void)
 {
     ReleaseListeners();
-    mxDispatchProviderWeak = WeakReference<frame::XDispatchProvider>(NULL);
+    mxDispatchProviderWeak = uno::WeakReference<frame::XDispatchProvider>(NULL);
     maCallback = Link();
 }
 
@@ -171,9 +170,9 @@ util::URL SlotStateListener::MakeURL (const OUString& rSlotName) const
         ::comphelper::getProcessServiceFactory());
     if (xServiceManager.is())
     {
-        Reference<util::XURLTransformer> xTransformer(xServiceManager->createInstance(
+        uno::Reference<util::XURLTransformer> xTransformer(xServiceManager->createInstance(
             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))),
-            UNO_QUERY);
+            uno::UNO_QUERY);
         if (xTransformer.is())
             xTransformer->parseStrict(aURL);
     }
@@ -184,12 +183,12 @@ util::URL SlotStateListener::MakeURL (const OUString& rSlotName) const
 
 
 
-Reference<frame::XDispatch>
+uno::Reference<frame::XDispatch>
     SlotStateListener::GetDispatch (const util::URL& rURL) const
 {
-    Reference<frame::XDispatch> xDispatch;
+    uno::Reference<frame::XDispatch> xDispatch;
 
-    Reference<frame::XDispatchProvider> xDispatchProvider (mxDispatchProviderWeak);
+    uno::Reference<frame::XDispatchProvider> xDispatchProvider (mxDispatchProviderWeak);
     if (xDispatchProvider.is())
         xDispatch = xDispatchProvider->queryDispatch(rURL, OUString(), 0);
 
@@ -200,8 +199,8 @@ Reference<frame::XDispatch>
 
 
 void SlotStateListener::statusChanged (
-    const ::com::sun::star::frame::FeatureStateEvent& rState)
-    throw (RuntimeException)
+    const frame::FeatureStateEvent& rState)
+    throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
     OUString sSlotName (rState.FeatureURL.Complete);
@@ -220,7 +219,7 @@ void SlotStateListener::ReleaseListeners (void)
         RegisteredURLList::iterator iEnd (maRegisteredURLList.end());
         for (; iURL!=iEnd; ++iURL)
         {
-            Reference<frame::XDispatch> xDispatch (GetDispatch(*iURL));
+            uno::Reference<frame::XDispatch> xDispatch (GetDispatch(*iURL));
             if (xDispatch.is())
             {
                 xDispatch->removeStatusListener(this,*iURL);
@@ -236,7 +235,7 @@ void SlotStateListener::ReleaseListeners (void)
 
 void SAL_CALL SlotStateListener::disposing (
     const lang::EventObject& )
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
 }
 
@@ -244,7 +243,7 @@ void SAL_CALL SlotStateListener::disposing (
 
 
 void SlotStateListener::ThrowIfDisposed (void)
-    throw (::com::sun::star::lang::DisposedException)
+    throw (lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
