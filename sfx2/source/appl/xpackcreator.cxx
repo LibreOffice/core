@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xpackcreator.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:22:12 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:36:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,14 +96,14 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const ::rtl::OUString&
         throw ( io::IOException,
                 uno::RuntimeException )
 {
-    uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
+    uno::Reference< ucb::XCommandEnvironment > xComEnv;
 
     if ( !xTargetStream.is() )
         throw io::IOException(); // TODO/LATER
 
     sal_Bool bSuccess = sal_False;
-    ::ucb::Content aContent;
-    if( ::ucb::Content::create( aFolderUrl, xComEnv, aContent ) )
+    ::ucbhelper::Content aContent;
+    if( ::ucbhelper::Content::create( aFolderUrl, xComEnv, aContent ) )
     {
         SvStream* pTempStream = NULL;
 
