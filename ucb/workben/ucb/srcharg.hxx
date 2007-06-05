@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srcharg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:22:39 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:23:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef CHAOS_UCBDEMO_SRCHARG_HXX
-#define CHAOS_UCBDEMO_SRCHARG_HXX
+#ifndef UCBDEMO_SRCHARG_HXX
+#define UCBDEMO_SRCHARG_HXX
 
 class String;
 namespace com { namespace sun { namespace star { namespace ucb {
@@ -45,5 +45,5 @@ namespace com { namespace sun { namespace star { namespace ucb {
 bool parseSearchArgument(String const & rInput,
                          com::sun::star::ucb::SearchInfo & rInfo);
 
-#endif // CHAOS_UCBDEMO_SRCHARG_HXX
+#endif // UCBDEMO_SRCHARG_HXX
 
