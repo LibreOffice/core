@@ -4,9 +4,9 @@
  *
  *  $RCSfile: webdavprovider.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:08:27 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:22:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,8 @@
 #include "webdavcontent.hxx"
 #endif
 
+#include "osl/mutex.hxx"
+
 using namespace com::sun::star;
 using namespace webdav_ucp;
 
@@ -66,7 +68,7 @@ using namespace webdav_ucp;
 
 ContentProvider::ContentProvider(
                 const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
-: ::ucb::ContentProviderImplHelper( rSMgr ),
+: ::ucbhelper::ContentProviderImplHelper( rSMgr ),
   m_xDAVSessionFactory( new DAVSessionFactory() ),
   m_pProps( 0 )
 {
@@ -88,7 +90,7 @@ ContentProvider::~ContentProvider()
 XINTERFACE_IMPL_3( ContentProvider,
                    lang::XTypeProvider,
                    lang::XServiceInfo,
-                   com::sun::star::ucb::XContentProvider );
+                   ucb::XContentProvider );
 
 //=========================================================================
 //
@@ -99,7 +101,7 @@ XINTERFACE_IMPL_3( ContentProvider,
 XTYPEPROVIDER_IMPL_3( ContentProvider,
                       lang::XTypeProvider,
                       lang::XServiceInfo,
-                      com::sun::star::ucb::XContentProvider );
+                      ucb::XContentProvider );
 
 //=========================================================================
 //
@@ -128,11 +130,11 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 //=========================================================================
 
 // virtual
-uno::Reference< com::sun::star::ucb::XContent > SAL_CALL
+uno::Reference< ucb::XContent > SAL_CALL
 ContentProvider::queryContent(
             const uno::Reference<
-                    com::sun::star::ucb::XContentIdentifier >& Identifier )
-    throw( com::sun::star::ucb::IllegalIdentifierException,
+                    ucb::XContentIdentifier >& Identifier )
+    throw( ucb::IllegalIdentifierException,
            uno::RuntimeException )
 {
     // Check URL scheme...
@@ -149,21 +151,21 @@ ContentProvider::queryContent(
          !aScheme.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM( FTP_URL_SCHEME ) )
        )
-        throw com::sun::star::ucb::IllegalIdentifierException();
+        throw ucb::IllegalIdentifierException();
 
     // Normalize URL and create new Id, if nessacary.
     rtl::OUString aURL = Identifier->getContentIdentifier();
 
     // At least: <scheme> + "://"
     if ( aURL.getLength() < ( aScheme.getLength() + 3 ) )
-        throw com::sun::star::ucb::IllegalIdentifierException();
+        throw ucb::IllegalIdentifierException();
 
     if ( ( aURL.getStr()[ aScheme.getLength() ]     != sal_Unicode( ':' ) ) ||
          ( aURL.getStr()[ aScheme.getLength() + 1 ] != sal_Unicode( '/' ) ) ||
          ( aURL.getStr()[ aScheme.getLength() + 2 ] != sal_Unicode( '/' ) ) )
-        throw com::sun::star::ucb::IllegalIdentifierException();
+        throw ucb::IllegalIdentifierException();
 
-    uno::Reference< com::sun::star::ucb::XContentIdentifier > xCanonicId;
+    uno::Reference< ucb::XContentIdentifier > xCanonicId;
 
     bool bNewId = false;
     if ( aScheme.equalsAsciiL(
@@ -182,7 +184,7 @@ ContentProvider::queryContent(
         // Find second slash in URL.
         nPos = aURL.indexOf( '/', aURL.indexOf( '/' ) + 1 );
         if ( nPos == -1 )
-            throw com::sun::star::ucb::IllegalIdentifierException();
+            throw ucb::IllegalIdentifierException();
 
         nPos = aURL.indexOf( '/', nPos + 1 );
         if ( nPos == -1 )
@@ -193,15 +195,15 @@ ContentProvider::queryContent(
     }
 
     if ( bNewId )
-        xCanonicId = new ::ucb::ContentIdentifier( m_xSMgr, aURL );
+        xCanonicId = new ::ucbhelper::ContentIdentifier( m_xSMgr, aURL );
     else
         xCanonicId = Identifier;
 
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     // Check, if a content with given id already exists...
-    uno::Reference< com::sun::star::ucb::XContent > xContent
-        = queryExistingContent( xCanonicId ).getBodyPtr();
+    uno::Reference< ucb::XContent > xContent
+        = queryExistingContent( xCanonicId ).get();
     if ( xContent.is() )
         return xContent;
 
@@ -213,13 +215,13 @@ ContentProvider::queryContent(
         xContent = new ::webdav_ucp::Content(
                         m_xSMgr, this, xCanonicId, m_xDAVSessionFactory );
     }
-    catch ( com::sun::star::ucb::ContentCreationException const & )
+    catch ( ucb::ContentCreationException const & )
     {
-        throw com::sun::star::ucb::IllegalIdentifierException();
+        throw ucb::IllegalIdentifierException();
     }
 
     if ( !xContent->getIdentifier().is() )
-        throw com::sun::star::ucb::IllegalIdentifierException();
+        throw ucb::IllegalIdentifierException();
 
     return xContent;
 }
