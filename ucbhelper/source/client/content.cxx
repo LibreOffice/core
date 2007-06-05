@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:24:23 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:52:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,7 @@ using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 
-namespace ucb
+namespace ucbhelper
 {
 
 class EmptyInputStream : public ::cppu::WeakImplHelper1< XInputStream >
@@ -301,7 +301,7 @@ public:
 // Helpers.
 //=========================================================================
 
-static void ensureContentProviderForURL( const ucb::ContentBroker & rBroker,
+static void ensureContentProviderForURL( const ContentBroker & rBroker,
                                          const rtl::OUString & rURL )
     throw ( ContentCreationException, RuntimeException )
 {
@@ -331,10 +331,10 @@ static void ensureContentProviderForURL( const ucb::ContentBroker & rBroker,
 }
 
 //=========================================================================
-static ucb::ContentBroker* getContentBroker( bool bThrow )
+static ContentBroker* getContentBroker( bool bThrow )
     throw ( ContentCreationException, RuntimeException )
 {
-    ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
+    ContentBroker* pBroker = ContentBroker::get();
 
     if ( !pBroker )
     {
@@ -370,7 +370,7 @@ static ucb::ContentBroker* getContentBroker( bool bThrow )
 
 //=========================================================================
 static Reference< XContentIdentifier > getContentIdentifier(
-                                    const ucb::ContentBroker & rBroker,
+                                    const ContentBroker & rBroker,
                                     const rtl::OUString & rURL,
                                     bool bThrow )
     throw ( ContentCreationException, RuntimeException )
@@ -411,7 +411,7 @@ static Reference< XContentIdentifier > getContentIdentifier(
 
 //=========================================================================
 static Reference< XContent > getContent(
-                                    const ucb::ContentBroker & rBroker,
+                                    const ContentBroker & rBroker,
                                     const Reference< XContentIdentifier > & xId,
                                     bool bThrow )
     throw ( ContentCreationException, RuntimeException )
@@ -475,7 +475,7 @@ Content::Content( const rtl::OUString& rURL,
                   const Reference< XCommandEnvironment >& rEnv )
     throw ( ContentCreationException, RuntimeException )
 {
-    ucb::ContentBroker* pBroker = getContentBroker( true );
+    ContentBroker* pBroker = getContentBroker( true );
 
     Reference< XContentIdentifier > xId
         = getContentIdentifier( *pBroker, rURL, true );
@@ -490,7 +490,7 @@ Content::Content( const Reference< XContentIdentifier >& rId,
                   const Reference< XCommandEnvironment >& rEnv )
     throw ( ContentCreationException, RuntimeException )
 {
-    ucb::ContentBroker* pBroker = getContentBroker( true );
+    ContentBroker* pBroker = getContentBroker( true );
 
     Reference< XContent > xContent = getContent( *pBroker, rId, true );
 
@@ -502,7 +502,7 @@ Content::Content( const Reference< XContent >& rContent,
                   const Reference< XCommandEnvironment >& rEnv )
     throw ( ContentCreationException, RuntimeException )
 {
-    ucb::ContentBroker* pBroker = getContentBroker( true );
+    ContentBroker* pBroker = getContentBroker( true );
 
     m_xImpl = new Content_Impl( pBroker->getServiceManager(), rContent, rEnv );
 }
@@ -519,7 +519,7 @@ sal_Bool Content::create( const rtl::OUString& rURL,
                           const Reference< XCommandEnvironment >& rEnv,
                           Content& rContent )
 {
-    ucb::ContentBroker* pBroker = getContentBroker( false );
+    ContentBroker* pBroker = getContentBroker( false );
     if ( !pBroker )
         return sal_False;
 
@@ -544,7 +544,7 @@ sal_Bool Content::create( const Reference< XContentIdentifier >& rId,
                           const Reference< XCommandEnvironment >& rEnv,
                           Content& rContent )
 {
-    ucb::ContentBroker* pBroker = getContentBroker( false );
+    ContentBroker* pBroker = getContentBroker( false );
     if ( !pBroker )
         return sal_False;
 
@@ -564,7 +564,7 @@ sal_Bool Content::create( const Reference< XContent >& xContent,
                           const Reference< XCommandEnvironment >& rEnv,
                           Content& rContent )
 {
-    ucb::ContentBroker* pBroker = getContentBroker( false );
+    ContentBroker* pBroker = getContentBroker( false );
     if ( !pBroker )
         return sal_False;
 
@@ -1496,7 +1496,7 @@ sal_Bool Content::transferContent( const Content& rSourceContent,
                                      const sal_Int32 nNameClashAction )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
-    ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
+    ContentBroker* pBroker = ContentBroker::get();
     if ( !pBroker )
     {
         OSL_ENSURE( sal_False,
@@ -1742,7 +1742,7 @@ Reference< XContent > Content_Impl::getContent()
 
         if ( !m_xContent.is() && m_aURL.getLength() )
         {
-            ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
+            ContentBroker* pBroker = ContentBroker::get();
 
             OSL_ENSURE( pBroker, "No Content Broker!" );
 
@@ -1935,5 +1935,5 @@ void SAL_CALL ContentEventListener_Impl::disposing( const EventObject& Source )
     m_rContent.disposing(Source);
 }
 
-} /* namespace ucb */
+} /* namespace ucbhelper */
 
