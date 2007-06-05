@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:42:01 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:25:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,7 +173,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::beans;
 using namespace ::comphelper;
-using namespace ::ucb;
+using namespace ::ucbhelper;
 using ::svt::SortingData_Impl;
 using ::svt::FolderDescriptor;
 using ::vos::TTimeValue;
