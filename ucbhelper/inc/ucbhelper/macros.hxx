@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:29:11 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:49:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,8 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
-#endif
+
+#include "osl/mutex.hxx"
 
 //=========================================================================
 
