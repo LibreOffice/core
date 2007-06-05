@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contentinfo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:21:59 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:54:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,10 @@
 #ifndef _COM_SUN_STAR_UCB_XPROPERTYSETREGISTRY_HPP_
 #include <com/sun/star/ucb/XPropertySetRegistry.hpp>
 #endif
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
-#endif
+
+#include "osl/diagnose.h"
+#include "osl/mutex.hxx"
+
 #ifndef _UCBHELPER_CONTENTHELPER_HXX
 #include <ucbhelper/contenthelper.hxx>
 #endif
@@ -57,13 +58,7 @@
 #include <ucbhelper/contentinfo.hxx>
 #endif
 
-using namespace rtl;
-using namespace vos;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::ucb;
-using namespace ucb;
+using namespace com::sun::star;
 
 //=========================================================================
 //=========================================================================
@@ -73,10 +68,12 @@ using namespace ucb;
 //=========================================================================
 //=========================================================================
 
+namespace ucbhelper {
+
 PropertySetInfo::PropertySetInfo(
-                        const Reference< XMultiServiceFactory >& rxSMgr,
-                        const Reference< XCommandEnvironment >& rxEnv,
-                        ContentImplHelper* pContent )
+    const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+    const uno::Reference< com::sun::star::ucb::XCommandEnvironment >& rxEnv,
+    ContentImplHelper* pContent )
 : m_xSMgr( rxSMgr ),
   m_xEnv( rxEnv ),
   m_pProps( 0 ),
@@ -98,8 +95,8 @@ PropertySetInfo::~PropertySetInfo()
 //=========================================================================
 
 XINTERFACE_IMPL_2( PropertySetInfo,
-                   XTypeProvider,
-                   XPropertySetInfo );
+                   lang::XTypeProvider,
+                   beans::XPropertySetInfo );
 
 //=========================================================================
 //
@@ -108,8 +105,8 @@ XINTERFACE_IMPL_2( PropertySetInfo,
 //=========================================================================
 
 XTYPEPROVIDER_IMPL_2( PropertySetInfo,
-                          XTypeProvider,
-                          XPropertySetInfo );
+                          lang::XTypeProvider,
+                          beans::XPropertySetInfo );
 
 //=========================================================================
 //
@@ -118,12 +115,12 @@ XTYPEPROVIDER_IMPL_2( PropertySetInfo,
 //=========================================================================
 
 // virtual
-Sequence< Property > SAL_CALL PropertySetInfo::getProperties()
-    throw( RuntimeException )
+uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
+    throw( uno::RuntimeException )
 {
     if ( !m_pProps )
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::MutexGuard aGuard( m_aMutex );
         if ( !m_pProps )
         {
             //////////////////////////////////////////////////////////////
@@ -132,34 +129,34 @@ Sequence< Property > SAL_CALL PropertySetInfo::getProperties()
 
             try
             {
-                Sequence< Property > aProps
+                uno::Sequence< beans::Property > aProps
                     = m_pContent->getProperties( m_xEnv );
-                m_pProps = new Sequence< Property >( aProps );
+                m_pProps = new uno::Sequence< beans::Property >( aProps );
             }
-            catch ( RuntimeException const & )
+            catch ( uno::RuntimeException const & )
             {
                 throw;
             }
-            catch ( Exception const & )
+            catch ( uno::Exception const & )
             {
-                m_pProps = new Sequence< Property >( 0 );
+                m_pProps = new uno::Sequence< beans::Property >( 0 );
             }
 
             //////////////////////////////////////////////////////////////
             // Get info for additional properties.
             //////////////////////////////////////////////////////////////
 
-            Reference< XPersistentPropertySet > xSet (
-                        m_pContent->getAdditionalPropertySet( sal_False ) );
+            uno::Reference< com::sun::star::ucb::XPersistentPropertySet >
+                xSet ( m_pContent->getAdditionalPropertySet( sal_False ) );
 
             if ( xSet.is() )
             {
                 // Get property set info.
-                Reference< XPropertySetInfo > xInfo(
-                                        xSet->getPropertySetInfo() );
+                uno::Reference< beans::XPropertySetInfo > xInfo(
+                    xSet->getPropertySetInfo() );
                 if ( xInfo.is() )
                 {
-                    const Sequence< Property >& rAddProps
+                    const uno::Sequence< beans::Property >& rAddProps
                         = xInfo->getProperties();
                     sal_Int32 nAddProps = rAddProps.getLength();
                     if ( nAddProps > 0 )
@@ -167,8 +164,9 @@ Sequence< Property > SAL_CALL PropertySetInfo::getProperties()
                         sal_Int32 nPos = m_pProps->getLength();
                         m_pProps->realloc( nPos + nAddProps );
 
-                        Property* pProps = m_pProps->getArray();
-                        const Property* pAddProps = rAddProps.getConstArray();
+                        beans::Property* pProps = m_pProps->getArray();
+                        const beans::Property* pAddProps
+                            = rAddProps.getConstArray();
 
                         for ( sal_Int32 n = 0; n < nAddProps; ++n, ++nPos )
                             pProps[ nPos ] = pAddProps[ n ];
@@ -182,22 +180,24 @@ Sequence< Property > SAL_CALL PropertySetInfo::getProperties()
 
 //=========================================================================
 // virtual
-Property SAL_CALL PropertySetInfo::getPropertyByName( const OUString& aName )
-    throw( UnknownPropertyException, RuntimeException )
+beans::Property SAL_CALL PropertySetInfo::getPropertyByName(
+        const rtl::OUString& aName )
+    throw( beans::UnknownPropertyException, uno::RuntimeException )
 {
-    Property aProp;
+    beans::Property aProp;
     if ( queryProperty( aName, aProp ) )
         return aProp;
 
-    throw UnknownPropertyException();
+    throw beans::UnknownPropertyException();
 }
 
 //=========================================================================
 // virtual
-sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName( const OUString& Name )
-    throw( RuntimeException )
+sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName(
+        const rtl::OUString& Name )
+    throw( uno::RuntimeException )
 {
-    Property aProp;
+    beans::Property aProp;
     return queryProperty( Name, aProp );
 }
 
@@ -209,24 +209,24 @@ sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName( const OUString& Name )
 
 void PropertySetInfo::reset()
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     delete m_pProps;
     m_pProps = 0;
 }
 
 //=========================================================================
 sal_Bool PropertySetInfo::queryProperty(
-                                const OUString& rName, Property& rProp )
+    const rtl::OUString& rName, beans::Property& rProp )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     getProperties();
 
-    const Property* pProps = m_pProps->getConstArray();
+    const beans::Property* pProps = m_pProps->getConstArray();
     sal_Int32 nCount = m_pProps->getLength();
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
-        const Property& rCurrProp = pProps[ n ];
+        const beans::Property& rCurrProp = pProps[ n ];
         if ( rCurrProp.Name == rName )
         {
             rProp = rCurrProp;
@@ -246,9 +246,9 @@ sal_Bool PropertySetInfo::queryProperty(
 //=========================================================================
 
 CommandProcessorInfo::CommandProcessorInfo(
-                        const Reference< XMultiServiceFactory >& rxSMgr,
-                        const Reference< XCommandEnvironment >& rxEnv,
-                        ContentImplHelper* pContent )
+    const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+    const uno::Reference< com::sun::star::ucb::XCommandEnvironment >& rxEnv,
+    ContentImplHelper* pContent )
 : m_xSMgr( rxSMgr ),
   m_xEnv( rxEnv ),
   m_pCommands( 0 ),
@@ -270,8 +270,8 @@ CommandProcessorInfo::~CommandProcessorInfo()
 //=========================================================================
 
 XINTERFACE_IMPL_2( CommandProcessorInfo,
-                   XTypeProvider,
-                   XCommandInfo );
+                   lang::XTypeProvider,
+                   com::sun::star::ucb::XCommandInfo );
 
 //=========================================================================
 //
@@ -280,8 +280,8 @@ XINTERFACE_IMPL_2( CommandProcessorInfo,
 //=========================================================================
 
 XTYPEPROVIDER_IMPL_2( CommandProcessorInfo,
-                         XTypeProvider,
-                         XCommandInfo );
+                         lang::XTypeProvider,
+                         com::sun::star::ucb::XCommandInfo );
 
 //=========================================================================
 //
@@ -290,12 +290,13 @@ XTYPEPROVIDER_IMPL_2( CommandProcessorInfo,
 //=========================================================================
 
 // virtual
-Sequence< CommandInfo > SAL_CALL CommandProcessorInfo::getCommands()
-    throw( RuntimeException )
+uno::Sequence< com::sun::star::ucb::CommandInfo > SAL_CALL
+CommandProcessorInfo::getCommands()
+    throw( uno::RuntimeException )
 {
     if ( !m_pCommands )
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::MutexGuard aGuard( m_aMutex );
         if ( !m_pCommands )
         {
             //////////////////////////////////////////////////////////////
@@ -304,17 +305,21 @@ Sequence< CommandInfo > SAL_CALL CommandProcessorInfo::getCommands()
 
             try
             {
-                Sequence< CommandInfo > aCmds
+                uno::Sequence< com::sun::star::ucb::CommandInfo > aCmds
                     = m_pContent->getCommands( m_xEnv );
-                m_pCommands = new Sequence< CommandInfo >( aCmds );
+                m_pCommands
+                    = new uno::Sequence< com::sun::star::ucb::CommandInfo >(
+                        aCmds );
             }
-            catch ( RuntimeException const & )
+            catch ( uno::RuntimeException const & )
             {
                 throw;
             }
-            catch ( Exception const & )
+            catch ( uno::Exception const & )
             {
-                m_pCommands = new Sequence< CommandInfo >( 0 );
+                m_pCommands
+                    = new uno::Sequence< com::sun::star::ucb::CommandInfo >(
+                        0 );
             }
         }
     }
@@ -323,45 +328,49 @@ Sequence< CommandInfo > SAL_CALL CommandProcessorInfo::getCommands()
 
 //=========================================================================
 // virtual
-CommandInfo SAL_CALL CommandProcessorInfo::getCommandInfoByName(
-                                                        const OUString& Name )
-    throw( UnsupportedCommandException, RuntimeException )
+com::sun::star::ucb::CommandInfo SAL_CALL
+CommandProcessorInfo::getCommandInfoByName(
+        const rtl::OUString& Name )
+    throw( com::sun::star::ucb::UnsupportedCommandException,
+           uno::RuntimeException )
 {
-    CommandInfo aInfo;
+    com::sun::star::ucb::CommandInfo aInfo;
     if ( queryCommand( Name, aInfo ) )
         return aInfo;
 
-    throw UnsupportedCommandException();
+    throw com::sun::star::ucb::UnsupportedCommandException();
 }
 
 //=========================================================================
 // virtual
-CommandInfo SAL_CALL CommandProcessorInfo::getCommandInfoByHandle(
-                                                        sal_Int32 Handle )
-    throw( UnsupportedCommandException, RuntimeException )
+com::sun::star::ucb::CommandInfo SAL_CALL
+CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
+    throw( com::sun::star::ucb::UnsupportedCommandException,
+           uno::RuntimeException )
 {
-    CommandInfo aInfo;
+    com::sun::star::ucb::CommandInfo aInfo;
     if ( queryCommand( Handle, aInfo ) )
         return aInfo;
 
-    throw UnsupportedCommandException();
+    throw com::sun::star::ucb::UnsupportedCommandException();
 }
 
 //=========================================================================
 // virtual
-sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName( const OUString& Name )
-    throw( RuntimeException )
+sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
+       const rtl::OUString& Name )
+    throw( uno::RuntimeException )
 {
-    CommandInfo aInfo;
+    com::sun::star::ucb::CommandInfo aInfo;
     return queryCommand( Name, aInfo );
 }
 
 //=========================================================================
 // virtual
 sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
-    throw( RuntimeException )
+    throw( uno::RuntimeException )
 {
-    CommandInfo aInfo;
+    com::sun::star::ucb::CommandInfo aInfo;
     return queryCommand( Handle, aInfo );
 }
 
@@ -373,25 +382,27 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
 
 void CommandProcessorInfo::reset()
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     delete m_pCommands;
     m_pCommands = 0;
 }
 
 
 //=========================================================================
-sal_Bool CommandProcessorInfo::queryCommand( const OUString& rName,
-                                             CommandInfo& rCommand )
+sal_Bool CommandProcessorInfo::queryCommand(
+    const rtl::OUString& rName,
+    com::sun::star::ucb::CommandInfo& rCommand )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     getCommands();
 
-    const CommandInfo* pCommands = m_pCommands->getConstArray();
+    const com::sun::star::ucb::CommandInfo* pCommands
+        = m_pCommands->getConstArray();
     sal_Int32 nCount = m_pCommands->getLength();
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
-        const CommandInfo& rCurrCommand = pCommands[ n ];
+        const com::sun::star::ucb::CommandInfo& rCurrCommand = pCommands[ n ];
         if ( rCurrCommand.Name == rName )
         {
             rCommand = rCurrCommand;
@@ -403,18 +414,20 @@ sal_Bool CommandProcessorInfo::queryCommand( const OUString& rName,
 }
 
 //=========================================================================
-sal_Bool CommandProcessorInfo::queryCommand( sal_Int32 nHandle,
-                                             CommandInfo& rCommand )
+sal_Bool CommandProcessorInfo::queryCommand(
+    sal_Int32 nHandle,
+    com::sun::star::ucb::CommandInfo& rCommand )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     getCommands();
 
-    const CommandInfo* pCommands = m_pCommands->getConstArray();
+    const com::sun::star::ucb::CommandInfo* pCommands
+        = m_pCommands->getConstArray();
     sal_Int32 nCount = m_pCommands->getLength();
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
-        const CommandInfo& rCurrCommand = pCommands[ n ];
+        const com::sun::star::ucb::CommandInfo& rCurrCommand = pCommands[ n ];
         if ( rCurrCommand.Handle == nHandle )
         {
             rCommand = rCurrCommand;
@@ -425,3 +438,4 @@ sal_Bool CommandProcessorInfo::queryCommand( sal_Int32 nHandle,
     return sal_False;
 }
 
+} // namespace ucbhelper
