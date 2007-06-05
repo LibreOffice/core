@@ -4,9 +4,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:49:41 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 13:54:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,15 +51,23 @@
 #include "../xpath/xpathapi.hxx"
 #include "../events/testlistener.hxx"
 
-extern "C"
-{
 using namespace ::DOM;
 using namespace ::DOM::events;
 using namespace ::XPath;
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
+
+namespace sax_fastparser
+{
+extern Reference< XInterface > SAL_CALL FastSaxParser_CreateInstance( const Reference< XMultiServiceFactory  >  & ) throw(Exception);
+extern Sequence< OUString > FastSaxParser_getSupportedServiceNames();
+extern OUString FastSaxParser_getImplementationName();
+}
+
+extern "C"
+{
 
 void SAL_CALL
 component_getImplementationEnvironment(const sal_Char **ppEnvironmentTypeName, uno_Environment ** /*ppEnvironment */)
@@ -101,6 +109,13 @@ component_writeInfo(void * /*pServiceManager*/, void* pRegistryKey )
     aImpl += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey(aImpl);
     xNewKey->createKey(CTestListener::_getSupportedServiceNames()[0]);
+
+    // register fast sax parser service
+    aImpl = OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += sax_fastparser::FastSaxParser_getImplementationName();
+    aImpl += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey(aImpl);
+    xNewKey->createKey(sax_fastparser::FastSaxParser_getSupportedServiceNames()[0]);
 
 
     return sal_True;
@@ -144,6 +159,13 @@ component_getFactory(const sal_Char *pImplementationName, void *pServiceManager,
                 cppu::createSingleFactory(
                     xServiceManager, CTestListener::_getImplementationName(),
                     CTestListener::_getInstance, CTestListener::_getSupportedServiceNames()));
+        }
+        else if (sax_fastparser::FastSaxParser_getImplementationName().compareToAscii( pImplementationName ) == 0 )
+        {
+            xFactory = Reference< XSingleServiceFactory >(
+                cppu::createSingleFactory(
+                    xServiceManager, sax_fastparser::FastSaxParser_getImplementationName(),
+                    sax_fastparser::FastSaxParser_CreateInstance, sax_fastparser::FastSaxParser_getSupportedServiceNames()));
         }
 
         // Factory is valid - service was found.
