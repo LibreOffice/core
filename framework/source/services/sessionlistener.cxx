@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sessionlistener.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:42:18 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:46:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,7 +194,7 @@ void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
         }
     }
     if (!m_rSessionManager.is())
-        m_rSessionManager = Reference< XSessionManagerClient >
+        m_rSessionManager = css::uno::Reference< XSessionManagerClient >
             (m_xSMGR->createInstance(aSMgr), UNO_QUERY);
 
     if (m_rSessionManager.is())
@@ -230,11 +230,11 @@ sal_Bool SAL_CALL SessionListener::doRestore()
     ResetableGuard aGuard(m_aLock);
     m_bRestored = sal_False;
     try {
-        Reference< XDispatch > xDispatch(m_xSMGR->createInstance(SERVICENAME_AUTORECOVERY), UNO_QUERY_THROW);
+        css::uno::Reference< XDispatch > xDispatch(m_xSMGR->createInstance(SERVICENAME_AUTORECOVERY), UNO_QUERY_THROW);
 
         URL aURL;
         aURL.Complete = OUString::createFromAscii("vnd.sun.star.autorecovery:/doSessionRestore");
-        Reference< XURLTransformer > xURLTransformer(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), UNO_QUERY_THROW);
+        css::uno::Reference< XURLTransformer > xURLTransformer(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), UNO_QUERY_THROW);
         xURLTransformer->parseStrict(aURL);
         Sequence< PropertyValue > args;
         xDispatch->addStatusListener(this, aURL);
@@ -263,8 +263,8 @@ void SAL_CALL SessionListener::doSave( sal_Bool bShutdown, sal_Bool /*bCancelabl
             // xd->dispatch("vnd.sun.star.autorecovery:/doSessionSave, async=true
             // on stop event m_rSessionManager->saveDone(this);
 
-            Reference< XDispatch > xDispatch(m_xSMGR->createInstance(SERVICENAME_AUTORECOVERY), UNO_QUERY_THROW);
-            Reference< XURLTransformer > xURLTransformer(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), UNO_QUERY_THROW);
+            css::uno::Reference< XDispatch > xDispatch(m_xSMGR->createInstance(SERVICENAME_AUTORECOVERY), UNO_QUERY_THROW);
+            css::uno::Reference< XURLTransformer > xURLTransformer(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), UNO_QUERY_THROW);
             URL aURL;
             aURL.Complete = OUString::createFromAscii("vnd.sun.star.autorecovery:/doSessionSave");
             xURLTransformer->parseStrict(aURL);
