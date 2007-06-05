@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_sfwk.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:12:24 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:07:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,7 +221,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     if (mediaType.getLength() == 0)
     {
         // detect media-type:
-        ::ucb::Content ucbContent;
+        ::ucbhelper::Content ucbContent;
         if (create_ucb_content( &ucbContent, url, xCmdEnv ) &&
             ucbContent.isFolder())
         {
@@ -251,7 +251,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 OUString sParcelDescURL = makeURL(
                     url, OUSTR("parcel-descriptor.xml") );
 
-                ::ucb::Content ucb_content;
+                ::ucbhelper::Content ucb_content;
 
                 if (create_ucb_content( &ucb_content, sParcelDescURL,
                         xCmdEnv, false /* no throw */ ))
