@@ -4,9 +4,9 @@
  *
  *  $RCSfile: webdavdatasupplier.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:38:41 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:21:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ class Content;
 struct DAVResource;
 class ContentProperties;
 
-class DataSupplier : public ucb::ResultSetDataSupplier
+class DataSupplier : public ucbhelper::ResultSetDataSupplier
 {
     DataSupplier_Impl* m_pImpl;
 
@@ -68,22 +68,22 @@ public:
 
     virtual ~DataSupplier();
 
-    virtual rtl::OUString queryContentIdentifierString( sal_Int32 nIndex );
+    virtual rtl::OUString queryContentIdentifierString( sal_uInt32 nIndex );
     virtual com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >
-    queryContentIdentifier( sal_Int32 nIndex );
+    queryContentIdentifier( sal_uInt32 nIndex );
     virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent >
-    queryContent( sal_Int32 nIndex );
+    queryContent( sal_uInt32 nIndex );
 
-    virtual sal_Bool getResult( sal_Int32 nIndex );
+    virtual sal_Bool getResult( sal_uInt32 nIndex );
 
-    virtual sal_Int32 totalCount();
-    virtual sal_Int32 currentCount();
+    virtual sal_uInt32 totalCount();
+    virtual sal_uInt32 currentCount();
     virtual sal_Bool isCountFinal();
 
     virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XRow >
-    queryPropertyValues( sal_Int32 nIndex  );
-    virtual void releasePropertyValues( sal_Int32 nIndex );
+    queryPropertyValues( sal_uInt32 nIndex  );
+    virtual void releasePropertyValues( sal_uInt32 nIndex );
 
     virtual void close();
 
