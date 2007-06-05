@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commandenvironmentproxy.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:21:03 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:53:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace rtl;
 
-namespace ucb
+namespace ucbhelper
 {
 
 //=========================================================================
@@ -188,5 +188,5 @@ CommandEnvironmentProxy::getProgressHandler()
     return m_pImpl->m_xProgressHandler;
 }
 
-} /* namespace ucb */
+} /* namespace ucbhelper */
 
