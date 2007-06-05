@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_provider.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:01:57 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:17:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ namespace tdoc_ucp {
 class StorageElementFactory;
 
 class ContentProvider :
-    public ::ucb::ContentProviderImplHelper,
+    public ::ucbhelper::ContentProviderImplHelper,
     public com::sun::star::frame::XTransientDocumentsDocumentContentFactory,
     public OfficeDocumentsEventListener
 {
