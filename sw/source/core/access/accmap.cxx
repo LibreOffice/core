@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:37:12 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:27:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,10 +158,8 @@
 #endif
 // <--
 
-using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::document;
 using namespace ::rtl;
 
 struct SwFrmFunc
@@ -173,7 +171,7 @@ struct SwFrmFunc
     }
 };
 
-typedef ::std::map < const SwFrm *, WeakReference < XAccessible >, SwFrmFunc > _SwAccessibleContextMap_Impl;
+typedef ::std::map < const SwFrm *, uno::WeakReference < XAccessible >, SwFrmFunc > _SwAccessibleContextMap_Impl;
 
 class SwAccessibleContextMap_Impl: public _SwAccessibleContextMap_Impl
 {
@@ -193,7 +191,7 @@ public:
 
 //------------------------------------------------------------------------------
 class SwDrawModellListener_Impl : public SfxListener,
-    public ::cppu::WeakImplHelper1< XEventBroadcaster >
+    public ::cppu::WeakImplHelper1< document::XEventBroadcaster >
 {
     mutable ::osl::Mutex maListenerMutex;
     ::cppu::OInterfaceContainerHelper maEventListeners;
@@ -205,8 +203,8 @@ public:
     SwDrawModellListener_Impl( SdrModel *pDrawModel );
 
 
-    virtual void SAL_CALL addEventListener( const Reference< XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener( const uno::Reference< document::XEventListener >& xListener ) throw (uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener( const uno::Reference< document::XEventListener >& xListener ) throw (uno::RuntimeException);
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     void Dispose();
@@ -224,12 +222,12 @@ SwDrawModellListener_Impl::~SwDrawModellListener_Impl()
     EndListening( *mpDrawModel );
 }
 
-void SAL_CALL SwDrawModellListener_Impl::addEventListener( const Reference< XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SwDrawModellListener_Impl::addEventListener( const uno::Reference< document::XEventListener >& xListener ) throw (uno::RuntimeException)
 {
     maEventListeners.addInterface( xListener );
 }
 
-void SAL_CALL SwDrawModellListener_Impl::removeEventListener( const Reference< XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SwDrawModellListener_Impl::removeEventListener( const uno::Reference< document::XEventListener >& xListener ) throw (uno::RuntimeException)
 {
     maEventListeners.removeInterface( xListener );
 }
@@ -257,20 +255,20 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& rBC,
     if( !mpDrawModel )
         return;
 
-    EventObject aEvent;
+    document::EventObject aEvent;
     if( !SvxUnoDrawMSFactory::createEvent( mpDrawModel, pSdrHint, aEvent ) )
         return;
 
     ::cppu::OInterfaceIteratorHelper aIter( maEventListeners );
     while( aIter.hasMoreElements() )
     {
-        Reference < XEventListener > xListener( aIter.next(),
-                                                UNO_QUERY );
+        uno::Reference < document::XEventListener > xListener( aIter.next(),
+                                                uno::UNO_QUERY );
         try
         {
             xListener->notifyEvent( aEvent );
         }
-        catch( ::com::sun::star::uno::RuntimeException& r )
+        catch( uno::RuntimeException const & r )
         {
 #if OSL_DEBUG_LEVEL > 1
             ByteString aError( "Runtime exception caught while notifying shape.:\n" );
@@ -295,13 +293,13 @@ struct SwShapeFunc
         return p1 < p2;
     }
 };
-typedef ::std::map < const SdrObject *, WeakReference < XAccessible >, SwShapeFunc > _SwAccessibleShapeMap_Impl;
-typedef ::std::pair < const SdrObject *, ::vos::ORef < accessibility::AccessibleShape > > SwAccessibleObjShape_Impl;
+typedef ::std::map < const SdrObject *, uno::WeakReference < XAccessible >, SwShapeFunc > _SwAccessibleShapeMap_Impl;
+typedef ::std::pair < const SdrObject *, ::vos::ORef < ::accessibility::AccessibleShape > > SwAccessibleObjShape_Impl;
 
 class SwAccessibleShapeMap_Impl: public _SwAccessibleShapeMap_Impl
 
 {
-    accessibility::AccessibleShapeTreeInfo maInfo;
+    ::accessibility::AccessibleShapeTreeInfo maInfo;
 
 public:
 
@@ -317,7 +315,7 @@ public:
         maInfo.SetWindow( pMap->GetShell()->GetWin() );
         maInfo.SetViewForwarder( pMap );
         // --> OD 2005-08-08 #i52858# - method name changed
-        Reference < XEventBroadcaster > xModelBroadcaster =
+        uno::Reference < document::XEventBroadcaster > xModelBroadcaster =
             new SwDrawModellListener_Impl(
                     pMap->GetShell()->getIDocumentDrawModelAccess()->GetOrCreateDrawModel() );
         // <--
@@ -326,7 +324,7 @@ public:
 
     ~SwAccessibleShapeMap_Impl();
 
-    const accessibility::AccessibleShapeTreeInfo& GetInfo() const { return maInfo; }
+    const ::accessibility::AccessibleShapeTreeInfo& GetInfo() const { return maInfo; }
 
     SwAccessibleObjShape_Impl *Copy( size_t& rSize,
         const SwFEShell *pFESh = 0,
@@ -335,7 +333,7 @@ public:
 
 SwAccessibleShapeMap_Impl::~SwAccessibleShapeMap_Impl()
 {
-    Reference < XEventBroadcaster > xBrd( maInfo.GetControllerBroadcaster() );
+    uno::Reference < document::XEventBroadcaster > xBrd( maInfo.GetControllerBroadcaster() );
     if( xBrd.is() )
         static_cast < SwDrawModellListener_Impl * >( xBrd.get() )->Dispose();
 }
@@ -364,14 +362,14 @@ SwAccessibleObjShape_Impl
         while( aIter != aEndIter )
         {
             const SdrObject *pObj = (*aIter).first;
-            Reference < XAccessible > xAcc( (*aIter).second );
+            uno::Reference < XAccessible > xAcc( (*aIter).second );
             if( nSelShapes && pFESh->IsObjSelected( *pObj ) )
             {
                 // selected objects are inserted from the back
                 --pSelShape;
                 pSelShape->first = pObj;
                 pSelShape->second =
-                    static_cast < accessibility::AccessibleShape* >(
+                    static_cast < ::accessibility::AccessibleShape* >(
                                                     xAcc.get() );
                 --nSelShapes;
             }
@@ -379,7 +377,7 @@ SwAccessibleObjShape_Impl
             {
                 pShape->first = pObj;
                 pShape->second =
-                    static_cast < accessibility::AccessibleShape* >(
+                    static_cast < ::accessibility::AccessibleShape* >(
                                                     xAcc.get() );
                 ++pShape;
             }
@@ -408,7 +406,7 @@ public:
 private:
     SwRect      maOldBox;               // the old bounds for CHILD_POS_CHANGED
                                         // and POS_CHANGED
-    WeakReference < XAccessible > mxAcc;    // The object that fires the event
+    uno::WeakReference < XAccessible > mxAcc;   // The object that fires the event
     SwFrmOrObj  maFrmOrObj;             // the child for CHILD_POS_CHANGED and
                                         // the same as xAcc for any other
                                         // event type
@@ -488,7 +486,7 @@ public:
 
     inline ::vos::ORef < SwAccessibleContext > GetContext() const
     {
-        Reference < XAccessible > xTmp( mxAcc );
+        uno::Reference < XAccessible > xTmp( mxAcc );
         ::vos::ORef < SwAccessibleContext > xAccImpl(
                             static_cast<SwAccessibleContext*>( xTmp.get() ) );
 
@@ -587,7 +585,7 @@ public:
 // shape) leads to an assert, because a client of the Modify is destroyed
 // within a Modify call.
 
-typedef ::std::list < Reference < XShape > > _SwShapeList_Impl;
+typedef ::std::list < uno::Reference < drawing::XShape > > _SwShapeList_Impl;
 
 class SwShapeList_Impl: public _SwShapeList_Impl
 {
@@ -637,14 +635,14 @@ struct SwAccessibleParaSelection
 
 struct SwXAccWeakRefComp
 {
-    sal_Bool operator()( const WeakReference<XAccessible>& _rXAccWeakRef1,
-                         const WeakReference<XAccessible>& _rXAccWeakRef2 ) const
+    sal_Bool operator()( const uno::WeakReference<XAccessible>& _rXAccWeakRef1,
+                         const uno::WeakReference<XAccessible>& _rXAccWeakRef2 ) const
     {
         return _rXAccWeakRef1.get() < _rXAccWeakRef2.get();
     }
 };
 
-typedef ::std::map< WeakReference < XAccessible >,
+typedef ::std::map< uno::WeakReference < XAccessible >,
                     SwAccessibleParaSelection,
                     SwXAccWeakRefComp > _SwAccessibleSelectedParas_Impl;
 
@@ -652,8 +650,8 @@ class SwAccessibleSelectedParas_Impl: public _SwAccessibleSelectedParas_Impl
 {};
 // <--
 //------------------------------------------------------------------------------
-static sal_Bool AreInSameTable( const Reference< XAccessible >& rAcc,
-                                 const SwFrm *pFrm )
+static sal_Bool AreInSameTable( const uno::Reference< XAccessible >& rAcc,
+                                  const SwFrm *pFrm )
 {
     sal_Bool bRet = sal_False;
 
@@ -844,7 +842,7 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
 }
 
 void SwAccessibleMap::InvalidateCursorPosition(
-        const Reference< XAccessible >& rAcc )
+        const uno::Reference< XAccessible >& rAcc )
 {
     SwAccessibleContext *pAccImpl =
         static_cast< SwAccessibleContext *>( rAcc.get() );
@@ -955,7 +953,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection()
                             mpFrmMap->find( *aIter );
                         if( aMapIter != mpFrmMap->end() )
                         {
-                            Reference < XAccessible > xAcc( (*aMapIter).second );
+                            uno::Reference < XAccessible > xAcc( (*aMapIter).second );
                             xParentAccImpl =
                                 static_cast< SwAccessibleContext *>( xAcc.get() );
                         }
@@ -1042,7 +1040,7 @@ SwAccessibleMap::SwAccessibleMap( ViewShell *pSh ) :
 
 SwAccessibleMap::~SwAccessibleMap()
 {
-    Reference < XAccessible > xAcc;
+    uno::Reference < XAccessible > xAcc;
     {
         vos::OGuard aGuard( maMutex );
         if( mpFrmMap )
@@ -1070,7 +1068,7 @@ SwAccessibleMap::~SwAccessibleMap()
             SwAccessibleContextMap_Impl::iterator aIter = mpFrmMap->begin();
             while( aIter != mpFrmMap->end() )
             {
-                Reference < XAccessible > xTmp = (*aIter).second;
+                uno::Reference < XAccessible > xTmp = (*aIter).second;
                 if( xTmp.is() )
                 {
                     SwAccessibleContext *pTmp =
@@ -1086,11 +1084,11 @@ SwAccessibleMap::~SwAccessibleMap()
             SwAccessibleShapeMap_Impl::iterator aIter = mpShapeMap->begin();
             while( aIter != mpShapeMap->end() )
             {
-                Reference < XAccessible > xTmp = (*aIter).second;
+                uno::Reference < XAccessible > xTmp = (*aIter).second;
                 if( xTmp.is() )
                 {
-                    accessibility::AccessibleShape *pTmp =
-                        static_cast< accessibility::AccessibleShape* >( xTmp.get() );
+                    ::accessibility::AccessibleShape *pTmp =
+                        static_cast< ::accessibility::AccessibleShape* >( xTmp.get() );
                 }
                 ++aIter;
             }
@@ -1143,10 +1141,10 @@ SwAccessibleMap::~SwAccessibleMap()
     mpVSh->GetLayout()->RemoveAccessibleShell();
 }
 
-Reference< XAccessible > SwAccessibleMap::_GetDocumentView(
+uno::Reference< XAccessible > SwAccessibleMap::_GetDocumentView(
     sal_Bool bPagePreview )
 {
-    Reference < XAccessible > xAcc;
+    uno::Reference < XAccessible > xAcc;
     sal_Bool bSetVisArea = sal_False;
 
     {
@@ -1207,14 +1205,14 @@ Reference< XAccessible > SwAccessibleMap::_GetDocumentView(
     return xAcc;
 }
 
-Reference< XAccessible > SwAccessibleMap::GetDocumentView( )
+uno::Reference< XAccessible > SwAccessibleMap::GetDocumentView( )
 {
     return _GetDocumentView( sal_False );
 }
 
 // OD 14.01.2003 #103492# - complete re-factoring of method due to new page/print
 // preview functionality.
-Reference<XAccessible> SwAccessibleMap::GetDocumentPreview(
+uno::Reference<XAccessible> SwAccessibleMap::GetDocumentPreview(
                                     const std::vector<PrevwPage*>& _rPrevwPages,
                                     const Fraction&  _rScale,
                                     const SwPageFrm* _pSelectedPageFrm,
@@ -1225,15 +1223,15 @@ Reference<XAccessible> SwAccessibleMap::GetDocumentPreview(
         mpPreview = new SwAccPreviewData();
     mpPreview->Update( _rPrevwPages, _rScale, _pSelectedPageFrm, _rPrevwWinSize );
 
-    Reference<XAccessible> xAcc = _GetDocumentView( sal_True );
+    uno::Reference<XAccessible> xAcc = _GetDocumentView( sal_True );
     return xAcc;
 }
 
-Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
+uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                                                      sal_Bool bCreate )
 {
-    Reference < XAccessible > xAcc;
-    Reference < XAccessible > xOldCursorAcc;
+    uno::Reference < XAccessible > xAcc;
+    uno::Reference < XAccessible > xOldCursorAcc;
     sal_Bool bOldShapeSelected = sal_False;
 
     {
@@ -1363,7 +1361,7 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
             const SwFrm *pFrm,
             sal_Bool bCreate )
 {
-    Reference < XAccessible > xAcc( GetContext( pFrm, bCreate ) );
+    uno::Reference < XAccessible > xAcc( GetContext( pFrm, bCreate ) );
 
     ::vos::ORef < SwAccessibleContext > xAccImpl(
          static_cast< SwAccessibleContext * >( xAcc.get() ) );
@@ -1371,13 +1369,13 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
     return xAccImpl;
 }
 
-Reference< XAccessible> SwAccessibleMap::GetContext(
+uno::Reference< XAccessible> SwAccessibleMap::GetContext(
         const SdrObject *pObj,
         SwAccessibleContext *pParentImpl,
         sal_Bool bCreate )
 {
-    Reference < XAccessible > xAcc;
-    Reference < XAccessible > xOldCursorAcc;
+    uno::Reference < XAccessible > xAcc;
+    uno::Reference < XAccessible > xOldCursorAcc;
 
     {
         vos::OGuard aGuard( maMutex );
@@ -1393,15 +1391,15 @@ Reference< XAccessible> SwAccessibleMap::GetContext(
 
             if( !xAcc.is() && bCreate )
             {
-                accessibility::AccessibleShape *pAcc = 0;
-                Reference < XShape > xShape(
+                ::accessibility::AccessibleShape *pAcc = 0;
+                uno::Reference < drawing::XShape > xShape(
                     const_cast< SdrObject * >( pObj )->getUnoShape(),
-                    UNO_QUERY );
+                    uno::UNO_QUERY );
                 if( xShape.is() )
                 {
-                    accessibility::ShapeTypeHandler& rShapeTypeHandler =
-                                accessibility::ShapeTypeHandler::Instance();
-                    Reference < XAccessible > xParent( pParentImpl );
+                    ::accessibility::ShapeTypeHandler& rShapeTypeHandler =
+                                ::accessibility::ShapeTypeHandler::Instance();
+                    uno::Reference < XAccessible > xParent( pParentImpl );
                     ::accessibility::AccessibleShapeInfo aShapeInfo(
                             xShape, xParent, this );
 
@@ -1437,15 +1435,15 @@ Reference< XAccessible> SwAccessibleMap::GetContext(
     return xAcc;
 }
 
-::vos::ORef < accessibility::AccessibleShape > SwAccessibleMap::GetContextImpl(
+::vos::ORef < ::accessibility::AccessibleShape > SwAccessibleMap::GetContextImpl(
             const SdrObject *pObj,
             SwAccessibleContext *pParentImpl,
             sal_Bool bCreate )
 {
-    Reference < XAccessible > xAcc( GetContext( pObj, pParentImpl, bCreate ) );
+    uno::Reference < XAccessible > xAcc( GetContext( pObj, pParentImpl, bCreate ) );
 
-    ::vos::ORef < accessibility::AccessibleShape > xAccImpl(
-         static_cast< accessibility::AccessibleShape* >( xAcc.get() ) );
+    ::vos::ORef < ::accessibility::AccessibleShape > xAccImpl(
+         static_cast< ::accessibility::AccessibleShape* >( xAcc.get() ) );
 
     return xAccImpl;
 }
@@ -1466,7 +1464,7 @@ void SwAccessibleMap::RemoveContext( const SwFrm *pFrm )
             // Remove reference to old caret object. Though mxCursorContext
             // is a weak reference and cleared automatically, clearing it
             // directly makes sure to not keep a defunctional object.
-            Reference < XAccessible > xOldAcc( mxCursorContext );
+            uno::Reference < XAccessible > xOldAcc( mxCursorContext );
             if( xOldAcc.is() )
             {
                 SwAccessibleContext *pOldAccImpl =
@@ -1542,7 +1540,7 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm, const SdrObject *pObj,
                     mpFrmMap->find( aFrmOrObj.GetSwFrm() );
                 if( aIter != mpFrmMap->end() )
                 {
-                    Reference < XAccessible > xAcc( (*aIter).second );
+                    uno::Reference < XAccessible > xAcc( (*aIter).second );
                     xAccImpl =
                         static_cast< SwAccessibleContext *>( xAcc.get() );
                 }
@@ -1560,7 +1558,7 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm, const SdrObject *pObj,
                         mpFrmMap->find( pParent );
                     if( aIter != mpFrmMap->end() )
                     {
-                        Reference < XAccessible > xAcc( (*aIter).second );
+                        uno::Reference < XAccessible > xAcc( (*aIter).second );
                         xParentAccImpl =
                             static_cast< SwAccessibleContext *>( xAcc.get() );
                     }
@@ -1573,9 +1571,9 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm, const SdrObject *pObj,
                     mpShapeMap->find( aFrmOrObj.GetSdrObject() );
                 if( aIter != mpShapeMap->end() )
                 {
-                    Reference < XAccessible > xAcc( (*aIter).second );
+                    uno::Reference < XAccessible > xAcc( (*aIter).second );
                     xShapeAccImpl =
-                        static_cast< accessibility::AccessibleShape *>( xAcc.get() );
+                        static_cast< ::accessibility::AccessibleShape *>( xAcc.get() );
                 }
             }
             if( pObj && GetShell()->ActionPend() &&
@@ -1583,9 +1581,9 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm, const SdrObject *pObj,
             {
                 // Keep a reference to the XShape to avoid that it
                 // is deleted with a SwFrmFmt::Modify.
-                Reference < XShape > xShape(
+                uno::Reference < drawing::XShape > xShape(
                     const_cast< SdrObject * >( pObj )->getUnoShape(),
-                    UNO_QUERY );
+                    uno::UNO_QUERY );
                 if( xShape.is() )
                 {
                     if( !mpShapes )
@@ -1661,7 +1659,7 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
                     {
                         // If there is an accesible object already it is
                         // notified directly.
-                        Reference < XAccessible > xAcc( (*aIter).second );
+                        uno::Reference < XAccessible > xAcc( (*aIter).second );
                         xAccImpl =
                             static_cast< SwAccessibleContext *>( xAcc.get() );
                     }
@@ -1680,7 +1678,7 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
                             mpFrmMap->find( pParent );
                         if( aIter != mpFrmMap->end() )
                         {
-                            Reference < XAccessible > xAcc( (*aIter).second );
+                            uno::Reference < XAccessible > xAcc( (*aIter).second );
                             xParentAccImpl =
                                 static_cast< SwAccessibleContext *>( xAcc.get() );
                         }
@@ -1728,7 +1726,7 @@ void SwAccessibleMap::InvalidateContent( const SwFrm *pFrm )
     SwFrmOrObj aFrmOrObj( pFrm );
     if( aFrmOrObj.IsAccessible( GetShell()->IsPreView() ) )
     {
-        Reference < XAccessible > xAcc;
+        uno::Reference < XAccessible > xAcc;
         {
             vos::OGuard aGuard( maMutex );
 
@@ -1796,8 +1794,8 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
     ASSERT( bShapeSelected || aFrmOrObj.IsAccessible(GetShell()->IsPreView()),
             "frame is not accessible" );
 
-    Reference < XAccessible > xOldAcc;
-    Reference < XAccessible > xAcc;
+    uno::Reference < XAccessible > xOldAcc;
+    uno::Reference < XAccessible > xAcc;
     sal_Bool bOldShapeSelected = sal_False;
 
     {
@@ -1855,7 +1853,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
 
 void SwAccessibleMap::InvalidateFocus()
 {
-    Reference < XAccessible > xAcc;
+    uno::Reference < XAccessible > xAcc;
     sal_Bool bShapeSelected;
     {
         vos::OGuard aGuard( maMutex );
@@ -1880,7 +1878,7 @@ void SwAccessibleMap::SetCursorContext(
         const ::vos::ORef < SwAccessibleContext >& rCursorContext )
 {
     vos::OGuard aGuard( maMutex );
-    Reference < XAccessible > xAcc( rCursorContext.getBodyPtr() );
+    uno::Reference < XAccessible > xAcc( rCursorContext.getBodyPtr() );
     mxCursorContext = xAcc;
 }
 
@@ -1896,7 +1894,7 @@ void SwAccessibleMap::InvalidateStates( tAccessibleStates _nStates,
     if( !aFrmOrObj.GetSwFrm() )
         aFrmOrObj = GetShell()->GetLayout();
 
-    Reference< XAccessible > xAcc( GetContext( aFrmOrObj.GetSwFrm(), sal_True ) );
+    uno::Reference< XAccessible > xAcc( GetContext( aFrmOrObj.GetSwFrm(), sal_True ) );
     SwAccessibleContext *pAccImpl =
         static_cast< SwAccessibleContext *>( xAcc.get() );
     if( GetShell()->ActionPend() )
@@ -1921,7 +1919,7 @@ void SwAccessibleMap::_InvalidateRelationSet( const SwFrm* pFrm,
     SwFrmOrObj aFrmOrObj( pFrm );
     if( aFrmOrObj.IsAccessible( GetShell()->IsPreView() ) )
     {
-        Reference < XAccessible > xAcc;
+        uno::Reference < XAccessible > xAcc;
         {
             vos::OGuard aGuard( maMutex );
 
@@ -1990,7 +1988,7 @@ void SwAccessibleMap::InvalidateParaTextSelection( const SwTxtFrm& _rTxtFrm )
     SwFrmOrObj aFrmOrObj( &_rTxtFrm );
     if( aFrmOrObj.IsAccessible( GetShell()->IsPreView() ) )
     {
-        Reference < XAccessible > xAcc;
+        uno::Reference < XAccessible > xAcc;
         {
             vos::OGuard aGuard( maMutex );
 
@@ -2047,8 +2045,8 @@ void SwAccessibleMap::UpdatePreview( const std::vector<PrevwPage*>& _rPrevwPages
         GetContextImpl( GetShell()->GetLayout() ).getBodyPtr();
     static_cast<SwAccessibleDocumentBase*>( pDoc )->SetVisArea();
 
-    Reference < XAccessible > xOldAcc;
-    Reference < XAccessible > xAcc;
+    uno::Reference < XAccessible > xOldAcc;
+    uno::Reference < XAccessible > xAcc;
     {
         vos::OGuard aGuard( maMutex );
 
@@ -2078,8 +2076,8 @@ void SwAccessibleMap::InvalidatePreViewSelection( sal_uInt16 nSelPage )
     // OD 16.01.2003 #103492# - changed metthod call due to method signature change.
     mpPreview->InvalidateSelection( GetShell()->GetLayout()->GetPageByPageNum( nSelPage ) );
 
-    Reference < XAccessible > xOldAcc;
-    Reference < XAccessible > xAcc;
+    uno::Reference < XAccessible > xOldAcc;
+    uno::Reference < XAccessible > xAcc;
     {
         vos::OGuard aGuard( maMutex );
 
@@ -2229,10 +2227,10 @@ Size SwAccessibleMap::PixelToLogic( const Size& rSize ) const
 
 sal_Bool SwAccessibleMap::ReplaceChild (
         ::accessibility::AccessibleShape* pCurrentChild,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
+        const uno::Reference< drawing::XShape >& _rxShape,
         const long _nIndex,
         const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
-    )   throw (::com::sun::star::uno::RuntimeException)
+    )   throw (uno::RuntimeException)
 {
     const SdrObject *pObj = 0;
     {
@@ -2243,9 +2241,9 @@ sal_Bool SwAccessibleMap::ReplaceChild (
             SwAccessibleShapeMap_Impl::const_iterator aEndIter = mpShapeMap->end();
             while( aIter != aEndIter && !pObj )
             {
-                Reference < XAccessible > xAcc( (*aIter).second );
+                uno::Reference < XAccessible > xAcc( (*aIter).second );
                 ::accessibility::AccessibleShape *pAccShape =
-                    static_cast < accessibility::AccessibleShape* >( xAcc.get() );
+                    static_cast < ::accessibility::AccessibleShape* >( xAcc.get() );
                 if( pAccShape == pCurrentChild )
                 {
                     pObj = (*aIter).first;
@@ -2257,11 +2255,11 @@ sal_Bool SwAccessibleMap::ReplaceChild (
     if( !pObj )
         return sal_False;
 
-    Reference < XShape > xShape( _rxShape ); //keep reference to shape, because
+    uno::Reference < drawing::XShape > xShape( _rxShape ); //keep reference to shape, because
                                              // we might be the only one that
                                              // hold it.
     // Also get keep parent.
-    Reference < XAccessible > xParent( pCurrentChild->getAccessibleParent() );
+    uno::Reference < XAccessible > xParent( pCurrentChild->getAccessibleParent() );
     pCurrentChild = 0;  // well be realease by dispose
     Dispose( 0, pObj );
 
@@ -2272,15 +2270,15 @@ sal_Bool SwAccessibleMap::ReplaceChild (
             mpShapeMap = new SwAccessibleShapeMap_Impl( this );
 
         // create the new child
-        accessibility::ShapeTypeHandler& rShapeTypeHandler =
-                        accessibility::ShapeTypeHandler::Instance();
+        ::accessibility::ShapeTypeHandler& rShapeTypeHandler =
+                        ::accessibility::ShapeTypeHandler::Instance();
         ::accessibility::AccessibleShapeInfo aShapeInfo(
                                             xShape, xParent, this );
         ::accessibility::AccessibleShape* pReplacement =
             rShapeTypeHandler.CreateAccessibleObject (
                 aShapeInfo, mpShapeMap->GetInfo() );
 
-        Reference < XAccessible > xAcc( pReplacement );
+        uno::Reference < XAccessible > xAcc( pReplacement );
         if( xAcc.is() )
         {
             pReplacement->Init();
@@ -2484,7 +2482,7 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
                         SwTxtFrm* pTxtFrm( dynamic_cast<SwTxtFrm*>(pFrm) );
                         if ( pTxtFrm )
                         {
-                            WeakReference < XAccessible > xWeakAcc;
+                            uno::WeakReference < XAccessible > xWeakAcc;
                             SwAccessibleContextMap_Impl::iterator aIter =
                                                     mpFrmMap->find( pTxtFrm );
                             if( aIter != mpFrmMap->end() )
@@ -2577,7 +2575,7 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
 
             if ( bSubmitEvent )
             {
-                Reference < XAccessible > xAcc( (*aIter).first );
+                uno::Reference < XAccessible > xAcc( (*aIter).first );
                 if ( xAcc.is() )
                 {
                     ::vos::ORef < SwAccessibleContext > xAccImpl(
@@ -2605,7 +2603,7 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
         SwAccessibleSelectedParas_Impl::iterator aIter = pPrevSelectedParas->begin();
         for ( ; aIter != pPrevSelectedParas->end(); ++aIter )
         {
-            Reference < XAccessible > xAcc( (*aIter).first );
+            uno::Reference < XAccessible > xAcc( (*aIter).first );
             if ( xAcc.is() )
             {
                 ::vos::ORef < SwAccessibleContext > xAccImpl(
