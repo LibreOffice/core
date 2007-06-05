@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftpcontentprovider.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:33:50 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:59:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,11 +48,8 @@
 // UNO service name for the provider. This name will be used by the UCB to
 // create instances of the provider.
 
-#define MYUCP_CONTENT_PROVIDER_SERVICE_NAME  "com.sun.star.ucb.FTPContentProvider"
-#define MYUCP_CONTENT_PROVIDER_SERVICE_NAME_LENGTH  35
-#define MYUCP_URL_SCHEME        "ftp"
-#define MYUCP_URL_SCHEME_LENGTH 3
-#define MYUCP_CONTENT_TYPE      "application/ftp-content"    // UCB Content Type.
+#define FTP_CONTENT_PROVIDER_SERVICE_NAME "com.sun.star.ucb.FTPContentProvider"
+#define FTP_CONTENT_TYPE "application/ftp-content"
 
 
 /**
@@ -68,7 +65,7 @@ namespace ftp {
 
 
     class FTPContentProvider:
-        public ::ucb::ContentProviderImplHelper,
+        public ::ucbhelper::ContentProviderImplHelper,
         public FTPHandleProvider
     {
     public:
