@@ -4,9 +4,9 @@
  *
  *  $RCSfile: myucp_content.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:44:14 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:58:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,13 +39,8 @@
 
 #include <list>
 
-#ifndef _RTL_REF_HXX_
-#include <rtl/ref.hxx>
-#endif
-
-#ifndef _UCBHELPER_CONTENTHELPER_HXX
-#include <ucbhelper/contenthelper.hxx>
-#endif
+#include "rtl/ref.hxx"
+#include "ucbhelper/contenthelper.hxx"
 
 namespace com { namespace sun { namespace star { namespace beans {
     struct Property;
@@ -56,6 +51,10 @@ namespace com { namespace sun { namespace star { namespace sdbc {
     class XRow;
 } } } }
 
+namespace com { namespace sun { namespace star { namespace io {
+    class XInputStream;
+} } } }
+
 // @@@ Adjust namespace name.
 namespace myucp
 {
@@ -64,9 +63,8 @@ namespace myucp
 
 // @@@ Adjust service name.
 
-// UNO service name for the content.
-#define MYUCP_CONTENT_SERVICE_NAME \
-                            "com.sun.star.ucb.MyContent"
+// UNO service name for the content. Prefix with reversed company domain main.
+#define MYUCP_CONTENT_SERVICE_NAME "com.sun.star.ucb.MyContent"
 
 //=========================================================================
 
@@ -85,7 +83,7 @@ struct ContentProperties
 
 //=========================================================================
 
-class Content : public ::ucb::ContentImplHelper
+class Content : public ::ucbhelper::ContentImplHelper
 {
     ContentProperties m_aProps;
 
@@ -109,26 +107,35 @@ private:
                        const ::com::sun::star::uno::Reference<
                         ::com::sun::star::ucb::XCommandEnvironment >& xEnv );
 
-//    typedef rtl::Reference< Content > ContentRef;
-//    typedef std::list< ContentRef > ContentRefList;
-//    void queryChildren( ContentRefList& rChildren );
+#define IMPLEMENT_COMMAND_OPEN
+#define IMPLEMENT_COMMAND_INSERT
+#define IMPLEMENT_COMMAND_DELETE
 
-//  // Command "insert"
-//    void insert( const ::com::sun::star::uno::Reference<
-//                    ::com::sun::star::io::XInputStream > & xInputStream,
-//                 sal_Bool bReplaceExisting,
-//                 const com::sun::star::uno::Reference<
-//                    com::sun::star::ucb::XCommandEnvironment >& Environment )
-//        throw( ::com::sun::star::uno::Exception );
+#ifdef IMPLEMENT_COMMAND_INSERT
+    typedef rtl::Reference< Content > ContentRef;
+    typedef std::list< ContentRef > ContentRefList;
+    void queryChildren( ContentRefList& rChildren );
 
-//  // Command "delete"
-//  void destroy( sal_Bool bDeletePhysical )
-//      throw( ::com::sun::star::uno::Exception );
+    // Command "insert"
+    void insert( const ::com::sun::star::uno::Reference<
+                 ::com::sun::star::io::XInputStream > & xInputStream,
+                 sal_Bool bReplaceExisting,
+                 const com::sun::star::uno::Reference<
+                 com::sun::star::ucb::XCommandEnvironment >& Environment )
+        throw( ::com::sun::star::uno::Exception );
+#endif
+
+#ifdef IMPLEMENT_COMMAND_DELETE
+
+    // Command "delete"
+    void destroy( sal_Bool bDeletePhysical )
+        throw( ::com::sun::star::uno::Exception );
+#endif
 
 public:
     Content( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-             ::ucb::ContentProviderImplHelper* pProvider,
+             ::ucbhelper::ContentProviderImplHelper* pProvider,
              const ::com::sun::star::uno::Reference<
                 ::com::sun::star::ucb::XContentIdentifier >& Identifier );
     virtual ~Content();
@@ -169,7 +176,7 @@ public:
     // Additional interfaces
     //////////////////////////////////////////////////////////////////////
 
-    // @@@ Add additional interfaces ( like com::sun:.star::ucb::XContentCreator ).
+    // @@@ Add additional interfaces ( like com::sun::star::ucb::XContentCreator ).
 
     //////////////////////////////////////////////////////////////////////
     // Non-interface methods.
@@ -183,7 +190,7 @@ public:
                            ::com::sun::star::beans::Property >& rProperties,
                        const ContentProperties& rData,
                        const rtl::Reference<
-                           ::ucb::ContentProviderImplHelper >&  rProvider,
+                           ::ucbhelper::ContentProviderImplHelper >& rProvider,
                        const ::rtl::OUString& rContentId );
 };
 
