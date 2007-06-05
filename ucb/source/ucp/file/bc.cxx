@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:46:02 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:54:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,9 @@
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
-#endif
+
+#include "osl/diagnose.h"
+
 #ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
 #include <com/sun/star/ucb/OpenMode.hpp>
 #endif
@@ -244,7 +244,7 @@ void SAL_CALL
 BaseContent::addEventListener( const Reference< lang::XEventListener >& Listener )
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     if ( ! m_pDisposeEventListeners )
         m_pDisposeEventListeners =
@@ -258,7 +258,7 @@ void SAL_CALL
 BaseContent::removeEventListener( const Reference< lang::XEventListener >& Listener )
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     if ( m_pDisposeEventListeners )
         m_pDisposeEventListeners->removeInterface( Listener );
@@ -276,7 +276,7 @@ BaseContent::dispose()
     PropertyListeners* pPropertyListener;
 
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::MutexGuard aGuard( m_aMutex );
         aEvt.Source = static_cast< XContent* >( this );
 
 
@@ -507,7 +507,7 @@ BaseContent::addPropertiesChangeListener(
     if( ! Listener.is() )
         return;
 
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     if( ! m_pPropertyListener )
         m_pPropertyListener = new PropertyListeners( m_aEventListenerMutex );
@@ -533,7 +533,7 @@ BaseContent::removePropertiesChangeListener( const Sequence< rtl::OUString >& Pr
     if( ! Listener.is() )
         return;
 
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     if( ! m_pPropertyListener )
         return;
@@ -592,13 +592,13 @@ BaseContent::getContentType()
                 }
                 else
                 {
-                    VOS_ENSURE( false,
+                    OSL_ENSURE( false,
                                 "BaseContent::getContentType - Property value was null!" );
                 }
             }
             catch ( sdbc::SQLException const & )
             {
-                VOS_ENSURE( false,
+                OSL_ENSURE( false,
                             "BaseContent::getContentType - Caught SQLException!" );
             }
         }
@@ -614,7 +614,7 @@ BaseContent::addContentEventListener(
     const Reference< XContentEventListener >& Listener )
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     if ( ! m_pContentEventListeners )
         m_pContentEventListeners =
@@ -630,7 +630,7 @@ BaseContent::removeContentEventListener(
     const Reference< XContentEventListener >& Listener )
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     if ( m_pContentEventListeners )
         m_pContentEventListeners->removeInterface( Listener );
@@ -745,14 +745,14 @@ BaseContent::createNewContent(
         if ( xRow->wasNull() )
         {
             IsDocument = false;
-//          VOS_ENSURE( false,
+//          OSL_ENSURE( false,
 //                      "BaseContent::createNewContent - Property value was null!" );
 //          return Reference< XContent >();
         }
     }
     catch ( sdbc::SQLException const & )
     {
-        VOS_ENSURE( false,
+        OSL_ENSURE( false,
                     "BaseContent::createNewContent - Caught SQLException!" );
         return Reference< XContent >();
     }
@@ -782,7 +782,7 @@ BaseContent::addPropertySetInfoChangeListener(
     const Reference< beans::XPropertySetInfoChangeListener >& Listener )
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     if( ! m_pPropertySetInfoChangeListeners )
         m_pPropertySetInfoChangeListeners = new cppu::OInterfaceContainerHelper( m_aEventListenerMutex );
 
@@ -795,7 +795,7 @@ BaseContent::removePropertySetInfoChangeListener(
     const Reference< beans::XPropertySetInfoChangeListener >& Listener )
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     if( m_pPropertySetInfoChangeListeners )
         m_pPropertySetInfoChangeListeners->removeInterface( Listener );
@@ -1145,7 +1145,7 @@ BaseContent::deleteContent( sal_Int32 nMyCommandIdentifier )
 
     if( m_pMyShell->remove( nMyCommandIdentifier,m_aUncPath ) )
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::MutexGuard aGuard( m_aMutex );
         m_nState |= Deleted;
     }
 }
@@ -1275,7 +1275,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
     }
     catch ( sdbc::SQLException const & )
     {
-        VOS_ENSURE( false,
+        OSL_ENSURE( false,
                     "BaseContent::insert - Caught SQLException!" );
         contentTypeSet = false;
     }
@@ -1342,7 +1342,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
     m_pMyShell->registerNotifier( m_aUncPath,this );
     m_pMyShell->insertDefaultProperties( m_aUncPath );
 
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     m_nState = FullFeatured;
 }
 
@@ -1359,7 +1359,7 @@ void SAL_CALL BaseContent::endTask( sal_Int32 CommandId )
 ContentEventNotifier*
 BaseContent::cDEL( void )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     m_nState |= Deleted;
 
@@ -1379,7 +1379,7 @@ BaseContent::cDEL( void )
 ContentEventNotifier*
 BaseContent::cEXC( const rtl::OUString aNewName )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     Reference< XContentIdentifier > xOldRef = m_xContentIdentifier;
     m_aUncPath = aNewName;
@@ -1401,7 +1401,7 @@ BaseContent::cEXC( const rtl::OUString aNewName )
 ContentEventNotifier*
 BaseContent::cCEL( void )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     ContentEventNotifier* p = 0;
     if( m_pContentEventListeners )
         p = new ContentEventNotifier( m_pMyShell,
@@ -1415,7 +1415,7 @@ BaseContent::cCEL( void )
 PropertySetInfoChangeNotifier*
 BaseContent::cPSL( void )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     PropertySetInfoChangeNotifier* p = 0;
     if( m_pPropertySetInfoChangeListeners  )
         p = new PropertySetInfoChangeNotifier( m_pMyShell,
@@ -1431,7 +1431,7 @@ BaseContent::cPSL( void )
 PropertyChangeNotifier*
 BaseContent::cPCL( void )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     Sequence< rtl::OUString > seqNames;
 
