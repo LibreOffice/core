@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:26:46 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:36:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -815,26 +815,26 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
     SendMailResult  eResult = SEND_MAIL_ERROR;
     if ( !maAttachedDocuments.empty() )
     {
-        Reference < XMultiServiceFactory > xMgr = ::comphelper::getProcessServiceFactory();
+        css::uno::Reference < XMultiServiceFactory > xMgr = ::comphelper::getProcessServiceFactory();
         if ( xMgr.is() )
         {
-            Reference< XSimpleMailClientSupplier >  xSimpleMailClientSupplier;
+            css::uno::Reference< XSimpleMailClientSupplier >    xSimpleMailClientSupplier;
 
             // Prefer the SimpleSystemMail service if available
-            xSimpleMailClientSupplier = Reference< XSimpleMailClientSupplier >(
+            xSimpleMailClientSupplier = css::uno::Reference< XSimpleMailClientSupplier >(
                 xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SimpleSystemMail" ))),
                 UNO_QUERY );
 
             if ( ! xSimpleMailClientSupplier.is() )
             {
-                xSimpleMailClientSupplier = Reference< XSimpleMailClientSupplier >(
+                xSimpleMailClientSupplier = css::uno::Reference< XSimpleMailClientSupplier >(
                     xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SimpleCommandMail" ))),
                     UNO_QUERY );
             }
 
             if ( xSimpleMailClientSupplier.is() )
             {
-                Reference< XSimpleMailClient > xSimpleMailClient = xSimpleMailClientSupplier->querySimpleMailClient();
+                css::uno::Reference< XSimpleMailClient > xSimpleMailClient = xSimpleMailClientSupplier->querySimpleMailClient();
 
                 if ( !xSimpleMailClient.is() )
                 {
@@ -843,7 +843,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                 }
 
                 // we have a simple mail client
-                Reference< XSimpleMailMessage > xSimpleMailMessage = xSimpleMailClient->createSimpleMailMessage();
+                css::uno::Reference< XSimpleMailMessage > xSimpleMailMessage = xSimpleMailClient->createSimpleMailMessage();
                 if ( xSimpleMailMessage.is() )
                 {
                     sal_Int32 nSendFlags = SimpleMailClientFlags::DEFAULTS;
