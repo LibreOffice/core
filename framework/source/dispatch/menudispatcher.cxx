@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menudispatcher.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:55:13 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:45:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,7 @@
 
 namespace framework{
 
+using namespace ::com::sun::star                ;
 using namespace ::com::sun::star::awt           ;
 using namespace ::com::sun::star::beans         ;
 using namespace ::com::sun::star::container     ;
@@ -154,8 +155,8 @@ const USHORT SLOTID_MDIWINDOWLIST = 5610;
 //*****************************************************************************************************************
 //  constructor
 //*****************************************************************************************************************
-MenuDispatcher::MenuDispatcher(   const   Reference< XMultiServiceFactory >&  xFactory    ,
-                                    const   Reference< XFrame >&                xOwner      )
+MenuDispatcher::MenuDispatcher(   const   uno::Reference< XMultiServiceFactory >&  xFactory    ,
+                                    const   uno::Reference< XFrame >&               xOwner      )
         //  Init baseclasses first
         :   ThreadHelpBase          ( &Application::GetSolarMutex()  )
         ,   OWeakObject             (                                )
@@ -172,7 +173,7 @@ MenuDispatcher::MenuDispatcher(   const   Reference< XMultiServiceFactory >&  xF
     LOG_ASSERT( impldbg_checkParameter_MenuDispatcher( xFactory, xOwner ), "MenuDispatcher::MenuDispatcher()\nInvalid parameter detected!\n" )
 
     m_bActivateListener = sal_True;
-    xOwner->addFrameActionListener( Reference< XFrameActionListener >( (OWeakObject *)this, UNO_QUERY ));
+    xOwner->addFrameActionListener( uno::Reference< XFrameActionListener >( (OWeakObject *)this, UNO_QUERY ));
 }
 
 //*****************************************************************************************************************
@@ -428,7 +429,7 @@ void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        /
 //*****************************************************************************************************************
 //  XDispatch
 //*****************************************************************************************************************
-void SAL_CALL MenuDispatcher::addStatusListener(   const   Reference< XStatusListener >&   xControl,
+void SAL_CALL MenuDispatcher::addStatusListener(   const   uno::Reference< XStatusListener >&   xControl,
                                                     const   URL&                            aURL    ) throw( RuntimeException )
 {
     // Ready for multithreading
@@ -443,7 +444,7 @@ void SAL_CALL MenuDispatcher::addStatusListener(   const   Reference< XStatusLis
 //*****************************************************************************************************************
 //  XDispatch
 //*****************************************************************************************************************
-void SAL_CALL MenuDispatcher::removeStatusListener(    const   Reference< XStatusListener >&   xControl,
+void SAL_CALL MenuDispatcher::removeStatusListener(    const   uno::Reference< XStatusListener >&   xControl,
                                                         const   URL&                            aURL    ) throw( RuntimeException )
 {
     // Ready for multithreading
@@ -466,12 +467,12 @@ void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) thro
     if ( m_pMenuManager && aEvent.Action == FrameAction_FRAME_UI_ACTIVATED )
     {
         MenuBar* pMenuBar = (MenuBar *)m_pMenuManager->GetMenu();
-        Reference< XFrame > xFrame( m_xOwnerWeak.get(), UNO_QUERY );
+        uno::Reference< XFrame > xFrame( m_xOwnerWeak.get(), UNO_QUERY );
         aGuard.unlock();
 
         if ( xFrame.is() && pMenuBar )
         {
-            Reference< ::com::sun::star::awt::XWindow >xContainerWindow = xFrame->getContainerWindow();
+            uno::Reference< ::com::sun::star::awt::XWindow >xContainerWindow = xFrame->getContainerWindow();
 
             OGuard aSolarGuard( Application::GetSolarMutex() );
             {
@@ -510,10 +511,10 @@ void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeExce
 
         if ( m_bActivateListener )
         {
-            Reference< XFrame > xFrame( m_xOwnerWeak.get(), UNO_QUERY );
+            uno::Reference< XFrame > xFrame( m_xOwnerWeak.get(), UNO_QUERY );
             if ( xFrame.is() )
             {
-                xFrame->removeFrameActionListener( Reference< XFrameActionListener >( (OWeakObject *)this, UNO_QUERY ));
+                xFrame->removeFrameActionListener( uno::Reference< XFrameActionListener >( (OWeakObject *)this, UNO_QUERY ));
                 m_bActivateListener = sal_False;
                 if ( m_pMenuManager )
                 {
@@ -525,7 +526,7 @@ void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeExce
         }
 
         // Forget our factory.
-        m_xFactory = Reference< XMultiServiceFactory >();
+        m_xFactory = uno::Reference< XMultiServiceFactory >();
 
         // Remove our menu from system window if it is still there!
         if ( m_pMenuManager )
@@ -536,7 +537,7 @@ void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeExce
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-void MenuDispatcher::impl_sendStatusEvent( const   Reference< XFrame >&    xEventSource    ,
+void MenuDispatcher::impl_sendStatusEvent( const   uno::Reference< XFrame >&    xEventSource    ,
                                             const   OUString&               sURL            ,
                                             sal_Bool                        bLoadState      )
 {
@@ -599,10 +600,10 @@ void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAcce
 //*****************************************************************************************************************
 sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromResource )
 {
-    Reference< XFrame > xFrame( m_xOwnerWeak.get(), UNO_QUERY );
+    uno::Reference< XFrame > xFrame( m_xOwnerWeak.get(), UNO_QUERY );
     if ( xFrame.is() )
     {
-        Reference< ::com::sun::star::awt::XWindow >xContainerWindow = xFrame->getContainerWindow();
+        uno::Reference< ::com::sun::star::awt::XWindow >xContainerWindow = xFrame->getContainerWindow();
         Window* pWindow = NULL;
 
         // Use SolarMutex for threadsafe code too!
@@ -641,11 +642,11 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
                 {
                     OUString aNoContext;
 
-                    Reference< XModel >         xModel;
-                    Reference< XController >    xController( xFrame->getController(), UNO_QUERY );
+                    uno::Reference< XModel >            xModel;
+                    uno::Reference< XController >   xController( xFrame->getController(), UNO_QUERY );
 
                     if ( xController.is() )
-                        xModel = Reference< XModel >( xController->getModel(), UNO_QUERY );
+                        xModel = uno::Reference< XModel >( xController->getModel(), UNO_QUERY );
 
                     // retrieve addon popup menus and add them to our menu bar
                     AddonMenuManager::MergeAddonPopupMenus( xFrame, xModel, nPos, pMenuBar );
@@ -692,7 +693,7 @@ IMPL_LINK( MenuDispatcher, Close_Impl, void*, EMPTYARG )
     {
         // Datei laden
         xTrans->parseStrict( aURL );
-        Reference< XDispatchProvider > xProv( xFrame, UNO_QUERY );
+        uno::Reference< XDispatchProvider > xProv( xFrame, UNO_QUERY );
         if ( xProv.is() )
         {
             css::uno::Reference < css::frame::XDispatch > aDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
