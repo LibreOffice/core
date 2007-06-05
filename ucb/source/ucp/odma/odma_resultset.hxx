@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odma_resultset.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:54:13 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:11:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,28 +33,24 @@
  *
  ************************************************************************/
 
-// @@@ Adjust multi-include-protection-ifdef.
 #ifndef ODMA_RESULTSET_HXX
 #define ODMA_RESULTSET_HXX
 
 #ifndef _UCBHELPER_RESULTSETHELPER_HXX
 #include <ucbhelper/resultsethelper.hxx>
 #endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
-#endif
 
-// @@@ Adjust multi-include-protection-ifdef and header file name.
+#include "rtl/ref.hxx"
+
 #ifndef ODMA_CONTENT_HXX
 #include "odma_content.hxx"
 #endif
 
-// @@@ Adjust namespace name.
 namespace odma {
 
-class DynamicResultSet : public ::ucb::ResultSetImplHelper
+class DynamicResultSet : public ::ucbhelper::ResultSetImplHelper
 {
-      vos::ORef< Content > m_xContent;
+      rtl::Reference< Content > m_xContent;
     com::sun::star::uno::Reference<
         com::sun::star::ucb::XCommandEnvironment > m_xEnv;
 
@@ -66,7 +62,7 @@ public:
     DynamicResultSet(
             const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-              const vos::ORef< Content >& rxContent,
+              const rtl::Reference< Content >& rxContent,
             const com::sun::star::ucb::OpenCommandArgument2& rCommand,
               const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XCommandEnvironment >& rxEnv );
