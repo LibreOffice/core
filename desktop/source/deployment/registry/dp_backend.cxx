@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_backend.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:30:03 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:06:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -381,10 +381,10 @@ void Package::exportTo(
     sal_Int32 nameClashAction, Reference<XCommandEnvironment> const & xCmdEnv )
     throw (CommandFailedException, CommandAbortedException, RuntimeException)
 {
-    ::ucb::Content destFolder( destFolderURL, xCmdEnv );
-    ::ucb::Content sourceContent( getURL(), xCmdEnv );
+    ::ucbhelper::Content destFolder( destFolderURL, xCmdEnv );
+    ::ucbhelper::Content sourceContent( getURL(), xCmdEnv );
     if (! destFolder.transferContent(
-            sourceContent, ::ucb::InsertOperation_COPY,
+            sourceContent, ::ucbhelper::InsertOperation_COPY,
             newTitle, nameClashAction ))
         throw RuntimeException( OUSTR("UCB transferContent() failed!"), 0 );
 }
