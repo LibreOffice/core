@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlxtexp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:14:32 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:37:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,7 +262,7 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
     SfxMedium* pMedium = NULL;
     sal_Bool bRet = sal_False;
 
-    Reference< XGraphicObjectResolver > xGrfResolver;
+    uno::Reference< XGraphicObjectResolver >    xGrfResolver;
     SvXMLGraphicHelper* pGraphicHelper = 0;
 
     try
@@ -341,11 +341,11 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
 
         if( xStorage.is() )
         {
-            Reference< XTransactedObject > xTrans( xStorage, UNO_QUERY );
+            uno::Reference< XTransactedObject > xTrans( xStorage, UNO_QUERY );
             if( xTrans.is() )
                 xTrans->commit();
 
-            Reference< XComponent > xComp( xStorage, UNO_QUERY );
+            uno::Reference< XComponent > xComp( xStorage, UNO_QUERY );
             if( xComp.is() )
                 xStorage->dispose();
         }
