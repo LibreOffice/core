@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.50 $
+#   $Revision: 1.51 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 15:22:14 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 14:38:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,14 +58,8 @@ LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1FILES=\
     $(SLB)$/animation.lib \
     $(SLB)$/overlay.lib \
-    $(SLB)$/form.lib \
-    $(SLB)$/fmcomp.lib \
-    $(SLB)$/engine3d.lib \
-    $(SLB)$/msfilter.lib \
-    $(SLB)$/xout.lib \
-    $(SLB)$/xml.lib
-
-
+    $(SLB)$/svdraw.lib \
+    $(SLB)$/form.lib
 
 .IF "$(GUI)" == "OS2" || "(GUIBASE)" == "WIN"
 LIB1FILES+=$(SLB)$/ibrwimp.lib
@@ -73,7 +67,6 @@ LIB1FILES+=$(SLB)$/ibrwimp.lib
 
 LIB2TARGET= $(SLB)$/$(TARGET)_2.lib
 LIB2FILES=\
-    $(SLB)$/svdraw.lib \
     $(SLB)$/init.lib \
     $(SLB)$/items.lib     \
     $(SLB)$/svxlink.lib   \
@@ -100,9 +93,13 @@ LIB3FILES=\
     $(SLB)$/mixer.lib \
     $(SLB)$/event.lib
 
-.IF "$(GUI)" == "OS2" || "(GUIBASE)" == "WIN"
-LIB1FILES+=$(SLB)$/ibrwimp.lib
-.ENDIF # (OS2 || WIN)
+LIB4TARGET= $(SLB)$/$(TARGET)_4.lib
+LIB4FILES=\
+    $(SLB)$/fmcomp.lib \
+    $(SLB)$/engine3d.lib \
+    $(SLB)$/msfilter.lib \
+    $(SLB)$/xout.lib \
+    $(SLB)$/xml.lib
 
 HELPIDFILES=    ..$/inc$/helpid.hrc
 
@@ -111,7 +108,7 @@ SHL1TARGET= svx$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= i$(TARGET)
 SHL1USE_EXPORTS=ordinal
 
-SHL1LIBS= $(LIB1TARGET) $(LIB2TARGET) $(LIB3TARGET)
+SHL1LIBS= $(LIB1TARGET) $(LIB2TARGET) $(LIB3TARGET) $(LIB4TARGET)
 SHL1STDLIBS= \
             $(AVMEDIALIB) \
             $(SFX2LIB) \
@@ -143,7 +140,7 @@ SHL1STDLIBS+=$(SHELLLIB)
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
-DEFLIB1NAME=$(TARGET) $(TARGET)_2 $(TARGET)_3
+DEFLIB1NAME=$(TARGET) $(TARGET)_2 $(TARGET)_3 $(TARGET)_4
 
 
 # cui
