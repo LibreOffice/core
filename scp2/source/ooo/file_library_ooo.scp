@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.239 $
+ *  $Revision: 1.240 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 11:53:28 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:02:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2221,9 +2221,9 @@ File gid_File_Lib_Ucbhelper
     Dir = gid_Dir_Program;
     Styles = (PACKED,PATCH);
   #ifdef UNX
-    Name = STRING(CONCAT3(libucbhelper3,COMID,UNXSUFFIX));
+    Name = STRING(CONCAT3(libucbhelper4,COMID,UNXSUFFIX));
   #else
-    Name = STRING(CONCAT3(ucbhelper3,COMID,.dll));
+    Name = STRING(CONCAT3(ucbhelper4,COMID,.dll));
   #endif
 End
 
