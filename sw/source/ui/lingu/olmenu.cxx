@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:19:44 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:42:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,9 +129,6 @@
 // <- #111827#
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::linguistic2;
 using namespace ::rtl;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
@@ -140,7 +137,7 @@ using namespace ::rtl;
 
 ---------------------------------------------------------------------------*/
 
-util::Language lcl_CheckLanguage( const OUString &rWord, Reference< XSpellChecker1 >  xSpell )
+util::Language lcl_CheckLanguage( const OUString &rWord, uno::Reference< linguistic2::XSpellChecker1 >  xSpell )
 {
     //
     // build list of languages to check
@@ -173,7 +170,7 @@ util::Language lcl_CheckLanguage( const OUString &rWord, Reference< XSpellChecke
         if (nTmpLang != LANGUAGE_NONE  &&  nTmpLang != LANGUAGE_DONTKNOW)
         {
             if (xSpell->hasLanguage( nTmpLang ) &&
-                xSpell->isValid( rWord, nTmpLang, Sequence< PropertyValue >() ))
+                xSpell->isValid( rWord, nTmpLang, uno::Sequence< beans::PropertyValue >() ))
             {
                 nLang = nTmpLang;
                 break;
@@ -185,7 +182,7 @@ util::Language lcl_CheckLanguage( const OUString &rWord, Reference< XSpellChecke
 }
 
 
-SwSpellPopup::SwSpellPopup( SwWrtShell* pWrtSh, const Reference< XSpellAlternatives >  &xAlt ) :
+SwSpellPopup::SwSpellPopup( SwWrtShell* pWrtSh, const uno::Reference< linguistic2::XSpellAlternatives >  &xAlt ) :
     PopupMenu(SW_RES(MN_SPELL_POPUP)),
     pSh ( pWrtSh ),
     xSpellAlt   (xAlt)
@@ -193,7 +190,7 @@ SwSpellPopup::SwSpellPopup( SwWrtShell* pWrtSh, const Reference< XSpellAlternati
     DBG_ASSERT(xSpellAlt.is(), "no spelling alternatives available");
 
     CreateAutoMnemonics();
-    Sequence< OUString >    aStrings;
+    uno::Sequence< OUString >   aStrings;
     if (xSpellAlt.is())
         aStrings = xSpellAlt->getAlternatives();
     const OUString *pString = aStrings.getConstArray();
@@ -236,18 +233,18 @@ SwSpellPopup::SwSpellPopup( SwWrtShell* pWrtSh, const Reference< XSpellAlternati
     bEnable = FALSE;    // enable MN_INSERT?
 
     pMenu->CreateAutoMnemonics();
-    Reference< XDictionaryList >    xDicList( SvxGetDictionaryList() );
+    uno::Reference< linguistic2::XDictionaryList >    xDicList( SvxGetDictionaryList() );
     if (xDicList.is())
     {
         // add active, positive dictionary to dic-list (if not already done).
         // This is to ensure that there is at least on dictionary to which
         // words could be added.
-        Reference< XDictionary1 >  xDic( SvxGetOrCreatePosDic( xDicList ) );
+        uno::Reference< linguistic2::XDictionary1 >  xDic( SvxGetOrCreatePosDic( xDicList ) );
         if (xDic.is())
             xDic->setActive( sal_True );
 
         aDics = xDicList->getDictionaries();
-        const Reference< XDictionary >  *pDic = aDics.getConstArray();
+        const uno::Reference< linguistic2::XDictionary >  *pDic = aDics.getConstArray();
         sal_Int32 nDicCount = aDics.getLength();
 
         sal_Int16 nLanguage = LANGUAGE_NONE;
@@ -256,14 +253,14 @@ SwSpellPopup::SwSpellPopup( SwWrtShell* pWrtSh, const Reference< XSpellAlternati
 
         for( sal_Int32 i = 0; i < nDicCount; i++ )
         {
-            Reference< XDictionary1 >  xDic( pDic[i], UNO_QUERY );
+            uno::Reference< linguistic2::XDictionary1 >  xDic( pDic[i], uno::UNO_QUERY );
             if (!xDic.is() || SvxGetIgnoreAllList() == xDic)
                 continue;
 
-            Reference< frame::XStorable > xStor( xDic, UNO_QUERY );
+            uno::Reference< frame::XStorable > xStor( xDic, uno::UNO_QUERY );
             LanguageType nActLanguage = xDic->getLanguage();
             if( xDic->isActive()
-                &&  xDic->getDictionaryType() != DictionaryType_NEGATIVE
+                &&  xDic->getDictionaryType() != linguistic2::DictionaryType_NEGATIVE
                 && (nLanguage == nActLanguage || LANGUAGE_NONE == nActLanguage )
                 && (!xStor.is() || !xStor->isReadonly()) )
             {
@@ -310,7 +307,7 @@ void SwSpellPopup::Execute( USHORT nId )
             sal_Bool bOldIns = pSh->IsInsMode();
             pSh->SetInsMode( sal_True );
 
-            const Sequence< OUString > aAlts( xSpellAlt->getAlternatives() );
+            const uno::Sequence< OUString > aAlts( xSpellAlt->getAlternatives() );
             const OUString *pString = aAlts.getConstArray();
             DBG_ASSERT( 0 <= nAltIdx && nAltIdx <= xSpellAlt->getAlternativesCount(),
                     "index out of range");
@@ -384,7 +381,7 @@ void SwSpellPopup::Execute( USHORT nId )
                 {
                     pSh->Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
                     {
-                        Reference<XDictionaryList> xDictionaryList( SvxGetDictionaryList() );
+                        uno::Reference<linguistic2::XDictionaryList> xDictionaryList( SvxGetDictionaryList() );
                         SvxDicListChgClamp aClamp( xDictionaryList );
                         pSh->GetView().GetViewFrame()->GetDispatcher()->
                             Execute( SID_SPELL_DIALOG, SFX_CALLMODE_ASYNCHRON );
@@ -393,7 +390,7 @@ void SwSpellPopup::Execute( USHORT nId )
                 break;
                 case MN_IGNORE :
                 {
-                    Reference< XDictionary > xDictionary( SvxGetIgnoreAllList(), UNO_QUERY );
+                    uno::Reference< linguistic2::XDictionary > xDictionary( SvxGetIgnoreAllList(), uno::UNO_QUERY );
                     sal_Int16 nAddRes = SvxAddEntryToDic(
                             xDictionary,
                             xSpellAlt->getWord(), sal_False,
@@ -432,7 +429,7 @@ void SwSpellPopup::Execute( USHORT nId )
                         INT32 nDicIdx = nId - MN_INSERT_START - 1;
                         DBG_ASSERT( nDicIdx < aDics.getLength(),
                                     "dictionary index out of range" );
-                        Reference< XDictionary > xDic =
+                        uno::Reference< linguistic2::XDictionary > xDic =
                             aDics.getConstArray()[nDicIdx];
                         INT16 nAddRes = SvxAddEntryToDic( xDic,
                             aWord, FALSE, aEmptyStr, LANGUAGE_NONE );
