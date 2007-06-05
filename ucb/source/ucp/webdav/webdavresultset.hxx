@@ -4,9 +4,9 @@
  *
  *  $RCSfile: webdavresultset.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:17:36 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:22:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 
 namespace webdav_ucp {
 
-class DynamicResultSet : public ::ucb::ResultSetImplHelper
+class DynamicResultSet : public ::ucbhelper::ResultSetImplHelper
 {
     rtl::Reference< Content > m_xContent;
     com::sun::star::uno::Reference<
