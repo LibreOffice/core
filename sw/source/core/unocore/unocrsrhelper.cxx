@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocrsrhelper.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:51:23 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:32:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,7 @@
 #include <SwStyleNameMapper.hxx>
 #endif
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
@@ -303,9 +304,9 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                 if( pAny )
                 {
                     const SwTOXMark& rMark = pTxtAttr->GetTOXMark();
-                    Reference< XDocumentIndexMark >  xRef = SwXDocumentIndexMark::GetObject(
+                    uno::Reference< XDocumentIndexMark >  xRef = SwXDocumentIndexMark::GetObject(
                             (SwTOXType*)rMark.GetTOXType(), &rMark, rPam.GetDoc());
-                    pAny->setValue(&xRef, ::getCppuType((Reference<XDocumentIndex>*)0));
+                    pAny->setValue(&xRef, ::getCppuType((uno::Reference<XDocumentIndex>*)0));
                 }
             }
             else
@@ -321,9 +322,9 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
             {
                 if( pAny )
                 {
-                    Reference< XDocumentIndex > aRef =
+                    uno::Reference< XDocumentIndex > aRef =
                         SwXDocumentIndexes::GetObject((SwTOXBaseSection*)pBase);
-                    pAny->setValue(&aRef, ::getCppuType((Reference<XDocumentIndex>*)0));
+                    pAny->setValue(&aRef, ::getCppuType((uno::Reference<XDocumentIndex>*)0));
                 }
             }
             else
@@ -354,8 +355,8 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                     }
                     if(!pFld)
                         pFld = new SwXTextField( rFld, rPam.GetDoc());
-                    Reference< XTextField >  xRet = pFld;
-                    pAny->setValue(&xRet, ::getCppuType((Reference<XTextField>*)0));
+                    uno::Reference< XTextField >  xRet = pFld;
+                    pAny->setValue(&xRet, ::getCppuType((uno::Reference<XTextField>*)0));
                 }
             }
             else
@@ -367,7 +368,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
         {
             if()
             {
-                Reference< XBookmark >  xBkm = SwXBookmarks::GetObject(rBkm);
+                uno::Reference< XBookmark >  xBkm = SwXBookmarks::GetObject(rBkm);
                 rAny.set(&xBkm, ::getCppuType((const XBookmark*)0)());
             }
         }
@@ -386,14 +387,14 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                     SwTable& rTable = ((SwTableNode*)pSttNode)->GetTable();
                     if(FN_UNO_TEXT_TABLE == pMap->nWID)
                     {
-                        Reference< XTextTable >  xTable = SwXTextTables::GetObject(*pTableFmt);
-                        pAny->setValue(&xTable, ::getCppuType((Reference<XTextTable>*)0));
+                        uno::Reference< XTextTable >  xTable = SwXTextTables::GetObject(*pTableFmt);
+                        pAny->setValue(&xTable, ::getCppuType((uno::Reference<XTextTable>*)0));
                     }
                     else
                     {
                         SwTableBox* pBox = pSttNode->GetTblBox();
-                        Reference< XCell >  xCell = SwXCell::CreateXCell(pTableFmt, pBox);
-                        pAny->setValue(&xCell, ::getCppuType((Reference<XCell>*)0));
+                        uno::Reference< XCell >  xCell = SwXCell::CreateXCell(pTableFmt, pBox);
+                        pAny->setValue(&xCell, ::getCppuType((uno::Reference<XCell>*)0));
                     }
                 }
             }
@@ -411,8 +412,8 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
             {
                 if( pAny )
                 {
-                    Reference< XTextFrame >  xFrm = (SwXTextFrame*) SwXFrames::GetObject(*pFmt, FLYCNTTYPE_FRM);
-                    pAny->setValue(&xFrm, ::getCppuType((Reference<XTextFrame>*)0));
+                    uno::Reference< XTextFrame >  xFrm = (SwXTextFrame*) SwXFrames::GetObject(*pFmt, FLYCNTTYPE_FRM);
+                    pAny->setValue(&xFrm, ::getCppuType((uno::Reference<XTextFrame>*)0));
                 }
             }
             else
@@ -426,8 +427,8 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
             {
                 if( pAny )
                 {
-                    Reference< XTextSection >  xSect = SwXTextSections::GetObject( *pSect->GetFmt() );
-                    pAny->setValue(&xSect, ::getCppuType((Reference<XTextSection>*)0) );
+                    uno::Reference< XTextSection >  xSect = SwXTextSections::GetObject( *pSect->GetFmt() );
+                    pAny->setValue(&xSect, ::getCppuType((uno::Reference<XTextSection>*)0) );
                 }
             }
             else
@@ -446,8 +447,8 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                 {
                     if( pAny )
                     {
-                        Reference< XFootnote >  xFoot = new SwXFootnote(rPam.GetDoc(), rFtn);
-                        pAny->setValue(&xFoot, ::getCppuType((Reference<XFootnote>*)0));
+                        uno::Reference< XFootnote >  xFoot = new SwXFootnote(rPam.GetDoc(), rFtn);
+                        pAny->setValue(&xFoot, ::getCppuType((uno::Reference<XFootnote>*)0));
                     }
                 }
                 else
@@ -466,8 +467,8 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                 if( pAny )
                 {
                     const SwFmtRefMark& rRef = pTxtAttr->GetRefMark();
-                    Reference< XTextContent >  xRef = SwXReferenceMarks::GetObject( rPam.GetDoc(), &rRef );
-                    pAny->setValue(&xRef, ::getCppuType((Reference<XTextContent>*)0));
+                    uno::Reference< XTextContent >  xRef = SwXReferenceMarks::GetObject( rPam.GetDoc(), &rRef );
+                    pAny->setValue(&xRef, ::getCppuType((uno::Reference<XTextContent>*)0));
                 }
             }
             else
@@ -565,12 +566,12 @@ sal_Int16 IsNodeNumStart(SwPaM& rPam, PropertyState& eState)
  * --------------------------------------------------*/
 void setNumberingProperty(const Any& rValue, SwPaM& rPam)
 {
-    Reference<XIndexReplace> xIndexReplace;
+    uno::Reference<XIndexReplace> xIndexReplace;
     if(rValue >>= xIndexReplace)
     {
         SwXNumberingRules* pSwNum = 0;
 
-        Reference<XUnoTunnel> xNumTunnel(xIndexReplace, UNO_QUERY);
+        uno::Reference<XUnoTunnel> xNumTunnel(xIndexReplace, UNO_QUERY);
         if(xNumTunnel.is())
         {
             pSwNum = (SwXNumberingRules*)
@@ -684,9 +685,9 @@ void  getNumberingProperty(SwPaM& rPam, PropertyState& eState, Any * pAny )
     const SwNumRule* pNumRule = rPam.GetDoc()->GetCurrNumRule( *rPam.GetPoint() );
     if(pNumRule)
     {
-        Reference< XIndexReplace >  xNum = new SwXNumberingRules(*pNumRule);
+        uno::Reference< XIndexReplace >  xNum = new SwXNumberingRules(*pNumRule);
         if ( pAny )
-            pAny->setValue(&xNum, ::getCppuType((const Reference<XIndexReplace>*)0));
+            pAny->setValue(&xNum, ::getCppuType((const uno::Reference<XIndexReplace>*)0));
         eState = PropertyState_DIRECT_VALUE;
     }
     else
