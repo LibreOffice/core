@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:50:31 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 10:59:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ USE_DEFFILE=TRUE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT" && "$(DISABLE_ATL)"==""
 
 SHL1TARGET= emser$(UPD)$(DLLPOSTFIX)
 
@@ -80,6 +80,12 @@ SHL1STDLIBS+=\
         $(ADVAPI32LIB)	\
         $(ATL_LIB)$/atls.lib
 .ENDIF
+
+.IF "$(WINDOWS_VISTA_PSDK)"!=""
+SHL1STDLIBS+=\
+        $(ADVAPI32LIB)	\
+        $(ATL_LIB)$/atls.lib
+.ENDIF # "$(WINDOWS_VISTA_PSDK)"!=""
 
 
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
