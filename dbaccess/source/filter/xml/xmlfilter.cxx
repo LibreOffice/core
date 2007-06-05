@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilter.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:49:04 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:40:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,10 +145,10 @@ namespace dbaxml
     using namespace ::com::sun::star::util;
     /// read a component (file + filter version)
 sal_Int32 ReadThroughComponent(
-    const Reference<XInputStream>& xInputStream,
-    const Reference<XComponent>& xModelComponent,
-    const Reference<XMultiServiceFactory> & rFactory,
-    const Reference< XDocumentHandler >& _xFilter )
+    const uno::Reference<XInputStream>& xInputStream,
+    const uno::Reference<XComponent>& xModelComponent,
+    const uno::Reference<XMultiServiceFactory> & rFactory,
+    const uno::Reference< XDocumentHandler >& _xFilter )
 {
     DBG_ASSERT(xInputStream.is(), "input stream missing");
     DBG_ASSERT(xModelComponent.is(), "document missing");
@@ -161,7 +161,7 @@ sal_Int32 ReadThroughComponent(
     aParserInput.aInputStream = xInputStream;
 
     // get parser
-    Reference< XParser > xParser(
+    uno::Reference< XParser > xParser(
         rFactory->createInstance(
             OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
         UNO_QUERY );
@@ -179,7 +179,7 @@ sal_Int32 ReadThroughComponent(
     xParser->setDocumentHandler( _xFilter );
 
     // connect model and filter
-    Reference < XImporter > xImporter( _xFilter, UNO_QUERY );
+    uno::Reference < XImporter > xImporter( _xFilter, UNO_QUERY );
     xImporter->setTargetDocument( xModelComponent );
 
 
@@ -236,11 +236,11 @@ sal_Int32 ReadThroughComponent(
 /// read a component (storage version)
 sal_Int32 ReadThroughComponent(
     uno::Reference< embed::XStorage > xStorage,
-    const Reference<XComponent>& xModelComponent,
+    const uno::Reference<XComponent>& xModelComponent,
     const sal_Char* pStreamName,
     const sal_Char* pCompatibilityStreamName,
-    const Reference<XMultiServiceFactory> & rFactory,
-    const Reference< XDocumentHandler >& _xFilter)
+    const uno::Reference<XMultiServiceFactory> & rFactory,
+    const uno::Reference< XDocumentHandler >& _xFilter)
 {
     DBG_ASSERT( xStorage.is(), "Need storage!");
     DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
@@ -285,7 +285,7 @@ sal_Int32 ReadThroughComponent(
             return 1; // TODO/LATER: error handling
         }
 
-        Reference< XInputStream > xInputStream = xDocStream->getInputStream();
+        uno::Reference< XInputStream > xInputStream = xDocStream->getInputStream();
         // read from the stream
         return ReadThroughComponent( xInputStream
                                     ,xModelComponent
@@ -302,7 +302,7 @@ sal_Int32 ReadThroughComponent(
 // -------------
 DBG_NAME(ODBFilter)
 
-ODBFilter::ODBFilter( const Reference< XMultiServiceFactory >& _rxMSF )
+ODBFilter::ODBFilter( const uno::Reference< XMultiServiceFactory >& _rxMSF )
     :SvXMLImport(_rxMSF)
 {
     DBG_CTOR(ODBFilter,NULL);
@@ -331,7 +331,7 @@ IMPLEMENT_SERVICE_INFO1_STATIC( ODBFilter, "com.sun.star.comp.sdb.DBFilter", "co
 sal_Bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xWindow;
+    uno::Reference< ::com::sun::star::awt::XWindow > xWindow;
     {
         ::vos::OGuard aGuard(Application::GetSolarMutex());
         Window*     pFocusWindow = Application::GetFocusWindow();
@@ -373,7 +373,7 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     sal_Bool bRet = (sFileName.getLength() != 0);
     if ( bRet )
     {
-        Reference<XComponent> xCom(GetModel(),UNO_QUERY);
+        uno::Reference<XComponent> xCom(GetModel(),UNO_QUERY);
 
         SfxMediumRef pMedium = new SfxMedium(
                 sFileName, ( STREAM_READ | STREAM_NOCREATE ), FALSE, 0 );
@@ -393,14 +393,14 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         OSL_ENSURE(xStorage.is(),"No Storage for read!");
         if ( xStorage.is() )
         {
-            Reference<sdb::XOfficeDatabaseDocument> xOfficeDoc(GetModel(),UNO_QUERY_THROW);
+            uno::Reference<sdb::XOfficeDatabaseDocument> xOfficeDoc(GetModel(),UNO_QUERY_THROW);
             m_xDataSource.set(xOfficeDoc->getDataSource(),UNO_QUERY_THROW);
             OSL_ENSURE(m_xDataSource.is(),"DataSource is NULL!");
-            Reference< XNumberFormatsSupplier > xNum(m_xDataSource->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER),UNO_QUERY);
+            uno::Reference< XNumberFormatsSupplier > xNum(m_xDataSource->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER),UNO_QUERY);
             SetNumberFormatsSupplier(xNum);
 
 
-            Reference<XComponent> xModel(GetModel(),UNO_QUERY);
+            uno::Reference<XComponent> xModel(GetModel(),UNO_QUERY);
             sal_Int32 nRet = ReadThroughComponent( xStorage
                                         ,xModel
                                         ,"settings.xml"
@@ -422,7 +422,7 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
             if ( bRet )
             {
-                Reference< XModifiable > xModi(GetModel(),UNO_QUERY);
+                uno::Reference< XModifiable > xModi(GetModel(),UNO_QUERY);
                 if ( xModi.is() )
                     xModi->setModified(sal_False);
             }
@@ -454,7 +454,7 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 // -----------------------------------------------------------------------------
 SvXMLImportContext* ODBFilter::CreateContext( sal_uInt16 nPrefix,
                                       const ::rtl::OUString& rLocalName,
-                                      const Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+                                      const uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = 0;
 
@@ -512,7 +512,7 @@ void ODBFilter::SetConfigurationSettings(const Sequence<PropertyValue>& aConfigP
         {
             Sequence<PropertyValue> aWindows;
             pIter->Value >>= aWindows;
-            Reference<XPropertySet> xProp(getDataSource());
+            uno::Reference<XPropertySet> xProp(getDataSource());
             if ( xProp.is() )
                 xProp->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aWindows));
         }
@@ -732,7 +732,7 @@ const SvXMLTokenMap& ODBFilter::GetColumnElemTokenMap() const
 }
 // -----------------------------------------------------------------------------
 SvXMLImportContext* ODBFilter::CreateStylesContext(const ::rtl::OUString& rLocalName,
-                                     const Reference< XAttributeList>& xAttrList, sal_Bool bIsAutoStyle )
+                                     const uno::Reference< XAttributeList>& xAttrList, sal_Bool bIsAutoStyle )
 {
     SvXMLImportContext *pContext = NULL;
     if (!pContext)
