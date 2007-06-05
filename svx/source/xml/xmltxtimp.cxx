@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltxtimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:29:45 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:37:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,20 +127,20 @@ using namespace xmloff::token;
 class SvxXMLTextImportContext : public SvXMLImportContext
 {
 public:
-    SvxXMLTextImportContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList, const Reference< XText >& xText );
+    SvxXMLTextImportContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >& xAttrList, const uno::Reference< XText >& xText );
     virtual ~SvxXMLTextImportContext();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList );
 
 //  SvxXMLXTableImport& getImport() const { return *(SvxXMLXTableImport*)&GetImport(); }
 
 private:
-    const Reference< XText > mxText;
+    const uno::Reference< XText > mxText;
 };
 
 ///////////////////////////////////////////////////////////////////////
 
-SvxXMLTextImportContext::SvxXMLTextImportContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName, const Reference< XAttributeList >&, const Reference< XText >& xText )
+SvxXMLTextImportContext::SvxXMLTextImportContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >&, const uno::Reference< XText >& xText )
 : SvXMLImportContext( rImport, nPrfx, rLName ), mxText( xText )
 {
 }
@@ -149,7 +149,7 @@ SvxXMLTextImportContext::~SvxXMLTextImportContext()
 {
 }
 
-SvXMLImportContext *SvxXMLTextImportContext::CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
+SvXMLImportContext *SvxXMLTextImportContext::CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = NULL;
     if(XML_NAMESPACE_OFFICE == nPrefix && IsXMLToken( rLocalName, XML_BODY ) )
@@ -181,16 +181,16 @@ public:
     // #110680#
     SvxXMLXTextImportComponent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
-        const Reference< XText > & xText );
+        const uno::Reference< XText > & xText );
 
     virtual ~SvxXMLXTextImportComponent() throw ();
 
     static sal_Bool load( const rtl::OUString& rUrl, const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xTable ) throw();
 protected:
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList );
 
 private:
-    const Reference< XText > mxText;
+    const uno::Reference< XText > mxText;
 };
 
 // --------------------------------------------------------------------
@@ -198,7 +198,7 @@ private:
 // #110680#
 SvxXMLXTextImportComponent::SvxXMLXTextImportComponent(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
-    const Reference< XText > & xText )
+    const uno::Reference< XText > & xText )
 :   SvXMLImport(xServiceFactory),
     mxText( xText )
 {
@@ -245,7 +245,7 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
                 break;
             }
 
-            Reference<io::XInputStream> xInputStream = new utl::OInputStreamWrapper( rStream );
+            uno::Reference<io::XInputStream> xInputStream = new utl::OInputStreamWrapper( rStream );
 
 /* testcode
             const OUString aURL( RTL_CONSTASCII_USTRINGPARAM( "file:///e:/test.xml" ) );
@@ -262,7 +262,7 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
                 break;
             }
 
-            Reference< XInterface > xPipe( xServiceFactory->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe") ) ) );
+            uno::Reference< XInterface > xPipe( xServiceFactory->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe") ) ) );
             if( !xPipe.is() )
             {
                 DBG_ERROR( "XMLReader::Read: com.sun.star.io.Pipe service missing" );
@@ -270,7 +270,7 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
             }
 
             // connect pipe's output stream to the data source
-            xSource->setOutputStream( Reference< io::XOutputStream >::query( xPipe ) );
+            xSource->setOutputStream( uno::Reference< io::XOutputStream >::query( xPipe ) );
 
             xml::sax::InputSource aParserInput;
             aParserInput.aInputStream = uno::Reference< io::XInputStream >::query( xPipe );
@@ -279,15 +279,15 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
 
             if( xSource.is() )
             {
-                Reference< io::XActiveDataControl > xSourceControl( xSource, UNO_QUERY );
+                uno::Reference< io::XActiveDataControl > xSourceControl( xSource, UNO_QUERY );
                 xSourceControl->start();
             }
 
 */
 
             // #110680#
-            // Reference< XDocumentHandler > xHandler( new SvxXMLXTextImportComponent( xText ) );
-            Reference< XDocumentHandler > xHandler( new SvxXMLXTextImportComponent( xServiceFactory, xText ) );
+            // uno::Reference< XDocumentHandler > xHandler( new SvxXMLXTextImportComponent( xText ) );
+            uno::Reference< XDocumentHandler > xHandler( new SvxXMLXTextImportComponent( xServiceFactory, xText ) );
 
             xParser->setDocumentHandler( xHandler );
 
@@ -303,7 +303,7 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
     }
 }
 
-SvXMLImportContext *SvxXMLXTextImportComponent::CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
+SvXMLImportContext *SvxXMLXTextImportComponent::CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext;
     if(XML_NAMESPACE_OFFICE == nPrefix && ( IsXMLToken( rLocalName, XML_DOCUMENT ) || IsXMLToken( rLocalName, XML_DOCUMENT_CONTENT ) ) )
