@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 20:53:15 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:33:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ SO2_DECL_REF(SotStorageStream)
 #endif
 SO2_IMPL_REF(SotStorageStream)
 
-namespace ucb
+namespace ucbhelper
 {
     class Content;
 }
@@ -157,7 +157,7 @@ public:
                         SotStorage( BOOL bUCBStorage, const String &,
                                    StreamMode = STREAM_STD_READWRITE,
                                    StorageMode = 0 );
-                        SotStorage( const ::ucb::Content& rContent, const String &,
+                        SotStorage( const ::ucbhelper::Content& rContent, const String &,
                                    StreamMode = STREAM_STD_READWRITE,
                                    StorageMode = 0 );
                         SotStorage( BaseStorage * );
