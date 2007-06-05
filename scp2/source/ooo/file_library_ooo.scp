@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.237 $
+ *  $Revision: 1.238 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 15:23:45 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 11:28:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ End
 
 #endif
 
-#ifdef WNT
+#if defined(WNT) && !defined(DISABLE_ADO)
 
 File gid_File_Lib_Ado_2
     TXT_FILE_BODY;
@@ -779,9 +779,12 @@ End
 #endif
 
 SPECIAL_UNO_LIB_FILE_PATCH(gid_File_Lib_Embobj,embobj)
-SPECIAL_UNO_LIB_FILE_PATCH(gid_File_Lib_Emboleobj,emboleobj)
 
-#ifdef WNT
+#ifndef DISABLE_ATL
+SPECIAL_UNO_LIB_FILE_PATCH(gid_File_Lib_Emboleobj,emboleobj)
+#endif
+
+#if defined(WNT) && !defined(DISABLE_ATL)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Emser , emser)
 
@@ -1599,7 +1602,7 @@ End
 #endif
 #endif
 
-#if defined(WNT)
+#if defined(WNT) && !defined(DISABLE_ATL)
 
 File gid_File_Lib_Ole
     TXT_FILE_BODY;
@@ -2657,4 +2660,3 @@ File gid_File_Lib_Onlinecheck
     Name = "onlinecheck.dll";
 End
 #endif
-
