@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 10:07:17 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 13:54:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,8 @@ DEF1NAME=$(SHL1TARGET)
 SHL1LIBS= \
     $(SLB)$/domimpl.lib \
     $(SLB)$/xpathimpl.lib \
-    $(SLB)$/eventsimpl.lib
+    $(SLB)$/eventsimpl.lib \
+    $(SLB)$/fastsax.lib
 
 SHL1STDLIBS= \
     $(XML2LIB) \
@@ -76,7 +77,8 @@ SHL1STDLIBS= \
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)	\
-    $(SALLIB)
+    $(SALLIB)\
+    $(EXPATASCII3RDLIB)
 
 # --- Targets ------------------------------------------------------
 
