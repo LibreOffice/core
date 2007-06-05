@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contentenumeration.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:09:01 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:24:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,9 +125,9 @@ namespace svt
     using ::com::sun::star::ucb::XCommandEnvironment;
     using ::com::sun::star::beans::XPropertySet;
     using ::rtl::OUString;
-    using ::ucb::ResultSetInclude;
-    using ::ucb::INCLUDE_FOLDERS_AND_DOCUMENTS;
-    using ::ucb::Content;
+    using ::ucbhelper::ResultSetInclude;
+    using ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
+    using ::ucbhelper::Content;
 
     //====================================================================
     //= FileViewContentEnumerator
@@ -160,7 +160,7 @@ namespace svt
         m_pResultHandler = NULL;
         m_pTranslator = NULL;
         m_pFilter = NULL;
-        m_aFolder.aContent = ::ucb::Content();
+        m_aFolder.aContent = ::ucbhelper::Content();
         m_aFolder.sURL = String();
     }
 
