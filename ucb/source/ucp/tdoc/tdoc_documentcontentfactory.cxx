@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_documentcontentfactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:01:55 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:17:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,9 +46,7 @@
 
 #include "tdoc_documentcontentfactory.hxx"
 
-using namespace com::sun;
 using namespace com::sun::star;
-
 using namespace tdoc_ucp;
 
 //=========================================================================
@@ -136,7 +134,7 @@ DocumentContentFactory::getSupportedServiceNames_Static()
 //=========================================================================
 
 // virtual
-uno::Reference< star::ucb::XContent > SAL_CALL
+uno::Reference< ucb::XContent > SAL_CALL
 DocumentContentFactory::createDocumentContent(
         const uno::Reference< frame::XModel >& Model )
     throw ( lang::IllegalArgumentException, uno::RuntimeException )
