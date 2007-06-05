@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registerucb.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:40:25 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:56:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ namespace com { namespace sun { namespace star {
 } } }
 namespace rtl { class OUString; }
 
-namespace ucb {
+namespace ucbhelper {
 
 struct ContentProviderRegistrationInfo;
 
