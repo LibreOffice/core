@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:54:28 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:03:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,8 +66,8 @@ using namespace gvfs;
 DynamicResultSet::DynamicResultSet(
     const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
     const rtl::Reference< Content >& rxContent,
-    const com::sun::star::ucb::OpenCommandArgument2& rCommand,
-    const uno::Reference<com::sun::star::ucb::XCommandEnvironment >& rxEnv )
+    const ucb::OpenCommandArgument2& rCommand,
+    const uno::Reference< ucb::XCommandEnvironment >& rxEnv )
     : ResultSetImplHelper( rxSMgr, rCommand ),
       m_xContent( rxContent ),
       m_xEnv( rxEnv )
@@ -76,12 +76,12 @@ DynamicResultSet::DynamicResultSet(
 void DynamicResultSet::initStatic()
 {
     m_xResultSet1
-        = new ::ucb::ResultSet( m_xSMgr,
-                    m_aCommand.Properties,
-                    new DataSupplier( m_xSMgr,
-                              m_xContent,
-                              m_aCommand.Mode ),
-                    m_xEnv );
+        = new ::ucbhelper::ResultSet( m_xSMgr,
+                                      m_aCommand.Properties,
+                                      new DataSupplier( m_xSMgr,
+                                                        m_xContent,
+                                                        m_aCommand.Mode ),
+                                      m_xEnv );
 }
 void DynamicResultSet::initDynamic()
 {
@@ -98,11 +98,11 @@ void DynamicResultSet::initDynamic()
 
 struct ResultListEntry
 {
-    rtl::OUString                                             aId;
-    uno::Reference< com::sun::star::ucb::XContentIdentifier > xId;
-    uno::Reference< com::sun::star::ucb::XContent >           xContent;
-    uno::Reference< sdbc::XRow >                              xRow;
-    GnomeVFSFileInfo                                          aInfo;
+    rtl::OUString                             aId;
+    uno::Reference< ucb::XContentIdentifier > xId;
+    uno::Reference< ucb::XContent >           xContent;
+    uno::Reference< sdbc::XRow >              xRow;
+    GnomeVFSFileInfo                          aInfo;
 
     ResultListEntry( const GnomeVFSFileInfo *fileInfo)
     {
@@ -173,11 +173,11 @@ DataSupplier::~DataSupplier()
 }
 
 // virtual
-rtl::OUString DataSupplier::queryContentIdentifierString( sal_Int32 nIndex )
+rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( nIndex < sal::static_int_cast<sal_Int32>(m_pImpl->m_aResults.size()) ) {
+    if ( nIndex < m_pImpl->m_aResults.size() ) {
         rtl::OUString aId = m_pImpl->m_aResults[ nIndex ]->aId;
         if ( aId.getLength() ) // cached
             return aId;
@@ -204,13 +204,13 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_Int32 nIndex )
 }
 
 // virtual
-uno::Reference< com::sun::star::ucb::XContentIdentifier >
-DataSupplier::queryContentIdentifier( sal_Int32 nIndex )
+uno::Reference< ucb::XContentIdentifier >
+DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( nIndex < sal::static_int_cast<sal_Int32>(m_pImpl->m_aResults.size()) ) {
-        uno::Reference< com::sun::star::ucb::XContentIdentifier > xId
+    if ( nIndex < m_pImpl->m_aResults.size() ) {
+        uno::Reference< ucb::XContentIdentifier > xId
             = m_pImpl->m_aResults[ nIndex ]->xId;
         if ( xId.is() ) // Already cached.
             return xId;
@@ -218,29 +218,29 @@ DataSupplier::queryContentIdentifier( sal_Int32 nIndex )
 
     rtl::OUString aId = queryContentIdentifierString( nIndex );
     if ( aId.getLength() ) {
-        uno::Reference< com::sun::star::ucb::XContentIdentifier > xId
-            = new ::ucb::ContentIdentifier( aId );
+        uno::Reference< ucb::XContentIdentifier > xId
+            = new ::ucbhelper::ContentIdentifier( aId );
         m_pImpl->m_aResults[ nIndex ]->xId = xId;
         return xId;
     }
 
-    return uno::Reference< com::sun::star::ucb::XContentIdentifier >();
+    return uno::Reference< ucb::XContentIdentifier >();
 }
 
 // virtual
-uno::Reference< com::sun::star::ucb::XContent >
-DataSupplier::queryContent( sal_Int32 nIndex )
+uno::Reference< ucb::XContent >
+DataSupplier::queryContent( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( nIndex < sal::static_int_cast<sal_Int32>(m_pImpl->m_aResults.size()) ) {
-        uno::Reference< com::sun::star::ucb::XContent > xContent
+    if ( nIndex < m_pImpl->m_aResults.size() ) {
+        uno::Reference< ucb::XContent > xContent
             = m_pImpl->m_aResults[ nIndex ]->xContent;
         if ( xContent.is() ) // Already cached.
             return xContent;
     }
 
-    uno::Reference< com::sun::star::ucb::XContentIdentifier > xId
+    uno::Reference< ucb::XContentIdentifier > xId
         = queryContentIdentifier( nIndex );
     if ( xId.is() ) {
         try
@@ -249,34 +249,34 @@ DataSupplier::queryContent( sal_Int32 nIndex )
             // It would be really nice to propagate this information
             // to the Content, but we can't then register it with the
             // ContentProvider, and the ucbhelper hinders here.
-            uno::Reference< com::sun::star::ucb::XContent > xContent
+            uno::Reference< ucb::XContent > xContent
                 = m_pImpl->m_xContent->getProvider()->queryContent( xId );
             m_pImpl->m_aResults[ nIndex ]->xContent = xContent;
             return xContent;
 
         }
-        catch ( com::sun::star::ucb::IllegalIdentifierException& ) {
+        catch ( ucb::IllegalIdentifierException& ) {
         }
     }
-    return uno::Reference< com::sun::star::ucb::XContent >();
+    return uno::Reference< ucb::XContent >();
 }
 
 // virtual
-sal_Bool DataSupplier::getResult( sal_Int32 nIndex )
+sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( sal::static_int_cast<sal_Int32>(m_pImpl->m_aResults.size()) > nIndex ) // Result already present.
+    if ( m_pImpl->m_aResults.size() > nIndex ) // Result already present.
         return sal_True;
 
-    if ( getData() && sal::static_int_cast<sal_Int32>(m_pImpl->m_aResults.size()) > nIndex )
+    if ( getData() && m_pImpl->m_aResults.size() > nIndex )
         return sal_True;
 
     return sal_False;
 }
 
 // virtual
-sal_Int32 DataSupplier::totalCount()
+sal_uInt32 DataSupplier::totalCount()
 {
     getData();
 
@@ -286,7 +286,7 @@ sal_Int32 DataSupplier::totalCount()
 }
 
 // virtual
-sal_Int32 DataSupplier::currentCount()
+sal_uInt32 DataSupplier::currentCount()
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
     return m_pImpl->m_aResults.size();
@@ -300,11 +300,11 @@ sal_Bool DataSupplier::isCountFinal()
 }
 
 // virtual
-uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues( sal_Int32 nIndex )
+uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( nIndex < sal::static_int_cast<sal_Int32>(m_pImpl->m_aResults.size()) ) {
+    if ( nIndex < m_pImpl->m_aResults.size() ) {
         uno::Reference< sdbc::XRow > xRow = m_pImpl->m_aResults[ nIndex ]->xRow;
         if ( xRow.is() ) // Already cached.
             return xRow;
@@ -328,11 +328,11 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues( sal_Int32 nIndex
 }
 
 // virtual
-void DataSupplier::releasePropertyValues( sal_Int32 nIndex )
+void DataSupplier::releasePropertyValues( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( nIndex < sal::static_int_cast<sal_Int32>(m_pImpl->m_aResults.size()) )
+    if ( nIndex < m_pImpl->m_aResults.size() )
         m_pImpl->m_aResults[ nIndex ]->xRow = uno::Reference< sdbc::XRow >();
 }
 
@@ -343,7 +343,7 @@ void DataSupplier::close()
 
 // virtual
 void DataSupplier::validate()
-    throw( com::sun::star::ucb::ResultSetException )
+    throw( ucb::ResultSetException )
 {
 }
 
@@ -383,19 +383,19 @@ sal_Bool DataSupplier::getData()
                 continue;
 
             switch ( m_pImpl->m_nOpenMode ) {
-            case com::sun::star::ucb::OpenMode::FOLDERS:
+            case ucb::OpenMode::FOLDERS:
                 if ( !(fileInfo.valid_fields & GNOME_VFS_FILE_INFO_FIELDS_TYPE) ||
                      fileInfo.type != GNOME_VFS_FILE_TYPE_DIRECTORY )
                     continue;
                 break;
 
-            case com::sun::star::ucb::OpenMode::DOCUMENTS:
+            case ucb::OpenMode::DOCUMENTS:
                 if ( !(fileInfo.valid_fields & GNOME_VFS_FILE_INFO_FIELDS_TYPE) ||
                      fileInfo.type != GNOME_VFS_FILE_TYPE_REGULAR )
                     continue;
                 break;
 
-            case com::sun::star::ucb::OpenMode::ALL:
+            case ucb::OpenMode::ALL:
             default:
                 break;
             }
