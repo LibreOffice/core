@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provider.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:49:04 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:04:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 
 namespace gvfs {
 
-class ContentProvider : public ::ucb::ContentProviderImplHelper
+class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
 {
 public:
     ContentProvider( const ::com::sun::star::uno::Reference<
