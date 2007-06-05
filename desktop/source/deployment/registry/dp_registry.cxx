@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_registry.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:43:11 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:06:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -454,7 +454,7 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
     OUString mediaType(mediaType_);
     if (mediaType.getLength() == 0)
     {
-        ::ucb::Content ucbContent;
+        ::ucbhelper::Content ucbContent;
         if (create_ucb_content(
                 &ucbContent, url, xCmdEnv, false /* no throw */ ))
         {
