@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SvXMLAutoCorrectImport.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:33:46 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:34:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,16 +49,16 @@
 #include <xmloff/xmltoken.hxx>
 #endif
 
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::rtl;
+
 
 static OUString sBlockList ( RTL_CONSTASCII_USTRINGPARAM ( "_block-list" ) );
 
 // #110680#
 SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     SvxAutocorrWordList *pNewAutocorr_List,
     SvxAutoCorrect &rNewAutoCorrect,
     const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rNewStorage)
@@ -80,7 +80,7 @@ SvXMLAutoCorrectImport::~SvXMLAutoCorrectImport ( void ) throw ()
 SvXMLImportContext *SvXMLAutoCorrectImport::CreateContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
 
@@ -106,7 +106,7 @@ SvXMLWordListContext::SvXMLWordListContext(
 SvXMLImportContext *SvXMLWordListContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference< xml::sax::XAttributeList > & xAttrList )
+    const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
 
@@ -179,7 +179,7 @@ SvXMLWordContext::~SvXMLWordContext ( void )
 
 // #110680#
 SvXMLExceptionListImport::SvXMLExceptionListImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     SvStringsISortDtor & rNewList )
 :   SvXMLImport( xServiceFactory ),
     rList (rNewList)
@@ -197,7 +197,7 @@ SvXMLExceptionListImport::~SvXMLExceptionListImport ( void ) throw ()
 SvXMLImportContext *SvXMLExceptionListImport::CreateContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
 
@@ -223,7 +223,7 @@ SvXMLExceptionListContext::SvXMLExceptionListContext(
 SvXMLImportContext *SvXMLExceptionListContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference< xml::sax::XAttributeList > & xAttrList )
+    const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
 
