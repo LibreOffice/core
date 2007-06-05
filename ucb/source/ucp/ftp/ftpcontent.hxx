@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftpcontent.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:32:04 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:59:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 #ifndef _FTP_FTPCONTENT_HXX
 #define _FTP_FTPCONTENT_HXX
 
-#include <vos/ref.hxx>
 #include <ucbhelper/contenthelper.hxx>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/XContentCreator.hpp>
@@ -59,7 +58,7 @@ namespace ftp
 //=========================================================================
 
 // UNO service name for the content.
-#define MYUCP_CONTENT_SERVICE_NAME "com.sun.star.ucb.FTPContent"
+#define FTP_CONTENT_SERVICE_NAME "com.sun.star.ucb.FTPContent"
 
 //=========================================================================
 
@@ -81,7 +80,7 @@ namespace ftp
 //=========================================================================
 
     class FTPContent
-        : public ::ucb::ContentImplHelper,
+        : public ::ucbhelper::ContentImplHelper,
           public com::sun::star::ucb::XContentCreator
     {
     public:
