@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pkgservices.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:00:30 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:14:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,27 +50,27 @@
 #include "pkgprovider.hxx"
 #endif
 
-using namespace rtl;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::registry;
+using namespace com::sun::star;
+
+namespace {
 
 //=========================================================================
-static sal_Bool writeInfo( void * pRegistryKey,
-                           const OUString & rImplementationName,
-                              Sequence< OUString > const & rServiceNames )
+sal_Bool writeInfo(
+    void * pRegistryKey,
+    const rtl::OUString & rImplementationName,
+    uno::Sequence< rtl::OUString > const & rServiceNames )
 {
-    OUString aKeyName( OUString::createFromAscii( "/" ) );
+    rtl::OUString aKeyName( rtl::OUString::createFromAscii( "/" ) );
     aKeyName += rImplementationName;
-    aKeyName += OUString::createFromAscii( "/UNO/SERVICES" );
+    aKeyName += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
 
-    Reference< XRegistryKey > xKey;
+    uno::Reference< registry::XRegistryKey > xKey;
     try
     {
-        xKey = static_cast< XRegistryKey * >(
+        xKey = static_cast< registry::XRegistryKey * >(
                                     pRegistryKey )->createKey( aKeyName );
     }
-    catch ( InvalidRegistryException const & )
+    catch ( registry::InvalidRegistryException const & )
     {
     }
 
@@ -85,7 +85,7 @@ static sal_Bool writeInfo( void * pRegistryKey,
         {
             xKey->createKey( rServiceNames[ n ] );
         }
-        catch ( InvalidRegistryException const & )
+        catch ( registry::InvalidRegistryException const & )
         {
             bSuccess = sal_False;
             break;
@@ -93,6 +93,8 @@ static sal_Bool writeInfo( void * pRegistryKey,
     }
     return bSuccess;
 }
+
+} // namespace
 
 //=========================================================================
 extern "C" void SAL_CALL component_getImplementationEnvironment(
@@ -122,9 +124,9 @@ extern "C" void * SAL_CALL component_getFactory(
 {
     void * pRet = 0;
 
-    Reference< XMultiServiceFactory > xSMgr(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ) );
-    Reference< XSingleServiceFactory > xFactory;
+    uno::Reference< lang::XMultiServiceFactory > xSMgr(
+        reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
+    uno::Reference< lang::XSingleServiceFactory > xFactory;
 
     //////////////////////////////////////////////////////////////////////
     // Create factory, if implementation name matches.
