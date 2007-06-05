@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gfxlink.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:00:51 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:47:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -425,7 +425,7 @@ ImpSwap::ImpSwap( BYTE* pData, ULONG nDataSize ) :
                 {
                     try
                     {
-                        ::ucb::Content aCnt( maURL.GetMainURL( INetURLObject::NO_DECODE ),
+                        ::ucbhelper::Content aCnt( maURL.GetMainURL( INetURLObject::NO_DECODE ),
                                              ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
                         aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
@@ -459,7 +459,7 @@ ImpSwap::~ImpSwap()
     {
         try
         {
-            ::ucb::Content aCnt( maURL.GetMainURL( INetURLObject::NO_DECODE ),
+            ::ucbhelper::Content aCnt( maURL.GetMainURL( INetURLObject::NO_DECODE ),
                                  ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
             aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
