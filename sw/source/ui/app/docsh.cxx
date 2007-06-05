@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 13:03:50 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:40:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -784,8 +784,8 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
         if( !pHtmlOpt->IsStarBasic() && pHtmlOpt->IsStarBasicWarning() && HasBasic() )
         {
-            Reference< XLibraryContainer > xLibCont(GetBasicContainer(), UNO_QUERY);
-            Reference< XNameAccess > xLib;
+            uno::Reference< XLibraryContainer > xLibCont(GetBasicContainer(), UNO_QUERY);
+            uno::Reference< XNameAccess > xLib;
             Sequence<rtl::OUString> aNames = xLibCont->getElementNames();
             const rtl::OUString* pNames = aNames.getConstArray();
             for(sal_Int32 nLib = 0; nLib < aNames.getLength(); nLib++)
