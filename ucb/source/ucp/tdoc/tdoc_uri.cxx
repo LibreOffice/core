@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_uri.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:06:27 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:18:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@ void Uri::init() const
             else
                 m_aName = m_aUri.copy( nLastSlash + 1 );
 
-            m_aDecodedName = ::ucb::urihelper::decodeSegment( m_aName );
+            m_aDecodedName = ::ucb_impl::urihelper::decodeSegment( m_aName );
 
             sal_Int32 nSlash = m_aPath.indexOf( '/', 1 );
             if ( nSlash == -1 )
