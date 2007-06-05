@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:29:46 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:29:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,9 +275,6 @@
 // <--
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::container;
 using namespace ::rtl;
 
 SV_IMPL_PTRARR(SwColumns,SwColumn*)
@@ -1697,8 +1694,8 @@ BOOL SwFmtAnchor::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
                 SwFrmFmt* pFmt = pCntntAnchor->nNode.GetNode().GetFlyFmt();
                 if(pFmt)
                 {
-                    Reference<XNamed> xNamed = SwXFrames::GetObject( *pFmt, FLYCNTTYPE_FRM );
-                    Reference<XTextFrame> xRet(xNamed, UNO_QUERY);
+                    uno::Reference<container::XNamed> xNamed = SwXFrames::GetObject( *pFmt, FLYCNTTYPE_FRM );
+                    uno::Reference<text::XTextFrame> xRet(xNamed, uno::UNO_QUERY);
                     rVal <<= xRet;
                 }
             }
@@ -1868,7 +1865,7 @@ BOOL SwFmtURL::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             break;
         case MID_URL_CLIENTMAP:
         {
-            Reference< XInterface > xInt;
+            uno::Reference< uno::XInterface > xInt;
             if(pMap)
             {
                 xInt = SvUnoImageMap_createInstance( *pMap, lcl_GetSupportedMacroItems() );
@@ -1878,7 +1875,7 @@ BOOL SwFmtURL::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
                 ImageMap aEmptyMap;
                 xInt = SvUnoImageMap_createInstance( aEmptyMap, lcl_GetSupportedMacroItems() );
             }
-            Reference< XIndexContainer > xCont(xInt, UNO_QUERY);
+            uno::Reference< container::XIndexContainer > xCont(xInt, uno::UNO_QUERY);
             rVal <<= xCont;
         }
         break;
@@ -1925,7 +1922,7 @@ BOOL SwFmtURL::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_URL_CLIENTMAP:
         {
-            Reference<XIndexContainer> xCont;
+            uno::Reference<container::XIndexContainer> xCont;
             if(!rVal.hasValue())
                 DELETEZ(pMap);
             else if(rVal >>= xCont)
@@ -2321,8 +2318,7 @@ SwTextGridItem& SwTextGridItem::operator=( const SwTextGridItem& rCpy )
     return *this;
 }
 
-BOOL SwTextGridItem::QueryValue( com::sun::star::uno::Any& rVal,
-                                 BYTE nMemberId ) const
+BOOL SwTextGridItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     BOOL bRet = TRUE;
 
@@ -2357,13 +2353,13 @@ BOOL SwTextGridItem::QueryValue( com::sun::star::uno::Any& rVal,
             switch( GetGridType() )
             {
                 case GRID_NONE:
-                    rVal <<= TextGridMode::NONE;
+                    rVal <<= text::TextGridMode::NONE;
                     break;
                 case GRID_LINES_ONLY:
-                    rVal <<= TextGridMode::LINES;
+                    rVal <<= text::TextGridMode::LINES;
                     break;
                 case GRID_LINES_CHARS:
-                    rVal <<= TextGridMode::LINES_AND_CHARS;
+                    rVal <<= text::TextGridMode::LINES_AND_CHARS;
                     break;
                 default:
                     DBG_ERROR("unknown SwTextGrid value");
@@ -2380,8 +2376,7 @@ BOOL SwTextGridItem::QueryValue( com::sun::star::uno::Any& rVal,
     return bRet;
 }
 
-BOOL SwTextGridItem::PutValue( const com::sun::star::uno::Any& rVal,
-                               BYTE nMemberId )
+BOOL SwTextGridItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     BOOL bRet = TRUE;
     switch( nMemberId & ~CONVERT_TWIPS )
@@ -2437,13 +2432,13 @@ BOOL SwTextGridItem::PutValue( const com::sun::star::uno::Any& rVal,
             {
                 switch( nTmp )
                 {
-                    case TextGridMode::NONE:
+                    case text::TextGridMode::NONE:
                         SetGridType( GRID_NONE );
                         break;
-                    case TextGridMode::LINES:
+                    case text::TextGridMode::LINES:
                         SetGridType( GRID_LINES_ONLY );
                         break;
-                    case TextGridMode::LINES_AND_CHARS:
+                    case text::TextGridMode::LINES_AND_CHARS:
                         SetGridType( GRID_LINES_CHARS );
                         break;
                     default:
