@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2007-01-31 08:40:05 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 18:02:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,13 +66,11 @@ SLOFILES1=\
     $(SLO)$/ftpresultsetbase.obj \
     $(SLO)$/ftpresultsetI.obj \
     $(SLO)$/ftploaderthread.obj  \
-    $(SLO)$/ftpdownloadthread.obj  \
     $(SLO)$/ftpinpstr.obj	\
     $(SLO)$/ftpdirp.obj     \
     $(SLO)$/ftpcfunc.obj     \
     $(SLO)$/ftpurl.obj     \
-    $(SLO)$/ftpintreq.obj     \
-    $(SLO)$/debughelper.obj
+    $(SLO)$/ftpintreq.obj
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES1)
@@ -98,17 +96,6 @@ SHL1LIBS= \
 # --- Def-File ---------------------------------------------------------
 
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=	$(TARGET).dxp
-DEF1DES=UCB Ftp Content Provider
-
-.IF "$(COMPHELPERLIB)"==""
-.IF "$(GUI)" == "UNX"
-COMPHELPERLIB=-licomphelp2
-.ENDIF # unx
-.IF "$(GUI)"=="WNT"
-COMPHELPERLIB=icomphelp2.lib
-.ENDIF # wnt
-.ENDIF
 
 .INCLUDE: target.mk
 
