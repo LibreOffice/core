@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:40:02 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 13:56:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,7 +267,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::scanner;
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 #define C2S(cChar) String::CreateFromAscii(cChar)
