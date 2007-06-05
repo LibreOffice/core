@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:00:22 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:22:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,9 +50,6 @@
 #ifndef _COM_SUN_STAR_UCB_XCONTENTACCESS_HPP_
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SQLC_XROW_HPP_
-#include <com/sun/star/sdbc/XRow.hpp>
-#endif
 #ifndef _SV_CONVERTER_HXX_
 #include <svtools/converter.hxx>
 #endif
@@ -78,9 +75,6 @@
 #include <rtl/math.hxx>
 #endif
 #include <stdio.h>      //sprintf
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
-#endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
@@ -113,7 +107,6 @@ using namespace ::comphelper;
 using namespace connectivity;
 using namespace connectivity::flat;
 using namespace connectivity::file;
-using namespace ucb;
 using namespace ::cppu;
 using namespace utl;
 using namespace ::com::sun::star::uno;
