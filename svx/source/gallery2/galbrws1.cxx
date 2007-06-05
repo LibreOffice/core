@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:49:15 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:35:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,10 +61,8 @@
 // - Namespaces -
 // --------------
 
-using namespace ::ucb;
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::ucb;
 
 // -----------------
 // - GalleryButton -
@@ -247,7 +245,7 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
 
     try
     {
-        Content         aCnt( pThm->GetThmURL().GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< XCommandEnvironment >() );
+        ::ucbhelper::Content aCnt( pThm->GetThmURL().GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
         util::DateTime  aDateTimeModified;
         DateTime        aDateTime;
 
@@ -256,13 +254,13 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
         rData.aThemeChangeDate = aDateTime;
         rData.aThemeChangeTime = aDateTime;
     }
-    catch( const ContentCreationException& )
+    catch( const ucb::ContentCreationException& )
     {
     }
-    catch( const ::com::sun::star::uno::RuntimeException& )
+    catch( const uno::RuntimeException& )
     {
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const uno::Exception& )
     {
     }
 }
