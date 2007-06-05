@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shell.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-15 14:34:56 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:58:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,11 +54,11 @@
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
+
+#include "osl/mutex.hxx"
+
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
@@ -617,7 +617,7 @@ namespace fileaccess {
             throw();
 
         // General
-        vos::OMutex m_aMutex;
+        osl::Mutex m_aMutex;
         ContentMap  m_aContent;
 
         // Default properties
