@@ -4,9 +4,9 @@
  *
  *  $RCSfile: providerhelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:29:47 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:50:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,12 +54,10 @@
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
-#endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
-#endif
+
+#include "osl/mutex.hxx"
+#include "rtl/ref.hxx"
+
 #ifndef _UCBHELPER_MACROS_HXX
 #include <ucbhelper/macros.hxx>
 #endif
@@ -74,14 +72,14 @@ namespace com { namespace sun { namespace star { namespace ucb {
     class XPersistentPropertySet;
 } } } }
 
-namespace ucb_impl { struct ContentProviderImplHelper_Impl; }
+namespace ucbhelper_impl { struct ContentProviderImplHelper_Impl; }
 
-namespace ucb {
+namespace ucbhelper {
 
 //=========================================================================
 
 class ContentImplHelper;
-typedef vos::ORef< ContentImplHelper >ContentImplHelperRef;
+typedef rtl::Reference< ContentImplHelper > ContentImplHelperRef;
 typedef std::list< ContentImplHelperRef > ContentRefList;
 
 /**
@@ -105,10 +103,10 @@ class UCBHELPER_DLLPUBLIC ContentProviderImplHelper : public cppu::OWeakObject,
 {
     friend class ContentImplHelper;
 
-    ucb_impl::ContentProviderImplHelper_Impl* m_pImpl;
+    ucbhelper_impl::ContentProviderImplHelper_Impl* m_pImpl;
 
 protected:
-    vos::OMutex m_aMutex;
+    osl::Mutex m_aMutex;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory >  m_xSMgr;
 
@@ -132,7 +130,7 @@ protected:
       * @return the content with the given identifier, if it exists or 0, if it
       *         does not exist.
       */
-    vos::ORef< ContentImplHelper >
+    rtl::Reference< ContentImplHelper >
     queryExistingContent( const ::com::sun::star::uno::Reference<
                    ::com::sun::star::ucb::XContentIdentifier >& Identifier );
 
@@ -144,7 +142,7 @@ protected:
       * @return the content with the given URL, if it exists or 0, if it
       *         does not exist.
       */
-    vos::ORef< ContentImplHelper >
+    rtl::Reference< ContentImplHelper >
     queryExistingContent( const ::rtl::OUString& rURL );
 
 public:
@@ -222,7 +220,7 @@ public:
       *
       * @return the mutex.
       */
-    vos::OMutex& getContentListMutex() { return m_aMutex; }
+    osl::Mutex& getContentListMutex() { return m_aMutex; }
 
     /**
       * This method fills a list with all contents existing at calling time.
@@ -287,6 +285,6 @@ public:
                                           sal_Bool bRecursive );
 };
 
-} // namespace ucb
+} // namespace ucbhelper
 
 #endif /* !_UCBHELPER_PROVIDERHELPER_HXX */
