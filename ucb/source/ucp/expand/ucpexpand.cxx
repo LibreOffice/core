@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucpexpand.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:45:48 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:54:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,8 +56,6 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ucb;
 using ::rtl::OUString;
 
 namespace
@@ -69,14 +67,14 @@ struct MutexHolder
 };
 
 typedef ::cppu::WeakComponentImplHelper2<
-    lang::XServiceInfo, XContentProvider > t_impl_helper;
+    lang::XServiceInfo, ucb::XContentProvider > t_impl_helper;
 
 //==============================================================================
 class ExpandContentProviderImpl : protected MutexHolder, public t_impl_helper
 {
-    Reference< util::XMacroExpander > m_xMacroExpander;
+    uno::Reference< util::XMacroExpander > m_xMacroExpander;
     OUString expandUri(
-        Reference< XContentIdentifier > const & xIdentifier ) const;
+        uno::Reference< ucb::XContentIdentifier > const & xIdentifier ) const;
 
 protected:
     inline void check() const;
@@ -84,31 +82,31 @@ protected:
 
 public:
     inline ExpandContentProviderImpl(
-        Reference< XComponentContext > const & xComponentContext )
+        uno::Reference< uno::XComponentContext > const & xComponentContext )
         : t_impl_helper( m_mutex ),
           m_xMacroExpander(
               xComponentContext->getValueByName(
                   OUSTR("/singletons/com.sun.star.util.theMacroExpander") ),
-              UNO_QUERY_THROW )
+              uno::UNO_QUERY_THROW )
         {}
     virtual ~ExpandContentProviderImpl() throw ();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (RuntimeException);
+        throw (uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
-        throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (RuntimeException);
+        throw (uno::RuntimeException);
+    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw (uno::RuntimeException);
 
     // XContentProvider
-    virtual Reference< XContent > SAL_CALL queryContent(
-        Reference< XContentIdentifier > const & xIdentifier )
-        throw (IllegalIdentifierException, RuntimeException);
+    virtual uno::Reference< ucb::XContent > SAL_CALL queryContent(
+        uno::Reference< ucb::XContentIdentifier > const & xIdentifier )
+        throw (ucb::IllegalIdentifierException, uno::RuntimeException);
     virtual sal_Int32 SAL_CALL compareContentIds(
-        Reference< XContentIdentifier > const & xId1,
-        Reference< XContentIdentifier > const & xId2 )
-        throw (RuntimeException);
+        uno::Reference< ucb::XContentIdentifier > const & xId1,
+        uno::Reference< ucb::XContentIdentifier > const & xId2 )
+        throw (uno::RuntimeException);
 };
 
 //______________________________________________________________________________
@@ -137,9 +135,9 @@ void ExpandContentProviderImpl::disposing()
 }
 
 //==============================================================================
-static Reference< XInterface > SAL_CALL create(
-    Reference< XComponentContext > const & xComponentContext )
-    SAL_THROW( (Exception) )
+static uno::Reference< uno::XInterface > SAL_CALL create(
+    uno::Reference< uno::XComponentContext > const & xComponentContext )
+    SAL_THROW( (uno::Exception) )
 {
     return static_cast< ::cppu::OWeakObject * >(
         new ExpandContentProviderImpl( xComponentContext ) );
@@ -152,27 +150,27 @@ static OUString SAL_CALL implName()
 }
 
 //==============================================================================
-static Sequence< OUString > SAL_CALL supportedServices()
+static uno::Sequence< OUString > SAL_CALL supportedServices()
 {
     OUString names [] = {
         OUSTR("com.sun.star.ucb.ExpandContentProvider"),
         OUSTR("com.sun.star.ucb.ContentProvider")
     };
-    return Sequence< OUString >( names, ARLEN(names) );
+    return uno::Sequence< OUString >( names, ARLEN(names) );
 }
 
 // XServiceInfo
 //______________________________________________________________________________
 OUString ExpandContentProviderImpl::getImplementationName()
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
     check();
     return implName();
 }
 
 //______________________________________________________________________________
-Sequence< OUString > ExpandContentProviderImpl::getSupportedServiceNames()
-    throw (RuntimeException)
+uno::Sequence< OUString > ExpandContentProviderImpl::getSupportedServiceNames()
+    throw (uno::RuntimeException)
 {
     check();
     return supportedServices();
@@ -181,10 +179,10 @@ Sequence< OUString > ExpandContentProviderImpl::getSupportedServiceNames()
 //______________________________________________________________________________
 sal_Bool ExpandContentProviderImpl::supportsService(
     OUString const & serviceName )
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
 //     check();
-    Sequence< OUString > supported_services( getSupportedServiceNames() );
+    uno::Sequence< OUString > supported_services( getSupportedServiceNames() );
     OUString const * ar = supported_services.getConstArray();
     for ( sal_Int32 pos = supported_services.getLength(); pos--; )
     {
@@ -196,13 +194,13 @@ sal_Bool ExpandContentProviderImpl::supportsService(
 
 //______________________________________________________________________________
 OUString ExpandContentProviderImpl::expandUri(
-    Reference< XContentIdentifier > const & xIdentifier ) const
+    uno::Reference< ucb::XContentIdentifier > const & xIdentifier ) const
 {
     OUString uri( xIdentifier->getContentIdentifier() );
     if (uri.compareToAscii(
             RTL_CONSTASCII_STRINGPARAM(EXPAND_PROTOCOL ":") ) != 0)
     {
-        throw IllegalIdentifierException(
+        throw ucb::IllegalIdentifierException(
             OUSTR("expected protocol " EXPAND_PROTOCOL "!"),
             static_cast< OWeakObject * >(
                 const_cast< ExpandContentProviderImpl * >(this) ) );
@@ -218,30 +216,30 @@ OUString ExpandContentProviderImpl::expandUri(
 
 // XContentProvider
 //______________________________________________________________________________
-Reference< XContent > ExpandContentProviderImpl::queryContent(
-    Reference< XContentIdentifier > const & xIdentifier )
-    throw (IllegalIdentifierException, RuntimeException)
+uno::Reference< ucb::XContent > ExpandContentProviderImpl::queryContent(
+    uno::Reference< ucb::XContentIdentifier > const & xIdentifier )
+    throw (ucb::IllegalIdentifierException, uno::RuntimeException)
 {
     check();
     OUString uri( expandUri( xIdentifier ) );
 
-    ::ucb::Content ucb_content;
-    if (::ucb::Content::create(
-            uri, Reference< XCommandEnvironment >(), ucb_content ))
+    ::ucbhelper::Content ucb_content;
+    if (::ucbhelper::Content::create(
+            uri, uno::Reference< ucb::XCommandEnvironment >(), ucb_content ))
     {
         return ucb_content.get();
     }
     else
     {
-        return Reference< XContent >();
+        return uno::Reference< ucb::XContent >();
     }
 }
 
 //______________________________________________________________________________
 sal_Int32 ExpandContentProviderImpl::compareContentIds(
-    Reference< XContentIdentifier > const & xId1,
-    Reference< XContentIdentifier > const & xId2 )
-    throw (RuntimeException)
+    uno::Reference< ucb::XContentIdentifier > const & xId1,
+    uno::Reference< ucb::XContentIdentifier > const & xId2 )
+    throw (uno::RuntimeException)
 {
     check();
     try
@@ -250,7 +248,7 @@ sal_Int32 ExpandContentProviderImpl::compareContentIds(
         OUString uri2( expandUri( xId2 ) );
         return uri1.compareTo( uri2 );
     }
-    catch (IllegalIdentifierException & exc)
+    catch (ucb::IllegalIdentifierException & exc)
     {
         (void) exc; // unused
         OSL_ENSURE(
