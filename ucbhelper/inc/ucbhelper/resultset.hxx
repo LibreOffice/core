@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultset.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:11:18 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:50:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,12 +69,10 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
-#endif
-#ifndef _VOS_REFERNCE_HXX_
-#include <vos/refernce.hxx>
-#endif
+
+#include "rtl/ref.hxx"
+#include "salhelper/simplereferenceobject.hxx"
+
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
@@ -85,7 +83,7 @@
 #include "ucbhelper/ucbhelperdllapi.h"
 #endif
 
-namespace ucb {
+namespace ucbhelper {
 
 //=========================================================================
 
@@ -133,7 +131,7 @@ public:
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
             const com::sun::star::uno::Sequence<
                 com::sun::star::beans::Property >& rProperties,
-            const vos::ORef< ResultSetDataSupplier >& rDataSupplier );
+            const rtl::Reference< ResultSetDataSupplier >& rDataSupplier );
     /**
       * Construction.
       *
@@ -149,7 +147,7 @@ public:
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
             const com::sun::star::uno::Sequence<
                 com::sun::star::beans::Property >& rProperties,
-            const vos::ORef< ResultSetDataSupplier >& rDataSupplier,
+            const rtl::Reference< ResultSetDataSupplier >& rDataSupplier,
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XCommandEnvironment >& rxEnv );
     virtual ~ResultSet();
@@ -434,7 +432,7 @@ public:
       * @param nOld is the old count of rows; must be non-negative.
       * @param nnew is the new count of rows; must be non-negative.
       */
-    void rowCountChanged( sal_Int32 nOld, sal_Int32 nNew );
+    void rowCountChanged( sal_uInt32 nOld, sal_uInt32 nNew );
 
     /**
       * This method should be called by the data supplier for the result set
@@ -469,7 +467,7 @@ public:
  *
  * @see ResultSet
  */
-class ResultSetDataSupplier : public vos::OReference
+class ResultSetDataSupplier : public salhelper::SimpleReferenceObject
 {
     friend class ResultSet;
 
@@ -485,7 +483,7 @@ public:
      *
      * @return the resultset for that the supplier supplies data.
      */
-    vos::ORef< ResultSet > getResultSet() const { return m_pResultSet; }
+    rtl::Reference< ResultSet > getResultSet() const { return m_pResultSet; }
 
     /**
      * This method returns the identifier string of the content at the
@@ -495,7 +493,7 @@ public:
      *               of the supplier; must be non-negative.
      * @return the content's identifier string.
      */
-    virtual rtl::OUString queryContentIdentifierString( sal_Int32 nIndex ) = 0;
+    virtual rtl::OUString queryContentIdentifierString( sal_uInt32 nIndex ) = 0;
 
     /**
      * This method returns the identifier of the content at the specified index.
@@ -506,7 +504,7 @@ public:
      */
     virtual com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >
-    queryContentIdentifier( sal_Int32 nIndex ) = 0;
+    queryContentIdentifier( sal_uInt32 nIndex ) = 0;
 
     /**
      * This method returns the the content at the specified index.
@@ -516,7 +514,7 @@ public:
      * @return the content.
      */
     virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent >
-    queryContent( sal_Int32 nIndex ) = 0;
+    queryContent( sal_uInt32 nIndex ) = 0;
 
     /**
      * This method returns whether there is a content at the specified index.
@@ -525,7 +523,7 @@ public:
      *               of the supplier; must be non-negative.
      * @return true, if there is a content at the given index.
      */
-    virtual sal_Bool getResult( sal_Int32 nIndex ) = 0;
+    virtual sal_Bool getResult( sal_uInt32 nIndex ) = 0;
 
     /**
      * This method returns the total count of objects in the logical data array
@@ -536,7 +534,7 @@ public:
      *
      * @return the total count of objects; will always be non-negative.
      */
-    virtual sal_Int32 totalCount() = 0;
+    virtual sal_uInt32 totalCount() = 0;
 
     /**
      * This method returns the count of objects obtained so far. There is no
@@ -549,7 +547,7 @@ public:
      * @return the count of objects obtained so far; will always be
      * non-negative.
      */
-    virtual sal_Int32 currentCount() = 0;
+    virtual sal_uInt32 currentCount() = 0;
 
     /**
      * This method returns whether the value returned by currentCount() is
@@ -574,7 +572,7 @@ public:
      * @return the object for accessing the property values.
      */
     virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XRow >
-    queryPropertyValues( sal_Int32 nIndex  ) = 0;
+    queryPropertyValues( sal_uInt32 nIndex  ) = 0;
 
     /**
      * This method is called to instruct the supplier to release the (possibly
@@ -583,7 +581,7 @@ public:
      * @param nIndex is the zero-based index within the logical data array
      *               of the supplier.
      */
-    virtual void releasePropertyValues( sal_Int32 nIndex ) = 0;
+    virtual void releasePropertyValues( sal_uInt32 nIndex ) = 0;
 
     /**
      * This method will be called by the resultset implementation in order
