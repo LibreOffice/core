@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contentbroker.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:26:55 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:48:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ namespace com { namespace sun { namespace star { namespace ucb {
 #include "ucbhelper/ucbhelperdllapi.h"
 #endif
 
-namespace ucb
+namespace ucbhelper
 {
 
 class ContentBroker_Impl;
@@ -217,6 +217,6 @@ public:
     getCommandProcessorInterface() const;
 };
 
-} /* namespace ucb */
+} /* namespace ucbhelper */
 
 #endif /* !_UCBHELPER_CONTENTBROKER_HXX */

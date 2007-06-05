@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fileidentifierconverter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:28:11 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:49:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ namespace com { namespace sun { namespace star { namespace ucb {
 } } } }
 namespace rtl { class OUString; }
 
-namespace ucb {
+namespace ucbhelper {
 
 //============================================================================
 /** Get a 'root' URL for the most 'local' file content provider.
