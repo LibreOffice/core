@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:37:39 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:35:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,12 +76,8 @@
 // - Namespaces -
 // --------------
 
-using namespace ::ucb;
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::ucb;
 
 // ------------
 // - SgaTheme -
@@ -1020,7 +1016,7 @@ BOOL GalleryTheme::InsertModel( const FmFormModel& rModel, ULONG nInsertPos )
             pFormModel->BurnInStyleSheetAttributes();
 
             {
-                com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > xDocOut( new utl::OOutputStreamWrapper( aMemStm ) );
+                uno::Reference< io::XOutputStream > xDocOut( new utl::OOutputStreamWrapper( aMemStm ) );
 
                 if( xDocOut.is() )
                     SvxDrawingLayerExport( pFormModel, xDocOut );
@@ -1080,7 +1076,7 @@ BOOL GalleryTheme::GetModelStream( ULONG nPos, SotStorageStreamRef& rxModelStrea
                         aModel.BurnInStyleSheetAttributes();
 
                         {
-                            com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *rxModelStream ) );
+                            uno::Reference< io::XOutputStream > xDocOut( new utl::OOutputStreamWrapper( *rxModelStream ) );
 
                             if( SvxDrawingLayerExport( &aModel, xDocOut ) )
                                 rxModelStream->Commit();
@@ -1190,7 +1186,7 @@ BOOL GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, ULONG
 
     try
     {
-        Content         aCnt( rFileOrDirURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< XCommandEnvironment >() );
+        ::ucbhelper::Content         aCnt( rFileOrDirURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
         sal_Bool        bFolder = false;
 
         aCnt.getPropertyValue( OUString::createFromAscii( "IsFolder" ) ) >>= bFolder;
@@ -1199,11 +1195,11 @@ BOOL GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, ULONG
         {
             uno::Sequence< OUString > aProps( 1 );
             aProps.getArray()[ 0 ] = OUString::createFromAscii( "Url" );
-            uno::Reference< sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, INCLUDE_DOCUMENTS_ONLY ) );
+            uno::Reference< sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
 
             if( xResultSet.is() )
             {
-                uno::Reference< XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
+                uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
 
                 if( xContentAccess.is() )
                 {
@@ -1218,13 +1214,13 @@ BOOL GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, ULONG
         else
             aURLVector.push_back( rFileOrDirURL );
     }
-    catch( const ContentCreationException& )
+    catch( const ucb::ContentCreationException& )
     {
     }
-    catch( const ::com::sun::star::uno::RuntimeException& )
+    catch( const uno::RuntimeException& )
     {
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const uno::Exception& )
     {
     }
 
@@ -1238,7 +1234,7 @@ BOOL GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, ULONG
 
 // -----------------------------------------------------------------------------
 
-BOOL GalleryTheme::InsertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable, ULONG nInsertPos )
+BOOL GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::XTransferable >& rxTransferable, ULONG nInsertPos )
 {
     BOOL bRet = FALSE;
 
