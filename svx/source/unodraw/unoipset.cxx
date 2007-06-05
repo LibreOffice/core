@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoipset.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:13:32 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:36:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,8 +67,6 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
 using namespace ::rtl;
 
 //----------------------------------------------------------------------
@@ -305,7 +303,7 @@ void SvxItemPropertySet::AddUsrAnyForID(const uno::Any& rAny, sal_uInt16 nWID)
 
 //----------------------------------------------------------------------
 void SvxItemPropertySet::ObtainSettingsFromPropertySet(SvxItemPropertySet& rPropSet,
-  SfxItemSet& rSet, Reference< beans::XPropertySet > xSet )
+  SfxItemSet& rSet, uno::Reference< beans::XPropertySet > xSet )
 {
     if(rPropSet.AreThereOwnUsrAnys())
     {
@@ -602,7 +600,7 @@ const SfxItemPropertyMap* SvxItemPropertySet::getPropertyMapEntry(const OUString
 
 //----------------------------------------------------------------------
 
-Reference< ::com::sun::star::beans::XPropertySetInfo >  SvxItemPropertySet::getPropertySetInfo() const
+uno::Reference< beans::XPropertySetInfo >  SvxItemPropertySet::getPropertySetInfo() const
 {
     return SvxInfoSetCache::getCachedPropertySetInfo( _pMap );
 }
@@ -617,7 +615,7 @@ Reference< ::com::sun::star::beans::XPropertySetInfo >  SvxItemPropertySet::getP
 #endif
 
 /** converts the given any with a metric to 100th/mm if needed */
-void SvxUnoConvertToMM( const SfxMapUnit eSourceMapUnit, com::sun::star::uno::Any & rMetric ) throw()
+void SvxUnoConvertToMM( const SfxMapUnit eSourceMapUnit, uno::Any & rMetric ) throw()
 {
     // map the metric of the itempool to 100th mm
     switch(eSourceMapUnit)
@@ -656,7 +654,7 @@ void SvxUnoConvertToMM( const SfxMapUnit eSourceMapUnit, com::sun::star::uno::An
 //----------------------------------------------------------------------
 
 /** converts the given any with a metric from 100th/mm to the given metric if needed */
-void SvxUnoConvertFromMM( const SfxMapUnit eDestinationMapUnit, com::sun::star::uno::Any & rMetric ) throw()
+void SvxUnoConvertFromMM( const SfxMapUnit eDestinationMapUnit, uno::Any & rMetric ) throw()
 {
     switch(eDestinationMapUnit)
     {
