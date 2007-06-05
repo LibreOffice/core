@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 14:38:02 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 11:54:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -173,6 +173,10 @@ SCP1FILES += \
              file_onlineupdate.par
 .ENDIF
 
+.IF "$(OS)"=="MACOSX" && "$(GUIBASE)"=="aqua"
+SCP1FILES += aqua_ooo.par
+.ENDIF
+
 # ------------------------------------------------------------------------
 # OpenOffice.org with JRE
 
@@ -297,6 +301,10 @@ SCP2FILES += \
 SCP2FILES += \
              module_onlineupdate.par   \
              file_onlineupdate.par
+.ENDIF
+
+.IF "$(OS)"=="MACOSX" && "$(GUIBASE)"=="aqua"
+SCP2FILES += aqua_ooo.par
 .ENDIF
 
 # ------------------------------------------------------------------------
