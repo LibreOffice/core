@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-27 09:16:12 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:11:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,8 +51,13 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <comphelper/processfactory.hxx>
 
+using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::script;
+
+using com::sun::star::uno::Reference;
 
 const static String aThisComponent( RTL_CONSTASCII_USTRINGPARAM("ThisComponent") );
 const static String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
