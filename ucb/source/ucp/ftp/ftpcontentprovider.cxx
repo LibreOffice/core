@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftpcontentprovider.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:50:20 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:59:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,10 +66,11 @@ using namespace com::sun::star::beans;
 //=========================================================================
 //=========================================================================
 
-FTPContentProvider::FTPContentProvider(const Reference< XMultiServiceFactory >& rSMgr)
-    : ::ucb::ContentProviderImplHelper(rSMgr),
-             m_ftpLoaderThread(0),
-             m_pProxyDecider(0)
+FTPContentProvider::FTPContentProvider(
+    const Reference< XMultiServiceFactory >& rSMgr)
+: ::ucbhelper::ContentProviderImplHelper(rSMgr),
+  m_ftpLoaderThread(0),
+  m_pProxyDecider(0)
 {
 }
 
@@ -109,9 +110,10 @@ XTYPEPROVIDER_IMPL_3(FTPContentProvider,
 //
 //=========================================================================
 
-XSERVICEINFO_IMPL_1(FTPContentProvider,
-                    rtl::OUString::createFromAscii("com.sun.star.comp.FTPContentProvider"),
-                    rtl::OUString::createFromAscii(MYUCP_CONTENT_PROVIDER_SERVICE_NAME));
+XSERVICEINFO_IMPL_1(
+    FTPContentProvider,
+    rtl::OUString::createFromAscii("com.sun.star.comp.FTPContentProvider"),
+    rtl::OUString::createFromAscii(FTP_CONTENT_PROVIDER_SERVICE_NAME));
 
 //=========================================================================
 //
@@ -139,8 +141,7 @@ FTPContentProvider::queryContent(
     )
 {
     // Check, if a content with given id already exists...
-    Reference<XContent> xContent
-        = queryExistingContent(xCanonicId).getBodyPtr();
+    Reference<XContent> xContent = queryExistingContent(xCanonicId).get();
     if(xContent.is())
         return xContent;
 
@@ -263,7 +264,7 @@ FTPContentProvider::getHttpProvider()
     throw(RuntimeException)
 {
     // used for access to ftp-proxy
-    ucb::ContentBroker *pBroker = ucb::ContentBroker::get();
+    ucbhelper::ContentBroker *pBroker = ucbhelper::ContentBroker::get();
 
     if(pBroker) {
         Reference<XContentProviderManager > xManager(
@@ -276,7 +277,7 @@ FTPContentProvider::getHttpProvider()
         else
             throw RuntimeException(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "bad ucb::ContentBroker")),
+                    "bad ucbhelper::ContentBroker")),
                 *this);
     } else
         return 0;
