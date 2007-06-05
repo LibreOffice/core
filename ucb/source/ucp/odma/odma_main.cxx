@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odma_main.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:58:24 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:10:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,10 @@
  *
  ************************************************************************/
 
+
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
-#ifndef _VOS_PROCESS_HXX_
-#include <vos/process.hxx>
-#endif
+
 #ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
 #endif
@@ -51,9 +50,7 @@
 #define SOFFICE "soffice"
 #endif
 
-using namespace vos;
-
-/** our main program to convert ODMAIDs to URLs
+/** our main program to convert ODMAIDs to ODMA URLs
 */
 
 #if (defined UNX) || (defined OS2)
@@ -63,24 +60,44 @@ void _cdecl main( int argc, char * argv[] )
 #endif
 {
     static ::rtl::OUString sProcess(RTL_CONSTASCII_USTRINGPARAM(SOFFICE));
-    if(argc > 1) // only chang when argument is docid
+    if(argc > 1)
     {
         ::rtl::OUString* pArguments = new ::rtl::OUString[argc-1];
-        for(int i = 1; i < argc;++i)
+        for(int i = 0; i < argc-1; ++i)
         {
-            pArguments[i] = ::rtl::OUString::createFromAscii(argv[1]);
-            if( pArguments[i].matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(ODMA_URL_ODMAID)))
+            pArguments[i] = ::rtl::OUString::createFromAscii(argv[i+1]);
+            if( pArguments[i].matchIgnoreAsciiCaseAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM(ODMA_URL_ODMAID)))
             {
-                ::rtl::OUString sArgument = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODMA_URL_SCHEME ODMA_URL_SHORT "/"));
+                ::rtl::OUString sArgument
+                      = ::rtl::OUString(
+                          RTL_CONSTASCII_USTRINGPARAM(
+                              ODMA_URL_SCHEME ODMA_URL_SHORT "/"));
                 sArgument += pArguments[i];
                 pArguments[i] = sArgument;
             }
         }
-        {
-            OArgumentList aList(pArguments,argc-1);
-            OProcess aProcess( sProcess );
-            aProcess.execute(OProcess::TOption_Detached,aList);
-        }
+
+        rtl_uString ** ustrArgumentList = new rtl_uString * [argc-1];
+        for (int i = 0; i < argc-1; i++)
+            ustrArgumentList[i] = pArguments[i].pData;
+
+        oslProcess  aProcess;
+
+        if ( osl_Process_E_None == osl_executeProcess(
+                 sProcess.pData,
+                 ustrArgumentList,
+                 argc-1,
+                 osl_Process_DETACHED,
+                 NULL,
+                 NULL,
+                 NULL,
+                 0,
+                 &aProcess )
+        )
+            osl_freeProcessHandle( aProcess );
+
+        delete [] ustrArgumentList;
         delete [] pArguments;
     }
 }
