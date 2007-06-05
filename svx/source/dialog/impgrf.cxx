@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impgrf.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:16:47 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:33:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #endif
 
-using namespace ::ucb;
+using namespace ::ucbhelper;
 using namespace com::sun::star::uno;
 
 #include "dialogs.hrc"
