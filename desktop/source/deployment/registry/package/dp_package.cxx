@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_package.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-17 10:32:42 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:07:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -318,7 +318,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     if (mediaType.getLength() == 0)
     {
         // detect media-type:
-        ::ucb::Content ucbContent;
+        ::ucbhelper::Content ucbContent;
         if (create_ucb_content( &ucbContent, url, xCmdEnv ))
         {
             const OUString title( ucbContent.getPropertyValue(
@@ -345,7 +345,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     {
         if (type.EqualsIgnoreCaseAscii("application"))
         {
-            ::ucb::Content ucbContent( url, xCmdEnv );
+            ::ucbhelper::Content ucbContent( url, xCmdEnv );
             if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.package-bundle")) {
                 return new PackageImpl(
                     this, url, ucbContent.getPropertyValue(
@@ -563,7 +563,7 @@ OUString BackendImpl::PackageImpl::getLicenseText(
 {
     try
     {
-        ::ucb::Content descContent(licenseUrl, xCmdEnv);
+        ::ucbhelper::Content descContent(licenseUrl, xCmdEnv);
         css::uno::Reference<css::io::XInputStream> xInput = descContent.openStream();
 
         //read out the complete content and create a string
@@ -948,7 +948,7 @@ void BackendImpl::PackageImpl::exportTo(
     sal_Int32 nameClashAction, Reference<XCommandEnvironment> const & xCmdEnv )
     throw (CommandFailedException, CommandAbortedException, RuntimeException)
 {
-    ::ucb::Content sourceContent( m_url_expanded, xCmdEnv );
+    ::ucbhelper::Content sourceContent( m_url_expanded, xCmdEnv );
     OUString title(newTitle);
     if (title.getLength() == 0)
         sourceContent.getPropertyValue( StrTitle::get() ) >>= title;
@@ -990,21 +990,21 @@ void BackendImpl::PackageImpl::exportTo(
     buf.append( static_cast<sal_Unicode>('/') );
     OUString destFolder( buf.makeStringAndClear() );
 
-    ::ucb::Content destFolderContent( destFolder, xCmdEnv );
+    ::ucbhelper::Content destFolderContent( destFolder, xCmdEnv );
     {
         // transfer every item of folder into zip:
         Reference<sdbc::XResultSet> xResultSet(
             sourceContent.createCursor(
                 Sequence<OUString>(),
-                ::ucb::INCLUDE_FOLDERS_AND_DOCUMENTS ) );
+                ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS ) );
         ProgressLevel progress( xCmdEnv, OUString() );
         while (xResultSet->next())
         {
-            ::ucb::Content subContent(
+            ::ucbhelper::Content subContent(
                 Reference<XContentAccess>(
                     xResultSet, UNO_QUERY_THROW )->queryContent(), xCmdEnv );
             if (! destFolderContent.transferContent(
-                    subContent, ::ucb::InsertOperation_COPY,
+                    subContent, ::ucbhelper::InsertOperation_COPY,
                     OUString(), NameClash::OVERWRITE ))
                 throw RuntimeException( OUSTR("UCB transferContent() failed!"),
                                         static_cast<OWeakObject *>(this) );
@@ -1013,7 +1013,7 @@ void BackendImpl::PackageImpl::exportTo(
     }
 
     // assure META-INF folder:
-    ::ucb::Content metainfFolderContent;
+    ::ucbhelper::Content metainfFolderContent;
     create_folder( &metainfFolderContent,
                    makeURL( destFolderContent.getURL(), OUSTR("META-INF") ),
                    xCmdEnv );
@@ -1057,7 +1057,7 @@ void BackendImpl::PackageImpl::exportTo(
             OUString fullPath;
             if (url_.getLength() > baseURLlen)
                 fullPath = url_.copy( baseURLlen + 1 );
-            ::ucb::Content ucbContent( url_, xCmdEnv );
+            ::ucbhelper::Content ucbContent( url_, xCmdEnv );
             if (ucbContent.getPropertyValue(strIsFolder).get<bool>())
                 fullPath += OUSTR("/");
             Sequence<beans::PropertyValue> attribs( 2 );
@@ -1091,7 +1091,7 @@ void BackendImpl::PackageImpl::exportTo(
             xPipe, comphelper::containerToSequence(manifest) );
 
         // write buffered pipe data to content:
-        ::ucb::Content manifestContent(
+        ::ucbhelper::Content manifestContent(
             makeURL( metainfFolderContent.getURL(), OUSTR("manifest.xml") ),
             xCmdEnv );
         manifestContent.writeStream(
@@ -1101,7 +1101,7 @@ void BackendImpl::PackageImpl::exportTo(
     else
     {
         // overwrite manifest.xml:
-        ::ucb::Content manifestContent;
+        ::ucbhelper::Content manifestContent;
         if ( ! create_ucb_content(
             &manifestContent,
             makeURL( m_url_expanded, OUSTR("META-INF/manifest.xml") ),
@@ -1112,7 +1112,7 @@ void BackendImpl::PackageImpl::exportTo(
         }
 
         if (! metainfFolderContent.transferContent(
-                manifestContent, ::ucb::InsertOperation_COPY,
+                manifestContent, ::ucbhelper::InsertOperation_COPY,
                 OUString(), NameClash::OVERWRITE ))
             throw RuntimeException( OUSTR("UCB transferContent() failed!"),
                                     static_cast<OWeakObject *>(this) );
@@ -1314,7 +1314,7 @@ void BackendImpl::PackageImpl::scanBundle(
 {
     OSL_ASSERT( !m_legacyBundle );
 
-    ::ucb::Content manifestContent;
+    ::ucbhelper::Content manifestContent;
     if (! create_ucb_content(
             &manifestContent,
             makeURL( m_url_expanded, OUSTR("META-INF/manifest.xml") ),
@@ -1409,7 +1409,7 @@ void BackendImpl::PackageImpl::scanBundle(
 
     if (descrFile.getLength() > 0)
     {
-        ::ucb::Content descrFileContent;
+        ::ucbhelper::Content descrFileContent;
         if (create_ucb_content( &descrFileContent, descrFile,
                                 xCmdEnv, false /* no throw */ ))
         {
@@ -1434,7 +1434,7 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
     Reference<XCommandEnvironment> const & xCmdEnv,
     bool skip_registration )
 {
-    ::ucb::Content ucbContent( url, xCmdEnv );
+    ::ucbhelper::Content ucbContent( url, xCmdEnv );
 
     // check for platform pathes:
     const OUString title( ucbContent.getPropertyValue(
@@ -1450,8 +1450,9 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
 
     OUString ar [] = { StrTitle::get(), OUSTR("IsFolder") };
     Reference<sdbc::XResultSet> xResultSet(
-        ucbContent.createCursor( Sequence<OUString>( ar, ARLEN(ar) ),
-                                 ::ucb::INCLUDE_FOLDERS_AND_DOCUMENTS ) );
+        ucbContent.createCursor(
+            Sequence<OUString>( ar, ARLEN(ar) ),
+            ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS ) );
     while (xResultSet->next())
     {
         checkAborted( abortChannel );
