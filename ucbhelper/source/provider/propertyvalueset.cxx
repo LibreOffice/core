@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyvalueset.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:22:41 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:55:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,9 +62,8 @@
 #include <com/sun/star/script/XTypeConverter.hpp>
 #endif
 
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
-#endif
+#include "osl/diagnose.h"
+#include "osl/mutex.hxx"
 
 #ifndef _UCBHELPER_PROPERTYVALUESET_HXX
 #include <ucbhelper/propertyvalueset.hxx>
@@ -79,9 +78,8 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 using namespace rtl;
-using namespace ucb;
 
-namespace ucb_impl
+namespace ucbhelper_impl
 {
 
 //=========================================================================
@@ -150,11 +148,11 @@ struct PropertyValue
           nDouble(0.0)
         {}
 };
-} // namespace ucb_impl
+} // namespace ucbhelper_impl
 
-using namespace ucb_impl;
+using namespace ucbhelper_impl;
 
-namespace ucb
+namespace ucbhelper
 {
 
 //=========================================================================
@@ -163,11 +161,11 @@ namespace ucb
 //
 //=========================================================================
 
-typedef std::vector< ucb_impl::PropertyValue > PropertyValuesVector;
+typedef std::vector< ucbhelper_impl::PropertyValue > PropertyValuesVector;
 
 class PropertyValues : public PropertyValuesVector {};
 
-} // namespace ucb
+} // namespace ucbhelper
 
 //=========================================================================
 //
@@ -177,7 +175,7 @@ class PropertyValues : public PropertyValuesVector {};
 
 #define GETVALUE_IMPL_TYPE( _type_, _type_name_, _member_name_, _cppu_type_ ) \
                                                                               \
-    vos::OGuard aGuard( m_aMutex );                                           \
+    osl::MutexGuard aGuard( m_aMutex );                                       \
                                                                               \
     _type_ aValue = _type_();   /* default ctor */                            \
                                                                               \
@@ -186,11 +184,12 @@ class PropertyValues : public PropertyValuesVector {};
     if ( ( columnIndex < 1 )                                                  \
          || ( columnIndex > sal_Int32( m_pValues->size() ) ) )                \
     {                                                                         \
-        VOS_ENSURE( sal_False, "PropertyValueSet - index out of range!" );    \
+        OSL_ENSURE( sal_False, "PropertyValueSet - index out of range!" );    \
     }                                                                         \
     else                                                                      \
     {                                                                         \
-        ucb_impl::PropertyValue& rValue = (*m_pValues)[ columnIndex - 1 ];    \
+        ucbhelper_impl::PropertyValue& rValue                                 \
+            = (*m_pValues)[ columnIndex - 1 ];                                \
                                                                               \
         if ( rValue.nOrigValue != NO_VALUE_SET )                              \
         {                                                                     \
@@ -265,15 +264,17 @@ class PropertyValues : public PropertyValuesVector {};
 
 #define SETVALUE_IMPL( _property_, _type_name_, _member_name_, _value_ )      \
                                                                               \
-    vos::OGuard aGuard( m_aMutex );                                           \
+    osl::MutexGuard aGuard( m_aMutex );                                       \
                                                                               \
-    ucb_impl::PropertyValue aNewValue;                                        \
+    ucbhelper_impl::PropertyValue aNewValue;                                  \
     aNewValue.aProperty     = _property_;                                     \
     aNewValue.nPropsSet     = _type_name_;                                    \
     aNewValue.nOrigValue    = _type_name_;                                    \
     aNewValue._member_name_ = _value_;                                        \
                                                                               \
     m_pValues->push_back( aNewValue );
+
+namespace ucbhelper {
 
 //=========================================================================
 //=========================================================================
@@ -490,7 +491,7 @@ Any SAL_CALL PropertyValueSet::getObject(
                                          const Reference< XNameAccess >& )
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     Any aValue;
 
@@ -499,11 +500,12 @@ Any SAL_CALL PropertyValueSet::getObject(
     if ( ( columnIndex < 1 )
          || ( columnIndex > sal_Int32( m_pValues->size() ) ) )
     {
-        VOS_ENSURE( sal_False, "PropertyValueSet - index out of range!" );
+        OSL_ENSURE( sal_False, "PropertyValueSet - index out of range!" );
     }
     else
     {
-        ucb_impl::PropertyValue& rValue = (*m_pValues)[ columnIndex - 1 ];
+        ucbhelper_impl::PropertyValue& rValue
+            = (*m_pValues)[ columnIndex - 1 ];
 
         if ( rValue.nPropsSet & OBJECT_VALUE_SET )
         {
@@ -595,7 +597,7 @@ Any SAL_CALL PropertyValueSet::getObject(
                 case OBJECT_VALUE_SET:
                     // Fall-through is intended!
                 default:
-                    VOS_ENSURE( sal_False,
+                    OSL_ENSURE( sal_False,
                                 "PropertyValueSet::getObject - "
                                 "Wrong original type" );
                     break;
@@ -655,7 +657,7 @@ Reference< XArray > SAL_CALL PropertyValueSet::getArray( sal_Int32 columnIndex )
 sal_Int32 SAL_CALL PropertyValueSet::findColumn( const OUString& columnName )
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     if ( columnName.getLength() )
     {
@@ -677,7 +679,7 @@ sal_Int32 SAL_CALL PropertyValueSet::findColumn( const OUString& columnName )
 
 const Reference< XTypeConverter >& PropertyValueSet::getTypeConverter()
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     if ( !m_bTriedToGetTypeConverter && !m_xTypeConverter.is() )
     {
@@ -688,7 +690,7 @@ const Reference< XTypeConverter >& PropertyValueSet::getTypeConverter()
                                         "com.sun.star.script.Converter" ) ),
                                 UNO_QUERY );
 
-        VOS_ENSURE( m_xTypeConverter.is(),
+        OSL_ENSURE( m_xTypeConverter.is(),
                     "PropertyValueSet::getTypeConverter() - "
                     "Service 'com.sun.star.script.Converter' n/a!" );
     }
@@ -940,3 +942,4 @@ sal_Bool PropertyValueSet::appendPropertySetValue(
     return sal_False;
 }
 
+} // namespace ucbhelper
