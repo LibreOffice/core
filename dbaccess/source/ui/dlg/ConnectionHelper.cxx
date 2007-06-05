@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionHelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 10:47:27 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:41:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -694,17 +694,17 @@ DBG_NAME(OConnectionHelper)
 
 
     //-------------------------------------------------------------------------
-    StringBag OConnectionHelper::getInstalledAdabasDBDirs(const String& _rPath,const ::ucb::ResultSetInclude& _reResultSetInclude)
+    StringBag OConnectionHelper::getInstalledAdabasDBDirs(const String& _rPath,const ::ucbhelper::ResultSetInclude& _reResultSetInclude)
     {
         INetURLObject aNormalizer;
         aNormalizer.SetSmartProtocol(INET_PROT_FILE);
         aNormalizer.SetSmartURL(_rPath);
         String sAdabasConfigDir = aNormalizer.GetMainURL(INetURLObject::NO_DECODE);
 
-        ::ucb::Content aAdabasConfigDir;
+        ::ucbhelper::Content aAdabasConfigDir;
         try
         {
-            aAdabasConfigDir = ::ucb::Content(sAdabasConfigDir, Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+            aAdabasConfigDir = ::ucbhelper::Content(sAdabasConfigDir, Reference< ::com::sun::star::ucb::XCommandEnvironment >());
         }
         catch(::com::sun::star::ucb::ContentCreationException&)
         {
@@ -765,8 +765,8 @@ DBG_NAME(OConnectionHelper)
         StringBag aInstalledDBs;
         // collect the names of the installed databases
         StringBag aConfigDBs,aWrkDBs;
-        aConfigDBs  = getInstalledAdabasDBDirs(sAdabasConfigDir,::ucb::INCLUDE_DOCUMENTS_ONLY);
-        aWrkDBs     = getInstalledAdabasDBDirs(sAdabasWorkDir,::ucb::INCLUDE_FOLDERS_ONLY);
+        aConfigDBs  = getInstalledAdabasDBDirs(sAdabasConfigDir,::ucbhelper::INCLUDE_DOCUMENTS_ONLY);
+        aWrkDBs     = getInstalledAdabasDBDirs(sAdabasWorkDir,::ucbhelper::INCLUDE_FOLDERS_ONLY);
         ConstStringBagIterator aOuter = aConfigDBs.begin();
         for(;aOuter != aConfigDBs.end();++aOuter)
         {
@@ -785,7 +785,7 @@ DBG_NAME(OConnectionHelper)
     // #106016# -------------------------------------------------------------------
     IS_PATH_EXIST OConnectionHelper::pathExists(const ::rtl::OUString& _rURL, sal_Bool bIsFile) const
     {
-        ::ucb::Content aCheckExistence;
+        ::ucbhelper::Content aCheckExistence;
         sal_Bool bExists = sal_False;
         IS_PATH_EXIST eExists = PATH_NOT_EXIST;
         Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler = Reference< ::com::sun::star::task::XInteractionHandler >(
@@ -793,10 +793,10 @@ DBG_NAME(OConnectionHelper)
         OFilePickerInteractionHandler* pHandler = new OFilePickerInteractionHandler(xInteractionHandler);
         xInteractionHandler = pHandler;
 
-        Reference< XCommandEnvironment > xCmdEnv = new ::ucb::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
+        Reference< XCommandEnvironment > xCmdEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
         try
         {
-            aCheckExistence = ::ucb::Content(_rURL, xCmdEnv );
+            aCheckExistence = ::ucbhelper::Content(_rURL, xCmdEnv );
             bExists = bIsFile? aCheckExistence.isDocument(): aCheckExistence.isFolder();
             eExists = bExists? PATH_EXIST: PATH_NOT_EXIST;
         }
@@ -866,7 +866,7 @@ DBG_NAME(OConnectionHelper)
         {
             // the parent content
             Reference< XCommandEnvironment > xEmptyEnv;
-            ::ucb::Content aParent(aParser.GetMainURL(INetURLObject::NO_DECODE), xEmptyEnv);
+            ::ucbhelper::Content aParent(aParser.GetMainURL(INetURLObject::NO_DECODE), xEmptyEnv);
 
             ::rtl::OUString sContentType;
             if ( INET_PROT_FILE == eProtocol )
