@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:22:50 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 18:15:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,6 @@ SHL1STDLIBS=\
     $(CPPULIB) \
     $(SALLIB)  \
     $(SALHELPERLIB)  \
-    $(VOSLIB)  \
     $(UCBHELPERLIB)
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
