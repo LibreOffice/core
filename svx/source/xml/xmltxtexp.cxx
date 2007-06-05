@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltxtexp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:29:31 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:37:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -329,7 +329,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstance( co
 
 }
 
-Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
     return createInstance( ServiceSpecifier );
 }
@@ -399,7 +399,7 @@ sal_Bool SAL_CALL SvxSimpleUnoModel::hasControllersLocked(  ) throw (::com::sun:
 
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > SAL_CALL SvxSimpleUnoModel::getCurrentController(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    Reference< frame::XController > xRet;
+    uno::Reference< frame::XController > xRet;
     return xRet;
 }
 
@@ -409,7 +409,7 @@ void SAL_CALL SvxSimpleUnoModel::setCurrentController( const ::com::sun::star::u
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvxSimpleUnoModel::getCurrentSelection(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    Reference< XInterface > xRet;
+    uno::Reference< XInterface > xRet;
     return xRet;
 }
 
