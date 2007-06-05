@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prov.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-15 14:34:17 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:57:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,9 @@
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
-#endif
+
+#include "osl/mutex.hxx"
+
 #ifndef _UCBHELPER_MACROS_HXX
 #include <ucbhelper/macros.hxx>
 #endif
@@ -257,7 +257,7 @@ namespace fileaccess {
         com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >  m_xMultiServiceFactory;
 
         void SAL_CALL initProperties( void );
-        vos::OMutex   m_aMutex;
+        osl::Mutex   m_aMutex;
         rtl::OUString m_HostName;
         rtl::OUString m_HomeDirectory;
         sal_Int32     m_FileSystemNotation;
