@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directory_ooo.scp,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 12:11:22 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 11:53:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,13 +50,6 @@ End
 #endif
 
 #ifdef MACOSX
-Directory gid_Dir_Bundle_Contents_Macos
-    ParentID = gid_Dir_Bundle_Contents;
-    HostName = "MacOS";
-End
-#endif
-
-#ifdef MACOSX
 Directory gid_Dir_Bundle_Contents_Resources
     ParentID = gid_Dir_Bundle_Contents;
     HostName = "Resources";
@@ -66,10 +59,11 @@ End
 Directory gid_Dir_Program
 #ifndef MACOSX
     ParentID = PD_PROGDIR;
-#else
-    ParentID = gid_Dir_Bundle_Contents_Macos;
-#endif
     DosName = "program";
+#else
+    ParentID = gid_Dir_Bundle_Contents;
+    DosName = "MacOS";
+#endif
 End
 
 Directory gid_Dir_Program_Remote
@@ -131,7 +125,7 @@ Directory gid_Dir_User
 #ifndef MACOSX
     ParentID = PD_PROGDIR;
 #else
-    ParentID = gid_Dir_Bundle_Contents_Macos;
+    ParentID = gid_Dir_Bundle_Contents;
 #endif
     DosName = "presets";
 End
@@ -368,7 +362,7 @@ Directory gid_Dir_Share
 #ifndef MACOSX
     ParentID = PD_PROGDIR;
 #else
-    ParentID = gid_Dir_Bundle_Contents_Macos;
+    ParentID = gid_Dir_Bundle_Contents;
 #endif
     DosName = "share";
 End
@@ -1447,7 +1441,7 @@ Directory gid_Dir_Help
 #ifndef MACOSX
     ParentID = PD_PROGDIR;
 #else
-    ParentID = gid_Dir_Bundle_Contents_Macos;
+    ParentID = gid_Dir_Bundle_Contents;
 #endif
     DosName = "help";
 End
