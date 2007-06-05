@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contentbroker.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:19:39 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:52:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ namespace
 
 } // namespace
 
-namespace ucb
+namespace ucbhelper
 {
 
 //=========================================================================
@@ -327,10 +327,10 @@ bool ContentBroker_Impl::initialize()
 
                     if ( m_xProviderMgr.is() )
                     {
-                        if ( !::ucb::configureUcb( m_xProviderMgr,
-                                                   m_xSMgr,
-                                                   m_aProvData,
-                                                   0 ) )
+                        if ( !configureUcb( m_xProviderMgr,
+                                            m_xSMgr,
+                                            m_aProvData,
+                                            0 ) )
                         {
                             OSL_ENSURE( false, "Failed to configure UCB!" );
                             return false;
@@ -401,5 +401,5 @@ bool ContentBroker_Impl::initialize()
     return true;
 }
 
-} /* namespace ucb */
+} /* namespace ucbhelper */
 
