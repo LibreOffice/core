@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:41:37 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:25:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -410,18 +410,18 @@ const sal_Char sDefunc[] = "object is defunctional";
 const sal_Char sMissingWindow[] = "window is missing";
 
 #define THROW_RUNTIME_EXCEPTION( ifc, msg )                                 \
-    Reference < ifc > xThis( this );                                        \
-    RuntimeException aExcept( OUString( RTL_CONSTASCII_USTRINGPARAM(msg) ), \
-                              xThis );                                      \
+    ::com::sun::star::uno::Reference < ifc > xThis( this );                 \
+    ::com::sun::star::uno::RuntimeException aExcept(                        \
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(msg) ), xThis );       \
     throw aExcept;
 
 #define CHECK_FOR_DEFUNC_THIS( ifc, ths )                                   \
     if( !(GetFrm() && GetMap()) )                                           \
     {                                                                       \
-        Reference < ifc > xThis( ths );                                     \
+        ::com::sun::star::uno::Reference < ifc > xThis( ths );              \
         ::com::sun::star::lang::DisposedException aExcept(                  \
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(sDefunc) ),       \
-                    xThis );                                                \
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(sDefunc) ),        \
+            xThis );                                                        \
         throw aExcept;                                                      \
     }
 
