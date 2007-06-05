@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MiscUtils.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:19:13 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:28:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,7 @@ public:
 
     try
     {
-        ::ucb::Content root( url, NULL );
+        ::ucbhelper::Content root( url, NULL );
         ::rtl::OUString propName =  OUSTR("Title");
         getUCBProperty( root, propName ) >>= title;
     }
@@ -212,7 +212,7 @@ public:
 
     try
     {
-        ::ucb::Content root( url, NULL );
+        ::ucbhelper::Content root( url, NULL );
         ::rtl::OUString propName =  OUSTR("DocumentModel");
         result = getUCBProperty( root, propName );
     }
@@ -232,7 +232,7 @@ public:
 }
 
 
-    static css::uno::Any getUCBProperty( ::ucb::Content& content, ::rtl::OUString& prop )
+    static css::uno::Any getUCBProperty( ::ucbhelper::Content& content, ::rtl::OUString& prop )
 {
     css::uno::Any result;
     try
