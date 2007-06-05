@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:23:36 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:36:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,12 +100,7 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 
-using namespace ::ucb;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::sdbc;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::ucb;
-using namespace com::sun::star::task;
+using namespace com::sun::star;
 using namespace rtl;
 using namespace comphelper;
 using namespace osl;
@@ -116,7 +111,7 @@ DECLARE_LIST( StringList_Impl, OUString* )
     aToolsDT = DateTime( Date( aUnoDT.Day, aUnoDT.Month, aUnoDT.Year ), \
                          Time( aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds, aUnoDT.HundredthSeconds ) );
 
-void AppendDateTime_Impl( const ::com::sun::star::util::DateTime rDT,
+void AppendDateTime_Impl( const util::DateTime rDT,
                           String& rRow, const LocaleDataWrapper& rWrapper )
 {
     DateTime aDT;
@@ -148,24 +143,24 @@ sal_Bool SfxContentHelper::Transfer_Impl( const String& rSource, const String& r
 
     try
     {
-        Content aDestPath( aDestObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-        Reference< ::com::sun::star::ucb::XCommandInfo > xInfo = aDestPath.getCommands();
+        ::ucbhelper::Content aDestPath( aDestObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
+        uno::Reference< ucb::XCommandInfo > xInfo = aDestPath.getCommands();
         OUString aTransferName = OUString::createFromAscii( "transfer" );
         if ( xInfo->hasCommandByName( aTransferName ) )
         {
-            aDestPath.executeCommand( aTransferName, makeAny(
-                ::com::sun::star::ucb::TransferInfo( bMoveData, aSourceObj.GetMainURL( INetURLObject::NO_DECODE ), aName, nNameClash ) ) );
+            aDestPath.executeCommand( aTransferName, uno::makeAny(
+                ucb::TransferInfo( bMoveData, aSourceObj.GetMainURL( INetURLObject::NO_DECODE ), aName, nNameClash ) ) );
         }
         else
         {
             DBG_ERRORFILE( "transfer command not available" );
         }
     }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    catch( ucb::CommandAbortedException& )
     {
         bRet = sal_False;
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
         bRet = sal_False;
@@ -187,22 +182,22 @@ sal_Bool SfxContentHelper::IsDocument( const String& rContent )
 
     try
     {
-        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
         bRet = aCnt.isDocument();
     }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    catch( ucb::CommandAbortedException& )
     {
         DBG_WARNING( "CommandAbortedException" );
     }
-    catch( ::com::sun::star::ucb::IllegalIdentifierException& )
+    catch( ucb::IllegalIdentifierException& )
     {
         DBG_WARNING( "IllegalIdentifierException" );
     }
-    catch( ContentCreationException& )
+    catch( ucb::ContentCreationException& )
     {
         DBG_WARNING( "IllegalIdentifierException" );
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
@@ -219,22 +214,22 @@ sal_Bool SfxContentHelper::IsFolder( const String& rContent )
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
         bRet = aCnt.isFolder();
     }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    catch( ucb::CommandAbortedException& )
     {
         DBG_WARNING( "CommandAbortedException" );
     }
-    catch( ::com::sun::star::ucb::IllegalIdentifierException& )
+    catch( ucb::IllegalIdentifierException& )
     {
         DBG_WARNING( "IllegalIdentifierException" );
     }
-    catch( ContentCreationException& )
+    catch( ucb::ContentCreationException& )
     {
         DBG_WARNING( "IllegalIdentifierException" );
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
@@ -251,17 +246,17 @@ sal_Bool SfxContentHelper::GetTitle( const String& rContent, String& rTitle )
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
         OUString aTemp;
         aCnt.getPropertyValue( OUString::createFromAscii( "Title" ) ) >>= aTemp;
         rTitle = String( aTemp );
         bRet = sal_True;
     }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    catch( ucb::CommandAbortedException& )
     {
         DBG_ERRORFILE( "CommandAbortedException" );
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
@@ -278,15 +273,15 @@ sal_Bool SfxContentHelper::Kill( const String& rContent )
 
     try
     {
-        Content aCnt( aDeleteObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-        aCnt.executeCommand( OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
+        ::ucbhelper::Content aCnt( aDeleteObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
+        aCnt.executeCommand( OUString::createFromAscii( "delete" ), uno::makeAny( sal_Bool( sal_True ) ) );
     }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    catch( ucb::CommandAbortedException& )
     {
         DBG_WARNING( "CommandAbortedException" );
         bRet = sal_False;
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
         bRet = sal_False;
@@ -297,45 +292,45 @@ sal_Bool SfxContentHelper::Kill( const String& rContent )
 
 // -----------------------------------------------------------------------
 
-Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rFolder, sal_Bool bFolder, sal_Bool bSorted )
+uno::Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rFolder, sal_Bool bFolder, sal_Bool bSorted )
 {
     StringList_Impl* pFiles = NULL;
     INetURLObject aFolderObj( rFolder );
     DBG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-        Reference< XResultSet > xResultSet;
-        Sequence< OUString > aProps(2);
+        ::ucbhelper::Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
+        uno::Reference< sdbc::XResultSet > xResultSet;
+        uno::Sequence< OUString > aProps(2);
         OUString* pProps = aProps.getArray();
         pProps[0] = OUString::createFromAscii( "Title" );
         pProps[1] = OUString::createFromAscii( "IsFolder" );
 
         try
         {
-            ResultSetInclude eInclude = bFolder ? INCLUDE_FOLDERS_AND_DOCUMENTS : INCLUDE_DOCUMENTS_ONLY;
+            ::ucbhelper::ResultSetInclude eInclude = bFolder ? ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS : ::ucbhelper::INCLUDE_DOCUMENTS_ONLY;
             if ( !bSorted )
             {
                 xResultSet = aCnt.createCursor( aProps, eInclude );
             }
             else
             {
-                Reference< com::sun::star::ucb::XDynamicResultSet > xDynResultSet;
+                uno::Reference< ucb::XDynamicResultSet > xDynResultSet;
                 xDynResultSet = aCnt.createDynamicCursor( aProps, eInclude );
 
-                Reference < com::sun::star::ucb::XAnyCompareFactory > xFactory;
-                Reference < XMultiServiceFactory > xMgr = getProcessServiceFactory();
-                Reference < com::sun::star::ucb::XSortedDynamicResultSetFactory > xSRSFac(
-                    xMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SortedDynamicResultSetFactory") ), UNO_QUERY );
+                uno::Reference < ucb::XAnyCompareFactory > xFactory;
+                uno::Reference < lang::XMultiServiceFactory > xMgr = getProcessServiceFactory();
+                uno::Reference < ucb::XSortedDynamicResultSetFactory > xSRSFac(
+                    xMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SortedDynamicResultSetFactory") ), uno::UNO_QUERY );
 
-                Sequence< com::sun::star::ucb::NumberedSortingInfo > aSortInfo( 2 );
-                com::sun::star::ucb::NumberedSortingInfo* pInfo = aSortInfo.getArray();
+                uno::Sequence< ucb::NumberedSortingInfo > aSortInfo( 2 );
+                ucb::NumberedSortingInfo* pInfo = aSortInfo.getArray();
                 pInfo[ 0 ].ColumnIndex = 2;
                 pInfo[ 0 ].Ascending   = sal_False;
                 pInfo[ 1 ].ColumnIndex = 1;
                 pInfo[ 1 ].Ascending   = sal_True;
 
-                Reference< com::sun::star::ucb::XDynamicResultSet > xDynamicResultSet;
+                uno::Reference< ucb::XDynamicResultSet > xDynamicResultSet;
                 xDynamicResultSet =
                     xSRSFac->createSortedDynamicResultSet( xDynResultSet, aSortInfo, xFactory );
                 if ( xDynamicResultSet.is() )
@@ -344,11 +339,11 @@ Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rFolder
                 }
             }
         }
-        catch( ::com::sun::star::ucb::CommandAbortedException& )
+        catch( ucb::CommandAbortedException& )
         {
             DBG_ERRORFILE( "createCursor: CommandAbortedException" );
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( uno::Exception& )
         {
             DBG_ERRORFILE( "createCursor: Any other exception" );
         }
@@ -356,7 +351,7 @@ Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rFolder
         if ( xResultSet.is() )
         {
             pFiles = new StringList_Impl;
-            Reference< com::sun::star::ucb::XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+            uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
             try
             {
                 while ( xResultSet->next() )
@@ -366,17 +361,17 @@ Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rFolder
                     pFiles->Insert( pFile, LIST_APPEND );
                 }
             }
-            catch( ::com::sun::star::ucb::CommandAbortedException& )
+            catch( ucb::CommandAbortedException& )
             {
                 DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
             }
-            catch( ::com::sun::star::uno::Exception& )
+            catch( uno::Exception& )
             {
                 DBG_ERRORFILE( "XContentAccess::next(): Any other exception" );
             }
         }
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( uno::Exception& )
     {
         DBG_ERRORFILE( "GetFolderContents: Any other exception" );
     }
@@ -384,7 +379,7 @@ Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rFolder
     if ( pFiles )
     {
         ULONG nCount = pFiles->Count();
-        Sequence < OUString > aRet( nCount );
+        uno::Sequence < OUString > aRet( nCount );
         OUString* pRet = aRet.getArray();
         for ( ULONG i = 0; i < nCount; ++i )
         {
@@ -396,25 +391,25 @@ Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rFolder
         return aRet;
     }
     else
-        return Sequence < OUString > ();
+        return uno::Sequence < OUString > ();
 }
 
 // -----------------------------------------------------------------------
 
-Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String& rFolder, sal_Bool bIsFolder )
+uno::Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String& rFolder, sal_Bool bIsFolder )
 {
     StringList_Impl* pProperties = NULL;
     INetURLObject aFolderObj( rFolder );
     DBG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-        Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
-                    xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY );
+        uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+        uno::Reference< task::XInteractionHandler > xInteractionHandler = uno::Reference< task::XInteractionHandler > (
+                    xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), uno::UNO_QUERY );
 
-        Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), new ::ucb::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() ) );
-        Reference< XResultSet > xResultSet;
-        Sequence< OUString > aProps(5);
+        ::ucbhelper::Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), new ::ucbhelper::CommandEnvironment( xInteractionHandler, uno::Reference< ucb::XProgressHandler >() ) );
+        uno::Reference< sdbc::XResultSet > xResultSet;
+        uno::Sequence< OUString > aProps(5);
         OUString* pProps = aProps.getArray();
         pProps[0] = OUString::createFromAscii( "Title" );
         pProps[1] = OUString::createFromAscii( "ContentType" );
@@ -424,23 +419,23 @@ Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String
 
         try
         {
-            Reference< com::sun::star::ucb::XDynamicResultSet > xDynResultSet;
-            ResultSetInclude eInclude = bIsFolder ? INCLUDE_FOLDERS_AND_DOCUMENTS : INCLUDE_DOCUMENTS_ONLY;
+            uno::Reference< ucb::XDynamicResultSet > xDynResultSet;
+            ::ucbhelper::ResultSetInclude eInclude = bIsFolder ? ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS : ::ucbhelper::INCLUDE_DOCUMENTS_ONLY;
             xDynResultSet = aCnt.createDynamicCursor( aProps, eInclude );
 
-            Reference < com::sun::star::ucb::XAnyCompareFactory > xCmpFactory;
-            Reference < XMultiServiceFactory > xMgr = getProcessServiceFactory();
-            Reference < com::sun::star::ucb::XSortedDynamicResultSetFactory > xSRSFac(
-                xMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SortedDynamicResultSetFactory") ), UNO_QUERY );
+            uno::Reference < ucb::XAnyCompareFactory > xCmpFactory;
+            uno::Reference < lang::XMultiServiceFactory > xMgr = getProcessServiceFactory();
+            uno::Reference < ucb::XSortedDynamicResultSetFactory > xSRSFac(
+                xMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SortedDynamicResultSetFactory") ), uno::UNO_QUERY );
 
-            Sequence< com::sun::star::ucb::NumberedSortingInfo > aSortInfo( 2 );
-            com::sun::star::ucb::NumberedSortingInfo* pInfo = aSortInfo.getArray();
+            uno::Sequence< ucb::NumberedSortingInfo > aSortInfo( 2 );
+            ucb::NumberedSortingInfo* pInfo = aSortInfo.getArray();
             pInfo[ 0 ].ColumnIndex = 5;
             pInfo[ 0 ].Ascending   = sal_False;
             pInfo[ 1 ].ColumnIndex = 1;
             pInfo[ 1 ].Ascending   = sal_True;
 
-            Reference< com::sun::star::ucb::XDynamicResultSet > xDynamicResultSet;
+            uno::Reference< ucb::XDynamicResultSet > xDynamicResultSet;
             xDynamicResultSet =
                 xSRSFac->createSortedDynamicResultSet( xDynResultSet, aSortInfo, xCmpFactory );
             if ( xDynamicResultSet.is() )
@@ -451,11 +446,11 @@ Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String
 //          if ( xDynResultSet.is() )
 //              xResultSet = xDynResultSet->getStaticResultSet();
         }
-        catch( ::com::sun::star::ucb::CommandAbortedException& )
+        catch( ucb::CommandAbortedException& )
         {
             DBG_ERRORFILE( "createCursor: CommandAbortedException" );
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( uno::Exception& )
         {
             DBG_ERRORFILE( "createCursor: Any other exception" );
         }
@@ -464,8 +459,8 @@ Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String
         {
             LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
             pProperties = new StringList_Impl;
-            Reference< com::sun::star::sdbc::XRow > xRow( xResultSet, UNO_QUERY );
-            Reference< com::sun::star::ucb::XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+            uno::Reference< sdbc::XRow > xRow( xResultSet, uno::UNO_QUERY );
+            uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
             ULONG nFolderPos = LIST_APPEND;
 
             try
@@ -475,7 +470,7 @@ Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String
                     String aTitle( xRow->getString(1) );
                     String aType( xRow->getString(2) );
                     sal_Int64 nSize = xRow->getLong(3);
-                    ::com::sun::star::util::DateTime aDT = xRow->getTimestamp(4);
+                    util::DateTime aDT = xRow->getTimestamp(4);
                     sal_Bool bFolder = xRow->getBoolean(5);
 
                     String aRow = aTitle;
@@ -502,17 +497,17 @@ Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String
                     pProperties->Insert( pRow, nPos );
                 }
             }
-            catch( ::com::sun::star::ucb::CommandAbortedException& )
+            catch( ucb::CommandAbortedException& )
             {
                 DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
             }
-            catch( ::com::sun::star::uno::Exception& )
+            catch( uno::Exception& )
             {
                 DBG_ERRORFILE( "XContentAccess::next(): Any other exception" );
             }
         }
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( uno::Exception& )
     {
         DBG_ERRORFILE( "GetFolderContents: Any other exception" );
     }
@@ -520,7 +515,7 @@ Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String
     if ( pProperties )
     {
         ULONG nCount = pProperties->Count();
-        Sequence < OUString > aRet( nCount );
+        uno::Sequence < OUString > aRet( nCount );
         OUString* pRet = aRet.getArray();
         for ( ULONG i = 0; i < nCount; ++i )
         {
@@ -532,20 +527,20 @@ Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String
         return aRet;
     }
     else
-        return Sequence < OUString > ();
+        return uno::Sequence < OUString > ();
 }
 
 // -----------------------------------------------------------------------
 
-Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
+uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
 {
     StringList_Impl* pList = NULL;
     try
     {
-        Content aCnt( rURL, Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
-        Reference< XResultSet > xResultSet;
-        Reference< com::sun::star::ucb::XDynamicResultSet > xDynResultSet;
-        Sequence< OUString > aProps(3);
+        ::ucbhelper::Content aCnt( rURL, uno::Reference< ucb::XCommandEnvironment >() );
+        uno::Reference< sdbc::XResultSet > xResultSet;
+        uno::Reference< ucb::XDynamicResultSet > xDynResultSet;
+        uno::Sequence< OUString > aProps(3);
         OUString* pProps = aProps.getArray();
         pProps[0] = OUString::createFromAscii( "Title" );
         pProps[1] = OUString::createFromAscii( "ContentType" );
@@ -553,15 +548,15 @@ Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
 
         try
         {
-            xDynResultSet = aCnt.createDynamicCursor( aProps, INCLUDE_FOLDERS_AND_DOCUMENTS );
+            xDynResultSet = aCnt.createDynamicCursor( aProps, ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS );
             if ( xDynResultSet.is() )
                 xResultSet = xDynResultSet->getStaticResultSet();
         }
-        catch( ::com::sun::star::ucb::CommandAbortedException& )
+        catch( ucb::CommandAbortedException& )
         {
             DBG_ERRORFILE( "createCursor: CommandAbortedException" );
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( uno::Exception& )
         {
             DBG_ERRORFILE( "createCursor: Any other exception" );
         }
@@ -569,8 +564,8 @@ Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
         if ( xResultSet.is() )
         {
             pList = new StringList_Impl;
-            Reference< com::sun::star::sdbc::XRow > xRow( xResultSet, UNO_QUERY );
-            Reference< com::sun::star::ucb::XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+            uno::Reference< sdbc::XRow > xRow( xResultSet, uno::UNO_QUERY );
+            uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
 
             try
             {
@@ -587,17 +582,17 @@ Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
                     pList->Insert( pRow, LIST_APPEND );
                 }
             }
-            catch( ::com::sun::star::ucb::CommandAbortedException& )
+            catch( ucb::CommandAbortedException& )
             {
                 DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
             }
-            catch( ::com::sun::star::uno::Exception& )
+            catch( uno::Exception& )
             {
                 DBG_ERRORFILE( "XContentAccess::next(): Any other exception" );
             }
         }
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( uno::Exception& )
     {
         DBG_ERRORFILE( "GetResultSet: Any other exception" );
     }
@@ -605,7 +600,7 @@ Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
     if ( pList )
     {
         ULONG nCount = pList->Count();
-        Sequence < OUString > aRet( nCount );
+        uno::Sequence < OUString > aRet( nCount );
         OUString* pRet = aRet.getArray();
         for ( ULONG i = 0; i < nCount; ++i )
         {
@@ -617,46 +612,46 @@ Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
         return aRet;
     }
     else
-        return Sequence < OUString > ();
+        return uno::Sequence < OUString > ();
 }
 
 // -----------------------------------------------------------------------
 
-Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const String& rURL )
+uno::Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const String& rURL )
 {
     StringList_Impl* pProperties = NULL;
     try
     {
-        Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-        Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
-                    xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY );
+        uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+        uno::Reference< task::XInteractionHandler > xInteractionHandler = uno::Reference< task::XInteractionHandler > (
+                    xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), uno::UNO_QUERY );
 
-        Content aCnt( rURL, new ::ucb::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() ) );
-        Reference< XResultSet > xResultSet;
-        Sequence< OUString > aProps(2);
+        ::ucbhelper::Content aCnt( rURL, new ::ucbhelper::CommandEnvironment( xInteractionHandler, uno::Reference< ucb::XProgressHandler >() ) );
+        uno::Reference< sdbc::XResultSet > xResultSet;
+        uno::Sequence< OUString > aProps(2);
         OUString* pProps = aProps.getArray();
         pProps[0] = OUString::createFromAscii( "Title" );
         pProps[1] = OUString::createFromAscii( "IsFolder" );
 
         try
         {
-            Reference< com::sun::star::ucb::XDynamicResultSet > xDynResultSet;
-            xDynResultSet = aCnt.createDynamicCursor( aProps, INCLUDE_FOLDERS_AND_DOCUMENTS );
+            uno::Reference< ucb::XDynamicResultSet > xDynResultSet;
+            xDynResultSet = aCnt.createDynamicCursor( aProps, ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS );
             if ( xDynResultSet.is() )
                 xResultSet = xDynResultSet->getStaticResultSet();
         }
-        catch( ::com::sun::star::ucb::CommandAbortedException& )
+        catch( ucb::CommandAbortedException& )
         {
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( uno::Exception& )
         {
         }
 
         if ( xResultSet.is() )
         {
             pProperties = new StringList_Impl;
-            Reference< com::sun::star::sdbc::XRow > xRow( xResultSet, UNO_QUERY );
-            Reference< com::sun::star::ucb::XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+            uno::Reference< sdbc::XRow > xRow( xResultSet, uno::UNO_QUERY );
+            uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
 
             try
             {
@@ -673,22 +668,22 @@ Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const String& rU
                     pProperties->Insert( pRow, LIST_APPEND );
                 }
             }
-            catch( ::com::sun::star::ucb::CommandAbortedException& )
+            catch( ucb::CommandAbortedException& )
             {
             }
-            catch( ::com::sun::star::uno::Exception& )
+            catch( uno::Exception& )
             {
             }
         }
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( uno::Exception& )
     {
     }
 
     if ( pProperties )
     {
         ULONG nCount = pProperties->Count();
-        Sequence < OUString > aRet( nCount );
+        uno::Sequence < OUString > aRet( nCount );
         OUString* pRet = aRet.getArray();
         for ( ULONG i = 0; i < nCount; ++i )
         {
@@ -700,7 +695,7 @@ Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const String& rU
         return aRet;
     }
     else
-        return Sequence < OUString > ();
+        return uno::Sequence < OUString > ();
 }
 
 // -----------------------------------------------------------------------
@@ -710,14 +705,14 @@ String SfxContentHelper::GetActiveHelpString( const String& rURL )
     String aRet;
     try
     {
-        Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-        Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
-                    xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY );
-        Content aCnt( rURL, new ::ucb::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() ) );
+        uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+        uno::Reference< task::XInteractionHandler > xInteractionHandler = uno::Reference< task::XInteractionHandler > (
+                    xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), uno::UNO_QUERY );
+        ::ucbhelper::Content aCnt( rURL, new ::ucbhelper::CommandEnvironment( xInteractionHandler, uno::Reference< ucb::XProgressHandler >() ) );
         // open the "active help" stream
-        Reference< ::com::sun::star::io::XInputStream > xStream = aCnt.openStream();
+        uno::Reference< io::XInputStream > xStream = aCnt.openStream();
         // and convert it to a String
-        Sequence< sal_Int8 > lData;
+        uno::Sequence< sal_Int8 > lData;
         sal_Int32 nRead = xStream->readBytes( lData, 1024 );
         while ( nRead > 0 )
         {
@@ -730,7 +725,7 @@ String SfxContentHelper::GetActiveHelpString( const String& rURL )
             nRead = xStream->readBytes( lData, 1024 );
         }
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( uno::Exception& )
     {
     }
 
@@ -744,14 +739,14 @@ sal_Bool SfxContentHelper::IsHelpErrorDocument( const String& rURL )
     sal_Bool bRet = sal_False;
     try
     {
-        Content aCnt( INetURLObject( rURL ).GetMainURL( INetURLObject::NO_DECODE ),
-                      Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        ::ucbhelper::Content aCnt( INetURLObject( rURL ).GetMainURL( INetURLObject::NO_DECODE ),
+                      uno::Reference< ucb::XCommandEnvironment > () );
         if ( !( aCnt.getPropertyValue( OUString::createFromAscii( "IsErrorDocument" ) ) >>= bRet ) )
         {
             DBG_ERRORFILE( "Property 'IsErrorDocument' is missing" );
         }
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( uno::Exception& )
     {
     }
 
@@ -762,7 +757,7 @@ sal_Bool SfxContentHelper::IsHelpErrorDocument( const String& rURL )
 
 sal_Bool SfxContentHelper::CopyTo( const String& rSource, const String& rDest )
 {
-    return Transfer_Impl( rSource, rDest, sal_False, NameClash::ERROR );
+    return Transfer_Impl( rSource, rDest, sal_False, ucb::NameClash::ERROR );
 }
 
 // -----------------------------------------------------------------------
@@ -780,32 +775,32 @@ sal_Bool SfxContentHelper::MakeFolder( const String& rFolder )
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     String aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
     aURL.removeSegment();
-    Sequence < OUString > aNames(2);
+    uno::Sequence < OUString > aNames(2);
     OUString* pNames = aNames.getArray();
     pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
     pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) );
-    Sequence<Any> aValues(2);
-    Any* pValues = aValues.getArray();
-    pValues[0] = makeAny( OUString( aTitle ) );
-    pValues[1] = makeAny( sal_Bool( sal_True ) );
-    Reference< ::com::sun::star::ucb::XCommandEnvironment > aCmdEnv;
+    uno::Sequence<uno::Any> aValues(2);
+    uno::Any* pValues = aValues.getArray();
+    pValues[0] = uno::makeAny( OUString( aTitle ) );
+    pValues[1] = uno::makeAny( sal_Bool( sal_True ) );
+    uno::Reference< ucb::XCommandEnvironment > aCmdEnv;
     sal_Bool bRet = sal_False;
     try
     {
-        Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
-        Content aNewFolder;
+        ::ucbhelper::Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
+        ::ucbhelper::Content aNewFolder;
         OUString aType( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.staroffice.fsys-folder" ) );
         bRet = aCnt.insertNewContent( aType, aNames, aValues, aNewFolder );
     }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    catch( ucb::CommandAbortedException& )
     {
         // double name?
     }
-    catch( ::com::sun::star::ucb::IllegalIdentifierException& )
+    catch( ucb::IllegalIdentifierException& )
     {
         DBG_ERRORFILE( "Illegal identifier" );
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
@@ -823,15 +818,15 @@ ErrCode SfxContentHelper::QueryDiskSpace( const String& rPath, sal_Int64& rFreeB
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
         aCnt.getPropertyValue( OUString::createFromAscii( "FreeSpace" ) ) >>= rFreeBytes;
     }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    catch( ucb::CommandAbortedException& )
     {
         DBG_ERRORFILE( "CommandAbortedException" );
         nErr = ERRCODE_IO_GENERAL;
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
         nErr = ERRCODE_IO_GENERAL;
@@ -849,14 +844,14 @@ ULONG SfxContentHelper::GetSize( const String& rContent )
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
         aCnt.getPropertyValue( OUString::createFromAscii( "Size" ) ) >>= nTemp;
     }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    catch( ucb::CommandAbortedException& )
     {
         DBG_ERRORFILE( "CommandAbortedException" );
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
@@ -875,21 +870,21 @@ sal_Bool SfxContentHelper::IsYounger( const String& rIsYoung, const String& rIsO
     DBG_ASSERT( aOlderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Reference< ::com::sun::star::ucb::XCommandEnvironment > aCmdEnv;
-        Content aYoung( aYoungObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
-        ::com::sun::star::util::DateTime aTempYoungDate;
+        uno::Reference< ucb::XCommandEnvironment > aCmdEnv;
+        ::ucbhelper::Content aYoung( aYoungObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
+        util::DateTime aTempYoungDate;
         aYoung.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aTempYoungDate;
         CONVERT_DATETIME( aTempYoungDate, aYoungDate );
-        Content aOlder( aOlderObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
-        ::com::sun::star::util::DateTime aTempOlderDate;
+        ::ucbhelper::Content aOlder( aOlderObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
+        util::DateTime aTempOlderDate;
         aOlder.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aTempOlderDate;
         CONVERT_DATETIME( aTempOlderDate, aOlderDate );
     }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    catch( ucb::CommandAbortedException& )
     {
         DBG_ERRORFILE( "CommandAbortedException" );
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
@@ -907,24 +902,24 @@ sal_Bool SfxContentHelper::Exists( const String& rContent )
 
     try
     {
-        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
         // just try to get the property; if no exception is thrown, the content exists!
         aCnt.isDocument();
         bRet = sal_True;
     }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    catch( ucb::CommandAbortedException& )
     {
             DBG_WARNING( "CommandAbortedException" );
     }
-    catch( ::com::sun::star::ucb::IllegalIdentifierException& )
+    catch( ucb::IllegalIdentifierException& )
     {
             DBG_WARNING( "IllegalIdentifierException" );
     }
-    catch( ContentCreationException& )
+    catch( ucb::ContentCreationException& )
     {
             DBG_WARNING( "IllegalIdentifierException" );
     }
-    catch( Exception& )
+    catch( uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
