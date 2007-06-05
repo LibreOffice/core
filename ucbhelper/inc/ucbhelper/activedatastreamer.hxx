@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activedatastreamer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:24:16 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:47:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 #include <ucbhelper/macros.hxx>
 #endif
 
-namespace ucb
+namespace ucbhelper
 {
 
 //=========================================================================
@@ -82,6 +82,6 @@ public:
         throw( com::sun::star::uno::RuntimeException );
 };
 
-} /* namespace ucb */
+} /* namespace ucbhelper */
 
 #endif /* !_UCBHELPER_ACTIVEDATASTREAMER_HXX */

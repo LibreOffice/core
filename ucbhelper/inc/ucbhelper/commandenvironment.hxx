@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commandenvironment.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:25:19 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:47:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 #include "ucbhelper/ucbhelperdllapi.h"
 #endif
 
-namespace ucb
+namespace ucbhelper
 {
 
 struct CommandEnvironment_Impl;
@@ -114,6 +114,6 @@ public:
         throw ( com::sun::star::uno::RuntimeException );
 };
 
-} /* namespace ucb */
+} /* namespace ucbhelper */
 
 #endif /* !_UCBHELPER_COMMANDENVIRONMENT_HXX */
