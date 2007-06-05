@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:07:49 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:19:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,9 +58,6 @@
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-#ifndef _UCBHELPER_BACKGROUNDDOWNLOAD_HXX_
-#include <ucbhelper/backgrounddownload.hxx>
 #endif
 
 #ifndef _DAVAUTHLISTENER_HXX_
@@ -175,42 +172,30 @@ static sal_uInt16 makeStatusCode( const rtl::OUString & rStatusText )
 // -------------------------------------------------------------------
 struct NeonRequestContext
 {
-    void*                                  pUserData;
     uno::Reference< io::XOutputStream >    xOutputStream;
     rtl::Reference< NeonInputStream >      xInputStream;
     const std::vector< ::rtl::OUString > * pHeaderNames;
     DAVResource *                          pResource;
 
     NeonRequestContext( uno::Reference< io::XOutputStream > & xOutStrm )
-    : pUserData(0),xOutputStream( xOutStrm ), xInputStream( 0 ),
+    : xOutputStream( xOutStrm ), xInputStream( 0 ),
       pHeaderNames( 0 ), pResource( 0 ) {}
 
     NeonRequestContext( const rtl::Reference< NeonInputStream > & xInStrm )
-    : pUserData(0),xOutputStream( 0 ), xInputStream( xInStrm ),
-      pHeaderNames( 0 ), pResource( 0 ) {}
-
-    NeonRequestContext( void* userData )
-    : pUserData(userData),xOutputStream( 0 ), xInputStream( 0 ),
+    : xOutputStream( 0 ), xInputStream( xInStrm ),
       pHeaderNames( 0 ), pResource( 0 ) {}
 
     NeonRequestContext( uno::Reference< io::XOutputStream > & xOutStrm,
                         const std::vector< ::rtl::OUString > & inHeaderNames,
                         DAVResource & ioResource )
-    : pUserData(0),xOutputStream( xOutStrm ), xInputStream( 0 ),
+    : xOutputStream( xOutStrm ), xInputStream( 0 ),
       pHeaderNames( &inHeaderNames ), pResource( &ioResource ) {}
 
     NeonRequestContext( const rtl::Reference< NeonInputStream > & xInStrm,
                         const std::vector< ::rtl::OUString > & inHeaderNames,
                         DAVResource & ioResource )
-    : pUserData(0),xOutputStream( 0 ), xInputStream( xInStrm ),
+    : xOutputStream( 0 ), xInputStream( xInStrm ),
       pHeaderNames( &inHeaderNames ), pResource( &ioResource ) {}
-
-    NeonRequestContext( void* userData,
-                        const std::vector< ::rtl::OUString > & inHeaderNames,
-                        DAVResource & ioResource )
-    : pUserData(userData),xOutputStream( 0 ), xInputStream( 0 ),
-      pHeaderNames( &inHeaderNames ), pResource( &ioResource ) {}
-
 };
 
 //--------------------------------------------------------------------
@@ -238,16 +223,11 @@ extern "C" void NeonSession_ResponseBlockReader
         NeonRequestContext * pCtx
             = static_cast< NeonRequestContext * >( inUserData );
 
-        if(pCtx->pUserData)
-            ::ucb::writeToDataSink((void*)inBuf,1,inLen,pCtx->pUserData);
-        else
-    {
-            rtl::Reference< NeonInputStream > xInputStream(
-                pCtx->xInputStream);
+        rtl::Reference< NeonInputStream > xInputStream(
+            pCtx->xInputStream);
 
-            if ( xInputStream.is() )
-                xInputStream->AddToStream( inBuf, inLen );
-        }
+        if ( xInputStream.is() )
+            xInputStream->AddToStream( inBuf, inLen );
     }
 #if NEON_VERSION >= 0250
     return 0;
@@ -1016,32 +996,6 @@ NeonSession::GET( const rtl::OUString & inPath,
     return uno::Reference< io::XInputStream >( xInputStream.get() );
 }
 
-
-// -------------------------------------------------------------------
-// GET
-// -------------------------------------------------------------------
-void NeonSession::GET( void* userData,
-               const ::rtl::OUString & inPath,
-               const DAVRequestEnvironment & rEnv )
-    throw( DAVException )
-{
-    osl::Guard< osl::Mutex > theGuard( m_aMutex );
-
-    Init();
-
-    m_aEnv = rEnv;
-
-    NeonRequestContext aCtx( userData );
-    int theRetVal = GET( m_pHttpSession,
-                         rtl::OUStringToOString(
-                             inPath, RTL_TEXTENCODING_UTF8 ),
-                         NeonSession_ResponseBlockReader,
-                         0,
-                         &aCtx );
-    HandleError( theRetVal );
-}
-
-
 // -------------------------------------------------------------------
 // GET
 // -------------------------------------------------------------------
@@ -1095,36 +1049,6 @@ NeonSession::GET( const rtl::OUString & inPath,
                          &aCtx );
     HandleError( theRetVal );
     return uno::Reference< io::XInputStream >( xInputStream.get() );
-}
-
-
-// -------------------------------------------------------------------
-// GET
-// -------------------------------------------------------------------
-void NeonSession::GET( void* userData,
-               const ::rtl::OUString & inPath,
-               const std::vector< ::rtl::OUString > & inHeaderNames,
-               DAVResource & ioResource,
-               const DAVRequestEnvironment & rEnv )
-    throw( DAVException )
-{
-    osl::Guard< osl::Mutex > theGuard( m_aMutex );
-
-    Init();
-
-    m_aEnv = rEnv;
-
-    ioResource.uri = inPath;
-    ioResource.properties.clear();
-
-    NeonRequestContext aCtx( userData,inHeaderNames,ioResource );
-    int theRetVal = GET( m_pHttpSession,
-                         rtl::OUStringToOString(
-                             inPath, RTL_TEXTENCODING_UTF8 ),
-                         NeonSession_ResponseBlockReader,
-                         NeonSession_ResponseHeaderCatcher,
-                         &aCtx );
-    HandleError( theRetVal );
 }
 
 // -------------------------------------------------------------------
