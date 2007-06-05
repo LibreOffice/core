@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pkgresultset.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:57:15 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:14:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 
 namespace package_ucp {
 
-class DynamicResultSet : public ::ucb::ResultSetImplHelper
+class DynamicResultSet : public ::ucbhelper::ResultSetImplHelper
 {
     rtl::Reference< Content > m_xContent;
     com::sun::star::uno::Reference<
