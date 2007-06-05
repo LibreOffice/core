@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:04:14 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:03:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,10 +192,10 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
     aArgs[5] <<= aPortal.makeStringAndClear();
 
     bool ret =
-        ::ucb::ContentBroker::initialize( xServiceFactory, aArgs ) != false;
+        ::ucbhelper::ContentBroker::initialize( xServiceFactory, aArgs ) != false;
 
     // register GnomeUCP if necessary
-    ::ucb::ContentBroker* cb = ::ucb::ContentBroker::get();
+    ::ucbhelper::ContentBroker* cb = ::ucbhelper::ContentBroker::get();
     if(cb) {
         try {
             Reference< XCurrentContext > xCurrentContext(
