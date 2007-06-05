@@ -917,3 +917,107 @@
   extern int
   main(int argc, char *argv[]) {
       const char *pname, *sourcePath, *destPath, *inFilename, *outFilename, *outComment;
+*** misc/icu/source/common/unicode/unistr.h	2007-05-20 08:40:31.000000000 -0400
+--- misc/build/icu/source/common/unicode/unistr.h	2007-05-20 08:42:01.000000000 -0400
+***************
+*** 3280,3286 ****
+  //========================================
+  inline int8_t
+  UnicodeString::doCompare(int32_t start,
+!               int32_t length,
+                const UnicodeString& srcText,
+                int32_t srcStart,
+                int32_t srcLength) const
+--- 3280,3286 ----
+  //========================================
+  inline int8_t
+  UnicodeString::doCompare(int32_t start,
+!               int32_t _length,
+                const UnicodeString& srcText,
+                int32_t srcStart,
+                int32_t srcLength) const
+***************
+*** 3289,3295 ****
+      return (int8_t)!isBogus(); // 0 if both are bogus, 1 otherwise
+    } else {
+      srcText.pinIndices(srcStart, srcLength);
+!     return doCompare(start, length, srcText.fArray, srcStart, srcLength);
+    }
+  }
+  
+--- 3289,3295 ----
+      return (int8_t)!isBogus(); // 0 if both are bogus, 1 otherwise
+    } else {
+      srcText.pinIndices(srcStart, srcLength);
+!     return doCompare(start, _length, srcText.fArray, srcStart, srcLength);
+    }
+  }
+  
+***************
+*** 3374,3380 ****
+  
+  inline int8_t
+  UnicodeString::doCompareCodePointOrder(int32_t start,
+!                                        int32_t length,
+                                         const UnicodeString& srcText,
+                                         int32_t srcStart,
+                                         int32_t srcLength) const
+--- 3374,3380 ----
+  
+  inline int8_t
+  UnicodeString::doCompareCodePointOrder(int32_t start,
+!                                        int32_t _length,
+                                         const UnicodeString& srcText,
+                                         int32_t srcStart,
+                                         int32_t srcLength) const
+***************
+*** 3383,3389 ****
+      return (int8_t)!isBogus(); // 0 if both are bogus, 1 otherwise
+    } else {
+      srcText.pinIndices(srcStart, srcLength);
+!     return doCompareCodePointOrder(start, length, srcText.fArray, srcStart, srcLength);
+    }
+  }
+  
+--- 3383,3389 ----
+      return (int8_t)!isBogus(); // 0 if both are bogus, 1 otherwise
+    } else {
+      srcText.pinIndices(srcStart, srcLength);
+!     return doCompareCodePointOrder(start, _length, srcText.fArray, srcStart, srcLength);
+    }
+  }
+  
+***************
+*** 3435,3441 ****
+  
+  inline int8_t
+  UnicodeString::doCaseCompare(int32_t start,
+!                              int32_t length,
+                               const UnicodeString &srcText,
+                               int32_t srcStart,
+                               int32_t srcLength,
+--- 3435,3441 ----
+  
+  inline int8_t
+  UnicodeString::doCaseCompare(int32_t start,
+!                              int32_t _length,
+                               const UnicodeString &srcText,
+                               int32_t srcStart,
+                               int32_t srcLength,
+***************
+*** 3445,3451 ****
+      return (int8_t)!isBogus(); // 0 if both are bogus, 1 otherwise
+    } else {
+      srcText.pinIndices(srcStart, srcLength);
+!     return doCaseCompare(start, length, srcText.fArray, srcStart, srcLength, options);
+    }
+  }
+  
+--- 3445,3451 ----
+      return (int8_t)!isBogus(); // 0 if both are bogus, 1 otherwise
+    } else {
+      srcText.pinIndices(srcStart, srcLength);
+!     return doCaseCompare(start, _length, srcText.fArray, srcStart, srcLength, options);
+    }
+  }
+  
