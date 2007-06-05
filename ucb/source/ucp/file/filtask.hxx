@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtask.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:21:59 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:56:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,9 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
-#endif
+
+#include "osl/mutex.hxx"
+
 #ifndef  _COM_SUN_STAR_UCB_DUPLICATECOMMANDIDENTIFIEREXCEPTION_HPP_
 #include <com/sun/star/ucb/DuplicateCommandIdentifierException.hpp>
 #endif
@@ -183,7 +183,7 @@ namespace fileaccess
 
     private:
 
-        vos::OMutex                                                         m_aMutex;
+        osl::Mutex                                                         m_aMutex;
         sal_Int32                                                           m_nCommandId;
         TaskMap                                                             m_aTaskMap;
 
