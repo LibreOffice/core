@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activedatasink.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:18:43 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:51:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 
 using namespace com::sun::star;
 
-namespace ucb
+namespace ucbhelper
 {
 
 //=========================================================================
@@ -101,4 +101,4 @@ uno::Reference< io::XInputStream > SAL_CALL ActiveDataSink::getInputStream()
     return m_xStream;
 }
 
-} // namespace ucb
+} // namespace ucbhelper
