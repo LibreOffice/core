@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swunohelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:55:04 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:31:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@ BOOL UCB_DeleteFile( const String& rURL )
     BOOL bRemoved;
     try
     {
-        ucb::Content aTempContent( rURL,
+        ucbhelper::Content aTempContent( rURL,
                                 STAR_REFERENCE( ucb::XCommandEnvironment )());
         aTempContent.executeCommand(
                         rtl::OUString::createFromAscii( "delete" ),
@@ -154,7 +154,7 @@ BOOL UCB_CopyFile( const String& rURL, const String& rNewURL, BOOL bCopyIsMove )
         aURL.removeSegment();
         String sMainURL( aURL.GetMainURL(INetURLObject::NO_DECODE) );
 
-        ucb::Content aTempContent( sMainURL,
+        ucbhelper::Content aTempContent( sMainURL,
                                 STAR_REFERENCE( ucb::XCommandEnvironment )());
 
         UNO_NMSPC::Any aAny;
@@ -187,16 +187,16 @@ BOOL UCB_IsCaseSensitiveFileName( const String& rURL )
         INetURLObject aTempObj( rURL );
         aTempObj.SetBase( aTempObj.GetBase().toAsciiLowerCase() );
         STAR_REFERENCE( ucb::XContentIdentifier ) xRef1 = new
-                ucb::ContentIdentifier( xMSF,
+                ucbhelper::ContentIdentifier( xMSF,
                             aTempObj.GetMainURL( INetURLObject::NO_DECODE ));
 
         aTempObj.SetBase(aTempObj.GetBase().toAsciiUpperCase());
         STAR_REFERENCE( ucb::XContentIdentifier ) xRef2 = new
-                ucb::ContentIdentifier( xMSF,
+                ucbhelper::ContentIdentifier( xMSF,
                             aTempObj.GetMainURL( INetURLObject::NO_DECODE ));
 
         STAR_REFERENCE( ucb::XContentProvider ) xProv =
-                ucb::ContentBroker::get()->getContentProviderInterface();
+                ucbhelper::ContentBroker::get()->getContentProviderInterface();
 
         sal_Int32 nCompare = xProv->compareContentIds( xRef1, xRef2 );
         bCaseSensitive = 0 != nCompare;
@@ -214,7 +214,7 @@ BOOL UCB_IsReadOnlyFileName( const String& rURL )
     BOOL bIsReadOnly = FALSE;
     try
     {
-        ucb::Content aCnt( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )());
+        ucbhelper::Content aCnt( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )());
         UNO_NMSPC::Any aAny = aCnt.getPropertyValue(
                             rtl::OUString::createFromAscii( "IsReadOnly" ));
         if(aAny.hasValue())
@@ -232,7 +232,7 @@ BOOL UCB_IsFile( const String& rURL )
     BOOL bExists = FALSE;
     try
     {
-        ::ucb::Content aContent( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )() );
+        ::ucbhelper::Content aContent( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )() );
         bExists = aContent.isDocument();
     }
     catch (UNO_NMSPC::Exception &)
@@ -246,7 +246,7 @@ BOOL UCB_IsDirectory( const String& rURL )
     BOOL bExists = FALSE;
     try
     {
-        ::ucb::Content aContent( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )() );
+        ::ucbhelper::Content aContent( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )() );
         bExists = aContent.isFolder();
     }
     catch (UNO_NMSPC::Exception &)
@@ -267,7 +267,7 @@ BOOL UCB_GetFileListOfFolder( const String& rURL, SvStrings& rList,
     BOOL bOk = FALSE;
     try
     {
-        ucb::Content aCnt( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )());
+        ucbhelper::Content aCnt( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )());
         STAR_REFERENCE( sdbc::XResultSet ) xResultSet;
 
         USHORT nSeqSize = pDateTimeList ? 2 : 1;
@@ -279,7 +279,7 @@ BOOL UCB_GetFileListOfFolder( const String& rURL, SvStrings& rList,
 
         try
         {
-            xResultSet = aCnt.createCursor( aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
+            xResultSet = aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY );
         }
         catch( UNO_NMSPC::Exception& )
         {
