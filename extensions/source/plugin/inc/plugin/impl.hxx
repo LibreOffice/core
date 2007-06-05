@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:52:49 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:43:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,7 @@ using namespace com::sun::star::uno;
 #define PROVIDING_MODEL_UPDATE      2
 
 // forwards
-namespace ucb { class Content; }
+namespace ucbhelper { class Content; }
 class PluginStream;
 class PluginInputStream;
 class PluginOutputStream;
@@ -389,7 +389,7 @@ class PluginInputStream :
                 >
 {
 private:
-    ::ucb::Content*             m_pContent;
+    ::ucbhelper::Content*       m_pContent;
     sal_Int32                   m_nMode;
     UINT32                      m_nWritePos;
 
@@ -416,7 +416,7 @@ public:
     void setMode( sal_Int32 nMode );
     UINT32 read( UINT32 offset, sal_Int8* buffer, UINT32 size );
     void setSource( const Reference< com::sun::star::io::XActiveDataSource >& xSource ) { m_xSource = xSource; }
-    // get contents ot url via ucb::Content
+    // get contents ot url via ucbhelper::Content
     void load();
 
     // clear reference
