@@ -4,9 +4,9 @@
  *
  *  $RCSfile: supplang.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:25:45 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:29:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,8 +114,8 @@ BOOL FileExists( const String &rMainURL )
     {
         try
         {
-            ::ucb::Content aContent( rMainURL,
-                    Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+            ::ucbhelper::Content aContent( rMainURL,
+                    uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >());
             bExists = aContent.isDocument();
         }
         catch(Exception &)
