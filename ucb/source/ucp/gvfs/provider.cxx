@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:54:42 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:04:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,9 @@ using namespace gvfs;
 //=========================================================================
 //=========================================================================
 
-ContentProvider::ContentProvider(const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
-    : ::ucb::ContentProviderImplHelper( rSMgr )
+ContentProvider::ContentProvider(
+    const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
+: ::ucbhelper::ContentProviderImplHelper( rSMgr )
 {
 }
 // sdafas
@@ -135,11 +136,11 @@ ContentProvider::queryContent(
 // #endif
 //      throw com::sun::star::ucb::IllegalIdentifierException();
 //  }
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     // Check, if a content with given id already exists...
     uno::Reference< com::sun::star::ucb::XContent > xContent
-        = queryExistingContent( Identifier ).getBodyPtr();
+        = queryExistingContent( Identifier ).get();
     if ( xContent.is() )
         return xContent;
 
