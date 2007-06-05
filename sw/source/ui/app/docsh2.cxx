@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 13:56:26 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:40:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -897,14 +897,14 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     if(RET_TEMPLATE_LOAD == nRet)
                     {
                         FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
-                        Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+                        uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
                         xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
 
                         SfxObjectFactory &rFact = GetFactory();
                         SfxFilterMatcher aMatcher( String::CreateFromAscii(rFact.GetShortName()) );
                         SfxFilterMatcherIter aIter( &aMatcher );
-                        Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
+                        uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
                         const SfxFilter* pFlt = aIter.First();
                         while( pFlt )
                         {
@@ -1126,13 +1126,13 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     ErrCode eErr = aWrt.Write( xWrt );
                     if( !ERRCODE_TOERROR( eErr ) )
                     {
-                        Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
-                        Reference< com::sun::star::frame::XDispatchProvider > xProv(
+                        uno::Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
+                        uno::Reference< com::sun::star::frame::XDispatchProvider > xProv(
                             xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.drawing.ModuleDispatcher")), UNO_QUERY );
                         if ( xProv.is() )
                         {
                             ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( "SendOutlineToImpress" );
-                            Reference< com::sun::star::frame::XDispatchHelper > xHelper(
+                            uno::Reference< com::sun::star::frame::XDispatchHelper > xHelper(
                                 xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.frame.DispatchHelper")), UNO_QUERY );
                             if ( xHelper.is() )
                             {
@@ -1197,13 +1197,13 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     pStrm->Seek( STREAM_SEEK_TO_BEGIN );
                     if ( nWhich == FN_OUTLINE_TO_IMPRESS )
                     {
-                        Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
-                        Reference< com::sun::star::frame::XDispatchProvider > xProv(
+                        uno::Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
+                        uno::Reference< com::sun::star::frame::XDispatchProvider > xProv(
                             xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.drawing.ModuleDispatcher")), UNO_QUERY );
                         if ( xProv.is() )
                         {
                             ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( "SendOutlineToImpress" );
-                            Reference< com::sun::star::frame::XDispatchHelper > xHelper(
+                            uno::Reference< com::sun::star::frame::XDispatchHelper > xHelper(
                                 xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.frame.DispatchHelper")), UNO_QUERY );
                             if ( xHelper.is() )
                             {
@@ -1369,7 +1369,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     aDlgHelper.SetControlHelpIds( nControlIds, nHelpIds );
 //                    aDlgHelper.SetDialogHelpId( bCreateHtml ? HID_SEND_HTML_DIALOG : HID_SEND_MASTER_DIALOG );
 
-                    Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+                    uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
                     const SfxFilter* pFlt;
                     USHORT nStrId;
@@ -1393,7 +1393,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                     if( pFlt )
                     {
-                        Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
+                        uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
                         const String sWild = ((WildCard&)pFlt->GetWildcard()).GetWildCard();
                         xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
                         try
@@ -1407,7 +1407,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     }
                     if(!bError)
                     {
-                        Reference<XFilePickerControlAccess> xCtrlAcc(xFP, UNO_QUERY);
+                        uno::Reference<XFilePickerControlAccess> xCtrlAcc(xFP, UNO_QUERY);
                         const USHORT nCount = pDoc->GetTxtFmtColls()->Count();
                         Sequence<OUString> aListBoxEntries(nCount);
                         OUString* pEntries = aListBoxEntries.getArray();
