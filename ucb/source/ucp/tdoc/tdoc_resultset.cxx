@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_resultset.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:02:46 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:17:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,7 @@
 #include "tdoc_resultset.hxx"
 #include "tdoc_content.hxx"
 
-using namespace com::sun;
 using namespace com::sun::star;
-
 using namespace tdoc_ucp;
 
 //=========================================================================
@@ -67,7 +65,7 @@ using namespace tdoc_ucp;
 DynamicResultSet::DynamicResultSet(
             const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
             const rtl::Reference< Content >& rxContent,
-            const star::ucb::OpenCommandArgument2& rCommand )
+            const ucb::OpenCommandArgument2& rCommand )
 : ResultSetImplHelper( rxSMgr, rCommand ),
   m_xContent( rxContent )
 {
@@ -82,24 +80,24 @@ DynamicResultSet::DynamicResultSet(
 void DynamicResultSet::initStatic()
 {
     m_xResultSet1
-        = new ::ucb::ResultSet(
-                    m_xSMgr,
-                    m_aCommand.Properties,
-                    new ResultSetDataSupplier( m_xSMgr,
-                                               m_xContent,
-                                               m_aCommand.Mode ) );
+        = new ::ucbhelper::ResultSet(
+            m_xSMgr,
+            m_aCommand.Properties,
+            new ResultSetDataSupplier( m_xSMgr,
+                                       m_xContent,
+                                       m_aCommand.Mode ) );
 }
 
 //=========================================================================
 void DynamicResultSet::initDynamic()
 {
     m_xResultSet1
-        = new ::ucb::ResultSet(
-                    m_xSMgr,
-                    m_aCommand.Properties,
-                    new ResultSetDataSupplier( m_xSMgr,
-                                               m_xContent,
-                                               m_aCommand.Mode ) );
+        = new ::ucbhelper::ResultSet(
+            m_xSMgr,
+            m_aCommand.Properties,
+            new ResultSetDataSupplier( m_xSMgr,
+                                       m_xContent,
+                                       m_aCommand.Mode ) );
     m_xResultSet2 = m_xResultSet1;
 }
 
