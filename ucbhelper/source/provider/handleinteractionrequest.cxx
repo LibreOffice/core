@@ -4,9 +4,9 @@
  *
  *  $RCSfile: handleinteractionrequest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:22:13 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:54:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,19 +85,17 @@
 #define INCLUDED_UTILITY
 #endif
 
-using namespace com::sun;
+using namespace com::sun::star;
 
 namespace {
 
 void
-handle(star::uno::Reference< star::task::XInteractionRequest > const &
-           rRequest,
-       star::uno::Reference< star::ucb::XCommandEnvironment > const &
-           rEnvironment)
-    SAL_THROW((star::uno::Exception))
+handle(uno::Reference< task::XInteractionRequest > const & rRequest,
+       uno::Reference< ucb::XCommandEnvironment > const & rEnvironment)
+    SAL_THROW((uno::Exception))
 {
     OSL_ENSURE(rRequest.is(), "specification violation");
-    star::uno::Reference< star::task::XInteractionHandler > xHandler;
+    uno::Reference< task::XInteractionHandler > xHandler;
     if (rEnvironment.is())
         xHandler = rEnvironment->getInteractionHandler();
     if (!xHandler.is())
@@ -111,12 +109,10 @@ namespace ucbhelper {
 
 sal_Int32
 handleInteractionRequest(
-    rtl::Reference< ucbhelper::SimpleInteractionRequest > const &
-        rRequest,
-    star::uno::Reference< star::ucb::XCommandEnvironment > const &
-        rEnvironment,
+    rtl::Reference< ucbhelper::SimpleInteractionRequest > const & rRequest,
+    uno::Reference< ucb::XCommandEnvironment > const & rEnvironment,
     bool bThrowOnAbort)
-    SAL_THROW((star::uno::Exception))
+    SAL_THROW((uno::Exception))
 {
     handle(rRequest.get(), rEnvironment);
     sal_Int32 nResponse = rRequest->getResponse();
@@ -128,7 +124,7 @@ handleInteractionRequest(
 
     case ucbhelper::CONTINUATION_ABORT:
         if (bThrowOnAbort)
-            throw star::ucb::CommandFailedException(
+            throw ucb::CommandFailedException(
                       rtl::OUString(), 0, rRequest->getRequest());
         break;
     }
@@ -139,28 +135,26 @@ std::pair< sal_Int32,
            rtl::Reference< ucbhelper::InteractionSupplyAuthentication > >
 handleInteractionRequest(
     rtl::Reference< ucbhelper::SimpleAuthenticationRequest > const & rRequest,
-    com::sun::star::uno::Reference<
-            com::sun::star::ucb::XCommandEnvironment > const &
-        rEnvironment,
+    uno::Reference< ucb::XCommandEnvironment > const & rEnvironment,
     bool bThrowOnAbort)
-    SAL_THROW((com::sun::star::uno::Exception))
+    SAL_THROW((uno::Exception))
 {
     handle(rRequest.get(), rEnvironment);
     rtl::Reference< ucbhelper::InteractionContinuation >
         xContinuation(rRequest->getSelection());
-    if (star::uno::Reference< star::task::XInteractionAbort >(
-                xContinuation.get(), star::uno::UNO_QUERY).
+    if (uno::Reference< task::XInteractionAbort >(
+                xContinuation.get(), uno::UNO_QUERY).
             is())
         if (bThrowOnAbort)
-            throw star::ucb::CommandFailedException(
+            throw ucb::CommandFailedException(
                       rtl::OUString(), 0, rRequest->getRequest());
         else
             return std::make_pair(
                        ucbhelper::CONTINUATION_ABORT,
                        rtl::Reference<
                            ucbhelper::InteractionSupplyAuthentication >());
-    else if (star::uno::Reference< star::task::XInteractionRetry >(
-                     xContinuation.get(), star::uno::UNO_QUERY).
+    else if (uno::Reference< task::XInteractionRetry >(
+                     xContinuation.get(), uno::UNO_QUERY).
                  is())
         return std::make_pair(
                    ucbhelper::CONTINUATION_ABORT,
