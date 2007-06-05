@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hierarchycontent.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:04:35 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:05:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,9 +148,7 @@
 
 #include "../inc/urihelper.hxx"
 
-using namespace com::sun;
 using namespace com::sun::star;
-
 using namespace hierarchy_ucp;
 
 //=========================================================================
@@ -165,7 +163,7 @@ using namespace hierarchy_ucp;
 HierarchyContent* HierarchyContent::create(
             const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
             HierarchyContentProvider* pProvider,
-            const uno::Reference< star::ucb::XContentIdentifier >& Identifier )
+            const uno::Reference< ucb::XContentIdentifier >& Identifier )
 {
     // Fail, if content does not exist.
     HierarchyContentProperties aProps;
@@ -180,8 +178,8 @@ HierarchyContent* HierarchyContent::create(
 HierarchyContent* HierarchyContent::create(
             const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
             HierarchyContentProvider* pProvider,
-            const uno::Reference< star::ucb::XContentIdentifier >& Identifier,
-            const star::ucb::ContentInfo& Info )
+            const uno::Reference< ucb::XContentIdentifier >& Identifier,
+            const ucb::ContentInfo& Info )
 {
     if ( !Info.Type.getLength() )
         return 0;
@@ -205,7 +203,7 @@ HierarchyContent* HierarchyContent::create(
 HierarchyContent::HierarchyContent(
             const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
             HierarchyContentProvider* pProvider,
-            const uno::Reference< star::ucb::XContentIdentifier >& Identifier,
+            const uno::Reference< ucb::XContentIdentifier >& Identifier,
             const HierarchyContentProperties& rProps )
 : ContentImplHelper( rxSMgr, pProvider, Identifier ),
   m_aProps( rProps ),
@@ -221,8 +219,8 @@ HierarchyContent::HierarchyContent(
 HierarchyContent::HierarchyContent(
             const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
             HierarchyContentProvider* pProvider,
-            const uno::Reference< star::ucb::XContentIdentifier >& Identifier,
-            const star::ucb::ContentInfo& Info )
+            const uno::Reference< ucb::XContentIdentifier >& Identifier,
+            const ucb::ContentInfo& Info )
 : ContentImplHelper( rxSMgr, pProvider, Identifier, sal_False ),
   m_aProps( Info.Type.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( HIERARCHY_FOLDER_CONTENT_TYPE ) )
@@ -275,7 +273,7 @@ uno::Any SAL_CALL HierarchyContent::queryInterface( const uno::Type & rType )
         // Note: isReadOnly may be relative expensive. So avoid calling it
         //       unless it is really necessary.
         aRet = cppu::queryInterface(
-                rType, static_cast< star::ucb::XContentCreator * >( this ) );
+                rType, static_cast< ucb::XContentCreator * >( this ) );
         if ( aRet.hasValue() )
         {
             if ( !isFolder() || isReadOnly() )
@@ -317,14 +315,14 @@ uno::Sequence< uno::Type > SAL_CALL HierarchyContent::getTypes()
                     CPPU_TYPE_REF( lang::XTypeProvider ),
                     CPPU_TYPE_REF( lang::XServiceInfo ),
                     CPPU_TYPE_REF( lang::XComponent ),
-                    CPPU_TYPE_REF( star::ucb::XContent ),
-                    CPPU_TYPE_REF( star::ucb::XCommandProcessor ),
+                    CPPU_TYPE_REF( ucb::XContent ),
+                    CPPU_TYPE_REF( ucb::XCommandProcessor ),
                     CPPU_TYPE_REF( beans::XPropertiesChangeNotifier ),
-                    CPPU_TYPE_REF( star::ucb::XCommandInfoChangeNotifier ),
+                    CPPU_TYPE_REF( ucb::XCommandInfoChangeNotifier ),
                     CPPU_TYPE_REF( beans::XPropertyContainer ),
                     CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                     CPPU_TYPE_REF( container::XChild ),
-                    CPPU_TYPE_REF( star::ucb::XContentCreator ) ); // !!
+                    CPPU_TYPE_REF( ucb::XContentCreator ) ); // !!
                 pCollection = &aCollection;
                 OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
                 pFolderTypes = pCollection;
@@ -349,10 +347,10 @@ uno::Sequence< uno::Type > SAL_CALL HierarchyContent::getTypes()
                     CPPU_TYPE_REF( lang::XTypeProvider ),
                     CPPU_TYPE_REF( lang::XServiceInfo ),
                     CPPU_TYPE_REF( lang::XComponent ),
-                    CPPU_TYPE_REF( star::ucb::XContent ),
-                    CPPU_TYPE_REF( star::ucb::XCommandProcessor ),
+                    CPPU_TYPE_REF( ucb::XContent ),
+                    CPPU_TYPE_REF( ucb::XCommandProcessor ),
                     CPPU_TYPE_REF( beans::XPropertiesChangeNotifier ),
-                    CPPU_TYPE_REF( star::ucb::XCommandInfoChangeNotifier ),
+                    CPPU_TYPE_REF( ucb::XCommandInfoChangeNotifier ),
                     CPPU_TYPE_REF( beans::XPropertyContainer ),
                     CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                     CPPU_TYPE_REF( container::XChild ) );
@@ -418,7 +416,7 @@ rtl::OUString SAL_CALL HierarchyContent::getContentType()
 
 //=========================================================================
 // virtual
-uno::Reference< star::ucb::XContentIdentifier > SAL_CALL
+uno::Reference< ucb::XContentIdentifier > SAL_CALL
 HierarchyContent::getIdentifier()
     throw( uno::RuntimeException )
 {
@@ -426,7 +424,7 @@ HierarchyContent::getIdentifier()
     if ( m_eState == TRANSIENT )
     {
         // Transient contents have no identifier.
-        return uno::Reference< star::ucb::XContentIdentifier >();
+        return uno::Reference< ucb::XContentIdentifier >();
     }
 
     return ContentImplHelper::getIdentifier();
@@ -440,11 +438,11 @@ HierarchyContent::getIdentifier()
 
 // virtual
 uno::Any SAL_CALL HierarchyContent::execute(
-        const star::ucb::Command& aCommand,
+        const ucb::Command& aCommand,
         sal_Int32 /*CommandId*/,
-        const uno::Reference< star::ucb::XCommandEnvironment >& Environment )
+        const uno::Reference< ucb::XCommandEnvironment >& Environment )
     throw( uno::Exception,
-           star::ucb::CommandAbortedException,
+           ucb::CommandAbortedException,
            uno::RuntimeException )
 {
     uno::Any aRet;
@@ -530,7 +528,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         // open command for a folder content
         //////////////////////////////////////////////////////////////////
 
-        star::ucb::OpenCommandArgument2 aOpenCommand;
+        ucb::OpenCommandArgument2 aOpenCommand;
         if ( !( aCommand.Argument >>= aOpenCommand ) )
         {
             ucbhelper::cancelCommandExecution(
@@ -543,7 +541,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
             // Unreachable
         }
 
-        uno::Reference< star::ucb::XDynamicResultSet > xSet
+        uno::Reference< ucb::XDynamicResultSet > xSet
                 = new DynamicResultSet( m_xSMgr, this, aOpenCommand );
         aRet <<= xSet;
     }
@@ -556,7 +554,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         //  ( Not available at root folder )
         //////////////////////////////////////////////////////////////////
 
-        star::ucb::InsertCommandArgument aArg;
+        ucb::InsertCommandArgument aArg;
         if ( !( aCommand.Argument >>= aArg ) )
         {
             ucbhelper::cancelCommandExecution(
@@ -570,8 +568,8 @@ uno::Any SAL_CALL HierarchyContent::execute(
         }
 
         sal_Int32 nNameClash = aArg.ReplaceExisting
-                             ? star::ucb::NameClash::OVERWRITE
-                             : star::ucb::NameClash::ERROR;
+                             ? ucb::NameClash::OVERWRITE
+                             : ucb::NameClash::ERROR;
         insert( nNameClash, Environment );
     }
     else if ( ( m_eKind != ROOT ) && !isReadOnly() &&
@@ -600,7 +598,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
                                               getContentIdentifier()),
                              beans::PropertyState_DIRECT_VALUE));
             ucbhelper::cancelCommandExecution(
-                star::ucb::IOErrorCode_CANT_WRITE,
+                ucb::IOErrorCode_CANT_WRITE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 Environment,
                 rtl::OUString::createFromAscii(
@@ -621,7 +619,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         //  ( Not available at link objects )
         //////////////////////////////////////////////////////////////////
 
-        star::ucb::TransferInfo aInfo;
+        ucb::TransferInfo aInfo;
         if ( !( aCommand.Argument >>= aInfo ) )
         {
             OSL_ENSURE( sal_False, "Wrong argument type!" );
@@ -644,7 +642,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         //////////////////////////////////////////////////////////////////
 
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( star::ucb::UnsupportedCommandException(
+            uno::makeAny( ucb::UnsupportedCommandException(
                                 rtl::OUString(),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
             Environment );
@@ -669,7 +667,7 @@ void SAL_CALL HierarchyContent::abort( sal_Int32 /*CommandId*/ )
 //=========================================================================
 
 // virtual
-uno::Sequence< star::ucb::ContentInfo > SAL_CALL
+uno::Sequence< ucb::ContentInfo > SAL_CALL
 HierarchyContent::queryCreatableContentsInfo()
     throw( uno::RuntimeException )
 {
@@ -677,13 +675,13 @@ HierarchyContent::queryCreatableContentsInfo()
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-        uno::Sequence< star::ucb::ContentInfo > aSeq( 2 );
+        uno::Sequence< ucb::ContentInfo > aSeq( 2 );
 
         // Folder.
         aSeq.getArray()[ 0 ].Type
             = rtl::OUString::createFromAscii( HIERARCHY_FOLDER_CONTENT_TYPE );
         aSeq.getArray()[ 0 ].Attributes
-            = star::ucb::ContentInfoAttribute::KIND_FOLDER;
+            = ucb::ContentInfoAttribute::KIND_FOLDER;
 
         uno::Sequence< beans::Property > aFolderProps( 1 );
         aFolderProps.getArray()[ 0 ] = beans::Property(
@@ -697,7 +695,7 @@ HierarchyContent::queryCreatableContentsInfo()
         aSeq.getArray()[ 1 ].Type
             = rtl::OUString::createFromAscii( HIERARCHY_LINK_CONTENT_TYPE );
         aSeq.getArray()[ 1 ].Attributes
-            = star::ucb::ContentInfoAttribute::KIND_LINK;
+            = ucb::ContentInfoAttribute::KIND_LINK;
 
         uno::Sequence< beans::Property > aLinkProps( 2 );
         aLinkProps.getArray()[ 0 ] = beans::Property(
@@ -719,14 +717,14 @@ HierarchyContent::queryCreatableContentsInfo()
         OSL_ENSURE( sal_False,
                     "queryCreatableContentsInfo called on non-folder object!" );
 
-        return uno::Sequence< star::ucb::ContentInfo >( 0 );
+        return uno::Sequence< ucb::ContentInfo >( 0 );
     }
 }
 
 //=========================================================================
 // virtual
-uno::Reference< star::ucb::XContent > SAL_CALL
-HierarchyContent::createNewContent( const star::ucb::ContentInfo& Info )
+uno::Reference< ucb::XContent > SAL_CALL
+HierarchyContent::createNewContent( const ucb::ContentInfo& Info )
     throw( uno::RuntimeException )
 {
     if ( isFolder() )
@@ -734,7 +732,7 @@ HierarchyContent::createNewContent( const star::ucb::ContentInfo& Info )
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
         if ( !Info.Type.getLength() )
-            return uno::Reference< star::ucb::XContent >();
+            return uno::Reference< ucb::XContent >();
 
         sal_Bool bCreateFolder =
             Info.Type.equalsAsciiL(
@@ -743,7 +741,7 @@ HierarchyContent::createNewContent( const star::ucb::ContentInfo& Info )
         if ( !bCreateFolder &&
              !Info.Type.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( HIERARCHY_LINK_CONTENT_TYPE ) ) )
-            return uno::Reference< star::ucb::XContent >();
+            return uno::Reference< ucb::XContent >();
 
         rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
 
@@ -758,8 +756,8 @@ HierarchyContent::createNewContent( const star::ucb::ContentInfo& Info )
         else
             aURL += rtl::OUString::createFromAscii( "New_Link" );
 
-        uno::Reference< star::ucb::XContentIdentifier > xId
-            = new ::ucb::ContentIdentifier( m_xSMgr, aURL );
+        uno::Reference< ucb::XContentIdentifier > xId
+            = new ::ucbhelper::ContentIdentifier( m_xSMgr, aURL );
 
         return create( m_xSMgr, m_pProvider, xId, Info );
     }
@@ -767,7 +765,7 @@ HierarchyContent::createNewContent( const star::ucb::ContentInfo& Info )
     {
         OSL_ENSURE( sal_False,
                     "createNewContent called on non-folder object!" );
-        return uno::Reference< star::ucb::XContent >();
+        return uno::Reference< ucb::XContent >();
     }
 }
 
@@ -784,7 +782,7 @@ rtl::OUString HierarchyContent::getParentURL()
 sal_Bool HierarchyContent::hasData(
             const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
             HierarchyContentProvider* pProvider,
-            const uno::Reference< star::ucb::XContentIdentifier >& Identifier )
+            const uno::Reference< ucb::XContentIdentifier >& Identifier )
 {
     rtl::OUString aURL = Identifier->getContentIdentifier();
 
@@ -805,7 +803,7 @@ sal_Bool HierarchyContent::hasData(
 sal_Bool HierarchyContent::loadData(
             const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
             HierarchyContentProvider* pProvider,
-            const uno::Reference< star::ucb::XContentIdentifier >& Identifier,
+            const uno::Reference< ucb::XContentIdentifier >& Identifier,
             HierarchyContentProperties& rProps )
 {
     rtl::OUString aURL = Identifier->getContentIdentifier();
@@ -838,8 +836,8 @@ sal_Bool HierarchyContent::storeData()
 
 //=========================================================================
 sal_Bool HierarchyContent::renameData(
-            const uno::Reference< star::ucb::XContentIdentifier >& xOldId,
-            const uno::Reference< star::ucb::XContentIdentifier >& xNewId )
+            const uno::Reference< ucb::XContentIdentifier >& xOldId,
+            const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
     HierarchyEntry aEntry(
             m_xSMgr, m_pProvider, xOldId->getContentIdentifier() );
@@ -857,7 +855,7 @@ sal_Bool HierarchyContent::removeData()
 
 //=========================================================================
 void HierarchyContent::setKind(
-            const uno::Reference< star::ucb::XContentIdentifier >& Identifier )
+            const uno::Reference< ucb::XContentIdentifier >& Identifier )
 {
     if ( m_aProps.getIsFolder() )
     {
@@ -910,7 +908,7 @@ bool HierarchyContent::isReadOnly()
 }
 
 //=========================================================================
-uno::Reference< star::ucb::XContentIdentifier >
+uno::Reference< ucb::XContentIdentifier >
 HierarchyContent::makeNewIdentifier( const rtl::OUString& rTitle )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -919,10 +917,10 @@ HierarchyContent::makeNewIdentifier( const rtl::OUString& rTitle )
     HierarchyUri aUri( m_xIdentifier->getContentIdentifier() );
     rtl::OUString aNewURL = aUri.getParentUri();
     aNewURL += rtl::OUString::createFromAscii( "/" );
-    aNewURL += ::ucb::urihelper::encodeSegment( rTitle );
+    aNewURL += ::ucb_impl::urihelper::encodeSegment( rTitle );
 
-    return uno::Reference< star::ucb::XContentIdentifier >(
-                           new ::ucb::ContentIdentifier( m_xSMgr, aNewURL ) );
+    return uno::Reference< ucb::XContentIdentifier >(
+        new ::ucbhelper::ContentIdentifier( m_xSMgr, aNewURL ) );
 }
 
 //=========================================================================
@@ -935,7 +933,7 @@ void HierarchyContent::queryChildren( HierarchyContentRefList& rChildren )
     // from provider and extract the contents which are direct children
     // of this content.
 
-    ::ucb::ContentRefList aAllContents;
+    ::ucbhelper::ContentRefList aAllContents;
     m_xProvider->queryExistingContents( aAllContents );
 
     rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
@@ -949,12 +947,12 @@ void HierarchyContent::queryChildren( HierarchyContentRefList& rChildren )
 
     sal_Int32 nLen = aURL.getLength();
 
-    ::ucb::ContentRefList::const_iterator it  = aAllContents.begin();
-    ::ucb::ContentRefList::const_iterator end = aAllContents.end();
+    ::ucbhelper::ContentRefList::const_iterator it  = aAllContents.begin();
+    ::ucbhelper::ContentRefList::const_iterator end = aAllContents.end();
 
     while ( it != end )
     {
-        ::ucb::ContentImplHelperRef xChild = (*it);
+        ::ucbhelper::ContentImplHelperRef xChild = (*it);
         rtl::OUString aChildURL
             = xChild->getIdentifier()->getContentIdentifier();
 
@@ -971,8 +969,7 @@ void HierarchyContent::queryChildren( HierarchyContentRefList& rChildren )
                 // No further slashes/ only a final slash. It's a child!
                 rChildren.push_back(
                     HierarchyContentRef(
-                        static_cast< HierarchyContent * >(
-                            xChild.getBodyPtr() ) ) );
+                        static_cast< HierarchyContent * >( xChild.get() ) ) );
             }
         }
         ++it;
@@ -981,14 +978,14 @@ void HierarchyContent::queryChildren( HierarchyContentRefList& rChildren )
 
 //=========================================================================
 sal_Bool HierarchyContent::exchangeIdentity(
-            const uno::Reference< star::ucb::XContentIdentifier >& xNewId )
+            const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
     if ( !xNewId.is() )
         return sal_False;
 
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
-    uno::Reference< star::ucb::XContent > xThis = this;
+    uno::Reference< ucb::XContent > xThis = this;
 
     // Already persistent?
     if ( m_eState != PERSISTENT )
@@ -1031,7 +1028,7 @@ sal_Bool HierarchyContent::exchangeIdentity(
                     HierarchyContentRef xChild = (*it);
 
                     // Create new content identifier for the child...
-                    uno::Reference< star::ucb::XContentIdentifier > xOldChildId
+                    uno::Reference< ucb::XContentIdentifier > xOldChildId
                                                     = xChild->getIdentifier();
                     rtl::OUString aOldChildURL
                         = xOldChildId->getContentIdentifier();
@@ -1040,8 +1037,9 @@ sal_Bool HierarchyContent::exchangeIdentity(
                                         0,
                                         aOldURL.getLength(),
                                         xNewId->getContentIdentifier() );
-                    uno::Reference< star::ucb::XContentIdentifier > xNewChildId
-                        = new ::ucb::ContentIdentifier( m_xSMgr, aNewChildURL );
+                    uno::Reference< ucb::XContentIdentifier > xNewChildId
+                        = new ::ucbhelper::ContentIdentifier(
+                            m_xSMgr, aNewChildURL );
 
                     if ( !xChild->exchangeIdentity( xNewChildId ) )
                         return sal_False;
@@ -1070,8 +1068,8 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
 {
     // Note: Empty sequence means "get values of all supported properties".
 
-    rtl::Reference< ::ucb::PropertyValueSet > xRow
-        = new ::ucb::PropertyValueSet( rSMgr );
+    rtl::Reference< ::ucbhelper::PropertyValueSet > xRow
+        = new ::ucbhelper::PropertyValueSet( rSMgr );
 
     sal_Int32 nCount = rProperties.getLength();
     if ( nCount )
@@ -1216,8 +1214,8 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
 //=========================================================================
 uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
         const uno::Sequence< beans::PropertyValue >& rValues,
-        const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
-    throw( ::com::sun::star::uno::Exception )
+        const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+    throw( uno::Exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -1236,7 +1234,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
     const beans::PropertyValue* pValues = rValues.getConstArray();
     sal_Int32 nCount = rValues.getLength();
 
-    uno::Reference< star::ucb::XPersistentPropertySet > xAdditionalPropSet;
+    uno::Reference< ucb::XPersistentPropertySet > xAdditionalPropSet;
     sal_Bool bTriedToGetAdditonalPropSet = sal_False;
 
     sal_Bool bExchange = sal_False;
@@ -1304,7 +1302,8 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
 
                             m_aProps.setTitle( aNewValue );
                             m_aProps.setName(
-                                ::ucb::urihelper::encodeSegment( aNewValue ) );
+                                ::ucb_impl::urihelper::encodeSegment(
+                                    aNewValue ) );
 
                             // property change event will be set later...
 
@@ -1451,9 +1450,9 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
 
     if ( bExchange )
     {
-        uno::Reference< star::ucb::XContentIdentifier > xOldId
+        uno::Reference< ucb::XContentIdentifier > xOldId
             = m_xIdentifier;
-        uno::Reference< star::ucb::XContentIdentifier > xNewId
+        uno::Reference< ucb::XContentIdentifier > xNewId
             = makeNewIdentifier( m_aProps.getTitle() );
 
         aGuard.clear();
@@ -1509,7 +1508,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                                                   getContentIdentifier()),
                                  beans::PropertyState_DIRECT_VALUE));
                 ucbhelper::cancelCommandExecution(
-                    star::ucb::IOErrorCode_CANT_WRITE,
+                    ucb::IOErrorCode_CANT_WRITE,
                     uno::Sequence< uno::Any >(&aProps, 1),
                     xEnv,
                     rtl::OUString::createFromAscii(
@@ -1531,7 +1530,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
 //=========================================================================
 void HierarchyContent::insert( sal_Int32 nNameClashResolve,
                                const uno::Reference<
-                                    star::ucb::XCommandEnvironment > & xEnv )
+                                    ucb::XCommandEnvironment > & xEnv )
     throw( uno::Exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
@@ -1540,7 +1539,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
     if ( m_eKind == ROOT )
     {
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( star::ucb::UnsupportedCommandException(
+            uno::makeAny( ucb::UnsupportedCommandException(
                                 rtl::OUString::createFromAscii(
                                     "Not supported by root folder!" ),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
@@ -1554,7 +1553,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
         uno::Sequence< rtl::OUString > aProps( 1 );
         aProps[ 0 ] = rtl::OUString::createFromAscii( "Title" );
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( star::ucb::MissingPropertiesException(
+            uno::makeAny( ucb::MissingPropertiesException(
                                 rtl::OUString(),
                                 static_cast< cppu::OWeakObject * >( this ),
                                 aProps ) ),
@@ -1564,7 +1563,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
 
     // Assemble new content identifier...
 
-    uno::Reference< star::ucb::XContentIdentifier > xId
+    uno::Reference< ucb::XContentIdentifier > xId
         = makeNewIdentifier( m_aProps.getTitle() );
 
     // Handle possible name clash...
@@ -1572,12 +1571,12 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
     switch ( nNameClashResolve )
     {
         // fail.
-        case star::ucb::NameClash::ERROR:
+        case ucb::NameClash::ERROR:
             if ( hasData( xId ) )
             {
                 ucbhelper::cancelCommandExecution(
                     uno::makeAny(
-                        star::ucb::NameClashException(
+                        ucb::NameClashException(
                             rtl::OUString(),
                             static_cast< cppu::OWeakObject * >( this ),
                             task::InteractionClassification_ERROR,
@@ -1588,11 +1587,11 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
             break;
 
         // replace existing object.
-        case star::ucb::NameClash::OVERWRITE:
+        case ucb::NameClash::OVERWRITE:
             break;
 
         // "invent" a new valid title.
-        case star::ucb::NameClash::RENAME:
+        case ucb::NameClash::RENAME:
             if ( hasData( xId ) )
             {
                 sal_Int32 nTry = 0;
@@ -1602,7 +1601,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
                     rtl::OUString aNewId = xId->getContentIdentifier();
                     aNewId += rtl::OUString::createFromAscii( "_" );
                     aNewId += rtl::OUString::valueOf( ++nTry );
-                    xId = new ::ucb::ContentIdentifier( m_xSMgr, aNewId );
+                    xId = new ::ucbhelper::ContentIdentifier( m_xSMgr, aNewId );
                 }
                 while ( hasData( xId ) && ( nTry < 1000 ) );
 
@@ -1610,7 +1609,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
                 {
                     ucbhelper::cancelCommandExecution(
                         uno::makeAny(
-                            star::ucb::UnsupportedNameClashException(
+                            ucb::UnsupportedNameClashException(
                                 rtl::OUString::createFromAscii(
                                     "Unable to resolve name clash!" ),
                                 static_cast< cppu::OWeakObject * >( this ),
@@ -1628,14 +1627,14 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
             }
             break;
 
-        case star::ucb::NameClash::KEEP: // deprecated
-        case star::ucb::NameClash::ASK:
+        case ucb::NameClash::KEEP: // deprecated
+        case ucb::NameClash::ASK:
         default:
             if ( hasData( xId ) )
             {
                 ucbhelper::cancelCommandExecution(
                     uno::makeAny(
-                        star::ucb::UnsupportedNameClashException(
+                        ucb::UnsupportedNameClashException(
                                 rtl::OUString(),
                                 static_cast< cppu::OWeakObject * >( this ),
                                 nNameClashResolve ) ),
@@ -1661,7 +1660,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
                                                    getContentIdentifier()),
                                   beans::PropertyState_DIRECT_VALUE));
         ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_WRITE,
+            ucb::IOErrorCode_CANT_WRITE,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
             rtl::OUString::createFromAscii( "Cannot store persistent data!" ),
@@ -1681,20 +1680,20 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
 //=========================================================================
 void HierarchyContent::destroy( sal_Bool bDeletePhysical,
                                 const uno::Reference<
-                                    star::ucb::XCommandEnvironment > & xEnv )
+                                    ucb::XCommandEnvironment > & xEnv )
     throw( uno::Exception )
 {
     // @@@ take care about bDeletePhysical -> trashcan support
 
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
-    uno::Reference< star::ucb::XContent > xThis = this;
+    uno::Reference< ucb::XContent > xThis = this;
 
     // Persistent?
     if ( m_eState != PERSISTENT )
     {
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( star::ucb::UnsupportedCommandException(
+            uno::makeAny( ucb::UnsupportedCommandException(
                                 rtl::OUString::createFromAscii(
                                     "Not persistent!" ),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
@@ -1706,7 +1705,7 @@ void HierarchyContent::destroy( sal_Bool bDeletePhysical,
     if ( m_eKind == ROOT )
     {
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( star::ucb::UnsupportedCommandException(
+            uno::makeAny( ucb::UnsupportedCommandException(
                                 rtl::OUString::createFromAscii(
                                     "Not supported by root folder!" ),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
@@ -1739,8 +1738,8 @@ void HierarchyContent::destroy( sal_Bool bDeletePhysical,
 
 //=========================================================================
 void HierarchyContent::transfer(
-            const star::ucb::TransferInfo& rInfo,
-            const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
+            const ucb::TransferInfo& rInfo,
+            const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     throw( uno::Exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
@@ -1749,7 +1748,7 @@ void HierarchyContent::transfer(
     if ( m_eState != PERSISTENT )
     {
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( star::ucb::UnsupportedCommandException(
+            uno::makeAny( ucb::UnsupportedCommandException(
                                 rtl::OUString::createFromAscii(
                                     "Not persistent!" ),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
@@ -1764,7 +1763,7 @@ void HierarchyContent::transfer(
             != 0 ) )
     {
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( star::ucb::InteractiveBadTransferURLException(
+            uno::makeAny( ucb::InteractiveBadTransferURLException(
                             rtl::OUString(),
                             static_cast< cppu::OWeakObject * >( this ) ) ),
             xEnv );
@@ -1793,7 +1792,7 @@ void HierarchyContent::transfer(
                                       uno::makeAny(rInfo.SourceURL),
                                       beans::PropertyState_DIRECT_VALUE));
             ucbhelper::cancelCommandExecution(
-                star::ucb::IOErrorCode_RECURSIVE,
+                ucb::IOErrorCode_RECURSIVE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
                 rtl::OUString::createFromAscii(
@@ -1807,8 +1806,8 @@ void HierarchyContent::transfer(
     // 0) Obtain content object for source.
     //////////////////////////////////////////////////////////////////////
 
-    uno::Reference< star::ucb::XContentIdentifier > xId
-        = new ::ucb::ContentIdentifier( m_xSMgr, rInfo.SourceURL );
+    uno::Reference< ucb::XContentIdentifier > xId
+        = new ::ucbhelper::ContentIdentifier( m_xSMgr, rInfo.SourceURL );
 
     // Note: The static cast is okay here, because its sure that
     //       m_xProvider is always the HierarchyContentProvider.
@@ -1819,7 +1818,7 @@ void HierarchyContent::transfer(
         xSource = static_cast< HierarchyContent * >(
                         m_xProvider->queryContent( xId ).get() );
     }
-    catch ( star::ucb::IllegalIdentifierException const & )
+    catch ( ucb::IllegalIdentifierException const & )
     {
         // queryContent
     }
@@ -1834,7 +1833,7 @@ void HierarchyContent::transfer(
                                   uno::makeAny(xId->getContentIdentifier()),
                                   beans::PropertyState_DIRECT_VALUE));
         ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_READ,
+            ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
             rtl::OUString::createFromAscii(
@@ -1850,7 +1849,7 @@ void HierarchyContent::transfer(
     rtl::OUString aType = xSource->isFolder()
         ? rtl::OUString::createFromAscii( HIERARCHY_FOLDER_CONTENT_TYPE )
         : rtl::OUString::createFromAscii( HIERARCHY_LINK_CONTENT_TYPE );
-    star::ucb::ContentInfo aContentInfo;
+    ucb::ContentInfo aContentInfo;
     aContentInfo.Type = aType;
     aContentInfo.Attributes = 0;
 
@@ -1869,7 +1868,7 @@ void HierarchyContent::transfer(
                                   uno::makeAny(aId),
                                   beans::PropertyState_DIRECT_VALUE));
         ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_CREATE,
+            ucb::IOErrorCode_CANT_CREATE,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
             rtl::OUString::createFromAscii(
@@ -1971,7 +1970,7 @@ void HierarchyContent::transfer(
 
             aChildId += rResult.getName();
 
-            star::ucb::TransferInfo aInfo;
+            ucb::TransferInfo aInfo;
             aInfo.MoveData  = sal_False;
             aInfo.NewTitle  = rtl::OUString();
             aInfo.SourceURL = aChildId;
@@ -2004,7 +2003,7 @@ void HierarchyContent::transfer(
                                               getContentIdentifier()),
                              beans::PropertyState_DIRECT_VALUE));
             ucbhelper::cancelCommandExecution(
-                star::ucb::IOErrorCode_CANT_WRITE,
+                ucb::IOErrorCode_CANT_WRITE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
                 rtl::OUString::createFromAscii(
