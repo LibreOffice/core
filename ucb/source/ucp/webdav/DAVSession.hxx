@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DAVSession.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:34:38 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:19:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,11 +135,6 @@ public:
                          const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
-    virtual void GET( void* userData,
-                      const ::rtl::OUString & inPath,
-                      const DAVRequestEnvironment & rEnv )
-        throw( DAVException ) = 0;
-
     virtual void    GET( const ::rtl::OUString & inPath,
         com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& o,
         const DAVRequestEnvironment & rEnv )
@@ -150,13 +145,6 @@ public:
                          const std::vector< ::rtl::OUString > & inHeaderNames,
                          DAVResource & ioResource,
                          const DAVRequestEnvironment & rEnv )
-        throw( DAVException ) = 0;
-
-    virtual void GET( void* userData,
-                      const ::rtl::OUString & inPath,
-                      const std::vector< ::rtl::OUString > & inHeaderNames,
-                      DAVResource & ioResource,
-                      const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
     virtual void    GET( const ::rtl::OUString & inPath,
