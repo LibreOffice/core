@@ -4,9 +4,9 @@
  *
  *  $RCSfile: webdavprovider.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:17:04 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:22:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ namespace webdav_ucp {
 
 //=========================================================================
 
-class ContentProvider : public ::ucb::ContentProviderImplHelper
+class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
 {
     rtl::Reference< DAVSessionFactory > m_xDAVSessionFactory;
     PropertyMap * m_pProps;
