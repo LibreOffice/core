@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyvalueset.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:29:25 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:49:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,9 @@
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
-#endif
+
+#include "osl/mutex.hxx"
+
 #ifndef _UCBHELPER_MACROS_HXX
 #include <ucbhelper/macros.hxx>
 #endif
@@ -72,7 +72,7 @@ namespace com { namespace sun { namespace star { namespace beans {
     class XPropertySet;
 } } } }
 
-namespace ucb {
+namespace ucbhelper {
 
 class PropertyValues;
 
@@ -95,7 +95,7 @@ class UCBHELPER_DLLPUBLIC PropertyValueSet :
                                      m_xSMgr;
     com::sun::star::uno::Reference< com::sun::star::script::XTypeConverter >
                                      m_xTypeConverter;
-    vos::OMutex     m_aMutex;
+    osl::Mutex      m_aMutex;
     PropertyValues* m_pValues;
     sal_Bool        m_bWasNull;
     sal_Bool        m_bTriedToGetTypeConverter;
