@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odma_contentprops.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:51:07 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:09:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,12 +35,9 @@
 #ifndef ODMA_CONTENTPROPS_HXX
 #define ODMA_CONTENTPROPS_HXX
 
-#ifndef _VOS_REFERNCE_HXX_
-#include <vos/refernce.hxx>
-#endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
-#endif
+#include "rtl/ref.hxx"
+#include "salhelper/simplereferenceobject.hxx"
+
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -51,7 +48,7 @@
 
 namespace odma
 {
-    class ContentProperties : public ::vos::OReference
+    class ContentProperties : public salhelper::SimpleReferenceObject
     {
     public:
         com::sun::star::util::DateTime  m_aDateCreated; // when was the document created
@@ -82,7 +79,7 @@ namespace odma
         inline ::rtl::OUString getTitle()       const { return m_sTitle;        }
         inline ::rtl::OUString getSavedAsName() const { return m_sSavedAsName;  }
     };
-    typedef ::std::binary_function< ::vos::ORef<ContentProperties>, ::rtl::OUString,bool> TContentPropertiesFunctorBase;
+    typedef ::std::binary_function< ::rtl::Reference<ContentProperties>, ::rtl::OUString,bool> TContentPropertiesFunctorBase;
     /// binary_function Functor object for class ContentProperties return type is bool
     class ContentPropertiesMemberFunctor : public TContentPropertiesFunctorBase
     {
@@ -91,9 +88,9 @@ namespace odma
         ContentPropertiesMemberFunctor(const ::std::const_mem_fun_t< ::rtl::OUString,ContentProperties>& _rFunc)
             : m_aFunction(_rFunc){}
 
-        inline bool operator()(const ::vos::ORef<ContentProperties>& lhs,const ::rtl::OUString& rhs) const
+        inline bool operator()(const ::rtl::Reference<ContentProperties>& lhs,const ::rtl::OUString& rhs) const
         {
-            return !!(m_aFunction(lhs.getBodyPtr()) == rhs);
+            return !!(m_aFunction(lhs.get()) == rhs);
         }
     };
 }
