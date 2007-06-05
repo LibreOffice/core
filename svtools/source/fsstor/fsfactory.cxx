@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fsfactory.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:56:33 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:26:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,15 +78,15 @@ sal_Bool isLocalNotFile_Impl( ::rtl::OUString aURL )
     sal_Bool bResult = sal_False;
 
     ::rtl::OUString aSystemPath;
-    ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
+    ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
     if ( !pBroker )
         throw uno::RuntimeException();
 
-    uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
+    uno::Reference< ucb::XContentProviderManager > xManager =
             pBroker->getContentProviderManagerInterface();
     try
     {
-           aSystemPath = ::ucb::getSystemPathFromFileURL( xManager, aURL );
+           aSystemPath = ::ucbhelper::getSystemPathFromFileURL( xManager, aURL );
     }
     catch ( uno::Exception& )
     {
@@ -97,8 +97,8 @@ sal_Bool isLocalNotFile_Impl( ::rtl::OUString aURL )
         // it is a local file URL, check that it is not a file
         try
         {
-            uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
-            ::ucb::Content aContent( aURL, xDummyEnv );
+            uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
+            ::ucbhelper::Content aContent( aURL, xDummyEnv );
             bResult = aContent.isFolder();
         }
         catch( uno::Exception& )
@@ -144,14 +144,16 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstance()
     if ( !aTempURL.getLength() )
         throw uno::RuntimeException(); // TODO: can not create tempfile
 
-    ::ucb::Content aResultContent( aTempURL, uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+    ::ucbhelper::Content aResultContent(
+        aTempURL, uno::Reference< ucb::XCommandEnvironment >() );
 
     return uno::Reference< uno::XInterface >(
-                static_cast< OWeakObject* >( new FSStorage( aResultContent,
-                                                            embed::ElementModes::READWRITE,
-                                                            uno::Sequence< beans::PropertyValue >(),
-                                                            m_xFactory ) ),
-                uno::UNO_QUERY );
+        static_cast< OWeakObject* >(
+            new FSStorage(  aResultContent,
+                            embed::ElementModes::READWRITE,
+                            uno::Sequence< beans::PropertyValue >(),
+                            m_xFactory ) ),
+        uno::UNO_QUERY );
 }
 
 //-------------------------------------------------------------------------
@@ -251,12 +253,16 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
     else if ( !::utl::UCBContentHelper::IsFolder( aURL ) )
         throw io::IOException(); // there is no such folder
 
-    ::ucb::Content aResultContent( aURL, uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+    ::ucbhelper::Content aResultContent(
+        aURL, uno::Reference< ucb::XCommandEnvironment >() );
 
     // create storage based on source
     return uno::Reference< uno::XInterface >(
-                static_cast< OWeakObject* >( new FSStorage( aResultContent, nStorageMode, aPropsToSet, m_xFactory ) ),
-                uno::UNO_QUERY );
+        static_cast< OWeakObject* >( new FSStorage( aResultContent,
+                                                    nStorageMode,
+                                                    aPropsToSet,
+                                                    m_xFactory ) ),
+        uno::UNO_QUERY );
 }
 
 //-------------------------------------------------------------------------
