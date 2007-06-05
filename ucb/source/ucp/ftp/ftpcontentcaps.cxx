@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftpcontentcaps.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:49:52 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:59:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,79 +47,75 @@
 
 #include "ftpcontent.hxx"
 
-using namespace com::sun::star::beans;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::ucb;
-using namespace com::sun::star::util;
-using namespace rtl;
-
+using namespace com::sun::star;
 using namespace ftp;
 
 // virtual
-Sequence< Property > FTPContent::getProperties(
-    const Reference< XCommandEnvironment > & /*xEnv*/
-)
+uno::Sequence< beans::Property > FTPContent::getProperties(
+    const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/)
 {
-    Sequence< Property > props(7);
+    #define PROPS_COUNT 7
 
-    props[0] =
-        Property(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
+    static const beans::Property aPropsInfoTable[] =
+    {
+        beans::Property(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
             -1,
-            getCppuType( static_cast< const OUString * >( 0 ) ),
-            PropertyAttribute::BOUND | PropertyAttribute::READONLY );
-
-    props[1] =
-        Property(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
-            -1,
-            getCppuBooleanType(),
-            PropertyAttribute::BOUND | PropertyAttribute::READONLY );
-
-    props[2] =
-        Property(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
+            getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+            beans::PropertyAttribute::BOUND
+            | beans::PropertyAttribute::READONLY
+        ),
+        beans::Property(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
             -1,
             getCppuBooleanType(),
-            PropertyAttribute::BOUND | PropertyAttribute::READONLY );
-
-    props[3] =
-        Property(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
+            beans::PropertyAttribute::BOUND
+            | beans::PropertyAttribute::READONLY
+        ),
+        beans::Property(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
             -1,
-            getCppuType( static_cast< const OUString * >( 0 ) ),
-            PropertyAttribute::BOUND );//  | PropertyAttribute::READONLY );
-
-    props[4] =
-        Property(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ),
+            getCppuBooleanType(),
+            beans::PropertyAttribute::BOUND
+            | beans::PropertyAttribute::READONLY
+        ),
+        beans::Property(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
+            -1,
+            getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+            beans::PropertyAttribute::BOUND
+            //  | beans::PropertyAttribute::READONLY
+        ),
+        beans::Property(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ),
             -1,
             getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
-            PropertyAttribute::BOUND  | PropertyAttribute::READONLY );
-
-    props[5] =
-        Property(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "DateCreated" ) ),
+            beans::PropertyAttribute::BOUND
+            | beans::PropertyAttribute::READONLY
+        ),
+        beans::Property(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateCreated" ) ),
             -1,
-            getCppuType( static_cast< DateTime* >( 0 ) ),
-            PropertyAttribute::BOUND  | PropertyAttribute::READONLY );
-
-    props[6] =
-        Property(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ),
+            getCppuType( static_cast< util::DateTime* >( 0 ) ),
+            beans::PropertyAttribute::BOUND
+            | beans::PropertyAttribute::READONLY
+        ),
+        beans::Property(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ),
             -1,
             getCppuBooleanType(),
-            PropertyAttribute::BOUND | PropertyAttribute::READONLY );
+            beans::PropertyAttribute::BOUND
+            | beans::PropertyAttribute::READONLY
+        )
+    };
 
-    return props;
+    return uno::Sequence< beans::Property >( aPropsInfoTable,PROPS_COUNT);
 }
-
-
 
 //=========================================================================
 // virtual
-Sequence< CommandInfo > FTPContent::getCommands(
-    const Reference< XCommandEnvironment > & /*xEnv*/ )
+uno::Sequence< ucb::CommandInfo > FTPContent::getCommands(
+    const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
 //  osl::MutexGuard aGuard( m_aMutex );
 
@@ -129,50 +125,57 @@ Sequence< CommandInfo > FTPContent::getCommands(
     //
     //=================================================================
 
-#define COMMAND_COUNT 7
+    #define COMMAND_COUNT 7
 
-    static CommandInfo aCommandInfoTable[] =
+    static const ucb::CommandInfo aCommandInfoTable[] =
     {
         ///////////////////////////////////////////////////////////////
         // Required commands
         ///////////////////////////////////////////////////////////////
-        CommandInfo(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+        ucb::CommandInfo(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
             -1,
             getCppuVoidType()
         ),
-        CommandInfo(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+        ucb::CommandInfo(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
             -1,
             getCppuVoidType()
         ),
-        CommandInfo(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+        ucb::CommandInfo(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
             -1,
-            getCppuType( static_cast< Sequence< Property > * >( 0 ) )
+            getCppuType(
+                static_cast< uno::Sequence< beans::Property > * >( 0 ) )
         ),
-        CommandInfo(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+        ucb::CommandInfo(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
             -1,
-            getCppuType( static_cast< Sequence< PropertyValue > * >( 0 ) )
+            getCppuType(
+                static_cast< uno::Sequence< beans::PropertyValue > * >( 0 ) )
         ),
-        CommandInfo(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
+        ucb::CommandInfo(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
             -1,
-            getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
+            getCppuType(
+                static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
         ),
-        CommandInfo(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
+        ucb::CommandInfo(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
             -1,
-            getCppuType( static_cast< InsertCommandArgument * >( 0 ) )
+            getCppuType(
+                static_cast< ucb::InsertCommandArgument * >( 0 ) )
         ),
-        CommandInfo(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
+        ucb::CommandInfo(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
             -1,
             getCppuType( static_cast< sal_Bool * >( 0 ) )
         )
     };
 
-    return Sequence<CommandInfo>(aCommandInfoTable,COMMAND_COUNT);
+    return uno::Sequence<ucb::CommandInfo>(aCommandInfoTable,COMMAND_COUNT);
 }
 
