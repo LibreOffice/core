@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activedatastreamer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:18:57 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:51:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 
 using namespace com::sun::star;
 
-namespace ucb
+namespace ucbhelper
 {
 
 //=========================================================================
@@ -100,4 +100,4 @@ uno::Reference< io::XStream > SAL_CALL ActiveDataStreamer::getStream()
     return m_xStream;
 }
 
-} // namespace ucb
+} // namespace ucbhelper
