@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptexsoundcollection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:21:46 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:13:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ ExSoundEntry::ExSoundEntry( const String& rString )
 {
     try
     {
-        ::ucb::Content aCnt( aSoundURL,
+        ::ucbhelper::Content aCnt( aSoundURL,
             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
         sal_Int64 nVal = 0;
         ::cppu::convertPropertyValue( nVal, aCnt.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ) ) );
@@ -123,7 +123,7 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId )
 {
     try
     {
-        ::ucb::Content aCnt( aSoundURL,
+        ::ucbhelper::Content aCnt( aSoundURL,
             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
         // create SoundContainer
