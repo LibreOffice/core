@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_treelb.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:30:52 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:04:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -977,7 +977,7 @@ void DialogImpl::contentEvent( ContentEvent const & evt )
         switch (evt.Action) {
         case ContentAction::INSERTED:
         {
-            ::ucb::Content ucbContent( evt.Content, 0 );
+            ::ucbhelper::Content ucbContent( evt.Content, 0 );
             OUString factoryURL;
             Reference<XInterface> xDocumentModel;
             if (ucbContent.getPropertyValue(
@@ -1020,7 +1020,7 @@ void DialogImpl::contentEvent( ContentEvent const & evt )
             break;
         }
         case ContentAction::REMOVED: {
-            ::ucb::Content ucbContent( evt.Content, 0 );
+            ::ucbhelper::Content ucbContent( evt.Content, 0 );
             OUString context(
                 makeURL( ucbContent.getURL(), OUSTR("uno_packages") ) );
 
