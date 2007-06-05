@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:18:12 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:34:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,12 +228,12 @@
 #endif
 
 using namespace ::rtl;
-using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::util;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
@@ -518,7 +518,7 @@ sal_Bool    OfaOptionsTreeListBox::Collapse( SvLBoxEntry* pParent )
  *
  * --------------------------------------------------*/
 
-OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent, const Reference< XFrame >& _xFrame ) :
+OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent, const uno::Reference< XFrame >& _xFrame ) :
 
     SfxModalDialog( pParent, SVX_RES( RID_OFADLG_OPTIONS_TREE ) ),
 
@@ -609,7 +609,7 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
             if (pPageInfo->nPageId == RID_SFXPAGE_LINGU)
             {
                 // write personal dictionaries
-                Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
+                uno::Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
                 if (xDicList.is())
                 {
                     SvxSaveDictionaries( xDicList );
@@ -1291,7 +1291,7 @@ CreateTabPage GetSSOCreator( void )
 
 SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
 {
-    Reference< XPropertySet >  xProp( SvxGetLinguPropertySet() );
+    uno::Reference< XPropertySet >  xProp( SvxGetLinguPropertySet() );
     SfxItemSet* pRet = 0;
     switch(nId)
     {
@@ -1346,7 +1346,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
 
             // fuer die Linguistik
 
-            Reference< XSpellChecker1 >  xSpell = SvxGetSpellChecker();
+            uno::Reference< XSpellChecker1 >  xSpell = SvxGetSpellChecker();
             pRet->Put(SfxSpellCheckItem( xSpell, SID_ATTR_SPELL ));
             SfxHyphenRegionItem aHyphen( SID_ATTR_HYPHENREGION );
 
@@ -1540,8 +1540,8 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
     {
         bSaveSpellCheck = ( (const SfxBoolItem*)pItem )->GetValue();
     }
-    Reference< XMultiServiceFactory >  xMgr( ::comphelper::getProcessServiceFactory() );
-    Reference< XPropertySet >  xProp(
+    uno::Reference< XMultiServiceFactory >  xMgr( ::comphelper::getProcessServiceFactory() );
+    uno::Reference< XPropertySet >  xProp(
             xMgr->createInstance( OUString::createFromAscii(
                     "com.sun.star.linguistic2.LinguProperties") ),
             UNO_QUERY );
@@ -1628,15 +1628,15 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
     }
 }
 
-rtl::OUString getCurrentFactory_Impl( const Reference< XFrame >& _xFrame )
+rtl::OUString getCurrentFactory_Impl( const uno::Reference< XFrame >& _xFrame )
 {
     ::rtl::OUString sIdentifier;
-    Reference < XFrame > xCurrentFrame( _xFrame );
-    Reference < XModuleManager > xModuleManager( ::comphelper::getProcessServiceFactory()->createInstance(
+    uno::Reference < XFrame > xCurrentFrame( _xFrame );
+    uno::Reference < XModuleManager > xModuleManager( ::comphelper::getProcessServiceFactory()->createInstance(
         DEFINE_CONST_UNICODE("com.sun.star.frame.ModuleManager") ), UNO_QUERY );
     if ( !xCurrentFrame.is() )
     {
-        Reference< XDesktop > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
+        uno::Reference< XDesktop > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
             DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
         if ( xDesktop.is() )
             xCurrentFrame = xDesktop->getCurrentFrame();
@@ -1661,7 +1661,7 @@ rtl::OUString getCurrentFactory_Impl( const Reference< XFrame >& _xFrame )
     return sIdentifier;
 }
 
-void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
+void OfaTreeOptionsDialog::Initialize( const uno::Reference< XFrame >& _xFrame )
 {
     OfaPageResource aDlgResource;
     sal_uInt16 nGroup = 0;
@@ -1686,8 +1686,8 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             // Disable Online Update page if service not installed
             if( nPageId == RID_SVXPAGE_ONLINEUPDATE )
             {
-                Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-                Reference < XInterface > xService( xFactory->createInstance(
+                uno::Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+                uno::Reference < XInterface > xService( xFactory->createInstance(
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.setup.UpdateCheck"))) );
 
                 if( ! xService.is() )
@@ -1994,7 +1994,7 @@ void OfaTreeOptionsDialog::ResizeTreeLB( void )
 short OfaTreeOptionsDialog::Execute()
 {
     // collect all DictionaryList Events while the dialog is executed
-    Reference<com::sun::star::linguistic2::XDictionaryList> xDictionaryList(SvxGetDictionaryList());
+    uno::Reference<com::sun::star::linguistic2::XDictionaryList> xDictionaryList(SvxGetDictionaryList());
     SvxDicListChgClamp aClamp( xDictionaryList );
     short nRet = SfxModalDialog::Execute();
 
