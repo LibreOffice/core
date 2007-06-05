@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:18:43 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:42:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,9 +176,6 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #endif
 
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace ::sfx2;
@@ -2613,11 +2610,11 @@ IMPL_LINK( SwGrfExtPage, BrowseHdl, Button *, EMPTYARG )
         pGrfDlg->SetTitle(SW_RESSTR(STR_EDIT_GRF ));
     }
     pGrfDlg->SetDisplayDirectory( aConnectED.GetText() );
-    Reference < XFilePicker > xFP = pGrfDlg->GetFilePicker();
-    Reference < XFilePickerControlAccess > xCtrlAcc(xFP, UNO_QUERY);
+    uno::Reference < ui::dialogs::XFilePicker > xFP = pGrfDlg->GetFilePicker();
+    uno::Reference < ui::dialogs::XFilePickerControlAccess > xCtrlAcc(xFP, uno::UNO_QUERY);
     sal_Bool bTrue = sal_True;
-    Any aVal(&bTrue, ::getBooleanCppuType());
-    xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aVal);
+    uno::Any aVal(&bTrue, ::getBooleanCppuType());
+    xCtrlAcc->setValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aVal);
 
     if ( pGrfDlg->Execute() == ERRCODE_NONE )
     {   // ausgewaehlten Filter merken
@@ -2884,8 +2881,8 @@ SfxTabPage* SwFrmURLPage::Create(Window *pParent, const SfxItemSet &rSet)
 
 IMPL_LINK( SwFrmURLPage, InsertFileHdl, PushButton *, pBtn )
 {
-    FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
-    Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+    FileDialogHelper aDlgHelper( ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
+    uno::Reference < ui::dialogs::XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
     try
     {
