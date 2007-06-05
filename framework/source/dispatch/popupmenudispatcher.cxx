@@ -4,9 +4,9 @@
  *
  *  $RCSfile: popupmenudispatcher.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:05:51 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:45:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ const sal_Int32 PROTOCOL_LENGTH     = 19;
 //  constructor
 //*****************************************************************************************************************
 PopupMenuDispatcher::PopupMenuDispatcher(
-    const Reference< XMultiServiceFactory >& xFactory )
+    const uno::Reference< XMultiServiceFactory >& xFactory )
         //  Init baseclasses first
         :   ThreadHelpBase          ( &Application::GetSolarMutex()  )
         ,   OWeakObject             (                                )
@@ -217,7 +217,7 @@ throw( css::uno::Exception, css::uno::RuntimeException)
             m_xWeakFrame = xFrame;
 
             m_bActivateListener = sal_True;
-            Reference< css::frame::XFrameActionListener > xFrameActionListener(
+            uno::Reference< css::frame::XFrameActionListener > xFrameActionListener(
                 (OWeakObject *)this, css::uno::UNO_QUERY );
             xFrame->addFrameActionListener( xFrameActionListener );
         }
@@ -328,7 +328,7 @@ throw( RuntimeException )
 //*****************************************************************************************************************
 void
 SAL_CALL PopupMenuDispatcher::addStatusListener(
-    const Reference< XStatusListener >& xControl,
+    const uno::Reference< XStatusListener >& xControl,
     const URL&                          aURL    )
 throw( RuntimeException )
 {
@@ -344,7 +344,7 @@ throw( RuntimeException )
 //*****************************************************************************************************************
 void
 SAL_CALL PopupMenuDispatcher::removeStatusListener(
-    const Reference< XStatusListener >& xControl,
+    const uno::Reference< XStatusListener >& xControl,
     const URL&                          aURL    )
 throw( RuntimeException )
 {
@@ -391,16 +391,16 @@ SAL_CALL PopupMenuDispatcher::disposing( const EventObject& ) throw( RuntimeExce
 
         if ( m_bActivateListener )
         {
-            Reference< XFrame > xFrame( m_xWeakFrame.get(), UNO_QUERY );
+            uno::Reference< XFrame > xFrame( m_xWeakFrame.get(), UNO_QUERY );
             if ( xFrame.is() )
             {
-                xFrame->removeFrameActionListener( Reference< XFrameActionListener >( (OWeakObject *)this, UNO_QUERY ));
+                xFrame->removeFrameActionListener( uno::Reference< XFrameActionListener >( (OWeakObject *)this, UNO_QUERY ));
                 m_bActivateListener = sal_False;
             }
         }
 
         // Forget our factory.
-        m_xFactory = Reference< XMultiServiceFactory >();
+        m_xFactory = uno::Reference< XMultiServiceFactory >();
     }
 }
 
