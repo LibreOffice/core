@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filrset.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:21:13 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:56:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
+
+#include "osl/mutex.hxx"
+
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
@@ -693,7 +696,7 @@ namespace fileaccess {
         com::sun::star::uno::Sequence< com::sun::star::beans::Property >      m_sProperty;
         com::sun::star::uno::Sequence< com::sun::star::ucb::NumberedSortingInfo >  m_sSortingInfo;
 
-        vos::OMutex                         m_aMutex;
+        osl::Mutex                          m_aMutex;
         osl::Mutex                          m_aEventListenerMutex;
         cppu::OInterfaceContainerHelper*    m_pDisposeEventListeners;
 
