@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 12:20:46 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:39:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,7 +150,7 @@ sal_uInt32 SwXMLWriter::_Write( SfxMedium* pTargetMedium )
 {
     DBG_ASSERT( pTargetMedium, "No medium is provided!" );
     // Get service factory
-    Reference< lang::XMultiServiceFactory > xServiceFactory =
+    uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
     ASSERT( xServiceFactory.is(),
             "SwXMLWriter::Write: got no service manager" );
@@ -158,11 +158,11 @@ sal_uInt32 SwXMLWriter::_Write( SfxMedium* pTargetMedium )
         return ERR_SWG_WRITE_ERROR;
 
     // Get data sink ...
-    Reference< io::XOutputStream > xOut;
+    uno::Reference< io::XOutputStream > xOut;
     SvStorageStreamRef xDocStream;
-    Reference< document::XGraphicObjectResolver > xGraphicResolver;
+    uno::Reference< document::XGraphicObjectResolver > xGraphicResolver;
     SvXMLGraphicHelper *pGraphicHelper = 0;
-    Reference< document::XEmbeddedObjectResolver > xObjectResolver;
+    uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
     SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
 
     ASSERT( xStg.is(), "Where is my storage?" );
@@ -395,7 +395,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         *pArgs++ <<= xStatusIndicator;
 
     //Get model
-    Reference< lang::XComponent > xModelComp(
+    uno::Reference< lang::XComponent > xModelComp(
         pDoc->GetDocShell()->GetModel(), UNO_QUERY );
     ASSERT( xModelComp.is(), "XMLWriter::Write: got no model" );
     if( !xModelComp.is() )
@@ -486,11 +486,11 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("layout-cache") );
         try
         {
-            Reference < io::XStream > xStm = xStg->openStreamElement( sStreamName, embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+            uno::Reference < io::XStream > xStm = xStg->openStreamElement( sStreamName, embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
             SvStream* pStrm = utl::UcbStreamHelper::CreateStream( xStm );
             if( !pStrm->GetError() )
             {
-                Reference < beans::XPropertySet > xSet( xStm, UNO_QUERY );
+                uno::Reference < beans::XPropertySet > xSet( xStm, UNO_QUERY );
                 String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
                 OUString aMime( RTL_CONSTASCII_USTRINGPARAM("application/binary") );
                 uno::Any aAny;
@@ -567,9 +567,9 @@ ULONG SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
 }
 
 sal_Bool SwXMLWriter::WriteThroughComponent(
-    const Reference<XComponent> & xComponent,
+    const uno::Reference<XComponent> & xComponent,
     const sal_Char* pStreamName,
-    const Reference<lang::XMultiServiceFactory> & rFactory,
+    const uno::Reference<lang::XMultiServiceFactory> & rFactory,
     const sal_Char* pServiceName,
     const Sequence<Any> & rArguments,
     const Sequence<beans::PropertyValue> & rMediaDesc,
@@ -592,7 +592,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
                 xStg->openStreamElement( sStreamName,
                 embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
 
-        Reference <beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
+        uno::Reference <beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
         if( !xSet.is() )
             return sal_False;
 
@@ -619,7 +619,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
         }
 
         // set buffer and create outputstream
-        Reference< io::XOutputStream > xOutputStream = xStream->getOutputStream();
+        uno::Reference< io::XOutputStream > xOutputStream = xStream->getOutputStream();
 
         // set Base URL
         uno::Reference< beans::XPropertySet > xInfoSet;
@@ -646,9 +646,9 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
 }
 
 sal_Bool SwXMLWriter::WriteThroughComponent(
-    const Reference<io::XOutputStream> & xOutputStream,
-    const Reference<XComponent> & xComponent,
-    const Reference<XMultiServiceFactory> & rFactory,
+    const uno::Reference<io::XOutputStream> & xOutputStream,
+    const uno::Reference<XComponent> & xComponent,
+    const uno::Reference<XMultiServiceFactory> & rFactory,
     const sal_Char* pServiceName,
     const Sequence<Any> & rArguments,
     const Sequence<PropertyValue> & rMediaDesc )
@@ -661,7 +661,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
                                 "SwXMLWriter::WriteThroughComponent" );
 
     // get component
-    Reference< io::XActiveDataSource > xSaxWriter(
+    uno::Reference< io::XActiveDataSource > xSaxWriter(
         rFactory->createInstance(
             String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(
                 "com.sun.star.xml.sax.Writer")) ),
@@ -676,14 +676,14 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
     xSaxWriter->setOutputStream( xOutputStream );
 
     // prepare arguments (prepend doc handler to given arguments)
-    Reference<xml::sax::XDocumentHandler> xDocHandler( xSaxWriter,UNO_QUERY);
+    uno::Reference<xml::sax::XDocumentHandler> xDocHandler( xSaxWriter,UNO_QUERY);
     Sequence<Any> aArgs( 1 + rArguments.getLength() );
     aArgs[0] <<= xDocHandler;
     for(sal_Int32 i = 0; i < rArguments.getLength(); i++)
         aArgs[i+1] = rArguments[i];
 
     // get filter component
-    Reference< document::XExporter > xExporter(
+    uno::Reference< document::XExporter > xExporter(
         rFactory->createInstanceWithArguments(
             OUString::createFromAscii(pServiceName), aArgs), UNO_QUERY);
     ASSERT( xExporter.is(),
@@ -697,7 +697,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
 
     // filter!
     RTL_LOGFILE_CONTEXT_TRACE( aFilterLog, "call filter()" );
-    Reference<XFilter> xFilter( xExporter, UNO_QUERY );
+    uno::Reference<XFilter> xFilter( xExporter, UNO_QUERY );
     return xFilter->filter( rMediaDesc );
 }
 
