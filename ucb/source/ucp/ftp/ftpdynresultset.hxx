@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftpdynresultset.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:35:46 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:00:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,25 +36,20 @@
 #ifndef _FTP_FTPDYNRESULTSET_HXX
 #define _FTP_FTPDYNRESULTSET_HXX
 
-#ifndef _UCBHELPER_RESULTSETHELPER_HXX
-#include <ucbhelper/resultsethelper.hxx>
-#endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
-#endif
-#ifndef _FTP_FTPCONTENT_HXX_
+#include "rtl/ref.hxx"
+#include "ucbhelper/resultsethelper.hxx"
+
 #include "ftpcontent.hxx"
-#endif
 
 namespace ftp {
 
     class ResultSetFactory;
 
-    class DynamicResultSet : public ::ucb::ResultSetImplHelper
+    class DynamicResultSet : public ::ucbhelper::ResultSetImplHelper
     {
-        vos::ORef< FTPContent > m_xContent;
+        rtl::Reference< FTPContent > m_xContent;
         com::sun::star::uno::Reference<
-        com::sun::star::ucb::XCommandEnvironment > m_xEnv;
+            com::sun::star::ucb::XCommandEnvironment > m_xEnv;
         ResultSetFactory*                    m_pFactory;
 
     private:
@@ -64,11 +59,11 @@ namespace ftp {
     public:
         DynamicResultSet(
             const com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-            const vos::ORef< FTPContent >& rxContent,
+                com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+            const rtl::Reference< FTPContent >& rxContent,
             const com::sun::star::ucb::OpenCommandArgument2& rCommand,
             const com::sun::star::uno::Reference<
-            com::sun::star::ucb::XCommandEnvironment >& rxEnv,
+                com::sun::star::ucb::XCommandEnvironment >& rxEnv,
             ResultSetFactory* pFactory );
 
         ~DynamicResultSet();
