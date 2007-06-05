@@ -4,9 +4,9 @@
  *
  *  $RCSfile: myucp_content.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:25:12 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:58:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,58 +42,36 @@
 
  *************************************************************************/
 
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
+#include "osl/diagnose.h"
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
-#include <com/sun/star/beans/XPropertyAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_ILLEGALACCESSEXCEPTION_HPP_
-#include <com/sun/star/lang/IllegalAccessException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
-#include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
-#include <com/sun/star/ucb/OpenCommandArgument2.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
-#include <com/sun/star/ucb/OpenMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCOMMANDINFO_HPP_
-#include <com/sun/star/ucb/XCommandInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XPERSISTENTPROPERTYSET_HPP_
-#include <com/sun/star/ucb/XPersistentPropertySet.hpp>
-#endif
-#ifndef _UCBHELPER_CONTENTIDENTIFIER_HXX
-#include <ucbhelper/contentidentifier.hxx>
-#endif
-#ifndef _UCBHELPER_PROPERTYVALUESET_HXX
-#include <ucbhelper/propertyvalueset.hxx>
-#endif
-#ifndef _UCBHELPER_CANCELCOMMANDEXECUTION_HXX_
-#include <ucbhelper/cancelcommandexecution.hxx>
-#endif
+#include "com/sun/star/beans/PropertyAttribute.hpp"
+#include "com/sun/star/beans/XPropertyAccess.hpp"
+#include "com/sun/star/lang/IllegalAccessException.hpp"
+#include "com/sun/star/sdbc/XRow.hpp"
+#include "com/sun/star/ucb/XCommandInfo.hpp"
+#include "com/sun/star/ucb/XPersistentPropertySet.hpp"
+#include "ucbhelper/contentidentifier.hxx"
+#include "ucbhelper/propertyvalueset.hxx"
+#include "ucbhelper/cancelcommandexecution.hxx"
 
-// @@@ Adjust multi-include-protection-ifdef and header file name.
-#ifndef _MYUCP_CONTENT_HXX
 #include "myucp_content.hxx"
-#endif
-// @@@ Adjust multi-include-protection-ifdef and header file name.
-#ifndef _MYUCP_PROVIDER_HXX
 #include "myucp_provider.hxx"
-#endif
-// @@@ Adjust multi-include-protection-ifdef and header file name.
-//#ifndef _MYUCP_RESULTSET_HXX
-//#include "myucp_resultset.hxx"
-//#endif
 
-using namespace com::sun;
+#ifdef IMPLEMENT_COMMAND_INSERT
+#include "com/sun/star/ucb/InsertCommandArgument.hpp"
+#include "com/sun/star/ucb/MissingInputStreamException.hpp"
+#include "com/sun/star/ucb/MissingPropertiesException.hpp"
+#endif
+#ifdef IMPLEMENT_COMMAND_OPEN
+#include "com/sun/star/io/XOutputStream.hpp"
+#include "com/sun/star/io/XActiveDataSink.hpp"
+#include "com/sun/star/ucb/OpenCommandArgument2.hpp"
+#include "com/sun/star/ucb/OpenMode.hpp"
+#include "com/sun/star/ucb/UnsupportedDataSinkException.hpp"
+#include "com/sun/star/ucb/UnsupportedOpenModeException.hpp"
+#include "myucp_resultset.hxx"
+#endif
+
 using namespace com::sun::star;
 
 // @@@ Adjust namespace name.
@@ -108,8 +86,8 @@ using namespace myucp;
 //=========================================================================
 
 Content::Content( const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
-                  ::ucb::ContentProviderImplHelper* pProvider,
-                  const uno::Reference< star::ucb::XContentIdentifier >& Identifier )
+                  ::ucbhelper::ContentProviderImplHelper* pProvider,
+                  const uno::Reference< ucb::XContentIdentifier >& Identifier )
 : ContentImplHelper( rxSMgr, pProvider, Identifier )
 {
     // @@@ Fill m_aProps here or implement lazy evaluation logic for this.
@@ -133,7 +111,7 @@ Content::~Content()
 
 // virtual
 void SAL_CALL Content::acquire()
-    throw( uno::RuntimeException )
+    throw()
 {
     ContentImplHelper::acquire();
 }
@@ -141,7 +119,7 @@ void SAL_CALL Content::acquire()
 //=========================================================================
 // virtual
 void SAL_CALL Content::release()
-    throw( uno::RuntimeException )
+    throw()
 {
     ContentImplHelper::release();
 }
@@ -188,10 +166,10 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
                 CPPU_TYPE_REF( lang::XTypeProvider ),
                 CPPU_TYPE_REF( lang::XServiceInfo ),
                 CPPU_TYPE_REF( lang::XComponent ),
-                CPPU_TYPE_REF( star::ucb::XContent ),
-                CPPU_TYPE_REF( star::ucb::XCommandProcessor ),
+                CPPU_TYPE_REF( ucb::XContent ),
+                CPPU_TYPE_REF( ucb::XCommandProcessor ),
                 CPPU_TYPE_REF( beans::XPropertiesChangeNotifier ),
-                CPPU_TYPE_REF( star::ucb::XCommandInfoChangeNotifier ),
+                CPPU_TYPE_REF( ucb::XCommandInfoChangeNotifier ),
                 CPPU_TYPE_REF( beans::XPropertyContainer ),
                 CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                 CPPU_TYPE_REF( container::XChild ) );
@@ -212,7 +190,8 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 rtl::OUString SAL_CALL Content::getImplementationName()
     throw( uno::RuntimeException )
 {
-    // @@@ Adjust implementation name. Keep the prefix "com.sun.star.comp."!
+    // @@@ Adjust implementation name.
+    // Prefix with reversed company domain name.
     return rtl::OUString::createFromAscii( "com.sun.star.comp.myucp.Content" );
 }
 
@@ -250,11 +229,11 @@ rtl::OUString SAL_CALL Content::getContentType()
 
 // virtual
 uno::Any SAL_CALL Content::execute(
-        const star::ucb::Command& aCommand,
-        sal_Int32 CommandId,
-        const uno::Reference< star::ucb::XCommandEnvironment >& Environment )
+        const ucb::Command& aCommand,
+        sal_Int32 /* CommandId */,
+        const uno::Reference< ucb::XCommandEnvironment >& Environment )
     throw( uno::Exception,
-           star::ucb::CommandAbortedException,
+           ucb::CommandAbortedException,
            uno::RuntimeException )
 {
     uno::Any aRet;
@@ -270,7 +249,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= Properties ) )
         {
             OSL_ENSURE( sal_False, "Wrong argument type!" );
-            ucbhelper::cancelCommandExecution(
+            ::ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
                                     rtl::OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
@@ -292,7 +271,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= aProperties ) )
         {
             OSL_ENSURE( sal_False, "Wrong argument type!" );
-            ucbhelper::cancelCommandExecution(
+            ::ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
                                     rtl::OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
@@ -304,7 +283,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !aProperties.getLength() )
         {
             OSL_ENSURE( sal_False, "No properties!" );
-            ucbhelper::cancelCommandExecution(
+            ::ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
                                     rtl::OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
@@ -335,15 +314,15 @@ uno::Any SAL_CALL Content::execute(
         // Note: Implemented by base class.
         aRet <<= getCommandInfo( Environment );
     }
-#if 0
+#ifdef IMPLEMENT_COMMAND_OPEN
     else if ( aCommand.Name.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( "open" ) ) )
     {
-        star::ucb::OpenCommandArgument2 aOpenCommand;
+        ucb::OpenCommandArgument2 aOpenCommand;
           if ( !( aCommand.Argument >>= aOpenCommand ) )
         {
             OSL_ENSURE( sal_False, "Wrong argument type!" );
-            ucbhelper::cancelCommandExecution(
+            ::ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
                                     rtl::OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
@@ -353,15 +332,15 @@ uno::Any SAL_CALL Content::execute(
         }
 
         sal_Bool bOpenFolder =
-            ( ( aOpenCommand.Mode == star::ucb::OpenMode::ALL ) ||
-              ( aOpenCommand.Mode == star::ucb::OpenMode::FOLDERS ) ||
-              ( aOpenCommand.Mode == star::ucb::OpenMode::DOCUMENTS ) );
+            ( ( aOpenCommand.Mode == ucb::OpenMode::ALL ) ||
+              ( aOpenCommand.Mode == ucb::OpenMode::FOLDERS ) ||
+              ( aOpenCommand.Mode == ucb::OpenMode::DOCUMENTS ) );
 
-        if ( bOpenFolder && isFolder( Environment ) )
+        if ( bOpenFolder /*&& isFolder( Environment )*/ )
         {
             // open as folder - return result set
 
-            uno::Reference< star::ucb::XDynamicResultSet > xSet
+            uno::Reference< ucb::XDynamicResultSet > xSet
                             = new DynamicResultSet( m_xSMgr,
                                                     this,
                                                     aOpenCommand,
@@ -375,13 +354,13 @@ uno::Any SAL_CALL Content::execute(
 
             // Check open mode
             if ( ( aOpenCommand.Mode
-                    == star::ucb::OpenMode::DOCUMENT_SHARE_DENY_NONE ) ||
+                    == ucb::OpenMode::DOCUMENT_SHARE_DENY_NONE ) ||
                  ( aOpenCommand.Mode
-                    == star::ucb::OpenMode::DOCUMENT_SHARE_DENY_WRITE ) )
+                    == ucb::OpenMode::DOCUMENT_SHARE_DENY_WRITE ) )
             {
                 // Unsupported.
-                ucbhelper::cancelCommandExecution(
-                    uno::makeAny( star::ucb::UnsupportedOpenModeException(
+                ::ucbhelper::cancelCommandExecution(
+                    uno::makeAny( ucb::UnsupportedOpenModeException(
                                     rtl::OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     sal_Int16( aOpenCommand.Mode ) ) ),
@@ -396,19 +375,16 @@ uno::Any SAL_CALL Content::execute(
                     aOpenCommand.Sink, uno::UNO_QUERY );
             if ( xOut.is() )
               {
-                // @@@ PUSH: write data into xOut
+                // @@@ write data into xOut
               }
             else
               {
-                uno::Reference< io::XActiveDataSink > xDataSink
-                    = uno::Reference< io::XActiveDataSink >(
+                uno::Reference< io::XActiveDataSink > xDataSink(
                         aOpenCommand.Sink, uno::UNO_QUERY );
                   if ( xDataSink.is() )
                 {
-                      // @@@ PULL: wait for client read
-
                     uno::Reference< io::XInputStream > xIn
-                        = new // @@@ your XInputStream + XSeekable impl. object
+                        /* @@@ your XInputStream + XSeekable impl. object */;
                     xDataSink->setInputStream( xIn );
                 }
                   else
@@ -416,7 +392,7 @@ uno::Any SAL_CALL Content::execute(
                     // Note: aOpenCommand.Sink may contain an XStream
                     //       implementation. Support for this type of
                     //       sink is optional...
-                    ucbhelper::cancelCommandExecution(
+                    ::ucbhelper::cancelCommandExecution(
                         uno::makeAny( ucb::UnsupportedDataSinkException(
                                 rtl::OUString(),
                                 static_cast< cppu::OWeakObject * >( this ),
@@ -427,6 +403,9 @@ uno::Any SAL_CALL Content::execute(
               }
         }
     }
+#endif // IMPLEMENT_COMMAND_OPEN
+
+#ifdef IMPLEMENT_COMMAND_INSERT
     else if ( aCommand.Name.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( "insert" ) ) )
     {
@@ -434,11 +413,11 @@ uno::Any SAL_CALL Content::execute(
         // insert
         //////////////////////////////////////////////////////////////////
 
-        star::ucb::InsertCommandArgument arg;
+        ucb::InsertCommandArgument arg;
           if ( !( aCommand.Argument >>= arg ) )
         {
               OSL_ENSURE( sal_False, "Wrong argument type!" );
-            ucbhelper::cancelCommandExecution(
+            ::ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
                                     rtl::OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
@@ -449,6 +428,9 @@ uno::Any SAL_CALL Content::execute(
 
           insert( arg.Data, arg.ReplaceExisting, Environment );
     }
+#endif // IMPLEMENT_COMMAND_INSERT
+
+#ifdef IMPLEMENT_COMMAND_DELETE
     else if ( aCommand.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "delete" ) ) )
     {
@@ -466,7 +448,7 @@ uno::Any SAL_CALL Content::execute(
         // Remove own and all childrens(!) persistent data.
 //      removeData();
     }
-#endif
+#endif // IMPLEMENT_COMMAND_DELETE
     else
     {
         //////////////////////////////////////////////////////////////////
@@ -475,8 +457,8 @@ uno::Any SAL_CALL Content::execute(
 
         OSL_ENSURE( sal_False, "Content::execute - unsupported command!" );
 
-        ucbhelper::cancelCommandExecution(
-            uno::makeAny( star::ucb::UnsupportedCommandException(
+        ::ucbhelper::cancelCommandExecution(
+            uno::makeAny( ucb::UnsupportedCommandException(
                             rtl::OUString(),
                             static_cast< cppu::OWeakObject * >( this ) ) ),
             Environment );
@@ -488,7 +470,7 @@ uno::Any SAL_CALL Content::execute(
 
 //=========================================================================
 // virtual
-void SAL_CALL Content::abort( sal_Int32 CommandId )
+void SAL_CALL Content::abort( sal_Int32 )
     throw( uno::RuntimeException )
 {
     // @@@ Implement logic to abort running commands, if this makes
@@ -517,13 +499,14 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             const uno::Reference< lang::XMultiServiceFactory >& rSMgr,
             const uno::Sequence< beans::Property >& rProperties,
             const ContentProperties& rData,
-            const rtl::Reference< ::ucb::ContentProviderImplHelper >& rProvider,
+            const rtl::Reference<
+                ::ucbhelper::ContentProviderImplHelper >& rProvider,
             const rtl::OUString& rContentId )
 {
     // Note: Empty sequence means "get values of all supported properties".
 
-    rtl::Reference< ::ucb::PropertyValueSet > xRow
-                                = new ::ucb::PropertyValueSet( rSMgr );
+    rtl::Reference< ::ucbhelper::PropertyValueSet > xRow
+        = new ::ucbhelper::PropertyValueSet( rSMgr );
 
     sal_Int32 nCount = rProperties.getLength();
     if ( nCount )
@@ -659,22 +642,22 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 //=========================================================================
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
             const uno::Sequence< beans::Property >& rProperties,
-            const uno::Reference< star::ucb::XCommandEnvironment >& xEnv )
+            const uno::Reference< ucb::XCommandEnvironment >& /* xEnv */)
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     return getPropertyValues( m_xSMgr,
                               rProperties,
                               m_aProps,
                               rtl::Reference<
-                                ::ucb::ContentProviderImplHelper >(
-                                    m_xProvider.getBodyPtr() ),
+                                ::ucbhelper::ContentProviderImplHelper >(
+                                    m_xProvider.get() ),
                               m_xIdentifier->getContentIdentifier() );
 }
 
 //=========================================================================
 uno::Sequence< uno::Any > Content::setPropertyValues(
             const uno::Sequence< beans::PropertyValue >& rValues,
-            const uno::Reference< star::ucb::XCommandEnvironment >& xEnv )
+            const uno::Reference< ucb::XCommandEnvironment >& /* xEnv */)
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -693,7 +676,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     const beans::PropertyValue* pValues = rValues.getConstArray();
     sal_Int32 nCount = rValues.getLength();
 
-    uno::Reference< star::ucb::XPersistentPropertySet > xAdditionalPropSet;
+    uno::Reference< ucb::XPersistentPropertySet > xAdditionalPropSet;
     sal_Bool bTriedToGetAdditonalPropSet = sal_False;
 
     for ( sal_Int32 n = 0; n < nCount; ++n )
@@ -735,8 +718,6 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             {
                 if ( aNewValue != m_aProps.aTitle )
                 {
-                    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
                     aEvent.PropertyName = rValue.Name;
                     aEvent.OldValue     = uno::makeAny( m_aProps.aTitle );
                     aEvent.NewValue     = uno::makeAny( aNewValue );
@@ -847,7 +828,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     return aRet;
 }
 
-#if 0
+#ifdef IMPLEMENT_COMMAND_INSERT
+
 //=========================================================================
 void Content::queryChildren( ContentRefList& rChildren )
 {
@@ -857,34 +839,34 @@ void Content::queryChildren( ContentRefList& rChildren )
     // from provider and extract the contents which are direct children
     // of this content.
 
-    ::ucb::ContentRefList aAllContents;
+    ::ucbhelper::ContentRefList aAllContents;
     m_xProvider->queryExistingContents( aAllContents );
 
-    OUString aURL = m_xIdentifier->getContentIdentifier();
+    ::rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
     sal_Int32 nPos = aURL.lastIndexOf( '/' );
 
     if ( nPos != ( aURL.getLength() - 1 ) )
     {
         // No trailing slash found. Append.
-        aURL += OUString::createFromAscii( "/" );
+        aURL += ::rtl::OUString::createFromAscii( "/" );
     }
 
     sal_Int32 nLen = aURL.getLength();
 
-    ::ucb::ContentRefList::const_iterator it  = aAllContents.begin();
-    ::ucb::ContentRefList::const_iterator end = aAllContents.end();
+    ::ucbhelper::ContentRefList::const_iterator it  = aAllContents.begin();
+    ::ucbhelper::ContentRefList::const_iterator end = aAllContents.end();
 
     while ( it != end )
     {
-        ::ucb::ContentImplHelperRef xChild = (*it);
-        OUString aChildURL = xChild->getIdentifier()->getContentIdentifier();
+        ::ucbhelper::ContentImplHelperRef xChild = (*it);
+        ::rtl::OUString aChildURL
+              = xChild->getIdentifier()->getContentIdentifier();
 
         // Is aURL a prefix of aChildURL?
         if ( ( aChildURL.getLength() > nLen ) &&
              ( aChildURL.compareTo( aURL, nLen ) == 0 ) )
         {
-            sal_Int32 nPos = nLen;
-            nPos = aChildURL.indexOf( '/', nPos );
+            nPos = aChildURL.indexOf( '/', nLen );
 
             if ( ( nPos == -1 ) ||
                  ( nPos == ( aChildURL.getLength() - 1 ) ) )
@@ -892,7 +874,7 @@ void Content::queryChildren( ContentRefList& rChildren )
                 // No further slashes / only a final slash. It's a child!
                 rChildren.push_back(
                     ContentRef(
-                        static_cast< Content * >( xChild.getBodyPtr() ) ) );
+                        static_cast< Content * >( xChild.get() ) ) );
             }
         }
         ++it;
@@ -903,20 +885,22 @@ void Content::queryChildren( ContentRefList& rChildren )
 void Content::insert(
         const uno::Reference< io::XInputStream > & xInputStream,
         sal_Bool bReplaceExisting,
-        const uno::Reference<
-            com::sun::star::ucb::XCommandEnvironment >& Environment )
+        const uno::Reference< ucb::XCommandEnvironment >& Environment )
     throw( uno::Exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
     // Check, if all required properties were set.
+
+#if 0
+    // @@@ add checks for property presence
     if ( m_aProps.xxxx == yyyyy )
     {
         OSL_ENSURE( sal_False, "Content::insert - property value missing!" );
 
         uno::Sequence< rtl::OUString > aProps( 1 );
         aProps[ 0 ] = rtl::OUString::createFromAscii( "zzzz" );
-        ucbhelper::cancelCommandExecution(
+        ::ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::MissingPropertiesException(
                                 rtl::OUString(),
                                 static_cast< cppu::OWeakObject * >( this ),
@@ -924,13 +908,15 @@ void Content::insert(
             Environment );
         // Unreachable
     }
+#endif
 
+    bool bNeedInputStream = true; // @@@ adjust to real requirements
     if ( bNeedInputStream && !xInputStream.is() )
     {
         OSL_ENSURE( sal_False, "Content::insert - No data stream!" );
 
-        ucbhelper::cancelCommandExecution(
-            uno::makeAny( star::ucb::MissingInputStreamException(
+        ::ucbhelper::cancelCommandExecution(
+            uno::makeAny( ucb::MissingInputStreamException(
                             rtl::OUString(),
                             static_cast< cppu::OWeakObject * >( this ) ) ),
             Environment );
@@ -939,15 +925,24 @@ void Content::insert(
 
     // Assemble new content identifier...
 
-    uno::Reference< star::ucb::XContentIdentifier > xId = ...;
+    uno::Reference< ucb::XContentIdentifier > xId /* @@@ create content identifier */;
 
     // Fail, if a resource with given id already exists.
-    if ( !bReplaceExisting && hasData( xId ) )
+    if ( !bReplaceExisting /*&& hasData( xId ) @@@ impl for hasData() */ )
     {
+        uno::Any aProps
+            = uno::makeAny( beans::PropertyValue(
+                                  rtl::OUString(
+                                      RTL_CONSTASCII_USTRINGPARAM( "Uri" ) ),
+                                  -1,
+                                  uno::makeAny( xId->getContentIdentifier() ),
+                                  beans::PropertyState_DIRECT_VALUE ) );
         ucbhelper::cancelCommandExecution(
-                        static_cast< cppu::OWeakObject * >( this ),
-                        star::ucb::IOErrorCode_ALREADY_EXISTING,
-                        Environment );
+            ucb::IOErrorCode_ALREADY_EXISTING,
+            uno::Sequence< uno::Any >(&aProps, 1),
+            Environment,
+            rtl::OUString::createFromAscii( "content already existing!!" ),
+            this );
         // Unreachable
     }
 
@@ -960,13 +955,17 @@ void Content::insert(
     inserted();
 }
 
+#endif // IMPLEMENT_COMMAND_INSERT
+
+#ifdef IMPLEMENT_COMMAND_DELETE
+
 //=========================================================================
 void Content::destroy( sal_Bool bDeletePhysical )
     throw( uno::Exception )
 {
     // @@@ take care about bDeletePhysical -> trashcan support
 
-    uno::Reference< star::ucb::XContent > xThis = this;
+    uno::Reference< ucb::XContent > xThis = this;
 
     deleted();
 
@@ -986,5 +985,7 @@ void Content::destroy( sal_Bool bDeletePhysical )
         ++it;
     }
 }
-#endif
+
+#endif // IMPLEMENT_COMMAND_DELETE
+
 
