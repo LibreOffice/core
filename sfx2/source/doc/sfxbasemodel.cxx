@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:29:27 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:38:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1926,17 +1926,17 @@ class ImplUCBPrintWatcher : public ::osl::Thread
                                             INetURLObject::DECODE_WITH_CHARSET);
                 if (aSplitter.removeSegment() && sFileName.Len()>0)
                 {
-                    ::ucb::Content aSource(
+                    ::ucbhelper::Content aSource(
                             ::rtl::OUString((*ppTempFile)->GetURL()),
                             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >());
 
-                    ::ucb::Content aTarget(
+                    ::ucbhelper::Content aTarget(
                             ::rtl::OUString(aSplitter.GetMainURL(INetURLObject::NO_DECODE)),
                             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >());
 
                     aTarget.transferContent(
                             aSource,
-                            ::ucb::InsertOperation_COPY,
+                            ::ucbhelper::InsertOperation_COPY,
                             ::rtl::OUString(sFileName),
                             ::com::sun::star::ucb::NameClash::OVERWRITE);
                 }
