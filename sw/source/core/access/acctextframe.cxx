@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acctextframe.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:39:06 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:28:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,8 +86,7 @@
 #include "acctextframe.hxx"
 #endif
 
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::rtl;
 
@@ -136,7 +135,7 @@ void SwAccessibleTextFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 }
 
 OUString SAL_CALL SwAccessibleTextFrame::getAccessibleDescription (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -147,14 +146,14 @@ OUString SAL_CALL SwAccessibleTextFrame::getAccessibleDescription (void)
 }
 
 OUString SAL_CALL SwAccessibleTextFrame::getImplementationName()
-        throw( RuntimeException )
+        throw( uno::RuntimeException )
 {
     return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplementationName));
 }
 
 sal_Bool SAL_CALL SwAccessibleTextFrame::supportsService(
-        const ::rtl::OUString& sTestServiceName)
-    throw (::com::sun::star::uno::RuntimeException)
+        const OUString& sTestServiceName)
+    throw (uno::RuntimeException)
 {
     return sTestServiceName.equalsAsciiL( sServiceName,
                                           sizeof(sServiceName)-1 ) ||
@@ -162,21 +161,21 @@ sal_Bool SAL_CALL SwAccessibleTextFrame::supportsService(
                                              sizeof(sAccessibleServiceName)-1 );
 }
 
-Sequence< OUString > SAL_CALL SwAccessibleTextFrame::getSupportedServiceNames()
-        throw( ::com::sun::star::uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL SwAccessibleTextFrame::getSupportedServiceNames()
+        throw( uno::RuntimeException )
 {
-    Sequence< OUString > aRet(2);
+    uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceName) );
     pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
     return aRet;
 }
 
-Sequence< sal_Int8 > SAL_CALL SwAccessibleTextFrame::getImplementationId()
-        throw(RuntimeException)
+uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleTextFrame::getImplementationId()
+        throw(uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    static Sequence< sal_Int8 > aId( 16 );
+    static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
     {
@@ -208,14 +207,14 @@ SwFlyFrm* SwAccessibleTextFrame::getFlyFrm() const
 
 AccessibleRelation SwAccessibleTextFrame::makeRelation( sal_Int16 nType, const SwFlyFrm* pFrm )
 {
-    Sequence<Reference<XInterface> > aSequence(1);
+    uno::Sequence<uno::Reference<XInterface> > aSequence(1);
     aSequence[0] = GetMap()->GetContext( pFrm );
     return AccessibleRelation( nType, aSequence );
 }
 
 
-Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleTextFrame::getAccessibleRelationSet( )
-    throw ( RuntimeException )
+uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleTextFrame::getAccessibleRelationSet( )
+    throw ( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     CHECK_FOR_DEFUNC( XAccessibleContext );
