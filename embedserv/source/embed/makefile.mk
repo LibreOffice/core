@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 11:36:31 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 10:59:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,8 @@ TARGET=emser
 .INCLUDE :  settings.mk
 #.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
+.IF "$(DISABLE_ATL)"==""
+
 LIBTARGET=NO
 USE_DEFFILE=NO
 
@@ -80,7 +82,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/syswinwrapper.obj  \
         $(SLO)$/tracker.obj
 
-
+.ENDIF
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
