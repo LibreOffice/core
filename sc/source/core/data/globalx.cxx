@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globalx.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 18:00:49 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:31:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,14 +98,14 @@ void ScGlobal::InitAddIns()
                 aObj.setFinalSlash();
                 try
                 {
-                    ::ucb::Content aCnt( aObj.GetMainURL(INetURLObject::NO_DECODE),
+                    ::ucbhelper::Content aCnt( aObj.GetMainURL(INetURLObject::NO_DECODE),
                         Reference< XCommandEnvironment > () );
                     Reference< sdbc::XResultSet > xResultSet;
                     Sequence< rtl::OUString > aProps;
                     try
                     {
                         xResultSet = aCnt.createCursor(
-                            aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
+                            aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY );
                     }
                     catch ( Exception& )
                     {
