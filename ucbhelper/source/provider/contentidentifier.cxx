@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contentidentifier.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:21:46 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:54:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 
-namespace ucb
+namespace ucbhelper
 {
 
 //=========================================================================
@@ -237,5 +237,5 @@ OUString SAL_CALL ContentIdentifier::getContentProviderScheme()
     return m_pImpl->m_aProviderScheme;
 }
 
-} /* namespace ucb */
+} /* namespace ucbhelper */
 
