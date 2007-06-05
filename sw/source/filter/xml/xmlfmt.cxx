@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:57:54 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:39:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,10 +139,6 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::style;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::container;
 using namespace ::rtl;
 using namespace ::xmloff::token;
 
@@ -295,7 +291,7 @@ public:
     SwXMLConditionContext_Impl(
             SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
-            const Reference< xml::sax::XAttributeList > & xAttrList );
+            const uno::Reference< xml::sax::XAttributeList > & xAttrList );
     virtual ~SwXMLConditionContext_Impl();
 
     TYPEINFO();
@@ -310,7 +306,7 @@ public:
 SwXMLConditionContext_Impl::SwXMLConditionContext_Impl(
             SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
-            const Reference< xml::sax::XAttributeList > & xAttrList ) :
+            const uno::Reference< xml::sax::XAttributeList > & xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     nCondition( 0 ),
     nSubCondition( 0 )
@@ -362,7 +358,7 @@ class SwXMLTextStyleContext_Impl : public XMLTextStyleContext
 
 protected:
 
-    virtual Reference < XStyle > Create();
+    virtual uno::Reference < style::XStyle > Create();
 
 public:
 
@@ -370,7 +366,7 @@ public:
 
     SwXMLTextStyleContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
-            const Reference< xml::sax::XAttributeList > & xAttrList,
+            const uno::Reference< xml::sax::XAttributeList > & xAttrList,
             sal_uInt16 nFamily,
             SvXMLStylesContext& rStyles );
     virtual ~SwXMLTextStyleContext_Impl();
@@ -378,29 +374,29 @@ public:
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const Reference< xml::sax::XAttributeList > & xAttrList );
+            const uno::Reference< xml::sax::XAttributeList > & xAttrList );
 
     virtual void Finish( sal_Bool bOverwrite );
 };
 
 TYPEINIT1( SwXMLTextStyleContext_Impl, XMLTextStyleContext );
 
-Reference < XStyle > SwXMLTextStyleContext_Impl::Create()
+uno::Reference < style::XStyle > SwXMLTextStyleContext_Impl::Create()
 {
-    Reference < XStyle > xNewStyle;
+    uno::Reference < style::XStyle > xNewStyle;
 
     if( pConditions && XML_STYLE_FAMILY_TEXT_PARAGRAPH == GetFamily() )
     {
-        Reference< XMultiServiceFactory > xFactory( GetImport().GetModel(),
-                                                    UNO_QUERY );
+        uno::Reference< lang::XMultiServiceFactory > xFactory( GetImport().GetModel(),
+                                                    uno::UNO_QUERY );
         if( xFactory.is() )
         {
             OUString sServiceName( RTL_CONSTASCII_USTRINGPARAM(
                         "com.sun.star.style.ConditionalParagraphStyle" ) );
-            Reference < XInterface > xIfc =
+            uno::Reference < uno::XInterface > xIfc =
                 xFactory->createInstance( sServiceName );
             if( xIfc.is() )
-                xNewStyle = Reference < XStyle >( xIfc, UNO_QUERY );
+                xNewStyle = uno::Reference < style::XStyle >( xIfc, uno::UNO_QUERY );
         }
     }
     else
@@ -413,7 +409,7 @@ Reference < XStyle > SwXMLTextStyleContext_Impl::Create()
 
 SwXMLTextStyleContext_Impl::SwXMLTextStyleContext_Impl( SwXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList,
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList,
         sal_uInt16 nFamily,
         SvXMLStylesContext& rStyles ) :
     XMLTextStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily ),
@@ -438,7 +434,7 @@ SwXMLTextStyleContext_Impl::~SwXMLTextStyleContext_Impl()
 SvXMLImportContext *SwXMLTextStyleContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
 
@@ -471,12 +467,12 @@ void SwXMLTextStyleContext_Impl::Finish( sal_Bool bOverwrite )
     if( !pConditions || XML_STYLE_FAMILY_TEXT_PARAGRAPH != GetFamily() )
         return;
 
-    Reference < XStyle > xStyle = GetStyle();
+    uno::Reference < style::XStyle > xStyle = GetStyle();
     if( !xStyle.is() )
         return;
 
     const SwXStyle* pStyle = 0;
-    Reference<XUnoTunnel> xStyleTunnel( xStyle, UNO_QUERY);
+    uno::Reference<lang::XUnoTunnel> xStyleTunnel( xStyle, uno::UNO_QUERY);
     if( xStyleTunnel.is() )
     {
         pStyle = (SwXStyle*)xStyleTunnel->getSomething(
@@ -534,7 +530,7 @@ class SwXMLItemSetStyleContext_Impl : public SvXMLStyleContext
     SvXMLImportContext *CreateItemSetContext(
             sal_uInt16 nPrefix,
             const OUString& rLName,
-            const Reference< xml::sax::XAttributeList > & xAttrList);
+            const uno::Reference< xml::sax::XAttributeList > & xAttrList);
 
 protected:
 
@@ -553,14 +549,14 @@ public:
     SwXMLItemSetStyleContext_Impl(
             SwXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
-            const Reference< xml::sax::XAttributeList > & xAttrList,
+            const uno::Reference< xml::sax::XAttributeList > & xAttrList,
             sal_uInt16 nFamily);
     virtual ~SwXMLItemSetStyleContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const Reference< xml::sax::XAttributeList > & xAttrList );
+            const uno::Reference< xml::sax::XAttributeList > & xAttrList );
 
     // The item set may be empty!
     SfxItemSet *GetItemSet() { return pItemSet; }
@@ -608,15 +604,15 @@ void SwXMLItemSetStyleContext_Impl::SetAttribute( sal_uInt16 nPrefixKey,
 
 SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
         sal_uInt16 nPrefix, const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     ASSERT( !pItemSet,
             "SwXMLItemSetStyleContext_Impl::CreateItemSetContext: item set exists" );
 
     SvXMLImportContext *pContext = 0;
 
-    Reference<XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
-                                       UNO_QUERY);
+    uno::Reference<lang::XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
+                                       uno::UNO_QUERY);
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
     OTextCursorHelper *pTxtCrsr = (OTextCursorHelper*)xCrsrTunnel->getSomething(
                                         OTextCursorHelper::getUnoTunnelId() );
@@ -658,7 +654,7 @@ TYPEINIT1( SwXMLItemSetStyleContext_Impl, SvXMLStyleContext );
 
 SwXMLItemSetStyleContext_Impl::SwXMLItemSetStyleContext_Impl( SwXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList,
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList,
         sal_uInt16 nFamily ) :
     SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, nFamily ),
     pItemSet( 0 ),
@@ -677,7 +673,7 @@ SwXMLItemSetStyleContext_Impl::~SwXMLItemSetStyleContext_Impl()
 SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
 
@@ -705,8 +701,8 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
         return;
     bPageDescConnected = sal_True;
 
-    Reference<XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
-                                       UNO_QUERY);
+    uno::Reference<lang::XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
+                                       uno::UNO_QUERY);
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
     OTextCursorHelper *pTxtCrsr = (OTextCursorHelper*)xCrsrTunnel->getSomething(
                                         OTextCursorHelper::getUnoTunnelId() );
@@ -777,8 +773,8 @@ sal_Bool SwXMLItemSetStyleContext_Impl::ResolveDataStyleName()
         {
             if( !pItemSet )
             {
-                Reference<XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
-                                                   UNO_QUERY);
+                uno::Reference<lang::XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
+                                                   uno::UNO_QUERY);
                 ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
                 OTextCursorHelper *pTxtCrsr = (OTextCursorHelper*)xCrsrTunnel->getSomething(
                                                     OTextCursorHelper::getUnoTunnelId() );
@@ -817,16 +813,15 @@ protected:
 
     virtual SvXMLStyleContext *CreateStyleStyleChildContext( sal_uInt16 nFamily,
         sal_uInt16 nPrefix, const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList );
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList );
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList );
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList );
     // HACK
     virtual UniReference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
         sal_uInt16 nFamily ) const;
 
-    virtual ::com::sun::star::uno::Reference <
-                    ::com::sun::star::container::XNameContainer >
+    virtual uno::Reference < container::XNameContainer >
         GetStylesContainer( sal_uInt16 nFamily ) const;
     virtual ::rtl::OUString GetServiceName( sal_uInt16 nFamily ) const;
     // HACK
@@ -838,7 +833,7 @@ public:
     SwXMLStylesContext_Impl(
             SwXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName ,
-            const Reference< xml::sax::XAttributeList > & xAttrList,
+            const uno::Reference< xml::sax::XAttributeList > & xAttrList,
             sal_Bool bAuto );
     virtual ~SwXMLStylesContext_Impl();
 
@@ -857,7 +852,7 @@ inline SwXMLItemSetStyleContext_Impl *SwXMLStylesContext_Impl::GetSwStyle(
 
 SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pStyle = 0;
 
@@ -925,7 +920,7 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateDefaultStyleStyleChildContext(
 
 SwXMLStylesContext_Impl::SwXMLStylesContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList,
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList,
         sal_Bool bAuto ) :
     SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList, bAuto )
 {
@@ -986,10 +981,10 @@ UniReference < SvXMLImportPropertyMapper > SwXMLStylesContext_Impl::GetImportPro
     return xMapper;
 }
 
-Reference < XNameContainer > SwXMLStylesContext_Impl::GetStylesContainer(
+uno::Reference < container::XNameContainer > SwXMLStylesContext_Impl::GetStylesContainer(
                                                 sal_uInt16 nFamily ) const
 {
-    Reference < XNameContainer > xStyles;
+    uno::Reference < container::XNameContainer > xStyles;
     if( XML_STYLE_FAMILY_SD_GRAPHICS_ID == nFamily )
         xStyles = ((SvXMLImport *)&GetImport())->GetTextImport()->GetFrameStyles();
     else
@@ -1038,7 +1033,7 @@ public:
     SwXMLMasterStylesContext_Impl(
             SwXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName ,
-            const Reference< xml::sax::XAttributeList > & xAttrList );
+            const uno::Reference< xml::sax::XAttributeList > & xAttrList );
     virtual ~SwXMLMasterStylesContext_Impl();
     virtual void EndElement();
 };
@@ -1048,7 +1043,7 @@ TYPEINIT1( SwXMLMasterStylesContext_Impl, XMLTextMasterStylesContext );
 SwXMLMasterStylesContext_Impl::SwXMLMasterStylesContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName ,
-        const Reference< xml::sax::XAttributeList > & xAttrList ) :
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList ) :
     XMLTextMasterStylesContext( rImport, nPrfx, rLName, xAttrList )
 {
 }
@@ -1080,7 +1075,7 @@ void SwXMLMasterStylesContext_Impl::EndElement()
 
 SvXMLImportContext *SwXMLImport::CreateStylesContext(
         const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList,
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList,
         sal_Bool bAuto )
 {
     SvXMLStylesContext *pContext =
@@ -1096,7 +1091,7 @@ SvXMLImportContext *SwXMLImport::CreateStylesContext(
 
 SvXMLImportContext *SwXMLImport::CreateMasterStylesContext(
         const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLStylesContext *pContext =
         new SwXMLMasterStylesContext_Impl( *this, XML_NAMESPACE_OFFICE, rLocalName,
@@ -1124,8 +1119,8 @@ void SwXMLImport::UpdateTxtCollConditions( SwDoc *pDoc )
 {
     if( !pDoc )
     {
-        Reference<XUnoTunnel> xCrsrTunnel( GetTextImport()->GetCursor(),
-                                              UNO_QUERY);
+        uno::Reference<lang::XUnoTunnel> xCrsrTunnel( GetTextImport()->GetCursor(),
+                                              uno::UNO_QUERY);
         ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
         OTextCursorHelper *pTxtCrsr =
                 (OTextCursorHelper*)xCrsrTunnel->getSomething(
