@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FileAccess.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:10:46 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:42:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,14 +300,14 @@ void OFileAccess::transferImpl( const rtl::OUString& rSource,
 
         try
         {
-            ucb::Content aFullDest(
+            ucbhelper::Content aFullDest(
                 aDestObj.GetMainURL(
                     INetURLObject::NO_DECODE ), mxEnvironment );
 
             Reference< XChild > xChild( aFullDest.get(), UNO_QUERY_THROW );
             Reference< com::sun::star::ucb::XContent >
                 xParent( xChild->getParent(), UNO_QUERY_THROW );
-            ucb::Content aParent( xParent, mxEnvironment );
+            ucbhelper::Content aParent( xParent, mxEnvironment );
 
             aDestURL = aParent.getURL();
 
@@ -379,15 +379,15 @@ void OFileAccess::transferImpl( const rtl::OUString& rSource,
 #endif
     }
 
-    ucb::Content aDestPath( aDestURL,   mxEnvironment );
-    ucb::Content aSrc     ( aSourceURL, mxEnvironment );
+    ucbhelper::Content aDestPath( aDestURL,   mxEnvironment );
+    ucbhelper::Content aSrc     ( aSourceURL, mxEnvironment );
 
     try
     {
         aDestPath.transferContent( aSrc,
                                    bMoveData
-                                    ? ucb::InsertOperation_MOVE
-                                    : ucb::InsertOperation_COPY,
+                                    ? ucbhelper::InsertOperation_MOVE
+                                    : ucbhelper::InsertOperation_COPY,
                                    aName,
                                    ::com::sun::star::ucb::NameClash::OVERWRITE );
     }
@@ -414,7 +414,7 @@ void OFileAccess::kill( const rtl::OUString& FileURL )
 {
     // SfxContentHelper::Kill
     INetURLObject aDeleteObj( FileURL, INET_PROT_FILE );
-    ucb::Content aCnt( aDeleteObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    ucbhelper::Content aCnt( aDeleteObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
     try
     {
         aCnt.executeCommand( rtl::OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
@@ -432,7 +432,7 @@ sal_Bool OFileAccess::isFolder( const rtl::OUString& FileURL )
     try
     {
         INetURLObject aURLObj( FileURL, INET_PROT_FILE );
-        ucb::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+        ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
         bRet = aCnt.isFolder();
     }
     catch (Exception &) {}
@@ -443,7 +443,7 @@ sal_Bool OFileAccess::isReadOnly( const rtl::OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
     INetURLObject aURLObj( FileURL, INET_PROT_FILE );
-    ucb::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
     Any aRetAny = aCnt.getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ) );
     sal_Bool bRet = sal_False;
     aRetAny >>= bRet;
@@ -454,7 +454,7 @@ void OFileAccess::setReadOnly( const rtl::OUString& FileURL, sal_Bool bReadOnly 
     throw(CommandAbortedException, Exception, RuntimeException)
 {
     INetURLObject aURLObj( FileURL, INET_PROT_FILE );
-    ucb::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
     Any aAny;
     aAny <<= bReadOnly;
     aCnt.setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ), aAny );
@@ -483,7 +483,7 @@ void OFileAccess::createFolder( const rtl::OUString& NewFolderURL )
         }
     }
 
-    ucb::Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    ucbhelper::Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
 
     Reference< XContentCreator > xCreator = Reference< XContentCreator >( aCnt.get(), UNO_QUERY );
     if ( !xCreator.is() )
@@ -516,7 +516,7 @@ void OFileAccess::createFolder( const rtl::OUString& NewFolderURL )
             Any* pValues = aValues.getArray();
             pValues[0] = makeAny( rtl::OUString( aTitle ) );
 
-            ucb::Content aNew;
+            ucbhelper::Content aNew;
             try
             {
                 if ( !aCnt.insertNewContent( rCurr.Type, aNames, aValues, aNew ) )
@@ -541,7 +541,7 @@ sal_Int32 OFileAccess::getSize( const rtl::OUString& FileURL )
     sal_Int32 nSize = 0;
     sal_Int64 nTemp = 0;
     INetURLObject aObj( FileURL, INET_PROT_FILE );
-    ucb::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
     aCnt.getPropertyValue( rtl::OUString::createFromAscii( "Size" ) ) >>= nTemp;
     nSize = (sal_Int32)nTemp;
     return nSize;
@@ -551,7 +551,7 @@ rtl::OUString OFileAccess::getContentType( const rtl::OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
     INetURLObject aObj( FileURL, INET_PROT_FILE );
-    ucb::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
 
     Reference< XContent > xContent = aCnt.get();
     rtl::OUString aTypeStr = xContent->getContentType();
@@ -565,7 +565,7 @@ DateTime OFileAccess::getDateTimeModified( const rtl::OUString& FileURL )
     DateTime aDateTime;
 
     Reference< XCommandEnvironment > aCmdEnv;
-    ucb::Content aYoung( aFileObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
+    ucbhelper::Content aYoung( aFileObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
     aYoung.getPropertyValue( rtl::OUString::createFromAscii( "DateModified" ) ) >>= aDateTime;
     return aDateTime;
 }
@@ -581,14 +581,14 @@ Sequence< rtl::OUString > OFileAccess::getFolderContents( const rtl::OUString& F
     StringList_Impl* pFiles = NULL;
     INetURLObject aFolderObj( FolderURL, INET_PROT_FILE );
 
-    ucb::Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    ucbhelper::Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
     Reference< XResultSet > xResultSet;
     Sequence< rtl::OUString > aProps(0);
     //Sequence< rtl::OUString > aProps(1);
     //rtl::OUString* pProps = aProps.getArray();
     //pProps[0] == rtl::OUString::createFromAscii( "Url" );
 
-    ucb::ResultSetInclude eInclude = bIncludeFolders ? ucb::INCLUDE_FOLDERS_AND_DOCUMENTS : ucb::INCLUDE_DOCUMENTS_ONLY;
+    ucbhelper::ResultSetInclude eInclude = bIncludeFolders ? ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS : ucbhelper::INCLUDE_DOCUMENTS_ONLY;
 
     try
     {
@@ -655,7 +655,7 @@ Reference< XInputStream > OFileAccess::openFileRead( const rtl::OUString& FileUR
 {
     Reference< XInputStream > xRet;
     INetURLObject aObj( FileURL, INET_PROT_FILE );
-    ucb::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
 
     Reference< XActiveDataSink > xSink = (XActiveDataSink*)(new OActiveDataSink());
 
@@ -699,7 +699,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const rtl::OUString& FileUR
     aCmdArg <<= aArg;
 
     INetURLObject aFileObj( FileURL, INET_PROT_FILE );
-    ucb::Content aCnt( aFileObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    ucbhelper::Content aCnt( aFileObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
 
     // Be silent...
     Reference< XInteractionHandler > xIH;
@@ -761,7 +761,7 @@ bool OFileAccess::createNewFile( const rtl::OUString & rParentURL,
                                  const Reference< XInputStream >& data )
     throw ( Exception )
 {
-    ucb::Content aParentCnt( rParentURL, mxEnvironment );
+    ucbhelper::Content aParentCnt( rParentURL, mxEnvironment );
 
     Reference< XContentCreator > xCreator
         = Reference< XContentCreator >( aParentCnt.get(), UNO_QUERY );
@@ -800,7 +800,7 @@ bool OFileAccess::createNewFile( const rtl::OUString & rParentURL,
 
                 try
                 {
-                    ucb::Content aNew;
+                    ucbhelper::Content aNew;
                     if ( aParentCnt.insertNewContent(
                             rCurr.Type, aNames, aValues, data, aNew ) )
                         return true; // success.
@@ -827,7 +827,7 @@ void SAL_CALL OFileAccess::writeFile( const rtl::OUString& FileURL,
     INetURLObject aURL( FileURL, INET_PROT_FILE );
     try
     {
-        ucb::Content aCnt(
+        ucbhelper::Content aCnt(
             aURL.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
 
         try
@@ -874,7 +874,7 @@ sal_Bool OFileAccess::isHidden( const ::rtl::OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
     INetURLObject aURLObj( FileURL, INET_PROT_FILE );
-    ucb::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
     Any aRetAny = aCnt.getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsHidden" ) ) );
     sal_Bool bRet = sal_False;
     aRetAny >>= bRet;
@@ -885,7 +885,7 @@ void OFileAccess::setHidden( const ::rtl::OUString& FileURL, sal_Bool bHidden )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
     INetURLObject aURLObj( FileURL, INET_PROT_FILE );
-    ucb::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
     Any aAny;
     aAny <<= bHidden;
     aCnt.setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsHidden" ) ), aAny );
