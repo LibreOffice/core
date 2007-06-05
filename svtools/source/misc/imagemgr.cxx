@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:45:33 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:26:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -413,7 +413,7 @@ static USHORT GetImageId_Impl( const String& rExtension )
     return nImage;
 }
 
-static sal_Bool GetVolumeProperties_Impl( ::ucb::Content& rContent, svtools::VolumeInfo& rVolumeInfo )
+static sal_Bool GetVolumeProperties_Impl( ::ucbhelper::Content& rContent, svtools::VolumeInfo& rVolumeInfo )
 {
     sal_Bool bRet = sal_False;
 
@@ -443,7 +443,7 @@ static USHORT GetFolderImageId_Impl( const String& rURL )
     ::svtools::VolumeInfo aVolumeInfo;
     try
     {
-        ::ucb::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        ::ucbhelper::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         if ( GetVolumeProperties_Impl( aCnt, aVolumeInfo ) )
         {
             if ( aVolumeInfo.m_bIsRemote )
@@ -576,7 +576,7 @@ static USHORT GetFolderDescriptionId_Impl( const String& rURL )
     svtools::VolumeInfo aVolumeInfo;
     try
     {
-        ::ucb::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        ::ucbhelper::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         if ( GetVolumeProperties_Impl( aCnt, aVolumeInfo ) )
         {
             if ( aVolumeInfo.m_bIsRemote )
