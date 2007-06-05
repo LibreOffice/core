@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LFolderList.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:26:33 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:21:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,12 +48,6 @@
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_XCONTENTACCESS_HPP_
-#include <com/sun/star/ucb/XContentAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SQLC_XROW_HPP_
-#include <com/sun/star/sdbc/XRow.hpp>
-#endif
 #ifndef _SV_CONVERTER_HXX_
 #include <svtools/converter.hxx>
 #endif
@@ -79,9 +73,6 @@
 #include <rtl/math.hxx>
 #endif
 #include <stdio.h>      //sprintf
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
-#endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
@@ -123,11 +114,9 @@ using namespace ::comphelper;
 using namespace connectivity;
 using namespace connectivity::evoab;
 using namespace connectivity::file;
-using namespace ucb;
 using namespace ::cppu;
 using namespace utl;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
