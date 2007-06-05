@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_ucb.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:27:43 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:04:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #include "dp_misc_api.hxx"
 #endif
 
-namespace ucb
+namespace ucbhelper
 {
 class Content;
 }
@@ -61,7 +61,7 @@ struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC StrTitle :
 
 //==============================================================================
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool create_ucb_content(
-    ::ucb::Content * ucb_content,
+    ::ucbhelper::Content * ucb_content,
     ::rtl::OUString const & url,
     css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
     bool throw_exc = true );
@@ -70,7 +70,7 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool create_ucb_content(
 /** @return true if previously non-existing folder has been created
  */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool create_folder(
-    ::ucb::Content * ucb_content,
+    ::ucbhelper::Content * ucb_content,
     ::rtl::OUString const & url,
     css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
     bool throw_exc = true );
@@ -83,12 +83,12 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool erase_path(
 
 //==============================================================================
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-::rtl::ByteSequence readFile( ::ucb::Content & ucb_content );
+::rtl::ByteSequence readFile( ::ucbhelper::Content & ucb_content );
 
 //==============================================================================
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 bool readLine( ::rtl::OUString * res, ::rtl::OUString const & startingWith,
-               ::ucb::Content & ucb_content, rtl_TextEncoding textenc );
+               ::ucbhelper::Content & ucb_content, rtl_TextEncoding textenc );
 
 }
 
