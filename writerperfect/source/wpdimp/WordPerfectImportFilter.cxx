@@ -78,6 +78,8 @@
 #include "WordPerfectImportFilter.hxx"
 
 using namespace ::rtl;
+using namespace ::com::sun::star;
+
 using rtl::OString;
 using rtl::OUString;
 using com::sun::star::uno::Sequence;
@@ -100,7 +102,7 @@ using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::xml::sax::XDocumentHandler;
 using com::sun::star::xml::sax::XParser;
 
-void callHandler(Reference < XDocumentHandler > xDocHandler);
+void callHandler(uno::Reference < XDocumentHandler > xDocHandler);
 
 sal_Bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException)
@@ -110,7 +112,7 @@ sal_Bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::su
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue * pValue = aDescriptor.getConstArray();
     OUString sURL;
-    Reference < XInputStream > xInputStream;
+    uno::Reference < XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
         if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ) )
@@ -128,10 +130,10 @@ sal_Bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::su
 
     // An XML import service: what we push sax messages to..
     OUString sXMLImportService ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.XMLImporter" ) );
-    Reference < XDocumentHandler > xInternalHandler( mxMSF->createInstance( sXMLImportService ), UNO_QUERY );
+    uno::Reference < XDocumentHandler > xInternalHandler( mxMSF->createInstance( sXMLImportService ), UNO_QUERY );
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to..
-    Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
+    uno::Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
     xImporter->setTargetDocument(mxDoc);
 
         // OO Document Handler: abstract class to handle document SAX messages, concrete implementation here
@@ -159,7 +161,7 @@ void SAL_CALL WordPerfectImportFilter::cancel(  )
 }
 
 // XImporter
-void SAL_CALL WordPerfectImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
+void SAL_CALL WordPerfectImportFilter::setTargetDocument( const uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
     throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
     WRITER_DEBUG_MSG(("WordPerfectImportFilter::getTargetDocument: Got here!\n"));
@@ -179,7 +181,7 @@ OUString SAL_CALL WordPerfectImportFilter::detect( com::sun::star::uno::Sequence
     sal_Int32 location = nLength;
     OUString sURL;
     const PropertyValue * pValue = Descriptor.getConstArray();
-    Reference < XInputStream > xInputStream;
+    uno::Reference < XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
         if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "TypeName" ) ) )
@@ -190,13 +192,13 @@ OUString SAL_CALL WordPerfectImportFilter::detect( com::sun::star::uno::Sequence
             pValue[i].Value >>= sURL;
     }
 
-        Reference< com::sun::star::ucb::XCommandEnvironment > xEnv;
+        uno::Reference< com::sun::star::ucb::XCommandEnvironment > xEnv;
         if (!xInputStream.is())
         {
         try
         {
-            ::ucb::Content aContent(sURL, xEnv);
-                    xInputStream = aContent.openStream();
+            ::ucbhelper::Content aContent(sURL, xEnv);
+            xInputStream = aContent.openStream();
         }
         catch ( ... )
         {
@@ -280,7 +282,7 @@ Sequence< OUString > SAL_CALL WordPerfectImportFilter_getSupportedServiceNames( 
 #undef SERVICE_NAME2
 #undef SERVICE_NAME1
 
-Reference< XInterface > SAL_CALL WordPerfectImportFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
+uno::Reference< XInterface > SAL_CALL WordPerfectImportFilter_createInstance( const uno::Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
     return (cppu::OWeakObject*) new WordPerfectImportFilter( rSMgr );
