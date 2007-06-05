@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:21:34 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:21:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::lang;
 
 ODbaseDatabaseMetaData::ODbaseDatabaseMetaData(::connectivity::file::OConnection* _pCon)    :ODatabaseMetaData(_pCon)
 {
@@ -371,7 +373,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
         aRow[4] = new ORowSetValueDecorator(getBOOL(xIndex->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))));
         aRow[6] = new ORowSetValueDecorator(*pBegin);
 
-        Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xIndex,UNO_QUERY);
+        Reference< XUnoTunnel> xTunnel(xIndex,UNO_QUERY);
         if(xTunnel.is())
         {
             ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId()) );
@@ -477,7 +479,7 @@ sal_Bool SAL_CALL ODbaseDatabaseMetaData::isReadOnly(  ) throw(SQLException, Run
 
     sal_Bool bReadOnly = sal_False;
     static ::rtl::OUString sReadOnly = ::rtl::OUString::createFromAscii("IsReadOnly");
-    ::ucb::Content aFile(m_pConnection->getContent(),::com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >());
+    ::ucbhelper::Content aFile(m_pConnection->getContent(),Reference< XCommandEnvironment >());
     aFile.getPropertyValue(sReadOnly) >>= bReadOnly;
 
     return bReadOnly;
