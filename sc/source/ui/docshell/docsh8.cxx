@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh8.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:08:30 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:31:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,7 @@ BOOL ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject&
 
     try
     {
-        ::ucb::Content aDestPath( aDestPathObj.GetMainURL(INetURLObject::NO_DECODE),
+        ::ucbhelper::Content aDestPath( aDestPathObj.GetMainURL(INetURLObject::NO_DECODE),
                             uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         uno::Reference< ::com::sun::star::ucb::XCommandInfo > xInfo = aDestPath.getCommands();
         rtl::OUString aTransferName = rtl::OUString::createFromAscii( "transfer" );
@@ -162,7 +162,7 @@ BOOL ScDocShell::KillFile( const INetURLObject& rURL )
     sal_Bool bRet = sal_True;
     try
     {
-        ::ucb::Content aCnt( rURL.GetMainURL(INetURLObject::NO_DECODE),
+        ::ucbhelper::Content aCnt( rURL.GetMainURL(INetURLObject::NO_DECODE),
                         uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         aCnt.executeCommand( rtl::OUString::createFromAscii( "delete" ),
                                 comphelper::makeBoolAny( sal_True ) );
@@ -182,7 +182,7 @@ BOOL ScDocShell::IsDocument( const INetURLObject& rURL )
     sal_Bool bRet = sal_False;
     try
     {
-        ::ucb::Content aCnt( rURL.GetMainURL(INetURLObject::NO_DECODE),
+        ::ucbhelper::Content aCnt( rURL.GetMainURL(INetURLObject::NO_DECODE),
                         uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         bRet = aCnt.isDocument();
     }
