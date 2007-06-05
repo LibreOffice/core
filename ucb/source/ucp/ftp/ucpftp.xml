@@ -32,15 +32,13 @@
     <project-build-dependency> sal                </project-build-dependency>
     <project-build-dependency> cppu               </project-build-dependency>
     <project-build-dependency> cppuhelper         </project-build-dependency>
-    <project-build-dependency> vos                </project-build-dependency>
     <project-build-dependency> ucbhelper          </project-build-dependency>
     <project-build-dependency> curl               </project-build-dependency>
 
     <runtime-module-dependency> sal3              </runtime-module-dependency>
     <runtime-module-dependency> cppu3             </runtime-module-dependency>
     <runtime-module-dependency> cppuhelper3$(COM) </runtime-module-dependency>
-    <runtime-module-dependency> vos2$(COM)        </runtime-module-dependency>
-    <runtime-module-dependency> ucbhelper1$(COM)  </runtime-module-dependency>
+    <runtime-module-dependency> ucbhelper4$(COM)  </runtime-module-dependency>
     <runtime-module-dependency> curl              </runtime-module-dependency>
 
     <type> com.sun.star.beans.UnknownPropertyException         </type>
