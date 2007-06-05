@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hierarchycontent.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:46:05 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:05:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,7 @@ private:
 
 class HierarchyContentProvider;
 
-class HierarchyContent : public ::ucb::ContentImplHelper,
+class HierarchyContent : public ::ucbhelper::ContentImplHelper,
                          public com::sun::star::ucb::XContentCreator
 {
     enum ContentKind  { LINK, FOLDER, ROOT };
