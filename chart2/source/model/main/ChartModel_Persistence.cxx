@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartModel_Persistence.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:32:47 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:49:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ Reference< embed::XStorage > lcl_createStorage(
     try
     {
         Reference< io::XStream > xStream(
-            ::ucb::Content( rURL, Reference< ::com::sun::star::ucb::XCommandEnvironment >()).openStream(),
+            ::ucbhelper::Content( rURL, Reference< ::com::sun::star::ucb::XCommandEnvironment >()).openStream(),
             uno::UNO_QUERY );
 
         Reference< lang::XSingleServiceFactory > xStorageFact(
