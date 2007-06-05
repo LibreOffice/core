@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:18:11 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 14:57:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,15 +47,14 @@ TARGET=		ucbhelper
 
 LIB1TARGET=	$(SLB)$/$(TARGET).lib
 LIB1FILES=	$(SLB)$/client.lib \
-        $(SLB)$/provider.lib
+            $(SLB)$/provider.lib
 
 SHL1TARGET=	$(TARGET)$(UCBHELPER_MAJOR)$(COMID)
 SHL1STDLIBS = \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALHELPERLIB) \
-    $(SALLIB) \
-    $(VOSLIB)
+    $(SALLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)
