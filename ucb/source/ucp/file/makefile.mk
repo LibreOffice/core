@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:22:04 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 17:57:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,14 +71,11 @@ SHL1STDLIBS=\
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALLIB)  \
-    $(VOSLIB) \
     $(UCBHELPERLIB)
 
 SHL1VERSIONMAP=exports.map
 
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=exports.dxp
-DEF1DES=UCB : File System Content Provider
 
 .INCLUDE: target.mk
 
