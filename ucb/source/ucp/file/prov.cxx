@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:44:32 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:57:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,6 @@
 #endif
 #ifndef _OSL_SOCKET_H_
 #include <osl/socket.h>
-#endif
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
 #endif
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
@@ -597,7 +594,7 @@ XPropertySetInfoImpl2::hasPropertyByName(
 
 void SAL_CALL FileProvider::initProperties( void )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     if( ! m_xPropertySetInfo.is() )
     {
         osl_getLocalHostname( &m_HostName.pData );
