@@ -4,9 +4,9 @@
  *
  *  $RCSfile: submission_post.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:15:45 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:45:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ using namespace CSS::task;
 using namespace CSS::io;
 using namespace rtl;
 using namespace osl;
-using namespace ucb;
+using namespace ucbhelper;
 using namespace std;
 
 
@@ -76,25 +76,25 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const CSS::uno::Reference<
     if( aInteractionHandler.is() )
         pHelper->m_aInteractionHandler = aInteractionHandler;
     else
-        pHelper->m_aInteractionHandler = Reference< XInteractionHandler >(m_aFactory->createInstance(
+        pHelper->m_aInteractionHandler = CSS::uno::Reference< XInteractionHandler >(m_aFactory->createInstance(
             OUString::createFromAscii("com.sun.star.task.InteractionHandler")), UNO_QUERY);
     OSL_ENSURE(pHelper->m_aInteractionHandler.is(), "failed to create IntreractionHandler");
     CProgressHandlerHelper *pProgressHelper = new CProgressHandlerHelper;
-    pHelper->m_aProgressHandler = Reference< XProgressHandler >(pProgressHelper);
+    pHelper->m_aProgressHandler = CSS::uno::Reference< XProgressHandler >(pProgressHelper);
     // UCB has ownership of environment...
-    Reference< XCommandEnvironment > aEnvironment(pHelper);
+    CSS::uno::Reference< XCommandEnvironment > aEnvironment(pHelper);
 
     try {
-        ucb::Content aContent(m_aURLObj.GetMainURL(INetURLObject::NO_DECODE), aEnvironment);
+        ucbhelper::Content aContent(m_aURLObj.GetMainURL(INetURLObject::NO_DECODE), aEnvironment);
 
         // use post command
 
         OUString aCommandName = OUString::createFromAscii("post");
         PostCommandArgument2 aPostArgument;
         aPostArgument.Source = apSerialization->getInputStream();
-        //Reference< XInterface > aSink( m_aFactory->createInstance(
+        //CSS::uno::Reference< XInterface > aSink( m_aFactory->createInstance(
         //    OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY_THROW);
-        Reference< XActiveDataSink > aSink(new ucb::ActiveDataSink);
+        CSS::uno::Reference< XActiveDataSink > aSink(new ucbhelper::ActiveDataSink);
         //    OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY_THROW);
         aPostArgument.Sink = aSink;
         aPostArgument.MediaType = OUString::createFromAscii("application/xml");
@@ -106,11 +106,11 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const CSS::uno::Reference<
         // wait for command to finish
         // pProgressHelper->m_cFinished.wait();
 
-        // Reference< XOutputStream > xOut(aSink, UNO_QUERY_THROW);
+        // CSS::uno::Reference< XOutputStream > xOut(aSink, UNO_QUERY_THROW);
         // xOut->closeOutput();
 
         try {
-            // m_aResultStream = Reference< XInputStream >(aSink, UNO_QUERY_THROW);
+            // m_aResultStream = CSS::uno::Reference< XInputStream >(aSink, UNO_QUERY_THROW);
             m_aResultStream = aSink->getInputStream();
         } catch (Exception&) {
             OSL_ENSURE(sal_False, "Cannot open reply stream from content");
