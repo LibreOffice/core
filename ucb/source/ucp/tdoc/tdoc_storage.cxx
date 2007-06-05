@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_storage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:44:40 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:18:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,9 +58,7 @@
 
 #include "tdoc_storage.hxx"
 
-using namespace com::sun;
 using namespace com::sun::star;
-
 using namespace tdoc_ucp;
 
 
