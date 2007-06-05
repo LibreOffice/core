@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:26:08 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:35:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,8 +230,8 @@
 #include <objsh.hxx>
 #include <docfac.hxx>
 
-using namespace ::ucb;
-using namespace com::sun::star::ucb;
+using namespace ::ucbhelper;
+using namespace ::com::sun::star::ucb;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
