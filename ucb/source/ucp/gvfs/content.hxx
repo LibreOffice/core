@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:27:02 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:03:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ public:
     ~Authentication();
 };
 
-class Content : public ::ucb::ContentImplHelper,
+class Content : public ::ucbhelper::ContentImplHelper,
         public com::sun::star::ucb::XContentCreator
 {
 //=========================================================================
