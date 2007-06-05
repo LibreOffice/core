@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdevgrind.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:47:49 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:48:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -966,13 +966,13 @@ void GrindApp::Main()
     uno::Sequence< uno::Any > aArgs( 2 );
     aArgs[ 0 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
     aArgs[ 1 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
-    ::ucb::ContentBroker::initialize( xFactory, aArgs );
+    ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
 
     TestWindow pWindow;
     pWindow.Execute();
 
     // clean up UCB
-    ::ucb::ContentBroker::deinitialize();
+    ::ucbhelper::ContentBroker::deinitialize();
 }
 
 } // namespace
