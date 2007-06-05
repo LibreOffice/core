@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:25:57 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:44:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -455,8 +455,8 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
     FileDialogHelper* pFileDlg = new FileDialogHelper( SFXWB_GRAPHIC | SFXWB_SHOWSTYLES );
     pFileDlg->SetTitle(SW_RESSTR(STR_INSERT_GRAPHIC ));
     pFileDlg->SetContext( FileDialogHelper::SW_INSERT_GRAPHIC );
-    Reference < XFilePicker > xFP = pFileDlg->GetFilePicker();
-    Reference < XFilePickerControlAccess > xCtrlAcc(xFP, UNO_QUERY);
+    uno::Reference < XFilePicker > xFP = pFileDlg->GetFilePicker();
+    uno::Reference < XFilePickerControlAccess > xCtrlAcc(xFP, UNO_QUERY);
     if(nHtmlMode & HTMLMODE_ON)
     {
         sal_Bool bTrue = sal_True;
@@ -2146,7 +2146,7 @@ void SwView::EnableMailMerge(BOOL bEnable )
 */
 namespace
 {
-    sal_Bool lcl_NeedAdditionalDataSource( const Reference< XNameAccess >& _rDatasourceContext )
+    sal_Bool lcl_NeedAdditionalDataSource( const uno::Reference< XNameAccess >& _rDatasourceContext )
     {
         Sequence < OUString > aNames = _rDatasourceContext->getElementNames();
 
@@ -2218,13 +2218,13 @@ void SwView::GenerateFormLetter(BOOL bUseCurrentDocument)
         if(!GetWrtShell().IsAnyDatabaseFieldInDoc())
         {
             //check availability of data sources (except biblio source)
-            Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-            Reference<XNameAccess>  xDBContext;
+            uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+            uno::Reference<XNameAccess>  xDBContext;
             if( xMgr.is() )
             {
-                Reference<XInterface> xInstance = xMgr->createInstance(
+                uno::Reference<XInterface> xInstance = xMgr->createInstance(
                     OUString::createFromAscii( "com.sun.star.sdb.DatabaseContext" ));
-                xDBContext = Reference<XNameAccess>(xInstance, UNO_QUERY) ;
+                xDBContext = uno::Reference<XNameAccess>(xInstance, UNO_QUERY) ;
             }
             if(!xDBContext.is())
                 return ;
