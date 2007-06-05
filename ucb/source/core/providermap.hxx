@@ -4,9 +4,9 @@
  *
  *  $RCSfile: providermap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:14:56 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:52:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ ProviderListEntry_Impl::getResolvedProvider() const
 typedef std::list< ProviderListEntry_Impl > ProviderList_Impl;
 
 //============================================================================
-typedef ucb::RegexpMap< ProviderList_Impl > ProviderMap_Impl;
+typedef ucb_impl::RegexpMap< ProviderList_Impl > ProviderMap_Impl;
 
 #endif // _UCB_PROVIDERMAP_HXX_
 
