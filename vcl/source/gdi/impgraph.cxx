@@ -5,9 +5,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:24:13 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:47:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -427,7 +427,7 @@ void ImpGraphic::ImplClear()
         {
             try
             {
-                ::ucb::Content aCnt( mpSwapFile->aSwapURL.GetMainURL( INetURLObject::NO_DECODE ),
+                ::ucbhelper::Content aCnt( mpSwapFile->aSwapURL.GetMainURL( INetURLObject::NO_DECODE ),
                                      ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
                 aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
@@ -1096,7 +1096,7 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
                             {
                                 try
                                 {
-                                    ::ucb::Content aCnt( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ),
+                                    ::ucbhelper::Content aCnt( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ),
                                                          ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
                                     aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
@@ -1280,7 +1280,7 @@ BOOL ImpGraphic::ImplSwapOut()
 
                         try
                         {
-                            ::ucb::Content aCnt( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ),
+                            ::ucbhelper::Content aCnt( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ),
                                                  ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
                             aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
@@ -1382,7 +1382,7 @@ BOOL ImpGraphic::ImplSwapIn()
                     {
                         try
                         {
-                            ::ucb::Content aCnt( aSwapURL,
+                            ::ucbhelper::Content aCnt( aSwapURL,
                                                  ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
                             aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
