@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:15:48 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:41:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1240,7 +1240,7 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
     return 1;
 }
 
-static inline Reference < XTransferable > * lcl_getTransferPointer ( Reference < XTransferable > &xRef )
+static inline uno::Reference < XTransferable > * lcl_getTransferPointer ( uno::Reference < XTransferable > &xRef )
 {
     return &xRef;
 }
@@ -1258,8 +1258,8 @@ BOOL SwTransferable::IsPaste( const SwWrtShell& rSh,
     if( ! bIsPaste )
     {
         // determine the proper paste action, and return true if we find one
-        Reference<XTransferable> xTransferable( rData.GetXTransferable() );
-        Reference<XUnoTunnel> xTunnel( xTransferable, UNO_QUERY );
+        uno::Reference<XTransferable> xTransferable( rData.GetXTransferable() );
+        uno::Reference<XUnoTunnel> xTunnel( xTransferable, UNO_QUERY );
         if ( xTunnel.is() )
         {
             sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
@@ -1305,7 +1305,7 @@ int SwTransferable::Paste( SwWrtShell& rSh, TransferableDataHelper& rData )
         nAction = EXCHG_OUT_ACTION_INSERT_PRIVATE;
     else
     {
-        Reference<XUnoTunnel> xTunnel( rData.GetTransferable(), UNO_QUERY );
+        uno::Reference<XUnoTunnel> xTunnel( rData.GetTransferable(), UNO_QUERY );
         if ( xTunnel.is() )
         {
             sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
@@ -1322,7 +1322,7 @@ int SwTransferable::Paste( SwWrtShell& rSh, TransferableDataHelper& rData )
                         EXCHG_DEST_SWDOC_FREE_AREA_WEB == nDestination )
                                         ? EXCHG_IN_ACTION_COPY
                                         : EXCHG_IN_ACTION_MOVE);
-            Reference<XTransferable> xTransferable( rData.GetXTransferable() );
+            uno::Reference<XTransferable> xTransferable( rData.GetXTransferable() );
             nAction = SotExchange::GetExchangeAction(
                                         rData.GetDataFlavorExVector(),
                                         nDestination,
@@ -1410,7 +1410,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
     }
 
     SwTransferable *pTrans=0, *pTunneledTrans=0;
-    Reference<XUnoTunnel> xTunnel( rData.GetTransferable(), UNO_QUERY );
+    uno::Reference<XUnoTunnel> xTunnel( rData.GetTransferable(), UNO_QUERY );
     if ( xTunnel.is() )
     {
         sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
@@ -2949,7 +2949,7 @@ int SwTransferable::PasteFormat( SwWrtShell& rSh,
         nRet = pClipboard->PrivatePaste( rSh );
     else if( rData.HasFormat( nFormat ) )
     {
-        Reference<XTransferable> xTransferable( rData.GetXTransferable() );
+        uno::Reference<XTransferable> xTransferable( rData.GetXTransferable() );
         USHORT nEventAction,
                nDestination = SwTransferable::GetSotDestination( rSh ),
                nSourceOptions =
@@ -2981,7 +2981,7 @@ int SwTransferable::_TestAllowedFormat( const TransferableDataHelper& rData,
 {
     USHORT nAction = EXCHG_INOUT_ACTION_NONE, nEventAction;
     if( rData.HasFormat( nFormat )) {
-        Reference<XTransferable> xTransferable( rData.GetXTransferable() );
+        uno::Reference<XTransferable> xTransferable( rData.GetXTransferable() );
         nAction = SotExchange::GetExchangeAction(
                         rData.GetDataFlavorExVector(),
                         nDestination, EXCHG_IN_ACTION_COPY,
