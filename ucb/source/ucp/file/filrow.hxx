@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filrow.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:27:15 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:55:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,9 @@
 #ifndef _UCBHELPER_MACROS_HXX
 #include <ucbhelper/macros.hxx>
 #endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
-#endif
+
+#include "osl/mutex.hxx"
+
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
@@ -213,7 +213,7 @@ namespace fileaccess {
                    com::sun::star::uno::RuntimeException);
 
     private:
-        vos::OMutex                                                              m_aMutex;
+        osl::Mutex                                                              m_aMutex;
         com::sun::star::uno::Sequence< com::sun::star::uno::Any >                m_aValueMap;
         sal_Bool                                                                 m_nWasNull;
         shell*                                                                   m_pMyShell;
