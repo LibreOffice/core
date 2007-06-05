@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:44:04 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:57:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,9 @@
 #include <stack>
 #define INCLUDED_STL_STACK
 #endif
-#ifndef _VOS_DIAGNOSE_H_
-#include <vos/diagnose.hxx>
-#endif
+
+#include "osl/diagnose.h"
+
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
@@ -493,7 +493,7 @@ shell::~shell()
 void SAL_CALL
 shell::registerNotifier( const rtl::OUString& aUnqPath, Notifier* pNotifier )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     ContentMap::iterator it =
         m_aContent.insert( ContentMap::value_type( aUnqPath,UnqPathData() ) ).first;
@@ -517,7 +517,7 @@ shell::registerNotifier( const rtl::OUString& aUnqPath, Notifier* pNotifier )
 void SAL_CALL
 shell::deregisterNotifier( const rtl::OUString& aUnqPath,Notifier* pNotifier )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     ContentMap::iterator it = m_aContent.find( aUnqPath );
     if( it == m_aContent.end() )
@@ -564,7 +564,7 @@ shell::associate( const rtl::OUString& aUnqPath,
         throw beans::PropertyExistException();
 
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::MutexGuard aGuard( m_aMutex );
 
         ContentMap::iterator it = m_aContent.insert( ContentMap::value_type( aUnqPath,UnqPathData() ) ).first;
 
@@ -599,7 +599,7 @@ shell::deassociate( const rtl::OUString& aUnqPath,
     if( it1 != m_aDefaultProperties.end() )
         throw beans::NotRemoveableException();
 
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     ContentMap::iterator it = m_aContent.insert( ContentMap::value_type( aUnqPath,UnqPathData() ) ).first;
 
@@ -863,7 +863,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 shell::info_p( const rtl::OUString& aUnqPath )
     throw()
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     XPropertySetInfo_impl* p = new XPropertySetInfo_impl( this,aUnqPath );
     return uno::Reference< beans::XPropertySetInfo >( p );
 }
@@ -886,7 +886,7 @@ shell::setv( const rtl::OUString& aUnqPath,
              const uno::Sequence< beans::PropertyValue >& values )
     throw()
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     sal_Int32 propChanged = 0;
     uno::Sequence< uno::Any > ret( values.getLength() );
@@ -1144,7 +1144,7 @@ shell::getv( sal_Int32 CommandId,
                      nError2);
 
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::MutexGuard aGuard( m_aMutex );
 
         shell::ContentMap::iterator it = m_aContent.find( aUnqPath );
         commit( it,aFileStatus );
@@ -1992,7 +1992,7 @@ shell::write( sal_Int32 CommandId,
 
 void SAL_CALL shell::insertDefaultProperties( const rtl::OUString& aUnqPath )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     ContentMap::iterator it =
         m_aContent.insert( ContentMap::value_type( aUnqPath,UnqPathData() ) ).first;
@@ -2575,7 +2575,7 @@ shell::getv(
     registerNotifier( aUnqPath,pNotifier );
     insertDefaultProperties( aUnqPath );
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::MutexGuard aGuard( m_aMutex );
 
         shell::ContentMap::iterator it = m_aContent.find( aUnqPath );
         commit( it,aFileStatus );
@@ -2613,7 +2613,7 @@ shell::getContentEventListeners( const rtl::OUString& aName )
     std::list< ContentEventNotifier* >* p = new std::list< ContentEventNotifier* >;
     std::list< ContentEventNotifier* >& listeners = *p;
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::MutexGuard aGuard( m_aMutex );
         shell::ContentMap::iterator it = m_aContent.find( aName );
         if( it != m_aContent.end() && it->second.notifier )
         {
@@ -2640,7 +2640,7 @@ shell::getContentDeletedEventListeners( const rtl::OUString& aName )
     std::list< ContentEventNotifier* >* p = new std::list< ContentEventNotifier* >;
     std::list< ContentEventNotifier* >& listeners = *p;
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::MutexGuard aGuard( m_aMutex );
         shell::ContentMap::iterator it = m_aContent.find( aName );
         if( it != m_aContent.end() && it->second.notifier )
         {
@@ -2711,7 +2711,7 @@ shell::getPropertySetListeners( const rtl::OUString& aName )
     std::list< PropertySetInfoChangeNotifier* >* p = new std::list< PropertySetInfoChangeNotifier* >;
     std::list< PropertySetInfoChangeNotifier* >& listeners = *p;
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::MutexGuard aGuard( m_aMutex );
         shell::ContentMap::iterator it = m_aContent.find( aName );
         if( it != m_aContent.end() && it->second.notifier )
         {
@@ -2778,7 +2778,7 @@ shell::getContentExchangedEventListeners( const rtl::OUString aOldPrefix,
     std::vector< rtl::OUString > oldChildList;
 
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::MutexGuard aGuard( m_aMutex );
 
         if( ! withChilds )
         {
@@ -2893,7 +2893,7 @@ shell::getPropertyChangeNotifier( const rtl::OUString& aName )
     std::list< PropertyChangeNotifier* >* p = new std::list< PropertyChangeNotifier* >;
     std::list< PropertyChangeNotifier* >& listeners = *p;
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::MutexGuard aGuard( m_aMutex );
         shell::ContentMap::iterator it = m_aContent.find( aName );
         if( it != m_aContent.end() && it->second.notifier )
         {
@@ -2939,7 +2939,7 @@ shell::erasePersistentSet( const rtl::OUString& aUnqPath,
 {
     if( ! m_xFileRegistry.is() )
     {
-        VOS_ASSERT( m_xFileRegistry.is() );
+        OSL_ASSERT( m_xFileRegistry.is() );
         return;
     }
 
@@ -2968,7 +2968,7 @@ shell::erasePersistentSet( const rtl::OUString& aUnqPath,
 
         {
             // Release possible references
-            vos::OGuard aGuard( m_aMutex );
+            osl::MutexGuard aGuard( m_aMutex );
             ContentMap::iterator it = m_aContent.find( old_Name );
             if( it != m_aContent.end() )
             {
@@ -3002,7 +3002,7 @@ shell::copyPersistentSet( const rtl::OUString& srcUnqPath,
 {
     if( ! m_xFileRegistry.is() )
     {
-        VOS_ASSERT( m_xFileRegistry.is() );
+        OSL_ASSERT( m_xFileRegistry.is() );
         return;
     }
 
