@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:26:32 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:48:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 #ifndef _UCBHELPER_CONTENT_HXX
 #define _UCBHELPER_CONTENT_HXX
 
+#include "rtl/ref.hxx"
+
 #ifndef _COM_SUN_STAR_UCB_CONTENTCREATIONEXCEPTION_HPP_
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #endif
@@ -50,9 +52,7 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
-#endif
+
 #ifndef INCLUDED_UCBHELPERDLLAPI_H
 #include "ucbhelper/ucbhelperdllapi.h"
 #endif
@@ -82,7 +82,7 @@ namespace com { namespace sun { namespace star { namespace ucb {
     struct NumberedSortingInfo;
 } } } }
 
-namespace ucb
+namespace ucbhelper
 {
 
 //=========================================================================
@@ -120,7 +120,7 @@ class Content_Impl;
   */
 class UCBHELPER_DLLPUBLIC Content
 {
-    vos::ORef< Content_Impl > m_xImpl;
+    rtl::Reference< Content_Impl > m_xImpl;
 
 protected:
     ::com::sun::star::uno::Any createCursorAny( const ::com::sun::star::uno::Sequence<
@@ -1019,6 +1019,6 @@ public:
                ::com::sun::star::uno::Exception );
 };
 
-} /* namespace ucb */
+} /* namespace ucbhelper */
 
 #endif /* !_UCBHELPER_CONTENT_HXX */
