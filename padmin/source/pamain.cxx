@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pamain.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:16:58 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:01:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,7 @@ void MyApp::Main()
 #if OSL_DEBUG_LEVEL > 1
     sal_Bool bSuccess =
 #endif
-        ::ucb::ContentBroker::initialize( xFactory, aArgs );
+        ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
 
 #if OSL_DEBUG_LEVEL > 1
     if ( !bSuccess )
@@ -187,6 +187,6 @@ void MyApp::Main()
     /*
      *  clean up UCB
      */
-    ::ucb::ContentBroker::deinitialize();
+    ::ucbhelper::ContentBroker::deinitialize();
 
 }
