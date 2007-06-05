@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regexp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:18:16 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:52:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,12 +39,9 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-#ifndef _VOS_DIAGNOSE_H_
-#include <vos/diagnose.hxx>
-#endif
 
 //============================================================================
-namespace ucb {
+namespace ucb_impl {
 
 class Regexp
 {
@@ -93,5 +90,5 @@ inline bool Regexp::operator ==(Regexp const & rOther) const
 
 }
 
-#endif // _UCPRMT_RMTREGX_HXX_
+#endif // _UCB_REGEXP_HXX_
 
