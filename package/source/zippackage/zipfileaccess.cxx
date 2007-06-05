@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zipfileaccess.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:40:45 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:39:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,7 +214,7 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
 
     if ( ( aArguments[0] >>= aParamURL ) )
     {
-        ::ucb::Content aContent ( aParamURL, uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+        ::ucbhelper::Content aContent ( aParamURL, uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
         uno::Reference < io::XActiveDataSink > xSink = new ZipPackageSink;
         if ( aContent.openStream ( xSink ) )
         {
