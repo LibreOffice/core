@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:55:30 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:36:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,7 +236,7 @@
 
 //-----------------------------------------------------------------------------
 
-using namespace ::com::sun;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
@@ -458,7 +458,7 @@ void FileDialogHelper_Impl::dispose()
     if ( mxFileDlg.is() )
     {
         // remove the event listener
-        Reference< XFilePickerNotifier > xNotifier( mxFileDlg, UNO_QUERY );
+        uno::Reference< XFilePickerNotifier > xNotifier( mxFileDlg, UNO_QUERY );
         if ( xNotifier.is() )
             xNotifier->removeFilePickerListener( this );
 
@@ -471,7 +471,7 @@ void FileDialogHelper_Impl::dispose()
 String FileDialogHelper_Impl::getCurrentFilterUIName() const
 {
     String aFilterName;
-    Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+    uno::Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
 
     if( xFltMgr.is() )
     {
@@ -529,7 +529,7 @@ sal_Bool FileDialogHelper_Impl::updateExtendedControl( sal_Int16 _nExtendedContr
 {
     sal_Bool bIsEnabled = sal_False;
 
-    Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+    uno::Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
     if ( xCtrlAccess.is() )
     {
         try
@@ -613,7 +613,7 @@ void FileDialogHelper_Impl::updateFilterOptionsBox()
 
 void FileDialogHelper_Impl::updateExportButton()
 {
-    Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+    uno::Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
     if ( xCtrlAccess.is() )
     {
         OUString sEllipses( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
@@ -660,7 +660,7 @@ void FileDialogHelper_Impl::updateSelectionBox()
         ExtendedFilePickerElementIds::CHECKBOX_SELECTION,
         ( mbSelectionEnabled && pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_SUPPORTSSELECTION ) != 0 ) );
 
-    Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+    uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
     xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0, makeAny( (sal_Bool)mbSelection ) );
 }
 
@@ -693,21 +693,21 @@ void FileDialogHelper_Impl::enablePasswordBox( sal_Bool bInit )
         // in case of inintialization previous state is not interesting
         if( mbIsPwdEnabled )
         {
-            Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+            uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
             if( mbPwdCheckBoxState )
                 xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, makeAny( sal_True ) );
         }
     }
     else if( !bWasEnabled && mbIsPwdEnabled )
     {
-        Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+        uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
         if( mbPwdCheckBoxState )
             xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, makeAny( sal_True ) );
     }
     else if( bWasEnabled && !mbIsPwdEnabled )
     {
         // remember user settings until checkbox is enabled
-        Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+        uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
         Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0 );
         sal_Bool bPassWord = sal_False;
         mbPwdCheckBoxState = ( aValue >>= bPassWord ) && bPassWord;
@@ -720,7 +720,7 @@ void FileDialogHelper_Impl::updatePreviewState( sal_Bool _bUpdatePreviewWindow )
 {
     if ( mbHasPreview )
     {
-        Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+        uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
 
         // check, wether or not we have to display a preview
         if ( xCtrlAccess.is() )
@@ -737,7 +737,7 @@ void FileDialogHelper_Impl::updatePreviewState( sal_Bool _bUpdatePreviewWindow )
                     // #97633
                     // setShowState has currently no effect for the
                     // OpenOffice FilePicker (see svtools/source/filepicker/iodlg.cxx)
-                    Reference< XFilePreview > xFilePreview( mxFileDlg, UNO_QUERY );
+                    uno::Reference< XFilePreview > xFilePreview( mxFileDlg, UNO_QUERY );
                     if ( xFilePreview.is() )
                         xFilePreview->setShowState( mbShowPreview );
 
@@ -768,15 +768,15 @@ void FileDialogHelper_Impl::updateVersions()
         {
             try
             {
-                star::uno::Reference< star::embed::XStorage > xStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
+                uno::Reference< embed::XStorage > xStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
                                                                 aObj.GetMainURL( INetURLObject::NO_DECODE ),
-                                                                star::embed::ElementModes::READ );
+                                                                embed::ElementModes::READ );
 
                 DBG_ASSERT( xStorage.is(), "The method must return the storage or throw an exception!" );
                 if ( !xStorage.is() )
-                    throw star::uno::RuntimeException();
+                    throw uno::RuntimeException();
 
-                star::uno::Sequence < star::util::RevisionTag > xVersions = SfxMedium::GetVersionList( xStorage );
+                uno::Sequence < util::RevisionTag > xVersions = SfxMedium::GetVersionList( xStorage );
 
                 aEntries.realloc( xVersions.getLength() + 1 );
                 aEntries[0] = OUString( String ( SfxResId( STR_SFX_FILEDLG_ACTUALVERSION ) ) );
@@ -796,13 +796,13 @@ void FileDialogHelper_Impl::updateVersions()
 //REMOVE                        }
 //REMOVE                    }
             }
-            catch( star::uno::Exception& )
+            catch( uno::Exception& )
             {
             }
         }
     }
 
-    Reference < XFilePickerControlAccess > xDlg( mxFileDlg, UNO_QUERY );
+    uno::Reference < XFilePickerControlAccess > xDlg( mxFileDlg, UNO_QUERY );
     Any aValue;
 
     try
@@ -856,7 +856,7 @@ IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
     maGraphic.Clear();
 
     Any aAny;
-    Reference < XFilePreview > xFilePicker( mxFileDlg, UNO_QUERY );
+    uno::Reference < XFilePreview > xFilePicker( mxFileDlg, UNO_QUERY );
 
     if ( ! xFilePicker.is() )
         return 0;
@@ -995,11 +995,11 @@ ErrCode FileDialogHelper_Impl::getGraphic( Graphic& rGraphic ) const
 }
 
 // ------------------------------------------------------------------------
-sal_Bool lcl_isSystemFilePicker( const Reference< XFilePicker >& _rxFP )
+sal_Bool lcl_isSystemFilePicker( const uno::Reference< XFilePicker >& _rxFP )
 {
     try
     {
-        Reference< XServiceInfo > xSI( _rxFP, UNO_QUERY );
+        uno::Reference< XServiceInfo > xSI( _rxFP, UNO_QUERY );
         if ( xSI.is() && xSI->supportsService( DEFINE_CONST_OUSTRING( "com.sun.star.ui.dialogs.SystemFilePicker" ) ) )
             return sal_True;
     }
@@ -1020,7 +1020,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* _pAntiImpl, sal_
 {
     OUString aService( RTL_CONSTASCII_USTRINGPARAM( FILE_OPEN_SERVICE_NAME ) );
 
-    Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+    uno::Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
 
     // create the file open dialog
     // the flags can be SFXWB_INSERT or SFXWB_MULTISELECTION
@@ -1060,8 +1060,8 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* _pAntiImpl, sal_
     mxFileDlg = mxFileDlg.query( xFactory->createInstance( aService ) );
     mbSystemPicker = lcl_isSystemFilePicker( mxFileDlg );
 
-    Reference< XFilePickerNotifier > xNotifier( mxFileDlg, UNO_QUERY );
-    Reference< XInitialization > xInit( mxFileDlg, UNO_QUERY );
+    uno::Reference< XFilePickerNotifier > xNotifier( mxFileDlg, UNO_QUERY );
+    uno::Reference< XInitialization > xInit( mxFileDlg, UNO_QUERY );
 
     if ( ! mxFileDlg.is() || ! xNotifier.is() )
     {
@@ -1099,7 +1099,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* _pAntiImpl, sal_
                 m_bHaveFilterOptions = sal_True;
                 if( xFactory.is() )
                 {
-                    mxFilterCFG = Reference< XNameAccess >(
+                    mxFilterCFG = uno::Reference< XNameAccess >(
                         xFactory->createInstance( DEFINE_CONST_OUSTRING( "com.sun.star.document.FilterFactory" ) ),
                         UNO_QUERY );
                 }
@@ -1114,7 +1114,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* _pAntiImpl, sal_
                 mbIsSaveDlg = sal_True;
                 if ( mbExport && !mxFilterCFG.is() && xFactory.is() )
                 {
-                    mxFilterCFG = Reference< XNameAccess >(
+                    mxFilterCFG = uno::Reference< XNameAccess >(
                         xFactory->createInstance( DEFINE_CONST_OUSTRING( "com.sun.star.document.FilterFactory" ) ),
                         UNO_QUERY );
                 }
@@ -1215,7 +1215,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* _pAntiImpl, sal_
     if ( mbInsert )
     {
         mxFileDlg->setTitle( OUString( String( SfxResId( STR_SFX_EXPLORERFILE_INSERT ) ) ) );
-        Reference < XFilePickerControlAccess > xExtDlg( mxFileDlg, UNO_QUERY );
+        uno::Reference < XFilePickerControlAccess > xExtDlg( mxFileDlg, UNO_QUERY );
         if ( xExtDlg.is() )
         {
             try
@@ -1253,12 +1253,12 @@ FileDialogHelper_Impl::~FileDialogHelper_Impl()
 
 class PickerThread_Impl : public ::vos::OThread
 {
-    Reference < XFilePicker > mxPicker;
+    uno::Reference < XFilePicker > mxPicker;
     ::vos::OMutex           maMutex;
     virtual void SAL_CALL   run();
     sal_Int16               mnRet;
 public:
-                            PickerThread_Impl( const Reference < XFilePicker >& rPicker )
+                            PickerThread_Impl( const uno::Reference < XFilePicker >& rPicker )
                             : mxPicker( rPicker ), mnRet(nMagic) {}
 
     sal_Int16               GetReturnValue()
@@ -1294,7 +1294,7 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
     {
         const ::rtl::OUString sHelpIdPrefix( RTL_CONSTASCII_USTRINGPARAM( "HID:" ) );
         // the ids for the single controls
-        Reference< XFilePickerControlAccess > xControlAccess( mxFileDlg, UNO_QUERY );
+        uno::Reference< XFilePickerControlAccess > xControlAccess( mxFileDlg, UNO_QUERY );
         if ( xControlAccess.is() )
         {
             while ( *_pControlId )
@@ -1372,7 +1372,7 @@ void FileDialogHelper_Impl::implInitializeFileName( )
             {
                 sal_Bool bAutoExtChecked = sal_False;
 
-                Reference < XFilePickerControlAccess > xControlAccess( mxFileDlg, UNO_QUERY );
+                uno::Reference < XFilePickerControlAccess > xControlAccess( mxFileDlg, UNO_QUERY );
                 if  (   xControlAccess.is()
                     &&  (   xControlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0 )
                         >>= bAutoExtChecked
@@ -1442,7 +1442,7 @@ void FileDialogHelper_Impl::implStartExecute()
     {
         try
         {
-            Reference< XAsynchronousExecutableDialog > xAsyncDlg( mxFileDlg, UNO_QUERY );
+            uno::Reference< XAsynchronousExecutableDialog > xAsyncDlg( mxFileDlg, UNO_QUERY );
             if ( xAsyncDlg.is() )
                 xAsyncDlg->startExecuteModal( this );
         }
@@ -1462,7 +1462,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
     // changing this would surely break code
     // rpSet is in/out parameter, usually just a media-descriptor that can be changed by dialog
 
-    Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+    uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
 
     // retrieves parameters from rpSet
     // for now only Password is used
@@ -1737,7 +1737,7 @@ void FileDialogHelper_Impl::setFilter( const OUString& rFilter )
             maCurFilter = pFilter->GetUIName();
     }
 
-    Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+    uno::Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
 
     if ( maCurFilter.getLength() && xFltMgr.is() )
     {
@@ -1762,7 +1762,7 @@ void FileDialogHelper_Impl::addFilters( sal_Int64 nFlags,
                                         SfxFilterFlags nMust,
                                         SfxFilterFlags nDont )
 {
-    Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+    uno::Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
 
     if ( ! xFltMgr.is() )
         return;
@@ -1780,8 +1780,8 @@ void FileDialogHelper_Impl::addFilters( sal_Int64 nFlags,
         mbDeleteMatcher = sal_True;
     }
 
-    Reference< XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
-    Reference< XContainerQuery > xFilterCont(
+    uno::Reference< XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+    uno::Reference< XContainerQuery > xFilterCont(
         xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.document.FilterFactory")),
         UNO_QUERY);
     if ( ! xFilterCont.is() )
@@ -1800,7 +1800,7 @@ void FileDialogHelper_Impl::addFilters( sal_Int64 nFlags,
     sQuery.appendAscii(":eflags="                                       );
     sQuery.append     (::rtl::OUString::valueOf((sal_Int32)m_nDontFlags));
 
-    Reference< XEnumeration > xResult = xFilterCont->createSubSetEnumerationByQuery(sQuery.makeStringAndClear());
+    uno::Reference< XEnumeration > xResult = xFilterCont->createSubSetEnumerationByQuery(sQuery.makeStringAndClear());
     TSortedFilterList         aIter   (xResult);
 
     // no matcher any longer used ...
@@ -1824,7 +1824,7 @@ void FileDialogHelper_Impl::addFilters( sal_Int64 nFlags,
 void FileDialogHelper_Impl::addFilter( const OUString& rFilterName,
                                        const OUString& rExtension )
 {
-    Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+    uno::Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
 
     if ( ! xFltMgr.is() )
         return;
@@ -1849,7 +1849,7 @@ void FileDialogHelper_Impl::addFilter( const OUString& rFilterName,
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::addGraphicFilter()
 {
-    Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+    uno::Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
 
     if ( ! xFltMgr.is() )
         return;
@@ -1935,7 +1935,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
 
 void FileDialogHelper_Impl::saveConfig()
 {
-    Reference < XFilePickerControlAccess > xDlg( mxFileDlg, UNO_QUERY );
+    uno::Reference < XFilePickerControlAccess > xDlg( mxFileDlg, UNO_QUERY );
     Any aValue;
 
     if ( ! xDlg.is() )
@@ -2038,7 +2038,7 @@ namespace
             sPathCheck += '.';
             try
             {
-                ::ucb::Content aContent( sPathCheck, Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+                ::ucbhelper::Content aContent( sPathCheck, uno::Reference< ucb::XCommandEnvironment >() );
                 bValid = aContent.isFolder();
             }
             catch( Exception& ) {}
@@ -2054,7 +2054,7 @@ namespace
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::loadConfig()
 {
-    Reference < XFilePickerControlAccess > xDlg( mxFileDlg, UNO_QUERY );
+    uno::Reference < XFilePickerControlAccess > xDlg( mxFileDlg, UNO_QUERY );
     Any aValue;
 
     if ( ! xDlg.is() )
@@ -2147,7 +2147,7 @@ void FileDialogHelper_Impl::setDefaultValues()
     // when no filter is set, we set the curentFilter to <all>
     if ( !maCurFilter.getLength() && maSelectFilter.getLength() )
     {
-        Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+        uno::Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
         try
         {
             xFltMgr->setCurrentFilter( maSelectFilter );
@@ -2488,8 +2488,8 @@ static int impl_isFolder( const OUString& rPath )
 {
     try
     {
-        ::ucb::Content aContent(
-            rPath, star::uno::Reference< star::ucb::XCommandEnvironment >() );
+        ::ucbhelper::Content aContent(
+            rPath, uno::Reference< ucb::XCommandEnvironment >() );
         if ( aContent.isFolder() )
             return 1;
 
@@ -2567,7 +2567,7 @@ void FileDialogHelper::SetCurrentFilter( const String& rFilter )
 }
 
 // ------------------------------------------------------------------------
-Reference < XFilePicker > FileDialogHelper::GetFilePicker() const
+uno::Reference < XFilePicker > FileDialogHelper::GetFilePicker() const
 {
     return mpImp->mxFileDlg;
 }
