@@ -4,9 +4,9 @@
  *
  *  $RCSfile: submission_put.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:15:59 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:45:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ using namespace CSS::task;
 using namespace CSS::io;
 using namespace rtl;
 using namespace osl;
-using namespace ucb;
+using namespace ucbhelper;
 using namespace std;
 
 
@@ -74,21 +74,21 @@ CSubmission::SubmissionResult CSubmissionPut::submit(const CSS::uno::Reference< 
     if( aInteractionHandler.is() )
         pHelper->m_aInteractionHandler = aInteractionHandler;
     else
-        pHelper->m_aInteractionHandler = Reference< XInteractionHandler >(m_aFactory->createInstance(
+        pHelper->m_aInteractionHandler = CSS::uno::Reference< XInteractionHandler >(m_aFactory->createInstance(
             OUString::createFromAscii("com.sun.star.task.InteractionHandler")), UNO_QUERY);
     OSL_ENSURE(pHelper->m_aInteractionHandler.is(), "failed to create IntreractionHandler");
 
     CProgressHandlerHelper *pProgressHelper = new CProgressHandlerHelper;
-    pHelper->m_aProgressHandler = Reference< XProgressHandler >(pProgressHelper);
+    pHelper->m_aProgressHandler = CSS::uno::Reference< XProgressHandler >(pProgressHelper);
 
     // UCB has ownership of environment...
-    Reference< XCommandEnvironment > aEnvironment(pHelper);
+    CSS::uno::Reference< XCommandEnvironment > aEnvironment(pHelper);
 
     try {
-        ucb::Content aContent(m_aURLObj.GetMainURL(INetURLObject::NO_DECODE), aEnvironment);
+        ucbhelper::Content aContent(m_aURLObj.GetMainURL(INetURLObject::NO_DECODE), aEnvironment);
 
         // insert serialized data to content -> PUT
-        Reference< XInputStream > aInStream = apSerialization->getInputStream();
+        CSS::uno::Reference< XInputStream > aInStream = apSerialization->getInputStream();
         aContent.writeStream(aInStream, sal_True);
         //aContent.closeStream();
 
