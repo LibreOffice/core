@@ -1564,3 +1564,150 @@
 + #endif
 + 
   #endif // BOOST_UTILITY_ADDRESSOF_HPP
+*** misc/spirit-1.6.1/miniboost/boost/concept_check.hpp	2007-05-20 07:38:14.000000000 -0400
+--- misc/build/spirit-1.6.1/miniboost/boost/concept_check.hpp	2007-05-20 07:52:59.000000000 -0400
+***************
+*** 708,719 ****
+        function_requires< AssignableConcept<Container> >();
+        const_constraints(c);
+      }
+!     void const_constraints(const Container& c) {
+!       i = c.begin();
+!       i = c.end();
+!       n = c.size();
+!       n = c.max_size();
+!       b = c.empty();
+      }
+      Container c;
+      bool b;
+--- 708,719 ----
+        function_requires< AssignableConcept<Container> >();
+        const_constraints(c);
+      }
+!     void const_constraints(const Container& cnr) {
+!       i = cnr.begin();
+!       i = cnr.end();
+!       n = cnr.size();
+!       n = cnr.max_size();
+!       b = cnr.empty();
+      }
+      Container c;
+      bool b;
+***************
+*** 777,785 ****
+          BidirectionalIteratorConcept<const_reverse_iterator> >();
+        const_constraints(c);
+      }
+!     void const_constraints(const ReversibleContainer& c) {
+!       const_reverse_iterator i = c.rbegin();
+!       i = c.rend();
+      }
+      ReversibleContainer c;
+    };
+--- 777,785 ----
+          BidirectionalIteratorConcept<const_reverse_iterator> >();
+        const_constraints(c);
+      }
+!     void const_constraints(const ReversibleContainer& cnr) {
+!       const_reverse_iterator i = cnr.rbegin();
+!       i = cnr.rend();
+      }
+      ReversibleContainer c;
+    };
+***************
+*** 821,828 ****
+  
+        const_constraints(c);
+      }
+!     void const_constraints(const RandomAccessContainer& c) {
+!       const_reference r = c[n];
+        ignore_unused_variable_warning(r);
+      }
+      RandomAccessContainer c;
+--- 821,828 ----
+  
+        const_constraints(c);
+      }
+!     void const_constraints(const RandomAccessContainer& cnr) {
+!       const_reference r = cnr[n];
+        ignore_unused_variable_warning(r);
+      }
+      RandomAccessContainer c;
+***************
+*** 925,932 ****
+        reference r = c.back();
+        ignore_unused_variable_warning(r);
+      }
+!     void const_constraints(const BackInsertionSequence& c) {
+!       const_reference r = c.back();
+        ignore_unused_variable_warning(r);
+      };
+      BackInsertionSequence c;
+--- 925,932 ----
+        reference r = c.back();
+        ignore_unused_variable_warning(r);
+      }
+!     void const_constraints(const BackInsertionSequence& cnr) {
+!       const_reference r = cnr.back();
+        ignore_unused_variable_warning(r);
+      };
+      BackInsertionSequence c;
+***************
+*** 947,956 ****
+        c.erase(r.first, r.second);
+        const_constraints(c);
+      }
+!     void const_constraints(const AssociativeContainer& c) {
+!       ci = c.find(k);
+!       n = c.count(k);
+!       cr = c.equal_range(k);
+      }
+      typedef typename AssociativeContainer::iterator iterator;
+      typedef typename AssociativeContainer::const_iterator const_iterator;
+--- 947,956 ----
+        c.erase(r.first, r.second);
+        const_constraints(c);
+      }
+!     void const_constraints(const AssociativeContainer& cnr) {
+!       ci = cnr.find(k);
+!       n = cnr.count(k);
+!       cr = cnr.equal_range(k);
+      }
+      typedef typename AssociativeContainer::iterator iterator;
+      typedef typename AssociativeContainer::const_iterator const_iterator;
+*** misc/spirit-1.6.1/miniboost/boost/type_traits/type_with_alignment.hpp	Wed May 23 19:45:34 2007
+--- misc/build/spirit-1.6.1/miniboost/boost/type_traits/type_with_alignment.hpp	Wed May 23 19:47:00 2007
+***************
+*** 72,78 ****
+  #undef BOOST_TT_CHOOSE_MIN_ALIGNMENT
+  #undef BOOST_TT_CHOOSE_T
+  
+! template<int TAlign, int Align>
+  struct is_aligned
+  {
+      BOOST_STATIC_CONSTANT(bool,
+--- 72,78 ----
+  #undef BOOST_TT_CHOOSE_MIN_ALIGNMENT
+  #undef BOOST_TT_CHOOSE_T
+  
+! template<std::size_t TAlign, std::size_t Align>
+  struct is_aligned
+  {
+      BOOST_STATIC_CONSTANT(bool,
+***************
+*** 93,99 ****
+  
+  // This alignment method originally due to Brian Parker, implemented by David
+  // Abrahams, and then ported here by Doug Gregor. 
+! template <int Align>
+  class type_with_alignment
+  {
+      typedef detail::lower_alignment<Align> t1;
+--- 93,99 ----
+  
+  // This alignment method originally due to Brian Parker, implemented by David
+  // Abrahams, and then ported here by Doug Gregor. 
+! template <std::size_t Align>
+  class type_with_alignment
+  {
+      typedef detail::lower_alignment<Align> t1;
