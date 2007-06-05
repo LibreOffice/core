@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multifil.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:19:08 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:33:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
         // #97807# URL content comparison of entries -----------
         INetURLObject aFile( aDlg.GetPath() );
         String sInsFile = aFile.getFSysPath( INetURLObject::FSYS_DETECT );
-        ::ucb::Content aContent( aFile.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >() );
+        ::ucbhelper::Content aContent( aFile.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >() );
         Reference< XContent > xContent = aContent.get();
         OSL_ENSURE( xContent.is(), "AddHdl_Impl: invalid content interface!" );
         Reference< XContentIdentifier > xID = xContent->getIdentifier();
@@ -107,17 +107,17 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
             if( nCount > 0 ) // start comparison
             {
                 USHORT i;
-                ::ucb::Content & VContent = aContent; // temporary Content reference
+                ::ucbhelper::Content & VContent = aContent; // temporary Content reference
                 Reference< XContent > xVContent;
                 Reference< XContentIdentifier > xVID;
                 for( i = 0; i < nCount; i++ )
                 {
                     String sVFile = aPathLB.GetEntry( i );
-                    std::map< String, ::ucb::Content >::iterator aCur = aFileContentMap.find( sVFile );
+                    std::map< String, ::ucbhelper::Content >::iterator aCur = aFileContentMap.find( sVFile );
                     if( aCur == aFileContentMap.end() ) // look for File Content in aFileContentMap, but not find it.
                     {
                         INetURLObject aVFile( sVFile, INetURLObject::FSYS_DETECT );
-                        aFileContentMap[sVFile] = ::ucb::Content( aVFile.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >() );
+                        aFileContentMap[sVFile] = ::ucbhelper::Content( aVFile.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >() );
                         VContent = aFileContentMap.find( sVFile )->second;
                     }
                     else
@@ -129,7 +129,7 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
                     if ( xID.is() && xVID.is() )
                     {
                         // get a generic content provider
-                        ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
+                        ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
                         Reference< XContentProvider > xProvider;
                         if ( pBroker )
                             xProvider = pBroker->getContentProviderInterface();
