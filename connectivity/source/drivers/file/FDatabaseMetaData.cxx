@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:32:12 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:22:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,16 +157,16 @@ namespace
         {
             // first get the real content for the URL
             INetURLObject aContentURL( _rFolderOrDoc );
-            ::ucb::Content aContent1;
+            ::ucbhelper::Content aContent1;
             {
-                ::ucb::Content aFolderOrDoc( _rFolderOrDoc, Reference< XCommandEnvironment >() );
+                ::ucbhelper::Content aFolderOrDoc( _rFolderOrDoc, Reference< XCommandEnvironment >() );
                 if ( aFolderOrDoc.isDocument() )
                     aContent1 = aFolderOrDoc;
                 else
                 {
                     aContentURL = INetURLObject( _rFolderOrDoc, INetURLObject::WAS_ENCODED );
                     aContentURL.Append( _rDocName );
-                    aContent1 = ::ucb::Content( aContentURL.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >() );
+                    aContent1 = ::ucbhelper::Content( aContentURL.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >() );
                 }
             }
 
@@ -187,10 +187,10 @@ namespace
 
             // the second context
             sal_Bool bCanAccess = sal_False;
-            ::ucb::Content aContent2;
+            ::ucbhelper::Content aContent2;
             try
             {
-                aContent2 = ::ucb::Content( aURL2.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >() );
+                aContent2 = ::ucbhelper::Content( aURL2.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >() );
                 bCanAccess = aContent2.isDocument();
             }
             catch( const Exception& )
@@ -212,7 +212,7 @@ namespace
                     if ( xID1.is() && xID2.is() )
                     {
                         // get a generic content provider
-                        ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
+                        ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
                         Reference< XContentProvider > xProvider;
                         if ( pBroker )
                             xProvider = pBroker->getContentProviderInterface();
@@ -276,13 +276,13 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     Reference < XSortedDynamicResultSetFactory > xSRSFac(
                 m_pConnection->getDriver()->getFactory()->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SortedDynamicResultSetFactory") ), UNO_QUERY );
 
-    Sequence< com::sun::star::ucb::NumberedSortingInfo > aSortInfo( 1 );
-    com::sun::star::ucb::NumberedSortingInfo* pInfo = aSortInfo.getArray();
+    Sequence< NumberedSortingInfo > aSortInfo( 1 );
+    NumberedSortingInfo* pInfo = aSortInfo.getArray();
     pInfo[ 0 ].ColumnIndex = 1;
     pInfo[ 0 ].Ascending   = sal_True;
 
-    Reference < com::sun::star::ucb::XAnyCompareFactory > xFactory;
-    Reference< com::sun::star::ucb::XDynamicResultSet > xDynamicResultSet;
+    Reference < XAnyCompareFactory > xFactory;
+    Reference< XDynamicResultSet > xDynamicResultSet;
     xDynamicResultSet = xSRSFac->createSortedDynamicResultSet( xContent, aSortInfo, xFactory );
     Reference<XResultSet> xResultSet = xDynamicResultSet->getStaticResultSet();
 
@@ -509,7 +509,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     ODatabaseMetaDataResultSet::ORows aRows;
 
 
-    Reference< ::com::sun::star::sdbcx::XTablesSupplier > xTabSup = m_pConnection->createCatalog();
+    Reference< XTablesSupplier > xTabSup = m_pConnection->createCatalog();
     if( xTabSup.is())
     {
         Reference< XNameAccess> xNames      = xTabSup->getTables();
