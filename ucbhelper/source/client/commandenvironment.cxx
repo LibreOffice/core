@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commandenvironment.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:19:11 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:52:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,13 +58,6 @@
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 #endif
 
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
-#endif
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
-#endif
-
 #ifndef _UCBHELPER_COMMANDENVIRONMENT_HXX
 #include <ucbhelper/commandenvironment.hxx>
 #endif
@@ -75,7 +68,7 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace rtl;
 
-namespace ucb
+namespace ucbhelper
 {
 
 //=========================================================================
@@ -164,5 +157,5 @@ CommandEnvironment::getProgressHandler()
     return m_pImpl->m_xProgressHandler;
 }
 
-} /* namespace ucb */
+} /* namespace ucbhelper */
 
