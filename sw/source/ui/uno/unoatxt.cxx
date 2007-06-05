@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:32:38 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:44:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,15 +119,9 @@
 
 SV_IMPL_REF ( SwDocShell )
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::lang;
 using namespace ::rtl;
 
-using ::com::sun::star::container::NoSuchElementException;
-
 #define PROPERTY_NONE   0
-
 
 /* -----------------16.06.98 09:15-------------------
  *
@@ -157,22 +151,22 @@ String lcl_GetCompleteGroupName(SwGlossaries* pGlossaries, const OUString& Group
 /* -----------------30.03.99 14:31-------------------
  *
  * --------------------------------------------------*/
-Reference< uno::XInterface > SAL_CALL SwXAutoTextContainer_createInstance(
-    const Reference< XMultiServiceFactory > & rSMgr) throw( Exception )
+uno::Reference< uno::XInterface > SAL_CALL SwXAutoTextContainer_createInstance(
+    const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     //the module may not be loaded
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     SwDLL::Init();
-    static Reference< uno::XInterface > xAText = (cppu::OWeakObject*)new SwXAutoTextContainer();;
+    static uno::Reference< uno::XInterface > xAText = (cppu::OWeakObject*)new SwXAutoTextContainer();;
     return xAText;
 }
 /* -----------------------------17.04.01 13:17--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence< OUString > SAL_CALL SwXAutoTextContainer_getSupportedServiceNames() throw()
+uno::Sequence< OUString > SAL_CALL SwXAutoTextContainer_getSupportedServiceNames() throw()
 {
     OUString sService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.AutoTextContainer"));
-    const Sequence< OUString > aSeq( &sService, 1 );
+    const uno::Sequence< OUString > aSeq( &sService, 1 );
     return aSeq;
 }
 /* -----------------------------17.04.01 13:18--------------------------------
@@ -225,7 +219,7 @@ uno::Any SwXAutoTextContainer::getByIndex(sal_Int32 nIndex)
   -----------------------------------------------------------------------*/
 uno::Type SwXAutoTextContainer::getElementType(void) throw( uno::RuntimeException )
 {
-    return ::getCppuType((const Reference<text::XAutoTextGroup>*)0);
+    return ::getCppuType((const uno::Reference<text::XAutoTextGroup>*)0);
 
 }
 /*-- 21.12.98 12:42:18---------------------------------------------------
@@ -244,7 +238,7 @@ uno::Any SwXAutoTextContainer::getByName(const OUString& GroupName)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
 
-    Reference< text::XAutoTextGroup > xGroup;
+    uno::Reference< text::XAutoTextGroup > xGroup;
     if ( pGlossaries && hasByName( GroupName ) )    // group name already known?
         // TRUE = create group if not already available
         xGroup = pGlossaries->GetAutoTextGroup( GroupName, TRUE );
@@ -288,7 +282,7 @@ sal_Bool SwXAutoTextContainer::hasByName(const OUString& Name)
 /*-- 21.12.98 12:42:19---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
+uno::Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
     const OUString& aGroupName)
     throw( lang::IllegalArgumentException, container::ElementExistException, uno::RuntimeException )
 {
@@ -298,7 +292,7 @@ Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
     //check for non-ASCII characters
     if(!aGroupName.getLength())
     {
-        IllegalArgumentException aIllegal;
+        lang::IllegalArgumentException aIllegal;
         aIllegal.Message = C2U("group name must not be empty");
         throw aIllegal;
     }
@@ -314,7 +308,7 @@ Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
         {
             continue;
         }
-        IllegalArgumentException aIllegal;
+        lang::IllegalArgumentException aIllegal;
         aIllegal.Message = C2U("group name must contain a-z, A-z, '_', ' ' only");
         throw aIllegal;
     }
@@ -326,7 +320,7 @@ Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
     }
     pGlossaries->NewGroupDoc(sGroup, sGroup.GetToken(0, GLOS_DELIM));
 
-    Reference< text::XAutoTextGroup > xGroup = pGlossaries->GetAutoTextGroup( sGroup, true );
+    uno::Reference< text::XAutoTextGroup > xGroup = pGlossaries->GetAutoTextGroup( sGroup, true );
     DBG_ASSERT( xGroup.is(), "SwXAutoTextContainer::insertNewByName: no UNO object created? How this?" );
         // we just inserted the group into the glossaries, so why doesn't it exist?
 
@@ -348,16 +342,16 @@ void SwXAutoTextContainer::removeByName(const OUString& aGroupName)
 /* -----------------------------06.04.00 11:11--------------------------------
 
  ---------------------------------------------------------------------------*/
-OUString SwXAutoTextContainer::getImplementationName(void) throw( RuntimeException )
+OUString SwXAutoTextContainer::getImplementationName(void) throw( uno::RuntimeException )
 {
     return SwXAutoTextContainer_getImplementationName();
 }
 /* -----------------------------06.04.00 11:11--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwXAutoTextContainer::supportsService(const OUString& rServiceName) throw( RuntimeException )
+BOOL SwXAutoTextContainer::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    const Sequence< OUString > aNames = SwXAutoTextContainer_getSupportedServiceNames();
+    const uno::Sequence< OUString > aNames = SwXAutoTextContainer_getSupportedServiceNames();
     for(sal_Int32 nService = 0; nService < aNames.getLength(); nService++)
     {
         if(aNames.getConstArray()[nService] == rServiceName)
@@ -368,7 +362,7 @@ BOOL SwXAutoTextContainer::supportsService(const OUString& rServiceName) throw( 
 /* -----------------------------06.04.00 11:11--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence< OUString > SwXAutoTextContainer::getSupportedServiceNames(void) throw( RuntimeException )
+uno::Sequence< OUString > SwXAutoTextContainer::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
     return SwXAutoTextContainer_getSupportedServiceNames();
 }
@@ -519,8 +513,8 @@ sal_Bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTextR
 /*-- 21.12.98 12:42:25---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const OUString& aName,
-        const OUString& aTitle, const Reference< text::XTextRange > & xTextRange)
+uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const OUString& aName,
+        const OUString& aTitle, const uno::Reference< text::XTextRange > & xTextRange)
         throw( container::ElementExistException, uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -538,7 +532,7 @@ Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const OUStr
         {
             throw uno::RuntimeException();
         } */
-        Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
+        uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
         SwXTextRange* pxRange = 0;
         OTextCursorHelper* pxCursor = 0;
         if(xRangeTunnel.is())
@@ -595,7 +589,7 @@ Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const OUStr
         pGlossaries->PutGroupDoc( pGlosGroup );
     }
 
-    Reference< text::XAutoTextEntry > xEntry = pGlossaries->GetAutoTextEntry( m_sGroupName, sName, sShortName, true );
+    uno::Reference< text::XAutoTextEntry > xEntry = pGlossaries->GetAutoTextEntry( m_sGroupName, sName, sShortName, true );
     DBG_ASSERT( xEntry.is(), "SwXAutoTextGroup::insertNewByName: no UNO object created? How this?" );
         // we just inserted the entry into the group, so why doesn't it exist?
 
@@ -715,7 +709,7 @@ uno::Any SwXAutoTextGroup::getByIndex(sal_Int32 nIndex)
   -----------------------------------------------------------------------*/
 uno::Type SwXAutoTextGroup::getElementType(void) throw( uno::RuntimeException )
 {
-    return ::getCppuType((Reference<text::XAutoTextEntry>*)0);
+    return ::getCppuType((uno::Reference<text::XAutoTextEntry>*)0);
 
 }
 /*-- 21.12.98 12:42:26---------------------------------------------------
@@ -741,7 +735,7 @@ uno::Any SwXAutoTextGroup::getByName(const OUString& _rName)
     throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    Reference< text::XAutoTextEntry > xEntry = pGlossaries->GetAutoTextEntry( m_sGroupName, sName, _rName, true );
+    uno::Reference< text::XAutoTextEntry > xEntry = pGlossaries->GetAutoTextEntry( m_sGroupName, sName, _rName, true );
     DBG_ASSERT( xEntry.is(), "SwXAutoTextGroup::getByName: GetAutoTextEntry is fractious!" );
         // we told it to create the object, so why didn't it?
     return makeAny( xEntry );
@@ -799,10 +793,10 @@ sal_Bool SwXAutoTextGroup::hasByName(const OUString& rName)
 /*-- 09.02.00 15:33:30---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< beans::XPropertySetInfo >  SwXAutoTextGroup::getPropertySetInfo(void)
+uno::Reference< beans::XPropertySetInfo >  SwXAutoTextGroup::getPropertySetInfo(void)
     throw( uno::RuntimeException )
 {
-    static Reference< beans::XPropertySetInfo >  xRet = aPropSet.getPropertySetInfo();
+    static uno::Reference< beans::XPropertySetInfo >  xRet = aPropSet.getPropertySetInfo();
     return xRet;
 }
 /*-- 09.02.00 15:33:31---------------------------------------------------
@@ -873,7 +867,7 @@ uno::Any SwXAutoTextGroup::getPropertyValue(const OUString& rPropertyName)
 
   -----------------------------------------------------------------------*/
 void SwXAutoTextGroup::addPropertyChangeListener(
-    const OUString& PropertyName, const Reference< beans::XPropertyChangeListener > & aListener)
+    const OUString& PropertyName, const uno::Reference< beans::XPropertyChangeListener > & aListener)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
 }
@@ -881,7 +875,7 @@ void SwXAutoTextGroup::addPropertyChangeListener(
 
   -----------------------------------------------------------------------*/
 void SwXAutoTextGroup::removePropertyChangeListener(
-    const OUString& PropertyName, const Reference< beans::XPropertyChangeListener > & aListener)
+    const OUString& PropertyName, const uno::Reference< beans::XPropertyChangeListener > & aListener)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
 }
@@ -889,7 +883,7 @@ void SwXAutoTextGroup::removePropertyChangeListener(
 
   -----------------------------------------------------------------------*/
 void SwXAutoTextGroup::addVetoableChangeListener(
-    const OUString& PropertyName, const Reference< beans::XVetoableChangeListener > & aListener)
+    const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener > & aListener)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
 }
@@ -897,7 +891,7 @@ void SwXAutoTextGroup::addVetoableChangeListener(
 
   -----------------------------------------------------------------------*/
 void SwXAutoTextGroup::removeVetoableChangeListener(
-    const OUString& PropertyName, const Reference< beans::XVetoableChangeListener > & aListener)
+    const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener > & aListener)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
 }
@@ -913,23 +907,23 @@ void SwXAutoTextGroup::Invalidate()
 /* -----------------------------06.04.00 11:11--------------------------------
 
  ---------------------------------------------------------------------------*/
-OUString SwXAutoTextGroup::getImplementationName(void) throw( RuntimeException )
+OUString SwXAutoTextGroup::getImplementationName(void) throw( uno::RuntimeException )
 {
     return C2U("SwXAutoTextGroup");
 }
 /* -----------------------------06.04.00 11:11--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwXAutoTextGroup::supportsService(const OUString& rServiceName) throw( RuntimeException )
+BOOL SwXAutoTextGroup::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return C2U("com.sun.star.text.AutoTextGroup") == rServiceName;
 }
 /* -----------------------------06.04.00 11:11--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence< OUString > SwXAutoTextGroup::getSupportedServiceNames(void) throw( RuntimeException )
+uno::Sequence< OUString > SwXAutoTextGroup::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
-    Sequence< OUString > aRet(1);
+    uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
     pArray[0] = C2U("com.sun.star.text.AutoTextGroup");
     return aRet;
@@ -1051,10 +1045,10 @@ void SwXAutoTextEntry::GetBodyText ()
     StartListening( *&xDocSh );
 
     pBodyText = new SwXBodyText ( xDocSh->GetDoc() );
-    xBodyText = Reference < XServiceInfo > ( *pBodyText, UNO_QUERY);
+    xBodyText = uno::Reference < lang::XServiceInfo > ( *pBodyText, uno::UNO_QUERY);
 }
 
-Reference< text::XTextCursor >  SwXAutoTextEntry::createTextCursor(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextCursor >  SwXAutoTextEntry::createTextCursor(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     EnsureBodyText();
@@ -1063,8 +1057,8 @@ Reference< text::XTextCursor >  SwXAutoTextEntry::createTextCursor(void) throw( 
 /*-- 21.12.98 12:42:34---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< text::XTextCursor >  SwXAutoTextEntry::createTextCursorByRange(
-    const Reference< text::XTextRange > & aTextPosition) throw( uno::RuntimeException )
+uno::Reference< text::XTextCursor >  SwXAutoTextEntry::createTextCursorByRange(
+    const uno::Reference< text::XTextRange > & aTextPosition) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     EnsureBodyText();
@@ -1073,7 +1067,7 @@ Reference< text::XTextCursor >  SwXAutoTextEntry::createTextCursorByRange(
 /*-- 21.12.98 12:42:34---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXAutoTextEntry::insertString(const Reference< text::XTextRange > & xRange, const OUString& aString, sal_Bool bAbsorb) throw( uno::RuntimeException )
+void SwXAutoTextEntry::insertString(const uno::Reference< text::XTextRange > & xRange, const OUString& aString, sal_Bool bAbsorb) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     EnsureBodyText();
@@ -1082,7 +1076,7 @@ void SwXAutoTextEntry::insertString(const Reference< text::XTextRange > & xRange
 /*-- 21.12.98 12:42:34---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXAutoTextEntry::insertControlCharacter(const Reference< text::XTextRange > & xRange,
+void SwXAutoTextEntry::insertControlCharacter(const uno::Reference< text::XTextRange > & xRange,
     sal_Int16 nControlCharacter, sal_Bool bAbsorb)
         throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
@@ -1094,8 +1088,8 @@ void SwXAutoTextEntry::insertControlCharacter(const Reference< text::XTextRange 
 
   -----------------------------------------------------------------------*/
 void SwXAutoTextEntry::insertTextContent(
-    const Reference< text::XTextRange > & xRange,
-    const Reference< text::XTextContent > & xContent, sal_Bool bAbsorb)
+    const uno::Reference< text::XTextRange > & xRange,
+    const uno::Reference< text::XTextContent > & xContent, sal_Bool bAbsorb)
         throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1106,7 +1100,7 @@ void SwXAutoTextEntry::insertTextContent(
 
   -----------------------------------------------------------------------*/
 void SwXAutoTextEntry::removeTextContent(
-    const Reference< text::XTextContent > & xContent)
+    const uno::Reference< text::XTextContent > & xContent)
         throw( container::NoSuchElementException, uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1116,16 +1110,16 @@ void SwXAutoTextEntry::removeTextContent(
 /*-- 21.12.98 12:42:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< text::XText >  SwXAutoTextEntry::getText(void) throw( uno::RuntimeException )
+uno::Reference< text::XText >  SwXAutoTextEntry::getText(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    Reference< text::XText >  xRet =  (text::XText*)this;
+    uno::Reference< text::XText >  xRet =  (text::XText*)this;
     return xRet;
 }
 /*-- 21.12.98 12:42:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< text::XTextRange >  SwXAutoTextEntry::getStart(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextRange >  SwXAutoTextEntry::getStart(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     EnsureBodyText();
@@ -1134,7 +1128,7 @@ Reference< text::XTextRange >  SwXAutoTextEntry::getStart(void) throw( uno::Runt
 /*-- 21.12.98 12:42:36---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< text::XTextRange >  SwXAutoTextEntry::getEnd(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextRange >  SwXAutoTextEntry::getEnd(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     EnsureBodyText();
@@ -1161,7 +1155,7 @@ void SwXAutoTextEntry::setString(const OUString& aString) throw( uno::RuntimeExc
 /* -----------------15.07.99 10:11-------------------
 
  --------------------------------------------------*/
-void SwXAutoTextEntry::applyTo(const Reference< text::XTextRange > & xTextRange)throw( uno::RuntimeException )
+void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextRange)throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Bool bRet = sal_False;
@@ -1178,7 +1172,7 @@ void SwXAutoTextEntry::applyTo(const Reference< text::XTextRange > & xTextRange)
         // This means that we would reflect any changes which were done to the AutoText by foreign instances
         // in the meantime
 
-    Reference<lang::XUnoTunnel> xTunnel( xTextRange, uno::UNO_QUERY);
+    uno::Reference<lang::XUnoTunnel> xTunnel( xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange = 0;
     OTextCursorHelper* pCursor = 0;
     SwXText *pText = 0;
@@ -1200,7 +1194,7 @@ void SwXAutoTextEntry::applyTo(const Reference< text::XTextRange > & xTextRange)
         pDoc = pCursor->GetDoc();
     else if ( pText && pText->GetDoc() )
     {
-        xTunnel = Reference < lang::XUnoTunnel > (pText->getStart(), uno::UNO_QUERY);
+        xTunnel = uno::Reference < lang::XUnoTunnel > (pText->getStart(), uno::UNO_QUERY);
         if (xTunnel.is())
         {
             pCursor = reinterpret_cast < OTextCursorHelper* >
@@ -1242,23 +1236,23 @@ void SwXAutoTextEntry::applyTo(const Reference< text::XTextRange > & xTextRange)
 /* -----------------------------06.04.00 11:11--------------------------------
 
  ---------------------------------------------------------------------------*/
-OUString SwXAutoTextEntry::getImplementationName(void) throw( RuntimeException )
+OUString SwXAutoTextEntry::getImplementationName(void) throw( uno::RuntimeException )
 {
     return C2U("SwXAutoTextEntry");
 }
 /* -----------------------------06.04.00 11:11--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwXAutoTextEntry::supportsService(const OUString& rServiceName) throw( RuntimeException )
+BOOL SwXAutoTextEntry::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return C2U("com.sun.star.text.AutoTextEntry") == rServiceName;
 }
 /* -----------------------------06.04.00 11:11--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence< OUString > SwXAutoTextEntry::getSupportedServiceNames(void) throw( RuntimeException )
+uno::Sequence< OUString > SwXAutoTextEntry::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
-    Sequence< OUString > aRet(1);
+    uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
     pArray[0] = C2U("com.sun.star.text.AutoTextEntry");
     return aRet;
@@ -1266,7 +1260,7 @@ Sequence< OUString > SwXAutoTextEntry::getSupportedServiceNames(void) throw( Run
 /* -----------------------------06.04.00 11:11--------------------------------
 
  ---------------------------------------------------------------------------*/
-Reference< container::XNameReplace > SwXAutoTextEntry::getEvents()
+uno::Reference< container::XNameReplace > SwXAutoTextEntry::getEvents()
     throw( uno::RuntimeException )
 {
     return new SwAutoTextEventDescriptor( *this );
@@ -1313,10 +1307,10 @@ void SwAutoTextEventDescriptor::replaceByName(
     const USHORT nEvent,
     const SvxMacro& rMacro)
             throw(
-                IllegalArgumentException,
-                NoSuchElementException,
-                WrappedTargetException,
-                RuntimeException)
+                lang::IllegalArgumentException,
+                container::NoSuchElementException,
+                lang::WrappedTargetException,
+                uno::RuntimeException)
 {
     DBG_ASSERT( NULL != rAutoTextEntry.GetGlossaries(),
                 "Strangely enough, the AutoText vanished!" );
@@ -1355,9 +1349,9 @@ void SwAutoTextEventDescriptor::getByName(
     SvxMacro& rMacro,
     const USHORT nEvent )
             throw(
-                NoSuchElementException,
-                WrappedTargetException,
-                RuntimeException)
+                container::NoSuchElementException,
+                lang::WrappedTargetException,
+                uno::RuntimeException)
 {
     DBG_ASSERT( NULL != rAutoTextEntry.GetGlossaries(), "no AutoText" );
     DBG_ASSERT( (nEvent == SW_EVENT_END_INS_GLOSSARY) ||
@@ -1413,7 +1407,7 @@ void SwGlossaries::RemoveFileFromList( const String& rGroup )
                             ++aLoop
                         )
                     {
-                        Reference< container::XNamed > xNamed( aLoop->get(), UNO_QUERY );
+                        uno::Reference< container::XNamed > xNamed( aLoop->get(), uno::UNO_QUERY );
                         if ( xNamed.is() && ( xNamed->getName() == aUName ) )
                         {
                             static_cast< SwXAutoTextGroup* >( xNamed.get() )->Invalidate();
@@ -1431,7 +1425,7 @@ void SwGlossaries::RemoveFileFromList( const String& rGroup )
                             aLoop != aGlossaryEntries.end();
                         )
                     {
-                        Reference< lang::XUnoTunnel > xEntryTunnel( aLoop->get(), UNO_QUERY );
+                        uno::Reference< lang::XUnoTunnel > xEntryTunnel( aLoop->get(), uno::UNO_QUERY );
 
                         SwXAutoTextEntry* pEntry = NULL;
                         if ( xEntryTunnel.is() )
@@ -1464,7 +1458,7 @@ void SwGlossaries::InvalidateUNOOjects()
             ++aGroupLoop
         )
     {
-        Reference< text::XAutoTextGroup > xGroup( aGroupLoop->get(), UNO_QUERY );
+        uno::Reference< text::XAutoTextGroup > xGroup( aGroupLoop->get(), uno::UNO_QUERY );
         if ( xGroup.is() )
             static_cast< SwXAutoTextGroup* >( xGroup.get() )->Invalidate();
     }
@@ -1477,7 +1471,7 @@ void SwGlossaries::InvalidateUNOOjects()
             ++aEntryLoop
         )
     {
-        Reference< lang::XUnoTunnel > xEntryTunnel( aEntryLoop->get(), UNO_QUERY );
+        uno::Reference< lang::XUnoTunnel > xEntryTunnel( aEntryLoop->get(), uno::UNO_QUERY );
         SwXAutoTextEntry* pEntry = NULL;
         if ( xEntryTunnel.is() )
             pEntry = reinterpret_cast< SwXAutoTextEntry* >(
@@ -1493,18 +1487,18 @@ void SwGlossaries::InvalidateUNOOjects()
 //-----------------------------------------------------------------------
 //--- 03.03.2003 14:15:32 -----------------------------------------------
 
-Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( const ::rtl::OUString& _rGroupName, bool _bCreate )
+uno::Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( const ::rtl::OUString& _rGroupName, bool _bCreate )
 {
     // first, find the name with path-extension
     String sCompleteGroupName = lcl_GetCompleteGroupName( this, _rGroupName );
 
-    Reference< text::XAutoTextGroup >  xGroup;
+    uno::Reference< text::XAutoTextGroup >  xGroup;
 
     // look up the group in the cache
     UnoAutoTextGroups::iterator aSearch = aGlossaryGroups.begin();
     for ( ; aSearch != aGlossaryGroups.end(); )
     {
-        Reference< lang::XUnoTunnel > xGroupTunnel( aSearch->get(), UNO_QUERY );
+        uno::Reference< lang::XUnoTunnel > xGroupTunnel( aSearch->get(), uno::UNO_QUERY );
 
         SwXAutoTextGroup* pSwGroup = 0;
         if ( xGroupTunnel.is() )
@@ -1550,7 +1544,7 @@ Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( const ::rtl::O
 //-----------------------------------------------------------------------
 //--- 03.03.2003 13:46:06 -----------------------------------------------
 
-Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry( const String& _rCompleteGroupName, const ::rtl::OUString& _rGroupName, const ::rtl::OUString& _rEntryName,
+uno::Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry( const String& _rCompleteGroupName, const ::rtl::OUString& _rGroupName, const ::rtl::OUString& _rEntryName,
     bool _bCreate )
 {
     //standard must be created
@@ -1564,16 +1558,16 @@ Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry( const String& 
             throw container::NoSuchElementException();
     }
     else
-        throw WrappedTargetException();
+        throw lang::WrappedTargetException();
 
-    Reference< text::XAutoTextEntry > xReturn;
+    uno::Reference< text::XAutoTextEntry > xReturn;
     String sGroupName( _rGroupName );
     String sEntryName( _rEntryName );
 
     UnoAutoTextEntries::iterator aSearch( aGlossaryEntries.begin() );
     for ( ; aSearch != aGlossaryEntries.end(); )
     {
-        Reference< lang::XUnoTunnel > xEntryTunnel( aSearch->get(), UNO_QUERY );
+        uno::Reference< lang::XUnoTunnel > xEntryTunnel( aSearch->get(), uno::UNO_QUERY );
 
         SwXAutoTextEntry* pEntry = NULL;
         if ( xEntryTunnel.is() )
