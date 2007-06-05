@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:25:45 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:43:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -472,9 +472,9 @@ void SwSrcView::Execute(SfxRequest& rReq)
             FileDialogHelper aDlgHelper(
                 TemplateDescription::FILESAVE_AUTOEXTENSION,
                 TemplateDescription::FILESAVE_SIMPLE );
-            Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+            uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 //          pFileDlg->SetHelpId(HID_FILEDLG_SRCVIEW);
-            Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
+            uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
 
             // search for an html filter for export
             SfxFilterContainer* pFilterCont = GetObjectShell()->GetFactory().GetFilterContainer();
