@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoredlines.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:00:06 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:35:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,11 +71,6 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::beans;
 using namespace ::rtl;
 
 /*-- 11.01.01 15:28:54---------------------------------------------------
@@ -94,7 +89,7 @@ SwXRedlines::~SwXRedlines()
 /*-- 11.01.01 15:28:55---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Int32 SwXRedlines::getCount(  ) throw(RuntimeException)
+sal_Int32 SwXRedlines::getCount(  ) throw(uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
@@ -105,46 +100,46 @@ sal_Int32 SwXRedlines::getCount(  ) throw(RuntimeException)
 /*-- 11.01.01 15:28:55---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Any SwXRedlines::getByIndex(sal_Int32 nIndex)
-    throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+uno::Any SwXRedlines::getByIndex(sal_Int32 nIndex)
+    throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw uno::RuntimeException();
     const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
-    Any aRet;
+    uno::Any aRet;
     if(rRedTbl.Count() > nIndex && nIndex >= 0)
     {
-        Reference <XPropertySet> xRet = SwXRedlines::GetObject( *rRedTbl.GetObject((USHORT)nIndex), *GetDoc() );
+        uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTbl.GetObject((USHORT)nIndex), *GetDoc() );
         aRet <<= xRet;
     }
     else
-        throw IndexOutOfBoundsException();
+        throw lang::IndexOutOfBoundsException();
     return aRet;
 }
 /*-- 11.01.01 15:28:55---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< XEnumeration >  SwXRedlines::createEnumeration(void)
-    throw( RuntimeException )
+uno::Reference< container::XEnumeration >  SwXRedlines::createEnumeration(void)
+    throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw uno::RuntimeException();
     const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
-    return Reference< XEnumeration >(new SwXRedlineEnumeration(*GetDoc()));
+    return uno::Reference< container::XEnumeration >(new SwXRedlineEnumeration(*GetDoc()));
 }
 /*-- 11.01.01 15:28:55---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Type SwXRedlines::getElementType(  ) throw(RuntimeException)
+uno::Type SwXRedlines::getElementType(  ) throw(uno::RuntimeException)
 {
-    return ::getCppuType((Reference<XPropertySet>*)0);
+    return ::getCppuType((uno::Reference<beans::XPropertySet>*)0);
 }
 /*-- 11.01.01 15:28:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool SwXRedlines::hasElements(  ) throw(RuntimeException)
+sal_Bool SwXRedlines::hasElements(  ) throw(uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
@@ -155,7 +150,7 @@ sal_Bool SwXRedlines::hasElements(  ) throw(RuntimeException)
 /*-- 11.01.01 15:28:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-OUString SwXRedlines::getImplementationName(void) throw( RuntimeException )
+OUString SwXRedlines::getImplementationName(void) throw( uno::RuntimeException )
 {
     return C2U("SwXRedlines");
 }
@@ -163,7 +158,7 @@ OUString SwXRedlines::getImplementationName(void) throw( RuntimeException )
 
   -----------------------------------------------------------------------*/
 BOOL SwXRedlines::supportsService(const rtl::OUString& ServiceName)
-    throw( RuntimeException )
+    throw( uno::RuntimeException )
 {
     DBG_ERROR("not implemented")
     return FALSE;
@@ -171,16 +166,16 @@ BOOL SwXRedlines::supportsService(const rtl::OUString& ServiceName)
 /*-- 11.01.01 15:28:57---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Sequence< OUString > SwXRedlines::getSupportedServiceNames(void)
-    throw( RuntimeException )
+uno::Sequence< OUString > SwXRedlines::getSupportedServiceNames(void)
+    throw( uno::RuntimeException )
 {
     DBG_ERROR("not implemented")
-    return Sequence< OUString >();
+    return uno::Sequence< OUString >();
 }
 /*-- 11.01.01 15:28:57---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-XPropertySet*   SwXRedlines::GetObject( SwRedline& rRedline, SwDoc& rDoc )
+beans::XPropertySet*    SwXRedlines::GetObject( SwRedline& rRedline, SwDoc& rDoc )
 {
     SwPageDesc* pStdDesc = rDoc.GetPageDescFromPool(RES_POOLPAGE_STANDARD);
     SwClientIter aIter(*pStdDesc);
@@ -213,48 +208,48 @@ SwXRedlineEnumeration::~SwXRedlineEnumeration()
 /*-- 12.01.01 15:06:10---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-BOOL SwXRedlineEnumeration::hasMoreElements(void) throw( RuntimeException )
+BOOL SwXRedlineEnumeration::hasMoreElements(void) throw( uno::RuntimeException )
 {
     if(!pDoc)
-        throw RuntimeException();
+        throw uno::RuntimeException();
     return pDoc->GetRedlineTbl().Count() > nCurrentIndex;
 }
 /*-- 12.01.01 15:06:10---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Any SwXRedlineEnumeration::nextElement(void)
-    throw( NoSuchElementException, WrappedTargetException, RuntimeException )
+uno::Any SwXRedlineEnumeration::nextElement(void)
+    throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
     if(!pDoc)
-        throw RuntimeException();
+        throw uno::RuntimeException();
     const SwRedlineTbl& rRedTbl = pDoc->GetRedlineTbl();
     if(!(rRedTbl.Count() > nCurrentIndex))
-        throw NoSuchElementException();
-    Reference <XPropertySet> xRet = SwXRedlines::GetObject( *rRedTbl.GetObject(nCurrentIndex++), *pDoc );
-    Any aRet;
+        throw container::NoSuchElementException();
+    uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTbl.GetObject(nCurrentIndex++), *pDoc );
+    uno::Any aRet;
     aRet <<= xRet;
     return aRet;
 }
 /*-- 12.01.01 15:06:10---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-rtl::OUString SwXRedlineEnumeration::getImplementationName(void) throw( RuntimeException )
+rtl::OUString SwXRedlineEnumeration::getImplementationName(void) throw( uno::RuntimeException )
 {
     return C2U("SwXRedlineEnumeration");
 }
 /*-- 12.01.01 15:06:10---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-BOOL SwXRedlineEnumeration::supportsService(const rtl::OUString& ServiceName) throw( RuntimeException )
+BOOL SwXRedlineEnumeration::supportsService(const rtl::OUString& ServiceName) throw( uno::RuntimeException )
 {
     return FALSE;
 }
 /*-- 12.01.01 15:06:11---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Sequence< OUString > SwXRedlineEnumeration::getSupportedServiceNames(void) throw( RuntimeException )
+uno::Sequence< OUString > SwXRedlineEnumeration::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
-    return Sequence< OUString >();
+    return uno::Sequence< OUString >();
 }
 /*-- 12.01.01 15:06:11---------------------------------------------------
 
