@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodispatch.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:29:51 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:44:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,12 +64,6 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::view;
 using namespace rtl;
 using namespace vos;
 
@@ -86,17 +80,17 @@ SwXDispatchProviderInterceptor::SwXDispatchProviderInterceptor(SwView& rVw) :
     m_pView(&rVw)
 {
     SfxFrame* pFrame = m_pView->GetViewFrame()->GetFrame();
-    Reference< XFrame> xUnoFrame = pFrame->GetFrameInterface();
-    m_xIntercepted = Reference< XDispatchProviderInterception>(xUnoFrame, UNO_QUERY);
+    uno::Reference< frame::XFrame> xUnoFrame = pFrame->GetFrameInterface();
+    m_xIntercepted = uno::Reference< frame::XDispatchProviderInterception>(xUnoFrame, uno::UNO_QUERY);
     if(m_xIntercepted.is())
     {
         m_refCount++;
-        m_xIntercepted->registerDispatchProviderInterceptor((XDispatchProviderInterceptor*)this);
+        m_xIntercepted->registerDispatchProviderInterceptor((frame::XDispatchProviderInterceptor*)this);
         // this should make us the top-level dispatch-provider for the component, via a call to our
         // setDispatchProvider we should have got an fallback for requests we (i.e. our master) cannot fullfill
-        Reference< XComponent> xInterceptedComponent(m_xIntercepted, UNO_QUERY);
+        uno::Reference< lang::XComponent> xInterceptedComponent(m_xIntercepted, uno::UNO_QUERY);
         if (xInterceptedComponent.is())
-            xInterceptedComponent->addEventListener((XEventListener*)this);
+            xInterceptedComponent->addEventListener((lang::XEventListener*)this);
         m_refCount--;
     }
 }
@@ -109,12 +103,12 @@ SwXDispatchProviderInterceptor::~SwXDispatchProviderInterceptor()
 /*-- 07.11.00 13:25:51---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< XDispatch > SwXDispatchProviderInterceptor::queryDispatch(
-    const URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
-        throw(RuntimeException)
+uno::Reference< frame::XDispatch > SwXDispatchProviderInterceptor::queryDispatch(
+    const util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
+        throw(uno::RuntimeException)
 {
     DispatchMutexLock_Impl aLock(*this);
-    Reference< XDispatch> xResult;
+    uno::Reference< frame::XDispatch> xResult;
     // create some dispatch ...
     if(m_pView && !aURL.Complete.compareToAscii(cURLStart, 23))
     {
@@ -138,13 +132,13 @@ Reference< XDispatch > SwXDispatchProviderInterceptor::queryDispatch(
 /*-- 07.11.00 13:25:52---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Sequence< Reference< XDispatch > > SwXDispatchProviderInterceptor::queryDispatches(
-    const Sequence< DispatchDescriptor >& aDescripts ) throw(RuntimeException)
+uno::Sequence< uno::Reference< frame::XDispatch > > SwXDispatchProviderInterceptor::queryDispatches(
+    const uno::Sequence< frame::DispatchDescriptor >& aDescripts ) throw(uno::RuntimeException)
 {
     DispatchMutexLock_Impl aLock(*this);
-    Sequence< Reference< XDispatch> > aReturn(aDescripts.getLength());
-    Reference< XDispatch>* pReturn = aReturn.getArray();
-    const DispatchDescriptor* pDescripts = aDescripts.getConstArray();
+    uno::Sequence< uno::Reference< frame::XDispatch> > aReturn(aDescripts.getLength());
+    uno::Reference< frame::XDispatch>* pReturn = aReturn.getArray();
+    const frame::DispatchDescriptor* pDescripts = aDescripts.getConstArray();
     for (sal_Int16 i=0; i<aDescripts.getLength(); ++i, ++pReturn, ++pDescripts)
     {
         *pReturn = queryDispatch(pDescripts->FeatureURL,
@@ -155,8 +149,8 @@ Sequence< Reference< XDispatch > > SwXDispatchProviderInterceptor::queryDispatch
 /*-- 07.11.00 13:25:52---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< XDispatchProvider > SwXDispatchProviderInterceptor::getSlaveDispatchProvider(  )
-        throw(RuntimeException)
+uno::Reference< frame::XDispatchProvider > SwXDispatchProviderInterceptor::getSlaveDispatchProvider(  )
+        throw(uno::RuntimeException)
 {
     DispatchMutexLock_Impl aLock(*this);
     return m_xSlaveDispatcher;
@@ -165,7 +159,7 @@ Reference< XDispatchProvider > SwXDispatchProviderInterceptor::getSlaveDispatchP
 
   -----------------------------------------------------------------------*/
 void SwXDispatchProviderInterceptor::setSlaveDispatchProvider(
-    const Reference< XDispatchProvider >& xNewDispatchProvider ) throw(RuntimeException)
+    const uno::Reference< frame::XDispatchProvider >& xNewDispatchProvider ) throw(uno::RuntimeException)
 {
     DispatchMutexLock_Impl aLock(*this);
     m_xSlaveDispatcher = xNewDispatchProvider;
@@ -173,8 +167,8 @@ void SwXDispatchProviderInterceptor::setSlaveDispatchProvider(
 /*-- 07.11.00 13:25:52---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< XDispatchProvider > SwXDispatchProviderInterceptor::getMasterDispatchProvider(  )
-        throw(RuntimeException)
+uno::Reference< frame::XDispatchProvider > SwXDispatchProviderInterceptor::getMasterDispatchProvider(  )
+        throw(uno::RuntimeException)
 {
     DispatchMutexLock_Impl aLock(*this);
     return m_xMasterDispatcher;
@@ -183,7 +177,7 @@ Reference< XDispatchProvider > SwXDispatchProviderInterceptor::getMasterDispatch
 
   -----------------------------------------------------------------------*/
 void SwXDispatchProviderInterceptor::setMasterDispatchProvider(
-    const Reference< XDispatchProvider >& xNewSupplier ) throw(RuntimeException)
+    const uno::Reference< frame::XDispatchProvider >& xNewSupplier ) throw(uno::RuntimeException)
 {
     DispatchMutexLock_Impl aLock(*this);
     m_xMasterDispatcher = xNewSupplier;
@@ -191,16 +185,16 @@ void SwXDispatchProviderInterceptor::setMasterDispatchProvider(
 /*-- 07.11.00 13:25:53---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXDispatchProviderInterceptor::disposing( const EventObject& Source )
-    throw(RuntimeException)
+void SwXDispatchProviderInterceptor::disposing( const lang::EventObject& Source )
+    throw(uno::RuntimeException)
 {
     DispatchMutexLock_Impl aLock(*this);
     if (m_xIntercepted.is())
     {
-        m_xIntercepted->releaseDispatchProviderInterceptor((XDispatchProviderInterceptor*)this);
-        Reference< XComponent> xInterceptedComponent(m_xIntercepted, UNO_QUERY);
+        m_xIntercepted->releaseDispatchProviderInterceptor((frame::XDispatchProviderInterceptor*)this);
+        uno::Reference< lang::XComponent> xInterceptedComponent(m_xIntercepted, uno::UNO_QUERY);
         if (xInterceptedComponent.is())
-            xInterceptedComponent->removeEventListener((XEventListener*)this);
+            xInterceptedComponent->removeEventListener((lang::XEventListener*)this);
         m_xDispatch       = 0;
     }
     m_xIntercepted = NULL;
@@ -208,17 +202,17 @@ void SwXDispatchProviderInterceptor::disposing( const EventObject& Source )
 /* -----------------------------01.10.2001 14:31------------------------------
 
  ---------------------------------------------------------------------------*/
-const Sequence< sal_Int8 > & SwXDispatchProviderInterceptor::getUnoTunnelId()
+const uno::Sequence< sal_Int8 > & SwXDispatchProviderInterceptor::getUnoTunnelId()
 {
-    static Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
+    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
     return aSeq;
 }
 /* -----------------------------01.10.2001 14:31------------------------------
 
  ---------------------------------------------------------------------------*/
 sal_Int64 SwXDispatchProviderInterceptor::getSomething(
-    const Sequence< sal_Int8 >& aIdentifier )
-        throw(RuntimeException)
+    const uno::Sequence< sal_Int8 >& aIdentifier )
+        throw(uno::RuntimeException)
 {
     if( aIdentifier.getLength() == 16
         && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
@@ -236,10 +230,10 @@ void    SwXDispatchProviderInterceptor::Invalidate()
     DispatchMutexLock_Impl aLock(*this);
     if (m_xIntercepted.is())
     {
-        m_xIntercepted->releaseDispatchProviderInterceptor((XDispatchProviderInterceptor*)this);
-        Reference< XComponent> xInterceptedComponent(m_xIntercepted, UNO_QUERY);
+        m_xIntercepted->releaseDispatchProviderInterceptor((frame::XDispatchProviderInterceptor*)this);
+        uno::Reference< lang::XComponent> xInterceptedComponent(m_xIntercepted, uno::UNO_QUERY);
         if (xInterceptedComponent.is())
-            xInterceptedComponent->removeEventListener((XEventListener*)this);
+            xInterceptedComponent->removeEventListener((lang::XEventListener*)this);
         m_xDispatch       = 0;
     }
     m_xIntercepted = NULL;
@@ -261,8 +255,8 @@ SwXDispatch::~SwXDispatch()
 {
     if(m_bListenerAdded && m_pView)
     {
-        Reference<XSelectionSupplier> xSupplier = m_pView->GetUNOObject();
-        Reference<XSelectionChangeListener> xThis = this;
+        uno::Reference<view::XSelectionSupplier> xSupplier = m_pView->GetUNOObject();
+        uno::Reference<view::XSelectionChangeListener> xThis = this;
         xSupplier->removeSelectionChangeListener(xThis);
     }
 }
@@ -270,10 +264,10 @@ SwXDispatch::~SwXDispatch()
 
   -----------------------------------------------------------------------*/
 void SwXDispatch::dispatch(
-    const URL& aURL, const Sequence< PropertyValue >& aArgs ) throw(RuntimeException)
+    const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& aArgs ) throw(uno::RuntimeException)
 {
     if(!m_pView)
-        throw RuntimeException();
+        throw uno::RuntimeException();
     SwWrtShell& rSh = m_pView->GetWrtShell();
     SwNewDBMgr* pNewDBMgr = rSh.GetNewDBMgr();
     if(!aURL.Complete.compareToAscii(cURLInsertContent))
@@ -288,7 +282,7 @@ void SwXDispatch::dispatch(
     }
     else if(!aURL.Complete.compareToAscii(cURLFormLetter))
     {
-        SfxUsrAnyItem aDBProperties(FN_PARAM_DATABASE_PROPERTIES, ::makeAny(aArgs));
+        SfxUsrAnyItem aDBProperties(FN_PARAM_DATABASE_PROPERTIES, uno::makeAny(aArgs));
         m_pView->GetViewFrame()->GetDispatcher()->Execute(
             FN_MAILMERGE_WIZARD,
             SFX_CALLMODE_ASYNCHRON,
@@ -301,7 +295,7 @@ void SwXDispatch::dispatch(
     }
     else if(!aURL.Complete.compareToAscii(cInternalDBChangeNotification))
     {
-        FeatureStateEvent aEvent;
+        frame::FeatureStateEvent aEvent;
         aEvent.IsEnabled = sal_True;
         aEvent.Source = *(cppu::OWeakObject*)this;
 
@@ -326,17 +320,17 @@ void SwXDispatch::dispatch(
         }
     }
     else
-        throw RuntimeException();
+        throw uno::RuntimeException();
 
 }
 /*-- 07.11.00 14:26:13---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXDispatch::addStatusListener(
-    const Reference< XStatusListener >& xControl, const URL& aURL ) throw(RuntimeException)
+    const uno::Reference< frame::XStatusListener >& xControl, const util::URL& aURL ) throw(uno::RuntimeException)
 {
     if(!m_pView)
-        throw RuntimeException();
+        throw uno::RuntimeException();
     ShellModes eMode = m_pView->GetShellMode();
     sal_Bool bEnable = SEL_TEXT == eMode  ||
                        SEL_LIST_TEXT == eMode  ||
@@ -344,7 +338,7 @@ void SwXDispatch::addStatusListener(
                        SEL_TABLE_LIST_TEXT == eMode;
 
     m_bOldEnable = bEnable;
-    FeatureStateEvent aEvent;
+    frame::FeatureStateEvent aEvent;
     aEvent.IsEnabled = bEnable;
     aEvent.Source = *(cppu::OWeakObject*)this;
     aEvent.FeatureURL = aURL;
@@ -374,8 +368,8 @@ void SwXDispatch::addStatusListener(
 
     if(!m_bListenerAdded)
     {
-        Reference<XSelectionSupplier> xSupplier = m_pView->GetUNOObject();
-        Reference<XSelectionChangeListener> xThis = this;
+        uno::Reference<view::XSelectionSupplier> xSupplier = m_pView->GetUNOObject();
+        uno::Reference<view::XSelectionChangeListener> xThis = this;
         xSupplier->addSelectionChangeListener(xThis);
         m_bListenerAdded = sal_True;
     }
@@ -384,7 +378,7 @@ void SwXDispatch::addStatusListener(
 
   -----------------------------------------------------------------------*/
 void SwXDispatch::removeStatusListener(
-    const Reference< XStatusListener >& xControl, const URL& aURL ) throw(RuntimeException)
+    const uno::Reference< frame::XStatusListener >& xControl, const util::URL& aURL ) throw(uno::RuntimeException)
 {
     StatusListenerList::iterator aListIter = m_aListenerList.begin();
     for(aListIter = m_aListenerList.begin(); aListIter != m_aListenerList.end(); ++aListIter)
@@ -398,8 +392,8 @@ void SwXDispatch::removeStatusListener(
     }
     if(m_aListenerList.empty() && m_pView)
     {
-        Reference<XSelectionSupplier> xSupplier = m_pView->GetUNOObject();
-        Reference<XSelectionChangeListener> xThis = this;
+        uno::Reference<view::XSelectionSupplier> xSupplier = m_pView->GetUNOObject();
+        uno::Reference<view::XSelectionChangeListener> xThis = this;
         xSupplier->removeSelectionChangeListener(xThis);
         m_bListenerAdded = sal_False;
     }
@@ -407,7 +401,7 @@ void SwXDispatch::removeStatusListener(
 /* -----------------------------07.03.01 10:27--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwXDispatch::selectionChanged( const EventObject& aEvent ) throw(RuntimeException)
+void SwXDispatch::selectionChanged( const lang::EventObject& aEvent ) throw(uno::RuntimeException)
 {
     ShellModes eMode = m_pView->GetShellMode();
     sal_Bool bEnable = SEL_TEXT == eMode  ||
@@ -417,7 +411,7 @@ void SwXDispatch::selectionChanged( const EventObject& aEvent ) throw(RuntimeExc
     if(bEnable != m_bOldEnable)
     {
         m_bOldEnable = bEnable;
-        FeatureStateEvent aEvent;
+        frame::FeatureStateEvent aEvent;
         aEvent.IsEnabled = bEnable;
         sal_Bool Requery = FALSE;
         aEvent.Source = *(cppu::OWeakObject*)this;
@@ -436,14 +430,14 @@ void SwXDispatch::selectionChanged( const EventObject& aEvent ) throw(RuntimeExc
 /* -----------------------------07.03.01 10:46--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwXDispatch::disposing( const EventObject& rSource ) throw(RuntimeException)
+void SwXDispatch::disposing( const lang::EventObject& rSource ) throw(uno::RuntimeException)
 {
-    Reference<XSelectionSupplier> xSupplier(rSource.Source, UNO_QUERY);
-    Reference<XSelectionChangeListener> xThis = this;
+    uno::Reference<view::XSelectionSupplier> xSupplier(rSource.Source, uno::UNO_QUERY);
+    uno::Reference<view::XSelectionChangeListener> xThis = this;
     xSupplier->removeSelectionChangeListener(xThis);
     m_bListenerAdded = sal_False;
 
-    EventObject aObject;
+    lang::EventObject aObject;
     aObject.Source = (cppu::OWeakObject*)this;
     StatusListenerList::iterator aListIter = m_aListenerList.begin();
     for(; aListIter != m_aListenerList.end(); ++aListIter)
