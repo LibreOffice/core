@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regexp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:44:55 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:53:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,8 @@
 
 #include <cstddef>
 
+#include "osl/diagnose.h"
+
 #ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
@@ -51,15 +53,12 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-#ifndef _VOS_DIAGNOSE_H_
-#include <vos/diagnose.hxx>
-#endif
 
 namespace unnamed_ucb_regexp {} using namespace unnamed_ucb_regexp;
     // unnamed namespaces don't work well yet...
 
 using namespace com::sun::star;
-using namespace ucb;
+using namespace ucb_impl;
 
 //============================================================================
 //
@@ -78,9 +77,9 @@ inline Regexp::Regexp(Kind eTheKind, rtl::OUString const & rThePrefix,
     m_bEmptyDomain(bTheEmptyDomain),
     m_bTranslation(bTheTranslation)
 {
-    VOS_ASSERT(m_eKind == KIND_DOMAIN
+    OSL_ASSERT(m_eKind == KIND_DOMAIN
                || !m_bEmptyDomain && m_aInfix.getLength() == 0);
-    VOS_ASSERT(m_bTranslation || m_aReversePrefix.getLength() == 0);
+    OSL_ASSERT(m_bTranslation || m_aReversePrefix.getLength() == 0);
 }
 
 //============================================================================
@@ -234,7 +233,7 @@ bool isScheme(rtl::OUString const & rString, bool bColon)
 void appendStringLiteral(rtl::OUStringBuffer * pBuffer,
                          rtl::OUString const & rString)
 {
-    VOS_ASSERT(pBuffer);
+    OSL_ASSERT(pBuffer);
 
     pBuffer->append(sal_Unicode('"'));
     sal_Unicode const * p = rString.getStr();
