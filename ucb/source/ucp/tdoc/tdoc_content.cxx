@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_content.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:06:16 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:15:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,9 +84,7 @@
 
 #include "../inc/urihelper.hxx"
 
-using namespace com::sun;
 using namespace com::sun::star;
-
 using namespace tdoc_ucp;
 
 //=========================================================================
@@ -124,7 +122,7 @@ static ContentType lcl_getContentType( const rtl::OUString & rType )
 Content* Content::create(
             const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
             ContentProvider* pProvider,
-            const uno::Reference< star::ucb::XContentIdentifier >& Identifier )
+            const uno::Reference< ucb::XContentIdentifier >& Identifier )
 {
     // Fail, if resource does not exist.
     ContentProperties aProps;
@@ -141,8 +139,8 @@ Content* Content::create(
 Content* Content::create(
             const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
             ContentProvider* pProvider,
-            const uno::Reference< star::ucb::XContentIdentifier >& Identifier,
-            const star::ucb::ContentInfo& Info )
+            const uno::Reference< ucb::XContentIdentifier >& Identifier,
+            const ucb::ContentInfo& Info )
 {
     if ( !Info.Type.getLength() )
         return 0;
@@ -170,7 +168,7 @@ Content* Content::create(
 Content::Content(
             const uno::Reference< lang::XMultiServiceFactory > & rxSMgr,
             ContentProvider * pProvider,
-            const uno::Reference< star::ucb::XContentIdentifier > & Identifier,
+            const uno::Reference< ucb::XContentIdentifier > & Identifier,
             const ContentProperties & rProps )
 : ContentImplHelper( rxSMgr, pProvider, Identifier ),
   m_aProps( rProps ),
@@ -184,8 +182,8 @@ Content::Content(
 Content::Content(
             const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
             ContentProvider* pProvider,
-            const uno::Reference< star::ucb::XContentIdentifier >& Identifier,
-            const star::ucb::ContentInfo& Info )
+            const uno::Reference< ucb::XContentIdentifier >& Identifier,
+            const ucb::ContentInfo& Info )
 : ContentImplHelper( rxSMgr, pProvider, Identifier, sal_False ),
   m_aProps( lcl_getContentType( Info.Type ), rtl::OUString() ), // no Title (yet)
   m_eState( TRANSIENT ),
@@ -230,7 +228,7 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
     if ( !aRet.hasValue() )
     {
         aRet = cppu::queryInterface(
-                rType, static_cast< star::ucb::XContentCreator * >( this ) );
+                rType, static_cast< ucb::XContentCreator * >( this ) );
         if ( aRet.hasValue() )
         {
             if ( !isContentCreator() )
@@ -272,14 +270,14 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
                     CPPU_TYPE_REF( lang::XTypeProvider ),
                     CPPU_TYPE_REF( lang::XServiceInfo ),
                     CPPU_TYPE_REF( lang::XComponent ),
-                    CPPU_TYPE_REF( star::ucb::XContent ),
-                    CPPU_TYPE_REF( star::ucb::XCommandProcessor ),
+                    CPPU_TYPE_REF( ucb::XContent ),
+                    CPPU_TYPE_REF( ucb::XCommandProcessor ),
                     CPPU_TYPE_REF( beans::XPropertiesChangeNotifier ),
-                    CPPU_TYPE_REF( star::ucb::XCommandInfoChangeNotifier ),
+                    CPPU_TYPE_REF( ucb::XCommandInfoChangeNotifier ),
                     CPPU_TYPE_REF( beans::XPropertyContainer ),
                     CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                     CPPU_TYPE_REF( container::XChild ),
-                    CPPU_TYPE_REF( star::ucb::XContentCreator ) ); // !!
+                    CPPU_TYPE_REF( ucb::XContentCreator ) ); // !!
                 pCollection = &aCollection;
                 OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
                 pFolderTypes = pCollection;
@@ -304,10 +302,10 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
                     CPPU_TYPE_REF( lang::XTypeProvider ),
                     CPPU_TYPE_REF( lang::XServiceInfo ),
                     CPPU_TYPE_REF( lang::XComponent ),
-                    CPPU_TYPE_REF( star::ucb::XContent ),
-                    CPPU_TYPE_REF( star::ucb::XCommandProcessor ),
+                    CPPU_TYPE_REF( ucb::XContent ),
+                    CPPU_TYPE_REF( ucb::XCommandProcessor ),
                     CPPU_TYPE_REF( beans::XPropertiesChangeNotifier ),
-                    CPPU_TYPE_REF( star::ucb::XCommandInfoChangeNotifier ),
+                    CPPU_TYPE_REF( ucb::XCommandInfoChangeNotifier ),
                     CPPU_TYPE_REF( beans::XPropertyContainer ),
                     CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                     CPPU_TYPE_REF( container::XChild ) );
@@ -378,7 +376,7 @@ rtl::OUString SAL_CALL Content::getContentType()
 
 //=========================================================================
 // virtual
-uno::Reference< star::ucb::XContentIdentifier > SAL_CALL
+uno::Reference< ucb::XContentIdentifier > SAL_CALL
 Content::getIdentifier()
     throw( uno::RuntimeException )
 {
@@ -389,7 +387,7 @@ Content::getIdentifier()
         if ( m_eState == TRANSIENT )
         {
             // Transient contents have no identifier.
-            return uno::Reference< star::ucb::XContentIdentifier >();
+            return uno::Reference< ucb::XContentIdentifier >();
         }
     }
     return ContentImplHelper::getIdentifier();
@@ -403,11 +401,11 @@ Content::getIdentifier()
 
 // virtual
 uno::Any SAL_CALL Content::execute(
-        const star::ucb::Command& aCommand,
+        const ucb::Command& aCommand,
         sal_Int32 /*CommandId*/,
-        const uno::Reference< star::ucb::XCommandEnvironment >& Environment )
+        const uno::Reference< ucb::XCommandEnvironment >& Environment )
     throw( uno::Exception,
-           star::ucb::CommandAbortedException,
+           ucb::CommandAbortedException,
            uno::RuntimeException )
 {
     uno::Any aRet;
@@ -493,7 +491,7 @@ uno::Any SAL_CALL Content::execute(
         // open
         //////////////////////////////////////////////////////////////////
 
-        star::ucb::OpenCommandArgument2 aOpenCommand;
+        ucb::OpenCommandArgument2 aOpenCommand;
         if ( !( aCommand.Argument >>= aOpenCommand ) )
         {
             ucbhelper::cancelCommandExecution(
@@ -519,7 +517,7 @@ uno::Any SAL_CALL Content::execute(
         if ( ( eType != FOLDER ) && ( eType != STREAM ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( star::ucb::UnsupportedCommandException(
+                uno::makeAny( ucb::UnsupportedCommandException(
                                 rtl::OUString(
                                     RTL_CONSTASCII_USTRINGPARAM(
                                         "insert command only supported by "
@@ -537,7 +535,7 @@ uno::Any SAL_CALL Content::execute(
             if ( aParentUri.isDocument() )
             {
                 ucbhelper::cancelCommandExecution(
-                    uno::makeAny( star::ucb::UnsupportedCommandException(
+                    uno::makeAny( ucb::UnsupportedCommandException(
                                     rtl::OUString(
                                         RTL_CONSTASCII_USTRINGPARAM(
                                             "insert command not supported by "
@@ -550,7 +548,7 @@ uno::Any SAL_CALL Content::execute(
             }
         }
 #endif
-        star::ucb::InsertCommandArgument aArg;
+        ucb::InsertCommandArgument aArg;
         if ( !( aCommand.Argument >>= aArg ) )
         {
             ucbhelper::cancelCommandExecution(
@@ -564,8 +562,8 @@ uno::Any SAL_CALL Content::execute(
         }
 
         sal_Int32 nNameClash = aArg.ReplaceExisting
-                             ? star::ucb::NameClash::OVERWRITE
-                             : star::ucb::NameClash::ERROR;
+                             ? ucb::NameClash::OVERWRITE
+                             : ucb::NameClash::ERROR;
         insert( aArg.Data, nNameClash, Environment );
     }
     else if ( aCommand.Name.equalsAsciiL(
@@ -582,7 +580,7 @@ uno::Any SAL_CALL Content::execute(
             if ( ( eType != FOLDER ) && ( eType != STREAM ) )
             {
                 ucbhelper::cancelCommandExecution(
-                    uno::makeAny( star::ucb::UnsupportedCommandException(
+                    uno::makeAny( ucb::UnsupportedCommandException(
                                     rtl::OUString(
                                         RTL_CONSTASCII_USTRINGPARAM(
                                             "delete command only supported by "
@@ -611,7 +609,7 @@ uno::Any SAL_CALL Content::execute(
                                               getContentIdentifier()),
                              beans::PropertyState_DIRECT_VALUE));
             ucbhelper::cancelCommandExecution(
-                star::ucb::IOErrorCode_CANT_WRITE,
+                ucb::IOErrorCode_CANT_WRITE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 Environment,
                 rtl::OUString::createFromAscii(
@@ -637,7 +635,7 @@ uno::Any SAL_CALL Content::execute(
             if ( ( eType != FOLDER ) && ( eType != DOCUMENT ) )
             {
                 ucbhelper::cancelCommandExecution(
-                    uno::makeAny( star::ucb::UnsupportedCommandException(
+                    uno::makeAny( ucb::UnsupportedCommandException(
                                     rtl::OUString(
                                         RTL_CONSTASCII_USTRINGPARAM(
                                             "transfer command only supported "
@@ -649,7 +647,7 @@ uno::Any SAL_CALL Content::execute(
             }
         }
 
-        star::ucb::TransferInfo aInfo;
+        ucb::TransferInfo aInfo;
         if ( !( aCommand.Argument >>= aInfo ) )
         {
             OSL_ENSURE( sal_False, "Wrong argument type!" );
@@ -672,7 +670,7 @@ uno::Any SAL_CALL Content::execute(
         //////////////////////////////////////////////////////////////////
 
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( star::ucb::UnsupportedCommandException(
+            uno::makeAny( ucb::UnsupportedCommandException(
                                 rtl::OUString(),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
             Environment );
@@ -696,7 +694,7 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
 //=========================================================================
 
 // virtual
-uno::Sequence< star::ucb::ContentInfo > SAL_CALL
+uno::Sequence< ucb::ContentInfo > SAL_CALL
 Content::queryCreatableContentsInfo()
     throw( uno::RuntimeException )
 {
@@ -715,13 +713,13 @@ Content::queryCreatableContentsInfo()
         if ( m_aProps.getType() == DOCUMENT )
         {
             // streams cannot be created as direct children of document root
-            uno::Sequence< star::ucb::ContentInfo > aSeq( 1 );
+            uno::Sequence< ucb::ContentInfo > aSeq( 1 );
 
             // Folder.
             aSeq.getArray()[ 0 ].Type
                 = rtl::OUString::createFromAscii( TDOC_FOLDER_CONTENT_TYPE );
             aSeq.getArray()[ 0 ].Attributes
-                = star::ucb::ContentInfoAttribute::KIND_FOLDER;
+                = ucb::ContentInfoAttribute::KIND_FOLDER;
             aSeq.getArray()[ 0 ].Properties = aProps;
 
             return aSeq;
@@ -729,21 +727,21 @@ Content::queryCreatableContentsInfo()
         else
         {
 #endif
-            uno::Sequence< star::ucb::ContentInfo > aSeq( 2 );
+            uno::Sequence< ucb::ContentInfo > aSeq( 2 );
 
             // Folder.
             aSeq.getArray()[ 0 ].Type
                 = rtl::OUString::createFromAscii( TDOC_FOLDER_CONTENT_TYPE );
             aSeq.getArray()[ 0 ].Attributes
-                = star::ucb::ContentInfoAttribute::KIND_FOLDER;
+                = ucb::ContentInfoAttribute::KIND_FOLDER;
             aSeq.getArray()[ 0 ].Properties = aProps;
 
             // Stream.
             aSeq.getArray()[ 1 ].Type
                 = rtl::OUString::createFromAscii( TDOC_STREAM_CONTENT_TYPE );
             aSeq.getArray()[ 1 ].Attributes
-                = star::ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
-                  | star::ucb::ContentInfoAttribute::KIND_DOCUMENT;
+                = ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
+                  | ucb::ContentInfoAttribute::KIND_DOCUMENT;
             aSeq.getArray()[ 1 ].Properties = aProps;
 
             return aSeq;
@@ -757,14 +755,14 @@ Content::queryCreatableContentsInfo()
                     "queryCreatableContentsInfo called on non-contentcreator "
                     "object!" );
 
-        return uno::Sequence< star::ucb::ContentInfo >( 0 );
+        return uno::Sequence< ucb::ContentInfo >( 0 );
     }
 }
 
 //=========================================================================
 // virtual
-uno::Reference< star::ucb::XContent > SAL_CALL
-Content::createNewContent( const star::ucb::ContentInfo& Info )
+uno::Reference< ucb::XContent > SAL_CALL
+Content::createNewContent( const ucb::ContentInfo& Info )
     throw( uno::RuntimeException )
 {
     if ( isContentCreator() )
@@ -772,7 +770,7 @@ Content::createNewContent( const star::ucb::ContentInfo& Info )
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
         if ( !Info.Type.getLength() )
-            return uno::Reference< star::ucb::XContent >();
+            return uno::Reference< ucb::XContent >();
 
         sal_Bool bCreateFolder =
             Info.Type.equalsAsciiL(
@@ -785,7 +783,7 @@ Content::createNewContent( const star::ucb::ContentInfo& Info )
             OSL_ENSURE( sal_False,
                         "Content::createNewContent - streams cannot be "
                         "created as direct children of document root!" );
-            return uno::Reference< star::ucb::XContent >();
+            return uno::Reference< ucb::XContent >();
         }
 #endif
         if ( !bCreateFolder &&
@@ -794,7 +792,7 @@ Content::createNewContent( const star::ucb::ContentInfo& Info )
         {
             OSL_ENSURE( sal_False,
                         "Content::createNewContent - unsupported type!" );
-            return uno::Reference< star::ucb::XContent >();
+            return uno::Reference< ucb::XContent >();
         }
 
         rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
@@ -810,8 +808,8 @@ Content::createNewContent( const star::ucb::ContentInfo& Info )
         else
             aURL += rtl::OUString::createFromAscii( "New_Stream" );
 
-        uno::Reference< star::ucb::XContentIdentifier > xId
-            = new ::ucb::ContentIdentifier( m_xSMgr, aURL );
+        uno::Reference< ucb::XContentIdentifier > xId
+            = new ::ucbhelper::ContentIdentifier( m_xSMgr, aURL );
 
         return create( m_xSMgr, m_pProvider, xId, Info );
     }
@@ -819,7 +817,7 @@ Content::createNewContent( const star::ucb::ContentInfo& Info )
     {
         OSL_ENSURE( sal_False,
                     "createNewContent called on non-contentcreator object!" );
-        return uno::Reference< star::ucb::XContent >();
+        return uno::Reference< ucb::XContent >();
     }
 }
 
@@ -833,7 +831,7 @@ rtl::OUString Content::getParentURL()
 }
 
 //=========================================================================
-uno::Reference< star::ucb::XContentIdentifier >
+uno::Reference< ucb::XContentIdentifier >
 Content::makeNewIdentifier( const rtl::OUString& rTitle )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -841,11 +839,11 @@ Content::makeNewIdentifier( const rtl::OUString& rTitle )
     // Assemble new content identifier...
     Uri aUri( m_xIdentifier->getContentIdentifier() );
     rtl::OUStringBuffer aNewURL = aUri.getParentUri();
-    aNewURL.append( ::ucb::urihelper::encodeSegment( rTitle ) );
+    aNewURL.append( ::ucb_impl::urihelper::encodeSegment( rTitle ) );
 
     return
-        uno::Reference< star::ucb::XContentIdentifier >(
-            new ::ucb::ContentIdentifier(
+        uno::Reference< ucb::XContentIdentifier >(
+            new ::ucbhelper::ContentIdentifier(
                 m_xSMgr, aNewURL.makeStringAndClear() ) );
 }
 
@@ -862,7 +860,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     // from provider and extract the contents which are direct children
     // of this content.
 
-    ::ucb::ContentRefList aAllContents;
+    ::ucbhelper::ContentRefList aAllContents;
     m_xProvider->queryExistingContents( aAllContents );
 
     rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
@@ -876,12 +874,12 @@ void Content::queryChildren( ContentRefList& rChildren )
 
     sal_Int32 nLen = aURL.getLength();
 
-    ::ucb::ContentRefList::const_iterator it  = aAllContents.begin();
-    ::ucb::ContentRefList::const_iterator end = aAllContents.end();
+    ::ucbhelper::ContentRefList::const_iterator it  = aAllContents.begin();
+    ::ucbhelper::ContentRefList::const_iterator end = aAllContents.end();
 
     while ( it != end )
     {
-        ::ucb::ContentImplHelperRef xChild = (*it);
+        ::ucbhelper::ContentImplHelperRef xChild = (*it);
         rtl::OUString aChildURL
             = xChild->getIdentifier()->getContentIdentifier();
 
@@ -898,8 +896,7 @@ void Content::queryChildren( ContentRefList& rChildren )
                 // No further slashes / only a final slash. It's a child!
                 rChildren.push_back(
                     ContentRef(
-                        static_cast< Content * >(
-                            xChild.getBodyPtr() ) ) );
+                        static_cast< Content * >( xChild.get() ) ) );
             }
         }
         ++it;
@@ -908,14 +905,14 @@ void Content::queryChildren( ContentRefList& rChildren )
 
 //=========================================================================
 sal_Bool Content::exchangeIdentity(
-            const uno::Reference< star::ucb::XContentIdentifier >& xNewId )
+            const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
     if ( !xNewId.is() )
         return sal_False;
 
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
-    uno::Reference< star::ucb::XContent > xThis = this;
+    uno::Reference< ucb::XContent > xThis = this;
 
     // Already persistent?
     if ( m_eState != PERSISTENT )
@@ -959,7 +956,7 @@ sal_Bool Content::exchangeIdentity(
                     ContentRef xChild = (*it);
 
                     // Create new content identifier for the child...
-                    uno::Reference< star::ucb::XContentIdentifier > xOldChildId
+                    uno::Reference< ucb::XContentIdentifier > xOldChildId
                                                     = xChild->getIdentifier();
                     rtl::OUString aOldChildURL
                         = xOldChildId->getContentIdentifier();
@@ -968,8 +965,9 @@ sal_Bool Content::exchangeIdentity(
                                         0,
                                         aOldURL.getLength(),
                                         xNewId->getContentIdentifier() );
-                    uno::Reference< star::ucb::XContentIdentifier > xNewChildId
-                        = new ::ucb::ContentIdentifier( m_xSMgr, aNewChildURL );
+                    uno::Reference< ucb::XContentIdentifier > xNewChildId
+                        = new ::ucbhelper::ContentIdentifier(
+                            m_xSMgr, aNewChildURL );
 
                     if ( !xChild->exchangeIdentity( xNewChildId ) )
                         return sal_False;
@@ -1003,8 +1001,8 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     }
     else
     {
-        rtl::Reference< ::ucb::PropertyValueSet > xRow
-            = new ::ucb::PropertyValueSet( rSMgr );
+        rtl::Reference< ::ucbhelper::PropertyValueSet > xRow
+            = new ::ucbhelper::PropertyValueSet( rSMgr );
 
         sal_Int32 nCount = rProperties.getLength();
         if ( nCount )
@@ -1029,8 +1027,8 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 {
     // Note: Empty sequence means "get values of all supported properties".
 
-    rtl::Reference< ::ucb::PropertyValueSet > xRow
-        = new ::ucb::PropertyValueSet( rSMgr );
+    rtl::Reference< ::ucbhelper::PropertyValueSet > xRow
+        = new ::ucbhelper::PropertyValueSet( rSMgr );
 
     sal_Int32 nCount = rProperties.getLength();
     if ( nCount )
@@ -1212,8 +1210,8 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 //=========================================================================
 uno::Sequence< uno::Any > Content::setPropertyValues(
         const uno::Sequence< beans::PropertyValue >& rValues,
-        const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
-    throw( ::com::sun::star::uno::Exception )
+        const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+    throw( uno::Exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -1232,7 +1230,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     const beans::PropertyValue* pValues = rValues.getConstArray();
     sal_Int32 nCount = rValues.getLength();
 
-    uno::Reference< star::ucb::XPersistentPropertySet > xAdditionalPropSet;
+    uno::Reference< ucb::XPersistentPropertySet > xAdditionalPropSet;
     sal_Bool bTriedToGetAdditonalPropSet = sal_False;
 
     sal_Bool bExchange = sal_False;
@@ -1423,9 +1421,9 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
     if ( bExchange )
     {
-        uno::Reference< star::ucb::XContentIdentifier > xOldId
+        uno::Reference< ucb::XContentIdentifier > xOldId
             = m_xIdentifier;
-        uno::Reference< star::ucb::XContentIdentifier > xNewId
+        uno::Reference< ucb::XContentIdentifier > xNewId
             = makeNewIdentifier( m_aProps.getTitle() );
 
         aGuard.clear();
@@ -1479,7 +1477,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                                   getContentIdentifier()),
                                  beans::PropertyState_DIRECT_VALUE));
                 ucbhelper::cancelCommandExecution(
-                    star::ucb::IOErrorCode_CANT_WRITE,
+                    ucb::IOErrorCode_CANT_WRITE,
                     uno::Sequence< uno::Any >(&aProps, 1),
                     xEnv,
                     rtl::OUString::createFromAscii(
@@ -1500,19 +1498,19 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
 //=========================================================================
 uno::Any Content::open(
-                const star::ucb::OpenCommandArgument2& rArg,
-                const uno::Reference< star::ucb::XCommandEnvironment >& xEnv )
+                const ucb::OpenCommandArgument2& rArg,
+                const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     throw( uno::Exception )
 {
-    if ( rArg.Mode == star::ucb::OpenMode::ALL ||
-         rArg.Mode == star::ucb::OpenMode::FOLDERS ||
-         rArg.Mode == star::ucb::OpenMode::DOCUMENTS )
+    if ( rArg.Mode == ucb::OpenMode::ALL ||
+         rArg.Mode == ucb::OpenMode::FOLDERS ||
+         rArg.Mode == ucb::OpenMode::DOCUMENTS )
     {
         //////////////////////////////////////////////////////////////////
         // open command for a folder content
         //////////////////////////////////////////////////////////////////
 
-        uno::Reference< star::ucb::XDynamicResultSet > xSet
+        uno::Reference< ucb::XDynamicResultSet > xSet
             = new DynamicResultSet( m_xSMgr, this, rArg );
         return uno::makeAny( xSet );
     }
@@ -1522,12 +1520,12 @@ uno::Any Content::open(
         // open command for a document content
         //////////////////////////////////////////////////////////////////
 
-        if ( ( rArg.Mode == star::ucb::OpenMode::DOCUMENT_SHARE_DENY_NONE ) ||
-             ( rArg.Mode == star::ucb::OpenMode::DOCUMENT_SHARE_DENY_WRITE ) )
+        if ( ( rArg.Mode == ucb::OpenMode::DOCUMENT_SHARE_DENY_NONE ) ||
+             ( rArg.Mode == ucb::OpenMode::DOCUMENT_SHARE_DENY_WRITE ) )
         {
             // Currently(?) unsupported.
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( star::ucb::UnsupportedOpenModeException(
+                uno::makeAny( ucb::UnsupportedOpenModeException(
                                     rtl::OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     sal_Int16( rArg.Mode ) ) ),
@@ -1558,12 +1556,11 @@ uno::Any Content::open(
                                                   getContentIdentifier()),
                                  beans::PropertyState_DIRECT_VALUE));
                 ucbhelper::cancelCommandExecution(
-                    star::ucb::IOErrorCode_CANT_READ,
+                    ucb::IOErrorCode_CANT_READ,
                     uno::Sequence< uno::Any >(&aProps, 1),
                     m_eState == PERSISTENT
                         ? xEnv
-                        : uno::Reference<
-                              star::ucb::XCommandEnvironment >(),
+                        : uno::Reference< ucb::XCommandEnvironment >(),
                     rtl::OUString::createFromAscii(
                         "Got no data stream!" ),
                     this );
@@ -1595,11 +1592,11 @@ uno::Any Content::open(
                                                       getContentIdentifier()),
                                      beans::PropertyState_DIRECT_VALUE));
                     ucbhelper::cancelCommandExecution(
-                        star::ucb::IOErrorCode_CANT_READ,
+                        ucb::IOErrorCode_CANT_READ,
                         uno::Sequence< uno::Any >(&aProps, 1),
                         m_eState == PERSISTENT
                             ? xEnv
-                            : uno::Reference< star::ucb::XCommandEnvironment >(),
+                            : uno::Reference< ucb::XCommandEnvironment >(),
                         rtl::OUString::createFromAscii( "Got no data stream!" ),
                         this );
                     // Unreachable
@@ -1656,12 +1653,12 @@ uno::Any Content::open(
                                                           getContentIdentifier()),
                                          beans::PropertyState_DIRECT_VALUE));
                         ucbhelper::cancelCommandExecution(
-                            star::ucb::IOErrorCode_CANT_READ,
+                            ucb::IOErrorCode_CANT_READ,
                             uno::Sequence< uno::Any >(&aProps, 1),
                             m_eState == PERSISTENT
                                 ? xEnv
                                 : uno::Reference<
-                                      star::ucb::XCommandEnvironment >(),
+                                      ucb::XCommandEnvironment >(),
                             rtl::OUString::createFromAscii(
                                 "Got no data stream!" ),
                             this );
@@ -1675,7 +1672,7 @@ uno::Any Content::open(
                 {
                     ucbhelper::cancelCommandExecution(
                         uno::makeAny(
-                            star::ucb::UnsupportedDataSinkException(
+                            ucb::UnsupportedDataSinkException(
                                     rtl::OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     rArg.Sink ) ),
@@ -1693,7 +1690,7 @@ uno::Any Content::open(
 void Content::insert( const uno::Reference< io::XInputStream >& xData,
                       sal_Int32 nNameClashResolve,
                       const uno::Reference<
-                        star::ucb::XCommandEnvironment > & xEnv )
+                          ucb::XCommandEnvironment > & xEnv )
     throw( uno::Exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
@@ -1732,7 +1729,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
         if ( !xData.is() )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( star::ucb::MissingInputStreamException(
+                uno::makeAny( ucb::MissingInputStreamException(
                                 rtl::OUString(),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
                 xEnv );
@@ -1753,11 +1750,11 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
     switch ( nNameClashResolve )
     {
         // fail.
-        case star::ucb::NameClash::ERROR:
+        case ucb::NameClash::ERROR:
             if ( hasData( aNewUri ) )
             {
                 ucbhelper::cancelCommandExecution(
-                    uno::makeAny( star::ucb::NameClashException(
+                    uno::makeAny( ucb::NameClashException(
                                     rtl::OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     task::InteractionClassification_ERROR,
@@ -1768,11 +1765,11 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
             break;
 
         // replace (possibly) existing object.
-        case star::ucb::NameClash::OVERWRITE:
+        case ucb::NameClash::OVERWRITE:
             break;
 
         // "invent" a new valid title.
-        case star::ucb::NameClash::RENAME:
+        case ucb::NameClash::RENAME:
             if ( hasData( aNewUri ) )
             {
                 sal_Int32 nTry = 0;
@@ -1790,7 +1787,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
                 {
                     ucbhelper::cancelCommandExecution(
                         uno::makeAny(
-                            star::ucb::UnsupportedNameClashException(
+                            ucb::UnsupportedNameClashException(
                                 rtl::OUString::createFromAscii(
                                     "Unable to resolve name clash!" ),
                                 static_cast< cppu::OWeakObject * >( this ),
@@ -1808,14 +1805,14 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
             }
             break;
 
-        case star::ucb::NameClash::KEEP: // deprecated
-        case star::ucb::NameClash::ASK:
+        case ucb::NameClash::KEEP: // deprecated
+        case ucb::NameClash::ASK:
         default:
             if ( hasData( aNewUri ) )
             {
                 ucbhelper::cancelCommandExecution(
                     uno::makeAny(
-                        star::ucb::UnsupportedNameClashException(
+                        ucb::UnsupportedNameClashException(
                             rtl::OUString(),
                             static_cast< cppu::OWeakObject * >( this ),
                             nNameClashResolve ) ),
@@ -1831,7 +1828,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
     if ( bNewId )
     {
         m_xIdentifier
-            = new ::ucb::ContentIdentifier( m_xSMgr, aNewUri.getUri() );
+            = new ::ucbhelper::ContentIdentifier( m_xSMgr, aNewUri.getUri() );
     }
 
     if ( !storeData( xData, xEnv ) )
@@ -1845,7 +1842,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
                                                    getContentIdentifier()),
                                   beans::PropertyState_DIRECT_VALUE));
         ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_WRITE,
+            ucb::IOErrorCode_CANT_WRITE,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
             rtl::OUString::createFromAscii( "Cannot store persistent data!" ),
@@ -1867,7 +1864,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
 //=========================================================================
 void Content::destroy( sal_Bool bDeletePhysical,
                        const uno::Reference<
-                        star::ucb::XCommandEnvironment > & xEnv )
+                           ucb::XCommandEnvironment > & xEnv )
     throw( uno::Exception )
 {
     // @@@ take care about bDeletePhysical -> trashcan support
@@ -1879,13 +1876,13 @@ void Content::destroy( sal_Bool bDeletePhysical,
     OSL_ENSURE( ( eType == FOLDER ) || ( eType == STREAM ),
                 "delete command only supported by streams and folders!" );
 
-    uno::Reference< star::ucb::XContent > xThis = this;
+    uno::Reference< ucb::XContent > xThis = this;
 
     // Persistent?
     if ( m_eState != PERSISTENT )
     {
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( star::ucb::UnsupportedCommandException(
+            uno::makeAny( ucb::UnsupportedCommandException(
                                 rtl::OUString::createFromAscii(
                                     "Not persistent!" ),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
@@ -1934,7 +1931,7 @@ void Content::notifyDocumentClosed()
 }
 
 //=========================================================================
-uno::Reference< star::ucb::XContent >
+uno::Reference< ucb::XContent >
 Content::queryChildContent( const rtl::OUString & rRelativeChildUri )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -1948,15 +1945,16 @@ Content::queryChildContent( const rtl::OUString & rRelativeChildUri )
     else
         aBuf.append( rRelativeChildUri.copy( 1 ) );
 
-    uno::Reference< star::ucb::XContentIdentifier > xChildId
-        = new ::ucb::ContentIdentifier( m_xSMgr, aBuf.makeStringAndClear() );
+    uno::Reference< ucb::XContentIdentifier > xChildId
+        = new ::ucbhelper::ContentIdentifier(
+            m_xSMgr, aBuf.makeStringAndClear() );
 
-    uno::Reference< star::ucb::XContent > xChild;
+    uno::Reference< ucb::XContent > xChild;
     try
     {
         xChild = m_pProvider->queryContent( xChildId );
     }
-    catch ( star::ucb::IllegalIdentifierException const & )
+    catch ( ucb::IllegalIdentifierException const & )
     {
         // handled below.
     }
@@ -1972,7 +1970,7 @@ void Content::notifyChildRemoved( const rtl::OUString & rRelativeChildUri )
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
     // Ugly! Need to create child content object, just to fill event properly.
-    uno::Reference< star::ucb::XContent > xChild
+    uno::Reference< ucb::XContent > xChild
         = queryChildContent( rRelativeChildUri );
 
     if ( xChild.is() )
@@ -1981,9 +1979,9 @@ void Content::notifyChildRemoved( const rtl::OUString & rRelativeChildUri )
         aGuard.clear();
 
         // Notify "REMOVED" event.
-        star::ucb::ContentEvent aEvt(
+        ucb::ContentEvent aEvt(
             static_cast< cppu::OWeakObject * >( this ),
-            star::ucb::ContentAction::REMOVED,
+            ucb::ContentAction::REMOVED,
             xChild,
             getIdentifier() );
         notifyContentEvent( aEvt );
@@ -1996,7 +1994,7 @@ void Content::notifyChildInserted( const rtl::OUString & rRelativeChildUri )
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
     // Ugly! Need to create child content object, just to fill event properly.
-    uno::Reference< star::ucb::XContent > xChild
+    uno::Reference< ucb::XContent > xChild
         = queryChildContent( rRelativeChildUri );
 
     if ( xChild.is() )
@@ -2005,9 +2003,9 @@ void Content::notifyChildInserted( const rtl::OUString & rRelativeChildUri )
         aGuard.clear();
 
         // Notify "INSERTED" event.
-        star::ucb::ContentEvent aEvt(
+        ucb::ContentEvent aEvt(
             static_cast< cppu::OWeakObject * >( this ),
-            star::ucb::ContentAction::INSERTED,
+            ucb::ContentAction::INSERTED,
             xChild,
             getIdentifier() );
         notifyContentEvent( aEvt );
@@ -2016,8 +2014,8 @@ void Content::notifyChildInserted( const rtl::OUString & rRelativeChildUri )
 
 //=========================================================================
 void Content::transfer(
-            const star::ucb::TransferInfo& rInfo,
-            const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
+            const ucb::TransferInfo& rInfo,
+            const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     throw( uno::Exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
@@ -2026,7 +2024,7 @@ void Content::transfer(
     if ( m_eState != PERSISTENT )
     {
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( star::ucb::UnsupportedCommandException(
+            uno::makeAny( ucb::UnsupportedCommandException(
                                 rtl::OUString::createFromAscii(
                                     "Not persistent!" ),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
@@ -2040,7 +2038,7 @@ void Content::transfer(
     {
         // Invaild length (to short).
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( star::ucb::InteractiveBadTransferURLException(
+            uno::makeAny( ucb::InteractiveBadTransferURLException(
                             rtl::OUString(),
                             static_cast< cppu::OWeakObject * >( this ) ) ),
             xEnv );
@@ -2055,7 +2053,7 @@ void Content::transfer(
     {
         // Invalid scheme.
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( star::ucb::InteractiveBadTransferURLException(
+            uno::makeAny( ucb::InteractiveBadTransferURLException(
                             rtl::OUString(),
                             static_cast< cppu::OWeakObject * >( this ) ) ),
             xEnv );
@@ -2111,7 +2109,7 @@ void Content::transfer(
                                       uno::makeAny( rInfo.SourceURL ),
                                       beans::PropertyState_DIRECT_VALUE));
             ucbhelper::cancelCommandExecution(
-                star::ucb::IOErrorCode_RECURSIVE,
+                ucb::IOErrorCode_RECURSIVE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
                 rtl::OUString::createFromAscii(
@@ -2197,7 +2195,7 @@ void Content::transfer(
                          uno::makeAny( rInfo.SourceURL ),
                          beans::PropertyState_DIRECT_VALUE));
         ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_WRITE,
+            ucb::IOErrorCode_CANT_WRITE,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
             rtl::OUString(
@@ -2215,7 +2213,7 @@ void Content::transfer(
         aTargetUri += rtl::OUString::createFromAscii( "/" );
 
     if ( rInfo.NewTitle.getLength() > 0 )
-        aTargetUri += ::ucb::urihelper::encodeSegment( rInfo.NewTitle );
+        aTargetUri += ::ucb_impl::urihelper::encodeSegment( rInfo.NewTitle );
     else
         aTargetUri += aSourceUri.getName();
 
@@ -2231,7 +2229,7 @@ void Content::transfer(
                          uno::makeAny( rInfo.SourceURL ),
                          beans::PropertyState_DIRECT_VALUE));
         ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_WRITE,
+            ucb::IOErrorCode_CANT_WRITE,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
             rtl::OUString(
@@ -2248,8 +2246,8 @@ void Content::transfer(
     rtl::Reference< Content > xTarget;
     try
     {
-        uno::Reference< star::ucb::XContentIdentifier > xTargetId
-            = new ::ucb::ContentIdentifier( m_xSMgr, aTargetUri );
+        uno::Reference< ucb::XContentIdentifier > xTargetId
+            = new ::ucbhelper::ContentIdentifier( m_xSMgr, aTargetUri );
 
         // Note: The static cast is okay here, because its sure that
         //       m_xProvider is always the WebDAVContentProvider.
@@ -2257,7 +2255,7 @@ void Content::transfer(
             m_pProvider->queryContent( xTargetId ).get() );
 
     }
-    catch ( star::ucb::IllegalIdentifierException const & )
+    catch ( ucb::IllegalIdentifierException const & )
     {
         // queryContent
     }
@@ -2272,7 +2270,7 @@ void Content::transfer(
                                   uno::makeAny( aTargetUri ),
                                   beans::PropertyState_DIRECT_VALUE));
         ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_READ,
+            ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
             rtl::OUString::createFromAscii(
@@ -2293,8 +2291,8 @@ void Content::transfer(
         rtl::Reference< Content > xSource;
         try
         {
-            uno::Reference< star::ucb::XContentIdentifier >
-                xSourceId = new ::ucb::ContentIdentifier(
+            uno::Reference< ucb::XContentIdentifier >
+                xSourceId = new ::ucbhelper::ContentIdentifier(
                     m_xSMgr, rInfo.SourceURL );
 
             // Note: The static cast is okay here, because its sure
@@ -2302,7 +2300,7 @@ void Content::transfer(
             xSource = static_cast< Content * >(
                 m_xProvider->queryContent( xSourceId ).get() );
         }
-        catch ( star::ucb::IllegalIdentifierException const & )
+        catch ( ucb::IllegalIdentifierException const & )
         {
             // queryContent
         }
@@ -2317,7 +2315,7 @@ void Content::transfer(
                                       uno::makeAny( rInfo.SourceURL ),
                                       beans::PropertyState_DIRECT_VALUE));
             ucbhelper::cancelCommandExecution(
-                star::ucb::IOErrorCode_CANT_READ,
+                ucb::IOErrorCode_CANT_READ,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
                 rtl::OUString::createFromAscii(
@@ -2341,7 +2339,7 @@ void Content::transfer(
                              uno::makeAny( rInfo.SourceURL ),
                              beans::PropertyState_DIRECT_VALUE));
             ucbhelper::cancelCommandExecution(
-                star::ucb::IOErrorCode_CANT_WRITE,
+                ucb::IOErrorCode_CANT_WRITE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
                 rtl::OUString::createFromAscii(
@@ -2362,7 +2360,7 @@ void Content::transfer(
                              uno::makeAny( rInfo.SourceURL ),
                              beans::PropertyState_DIRECT_VALUE));
             ucbhelper::cancelCommandExecution(
-                star::ucb::IOErrorCode_CANT_WRITE,
+                ucb::IOErrorCode_CANT_WRITE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
                 rtl::OUString::createFromAscii(
@@ -2489,8 +2487,8 @@ bool Content::loadData( ContentProvider* pProvider,
 //=========================================================================
 bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
                          const uno::Reference<
-                            star::ucb::XCommandEnvironment >& xEnv )
-    throw ( star::ucb::CommandFailedException,
+                            ucb::XCommandEnvironment >& xEnv )
+    throw ( ucb::CommandFailedException,
             task::DocumentPasswordRequest )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -2632,8 +2630,8 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
 
 //=========================================================================
 bool Content::renameData(
-            const uno::Reference< star::ucb::XContentIdentifier >& xOldId,
-            const uno::Reference< star::ucb::XContentIdentifier >& xNewId )
+            const uno::Reference< ucb::XContentIdentifier >& xOldId,
+            const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -2886,8 +2884,8 @@ bool Content::closeOutputStream(
 static rtl::OUString obtainPassword(
         const rtl::OUString & rName,
         task::PasswordRequestMode eMode,
-        const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
-    throw ( star::ucb::CommandFailedException,
+        const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+    throw ( ucb::CommandFailedException,
             task::DocumentPasswordRequest )
 {
     rtl::Reference< DocumentPasswordRequest > xRequest
@@ -2911,7 +2909,7 @@ static rtl::OUString obtainPassword(
                     xSelection.get(), uno::UNO_QUERY );
                 if ( xAbort.is() )
                 {
-                    throw star::ucb::CommandFailedException(
+                    throw ucb::CommandFailedException(
                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                             "Abort requested by Interaction Handler." ) ),
                         uno::Reference< uno::XInterface >(),
@@ -2926,7 +2924,7 @@ static rtl::OUString obtainPassword(
                 }
 
                 // Unknown selection. Should never happen.
-                throw star::ucb::CommandFailedException(
+                throw ucb::CommandFailedException(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                         "Interaction Handler selected unknown continuation!" ) ),
                     uno::Reference< uno::XInterface >(),
@@ -2943,8 +2941,8 @@ static rtl::OUString obtainPassword(
 
 //=========================================================================
 uno::Reference< io::XInputStream > Content::getInputStream(
-        const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
-    throw ( star::ucb::CommandFailedException,
+        const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+    throw ( ucb::CommandFailedException,
             task::DocumentPasswordRequest )
 {
     rtl::OUString aUri;
@@ -2986,8 +2984,8 @@ uno::Reference< io::XInputStream > Content::getInputStream(
 static uno::Reference< io::XOutputStream > lcl_getTruncatedOutputStream(
                 const rtl::OUString & rUri,
                 ContentProvider * pProvider,
-                const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
-    throw ( star::ucb::CommandFailedException,
+                const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+    throw ( ucb::CommandFailedException,
             task::DocumentPasswordRequest )
 {
     rtl::OUString aPassword;
@@ -3016,8 +3014,8 @@ static uno::Reference< io::XOutputStream > lcl_getTruncatedOutputStream(
 
 //=========================================================================
 uno::Reference< io::XOutputStream > Content::getTruncatedOutputStream(
-        const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
-    throw ( star::ucb::CommandFailedException,
+        const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+    throw ( ucb::CommandFailedException,
             task::DocumentPasswordRequest )
 {
     OSL_ENSURE( m_aProps.getType() == STREAM,
@@ -3031,8 +3029,8 @@ uno::Reference< io::XOutputStream > Content::getTruncatedOutputStream(
 
 //=========================================================================
 uno::Reference< io::XStream > Content::getStream(
-        const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
-    throw ( star::ucb::CommandFailedException,
+        const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+    throw ( ucb::CommandFailedException,
             task::DocumentPasswordRequest )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
