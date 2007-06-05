@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 15:23:11 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:34:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -805,24 +805,24 @@ void ClientModify(SwClient* pClient, SfxPoolItem *pOld, SfxPoolItem *pNew)
 /* -----------------------------03.04.00 09:11--------------------------------
 
  ---------------------------------------------------------------------------*/
-Reference< XEnumeration >  SAL_CALL SwXTextCursor::createContentEnumeration(const OUString& rServiceName) throw( RuntimeException )
+uno::Reference< XEnumeration >  SAL_CALL SwXTextCursor::createContentEnumeration(const OUString& rServiceName) throw( RuntimeException )
 {
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if( !pUnoCrsr || 0 != rServiceName.compareToAscii("com.sun.star.text.TextContent") )
         throw RuntimeException();
 
-    Reference< XEnumeration > xRet = new SwXParaFrameEnumeration(*pUnoCrsr, PARAFRAME_PORTION_TEXTRANGE);
+    uno::Reference< XEnumeration > xRet = new SwXParaFrameEnumeration(*pUnoCrsr, PARAFRAME_PORTION_TEXTRANGE);
     return xRet;
 }
 /* -----------------------------07.03.01 14:53--------------------------------
 
  ---------------------------------------------------------------------------*/
-Reference< XEnumeration >  SwXTextCursor::createEnumeration(void) throw( RuntimeException )
+uno::Reference< XEnumeration >  SwXTextCursor::createEnumeration(void) throw( RuntimeException )
 {
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if( !pUnoCrsr  )
         throw RuntimeException();
-    Reference<XUnoTunnel> xTunnel(xParentText, UNO_QUERY);
+    uno::Reference<XUnoTunnel> xTunnel(xParentText, UNO_QUERY);
     SwXText* pParentText = 0;
     if(xTunnel.is())
     {
@@ -838,7 +838,7 @@ Reference< XEnumeration >  SwXTextCursor::createEnumeration(void) throw( Runtime
     }
     CursorType eSetType = eType == CURSOR_TBLTEXT ? CURSOR_SELECTION_IN_TABLE : CURSOR_SELECTION;
     SwXParagraphEnumeration *pEnum = new SwXParagraphEnumeration(pParentText, *pNewCrsr, eSetType);
-    Reference< XEnumeration > xRet = pEnum;
+    uno::Reference< XEnumeration > xRet = pEnum;
     if (eType == CURSOR_TBLTEXT)
     {
         // for import of tables in tables we have to remember the actual
@@ -882,7 +882,7 @@ Sequence< OUString > SAL_CALL SwXTextCursor::getAvailableServiceNames(void) thro
   -----------------------------------------------------------------------*/
 
 IMPL_STATIC_LINK( SwXTextCursor, RemoveCursor_Impl,
-                  Reference<XInterface>*, pArg )
+                  uno::Reference<XInterface>*, pArg )
 {
     ASSERT( pThis != NULL, "no reference?" );
     ASSERT( pArg != NULL, "no reference?" );
@@ -924,8 +924,8 @@ void    SwXTextCursor::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
         // create reference to this object to prevent deletion before
         // the STATIC_LINK is executed. The link will delete the
         // reference.
-        //Reference<XInterface>* pRef =
-            //new Reference<XInterface>( static_cast<XServiceInfo*>( this ) );
+        //uno::Reference<XInterface>* pRef =
+            //new uno::Reference<XInterface>( static_cast<XServiceInfo*>( this ) );
 
         mbRemoveUserEvent = true;
         // <--
@@ -1597,7 +1597,7 @@ uno::Reference< XText >  SwXTextRange::getText(void) throw( uno::RuntimeExceptio
             SwTable* pTable = SwTable::FindTable( pTblFmt );
             SwTableNode* pTblNode = pTable->GetTableNode();
             SwPosition aPosition( *pTblNode );
-            Reference< XTextRange >  xRange = SwXTextRange::CreateTextRangeFromPosition(pDoc,
+            uno::Reference< XTextRange >  xRange = SwXTextRange::CreateTextRangeFromPosition(pDoc,
                         aPosition, 0);
             xParentText = xRange->getText();
         }
@@ -1777,12 +1777,12 @@ sal_Bool        SwXTextRange::XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
     }
 
     //if it's a text cursor then create a temporary cursor there and re-use the pCursor variable
-    Reference< XTextCursor > xTextCursor;
+    uno::Reference< XTextCursor > xTextCursor;
     if(pText)
     {
         xTextCursor = pText->createCursor();
         xTextCursor->gotoEnd(sal_True);
-        Reference<XUnoTunnel> xCrsrTunnel( xTextCursor, UNO_QUERY);
+        uno::Reference<XUnoTunnel> xCrsrTunnel( xTextCursor, UNO_QUERY);
         pCursor = (OTextCursorHelper*)xCrsrTunnel->getSomething(
                                                     OTextCursorHelper::getUnoTunnelId());
     }
@@ -1971,10 +1971,10 @@ uno::Reference< XTextRange >  SwXTextRange::CreateTextRangeFromPosition(SwDoc* p
     delete pNewCrsr;
     return aRet;
 }
-/*Reference< XTextRange > SwXTextRange::createTextRangeFromPaM(
-    SwPaM& rPaM, Reference<XText> xParentText)
+/*uno::Reference< XTextRange > SwXTextRange::createTextRangeFromPaM(
+    SwPaM& rPaM, uno::Reference<XText> xParentText)
 {
-    Reference< XTextRange > xRet;
+    uno::Reference< XTextRange > xRet;
     // in welcher Umgebung steht denn der PaM?
     SwStartNode* pSttNode = rPaM.GetNode()->StartOfSectionNode();
     SwStartNodeType eType = pSttNode->GetStartNodeType();
@@ -2096,7 +2096,7 @@ uno::Reference< XTextRange >  SwXTextRange::CreateTextRangeFromPosition(SwDoc* p
 /* -----------------------------03.04.00 09:11--------------------------------
 
  ---------------------------------------------------------------------------*/
-Reference< XEnumeration >  SAL_CALL SwXTextRange::createContentEnumeration(
+uno::Reference< XEnumeration >  SAL_CALL SwXTextRange::createContentEnumeration(
         const OUString& rServiceName)
                 throw( RuntimeException )
 {
@@ -2112,14 +2112,14 @@ Reference< XEnumeration >  SAL_CALL SwXTextRange::createContentEnumeration(
         pNewCrsr->SetMark();
         *pNewCrsr->GetMark() = *pMark;
     }
-    Reference< XEnumeration > xRet = new SwXParaFrameEnumeration(*pNewCrsr, PARAFRAME_PORTION_TEXTRANGE);
+    uno::Reference< XEnumeration > xRet = new SwXParaFrameEnumeration(*pNewCrsr, PARAFRAME_PORTION_TEXTRANGE);
     delete pNewCrsr;
     return xRet;
 }
 /* -----------------------------07.03.01 14:55--------------------------------
 
  ---------------------------------------------------------------------------*/
-Reference< XEnumeration >  SwXTextRange::createEnumeration(void) throw( RuntimeException )
+uno::Reference< XEnumeration >  SwXTextRange::createEnumeration(void) throw( RuntimeException )
 {
     SwBookmark* pBkm = GetBookmark();
     if( !pBkm  )
@@ -2132,7 +2132,7 @@ Reference< XEnumeration >  SwXTextRange::createEnumeration(void) throw( RuntimeE
         pNewCrsr->SetMark();
         *pNewCrsr->GetMark() = *pMark;
     }
-    Reference<XUnoTunnel> xTunnel(xParentText, UNO_QUERY);
+    uno::Reference<XUnoTunnel> xTunnel(xParentText, UNO_QUERY);
     SwXText* pParentText = 0;
     if(xTunnel.is())
     {
@@ -2140,7 +2140,7 @@ Reference< XEnumeration >  SwXTextRange::createEnumeration(void) throw( RuntimeE
     }
     DBG_ASSERT(pParentText, "parent is not a SwXText")
     CursorType eSetType = RANGE_IN_CELL == eRangePosition ? CURSOR_SELECTION_IN_TABLE : CURSOR_SELECTION;
-    Reference< XEnumeration > xRet = new SwXParagraphEnumeration(pParentText, *pNewCrsr, eSetType);
+    uno::Reference< XEnumeration > xRet = new SwXParagraphEnumeration(pParentText, *pNewCrsr, eSetType);
     return xRet;
 }
 /* -----------------------------07.03.01 15:43--------------------------------
@@ -2170,10 +2170,10 @@ Sequence< OUString > SAL_CALL SwXTextRange::getAvailableServiceNames(void) throw
 /*-- 03.05.00 12:41:46---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< XPropertySetInfo > SAL_CALL SwXTextRange::getPropertySetInfo(  ) throw(RuntimeException)
+uno::Reference< XPropertySetInfo > SAL_CALL SwXTextRange::getPropertySetInfo(  ) throw(RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    static Reference< XPropertySetInfo > xRef =
+    static uno::Reference< XPropertySetInfo > xRef =
         aPropSet.getPropertySetInfo();
     return xRef;
 }
@@ -2209,7 +2209,7 @@ Any SAL_CALL SwXTextRange::getPropertyValue( const OUString& rPropertyName )
 
   -----------------------------------------------------------------------*/
 void SAL_CALL SwXTextRange::addPropertyChangeListener(
-    const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
+    const OUString& aPropertyName, const uno::Reference< XPropertyChangeListener >& xListener )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     DBG_WARNING("not implemented")
@@ -2218,7 +2218,7 @@ void SAL_CALL SwXTextRange::addPropertyChangeListener(
 
   -----------------------------------------------------------------------*/
 void SAL_CALL SwXTextRange::removePropertyChangeListener(
-    const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener )
+    const OUString& aPropertyName, const uno::Reference< XPropertyChangeListener >& aListener )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     DBG_WARNING("not implemented")
@@ -2227,7 +2227,7 @@ void SAL_CALL SwXTextRange::removePropertyChangeListener(
 
   -----------------------------------------------------------------------*/
 void SAL_CALL SwXTextRange::addVetoableChangeListener(
-    const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
+    const OUString& PropertyName, const uno::Reference< XVetoableChangeListener >& aListener )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     DBG_WARNING("not implemented")
@@ -2236,7 +2236,7 @@ void SAL_CALL SwXTextRange::addVetoableChangeListener(
 
   -----------------------------------------------------------------------*/
 void SAL_CALL SwXTextRange::removeVetoableChangeListener(
-    const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
+    const OUString& PropertyName, const uno::Reference< XVetoableChangeListener >& aListener )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     DBG_WARNING("not implemented")
@@ -2465,10 +2465,10 @@ XTextRangeArr*  SwXTextRanges::GetRangesArray()
         pRangeArr = new XTextRangeArr();
         FOREACHUNOPAM_START(pCrsr)
 
-            Reference< XTextRange >* pPtr =
-                new Reference<XTextRange>( SwXTextRange::CreateTextRangeFromPosition(PUNOPAM->GetDoc(),
+            uno::Reference< XTextRange >* pPtr =
+                new uno::Reference<XTextRange>( SwXTextRange::CreateTextRangeFromPosition(PUNOPAM->GetDoc(),
                         *PUNOPAM->GetPoint(), PUNOPAM->GetMark()));
-//              new Reference<XTextRange>( SwXTextRange::createTextRangeFromPaM(*PUNOPAM, xParentText));
+//              new uno::Reference<XTextRange>( SwXTextRange::createTextRangeFromPaM(*PUNOPAM, xParentText));
             if(pPtr->is())
                 pRangeArr->Insert(pPtr, pRangeArr->Count());
         FOREACHUNOPAM_END()
