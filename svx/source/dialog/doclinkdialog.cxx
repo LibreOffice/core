@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doclinkdialog.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:29:48 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:32:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,7 @@ namespace svx
         sal_Bool bFileExists = sal_False;
         try
         {
-            ::ucb::Content aFile(sURL, Reference< XCommandEnvironment >());
+            ::ucbhelper::Content aFile(sURL, Reference< XCommandEnvironment >());
             if (aFile.isDocument())
                 bFileExists = sal_True;
         }
