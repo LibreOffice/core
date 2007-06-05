@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 15:43:39 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 18:04:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,8 @@ PRJNAME=ucb
 UCPGVFS_MAJOR=1
 TARGET=ucpgvfs
 ENABLE_EXCEPTIONS=TRUE
+USE_DEFFILE=TRUE
 NO_BSYMBOLIC=TRUE
-
 
 .INCLUDE: settings.mk
 
@@ -79,12 +79,14 @@ SHL1STDLIBS=\
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALLIB)  \
-    $(VOSLIB) \
+    $(SALHELPERLIB)  \
     $(UCBHELPERLIB)	\
     $(UNOTOOLSLIB) \
     $(TOOLSLIB)
 
 SHL1STDLIBS+=$(PKGCONFIG_LIBS)
+
+SHL1VERSIONMAP= exports.map
 
 .ENDIF          # "$(ENABLE_GNOMEVFS)"!=""
 
