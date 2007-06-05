@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TemplateScanner.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:57:57 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:13:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,7 +244,7 @@ TemplateScanner::State TemplateScanner::InitializeEntryScanning (void)
         aProps[2] = DESCRIPTION;
 
         //  Create a cursor to iterate over the templates in this folders.
-        ::ucb::ResultSetInclude eInclude = ::ucb::INCLUDE_DOCUMENTS_ONLY;
+        ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_DOCUMENTS_ONLY;
         mxEntryResultSet = Reference<com::sun::star::sdbc::XResultSet>(
             maFolderContent.createCursor(aProps, eInclude));
     }
@@ -273,7 +273,7 @@ TemplateScanner::State TemplateScanner::ScanEntry (void)
             ::rtl::OUString sContentType (xRow->getString (3));
 
             ::rtl::OUString aId = xContentAccess->queryContentIdentifierString();
-            ::ucb::Content  aContent = ::ucb::Content (aId, mxEntryEnvironment);
+            ::ucbhelper::Content  aContent = ::ucbhelper::Content (aId, mxEntryEnvironment);
             if (aContent.isDocument ())
             {
                 //  Check wether the entry is an impress template.  If so
@@ -327,7 +327,7 @@ TemplateScanner::State TemplateScanner::InitializeFolderScanning (void)
     {
         //  Create content for template folders.
         mxFolderEnvironment = Reference<com::sun::star::ucb::XCommandEnvironment>();
-        ::ucb::Content aTemplateDir (mxTemplateRoot, mxFolderEnvironment);
+        ::ucbhelper::Content aTemplateDir (mxTemplateRoot, mxFolderEnvironment);
 
         //  Define the list of properties we are interested in.
         Sequence<rtl::OUString> aProps (2);
@@ -335,7 +335,7 @@ TemplateScanner::State TemplateScanner::InitializeFolderScanning (void)
         aProps[1] = TARGET_DIR_URL;
 
         //  Create an cursor to iterate over the template folders.
-        ::ucb::ResultSetInclude eInclude = ::ucb::INCLUDE_FOLDERS_ONLY;
+        ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_ONLY;
         mxFolderResultSet = Reference<sdbc::XResultSet>(
             aTemplateDir.createCursor(aProps, eInclude));
         if (mxFolderResultSet.is())
@@ -400,7 +400,7 @@ TemplateScanner::State TemplateScanner::ScanFolder (void)
         ::rtl::OUString sTargetDir (aDescriptor.msTargetDir);
         ::rtl::OUString aId (aDescriptor.msContentIdentifier);
 
-        maFolderContent = ::ucb::Content (aId, aDescriptor.mxFolderEnvironment);
+        maFolderContent = ::ucbhelper::Content (aId, aDescriptor.mxFolderEnvironment);
         if (maFolderContent.isFolder())
         {
             // Scan the folder and insert it into the list of template
