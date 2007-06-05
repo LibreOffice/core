@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xplugin.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:09:27 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:43:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@
 #include <stdio.h>
 #endif
 
+using namespace com::sun::star;
 using namespace com::sun::star::io;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::plugin;
@@ -118,7 +119,7 @@ Any XPlugin_Impl::queryAggregation( const Type& type ) throw( RuntimeException )
 }
 
 
-XPlugin_Impl::XPlugin_Impl( const Reference< com::sun::star::lang::XMultiServiceFactory >  & rSMgr) :
+XPlugin_Impl::XPlugin_Impl( const uno::Reference< com::sun::star::lang::XMultiServiceFactory >  & rSMgr) :
         m_xSMgr( rSMgr ),
         PluginControl_Impl(),
         m_pPluginComm( NULL ),
@@ -136,7 +137,7 @@ XPlugin_Impl::XPlugin_Impl( const Reference< com::sun::star::lang::XMultiService
     memset( &m_aNPWindow, 0, sizeof( m_aNPWindow ) );
 
     m_xModel = new PluginModel();
-    Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
+    uno::Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
     xPS->addPropertyChangeListener( OUString(), this );
 
     Guard< Mutex > aGuard( PluginManager::get().getPluginMutex() );
@@ -221,8 +222,8 @@ IMPL_LINK( XPlugin_Impl, secondLevelDispose, XPlugin_Impl*, pThis )
         m_pDisposer = NULL;
     }
 
-    Reference< XPlugin >  xProtection( this );
-    Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
+    uno::Reference< XPlugin >  xProtection( this );
+    uno::Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
     xPS->removePropertyChangeListener( OUString(), this );
     {
         Guard< Mutex > aGuard( PluginManager::get().getPluginMutex() );
@@ -328,7 +329,7 @@ void XPlugin_Impl::handleSpecialArgs()
         {
             try
             {
-                Reference< XPropertySet > xProp( m_xModel, UNO_QUERY );
+                uno::Reference< XPropertySet > xProp( m_xModel, UNO_QUERY );
                 Any aProp = xProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ) );
                 aProp >>= aURL;
             }
@@ -398,7 +399,7 @@ void XPlugin_Impl::handleSpecialArgs()
         {
             try
             {
-                Reference< XPropertySet > xProp( m_xModel, UNO_QUERY );
+                uno::Reference< XPropertySet > xProp( m_xModel, UNO_QUERY );
                 Any aProp = xProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ) );
                 aProp >>= aURL;
             }
@@ -458,7 +459,7 @@ void XPlugin_Impl::modelChanged()
 
     OUString aURL = getCreationURL();
     provideNewStream( m_aDescription.Mimetype,
-                      Reference< XActiveDataSource >(),
+                      uno::Reference< XActiveDataSource >(),
                       aURL,
                       0, 0, (sal_Bool)(aURL.compareToAscii( "file:", 5 ) == 0) );
     m_nProvidingState = PROVIDING_NONE;
@@ -469,7 +470,7 @@ OUString XPlugin_Impl::getCreationURL()
     Guard< Mutex > aGuard( m_aMutex );
 
     OUString aRet;
-    Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
+    uno::Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
     if( xPS.is() )
     {
         Any aValue = xPS->getPropertyValue( OUString::createFromAscii( "URL" ) );
@@ -479,12 +480,12 @@ OUString XPlugin_Impl::getCreationURL()
 }
 
 
-sal_Bool XPlugin_Impl::setModel( const Reference< com::sun::star::awt::XControlModel > & Model )
+sal_Bool XPlugin_Impl::setModel( const uno::Reference< com::sun::star::awt::XControlModel > & Model )
     throw( RuntimeException )
 {
     Guard< Mutex > aGuard( m_aMutex );
 
-    Reference< com::sun::star::beans::XPropertySet >  xPS( Model, UNO_QUERY );
+    uno::Reference< com::sun::star::beans::XPropertySet >  xPS( Model, UNO_QUERY );
     if( ! xPS.is() )
         return sal_False;
 
@@ -498,7 +499,7 @@ sal_Bool XPlugin_Impl::setModel( const Reference< com::sun::star::awt::XControlM
     return sal_False;
 }
 
-void XPlugin_Impl::createPeer( const Reference< com::sun::star::awt::XToolkit > & xToolkit, const Reference< com::sun::star::awt::XWindowPeer > & Parent )
+void XPlugin_Impl::createPeer( const uno::Reference< com::sun::star::awt::XToolkit > & xToolkit, const uno::Reference< com::sun::star::awt::XWindowPeer > & Parent )
     throw( RuntimeException )
 {
     Guard< Mutex > aGuard( m_aMutex );
@@ -639,7 +640,7 @@ PluginStream* XPlugin_Impl::getStreamFromNPStream( NPStream* stream )
 }
 
 sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
-                                        const Reference< com::sun::star::io::XActiveDataSource > & stream,
+                                        const uno::Reference< com::sun::star::io::XActiveDataSource > & stream,
                                         const OUString& url, sal_Int32 length,
                                         sal_Int32 lastmodified, sal_Bool isfile) throw()
 
@@ -652,7 +653,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
         m_nProvidingState = PROVIDING_NOW;
         Any aAny;
         aAny <<= url;
-        Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
+        uno::Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
         if( xPS.is() )
         {
             try
@@ -714,7 +715,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
 
      // set mimetype on model
      {
-         Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
+         uno::Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
          if( xPS.is() )
          {
              try
@@ -750,7 +751,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
 
      PluginInputStream* pStream = new PluginInputStream( this, aURL.getStr(),
                                                         length, lastmodified );
-     Reference< com::sun::star::io::XOutputStream > xNewStream( pStream );
+     uno::Reference< com::sun::star::io::XOutputStream > xNewStream( pStream );
 
      if( iter != m_aPEventListeners.end() )
          pStream->getStream()->notifyData = (*iter)->getNotifyData();
@@ -815,7 +816,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
             }
             else
             {
-                Reference< com::sun::star::io::XConnectable > xConnectable( stream, UNO_QUERY );
+                uno::Reference< com::sun::star::io::XConnectable > xConnectable( stream, UNO_QUERY );
                 pStream->setPredecessor( xConnectable );
                 if( xConnectable.is() )
                 {
@@ -825,11 +826,11 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
                 }
                 stream->setOutputStream( xNewStream );
                 pStream->setSource( stream );
-                Reference< com::sun::star::io::XActiveDataControl > xController;
+                uno::Reference< com::sun::star::io::XActiveDataControl > xController;
                 if( xConnectable.is() )
-                    xController = Reference< com::sun::star::io::XActiveDataControl >( xConnectable, UNO_QUERY );
+                    xController = uno::Reference< com::sun::star::io::XActiveDataControl >( xConnectable, UNO_QUERY );
                 else
-                    xController = Reference< com::sun::star::io::XActiveDataControl >( stream, UNO_QUERY );
+                    xController = uno::Reference< com::sun::star::io::XActiveDataControl >( stream, UNO_QUERY );
 
                 if( xController.is() )
                     xController->start();
@@ -866,7 +867,7 @@ void XPlugin_Impl::propertyChange( const com::sun::star::beans::PropertyChangeEv
     }
 }
 
-void XPlugin_Impl::setPluginContext( const Reference< XPluginContext > & rContext )
+void XPlugin_Impl::setPluginContext( const uno::Reference< XPluginContext > & rContext )
 {
     m_rBrowserContext = rContext;
 }
@@ -898,7 +899,7 @@ void XPlugin_Impl::setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, 
 
 PluginDescription XPlugin_Impl::fitDescription( const OUString& rURL )
 {
-    Reference< XPluginManager >  xPMgr( m_xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.plugin.PluginManager" ) ), UNO_QUERY );
+    uno::Reference< XPluginManager >  xPMgr( m_xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.plugin.PluginManager" ) ), UNO_QUERY );
     if( !xPMgr.is() )
     {
         m_nProvidingState = PROVIDING_NONE;
@@ -1050,9 +1051,9 @@ void PluginInputStream::load()
     try
     {
         m_pContent =
-            new ucb::Content(
+            new ::ucbhelper::Content(
                                aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI),
-                               Reference< com::sun::star::ucb::XCommandEnvironment >()
+                               uno::Reference< com::sun::star::ucb::XCommandEnvironment >()
                                );
         m_pContent->openStream( static_cast< XOutputStream* >( this ) );
     }
@@ -1129,7 +1130,7 @@ void PluginInputStream::closeOutput() throw()
     Guard< Mutex > aGuard( m_pPlugin->getMutex() );
 
     flush();
-    m_xSource = Reference< com::sun::star::io::XActiveDataSource >();
+    m_xSource = uno::Reference< com::sun::star::io::XActiveDataSource >();
 }
 
 sal_uInt32 PluginInputStream::read( sal_uInt32 offset, sal_Int8* buffer, sal_uInt32 size )
