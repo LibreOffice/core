@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XPropertyTable.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:20:57 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:36:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,14 +82,11 @@
 #endif
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::container;
-using namespace com::sun::star::lang;
 using namespace ::cppu;
 using namespace ::rtl;
 using namespace ::vos;
 
-class SvxUnoXPropertyTable : public WeakImplHelper2< XNameContainer, XServiceInfo >
+class SvxUnoXPropertyTable : public WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
 {
 private:
     XPropertyTable* mpTable;
@@ -104,26 +101,26 @@ public:
 
     virtual ~SvxUnoXPropertyTable() throw();
 
-    virtual Any getAny( const XPropertyEntry* pEntry ) const throw() = 0;
-    virtual XPropertyEntry* getEntry( const OUString& rName, const Any& rAny ) const throw() = 0;
+    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() = 0;
+    virtual XPropertyEntry* getEntry( const OUString& rName, const uno::Any& rAny ) const throw() = 0;
 
     // XServiceInfo
-    virtual sal_Bool SAL_CALL supportsService( const  OUString& ServiceName ) throw( RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const  OUString& ServiceName ) throw( uno::RuntimeException);
 
     // XNameContainer
-    virtual void SAL_CALL insertByName( const  OUString& aName, const  Any& aElement ) throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException);
-    virtual void SAL_CALL removeByName( const  OUString& Name ) throw( NoSuchElementException, WrappedTargetException, RuntimeException);
+    virtual void SAL_CALL insertByName( const  OUString& aName, const  uno::Any& aElement ) throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException);
+    virtual void SAL_CALL removeByName( const  OUString& Name ) throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const  OUString& aName, const  Any& aElement ) throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException);
+    virtual void SAL_CALL replaceByName( const  OUString& aName, const  uno::Any& aElement ) throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
 
     // XNameAccess
-    virtual Any SAL_CALL getByName( const  OUString& aName ) throw( NoSuchElementException, WrappedTargetException, RuntimeException);
-    virtual Sequence<  OUString > SAL_CALL getElementNames(  ) throw( RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const  OUString& aName ) throw( RuntimeException);
+    virtual uno::Any SAL_CALL getByName( const  OUString& aName ) throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
+    virtual uno::Sequence<  OUString > SAL_CALL getElementNames(  ) throw( uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasByName( const  OUString& aName ) throw( uno::RuntimeException);
 
     // XElementAccess
-    virtual sal_Bool SAL_CALL hasElements(  ) throw( RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements(  ) throw( uno::RuntimeException);
 };
 
 SvxUnoXPropertyTable::SvxUnoXPropertyTable( sal_Int16 nWhich, XPropertyTable* pTable ) throw()
@@ -152,9 +149,9 @@ XPropertyEntry* SvxUnoXPropertyTable::get( long index ) const
 
 // XServiceInfo
 sal_Bool SAL_CALL SvxUnoXPropertyTable::supportsService( const  OUString& ServiceName )
-    throw( RuntimeException)
+    throw( uno::RuntimeException)
 {
-    const Sequence< OUString > aServices( getSupportedServiceNames() );
+    const uno::Sequence< OUString > aServices( getSupportedServiceNames() );
     const OUString* pServices = aServices.getConstArray();
     const sal_Int32 nCount = aServices.getLength();
     sal_Int32 i;
@@ -168,23 +165,23 @@ sal_Bool SAL_CALL SvxUnoXPropertyTable::supportsService( const  OUString& Servic
 }
 
 // XNameContainer
-void SAL_CALL SvxUnoXPropertyTable::insertByName( const  OUString& aName, const  Any& aElement )
-    throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
+void SAL_CALL SvxUnoXPropertyTable::insertByName( const  OUString& aName, const  uno::Any& aElement )
+    throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
     if( NULL == mpList && NULL == mpTable )
-        throw IllegalArgumentException();
+        throw lang::IllegalArgumentException();
 
     if( hasByName( aName ) )
-        throw ElementExistException();
+        throw container::ElementExistException();
 
     String aInternalName;
     SvxUnogetInternalNameForItem( mnWhich, aName, aInternalName );
 
     XPropertyEntry* pNewEntry = getEntry( aInternalName, aElement );
     if( NULL == pNewEntry )
-        throw IllegalArgumentException();
+        throw lang::IllegalArgumentException();
 
     if( mpList )
         mpList->Insert( pNewEntry );
@@ -193,7 +190,7 @@ void SAL_CALL SvxUnoXPropertyTable::insertByName( const  OUString& aName, const 
 }
 
 void SAL_CALL SvxUnoXPropertyTable::removeByName( const  OUString& Name )
-    throw( NoSuchElementException, WrappedTargetException, RuntimeException)
+    throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
@@ -216,12 +213,12 @@ void SAL_CALL SvxUnoXPropertyTable::removeByName( const  OUString& Name )
         }
     }
 
-    throw NoSuchElementException();
+    throw container::NoSuchElementException();
 }
 
 // XNameReplace
-void SAL_CALL SvxUnoXPropertyTable::replaceByName( const  OUString& aName, const  Any& aElement )
-    throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
+void SAL_CALL SvxUnoXPropertyTable::replaceByName( const  OUString& aName, const  uno::Any& aElement )
+    throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
@@ -238,7 +235,7 @@ void SAL_CALL SvxUnoXPropertyTable::replaceByName( const  OUString& aName, const
         {
             XPropertyEntry* pNewEntry = getEntry( aInternalName, aElement );
             if( NULL == pNewEntry )
-                throw IllegalArgumentException();
+                throw lang::IllegalArgumentException();
 
             if( mpList )
                 delete mpList->Replace( pNewEntry, i );
@@ -248,12 +245,12 @@ void SAL_CALL SvxUnoXPropertyTable::replaceByName( const  OUString& aName, const
         }
     }
 
-    throw NoSuchElementException();
+    throw container::NoSuchElementException();
 }
 
 // XNameAccess
-Any SAL_CALL SvxUnoXPropertyTable::getByName( const  OUString& aName )
-    throw( NoSuchElementException, WrappedTargetException, RuntimeException)
+uno::Any SAL_CALL SvxUnoXPropertyTable::getByName( const  OUString& aName )
+    throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
@@ -271,16 +268,16 @@ Any SAL_CALL SvxUnoXPropertyTable::getByName( const  OUString& aName )
             return getAny( pEntry );
     }
 
-    throw NoSuchElementException();
+    throw container::NoSuchElementException();
 }
 
-Sequence<  OUString > SAL_CALL SvxUnoXPropertyTable::getElementNames()
-    throw( RuntimeException)
+uno::Sequence<  OUString > SAL_CALL SvxUnoXPropertyTable::getElementNames()
+    throw( uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
     const long nCount = getCount();
-    Sequence< OUString > aNames( nCount );
+    uno::Sequence< OUString > aNames( nCount );
     OUString* pNames = aNames.getArray();
     long i;
     XPropertyEntry* pEntry;
@@ -299,7 +296,7 @@ Sequence<  OUString > SAL_CALL SvxUnoXPropertyTable::getElementNames()
 }
 
 sal_Bool SAL_CALL SvxUnoXPropertyTable::hasByName( const  OUString& aName )
-    throw( RuntimeException)
+    throw( uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
@@ -321,7 +318,7 @@ sal_Bool SAL_CALL SvxUnoXPropertyTable::hasByName( const  OUString& aName )
 
 // XElementAccess
 sal_Bool SAL_CALL SvxUnoXPropertyTable::hasElements(  )
-    throw( RuntimeException)
+    throw( uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
@@ -336,31 +333,31 @@ public:
     SvxUnoXColorTable( XPropertyTable* pTable ) throw() : SvxUnoXPropertyTable( XATTR_LINECOLOR, pTable ) {};
 
     // SvxUnoXPropertyTable
-    virtual Any getAny( const XPropertyEntry* pEntry ) const throw();
-    virtual XPropertyEntry* getEntry( const OUString& rName, const Any& rAny ) const throw();
+    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw();
+    virtual XPropertyEntry* getEntry( const OUString& rName, const uno::Any& rAny ) const throw();
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType() throw( RuntimeException );
+    virtual uno::Type SAL_CALL getElementType() throw( uno::RuntimeException );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException );
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException);
 };
 
-uno::Reference< XInterface > SAL_CALL SvxUnoXColorTable_createInstance( XPropertyTable* pTable ) throw()
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoXColorTable_createInstance( XPropertyTable* pTable ) throw()
 {
     return (OWeakObject*) new SvxUnoXColorTable( pTable );
 }
 
 // SvxUnoXPropertyTable
-Any SvxUnoXColorTable::getAny( const XPropertyEntry* pEntry ) const throw()
+uno::Any SvxUnoXColorTable::getAny( const XPropertyEntry* pEntry ) const throw()
 {
-    Any aAny;
+    uno::Any aAny;
     aAny <<= (sal_Int32)((XColorEntry*)pEntry)->GetColor().GetColor();
     return aAny;
 }
 
-XPropertyEntry* SvxUnoXColorTable::getEntry( const OUString& rName, const Any& rAny ) const throw()
+XPropertyEntry* SvxUnoXColorTable::getEntry( const OUString& rName, const uno::Any& rAny ) const throw()
 {
     sal_Int32 nColor = 0;
     if( !(rAny >>= nColor) )
@@ -372,8 +369,8 @@ XPropertyEntry* SvxUnoXColorTable::getEntry( const OUString& rName, const Any& r
 }
 
 // XElementAccess
-Type SAL_CALL SvxUnoXColorTable::getElementType()
-    throw( RuntimeException )
+uno::Type SAL_CALL SvxUnoXColorTable::getElementType()
+    throw( uno::RuntimeException )
 {
     return ::getCppuType((const sal_Int32*)0);
 }
@@ -387,7 +384,7 @@ OUString SAL_CALL SvxUnoXColorTable::getImplementationName(  ) throw( uno::Runti
 uno::Sequence<  OUString > SAL_CALL SvxUnoXColorTable::getSupportedServiceNames(  ) throw( uno::RuntimeException)
 {
     const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.ColorTable" ) );
-    Sequence< OUString > aServices( &aServiceName, 1 );
+    uno::Sequence< OUString > aServices( &aServiceName, 1 );
     return aServices;
 }
 
@@ -399,34 +396,34 @@ public:
     SvxUnoXLineEndTable( XPropertyList* pTable ) throw() : SvxUnoXPropertyTable( XATTR_LINEEND, pTable ) {};
 
     // SvxUnoXPropertyTable
-    virtual Any getAny( const XPropertyEntry* pEntry ) const throw();
-    virtual XPropertyEntry* getEntry( const OUString& rName, const Any& rAny ) const throw();
+    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw();
+    virtual XPropertyEntry* getEntry( const OUString& rName, const uno::Any& rAny ) const throw();
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType() throw( RuntimeException );
+    virtual uno::Type SAL_CALL getElementType() throw( uno::RuntimeException );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException );
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException);
 };
 
-uno::Reference< XInterface > SAL_CALL SvxUnoXLineEndTable_createInstance( XPropertyList* pTable ) throw()
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoXLineEndTable_createInstance( XPropertyList* pTable ) throw()
 {
     return (OWeakObject*)new SvxUnoXLineEndTable( pTable );
 }
 
 // SvxUnoXPropertyTable
-Any SvxUnoXLineEndTable::getAny( const XPropertyEntry* pEntry ) const throw()
+uno::Any SvxUnoXLineEndTable::getAny( const XPropertyEntry* pEntry ) const throw()
 {
 
-    Any aAny;
+    uno::Any aAny;
     drawing::PolyPolygonBezierCoords aBezier;
     SvxConvertB2DPolyPolygonToPolyPolygonBezier( ((XLineEndEntry*)pEntry)->GetLineEnd(), aBezier );
     aAny <<= aBezier;
     return aAny;
 }
 
-XPropertyEntry* SvxUnoXLineEndTable::getEntry( const OUString& rName, const Any& rAny ) const throw()
+XPropertyEntry* SvxUnoXLineEndTable::getEntry( const OUString& rName, const uno::Any& rAny ) const throw()
 {
 
     if( !rAny.getValue() || rAny.getValueType() != ::getCppuType((const drawing::PolyPolygonBezierCoords*)0) )
@@ -445,8 +442,8 @@ XPropertyEntry* SvxUnoXLineEndTable::getEntry( const OUString& rName, const Any&
 }
 
 // XElementAccess
-Type SAL_CALL SvxUnoXLineEndTable::getElementType()
-    throw( RuntimeException )
+uno::Type SAL_CALL SvxUnoXLineEndTable::getElementType()
+    throw( uno::RuntimeException )
 {
     return ::getCppuType((const drawing::PolyPolygonBezierCoords*)0);
 }
@@ -460,7 +457,7 @@ OUString SAL_CALL SvxUnoXLineEndTable::getImplementationName(  ) throw( uno::Run
 uno::Sequence<  OUString > SAL_CALL SvxUnoXLineEndTable::getSupportedServiceNames(  ) throw( uno::RuntimeException)
 {
     const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.LineEndTable" ) );
-    Sequence< OUString > aServices( &aServiceName, 1 );
+    uno::Sequence< OUString > aServices( &aServiceName, 1 );
     return aServices;
 }
 
@@ -472,24 +469,24 @@ public:
     SvxUnoXDashTable( XPropertyList* pTable ) throw() : SvxUnoXPropertyTable( XATTR_LINEDASH, pTable ) {};
 
     // SvxUnoXPropertyTable
-    virtual Any getAny( const XPropertyEntry* pEntry ) const throw();
-    virtual XPropertyEntry* getEntry( const OUString& rName, const Any& rAny ) const throw();
+    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw();
+    virtual XPropertyEntry* getEntry( const OUString& rName, const uno::Any& rAny ) const throw();
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType() throw( RuntimeException );
+    virtual uno::Type SAL_CALL getElementType() throw( uno::RuntimeException );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException );
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException);
 };
 
-uno::Reference< XInterface > SAL_CALL SvxUnoXDashTable_createInstance( XPropertyList* pTable ) throw()
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoXDashTable_createInstance( XPropertyList* pTable ) throw()
 {
     return (OWeakObject*)new SvxUnoXDashTable( pTable );
 }
 
 // SvxUnoXPropertyTable
-Any SvxUnoXDashTable::getAny( const XPropertyEntry* pEntry ) const throw()
+uno::Any SvxUnoXDashTable::getAny( const XPropertyEntry* pEntry ) const throw()
 {
     const XDash& rXD = ((XDashEntry*)pEntry)->GetDash();
 
@@ -502,12 +499,12 @@ Any SvxUnoXDashTable::getAny( const XPropertyEntry* pEntry ) const throw()
     aLineDash.DashLen = rXD.GetDashLen();
     aLineDash.Distance = rXD.GetDistance();
 
-    Any aAny;
+    uno::Any aAny;
     aAny <<= aLineDash;
     return aAny;
 }
 
-XPropertyEntry* SvxUnoXDashTable::getEntry( const OUString& rName, const Any& rAny ) const throw()
+XPropertyEntry* SvxUnoXDashTable::getEntry( const OUString& rName, const uno::Any& rAny ) const throw()
 {
     drawing::LineDash aLineDash;
     if(!(rAny >>= aLineDash))
@@ -527,8 +524,8 @@ XPropertyEntry* SvxUnoXDashTable::getEntry( const OUString& rName, const Any& rA
 }
 
 // XElementAccess
-Type SAL_CALL SvxUnoXDashTable::getElementType()
-    throw( RuntimeException )
+uno::Type SAL_CALL SvxUnoXDashTable::getElementType()
+    throw( uno::RuntimeException )
 {
     return ::getCppuType((const drawing::LineDash*)0);
 }
@@ -542,7 +539,7 @@ OUString SAL_CALL SvxUnoXDashTable::getImplementationName(  ) throw( uno::Runtim
 uno::Sequence<  OUString > SAL_CALL SvxUnoXDashTable::getSupportedServiceNames(  ) throw( uno::RuntimeException)
 {
     const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DashTable" ) );
-    Sequence< OUString > aServices( &aServiceName, 1 );
+    uno::Sequence< OUString > aServices( &aServiceName, 1 );
     return aServices;
 }
 
@@ -554,24 +551,24 @@ public:
     SvxUnoXHatchTable( XPropertyList* pTable ) throw() : SvxUnoXPropertyTable( XATTR_FILLHATCH, pTable ) {};
 
     // SvxUnoXPropertyTable
-    virtual Any getAny( const XPropertyEntry* pEntry ) const throw();
-    virtual XPropertyEntry* getEntry( const OUString& rName, const Any& rAny ) const throw();
+    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw();
+    virtual XPropertyEntry* getEntry( const OUString& rName, const uno::Any& rAny ) const throw();
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType() throw( RuntimeException );
+    virtual uno::Type SAL_CALL getElementType() throw( uno::RuntimeException );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException );
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException);
 };
 
-uno::Reference< XInterface > SAL_CALL SvxUnoXHatchTable_createInstance( XPropertyList* pTable ) throw()
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoXHatchTable_createInstance( XPropertyList* pTable ) throw()
 {
     return (OWeakObject*)new SvxUnoXHatchTable( pTable );
 }
 
 // SvxUnoXPropertyTable
-Any SvxUnoXHatchTable::getAny( const XPropertyEntry* pEntry ) const throw()
+uno::Any SvxUnoXHatchTable::getAny( const XPropertyEntry* pEntry ) const throw()
 {
     const XHatch& aHatch = ((XHatchEntry*)pEntry)->GetHatch();
 
@@ -582,12 +579,12 @@ Any SvxUnoXHatchTable::getAny( const XPropertyEntry* pEntry ) const throw()
     aUnoHatch.Distance = aHatch.GetDistance();
     aUnoHatch.Angle = aHatch.GetAngle();
 
-    Any aAny;
+    uno::Any aAny;
     aAny <<= aUnoHatch;
     return aAny;
 }
 
-XPropertyEntry* SvxUnoXHatchTable::getEntry( const OUString& rName, const Any& rAny ) const throw()
+XPropertyEntry* SvxUnoXHatchTable::getEntry( const OUString& rName, const uno::Any& rAny ) const throw()
 {
     drawing::Hatch aUnoHatch;
     if(!(rAny >>= aUnoHatch))
@@ -604,8 +601,8 @@ XPropertyEntry* SvxUnoXHatchTable::getEntry( const OUString& rName, const Any& r
 }
 
 // XElementAccess
-Type SAL_CALL SvxUnoXHatchTable::getElementType()
-    throw( RuntimeException )
+uno::Type SAL_CALL SvxUnoXHatchTable::getElementType()
+    throw( uno::RuntimeException )
 {
     return ::getCppuType((const drawing::Hatch*)0);
 }
@@ -619,7 +616,7 @@ OUString SAL_CALL SvxUnoXHatchTable::getImplementationName(  ) throw( uno::Runti
 uno::Sequence<  OUString > SAL_CALL SvxUnoXHatchTable::getSupportedServiceNames(  ) throw( uno::RuntimeException)
 {
     const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.HatchTable" ) );
-    Sequence< OUString > aServices( &aServiceName, 1 );
+    uno::Sequence< OUString > aServices( &aServiceName, 1 );
     return aServices;
 }
 
@@ -631,24 +628,24 @@ public:
     SvxUnoXGradientTable( XPropertyList* pTable ) throw() : SvxUnoXPropertyTable( XATTR_FILLGRADIENT, pTable ) {};
 
     // SvxUnoXPropertyTable
-    virtual Any getAny( const XPropertyEntry* pEntry ) const throw();
-    virtual XPropertyEntry* getEntry( const OUString& rName, const Any& rAny ) const throw();
+    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw();
+    virtual XPropertyEntry* getEntry( const OUString& rName, const uno::Any& rAny ) const throw();
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType() throw( RuntimeException );
+    virtual uno::Type SAL_CALL getElementType() throw( uno::RuntimeException );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException );
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException);
 };
 
-uno::Reference< XInterface > SAL_CALL SvxUnoXGradientTable_createInstance( XPropertyList* pTable ) throw()
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoXGradientTable_createInstance( XPropertyList* pTable ) throw()
 {
     return (OWeakObject*)new SvxUnoXGradientTable( pTable );
 }
 
 // SvxUnoXPropertyTable
-Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const throw()
+uno::Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const throw()
 {
     const XGradient& aXGradient = ((XGradientEntry*)pEntry)->GetGradient();
     awt::Gradient aGradient;
@@ -664,12 +661,12 @@ Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const throw()
     aGradient.EndIntensity = aXGradient.GetEndIntens();
     aGradient.StepCount = aXGradient.GetSteps();
 
-    Any aAny;
+    uno::Any aAny;
     aAny <<= aGradient;
     return aAny;
 }
 
-XPropertyEntry* SvxUnoXGradientTable::getEntry( const OUString& rName, const Any& rAny ) const throw()
+XPropertyEntry* SvxUnoXGradientTable::getEntry( const OUString& rName, const uno::Any& rAny ) const throw()
 {
     awt::Gradient aGradient;
     if(!(rAny >>= aGradient))
@@ -693,8 +690,8 @@ XPropertyEntry* SvxUnoXGradientTable::getEntry( const OUString& rName, const Any
 }
 
 // XElementAccess
-Type SAL_CALL SvxUnoXGradientTable::getElementType()
-    throw( RuntimeException )
+uno::Type SAL_CALL SvxUnoXGradientTable::getElementType()
+    throw( uno::RuntimeException )
 {
     return ::getCppuType((const awt::Gradient*)0);
 }
@@ -708,7 +705,7 @@ OUString SAL_CALL SvxUnoXGradientTable::getImplementationName(  ) throw( uno::Ru
 uno::Sequence<  OUString > SAL_CALL SvxUnoXGradientTable::getSupportedServiceNames(  ) throw( uno::RuntimeException)
 {
     const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GradientTable" ) );
-    Sequence< OUString > aServices( &aServiceName, 1 );
+    uno::Sequence< OUString > aServices( &aServiceName, 1 );
     return aServices;
 }
 
@@ -720,34 +717,34 @@ public:
     SvxUnoXBitmapTable( XPropertyList* pTable ) throw() : SvxUnoXPropertyTable( XATTR_FILLBITMAP, pTable ) {};
 
     // SvxUnoXPropertyTable
-    virtual Any getAny( const XPropertyEntry* pEntry ) const throw();
-    virtual XPropertyEntry* getEntry( const OUString& rName, const Any& rAny ) const throw();
+    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw();
+    virtual XPropertyEntry* getEntry( const OUString& rName, const uno::Any& rAny ) const throw();
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType() throw( RuntimeException );
+    virtual uno::Type SAL_CALL getElementType() throw( uno::RuntimeException );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException );
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException);
 };
 
-uno::Reference< XInterface > SAL_CALL SvxUnoXBitmapTable_createInstance( XPropertyList* pTable ) throw()
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoXBitmapTable_createInstance( XPropertyList* pTable ) throw()
 {
     return (OWeakObject*)new SvxUnoXBitmapTable( pTable );
 }
 
 // SvxUnoXPropertyTable
-Any SvxUnoXBitmapTable::getAny( const XPropertyEntry* pEntry ) const throw()
+uno::Any SvxUnoXBitmapTable::getAny( const XPropertyEntry* pEntry ) const throw()
 {
     OUString aURL( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
     aURL += OUString::createFromAscii( ((XBitmapEntry*)pEntry)->GetXBitmap().GetGraphicObject().GetUniqueID().GetBuffer() );
 
-    Any aAny;
+    uno::Any aAny;
     aAny <<= aURL;
     return aAny;
 }
 
-XPropertyEntry* SvxUnoXBitmapTable::getEntry( const OUString& rName, const Any& rAny ) const throw()
+XPropertyEntry* SvxUnoXBitmapTable::getEntry( const OUString& rName, const uno::Any& rAny ) const throw()
 {
     OUString aURL;
     if(!(rAny >>= aURL))
@@ -761,8 +758,8 @@ XPropertyEntry* SvxUnoXBitmapTable::getEntry( const OUString& rName, const Any& 
 }
 
 // XElementAccess
-Type SAL_CALL SvxUnoXBitmapTable::getElementType()
-    throw( RuntimeException )
+uno::Type SAL_CALL SvxUnoXBitmapTable::getElementType()
+    throw( uno::RuntimeException )
 {
     return ::getCppuType((const OUString*)0);
 }
@@ -776,6 +773,6 @@ OUString SAL_CALL SvxUnoXBitmapTable::getImplementationName(  ) throw( uno::Runt
 uno::Sequence<  OUString > SAL_CALL SvxUnoXBitmapTable::getSupportedServiceNames(  ) throw( uno::RuntimeException)
 {
     const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.BitmapTable" ) );
-    Sequence< OUString > aServices( &aServiceName, 1 );
+    uno::Sequence< OUString > aServices( &aServiceName, 1 );
     return aServices;
 }
