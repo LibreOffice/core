@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hierarchycontentcaps.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:55:35 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:06:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,6 @@
 #include "hierarchycontent.hxx"
 #endif
 
-using namespace com::sun;
 using namespace com::sun::star;
 using namespace hierarchy_ucp;
 
@@ -109,7 +108,7 @@ using namespace hierarchy_ucp;
 
 // virtual
 uno::Sequence< beans::Property > HierarchyContent::getProperties(
-            const uno::Reference< star::ucb::XCommandEnvironment > & /*xEnv*/ )
+            const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -385,8 +384,8 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
 
 //=========================================================================
 // virtual
-uno::Sequence< star::ucb::CommandInfo > HierarchyContent::getCommands(
-            const uno::Reference< star::ucb::XCommandEnvironment > & /*xEnv*/ )
+uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
+            const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -400,31 +399,31 @@ uno::Sequence< star::ucb::CommandInfo > HierarchyContent::getCommands(
 
         if ( isReadOnly() )
         {
-            static star::ucb::CommandInfo aLinkCommandInfoTable[] =
+            static const ucb::CommandInfo aLinkCommandInfoTable[] =
             {
                 ///////////////////////////////////////////////////////////
                 // Required commands
                 ///////////////////////////////////////////////////////////
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
                     -1,
                     getCppuVoidType()
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
                     -1,
                     getCppuVoidType()
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
                     -1,
                     getCppuType(
                         static_cast< uno::Sequence< beans::Property > * >( 0 ) )
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
                     -1,
@@ -441,35 +440,35 @@ uno::Sequence< star::ucb::CommandInfo > HierarchyContent::getCommands(
                 ///////////////////////////////////////////////////////////
             };
             return uno::Sequence<
-                    star::ucb::CommandInfo >( aLinkCommandInfoTable, 4 );
+                    ucb::CommandInfo >( aLinkCommandInfoTable, 4 );
         }
         else
         {
-            static star::ucb::CommandInfo aLinkCommandInfoTable[] =
+            static const ucb::CommandInfo aLinkCommandInfoTable[] =
             {
                 ///////////////////////////////////////////////////////////
                 // Required commands
                 ///////////////////////////////////////////////////////////
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
                     -1,
                     getCppuVoidType()
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
                     -1,
                     getCppuVoidType()
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
                     -1,
                     getCppuType(
                         static_cast< uno::Sequence< beans::Property > * >( 0 ) )
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
                     -1,
@@ -480,12 +479,12 @@ uno::Sequence< star::ucb::CommandInfo > HierarchyContent::getCommands(
                 ///////////////////////////////////////////////////////////
                 // Optional standard commands
                 ///////////////////////////////////////////////////////////
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
                     -1,
                     getCppuBooleanType()
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
                     -1,
                     getCppuVoidType()
@@ -495,7 +494,7 @@ uno::Sequence< star::ucb::CommandInfo > HierarchyContent::getCommands(
                 ///////////////////////////////////////////////////////////
             };
             return uno::Sequence<
-                    star::ucb::CommandInfo >( aLinkCommandInfoTable, 6 );
+                    ucb::CommandInfo >( aLinkCommandInfoTable, 6 );
         }
     }
     else if ( m_eKind == FOLDER )
@@ -508,31 +507,31 @@ uno::Sequence< star::ucb::CommandInfo > HierarchyContent::getCommands(
 
         if ( isReadOnly() )
         {
-            static star::ucb::CommandInfo aFolderCommandInfoTable[] =
+            static const ucb::CommandInfo aFolderCommandInfoTable[] =
             {
                 ///////////////////////////////////////////////////////////
                 // Required commands
                 ///////////////////////////////////////////////////////////
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
                     -1,
                     getCppuVoidType()
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
                     -1,
                     getCppuVoidType()
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
                     -1,
                     getCppuType(
                         static_cast< uno::Sequence< beans::Property > * >( 0 ) )
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
                     -1,
@@ -543,46 +542,46 @@ uno::Sequence< star::ucb::CommandInfo > HierarchyContent::getCommands(
                 ///////////////////////////////////////////////////////////
                 // Optional standard commands
                 ///////////////////////////////////////////////////////////
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
                     -1,
                     getCppuType(
-                        static_cast< star::ucb::OpenCommandArgument2 * >( 0 ) )
+                        static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
                 )
                 ///////////////////////////////////////////////////////////
                 // New commands
                 ///////////////////////////////////////////////////////////
             };
             return uno::Sequence<
-                    star::ucb::CommandInfo >( aFolderCommandInfoTable, 5 );
+                    ucb::CommandInfo >( aFolderCommandInfoTable, 5 );
         }
         else
         {
-            static star::ucb::CommandInfo aFolderCommandInfoTable[] =
+            static const ucb::CommandInfo aFolderCommandInfoTable[] =
             {
                 ///////////////////////////////////////////////////////////
                 // Required commands
                 ///////////////////////////////////////////////////////////
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
                     -1,
                     getCppuVoidType()
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
                     -1,
                     getCppuVoidType()
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
                     -1,
                     getCppuType(
                         static_cast< uno::Sequence< beans::Property > * >( 0 ) )
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
                     -1,
@@ -593,33 +592,33 @@ uno::Sequence< star::ucb::CommandInfo > HierarchyContent::getCommands(
                 ///////////////////////////////////////////////////////////
                 // Optional standard commands
                 ///////////////////////////////////////////////////////////
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
                     -1,
                     getCppuBooleanType()
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
                     -1,
                     getCppuVoidType()
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
                     -1,
                     getCppuType(
-                        static_cast< star::ucb::OpenCommandArgument2 * >( 0 ) )
+                        static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
                     -1,
-                    getCppuType( static_cast< star::ucb::TransferInfo * >( 0 ) )
+                    getCppuType( static_cast< ucb::TransferInfo * >( 0 ) )
                 )
                 ///////////////////////////////////////////////////////////
                 // New commands
                 ///////////////////////////////////////////////////////////
             };
             return uno::Sequence<
-                    star::ucb::CommandInfo >( aFolderCommandInfoTable, 8 );
+                    ucb::CommandInfo >( aFolderCommandInfoTable, 8 );
         }
     }
     else
@@ -632,31 +631,31 @@ uno::Sequence< star::ucb::CommandInfo > HierarchyContent::getCommands(
 
         if ( isReadOnly() )
         {
-            static star::ucb::CommandInfo aRootFolderCommandInfoTable[] =
+            static const ucb::CommandInfo aRootFolderCommandInfoTable[] =
             {
                 ///////////////////////////////////////////////////////////
                 // Required commands
                 ///////////////////////////////////////////////////////////
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
                     -1,
                     getCppuVoidType()
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
                     -1,
                     getCppuVoidType()
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
                     -1,
                     getCppuType(
                         static_cast< uno::Sequence< beans::Property > * >( 0 ) )
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
                     -1,
@@ -667,46 +666,46 @@ uno::Sequence< star::ucb::CommandInfo > HierarchyContent::getCommands(
                 ///////////////////////////////////////////////////////////
                 // Optional standard commands
                 ///////////////////////////////////////////////////////////
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
                     -1,
                     getCppuType(
-                        static_cast< star::ucb::OpenCommandArgument2 * >( 0 ) )
+                        static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
                 )
                 ///////////////////////////////////////////////////////////
                 // New commands
                 ///////////////////////////////////////////////////////////
             };
             return uno::Sequence<
-                    star::ucb::CommandInfo >( aRootFolderCommandInfoTable, 5 );
+                    ucb::CommandInfo >( aRootFolderCommandInfoTable, 5 );
         }
         else
         {
-            static star::ucb::CommandInfo aRootFolderCommandInfoTable[] =
+            static const ucb::CommandInfo aRootFolderCommandInfoTable[] =
             {
                 ///////////////////////////////////////////////////////////
                 // Required commands
                 ///////////////////////////////////////////////////////////
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
                     -1,
                     getCppuVoidType()
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
                     -1,
                     getCppuVoidType()
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
                     -1,
                     getCppuType(
                         static_cast< uno::Sequence< beans::Property > * >( 0 ) )
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
                     -1,
@@ -717,24 +716,23 @@ uno::Sequence< star::ucb::CommandInfo > HierarchyContent::getCommands(
                 ///////////////////////////////////////////////////////////
                 // Optional standard commands
                 ///////////////////////////////////////////////////////////
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
                     -1,
                     getCppuType(
-                        static_cast< star::ucb::OpenCommandArgument2 * >( 0 ) )
+                        static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
                 ),
-                star::ucb::CommandInfo(
+                ucb::CommandInfo(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
                     -1,
-                    getCppuType( static_cast< star::ucb::TransferInfo * >( 0 ) )
+                    getCppuType( static_cast< ucb::TransferInfo * >( 0 ) )
                 )
                 ///////////////////////////////////////////////////////////
                 // New commands
                 ///////////////////////////////////////////////////////////
             };
             return uno::Sequence<
-                    star::ucb::CommandInfo >( aRootFolderCommandInfoTable, 6 );
+                    ucb::CommandInfo >( aRootFolderCommandInfoTable, 6 );
         }
     }
 }
-
