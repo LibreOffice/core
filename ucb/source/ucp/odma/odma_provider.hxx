@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odma_provider.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:53:43 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:11:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-// @@@ Adjust multi-include-protection-ifdef.
 #ifndef ODMA_PROVIDER_HXX
 #define ODMA_PROVIDER_HXX
 
@@ -43,19 +42,18 @@
 #ifndef ODMA_LIB_HXX
 #include "odma_lib.hxx"
 #endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
-#endif
+
+#include "rtl/ref.hxx"
+
 #include <map>
+
 #ifndef ODMA_CONTENTPROPS_HXX
 #include "odma_contentprops.hxx"
 #endif
-// @@@ Adjust namespace name.
+
 namespace odma {
 
 //=========================================================================
-
-// @@@ Adjust defines.
 
 // UNO service name for the provider. This name will be used by the UCB to
 // create instances of the provider.
@@ -82,20 +80,20 @@ namespace odma {
 
 //=========================================================================
 class ContentProperties;
-class ContentProvider : public ::ucb::ContentProviderImplHelper
+class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
 {
-    typedef ::std::map< ::rtl::OString, ::vos::ORef<ContentProperties> > ContentsMap;
+    typedef ::std::map< ::rtl::OString, ::rtl::Reference<ContentProperties> > ContentsMap;
     ContentsMap      m_aContents;  // contains all ContentProperties
     static ODMHANDLE m_aOdmHandle; // the one and only ODMA handle to our DMS
 
     /** fillDocumentProperties fills the given _rProp with ODMA properties
         @param  _rProp  the ContentProperties
     */
-    void fillDocumentProperties(const ::vos::ORef<ContentProperties>& _rProp);
+    void fillDocumentProperties(const ::rtl::Reference<ContentProperties>& _rProp);
 
     /**
     */
-    ::vos::ORef<ContentProperties> getContentProperty(const ::rtl::OUString& _sName,
+    ::rtl::Reference<ContentProperties> getContentProperty(const ::rtl::OUString& _sName,
                                                        const ContentPropertiesMemberFunctor& _aFunctor) const;
 public:
     ContentProvider( const ::com::sun::star::uno::Reference<
@@ -131,7 +129,7 @@ public:
     /** append add an entry to the internal map
         @param  _rProp  the content properties
     */
-    void append(const ::vos::ORef<ContentProperties>& _rProp);
+    void append(const ::rtl::Reference<ContentProperties>& _rProp);
 
     /** closeDocument closes the document
         @param  _sDocumentId    the id of the document
@@ -148,28 +146,28 @@ public:
 
         @return the content properties for this content or an empty refernce
     */
-    ::vos::ORef<ContentProperties> queryContentProperty(const ::rtl::OUString& _sDocumentName);
+    ::rtl::Reference<ContentProperties> queryContentProperty(const ::rtl::OUString& _sDocumentName);
 
     /** getContentProperty returns the ContentProperties for the first content with that title
         @param  _sTitle the title of the document
 
         @return the content properties
     */
-    ::vos::ORef<ContentProperties> getContentPropertyWithTitle(const ::rtl::OUString& _sTitle) const;
+    ::rtl::Reference<ContentProperties> getContentPropertyWithTitle(const ::rtl::OUString& _sTitle) const;
 
     /** getContentProperty returns the ContentProperties for the first content with that SavedAsName
         @param  _sSaveAsName    the SavedAsName of the document
 
         @return the content properties
     */
-    ::vos::ORef<ContentProperties> getContentPropertyWithSavedAsName(const ::rtl::OUString& _sSaveAsName) const;
+    ::rtl::Reference<ContentProperties> getContentPropertyWithSavedAsName(const ::rtl::OUString& _sSaveAsName) const;
 
     /** openDoc returns the URL for the temporary file for the specific Content and opens it
         @param  _rProp  used for check if already open, the member m_sFileURL will be set if is wan't opened yet
 
         @return the URL of the temporary file
     */
-    static ::rtl::OUString openDoc(const ::vos::ORef<ContentProperties>& _rProp) throw (::com::sun::star::uno::Exception);
+    static ::rtl::OUString openDoc(const ::rtl::Reference<ContentProperties>& _rProp) throw (::com::sun::star::uno::Exception);
 
     /** convertURL converts a normal URL into an ODMA understandable name
         @param  _sCanonicURL    the URL from ContentIndentifier
@@ -183,7 +181,7 @@ public:
 
         @return true when successful
     */
-    sal_Bool deleteDocument(const ::vos::ORef<ContentProperties>& _rProp);
+    sal_Bool deleteDocument(const ::rtl::Reference<ContentProperties>& _rProp);
 };
 
 }

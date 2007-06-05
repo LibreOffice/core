@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odma_content.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:50:31 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:09:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-// @@@ Adjust multi-include-protection-ifdef.
 #ifndef ODMA_CONTENT_HXX
 #define ODMA_CONTENT_HXX
 
@@ -55,7 +54,7 @@ namespace com { namespace sun { namespace star {
         class XInputStream;
     }
 }}}
-namespace ucb
+namespace ucbhelper
 {
     class Content;
 }
@@ -76,11 +75,11 @@ namespace odma
 //=========================================================================
 class ContentProvider;
 class ContentProperties;
-class Content : public ::ucb::ContentImplHelper
+class Content : public ::ucbhelper::ContentImplHelper
 {
-    ::vos::ORef<ContentProperties>  m_aProps;
-    ContentProvider*                m_pProvider;
-    ::ucb::Content*                 m_pContent;
+    ::rtl::Reference<ContentProperties> m_aProps;
+    ContentProvider*                    m_pProvider;
+    ::ucbhelper::Content*               m_pContent;
 
 private:
     virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
@@ -144,7 +143,7 @@ public:
                 ContentProvider* pProvider,
              const ::com::sun::star::uno::Reference<
                 ::com::sun::star::ucb::XContentIdentifier >& Identifier,
-                const ::vos::ORef<ContentProperties>& _rProps);
+                const ::rtl::Reference<ContentProperties>& _rProps);
     virtual ~Content();
 
     // XInterface
@@ -195,9 +194,9 @@ public:
                         ::com::sun::star::lang::XMultiServiceFactory >& rSMgr,
                        const ::com::sun::star::uno::Sequence<
                            ::com::sun::star::beans::Property >& rProperties,
-                       const ::vos::ORef<ContentProperties>& rData,
-                       const ::vos::ORef<
-                           ::ucb::ContentProviderImplHelper >&  rProvider,
+                       const ::rtl::Reference<ContentProperties>& rData,
+                       const ::rtl::Reference<
+                           ::ucbhelper::ContentProviderImplHelper >&    rProvider,
                        const ::rtl::OUString& rContentId );
 
     ContentProvider* getContentProvider() const { return m_pProvider; }

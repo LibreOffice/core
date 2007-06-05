@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odma_datasupplier.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:51:37 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:10:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,14 +45,14 @@ namespace odma {
 struct DataSupplier_Impl;
 class Content;
 
-class DataSupplier : public ucb::ResultSetDataSupplier
+class DataSupplier : public ucbhelper::ResultSetDataSupplier
 {
     DataSupplier_Impl* m_pImpl;
 
 public:
     DataSupplier( const com::sun::star::uno::Reference<
                       com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-                  const vos::ORef< Content >& rContent,
+                  const rtl::Reference< Content >& rContent,
                   sal_Int32 nOpenMode );
     virtual ~DataSupplier();
 

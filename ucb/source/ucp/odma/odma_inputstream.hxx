@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odma_inputstream.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:52:08 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:10:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,11 +57,10 @@
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
 #endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
-#endif
 
-namespace ucb
+#include "rtl/ref.hxx"
+
+namespace ucbhelper
 {
     class Content;
 }
@@ -83,12 +82,12 @@ namespace odma
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>   m_xInput;
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable>      m_xInputSeek;
 
-        ::vos::ORef<ContentProperties>  m_aProp;
-        ::ucb::Content*                 m_pContent;
-        ContentProvider*                m_pProvider;
-        sal_Bool                        m_bInputStreamCalled;
-        sal_Bool                        m_bOutputStreamCalled;
-        sal_Bool                        m_bModified;
+        ::rtl::Reference<ContentProperties> m_aProp;
+        ::ucbhelper::Content*               m_pContent;
+        ContentProvider*                    m_pProvider;
+        sal_Bool                            m_bInputStreamCalled;
+        sal_Bool                            m_bOutputStreamCalled;
+        sal_Bool                            m_bModified;
 
         void ensureInputStream()  throw( ::com::sun::star::io::IOException );
         void ensureOutputStream()  throw( ::com::sun::star::io::IOException );
@@ -96,9 +95,9 @@ namespace odma
                                             ::com::sun::star::io::IOException,
                                             ::com::sun::star::uno::RuntimeException );
     public:
-        OOdmaStream(::ucb::Content* _pContent,
+        OOdmaStream(::ucbhelper::Content* _pContent,
                     ContentProvider* _pProvider,
-                    const ::vos::ORef<ContentProperties>& _rProp);
+                    const ::rtl::Reference<ContentProperties>& _rProp);
         virtual ~OOdmaStream();
         // com::sun::star::io::XInputStream
         virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence<sal_Int8>& aData, sal_Int32 nBytesToRead )
