@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:22:00 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:21:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,9 +75,6 @@
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
-#endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
@@ -106,7 +103,6 @@
 using namespace ::comphelper;
 // -------------------------------------------------------------------------
 using namespace connectivity;
-using namespace ucb;
 using namespace utl;
 using namespace ::cppu;
 using namespace connectivity::file;
@@ -116,8 +112,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
-using namespace com::sun::star::ucb;
-
+using namespace com::sun::star::lang;
 
 IMPLEMENT_SERVICE_INFO(ODbaseIndex,"com.sun.star.sdbcx.driver.dbase.Index","com.sun.star.sdbcx.Index");
 // -------------------------------------------------------------------------
@@ -181,7 +176,7 @@ Sequence< sal_Int8 > ODbaseIndex::getUnoTunnelImplementationId()
     return pId->getImplementationId();
 }
 
-// com::sun::star::lang::XUnoTunnel
+// XUnoTunnel
 //------------------------------------------------------------------
 sal_Int64 ODbaseIndex::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
@@ -668,7 +663,7 @@ BOOL ODbaseIndex::CreateImpl()
 
     if(xSet->last())
     {
-        Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xSet,UNO_QUERY);
+        Reference< XUnoTunnel> xTunnel(xSet,UNO_QUERY);
         ODbaseResultSet* pDbaseRes = NULL;
         if(xTunnel.is())
             pDbaseRes = reinterpret_cast< ODbaseResultSet* >( xTunnel->getSomething(ODbaseResultSet::getUnoTunnelImplementationId()) );
