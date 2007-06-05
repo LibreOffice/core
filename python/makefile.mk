@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 11:01:49 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 10:45:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -140,15 +140,21 @@ PYTHONPATH:=..$/Lib
 .IF "$(CCNUMVER)" <= "001400000000"
 EXFLAGS="/GX /YX"
 .ELSE
+.IF "$(WINDOWS_VISTA_PSDK)"!=""
 EXFLAGS="/EHa /Zc:wchar_t- /D "_CRT_SECURE_NO_DEPRECATE""
+ADDITIONALLIBS=ws2_32.lib
+.ELSE  #"$(WINDOWS_VISTA_PSDK)"!=""
+EXFLAGS="/EHa /Zc:wchar_t- /D "_CRT_SECURE_NO_DEPRECATE""
+.ENDIF #"$(WINDOWS_VISTA_PSDK)"!=""
 .ENDIF
 
 BUILD_DIR=PCbuild
+
 # Build python executable and then runs a minimal script. Running the minimal script
 # ensures that certain *.pyc files are generated which would otherwise be created on
 # solver during registration in insetoo_native
 BUILD_ACTION= \
-    $(foreach,i,$(PYPROJECTS) nmake /f $(i).mak CFG="$(i) - Win32 Release" EXFLAGS=$(EXFLAGS) && ) \
+    $(foreach,i,$(PYPROJECTS) nmake /f $(i).mak CFG="$(i) - Win32 Release" EXFLAGS=$(EXFLAGS) ADDITIONALLIBS=$(ADDITIONALLIBS) && ) \
     python.exe -c "import os" && \
     echo build done
 .ENDIF
