@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hierarchyprovider.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:04:47 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:06:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,9 +75,7 @@
 
 #include "../inc/urihelper.hxx"
 
-using namespace com::sun;
 using namespace com::sun::star;
-
 using namespace hierarchy_ucp;
 
 //=========================================================================
@@ -90,7 +88,7 @@ using namespace hierarchy_ucp;
 
 HierarchyContentProvider::HierarchyContentProvider(
             const uno::Reference< lang::XMultiServiceFactory >& rXSMgr )
-: ::ucb::ContentProviderImplHelper( rXSMgr )
+: ::ucbhelper::ContentProviderImplHelper( rXSMgr )
 {
 }
 
@@ -109,7 +107,7 @@ HierarchyContentProvider::~HierarchyContentProvider()
 XINTERFACE_IMPL_4( HierarchyContentProvider,
                    lang::XTypeProvider,
                    lang::XServiceInfo,
-                   star::ucb::XContentProvider,
+                   ucb::XContentProvider,
                    lang::XInitialization );
 
 //=========================================================================
@@ -121,7 +119,7 @@ XINTERFACE_IMPL_4( HierarchyContentProvider,
 XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
                       lang::XTypeProvider,
                       lang::XServiceInfo,
-                      star::ucb::XContentProvider,
+                      ucb::XContentProvider,
                       lang::XInitialization );
 
 //=========================================================================
@@ -151,25 +149,25 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( HierarchyContentProvider );
 //=========================================================================
 
 // virtual
-uno::Reference< star::ucb::XContent > SAL_CALL
+uno::Reference< ucb::XContent > SAL_CALL
 HierarchyContentProvider::queryContent(
-        const uno::Reference< star::ucb::XContentIdentifier >& Identifier )
-    throw( star::ucb::IllegalIdentifierException, uno::RuntimeException )
+        const uno::Reference< ucb::XContentIdentifier >& Identifier )
+    throw( ucb::IllegalIdentifierException, uno::RuntimeException )
 {
     HierarchyUri aUri( Identifier->getContentIdentifier() );
     if ( !aUri.isValid() )
-        throw star::ucb::IllegalIdentifierException();
+        throw ucb::IllegalIdentifierException();
 
     // Encode URL and create new Id. This may "correct" user-typed-in URL's.
-    uno::Reference< star::ucb::XContentIdentifier > xCanonicId
-        = new ::ucb::ContentIdentifier( m_xSMgr,
-                                        ::ucb::urihelper::encodeURI(
-                                                            aUri.getUri() ) );
-    vos::OGuard aGuard( m_aMutex );
+    uno::Reference< ucb::XContentIdentifier > xCanonicId
+        = new ::ucbhelper::ContentIdentifier( m_xSMgr,
+                                              ::ucb_impl::urihelper::encodeURI(
+                                                  aUri.getUri() ) );
+    osl::MutexGuard aGuard( m_aMutex );
 
     // Check, if a content with given id already exists...
-    uno::Reference< star::ucb::XContent > xContent
-        = queryExistingContent( xCanonicId ).getBodyPtr();
+    uno::Reference< ucb::XContent > xContent
+        = queryExistingContent( xCanonicId ).get();
     if ( xContent.is() )
         return xContent;
 
@@ -179,7 +177,7 @@ HierarchyContentProvider::queryContent(
     xContent = HierarchyContent::create( m_xSMgr, this, xCanonicId );
 
     if ( xContent.is() && !xContent->getIdentifier().is() )
-        throw star::ucb::IllegalIdentifierException();
+        throw ucb::IllegalIdentifierException();
 
     return xContent;
 }
@@ -222,7 +220,7 @@ uno::Reference< lang::XMultiServiceFactory >
 HierarchyContentProvider::getConfigProvider(
                                 const rtl::OUString & rServiceSpecifier )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     ConfigProviderMap::iterator it = m_aConfigProviderMap.find(
                                                     rServiceSpecifier );
     if ( it == m_aConfigProviderMap.end() )
@@ -263,7 +261,7 @@ uno::Reference< container::XHierarchicalNameAccess >
 HierarchyContentProvider::getRootConfigReadNameAccess(
                                 const rtl::OUString & rServiceSpecifier )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     ConfigProviderMap::iterator it = m_aConfigProviderMap.find(
                                                     rServiceSpecifier );
     if ( it != m_aConfigProviderMap.end() )
@@ -330,7 +328,7 @@ HierarchyContentProvider::getOfficeInstallationDirectories()
 {
     if ( !m_xOfficeInstDirs.is() )
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::MutexGuard aGuard( m_aMutex );
         if ( !m_xOfficeInstDirs.is() )
         {
             OSL_ENSURE( m_xSMgr.is(), "No service manager!" );
