@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acctable.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:39:01 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:28:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,8 +108,7 @@
 #include <acctable.hxx>
 #endif
 
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::rtl;
 
@@ -166,7 +165,7 @@ public:
 
     const SwFrm *GetCell( sal_Int32 nRow, sal_Int32 nColumn, sal_Bool bExact,
                           SwAccessibleTable *pThis ) const
-        throw(IndexOutOfBoundsException );
+        throw(lang::IndexOutOfBoundsException );
     const SwFrm *GetCellAtPos( sal_Int32 nLeft, sal_Int32 nTop,
                                          sal_Bool bExact ) const;
     inline sal_Int32 GetRowCount() const;
@@ -180,7 +179,7 @@ public:
 
     void CheckRowAndCol( sal_Int32 nRow, sal_Int32 nCol,
                          SwAccessibleTable *pThis ) const
-        throw(IndexOutOfBoundsException );
+        throw(lang::IndexOutOfBoundsException );
 
     void GetRowColumnAndExtent( const SwRect& rBox,
                                   sal_Int32& rRow, sal_Int32& rColumn,
@@ -403,7 +402,7 @@ void SwAccessibleTableData_Impl::GetSelection(
 const SwFrm *SwAccessibleTableData_Impl::GetCell(
         sal_Int32 nRow, sal_Int32 nColumn, sal_Bool bExact,
         SwAccessibleTable *pThis ) const
-    throw(IndexOutOfBoundsException )
+    throw(lang::IndexOutOfBoundsException )
 {
     CheckRowAndCol( nRow, nColumn, pThis );
 
@@ -527,13 +526,13 @@ inline Int32Set_Impl::const_iterator SwAccessibleTableData_Impl::GetColumnIter(
 
 void SwAccessibleTableData_Impl::CheckRowAndCol(
         sal_Int32 nRow, sal_Int32 nCol, SwAccessibleTable *pThis ) const
-    throw(IndexOutOfBoundsException )
+    throw(lang::IndexOutOfBoundsException )
 {
     if( ( nRow < 0 || nRow >= static_cast< sal_Int32 >( maRows.size() ) ) ||
         ( nCol < 0 || nCol >= static_cast< sal_Int32 >( maColumns.size() ) ) )
     {
-        Reference < XAccessibleTable > xThis( pThis );
-        IndexOutOfBoundsException aExcept(
+        uno::Reference < XAccessibleTable > xThis( pThis );
+        lang::IndexOutOfBoundsException aExcept(
                OUString( RTL_CONSTASCII_USTRINGPARAM(
                        "row or column index out of range") ),
                xThis );
@@ -600,7 +599,7 @@ public:
 
     inline SwAccAllTableSelHander_Impl( sal_Int32 nSize );
 
-    Sequence < sal_Int32 > GetSelSequence();
+    uno::Sequence < sal_Int32 > GetSelSequence();
 
     virtual void Unselect( sal_Int32 nRowOrCol, sal_Int32 nExt );
 };
@@ -611,10 +610,10 @@ inline SwAccAllTableSelHander_Impl::SwAccAllTableSelHander_Impl( sal_Int32 nSize
 {
 }
 
-Sequence < sal_Int32 > SwAccAllTableSelHander_Impl::GetSelSequence()
+uno::Sequence < sal_Int32 > SwAccAllTableSelHander_Impl::GetSelSequence()
 {
     ASSERT( nCount >= 0, "underflow" );
-    Sequence < sal_Int32 > aRet( nCount );
+    uno::Sequence < sal_Int32 > aRet( nCount );
     sal_Int32 *pRet = aRet.getArray();
     sal_Int32 nPos = 0;
     size_t nSize = aSelected.size();
@@ -847,18 +846,18 @@ void SwAccessibleTable::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
     }
 }
 
-Any SwAccessibleTable::queryInterface( const ::com::sun::star::uno::Type& rType )
-    throw (RuntimeException)
+uno::Any SwAccessibleTable::queryInterface( const uno::Type& rType )
+    throw (uno::RuntimeException)
 {
-    Any aRet;
-    if ( rType == ::getCppuType((Reference<XAccessibleTable> *)0) )
+    uno::Any aRet;
+    if ( rType == ::getCppuType( static_cast< uno::Reference< XAccessibleTable > * >( 0 ) ) )
     {
-        Reference<XAccessibleTable> xThis( this );
+        uno::Reference<XAccessibleTable> xThis( this );
            aRet <<= xThis;
     }
-    else if ( rType == ::getCppuType((Reference<XAccessibleSelection> *)0) )
+    else if ( rType == ::getCppuType( static_cast< uno::Reference< XAccessibleSelection > * >( 0 ) ) )
     {
-        Reference<XAccessibleSelection> xSelection( this );
+        uno::Reference<XAccessibleSelection> xSelection( this );
         aRet <<= xSelection;
     }
     else
@@ -870,25 +869,26 @@ Any SwAccessibleTable::queryInterface( const ::com::sun::star::uno::Type& rType 
 }
 
 //====== XTypeProvider ====================================================
-Sequence< ::com::sun::star::uno::Type > SAL_CALL SwAccessibleTable::getTypes() throw(RuntimeException)
+uno::Sequence< uno::Type > SAL_CALL SwAccessibleTable::getTypes()
+    throw(uno::RuntimeException)
 {
-    Sequence< ::com::sun::star::uno::Type > aTypes( SwAccessibleContext::getTypes() );
+    uno::Sequence< uno::Type > aTypes( SwAccessibleContext::getTypes() );
 
     sal_Int32 nIndex = aTypes.getLength();
     aTypes.realloc( nIndex + 2 );
 
-    ::com::sun::star::uno::Type* pTypes = aTypes.getArray();
-    pTypes[nIndex++] = ::getCppuType( static_cast< Reference< XAccessibleSelection > * >( 0 ) );
-    pTypes[nIndex++] = ::getCppuType( static_cast< Reference< XAccessibleTable > * >( 0 ) );
+    uno::Type* pTypes = aTypes.getArray();
+    pTypes[nIndex++] = ::getCppuType( static_cast< uno::Reference< XAccessibleSelection > * >( 0 ) );
+    pTypes[nIndex++] = ::getCppuType( static_cast< uno::Reference< XAccessibleTable > * >( 0 ) );
 
     return aTypes;
 }
 
-Sequence< sal_Int8 > SAL_CALL SwAccessibleTable::getImplementationId()
-        throw(RuntimeException)
+uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleTable::getImplementationId()
+        throw(uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    static Sequence< sal_Int8 > aId( 16 );
+    static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
     {
@@ -914,7 +914,7 @@ void SwAccessibleTable::ClearTableData()
 }
 
 OUString SAL_CALL SwAccessibleTable::getAccessibleDescription (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -924,7 +924,7 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleDescription (void)
 }
 
 sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRowCount()
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -934,7 +934,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRowCount()
 }
 
 sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumnCount(  )
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -945,7 +945,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumnCount(  )
 
 OUString SAL_CALL SwAccessibleTable::getAccessibleRowDescription(
             sal_Int32 nRow )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     // TODO: Is there any reasonable we can do here?
     OUString sDesc;
@@ -957,7 +957,7 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleRowDescription(
 
 OUString SAL_CALL SwAccessibleTable::getAccessibleColumnDescription(
             sal_Int32 nColumn )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     // TODO: Is there any reasonable we can do here?
     OUString sDesc;
@@ -969,7 +969,7 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleColumnDescription(
 
 sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRowExtentAt(
             sal_Int32 nRow, sal_Int32 nColumn )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     sal_Int32 nExtend = -1;
 
@@ -1000,7 +1000,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRowExtentAt(
 
 sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumnExtentAt(
                sal_Int32 nRow, sal_Int32 nColumn )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     sal_Int32 nExtend = -1;
 
@@ -1029,26 +1029,24 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumnExtentAt(
     return nExtend;
 }
 
-Reference< XAccessibleTable > SAL_CALL
+uno::Reference< XAccessibleTable > SAL_CALL
         SwAccessibleTable::getAccessibleRowHeaders(  )
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
     // Column headers aren't supported
-    Reference< XAccessibleTable > xRet;
-    return xRet;
+    return uno::Reference< XAccessibleTable >();
 }
 
-Reference< XAccessibleTable > SAL_CALL
+uno::Reference< XAccessibleTable > SAL_CALL
         SwAccessibleTable::getAccessibleColumnHeaders(  )
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
     // TODO Column headers aren't supported, arent they?
-    Reference< XAccessibleTable > xRet;
-    return xRet;
+    return uno::Reference< XAccessibleTable >();
 }
 
-Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleRows()
-    throw (RuntimeException)
+uno::Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleRows()
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -1067,13 +1065,12 @@ Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleRows()
     }
     else
     {
-        Sequence< sal_Int32 > aRet( 0 );
-        return aRet;
+        return uno::Sequence< sal_Int32 >( 0 );
     }
 }
 
-Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleColumns()
-    throw (RuntimeException)
+uno::Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleColumns()
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -1091,13 +1088,12 @@ Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleColumns()
     }
     else
     {
-        Sequence< sal_Int32 > aRet( 0 );
-        return aRet;
+        return uno::Sequence< sal_Int32 >( 0 );
     }
 }
 
 sal_Bool SAL_CALL SwAccessibleTable::isAccessibleRowSelected( sal_Int32 nRow )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -1124,7 +1120,7 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleRowSelected( sal_Int32 nRow )
 
 sal_Bool SAL_CALL SwAccessibleTable::isAccessibleColumnSelected(
         sal_Int32 nColumn )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -1150,11 +1146,11 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleColumnSelected(
     return bRet;
 }
 
-Reference< XAccessible > SAL_CALL SwAccessibleTable::getAccessibleCellAt(
+uno::Reference< XAccessible > SAL_CALL SwAccessibleTable::getAccessibleCellAt(
         sal_Int32 nRow, sal_Int32 nColumn )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    Reference< XAccessible > xRet;
+    uno::Reference< XAccessible > xRet;
 
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -1168,25 +1164,23 @@ Reference< XAccessible > SAL_CALL SwAccessibleTable::getAccessibleCellAt(
     return xRet;
 }
 
-Reference< XAccessible > SAL_CALL SwAccessibleTable::getAccessibleCaption()
-    throw (RuntimeException)
+uno::Reference< XAccessible > SAL_CALL SwAccessibleTable::getAccessibleCaption()
+    throw (uno::RuntimeException)
 {
     // captions aren't supported
-    Reference< XAccessible > xRet;
-    return xRet;
+    return uno::Reference< XAccessible >();
 }
 
-Reference< XAccessible > SAL_CALL SwAccessibleTable::getAccessibleSummary()
-    throw (RuntimeException)
+uno::Reference< XAccessible > SAL_CALL SwAccessibleTable::getAccessibleSummary()
+    throw (uno::RuntimeException)
 {
     // summaries aren't supported
-    Reference< XAccessible > xRet;
-    return xRet;
+    return uno::Reference< XAccessible >();
 }
 
 sal_Bool SAL_CALL SwAccessibleTable::isAccessibleSelected(
             sal_Int32 nRow, sal_Int32 nColumn )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     sal_Bool bRet = sal_False;
 
@@ -1213,7 +1207,7 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleSelected(
 
 sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleIndex(
             sal_Int32 nRow, sal_Int32 nColumn )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     sal_Int32 nRet = -1;
 
@@ -1229,7 +1223,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleIndex(
 }
 
 sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRow( sal_Int32 nChildIndex )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     sal_Int32 nRet = -1;
 
@@ -1252,7 +1246,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRow( sal_Int32 nChildIndex )
         ASSERT( !aCell.IsValid(), "SwAccessibleTable::getAccessibleColumn:"
                 "aCell not expected to be valid.");
 
-        throw IndexOutOfBoundsException();
+        throw lang::IndexOutOfBoundsException();
     }
 
     return nRet;
@@ -1260,7 +1254,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRow( sal_Int32 nChildIndex )
 
 sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumn(
         sal_Int32 nChildIndex )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     sal_Int32 nRet = -1;
 
@@ -1283,7 +1277,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumn(
         ASSERT( !aCell.IsValid(), "SwAccessibleTable::getAccessibleColumn:"
                 "aCell not expected to be valid.");
 
-        throw IndexOutOfBoundsException();
+        throw lang::IndexOutOfBoundsException();
     }
 
     return nRet;
@@ -1291,14 +1285,14 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumn(
 
 
 OUString SAL_CALL SwAccessibleTable::getImplementationName()
-        throw( RuntimeException )
+        throw( uno::RuntimeException )
 {
     return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplementationName));
 }
 
 sal_Bool SAL_CALL SwAccessibleTable::supportsService(
-        const ::rtl::OUString& sTestServiceName)
-    throw (::com::sun::star::uno::RuntimeException)
+        const OUString& sTestServiceName)
+    throw (uno::RuntimeException)
 {
     return sTestServiceName.equalsAsciiL( sServiceName,
                                           sizeof(sServiceName)-1 ) ||
@@ -1306,10 +1300,10 @@ sal_Bool SAL_CALL SwAccessibleTable::supportsService(
                                              sizeof(sAccessibleServiceName)-1 );
 }
 
-Sequence< OUString > SAL_CALL SwAccessibleTable::getSupportedServiceNames()
-        throw( ::com::sun::star::uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL SwAccessibleTable::getSupportedServiceNames()
+        throw( uno::RuntimeException )
 {
-    Sequence< OUString > aRet(2);
+    uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceName) );
     pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
@@ -1354,7 +1348,7 @@ void SwAccessibleTable::DisposeChild( const SwFrmOrObj& rChildFrmOrObj,
     // the map, and we have to call our superclass.
     // The other situation is that we have been call by a call to get notified
     // about its change. We then must not call the superclass
-    Reference< XAccessible > xAcc( GetMap()->GetContext( pFrm, sal_False ) );
+    uno::Reference< XAccessible > xAcc( GetMap()->GetContext( pFrm, sal_False ) );
     if( !xAcc.is() )
         SwAccessibleContext::DisposeChild( rChildFrmOrObj, bRecursive );
 }
@@ -1393,7 +1387,7 @@ void SwAccessibleTable::InvalidateChildPosOrSize( const SwFrmOrObj& rChildFrmOrO
     // The other situation is that we have been call by a call to get notified
     // about its change. We then must not call the superclass
     ASSERT( rChildFrmOrObj.GetSwFrm(), "frame expected" );
-    Reference< XAccessible > xAcc( GetMap()->GetContext( rChildFrmOrObj.GetSwFrm(), sal_False ) );
+    uno::Reference< XAccessible > xAcc( GetMap()->GetContext( rChildFrmOrObj.GetSwFrm(), sal_False ) );
     if( !xAcc.is() )
         SwAccessibleContext::InvalidateChildPosOrSize( rChildFrmOrObj, rOldBox );
 }
@@ -1405,13 +1399,13 @@ void SwAccessibleTable::InvalidateChildPosOrSize( const SwFrmOrObj& rChildFrmOrO
 
 void SAL_CALL SwAccessibleTable::selectAccessibleChild(
     sal_Int32 nChildIndex )
-    throw ( IndexOutOfBoundsException, RuntimeException )
+    throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     CHECK_FOR_DEFUNC( XAccessibleTable );
 
     if( (nChildIndex < 0) || (nChildIndex >= GetChildCount()) )
-        throw IndexOutOfBoundsException();
+        throw lang::IndexOutOfBoundsException();
 
     // preliminaries: get 'our' table box, and get the cursor shell
     const SwTableBox* pBox = GetTableBox( nChildIndex );
@@ -1509,20 +1503,20 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
 
 sal_Bool SAL_CALL SwAccessibleTable::isAccessibleChildSelected(
     sal_Int32 nChildIndex )
-    throw ( IndexOutOfBoundsException,
-            RuntimeException )
+    throw ( lang::IndexOutOfBoundsException,
+            uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     CHECK_FOR_DEFUNC( XAccessibleTable );
 
     if( (nChildIndex < 0) || (nChildIndex >= GetChildCount()) )
-        throw IndexOutOfBoundsException();
+        throw lang::IndexOutOfBoundsException();
 
     return IsChildSelected( nChildIndex );
 }
 
 void SAL_CALL SwAccessibleTable::clearAccessibleSelection(  )
-    throw ( RuntimeException )
+    throw ( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -1538,7 +1532,7 @@ void SAL_CALL SwAccessibleTable::clearAccessibleSelection(  )
 }
 
 void SAL_CALL SwAccessibleTable::selectAllAccessibleChildren(  )
-    throw ( RuntimeException )
+    throw ( uno::RuntimeException )
 {
     // first clear selection, then select first and last child
     clearAccessibleSelection();
@@ -1547,7 +1541,7 @@ void SAL_CALL SwAccessibleTable::selectAllAccessibleChildren(  )
 }
 
 sal_Int32 SAL_CALL SwAccessibleTable::getSelectedAccessibleChildCount(  )
-    throw ( RuntimeException )
+    throw ( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     CHECK_FOR_DEFUNC( XAccessibleTable );
@@ -1563,23 +1557,23 @@ sal_Int32 SAL_CALL SwAccessibleTable::getSelectedAccessibleChildCount(  )
     return nCount;
 }
 
-Reference<XAccessible> SAL_CALL SwAccessibleTable::getSelectedAccessibleChild(
+uno::Reference<XAccessible> SAL_CALL SwAccessibleTable::getSelectedAccessibleChild(
     sal_Int32 nSelectedChildIndex )
-    throw ( IndexOutOfBoundsException,
-            RuntimeException)
+    throw ( lang::IndexOutOfBoundsException,
+            uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     CHECK_FOR_DEFUNC( XAccessibleTable );
 
     // paremter checking (part 1): index lower 0
     if( nSelectedChildIndex < 0 )
-        throw IndexOutOfBoundsException();
+        throw lang::IndexOutOfBoundsException();
 
     sal_Int32 nChildIndex = GetIndexOfSelectedChild( nSelectedChildIndex );
 
     // parameter checking (part 2): index higher than selected children?
     if( nChildIndex < 0 )
-        throw IndexOutOfBoundsException();
+        throw lang::IndexOutOfBoundsException();
 
     return getAccessibleChild( nChildIndex );
 }
@@ -1587,8 +1581,8 @@ Reference<XAccessible> SAL_CALL SwAccessibleTable::getSelectedAccessibleChild(
 // --> OD 2004-11-16 #111714# - index has to be treated as global child index.
 void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
     sal_Int32 nChildIndex )
-    throw ( IndexOutOfBoundsException,
-            RuntimeException )
+    throw ( lang::IndexOutOfBoundsException,
+            uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     CHECK_FOR_DEFUNC( XAccessibleTable );
@@ -1597,11 +1591,11 @@ void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
 
     // --> OD 2004-11-16 #111714# - index has to be treated as global child index
     if ( !pCrsrShell )
-        throw IndexOutOfBoundsException();
+        throw lang::IndexOutOfBoundsException();
 
     // assure, that given child index is in bounds.
     if ( nChildIndex < 0 || nChildIndex >= GetChildCount() )
-        throw IndexOutOfBoundsException();
+        throw lang::IndexOutOfBoundsException();
 
     // assure, that child, identified by the given index, is selected.
     if ( !IsChildSelected( nChildIndex ) )
