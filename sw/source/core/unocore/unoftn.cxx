@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoftn.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:57:26 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:33:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,11 +75,6 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::beans;
 using namespace ::rtl;
 
 /******************************************************************
@@ -110,14 +105,14 @@ sal_Int64 SAL_CALL SwXFootnote::getSomething( const uno::Sequence< sal_Int8 >& r
 /* -----------------------------06.04.00 16:36--------------------------------
 
  ---------------------------------------------------------------------------*/
-OUString SwXFootnote::getImplementationName(void) throw( RuntimeException )
+OUString SwXFootnote::getImplementationName(void) throw( uno::RuntimeException )
 {
     return C2U("SwXFootnote");
 }
 /* -----------------------------06.04.00 16:36--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwXFootnote::supportsService(const OUString& rServiceName) throw( RuntimeException )
+BOOL SwXFootnote::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return  !rServiceName.compareToAscii("com.sun.star.text.Footnote") ||
             !rServiceName.compareToAscii("com.sun.star.text.TextContent") ||
@@ -128,9 +123,9 @@ BOOL SwXFootnote::supportsService(const OUString& rServiceName) throw( RuntimeEx
 /* -----------------------------06.04.00 16:36--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence< OUString > SwXFootnote::getSupportedServiceNames(void) throw( RuntimeException )
+uno::Sequence< OUString > SwXFootnote::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
-    Sequence< OUString > aRet(m_bIsEndnote ? 4 : 3);
+    uno::Sequence< OUString > aRet(m_bIsEndnote ? 4 : 3);
     OUString* pArray = aRet.getArray();
     pArray[0] = C2U("com.sun.star.text.Footnote");
     pArray[1] = C2U("com.sun.star.text.TextContent");
@@ -197,7 +192,7 @@ uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL SwXFootnote::getTypes(  ) 
 uno::Sequence< sal_Int8 > SAL_CALL SwXFootnote::getImplementationId(  ) throw(uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    static Sequence< sal_Int8 > aId( 16 );
+    static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
     {
@@ -391,7 +386,7 @@ const SwStartNode *SwXFootnote::GetStartNode() const
     return pSttNd;
 }
 
-uno::Reference< text::XTextCursor >   SwXFootnote::createCursor() throw ( ::com::sun::star::uno::RuntimeException)
+uno::Reference< text::XTextCursor >   SwXFootnote::createCursor() throw (uno::RuntimeException)
 {
     return createTextCursor();
 }
@@ -446,7 +441,7 @@ uno::Reference< text::XTextCursor >  SwXFootnote::createTextCursorByRange(
 /*-- 13.06.00 14:28:23---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< XEnumeration >  SwXFootnote::createEnumeration() throw( RuntimeException )
+uno::Reference< container::XEnumeration >  SwXFootnote::createEnumeration() throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< container::XEnumeration >  aRef;
@@ -466,14 +461,14 @@ Reference< XEnumeration >  SwXFootnote::createEnumeration() throw( RuntimeExcept
 /*-- 13.06.00 14:28:24---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Type SwXFootnote::getElementType(  ) throw(RuntimeException)
+uno::Type SwXFootnote::getElementType(  ) throw(uno::RuntimeException)
 {
-    return ::getCppuType((Reference<XTextRange>*)0);
+    return ::getCppuType(static_cast<uno::Reference<XTextRange>*>(0));
 }
 /*-- 13.06.00 14:28:24---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool SwXFootnote::hasElements(  ) throw(RuntimeException)
+sal_Bool SwXFootnote::hasElements(  ) throw(uno::RuntimeException)
 {
     return sal_True;
 }
@@ -517,8 +512,8 @@ void SwXFootnote::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 /*-- 11.09.00 13:12:03---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< XPropertySetInfo > SwXFootnote::getPropertySetInfo(  )
-    throw(RuntimeException)
+uno::Reference< beans::XPropertySetInfo > SwXFootnote::getPropertySetInfo(  )
+    throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo >  xRef =
         new SfxItemPropertySetInfo(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_FOOTNOTE));
@@ -528,21 +523,21 @@ Reference< XPropertySetInfo > SwXFootnote::getPropertySetInfo(  )
 
   -----------------------------------------------------------------------*/
 void SwXFootnote::setPropertyValue( const ::rtl::OUString&,
-    const Any& )
-        throw(UnknownPropertyException, PropertyVetoException,
-            IllegalArgumentException, WrappedTargetException, RuntimeException)
+    const uno::Any& )
+        throw(beans::UnknownPropertyException, beans::PropertyVetoException,
+            lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     //no values to be set
-    throw IllegalArgumentException();
+    throw lang::IllegalArgumentException();
 }
 /*-- 11.09.00 13:12:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Any SwXFootnote::getPropertyValue( const OUString& rPropertyName )
-    throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+uno::Any SwXFootnote::getPropertyValue( const OUString& rPropertyName )
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    Any aRet;
+    uno::Any aRet;
     if(!SwXParagraph::getDefaultTextContentValue(aRet, rPropertyName))
     {
         if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_START_REDLINE))||
@@ -564,7 +559,7 @@ Any SwXFootnote::getPropertyValue( const OUString& rPropertyName )
         }
         else
         {
-            UnknownPropertyException aExcept;
+            beans::UnknownPropertyException aExcept;
             aExcept.Message = rPropertyName;
             throw aExcept;
         }
@@ -575,32 +570,32 @@ Any SwXFootnote::getPropertyValue( const OUString& rPropertyName )
 
   -----------------------------------------------------------------------*/
 void SwXFootnote::addPropertyChangeListener( const OUString& aPropertyName,
-    const Reference< XPropertyChangeListener >& xListener )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+    const uno::Reference< beans::XPropertyChangeListener >& xListener )
+        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
 /*-- 11.09.00 13:12:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXFootnote::removePropertyChangeListener( const OUString& aPropertyName,
-    const Reference< XPropertyChangeListener >& aListener )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+    const uno::Reference< beans::XPropertyChangeListener >& aListener )
+        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
 /*-- 11.09.00 13:12:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXFootnote::addVetoableChangeListener( const OUString& PropertyName,
-    const Reference< XVetoableChangeListener >& aListener )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+    const uno::Reference< beans::XVetoableChangeListener >& aListener )
+        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
 /*-- 11.09.00 13:12:05---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXFootnote::removeVetoableChangeListener( const OUString& PropertyName,
-    const Reference< XVetoableChangeListener >& aListener )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+    const uno::Reference< beans::XVetoableChangeListener >& aListener )
+        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
 
