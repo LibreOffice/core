@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svgexport.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:10:00 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 13:51:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,8 @@
 #include <svx/flditem.hxx>
 #include <svx/numitem.hxx>
 
-using namespace ::rtl;
+using ::rtl::OUString;
+
 // -------------
 // - SVGExport -
 // -------------
