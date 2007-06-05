@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci11.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 10:52:54 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 11:27:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -195,7 +195,7 @@ CFLAGSOUTOBJ=-Fo
 CFLAGSWARNCXX=-Wall -wd4061 -wd4127 -wd4191 -wd4217 -wd4251 -wd4275 -wd4290 \
     -wd4294 -wd4355 -wd4511 -wd4512 -wd4514 -wd4611 -wd4625 -wd4626 -wd4640 \
     -wd4675 -wd4710 -wd4711 -wd4786 -wd4800 -wd4820 -wd4503 -wd4619 -wd4365 \
-    -wd4668 -wd4738 -wd4826 -wd4350 -wd4505 -wd4692 -wd4189
+    -wd4668 -wd4738 -wd4826 -wd4350 -wd4505 -wd4692 -wd4189 -wd4005
 CFLAGSWARNCC=$(CFLAGSWARNCXX) -wd4255
 CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)
