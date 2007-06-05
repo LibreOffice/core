@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:23:30 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 18:08:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,16 +33,11 @@
 #
 #*************************************************************************
 
-# @@@ UCP Version - Increase, if your UCP libraray becomes incompatible.
 UCP_VERSION=1
-
-# @@@ Name for your UCP. Will become part of the library name (See below).
 UCP_NAME=odma
 
-# @@@ Relative path to project root.
-PRJ=..$/..$/..
 
-# @@@ Name of the project your UCP code recides it.
+PRJ=..$/..$/..
 PRJNAME=ucb
 
 TARGET=ucp$(UCP_NAME)
@@ -60,7 +55,6 @@ LIBTARGET=NO
 
 # --- General -----------------------------------------------------
 
-# @@@ Adjust template file names. Add own files here.
 SLOFILES=\
     $(SLO)$/odma_lib.obj    		\
     $(SLO)$/odma_services.obj    	\
@@ -71,7 +65,6 @@ SLOFILES=\
     $(SLO)$/odma_inputstream.obj	\
     $(SLO)$/odma_contentcaps.obj
 
-
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES)
 
@@ -81,12 +74,11 @@ SHL1TARGET=$(TARGET)$(UCP_VERSION)
 SHL1IMPLIB=i$(TARGET)
 SHL1VERSIONMAP=exports.map
 
-# @@@ Add additional libs here.
 SHL1STDLIBS=\
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALLIB)  \
-    $(VOSLIB)  \
+    $(SALHELPERLIB)	\
     $(UCBHELPERLIB)
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
@@ -95,10 +87,6 @@ SHL1LIBS=$(LIB1TARGET)
 # --- Def-File ---------------------------------------------------------
 
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=exports.dxp
-
-# @@@ A description string for you UCP.
-DEF1DES=UCB ODMA Content Provider
 
 # --- SODMA executable -------------------------------------------------
 OBJFILES= $(OBJ)$/odma_main.obj 
@@ -106,11 +94,9 @@ OBJFILES= $(OBJ)$/odma_main.obj
 APP2TARGET= $(TARGET2)
 APP2OBJS=   $(OBJFILES)
 APP2STDLIBS=$(SALLIB)			\
-            $(VOSLIB)			\
             $(CPPULIB)			\
             $(CPPUHELPERLIB)
 
-# @@@ A description string for you UCP.
 DEF2DES=UCB ODMA URL converter
 
 # --- Targets ----------------------------------------------------------
