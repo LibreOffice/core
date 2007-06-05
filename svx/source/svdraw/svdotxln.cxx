@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotxln.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:14:48 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:36:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,9 +245,9 @@ FASTBOOL SdrTextObj::ReloadLinkedText( FASTBOOL bForceLoad)
 
     if( pData )
     {
-        ::ucb::ContentBroker*   pBroker = ::ucb::ContentBroker::get();
-        DateTime                aFileDT;
-        BOOL                    bExists = FALSE, bLoad = FALSE;
+        ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
+        DateTime                    aFileDT;
+        BOOL                        bExists = FALSE, bLoad = FALSE;
 
         if( pBroker )
         {
@@ -258,7 +258,7 @@ FASTBOOL SdrTextObj::ReloadLinkedText( FASTBOOL bForceLoad)
                 INetURLObject aURL( pData->aFileName );
                 DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-                ::ucb::Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+                ::ucbhelper::Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
                 ::com::sun::star::uno::Any aAny( aCnt.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ) ) ) );
                 ::com::sun::star::util::DateTime aDateTime;
 
