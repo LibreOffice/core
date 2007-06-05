@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:08:54 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:41:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,9 +162,9 @@ using namespace ::com::sun::star::ui::dialogs;
  ---------------------------------------------------------------------------*/
 struct SwMailMergeDlg_Impl
 {
-    Reference<XFormController> xFController;
-    Reference<XSelectionChangeListener> xChgLstnr;
-    Reference<XSelectionSupplier> xSelSupp;
+    uno::Reference<XFormController> xFController;
+    uno::Reference<XSelectionChangeListener> xChgLstnr;
+    uno::Reference<XSelectionSupplier> xSelSupp;
 };
 /* -----------------------------05.06.01 13:47--------------------------------
     helper classes
@@ -227,7 +227,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
          const String& rSourceName,
         const String& rTblName,
         sal_Int32 nCommandType,
-        const Reference< XConnection>& _xConnection,
+        const uno::Reference< XConnection>& _xConnection,
         Sequence< Any >* pSelection) :
 
     SvxStandardDialog(pParent, SW_RES(DLG_MAILMERGE)),
@@ -353,9 +353,9 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
         try
         {
             // create a frame wrapper for myself
-            Reference< XMultiServiceFactory >
+            uno::Reference< XMultiServiceFactory >
                                         xMgr = comphelper::getProcessServiceFactory();
-            xFrame = Reference< XFrame >(xMgr->createInstance(C2U("com.sun.star.frame.Frame")), UNO_QUERY);
+            xFrame = uno::Reference< XFrame >(xMgr->createInstance(C2U("com.sun.star.frame.Frame")), UNO_QUERY);
             if(xFrame.is())
             {
                 xFrame->initialize( VCLUnoHelper::GetInterface ( pBeamerWin ) );
@@ -367,10 +367,10 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
         }
         if(xFrame.is())
         {
-            Reference<XDispatchProvider> xDP(xFrame, UNO_QUERY);
+            uno::Reference<XDispatchProvider> xDP(xFrame, UNO_QUERY);
             URL aURL;
             aURL.Complete = C2U(".component:DB/DataSourceBrowser");
-            Reference<XDispatch> xD = xDP->queryDispatch(aURL,
+            uno::Reference<XDispatch> xD = xDP->queryDispatch(aURL,
                         C2U(""),
                         0x0C);
             if(xD.is())
@@ -386,12 +386,12 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
                 xD->dispatch(aURL, aProperties);
                 pBeamerWin->Show();
             }
-            Reference<XController> xController = xFrame->getController();
-            pImpl->xFController = Reference<XFormController>(xController, UNO_QUERY);
+            uno::Reference<XController> xController = xFrame->getController();
+            pImpl->xFController = uno::Reference<XFormController>(xController, UNO_QUERY);
             if(pImpl->xFController.is())
             {
-                Reference< awt::XControl > xCtrl = pImpl->xFController->getCurrentControl(  );
-                pImpl->xSelSupp = Reference<XSelectionSupplier>(xCtrl, UNO_QUERY);
+                uno::Reference< awt::XControl > xCtrl = pImpl->xFController->getCurrentControl(  );
+                pImpl->xSelSupp = uno::Reference<XSelectionSupplier>(xCtrl, UNO_QUERY);
                 if(pImpl->xSelSupp.is())
                 {
                     pImpl->xChgLstnr = new SwXSelChgLstnr_Impl(*this);
@@ -656,8 +656,8 @@ void SwMailMergeDlg::ExecQryShell(BOOL bVisible)
         if(pImpl->xSelSupp.is())
         {
             //update selection
-            Reference< XRowLocate > xRowLocate(GetResultSet(),UNO_QUERY);
-            Reference< XResultSet > xRes(xRowLocate,UNO_QUERY);
+            uno::Reference< XRowLocate > xRowLocate(GetResultSet(),UNO_QUERY);
+            uno::Reference< XResultSet > xRes(xRowLocate,UNO_QUERY);
             pImpl->xSelSupp->getSelection() >>= m_aSelection;
             if ( xRowLocate.is() )
             {
@@ -705,11 +705,11 @@ IMPL_LINK( SwMailMergeDlg, InsertPathHdl, PushButton *, pBtn )
         sPath = aPathOpt.GetWorkPath();
     }
 
-    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-    Reference < XFolderPicker > xFP;
+    uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+    uno::Reference < XFolderPicker > xFP;
     if( xMgr.is() )
     {
-        xFP = Reference< XFolderPicker >(
+        xFP = uno::Reference< XFolderPicker >(
                 xMgr->createInstance(
                     C2U( "com.sun.star.ui.dialogs.FolderPicker" ) ),
                 UNO_QUERY );
@@ -752,13 +752,13 @@ IMPL_LINK( SwMailMergeDlg, AttachFileHdl, PushButton *, pBtn )
 /* -----------------------------05.06.01 14:56--------------------------------
 
  ---------------------------------------------------------------------------*/
-Reference<XResultSet> SwMailMergeDlg::GetResultSet() const
+uno::Reference<XResultSet> SwMailMergeDlg::GetResultSet() const
 {
-    Reference< XResultSet >  xResSetClone;
+    uno::Reference< XResultSet >  xResSetClone;
     if ( pImpl->xFController.is() )
     {
         // we create a clone to do the task
-        Reference< XResultSetAccess > xResultSetAccess( pImpl->xFController->getModel(),UNO_QUERY);
+        uno::Reference< XResultSetAccess > xResultSetAccess( pImpl->xFController->getModel(),UNO_QUERY);
         if ( xResultSetAccess.is() )
             xResSetClone = xResultSetAccess->createResultSet();
     }
