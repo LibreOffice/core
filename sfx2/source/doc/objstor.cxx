@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.192 $
+ *  $Revision: 1.193 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:12:17 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:37:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -962,7 +962,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     {
         try
         {
-            ::ucb::Content aContent( pMedium->GetName(), com::sun::star::uno::Reference < XCommandEnvironment >() );
+            ::ucbhelper::Content aContent( pMedium->GetName(), com::sun::star::uno::Reference < XCommandEnvironment >() );
             com::sun::star::uno::Reference < XPropertySetInfo > xProps = aContent.getProperties();
             if ( xProps.is() )
             {
@@ -1796,7 +1796,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     {
         try
         {
-            ::ucb::Content aContent( rMedium.GetName(), com::sun::star::uno::Reference < XCommandEnvironment >() );
+            ::ucbhelper::Content aContent( rMedium.GetName(), com::sun::star::uno::Reference < XCommandEnvironment >() );
             com::sun::star::uno::Reference < XPropertySetInfo > xProps = aContent.getProperties();
             if ( xProps.is() )
             {
