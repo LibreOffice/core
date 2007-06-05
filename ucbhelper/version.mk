@@ -4,9 +4,9 @@
 #
 #   $RCSfile: version.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 16:23:28 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 14:46:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 UCBHELPER_TARGET=ucbhelper
 
 # the major
-UCBHELPER_MAJOR=3
+UCBHELPER_MAJOR=4
 # the minor
 UCBHELPER_MINOR=0
 # the micro
