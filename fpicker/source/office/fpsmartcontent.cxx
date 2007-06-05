@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fpsmartcontent.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:51:07 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:08:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ namespace svt
         m_pOwnInteraction->enableInterceptions(eInterceptions);
         m_xOwnInteraction = m_pOwnInteraction;
 
-        m_xCmdEnv = new ::ucb::CommandEnvironment( m_xOwnInteraction, Reference< XProgressHandler >() );
+        m_xCmdEnv = new ::ucbhelper::CommandEnvironment( m_xOwnInteraction, Reference< XProgressHandler >() );
     }
 
     //--------------------------------------------------------------------
@@ -130,7 +130,7 @@ namespace svt
         Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
         Reference< XInteractionHandler >  xGlobalInteractionHandler = Reference< XInteractionHandler >(
             xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY );
-        m_xCmdEnv = new ucb::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );
+        m_xCmdEnv = new ucbhelper::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );
     }
 
     //--------------------------------------------------------------------
@@ -179,7 +179,7 @@ namespace svt
         {
             try
             {
-                m_pContent = new ::ucb::Content( _rURL, m_xCmdEnv );
+                m_pContent = new ::ucbhelper::Content( _rURL, m_xCmdEnv );
                 m_eState = UNKNOWN;
                     // from now on, the state is unknown -> we cannot know for sure if the content
                     // is really valid (some UCP's only tell this when asking for properties, not upon
