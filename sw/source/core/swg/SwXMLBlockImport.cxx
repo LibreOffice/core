@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLBlockImport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:28:09 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:30:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ SwXMLBlockListImport::~SwXMLBlockListImport ( void )
 SvXMLImportContext *SwXMLBlockListImport::CreateContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
     if ( XML_NAMESPACE_BLOCKLIST == nPrefix &&
@@ -118,7 +118,7 @@ SwXMLTextBlockImport::~SwXMLTextBlockImport ( void )
 SvXMLImportContext *SwXMLTextBlockImport::CreateContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
     if( XML_NAMESPACE_OFFICE == nPrefix &&
