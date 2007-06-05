@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:12:02 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:37:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,7 +198,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 
 using namespace ::rtl;
-using namespace ::ucb;
+using namespace ::ucbhelper;
 using namespace ::comphelper;
 
 //=============================================================================
@@ -237,10 +237,10 @@ class GroupData_Impl;
 
 class SfxDocTplService_Impl
 {
-    Reference< XMultiServiceFactory >           mxFactory;
-    Reference< XCommandEnvironment >            maCmdEnv;
-    Reference< XStandaloneDocumentInfo >        mxInfo;
-    Reference< XTypeDetection >                 mxType;
+    uno::Reference< XMultiServiceFactory >           mxFactory;
+    uno::Reference< XCommandEnvironment >            maCmdEnv;
+    uno::Reference< XStandaloneDocumentInfo >        mxInfo;
+    uno::Reference< XTypeDetection >                 mxType;
 
     ::osl::Mutex                maMutex;
     Sequence< OUString >        maTemplateDirs;
@@ -329,7 +329,7 @@ class SfxDocTplService_Impl
     void                        updateData( DocTemplates_EntryData_Impl *pData );
 
 public:
-                                 SfxDocTplService_Impl( Reference< XMultiServiceFactory > xFactory );
+                                 SfxDocTplService_Impl( uno::Reference< XMultiServiceFactory > xFactory );
                                 ~SfxDocTplService_Impl();
 
     sal_Bool                    init() { if ( !mbIsInitialized ) init_Impl(); return mbIsInitialized; }
@@ -340,7 +340,7 @@ public:
 
     sal_Bool                    storeTemplate( const OUString& rGroupName,
                                                const OUString& rTemplateName,
-                                               const Reference< XSTORABLE >& rStorable );
+                                               const uno::Reference< XSTORABLE >& rStorable );
 
     sal_Bool                    addTemplate( const OUString& rGroupName,
                                              const OUString& rTemplateName,
@@ -506,10 +506,10 @@ void SfxDocTplService_Impl::init_Impl()
     if ( bIsInitialized )
     {
         OUString aService( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_DOCINFO ) );
-        mxInfo = Reference< XStandaloneDocumentInfo > ( mxFactory->createInstance( aService ), UNO_QUERY );
+        mxInfo = uno::Reference< XStandaloneDocumentInfo > ( mxFactory->createInstance( aService ), UNO_QUERY );
 
         aService = OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_TYPEDETECTION ) );
-        mxType = Reference< XTypeDetection > ( mxFactory->createInstance( aService ), UNO_QUERY );
+        mxType = uno::Reference< XTypeDetection > ( mxFactory->createInstance( aService ), UNO_QUERY );
 
         getDirList();
         readFolderList();
@@ -691,7 +691,7 @@ sal_Bool SfxDocTplService_Impl::setTitleForURL( const OUString& rURL, const OUSt
         try
         {
             mxInfo->loadFromURL( rURL );
-            Reference< XPropertySet > xPropSet( mxInfo, UNO_QUERY_THROW );
+            uno::Reference< XPropertySet > xPropSet( mxInfo, UNO_QUERY_THROW );
             OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
             xPropSet->setPropertyValue( aPropName, uno::makeAny( aTitle ) );
             mxInfo->storeIntoURL( rURL );
@@ -724,7 +724,7 @@ sal_Bool SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString&
 
         try
         {
-            Reference< XPropertySet > aPropSet( mxInfo, UNO_QUERY );
+            uno::Reference< XPropertySet > aPropSet( mxInfo, UNO_QUERY );
             if ( aPropSet.is() )
             {
                 OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
@@ -914,7 +914,7 @@ sal_Bool SfxDocTplService_Impl::CreateNewUniqueFolderWithPrefix( const ::rtl::OU
 
                 bCreated = aParent.insertNewContent( aType, aNames, aValues, aNewFolder );
             }
-            catch( ::com::sun::star::ucb::NameClashException& )
+            catch( ucb::NameClashException& )
             {
                 // if there is already an element, retry
             }
@@ -979,7 +979,7 @@ sal_Bool SfxDocTplService_Impl::CreateNewUniqueFolderWithPrefix( const ::rtl::OU
 
                 bCreated = aParent.insertNewContent( aType, aNames, aValues, aNewFile );
             }
-            catch( ::com::sun::star::ucb::NameClashException& )
+            catch( ucb::NameClashException& )
             {
                 // if there is already an element, retry
             }
@@ -1046,12 +1046,12 @@ sal_Bool SfxDocTplService_Impl::setProperty( Content& rContent,
     try
     {
         Any aPropValue( rPropValue );
-        Reference< XPropertySetInfo > aPropInfo = rContent.getProperties();
+        uno::Reference< XPropertySetInfo > aPropInfo = rContent.getProperties();
 
         // check, wether or not the property exists, create it, when not
         if ( !aPropInfo.is() || !aPropInfo->hasPropertyByName( rPropName ) )
         {
-            Reference< XPropertyContainer > xProperties( rContent.get(), UNO_QUERY );
+            uno::Reference< XPropertyContainer > xProperties( rContent.get(), UNO_QUERY );
             if ( xProperties.is() )
             {
                 try
@@ -1113,7 +1113,7 @@ sal_Bool SfxDocTplService_Impl::getProperty( Content& rContent,
     // Get the property
     try
     {
-        Reference< XPropertySetInfo > aPropInfo = rContent.getProperties();
+        uno::Reference< XPropertySetInfo > aPropInfo = rContent.getProperties();
 
         // check, wether or not the property exists
         if ( !aPropInfo.is() || !aPropInfo->hasPropertyByName( rPropName ) )
@@ -1180,7 +1180,7 @@ bool SfxURLRelocator_Impl::propertyCanContainOfficeDir(
 // public SfxDocTplService_Impl
 //-----------------------------------------------------------------------------
 
-SfxDocTplService_Impl::SfxDocTplService_Impl( Reference< XMultiServiceFactory > xFactory )
+SfxDocTplService_Impl::SfxDocTplService_Impl( uno::Reference< XMultiServiceFactory > xFactory )
 : maRelocator( xFactory )
 {
     mxFactory       = xFactory;
@@ -1449,9 +1449,9 @@ sal_Bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const ::rtl::OU
         Content aTargetContent( aUserPath, maCmdEnv );
         Content aSourceContent( aTempURL, maCmdEnv );
         aTargetContent.transferContent( aSourceContent,
-                                        ::ucb::InsertOperation_COPY,
+                                        InsertOperation_COPY,
                                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "groupuinames.xml" ) ),
-                                        ::com::sun::star::ucb::NameClash::OVERWRITE );
+                                        ucb::NameClash::OVERWRITE );
         bResult = sal_True;
     }
     catch ( uno::Exception& )
@@ -1637,7 +1637,7 @@ sal_Bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
             return sal_False;
 
         // now get the content of the Group
-        Reference< XResultSet > xResultSet;
+        uno::Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps( 1 );
 
         aProps[0] = OUString::createFromAscii( TARGET_URL );
@@ -1652,8 +1652,8 @@ sal_Bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
 
             if ( xResultSet.is() )
             {
-                Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY_THROW );
-                Reference< XRow > xRow( xResultSet, UNO_QUERY_THROW );
+                uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY_THROW );
+                uno::Reference< XRow > xRow( xResultSet, UNO_QUERY_THROW );
 
                 while ( xResultSet->next() )
                 {
@@ -1754,7 +1754,7 @@ sal_Bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
     sal_Bool bCanBeRenamed = sal_False;
        try
        {
-        Reference< XResultSet > xResultSet;
+        uno::Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps( 1 );
 
         aProps[0] = OUString::createFromAscii( TARGET_URL );
@@ -1763,8 +1763,8 @@ sal_Bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
 
         if ( xResultSet.is() )
         {
-               Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY_THROW );
-               Reference< XRow > xRow( xResultSet, UNO_QUERY_THROW );
+               uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY_THROW );
+               uno::Reference< XRow > xRow( xResultSet, UNO_QUERY_THROW );
 
                while ( xResultSet->next() )
                {
@@ -1804,7 +1804,7 @@ sal_Bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
 //-----------------------------------------------------------------------------
 sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
                                                const OUString& rTemplateName,
-                                               const Reference< XSTORABLE >& rStorable )
+                                               const uno::Reference< XSTORABLE >& rStorable )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -1859,7 +1859,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
             throw uno::RuntimeException();
 
         // get document service name
-        uno::Reference< ::com::sun::star::frame::XModuleManager > xModuleManager(
+        uno::Reference< frame::XModuleManager > xModuleManager(
             xFactory->createInstance(
                     ::rtl::OUString::createFromAscii( "com.sun.star.frame.ModuleManager" ) ),
             uno::UNO_QUERY_THROW );
@@ -2067,7 +2067,7 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
 
     // get access to source file
     Content aSourceContent;
-    Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
+    uno::Reference < ucb::XCommandEnvironment > xEnv;
     INetURLObject   aSourceURL( rSourceURL );
     if( ! Content::create( aSourceURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aSourceContent ) )
         return sal_False;
@@ -2248,7 +2248,7 @@ SFX_IMPL_XSERVICEINFO( SfxDocTplService, TEMPLATE_SERVICE_NAME, TEMPLATE_IMPLEME
 SFX_IMPL_SINGLEFACTORY( SfxDocTplService )
 
 //-----------------------------------------------------------------------------
-SfxDocTplService::SfxDocTplService( const Reference< XMultiServiceFactory >& xFactory )
+SfxDocTplService::SfxDocTplService( const uno::Reference< XMultiServiceFactory >& xFactory )
 {
     pImp = new SfxDocTplService_Impl( xFactory );
 }
@@ -2281,7 +2281,7 @@ void SAL_CALL SfxDocTplService::setLocale( const Locale & rLocale )
 //-----------------------------------------------------------------------------
 //--- XDocumentTemplates ---
 //-----------------------------------------------------------------------------
-Reference< XCONTENT > SAL_CALL SfxDocTplService::getContent()
+uno::Reference< XCONTENT > SAL_CALL SfxDocTplService::getContent()
     throw( RUNTIMEEXCEPTION )
 {
     if ( pImp->init() )
@@ -2293,7 +2293,7 @@ Reference< XCONTENT > SAL_CALL SfxDocTplService::getContent()
 //-----------------------------------------------------------------------------
 sal_Bool SAL_CALL SfxDocTplService::storeTemplate( const OUString& GroupName,
                                                    const OUString& TemplateName,
-                                                   const Reference< XSTORABLE >& Storable )
+                                                   const uno::Reference< XSTORABLE >& Storable )
     throw( RUNTIMEEXCEPTION )
 {
     if ( pImp->init() )
@@ -2450,7 +2450,7 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
 {
     // now get the content of the Group
     Content                 aContent;
-    Reference< XResultSet > xResultSet;
+    uno::Reference< XResultSet > xResultSet;
     Sequence< OUString >    aProps(3);
 
     aProps[0] = OUString::createFromAscii( TITLE );
@@ -2476,8 +2476,8 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
         pGroup->setHierarchyURL( rOwnURL );
         rList.Insert( pGroup );
 
-        Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
-        Reference< XRow > xRow( xResultSet, UNO_QUERY );
+        uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+        uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
 
         try
         {
@@ -2557,7 +2557,7 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
 
     // now get the content of the Group
     Content                 aContent;
-    Reference< XResultSet > xResultSet;
+    uno::Reference< XResultSet > xResultSet;
     Sequence< OUString >    aProps(1);
     aProps[0] = OUString::createFromAscii( TITLE );
 
@@ -2571,8 +2571,8 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
 
     if ( xResultSet.is() )
     {
-        Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
-        Reference< XRow > xRow( xResultSet, UNO_QUERY );
+        uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+        uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
 
         try
         {
@@ -2622,7 +2622,7 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
     if ( !bHierarchy )
         aUINames = ReadUINamesForTemplateDir_Impl( aLayerObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
-    Reference< XResultSet > xResultSet;
+    uno::Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(1);
     aProps[0] = OUString::createFromAscii( TITLE );
 
@@ -2635,8 +2635,8 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
 
     if ( xResultSet.is() )
     {
-        Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
-        Reference< XRow > xRow( xResultSet, UNO_QUERY );
+        uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+        uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
 
         try
         {
@@ -2843,7 +2843,7 @@ DocTemplates_EntryData_Impl::DocTemplates_EntryData_Impl( const OUString& rTitle
 }
 
 // -----------------------------------------------------------------------
-SfxURLRelocator_Impl::SfxURLRelocator_Impl( Reference< XMultiServiceFactory > xFactory )
+SfxURLRelocator_Impl::SfxURLRelocator_Impl( uno::Reference< XMultiServiceFactory > xFactory )
 : mxFactory( xFactory )
 {
 }
@@ -2863,8 +2863,8 @@ void SfxURLRelocator_Impl::initOfficeInstDirs()
         {
             OSL_ENSURE( mxFactory.is(), "No service manager!" );
 
-            Reference< XComponentContext > xCtx;
-            Reference< XPropertySet > xPropSet( mxFactory, UNO_QUERY );
+            uno::Reference< XComponentContext > xCtx;
+            uno::Reference< XPropertySet > xPropSet( mxFactory, UNO_QUERY );
             if ( xPropSet.is() )
             {
                 xPropSet->getPropertyValue(
