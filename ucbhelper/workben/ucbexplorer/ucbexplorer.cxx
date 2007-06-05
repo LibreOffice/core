@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucbexplorer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:26:44 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:01:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,9 +75,9 @@
 #ifndef _COM_SUN_STAR_UCB_CONTENTINFOATTRIBUTE_HPP_
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #endif
-#ifndef _VOS_PROCESS_HXX_
-#include <vos/process.hxx>
-#endif
+
+#include "rtl/ref.hxx"
+
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
@@ -126,6 +126,7 @@
 #include "ucbexplorer.hrc"
 #endif
 
+using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
@@ -134,7 +135,6 @@ using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace rtl;
-using namespace vos;
 
 //=========================================================================
 //
@@ -144,7 +144,7 @@ using namespace vos;
 
 class TestDataSink : public cppu::OWeakObject, public XActiveDataSink
 {
-    Reference< XInputStream > m_xStream;
+    uno::Reference< XInputStream > m_xStream;
 
 public:
 //  TestDataSink() {}
@@ -154,15 +154,15 @@ public:
     virtual Any SAL_CALL queryInterface( const Type & rType )
         throw( RuntimeException );
     virtual void SAL_CALL acquire()
-        throw ( RuntimeException );
+        throw ();
     virtual void SAL_CALL release()
-        throw ( RuntimeException );
+        throw ();
 
     // XActiveDataSink methods.
     virtual void SAL_CALL setInputStream(
-                                const Reference< XInputStream >& aStream )
+                                const uno::Reference< XInputStream >& aStream )
         throw( RuntimeException );
-    virtual Reference< XInputStream > SAL_CALL getInputStream()
+    virtual uno::Reference< XInputStream > SAL_CALL getInputStream()
         throw( RuntimeException );
 };
 
@@ -295,7 +295,7 @@ Any SAL_CALL TestDataSink::queryInterface( const Type & rType )
 //=========================================================================
 // virtual
 void SAL_CALL TestDataSink::acquire()
-    throw( RuntimeException )
+    throw()
 {
     OWeakObject::acquire();
 }
@@ -303,7 +303,7 @@ void SAL_CALL TestDataSink::acquire()
 //=========================================================================
 // virtual
 void SAL_CALL TestDataSink::release()
-    throw( RuntimeException )
+    throw()
 {
     OWeakObject::release();
 }
@@ -311,7 +311,7 @@ void SAL_CALL TestDataSink::release()
 //=========================================================================
 // virtual
 void SAL_CALL TestDataSink::setInputStream(
-                                const Reference< XInputStream >& aStream )
+                                const uno::Reference< XInputStream >& aStream )
     throw( RuntimeException )
 {
     m_xStream = aStream;
@@ -319,7 +319,7 @@ void SAL_CALL TestDataSink::setInputStream(
 
 //=========================================================================
 // virtual
-Reference< XInputStream > SAL_CALL TestDataSink::getInputStream()
+uno::Reference< XInputStream > SAL_CALL TestDataSink::getInputStream()
     throw( RuntimeException )
 {
     return m_xStream;
@@ -495,7 +495,7 @@ BOOL UcbExplorerListBoxEntry::createNewContent( const ContentInfo& rInfo,
         }
     }
 
-    Reference< XInputStream > xData;
+    uno::Reference< XInputStream > xData;
 
     if ( rInfo.Attributes & ContentInfoAttribute::INSERT_WITH_INPUTSTREAM )
     {
@@ -521,18 +521,18 @@ BOOL UcbExplorerListBoxEntry::createNewContent( const ContentInfo& rInfo,
 
             try
             {
-                Reference< XCommandEnvironment > xEnv;
+                uno::Reference< XCommandEnvironment > xEnv;
 
                 ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
                 if ( pBroker )
                 {
-                    Reference< XInteractionHandler > xInteractionHandler(
+                    uno::Reference< XInteractionHandler > xInteractionHandler(
                          pBroker->getServiceManager()->createInstance(
                                 OUString::createFromAscii(
                                     "com.sun.star.task.InteractionHandler" ) ),
                         UNO_QUERY );
 
-                    Reference< XProgressHandler > xProgressHandler
+                    uno::Reference< XProgressHandler > xProgressHandler
                                     /* = new ProgressHandler( *pBroker ) */ ;
 
                     xEnv = new ::ucb::CommandEnvironment( xInteractionHandler,
@@ -542,7 +542,7 @@ BOOL UcbExplorerListBoxEntry::createNewContent( const ContentInfo& rInfo,
                 ::ucb::Content aSourceContent( aSourceURL, xEnv );
 
                 // Get source data.
-                vos::ORef< TestDataSink > xSourceData = new TestDataSink;
+                rtl::Reference< TestDataSink > xSourceData = new TestDataSink;
                 aSourceContent.openStream( xSourceData.getBodyPtr() );
                 xData = xSourceData->getInputStream();
             }
@@ -646,11 +646,11 @@ void UcbExplorerTreeListBox::RequestingChilds( SvLBoxEntry* pParent )
 //                  OUString* pNames = aPropertyNames.getArray();
 //                  pNames[ 0 ] = OUString::createFromAscii( "Title" );
 
-                    Reference< XResultSet > xResultSet
+                    uno::Reference< XResultSet > xResultSet
                         = pEntry->m_aContent.createCursor(
                                     aPropertyNames,
                                     ::ucb::INCLUDE_FOLDERS_AND_DOCUMENTS );
-                    Reference< XContentAccess > xContentAccess(
+                    uno::Reference< XContentAccess > xContentAccess(
                                                     xResultSet, UNO_QUERY );
 
                     if ( xResultSet.is() && xContentAccess.is() )
@@ -717,7 +717,7 @@ void UcbExplorerTreeListBox::Command( const CommandEvent& rCEvt )
             // Configure "New"
             //////////////////////////////////////////////////////////////
 
-            Reference< XContentCreator > xCreator(
+            uno::Reference< XContentCreator > xCreator(
                                     pEntry->m_aContent.get(), UNO_QUERY );
             Sequence< ContentInfo > aInfo;
             BOOL bCanCreate = xCreator.is();
@@ -1058,18 +1058,18 @@ UcbExplorerListBoxEntry* UcbExplorerTreeListBox::InsertEntry(
 {
     try
     {
-        Reference< XCommandEnvironment > xEnv;
+        uno::Reference< XCommandEnvironment > xEnv;
 
         ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
         if ( pBroker )
         {
-            Reference< XInteractionHandler > xInteractionHandler(
+            uno::Reference< XInteractionHandler > xInteractionHandler(
                  pBroker->getServiceManager()->createInstance(
                         OUString::createFromAscii(
                             "com.sun.star.task.InteractionHandler" ) ),
                 UNO_QUERY );
 
-            Reference< XProgressHandler > xProgressHandler
+            uno::Reference< XProgressHandler > xProgressHandler
                                 /* = new ProgressHandler( *pBroker ) */ ;
 
             xEnv = new ::ucb::CommandEnvironment( xInteractionHandler,
@@ -1135,10 +1135,10 @@ void MyApp::Main()
     // Initialize local Service Manager and basic services.
     //////////////////////////////////////////////////////////////////////
 
-    Reference< XMultiServiceFactory > xFac;
+    uno::Reference< XMultiServiceFactory > xFac;
     try
     {
-        Reference< XComponentContext > xCtx(
+        uno::Reference< XComponentContext > xCtx(
             cppu::defaultBootstrap_InitialComponentContext() );
         if ( !xCtx.is() )
         {
@@ -1146,7 +1146,7 @@ void MyApp::Main()
             return;
         }
 
-        xFac = Reference< XMultiServiceFactory >(
+        xFac = uno::Reference< XMultiServiceFactory >(
             xCtx->getServiceManager(), UNO_QUERY );
 
         if ( !xFac.is() )
@@ -1163,7 +1163,7 @@ void MyApp::Main()
 
     comphelper::setProcessServiceFactory( xFac );
 
-    Reference< XComponent > xComponent( xFac, UNO_QUERY );
+    unO::Reference< XComponent > xComponent(    xFac, UNO_QUERY );
 
     //////////////////////////////////////////////////////////////////////
     // Create UCB.
