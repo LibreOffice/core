@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_content.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:58:52 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:16:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ private:
 
 //=========================================================================
 
-class Content : public ::ucb::ContentImplHelper,
+class Content : public ::ucbhelper::ContentImplHelper,
                 public com::sun::star::ucb::XContentCreator
 {
     enum ContentState { TRANSIENT,  // created via createNewContent,
