@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:02:50 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:36:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -301,7 +301,7 @@ struct SwTextSectionProperties_Impl
 /* -----------------------------11.07.00 12:10--------------------------------
 
  ---------------------------------------------------------------------------*/
-SwXTextSection* SwXTextSection::GetImplementation(Reference< XInterface> xRef )
+SwXTextSection* SwXTextSection::GetImplementation(uno::Reference< XInterface> xRef )
 {
     uno::Reference<lang::XUnoTunnel> xTunnel( xRef, uno::UNO_QUERY);
     if(xTunnel.is())
@@ -1128,7 +1128,7 @@ uno::Sequence< Any > SAL_CALL SwXTextSection::GetPropertyValues_Impl(
                             // convert section to TOXBase and get SwXDocumentIndex
                             SwTOXBaseSection* pTOXBaseSect =
                                 PTR_CAST(SwTOXBaseSection, pEnclosingSection);
-                            Reference<XDocumentIndex> xIndex =
+                            uno::Reference<XDocumentIndex> xIndex =
                                 SwXDocumentIndexes::GetObject(pTOXBaseSect);
                             pRet[nProperty] <<= xIndex;
                         }
@@ -1286,7 +1286,7 @@ uno::Any SwXTextSection::getPropertyValue(const OUString& rPropertyName)
  ---------------------------------------------------------------------------*/
 void SwXTextSection::addPropertiesChangeListener(
     const Sequence< ::rtl::OUString >& aPropertyNames,
-    const Reference< XPropertiesChangeListener >& xListener ) throw(RuntimeException)
+    const uno::Reference< XPropertiesChangeListener >& xListener ) throw(RuntimeException)
 {
     DBG_WARNING("not implemented")
 }
@@ -1294,7 +1294,7 @@ void SwXTextSection::addPropertiesChangeListener(
 
  ---------------------------------------------------------------------------*/
 void SwXTextSection::removePropertiesChangeListener(
-    const Reference< XPropertiesChangeListener >& xListener )
+    const uno::Reference< XPropertiesChangeListener >& xListener )
         throw(RuntimeException)
 {
     DBG_WARNING("not implemented")
@@ -1304,7 +1304,7 @@ void SwXTextSection::removePropertiesChangeListener(
  ---------------------------------------------------------------------------*/
 void SwXTextSection::firePropertiesChangeEvent(
     const Sequence< ::rtl::OUString >& aPropertyNames,
-    const Reference< XPropertiesChangeListener >& xListener )
+    const uno::Reference< XPropertiesChangeListener >& xListener )
         throw(RuntimeException)
 {
     DBG_WARNING("not implemented")
