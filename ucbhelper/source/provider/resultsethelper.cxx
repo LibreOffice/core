@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultsethelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:23:49 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:56:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,14 +64,9 @@
 #include <ucbhelper/resultsethelper.hxx>
 #endif
 
-using namespace com::sun::star::beans;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::sdbc;
-using namespace com::sun::star::ucb;
-using namespace com::sun::star::uno;
-using namespace cppu;
-using namespace rtl;
-using namespace ucb;
+#include "osl/diagnose.h"
+
+using namespace com::sun::star;
 
 //=========================================================================
 //=========================================================================
@@ -81,9 +76,11 @@ using namespace ucb;
 //=========================================================================
 //=========================================================================
 
+namespace ucbhelper {
+
 //=========================================================================
 ResultSetImplHelper::ResultSetImplHelper(
-                      const Reference< XMultiServiceFactory >& rxSMgr )
+    const uno::Reference< lang::XMultiServiceFactory >& rxSMgr )
 : m_pDisposeEventListeners( 0 ),
   m_bStatic( sal_False ),
   m_bInitDone( sal_False ),
@@ -93,8 +90,8 @@ ResultSetImplHelper::ResultSetImplHelper(
 
 //=========================================================================
 ResultSetImplHelper::ResultSetImplHelper(
-                      const Reference< XMultiServiceFactory >& rxSMgr,
-                      const OpenCommandArgument2& rCommand )
+    const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+    const com::sun::star::ucb::OpenCommandArgument2& rCommand )
 : m_pDisposeEventListeners( 0 ),
   m_bStatic( sal_False ),
   m_bInitDone( sal_False ),
@@ -117,10 +114,10 @@ ResultSetImplHelper::~ResultSetImplHelper()
 //=========================================================================
 
 XINTERFACE_IMPL_4( ResultSetImplHelper,
-                   XTypeProvider,
-                   XServiceInfo,
-                   XComponent, /* base of XDynamicResultSet */
-                   XDynamicResultSet );
+                   lang::XTypeProvider,
+                   lang::XServiceInfo,
+                   lang::XComponent, /* base of XDynamicResultSet */
+                   com::sun::star::ucb::XDynamicResultSet );
 
 //=========================================================================
 //
@@ -129,9 +126,9 @@ XINTERFACE_IMPL_4( ResultSetImplHelper,
 //=========================================================================
 
 XTYPEPROVIDER_IMPL_3( ResultSetImplHelper,
-                      XTypeProvider,
-                         XServiceInfo,
-                      XDynamicResultSet );
+                      lang::XTypeProvider,
+                         lang::XServiceInfo,
+                      com::sun::star::ucb::XDynamicResultSet );
 
 //=========================================================================
 //
@@ -140,8 +137,10 @@ XTYPEPROVIDER_IMPL_3( ResultSetImplHelper,
 //=========================================================================
 
 XSERVICEINFO_NOFACTORY_IMPL_1( ResultSetImplHelper,
-                    OUString::createFromAscii( "ResultSetImplHelper" ),
-                    OUString::createFromAscii( DYNAMICRESULTSET_SERVICE_NAME ) );
+                               rtl::OUString::createFromAscii(
+                                   "ResultSetImplHelper" ),
+                               rtl::OUString::createFromAscii(
+                                   DYNAMICRESULTSET_SERVICE_NAME ) );
 
 //=========================================================================
 //
@@ -151,14 +150,14 @@ XSERVICEINFO_NOFACTORY_IMPL_1( ResultSetImplHelper,
 
 // virtual
 void SAL_CALL ResultSetImplHelper::dispose()
-    throw( RuntimeException )
+    throw( uno::RuntimeException )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     if ( m_pDisposeEventListeners && m_pDisposeEventListeners->getLength() )
     {
-        EventObject aEvt;
-        aEvt.Source = static_cast< XComponent * >( this );
+        lang::EventObject aEvt;
+        aEvt.Source = static_cast< lang::XComponent * >( this );
         m_pDisposeEventListeners->disposeAndClear( aEvt );
     }
 }
@@ -166,13 +165,14 @@ void SAL_CALL ResultSetImplHelper::dispose()
 //=========================================================================
 // virtual
 void SAL_CALL ResultSetImplHelper::addEventListener(
-                            const Reference< XEventListener >& Listener )
-    throw( RuntimeException )
+        const uno::Reference< lang::XEventListener >& Listener )
+    throw( uno::RuntimeException )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     if ( !m_pDisposeEventListeners )
-        m_pDisposeEventListeners = new OInterfaceContainerHelper( m_aMutex );
+        m_pDisposeEventListeners
+            = new cppu::OInterfaceContainerHelper( m_aMutex );
 
     m_pDisposeEventListeners->addInterface( Listener );
 }
@@ -180,10 +180,10 @@ void SAL_CALL ResultSetImplHelper::addEventListener(
 //=========================================================================
 // virtual
 void SAL_CALL ResultSetImplHelper::removeEventListener(
-                            const Reference< XEventListener >& Listener )
-    throw( RuntimeException )
+        const uno::Reference< lang::XEventListener >& Listener )
+    throw( uno::RuntimeException )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     if ( m_pDisposeEventListeners )
         m_pDisposeEventListeners->removeInterface( Listener );
@@ -196,13 +196,15 @@ void SAL_CALL ResultSetImplHelper::removeEventListener(
 //=========================================================================
 
 // virtual
-Reference< XResultSet > SAL_CALL ResultSetImplHelper::getStaticResultSet()
-    throw( ListenerAlreadySetException, RuntimeException )
+uno::Reference< sdbc::XResultSet > SAL_CALL
+ResultSetImplHelper::getStaticResultSet()
+    throw( com::sun::star::ucb::ListenerAlreadySetException,
+           uno::RuntimeException )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     if ( m_xListener.is() )
-        throw ListenerAlreadySetException();
+        throw com::sun::star::ucb::ListenerAlreadySetException();
 
     init( sal_True );
     return m_xResultSet1;
@@ -211,13 +213,15 @@ Reference< XResultSet > SAL_CALL ResultSetImplHelper::getStaticResultSet()
 //=========================================================================
 // virtual
 void SAL_CALL ResultSetImplHelper::setListener(
-                    const Reference< XDynamicResultSetListener >& Listener )
-    throw( ListenerAlreadySetException, RuntimeException )
+        const uno::Reference< com::sun::star::ucb::XDynamicResultSetListener >&
+            Listener )
+    throw( com::sun::star::ucb::ListenerAlreadySetException,
+           uno::RuntimeException )
 {
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    osl::ClearableMutexGuard aGuard( m_aMutex );
 
     if ( m_bStatic || m_xListener.is() )
-        throw ListenerAlreadySetException();
+        throw com::sun::star::ucb::ListenerAlreadySetException();
 
     m_xListener = Listener;
 
@@ -232,58 +236,68 @@ void SAL_CALL ResultSetImplHelper::setListener(
 
     init( sal_False );
 
-    Any aInfo;
-    aInfo <<= WelcomeDynamicResultSetStruct( m_xResultSet1 /* "old" */,
-                                             m_xResultSet2 /* "new" */ );
+    uno::Any aInfo;
+    aInfo <<= com::sun::star::ucb::WelcomeDynamicResultSetStruct(
+        m_xResultSet1 /* "old" */,
+        m_xResultSet2 /* "new" */ );
 
-    Sequence< ListAction > aActions( 1 );
-    aActions.getArray()[ 0 ] = ListAction( 0, // Position; not used
-                                           0, // Count; not used
-                                           ListActionType::WELCOME,
-                                              aInfo );
+    uno::Sequence< com::sun::star::ucb::ListAction > aActions( 1 );
+    aActions.getArray()[ 0 ]
+        = com::sun::star::ucb::ListAction(
+            0, // Position; not used
+            0, // Count; not used
+            com::sun::star::ucb::ListActionType::WELCOME,
+            aInfo );
     aGuard.clear();
 
     Listener->notify(
-                ListEvent( static_cast< OWeakObject * >( this ), aActions ) );
+        com::sun::star::ucb::ListEvent(
+            static_cast< cppu::OWeakObject * >( this ), aActions ) );
 }
 
 //=========================================================================
 // virtual
 sal_Int16 SAL_CALL ResultSetImplHelper::getCapabilities()
-    throw( RuntimeException )
+    throw( uno::RuntimeException )
 {
-    // ! ContentResultSetCapability::SORTED
+    // ! com::sun::star::ucb::ContentResultSetCapability::SORTED
     return 0;
 }
 
 //=========================================================================
 // virtual
 void SAL_CALL ResultSetImplHelper::connectToCache(
-                        const Reference< XDynamicResultSet > & xCache )
-    throw( ListenerAlreadySetException,
-           AlreadyInitializedException,
-           ServiceNotFoundException,
-           RuntimeException )
+        const uno::Reference< com::sun::star::ucb::XDynamicResultSet > &
+            xCache )
+    throw( com::sun::star::ucb::ListenerAlreadySetException,
+           com::sun::star::ucb::AlreadyInitializedException,
+           com::sun::star::ucb::ServiceNotFoundException,
+           uno::RuntimeException )
 {
     if ( m_xListener.is() )
-        throw ListenerAlreadySetException();
+        throw com::sun::star::ucb::ListenerAlreadySetException();
 
     if ( m_bStatic )
-        throw ListenerAlreadySetException();
+        throw com::sun::star::ucb::ListenerAlreadySetException();
 
-    Reference< XSourceInitialization > xTarget( xCache, UNO_QUERY );
+    uno::Reference< com::sun::star::ucb::XSourceInitialization >
+        xTarget( xCache, uno::UNO_QUERY );
     if ( xTarget.is() )
     {
-        Reference< XCachedDynamicResultSetStubFactory > xStubFactory;
+        uno::Reference<
+            com::sun::star::ucb::XCachedDynamicResultSetStubFactory >
+                xStubFactory;
         try
         {
-            xStubFactory = Reference< XCachedDynamicResultSetStubFactory >(
-                m_xSMgr->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ),
-                UNO_QUERY );
+            xStubFactory
+                = uno::Reference<
+                    com::sun::star::ucb::XCachedDynamicResultSetStubFactory >(
+                        m_xSMgr->createInstance(
+                            rtl::OUString::createFromAscii(
+                                "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ),
+                uno::UNO_QUERY );
         }
-        catch ( Exception const & )
+        catch ( uno::Exception const & )
         {
         }
 
@@ -294,7 +308,7 @@ void SAL_CALL ResultSetImplHelper::connectToCache(
             return;
         }
     }
-    throw ServiceNotFoundException();
+    throw com::sun::star::ucb::ServiceNotFoundException();
 }
 
 //=========================================================================
@@ -305,7 +319,7 @@ void SAL_CALL ResultSetImplHelper::connectToCache(
 
 void ResultSetImplHelper::init( sal_Bool bStatic )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     if ( !m_bInitDone )
     {
@@ -314,7 +328,7 @@ void ResultSetImplHelper::init( sal_Bool bStatic )
             // virtual... derived class fills m_xResultSet1
             initStatic();
 
-            VOS_ENSURE( m_xResultSet1.is(),
+            OSL_ENSURE( m_xResultSet1.is(),
                         "ResultSetImplHelper::init - No 1st result set!" );
             m_bStatic = sal_True;
         }
@@ -323,32 +337,14 @@ void ResultSetImplHelper::init( sal_Bool bStatic )
             // virtual... derived class fills m_xResultSet1 and m_xResultSet2
             initDynamic();
 
-            VOS_ENSURE( m_xResultSet1.is(),
+            OSL_ENSURE( m_xResultSet1.is(),
                         "ResultSetImplHelper::init - No 1st result set!" );
-            VOS_ENSURE( m_xResultSet2.is(),
+            OSL_ENSURE( m_xResultSet2.is(),
                         "ResultSetImplHelper::init - No 2nd result set!" );
             m_bStatic = sal_False;
         }
         m_bInitDone = sal_True;
     }
-
 }
 
-/*
-
-pure virtual
-
-//=========================================================================
-// virtual
-void ResultSetImplHelper::initStatic()
-{
-}
-
-//=========================================================================
-// virtual
-void ResultSetImplHelper::initDynamic()
-{
-}
-
-*/
-
+} // namespace ucbhelper
