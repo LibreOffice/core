@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_xml.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:21:13 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:03:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ namespace dp_misc
 //==============================================================================
 void xml_parse(
     Reference<xml::sax::XDocumentHandler> const & xDocHandler,
-    ::ucb::Content & ucb_content,
+    ::ucbhelper::Content & ucb_content,
     Reference<XComponentContext> const & xContext )
 {
     // raise sax parser:
@@ -72,7 +72,7 @@ void xml_parse(
 //==============================================================================
 void xml_parse(
     Reference<xml::input::XRoot> const & xRoot,
-    ::ucb::Content & ucb_content,
+    ::ucbhelper::Content & ucb_content,
     Reference<XComponentContext> const & xContext )
 {
     const Any arg(xRoot);
