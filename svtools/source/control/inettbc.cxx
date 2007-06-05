@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:42:19 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:25:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,8 +148,9 @@
 // -----------------------------------------------------------------------
 
 using namespace ::rtl;
-using namespace ::ucb;
+using namespace ::ucbhelper;
 using namespace ::utl;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
@@ -470,12 +471,12 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
 
     try
     {
-        Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+        uno::Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
 
         Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ),
-                      new ::ucb::CommandEnvironment( Reference< XInteractionHandler >(),
-                                                     Reference< XProgressHandler >() ) );
-        Reference< XResultSet > xResultSet;
+                      new ::ucbhelper::CommandEnvironment( uno::Reference< XInteractionHandler >(),
+                                                     uno::Reference< XProgressHandler >() ) );
+        uno::Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps(2);
         OUString* pProps = aProps.getArray();
         pProps[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
@@ -483,15 +484,15 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
 
         try
         {
-            Reference< XDynamicResultSet > xDynResultSet;
+            uno::Reference< XDynamicResultSet > xDynResultSet;
             ResultSetInclude eInclude = INCLUDE_FOLDERS_AND_DOCUMENTS;
             if ( bOnlyDirectories )
                 eInclude =  INCLUDE_FOLDERS_ONLY;
 
             xDynResultSet = aCnt.createDynamicCursor( aProps, eInclude );
 
-            Reference < XAnyCompareFactory > xCompare;
-            Reference < XSortedDynamicResultSetFactory > xSRSFac(
+            uno::Reference < XAnyCompareFactory > xCompare;
+            uno::Reference < XSortedDynamicResultSetFactory > xSRSFac(
                 xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SortedDynamicResultSetFactory") ) ), UNO_QUERY );
 
             Sequence< NumberedSortingInfo > aSortInfo( 2 );
@@ -501,7 +502,7 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
             pInfo[ 1 ].ColumnIndex = 1;
             pInfo[ 1 ].Ascending   = sal_True;
 
-            Reference< XDynamicResultSet > xDynamicResultSet;
+            uno::Reference< XDynamicResultSet > xDynamicResultSet;
             xDynamicResultSet =
                 xSRSFac->createSortedDynamicResultSet( xDynResultSet, aSortInfo, xCompare );
 
@@ -514,8 +515,8 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
 
         if ( xResultSet.is() )
         {
-            Reference< XRow > xRow( xResultSet, UNO_QUERY );
-            Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+            uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
+            uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
 
             try
             {
