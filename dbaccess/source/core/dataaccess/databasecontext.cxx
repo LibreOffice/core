@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:39:14 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:39:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -355,7 +355,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
 
     try
     {
-        ::ucb::Content aContent(_sURL,Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+        ::ucbhelper::Content aContent(_sURL,Reference< ::com::sun::star::ucb::XCommandEnvironment >());
         if ( !aContent.isDocument() )
             throw InteractiveIOException(
                 _sURL, *this, InteractionClassification_ERROR, IOErrorCode_NO_FILE
