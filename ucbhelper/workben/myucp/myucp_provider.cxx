@@ -4,9 +4,9 @@
  *
  *  $RCSfile: myucp_provider.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:25:52 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:59:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,27 +42,18 @@
 
  *************************************************************************/
 
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENTIDENTIFIER_HXX
-#include <ucbhelper/contentidentifier.hxx>
-#endif
+#include "osl/diagnose.h"
+#include "osl/mutex.hxx"
 
-// @@@ Adjust multi-include-protection-ifdef and header file name.
-#ifndef _MYUCP_PROVIDER_HXX
+#include "ucbhelper/contentidentifier.hxx"
+
 #include "myucp_provider.hxx"
-#endif
-// @@@ Adjust multi-include-protection-ifdef and header file name.
-#ifndef _MYUCP_CONTENT_HXX
 #include "myucp_content.hxx"
-#endif
 
-using namespace com::sun;
 using namespace com::sun::star;
 
 // @@@ Adjust namespace name.
-using namespace myucp;
+namespace myucp {
 
 //=========================================================================
 //=========================================================================
@@ -74,7 +65,7 @@ using namespace myucp;
 
 ContentProvider::ContentProvider(
                 const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
-: ::ucb::ContentProviderImplHelper( rSMgr )
+: ::ucbhelper::ContentProviderImplHelper( rSMgr )
 {
 }
 
@@ -94,7 +85,7 @@ ContentProvider::~ContentProvider()
 XINTERFACE_IMPL_3( ContentProvider,
                    lang::XTypeProvider,
                    lang::XServiceInfo,
-                   star::ucb::XContentProvider );
+                   ucb::XContentProvider );
 
 //=========================================================================
 //
@@ -106,7 +97,7 @@ XINTERFACE_IMPL_3( ContentProvider,
 XTYPEPROVIDER_IMPL_3( ContentProvider,
                       lang::XTypeProvider,
                       lang::XServiceInfo,
-                      star::ucb::XContentProvider );
+                      ucb::XContentProvider );
 
 //=========================================================================
 //
@@ -137,37 +128,37 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 //=========================================================================
 
 // virtual
-uno::Reference< star::ucb::XContent > SAL_CALL ContentProvider::queryContent(
-        const uno::Reference< star::ucb::XContentIdentifier >& Identifier )
-    throw( star::ucb::IllegalIdentifierException, uno::RuntimeException )
+uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
+        const uno::Reference< ucb::XContentIdentifier >& Identifier )
+    throw( ucb::IllegalIdentifierException, uno::RuntimeException )
 {
     // Check URL scheme...
 
     rtl::OUString aScheme( rtl::OUString::createFromAscii( MYUCP_URL_SCHEME ) );
     if ( !Identifier->getContentProviderScheme().equalsIgnoreAsciiCase( aScheme ) )
-        throw star::ucb::IllegalIdentifierException();
+        throw ucb::IllegalIdentifierException();
 
     // @@@ Further id checks may go here...
 #if 0
     if ( id-check-failes )
-        throw star::ucb::IllegalIdentifierException();
+        throw ucb::IllegalIdentifierException();
 #endif
 
     // @@@ Id normalization may go here...
 #if 0
     // Normalize URL and create new Id.
     rtl::OUString aCanonicURL = xxxxx( Identifier->getContentIdentifier() );
-    uno::Reference< star::ucb::XContentIdentifier > xCanonicId
-        = new ::ucb::ContentIdentifier( m_xSMgr, aCanonicURL );
+    uno::Reference< ucb::XContentIdentifier > xCanonicId
+        = new ::ucbhelper::ContentIdentifier( m_xSMgr, aCanonicURL );
 #else
-    uno::Reference< star::ucb::XContentIdentifier > xCanonicId = Identifier;
+    uno::Reference< ucb::XContentIdentifier > xCanonicId = Identifier;
 #endif
 
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     // Check, if a content with given id already exists...
-    uno::Reference< star::ucb::XContent > xContent
-        = queryExistingContent( xCanonicId ).getBodyPtr();
+    uno::Reference< ucb::XContent > xContent
+        = queryExistingContent( xCanonicId ).get();
     if ( xContent.is() )
         return xContent;
 
@@ -180,8 +171,9 @@ uno::Reference< star::ucb::XContent > SAL_CALL ContentProvider::queryContent(
     xContent = new Content( m_xSMgr, this, xCanonicId );
 
     if ( !xContent->getIdentifier().is() )
-        throw star::ucb::IllegalIdentifierException();
+        throw ucb::IllegalIdentifierException();
 
     return xContent;
 }
 
+} // namespace

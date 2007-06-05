@@ -4,9 +4,9 @@
  *
  *  $RCSfile: myucp_contentcaps.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:25:25 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:59:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,36 +42,22 @@
 
  *************************************************************************/
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
-#include <com/sun/star/beans/Property.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_COMMANDINFO_HPP_
-#include <com/sun/star/ucb/CommandInfo.hpp>
-#endif
-/*
-#ifndef _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
-#include <com/sun/star/ucb/InsertCommandArgument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
-#include <com/sun/star/ucb/OpenCommandArgument2.hpp>
-#endif
-*/
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include <com/sun/star/uno/Sequence.hxx>
-#endif
+#include "com/sun/star/beans/Property.hpp"
+#include "com/sun/star/beans/PropertyAttribute.hpp"
+#include "com/sun/star/beans/PropertyValue.hpp"
+#include "com/sun/star/ucb/CommandInfo.hpp"
+#include "com/sun/star/uno/Sequence.hxx"
 
-// @@@ Adjust multi-include-protection-ifdef and header file name.
-#ifndef _MYUCP_CONTENT_HXX
 #include "myucp_content.hxx"
+
+#ifdef IMPLEMENT_COMMAND_INSERT
+#include "com/sun/star/ucb/InsertCommandArgument.hpp"
 #endif
 
-using namespace com::sun;
+#ifdef IMPLEMENT_COMMAND_OPEN
+#include "com/sun/star/ucb/OpenCommandArgument2.hpp"
+#endif
+
 using namespace com::sun::star;
 
 // @@@ Adjust namespace name.
@@ -92,7 +78,7 @@ using namespace myucp;
 
 // virtual
 uno::Sequence< beans::Property > Content::getProperties(
-             const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
+    const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
     // @@@ Add additional properties...
 
@@ -117,7 +103,7 @@ uno::Sequence< beans::Property > Content::getProperties(
     static beans::Property aPropertyInfoTable[] =
     {
         ///////////////////////////////////////////////////////////////
-        // Required properties
+        // Mandatory properties
         ///////////////////////////////////////////////////////////////
         beans::Property(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
@@ -146,6 +132,7 @@ uno::Sequence< beans::Property > Content::getProperties(
         ///////////////////////////////////////////////////////////////
         // Optional standard properties
         ///////////////////////////////////////////////////////////////
+
         ///////////////////////////////////////////////////////////////
         // New properties
         ///////////////////////////////////////////////////////////////
@@ -156,8 +143,8 @@ uno::Sequence< beans::Property > Content::getProperties(
 
 //=========================================================================
 // virtual
-uno::Sequence< star::ucb::CommandInfo > Content::getCommands(
-            const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
+uno::Sequence< ucb::CommandInfo > Content::getCommands(
+    const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
     // @@@ Add additional commands...
 
@@ -169,30 +156,39 @@ uno::Sequence< star::ucb::CommandInfo > Content::getCommands(
     //
     //=================================================================
 
-    #define COMMAND_COUNT 4
+    sal_uInt32 nCommandCount = 4;
+#ifdef IMPLEMENT_COMMAND_DELETE
+    nCommandCount++;
+#endif
+#ifdef IMPLEMENT_COMMAND_INSERT
+    nCommandCount++;
+#endif
+#ifdef IMPLEMENT_COMMAND_OPEN
+    nCommandCount++;
+#endif
 
-    static star::ucb::CommandInfo aCommandInfoTable[] =
+    static const ucb::CommandInfo aCommandInfoTable[] =
     {
         ///////////////////////////////////////////////////////////////
-        // Required commands
+        // Mandatory commands
         ///////////////////////////////////////////////////////////////
-        star::ucb::CommandInfo(
+        ucb::CommandInfo(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
             -1,
             getCppuVoidType()
         ),
-        star::ucb::CommandInfo(
+        ucb::CommandInfo(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
             -1,
             getCppuVoidType()
         ),
-        star::ucb::CommandInfo(
+        ucb::CommandInfo(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
             -1,
             getCppuType(
                 static_cast< uno::Sequence< beans::Property > * >( 0 ) )
         ),
-        star::ucb::CommandInfo(
+        ucb::CommandInfo(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
             -1,
             getCppuType(
@@ -201,30 +197,35 @@ uno::Sequence< star::ucb::CommandInfo > Content::getCommands(
         ///////////////////////////////////////////////////////////////
         // Optional standard commands
         ///////////////////////////////////////////////////////////////
-/*
-        star::ucb::CommandInfo(
+
+#ifdef IMPLEMENT_COMMAND_DELETE
+        , ucb::CommandInfo(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
             -1,
             getCppuBooleanType()
-        ),
-        star::ucb::CommandInfo(
+        )
+#endif
+#ifdef IMPLEMENT_COMMAND_INSERT
+        , ucb::CommandInfo(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
             -1,
             getCppuType(
-                static_cast< star::ucb::InsertCommandArgument * >( 0 ) )
-        ),
-        star::ucb::CommandInfo(
+                static_cast< ucb::InsertCommandArgument * >( 0 ) )
+        )
+#endif
+#ifdef IMPLEMENT_COMMAND_OPEN
+        , ucb::CommandInfo(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
             -1,
-            getCppuType( static_cast< star::ucb::OpenCommandArgument2 * >( 0 ) )
+            getCppuType( static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
         )
-*/
+#endif
         ///////////////////////////////////////////////////////////////
         // New commands
         ///////////////////////////////////////////////////////////////
     };
 
     return uno::Sequence<
-            star::ucb::CommandInfo >( aCommandInfoTable, COMMAND_COUNT );
+        ucb::CommandInfo >( aCommandInfoTable, nCommandCount );
 }
 
