@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provconf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:22:55 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:55:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ using namespace com::sun::star;
 
 //=========================================================================
 
-namespace ucb {
+namespace ucbhelper {
 
 void makeAndAppendXMLName(
                 rtl::OUStringBuffer & rBuffer, const rtl::OUString & rIn )
@@ -142,19 +142,11 @@ bool getContentProviderData(
         }
 
         rtl::OUStringBuffer aFullPath;
-#if SUPD<638
-        aFullPath.appendAscii( CONFIG_CONTENTPROVIDERS_KEY "/" );
-        aFullPath.append( rKey1 );
-        aFullPath.appendAscii( "/SecondaryKeys/" );
-        aFullPath.append( rKey2 );
-        aFullPath.appendAscii( "/ProviderData" );
-#else
         aFullPath.appendAscii( CONFIG_CONTENTPROVIDERS_KEY "/['" );
         makeAndAppendXMLName( aFullPath, rKey1 );
         aFullPath.appendAscii( "']/SecondaryKeys/['" );
         makeAndAppendXMLName( aFullPath, rKey2 );
         aFullPath.appendAscii( "']/ProviderData" );
-#endif
 
         uno::Sequence< uno::Any > aArguments( 1 );
         beans::PropertyValue      aProperty;
@@ -207,23 +199,17 @@ bool getContentProviderData(
             for ( sal_Int32 n = 0; n < nCount; ++n )
             {
                 rtl::OUStringBuffer aElemBuffer;
-#if SUPD<638
-                aElemBuffer.append( pElems[ n ] );
-#else
                 aElemBuffer.appendAscii( "['" );
                 makeAndAppendXMLName( aElemBuffer, pElems[ n ] );
-#endif
+
                 try
                 {
                     ContentProviderData aInfo;
 
                     // Obtain service name.
                     rtl::OUStringBuffer aKeyBuffer = aElemBuffer;
-#if SUPD<638
-                    aKeyBuffer.appendAscii( "/ServiceName" );
-#else
                     aKeyBuffer.appendAscii( "']/ServiceName" );
-#endif
+
                     rtl::OUString aValue;
                     if ( !( xHierNameAccess->getByHierarchicalName(
                                 aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
@@ -238,11 +224,8 @@ bool getContentProviderData(
 
                     // Obtain URL Template.
                     aKeyBuffer = aElemBuffer;
-#if SUPD<638
-                    aKeyBuffer.appendAscii( "/URLTemplate" );
-#else
                     aKeyBuffer.appendAscii( "']/URLTemplate" );
-#endif
+
                     if ( !( xHierNameAccess->getByHierarchicalName(
                                 aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
                     {
@@ -256,11 +239,8 @@ bool getContentProviderData(
 
                     // Obtain Arguments.
                     aKeyBuffer = aElemBuffer;
-#if SUPD<638
-                    aKeyBuffer.appendAscii( "/Arguments" );
-#else
                     aKeyBuffer.appendAscii( "']/Arguments" );
-#endif
+
                     if ( !( xHierNameAccess->getByHierarchicalName(
                                 aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
                     {
