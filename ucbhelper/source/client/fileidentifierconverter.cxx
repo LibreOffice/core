@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fileidentifierconverter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:19:53 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:52:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,10 +65,9 @@
 #include <sal/types.h>
 #endif
 
-using namespace com::sun;
 using namespace com::sun::star;
 
-namespace ucb {
+namespace ucbhelper {
 
 //============================================================================
 //
@@ -78,8 +77,8 @@ namespace ucb {
 
 rtl::OUString
 getLocalFileURL(
-    uno::Reference< star::ucb::XContentProviderManager > const &)
-    SAL_THROW((com::sun::star::uno::RuntimeException))
+    uno::Reference< ucb::XContentProviderManager > const &)
+    SAL_THROW((uno::RuntimeException))
 {
     // If there were more file systems than just "file:///" (e.g., the obsolete
     // "vnd.sun.star.wfs:///"), this code should query all relevant UCPs for
@@ -96,14 +95,14 @@ getLocalFileURL(
 
 rtl::OUString
 getFileURLFromSystemPath(
-    uno::Reference< star::ucb::XContentProviderManager > const & rManager,
+    uno::Reference< ucb::XContentProviderManager > const & rManager,
     rtl::OUString const & rBaseURL,
     rtl::OUString const & rSystemPath)
-    SAL_THROW((com::sun::star::uno::RuntimeException))
+    SAL_THROW((uno::RuntimeException))
 {
     OSL_ASSERT(rManager.is());
 
-    uno::Reference< star::ucb::XFileIdentifierConverter >
+    uno::Reference< ucb::XFileIdentifierConverter >
         xConverter(rManager->queryContentProvider(rBaseURL), uno::UNO_QUERY);
     if (xConverter.is())
         return xConverter->getFileURLFromSystemPath(rBaseURL, rSystemPath);
@@ -119,13 +118,13 @@ getFileURLFromSystemPath(
 
 rtl::OUString
 getSystemPathFromFileURL(
-    uno::Reference< star::ucb::XContentProviderManager > const & rManager,
+    uno::Reference< ucb::XContentProviderManager > const & rManager,
     rtl::OUString const & rURL)
-    SAL_THROW((com::sun::star::uno::RuntimeException))
+    SAL_THROW((uno::RuntimeException))
 {
     OSL_ASSERT(rManager.is());
 
-    uno::Reference< star::ucb::XFileIdentifierConverter >
+    uno::Reference< ucb::XFileIdentifierConverter >
         xConverter(rManager->queryContentProvider(rURL), uno::UNO_QUERY);
     if (xConverter.is())
         return xConverter->getSystemPathFromFileURL(rURL);
