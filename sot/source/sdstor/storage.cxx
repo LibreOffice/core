@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 14:07:18 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:34:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -536,7 +536,7 @@ SotStorage::SotStorage()
 #include <ucbhelper/content.hxx>
 #endif
 
-SotStorage::SotStorage( const ::ucb::Content& rContent, const String & rName, StreamMode nMode, StorageMode nStorageMode )
+SotStorage::SotStorage( const ::ucbhelper::Content& rContent, const String & rName, StreamMode nMode, StorageMode nStorageMode )
     INIT_SotStorage()
 {
     m_aName = rName; // Namen merken
@@ -584,7 +584,7 @@ void SotStorage::CreateStorage( BOOL bForceUCBStorage, StreamMode nMode, Storage
             String aURL = UCBStorage::CreateLinkFile( m_aName );
             if ( aURL.Len() )
             {
-                ::ucb::Content aContent( aURL, ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XCommandEnvironment >() );
+                ::ucbhelper::Content aContent( aURL, ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XCommandEnvironment >() );
                 m_pOwnStg = new UCBStorage( aContent, aURL, nMode, FALSE );
             }
             else
