@@ -4,9 +4,9 @@
  *
  *  $RCSfile: myucp_services.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:26:30 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:00:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,27 +36,20 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucbhelper.hxx"
 
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#endif
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/lang/XSingleServiceFactory.hpp"
+#include "com/sun/star/registry/XRegistryKey.hpp"
 
-// @@@ Adjust multi-include-protection-ifdef and header file name.
-#ifndef _MYUCP_PROVIDER_HXX
 #include "myucp_provider.hxx"
-#endif
 
 using namespace com::sun::star;
 
+namespace {
+
 //=========================================================================
-static sal_Bool writeInfo( void * pRegistryKey,
-                           const rtl::OUString & rImplementationName,
-                              uno::Sequence< rtl::OUString > const & rServiceNames )
+sal_Bool writeInfo( void * pRegistryKey,
+                    const rtl::OUString & rImplementationName,
+                    uno::Sequence< rtl::OUString > const & rServiceNames )
 {
     rtl::OUString aKeyName( rtl::OUString::createFromAscii( "/" ) );
     aKeyName += rImplementationName;
@@ -92,16 +85,18 @@ static sal_Bool writeInfo( void * pRegistryKey,
     return bSuccess;
 }
 
+}
+
 //=========================================================================
 extern "C" void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
 //=========================================================================
 extern "C" sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
+    void * /*pServiceManager*/, void * pRegistryKey )
 {
     return pRegistryKey &&
 
@@ -117,7 +112,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 
 //=========================================================================
 extern "C" void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
 
