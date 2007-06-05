@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registerextensions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 10:49:10 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 11:26:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,8 @@
 #undef UNICODE
 #undef _UNICODE
 
+#define _WIN32_WINDOWS 0x0410
+
 #pragma warning(push, 1) /* disable warnings within system headers */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -53,10 +55,6 @@
 #endif
 #include <tchar.h>
 #include <string>
-
-#if defined(_WIN32_WINNT) && !defined(__MINGW32__)
-#error YES
-#endif
 
 static std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
 {
