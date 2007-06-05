@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:58:04 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:48:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1412,7 +1412,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
         Reference< XCommandEnvironment > xCmdEnv =
             static_cast<XCommandEnvironment*>( new OLibCommandEnvironment( xHandler ) );
 
-        ::ucb::Content sourceContent( aSourcePath, xCmdEnv );
+        ::ucbhelper::Content sourceContent( aSourcePath, xCmdEnv );
 
         ::rtl::OUStringBuffer buf;
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.zip://") );
@@ -1426,9 +1426,9 @@ void LibPage::ExportAsPackage( const String& aLibName )
         if( xSFA->exists( aPackageURL ) )
             xSFA->kill( aPackageURL );
 
-        ::ucb::Content destFolderContent( destFolder, xCmdEnv );
+        ::ucbhelper::Content destFolderContent( destFolder, xCmdEnv );
         destFolderContent.transferContent(
-            sourceContent, ::ucb::InsertOperation_COPY,
+            sourceContent, ::ucbhelper::InsertOperation_COPY,
             OUString(), NameClash::OVERWRITE );
 
         INetURLObject aMetaInfInetObj( aTmpPath );
@@ -1468,12 +1468,12 @@ void LibPage::ExportAsPackage( const String& aLibName )
             sal_True, INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
 
         // write buffered pipe data to content:
-        ::ucb::Content manifestContent( aMetaInfInetObj.GetMainURL( INetURLObject::NO_DECODE ), xCmdEnv );
+        ::ucbhelper::Content manifestContent( aMetaInfInetObj.GetMainURL( INetURLObject::NO_DECODE ), xCmdEnv );
         manifestContent.writeStream( Reference<io::XInputStream>( xPipe, UNO_QUERY_THROW ), true );
 
-        ::ucb::Content MetaInfContent( aMetaInfFolder, xCmdEnv );
+        ::ucbhelper::Content MetaInfContent( aMetaInfFolder, xCmdEnv );
         destFolderContent.transferContent(
-            MetaInfContent, ::ucb::InsertOperation_COPY,
+            MetaInfContent, ::ucbhelper::InsertOperation_COPY,
             OUString(), NameClash::OVERWRITE );
 
         if( xSFA->exists( aSourcePath ) )
