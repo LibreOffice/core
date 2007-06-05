@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 13:56:39 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 17:44:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1803,7 +1803,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 void SwView::ScannerEventHdl( const EventObject& rEventObject )
 {
-    Reference< XScannerManager > xScanMgr = SW_MOD()->GetScannerManager();
+    uno::Reference< XScannerManager > xScanMgr = SW_MOD()->GetScannerManager();
     if( xScanMgr.is() )
     {
         const ScannerContext    aContext( xScanMgr->getAvailableScanners().getConstArray()[ 0 ] );
