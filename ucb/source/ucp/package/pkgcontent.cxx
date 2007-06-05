@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:05:29 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:12:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,6 @@
 
 #include "../inc/urihelper.hxx"
 
-using namespace com::sun;
 using namespace com::sun::star;
 using namespace package_ucp;
 
@@ -213,7 +212,7 @@ ContentProperties::ContentProperties( const rtl::OUString& rContentType )
 Content* Content::create(
             const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
             ContentProvider* pProvider,
-            const uno::Reference< star::ucb::XContentIdentifier >& Identifier )
+            const uno::Reference< ucb::XContentIdentifier >& Identifier )
 {
     rtl::OUString aURL = Identifier->getContentIdentifier();
     PackageUri aURI( aURL );
@@ -232,8 +231,8 @@ Content* Content::create(
                 return 0;
         }
 
-        uno::Reference< star::ucb::XContentIdentifier > xId
-            = new ::ucb::ContentIdentifier( rxSMgr, aURI.getUri() );
+        uno::Reference< ucb::XContentIdentifier > xId
+            = new ::ucbhelper::ContentIdentifier( rxSMgr, aURI.getUri() );
         return new Content( rxSMgr, pProvider, xId, xPackage, aURI, aProps );
     }
     else
@@ -247,10 +246,10 @@ Content* Content::create(
         if ( ( nLastSlash + 1 ) == aURL.getLength() )
             bFolder = sal_True;
 
-        uno::Reference< star::ucb::XContentIdentifier > xId
-            = new ::ucb::ContentIdentifier( rxSMgr, aURI.getUri() );
+        uno::Reference< ucb::XContentIdentifier > xId
+            = new ::ucbhelper::ContentIdentifier( rxSMgr, aURI.getUri() );
 
-        star::ucb::ContentInfo aInfo;
+        ucb::ContentInfo aInfo;
         if ( bFolder || aURI.isRootFolder() )
             aInfo.Type = GetContentType( aURI.getScheme(), sal_True );
         else
@@ -265,8 +264,8 @@ Content* Content::create(
 Content* Content::create(
             const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
             ContentProvider* pProvider,
-            const uno::Reference< star::ucb::XContentIdentifier >& Identifier,
-            const star::ucb::ContentInfo& Info )
+            const uno::Reference< ucb::XContentIdentifier >& Identifier,
+            const ucb::ContentInfo& Info )
 {
     if ( !Info.Type.getLength() )
         return 0;
@@ -289,26 +288,28 @@ Content* Content::create(
     xPackage = pProvider->createPackage( aURI.getPackage(), aURI.getParam() );
 #endif
 
-    uno::Reference< star::ucb::XContentIdentifier > xId
-        = new ::ucb::ContentIdentifier( rxSMgr, aURI.getUri() );
+    uno::Reference< ucb::XContentIdentifier > xId
+        = new ::ucbhelper::ContentIdentifier( rxSMgr, aURI.getUri() );
     return new Content( rxSMgr, pProvider, xId, xPackage, aURI, Info );
 }
 
 //=========================================================================
 // static
-::rtl::OUString Content::GetContentType( const ::rtl::OUString& aScheme, sal_Bool bFolder )
+::rtl::OUString Content::GetContentType(
+    const ::rtl::OUString& aScheme, sal_Bool bFolder )
 {
-    return
-        ( rtl::OUString::createFromAscii( "application/" )
-        + aScheme
-        + ( bFolder ? rtl::OUString::createFromAscii( "-folder" ) : rtl::OUString::createFromAscii( "-stream" ) ) );
+    return ( rtl::OUString::createFromAscii( "application/" )
+             + aScheme
+             + ( bFolder
+                 ? rtl::OUString::createFromAscii( "-folder" )
+                 : rtl::OUString::createFromAscii( "-stream" ) ) );
 }
 
 //=========================================================================
 Content::Content(
         const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
         ContentProvider* pProvider,
-        const uno::Reference< star::ucb::XContentIdentifier >& Identifier,
+        const uno::Reference< ucb::XContentIdentifier >& Identifier,
         const uno::Reference< container::XHierarchicalNameAccess > & Package,
         const PackageUri& rUri,
         const ContentProperties& rProps )
@@ -326,10 +327,10 @@ Content::Content(
 Content::Content(
         const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
         ContentProvider* pProvider,
-        const uno::Reference< star::ucb::XContentIdentifier >& Identifier,
+        const uno::Reference< ucb::XContentIdentifier >& Identifier,
         const uno::Reference< container::XHierarchicalNameAccess > & Package,
         const PackageUri& rUri,
-        const star::ucb::ContentInfo& Info )
+        const ucb::ContentInfo& Info )
 : ContentImplHelper( rxSMgr, pProvider, Identifier, sal_False ),
   m_aUri( rUri ),
   m_aProps( Info.Type ),
@@ -376,7 +377,7 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
 
     if ( isFolder() )
         aRet = cppu::queryInterface(
-                rType, static_cast< star::ucb::XContentCreator * >( this ) );
+                rType, static_cast< ucb::XContentCreator * >( this ) );
 
      return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
 }
@@ -412,14 +413,14 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
                     CPPU_TYPE_REF( lang::XTypeProvider ),
                     CPPU_TYPE_REF( lang::XServiceInfo ),
                     CPPU_TYPE_REF( lang::XComponent ),
-                    CPPU_TYPE_REF( star::ucb::XContent ),
-                    CPPU_TYPE_REF( star::ucb::XCommandProcessor ),
+                    CPPU_TYPE_REF( ucb::XContent ),
+                    CPPU_TYPE_REF( ucb::XCommandProcessor ),
                     CPPU_TYPE_REF( beans::XPropertiesChangeNotifier ),
-                    CPPU_TYPE_REF( star::ucb::XCommandInfoChangeNotifier ),
+                    CPPU_TYPE_REF( ucb::XCommandInfoChangeNotifier ),
                     CPPU_TYPE_REF( beans::XPropertyContainer ),
                     CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                     CPPU_TYPE_REF( container::XChild ),
-                    CPPU_TYPE_REF( star::ucb::XContentCreator ) ); // !!
+                    CPPU_TYPE_REF( ucb::XContentCreator ) ); // !!
                 pCollection = &aCollection;
                 OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
                 pFolderTypes = pCollection;
@@ -444,10 +445,10 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
                     CPPU_TYPE_REF( lang::XTypeProvider ),
                     CPPU_TYPE_REF( lang::XServiceInfo ),
                     CPPU_TYPE_REF( lang::XComponent ),
-                    CPPU_TYPE_REF( star::ucb::XContent ),
-                    CPPU_TYPE_REF( star::ucb::XCommandProcessor ),
+                    CPPU_TYPE_REF( ucb::XContent ),
+                    CPPU_TYPE_REF( ucb::XCommandProcessor ),
                     CPPU_TYPE_REF( beans::XPropertiesChangeNotifier ),
-                    CPPU_TYPE_REF( star::ucb::XCommandInfoChangeNotifier ),
+                    CPPU_TYPE_REF( ucb::XCommandInfoChangeNotifier ),
                     CPPU_TYPE_REF( beans::XPropertyContainer ),
                     CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                     CPPU_TYPE_REF( container::XChild ) );
@@ -516,11 +517,11 @@ rtl::OUString SAL_CALL Content::getContentType()
 
 // virtual
 uno::Any SAL_CALL Content::execute(
-        const star::ucb::Command& aCommand,
+        const ucb::Command& aCommand,
         sal_Int32 /*CommandId*/,
-        const uno::Reference< star::ucb::XCommandEnvironment >& Environment )
+        const uno::Reference< ucb::XCommandEnvironment >& Environment )
     throw( uno::Exception,
-           star::ucb::CommandAbortedException,
+           ucb::CommandAbortedException,
            uno::RuntimeException )
 {
     uno::Any aRet;
@@ -608,7 +609,7 @@ uno::Any SAL_CALL Content::execute(
         // open
         //////////////////////////////////////////////////////////////////
 
-        star::ucb::OpenCommandArgument2 aOpenCommand;
+        ucb::OpenCommandArgument2 aOpenCommand;
         if ( !( aCommand.Argument >>= aOpenCommand ) )
         {
             ucbhelper::cancelCommandExecution(
@@ -631,7 +632,7 @@ uno::Any SAL_CALL Content::execute(
         // insert
         //////////////////////////////////////////////////////////////////
 
-        star::ucb::InsertCommandArgument aArg;
+        ucb::InsertCommandArgument aArg;
         if ( !( aCommand.Argument >>= aArg ) )
         {
             ucbhelper::cancelCommandExecution(
@@ -645,8 +646,8 @@ uno::Any SAL_CALL Content::execute(
         }
 
         sal_Int32 nNameClash = aArg.ReplaceExisting
-                             ? star::ucb::NameClash::OVERWRITE
-                             : star::ucb::NameClash::ERROR;
+                             ? ucb::NameClash::OVERWRITE
+                             : ucb::NameClash::ERROR;
         insert( aArg.Data, nNameClash, Environment );
     }
     else if ( !m_aUri.isRootFolder()
@@ -674,7 +675,7 @@ uno::Any SAL_CALL Content::execute(
                                               getContentIdentifier()),
                              beans::PropertyState_DIRECT_VALUE));
             ucbhelper::cancelCommandExecution(
-                star::ucb::IOErrorCode_CANT_WRITE,
+                ucb::IOErrorCode_CANT_WRITE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 Environment,
                 rtl::OUString::createFromAscii(
@@ -694,7 +695,7 @@ uno::Any SAL_CALL Content::execute(
         //  ( Not available at stream objects )
         //////////////////////////////////////////////////////////////////
 
-        star::ucb::TransferInfo aInfo;
+        ucb::TransferInfo aInfo;
         if ( !( aCommand.Argument >>= aInfo ) )
         {
             ucbhelper::cancelCommandExecution(
@@ -729,7 +730,7 @@ uno::Any SAL_CALL Content::execute(
                                               getContentIdentifier()),
                              beans::PropertyState_DIRECT_VALUE));
             ucbhelper::cancelCommandExecution(
-                star::ucb::IOErrorCode_CANT_WRITE,
+                ucb::IOErrorCode_CANT_WRITE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 Environment,
                 rtl::OUString::createFromAscii(
@@ -745,7 +746,7 @@ uno::Any SAL_CALL Content::execute(
         //////////////////////////////////////////////////////////////////
 
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( star::ucb::UnsupportedCommandException(
+            uno::makeAny( ucb::UnsupportedCommandException(
                                 rtl::OUString(),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
             Environment );
@@ -771,7 +772,7 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
 //=========================================================================
 
 // virtual
-uno::Sequence< star::ucb::ContentInfo > SAL_CALL
+uno::Sequence< ucb::ContentInfo > SAL_CALL
 Content::queryCreatableContentsInfo()
     throw( uno::RuntimeException )
 {
@@ -786,21 +787,21 @@ Content::queryCreatableContentsInfo()
                     getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND );
 
-        uno::Sequence< star::ucb::ContentInfo > aSeq( 2 );
+        uno::Sequence< ucb::ContentInfo > aSeq( 2 );
 
         // Folder.
         aSeq.getArray()[ 0 ].Type
             = GetContentType( m_aUri.getScheme(), sal_True );
         aSeq.getArray()[ 0 ].Attributes
-            = star::ucb::ContentInfoAttribute::KIND_FOLDER;
+            = ucb::ContentInfoAttribute::KIND_FOLDER;
         aSeq.getArray()[ 0 ].Properties = aProps;
 
         // Stream.
         aSeq.getArray()[ 1 ].Type
             = GetContentType( m_aUri.getScheme(), sal_False );
         aSeq.getArray()[ 1 ].Attributes
-            = star::ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
-              | star::ucb::ContentInfoAttribute::KIND_DOCUMENT;
+            = ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
+              | ucb::ContentInfoAttribute::KIND_DOCUMENT;
         aSeq.getArray()[ 1 ].Properties = aProps;
 
         return aSeq;
@@ -810,14 +811,14 @@ Content::queryCreatableContentsInfo()
         OSL_ENSURE( sal_False,
                     "queryCreatableContentsInfo called on non-folder object!" );
 
-        return uno::Sequence< star::ucb::ContentInfo >( 0 );
+        return uno::Sequence< ucb::ContentInfo >( 0 );
     }
 }
 
 //=========================================================================
 // virtual
-uno::Reference< star::ucb::XContent > SAL_CALL
-Content::createNewContent( const star::ucb::ContentInfo& Info )
+uno::Reference< ucb::XContent > SAL_CALL
+Content::createNewContent( const ucb::ContentInfo& Info )
     throw( uno::RuntimeException )
 {
     if ( isFolder() )
@@ -825,13 +826,13 @@ Content::createNewContent( const star::ucb::ContentInfo& Info )
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
         if ( !Info.Type.getLength() )
-            return uno::Reference< star::ucb::XContent >();
+            return uno::Reference< ucb::XContent >();
 
         if ( !Info.Type.equalsIgnoreAsciiCase(
                 GetContentType( m_aUri.getScheme(), sal_True ) ) &&
              !Info.Type.equalsIgnoreAsciiCase(
                 GetContentType( m_aUri.getScheme(), sal_False ) ) )
-            return uno::Reference< star::ucb::XContent >();
+            return uno::Reference< ucb::XContent >();
 
         rtl::OUString aURL = m_aUri.getUri();
         aURL += rtl::OUString::createFromAscii( "/" );
@@ -842,8 +843,8 @@ Content::createNewContent( const star::ucb::ContentInfo& Info )
         else
             aURL += rtl::OUString::createFromAscii( "New_Stream" );
 
-        uno::Reference< star::ucb::XContentIdentifier > xId(
-                        new ::ucb::ContentIdentifier( m_xSMgr, aURL ) );
+        uno::Reference< ucb::XContentIdentifier > xId(
+            new ::ucbhelper::ContentIdentifier( m_xSMgr, aURL ) );
 
         return create( m_xSMgr, m_pProvider, xId, Info );
     }
@@ -851,7 +852,7 @@ Content::createNewContent( const star::ucb::ContentInfo& Info )
     {
         OSL_ENSURE( sal_False,
                     "createNewContent called on non-folder object!" );
-        return uno::Reference< star::ucb::XContent >();
+        return uno::Reference< ucb::XContent >();
     }
 }
 
@@ -883,14 +884,14 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                                   rProperties,
                                   aData,
                                   rtl::Reference<
-                                    ::ucb::ContentProviderImplHelper >(
+                                    ::ucbhelper::ContentProviderImplHelper >(
                                         pProvider ),
                                   rContentId );
     }
     else
     {
-        rtl::Reference< ::ucb::PropertyValueSet > xRow
-                                = new ::ucb::PropertyValueSet( rSMgr );
+        rtl::Reference< ::ucbhelper::PropertyValueSet > xRow
+            = new ::ucbhelper::PropertyValueSet( rSMgr );
 
         sal_Int32 nCount = rProperties.getLength();
         if ( nCount )
@@ -910,13 +911,14 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         const uno::Reference< lang::XMultiServiceFactory >& rSMgr,
         const uno::Sequence< beans::Property >& rProperties,
         const ContentProperties& rData,
-        const rtl::Reference< ::ucb::ContentProviderImplHelper >& rProvider,
+        const rtl::Reference< ::ucbhelper::ContentProviderImplHelper >&
+            rProvider,
         const rtl::OUString& rContentId )
 {
     // Note: Empty sequence means "get values of all supported properties".
 
-    rtl::Reference< ::ucb::PropertyValueSet > xRow
-                                = new ::ucb::PropertyValueSet( rSMgr );
+    rtl::Reference< ::ucbhelper::PropertyValueSet > xRow
+        = new ::ucbhelper::PropertyValueSet( rSMgr );
 
     sal_Int32 nCount = rProperties.getLength();
     if ( nCount )
@@ -1130,16 +1132,16 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                               rProperties,
                               m_aProps,
                               rtl::Reference<
-                                ::ucb::ContentProviderImplHelper >(
-                                    m_xProvider.getBodyPtr() ),
+                                ::ucbhelper::ContentProviderImplHelper >(
+                                    m_xProvider.get() ),
                               m_xIdentifier->getContentIdentifier() );
 }
 
 //=========================================================================
 uno::Sequence< uno::Any > Content::setPropertyValues(
         const uno::Sequence< beans::PropertyValue >& rValues,
-        const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
-    throw( ::com::sun::star::uno::Exception )
+        const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+    throw( uno::Exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -1158,7 +1160,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     const beans::PropertyValue* pValues = rValues.getConstArray();
     sal_Int32 nCount = rValues.getLength();
 
-    uno::Reference< star::ucb::XPersistentPropertySet > xAdditionalPropSet;
+    uno::Reference< ucb::XPersistentPropertySet > xAdditionalPropSet;
     sal_Bool bTriedToGetAdditonalPropSet = sal_False;
     sal_Bool bExchange = sal_False;
     sal_Bool bStore    = sal_False;
@@ -1467,14 +1469,14 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
     if ( bExchange )
     {
-        uno::Reference< star::ucb::XContentIdentifier > xOldId = m_xIdentifier;
+        uno::Reference< ucb::XContentIdentifier > xOldId = m_xIdentifier;
 
         // Assemble new content identifier...
         rtl::OUString aNewURL = m_aUri.getParentUri();
         aNewURL += rtl::OUString::createFromAscii( "/" );
-        aNewURL += ::ucb::urihelper::encodeSegment( aNewTitle );
-        uno::Reference< star::ucb::XContentIdentifier > xNewId
-            = new ::ucb::ContentIdentifier( m_xSMgr, aNewURL );
+        aNewURL += ::ucb_impl::urihelper::encodeSegment( aNewTitle );
+        uno::Reference< ucb::XContentIdentifier > xNewId
+            = new ::ucbhelper::ContentIdentifier( m_xSMgr, aNewURL );
 
         aGuard.clear();
         if ( exchangeIdentity( xNewId ) )
@@ -1529,7 +1531,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                                   getContentIdentifier()),
                                  beans::PropertyState_DIRECT_VALUE));
                 ucbhelper::cancelCommandExecution(
-                    star::ucb::IOErrorCode_CANT_WRITE,
+                    ucb::IOErrorCode_CANT_WRITE,
                     uno::Sequence< uno::Any >(&aProps, 1),
                     xEnv,
                     rtl::OUString::createFromAscii(
@@ -1549,19 +1551,19 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
 //=========================================================================
 uno::Any Content::open(
-                const star::ucb::OpenCommandArgument2& rArg,
-                const uno::Reference< star::ucb::XCommandEnvironment >& xEnv )
+                const ucb::OpenCommandArgument2& rArg,
+                const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     throw( uno::Exception )
 {
-    if ( rArg.Mode == star::ucb::OpenMode::ALL ||
-         rArg.Mode == star::ucb::OpenMode::FOLDERS ||
-         rArg.Mode == star::ucb::OpenMode::DOCUMENTS )
+    if ( rArg.Mode == ucb::OpenMode::ALL ||
+         rArg.Mode == ucb::OpenMode::FOLDERS ||
+         rArg.Mode == ucb::OpenMode::DOCUMENTS )
     {
         //////////////////////////////////////////////////////////////////
         // open command for a folder content
         //////////////////////////////////////////////////////////////////
 
-        uno::Reference< star::ucb::XDynamicResultSet > xSet
+        uno::Reference< ucb::XDynamicResultSet > xSet
             = new DynamicResultSet( m_xSMgr, this, rArg, xEnv );
         return uno::makeAny( xSet );
       }
@@ -1571,12 +1573,12 @@ uno::Any Content::open(
         // open command for a document content
         //////////////////////////////////////////////////////////////////
 
-        if ( ( rArg.Mode == star::ucb::OpenMode::DOCUMENT_SHARE_DENY_NONE ) ||
-             ( rArg.Mode == star::ucb::OpenMode::DOCUMENT_SHARE_DENY_WRITE ) )
+        if ( ( rArg.Mode == ucb::OpenMode::DOCUMENT_SHARE_DENY_NONE ) ||
+             ( rArg.Mode == ucb::OpenMode::DOCUMENT_SHARE_DENY_WRITE ) )
         {
             // Currently(?) unsupported.
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( star::ucb::UnsupportedOpenModeException(
+                uno::makeAny( ucb::UnsupportedOpenModeException(
                                     rtl::OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     sal_Int16( rArg.Mode ) ) ),
@@ -1604,11 +1606,11 @@ uno::Any Content::open(
                                                   getContentIdentifier()),
                                  beans::PropertyState_DIRECT_VALUE));
                 ucbhelper::cancelCommandExecution(
-                    star::ucb::IOErrorCode_CANT_READ,
+                    ucb::IOErrorCode_CANT_READ,
                     uno::Sequence< uno::Any >(&aProps, 1),
                     m_eState == PERSISTENT
                         ? xEnv
-                        : uno::Reference< star::ucb::XCommandEnvironment >(),
+                        : uno::Reference< ucb::XCommandEnvironment >(),
                     rtl::OUString::createFromAscii( "Got no data stream!" ),
                     this );
                 // Unreachable
@@ -1664,12 +1666,12 @@ uno::Any Content::open(
                                                       getContentIdentifier()),
                                      beans::PropertyState_DIRECT_VALUE));
                     ucbhelper::cancelCommandExecution(
-                        star::ucb::IOErrorCode_CANT_READ,
+                        ucb::IOErrorCode_CANT_READ,
                         uno::Sequence< uno::Any >(&aProps, 1),
                         m_eState == PERSISTENT
                             ? xEnv
                             : uno::Reference<
-                                  star::ucb::XCommandEnvironment >(),
+                                  ucb::XCommandEnvironment >(),
                         rtl::OUString::createFromAscii(
                             "Got no data stream!" ),
                         this );
@@ -1686,7 +1688,7 @@ uno::Any Content::open(
                 //       sink is optional...
                 ucbhelper::cancelCommandExecution(
                     uno::makeAny(
-                        star::ucb::UnsupportedDataSinkException(
+                        ucb::UnsupportedDataSinkException(
                                 rtl::OUString(),
                                 static_cast< cppu::OWeakObject * >( this ),
                                 rArg.Sink ) ),
@@ -1703,7 +1705,7 @@ uno::Any Content::open(
 void Content::insert(
             const uno::Reference< io::XInputStream >& xStream,
             sal_Int32 nNameClashResolve,
-            const uno::Reference< star::ucb::XCommandEnvironment >& xEnv )
+            const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     throw( uno::Exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
@@ -1723,7 +1725,7 @@ void Content::insert(
         if ( !xStream.is() )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( star::ucb::MissingInputStreamException(
+                uno::makeAny( ucb::MissingInputStreamException(
                                 rtl::OUString(),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
                 xEnv );
@@ -1739,18 +1741,18 @@ void Content::insert(
     rtl::OUString aNewURL = m_aUri.getParentUri();
     if (1 + aNewURL.lastIndexOf('/') != aNewURL.getLength())
         aNewURL += rtl::OUString::createFromAscii( "/" );
-    aNewURL += ::ucb::urihelper::encodeSegment( m_aProps.aTitle );
+    aNewURL += ::ucb_impl::urihelper::encodeSegment( m_aProps.aTitle );
     PackageUri aNewUri( aNewURL );
 
     // Handle possible name clash...
     switch ( nNameClashResolve )
     {
         // fail.
-        case star::ucb::NameClash::ERROR:
+        case ucb::NameClash::ERROR:
             if ( hasData( aNewUri ) )
             {
                 ucbhelper::cancelCommandExecution(
-                    uno::makeAny( star::ucb::NameClashException(
+                    uno::makeAny( ucb::NameClashException(
                                     rtl::OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     task::InteractionClassification_ERROR,
@@ -1761,11 +1763,11 @@ void Content::insert(
             break;
 
         // replace (possibly) existing object.
-        case star::ucb::NameClash::OVERWRITE:
+        case ucb::NameClash::OVERWRITE:
             break;
 
         // "invent" a new valid title.
-        case star::ucb::NameClash::RENAME:
+        case ucb::NameClash::RENAME:
             if ( hasData( aNewUri ) )
             {
                 sal_Int32 nTry = 0;
@@ -1783,7 +1785,7 @@ void Content::insert(
                 {
                     ucbhelper::cancelCommandExecution(
                         uno::makeAny(
-                            star::ucb::UnsupportedNameClashException(
+                            ucb::UnsupportedNameClashException(
                                 rtl::OUString::createFromAscii(
                                     "Unable to resolve name clash!" ),
                                 static_cast< cppu::OWeakObject * >( this ),
@@ -1799,14 +1801,14 @@ void Content::insert(
             }
             break;
 
-        case star::ucb::NameClash::KEEP: // deprecated
-        case star::ucb::NameClash::ASK:
+        case ucb::NameClash::KEEP: // deprecated
+        case ucb::NameClash::ASK:
         default:
             if ( hasData( aNewUri ) )
             {
                 ucbhelper::cancelCommandExecution(
                     uno::makeAny(
-                        star::ucb::UnsupportedNameClashException(
+                        ucb::UnsupportedNameClashException(
                             rtl::OUString(),
                             static_cast< cppu::OWeakObject * >( this ),
                             nNameClashResolve ) ),
@@ -1821,7 +1823,7 @@ void Content::insert(
 
     if ( bNewId )
     {
-        m_xIdentifier = new ::ucb::ContentIdentifier( m_xSMgr, aNewURL );
+        m_xIdentifier = new ::ucbhelper::ContentIdentifier( m_xSMgr, aNewURL );
         m_aUri = aNewUri;
     }
 
@@ -1836,7 +1838,7 @@ void Content::insert(
                                                    getContentIdentifier()),
                                   beans::PropertyState_DIRECT_VALUE));
         ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_WRITE,
+            ucb::IOErrorCode_CANT_WRITE,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
             rtl::OUString::createFromAscii( "Cannot store persistent data!" ),
@@ -1863,20 +1865,20 @@ void Content::insert(
 //=========================================================================
 void Content::destroy(
                 sal_Bool bDeletePhysical,
-                const uno::Reference< star::ucb::XCommandEnvironment >& xEnv )
+                const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     throw( uno::Exception )
 {
     // @@@ take care about bDeletePhysical -> trashcan support
 
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
-    uno::Reference< star::ucb::XContent > xThis = this;
+    uno::Reference< ucb::XContent > xThis = this;
 
     // Persistent?
     if ( m_eState != PERSISTENT )
     {
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( star::ucb::UnsupportedCommandException(
+            uno::makeAny( ucb::UnsupportedCommandException(
                                 rtl::OUString::createFromAscii(
                                     "Not persistent!" ),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
@@ -1909,8 +1911,8 @@ void Content::destroy(
 
 //=========================================================================
 void Content::transfer(
-            const star::ucb::TransferInfo& rInfo,
-            const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
+            const ucb::TransferInfo& rInfo,
+            const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     throw( uno::Exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
@@ -1919,7 +1921,7 @@ void Content::transfer(
     if ( m_eState != PERSISTENT )
     {
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( star::ucb::UnsupportedCommandException(
+            uno::makeAny( ucb::UnsupportedCommandException(
                                 rtl::OUString::createFromAscii(
                                     "Not persistent!" ),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
@@ -1933,7 +1935,7 @@ void Content::transfer(
             m_aUri.getUri(), PACKAGE_URL_SCHEME_LENGTH + 3 ) != 0 ) )
     {
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( star::ucb::InteractiveBadTransferURLException(
+            uno::makeAny( ucb::InteractiveBadTransferURLException(
                                 rtl::OUString(),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
             xEnv );
@@ -1957,7 +1959,7 @@ void Content::transfer(
                                       uno::makeAny(rInfo.SourceURL),
                                       beans::PropertyState_DIRECT_VALUE));
             ucbhelper::cancelCommandExecution(
-                star::ucb::IOErrorCode_RECURSIVE,
+                ucb::IOErrorCode_RECURSIVE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
                 rtl::OUString::createFromAscii(
@@ -1971,8 +1973,8 @@ void Content::transfer(
     // 0) Obtain content object for source.
     //////////////////////////////////////////////////////////////////////
 
-    uno::Reference< star::ucb::XContentIdentifier > xId
-        = new ::ucb::ContentIdentifier( m_xSMgr, rInfo.SourceURL );
+    uno::Reference< ucb::XContentIdentifier > xId
+        = new ::ucbhelper::ContentIdentifier( m_xSMgr, rInfo.SourceURL );
 
     // Note: The static cast is okay here, because its sure that
     //       m_xProvider is always the PackageContentProvider.
@@ -1983,7 +1985,7 @@ void Content::transfer(
         xSource = static_cast< Content * >(
                         m_xProvider->queryContent( xId ).get() );
     }
-    catch ( star::ucb::IllegalIdentifierException const & )
+    catch ( ucb::IllegalIdentifierException const & )
     {
         // queryContent
     }
@@ -1998,7 +2000,7 @@ void Content::transfer(
                                   uno::makeAny(xId->getContentIdentifier()),
                                   beans::PropertyState_DIRECT_VALUE));
         ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_READ,
+            ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
             rtl::OUString::createFromAscii(
@@ -2014,7 +2016,7 @@ void Content::transfer(
     rtl::OUString aType = xSource->isFolder()
             ? GetContentType( m_aUri.getScheme(), sal_True )
             : GetContentType( m_aUri.getScheme(), sal_False );
-    star::ucb::ContentInfo aContentInfo;
+    ucb::ContentInfo aContentInfo;
     aContentInfo.Type = aType;
     aContentInfo.Attributes = 0;
 
@@ -2032,7 +2034,7 @@ void Content::transfer(
                                   uno::makeAny(aId),
                                   beans::PropertyState_DIRECT_VALUE));
         ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_CREATE,
+            ucb::IOErrorCode_CANT_CREATE,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
             rtl::OUString::createFromAscii(
@@ -2153,9 +2155,9 @@ void Content::transfer(
                                                 != aChildId.getLength() )
                         aChildId += rtl::OUString::createFromAscii( "/" );
 
-                    aChildId += ::ucb::urihelper::encodeSegment( aName );
+                    aChildId += ::ucb_impl::urihelper::encodeSegment( aName );
 
-                    star::ucb::TransferInfo aInfo;
+                    ucb::TransferInfo aInfo;
                     aInfo.MoveData  = sal_False;
                     aInfo.NewTitle  = rtl::OUString();
                     aInfo.SourceURL = aChildId;
@@ -2196,7 +2198,7 @@ void Content::transfer(
                                               getContentIdentifier()),
                              beans::PropertyState_DIRECT_VALUE));
             ucbhelper::cancelCommandExecution(
-                star::ucb::IOErrorCode_CANT_WRITE,
+                ucb::IOErrorCode_CANT_WRITE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
                 rtl::OUString::createFromAscii(
@@ -2212,14 +2214,14 @@ void Content::transfer(
 
 //=========================================================================
 sal_Bool Content::exchangeIdentity(
-            const uno::Reference< star::ucb::XContentIdentifier >& xNewId )
+            const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
     if ( !xNewId.is() )
         return sal_False;
 
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
-    uno::Reference< star::ucb::XContent > xThis = this;
+    uno::Reference< ucb::XContent > xThis = this;
 
     // Already persistent?
     if ( m_eState != PERSISTENT )
@@ -2256,7 +2258,7 @@ sal_Bool Content::exchangeIdentity(
                     ContentRef xChild = (*it);
 
                     // Create new content identifier for the child...
-                    uno::Reference< star::ucb::XContentIdentifier > xOldChildId
+                    uno::Reference< ucb::XContentIdentifier > xOldChildId
                         = xChild->getIdentifier();
                     rtl::OUString aOldChildURL
                         = xOldChildId->getContentIdentifier();
@@ -2265,8 +2267,9 @@ sal_Bool Content::exchangeIdentity(
                                         0,
                                         aOldURL.getLength(),
                                         xNewId->getContentIdentifier() );
-                    uno::Reference< star::ucb::XContentIdentifier > xNewChildId
-                        = new ::ucb::ContentIdentifier( m_xSMgr, aNewChildURL );
+                    uno::Reference< ucb::XContentIdentifier > xNewChildId
+                        = new ::ucbhelper::ContentIdentifier(
+                            m_xSMgr, aNewChildURL );
 
                     if ( !xChild->exchangeIdentity( xNewChildId ) )
                         return sal_False;
@@ -2290,7 +2293,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     // from provider and extract the contents which are direct children
     // of this content.
 
-    ::ucb::ContentRefList aAllContents;
+    ::ucbhelper::ContentRefList aAllContents;
     m_xProvider->queryExistingContents( aAllContents );
 
     rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
@@ -2302,12 +2305,12 @@ void Content::queryChildren( ContentRefList& rChildren )
 
     sal_Int32 nLen = aURL.getLength();
 
-    ::ucb::ContentRefList::const_iterator it  = aAllContents.begin();
-    ::ucb::ContentRefList::const_iterator end = aAllContents.end();
+    ::ucbhelper::ContentRefList::const_iterator it  = aAllContents.begin();
+    ::ucbhelper::ContentRefList::const_iterator end = aAllContents.end();
 
     while ( it != end )
     {
-        ::ucb::ContentImplHelperRef xChild = (*it);
+        ::ucbhelper::ContentImplHelperRef xChild = (*it);
         rtl::OUString aChildURL
             = xChild->getIdentifier()->getContentIdentifier();
 
@@ -2320,7 +2323,7 @@ void Content::queryChildren( ContentRefList& rChildren )
                 // No further slashes. It's a child!
                 rChildren.push_back(
                     ContentRef(
-                        static_cast< Content * >( xChild.getBodyPtr() ) ) );
+                        static_cast< Content * >( xChild.get() ) ) );
             }
         }
         ++it;
@@ -2598,8 +2601,8 @@ sal_Bool Content::loadData(
 
 //=========================================================================
 sal_Bool Content::renameData(
-            const uno::Reference< star::ucb::XContentIdentifier >& xOldId,
-            const uno::Reference< star::ucb::XContentIdentifier >& xNewId )
+            const uno::Reference< ucb::XContentIdentifier >& xOldId,
+            const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
