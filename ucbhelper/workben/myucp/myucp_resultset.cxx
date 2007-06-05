@@ -4,9 +4,9 @@
  *
  *  $RCSfile: myucp_resultset.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:26:17 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:00:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,21 +45,13 @@
 
  *************************************************************************/
 
-// @@@ Adjust multi-include-protection-ifdef and header file name.
-#ifndef _MYUCP_DATASUPPLIER_HXX
 #include "myucp_datasupplier.hxx"
-#endif
-// @@@ Adjust multi-include-protection-ifdef and header file name.
-#ifndef _MYUCP_RESULTSET_HXX
 #include "myucp_resultset.hxx"
-#endif
 
-
-using namespace com::sun;
 using namespace com::sun::star;
 
 // @@@ Adjust namespace name.
-using namespace myucp;
+namespace myucp {
 
 //=========================================================================
 //=========================================================================
@@ -70,10 +62,10 @@ using namespace myucp;
 //=========================================================================
 
 DynamicResultSet::DynamicResultSet(
-                      const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
-                      const rtl::Reference< Content >& rxContent,
-                      const star::ucb::OpenCommandArgument2& rCommand,
-                      const uno::Reference< star::ucb::XCommandEnvironment >& rxEnv )
+    const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+    const rtl::Reference< Content >& rxContent,
+    const ucb::OpenCommandArgument2& rCommand,
+    const uno::Reference< ucb::XCommandEnvironment >& rxEnv )
 : ResultSetImplHelper( rxSMgr, rCommand ),
   m_xContent( rxContent ),
   m_xEnv( rxEnv )
@@ -89,24 +81,25 @@ DynamicResultSet::DynamicResultSet(
 void DynamicResultSet::initStatic()
 {
     m_xResultSet1
-        = new ::ucb::ResultSet( m_xSMgr,
-                                m_aCommand.Properties,
-                                new DataSupplier( m_xSMgr,
-                                                  m_xContent,
-                                                  m_aCommand.Mode ),
-                                m_xEnv );
+        = new ::ucbhelper::ResultSet( m_xSMgr,
+                                      m_aCommand.Properties,
+                                      new DataSupplier( m_xSMgr,
+                                                        m_xContent,
+                                                        m_aCommand.Mode ),
+                                      m_xEnv );
 }
 
 //=========================================================================
 void DynamicResultSet::initDynamic()
 {
     m_xResultSet1
-        = new ::ucb::ResultSet( m_xSMgr,
-                                m_aCommand.Properties,
-                                new DataSupplier( m_xSMgr,
-                                                  m_xContent,
-                                                  m_aCommand.Mode ),
-                                m_xEnv );
+        = new ::ucbhelper::ResultSet( m_xSMgr,
+                                      m_aCommand.Properties,
+                                      new DataSupplier( m_xSMgr,
+                                                        m_xContent,
+                                                        m_aCommand.Mode ),
+                                      m_xEnv );
     m_xResultSet2 = m_xResultSet1;
 }
 
+}
