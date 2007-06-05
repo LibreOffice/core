@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LDriver.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:26:20 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:21:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,9 +59,6 @@
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCONTENTACCESS_HPP_
-#include <com/sun/star/ucb/XContentAccess.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -424,11 +421,11 @@ String OEvoabDriver::getTempDirURL() const
 //-------------------------------------------------------------------------
 sal_Bool OEvoabDriver::fileExists(const ::rtl::OUString& _rURL, sal_Bool _bIsDir) const
 {
-    ::ucb::Content aCheckExistence;
+    ::ucbhelper::Content aCheckExistence;
     sal_Bool bExists = sal_False;
     try
     {
-        aCheckExistence = ::ucb::Content(_rURL, Reference< XCommandEnvironment >());
+        aCheckExistence = ::ucbhelper::Content(_rURL, Reference< XCommandEnvironment >());
         if(_bIsDir)
             bExists = aCheckExistence.isFolder();
         else
