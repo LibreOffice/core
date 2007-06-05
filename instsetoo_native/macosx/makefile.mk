@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-26 14:56:38 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 11:51:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,8 +66,10 @@ ZIP1LIST = *
 
 .IF "$(GUIBASE)"!="aqua"
 CREATOR_TYPE=OOo2
+BUNDLEEXECUTABLE=droplet
 .ELSE
 CREATOR_TYPE=OOO2
+BUNDLEEXECUTABLE=soffice.bin
 .ENDIF
 
 # --- Targets --------------------------------------------------
@@ -94,7 +96,8 @@ $(CONTENTS)$/Resources$/Scripts$/%.scpt : application/%.applescript
 
 # Info.plist is just versioned and copied into the bundle	
 $(CONTENTS)$/%.plist : application/%.plist
-    make_versioned.sh "$<" "$@"
+    make_versioned.sh "$<" "$(VERSIONED)/$<"
+        sed "s|\%BUNDLEEXECUTABLE|${BUNDLEEXECUTABLE}|g" "$(VERSIONED)/$<" > "$@"
 
 # The InfoPlist.strings file has to be in UTF-16, thus a back-and-forth conversion
 # is needed for versioning

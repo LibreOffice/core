@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PostInstall.applescript,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-26 14:57:02 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 11:52:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,7 @@
 (*==== (global variables as get-functions) ====*)
 
 on getOOInstallPath()
-	-- return (((path to applications folder from system domain) as string) & "OpenOffice %PRODUCTVERSION.app:" & "Contents:MacOS:")
-	return (((path to me) as string) & "Contents:MacOS:")
+	return (((path to me) as string) & "Contents:")
 end getOOInstallPath
 
 on getOOResourcesPath()
@@ -51,7 +50,7 @@ on getOOResourcesPath()
 end getOOResourcesPath
 
 on getOOProgramPath()
-	return (getOOInstallPath() & "program:")
+	return (getOOInstallPath() & "MacOS:")
 end getOOProgramPath
 
 -- OSXSystemFontPathList : {"/System/Library/Fonts/", "/Library/Fonts/"}
