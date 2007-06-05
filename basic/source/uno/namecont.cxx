@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namecont.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:22:57 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:11:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,6 +161,7 @@ using namespace cppu;
 using namespace rtl;
 using namespace osl;
 
+using com::sun::star::uno::Reference;
 
 // #i34411: Flag for error handling during migration
 static bool GbMigrationSuppressErrors = false;
