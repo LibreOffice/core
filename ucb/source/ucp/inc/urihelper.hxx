@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urihelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:05:18 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:08:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 
 //=========================================================================
 
-namespace ucb { namespace urihelper {
+namespace ucb_impl { namespace urihelper {
 
     inline ::rtl::OUString encodeSegment( const ::rtl::OUString & rSegment )
     {
