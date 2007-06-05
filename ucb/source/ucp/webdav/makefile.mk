@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 10:56:17 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 18:20:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,6 @@ SLOFILES=\
     $(SLO)$/DAVProperties.obj	\
     $(SLO)$/DAVSessionFactory.obj	\
     $(SLO)$/DAVResourceAccess.obj	\
-    $(SLO)$/DAVResourceAccessThread.obj	\
     $(SLO)$/NeonUri.obj		\
     $(SLO)$/NeonInputStream.obj	\
     $(SLO)$/NeonPropFindRequest.obj	\
@@ -121,7 +120,6 @@ SHL1STDLIBS=\
         $(CPPULIB)              \
         $(SALLIB)               \
         $(SALHELPERLIB)         \
-        $(VOSLIB)               \
         $(UCBHELPERLIB)         \
         $(COMPHELPERLIB)		\
         $(NEON3RDLIB)           \
@@ -143,9 +141,6 @@ SHL1LIBS=$(LIB1TARGET)
 # --- Def-File ---------------------------------------------------------
 
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=exports.dxp
-
-DEF1DES=UCB WebDAV Content Provider
 
 # --- Targets ----------------------------------------------------------
 
