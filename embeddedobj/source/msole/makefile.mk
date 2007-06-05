@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:43:30 $
+#   last change: $Author: ihi $ $Date: 2007-06-05 10:58:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,8 @@ TARGET=emboleobj
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+
+.IF "$(DISABLE_ATL)"==""
 
 LIBTARGET=NO
 USE_DEFFILE=YES
@@ -131,7 +133,7 @@ SHL1DEF= $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME= $(SHL1TARGET)
 
-
+.ENDIF
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
