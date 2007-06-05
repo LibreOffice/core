@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autorecovery.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:42:33 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:45:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3211,12 +3211,12 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const ::rtl::OUSt
 
     css::uno::Reference< css::ucb::XCommandEnvironment > xEnvironment;
 
-    ::ucb::Content aSourceContent;
-    ::ucb::Content aTargetContent;
+    ::ucbhelper::Content aSourceContent;
+    ::ucbhelper::Content aTargetContent;
 
     try
     {
-        aTargetContent = ::ucb::Content(sTargetPath, xEnvironment);
+        aTargetContent = ::ucbhelper::Content(sTargetPath, xEnvironment);
     }
     catch(const css::uno::Exception&)
         { return AutoRecovery::E_WRONG_TARGET_PATH; }
@@ -3228,8 +3228,8 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const ::rtl::OUSt
 
     try
     {
-        ::ucb::Content::create(sSource, xEnvironment, aSourceContent);
-        aTargetContent.transferContent(aSourceContent, ::ucb::InsertOperation_COPY, sTargetName, nNameClash);
+        ::ucbhelper::Content::create(sSource, xEnvironment, aSourceContent);
+        aTargetContent.transferContent(aSourceContent, ::ucbhelper::InsertOperation_COPY, sTargetName, nNameClash);
     }
     catch(const css::uno::Exception&)
         { return AutoRecovery::E_ORIGINAL_FILE_MISSING; }
@@ -3613,7 +3613,7 @@ void AutoRecovery::st_impl_removeFile(const ::rtl::OUString& sURL)
 
     try
     {
-        ::ucb::Content aContent = ::ucb::Content(sURL, css::uno::Reference< css::ucb::XCommandEnvironment >());
+        ::ucbhelper::Content aContent = ::ucbhelper::Content(sURL, css::uno::Reference< css::ucb::XCommandEnvironment >());
         aContent.executeCommand(::rtl::OUString::createFromAscii("delete"), css::uno::makeAny(sal_True));
     }
     catch(const css::uno::Exception&)
