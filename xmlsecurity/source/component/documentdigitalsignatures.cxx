@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-17 10:15:06 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:46:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -384,14 +384,14 @@ void DocumentDigitalSignatures::showCertificate( const Reference< ::com::sun::st
     INetURLObject aLocObjLowCase( Location.toAsciiLowerCase() ); // will be used for case insensitive comparing
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProvider > xContentProvider;
-    ::ucb::ContentBroker* pBroker = NULL;
+    ::ucbhelper::ContentBroker* pBroker = NULL;
 
     //warning free code
-    //if ( aLocObj.GetProtocol() == INET_PROT_FILE && ( pBroker = ::ucb::ContentBroker::get() ) )
+    //if ( aLocObj.GetProtocol() == INET_PROT_FILE && ( pBroker = ::ucbhelper::ContentBroker::get() ) )
     //  xContentProvider = pBroker->getContentProviderInterface();
     if ( aLocObj.GetProtocol() == INET_PROT_FILE)
     {
-        pBroker = ::ucb::ContentBroker::get();
+        pBroker = ::ucbhelper::ContentBroker::get();
         if (pBroker)
             xContentProvider = pBroker->getContentProviderInterface();
     }
