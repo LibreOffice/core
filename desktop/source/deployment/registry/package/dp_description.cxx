@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_description.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-17 10:32:26 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:06:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ ExtensionDescription::ExtensionDescription(
         cssu::Reference<css::ucb::XCommandEnvironment> xFilter =
             static_cast<css::ucb::XCommandEnvironment*>(
                 new FileDoesNotExistFilter(xCmdEnv));
-        ::ucb::Content descContent(sDescriptionUri, xFilter);
+        ::ucbhelper::Content descContent(sDescriptionUri, xFilter);
 
         //throws an com::sun::star::uno::Exception if the file is not available
         cssu::Reference<css::io::XInputStream> xIn;
