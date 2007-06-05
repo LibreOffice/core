@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2007-05-29 15:46:57 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 14:34:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2046,7 +2046,7 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
             }
             else
             {
-                Reference< lang::XMultiServiceFactory > xServiceFactory =
+                uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
                     comphelper::getProcessServiceFactory();
                 DBG_ASSERT( xServiceFactory.is(),
                     "XMLReader::Read: got no service manager" );
@@ -2063,7 +2063,7 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
                 aParserInput.aInputStream = new utl::OInputStreamWrapper( *xStrm );
 
                 // get parser
-                Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
+                uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
                     OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
                 DBG_ASSERT( xXMLParser.is(),
                     "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
@@ -2074,11 +2074,11 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
 
                 // get filter
                 // #110680#
-                // Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLExceptionListImport ( *rpLst );
-                Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLExceptionListImport ( xServiceFactory, *rpLst );
+                // uno::Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLExceptionListImport ( *rpLst );
+                uno::Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLExceptionListImport ( xServiceFactory, *rpLst );
 
                 // connect parser and filter
-                Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
+                uno::Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
                 xParser->setDocumentHandler( xFilter );
 
                 // parse
@@ -2140,7 +2140,7 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                 xStrm->SetProperty( aPropName, aAny );
 
 
-                Reference< lang::XMultiServiceFactory > xServiceFactory =
+                uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
                     comphelper::getProcessServiceFactory();
                 DBG_ASSERT( xServiceFactory.is(),
                             "XMLReader::Read: got no service manager" );
@@ -2149,10 +2149,10 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                     // Throw an exception ?
                 }
 
-                    Reference < XInterface > xWriter (xServiceFactory->createInstance(
+                    uno::Reference < XInterface > xWriter (xServiceFactory->createInstance(
                         OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"))));
                     DBG_ASSERT(xWriter.is(),"com.sun.star.xml.sax.Writer service missing");
-                Reference < io::XOutputStream> xOut = new utl::OOutputStreamWrapper( *xStrm );
+                uno::Reference < io::XOutputStream> xOut = new utl::OOutputStreamWrapper( *xStrm );
                     uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
                     xSrc->setOutputStream(xOut);
 
@@ -2198,21 +2198,21 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
         uno::Reference < embed::XStorage > xStg = comphelper::OStorageHelper::GetStorageFromURL( sShareAutoCorrFile, embed::ElementModes::READ );
         String aXMLWordListName( pXMLImplAutocorr_ListStr, RTL_TEXTENCODING_MS_1252 );
         uno::Reference < io::XStream > xStrm = xStg->openStreamElement( aXMLWordListName, embed::ElementModes::READ );
-        Reference< lang::XMultiServiceFactory > xServiceFactory = comphelper::getProcessServiceFactory();
+        uno::Reference< lang::XMultiServiceFactory > xServiceFactory = comphelper::getProcessServiceFactory();
 
         xml::sax::InputSource aParserInput;
         aParserInput.sSystemId = aXMLWordListName;
         aParserInput.aInputStream = xStrm->getInputStream();
 
         // get parser
-        Reference< XInterface > xXMLParser = xServiceFactory->createInstance( OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
+        uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance( OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
         DBG_ASSERT( xXMLParser.is(), "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
         if( xXMLParser.is() )
         {
-            Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLAutoCorrectImport( xServiceFactory, pAutocorr_List, rAutoCorrect, xStg );
+            uno::Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLAutoCorrectImport( xServiceFactory, pAutocorr_List, rAutoCorrect, xStg );
 
             // connect parser and filter
-            Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
+            uno::Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
             xParser->setDocumentHandler( xFilter );
 
             // parse
@@ -2471,7 +2471,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             sal_Unicode cSlash = '/';
             xub_StrLen nSlashPos = sMain.SearchBackward(cSlash);
             sMain.Erase(nSlashPos);
-            ::ucb::Content aNewContent( sMain, Reference< XCommandEnvironment > ());
+            ::ucbhelper::Content aNewContent(   sMain, uno::Reference< XCommandEnvironment > ());
             Any aAny;
             TransferInfo aInfo;
             aInfo.NameClash = NameClash::OVERWRITE;
@@ -2527,7 +2527,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             xDstStg = 0;
             try
             {
-                ::ucb::Content aContent ( aDest.GetMainURL( INetURLObject::DECODE_TO_IURI ), Reference < XCommandEnvironment > ());
+                ::ucbhelper::Content aContent ( aDest.GetMainURL( INetURLObject::DECODE_TO_IURI ), uno::Reference < XCommandEnvironment > ());
                 aContent.executeCommand ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "delete" ) ), makeAny ( sal_Bool (sal_True ) ) );
             }
             catch (...)
@@ -2567,7 +2567,7 @@ BOOL SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
             aAny <<= aMime;
             refList->SetProperty( aPropName, aAny );
 
-            Reference< lang::XMultiServiceFactory > xServiceFactory =
+            uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
                 comphelper::getProcessServiceFactory();
             DBG_ASSERT( xServiceFactory.is(),
                         "XMLReader::Read: got no service manager" );
@@ -2576,10 +2576,10 @@ BOOL SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
                 // Throw an exception ?
             }
 
-                Reference < XInterface > xWriter (xServiceFactory->createInstance(
+                uno::Reference < XInterface > xWriter (xServiceFactory->createInstance(
                     OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"))));
                 DBG_ASSERT(xWriter.is(),"com.sun.star.xml.sax.Writer service missing");
-            Reference < io::XOutputStream> xOut = new utl::OOutputStreamWrapper( *refList );
+            uno::Reference < io::XOutputStream> xOut = new utl::OOutputStreamWrapper( *refList );
                 uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
                 xSrc->setOutputStream(xOut);
 
