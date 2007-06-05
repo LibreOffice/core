@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgcont.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:39:02 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:11:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,7 @@ using namespace cppu;
 using namespace rtl;
 using namespace osl;
 
+using com::sun::star::uno::Reference;
 
 //============================================================================
 // Implementation class SfxDialogLibraryContainer
