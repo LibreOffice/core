@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odma_contentcaps.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:57:29 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:09:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,6 @@
 #include "odma_content.hxx"
 #endif
 
-using namespace com::sun;
 using namespace com::sun::star;
 using namespace odma;
 
@@ -92,7 +91,7 @@ using namespace odma;
 
 // virtual
 uno::Sequence< beans::Property > Content::getProperties(
-             const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
+    const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
     // @@@ Add additional properties...
 
@@ -149,13 +148,13 @@ uno::Sequence< beans::Property > Content::getProperties(
         beans::Property(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateCreated" ) ),
             -1,
-            getCppuType(static_cast< const com::sun::star::util::DateTime * >( 0 ) ),
+            getCppuType(static_cast< const util::DateTime * >( 0 ) ),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY
         ),
         beans::Property(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ) ),
             -1,
-            getCppuType(static_cast< const com::sun::star::util::DateTime * >( 0 ) ),
+            getCppuType(static_cast< const util::DateTime * >( 0 ) ),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY
         ),
         beans::Property(
@@ -192,8 +191,8 @@ uno::Sequence< beans::Property > Content::getProperties(
 
 //=========================================================================
 // virtual
-uno::Sequence< star::ucb::CommandInfo > Content::getCommands(
-            const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
+uno::Sequence< ucb::CommandInfo > Content::getCommands(
+    const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
     // @@@ Add additional commands...
 
@@ -207,28 +206,28 @@ uno::Sequence< star::ucb::CommandInfo > Content::getCommands(
 
     #define COMMAND_COUNT 8
 
-    static star::ucb::CommandInfo aCommandInfoTable[] =
+    static ucb::CommandInfo aCommandInfoTable[] =
     {
         ///////////////////////////////////////////////////////////////
         // Required commands
         ///////////////////////////////////////////////////////////////
-        star::ucb::CommandInfo(
+        ucb::CommandInfo(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
             -1,
             getCppuVoidType()
         ),
-        star::ucb::CommandInfo(
+        ucb::CommandInfo(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
             -1,
             getCppuVoidType()
         ),
-        star::ucb::CommandInfo(
+        ucb::CommandInfo(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
             -1,
             getCppuType(
                 static_cast< uno::Sequence< beans::Property > * >( 0 ) )
         ),
-        star::ucb::CommandInfo(
+        ucb::CommandInfo(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
             -1,
             getCppuType(
@@ -238,32 +237,32 @@ uno::Sequence< star::ucb::CommandInfo > Content::getCommands(
         // Optional standard commands
         ///////////////////////////////////////////////////////////////
 /*
-        star::ucb::CommandInfo(
+        ucb::CommandInfo(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
             -1,
             getCppuBooleanType()
         ),
 */
-        star::ucb::CommandInfo(
+        ucb::CommandInfo(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
             -1,
             getCppuType(
-                static_cast< star::ucb::InsertCommandArgument * >( 0 ) )
+                static_cast< ucb::InsertCommandArgument * >( 0 ) )
         ),
-        star::ucb::CommandInfo(
+        ucb::CommandInfo(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
             -1,
-            getCppuType( static_cast< star::ucb::OpenCommandArgument2 * >( 0 ) )
+            getCppuType( static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
         ),
-        star::ucb::CommandInfo(
+        ucb::CommandInfo(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "close" ) ),
             -1,
             getCppuVoidType( )
         ),
-        star::ucb::CommandInfo(
+        ucb::CommandInfo(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
             -1,
-            getCppuType( static_cast< star::ucb::TransferInfo * >( 0 ) )
+            getCppuType( static_cast< ucb::TransferInfo * >( 0 ) )
         )
 
         ///////////////////////////////////////////////////////////////
@@ -272,6 +271,6 @@ uno::Sequence< star::ucb::CommandInfo > Content::getCommands(
     };
 
     return uno::Sequence<
-            star::ucb::CommandInfo >( aCommandInfoTable, COMMAND_COUNT );
+            ucb::CommandInfo >( aCommandInfoTable, COMMAND_COUNT );
 }
 

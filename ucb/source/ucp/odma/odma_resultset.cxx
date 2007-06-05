@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odma_resultset.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:58:51 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:11:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,11 +45,9 @@
 
  *************************************************************************/
 
-// @@@ Adjust multi-include-protection-ifdef and header file name.
 #ifndef ODMA_DATASUPPLIER_HXX
 #include "odma_datasupplier.hxx"
 #endif
-// @@@ Adjust multi-include-protection-ifdef and header file name.
 #ifndef ODMA_RESULTSET_HXX
 #include "odma_resultset.hxx"
 #endif
@@ -58,7 +56,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 
-// @@@ Adjust namespace name.
 using namespace odma;
 
 //=========================================================================
@@ -71,7 +68,7 @@ using namespace odma;
 
 DynamicResultSet::DynamicResultSet(
                       const Reference< XMultiServiceFactory >& rxSMgr,
-                      const vos::ORef< Content >& rxContent,
+                      const rtl::Reference< Content >& rxContent,
                       const OpenCommandArgument2& rCommand,
                       const Reference< XCommandEnvironment >& rxEnv )
 : ResultSetImplHelper( rxSMgr, rCommand ),
@@ -89,24 +86,24 @@ DynamicResultSet::DynamicResultSet(
 void DynamicResultSet::initStatic()
 {
     m_xResultSet1
-        = new ::ucb::ResultSet( m_xSMgr,
-                                m_aCommand.Properties,
-                                new DataSupplier( m_xSMgr,
-                                                  m_xContent,
-                                                  m_aCommand.Mode ),
-                                m_xEnv );
+        = new ::ucbhelper::ResultSet( m_xSMgr,
+                                      m_aCommand.Properties,
+                                      new DataSupplier( m_xSMgr,
+                                                        m_xContent,
+                                                        m_aCommand.Mode ),
+                                      m_xEnv );
 }
 
 //=========================================================================
 void DynamicResultSet::initDynamic()
 {
     m_xResultSet1
-        = new ::ucb::ResultSet( m_xSMgr,
-                                m_aCommand.Properties,
-                                new DataSupplier( m_xSMgr,
-                                                  m_xContent,
-                                                  m_aCommand.Mode ),
-                                m_xEnv );
+        = new ::ucbhelper::ResultSet( m_xSMgr,
+                                      m_aCommand.Properties,
+                                      new DataSupplier( m_xSMgr,
+                                                        m_xContent,
+                                                        m_aCommand.Mode ),
+                                      m_xEnv );
     m_xResultSet2 = m_xResultSet1;
 }
 

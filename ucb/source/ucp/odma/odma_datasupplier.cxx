@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odma_datasupplier.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:57:42 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:09:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::sdbc;
-using namespace ucb;
 
 using namespace odma;
 
@@ -87,13 +86,13 @@ namespace odma
 
 struct ResultListEntry
 {
-    ::rtl::OUString                 aId;
-    Reference< XContentIdentifier > xId;
-    Reference< XContent >           xContent;
-    Reference< XRow >               xRow;
-    ::vos::ORef<ContentProperties>  rData;
+    ::rtl::OUString                     aId;
+    Reference< XContentIdentifier >     xId;
+    Reference< XContent >               xContent;
+    Reference< XRow >                   xRow;
+    ::rtl::Reference<ContentProperties> rData;
 
-    ResultListEntry( const ::vos::ORef<ContentProperties>& rEntry ) : rData( rEntry ) {}
+    ResultListEntry( const ::rtl::Reference<ContentProperties>& rEntry ) : rData( rEntry ) {}
 };
 
 //=========================================================================
@@ -114,7 +113,7 @@ struct DataSupplier_Impl
 {
     osl::Mutex                        m_aMutex;
     ResultList                        m_aResults;
-    vos::ORef< Content >              m_xContent;
+    rtl::Reference< Content >         m_xContent;
     Reference< XMultiServiceFactory > m_xSMgr;
 // @@@ The data source and an iterator for it
 //  Entry                             m_aFolder;
@@ -123,7 +122,7 @@ struct DataSupplier_Impl
       sal_Bool                        m_bCountFinal;
 
     DataSupplier_Impl( const Reference< XMultiServiceFactory >& rxSMgr,
-                       const vos::ORef< Content >& rContent,
+                       const rtl::Reference< Content >& rContent,
                        sal_Int32 nOpenMode )
     : m_xContent( rContent ), m_xSMgr( rxSMgr ),
 //    m_aFolder( rxSMgr, rContent->getIdentifier()->getContentIdentifier() ),
@@ -155,7 +154,7 @@ DataSupplier_Impl::~DataSupplier_Impl()
 //=========================================================================
 
 DataSupplier::DataSupplier( const Reference<XMultiServiceFactory >& rxSMgr,
-                           const vos::ORef< ::odma::Content >& rContent,
+                           const rtl::Reference< ::odma::Content >& rContent,
                             sal_Int32 nOpenMode )
 : m_pImpl( new DataSupplier_Impl( rxSMgr, rContent, nOpenMode ) )
 {
@@ -218,7 +217,8 @@ Reference< XContentIdentifier > DataSupplier::queryContentIdentifier(
     ::rtl::OUString aId = queryContentIdentifierString( nIndex );
     if ( aId.getLength() )
     {
-        Reference< XContentIdentifier > xId = new ucb::ContentIdentifier( aId );
+        Reference< XContentIdentifier > xId
+            = new ucbhelper::ContentIdentifier( aId );
         m_pImpl->m_aResults[ nIndex ]->xId = xId;
         return xId;
     }
@@ -281,7 +281,7 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
 
     sal_uInt32 nOldCount = m_pImpl->m_aResults.size();
     sal_Bool bFound = sal_False;
-    sal_uInt32 nPos = nOldCount;
+//  sal_uInt32 nPos = nOldCount;
 
     // @@@ Obtain data and put it into result list...
 /*
@@ -336,7 +336,7 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
             bFound = sal_True;
             for(sal_uInt16 i = 0; i < nCount; ++i)
             {
-                ::vos::ORef<ContentProperties> rProps = new ContentProperties();
+                ::rtl::Reference<ContentProperties> rProps = new ContentProperties();
                 rProps->m_sDocumentId   = ::rtl::OString(&lpszDocId[ODM_DOCID_MAX*i]);
                 rProps->m_sContentType  = sContentType;
                 m_pImpl->m_xContent->getContentProvider()->append(rProps);
@@ -358,8 +358,8 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
     if ( !bFound )
         m_pImpl->m_bCountFinal = sal_True;
 
-    vos::ORef< ResultSet > xResultSet = getResultSet();
-    if ( xResultSet.isValid() )
+    rtl::Reference< ucbhelper::ResultSet > xResultSet = getResultSet();
+    if ( xResultSet.is() )
     {
         // Callbacks follow!
         aGuard.clear();
@@ -394,8 +394,8 @@ sal_uInt32 DataSupplier::totalCount()
 */
     m_pImpl->m_bCountFinal = sal_True;
 
-    vos::ORef< ResultSet > xResultSet = getResultSet();
-    if ( xResultSet.isValid() )
+    rtl::Reference< ucbhelper::ResultSet > xResultSet = getResultSet();
+    if ( xResultSet.is() )
     {
         // Callbacks follow!
         aGuard.clear();

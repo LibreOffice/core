@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odma_content.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:57:15 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 18:08:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,6 @@
 #include <osl/file.hxx>
 #endif
 
-using namespace com::sun;
 using namespace com::sun::star;
 using namespace odma;
 
@@ -153,14 +152,14 @@ using namespace odma;
 
 Content::Content( const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
                   ContentProvider* pProvider,
-                  const uno::Reference< star::ucb::XContentIdentifier >& Identifier,
-                  const ::vos::ORef<ContentProperties>& _rProps)
+                  const uno::Reference< ucb::XContentIdentifier >& Identifier,
+                  const ::rtl::Reference<ContentProperties>& _rProps)
     : ContentImplHelper( rxSMgr, pProvider, Identifier )
     ,m_aProps(_rProps)
     ,m_pProvider(pProvider)
     ,m_pContent(NULL)
 {
-    OSL_ENSURE(m_aProps.isValid(),"No valid ContentPropeties!");
+    OSL_ENSURE(m_aProps.is(),"No valid ContentPropeties!");
 }
 
 //=========================================================================
@@ -231,10 +230,10 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
                 CPPU_TYPE_REF( lang::XTypeProvider ),
                 CPPU_TYPE_REF( lang::XServiceInfo ),
                 CPPU_TYPE_REF( lang::XComponent ),
-                CPPU_TYPE_REF( star::ucb::XContent ),
-                CPPU_TYPE_REF( star::ucb::XCommandProcessor ),
+                CPPU_TYPE_REF( ucb::XContent ),
+                CPPU_TYPE_REF( ucb::XCommandProcessor ),
                 CPPU_TYPE_REF( beans::XPropertiesChangeNotifier ),
-                CPPU_TYPE_REF( star::ucb::XCommandInfoChangeNotifier ),
+                CPPU_TYPE_REF( ucb::XCommandInfoChangeNotifier ),
                 CPPU_TYPE_REF( beans::XPropertyContainer ),
                 CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                 CPPU_TYPE_REF( container::XChild ) );
@@ -293,11 +292,11 @@ rtl::OUString SAL_CALL Content::getContentType()
 
 // virtual
 uno::Any SAL_CALL Content::execute(
-        const star::ucb::Command& aCommand,
-        sal_Int32 CommandId,
-        const uno::Reference< star::ucb::XCommandEnvironment >& Environment )
+        const ucb::Command& aCommand,
+        sal_Int32 /*CommandId*/,
+        const uno::Reference< ucb::XCommandEnvironment >& Environment )
     throw( uno::Exception,
-           star::ucb::CommandAbortedException,
+           ucb::CommandAbortedException,
            uno::RuntimeException )
 {
     uno::Any aRet;
@@ -381,7 +380,7 @@ uno::Any SAL_CALL Content::execute(
     else if ( aCommand.Name.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( "open" ) ) )
     {
-        star::ucb::OpenCommandArgument2 aOpenCommand;
+        ucb::OpenCommandArgument2 aOpenCommand;
           if ( !( aCommand.Argument >>= aOpenCommand ) )
         {
             OSL_ENSURE( sal_False, "Wrong argument type!" );
@@ -395,15 +394,15 @@ uno::Any SAL_CALL Content::execute(
         }
 
         sal_Bool bOpenFolder =
-            ( ( aOpenCommand.Mode == star::ucb::OpenMode::ALL ) ||
-              ( aOpenCommand.Mode == star::ucb::OpenMode::FOLDERS ) ||
-              ( aOpenCommand.Mode == star::ucb::OpenMode::DOCUMENTS ) );
+            ( ( aOpenCommand.Mode == ucb::OpenMode::ALL ) ||
+              ( aOpenCommand.Mode == ucb::OpenMode::FOLDERS ) ||
+              ( aOpenCommand.Mode == ucb::OpenMode::DOCUMENTS ) );
 
         if ( bOpenFolder)
         {
             // open as folder - return result set
 
-            uno::Reference< star::ucb::XDynamicResultSet > xSet
+            uno::Reference< ucb::XDynamicResultSet > xSet
                             = new DynamicResultSet( m_xSMgr,
                                                     this,
                                                     aOpenCommand,
@@ -417,13 +416,13 @@ uno::Any SAL_CALL Content::execute(
 
             // Check open mode
             if ( ( aOpenCommand.Mode
-                    == star::ucb::OpenMode::DOCUMENT_SHARE_DENY_NONE ) ||
+                    == ucb::OpenMode::DOCUMENT_SHARE_DENY_NONE ) ||
                  ( aOpenCommand.Mode
-                    == star::ucb::OpenMode::DOCUMENT_SHARE_DENY_WRITE ) )
+                    == ucb::OpenMode::DOCUMENT_SHARE_DENY_WRITE ) )
             {
                 // Unsupported.
                 ucbhelper::cancelCommandExecution(
-                    uno::makeAny( star::ucb::UnsupportedOpenModeException(
+                    uno::makeAny( ucb::UnsupportedOpenModeException(
                                     rtl::OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     sal_Int16( aOpenCommand.Mode ) ) ),
@@ -435,7 +434,7 @@ uno::Any SAL_CALL Content::execute(
             rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
             rtl::OUString sFileURL = openDoc();
             delete m_pContent;
-            m_pContent = new ::ucb::Content(sFileURL,NULL);
+            m_pContent = new ::ucbhelper::Content(sFileURL,NULL);
             if(!m_pContent->isDocument())
             {
                 rtl::OUString sErrorMsg(RTL_CONSTASCII_USTRINGPARAM("File: "));
@@ -489,7 +488,7 @@ uno::Any SAL_CALL Content::execute(
                         //       implementation. Support for this type of
                         //       sink is optional...
                         ucbhelper::cancelCommandExecution(
-                            uno::makeAny( com::sun::star::ucb::UnsupportedDataSinkException(
+                            uno::makeAny( ucb::UnsupportedDataSinkException(
                                     rtl::OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     aOpenCommand.Sink ) ),
@@ -528,7 +527,7 @@ uno::Any SAL_CALL Content::execute(
         // insert
         //////////////////////////////////////////////////////////////////
 
-        star::ucb::InsertCommandArgument arg;
+        ucb::InsertCommandArgument arg;
           if ( !( aCommand.Argument >>= arg ) )
         {
               OSL_ENSURE( sal_False, "Wrong argument type!" );
@@ -545,7 +544,7 @@ uno::Any SAL_CALL Content::execute(
     }
     else if( ! aCommand.Name.compareToAscii( "transfer" ) )
     {
-        com::sun::star::ucb::TransferInfo aTransferInfo;
+        ucb::TransferInfo aTransferInfo;
         if( ! ( aCommand.Argument >>= aTransferInfo ) )
         {
             OSL_ENSURE( sal_False, "Wrong argument type!" );
@@ -557,13 +556,13 @@ uno::Any SAL_CALL Content::execute(
                 Environment );
             // Unreachable
         }
-        ::vos::ORef<ContentProperties> aProp = m_aProps;
+        ::rtl::Reference<ContentProperties> aProp = m_aProps;
         if(aProp->m_bIsFolder)
         {
             aProp = getContentProvider()->getContentPropertyWithTitle(aTransferInfo.NewTitle);
-            if(!aProp.isValid())
+            if(!aProp.is())
                 aProp = getContentProvider()->getContentPropertyWithSavedAsName(aTransferInfo.NewTitle);
-            sal_Bool bError = !aProp.isValid();
+            sal_Bool bError = !aProp.is();
             if(bError)
             {
                 sal_Char* pExtension = NULL;
@@ -632,9 +631,9 @@ uno::Any SAL_CALL Content::execute(
 
                 }
                 else if ( odm == ODM_E_CANCEL)
-                    ODMSTATUS odm = NODMActivate(ContentProvider::getHandle(),
-                                                 ODM_DELETE,
-                                                 lpszNewDocId);
+                    NODMActivate(ContentProvider::getHandle(),
+                                 ODM_DELETE,
+                                 lpszNewDocId);
 
                 delete lpszNewDocId;
             }
@@ -649,8 +648,8 @@ uno::Any SAL_CALL Content::execute(
         rtl::OUString sFileURL = ContentProvider::openDoc(aProp);
 
         sal_Int32 nLastIndex = sFileURL.lastIndexOf( sal_Unicode('/') );
-        ::ucb::Content aContent(sFileURL.copy(0,nLastIndex),NULL);
-        //  aTransferInfo.NameClash = com::sun::star::ucb::NameClash::OVERWRITE;
+        ::ucbhelper::Content aContent(sFileURL.copy(0,nLastIndex),NULL);
+        //  aTransferInfo.NameClash = ucb::NameClash::OVERWRITE;
         aTransferInfo.NewTitle = sFileURL.copy( 1 + nLastIndex );
         aContent.executeCommand(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("transfer")),uno::makeAny(aTransferInfo));
         getContentProvider()->saveDocument(aProp->m_sDocumentId);
@@ -664,7 +663,7 @@ uno::Any SAL_CALL Content::execute(
         OSL_ENSURE( sal_False, "Content::execute - unsupported command!" );
 
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( star::ucb::UnsupportedCommandException(
+            uno::makeAny( ucb::UnsupportedCommandException(
                             rtl::OUString(),
                             static_cast< cppu::OWeakObject * >( this ) ) ),
             Environment );
@@ -676,7 +675,7 @@ uno::Any SAL_CALL Content::execute(
 
 //=========================================================================
 // virtual
-void SAL_CALL Content::abort( sal_Int32 CommandId )
+void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
     throw( uno::RuntimeException )
 {
     // @@@ Implement logic to abort running commands, if this makes
@@ -710,14 +709,14 @@ void SAL_CALL Content::abort( sal_Int32 CommandId )
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
             const uno::Reference< lang::XMultiServiceFactory >& rSMgr,
             const uno::Sequence< beans::Property >& rProperties,
-            const ::vos::ORef<ContentProperties>& rData,
-            const vos::ORef< ::ucb::ContentProviderImplHelper >& rProvider,
+            const rtl::Reference<ContentProperties>& rData,
+            const rtl::Reference< ::ucbhelper::ContentProviderImplHelper >& rProvider,
             const rtl::OUString& rContentId )
 {
     // Note: Empty sequence means "get values of all supported properties".
 
-    rtl::Reference< ::ucb::PropertyValueSet > xRow
-                                = new ::ucb::PropertyValueSet( rSMgr );
+    rtl::Reference< ::ucbhelper::PropertyValueSet > xRow
+                                = new ::ucbhelper::PropertyValueSet( rSMgr );
 
     sal_Int32 nCount = rProperties.getLength();
     if ( nCount )
@@ -856,14 +855,14 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         xRow->appendTimestamp(
             beans::Property( rtl::OUString::createFromAscii( "DateCreated" ),
                       -1,
-                      getCppuType(static_cast< const com::sun::star::util::DateTime * >( 0 ) ),
+                      getCppuType(static_cast< const util::DateTime * >( 0 ) ),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData->m_aDateCreated );
         xRow->appendTimestamp(
             beans::Property( rtl::OUString::createFromAscii( "DateModified" ),
                       -1,
-                      getCppuType(static_cast< const com::sun::star::util::DateTime * >( 0 ) ),
+                      getCppuType(static_cast< const util::DateTime * >( 0 ) ),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData->m_aDateModified );
@@ -914,22 +913,22 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 //=========================================================================
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
             const uno::Sequence< beans::Property >& rProperties,
-            const uno::Reference< star::ucb::XCommandEnvironment >& xEnv )
+            const uno::Reference< ucb::XCommandEnvironment >& /*xEnv*/ )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     return getPropertyValues( m_xSMgr,
                               rProperties,
                               m_aProps,
-                              vos::ORef<
-                                ::ucb::ContentProviderImplHelper >(
-                                    m_xProvider.getBodyPtr() ),
+                              rtl::Reference<
+                                ::ucbhelper::ContentProviderImplHelper >(
+                                    m_xProvider.get() ),
                               m_xIdentifier->getContentIdentifier() );
 }
 
 //=========================================================================
 uno::Sequence< uno::Any > Content::setPropertyValues(
             const uno::Sequence< beans::PropertyValue >& rValues,
-            const uno::Reference< star::ucb::XCommandEnvironment >& xEnv )
+            const uno::Reference< ucb::XCommandEnvironment >& /*xEnv*/ )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -948,7 +947,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     const beans::PropertyValue* pValues = rValues.getConstArray();
     sal_Int32 nCount = rValues.getLength();
 
-    uno::Reference< star::ucb::XPersistentPropertySet > xAdditionalPropSet;
+    uno::Reference< ucb::XPersistentPropertySet > xAdditionalPropSet;
     sal_Bool bTriedToGetAdditonalPropSet = sal_False;
 
     for ( sal_Int32 n = 0; n < nCount; ++n )
@@ -1074,7 +1073,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     // from provider and extract the contents which are direct children
     // of this content.
 
-    ::ucb::ContentRefList aAllContents;
+    ::ucbhelper::ContentRefList aAllContents;
     m_xProvider->queryExistingContents( aAllContents );
 
     OUString aURL = m_xIdentifier->getContentIdentifier();
@@ -1088,12 +1087,12 @@ void Content::queryChildren( ContentRefList& rChildren )
 
     sal_Int32 nLen = aURL.getLength();
 
-    ::ucb::ContentRefList::const_iterator it  = aAllContents.begin();
-    ::ucb::ContentRefList::const_iterator end = aAllContents.end();
+    ::ucbhelper::ContentRefList::const_iterator it  = aAllContents.begin();
+    ::ucbhelper::ContentRefList::const_iterator end = aAllContents.end();
 
     while ( it != end )
     {
-        ::ucb::ContentImplHelperRef xChild = (*it);
+        ::ucbhelper::ContentImplHelperRef xChild = (*it);
         OUString aChildURL = xChild->getIdentifier()->getContentIdentifier();
 
         // Is aURL a prefix of aChildURL?
@@ -1109,7 +1108,7 @@ void Content::queryChildren( ContentRefList& rChildren )
                 // No further slashes / only a final slash. It's a child!
                 rChildren.push_back(
                     ContentRef(
-                        static_cast< Content * >( xChild.getBodyPtr() ) ) );
+                        static_cast< Content * >( xChild.get() ) ) );
             }
         }
         ++it;
@@ -1120,8 +1119,7 @@ void Content::queryChildren( ContentRefList& rChildren )
 void Content::insert(
         const uno::Reference< io::XInputStream > & xInputStream,
         sal_Bool bReplaceExisting,
-        const uno::Reference<
-            com::sun::star::ucb::XCommandEnvironment >& Environment )
+        const uno::Reference< ucb::XCommandEnvironment >& Environment )
     throw( uno::Exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
@@ -1134,7 +1132,7 @@ void Content::insert(
         uno::Sequence< rtl::OUString > aProps( 1 );
         aProps[ 0 ] = rtl::OUString::createFromAscii( "zzzz" );
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( star::ucb::MissingPropertiesException(
+            uno::makeAny( ucb::MissingPropertiesException(
                                 rtl::OUString(),
                                 static_cast< cppu::OWeakObject * >( this ),
                                 aProps ) ),
@@ -1147,7 +1145,7 @@ void Content::insert(
         OSL_ENSURE( sal_False, "Content::insert - No data stream!" );
 
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( star::ucb::MissingInputStreamException(
+            uno::makeAny( ucb::MissingInputStreamException(
                             rtl::OUString(),
                             static_cast< cppu::OWeakObject * >( this ) ) ),
             Environment );
@@ -1156,18 +1154,18 @@ void Content::insert(
 
     // Assemble new content identifier...
 
-    //  uno::Reference< star::ucb::XContentIdentifier > xId = ...;
+    //  uno::Reference< ucb::XContentIdentifier > xId = ...;
 
     // Fail, if a resource with given id already exists.
     if ( !bReplaceExisting ) // && hasData( m_xIdentifier ) )
     {
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( star::ucb::UnsupportedCommandException(
+            uno::makeAny( ucb::UnsupportedCommandException(
                             rtl::OUString(),
                             static_cast< cppu::OWeakObject * >( this ) ) ),
             Environment );
 //        ucbhelper::cancelCommandExecution(
-//                      star::ucb::IOErrorCode_ALREADY_EXISTING,
+//                      ucb::IOErrorCode_ALREADY_EXISTING,
 //                      Environment,
 //                      uno::makeAny(static_cast< cppu::OWeakObject * >( this ))
 //                         );
@@ -1189,7 +1187,7 @@ void Content::destroy( sal_Bool bDeletePhysical )
 {
     // @@@ take care about bDeletePhysical -> trashcan support
 
-    uno::Reference< star::ucb::XContent > xThis = this;
+    uno::Reference< ucb::XContent > xThis = this;
 
     deleted();
 
@@ -1214,7 +1212,7 @@ void Content::destroy( sal_Bool bDeletePhysical )
 // -----------------------------------------------------------------------------
 ::rtl::OUString Content::openDoc()
 {
-    OSL_ENSURE(m_aProps.isValid(),"No valid content properties!");
+    OSL_ENSURE(m_aProps.is(),"No valid content properties!");
     return ContentProvider::openDoc(m_aProps);
 }
 // -----------------------------------------------------------------------------
@@ -1234,7 +1232,7 @@ void Content::changePropertyValue(const beans::PropertyValue& _rValue,
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             // first we have to check if we could change the property inside the DMS
             ::rtl::OString sDocInfoValue = ::rtl::OUStringToOString(sNewValue,RTL_TEXTENCODING_ASCII_US);
-            WORD nDocInfo;
+            WORD nDocInfo = 0;
             if(&_rsMemberValue == &m_aProps->m_sTitle)
                 nDocInfo = ODM_TITLETEXT;
             else if(&_rsMemberValue == &m_aProps->m_sAuthor)
