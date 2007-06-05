@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:23:08 $
+ *  last change: $Author: ihi $ $Date: 2007-06-05 15:03:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,13 +322,13 @@ DialogImpl::~DialogImpl()
             UNO_QUERY_THROW );
         that->m_xDesktop->addTerminateListener( that.get() );
 
-        ::ucb::Content ucb_tdocRoot( OUSTR("vnd.sun.star.tdoc:/"), 0 );
+        ::ucbhelper::Content ucb_tdocRoot( OUSTR("vnd.sun.star.tdoc:/"), 0 );
         that->m_xTdocRoot.set( ucb_tdocRoot.get() );
 
 //         // scan for open documents:
 //         Reference<sdbc::XResultSet> xResultSet(
 //             ucb_tdocRoot.createCursor( Sequence<OUString>(),
-//                                        ::ucb::INCLUDE_FOLDERS_ONLY ) );
+//                                        ::ucbhelper::INCLUDE_FOLDERS_ONLY ) );
 //         while (xResultSet->next()) {
 //             that->contentEvent(
 //                 ContentEvent( that->m_xTdocRoot,
@@ -521,8 +521,9 @@ void DialogImpl::installExtensions()
             OUString file;
             file = m_arExtensions[ pos ];
             currentCmdEnv->progressSection(
-                ::ucb::Content( file, currentCmdEnv.get() ).getPropertyValue(
-                    OUSTR("Title") ).get<OUString>(), xAbortChannel );
+                ::ucbhelper::Content(
+                    file, currentCmdEnv.get() ).getPropertyValue(
+                        OUSTR("Title") ).get<OUString>(), xAbortChannel );
             Reference<deployment::XPackage> xPackage(
                 xPackageManager->addPackage(
                     file, OUString() /* detect media-type */,
@@ -766,7 +767,7 @@ void DialogImpl::clickAdd( USHORT )
         else
             file = files[ pos ];
         currentCmdEnv->progressSection(
-            ::ucb::Content( file, currentCmdEnv.get() ).getPropertyValue(
+            ::ucbhelper::Content( file, currentCmdEnv.get() ).getPropertyValue(
                 OUSTR("Title") ).get<OUString>(), xAbortChannel );
         try {
             Reference<deployment::XPackage> xPackage(
@@ -955,7 +956,8 @@ bool DialogImpl::solarthread_raiseExportPickers(
         }
 
         // set default selection:
-        ::ucb::Content sourceContent( xPackage->getURL(), currentCmdEnv.get() );
+        ::ucbhelper::Content sourceContent(
+            xPackage->getURL(), currentCmdEnv.get() );
         OUString defaultname(sourceContent.getPropertyValue(
                                  OUSTR("Title") ).get<OUString>());
         OUString legacyext(RTL_CONSTASCII_USTRINGPARAM(".zip"));
@@ -981,10 +983,10 @@ bool DialogImpl::solarthread_raiseExportPickers(
         Sequence<OUString> files( xFilePicker->getFiles() );
         OSL_ASSERT( files.getLength() == 1 );
         OUString const & url = files[ 0 ];
-        ::ucb::Content childContent( url, currentCmdEnv.get() );
+        ::ucbhelper::Content childContent( url, currentCmdEnv.get() );
         Reference<container::XChild> xChild( childContent.get(),
                                              UNO_QUERY_THROW );
-        ::ucb::Content destFolderContent(
+        ::ucbhelper::Content destFolderContent(
             Reference<XContent>( xChild->getParent(), UNO_QUERY_THROW ),
             currentCmdEnv.get() );
         rDestFolder = destFolderContent.getURL();
