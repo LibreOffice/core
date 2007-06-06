@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrwnd.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:30:53 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 14:21:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,11 +158,10 @@ void ImplWheelWindow::ImplSetRegion( const Bitmap& rRegionBmp )
 
 void ImplWheelWindow::ImplCreateImageList()
 {
-    Bitmap aImgBmp;
     ResMgr* pResMgr = ImplGetResMgr();
     if( pResMgr )
-        aImgBmp = Bitmap( ResId( SV_RESID_BITMAP_SCROLLBMP, *pResMgr ) );
-    maImgList = ImageList( aImgBmp, 6 );
+        maImgList.InsertFromHorizontalBitmap
+            ( ResId( SV_RESID_BITMAP_SCROLLBMP, *pResMgr ), 6, NULL );
 }
 
 // ------------------------------------------------------------------------
