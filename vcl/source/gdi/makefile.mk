@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-04 08:05:04 $
+#   last change: $Author: ihi $ $Date: 2007-06-06 14:11:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,9 +75,9 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/hatch.obj		\
             $(SLO)$/graph.obj		\
             $(SLO)$/image.obj		\
+            $(SLO)$/impimage.obj		\
             $(SLO)$/impbmp.obj		\
             $(SLO)$/impgraph.obj	\
-            $(SLO)$/impimage.obj	\
             $(SLO)$/impimagetree.obj \
             $(SLO)$/imagerepository.obj   \
             $(SLO)$/impprn.obj		\
@@ -126,6 +126,7 @@ EXCEPTIONSFILES=	$(SLO)$/outdev.obj		\
                     $(SLO)$/print2.obj		\
                     $(SLO)$/sallayout.obj		\
                     $(SLO)$/image.obj		\
+                    $(SLO)$/impimage.obj		\
                     $(SLO)$/impgraph.obj	\
                     $(SLO)$/metric.obj		\
                     $(SLO)$/pdfwriter_impl.obj	\
