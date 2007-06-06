@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 15:16:15 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 11:06:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -369,7 +369,7 @@ SwView* lcl_LoadDoc(SwView* pView, const String& rURL)
         SfxStringItem aReferer(SID_REFERER, pView->GetDocShell()->GetTitle());
         SfxObjectItem* pItem = (SfxObjectItem*)pView->GetViewFrame()->GetDispatcher()->
                 Execute(SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
-                            &aURL, &aHidden, &aReferer, &aTargetFrameName, 0);
+                            &aURL, &aHidden, &aReferer, &aTargetFrameName, 0L);
         SfxShell* pShell = pItem ? pItem->GetShell() : 0;
 
         if(pShell)
