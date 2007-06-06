@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiteratorImpl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:13:08 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 12:16:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -405,7 +405,8 @@ static ScriptTypeList typeList[] = {
     { UnicodeScript_kHebrew, UnicodeScript_kMyanmar,        ScriptType::COMPLEX },  // 10-27,
     { UnicodeScript_kGeorgian, UnicodeScript_kGeorgian,     ScriptType::LATIN },    // 28,
     { UnicodeScript_kHangulJamo, UnicodeScript_kHangulJamo, ScriptType::ASIAN },    // 29,
-    { UnicodeScript_kEthiopic, UnicodeScript_kRunic,        ScriptType::LATIN },    // 30-34,
+    { UnicodeScript_kEthiopic, UnicodeScript_kEthiopic,     ScriptType::COMPLEX },    // 30
+    { UnicodeScript_kCherokee, UnicodeScript_kRunic,        ScriptType::LATIN },    // 31-34,
     { UnicodeScript_kKhmer, UnicodeScript_kMongolian,       ScriptType::COMPLEX },  // 35-36,
     { UnicodeScript_kLatinExtendedAdditional,
       UnicodeScript_kGreekExtended,                         ScriptType::LATIN },    // 37-38,
@@ -439,6 +440,9 @@ sal_Int16  BreakIteratorImpl::getScriptClass(sal_Unicode currentChar )
             //                  0x20 & 0xA0 - Bug 102975, declare western space and non-break space as WEAK char.
             if( 1 == currentChar || 2 == currentChar || 0x20 == currentChar || 0xA0 == currentChar)
                 nRet = ScriptType::WEAK;
+            // workaround for Coptic
+            else if ( 0x2C80 <= currentChar && 0x2CE3 >= currentChar)
+                nRet = ScriptType::LATIN;
             else
                 nRet = unicode::getUnicodeScriptType( currentChar, typeList, ScriptType::WEAK );
         }
