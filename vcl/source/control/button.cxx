@@ -4,9 +4,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:36:08 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 14:21:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3115,6 +3115,31 @@ Size RadioButton::ImplGetRadioImageSize() const
     return aSize;
 }
 
+static void LoadThemedImageList (const StyleSettings &rStyleSettings,
+                                 ImageList *pList, const ResId &rResId,
+                                 USHORT nImages)
+{
+    Color pColorAry1[6];
+    Color pColorAry2[6];
+    pColorAry1[0] = Color( 0xC0, 0xC0, 0xC0 );
+    pColorAry1[1] = Color( 0xFF, 0xFF, 0x00 );
+    pColorAry1[2] = Color( 0xFF, 0xFF, 0xFF );
+    pColorAry1[3] = Color( 0x80, 0x80, 0x80 );
+    pColorAry1[4] = Color( 0x00, 0x00, 0x00 );
+    pColorAry1[5] = Color( 0x00, 0xFF, 0x00 );
+    pColorAry2[0] = rStyleSettings.GetFaceColor();
+    pColorAry2[1] = rStyleSettings.GetWindowColor();
+    pColorAry2[2] = rStyleSettings.GetLightColor();
+    pColorAry2[3] = rStyleSettings.GetShadowColor();
+    pColorAry2[4] = rStyleSettings.GetDarkShadowColor();
+    pColorAry2[5] = rStyleSettings.GetWindowTextColor();
+
+    Color aMaskColor(0x00, 0x00, 0xFF );
+    // FIXME: do we want the mask for the checkbox ?
+    pList->InsertFromHorizontalBitmap (rResId, nImages, &aMaskColor,
+                                       pColorAry1, pColorAry2, nImages);
+}
+
 Image RadioButton::GetRadioImage( const AllSettings& rSettings, USHORT nFlags )
 {
     ImplSVData*             pSVData = ImplGetSVData();
@@ -3137,10 +3162,8 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, USHORT nFlags )
         pSVData->maCtrlData.mnLastRadioWColor = rStyleSettings.GetWindowColor().GetColor();
         pSVData->maCtrlData.mnLastRadioLColor = rStyleSettings.GetLightColor().GetColor();
 
-        long    aTempAry1[(6*sizeof(Color))/sizeof(long)];
-        long    aTempAry2[(6*sizeof(Color))/sizeof(long)];
-        Color*  pColorAry1 = (Color*)aTempAry1;
-        Color*  pColorAry2 = (Color*)aTempAry2;
+        Color pColorAry1[6];
+        Color pColorAry2[6];
         pColorAry1[0] = Color( 0xC0, 0xC0, 0xC0 );
         pColorAry1[1] = Color( 0xFF, 0xFF, 0x00 );
         pColorAry1[2] = Color( 0xFF, 0xFF, 0xFF );
@@ -3155,12 +3178,12 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, USHORT nFlags )
         pColorAry2[5] = rStyleSettings.GetWindowTextColor();
 
         ResMgr* pResMgr = ImplGetResMgr();
-        Bitmap aBmp;
+        pSVData->maCtrlData.mpRadioImgList = new ImageList();
         if( pResMgr )
-            aBmp = Bitmap( ResId( SV_RESID_BITMAP_RADIO+nStyle, *pResMgr ) );
-        aBmp.Replace( pColorAry1, pColorAry2, 6, NULL );
-        pSVData->maCtrlData.mpRadioImgList = new ImageList( aBmp, Color( 0x00, 0x00, 0xFF ), 6 );
-        pSVData->maCtrlData.mnRadioStyle = nStyle;
+        LoadThemedImageList( rStyleSettings,
+                 pSVData->maCtrlData.mpRadioImgList,
+                 ResId( SV_RESID_BITMAP_RADIO+nStyle, *pResMgr ), 6 );
+    pSVData->maCtrlData.mnRadioStyle = nStyle;
     }
 
     USHORT nId;
@@ -3979,29 +4002,12 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, USHORT nFlags )
         pSVData->maCtrlData.mnLastCheckWColor = rStyleSettings.GetWindowColor().GetColor();
         pSVData->maCtrlData.mnLastCheckLColor = rStyleSettings.GetLightColor().GetColor();
 
-        long    aTempAry1[(6*sizeof(Color))/sizeof(long)];
-        long    aTempAry2[(6*sizeof(Color))/sizeof(long)];
-        Color*  pColorAry1 = (Color*)aTempAry1;
-        Color*  pColorAry2 = (Color*)aTempAry2;
-        pColorAry1[0] = Color( 0xC0, 0xC0, 0xC0 );
-        pColorAry1[1] = Color( 0xFF, 0xFF, 0x00 );
-        pColorAry1[2] = Color( 0xFF, 0xFF, 0xFF );
-        pColorAry1[3] = Color( 0x80, 0x80, 0x80 );
-        pColorAry1[4] = Color( 0x00, 0x00, 0x00 );
-        pColorAry1[5] = Color( 0x00, 0xFF, 0x00 );
-        pColorAry2[0] = rStyleSettings.GetFaceColor();
-        pColorAry2[1] = rStyleSettings.GetWindowColor();
-        pColorAry2[2] = rStyleSettings.GetLightColor();
-        pColorAry2[3] = rStyleSettings.GetShadowColor();
-        pColorAry2[4] = rStyleSettings.GetDarkShadowColor();
-        pColorAry2[5] = rStyleSettings.GetWindowTextColor();
-
         ResMgr* pResMgr = ImplGetResMgr();
-        Bitmap aBmp;
+        pSVData->maCtrlData.mpCheckImgList = new ImageList();
         if( pResMgr )
-            aBmp = Bitmap( ResId( SV_RESID_BITMAP_CHECK+nStyle, *pResMgr ) );
-        aBmp.Replace( pColorAry1, pColorAry2, 6, NULL );
-        pSVData->maCtrlData.mpCheckImgList = new ImageList( aBmp, 9 );
+        LoadThemedImageList( rStyleSettings,
+                 pSVData->maCtrlData.mpCheckImgList,
+                 ResId( SV_RESID_BITMAP_CHECK+nStyle, *pResMgr ), 9 );
         pSVData->maCtrlData.mnCheckStyle = nStyle;
     }
 
