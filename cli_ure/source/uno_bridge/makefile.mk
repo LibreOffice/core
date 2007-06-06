@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-09 13:32:11 $
+#   last change: $Author: ihi $ $Date: 2007-06-06 10:58:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@ USE_DEFFILE = TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 .IF "$(COM)$(COMEX)" == "MSC11" || "$(COM)$(COMEX)" == "MSC10"
 
