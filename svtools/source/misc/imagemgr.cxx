@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:26:44 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 14:03:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -685,18 +685,20 @@ static Image GetOfficeImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHigh
         }
     }
 
+    Image aImage = pList->GetImage( nImageId );
+
     if ( bBlackAndWhite )
     {
         // First invert the Image, because it's designed for black background, structures are bright
-        pList->Invert();
+        aImage.Invert();
         // Now make monochrome...
         ImageColorTransform eTrans = IMAGECOLORTRANSFORM_MONOCHROME_WHITE;
         if ( Application::GetSettings().GetStyleSettings().GetFaceColor().GetColor() == COL_WHITE )
             eTrans = IMAGECOLORTRANSFORM_MONOCHROME_BLACK;
-        *pList = pList->GetColorTransformedImageList( eTrans );
+        aImage = aImage.GetColorTransformedImage( eTrans );
     }
 
-    return pList->GetImage( nImageId );
+    return aImage;
 }
 
 static Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContrast )
@@ -743,7 +745,7 @@ static Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContra
         }
     }
 
-    if ( pList->GetImagePos( nImageId ) != IMAGELIST_IMAGE_NOTFOUND )
+    if ( pList->HasImageAtPos( nImageId ) )
         return pList->GetImage( nImageId );
     else
         return GetOfficeImageFromList_Impl( nImageId, bBig, bHighContrast );
