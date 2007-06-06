@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:14:35 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 14:05:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,7 +277,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const :
                         }
                         else
                         {
-                            aBmpEx = aImageList.GetBitmapEx();
+                            aBmpEx = aImageList.GetAsHorizontalStrip();
                         }
                     }
                 }
