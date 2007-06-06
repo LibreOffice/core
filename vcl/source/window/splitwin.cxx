@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:31:06 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 14:22:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1969,26 +1969,32 @@ void SplitWindow::ImplDrawAutoHide( BOOL bInPaint )
         {
             if ( !pSVData->maCtrlData.mpSplitHPinImgList )
             {
-                Bitmap aBmp;
                 ResMgr* pResMgr = ImplGetResMgr();
                 if( pResMgr )
-                    aBmp = Bitmap( ResId( SV_RESID_BITMAP_SPLITHPIN, *pResMgr ) );
-                pSVData->maCtrlData.mpSplitHPinImgList = new ImageList( aBmp, Color( 0x00, 0x00, 0xFF ), 4 );
-            }
+                {
+                    Color aNonAlphaMask( 0x00, 0x00, 0xFF );
+                    pSVData->maCtrlData.mpSplitHPinImgList = new ImageList(4);
+                    pSVData->maCtrlData.mpSplitHPinImgList->InsertFromHorizontalBitmap
+                        ( ResId( SV_RESID_BITMAP_SPLITHPIN, *pResMgr ), 4, &aNonAlphaMask );
+                }
+                }
             pImageList = pSVData->maCtrlData.mpSplitHPinImgList;
         }
         else
         {
             if ( !pSVData->maCtrlData.mpSplitVPinImgList )
             {
-                Bitmap aBmp;
                 ResMgr* pResMgr = ImplGetResMgr();
+                pSVData->maCtrlData.mpSplitVPinImgList = new ImageList(4);
                 if( pResMgr )
-                    aBmp = Bitmap( ResId( SV_RESID_BITMAP_SPLITVPIN, *pResMgr ) );
-                pSVData->maCtrlData.mpSplitVPinImgList = new ImageList( aBmp, Color( 0x00, 0x00, 0xFF ), 4 );
+                {
+                    Color aNonAlphaMask( 0x00, 0x00, 0xFF );
+                    pSVData->maCtrlData.mpSplitVPinImgList->InsertFromHorizontalBitmap
+                        ( ResId( SV_RESID_BITMAP_SPLITVPIN, *pResMgr ), 4, &aNonAlphaMask );
+                }
             }
             pImageList = pSVData->maCtrlData.mpSplitVPinImgList;
-        }
+                }
 
         // Image ermitteln und zurueckgeben
         USHORT nId;
