@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapex.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:47:59 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 14:10:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,7 @@ public:
                         BitmapEx();
                         BitmapEx( const ResId& rResId );
                         BitmapEx( const BitmapEx& rBitmapEx );
+                        BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize );
                         BitmapEx( const Bitmap& rBmp );
                         BitmapEx( const Bitmap& rBmp, const Bitmap& rMask );
                         BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask );

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:56:38 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 14:10:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,38 +137,23 @@ public:
                                const ::rtl::OUString& rPrefix,
                                const Color* pMaskColor = NULL );
                     ImageList( const ImageList& rImageList );
-                    ImageList( const BitmapEx& rBitmapEx,
-                               USHORT nInitSize,
-                               USHORT* pIdAry = NULL,
-                               USHORT nGrow = 4 );
-                    ImageList( const BitmapEx& rBitmapEx,
-                               const ::std::vector< ::rtl::OUString >& rNameVector,
-                               USHORT nGrow = 4 );
-
-                    ImageList( const Bitmap& rBitmap,
-                               USHORT nInitSize, USHORT* pIdAry = NULL,
-                               USHORT nGrow = 4 );
-                    ImageList( const Bitmap& rBitmap, const Bitmap& rMaskBmp,
-                               USHORT nInitSize, USHORT* pIdAry = NULL,
-                               USHORT nGrow = 4 );
-                    ImageList( const Bitmap& rBitmap, const Color& rColor,
-                               USHORT nInitSize, USHORT* pIdAry = NULL,
-                               USHORT nGrow = 4 );
                     ~ImageList();
 
-    void            Clear();
-
+    void                Clear();
+    void                    InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
+                                   const std::vector< rtl::OUString > &rNameVector );
+    void                    InsertFromHorizontalBitmap( const ResId& rResId,
+                                    USHORT       nCount,
+                                    const Color *pNonAlphaMaskColor,
+                                    const Color *pSearchColors = NULL,
+                                    const Color *pReplaceColors = NULL,
+                                    ULONG        nColorCount = 0);
+    BitmapEx        GetAsHorizontalStrip() const;
     USHORT          GetImageCount() const;
     Size            GetImageSize() const;
-    BitmapEx        GetBitmapEx() const;
-    ImageList       GetColorTransformedImageList( ImageColorTransform eColorTransform ) const;
-       void            Invert();
 
     void            AddImage( USHORT nNewId, const Image& rImage );
     void            AddImage( const ::rtl::OUString& rImageName, const Image& rImage );
-
-    void            CopyImage( USHORT nNewId, USHORT nCopyId );
-    void            CopyImage( const ::rtl::OUString& rImageName, const ::rtl::OUString& rCopyName );
 
     void            ReplaceImage( USHORT nId, const Image& rImage );
     void            ReplaceImage( const ::rtl::OUString& rImageName, const Image& rImage );
@@ -183,6 +168,7 @@ public:
     Image           GetImage( const ::rtl::OUString& rImageName ) const;
 
     USHORT          GetImagePos( USHORT nId ) const;
+    bool            HasImageAtPos( USHORT nId ) const;
     USHORT          GetImagePos( const ::rtl::OUString& rImageName ) const;
 
     USHORT          GetImageId( USHORT nPos ) const;
@@ -195,9 +181,6 @@ public:
     BOOL            operator==( const ImageList& rImageList ) const;
     BOOL            operator!=( const ImageList& rImageList ) const { return !(ImageList::operator==( rImageList )); }
 
-    friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStream, ImageList& rImageList );
-    friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStream, const ImageList& rImageList );
-
 private:
 
     ImplImageList*  mpImplData;
@@ -209,7 +192,7 @@ private:
                                              const ::rtl::OUString& rSymbolsStyle,
                                              BitmapEx& rBmpEx,
                                              const Color* pMaskColor ) const;
-    SAL_DLLPRIVATE void    ImplInit( const BitmapEx& rBitmapEx, USHORT nInit, const USHORT* pIdAry, const ::std::vector< ::rtl::OUString >* pNames, USHORT nGrow );
+    SAL_DLLPRIVATE void    ImplInit( USHORT nItems, const Size &rSize );
     SAL_DLLPRIVATE USHORT  ImplGetImageId( const ::rtl::OUString& rImageName ) const;
     SAL_DLLPRIVATE void    ImplMakeUnique();
 };
