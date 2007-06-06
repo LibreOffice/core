@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:22:48 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 11:07:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2934,7 +2934,7 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
                         SwPtrItem aPtrItem( FN_INSERT_MULTI_TOX, (void*)pBase);
                         pActiveShell->GetView().GetViewFrame()->
                             GetDispatcher()->Execute(FN_INSERT_MULTI_TOX,
-                                            SFX_CALLMODE_ASYNCHRON, &aPtrItem, 0);
+                                            SFX_CALLMODE_ASYNCHRON, &aPtrItem, 0L);
 
                     }
                 break;
