@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convdicxml.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:21:21 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 10:48:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,7 +295,7 @@ SvXMLImportContext * ConvDicXMLImportContext::CreateChildContext(
 ////////////////////////////////////////
 
 void ConvDicXMLDictionaryContext_Impl::StartElement(
-    const Reference< xml::sax::XAttributeList > &rxAttrList )
+    const uno::Reference< xml::sax::XAttributeList > &rxAttrList )
 {
     sal_Int16 nAttrCount = rxAttrList.is() ? rxAttrList->getLength() : 0;
     for (sal_Int16 i = 0;  i < nAttrCount;  ++i)
@@ -347,7 +347,7 @@ SvXMLImportContext * ConvDicXMLEntryTextContext_Impl::CreateChildContext(
 }
 
 void ConvDicXMLEntryTextContext_Impl::StartElement(
-        const Reference< xml::sax::XAttributeList >& rxAttrList )
+        const uno::Reference< xml::sax::XAttributeList >& rxAttrList )
 {
     sal_Int16 nAttrCount = rxAttrList.is() ? rxAttrList->getLength() : 0;
     for (sal_Int16 i = 0;  i < nAttrCount;  ++i)
@@ -395,8 +395,8 @@ sal_Bool ConvDicXMLExport::Export( SfxMedium & /*rMedium*/ )
 {
     sal_Bool bRet = sal_False;
 
-    Reference< document::XExporter > xExporter( this );
-    Reference< document::XFilter > xFilter( xExporter, UNO_QUERY );
+    uno::Reference< document::XExporter > xExporter( this );
+    uno::Reference< document::XFilter > xFilter( xExporter, UNO_QUERY );
     uno::Sequence< beans::PropertyValue > aProps(0);
     xFilter->filter( aProps );      // calls exportDoc implicitly
 
