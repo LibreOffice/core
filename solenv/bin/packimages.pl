@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: packimages.pl,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2006-11-08 12:06:33 $
+#   last change: $Author: ihi $ $Date: 2007-06-06 14:04:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,7 @@ my $out_file;                # path to output archive
 my $tmp_out_file;            # path to temporary output file
 my $global_path;             # path to global images directory
 my $module_path;             # path to module images directory
+my $sort_file;               # path to file containing sorting data
 my @custom_path;             # path to custom images directory
 my @imagelist_path;          # pathes to directories containing the image lists
 my $verbose;                 # be verbose
@@ -67,7 +68,7 @@ my @custom_list;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.15 $ ';
+my $id_str = ' $Revision: 1.16 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -109,6 +110,7 @@ sub parse_options
                              '-h' => \$opt_help,
                              '-o=s' => \$out_file,
                              '-g=s' => \$global_path,
+                 '-s=s' => \$sort_file,
                              '-m=s' => \$module_path,
                              '-c=s' => \@custom_path_list,
                              '-e=s' => \$custom_path_extended,
@@ -313,6 +315,43 @@ sub is_file_newer
     return 0;
 }
 
+sub optimize_zip_layout($)
+{
+    my $zip_hash_ref = shift;
+
+    if (!defined $sort_file) {
+    print_message("no sort file - sorting alphabetically ...") if $verbose;
+    return sort keys %{$zip_hash_ref};
+    }
+    print_message("sorting from $sort_file ...") if $verbose;
+
+    my $orderh;
+    my %included;
+    my @sorted;
+    open ($orderh, $sort_file) || die "Can't open $sort_file: $!";
+    while (<$orderh>) {
+    /^\#.*/ && next; # comments
+    s/[\r\n]*$//;
+    /^\s*$/ && next;
+    my $file = $_;
+    if (!defined $zip_hash_ref->{$file}) {
+        print "unknown file '$file'\n" if ($extra_verbose);
+    } else {
+        push @sorted, $file;
+        $included{$file} = 1;
+    }
+    }
+    close ($orderh);
+
+    for my $img (sort keys %{$zip_hash_ref}) {
+    push @sorted, $img if (!$included{$img});
+    }
+
+    print_message("done sort ...") if $verbose;
+
+    return @sorted;
+}
+
 sub create_zip_archive
 {
     my $zip_hash_ref = shift;
@@ -320,10 +359,13 @@ sub create_zip_archive
     print_message("creating image archive ...") if $verbose;
     my $zip = Archive::Zip->new();
 
-    foreach ( sort keys %{$zip_hash_ref} ) {
+# FIXME: test - $member = addfile ... $member->desiredCompressionMethod( COMPRESSION_STORED );
+# any measurable performance win/loss ?
+    foreach ( optimize_zip_layout($zip_hash_ref) ) {
         my $path = $zip_hash_ref->{$_} . "/$_";
         print_message("zipping '$path' ...") if $extra_verbose;
-        if ( !$zip->addFile($path, $_) ) {
+        my $member = $zip->addFile($path, $_);
+        if ( !$member ) {
             print_error("can't add file '$path' to image zip archive: $!", 5);
         }
     }
@@ -363,6 +405,7 @@ sub usage
     print STDERR "    -g g_path          path to global images directory\n";
     print STDERR "    -m m_path          path to module images directory\n";
     print STDERR "    -c c_path          path to custom images directory\n";
+    print STDERR "    -s sort_file       path to image sort order file\n";
     print STDERR "    -l imagelist_path  path to directory containing image lists (may appear mutiple times)\n";
     print STDERR "    -v                 verbose\n";
     print STDERR "    -vv                very verbose\n";
