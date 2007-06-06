@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodispatch.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:44:50 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 11:07:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -286,7 +286,7 @@ void SwXDispatch::dispatch(
         m_pView->GetViewFrame()->GetDispatcher()->Execute(
             FN_MAILMERGE_WIZARD,
             SFX_CALLMODE_ASYNCHRON,
-            &aDBProperties, 0);
+            &aDBProperties, 0L);
 //      pNewDBMgr->ExecuteFormLetter(rSh, aArgs);
     }
     else if(!aURL.Complete.compareToAscii(cURLDocumentDataSource))
