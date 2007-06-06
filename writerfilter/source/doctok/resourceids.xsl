@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourceids.xsl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-12-01 10:34:12 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-06 10:25:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,9 +52,9 @@
  *
  *  $RCSfile: resourceids.xsl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-12-01 10:34:12 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-06 10:25:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,13 +97,14 @@ using namespace ::std;
 
 namespace NS_rtf {
 
-/* Attributes */&#xa;</xsl:text>
+/* Attributes */</xsl:text>
       <xsl:for-each select='.//UML:Attribute[@name!="reserved"][count(.//UML:Stereotype[@xmi.idref="noqname"]) = 0]//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="attrid"]'>
         <xsl:choose>
           <xsl:when test='generate-id(UML:TaggedValue.dataValue) != generate-id(key("same-valued-tagged-data", UML:TaggedValue.dataValue)[1])'/>
           <!-- <xsl:when test='.//UML:TaggedValue.dataValue = preceding::*//UML:TaggedValue.dataValue'/>-->
           <xsl:otherwise>
-            <xsl:text>const QName_t </xsl:text>
+            <xsl:text>
+const QName_t </xsl:text>
             <xsl:call-template name='idtoqname'>
               <xsl:with-param name='id'><xsl:value-of select='.//UML:TaggedValue.dataValue'/></xsl:with-param>
             </xsl:call-template>
@@ -113,18 +114,18 @@ namespace NS_rtf {
             <xsl:call-template name="dectohex">
               <xsl:with-param name="number" select="10000 + position()"/>
             </xsl:call-template>
-            <xsl:text>&#xa;</xsl:text>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:for-each>
       <xsl:text>
 
-/* Operations */&#xa;</xsl:text>
+/* Operations */</xsl:text>
       <xsl:for-each select='.//UML:Operation[@name!="reserved"][count(.//UML:Stereotype[@xmi.idref="noqname"]) = 0]//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="opid"]'>
         <xsl:choose>
           <xsl:when test='generate-id(UML:TaggedValue.dataValue) != generate-id(key("same-valued-tagged-data", UML:TaggedValue.dataValue)[1])'/>
           <xsl:otherwise>
-            <xsl:text>const QName_t </xsl:text>
+            <xsl:text>
+const QName_t </xsl:text>
             <xsl:call-template name='idtoqname'>
               <xsl:with-param name='id'><xsl:value-of select='.//UML:TaggedValue.dataValue'/></xsl:with-param>
             </xsl:call-template>
@@ -134,19 +135,19 @@ namespace NS_rtf {
             <xsl:call-template name="dectohex">
               <xsl:with-param name="number" select="20000 + position()"/>
             </xsl:call-template>
-            <xsl:text>&#xa;</xsl:text>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:for-each>
       <xsl:text>
 
-/* Classes */&#xa;</xsl:text>
+/* Classes */</xsl:text>
       <xsl:for-each select='.//UML:Class[@name!="reserved"]//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="classid"]'>
         <xsl:choose>
           <xsl:when test='.//UML:Stereotype[@xmi.idref="noqname"]'/>
           <xsl:when test='generate-id(UML:TaggedValue.dataValue) != generate-id(key("same-valued-tagged-data", UML:TaggedValue.dataValue)[1])'/>
           <xsl:otherwise>
-            <xsl:text>const QName_t </xsl:text>
+            <xsl:text>
+const QName_t </xsl:text>
             <xsl:call-template name='idtoqname'>
               <xsl:with-param name='id'><xsl:value-of select='.//UML:TaggedValue.dataValue'/></xsl:with-param>
             </xsl:call-template>
@@ -156,7 +157,6 @@ namespace NS_rtf {
             <xsl:call-template name="dectohex">
               <xsl:with-param name="number" select="30000 + position()"/>
             </xsl:call-template>
-            <xsl:text>&#xa;</xsl:text>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:for-each>
@@ -164,28 +164,27 @@ namespace NS_rtf {
 }
 
 namespace NS_dff
-{
-      </xsl:text>
-      <xsl:for-each select='.//UML:Class[.//UML:Stereotype/@xmi.idref="dffopt"]'>
-        <xsl:variable name ="optname">
-          <xsl:value-of select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="optname"]/UML:TaggedValue.dataValue'/>
-        </xsl:variable>
-        <xsl:variable name="fopid">          
-          <xsl:value-of select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="fopid"]/UML:TaggedValue.dataValue'/>
-        </xsl:variable>
-        <xsl:text>const QName_t </xsl:text>
-        <xsl:call-template name="idtoqname">
-          <xsl:with-param name="id"><xsl:value-of select="$optname"/></xsl:with-param>
-        </xsl:call-template>
-        <xsl:text> = </xsl:text>
-        <xsl:value-of select="$fopid"/>
-        <xsl:text>; // 0x</xsl:text>
-        <xsl:call-template name="dectohex">
-          <xsl:with-param name="number" select="$fopid"/>
-        </xsl:call-template>
-        <xsl:text>&#xa;</xsl:text>
-      </xsl:for-each>
-      <xsl:text>
+{</xsl:text>
+<xsl:for-each select='.//UML:Class[.//UML:Stereotype/@xmi.idref="dffopt"]'>
+  <xsl:variable name ="optname">
+    <xsl:value-of select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="optname"]/UML:TaggedValue.dataValue'/>
+  </xsl:variable>
+  <xsl:variable name="fopid">          
+    <xsl:value-of select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="fopid"]/UML:TaggedValue.dataValue'/>
+  </xsl:variable>
+  <xsl:text>
+const QName_t </xsl:text>
+  <xsl:call-template name="idtoqname">
+    <xsl:with-param name="id"><xsl:value-of select="$optname"/></xsl:with-param>
+  </xsl:call-template>
+  <xsl:text> = </xsl:text>
+  <xsl:value-of select="$fopid"/>
+  <xsl:text>; // 0x</xsl:text>
+  <xsl:call-template name="dectohex">
+    <xsl:with-param name="number" select="$fopid"/>
+  </xsl:call-template>
+</xsl:for-each>
+<xsl:text>
 }
 
 }
