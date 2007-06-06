@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msgbox.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:30:28 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 14:21:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,15 +87,13 @@ static void ImplInitMsgBoxImageList()
     {
         BitmapEx aBmpEx;
         ResMgr* pResMgr = ImplGetResMgr();
+        pSVData->maWinData.mpMsgBoxImgList = new ImageList(4);
         if( pResMgr )
         {
-            aBmpEx = BitmapEx( ResId( SV_RESID_BITMAP_MSGBOX, *pResMgr ) );
-
-            if( !aBmpEx.IsTransparent() )
-                aBmpEx = BitmapEx( aBmpEx.GetBitmap(), Color( 0xC0, 0xC0, 0xC0 ) );
-        }
-
-        pSVData->maWinData.mpMsgBoxImgList = new ImageList( aBmpEx, 4 );
+            Color aNonAlphaMask( 0xC0, 0xC0, 0xC0 );
+            pSVData->maWinData.mpMsgBoxImgList->InsertFromHorizontalBitmap
+                ( ResId( SV_RESID_BITMAP_MSGBOX, *pResMgr ), 4, &aNonAlphaMask );
+    }
     }
 }
 
