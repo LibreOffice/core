@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drformsh.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:13:47 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 11:06:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,7 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
                         rView.StopShellTimer();
                         //issue a new command to insert the link
                         rView.GetViewFrame()->GetDispatcher()->Execute(
-                                SID_HYPERLINK_SETLINK, SFX_CALLMODE_ASYNCHRON, &rHLinkItem, 0);
+                                SID_HYPERLINK_SETLINK, SFX_CALLMODE_ASYNCHRON, &rHLinkItem, 0L);
                     }
                     else
                     {
