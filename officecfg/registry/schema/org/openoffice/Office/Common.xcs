@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-04 14:50:46 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 14:04:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1260,7 +1260,7 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 						<desc>Specifies the maximum cache size for all graphical display objects.</desc>
 						<label>Total Graphic Cache Size</label>
 					</info>
-					<value>10240000</value>
+					<value>22000000</value>
 				</prop>
 				<prop oor:name="ObjectCacheSize" oor:type="xs:int">
 					<info>
@@ -1268,7 +1268,7 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 						<desc>Specifies the maximum cache size for a single graphic display object.</desc>
 						<label>Graphic Object Cache Size</label>
 					</info>
-					<value>2560000</value>
+					<value>5500000</value>
 				</prop>
 				<prop oor:name="ObjectReleaseTime" oor:type="xs:int">
 					<info>
@@ -4810,7 +4810,8 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					</prop>
 				</group>
 			</group>
-			<group oor:name="PDF">
+			
+            <group oor:name="PDF">
 				<info>
 					<author>KA</author>
 					<desc>Specifies default settings of PDF export dialog.</desc>
