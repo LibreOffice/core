@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-25 09:54:42 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 12:17:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,7 +229,7 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::previousCharacters( const OUString& Te
 Boundary SAL_CALL BreakIterator_Unicode::nextWord( const OUString& Text, sal_Int32 nStartPos,
     const lang::Locale& rLocale, sal_Int16 rWordType ) throw(uno::RuntimeException)
 {
-        loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, wordRule, Text);
+        loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, NULL, Text);
 
         result.startPos = word.aBreakIterator->following(nStartPos);
         if( result.startPos >= Text.getLength() || result.startPos == BreakIterator::DONE )
@@ -251,7 +251,7 @@ Boundary SAL_CALL BreakIterator_Unicode::nextWord( const OUString& Text, sal_Int
 Boundary SAL_CALL BreakIterator_Unicode::previousWord(const OUString& Text, sal_Int32 nStartPos,
         const lang::Locale& rLocale, sal_Int16 rWordType) throw(uno::RuntimeException)
 {
-        loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, wordRule, Text);
+        loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, NULL, Text);
 
         result.startPos = word.aBreakIterator->preceding(nStartPos);
         if( result.startPos < 0 || result.startPos == BreakIterator::DONE)
@@ -273,7 +273,7 @@ Boundary SAL_CALL BreakIterator_Unicode::previousWord(const OUString& Text, sal_
 Boundary SAL_CALL BreakIterator_Unicode::getWordBoundary( const OUString& Text, sal_Int32 nPos, const lang::Locale& rLocale,
         sal_Int16 rWordType, sal_Bool bDirection ) throw(uno::RuntimeException)
 {
-        loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, wordRule, Text);
+        loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, NULL, Text);
         sal_Int32 len = Text.getLength();
 
         if(word.aBreakIterator->isBoundary(nPos)) {
