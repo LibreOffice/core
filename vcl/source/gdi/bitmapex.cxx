@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapex.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 14:20:41 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 14:10:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,28 @@ BitmapEx::BitmapEx( const BitmapEx& rBitmapEx ) :
         eTransparent        ( rBitmapEx.eTransparent ),
         bAlpha              ( rBitmapEx.bAlpha )
 {
+}
+
+BitmapEx::BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize ) :
+        eTransparent( TRANSPARENT_NONE ),
+        bAlpha      ( FALSE )
+{
+    if( rBitmapEx.IsEmpty() )
+        return;
+
+    aBitmap = Bitmap( aSize, rBitmapEx.aBitmap.GetBitCount() );
+    aBitmapSize = aSize;
+    if( rBitmapEx.IsAlpha() )
+    {
+        bAlpha = TRUE;
+        aMask = AlphaMask( aSize ).ImplGetBitmap();
+    }
+    else if( rBitmapEx.IsTransparent() )
+        aMask = Bitmap( aSize, rBitmapEx.aMask.GetBitCount() );
+
+    Rectangle aDestRect( Point( 0, 0 ), aSize );
+    Rectangle aSrcRect( aSrc, aSize );
+    CopyPixel( aDestRect, aSrcRect, &rBitmapEx );
 }
 
 // ------------------------------------------------------------------
