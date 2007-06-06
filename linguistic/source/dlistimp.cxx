@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlistimp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:22:14 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 10:49:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,9 +95,9 @@ SV_IMPL_OBJARR(ActDicArray, ActDic);
 
 static BOOL IsVers2OrNewer( const String& rFileURL, USHORT& nLng, BOOL& bNeg );
 
-static void AddInternal( const Reference< XDictionary > &rDic,
+static void AddInternal( const uno::Reference< XDictionary > &rDic,
                          const OUString& rNew );
-static void AddUserData( const Reference< XDictionary > &rDic );
+static void AddUserData( const uno::Reference< XDictionary > &rDic );
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -109,14 +109,14 @@ class DicEvtListenerHelper :
 {
     cppu::OInterfaceContainerHelper     aDicListEvtListeners;
     Sequence< DictionaryEvent >         aCollectDicEvt;
-    Reference< XDictionaryList >        xMyDicList;
+    uno::Reference< XDictionaryList >       xMyDicList;
 
     INT16                               nCondensedEvt;
     INT16                               nNumCollectEvtListeners,
                                          nNumVerboseListeners;
 
 public:
-    DicEvtListenerHelper( const Reference< XDictionaryList > &rxDicList );
+    DicEvtListenerHelper( const uno::Reference< XDictionaryList > &rxDicList );
     virtual ~DicEvtListenerHelper();
 
     // XEventListener
@@ -133,10 +133,10 @@ public:
     void    DisposeAndClear( const EventObject &rEvtObj );
 
     BOOL    AddDicListEvtListener(
-                const Reference< XDictionaryListEventListener >& rxListener,
+                const uno::Reference< XDictionaryListEventListener >& rxListener,
                 BOOL bReceiveVerbose );
     BOOL    RemoveDicListEvtListener(
-                const Reference< XDictionaryListEventListener >& rxListener );
+                const uno::Reference< XDictionaryListEventListener >& rxListener );
     INT16   BeginCollectEvents();
     INT16   EndCollectEvents();
     INT16   FlushEvents();
@@ -145,7 +145,7 @@ public:
 
 
 DicEvtListenerHelper::DicEvtListenerHelper(
-        const Reference< XDictionaryList > &rxDicList ) :
+        const uno::Reference< XDictionaryList > &rxDicList ) :
     aDicListEvtListeners    ( GetLinguMutex() ),
     xMyDicList              ( rxDicList )
 {
@@ -172,7 +172,7 @@ void SAL_CALL DicEvtListenerHelper::disposing( const EventObject& rSource )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    Reference< XInterface > xSrc( rSource.Source );
+    uno::Reference< XInterface > xSrc( rSource.Source );
 
     // remove event object from EventListener list
     if (xSrc.is())
@@ -181,7 +181,7 @@ void SAL_CALL DicEvtListenerHelper::disposing( const EventObject& rSource )
     // if object is a dictionary then remove it from the dictionary list
     // Note: this will probably happen only if someone makes a XDictionary
     // implementation of his own that is also a XComponent.
-    Reference< XDictionary > xDic( xSrc, UNO_QUERY );
+    uno::Reference< XDictionary > xDic( xSrc, UNO_QUERY );
     if (xDic.is())
     {
         xMyDicList->removeDictionary( xDic );
@@ -195,12 +195,12 @@ void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    Reference< XDictionary > xDic( rDicEvent.Source, UNO_QUERY );
+    uno::Reference< XDictionary > xDic( rDicEvent.Source, UNO_QUERY );
     DBG_ASSERT(xDic.is(), "lng : missing event source");
 
     // assert that there is a corresponding dictionary entry if one was
     // added or deleted
-    Reference< XDictionaryEntry > xDicEntry( rDicEvent.xDictionaryEntry, UNO_QUERY );
+    uno::Reference< XDictionaryEntry > xDicEntry( rDicEvent.xDictionaryEntry, UNO_QUERY );
     DBG_ASSERT( !(rDicEvent.nEvent &
                     (DictionaryEventFlags::ADD_ENTRY | DictionaryEventFlags::DEL_ENTRY))
                 || xDicEntry.is(),
@@ -254,7 +254,7 @@ void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
 
 
 BOOL DicEvtListenerHelper::AddDicListEvtListener(
-            const Reference< XDictionaryListEventListener >& xListener,
+            const uno::Reference< XDictionaryListEventListener >& xListener,
             BOOL /*bReceiveVerbose*/ )
 {
     DBG_ASSERT( xListener.is(), "empty reference" );
@@ -264,7 +264,7 @@ BOOL DicEvtListenerHelper::AddDicListEvtListener(
 
 
 BOOL DicEvtListenerHelper::RemoveDicListEvtListener(
-            const Reference< XDictionaryListEventListener >& xListener )
+            const uno::Reference< XDictionaryListEventListener >& xListener )
 {
     DBG_ASSERT( xListener.is(), "empty reference" );
     INT32   nCount = aDicListEvtListeners.getLength();
@@ -305,7 +305,7 @@ INT16 DicEvtListenerHelper::FlushEvents()
         cppu::OInterfaceIteratorHelper aIt( aDicListEvtListeners );
         while (aIt.hasMoreElements())
         {
-            Reference< XDictionaryListEventListener > xRef( aIt.next(), UNO_QUERY );
+            uno::Reference< XDictionaryListEventListener > xRef( aIt.next(), UNO_QUERY );
             if (xRef.is())
                 xRef->processDictionaryListEvent( aEvent );
         }
@@ -408,7 +408,7 @@ void DicList::searchForDictionaries( ActDicArray &rDicList,
                         RTL_TEXTENCODING_UTF8 );
 
             DictionaryType eType = bNeg ? DictionaryType_NEGATIVE : DictionaryType_POSITIVE;
-            Reference< XDictionary > xDic =
+            uno::Reference< XDictionary > xDic =
                         new DictionaryNeo( aDicName, nLang, eType, aURL );
 
             addDictionary( xDic );
@@ -418,7 +418,7 @@ void DicList::searchForDictionaries( ActDicArray &rDicList,
 }
 
 
-INT32 DicList::getDicPos(const Reference< XDictionary > &xDic)
+INT32 DicList::getDicPos(const uno::Reference< XDictionary > &xDic)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -434,11 +434,11 @@ INT32 DicList::getDicPos(const Reference< XDictionary > &xDic)
 }
 
 
-Reference< XInterface > SAL_CALL
-    DicList_CreateInstance( const Reference< XMultiServiceFactory > & /*rSMgr*/ )
+uno::Reference< XInterface > SAL_CALL
+    DicList_CreateInstance( const uno::Reference< XMultiServiceFactory > & /*rSMgr*/ )
             throw(Exception)
 {
-    Reference< XInterface > xService = (cppu::OWeakObject *) new DicList;
+    uno::Reference< XInterface > xService = (cppu::OWeakObject *) new DicList;
     return xService;
 }
 
@@ -448,7 +448,7 @@ sal_Int16 SAL_CALL DicList::getCount() throw(RuntimeException)
     return GetDicList().Count();
 }
 
-uno::Sequence< Reference< XDictionary > > SAL_CALL
+uno::Sequence< uno::Reference< XDictionary > > SAL_CALL
         DicList::getDictionaries()
             throw(RuntimeException)
 {
@@ -456,8 +456,8 @@ uno::Sequence< Reference< XDictionary > > SAL_CALL
 
     ActDicArray& rDicList = GetDicList();
 
-    uno::Sequence< Reference< XDictionary > > aDics( rDicList.Count() );
-    Reference< XDictionary > *pDic = aDics.getArray();
+    uno::Sequence< uno::Reference< XDictionary > > aDics( rDicList.Count() );
+    uno::Reference< XDictionary > *pDic = aDics.getArray();
 
     USHORT n = (USHORT) aDics.getLength();
     for (USHORT i = 0;  i < n;  i++)
@@ -466,18 +466,18 @@ uno::Sequence< Reference< XDictionary > > SAL_CALL
     return aDics;
 }
 
-Reference< XDictionary > SAL_CALL
+uno::Reference< XDictionary > SAL_CALL
         DicList::getDictionaryByName( const OUString& aDictionaryName )
             throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    Reference< XDictionary > xDic;
+    uno::Reference< XDictionary > xDic;
     ActDicArray& rDicList = GetDicList();
     USHORT nCount = rDicList.Count();
     for (USHORT i = 0;  i < nCount;  i++)
     {
-        const Reference< XDictionary > &rDic = rDicList.GetObject(i).xDic;
+        const uno::Reference< XDictionary > &rDic = rDicList.GetObject(i).xDic;
         if (rDic.is()  &&  rDic->getName() == aDictionaryName)
         {
             xDic = rDic;
@@ -489,7 +489,7 @@ Reference< XDictionary > SAL_CALL
 }
 
 sal_Bool SAL_CALL DicList::addDictionary(
-            const Reference< XDictionary >& xDictionary )
+            const uno::Reference< XDictionary >& xDictionary )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -511,7 +511,7 @@ sal_Bool SAL_CALL DicList::addDictionary(
 }
 
 sal_Bool SAL_CALL
-    DicList::removeDictionary( const Reference< XDictionary >& xDictionary )
+    DicList::removeDictionary( const uno::Reference< XDictionary >& xDictionary )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -525,7 +525,7 @@ sal_Bool SAL_CALL
     {
         // remove dictionary list from the dictionaries listener lists
         ActDicArray& rDicList = GetDicList();
-        Reference< XDictionary > xDic( rDicList.GetObject( (USHORT) nPos ).xDic );
+        uno::Reference< XDictionary > xDic( rDicList.GetObject( (USHORT) nPos ).xDic );
         DBG_ASSERT(xDic.is(), "lng : empty reference");
         if (xDic.is())
         {
@@ -542,7 +542,7 @@ sal_Bool SAL_CALL
 }
 
 sal_Bool SAL_CALL DicList::addDictionaryListEventListener(
-            const Reference< XDictionaryListEventListener >& xListener,
+            const uno::Reference< XDictionaryListEventListener >& xListener,
             sal_Bool bReceiveVerbose )
         throw(RuntimeException)
 {
@@ -563,7 +563,7 @@ sal_Bool SAL_CALL DicList::addDictionaryListEventListener(
 }
 
 sal_Bool SAL_CALL DicList::removeDictionaryListEventListener(
-            const Reference< XDictionaryListEventListener >& xListener )
+            const uno::Reference< XDictionaryListEventListener >& xListener )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -597,7 +597,7 @@ sal_Int16 SAL_CALL DicList::flushEvents() throw(RuntimeException)
     return pDicEvtLstnrHelper->FlushEvents();
 }
 
-Reference< XDictionary > SAL_CALL
+uno::Reference< XDictionary > SAL_CALL
     DicList::createDictionary( const OUString& rName, const Locale& rLocale,
             DictionaryType eDicType, const OUString& rURL )
         throw(RuntimeException)
@@ -609,7 +609,7 @@ Reference< XDictionary > SAL_CALL
 }
 
 
-Reference< XDictionaryEntry > SAL_CALL
+uno::Reference< XDictionaryEntry > SAL_CALL
     DicList::queryDictionaryEntry( const OUString& rWord, const Locale& rLocale,
             sal_Bool bSearchPosDics, sal_Bool bSearchSpellEntry )
         throw(RuntimeException)
@@ -642,10 +642,10 @@ void SAL_CALL
             INT16 nCount = rDicList.Count();
             for (INT16 i = 0;  i < nCount;  i++)
             {
-                Reference< XDictionary > xDic( rDicList.GetObject(i).xDic , UNO_QUERY );
+                uno::Reference< XDictionary > xDic( rDicList.GetObject(i).xDic , UNO_QUERY );
 
                 // save (modified) dictionaries
-                Reference< frame::XStorable >  xStor( xDic , UNO_QUERY );
+                uno::Reference< frame::XStorable >  xStor( xDic , UNO_QUERY );
                 if (xStor.is())
                 {
                     try
@@ -668,7 +668,7 @@ void SAL_CALL
 }
 
 void SAL_CALL
-    DicList::addEventListener( const Reference< XEventListener >& rxListener )
+    DicList::addEventListener( const uno::Reference< XEventListener >& rxListener )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -678,7 +678,7 @@ void SAL_CALL
 }
 
 void SAL_CALL
-    DicList::removeEventListener( const Reference< XEventListener >& rxListener )
+    DicList::removeEventListener( const uno::Reference< XEventListener >& rxListener )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -699,7 +699,7 @@ void DicList::_CreateDicList()
     // create IgnoreAllList dictionary with empty URL (non persistent)
     // and add it to list
     OUString aDicName( A2OU( "IgnoreAllList" ) );
-    Reference< XDictionary > xIgnAll(
+    uno::Reference< XDictionary > xIgnAll(
             createDictionary( aDicName, CreateLocale( LANGUAGE_NONE ),
                               DictionaryType_POSITIVE, OUString() ) );
     if (xIgnAll.is())
@@ -724,7 +724,7 @@ void DicList::_CreateDicList()
     {
         if (pActiveDic[i].getLength())
         {
-            Reference< XDictionary > xDic( getDictionaryByName( pActiveDic[i] ) );
+            uno::Reference< XDictionary > xDic( getDictionaryByName( pActiveDic[i] ) );
             if (xDic.is())
                 xDic->setActive( TRUE );
         }
@@ -750,7 +750,7 @@ void DicList::SaveDics()
         for (USHORT i = 0;  i < nCount;  i++)
         {
             // save (modified) dictionaries
-            Reference< frame::XStorable >  xStor( rDicList.GetObject(i).xDic,
+            uno::Reference< frame::XStorable >  xStor( rDicList.GetObject(i).xDic,
                                                   UNO_QUERY );
             if (xStor.is())
             {
@@ -819,7 +819,7 @@ sal_Bool SAL_CALL DicList_writeInfo(
         String aImpl( '/' );
         aImpl += DicList::getImplementationName_Static().getStr();
         aImpl.AppendAscii( "/UNO/SERVICES" );
-        Reference< registry::XRegistryKey > xNewKey =
+        uno::Reference< registry::XRegistryKey > xNewKey =
                 pRegistryKey->createKey(aImpl );
         uno::Sequence< OUString > aServices =
                 DicList::getSupportedServiceNames_Static();
@@ -841,7 +841,7 @@ void * SAL_CALL DicList_getFactory( const sal_Char * pImplName,
     void * pRet = 0;
     if ( !DicList::getImplementationName_Static().compareToAscii( pImplName ) )
     {
-        Reference< XSingleServiceFactory > xFactory =
+        uno::Reference< XSingleServiceFactory > xFactory =
             cppu::createOneInstanceFactory(
                 pServiceManager,
                 DicList::getImplementationName_Static(),
@@ -890,7 +890,7 @@ xub_StrLen lcl_GetToken( String &rToken,
 
 
 static void AddInternal(
-        const Reference<XDictionary> &rDic,
+        const uno::Reference<XDictionary> &rDic,
         const OUString& rNew )
 {
     if (rDic.is())
@@ -915,7 +915,7 @@ static void AddInternal(
     }
 }
 
-static void AddUserData( const Reference< XDictionary > &rDic )
+static void AddUserData( const uno::Reference< XDictionary > &rDic )
 {
     if (rDic.is())
     {
