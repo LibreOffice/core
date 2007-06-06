@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiterator_cjk.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 13:53:13 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 12:17:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,8 +65,9 @@ BreakIterator_CJK::previousWord(const OUString& text, sal_Int32 anyPos,
             if (result.endPos - result.startPos != 1 ||
                     getScriptType(text, result.startPos) == ScriptType::ASIAN)
                 return result;
-            else
-                return BreakIterator_Unicode::getWordBoundary(text, result.startPos, nLocale, wordType, true);
+            result = BreakIterator_Unicode::getWordBoundary(text, result.startPos, nLocale, wordType, true);
+            if (result.endPos < anyPos)
+                return result;
         }
         return BreakIterator_Unicode::previousWord(text, anyPos, nLocale, wordType);
 }
@@ -81,8 +82,9 @@ BreakIterator_CJK::nextWord(const OUString& text, sal_Int32 anyPos,
             if (result.endPos - result.startPos != 1 ||
                     getScriptType(text, result.startPos) == ScriptType::ASIAN)
                 return result;
-            else
-                return BreakIterator_Unicode::getWordBoundary(text, result.startPos, nLocale, wordType, true);
+            result = BreakIterator_Unicode::getWordBoundary(text, result.startPos, nLocale, wordType, true);
+            if (result.startPos > anyPos)
+                return result;
         }
         return BreakIterator_Unicode::nextWord(text, anyPos, nLocale, wordType);
 }
