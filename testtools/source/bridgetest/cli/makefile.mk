@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 10:50:18 $
+#   last change: $Author: ihi $ $Date: 2007-06-06 10:57:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@ LIBTARGET=NO
 
 .INCLUDE :  settings.mk
 DLLPRE =
+CFLAGSENABLESYMBOLS:=-Z7
 
 .IF "$(COM)" == "MSC"
 
