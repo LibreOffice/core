@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:02:02 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 11:06:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3288,7 +3288,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             SfxStringItem aURL( SID_FILE_NAME, sSourceDocURL );
             const SfxPoolItem* pReturnValue =
                             rSourceView.GetViewFrame()->GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
-                                    &aURL, &aFilterName, &aHidden, &aReferer, &aTarget, 0);
+                                    &aURL, &aFilterName, &aHidden, &aReferer, &aTarget, 0L);
             if(pReturnValue)
             {
                 SfxViewFrameItem* pVItem = (SfxViewFrameItem*)pReturnValue;
