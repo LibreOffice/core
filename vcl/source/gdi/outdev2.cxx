@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:37:15 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 14:12:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1234,13 +1234,6 @@ void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, USHORT nSt
         }
         break;
 
-        case IMAGETYPE_IMAGEREF:
-        {
-            ImplImageRefData* pData = static_cast< ImplImageRefData* >( rImage.mpImplData->mpData );
-            pData->mpImplData->mpImageBitmap->Draw( pData->mnIndex, this, rPos, nStyle );
-        }
-        break;
-
         default:
         break;
     }
@@ -1274,13 +1267,6 @@ void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
                 }
 
                 pData->mpImageBitmap->Draw( 0, this, rPos, nStyle, &rSize );
-            }
-            break;
-
-            case IMAGETYPE_IMAGEREF:
-            {
-                ImplImageRefData* pData = static_cast< ImplImageRefData* >( rImage.mpImplData->mpData );
-                pData->mpImplData->mpImageBitmap->Draw( pData->mnIndex, this, rPos, nStyle, &rSize );
             }
             break;
 
