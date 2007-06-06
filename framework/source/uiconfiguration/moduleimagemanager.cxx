@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduleimagemanager.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:31:37 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 14:02:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -355,8 +355,7 @@ ImageList* CmdImageList::impl_getImageList( sal_Int16 nImageType )
     if ( !m_pImageList[nImageType] )
     {
         m_pImageList[nImageType] = new ImageList( m_aImageNameVector,
-                                                  OUString::createFromAscii( ImageType_Prefixes[nImageType] ),
-                                                  NULL );
+                                                  OUString::createFromAscii( ImageType_Prefixes[nImageType] ) );
     }
 
     return m_pImageList[nImageType];
@@ -641,7 +640,9 @@ sal_Bool ModuleImageManager::implts_loadUserImages(
 
                     // Delete old image list and create a new one from the read bitmap
                     delete m_pUserImageList[nImageType];
-                    m_pUserImageList[nImageType] = new ImageList( aUserBitmap, aUserImagesVector );
+                    m_pUserImageList[nImageType] = new ImageList();
+                    m_pUserImageList[nImageType]->InsertFromHorizontalStrip
+                        ( aUserBitmap, aUserImagesVector );
                     return sal_True;
                 }
             }
@@ -713,7 +714,7 @@ sal_Bool ModuleImageManager::implts_storeUserImages(
                 if ( xBitmapStream.is() )
                 {
                     SvStream* pSvStream = utl::UcbStreamHelper::CreateStream( xBitmapStream );
-                    vcl::PNGWriter aPngWriter( pImageList->GetBitmapEx() );
+                    vcl::PNGWriter aPngWriter( pImageList->GetAsHorizontalStrip() );
                     aPngWriter.Write( *pSvStream );
                     delete pSvStream;
 
