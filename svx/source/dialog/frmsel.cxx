@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmsel.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:31:20 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 14:20:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,8 @@
 #ifndef SVX_FRMSEL_HRC
 #include "frmsel.hrc"
 #endif
+
+#include <tools/rcid.h>
 
 namespace svx {
 
@@ -256,7 +258,7 @@ FrameBorderType FrameBorder::GetKeyboardNeighbor( USHORT nKeyCode ) const
 FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
     Resource( SVX_RES( RID_SVXSTR_BORDER_CONTROL ) ),
     mrFrameSel( rFrameSel ),
-    maBmpArrows( SVX_RES( BMP_FRMSEL_ARROWS ) ),
+    maILArrows( 16 ),
     maLeft( FRAMEBORDER_LEFT ),
     maRight( FRAMEBORDER_RIGHT ),
     maTop( FRAMEBORDER_TOP ),
@@ -296,7 +298,7 @@ FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
         DBG_ASSERT( bOk, "svx::FrameSelectorImpl::FrameSelectorImpl - missing entry in maAllBorders" );
     }
 #endif
-
+L
     //                             left neighbor     right neighbor     upper neighbor    lower neighbor
     maLeft.SetKeyboardNeighbors(   FRAMEBORDER_NONE, FRAMEBORDER_TLBR,  FRAMEBORDER_TOP,  FRAMEBORDER_BOTTOM );
     maRight.SetKeyboardNeighbors(  FRAMEBORDER_BLTR, FRAMEBORDER_NONE,  FRAMEBORDER_TOP,  FRAMEBORDER_BOTTOM );
@@ -350,14 +352,20 @@ void FrameSelectorImpl::InitColors()
 
 void FrameSelectorImpl::InitArrowImageList()
 {
-    /*  Build the arrow images bitmap with current colors. */
-    Bitmap aBmp( maBmpArrows );
-    aBmp.Replace( Color( 0, 0, 0 ), maArrowCol );       // black -> arrow color
-    aBmp.Replace( Color( 0, 255, 0 ), maMarkCol );      // green -> marker color
-    aBmp.Replace( Color( 255, 0, 255 ), maBackCol );    // magenta -> background
+    /* Build the arrow images bitmap with current colors. */
+    Color pColorAry1[3];
+    Color pColorAry2[3];
+    pColorAry1[0] = Color( 0, 0, 0 );
+    pColorAry2[0] = maArrowCol;       // black -> arrow color
+    pColorAry1[1] = Color( 0, 255, 0 );
+    pColorAry2[1] = maMarkCol;        // green -> marker color
+    pColorAry1[2] = Color( 255, 0, 255 );
+    pColorAry2[2] = maBackCol;       // magenta -> background
 
-    /*  Create the new image list. */
-    maILArrows = ImageList( aBmp, 16 );
+    GetRes( SVX_RES( RID_SVXSTR_BORDER_CONTROL ).SetRT( RSC_RESOURCE ) );
+    maILArrows.InsertFromHorizontalBitmap(
+        SVX_RES( BMP_FRMSEL_ARROWS ), 16, NULL, pColorAry1, pColorAry2, 3);
+    FreeResource();
     DBG_ASSERT( maILArrows.GetImageSize().Height() == maILArrows.GetImageSize().Width(),
         "svx::FrameSelectorImpl::InitArrowImageList - images are not squarish" );
     mnArrowSize = maILArrows.GetImageSize().Height();
