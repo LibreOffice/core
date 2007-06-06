@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:15:20 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 14:09:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,7 +217,7 @@ ImageList* SfxImageManager_Impl::GetImageList( BOOL bBig, BOOL bHiContrast )
 Image SfxImageManager_Impl::GetImage( USHORT nId, BOOL bBig, BOOL bHiContrast )
 {
     ImageList* pImageList = GetImageList( bBig, bHiContrast );
-    if ( pImageList && pImageList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
+    if ( pImageList )
         return pImageList->GetImage( nId );
     return Image();
 }
@@ -328,7 +328,7 @@ SfxImageManager* SfxImageManager::GetImageManager( SfxModule* pModule )
 Image SfxImageManager::GetImage( USHORT nId, BOOL bBig, BOOL bHiContrast ) const
 {
     ImageList* pImageList = pImp->GetImageList( bBig, bHiContrast );
-    if ( pImageList && pImageList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
+    if ( pImageList && pImageList->HasImageAtPos( nId ) )
         return pImageList->GetImage( nId );
     return Image();
 }
@@ -347,12 +347,12 @@ Image SfxImageManager::SeekImage( USHORT nId, BOOL bBig, BOOL bHiContrast ) cons
 {
     sal_Bool bGlobal = ( pImp->m_pModule == 0 );
     ImageList* pImageList = pImp->GetImageList( bBig, bHiContrast );
-    if ( pImageList && pImageList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
+    if ( pImageList && pImageList->HasImageAtPos( nId ) )
         return pImageList->GetImage( nId );
     else if ( !bGlobal )
     {
         pImageList = ::GetImageManager( 0 )->GetImageList( bBig, bHiContrast );
-        if ( pImageList && pImageList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
+        if ( pImageList )
             return pImageList->GetImage( nId );
     }
     return Image();
@@ -416,7 +416,7 @@ void SfxImageManager::SetImagesForceSize( ToolBox& rToolBox, BOOL bHiContrast, B
         {
             case TOOLBOXITEM_BUTTON:
             {
-                if ( pImageList && pImageList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
+                if ( pImageList && pImageList->HasImageAtPos( nId ) )
                     rToolBox.SetItemImage( nId, pImageList->GetImage( nId ));
                 else
                     rToolBox.SetItemImage( nId, Image() );
