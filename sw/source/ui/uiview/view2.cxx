@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:44:23 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 11:07:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1264,7 +1264,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             {
                 SfxAllEnumItem aEnumItem(SID_OBJECT_ALIGN, nAlias - SID_OBJECT_ALIGN_LEFT);
                 GetViewFrame()->GetDispatcher()->Execute(
-                                SID_OBJECT_ALIGN, SFX_CALLMODE_ASYNCHRON, &aEnumItem, 0);
+                                SID_OBJECT_ALIGN, SFX_CALLMODE_ASYNCHRON, &aEnumItem, 0L);
             }
             else if(nAlias)
             //these slots are either re-mapped to text or object alignment
@@ -2277,7 +2277,7 @@ void SwView::GenerateFormLetter(BOOL bUseCurrentDocument)
             //then show the "Data base only" field dialog
             SfxBoolItem aOn(FN_INSERT_FIELD_DATA_ONLY, TRUE);
             pVFrame->GetDispatcher()->Execute(FN_INSERT_FIELD_DATA_ONLY,
-                                                SFX_CALLMODE_SYNCHRON, &aOn, 0);
+                                                SFX_CALLMODE_SYNCHRON, &aOn, 0L);
             return;
         }
         else
