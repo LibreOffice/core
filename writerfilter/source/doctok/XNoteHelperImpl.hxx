@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XNoteHelperImpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:33 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-06 10:26:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,21 +100,30 @@ XNoteHelper<T>::get(sal_uInt32 nPos)
 template <class T>
 sal_uInt32 XNoteHelper<T>::getIndexOfCpAndFc(const CpAndFc & rCpAndFc)
 {
-    sal_uInt32 n = getCount();
+   sal_uInt32 nResult = getCount();
 
-    if (n > 0)
-    {
-        --n;
+   clog << "-------------" << endl;
 
-        Cp aCp(mpRefs->getFc(n));
-        Fc aFc(mpPieceTable->cp2fc(aCp));
-        CpAndFc aCpAndFc(aCp, aFc, meType);
+   sal_uInt32 n = nResult;
+   while (n > 0)
+   {
+       --n;
 
-        while (n > 0 && rCpAndFc < aCpAndFc)
-            --n;
+       Cp aCp(mpRefs->getFc(n));
+       Fc aFc(mpPieceTable->cp2fc(aCp));
+       CpAndFc aCpAndFc(aCp, aFc, meType);
+
+       clog << "XNoteHelper<T>::getIndex(" << rCpAndFc << "):" << aCpAndFc
+            << ", " << n << endl;
+
+       if (aCpAndFc <= rCpAndFc)
+       {
+           nResult = n;
+           break;
+       }
     }
 
-    return n;
+    return nResult;
 }
 
 template <class T>
