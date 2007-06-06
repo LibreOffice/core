@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:29:48 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 14:21:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,11 +98,15 @@ static void ImplGetPinImage( USHORT nStyle, BOOL bPinIn, Image& rImage )
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maCtrlData.mpPinImgList )
     {
-        Bitmap aBmp;
         ResMgr* pResMgr = ImplGetResMgr();
+        pSVData->maCtrlData.mpPinImgList = new ImageList();
         if( pResMgr )
-            aBmp = Bitmap( ResId( SV_RESID_BITMAP_PIN, *pResMgr ) );
-        pSVData->maCtrlData.mpPinImgList = new ImageList( aBmp, Color( 0x00, 0x00, 0xFF ), 4 );
+        {
+            Color aMaskColor( 0x00, 0x00, 0xFF );
+            pSVData->maCtrlData.mpPinImgList->InsertFromHorizontalBitmap
+                ( ResId( SV_RESID_BITMAP_PIN, *pResMgr ), 4,
+                  &aMaskColor, NULL, NULL, 0);
+        }
     }
 
     // Image ermitteln und zurueckgeben
