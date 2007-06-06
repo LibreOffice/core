@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 11:28:00 $
+ *  last change: $Author: os $ $Date: 2007-06-06 06:33:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,6 +228,9 @@ private:
     bool                            m_bInStyleSheetImport;
 
     bool                            m_bLineNumberingSet;
+//    bool                            m_bIsFootnoteSymbol;
+    sal_Unicode                     m_cFootnoteSymbol; // 0 == invalid
+    sal_Int32                       m_nFootnoteFontId; // negative values are invalid ids
 
     void                            GetCurrentLocale(::com::sun::star::lang::Locale& rLocale);
     void                            SetNumberFormat( const ::rtl::OUString& rCommand,
@@ -261,7 +264,8 @@ public:
 
     void finishParagraph( PropertyMapPtr pPropertyMap );
     void appendTextPortion( const ::rtl::OUString& rString, PropertyMapPtr pPropertyMap );
-    void appendTextContent( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > );
+    void appendTextContent( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >,
+                                const uno::Sequence< beans::PropertyValue >  );
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > appendTextSectionAfter(
                     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xBefore );
 
@@ -277,6 +281,9 @@ public:
                 return m_pTopContext;
             }
     PropertyMapPtr GetTopContextOfType(ContextType eId);
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppendAndConvert >  GetTopTextAppendAndConvert();
+
     FontTablePtr GetFontTable()
             {
                 if(!m_pFontTable)
@@ -349,6 +356,16 @@ public:
 
     void SetLineNumbering( sal_Int32 nLnnMod, sal_Int32 nLnc, sal_Int32 ndxaLnn );
     bool IsLineNumberingSet() const {return m_bLineNumberingSet;}
+
+//    bool IsFootnoteSymbol() const { return m_bIsFootnoteSymbol;}
+//    void SetFootnoteSymbol() { m_bIsFootnoteSymbol = true;}
+//    void ResetFootnoteSymbol() { m_bIsFootnoteSymbol = false;}
+    sal_Unicode GetFootnoteSymbol() const { return m_cFootnoteSymbol;}
+    void        SetFootnoteSymbol(sal_Unicode cSet) { m_cFootnoteSymbol = cSet;}
+
+    sal_Int32   GetFootnoteFontId() const { return m_nFootnoteFontId;}
+    void        SetFootnoteFontId(sal_Int32 nSet) { m_nFootnoteFontId = nSet;}
+
     DeletableTabStop                m_aCurrentTabStop;
 
 };

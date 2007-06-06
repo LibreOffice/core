@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 12:11:05 $
+ *  last change: $Author: os $ $Date: 2007-06-06 06:33:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1540,7 +1540,15 @@ void DomainMapper::attribute(doctok::Id nName, doctok::Value & val)
                 }
             }
             break;
-
+        case NS_rtf::LN_FRD : //footnote reference descriptor, if nIntValue > 0 then automatic, custom otherwise
+            //ignored
+        break;
+        case NS_rtf::LN_FONT: //font of footnote symbol
+            m_pImpl->SetFootnoteFontId( nIntValue );
+        break;
+        case NS_rtf::LN_CHAR: //footnote symbol character
+            m_pImpl->SetFootnoteSymbol( sal_Unicode(nIntValue));
+        break;
         case NS_ooxml::LN_CT_Underline_val:
             handleUnderlineType(nIntValue, m_pImpl->GetTopContext());
             break;
@@ -2143,9 +2151,10 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 0xEA08:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmCChs
-    case 0x6A09:
+    case 0x6A09: // sprmCSymbol
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        break;  // sprmCSymbol
+        resolveSprmProps(sprm_); //resolves LN_FONT and LN_CHAR
+    break;
     case 0x080A:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmCFOle2
@@ -3328,16 +3337,17 @@ void DomainMapper::endCharacterGroup()
 -----------------------------------------------------------------------*/
 void DomainMapper::text(const sal_uInt8 * data_, size_t len)
 {
+    //TODO: Determine the right text encoding (FIB?)
+    ::rtl::OUString sText( (const sal_Char*) data_, len, RTL_TEXTENCODING_MS_1252 );
     try
     {
         bool bContinue = true;
-        //TODO: Determine the right text encoding (FIB?)
-        ::rtl::OUString sText( (const sal_Char*) data_, len, RTL_TEXTENCODING_MS_1252 );
         if(len == 1)
         {
             bContinue = false;
             switch(*data_)
             {
+                case 0x02: break; //footnote character
                 case 0x0c: break; //page break
                 case 0x07:
                     m_pImpl->getTableManager().text(data_, len);
@@ -3387,6 +3397,10 @@ void DomainMapper::text(const sal_uInt8 * data_, size_t len)
 -----------------------------------------------------------------------*/
 void DomainMapper::utext(const sal_uInt8 * data_, size_t len)
 {
+    OUString sText;
+    OUStringBuffer aBuffer = OUStringBuffer(len);
+    aBuffer.append( (const sal_Unicode *) data_, len);
+    sText = aBuffer.makeStringAndClear();
     try
     {
         m_pImpl->getTableManager().utext(data_, len);
@@ -3396,10 +3410,6 @@ void DomainMapper::utext(const sal_uInt8 * data_, size_t len)
         else
         {
             PropertyMapPtr pContext = m_pImpl->GetTopContext();
-            OUString sText;
-            OUStringBuffer aBuffer = OUStringBuffer(len);
-            aBuffer.append( (const sal_Unicode *) data_, len);
-            sText = aBuffer.makeStringAndClear();
             //--> debug
             //sal_uInt32 nSize = pContext->size();
             //<--

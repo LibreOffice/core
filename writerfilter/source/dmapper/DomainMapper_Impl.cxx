@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 10:43:21 $
+ *  last change: $Author: os $ $Date: 2007-06-06 06:33:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
 #include <com/sun/star/text/UserDataPart.hpp>
 #include <com/sun/star/text/SetVariableType.hpp>
+#include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XLineNumberingProperties.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
@@ -360,7 +361,9 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_nCurrentTabStopIndex( 0 ),
         m_sCurrentParaStyleId(),
         m_bInStyleSheetImport( false ),
-        m_bLineNumberingSet( false )
+        m_bLineNumberingSet( false ),
+        m_cFootnoteSymbol( 0 ),
+        m_nFootnoteFontId( -1 )
 {
     GetBodyText();
     uno::Reference< text::XTextAppendAndConvert > xBodyTextAppendAndConvert = uno::Reference< text::XTextAppendAndConvert >( m_xBodyText, uno::UNO_QUERY );
@@ -487,6 +490,15 @@ PropertyMapPtr DomainMapper_Impl::GetTopContextOfType(ContextType eId)
     if(!m_aPropertyStacks[eId].empty())
         pRet = m_aPropertyStacks[eId].top();
     return pRet;
+}
+
+/*-- 24.05.2007 15:54:51---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Reference< text::XTextAppendAndConvert >  DomainMapper_Impl::GetTopTextAppendAndConvert()
+{
+    OSL_ENSURE(!m_aTextAppendStack.empty(), "text append stack is empty" );
+    return m_aTextAppendStack.top();
 }
 
 /*-- 17.07.2006 08:47:04---------------------------------------------------
@@ -684,14 +696,17 @@ void DomainMapper_Impl::appendTextPortion( const ::rtl::OUString& rString, Prope
 /*-- 02.11.2006 12:08:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void DomainMapper_Impl::appendTextContent( const uno::Reference< text::XTextContent > xContent)
+void DomainMapper_Impl::appendTextContent(
+    const uno::Reference< text::XTextContent > xContent,
+    const uno::Sequence< beans::PropertyValue > xPropertyValues
+    )
 {
     uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top();
     if(xTextAppendAndConvert.is() && ! m_TableManager.isIgnore())
     {
         try
         {
-            xTextAppendAndConvert->appendTextContent( xContent );
+            xTextAppendAndConvert->appendTextContent( xContent, xPropertyValues );
         }
         catch(const lang::IllegalArgumentException& )
         {
@@ -864,12 +879,31 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
             bIsFootnote ?
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Footnote") ) : ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Endnote") )),
             uno::UNO_QUERY_THROW );
-        appendTextContent( uno::Reference< text::XTextContent >( xFootnoteText, uno::UNO_QUERY_THROW ) );
+        if( m_cFootnoteSymbol != 0)
+        {
+            uno::Reference< text::XFootnote > xFootnote( xFootnoteText, uno::UNO_QUERY_THROW );
+            xFootnote->setLabel( ::rtl::OUString( m_cFootnoteSymbol ) );
+        }
+        FontTablePtr pFontTable = GetFontTable();
+        uno::Sequence< beans::PropertyValue > aFontProperties;
+        if( pFontTable && m_nFootnoteFontId >= 0 && pFontTable->size() > (size_t)m_nFootnoteFontId )
+        {
+            const FontEntry* pFontEntry = pFontTable->getFontEntry(sal_uInt32(m_nFootnoteFontId));
+            PropertyMapPtr aFontProps( new PropertyMap );
+            aFontProps->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( pFontEntry->sFontName  ));
+            aFontProps->Insert(PROP_CHAR_FONT_CHAR_SET, uno::makeAny( (sal_Int16)pFontEntry->nTextEncoding  ));
+            aFontProps->Insert(PROP_CHAR_FONT_PITCH, uno::makeAny( pFontEntry->nPitchRequest  ));
+            aFontProperties = aFontProps->GetPropertyValues();
+        }
+        appendTextContent( uno::Reference< text::XTextContent >( xFootnoteText, uno::UNO_QUERY_THROW ), aFontProperties );
         m_aTextAppendStack.push(uno::Reference< text::XTextAppendAndConvert >( xFootnoteText, uno::UNO_QUERY_THROW ));
     }
     catch( uno::Exception& )
     {
     }
+    //reset footnote properties
+    m_nFootnoteFontId = -1;
+    m_cFootnoteSymbol = 0;
 }
 /*-- 24.05.2007 14:22:29---------------------------------------------------
 
@@ -2669,7 +2703,7 @@ void DomainMapper_Impl::PopFieldContext()
                     if( !xToInsert.is() )
                         xToInsert = uno::Reference< text::XTextContent >(pContext->GetTextField(), uno::UNO_QUERY);
                     if( xToInsert.is() )
-                        xTextAppendAndConvert->appendTextContent( xToInsert );
+                        xTextAppendAndConvert->appendTextContent( xToInsert, uno::Sequence< beans::PropertyValue >() );
                     else if(pContext->GetHyperlinkURL().getLength())
                     {
                         PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
@@ -2730,7 +2764,7 @@ void  DomainMapper_Impl::ImportGraphic(doctok::Reference< doctok::Properties >::
     //create the graphic
     ref->resolve( *GetGraphicImport(bIsShape) );
     //insert it into the document at the current cursor position
-    appendTextContent( m_pGraphicImport->GetGraphicObject() );
+    appendTextContent( m_pGraphicImport->GetGraphicObject(), uno::Sequence< beans::PropertyValue >() );
     m_pGraphicImport.reset();
 }
 
