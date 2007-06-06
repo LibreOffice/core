@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impimage.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:03:20 $
+ *  last change: $Author: ihi $ $Date: 2007-06-06 14:11:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,8 +73,9 @@
 // ----------------
 
 ImageAryData::ImageAryData() :
+    maName(),
     mnId( 0 ),
-    mnRefCount( 0 )
+    maBitmapEx()
 {
 }
 
@@ -83,7 +84,13 @@ ImageAryData::ImageAryData() :
 ImageAryData::ImageAryData( const ImageAryData& rData ) :
     maName( rData.maName ),
     mnId( rData.mnId ),
-    mnRefCount( rData.mnRefCount )
+    maBitmapEx( rData.maBitmapEx )
+{
+}
+
+ImageAryData::ImageAryData( const rtl::OUString &aName,
+                            USHORT nId, const BitmapEx &aBitmap )
+        : maName( aName ), mnId( nId ), maBitmapEx( aBitmap )
 {
 }
 
@@ -99,7 +106,7 @@ ImageAryData& ImageAryData::operator=( const ImageAryData& rData )
 {
     maName = rData.maName;
     mnId = rData.mnId;
-    mnRefCount = rData.mnRefCount;
+    maBitmapEx = rData.maBitmapEx;
 
     return *this;
 }
@@ -112,38 +119,47 @@ ImplImageList::ImplImageList()
 {
 }
 
-// -----------------------------------------------------------------------
+ImplImageList::ImplImageList( const ImplImageList &aSrc ) :
+    maPrefix( aSrc.maPrefix ),
+    maImageSize( aSrc.maImageSize ),
+    mnRefCount( 1 )
+{
+    maImages.reserve( aSrc.maImages.size() );
+    for ( ImageAryDataVec::const_iterator aIt = aSrc.maImages.begin(), aEnd = aSrc.maImages.end(); aIt != aEnd; ++aIt )
+    {
+        ImageAryData* pAryData = new ImageAryData( **aIt );
+        maImages.push_back( pAryData );
+        if( pAryData->maName.getLength() )
+            maNameHash [ pAryData->maName ] = pAryData;
+    }
+}
 
 ImplImageList::~ImplImageList()
 {
-    delete mpImageBitmap;
-    delete[] mpAry;
+    for ( ImageAryDataVec::iterator aIt = maImages.begin(), aEnd = maImages.end(); aIt != aEnd; ++aIt )
+        delete *aIt;
 }
 
-// --------------------
-// - ImplImageRefData -
-// --------------------
-
-ImplImageRefData::~ImplImageRefData()
+void ImplImageList::AddImage( const ::rtl::OUString &aName,
+                              USHORT nId, const BitmapEx &aBitmapEx )
 {
-    --mpImplData->mnIRefCount;
-
-    if( mpImplData->mnRefCount || mpImplData->mnIRefCount )
-    {
-        --mpImplData->mpAry[mnIndex].mnRefCount;
-
-        if( !mpImplData->mpAry[mnIndex].mnRefCount )
-            --mpImplData->mnRealCount;
-    }
-    else
-        delete mpImplData;
+    ImageAryData *pImg = new ImageAryData( aName, nId, aBitmapEx );
+    maImages.push_back( pImg );
+    if( aName.getLength() )
+        maNameHash [ aName ] = pImg;
 }
 
-// -----------------------------------------------------------------------
-
-BOOL ImplImageRefData::IsEqual( const ImplImageRefData& rData )
+void ImplImageList::RemoveImage( USHORT nPos )
 {
-    return( ( mpImplData == rData.mpImplData ) && ( mnIndex == rData.mnIndex ) );
+    ImageAryData *pImg = maImages[ nPos ];
+    if( pImg->maName.getLength() )
+        maNameHash.erase( pImg->maName );
+    maImages.erase( maImages.begin() + nPos );
+}
+
+USHORT ImplImageList::GetImageCount() const
+{
+    return sal::static_int_cast< USHORT >( maImages.size() );
 }
 
 // -----------------
@@ -192,10 +208,6 @@ ImplImage::~ImplImage()
 
         case IMAGETYPE_IMAGE:
             delete static_cast< ImplImageData* >( mpData );
-        break;
-
-        case IMAGETYPE_IMAGEREF:
-            delete static_cast< ImplImageRefData* >( mpData );
         break;
     }
 }
