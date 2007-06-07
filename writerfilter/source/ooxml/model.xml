@@ -1,180 +1,180 @@
 <?xml version="1.0" encoding="UTF-8"?>
     <!--
-        = Format of <resource> elements =
+= Format of <resource> elements =
 
-        A <resource> element A always refers to exactly one <define>
-        element inside the parent <namespace> element of A.
+A <resource> element A always refers to exactly one <define>
+element inside the parent <namespace> element of A.
 
-        In the following XPath expressions are used to denote class
-        names etc. <resource> is denoted as the current resource node
-        <resource name="name">. <define> is denoted as the current
-        define node <define name="name">.
+In the following XPath expressions are used to denote class
+names etc. <resource> is denoted as the current resource node
+<resource name="name">. <define> is denoted as the current
+define node <define name="name">.
 
-        For each <define> whose name starts with 'CT_' or 'EG_' a
-        class OOXMLContext.<define>/@name is generated. This class is
-        directly or indirectly derived from OOXMLContext. If there is
-        a <resource> for a certain <define> the according class
-        OOXMLContext.<define>/@name is derived from
-        OOXMLContext.<resource>/@resource. The latter in turn is then
-        derived from OOXMLContext. If there is no <resource> for
-        <define> the generated class is derived directly from
-        OOXMLContext (see OOXMLContext.hxx).
+For each <define> whose name starts with 'CT_' or 'EG_' a
+class OOXMLContext.<define>/@name is generated. This class is
+directly or indirectly derived from OOXMLContext. If there is
+a <resource> for a certain <define> the according class
+OOXMLContext.<define>/@name is derived from
+OOXMLContext.<resource>/@resource. The latter in turn is then
+derived from OOXMLContext. If there is no <resource> for
+<define> the generated class is derived directly from
+OOXMLContext (see OOXMLContext.hxx).
 
-        For each <define> whose name starts with 'ST_' a class
-        OOXML.<define>/@name.Value is generated. This class is
-        directly or indirectly derived from OOXMLValue. If there is a
-        <resource> for a certain <define> the according class
-        OOXML.<define>/@named.Value is derived from
-        OOXML.<resource>/@resource.Value. The latter is in turn
-        derived from OOXMLValue. If there is no <resource> for
-        <define> the generated class is derived directly from
-        OOXMLValue (see OOXMLContext.hxx).
+For each <define> whose name starts with 'ST_' a class
+OOXML.<define>/@name.Value is generated. This class is
+directly or indirectly derived from OOXMLValue. If there is a
+<resource> for a certain <define> the according class
+OOXML.<define>/@named.Value is derived from
+OOXML.<resource>/@resource.Value. The latter is in turn
+derived from OOXMLValue. If there is no <resource> for
+<define> the generated class is derived directly from
+OOXMLValue (see OOXMLContext.hxx).
 
-        Attribute     Meaning
-        ====================================================================
-        name          the name of the <define> the <resource> references to.
+Attribute     Meaning
+====================================================================
+name          the name of the <define> the <resource> references to.
 
-        resource      the resource for the <define>
+resource      the resource for the <define>
 
-                      A class OOXMLContext.<define>/@name will be
-                      generated that is derived from
-                      OOXMLContext.<resource>/@resource
+              A class OOXMLContext.<define>/@name will be
+              generated that is derived from
+              OOXMLContext.<resource>/@resource
 
-        generated     denotes, that this <resource> is automatically generated.
-
-
-        == Elements with special semantics ==
-
-        === Elements of <resource>[@resource = 'Properties'] ====
-
-        The <define> represents a property set (aka a Properties
-        resource in the WW8ResourceModel). The according class
-        OOXMLContext.<define>/@name gathers the properties. The
-        function OOXMLContextProperties::newProperty inserts a
-        property to the set. When being resolved the class
-        OOXMLContext.<define>/@name sends the properties to handler.
-
-        Element       Attribute
-                      Meaning
-        ====================================================================
-        sprm          name
-
-                      associates <define>/rng:element[@name=name] to this entry
-
-                      tokenid
-
-                      When being resolved OOXMLContext.<define>/@name
-                      sends an event sprm(@tokenid, value) to the
-                      handler.
-
-        attribute     name
-
-                      associates <define>/rng:attribute[@name=name] to this entry
-
-                      tokenid
-
-                      When being resolved OOXMLContext.<define>/@name
-                      sends an event attribute(@tokenid, value) to the
-                      handler.
-
-        === Elemets of <resource>[@name='Table'] ===
-
-        The <define> represents a table in the sense of the
-        WW8ResourceModel, e.g. the style sheet, the font table. A
-        class OOXMLContext.<define>/@name will be created that is
-        derived from OOXMLContextTable. When being resolved the class
-        OOXMLContext.<define>/@name sends an entry event to the
-        according handler.
-
-        Attribute    Meaning
-        ====================================================================
-        tokenid      When being resolved the class will send an
-                     entry(@tokenid, ...) to the handler
+generated     denotes, that this <resource> is automatically generated.
 
 
-        === Elements of <resource>[@name='List'] ===
+== Elements with special semantics ==
 
-        The <define> represents a value in the sense of the resource
-        model. The <value> elements of the <define> define possible
-        instances of this value. A class OOXML.<define>/@name.Value is
-        generated. The constructor of this class takes the instance of
-        the value and sets the mnValue member of the class to the
-        token id defined by the <value> elements of the <resource>.
+=== Elements of <resource>[@resource = 'Properties'] ====
 
-        Element      Attribute/content
-                     Meaning
-        ====================================================================
-        value        tokenid
+The <define> represents a property set (aka a Properties
+resource in the WW8ResourceModel). The according class
+OOXMLContext.<define>/@name gathers the properties. The
+function OOXMLContextProperties::newProperty inserts a
+property to the set. When being resolved the class
+OOXMLContext.<define>/@name sends the properties to handler.
 
-                     the token id to use for this value
+Element       Attribute
+              Meaning
+====================================================================
+sprm          name
 
-                     content
+              associates <define>/rng:element[@name=name] to this entry
 
-                     the value from the according <define>//<value>
+              tokenid
 
-        === Elements of <resource>[@resource='XNote'] ===
+              When being resolved OOXMLContext.<define>/@name
+              sends an event sprm(@tokenid, value) to the
+              handler.
 
-        These elements are a special case kind of
-        <resource>[@resource='Stream']>. They represent
-        footnotes/endnotes and comments. The resulting class has a
-        property set for the attributes that is resolved when reading
-        the start tag is finished.
+attribute     name
 
-        Element      Attribute/content
-                     Meaning
-        ====================================================================
-        attribute    name
+              associates <define>/rng:attribute[@name=name] to this entry
 
-                     links to the <rng:attribute> in <define> with the same @name.
+              tokenid
 
-                     tokenid
+              When being resolved OOXMLContext.<define>/@name
+              sends an event attribute(@tokenid, value) to the
+              handler.
 
-                     an attribute @name in the start tag for <define>
-                     is sent by attribute(@tokenid, value) to the
-                     according handler.
+=== Elemets of <resource>[@name='Table'] ===
 
-                     action="checkId"
+The <define> represents a table in the sense of the
+WW8ResourceModel, e.g. the style sheet, the font table. A
+class OOXMLContext.<define>/@name will be created that is
+derived from OOXMLContextTable. When being resolved the class
+OOXMLContext.<define>/@name sends an entry event to the
+according handler.
 
-                     when the attribute @name is read checkId(value)
-                     is called on the context for <define>.
-
-
-        == Actions ==
-
-        If there are <action> elements present in a <resource> the follwing actions
-        will be carried out:
+Attribute    Meaning
+====================================================================
+tokenid      When being resolved the class will send an
+             entry(@tokenid, ...) to the handler
 
 
-        Element      Attribute/content
-                     Meaning
-        ====================================================================
-        name         the name of the action:
+=== Elements of <resource>[@name='List'] ===
 
-                     - start    The action is carried out in the startAction method of
-                                the context
-                     - end      The action is carried out in the endAction method of
-                                the context.
-                     - characters   The action is carried out in the characters method of
-                                    the context.
+The <define> represents a value in the sense of the resource
+model. The <value> elements of the <define> define possible
+instances of this value. A class OOXML.<define>/@name.Value is
+generated. The constructor of this class takes the instance of
+the value and sets the mnValue member of the class to the
+token id defined by the <value> elements of the <resource>.
 
-        action       the action to carry out
+Element      Attribute/content
+             Meaning
+====================================================================
+value        tokenid
 
-                     - handleHdrFtr      handle headers and footers
-                     - setLastParagraphInSection     set lastParagraphInSection flag in
-                                                     parser state
-                     - text              send text of current run to handler
-                     - ftnednref         send footnote/endnote reference character
-                     - ftnednsep         send footnote/endnote separation character
-                     - ftmedncont        send footnote/endnote continuation character
-                     - pgNum             send page number character
-                     - endOfParagraph    send end of paragraph
-                     - tab               send tab character
-                     - startCharacterGroup        call startCharacterGroup on context
-                     - endCharacterGroup          call endCharacterGroup on context
-                     - startParagraphGroup        call startParagraphGroup on context
-                     - endParagraphGroup          call endParagraphGroup on context
-                     - startSectionGroup          call startSectionGroup on context
-                     - endSectionGroup            call endSectionGroup on context
+             the token id to use for this value
+
+             content
+
+             the value from the according <define>//<value>
+
+=== Elements of <resource>[@resource='XNote'] ===
+
+These elements are a special case kind of
+<resource>[@resource='Stream']>. They represent
+footnotes/endnotes and comments. The resulting class has a
+property set for the attributes that is resolved when reading
+the start tag is finished.
+
+Element      Attribute/content
+             Meaning
+====================================================================
+attribute    name
+
+             links to the <rng:attribute> in <define> with the same @name.
+
+             tokenid
+
+             an attribute @name in the start tag for <define>
+             is sent by attribute(@tokenid, value) to the
+             according handler.
+
+             action="checkId"
+
+             when the attribute @name is read checkId(value)
+             is called on the context for <define>.
+
+
+== Actions ==
+
+If there are <action> elements present in a <resource> the follwing actions
+will be carried out:
+
+
+Element      Attribute/content
+             Meaning
+====================================================================
+name         the name of the action:
+
+             - start    The action is carried out in the startAction method of
+                        the context
+             - end      The action is carried out in the endAction method of
+                        the context.
+             - characters   The action is carried out in the characters method
+                            of the context.
+
+action       the action to carry out
+
+             - handleHdrFtr      handle headers and footers
+             - setLastParagraphInSection     set lastParagraphInSection flag in
+                                             parser state
+             - text              send text of current run to handler
+             - ftnednref         send footnote/endnote reference character
+             - ftnednsep         send footnote/endnote separation character
+             - ftmedncont        send footnote/endnote continuation character
+             - pgNum             send page number character
+             - endOfParagraph    send end of paragraph
+             - tab               send tab character
+             - startCharacterGroup        call startCharacterGroup on context
+             - endCharacterGroup          call endCharacterGroup on context
+             - startParagraphGroup        call startParagraphGroup on context
+             - endParagraphGroup          call endParagraphGroup on context
+             - startSectionGroup          call startSectionGroup on context
+             - endSectionGroup            call endSectionGroup on context
 
     -->
 <model xmlns:rng="http://relaxng.org/ns/structure/1.0">

@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-06-04 08:48:32 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-07 07:56:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,15 +97,29 @@
 
   <xsl:key name="namespace-aliases" match="//namespace-alias" use="@name"/>
 
-  <xsl:template name="namespace">
-    <xsl:value-of select="ancestor::rng:grammar/@ns"/>
-  </xsl:template>
+  <!-- 
+       Returns <define> for the current <ref>. 
 
+       The current node must be a <ref>!
+  -->
   <xsl:template name="defineforref">
     <xsl:variable name="mygrammarid" select="generate-id(ancestor::rng:grammar)"/>
     <xsl:value-of select="key('defines-with-name', @name)[generate-id(ancestor::rng:grammar) = $mygrammarid]"/>
   </xsl:template>
 
+  <!-- 
+       Generates a context name for the current node.
+
+       The name is determined by the @name attribute of the current
+       node. A unique <define> with the name @name is searched. If
+       there is a unique one contextnamefordefine is used to determine
+       the context name. If there are multiple <define>s with name
+       @name the one with the same application as as the current node
+       determines the context name.
+
+       The application of the current node is the @application
+       attribute of the ancestor <rng:grammar>.
+  -->
   <xsl:template name="contextnameforname">
     <xsl:variable name="application" select="ancestor::rng:grammar/@application"/>
     <xsl:variable name="name" select="@name"/>
@@ -123,15 +137,17 @@
     </xsl:choose>
   </xsl:template>
 
+  <!--
+      Generates statement to generate a context for the current node.
+
+      Uses contextnameforname.
+  -->
   <xsl:template name="contextnew">
     <xsl:text> new </xsl:text>
     <xsl:call-template name="contextnameforname"/>
     <xsl:text>(*this)</xsl:text>
   </xsl:template>
 
-  <xsl:template name="defineforname">
-    <xsl:value-of select="key('defines-with-name', @name)"/>
-  </xsl:template>
   <!-- 
        Create name with prefix.
 
@@ -210,6 +226,15 @@
     </xsl:for-each>
   </xsl:template>
 
+  <!--
+      Create entries in enum definition for attributes.
+
+      For each occurrence of rng:attribute an entry
+
+               OOXML_ATTRIBUTE_<name>
+
+      is generated, but only if the attribute is the first named <name>.
+  -->
   <xsl:template name="enumattribute">
     <xsl:param name="prefix"/>
     <xsl:for-each select=".//rng:attribute[@enumname]">
@@ -222,6 +247,9 @@
     </xsl:for-each>
   </xsl:template>
 
+  <!--
+      Create entry in reverse element map of TokenMap.
+  -->
   <xsl:template name="hashelement">
     <xsl:param name="prefix"/>
     <xsl:for-each select=".//rng:element[@enumname]">
@@ -237,12 +265,6 @@
         rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("</xsl:text>
         <xsl:value-of select="@qname"/>
           <xsl:text>"));</xsl:text>
-<!--
-          <xsl:text>
-        mElementMap[aStr] = </xsl:text>
-        <xsl:value-of select="$element"/>
-          <xsl:text>;</xsl:text>
--->
           <xsl:text>
         mElementReverseMap[</xsl:text>
         <xsl:value-of select="$element"/>
@@ -253,6 +275,9 @@
     </xsl:for-each>
   </xsl:template>
 
+  <!-- 
+       Create entry in reverse attribute map of TokenMap.
+  -->
   <xsl:template name="hashattribute">
     <xsl:param name="prefix"/>
     <xsl:for-each select=".//rng:attribute[@name]">
@@ -268,12 +293,6 @@
         rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("</xsl:text>
           <xsl:value-of select="@qname"/>
           <xsl:text>"));</xsl:text>
-<!--
-          <xsl:text>
-        mAttributeMap[aStr] = </xsl:text>
-          <xsl:value-of select="$attribute"/>
-          <xsl:text>;</xsl:text>
--->
           <xsl:text>
         mAttributeReverseMap[</xsl:text>
           <xsl:value-of select="$attribute"/>
@@ -284,6 +303,9 @@
     </xsl:for-each>
   </xsl:template>
 
+  <!--
+      Returns prefix for the rng:grammar of the current node.
+  -->
   <xsl:template name="prefixforgrammar">
     <xsl:variable name="ns" select="ancestor::rng:grammar/@ns"/>
     <xsl:variable name="nsalias"><xsl:value-of select="key('namespace-aliases', $ns)/@alias"/></xsl:variable>
@@ -298,10 +320,23 @@
     </xsl:choose>
   </xsl:template>
 
+  <!--
+      Returns prefix for the rng:grammar of the matching nodes.
+  -->
   <xsl:template match="*" mode="grammar-prefix">
     <xsl:call-template name="prefixforgrammar"/>
   </xsl:template>
 
+  <!--
+      Generates context name.
+
+      The resulting name is
+
+          OOXMLContext_$prefix_$name
+
+      @param prefix
+      @param name
+  -->
   <xsl:template name="contextname">
     <xsl:param name="prefix"/>
     <xsl:param name="name"/>
@@ -311,6 +346,11 @@
     <xsl:value-of select="$name"/>
   </xsl:template>
 
+  <!--
+      Returns the context name for the current <define> node.
+
+      The current node has to be the <define> node.
+  -->
   <xsl:template name="contextnamefordefine">
     <xsl:variable name="myprefix">
       <xsl:apply-templates select="." mode="grammar-prefix"/>
@@ -321,14 +361,18 @@
     </xsl:call-template>
   </xsl:template>
 
+  <!--
+      Returns the value of the @resource attribute of the <resource>
+      node according to the current <define>.
+  -->
   <xsl:template name="contextresource">
     <xsl:variable name="mynsid" select="generate-id(ancestor::namespace)"/>
     <xsl:value-of select="key('context-resource', @name)[generate-id(ancestor::namespace)=$mynsid]/@resource"/>
   </xsl:template>
 
-  <xsl:template name="contextmembers">
-  </xsl:template>
-
+  <!--
+      Generates contructor declaration for a <define>.
+  -->
   <xsl:template name="contextconstructordecl">
     <xsl:variable name="classname">
       <xsl:call-template name="contextnamefordefine"/>
@@ -337,6 +381,10 @@
     <xsl:text>(const OOXMLContext &amp; rContext);&#xa;</xsl:text>
   </xsl:template>
 
+  <!--
+      Returns the parent class for the context class representing the
+      current <define>.
+  -->
   <xsl:template name="contextparent">
     <xsl:variable name="resource">
       <xsl:call-template name="contextresource"/>
@@ -345,6 +393,16 @@
     <xsl:value-of select="$resource"/>
   </xsl:template>
 
+  <!--
+      Returns a value name.
+
+      The resulting value name is
+          
+          OOXMLValue_$prefix_$name
+
+      @prefix     the prefix
+      @name       the name
+  -->
   <xsl:template name="valuename">
     <xsl:param name="prefix"/>
     <xsl:param name="name"/>
@@ -354,6 +412,9 @@
     <xsl:value-of select="$name"/>
   </xsl:template>
 
+  <!--
+      Returns the value name for the current <define>.
+  -->
   <xsl:template name="valuenamefordefine">
     <xsl:variable name="myprefix">
       <xsl:apply-templates select="." mode="grammar-prefix"/>
@@ -364,6 +425,14 @@
     </xsl:call-template>
   </xsl:template>
 
+  <!--
+      Returns the name of the parent class of the class for the
+      current <define>.
+
+      Precondition: The class for the current <define> is derived
+      indirectly from OOXMLValue.
+
+  -->
   <xsl:template name="valueparent">
     <xsl:variable name="resource">
       <xsl:call-template name="contextresource"/>
@@ -373,6 +442,12 @@
     <xsl:text>Value</xsl:text>
   </xsl:template>
 
+  <!--
+      Generates declaration for a value class.
+
+      Precondition: <resource> for current <define> indicates that the
+      class is derived directly or indirectly from OOXMLValue.
+  -->
   <xsl:template name="valuedecl">
     <xsl:variable name="classname">
      <xsl:call-template name="valuenamefordefine"/>
@@ -411,6 +486,12 @@ public:
 </xsl:text>
   </xsl:template>
 
+  <!--
+      Generates declaration of a context class.
+
+      Precondition: <resource> for current <define> indicates that
+      class is directly or indirectly derived from OOXMLContext.
+  -->
   <xsl:template name="contextdecl">
     <xsl:variable name="classname">
       <xsl:call-template name="contextnamefordefine"/>
@@ -424,10 +505,7 @@ class </xsl:text>
     <xsl:text> : public </xsl:text>
     <xsl:call-template name="contextparent"/>
     <xsl:text>
-{</xsl:text>
-    <xsl:call-template name="contextmembers"/>
-    <xsl:text>
-
+{
 public:
     </xsl:text>
     <xsl:call-template name="contextconstructordecl"/>
@@ -455,6 +533,13 @@ public:
     </xsl:text>
   </xsl:template>
   
+  <!--
+      Checks if a class derived from OOXMLContex shall be defined for
+      the current <define>.
+
+      @retval 1    the class shall be defined.
+      @retval 0    otherwise
+  -->
   <xsl:template name="classfordefine">
     <xsl:variable name="name" select="@name"/>
     <xsl:choose>
@@ -464,6 +549,13 @@ public:
     </xsl:choose>
   </xsl:template>
 
+  <!--
+      Checks if a class derived from OOXMLValue shall be defined for
+      the current <define>.
+
+      @retval 1    the class shall be defined
+      @retval 0    otherwise
+  -->
   <xsl:template name="valuefordefine">
     <xsl:choose>
       <xsl:when test="starts-with(@name, 'ST_')">1</xsl:when>
@@ -471,6 +563,10 @@ public:
     </xsl:choose>
   </xsl:template>
 
+  <!--
+      Generates declarations of classes (derived from OOXMLContext and 
+      OOXMLValue).
+  -->
   <xsl:template name="contextdecls">
     <xsl:param name="prefix"/>
     <xsl:for-each select=".//rng:define">
@@ -489,6 +585,9 @@ public:
     </xsl:for-each>
   </xsl:template>
 
+  <!--
+      Generates the inner of OOXMLContext...::elementByRef.
+  -->
   <xsl:template name="refsimplondefine">
     <xsl:variable name="do">
       <xsl:call-template name="classfordefine">
@@ -509,6 +608,9 @@ public:
     </xsl:if>
   </xsl:template>
 
+  <!--
+      Generates definition of getIdFromRefs for the current <define>.
+  -->
   <xsl:template name="contextrefsidimpl">
     <xsl:param name="prefix"/>
     <xsl:variable name="classname">
@@ -536,6 +638,9 @@ doctok::Id </xsl:text>
     </xsl:text>
   </xsl:template>
 
+  <!--
+      Generates definition of elementFromRefs for the current <define>.
+  -->
   <xsl:template name="contextrefsimpl">
     <xsl:param name="prefix"/>
     <xsl:variable name="classname">
@@ -564,6 +669,9 @@ OOXMLContext::Pointer_t </xsl:text>
     </xsl:text>
   </xsl:template>
 
+  <!--
+      Generates the inner of getIdFromRefs for the current <define>.
+  -->
   <xsl:template name="refsidimplondefine">
     <xsl:variable name="do">
       <xsl:call-template name="classfordefine">
@@ -584,6 +692,9 @@ OOXMLContext::Pointer_t </xsl:text>
     </xsl:if>
   </xsl:template>
 
+  <!---
+      Generates the definition of lcl_characters for the current <define>.
+  -->
   <xsl:template name="contextcharactersimpl">
     <xsl:variable name="classname">
       <xsl:call-template name="contextnamefordefine"/>
@@ -612,6 +723,12 @@ void </xsl:text>
 }</xsl:text>
   </xsl:template>
 
+  <!--
+      Generates an element case statement.
+
+      Precondition: the current node is a <rng:element> node in a
+      <rng:define>.
+  -->
   <xsl:template name="caselabelelement">
           <xsl:text>
      case </xsl:text>
@@ -621,6 +738,12 @@ void </xsl:text>
            <xsl:text>:</xsl:text>
   </xsl:template>
 
+  <!--
+      Generates an attribute case statement.
+
+      Precondition the current node is a <rng:attribute> node in a
+      <rng:define>
+  -->
   <xsl:template name="caselabelattribute">
           <xsl:text>
      case </xsl:text>
@@ -630,6 +753,9 @@ void </xsl:text>
            <xsl:text>:</xsl:text>
   </xsl:template>
 
+  <!--
+      Generates definition of method element for current <define>.
+  -->
   <xsl:template name="contextelementimpl">
     <xsl:param name="prefix"/>
     <xsl:variable name="classname">
@@ -640,6 +766,23 @@ void </xsl:text>
     </xsl:variable>
     <xsl:variable name="mydefine" select="@name"/>
     <xsl:variable name="switchbody">
+      <!--
+          This variable contains the body of the switch over the given token.
+
+          For each <rng:element> in <define> that contains a <rng:ref>
+          and has an attribute @enumname a case is generated. In the
+          case a context for the according OOXMLContext... is created
+          and assigned as the result of the method.
+
+          Exceptions:
+
+          - For <rng:ref>s to BUILT_IN_ANY_TYPE OOXMLContext is used
+            to create the context.
+            
+          - If classfordefine indicates that no class will be
+            generated for <rng:ref> nothing will hapen and the result
+            is null.
+      -->
       <xsl:for-each select=".//rng:element[@enumname and rng:ref]">
         <xsl:variable name="do">
           <xsl:for-each select="key('defines-with-name', ./rng:ref/@name)[1]">
@@ -712,6 +855,11 @@ OOXMLContext::Pointer_t
      </xsl:text>
   </xsl:template>
 
+  <!--
+      Processes token id given in <resource> elements.
+
+      The result is the identifier for the tokenid.      
+  -->
   <xsl:template name="processtokenid">
     <xsl:choose>
       <xsl:when test="contains(@tokenid, ':')">
@@ -725,6 +873,9 @@ OOXMLContext::Pointer_t
     </xsl:choose>
   </xsl:template>
 
+  <!--
+      Generated the definition of getId for current <define>.
+  -->
   <xsl:template name="contextgetid">
     <xsl:param name="prefix"/>
     <xsl:variable name="classname">
@@ -735,25 +886,28 @@ OOXMLContext::Pointer_t
     </xsl:variable>
     <xsl:variable name="mydefine" select="@name"/>
     <xsl:variable name="switchbody">
-    <xsl:if test="$resource = 'Properties' or $resource = 'Property' or $resource = 'SingleElement'">
-    <xsl:for-each select="//resource[@name=$mydefine]">
-      <xsl:for-each select="attribute|sprm">
-      <xsl:variable name="sprmname" select="@name"/>
-      // <xsl:value-of select="$mydefine"/> : <xsl:value-of select="$sprmname"/>
-      <xsl:for-each select="key('defines-with-name', $mydefine)//rng:element[@name=$sprmname]">
-        <xsl:call-template name="caselabelelement"/>
-      </xsl:for-each>
-      <xsl:for-each select="key('defines-with-name', $mydefine)//rng:attribute[@name=$sprmname]">
-        <xsl:call-template name="caselabelattribute"/>
-      </xsl:for-each>
-      <xsl:text>
+      <!--
+          Generates the body for the switch over the token id.
+      -->
+      <xsl:if test="$resource = 'Properties' or $resource = 'Property' or $resource = 'SingleElement'">
+        <xsl:for-each select="//resource[@name=$mydefine]">
+          <xsl:for-each select="attribute|sprm">
+            <xsl:variable name="sprmname" select="@name"/>
+        // <xsl:value-of select="$mydefine"/> : <xsl:value-of select="$sprmname"/>
+            <xsl:for-each select="key('defines-with-name', $mydefine)//rng:element[@name=$sprmname]">
+              <xsl:call-template name="caselabelelement"/>
+            </xsl:for-each>
+            <xsl:for-each select="key('defines-with-name', $mydefine)//rng:attribute[@name=$sprmname]">
+              <xsl:call-template name="caselabelattribute"/>
+            </xsl:for-each>
+            <xsl:text>
         nResult = </xsl:text>
         <xsl:call-template name="processtokenid"/>
         <xsl:text>;
         break;</xsl:text>
-    </xsl:for-each>
-    </xsl:for-each>
-    </xsl:if>
+          </xsl:for-each>
+        </xsl:for-each>
+      </xsl:if>
     </xsl:variable>
     <xsl:text>
 doctok::Id
@@ -788,6 +942,12 @@ doctok::Id
     </xsl:text>
   </xsl:template>
 
+  <!--
+      Generates case block for current <rng:attribute> node.
+
+      Precondition: The current <define> is labeled as "Boolean" by
+      the according <resource>.      
+  -->
  <xsl:template name="contextattributeimplbool">
     <xsl:call-template name="caselabelattribute"/>
     <xsl:for-each select=".//rng:ref">
@@ -807,6 +967,12 @@ doctok::Id
       break;</xsl:text>
   </xsl:template>
 
+  <!--      
+      Generates case block for current <rng:attribute> node.
+
+      Precondition: The current <define> is labeled as "Integer" by
+      the according <resource>.      
+  -->
   <xsl:template name="contextattributeimplint">
     <xsl:call-template name="caselabelattribute"/>
     <xsl:text>
@@ -815,6 +981,9 @@ doctok::Id
         break;</xsl:text>
   </xsl:template>
 
+  <!--
+      Generates inner of case block for current <rng:attribute> node.
+  -->
   <xsl:template name="contextattributeimplpropcaseinner">
     <xsl:variable name="mynsid" select="generate-id(ancestor::namespace)"/>
     <xsl:if test=".//rng:text">
@@ -842,6 +1011,12 @@ doctok::Id
     </xsl:for-each>
   </xsl:template>
 
+  <!--      
+      Generates case block for current <rng:attribute> node.
+
+      Precondition: The current <define> is labeled as "XNotes" by
+      the according <resource>.      
+  -->
   <xsl:template name="contextattributeimplxnote">
     <xsl:variable name="mynsid" select="generate-id(ancestor::namespace)"/>
     <xsl:variable name="definename" select="ancestor::rng:define/@name"/>
@@ -859,6 +1034,12 @@ doctok::Id
         break;</xsl:text>
   </xsl:template>
 
+  <!--      
+      Generates case block for current <rng:attribute> node.
+
+      Precondition: The current <define> is labeled as "Hex" by
+      the according <resource>.      
+  -->
   <xsl:template name="contextattributeimplhex">
     <xsl:call-template name="caselabelattribute"/>
     <xsl:text>
@@ -867,6 +1048,12 @@ doctok::Id
         break;</xsl:text>
   </xsl:template>
 
+  <!--      
+      Generates case block for current <rng:attribute> node.
+
+      Precondition: The current <define> is labeled as "String" by
+      the according <resource>.      
+  -->
    <xsl:template name="contextattributeimplstring">
     <xsl:call-template name="caselabelattribute"/>
     <xsl:text>
@@ -875,6 +1062,12 @@ doctok::Id
         break;</xsl:text>
   </xsl:template>
 
+  <!--      
+      Generates case block for current <rng:attribute> node.
+
+      Precondition: The current <define> is labeled as "List" by
+      the according <resource>.      
+  -->
  <xsl:template name="contextattributeimpllist">
     <xsl:call-template name="caselabelattribute"/>
     <xsl:for-each select=".//rng:ref">
@@ -908,6 +1101,12 @@ doctok::Id
     </xsl:choose>
   </xsl:template>
 
+  <!--      
+      Generates case block for current <rng:attribute> node.
+
+      Precondition: The current <define> is labeled as "Properties" by
+      the according <resource>.      
+  -->
   <xsl:template name="contextattributeimplprops">
     <xsl:variable name="mynsid" select="generate-id(ancestor::namespace)"/>
     <xsl:variable name="name" select="@name"/>
