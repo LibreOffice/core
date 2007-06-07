@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-04 14:02:32 $
+ *  last change: $Author: ihi $ $Date: 2007-06-07 16:46:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2030,7 +2030,8 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                                     if ( !pTmpSet )
                                         pTmpSet = new SfxItemSet(pNd->GetSwAttrSet());
 
-                                    pTmpSet->Put( SvxFmtKeepItem( TRUE ) );
+                                    const SvxFmtKeepItem aKeepItem( TRUE, RES_KEEP );
+                                    pTmpSet->Put( aKeepItem );
                                 }
                             }
                         }
