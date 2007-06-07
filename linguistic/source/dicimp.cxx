@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dicimp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:21:48 $
+ *  last change: $Author: ihi $ $Date: 2007-06-07 14:21:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,7 +348,7 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
             {
                 ByteString aDummy( aWordBuf );
                 String aText( aDummy, eEnc );
-                Reference< XDictionaryEntry > xEntry =
+                uno::Reference< XDictionaryEntry > xEntry =
                         new DicEntry( aText, bNegativ );
                 addEntry_Impl( xEntry , TRUE ); //! don't launch events here
             }
@@ -385,7 +385,7 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
             if (aLine.GetChar(0) == '#') // skip comments
                 continue;
             rtl::OUString aText = rtl::OStringToOUString (aLine, RTL_TEXTENCODING_UTF8);
-            Reference< XDictionaryEntry > xEntry =
+            uno::Reference< XDictionaryEntry > xEntry =
                     new DicEntry( aText, eDicType == DictionaryType_NEGATIVE );
             addEntry_Impl( xEntry , TRUE ); //! don't launch events here
         }
@@ -403,7 +403,7 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
 
 
 static ByteString formatForSave(
-        const Reference< XDictionaryEntry > &xEntry, rtl_TextEncoding eEnc )
+        const uno::Reference< XDictionaryEntry > &xEntry, rtl_TextEncoding eEnc )
 {
    ByteString aStr(xEntry->getDictionaryWord().getStr(), eEnc);
 
@@ -465,7 +465,7 @@ ULONG DictionaryNeo::saveEntries(const OUString &rURL)
         if (0 != (nErr = pStream->GetError()))
             return nErr;
 
-        const Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
+        const uno::Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
         for (INT32 i = 0;  i < nCount;  i++)
         {
             ByteString aOutStr = formatForSave(pEntry[i], eEnc);
@@ -500,7 +500,7 @@ ULONG DictionaryNeo::saveEntries(const OUString &rURL)
         if (0 != (nErr = pStream->GetError()))
             return nErr;
 
-        const Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
+        const uno::Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
         for (INT32 i = 0;  i < nCount;  i++)
         {
             ByteString aOutStr = formatForSave(pEntry[i], eEnc);
@@ -532,19 +532,19 @@ ULONG DictionaryNeo::saveEntries(const OUString &rURL)
 }
 
 void DictionaryNeo::launchEvent(INT16 nEvent,
-                                Reference< XDictionaryEntry > xEntry)
+                                uno::Reference< XDictionaryEntry > xEntry)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
     DictionaryEvent aEvt;
-    aEvt.Source = Reference< XDictionary >( this );
+    aEvt.Source = uno::Reference< XDictionary >( this );
     aEvt.nEvent = nEvent;
     aEvt.xDictionaryEntry = xEntry;
 
     cppu::OInterfaceIteratorHelper aIt( aDicEvtListeners );
     while (aIt.hasMoreElements())
     {
-        Reference< XDictionaryEventListener > xRef( aIt.next(), UNO_QUERY );
+        uno::Reference< XDictionaryEventListener > xRef( aIt.next(), UNO_QUERY );
         if (xRef.is())
             xRef->processDictionaryEvent( aEvt );
     }
@@ -644,7 +644,7 @@ BOOL DictionaryNeo::seekEntry(const OUString &rWord,
 
     MutexGuard  aGuard( GetLinguMutex() );
 
-    const Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
+    const uno::Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
     INT32 nUpperIdx = getCount(),
           nMidIdx,
           nLowerIdx = 0;
@@ -682,7 +682,7 @@ BOOL DictionaryNeo::isSorted()
 {
     BOOL bRes = TRUE;
 
-    const Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
+    const uno::Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
     INT32 nEntries = getCount();
     INT32 i;
     for (i = 1;  i < nEntries;  i++)
@@ -697,7 +697,7 @@ BOOL DictionaryNeo::isSorted()
     return bRes;
 }
 
-BOOL DictionaryNeo::addEntry_Impl(const Reference< XDictionaryEntry > xDicEntry,
+BOOL DictionaryNeo::addEntry_Impl(const uno::Reference< XDictionaryEntry > xDicEntry,
         BOOL bIsLoadEntries)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -729,7 +729,7 @@ BOOL DictionaryNeo::addEntry_Impl(const Reference< XDictionaryEntry > xDicEntry,
 
             if (nCount >= aEntries.getLength())
                 aEntries.realloc( Max(2 * nCount, nCount + 32) );
-            Reference< XDictionaryEntry > *pEntry = aEntries.getArray();
+            uno::Reference< XDictionaryEntry > *pEntry = aEntries.getArray();
 
             // shift old entries right
             INT32 i;
@@ -753,11 +753,11 @@ BOOL DictionaryNeo::addEntry_Impl(const Reference< XDictionaryEntry > xDicEntry,
 }
 
 
-Reference< XInterface > SAL_CALL DictionaryNeo_CreateInstance(
-            const Reference< XMultiServiceFactory > & /*rSMgr*/ )
+uno::Reference< XInterface > SAL_CALL DictionaryNeo_CreateInstance(
+            const uno::Reference< XMultiServiceFactory > & /*rSMgr*/ )
         throw(Exception)
 {
-    Reference< XInterface > xService =
+    uno::Reference< XInterface > xService =
             (cppu::OWeakObject*) new DictionaryNeo;
     return xService;
 }
@@ -876,7 +876,7 @@ void SAL_CALL DictionaryNeo::setLanguage( sal_Int16 nLanguageP )
 }
 
 
-Reference< XDictionaryEntry > SAL_CALL DictionaryNeo::getEntry(
+uno::Reference< XDictionaryEntry > SAL_CALL DictionaryNeo::getEntry(
             const OUString& aWord )
         throw(RuntimeException)
 {
@@ -891,11 +891,11 @@ Reference< XDictionaryEntry > SAL_CALL DictionaryNeo::getEntry(
     DBG_ASSERT(!bFound || nPos < nCount, "lng : index out of range");
 
     return bFound ? aEntries.getConstArray()[ nPos ]
-                    : Reference< XDictionaryEntry >();
+                    : uno::Reference< XDictionaryEntry >();
 }
 
 sal_Bool SAL_CALL DictionaryNeo::addEntry(
-            const Reference< XDictionaryEntry >& xDicEntry )
+            const uno::Reference< XDictionaryEntry >& xDicEntry )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -923,7 +923,7 @@ sal_Bool SAL_CALL
 
     if (!bIsReadonly)
     {
-        Reference< XDictionaryEntry > xEntry =
+        uno::Reference< XDictionaryEntry > xEntry =
                 new DicEntry( rWord, bIsNegative, rRplcText );
         bRes = addEntry_Impl( xEntry );
     }
@@ -932,14 +932,14 @@ sal_Bool SAL_CALL
 }
 
 void lcl_SequenceRemoveElementAt(
-            uno::Sequence< Reference< XDictionaryEntry > >& rEntries, int nPos )
+            uno::Sequence< uno::Reference< XDictionaryEntry > >& rEntries, int nPos )
 {
     //TODO: helper for SequenceRemoveElementAt available?
     if(nPos >= rEntries.getLength())
         return;
-    uno::Sequence< Reference< XDictionaryEntry > > aTmp(rEntries.getLength() - 1);
-    Reference< XDictionaryEntry > * pOrig = rEntries.getArray();
-    Reference< XDictionaryEntry > * pTemp = aTmp.getArray();
+    uno::Sequence< uno::Reference< XDictionaryEntry > > aTmp(rEntries.getLength() - 1);
+    uno::Reference< XDictionaryEntry > * pOrig = rEntries.getArray();
+    uno::Reference< XDictionaryEntry > * pTemp = aTmp.getArray();
     int nOffset = 0;
     for(int i = 0; i < aTmp.getLength(); i++)
     {
@@ -973,7 +973,7 @@ sal_Bool SAL_CALL DictionaryNeo::remove( const OUString& aWord )
         if (bFound)
         {
             // entry to be removed
-            Reference< XDictionaryEntry >
+            uno::Reference< XDictionaryEntry >
                     xDicEntry( aEntries.getConstArray()[ nPos ] );
             DBG_ASSERT(xDicEntry.is(), "lng : dictionary entry is NULL")
 
@@ -1000,7 +1000,7 @@ sal_Bool SAL_CALL DictionaryNeo::isFull(  )
     return nCount >= DIC_MAX_ENTRIES;
 }
 
-uno::Sequence< Reference< XDictionaryEntry > >
+uno::Sequence< uno::Reference< XDictionaryEntry > >
     SAL_CALL DictionaryNeo::getEntries(  )
         throw(RuntimeException)
 {
@@ -1010,7 +1010,7 @@ uno::Sequence< Reference< XDictionaryEntry > >
         loadEntries( aMainURL );
     //! return sequence with length equal to the number of dictionary entries
     //! (internal used sequence may have additional unused elements.)
-    return uno::Sequence< Reference< XDictionaryEntry > >
+    return uno::Sequence< uno::Reference< XDictionaryEntry > >
         (aEntries.getConstArray(), nCount);
 }
 
@@ -1023,7 +1023,7 @@ void SAL_CALL DictionaryNeo::clear(  )
     if (!bIsReadonly && nCount)
     {
         // release all references to old entries and provide space for new ones
-        aEntries = uno::Sequence< Reference< XDictionaryEntry > > ( 32 );
+        aEntries = uno::Sequence< uno::Reference< XDictionaryEntry > > ( 32 );
 
         nCount = 0;
         bNeedEntries = FALSE;
@@ -1034,7 +1034,7 @@ void SAL_CALL DictionaryNeo::clear(  )
 }
 
 sal_Bool SAL_CALL DictionaryNeo::addDictionaryEventListener(
-            const Reference< XDictionaryEventListener >& xListener )
+            const uno::Reference< XDictionaryEventListener >& xListener )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -1049,7 +1049,7 @@ sal_Bool SAL_CALL DictionaryNeo::addDictionaryEventListener(
 }
 
 sal_Bool SAL_CALL DictionaryNeo::removeDictionaryEventListener(
-            const Reference< XDictionaryEventListener >& xListener )
+            const uno::Reference< XDictionaryEventListener >& xListener )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
