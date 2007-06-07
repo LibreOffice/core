@@ -4,9 +4,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-04 14:57:56 $
+ *  last change: $Author: vg $ $Date: 2007-06-07 10:11:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -774,7 +774,7 @@ void StyleSettings::SetPreferredSymbolsStyleName( const ::rtl::OUString &rName )
     {
         ::rtl::OUString rNameLowCase( rName.toAsciiLowerCase() );
 
-        for( sal_Int32 n = 0; n <= STYLE_SYMBOLS_THEMES_MAX; n++ )
+        for( sal_uInt32 n = 0; n <= STYLE_SYMBOLS_THEMES_MAX; n++ )
             if ( rNameLowCase.indexOf( ImplSymbolsStyleToName( n ) ) != -1 )
                 SetPreferredSymbolsStyle( n );
     }
