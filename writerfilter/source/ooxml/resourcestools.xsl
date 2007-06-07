@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-06-07 07:56:14 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-07 12:49:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -692,7 +692,7 @@ OOXMLContext::Pointer_t </xsl:text>
     </xsl:if>
   </xsl:template>
 
-  <!---
+  <!--
       Generates the definition of lcl_characters for the current <define>.
   -->
   <xsl:template name="contextcharactersimpl">
@@ -1121,6 +1121,15 @@ doctok::Id
       break;</xsl:text>
   </xsl:template>
 
+  <!--
+      Generates the inner of the switch over the given token id in the
+      ::attribute method of the class for the current <define>.
+
+      For each <rng:attribute> in the current <define> the according
+      template generating the case block is called. Which template is
+      called depends on the <resource>/@resource for the current
+      <define>.
+  -->
   <xsl:template name="contextattributeswitchbody">
     <xsl:variable name="resource">
       <xsl:call-template name="contextresource"/>
@@ -1156,6 +1165,17 @@ doctok::Id
     </xsl:for-each>
   </xsl:template>
 
+  <!--
+      Generates the code in ::lcl_attribute handling direct <rng:ref>s in
+      the current define.
+
+      Direct <rng:ref>s have a path from the <define> that does not
+      contain neither <rng:attribute> nor <rng:element>.
+
+      For each those <rng:ref>s an instance of the according context
+      class is generated. The handling is then passed to the
+      ::attribute method of that instance.
+  -->
   <xsl:template name="contextattributerefs">
     <xsl:variable name="resource">
       <xsl:call-template name="contextresource"/>
@@ -1215,6 +1235,10 @@ doctok::Id
       </xsl:for-each>
   </xsl:template>
 
+  <!--
+      Generates the definition of ::lcl_attribute for the current
+      <define>.
+  -->
   <xsl:template name="contextattributeimpl">
     <xsl:param name="prefix"/>
     <xsl:variable name="classname">
@@ -1257,6 +1281,15 @@ bool </xsl:text>
 }</xsl:text>
   </xsl:template>
 
+  <!--
+      Check if a default is defined for a define.
+
+      Returns if the <resource> for the current <define> has a
+      <default> child.
+
+      @retval 0     there is no default
+      @retval 1     there is a default
+  -->
   <xsl:template name="contexthasdefault">
     <xsl:variable name="name" select="@name"/>
     <xsl:choose>
@@ -1265,6 +1298,10 @@ bool </xsl:text>
     </xsl:choose>
   </xsl:template>
 
+  <!--
+      Generates the definition of the constructor for the context
+      class for the current <define>.
+  -->
   <xsl:template name="contextconstructorimpl">
     <xsl:param name="prefix"/>
     <xsl:variable name="me" select="node()"/>
@@ -1284,6 +1321,10 @@ bool </xsl:text>
 }&#xa;</xsl:text>
   </xsl:template>
 
+  <!--
+      Generates the definition of ::startAction of the context class
+      for the current <define>.
+  -->
   <xsl:template name="contextstartimpl">
     <xsl:param name="prefix"/>
     <xsl:variable name="me" select="node()"/>
@@ -1352,6 +1393,10 @@ void </xsl:text>
 }</xsl:text>
   </xsl:template>
 
+  <!--
+      Genertes the definition of ::endAction of the context class for
+      the current <define>.
+  -->
   <xsl:template name="contextendimpl">
     <xsl:param name="prefix"/>
     <xsl:variable name="classname">
@@ -1467,6 +1512,10 @@ void </xsl:text>
 }</xsl:text>
   </xsl:template>
 
+  <!--
+      Generates the definition of the destructor of the context class
+      for the current <define>.
+  -->
   <xsl:template name="contextdestructorimpl">
     <xsl:param name="prefix"/>
     <xsl:variable name="classname">
@@ -1482,6 +1531,10 @@ void </xsl:text>
 }&#xa;</xsl:text>
   </xsl:template>
 
+  <!--
+      Generates the definitions of the methods of the context class
+      for the current <define>.
+  -->
   <xsl:template name="contextimpls">
     <xsl:call-template name="maincontextrefs"/>
     <xsl:call-template name="mainidrefs"/>
@@ -1519,12 +1572,22 @@ void </xsl:text>
   <xsl:key name="value-with-content" match="//rng:value"
            use="text()"/>
 
+  <!--
+      Generates name for a value string.
+
+      Value strings are possible values for attributes in OOXML.
+      
+      @param string    the string as present in the according <rng:value>
+  -->
   <xsl:template name="valuestringname">
     <xsl:param name="string"/>
     <xsl:text>OOXMLValueString_</xsl:text>
     <xsl:value-of select="translate($string, '-+', 'mp')"/>
   </xsl:template>
   
+  <!--
+      Generates constant definitions for attribute values.
+  -->
   <xsl:template name="valueconstants">
     <xsl:for-each select="//rng:value[generate-id(key('value-with-content', text())[1]) = generate-id(.)]">
       <xsl:text>
@@ -1538,6 +1601,9 @@ rtl::OUString </xsl:text>
     </xsl:for-each>
   </xsl:template>
 
+  <!--
+      Generates constant declarations for attribute values.
+  -->
   <xsl:template name="valueconstantdecls">
     <xsl:for-each select="//rng:value[generate-id(key('value-with-content', text())[1]) = generate-id(.)]">
       <xsl:text>
@@ -1549,6 +1615,10 @@ extern rtl::OUString </xsl:text>
     </xsl:for-each>
   </xsl:template>
 
+  <!--
+      Generates definition of constructor for attribute value class
+      for current <define>.
+  -->
   <xsl:template name="valueconstructorimpl">
     <xsl:variable name="name" select="@name"/>
     <xsl:variable name="classname">
@@ -1595,6 +1665,10 @@ extern rtl::OUString </xsl:text>
     </xsl:choose>
   </xsl:template>
 
+  <!--
+      Generates definition of destructor of attribute value class for
+      current <define>.
+  -->
   <xsl:template name="valuedestructorimpl">
     <xsl:variable name="classname">
       <xsl:call-template name="valuenamefordefine"/>
@@ -1609,6 +1683,10 @@ extern rtl::OUString </xsl:text>
     </xsl:text>
   </xsl:template>
 
+  <!--
+      Generates definitions for attribute value class for current
+      <define>.
+  -->
   <xsl:template name="valueimpls">
     <xsl:for-each select=".//rng:define">
       <xsl:variable name="do">
@@ -1630,6 +1708,9 @@ extern rtl::OUString </xsl:text>
     </xsl:for-each>
   </xsl:template>
 
+  <!--
+      Generates OOXMLContext::elementForRefs.
+  -->
   <xsl:template name="maincontextrefs">
     <xsl:param name="prefix"/>
     <xsl:text>
@@ -1659,6 +1740,9 @@ OOXMLContext::Pointer_t OOXMLContext::elementFromRefs(TokenEnum_t nToken)
     </xsl:text>  
   </xsl:template>
 
+  <!--
+      Generates OOXMLContext::getIdFromRefs.
+  -->
   <xsl:template name="mainidrefs">
     <xsl:param name="prefix"/>
     <xsl:text>
@@ -1688,6 +1772,9 @@ doctok::Id OOXMLContext::getIdFromRefs(TokenEnum_t nToken)
     </xsl:text>  
   </xsl:template>
 
+  <!--
+      Generates getAnyContext.
+  -->
   <xsl:template name="elementimplany">
     <xsl:variable name="switchbody">
     <xsl:for-each select=".//namespace">
@@ -1737,6 +1824,9 @@ OOXMLContext::Pointer_t getAnyContext(TokenEnum_t nToken)
 }&#xa;</xsl:text>
   </xsl:template>
 
+  <!--
+      Generates contant definitions for tokenids.
+  -->
   <xsl:template name="defineooxmlids">
     <xsl:text>
 namespace writerfilter { namespace NS_ooxml
@@ -1754,6 +1844,9 @@ namespace writerfilter { namespace NS_ooxml
 }}
   </xsl:template>
 
+  <!--
+      Generates mapping from tokenids to strings. (DEBUG)
+  -->
   <xsl:template name="qnametostr">
     <xsl:text>
     /* ooxml */
@@ -1780,6 +1873,12 @@ namespace writerfilter { namespace NS_ooxml
   
   <xsl:key name="sprms-with-code" match="sprm" use="@tokenid"/>
 
+  <!--
+      Generates case labels for mapping from token ids to a single kind
+      of sprm.
+
+      @param kind     the sprm kind for which to generate the case labels
+  -->
   <xsl:template name="sprmkindcase">
     <xsl:param name="kind"/>
     <xsl:for-each select="key('resources-with-kind', $kind)/sprm">
@@ -1797,6 +1896,9 @@ namespace writerfilter { namespace NS_ooxml
     </xsl:for-each>
   </xsl:template>
 
+  <!--
+      Generates SprmKind.
+  -->
   <xsl:template name="sprmkind">
     <xsl:text>
 Sprm::Kind SprmKind(sal_uInt32 nSprmCode)
@@ -1832,6 +1934,17 @@ Sprm::Kind SprmKind(sal_uInt32 nSprmCode)
 }</xsl:text>
   </xsl:template>
 
+  <!--
+      Generates qname for id.
+
+      @param id     the id to generate qname for
+
+      If id is of format <prefix>:<localname> the result is
+      
+               NS_<prefix>::LN_<localname>
+
+      If id does not contain ":" the result is just id.
+  -->
   <xsl:template name='idtoqname'>
     <xsl:param name='id'/>
     <xsl:choose>
@@ -1847,6 +1960,9 @@ Sprm::Kind SprmKind(sal_uInt32 nSprmCode)
     </xsl:choose>
   </xsl:template>
 
+  <!--
+      Generates input for gperf to generate hash map for elements.
+  -->
   <xsl:template name="gperfinputelements">
     <xsl:text>
 %{
@@ -1870,6 +1986,9 @@ struct token { const char * name; TokenEnum_t nToken; };
 %%&#xa;</xsl:text>
 }}}&#xa;</xsl:template>
 
+<!--
+    Generates input for gperf to generate hash map for attributes.
+-->
 <xsl:template name="gperfinputattributes">
     <xsl:text>
 %{
