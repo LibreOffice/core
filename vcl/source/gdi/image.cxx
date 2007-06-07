@@ -5,9 +5,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 14:11:14 $
+ *  last change: $Author: vg $ $Date: 2007-06-07 07:12:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,8 +79,8 @@
 #include <image.hxx>
 #endif
 
-DBG_NAME( Image );
-DBG_NAME( ImageList );
+DBG_NAME( Image )
+DBG_NAME( ImageList )
 
 #define IMAGE_FILE_VERSION 100
 
