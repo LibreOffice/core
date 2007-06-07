@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menudispatcher.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:45:19 $
+ *  last change: $Author: ihi $ $Date: 2007-06-07 15:19:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -723,8 +723,8 @@ IMPL_LINK( MenuDispatcher, Close_Impl, void*, EMPTYARG )
 #ifdef ENABLE_ASSERTIONS
 
 //*****************************************************************************************************************
-sal_Bool MenuDispatcher::impldbg_checkParameter_MenuDispatcher(   const   Reference< XMultiServiceFactory >&  xFactory    ,
-                                                                        const   Reference< XFrame >&                xOwner      )
+sal_Bool MenuDispatcher::impldbg_checkParameter_MenuDispatcher(   const   uno::Reference< XMultiServiceFactory >&  xFactory    ,
+                                                                        const   uno::Reference< XFrame >&               xOwner      )
 {
     // Set default return value.
     sal_Bool bOK = sal_True;
@@ -765,7 +765,7 @@ sal_Bool MenuDispatcher::impldbg_checkParameter_dispatch(  const   URL&         
 //*****************************************************************************************************************
 // We need a valid URL. What is meaning with "register for nothing"?!
 // xControl must correct to - nobody can advised otherwise!
-sal_Bool MenuDispatcher::impldbg_checkParameter_addStatusListener( const   Reference< XStatusListener >&   xControl,
+sal_Bool MenuDispatcher::impldbg_checkParameter_addStatusListener( const   uno::Reference< XStatusListener >&   xControl,
                                                                         const   URL&                            aURL    )
 {
     // Set default return value.
@@ -786,7 +786,7 @@ sal_Bool MenuDispatcher::impldbg_checkParameter_addStatusListener( const   Refer
 //*****************************************************************************************************************
 // The same goes for these case! We have added valid listener for correct URL only.
 // We can't remove invalid listener for nothing!
-sal_Bool MenuDispatcher::impldbg_checkParameter_removeStatusListener(  const   Reference< XStatusListener >&   xControl,
+sal_Bool MenuDispatcher::impldbg_checkParameter_removeStatusListener(  const   uno::Reference< XStatusListener >&   xControl,
                                                                             const   URL&                            aURL    )
 {
     // Set default return value.
