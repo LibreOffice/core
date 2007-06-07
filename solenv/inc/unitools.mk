@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.53 $
+#   $Revision: 1.54 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 13:14:40 $
+#   last change: $Author: ihi $ $Date: 2007-06-07 10:27:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,7 @@ LS*=ls
 MKDIR*=mkdir
 MKDIRHIER*=mkdir -p
 PERL*:=perl
+.EXPORT : PERL
 RENAME*=mv
 TOUCH*=touch
 TYPE*=cat
@@ -159,6 +160,7 @@ LS*=$(BUILD_TOOLS)$/ls.exe
 MKDIR=+mkdir
 MKDIRHIER=$(MKDIR) /sn
 PERL*:=+call perl5.btm
+.EXPORT : PERL
 RENAME*=+ren
 TOUCH*=$(PERL) $(SOLARENV)$/bin$/touch.pl
 TYPE*=+type
@@ -170,6 +172,7 @@ DUMPBIN*=$(WRAPCMD) dumpbin
 SED*=sed
 SORT*=sort
 PERL*=perl
+.EXPORT : PERL
 TYPE=cat
 CDD=cd
 COPY=cp -f
