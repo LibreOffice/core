@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpCompiler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 10:24:46 $
+ *  last change: $Author: vg $ $Date: 2007-06-08 15:00:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ namespace fs
             osl_getProcessWorkingDir(&sWorkingDir.pData);
 
             rtl::OString tmp(in.c_str());
-            rtl::OUString ustrSystemPath(OStringToOUString(tmp, osl_getThreadTextEncoding()));
+            rtl::OUString ustrSystemPath(rtl::OStringToOUString(tmp, osl_getThreadTextEncoding()));
             osl::File::getFileURLFromSystemPath(ustrSystemPath, data);
             osl::File::getAbsoluteFileURL(sWorkingDir, data, data);
             }
@@ -97,14 +97,14 @@ namespace fs
         {
             ::rtl::OUString ustrSystemPath;
             osl::File::getSystemPathFromFileURL(data, ustrSystemPath);
-            rtl::OString tmp(OUStringToOString(ustrSystemPath, osl_getThreadTextEncoding()));
+            rtl::OString tmp(rtl::OUStringToOString(ustrSystemPath, osl_getThreadTextEncoding()));
             HCDBG(std::cerr << "native_file_string is " << tmp.getStr() << std::endl);
             return std::string(tmp.getStr());
         }
         std::string native_directory_string() const { return native_file_string(); }
         std::string toUTF8() const
         {
-            rtl::OString tmp(OUStringToOString(data, RTL_TEXTENCODING_UTF8));
+            rtl::OString tmp(rtl::OUStringToOString(data, RTL_TEXTENCODING_UTF8));
             return std::string(tmp.getStr());
         }
         bool empty() const { return data.getLength() == 0; }
@@ -114,7 +114,7 @@ namespace fs
             HCDBG(std::cerr << "orig was " <<
                 rtl::OUStringToOString(ret.data, RTL_TEXTENCODING_UTF8).getStr() << std::endl);
             rtl::OString tmp(in.c_str());
-            rtl::OUString ustrSystemPath(OStringToOUString(tmp, osl_getThreadTextEncoding()));
+            rtl::OUString ustrSystemPath(rtl::OStringToOUString(tmp, osl_getThreadTextEncoding()));
             ret.data += rtl::OUString(sal_Unicode('/'));
             ret.data += ustrSystemPath;
             HCDBG(std::cerr << "final is " <<
@@ -124,7 +124,7 @@ namespace fs
         void append(const char *in)
         {
             rtl::OString tmp(in);
-            rtl::OUString ustrSystemPath(OStringToOUString(tmp, osl_getThreadTextEncoding()));
+            rtl::OUString ustrSystemPath(rtl::OStringToOUString(tmp, osl_getThreadTextEncoding()));
             data = data + ustrSystemPath;
         }
         void append(const std::string &in) { append(in.c_str()); }

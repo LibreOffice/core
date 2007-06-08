@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpLinker.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 10:25:03 $
+ *  last change: $Author: vg $ $Date: 2007-06-08 15:01:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -598,6 +598,7 @@ class EntryProcessor
 {
 public:
     virtual void processEntry(const std::string &string, int id) const = 0;
+    virtual ~EntryProcessor() {};
 };
 
 class BtreeDict
@@ -641,6 +642,7 @@ class BlockFactory
 {
 public:
     virtual Block* makeBlock() const = 0;
+    virtual ~BlockFactory() {}
 };
 
 static int dictcount;
@@ -797,6 +799,7 @@ protected:
 public:
     BlockProcessor(std::vector<int> &_blocks) : blocks(_blocks) {}
     virtual void process(const Block &block) = 0;
+    virtual ~BlockProcessor() {}
 };
 
 
@@ -912,6 +915,9 @@ void BlockManager::addDescriptor(Block *block)
 {
     BlockDescriptor desc(block);
     _blockTab.push_back(desc);
+    // Ivo debug
+    fprintf(stderr, "numbers are %lx %lx\n", block->_number,
+            _blockTab.size() - 1);
     if (block->_number != _blockTab.size() - 1)
     {
         std::cerr << "totally screwed" << std::endl;
@@ -1629,7 +1635,7 @@ public:
     std::fstream& getPositionsFile();
     std::fstream& getOffsetsFile();
     DocumentCompressor& getDocumentCompressor();
-    void compress(int docID, int titleID,
+    virtual void compress(int docID, int titleID,
         std::vector<ConceptLocation> &locations,
         std::vector<ConceptLocation> &extents);
     void close();
@@ -1654,7 +1660,7 @@ private:
 
 protected:
     virtual int getNextByte() = 0;
-    void initReading() { _toRead = 0; _path = 0; }
+    virtual void initReading() { _toRead = 0; _path = 0; }
 
 private:
     int countZeroes();
@@ -1668,6 +1674,7 @@ public:
     void decode(int k, IntegerArray &array);
     void ascDecode(int k, IntegerArray &array);
     int ascendingDecode(int k, int start, std::vector<int> &array);
+    virtual ~Decompressor() {}
 };
 
 int Decompressor::BitsInByte = 8;
@@ -1681,7 +1688,8 @@ private:
     int _index0;
 public:
     ByteArrayDecompressor(const std::vector<unsigned char> *array, int index) { initReading(array, index); }
-    void initReading(const std::vector<unsigned char> *array, int index)
+    using Decompressor::initReading;
+    virtual void initReading(const std::vector<unsigned char> *array, int index)
     {
         _array = array;
         _index = _index0 = index;
@@ -2491,6 +2499,7 @@ protected:
             else if (_data[idx] < nBytesEq)
                 return false;
         }
+        return false;
     }
 public:
     bool processLeafBlock(VectorProcessor &processor, const VectorBtree &tree)
@@ -2578,6 +2587,7 @@ class CompressorIterator
 {
 public:
     virtual void value(int value) = 0;
+    virtual ~CompressorIterator() {}
 };
 
 int Decompressor::countZeroes()
@@ -2602,7 +2612,7 @@ int Decompressor::countZeroes()
             }
         }
     }
-    return 0;
+    //return 0;
 }
 
 // reads 1 bit; returns non-0 for bit "1"
@@ -2804,7 +2814,8 @@ private:
     std::ifstream *_input;
 public:
     StreamDecompressor(std::ifstream &input) { initReading(input); }
-    void initReading(std::ifstream &input) { _input = &input; Decompressor::initReading(); }
+    using Decompressor::initReading;
+    virtual void initReading(std::ifstream &input) { _input = &input; Decompressor::initReading(); }
     int getNextByte()
     {
         unsigned char ret;
@@ -3232,7 +3243,8 @@ public:
     void close();
     virtual ~XmlIndex() { delete _edgesParams; delete _edges; delete _contextTables; }
     std::fstream& getContextsFile();
-    void compress(int docID, int titleID,
+    using Index::compress;
+    virtual void compress(int docID, int titleID,
         std::vector<ConceptLocation> &locations,
         std::vector<ConceptLocation> &extents,
         int k, const Compressor &contextTables);
@@ -4743,7 +4755,21 @@ void JarOutputStream::commit()
     fos << perlline.str();
     fos.close();
 
-    std::string commandline = "perl " + perlfile;
+    std::string myperl( getenv( "PERL" ) );
+    std::string commandline;
+    const std::string is4nt ( getenv( "USE_SHELL" ) );
+    if( !is4nt.empty() && is4nt == "4nt" )
+    {
+        std::string myperl2 = replaceAll( myperl , "\\" , "\\\\" );
+        myperl  = myperl2 ;
+        myperl2 = replaceAll( perlfile , "\\" , "\\\\" );
+        perlfile = myperl2 ;
+        commandline = myperl + " " + perlfile;
+    }
+//    std::string commandline = "perl " + perlfile;
+    else
+        commandline = "perl " + perlfile;
+
     HCDBG(std::cerr << "command line 3 is" << commandline << std::endl);
     system(commandline.c_str());
 
@@ -4841,7 +4867,7 @@ namespace
     }
 }
 
-void function_orig_pointer(xmlXPathParserContextPtr ctxt, int nargs)
+extern "C" void function_orig_pointer(xmlXPathParserContextPtr ctxt, int nargs)
 {
     if (nargs > 1)
     {
@@ -4885,7 +4911,7 @@ void function_orig_pointer(xmlXPathParserContextPtr ctxt, int nargs)
     valuePush(ctxt, xmlXPathNewString(str));
 }
 
-void* cmc_module_init(xsltTransformContextPtr ctxt, const xmlChar* uri)
+extern "C" void* cmc_module_init(xsltTransformContextPtr ctxt, const xmlChar* uri)
 {
     if (xsltRegisterExtFunction(ctxt, (const xmlChar*)"orig-pointer", uri, function_orig_pointer))
     {
@@ -4895,7 +4921,7 @@ void* cmc_module_init(xsltTransformContextPtr ctxt, const xmlChar* uri)
     return NULL;
 }
 
-void cmc_module_term(xsltTransformContextPtr, const xmlChar*, void*)
+extern "C" void cmc_module_term(xsltTransformContextPtr, const xmlChar*, void*)
 {
 }
 

@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 10:25:23 $
+#   last change: $Author: vg $ $Date: 2007-06-08 15:01:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,11 @@ CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)
 OBJFILES=\
         $(OBJ)$/HelpLinker.obj \
         $(OBJ)$/HelpCompiler.obj
+
+EXCEPTIONSFILES=\
+        $(OBJ)$/HelpLinker.obj \
+        $(OBJ)$/HelpCompiler.obj
+
 
 APP1TARGET= $(TARGET)
 APP1OBJS=\
