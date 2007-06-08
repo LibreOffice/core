@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-06 10:58:14 $
+#   last change: $Author: hjs $ $Date: 2007-06-08 12:47:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,10 @@ CFLAGS+= -Ob1
 .IF "$(UPDATER)"!=""
 CFLAGSENABLESYMBOLS=-Z7 -Yd
 .ELSE				# "$(UPDATER)"!=""
+# -Zd got higher priority and overrides debug switches
+.IF "$(debug)"==""
 CFLAGSENABLESYMBOLS=-Zd
+.ENDIF			# "$(debug)"==""
 .ENDIF				# "$(UPDATER)"!=""
 
 .IF "$(bndchk)" != ""
