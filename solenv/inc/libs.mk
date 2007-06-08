@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.112 $
+#   $Revision: 1.113 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 11:22:48 $
+#   last change: $Author: rt $ $Date: 2007-06-08 07:07:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.112 $$"
+LIBSMKREV!:="$$Revision: 1.113 $$"
 
 .IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC" || "$(COM)"=="GCC"
 
@@ -263,7 +263,6 @@ JVMACCESSLIB = -ljvmaccess$(COMID)
 CPPUNITLIB = -lcppunit$(DLLPOSTFIX)
 .IF "$(GUI)$(COM)"=="WNTGCC"
 XML2LIB=-lxml2-2
-JVMFWKLIB = -ljvmfwk$(UDK_MAJOR)
 .ELSE
 .IF "$(SYSTEM_LIBXML)"=="YES"
 XML2LIB=$(LIBXML_LIBS)
@@ -275,6 +274,10 @@ XML2LIB=-lxml2
 XSLTLIB=$(LIBXSLT_LIBS)
 .ELSE
 XSLTLIB=-lxslt $(ZLIB3RD) $(XML2LIB)
+.ENDIF
+.IF "$(GUI)$(COM)"=="WNTGCC"
+JVMFWKLIB = -ljvmfwk$(UDK_MAJOR)
+.ELSE
 JVMFWKLIB = -ljvmfwk
 .ENDIF
 
