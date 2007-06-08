@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: vg $ $Date: 2007-06-08 15:01:03 $
+#   last change: $Author: vg $ $Date: 2007-06-08 16:42:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,41 +35,103 @@
 
 PRJ		= ..$/..$/..$/..$/..
 PRJNAME = xmlhelp
-TARGET  = HelpLinker
-TARGETTYPE=CUI
-LIBTARGET=no
+PACKAGE = com$/sun$/star$/help
+TARGET  = com_sun_star_help
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
 
-.IF "$(SYSTEM_LIBXSLT)" == "YES"
-CFLAGS+= $(LIBXSLT_CFLAGS)
+JARFILES 	= xt-xmlsearch.jar unoil.jar ridl.jar jurt.jar jut.jar xmlsearch.jar
+EXTRAJARFILES 	= 
+
+.IF "$(SYSTEM_XT)" == "YES"
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XT_JAR)
 .ELSE
-LIBXSLTINCDIR=external$/libxslt
-CFLAGS+= -I$(SOLARINCDIR)$/$(LIBXSLTINCDIR)
+JARFILES += xt.jar
+.ENDIF
+
+.IF "$(SYSTEM_XML_APIS)" == "YES"
+.IF "$(XCLASSPATH)" != ""
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XML_APIS_JAR)
+.ELSE
+XCLASSPATH!:=$(XML_APIS_JAR)
+.ENDIF
+.ELSE
+JARFILES += xml-apis.jar
+.ENDIF
+
+.IF "$(SYSTEM_XERCES)" == "YES"
+.IF "$(XCLASSPATH)" != ""
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XERCES_JAR)
+.ELSE
+XCLASSPATH!:=$(XERCES_JAR)
+.ENDIF
+.ELSE
+JARFILES += xercesImpl.jar
 .ENDIF
 
 .IF "$(SYSTEM_DB)" == "YES"
-CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)
+.IF "$(XCLASSPATH)" != ""
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(DB_JAR)
+.ELSE
+XCLASSPATH!:=$(DB_JAR)
+.ENDIF
+.ELSE
+JARFILES += db.jar
 .ENDIF
 
-OBJFILES=\
-        $(OBJ)$/HelpLinker.obj \
-        $(OBJ)$/HelpCompiler.obj
+CLASSGENDIR		= $(OUT)$/classgen
+RDB	 		= $(SOLARBINDIR)$/types.rdb
+JAVAFILES		= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
 
-EXCEPTIONSFILES=\
-        $(OBJ)$/HelpLinker.obj \
-        $(OBJ)$/HelpCompiler.obj
+# --- Files --------------------------------------------------------
 
+JAVACLASSFILES = \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpCompiler.class			        \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpLinker.class  			        \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpContentIdentifier.class        \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpProvider.class                 \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpContent.class                  \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpOutputStream.class             \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpDatabases.class                \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpURLStreamHandlerFactory.class  \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpURLStreamHandler.class         \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpURLStreamHandlerWithJars.class \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpURLConnection.class            \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpURLConnectionWithJars.class    \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpURLParameter.class             \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpResultSetFactory.class         \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpDynamicResultSet.class         \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpResultSetBase.class            \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpResultSet.class                \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpResultSetForRoot.class         \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpIndexer.class                  \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpKeyword.class                  \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpPackager.class                 \
+    $(CLASSDIR)$/$(PACKAGE)$/XSLData.class                      \
+    $(CLASSDIR)$/$(PACKAGE)$/MemoryURLConnection.class          \
+    $(CLASSDIR)$/$(PACKAGE)$/StringDbt.class 
 
-APP1TARGET= $(TARGET)
-APP1OBJS=\
-      $(OBJ)$/HelpLinker.obj \
-      $(OBJ)$/HelpCompiler.obj
+.IF "$(JDK)"=="gcj"
+JAVACLASSFILES += \
+    $(CLASSDIR)$/$(PACKAGE)$/GCJFileURLStreamHandler.class
+.ELSE
+JAVACLASSFILES += \
+    $(CLASSDIR)$/$(PACKAGE)$/FileURLStreamHandler.class
+.ENDIF
 
-APP1STDLIBS+=$(SALLIB) $(BERKELEYLIB) $(ICUUCLIB) $(XSLTLIB)
+JARCLASSDIRS	= com
+JARTARGET		= $(PRJNAME).jar
+JARCOMPRESS 	= TRUE
+CUSTOMMANIFESTFILE = manifest
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+.IF "$(JAVAAOTCOMPILER)" != ""
+AOTTARGET = com.sun.star.help.HelpLinker
+.INCLUDE :  aottarget.mk
+ALLTAR : $(AOTTARGETN)
+.ENDIF
