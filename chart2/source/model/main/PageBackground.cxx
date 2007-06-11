@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageBackground.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:39:50 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 15:01:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,8 @@
 #include "PropertyHelper.hxx"
 #endif
 
+#include <com/sun/star/drawing/LineStyle.hpp>
+
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
 #endif
@@ -72,6 +74,10 @@ void lcl_AddDefaultsToMap(
 {
     rOutMap[ ::chart::FillProperties::PROP_FILL_COLOR ] =
         uno::makeAny( sal_Int32( 0xffffff ));
+
+    // override other defaults
+    rOutMap[ ::chart::LineProperties::PROP_LINE_STYLE ] =
+        uno::makeAny( drawing::LineStyle_NONE );
 }
 
 const uno::Sequence< Property > & lcl_GetPropertySequence()
