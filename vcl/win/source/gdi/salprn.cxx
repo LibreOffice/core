@@ -853,8 +853,44 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     // PaperSize
     if ( nFlags & SAL_JOBSET_PAPERSIZE )
     {
-        pSetupData->mnPaperWidth  = CHOOSE_DEVMODE(dmPaperWidth)*10;
-        pSetupData->mnPaperHeight = CHOOSE_DEVMODE(dmPaperLength)*10;
+        if( (CHOOSE_DEVMODE(dmFields) & (DM_PAPERWIDTH|DM_PAPERLENGTH)) == (DM_PAPERWIDTH|DM_PAPERLENGTH) )
+        {
+            pSetupData->mnPaperWidth  = CHOOSE_DEVMODE(dmPaperWidth)*10;
+            pSetupData->mnPaperHeight = CHOOSE_DEVMODE(dmPaperLength)*10;
+        }
+        else
+        {
+            ULONG   nPaperCount = ImplDeviceCaps( pPrinter, DC_PAPERS, NULL, pSetupData );
+            WORD*   pPapers = NULL;
+            ULONG   nPaperSizeCount = ImplDeviceCaps( pPrinter, DC_PAPERSIZE, NULL, pSetupData );
+            POINT*  pPaperSizes = NULL;
+            if ( nPaperCount && (nPaperCount != GDI_ERROR) )
+            {
+                pPapers = (WORD*)rtl_allocateZeroMemory(nPaperCount*sizeof(WORD));
+                ImplDeviceCaps( pPrinter, DC_PAPERS, (BYTE*)pPapers, pSetupData );
+            }
+            if ( nPaperSizeCount && (nPaperSizeCount != GDI_ERROR) )
+            {
+                pPaperSizes = (POINT*)rtl_allocateZeroMemory(nPaperSizeCount*sizeof(POINT));
+                ImplDeviceCaps( pPrinter, DC_PAPERSIZE, (BYTE*)pPaperSizes, pSetupData );
+            }
+            if( nPaperSizeCount == nPaperCount && pPaperSizes && pPapers )
+            {
+                for( ULONG i = 0; i < nPaperCount; i++ )
+                {
+                    if( pPapers[ i ] == CHOOSE_DEVMODE(dmPaperSize) )
+                    {
+                        pSetupData->mnPaperWidth  = pPaperSizes[ i ].x*10;
+                        pSetupData->mnPaperHeight = pPaperSizes[ i ].y*10;
+                        break;
+                    }
+                }
+            }
+            if( pPapers )
+                rtl_freeMemory( pPapers );
+            if( pPaperSizes )
+                rtl_freeMemory( pPaperSizes );
+        }
         switch( CHOOSE_DEVMODE(dmPaperSize) )
         {
             case( DMPAPER_A3 ):
