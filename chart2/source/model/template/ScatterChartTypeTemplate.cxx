@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScatterChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:52:02 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 15:01:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,6 +238,13 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 sal_Int32 ScatterChartTypeTemplate::getDimension() const
 {
     return m_nDim;
+}
+
+StackMode ScatterChartTypeTemplate::getStackMode( sal_Int32 nChartTypeIndex ) const
+{
+    if( m_nDim == 3 )
+        return StackMode_Z_STACKED;
+    return StackMode_NONE;
 }
 
 bool ScatterChartTypeTemplate::supportsCategories() const
