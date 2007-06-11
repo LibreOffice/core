@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeriesHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:57:32 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 15:01:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -680,6 +680,28 @@ void setPropertyAlsoToAllAttributedDataPoints( const Reference< chart2::XDataSer
     }
 }
 
+bool hasAttributedDataPointDifferentValue( const Reference< chart2::XDataSeries >& xSeries,
+                                              const OUString& rPropertyName, const uno::Any& rPropertyValue )
+{
+    Reference< beans::XPropertySet > xSeriesProperties( xSeries, uno::UNO_QUERY );
+    if( !xSeriesProperties.is() )
+        return false;
+
+    uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
+    if( xSeriesProperties->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aAttributedDataPointIndexList )
+    {
+        for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
+        {
+            Reference< beans::XPropertySet > xPointProp( xSeries->getDataPointByIndex(nN) );
+            if(!xPointProp.is())
+                continue;
+            uno::Any aPointValue( xPointProp->getPropertyValue( rPropertyName ) );
+            if( !( rPropertyValue==aPointValue ) )
+                return true;
+        }
+    }
+    return false;
+}
 
 } //  namespace DataSeriesHelper
 } //  namespace chart
