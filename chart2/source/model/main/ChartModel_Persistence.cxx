@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartModel_Persistence.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:49:52 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 15:00:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -475,7 +475,10 @@ void SAL_CALL ChartModel::load(
         else if( aMDHelper.ISSET_Stream ||
                  aMDHelper.ISSET_InputStream )
         {
-            if( aMDHelper.ISSET_FilterName && aMDHelper.FilterName.equals( C2U("StarChart 5.0")) )
+            if( aMDHelper.ISSET_FilterName &&
+                (aMDHelper.FilterName.equals( C2U("StarChart 5.0")) ||
+                 aMDHelper.FilterName.equals( C2U("StarChart 4.0")) ||
+                 aMDHelper.FilterName.equals( C2U("StarChart 3.0")) ))
             {
                 attachResource( aMDHelper.URL, rMediaDescriptor );
                 impl_load( rMediaDescriptor, 0 ); // cannot create a storage from binary streams, but I do not need the storage here anyhow
