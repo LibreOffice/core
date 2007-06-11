@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:26:46 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:23:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -838,21 +838,21 @@ SvxShowText::~SvxShowText()
 
 // class SvxCharacterMap =================================================
 
-SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, BOOL bOne_ )
+SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, BOOL bOne_, ResMgr* pResContext )
 :   mpDialog( pDialog ),
-    aShowSet        ( pDialog, SVX_RES( CT_SHOWSET ) ),
-    aShowText       ( pDialog, SVX_RES( CT_SHOWTEXT ) ),
-    aOKBtn          ( pDialog, SVX_RES( BTN_CHAR_OK ) ),
-    aCancelBtn      ( pDialog, SVX_RES( BTN_CHAR_CANCEL ) ),
-    aHelpBtn        ( pDialog, SVX_RES( BTN_CHAR_HELP ) ),
-    aDeleteBtn      ( pDialog, SVX_RES( BTN_DELETE ) ),
-    aFontText       ( pDialog, SVX_RES( FT_FONT ) ),
-    aFontLB         ( pDialog, SVX_RES( LB_FONT ) ),
-    aSubsetText     ( pDialog, SVX_RES( FT_SUBSET ) ),
-    aSubsetLB       ( pDialog, SVX_RES( LB_SUBSET ) ),
-    aSymbolText     ( pDialog, SVX_RES( FT_SYMBOLE ) ),
-    aShowChar       ( pDialog, SVX_RES( CT_SHOWCHAR ), TRUE ),
-    aCharCodeText   ( pDialog, SVX_RES( FT_CHARCODE ) ),
+    aShowSet        ( pDialog, ResId( CT_SHOWSET, *pResContext ) ),
+    aShowText       ( pDialog, ResId( CT_SHOWTEXT, *pResContext ) ),
+    aOKBtn          ( pDialog, ResId( BTN_CHAR_OK, *pResContext ) ),
+    aCancelBtn      ( pDialog, ResId( BTN_CHAR_CANCEL, *pResContext ) ),
+    aHelpBtn        ( pDialog, ResId( BTN_CHAR_HELP, *pResContext ) ),
+    aDeleteBtn      ( pDialog, ResId( BTN_DELETE, *pResContext ) ),
+    aFontText       ( pDialog, ResId( FT_FONT, *pResContext ) ),
+    aFontLB         ( pDialog, ResId( LB_FONT, *pResContext ) ),
+    aSubsetText     ( pDialog, ResId( FT_SUBSET, *pResContext ) ),
+    aSubsetLB       ( pDialog, ResId( LB_SUBSET, *pResContext ) ),
+    aSymbolText     ( pDialog, ResId( FT_SYMBOLE, *pResContext ) ),
+    aShowChar       ( pDialog, ResId( CT_SHOWCHAR, *pResContext ), TRUE ),
+    aCharCodeText   ( pDialog, ResId( FT_CHARCODE, *pResContext ) ),
     bOne( bOne_ ),
     pSubsetMap( NULL )
 {
@@ -918,7 +918,11 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, BOOL bOne_ )
     aShowSet.SetPreSelectHdl( LINK( this, SvxCharMapData, CharPreSelectHdl ) );
     aDeleteBtn.SetClickHdl( LINK( this, SvxCharMapData, DeleteHdl ) );
 
-    aOKBtn.Disable();
+
+    if(getSelectedChar() == ' ')
+        aOKBtn.Disable();
+    else
+        aOKBtn.Enable();
 
     // left align aShowText field
     int nLeftEdge = aSymbolText.GetPosPixel().X();
