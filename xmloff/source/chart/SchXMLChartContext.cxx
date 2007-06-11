@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:05:37 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:52:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -405,6 +405,15 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
                 msRowTrans = aValue;
                 break;
         }
+    }
+
+    if( aOldChartTypeName.getLength()<= 0 )
+    {
+        DBG_ERROR( "need a charttype to create a diagram" );
+        //set a fallback value:
+        ::rtl::OUString aChartClass_Bar( GetXMLToken(XML_BAR ) );
+        aOldChartTypeName = SchXMLTools::GetChartTypeByClassName( aChartClass_Bar, true /* bUseOldNames */ );
+        maChartTypeServiceName = SchXMLTools::GetChartTypeByClassName( aChartClass_Bar, false /* bUseOldNames */ );
     }
 
     InitChart (aChartSize, bDomainForDefaultDataNeeded, aOldChartTypeName, bSetSwitchData);
