@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UserDefinedProperties.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:47:08 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:59:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,8 +54,15 @@ public:
     // FastProperty Ids for properties
     enum
     {
+        // UserDefined attributes in the chart-properties
+        PROP_XML_USERDEF_CHART = FAST_PROPERTY_ID_START_USERDEF_PROP,
+        PROP_XML_USERDEF_TEXT,
+        PROP_XML_USERDEF_PARA,
         // com.sun.star.xml.UserDefinedAttributeSupplier
-        PROP_XML_USERDEF = FAST_PROPERTY_ID_START_USERDEF_PROP
+        // UserDefined attributes in the other properties-sections. (as long as
+        // there is no reliable mechanism, properties may move between the
+        // sections)
+        PROP_XML_USERDEF
     };
 
     static void AddPropertiesToVector(
