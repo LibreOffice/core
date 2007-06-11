@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:02:54 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:58:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_DATA_XDATARECEIVER_HPP_
+#include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XLOADABLE_HPP_
 #include <com/sun/star/frame/XLoadable.hpp>
@@ -540,6 +543,8 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
                     //reselect object
                     if( m_aSelection.hasSelection() )
                         this->impl_selectObjectAndNotiy();
+                    else
+                        ChartModelHelper::triggerRangeHighlighting( m_aModel->getModel() );
 
                     impl_initializeAccessible();
 
@@ -778,8 +783,21 @@ void ChartController::impl_deleteDrawViewController()
 
         this->stopDoubleClickWaiting();
 
-        // clear selection (and therefore range highlighting)
-        this->select( uno::Any());
+        //end range highlighting
+        {
+            uno::Reference< view::XSelectionChangeListener > xSelectionChangeListener;
+            uno::Reference< chart2::data::XDataReceiver > xDataReceiver( m_aModel->getModel(), uno::UNO_QUERY );
+            if( xDataReceiver.is() )
+                xSelectionChangeListener = uno::Reference< view::XSelectionChangeListener >( xDataReceiver->getRangeHighlighter(), uno::UNO_QUERY );
+            if( xSelectionChangeListener.is() )
+            {
+                uno::Reference< frame::XController > xController( this );
+                uno::Reference< lang::XComponent > xComp( xController, uno::UNO_QUERY );
+                //lang::EventObject aEvent( static_cast< lang::XComponent* >( this ) );
+                lang::EventObject aEvent( xComp );
+                xSelectionChangeListener->disposing( aEvent );
+            }
+        }
 
         //--release all resources and references
         {
@@ -798,6 +816,7 @@ void ChartController::impl_deleteDrawViewController()
             m_pChartWindow->clear();
             m_pChartWindow = NULL;//m_pChartWindow is deleted via UNO due to dispose of m_xViewWindow (trigerred by Framework (Controller pretends to be XWindow also))
             m_xViewWindow->dispose();
+            m_xChartView.clear();
             // \--
         }
 
