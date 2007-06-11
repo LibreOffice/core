@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TickmarkHelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:09:15 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 15:02:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -543,7 +543,10 @@ bool TickmarkHelper::isWithinOuterBorder( double fScaledValue ) const
 bool TickmarkHelper::isVisible( double fScaledValue ) const
 {
     if(fScaledValue>m_fScaledVisibleMax)
-        return false;
+    {
+        if( !approxEqual(fScaledValue,m_fScaledVisibleMax) )
+            return false;
+    }
     if(fScaledValue<m_fScaledVisibleMin)
         return false;
 
