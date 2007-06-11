@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:22:45 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 15:03:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -673,6 +673,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
         return;
     uno::Reference< XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
     uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+    sal_Int32 nGlobalSeriesIndex = 0;//for automatic symbols
     for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
     {
         uno::Reference< XCoordinateSystem > xCooSys( aCooSysList[nCS] );
@@ -714,6 +715,9 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
                 if(!xDataSeries.is())
                     continue;
                 VDataSeries* pSeries = new VDataSeries( xDataSeries );
+
+                pSeries->setGlobalSeriesIndex(nGlobalSeriesIndex);
+                nGlobalSeriesIndex++;
 
                 if( bSortByXValues )
                     pSeries->doSortByXValues();
@@ -1629,6 +1633,14 @@ bool getAvailablePosAndSizeForDiagram(
     }
     else
         rOutPos = awt::Point(aRemainingSpace.X,aRemainingSpace.Y);
+
+    //ensure that the diagram does not lap out right side or out of bottom
+    {
+        if( rOutPos.Y + rOutAvailableDiagramSize.Height > rPageSize.Height )
+            rOutAvailableDiagramSize.Height = rPageSize.Height - rOutPos.Y;
+        if( rOutPos.X + rOutAvailableDiagramSize.Width > rPageSize.Width )
+            rOutAvailableDiagramSize.Width = rPageSize.Width - rOutPos.X;
+    }
 
     if( bMakeRoomForTitle )
     {
