@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splash.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:25:33 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:03:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
+#include <introbmpnames.hxx>
 #include "splash.hxx"
 #include <stdio.h>
 #ifndef _UTL_BOOTSTRAP_HXX
@@ -407,42 +408,18 @@ void SplashScreen::initBitmap()
         }
         if ( !haveBitmap )
             haveBitmap = findBitmap( aBmpFileName );
-
-        if ( !haveBitmap )
-        {
-            // Save case:
-            // Create resource manager for intro bitmap. Due to our problem that we don't have
-            // any language specific information, we have to search for the correct resource
-            // file. The bitmap resource is language independent.
-            const USHORT nResId = RID_DEFAULTINTRO;
-            ByteString aMgrName( "iso" );
-            aMgrName += ByteString::CreateFromInt32(SUPD); // current build version
-            ResMgr* pLabelResMgr = ResMgr::CreateResMgr( aMgrName.GetBuffer() );
-            if ( !pLabelResMgr )
-            {
-                // no "iso" resource -> search for "ooo" resource
-                aMgrName = "ooo";
-                aMgrName += ByteString::CreateFromInt32(SUPD); // current build version
-                pLabelResMgr = ResMgr::CreateResMgr( aMgrName.GetBuffer() );
-            }
-            if ( pLabelResMgr )
-            {
-                ResId aIntroBmpRes( nResId, *pLabelResMgr );
-                _aIntroBmp = Bitmap( aIntroBmpRes );
-            }
-            delete pLabelResMgr;
-        }
     }
 }
 
-bool SplashScreen::findBitmap( const rtl::OUString aBmpFileName )
+bool SplashScreen::loadBitmap( const rtl::OUString &rBmpFileName, const rtl::OUString &rExecutePath, Bitmap &rIntroBmp )
 {
-    bool haveBitmap = false;
+    if ( rBmpFileName.getLength() == 0 )
+        return false;
 
     // First, try to use custom bitmap data.
     rtl::OUString value;
     rtl::Bootstrap::get(
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CustomDataUrl" ) ), value );
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CustomDataUrl" ) ), value );
     if ( value.getLength() > 0 )
     {
         if ( value[ value.getLength() - 1 ] != sal_Unicode( '/' ) )
@@ -451,33 +428,51 @@ bool SplashScreen::findBitmap( const rtl::OUString aBmpFileName )
             value += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "program" ) );
 
         INetURLObject aObj( value, INET_PROT_FILE );
-        aObj.insertName( aBmpFileName );
+        aObj.insertName( rBmpFileName );
 
         SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
         if ( !aStrm.GetError() )
         {
             // Default case, we load the intro bitmap from a seperate file
             // (e.g. staroffice_intro.bmp or starsuite_intro.bmp)
-            aStrm >> _aIntroBmp;
-            haveBitmap = true;
+            aStrm >> rIntroBmp;
+            return true;
         }
     }
 
     // Then, try to use bitmap located in the same directory as the executable.
-    if ( !haveBitmap )
-    {
-        INetURLObject aObj( _sExecutePath, INET_PROT_FILE );
-        aObj.insertName( aBmpFileName );
+    INetURLObject aObj( rExecutePath, INET_PROT_FILE );
+    aObj.insertName( rBmpFileName );
 
-        SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
-        if ( !aStrm.GetError() )
-        {
-            // Default case, we load the intro bitmap from a seperate file
-            // (e.g. staroffice_intro.bmp or starsuite_intro.bmp)
-            aStrm >> _aIntroBmp;
-            haveBitmap = true;
-        }
+    SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
+    if ( !aStrm.GetError() )
+    {
+        // Default case, we load the intro bitmap from a seperate file
+        // (e.g. staroffice_intro.bmp or starsuite_intro.bmp)
+        aStrm >> rIntroBmp;
+        return true;
     }
+
+    return false;
+}
+
+bool SplashScreen::findBitmap( const rtl::OUString aDefaultBmpFileName )
+{
+    bool haveBitmap = false;
+
+    // Try all bitmaps in INTRO_BITMAP_NAMES
+    sal_Int32 nIndex = 0;
+    OUString  aIntroBitmapFiles( RTL_CONSTASCII_USTRINGPARAM( INTRO_BITMAP_STRINGLIST ));
+    do
+    {
+        haveBitmap = loadBitmap( aIntroBitmapFiles.getToken( 0, ',', nIndex ),
+                                 _sExecutePath, _aIntroBmp );
+    }
+    while ( !haveBitmap && ( nIndex >= 0 ) );
+
+    // Failed?  Try aDefaultBmpFileName
+    if ( !haveBitmap )
+        haveBitmap = loadBitmap( aDefaultBmpFileName, _sExecutePath, _aIntroBmp );
 
     return haveBitmap;
 }
