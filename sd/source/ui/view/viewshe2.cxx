@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:13:55 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:54:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
 #include <com/sun/star/drawing/FillStyle.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
+#include <com/sun/star/drawing/LineStyle.hpp>
 #endif
 
 #include "ViewShell.hxx"
@@ -154,34 +157,6 @@
 using namespace com::sun::star;
 
 const String aEmptyStr;
-
-namespace
-{
-void lcl_setTransparentBackgroundAtChart(
-    const uno::Reference < embed::XEmbeddedObject > & xEmbObj )
-{
-    if( xEmbObj.is())
-    {
-        uno::Reference< chart2::XChartDocument > xChartDoc( xEmbObj->getComponent(), uno::UNO_QUERY );
-        OSL_ENSURE( xChartDoc.is(), "Trying to set chart property to non-chart OLE" );
-        if( !xChartDoc.is())
-            return;
-
-        try
-        {
-            uno::Reference< beans::XPropertySet > xPageProp( xChartDoc->getPageBackground());
-            if( xPageProp.is())
-                xPageProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FillStyle")),
-                                             uno::makeAny( drawing::FillStyle_NONE ));
-        }
-        catch( const uno::Exception & )
-        {
-            OSL_ENSURE( false, "Exception caught in lcl_setTransparentBackgroundAtChart" );
-        }
-    }
-}
-
-} // anonymous namespace
 
 namespace sd {
 
@@ -961,7 +936,7 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
     GetDocSh()->SetWaitCursor( TRUE );
     SfxViewShell* pViewShell = GetViewShell();
     OSL_ASSERT (pViewShell!=NULL);
-    bool bSetTransparentChartBackground = false;
+    bool bChangeDefaultsForChart = false;
 
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     if ( !xObj.is() )
@@ -978,7 +953,7 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             if( SvtModuleOptions().IsChart() )
             {
                 aClass = SvGlobalName( SO3_SCH_CLASSID );
-                bSetTransparentChartBackground = true;
+                bChangeDefaultsForChart = true;
             }
         }
         else if( aName.EqualsAscii( "StarCalc" ))
@@ -1092,9 +1067,9 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         // the object area size must be set after scaling, since it triggers the resizing
         pSdClient->SetObjArea(aRect);
 
-        if( bSetTransparentChartBackground && xObj.is())
+        if( bChangeDefaultsForChart && xObj.is())
         {
-            lcl_setTransparentBackgroundAtChart( xObj );
+            AdaptDefaultsForChart( xObj );
         }
 
         pSdClient->DoVerb(nVerb);   // ErrCode wird ggf. vom Sfx ausgegeben
@@ -1302,6 +1277,35 @@ Point ViewShell::GetWinViewPos() const
 Point ViewShell::GetViewOrigin() const
 {
     return mpContentWindow->GetViewOrigin();
+}
+
+void ViewShell::AdaptDefaultsForChart(
+    const uno::Reference < embed::XEmbeddedObject > & xEmbObj )
+{
+    if( xEmbObj.is())
+    {
+        uno::Reference< chart2::XChartDocument > xChartDoc( xEmbObj->getComponent(), uno::UNO_QUERY );
+        OSL_ENSURE( xChartDoc.is(), "Trying to set chart property to non-chart OLE" );
+        if( !xChartDoc.is())
+            return;
+
+        try
+        {
+            // set background to transparent (none)
+            uno::Reference< beans::XPropertySet > xPageProp( xChartDoc->getPageBackground());
+            if( xPageProp.is())
+                xPageProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FillStyle")),
+                                             uno::makeAny( drawing::FillStyle_NONE ));
+            // set no border
+            if( xPageProp.is())
+                xPageProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("LineStyle")),
+                                             uno::makeAny( drawing::LineStyle_NONE ));
+        }
+        catch( const uno::Exception & )
+        {
+            OSL_ENSURE( false, "Exception caught in AdaptDefaultsForChart" );
+        }
+    }
 }
 
 } // end of namespace sd
