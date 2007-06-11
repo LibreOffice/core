@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmsel.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 14:20:16 $
+ *  last change: $Author: vg $ $Date: 2007-06-11 09:47:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -298,7 +298,6 @@ FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
         DBG_ASSERT( bOk, "svx::FrameSelectorImpl::FrameSelectorImpl - missing entry in maAllBorders" );
     }
 #endif
-L
     //                             left neighbor     right neighbor     upper neighbor    lower neighbor
     maLeft.SetKeyboardNeighbors(   FRAMEBORDER_NONE, FRAMEBORDER_TLBR,  FRAMEBORDER_TOP,  FRAMEBORDER_BOTTOM );
     maRight.SetKeyboardNeighbors(  FRAMEBORDER_BLTR, FRAMEBORDER_NONE,  FRAMEBORDER_TOP,  FRAMEBORDER_BOTTOM );
