@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ShapeFactory.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:25:43 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 15:04:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,7 +254,7 @@ uno::Any createPolyPolygon_Cube(
 
     const double fHeightSign = fHeight >= 0.0 ? 1.0 : -1.0;
 
-    const double fOffset = (fDepth * fRoundedEdge) * 1.05;  // increase by 5% for safety
+    const double fOffset = (fWidthH * fRoundedEdge) * 1.05; // increase by 5% for safety
     const bool bRoundEdges = fRoundedEdge && fOffset < fWidthH && 2.0 * fOffset < fHeightSign*fHeight;
     const sal_Int32 nPointCount = bRoundEdges ? 13 : 5;
 
@@ -647,7 +647,7 @@ uno::Reference<drawing::XShape>
                 , uno::makeAny((sal_Int32)fDepth) );
 
             //PercentDiagonal
-            sal_Int16 nPercentDiagonal = bRounded ? 5 : 0;
+            sal_Int16 nPercentDiagonal = bRounded ? 3 : 0;
             xProp->setPropertyValue( C2U( UNO_NAME_3D_PERCENT_DIAGONAL )
                 , uno::makeAny( nPercentDiagonal ) );
 
