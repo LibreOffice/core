@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RangeHighlighter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:03:32 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 15:02:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,11 @@ void RangeHighlighter::determineRanges()
     {
         try
         {
+            Reference< frame::XController > xController( m_xSelectionSupplier, uno::UNO_QUERY );
+            Reference< frame::XModel > xChartModel;
+            if( xController.is())
+                xChartModel.set( xController->getModel());
+
             uno::Any aSelection( m_xSelectionSupplier->getSelection());
             OUString aCID;
             if(( aSelection >>= aCID ) &&
@@ -129,10 +134,6 @@ void RangeHighlighter::determineRanges()
             {
                 // @todo??: maybe getSelection() should return a model object rather than a CID
 
-                Reference< frame::XController > xController( m_xSelectionSupplier, uno::UNO_QUERY );
-                Reference< frame::XModel > xChartModel;
-                if( xController.is())
-                    xChartModel.set( xController->getModel());
                 ObjectType eObjectType = ObjectIdentifier::getObjectType( aCID );
                 sal_Int32 nIndex = ObjectIdentifier::getIndexFromParticleOrCID( aCID );
                 Reference< uno::XInterface > xSelectedObject;
@@ -182,6 +183,13 @@ void RangeHighlighter::determineRanges()
                         return;
                     }
                 }
+            }
+            else
+            {
+                //if nothing is selected select all ranges
+                Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY_THROW );
+                fillRangesForDiagram( xChartDoc->getFirstDiagram() );
+                return;
             }
         }
         catch( const uno::Exception & ex )
@@ -264,10 +272,17 @@ void RangeHighlighter::fillRangesForDataPoint( const Reference< uno::XInterface 
 void SAL_CALL RangeHighlighter::addSelectionChangeListener( const Reference< view::XSelectionChangeListener >& xListener )
     throw (uno::RuntimeException)
 {
+    if(!xListener.is())
+        return;
+
     if( m_nAddedListenerCount == 0 )
         startListening();
     rBHelper.addListener( ::getCppuType( & xListener ), xListener);
     ++m_nAddedListenerCount;
+
+    //bring the new listener up to the current state
+    lang::EventObject aEvent( static_cast< lang::XComponent* >( this ) );
+    xListener->selectionChanged( aEvent );
 }
 
 void SAL_CALL RangeHighlighter::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& xListener )
@@ -310,6 +325,7 @@ void SAL_CALL RangeHighlighter::disposing( const lang::EventObject& Source )
     {
         m_xSelectionSupplier.clear();
         m_aSelectedRanges.realloc( 0 );
+        fireSelectionEvent();
     }
 }
 
