@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartModel.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:32:25 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:59:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -390,6 +390,8 @@ APPHELPER_XSERVICEINFO_IMPL(ChartModel,CHART_MODEL_SERVICE_IMPLEMENTATION_NAME)
     //case: current controller is disconnected:
     if( m_xCurrentController == xController )
         m_xCurrentController.clear();
+
+    DisposeHelper::DisposeAndClear( m_xRangeHighlighter );
 }
 
         void SAL_CALL ChartModel
@@ -551,7 +553,10 @@ APPHELPER_XSERVICEINFO_IMPL(ChartModel,CHART_MODEL_SERVICE_IMPLEMENTATION_NAME)
     }
 
     m_aControllers.disposeAndClear( lang::EventObject( static_cast< cppu::OWeakObject * >( this )));
+    m_xCurrentController.clear();
 
+    m_xStorage.clear();
+    m_xParent.clear();
     DisposeHelper::DisposeAndClear( m_xRangeHighlighter );
     OSL_TRACE( "ChartModel: dispose() called" );
 }
@@ -1247,7 +1252,8 @@ Reference< uno::XInterface > SAL_CALL ChartModel::createInstance( const OUString
                 return 0;
             case SERVICE_NAMESPACE_MAP:
                 // not yet supported, @todo
-                return 0;
+//                 return 0;
+                return m_pImplChartModel->GetXMLNameSpaceMap();
         }
     }
     else
