@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-27 08:15:48 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:25:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,8 @@ using namespace rtl;
 #define COMPRESS_PAGES
 #endif
 
+#define DEBUG_DISABLE_PDFCOMPRESSION
+
 #ifdef DO_TEST_PDF
 class PDFTestOutputStream : public PDFOutputStream
 {
@@ -118,6 +120,7 @@ void doTestCode()
     aDocInfo.Producer = OUString( RTL_CONSTASCII_USTRINGPARAM( "VCL" ) );
     aWriter.SetDocInfo( aDocInfo );
     aWriter.NewPage();
+    aWriter.BeginStructureElement( PDFWriter::Document );
     // set duration of 3 sec for first page
     aWriter.SetAutoAdvanceTime( 3 );
     aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
@@ -296,7 +299,7 @@ void doTestCode()
     aWriter.DrawWallpaper( Rectangle( Point( 4400, 4200 ), Size( 10200, 6300 ) ), aWall );
 
     aWriter.Push( PUSH_ALL );
-    aWriter.BeginPattern();
+    aWriter.BeginPattern(Rectangle(Point(0,0),Size(2000,1000)));
     aWriter.SetFillColor( Color( COL_RED ) );
     aWriter.SetLineColor( Color( COL_LIGHTBLUE ) );
     Point aFillPoints[] = { Point( 1000, 0 ),
@@ -305,7 +308,7 @@ void doTestCode()
     aWriter.DrawPolygon( Polygon( 3, aFillPoints ) );
     aWriter.DrawBitmap( Point( 200, 200 ), Size( 1600, 600 ), aTransMask );
     aWriter.DrawText( Rectangle( Point( 200, 200 ), Size( 1600, 600 ) ), String( RTL_CONSTASCII_USTRINGPARAM( "Pattern" ) ) );
-    sal_Int32 nPattern = aWriter.EndPattern( Rectangle(Point(0,0),Size(2000,1000)), SvtGraphicFill::Transform() );
+    sal_Int32 nPattern = aWriter.EndPattern( SvtGraphicFill::Transform() );
     aWriter.Pop();
     Rectangle aPolyRect( Point( 3800, 11200 ), Size( 10200, 6300 ) );
     aWriter.DrawPolyPolygon( PolyPolygon( Polygon( aPolyRect ) ), nPattern, true );
@@ -463,6 +466,7 @@ void doTestCode()
     aWriter.SetOutlineItemText( nPage2OL, OUString( RTL_CONSTASCII_USTRINGPARAM( "Page 2" ) ) );
     aWriter.CreateOutlineItem( nPage2OL, OUString( RTL_CONSTASCII_USTRINGPARAM( "Dest 1" ) ), nFirstDest );
 
+    aWriter.EndStructureElement(); // close document
     aWriter.Emit();
 }
 #endif
@@ -2527,6 +2531,10 @@ bool PDFWriterImpl::emitTilings()
         sal_Int32 nY = (sal_Int32)it->m_aRectangle.Top();
         sal_Int32 nW = (sal_Int32)it->m_aRectangle.GetWidth();
         sal_Int32 nH = (sal_Int32)it->m_aRectangle.GetHeight();
+        if( it->m_aCellSize.Width() == 0 )
+            it->m_aCellSize.Width() = nW;
+        if( it->m_aCellSize.Height() == 0 )
+            it->m_aCellSize.Height() = nH;
 
         bool bDeflate = compressStream( it->m_pTilingStream );
         it->m_pTilingStream->Seek( STREAM_SEEK_TO_END );
@@ -2549,10 +2557,10 @@ bool PDFWriterImpl::emitTilings()
         appendFixedInt( nY+nH, aTilingObj );
         aTilingObj.append( "]\n"
                            "/XStep " );
-        appendFixedInt( nW, aTilingObj );
+        appendFixedInt( it->m_aCellSize.Width(), aTilingObj );
         aTilingObj.append( "\n"
                            "/YStep " );
-        appendFixedInt( nH, aTilingObj );
+        appendFixedInt( it->m_aCellSize.Height(), aTilingObj );
         aTilingObj.append( "\n" );
         if( it->m_aTransform.matrix[0] != 1.0 ||
             it->m_aTransform.matrix[1] != 0.0 ||
@@ -4197,6 +4205,8 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     Font aFont = replaceFont( rWidget.TextFont, rSettings.GetRadioCheckFont() );
     setFont( aFont );
     Size aFontSize = aFont.GetSize();
+    if( aFontSize.Height() > rBox.m_aRect.GetHeight() )
+        aFontSize.Height() = rBox.m_aRect.GetHeight();
     sal_Int32 nDelta = aFontSize.Height()/10;
     if( nDelta < 1 )
         nDelta = 1;
@@ -4209,6 +4219,14 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
         aCheckRect.Right()  = aCheckRect.Left() + aFontSize.Height();
         aCheckRect.Bottom() = aCheckRect.Top() + aFontSize.Height();
 
+        // #i74206# handle small controls without text area
+        while( aCheckRect.GetWidth() > rBox.m_aRect.GetWidth() && aCheckRect.GetWidth() > nDelta )
+        {
+            aCheckRect.Right()  -= nDelta;
+            aCheckRect.Top()    += nDelta/2;
+            aCheckRect.Bottom() -= nDelta - (nDelta/2);
+        }
+
         aTextRect.Left()    = rBox.m_aRect.Left() + aCheckRect.GetWidth()+5*nDelta;
         aTextRect.Top()     = rBox.m_aRect.Top();
         aTextRect.Right()   = aTextRect.Left() + rBox.m_aRect.GetWidth() - aCheckRect.GetWidth()-6*nDelta;
@@ -4220,6 +4238,14 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
         aCheckRect.Top()    = rBox.m_aRect.Top() + (rBox.m_aRect.GetHeight()-aFontSize.Height())/2;
         aCheckRect.Right()  = aCheckRect.Left() + aFontSize.Height();
         aCheckRect.Bottom() = aCheckRect.Top() + aFontSize.Height();
+
+        // #i74206# handle small controls without text area
+        while( aCheckRect.GetWidth() > rBox.m_aRect.GetWidth() && aCheckRect.GetWidth() > nDelta )
+        {
+            aCheckRect.Left()   += nDelta;
+            aCheckRect.Top()    += nDelta/2;
+            aCheckRect.Bottom() -= nDelta - (nDelta/2);
+        }
 
         aTextRect.Left()    = rBox.m_aRect.Left();
         aTextRect.Top()     = rBox.m_aRect.Top();
@@ -4304,6 +4330,8 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
     Font aFont = replaceFont( rWidget.TextFont, rSettings.GetRadioCheckFont() );
     setFont( aFont );
     Size aFontSize = aFont.GetSize();
+    if( aFontSize.Height() > rBox.m_aRect.GetHeight() )
+        aFontSize.Height() = rBox.m_aRect.GetHeight();
     sal_Int32 nDelta = aFontSize.Height()/10;
     if( nDelta < 1 )
         nDelta = 1;
@@ -4316,6 +4344,14 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
         aCheckRect.Right()  = aCheckRect.Left() + aFontSize.Height();
         aCheckRect.Bottom() = aCheckRect.Top() + aFontSize.Height();
 
+        // #i74206# handle small controls without text area
+        while( aCheckRect.GetWidth() > rBox.m_aRect.GetWidth() && aCheckRect.GetWidth() > nDelta )
+        {
+            aCheckRect.Right()  -= nDelta;
+            aCheckRect.Top()    += nDelta/2;
+            aCheckRect.Bottom() -= nDelta - (nDelta/2);
+        }
+
         aTextRect.Left()    = rBox.m_aRect.Left() + aCheckRect.GetWidth()+5*nDelta;
         aTextRect.Top()     = rBox.m_aRect.Top();
         aTextRect.Right()   = aTextRect.Left() + rBox.m_aRect.GetWidth() - aCheckRect.GetWidth()-6*nDelta;
@@ -4327,6 +4363,14 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
         aCheckRect.Top()    = rBox.m_aRect.Top() + (rBox.m_aRect.GetHeight()-aFontSize.Height())/2;
         aCheckRect.Right()  = aCheckRect.Left() + aFontSize.Height();
         aCheckRect.Bottom() = aCheckRect.Top() + aFontSize.Height();
+
+        // #i74206# handle small controls without text area
+        while( aCheckRect.GetWidth() > rBox.m_aRect.GetWidth() && aCheckRect.GetWidth() > nDelta )
+        {
+            aCheckRect.Left()   += nDelta;
+            aCheckRect.Top()    += nDelta/2;
+            aCheckRect.Bottom() -= nDelta - (nDelta/2);
+        }
 
         aTextRect.Left()    = rBox.m_aRect.Left();
         aTextRect.Top()     = rBox.m_aRect.Top();
@@ -7057,13 +7101,14 @@ void PDFWriterImpl::beginRedirect( SvStream* pStream, const Rectangle& rTargetRe
 
     if( !rTargetRect.IsEmpty() )
     {
-        Rectangle aTargetRect = lcl_convert( m_aGraphicsStack.front().m_aMapMode,
-                                             m_aMapMode,
-                                             getReferenceDevice(),
-                                             rTargetRect );
-        Point aDelta = aTargetRect.BottomLeft();
-        sal_Int32 nPageHeight = m_aPages[m_nCurrentPage].getHeight();
-        aDelta.Y() = aTargetRect.Bottom() - pointToPixel(nPageHeight);
+        m_aOutputStreams.front().m_aTargetRect =
+            lcl_convert( m_aGraphicsStack.front().m_aMapMode,
+                         m_aMapMode,
+                         getReferenceDevice(),
+                         rTargetRect );
+        Point aDelta = m_aOutputStreams.front().m_aTargetRect.BottomLeft();
+        long nPageHeight = pointToPixel(m_aPages[m_nCurrentPage].getHeight());
+        aDelta.Y() = -(nPageHeight - m_aOutputStreams.front().m_aTargetRect.Bottom());
         m_aMapMode.SetOrigin( m_aMapMode.GetOrigin() + aDelta );
     }
 
@@ -7074,10 +7119,15 @@ void PDFWriterImpl::beginRedirect( SvStream* pStream, const Rectangle& rTargetRe
     m_aCurrentPDFState.m_aFillColor = Color( COL_TRANSPARENT );
 }
 
+Rectangle PDFWriterImpl::getRedirectTargetRect() const
+{
+    return m_aOutputStreams.empty() ? Rectangle() : m_aOutputStreams.front().m_aTargetRect;
+}
+
 SvStream* PDFWriterImpl::endRedirect()
 {
     SvStream* pStream = NULL;
-    if( m_aOutputStreams.begin() != m_aOutputStreams.end() )
+    if( ! m_aOutputStreams.empty() )
     {
         pStream     = m_aOutputStreams.front().m_pStream;
         m_aMapMode  = m_aOutputStreams.front().m_aMapMode;
@@ -7600,7 +7650,7 @@ void PDFWriterImpl::drawPolyLine( const Polygon& rPoly, const PDFWriter::ExtLine
         {
             aLine.append( (nPoly != 0 && (nPoly & 7) == 0) ? "\n" : " " );
             aPoly = aPolyPoly.getB2DPolygon( nPoly );
-            DBG_ASSERT( aPoly.count() != 2, "erroneous sub polygon" );
+            DBG_ASSERT( aPoly.count() == 2, "erroneous sub polygon" );
             basegfx::B2DPoint aStart = aPoly.getB2DPoint( 0 );
             basegfx::B2DPoint aStop  = aPoly.getB2DPoint( 1 );
             m_aPages.back().appendPoint( Point( FRound(aStart.getX()),
@@ -8775,40 +8825,41 @@ void PDFWriterImpl::drawWallpaper( const Rectangle& rRect, const Wallpaper& rWal
     }
 }
 
-void PDFWriterImpl::beginPattern()
+void PDFWriterImpl::beginPattern( const Rectangle& rCellRect )
 {
-    beginRedirect( new SvMemoryStream(), Rectangle() );
+    beginRedirect( new SvMemoryStream(), rCellRect );
 }
 
-sal_Int32 PDFWriterImpl::endPattern( const Rectangle& rRect, const SvtGraphicFill::Transform& rTransform )
+sal_Int32 PDFWriterImpl::endPattern( const SvtGraphicFill::Transform& rTransform )
 {
-    Rectangle aConvertRect( rRect );
-    m_aPages.back().convertRect( aConvertRect );
+    Rectangle aConvertRect( getRedirectTargetRect() );
+    DBG_ASSERT( aConvertRect.GetWidth() != 0 && aConvertRect.GetHeight() != 0, "empty cell rectangle in pattern" );
+
+    // get scaling between current mapmode and PDF output
+    Size aScaling( lcl_convert( m_aGraphicsStack.front().m_aMapMode, m_aMapMode, getReferenceDevice(), Size( 10000, 10000 ) ) );
+    double fSX = (double(aScaling.Width()) / 10000.0);
+    double fSY = (double(aScaling.Height()) / 10000.0);
 
     // transform translation part of matrix
-    Size aSize( (long)rTransform.matrix[2], (long)rTransform.matrix[5] );
-    aSize = lcl_convert( m_aGraphicsStack.front().m_aMapMode, m_aMapMode, getReferenceDevice(), aSize );
+    Size aTranslation( (long)rTransform.matrix[2], (long)rTransform.matrix[5] );
+    aTranslation = lcl_convert( m_aGraphicsStack.front().m_aMapMode, m_aMapMode, getReferenceDevice(), aTranslation );
 
     sal_Int32 nTilingId = m_aTilings.size();
     m_aTilings.push_back( TilingEmit() );
     TilingEmit& rTile = m_aTilings.back();
     rTile.m_nObject         = createObject();
-    rTile.m_aRectangle      = aConvertRect;
     rTile.m_aResources      = m_aOutputStreams.front().m_aResourceDict;
-    rTile.m_aTransform.matrix[0] = rTransform.matrix[0];
-    rTile.m_aTransform.matrix[1] = rTransform.matrix[1];
-    rTile.m_aTransform.matrix[2] = double(aSize.Width())/fDivisor;
-    rTile.m_aTransform.matrix[3] = rTransform.matrix[3];
-    rTile.m_aTransform.matrix[4] = rTransform.matrix[4];
-    rTile.m_aTransform.matrix[5] = double(aSize.Height())/fDivisor;
-    double fx = double(aConvertRect.Left()%aConvertRect.GetWidth())/fDivisor;
-    double fy = double(aConvertRect.Top()%aConvertRect.GetHeight())/fDivisor;
-    rTile.m_aTransform.matrix[2] +=
-            rTile.m_aTransform.matrix[0] * fx + rTile.m_aTransform.matrix[1] * fy;
-    rTile.m_aTransform.matrix[5] +=
-            rTile.m_aTransform.matrix[3] * fx + rTile.m_aTransform.matrix[4] * fy;
+    rTile.m_aTransform.matrix[0] = rTransform.matrix[0] * fSX;
+    rTile.m_aTransform.matrix[1] = rTransform.matrix[1] * fSY;
+    rTile.m_aTransform.matrix[2] = aTranslation.Width();
+    rTile.m_aTransform.matrix[3] = rTransform.matrix[3] * fSX;
+    rTile.m_aTransform.matrix[4] = rTransform.matrix[4] * fSY;
+    rTile.m_aTransform.matrix[5] = -aTranslation.Height();
     // caution: endRedirect pops the stream, so do this last
     rTile.m_pTilingStream   = dynamic_cast<SvMemoryStream*>(endRedirect());
+    // FIXME: bound rect will not work with rotated matrix
+    rTile.m_aRectangle      = Rectangle( Point(0,0), aConvertRect.GetSize() );
+    rTile.m_aCellSize       = aConvertRect.GetSize();
 
     OStringBuffer aObjName( 16 );
     aObjName.append( 'P' );
