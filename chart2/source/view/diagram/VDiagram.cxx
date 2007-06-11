@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VDiagram.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:17:58 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 15:03:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -597,6 +597,7 @@ void VDiagram::createShapes_3d()
             {
                 ::basegfx::B3DHomMatrix aM;
                 aM.rotate(F_PI/2.0,0.0,0.0);
+                aM.translate(0.0,FLOOR_THICKNESS, 0.0);
                 drawing::HomogenMatrix aHM = B3DHomMatrixToHomogenMatrix(aM);
                 xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
                     , uno::makeAny(aHM) );
@@ -677,11 +678,11 @@ void VDiagram::createShapes_3d()
             try
             {
                 double fXScale = (FIXED_SIZE_FOR_3D_CHART_VOLUME -GRID_TO_WALL_DISTANCE) /FIXED_SIZE_FOR_3D_CHART_VOLUME;
-                double fYScale = (FIXED_SIZE_FOR_3D_CHART_VOLUME -FLOOR_THICKNESS      ) /FIXED_SIZE_FOR_3D_CHART_VOLUME;
+                double fYScale = (FIXED_SIZE_FOR_3D_CHART_VOLUME -FLOOR_THICKNESS-GRID_TO_WALL_DISTANCE      ) /FIXED_SIZE_FOR_3D_CHART_VOLUME;
                 double fZScale = (FIXED_SIZE_FOR_3D_CHART_VOLUME -GRID_TO_WALL_DISTANCE) /FIXED_SIZE_FOR_3D_CHART_VOLUME;
 
                 ::basegfx::B3DHomMatrix aM;
-                aM.translate(GRID_TO_WALL_DISTANCE/fXScale, FLOOR_THICKNESS/fYScale, GRID_TO_WALL_DISTANCE/fZScale);
+                aM.translate(GRID_TO_WALL_DISTANCE/fXScale, (FLOOR_THICKNESS+GRID_TO_WALL_DISTANCE)/fYScale, GRID_TO_WALL_DISTANCE/fZScale);
                 aM.scale( fXScale, fYScale, fZScale );
                 xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
                     , uno::makeAny(BaseGFXHelper::B3DHomMatrixToHomogenMatrix(aM)) );
