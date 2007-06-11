@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntctrl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:12:15 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:23:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,9 @@ class FontPrevWin_Impl
     BOOL                            bSelection      : 1,
                                     bGetSelection   : 1,
                                     bUseResText     : 1,
-                                    bTwoLines       : 1;
+                                    bTwoLines       : 1,
+                                    bIsCJKUI        : 1,
+                                    bIsCTLUI        : 1;
 
     void                _CheckScript();
 public:
@@ -178,7 +180,8 @@ public:
         pColor( NULL ), pBackColor( 0 ),
         cStartBracket( 0 ), cEndBracket( 0 ), nFontWidthScale( 100 ),
         bSelection( FALSE ), bGetSelection( FALSE ), bUseResText( FALSE ),
-        bTwoLines( FALSE )
+        bTwoLines( FALSE ),
+        bIsCJKUI( FALSE ), bIsCTLUI( FALSE )
         {
             Invalidate100PercentFontWidth();
         }
@@ -486,6 +489,28 @@ SvxFontPrevWindow::SvxFontPrevWindow( Window* pParent, const ResId& rId ) :
     initFont(pImpl->aCTLFont);
     InitSettings( TRUE, TRUE );
     SetBorderStyle( WINDOW_BORDER_MONO );
+
+    LanguageType eLanguage = Application::GetSettings().GetUILanguage();
+    switch( eLanguage )
+    {
+        case LANGUAGE_CHINESE:
+        case LANGUAGE_JAPANESE:
+        case LANGUAGE_KOREAN:
+        case LANGUAGE_KOREAN_JOHAB:
+        case LANGUAGE_CHINESE_SIMPLIFIED:
+        case LANGUAGE_CHINESE_HONGKONG:
+        case LANGUAGE_CHINESE_SINGAPORE:
+        case LANGUAGE_CHINESE_MACAU:
+        case LANGUAGE_CHINESE_TRADITIONAL:
+            pImpl->bIsCJKUI = sal_True;
+            break;
+        // TODO: CTL Locale
+        //  pImpl->bIsCTLUI = sal_True;
+        //  break;
+        default:
+            pImpl->bIsCJKUI = pImpl->bIsCTLUI = sal_False;
+            break;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -613,6 +638,8 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
 {
     Printer* pPrinter = pImpl->pPrinter;
     SvxFont& rFont = pImpl->aFont;
+    SvxFont& rCJKFont = pImpl->aCJKFont;
+    // TODO: SvxFont& rCTLFont = pImpl->aCTLFont;
 
     if ( pImpl->bUseResText )
         pImpl->aText = GetText();
@@ -629,7 +656,12 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
         }
 
         if ( !pImpl->bSelection )
+        {
             pImpl->aText = rFont.GetName();
+            if( pImpl->bIsCJKUI )
+                pImpl->aText += rCJKFont.GetName();
+            //TODO bIsCTLUI
+        }
 
         if ( !pImpl->aText.Len() )
             pImpl->aText = GetText();
