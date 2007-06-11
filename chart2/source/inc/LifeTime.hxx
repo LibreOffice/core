@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LifeTime.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:18:35 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:59:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,8 @@ class LifeTimeGuard;
 class LifeTimeManager
 {
 friend class LifeTimeGuard;
+protected:
+    mutable ::osl::Mutex                    m_aAccessMutex;
 public:
     LifeTimeManager( ::com::sun::star::lang::XComponent* pComponent, sal_Bool bLongLastingCallsCancelable = sal_False );
     virtual ~LifeTimeManager();
@@ -87,8 +89,6 @@ protected:
     void        impl_init();
 
 protected:
-    mutable ::osl::Mutex                    m_aAccessMutex;
-
     ::com::sun::star::lang::XComponent*     m_pComponent;
 
     ::osl::Condition        m_aNoAccessCountCondition;
