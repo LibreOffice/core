@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawModelWrapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:26:23 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:59:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,8 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > m_xMainDrawPage;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > m_xHiddenDrawPage;
+
+    std::auto_ptr< OutputDevice > m_apRefDevice;
 
     //no default constructor
     DrawModelWrapper();
