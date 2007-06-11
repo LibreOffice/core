@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:05:13 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:52:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,6 +210,8 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     // changed for Oasis file-format
     // Oasis proposal, see http://lists.oasis-open.org/archives/office/200312/msg00000.html
     MAP_SPECIAL_IMP( "StepHelp", CHART, XML_INTERVAL_MINOR_DIVISOR, XML_TYPE_NUMBER, STEP_HELP ),
+
+    MAP_ENTRY( "ChartUserDefinedAttributes", TEXT, XML_XMLNS, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM ),
 
     MAP_ENTRY_END
 };
