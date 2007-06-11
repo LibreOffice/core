@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_SeriesToAxis.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:49:18 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:58:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,8 +162,8 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
     }
     if (rInAttrs.GetItemState(SCHATTR_BAR_CONNECT, TRUE, &pPoolItem) == SFX_ITEM_SET)
     {
-        nTmp = (long)((const SfxInt32Item*)pPoolItem)->GetValue();
-        aCBConnect.Check(BOOL(nTmp));
+        BOOL bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
+        aCBConnect.Check(bCheck);
     }
     else
     {
