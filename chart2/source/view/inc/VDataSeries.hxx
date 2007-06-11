@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VDataSeries.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:21:11 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 15:03:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,7 @@ public:
 
     void setCategoryXAxis();
     void setParticle( const rtl::OUString& rSeriesParticle );
+    void setGlobalSeriesIndex( sal_Int32 nGlobalSeriesIndex );
     void setDiagramReferenceSize( const ::com::sun::star::awt::Size & rDiagramRefSize );
 
     sal_Int32   getTotalPointCount() const;
@@ -228,6 +229,8 @@ private: //member
     rtl::OUString           m_aCID;
     rtl::OUString           m_aPointCID_Stub;
     rtl::OUString           m_aLabelCID_Stub;
+
+    sal_Int32               m_nGlobalSeriesIndex;
 
     //some cached values for data labels as they are very expensive
     mutable ::std::auto_ptr< ::com::sun::star::chart2::DataPointLabel >
