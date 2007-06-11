@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawModelWrapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:23:50 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 15:04:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,14 @@
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
+// header for class Application
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+// header for class VirtualDevice
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -157,10 +165,15 @@ DrawModelWrapper::DrawModelWrapper(
         , m_pChartItemPool(0)
         , m_xMainDrawPage(0)
         , m_xHiddenDrawPage(0)
+        , m_apRefDevice(0)
 {
     m_pChartItemPool = ChartItemPool::CreateChartItemPool();
 
     m_xMCF = xContext->getServiceManager();
+
+    SetScaleUnit(MAP_100TH_MM);
+    SetScaleFraction(Fraction(1, 1));
+    SetDefaultFontHeight(847);     // 24pt
 
     SfxItemPool* pMasterPool = &GetItemPool();
     pMasterPool->SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
@@ -205,6 +218,17 @@ DrawModelWrapper::DrawModelWrapper(
     {
         DBG_ERROR("Can't get Hyphenator or SpellChecker for chart");
     }
+
+    //ref device for font rendering
+    OutputDevice* pDefaultDevice = rOutliner.GetRefDevice();
+    if( !pDefaultDevice )
+        pDefaultDevice = Application::GetDefaultDevice();
+    m_apRefDevice = std::auto_ptr< OutputDevice >( new VirtualDevice( *pDefaultDevice ) );
+    MapMode aMapMode = m_apRefDevice->GetMapMode();
+    aMapMode.SetMapUnit(MAP_100TH_MM);
+    m_apRefDevice->SetMapMode(aMapMode);
+    SetRefDevice(m_apRefDevice.get());
+    rOutliner.SetRefDevice(m_apRefDevice.get());
 }
 
 DrawModelWrapper::~DrawModelWrapper()
