@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.192 $
+ *  $Revision: 1.193 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:02:36 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:02:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -457,20 +457,11 @@ End
 
 #endif
 
-// bitmaps at the root module
-
-File gid_File_Bmp_About
+File gid_File_Bmp_IntroAbout
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
-    Name = "about.bmp";
-    Styles = (PACKED);
-End
-
-File gid_File_Bmp_Intro
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Name = "intro.bmp";
-    Styles = (PACKED);
+    Name = "intro.zip";
+    Styles = (ARCHIVE,PATCH);
 End
 
 File gid_File_Dtd_Accelerator
