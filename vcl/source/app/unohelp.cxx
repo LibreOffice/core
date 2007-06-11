@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:50:46 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:24:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,29 +134,37 @@ uno::Reference< lang::XMultiServiceFactory > vcl::unohelper::GetMultiServiceFact
         osl::FileBase::getSystemPathFromFileURL( aTempFile.GetName(), aTempFileName );
         pSVData->maAppData.mpMSFTempFileName = new String(aTempFileName);
 
-        pSVData->maAppData.mxMSF = ::cppu::createRegistryServiceFactory( aTempFileName, rtl::OUString(), sal_False );
-
-
-        uno::Reference < registry::XImplementationRegistration > xReg(
-            pSVData->maAppData.mxMSF->createInstance( OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" )), uno::UNO_QUERY );
-
-        sal_Int32 nCompCount = 0;
-
-        while ( aVCLComponentsArray[ nCompCount ].pLibName )
+        try
         {
-            OUString aComponentPathString = CreateLibraryName( aVCLComponentsArray[ nCompCount ].pLibName,  aVCLComponentsArray[ nCompCount ].bHasSUPD );
-            if (aComponentPathString.getLength() )
+            pSVData->maAppData.mxMSF = ::cppu::createRegistryServiceFactory( aTempFileName, rtl::OUString(), sal_False );
+            uno::Reference < registry::XImplementationRegistration > xReg(
+                pSVData->maAppData.mxMSF->createInstance( OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" )), uno::UNO_QUERY );
+
+            if( xReg.is() )
             {
-                try
+                sal_Int32 nCompCount = 0;
+                while ( aVCLComponentsArray[ nCompCount ].pLibName )
                 {
-                    xReg->registerImplementation(
-                        OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),aComponentPathString, NULL );
-                }
-                catch( ::com::sun::star::uno::Exception & )
-                {
+                    OUString aComponentPathString = CreateLibraryName( aVCLComponentsArray[ nCompCount ].pLibName,  aVCLComponentsArray[ nCompCount ].bHasSUPD );
+                    if (aComponentPathString.getLength() )
+                    {
+                        try
+                        {
+                            xReg->registerImplementation(
+                                OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),aComponentPathString, NULL );
+                        }
+                        catch( ::com::sun::star::uno::Exception & )
+                        {
+                        }
+                    }
+                    nCompCount++;
                 }
             }
-            nCompCount++;
+        }
+        catch( ::com::sun::star::uno::Exception & )
+        {
+            delete pSVData->maAppData.mpMSFTempFileName;
+            pSVData->maAppData.mpMSFTempFileName = NULL;
         }
     }
     return pSVData->maAppData.mxMSF;
