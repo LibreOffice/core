@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataBrowser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:27:33 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:57:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -478,23 +478,38 @@ struct applyChangesFunctor : public ::std::unary_function< ::boost::shared_ptr< 
 namespace
 {
 
-sal_Int32 lcl_getColumnInDataOrHeader(
-    USHORT nCol, const ::std::vector< ::boost::shared_ptr< ::chart::impl::SeriesHeader > > & rSeriesHeader )
-{
-    bool bHeaderHasFocus( false );
-    sal_Int32 nColIdx = 0;
+/** returns false, if no header as the focus.
 
+    If a header has the focus, true is returned and the index of the header
+    with focus is set at pIndex if pOutIndex is not 0.
+*/
+bool lcl_SeriesHeaderHasFocus(
+    const ::std::vector< ::boost::shared_ptr< ::chart::impl::SeriesHeader > > & rSeriesHeader,
+    sal_Int32 * pOutIndex = 0 )
+{
+    sal_Int32 nIndex = 0;
     for( ::std::vector< ::boost::shared_ptr< ::chart::impl::SeriesHeader > >::const_iterator aIt( rSeriesHeader.begin());
-         aIt != rSeriesHeader.end(); ++aIt )
+         aIt != rSeriesHeader.end(); ++aIt, ++nIndex )
     {
         if( (*aIt)->HasFocus())
         {
-            bHeaderHasFocus = true;
-            nColIdx = lcl_getColumnInData( static_cast< USHORT >( (*aIt)->GetStartColumn()));
-            break;
+            if( pOutIndex )
+                *pOutIndex = nIndex;
+            return true;
         }
     }
-    if( !bHeaderHasFocus )
+    return false;
+}
+
+sal_Int32 lcl_getColumnInDataOrHeader(
+    USHORT nCol, const ::std::vector< ::boost::shared_ptr< ::chart::impl::SeriesHeader > > & rSeriesHeader )
+{
+    sal_Int32 nColIdx = 0;
+    bool bHeaderHasFocus( lcl_SeriesHeaderHasFocus( rSeriesHeader, &nColIdx ));
+
+    if( bHeaderHasFocus )
+        nColIdx = lcl_getColumnInData( static_cast< USHORT >( rSeriesHeader[nColIdx]->GetStartColumn()));
+    else
         nColIdx = lcl_getColumnInData( nCol );
 
     return nColIdx;
@@ -528,7 +543,8 @@ DataBrowser::~DataBrowser()
 
 bool DataBrowser::MayInsertRow() const
 {
-    return ! IsReadOnly();
+    return ! IsReadOnly()
+        && ( !lcl_SeriesHeaderHasFocus( m_aSeriesHeaders ));
 }
 
 bool DataBrowser::MayInsertColumn() const
@@ -539,6 +555,7 @@ bool DataBrowser::MayInsertColumn() const
 bool DataBrowser::MayDeleteRow() const
 {
     return ! IsReadOnly()
+        && ( !lcl_SeriesHeaderHasFocus( m_aSeriesHeaders ))
         && ( GetCurRow() >= 0 )
         && ( GetRowCount() > 1 );
 }
@@ -546,12 +563,8 @@ bool DataBrowser::MayDeleteRow() const
 bool DataBrowser::MayDeleteColumn() const
 {
     // if a series header has the focus
-    for( tSeriesHeaderContainer::const_iterator aIt( m_aSeriesHeaders.begin());
-         aIt != m_aSeriesHeaders.end(); ++aIt )
-    {
-        if( (*aIt)->HasFocus())
-            return true;
-    }
+    if( lcl_SeriesHeaderHasFocus( m_aSeriesHeaders ))
+        return true;
 
     return ! IsReadOnly()
         && ( GetCurColumnId() > 1 )
@@ -561,6 +574,7 @@ bool DataBrowser::MayDeleteColumn() const
 bool DataBrowser::MaySwapRows() const
 {
     return ! IsReadOnly()
+        && ( !lcl_SeriesHeaderHasFocus( m_aSeriesHeaders ))
         && ( GetCurRow() >= 0 )
         && ( GetCurRow() < GetRowCount() - 1 );
 }
@@ -568,15 +582,10 @@ bool DataBrowser::MaySwapRows() const
 bool DataBrowser::MaySwapColumns() const
 {
     // if a series header (except the last one) has the focus
-    for( tSeriesHeaderContainer::const_iterator aIt( m_aSeriesHeaders.begin());
-         aIt != m_aSeriesHeaders.end(); )
     {
-        bool bHasFocus = false;
-        if( (*aIt)->HasFocus())
-            bHasFocus = true;
-        ++aIt;
-        if( bHasFocus )
-            return (aIt != m_aSeriesHeaders.end());
+        sal_Int32 nColIndex(0);
+        if( lcl_SeriesHeaderHasFocus( m_aSeriesHeaders, &nColIndex ))
+            return (static_cast< sal_uInt32 >( nColIndex ) < (m_aSeriesHeaders.size() - 1));
     }
 
     return ! IsReadOnly()
@@ -1268,6 +1277,7 @@ IMPL_LINK( DataBrowser, SeriesHeaderGotFocus, impl::SeriesHeaderEdit*, pEdit )
     {
         DeactivateCell();
         MakeFieldVisible( GetCurRow(), static_cast< sal_uInt16 >( pEdit->getStartColumn()), true /* bComplete */ );
+        ActivateCell();
         m_aCursorMovedHdlLink.Call( this );
     }
     return 0;
