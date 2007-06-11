@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImplChartModel.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:38:21 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 15:00:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,15 +201,18 @@ public:
     void CreateDefaultChart();
 
     ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XInterface > GetDashTable();
+            ::com::sun::star::uno::XInterface > GetDashTable() const;
     ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XInterface > GetGradientTable();
+            ::com::sun::star::uno::XInterface > GetGradientTable() const;
     ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XInterface > GetHatchTable();
+            ::com::sun::star::uno::XInterface > GetHatchTable() const;
     ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XInterface > GetBitmapTable();
+            ::com::sun::star::uno::XInterface > GetBitmapTable() const;
     ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XInterface > GetTransparencyGradientTable();
+            ::com::sun::star::uno::XInterface > GetTransparencyGradientTable() const;
+
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XInterface > GetXMLNameSpaceMap() const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
         GetNumberFormatsSupplier();
@@ -273,6 +276,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xHatchTable;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xBitmapTable;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xTransparencyGradientTable;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xXMLNamespaceMap;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >     m_xModifyListener;
 };
