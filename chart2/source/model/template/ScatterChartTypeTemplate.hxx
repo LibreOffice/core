@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScatterChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:52:14 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 15:01:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,7 @@ protected:
 
     // ____ ChartTypeTemplate ____
     virtual sal_Int32 getDimension() const;
+    virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const;
 
     virtual bool supportsCategories() const;
 
