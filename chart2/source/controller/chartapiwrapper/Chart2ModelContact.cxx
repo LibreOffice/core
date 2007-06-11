@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Chart2ModelContact.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:16:34 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:56:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,7 @@ void Chart2ModelContact::setModel( const ::com::sun::star::uno::Reference<
 void Chart2ModelContact::clear()
 {
     m_xChartModel = uno::WeakReference< frame::XModel >(0);
+    m_xChartView.clear();
 }
 
 Reference< frame::XModel > Chart2ModelContact::getChartModel() const
