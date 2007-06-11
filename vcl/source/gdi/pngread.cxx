@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pngread.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:49:40 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:25:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,9 +300,14 @@ bool PNGReaderImpl::ReadNextChunk()
         if( mnChunkLen && !mrPNGStream.IsEof() )
         {
             rChunkData.aData.resize( mnChunkLen );
-            sal_uInt8* pPtr = &rChunkData.aData[ 0 ];
-            mrPNGStream.Read( pPtr, mnChunkLen );
-            nCRC32 = rtl_crc32( nCRC32, pPtr, mnChunkLen );
+
+            sal_Size nBytesRead = 0;
+            do {
+                sal_uInt8* pPtr = &rChunkData.aData[ nBytesRead ];
+                nBytesRead += mrPNGStream.Read( pPtr, mnChunkLen - nBytesRead );
+            } while ( ( nBytesRead < mnChunkLen ) && ( mrPNGStream.GetError() == ERRCODE_NONE ) );
+
+            nCRC32 = rtl_crc32( nCRC32, &rChunkData.aData[ 0 ], mnChunkLen );
             maDataIter = rChunkData.aData.begin();
         }
         sal_uInt32 nCheck;
