@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:27:45 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:52:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,11 +317,26 @@ void SvXMLImportPropertyMapper::importXML(
                         xAttrContainer = xNew;
 
                         // find map entry and create new property state
-                        nIndex = maPropMapper->FindEntryIndex( "UserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
                         if( -1 == nIndex )
-                            nIndex = maPropMapper->FindEntryIndex( "ParaUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
-                        if( -1 == nIndex )
-                            nIndex = maPropMapper->FindEntryIndex( "TextUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
+                        {
+                            switch( nPropType )
+                            {
+                                case XML_TYPE_PROP_CHART:
+                                    nIndex = maPropMapper->FindEntryIndex( "ChartUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
+                                    break;
+                                case XML_TYPE_PROP_PARAGRAPH:
+                                    nIndex = maPropMapper->FindEntryIndex( "ParaUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
+                                    break;
+                                case  XML_TYPE_PROP_TEXT:
+                                    nIndex = maPropMapper->FindEntryIndex( "TextUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
+                                    break;
+                                default:
+                                    break;
+                            }
+                            // other property type or property not found
+                            if( -1 == nIndex )
+                                nIndex = maPropMapper->FindEntryIndex( "UserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
+                        }
 
                         // #106963#; use userdefined attribute only if it is in the specified property range
                         if( nIndex != -1 && nIndex >= nStartIdx && nIndex < nEndIdx)
