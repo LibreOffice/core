@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AreaChart.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:14:21 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 15:03:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,6 +252,14 @@ bool AreaChart::keepAspectRatio() const
 
 void AreaChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlot, sal_Int32 ySlot )
 {
+    if( m_nDimension == 3 && !m_bCategoryXAxis )
+    {
+        //3D xy always deep
+        DBG_ASSERT( zSlot==-1,"3D xy charts should be deep stacked in model also" );
+        zSlot=-1;
+        xSlot=0;
+        ySlot=0;
+    }
     VSeriesPlotter::addSeries( pSeries, zSlot, xSlot, ySlot );
 }
 
