@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 14:17:19 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:20:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,10 +63,6 @@
 #define GLOBAL_DEFAULTS_GROUP "__Global_Printer_Defaults__"
 
 #include <hash_set>
-
-#ifdef LIBPAPER_LINK
-#include <paper.h>
-#endif
 
 using namespace psp;
 using namespace rtl;
@@ -147,47 +143,29 @@ PrinterInfoManager::~PrinterInfoManager()
 void PrinterInfoManager::initSystemDefaultPaper()
 {
     bool bSuccess = false;
-    const char* pPaper;
-#ifndef LIBPAPER_LINK
+
     // try libpaper
-    OUString aModName( RTL_CONSTASCII_USTRINGPARAM( "libpaper.so.1" ) );
-    OUString aInitName( RTL_CONSTASCII_USTRINGPARAM( "paperinit" ) );
-    OUString aDoneName( RTL_CONSTASCII_USTRINGPARAM( "paperdone" ) );
-    OUString aSystemName( RTL_CONSTASCII_USTRINGPARAM( "systempapername" ) );
-    oslModule hMod = osl_loadModule( aModName.pData, SAL_LOADMODULE_NOW );
-    if( hMod )
+    FILE* pPipe = popen( "paperconf", "r" );
+    if( pPipe )
     {
-        int (*init)() = (int(*)())osl_getFunctionSymbol( hMod, aInitName.pData );
-        int (*done)() = (int(*)())osl_getFunctionSymbol( hMod, aDoneName.pData );
-        const char* (*sys)() = (const char*(*)())osl_getFunctionSymbol( hMod, aSystemName.pData );
-        if( init && done && sys )
-        {
-            init();
-            pPaper = sys();
-#else
-        paperinit();
-        pPaper = systempapername();
-#endif
-            if( pPaper && *pPaper )
-            {
-                m_aSystemDefaultPaper = OUString( OStringToOUString( pPaper, osl_getThreadTextEncoding() ) );
-                bSuccess = true;
-                #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "paper from libpaper = %s\n", pPaper );
-                #endif
-            }
-#ifndef LIBPAPER_LINK
-            done();
+        char pBuffer[ 1024 ];
+    *pBuffer = 0;
+        fgets( pBuffer, sizeof(pBuffer)-1, pPipe );
+    pclose( pPipe );
+
+    ByteString aPaper( pBuffer );
+    aPaper = WhitespaceToSpace( aPaper );
+    if( aPaper.Len() )
+    {
+            m_aSystemDefaultPaper = OUString( OStringToOUString( aPaper, osl_getThreadTextEncoding() ) );
+            bSuccess = true;
+            #if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "paper from paperconf = %s\n", aPaper.GetBuffer() );
+            #endif
         }
-        osl_unloadModule( hMod );
-#else
-    paperdone();
-#endif
         if( bSuccess )
             return;
-#ifndef LIBPAPER_LINK
     }
-#endif
 
     // default value is Letter for US (en_US), Cannada (en_CA, fr_CA); else A4
     // en will be interpreted as en_US
