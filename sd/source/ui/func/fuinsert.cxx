@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:13:37 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:53:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,34 +155,6 @@
 #endif
 
 using namespace com::sun::star;
-
-namespace
-{
-void lcl_setTransparentBackgroundAtChart(
-    const uno::Reference < embed::XEmbeddedObject > & xEmbObj )
-{
-    if( xEmbObj.is())
-    {
-        uno::Reference< chart2::XChartDocument > xChartDoc( xEmbObj->getComponent(), uno::UNO_QUERY );
-        OSL_ENSURE( xChartDoc.is(), "Trying to set chart property to non-chart OLE" );
-        if( !xChartDoc.is())
-            return;
-
-        try
-        {
-            uno::Reference< beans::XPropertySet > xPageProp( xChartDoc->getPageBackground());
-            if( xPageProp.is())
-                xPageProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FillStyle")),
-                                             uno::makeAny( drawing::FillStyle_NONE ));
-        }
-        catch( const uno::Exception & )
-        {
-            OSL_ENSURE( false, "Exception caught in lcl_setTransparentBackgroundAtChart" );
-        }
-    }
-}
-
-} // anonymous namespace
 
 namespace sd {
 
@@ -468,7 +440,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     // note, that this call modified the chart model which
                     // results in a change notification.  So call this after
                     // everything else is finished.
-                    lcl_setTransparentBackgroundAtChart( xObj );
+                    mpViewShell->AdaptDefaultsForChart( xObj );
                 }
             }
         }
