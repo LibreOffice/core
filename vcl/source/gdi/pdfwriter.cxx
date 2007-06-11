@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 11:20:49 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:24:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -534,14 +534,14 @@ void PDFWriter::AddStream( const String& rMimeType, PDFOutputStream* pStream, bo
     ((PDFWriterImpl*)pImplementation)->addStream( rMimeType, pStream, bCompress );
 }
 
-void PDFWriter::BeginPattern()
+void PDFWriter::BeginPattern( const Rectangle& rCellRect )
 {
-    ((PDFWriterImpl*)pImplementation)->beginPattern();
+    ((PDFWriterImpl*)pImplementation)->beginPattern( rCellRect );
 }
 
-sal_Int32 PDFWriter::EndPattern( const Rectangle& rCellBounds, const SvtGraphicFill::Transform& rTransform )
+sal_Int32 PDFWriter::EndPattern( const SvtGraphicFill::Transform& rTransform )
 {
-    return ((PDFWriterImpl*)pImplementation)->endPattern( rCellBounds, rTransform );
+    return ((PDFWriterImpl*)pImplementation)->endPattern( rTransform );
 }
 
 void PDFWriter::DrawPolyPolygon( const PolyPolygon& rPolyPoly, sal_Int32 nPattern, bool bEOFill )
