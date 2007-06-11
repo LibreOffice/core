@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:46:20 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:26:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,10 +66,34 @@ static HBITMAP ImplCreateVirDevBitmap( HDC hDC, long nDX, long nDY,
 {
     HBITMAP hBitmap;
 
-    if ( nBitCount == 1 )
-        hBitmap = CreateBitmap( (int)nDX, (int)nDY, 1, 1, NULL );
-    else
-        hBitmap = CreateCompatibleBitmap( hDC, (int)nDX, (int)nDY );
+     if ( nBitCount == 1 )
+     {
+         hBitmap = CreateBitmap( (int)nDX, (int)nDY, 1, 1, NULL );
+     }
+     else
+     {
+        // #146839# Don't use CreateCompatibleBitmap() - there seem to
+        // be build-in limits for those HBITMAPs, at least this fails
+        // rather often on large displays/multi-monitor setups.
+         BITMAPINFO aBitmapInfo;
+         aBitmapInfo.bmiHeader.biSize = sizeof( BITMAPINFOHEADER );
+         aBitmapInfo.bmiHeader.biWidth = nDX;
+         aBitmapInfo.bmiHeader.biHeight = nDY;
+         aBitmapInfo.bmiHeader.biPlanes = 1;
+         aBitmapInfo.bmiHeader.biBitCount = (WORD)GetDeviceCaps( hDC,
+                                                                 BITSPIXEL );
+         aBitmapInfo.bmiHeader.biCompression = BI_RGB;
+         aBitmapInfo.bmiHeader.biSizeImage = 0;
+         aBitmapInfo.bmiHeader.biXPelsPerMeter = 0;
+         aBitmapInfo.bmiHeader.biYPelsPerMeter = 0;
+         aBitmapInfo.bmiHeader.biClrUsed = 0;
+         aBitmapInfo.bmiHeader.biClrImportant = 0;
+
+         void* pDummy;
+         hBitmap = CreateDIBSection( hDC, &aBitmapInfo,
+                                     DIB_RGB_COLORS, &pDummy, NULL,
+                                     0 );
+     }
 
     return hBitmap;
 }
