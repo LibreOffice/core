@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-05-25 14:35:07 $
+dnl * Date: $Date: 2007-06-11 14:00:24 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.206 $ )
+AC_REVISION( $Revision: 1.207 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -564,6 +564,25 @@ AC_ARG_WITH(dict,
                           commas. For all dictionaries, use --with-dict=ALL.
 
                           Usage: --with-dict=ENGB,ENUS,ITIT
+],,)
+AC_ARG_WITH(intro-bitmaps,
+[  --with-intro-bitmaps    Prefer the specified intro bitmaps over the
+                          the default one.  Can be more than one (separated by
+                          commas), the order means priority of fallback if the
+                          first does not exist (in the installed tree).
+
+                          Usage: --with-intro-bitmaps=/path/my_ooo_intro.bmp
+],,)
+AC_ARG_WITH(about-bitmaps,
+[  --with-about-bitmaps    Similarly to --with-intro-bitmaps, this allows
+                          specification of bitmaps for the About box.
+
+                          Usage: --with-about-bitmaps=/path/my_ooo_about.bmp
+],,)
+AC_ARG_WITH(vendor,
+[  --with-vendor           Set vendor of the build.
+
+                          Usage: --with-vendor="John the Builder"
 ],,)
 AC_ARG_WITH(asm-home,
 [  --with-asm-home         For Windows users, please supply the path for the
@@ -5210,6 +5229,54 @@ else
    AC_MSG_RESULT([$with_dict])
 fi
 AC_SUBST(WITH_DICT)
+
+AC_MSG_CHECKING([for additional 'intro' bitmaps])
+INTRO_BITMAPS=
+if test -z "$with_intro_bitmaps" -o "$with_intro_bitmaps" = "no" ; then
+   INTRO_BITMAPS=
+   AC_MSG_RESULT([none])
+else
+   for bitmap in `echo $with_intro_bitmaps | tr ',' ' '` ; do
+      case "$bitmap" in
+         *.bmp) ;;
+         *)     bitmap= ; AC_MSG_WARN([Intro bitmaps should be .bmp files!]) ;;
+      esac
+      if test -n "$bitmap" ; then
+         INTRO_BITMAPS="$INTRO_BITMAPS $bitmap"
+      fi
+   done
+   AC_MSG_RESULT([$INTRO_BITMAPS])
+fi
+AC_SUBST(INTRO_BITMAPS)
+
+AC_MSG_CHECKING([for additional 'about' bitmaps])
+ABOUT_BITMAPS=
+if test -z "$with_about_bitmaps" -o "$with_about_bitmaps" = "no" ; then
+   ABOUT_BITMAPS=
+   AC_MSG_RESULT([none])
+else
+   for bitmap in `echo $with_about_bitmaps | tr ',' ' '` ; do
+      case "$bitmap" in
+         *.bmp) ;;
+         *)     bitmap= ; AC_MSG_WARN([About bitmaps should be .bmp files!]) ;;
+      esac
+      if test -n "$bitmap" ; then
+         ABOUT_BITMAPS="$ABOUT_BITMAPS $bitmap"
+      fi
+   done
+   AC_MSG_RESULT([$ABOUT_BITMAPS])
+fi
+AC_SUBST(ABOUT_BITMAPS)
+
+OOO_VENDOR=
+AC_MSG_CHECKING([for vendor])
+if test -z "$with_vendor" -o "$with_vendor" = "no" ; then
+   AC_MSG_RESULT([not set])
+else
+   OOO_VENDOR="$with_vendor"
+   AC_MSG_RESULT([$OOO_VENDOR])
+fi
+AC_SUBST(OOO_VENDOR)
 
 AC_MSG_CHECKING([whether to statically link to Gtk])
 if test -n "$enable_static_gtk" && test "$enable_static_gtk" != "no"; then
