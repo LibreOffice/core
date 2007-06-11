@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DiagramWrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:17:52 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:57:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -489,6 +489,54 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
     return OUString();
 }
 
+typedef ::comphelper::MakeMap< ::rtl::OUString, ::rtl::OUString > tMakeStringStringMap;
+//static
+const tMakeStringStringMap& lcl_getChartTypeNameMap()
+{
+    static tMakeStringStringMap g_aChartTypeNameMap =
+        tMakeStringStringMap
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.LineChartType" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.LineDiagram" ) )
+
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.AreaChartType" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.AreaDiagram" ) )
+
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.ColumnChartType" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.BarDiagram" ) )
+
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.PieChartType" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.PieDiagram" ) )
+
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.DonutChartType" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.DonutDiagram" ) )
+
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.ScatterChartType" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.XYDiagram" ) )
+
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.NetChartType" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.NetDiagram" ) )
+
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.CandleStickChartType" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.StockDiagram" ) )
+
+        ;
+    return g_aChartTypeNameMap;
+}
+
+
+OUString lcl_getOldChartTypeName( const OUString & rNewChartTypeName )
+{
+    OUString aOld(rNewChartTypeName);
+
+    const tMakeStringStringMap& rMap = lcl_getChartTypeNameMap();
+    tMakeStringStringMap::const_iterator aIt( rMap.find( rNewChartTypeName ));
+    if( aIt != rMap.end())
+    {
+        aOld = aIt->second;
+    }
+    return aOld;
+}
+
 } // anonymous namespace
 
 // --------------------------------------------------------------------------------
@@ -538,10 +586,20 @@ OUString SAL_CALL DiagramWrapper::getDiagramType()
         aRet = lcl_getDiagramType( aTemplateAndService.second );
     }
 
-//     if( ! aTypeName.getLength())
-//     {
-//         // none of the standard templates matched
-//     }
+    if( !aRet.getLength())
+    {
+        // none of the standard templates matched
+        // use first chart type
+        Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+        if( xChartType.is() )
+        {
+            aRet = xChartType->getChartType();
+            if( aRet.getLength() )
+                aRet = lcl_getOldChartTypeName( aRet );
+        }
+        if( !aRet.getLength())
+            aRet = C2U( "com.sun.star.chart.BarDiagram" );
+    }
 
     return aRet;
 }
