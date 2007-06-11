@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.67 $
+#   $Revision: 1.68 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 15:10:36 $
+#   last change: $Author: obo $ $Date: 2007-06-11 13:59:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -165,13 +165,14 @@ MSIURETEMPLATEDIR=$(MSIURETEMPLATESOURCE)
 MSISDKOOTEMPLATEDIR=$(MSISDKOOTEMPLATESOURCE)
 MSIURETEMPLATEDIR=$(MSIURETEMPLATESOURCE)
 .ELSE			# "$(BUILD_SPECIAL)"!=""
-NOLOGOSPLASH:=$(BIN)$/intro.bmp
+NOLOGOSPLASH:=$(BIN)$/intro.zip
+DEVNOLOGOSPLASH:=$(BIN)$/dev$/intro.zip
 MSIOFFICETEMPLATEDIR=$(MISC)$/openoffice$/msi_templates
 MSILANGPACKTEMPLATEDIR=$(MISC)$/ooolangpack$/msi_templates
 MSIURETEMPLATEDIR=$(MISC)$/ure$/msi_templates
 MSISDKOOTEMPLATEDIR=$(MISC)$/sdkoo$/msi_templates
 
-ADDDEPS=$(NOLOGOSPLASH)
+ADDDEPS=$(NOLOGOSPLASH) $(DEVNOLOGOSPLASH)
 .IF "$(OS)" == "WNT"
 ADDDEPS+=hack_msitemplates
 .ENDIF
@@ -487,7 +488,11 @@ $(BIN)$/iso8859_1.py :
     @echo "Using system python - nothing more to do here"
 .ENDIF
 
-$(BIN)$/intro.bmp : $(SOLARCOMMONPCKDIR)$/openoffice$/nologointro.bmp
+$(BIN)$/intro.zip : $(SOLARCOMMONPCKDIR)$/openoffice_nologo$/intro.zip
+    $(COPY) $< $@
+
+$(BIN)$/dev$/intro.zip : $(SOLARCOMMONPCKDIR)$/openoffice_dev_nologo$/intro.zip
+    @-$(MKDIR) $(@:d)
     $(COPY) $< $@
 
 hack_msitemplates .PHONY:
