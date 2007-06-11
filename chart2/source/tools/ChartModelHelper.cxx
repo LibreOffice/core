@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartModelHelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:56:01 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 15:01:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@
 #include "macros.hxx"
 #include "DiagramHelper.hxx"
 
+#ifndef _COM_SUN_STAR_CHART2_DATA_XDATARECEIVER_HPP_
+#include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #endif
@@ -57,6 +60,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
 #include <com/sun/star/embed/XVisualObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_VIEW_XSELECTIONCHANGELISTENER_HPP_
+#include <com/sun/star/view/XSelectionChangeListener.hpp>
 #endif
 
 // header for define DBG_ASSERT
@@ -147,6 +153,21 @@ void ChartModelHelper::setPageSize( const awt::Size& rSize, const uno::Reference
     DBG_ASSERT(xVisualObject.is(),"need xVisualObject for page size");
     if( xVisualObject.is() )
         xVisualObject->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, rSize );
+}
+
+void ChartModelHelper::triggerRangeHighlighting( const uno::Reference< frame::XModel >& xModel )
+{
+    uno::Reference< chart2::data::XDataReceiver > xDataReceiver( xModel, uno::UNO_QUERY );
+    if( xDataReceiver.is() )
+    {
+        uno::Reference< view::XSelectionChangeListener > xSelectionChangeListener( xDataReceiver->getRangeHighlighter(), uno::UNO_QUERY );
+        //trigger selection of cell range
+        if( xSelectionChangeListener.is() )
+        {
+            lang::EventObject aEvent( xSelectionChangeListener );
+            xSelectionChangeListener->selectionChanged( aEvent );
+        }
+    }
 }
 
 //.............................................................................
