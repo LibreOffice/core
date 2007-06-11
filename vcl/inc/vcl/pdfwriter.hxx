@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-17 14:02:12 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:24:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1188,15 +1188,15 @@ The following structure describes the permissions used in PDF security
     A pattern can consist of arbitrary drawing operations; all drawing operations
     between <code>BeingPattern()</code> and <code>EndPattern()</code> calls
     will be recorded and considered as forming up the pattern.
+
+    @param rCellBounds
+    a rectangle defining the "cell" that will be repeated to form the pattern
     */
-    void BeginPattern();
+    void BeginPattern( const Rectangle& );
     /** finish a new pattern for filling operations
 
     This functions finishes the pattern create begun with <code>BeginPattern()</code>
     and returns a pattern id to be used in subsequent drawing operations.
-
-    @param rCellBounds
-    a rectangle defining the "cell" that ill be repeated to form the pattern
 
     @param rMatrix
     a transformation to be imposed on the drawing operations that make up the pattern
@@ -1204,7 +1204,7 @@ The following structure describes the permissions used in PDF security
     @returns
     the ne pattern's id
     */
-    sal_Int32 EndPattern( const Rectangle&, const SvtGraphicFill::Transform& rTransformation );
+    sal_Int32 EndPattern( const SvtGraphicFill::Transform& rTransformation );
     /** draw a polypolygon filled with a pattern
 
     @param rPolyPoly
