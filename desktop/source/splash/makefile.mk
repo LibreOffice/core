@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2006-01-27 16:21:49 $
+#   last change: $Author: obo $ $Date: 2007-06-11 14:03:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,3 +82,14 @@ SHL1STDLIBS= \
 
 .INCLUDE :  target.mk
 
+$(SLO)$/splash.obj : $(INCCOM)$/introbmpnames.hxx
+
+.INCLUDE .IGNORE : $(MISC)$/intro_bmp_names.mk
+
+.IF "$(INTO_BITMAPS:f)"!="$(LASTTIME_INTRO_BITMAPS)"
+DO_PHONY=.PHONY
+.ENDIF			# "$(INTRO_BITMAPS:f)"!="$(LASTTIME_INTRO_BITMAPS)"
+
+$(INCCOM)$/introbmpnames.hxx $(DO_PHONY):
+    echo const char INTRO_BITMAP_STRINGLIST[]=$(EMQ)"$(INTRO_BITMAPS:f:t",")$(EMQ)"$(EMQ); > $@
+    echo LASTTIME_INTRO_BITMAPS=$(INTRO_BITMAPS:f) > $(MISC)$/intro_bmp_names.mk
