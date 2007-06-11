@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartDocumentWrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:17:17 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:57:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1098,16 +1098,32 @@ void SAL_CALL ChartDocumentWrapper::dispose()
 
     try
     {
+        Reference< lang::XComponent > xFormerDelegator( m_xDelegator, uno::UNO_QUERY );
+        DisposeHelper::DisposeAndClear( m_xTitle );
+        DisposeHelper::DisposeAndClear( m_xSubTitle );
+        DisposeHelper::DisposeAndClear( m_xLegend );
+        DisposeHelper::DisposeAndClear( m_xChartData );
+        DisposeHelper::DisposeAndClear( m_xDiagram );
+        DisposeHelper::DisposeAndClear( m_xArea );
+        m_xChartView.set( 0 );
+        m_xShapeFactory.set( 0 );
+        m_xDelegator.set( 0 );
+
+        clearWrappedPropertySet();
+        m_spChart2ModelContact->clear();
         impl_resetAddIn();
-        // note: this call should call setDelegator(0) here, so we can release
-        // ressources there
-        Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
-        if( xModel.is() )
-            xModel->dispose();
-    }
-    catch( lang::DisposedException )
-    {
-        // this is ok, don't panic
+
+        stopAllComponentListening();
+
+        try
+        {
+            if( xFormerDelegator.is())
+                xFormerDelegator->dispose();
+        }
+        catch( lang::DisposedException )
+        {
+            // this is ok, don't panic
+        }
     }
     catch( uno::Exception &ex )
     {
@@ -1579,16 +1595,7 @@ void SAL_CALL ChartDocumentWrapper::setDelegator(
         // this is a sort of dispose() from the new model,so release ressources here
         try
         {
-            DisposeHelper::DisposeAndClear( m_xTitle );
-            DisposeHelper::DisposeAndClear( m_xSubTitle );
-            DisposeHelper::DisposeAndClear( m_xLegend );
-            DisposeHelper::DisposeAndClear( m_xChartData );
-            DisposeHelper::DisposeAndClear( m_xDiagram );
-            DisposeHelper::DisposeAndClear( m_xArea );
-
-            clearWrappedPropertySet();
-
-            m_spChart2ModelContact->clear();
+            this->dispose();
         }
         catch( uno::Exception &ex )
         {
@@ -1607,11 +1614,21 @@ uno::Any SAL_CALL ChartDocumentWrapper::queryAggregation( const uno::Type& rType
 void ChartDocumentWrapper::_disposing( const lang::EventObject& rSource )
 {
     if( rSource.Source == m_xTitle )
-        m_xTitle = NULL;
-    if( rSource.Source == m_xSubTitle )
-        m_xSubTitle = NULL;
-    if( rSource.Source == m_xDiagram )
-        m_xDiagram = NULL;
+        m_xTitle.set( 0 );
+    else if( rSource.Source == m_xSubTitle )
+        m_xSubTitle.set( 0 );
+    else if( rSource.Source == m_xLegend )
+        m_xLegend.set( 0 );
+    else if( rSource.Source == m_xChartData )
+        m_xChartData.set( 0 );
+    else if( rSource.Source == m_xDiagram )
+        m_xDiagram.set( 0 );
+    else if( rSource.Source == m_xArea )
+        m_xArea.set( 0 );
+    else if( rSource.Source == m_xAddIn )
+        m_xAddIn.set( 0 );
+    else if( rSource.Source == m_xChartView )
+        m_xChartView.set( 0 );
 }
 
 // ================================================================================
