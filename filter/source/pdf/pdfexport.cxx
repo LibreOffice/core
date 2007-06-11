@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:12:00 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:20:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,6 +149,7 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::
     mbUseLosslessCompression( sal_False ),
     mbReduceImageResolution ( sal_False ),
     mbSkipEmptyPages        ( sal_False ),
+    mbAddStream             ( sal_False ),
     mnMaxImageResolution    ( 300 ),
     mnQuality               ( 90 ),
     mnFormsFormat           ( 0 ),
@@ -1284,17 +1285,19 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                                     Graphic aPatternGraphic;
                                     aFill.getGraphic( aPatternGraphic );
                                     bool bUseCache = false;
-                                    if( mnCachePatternId >= 0 )
+                                    SvtGraphicFill::Transform aPatTransform;
+                                    aFill.getTransform( aPatTransform );
+
+                                    if(  mnCachePatternId >= 0 )
                                     {
-                                        SvtGraphicFill::Transform aCacheTransform, aTransform;
+                                        SvtGraphicFill::Transform aCacheTransform;
                                         maCacheFill.getTransform( aCacheTransform );
-                                        aFill.getTransform( aTransform );
-                                        if( aCacheTransform.matrix[0] == aTransform.matrix[0] &&
-                                            aCacheTransform.matrix[1] == aTransform.matrix[1] &&
-                                            aCacheTransform.matrix[2] == aTransform.matrix[2] &&
-                                            aCacheTransform.matrix[3] == aTransform.matrix[3] &&
-                                            aCacheTransform.matrix[4] == aTransform.matrix[4] &&
-                                            aCacheTransform.matrix[5] == aTransform.matrix[5]
+                                        if( aCacheTransform.matrix[0] == aPatTransform.matrix[0] &&
+                                            aCacheTransform.matrix[1] == aPatTransform.matrix[1] &&
+                                            aCacheTransform.matrix[2] == aPatTransform.matrix[2] &&
+                                            aCacheTransform.matrix[3] == aPatTransform.matrix[3] &&
+                                            aCacheTransform.matrix[4] == aPatTransform.matrix[4] &&
+                                            aCacheTransform.matrix[5] == aPatTransform.matrix[5]
                                             )
                                         {
                                             Graphic aCacheGraphic;
@@ -1306,52 +1309,46 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
 
                                     if( ! bUseCache )
                                     {
-                                        GDIMetaFile aPattern;
 
-                                        // paint metafile into graphic
+                                        // paint graphic to metafile
+                                        GDIMetaFile aPattern;
                                         rDummyVDev.SetConnectMetaFile( &aPattern );
                                         rDummyVDev.Push();
                                         rDummyVDev.SetMapMode( aPatternGraphic.GetPrefMapMode() );
+
                                         aPatternGraphic.Draw( &rDummyVDev, Point( 0, 0 ) );
                                         rDummyVDev.Pop();
                                         rDummyVDev.SetConnectMetaFile( NULL );
                                         aPattern.WindStart();
 
+                                        MapMode aPatternMapMode( aPatternGraphic.GetPrefMapMode() );
                                         // prepare pattern from metafile
+                                        Size aPrefSize( aPatternGraphic.GetPrefSize() );
+                                        // FIXME: this magic -1 shouldn't be necessary
+                                        aPrefSize.Width() -= 1;
+                                        aPrefSize.Height() -= 1;
+                                        aPrefSize = rWriter.GetReferenceDevice()->
+                                            LogicToLogic( aPrefSize,
+                                                          &aPatternMapMode,
+                                                          &rWriter.GetReferenceDevice()->GetMapMode() );
+                                        // build bounding rectangle of pattern
+                                        Rectangle aBound( Point( 0, 0 ), aPrefSize );
+                                        rWriter.BeginPattern( aBound );
                                         rWriter.Push();
-                                        rWriter.BeginPattern();
                                         rDummyVDev.Push();
-                                        MapMode aMapMode( aPatternGraphic.GetPrefMapMode() );
-                                        rWriter.SetMapMode( aMapMode );
-                                        rDummyVDev.SetMapMode( aMapMode );
+                                        rWriter.SetMapMode( aPatternMapMode );
+                                        rDummyVDev.SetMapMode( aPatternMapMode );
                                         ImplWriteActions( rWriter, NULL, aPattern, rDummyVDev );
                                         rDummyVDev.Pop();
-                                        Size aPrefSize( aPatternGraphic.GetPrefSize() );
-                                        aPrefSize.Width() -= 1; // magic: for some reason prefsize is usually off by one
-                                        aPrefSize.Height() -= 1;
-                                        SvtGraphicFill::Transform aPatTransform;
-                                        aFill.getTransform( aPatTransform );
-                                        // workaround strange SvtGraphicsFill behaviour
-                                        BitmapEx aBmpEx = aPatternGraphic.GetBitmapEx();
-                                        if( !!aBmpEx )
-                                        {
-                                            Size aPixSz( 1000, 1000 );
-                                            Size aDummySz( rDummyVDev.PixelToLogic( aPixSz, MapMode( MAP_100TH_MM ) ) );
-                                            Size aPDFSz( rWriter.GetReferenceDevice()->PixelToLogic( aPixSz, MapMode( MAP_100TH_MM ) ) );
-                                            double sX = sqrt(double( aPDFSz.Width() )/ double( aDummySz.Width() ));
-                                            aPatTransform.matrix[0] *= sX;
-                                            aPatTransform.matrix[1] *= sX;
-                                            aPatTransform.matrix[3] *= sX;
-                                            aPatTransform.matrix[4] *= sX;
-                                        }
-
-                                        nPattern = rWriter.EndPattern( Rectangle( Point( 0 , 0 ), aPrefSize  ), aPatTransform );
                                         rWriter.Pop();
+
+                                        nPattern = rWriter.EndPattern( aPatTransform );
 
                                         // try some caching and reuse pattern
                                         mnCachePatternId = nPattern;
                                         maCacheFill = aFill;
                                     }
+
                                     // draw polypolygon with pattern fill
                                     PolyPolygon aPath;
                                     aFill.getPath( aPath );
