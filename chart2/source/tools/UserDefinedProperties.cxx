@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UserDefinedProperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:30:21 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 15:02:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,24 @@ namespace chart
 void UserDefinedProperties::AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
+    rOutProperties.push_back(
+        Property( C2U( "ChartUserDefinedAttributes" ),
+                  PROP_XML_USERDEF_CHART,
+                  ::getCppuType( reinterpret_cast< const uno::Reference< container::XNameContainer > * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+    rOutProperties.push_back(
+        Property( C2U( "TextUserDefinedAttributes" ),
+                  PROP_XML_USERDEF_TEXT,
+                  ::getCppuType( reinterpret_cast< const uno::Reference< container::XNameContainer > * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+    rOutProperties.push_back(
+        Property( C2U( "ParaUserDefinedAttributes" ),
+                  PROP_XML_USERDEF_PARA,
+                  ::getCppuType( reinterpret_cast< const uno::Reference< container::XNameContainer > * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
     // UserDefinedAttributeSupplier
     // ----------------------------
     rOutProperties.push_back(
