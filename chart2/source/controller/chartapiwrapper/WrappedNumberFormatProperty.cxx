@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedNumberFormatProperty.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:22:23 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:57:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,11 @@
 
 #include "WrappedNumberFormatProperty.hxx"
 #include "macros.hxx"
+
+// header for define DBG_ERROR
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -92,6 +97,11 @@ void WrappedNumberFormatProperty::setPropertyValue( const Any& rOuterValue, cons
 Any WrappedNumberFormatProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
+    if( !xInnerPropertySet.is() )
+    {
+        DBG_ERROR("missing xInnerPropertySet in WrappedNumberFormatProperty::getPropertyValue");
+        return Any();
+    }
     Any aRet( xInnerPropertySet->getPropertyValue( m_aInnerName ));
     if( !aRet.hasValue() )
     {
@@ -134,6 +144,12 @@ WrappedLinkNumberFormatProperty::~WrappedLinkNumberFormatProperty()
 void WrappedLinkNumberFormatProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
+    if( !xInnerPropertySet.is() )
+    {
+        DBG_ERROR("missing xInnerPropertySet in WrappedNumberFormatProperty::setPropertyValue");
+        return;
+    }
+
     bool bLinkFormat;
     if( rOuterValue >>= bLinkFormat )
     {
