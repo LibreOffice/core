@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeriesHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:14:57 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:59:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,6 +200,12 @@ void setPropertyAlsoToAllAttributedDataPoints(
         ::com::sun::star::chart2::XDataSeries >& xSeries,
         const ::rtl::OUString& rPropertyName,
         const ::com::sun::star::uno::Any& rPropertyValue );
+
+bool hasAttributedDataPointDifferentValue(
+    const ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::XDataSeries >& xSeries,
+    const ::rtl::OUString& rPropertyName,
+    const ::com::sun::star::uno::Any& rPropertyValue );
 
 } //  namespace DataSeriesHelper
 } //  namespace chart
