@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-17 13:57:17 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:25:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,6 +275,7 @@ public:
     {
         sal_Int32                   m_nObject;
         Rectangle                   m_aRectangle;
+        Size                        m_aCellSize;
         SvtGraphicFill::Transform   m_aTransform;
         ResourceDict                m_aResources;
         SvMemoryStream*             m_pTilingStream;
@@ -659,6 +660,7 @@ private:
     {
         SvStream*       m_pStream;
         MapMode         m_aMapMode;
+        Rectangle       m_aTargetRect;
         ResourceDict    m_aResourceDict;
     };
     std::list< StreamRedirect >         m_aOutputStreams;
@@ -1011,6 +1013,8 @@ i12626
     void beginCompression();
     void endCompression();
     void beginRedirect( SvStream* pStream, const Rectangle& );
+    // returns an empty rect if no redirection is happending
+    Rectangle getRedirectTargetRect() const;
     SvStream* endRedirect();
 
     void endPage();
@@ -1203,8 +1207,8 @@ public:
     void beginTransparencyGroup();
     void endTransparencyGroup( const Rectangle& rBoundingBox, sal_uInt32 nTransparentPercent );
     void endTransparencyGroup( const Rectangle& rBoundingBox, const Bitmap& rAlphaMask );
-    void beginPattern();
-    sal_Int32 endPattern( const Rectangle& rCell, const SvtGraphicFill::Transform& rTransform );
+    void beginPattern( const Rectangle& rCell );
+    sal_Int32 endPattern( const SvtGraphicFill::Transform& rTransform );
     void drawPolyPolygon( const PolyPolygon& rPolyPoly, sal_Int32 nPattern, bool bEOFill );
 
     void emitComment( const char* pComment );
