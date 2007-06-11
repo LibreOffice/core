@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.149 $
+ *  $Revision: 1.150 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:29:36 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:25:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4699,8 +4699,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
                     MenuFloatingWindow* pFloat = pPopupMenu->ImplGetFloatingWindow();
                     pFloat->GrabFocus();
                     pFloat->KillActivePopup();
-                    if (pPopupMenu->pStartedFrom)
-                        pPopupMenu->pStartedFrom->ImplCallHighlight(pFloat->nHighlightedItem);
+                    pPopupMenu->ImplCallHighlight(pFloat->nHighlightedItem);
                 }
             }
         }
