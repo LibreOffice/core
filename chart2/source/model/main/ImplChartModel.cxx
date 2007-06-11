@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImplChartModel.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:38:07 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 15:00:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,15 +74,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 
-// #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETS_HPP_
-// #include <com/sun/star/sheet/XSpreadsheets.hpp>
-// #endif
-// #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEET_HPP_
-// #include <com/sun/star/sheet/XSpreadsheet.hpp>
-// #endif
-// #ifndef _COM_SUN_STAR_SHEET_XSHEETCELLRANGECONTAINER_HPP_
-// #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
-// #endif
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
 #endif
@@ -162,6 +153,8 @@ ImplChartModel::ImplChartModel(
                 C2U( "com.sun.star.drawing.BitmapTable" ), C2U( "com.sun.star.comp.chart.BitmapTable" ) )),
         m_xTransparencyGradientTable( new NameContainer( ::getCppuType( reinterpret_cast< const awt::Gradient * >(0)),
                 C2U( "com.sun.star.drawing.TransparencyGradientTable" ), C2U( "com.sun.star.comp.chart.TransparencyGradientTable" ) )),
+        m_xXMLNamespaceMap( new NameContainer( ::getCppuType( (const OUString*) 0 ),
+                C2U( "com.sun.star.xml.NamespaceMap" ), C2U( "com.sun.star.comp.chart.XMLNameSpaceMap" ) )),
         m_xModifyListener( xListener )
 {
     m_spChartData.reset( new ChartData( m_xContext ));
@@ -195,6 +188,8 @@ ImplChartModel::ImplChartModel( const ImplChartModel & rOther, const Reference< 
     m_xHatchTable.set( CreateRefClone< Reference< container::XNameContainer > >()( rOther.m_xHatchTable ));
     m_xBitmapTable.set( CreateRefClone< Reference< container::XNameContainer > >()( rOther.m_xBitmapTable ));
     m_xTransparencyGradientTable.set( CreateRefClone< Reference< container::XNameContainer > >()( rOther.m_xTransparencyGradientTable ));
+
+    m_xXMLNamespaceMap.set( CreateRefClone< Reference< container::XNameAccess > >()( rOther.m_xXMLNamespaceMap ));
 
     CloneRefVector< Reference< chart2::XDiagram > >( rOther.m_aDiagrams, m_aDiagrams );
 }
@@ -528,6 +523,7 @@ void ImplChartModel::dispose()
     m_spChartData.reset();
     m_xNumberFormatsSupplier.clear();
 
+    DisposeHelper::DisposeAndClear( m_xFamilies );
     DisposeHelper::DisposeAndClear( m_xOwnNumberFormatsSupplier );
     DisposeHelper::DisposeAndClear( m_xChartTypeManager );
     DisposeHelper::DisposeAndClear( m_xChartTypeTemplate );
@@ -540,6 +536,8 @@ void ImplChartModel::dispose()
     DisposeHelper::DisposeAndClear( m_xHatchTable );
     DisposeHelper::DisposeAndClear( m_xBitmapTable );
     DisposeHelper::DisposeAndClear( m_xTransparencyGradientTable );
+
+    DisposeHelper::DisposeAndClear( m_xXMLNamespaceMap );
 
     // note: m_xModifyListener is the ChartModel, so don't call dispose()
     m_xModifyListener.clear();
@@ -642,25 +640,30 @@ void ImplChartModel::CreateDefaultChartTypeTemplate()
     }
 }
 
-Reference< uno::XInterface > ImplChartModel::GetDashTable()
+Reference< uno::XInterface > ImplChartModel::GetDashTable() const
 {
     return Reference< uno::XInterface >( m_xDashTable );
 }
-Reference< uno::XInterface > ImplChartModel::GetGradientTable()
+Reference< uno::XInterface > ImplChartModel::GetGradientTable() const
 {
     return Reference< uno::XInterface >( m_xGradientTable );
 }
-Reference< uno::XInterface > ImplChartModel::GetHatchTable()
+Reference< uno::XInterface > ImplChartModel::GetHatchTable() const
 {
     return Reference< uno::XInterface >( m_xHatchTable );
 }
-Reference< uno::XInterface > ImplChartModel::GetBitmapTable()
+Reference< uno::XInterface > ImplChartModel::GetBitmapTable() const
 {
     return Reference< uno::XInterface >( m_xBitmapTable );
 }
-Reference< uno::XInterface > ImplChartModel::GetTransparencyGradientTable()
+Reference< uno::XInterface > ImplChartModel::GetTransparencyGradientTable() const
 {
     return Reference< uno::XInterface >( m_xTransparencyGradientTable );
+}
+
+Reference< uno::XInterface > ImplChartModel::GetXMLNameSpaceMap() const
+{
+    return Reference< uno::XInterface >( m_xXMLNamespaceMap );
 }
 
 void ImplChartModel::SetNumberFormatsSupplier(
