@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DiagramHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:58:15 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 15:02:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,49 +188,64 @@ void DiagramHelper::setVertical(
             {
                 uno::Reference< XCoordinateSystem > xCooSys( aCooSys[i] );
                 Reference< beans::XPropertySet > xProp( xCooSys, uno::UNO_QUERY );
+                bool bChanged = false;
                 if( xProp.is() )
-                    xProp->setPropertyValue( C2U("SwapXAndYAxis"), aValue );
+                {
+                    sal_Bool bOldSwap = sal_False;
+                    if( !(xProp->getPropertyValue( C2U("SwapXAndYAxis") ) >>= bOldSwap)
+                        || bVertical != bOldSwap )
+                        bChanged = true;
+
+                    if( bChanged )
+                        xProp->setPropertyValue( C2U("SwapXAndYAxis"), aValue );
+                }
                 if( xCooSys.is() )
                 {
+                    const sal_Int32 nDimensionCount( xCooSys->getDimension() );
                     sal_Int32 nDimIndex = 0;
-                    const sal_Int32 nMaximumScaleIndex = xCooSys->getMaximumAxisIndexByDimension(nDimIndex);
-                    for(sal_Int32 nI=0; nI<=nMaximumScaleIndex; ++nI)
+                    for(nDimIndex=0; nDimIndex<nDimensionCount; ++nDimIndex)
                     {
-                        Reference< chart2::XAxis > xAxis( xCooSys->getAxisByDimension( nDimIndex,nI ));
-                        if( xAxis.is() )
+                        const sal_Int32 nMaximumScaleIndex = xCooSys->getMaximumAxisIndexByDimension(nDimIndex);
+                        for(sal_Int32 nI=0; nI<=nMaximumScaleIndex; ++nI)
                         {
-                            sal_Int32 nDimensionCount( xCooSys->getDimension() );
-                            if( nDimensionCount == 2 )
+                            Reference< chart2::XAxis > xAxis( xCooSys->getAxisByDimension( nDimIndex,nI ));
+                            if( xAxis.is() )
                             {
-                                //adapt scale orientation for 2D bar charts
-                                chart2::ScaleData aScaleData = xAxis->getScaleData();
-                                if( !bVertical != (AxisOrientation_MATHEMATICAL==aScaleData.Orientation) )
+                                if( nDimensionCount == 2 && nDimIndex == 0 )
                                 {
-                                    aScaleData.Orientation = bVertical ? AxisOrientation_REVERSE : AxisOrientation_MATHEMATICAL;
-                                    xAxis->setScaleData( aScaleData );
+                                    //adapt scale orientation for 2D bar charts
+                                    chart2::ScaleData aScaleData = xAxis->getScaleData();
+                                    if( !bVertical != (AxisOrientation_MATHEMATICAL==aScaleData.Orientation) )
+                                    {
+                                        aScaleData.Orientation = bVertical ? AxisOrientation_REVERSE : AxisOrientation_MATHEMATICAL;
+                                        xAxis->setScaleData( aScaleData );
+                                    }
                                 }
-                            }
 
-                            //adapt title rotation
-                            Reference< XTitled > xTitled( xAxis, uno::UNO_QUERY );
-                            if( xTitled.is())
-                            {
-                                Reference< beans::XPropertySet > xTitleProps( xTitled->getTitle(), uno::UNO_QUERY );
-                                if( !xTitleProps.is() )
-                                    continue;
-                                double fAngleDegree = 0.0;
-                                xTitleProps->getPropertyValue( C2U( "TextRotation" ) ) >>= fAngleDegree;
-                                if( !::rtl::math::approxEqual( fAngleDegree, 0.0 )
-                                    && !::rtl::math::approxEqual( fAngleDegree, 90.0 ) )
-                                    continue;
+                                //adapt title rotation only when axis swapping has changed
+                                if( bChanged )
+                                {
+                                    Reference< XTitled > xTitled( xAxis, uno::UNO_QUERY );
+                                    if( xTitled.is())
+                                    {
+                                        Reference< beans::XPropertySet > xTitleProps( xTitled->getTitle(), uno::UNO_QUERY );
+                                        if( !xTitleProps.is() )
+                                            continue;
+                                        double fAngleDegree = 0.0;
+                                        xTitleProps->getPropertyValue( C2U( "TextRotation" ) ) >>= fAngleDegree;
+                                        if( !::rtl::math::approxEqual( fAngleDegree, 0.0 )
+                                            && !::rtl::math::approxEqual( fAngleDegree, 90.0 ) )
+                                            continue;
 
-                                double fNewAngleDegree = 0.0;
-                                if( !bVertical && nDimIndex == 1 )
-                                    fNewAngleDegree = 90.0;
-                                else if( bVertical && nDimIndex == 0 )
-                                    fNewAngleDegree = 90.0;
+                                        double fNewAngleDegree = 0.0;
+                                        if( !bVertical && nDimIndex == 1 )
+                                            fNewAngleDegree = 90.0;
+                                        else if( bVertical && nDimIndex == 0 )
+                                            fNewAngleDegree = 90.0;
 
-                                xTitleProps->setPropertyValue( C2U( "TextRotation" ), uno::makeAny( fNewAngleDegree ));
+                                        xTitleProps->setPropertyValue( C2U( "TextRotation" ), uno::makeAny( fNewAngleDegree ));
+                                    }
+                                }
                             }
                         }
                     }
