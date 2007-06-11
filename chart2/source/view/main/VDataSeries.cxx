@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:26:09 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 15:04:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,6 +183,8 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     , m_aPointCID_Stub()
     , m_aLabelCID_Stub()
 
+    , m_nGlobalSeriesIndex(0)
+
     , m_apLabel_Series(NULL)
     , m_apLabelPropNames_Series(NULL)
     , m_apLabelPropValues_Series(NULL)
@@ -327,6 +329,11 @@ void VDataSeries::releaseShapes()
 void VDataSeries::setCategoryXAxis()
 {
     m_aValues_X.clear();
+}
+
+void VDataSeries::setGlobalSeriesIndex( sal_Int32 nGlobalSeriesIndex )
+{
+    m_nGlobalSeriesIndex = nGlobalSeriesIndex;
 }
 
 void VDataSeries::setParticle( const rtl::OUString& rSeriesParticle )
@@ -594,7 +601,7 @@ Symbol* VDataSeries::getSymbolProperties( sal_Int32 index ) const
     {
         pRet->Style = SymbolStyle_STANDARD;
 
-        sal_Int32 nIndex = ObjectIdentifier::getIndexFromParticleOrCID( getSeriesParticle() );
+        sal_Int32 nIndex = m_nGlobalSeriesIndex;
         if(m_aValues_X.is())
             nIndex++;
         pRet->StandardSymbol = nIndex;
