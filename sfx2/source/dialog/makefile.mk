@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 11:05:43 $
+#   last change: $Author: obo $ $Date: 2007-06-11 14:02:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,40 +52,40 @@ EXCEPTIONSFILES=\
         $(SLO)$/itemconnect.obj     \
         $(SLO)$/mailmodel.obj		\
         $(SLO)$/partwnd.obj         \
-                $(SLO)$/recfloat.obj \
-                $(SLO)$/templdlg.obj
+        $(SLO)$/recfloat.obj \
+        $(SLO)$/templdlg.obj
 
 SLOFILES =\
         $(EXCEPTIONSFILES)			\
-                $(SLO)$/about.obj           \
-                $(SLO)$/alienwarn.obj       \
+        $(SLO)$/about.obj           \
+        $(SLO)$/alienwarn.obj       \
         $(SLO)$/basedlgs.obj		\
         $(SLO)$/dinfdlg.obj			\
         $(SLO)$/dinfedt.obj			\
         $(SLO)$/dockwin.obj			\
         $(SLO)$/intro.obj			\
-                $(SLO)$/macropg.obj         \
+        $(SLO)$/macropg.obj         \
         $(SLO)$/mailwindow.obj		\
         $(SLO)$/mgetempl.obj		\
         $(SLO)$/navigat.obj			\
         $(SLO)$/newstyle.obj		\
         $(SLO)$/passwd.obj			\
         $(SLO)$/printopt.obj		\
-                $(SLO)$/sfxdlg.obj          \
+        $(SLO)$/sfxdlg.obj          \
         $(SLO)$/sfxurl.obj			\
         $(SLO)$/splitwin.obj		\
-                $(SLO)$/srchdlg.obj         \
+        $(SLO)$/srchdlg.obj         \
         $(SLO)$/styfitem.obj		\
         $(SLO)$/styledlg.obj		\
         $(SLO)$/tabdlg.obj			\
         $(SLO)$/tplcitem.obj		\
         $(SLO)$/tplpitem.obj		\
-                $(SLO)$/versdlg.obj
+        $(SLO)$/versdlg.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =\
         recfloat.src		\
-                alienwarn.src       \
+        alienwarn.src       \
         cfg.src				\
         dialog.src			\
         dinfdlg.src			\
@@ -123,3 +123,14 @@ $(INCCOM)$/cuilib.hxx: makefile.mk
 
 $(SLO)$/sfxdlg.obj : $(INCCOM)$/cuilib.hxx
 
+$(SLO)$/about.obj : $(INCCOM)$/aboutbmpnames.hxx
+
+.INCLUDE .IGNORE : $(MISC)$/about_bmp_names.mk
+
+.IF "$(ABOUT_BITMAPS:f)"!="$(LASTTIME_ABOUT_BITMAPS)"
+DO_PHONY=.PHONY
+.ENDIF			# "$(ABOUT_BITMAPS:f)"!="$(LASTTIME_ABOUT_BITMAPS)"
+
+$(INCCOM)$/aboutbmpnames.hxx $(DO_PHONY):
+    echo const char ABOUT_BITMAP_STRINGLIST[]=$(EMQ)"$(ABOUT_BITMAPS:f:t",")$(EMQ)"$(EMQ); > $@
+    echo LASTTIME_ABOUT_BITMAPS=$(ABOUT_BITMAPS:f) > $(MISC)$/about_bmp_names.mk
