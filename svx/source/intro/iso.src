@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iso.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:37:20 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 13:58:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,21 +42,6 @@
 #endif
 
 #include "intro.hrc"
-Bitmap RID_DEFAULT_ABOUT_BMP_LOGO
-{
-    File = "cjkabout.bmp" ;
-};
-
-Bitmap RID_DEFAULTINTRO
-{
-    File = "cjkintro.bmp" ;
-};
-
-Bitmap RID_DEFAULTINTRO_PORTAL
-{
-    File = "cjkintro.bmp" ;
-};
-
 String RID_APPTITLE
 {
     Text = "%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION" ;
