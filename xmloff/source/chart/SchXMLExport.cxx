@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:06:15 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:52:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -971,6 +971,10 @@ void SchXMLExportHelper::parseDocument( Reference< chart::XChartDocument >& rCha
         if( sChartType.getLength())
         {
             enum XMLTokenEnum eXMLChartType = SchXMLTools::getTokenByChartType( sChartType, true /* bUseOldNames */ );
+
+            DBG_ASSERT( eXMLChartType != XML_TOKEN_INVALID, "invalid chart class" );
+            if( eXMLChartType == XML_TOKEN_INVALID )
+                eXMLChartType = XML_BAR;
 
             if( eXMLChartType == XML_ADD_IN )
             {
