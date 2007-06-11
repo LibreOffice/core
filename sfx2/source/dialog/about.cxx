@@ -4,9 +4,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:09:37 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:01:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "precompiled_sfx2.hxx"
 
 // include ---------------------------------------------------------------
+#include <aboutbmpnames.hxx>
 
 #ifndef _SV_APP_HXX
 #include <vcl/svapp.hxx>
@@ -93,6 +94,21 @@ static void layoutText( FixedInfo &rText, long &nY, long nTextWidth, Size a6Size
     nY += aTxtSiz.Height();
 }
 
+static bool impl_loadBitmap( const rtl::OUString &rBmpFileName, Image &rLogo )
+{
+    INetURLObject aObj( SvtPathOptions().GetModulePath(), INET_PROT_FILE );
+    aObj.insertName( rBmpFileName );
+    SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
+    if ( !aStrm.GetError() )
+    {
+        Bitmap aBmp;
+        aStrm >> aBmp;
+        rLogo = Image( aBmp );
+        return true;
+    }
+    return false;
+}
+
 AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerStr ) :
 
     SfxModalDialog  ( pParent,  rId ),
@@ -130,20 +146,18 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     }
 
     // load image from module path
-    String aBmpFileName( DEFINE_CONST_UNICODE("about.bmp") );
-    INetURLObject aObj( SvtPathOptions().GetModulePath(), INET_PROT_FILE );
-    aObj.insertName( aBmpFileName );
-    SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
-    if ( !aStrm.GetError() )
+    rtl::OUString aAbouts( RTL_CONSTASCII_USTRINGPARAM( ABOUT_BITMAP_STRINGLIST ) );
+    bool bLoaded = false;
+    sal_Int32 nIndex = 0;
+    do
     {
-        Bitmap aBmp;
-        aStrm >> aBmp;
-        aAppLogo = Image( aBmp );
+        bLoaded = impl_loadBitmap( aAbouts.getToken( 0, ',', nIndex ), aAppLogo );
     }
-    else
-    {
-        aAppLogo = Image( Bitmap( ResId( RID_DEFAULT_ABOUT_BMP_LOGO, *rId.GetResMgr() ) ) );
-    }
+    while ( !bLoaded && ( nIndex >= 0 ) );
+
+    // fallback to "about.bmp"
+    if ( !bLoaded )
+        bLoaded = impl_loadBitmap( rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
 
     // Transparenter Font
     Font aFont = GetFont();
