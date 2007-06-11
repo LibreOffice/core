@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScaleAutomatism.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:08:52 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 15:02:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,18 @@ using namespace ::com::sun::star::chart2;
 
 const sal_Int32 MAXIMUM_MANUAL_INCREMENT_COUNT = 500;
 const sal_Int32 MAXIMUM_AUTO_INCREMENT_COUNT = 10;
+const sal_Int32 MAXIMUM_SUB_INCREMENT_COUNT = 100;
+
+namespace
+{
+
+void lcl_ensureMaximumSubIncrementCount( sal_Int32& rnSubIntervalCount )
+{
+    if( rnSubIntervalCount > MAXIMUM_SUB_INCREMENT_COUNT )
+        rnSubIntervalCount = MAXIMUM_SUB_INCREMENT_COUNT;
+}
+
+}//end anonymous namespace
 
 ScaleAutomatism::ScaleAutomatism( const ScaleData& rSourceScale )
                     : m_aSourceScale( rSourceScale )
@@ -238,6 +250,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForCategory(
             //@todo autocalculate IntervalCount dependent on MainIncrement and scaling
             rExplicitSubIncrement.IntervalCount = 2;
         }
+        lcl_ensureMaximumSubIncrementCount( rExplicitSubIncrement.IntervalCount );
         if(!(rSubIncrement.PostEquidistant>>=rExplicitSubIncrement.PostEquidistant))
         {
             //scaling dependent
@@ -455,17 +468,13 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
             //@todo autocalculate IntervalCount dependent on MainIncrement and scaling
             rExplicitSubIncrement.IntervalCount = 5;
         }
+        lcl_ensureMaximumSubIncrementCount( rExplicitSubIncrement.IntervalCount );
         if(!(rSubIncrement.PostEquidistant>>=rExplicitSubIncrement.PostEquidistant))
         {
             //scaling dependent
             rExplicitSubIncrement.PostEquidistant = sal_False;
         }
     }
-
-    /*  Add an unvisible little bit to the maximum to workaround rounding
-        errors (otherwise sometimes the maximum is not shown correctly). */
-    rExplicitScale.Minimum -= rExplicitScale.Minimum * 1.0e-10;
-    rExplicitScale.Maximum += rExplicitScale.Maximum * 1.0e-10;
 }
 
 void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
@@ -705,18 +714,13 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
             //@todo autocalculate IntervalCount dependent on MainIncrement and scaling
             rExplicitSubIncrement.IntervalCount = 2;
         }
+        lcl_ensureMaximumSubIncrementCount( rExplicitSubIncrement.IntervalCount );
         if(!(rSubIncrement.PostEquidistant>>=rExplicitSubIncrement.PostEquidistant))
         {
             //scaling dependent
             rExplicitSubIncrement.PostEquidistant = sal_False;
         }
     }
-
-    /*  Add an unvisible little bit to the maximum to workaround rounding
-        errors (otherwise sometimes the maximum is not shown correctly). */
-    double fLittleBit = (rExplicitScale.Maximum - rExplicitScale.Minimum) * 1.0e-10;
-    rExplicitScale.Minimum -= fLittleBit;
-    rExplicitScale.Maximum += fLittleBit;
 }
 
 //.............................................................................
