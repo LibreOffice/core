@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShell.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:08:06 $
+ *  last change: $Author: obo $ $Date: 2007-06-11 14:54:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,10 @@ class MultiSelection;
 
 extern const String aEmptyStr;
 
+namespace com { namespace sun { namespace star {
+namespace embed {
+    class XEmbeddedObject;
+}}}}
 
 namespace sd {
 
@@ -465,6 +469,9 @@ public:
         was successfull.
     */
     virtual bool RelocateToParentWindow (::Window* pParentWindow);
+
+    void AdaptDefaultsForChart(
+        const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > & xEmbObj );
 
     class Implementation;
 
