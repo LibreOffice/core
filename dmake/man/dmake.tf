@@ -19,7 +19,7 @@
 .IP "\\$1" \\n[dmake-indent]u
 .it 1 PD
 ..
-.TH DMAKE 1  "2006-11-23" "Dmake Version 4.7"
+.TH DMAKE 1  "2007-04-24" "Dmake Version 4.8"
 .SH NAME
 \fBdmake\fR \- maintain program groups, or interdependent files
 .SH SYNOPSIS
@@ -513,6 +513,7 @@ target-definition \(-> targets [attrs] op { \fBPREREQUISITE\fP } [\fB;\fR rcp-li
 \(-> \fB.USESHELL\fR
 \(-> \fB.SYMBOL\fR
 \(-> \fB.UPDATEALL\fR
+\(-> \fB.WINPATH\fR
 .Ip "special-target" "\(-> \fB.ERROR\fR"
 \(-> \fB.EXIT\fR
 \(-> \fB.EXPORT\fR
@@ -708,6 +709,38 @@ are treated as a single target and all timestamps are updated whenever any
 target in the set is made.  As a side-effect, \fBdmake\fP internally sorts
 such targets in ascending alphabetical order and the value of $@ is always
 the first target in the sorted set.
+.IP \fB.WINPATH\fP 1.2i
+Switch between default (POSIX) and Windows style path representation.
+(This attribute is specific for cygwin dmake executables and non-cygwin
+environments ignore this attribute.)
+.sp
+Under Cygwin it can be useful to generate Windows style paths (with
+regular slashes) instead of the default cygwin style (POSIX) paths
+for dmake's dynamic macros.
+The affected macros are $@, $*, $>, $?, $<, $&, $^ and $(PWD), $(MAKEDIR)
+and $(TMD). This feature can be used to create DOS style path parameters
+for native W32 programs from dynamic macros.
+.sp
+\fBNote\fP that the Windows style paths use regular slashes ('/') instead
+of the usual Windows backslash ('\\') as directory separator to avoid quoting
+problems (after all it is still a cygwin \fBdmake\fP!) and cygwin, as well
+as native Windows, programs should have no problems using this (c:/foo/bar)
+path representation.
+.sp
+Example: Assuming the current target to be /tmp/mytarget the $@ macro
+without .WINPATH active expands to:
+.RS
+.sp
+.RS
+/tmp/mytarget
+.sp
+.RE
+With .WINPATH set it expands to:
+.sp
+.RS
+C:/cygwin/tmp/mytarget
+.RE
+.RE
 .LP
 All attributes are user setable and except for .UPDATEALL and .MKSARGS
 may be used in one of two forms.
@@ -1099,7 +1132,10 @@ by any of the modifiers { !, ^, \-, :, | }, where:
 .sp
 .IP \fB!\fP
 says execute the recipe for the associated targets once for each out of date
-prerequisite.  Ordinarily the recipe is executed
+prerequisite.  (The meaning of the runtime macro \fB$?\fP is changed, see
+below in the
+.B "RUNTIME MACROS"
+section.) Ordinarily the recipe is executed
 once for all out of date prerequisites at the same time.
 .IP \fB^\fP
 says to insert the specified prerequisites, if any, before any
@@ -1718,6 +1754,10 @@ directory is the directory that \fBdmake\fP was started up in TMD will be
 set to the relative path ".". This allows to create valid paths by prepending
 $(TMD)$(DIRSEPSTR) to a relative path.
 This macro is modified when .SETDIR attributes are processed.
+TMD will usually be a relative path with the following two exceptions. If the
+relative path would go up until the root directory or if different drive
+letters (DOS file system) make a relative path impossible the absolute path
+from MAKEDIR is used.
 .IP \fBUSESHELL\fP 1.6i
 The value of this macro is set to "yes" if the current recipe is forced to
 use a shell for its execution via the .USESHELL or '+' directives, its value
@@ -1732,11 +1772,19 @@ If set to "yes" enables the directory cache (this is the default).  If set to
 "no" disables the directory cache (equivalent to -d command-line flag).
 .IP \fB.DIRCACHERESPCASE\fP 1.6i
 If set to "yes" causes the directory cache, if enabled, to respect
-file case, if set to "no" facilities of the native OS are used to
-match file case.
-By default it is set to "no" for Windows and Mac OS X as the filesystems on
-those operating systems are usually case insensitive and set to "yes" for all
+file case, if set to "no" files are cached case insensitive.
+By default it is set to "no" on Windows as the filesystems on
+this operating system are case insensitive and set to "yes" for all
 other operating systems. The default can be overriden, if desired.
+.sp
+\fBNote:\fP Using case insensitive directory caching on case sensitive
+file systems is a \fBBAD\fP idea. If in doubt use case sensitive
+directory caching even on case insensitive file systems as the
+worst case in this scenario is that /foo/bar/ and /foo/BAR/ are
+cached separately (with the same content) even though they are
+the same directory. This would only happen if different targets
+use different upper/lower case spellings for the same directory
+and that is \fBnever\fP a good idea.
 .IP \fBNAMEMAX\fP 1.6i
 Defines the maximum length of a filename component.  The value of the variable
 is initialized at startup to the value of the compiled macro NAME_MAX.  On
@@ -1885,7 +1933,9 @@ the corresponding attribute to on.
 These macros are defined
 when \fBdmake\fP is making targets, and may take on different values for each
 target.  \fB$@\fP is defined to be the full target name, \fB$?\fP is the
-list of all out of date prerequisites, \fB$&\fP is the list of all
+list of all out of date prerequisites, except for the \fB!\fP ruleop, in
+which case it is set to the current build
+prerequisite instead.  \fB$&\fP is the list of all
 prerequisites, \fB$>\fP is the name of the library if the current target is a
 library member, and
 \fB$<\fP is the list of prerequisites specified in the current rule.
