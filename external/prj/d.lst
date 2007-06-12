@@ -5,7 +5,6 @@ mkdir: %_DEST%\inc%_EXT%\external\mingw
 mkdir: %_DEST%\inc%_EXT%\external\mingw\include
 mkdir: %_DEST%\inc%_EXT%\external\mingw\include\atl
 mkdir: %_DEST%\inc%_EXT%\external\mingw\include\sys
-mkdir: %_DEST%\pck%_EXT%
 
 ..\jars\parser.jar %_DEST%\bin%_EXT%\parser.jar
 ..\jars\jaxp.jar %_DEST%\bin%_EXT%\jaxp.jar
@@ -55,8 +54,6 @@ mkdir: %_DEST%\pck%_EXT%
 ..\%__SRC%\lib\libmsvcrt*.* %_DEST%\lib%_EXT%\lib*.*
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
-..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
-..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
 
 linklib: libgcc_s.*.*
 
