@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppElementType.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:14:25 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:34:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,9 @@ namespace dbaui
         E_REPORT    = 1,
         E_QUERY     = 2,
         E_TABLE     = 3,
-        E_NONE      = 4
+
+        E_NONE      = 4,
+        E_ELEMENT_TYPE_COUNT = E_NONE
     };
 
     enum PreviewMode
