@@ -1,6 +1,6 @@
 /* $RCSfile: rmprq.c,v $
--- $Revision: 1.4 $
--- last change: $Author: rt $ $Date: 2004-09-08 16:09:12 $
+-- $Revision: 1.5 $
+-- last change: $Author: obo $ $Date: 2007-06-12 06:09:05 $
 --
 -- SYNOPSIS
 --      Remove prerequisites code.
@@ -30,7 +30,23 @@
 #include "extern.h"
 
 PUBLIC void
-Remove_prq( tcp )
+Remove_prq( tcp )/*
+===================
+   Removable targets (ie. an inferred intermediate node) are removed
+   by this function by running Make() on the special target .REMOVE
+   (pointed to by tcp).
+   As this function can be called from within another Make() (for example
+   like this:
+     Make()->Exec_commands()->Do_cmnd()->runargv()->..->_finished_child()
+     ->Update_time_stamp()->Remove_prq() )
+   it is necessary to store and restore the dynamic macros when Make()
+   is finished.
+
+   FIXME: Another potential problem is that while building .REMOVE another
+   previously started target finishes and from _finished_child() calls
+   Remove_prq() again. This will delete the dynamic macros and possibly
+   clear/reset the prerequisites of the previous .REMOVE target.
+*/
 CELLPTR tcp;
 {
    static  LINKPTR rlp = NIL(LINK);
@@ -39,10 +55,17 @@ CELLPTR tcp;
    char    *m_at_s, *m_g_s, *m_q_s, *m_b_s, *m_l_s, *m_bb_s, *m_up_s;
    LINKPTR tlp;
 
+   /* Unset F_MADE and F_VISITED. */
    tcp->ce_flag         &= ~(F_MADE|F_VISITED);
    tcp->ce_time          = 0L;
 
+   /* The idea seems to be to create a target that is used to remove
+    * intermediate prerequisites. Why add something to the "CeMeToo(tlp)"
+    * list? I don't understand this yet.
+    * FIXME! Either comment on what is going on or fix the code. */
    for( tlp=rlp; tlp !=NIL(LINK); tlp=tlp->cl_next )
+      /* Find first target that has F_VISITED not set or F_MADE set,
+       * i.e. it is not currently made or already done. */
       if( (tlp->cl_prq->ce_flag & (F_VISITED|F_MADE)) != F_VISITED )
      break;
 
