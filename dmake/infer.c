@@ -1,6 +1,6 @@
 /* $RCSfile: infer.c,v $
--- $Revision: 1.6 $
--- last change: $Author: ihi $ $Date: 2006-06-29 11:24:00 $
+-- $Revision: 1.7 $
+-- last change: $Author: obo $ $Date: 2007-06-12 06:06:11 $
 --
 -- SYNOPSIS
 --      Infer how to make a target.
@@ -523,18 +523,23 @@ static char *
 buildname( tg, meta, per )/*
 ============================
    Replace '%' with per in meta. Expand the result and return it. */
-char *tg;
+char *tg; /* Current target name. */
 char *meta;
 char *per;
 {
    char    *name;
 
    name = Apply_edit( meta, "%", per, FALSE, FALSE );
+   /* Handle infered dynamic prerequisites. */
    if( strchr(name, '$') ) {
       HASHPTR m_at;
       char *tmp;
 
-      m_at = Def_macro( "@", tg, M_MULTI );
+      /* Set $@ so that a Expand() can use it and remove it afterwards. */
+      /* Is $@ already expanded? FIXME: Remove this check later. */
+      if( *DmStrPbrk( tg, "${}" ) != '\0' )
+     Fatal("$@ [%s] not fully expanded!", tg);
+      m_at = Def_macro( "@", DO_WINPATH(tg), M_MULTI|M_EXPANDED );
       tmp = Expand( name );
 
       if( m_at->ht_value != NIL(char) ) {
@@ -542,6 +547,7 @@ char *per;
      m_at->ht_value = NIL(char);
       }
 
+      /* Free name if Apply_edit() did something. */
       if( name != meta ) FREE( name );
       name = tmp;
    }
