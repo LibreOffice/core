@@ -1,4 +1,4 @@
-/* RCS  $Id: dmdump.c,v 1.3 2006-06-29 11:23:21 ihi Exp $
+/* RCS  $Id: dmdump.c,v 1.4 2007-06-12 06:05:11 obo Exp $
 --
 -- SYNOPSIS
 --      Dump the internal dag to stdout.
@@ -111,7 +111,17 @@ STRINGPTR sp;
 
 static char *_attrs[] = { ".PRECIOUS", ".SILENT", ".LIBRARY",
    ".EPILOG", ".PROLOG", ".IGNORE", ".SYMBOL", ".NOINFER",
-   ".UPDATEALL", ".SEQUENTIAL", ".SETDIR=", ".USESHELL", ".SWAP", ".MKSARGS",
+   ".UPDATEALL", ".SEQUENTIAL", ".SETDIR=", ".USESHELL",
+#if defined(MSDOS)
+   ".SWAP",
+#else
+# if defined(__CYGWIN__)
+   ".WINPATH",
+# else
+   "- unused -",
+# endif
+#endif
+   ".MKSARGS",
    ".PHONY", ".NOSTATE", ".IGNOREGROUP", ".EXECUTE", ".ERRREMOVE" };
 
 static void
