@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:56:30 $
+#   last change: $Author: obo $ $Date: 2007-06-12 05:36:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@ SLOFILES= \
             $(SLO)$/keyevent.obj	\
             $(SLO)$/menu.obj		\
             $(SLO)$/mnemonic.obj	\
+            $(SLO)$/mnemonicengine.obj  \
             $(SLO)$/msgbox.obj		\
             $(SLO)$/scrwnd.obj		\
             $(SLO)$/seleng.obj		\
