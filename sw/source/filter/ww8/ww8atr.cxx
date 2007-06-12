@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-04 14:03:26 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:56:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -941,8 +941,11 @@ void SwWW8Writer::ExportOutlineNumbering(BYTE nLvl, const SwNumFmt &rNFmt,
     }
 }
 
-void SwWW8Writer::DisallowInheritingOutlineNumbering(const SwFmt &rFmt)
+// --> OD 2007-06-04 #i77805#
+bool SwWW8Writer::DisallowInheritingOutlineNumbering(const SwFmt &rFmt)
 {
+    bool bRet( false );
+
     //If there is no numbering on this fmt, but its parent was outline
     //numbered, then in writer this is no inheritied, but in word it would
     //be, so we must export "no numbering" and "body level" to make word
@@ -960,12 +963,17 @@ void SwWW8Writer::DisallowInheritingOutlineNumbering(const SwFmt &rFmt)
                     pO->Insert(BYTE(9), pO->Count());
                     SwWW8Writer::InsUInt16(*pO, 0x460b);
                     SwWW8Writer::InsUInt16(*pO, 0);
+
+                    bRet = true;
                 }
                 /*whats the winword 6 way to do this ?*/
             }
         }
     }
+
+    return bRet;
 }
+// <--
 
 void SwWW8Writer::Out_SwFmt(const SwFmt& rFmt, bool bPapFmt, bool bChpFmt,
     bool bFlyFmt)
@@ -1009,8 +1017,20 @@ void SwWW8Writer::Out_SwFmt(const SwFmt& rFmt, bool bPapFmt, bool bChpFmt,
             {
                 //otherwise we might have to remove outline numbering from
                 //what gets exported if the parent style was outline numbered
-                if (bStyDef)
-                    DisallowInheritingOutlineNumbering(rFmt);
+                // --> OD 2007-06-04 #i77805#
+                // If inherited outline numbering is suppress, the left/right
+                // margins has to be exported explicitly.
+                if ( bStyDef && DisallowInheritingOutlineNumbering(rFmt) )
+                {
+                    SfxItemSet aSet( rFmt.GetAttrSet() );
+                    SvxLRSpaceItem aLR(
+                        ItemGet<SvxLRSpaceItem>(aSet, RES_LR_SPACE));
+                    aSet.Put( aLR );
+                    Out_SfxItemSet( aSet, bPapFmt, bChpFmt,
+                        com::sun::star::i18n::ScriptType::LATIN);
+                    bCallOutSet = false;
+                }
+                // <--
             }
         }
         break;
@@ -3556,6 +3576,7 @@ ULONG SwWW8Writer::ReplaceCr( BYTE nChar )
         WriteChar(nChar);
         pPiece->SetParaBreak();
         pPapPlc->AppendFkpEntry(rStrm.Tell());
+        pChpPlc->AppendFkpEntry(rStrm.Tell());
         nRetPos = rStrm.Tell();
     }
 #ifdef PRODUCT
