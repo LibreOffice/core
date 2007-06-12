@@ -1,6 +1,6 @@
 /* $RCSfile: make.c,v $
--- $Revision: 1.8 $
--- last change: $Author: vg $ $Date: 2007-01-18 09:30:56 $
+-- $Revision: 1.9 $
+-- last change: $Author: obo $ $Date: 2007-06-12 06:06:24 $
 --
 -- SYNOPSIS
 --      Perform the update of all outdated targets.
@@ -142,20 +142,56 @@ list_add(LISTSTRINGPTR s, char *str)
 
 
 static char *
-list_string(LISTSTRINGPTR s)
+gen_path_list_string(LISTSTRINGPTR s)/*
+=======================================
+   Take a list of filepaths and create a string from it separating
+   the filenames by a space.
+   This function honors the cygwin specific .WINPATH attribute. */
 {
    LISTCELLPTR next, cell;
    int         len;
+   int         slen, slen_rest;
    char        *result;
-   char        *p;
+   char        *p, *tpath;
 
-   if(s->len == 0)
+   if( (slen_rest = slen = s->len) == 0)
       return(NIL(char));
 
-   if((p = result = MALLOC(s->len, char)) == NULL) No_ram();
+   /* reserve enough space to hold the concated original filenames. */
+   if((p = result = MALLOC(slen, char)) == NULL) No_ram();
 
    for (cell=s->first; cell; cell=next) {
-      memcpy((void *)p, (void *)cell->datum, len=cell->len);
+#if !defined(__CYGWIN__)
+      tpath = cell->datum;
+      len=cell->len;
+#else
+      /* For cygwin with .WINPATH set the lenght of the converted
+       * filepaths might me longer. Extra checking is needed ... */
+      tpath = DO_WINPATH(cell->datum);
+      if( tpath == cell->datum ) {
+     len=cell->len;
+      }
+      else {
+     /* ... but only if DO_WINPATH() did something. */
+     len = strlen(tpath);
+
+     if( len > slen_rest ) {
+        /* We need more memory. As DOS paths are usually shorter than the
+         * original cygwin POSIX paths (exception mounted paths) this should
+         * rarely happen. */
+        int p_offset = p - result;
+        /* Get more than needed. */
+        slen += slen + len-slen_rest + 128;
+        if((result = realloc( result, (unsigned)(slen*sizeof(char)) ) ) == NULL)
+           No_ram();
+        p = result + p_offset;
+     }
+      }
+
+      slen_rest -= len;
+#endif
+
+      memcpy((void *)p, (void *)tpath, len);
       p += len;
       *p++ = ' ';
       next = cell->next;
@@ -245,6 +281,12 @@ CELLPTR setdirroot;
    time_t       ttime   = (time_t) 1L;
    int          mark_made = FALSE;
 
+#if defined(__CYGWIN__)
+   /* static variable to hold .WINPATH status of previously made target.
+    * 0, 1 are .WINPATH states, -1 indicates the first target. */
+   static int prev_winpath_attr = -1;
+#endif
+
    DB_ENTER( "Make" );
    DB_PRINT( "mem", ("%s:-> mem %ld", cp->CE_NAME, (long) coreleft()) );
 
@@ -268,7 +310,18 @@ CELLPTR setdirroot;
 
    nsetdirroot = setdirroot;
    ignore = (((cp->ce_attr|Glob_attr)&A_IGNORE) != 0);
-   m_at = Def_macro( "@", cp->ce_fname, M_MULTI );
+
+   /* Set the UseWinpath variable to reflect the (global/local) .WINPATH
+    * attribute. The variable is used by DO_WINPATH() and in some other
+    * places. */
+   UseWinpath = (((cp->ce_attr|Glob_attr)&A_WINPATH) != 0);
+
+   /* m_at needs to be defined before going to a "stop_making_it" where
+    * a _drop_mac( m_at ) would try to free it. */
+   /* FIXME: m_at can most probably not be changed before the next
+    * Def_macro("@", ...) command. Check if both this and the next
+    * call are needed. */
+   m_at = Def_macro("@", DO_WINPATH(cp->ce_fname), M_MULTI);
 
    if( cp->ce_attr & A_SETDIR ) {
       /* Change directory only if the previous .SETDIR is a different
@@ -386,7 +439,11 @@ CELLPTR setdirroot;
       }
    }
 
-   m_at = Def_macro("@", cp->ce_fname, M_MULTI);
+   /* Define $@ macro. The only reason for defining it here (that I see ATM)
+    * is that $@ is already defined in conditional macros. */
+   /* FIXME: check if both this and the previous Def_macro("@", ...) call
+    * are needed. */
+   m_at = Def_macro("@", DO_WINPATH(cp->ce_fname), M_MULTI);
 
    /* Define conditional macros if any, note this is done BEFORE we process
     * prerequisites for the current target.  Thus the making of a prerequisite
@@ -416,10 +473,16 @@ CELLPTR setdirroot;
    for( prev=NULL,dp=cp->ce_prq; dp != NIL(LINK); prev=dp, dp=next ) {
       int seq;
 
-      /* This is the only macro that needs to be reset while building
-       * prerequisites since it is set when we make each prerequisite. */
+      /* This loop executes Make() to build prerequisites if needed.
+       * The only macro that needs to be reset after a Make() was executed
+       * is $@ as it might be used when expanding potential dynamic
+       * prerequisites. As UseWinpath is a global variable we also
+       * need to restore it. */
       if (m_at->ht_value == NIL(char)) {
-     m_at = Def_macro("@", cp->ce_fname, M_MULTI);
+     /* This check effectively tests if Make() was run before because
+      * Make() frees all dynamic macro values at the end. */
+     UseWinpath = (((cp->ce_attr|Glob_attr)&A_WINPATH) != 0);
+     m_at = Def_macro("@", DO_WINPATH(cp->ce_fname), M_MULTI);
       }
 
       /* Make the prerequisite, note that if the current target has the
@@ -568,10 +631,21 @@ CELLPTR setdirroot;
       }
    }
 
-   all = list_string(&all_list);
-   imm = list_string(&imm_list);
-   outall = list_string(&outall_list);
-   inf = list_string(&inf_list);
+   /* Restore UseWinpath and $@ if needed, see above for an explanation. */
+   if (m_at->ht_value == NIL(char)) {
+      /* This check effectively tests if Make() was run before because
+       * Make() frees all dynamic macro values at the end. */
+      UseWinpath = (((cp->ce_attr|Glob_attr)&A_WINPATH) != 0);
+      m_at = Def_macro("@", DO_WINPATH(cp->ce_fname), M_MULTI);
+   }
+
+   /* Create a string with all concatenate filenames. The function
+    * respects .WINPATH.  Note that gen_path_list_string empties its
+    * parameter :( */
+   all = gen_path_list_string(&all_list);
+   imm = gen_path_list_string(&imm_list);
+   outall = gen_path_list_string(&outall_list);
+   inf = gen_path_list_string(&inf_list);
 
    DB_PRINT( "mem", ("%s:-C mem %ld", cp->CE_NAME, (long) coreleft()) );
    DB_PRINT( "make", ("I make '%s' if %ld > %ld", cp->CE_NAME, otime,
@@ -588,13 +662,38 @@ CELLPTR setdirroot;
      printf( "[%s]\n", cp->CE_NAME );
    }
 
-   m_at = Def_macro( "@", cp->ce_fname, M_MULTI );
-   m_g  = Def_macro( ">", cp->ce_lib,   M_MULTI|M_EXPANDED );
+
+   /* Only PWD, TMD, MAKEDIR and the dynamic macros are affected by
+    * .WINPATH. $@ is handled earlier, do the rest now. */
+#if defined(__CYGWIN__)
+   /* This is only relevant for cygwin. */
+   if( UseWinpath != prev_winpath_attr ) {
+      Def_macro( "MAKEDIR", Makedir, M_FORCE | M_EXPANDED );
+      /* If push is TRUE (Push_dir() was used) PWD and TMD are already
+       * set. */
+      if( !push ) {
+     Def_macro( "PWD", Pwd, M_FORCE | M_EXPANDED );
+     _set_tmd();
+      }
+   }
+   prev_winpath_attr = UseWinpath;
+#endif
+
+   /* Set the remaining dynamic macros $*, $>, $?, $<, $& and $^. */
+
+   /* $* is either expanded as the result of a % inference or defined to
+    * $(@:db) and hence unexpanded otherwise. The latter doesn't start
+    * with / and will therefore not be touched by DO_WINPATH(). */
+   m_bb = Def_macro( "*", DO_WINPATH(cp->ce_per),   M_MULTI );
+
+   /* This is expanded. */
+   m_g  = Def_macro( ">", DO_WINPATH(cp->ce_lib),   M_MULTI|M_EXPANDED );
+   /* These strings are generated with gen_path_list_string() and honor
+    * .WINPATH */
    m_q  = Def_macro( "?", outall,       M_MULTI|M_EXPANDED );
    m_b  = Def_macro( "<", inf,          M_MULTI|M_EXPANDED );
    m_l  = Def_macro( "&", all,          M_MULTI|M_EXPANDED );
    m_up = Def_macro( "^", imm,          M_MULTI|M_EXPANDED );
-   m_bb = Def_macro( "*", cp->ce_per,   M_MULTI );
 
    _recipes[ RP_RECIPE ] = cp->ce_recipe;
 
@@ -649,13 +748,19 @@ CELLPTR setdirroot;
      /* If a recipe is found use it. Note this misses F_MULTI targets. */
      if( !(cp->ce_flag & F_SINGLE) ) /* Execute the recipes once ... */
            rval = Exec_commands( cp );
+     /* Update_time_stamp() is called inside Exec_commands() after the
+      * last recipe line is finished. (In _finished_child()) */
      else {              /* or for every out of date dependency
                       * if the ruleop ! was used. */
         TKSTR tk;
 
+        /* We will redefine $? to be the prerequisite that the recipes
+         * are currently evaluated for. */
         _drop_mac( m_q );
 
-        /* Build all out of date prerequisites. */
+        /* Execute recipes for each out out of date prerequisites.
+         * WARNING! If no prerequisite is given the recipes are not
+         * executed at all! */
         if( outall && *outall ) {
            /* Wait for each prerequisite to finish, save the status
         * of Wait_for_completion. */
@@ -664,11 +769,15 @@ CELLPTR setdirroot;
 
            SET_TOKEN( &tk, outall );
 
-           /* No need to update the target timestamp until all
-        * prerequisites are done. */
+           /* No need to update the target timestamp/removing temporary
+        * prerequisites (Update_time_stamp() in _finished_child())
+        * until all prerequisites are done. */
            Doing_bang = TRUE;
            name = Get_token( &tk, "", FALSE );
+           /* This loop might fail if outall contains filenames with
+        * spaces. */
            do {
+          /* Set $? to current prerequisite. */
           m_q->ht_value = name;
 
           rval = Exec_commands( cp );
@@ -680,6 +789,7 @@ CELLPTR setdirroot;
         }
 
         Update_time_stamp( cp );
+        /* Erase $? again. Don't free the pointer, it was part of outall. */
         m_q->ht_value = NIL(char);
      }
       }
@@ -724,7 +834,9 @@ CELLPTR setdirroot;
       if( push ) {
      char *dir   = nsetdirroot ? nsetdirroot->ce_dir : Makedir;
      /* get relative path from current SETDIR to new SETDIR. */
-     char *pref  = _prefix(dir,tcp->ce_dir);
+     /* Attention, even with .WINPATH set this has to be a POSIX
+      * path as ce_fname neeed to be POSIX. */
+     char *pref  = _prefix( dir, tcp->ce_dir );
      char *nname = Build_path(pref, tcp->ce_fname);
 
      FREE(pref);
@@ -761,7 +873,7 @@ stop_making_it:
       }
    }
 
-   while( push-- )
+   if( push )
       Pop_dir(FALSE);
 
    /* Undefine the strings that we used for constructing inferred
@@ -785,15 +897,18 @@ _prefix( pfx, pat )/*
 =====================
    Return the relative path from pfx to pat. Both paths have to be absolute
    paths. If the paths are on different resources or drives (if applicable)
+   or only share a relative path going up to the root dir and down again
    return pat. */
 char *pfx;
 char *pat;
 {
    char *cmp1=pfx;
    char *cmp2=pat;
+   char *tpat=pat; /* Keep pointer to original pat. */
    char *result;
    char *up;
    int first = 1;
+   int samerootdir = 1; /* Marks special treatment for the root dir. */
 #ifdef HAVE_DRIVE_LETTERS
    int pfxdl = 0;
    int patdl = 0;
@@ -821,6 +936,10 @@ char *pat;
    /* If only one has a drive letter also use the abs. path. */
    if( pfxdl != patdl )
       return(DmStrDup(pat));
+   else if( pfxdl )
+      /* If both are the same drive letter, disable the special top
+       * dir treatment. */
+      samerootdir = 0;
 
    /* Continue without the drive letters. (Either none was present,
     * or both were the same. This also solves the problem that the
@@ -843,7 +962,7 @@ char *pat;
        * In this case return the absolute path. */
       if( first ) {
      if( cmp1-pfx != cmp2-pat ) {
-        return(DmStrDup(pat));
+        return(DmStrDup(tpat));
      }
      first = 0;
       }
@@ -853,9 +972,27 @@ char *pat;
       cmp2 = DmStrPbrk(pat, DirBrkStr);
 
       /* if length of directory name is equal compare the strings. If equal
-       * go into next loop. */
-      if ( (cmp1-pfx) != (cmp2-pat) || strncmp(pfx,pat,cmp1-pfx) != 0 )
+       * go into next loop. If not equal and directory names in the root
+       * dir are compared return the absolut path otherwise break the loop
+       * and construct the relative path from pfx to pat. */
+      if ( (cmp1-pfx) != (cmp2-pat) || strncmp(pfx,pat,cmp1-pfx) != 0 ) {
+     if( samerootdir ) {
+        return(DmStrDup(tpat));
+     }
      break;
+      }
+
+      if( samerootdir ) {
+#if __CYGWIN__
+     /* If the toplevel directory is /cygdrive (or the equivalent prefix)
+      * treat the following level also as rootdir. If we are here cmp1-pfx
+      * cannot be zero so we won't compare with an empty cygdrive prefix. */
+     if ( (cmp1-pfx) == CygDrvPreLen && strncmp(pfx,CygDrvPre,CygDrvPreLen) == 0 )
+        samerootdir = 1;
+     else
+#endif
+        samerootdir = 0;
+      }
    }
 
    result = DmStrDup("");
@@ -1140,7 +1277,7 @@ CELLPTR cp;
 
    /* Process commands in recipe. If in group, merely append to file.
     * Otherwise, run them.  */
-   for( rp=_recipes[RP_RECIPE]; rp != NIL(STRING); rp=rp->st_next,FREE(cmnd)){
+   for( rp=_recipes[RP_RECIPE]; rp != NIL(STRING); rp=rp->st_next) {
       t_attr a_attr = A_DEFAULT;
       t_attr l_attr;
       char   *p;
@@ -1171,6 +1308,8 @@ CELLPTR cp;
       shell  = ((l_attr & A_SHELL) != 0);
       useshell->ht_value = (group||shell)?"yes":"no";
 
+      /* All macros are expanded before putting them in the "process queue".
+       * Nothing in Expand() should be able to change dynamic macros. */
       cmnd = Expand( rp->st_string );
 
       if( new_attr && (p = DmStrSpn(cmnd," \t\n+-@%")) != cmnd )
@@ -1206,7 +1345,9 @@ CELLPTR cp;
         strcpy(cmnd,p);
       }
 
+#if defined(MSDOS)
       Swap_on_exec = ((l_attr & A_SWAP) != 0);    /* Swapping for DOS only */
+#endif
       do_it = !Trace;
 
       /* We force execution of the recipe if we are tracing and the .EXECUTE
@@ -1235,6 +1376,8 @@ CELLPTR cp;
      rval=Do_cmnd(cmnd,FALSE,do_it,cp,l_attr,
               rp->st_next == NIL(STRING) );
       }
+
+      FREE(cmnd);
    }
 
    /* If it is a group then output the EPILOG if required and possibly
@@ -1322,7 +1465,9 @@ Push_dir( dir, name, ignore )/*
    Change the current working directory to dir and save the current
    working directory on the stack so that we can come back.
 
-   If ignore is TRUE then do not complain about _ch_dir if not possible.*/
+   If ignore is TRUE then do not complain about _ch_dir if not possible.
+
+   Return 1 if the directory change was successfull and 0 otherwise. */
 char *dir;
 char *name;
 int  ignore;
@@ -1363,7 +1508,7 @@ int  ignore;
    dir_stack          = new_dir;
    new_dir->st_string = DmStrDup( Pwd );
 
-   Def_macro( "PWD", Get_current_dir(), M_MULTI | M_EXPANDED );
+   Def_macro( "PWD", Get_current_dir(), M_FORCE | M_EXPANDED );
    _set_tmd();
 
    DB_RETURN( 1 );
@@ -1393,7 +1538,7 @@ int ignore;
    if( Set_dir(dir = dir_stack->st_string) )
       Fatal( "Could not change to directory `%s'", dir );
 
-   Def_macro( "PWD", dir, M_MULTI | M_EXPANDED );
+   Def_macro( "PWD", dir, M_FORCE | M_EXPANDED );
    DB_PRINT( "dir", ("Pop: [%s]", dir) );
    if( Verbose & V_DIR_SET )
       printf( "%s:  Changed back to directory [%s]\n", Pname, dir);
@@ -1413,17 +1558,24 @@ int ignore;
 static void
 _set_tmd()/*
 ============
-   Set the TMD Macro. This is the path from the present directory (value of
-   $(PWD)) to the directory dmake was started up in (value of $(MAKEDIR)).
+   Set the TMD Macro and the Tmd global variable. TMD stands for "To MakeDir"
+   and is the path from the present directory (value of $(PWD)) to the directory
+   dmake was started up in (value of $(MAKEDIR)). As _prefix() can return absolute
+   paths some special .WINPATH treatment is needed.
 */
 {
    char  *tmd;
 
+   if( Tmd )
+      FREE(Tmd);
+
    tmd = _prefix(Pwd, Makedir);
    if( *tmd ) {
-      Def_macro( "TMD", tmd, M_MULTI | M_EXPANDED );
+      Def_macro( "TMD", DO_WINPATH(tmd), M_FORCE | M_EXPANDED );
+      Tmd = DmStrDup(tmd);
    } else {
-      Def_macro( "TMD", ".", M_MULTI | M_EXPANDED );
+      Def_macro( "TMD", ".", M_FORCE | M_EXPANDED );
+      Tmd = DmStrDup(".");
    }
    FREE( tmd );
 }
