@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-22 18:12:58 $
+#   last change: $Author: obo $ $Date: 2007-06-12 06:17:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,22 +43,24 @@ PACKAGE = com$/sun$/star$/deployment
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 IDLFILES = \
-        DeploymentException.idl                                 \
-        XPackageTypeInfo.idl                                    \
-        XPackage.idl                                            \
-        XPackageRegistry.idl                                    \
-        PackageRegistryBackend.idl                              \
-        XPackageManager.idl                                     \
-        XPackageManagerFactory.idl                              \
-        thePackageManagerFactory.idl				\
-        DependencyException.idl \
-        LicenseException.idl \
-        VersionException.idl \
-        InstallException.idl \
-        XUpdateInformationProvider.idl \
-        UpdateInformationProvider.idl \
+        DeploymentException.idl                 \
+        XPackageTypeInfo.idl                    \
+        XPackage.idl                            \
+        XPackageRegistry.idl                    \
+        PackageRegistryBackend.idl              \
+        XPackageManager.idl                     \
+        XPackageManagerFactory.idl              \
+        thePackageManagerFactory.idl			\
+        DependencyException.idl                 \
+        LicenseException.idl                    \
+        VersionException.idl                    \
+        InstallException.idl                    \
+        XUpdateInformationProvider.idl          \
+        UpdateInformationProvider.idl           \
+        XPackageInformationProvider.idl         \
+        PackageInformationProvider.idl          \
         LicenseIndividualAgreementException.idl
-
 
 .INCLUDE : target.mk
 .INCLUDE : $(PRJ)$/util$/target.pmk
+
