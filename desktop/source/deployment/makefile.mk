@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-16 10:46:36 $
+#   last change: $Author: obo $ $Date: 2007-06-12 06:19:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@ SHL1LIBS = \
     $(SLB)$/deployment_registry_package.lib \
     $(SLB)$/deployment_registry_script.lib \
     $(SLB)$/deployment_registry_sfwk.lib
+
 SHL1OBJS = \
     $(SLO)$/dp_log.obj \
     $(SLO)$/dp_persmap.obj \
