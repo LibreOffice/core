@@ -1,4 +1,4 @@
-/* RCS  $Id: sysintf.c,v 1.9 2007-01-18 09:32:48 vg Exp $
+/* RCS  $Id: sysintf.c,v 1.10 2007-06-12 06:07:03 obo Exp $
 --
 -- SYNOPSIS
 --      System independent interface
@@ -72,8 +72,18 @@
 #   include <sys/timeb.h>
 #endif
 
+/* for cygwin_conv_to_posix_path() in Prolog() and for cygdospath()*/
+#if __CYGWIN__
+#   include <sys/cygwin.h>
+#endif
+
 #include "extern.h"
 #include "sysintf.h"
+#if HAVE_ERRNO_H
+#  include <errno.h>
+#else
+   extern  int  errno;
+#endif
 
 /*
 ** Tries to stat the file name.  Returns 0 if the file
@@ -476,6 +486,30 @@ char* argv[];
    GetModuleFileName(NULL, AbsPname, PATH_MAX*sizeof(char));
 #else
    AbsPname = "";
+#endif
+
+#if __CYGWIN__
+   /* Get the drive letter prefix used by cygwin. */
+   if ( (CygDrvPre = MALLOC( PATH_MAX, char)) == NIL(char) )
+      No_ram();
+   else {
+      int err = cygwin_conv_to_posix_path("c:", CygDrvPre);
+      if (err)
+     Fatal( "error converting \"%s\" - %s\n",
+        CygDrvPre, strerror (errno));
+      if( (CygDrvPreLen = strlen(CygDrvPre)) == 2 ) {
+     /* No prefix */
+     *CygDrvPre = '\0';
+     CygDrvPreLen = 0;
+      } else {
+     /* Cut away the directory letter. */
+     CygDrvPre[CygDrvPreLen-2] = '\0';
+     /* Cut away the leading '/'. We don't free the pointer, i.e. choose
+      * the easy way. */
+     CygDrvPre++;
+     CygDrvPreLen -= 3;
+      }
+   }
 #endif
 
    /* DirSepStr is used from Clean_path() in Def_cell(). Set it preliminary
@@ -904,8 +938,11 @@ CELLPTR cp;
    /* Scan the list of prerequisites and if we find one that is
     * marked as being removable, (ie. an inferred intermediate node)
     * then remove it.  We remove a prerequisite by running the recipe
-    * associated with the special target .REMOVE, with $< set to
-    * the list of prerequisites to remove. */
+    * associated with the special target .REMOVE.
+    * Typically .REMOVE is defined in the startup file as:
+    *  .REMOVE :; $(RM) $<
+    * with $< being the list of prerequisites specified in the current
+    * target. (Make() sets $< .) */
 
    /* Make sure we don't try to remove prerequisites for the .REMOVE
     * target. */
@@ -918,6 +955,7 @@ CELLPTR cp;
 
       tcp = hp->CP_OWNR;
 
+      /* The .REMOVE target is re-used. Remove old prerequisites. */
       tcp->ce_flag |= F_TARGET;
       Clear_prerequisites( tcp );
 
@@ -939,6 +977,8 @@ CELLPTR cp;
      if(rem) {
         LINKPTR tdp;
 
+        /* Add the target plus all that are linked to it with the .UPDATEALL
+         * attribute. */
         for(tdp=CeMeToo(prq); tdp; tdp=tdp->cl_next) {
            CELLPTR tmpcell=tdp->cl_prq;
 
@@ -980,3 +1020,44 @@ char *name;
       return 1;
    return(unlink(name));
 }
+
+
+#if defined(__CYGWIN__)
+char *
+cygdospath(char *src, int winpath)/*
+====================================
+   Convert to DOS path if winpath is true. The returned pointer is
+   either the original pointer or a pointer to a static buffer.
+*/
+{
+   static char *buf = NIL(char);
+
+   if ( !buf && ( (buf = MALLOC( PATH_MAX, char)) == NIL(char) ) )
+      No_ram();
+
+   DB_PRINT( "cygdospath", ("converting [%s] with winpath [%d]", src, winpath ) );
+
+   /* Return immediately on NULL pointer or when .WINPATH is
+    * not set. */
+   if( !src || !winpath )
+      return src;
+
+   if( *src && src[0] == '/' ) {
+      char *tmp;
+      int err = cygwin_conv_to_win32_path(src, buf);
+      if (err)
+     Fatal( "error converting \"%s\" - %s\n",
+        src, strerror (errno));
+
+      tmp = buf;
+      while ((tmp = strchr (tmp, '\\')) != NULL) {
+     *tmp = '/';
+     tmp++;
+      }
+
+      return buf;
+   }
+   else
+      return src;
+}
+#endif
