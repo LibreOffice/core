@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptexanimations.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:21:18 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:53:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -593,6 +593,9 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                                     const sal_uInt16 nInstance, const sal_Int32 nGroupLevel, const sal_Bool bTakeBackInteractiveSequenceTiming, const sal_Int16 nFDef )
 {
     if( (nGroupLevel == 4) && isEmptyNode( xNode ) )
+        return;
+
+    if ( ( nContainerRecType == DFF_msofbtAnimGroup ) && ( nGroupLevel == 2 ) && isEmptyNode( xNode ) )
         return;
 
     if( nContainerRecType == DFF_msofbtAnimGroup )
