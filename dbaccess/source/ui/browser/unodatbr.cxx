@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.186 $
+ *  $Revision: 1.187 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:20:03 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:34:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,9 @@
 
 #ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
 #endif
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
@@ -3513,6 +3516,11 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
         aContextMenu.EnableItem(ID_TREE_REBUILD_CONN, sal_False);
     }
     aContextMenu.EnableItem(SID_COPY,   sal_False);
+
+    if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
+    {
+        aContextMenu.EnableItem( ID_TREE_EDIT_DATABASE, sal_False );
+    }
 
     if ( pEntry )
     {
