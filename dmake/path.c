@@ -1,4 +1,4 @@
-/* RCS  $Id: path.c,v 1.2 2007-01-18 09:31:57 vg Exp $
+/* RCS  $Id: path.c,v 1.3 2007-06-12 06:06:38 obo Exp $
 --
 -- SYNOPSIS
 --      Pathname manipulation code
@@ -44,7 +44,10 @@ char *name;
 
 
 PUBLIC char *
-Basename(path)
+Basename(path)/*
+================
+   Return pointer to the basename part of path. path itself remains
+   unchanged. */
 char *path;
 {
    char *p;
@@ -110,6 +113,8 @@ char *name;
    int  dlen = 0;
    int  len;
 
+   DB_ENTER( "Build_path" );
+
    if( dir  != NIL(char) ) dlen = strlen( dir  );
    if( name != NIL(char) ) plen = strlen( name );
    len = plen+dlen+1+1; /* Reserve space for extra path separator. */
@@ -137,10 +142,12 @@ char *name;
    }
 
    DB_PRINT( "path", ("dir: %s  name: %s", dir, name ));
+   DB_PRINT( "path", ("joined to: %s", path ));
 
    Clean_path( path );
+   DB_PRINT( "path", ("cleaned to: %s", path ));
 
-   return( path );
+   DB_RETURN( path );
 }
 
 
