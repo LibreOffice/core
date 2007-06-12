@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XNoteHelperImpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-06-06 10:26:49 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-12 09:08:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,8 +102,6 @@ sal_uInt32 XNoteHelper<T>::getIndexOfCpAndFc(const CpAndFc & rCpAndFc)
 {
    sal_uInt32 nResult = getCount();
 
-   clog << "-------------" << endl;
-
    sal_uInt32 n = nResult;
    while (n > 0)
    {
@@ -112,9 +110,6 @@ sal_uInt32 XNoteHelper<T>::getIndexOfCpAndFc(const CpAndFc & rCpAndFc)
        Cp aCp(mpRefs->getFc(n));
        Fc aFc(mpPieceTable->cp2fc(aCp));
        CpAndFc aCpAndFc(aCp, aFc, meType);
-
-       clog << "XNoteHelper<T>::getIndex(" << rCpAndFc << "):" << aCpAndFc
-            << ", " << n << endl;
 
        if (aCpAndFc <= rCpAndFc)
        {
