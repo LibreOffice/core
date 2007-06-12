@@ -2,6 +2,33 @@ News file for the dmake version that is hosted on the OpenOffice.org
 cvs. #i<number># denote issues tracked by the OpenOffice.org issue tracking
 system, see <http://qa.openoffice.org/issue_handling/project_issues.html>.
 
+Version 4.8
+===========
+
+Volker Quetschke (vq@openoffice.org)
+#i73499#  Add new .WINPATH attribute to generate Windows style paths (with
+regular slashes) instead of the default cygwin style (POSIX) paths for
+dmake's dynamic macros.
+
+This attribute is specific for cygwin dmake executables and non-cygwin
+environments ignore this attribute. This feature can be used to create DOS
+style path parameters for native W32 programs from dynamic macros.
+
+The windows style paths use regular slashes ('/') instead of the usual
+windows backslash ('\') as directory separator to avoid quoting problems
+(It still is a cygwin dmake feature!) and cygwin as well as native windows
+programs should have no problems using this (c:/foo/bar) path
+representation.
+
+The affected macros are $@, $*, $>, $?, $<, $&, $^ and $(PWD), $(MAKEDIR)
+and $(TMD).
+
+Examples:
+  Content of $(PWD) without .WINPATH (default):  /cygdrive/c/temp
+
+  Content of $(PWD) with .WINPATH set:           c:/temp
+
+
 Version 4.7
 ===========
 
