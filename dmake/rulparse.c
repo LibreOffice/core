@@ -1,6 +1,6 @@
 /* $RCSfile: rulparse.c,v $
--- $Revision: 1.10 $
--- last change: $Author: vg $ $Date: 2007-01-18 09:32:23 $
+-- $Revision: 1.11 $
+-- last change: $Author: obo $ $Date: 2007-06-12 06:06:50 $
 --
 -- SYNOPSIS
 --      Perform semantic analysis on input
@@ -61,7 +61,7 @@ static int    _sv_op;
 static char      *_sv_setdir;
 static char   _sv_globprq_only = 0;
 
-/* Define for global attribute mask */
+/* Define for global attribute mask (A_SWAP == A_WINPATH) */
 #define A_GLOB   (A_PRECIOUS | A_SILENT | A_IGNORE | A_EPILOG | A_SWAP |\
           A_SHELL | A_PROLOG | A_NOINFER | A_SEQ | A_MKSARGS )
 
@@ -1460,7 +1460,11 @@ t_attr attr;
      else if( flag == A_SEQ )     Def_macro(".SEQUENTIAL","y", M_EXPANDED);
      else if( flag == A_SHELL )   Def_macro(".USESHELL",  "y", M_EXPANDED);
      else if( flag == A_MKSARGS ) Def_macro(".MKSARGS",   "y", M_EXPANDED);
+#if !defined(__CYGWIN__)
      else if( flag == A_SWAP )    Def_macro(".SWAP",      "y", M_EXPANDED);
+#else
+     else if( flag == A_WINPATH ) Def_macro(".WINPATH",   "y", M_EXPANDED);
+#endif
       }
 
    attr &= ~A_GLOB;
@@ -1499,7 +1503,7 @@ _is_attribute( name )/*
 
    Valid attributes are:  .IGNORE, .SETDIR=, .SILENT, .PRECIOUS, .LIBRARY,
                           .EPILOG, .PROLOG,  .LIBRARYM, .SYMBOL, .UPDATEALL,
-              .USESHELL, .NOINFER, .PHONY, .SWAP, .SEQUENTIAL
+              .USESHELL, .NOINFER, .PHONY, .SWAP/.WINPATH, .SEQUENTIAL
               .NOSTATE,  .MKSARGS, .IGNOREGROUP, .GROUP, .FIRST
               .EXECUTE, .ERRREMOVE
 
@@ -1561,9 +1565,12 @@ char *name;
             else if( !strcmp(name, "SILENT") )    attr = A_SILENT;
             else if( !strcmp(name, "SYMBOL") )    attr = A_SYMBOL;
             else if( !strcmp(name, "SEQUENTIAL")) attr = A_SEQ;
+        /* A_SWAP has no meaning except for MSDOS. */
             else if( !strcmp(name, "SWAP"))       attr = A_SWAP;
             else attr = 0;
             break;
+
+         case 'W': attr = (strcmp(name, "WINPATH"))  ? 0 : A_WINPATH; break;
       }
 
    DB_RETURN( attr );
