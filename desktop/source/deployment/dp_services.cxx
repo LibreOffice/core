@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_services.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:21:04 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 06:18:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
+#define COMPHELPER_SERVICEDECL_COMPONENT_HELPER_MAX_ARGS 9
 #include "comphelper/servicedecl.hxx"
 
 using namespace com::sun::star;
@@ -78,6 +79,11 @@ namespace dp_migration {
 extern sdecl::ServiceDecl const serviceDecl;
 }
 
+namespace dp_info {
+extern sdecl::ServiceDecl const serviceDecl;
+bool singleton_entries( uno::Reference<registry::XRegistryKey> const& );
+}
+
 extern "C" {
 
 struct uno_Environment;
@@ -100,8 +106,10 @@ sal_Bool SAL_CALL component_writeInfo(
         dp_registry::backend::sfwk::serviceDecl,
         dp_manager::factory::serviceDecl,
         dp_log::serviceDecl,
-        dp_migration::serviceDecl ) &&
-        dp_manager::factory::singleton_entries( pRegistryKey );
+        dp_migration::serviceDecl,
+        dp_info::serviceDecl ) &&
+        dp_manager::factory::singleton_entries( pRegistryKey ) &&
+        dp_info::singleton_entries( pRegistryKey );
 }
 
 void * SAL_CALL component_getFactory(
@@ -117,7 +125,8 @@ void * SAL_CALL component_getFactory(
         dp_registry::backend::sfwk::serviceDecl,
         dp_manager::factory::serviceDecl,
         dp_log::serviceDecl,
-        dp_migration::serviceDecl );
+        dp_migration::serviceDecl,
+        dp_info::serviceDecl );
 }
 
 } // extern "C"
