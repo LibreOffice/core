@@ -1,8 +1,8 @@
 mkdir: %_DEST%\inc%_EXT%\external\zlib
 
-hedabu_obsolete: ..\%__SRC%\inc\zlib.h %_DEST%\inc%_EXT%\external\zlib\zlib.h
-hedabu_obsolete: ..\%__SRC%\inc\unzip.h %_DEST%\inc%_EXT%\external\zlib\unzip.h
-hedabu_obsolete: ..\%__SRC%\inc\zconf.h %_DEST%\inc%_EXT%\external\zlib\zconf.h
+addincpath: ..\%__SRC%\inc\zlib.h %_DEST%\inc%_EXT%\external\zlib\zlib.h
+addincpath: ..\%__SRC%\inc\unzip.h %_DEST%\inc%_EXT%\external\zlib\unzip.h
+addincpath: ..\%__SRC%\inc\zconf.h %_DEST%\inc%_EXT%\external\zlib\zconf.h
 
 ..\%__SRC%\lib\libzlib.a %_DEST%\lib%_EXT%\libzlib.a
 ..\%__SRC%\slb\zlib.lib %_DEST%\lib%_EXT%\zlib.lib
