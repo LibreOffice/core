@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailView.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:17:19 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:32:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,9 @@
 #ifndef _IMAGE_HXX //autogen
 #include <vcl/image.hxx>
 #endif
+#ifndef _SV_MNEMONIC_HXX
+#include <vcl/mnemonic.hxx>
+#endif
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
 #endif
@@ -115,9 +118,19 @@ using namespace ::com::sun::star::container;
 
 #define SPACEBETWEENENTRIES     4
 
-OCreationList::OCreationList(OTasksWindow* _pParent)
-    :SvTreeListBox( _pParent, WB_TABSTOP | WB_HASBUTTONSATROOT | WB_HASBUTTONS )
-    ,m_pTaskWindow(_pParent)
+// -----------------------------------------------------------------------------
+TaskEntry::TaskEntry( const sal_Char* _pAsciiUNOCommand, USHORT _nHelpID, USHORT _nTitleResourceID, bool _bHideWhenDisabled )
+    :sUNOCommand( ::rtl::OUString::createFromAscii( _pAsciiUNOCommand ) )
+    ,nHelpID( _nHelpID )
+    ,sTitle( ModuleRes( _nTitleResourceID ) )
+    ,bHideWhenDisabled( _bHideWhenDisabled )
+{
+}
+
+// -----------------------------------------------------------------------------
+OCreationList::OCreationList( OTasksWindow& _rParent )
+    :SvTreeListBox( &_rParent, WB_TABSTOP | WB_HASBUTTONSATROOT | WB_HASBUTTONS )
+    ,m_rTaskWindow( _rParent )
     ,m_pMouseDownEntry( NULL )
     ,m_pLastActiveEntry( NULL )
 {
@@ -125,6 +138,7 @@ OCreationList::OCreationList(OTasksWindow* _pParent)
     SetSpaceBetweenEntries(nSize);
     SetSelectionMode( NO_SELECTION );
     SetExtendedWinBits( EWB_NO_AUTO_CURENTRY );
+    EnableEntryMnemonics();
 }
 // -----------------------------------------------------------------------------
 void OCreationList::Paint( const Rectangle& _rRect )
@@ -166,6 +180,31 @@ void OCreationList::PreparePaint( SvLBoxEntry* _pEntry )
 
     SetBackground( aEntryBackground );
 }
+
+// -----------------------------------------------------------------------------
+void OCreationList::SelectSearchEntry( const void* _pEntry )
+{
+    SvLBoxEntry* pEntry = const_cast< SvLBoxEntry* >( static_cast< const SvLBoxEntry* >( _pEntry ) );
+    DBG_ASSERT( pEntry, "OCreationList::SelectSearchEntry: invalid entry!" );
+
+    if ( pEntry )
+        setCurrentEntryInvalidate( pEntry );
+
+    if ( !HasChildPathFocus() )
+        GrabFocus();
+}
+
+// -----------------------------------------------------------------------------
+void OCreationList::ExecuteSearchEntry( const void* _pEntry )
+{
+    SvLBoxEntry* pEntry = const_cast< SvLBoxEntry* >( static_cast< const SvLBoxEntry* >( _pEntry ) );
+    DBG_ASSERT( pEntry, "OCreationList::ExecuteSearchEntry: invalid entry!" );
+    DBG_ASSERT( pEntry == GetCurEntry(), "OCreationList::ExecuteSearchEntry: SelectSearchEntry should have been called before!" );
+
+    if ( pEntry )
+        onSelected( pEntry );
+}
+
 // -----------------------------------------------------------------------------
 Rectangle OCreationList::GetFocusRect( SvLBoxEntry* _pEntry, long _nLine )
 {
@@ -317,14 +356,14 @@ void OCreationList::updateHelpText()
 {
     USHORT nHelpTextId = 0;
     if ( GetCurEntry() )
-        nHelpTextId = reinterpret_cast< TResourcePair* >( GetCurEntry()->GetUserData() )->second;
-    m_pTaskWindow->setHelpText( nHelpTextId );
+        nHelpTextId = reinterpret_cast< TaskEntry* >( GetCurEntry()->GetUserData() )->nHelpID;
+    m_rTaskWindow.setHelpText( nHelpTextId );
 }
 // -----------------------------------------------------------------------------
 void OCreationList::onSelected( SvLBoxEntry* _pEntry ) const
 {
     DBG_ASSERT( _pEntry, "OCreationList::onSelected: invalid entry!" );
-    m_pTaskWindow->getDetailView()->onCreationClick( reinterpret_cast< TResourcePair* >( _pEntry->GetUserData() )->first );
+    m_rTaskWindow.getDetailView()->onCreationClick( reinterpret_cast< TaskEntry* >( _pEntry->GetUserData() )->sUNOCommand );
 }
 // -----------------------------------------------------------------------------
 void OCreationList::KeyInput( const KeyEvent& rKEvt )
@@ -360,7 +399,7 @@ void OCreationList::KeyInput( const KeyEvent& rKEvt )
 DBG_NAME(OTasksWindow)
 OTasksWindow::OTasksWindow(Window* _pParent,OApplicationDetailView* _pDetailView)
     : Window(_pParent,WB_DIALOGCONTROL )
-    ,m_aCreation(this)
+    ,m_aCreation(*this)
     ,m_aDescription(this)
     ,m_aHelpText(this,WB_WORDBREAK)
     ,m_aFL(this,WB_VERT)
@@ -446,7 +485,7 @@ IMPL_LINK(OTasksWindow, OnEntrySelectHdl, SvTreeListBox*, /*_pTreeBox*/)
     DBG_CHKTHIS(OTasksWindow,NULL);
     SvLBoxEntry* pEntry = m_aCreation.GetHdlEntry();
     if ( pEntry )
-        m_aHelpText.SetText(ModuleRes(reinterpret_cast<TResourcePair*>(pEntry->GetUserData())->second));
+        m_aHelpText.SetText( ModuleRes( reinterpret_cast< TaskEntry* >( pEntry->GetUserData() )->nHelpID ) );
     return 1L;
 }
 // -----------------------------------------------------------------------------
@@ -471,7 +510,7 @@ void OTasksWindow::Resize()
     m_aFL.SetPosSizePixel( Point(nHalfOutputWidth , 0), Size(aFLSize.Width(), nOutputHeight ) );
 }
 // -----------------------------------------------------------------------------
-void OTasksWindow::fillCreationNew( const TResourceStruct& _rList )
+void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
 {
     DBG_CHKTHIS(OTasksWindow,NULL);
     Clear();
@@ -482,30 +521,29 @@ void OTasksWindow::fillCreationNew( const TResourceStruct& _rList )
         Reference<XUIConfigurationManager> xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument")));
         Reference<XImageManager> xImageMgr(xUIConfigMgr->getImageManager(),UNO_QUERY);
 
-        m_aHelpTextIds.reserve(_rList.size());
-        Sequence< ::rtl::OUString> aSeq(_rList.size());
-        sal_Int32 i = 0;
-        TResourceStruct::const_iterator aEnd = _rList.end();
-        for (TResourceStruct::const_iterator aIter = _rList.begin(); aIter != aEnd; ++aIter,++i)
+        // copy the commands so we can use them with the config managers
+        Sequence< ::rtl::OUString > aCommands( _rList.size() );
+        ::rtl::OUString* pCommands = aCommands.getArray();
+        TaskEntryList::const_iterator aEnd = _rList.end();
+        for ( TaskEntryList::const_iterator pCopyTask = _rList.begin(); pCopyTask != aEnd; ++pCopyTask, ++pCommands )
+            *pCommands = pCopyTask->sUNOCommand;
+
+        Sequence< Reference< XGraphic> > aImages = xImageMgr->getImages( ImageType::SIZE_DEFAULT | ImageType::COLOR_NORMAL, aCommands );
+        Sequence< Reference< XGraphic> > aHCImages = xImageMgr->getImages( ImageType::SIZE_DEFAULT | ImageType::COLOR_HIGHCONTRAST, aCommands );
+
+        const Reference< XGraphic >* pImages( aImages.getConstArray() );
+        const Reference< XGraphic >* pHCImages( aHCImages.getConstArray() );
+
+        for ( TaskEntryList::const_iterator pTask = _rList.begin(); pTask != aEnd; ++pTask, ++pImages, ++pHCImages )
         {
-            aSeq[i] = aIter->second.first;
-        }
+            SvLBoxEntry* pEntry = m_aCreation.InsertEntry( pTask->sTitle );
+            pEntry->SetUserData( reinterpret_cast< void* >( new TaskEntry( *pTask ) ) );
 
-        i = 0;
-
-        Sequence< Reference< XGraphic> > aImages = xImageMgr->getImages( ImageType::SIZE_DEFAULT | ImageType::COLOR_NORMAL, aSeq );
-        Sequence< Reference< XGraphic> > aHCImages = xImageMgr->getImages( ImageType::SIZE_DEFAULT | ImageType::COLOR_HIGHCONTRAST, aSeq );
-
-        for (TResourceStruct::const_iterator aIter = _rList.begin(); aIter != aEnd; ++aIter,++i)
-        {
-            SvLBoxEntry* pEntry = m_aCreation.InsertEntry( aIter->first );
-            pEntry->SetUserData(reinterpret_cast<void*>(new TResourcePair(aIter->second)));
-
-            Image aImage = Image( aImages[i] );
+            Image aImage = Image( *pImages );
             m_aCreation.SetExpandedEntryBmp( pEntry, aImage, BMP_COLOR_NORMAL );
             m_aCreation.SetCollapsedEntryBmp( pEntry, aImage, BMP_COLOR_NORMAL );
 
-            Image aHCImage = Image( aHCImages[i] );
+            Image aHCImage = Image( *pHCImages );
             m_aCreation.SetExpandedEntryBmp( pEntry, aHCImage, BMP_COLOR_HIGHCONTRAST );
             m_aCreation.SetCollapsedEntryBmp( pEntry, aHCImage, BMP_COLOR_HIGHCONTRAST );
         }
@@ -529,7 +567,7 @@ void OTasksWindow::Clear()
     SvLBoxEntry* pEntry = m_aCreation.First();
     while ( pEntry )
     {
-        delete reinterpret_cast<TResourcePair*>(pEntry->GetUserData());
+        delete reinterpret_cast< TaskEntry* >( pEntry->GetUserData() );
         pEntry = m_aCreation.Next(pEntry);
     }
     m_aCreation.Clear();
@@ -625,75 +663,144 @@ void OApplicationDetailView::GetFocus()
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     OSplitterView::GetFocus();
 }
+
 // -----------------------------------------------------------------------------
-void OApplicationDetailView::createTablesPage(const Reference< XConnection>& _xConnection)
+void OApplicationDetailView::setTaskExternalMnemonics( MnemonicGenerator& _rMnemonics )
+{
+    m_aExternalMnemonics = _rMnemonics;
+}
+
+// -----------------------------------------------------------------------------
+bool OApplicationDetailView::interceptKeyInput( const KeyEvent& _rEvent )
+{
+    const KeyCode& rKeyCode = _rEvent.GetKeyCode();
+    if ( rKeyCode.GetModifier() == KEY_MOD2 )
+        return getTasksWindow().HandleKeyInput( _rEvent );
+
+    // not handled
+    return false;
+}
+
+// -----------------------------------------------------------------------------
+void OApplicationDetailView::createTablesPage(const Reference< XConnection >& _xConnection )
+{
+    impl_createPage( E_TABLE, _xConnection, NULL );
+}
+
+// -----------------------------------------------------------------------------
+void OApplicationDetailView::createPage( ElementType _eType,const Reference< XNameAccess >& _xContainer )
+{
+    impl_createPage( _eType, NULL, _xContainer );
+}
+
+// -----------------------------------------------------------------------------
+void OApplicationDetailView::impl_createPage( ElementType _eType, const Reference< XConnection >& _rxConnection,
+    const Reference< XNameAccess >& _rxNonTableElements )
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
 
-    m_pControlHelper->createTablesPage(_xConnection);
+    // get the data for the pane
+    const TaskPaneData& rData = impl_getTaskPaneData( _eType );
+    getTasksWindow().fillTaskEntryList( rData.aTasks );
 
-    TResourceStruct aList;
-    aList.reserve(4);
-    aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_TABLE),TResourcePair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewTable")),RID_STR_TABLES_HELP_TEXT_DESIGN)));
-    aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_TABLE_AUTO),TResourcePair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewTableAutoPilot")),RID_STR_TABLES_HELP_TEXT_WIZARD)));
+    // enable the pane as a whole, depending on the availability of the first command
+    OSL_ENSURE( !rData.aTasks.empty(), "OApplicationDetailView::impl_createPage: no tasks at all!?" );
+    bool bEnabled = rData.aTasks.empty()
+                ?   false
+                :   getBorderWin().getView()->getCommandController()->isCommandEnabled( rData.aTasks[0].sUNOCommand );
+    getTasksWindow().Enable( bEnabled );
+    m_aContainer.setTitle( rData.nTitleId );
 
-    ::com::sun::star::util::URL aUrl;
-    aUrl.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewView"));
-    if ( getBorderWin().getView()->getCommandController()->isCommandEnabled(aUrl) )
-        aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_VIEW),TResourcePair(aUrl.Complete,RID_STR_VIEWS_HELP_TEXT_DESIGN)));
-    //  aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_VIEW_AUTO),TResourcePair(ID_NEW_VIEW_DESIGN_AUTO_PILOT,RID_STR_VIEWS_HELP_TEXT_WIZARD)));
+    // let our helper create the object list
+    if ( _eType == E_TABLE )
+        m_pControlHelper->createTablesPage( _rxConnection );
+    else
+        m_pControlHelper->createPage( _eType, _rxNonTableElements );
 
-    static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->fillCreationNew( aList );
-    static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->Enable(static_cast<OAppBorderWindow*>(GetParent())->getView()->getCommandController()->isCommandEnabled(ID_NEW_TABLE_DESIGN));
-
-    m_aContainer.setTitle(RID_STR_TABLES_CONTAINER);
+    // resize for proper window arrangements
     Resize();
 }
+
 // -----------------------------------------------------------------------------
-void OApplicationDetailView::createPage(ElementType _eType,const Reference< XNameAccess >& _xContainer)
+const TaskPaneData& OApplicationDetailView::impl_getTaskPaneData( ElementType _eType )
 {
-    DBG_CHKTHIS(OApplicationDetailView,NULL);
-    USHORT nTitleId = 0;
-    TResourceStruct aList;
-    aList.reserve(4);
-    switch(_eType )
+    if ( m_aTaskPaneData.empty() )
+        m_aTaskPaneData.resize( E_ELEMENT_TYPE_COUNT );
+    OSL_ENSURE( ( _eType >= 0 ) && ( _eType < E_ELEMENT_TYPE_COUNT ), "OApplicationDetailView::impl_getTaskPaneData: illegal element type!" );
+    TaskPaneData& rData = m_aTaskPaneData[ _eType ];
+
+    if ( rData.aTasks.empty() )
+        impl_fillTaskPaneData( _eType, rData );
+
+    return rData;
+}
+
+// -----------------------------------------------------------------------------
+void OApplicationDetailView::impl_fillTaskPaneData( ElementType _eType, TaskPaneData& _rData ) const
+{
+    TaskEntryList& rList( _rData.aTasks );
+    rList.clear(); rList.reserve( 4 );
+
+    switch ( _eType )
     {
-        case E_FORM:
-            {
-                aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_FORM),TResourcePair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewForm")), RID_STR_FORMS_HELP_TEXT)));
-                aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_FORM_AUTO),TResourcePair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewFormAutoPilot")),RID_STR_FORMS_HELP_TEXT_WIZARD)));
+    case E_TABLE:
+        rList.push_back( TaskEntry( ".uno:DBNewTable", RID_STR_TABLES_HELP_TEXT_DESIGN, RID_STR_NEW_TABLE ) );
+        rList.push_back( TaskEntry( ".uno:DBNewTableAutoPilot", RID_STR_TABLES_HELP_TEXT_WIZARD, RID_STR_NEW_TABLE_AUTO ) );
+        rList.push_back( TaskEntry( ".uno:DBNewView", RID_STR_VIEWS_HELP_TEXT_DESIGN, RID_STR_NEW_VIEW, true ) );
+        _rData.nTitleId = RID_STR_TABLES_CONTAINER;
+        break;
 
-                nTitleId = RID_STR_FORMS_CONTAINER;
-                static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->Enable(static_cast<OAppBorderWindow*>(GetParent())->getView()->getCommandController()->isCommandEnabled(SID_APP_NEW_FORM));
-            }
-            break;
-        case E_REPORT:
-            {
-                aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_REPORT_AUTO),TResourcePair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewReportAutoPilot")),RID_STR_REPORTS_HELP_TEXT_WIZARD)));
+    case E_FORM:
+        rList.push_back( TaskEntry( ".uno:DBNewForm", RID_STR_FORMS_HELP_TEXT, RID_STR_NEW_FORM ) );
+        rList.push_back( TaskEntry( ".uno:DBNewFormAutoPilot", RID_STR_FORMS_HELP_TEXT_WIZARD, RID_STR_NEW_FORM_AUTO ) );
+        _rData.nTitleId = RID_STR_FORMS_CONTAINER;
+        break;
 
-                nTitleId = RID_STR_REPORTS_CONTAINER;
-                static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->Enable(static_cast<OAppBorderWindow*>(GetParent())->getView()->getCommandController()->isCommandEnabled(ID_DOCUMENT_CREATE_REPWIZ));
-            }
-            break;
-        case E_QUERY:
-            {
-                aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_QUERY),TResourcePair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewQuery")),RID_STR_QUERIES_HELP_TEXT)));
-                aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_QUERY_AUTO),TResourcePair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewQueryAutoPilot")),RID_STR_QUERIES_HELP_TEXT_WIZARD)));
-                aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_QUERY_SQL),TResourcePair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewQuerySql")),RID_STR_QUERIES_HELP_TEXT_SQL)));
+    case E_REPORT:
+        rList.push_back( TaskEntry( ".uno:DBNewReportAutoPilot", RID_STR_REPORTS_HELP_TEXT_WIZARD, RID_STR_NEW_REPORT_AUTO ) );
+        _rData.nTitleId = RID_STR_REPORTS_CONTAINER;
+        break;
 
-                nTitleId = RID_STR_QUERIES_CONTAINER;
-                static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->Enable(static_cast<OAppBorderWindow*>(GetParent())->getView()->getCommandController()->isCommandEnabled(ID_NEW_QUERY_DESIGN));
-            }
-            break;
-        default:
-            OSL_ENSURE(0,"Illegal call!");
+    case E_QUERY:
+        rList.push_back( TaskEntry( ".uno:DBNewQuery", RID_STR_QUERIES_HELP_TEXT, RID_STR_NEW_QUERY ) );
+        rList.push_back( TaskEntry( ".uno:DBNewQueryAutoPilot", RID_STR_QUERIES_HELP_TEXT_WIZARD, RID_STR_NEW_QUERY_AUTO ) );
+        rList.push_back( TaskEntry( ".uno:DBNewQuerySql", RID_STR_QUERIES_HELP_TEXT_SQL, RID_STR_NEW_QUERY_SQL ) );
+        _rData.nTitleId = RID_STR_QUERIES_CONTAINER;
+        break;
+
+    default:
+        OSL_ENSURE( false, "OApplicationDetailView::impl_fillTaskPaneData: illegal element type!" );
     }
 
-    static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->fillCreationNew( aList );
-    m_pControlHelper->createPage(_eType,_xContainer);
-    m_aContainer.setTitle(nTitleId);
-    Resize();
+    MnemonicGenerator aAllMnemonics( m_aExternalMnemonics );
+
+    // remove the entries which are not enabled currently
+    for (   TaskEntryList::iterator pTask = rList.begin();
+            pTask != rList.end();
+        )
+    {
+        if  (   pTask->bHideWhenDisabled
+            &&  !getBorderWin().getView()->getCommandController()->isCommandEnabled( pTask->sUNOCommand )
+            )
+            pTask = rList.erase( pTask );
+        else
+        {
+            aAllMnemonics.RegisterMnemonic( pTask->sTitle );
+            ++pTask;
+        }
+    }
+
+    // for the remaining entries, assign mnemonics
+    for (   TaskEntryList::iterator pTask = rList.begin();
+            pTask != rList.end();
+            ++pTask
+        )
+    {
+        aAllMnemonics.CreateMnemonic( pTask->sTitle );
+        // don't do this for now, until our task window really supports mnemonics
+    }
 }
+
 // -----------------------------------------------------------------------------
 ::rtl::OUString OApplicationDetailView::getQualifiedName( SvLBoxEntry* _pEntry ) const
 {
@@ -747,7 +854,7 @@ void OApplicationDetailView::clearPages(sal_Bool _bTaskAlso)
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     if ( _bTaskAlso )
-        static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->Clear();
+        getTasksWindow().Clear();
     m_pControlHelper->clearPages();
 }
 // -----------------------------------------------------------------------------
@@ -797,7 +904,7 @@ void OApplicationDetailView::paste()
 void OApplicationDetailView::onCreationClick( const ::rtl::OUString& _sCommand)
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
-    static_cast<OAppBorderWindow*>(GetParent())->getView()->getElementNotification()->onCreationClick(_sCommand);
+    getBorderWin().getView()->getElementNotification()->onCreationClick(_sCommand);
 }
 // -----------------------------------------------------------------------------
 SvLBoxEntry*  OApplicationDetailView::elementAdded(ElementType _eType,const ::rtl::OUString& _rName, const Any& _rObject )
