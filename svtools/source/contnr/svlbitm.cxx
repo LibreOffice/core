@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svlbitm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:17:08 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:29:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,6 +252,8 @@ void SvLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT /* nFlags */,
     if ( _pEntry )
     {
         USHORT nStyle = rDev.IsEnabled() ? 0 : TEXT_DRAW_DISABLE;
+        if ( rDev.IsEntryMnemonicsEnabled() )
+            nStyle |= TEXT_DRAW_MNEMONIC;
         rDev.DrawText( Rectangle(rPos,GetSize(&rDev,_pEntry)),aStr,nStyle);
     }
     else
