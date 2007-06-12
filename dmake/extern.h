@@ -1,6 +1,6 @@
 /* $RCSfile: extern.h,v $
--- $Revision: 1.10 $
--- last change: $Author: vg $ $Date: 2007-01-18 09:29:52 $
+-- $Revision: 1.11 $
+-- last change: $Author: obo $ $Date: 2007-06-12 06:05:25 $
 --
 -- SYNOPSIS
 --      External declarations for dmake functions.
@@ -108,6 +108,15 @@ char *strlwr(char *p);
 /* from path.c */
 void Clean_path(char *path);
 
+/* from sysintf.c */
+/* cygdospath()/DO_WINPATH() are only needed for the .WINPATH attribute
+ * on cygwin. */
+#if __CYGWIN__
+char *cygdospath(char *src, int winpath);
+# define DO_WINPATH(p) cygdospath(p, UseWinpath)
+#else
+# define DO_WINPATH(p) p
+#endif
 
 
 /* Define some usefull macros. This is done here and not in config.h
