@@ -6,5 +6,4 @@ mkdir: %_DEST%\inc%_EXT%\cosv\template
 ..\inc\cosv\*.hxx %_DEST%\inc%_EXT%\cosv\*.hxx
 ..\inc\cosv\*.h %_DEST%\inc%_EXT%\cosv\*.h
 ..\inc\cosv\template\*.hxx %_DEST%\inc%_EXT%\cosv\template\*.hxx
-..\inc\cosv\template\*.cxx %_DEST%\inc%_EXT%\cosv\template\*.cxx
 
