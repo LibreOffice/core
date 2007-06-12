@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 13:22:28 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:55:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -974,10 +974,6 @@ const SwTxtNode* SwNode::FindOutlineNodeOfLevel( BYTE nLvl ) const
     return pRet;
 }
 
-// is the node the first and/or last node of a section?
-// This information is used for the export filters. Our layout never have a
-// distance before or after if the node is the first or last in a section.
-
 inline sal_Bool IsValidNextPrevNd( const SwNode& rNd )
 {
     return ND_TABLENODE == rNd.GetNodeType() ||
@@ -988,13 +984,34 @@ inline sal_Bool IsValidNextPrevNd( const SwNode& rNd )
 
 BYTE SwNode::HasPrevNextLayNode() const
 {
+    // assumption: <this> node is a node inside the document nodes array section.
+
     BYTE nRet = 0;
     if( IsValidNextPrevNd( *this ))
     {
         SwNodeIndex aIdx( *this, -1 );
+        // --> OD 2007-06-04 #i77805#
+        // skip section start and end nodes
+        while ( aIdx.GetNode().IsSectionNode() ||
+                ( aIdx.GetNode().IsEndNode() &&
+                  aIdx.GetNode().StartOfSectionNode()->IsSectionNode() ) )
+        {
+            --aIdx;
+        }
+        // <--
         if( IsValidNextPrevNd( aIdx.GetNode() ))
             nRet |= ND_HAS_PREV_LAYNODE;
-        aIdx += 2;
+        // --> OD 2007-06-04 #i77805#
+        // skip section start and end nodes
+//        aIdx += 2;
+        aIdx = SwNodeIndex( *this, +1 );
+        while ( aIdx.GetNode().IsSectionNode() ||
+                ( aIdx.GetNode().IsEndNode() &&
+                  aIdx.GetNode().StartOfSectionNode()->IsSectionNode() ) )
+        {
+            ++aIdx;
+        }
+        // <--
         if( IsValidNextPrevNd( aIdx.GetNode() ))
             nRet |= ND_HAS_NEXT_LAYNODE;
     }
