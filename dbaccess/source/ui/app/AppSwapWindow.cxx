@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppSwapWindow.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:55:16 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:33:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,10 +81,11 @@ using namespace ::com::sun::star::container;
 // class OApplicationSwapWindow
 DBG_NAME(OApplicationSwapWindow)
 //==================================================================
-OApplicationSwapWindow::OApplicationSwapWindow(Window* _pParent,OAppBorderWindow* _pBorderWindow) : Window(_pParent,WB_DIALOGCONTROL )
+OApplicationSwapWindow::OApplicationSwapWindow( Window* _pParent, OAppBorderWindow& _rBorderWindow )
+    :Window(_pParent,WB_DIALOGCONTROL )
     ,m_aIconControl(this)
     ,m_eLastType(E_NONE)
-    ,m_pBorderWin(_pBorderWindow)
+    ,m_rBorderWin( _rBorderWindow )
 {
     DBG_CTOR(OApplicationSwapWindow,NULL);
 //  SetCompoundControl( TRUE );
@@ -92,7 +93,7 @@ OApplicationSwapWindow::OApplicationSwapWindow(Window* _pParent,OAppBorderWindow
     ImplInitSettings( sal_True, sal_True, sal_True );
 
     m_aIconControl.SetClickHdl(LINK(this, OApplicationSwapWindow, OnContainerSelectHdl));
-    m_aIconControl.setControlActionListener(_pBorderWindow->getView()->getActionListener());
+    m_aIconControl.setControlActionListener( m_rBorderWin.getView()->getActionListener());
     m_aIconControl.SetHelpId(HID_APP_SWAP_ICONCONTROL);
     m_aIconControl.Show();
     //m_aIconControl.Enable(TRUE);
@@ -161,20 +162,9 @@ void OApplicationSwapWindow::clearSelection()
 }
 
 // -----------------------------------------------------------------------------
-void OApplicationSwapWindow::createIconAutoMnemonics()
+void OApplicationSwapWindow::createIconAutoMnemonics( MnemonicGenerator& _rMnemonics )
 {
-    // we need to share our "mnemonic space" with the menu of the window we live in
-    MnemonicGenerator aMnemonicGenerator;
-    SystemWindow* pSystemWindow = GetSystemWindow();
-    MenuBar* pMenu = pSystemWindow ? pSystemWindow->GetMenuBar() : NULL;
-    if ( pMenu )
-    {
-        USHORT nMenuItems = pMenu->GetItemCount();
-        for ( USHORT i = 0; i < nMenuItems; ++i )
-            aMnemonicGenerator.RegisterMnemonic( pMenu->GetItemText( pMenu->GetItemId( i ) ) );
-    }
-
-    m_aIconControl.CreateAutoMnemonics( aMnemonicGenerator );
+    m_aIconControl.CreateAutoMnemonics( _rMnemonics );
 }
 
 // -----------------------------------------------------------------------------
@@ -184,7 +174,7 @@ bool OApplicationSwapWindow::interceptKeyInput( const KeyEvent& _rEvent )
     if ( rKeyCode.GetModifier() == KEY_MOD2 )
         return m_aIconControl.DoKeyInput( _rEvent );
 
-    // not intercepted
+    // not handled
     return false;
 }
 
@@ -206,7 +196,7 @@ IMPL_LINK(OApplicationSwapWindow, OnContainerSelectHdl, SvtIconChoiceCtrl*, _pCo
 
     if ( m_eLastType != eType && eType != E_NONE )
     {
-        if ( m_pBorderWin->getView()->getElementNotification()->onContainerSelect(eType) )
+        if ( m_rBorderWin.getView()->getElementNotification()->onContainerSelect(eType) )
             m_eLastType = eType;
         else
         {
