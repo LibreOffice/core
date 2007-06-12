@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.117 $
+#   $Revision: 1.118 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 10:50:56 $
+#   last change: $Author: obo $ $Date: 2007-06-12 05:09:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.117 $ ';
+$id_str = ' $Revision: 1.118 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -65,7 +65,7 @@ print "$script_name -- version: $script_rev\n";
 @action_list        =   (           # valid actions
                         'copy',
                         'dos',
-                        'hedabu_obsolete',
+                        'addincpath',
                         'linklib',
                         'mkdir',
                         'symlink',
@@ -91,7 +91,7 @@ $common_dest        = 0;            # common tree on solver
 
 @action_data        = ();           # LoL with all action data
 @macros             = ();           # d.lst macros
-@hedabu_obsolete_list        = ();           # files which have to be filtered through hedabu_obsolete
+@addincpath_list    = ();           # files which have to be filtered through addincpath
 @dirlist            = ();           # List of 'mkdir' targets
 @zip_list           = ();           # files which have to be zipped
 @common_zip_list    = ();           # common files which have to be zipped
@@ -110,6 +110,7 @@ $opt_zip            = 0;            # create an additional zip file
 $opt_log            = 1;            # create an additional log file
 $opt_link           = 0;            # hard link files into the solver to save disk space
 $opt_deloutput      = 0;            # delete the output tree for the project once successfully delivered
+$opt_checkdlst      = 0;
 $delete_common      = 1;            # for "-delete": if defined delete files from common tree also
 
 if ($^O ne 'cygwin') {              # iz59477 - cygwin needes a dot "." at the end of filenames to disable
@@ -118,7 +119,6 @@ if ($^O ne 'cygwin') {              # iz59477 - cygwin needes a dot "." at the e
   $maybedot     = '.';
 }
 
-$upd           = $ENV{'UPD'};
 ($gui       = lc($ENV{GUI}))        || die "can't determine GUI";
 $tempcounter        = 0;
 
@@ -150,8 +150,9 @@ if ( ! $opt_delete ) {
 init_globals();
 push_default_actions();
 parse_dlst();
+check_dlst() if $opt_checkdlst;
 walk_action_data();
-walk_hedabu_obsolete_list();
+walk_addincpath_list();
 write_log() if $opt_log;
 zip_files() if $opt_zip;
 cleanup() if $opt_delete;
@@ -224,9 +225,9 @@ sub do_dos
     }
 }
 
-sub do_hedabu_obsolete
+sub do_addincpath
 {
-    # just collect all hedabu_obsolete files, actual filtering is done later
+    # just collect all addincpath files, actual filtering is done later
     my $line = shift;
     my ($from, $to);
     my @globbed_files = ();
@@ -234,7 +235,7 @@ sub do_hedabu_obsolete
     $line = expand_macros($line);
     ($from, $to) = split(' ', $line);
 
-    push( @hedabu_obsolete_list, @{glob_line($from, $to)});
+    push( @addincpath_list, @{glob_line($from, $to)});
 }
 
 sub do_linklib
@@ -338,7 +339,7 @@ sub do_mkdir
     my $path = expand_macros(shift);
     # strip whitespaces from path name
     $path =~ s/\s$//;
-    if ( ! $opt_delete ) {
+    if (( ! $opt_delete ) && ( ! -d $path )) {
         if ( $opt_check ) {
             print "MKDIR: $path\n";
         } else {
@@ -427,6 +428,7 @@ sub parse_options
         $arg =~ /^-link$/ and $ENV{GUI} ne 'WNT' and $opt_link = 1 and next;
         $arg =~ /^-deloutput$/ and $opt_deloutput = 1 and next;
         $arg =~ /^-debug$/  and $is_debug   = 1 and next;
+        $arg =~ /^-checkdlst$/  and $opt_checkdlst = 1 and next;
         print_error("invalid option $arg") if ( $arg =~ /^-/ );
         if ( $arg =~ /^-/ || $opt_help || $#ARGV > -1 ) {
             usage(1);
@@ -531,6 +533,7 @@ sub init_globals
     # %DLLSUFFIX%'
     # %OUTPATH%
     # %L10N_FRAMEWORK%
+    # %UPD%
 
     # valid macros
     @macros = (
@@ -540,8 +543,7 @@ sub init_globals
                 [ '%_EXT%',             $ext            ],
                 [ '%COMMON_OUTDIR%',    $common_outdir  ],
                 [ '%COMMON_DEST%',      $common_dest    ],
-                [ '%GUI%',              $gui            ],
-                [ '%UPD%',              $upd            ]
+                [ '%GUI%',              $gui            ]
               );
 
     # find out if the system supports symlinks
@@ -677,7 +679,7 @@ sub glob_line
     my @globbed_files = ();
 
     if ( ! ( $from && $to ) ) {
-        print "Error in d.lst? source: $from destination: $to\n";
+        print_warning("Error in d.lst? source: '$from' destination: '$to'");
         return \@globbed_files;
     }
 
@@ -701,6 +703,13 @@ sub glob_line
     else {
         # no globbing but renaming possible
         push(@globbed_files, [$from, $to]);
+    }
+    if ( $opt_checkdlst ) {
+        my $outtree = expand_macros("%__SRC%");
+        my $commonouttree = expand_macros("%COMMON_OUTDIR%");
+        if (( $from !~ /\Q$outtree\E/ ) && ( $from !~ /\Q$commonouttree\E/ )) {
+            print_warning("'$from' does not match any file") if ( $#globbed_files == -1 );
+        }
     }
     return \@globbed_files;
 }
@@ -727,7 +736,8 @@ sub is_unstripped {
     if (-f $file_name.$maybedot) {
         my $file_type = `file $file_name`;
         # OS X file command doesn't know if a file is stripped or not
-        if (($file_type =~ /not stripped/o) || ($file_type =~ /Mach-O/o) || ($file_type =~ /PE/o)) {
+        if (($file_type =~ /not stripped/o) || ($file_type =~ /Mach-O/o) ||
+            (($file_type =~ /PE/o) && ($ENV{GUI} eq 'WNT'))) {
             return '1' if ($file_name =~ /\.bin$/o);
             return '1' if ($file_name =~ /\.so\.*/o);
             return '1' if ($file_name =~ /\.dylib\.*/o);
@@ -866,6 +876,15 @@ sub is_newer
         my (@from_stat, @to_stat);
 
         @from_stat = stat($from.$maybedot);
+        if ( $opt_checkdlst ) {
+            my $outtree = expand_macros("%__SRC%");
+            my $commonouttree = expand_macros("%COMMON_OUTDIR%");
+            if ( $from !~ /$outtree/ ) {
+                if ( $from !~ /$commonouttree/ ) {
+                    print_warning("'$from' does not exist") unless -e _;
+                }
+            }
+        }
         return 0 unless -f _;
 
         if ( $touch ) {
@@ -968,20 +987,25 @@ sub push_default_actions
     my $subdir;
     my @subdirs = (
                     'bin',
+                    'doc',
                     'inc',
                     'lib',
+                    'par',
+                    'pck',
                     'rdb',
                     'res',
-                    'xml',
+                    'xml'
                 );
     push(@subdirs, 'zip') if $opt_zip;
     push(@subdirs, 'idl') if ! $common_build;
+    push(@subdirs, 'pus') if ! $common_build;
     my @common_subdirs = (
                     'bin',
                     'idl',
                     'inc',
                     'pck',
-                    'res',
+                    'pus',
+                    'res'
                 );
     push(@common_subdirs, 'zip') if $opt_zip;
 
@@ -990,67 +1014,62 @@ sub push_default_actions
         foreach $subdir (@subdirs) {
             push(@action_data, ['mkdir', "%_DEST%/$subdir%_EXT%"]);
         }
+        push(@action_data, ['mkdir', "%_DEST%/inc%_EXT%/$module"]);
         if ( $common_build ) {
             foreach $subdir (@common_subdirs) {
                 push(@action_data, ['mkdir', "%COMMON_DEST%/$subdir%_EXT%"]);
             }
+            push(@action_data, ['mkdir', "%COMMON_DEST%/inc%_EXT%/$module"]);
         }
-        push(@action_data, ['mkdir', "%_DEST%/bin%_EXT%/so"]);
-        push(@action_data, ['mkdir', "%_DEST%/bin%_EXT%/additional"]);
-        if ( $common_build ) {
-            push(@action_data, ['mkdir', "%COMMON_DEST%/bin%_EXT%/so"]);
-            push(@action_data, ['mkdir', "%COMMON_DEST%/bin%_EXT%/additional"]);
-            push(@action_data, ['mkdir', "%COMMON_DEST%/res%_EXT%/img/additional"]);
-        } else {
-            push(@action_data, ['mkdir', "%_DEST%/res%_EXT%/img/additional"]);
-        }
+    }
+    push(@action_data, ['mkdir', "%_DEST%/bin%_EXT%/so"]);
+    push(@action_data, ['mkdir', "%_DEST%/res%_EXT%/img"]);
+    if ( $common_build ) {
+        push(@action_data, ['mkdir', "%COMMON_DEST%/bin%_EXT%/so"]);
+        push(@action_data, ['mkdir', "%COMMON_DEST%/res%_EXT%/img"]);
     }
 
     # deliver build.lst to $dest/inc/$module
-    push(@action_data, ['mkdir', "%_DEST%/inc%_EXT%/$module"]);
     push(@action_data, ['copy', "build.lst %_DEST%/inc%_EXT%/$module/build.lst"]);
     if ( $common_build ) {
         # ... and to $common_dest/inc/$module
-        push(@action_data, ['mkdir', "%COMMON_DEST%/inc%_EXT%/$module"]);
         push(@action_data, ['copy', "build.lst %COMMON_DEST%/inc%_EXT%/$module/build.lst"]);
     }
 
     # need to copy libstaticmxp.dylib for Mac OS X
     if ( $^O eq 'darwin' )
     {
-        push(@action_data, ['copy', "../%__SRC%/misc/*staticdatamembers.cxx %_DEST%/inc%_EXT%/*staticdatamembers.cxx"]);
-        push(@action_data, ['copy', "../%__SRC%/misc/*staticdatamembers.h* %_DEST%/inc%_EXT%/*staticdatamembers.H*"]);
         push(@action_data, ['copy', "../%__SRC%/lib/lib*static*.dylib %_DEST%/lib%_EXT%/lib*static*.dylib"]);
     }
 }
 
-sub walk_hedabu_obsolete_list
+sub walk_addincpath_list
 {
-    my (@hedabu_obsolete_headers);
-    return if $#hedabu_obsolete_list == -1;
+    my (@addincpath_headers);
+    return if $#addincpath_list == -1;
 
-    # create hash with all hedabu_obsolete header names
-    for (my $i = 0; $i <= $#hedabu_obsolete_list; $i++) {
-        my @field = split('/', $hedabu_obsolete_list[$i][0]);
-        push (@hedabu_obsolete_headers, $field[-1]);
+    # create hash with all addincpath header names
+    for (my $i = 0; $i <= $#addincpath_list; $i++) {
+        my @field = split('/', $addincpath_list[$i][0]);
+        push (@addincpath_headers, $field[-1]);
     }
 
-    # now stream all hedabu_obsolete headers through hedabu_obsolete filter
-    for (my $i = 0; $i <= $#hedabu_obsolete_list; $i++) {
-        hedabu_obsolete_if_newer($hedabu_obsolete_list[$i][0], $hedabu_obsolete_list[$i][1], \@hedabu_obsolete_headers)
+    # now stream all addincpath headers through addincpath filter
+    for (my $i = 0; $i <= $#addincpath_list; $i++) {
+        add_incpath_if_newer($addincpath_list[$i][0], $addincpath_list[$i][1], \@addincpath_headers)
                 ? $files_copied++ : $files_unchanged++;
     }
 }
 
-sub hedabu_obsolete_if_newer
+sub add_incpath_if_newer
 {
     my $from = shift;
     my $to = shift;
-    my $hedabu_obsolete_headers_ref = shift;
+    my $modify_headers_ref = shift;
     my ($from_stat_ref, $header);
 
     push_on_ziplist($to) if $opt_zip;
-    push_on_loglist("HEDABU_OBSOLETE", "$from", "$to") if $opt_log;
+    push_on_loglist("ADDINCPATH", "$from", "$to") if $opt_log;
 
     if ( $opt_delete ) {
         print "REMOVE: $to\n";
@@ -1060,7 +1079,7 @@ sub hedabu_obsolete_if_newer
     }
 
     if ( $from_stat_ref = is_newer($from, $to) ) {
-        print "HEDABU_OBSOLETE: $from -> $to\n";
+        print "ADDINCPATH: $from -> $to\n";
 
         return 1 if $opt_check;
 
@@ -1072,19 +1091,9 @@ sub hedabu_obsolete_if_newer
         close(FROM);
         $/ = $save;
 
-        # strip any carriage returns
-        $content =~ tr/\r//d;
-        # squeeze lines with white space only
-        $content =~ s/\n\s+\n/\n\n/sg;
-        # squeeze multiple blank lines
-        $content =~ s/\n{3,}/\n\n/sg;
-
-        foreach $header (@$hedabu_obsolete_headers_ref) {
+        foreach $header (@$modify_headers_ref) {
             $content =~ s/#include [<"]$header[>"]/#include <$module\/$header>/g;
         }
-
-        # __SOLAR_PRIVATE hack
-        $content =~ s/#if _SOLAR__PRIVATE/#if 0 \/\/ _SOLAR__PRIVATE/g;
 
         open(TO, ">$to");
         print TO $content;
@@ -1126,7 +1135,7 @@ sub push_on_loglist
     my @entry = @_;
     return 0 if ( $opt_check );
     return -1 if ( $#entry != 2 );
-    if (( $entry[0] eq "COPY" ) || ( $entry[0] eq "HEDABU_OBSOLETE" )) {
+    if (( $entry[0] eq "COPY" ) || ( $entry[0] eq "ADDINCPATH" )) {
         return 0 if ( ! -e $entry[1].$maybedot );
         # make 'from' relative to source root
         $entry[1] = $module . "/prj/" . $entry[1];
@@ -1325,6 +1334,56 @@ sub write_log
     return;
 }
 
+sub check_dlst
+{
+    my %createddir;
+    my %destdir;
+    my %destfile;
+    # get all checkable actions to perform
+    foreach my $action ( @action_data ) {
+        my $path = expand_macros( $$action[1] );
+        if ( $$action[0] eq 'mkdir' ) {
+            $createddir{$path} ++;
+        } elsif (( $$action[0] eq 'copy' ) || ( $$action[0] eq 'addincpath' )) {
+            my ($from, $to) = split(' ', $path);
+            my ($to_fname, $to_dir);
+            my $withwildcard = 0;
+            if ( $from =~ /[\*\?\[\]]/ ) {
+                $withwildcard = 1;
+            }
+            ($to_fname, $to_dir) = fileparse($to);
+            if ( $withwildcard ) {
+                if ( $to !~ /[\*\?\[\]]/ ) {
+                    $to_dir = $to;
+                    $to_fname ='';
+                }
+            }
+            $to_dir =~ s/[\\\/\s]$//;
+            $destdir{$to_dir} ++;
+            # Check: copy into non existing directory?
+            if ( ! $createddir{$to_dir} ) {
+                # unfortunately it is not so easy: it's OK if a subdirectory of $to_dir
+                # gets created, because mkpath creates the whole tree
+                foreach my $directory ( keys %createddir ) {
+                    if ( $directory =~ /^\Q$to_dir\E[\\\/]/ ) {
+                        $createddir{$to_dir} ++;
+                        last;
+                    }
+                }
+                print_warning("Possibly copying into directory without creating in before: '$to_dir'")
+                    unless $createddir{$to_dir};
+            }
+            # Check: overwrite file?
+            if ( ! $to ) {
+                if ( $destfile{$to} ) {
+                    print_warning("Multiple entries copying to '$to'");
+                }
+                $destfile{$to} ++;
+            }
+        }
+    }
+}
+
 sub cleanup
 {
     # remove empty directories
@@ -1418,6 +1477,7 @@ sub usage
     print STDERR "Usage:\ndeliver [OPTION]... [DESTINATION-PATH]\n";
     print STDERR "Options:\n";
     print STDERR "  -check       just print what would happen, no actual copying of files\n";
+    print STDERR "  -checkdlst   be verbose about (possible) d.lst bugs\n";
     print STDERR "  -delete      delete files (undeliver), use with care\n";
     print STDERR "  -deloutput   remove the output tree after copying\n";
     print STDERR "  -force       copy even if not newer\n";
