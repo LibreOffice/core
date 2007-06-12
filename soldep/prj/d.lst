@@ -1,5 +1,8 @@
 mkdir: %_DEST%\inc%_EXT%\soldep
 mkdir: %_DEST%\inc%_EXT%\bootstrp2
+mkdir: %COMMON_DEST%\bin%_EXT%\additional
+mkdir: %COMMON_DEST%\res%_EXT%\img\additional
+
 ..\inc\soldep\sdtresid.hxx %_DEST%\inc%_EXT%\soldep\sdtresid.hxx
 ..\%__SRC%\bin\soldepl.exe %_DEST%\bin%_EXT%\soldepl.exe
 ..\%__SRC%\bin\bootstrpdt?????.dll %_DEST%\bin%_EXT%\bootstrpdt?????.dll
@@ -32,7 +35,5 @@ mkdir: %_DEST%\inc%_EXT%\bootstrp2
 ..\%__SRC%\lib\bootstrpdt.lib %_DEST%\lib%_EXT%\bootstrpdt.lib
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
-..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
-..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
-..\%__SRC%\bin\dep*.res %_DEST%\bin%_EXT%\additional\dep*.res
+..\%__SRC%\bin\dep*.res %COMMON_DEST%\bin%_EXT%\additional\dep*.res
 
