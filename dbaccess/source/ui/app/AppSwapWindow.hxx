@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppSwapWindow.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:41:13 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:33:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ namespace dbaui
     {
         OApplicationIconControl             m_aIconControl;
         ElementType                         m_eLastType;
-        OAppBorderWindow*                   m_pBorderWin;
+        OAppBorderWindow&                   m_rBorderWin;
 
         void ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
 
@@ -66,7 +66,7 @@ namespace dbaui
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt);
     public:
-        OApplicationSwapWindow(Window* _pParent,OAppBorderWindow* _pBorderWindow);
+        OApplicationSwapWindow( Window* _pParent, OAppBorderWindow& _rBorderWindow );
         virtual ~OApplicationSwapWindow();
         // window overloads
         virtual void Resize();
@@ -86,7 +86,7 @@ namespace dbaui
 
         /** automatically creates mnemonics for the icon/texts in our left hand side panel
         */
-        void    createIconAutoMnemonics();
+        void    createIconAutoMnemonics( MnemonicGenerator& _rMnemonics );
 
         /** called to give the window the chance to intercept key events, while it has not
             the focus
