@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserline.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:46:12 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:37:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -335,8 +335,17 @@ namespace pcr
         if( m_pTheParent )
         {
             String aText = m_aFtTitle.GetText();
+
             while( m_pTheParent->GetTextWidth( aText ) < m_nNameWidth )
-                aText.AppendAscii("...........");
+                        aText.AppendAscii("...........");
+
+            // for Issue 69452
+            if (Application::GetSettings().GetLayoutRTL())
+            {
+                sal_Unicode cRTL_mark = 0x200F;
+                aText.Append(cRTL_mark);
+            }
+
             m_aFtTitle.SetText(aText);
         }
     }
@@ -345,7 +354,16 @@ namespace pcr
     XubString OBrowserLine::GetTitle() const
     {
         String sDisplayName = m_aFtTitle.GetText();
+
+    // for Issue 69452
+    if (Application::GetSettings().GetLayoutRTL())
+    {
+        sal_Unicode cRTL_mark = 0x200F;
+        sDisplayName.EraseTrailingChars(cRTL_mark);
+    }
+
         sDisplayName.EraseTrailingChars( '.' );
+
         return sDisplayName;
     }
 
