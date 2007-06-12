@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fields.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:20:03 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:55:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ namespace ww
             /*23*/  "PRINTDATE",
             /*24*/  "REVNUM",
             /*25*/  "EDITTIME",
-            /*26*/  "NUMPAGE",
+            /*26*/  "NUMPAGES",
             /*27*/  "NUMWORDS",
             /*28*/  "NUMCHARS",
             /*29*/  "FILENAME",
