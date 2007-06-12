@@ -1,3 +1,155 @@
+2007-04-24 13:42  vq
+
+	* Makefile.in, NEWS, configure, configure.in, man/dmake.nc,
+	  man/dmake.tf, win95/microsft/config.h, winnt/microsft/config.h:
+
+	#i73700# Release dmake 4.8.
+
+2007-04-09 09:22  vq
+
+	* tests/misc-18:
+
+	#i73499# Fix bash syntax typo.
+
+2007-04-08 23:27  vq
+
+	* tests/misc-18:
+
+	#i73499# Make test work on Solaris.
+
+2007-04-08 23:06  vq
+
+	* make.c:
+
+	#i73499# Fix potential problem with m_at getting freed without being
+	initalized first.
+
+2007-03-27 13:21  vq
+
+	* man/: dmake.nc, dmake.tf:
+
+	#i10000# Fix typos in manual.
+	This patch was provided by shay@openoffice.org.
+
+2007-03-24 00:29  vq
+
+	* make.c, man/dmake.nc, man/dmake.tf:
+
+	#i75697# Document the special treatment of $? for the :! ruleop.
+
+2007-03-23 16:40  vq
+
+	* NEWS, man/dmake.nc, man/dmake.tf, tests/Makefile.am,
+	  tests/Makefile.in, tests/misc-18:
+
+	#i73499# Add documentation and testcase.
+
+2007-03-19 00:58  vq
+
+	* sysintf.c:
+
+	#i73499# Restrict function to cygwin only use.
+
+2007-03-18 11:02  vq
+
+	* sysintf.c:
+
+	#i73499# Add missing include statement.
+
+2007-03-17 15:00  vq
+
+	* dag.c, dmake.c, dmake.h, dmdump.c, extern.h, getinp.c, imacs.c,
+	  infer.c, make.c, rulparse.c, sysintf.c, vextern.h:
+
+	#i73499# Add new .WINPATH attribute to generate Windows style paths
+	(with regular slashes) instead of the default cygwin style (POSIX)
+	paths for dmake's dynamic macros.
+
+	This attribute is specific for cygwin dmake executables and non-cygwin
+	environments ignore this attribute.
+
+	The windows style paths use regular slashes ('/') instead of the
+	usual windows backslash ('\') as directory separator to avoid quoting
+	problems (It still is a cygwin dmake!) and cygwin as well as native
+	windows programs should have no problems using this (c:/foo/bar) path
+	representation.
+
+	The affected macros are $@, $*, $>, $?, $<, $&, $^ and $(PWD),
+	$(MAKEDIR) and $(TMD).
+
+	Examples:
+
+	Content of $(PWD) without .WINPATH (default):  /cygdrive/c/temp
+
+	Content of $(PWD) with .WINPATH set:           c:/temp
+
+2007-03-16 22:36  vq
+
+	* sysintf.c:
+
+	#i10000# Trivial fix.
+
+2007-03-13 20:51  vq
+
+	* sysintf.c, unix/rmprq.c:
+
+	#i10000# No real change, only comments were added or modified.
+
+2007-01-29 23:24  vq
+
+	* man/: dmake.nc, dmake.tf:
+
+	#i73996# Update man page.
+
+2007-01-29 21:39  vq
+
+	* make.c, path.c, sysintf.c, vextern.h:
+
+	#i73996# Avoid relative paths going up to the root directory.
+
+2007-01-26 19:51  vq
+
+	* dag.c, imacs.c, make.c:
+
+	#i739183 Mark the internal macros PWD, MAKEDIR and TMD as precious.
+	Also commit some small macro relates clean ups and comment changes.
+
+2007-01-22 21:49  vq
+
+	* dag.c:
+
+	#i10000# Remove warning and add error handling.
+
+2007-01-22 21:25  vq
+
+	* getinp.c, make.c:
+
+	#i10000# Small cosmetic changes.
+
+2007-01-21 18:21  vq
+
+	* configure, configure.in, path.c, man/dmake.nc, man/dmake.tf,
+	  unix/dcache.c:
+
+	#i73661# Improve case insensitive directory caching on case sensitive
+	file systems but it is *not* recommended to to so. A comment was added
+	to the man page emphasizing this.
+
+2007-01-20 22:00  vq
+
+	* Makefile.in, configure, configure.in, man/dmake.nc, man/dmake.tf,
+	  readme/read1st.txt, win95/microsft/config.h,
+	  winnt/microsft/config.h:
+
+	#i73700# Bump version to 4.8-cvs.
+
+2007-01-27 20:53  vq
+
+	* configure, configure.in:
+
+	Masterfix from SRC680_m200. This patch fixes a MacOSX problem
+	encountered after integration into the OOo SRC680 master.
+
 2007-01-15 21:36  vq
 
 	* msdos/runargv.c:
