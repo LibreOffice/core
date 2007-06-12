@@ -1,6 +1,6 @@
 /* $RCSfile: dag.c,v $
--- $Revision: 1.8 $
--- last change: $Author: vg $ $Date: 2007-01-18 09:28:42 $
+-- $Revision: 1.9 $
+-- last change: $Author: obo $ $Date: 2007-06-12 06:04:33 $
 --
 -- SYNOPSIS
 --      Routines to construct the internal dag.
@@ -27,6 +27,10 @@
 */
 
 #include "extern.h"
+#if __CYGWIN__
+#include <sys/cygwin.h>
+#include <errno.h>
+#endif
 
 static char *_normalize_path(char *path);
 
@@ -42,8 +46,25 @@ HASHPTR hp;
    switch( hp->ht_flag & M_VAR_MASK )   /* only one var type per var */
    {
       case M_VAR_STRING:
-         *hp->MV_SVAR = hp->ht_value;
-         break;
+     *hp->MV_SVAR = hp->ht_value;
+     /* Add special treatment for PWD/MAKEDIR for .WINPATH. */
+     if( hp->MV_SVAR == &Pwd_macval ) {
+        if( Pwd )
+           FREE(Pwd);
+        Pwd = hp->ht_value;
+        /* Use the "DOSified" path for the macro. */
+        *hp->MV_SVAR = hp->ht_value = DmStrDup(DO_WINPATH(hp->ht_value));
+        DB_PRINT( "smv", ("PWD: %s/%s", Pwd_macval, Pwd) );
+     } else if( hp->MV_SVAR == &Makedir_macval ) {
+        if( Makedir )
+           FREE(Makedir);
+        Makedir = hp->ht_value;
+        /* Use the "DOSified" path for the macro. */
+        *hp->MV_SVAR = hp->ht_value = DmStrDup(DO_WINPATH(hp->ht_value));
+        DB_PRINT( "smv", ("MAKEDIR: %s/%s", Makedir_macval, Makedir) );
+     }
+     /* No special treatment for TMD needed. */
+     break;
 
       case M_VAR_CHAR:
          *hp->MV_CVAR = (hp->ht_value == NIL(char)) ? '\0':*hp->ht_value;
@@ -98,7 +119,20 @@ HASHPTR hp;
         if( (hp->MV_MASK & A_SEQ) && (Max_proc != 1) )
            Def_macro( "MAXPROCESS", "1", M_MULTI|M_EXPANDED);
      }
-         break;
+
+#if defined(__CYGWIN__)
+     /* Global .WINPATH change. Only needed for cygwin. */
+     if(hp->MV_MASK & A_WINPATH) {
+        UseWinpath = ((Glob_attr&A_WINPATH) != 0);
+        /* Change MAKEDIR, PWD according to .WINPATH. During
+         * makefile evaluation this cannot change TMD (it is "."
+         * and later TMD is set in Make() according to the
+         * .WINPATH attribute. */
+        Def_macro( "MAKEDIR", Makedir, M_FORCE | M_EXPANDED );
+        Def_macro( "PWD", Pwd, M_FORCE | M_EXPANDED );
+     }
+#endif
+     break;
    }
 }
 
@@ -263,12 +297,14 @@ HASHPTR hp;
 PUBLIC HASHPTR
 Def_macro( name, value, flags )/*
 =================================
-   This routine is used to define a macro, and it's value.
+   This routine is used to define a macro, and it's value. A copy of
+   the content of value is stored and not the pointer to the value.
    The flags indicates if it is a permanent macro or if it's value
    can be redefined.  A flags of M_PRECIOUS means it is a precious
-   macro and cannot be further redefined.  If the flags flag also
-   contains the M_MULTI bit it means that the macro can be redefined
-   multiple times and no warning of the redefinitions should be issued.
+   macro and cannot be further redefined unless M_FORCE is used.
+   If the flags flag contains the M_MULTI bit it means that the macro
+   can be redefined multiple times and no warning of the redefinitions
+   should be issued.
    Once a macro's VAR flags are set they are preserved through all future
    macro definitions.
 
@@ -327,19 +363,24 @@ int     flags;          /* initial ht_flags */
 
    /* If an empty string ("") is given set ht_value to NIL(char) */
    if( (value != NIL(char)) && (*value) ) {
-      /* strip out any \<nl> combinations where \ is the current CONTINUATION
-       * char */
-
-      for( p = value; (p = strchr(p, CONTINUATION_CHAR)) != NIL(char); )
-         if( p[1] == '\n' )
-        strcpy( p, p+2 );
-     else
-        p++;
 
       if( !(flags & M_LITERAL) ) {
-     p = DmStrDup( DmStrSpn(value," \t")); /* strip white space before */
-                           /* ... and after value      */
-     if( *p ) {
+     q = DmStrDup(value);
+     /* strip out any \<nl> combinations where \ is the current
+      * CONTINUATION char */
+     for(p=q; (p=strchr(p,CONTINUATION_CHAR))!=NIL(char); )
+        if( p[1] == '\n' )
+           strcpy( p, p+2 );
+        else
+           p++;
+
+     p = DmStrSpn(q ," \t");    /* Strip white space before ... */
+     if( p != q ) {
+        strcpy( q, p);
+        p = q;
+     }
+
+     if( *p ) {         /* ... and after the value. */
         for(q=p+strlen(p)-1; ((*q == ' ')||(*q == '\t')); q--);
         *++q = '\0';
      }
@@ -358,16 +399,18 @@ int     flags;          /* initial ht_flags */
 
       hp->ht_value = p;
    }
-   else
+   else {
       hp->ht_value = NIL(char);
+      flags |= M_EXPANDED;
+   }
 
    /* Assign the hash table flag less the M_MULTI flag, it is used only
     * to silence the warning.  But carry it over if it was previously
-    * defined in ht_flag, as this is a permanent M_MULTI variable. */
-   /* Also strip M_INIT flag if macro is assigned. */
+    * defined in ht_flag, as this is a permanent M_MULTI variable. Keep
+    * the M_PRECIOUS flag and strip the M_INIT flag. */
 
-   hp->ht_flag = (((flags & ~(M_MULTI|M_FORCE)) |
-          (hp->ht_flag & (M_VAR_MASK | M_MULTI)))) & ~M_INIT;
+   hp->ht_flag = ((flags & ~(M_MULTI|M_FORCE)) |
+          (hp->ht_flag & (M_VAR_MASK|M_MULTI|M_PRECIOUS))) & ~M_INIT;
 
    /* Check for macro variables and make the necessary adjustment in the
     * corresponding global variables */
@@ -627,7 +670,12 @@ char *rp;
      case '@' : ++atcount;        break;
      case '-' : flag |= A_IGNORE; break;
      case '+' : flag |= A_SHELL;  break;
-     case '%' : flag |= A_SWAP;   break;
+     case '%' :
+#if defined(MSDOS)
+        /* Ignore % in the non-MSDOS case. */
+        flag |= A_SWAP;
+#endif
+        break;
 
      case ' ' :
      case '\t': break;
@@ -676,7 +724,10 @@ char *path;
 #if __CYGWIN__
    /* Use cygwin function to convert a DOS path to a POSIX path. */
    if( *path && path[1] == ':' && isalpha(*path) ) {
-      cygwin_conv_to_posix_path(path, cpath);
+      int err = cygwin_conv_to_posix_path(path, cpath);
+      if (err)
+     Fatal( "error converting \"%s\" - %s\n",
+        path, strerror (errno));
    }
    else
 #endif
