@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryTextView.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:23:35 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:35:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,7 @@ OQueryTextView::OQueryTextView(OQueryContainerWindow* _pParent)
 {
     DBG_CTOR(OQueryTextView,NULL);
     m_pEdit = new OSqlEdit(this);
+    m_pEdit->SetRightToLeft(FALSE);
     m_pEdit->ClearModifyFlag();
     m_pEdit->SaveValue();
     m_pEdit->SetPosPixel( Point( 0, 0 ) );
