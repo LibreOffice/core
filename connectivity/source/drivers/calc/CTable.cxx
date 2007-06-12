@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:20:53 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:27:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -328,7 +328,9 @@ void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Reference<X
             {
             }
 
-            if ( nNumType & NumberFormat::NUMBER )
+            if ( nNumType & NumberFormat::TEXT )
+                rDataType = DataType::VARCHAR;
+            else if ( nNumType & NumberFormat::NUMBER )
                 rDataType = DataType::DECIMAL;
             else if ( nNumType & NumberFormat::CURRENCY )
             {
