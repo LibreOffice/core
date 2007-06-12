@@ -1,6 +1,6 @@
 /* $RCSfile: dmake.c,v $
--- $Revision: 1.9 $
--- last change: $Author: vg $ $Date: 2007-01-18 09:29:05 $
+-- $Revision: 1.10 $
+-- last change: $Author: obo $ $Date: 2007-06-12 06:04:45 $
 --
 -- SYNOPSIS
 --      The main program.
@@ -171,6 +171,7 @@ char **argv;
    Check     = FALSE;
    Microsoft = FALSE;
    Makemkf   = FALSE;
+   UseWinpath= FALSE;
    No_exec   = FALSE;
    m_export  = FALSE;
    cmdmacs   = NIL(char);
