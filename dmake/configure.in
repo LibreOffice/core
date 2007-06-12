@@ -6,7 +6,7 @@ dnl Set the package version
 dnl Don't forget to update the PACKAGE, VERSION and BUILDINFO macros in
 dnl dmake/win95/microsft/config.h to keep the native Microsoft C++
 dnl compiler build happy. 
-AC_INIT(dmake, 4.7)
+AC_INIT(dmake, 4.8)
 AC_CANONICAL_BUILD
 BUILDINFO="$build"
 
@@ -86,9 +86,8 @@ case "$_os" in
 	  ;;
 	"Darwin")
 	  OS_VERSION=macosx
-      rm -f Empty empty
-      touch Empty && [ -f empty ] && CASE_INSENSITIVE_FS=true
-      rm -f Empty empty
+# MacOSX is not garuanteed to be case insensitive, assume it's case
+# sensitive, see issue 73661 for details.
 	  ;;
 	"FreeBSD")
 	  OS_VERSION=linux
