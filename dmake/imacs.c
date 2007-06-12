@@ -1,4 +1,4 @@
-/* RCS  $Id: imacs.c,v 1.5 2007-01-18 09:30:31 vg Exp $
+/* RCS  $Id: imacs.c,v 1.6 2007-06-12 06:05:57 obo Exp $
 --
 -- SYNOPSIS
 --      Define default internal macros.
@@ -86,7 +86,9 @@ Create_macro_vars()
    _set_bit_var(".NOINFER",  "", A_NOINFER );
    _set_bit_var(".SEQUENTIAL","",A_SEQ     );
    _set_bit_var(".USESHELL", "", A_SHELL   );
+   /* .SWAP (MSDOS) and .WINPATH (cygwin) share the same bit. */
    _set_bit_var(".SWAP",     "", A_SWAP    );
+   _set_bit_var(".WINPATH",  "", A_WINPATH );
    _set_bit_var(".MKSARGS",  "", A_MKSARGS );
    _set_bit_var(".IGNOREGROUP","",A_IGNOREGROUP);
 
@@ -110,10 +112,14 @@ Create_macro_vars()
 #endif
    _set_string_var(".DIRCACHERESPCASE", DIRCACHERESPCASEDEFAULT, M_DEFAULT, &DcacheRespCase);
 
-   _set_string_var("MAKEDIR",Get_current_dir(),M_PRECIOUS|M_NOEXPORT,&Makedir);
-   _set_string_var("MAKEVERSION", VERSION, M_DEFAULT|M_PRECIOUS, &version);
-   _set_string_var("PWD",  Makedir,  M_DEFAULT|M_NOEXPORT, &Pwd);
-   _set_string_var("TMD",  ".",      M_DEFAULT|M_NOEXPORT, &Tmd);
+   _set_string_var("MAKEDIR",Get_current_dir(),M_PRECIOUS|M_NOEXPORT,
+           &Makedir_macval);
+   Makedir = DmStrDup(Makedir_macval); /* Later done by Def_macro(). */
+   _set_string_var("MAKEVERSION", VERSION, M_PRECIOUS, &version);
+   _set_string_var("PWD",  Makedir,  M_PRECIOUS|M_NOEXPORT, &Pwd_macval);
+   Pwd = DmStrDup(Pwd_macval); /* Later done by Def_macro(). */
+   _set_string_var("TMD",  ".",      M_PRECIOUS|M_NOEXPORT, &Tmd_macval);
+   Tmd = DmStrDup(Tmd_macval); /* Later done by _set_tmd(). */
 
    Def_macro("NULL", "", M_PRECIOUS|M_NOEXPORT|M_FLAG);
 
