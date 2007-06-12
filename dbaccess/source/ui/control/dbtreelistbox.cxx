@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtreelistbox.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 12:00:13 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:34:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -548,11 +548,7 @@ namespace
                     _pPopup->EnableItem(nId,pSubPopUp->HasValidEntries());
                 }
                 else
-                {
-                    ::com::sun::star::util::URL aCommand;
-                    aCommand.Complete = _pPopup->GetItemCommand(nId);
-                    _pPopup->EnableItem(nId,_pController->isCommandEnabled(aCommand));
-                }
+                    _pPopup->EnableItem( nId, _pController->isCommandEnabled( _pPopup->GetItemCommand( nId ) ) );
             }
         }
 
