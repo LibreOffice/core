@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppView.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:17:55 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:33:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,8 +65,10 @@
 
 namespace com{ namespace sun { namespace star { namespace beans    { class XPropertySet; } } } }
 namespace com{ namespace sun { namespace star { namespace frame    { class XController; } } } }
+
 class Control;
 class SvLBoxEntry;
+class MnemonicGenerator;
 
 namespace dbaui
 {
@@ -101,6 +103,7 @@ namespace dbaui
         OApplicationSwapWindow* getPanel() const;
         OApplicationDetailView* getDetailView() const;
     };
+
     //==================================================================
     class OApplicationView : public ODataView
                             ,public IClipboardTest
@@ -153,9 +156,11 @@ namespace dbaui
                             );
         virtual ~OApplicationView();
 
-        /** automatically creates mnemonics for the icon/texts in our left hand side panel
-        */
-        void    createIconAutoMnemonics();
+        /// automatically creates mnemonics for the icon/texts in our left hand side panel
+        void    createIconAutoMnemonics( MnemonicGenerator& _rMnemonics );
+
+        /// automatically creates mnemonics for the texts in our task pane
+        void    setTaskExternalMnemonics( MnemonicGenerator& _rMnemonics );
 
         // window overloads
         virtual long PreNotify( NotifyEvent& rNEvt );
