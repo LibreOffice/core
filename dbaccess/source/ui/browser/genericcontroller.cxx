@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:19:39 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:33:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1303,11 +1303,11 @@ sal_Bool OGenericUnoController::isCommandEnabled(sal_uInt16 _nCommandId) const
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool OGenericUnoController::isCommandEnabled(const ::com::sun::star::util::URL& _rCommand) const
+sal_Bool OGenericUnoController::isCommandEnabled( const ::rtl::OUString& _rCompleteCommandURL ) const
 {
-    OSL_ENSURE(_rCommand.Complete.getLength(),"Empty command url!");
+    OSL_ENSURE( _rCompleteCommandURL.getLength(), "OGenericUnoController::isCommandEnabled: Empty command url!" );
     sal_Bool bIsEnabled = sal_False;
-    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( _rCommand.Complete );
+    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( _rCompleteCommandURL );
     if ( aIter != m_aSupportedFeatures.end() )
         bIsEnabled = isCommandEnabled( aIter->second.nFeatureId );
 
