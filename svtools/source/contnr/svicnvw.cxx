@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svicnvw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:33:39 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:29:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -393,11 +393,6 @@ void SvIconView::ViewDataInitialized( SvLBoxEntry* pEntry )
     pImp->ViewDataInitialized( pEntry );
 }
 
-SvLBoxEntry* SvIconView::GetCurEntry() const
-{
-    return pImp->GetCurEntry();
-}
-
 SvLBoxEntry* SvIconView::GetDropTarget( const Point& rPos )
 {
     return pImp->GetDropTarget( rPos );
@@ -477,6 +472,16 @@ void SvIconView::SelectAll( BOOL bSelect, BOOL )
         Select( pEntry, bSelect );
         pEntry = NextSibling( pEntry );
     }
+}
+
+void SvIconView::SetCurEntry( SvLBoxEntry* _pEntry )
+{
+    pImp->SetCursor( _pEntry );
+}
+
+SvLBoxEntry* SvIconView::GetCurEntry() const
+{
+    return pImp->GetCurEntry();
 }
 
 void SvIconView::Arrange()
