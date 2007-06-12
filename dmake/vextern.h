@@ -1,4 +1,4 @@
-/* RCS  $Id: vextern.h,v 1.4 2007-01-18 09:33:01 vg Exp $
+/* RCS  $Id: vextern.h,v 1.5 2007-06-12 06:07:16 obo Exp $
 --
 -- SYNOPSIS
 --      Global variable declarations.
@@ -40,6 +40,7 @@ extern  char**  Rule_tab;   /* Builtin rules */
 EXTERN  int Line_number;    /* Current line number in make file parse */
 EXTERN  t_attr  Glob_attr;  /* Global attrs to control global ops     */
 EXTERN  char*   Makedir;    /* pointer to macro value for MAKEDIR     */
+EXTERN  char*   Makedir_macval; /* value of MAKEDIR (for .WINPATH)        */
 EXTERN  char*   Shell;      /* pointer to macro value for SHELL       */
 EXTERN  char*   Shell_flags;    /* pointer to macro value for SHELLFLAGS  */
 EXTERN  char*   GShell;     /* pointer to macro value for GROUPSHELL  */
@@ -49,8 +50,10 @@ EXTERN  char*   Grp_suff;   /* pointer to macro value for GROUPSUFFIX */
 EXTERN  char*   DirSepStr;  /* pointer to macro value for DIRSEPSTR   */
 EXTERN  char*   AbsPname;   /* pointer to macro value for ABSMAKECMD  */
 EXTERN  char*   Pname;      /* dmake process invoke name              */
-EXTERN  char*   Pwd;        /* current working dir, value of PWD      */
+EXTERN  char*   Pwd;        /* current working dir                    */
+EXTERN  char*   Pwd_macval; /* value of PWD (for .WINPATH)            */
 EXTERN  char*   Tmd;        /* path to directory where dmake started  */
+EXTERN  char*   Tmd_macval; /* value of TMD (for .WINPATH)            */
 EXTERN  char*   Spacechar;  /* pointer to macro value for SPACECHAR   */
 EXTERN  char*   Keep_state; /* current .KEEP_STATE file       */
 EXTERN  char*   Escape_char;    /* Current escape character               */
@@ -68,7 +71,13 @@ EXTERN  int     Prep;       /* Value of macro PREP            */
 EXTERN  int Def_targets;    /* TRUE if defining targets - Only used   *
                  * in Def_cell().             */
 EXTERN  int Skip_to_eof;    /* TRUE if asked to skip to eof on input  */
-EXTERN  int     NameMax;        /* The value of NAMEMAX                   */
+EXTERN  int NameMax;    /* The value of NAMEMAX                   */
+EXTERN  int UseWinpath; /* True if .WINPATH is set for currently  *
+                 * made target.                           */
+#if __CYGWIN__
+EXTERN  char*   CygDrvPre;      /* Drive prefix used by cygwin            */
+EXTERN  int     CygDrvPreLen;   /* Drive prefix length used by cygwin     */
+#endif
 
 
 EXTERN  CELLPTR Root;       /* Root of the make graph (.ROOT)     */
@@ -83,7 +92,9 @@ EXTERN  int zerofd;         /* File descriptor for /dev/null          */
 EXTERN  int Doing_bang; /* TRUE if target timestamp needs not to be
                  * updated immediately. */
 EXTERN  int Packed_shell;   /* TRUE if packed args to use a shell     */
+#if defined(MSDOS)
 EXTERN  int Swap_on_exec;   /* TRUE if going to swap on exec call     */
+#endif
 EXTERN  int State;      /* parser state               */
 EXTERN  int Group;      /* parsing a group recipe ==> TRUE        */
 
