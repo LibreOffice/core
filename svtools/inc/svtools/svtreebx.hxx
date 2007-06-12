@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtreebx.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:38:57 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:28:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -327,8 +327,6 @@ public:
     using Window::SetCursor;
     void            SetCursor( SvLBoxEntry* pEntry, BOOL bForceNoSelect = FALSE );
 
-    SvLBoxEntry*    GetCurEntry() const;
-    void            SetCurEntry( SvLBoxEntry* );
     SvLBoxEntry*    GetEntry( const Point& rPos, BOOL bHit = FALSE ) const;
     SvLBoxEntry*    GetEntry( SvLBoxEntry* pParent, ULONG nPos ) const { return SvLBox::GetEntry(pParent,nPos); }
     SvLBoxEntry*    GetEntry( ULONG nRootPos ) const { return SvLBox::GetEntry(nRootPos);}
@@ -350,16 +348,14 @@ public:
     void            SetAddMode( BOOL bAdd );
     BOOL            IsAddMode() const;
 
-    using SvListView::Expand;
-    BOOL            Expand( SvLBoxEntry* pParent );
-    using SvListView::Collapse;
-    BOOL            Collapse( SvLBoxEntry* pParent );
-    using SvListView::Select;
-    BOOL            Select( SvLBoxEntry* pEntry, BOOL bSelect=TRUE );
-    using SvListView::SelectChilds;
-    ULONG           SelectChilds( SvLBoxEntry* pParent, BOOL bSelect );
-    using SvListView::SelectAll;
+    virtual BOOL    Expand( SvLBoxEntry* pParent );
+    virtual BOOL    Collapse( SvLBoxEntry* pParent );
+    virtual BOOL    Select( SvLBoxEntry* pEntry, BOOL bSelect=TRUE );
+    virtual ULONG   SelectChilds( SvLBoxEntry* pParent, BOOL bSelect );
     virtual void    SelectAll( BOOL bSelect, BOOL bPaint = TRUE );
+    virtual void    SetCurEntry( SvLBoxEntry* _pEntry );
+    virtual SvLBoxEntry*
+                    GetCurEntry() const;
 
     using Window::Invalidate;
     virtual void    Invalidate( USHORT nFlags = 0);
@@ -424,6 +420,13 @@ public:
 
     /** Enables, that one cell of a tablistbox entry can be focused */
     void                EnableCellFocus();
+
+protected:
+    using SvListView::Expand;
+    using SvListView::Collapse;
+    using SvListView::Select;
+    using SvListView::SelectChilds;
+    using SvListView::SelectAll;
 };
 
 #endif

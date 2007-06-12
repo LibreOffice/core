@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svlbox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:36:56 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:28:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@
 #endif
 #ifndef _ACCEL_HXX
 #include <vcl/accel.hxx>
+#endif
+#ifndef VCL_MNEMONICENGINE_HXX
+#include <vcl/mnemonicengine.hxx>
 #endif
 #ifndef _GEN_HXX
 #include <tools/gen.hxx>
@@ -271,16 +274,23 @@ DECLARE_SVTREELIST(SvLBoxTreeList, SvLBoxEntry*)
 #define SVLBOX_TARGEMPH_VIS     0x0010
 #define SVLBOX_EDTEND_CALLED    0x0020
 
+class SvLBox;
 struct SvLBox_Impl
 {
-    bool    m_bIsEmptyTextAllowed;
-    Link*   m_pLink;
+    bool                    m_bIsEmptyTextAllowed;
+    bool                    m_bEntryMnemonicsEnabled;
+    Link*                   m_pLink;
+    ::vcl::MnemonicEngine   m_aMnemonicEngine;
 
-    SvLBox_Impl() : m_bIsEmptyTextAllowed( true ), m_pLink( NULL ) {}
+    SvLBox_Impl( SvLBox& _rBox );
 };
 
-class SVT_DLLPUBLIC SvLBox : public Control, public SvListView,
-                public DropTargetHelper, public DragSourceHelper
+class SVT_DLLPUBLIC SvLBox
+                :public Control
+                ,public SvListView
+                ,public DropTargetHelper
+                ,public DragSourceHelper
+                ,public ::vcl::IMnemonicEntryList
 {
     friend class SvLBoxEntry;
 
@@ -372,6 +382,7 @@ protected:
     virtual void    ViewDataInitialized( SvLBoxEntry* );
 
     virtual void    Command( const CommandEvent& rCEvt );
+    virtual void    KeyInput( const KeyEvent& rKEvt );
     virtual SvLBoxEntry* GetEntry( const Point& rPos, BOOL bHit=FALSE ) const;
     virtual void    ModelHasEntryInvalidated( SvListEntry* pEntry );
 
@@ -385,6 +396,12 @@ protected:
 
     // for asynchronous D&D
     sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt, SvLBox* pSourceView );
+
+     // IMnemonicEntryList
+     virtual const void* FirstSearchEntry( String& _rEntryText );
+     virtual const void* NextSearchEntry( const void* _pCurrentSearchEntry, String& _rEntryText );
+     virtual void        SelectSearchEntry( const void* _pEntry );
+     virtual void        ExecuteSearchEntry( const void* _pEntry );
 
 public:
 
@@ -447,16 +464,51 @@ public:
     virtual void    MakeVisible( SvLBoxEntry* pEntry );
     void            Clear();
 
-    using SvListView::Expand;
+    /** enables or disables mnemonic characters in the entry texts.
+
+        If mnemonics are enabled, then entries are selected and made current when
+        there mnemonic character is pressed. If there are multiple entries with the
+        same mnemonic, the selection cycles between them.
+
+        Entries with an collapsed ancestor are not included in the calculation of
+        mnemonics. That is, if you press the accelerator key of an invisible
+        entry, then this entry is *not* selected.
+
+        Be aware that enabling mnemonics is the more expensive the more
+        entries you have in your list.
+    */
+    void            EnableEntryMnemonics( bool _bEnable = true );
+    bool            IsEntryMnemonicsEnabled() const;
+
+    /** handles the given key event.
+
+        At the moment, this merely checks for accelerator keys, if entry mnemonics
+        are enabled.
+
+        The method might come handy when you want to use keyboard acceleration
+        while the control does not have the focus.
+
+        When the key event describes the pressing of a shortcut for an entry,
+        then SelectSearchEntry resp. ExecuteSearchEntry are called.
+
+        @see IMnemonicEntryList
+        @see MnemonicEngine
+
+        @return
+            <TRUE/> if the event has been consumed, <FALSE/> otherwise.
+    */
+    bool            HandleKeyInput( const KeyEvent& rKEvt );
+
     virtual BOOL    Expand( SvLBoxEntry* pParent );
-    using SvListView::Collapse;
     virtual BOOL    Collapse( SvLBoxEntry* pParent );
-    using SvListView::Select;
     virtual BOOL    Select( SvLBoxEntry* pEntry, BOOL bSelect=TRUE );
-    using SvListView::SelectChilds;
     virtual ULONG   SelectChilds( SvLBoxEntry* pParent, BOOL bSelect );
-    using SvListView::SelectAll;
     virtual void    SelectAll( BOOL bSelect, BOOL bPaint=TRUE );
+
+    virtual void    SetCurEntry( SvLBoxEntry* _pEntry ) = 0;
+    virtual SvLBoxEntry*
+                    GetCurEntry() const = 0;
+
     // Model
     void            SetInUseEmphasis( SvLBoxEntry* pEntry, BOOL bInUse=TRUE);
     // View
@@ -538,6 +590,13 @@ public:
             The entry.
         @return  The bounding rectangle of an entry. */
     virtual Rectangle   GetBoundingRect( SvLBoxEntry* pEntry );
+
+protected:
+    using SvListView::Expand;
+    using SvListView::Collapse;
+    using SvListView::Select;
+    using SvListView::SelectChilds;
+    using SvListView::SelectAll;
 };
 
 #define SV_LBOX_DD_FORMAT "SV_LBOX_DD_FORMAT"

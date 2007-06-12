@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svicnvw.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:36:38 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:28:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,8 +205,6 @@ public:
     void            SetFont( const Font& rFont );
     void            SetDefaultFont();
 
-    SvLBoxEntry*    GetCurEntry() const;
-
     using SvLBox::GetEntry;
     SvLBoxEntry*    GetEntry( const Point& rPixPos, BOOL  ) const;
     // Gibt den naechsten ueber pCurEntry liegenden Eintrag (ZOrder)
@@ -229,6 +227,10 @@ public:
     using SvListView::Select;
     BOOL            Select( SvLBoxEntry* pEntry, BOOL bSelect=TRUE );
     void            SelectAll( BOOL bSelect, BOOL bPaint=TRUE );
+    virtual void    SetCurEntry( SvLBoxEntry* _pEntry );
+    virtual SvLBoxEntry*
+                    GetCurEntry() const;
+
     // logische Koordinaten
     void            SelectRect(
                         const Rectangle& rRect,
