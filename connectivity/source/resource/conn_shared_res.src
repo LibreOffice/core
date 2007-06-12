@@ -1,12 +1,12 @@
-﻿/*************************************************************************
+/*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: conn_shared_res.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:39:23 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:27:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,7 @@ String STR_STRING_LENGTH_EXCEEDED
 
 String STR_CANNOT_CONVERT_STRING
 {
-    Text [ en-US ] = "The string '$string$' cannot be converted using the encoding '$charset'.";
+    Text [ en-US ] = "The string '$string$' cannot be converted using the encoding '$charset$'.";
 };
 
 String STR_URI_SYNTAX_ERROR
