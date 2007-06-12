@@ -1,4 +1,4 @@
-/* RCS  $Id: getinp.c,v 1.8 2007-01-18 09:30:18 vg Exp $
+/* RCS  $Id: getinp.c,v 1.9 2007-06-12 06:05:42 obo Exp $
 --
 -- SYNOPSIS
 --      Handle reading of input.
@@ -305,10 +305,16 @@ int  keep;
            cmnd = Expand(c+2);
            cmnd[strlen(cmnd)-1] = '\0'; /* strip last newline */
            Current_target = Root;
+#if defined(MSDOS)
            Swap_on_exec = TRUE;
+#endif
            Wait_for_completion = TRUE;
            Do_cmnd(cmnd, FALSE, TRUE, Current_target, A_DEFAULT, TRUE);
+#if defined(MSDOS)
+           Swap_on_exec = FALSE;
+#endif
            Wait_for_completion = FALSE;
+           FREE(cmnd);
         }
 
         *c = '\0';               /* a true comment so break */
