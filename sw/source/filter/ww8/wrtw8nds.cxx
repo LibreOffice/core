@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-07 16:46:19 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:55:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -543,8 +543,11 @@ void WW8_SwAttrIter::OutAttr(xub_StrLen nSwPos)
     //The hard formatting properties that affect the entire paragraph
     if (rNd.HasSwAttrSet())
     {
-        aExportSet.Set(rNd.GetSwAttrSet());
-        const SvxFontItem &rNdFont = ItemGet<SvxFontItem>(aExportSet, nFontId);
+        BOOL bDeep = FALSE;
+        // only copy hard attributes - bDeep = false
+        aExportSet.Set(rNd.GetSwAttrSet(), bDeep);
+        // get the current font item. Use rNd.GetSwAttrSet instead of aExportSet:
+        const SvxFontItem &rNdFont = ItemGet<SvxFontItem>(rNd.GetSwAttrSet(), nFontId);
         pFont = &rNdFont;
         aExportSet.ClearItem(nFontId);
     }
