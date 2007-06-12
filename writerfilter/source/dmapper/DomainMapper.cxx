@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: os $ $Date: 2007-06-06 06:33:22 $
+ *  last change: $Author: os $ $Date: 2007-06-12 05:40:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,7 @@
 #ifndef _COM_SUN_STAR_TEXT_WRITINGMODE_HPP_
 #include <com/sun/star/text/WritingMode.hpp>
 #endif
+#include <com/sun/star/text/XFootnote.hpp>
 #ifndef _COM_SUN_STAR_STYLE_NUMBERINGTYPE_HPP_
 #include <com/sun/star/style/NumberingType.hpp>
 #endif
@@ -1408,7 +1409,10 @@ void DomainMapper::attribute(doctok::Id nName, doctok::Value & val)
             break;
         case NS_rtf::LN_BOOKMARKNAME:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
-            break;
+            // sStringValue contains the bookmark name
+            // if it is already known then it's time to insert the bookmark
+            m_pImpl->AddBookmark( sStringValue );
+        break;
 
         case NS_rtf::LN_LISTLEVEL:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
@@ -1544,10 +1548,14 @@ void DomainMapper::attribute(doctok::Id nName, doctok::Value & val)
             //ignored
         break;
         case NS_rtf::LN_FONT: //font of footnote symbol
-            m_pImpl->SetFootnoteFontId( nIntValue );
+            m_pImpl->GetTopContext()->SetFootnoteFontId( nIntValue );
         break;
+        case NS_ooxml::LN_CT_Sym_char:
         case NS_rtf::LN_CHAR: //footnote symbol character
-            m_pImpl->SetFootnoteSymbol( sal_Unicode(nIntValue));
+            m_pImpl->GetTopContext()->SetFootnoteSymbol( sal_Unicode(nIntValue));
+        break;
+        case NS_ooxml::LN_CT_Sym_font:
+            m_pImpl->GetTopContext()->SetFootnoteFontName( sStringValue );
         break;
         case NS_ooxml::LN_CT_Underline_val:
             handleUnderlineType(nIntValue, m_pImpl->GetTopContext());
@@ -3367,18 +3375,21 @@ void DomainMapper::text(const sal_uInt8 * data_, size_t len)
         }
         if(bContinue)
         {
-            if( m_pImpl->IsOpenFieldCommand() )
+            PropertyMapPtr pContext = m_pImpl->GetTopContext();
+            if( pContext->GetFootnote().is() )
+            {
+                if( !pContext->GetFootnoteSymbol() )
+                    pContext->GetFootnote()->setLabel( sText );
+                //otherwise ignore sText
+            }
+            else if( m_pImpl->IsOpenFieldCommand() )
                 m_pImpl->AppendFieldCommand(sText);
-//            if( m_pImpl->IsFieldMode())
-//                m_pImpl->CreateField( sText );
             else if( m_pImpl->IsOpenField() && m_pImpl->IsFieldResultAsString())
-//            else if( m_pImpl->IsFieldAvailable())
                 /*depending on the success of the field insert operation this result will be
                   set at the field or directly inserted into the text*/
                 m_pImpl->SetFieldResult( sText );
             else
             {
-                PropertyMapPtr pContext = m_pImpl->GetTopContext();
                 //--> debug
                 //sal_uInt32 nSize = pContext->size();
                 //<--
@@ -3409,11 +3420,21 @@ void DomainMapper::utext(const sal_uInt8 * data_, size_t len)
             m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH));
         else
         {
+
             PropertyMapPtr pContext = m_pImpl->GetTopContext();
-            //--> debug
-            //sal_uInt32 nSize = pContext->size();
-            //<--
-            m_pImpl->appendTextPortion( sText, pContext );
+
+            //-->debug
+            uno::Reference<text::XFootnote> xTest = pContext->GetFootnote();
+            //<--debug
+            if( xTest.is() )
+//            if( pContext->GetFootnote().is() )
+            {
+                if( !pContext->GetFootnoteSymbol() )
+                    pContext->GetFootnote()->setLabel( sText );
+                //otherwise ignore sText
+            }
+            else
+                m_pImpl->appendTextPortion( sText, pContext );
         }
     }
     catch( const uno::RuntimeException& )

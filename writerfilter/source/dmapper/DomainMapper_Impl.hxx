@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2007-06-06 06:33:22 $
+ *  last change: $Author: os $ $Date: 2007-06-12 05:40:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,13 +72,17 @@
 #ifndef INCLUDED_GRAPHICIMPORT_HXX
 #include <GraphicImport.hxx>
 #endif
+#include <map>
 
 namespace com{ namespace sun{ namespace star{
         namespace lang{
             class XMultiServiceFactory;
             struct Locale;
         }
-        namespace text{ class XTextField;}
+        namespace text
+        {
+                class XTextField;
+        }
         namespace beans{ class XPropertySet;}
 }}}
 
@@ -182,6 +186,18 @@ struct DeletableTabStop : public ::com::sun::star::style::TabStop
         TabStop( rTabStop ),
             bDeleted( false ){}
 };
+/*-- 12.06.2007 07:15:31---------------------------------------------------
+    /// helper to remember bookmark start position
+  -----------------------------------------------------------------------*/
+struct BookmarkInsertPosition
+{
+    bool                                                                    m_bIsStartOfText;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  m_xTextRange;
+    BookmarkInsertPosition(bool bIsStartOfText, ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  xTextRange):
+        m_bIsStartOfText( bIsStartOfText ),
+        m_xTextRange( xTextRange )
+     {}
+};
 /*-- 09.06.2006 10:15:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -191,6 +207,7 @@ class DomainMapper_Impl
 public:
     typedef doctok::TableManager< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >, PropertyMapPtr > TableManager_t;
     typedef doctok::TableDataHandler< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >, PropertyMapPtr > TableDataHandler_t;
+    typedef std::map < ::rtl::OUString, BookmarkInsertPosition > BookmarkMap_t;
 
 private:
     DomainMapper&                                                                   m_rDMapper;
@@ -207,6 +224,8 @@ private:
     bool                                                                            m_bFieldMode;
     bool                                                                            m_bSetUserFieldContent;
     bool                                                                            m_bIsFirstSection;
+
+    BookmarkMap_t                                                                   m_aBookmarkMap;
 
     DomainMapperTableManager m_TableManager;
 
@@ -228,9 +247,6 @@ private:
     bool                            m_bInStyleSheetImport;
 
     bool                            m_bLineNumberingSet;
-//    bool                            m_bIsFootnoteSymbol;
-    sal_Unicode                     m_cFootnoteSymbol; // 0 == invalid
-    sal_Int32                       m_nFootnoteFontId; // negative values are invalid ids
 
     void                            GetCurrentLocale(::com::sun::star::lang::Locale& rLocale);
     void                            SetNumberFormat( const ::rtl::OUString& rCommand,
@@ -344,27 +360,12 @@ public:
     //the end of field is reached (0x15 appeared) - the command might still be open
     void PopFieldContext();
 
-    //create a new field from the command string
-//    void CreateField( ::rtl::OUString& rCommand );
-    //set the field result in insert the field
-//    void SetFieldMode( bool bSet ) { m_bFieldMode = bSet; }
-//    bool IsFieldMode() const { return m_bFieldMode; }
-//    void SetFieldResult( ::rtl::OUString& rResult );
-//    bool IsFieldAvailable() const;
+    void AddBookmark( const ::rtl::OUString& rBookmarkName );
 
     TableManager_t & getTableManager() { return m_TableManager; }
 
     void SetLineNumbering( sal_Int32 nLnnMod, sal_Int32 nLnc, sal_Int32 ndxaLnn );
     bool IsLineNumberingSet() const {return m_bLineNumberingSet;}
-
-//    bool IsFootnoteSymbol() const { return m_bIsFootnoteSymbol;}
-//    void SetFootnoteSymbol() { m_bIsFootnoteSymbol = true;}
-//    void ResetFootnoteSymbol() { m_bIsFootnoteSymbol = false;}
-    sal_Unicode GetFootnoteSymbol() const { return m_cFootnoteSymbol;}
-    void        SetFootnoteSymbol(sal_Unicode cSet) { m_cFootnoteSymbol = cSet;}
-
-    sal_Int32   GetFootnoteFontId() const { return m_nFootnoteFontId;}
-    void        SetFootnoteFontId(sal_Int32 nSet) { m_nFootnoteFontId = nSet;}
 
     DeletableTabStop                m_aCurrentTabStop;
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2007-06-06 06:33:22 $
+ *  last change: $Author: os $ $Date: 2007-06-12 05:40:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -361,9 +362,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_nCurrentTabStopIndex( 0 ),
         m_sCurrentParaStyleId(),
         m_bInStyleSheetImport( false ),
-        m_bLineNumberingSet( false ),
-        m_cFootnoteSymbol( 0 ),
-        m_nFootnoteFontId( -1 )
+        m_bLineNumberingSet( false )
 {
     GetBodyText();
     uno::Reference< text::XTextAppendAndConvert > xBodyTextAppendAndConvert = uno::Reference< text::XTextAppendAndConvert >( m_xBodyText, uno::UNO_QUERY );
@@ -875,35 +874,41 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
 {
     try
     {
+        PropertyMapPtr pTopContext = GetTopContext();
         uno::Reference< text::XText > xFootnoteText( GetTextFactory()->createInstance(
             bIsFootnote ?
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Footnote") ) : ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Endnote") )),
             uno::UNO_QUERY_THROW );
-        if( m_cFootnoteSymbol != 0)
+        uno::Reference< text::XFootnote > xFootnote( xFootnoteText, uno::UNO_QUERY_THROW );
+        pTopContext->SetFootnote( xFootnote );
+        if( pTopContext->GetFootnoteSymbol() != 0)
         {
-            uno::Reference< text::XFootnote > xFootnote( xFootnoteText, uno::UNO_QUERY_THROW );
-            xFootnote->setLabel( ::rtl::OUString( m_cFootnoteSymbol ) );
+            xFootnote->setLabel( ::rtl::OUString( pTopContext->GetFootnoteSymbol() ) );
         }
         FontTablePtr pFontTable = GetFontTable();
         uno::Sequence< beans::PropertyValue > aFontProperties;
-        if( pFontTable && m_nFootnoteFontId >= 0 && pFontTable->size() > (size_t)m_nFootnoteFontId )
+        if( pFontTable && pTopContext->GetFootnoteFontId() >= 0 && pFontTable->size() > (size_t)pTopContext->GetFootnoteFontId() )
         {
-            const FontEntry* pFontEntry = pFontTable->getFontEntry(sal_uInt32(m_nFootnoteFontId));
+            const FontEntry* pFontEntry = pFontTable->getFontEntry(sal_uInt32(pTopContext->GetFootnoteFontId()));
             PropertyMapPtr aFontProps( new PropertyMap );
             aFontProps->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( pFontEntry->sFontName  ));
             aFontProps->Insert(PROP_CHAR_FONT_CHAR_SET, uno::makeAny( (sal_Int16)pFontEntry->nTextEncoding  ));
             aFontProps->Insert(PROP_CHAR_FONT_PITCH, uno::makeAny( pFontEntry->nPitchRequest  ));
             aFontProperties = aFontProps->GetPropertyValues();
         }
+        else if(pTopContext->GetFootnoteFontName().getLength())
+        {
+            PropertyMapPtr aFontProps( new PropertyMap );
+            aFontProps->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( pTopContext->GetFootnoteFontName()  ));
+            aFontProperties = aFontProps->GetPropertyValues();
+        }
+
         appendTextContent( uno::Reference< text::XTextContent >( xFootnoteText, uno::UNO_QUERY_THROW ), aFontProperties );
         m_aTextAppendStack.push(uno::Reference< text::XTextAppendAndConvert >( xFootnoteText, uno::UNO_QUERY_THROW ));
     }
     catch( uno::Exception& )
     {
     }
-    //reset footnote properties
-    m_nFootnoteFontId = -1;
-    m_cFootnoteSymbol = 0;
 }
 /*-- 24.05.2007 14:22:29---------------------------------------------------
 
@@ -2730,23 +2735,51 @@ void DomainMapper_Impl::PopFieldContext()
     //remove the field context
     m_aFieldStack.pop();
 }
-/*-- 18.09.2006 15:47:09---------------------------------------------------
-    the string _can_ be quoted or not be available at all
+/*-- 11.06.2007 16:19:00---------------------------------------------------
+
   -----------------------------------------------------------------------*/
-//void DomainMapper_Impl::ExtractAndSetDocumentInfo(
-//        const ::rtl::OUString& rCommand, sal_Int32 nCommandLength, PropertyIds ePropId )
-//{
-//    ::rtl::OUString sParam = lcl_ExtractParameter( rCommand, nCommandLength );
-//    if( sParam.getLength() )
-//    {
-//        uno::Reference< document::XDocumentInfoSupplier > xInfoSupplier( m_xTextDocument, uno::UNO_QUERY_THROW );
-//        uno::Reference< beans::XPropertySet > xInfoPropSet( xInfoSupplier->getDocumentInfo(), uno::UNO_QUERY_THROW );
-//        xInfoPropSet->setPropertyValue(
-//                PropertyNameSupplier::GetPropertyNameSupplier().GetName(ePropId), uno::makeAny( sParam ));
-//    }
+void DomainMapper_Impl::AddBookmark( const ::rtl::OUString& rBookmarkName )
+{
+    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top();
+    BookmarkMap_t::iterator aBookmarkIter = m_aBookmarkMap.find( rBookmarkName );
+    //is the bookmark name already registered?
+    try
+    {
+        if( aBookmarkIter != m_aBookmarkMap.end() )
+        {
+            static const rtl::OUString sBookmarkService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Bookmark"));
+            uno::Reference< text::XTextContent > xBookmark( m_xTextFactory->createInstance( sBookmarkService ), uno::UNO_QUERY_THROW );
+            uno::Reference< text::XTextCursor > xCursor;
+            uno::Reference< text::XText > xText = aBookmarkIter->second.m_xTextRange->getText();
+            if( aBookmarkIter->second.m_bIsStartOfText )
+                xCursor = xText->createTextCursorByRange( xText->getStart() );
+            else
+            {
+                xCursor = xText->createTextCursorByRange( aBookmarkIter->second.m_xTextRange );
+                xCursor->goRight( 1, false );
+            }
 
-//}
-
+            xCursor->gotoRange( xTextAppendAndConvert->getEnd(), true );
+            uno::Reference< container::XNamed > xBkmNamed( xBookmark, uno::UNO_QUERY_THROW );
+            //todo: make sure the name is not used already!
+            xBkmNamed->setName( rBookmarkName );
+            xTextAppendAndConvert->insertTextContent( uno::Reference< text::XTextRange >( xCursor, uno::UNO_QUERY_THROW), xBookmark, !xCursor->isCollapsed() );
+            m_aBookmarkMap.erase( aBookmarkIter );
+        }
+        else
+        {
+            //otherwise insert a text range as marker
+            uno::Reference< text::XTextCursor > xCursor = xTextAppendAndConvert->createTextCursorByRange( xTextAppendAndConvert->getEnd() );
+            bool bIsStart = !xCursor->goLeft(1, false);
+            uno::Reference< text::XTextRange > xCurrent = xCursor->getStart();
+            m_aBookmarkMap.insert(BookmarkMap_t::value_type( rBookmarkName, BookmarkInsertPosition( bIsStart, xCurrent ) ));
+        }
+    }
+    catch( const uno::Exception& )
+    {
+        //TODO: What happens to bookmarks where start and end are at different XText objects?
+    }
+}
 /*-- 01.11.2006 14:57:44---------------------------------------------------
 
   -----------------------------------------------------------------------*/
