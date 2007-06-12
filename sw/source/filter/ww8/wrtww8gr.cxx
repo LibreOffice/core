@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:10:11 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:56:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -438,13 +438,36 @@ void SwWW8Writer::OutGrf(const sw::Frame &rFrame)
     pChpPlc->AppendFkpEntry( pStrm->Tell(), pO->Count(), pO->GetData() );
     pO->Remove( 0, pO->Count() );                   // leeren
 
+    // --> OD 2007-06-06 #i29408#
+    // linked, as-character anchored graphics have to be exported as fields.
+    const SwGrfNode* pGrfNd = rFrame.IsInline() && rFrame.GetContent()
+                              ? rFrame.GetContent()->GetGrfNode() : 0;
+    if ( pGrfNd && pGrfNd->IsLinkedFile() )
+    {
+        String sStr( FieldString(ww::eINCLUDEPICTURE) );
+        sStr.APPEND_CONST_ASC(" \"");
+        {
+            if ( pGrfNd )
+            {
+                String aFileURL;
+                pGrfNd->GetFileFilterNms( &aFileURL, 0 );
+                sStr += aFileURL;
+            }
+        }
+        sStr.APPEND_CONST_ASC("\" \\d");
+
+        OutField( 0, ww::eINCLUDEPICTURE, sStr,
+                   WRITEFIELD_START | WRITEFIELD_CMD_START | WRITEFIELD_CMD_END );
+    }
+    // <--
+
     WriteChar( (char)1 );   // Grafik-Sonderzeichen in Haupttext einfuegen
 
     BYTE aArr[ 18 ];
     BYTE* pArr = aArr;
 
     const SwFrmFmt &rFlyFmt = rFrame.GetFrmFmt();
-    RndStdIds eAn = rFlyFmt.GetAttrSet().GetAnchor(false).GetAnchorId();
+    const RndStdIds eAn = rFlyFmt.GetAttrSet().GetAnchor(false).GetAnchorId();
     if( eAn == FLY_IN_CNTNT )
     {
         SwVertOrient eVert = rFlyFmt.GetVertOrient().GetVertOrient();
@@ -523,6 +546,13 @@ void SwWW8Writer::OutGrf(const sw::Frame &rFrame)
         pPapPlc->AppendFkpEntry( pStrm->Tell(), pO->Count(), pO->GetData() );
         pO->Remove( 0, pO->Count() );                   // leeren
     }
+    // --> OD 2007-06-06 #i29408#
+    // linked, as-character anchored graphics have to be exported as fields.
+    else if ( pGrfNd && pGrfNd->IsLinkedFile() )
+    {
+        OutField( 0, ww::eINCLUDEPICTURE, String(), WRITEFIELD_CLOSE );
+    }
+    // <--
 }
 
 GraphicDetails& GraphicDetails::operator=(const GraphicDetails &rOther)
@@ -699,17 +729,16 @@ void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
 {
     if (rGrfNd.IsLinkedFile())     // Linked File
     {
-        String aFileN, aFiltN;
-        UINT16 mm;
-        rGrfNd.GetFileFilterNms( &aFileN, &aFiltN );
+        String aFileN;
+        rGrfNd.GetFileFilterNms( &aFileN, 0 );
 
-        aFileN = URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(),
-                                          aFileN);
-
-
-        INetURLObject aUrl( aFileN );
-        if( aUrl.GetProtocol() == INET_PROT_FILE )
-            aFileN = aUrl.PathToFileName();
+        // --> OD 2007-06-06 #i29408# - take the file URL as it is.
+//        aFileN = URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(),
+//                                          aFileN);
+//        INetURLObject aUrl( aFileN );
+//        if( aUrl.GetProtocol() == INET_PROT_FILE )
+//            aFileN = aUrl.PathToFileName();
+        // <--
 
 //JP 05.12.98: nach einigen tests hat sich gezeigt, das WW mit 99 nicht
 //              klarkommt. Sie selbst schreiben aber bei Verknuepfunfen,
@@ -718,7 +747,7 @@ void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
 //      if ( COMPARE_EQUAL == aFiltN.ICompare( "TIF", 3 ) )
 //          mm = 99;                    // 99 = TIFF
 //      else
-            mm = 94;                    // 94 = BMP, GIF
+            UINT16 mm = 94;                    // 94 = BMP, GIF
 
         WritePICFHeader(rStrm, rFly, mm, nWidth, nHeight,
             rGrfNd.GetpSwAttrSet());
@@ -870,6 +899,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
         break;
         case sw::Frame::eDrawing:
         case sw::Frame::eTxtBox:
+        case sw::Frame::eFormControl:
             ASSERT(rWrt.bWrtWW8,
                 "You can't try and export these in WW8 format, a filter bug");
             /*
