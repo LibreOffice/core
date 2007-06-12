@@ -1,4 +1,4 @@
-/* RCS  $Id: dmake.h,v 1.6 2007-01-18 09:29:28 vg Exp $
+/* RCS  $Id: dmake.h,v 1.7 2007-06-12 06:04:58 obo Exp $
 --
 -- SYNOPSIS
 --      Global defines for dmake.
@@ -89,7 +89,10 @@
 #define A_WFC              A_SEQ
 #define A_SETDIR         0x00400        /* cd to dir when making target */
 #define A_SHELL          0x00800        /* run the recipe using a shell */
-#define A_SWAP           0x01000        /* swap on exec.                */
+#define A_SWAP           0x01000        /* Use swap on MSDOS            */
+/* Reuse A_SWAP for the .WINPATH attribute to convert cygwin POSIX paths
+ * into DOS style paths. */
+#define A_WINPATH        0x01000        /* Enable dos paths on cygwin   */
 #define A_MKSARGS        0x02000        /* use MKS argument swapping    */
 #define A_PHONY          0x04000        /* .PHONY attribute             */
 #define A_NOSTATE        0x08000        /* don't track state for me     */
