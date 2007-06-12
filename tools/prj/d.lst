@@ -1,13 +1,9 @@
 mkdir: %_DEST%\inc%_EXT%\bootstrp
-mkdir: %_DEST%\inc%_EXT%\tools
 
 ..\%__SRC%\misc\_ooo_st_btstrp.pdb %_DEST%\lib%_EXT%\_ooo_st_btstrp.pdb
-..\%__SRC%\bin\testshl.exe %_DEST%\bin%_EXT%\testshl.exe
-..\%__SRC%\bin\soagent.dll %_DEST%\bin%_EXT%\soagent.dll
 ..\%__SRC%\bin\mkunroll* %_DEST%\bin%_EXT%
 ..\%__SRC%\bin\tl?????.dll %_DEST%\bin%_EXT%\tl?????.dll
 ..\%__SRC%\bin\tl?????.sym %_DEST%\bin%_EXT%\tl?????.sym
-..\%__SRC%\bin\wps?????.dll %_DEST%\bin%_EXT%\wps?????.dll
 ..\%__SRC%\lib\atools.lib %_DEST%\lib%_EXT%\atools.lib
 ..\%__SRC%\lib\btstrp.lib %_DEST%\lib%_EXT%\btstrp.lib
 ..\%__SRC%\lib\bootstrp2.lib %_DEST%\lib%_EXT%\bootstrp2.lib
@@ -18,11 +14,8 @@ mkdir: %_DEST%\inc%_EXT%\tools
 ..\%__SRC%\lib\lib*.so.* %_DEST%\lib%_EXT%\lib*.so.*
 ..\%__SRC%\lib\lib*.dylib %_DEST%\lib%_EXT%\lib*.dylib
 ..\%__SRC%\lib\stdstrm.lib %_DEST%\lib%_EXT%\stdstrm.lib
-..\%__SRC%\lib\tools.lib %_DEST%\lib%_EXT%\tools.lib
 ..\%__SRC%\misc\tl?????.map %_DEST%\bin%_EXT%\tl?????.map
 ..\%__SRC%\slb\btstrpsh.lib %_DEST%\lib%_EXT%\btstrpsh.lib
-..\%__SRC%\lib\tstutil.lib %_DEST%\lib%_EXT%\tstutil.lib
-
 
 ..\inc\bootstrp\appdef.hxx %_DEST%\inc%_EXT%\bootstrp\appdef.hxx
 ..\inc\bootstrp\command.hxx %_DEST%\inc%_EXT%\bootstrp\command.hxx
@@ -65,9 +58,6 @@ mkdir: %_DEST%\inc%_EXT%\tools
 ..\inc\tools\inetmime.hxx %_DEST%\inc%_EXT%\tools\inetmime.hxx
 ..\inc\tools\inetmsg.hxx %_DEST%\inc%_EXT%\tools\inetmsg.hxx
 ..\inc\tools\inetstrm.hxx %_DEST%\inc%_EXT%\tools\inetstrm.hxx
-..\inc\tools\mslangid.hxx %_DEST%\inc%_EXT%\tools\mslangid.hxx
-..\inc\tools\isolang.hxx %_DEST%\inc%_EXT%\tools\isolang.hxx
-..\inc\tools\lang.hxx %_DEST%\inc%_EXT%\tools\lang.hxx
 ..\inc\tools\link.hxx %_DEST%\inc%_EXT%\tools\link.hxx
 ..\inc\tools\list.hxx %_DEST%\inc%_EXT%\tools\list.hxx
 ..\inc\tools\mempool.hxx %_DEST%\inc%_EXT%\tools\mempool.hxx
@@ -88,9 +78,7 @@ mkdir: %_DEST%\inc%_EXT%\tools
 ..\inc\tools\shl.hxx %_DEST%\inc%_EXT%\tools\shl.hxx
 ..\inc\tools\simplerm.hxx %_DEST%\inc%_EXT%\tools\simplerm.hxx
 ..\inc\tools\solar.h %_DEST%\inc%_EXT%\tools\solar.h
-..\inc\tools\solmath.hxx %_DEST%\inc%_EXT%\tools\solmath.hxx
 ..\inc\tools\stack.hxx %_DEST%\inc%_EXT%\tools\stack.hxx
-..\inc\tools\stdstrm.hxx %_DEST%\inc%_EXT%\tools\stdstrm.hxx
 ..\inc\tools\stream.hxx %_DEST%\inc%_EXT%\tools\stream.hxx
 ..\inc\tools\string.hxx %_DEST%\inc%_EXT%\tools\string.hxx
 ..\inc\tools\svwin.h %_DEST%\inc%_EXT%\tools\svwin.h
@@ -106,11 +94,8 @@ mkdir: %_DEST%\inc%_EXT%\tools
 ..\inc\tools\wldcrd.hxx %_DEST%\inc%_EXT%\tools\wldcrd.hxx
 ..\inc\tools\zcodec.hxx %_DEST%\inc%_EXT%\tools\zcodec.hxx
 ..\inc\tools\tempfile.hxx %_DEST%\inc%_EXT%\tools\tempfile.hxx
-..\inc\tools\l2txtenc.hxx %_DEST%\inc%_EXT%\tools\l2txtenc.hxx
 ..\inc\tools\geninfo.hxx %_DEST%\inc%_EXT%\tools\geninfo.hxx
 ..\inc\tools\iparser.hxx %_DEST%\inc%_EXT%\tools\iparser.hxx
-..\inc\tools\iclient.hxx %_DEST%\inc%_EXT%\tools\iclient.hxx
-..\inc\tools\tcpcon.hxx %_DEST%\inc%_EXT%\tools\tcpcon.hxx
 ..\inc\tools\config.hxx %_DEST%\inc%_EXT%\tools\config.hxx
 ..\inc\tools\resary.hxx %_DEST%\inc%_EXT%\tools\resary.hxx
 ..\inc\tools\poly.hxx %_DEST%\inc%_EXT%\tools\poly.hxx
