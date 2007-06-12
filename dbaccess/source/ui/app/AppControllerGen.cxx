@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:46:56 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:32:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_MNEMONIC_HXX
+#include <vcl/mnemonic.hxx>
 #endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
@@ -645,7 +648,23 @@ void OApplicationController::onLoadedMenu(const Reference< ::com::sun::star::fra
         _xLayoutManager->requestElement( s_sStatusbar );
 
         if ( getContainer() )
-            getContainer()->createIconAutoMnemonics();
+        {
+            // we need to share the "mnemonic space":
+            MnemonicGenerator aMnemonicGenerator;
+            // - the menu already has mnemonics
+            SystemWindow* pSystemWindow = getContainer()->GetSystemWindow();
+            MenuBar* pMenu = pSystemWindow ? pSystemWindow->GetMenuBar() : NULL;
+            if ( pMenu )
+            {
+                USHORT nMenuItems = pMenu->GetItemCount();
+                for ( USHORT i = 0; i < nMenuItems; ++i )
+                    aMnemonicGenerator.RegisterMnemonic( pMenu->GetItemText( pMenu->GetItemId( i ) ) );
+            }
+            // - the icons should use automatic ones
+            getContainer()->createIconAutoMnemonics( aMnemonicGenerator );
+            // - as well as the entries in the task pane
+            getContainer()->setTaskExternalMnemonics( aMnemonicGenerator );
+        }
 
         Execute( SID_DB_APP_VIEW_FORMS, Sequence< PropertyValue >() );
         InvalidateAll();
