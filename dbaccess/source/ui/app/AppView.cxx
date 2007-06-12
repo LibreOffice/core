@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppView.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:17:43 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:33:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePrev
 
     m_pPanel = new OTitleWindow(this,STR_DATABASE,WB_BORDER | WB_DIALOGCONTROL ,FALSE);
     m_pPanel->SetBorderStyle(WINDOW_BORDER_MONO);
-    OApplicationSwapWindow* pSwap = new OApplicationSwapWindow(m_pPanel,this);
+    OApplicationSwapWindow* pSwap = new OApplicationSwapWindow( m_pPanel, *this );
     pSwap->Show();
     pSwap->SetUniqueId(UID_APP_SWAP_VIEW);
 
@@ -249,9 +249,23 @@ void OAppBorderWindow::ImplInitSettings()
     SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );*/
 }
 // -----------------------------------------------------------------------------
-OApplicationView*       OAppBorderWindow::getView()         const { return m_pView; }
-OApplicationSwapWindow* OAppBorderWindow::getPanel()        const { return static_cast<OApplicationSwapWindow*>(m_pPanel->getChildWindow()); }
-OApplicationDetailView* OAppBorderWindow::getDetailView()   const { return m_pDetailView; }
+OApplicationView* OAppBorderWindow::getView() const
+{
+    return m_pView;
+}
+
+// -----------------------------------------------------------------------------
+OApplicationSwapWindow* OAppBorderWindow::getPanel() const
+{
+    return static_cast< OApplicationSwapWindow* >( m_pPanel->getChildWindow() );
+}
+
+// -----------------------------------------------------------------------------
+OApplicationDetailView* OAppBorderWindow::getDetailView() const
+{
+    return m_pDetailView;
+}
+
 //==================================================================
 // class OApplicationView
 //==================================================================
@@ -306,10 +320,17 @@ OApplicationView::~OApplicationView()
     m_pElementNotification = NULL;
 }
 // -----------------------------------------------------------------------------
-void OApplicationView::createIconAutoMnemonics()
+void OApplicationView::createIconAutoMnemonics( MnemonicGenerator& _rMnemonics )
 {
     if ( m_pWin && m_pWin->getPanel() )
-        m_pWin->getPanel()->createIconAutoMnemonics();
+        m_pWin->getPanel()->createIconAutoMnemonics( _rMnemonics );
+}
+
+// -----------------------------------------------------------------------------
+void OApplicationView::setTaskExternalMnemonics( MnemonicGenerator& _rMnemonics )
+{
+    if ( m_pWin && m_pWin->getDetailView() )
+        m_pWin->getDetailView()->setTaskExternalMnemonics( _rMnemonics );
 }
 
 // -----------------------------------------------------------------------------
@@ -359,6 +380,10 @@ long OApplicationView::PreNotify( NotifyEvent& rNEvt )
             // give the pane the chance to intercept mnemonic accelerators
             // #i34790# - 2004-09-30 - fs@openoffice.org
             if ( getPanel() && getPanel()->interceptKeyInput( *pKeyEvent ) )
+                return 1L;
+            // and ditto the detail view
+            // #i72799# - 2006-12-20 / frank.schoenheit@sun.com
+            if ( getDetailView() && getDetailView()->interceptKeyInput( *pKeyEvent ) )
                 return 1L;
         }
         break;
