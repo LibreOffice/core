@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 10:43:21 $
+ *  last change: $Author: os $ $Date: 2007-06-12 05:41:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,9 @@ namespace dmapper{
 /*-- 21.06.2006 09:30:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-PropertyMap::PropertyMap()
+PropertyMap::PropertyMap() :
+    m_cFootnoteSymbol( 0 ),
+    m_nFootnoteFontId( -1 )
 {
 }
 /*-- 21.06.2006 09:30:56---------------------------------------------------
@@ -168,6 +170,13 @@ void PropertyMap::insert( PropertyMapPtr pMap, bool bOverwrite )
             ::std::for_each( pMap->begin(), pMap->end(), removeExistingElements<PropertyMap::value_type>(*this) );
         _PropertyMap::insert(pMap->begin(), pMap->end());
     }
+}
+/*-- 06.06.2007 15:49:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+const uno::Reference< text::XFootnote>&  PropertyMap::GetFootnote() const
+{
+    return m_xFootnote;
 }
 /*-- 24.07.2006 08:29:01---------------------------------------------------
 

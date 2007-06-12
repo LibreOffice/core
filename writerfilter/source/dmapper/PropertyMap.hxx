@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2007-05-24 11:33:45 $
+ *  last change: $Author: os $ $Date: 2007-06-12 05:41:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@ namespace com{namespace sun{namespace star{
     namespace text{
         class XTextRange;
         class XTextColumns;
+        class XFootnote;
     }
     namespace table{
         struct BorderLine;
@@ -92,6 +93,12 @@ typedef std::map < ::rtl::OUString, ::com::sun::star::uno::Any > _PropertyMap;
 class PropertyMap : public _PropertyMap
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aValues;
+    //marks context as footnote context - ::text( ) events contain either the footnote character or can be ignored
+    //depending on sprmCSymbol
+    sal_Unicode                                                                 m_cFootnoteSymbol; // 0 == invalid
+    sal_Int32                                                                   m_nFootnoteFontId; // negative values are invalid ids
+    ::rtl::OUString                                                             m_sFootnoteFontName;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote >       m_xFootnote;
 
     public:
         PropertyMap();
@@ -109,6 +116,18 @@ class PropertyMap : public _PropertyMap
             if(m_aValues.getLength())
                 m_aValues.realloc( 0 );
         }
+
+    const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote>&  GetFootnote() const;
+    void SetFootnote( ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote> xF ) { m_xFootnote = xF; }
+
+    sal_Unicode GetFootnoteSymbol() const { return m_cFootnoteSymbol;}
+    void        SetFootnoteSymbol(sal_Unicode cSet) { m_cFootnoteSymbol = cSet;}
+
+    sal_Int32   GetFootnoteFontId() const { return m_nFootnoteFontId;}
+    void        SetFootnoteFontId(sal_Int32 nSet) { m_nFootnoteFontId = nSet;}
+
+    const ::rtl::OUString&      GetFootnoteFontName() const { return m_sFootnoteFontName;}
+    void                        SetFootnoteFontName( const ::rtl::OUString& rSet ) { m_sFootnoteFontName = rSet;}
 };
 typedef boost::shared_ptr<PropertyMap>  PropertyMapPtr;
 
