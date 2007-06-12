@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-04 14:03:02 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:56:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -650,7 +650,10 @@ public:
 
     void ExportOutlineNumbering(BYTE nLvl, const SwNumFmt &rNFmt,
         const SwFmt &rFmt);
-    void DisallowInheritingOutlineNumbering(const SwFmt &rFmt);
+    // --> OD 2007-06-04 #i77805#
+    // new return value indicates, if an inherited outline numbering is suppressed
+    bool DisallowInheritingOutlineNumbering(const SwFmt &rFmt);
+    // <--
 
     unsigned int GetHdFtIndex() const { return mnHdFtIndex; }
     void SetHdFtIndex(unsigned int nHdFtIndex) { mnHdFtIndex = nHdFtIndex; }
