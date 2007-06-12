@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:34:48 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:29:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,9 @@
 #endif
 #ifndef _SV_ACCEL_HXX
 #include <vcl/accel.hxx>
+#endif
+#ifndef _VCL_I18NHELP_HXX
+#include <vcl/i18nhelp.hxx>
 #endif
 #ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
@@ -704,11 +707,21 @@ SvViewDataEntry::~SvViewDataEntry()
 }
 
 // ***************************************************************
+// struct SvLBox_Impl
+// ***************************************************************
+SvLBox_Impl::SvLBox_Impl( SvLBox& _rBox )
+    :m_bIsEmptyTextAllowed( true )
+    ,m_bEntryMnemonicsEnabled( false )
+    ,m_pLink( NULL )
+    ,m_aMnemonicEngine( _rBox )
+{
+}
+
+// ***************************************************************
 // class SvLBox
 // ***************************************************************
 
 DBG_NAME(SvLBox);
-
 
 SvLBox::SvLBox( Window* pParent, WinBits nWinStyle  ) :
     Control( pParent, nWinStyle | WB_CLIPCHILDREN ),
@@ -720,7 +733,7 @@ SvLBox::SvLBox( Window* pParent, WinBits nWinStyle  ) :
     nImpFlags = 0;
     pTargetEntry = 0;
     nDragDropMode = 0;
-    pLBoxImpl = new SvLBox_Impl;
+    pLBoxImpl = new SvLBox_Impl( *this );
     SvLBoxTreeList* pTempModel = new SvLBoxTreeList;
     pTempModel->SetRefCount( 0 );
     SetModel( pTempModel );
@@ -745,7 +758,7 @@ SvLBox::SvLBox( Window* pParent, const ResId& rResId ) :
     pTargetEntry = 0;
     nImpFlags = 0;
     nWindowStyle = 0;
-    pLBoxImpl = new SvLBox_Impl;
+    pLBoxImpl = new SvLBox_Impl( *this );
     nDragOptions = DND_ACTION_COPYMOVE | DND_ACTION_LINK;
     nDragDropMode = 0;
     SvLBoxTreeList* pTempModel = new SvLBoxTreeList;
@@ -813,6 +826,19 @@ void SvLBox::Clear()
     pModel->Clear();  // Model ruft SvLBox::ModelHasCleared() auf
 }
 
+void SvLBox::EnableEntryMnemonics( bool _bEnable )
+{
+    if ( _bEnable == IsEntryMnemonicsEnabled() )
+        return;
+
+    pLBoxImpl->m_bEntryMnemonicsEnabled = _bEnable;
+    Invalidate();
+}
+
+bool SvLBox::IsEntryMnemonicsEnabled() const
+{
+    return pLBoxImpl->m_bEntryMnemonicsEnabled;
+}
 
 USHORT SvLBox::IsA()
 {
@@ -1524,6 +1550,71 @@ void SvLBox::MakeVisible( SvLBoxEntry* )
 void SvLBox::Command( const CommandEvent& )
 {
     DBG_CHKTHIS(SvLBox,0);
+}
+
+void SvLBox::KeyInput( const KeyEvent& rKEvt )
+{
+    bool bHandled = HandleKeyInput( rKEvt );
+    if ( !bHandled )
+        Control::KeyInput( rKEvt );
+}
+
+const void* SvLBox::FirstSearchEntry( String& _rEntryText )
+{
+    SvLBoxEntry* pEntry = GetCurEntry();
+    if ( pEntry )
+        pEntry = const_cast< SvLBoxEntry* >( static_cast< const SvLBoxEntry* >( NextSearchEntry( pEntry, _rEntryText ) ) );
+    else
+    {
+        if ( !pEntry )
+            pEntry = FirstSelected();
+        if ( !pEntry )
+            pEntry = First();
+    }
+
+    if ( pEntry )
+        _rEntryText = GetEntryText( pEntry );
+
+    return pEntry;
+}
+
+const void* SvLBox::NextSearchEntry( const void* _pCurrentSearchEntry, String& _rEntryText )
+{
+    SvLBoxEntry* pEntry = const_cast< SvLBoxEntry* >( static_cast< const SvLBoxEntry* >( _pCurrentSearchEntry ) );
+
+    pEntry = Next( pEntry );
+    if ( !pEntry )
+        pEntry = First();
+
+    if ( pEntry )
+        _rEntryText = GetEntryText( pEntry );
+
+    return pEntry;
+}
+
+void SvLBox::SelectSearchEntry( const void* _pEntry )
+{
+    SvLBoxEntry* pEntry = const_cast< SvLBoxEntry* >( static_cast< const SvLBoxEntry* >( _pEntry ) );
+    DBG_ASSERT( pEntry, "SvLBox::SelectSearchEntry: invalid entry!" );
+    if ( pEntry )
+        return;
+
+    SelectAll( FALSE );
+    SetCurEntry( pEntry );
+    Select( pEntry );
+}
+
+void SvLBox::ExecuteSearchEntry( const void* /*_pEntry*/ )
+{
+    // nothing to do here, we have no "execution"
+}
+
+bool SvLBox::HandleKeyInput( const KeyEvent& _rKEvt )
+{
+    if ( !IsEntryMnemonicsEnabled() )
+        return false;
+
+    return pLBoxImpl->m_aMnemonicEngine.HandleKeyEvent( _rKEvt );
 }
 
 SvLBoxEntry* SvLBox::GetEntry( const Point&, BOOL ) const
