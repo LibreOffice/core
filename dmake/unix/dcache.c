@@ -1,6 +1,6 @@
 /* $RCSfile: dcache.c,v $
--- $Revision: 1.6 $
--- last change: $Author: vg $ $Date: 2007-01-18 09:43:52 $
+-- $Revision: 1.7 $
+-- last change: $Author: obo $ $Date: 2007-06-12 06:08:51 $
 --
 -- SYNOPSIS
 --      Directory cache management routines.
@@ -98,6 +98,7 @@ int          force;
    char *spath;
    char *comp;
    char *dir;
+   char *udir; /* Hold the unchanged (DcacheRespCase) directory. */
    int  loaded=FALSE;
 
    if (If_root_path(path))
@@ -107,12 +108,16 @@ int          force;
 
    fpath = DmStrDup(spath);
 
-   /* do caching and comparing lower case if told so. */
-   if( !STOBOOL(DcacheRespCase) )
-      strlwr(fpath);
-
-   comp  = Basename(fpath);
+   comp  = Basename(fpath); /* Use before the Filedir() call. */
    dir   = Filedir(fpath);
+
+   /* do caching and comparing lower case if told so. */
+   if( !STOBOOL(DcacheRespCase) ) {
+      udir = DmStrDup(dir);
+      strlwr(comp);
+      strlwr(dir);
+   } else
+      udir = dir;
 
    hv = Hash(dir,&hkey);
 
@@ -137,7 +142,18 @@ int          force;
       dp->path = DmStrDup(dir);
       dp->hkey = hkey;
 
-      if (Set_dir(dir) == 0) {
+      /* We use the unchanged (not potentially lowercased because of
+       * DcacheRespCase) directory as this would fail on a case sensitive
+       * file system.
+       * Note: Using case insensitive directory caching on case sensitive
+       * file systems is a *BAD* idea. If in doubt use case sensitive
+       * directory caching even on case insensitive file systems as the
+       * worst case in this szenario is that /foo/bar/ and /foo/BAR/ are
+       * cached separately (with the same content) even though they are
+       * the same directory. This would only happen if different targets
+       * using different upper/lower case spellings for the same directory
+       * and is *never* a good idea. */
+      if (Set_dir(udir) == 0) {
      if((dirp=opendir(".")) != NIL(DIR)) {
         while((direntp=readdir(dirp)) != NULL) {
            TALLOC(ep,1,Entry);
@@ -198,6 +214,9 @@ int          force;
      printf("%s:  Updating dir cache entry for [%s], new time is %ld\n",
             Pname, spath, ep ? ep->mtime : 0L);
    }
+
+   if( udir != dir )
+      FREE(udir); /* Keep this before the free of fpath. */
 
    FREE(fpath);
    return(!ep ? (time_t)0L : ((STOBOOL(Augmake) && ep->isdir)?0L:ep->mtime));
