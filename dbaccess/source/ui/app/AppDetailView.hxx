@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailView.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:17:31 $
+ *  last change: $Author: obo $ $Date: 2007-06-12 05:32:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,9 @@
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
 #endif
+#ifndef _SV_MNEMONIC_HXX
+#include <vcl/mnemonic.hxx>
+#endif
 #ifndef DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
 #include "IClipBoardTest.hxx"
 #endif
@@ -72,6 +75,7 @@
 #include <vector>
 
 class SvLBoxEntry;
+
 namespace dbaui
 {
     class OApplicationController;
@@ -82,7 +86,7 @@ namespace dbaui
 
     class OCreationList : public SvTreeListBox
     {
-        OTasksWindow*   m_pTaskWindow;
+        OTasksWindow&   m_rTaskWindow;
 
         // members related to drawing the currently hovered/selected entry
         SvLBoxEntry*        m_pMouseDownEntry;
@@ -91,7 +95,7 @@ namespace dbaui
         Font                m_aOriginalFont;
 
     public:
-        OCreationList(OTasksWindow* _pParent);
+        OCreationList( OTasksWindow& _rParent );
         // window overloads
         virtual void MouseMove( const MouseEvent& rMEvt );
         virtual void MouseButtonDown( const MouseEvent& rMEvt );
@@ -111,6 +115,10 @@ namespace dbaui
         virtual Rectangle   GetFocusRect( SvLBoxEntry* _pEntry, long _nLine );
         virtual void        ModelHasCleared();
 
+        // IMnemonicEntryList
+        virtual void        SelectSearchEntry( const void* _pEntry );
+        virtual void        ExecuteSearchEntry( const void* _pEntry );
+
     private:
         void    onSelected( SvLBoxEntry* _pEntry ) const;
         /** sets a new current entry, and invalidates the old and the new one, if necessary
@@ -119,12 +127,30 @@ namespace dbaui
         bool    setCurrentEntryInvalidate( SvLBoxEntry* _pEntry );
     };
 
-    typedef ::std::pair< ::rtl::OUString,USHORT>                TResourcePair;
-    typedef ::std::vector< ::std::pair<String, TResourcePair> > TResourceStruct;
+    struct TaskEntry
+    {
+        ::rtl::OUString sUNOCommand;
+        USHORT          nHelpID;
+        String          sTitle;
+        bool            bHideWhenDisabled;
+            // TODO: we should be consistent in the task pane and the menus/toolbars:
+            // If an entry is disabled in the latter, it should also be disabled in the former.
+            // If an entry is *hidden* in the former, it should also be hidden in the latter.
+
+        TaskEntry( const sal_Char* _pAsciiUNOCommand, USHORT _nHelpID, USHORT _nTitleResourceID, bool _bHideWhenDisabled = false );
+    };
+    typedef ::std::vector< TaskEntry >  TaskEntryList;
+
+    struct TaskPaneData
+    {
+        /// the tasks available in the pane
+        TaskEntryList   aTasks;
+        /// the resource ID for the title of the pane
+        USHORT          nTitleId;
+    };
 
     class OTasksWindow : public Window
     {
-        ::std::vector< USHORT >             m_aHelpTextIds;
         OCreationList                       m_aCreation;
         FixedText                           m_aDescription;
         FixedText                           m_aHelpText;
@@ -144,11 +170,13 @@ namespace dbaui
 
         OApplicationDetailView* getDetailView() const { return m_pDetailView; }
 
-        /** fills the Creation listbox with the necessary strings and images
-            @param  _rList
-                The strings and the id of the images and help texts to add.
-        */
-        void fillCreationNew( const TResourceStruct& _rList );
+        /// fills the Creation listbox with the necessary strings and images
+        void fillTaskEntryList( const TaskEntryList& _rList );
+
+        inline bool HandleKeyInput( const KeyEvent& _rKEvt )
+        {
+            return m_aCreation.HandleKeyInput( _rKEvt );
+        }
 
         void Clear();
         void setHelpText(USHORT _nId);
@@ -162,10 +190,14 @@ namespace dbaui
         OTitleWindow                        m_aContainer;
         OAppBorderWindow&                   m_rBorderWin;       // my parent
         OAppDetailPageHelper*               m_pControlHelper;
+        ::std::vector< TaskPaneData >       m_aTaskPaneData;
+        MnemonicGenerator                   m_aExternalMnemonics;
 
         void ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
+
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt);
+
     public:
         OApplicationDetailView(OAppBorderWindow& _rParent,PreviewMode _ePreviewMode);
         virtual ~OApplicationDetailView();
@@ -187,7 +219,19 @@ namespace dbaui
         */
         void createPage(ElementType _eType,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer);
 
-        inline OAppBorderWindow& getBorderWin() const { return m_rBorderWin;}
+        void setTaskExternalMnemonics( MnemonicGenerator& _rMnemonics );
+
+        /** called to give the window the chance to intercept key events, while it has not
+            the focus
+
+            @return <TRUE/> if and only if the event has been handled, and should not
+                not be further processed
+        */
+        bool    interceptKeyInput( const KeyEvent& _rEvent );
+
+        inline OAppBorderWindow& getBorderWin() const { return m_rBorderWin; }
+        inline OTasksWindow& getTasksWindow() const { return *static_cast< OTasksWindow* >( m_aTasks.getChildWindow() ); }
+
         sal_Bool isCutAllowed() ;
         sal_Bool isCopyAllowed()    ;
         sal_Bool isPasteAllowed();
@@ -336,6 +380,16 @@ namespace dbaui
                 The command to be executed.
         */
         void onCreationClick( const ::rtl::OUString& _sCommand);
+
+    private:
+        void                impl_createPage(
+                                ElementType _eType,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxNonTableElements
+                            );
+
+        const TaskPaneData& impl_getTaskPaneData( ElementType _eType );
+        void                impl_fillTaskPaneData( ElementType _eType, TaskPaneData& _rData ) const;
     };
 }
 #endif // DBAUI_APPDETAILVIEW_HXX
