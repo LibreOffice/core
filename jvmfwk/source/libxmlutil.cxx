@@ -4,9 +4,9 @@
  *
  *  $RCSfile: libxmlutil.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:48:32 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 07:58:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,6 +142,12 @@ CXmlCharPtr::CXmlCharPtr(xmlChar * aChar)
 {
 }
 
+CXmlCharPtr::CXmlCharPtr(const ::rtl::OUString & s):
+    _object(NULL)
+{
+    ::rtl::OString o = ::rtl::OUStringToOString(s, RTL_TEXTENCODING_UTF8);
+    _object = xmlCharStrdup(o.getStr());
+}
 CXmlCharPtr::CXmlCharPtr():_object(NULL)
 {
 }
@@ -165,20 +171,20 @@ CXmlCharPtr::operator xmlChar*()
     return _object;
 }
 
-CXmlCharPtr::operator rtl::OUString()
+CXmlCharPtr::operator ::rtl::OUString()
 {
-    rtl::OUString ret;
+    ::rtl::OUString ret;
     if (_object != NULL)
     {
-        rtl::OString aOStr((sal_Char*)_object);
-        ret = rtl::OStringToOUString(aOStr, RTL_TEXTENCODING_UTF8);
+        ::rtl::OString aOStr((sal_Char*)_object);
+        ret = ::rtl::OStringToOUString(aOStr, RTL_TEXTENCODING_UTF8);
     }
     return ret;
 }
 
-CXmlCharPtr::operator rtl::OString()
+CXmlCharPtr::operator ::rtl::OString()
 {
-    return rtl::OString((sal_Char*) _object);
+    return ::rtl::OString((sal_Char*) _object);
 }
 
 
