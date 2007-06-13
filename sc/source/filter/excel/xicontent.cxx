@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:49:16 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:10:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -598,7 +598,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     {
         const ScTokenArray* pTokArr = 0;
         rFmlaConv.Reset( rPos );
-        rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize1, FT_RangeName );
+        rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize1, false, FT_RangeName );
         // formula converter owns pTokArr -> create a copy of the token array
         if( pTokArr )
             xTokArr1.reset( pTokArr->Clone() );
@@ -609,7 +609,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     {
         const ScTokenArray* pTokArr = 0;
         rFmlaConv.Reset( rPos );
-        rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize2, FT_RangeName );
+        rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize2, false, FT_RangeName );
         // formula converter owns pTokArr -> create a copy of the token array
         if( pTokArr )
             pTokArr2.reset( pTokArr->Clone() );
@@ -732,7 +732,7 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
         {
             const ScTokenArray* pTokArr = 0;
             rFmlaConv.Reset();
-            rFmlaConv.Convert( pTokArr, rStrm, nLen, FT_RangeName );
+            rFmlaConv.Convert( pTokArr, rStrm, nLen, false, FT_RangeName );
             // formula converter owns pTokArr -> create a copy of the token array
             if( pTokArr )
                 xTokArr1.reset( pTokArr->Clone() );
@@ -747,7 +747,7 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
         {
             const ScTokenArray* pTokArr = 0;
             rFmlaConv.Reset();
-            rFmlaConv.Convert( pTokArr, rStrm, nLen, FT_RangeName );
+            rFmlaConv.Convert( pTokArr, rStrm, nLen, false, FT_RangeName );
             // formula converter owns pTokArr -> create a copy of the token array
             if( pTokArr )
                 xTokArr2.reset( pTokArr->Clone() );
