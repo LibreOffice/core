@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_headless.scp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 14:37:38 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:36:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,6 @@
 Module gid_Module_Optional_Headless
     ParentID = gid_Module_Optional;
     MOD_NAME_DESC(MODULE_OPTIONAL_HEADLESS);
-    Files = (gid_File_Lib_Vclplug_Hidden);
+    Files = (gid_File_Lib_Vclplug_Hidden, gid_File_Lib_BaseBmp);
     Dirs = ();
 End
