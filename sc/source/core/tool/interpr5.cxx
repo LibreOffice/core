@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: gm $ $Date: 2007-04-26 07:38:52 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:08:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -736,7 +736,7 @@ void ScInterpreter::ScMatValue()
                                 ScMatValType nMatValType;
                                 const ScMatrixValue* pMatVal = pMat->Get( nC,
                                         nR, nMatValType);
-                                if (nMatValType != SC_MATVAL_VALUE)
+                                if (ScMatrix::IsStringType( nMatValType))
                                     PushString( pMatVal->GetString() );
                                 else
                                     PushDouble(pMatVal->fVal);
@@ -794,7 +794,7 @@ void ScInterpreter::ScMatValue()
                         ScMatValType nMatValType;
                         const ScMatrixValue* pMatVal = pMat->Get( nC, nR,
                                 nMatValType);
-                        if (nMatValType != SC_MATVAL_VALUE)
+                        if (ScMatrix::IsStringType( nMatValType))
                             PushString( pMatVal->GetString() );
                         else
                             PushDouble(pMatVal->fVal);
@@ -3925,7 +3925,7 @@ void ScInterpreter::ScMatRef()
             {
                 ScMatValType nMatValType;
                 const ScMatrixValue* pMatVal = pMat->Get( nC, nR, nMatValType);
-                if (nMatValType != SC_MATVAL_VALUE)
+                if (ScMatrix::IsStringType( nMatValType))
                 {
                     if ( pMat->IsEmptyPath( nC, nR))
                     {   // result of empty FALSE jump path
