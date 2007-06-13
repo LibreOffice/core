@@ -4,9 +4,9 @@
  *
  *  $RCSfile: libxmlutil.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:36:19 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 07:58:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,8 +82,9 @@ class CXmlDocPtr
     xmlDoc* _object;
 
     CXmlDocPtr(const CXmlDocPtr&);
-    CXmlDocPtr & operator = (const CXmlDocPtr&);
+
 public:
+    CXmlDocPtr & operator = (const CXmlDocPtr&);
     CXmlDocPtr();
     CXmlDocPtr(xmlDoc* aDoc);
     /** Takes ownership of xmlDoc
@@ -122,12 +123,13 @@ class CXmlCharPtr
 public:
     CXmlCharPtr();
     CXmlCharPtr(xmlChar* aDoc);
+    CXmlCharPtr(const ::rtl::OUString &);
     ~CXmlCharPtr();
     CXmlCharPtr & operator = (xmlChar* pObj);
 //    xmlChar* operator -> ();
     operator xmlChar* ();
-    operator rtl::OUString ();
-    operator rtl::OString ();
+    operator ::rtl::OUString ();
+    operator ::rtl::OString ();
 };
 
 
