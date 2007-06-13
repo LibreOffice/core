@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 16:23:51 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:06:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,10 @@ Resource RID_SC_FUNCTION_NAMES
     };
     String SC_OPCODE_OPEN { Text = "(" ; };
     String SC_OPCODE_CLOSE { Text = ")" ; };
+    String SC_OPCODE_ARRAY_OPEN { Text = "{" ; };
+    String SC_OPCODE_ARRAY_CLOSE { Text = "}" ; };
+    String SC_OPCODE_ARRAY_ROW_SEP { Text = "|" ; };
+    String SC_OPCODE_ARRAY_COL_SEP { Text = ";" ; };
     String SC_OPCODE_SEP { Text = ";" ; };
     String SC_OPCODE_PERCENT_SIGN { Text = "%" ; };
     String SC_OPCODE_ADD { Text = "+" ; };
@@ -1159,6 +1163,10 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_CHOSE { Text = "CHOOSE" ; };
     String SC_OPCODE_OPEN { Text = "(" ; };
     String SC_OPCODE_CLOSE { Text = ")" ; };
+    String SC_OPCODE_ARRAY_OPEN { Text = "{" ; };
+    String SC_OPCODE_ARRAY_CLOSE { Text = "}" ; };
+    String SC_OPCODE_ARRAY_ROW_SEP { Text = "|" ; };
+    String SC_OPCODE_ARRAY_COL_SEP { Text = ";" ; };
     String SC_OPCODE_SEP { Text = ";" ; };
     String SC_OPCODE_PERCENT_SIGN { Text = "%" ; };
     String SC_OPCODE_ADD { Text = "+" ; };
