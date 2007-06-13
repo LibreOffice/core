@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:47:10 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:10:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1126,92 +1126,89 @@ String XclExpUrlHelper::EncodeDde( const String& rApplic, const String rTopic )
 
 // Cached Value Lists =========================================================
 
-XclExpCachedValue::~XclExpCachedValue()
+XclExpCachedMatrix::XclExpCachedMatrix( const ScMatrix& rMatrix )
+    : mrMatrix( rMatrix )
 {
+    mrMatrix.IncRef();
+}
+XclExpCachedMatrix::~XclExpCachedMatrix()
+{
+    mrMatrix.DecRef();
 }
 
-// ----------------------------------------------------------------------------
-
-void XclExpCachedDouble::Save( XclExpStream& rStrm ) const
+void XclExpCachedMatrix::GetDimensions( SCSIZE & nCols, SCSIZE & nRows ) const
 {
-    rStrm.SetSliceSize( 9 );
-    rStrm << EXC_CACHEDVAL_DOUBLE << mfVal;
-}
+    mrMatrix.GetDimensions( nCols, nRows );
 
-// ----------------------------------------------------------------------------
-
-XclExpCachedString::XclExpCachedString( const String& rStr, XclStrFlags nFlags ) :
-    maStr( rStr, nFlags )
-{
-}
-
-void XclExpCachedString::Save( XclExpStream& rStrm ) const
-{
-    rStrm.SetSliceSize( 6 );
-    rStrm << EXC_CACHEDVAL_STRING << maStr;
-}
-
-// ----------------------------------------------------------------------------
-
-XclExpCachedError::XclExpCachedError( USHORT nScError ) :
-    mnError( XclTools::GetXclErrorCode( nScError ) )
-{
-}
-
-void XclExpCachedError::Save( XclExpStream& rStrm ) const
-{
-    rStrm.SetSliceSize( 9 );
-    rStrm << EXC_CACHEDVAL_ERROR << mnError;
-    rStrm.WriteZeroBytes( 7 );
-}
-
-// ----------------------------------------------------------------------------
-
-XclExpCachedMatrix::XclExpCachedMatrix( const ScMatrix& rMatrix, XclStrFlags nFlags )
-{
-    rMatrix.GetDimensions( mnScCols, mnScRows );
-    DBG_ASSERT( mnScCols && mnScRows, "XclExpCachedMatrix::XclExpCachedMatrix - empty matrix" );
-    DBG_ASSERT( mnScCols <= 256, "XclExpCachedMatrix::XclExpCachedMatrix - too many columns" );
-
-    for( SCSIZE nScRow = 0; nScRow < mnScRows; ++nScRow )
-    {
-        for( SCSIZE nScCol = 0; nScCol < mnScCols; ++nScCol )
-        {
-            XclExpCachedValue* pNewVal = 0;
-            ScMatValType nMatValType = SC_MATVAL_VALUE;
-            const ScMatrixValue* pMatVal = rMatrix.Get( nScCol, nScRow, nMatValType );
-            if( !pMatVal )
-                pNewVal = new XclExpCachedString( EMPTY_STRING, nFlags );
-            else if( nMatValType != SC_MATVAL_VALUE )
-                pNewVal = new XclExpCachedString( pMatVal->GetString(), nFlags );
-            else if( USHORT nScError = pMatVal->GetError() )
-                pNewVal = new XclExpCachedError( nScError );
-            else
-                pNewVal = new XclExpCachedDouble( pMatVal->fVal );
-            maValueList.Append( pNewVal );
-        }
-    }
+    DBG_ASSERT( nCols && nRows, "XclExpCachedMatrix::GetDimensions - empty matrix" );
+    DBG_ASSERT( nCols <= 256, "XclExpCachedMatrix::GetDimensions - too many columns" );
 }
 
 sal_Size XclExpCachedMatrix::GetSize() const
 {
+    SCSIZE nCols, nRows;
+
+    GetDimensions( nCols, nRows );
+
     /*  The returned size may be wrong if the matrix contains strings. The only
         effect is that the export stream has to update a wrong record size which is
         faster than to iterate through all cached values and calculate their sizes. */
-    return 3 + 9 * maValueList.Count();
+    return 3 + 9 * (nCols * nRows);
 }
 
 void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
 {
+    SCSIZE nCols, nRows;
+
+    GetDimensions( nCols, nRows );
+
     if( rStrm.GetRoot().GetBiff() <= EXC_BIFF5 )
         // in BIFF2-BIFF7: 256 columns represented by 0 columns
-        rStrm << static_cast< sal_uInt8 >( mnScCols ) << static_cast< sal_uInt16 >( mnScRows );
+        rStrm << static_cast< sal_uInt8 >( nCols ) << static_cast< sal_uInt16 >( nRows );
     else
         // in BIFF8: columns and rows decreaed by 1
-        rStrm << static_cast< sal_uInt8 >( mnScCols - 1 ) << static_cast< sal_uInt16 >( mnScRows - 1 );
+        rStrm << static_cast< sal_uInt8 >( nCols - 1 ) << static_cast< sal_uInt16 >( nRows - 1 );
 
-    for( const XclExpCachedValue* pValue = maValueList.First(); pValue; pValue = maValueList.Next() )
-        pValue->Save( rStrm );
+    for( SCSIZE nRow = 0; nRow < nRows; ++nRow )
+    {
+        for( SCSIZE nCol = 0; nCol < nCols; ++nCol )
+        {
+            ScMatValType nMatValType = SC_MATVAL_VALUE;
+            const ScMatrixValue* pMatVal = mrMatrix.Get( nCol, nRow, nMatValType );
+
+            if( !pMatVal || SC_MATVAL_EMPTY == nMatValType )
+            {
+                rStrm.SetSliceSize( 9 );
+                rStrm << EXC_CACHEDVAL_EMPTY;
+                rStrm.WriteZeroBytes( 8 );
+            }
+            else if( ScMatrix::IsStringType( nMatValType ) )
+            {
+                XclExpString aStr( pMatVal->GetString(), EXC_STR_DEFAULT );
+                rStrm.SetSliceSize( 6 );
+                rStrm << EXC_CACHEDVAL_STRING << aStr;
+            }
+            else if( SC_MATVAL_BOOLEAN == nMatValType )
+            {
+                sal_Int8 nBool = pMatVal->GetBoolean();
+                rStrm.SetSliceSize( 9 );
+                rStrm << EXC_CACHEDVAL_BOOL << nBool;
+                rStrm.WriteZeroBytes( 7 );
+            }
+            else if( USHORT nScError = pMatVal->GetError() )
+            {
+                sal_Int8 nError ( XclTools::GetXclErrorCode( nScError ) );
+                rStrm.SetSliceSize( 9 );
+                rStrm << EXC_CACHEDVAL_ERROR << nError;
+                rStrm.WriteZeroBytes( 7 );
+            }
+            else
+            {
+                rStrm.SetSliceSize( 9 );
+                rStrm << EXC_CACHEDVAL_DOUBLE << pMatVal->fVal;
+            }
+        }
+    }
 }
 
 // ============================================================================
