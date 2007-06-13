@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:13:55 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:07:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ void ScInterpreter::ScIfJump()
                             ScMatValType nType = 0;
                             const ScMatrixValue* pMatVal = pMat->Get( nC, nR,
                                     nType);
-                            bool bIsValue = (nType == SC_MATVAL_VALUE);
+                            bool bIsValue = ScMatrix::IsValueType( nType);
                             if ( bIsValue )
                             {
                                 fVal = pMatVal->fVal;
@@ -250,7 +250,7 @@ void ScInterpreter::ScChoseJump()
                             ScMatValType nType;
                             const ScMatrixValue* pMatVal = pMat->Get( nC, nR,
                                     nType);
-                            bool bIsValue = (nType == SC_MATVAL_VALUE);
+                            bool bIsValue = ScMatrix::IsValueType( nType);
                             if ( bIsValue )
                             {
                                 fVal = pMatVal->fVal;
@@ -2409,6 +2409,7 @@ void ScInterpreter::ScValue()
                         fVal = 0.0;
                         // fallthru
                     case SC_MATVAL_VALUE:
+                    case SC_MATVAL_BOOLEAN:
                         PushDouble( fVal);
                         return;
                         //break;
@@ -3587,7 +3588,7 @@ void ScInterpreter::ScMatch()
                 {
                     ScMatValType nType = GetDoubleOrStringFromMatrix(
                             rEntry.nVal, *rEntry.pStr);
-                    rEntry.bQueryByString = (nType != SC_MATVAL_VALUE);
+                    rEntry.bQueryByString = ScMatrix::IsStringType( nType);
                 }
                 break;
                 default:
@@ -3761,7 +3762,7 @@ void ScInterpreter::ScCountIf()
             {
                 ScMatValType nType = GetDoubleOrStringFromMatrix( fVal,
                         rString);
-                bIsString = (nType != SC_MATVAL_VALUE);
+                bIsString = ScMatrix::IsStringType( nType);
             }
             break;
             case svString:
@@ -3931,7 +3932,7 @@ void ScInterpreter::ScSumIf()
             {
                 ScMatValType nType = GetDoubleOrStringFromMatrix( fVal,
                         rString);
-                bIsString = (nType != SC_MATVAL_VALUE);
+                bIsString = ScMatrix::IsStringType( nType);
             }
             break;
             default:
@@ -4263,7 +4264,7 @@ void ScInterpreter::ScLookup()
             {
                 ScMatValType nType = GetDoubleOrStringFromMatrix( rEntry.nVal,
                         *rEntry.pStr);
-                rEntry.bQueryByString = (nType != SC_MATVAL_VALUE);
+                rEntry.bQueryByString = ScMatrix::IsStringType( nType);
             }
             break;
             default:
@@ -4527,7 +4528,7 @@ void ScInterpreter::ScHLookup()
                 {
                     ScMatValType nType = GetDoubleOrStringFromMatrix(
                             rEntry.nVal, *rEntry.pStr);
-                    rEntry.bQueryByString = (nType != SC_MATVAL_VALUE);
+                    rEntry.bQueryByString = ScMatrix::IsStringType( nType);
                 }
                 break;
                 default:
@@ -4784,7 +4785,7 @@ void ScInterpreter::ScVLookup()
                 {
                     ScMatValType nType = GetDoubleOrStringFromMatrix(
                             rEntry.nVal, *rEntry.pStr);
-                    rEntry.bQueryByString = (nType != SC_MATVAL_VALUE);
+                    rEntry.bQueryByString = ScMatrix::IsStringType( nType);
                 }
                 break;
                 default:
