@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmatrix.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:27:33 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:05:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,9 +56,10 @@ class SvNumberFormatter;
 
 typedef BYTE ScMatValType;
 const ScMatValType SC_MATVAL_VALUE     = 0x00;
-const ScMatValType SC_MATVAL_STRING    = 0x01;
-const ScMatValType SC_MATVAL_EMPTY     = SC_MATVAL_STRING | 0x02; // STRING plus flag
-const ScMatValType SC_MATVAL_EMPTYPATH = SC_MATVAL_EMPTY | 0x04;  // EMPTY plus flag
+const ScMatValType SC_MATVAL_BOOLEAN   = 0x01;
+const ScMatValType SC_MATVAL_STRING    = 0x02;
+const ScMatValType SC_MATVAL_EMPTY     = SC_MATVAL_STRING | 0x04; // STRING plus flag
+const ScMatValType SC_MATVAL_EMPTYPATH = SC_MATVAL_EMPTY | 0x08;  // EMPTY plus flag
 
 union ScMatrixValue
 {
@@ -70,6 +71,9 @@ union ScMatrixValue
 
     /// Only valid if ScMatrix methods indicate that this is no string!
     USHORT GetError() const         { return GetDoubleErrorValue( fVal); }
+
+    /// Only valid if ScMatrix methods indicate that this is a boolean
+    bool GetBoolean() const         { return fVal != 0.; }
 };
 
 /** Matrix representation of double values and strings.
@@ -100,9 +104,10 @@ union ScMatrixValue
 class ScMatrix
 {
     ScMatrixValue*  pMat;
-    ScMatValType*   bIsString;
+    ScMatValType*   mnValType;
+    ULONG           mnNonValue; // how many strings and empties
     ScInterpreter*  pErrorInterpreter;
-    ULONG           nRefCnt;     // reference count
+    mutable ULONG   nRefCnt;    // reference count
     SCSIZE          nColCount;
     SCSIZE          nRowCount;
 
@@ -132,6 +137,18 @@ public:
         return nMemMax < nArbitraryLimit ? nMemMax : nArbitraryLimit;
     }
 
+    /// Value or boolean.
+    inline static bool IsValueType( ScMatValType nType )
+    {
+        return nType <= SC_MATVAL_BOOLEAN;
+    }
+
+    /// String, empty or empty path, but not value nor boolean.
+    inline static bool IsStringType( ScMatValType nType )
+    {
+        return (nType & SC_MATVAL_STRING) != 0;
+    }
+
     /** If nC*nR results in more than GetElementsMax() entries, a 1x1 matrix is
         created instead and a double error value (errStackOverflow) is set.
         Compare nC and nR with a GetDimensions() call to check. */
@@ -141,12 +158,12 @@ public:
     /// disable refcounting forever, may only be deleted via Delete() afterwards
     inline  void    SetEternalRef()         { nRefCnt = ULONG_MAX; }
     inline  bool    IsEternalRef() const    { return nRefCnt == ULONG_MAX; }
-    inline  void    IncRef()
+    inline  void    IncRef() const
     {
         if ( !IsEternalRef() )
             ++nRefCnt;
     }
-    inline  void    DecRef()
+    inline  void    DecRef() const
     {
         if ( nRefCnt > 0 && !IsEternalRef() )
             if ( --nRefCnt == 0 )
@@ -191,12 +208,14 @@ public:
         { PutDouble( CreateDoubleError( nErrorCode ), nC, nR ); }
     void PutError( USHORT nErrorCode, SCSIZE nIndex )
         { PutDouble( CreateDoubleError( nErrorCode ), nIndex ); }
+    void PutBoolean( bool bVal, SCSIZE nC, SCSIZE nR);
+    void PutBoolean( bool bVal, SCSIZE nIndex);
+
     void FillDouble( double fVal,
             SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSIZE nR2 );
     /// lower left triangle
     void FillDoubleLowerLeft( double fVal, SCSIZE nC2 );
 
-private:
     /** May be used before obtaining the double value of an element to avoid
         passing its NAN around.
         @ATTENTION: MUST NOT be used if the element is a string!
@@ -204,7 +223,7 @@ private:
     USHORT GetError( SCSIZE nC, SCSIZE nR) const;
     USHORT GetError( SCSIZE nIndex) const
         { return pMat[nIndex].GetError(); }
-public:
+
     /** Use in ScInterpreter to obtain the error code, if any.
         @returns 0 if no error or string element, else one of err... constants */
     USHORT GetErrorIfNotString( SCSIZE nC, SCSIZE nR) const
@@ -238,37 +257,33 @@ public:
 
     /// @return <TRUE/> if string or empty
     BOOL IsString( SCSIZE nIndex ) const
-        { return bIsString && bIsString[nIndex]; }
+        { return mnValType && IsStringType( mnValType[nIndex]); }
     /// @return <TRUE/> if string or empty
     BOOL IsString( SCSIZE nC, SCSIZE nR ) const
-        { return bIsString && bIsString[ nC * nRowCount + nR ]; }
+        { return mnValType && IsStringType( mnValType[ nC * nRowCount + nR ]); }
     BOOL IsEmpty( SCSIZE nIndex ) const
-        { return bIsString && ((bIsString[nIndex] & SC_MATVAL_EMPTY) ==
-                SC_MATVAL_EMPTY); }
+        { return mnValType && ((mnValType[nIndex] & SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY); }
     BOOL IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
-        { return bIsString && ((bIsString[ nC * nRowCount + nR ] &
-                    SC_MATVAL_EMPTYPATH) == SC_MATVAL_EMPTYPATH); }
+        { return mnValType && ((mnValType[ nC * nRowCount + nR ] & SC_MATVAL_EMPTYPATH) == SC_MATVAL_EMPTYPATH); }
     BOOL IsEmptyPath( SCSIZE nIndex ) const
-        { return bIsString && ((bIsString[nIndex] & SC_MATVAL_EMPTYPATH) ==
-                SC_MATVAL_EMPTYPATH); }
+        { return mnValType && ((mnValType[nIndex] & SC_MATVAL_EMPTYPATH) == SC_MATVAL_EMPTYPATH); }
     BOOL IsEmpty( SCSIZE nC, SCSIZE nR ) const
-        { return bIsString && ((bIsString[ nC * nRowCount + nR ] &
-                    SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY); }
+        { return mnValType && ((mnValType[ nC * nRowCount + nR ] & SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY); }
     BOOL IsValue( SCSIZE nIndex ) const
-        { return !bIsString || !bIsString[nIndex]; }
+        { return !mnValType || IsValueType( mnValType[nIndex]); }
     BOOL IsValue( SCSIZE nC, SCSIZE nR ) const
-        { return !bIsString || !bIsString[ nC * nRowCount + nR ]; }
+        { return !mnValType || IsValueType( mnValType[ nC * nRowCount + nR ]); }
     BOOL IsValueOrEmpty( SCSIZE nIndex ) const
-        { return !bIsString || !bIsString[nIndex] || ((bIsString[nIndex] &
-                    SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY); }
+        { return !mnValType || IsValueType( mnValType[nIndex] ) ||
+            ((mnValType[nIndex] & SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY); }
     BOOL IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const
-        { return !bIsString || !bIsString[ nC * nRowCount + nR ] ||
-            ((bIsString[ nC * nRowCount + nR ] & SC_MATVAL_EMPTY) ==
+        { return !mnValType || IsValueType( mnValType[ nC * nRowCount + nR ]) ||
+            ((mnValType[ nC * nRowCount + nR ] & SC_MATVAL_EMPTY) ==
              SC_MATVAL_EMPTY); }
 
-    /// @return <TRUE/> if entire matrix is numeric and no strings are contained
+    /// @return <TRUE/> if entire matrix is numeric, including booleans, with no strings or empties
     BOOL IsNumeric() const
-        { return bIsString == NULL; }
+        { return 0 == mnNonValue; }
 
     void MatTrans( ScMatrix& mRes) const;
     void MatCopy ( ScMatrix& mRes) const;
