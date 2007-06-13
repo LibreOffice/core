@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 15:56:13 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:04:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,7 +289,7 @@ private:
     BOOL        bImportXML;
 
     BOOL   GetToken();
-    BOOL   NextNewToken();
+    BOOL   NextNewToken(bool bAllowBooleans = false);
     OpCode NextToken();
     void PutCode( ScTokenRef& );
     void Factor();
@@ -315,11 +315,17 @@ private:
     BOOL IsNamedRange( const String& );
     BOOL IsDBRange( const String& );
     BOOL IsColRowName( const String& );
+    BOOL IsBoolean( const String& );
     void AutoCorrectParsedSymbol();
     void AdjustReference( SingleRefData& r );
     void PushTokenArray( ScTokenArray*, BOOL = FALSE );
     void PopTokenArray();
     void SetRelNameReference();
+    void CreateStringFromScMatrix( rtl::OUStringBuffer& rBuffer, const ScMatrix* pMatrix );
+
+    void AppendBoolean( rtl::OUStringBuffer& rBuffer, bool bVal );
+    void AppendDouble( rtl::OUStringBuffer& rBuffer, double fVal );
+    void AppendString( rtl::OUStringBuffer& rBuffer, const String & rStr );
 
 public:
     ScCompiler(ScDocument* pDocument, const ScAddress& );
