@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:48:52 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:10:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -860,9 +860,8 @@ XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm ) :
         case EXC_CACHEDVAL_ERROR:
         {
             double fVal;
-            rStrm.Ignore( 1 );
             rStrm >> mnBoolErr;
-            rStrm.Ignore( 6 );
+            rStrm.Ignore( 7 );
 
             const ScTokenArray* pScTokArr = rStrm.GetRoot().GetOldFmlaConverter().GetBoolErr(
                 XclTools::ErrorToEnum( fVal, mnType == EXC_CACHEDVAL_ERROR, mnBoolErr ) );
@@ -931,7 +930,7 @@ ScMatrixRef XclImpCachedMatrix::CreateScMatrix() const
                 {
                     case EXC_CACHEDVAL_EMPTY:
                         // Excel shows 0.0 here, not an empty cell
-                        xScMatrix->PutDouble( 0.0, nScCol, nScRow );
+                        xScMatrix->PutEmpty( nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_DOUBLE:
                         xScMatrix->PutDouble( pValue->GetValue(), nScCol, nScRow );
@@ -940,7 +939,7 @@ ScMatrixRef XclImpCachedMatrix::CreateScMatrix() const
                         xScMatrix->PutString( pValue->GetString(), nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_BOOL:
-                        xScMatrix->PutDouble( pValue->GetBool() ? 1.0 : 0.0, nScCol, nScRow );
+                        xScMatrix->PutBoolean( pValue->GetBool(), nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_ERROR:
                         xScMatrix->PutError( pValue->GetError(), nScCol, nScRow );
