@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlformula.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:51:46 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:11:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -451,10 +451,16 @@ XclTokenArray::XclTokenArray( bool bVolatile ) :
 {
 }
 
-XclTokenArray::XclTokenArray( ScfUInt8Vec& rTokVec, bool bVolatile ) :
+XclTokenArray::XclTokenArray( ScfUInt8Vec& rTokVec, bool bVolatile,
+                              ScfUInt8Vec* pExtensionTokens) :
     mbVolatile( bVolatile )
 {
     maTokVec.swap( rTokVec );
+    if( NULL != pExtensionTokens)
+    {
+        DBG_ASSERT( maTokVec.size() <= 0xFFFF, "XclTokenArray::XclTokenArray - extension array too long" );
+        maExtensions.swap( *pExtensionTokens );
+    }
 }
 
 sal_uInt16 XclTokenArray::GetSize() const
@@ -491,6 +497,8 @@ void XclTokenArray::WriteArray( XclExpStream& rStrm ) const
 {
     if( !maTokVec.empty() )
         rStrm.Write( &maTokVec.front(), GetSize() );
+    if( !maExtensions.empty() )
+        rStrm.Write( &maExtensions.front(), limit_cast< sal_uInt16 >(maExtensions.size() ) );
 }
 
 void XclTokenArray::Write( XclExpStream& rStrm ) const
