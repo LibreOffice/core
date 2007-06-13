@@ -25,7 +25,6 @@ mkdir: %_DEST%\lib%_EXT%\python\logging
 mkdir: %_DEST%\lib%_EXT%\python\idlelib
 mkdir: %_DEST%\lib%_EXT%\python\idlelib\Icons
 
-#..\%__SRC%\misc\build\python-inst\include\python2.3\* %_DEST%\inc%_EXT%\python\*
 ..\%__SRC%\misc\build\Python-2.3.4\Include\* %_DEST%\inc%_EXT%\python\*
 
 ..\%__SRC%\misc\build\Python-2.3.4\Lib\* %_DEST%\lib%_EXT%\python\*
@@ -72,24 +71,23 @@ symlink: %_DEST%\lib%_EXT%\libpython2.3.so.1.0 %_DEST%\lib%_EXT%\libpython2.3.so
 
 # WINDOWS ONLY !
 ..\%__SRC%\misc\build\pyconfig.h %_DEST%\inc%_EXT%\python\pyconfig.h
-..\%__SRC%\misc\build\Python-2.3.4\PCBuild\python.exe %_DEST%\bin%_EXT%\python.exe
-..\%__SRC%\misc\build\Python-2.3.4\PCBuild\python.exe %_DEST%\bin%_EXT%\python.exe
-..\%__SRC%\misc\build\Python-2.3.4\PCBuild\python23.dll %_DEST%\bin%_EXT%\python23.dll
-..\%__SRC%\misc\build\Python-2.3.4\PCBuild\python23.lib %_DEST%\lib%_EXT%\python23.lib
-..\%__SRC%\misc\build\Python-2.3.4\PCBuild\_sre.pyd %_DEST%\lib%_EXT%\python\_sre.pyd
-..\%__SRC%\misc\build\Python-2.3.4\PCBuild\_socket.pyd %_DEST%\lib%_EXT%\python\_socket.pyd
-..\%__SRC%\misc\build\Python-2.3.4\PCBuild\_symtable.pyd %_DEST%\lib%_EXT%\python\_symtable.pyd
-..\%__SRC%\misc\build\Python-2.3.4\PCBuild\mmap.pyd %_DEST%\lib%_EXT%\python\mmap.pyd
-..\%__SRC%\misc\build\Python-2.3.4\PCBuild\parser.pyd %_DEST%\lib%_EXT%\python\parser.pyd
-..\%__SRC%\misc\build\Python-2.3.4\PCBuild\datetime.pyd %_DEST%\lib%_EXT%\python\datetime.pyd
-..\%__SRC%\misc\build\Python-2.3.4\PCBuild\select.pyd %_DEST%\lib%_EXT%\python\select.pyd
-..\%__SRC%\misc\build\Python-2.3.4\PCBuild\unicodedata.pyd %_DEST%\lib%_EXT%\python\unicodedata.pyd
-..\%__SRC%\misc\build\Python-2.3.4\PCBuild\_winreg.pyd %_DEST%\lib%_EXT%\python\_winreg.pyd
-..\%__SRC%\misc\build\Python-2.3.4\PCBuild\winsound.pyd %_DEST%\lib%_EXT%\python\winsound.pyd
-..\%__SRC%\misc\build\Python-2.3.4\PCBuild\parser.pyd %_DEST%\lib%_EXT%\python\parser.pyd
-..\%__SRC%\misc\build\Python-2.3.4\PCBuild\pyexpat.pyd %_DEST%\lib%_EXT%\python\pyexpat.pyd
-..\%__SRC%\misc\build\Python-2.3.4\PCBuild\_csv.pyd %_DEST%\lib%_EXT%\python\_csv.pyd
-..\%__SRC%\misc\build\Python-2.3.4\PCBuild\_testcapi.pyd %_DEST%\lib%_EXT%\python\_testcapi.pyd
+..\%__SRC%\misc\build\Python-2.3.4\PCbuild\python.exe %_DEST%\bin%_EXT%\python.exe
+..\%__SRC%\misc\build\Python-2.3.4\PCbuild\python23.dll %_DEST%\bin%_EXT%\python23.dll
+..\%__SRC%\misc\build\Python-2.3.4\PCbuild\python23.lib %_DEST%\lib%_EXT%\python23.lib
+..\%__SRC%\misc\build\Python-2.3.4\PCbuild\_sre.pyd %_DEST%\lib%_EXT%\python\_sre.pyd
+..\%__SRC%\misc\build\Python-2.3.4\PCbuild\_socket.pyd %_DEST%\lib%_EXT%\python\_socket.pyd
+..\%__SRC%\misc\build\Python-2.3.4\PCbuild\_symtable.pyd %_DEST%\lib%_EXT%\python\_symtable.pyd
+..\%__SRC%\misc\build\Python-2.3.4\PCbuild\mmap.pyd %_DEST%\lib%_EXT%\python\mmap.pyd
+..\%__SRC%\misc\build\Python-2.3.4\PCbuild\parser.pyd %_DEST%\lib%_EXT%\python\parser.pyd
+..\%__SRC%\misc\build\Python-2.3.4\PCbuild\datetime.pyd %_DEST%\lib%_EXT%\python\datetime.pyd
+..\%__SRC%\misc\build\Python-2.3.4\PCbuild\select.pyd %_DEST%\lib%_EXT%\python\select.pyd
+..\%__SRC%\misc\build\Python-2.3.4\PCbuild\unicodedata.pyd %_DEST%\lib%_EXT%\python\unicodedata.pyd
+..\%__SRC%\misc\build\Python-2.3.4\PCbuild\_winreg.pyd %_DEST%\lib%_EXT%\python\_winreg.pyd
+..\%__SRC%\misc\build\Python-2.3.4\PCbuild\winsound.pyd %_DEST%\lib%_EXT%\python\winsound.pyd
+..\%__SRC%\misc\build\Python-2.3.4\PCbuild\parser.pyd %_DEST%\lib%_EXT%\python\parser.pyd
+..\%__SRC%\misc\build\Python-2.3.4\PCbuild\pyexpat.pyd %_DEST%\lib%_EXT%\python\pyexpat.pyd
+..\%__SRC%\misc\build\Python-2.3.4\PCbuild\_csv.pyd %_DEST%\lib%_EXT%\python\_csv.pyd
+..\%__SRC%\misc\build\Python-2.3.4\PCbuild\_testcapi.pyd %_DEST%\lib%_EXT%\python\_testcapi.pyd
 
 #linklib: libpython.so.*.*.*
 
