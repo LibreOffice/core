@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:45:56 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:09:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -535,7 +535,7 @@ void ImportExcel::Array25( void )
 
         pFormConv->Reset( ScAddress( static_cast<SCCOL>(nFirstCol),
                     static_cast<SCROW>(nFirstRow), GetCurrScTab() ) );
-        pFormConv->Convert( pErgebnis, maStrm, nFormLen );
+        pFormConv->Convert( pErgebnis, maStrm, nFormLen, true, FT_CellFormula);
 
         DBG_ASSERT( pErgebnis, "*ImportExcel::Array25(): ScTokenArray ist NULL!" );
 
@@ -830,7 +830,7 @@ void ImportExcel::Shrfmla( void )
     const ScTokenArray* pErgebnis;
 
     pFormConv->Reset();
-    pFormConv->Convert( pErgebnis, maStrm, nLenExpr, FT_SharedFormula );
+    pFormConv->Convert( pErgebnis, maStrm, nLenExpr, true, FT_SharedFormula );
 
 
     DBG_ASSERT( pErgebnis, "+ImportExcel::Shrfmla(): ScTokenArray ist NULL!" );
@@ -1006,7 +1006,7 @@ void ImportExcel::Array34( void )
 
         pFormConv->Reset( ScAddress( static_cast<SCCOL>(nFirstCol),
                     static_cast<SCROW>(nFirstRow), GetCurrScTab() ) );
-        pFormConv->Convert( pErgebnis, maStrm, nFormLen );
+        pFormConv->Convert( pErgebnis, maStrm, nFormLen, true, FT_CellFormula);
 
         DBG_ASSERT( pErgebnis, "+ImportExcel::Array34(): ScTokenArray ist NULL!" );
 
