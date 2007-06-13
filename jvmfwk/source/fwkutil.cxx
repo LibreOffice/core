@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:48:18 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 07:58:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,22 +67,6 @@ using namespace osl;
 
 namespace jfw
 {
-
-struct Init
-{
-    osl::Mutex * operator()()
-        {
-            static osl::Mutex aInstance;
-            return &aInstance;
-        }
-};
-osl::Mutex * getFwkMutex()
-{
-    return rtl_Instance< osl::Mutex, Init, ::osl::MutexGuard,
-        ::osl::GetGlobalMutex >::create(
-            Init(), ::osl::GetGlobalMutex());
-}
-
 
 bool isAccessibilitySupportDesired()
 {
@@ -324,103 +308,38 @@ rtl::OUString getLibraryLocation()
     return getDirFromFile(libraryFileUrl);
 }
 
-//Todo is this still needed?
-rtl::OUString searchFileNextToThisLib(const rtl::OUString & sFile)
+jfw::FileStatus checkFileURL(const rtl::OUString & sURL)
 {
-    rtl::OUString ret;
-    rtl::OUString sLib;
-    if (osl::Module::getUrlFromAddress(
-            reinterpret_cast< oslGenericFunction >(searchFileNextToThisLib),
-            sLib))
-    {
-        sLib = getDirFromFile(sLib);
-        rtl::OUStringBuffer sBufVendor(256);
-        sBufVendor.append(sLib);
-        sBufVendor.appendAscii("/");
-        sBufVendor.append(sFile);
-        sLib =  sBufVendor.makeStringAndClear();
-        //check if the file exists
-        osl::DirectoryItem item;
-        osl::File::RC fileError = osl::DirectoryItem::get(sLib, item);
-        if (fileError == osl::FileBase::E_None)
-            ret = sLib;
-    }
-    return ret;
-}
-
-jfw::FileStatus checkFileURL(const rtl::OUString & path)
-{
-    rtl::OString sExcMsg("[Java framework] Error in function "
-                         "resolveFileURL (fwkutil.cxx).");
-    OUString sResolved = path;
     jfw::FileStatus ret = jfw::FILE_OK;
-    while (1)
+    DirectoryItem item;
+    File::RC rc_item = DirectoryItem::get(sURL, item);
+    if (File::E_None == rc_item)
     {
-        DirectoryItem item;
-        File::RC fileErr =
-            DirectoryItem::get(sResolved, item);
-        if (fileErr == File::E_None)
-        {
-            osl::FileStatus status(FileStatusMask_Type |
-                              FileStatusMask_LinkTargetURL |
-                              FileStatusMask_FileURL);
+        osl::FileStatus status(FileStatusMask_Validate);
 
-            if (item.getFileStatus(status) == File::E_None)
-            {
-                osl::FileStatus::Type t = status.getFileType();
-                if (t == osl::FileStatus::Regular)
-                {
-                    ret = jfw::FILE_OK;
-                    break;
-                }
-                else if ( t == osl::FileStatus::Link )
-                {
-                    sResolved = status.getLinkTargetURL();
-                }
-                else
-                {
-                    ret = FILE_INVALID;
-                    break;
-                }
-            }
-            else
-            {
-                throw FrameworkException(JFW_E_ERROR, sExcMsg);
-            }
+        File::RC rc_stat = item.getFileStatus(status);
+        if (File::E_None == rc_stat)
+        {
+            ret = FILE_OK;
         }
-        else if(fileErr == File::E_NOENT)
+        else if (File::E_NOENT == rc_stat)
         {
             ret = FILE_DOES_NOT_EXIST;
-            break;
         }
         else
         {
             ret = FILE_INVALID;
-            break;
         }
     }
-    return ret;
-}
-const rtl::Bootstrap& getBootstrap()
-{
-    static rtl::Bootstrap *pBootstrap = 0;
-    rtl::OUString sIni;
-    if( !pBootstrap )
+    else if (File::E_NOENT == rc_item)
     {
-        rtl::OUStringBuffer buf( 255);
-        buf.append( getLibraryLocation());
-        buf.appendAscii( SAL_CONFIGFILE("/jvmfwk3") );
-        sIni = buf.makeStringAndClear();
-        static rtl::Bootstrap  bootstrap(sIni);
-        pBootstrap = &bootstrap;
-#if OSL_DEBUG_LEVEL >=2
-        rtl::OString o = rtl::OUStringToOString( sIni , osl_getThreadTextEncoding() );
-        fprintf(stderr, "[Java framework] Using configuration file %s\n" , o.getStr() );
-#endif
+        ret = FILE_DOES_NOT_EXIST;
     }
-
-    return *pBootstrap;
-
+    else
+    {
+        ret = FILE_INVALID;
+    }
+    return ret;
 }
 
 }
