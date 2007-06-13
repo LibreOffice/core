@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xichart.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:49:05 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:10:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -644,6 +644,7 @@ void XclImpChSourceLink::ReadChSourceLink( XclImpStream& rStrm )
         XclTokenArray aXclTokArr;
         rStrm >> aXclTokArr;
         // convert token array to range list
+        // FIXME: JEG : This is wrong.  It should be a formula
         GetFormulaCompiler().CreateRangeList( maScRanges, EXC_FMLATYPE_CHART, aXclTokArr, rStrm );
     }
 
