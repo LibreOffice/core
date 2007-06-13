@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-11 08:54:44 $
+ *  last change: $Author: gh $ $Date: 2007-06-13 09:02:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1128,11 +1128,13 @@ void ImplKeyInput( Window* pWin, KeyEvent &aKEvnt, BOOL bForceDirect )
     {
         if ( StatementList::WinPtrValid( pWin ) )
         {
-            ULONG nID;
-            nID = Application::PostKeyEvent( VCLEVENT_WINDOW_KEYINPUT, pWin, &aKEvnt );
-            ImplEventWait( nID );
-            nID = Application::PostKeyEvent( VCLEVENT_WINDOW_KEYUP, pWin, &aKEvnt );
-            ImplEventWait( nID );
+            ULONG nID1;
+            ULONG nID2;
+            nID1 = Application::PostKeyEvent( VCLEVENT_WINDOW_KEYINPUT, pWin, &aKEvnt );
+            nID2 = Application::PostKeyEvent( VCLEVENT_WINDOW_KEYUP, pWin, &aKEvnt );
+            // wait after posting both events so deleting pWin will remove the second event also
+            ImplEventWait( nID1 );
+            ImplEventWait( nID2 );
         }
     }
     else
