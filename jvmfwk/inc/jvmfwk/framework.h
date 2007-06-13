@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framework.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:28:21 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 07:56:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,30 @@ extern "C" {
     <dt>UNO_JAVA_JFW_SHARED_DATA</dt>
     <dd>The file contains settings valid for all users. If a user changes a setting
     then it takes precedence over the setting from UNO_JAVA_JFW_SHARED_DATA.
-    The content of this file is an
-    implementation detail and may change in the future.</dd>
+    The content of this file is an implementation detail and may change in the future.</dd>
+
+    <dt>UNO_JAVA_JFW_INSTALL_DATA</dt>
+    <dd>The file contains settings for all users. A user cannot override these settings.
+    When this parameter is provided then UNO_JAVA_JFW_SHARED_DATA and UNO_JAVA_JFW_USER_DATA
+    are irrelevant. This parameter is intended for use during the setup. For example, to
+    install extensions which contain java components. If there is already a file at this
+    location then it will be overwritten if it is too old. The period of validatity is per
+    default one hour. This value can be overridden by the bootstrap parameter
+    UNO_JAVA_JFW_INSTALL_EXPIRE. Setting this variable to 1000 means the settings file
+    is only valid for 1000 seconds.
+
+    <p>If one would not use UNO_JAVA_JFW_INSTALL_DATA during setup then most probably
+    a user installation directory would be created in the home directory of root. This is
+    because, java settings are determined and stored on behalf of the current user. In other
+    words UNO_JAVA_JFW_USER_DATA would be used which points into the user installation.
+    </p>
+    <p>UNO_JAVA_JFW_INSTALL_DATA could point into the shared installation, provided that
+    only people with root rights can install OOo. Then one has to take care that the
+    installer removes this file when uninstalling.
+    </p>
+
+
+    The content of this file is an implementation detail and may change in the future.</dd>
     </dl>
 
     <p>The values for these parameters must be file URLs and include the file name, for
