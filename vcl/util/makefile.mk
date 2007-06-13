@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.91 $
+#   $Revision: 1.92 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 14:36:51 $
+#   last change: $Author: obo $ $Date: 2007-06-13 09:36:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -397,9 +397,11 @@ SHL6IMPLIB=iheadless_plug_
 SHL6LIBS=$(LIB6TARGET)
 SHL6DEPN=$(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2IMPLIBN) $(SHL2TARGETN)
 
-# libs for dummy plugin
+# libs for headless plugin
 SHL6STDLIBS=\
-        $(VCLLIB)\
+        $(BASEBMPLIB)	\
+        $(BASEGFXLIB)	\
+        $(VCLLIB)		\
         -lpsp$(VERSION)$(DLLPOSTFIX)\
             $(SOTLIB)           \
             $(UNOTOOLSLIB)      \
