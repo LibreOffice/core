@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.241 $
+ *  $Revision: 1.242 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 11:08:25 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:36:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1709,6 +1709,9 @@ File gid_File_Lib_Vclplug_Hidden
     Styles = (PACKED,PATCH);
     Dir = gid_Dir_Program;
 End
+
+STD_LIB_FILE_PATCH( gid_File_Lib_BaseBmp, basebmp )
+
 #endif
 #endif
 
