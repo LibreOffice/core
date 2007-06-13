@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opcode.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:17:24 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:05:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,11 @@ enum OpCodeEnum
         ocOpen              = SC_OPCODE_OPEN,
         ocClose             = SC_OPCODE_CLOSE,
         ocSep               = SC_OPCODE_SEP,
+        ocArrayOpen         = SC_OPCODE_ARRAY_OPEN,
+        ocArrayClose        = SC_OPCODE_ARRAY_CLOSE,
+        ocArrayRowSep       = SC_OPCODE_ARRAY_ROW_SEP,
+        ocArrayColSep       = SC_OPCODE_ARRAY_COL_SEP,
+
     // Spezial-Opcodes
         ocMissing           = SC_OPCODE_MISSING,
         ocBad               = SC_OPCODE_BAD,
