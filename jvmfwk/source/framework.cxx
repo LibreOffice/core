@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:47:52 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 07:57:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
     javaFrameworkError retVal = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::getFwkMutex());
+        osl::MutexGuard guard(jfw::FwkMutex::get());
         javaFrameworkError errcode = JFW_E_NONE;
         if (pparInfo == NULL || pSize == NULL)
             return JFW_E_INVALID_ARG;
@@ -101,10 +101,9 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
         typedef std::vector<jfw::CJavaInfo>::iterator it_info;
         //get the list of paths to jre locations which have been
         //added manually
-        jfw::CNodeJava node;
-        node.loadFromSettings();
-        const std::vector<rtl::OString>& vecJRELocations =
-            node.getJRELocations();
+        const jfw::MergedSettings settings;
+        const std::vector<rtl::OUString>& vecJRELocations =
+            settings.getJRELocations();
         //Use every plug-in library to get Java installations.
         typedef std::vector<jfw::PluginLibrary>::const_iterator ci_pl;
         int cModule = 0;
@@ -164,16 +163,16 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             if (jfw_plugin_getJavaInfoByPathFunc == NULL)
                 return JFW_E_ERROR;
 
-            typedef std::vector<rtl::OString>::const_iterator citLoc;
+            typedef std::vector<rtl::OUString>::const_iterator citLoc;
             //Check every manually added location
             for (citLoc ii = vecJRELocations.begin();
                 ii != vecJRELocations.end(); ii++)
             {
-                rtl::OUString sLocation =
-                    rtl::OStringToOUString(*ii, RTL_TEXTENCODING_UTF8);
+//              rtl::OUString sLocation =
+//                  rtl::OStringToOUString(*ii, RTL_TEXTENCODING_UTF8);
                 jfw::CJavaInfo aInfo;
                 plerr = (*jfw_plugin_getJavaInfoByPathFunc)(
-                    sLocation.pData,
+                    ii->pData,
                     library.sVendor.pData,
                     versionInfo.sMinVersion.pData,
                     versionInfo.sMaxVersion.pData,
@@ -261,9 +260,12 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
     return JFW_E_ERROR;
 #else
     javaFrameworkError errcode = JFW_E_NONE;
+    if (cOptions > 0 && arOptions == NULL)
+        return JFW_E_INVALID_ARG;
+
     try
     {
-        osl::MutexGuard guard(jfw::getFwkMutex());
+        osl::MutexGuard guard(jfw::FwkMutex::get());
 
         //We keep this pointer so we can determine if a VM has already
         //been created.
@@ -273,23 +275,19 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
         if (ppVM == NULL)
             return JFW_E_INVALID_ARG;
 
-        jfw::CNodeJava javaSettings;
+        std::vector<rtl::OString> vmParams;
+        rtl::OString sUserClassPath;
         jfw::CJavaInfo aInfo;
         jfw::JFW_MODE mode = jfw::getMode();
-
         if (mode == jfw::JFW_MODE_APPLICATION)
         {
-            //check if Java is disabled
-            sal_Bool bEnabled = sal_False;
-            if ((errcode = jfw_getEnabled(&bEnabled)) == JFW_E_NONE)
-            {
-                if (bEnabled == sal_False)
-                    return JFW_E_JAVA_DISABLED;
-            }
-            else
-            {
-                return errcode;
-            }
+            const jfw::MergedSettings settings;
+            if (sal_False == settings.getEnabled())
+                return JFW_E_JAVA_DISABLED;
+            aInfo.attach(settings.createJavaInfo());
+            //check if a Java has ever been selected
+            if (aInfo == NULL)
+                return JFW_E_NO_SELECT;
 
 #ifdef WNT
             //Because on Windows there is no system setting that we can use to determine
@@ -300,39 +298,27 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
             //only if the user has not manually changed the selected JRE in the options dialog.
             if (jfw::isAccessibilitySupportDesired())
             {
-                jfw::CJavaInfo info;
-                javaFrameworkError err = JFW_E_NONE;
-                if ((err = jfw_getSelectedJRE( & info.pInfo)) != JFW_E_NONE)
-                    return err;
-                // If no JRE has been selected then we do no select one. This function shall then
+                // If no JRE has been selected then we do not select one. This function shall then
                 //return JFW_E_NO_SELECT
-                if (info != NULL &&
-                    (info->nFeatures & JFW_FEATURE_ACCESSBRIDGE) == 0)
+                if (aInfo != NULL &&
+                    (aInfo->nFeatures & JFW_FEATURE_ACCESSBRIDGE) == 0)
                 {
                     //has the user manually selected a JRE?
-                    jfw::CNodeJava settings;
-                    settings.loadFromSettings();
                     if (settings.getJavaInfoAttrAutoSelect() == true)
                     {
-                        //The currently selected JRE has no access bridge
-                        if ((err = jfw_findAndSelectJRE(NULL)) != JFW_E_NONE)
-                            return err;
+                        // if not then the automatism has previously selected a JRE
+                        //without accessibility support. We return JFW_E_NO_SELECT
+                        //to cause that we search for another JRE. The search code will
+                        //then prefer a JRE with accessibility support.
+                        return JFW_E_NO_SELECT;
                     }
                 }
             }
 #endif
-            javaSettings.loadFromSettings();
-
-            //get the current java setting (javaInfo)
-            aInfo = jfw::CJavaInfo::createWrapper(javaSettings.createJavaInfo());
-
-            //check if a Java has ever been selected
-            if (aInfo == NULL)
-                return JFW_E_NO_SELECT;
             //check if the javavendors.xml has changed after a Java was selected
             rtl::OString sVendorUpdate = jfw::getElementUpdated();
 
-            if (sVendorUpdate != javaSettings.getJavaInfoAttrVendorUpdate())
+            if (sVendorUpdate != settings.getJavaInfoAttrVendorUpdate())
                 return JFW_E_INVALID_SETTINGS;
 
             //check if JAVA is disabled
@@ -349,12 +335,20 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
                 &&
                 (jfw::wasJavaSelectedInSameProcess() == true))
                 return JFW_E_NEED_RESTART;
+
+            vmParams = settings.getVmParametersUtf8();
+            sUserClassPath = jfw::makeClassPathOption(settings.getUserClassPath());
         } // end mode FWK_MODE_OFFICE
         else if (mode == jfw::JFW_MODE_DIRECT)
         {
             errcode = jfw_getSelectedJRE(&aInfo.pInfo);
             if (errcode != JFW_E_NONE)
                 return errcode;
+            //In direct mode the options are specified by bootstrap variables
+            //of the form UNO_JAVA_JFW_PARAMETER_1 .. UNO_JAVA_JFW_PARAMETER_n
+            vmParams = jfw::BootParams::getVMParameters();
+            sUserClassPath =
+                "-Djava.class.path=" + jfw::BootParams::getClasspath();
         }
         else
             OSL_ASSERT(0);
@@ -378,29 +372,14 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
         // create JavaVMOptions array that is passed to the plugin
         // it contains the classpath and all options set in the
         //options dialog
-        //In direct mode the options are specified by bootstrap variables
-        //of the form UNO_JAVA_JFW_PARAMETER_1 .. UNO_JAVA_JFW_PARAMETER_n
-        if (cOptions > 0 && arOptions == NULL)
-            return JFW_E_INVALID_ARG;
-
-        std::vector<rtl::OString> vecDirectModeOptions =
-            jfw::BootParams::getVMParameters();
-
-        boost::scoped_array<JavaVMOption> sarJOptions;
-
-        if (mode == jfw::JFW_MODE_APPLICATION)
-            sarJOptions.reset(new JavaVMOption[cOptions + 2 + javaSettings.getVmParameters().size()]);
-        else // direct mode
-            sarJOptions.reset(new JavaVMOption[cOptions + 2 + vecDirectModeOptions.size()]);
-
+        boost::scoped_array<JavaVMOption> sarJOptions(
+            new JavaVMOption[cOptions + 2 + vmParams.size()]);
         JavaVMOption * arOpt = sarJOptions.get();
         if (! arOpt)
             return JFW_E_ERROR;
 
         //The first argument is the classpath
-        rtl::OString sOptionClassPath =
-            jfw::makeClassPathOption(javaSettings);
-        arOpt[0].optionString= (char*) sOptionClassPath.getStr();
+        arOpt[0].optionString= (char*) sUserClassPath.getStr();
         arOpt[0].extraInfo = NULL;
         // Set a flag that this JVM has been created via the JNI Invocation API
         // (used, for example, by UNO remote bridges to share a common thread pool
@@ -409,18 +388,11 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
         arOpt[1].extraInfo = 0;
 
         //add the options set by options dialog
-        typedef std::vector<rtl::OString>::const_iterator cit;
-        std::vector<rtl::OString> params;
-
-        if (mode == jfw::JFW_MODE_APPLICATION)
-            params = javaSettings.getVmParameters();
-        else // JFW_MODE_DIRECT
-            params = vecDirectModeOptions;
-
         int index = 2;
-        for (cit i = params.begin(); i != params.end(); i ++)
+        typedef std::vector<rtl::OString>::const_iterator cit;
+        for (cit i = vmParams.begin(); i != vmParams.end(); i ++)
         {
-            arOpt[index].optionString= (char*) i->getStr();
+            arOpt[index].optionString = const_cast<sal_Char*>(i->getStr());
             arOpt[index].extraInfo = 0;
             index ++;
         }
@@ -472,7 +444,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::getFwkMutex());
+        osl::MutexGuard guard(jfw::FwkMutex::get());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
         sal_uInt64 nFeatureFlags = 0;
@@ -572,10 +544,10 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
         {//The plug-ins did not find a suitable Java. Now try the paths which have been
         //added manually.
             //get the list of paths to jre locations which have been added manually
-            jfw::CNodeJava node;
-            node.loadFromSettings();
-            const std::vector<rtl::OString> & vecJRELocations =
-                node.getJRELocations();
+            const jfw::MergedSettings settings;
+            //node.loadFromSettings();
+            const std::vector<rtl::OUString> & vecJRELocations =
+                settings.getJRELocations();
             //use every plug-in to determine the JavaInfo objects
             bool bInfoFound = false;
             for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); i++)
@@ -598,15 +570,13 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                 if (jfw_plugin_getJavaInfoByPathFunc == NULL)
                     return JFW_E_ERROR;
 
-                typedef std::vector<rtl::OString>::const_iterator citLoc;
+                typedef std::vector<rtl::OUString>::const_iterator citLoc;
                 for (citLoc it = vecJRELocations.begin();
                     it != vecJRELocations.end(); it++)
                 {
-                    rtl::OUString sLocation =
-                        rtl::OStringToOUString(*it, RTL_TEXTENCODING_UTF8);
                     jfw::CJavaInfo aInfo;
                     javaPluginError err = (*jfw_plugin_getJavaInfoByPathFunc)(
-                        sLocation.pData,
+                        it->pData,
                         library.sVendor.pData,
                         versionInfo.sMinVersion.pData,
                         versionInfo.sMaxVersion.pData,
@@ -644,9 +614,9 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
         }
         if ((JavaInfo*) aCurrentInfo)
         {
-            jfw::CNodeJava javaNode;
+            jfw::NodeJava javaNode;
             javaNode.setJavaInfo(aCurrentInfo,true);
-            javaNode.writeSettings();
+            javaNode.write();
 
             if (pInfo !=NULL)
             {
@@ -710,7 +680,7 @@ javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo)
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::getFwkMutex());
+        osl::MutexGuard guard(jfw::FwkMutex::get());
         if (ppInfo == NULL)
             return JFW_E_INVALID_ARG;
 
@@ -733,10 +703,9 @@ javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo)
             return JFW_E_NONE;
         }
 
-        jfw::CNodeJava aSettings;
-        aSettings.loadFromSettings();
+        const jfw::MergedSettings settings;
         jfw::CJavaInfo aInfo;
-        aInfo.attach(aSettings.createJavaInfo());
+        aInfo.attach(settings.createJavaInfo());
         if (! aInfo)
         {
             *ppInfo = NULL;
@@ -747,7 +716,7 @@ javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo)
         // /java/javaInfo/@vendorUpdate != javaSelection/updated (javavendors.xml)
         rtl::OString sUpdated = jfw::getElementUpdated();
 
-        if (sUpdated.equals(aSettings.getJavaInfoAttrVendorUpdate()) == sal_False)
+        if (sUpdated.equals(settings.getJavaInfoAttrVendorUpdate()) == sal_False)
             return JFW_E_INVALID_SETTINGS;
         *ppInfo = aInfo.detach();
     }
@@ -762,7 +731,7 @@ javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo)
 
 javaFrameworkError SAL_CALL jfw_isVMRunning(sal_Bool *bRunning)
 {
-    osl::MutexGuard guard(jfw::getFwkMutex());
+    osl::MutexGuard guard(jfw::FwkMutex::get());
     if (bRunning == NULL)
         return JFW_E_INVALID_ARG;
     if (g_pJavaVM == NULL)
@@ -778,7 +747,7 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::getFwkMutex());
+        osl::MutexGuard guard(jfw::FwkMutex::get());
         if (pPath == NULL || ppInfo == NULL)
             return JFW_E_INVALID_ARG;
 
@@ -895,7 +864,7 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo)
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::getFwkMutex());
+        osl::MutexGuard guard(jfw::FwkMutex::get());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
         //check if pInfo is the selected JRE
@@ -906,9 +875,9 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo)
 
         if (jfw_areEqualJavaInfo(currentInfo, pInfo) == sal_False)
         {
-            jfw::CNodeJava node;
+            jfw::NodeJava node;
             node.setJavaInfo(pInfo, false);
-            node.writeSettings();
+            node.write();
             //remember that the JRE was selected in this process
             jfw::setJavaSelected();
         }
@@ -926,11 +895,9 @@ javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled)
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::getFwkMutex());
+        osl::MutexGuard guard(jfw::FwkMutex::get());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
-
-        jfw::CNodeJava node;
 
         if (g_bEnabledSwitchedOn == false && bEnabled == sal_True)
         {
@@ -940,12 +907,13 @@ javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled)
             //LD_LIBRARY_PATH, etc.
 
             //check if Enabled is false;
-            node.loadFromSettings();
-            if (node.getEnabled() == sal_False)
+            const jfw::MergedSettings settings;
+            if (settings.getEnabled() == sal_False)
                 g_bEnabledSwitchedOn = true;
         }
+        jfw::NodeJava node;
         node.setEnabled(bEnabled);
-        node.writeSettings();
+        node.write();
     }
     catch (jfw::FrameworkException& e)
     {
@@ -963,12 +931,11 @@ javaFrameworkError SAL_CALL jfw_getEnabled(sal_Bool *pbEnabled)
     {
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
-        osl::MutexGuard guard(jfw::getFwkMutex());
+        osl::MutexGuard guard(jfw::FwkMutex::get());
         if (pbEnabled == NULL)
             return JFW_E_INVALID_ARG;
-        jfw::CNodeJava node;
-        node.loadFromSettings();
-        *pbEnabled = node.getEnabled();
+        jfw::MergedSettings settings;
+        *pbEnabled = settings.getEnabled();
     }
     catch (jfw::FrameworkException& e)
     {
@@ -986,14 +953,14 @@ javaFrameworkError SAL_CALL jfw_setVMParameters(
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::getFwkMutex());
+        osl::MutexGuard guard(jfw::FwkMutex::get());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
-        jfw::CNodeJava node;
+        jfw::NodeJava node;
         if (arOptions == NULL && nLen != 0)
             return JFW_E_INVALID_ARG;
         node.setVmParameters(arOptions, nLen);
-        node.writeSettings();
+        node.write();
     }
     catch (jfw::FrameworkException& e)
     {
@@ -1011,15 +978,14 @@ javaFrameworkError SAL_CALL jfw_getVMParameters(
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::getFwkMutex());
+        osl::MutexGuard guard(jfw::FwkMutex::get());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
 
         if (parOptions == NULL || pLen == NULL)
             return JFW_E_INVALID_ARG;
-        jfw::CNodeJava node;
-        node.loadFromSettings();
-        node.getVmParametersArray(parOptions, pLen);
+        const jfw::MergedSettings settings;
+        settings.getVmParametersArray(parOptions, pLen);
     }
     catch (jfw::FrameworkException& e)
     {
@@ -1035,14 +1001,14 @@ javaFrameworkError SAL_CALL jfw_setUserClassPath(rtl_uString * pCp)
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::getFwkMutex());
+        osl::MutexGuard guard(jfw::FwkMutex::get());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
-        jfw::CNodeJava node;
+        jfw::NodeJava node;
         if (pCp == NULL)
             return JFW_E_INVALID_ARG;
         node.setUserClassPath(pCp);
-        node.writeSettings();
+        node.write();
     }
     catch (jfw::FrameworkException& e)
     {
@@ -1058,14 +1024,13 @@ javaFrameworkError SAL_CALL jfw_getUserClassPath(rtl_uString ** ppCP)
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::getFwkMutex());
+        osl::MutexGuard guard(jfw::FwkMutex::get());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
         if (ppCP == NULL)
             return JFW_E_INVALID_ARG;
-        jfw::CNodeJava node;
-        node.loadFromSettings();
-        *ppCP = node.getUserClassPath().pData;
+        const jfw::MergedSettings settings;
+        *ppCP = settings.getUserClassPath().pData;
         rtl_uString_acquire(*ppCP);
     }
     catch (jfw::FrameworkException& e)
@@ -1082,15 +1047,15 @@ javaFrameworkError SAL_CALL jfw_addJRELocation(rtl_uString * sLocation)
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::getFwkMutex());
+        osl::MutexGuard guard(jfw::FwkMutex::get());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
-        jfw::CNodeJava node;
+        jfw::NodeJava node;
         if (sLocation == NULL)
             return JFW_E_INVALID_ARG;
-        node.loadFromSettings();
+        node.load();
         node.addJRELocation(sLocation);
-        node.writeSettings();
+        node.write();
     }
     catch (jfw::FrameworkException& e)
     {
@@ -1109,14 +1074,14 @@ javaFrameworkError SAL_CALL jfw_setJRELocations(
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::getFwkMutex());
+        osl::MutexGuard guard(jfw::FwkMutex::get());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
-        jfw::CNodeJava node;
+        jfw::NodeJava node;
         if (arLocations == NULL && nLen != 0)
             return JFW_E_INVALID_ARG;
         node.setJRELocations(arLocations, nLen);
-        node.writeSettings();
+        node.write();
     }
     catch (jfw::FrameworkException& e)
     {
@@ -1134,15 +1099,14 @@ javaFrameworkError SAL_CALL jfw_getJRELocations(
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::getFwkMutex());
+        osl::MutexGuard guard(jfw::FwkMutex::get());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
 
         if (parLocations == NULL || pLen == NULL)
             return JFW_E_INVALID_ARG;
-        jfw::CNodeJava node;
-        node.loadFromSettings();
-        node.getJRELocations(parLocations, pLen);
+        const jfw::MergedSettings settings;
+        settings.getJRELocations(parLocations, pLen);
     }
     catch (jfw::FrameworkException& e)
     {
@@ -1156,14 +1120,12 @@ javaFrameworkError SAL_CALL jfw_getJRELocations(
 
 void SAL_CALL jfw_lock()
 {
-    osl::Mutex * mutex = jfw::getFwkMutex();
-    mutex->acquire();
+    jfw::FwkMutex::get().acquire();
 }
 
 void SAL_CALL jfw_unlock()
 {
-    osl::Mutex * mutex = jfw::getFwkMutex();
-    mutex->release();
+    jfw::FwkMutex::get().release();
 }
 
 
