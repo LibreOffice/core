@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tokstack.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:43:28 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:12:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,15 +81,16 @@ class ScToken;
 
 enum E_TYPE
 {
-    T_Id,   // Id-Folge
-    T_Str,  // String
-    T_D,    // Double
-    T_RefC, // Cell Reference
-    T_RefA, // Area Reference
-    T_RN,   // Range Name
-    T_Ext,  // irgendwas Unbekanntes mit Funktionsnamen
-    T_Nlf,  // token for natural language formula
-    T_Error // fuer Abfrage im Fehlerfall
+    T_Id,       // Id-Folge
+    T_Str,      // String
+    T_D,        // Double
+    T_RefC,     // Cell Reference
+    T_RefA,     // Area Reference
+    T_RN,       // Range Name
+    T_Ext,      // irgendwas Unbekanntes mit Funktionsnamen
+    T_Nlf,      // token for natural language formula
+    T_Matrix,   // token for inline arrays
+    T_Error     // fuer Abfrage im Fehlerfall
 };
 
 
@@ -137,6 +138,10 @@ class TokenPool
         UINT16                      nP_Nlf;
         UINT16                      nP_NlfAkt;
 
+        ScMatrix**                  ppP_Matrix;     // Pool fuer Matricies
+        UINT16                      nP_Matrix;
+        UINT16                      nP_MatrixAkt;
+
         UINT16*                     pElement;   // Array mit Indizes fuer Elemente
         E_TYPE*                     pType;      // ...mit Typ-Info
         UINT16*                     pSize;      // ...mit Laengenangabe (Anz. UINT16)
@@ -156,6 +161,7 @@ class TokenPool
         void                        GrowElement( void );
         void                        GrowExt( void );
         void                        GrowNlf( void );
+        void                        GrowMatrix( void );
         void                        GetElement( const UINT16 nId );
         void                        GetElementRek( const UINT16 nId );
     public:
@@ -179,6 +185,8 @@ class TokenPool
         const TokenId               Store( const DefTokenId eId, const String& rName );
                                         // 4 externals (e.g. AddIns, Makros...)
         const TokenId               StoreNlf( const SingleRefData& rTr );
+        const TokenId               StoreMatrix( SCSIZE nC, SCSIZE nR );
+
         inline const TokenId        LastId( void ) const;
         inline const ScTokenArray*  operator []( const TokenId nId );
         void                        Reset( void );
@@ -187,6 +195,7 @@ class TokenPool
         BOOL                        IsSingleOp( const TokenId& nId, const DefTokenId eId ) const;
         const String*               GetExternal( const TokenId& nId ) const;
         const String*               GetString( const TokenId& nId ) const;
+        ScMatrix*                   GetMatrix( unsigned int n ) const;
 };
 
 
