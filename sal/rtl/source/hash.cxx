@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hash.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-19 11:56:36 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 08:13:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,8 @@ rtl_str_hash_intern (StringHashTable   *pHash,
             return NULL;
     }
 
-    pString->refCount |= SAL_STRING_INTERN_FLAG;
+    if (!SAL_STRING_IS_STATIC (pString))
+        pString->refCount |= SAL_STRING_INTERN_FLAG;
     pHash->insert(pString);
 
     return pString;
