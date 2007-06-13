@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fwkbase.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:48:06 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 07:57:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,12 +64,48 @@ using namespace rtl;
 #define UNO_JAVA_JFW_VENDOR_SETTINGS "UNO_JAVA_JFW_VENDOR_SETTINGS"
 #define UNO_JAVA_JFW_USER_DATA "UNO_JAVA_JFW_USER_DATA"
 #define UNO_JAVA_JFW_SHARED_DATA "UNO_JAVA_JFW_SHARED_DATA"
+#define UNO_JAVA_JFW_INSTALL_DATA "UNO_JAVA_JFW_INSTALL_DATA"
+#define UNO_JAVA_JFW_INSTALL_EXPIRE "UNO_JAVA_JFW_INSTALL_EXPIRE"
+#define DEFAULT_INSTALL_EXPIRATION 3600
 
 namespace jfw
 {
 bool  g_bJavaSet = false;
 
-static rtl::OString getVendorSettingsPath(rtl::OUString const & sURL);
+namespace {
+
+rtl::OString getVendorSettingsPath(rtl::OUString const & sURL)
+{
+    if (sURL.getLength() == 0)
+        return rtl::OString();
+    rtl::OUString sSystemPathSettings;
+    if (osl_getSystemPathFromFileURL(sURL.pData,
+        & sSystemPathSettings.pData) != osl_File_E_None)
+        throw FrameworkException(
+            JFW_E_ERROR,
+            rtl::OString("[Java framework] Error in function "
+                         "getVendorSettingsPath (fwkutil.cxx) "));
+    rtl::OString osSystemPathSettings =
+        rtl::OUStringToOString(sSystemPathSettings,osl_getThreadTextEncoding());
+    return osSystemPathSettings;
+}
+
+rtl::OUString getParam(const char * name)
+{
+    rtl::OUString retVal;
+    if (Bootstrap::get()->getFrom(rtl::OUString::createFromAscii(name), retVal))
+    {
+#if OSL_DEBUG_LEVEL >=2
+        rtl::OString sValue = rtl::OUStringToOString(retVal, osl_getThreadTextEncoding());
+        fprintf(stderr,"[Java framework] Using bootstrap parameter %s = %s.\n",
+                name, sValue.getStr());
+#endif
+    }
+    return retVal;
+}
+
+}//blind namespace
+
 
 VendorSettings::VendorSettings():
     m_xmlDocVendorSettingsFileUrl(BootParams::getVendorSettings())
@@ -77,8 +113,7 @@ VendorSettings::VendorSettings():
     OString sMsgExc("[Java framework] Error in constructor "
                          "VendorSettings::VendorSettings() (fwkbase.cxx)");
     //Prepare the xml document and context
-    OString sSettingsPath = jfw::getVendorSettingsPath(
-        m_xmlDocVendorSettingsFileUrl);
+    OString sSettingsPath = getVendorSettingsPath(m_xmlDocVendorSettingsFileUrl);
     if (sSettingsPath.getLength() == 0)
     {
         OString sMsg("[Java framework] A vendor settings file was not specified."
@@ -298,9 +333,9 @@ OUString VendorSettings::getPluginLibrary(const OUString& sVendor)
     return sUrl;
 }
 
-std::vector<OString> BootParams::getVMParameters()
+::std::vector<OString> BootParams::getVMParameters()
 {
-    std::vector<OString> vecParams;
+    ::std::vector<OString> vecParams;
 
     for (sal_Int32 i = 1; ; i++)
     {
@@ -308,7 +343,7 @@ std::vector<OString> BootParams::getVMParameters()
             OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_PARAMETER)) +
             OUString::valueOf(i);
         OUString sValue;
-        if (getBootstrap().getFrom(sName, sValue) == sal_True)
+        if (Bootstrap::get()->getFrom(sName, sValue) == sal_True)
         {
             OString sParam =
                 OUStringToOString(sValue, osl_getThreadTextEncoding());
@@ -327,40 +362,18 @@ std::vector<OString> BootParams::getVMParameters()
 
 rtl::OUString BootParams::getUserData()
 {
-    //do not cache the URL in a static because the user data file may not exist
-    //at startup and is later created when data are read or written.
-    //get the system path to the javasettings_xxx_xxx.xml file
-    rtl::OUString retVal;
-    if (getBootstrap().getFrom(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_USER_DATA)),
-            retVal))
-    {
-#if OSL_DEBUG_LEVEL >=2
-        rtl::OString sValue = rtl::OUStringToOString(retVal, osl_getThreadTextEncoding());
-        fprintf(stderr,"[Java framework] Using bootstrap parameter "
-                UNO_JAVA_JFW_USER_DATA" = %s.\n", sValue.getStr());
-#endif
-    }
-    return retVal;
+    return getParam(UNO_JAVA_JFW_USER_DATA);
 }
 
 rtl::OUString BootParams::getSharedData()
 {
-    rtl::OUString sShare;
-    if (getBootstrap().getFrom(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_SHARED_DATA)),
-            sShare))
-    {
-#if OSL_DEBUG_LEVEL >=2
-        rtl::OString sValue = rtl::OUStringToOString(sShare, osl_getThreadTextEncoding());
-        fprintf(stderr,"[Java framework] Using bootstrap parameter "
-                UNO_JAVA_JFW_SHARED_DATA" = %s.\n", sValue.getStr());
-#endif
-    }
-    return sShare;
+    return getParam(UNO_JAVA_JFW_SHARED_DATA);
 }
 
+rtl::OUString BootParams::getInstallData()
+{
+    return getParam(UNO_JAVA_JFW_INSTALL_DATA);
+}
 
 
 rtl::OString BootParams::getClasspath()
@@ -368,7 +381,7 @@ rtl::OString BootParams::getClasspath()
     rtl::OString sClassPath;
     rtl::OUString sCP;
     char szSep[] = {SAL_PATHSEPARATOR,0};
-    if (getBootstrap().getFrom(
+    if (Bootstrap::get()->getFrom(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_CLASSPATH)),
         sCP) == sal_True)
     {
@@ -381,7 +394,7 @@ rtl::OString BootParams::getClasspath()
     }
 
     rtl::OUString sEnvCP;
-    if (getBootstrap().getFrom(
+    if (Bootstrap::get()->getFrom(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_ENV_CLASSPATH)),
         sEnvCP) == sal_True)
     {
@@ -404,7 +417,7 @@ rtl::OUString BootParams::getVendorSettings()
     rtl::OUString sVendor;
     rtl::OUString sName(
         RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_VENDOR_SETTINGS));
-    if (getBootstrap().getFrom(sName ,sVendor) == sal_True)
+    if (Bootstrap::get()->getFrom(sName ,sVendor) == sal_True)
     {
         //check the value of the bootstrap variable
         jfw::FileStatus s = checkFileURL(sVendor);
@@ -442,9 +455,9 @@ rtl::OUString BootParams::getJREHome()
 {
     rtl::OUString sJRE;
     rtl::OUString sEnvJRE;
-    sal_Bool bJRE = getBootstrap().getFrom(
+    sal_Bool bJRE = Bootstrap::get()->getFrom(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_JREHOME)) ,sJRE);
-    sal_Bool bEnvJRE = getBootstrap().getFrom(
+    sal_Bool bEnvJRE = Bootstrap::get()->getFrom(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_ENV_JREHOME)) ,sEnvJRE);
 
     if (bJRE == sal_True && bEnvJRE == sal_True)
@@ -505,7 +518,7 @@ rtl::OUString BootParams::getJREHome()
 rtl::OUString BootParams::getClasspathUrls()
 {
     rtl::OUString sParams;
-    getBootstrap().getFrom(
+    Bootstrap::get()->getFrom(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_CLASSPATH_URLS)),
         sParams);
 #if OSL_DEBUG_LEVEL >=2
@@ -514,6 +527,34 @@ rtl::OUString BootParams::getClasspathUrls()
             UNO_JAVA_JFW_CLASSPATH_URLS " = %s.\n", sValue.getStr());
 #endif
     return sParams;
+}
+
+::sal_uInt32 BootParams::getInstallDataExpiration()
+{
+    rtl::OUString sValue;
+    Bootstrap::get()->getFrom(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_INSTALL_EXPIRE)),
+        sValue);
+
+#if OSL_DEBUG_LEVEL >=2
+    rtl::OString osValue = rtl::OUStringToOString(sValue, osl_getThreadTextEncoding());
+    fprintf(stderr,"[Java framework] Using bootstrap parameter "
+            UNO_JAVA_JFW_INSTALL_EXPIRE " = %s.\n", osValue.getStr());
+#endif
+
+    sal_Int64 nVal = sValue.toInt64();
+    if (0 == nVal)
+    {
+#if OSL_DEBUG_LEVEL >=2
+        fprintf(stderr,"[Java framework] Using default value for "
+                "UNO_JAVA_JFW_INSTALL_EXPIRE: %d  \n", DEFAULT_INSTALL_EXPIRATION);
+#endif
+        return DEFAULT_INSTALL_EXPIRATION;
+    }
+    else
+    {
+        return static_cast<sal_uInt32>(nVal);
+    }
 }
 
 JFW_MODE getMode()
@@ -526,27 +567,27 @@ JFW_MODE getMode()
         //check if either of the "direct mode" bootstrap variables is set
         bool bDirectMode = true;
         rtl::OUString sValue;
-        const rtl::Bootstrap & aBoot = getBootstrap();
+        const rtl::Bootstrap * aBoot = Bootstrap::get();
         rtl::OUString sJREHome(
             RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_JREHOME));
-        if (aBoot.getFrom(sJREHome, sValue) == sal_False)
+        if (aBoot->getFrom(sJREHome, sValue) == sal_False)
         {
             rtl::OUString sEnvJRE(
             RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_ENV_JREHOME));
-            if (aBoot.getFrom(sEnvJRE, sValue) == sal_False)
+            if (aBoot->getFrom(sEnvJRE, sValue) == sal_False)
             {
                 rtl::OUString sClasspath(
                     RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_CLASSPATH));
-                if (aBoot.getFrom(sClasspath, sValue) == sal_False)
+                if (aBoot->getFrom(sClasspath, sValue) == sal_False)
                 {
                     rtl::OUString sEnvClasspath(
                         RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_ENV_CLASSPATH));
-                    if (aBoot.getFrom(sEnvClasspath, sValue) == sal_False)
+                    if (aBoot->getFrom(sEnvClasspath, sValue) == sal_False)
                     {
                         rtl::OUString sParams = rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_PARAMETER)) +
                             rtl::OUString::valueOf((sal_Int32)1);
-                        if (aBoot.getFrom(sParams, sValue) == sal_False)
+                        if (aBoot->getFrom(sParams, sValue) == sal_False)
                         {
                             bDirectMode = false;
                         }
@@ -598,116 +639,60 @@ rtl::OUString getApplicationClassPath()
     return buf.makeStringAndClear();
 }
 
-rtl::OString makeClassPathOption(CNodeJava & javaSettings)
+rtl::OString makeClassPathOption(OUString const & sUserClassPath)
 {
     //Compose the class path
     rtl::OString sPaths;
     rtl::OUStringBuffer sBufCP(4096);
     char szSep[] = {SAL_PATHSEPARATOR,0};
-    JFW_MODE mode = getMode();
-    if (mode == JFW_MODE_APPLICATION)
-    {
-        // append all user selected jars to the class path
-        rtl::OUString sUser = javaSettings.getUserClassPath();
-        if (sUser.getLength() > 0)
-            sBufCP.append(sUser);
 
-        //append all jar libraries and components to the class path
-        OUString sAppCP = getApplicationClassPath();
-        if (sAppCP.getLength())
-        {
-            if (sUser.getLength())
-                sBufCP.appendAscii(szSep);
-            sBufCP.append(sAppCP);
-        }
+    // append all user selected jars to the class path
+    if (sUserClassPath.getLength() > 0)
+        sBufCP.append(sUserClassPath);
 
-        sPaths = rtl::OUStringToOString(
-            sBufCP.makeStringAndClear(), osl_getThreadTextEncoding());
-    }
-    else if (mode == JFW_MODE_DIRECT)
+    //append all jar libraries and components to the class path
+    OUString sAppCP = getApplicationClassPath();
+    if (sAppCP.getLength())
     {
-        sPaths = BootParams::getClasspath();
+        if (sUserClassPath.getLength())
+            sBufCP.appendAscii(szSep);
+        sBufCP.append(sAppCP);
     }
+
+    sPaths = rtl::OUStringToOString(
+        sBufCP.makeStringAndClear(), osl_getThreadTextEncoding());
 
     rtl::OString sOptionClassPath("-Djava.class.path=");
     sOptionClassPath += sPaths;
     return sOptionClassPath;
 }
-rtl::OString getUserSettingsStoreLocation()
-{
-    OSL_ASSERT(getMode() == JFW_MODE_APPLICATION);
-    static rtl::OString g_sUserSettings;
-    if (g_sUserSettings.getLength() > 0)
-        return g_sUserSettings;
-    //get the system path to the javasettings_xxx_xxx.xml file
-    rtl::OUString sUser = BootParams::getUserData();
-    OSL_ENSURE(sUser.getLength() > 0, "[Java framework]: The bootstrap parameter "
-               "UNO_JAVA_JFW_USER_DATA must be set in application mode!");
-    if (sUser.getLength() > 0)
-    {
-        rtl::OUString sSystemPath;
-        if (osl_getSystemPathFromFileURL(sUser.pData,
-                                         & sSystemPath.pData) != osl_File_E_None)
-            throw FrameworkException(
-                JFW_E_ERROR, rtl::OString("[Java framework] Error in function "
-                                          "getUserSettingsStoreLocation (fwkutil.cxx)."));
-        g_sUserSettings =
-            rtl::OUStringToOString(sSystemPath,osl_getThreadTextEncoding());
-    }
-    return g_sUserSettings;
-}
-
 
 rtl::OString getUserSettingsPath()
 {
-    rtl::OUString sURL = BootParams::getUserData();
-    if (sURL.getLength() == 0)
-        return rtl::OString();
-    rtl::OUString sSystemPathSettings;
-    if (osl_getSystemPathFromFileURL(sURL.pData,
-        & sSystemPathSettings.pData) != osl_File_E_None)
-        throw FrameworkException(
-            JFW_E_ERROR, rtl::OString("[Java framework] Error in function "
-                                      "getUserSettingsPath (fwkutil.cxx)."));
-
-    rtl::OString osSystemPathSettings =
-        rtl::OUStringToOString(sSystemPathSettings,osl_getThreadTextEncoding());
-    return osSystemPathSettings;
+    return getSettingsPath(BootParams::getUserData());
 }
-
 
 rtl::OString getSharedSettingsPath()
 {
-    rtl::OUString sURL = BootParams::getSharedData();
-    if (sURL.getLength() == 0)
-        return rtl::OString();
-    rtl::OUString sSystemPathSettings;
-    if (osl_getSystemPathFromFileURL(sURL.pData,
-        & sSystemPathSettings.pData) != osl_File_E_None)
-        throw FrameworkException(
-            JFW_E_ERROR,
-            rtl::OString("[Java framework] Error in function "
-                         "getShareSettingsPath (fwkutil.cxx)."));
-
-    rtl::OString osSystemPathSettings =
-        rtl::OUStringToOString(sSystemPathSettings,osl_getThreadTextEncoding());
-    return osSystemPathSettings;
+    return getSettingsPath(BootParams::getSharedData());
 }
 
-rtl::OString getVendorSettingsPath(rtl::OUString const & sURL)
+rtl::OString getInstallSettingsPath()
+{
+    return getSettingsPath(BootParams::getInstallData());
+}
+
+rtl::OString getSettingsPath( const rtl::OUString & sURL)
 {
     if (sURL.getLength() == 0)
         return rtl::OString();
-    rtl::OUString sSystemPathSettings;
+    rtl::OUString sPath;
     if (osl_getSystemPathFromFileURL(sURL.pData,
-        & sSystemPathSettings.pData) != osl_File_E_None)
+        & sPath.pData) != osl_File_E_None)
         throw FrameworkException(
-            JFW_E_ERROR,
-            rtl::OString("[Java framework] Error in function "
-                         "getVendorSettingsPath (fwkutil.cxx) "));
-    rtl::OString osSystemPathSettings =
-        rtl::OUStringToOString(sSystemPathSettings,osl_getThreadTextEncoding());
-    return osSystemPathSettings;
+            JFW_E_ERROR, rtl::OString(
+                "[Java framework] Error in function ::getSettingsPath (fwkbase.cxx)."));
+    return rtl::OUStringToOString(sPath,osl_getThreadTextEncoding());
 }
 
 rtl::OString getVendorSettingsPath()
