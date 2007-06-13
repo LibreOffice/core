@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fwkutil.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:35:48 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 07:58:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,30 +35,59 @@
 #if !defined INCLUDED_JVMFWK_FWKUTIL_HXX
 #define INCLUDED_JVMFWK_FWKUTIL_HXX
 
+#include "sal/config.h"
 #include "osl/mutex.hxx"
 #include "rtl/bootstrap.hxx"
+#include "rtl/instance.hxx"
+#include "rtl/ustrbuf.hxx"
+#include "rtl/byteseq.hxx"
+#include "osl/thread.hxx"
+
+
+
 namespace jfw
 {
-osl::Mutex * getFwkMutex();
+
+/** Returns the file URL of the directory where the framework library
+    (this library) resides.
+*/
+rtl::OUString getLibraryLocation();
+
+/** provides a bootstrap class which already knows the values from the
+    jvmfkwrc file.
+*/
+struct Bootstrap :
+    public ::rtl::StaticWithInit< const rtl::Bootstrap *, Bootstrap > {
+        const rtl::Bootstrap * operator () () {
+            ::rtl::OUStringBuffer buf(256);
+            buf.append(getLibraryLocation());
+            buf.appendAscii(SAL_CONFIGFILE("/jvmfwk3"));
+            ::rtl::OUString sIni = buf.makeStringAndClear();
+            ::rtl::Bootstrap *  bootstrap = new ::rtl::Bootstrap(sIni);
+#if OSL_DEBUG_LEVEL >=2
+        rtl::OString o = rtl::OUStringToOString( sIni , osl_getThreadTextEncoding() );
+        fprintf(stderr, "[Java framework] Using configuration file %s\n" , o.getStr() );
+#endif
+        return bootstrap;
+    }
+};
+
+struct FwkMutex: public ::rtl::Static<osl::Mutex, FwkMutex> {};
+
+//osl::Mutex * getFwkMutex();
 
 rtl::ByteSequence encodeBase16(const rtl::ByteSequence& rawData);
 rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data);
 
 rtl::OUString getPlatform();
-/** provides a bootstrap class which already knows the values from the
-    jvmfkwrc file.
-*/
-const rtl::Bootstrap& getBootstrap();
+
+//const rtl::Bootstrap& getBootstrap();
 
 
 rtl::OUString getDirFromFile(const rtl::OUString& usFilePath);
 
 rtl::OUString getFileFromURL(const rtl::OUString& sFileURL);
 
-/** Returns the file URL of the directory where the framework library
-    (this library) resides.
-*/
-rtl::OUString getLibraryLocation();
 
 /** Returns the file URL of the folder where the executable resides.
  */
@@ -79,9 +108,6 @@ rtl::OUString getExecutableDirectory();
  */
 rtl::OUString findPlugin(
     const rtl::OUString & baseUrl, const rtl::OUString & plugin);
-//Todo still needed?
-rtl::OUString searchFileNextToThisLib(const rtl::OUString & sFile);
-class CNodeJava;
 
 
 enum FileStatus
