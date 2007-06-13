@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errorcodes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:39:17 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:05:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,8 @@ const USHORT errCellNoValue          = 529;
 const USHORT errNoAddin              = 530;
 // Interpreter: needed Macro not found
 const USHORT errNoMacro              = 531;
+// Compiler: a non-simple (str,err,val) value was put in an array
+const USHORT errNestedArray          = 533;
 
 // Interpreter: NA() not available condition, not a real error
 const USHORT NOVALUE                 = 0x7fff;
