@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiname.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:27:18 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:11:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,7 +190,9 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
         rStrm.PopPosition();
 
         // --- name formula ---
-        rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize, FT_RangeName );
+        // JEG : double check this.  It is clearly false for normal names
+        //  but some of the builtins (sheettitle?) might be able to handle arrays
+        rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize, false, FT_RangeName );
 
         // --- auto or advanced filter ---
         if( (GetBiff() == EXC_BIFF8) && pTokArr && bBuiltIn )
@@ -218,7 +220,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     else if( nFmlaSize > 0 )
     {
         // regular defined name
-        rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize, FT_RangeName );
+        rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize, true, FT_RangeName );
     }
 
     // 4) *** create a defined name in the Calc document *** ------------------
