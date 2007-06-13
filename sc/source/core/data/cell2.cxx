@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:00:00 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:06:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -360,12 +360,12 @@ const ScMatrix* ScFormulaCell::GetMatrix()
     {
         // war !bDirty gespeichert aber zugehoerige Matrixzelle bDirty?
         // => wir brauchen pMatrix
-        if ( !pMatrix && cMatrixFlag == MM_FORMULA )
+        if ( !xMatrix && cMatrixFlag == MM_FORMULA )
             bDirty = TRUE;
         if ( IsDirtyOrInTableOpDirty() )
             Interpret();
     }
-    return pMatrix;
+    return xMatrix;
 }
 
 BOOL ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const
