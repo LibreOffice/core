@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:44:48 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:08:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ void ImportExcel::Formula( const XclAddress& rXclPos,
             bConvert = TRUE;
 
         if( bConvert )
-            eErr = pFormConv->Convert( pErgebnis, maStrm, nFormLen );
+            eErr = pFormConv->Convert( pErgebnis, maStrm, nFormLen, true, FT_CellFormula);
 
         ScFormulaCell*      pZelle = NULL;
 
@@ -210,8 +210,10 @@ void ExcelToSc::GetDummy( const ScTokenArray*& pErgebnis )
 }
 
 
-// stream seeks to first byte after <nFormulaLen>
-ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, sal_Size nFormulaLen, const FORMULA_TYPE eFT )
+// if bAllowArrays is false stream seeks to first byte after <nFormulaLen>
+// otherwise it will seek to the first byte after the additional content (eg
+// inline arrays) following <nFormulaLen>
+ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, sal_Size nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT )
 {
     RootData&       rR = GetOldRoot();
     BYTE            nOp, nLen, nByte;
@@ -226,8 +228,9 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
     const BOOL      bSharedFormula = eFT == FT_SharedFormula;
     const BOOL      bRNorSF = bRangeName || bSharedFormula;
 
-    SingleRefData   aSRD;
-    ComplRefData    aCRD;
+    SingleRefData       aSRD;
+    ComplRefData        aCRD;
+    ExtensionTypeVec    aExtensions;
 
     bExternName = FALSE;
 
@@ -474,9 +477,23 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             case 0x40:
             case 0x60:
             case 0x20: // Array Constant                        [317 268]
-                aIn.Ignore( (meBiff == EXC_BIFF2) ? 6 : 7 );
-                aPool << ocBad;
-                aPool >> aStack;
+                if( bAllowArrays )
+                {
+                    aIn >> nByte >> nUINT16;
+                    aIn.Ignore( 4 );
+
+                    SCSIZE nC = nByte + 1;
+                    SCSIZE nR = nUINT16 + 1;
+
+                    aStack << aPool.StoreMatrix( nC, nR );
+                    aExtensions.push_back( EXTENSION_ARRAY );
+                }
+                else
+                {
+                    aIn.Ignore( (meBiff == EXC_BIFF2) ? 6 : 7 );
+                    aPool << ocBad;
+                    aPool >> aStack;
+                }
                 break;
             case 0x41:
             case 0x61:
@@ -606,6 +623,9 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             case 0x46:
             case 0x66:
             case 0x26: // Constant Reference Subexpression      [321 271]
+                aExtensions.push_back( EXTENSION_MEMAREA );
+                // fall through
+
             case 0x47:
             case 0x67:
             case 0x27: // Erroneous Constant Reference Subexpr. [322 272]
@@ -885,6 +905,10 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
     }
 
     aIn.Seek( nEndPos );
+
+    if( eRet == ConvOK )
+        ReadExtensions( aExtensions, aIn );
+
     return eRet;
 }
 
@@ -1880,5 +1904,153 @@ void ExcelToSc::SetComplRow( ComplRefData &rCRD )
         rSRD.nRow = MAXROW;
 }
 
+void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
+{
+    // printf( "inline array;\n" );
 
+    BYTE        nByte;
+    UINT16      nUINT16;
+    double      fDouble;
+    String      aString;
+    ScMatrix*   pMatrix;
+
+    aIn >> nByte >> nUINT16;
+
+    SCSIZE nC, nCols;
+    SCSIZE nR, nRows;
+    if( GetBiff() == EXC_BIFF8 )
+    {
+        nCols = nByte + 1;
+        nRows = nUINT16 + 1;
+    }
+    else
+    {
+        nCols = nByte ? nByte : 256;
+        nRows = nUINT16;
+    }
+
+    pMatrix = aPool.GetMatrix( n );
+
+    if( NULL != pMatrix )
+    {
+        pMatrix->GetDimensions( nC, nR);
+        if( nC != nCols || nR != nRows )
+        {
+            DBG_ERRORFILE( "ExcelToSc::ReadExtensionArray - matrix size mismatch" );
+            pMatrix = NULL;
+        }
+    }
+    else
+    {
+        DBG_ERRORFILE( "ExcelToSc::ReadExtensionArray - missing matrix" );
+    }
+
+    for( nR = 0 ; nR < nRows; nR++ )
+    {
+        for( nC = 0 ; nC < nCols; nC++ )
+        {
+            aIn >> nByte;
+            switch( nByte )
+            {
+                case EXC_CACHEDVAL_EMPTY:
+                    aIn.Ignore( 8 );
+                    if( NULL != pMatrix )
+                    {
+                        pMatrix->PutEmpty( nC, nR );
+                    }
+                    break;
+
+                case EXC_CACHEDVAL_DOUBLE:
+                    aIn >> fDouble;
+                    if( NULL != pMatrix )
+                    {
+                        pMatrix->PutDouble( fDouble, nC, nR );
+                    }
+                    break;
+
+                case EXC_CACHEDVAL_STRING:
+                    if( GetBiff() == EXC_BIFF8 )
+                    {
+                        aIn >> nUINT16;
+                        aString = aIn.ReadUniString( nUINT16 );
+                    }
+                    else
+                    {
+                        aIn >> nByte;
+                        aString = aIn.ReadRawByteString( nByte );
+                    }
+                    if( NULL != pMatrix )
+                    {
+                        pMatrix->PutString( aString, nC, nR );
+                    }
+                    break;
+
+                case EXC_CACHEDVAL_BOOL:
+                    aIn >> nByte;
+                    aIn.Ignore( 7 );
+                    if( NULL != pMatrix )
+                    {
+                        pMatrix->PutBoolean( nByte != 0, nC, nR );
+                    }
+                    break;
+
+                case EXC_CACHEDVAL_ERROR:
+                    aIn >> nByte;
+                    aIn.Ignore( 7 );
+                    if( NULL != pMatrix )
+                    {
+                        pMatrix->PutError( XclTools::GetScErrorCode( nByte ), nC, nR );
+                    }
+                    break;
+            }
+        }
+    }
+}
+
+void ExcelToSc::ReadExtensionNlr( XclImpStream& aIn )
+{
+    // printf( "natural lang fmla;\n" );
+
+    sal_uInt32 nFlags;
+    aIn >> nFlags;
+
+    sal_uInt32 nCount = nFlags & EXC_TOK_NLR_ADDMASK;
+    aIn.Ignore( nCount * (4 + 2) ); // Drop the cell positions
+}
+
+void ExcelToSc::ReadExtensionMemArea( XclImpStream& aIn )
+{
+    // printf( "mem area;\n" );
+
+    sal_uInt16 nCount;
+    aIn >> nCount;
+
+    aIn.Ignore( nCount * (4 + 4 + 2 + 2) ); // drop the ranges
+}
+
+void ExcelToSc::ReadExtensions( const ExtensionTypeVec& rExtensions,
+                                XclImpStream& aIn )
+{
+    unsigned int nArray = 0;
+
+    for( unsigned int i = 0 ; i < rExtensions.size() ; i++ )
+    {
+        ExtensionType eType = rExtensions[i];
+
+        switch( eType )
+        {
+            case EXTENSION_ARRAY:
+                ReadExtensionArray( nArray++, aIn );
+                break;
+
+            case EXTENSION_NLR:
+                ReadExtensionNlr( aIn );
+                break;
+
+            case EXTENSION_MEMAREA:
+                ReadExtensionMemArea( aIn );
+                break;
+        }
+    }
+}
 
