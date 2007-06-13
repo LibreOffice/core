@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xldumper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-05-23 15:57:49 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:11:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,8 @@ const sal_Unicode SCF_DUMP_LISTSEP      = ',';
 const sal_Unicode SCF_DUMP_ADDRABS      = '$';
 const sal_Unicode SCF_DUMP_RANGESEP     = ':';
 const sal_Unicode SCF_DUMP_TABSEP       = '!';
-const sal_Unicode SCF_DUMP_ARRAYSEP     = ';';
+const sal_Unicode SCF_DUMP_ARRAY_COL    = ';';
+const sal_Unicode SCF_DUMP_ARRAY_ROW    = '|';
 const sal_Unicode SCF_DUMP_EMPTYVALUE   = '~';
 const sal_Unicode SCF_DUMP_CMDPROMPT    = '?';
 const sal_Unicode SCF_DUMP_PLACEHOLDER  = '\x01';
@@ -1604,8 +1605,8 @@ void FormulaObject::DumpAddDataArray( size_t nIdx )
     {
         String aArrayLine;
         for( sal_uInt32 nCol = 0; nCol < nCols; ++nCol )
-            StringHelper::AppendToken( aArrayLine, DumpConstValue(), SCF_DUMP_LISTSEP );
-        StringHelper::AppendToken( aOp, aArrayLine, SCF_DUMP_ARRAYSEP );
+            StringHelper::AppendToken( aArrayLine, DumpConstValue(), SCF_DUMP_ARRAY_COL );
+        StringHelper::AppendToken( aOp, aArrayLine, SCF_DUMP_ARRAY_ROW );
     }
     StringHelper::Enclose( aOp, '{', '}' );
     mxStack->ReplaceOnTop( CreatePlaceHolder( nIdx ), aOp );
