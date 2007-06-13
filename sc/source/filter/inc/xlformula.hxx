@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlformula.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:59:20 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:12:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -291,7 +291,8 @@ public:
     /** Creates an empty token array. */
     explicit            XclTokenArray( bool bVolatile = false );
     /** Creates a token array, swaps passed token vector into own data. */
-    explicit            XclTokenArray( ScfUInt8Vec& rTokVec, bool bVolatile = false );
+    explicit            XclTokenArray( ScfUInt8Vec& rTokVec, bool bVolatile = false,
+                                       ScfUInt8Vec* pExtensionTokens = NULL);
 
     /** Returns true, if the token array is empty. */
     inline bool         Empty() const { return maTokVec.empty(); }
@@ -301,9 +302,6 @@ public:
     inline const sal_uInt8* GetData() const { return maTokVec.empty() ? 0 : &maTokVec.front(); }
     /** Returns true, if the formula contains a volatile function. */
     inline bool         IsVolatile() const { return mbVolatile; }
-
-    /** Swaps own token vector with passed token vector. */
-    inline void         SwapTokenVec( ScfUInt8Vec& rTokVec ) { maTokVec.swap( rTokVec ); }
 
     /** Reads the size field of the token array. */
     void                ReadSize( XclImpStream& rStrm );
@@ -324,6 +322,7 @@ public:
 
 private:
     ScfUInt8Vec         maTokVec;       /// Byte vector containing token data.
+    ScfUInt8Vec         maExtensions;   /// Byte vector of extensions (eg inline arrays)
     bool                mbVolatile;     /// True = Formula contains volatile function.
 };
 
