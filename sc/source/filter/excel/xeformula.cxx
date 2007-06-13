@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeformula.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:24:32 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:09:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,6 +106,7 @@ struct XclExpCompConfig
     bool                mbFromCell;     /// True = Any kind of cell formula (cell, array, shared).
     bool                mb3DRefOnly;    /// True = Only 3D references allowed (e.g. names).
     bool                mbStopAtSep;    /// True = Stop compilation at ocSep in root level.
+    bool                mbAllowArrays;  /// True = Allow inline arrays
 };
 
 // ----------------------------------------------------------------------------
@@ -113,6 +114,8 @@ struct XclExpCompConfig
 /** Working data of the formula compiler. Used to push onto a stack for recursive calls. */
 struct XclExpCompData
 {
+    typedef ::std::list< const ScMatrix * > ScMatrixList;
+    typedef ScfRef< ScMatrixList > ScMatrixListRef;
     typedef ScfRef< ScTokenArray > ScTokenArrayRef;
 
     XclExpCompConfig    maCfg;          /// Configuration for current formula type.
@@ -121,6 +124,8 @@ struct XclExpCompData
     XclTokenArrayIterator maTokArrIt;   /// Iterator in Calc token array.
     XclExpLinkManager*  mpLinkMgr;      /// Link manager for current context (local/global).
     XclExpRefLog*       mpRefLog;       /// Log for external references.
+    ScMatrixListRef     maInlineArr;    /// List of inline arrays (in reverse order)
+
     const ScAddress*    mpScBasePos;    /// Current cell position of the formula.
 
     // processing data during compilation
@@ -281,8 +286,9 @@ private:
                             const ScAddress* pScBasePos, XclExpRefLog* pRefLog );
 
     void                LeaveRecursive();
-    void                FinalizeFormula();
-    XclTokenArrayRef    CreateTokenArray();
+    void                FinalizeFormula( ScfUInt8Vec & rExtensionTokens );
+    void                AppendInlineArrays( ScfUInt8Vec & rExtensionTokens );
+    XclTokenArrayRef    CreateTokenArray( ScfUInt8Vec* pExtensionTokens = NULL );
 
     // compiler ---------------------------------------------------------------
     // XclExpTokenData: pass-by-value and return-by-value is intended
@@ -347,6 +353,7 @@ private:
     XclExpRefLogEntry*  GetNewRefLogEntry();
     void                ProcessCellRef( const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
     void                ProcessRangeRef( const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
+    void                ProcessMatrix (const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
     void                ProcessDefinedName( const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
     void                ProcessDatabaseArea( const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
 
@@ -375,6 +382,7 @@ private:
 
     void                AppendAddress( const XclAddress& rXclPos );
     void                AppendRange( const XclRange& rXclRange );
+    void                AppendMatrixPlaceHolder( const ScMatrix* rMatrix );
 
     void                AppendSpaceToken( sal_uInt8 nType, sal_uInt8 nCount );
     void                AppendIntToken( sal_uInt16 nValue, sal_uInt8 nSpaces = 0 );
@@ -423,17 +431,17 @@ namespace {
 /** The table containing configuration data for all formula types. */
 static const XclExpCompConfig spConfigTable[] =
 {
-    // formula type         token class type      link manager type       inCell 3dOnly StopAtSep
-    { EXC_FMLATYPE_CELL,    EXC_CLASSTYPE_CELL,   EXC_LINKMGRTYPE_LOCAL,  true,  false, true  },
-    { EXC_FMLATYPE_SHARED,  EXC_CLASSTYPE_CELL,   EXC_LINKMGRTYPE_LOCAL,  true,  false, true  },
-    { EXC_FMLATYPE_MATRIX,  EXC_CLASSTYPE_ARRAY,  EXC_LINKMGRTYPE_LOCAL,  true,  false, true  },
-    { EXC_FMLATYPE_CONDFMT, EXC_CLASSTYPE_ARRAY,  EXC_LINKMGRTYPE_NONE,   false, false, true  },
-    { EXC_FMLATYPE_DATAVAL, EXC_CLASSTYPE_ARRAY,  EXC_LINKMGRTYPE_NONE,   false, false, true  },
-    { EXC_FMLATYPE_NAME,    EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_GLOBAL, false, true,  false },
-    { EXC_FMLATYPE_CHART,   EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_LOCAL,  false, true,  false },
-    { EXC_FMLATYPE_CONTROL, EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_LOCAL,  false, false, true  },
-    { EXC_FMLATYPE_WQUERY,  EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_LOCAL,  false, true,  false },
-    { EXC_FMLATYPE_LISTVAL, EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_NONE,   false, false, true  }
+    // formula type         token class type      link manager type       inCell 3dOnly StopAtSep allowArray
+    { EXC_FMLATYPE_CELL,    EXC_CLASSTYPE_CELL,   EXC_LINKMGRTYPE_LOCAL,  true,  false, true,       true  },
+    { EXC_FMLATYPE_SHARED,  EXC_CLASSTYPE_CELL,   EXC_LINKMGRTYPE_LOCAL,  true,  false, true,       true  },
+    { EXC_FMLATYPE_MATRIX,  EXC_CLASSTYPE_ARRAY,  EXC_LINKMGRTYPE_LOCAL,  true,  false, true,       true  },
+    { EXC_FMLATYPE_CONDFMT, EXC_CLASSTYPE_ARRAY,  EXC_LINKMGRTYPE_NONE,   false, false, true,       false  },
+    { EXC_FMLATYPE_DATAVAL, EXC_CLASSTYPE_ARRAY,  EXC_LINKMGRTYPE_NONE,   false, false, true,       false  },
+    { EXC_FMLATYPE_NAME,    EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_GLOBAL, false, true,  false,      true },
+    { EXC_FMLATYPE_CHART,   EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_LOCAL,  false, true,  false,      true },
+    { EXC_FMLATYPE_CONTROL, EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_LOCAL,  false, false, true,       false  },
+    { EXC_FMLATYPE_WQUERY,  EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_LOCAL,  false, true,  false,      false },
+    { EXC_FMLATYPE_LISTVAL, EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_NONE,   false, false, true,       false  }
 };
 
 } // namespace
@@ -497,10 +505,11 @@ XclTokenArrayRef XclExpFmlaCompImpl::CreateFormula( XclFormulaType eType,
         }
     }
 
-    // finalizing, e.g. add tAttr-volatile token
-    FinalizeFormula();
+    // finalizing, e.g. add tAttr-volatile token, and storing any inline arrays
+    ScfUInt8Vec aExtensionTokens;
+    FinalizeFormula( aExtensionTokens );
 
-    return CreateTokenArray();
+    return CreateTokenArray( &aExtensionTokens );
 }
 
 XclTokenArrayRef XclExpFmlaCompImpl::CreateErrorFormula( sal_uInt8 nErrCode )
@@ -570,6 +579,9 @@ void XclExpFmlaCompImpl::Init( XclFormulaType eType )
         maTokArrIt.Init();
         mpLinkMgr = 0;
         mpRefLog = 0;
+
+    maInlineArr.reset( NULL );
+
         mpScBasePos = 0;
 
         // init processing data used during compilation
@@ -635,7 +647,101 @@ void XclExpFmlaCompImpl::LeaveRecursive()
     }
 }
 
-void XclExpFmlaCompImpl::FinalizeFormula()
+void XclExpFmlaCompImpl::AppendInlineArrays( ScfUInt8Vec & rExtensionTokens )
+{
+    // The const_cast is needed, otherwise MS and Sun compilers can't promote
+    // the non-const iterators obtained via ScMatrixList* to const iterators.
+    const ScMatrixList* pList = const_cast<const ScMatrixList*>(maInlineArr.get());
+    const ScMatrixList::const_reverse_iterator end = pList->rend();
+    ScMatrixList::const_reverse_iterator i = pList->rbegin();
+    for( ;  i != end ; i++ )
+    {
+        const ScMatrix *pMatrix = *i;
+        SCSIZE nC, nMaxC, nR, nMaxR;
+
+        pMatrix->GetDimensions( nMaxC, nMaxR);
+
+        if( meBiff == EXC_BIFF8 )
+        {
+            rExtensionTokens.push_back( nMaxC - 1 );
+            rExtensionTokens.resize( rExtensionTokens.size() + 2 );
+            ShortToSVBT16( nMaxR - 1, &*(rExtensionTokens.end() - 2) );
+        }
+        else
+        {
+            rExtensionTokens.push_back( nMaxC == 256 ? 0 : nMaxC );
+            rExtensionTokens.resize( rExtensionTokens.size() + 2 );
+            ShortToSVBT16( nMaxR, &*(rExtensionTokens.end() - 2) );
+        }
+
+        for( nR = 0 ; nR < nMaxR ; nR++)
+        {
+            for( nC = 0 ; nC < nMaxC ; nC++)
+            {
+                if( pMatrix->IsValue( nC, nR ) )
+                {
+                    ScMatValType nType;
+                    const ScMatrixValue* pVal = pMatrix->Get( nC, nR, nType);
+
+                    if( nType == SC_MATVAL_BOOLEAN )
+                    {
+                        rExtensionTokens.push_back( EXC_CACHEDVAL_BOOL );
+
+                        rExtensionTokens.resize( rExtensionTokens.size() + 8 );
+                        const bool bVal = ! ::rtl::math::approxEqual( pVal->fVal, 0. );
+                        UInt32ToSVBT32( bVal ? 1 : 0, &*(rExtensionTokens.end() - 8) );
+                        UInt32ToSVBT32( 0, &*(rExtensionTokens.end() - 4) );
+                    }
+                    else
+                    {
+                        USHORT nErr = pVal->GetError();
+                        if( nErr )
+                        {
+                            rExtensionTokens.push_back( EXC_CACHEDVAL_ERROR );
+
+                            rExtensionTokens.resize( rExtensionTokens.size() + 8 );
+                            UInt32ToSVBT32( XclTools::GetXclErrorCode ( nErr ),
+                                            &*(rExtensionTokens.end() - 8) );
+                            UInt32ToSVBT32( 0, &*(rExtensionTokens.end() - 4) );
+                        }
+                        else
+                        {
+                            rExtensionTokens.push_back( EXC_CACHEDVAL_DOUBLE );
+
+                            const double nVal = pMatrix->GetDouble( nC, nR );
+                            rExtensionTokens.resize( rExtensionTokens.size() + 8 );
+                            DoubleToSVBT64( nVal, &*(rExtensionTokens.end() - 8) );
+                        }
+                    }
+                }
+                else if( pMatrix->IsEmpty( nC, nR ) )
+                {
+                    rExtensionTokens.push_back( EXC_CACHEDVAL_EMPTY );
+
+                    rExtensionTokens.resize( rExtensionTokens.size() + 8 );
+                    UInt32ToSVBT32( 0, &*(rExtensionTokens.end() - 8) );
+                    UInt32ToSVBT32( 0, &*(rExtensionTokens.end() - 4) );
+                }
+                else if( pMatrix->IsString( nC, nR ) )
+                {
+                    rExtensionTokens.push_back( EXC_CACHEDVAL_STRING );
+
+                    const String & rString = pMatrix->GetString( nC, nR );
+                    XclExpStringRef xXclStr = XclExpStringHelper::CreateString(
+                        GetRoot(), rString,
+                        ((meBiff == EXC_BIFF8) ? EXC_STR_DEFAULT : EXC_STR_8BITLENGTH),
+                        EXC_TOK_STR_MAXLEN );
+                    size_t nSize = rExtensionTokens.size();
+                    rExtensionTokens.resize( nSize + xXclStr->GetSize() );
+                    xXclStr->WriteToMem( &rExtensionTokens[ nSize ] );
+                }
+
+            }
+        }
+    }
+}
+
+void XclExpFmlaCompImpl::FinalizeFormula( ScfUInt8Vec & rExtensionTokens )
 {
     if( mbOk )
     {
@@ -653,6 +759,12 @@ void XclExpFmlaCompImpl::FinalizeFormula()
 
         // Token array too long? -> error
         mbOk = maTokVec.size() <= EXC_TOKARR_MAXLEN;
+
+        // Store any inline arrays
+        if( mbOk && maInlineArr.is() )
+        {
+            AppendInlineArrays( rExtensionTokens );
+        }
     }
 
     if( !mbOk )
@@ -664,10 +776,10 @@ void XclExpFmlaCompImpl::FinalizeFormula()
     }
 }
 
-XclTokenArrayRef XclExpFmlaCompImpl::CreateTokenArray()
+XclTokenArrayRef XclExpFmlaCompImpl::CreateTokenArray( ScfUInt8Vec* pExtensionTokens )
 {
     // create the Excel token array object before calling LeaveRecursive()
-    XclTokenArrayRef xTokArr( new XclTokenArray( maTokVec, mbVolatile ) );
+    XclTokenArrayRef xTokArr( new XclTokenArray( maTokVec, mbVolatile, pExtensionTokens ) );
 
     // compiler invoked recursively? - restore old working data
     LeaveRecursive();
@@ -1042,6 +1154,7 @@ XclExpTokenData XclExpFmlaCompImpl::Factor( XclExpTokenData aTokData, sal_uInt8 
         case svString:      ProcessString( aTokData );              break;
         case svSingleRef:   ProcessCellRef( aTokData, nExpClass );  break;
         case svDoubleRef:   ProcessRangeRef( aTokData, nExpClass ); break;
+        case svMatrix:      ProcessMatrix (aTokData, nExpClass );   break;
         case svExternal:    ProcessExternal( aTokData, nExpClass ); break;
 
         default:
@@ -1842,6 +1955,9 @@ void XclExpFmlaCompImpl::UpdateArrExpFlag( sal_uInt8 nParamExpClass, sal_uInt8 n
         case EXC_CLASSTYPE_NAME:
             bNewIsArrExp = ((nParamExpClass != EXC_TOKCLASS_VAL) || (nFuncRetClass != EXC_TOKCLASS_REF));
         break;
+
+        default :
+        break;
     }
     SetArrExpFlag( mbIsArrExp || bNewIsArrExp );
 }
@@ -2016,6 +2132,20 @@ void XclExpFmlaCompImpl::AppendSpaceToken( sal_uInt8 nType, sal_uInt8 nCount )
         Append( nType );
         Append( nCount );
     }
+}
+
+void XclExpFmlaCompImpl::AppendMatrixPlaceHolder( const ScMatrix* pMatrix )
+{
+    SCSIZE cols, rows;
+
+    if( !maInlineArr )
+        maInlineArr.reset( new ScMatrixList );
+    maInlineArr->push_front( pMatrix ); // save it for later
+
+    pMatrix->GetDimensions( cols, rows);
+    Append( static_cast< sal_uInt8 >( cols-1 ) );
+    Append( static_cast< sal_uInt16 >( rows-1 ) );
+    Append( static_cast< sal_uInt32 >( 0 ) );   // undocumented
 }
 
 void XclExpFmlaCompImpl::AppendIntToken( sal_uInt16 nValue, sal_uInt8 nSpaces )
@@ -2258,6 +2388,20 @@ XclTokenArrayRef XclExpFormulaCompiler::CreateNameXFormula(
         sal_uInt16 nExtSheet, sal_uInt16 nExtName )
 {
     return mxImpl->CreateNameXFormula( nExtSheet, nExtName );
+}
+void XclExpFmlaCompImpl::ProcessMatrix ( const XclExpTokenData& rTokData, sal_uInt8 nExpClass )
+{
+    if( maCfg.mbAllowArrays )
+    {
+        AppendOpTokenId( GetTokenId( EXC_TOKID_ARRAY, EXC_TOKCLASS_ARR ),
+             nExpClass, rTokData.mnSpaces );
+        AppendMatrixPlaceHolder( rTokData.mpScToken->GetMatrix() );
+    }
+    else
+    {
+        // Array in places that do not allow it (cond fmts, data validation)
+        AppendErrorToken( EXC_ERR_NA, rTokData.mnSpaces );
+    }
 }
 
 // ============================================================================
