@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:13:57 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:07:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -351,9 +351,9 @@ for (i = 65; i < 91; i++)
 /* ` */     // FREI
 for (i = 97; i < 123; i++)
 /* a-z */   t[i] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT;
-/* { */     // FREI
-/* | */     // FREI
-/* } */     // FREI
+/* { */     t[123] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP; // array open
+/* | */     t[124] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP; // array row sep (Should be OOo specific)
+/* } */     t[125] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP; // array close
 /* ~ */     // FREI
 /* 127 */   // FREI
     if( ScAddress::CONV_XL_A1 == meConv || ScAddress::CONV_XL_R1C1 == meConv )
@@ -1369,7 +1369,8 @@ BOOL ScCompiler::IsOpCode( const String& rName )
         }
     }
     if ( bFound && pRawToken->GetOpCode() == ocSub &&
-            (eLastOp == ocOpen || eLastOp == ocSep || eLastOp == ocNegSub ||
+            (eLastOp == ocOpen || eLastOp == ocArrayOpen ||
+             eLastOp == ocSep || eLastOp == ocNegSub ||
              (eLastOp > ocEndDiv && eLastOp < ocEndBinOp)))
         pRawToken->NewOpCode( ocNegSub );
         //! if ocNegSub had ForceArray we'd have to set it here
@@ -1900,6 +1901,22 @@ BOOL ScCompiler::IsColRowName( const String& rName )
         return FALSE;
 }
 
+BOOL ScCompiler::IsBoolean( const String& rName )
+{
+    ScOpCodeHashMap::const_iterator iLook( pSymbolHashMap->find( rName ) );
+    if( iLook != pSymbolHashMap->end() &&
+        (iLook->second == ocTrue ||
+         iLook->second == ocFalse) )
+    {
+        ScRawToken aToken;
+        aToken.SetOpCode( iLook->second );
+        pRawToken = aToken.Clone();
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
 //---------------------------------------------------------------------------
 
 void ScCompiler::AutoCorrectParsedSymbol()
@@ -2094,12 +2111,14 @@ void ScCompiler::AutoCorrectParsedSymbol()
     }
 }
 
-BOOL ScCompiler::NextNewToken()
+BOOL ScCompiler::NextNewToken( bool bAllowBooleans )
 {
     xub_StrLen nSpaces = NextSymbol();
 
-//  fprintf( stderr, "NextNewToken '%s' (?) ",
-//           rtl::OUStringToOString( cSymbol, RTL_TEXTENCODING_UTF8 ).getStr() );
+#if 0
+    fprintf( stderr, "NextNewToken '%s' (spaces = %d)\n",
+             rtl::OUStringToOString( cSymbol, RTL_TEXTENCODING_UTF8 ).getStr(), nSpaces );
+#endif
 
     ScRawToken aToken;
     if( cSymbol[0] )
@@ -2142,12 +2161,19 @@ BOOL ScCompiler::NextNewToken()
 
             String aOrg( cSymbol ); // preserve file names in IsReference()
             String aUpper( ScGlobal::pCharClass->upper( aOrg ) );
+#if 0
+            fprintf( stderr, "Token '%s'\n",
+                     rtl::OUStringToOString( aUpper, RTL_TEXTENCODING_UTF8 ).getStr() );
+#endif
             // Column 'DM' ("Deutsche Mark", German currency) couldn't be
             // referred to => IsReference() before IsValue().
             // #42016# Italian ARCTAN.2 resulted in #REF! => IsOpcode() before
             // IsReference().
+            // IsBoolean before isValue to catch inline bools without the kludge
+            //    for inline arrays.
             if ( !(bMayBeFuncName && IsOpCode( aUpper ))
               && !IsReference( aOrg )
+              && !(bAllowBooleans && IsBoolean( aUpper ))
               && !IsValue( aUpper )
               && !IsNamedRange( aUpper )
               && !IsDBRange( aUpper )
@@ -2181,8 +2207,11 @@ BOOL ScCompiler::NextNewToken()
 ScTokenArray* ScCompiler::CompileString( const String& rFormula,
                                          ScAddress::Convention eConv )
 {
-//  fprintf( stderr, "CompileString '%s'\n",
-//           rtl::OUStringToOString( rFormula, RTL_TEXTENCODING_UTF8 ).getStr() );
+#if 0
+    fprintf( stderr, "CompileString '%s'\n",
+             rtl::OUStringToOString( rFormula, RTL_TEXTENCODING_UTF8 ).getStr() );
+#endif
+
     ScTokenArray aArr;
     pArr = &aArr;
     aFormula = rFormula;
@@ -2214,8 +2243,9 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula,
             aCorrectedFormula += '=';
     }
     short nBrackets = 0;
+    bool bInArray = false;
     eLastOp = ocOpen;
-    while( NextNewToken() )
+    while( NextNewToken( bInArray ) )
     {
         if( pRawToken->GetOpCode() == ocOpen )
             nBrackets++;
@@ -2233,7 +2263,37 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula,
             else
                 nBrackets--;
         }
-        if( eLastOp == ocSep && pRawToken->GetOpCode() == ocSep )
+        else if( pRawToken->GetOpCode() == ocArrayOpen )
+        {
+            if( bInArray )
+                SetError( errNestedArray );
+            else
+                bInArray = true;
+        }
+        else if( pRawToken->GetOpCode() == ocArrayClose )
+        {
+            if( bInArray )
+            {
+                bInArray = false;
+            }
+            else
+            {
+                SetError( errPairExpected );
+                if ( bAutoCorrect )
+                {
+                    bCorrected = TRUE;
+                    aCorrectedSymbol.Erase();
+                }
+            }
+        }
+        if( (eLastOp == ocSep ||
+             eLastOp == ocArrayRowSep ||
+             eLastOp == ocArrayColSep ||
+             eLastOp == ocArrayOpen) &&
+            (pRawToken->GetOpCode() == ocSep ||
+             pRawToken->GetOpCode() == ocArrayRowSep ||
+             pRawToken->GetOpCode() == ocArrayColSep ||
+             pRawToken->GetOpCode() == ocArrayClose) )
         {
             // FIXME: should we check for known functions with optional empty
             // args so the correction dialog can do better?
@@ -2253,6 +2313,17 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula,
     }
     if ( eLastOp != ocBad )
     {
+        if( bInArray )
+        {
+            ScByteToken aToken( ocArrayClose );
+            if( !pArr->AddToken( aToken ) )
+            {
+                SetError(errCodeOverflow);
+            }
+            else if ( bAutoCorrect )
+                aCorrectedFormula += pSymbolTable[ocArrayClose];
+        }
+
         // With ocBad the remaining formula is a string, too many parentheses
         // would be shown.
         ScByteToken aToken( ocClose );
@@ -4321,51 +4392,14 @@ ScToken* ScCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuffer, ScToke
     if( bNext ) switch( t->GetType() )
     {
         case svDouble:
-        {
-            if ( pSymbolTable == pSymbolTableEnglish )
-            {   // Don't go via number formatter, slows down XML export
-                // significantly because on every formula the number formatter
-                // has to switch to/from English/native language.
-                ::rtl::math::doubleToUStringBuffer( rBuffer, t->GetDouble(),
-                        rtl_math_StringFormat_Automatic,
-                        rtl_math_DecimalPlaces_Max, '.', TRUE );
-            }
-            else
-            {
-                ::rtl::math::doubleToUStringBuffer( rBuffer, t->GetDouble(),
-                        rtl_math_StringFormat_Automatic,
-                        rtl_math_DecimalPlaces_Max,
-                        ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0),
-                        TRUE );
-            }
-        }
+            AppendDouble( rBuffer, t->GetDouble() );
         break;
+
         case svString:
             if( eOp == ocBad )
                 rBuffer.append(t->GetString());
             else
-            {
-                if (bImportXML)
-                    rBuffer.append(t->GetString());
-                else
-                {
-                    rBuffer.append(sal_Unicode('"'));
-                    if ( ScGlobal::UnicodeStrChr( t->GetString().GetBuffer(), '"' ) == NULL )
-                        rBuffer.append(t->GetString());
-                    else
-                    {
-                        String aStr( t->GetString() );
-                        xub_StrLen nPos = 0;
-                        while ( (nPos = aStr.Search( '"', nPos)) != STRING_NOTFOUND )
-                        {
-                            aStr.Insert( '"', nPos );
-                            nPos += 2;
-                        }
-                        rBuffer.append(aStr);
-                    }
-                    rBuffer.append(sal_Unicode('"'));
-                }
-            }
+                AppendString( rBuffer, t->GetString() );
             break;
         case svSingleRef:
         {
@@ -4395,6 +4429,10 @@ ScToken* ScCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuffer, ScToke
         case svDoubleRef:
             pConv->MakeRefStr( rBuffer, *this, t->GetDoubleRef(), FALSE );
             break;
+        case svMatrix:
+            CreateStringFromScMatrix( rBuffer, t->GetMatrix() );
+            break;
+
         case svIndex:
         {
             rtl::OUStringBuffer aBuffer;
@@ -4456,6 +4494,99 @@ ScToken* ScCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuffer, ScToke
         return t;
     }
     return pTokenP;
+}
+
+void ScCompiler::CreateStringFromScMatrix( rtl::OUStringBuffer& rBuffer,
+                                           const ScMatrix* pMatrix )
+{
+    SCSIZE nC, nMaxC, nR, nMaxR;
+
+    pMatrix->GetDimensions( nMaxC, nMaxR);
+
+    rBuffer.append( pSymbolTable[ocArrayOpen] );
+    for( nR = 0 ; nR < nMaxR ; nR++)
+    {
+        if( nR > 0)
+        {
+            rBuffer.append( pSymbolTable[ocArrayRowSep] );
+        }
+
+        for( nC = 0 ; nC < nMaxC ; nC++)
+        {
+            if( nC > 0)
+            {
+                rBuffer.append( pSymbolTable[ocArrayColSep] );
+            }
+
+            if( pMatrix->IsValue( nC, nR ) )
+            {
+                ScMatValType nType;
+                const ScMatrixValue* pVal = pMatrix->Get( nC, nR, nType);
+
+                if( nType == SC_MATVAL_BOOLEAN )
+                    AppendBoolean( rBuffer, pVal->GetBoolean() );
+                else
+                {
+                    USHORT nErr = pVal->GetError();
+                    if( nErr )
+                        rBuffer.append( ScGlobal::GetErrorString( nErr ) );
+                    else
+                        AppendDouble( rBuffer, pVal->fVal );
+                }
+            }
+            else if( pMatrix->IsEmpty( nC, nR ) )
+                ;
+            else if( pMatrix->IsString( nC, nR ) )
+                AppendString( rBuffer, pMatrix->GetString( nC, nR ) );
+        }
+    }
+    rBuffer.append( pSymbolTable[ocArrayClose] );
+}
+void ScCompiler::AppendBoolean( rtl::OUStringBuffer& rBuffer, bool bVal )
+{
+    rBuffer.append( pSymbolTable[bVal ? ocTrue : ocFalse] );
+}
+
+void ScCompiler::AppendDouble( rtl::OUStringBuffer& rBuffer, double fVal )
+{
+    if ( pSymbolTable == pSymbolTableEnglish )
+    {
+        ::rtl::math::doubleToUStringBuffer( rBuffer, fVal,
+                rtl_math_StringFormat_Automatic,
+                rtl_math_DecimalPlaces_Max, '.', TRUE );
+    }
+    else
+    {
+        ::rtl::math::doubleToUStringBuffer( rBuffer, fVal,
+                rtl_math_StringFormat_Automatic,
+                rtl_math_DecimalPlaces_Max,
+                ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0),
+                TRUE );
+    }
+}
+
+void ScCompiler::AppendString( rtl::OUStringBuffer& rBuffer, const String & rStr )
+{
+    if (bImportXML)
+        rBuffer.append( rStr );
+    else
+    {
+        rBuffer.append(sal_Unicode('"'));
+        if ( ScGlobal::UnicodeStrChr( rStr.GetBuffer(), '"' ) == NULL )
+            rBuffer.append( rStr );
+        else
+        {
+            String aStr( rStr );
+            xub_StrLen nPos = 0;
+            while ( (nPos = aStr.Search( '"', nPos)) != STRING_NOTFOUND )
+            {
+                aStr.Insert( '"', nPos );
+                nPos += 2;
+            }
+            rBuffer.append(aStr);
+        }
+        rBuffer.append(sal_Unicode('"'));
+    }
 }
 
 void ScCompiler::CreateStringFromTokenArray( String& rFormula )
