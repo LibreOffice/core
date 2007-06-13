@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xehelper.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:55:09 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:12:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -436,88 +436,27 @@ public:
     static String       EncodeDde( const String& rApplic, const String rTopic );
 };
 
-// Cached Value Lists =========================================================
-
-/** The base class for cached values.
-    @descr  Cached values are used to store a list or a 2D array of double,
-    string and Boolean values and error codes, for instannce in the records
-    CRN and EXTERNNAME or in the token tArray. */
-class XclExpCachedValue
-{
-public:
-    virtual             ~XclExpCachedValue();
-    virtual void        Save( XclExpStream& rStrm ) const = 0;
-};
-
 // ----------------------------------------------------------------------------
-
-/** A cached value that stores a double. */
-class XclExpCachedDouble : public XclExpCachedValue
-{
-public:
-    explicit inline     XclExpCachedDouble( double fVal ) : mfVal( fVal ) {}
-    /** Writes the double value to stream. */
-    virtual void        Save( XclExpStream& rStrm ) const;
-
-private:
-    double              mfVal;          /// The double value.
-};
-
-// ----------------------------------------------------------------------------
-
-/** A cached value that stores a string. */
-class XclExpCachedString : public XclExpCachedValue
-{
-public:
-    explicit            XclExpCachedString( const String& rStr, XclStrFlags nFlags = EXC_STR_DEFAULT );
-    /** Writes the string to stream. */
-    virtual void        Save( XclExpStream& rStrm ) const;
-
-private:
-    XclExpString        maStr;
-};
-
-// ----------------------------------------------------------------------------
-
-/** A cached value that stores an error code. */
-class XclExpCachedError : public XclExpCachedValue
-{
-public:
-    explicit            XclExpCachedError( USHORT nScError );
-    /** Writes the error code to stream. */
-    virtual void        Save( XclExpStream& rStrm ) const;
-
-private:
-    sal_uInt8           mnError;
-};
-
-// ----------------------------------------------------------------------------
-
 class ScDocument;
 class ScMatrix;
 
 /** Contains cached values in a 2-dimensional array. */
 class XclExpCachedMatrix
 {
+    void            GetDimensions( SCSIZE & nCols, SCSIZE & nRows ) const;
 public:
     /** Constructs and fills a new matrix.
-        @param rMatrix  The Calc value matrix.
-        @param nFlags  Flags for writing strings. */
-    explicit            XclExpCachedMatrix(
-                            const ScMatrix& rMatrix,
-                            XclStrFlags nFlags = EXC_STR_DEFAULT );
+        @param rMatrix  The Calc value matrix. */
+    explicit        XclExpCachedMatrix( const ScMatrix& rMatrix );
+                   ~XclExpCachedMatrix();
 
     /** Returns the byte count of all contained data. */
-    sal_Size            GetSize() const;
+    sal_Size        GetSize() const;
     /** Writes the complete matrix to stream. */
-    void                Save( XclExpStream& rStrm ) const;
+    void            Save( XclExpStream& rStrm ) const;
 
 private:
-    typedef ScfDelList< XclExpCachedValue > XclExpCachedValueList;
-
-    XclExpCachedValueList maValueList;  /// The list containing the cached values.
-    SCSIZE              mnScCols;       /// Calc column count of the value matrix.
-    SCSIZE              mnScRows;       /// Calc row count of the value matrix.
+    const ScMatrix& mrMatrix;
 };
 
 // ============================================================================
