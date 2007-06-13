@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:43:09 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:06:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -516,7 +516,7 @@ ScFormulaCell::ScFormulaCell() :
     nErgValue( 0.0 ),
     pCode( NULL ),
     pDocument( NULL ),
-    pMatrix( NULL ),
+    xMatrix( NULL ),
     pPrevious(0),
     pNext(0),
     pPreviousTrack(0),
@@ -549,7 +549,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     nErgValue( 0.0 ),
     pCode( NULL ),
     pDocument( pDoc ),
-    pMatrix( NULL ),
+    xMatrix( NULL ),
     pPrevious(0),
     pNext(0),
     pPreviousTrack(0),
@@ -583,7 +583,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     nErgValue( 0.0 ),
     pCode( pArr ? new ScTokenArray( *pArr ) : new ScTokenArray ),
     pDocument( pDoc ),
-    pMatrix ( NULL ),
+    xMatrix ( NULL ),
     pPrevious(0),
     pNext(0),
     pPreviousTrack(0),
@@ -651,13 +651,10 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rNewPos,
     cMatrixFlag ( rScFormulaCell.cMatrixFlag ),
     aPos( rNewPos )
 {
-    if (rScFormulaCell.pMatrix)
-    {
-        pMatrix = rScFormulaCell.pMatrix->Clone();
-        pMatrix->SetEternalRef();
-    }
+    if (rScFormulaCell.xMatrix)
+        xMatrix = rScFormulaCell.xMatrix->Clone();
     else
-        pMatrix = NULL;
+        xMatrix = NULL;
     pCode = rScFormulaCell.pCode->Clone();
 
     if ( nCopyFlags & 0x0001 )
@@ -724,7 +721,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     nErgValue( 0.0 ),
     pCode( new ScTokenArray ),
     pDocument( pDoc ),
-    pMatrix ( NULL ),
+    xMatrix ( NULL ),
     pPrevious(0),
     pNext(0),
     pPreviousTrack(0),
@@ -978,8 +975,8 @@ void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
     if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
         Interpret();
 
-    if ( !pCode->GetError() && pMatrix )
-        pMatrix->GetDimensions( rCols, rRows );
+    if ( !pCode->GetError() && xMatrix )
+        xMatrix->GetDimensions( rCols, rRows );
     else
     {
         rCols = 0;
@@ -1621,12 +1618,8 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
                     pDocument->GetDocOptions().IsIter())
                 pCode->SetError( 0 );
         }
-        if ( pMatrix )
-        {
-            DBG_ASSERT( pMatrix->IsEternalRef(), "ScFormulaCell.pMatrix is not eternal");
-            pMatrix->Delete();
-            pMatrix = NULL;
-        }
+        if ( xMatrix )
+            xMatrix = NULL;
 
         switch ( pCode->GetError() )
         {
@@ -1737,15 +1730,13 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             bDirty = FALSE;
             bTableOpDirty = FALSE;
         }
-        pMatrix = p->GetMatrixResult();
-        if( pMatrix )
+        xMatrix = p->GetMatrixResult();
+        if( xMatrix )
         {
             // If the formula wasn't entered as a matrix formula, live on with
             // the upper left corner and let the interpreter delete the matrix.
             if( cMatrixFlag != MM_FORMULA && !pCode->IsHyperLink() )
-                pMatrix = NULL;
-            else
-                pMatrix->SetEternalRef();   // it's mine now
+                xMatrix = NULL;
         }
         if( bChanged )
         {
@@ -1943,15 +1934,14 @@ void ScFormulaCell::GetURLResult( String& rURL, String& rCellText )
         GetString( aCellString );
         pFormatter->GetOutputString( aCellString, nCellFormat, rCellText, &pColor );
     }
-
-    if(pMatrix)
+    if(xMatrix)
     {
         ScMatValType nMatValType;
         // determine if the matrix result is a string or value.
-        const ScMatrixValue* pMatVal = pMatrix->Get(0, 1, nMatValType);
+        const ScMatrixValue* pMatVal = xMatrix->Get(0, 1, nMatValType);
         if (pMatVal)
         {
-            if (nMatValType != SC_MATVAL_VALUE)
+            if (!ScMatrix::IsValueType( nMatValType))
                 rURL = pMatVal->GetString();
             else
                 pFormatter->GetOutputString( pMatVal->fVal, nURLFormat, rURL, &pColor );
@@ -2038,12 +2028,6 @@ ScFormulaCell::~ScFormulaCell()
 {
     pDocument->RemoveFromFormulaTree( this );
     delete pCode;
-    if ( pMatrix )
-    {
-        DBG_ASSERT( pMatrix->IsEternalRef(), "~ScFormulaCell:: pMatrix is not eternal");
-        pMatrix->Delete();
-        pMatrix = NULL;
-    }
 #ifdef DBG_UTIL
     eCellType = CELLTYPE_DESTROYED;
 #endif
