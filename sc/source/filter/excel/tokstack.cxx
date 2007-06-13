@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tokstack.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:52:00 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:09:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,10 @@ TokenPool::TokenPool( void )
     ppP_Nlf = new NLFCONT*[ nP_Nlf ];
     memset( ppP_Nlf, 0, sizeof( NLFCONT* ) * nP_Nlf );
 
+    nP_Matrix = 16;
+    ppP_Matrix = new ScMatrix*[ nP_Matrix ];
+    memset( ppP_Matrix, 0, sizeof( ScMatrix* ) * nP_Matrix );
+
     pScToken = new ScTokenArray;
 
     Reset();
@@ -154,6 +158,13 @@ TokenPool::~TokenPool()
             delete ppP_Nlf[ n ];
     }
     delete[] ppP_Nlf;
+
+    for( n = 0 ; n < nP_Matrix ; n++ )
+    {
+        if( ppP_Matrix[ n ] )
+            ppP_Matrix[ n ]->DecRef( );
+    }
+    delete[] ppP_Matrix;
 
     delete pScToken;
 }
@@ -285,6 +296,20 @@ void TokenPool::GrowNlf( void )
 }
 
 
+void TokenPool::GrowMatrix( void )
+{
+    UINT16      nNewSize = nP_Matrix * 2;
+
+    ScMatrix**  ppNew = new ScMatrix*[ nNewSize ];
+
+    memset( ppNew, 0, sizeof( ScMatrix* ) * nNewSize );
+    memcpy( ppNew, ppP_Matrix, sizeof( ScMatrix* ) * nP_Matrix );
+
+    delete[] ppP_Matrix;
+    ppP_Matrix = ppNew;
+    nP_Matrix = nNewSize;
+}
+
 void TokenPool::GetElement( const UINT16 nId )
 {
     DBG_ASSERT( nId < nElementAkt, "*TokenPool::GetElement(): Id zu gross!?" );
@@ -339,6 +364,15 @@ void TokenPool::GetElement( const UINT16 nId )
 
                 if( p )
                         pScToken->AddColRowName( p->aRef );
+                }
+                break;
+            case T_Matrix:
+                {
+                UINT16          n = pElement[ nId ];
+                ScMatrix*       p = ( n < nP_Matrix )? ppP_Matrix[ n ] : NULL;
+
+                if( p )
+                        pScToken->AddMatrix( p );
                 }
                 break;
             default:
@@ -410,6 +444,15 @@ void TokenPool::GetElementRek( const UINT16 nId )
 
                     if( p )
                         pScToken->AddColRowName( p->aRef );
+                    }
+                    break;
+                case T_Matrix:
+                    {
+                    UINT16          n = pElement[ *pAkt ];
+                    ScMatrix*       p = ( n < nP_Matrix )? ppP_Matrix[ n ] : NULL;
+
+                    if( p )
+                            pScToken->AddMatrix( p );
                     }
                     break;
                 default:
@@ -613,10 +656,33 @@ const TokenId TokenPool::StoreNlf( const SingleRefData& rTr )
     return ( const TokenId ) nElementAkt;
 }
 
+const TokenId TokenPool::StoreMatrix( SCSIZE nC, SCSIZE nR )
+{
+    ScMatrix* pM;
+
+    if( nElementAkt >= nElement )
+        GrowElement();
+
+    if( nP_MatrixAkt >= nP_Matrix )
+        GrowMatrix();
+
+    pElement[ nElementAkt ] = nP_MatrixAkt;
+    pType[ nElementAkt ] = T_Matrix;
+
+    pM = new ScMatrix( nC, nR );
+    pM->FillDouble( 0., 0,0, nC-1, nR-1 );
+    pM->IncRef( );
+    ppP_Matrix[ nP_MatrixAkt ] = pM;
+
+    nElementAkt++;
+    nP_MatrixAkt++;
+
+    return ( const TokenId ) nElementAkt;
+}
 
 void TokenPool::Reset( void )
 {
-    nP_IdAkt = nP_IdLast = nElementAkt = nP_StrAkt = nP_DblAkt = nP_RefTrAkt = nP_ExtAkt = nP_NlfAkt = 0;
+    nP_IdAkt = nP_IdLast = nElementAkt = nP_StrAkt = nP_DblAkt = nP_RefTrAkt = nP_ExtAkt = nP_NlfAkt = nP_MatrixAkt = 0;
 }
 
 
@@ -670,5 +736,14 @@ const String* TokenPool::GetString( const TokenId& r ) const
     }
 
     return p;
+}
+
+ScMatrix* TokenPool::GetMatrix( unsigned int n ) const
+{
+    if( n < nP_MatrixAkt )
+        return ppP_Matrix[ n ];
+    else
+        printf ("GETMATRIX %d >= %d\n", n, nP_MatrixAkt);
+    return NULL;
 }
 
