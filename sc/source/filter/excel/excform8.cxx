@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:21:47 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:09:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,8 +81,9 @@ BOOL ExcelToSc8::Read3DTabReference( XclImpStream& rStrm, SCTAB& rFirstTab, SCTA
 }
 
 
-// stream seeks to first byte after <nFormulaLen>
-ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn, sal_Size nFormulaLen, const FORMULA_TYPE eFT )
+// if bAllowArrays is false stream seeks to first byte after <nFormulaLen>
+// otherwise it will seek to the first byte past additional content after <nFormulaLen>
+ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn, sal_Size nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT )
 {
     BYTE                    nOp, nLen, nByte;
     UINT16                  nUINT16;
@@ -94,10 +95,10 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
     const BOOL              bRangeName = eFT == FT_RangeName;
     const BOOL              bSharedFormula = eFT == FT_SharedFormula;
     const BOOL              bRNorSF = bRangeName || bSharedFormula;
-    UINT32                  nExtCnt = 0;
 
     SingleRefData           aSRD;
     ComplRefData            aCRD;
+    ExtensionTypeVec        aExtensions;
 
     if( eStatus != ConvOK )
     {
@@ -288,7 +289,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                         break;
                     case 0x0B:              //  RadicalS    13      x       ref
                         aIn.Ignore( 13 );
-                        nExtCnt++;
+                        aExtensions.push_back( EXTENSION_NLR );
                         aPool << ocBad;
                         aPool >> aStack;
                     break;
@@ -297,7 +298,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     case 0x0E:              //  RwSV        4       x       val
                     case 0x0F:              //  ColSV       4       x       val
                         aIn.Ignore( 4 );
-                        nExtCnt++;
+                        aExtensions.push_back( EXTENSION_NLR );
                         aPool << ocBad;
                         aPool >> aStack;
                     break;
@@ -371,9 +372,23 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x40:
             case 0x60:
             case 0x20: // Array Constant                        [317 268]
-                aIn.Ignore( 7 );
-                aPool << ocBad;
-                aPool >> aStack;
+                if( bAllowArrays )
+                {
+                    aIn >> nByte >> nUINT16;
+                    aIn.Ignore( 4 );
+
+                    SCSIZE nC = nByte + 1;
+                    SCSIZE nR = nUINT16 + 1;
+
+                    aStack << aPool.StoreMatrix( nC, nR );
+                    aExtensions.push_back( EXTENSION_ARRAY );
+                }
+                else
+                {
+                    aIn.Ignore( 7 );
+                    aPool << ocBad;
+                    aPool >> aStack;
+                }
                 break;
             case 0x41:
             case 0x61:
@@ -493,6 +508,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x46:
             case 0x66:
             case 0x26: // Constant Reference Subexpression      [321 271]
+                aExtensions.push_back( EXTENSION_MEMAREA );
                 aIn.Ignore( 6 );       // mehr steht da nicht!
                 break;
             case 0x47:
@@ -788,6 +804,10 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
     }
 
     aIn.Seek( nEndPos );
+
+    if( eRet == ConvOK)
+        ReadExtensions( aExtensions, aIn );
+
     return eRet;
 }
 
