@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elements.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:47:38 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 07:57:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 #include "elements.hxx"
 #include "osl/mutex.hxx"
 #include "osl/file.hxx"
+#include "osl/time.h"
 #include "fwkutil.hxx"
 #include "fwkbase.hxx"
 #include "framework.hxx"
@@ -48,6 +49,7 @@
 #include "libxml/xpath.h"
 #include "libxml/xpathInternals.h"
 #include "rtl/bootstrap.hxx"
+#include "boost/optional.hpp"
 // #define NS_JAVA_FRAMEWORK "http://openoffice.org/2004/java/framework/1.0"
 // #define NS_SCHEMA_INSTANCE "http://www.w3.org/2001/XMLSchema-instance"
 
@@ -105,54 +107,6 @@ rtl::OString getElementUpdated()
     return sValue;
 }
 
-void createUserSettingsDocument()
-{
-    //make sure there is a user directory
-    rtl::OString sExcMsg("[Java framework] Error in function createUserSettingsDocument "
-                         "(elements.cxx).");
-    // check if javasettings.xml already exist
-    rtl::OUString sURL = BootParams::getUserData();
-    if (checkFileURL(sURL) == FILE_OK)
-        return;
-    //make sure that the directories are created in case they do not exist
-    FileBase::RC rcFile = Directory::createPath(getDirFromFile(sURL));
-    if (rcFile != FileBase::E_EXIST && rcFile != FileBase::E_None)
-        throw FrameworkException(JFW_E_ERROR, sExcMsg);
-
-    //javasettings.xml does not exist yet
-    CXmlDocPtr doc(xmlNewDoc((xmlChar *)"1.0"));
-    if (! doc)
-        throw FrameworkException(JFW_E_ERROR, sExcMsg);
-    //Create a comment
-    xmlNewDocComment(
-        doc, (xmlChar *) "This is a generated file. Do not alter this file!");
-
-    //Create the root element and name spaces
-    xmlNodePtr root =   xmlNewDocNode(
-        doc, NULL, (xmlChar *) "java", (xmlChar *) "\n");
-
-    if (root == NULL)
-        throw FrameworkException(JFW_E_ERROR, sExcMsg);
-
-    if (xmlNewNs(root, (xmlChar *) NS_JAVA_FRAMEWORK,NULL) == NULL)
-        throw FrameworkException(JFW_E_ERROR, sExcMsg);
-    if (xmlNewNs(root,(xmlChar*) NS_SCHEMA_INSTANCE,(xmlChar*)"xsi") == NULL)
-        throw FrameworkException(JFW_E_ERROR, sExcMsg);
-    xmlDocSetRootElement(doc,  root);
-
-    //Create a comment
-    xmlNodePtr com = xmlNewComment(
-        (xmlChar *) "This is a generated file. Do not alter this file!");
-    if (com == NULL)
-        throw FrameworkException(JFW_E_ERROR, sExcMsg);
-
-    if (xmlAddPrevSibling(root, com) == NULL)
-        throw FrameworkException(JFW_E_ERROR, sExcMsg);
-
-    if (xmlSaveFormatFileEnc(
-            getUserSettingsStoreLocation().getStr(), doc,"UTF-8", 1) == -1)
-        throw FrameworkException(JFW_E_ERROR, sExcMsg);
-}
 
 void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
 {
@@ -183,15 +137,6 @@ void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
     //Get xsi:nil namespace
     xmlNs* nsXsi = xmlSearchNsByHref(
         document, root,(xmlChar*)  NS_SCHEMA_INSTANCE);
-
-//     //<classesDirectory/>
-//     xmlNode  * nodeCP = xmlNewTextChild(
-//         root,NULL, (xmlChar*) "classesDirectory", (xmlChar*) "");
-//     if (nodeCP == NULL)
-//         throw FrameworkException(JFW_E_ERROR, sExcMsg);
-//     //add a new line
-//     xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
-//     xmlAddChild(root, nodeCrLf);
 
     //<enabled xsi:nil="true"
     xmlNode  * nodeEn = xmlNewTextChild(
@@ -243,39 +188,8 @@ void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
     //add a new line
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(root, nodeCrLf);
-
-    //only copied during first time setup for the current user and client
-    //machine
-    copyShareSettings(document, root);
 }
 
-void copyShareSettings(xmlDoc * /*doc*/, xmlNode * /*userParent*/)
-{
-    rtl::OString sExcMsg("[Java framework] Error in function copyShareSettings "
-                         "(elements.cxx).");
-    // insert values into user settings here
-}
-
-void prepareSettingsDocument()
-{
-    rtl::OString sExcMsg(
-        "[Java framework] Error in function prepareSettingsDocument"
-        " (elements.cxx).");
-    createUserSettingsDocument();
-    rtl::OString sSettings = getUserSettingsPath();
-    CXmlDocPtr doc(xmlParseFile(sSettings.getStr()));
-    if (!doc)
-        throw FrameworkException(JFW_E_ERROR, sExcMsg);
-
-    bool bNeedsSave = false;
-    createSettingsStructure(doc, & bNeedsSave);
-    if (bNeedsSave)
-    {
-        if (xmlSaveFormatFileEnc(
-                sSettings.getStr(), doc,"UTF-8", 1) == -1)
-            throw FrameworkException(JFW_E_ERROR, sExcMsg);
-    }
-}
 
 //====================================================================
 VersionInfo::VersionInfo(): arVersions(NULL)
@@ -294,7 +208,7 @@ void VersionInfo::addExcludeVersion(const rtl::OUString& sVersion)
 
 rtl_uString** VersionInfo::getExcludeVersions()
 {
-    osl::MutexGuard guard(getFwkMutex());
+    osl::MutexGuard guard(FwkMutex::get());
     if (arVersions != NULL)
         return arVersions;
 
@@ -315,35 +229,62 @@ sal_Int32 VersionInfo::getExcludeVersionSize()
 }
 //==================================================================
 
-CNodeJava::CNodeJava():
-    m_bEnabled(sal_True), m_bEnabledModified(false),
-    m_bUserClassPathModified(false), m_bJavaInfoModified(false),
-    m_bVmParametersModified(false), m_bJRELocationsModified(false)
+NodeJava::NodeJava(Layer layer):
+    m_layer(layer)
 {
-}
-
-
-void CNodeJava::loadFromSettings()
-{
-    // share settings may not be given
-    loadShareSettings();
-    loadUserSettings();
-}
-
-
-void CNodeJava::loadUserSettings()
-{
-    rtl::OString sExcMsg("[Java framework] Error in function CNodeJava::loadUserSettings "
-                             "(elements.cxx).");
-    CXmlDocPtr docUser;
+    //This class reads and write to files which should only be done in
+    //application mode
     if (getMode() == JFW_MODE_DIRECT)
-        return;
-    prepareSettingsDocument();
+        throw FrameworkException(
+            JFW_E_DIRECT_MODE,
+            "[Java framework] Trying to access settings files in direct mode.");
+
+    if (USER_OR_INSTALL == m_layer)
+    {
+        if (BootParams::getInstallData().getLength() > 0)
+            m_layer = INSTALL;
+        else
+            m_layer = USER;
+    }
+    else
+    {
+        m_layer = layer;
+    }
+}
+
+
+void NodeJava::load()
+{
+    const rtl::OString sExcMsg("[Java framework] Error in function NodeJava::load"
+                             "(elements.cxx).");
+    if (SHARED == m_layer)
+    {
+        //we do not support yet to write into the shared installation
+
+        //check if shared settings exist at all.
+        jfw::FileStatus s = checkFileURL(BootParams::getSharedData());
+        if (s == FILE_INVALID)
+            throw FrameworkException(
+                JFW_E_ERROR,
+                "[Java framework] Invalid file for shared Java settings.");
+        else if (s == FILE_DOES_NOT_EXIST)
+            //Writing shared data is not supported yet.
+            return;
+    }
+    else if (USER == m_layer || INSTALL == m_layer)
+    {
+        prepareSettingsDocument();
+    }
+    else
+    {
+        OSL_ASSERT("[Java framework] Unknown enum used.");
+    }
+
 
     //Read the user elements
-    rtl::OString sSettingsPath = jfw::getUserSettingsPath();
+    rtl::OString sSettingsPath = getSettingsPath();
     //There must not be a share settings file
-    docUser = xmlParseFile(sSettingsPath.getStr());
+    CXmlDocPtr docUser(xmlParseFile(sSettingsPath.getStr()));
     if (docUser == NULL)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
@@ -364,15 +305,12 @@ void CNodeJava::loadUserSettings()
                 throw FrameworkException(JFW_E_ERROR, sExcMsg);;
             if (xmlStrcmp(sNil, (xmlChar*) "false") == 0)
             {
-                CXmlCharPtr sEnabled;
-                sEnabled = xmlNodeListGetString(
-                    docUser, cur->children, 1);
+                CXmlCharPtr sEnabled( xmlNodeListGetString(
+                    docUser, cur->children, 1));
                 if (xmlStrcmp(sEnabled, (xmlChar*) "true") == 0)
-                    m_bEnabled = sal_True;
+                    m_enabled = boost::optional<sal_Bool>(sal_True);
                 else if (xmlStrcmp(sEnabled, (xmlChar*) "false") == 0)
-                    m_bEnabled = sal_False;
-                else
-                    m_bEnabled = sal_True;
+                    m_enabled = boost::optional<sal_Bool>(sal_False);
             }
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "userClassPath") == 0)
@@ -383,10 +321,9 @@ void CNodeJava::loadUserSettings()
                 throw FrameworkException(JFW_E_ERROR, sExcMsg);
             if (xmlStrcmp(sNil, (xmlChar*) "false") == 0)
             {
-                CXmlCharPtr sUser;
-                sUser = xmlNodeListGetString(
-                    docUser, cur->children, 1);
-                m_sUserClassPath = sUser;
+                CXmlCharPtr sUser(xmlNodeListGetString(
+                    docUser, cur->children, 1));
+                m_userClassPath = boost::optional<rtl::OUString>(sUser);
             }
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "javaInfo") == 0)
@@ -398,7 +335,9 @@ void CNodeJava::loadUserSettings()
 
             if (xmlStrcmp(sNil, (xmlChar*) "false") == 0)
             {
-                m_aInfo.loadFromNode(docUser, cur);
+                if (! m_javaInfo)
+                    m_javaInfo = boost::optional<CNodeJavaInfo>(CNodeJavaInfo());
+                m_javaInfo->loadFromNode(docUser, cur);
             }
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "vmParameters") == 0)
@@ -409,8 +348,10 @@ void CNodeJava::loadUserSettings()
                 throw FrameworkException(JFW_E_ERROR, sExcMsg);
             if (xmlStrcmp(sNil, (xmlChar*) "false") == 0)
             {
-                //throw away share settings
-                m_arVmParameters.clear();
+                if ( ! m_vmParameters)
+                    m_vmParameters = boost::optional<std::vector<rtl::OUString> >(
+                        std::vector<rtl::OUString> ());
+
                 xmlNode * pOpt = cur->children;
                 while (pOpt != NULL)
                 {
@@ -419,7 +360,7 @@ void CNodeJava::loadUserSettings()
                         CXmlCharPtr sOpt;
                         sOpt = xmlNodeListGetString(
                             docUser, pOpt->children, 1);
-                        m_arVmParameters.push_back(sOpt);
+                        m_vmParameters->push_back(sOpt);
                     }
                     pOpt = pOpt->next;
                 }
@@ -433,8 +374,10 @@ void CNodeJava::loadUserSettings()
                 throw FrameworkException(JFW_E_ERROR, sExcMsg);
             if (xmlStrcmp(sNil, (xmlChar*) "false") == 0)
             {
-                //throw away share settings
-                m_arJRELocations.clear();
+                if (! m_JRELocations)
+                    m_JRELocations = boost::optional<std::vector<rtl::OUString> >(
+                        std::vector<rtl::OUString>());
+
                 xmlNode * pLoc = cur->children;
                 while (pLoc != NULL)
                 {
@@ -443,7 +386,7 @@ void CNodeJava::loadUserSettings()
                         CXmlCharPtr sLoc;
                         sLoc = xmlNodeListGetString(
                             docUser, pLoc->children, 1);
-                        m_arJRELocations.push_back(sLoc);
+                        m_JRELocations->push_back(sLoc);
                     }
                     pLoc = pLoc->next;
                 }
@@ -453,98 +396,58 @@ void CNodeJava::loadUserSettings()
     }
 }
 
-void CNodeJava::loadShareSettings()
+::rtl::OString NodeJava::getSettingsPath() const
 {
-    rtl::OString sExcMsg("[Java framework] Error in function CNodeJava::loadShareSettings "
-                             "(elements.cxx).");
-    //check if shared settings exist at all.
-    jfw::FileStatus s = checkFileURL(BootParams::getSharedData());
-    if (s == FILE_INVALID)
-        throw FrameworkException(
-            JFW_E_ERROR,
-            "[Java framework] Invalid file for shared Java settings.");
-    else if (s == FILE_DOES_NOT_EXIST)
-        return;
-    rtl::OString sSettingsPath = jfw::getSharedSettingsPath();
-    if (sSettingsPath.getLength() == 0)
-        return;
-
-    //There must not be a share settings file
-    CXmlDocPtr docShare(xmlParseFile(sSettingsPath.getStr()));
-    if (docShare == NULL)
-        throw FrameworkException(JFW_E_ERROR, sExcMsg);
-
-    xmlNode * cur = xmlDocGetRootElement(docShare);
-    if (cur == NULL)
-        throw FrameworkException(JFW_E_ERROR, sExcMsg);
-
-    if (cur->children == NULL)
-        return;
-    cur = cur->children;
-
-    while (cur != NULL)
+    ::rtl::OString ret;
+    switch (m_layer)
     {
-        if (xmlStrcmp(cur->name, (xmlChar*) "enabled") == 0)
-        {
-            CXmlCharPtr sEnabled;
-            sEnabled = xmlNodeListGetString(
-                docShare, cur->children, 1);
-            if (xmlStrcmp(sEnabled, (xmlChar*) "true") == 0)
-                m_bEnabled = sal_True;
-            else if (xmlStrcmp(sEnabled, (xmlChar*) "false") == 0)
-                m_bEnabled = sal_False;
-            else
-                m_bEnabled = sal_True;
-        }
-        else if (xmlStrcmp(cur->name, (xmlChar*) "userClassPath") == 0)
-        {
-            CXmlCharPtr sUser;
-            sUser = xmlNodeListGetString(
-                docShare, cur->children, 1);
-            m_sUserClassPath = sUser;
-        }
-        else if (xmlStrcmp(cur->name, (xmlChar*) "javaInfo") == 0)
-        {
-            m_aInfo.loadFromNode(docShare, cur);
-        }
-        else if (xmlStrcmp(cur->name, (xmlChar*) "vmParameters") == 0)
-        {
-            xmlNode * pOpt = cur->children;
-            while (pOpt != NULL)
-            {
-                if (xmlStrcmp(pOpt->name, (xmlChar*) "param") == 0)
-                {
-                    CXmlCharPtr sOpt;
-                    sOpt = xmlNodeListGetString(
-                        docShare, pOpt->children, 1);
-                    m_arVmParameters.push_back(sOpt);
-                }
-                pOpt = pOpt->next;
-            }
-        }
-        else if (xmlStrcmp(cur->name, (xmlChar*) "jreLocations") == 0)
-        {
-            xmlNode * pLoc = cur->children;
-            while (pLoc != NULL)
-            {
-                if (xmlStrcmp(pLoc->name, (xmlChar*) "location") == 0)
-                {
-                    CXmlCharPtr sLoc;
-                    sLoc = xmlNodeListGetString(
-                        docShare, pLoc->children, 1);
-                    m_arJRELocations.push_back(sLoc);
-                }
-                pLoc = pLoc->next;
-            }
-        }
+    case USER: ret = getUserSettingsPath(); break;
+    case INSTALL: ret = getInstallSettingsPath(); break;
+    case SHARED: ret = getSharedSettingsPath(); break;
+    default:
+        OSL_ASSERT("[Java framework] NodeJava::getSettingsPath()");
+    }
+    return ret;
+}
 
-        cur = cur->next;
+::rtl::OUString NodeJava::getSettingsURL() const
+{
+    ::rtl::OUString ret;
+    switch (m_layer)
+    {
+    case USER: ret = BootParams::getUserData(); break;
+    case INSTALL: ret = BootParams::getInstallData(); break;
+    case SHARED: ret = BootParams::getSharedData(); break;
+    default:
+        OSL_ASSERT("[Java framework] NodeJava::getSettingsURL()");
+    }
+    return ret;
+}
+
+void NodeJava::prepareSettingsDocument() const
+{
+    rtl::OString sExcMsg(
+        "[Java framework] Error in function prepareSettingsDocument"
+        " (elements.cxx).");
+    createSettingsDocument();
+    rtl::OString sSettings = getSettingsPath();
+    CXmlDocPtr doc(xmlParseFile(sSettings.getStr()));
+    if (!doc)
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
+
+    bool bNeedsSave = false;
+    createSettingsStructure(doc, & bNeedsSave);
+    if (bNeedsSave)
+    {
+        if (xmlSaveFormatFileEnc(
+                sSettings.getStr(), doc,"UTF-8", 1) == -1)
+            throw FrameworkException(JFW_E_ERROR, sExcMsg);
     }
 }
 
-void CNodeJava::writeSettings() const
+void NodeJava::write() const
 {
-    rtl::OString sExcMsg("[Java framework] Error in function CNodeJava::writeSettings "
+    rtl::OString sExcMsg("[Java framework] Error in function NodeJava::writeSettings "
                          "(elements.cxx).");
     CXmlDocPtr docUser;
     CXPathContextPtr contextUser;
@@ -553,7 +456,7 @@ void CNodeJava::writeSettings() const
     prepareSettingsDocument();
 
     //Read the user elements
-    rtl::OString sSettingsPath = jfw::getUserSettingsPath();
+    rtl::OString sSettingsPath = getSettingsPath();
     docUser = xmlParseFile(sSettingsPath.getStr());
     if (docUser == NULL)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
@@ -570,7 +473,7 @@ void CNodeJava::writeSettings() const
 
     //set the <enabled> element
     //The element must exist
-    if (m_bEnabledModified)
+    if (m_enabled)
     {
         rtl::OString sExpression= rtl::OString(
             "/jf:java/jf:enabled");
@@ -585,7 +488,7 @@ void CNodeJava::writeSettings() const
                      (xmlChar*) "nil",
                      (xmlChar*) "false");
 
-        if (m_bEnabled == sal_True)
+        if (m_enabled == boost::optional<sal_Bool>(sal_True))
             xmlNodeSetContent(nodeEnabled,(xmlChar*) "true");
         else
             xmlNodeSetContent(nodeEnabled,(xmlChar*) "false");
@@ -593,7 +496,7 @@ void CNodeJava::writeSettings() const
 
     //set the <userClassPath> element
     //The element must exist
-    if (m_bUserClassPathModified)
+    if (m_userClassPath)
     {
         rtl::OString sExpression= rtl::OString(
             "/jf:java/jf:userClassPath");
@@ -606,12 +509,12 @@ void CNodeJava::writeSettings() const
         xmlSetNsProp(nodeEnabled, nsXsi, (xmlChar*) "nil",(xmlChar*) "false");
 
         rtl::OString osUserCP =
-            rtl::OUStringToOString(m_sUserClassPath, osl_getThreadTextEncoding());
+            rtl::OUStringToOString(*m_userClassPath, osl_getThreadTextEncoding());
         xmlNodeSetContent(nodeEnabled,(xmlChar*) osUserCP.getStr());
     }
 
     //set <javaInfo> element
-    if (m_bJavaInfoModified)
+    if (m_javaInfo)
     {
         rtl::OString sExpression= rtl::OString(
             "/jf:java/jf:javaInfo");
@@ -619,13 +522,12 @@ void CNodeJava::writeSettings() const
                                                 contextUser);
         if ( ! pathObj || xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
             throw FrameworkException(JFW_E_ERROR, sExcMsg);
-
-        m_aInfo.writeToNode(
+        m_javaInfo->writeToNode(
             docUser, pathObj->nodesetval->nodeTab[0]);
     }
 
     //set <vmParameters> element
-    if (m_bVmParametersModified)
+    if (m_vmParameters)
     {
         rtl::OString sExpression= rtl::OString(
             "/jf:java/jf:vmParameters");
@@ -648,17 +550,17 @@ void CNodeJava::writeSettings() const
             xmlFreeNode(lastNode);
         }
         //add a new line after <vmParameters>
-        if (m_arVmParameters.size() > 0)
+        if (m_vmParameters->size() > 0)
         {
             xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
             xmlAddChild(vmParameters, nodeCrLf);
         }
 
-        typedef std::vector<rtl::OString>::const_iterator cit;
-        for (cit i = m_arVmParameters.begin(); i != m_arVmParameters.end(); i++)
+        typedef std::vector<rtl::OUString>::const_iterator cit;
+        for (cit i = m_vmParameters->begin(); i != m_vmParameters->end(); i++)
         {
             xmlNewTextChild(vmParameters, NULL, (xmlChar*) "param",
-                            (xmlChar*) i->getStr());
+                            CXmlCharPtr(*i));
             //add a new line
             xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
             xmlAddChild(vmParameters, nodeCrLf);
@@ -666,7 +568,7 @@ void CNodeJava::writeSettings() const
     }
 
     //set <jreLocations> element
-    if (m_bJRELocationsModified)
+    if (m_JRELocations)
     {
         rtl::OString sExpression= rtl::OString(
             "/jf:java/jf:jreLocations");
@@ -689,17 +591,17 @@ void CNodeJava::writeSettings() const
             xmlFreeNode(lastNode);
         }
         //add a new line after <vmParameters>
-        if (m_arJRELocations.size() > 0)
+        if (m_JRELocations->size() > 0)
         {
             xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
             xmlAddChild(jreLocationsNode, nodeCrLf);
         }
 
-        typedef std::vector<rtl::OString>::const_iterator cit;
-        for (cit i = m_arJRELocations.begin(); i != m_arJRELocations.end(); i++)
+        typedef std::vector<rtl::OUString>::const_iterator cit;
+        for (cit i = m_JRELocations->begin(); i != m_JRELocations->end(); i++)
         {
             xmlNewTextChild(jreLocationsNode, NULL, (xmlChar*) "location",
-                            (xmlChar*) i->getStr());
+                            CXmlCharPtr(*i));
             //add a new line
             xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
             xmlAddChild(jreLocationsNode, nodeCrLf);
@@ -709,189 +611,259 @@ void CNodeJava::writeSettings() const
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
 }
 
-void CNodeJava::setEnabled(sal_Bool bEnabled)
+void NodeJava::setEnabled(sal_Bool bEnabled)
 {
-    m_bEnabled = bEnabled;
-    m_bEnabledModified = true;
+    m_enabled =  boost::optional<sal_Bool>(bEnabled);
 }
 
-sal_Bool CNodeJava::getEnabled() const
+
+void NodeJava::setUserClassPath(const rtl::OUString & sClassPath)
 {
-    return m_bEnabled;
+    m_userClassPath = boost::optional<rtl::OUString>(sClassPath);
 }
 
-void CNodeJava::setUserClassPath(const rtl::OUString & sClassPath)
+void NodeJava::setJavaInfo(const JavaInfo * pInfo, bool bAutoSelect)
 {
-    m_sUserClassPath = sClassPath;
-    m_bUserClassPathModified = true;
-}
-
-rtl::OUString const &  CNodeJava::getUserClassPath() const
-{
-    return m_sUserClassPath;
-}
-
-void CNodeJava::setJavaInfo(const JavaInfo * pInfo, bool bAutoSelect)
-
-{
-    m_aInfo.bAutoSelect = bAutoSelect;
-    m_aInfo.bNil = false;
-//    m_aInfo.sAttrVendorUpdate = sVendorUpdate;
-
+    if (!m_javaInfo)
+        m_javaInfo = boost::optional<CNodeJavaInfo>(CNodeJavaInfo());
+    m_javaInfo->bAutoSelect = bAutoSelect;
+    m_javaInfo->bNil = false;
 
     if (pInfo != NULL)
     {
-        m_aInfo.m_bEmptyNode = false;
-        m_aInfo.sVendor = pInfo->sVendor;
-        m_aInfo.sLocation = pInfo->sLocation;
-        m_aInfo.sVersion = pInfo->sVersion;
-        m_aInfo.nFeatures = pInfo->nFeatures;
-        m_aInfo.nRequirements = pInfo->nRequirements;
-        m_aInfo.arVendorData = pInfo->arVendorData;
+        m_javaInfo->m_bEmptyNode = false;
+        m_javaInfo->sVendor = pInfo->sVendor;
+        m_javaInfo->sLocation = pInfo->sLocation;
+        m_javaInfo->sVersion = pInfo->sVersion;
+        m_javaInfo->nFeatures = pInfo->nFeatures;
+        m_javaInfo->nRequirements = pInfo->nRequirements;
+        m_javaInfo->arVendorData = pInfo->arVendorData;
     }
     else
     {
-        m_aInfo.m_bEmptyNode = true;
+        m_javaInfo->m_bEmptyNode = true;
         rtl::OUString sEmpty;
-        m_aInfo.sVendor = sEmpty;
-        m_aInfo.sLocation = sEmpty;
-        m_aInfo.sVersion = sEmpty;
-        m_aInfo.nFeatures = 0;
-        m_aInfo.nRequirements = 0;
-        m_aInfo.arVendorData = rtl::ByteSequence();
+        m_javaInfo->sVendor = sEmpty;
+        m_javaInfo->sLocation = sEmpty;
+        m_javaInfo->sVersion = sEmpty;
+        m_javaInfo->nFeatures = 0;
+        m_javaInfo->nRequirements = 0;
+        m_javaInfo->arVendorData = rtl::ByteSequence();
     }
-    m_bJavaInfoModified = true;
 }
 
-JavaInfo * CNodeJava::createJavaInfo() const
-{
-    return m_aInfo.makeJavaInfo();
-}
-
-rtl::OString const & CNodeJava::getJavaInfoAttrVendorUpdate() const
-{
-    return m_aInfo.sAttrVendorUpdate;
-}
-
-const std::vector<rtl::OString> & CNodeJava::getVmParameters() const
-{
-    return m_arVmParameters;
-}
-
-void CNodeJava::setVmParameters(rtl_uString * * arOptions, sal_Int32 size)
+void NodeJava::setVmParameters(rtl_uString * * arOptions, sal_Int32 size)
 {
     OSL_ASSERT( !(arOptions == 0 && size != 0));
-    m_arVmParameters.clear();
+    if ( ! m_vmParameters)
+        m_vmParameters = boost::optional<std::vector<rtl::OUString> >(
+            std::vector<rtl::OUString>());
+    m_vmParameters->clear();
     if (arOptions != NULL)
     {
         for (int i  = 0; i < size; i++)
         {
-            const rtl::OUString usOption = (rtl_uString*) arOptions[i];
-            rtl::OString osOption = rtl::OUStringToOString(
-                usOption, RTL_TEXTENCODING_UTF8);
-            m_arVmParameters.push_back(osOption);
+            const rtl::OUString sOption(static_cast<rtl_uString*>(arOptions[i]));
+            m_vmParameters->push_back(sOption);
         }
     }
-    m_bVmParametersModified = true;
 }
 
-void CNodeJava::getVmParametersArray(
-    rtl_uString *** parParams, sal_Int32 * size) const
-{
-    osl::MutexGuard guard(getFwkMutex());
-    OSL_ASSERT(parParams != NULL && size != NULL);
-
-    *parParams = (rtl_uString **)
-        rtl_allocateMemory(sizeof(rtl_uString*) * m_arVmParameters.size());
-    if (*parParams == NULL)
-        return;
-
-    int j=0;
-    typedef std::vector<rtl::OString>::const_iterator it;
-    for (it i = m_arVmParameters.begin(); i != m_arVmParameters.end();
-         i++, j++)
-    {
-        rtl::OUString sParam =
-            rtl::OStringToOUString(*i, RTL_TEXTENCODING_UTF8);
-        (*parParams)[j] = sParam.pData;
-        rtl_uString_acquire(sParam.pData);
-    }
-    *size = m_arVmParameters.size();
-}
-
-
-void CNodeJava::setJRELocations(rtl_uString  * * arLocations, sal_Int32 size)
+void NodeJava::setJRELocations(rtl_uString  * * arLocations, sal_Int32 size)
 {
     OSL_ASSERT( !(arLocations == 0 && size != 0));
-    m_arJRELocations.clear();
+    if (! m_JRELocations)
+        m_JRELocations = boost::optional<std::vector<rtl::OUString> > (
+            std::vector<rtl::OUString>());
+    m_JRELocations->clear();
     if (arLocations != NULL)
     {
         for (int i  = 0; i < size; i++)
         {
-            const rtl::OUString & usLocation = (rtl_uString*) arLocations[i];
-            rtl::OString osLocation = rtl::OUStringToOString(
-                usLocation, RTL_TEXTENCODING_UTF8);
+            const rtl::OUString & sLocation = static_cast<rtl_uString*>(arLocations[i]);
+
             //only add the path if not already present
-            std::vector<rtl::OString>::const_iterator it =
-                std::find(m_arJRELocations.begin(), m_arJRELocations.end(),
-                          osLocation);
-            if (it == m_arJRELocations.end())
-                m_arJRELocations.push_back(osLocation);
+            std::vector<rtl::OUString>::const_iterator it =
+                std::find(m_JRELocations->begin(), m_JRELocations->end(),
+                          sLocation);
+            if (it == m_JRELocations->end())
+                m_JRELocations->push_back(sLocation);
         }
     }
-    m_bJRELocationsModified = true;
 }
 
-void CNodeJava::addJRELocation(rtl_uString * sLocation)
+void NodeJava::addJRELocation(rtl_uString * sLocation)
 {
     OSL_ASSERT( sLocation);
-
-    const rtl::OUString & usLocation = sLocation;
-    rtl::OString osLocation = rtl::OUStringToOString(
-        usLocation, RTL_TEXTENCODING_UTF8);
-    //only add the path if not already present
-    std::vector<rtl::OString>::const_iterator it =
-        std::find(m_arJRELocations.begin(), m_arJRELocations.end(),
-                  osLocation);
-    if (it == m_arJRELocations.end())
-        m_arJRELocations.push_back(osLocation);
-
-    m_bJRELocationsModified = true;
+    if (!m_JRELocations)
+        m_JRELocations = boost::optional<std::vector<rtl::OUString> >(
+            std::vector<rtl::OUString> ());
+     //only add the path if not already present
+    std::vector<rtl::OUString>::const_iterator it =
+        std::find(m_JRELocations->begin(), m_JRELocations->end(),
+                  rtl::OUString(sLocation));
+    if (it == m_JRELocations->end())
+        m_JRELocations->push_back(rtl::OUString(sLocation));
 }
 
-const std::vector<rtl::OString> & CNodeJava::getJRELocations() const
+const boost::optional<sal_Bool> & NodeJava::getEnabled() const
 {
-    return m_arJRELocations;
+    return m_enabled;
 }
 
-void CNodeJava::getJRELocations(
-    rtl_uString *** parLocations, sal_Int32 * size) const
+const boost::optional<std::vector<rtl::OUString> >&
+NodeJava::getJRELocations() const
 {
-    osl::MutexGuard guard(getFwkMutex());
-    OSL_ASSERT(parLocations != NULL && size != NULL);
+    return m_JRELocations;
+}
 
-    *parLocations = (rtl_uString **)
-        rtl_allocateMemory(sizeof(rtl_uString*) * m_arJRELocations.size());
-    if (*parLocations == NULL)
+const boost::optional<rtl::OUString> & NodeJava::getUserClassPath() const
+{
+    return m_userClassPath;
+}
+
+const boost::optional<std::vector<rtl::OUString> > & NodeJava::getVmParameters() const
+{
+    return m_vmParameters;
+}
+
+const boost::optional<CNodeJavaInfo> & NodeJava::getJavaInfo() const
+{
+    return m_javaInfo;
+}
+
+jfw::FileStatus NodeJava::checkSettingsFileStatus() const
+{
+    jfw::FileStatus ret = FILE_DOES_NOT_EXIST;
+
+    const rtl::OUString sURL = getSettingsURL();
+    //check the file time
+    ::osl::DirectoryItem item;
+    File::RC rc = ::osl::DirectoryItem::get(sURL, item);
+    if (File::E_None == rc)
+    {
+        ::osl::FileStatus stat(
+            FileStatusMask_Validate
+            | FileStatusMask_CreationTime
+            | FileStatusMask_ModifyTime);
+        File::RC rc_stat = item.getFileStatus(stat);
+        if (File::E_None == rc_stat)
+        {
+            //ToDo we remove the file and create it shortly after. This
+            //function may be called multiple times when a java is started.
+            //If the expiretime is too small then we may loop because everytime
+            //the file is deleted and we need to search for a java again.
+            if (INSTALL == m_layer)
+            {
+                //file exists. Check if it is too old
+                //Do not use the creation time. On Windows 2003 server I noticed
+                //that after removing the file and shortly later creating it again
+                //did not change the creation time. That is the newly created file
+                //had the creation time of the former file.
+//                ::TimeValue time = stat.getCreationTime();
+                ::TimeValue modTime = stat.getModifyTime();
+                ::TimeValue curTime = {0,0};
+                if (sal_True == ::osl_getSystemTime(& curTime))
+                {
+                    if ( curTime.Seconds - modTime.Seconds >
+                         BootParams::getInstallDataExpiration())
+                    {
+#if OSL_DEBUG_LEVEL >=2
+                        rtl::OString s = rtl::OUStringToOString(sURL, osl_getThreadTextEncoding());
+                        fprintf(stderr, "[Java framework] Deleting settings file at \n%s\n", s.getStr());
+#endif
+                        //delete file
+                        File::RC rc_rem = File::remove(sURL);
+                        if (File::E_None == rc_rem)
+                            ret = FILE_DOES_NOT_EXIST;
+                        else
+                            ret = FILE_INVALID;
+                    }
+                    else
+                    {
+                        ret = FILE_OK;
+                    }
+                }
+                else // osl_getSystemTime
+                {
+                    ret = FILE_INVALID;
+                }
+            }
+            else // INSTALL == m_layer
+            {
+                ret = FILE_OK;
+            }
+        }
+        else if (File::E_NOENT == rc_stat)
+        {
+            ret = FILE_DOES_NOT_EXIST;
+        }
+        else
+        {
+            ret = FILE_INVALID;
+        }
+    }
+    else if(File::E_NOENT == rc)
+    {
+        ret = FILE_DOES_NOT_EXIST;
+    }
+    else
+    {
+        ret = FILE_INVALID;
+    }
+    return ret;
+}
+
+void NodeJava::createSettingsDocument() const
+{
+    const rtl::OUString sURL = getSettingsURL();
+    //make sure there is a user directory
+    rtl::OString sExcMsg("[Java framework] Error in function createSettingsDocument "
+                         "(elements.cxx).");
+    // check if javasettings.xml already exist
+    if (FILE_OK == checkSettingsFileStatus())
         return;
 
-    int j=0;
-    typedef std::vector<rtl::OString>::const_iterator it;
-    for (it i = m_arJRELocations.begin(); i != m_arJRELocations.end();
-         i++, j++)
-    {
-        rtl::OUString sLocation =
-            rtl::OStringToOUString(*i, RTL_TEXTENCODING_UTF8);
-        (*parLocations)[j] = sLocation.pData;
-        rtl_uString_acquire(sLocation.pData);
-    }
-    *size = m_arJRELocations.size();
+    //make sure that the directories are created in case they do not exist
+    FileBase::RC rcFile = Directory::createPath(getDirFromFile(sURL));
+    if (rcFile != FileBase::E_EXIST && rcFile != FileBase::E_None)
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
+
+    //javasettings.xml does not exist yet
+    CXmlDocPtr doc(xmlNewDoc((xmlChar *)"1.0"));
+    if (! doc)
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
+    //Create a comment
+    xmlNewDocComment(
+        doc, (xmlChar *) "This is a generated file. Do not alter this file!");
+
+    //Create the root element and name spaces
+    xmlNodePtr root =   xmlNewDocNode(
+        doc, NULL, (xmlChar *) "java", (xmlChar *) "\n");
+
+    if (root == NULL)
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
+
+    if (xmlNewNs(root, (xmlChar *) NS_JAVA_FRAMEWORK,NULL) == NULL)
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
+    if (xmlNewNs(root,(xmlChar*) NS_SCHEMA_INSTANCE,(xmlChar*)"xsi") == NULL)
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
+    xmlDocSetRootElement(doc,  root);
+
+    //Create a comment
+    xmlNodePtr com = xmlNewComment(
+        (xmlChar *) "This is a generated file. Do not alter this file!");
+    if (com == NULL)
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
+
+    if (xmlAddPrevSibling(root, com) == NULL)
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
+
+    const rtl::OString path = getSettingsPath();
+    if (xmlSaveFormatFileEnc(path.getStr(), doc,"UTF-8", 1) == -1)
+         throw FrameworkException(JFW_E_ERROR, sExcMsg);
 }
 
-bool CNodeJava::getJavaInfoAttrAutoSelect() const
-{
-    return m_aInfo.bAutoSelect;
-}
 //=====================================================================
 CNodeJavaInfo::CNodeJavaInfo() :
     m_bEmptyNode(false), bNil(true), bAutoSelect(true),
@@ -919,7 +891,7 @@ CNodeJavaInfo::CNodeJavaInfo(const JavaInfo * pInfo)
 }
 void CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
 {
-    rtl::OString sExcMsg("[Java framework] Error in function CNodeJavaInfo::loadFromNode "
+    rtl::OString sExcMsg("[Java framework] Error in function NodeJavaInfo::loadFromNode "
                          "(elements.cxx).");
 
     OSL_ASSERT(pJavaInfo && pDoc);
@@ -1030,7 +1002,7 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
 
 {
     OSL_ASSERT(pJavaInfoNode && pDoc);
-    rtl::OString sExcMsg("[Java framework] Error in function CNodeJavaInfo::writeToNode "
+    rtl::OString sExcMsg("[Java framework] Error in function NodeJavaInfo::writeToNode "
                          "(elements.cxx).");
 
     //write the attribute vendorSettings
@@ -1162,5 +1134,156 @@ JavaInfo * CNodeJavaInfo::makeJavaInfo() const
     pInfo->arVendorData = arVendorData.getHandle();
     rtl_byte_sequence_acquire(pInfo->arVendorData);
     return pInfo;
+}
+
+
+//================================================================================
+MergedSettings::MergedSettings():
+    m_bEnabled(sal_False),
+    m_sClassPath(),
+    m_vmParams(),
+    m_JRELocations(),
+    m_javaInfo()
+{
+    NodeJava settings(NodeJava::USER_OR_INSTALL);
+    settings.load();
+
+    //Check if UNO_JAVA_JFW_INSTALL_DATA is set. If so, then we need not use user and
+    //shared data.
+    const ::rtl::OUString sInstall = BootParams::getInstallData();
+
+    if (sInstall.getLength() == 0)
+    {
+        NodeJava sharedSettings(NodeJava::SHARED);
+        sharedSettings.load();
+        merge(sharedSettings, settings);
+    }
+    else
+    {
+        merge(NodeJava(), settings);
+    }
+}
+
+MergedSettings::~MergedSettings()
+{
+}
+
+void MergedSettings::merge(const NodeJava & share, const NodeJava & user)
+{
+    if (user.getEnabled())
+        m_bEnabled = * user.getEnabled();
+    else if (share.getEnabled())
+        m_bEnabled = * share.getEnabled();
+    else
+        m_bEnabled = sal_True;
+
+    if (user.getUserClassPath())
+        m_sClassPath = * user.getUserClassPath();
+    else if (share.getUserClassPath())
+        m_sClassPath = * share.getUserClassPath();
+
+    if (user.getJavaInfo())
+        m_javaInfo = * user.getJavaInfo();
+    else if (share.getJavaInfo())
+        m_javaInfo = * share.getJavaInfo();
+
+    if (user.getVmParameters())
+        m_vmParams = * user.getVmParameters();
+    else if (share.getVmParameters())
+         m_vmParams = * share.getVmParameters();
+
+    if (user.getJRELocations())
+        m_JRELocations = * user.getJRELocations();
+    else if (share.getJRELocations())
+        m_JRELocations = * share.getJRELocations();
+}
+
+sal_Bool MergedSettings::getEnabled() const
+{
+    return m_bEnabled;
+}
+const rtl::OUString&  MergedSettings::getUserClassPath() const
+{
+    return m_sClassPath;
+}
+
+const std::vector<rtl::OUString>& MergedSettings::getVmParameters() const
+{
+    return m_vmParams;
+}
+
+::std::vector< ::rtl::OString> MergedSettings::getVmParametersUtf8() const
+{
+    ::std::vector< ::rtl::OString> ret;
+    typedef ::std::vector< ::rtl::OUString>::const_iterator cit;
+    for (cit i = m_vmParams.begin(); i < m_vmParams.end(); i++)
+    {
+        ret.push_back( ::rtl::OUStringToOString(*i, RTL_TEXTENCODING_UTF8));
+    }
+    return ret;
+}
+
+const ::rtl::OString  & MergedSettings::getJavaInfoAttrVendorUpdate() const
+{
+    return m_javaInfo.sAttrVendorUpdate;
+}
+
+
+JavaInfo * MergedSettings::createJavaInfo() const
+{
+    return m_javaInfo.makeJavaInfo();
+}
+
+bool MergedSettings::getJavaInfoAttrAutoSelect() const
+{
+    return m_javaInfo.bAutoSelect;
+}
+
+void MergedSettings::getVmParametersArray(
+    rtl_uString *** parParams, sal_Int32 * size) const
+{
+    osl::MutexGuard guard(FwkMutex::get());
+    OSL_ASSERT(parParams != NULL && size != NULL);
+
+    *parParams = (rtl_uString **)
+        rtl_allocateMemory(sizeof(rtl_uString*) * m_vmParams.size());
+    if (*parParams == NULL)
+        return;
+
+    int j=0;
+    typedef std::vector<rtl::OUString>::const_iterator it;
+    for (it i = m_vmParams.begin(); i != m_vmParams.end();
+         i++, j++)
+    {
+        (*parParams)[j] = i->pData;
+        rtl_uString_acquire(i->pData);
+    }
+    *size = m_vmParams.size();
+}
+
+void MergedSettings::getJRELocations(
+    rtl_uString *** parLocations, sal_Int32 * size) const
+{
+    osl::MutexGuard guard(FwkMutex::get());
+    OSL_ASSERT(parLocations != NULL && size != NULL);
+
+    *parLocations = (rtl_uString **)
+        rtl_allocateMemory(sizeof(rtl_uString*) * m_JRELocations.size());
+    if (*parLocations == NULL)
+        return;
+
+    int j=0;
+    typedef std::vector<rtl::OUString>::const_iterator it;
+    for (it i = m_JRELocations.begin(); i != m_JRELocations.end();
+         i++, j++)
+    {
+        (*parLocations)[j] = i->pData;
+        rtl_uString_acquire(i->pData);
+    }
+    *size = m_JRELocations.size();
+}
+const std::vector<rtl::OUString> & MergedSettings::getJRELocations() const
+{
+    return m_JRELocations;
 }
 }
