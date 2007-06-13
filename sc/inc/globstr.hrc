@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globstr.hrc,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:17:08 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:05:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -555,7 +555,9 @@
 
 #define STR_UNDO_TAB_R1C1           418
 
-#define STR_COUNT                   419
+#define STR_ERR_LONG_NESTED_ARRAY   419
+
+#define STR_COUNT                   420
 
 #endif
 
