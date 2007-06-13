@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:36:36 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:12:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,7 +232,7 @@ void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddres
     // read the formula, 3D tab refs from extended data
     const ScTokenArray* pArray = NULL;
     aFmlConv.Reset( rPosition );
-    BOOL bOK = (aFmlConv.Convert( pArray, aFmlaStrm, nFmlSize ) == ConvOK);
+    BOOL bOK = (aFmlConv.Convert( pArray, aFmlaStrm, nFmlSize, false, FT_CellFormula) == ConvOK);   // JEG : Check This
     rpTokenArray = (bOK && pArray) ? new ScTokenArray( *pArray ) : NULL;
     pStrm->Ignore( 1 );
 }
