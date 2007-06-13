@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sunjavaplugin.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:45:56 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 07:57:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,20 +71,7 @@ using namespace jfw_plugin;
 
 namespace {
 
-struct Init
-{
-    osl::Mutex * operator()()
-        {
-            static osl::Mutex aInstance;
-            return &aInstance;
-        }
-};
-osl::Mutex * getPluginMutex()
-{
-    return rtl_Instance< osl::Mutex, Init, ::osl::MutexGuard,
-        ::osl::GetGlobalMutex >::create(
-            Init(), ::osl::GetGlobalMutex());
-}
+struct PluginMutex: public ::rtl::Static<osl::Mutex, PluginMutex> {};
 
 #if defined UNX
 OString getPluginJarPath(
@@ -463,7 +450,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     JavaVM ** ppVm,
     JNIEnv ** ppEnv)
 {
-    osl::MutexGuard guard(getPluginMutex());
+    osl::MutexGuard guard(PluginMutex::get());
     // unless errcode is volatile the following warning occurs on gcc:
     // warning: variable 'errcode' might be clobbered by `longjmp' or `vfork'
     volatile javaPluginError errcode = JFW_PLUGIN_E_NONE;
