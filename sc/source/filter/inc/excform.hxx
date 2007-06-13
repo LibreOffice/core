@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:32:19 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:11:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,9 @@ class ScRangeList;
 class ExcelToSc : public ExcelConverterBase, protected XclImpRoot
 {
 protected:
+    enum ExtensionType { EXTENSION_ARRAY, EXTENSION_NLR, EXTENSION_MEMAREA };
+    typedef ::std::vector< ExtensionType >          ExtensionTypeVec;
+
     BOOL                bExternName;    // wenn External Name gefunden wurde
     static const UINT16 nRowMask;
     static const UINT16 nLastInd;       // letzter Index fuer Excel->SC-
@@ -72,7 +75,8 @@ protected:
 public:
                         ExcelToSc( const XclImpRoot& rRoot );
     virtual             ~ExcelToSc();
-    virtual ConvErr     Convert( const ScTokenArray*&, XclImpStream& rStrm, sal_Size nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
+    virtual ConvErr     Convert( const ScTokenArray*&, XclImpStream& rStrm, sal_Size nFormulaLen,
+                                 bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula );
 
     virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
     virtual BOOL        GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen );
@@ -90,6 +94,13 @@ public:
 
     void                SetComplCol( ComplRefData& );
     void                SetComplRow( ComplRefData& );
+
+    void                ReadExtensions( const ExtensionTypeVec& rExtensions,
+                                        XclImpStream& aIn );
+    void                ReadExtensionArray( unsigned int n,
+                                            XclImpStream& aIn );
+    void                ReadExtensionNlr( XclImpStream& aIn );
+    void                ReadExtensionMemArea( XclImpStream& aIn );
 };
 
 
@@ -122,7 +133,7 @@ public:
                         ExcelToSc8( const XclImpRoot& rRoot );
     virtual             ~ExcelToSc8();
 
-    virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, XclImpStream& rStrm, sal_Size nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
+    virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, XclImpStream& rStrm, sal_Size nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula );
 
     virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
 
