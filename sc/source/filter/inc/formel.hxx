@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formel.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:33:39 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:11:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,7 +237,7 @@ public:
     void                Reset( const ScAddress& rEingPos );
 
     virtual ConvErr     Convert( const ScTokenArray*& rpErg, XclImpStream& rStrm, sal_Size nFormulaLen,
-                                    const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
+                                 bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
     virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen,
                                     const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
 };
