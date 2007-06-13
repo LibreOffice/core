@@ -4,9 +4,9 @@
  *
  *  $RCSfile: address.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 11:52:12 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:04:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,6 +258,7 @@ public:
         CONV_OOO     =  0,  /* 'doc'#sheet.A1:sheet2.B2 */
         CONV_XL_A1,         /* [doc]sheet:sheet2!A1:B2 */
         CONV_XL_R1C1,       /* [doc]sheet:sheet2!R1C1:R2C2 */
+        CONV_XL_OOX,        /* [#]sheet:sheet2!A1:B2 */
 
         CONV_LOTUS_A1,      /* external? 3d? A1.B2 <placeholder/> */
 
