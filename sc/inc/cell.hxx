@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 11:52:45 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:04:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,7 +250,7 @@ private:
     ScAddress::Convention nErgConv;
     ScTokenArray*   pCode;                  // das neue Token-Array
     ScDocument*     pDocument;
-    ScMatrix*       pMatrix;                // Pointer auf Ergebnis-Matrix
+    ScMatrixRef     xMatrix;                // Pointer to refcounted result matrix
     ScFormulaCell*  pPrevious;
     ScFormulaCell*  pNext;
     ScFormulaCell*  pPreviousTrack;
