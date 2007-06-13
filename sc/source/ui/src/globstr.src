@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 16:37:44 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:14:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1800,6 +1800,10 @@ Resource RID_GLOBSTR
     String STR_RECALC_AUTO
     {
         Text [ en-US ] = "Automatic";
+    };
+    String STR_ERR_LONG_NESTED_ARRAY
+    {
+    Text [ en-US ] = "Nested arrays are not supported." ;
     };
 };
 
