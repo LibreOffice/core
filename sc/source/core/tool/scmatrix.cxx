@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmatrix.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:18:59 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:08:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,8 @@ void ScMatrix::CreateMatrix(SCSIZE nC, SCSIZE nR)       // nur fuer ctor
     }
     else
         pMat = new ScMatrixValue[nCount];
-    bIsString = NULL;
+    mnValType = NULL;
+    mnNonValue = 0;
 }
 
 ScMatrix::~ScMatrix()
@@ -141,9 +142,10 @@ ScMatrix::ScMatrix(SvStream& /* rStream */)
 
             if ( i < nCount )
             {
-                if (!bIsString)
+                if (!mnValType)
                     ResetIsString();        // init string flags
-                bIsString[i] = ( nType == CELLTYPE_NONE ? SC_MATVAL_EMPTY : SC_MATVAL_STRING );
+                mnValType[i] = ( nType == CELLTYPE_NONE ? SC_MATVAL_EMPTY : SC_MATVAL_STRING );
+                mnNonValue++;
 
                 if ( nType == CELLTYPE_STRING )
                     pMat[i].pS = new String(aMatStr);
@@ -190,14 +192,14 @@ void ScMatrix::Store(SvStream& /* rStream */) const
     for (SCSIZE i=0; i<nCount; i++)
     {
         BYTE nType = CELLTYPE_VALUE;
-        if ( bIsString && bIsString[i] )
+        if ( mnValType && IsStringType( mnValType[i]))
         {
             if ( pMat[i].pS )
                 aMatStr = *pMat[i].pS;
             else
                 aMatStr.Erase();
 
-            if ( bIsString[i] == SC_MATVAL_STRING )
+            if ( mnValType[i] == SC_MATVAL_STRING )
                 nType = CELLTYPE_STRING;
             else
                 nType = CELLTYPE_NONE;
@@ -214,31 +216,33 @@ void ScMatrix::Store(SvStream& /* rStream */) const
 void ScMatrix::ResetIsString()
 {
     SCSIZE nCount = nColCount * nRowCount;
-    if (bIsString)
+    if (mnValType)
     {
         for (SCSIZE i = 0; i < nCount; i++)
         {
-            if ( bIsString[i] )
+            if ( IsStringType( mnValType[i]))
                 delete pMat[i].pS;
         }
     }
     else
-        bIsString = new BYTE[nCount];
-    memset( bIsString, 0, nCount * sizeof( BYTE ) );
+        mnValType = new BYTE[nCount];
+    memset( mnValType, 0, nCount * sizeof( BYTE ) );
+    mnNonValue = 0;
 }
 
 void ScMatrix::DeleteIsString()
 {
-    if ( bIsString )
+    if ( mnValType )
     {
         SCSIZE nCount = nColCount * nRowCount;
         for ( SCSIZE i = 0; i < nCount; i++ )
         {
-            if ( bIsString[i] )
+            if (IsStringType( mnValType[i]))
                 delete pMat[i].pS;
         }
-        delete [] bIsString;
-        bIsString = NULL;
+        delete [] mnValType;
+        mnValType = NULL;
+        mnNonValue = 0;
     }
 }
 
@@ -263,7 +267,8 @@ void ScMatrix::PutDoubleAndResetString( double fVal, SCSIZE nIndex )
     if ( IsString( nIndex ) )
     {
         delete pMat[nIndex].pS;
-        bIsString[nIndex] = 0;
+        mnValType[nIndex] = 0;
+        mnNonValue--;
     }
     PutDouble( fVal, nIndex );
 }
@@ -278,19 +283,22 @@ void ScMatrix::PutString(const String& rStr, SCSIZE nC, SCSIZE nR)
 
 void ScMatrix::PutString(const String& rStr, SCSIZE nIndex)
 {
-    if (bIsString == NULL)
+    if (mnValType == NULL)
         ResetIsString();
-    if ( bIsString[nIndex] && pMat[nIndex].pS )
+    if ( IsStringType( mnValType[nIndex]) && pMat[nIndex].pS )
         *(pMat[nIndex].pS) = rStr;
     else
+    {
         pMat[nIndex].pS = new String(rStr);
-    bIsString[nIndex] = SC_MATVAL_STRING;
+        mnNonValue++;
+    }
+    mnValType[nIndex] = SC_MATVAL_STRING;
 }
 
 void ScMatrix::PutStringEntry( const String* pStr, BYTE bFlag, SCSIZE nIndex )
 {
     DBG_ASSERT( bFlag, "ScMatrix::PutStringEntry: bFlag == 0" );
-    if (bIsString == NULL)
+    if (mnValType == NULL)
         ResetIsString();
     // Make sure all bytes of the union are initialized to be able to access
     // the value with if (IsValueOrEmpty()) GetDouble(). Backup pS first.
@@ -299,7 +307,7 @@ void ScMatrix::PutStringEntry( const String* pStr, BYTE bFlag, SCSIZE nIndex )
     // An EMPTY entry must not have a string pointer therefor.
     DBG_ASSERT( (((bFlag & SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY) && !pStr) || TRUE,
             "ScMatrix::PutStringEntry: pStr passed though EMPTY entry");
-    if ( bIsString[nIndex] && pS )
+    if ( IsStringType( mnValType[nIndex]) && pS )
     {
         if ((bFlag & SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY)
             delete pS, pS = NULL;
@@ -310,8 +318,11 @@ void ScMatrix::PutStringEntry( const String* pStr, BYTE bFlag, SCSIZE nIndex )
         pMat[nIndex].pS = pS;
     }
     else
+    {
         pMat[nIndex].pS = (pStr ? new String(*pStr) : NULL);
-    bIsString[nIndex] = bFlag;
+        mnNonValue++;
+    }
+    mnValType[nIndex] = bFlag;
 }
 
 void ScMatrix::PutEmpty(SCSIZE nC, SCSIZE nR)
@@ -324,11 +335,17 @@ void ScMatrix::PutEmpty(SCSIZE nC, SCSIZE nR)
 
 void ScMatrix::PutEmpty(SCSIZE nIndex)
 {
-    if (bIsString == NULL)
+    if (mnValType == NULL)
         ResetIsString();
-    if ( bIsString[nIndex] && pMat[nIndex].pS )
+    if ( IsStringType( mnValType[nIndex]) && pMat[nIndex].pS )
+    {
         delete pMat[nIndex].pS;
-    bIsString[nIndex] = SC_MATVAL_EMPTY;
+    }
+    else
+    {
+        mnNonValue++;
+    }
+    mnValType[nIndex] = SC_MATVAL_EMPTY;
     pMat[nIndex].pS = NULL;
     pMat[nIndex].fVal = 0.0;
 }
@@ -343,13 +360,42 @@ void ScMatrix::PutEmptyPath(SCSIZE nC, SCSIZE nR)
 
 void ScMatrix::PutEmptyPath(SCSIZE nIndex)
 {
-    if (bIsString == NULL)
+    if (mnValType == NULL)
         ResetIsString();
-    if ( bIsString[nIndex] && pMat[nIndex].pS )
+    if ( IsStringType( mnValType[nIndex]) && pMat[nIndex].pS )
+    {
         delete pMat[nIndex].pS;
-    bIsString[nIndex] = SC_MATVAL_EMPTYPATH;
+    }
+    else
+    {
+        mnNonValue++;
+    }
+    mnValType[nIndex] = SC_MATVAL_EMPTYPATH;
     pMat[nIndex].pS = NULL;
     pMat[nIndex].fVal = 0.0;
+}
+
+void ScMatrix::PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR)
+{
+    if (ValidColRow( nC, nR))
+        PutBoolean( bVal, CalcOffset( nC, nR) );
+    else
+        DBG_ERRORFILE("ScMatrix::PutBoolean: dimension error");
+}
+
+void ScMatrix::PutBoolean( bool bVal, SCSIZE nIndex)
+{
+    if (mnValType == NULL)
+        ResetIsString();
+    if ( IsStringType( mnValType[nIndex]) && pMat[nIndex].pS )
+    {
+        delete pMat[nIndex].pS;
+        mnNonValue--;
+    }
+
+    mnValType[nIndex] = SC_MATVAL_BOOLEAN;
+    pMat[nIndex].pS = NULL;
+    pMat[nIndex].fVal = bVal ? 1. : 0.;
 }
 
 USHORT ScMatrix::GetError( SCSIZE nC, SCSIZE nR) const
@@ -443,8 +489,8 @@ const ScMatrixValue* ScMatrix::Get(SCSIZE nC, SCSIZE nR, ScMatValType& nType) co
     if (ValidColRow( nC, nR))
     {
         SCSIZE nIndex = CalcOffset( nC, nR);
-        if (bIsString)
-            nType = bIsString[nIndex];
+        if (mnValType)
+            nType = mnValType[nIndex];
         else
             nType = SC_MATVAL_VALUE;
         return &pMat[nIndex];
@@ -463,19 +509,22 @@ void ScMatrix::MatCopy(ScMatrix& mRes) const
     }
     else
     {
-        if (bIsString)
+        if (mnValType)
         {
+            ScMatValType nType;
             mRes.ResetIsString();
             for (SCSIZE i = 0; i < nColCount; i++)
             {
                 SCSIZE nStart = i * nRowCount;
                 for (SCSIZE j = 0; j < nRowCount; j++)
                 {
-                    if ( bIsString[nStart+j] )
-                        mRes.PutStringEntry( pMat[nStart+j].pS,
-                            bIsString[nStart+j], nStart+j );
+                    if (IsStringType( (nType = mnValType[nStart+j])))
+                        mRes.PutStringEntry( pMat[nStart+j].pS, nType, nStart+j );
                     else
+                    {
                         mRes.pMat[nStart+j].fVal = pMat[nStart+j].fVal;
+                        mRes.mnValType[nStart+j] = nType;
+                    }
                 }
             }
         }
@@ -497,19 +546,22 @@ void ScMatrix::MatTrans(ScMatrix& mRes) const
     }
     else
     {
-        if (bIsString)
+        if (mnValType)
         {
+            ScMatValType nType;
             mRes.ResetIsString();
             for ( SCSIZE i = 0; i < nColCount; i++ )
             {
                 SCSIZE nStart = i * nRowCount;
                 for ( SCSIZE j = 0; j < nRowCount; j++ )
                 {
-                    if ( bIsString[nStart+j] )
-                        mRes.PutStringEntry( pMat[nStart+j].pS,
-                            bIsString[nStart+j], j*mRes.nRowCount+i );
+                    if (IsStringType( (nType = mnValType[nStart+j])))
+                        mRes.PutStringEntry( pMat[nStart+j].pS, nType, j*mRes.nRowCount+i );
                     else
+                    {
                         mRes.pMat[j*mRes.nRowCount+i].fVal = pMat[nStart+j].fVal;
+                        mRes.mnValType[j*mRes.nRowCount+i] = nType;
+                    }
                 }
             }
         }
@@ -536,19 +588,23 @@ void ScMatrix::MatCopyUpperLeft(ScMatrix& mRes) const
     }
     else
     {
-        if (bIsString)
+        if (mnValType)
         {
+            ScMatValType nType;
             mRes.ResetIsString();
             for ( SCSIZE i = 0; i < mRes.nColCount; i++ )
             {
                 SCSIZE nStart = i * nRowCount;
                 for ( SCSIZE j = 0; j < mRes.nRowCount; j++ )
                 {
-                    if ( bIsString[nStart+j] )
-                        mRes.PutStringEntry( pMat[nStart+j].pS, bIsString[nStart+j],
+                    if ( IsStringType( (nType = mnValType[nStart+j]) ))
+                        mRes.PutStringEntry( pMat[nStart+j].pS, nType,
                             i*mRes.nRowCount+j );
                     else
+                    {
                         mRes.pMat[i*mRes.nRowCount+j].fVal = pMat[nStart+j].fVal;
+                        mRes.mnValType[i*mRes.nRowCount+j] = nType;
+                    }
                 }
             }
         }
@@ -611,10 +667,10 @@ void ScMatrix::FillDoubleLowerLeft( double fVal, SCSIZE nC2 )
 void ScMatrix::CompareEqual()
 {
     SCSIZE n = nColCount * nRowCount;
-    if ( bIsString )
+    if ( mnValType )
     {
         for ( SCSIZE j=0; j<n; j++ )
-            if ( !bIsString[j])     // else: #WERT!
+            if ( IsValueType( mnValType[j]) )               // else: #WERT!
                 if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                     pMat[j].fVal = (pMat[j].fVal == 0.0);
     }
@@ -629,10 +685,10 @@ void ScMatrix::CompareEqual()
 void ScMatrix::CompareNotEqual()
 {
     SCSIZE n = nColCount * nRowCount;
-    if ( bIsString )
+    if ( mnValType )
     {
         for ( SCSIZE j=0; j<n; j++ )
-            if ( !bIsString[j])     // else: #WERT!
+            if ( IsValueType( mnValType[j]) )               // else: #WERT!
                 if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                     pMat[j].fVal = (pMat[j].fVal != 0.0);
     }
@@ -647,10 +703,10 @@ void ScMatrix::CompareNotEqual()
 void ScMatrix::CompareLess()
 {
     SCSIZE n = nColCount * nRowCount;
-    if ( bIsString )
+    if ( mnValType )
     {
         for ( SCSIZE j=0; j<n; j++ )
-            if ( !bIsString[j])     // else: #WERT!
+            if ( IsValueType( mnValType[j]) )               // else: #WERT!
                 if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                     pMat[j].fVal = (pMat[j].fVal < 0.0);
     }
@@ -665,10 +721,10 @@ void ScMatrix::CompareLess()
 void ScMatrix::CompareGreater()
 {
     SCSIZE n = nColCount * nRowCount;
-    if ( bIsString )
+    if ( mnValType )
     {
         for ( SCSIZE j=0; j<n; j++ )
-            if ( !bIsString[j])     // else: #WERT!
+            if ( IsValueType( mnValType[j]) )               // else: #WERT!
                 if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                     pMat[j].fVal = (pMat[j].fVal > 0.0);
     }
@@ -683,10 +739,10 @@ void ScMatrix::CompareGreater()
 void ScMatrix::CompareLessEqual()
 {
     SCSIZE n = nColCount * nRowCount;
-    if ( bIsString )
+    if ( mnValType )
     {
         for ( SCSIZE j=0; j<n; j++ )
-            if ( !bIsString[j])     // else: #WERT!
+            if ( IsValueType( mnValType[j]) )               // else: #WERT!
                 if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                     pMat[j].fVal = (pMat[j].fVal <= 0.0);
     }
@@ -701,10 +757,10 @@ void ScMatrix::CompareLessEqual()
 void ScMatrix::CompareGreaterEqual()
 {
     SCSIZE n = nColCount * nRowCount;
-    if ( bIsString )
+    if ( mnValType )
     {
         for ( SCSIZE j=0; j<n; j++ )
-            if ( !bIsString[j])     // else: #WERT!
+            if ( IsValueType( mnValType[j]) )               // else: #WERT!
                 if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                     pMat[j].fVal = (pMat[j].fVal >= 0.0);
     }
@@ -720,11 +776,11 @@ double ScMatrix::And()
 {
     SCSIZE n = nColCount * nRowCount;
     bool bAnd = true;
-    if ( bIsString )
+    if ( mnValType )
     {
         for ( SCSIZE j=0; bAnd && j<n; j++ )
         {
-            if ( bIsString[j] )
+            if ( !IsValueType( mnValType[j]) )
             {   // assuming a CompareMat this is an error
                 return CreateDoubleError( errIllegalArgument );
             }
@@ -751,10 +807,10 @@ double ScMatrix::Or()
 {
     SCSIZE n = nColCount * nRowCount;
     bool bOr = false;
-    if ( bIsString )
+    if ( mnValType )
     {
         for ( SCSIZE j=0; !bOr && j<n; j++ )
-            if ( bIsString[j] )
+            if ( !IsValueType( mnValType[j]) )
             {   // assuming a CompareMat this is an error
                 return CreateDoubleError( errIllegalArgument );
             }
