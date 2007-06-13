@@ -4,9 +4,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:19:23 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:08:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1455,6 +1455,164 @@ ScToken* ScTokenArray::AddToken( const ScToken& r )
     return Add( r.Clone() );
 }
 
+// Utility function to ensure that there is strict alternation of values and
+// seperators.
+static bool
+checkArraySep( bool & bPrevWasSep, bool bNewVal )
+{
+    bool bResult = (bPrevWasSep == bNewVal);
+    bPrevWasSep = bNewVal;
+    return bResult;
+}
+
+ScToken* ScTokenArray::MergeArray( )
+{
+    int nCol = -1, nRow = 0;
+    int i, nPrevRowSep = -1, nStart = 0;
+    bool bPrevWasSep = false; // top of stack is ocArrayClose
+    ScToken* t;
+
+    // (1) Iterate from the end to the start to find matrix dims
+    // and do basic validation.
+    for ( i = nLen ; i-- > nStart ; )
+    {
+        t = pCode[i];
+        switch ( t->GetOpCode() )
+        {
+            case ocPush :
+                if( checkArraySep( bPrevWasSep, false ) )
+                {
+                    return NULL;
+                }
+
+                // no references or nested arrays
+                if ( t->GetType() != svDouble  && t->GetType() != svString )
+                {
+                    return NULL;
+                }
+            break;
+
+            case ocMissing :
+            case ocTrue :
+            case ocFalse :
+                if( checkArraySep( bPrevWasSep, false ) )
+                {
+                    return NULL;
+                }
+            break;
+
+            case ocArrayColSep :
+            case ocSep :
+                if( checkArraySep( bPrevWasSep, true ) )
+                {
+                    return NULL;
+                }
+            break;
+
+            case ocArrayClose :
+                // not possible with the , but check just in case
+                // something changes in the future
+                if( i != (nLen-1))
+                {
+                    return NULL;
+                }
+
+                if( checkArraySep( bPrevWasSep, true ) )
+                {
+                    return NULL;
+                }
+
+                nPrevRowSep = i;
+            break;
+
+            case ocArrayOpen :
+                nStart = i; // stop iteration
+                // fall through to ArrayRowSep
+
+            case ocArrayRowSep :
+                if( checkArraySep( bPrevWasSep, true ) )
+                {
+                    return NULL;
+                }
+
+                if( nPrevRowSep < 0 ||              // missing ocArrayClose
+                    ((nPrevRowSep - i) % 2) == 1)   // no complex elements
+                {
+                    return NULL;
+                }
+
+                if( nCol < 0 )
+                {
+                    nCol = (nPrevRowSep - i) / 2;
+                }
+                else if( (nPrevRowSep - i)/2 != nCol)   // irregular array
+                {
+                    return NULL;
+                }
+
+                nPrevRowSep = i;
+                nRow++;
+            break;
+
+            default :
+                // no functions or operators
+                return NULL;
+        }
+    }
+    if( nCol <= 0 || nRow <= 0 )
+        return NULL;
+
+    // fprintf (stderr, "Array (cols = %d, rows = %d)\n", nCol, nRow );
+
+    ScMatrix* pArray = new ScMatrix( nCol, nRow );
+    for ( i = nStart, nCol = 0, nRow = 0 ; i < nLen ; i++ )
+    {
+        t = pCode[i];
+
+        switch ( t->GetOpCode() )
+        {
+            case ocPush :
+                if ( t->GetType() == svDouble )
+                {
+                    pArray->PutDouble( t->GetDouble(), nCol, nRow );
+                }
+                else if ( t->GetType() == svString )
+                {
+                    pArray->PutString( t->GetString(), nCol, nRow );
+                }
+            break;
+
+            case ocMissing :
+                pArray->PutEmpty( nCol, nRow );
+            break;
+
+            case ocTrue :
+                pArray->PutBoolean( true, nCol, nRow );
+            break;
+
+            case ocFalse :
+                pArray->PutBoolean( false, nCol, nRow );
+            break;
+
+            case ocArrayColSep :
+            case ocSep :
+                nCol++;
+            break;
+
+            case ocArrayRowSep :
+                nRow++; nCol = 0;
+            break;
+
+            default :
+                break;
+        }
+        pCode[i] = NULL;
+        t->DecRef();
+    }
+    nLen = nStart;
+    return AddMatrix( pArray );
+}
+
 // Wird auch vom Compiler genutzt. Das Token ist per new angelegt!
 
 ScToken* ScTokenArray::Add( ScToken* t )
@@ -1463,11 +1621,14 @@ ScToken* ScTokenArray::Add( ScToken* t )
         pCode = new ScToken*[ MAXCODE ];
     if( nLen < MAXCODE-1 )
     {
+        // fprintf (stderr, "Add : %d\n", t->GetOpCode());
         pCode[ nLen++ ] = t;
         if( t->GetOpCode() == ocPush
             && ( t->GetType() == svSingleRef || t->GetType() == svDoubleRef ) )
             nRefs++;
         t->IncRef();
+        if( t->GetOpCode() == ocArrayClose )
+            return MergeArray();
         return t;
     }
     else
