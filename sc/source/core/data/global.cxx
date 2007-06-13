@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:45:04 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:06:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -481,6 +481,9 @@ String ScGlobal::GetLongErrorString(USHORT nErrNumber)
         break;
         case errNoMacro:
             nErrNumber = STR_LONG_ERR_NO_MACRO;
+        break;
+        case errNestedArray:
+            nErrNumber = STR_ERR_LONG_NESTED_ARRAY;
         break;
         case errNoValue:
             nErrNumber = STR_LONG_ERR_NO_VALUE;
