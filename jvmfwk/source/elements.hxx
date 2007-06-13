@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elements.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:34:08 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 07:57:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,11 @@
 
 #include <vector>
 #include "jvmfwk/framework.h"
+#include "fwkutil.hxx"
 #include "rtl/ustring.hxx"
 #include "rtl/byteseq.hxx"
 #include "libxml/parser.h"
+#include "boost/optional.hpp"
 
 #define NS_JAVA_FRAMEWORK "http://openoffice.org/2004/java/framework/1.0"
 #define NS_SCHEMA_INSTANCE "http://www.w3.org/2001/XMLSchema-instance"
@@ -53,21 +55,6 @@ xmlNode* findChildNode(const xmlNode * pParent, const xmlChar* pName);
  */
 rtl::OString getElementUpdated();
 
-/** creates the javasettings.xml in the users home directory.
-
-    If javasettings.xml does not exist then it creates the file
-    and inserts the root element with its namespaces.
-    The content should look like this:
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!--This is a generated file. Do not alter this file!-->
-    <java xmlns:="http://openoffice.org/2004/java/framework/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    </java>
-
-
- */
-void createUserSettingsDocument();
-
 /** create the child elements within the root structure for each platform.
 
     @param bNeedsSave
@@ -77,34 +64,11 @@ void createUserSettingsDocument();
 void createSettingsStructure(
     xmlDoc * document, bool * bNeedsSave);
 
-/** copies shared settings to user settings.
 
-    This must only occur the first time when the javasettings.xml is
-    prepared for the user. The shared settings shall be provided as bootstrap
-    parameters.
-
-    @param userParent
-    The node under which the values are to be copied.
-
- */
-void copyShareSettings(xmlDoc * userDoc, xmlNode* userParent);
-
-/** creates the structure of the documend.
-
-    When this function is called the first time for a user then it creates the
-    javasettings.xml in th ~/<office>/user/config/ unless it already exists
-    (see createUserSettingsDocument). Then
-    it creates a section for the current platform unless it already exist and
-    creates all children elements. If the respective platform section did not exist
-    then after creating the children, the values from the share/config/javasettings.xml
-    are copied.
-
-    @return
-    JFW_E_CONFIG_READWRITE
- */
-void prepareSettingsDocument();
-
-class CXmlCharPtr;
+/** represents the settings saved in the /java/javaInfo element.
+    It is used within class NodeJava which determines the settings
+    file.
+*/
 class CNodeJavaInfo
 {
 public:
@@ -125,7 +89,7 @@ public:
         It is not used, when the javaInfo node is written.
         see writeToNode
      */
-    rtl::OString sAttrVendorUpdate;
+    ::rtl::OString sAttrVendorUpdate;
     /** contains the nil value of the /java/javaInfo@xsi:nil attribute.
         Default is true;
      */
@@ -137,126 +101,245 @@ public:
         jfw_findAndSelectJRE sets the attribute to true.
      */
     bool bAutoSelect;
-    rtl::OUString sVendor;
-    rtl::OUString sLocation;
-    rtl::OUString sVersion;
+    ::rtl::OUString sVendor;
+    ::rtl::OUString sLocation;
+    ::rtl::OUString sVersion;
     sal_uInt64 nFeatures;
     sal_uInt64 nRequirements;
-    rtl::ByteSequence arVendorData;
+    ::rtl::ByteSequence arVendorData;
 
     /** reads the node /java/javaInfo.
         If javaInfo@xsi:nil = true then member bNil is set to true
         an no further elements are read.
      */
     void loadFromNode(xmlDoc * pDoc,xmlNode * pJavaInfo);
-    /** Only writes user settings. The attribut nil always gets the value
-        false. The function gets the value javaSettings/updated from the
-        javavendors.xml and writes it to javaInfo@vendorUpdate in javasettings.xml
+    /** The attribut nil will be set to false. The function gets the value
+        javaSettings/updated from the javavendors.xml and writes it to
+        javaInfo@vendorUpdate in javasettings.xml
      */
     void writeToNode(xmlDoc * pDoc, xmlNode * pJavaInfo) const;
 
-    /** returns NULL if javaInfo is nil in both, user and share, settings.
+    /** returns NULL if javaInfo is nil.
      */
     JavaInfo * makeJavaInfo() const;
 };
 
-/** this class represents the javasettings.xml file
+/** this class represents the java settings  based on a particular
+    settings file.
+
+    Which settings file is used is determined by the value passed into the
+    constructo and the values of the bootstrap parameters UNO_JAVA_JFW_USER_DATA,
+    UNO_JAVA_JFW_SHARED_DATA,_JAVA_JFW_INSTALL_DATA.
+
+    If the value is USER_OR_INSTALL then it depends of the bootstrap parameter
+    UNO_JAVA_JFW_INSTALL_DATA. If it has as value then it is used. Otherwise the
+    value from UNO_JAVA_JFW_USER_DATA is used.
+
+    The method load reads the data from the settings file.
+    The method write stores the data into the settings file.
  */
-class CNodeJava
+class NodeJava
 {
-    /** Share settings are a special case. Per default
-        there are only user settings. Currently there need not be
-        a share settings file. In that case the function returns
-        without throwing an exception.
-     */
-    void loadShareSettings();
-    /** This function is called after loadShareSettings. Elements which have been
-        modified by the user, that is, the attribute xsi:nil = false, overwrite the
-        values which have been retrieved with loadShareSettings.
+public:
+    enum Layer { USER_OR_INSTALL, USER, SHARED, INSTALL };
+private:
+
+    /** creates settings file and fills it with default values.
+
+        When this function is called then it creates the
+        settings file at the possition determined by the bootstrap parameters
+        (UNO_JAVA_JFW_USER_DATA, UNO_JAVA_JFW_SHARED_DATA,
+        UNO_JAVA_JFW_INSTALL_DATA) and m_layer, unless the file already exists
+        (see createSettingsDocument).
+
+        @return
+        JFW_E_CONFIG_READWRITE
     */
-    void loadUserSettings();
+    void prepareSettingsDocument() const;
+
+    /** helper function for prepareSettingsDocument.
+    */
+    void createSettingsDocument() const;
+
+    /** returns the system path to the data file which is to be used. The value
+        depends on
+        the the member m_layer and the bootstrap paramters UNO_JAVA_JFW_USER_DATA,
+        UNO_JAVA_JFW_SHARED_DATA and UNO_JAVA_JFW_INSTALL_DATA which this may be.
+    */
+    ::rtl::OString getSettingsPath() const;
+
+    /** returns the file URL to the data file which is to be used. See getSettingsPath.
+    */
+    ::rtl::OUString getSettingsURL() const;
+
+    /** Verifies if the respective settings file exist. In case UNO_JAVA_JFW_INSTALL_DATA
+        is used, the age is checked. If the file is too old the we assume that it does not
+        exist.
+     */
+    jfw::FileStatus checkSettingsFileStatus() const;
+
+    /** Determines the layer for which the instance the loads and writes the
+        data.
+    */
+    Layer m_layer;
 
     /** User configurable option.  /java/enabled
-        The value is valid after loadFromSettings has been called
-        successfully.
-        The value is that of the user setting. If it is nil
-        (/java/enabled[@xsi:nil = true]) then it represents the share setting.
-        If there are no share settings or the node is also nil then the default
-        is true.
+        If /java/enabled@xsi:nil == true then the value will be uninitialized
+        after a call to load().
     */
-    sal_Bool m_bEnabled;
-    /** Determines if m_bEnabled has been modified */
-    bool m_bEnabledModified;
+    boost::optional<sal_Bool> m_enabled;
+
     /** User configurable option. /java/userClassPath
-        The value is valid after loadFromSettings has been called successfully.
-        The value is that of the user setting. If it is nil
-        (/java/userClassPath[@xsi:nil = true]) then it represents the share setting.
-        If there are no share settings or the node is also nil then the default
-        is an empty string.
+        If /java/userClassPath@xsi:nil == true then the value is uninitialized
+        after a call to load().
     */
-    rtl::OUString m_sUserClassPath;
-    /** Determines if m_sUserClassPath has been modified */
-    bool m_bUserClassPathModified;
+    boost::optional< ::rtl::OUString> m_userClassPath;
     /** User configurable option.  /java/javaInfo
-        The value is valid after loadFromSettings has been called successfully.
-        The value is that of the user setting. If it is nil
-        (/java/javaInfo[@xsi:nil = true]) then it represents the share setting.
-        If there are no share settings then the structure is regarded as empty.
+        If /java/javaInfo@xsi:nil == true then the value is uninitialized
+        after a call to load.
      */
-    CNodeJavaInfo m_aInfo;
-    /** Determines if m_aInfo has been modified */
-    bool m_bJavaInfoModified;
-
+    boost::optional<CNodeJavaInfo> m_javaInfo;
     /** User configurable option. /java/vmParameters
-        The value is valid after loadFromSettings has been called successfully.
-        The value is that of the user setting. If it is nil
-        (/java/vmParameters[@xsi:nil = true]) then it represents the share setting.
-        If there are no share settings then array is empty.
+        If /java/vmParameters@xsi:nil == true then the value is uninitialized
+        after a call to load.
     */
-    std::vector<rtl::OString>  m_arVmParameters;
-    bool m_bVmParametersModified;
-
+    boost::optional< ::std::vector< ::rtl::OUString> > m_vmParameters;
     /** User configurable option. /java/jreLocations
-        The value is valid after loadFromSettings has been called successfully.
-        The value is that of the user setting. If it is nil
-        (/java/jreLocations[@xsi:nil = true]) then it represents the share setting.
-        If there are no share settings then array is empty.
+        If /java/jreLocaltions@xsi:nil == true then the value is uninitialized
+        after a call to load.
     */
-    std::vector<rtl::OString>  m_arJRELocations;
-    bool m_bJRELocationsModified;
+    boost::optional< ::std::vector< ::rtl::OUString> > m_JRELocations;
 
 public:
-    CNodeJava();
-    /** sets m_bEnabled. It also sets a flag, that the value has been
-        modified. This will cause that /java/enabled[@xsi:nil] will be
-        set to false. The nil value and the value of enabled are only
-        written when write Settings is called.
+
+    NodeJava(Layer theLayer = USER_OR_INSTALL);
+
+    /** sets m_enabled.
+        /java/enabled@xsi:nil will be set to false when write is called.
      */
     void setEnabled(sal_Bool bEnabled);
-    /** returns the value of the element /java/enabled
+
+    /** sets m_sUserClassPath. See setEnabled.
      */
-    sal_Bool getEnabled() const;
-    /** sets m_sUserClassPath. Analog to setEnabled.
-     */
-    void setUserClassPath(const rtl::OUString & sClassPath);
-    /** returns the value of the element /java/userClassPath.
-     */
-    rtl::OUString const & getUserClassPath() const;
-    /** sets m_aInfo. Analog to setEnabled.
+    void setUserClassPath(const ::rtl::OUString & sClassPath);
+
+    /** sets m_aInfo. See setEnabled.
         @param bAutoSelect
         true- called by jfw_setSelectedJRE
         false called by jfw_findAndSelectJRE
      */
     void setJavaInfo(const JavaInfo * pInfo, bool bAutoSelect);
+
+    /** sets the /java/vmParameters/param elements.
+        When this method all previous values are removed and replaced
+        by those in arParameters.
+        /java/vmParameters@xsi:nil will be set to true when write() is
+        called.
+     */
+    void setVmParameters(rtl_uString  * * arParameters, sal_Int32 size);
+
+    /** sets the /java/jreLocations/location elements.
+        When this method is called then all previous values are removed
+        and replaced by those in arParamters.
+        /java/jreLocations@xsi:nil will be set to true write() is called.
+     */
+    void setJRELocations(rtl_uString  * * arParameters, sal_Int32 size);
+
+    /** adds a location to the already existing locations.
+        Note: call load() before, then add the location and then call write().
+    */
+    void addJRELocation(rtl_uString * sLocation);
+
+    /** writes the data to user settings.
+     */
+    void write() const;
+
+    /** load the values of the settings file.
+     */
+    void load();
+
+    /** returns the value of the element /java/enabled
+     */
+    const boost::optional<sal_Bool> & getEnabled() const;
+    /** returns the value of the element /java/userClassPath.
+     */
+    const boost::optional< ::rtl::OUString> & getUserClassPath() const;
+
+    /** returns the value of the element /java/javaInfo.
+     */
+    const boost::optional<CNodeJavaInfo> & getJavaInfo() const;
+
+    /** returns the parameters from the element /java/vmParameters/param.
+     */
+    const boost::optional< ::std::vector< ::rtl::OUString> > & getVmParameters() const;
+
+    /** returns the parameters from the element /java/jreLocations/location.
+     */
+    const boost::optional< ::std::vector< ::rtl::OUString> > & getJRELocations() const;
+};
+
+/** merges the settings for shared, user and installation during construction.
+    The class uses a simple merge mechanism for the javasettings.xml files in share and
+    user. The following elements completly overwrite the corresponding elements
+    from share:
+    /java/enabled
+    /java/userClassPath
+    /java/vmParameters
+    /java/jreLocations
+    /java/javaInfo
+
+    In case of an installation, the shared and user settings are completely
+    disregarded.
+
+    The locations of the different settings files is obtained through the
+    bootstrap variables:
+    UNO_JAVA_JFW_USER_DATA
+    UNO_JAVA_JFW_SHARED_DATA
+    UNO_JAVA_JFW_INSTALL_DATA
+
+    The class also determines useful default values for settings which have not been made.
+*/
+class MergedSettings
+{
+private:
+    const MergedSettings& operator = (MergedSettings&);
+    MergedSettings(MergedSettings&);
+
+    void merge(const NodeJava & share, const NodeJava & user);
+
+    sal_Bool m_bEnabled;
+
+    ::rtl::OUString m_sClassPath;
+
+    ::std::vector< ::rtl::OUString> m_vmParams;
+
+    ::std::vector< ::rtl::OUString> m_JRELocations;
+
+    CNodeJavaInfo m_javaInfo;
+
+public:
+    MergedSettings();
+    virtual ~MergedSettings();
+
+    /** the default is true.
+     */
+    sal_Bool getEnabled() const;
+
+    const ::rtl::OUString & getUserClassPath() const;
+
+    const ::std::vector< ::rtl::OUString>& getVmParameters() const;
+
+    ::std::vector< ::rtl::OString> getVmParametersUtf8() const;
     /** returns a JavaInfo structure representing the node
         /java/javaInfo. Every time a new JavaInfo structure is created
         which needs to be freed by the caller.
         If both, user and share settings are nil, then NULL is returned.
     */
     JavaInfo * createJavaInfo() const;
+
     /** returns the value of the attribute /java/javaInfo[@vendorUpdate].
      */
-    rtl::OString const & getJavaInfoAttrVendorUpdate() const;
+    ::rtl::OString const & getJavaInfoAttrVendorUpdate() const;
 
     /** returns the javaInfo@autoSelect attribute.
         Before calling this function loadFromSettings must be called.
@@ -265,69 +348,33 @@ public:
      */
     bool getJavaInfoAttrAutoSelect() const;
 
-    /** sets the /java/vmParameters/param elements.
-        The values are kept in a vector m_arVmParameters. When this method is
-        called then the vector is cleared and the new values are inserted.
-        The xsi:nil attribute of vmParameters will be set to true;
-     */
-    void setVmParameters(rtl_uString  * * arParameters, sal_Int32 size);
-    /** returns the parameters from the element /java/vmParameters/param.
-     */
-    const std::vector<rtl::OString> & getVmParameters() const;
-
     /** returns an array.
         Caller must free the strings and the array.
      */
     void getVmParametersArray(rtl_uString *** parParameters, sal_Int32 * size) const;
-
-    /** sets the /java/jreLocations/location elements.
-        The values are kept in a vector m_arJRELocations. When this method is
-        called then the vector is cleared and the new values are inserted.
-        The xsi:nil attribute of vmParameters will be set to true;
-     */
-    void setJRELocations(rtl_uString  * * arParameters, sal_Int32 size);
-
-    void addJRELocation(rtl_uString * sLocation);
-    /** returns the parameters from the element /java/jreLocations/location.
-     */
-    const std::vector<rtl::OString> & getJRELocations() const;
-
 
     /** returns an array.
         Caller must free the strings and the array.
      */
     void getJRELocations(rtl_uString *** parLocations, sal_Int32 * size) const;
 
-
-    /** reads user and share settings. user data supersede
-        share data. These elements can be changed by the user:
-        <enabled>, <userClasspath>, <javaInfo>, <vmParameters>
-        If the user has not changed them then the nil attribute is
-        set to true;
-     */
-    void loadFromSettings();
-    /** writes the data to user settings.
-     */
-    void writeSettings() const;
-
-
+    const ::std::vector< ::rtl::OUString> & getJRELocations() const;
 };
-
 
 
 class VersionInfo
 {
-    std::vector<rtl::OUString> vecExcludeVersions;
+    ::std::vector< ::rtl::OUString> vecExcludeVersions;
     rtl_uString ** arVersions;
 
 public:
     VersionInfo();
     ~VersionInfo();
 
-    void addExcludeVersion(const rtl::OUString& sVersion);
+    void addExcludeVersion(const ::rtl::OUString& sVersion);
 
-    rtl::OUString sMinVersion;
-    rtl::OUString sMaxVersion;
+    ::rtl::OUString sMinVersion;
+    ::rtl::OUString sMaxVersion;
 
     /** The caller DOES NOT get ownership of the strings. That is he
         does not need to release the strings.
@@ -343,16 +390,16 @@ struct PluginLibrary
     PluginLibrary()
     {
     }
-    PluginLibrary(rtl::OUString vendor, rtl::OUString path) :
+    PluginLibrary(rtl::OUString vendor,::rtl::OUString path) :
         sVendor(vendor), sPath(path)
     {
     }
     /** contains the vendor string which is later userd in the xml API
      */
-    rtl::OUString sVendor;
+    ::rtl::OUString sVendor;
     /** File URL the plug-in library
      */
-    rtl::OUString sPath;
+    ::rtl::OUString sPath;
 };
 
 } //end namespace
