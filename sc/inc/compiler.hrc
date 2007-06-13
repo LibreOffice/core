@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.hrc,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:16:24 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:04:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,44 +58,48 @@
 #define SC_OPCODE_MACRO              15
 #define SC_OPCODE_COL_ROW_NAME       16
 #define SC_OPCODE_COL_ROW_NAME_AUTO  17
-#define SC_OPCODE_PERCENT_SIGN            18     /* operator _follows_ value */
-#define SC_OPCODE_END_DIV            20
+#define SC_OPCODE_PERCENT_SIGN       18     /* operator _follows_ value */
+#define SC_OPCODE_ARRAY_OPEN         19
+#define SC_OPCODE_ARRAY_CLOSE        20
+#define SC_OPCODE_ARRAY_ROW_SEP      21
+#define SC_OPCODE_ARRAY_COL_SEP      22     /* some convs use sep != col_sep */
+#define SC_OPCODE_END_DIV            23
 
 /*** Binaere Operatoren ***/
-#define SC_OPCODE_ADD                21
-#define SC_OPCODE_SUB                22
-#define SC_OPCODE_MUL                23
-#define SC_OPCODE_DIV                24
-#define SC_OPCODE_AMPERSAND          25
-#define SC_OPCODE_POW                26
-#define SC_OPCODE_EQUAL              27
-#define SC_OPCODE_NOT_EQUAL          28
-#define SC_OPCODE_LESS               29
-#define SC_OPCODE_GREATER            30
-#define SC_OPCODE_LESS_EQUAL         31
-#define SC_OPCODE_GREATER_EQUAL      32
-#define SC_OPCODE_AND                33
-#define SC_OPCODE_OR                 34
-#define SC_OPCODE_INTERSECT          35
-#define SC_OPCODE_UNION              36
-#define SC_OPCODE_RANGE              37
-#define SC_OPCODE_END_BIN_OP         40
+#define SC_OPCODE_ADD                25
+#define SC_OPCODE_SUB                26
+#define SC_OPCODE_MUL                27
+#define SC_OPCODE_DIV                28
+#define SC_OPCODE_AMPERSAND          29
+#define SC_OPCODE_POW                30
+#define SC_OPCODE_EQUAL              31
+#define SC_OPCODE_NOT_EQUAL          32
+#define SC_OPCODE_LESS               33
+#define SC_OPCODE_GREATER            34
+#define SC_OPCODE_LESS_EQUAL         35
+#define SC_OPCODE_GREATER_EQUAL      36
+#define SC_OPCODE_AND                37
+#define SC_OPCODE_OR                 38
+#define SC_OPCODE_INTERSECT          39
+#define SC_OPCODE_UNION              40
+#define SC_OPCODE_RANGE              41
+#define SC_OPCODE_END_BIN_OP         44
 
 /*** Unaere Operatoren ***/
-#define SC_OPCODE_NOT                41
-#define SC_OPCODE_NEG                42
-#define SC_OPCODE_NEG_SUB            43
-#define SC_OPCODE_END_UN_OP          45
+#define SC_OPCODE_NOT                45
+#define SC_OPCODE_NEG                46
+#define SC_OPCODE_NEG_SUB            47
+#define SC_OPCODE_END_UN_OP          48
 
 /*** Funktionen ohne Parameter ***/
-#define SC_OPCODE_PI                 46
-#define SC_OPCODE_RANDOM             47
-#define SC_OPCODE_TRUE               48
-#define SC_OPCODE_FALSE              49
-#define SC_OPCODE_GET_ACT_DATE       50
-#define SC_OPCODE_GET_ACT_TIME       51
-#define SC_OPCODE_NO_VALUE           52
-#define SC_OPCODE_CURRENT            53
+#define SC_OPCODE_PI                 50
+#define SC_OPCODE_RANDOM             51
+#define SC_OPCODE_TRUE               52
+#define SC_OPCODE_FALSE              53
+#define SC_OPCODE_GET_ACT_DATE       54
+#define SC_OPCODE_GET_ACT_TIME       55
+#define SC_OPCODE_NO_VALUE           56
+#define SC_OPCODE_CURRENT            57
 #define SC_OPCODE_END_NO_PAR         60
 
 /*** Funktionen mit einem Parameter ***/
