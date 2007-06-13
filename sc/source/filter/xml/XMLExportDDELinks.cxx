@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLExportDDELinks.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:43:58 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:12:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,7 +162,7 @@ void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
             {
                 ScMatValType nType = SC_MATVAL_VALUE;
                 const ScMatrixValue* pMatVal = pMatrix->Get( static_cast<SCSIZE>(nColumn), static_cast<SCSIZE>(nRow), nType );
-                BOOL bIsString = (nType != SC_MATVAL_VALUE);
+                BOOL bIsString = ScMatrix::IsStringType( nType);
 
                 if (nColumn == 0)
                 {
