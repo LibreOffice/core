@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helper_purpenv_Proxy.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-14 09:32:30 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:27:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,8 +143,8 @@ extern "C" { static void SAL_CALL s_Proxy_dispatch(
     Proxy * pThis = static_cast<Proxy *>(pUnoI);
 
     typelib_MethodParameter            param;
-    sal_Int32                          nParams;
-    typelib_MethodParameter          * pParams;
+    sal_Int32                          nParams = 0;
+    typelib_MethodParameter          * pParams = 0;
     typelib_TypeDescriptionReference * pReturnTypeRef = 0;
     // sal_Int32                          nOutParams = 0;
 
