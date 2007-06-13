@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_component.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:06:30 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 07:59:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -934,7 +934,6 @@ BackendImpl::ComponentPackageImpl::getComponentInfo(
         Reference<registry::XRegistryKey> const & xImplKey = keys[ pos ];
         const OUString implName(
             xImplKey->getKeyName().copy( 1 /*leading slash*/ ) );
-        pImplNames->push_back( implName );
 
         // check for singletons:
         const Reference<registry::XRegistryKey> xSingletonKey(
@@ -954,6 +953,10 @@ BackendImpl::ComponentPackageImpl::getComponentInfo(
                             sizeof ("//UNO/SINGLETONS/") - 1 ),
                         xSingleton->getStringValue() ) );
             }
+        }
+        else
+        {
+            pImplNames->push_back( implName );
         }
     }
 
