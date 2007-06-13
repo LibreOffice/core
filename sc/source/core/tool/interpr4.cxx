@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-15 12:53:48 $
+ *  last change: $Author: obo $ $Date: 2007-06-13 09:07:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1642,6 +1642,11 @@ ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix( double& rDouble,
                 }
                 else if (nMatValType == SC_MATVAL_VALUE)
                     rDouble = pMatVal->fVal;
+                else if (nMatValType == SC_MATVAL_BOOLEAN)
+                {
+                    rDouble = pMatVal->fVal;
+                    nMatValType = SC_MATVAL_VALUE;
+                }
                 else
                     rString = pMatVal->GetString();
             }
@@ -3738,7 +3743,7 @@ StackVar ScInterpreter::Interpret()
                         const ScMatrixValue* pMatVal = pResult->Get(0, 0, nMatValType);
                         if ( pMatVal )
                         {
-                            if (nMatValType != SC_MATVAL_VALUE)
+                            if (ScMatrix::IsStringType( nMatValType))
                             {
                                 if ( pResult->IsEmptyPath( 0, 0))
                                 {   // result of empty FALSE jump path
