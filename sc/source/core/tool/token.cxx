@@ -4,9 +4,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:08:34 $
+ *  last change: $Author: obo $ $Date: 2007-06-14 07:31:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1609,7 +1609,7 @@ ScToken* ScTokenArray::MergeArray( )
         pCode[i] = NULL;
         t->DecRef();
     }
-    nLen = nStart;
+    nLen = USHORT( nStart );
     return AddMatrix( pArray );
 }
 
