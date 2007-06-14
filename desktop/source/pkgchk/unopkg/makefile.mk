@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:16:57 $
+#   last change: $Author: obo $ $Date: 2007-06-14 13:01:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -110,8 +110,8 @@ CFLAGS += -Ob0
 
 .INCLUDE : target.mk
 
-$(APP1TARGETN) : $(PRJ)$/$(BIN)$/so
+$(APP1TARGETN) : $(MISC)$/binso_created.flg
 
-$(PRJ)$/$(BIN)$/so:
-    @@-$(MKDIRHIER) $(BIN)$/so
+$(MISC)$/binso_created.flg:
+    @@-$(MKDIRHIER) $(BIN)$/so && $(TOUCH) $@
 
