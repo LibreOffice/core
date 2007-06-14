@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2007-06-12 06:20:37 $
+#   last change: $Author: rt $ $Date: 2007-06-14 10:26:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,9 +56,6 @@ ZIPFLAGS=-r
 ZIP1DIR=$(MISC)$/$(TARGET)
 ZIP1EXT=.oxt
 
-EXTUPDATEINFO_NAME=org.openoffice.extensions.testarea.desktop.updateinfo.update.xml
-EXTUPDATEINFO_SOURCE=description.xml
-EXTUPDATEINFO_URLS = http://extensions.openoffice.org/testarea/desktop/updateinfocreation/update/updateinfo.oxt
 # --- Files --------------------------------------------------------
 
 COPY_OXT_MANIFEST:= $(MISC)$/$(TARGET)$/META-INF$/manifest.xml
