@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2007-06-12 05:40:45 $
+ *  last change: $Author: os $ $Date: 2007-06-14 08:22:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -460,6 +460,16 @@ void    DomainMapper_Impl::PushProperties(ContextType eId)
     m_aContextStack.push(eId);
 
     m_pTopContext = m_aPropertyStacks[eId].top();
+}
+/*-- 13.06.2007 16:18:18---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void DomainMapper_Impl::PushStyleProperties( PropertyMapPtr pStyleProperties )
+{
+    m_aPropertyStacks[CONTEXT_STYLESHEET].push( pStyleProperties );
+    m_aContextStack.push(CONTEXT_STYLESHEET);
+
+    m_pTopContext = m_aPropertyStacks[CONTEXT_STYLESHEET].top();
 }
 /*-------------------------------------------------------------------------
 

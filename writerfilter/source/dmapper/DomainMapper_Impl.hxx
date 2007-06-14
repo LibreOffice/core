@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2007-06-12 05:40:46 $
+ *  last change: $Author: os $ $Date: 2007-06-14 08:22:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,7 @@ enum ContextType
     CONTEXT_SECTION,
     CONTEXT_PARAGRAPH,
     CONTEXT_CHARACTER,
+    CONTEXT_STYLESHEET,
     NUMBER_OF_CONTEXTS
 };
 /*-----------------29.01.2007 11:47-----------------
@@ -290,6 +291,7 @@ public:
     FIB&    GetFIB() {return m_aFIB;}
     // push the new properties onto the stack and make it the 'current' property map
     void    PushProperties(ContextType eId);
+    void    PushStyleProperties(PropertyMapPtr pStyleProperties);
     void    PopProperties(ContextType eId);
 
     PropertyMapPtr GetTopContext()

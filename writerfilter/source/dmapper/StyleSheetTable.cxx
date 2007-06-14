@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-06-04 09:40:20 $
+ *  last change: $Author: os $ $Date: 2007-06-14 08:22:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -662,11 +662,15 @@ void StyleSheetTable::sprm(doctok::Sprm & sprm_)
         resolveSprmProps(sprm_);
         break;
     case NS_ooxml::LN_CT_PPrDefault_pPr:
-        m_pImpl->m_rDMapper.sprm( sprm_, m_pImpl->m_pDefaultParaProps );
+        m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pDefaultParaProps );
+        m_pImpl->m_rDMapper.sprm( sprm_ );
+        m_pImpl->m_rDMapper.PopStyleSheetProperties();
         break;
     case NS_ooxml::LN_CT_RPrDefault_rPr:
-        m_pImpl->m_rDMapper.sprm( sprm_, m_pImpl->m_pDefaultCharProps );
-        break;
+        m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pDefaultCharProps );
+        m_pImpl->m_rDMapper.sprm( sprm_ );
+        m_pImpl->m_rDMapper.PopStyleSheetProperties();
+    break;
     case NS_ooxml::LN_CT_Style_pPr:
     case NS_ooxml::LN_CT_Style_rPr:
     default:
@@ -691,8 +695,10 @@ void StyleSheetTable::entry(int /*pos*/, doctok::Reference<Properties>::Pointer_
     // printf("StyleSheetTable::entry(...)\n");
     OSL_ENSURE( !m_pImpl->m_pCurrentEntry, "current entry has to be NULL here");
     m_pImpl->m_pCurrentEntry = new StyleSheetEntry;
+    m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pCurrentEntry->pProperties );
     ref->resolve(*this);
     //append it to the table
+    m_pImpl->m_rDMapper.PopStyleSheetProperties();
     m_pImpl->m_aStyleSheetEntries.push_back( *m_pImpl->m_pCurrentEntry );
     m_pImpl->m_pCurrentEntry = 0;
 }

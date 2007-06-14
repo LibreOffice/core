@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: os $ $Date: 2007-06-12 05:40:45 $
+ *  last change: $Author: os $ $Date: 2007-06-14 08:22:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3326,6 +3326,22 @@ void DomainMapper::endParagraphGroup()
     m_pImpl->PopProperties(CONTEXT_PARAGRAPH);
     m_pImpl->getTableManager().endParagraphGroup();
 }
+
+/*-- 13.06.2007 16:15:55---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void DomainMapper::PushStyleSheetProperties( PropertyMapPtr pStyleProperties )
+{
+    m_pImpl->PushStyleProperties( pStyleProperties );
+}
+/*-- 13.06.2007 16:15:55---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void DomainMapper::PopStyleSheetProperties()
+{
+    m_pImpl->PopProperties( CONTEXT_STYLESHEET );
+}
+
 /*-- 09.06.2006 09:52:14---------------------------------------------------
 
 -----------------------------------------------------------------------*/
