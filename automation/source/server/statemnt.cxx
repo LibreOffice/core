@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-11 08:54:57 $
+ *  last change: $Author: gh $ $Date: 2007-06-15 11:40:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4742,7 +4742,7 @@ BOOL StatementControl::Execute()
             {
                 pControl->GrabFocus();
                 int i = 10;
-                while ( i && !pControl->HasFocus() )    // reschedule a bit
+                while ( i-- && !pControl->HasFocus() )    // reschedule a bit
                     SafeReschedule();
                 if ( !pControl->HasFocus() )  // to get asyncronous focus
                 {
