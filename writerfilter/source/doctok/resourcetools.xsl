@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcetools.xsl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-06-04 08:41:22 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-15 09:25:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,6 +147,82 @@
 <xsl:text>";
 </xsl:text>
 </xsl:for-each>
+</xsl:template>
+
+<xsl:key name="ids" match='UML:Attribute[@name!="reserved"]//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="attrid"]|UML:Operation[@name!="reserved"]//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="opid"]' use=".//UML:TaggedValue.dataValue"/>
+
+<xsl:template match="UML:Model" mode="qnametostrfunc">
+  <xsl:text>
+string qnameToString(writerfilter::QName_t nToken)
+{
+    string sResult;
+
+    switch (nToken)
+    {
+       // Attributes</xsl:text>
+       <xsl:for-each select='.//UML:Attribute[@name!="reserved"]//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="attrid"]'>
+         <xsl:choose>
+           <xsl:when test='.//UML:Stereotype[@xmi.idref="noresolve"]'>
+           </xsl:when>
+           <xsl:otherwise>
+             <xsl:if test="generate-id(key('ids', .//UML:TaggedValue.dataValue)[1])=generate-id(.)">
+               <xsl:text>
+    case </xsl:text>
+    <xsl:call-template name='idtoqname'>
+      <xsl:with-param name='id'><xsl:value-of select='.//UML:TaggedValue.dataValue'/></xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>:
+        sResult = "</xsl:text>
+        <xsl:value-of select='.//UML:TaggedValue.dataValue'/>
+        <xsl:text>";
+        break;</xsl:text>
+             </xsl:if>
+           </xsl:otherwise>
+         </xsl:choose>
+       </xsl:for-each>
+       <xsl:text>
+       // Operations</xsl:text>
+       <xsl:for-each select='.//UML:Operation[@name!="reserved"]//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="opid"]'>
+         <xsl:choose>
+           <xsl:when test='.//UML:Stereotype[@xmi.idref="noresolve"]'>
+           </xsl:when>
+           <xsl:otherwise>
+             <xsl:if test="generate-id(key('ids', .//UML:TaggedValue.dataValue)[1])=generate-id(.)">
+               <xsl:text>
+    case </xsl:text>
+    <xsl:call-template name='idtoqname'>
+      <xsl:with-param name='id'><xsl:value-of select='.//UML:TaggedValue.dataValue'/></xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>:
+        sResult = "</xsl:text>
+        <xsl:value-of select='.//UML:TaggedValue.dataValue'/>
+        <xsl:text>";
+        break;</xsl:text>
+             </xsl:if>
+           </xsl:otherwise>
+         </xsl:choose>
+       </xsl:for-each>
+       <xsl:text>
+       // Classes:</xsl:text>
+       <xsl:for-each select='.//UML:Class[@name!="reserved"]//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="classid"]'>
+         <xsl:text>
+    case </xsl:text>
+       <xsl:call-template name='idtoqname'>
+         <xsl:with-param name='id'><xsl:value-of select='.//UML:TaggedValue.dataValue'/></xsl:with-param>
+       </xsl:call-template>
+       <xsl:text>:
+        sResult = "</xsl:text>
+        <xsl:value-of select='.//UML:TaggedValue.dataValue'/>
+        <xsl:text>";
+        break;</xsl:text>
+       </xsl:for-each>
+       <xsl:text>
+    default:
+        ;
+    }
+    
+    return sResult;
+}</xsl:text>
 </xsl:template>
 
 <xsl:template match='UML:Model' mode='sprmcodetostr'>
