@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-06-07 12:49:40 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-15 09:30:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1829,7 +1829,7 @@ OOXMLContext::Pointer_t getAnyContext(TokenEnum_t nToken)
   -->
   <xsl:template name="defineooxmlids">
     <xsl:text>
-namespace writerfilter { namespace NS_ooxml
+namespace NS_ooxml
 {</xsl:text>
     <xsl:for-each select="//resource//attribute|//resource//element|//resource//sprm|//resource//value">
       <xsl:if test="contains(@tokenid, 'ooxml:')">
@@ -1841,7 +1841,7 @@ namespace writerfilter { namespace NS_ooxml
     <xsl:text>;</xsl:text>
       </xsl:if>
     </xsl:for-each>
-}}
+}
   </xsl:template>
 
   <!--
@@ -1866,6 +1866,40 @@ namespace writerfilter { namespace NS_ooxml
         </xsl:if>
       </xsl:for-each>
     </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="qnametostrfunc">
+    <xsl:text>
+string qnameToString(writerfilter::QName_t nToken)
+{
+    string sResult;
+
+    switch (nToken)
+    {</xsl:text>
+    <xsl:for-each select="//resource">
+      <xsl:variable name="name" select="@name"/>
+      <xsl:for-each select="attribute|element|sprm">
+        <xsl:if test="contains(@tokenid, 'ooxml:')">
+          <xsl:text>
+    case </xsl:text>
+    <xsl:call-template name="idtoqname">
+      <xsl:with-param name="id" select="@tokenid"/>
+    </xsl:call-template>
+    <xsl:text>:
+        sResult = "</xsl:text>
+        <xsl:value-of select="@tokenid"/>
+        <xsl:text>";
+        break;</xsl:text>        
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:for-each>
+    <xsl:text>
+    default:
+        ;
+    }
+
+    return sResult;
+}</xsl:text>
   </xsl:template>
 
   <xsl:key name="resources-with-kind" match="resource[.//kind]"
