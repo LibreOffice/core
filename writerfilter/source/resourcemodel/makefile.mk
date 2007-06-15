@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: os $ $Date: 2007-04-23 07:44:39 $
+#  last change: $Author: hbrinkm $ $Date: 2007-06-15 09:31:01 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,10 +56,24 @@ SLOFILES= \
 
 SHL1TARGET=$(TARGET)
 
+.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
+ODIAPILIB=-lodiapi
+RTFTOKLIB=-lrtftok
+DOCTOKLIB=-ldoctok
+OOXMLLIB=-looxml
+.ELIF "$(GUI)"=="WNT"
+ODIAPILIB=$(LB)$/iodiapi.lib
+RTFTOKLIB=$(LB)$/irtftok.lib
+DOCTOKLIB=$(LB)$/idoctok.lib
+OOXMLLIB=$(LB)$/iooxml.lib
+.ENDIF
+
 SHL1STDLIBS=$(SALLIB)\
     $(CPPULIB)\
     $(CPPUHELPERLIB) \
-    $(COMPHELPERLIB)
+    $(COMPHELPERLIB) \
+    $(DOCTOKLIB) \
+    $(OOXMLLIB)
 SHL1IMPLIB=i$(SHL1TARGET)
 #SHL1USE_EXPORTS=name
 SHL1USE_EXPORTS=ordinal
@@ -73,3 +87,61 @@ DEFLIB1NAME=$(TARGET)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
+.IF "$(WRITERFILTER_GEN)"=="yes"
+
+RESOURCEMODELCXXOUTDIR=.
+WRITERFILTERINCDIR=..$/..$/inc
+
+OOXMLMODEL=..$/ooxml$/model.xml
+OOXMLPREPROCESSXSL=..$/ooxml$/modelpreprocess.xsl
+OOXMLQNAMETOSTRXSL=..$/ooxml$/qnametostr.xsl
+OOXMLRESOURCEIDSXSL=..$/ooxml$/resourceids.xsl
+DOCTOKMODEL=..$/doctok$/resources.xmi
+DOCTOKQNAMETOSTRXSL=..$/doctok$/qnametostr.xsl
+DOCTOKSPRMCODETOSTRXSL=..$/doctok$/sprmcodetostr.xsl
+DOCTOKRESOURCEIDSXSL=..$/doctok$/resourceids.xsl
+DOCTOKSPRMIDSXSL=..$/doctok$/sprmids.xsl
+
+OOXMLRESOURCEIDSHXX=$(WRITERFILTERINCDIR)$/ooxml$/resourceids.hxx
+DOCTOKRESOURCEIDSHXX=$(WRITERFILTERINCDIR)$/doctok$/resourceids.hxx
+RESOURCESPRMIDSHXX=$(WRITERFILTERINCDIR)$/resourcemodel$/sprmids.hxx
+
+MODELPROCESSED=$(MISC)$/model_preprocessed
+QNAMETOSTRCXX=$(RESOURCEMODELCXXOUTDIR)$/qnametostr.cxx
+SPRMCODETOSTRCXX=$(RESOURCEMODELCXXOUTDIR)$/sprmcodetostr.cxx
+
+XALANJAR=$(SOLARVER)$/$(INPATH)$/bin$(UPDMINOREXT)$/xalan.jar
+XALAN=$(JAVA) -jar $(XALANJAR)
+
+$(MODELPROCESSED): $(OOXMLPREPROCESSXSL) $(OOXMLMODEL)
+    $(XALAN) -xsl $(OOXMLPREPROCESSXSL) -in $(OOXMLMODEL) > $(MODELPROCESSED)
+
+$(QNAMETOSTRCXX): $(OOXMLQNAMETOSTRXSL) $(MODELPROCESSED) $(DOCTOKQNAMETOSTRXSL) qnametostrheader qnametostrfooter $(DOCTOKRESOURCEIDSHXX) $(OOXMLRESOURCEIDSHXX)
+    $(TYPE) qnametostrheader > $(QNAMETOSTRCXX) 
+    $(XALAN) -xsl $(OOXMLQNAMETOSTRXSL) -in $(MODELPROCESSED) >> $(QNAMETOSTRCXX)
+    $(XALAN) -xsl $(DOCTOKQNAMETOSTRXSL) -in $(DOCTOKMODEL) >> $(QNAMETOSTRCXX)
+    $(TYPE) qnametostrfooter >> $(QNAMETOSTRCXX)
+
+$(SLO)$/qnametostr.obj: $(QNAMETOSTRCXX)
+
+$(SPRMCODETOSTRCXX): sprmcodetostrheader $(DOCTOKSPRMCODETOSTRXSL) $(DOCTOKMODEL) $(RESOURCESPRMIDSHXX)
+    $(TYPE) sprmcodetostrheader > $(SPRMCODETOSTRCXX) 
+    $(XALAN) -xsl $(DOCTOKSPRMCODETOSTRXSL) -in $(DOCTOKMODEL) >> $(SPRMCODETOSTRCXX)
+    echo "}" >> $(SPRMCODETOSTRCXX)
+
+$(SLO)$/sprmcodetostr.obj: $(SPRMCODETOSTRCXX)
+
+$(DOCTOKRESOURCEIDSHXX): $(DOCTOKMODEL) $(DOCTOKRESOURCEIDSXSL)
+    $(MKDIRHIER) $(INCCOM)$/doctok
+    $(XALAN) -xsl $(DOCTOKRESOURCEIDSXSL) -in $(DOCTOKMODEL) > $(DOCTOKRESOURCEIDSHXX)
+
+$(OOXMLRESOURCEIDSHXX): $(OOXMLRESOURCEIDSXSL) $(MODELPROCESSED)
+    $(MKDIRHIER) $(INCCOM)$/ooxml
+    $(XALAN) -xsl $(OOXMLRESOURCEIDSXSL) -in $(MODELPROCESSED) > $(OOXMLRESOURCEIDSHXX)
+
+$(RESOURCESPRMIDSHXX): $(DOCTOKMODEL) $(DOCTOKSPRMIDSXSL)
+    $(MKDIRHIER) $(INCCOM)$/resourcemodel
+    $(XALAN) -xsl $(DOCTOKSPRMIDSXSL) -in $(DOCTOKMODEL) > $(RESOURCESPRMIDSHXX)
+
+.ENDIF
