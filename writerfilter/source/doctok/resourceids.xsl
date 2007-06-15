@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourceids.xsl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-06-06 10:25:57 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-15 09:22:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,9 +52,9 @@
  *
  *  $RCSfile: resourceids.xsl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-06-06 10:25:57 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-15 09:22:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,6 @@
 #endif
 
 namespace writerfilter {
-using namespace ::std;
 
 namespace NS_rtf {
 
@@ -187,7 +186,9 @@ const QName_t </xsl:text>
 <xsl:text>
 }
 
+
 }
+
 #endif // INCLUDED_RESOURCESIDS&#xa;</xsl:text></out>
 </xsl:template>
 
