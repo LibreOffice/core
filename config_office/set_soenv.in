@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.148 $
-# Date:        $Date: 2007-06-11 14:21:39 $
+# Version:     $Revision: 1.149 $
+# Date:        $Date: 2007-06-18 16:36:33 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -441,22 +441,39 @@ elsif ( $platform =~ m/linux-gnu/ )
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
    }
    elsif ($platform =~ m/^powerpc/)
-   {  print "Setting Linux PPC specific values... ";
-      $outfile        = "LinuxPPCEnv.Set"; 
+   {
+      if (($platform =~ m/^powerpc64/) && ('@SIZEOF_LONG@' eq '8')) {
+         print "Setting Linux PPC64 specific values... ";
+         $outfile = "LinuxPPC64Env.Set"; 
+         $OUTPATH = "unxlngppc64";
+         $CPUNAME = "POWERPC64";
+
+         if ( $JDK eq "gcj" ) {
+            $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc64";
+            $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc64".$ds."client";
+            $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc64".$ds."native_threads";
+         }
+      }
+      else {
+         print "Setting Linux PPC specific values... ";
+         $outfile = "LinuxPPCEnv.Set"; 
+         $OUTPATH = "unxlngppc";
+         $CPUNAME = "POWERPC";
+
+         if ( $JDK eq "gcj" ) {
+            $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
+            $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."client";
+            $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
+         }
+      }
+
       $CPU            = "P";
-      $CPUNAME        = "POWERPC";
-      $OUTPATH        = "unxlngppc";
+
+# the "standard" ppc j2sdk is IBMJava2-ppc-142
       if ( $JDK ne "gcj" ) {
-# j2sdk is IBMJava2-ppc-142
           $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."bin";
           $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."bin".$ds."classic";
           $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."bin";
-      }
-      else {
-# j2sdk has sun-style locations
-          $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
-          $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."client";
-          $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
       }
    }
    elsif ($platform =~ m/^s390/)
@@ -821,6 +838,8 @@ $LIB                  = $ds."lib";
 $LIB64                = $ds."lib";
 $LIB64               .= "64"
 if ($platform =~ m/x86_64-.*-linux-gnu/);
+$LIB64               .= "64" 
+if (($platform =~ m/powerpc64-.*-linux-gnu/) && ('@SIZEOF_LONG@' eq '8'));
 $INC                  = $ds."inc";
 $INCLUDE              = $ds."include";
 $DEV                  = $ds."dev";
