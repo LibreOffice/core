@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngppc4.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:10:02 $
+#   last change: $Author: kz $ $Date: 2007-06-18 16:33:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ CFLAGSENABLESYMBOLS=-g
 CFLAGSDBGUTIL=
 
 # Compiler flags for enabling optimizations
-CFLAGSOPT=-O2 -fno-strict-aliasing
+CFLAGSOPT=-Os -fno-strict-aliasing
 
 # Compiler flags for disabling optimizations
 # don't change - required to work around optimization bugs
