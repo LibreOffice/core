@@ -1,3 +1,27 @@
+*** misc/boost-1.30.2/boost/config/platform/macos.hpp  Thu Feb 13 13:28:05 2003
+--- misc/build/boost-1.30.2/boost/config/platform/macos.hpp    Mon Jun  4 10:01:49 2007
+***************
+*** 19,27 ****
+  #    define BOOST_HAS_UNISTD_H
+  #  endif
+  // boilerplate code:
+! #  ifndef TARGET_CARBON
+  #     include <boost/config/posix_features.hpp>
+! #  endif
+  #  ifndef BOOST_HAS_STDINT_H
+  #     define BOOST_HAS_STDINT_H
+  #  endif
+--- 19,28 ----
+  #    define BOOST_HAS_UNISTD_H
+  #  endif
+  // boilerplate code:
+! // HDU: disabled the TARGET_CARBON check because of issue #i72248#
+! //#  ifndef TARGET_CARBON
+  #     include <boost/config/posix_features.hpp>
+! //#  endif
+  #  ifndef BOOST_HAS_STDINT_H
+  #     define BOOST_HAS_STDINT_H
+  #  endif
 *** misc/boost-1.30.2/boost/bind.hpp	Tue Oct 15 12:51:34 2002
 --- misc/build/boost-1.30.2/boost/bind.hpp	Tue Jul 25 14:47:06 2006
 ***************
