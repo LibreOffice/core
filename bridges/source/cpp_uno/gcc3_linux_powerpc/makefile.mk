@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:28:00 $
+#   last change: $Author: kz $ $Date: 2007-06-18 16:34:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,8 +45,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
-
-.IF "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCLINUXPgcc3"
+.IF "$(COM)$(OS)$(CPU)$(COMNAME)$(CPUNAME)" == "GCCLINUXPgcc3POWERPC"
 
 .IF "$(cppu_no_leak)" == ""
 CFLAGS += -DLEAK_STATIC_DATA
