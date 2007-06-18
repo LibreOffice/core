@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.64 $
+#   $Revision: 1.65 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 13:56:33 $
+#   last change: $Author: kz $ $Date: 2007-06-18 16:33:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -2074,9 +2074,10 @@ sub create_packages_without_epm
 
         my $target = "";
         if ( $installer::globals::compiler =~ /unxlngi/) { $target = "i586"; }
-        if ( $installer::globals::compiler =~ /unxlngx/) { $target = "x86_64"; }
-        if ( $installer::globals::compiler =~ /unxlngs/) { $target = "sparc"; }
-        if ( $installer::globals::compiler =~ /unxlngppc/) {$target = "ppc"; }
+        elsif ( $installer::globals::compiler =~ /unxlngx/) { $target = "x86_64"; }
+        elsif ( $installer::globals::compiler =~ /unxlngs/) { $target = "sparc"; }
+        elsif ( $installer::globals::compiler =~ /unxlngppc64/) {$target = "ppc64"; }
+        elsif ( $installer::globals::compiler =~ /unxlngppc/) {$target = "ppc"; }
 
         my $systemcall = "$rpmcommand -bb $specfilename --target $target 2\>\&1 |";
 
@@ -2256,9 +2257,10 @@ sub create_new_directory_structure
     {
         my $rpmdir;
         if ( $installer::globals::compiler =~ /unxlngi/) { $rpmdir = "$installer::globals::epmoutpath/RPMS/i586"; }
-        if ( $installer::globals::compiler =~ /unxlngx/) { $rpmdir = "$installer::globals::epmoutpath/RPMS/x86_64"; }
-        if ( $installer::globals::compiler =~ /unxlngs/) { $rpmdir = "$installer::globals::epmoutpath/RPMS/sparc"; }
-        if ( $installer::globals::compiler =~ /unxlngppc/) { $rpmdir = "$installer::globals::epmoutpath/RPMS/ppc"; }
+        elsif ( $installer::globals::compiler =~ /unxlngx/) { $rpmdir = "$installer::globals::epmoutpath/RPMS/x86_64"; }
+        elsif ( $installer::globals::compiler =~ /unxlngs/) { $rpmdir = "$installer::globals::epmoutpath/RPMS/sparc"; }
+        elsif ( $installer::globals::compiler =~ /unxlngppc64/) { $rpmdir = "$installer::globals::epmoutpath/RPMS/ppc64"; }
+        elsif ( $installer::globals::compiler =~ /unxlngppc/) { $rpmdir = "$installer::globals::epmoutpath/RPMS/ppc"; }
 
         my $systemcall = "mv $rpmdir/* $newdir";    # moving the rpms into the directory "RPMS"
 
@@ -2284,6 +2286,7 @@ sub create_new_directory_structure
         installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/i586");
         installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/i386");
         installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/sparc");
+        installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/ppc64");
         installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/ppc");
         installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS");
 
