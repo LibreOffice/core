@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vendorbase.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:35:40 $
+ *  last change: $Author: kz $ $Date: 2007-06-18 16:36:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,8 @@ namespace jfw_plugin
 #define JFW_PLUGIN_ARCH "sparc"
 #elif defined INTEL
 #define JFW_PLUGIN_ARCH "i386"
+#elif defined POWERPC64
+#define JFW_PLUGIN_ARCH "ppc64"
 #elif defined POWERPC
 #define JFW_PLUGIN_ARCH "ppc"
 #elif defined MIPS
