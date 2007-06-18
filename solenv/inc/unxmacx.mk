@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacx.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 15:11:43 $
+#   last change: $Author: kz $ $Date: 2007-06-18 16:34:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -152,9 +152,7 @@ MODULES_WITH_WARNINGS := \
     chart2 \
     devtools \
     extensions \
-    lingu \
     r_tools \
-    starmath \
     sw
 
 # Currently, there is no nas support for OS X...
