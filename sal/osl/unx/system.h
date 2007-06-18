@@ -4,9 +4,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:16:48 $
+ *  last change: $Author: kz $ $Date: 2007-06-18 16:37:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,9 @@
 #   if __BYTE_ORDER == __LITTLE_ENDIAN
 #       define _LITTLE_ENDIAN
 #   elif __BYTE_ORDER == __BIG_ENDIAN
-#       define _BIG_ENDIAN
+#               ifndef _BIG_ENDIAN
+#               define _BIG_ENDIAN
+#               endif
 #   elif __BYTE_ORDER == __PDP_ENDIAN
 #       define _PDP_ENDIAN
 #   endif
