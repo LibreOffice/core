@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:13:27 $
+ *  last change: $Author: kz $ $Date: 2007-06-18 16:33:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3533,7 +3533,7 @@ void SmXMLImport::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
     sal_Int32 nCount = aViewProps.getLength();
     const PropertyValue *pValue = aViewProps.getConstArray();
 
-    long nTmp;
+    long nTmp = 0;
     //sal_Bool bShowDeletes = sal_False, bShowInserts = sal_False, bShowFooter = sal_False, bShowHeader = sal_False;
 
     for (sal_Int32 i = 0; i < nCount ; i++)
