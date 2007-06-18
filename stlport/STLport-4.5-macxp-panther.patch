@@ -83,7 +83,7 @@
 ***************
 *** 1 ****
 ! dummy
---- 1,59 ----
+--- 1,65 ----
 ! #
 ! # Note : this makefile is for gcc-3, Mac OS X only !
 ! #
@@ -104,8 +104,14 @@
 ! #
 ! #
 ! LINK=libtool -static -o
-! DYN_LINK=$(CXX) -dynamiclib -single_module -install_name @executable_path/libstlport_gcc.dylib -o
+! DYN_LINK=g++ -o
 ! 
+! LDFLAGS_COMMON_dynamic= -dynamiclib -single_module 
+!
+! LDFLAGS_RELEASE_dynamic=   $(LDFLAGS_COMMON_dynamic) -install_name @executable_path/libstlport_gcc.dylib
+! LDFLAGS_DEBUG_dynamic=     $(LDFLAGS_COMMON_dynamic) -install_name @executable_path/libstlport_gcc.dylib
+! LDFLAGS_STLDEBUG_dynamic=  $(LDFLAGS_COMMON_dynamic) -install_name @executable_path/libstlport_gcc_stldebug.dylib
+!
 ! OBJEXT=o
 ! DYNEXT=dylib
 ! STEXT=a
