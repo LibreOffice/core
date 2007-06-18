@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.242 $
+ *  $Revision: 1.243 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:36:40 $
+ *  last change: $Author: kz $ $Date: 2007-06-18 16:36:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2006,7 +2006,7 @@ End
 STD_LIB_FILE_PATCH( gid_File_Lib_So, so )
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sot, sot )
 
-#ifdef UNX
+#if defined(UNX) && !defined(QUARTZ)
 
 File gid_File_Lib_Spa
     Name = LIBNAME(spa);
