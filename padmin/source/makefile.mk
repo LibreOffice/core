@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:25:28 $
+#   last change: $Author: kz $ $Date: 2007-06-18 16:36:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,13 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
+
+.IF "$(GUIBASE)"=="aqua"
+
+dummy:
+    @echo "Nothing to build for GUIBASE aqua."
+
+.ELSE
 
 PRJ=..
 PRJNAME=padmin
@@ -110,4 +117,6 @@ APP1STDLIBS=	\
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+.ENDIF # GUIBASE==aqua
 
