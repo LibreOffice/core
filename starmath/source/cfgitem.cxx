@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgitem.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:11:41 $
+ *  last change: $Author: kz $ $Date: 2007-06-18 16:33:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -894,8 +894,8 @@ void SmMathConfig::LoadOther()
         const Any *pValues = aValues.getConstArray();
         const Any *pVal = pValues;
 
-        INT16   nTmp16;
-        BOOL    bTmp;
+        INT16   nTmp16 = 0;
+        BOOL    bTmp = FALSE;
 
         // Print/Title
         if (pVal->hasValue()  &&  (*pVal >>= bTmp))
@@ -1001,8 +1001,8 @@ void SmMathConfig::LoadFormat()
         const Any *pVal = pValues;
 
         OUString    aTmpStr;
-        INT16       nTmp16;
-        BOOL        bTmp;
+        INT16       nTmp16 = 0;
+        BOOL        bTmp = FALSE;
 
         // StandardFormat/Textmode
         if (pVal->hasValue()  &&  (*pVal >>= bTmp))
