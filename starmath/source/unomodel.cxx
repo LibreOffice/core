@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:16:16 $
+ *  last change: $Author: kz $ $Date: 2007-06-18 16:34:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -550,7 +550,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             case HANDLE_RELATIVE_FONT_HEIGHT_OPERATORS     :
             case HANDLE_RELATIVE_FONT_HEIGHT_LIMITS        :
             {
-                sal_Int16 nVal;
+                sal_Int16 nVal = 0;
                 *pValues >>= nVal;
                 if(nVal < 1)
                     throw IllegalArgumentException();
@@ -567,7 +567,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             case HANDLE_ALIGNMENT                          :
             {
                 // SmHorAlign uses the same values as HorizontalAlignment
-                sal_Int16 nVal;
+                sal_Int16 nVal = 0;
                 *pValues >>= nVal;
                 if(nVal < 0 || nVal > 2)
                     throw IllegalArgumentException();
@@ -600,7 +600,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             case HANDLE_TOP_MARGIN                :
             case HANDLE_BOTTOM_MARGIN             :
             {
-                sal_Int16 nVal;
+                sal_Int16 nVal = 0;
                 *pValues >>= nVal;
                 if(nVal < 0)
                     throw IllegalArgumentException();
@@ -693,7 +693,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             {
                 if ( (*pValues).getValueType() != ::getBooleanCppuType() )
                     throw IllegalArgumentException();
-                sal_Bool bReadonly;
+                sal_Bool bReadonly = FALSE;
                 if ( *pValues >>= bReadonly )
                     pDocSh->GetDocInfo().SetLoadReadonly( bReadonly );
                 break;
