@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2007-06-14 08:22:49 $
+ *  last change: $Author: os $ $Date: 2007-06-18 12:31:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ StyleSheetEntry::StyleSheetEntry() :
         ,nStyleTypeCode(STYLE_TYPE_UNKNOWN)
         ,sBaseStyleIdentifier()
         ,sNextStyleIdentifier()
-        ,pProperties(new PropertyMap)
+        ,pProperties(new StyleSheetPropertyMap)
         {
         }
 
@@ -601,6 +601,12 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
             m_pImpl->m_pCurrentEntry->sStyleIdentifierI = sValue;
             m_pImpl->m_pCurrentEntry->sStyleIdentifierD = sValue;
         break;
+        case NS_ooxml::LN_CT_TblWidth_w:
+            dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() )->SetCT_TblWidth_w( nIntValue );
+        break;
+        case NS_ooxml::LN_CT_TblWidth_type:
+            dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() )->SetCT_TblWidth_type( nIntValue );
+        break;
         default:
         {
             //----> debug
@@ -614,17 +620,18 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
 /*-- 19.06.2006 12:04:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void StyleSheetTable::sprm(doctok::Sprm & sprm_)
+void StyleSheetTable::sprm(doctok::Sprm & rSprm)
 {
-    sal_uInt32 nId = sprm_.getId();
-    doctok::Value::Pointer_t pValue = sprm_.getValue();
+    sal_uInt32 nSprmId = rSprm.getId();
+    doctok::Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue.get() ? pValue->getInt() : 0;
     (void)nIntValue;
     rtl::OUString sStringValue = pValue.get() ? pValue->getString() : rtl::OUString();
-    //printf ( "StyleSheetTable::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
+    //printf ( "StyleSheetTable::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nSprmId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
 
-    switch(nId)
+    switch(nSprmId)
     {
+
     case NS_ooxml::LN_CT_Style_name:
         m_pImpl->m_pCurrentEntry->sStyleName = sStringValue;
         m_pImpl->m_pCurrentEntry->sStyleName1 = sStringValue;
@@ -652,31 +659,37 @@ void StyleSheetTable::sprm(doctok::Sprm & sprm_)
     case NS_ooxml::LN_CT_Style_personalCompose:
     case NS_ooxml::LN_CT_Style_personalReply:
     case NS_ooxml::LN_CT_Style_rsid:
-    case NS_ooxml::LN_CT_Style_tblPr:
     case NS_ooxml::LN_CT_Style_trPr:
     case NS_ooxml::LN_CT_Style_tcPr:
-    case NS_ooxml::LN_CT_Style_tblStylePr:
-        break;
+    break;
+    case NS_ooxml::LN_CT_Style_tblPr: //contains table properties
+    case NS_ooxml::LN_CT_Style_tblStylePr: //contains  to table properties
     case NS_ooxml::LN_CT_DocDefaults_pPrDefault:
     case NS_ooxml::LN_CT_DocDefaults_rPrDefault:
-        resolveSprmProps(sprm_);
+    case NS_ooxml::LN_CT_TblPrBase_tblInd: //table properties - at least width value and type
+    case NS_ooxml::LN_CT_TblPrBase_tblBorders: //table borders
+    case NS_ooxml::LN_EG_RPrBase_rFonts: //table fonts
+        resolveSprmProps(rSprm);
         break;
     case NS_ooxml::LN_CT_PPrDefault_pPr:
         m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pDefaultParaProps );
-        m_pImpl->m_rDMapper.sprm( sprm_ );
+        m_pImpl->m_rDMapper.sprm( rSprm );
         m_pImpl->m_rDMapper.PopStyleSheetProperties();
         break;
     case NS_ooxml::LN_CT_RPrDefault_rPr:
         m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pDefaultCharProps );
-        m_pImpl->m_rDMapper.sprm( sprm_ );
+        m_pImpl->m_rDMapper.sprm( rSprm );
         m_pImpl->m_rDMapper.PopStyleSheetProperties();
     break;
+    case NS_ooxml::LN_CT_TrPrBase_jc:     //table alignment
+            dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() )->SetCT_TrPrBase_jc(nIntValue);
+        break;
     case NS_ooxml::LN_CT_Style_pPr:
     case NS_ooxml::LN_CT_Style_rPr:
     default:
         if (!m_pImpl->m_pCurrentEntry)
             break;
-        m_pImpl->m_rDMapper.sprm( sprm_, m_pImpl->m_pCurrentEntry->pProperties );
+        m_pImpl->m_rDMapper.sprm( rSprm, m_pImpl->m_pCurrentEntry->pProperties );
         break;
     }
 
@@ -684,7 +697,7 @@ void StyleSheetTable::sprm(doctok::Sprm & sprm_)
 //      return;
 
     //fill the attributes of the style sheet
-//    m_pImpl->m_rDMapper.sprm( sprm_, m_pImpl->m_pCurrentProps );
+//    m_pImpl->m_rDMapper.sprm( rSprm, m_pImpl->m_pCurrentProps );
 }
 /*-- 19.06.2006 12:04:33---------------------------------------------------
 
@@ -1046,9 +1059,9 @@ static const sal_Char *aStyleNamePairs[] =
     return sRet;
 }
 
-void StyleSheetTable::resolveSprmProps(doctok::Sprm & sprm_)
+void StyleSheetTable::resolveSprmProps(doctok::Sprm & rSprm)
 {
-    doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
+    doctok::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
     if( pProperties.get())
         pProperties->resolve(*this);
 }

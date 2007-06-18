@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: os $ $Date: 2007-06-14 08:22:49 $
+ *  last change: $Author: os $ $Date: 2007-06-18 12:31:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,8 +184,9 @@ void DomainMapper::attribute(doctok::Id nName, doctok::Value & val)
     //printf ( "DomainMapper::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nName, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     if( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR )
         m_pImpl->GetFIB().SetData( nName, nIntValue );
-    else
+    else //if( !m_pImpl->getTableManager().attribute( nName, val) )
     {
+
 
         /* WRITERFILTERSTATUS: table: attributedata */
         switch( nName )
@@ -1730,21 +1731,21 @@ void DomainMapper::attribute(doctok::Id nName, doctok::Value & val)
 /*-- 09.06.2006 09:52:12---------------------------------------------------
 
 -----------------------------------------------------------------------*/
-void DomainMapper::sprm(doctok::Sprm & sprm_)
+void DomainMapper::sprm(doctok::Sprm & rSprm)
 {
-    if( !m_pImpl->getTableManager().sprm(sprm_) )
-        DomainMapper::sprm( sprm_, m_pImpl->GetTopContext() );
+    if( !m_pImpl->getTableManager().sprm(rSprm) )
+        DomainMapper::sprm( rSprm, m_pImpl->GetTopContext() );
 }
 /*-- 20.06.2006 09:58:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType eSprmType )
+void DomainMapper::sprm( doctok::Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmType )
 {
     OSL_ENSURE(rContext.get(), "PropertyMap has to be valid!");
     if(!rContext.get())
         return ;
 
-    sal_uInt32 nId = sprm_.getId();
+    sal_uInt32 nSprmId = rSprm.getId();
     //needed for page properties
     SectionPropertyMap* pSectionContext = 0;
     //the section context is not availabe before the first call of startSectionGroup()
@@ -1757,15 +1758,15 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
 
     //TODO: In rtl-paragraphs the meaning of left/right are to be exchanged
     bool bExchangeLeftRight = false;
-    // if( nId == 0x2461 && AlreadyInRTLPara() )
+    // if( nSprmId == 0x2461 && AlreadyInRTLPara() )
     //      bExchangeLeftRight = true;
-    doctok::Value::Pointer_t pValue = sprm_.getValue();
+    doctok::Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
     rtl::OUString sStringValue = pValue->getString();
-    //printf ( "DomainMapper::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
+    //printf ( "DomainMapper::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nSprmId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     /* WRITERFILTERSTATUS: table: sprmdata */
 
-    switch(nId)
+    switch(nSprmId)
     {
     case 2:  // sprmPIstd
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
@@ -1844,7 +1845,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
             }
 
             //create a new tab stop property - this is done with the contained properties
-            resolveSprmProps(sprm_);
+            resolveSprmProps(rSprm);
             //add this property
             rContext->Insert(PROP_PARA_TAB_STOPS, uno::makeAny( m_pImpl->GetCurrentTabStopAndClear()));
         }
@@ -1856,7 +1857,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 17:
     case 0x840F:   // sprmPDxaLeft
         /* WRITERFILTERSTATUS: done: 50, planned: 5, spent: 1 */
-        if( 0x840F == nId || 0x17 == nId|| (bExchangeLeftRight && nId == 0x845d) || ( !bExchangeLeftRight && nId == 0x845e))
+        if( 0x840F == nSprmId || 0x17 == nSprmId|| (bExchangeLeftRight && nSprmId == 0x845d) || ( !bExchangeLeftRight && nSprmId == 0x845e))
             rContext->Insert(
                              eSprmType == SPRM_DEFAULT ? PROP_PARA_LEFT_MARGIN : PROP_LEFT_MARGIN,
 
@@ -1994,7 +1995,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
             sal_Int32 nLineDistance = ConversionHelper::MakeBorderLine( nIntValue, aBorderLine );
             PropertyIds eBorderId = PROP_LEFT_BORDER;
             PropertyIds eBorderDistId = PROP_LEFT_BORDER_DISTANCE  ;
-            switch( nId )
+            switch( nSprmId )
             {
             case 0x6428:   // sprmPBrcBetween
                 OSL_ASSERT("TODO: inner border is not handled");
@@ -2161,7 +2162,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         break;  // sprmCChs
     case 0x6A09: // sprmCSymbol
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        resolveSprmProps(sprm_); //resolves LN_FONT and LN_CHAR
+        resolveSprmProps(rSprm); //resolves LN_FONT and LN_CHAR
     break;
     case 0x080A:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
@@ -2229,17 +2230,17 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         /* WRITERFILTERSTATUS: done: 100, planned: , spent: 0.5 */
         {
             PropertyIds ePropertyId = PROP_CHAR_WEIGHT; //initialized to prevent warning!
-            switch( nId )
+            switch( nSprmId )
             {
             case 060:// sprmCFBold
             case 0x085C: // sprmCFBoldBi
             case 0x835: /*sprmCFBold*/
-                ePropertyId = nId != 0x085C ? PROP_CHAR_WEIGHT : PROP_CHAR_WEIGHT_COMPLEX;
+                ePropertyId = nSprmId != 0x085C ? PROP_CHAR_WEIGHT : PROP_CHAR_WEIGHT_COMPLEX;
                 break;
             case 61: /*sprmCFItalic*/
             case 0x085D: // sprmCFItalicBi
             case 0x836: /*sprmCFItalic*/
-                ePropertyId = nId == 0x836 ? PROP_CHAR_POSTURE : PROP_CHAR_POSTURE_COMPLEX;
+                ePropertyId = nSprmId == 0x836 ? PROP_CHAR_POSTURE : PROP_CHAR_POSTURE_COMPLEX;
                 break;
             case 0x837: /*sprmCFStrike*/
             case 0x2A53 : /*sprmCFDStrike double strike through*/
@@ -2273,7 +2274,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
                     uno::Any aStyleVal = m_pImpl->GetPropertyFromStyleSheet(ePropertyId);
                     if( !aStyleVal.hasValue() )
                     {
-                        nIntValue = 0x83a == nId ?
+                        nIntValue = 0x83a == nSprmId ?
                             4 : 1;
                     }
                     else if(aStyleVal.getValueTypeClass() == uno::TypeClass_FLOAT )
@@ -2285,7 +2286,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
                     else if((aStyleVal >>= nStyleValue) ||
                             (nStyleValue = (sal_Int16)comphelper::getEnumAsINT32(aStyleVal)) >= 0 )
                     {
-                        nIntValue = 0x83a == nId ?
+                        nIntValue = 0x83a == nSprmId ?
                             nStyleValue ? 0 : 4 :
                             nStyleValue ? 0 : 1;
                     }
@@ -2295,7 +2296,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
                     }
                 }
 
-                switch( nId )
+                switch( nSprmId )
                 {
                     case 060:/*sprmCFBold*/
                     case 0x835: /*sprmCFBold*/
@@ -2303,7 +2304,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
                     {
                         uno::Any aBold( uno::makeAny( nIntValue ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL ) );
                         rContext->Insert(ePropertyId, aBold );
-                        if( nId != 0x085c ) // sprmCFBoldBi
+                        if( nSprmId != 0x085c ) // sprmCFBoldBi
                             rContext->Insert(PROP_CHAR_WEIGHT_ASIAN, aBold );
                     }
                     break;
@@ -2313,7 +2314,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
                     {
                         uno::Any aPosture( uno::makeAny( nIntValue ? awt::FontSlant_ITALIC : awt::FontSlant_NONE ) );
                         rContext->Insert( ePropertyId, aPosture );
-                        if( nId != 0x085D ) // sprmCFItalicBi
+                        if( nSprmId != 0x085D ) // sprmCFItalicBi
                             rContext->Insert(PROP_CHAR_POSTURE_ASIAN, aPosture );
                     }
                     break;
@@ -2381,7 +2382,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
             //multiples of half points (12pt == 24)
             double fVal = double(nIntValue) / 2.;
             uno::Any aVal = uno::makeAny( fVal );
-            if( 0x4A61 == nId )
+            if( 0x4A61 == nSprmId )
                 rContext->Insert( PROP_CHAR_HEIGHT_COMPLEX, aVal );
             else
             {
@@ -2483,7 +2484,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
                 PropertyIds eFontFamily  = PROP_CHAR_FONT_FAMILY;
                 PropertyIds eFontCharSet = PROP_CHAR_FONT_CHAR_SET;
                 PropertyIds eFontPitch   = PROP_CHAR_FONT_PITCH;
-                switch(nId)
+                switch(nSprmId)
                 {
                 case 0x4A4F:
                     //already initialized
@@ -2584,8 +2585,8 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         {
             lang::Locale aLocale;
             MsLangId::convertLanguageToLocale( (LanguageType)nIntValue, aLocale );
-            rContext->Insert(0x486D == nId ? PROP_CHAR_LOCALE :
-                             0x486E == nId ? PROP_CHAR_LOCALE_ASIAN : PROP_CHAR_LOCALE_COMPLEX,
+            rContext->Insert(0x486D == nSprmId ? PROP_CHAR_LOCALE :
+                             0x486E == nSprmId ? PROP_CHAR_LOCALE_ASIAN : PROP_CHAR_LOCALE_COMPLEX,
                              uno::makeAny( aLocale ) );
         }
         break;
@@ -2949,7 +2950,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
                         BORDER_BOTTOM,
                         BORDER_RIGHT
                     };
-                pSectionContext->SetBorder( aPositions[nId - 0x702B], nLineDistance, aBorderLine );
+                pSectionContext->SetBorder( aPositions[nSprmId - 0x702B], nLineDistance, aBorderLine );
             }
         }
         break;
@@ -3167,10 +3168,10 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
         break;//undocumented section properties
     case 0xca78:
-        resolveSprmProps(sprm_);
+        resolveSprmProps(rSprm);
         break;
     case NS_ooxml::LN_CT_Tabs_tab:
-        resolveSprmProps(sprm_);
+        resolveSprmProps(rSprm);
         m_pImpl->IncorporateTabStop(m_pImpl->m_aCurrentTabStop);
         break;
 
@@ -3193,7 +3194,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case NS_ooxml::LN_CT_Style_pPr:
     case NS_ooxml::LN_CT_Style_rPr:
 //    case NS_ooxml::LN_CT_PPr_rPr:
-        resolveSprmProps(sprm_);
+        resolveSprmProps(rSprm);
         break;
 
     case NS_ooxml::LN_EG_SectPrContents_pgSz:
@@ -3201,7 +3202,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         CT_PageSz.h = ConversionHelper::convertToMM100( ConversionHelper::SnapPageDimension( sal_Int32(15840) ));
         CT_PageSz.w = ConversionHelper::convertToMM100( ConversionHelper::SnapPageDimension( sal_Int32(12240) ));
         CT_PageSz.orient = false;
-        resolveSprmProps(sprm_);
+        resolveSprmProps(rSprm);
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
         {
@@ -3217,7 +3218,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
             ConversionHelper::convertToMM100( sal_Int32(1440));
         CT_PageMar.right = CT_PageMar.left = ConversionHelper::convertToMM100( sal_Int32(1800));
         CT_PageMar.gutter = 0;
-        resolveSprmProps(sprm_);
+        resolveSprmProps(rSprm);
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
         {
@@ -3234,7 +3235,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         CT_Columns.equalWidth = CT_Columns.sep = false;
         CT_Columns.space = CT_Columns.num = 0;
         CT_Columns.cols.erase(CT_Columns.cols.begin(), CT_Columns.cols.end());
-        resolveSprmProps(sprm_);
+        resolveSprmProps(rSprm);
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
         {
@@ -3265,14 +3266,14 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
 
     case NS_ooxml::LN_CT_Columns_col:
         CT_Column.w = CT_Column.space = 0;
-        resolveSprmProps(sprm_);
+        resolveSprmProps(rSprm);
         CT_Columns.cols.push_back(CT_Column);
         break;
 
     default:
         {
             OSL_ASSERT("DomainMapper::sprm()"); //
-            //doctok::Value::Pointer_t pValue_ = sprm_.getValue();
+            //doctok::Value::Pointer_t pValue_ = rSprm.getValue();
         }
     }
 }
@@ -3721,9 +3722,9 @@ rtl::OUString DomainMapper::getBracketStringFromEnum(const sal_Int32 nIntValue, 
     }
 }
 
-void DomainMapper::resolveSprmProps(doctok::Sprm & sprm_)
+void DomainMapper::resolveSprmProps(doctok::Sprm & rSprm)
 {
-    doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
+    doctok::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
     if( pProperties.get())
         pProperties->resolve(*this);
 }

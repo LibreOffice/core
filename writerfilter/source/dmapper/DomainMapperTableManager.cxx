@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableManager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2007-05-21 15:00:15 $
+ *  last change: $Author: os $ $Date: 2007-06-18 12:31:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,7 @@
 #ifndef _COM_SUN_STAR_TEXT_SIZETYPE_HDL_
 #include <com/sun/star/text/SizeType.hpp>
 #endif
+#include <ooxml/resourceids.hxx>
 
 namespace dmapper {
 
@@ -71,7 +72,8 @@ DomainMapperTableManager::DomainMapperTableManager() :
     m_nHeaderRepeat(0),
     m_nGapHalf(0),
     m_nLeftMargin(0),
-    m_nTableWidth(0)
+    m_nTableWidth(0),
+    m_bFullWidth(false)
 {
 }
 /*-- 23.04.2007 14:57:49---------------------------------------------------
@@ -95,7 +97,9 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
         /* WRITERFILTERSTATUS: table: table_sprmdata */
         switch( nSprmId )
         {
+            case NS_ooxml::LN_CT_TrPrBase_jc: //90706
             case 0x5400: // sprmTJc
+            if( !m_bFullWidth )
             {
                 /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
                 //table justification 0: left, 1: center, 2: right
@@ -123,11 +127,15 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
                 m_nGapHalf = ConversionHelper::convertToMM100( nIntValue );
                 PropertyMapPtr pPropMap( new PropertyMap );
                 pPropMap->Insert( PROP_LEFT_MARGIN, uno::makeAny( m_nLeftMargin - m_nGapHalf ));
+                if( m_bFullWidth && m_nLeftMargin > 0 )
+                    pPropMap->Insert( PROP_HORI_ORIENT, uno::makeAny( text::HoriOrientation::RIGHT ) );
                 insertTableProps(pPropMap);
             }
             break;
             case 0xf661: //sprmTTRLeft left table indent
             case 0xf614: // sprmTTPreferredWidth - preferred table width
+            case NS_ooxml::LN_CT_TblPrBase_tblW:  //90722;
+            case NS_ooxml::LN_CT_TblPrBase_tblInd: //90725
             {
                 //contains unit and value
                 doctok::Reference<doctok::Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -136,16 +144,25 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
                     MeasureHandlerPtr pMeasureHandler( new MeasureHandler );
                     pProperties->resolve(*pMeasureHandler);
                     PropertyMapPtr pPropMap( new PropertyMap );
-                    if( nSprmId == 0xf661)
+                    if( nSprmId == 0xf661 || nSprmId == NS_ooxml::LN_CT_TblPrBase_tblInd )
                     {
-                        m_nLeftMargin = pMeasureHandler->getTwipValue();
+                        m_nLeftMargin = pMeasureHandler->getMeasureValue();
                         pPropMap->Insert( PROP_LEFT_MARGIN, uno::makeAny( m_nLeftMargin - m_nGapHalf ));
+                        if( m_bFullWidth && m_nLeftMargin > 0 )
+                            pPropMap->Insert( PROP_HORI_ORIENT, uno::makeAny( text::HoriOrientation::RIGHT ));
+
                     }
                     else
                     {
-                        m_nTableWidth = pMeasureHandler->getTwipValue();
+                        m_nTableWidth = pMeasureHandler->getMeasureValue();
                         if( m_nTableWidth )
                             pPropMap->Insert( PROP_WIDTH, uno::makeAny( m_nTableWidth ));
+                        if( pMeasureHandler->isAutoWidth() )
+                        {
+                            pPropMap->Insert( PROP_HORI_ORIENT,
+                                uno::makeAny( m_nLeftMargin > 0 ? text::HoriOrientation::RIGHT : text::HoriOrientation::FULL ) );
+                            m_bFullWidth = true;
+                        }
                     }
                     insertTableProps(pPropMap);
                 }
@@ -275,35 +292,35 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
             case 0xf618 : //unknown
                 bRet = false;
             break;
+//OOXML table properties
+            case NS_ooxml::LN_CT_TblPrBase_tblStyle: //table style name
+            {
+                rtl::OUString sTableStyle = pValue->getString();
+                PropertyMapPtr pPropMap( new PropertyMap );
+                pPropMap->Insert( META_PROP_TABLE_STYLE_NAME, uno::makeAny( sTableStyle ));
+                insertTableProps(pPropMap);
+            }
+            break;
+            case NS_ooxml::LN_CT_TcPrBase_tcW: //90684 - column width values
+            //TODO: this is wrong - it should be something like CT_TblGridBase
+            if(!m_nRow)
+            {
+                doctok::Reference<doctok::Properties>::Pointer_t pProperties = rSprm.getProps();
+                if( pProperties.get())
+                {
+                    MeasureHandlerPtr pMeasureHandler( new MeasureHandler );
+                    pProperties->resolve(*pMeasureHandler);
+                    sal_Int32 nColumnWidth = pMeasureHandler->getMeasureValue();
+                    m_aCellWidths.push_back( nColumnWidth );
+                }
+            }
+            break;
+            case NS_ooxml::LN_CT_TblPrBase_tblLook: break; //todo: table look specifier
             default: bRet = false;
         }
     }
     return bRet;
 }
-/*-- 26.04.2007 08:20:08---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-//void DomainMapperTableManager::attribute(doctok::Id nName, doctok::Value & rVal)
-//{
-//    sal_Int32 nIntValue = rVal.getInt();
-//    rtl::OUString sStringValue = val.getString();
-//    /* WRITERFILTERSTATUS: table: tablemanager_attributedata */
-//    switch( nName )
-//    {
-//        case NS_rtf::LN_cellTopColor:
-//            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
-//            break;
-//        case NS_rtf::LN_cellLeftColor:
-//            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
-//            break;
-//        case NS_rtf::LN_cellBottomColor:
-//            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
-//            break;
-//        case NS_rtf::LN_cellRightColor:
-//            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
-//            break;
-//    }
-
 /*-- 02.05.2007 14:36:26---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -316,10 +333,30 @@ void DomainMapperTableManager::endOfCellAction()
   -----------------------------------------------------------------------*/
 void DomainMapperTableManager::endOfRowAction()
 {
+    if(!m_nRow && !m_nTableWidth && m_aCellWidths.size())
+    {
+        ::std::vector<sal_Int32>::const_iterator aCellIter = m_aCellWidths.begin();
+        while( aCellIter != m_aCellWidths.end() )
+             m_nTableWidth += *aCellIter++;
+        if( m_nTableWidth > 0)
+        {
+            PropertyMapPtr pPropMap( new PropertyMap );
+            pPropMap->Insert( PROP_WIDTH, uno::makeAny( m_nTableWidth ));
+            insertTableProps(pPropMap);
+        }
+    }
     ++m_nRow;
     m_nCell = 0;
     m_nCellBorderIndex = 0;
 }
+/*-- 18.06.2007 10:34:37---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+void DomainMapperTableManager::clearData()
+{
+    m_nRow = m_nCell = m_nCellBorderIndex = m_nHeaderRepeat = m_nGapHalf = m_nLeftMargin = m_nTableWidth = 0;
+    m_bFullWidth = false;
+    m_aCellWidths.clear();
+}
 
 }

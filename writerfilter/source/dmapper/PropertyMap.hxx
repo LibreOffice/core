@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2007-06-12 05:41:16 $
+ *  last change: $Author: os $ $Date: 2007-06-18 12:31:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,5 +265,104 @@ public:
     void CloseSectionGroup( DomainMapper_Impl& rDM_Impl );
 };
 
+/*-- 14.06.2007 12:12:34---------------------------------------------------
+    property map of a stylesheet
+  -----------------------------------------------------------------------*/
+class StyleSheetPropertyMap : public PropertyMap
+
+{
+    //special table style properties
+//    sal_Int32               mnCT_Spacing_after;
+    sal_Int32               mnCT_Spacing_line;
+    sal_Int32               mnCT_Spacing_lineRule;
+
+    ::rtl::OUString         msCT_Fonts_ascii;
+    bool                    mbCT_TrPrBase_tblHeader;
+    sal_Int32               mnCT_TrPrBase_jc;
+    sal_Int32               mnCT_TcPrBase_vAlign;
+
+    sal_Int32               mnCT_TblWidth_w;
+    sal_Int32               mnCT_TblWidth_type;
+
+//    bool                    mbCT_Spacing_afterSet;
+    bool                    mbCT_Spacing_lineSet;
+    bool                    mbCT_Spacing_lineRuleSet;
+
+    bool                    mbCT_TrPrBase_tblHeaderSet;
+    bool                    mbCT_TrPrBase_jcSet;
+    bool                    mbCT_TcPrBase_vAlignSet;
+
+    bool                    mbCT_TblWidth_wSet;
+    bool                    mbCT_TblWidth_typeSet;
+public:
+    explicit StyleSheetPropertyMap();
+    ~StyleSheetPropertyMap();
+
+//    void SetCT_Spacing_after(      sal_Int32 nSet )
+//        {mnCT_Spacing_after = nSet;    mbCT_Spacing_afterSet = true;        }
+    void SetCT_Spacing_line(       sal_Int32 nSet )
+        {mnCT_Spacing_line = nSet;     mbCT_Spacing_lineSet = true;         }
+    void SetCT_Spacing_lineRule(   sal_Int32  nSet )
+        {mnCT_Spacing_lineRule = nSet; mbCT_Spacing_lineRuleSet = true;     }
+
+    void SetCT_Fonts_ascii(  const ::rtl::OUString& rSet )
+        {msCT_Fonts_ascii = rSet;          }
+    void SetCT_TrPrBase_tblHeader( bool bSet )
+        {mbCT_TrPrBase_tblHeader = bSet; mbCT_TrPrBase_tblHeaderSet = true; }
+    void SetCT_TrPrBase_jc(        sal_Int32 nSet )
+        {mnCT_TrPrBase_jc = nSet;        mbCT_TrPrBase_jcSet = true;     }
+    void SetCT_TcPrBase_vAlign(    sal_Int32 nSet )
+        {mnCT_TcPrBase_vAlign = nSet;    mbCT_TcPrBase_vAlignSet = true; }
+
+    void SetCT_TblWidth_w( sal_Int32 nSet )
+        { mnCT_TblWidth_w = nSet;    mbCT_TblWidth_wSet = true; }
+    void SetCT_TblWidth_type( sal_Int32 nSet )
+        {mnCT_TblWidth_type = nSet;    mbCT_TblWidth_typeSet = true; }
+
+//    bool GetCT_Spacing_after(   sal_Int32& rToFill) const
+//    {
+//        if( mbCT_Spacing_afterSet )
+//            rToFill = mnCT_Spacing_after;
+//        return mbCT_Spacing_afterSet;
+//    }
+    bool GetCT_Spacing_line(    sal_Int32& rToFill) const
+    {
+        if( mbCT_Spacing_lineSet )
+            rToFill = mnCT_Spacing_line;
+        return mbCT_Spacing_lineSet;
+    }
+    bool GetCT_Spacing_lineRule(sal_Int32& rToFill) const
+    {
+        if( mbCT_Spacing_lineRuleSet )
+            rToFill = mnCT_Spacing_lineRule;
+        return mbCT_Spacing_lineRuleSet;
+    }
+
+    bool GetCT_Fonts_ascii(::rtl::OUString& rToFill) const
+    {
+        if( msCT_Fonts_ascii.getLength() > 0 )
+            rToFill = msCT_Fonts_ascii;
+        return msCT_Fonts_ascii.getLength() > 0;
+    }
+    bool GetCT_TrPrBase_tblHeader(bool& rToFill) const
+    {
+        if( mbCT_TrPrBase_tblHeaderSet )
+            rToFill = mbCT_TrPrBase_tblHeader;
+        return mbCT_TrPrBase_tblHeaderSet;
+    }
+    bool GetCT_TrPrBase_jc(     sal_Int32& rToFill)const
+    {
+        if( mbCT_TrPrBase_jcSet )
+            rToFill = mnCT_TrPrBase_jc;
+        return mbCT_TrPrBase_jcSet;
+    }
+    bool GetCT_TcPrBase_vAlign( sal_Int32& rToFill)const
+    {
+        if( mbCT_TcPrBase_vAlignSet )
+            rToFill = mnCT_TcPrBase_vAlign;
+        return mbCT_TcPrBase_vAlignSet;
+    }
+
+};
 } //namespace dmapper
 #endif

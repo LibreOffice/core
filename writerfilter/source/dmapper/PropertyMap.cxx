@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2007-06-12 05:41:16 $
+ *  last change: $Author: os $ $Date: 2007-06-18 12:31:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -851,6 +851,34 @@ void SectionPropertyMap::SetPaperBin( sal_Int32 nSet )
 void SectionPropertyMap::SetFirstPaperBin( sal_Int32 nSet )
 {
     m_nFirstPaperBin = lcl_AlignPaperBin( nSet );
+}
+/*-- 14.06.2007 13:57:42---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+StyleSheetPropertyMap::StyleSheetPropertyMap() :
+//    mnCT_Spacing_after( 0 ),
+    mnCT_Spacing_line( 0 ),
+    mnCT_Spacing_lineRule( 0 ),
+    mbCT_TrPrBase_tblHeader( false ),
+    mnCT_TrPrBase_jc( 0 ),
+    mnCT_TcPrBase_vAlign( 0 ),
+    mnCT_TblWidth_w( 0 ),
+    mnCT_TblWidth_type( 0 ),
+//    mbCT_Spacing_afterSet( false ),
+    mbCT_Spacing_lineSet( false ),
+    mbCT_Spacing_lineRuleSet( false ),
+    mbCT_TrPrBase_tblHeaderSet( false ),
+    mbCT_TrPrBase_jcSet( false ),
+    mbCT_TcPrBase_vAlignSet( false ),
+    mbCT_TblWidth_wSet( false ),
+    mbCT_TblWidth_typeSet( false )
+{
+}
+/*-- 14.06.2007 13:57:43---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+StyleSheetPropertyMap::~StyleSheetPropertyMap()
+{
 }
 
 }//namespace dmapper

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableManager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2007-05-09 13:57:29 $
+ *  last change: $Author: os $ $Date: 2007-06-18 12:31:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
 #include <com/sun/star/text/XTextRange.hpp>
 #endif
+#include <vector>
 
 namespace dmapper {
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > Handle_t;
@@ -58,6 +59,12 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     sal_Int32       m_nGapHalf; // necessary value to calculate width and columns
     sal_Int32       m_nLeftMargin; // to-be-combined width m_nGapHalf
     sal_Int32       m_nTableWidth; //might be set directly or has to be calculated from the column positions
+    bool            m_bFullWidth; //width is set to full, disable setting of different orientation values
+
+    ::std::vector<sal_Int32>  m_aCellWidths;
+
+    virtual void clearData();
+
 public:
 
     DomainMapperTableManager();

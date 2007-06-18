@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MeasureHandler.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2007-05-09 13:49:23 $
+ *  last change: $Author: os $ $Date: 2007-06-18 12:31:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,9 @@ public:
     virtual void attribute(doctok::Id Name, doctok::Value & val);
     virtual void sprm(doctok::Sprm & sprm);
 
-    sal_Int32 getTwipValue() const;
+    sal_Int32 getMeasureValue() const;
+    //at least tables can have automatic width
+    bool isAutoWidth() const;
 };
 typedef boost::shared_ptr< MeasureHandler >  MeasureHandlerPtr;
 }

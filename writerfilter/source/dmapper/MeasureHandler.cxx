@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MeasureHandler.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2007-05-09 13:49:12 $
+ *  last change: $Author: os $ $Date: 2007-06-18 12:31:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,21 +32,11 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef INCLUDED_MEASUREHANDLER_HXX
 #include <MeasureHandler.hxx>
-#endif
-#ifndef INCLUDED_DMAPPER_PROPERTYMAP_HXX
 #include <PropertyMap.hxx>
-#endif
-#ifndef INCLUDED_RESOURCESIDS
 #include <doctok/resourceids.hxx>
-#endif
-#ifndef INCLUDED_DMAPPER_CONVERSIONHELPER_HXX
 #include <ConversionHelper.hxx>
-#endif
-#ifndef INCLUDED_QNAME_HXX
-#include <odiapi/qname.hxx>
-#endif
+#include <ooxml/resourceids.hxx>
 
 using namespace ::writerfilter;
 namespace dmapper {
@@ -77,10 +67,14 @@ void MeasureHandler::attribute(doctok::Id rName, doctok::Value & rVal)
     switch( rName )
     {
         case NS_rtf::LN_unit:
+        case NS_ooxml::LN_CT_TblWidth_type:// = 90668;
+            //can be: NS_ooxml::LN_Value_ST_TblWidth_nil, NS_ooxml::LN_Value_ST_TblWidth_pct,
+            //        NS_ooxml::LN_Value_ST_TblWidth_dxa, NS_ooxml::LN_Value_ST_TblWidth_auto;
             m_nUnit = nIntValue;
         break;
         case NS_rtf::LN_trleft:
         case NS_rtf::LN_preferredWidth:
+        case NS_ooxml::LN_CT_TblWidth_w:// = 90667;
             m_nMeasureValue = nIntValue;
         break;
         default:
@@ -97,15 +91,26 @@ void MeasureHandler::sprm(doctok::Sprm & rSprm)
 /*-- 24.04.2007 09:09:01---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Int32 MeasureHandler::getTwipValue() const
+sal_Int32 MeasureHandler::getMeasureValue() const
 {
     sal_Int32 nRet = 0;
     if( m_nMeasureValue != 0 && m_nUnit >= 0 )
     {
         // TODO m_nUnit 3 - twip, other values unknown :-(
-        if( m_nUnit == 3 )
+        if( m_nUnit == 3 || m_nUnit == NS_ooxml::LN_Value_ST_TblWidth_dxa)
             nRet = ConversionHelper::convertToMM100( m_nMeasureValue );
+        //todo: handle additional width types:
+        //NS_ooxml::LN_Value_ST_TblWidth_nil, NS_ooxml::LN_Value_ST_TblWidth_pct,
+        //NS_ooxml::LN_Value_ST_TblWidth_dxa, NS_ooxml::LN_Value_ST_TblWidth_auto;
     }
     return nRet;
 }
+/*-- 18.06.2007 10:24:26---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+bool MeasureHandler::isAutoWidth() const
+{
+    return m_nUnit == NS_ooxml::LN_Value_ST_TblWidth_auto;
+}
+
 } //namespace dmapper

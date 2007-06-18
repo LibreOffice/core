@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableHandler.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2007-05-24 11:34:16 $
+ *  last change: $Author: os $ $Date: 2007-06-18 12:32:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,6 +273,13 @@ void DomainMapperTableHandler::endTable()
     TablePropertyValues_t       aTableProperties;
     if( m_aTableProperties.get() )
     {
+        const PropertyMap::iterator aTableStyleIter =
+                                m_aTableProperties->find( rPropSupplier.GetName(META_PROP_TABLE_STYLE_NAME) );
+        if(aTableStyleIter != m_aTableProperties->end())
+        {
+            //TODO: apply table style properties recursively
+            m_aTableProperties->erase( aTableStyleIter );
+        }
         //fill default value - if not available
         const PropertyMap::const_iterator aRepeatIter =
                                 m_aTableProperties->find( rPropSupplier.GetName(PROP_HEADER_ROW_COUNT) );
@@ -314,6 +321,9 @@ void DomainMapperTableHandler::endTable()
 #endif
         }
     }
+    m_aTableProperties.reset();
+    m_aCellProperties.clear();
+    m_aRowProperties.clear();
 }
 
 void DomainMapperTableHandler::startRow(unsigned int nCells,
