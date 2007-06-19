@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:18:16 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:16:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -854,7 +854,6 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 int (*pGetOSXLocale)( char *, sal_uInt32 );
 
 oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode);
-void* SAL_CALL osl_psz_getSymbol(oslModule hModule, const sal_Char* pszSymbolName);
 /*****************************************************************************
  return the current process locale
  *****************************************************************************/
@@ -883,14 +882,14 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
             const sal_Char   *aLocaleLibName            = "libsalsystools" SAL_DLLEXTENSION;
             const sal_Char   *aGetOSXLocaleFunctionName = "macosx_getLocale";
             oslModule         pLocaleLib;
-            void             *pFunc;
+            oslGenericFunction pFunc;
             int               err;
 
             pLocaleLib = osl_psz_loadModule( aLocaleLibName, SAL_LOADMODULE_DEFAULT );
             if( pLocaleLib )
             {
                 /* Grab a pointer to the locale function and call it */
-                pFunc = osl_psz_getSymbol( pLocaleLib, aGetOSXLocaleFunctionName );
+                pFunc = osl_getAsciiFunctionSymbol( pLocaleLib, aGetOSXLocaleFunctionName );
                 if( pFunc )
                 {
                     pGetOSXLocale = ( int(*)(char *, sal_uInt32) )( pFunc );
