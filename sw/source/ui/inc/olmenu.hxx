@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olmenu.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:43:50 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 15:51:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,12 +55,14 @@ class SwSpellPopup : public PopupMenu
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellAlternatives > xSpellAlt;
 
-    LanguageType                nCorrLang;
+    LanguageType                nGuessLangWord;
+    LanguageType                nGuessLangPara;
 
 public:
     SwSpellPopup( SwWrtShell*,
             const ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XSpellAlternatives >  &xAlt );
+                ::com::sun::star::linguistic2::XSpellAlternatives >  &xAlt,
+            const String & rParaText );
 
     sal_uInt16  Execute( Window* pWin, const Rectangle& rPopupPos );
     void Execute( USHORT nId );
