@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:20:56 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:17:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,23 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
 }
 
 /*****************************************************************************/
+/* osl_getModuleHandle */
+/*****************************************************************************/
+
+sal_Bool SAL_CALL
+osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
+{
+    HINSTANCE hInstance = GetModuleHandleW(pModuleName->buffer);
+    if( hInstance )
+    {
+        *pResult = (oslModule) hInstance;
+        return sal_True;
+    }
+
+    return sal_False;
+}
+
+/*****************************************************************************/
 /* osl_unloadModule */
 /*****************************************************************************/
 void SAL_CALL osl_unloadModule(oslModule Module)
@@ -128,11 +145,27 @@ oslGenericFunction SAL_CALL osl_getFunctionSymbol( oslModule Module, rtl_uString
         OUSTRING_TO_OSTRING_CVTFLAGS
     );
 
-    address=(oslGenericFunction)GetProcAddress((HINSTANCE)Module, rtl_string_getStr(symbolName));
+    address=osl_getAsciiFunctionSymbol(Module, rtl_string_getStr(symbolName));
     rtl_string_release(symbolName);
 
     return address;
 }
+
+/*****************************************************************************/
+/* osl_getAsciiFunctionSymbol */
+/*****************************************************************************/
+oslGenericFunction SAL_CALL
+osl_getAsciiFunctionSymbol( oslModule Module, const sal_Char *pSymbol )
+{
+    oslGenericFunction fncAddr = NULL;
+
+    if( pSymbol )
+        fncAddr=(oslGenericFunction)GetProcAddress((HINSTANCE) Module, pSymbol);
+
+    return fncAddr;
+}
+
+
 
 /*****************************************************************************/
 /* osl_addressGetModuleURL */
