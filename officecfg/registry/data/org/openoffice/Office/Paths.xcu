@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Paths.xcu,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:10:19 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 15:49:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,6 +161,12 @@
                      <node oor:name="$(progpath)/plugin" oor:op="fuse" />
             </node>
         </node>
+
+                <node oor:name="Fingerprint" oor:op="fuse" oor:mandatory="true">
+                        <node oor:name="InternalPaths">
+                              <node oor:name="$(insturl)/share/fingerprint" oor:op="fuse" />
+                        </node>
+                </node>
 
         <!-- deprecated ! -->
         <node oor:name="Storage" oor:op="fuse" oor:mandatory="true">
