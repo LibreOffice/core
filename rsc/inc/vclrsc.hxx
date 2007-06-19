@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclrsc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:05:58 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:11:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ typedef sal_Int64 WinBits;
 // Window-Bits for Edit
 #define WB_PASSWORD             ((WinBits)0x01000000)
 #define WB_READONLY             ((WinBits)0x02000000)
-#define WB_NOHIDESELECTION      ((WinBits)0x40000000)
+#define WB_NOHIDESELECTION      ((WinBits)SAL_CONST_INT64(0x1000000000))
 
 // Window-Bits for MultiLineEdit
 #define WB_IGNORETAB            ((WinBits)0x20000000)
