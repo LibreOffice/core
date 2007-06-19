@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SDFWriter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-11 09:10:33 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 14:40:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ public class SDFWriter  extends DataWriter {
 
         // get the values of the found fields
         //create the two sdf lines
-        //
+
         //at first the source language line
         for(int i=0;i<sourceLineNames.length;i++){
             // put them together for output

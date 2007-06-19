@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SDFReader.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-11 09:10:24 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 14:40:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -315,13 +315,9 @@ public class SDFReader extends DataReader {
         data[0]=new ExtMap();
         data[1]=new ExtMap();
         String help;
-//        if(blockNr==30117){
-//        help=null;
-//        }
         String c = null;
         //read next line or use buffered line
-        while (useBuffer || (line = readLine()) != null) { //works because '||'
-            // is shortcut
+        while (useBuffer || (line = readLine()) != null) { //works because '||' is shortcut
 
             try {
                 //              buffer used?
@@ -402,10 +398,9 @@ public class SDFReader extends DataReader {
                                 skippedLines++;
                                 sourceLangMiss++;
                                 continue;// skip output of this block if no
-                                // source language is found
+                                         // source language is found
 
                             }
-                            //
 
                             break;
 
@@ -560,7 +555,7 @@ public class SDFReader extends DataReader {
                             splittedLine);// found the next target language line
                     this.data[1].put("BlockNr", blockNrFormatter.format(blockNr)+'-'+Integer.toHexString(this.CurrentBlockHash));
                     foundTarget = true;
-                    //
+
                     return;
                 }
             }//end !foundTarget

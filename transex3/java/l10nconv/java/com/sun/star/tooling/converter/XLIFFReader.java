@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XLIFFReader.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-11 09:10:46 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 14:40:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -281,7 +281,7 @@ public class XLIFFReader extends DefaultHandler {
     /**
      * used to find the matching ISO or RFC3066 language code
      */
-    LanguageResolver languageResolver= new LanguageResolver();
+    LanguageResolver languageResolver;
 
     private boolean doBlockCompleteCheck=true;
 
@@ -295,7 +295,7 @@ public class XLIFFReader extends DefaultHandler {
      * @throws IOException
      */
     public XLIFFReader(DataHandler handler, DataWriter target) throws IOException {
-
+        this.languageResolver = new LanguageResolver();
         this.handler = handler;
         this.target = target;
     }
@@ -311,6 +311,7 @@ public class XLIFFReader extends DefaultHandler {
      */
     public XLIFFReader(DataHandler handler, DataWriter target,boolean doBlockCompleteCheck) throws IOException {
         this(handler, target);
+        this.languageResolver = new LanguageResolver();
         this.doBlockCompleteCheck=doBlockCompleteCheck;
 
     }
@@ -460,13 +461,11 @@ public class XLIFFReader extends DefaultHandler {
                 //TODO arraycopy might not be nessessary
                 System.arraycopy((String[]) DataStore.get(id), 0, data, 0,
                         data.length);
-                int help = (new Integer(data[FOUND_PARTS_COUNTER_IDX])).intValue(); //found one more
-                // part
+                int help = (new Integer(data[FOUND_PARTS_COUNTER_IDX])).intValue(); //found one more part
                 help++; // refresh the actual found parts
-                data[FOUND_PARTS_COUNTER_IDX] = (new Integer(help)).toString(); // belonging to this
-                // information
+                data[FOUND_PARTS_COUNTER_IDX] = (new Integer(help)).toString(); // belonging to this information
 
-                DataStore.remove(attrs.getValue("id")); // TODO this can be deletet?
+                DataStore.remove(attrs.getValue("id")); // TODO this can be deleted?
             } else {
 
                 data[BLOCKNR_IDX] = (attrs.getValue("id")); // a new part
@@ -699,7 +698,6 @@ public class XLIFFReader extends DefaultHandler {
      *
      */
     final public boolean isComplete() {
-//        for Gregors Feature...
 
         if(!doBlockCompleteCheck){
             return true;
@@ -713,11 +711,6 @@ public class XLIFFReader extends DefaultHandler {
         //create the new 'id'
         sParts = data[BLOCKNR_IDX].substring(data[BLOCKNR_IDX].lastIndexOf(":") + 1);
 
-//GH das wird doch durch die nächste Abfrage mit erschlagen oder?
-// jo
-//        if ("1".equals(sParts)) {
-//            return true;
-//        }
         if (sFoundParts.equals(sParts)) {
             return true;
         }

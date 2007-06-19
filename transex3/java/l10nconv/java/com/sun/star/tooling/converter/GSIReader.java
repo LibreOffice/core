@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GSIReader.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-11 09:09:13 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 14:39:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ public class GSIReader extends DataReader {
     /**
      * @see LanguageResolver
      */
-    LanguageResolver            languageResolver = new LanguageResolver();
+    LanguageResolver            languageResolver;
 
     /**
      * The source language identifier
@@ -125,6 +125,7 @@ public class GSIReader extends DataReader {
     public GSIReader(File source, String sourceLanguage, String targetLanguage,
             String charset) throws java.io.IOException {
         super(new InputStreamReader(new FileInputStream(source), charset));
+    this.languageResolver = new LanguageResolver();
         this.sourceLanguage = sourceLanguage;
         this.targetLanguage = targetLanguage;
 

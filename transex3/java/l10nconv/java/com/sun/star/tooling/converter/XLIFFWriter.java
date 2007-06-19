@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XLIFFWriter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-11 09:10:59 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 14:41:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ public class XLIFFWriter extends DataWriter {
      */
     boolean isFirst = true;
 
-    LanguageResolver languageResolver=new LanguageResolver();
+    LanguageResolver languageResolver;
 
 
     /**
@@ -102,7 +102,7 @@ public class XLIFFWriter extends DataWriter {
     public XLIFFWriter(BufferedOutputStream bos, String charset)
             throws IOException {
         super(bos, charset);
-
+        this.languageResolver =new LanguageResolver();
 
 
     }
@@ -250,7 +250,7 @@ public class XLIFFWriter extends DataWriter {
             }
             if (!(this.data.get("SourceText").equals("") || this.data.get(
                     "SourceText").equals(" "))) {
-                sRessource = "res"; // normale TEXT Quelle
+                sRessource = "res"; // normal TEXT source
 
                 allLinesEnd
                         .append("\t\t\t\t<context-group name=\"StarOffice Attributes\">\n");
@@ -334,7 +334,7 @@ public class XLIFFWriter extends DataWriter {
             // //sLineNumber=String.valueOf(iLineNumber);//
             // writeBuffer.append("\t\t<trans-unit
             // id=\""+this.data.get("BlockNr")+":"+parts+"\"
-            // restype=\""+sRessource+"\" translate=\"yes\">\n");//Immer übersetzen
+            // restype=\""+sRessource+"\" translate=\"yes\">\n");//always translate
             // if(isUsed((String)this.data.get("SourceHText")))
             // writeBuffer.append("\t\t\t<source
             // xml:lang=\""+this.data.get("SourceLanguageID")+"\">"+xmlString((String)this.data.get("SourceHText"))+"</source>\n");
@@ -351,8 +351,7 @@ public class XLIFFWriter extends DataWriter {
                 // sLineNumber=String.valueOf(iLineNumber);//
                 writeBuffer.append("\t\t\t<trans-unit id=\""
                         + this.data.get("BlockNr") + ":" + parts + "\" restype=\""
-                        + sRessource + "\" translate=\"yes\">\n");// Immer
-                                                                    // übersetzen
+                        + sRessource + "\" translate=\"yes\">\n");// always translate
                 if (isUsed((String) this.data.get("SourceQText")))
                     writeBuffer.append("\t\t\t\t<source xml:lang=\""
                             + languageResolver.getRFCFromISO((String)this.data.get("SourceLanguageID")) + "\">"
@@ -375,8 +374,7 @@ public class XLIFFWriter extends DataWriter {
 
                 writeBuffer.append("\t\t\t<trans-unit id=\""
                         + this.data.get("BlockNr") + ":" + parts + "\" restype=\""
-                        + sRessource + "\" translate=\"yes\">\n");// Immer
-                                                                    // übersetzen
+                        + sRessource + "\" translate=\"yes\">\n");// always translate
                 if (isUsed((String) this.data.get("SourceTitle")))
                     writeBuffer.append("\t\t\t\t<source xml:lang=\""
                             + languageResolver.getRFCFromISO((String)this.data.get("SourceLanguageID")) + "\">"
