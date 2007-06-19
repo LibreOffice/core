@@ -12,13 +12,11 @@
 
 ..\%__SRC%\bin\spell* %_DEST%\bin%_EXT%\spell*
 ..\%__SRC%\lib\ilspell* %_DEST%\lib%_EXT%\ilspell*
-..\%__SRC%\lib\libspell.a %_DEST%\lib%_EXT%\libspell.a
 ..\%__SRC%\lib\libspell*.dylib %_DEST%\lib%_EXT%\libspell*.dylib
 ..\%__SRC%\lib\libspell*.so %_DEST%\lib%_EXT%\libspell*.so
 
 ..\%__SRC%\bin\hunspell* %_DEST%\bin%_EXT%\hunspell*
 ..\%__SRC%\lib\ilhunspell* %_DEST%\lib%_EXT%\ilhunspell*
-..\%__SRC%\lib\libhunspell.a %_DEST%\lib%_EXT%\libhunspell.a
 ..\%__SRC%\lib\libhunspell*.dylib %_DEST%\lib%_EXT%\libhunspell*.dylib
 ..\%__SRC%\lib\libhunspell*.so %_DEST%\lib%_EXT%\libhunspell*.so
 
@@ -32,3 +30,9 @@
 ..\%__SRC%\lib\ilulingu* %_DEST%\lib%_EXT%\iulingu*
 ..\%__SRC%\lib\libulingu.a %_DEST%\lib%_EXT%\libulingu.a
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+
+..\%__SRC%\bin\guesslang* %_DEST%\bin%_EXT%\guesslang*
+..\%__SRC%\lib\iguesslang* %_DEST%\lib%_EXT%\iguesslang*
+..\%__SRC%\lib\libguesslang*.dylib %_DEST%\lib%_EXT%\libguesslang*.dylib
+..\%__SRC%\lib\libguesslang*.so %_DEST%\lib%_EXT%\libguesslang*.so
+
