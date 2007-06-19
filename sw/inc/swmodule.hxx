@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:57:05 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 15:51:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,9 @@
 
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEEVENTLISTENER_HPP_
 #include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XLANGUAGEGUESSING_HPP_
+#include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #endif
 
 class SvStringsDtor;
@@ -143,6 +146,8 @@ class SwModule: public SfxModule, public SfxListener
         ::com::sun::star::linguistic2::XLinguServiceEventListener > xLngSvcEvtListener;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::scanner::XScannerManager >    m_xScannerManager;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XLanguageGuessing >  m_xLanguageGuesser;
 
     sal_Bool                bAuthorInitialised : 1;
     sal_Bool                bEmbeddedLoadSave : 1;
@@ -267,6 +272,10 @@ public:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::scanner::XScannerManager >
             GetScannerManager();
+
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XLanguageGuessing >
+            GetLanguageGuesser();
 };
 
 
