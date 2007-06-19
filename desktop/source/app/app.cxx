@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.203 $
+ *  $Revision: 1.204 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:03:18 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:18:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,9 +199,6 @@
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
 #endif
-#ifndef _VOS_PROCESS_HXX_
-#include <vos/process.hxx>
-#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -348,11 +345,6 @@ namespace desktop
 
 static SalMainPipeExchangeSignalHandler* pSignalHandler = 0;
 static sal_Bool _bCrashReporterEnabled = sal_True;
-
-// ----------------------------------------------------------------------------
-
-char const INSTALLMODE_STANDALONE[] = "STANDALONE";
-char const INSTALLMODE_NETWORK[]    = "NETWORK";
 
 // ----------------------------------------------------------------------------
 
@@ -728,53 +720,6 @@ BOOL Desktop::QueryExit()
     return bExit;
 }
 
-void Desktop::StartSetup( const OUString& aParameters )
-{
-    OUString aProgName;
-    OUString aSysPathFileName;
-    OUString aDir;
-
-    ::vos::OStartupInfo aInfo;
-    aInfo.getExecutableFile( aProgName );
-
-    sal_uInt32     lastIndex = aProgName.lastIndexOf('/');
-    if ( lastIndex > 0 )
-    {
-        aProgName    = aProgName.copy( 0, lastIndex+1 );
-        aDir        = aProgName;
-
-        aProgName    += OUString( RTL_CONSTASCII_USTRINGPARAM( "setup" ));
-#ifdef WNT
-        aProgName    += OUString( RTL_CONSTASCII_USTRINGPARAM( ".exe" ));
-#endif
-    }
-
-    OUString                aArgListArray[1];
-    ::vos::OSecurity        aSecurity;
-    ::vos::OEnvironment        aEnv;
-    ::vos::OArgumentList    aArgList;
-
-    aArgListArray[0] = aParameters;
-    OArgumentList aArgumentList( aArgListArray, 1 );
-
-    ::vos::OProcess    aProcess( aProgName, aDir );
-    ::vos::OProcess::TProcessError aProcessError =
-        aProcess.execute( OProcess::TOption_Detached,
-                          aSecurity,
-                          aArgumentList,
-                          aEnv );
-
-    if ( aProcessError != OProcess::E_None )
-    {
-        OUString aMessage( GetMsgString(
-            STR_SETUP_ERR_CANNOT_START,
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "Couldn't start setup application! Please start it manually." )) ));
-
-        ErrorBox aBootstrapFailedBox( NULL, WB_OK, aMessage );
-        aBootstrapFailedBox.Execute();
-    }
-}
-
 void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStatus, const OUString& aDiagnosticMessage )
 {
     if ( aBootstrapStatus != ::utl::Bootstrap::DATA_OK )
@@ -811,58 +756,9 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
 
         aBuffer.appendAscii( "\n" );
 
-        if (( aBootstrapStatus == ::utl::Bootstrap::MISSING_USER_INSTALL ) || bWorkstationInstallation )
-        {
-            // Check installation mode to suppress error message if we are currently running with a network installation.
-            OUString aInstallMode( RTL_CONSTASCII_USTRINGPARAM( INSTALLMODE_STANDALONE ));
-
-            aInstallMode = utl::Bootstrap::getInstallMode( aInstallMode );
-            if ( aInstallMode.equalsIgnoreAsciiCaseAscii( INSTALLMODE_NETWORK ))
-            {
-                // network installation => start setup without error message
-                OUString aParameters;
-                StartSetup( aParameters );
-            }
-            else
-            {
-                OUString aAskSetupStr( GetMsgString(
-                    STR_ASK_START_SETUP,
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "Start setup application to check installation?" )) ));
-
-                aBuffer.append( aAskSetupStr );
-                aMessage = aBuffer.makeStringAndClear();
-
-                ErrorBox aBootstrapFailedBox( NULL, WB_YES_NO, aMessage );
-                aBootstrapFailedBox.SetText( aProductKey );
-                int nResult = aBootstrapFailedBox.Execute();
-
-                if ( nResult == RET_YES )
-                {
-                    OUString aParameters;
-                    StartSetup( aParameters );
-                }
-            }
-        }
-        else if (( aBootstrapStatus == utl::Bootstrap::INVALID_USER_INSTALL ) ||
-                    ( aBootstrapStatus == utl::Bootstrap::INVALID_BASE_INSTALL )     )
-        {
-            OUString aAskSetupRepairStr( GetMsgString(
-                STR_ASK_START_SETUP_REPAIR,
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "Start setup application to repair installation?" )) ));
-
-            aBuffer.append( aAskSetupRepairStr );
-            aMessage = aBuffer.makeStringAndClear();
-
-            ErrorBox aBootstrapFailedBox( NULL, WB_YES_NO, aMessage );
-            aBootstrapFailedBox.SetText( aProductKey );
-            int nResult = aBootstrapFailedBox.Execute();
-
-            if ( nResult == RET_YES )
-            {
-                    OUString aParameters( RTL_CONSTASCII_USTRINGPARAM( "-repair" ));
-                StartSetup( aParameters );
-            }
-        }
+        ErrorBox aBootstrapFailedBox( NULL, WB_OK, aMessage );
+        aBootstrapFailedBox.SetText( aProductKey );
+        aBootstrapFailedBox.Execute();
     }
 }
 
