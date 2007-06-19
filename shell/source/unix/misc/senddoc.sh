@@ -94,7 +94,7 @@ fi
 # autodetect mail client from executable name
 case `basename "$MAILER" | sed 's/-.*$//'` in
 
-    mozilla | netscape | seamonkey | thunderbird)
+    iceape | mozilla | netscape | seamonkey | icedove | thunderbird)
 
         while [ "$1" != "" ]; do
             case $1 in
@@ -187,6 +187,56 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
         ${MAILER} --composer ${CC:+--cc} ${CC:+"${CC}"} ${BCC:+--bcc} ${BCC:+"${BCC}"} \
             ${SUBJECT:+--subject} ${SUBJECT:+"${SUBJECT}"} ${BODY:+--body} ${BODY:+"${BODY}"} \
             ${ATTACH:+--attach} ${ATTACH:+"${ATTACH}"} ${TO:+"${TO}"}
+        ;;
+
+    mutt)
+
+        while [ "$1" != "" ]; do
+            case $1 in
+                --from)
+                    FROM="$2"
+                    shift
+                    ;;
+                --to)
+                    TO="${TO:-}${TO:+,}$2"
+                    shift
+                    ;;
+                --cc)
+                    CC="${CC:-}${CC:+,}$2"
+                    shift
+                    ;;
+                --bcc)
+                    BCC="${BCC:-}${BCC:+,}$2"
+                    shift
+                    ;;
+                --subject)
+                    SUBJECT="$2"
+                    shift
+                    ;;
+                --body)
+                    BODY=$(mktemp -q -t $(basename $0).mutt.XXXXXXXX)
+                    echo "$2" > $BODY
+                    shift
+                    ;;
+                --attach)
+                    ATTACH="$2"
+                    shift
+                    ;;
+                *)
+                    ;;
+            esac
+            shift;
+        done
+
+        x-terminal-emulator -e ${MAILER} \
+            ${FROM:+-e} ${FROM:+"set from=\"${FROM}\""} \
+            ${CC:+-c} ${CC:+"${CC}"} \
+            ${BCC:+-b} ${BCC:+"${BCC}"} \
+            ${SUBJECT:+-s} ${SUBJECT:+"${SUBJECT}"} \
+            ${BODY:+-i} ${BODY:+"${BODY}"} \
+            ${ATTACH:+-a} ${ATTACH:+"${ATTACH}"} \
+            ${TO:+"${TO}"} &
+        rm -f $BODY
         ;;
 
     evolution)
