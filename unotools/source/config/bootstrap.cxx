@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:22:53 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:10:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,6 @@
 #define BOOTSTRAP_ITEM_VERSIONFILE          "Location"
 #define BOOTSTRAP_ITEM_LOGO                 "Logo"
 #define BOOTSTRAP_ITEM_BUILDID              "buildid"
-#define BOOTSTRAP_ITEM_INSTALLMODE          "InstallMode"
 
 #define BOOTSTRAP_ITEM_BASEINSTALLATION     "BaseInstallation"
 #define BOOTSTRAP_ITEM_USERINSTALLATION     "UserInstallation"
@@ -694,15 +693,6 @@ OUString Bootstrap::getBuildIdData(OUString const& _sDefault)
          // read buildid from bootstrap.ini (bootstraprc)
         sBuildId = data().getBootstrapValue( csBuildIdItem, _sDefault );
     return sBuildId;
-}
-// ---------------------------------------------------------------------------------------
-
-/// retrieve the installation mode information item; uses the given default, if not found
-OUString Bootstrap::getInstallMode(rtl::OUString const& _sDefault)
-{
-    OUString const csInstallModeItem(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_ITEM_INSTALLMODE));
-
-    return data().getBootstrapValue( csInstallModeItem, _sDefault );
 }
 // ---------------------------------------------------------------------------------------
 
