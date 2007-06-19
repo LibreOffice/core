@@ -4,9 +4,9 @@
  *
  *  $RCSfile: status.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:20:08 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 14:38:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 
 #define ST_MESSAGE          1
 #define ST_LINE             2
+#define ST_PROF             3
 
 class BasicFrame;
 
@@ -56,8 +57,9 @@ protected:
 
 public:
     StatusLine( BasicFrame* );
-    void Message( String& );                // Text anzeigen
-    void Pos( String& s );                  // Textposition anzeigen
+    void Message( const String& );              // Text anzeigen
+    void Pos( const String& s );                    // Textposition anzeigen
+    void SetProfileName( const String& s );     // Current Profile
     void LoadTaskToolBox();
 };
 
