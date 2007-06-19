@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editdbg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:26:14 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 15:57:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ class SfxPoolItem;
 ByteString  DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem );
 void        DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, BOOL bSearchInParent, BOOL bShowALL );
 
-class EditDbg
+class SVX_DLLPUBLIC EditDbg
 {
 public:
     static void         ShowEditEngineData( EditEngine* pEditEngine, BOOL bInfoBox = TRUE );
