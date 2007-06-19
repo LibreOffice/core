@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DAVResource.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:33:52 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:12:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,24 +38,25 @@
 
 #include <vector>
 
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
-#include <com/sun/star/beans/Property.hpp>
-#endif
+#include "rtl/ustring.hxx"
+#include "com/sun/star/uno/Any.hxx"
 
 namespace webdav_ucp
 {
 
+struct DAVPropertyValue
+{
+    rtl::OUString            Name;
+    com::sun::star::uno::Any Value;
+    bool                     IsCaseSensitive;
+
+    DAVPropertyValue() : IsCaseSensitive( true ) {}
+};
+
 struct DAVResource
 {
     ::rtl::OUString uri;
-    std::vector < com::sun::star::beans::PropertyValue > properties;
+    std::vector< DAVPropertyValue > properties;
 
     DAVResource() {}
     DAVResource( const ::rtl::OUString & inUri ) : uri( inUri ) {}
