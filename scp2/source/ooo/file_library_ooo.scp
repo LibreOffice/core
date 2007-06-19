@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.243 $
+ *  $Revision: 1.244 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-18 16:36:28 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:02:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2650,6 +2650,19 @@ File gid_File_Lib_Migrationoo2
     Name = "migrationoo2.uno.dll";
   #endif
 End
+
+File gid_File_Lib_Libtextcat
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT2(libtextcat,UNXSUFFIX));
+  #else
+    Name = "libtextcat.dll";
+  #endif
+End
+
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Guesslang, guesslang )
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Updchkui , updchk )
 
