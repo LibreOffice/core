@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:37:12 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 15:57:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,9 @@
 #include <eeng_pch.hxx>
 
 #define _SOLAR__PRIVATE 1
+
+#include <i18npool/mslangid.hxx>
+#include <svtools/languageoptions.hxx>
 
 #ifndef SVX_LIGHT
 #include <sfx2/srchitem.hxx>
@@ -95,44 +98,172 @@ using namespace com::sun::star::linguistic2;
 
 DBG_NAME( EditView )
 
-// From SW => Create common method
-LanguageType lcl_CheckLanguage( const OUString &rWord, Reference< XSpellChecker1 >  xSpell )
+// temporary work-around for not yet implemented language fall-back
+// from SW olmenu.cxx imported
+static LanguageType lcl_GuessLocale2Lang( const lang::Locale &rLocale )
 {
-    //
-    // build list of languages to check
-    //
-    LanguageType aLangList[4];
-    const AllSettings& rSettings  = Application::GetSettings();
-    SvtLinguOptions aLinguOpt;
-    SvtLinguConfig().GetOptions( aLinguOpt );
-    // The default document language from "Tools/Options - Language Settings - Languages: Western"
-    aLangList[0] = aLinguOpt.nDefaultLanguage;
-    // The one from "Tools/Options - Language Settings - Languages: User interface"
-    aLangList[1] = rSettings.GetUILanguage();
-    // The one from "Tools/Options - Language Settings - Languages: Locale setting"
-    aLangList[2] = rSettings.GetLanguage();
-    // en-US
-    aLangList[3] = LANGUAGE_ENGLISH_US;
+    struct Loc2Lang
+    {
+        const char *    pLang;
+        const char *    pCountry;
+        LanguageType    nLang;
+    };
+    static const Loc2Lang aLoc2Lang[] =
+    {
+        {"af", "",      LANGUAGE_AFRIKAANS},
+        {"sq", "",      LANGUAGE_ALBANIAN},
+        {"am", "",      LANGUAGE_AMHARIC_ETHIOPIA},
+        {"ar", "",      LANGUAGE_ARABIC_EGYPT},
+        {"eu", "",      LANGUAGE_BASQUE},
+        {"be", "",      LANGUAGE_BELARUSIAN},
+        {"bs", "",      LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA},
+        {"br", "",      LANGUAGE_BRETON_FRANCE},
+        {"ca", "",      LANGUAGE_CATALAN},
+        {"zh", "CN",    LANGUAGE_CHINESE_SIMPLIFIED},
+        {"zh", "TW",    LANGUAGE_CHINESE_TRADITIONAL},
+        {"hr", "",      LANGUAGE_CROATIAN},
+        {"cs", "",      LANGUAGE_CZECH},
+        {"da", "",      LANGUAGE_DANISH},
+        {"nl", "",      LANGUAGE_DUTCH},
+        {"en", "",      LANGUAGE_ENGLISH_US},
+        {"eo", "",      LANGUAGE_USER_ESPERANTO},
+        {"et", "",      LANGUAGE_ESTONIAN},
+        {"fi", "",      LANGUAGE_FINNISH},
+        {"fr", "",      LANGUAGE_FRENCH},
+        {"fy", "",      LANGUAGE_FRISIAN_NETHERLANDS},
+        {"ka", "",      LANGUAGE_GEORGIAN},
+        {"de", "",      LANGUAGE_GERMAN},
+        {"el", "",      LANGUAGE_GREEK},
+        {"he", "",      LANGUAGE_HEBREW},
+        {"hi", "",      LANGUAGE_HINDI},
+        {"hu", "",      LANGUAGE_HUNGARIAN},
+        {"is", "",      LANGUAGE_ICELANDIC},
+        {"id", "",      LANGUAGE_INDONESIAN},
+        {"ga", "",      LANGUAGE_GAELIC_IRELAND},
+        {"it", "",      LANGUAGE_ITALIAN},
+        {"ja", "",      LANGUAGE_JAPANESE},
+        {"ko", "",      LANGUAGE_KOREAN},
+        {"la", "",      LANGUAGE_LATIN},
+        {"lv", "",      LANGUAGE_LATVIAN},
+        {"lt", "",      LANGUAGE_LITHUANIAN},
+        {"ms", "",      LANGUAGE_MALAY_MALAYSIA},
+        {"gv", "",        LANGUAGE_NONE},
+        {"mr", "",      LANGUAGE_MARATHI},
+        {"ne", "",      LANGUAGE_NEPALI},
+        {"nb", "",      LANGUAGE_NORWEGIAN_BOKMAL},
+        {"fa", "",      LANGUAGE_FARSI},
+        {"pl", "",      LANGUAGE_POLISH},
+        {"pt", "PT",    LANGUAGE_PORTUGUESE},
+        {"ro", "",      LANGUAGE_ROMANIAN},
+        {"rm", "",      LANGUAGE_RHAETO_ROMAN},
+        {"ru", "",      LANGUAGE_RUSSIAN},
+        {"sa", "",      LANGUAGE_SANSKRIT},
+        {"sco","",        LANGUAGE_NONE},
+        {"gd", "",      LANGUAGE_GAELIC_SCOTLAND},
+        {"sh", "YU",    LANGUAGE_SERBIAN_LATIN},
+        {"sk", "SK",    LANGUAGE_SLOVAK},
+        {"sl", "",      LANGUAGE_SLOVENIAN},
+        {"es", "",      LANGUAGE_SPANISH},
+        {"sw", "",      LANGUAGE_SWAHILI},
+        {"sv", "",      LANGUAGE_SWEDISH},
+        {"tl", "",        LANGUAGE_NONE},
+        {"ta", "",      LANGUAGE_TAMIL},
+        {"th", "",      LANGUAGE_THAI},
+        {"tr", "",      LANGUAGE_TURKISH},
+        {"uk", "",      LANGUAGE_UKRAINIAN},
+        {"vi", "",      LANGUAGE_VIETNAMESE},
+        {"cy", "",      LANGUAGE_WELSH}
+    };
+
+    LanguageType nRes = LANGUAGE_DONTKNOW;
+    const sal_Int16 nNum = sizeof(aLoc2Lang) / sizeof(aLoc2Lang[0]);
+    for (sal_Int16 i = 0;  i < nNum;  ++i)
+    {
+        if (rLocale.Language.equalsAscii( aLoc2Lang[i].pLang ) &&
+            rLocale.Country .equalsAscii( aLoc2Lang[i].pCountry ))
+        {
+            nRes = aLoc2Lang[i].nLang;
+            break;
+        }
+    }
+    return nRes;
+}
+
+
+// From SW => Create common method
+LanguageType lcl_CheckLanguage(
+    const OUString &rText,
+    Reference< XSpellChecker1 > xSpell,
+    Reference< linguistic2::XLanguageGuessing > xLangGuess,
+    sal_Bool bIsParaText )
+{
+    LanguageType nLang = LANGUAGE_NONE;
+    if (bIsParaText)    // check longer texts with language-guessing...
+    {
+        if (!xLangGuess.is())
+            return nLang;
+
+        lang::Locale aLocale( xLangGuess->guessPrimaryLanguage( rText, 0, rText.getLength()) );
+
+        // get language as from "Tools/Options - Language Settings - Languages: Locale setting"
+        LanguageType nTmpLang = Application::GetSettings().GetLanguage();
+
+        nLang = lcl_GuessLocale2Lang( aLocale );
+
+        // if the result from language guessing does not provide a 'Country' part
+        // try to get it by looking up the locale setting of the office.
+//        if (aLocale.Country.getLength() == 0)
+//        {
+//            lang::Locale aTmpLocale = SvxCreateLocale( nTmpLang );
+//            if (aTmpLocale.Language == aLocale.Language)
+//                nLang = nTmpLang;
+//        }
+//        if (nLang == LANGUAGE_NONE) // language not found by looking up the sytem language...
+//            nLang = MsLangId::convertLocaleToLanguage( aLocale );
+        if (nLang == LANGUAGE_SYSTEM)
+            nLang = nTmpLang;
+        if (nLang == LANGUAGE_DONTKNOW)
+            nLang = LANGUAGE_NONE;
+    }
+    else    // check single word
+    {
+            if (!xSpell.is())
+            return nLang;
+
+        //
+        // build list of languages to check
+        //
+        LanguageType aLangList[4];
+        const AllSettings& rSettings  = Application::GetSettings();
+        SvtLinguOptions aLinguOpt;
+        SvtLinguConfig().GetOptions( aLinguOpt );
+        // The default document language from "Tools/Options - Language Settings - Languages: Western"
+        aLangList[0] = aLinguOpt.nDefaultLanguage;
+        // The one from "Tools/Options - Language Settings - Languages: User interface"
+        aLangList[1] = rSettings.GetUILanguage();
+        // The one from "Tools/Options - Language Settings - Languages: Locale setting"
+        aLangList[2] = rSettings.GetLanguage();
+        // en-US
+        aLangList[3] = LANGUAGE_ENGLISH_US;
 #ifdef DEBUG
-    lang::Locale a1( SvxCreateLocale( aLangList[0] ) );
-    lang::Locale a2( SvxCreateLocale( aLangList[1] ) );
-    lang::Locale a3( SvxCreateLocale( aLangList[2] ) );
-    lang::Locale a4( SvxCreateLocale( aLangList[3] ) );
+        lang::Locale a0( SvxCreateLocale( aLangList[0] ) );
+        lang::Locale a1( SvxCreateLocale( aLangList[1] ) );
+        lang::Locale a2( SvxCreateLocale( aLangList[2] ) );
+        lang::Locale a3( SvxCreateLocale( aLangList[3] ) );
 #endif
 
-    util::Language nLang = LANGUAGE_NONE;
-
-    INT32   nCount = sizeof(aLangList) / sizeof(aLangList[0]);
-    for (INT32 i = 0;  i < nCount;  i++)
-    {
-        INT16 nTmpLang = aLangList[i];
-        if (nTmpLang != LANGUAGE_NONE  &&  nTmpLang != LANGUAGE_DONTKNOW)
+        INT32   nCount = sizeof(aLangList) / sizeof(aLangList[0]);
+        for (INT32 i = 0;  i < nCount;  i++)
         {
-            if (xSpell->hasLanguage( nTmpLang ) &&
-                xSpell->isValid( rWord, nTmpLang, Sequence< PropertyValue >() ))
+            INT16 nTmpLang = aLangList[i];
+            if (nTmpLang != LANGUAGE_NONE  &&  nTmpLang != LANGUAGE_DONTKNOW)
             {
-                nLang = nTmpLang;
-                break;
+                if (xSpell->hasLanguage( nTmpLang ) &&
+                    xSpell->isValid( rText, nTmpLang, Sequence< PropertyValue >() ))
+                {
+                    nLang = nTmpLang;
+                    break;
+                }
             }
         }
     }
@@ -1003,19 +1134,38 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         Reference< XSpellAlternatives >  xSpellAlt =
                 xSpeller->spell( aSelected, PIMPEE->GetLanguage( aPaM2 ), aPropVals );
 
-        // Other language???
-        LanguageType nCorrLang = LANGUAGE_NONE;
-        if (xSpellAlt.is())
-            nCorrLang = lcl_CheckLanguage( xSpellAlt->getWord(), PIMPEE->GetSpeller() );
+        Reference< XLanguageGuessing >  xLangGuesser( EE_DLL()->GetGlobalData()->GetLanguageGuesser() );
 
-        if( nCorrLang != LANGUAGE_NONE )
+        // check if text might belong to a different language...
+        LanguageType nGuessLangWord = LANGUAGE_NONE;
+        LanguageType nGuessLangPara = LANGUAGE_NONE;
+        if (xSpellAlt.is() && xLangGuesser.is())
         {
+            String aParaText;
+            ContentNode *pNode = aPaM.GetNode();
+            if (pNode)
+                aParaText = *pNode;
+            else
+                DBG_ERROR( "content node is NULL" );
+
+            nGuessLangWord = lcl_CheckLanguage( xSpellAlt->getWord(), xSpeller, xLangGuesser, sal_False );
+            nGuessLangPara = lcl_CheckLanguage( aParaText, xSpeller, xLangGuesser, sal_True );
+        }
+        if (nGuessLangWord != LANGUAGE_NONE || nGuessLangPara != LANGUAGE_NONE)
+        {
+            // make sure LANGUAGE_NONE gets not used as menu entry
+            if (nGuessLangWord == LANGUAGE_NONE)
+                nGuessLangWord = nGuessLangPara;
+            if (nGuessLangPara == LANGUAGE_NONE)
+                nGuessLangPara = nGuessLangWord;
+
             aPopupMenu.InsertSeparator();
-            String aTmp( ::GetLanguageString( nCorrLang ) );
+            String aTmpWord( ::GetLanguageString( nGuessLangWord ) );
+            String aTmpPara( ::GetLanguageString( nGuessLangPara ) );
             String aWordStr( EditResId( RID_STR_WORD ) );
-            aWordStr.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%x" ) ), aTmp );
+            aWordStr.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%x" ) ), aTmpWord );
             String aParaStr( EditResId( RID_STR_PARAGRAPH ) );
-            aParaStr.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%x" ) ), aTmp );
+            aParaStr.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%x" ) ), aTmpPara );
             aPopupMenu.InsertItem( MN_WORDLANGUAGE, aWordStr );
             aPopupMenu.SetHelpId( MN_WORDLANGUAGE, HID_EDITENG_SPELLER_WORDLANGUAGE );
             aPopupMenu.InsertItem( MN_PARALANGUAGE, aParaStr );
@@ -1094,10 +1244,16 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         }
         else if ( ( nId == MN_WORDLANGUAGE ) || ( nId == MN_PARALANGUAGE ) )
         {
+            LanguageType nLangToUse = (nId == MN_WORDLANGUAGE) ? nGuessLangWord : nGuessLangPara;
+            sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nLangToUse );
+
             SfxItemSet aAttrs = GetEditEngine()->GetEmptyItemSet();
-            aAttrs.Put( SvxLanguageItem( nCorrLang, EE_CHAR_LANGUAGE ) );
-            aAttrs.Put( SvxLanguageItem( nCorrLang, EE_CHAR_LANGUAGE_CTL ) );
-            aAttrs.Put( SvxLanguageItem( nCorrLang, EE_CHAR_LANGUAGE_CJK ) );
+            if (nScriptType == SCRIPTTYPE_LATIN)
+                aAttrs.Put( SvxLanguageItem( nLangToUse, EE_CHAR_LANGUAGE ) );
+            if (nScriptType == SCRIPTTYPE_COMPLEX)
+                aAttrs.Put( SvxLanguageItem( nLangToUse, EE_CHAR_LANGUAGE_CTL ) );
+            if (nScriptType == SCRIPTTYPE_ASIAN)
+                aAttrs.Put( SvxLanguageItem( nLangToUse, EE_CHAR_LANGUAGE_CJK ) );
             if ( nId == MN_PARALANGUAGE )
             {
                 ESelection aSel = GetSelection();
@@ -1110,7 +1266,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
 
             if ( pCallBack )
             {
-                SpellCallbackInfo aInf( ( nId == MN_WORDLANGUAGE ) ? SPELLCMD_WORDLANGUAGE : SPELLCMD_PARALANGUAGE, nCorrLang );
+                SpellCallbackInfo aInf( ( nId == MN_WORDLANGUAGE ) ? SPELLCMD_WORDLANGUAGE : SPELLCMD_PARALANGUAGE, nLangToUse );
                 pCallBack->Call( &aInf );
             }
             SetSelection( aOldSel );
