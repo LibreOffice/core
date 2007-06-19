@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:37:45 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 15:51:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -345,6 +345,8 @@ namespace css = com::sun::star;
 
 TYPEINIT1( SwModule, SfxModule );
 
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 //************************************************************************
 
@@ -436,6 +438,22 @@ SwModule::GetScannerManager()
         }
     }
     return m_xScannerManager;
+}
+
+uno::Reference< linguistic2::XLanguageGuessing > SwModule::GetLanguageGuesser()
+{
+    if (!m_xLanguageGuesser.is())
+    {
+        uno::Reference< lang::XMultiServiceFactory > xMgr ( comphelper::getProcessServiceFactory() );
+        if (xMgr.is())
+        {
+            m_xLanguageGuesser = uno::Reference< linguistic2::XLanguageGuessing >(
+                    xMgr->createInstance(
+                        rtl::OUString::createFromAscii( "com.sun.star.linguistic2.LanguageGuessing" ) ),
+                        uno::UNO_QUERY );
+        }
+    }
+    return m_xLanguageGuesser;
 }
 
 //************************************************************************
