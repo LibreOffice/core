@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableManager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2007-06-18 12:31:12 $
+ *  last change: $Author: os $ $Date: 2007-06-19 05:27:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@
 #endif
 #include <ooxml/resourceids.hxx>
 
+using namespace ::writerfilter;
 namespace dmapper {
 
 using namespace ::com::sun::star;
@@ -144,7 +145,7 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
                     MeasureHandlerPtr pMeasureHandler( new MeasureHandler );
                     pProperties->resolve(*pMeasureHandler);
                     PropertyMapPtr pPropMap( new PropertyMap );
-                    if( nSprmId == 0xf661 || nSprmId == NS_ooxml::LN_CT_TblPrBase_tblInd )
+                    if( nSprmId == 0xf661 || nSprmId == sal_uInt32(NS_ooxml::LN_CT_TblPrBase_tblInd ))
                     {
                         m_nLeftMargin = pMeasureHandler->getMeasureValue();
                         pPropMap->Insert( PROP_LEFT_MARGIN, uno::makeAny( m_nLeftMargin - m_nGapHalf ));
