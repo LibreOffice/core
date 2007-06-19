@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-27 08:49:12 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:10:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2479,7 +2479,7 @@ UUIInteractionHelper::handleErrorRequest(
     {
         enum Source { SOURCE_DEFAULT, SOURCE_CNT, SOURCE_SVX, SOURCE_UUI };
         static char const * const aManager[4]
-            = { 0,
+            = { CREATEVERSIONRESMGR_NAME(ofa),
                 CREATEVERSIONRESMGR_NAME(cnt),
                 CREATEVERSIONRESMGR_NAME(svx),
                 CREATEVERSIONRESMGR_NAME(uui) };
