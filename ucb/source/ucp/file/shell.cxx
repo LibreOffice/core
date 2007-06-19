@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:57:51 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:10:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1194,9 +1194,6 @@ shell::move( sal_Int32 CommandId,
     osl::FileBase::RC nError;
     rtl::OUString dstUnqPath( dstUnqPathIn );
 
-    if( dstUnqPath == srcUnqPath )    // Nothing left to be done
-        return;
-
     switch( NameClash )
     {
     case NameClash::KEEP:
@@ -1407,9 +1404,6 @@ shell::copy(
     osl::FileBase::RC nError;
     rtl::OUString dstUnqPath( dstUnqPathIn );
 
-    if( dstUnqPath == srcUnqPath )    // Nothing left to be done
-        return;
-
     // Resolve symbolic links within the source path.  If srcUnqPath denotes a
     // symbolic link (targeting either a file or a folder), the contents of the
     // target is copied (recursively, in the case of a folder).  However, if
@@ -1436,6 +1430,7 @@ shell::copy(
     } else {
         rslvdSrcUnqPath = srcUnqPath;
     }
+
     sal_Bool isDocument
         = type != osl::FileStatus::Directory && type != osl::FileStatus::Volume;
     sal_Int32 IsWhat = isDocument ? -1 : 1;
