@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatefeed.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:35:50 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:20:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,8 +202,8 @@ class InflateInputStream : public ::cppu::WeakImplHelper1< io::XInputStream >
     uno::Reference< io::XInputStream > m_xStream;
 
     uno::Sequence < sal_Int8 > m_aBuffer;
-    bool m_bRead;
     sal_Int32 m_nOffset;
+    bool m_bRead;
 
     rtl::OUString m_aContentEncoding;
 
@@ -257,15 +257,17 @@ void InflateInputStream::readIntoMemory()
 {
     if( !m_bRead && m_xStream.is() )
     {
+        const sal_Int32 nBytesRequested = 4096;
+
+        uno::Sequence < sal_Int8 > aTempBuffer(nBytesRequested);
         uno::Sequence < sal_Int8 > aCompressedBuffer;
-        uno::Sequence < sal_Int8 > aTempBuffer(4096);
         sal_Int32 nBytesRead;
 
         m_bRead = true;
 
         do
         {
-            nBytesRead = m_xStream->readBytes(aTempBuffer, aTempBuffer.getLength());
+            nBytesRead = m_xStream->readBytes(aTempBuffer, nBytesRequested);
 
             if( nBytesRead > 0 )
             {
@@ -275,7 +277,7 @@ void InflateInputStream::readIntoMemory()
                 rtl_copyMemory(aCompressedBuffer.getArray() + nOffset, aTempBuffer.getConstArray(), nBytesRead);
             }
         }
-        while( nBytesRead == aTempBuffer.getLength() );
+        while( nBytesRead == nBytesRequested );
 
         z_stream *pStream = new z_stream;
         /* memset to 0 to set zalloc/opaque etc */
