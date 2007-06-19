@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-11 11:44:26 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 14:38:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,4 +336,8 @@ String S_CANNOT_FIND_FLOATING_WIN
 String S_NO_LIST_BOX_STRING
 {
     Text[ en-US ] = "String does not exist in ($Arg1)";
+};
+String S_SLOT_IN_EXECUTE
+{
+    Text[ en-US ] = "Another Slot is being executed already.";
 };
