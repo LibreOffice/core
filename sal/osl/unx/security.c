@@ -4,9 +4,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:16:31 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:17:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,10 +46,6 @@
 #include <osl/security.h>
 #include <osl/diagnose.h>
 
-#ifndef _OSL_MODULE_H_
-#include <osl/module.h>
-#endif
-
 #include "osl/thread.h"
 #include "osl/file.h"
 
@@ -65,8 +61,6 @@
 #endif
 #endif
 
-extern oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode);
-extern void* SAL_CALL osl_psz_getSymbol(oslModule hModule, const sal_Char* pszSymbolName);
 static oslSecurityError SAL_CALL
 osl_psz_loginUser(const sal_Char* pszUserName, const sal_Char* pszPasswd,
                   oslSecurity* pSecurity);
@@ -388,11 +382,11 @@ osl_getCrypt()
 
     if ( !load_once )
     {
-        oslModule crypt_library;
+        void * crypt_library;
 
-        crypt_library = osl_psz_loadModule( "libcrypt.so.1", SAL_LOADMODULE_DEFAULT );  /* never closed */
+        crypt_library = dlopen( "libcrypt.so.1", RTLD_GLOBAL | RTLD_LAZY ); /* never closed */
         if ( crypt_library != NULL )
-            crypt_sym = (char* (*)(const char *, const char *)) osl_psz_getSymbol(crypt_library, "crypt" );
+            crypt_sym = (char* (*)(const char *, const char *)) dlsym(crypt_library, "crypt" );
         if ( crypt_sym == NULL ) /* no libcrypt or libcrypt without crypt */
             crypt_sym = (char* (*)(const char *, const char *)) &osl_noCrypt;
 
