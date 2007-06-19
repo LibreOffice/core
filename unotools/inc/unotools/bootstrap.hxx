@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:27:15 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:10:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,9 +68,6 @@ namespace utl
 
         /// retrieve the BUILDID information item; uses the given default, if not found
         static rtl::OUString getBuildIdData(rtl::OUString const& _sDefault);
-
-        /// retrieve the installation mode information item; uses the given default, if not found
-        static rtl::OUString getInstallMode(rtl::OUString const& _sDefault);
 
         /// retrieve the product patch level; uses the given default, if not found
         static rtl::OUString getProductPatchLevel(rtl::OUString const& _sDefault);
