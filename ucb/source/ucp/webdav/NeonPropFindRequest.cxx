@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonPropFindRequest.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:06:39 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:12:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,6 @@
 #endif
 
 using namespace rtl;
-using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 using namespace std;
@@ -100,9 +99,8 @@ extern "C" int NPFR_propfind_iter( void* userdata,
         return 0; // Error getting this property. Go on.
 
     // Create & set the PropertyValue
-    PropertyValue thePropertyValue;
-    thePropertyValue.Handle = -1;
-    thePropertyValue.State = PropertyState_DIRECT_VALUE;
+    DAVPropertyValue thePropertyValue;
+    thePropertyValue.IsCaseSensitive = true;
 
     DAVProperties::createUCBPropName( pname->nspace,
                                         pname->name,
