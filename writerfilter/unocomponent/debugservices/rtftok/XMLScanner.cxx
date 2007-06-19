@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLScanner.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2007-04-23 09:57:09 $
+ *  last change: $Author: os $ $Date: 2007-06-19 05:39:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,7 +264,7 @@ sal_Int32 SAL_CALL XMLScanner::run( const uno::Sequence< rtl::OUString >& aArgum
     aUcbInitSequence[1] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW);
     uno::Reference<lang::XMultiComponentFactory> xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW );
-    if (::ucb::ContentBroker::initialize(xServiceFactory, aUcbInitSequence))
+    if (::ucbhelper::ContentBroker::initialize(xServiceFactory, aUcbInitSequence))
     {
             rtl::OUString arg=aArguments[0];
 
@@ -310,7 +310,7 @@ sal_Int32 SAL_CALL XMLScanner::run( const uno::Sequence< rtl::OUString >& aArgum
             cout << "</out>" << endl;
             delete rtfScanner;
 
-        ::ucb::ContentBroker::deinitialize();
+        ::ucbhelper::ContentBroker::deinitialize();
     }
     else
     {

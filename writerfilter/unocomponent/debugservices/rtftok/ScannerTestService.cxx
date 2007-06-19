@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScannerTestService.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2007-04-23 09:52:58 $
+ *  last change: $Author: os $ $Date: 2007-06-19 05:39:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -379,7 +379,7 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
   printf("A\n");
     uno::Reference<lang::XMultiComponentFactory> xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW );
   printf("B\n");
-    if (::ucb::ContentBroker::initialize(xServiceFactory, aUcbInitSequence))
+    if (::ucbhelper::ContentBroker::initialize(xServiceFactory, aUcbInitSequence))
     {
   printf("C\n");
             rtl::OUString arg=aArguments[0];
@@ -432,7 +432,7 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
             xTransact->commit();
 
 
-        ::ucb::ContentBroker::deinitialize();
+        ::ucbhelper::ContentBroker::deinitialize();
     }
     else
     {
