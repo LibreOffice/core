@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statemnt.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-11 08:55:08 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 14:36:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,6 +218,8 @@ protected:
     static BOOL bDoTypeKeysDelay;
 
     static Window* pFirstDocFrame;
+
+    static BOOL bIsSlotInExecute;
 
 public:
     static BOOL IsInReschedule() { return bIsInReschedule; }
