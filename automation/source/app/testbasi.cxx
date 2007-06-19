@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testbasi.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:33:35 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 14:35:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 //#include "app.hxx"
 //#include "basic.hrc"
 //#include "appbased.hxx"
-#define P_FEHLERLISTE ((TestToolObj*)pTestObject)->GetFehlerListe()
+#define P_FEHLERLISTE TestToolObj::pFehlerListe
 
 //#include "status.hxx"
 //#include "basic.hrc"
