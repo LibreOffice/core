@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eerdll2.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:32:01 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 15:58:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,10 @@
 #ifndef _EERDLL2_HXX
 #define _EERDLL2_HXX
 
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XLANGUAGEGUESSING_HPP_
+#include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
+#endif
+
 #include <forbiddencharacterstable.hxx>
 #include <vos/ref.hxx>
 
@@ -44,6 +48,8 @@ class SfxPoolItem;
 class GlobalEditData
 {
 private:
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XLanguageGuessing >  xLanguageGuesser;
     SfxPoolItem**   ppDefItems;
     OutputDevice*   pStdRefDevice;
 
@@ -58,6 +64,7 @@ public:
 
     vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable();
     void            SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars ) { xForbiddenCharsTable = xForbiddenChars; }
+    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLanguageGuessing > GetLanguageGuesser();
 };
 
 
