@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:09:56 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 14:37:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -766,6 +766,9 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
     GetMenuBar()->SetHideButtonClickHdl( LINK( this, BasicFrame, HideButtonClick ) );
 }
 
+const ByteString ProfilePrefix("_profile_");
+const USHORT ProfilePrefixLen = ProfilePrefix.Len();
+
 void BasicFrame::LoadIniFile()
 {
     USHORT i;
@@ -785,6 +788,9 @@ void BasicFrame::LoadIniFile()
     aConf.SetGroup("Misc");
     ByteString aTemp;
     ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Misc" );
+
+    pStatus->SetProfileName( String( aCurrentProfile.Copy( ProfilePrefixLen ), RTL_TEXTENCODING_UTF8 ) );
+
     aConf.SetGroup( aCurrentProfile );
     aTemp = aConf.ReadKey( "AutoReload", "0" );
     bAutoReload = ( aTemp.CompareTo("1") == COMPARE_EQUAL );
@@ -1148,9 +1154,20 @@ BOOL BasicFrame::CompileAll()
 
 // Menu aufsetzen
 
-#define MENU2FILENAME( Name ) Name.Copy( Name.SearchAscii(" ") +1)
-#define FILENAME2MENU( Nr, Name ) CUniString("~").Append( UniString::CreateFromInt32(i) ).AppendAscii(" ").Append( Name )
-#define LRUNr( nNr ) CByteString("LRU").Append( ByteString::CreateFromInt32(nNr) )
+#define MENU2FILENAME( Name ) Name.Copy( Name.SearchAscii(" ") +1).EraseAllChars( '~' )
+#define LRUNr( nNr ) CByteString("LRU").Append( ByteString::CreateFromInt32( nNr ) )
+String FILENAME2MENU( USHORT nNr, String aName )
+{
+    String aRet;
+    if ( nNr <= 9 )
+        aRet = CUniString("~").Append( UniString::CreateFromInt32( nNr ) );
+    else if ( nNr == 10 )
+        aRet = CUniString("1~0");
+    else
+        aRet = UniString::CreateFromInt32( nNr );
+
+    return aRet.AppendAscii(" ").Append( aName );
+}
 void BasicFrame::AddToLRU(String const& aFile)
 {
     Config aConfig(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
@@ -1181,7 +1198,7 @@ void BasicFrame::AddToLRU(String const& aFile)
         }
     }
     aConfig.WriteKey(LRUNr(1), ByteString( aFile, RTL_TEXTENCODING_UTF8 ) );
-    if ( pPopup->GetItemPos( IDM_FILE_LRU1 + i-1 ) == MENU_ITEM_NOTFOUND )
+    if ( pPopup->GetItemPos( IDM_FILE_LRU1 ) == MENU_ITEM_NOTFOUND )
          pPopup->InsertItem(IDM_FILE_LRU1,FILENAME2MENU( 1, aFile));
     else
         pPopup->SetItemText(IDM_FILE_LRU1,FILENAME2MENU( 1, aFile));
