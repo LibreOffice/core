@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: obo $ $Date: 2007-06-07 06:25:35 $
+#   last change: $Author: kz $ $Date: 2007-06-19 16:13:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,13 @@ NO_BSYMBOLIC=TRUE
 
 .INCLUDE: settings.mk
 
+.IF "$(DISABLE_NEON)" == "TRUE"
+
+@all:
+    @echo "neon disabled...."
+
+.ELSE
+
 NEONINCDIR=external$/neon
 
 .IF "$(SYSTEM_NEON)" != "YES"
@@ -77,11 +84,6 @@ CFLAGS+= -I$(SOLARINCDIR)$/$(LIBXMLINCDIR)
 .ENDIF
 
 # --- General -----------------------------------------------------
-
-.IF "$(DISABLE_NEON)" == "TRUE"
-@all:
-    @echo "neon disabled...."
-.ENDIF
 
 SLOFILES=\
     $(SLO)$/webdavservices.obj    	\
@@ -141,6 +143,8 @@ SHL1LIBS=$(LIB1TARGET)
 # --- Def-File ---------------------------------------------------------
 
 DEF1NAME=$(SHL1TARGET)
+
+.ENDIF #"$(DISABLE_NEON)" == "TRUE"
 
 # --- Targets ----------------------------------------------------------
 
