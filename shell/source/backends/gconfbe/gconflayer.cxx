@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gconflayer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 07:47:04 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:11:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,10 @@
 #include <rtl/strbuf.hxx>
 #endif
 
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
 #ifndef _OSL_SECURITY_HXX_
 #include <osl/security.hxx>
 #endif
@@ -67,6 +71,8 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+
+using namespace rtl;
 
 //==============================================================================
 
@@ -92,6 +98,133 @@ GconfLayer::GconfLayer( const uno::Reference<uno::XComponentContext>& xContext,
     else
     {
         OSL_TRACE( "Could not retrieve ServiceManager" );
+    }
+}
+
+//------------------------------------------------------------------------------
+
+static OUString xdg_user_dir_lookup (const char *type)
+{
+    char *config_home;
+    char *p;
+    int relative;
+    bool bError = false;
+
+    osl::Security aSecurity;
+    oslFileHandle handle;
+    OUString aHomeDirURL;
+    OUString aDocumentsDirURL;
+    OUString aConfigFileURL;
+    OUStringBuffer aUserDirBuf;
+
+    if (!aSecurity.getHomeDir( aHomeDirURL ) )
+    {
+    osl::FileBase::getFileURLFromSystemPath(rtl::OUString::createFromAscii("/tmp"), aDocumentsDirURL);
+    return aDocumentsDirURL;
+    }
+
+    config_home = getenv ("XDG_CONFIG_HOME");
+    if (config_home == NULL || config_home[0] == 0)
+    {
+    aConfigFileURL = OUString(aHomeDirURL);
+    aConfigFileURL += OUString::createFromAscii( "/.config/user-dirs.dirs" );
+    }
+    else
+    {
+    aConfigFileURL = OUString::createFromAscii(config_home);
+    aConfigFileURL += OUString::createFromAscii( "/user-dirs.dirs" );
+    }
+
+    if(osl_File_E_None == osl_openFile(aConfigFileURL.pData, &handle, osl_File_OpenFlag_Read))
+    {
+    rtl::ByteSequence seq;
+    while (osl_File_E_None == osl_readLine(handle , (sal_Sequence **)&seq))
+    {
+        /* Remove newline at end */
+        int len = seq.getLength();
+        if(len>0 && seq[len-1] == '\n')
+        seq[len-1] = 0;
+
+        p = (char *)seq.getArray();
+
+        while (*p == ' ' || *p == '\t')
+        p++;
+
+        if (strncmp (p, "XDG_", 4) != 0)
+        continue;
+        p += 4;
+        if (strncmp (p, type, strlen (type)) != 0)
+        continue;
+        p += strlen (type);
+        if (strncmp (p, "_DIR", 4) != 0)
+        continue;
+        p += 4;
+
+        while (*p == ' ' || *p == '\t')
+        p++;
+
+        if (*p != '=')
+        continue;
+        p++;
+
+        while (*p == ' ' || *p == '\t')
+        p++;
+
+        if (*p != '"')
+        continue;
+        p++;
+
+        relative = 0;
+        if (strncmp (p, "$HOME/", 6) == 0)
+        {
+        p += 6;
+        relative = 1;
+        }
+        else if (*p != '/')
+        continue;
+
+        if (relative)
+        {
+        aUserDirBuf = OUStringBuffer(aHomeDirURL);
+        aUserDirBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "/" ) );
+        }
+        else
+        {
+        aUserDirBuf = OUStringBuffer();
+        }
+
+        while (*p && *p != '"')
+        {
+        if ((*p == '\\') && (*(p+1) != 0))
+            p++;
+        aUserDirBuf.append((sal_Unicode)*p++);
+        }
+    }
+      osl_closeFile(handle);
+    }
+    else
+    bError = true;
+
+    if (aUserDirBuf.getLength()>0 && !bError)
+    {
+    aDocumentsDirURL = aUserDirBuf.makeStringAndClear();
+    osl::Directory aDocumentsDir( aDocumentsDirURL );
+    if( osl::FileBase::E_None == aDocumentsDir.open() )
+        return aDocumentsDirURL;
+    }
+
+    /* Special case desktop for historical compatibility */
+    if (strcmp (type, "DESKTOP") == 0)
+    {
+    aUserDirBuf = OUStringBuffer(aHomeDirURL);
+    aUserDirBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "/Desktop" ) );
+    return aUserDirBuf.makeStringAndClear();
+    }
+    else
+    {
+    aUserDirBuf = OUStringBuffer(aHomeDirURL);
+    aUserDirBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "/Documents" ) );
+    return aUserDirBuf.makeStringAndClear();
     }
 }
 
@@ -141,6 +274,7 @@ static void splitFontName( GConfValue *aGconfValue, rtl::OUString &rName, sal_In
 
 uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValue )
 {
+
     switch( aValue.nSettingId )
     {
         case SETTING_PROXY_MODE:
@@ -212,10 +346,8 @@ uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValu
 
         case SETTING_WORK_DIRECTORY:
         {
-            osl::Security aSecurity;
-            rtl::OUString aDocumentsDirURL;
-            if ( aSecurity.getHomeDir( aDocumentsDirURL ) )
-                aDocumentsDirURL += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/Documents" ) );
+            rtl::OUString aDocumentsDirURL = xdg_user_dir_lookup("DOCUMENTS");
+
             return uno::makeAny( aDocumentsDirURL );
         }
 
