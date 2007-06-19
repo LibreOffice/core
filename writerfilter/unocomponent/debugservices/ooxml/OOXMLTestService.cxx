@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLTestService.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-05-03 13:44:10 $
+ *  last change: $Author: os $ $Date: 2007-06-19 05:33:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,7 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
     aUcbInitSequence[1] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW);
     uno::Reference<lang::XMultiComponentFactory> xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW );
-    if (::ucb::ContentBroker::initialize(xServiceFactory, aUcbInitSequence))
+    if (::ucbhelper::ContentBroker::initialize(xServiceFactory, aUcbInitSequence))
     {
             rtl::OUString arg=aArguments[0];
 
@@ -143,7 +143,7 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
         printf("time=%is\n", t2.Seconds-t1.Seconds);
 #endif
 
-        ::ucb::ContentBroker::deinitialize();
+        ::ucbhelper::ContentBroker::deinitialize();
     }
     else
     {

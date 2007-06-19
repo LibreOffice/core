@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocTokAnalyzeService.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-21 15:06:33 $
+ *  last change: $Author: os $ $Date: 2007-06-19 05:32:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,7 +177,7 @@ sal_Int32 SAL_CALL AnalyzeService::run
     uno::Reference<lang::XMultiComponentFactory>
         xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW );
 
-    if (::ucb::ContentBroker::initialize(xServiceFactory, aUcbInitSequence))
+    if (::ucbhelper::ContentBroker::initialize(xServiceFactory, aUcbInitSequence))
     {
         rtl::OUString arg=aArguments[0];
 
@@ -269,7 +269,7 @@ sal_Int32 SAL_CALL AnalyzeService::run
         fprintf(stdout, "</analyze>\n");
 
         rtl_uString_release(dir);
-        ::ucb::ContentBroker::deinitialize();
+        ::ucbhelper::ContentBroker::deinitialize();
 
 
     }
