@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:26:08 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 15:52:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -795,9 +795,18 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
             Reference< XSpellAlternatives >  xAlt( pWrtShell->GetCorrection(&rPt, aToFill) );
             if ( xAlt.is() )
             {
+                // get paragraph text
+                String aParaText;
+                const SwTxtNode *pNode = dynamic_cast< const SwTxtNode * >(
+                                            &pWrtShell->GetCrsr()->GetPoint()->nNode.GetNode() );
+                if (pNode)
+                    aParaText = pNode->GetTxt();    // this may include hidden text but that should be Ok
+                else
+                    DBG_ERROR( "text node expected but not found" );
+
                 bRet = sal_True;
                 pWrtShell->SttSelect();
-                SwSpellPopup aPopup( pWrtShell, xAlt );
+                SwSpellPopup aPopup( pWrtShell, xAlt, aParaText );
                 ::com::sun::star::ui::ContextMenuExecuteEvent aEvent;
                 const Point aPixPos = GetEditWin().LogicToPixel( rPt );
 
