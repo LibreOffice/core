@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-09 15:43:15 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:16:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,6 @@ int dladdr(void *address, Dl_info *dl)
 extern int UnicodeToText(char *, size_t, const sal_Unicode *, sal_Int32);
 
 oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode);
-void* SAL_CALL osl_psz_getSymbol(oslModule hModule, const sal_Char* pszSymbolName);
 
 /*****************************************************************************/
 /* osl_loadModule */
@@ -134,16 +133,6 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
     {
 #ifndef NO_DL_FUNCTIONS
         void* pLib = dlopen(pszModuleName, rtld_mode);
-        if ((pLib == 0) && (strchr (pszModuleName, '/') == 0))
-        {
-            /* module w/o pathname not found, try cwd as last chance */
-            char buffer[PATH_MAX];
-
-            buffer[0] = '.', buffer[1] = '/', buffer[2] = '\0';
-            strncat (buffer, pszModuleName, sizeof(buffer) - 2);
-
-            pLib = dlopen(buffer, rtld_mode);
-        }
 
 #if OSL_DEBUG_LEVEL > 1
         if (pLib == 0)
@@ -160,6 +149,18 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
 #endif  /* NO_DL_FUNCTIONS */
     }
     return NULL;
+}
+
+/*****************************************************************************/
+/* osl_getModuleHandle */
+/*****************************************************************************/
+
+sal_Bool SAL_CALL
+osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
+{
+    (void) pModuleName; /* avoid warning about unused parameter */
+    *pResult = (oslModule) RTLD_DEFAULT;
+    return sal_True;
 }
 
 /*****************************************************************************/
@@ -194,63 +195,60 @@ void SAL_CALL osl_unloadModule(oslModule hModule)
 /*****************************************************************************/
 /* osl_getSymbol */
 /*****************************************************************************/
-void* SAL_CALL osl_getSymbol(oslModule Module, rtl_uString* ustrSymbolName)
+void* SAL_CALL
+osl_getSymbol(oslModule Module, rtl_uString* pSymbolName)
 {
-    void* pHandle = 0;
-
-    OSL_ENSURE(Module,"osl_getSymbol : module handle is not valid");
-    OSL_ENSURE(Module,"osl_getSymbol : ustrSymbolName");
-
-    if (Module!= 0 && ustrSymbolName != 0)
-    {
-        rtl_String* strSymbolName = 0;
-        sal_Char* pszSymbolName = 0;
-
-        rtl_uString2String( &strSymbolName,
-                            rtl_uString_getStr(ustrSymbolName),
-                            rtl_uString_getLength(ustrSymbolName),
-                            osl_getThreadTextEncoding(),
-                            OUSTRING_TO_OSTRING_CVTFLAGS );
-
-        pszSymbolName = rtl_string_getStr(strSymbolName);
-
-        pHandle=osl_psz_getSymbol(Module,pszSymbolName);
-
-        if (strSymbolName != 0)
-        {
-            rtl_string_release(strSymbolName);
-        }
-    }
-    return pHandle;
+    return (void *) osl_getFunctionSymbol(Module, pSymbolName);
 }
 
 
 /*****************************************************************************/
-/* osl_psz_getSymbol */
+/* osl_getAsciiFunctionSymbol */
 /*****************************************************************************/
-void* SAL_CALL osl_psz_getSymbol(oslModule hModule, const sal_Char* pszSymbolName)
+oslGenericFunction SAL_CALL
+osl_getAsciiFunctionSymbol(oslModule Module, const sal_Char *pSymbol)
 {
-    if (hModule && pszSymbolName)
-    {
-#ifndef NO_DL_FUNCTIONS
-        void* pSym = dlsym(hModule, pszSymbolName);
+    void *fcnAddr = NULL;
 
-#if OSL_DEBUG_LEVEL > 1
-        if (!pSym)
-            fprintf(stderr, "Error osl_getSymbol: %s\n", dlerror());
-#endif
-        return pSym;
-#endif
+#ifndef NO_DL_FUNCTIONS
+    if (pSymbol)
+    {
+        fcnAddr = dlsym(Module, pSymbol);
+
+        if (!fcnAddr)
+            OSL_TRACE("Error osl_getAsciiFunctionSymbol: %s\n", dlerror());
     }
-    return NULL;
+#endif
+
+    return (oslGenericFunction) fcnAddr;
 }
 
 /*****************************************************************************/
 /* osl_getFunctionSymbol */
 /*****************************************************************************/
-oslGenericFunction SAL_CALL osl_getFunctionSymbol( oslModule Module, rtl_uString *ustrFunctionSymbolName )
+oslGenericFunction SAL_CALL
+osl_getFunctionSymbol(oslModule module, rtl_uString *puFunctionSymbolName)
 {
-    return (oslGenericFunction)osl_getSymbol( Module, ustrFunctionSymbolName);
+    oslGenericFunction pSymbol = NULL;
+
+    if( puFunctionSymbolName )
+    {
+        rtl_String* pSymbolName = NULL;
+
+        rtl_uString2String( &pSymbolName,
+            rtl_uString_getStr(puFunctionSymbolName),
+            rtl_uString_getLength(puFunctionSymbolName),
+            RTL_TEXTENCODING_UTF8,
+            OUSTRING_TO_OSTRING_CVTFLAGS );
+
+        if( pSymbolName != NULL )
+        {
+            pSymbol = osl_getAsciiFunctionSymbol(module, rtl_string_getStr(pSymbolName));
+            rtl_string_release(pSymbolName);
+        }
+    }
+
+    return pSymbol;
 }
 
 /*****************************************************************************/
