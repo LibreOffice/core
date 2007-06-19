@@ -4,9 +4,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:20:52 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:13:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYSETINFOCHANGEEVENT_HPP_
 #include <com/sun/star/beans/PropertySetInfoChangeEvent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
 #include <com/sun/star/io/XActiveDataSink.hpp>
@@ -1381,7 +1384,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         while ( it != end )
         {
             if ( pProvider->getProperty( (*it).first, aProp ) )
-                xRow->appendObject( aProp, (*it).second );
+                xRow->appendObject( aProp, (*it).second.value() );
 
             ++it;
         }
@@ -1620,7 +1623,8 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     xProps->addProperty( rtl::OUString(
                                             RTL_CONSTASCII_USTRINGPARAM(
                                                 "BaseURI" ) ),
-                                         uno::makeAny( getBaseURI() ) );
+                                         uno::makeAny( getBaseURI() ),
+                                         true );
                     break;
                 }
             }
