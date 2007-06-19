@@ -1,0 +1,216 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XLanguageGuessing.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2007-06-19 15:54:15 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  the BSD license.
+ *
+ *  Copyright (c) 2003 by Sun Microsystems, Inc.
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *  1. Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *  2. Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *  3. Neither the name of Sun Microsystems, Inc. nor the names of its
+ *     contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ *  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ *  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ *  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+ *  OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+ *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+ *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ *************************************************************************/
+
+#ifndef __com_sun_star_linguistic2_XLanguageGuessing_idl__
+#define __com_sun_star_linguistic2_XLanguageGuessing_idl__
+
+#ifndef _COM_SUN_STAR_UNO_XINTERFACE_idl_
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_idl_
+#include <com/sun/star/lang/Locale.idl>
+#endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_IDL_
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+module com { module sun { module star { module linguistic2 {
+
+/** This interface allows to guess the language of a text
+
+    <p> The current set of supported languages is:
+    <ul>
+        <li>af : Afrikaans</li>
+        <li>am : Amharic</li>
+        <li>ar : Arabic</li>
+        <li>be : Belarus</li>
+        <li>br : Breton</li>
+        <li>bs : Bosnian</li>
+        <li>ca : Catalan</li>
+        <li>cs : Czech</li>
+        <li>cy : Welsh</li>
+        <li>da : Danish</li>
+        <li>de : German</li>
+        <li>drt : Drents</li>
+        <li>el : Greek</li>
+        <li>en : English</li>
+        <li>eo : Esperanto</li>
+        <li>es : Spanish</li>
+        <li>et : Estonian</li>
+        <li>eu : Basque</li>
+        <li>fa : Farsi</li>
+        <li>fi : Finnish</li>
+        <li>fr : French</li>
+        <li>fy : Frisian</li>
+        <li>ga : Irish Gaelic</li>
+        <li>gd : Scots Gaelic</li>
+        <li>gv : Manx Gaelic</li>
+        <li>he : Hebrew</li>
+        <li>hi : Hindi</li>
+        <li>hr : Croatian</li>
+        <li>hu : Hungarian</li>
+        <li>hy : Armenian</li>
+        <li>id : Indonesian</li>
+        <li>is : Icelandic</li>
+        <li>it : Italian</li>
+        <li>ja : Japanese</li>
+        <li>ka : Georgian</li>
+        <li>ko : Korean</li>
+        <li>la : Latin</li>
+        <li>lt : Lithuanian</li>
+        <li>lv : Latvian</li>
+        <li>mr : Marathi</li>
+        <li>ms : Malay</li>
+        <li>ne : Nepali</li>
+        <li>nl : Dutch</li>
+        <li>nb : Norwegian (Bokmal)</li>
+        <li>pl : Polish</li>
+        <li>pt-PT : Portuguese (Portugal)</li>
+        <li>qu : Quechua</li>
+        <li>rm : Romansh</li>
+        <li>ro : Romanian</li>
+        <li>ru : Russian</li>
+        <li>sa : Sanskrit</li>
+        <li>sco : Scots</li>
+        <li>sh-YU : Serbian (written with latin characters)</li>
+        <li>sk-SK : Slovak (written with latin characters)</li>
+        <li>sl : Slovenian</li>
+        <li>sq : Albanian</li>
+        <li>sv : Swedish</li>
+        <li>sw : Swahili</li>
+        <li>ta : Tamil</li>
+        <li>th : Thai</li>
+        <li>tl : Tagalog</li>
+        <li>tr : Turkish</li>
+        <li>uk : Ukrainian</li>
+        <li>vi : Vietnamese</li>
+        <li>yi : Yiddish</li>
+        <li>zh-CN : Chinese (simplified)</li>
+        <li>zh-TW : Chinese (traditional)</li>
+    </ul>
+
+    </p>
+
+    @since OOo 2.2
+ */
+interface XLanguageGuessing
+{
+    //-------------------------------------------------------------------------
+    /** determines the single most probable language of a sub-string.
+
+        <p>Please note that because statistical analysis is part
+        of the algorithm the the likelihood to get the correct
+        result increases with the length of the sub-string.
+        A word is much less likely guessed correctly compared to
+        a sentence or even a whole paragraph.</p>
+
+        <p>Also note that some languages are that 'close' to each other
+        that it will be quite unlikely to find a difference in them,
+        e.g. English (UK), English (IE) and English (AUS) and
+        most liklely English (US) as well. And thus the result may
+        be arbitrary.</p>
+
+        @returns
+            the locale for the language identified.
+            If no language could be identified the locale will be empty.
+
+        @param  aText
+            all the text including the part that should checked.
+
+        @param nStartPos
+            specifies the starting index of the sub-string to be checked
+            The value must met 0 <= nStartPos < (length of text - 1).
+
+        @param nLen
+            specifies the length of the sub-string to be checked.
+            The value must met 0 <= nLen <= (length of text).
+
+        @see    <type scope="com::sun::star::lang">Locale</type>
+     */
+    com::sun::star::lang::Locale    guessPrimaryLanguage(
+            [in] string  aText,
+            [in] long    nStartPos,
+            [in] long    nLen )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** allows to explicitly discard some languages from the set of
+        languages possibly returned.
+
+        <p>By default all languages are enabled.</p>
+    */
+    void disableLanguages(
+            [in] sequence< com::sun::star::lang::Locale > aLanguages )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** allows to explicitly re-enable some languages that got previously
+        disabled.
+
+        <p>By default all languages are enabled.</p>
+    */
+    void enableLanguages(
+            [in] sequence< com::sun::star::lang::Locale > aLanguages )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** returns a list of all supported languages.
+
+        <p>This should be the same as the mathematical union of
+        all enabled and disabled languages.</p>
+    */
+    sequence< com::sun::star::lang::Locale > getAvailableLanguages();
+
+    //-------------------------------------------------------------------------
+    /** returns the list of all enabled languages
+    */
+    sequence< com::sun::star::lang::Locale > getEnabledLanguages();
+
+    //-------------------------------------------------------------------------
+    /** returns the list of all disabled languages
+    */
+    sequence< com::sun::star::lang::Locale > getDisabledLanguages();
+
+};
+
+}; }; }; };
+
+#endif
+
