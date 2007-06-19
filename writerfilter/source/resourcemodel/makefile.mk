@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: hbrinkm $ $Date: 2007-06-15 09:31:01 $
+#  last change: $Author: fridrich_strba $ $Date: 2007-06-19 07:18:53 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,9 +71,8 @@ OOXMLLIB=$(LB)$/iooxml.lib
 SHL1STDLIBS=$(SALLIB)\
     $(CPPULIB)\
     $(CPPUHELPERLIB) \
-    $(COMPHELPERLIB) \
-    $(DOCTOKLIB) \
-    $(OOXMLLIB)
+    $(COMPHELPERLIB)
+
 SHL1IMPLIB=i$(SHL1TARGET)
 #SHL1USE_EXPORTS=name
 SHL1USE_EXPORTS=ordinal
