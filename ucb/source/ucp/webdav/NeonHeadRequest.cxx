@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonHeadRequest.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:06:12 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:12:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,12 +93,10 @@ static void process_headers(ne_request *req,
         if ( bIncludeIt )
         {
             // Create & set the PropertyValue
-            beans::PropertyValue thePropertyValue;
-            thePropertyValue.Handle = -1;
-            thePropertyValue.Name   = aHeaderName;
-            thePropertyValue.State  = beans::PropertyState_DIRECT_VALUE;
-
-            thePropertyValue.Value  <<= aHeaderValue;
+            DAVPropertyValue thePropertyValue;
+            thePropertyValue.Name = aHeaderName;
+            thePropertyValue.IsCaseSensitive = false;
+            thePropertyValue.Value <<= aHeaderValue;
 
             // Add the newly created PropertyValue
             rResource.properties.push_back( thePropertyValue );
@@ -155,10 +153,9 @@ extern "C" void NHR_ResponseHeaderCatcher( void * userdata,
         if ( bIncludeIt )
         {
             // Create & set the PropertyValue
-            beans::PropertyValue thePropertyValue;
-            thePropertyValue.Handle = -1;
-            thePropertyValue.Name   = aHeaderName;
-            thePropertyValue.State  = beans::PropertyState_DIRECT_VALUE;
+            DAVPropertyValue thePropertyValue;
+            thePropertyValue.Name = aHeaderName;
+            thePropertyValue.IsCaseSensitive = false;
 
             if ( nPos < aHeader.getLength() )
                 thePropertyValue.Value <<= aHeader.copy( nPos + 1 ).trim();
