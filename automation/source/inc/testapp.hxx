@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testapp.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:21:06 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 14:36:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,15 +131,13 @@ public:
 
 private:
     ImplTestToolObj *pImpl;     // Alles was von der Implementation abhängt
-    CErrors* const GetFehlerListe() { return pFehlerListe; }
-    BOOL bQuietErrors;          // Wenn Control in pControls nicht gefunden kein Programmabbruch
+    static CErrors* const GetFehlerListe() { return pFehlerListe; }
     BOOL bUseIPC;
     Link aLogHdl;               // Zum Logen der Fehlermeldungen im Testtool
     Link aWinInfoHdl;           // Anzeigen der Windows/Controls der zu testenden App
     Link aModuleWinExistsHdl;   // Prüft ob das Modul schon im Editor geladen ist
     Link aCErrorHdl;            // Melden von Compilererror
     Link aWriteStringHdl;       // Schreiben von text (e.g. MakroRecorder)
-    CErrors *pFehlerListe;      // Hier werden die Fehler des Testtools gespeichert
     BOOL bReturnOK;             // Bricht WaitForAnswer ab
     CRevNames *pShortNames;     // Aktuell verwendete Controls, zur gewinnung des Namens aus Fehlermeldung
     ULONG nSequence;            // Sequence um Antwort und Anfrage zu syncronisieren
@@ -201,6 +199,8 @@ private:
     SbTextType GetSymbolType( const String &rSymbol, BOOL bWasControl );
     static ControlDefLoad const arR_Cmds[];
     static CNames *pRCommands;
+
+    static CErrors *pFehlerListe;       // Hier werden die Fehler des Testtools gespeichert
 
 };
 
