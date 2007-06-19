@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wintypes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:35:22 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:14:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,7 +216,7 @@ typedef sal_Int64 WinBits;
 // Window-Bits for Edit
 #define WB_PASSWORD             ((WinBits)0x01000000)
 #define WB_READONLY             ((WinBits)0x02000000)
-#define WB_NOHIDESELECTION      ((WinBits)0x40000000)
+#define WB_NOHIDESELECTION      ((WinBits)SAL_CONST_INT64(0x1000000000))
 #define WB_FORCECTRLBACKGROUND  ((WinBits)0x80000000)
 
 // Window-Bits for MultiLineEdit
