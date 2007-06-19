@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:42:57 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:09:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,8 @@
 #ifndef _MySVXACORR_HXX //autogen
 #include <svx/svxacorr.hxx>
 #endif
+
+#include <i18npool/mslangid.hxx>
 
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
@@ -128,6 +130,8 @@
 #include <undobj.hxx>
 // <- #111827#
 
+#include <svtools/languageoptions.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
@@ -137,43 +141,173 @@ using namespace ::rtl;
 
 ---------------------------------------------------------------------------*/
 
-util::Language lcl_CheckLanguage( const OUString &rWord, uno::Reference< linguistic2::XSpellChecker1 >  xSpell )
+// temporary work-around for not yet implemented language fall-back
+static LanguageType lcl_GuessLocale2Lang( const lang::Locale &rLocale )
 {
-    //
-    // build list of languages to check
-    //
-    LanguageType aLangList[4];
-    const AllSettings& rSettings  = Application::GetSettings();
-    SvtLinguOptions aLinguOpt;
-    SvtLinguConfig().GetOptions( aLinguOpt );
-    // The default document language from "Tools/Options - Language Settings - Languages: Western"
-    aLangList[0] = aLinguOpt.nDefaultLanguage;
-    // The one from "Tools/Options - Language Settings - Languages: User interface"
-    aLangList[1] = rSettings.GetUILanguage();
-    // The one from "Tools/Options - Language Settings - Languages: Locale setting"
-    aLangList[2] = rSettings.GetLanguage();
-    // en-US
-    aLangList[3] = LANGUAGE_ENGLISH_US;
+    struct Loc2Lang
+    {
+        const char *    pLang;
+        const char *    pCountry;
+        LanguageType    nLang;
+    };
+    static const Loc2Lang aLoc2Lang[] =
+    {
+        {"af", "",      LANGUAGE_AFRIKAANS},
+        {"sq", "",      LANGUAGE_ALBANIAN},
+        {"am", "",      LANGUAGE_AMHARIC_ETHIOPIA},
+        {"ar", "",      LANGUAGE_ARABIC_EGYPT},
+        {"eu", "",      LANGUAGE_BASQUE},
+        {"be", "",      LANGUAGE_BELARUSIAN},
+        {"bs", "",      LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA},
+        {"br", "",      LANGUAGE_BRETON_FRANCE},
+        {"ca", "",      LANGUAGE_CATALAN},
+        {"zh", "CN",    LANGUAGE_CHINESE_SIMPLIFIED},
+        {"zh", "TW",    LANGUAGE_CHINESE_TRADITIONAL},
+        {"hr", "",      LANGUAGE_CROATIAN},
+        {"cs", "",      LANGUAGE_CZECH},
+        {"da", "",      LANGUAGE_DANISH},
+        {"nl", "",      LANGUAGE_DUTCH},
+        {"en", "",      LANGUAGE_ENGLISH_US},
+        {"eo", "",      LANGUAGE_USER_ESPERANTO},
+        {"et", "",      LANGUAGE_ESTONIAN},
+        {"fi", "",      LANGUAGE_FINNISH},
+        {"fr", "",      LANGUAGE_FRENCH},
+        {"fy", "",      LANGUAGE_FRISIAN_NETHERLANDS},
+        {"ka", "",      LANGUAGE_GEORGIAN},
+        {"de", "",      LANGUAGE_GERMAN},
+        {"el", "",      LANGUAGE_GREEK},
+        {"he", "",      LANGUAGE_HEBREW},
+        {"hi", "",      LANGUAGE_HINDI},
+        {"hu", "",      LANGUAGE_HUNGARIAN},
+        {"is", "",      LANGUAGE_ICELANDIC},
+        {"id", "",      LANGUAGE_INDONESIAN},
+        {"ga", "",      LANGUAGE_GAELIC_IRELAND},
+        {"it", "",      LANGUAGE_ITALIAN},
+        {"ja", "",      LANGUAGE_JAPANESE},
+        {"ko", "",      LANGUAGE_KOREAN},
+        {"la", "",      LANGUAGE_LATIN},
+        {"lv", "",      LANGUAGE_LATVIAN},
+        {"lt", "",      LANGUAGE_LITHUANIAN},
+        {"ms", "",      LANGUAGE_MALAY_MALAYSIA},
+        {"gv", "",        LANGUAGE_NONE},
+        {"mr", "",      LANGUAGE_MARATHI},
+        {"ne", "",      LANGUAGE_NEPALI},
+        {"nb", "",      LANGUAGE_NORWEGIAN_BOKMAL},
+        {"fa", "",      LANGUAGE_FARSI},
+        {"pl", "",      LANGUAGE_POLISH},
+        {"pt", "PT",    LANGUAGE_PORTUGUESE},
+        {"ro", "",      LANGUAGE_ROMANIAN},
+        {"rm", "",      LANGUAGE_RHAETO_ROMAN},
+        {"ru", "",      LANGUAGE_RUSSIAN},
+        {"sa", "",      LANGUAGE_SANSKRIT},
+        {"sco","",        LANGUAGE_NONE},
+        {"gd", "",      LANGUAGE_GAELIC_SCOTLAND},
+        {"sh", "YU",    LANGUAGE_SERBIAN_LATIN},
+        {"sk", "SK",    LANGUAGE_SLOVAK},
+        {"sl", "",      LANGUAGE_SLOVENIAN},
+        {"es", "",      LANGUAGE_SPANISH},
+        {"sw", "",      LANGUAGE_SWAHILI},
+        {"sv", "",      LANGUAGE_SWEDISH},
+        {"tl", "",        LANGUAGE_NONE},
+        {"ta", "",      LANGUAGE_TAMIL},
+        {"th", "",      LANGUAGE_THAI},
+        {"tr", "",      LANGUAGE_TURKISH},
+        {"uk", "",      LANGUAGE_UKRAINIAN},
+        {"vi", "",      LANGUAGE_VIETNAMESE},
+        {"cy", "",      LANGUAGE_WELSH}
+    };
+
+    LanguageType nRes = LANGUAGE_DONTKNOW;
+    const sal_Int16 nNum = sizeof(aLoc2Lang) / sizeof(aLoc2Lang[0]);
+    for (sal_Int16 i = 0;  i < nNum;  ++i)
+    {
+        if (rLocale.Language.equalsAscii( aLoc2Lang[i].pLang ) &&
+            rLocale.Country .equalsAscii( aLoc2Lang[i].pCountry ))
+        {
+            nRes = aLoc2Lang[i].nLang;
+            break;
+        }
+    }
+    return nRes;
+}
+
+// tries to determine the language of 'rText'
+//
+LanguageType lcl_CheckLanguage(
+    const OUString &rText,
+    Reference< XSpellChecker1 > xSpell,
+    Reference< linguistic2::XLanguageGuessing > xLangGuess,
+    sal_Bool bIsParaText )
+{
+    LanguageType  nLang = LANGUAGE_NONE;
+    if (bIsParaText)    // check longer texts with language-guessing...
+    {
+        if (!xLangGuess.is())
+            return nLang;
+
+        lang::Locale aLocale( xLangGuess->guessPrimaryLanguage( rText, 0, rText.getLength()) );
+
+        // get language as from "Tools/Options - Language Settings - Languages: Locale setting"
+        LanguageType nTmpLang = Application::GetSettings().GetLanguage();
+
+        nLang = lcl_GuessLocale2Lang( aLocale );
+
+        // if the result from language guessing does not provide a 'Country' part
+        // try to get it by looking up the locale setting of the office.
+//      if (aLocale.Country.getLength() == 0)
+//      {
+//          lang::Locale aTmpLocale = SvxCreateLocale( nTmpLang );
+//          if (aTmpLocale.Language == aLocale.Language)
+//              nLang = nTmpLang;
+//      }
+//      if (nLang == LANGUAGE_NONE) // language not found by looking up the sytem language...
+//      {
+//          nLang = MsLangId::convertLocaleToLanguage( aLocale );
+//      }
+        if (nLang == LANGUAGE_SYSTEM)
+            nLang = nTmpLang;
+        if (nLang == LANGUAGE_DONTKNOW)
+            nLang = LANGUAGE_NONE;
+    }
+    else    // check single word
+    {
+            if (!xSpell.is())
+            return nLang;
+
+        //
+        // build list of languages to check
+        //
+        LanguageType aLangList[4];
+        const AllSettings& rSettings  = Application::GetSettings();
+        SvtLinguOptions aLinguOpt;
+        SvtLinguConfig().GetOptions( aLinguOpt );
+        // The default document language from "Tools/Options - Language Settings - Languages: Western"
+        aLangList[0] = aLinguOpt.nDefaultLanguage;
+        // The one from "Tools/Options - Language Settings - Languages: User interface"
+        aLangList[1] = rSettings.GetUILanguage();
+        // The one from "Tools/Options - Language Settings - Languages: Locale setting"
+        aLangList[2] = rSettings.GetLanguage();
+        // en-US
+        aLangList[3] = LANGUAGE_ENGLISH_US;
 #ifdef DEBUG
-    lang::Locale a1( SvxCreateLocale( aLangList[0] ) );
-    lang::Locale a2( SvxCreateLocale( aLangList[1] ) );
-    lang::Locale a3( SvxCreateLocale( aLangList[2] ) );
-    lang::Locale a4( SvxCreateLocale( aLangList[3] ) );
+        lang::Locale a0( SvxCreateLocale( aLangList[0] ) );
+        lang::Locale a1( SvxCreateLocale( aLangList[1] ) );
+        lang::Locale a2( SvxCreateLocale( aLangList[2] ) );
+        lang::Locale a3( SvxCreateLocale( aLangList[3] ) );
 #endif
 
-    util::Language nLang = LANGUAGE_NONE;
-
-    INT32   nCount = sizeof(aLangList) / sizeof(aLangList[0]);
-    for (INT32 i = 0;  i < nCount;  i++)
-    {
-        INT16 nTmpLang = aLangList[i];
-        if (nTmpLang != LANGUAGE_NONE  &&  nTmpLang != LANGUAGE_DONTKNOW)
+        INT32   nCount = sizeof(aLangList) / sizeof(aLangList[0]);
+        for (INT32 i = 0;  i < nCount;  i++)
         {
-            if (xSpell->hasLanguage( nTmpLang ) &&
-                xSpell->isValid( rWord, nTmpLang, uno::Sequence< beans::PropertyValue >() ))
+            INT16 nTmpLang = aLangList[i];
+            if (nTmpLang != LANGUAGE_NONE  &&  nTmpLang != LANGUAGE_DONTKNOW)
             {
-                nLang = nTmpLang;
-                break;
+                if (xSpell->hasLanguage( nTmpLang ) &&
+                    xSpell->isValid( rText, nTmpLang, Sequence< PropertyValue >() ))
+                {
+                    nLang = nTmpLang;
+                    break;
+                }
             }
         }
     }
@@ -182,7 +316,10 @@ util::Language lcl_CheckLanguage( const OUString &rWord, uno::Reference< linguis
 }
 
 
-SwSpellPopup::SwSpellPopup( SwWrtShell* pWrtSh, const uno::Reference< linguistic2::XSpellAlternatives >  &xAlt ) :
+SwSpellPopup::SwSpellPopup(
+        SwWrtShell* pWrtSh,
+        const Reference< XSpellAlternatives >  &xAlt,
+        const String &rParaText ) :
     PopupMenu(SW_RES(MN_SPELL_POPUP)),
     pSh ( pWrtSh ),
     xSpellAlt   (xAlt)
@@ -215,16 +352,28 @@ SwSpellPopup::SwSpellPopup( SwWrtShell* pWrtSh, const uno::Reference< linguistic
     }
     EnableItem( MN_AUTOCORR, bEnable );
 
-    nCorrLang = LANGUAGE_NONE;
-    if (xSpellAlt.is())
-        nCorrLang = lcl_CheckLanguage( xSpellAlt->getWord(), ::GetSpellChecker() );
-    if( nCorrLang != LANGUAGE_NONE )
+    Reference< linguistic2::XLanguageGuessing > xLG = SW_MOD()->GetLanguageGuesser();
+    nGuessLangWord = LANGUAGE_NONE;
+    nGuessLangPara = LANGUAGE_NONE;
+    if (xSpellAlt.is() && xLG.is())
     {
+        nGuessLangWord = lcl_CheckLanguage( xSpellAlt->getWord(), ::GetSpellChecker(), xLG, sal_False );
+        nGuessLangPara = lcl_CheckLanguage( rParaText, ::GetSpellChecker(), xLG, sal_True );
+    }
+    if (nGuessLangWord != LANGUAGE_NONE || nGuessLangPara != LANGUAGE_NONE)
+    {
+        // make sure LANGUAGE_NONE gets not used as menu entry
+        if (nGuessLangWord == LANGUAGE_NONE)
+            nGuessLangWord = nGuessLangPara;
+        if (nGuessLangPara == LANGUAGE_NONE)
+            nGuessLangPara = nGuessLangWord;
+
         InsertSeparator();
-        String aTmp( ::GetLanguageString( nCorrLang ) );
-        InsertItem( MN_LANGUAGE_WORD, String( SW_RES( STR_WORD ) ).Append(aTmp) );
+        String aTmpWord( ::GetLanguageString( nGuessLangWord ) );
+        String aTmpPara( ::GetLanguageString( nGuessLangPara ) );
+        InsertItem( MN_LANGUAGE_WORD, String( SW_RES( STR_WORD ) ).Append(aTmpWord) );
         SetHelpId( MN_LANGUAGE_WORD, HID_LINGU_WORD_LANGUAGE );
-        InsertItem( MN_LANGUAGE_PARA, String( SW_RES( STR_PARAGRAPH ) ).Append(aTmp) );
+        InsertItem( MN_LANGUAGE_PARA, String( SW_RES( STR_PARAGRAPH ) ).Append(aTmpPara) );
         SetHelpId( MN_LANGUAGE_PARA, HID_LINGU_PARA_LANGUAGE );
     }
 
@@ -414,9 +563,17 @@ void SwSpellPopup::Execute( USHORT nId )
                             pSh->MovePara( fnParaCurr,  fnParaEnd );
                     }
 
-                    SfxItemSet aSet(pSh->GetAttrPool(), RES_CHRATR_LANGUAGE,
-                                                        RES_CHRATR_LANGUAGE);
-                    aSet.Put( SvxLanguageItem( nCorrLang, RES_CHRATR_LANGUAGE ) );
+                    LanguageType nLangToUse = (MN_LANGUAGE_PARA == nId) ? nGuessLangPara : nGuessLangWord;
+                    sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nLangToUse );
+                    USHORT nResId = 0;
+                    switch (nScriptType)
+                    {
+                        case SCRIPTTYPE_COMPLEX     : nResId = RES_CHRATR_CTL_LANGUAGE; break;
+                        case SCRIPTTYPE_ASIAN       : nResId = RES_CHRATR_CJK_LANGUAGE; break;
+                        default /*SCRIPTTYPE_LATIN*/: nResId = RES_CHRATR_LANGUAGE; break;
+                    }
+                    SfxItemSet aSet(pSh->GetAttrPool(), nResId, nResId );
+                    aSet.Put( SvxLanguageItem( nLangToUse, nResId ) );
                     pSh->SetAttr( aSet );
 
                     pSh->EndAction();
