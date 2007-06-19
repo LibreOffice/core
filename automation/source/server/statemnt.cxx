@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: gh $ $Date: 2007-06-15 11:40:39 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 15:47:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -742,7 +742,16 @@ BOOL StatementSlot::Execute()
                     Reference < XStatusListener > xListener = ( XStatusListener* )new SlotStatusListener;
                     xDisp->addStatusListener( xListener, aTargetURL );
                     if ( static_cast< SlotStatusListener* >(xListener.get())->bEnabled )
-                        xDisp->dispatch( aTargetURL, aArgs );
+                    {
+                        if ( bIsSlotInExecute )
+                            ReportError( GEN_RES_STR0( S_SLOT_IN_EXECUTE ) );
+                        else
+                        {
+                            bIsSlotInExecute = TRUE;
+                            xDisp->dispatch( aTargetURL, aArgs );
+                            bIsSlotInExecute = FALSE;
+                        }
+                    }
                     else
                         ReportError( GEN_RES_STR1( S_UNO_URL_EXECUTE_FAILED_DISABLED, aTargetURL.Complete ) );
                     xDisp->removeStatusListener( xListener, aTargetURL );
@@ -2632,7 +2641,27 @@ BOOL StatementCommand::Execute()
                 else
                     pRet->GenReturn ( RET_Value, aSmartMethodId, aString1);
             }
+            break;
+        case RC_WaitSlot:
+            {
+                if ( ! (nParams & PARAM_USHORT_1) )
+                    nNr1 = 1000;    // defaults to 1000 = 1 Sec.
+                if ( !bBool1 )
+                {
+                    nLNr1 = Time().GetTime() + nNr1/10;
+                    bBool1 = TRUE;
+                }
 
+                if ( !bIsSlotInExecute )
+                    pRet->GenReturn ( RET_Value, aSmartMethodId, comm_USHORT(CONST_WSFinished) );
+                else
+                {
+                    if ( Time().GetTime() < long(nLNr1) )   // Aktuelle Zeit kleiner Endzeit
+                        return FALSE;
+                    pRet->GenReturn ( RET_Value, aSmartMethodId, comm_USHORT(CONST_WSTimeout) );
+                }
+            }
+            break;
     }
 
 
@@ -2644,6 +2673,8 @@ BOOL StatementCommand::Execute()
         case RC_AppDelay:       // Diese Befehle werden anderswo behandelt
         case RC_DisplayHid:
         case RC_ResetApplication:
+        case RC_WaitSlot:
+
         case RC_AppAbort:       // Sofortiges Löschen aller Befehle
             break;
         case RC_Assert:
@@ -4744,6 +4775,9 @@ BOOL StatementControl::Execute()
                 int i = 10;
                 while ( i-- && !pControl->HasFocus() )    // reschedule a bit
                     SafeReschedule();
+                    if ( !WinPtrValid( pControl ) )
+                        return FALSE;
+                }
                 if ( !pControl->HasFocus() )  // to get asyncronous focus
                 {
                     bBool2 = TRUE;
