@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:02:54 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:11:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <tools/datetime.hxx>
+
+#include "osl/time.h"
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -631,13 +633,16 @@ rtl::OUString Content::getParentURL()
 static util::DateTime
 getDateFromUnix (time_t t)
 {
-    static const Date epochStart( 1,1,1970 );
+    TimeValue tv;
+    tv.Nanosec = 0;
+    tv.Seconds = t;
+    oslDateTime dt;
 
-    ::DateTime tmp;
-    tmp.MakeDateTimeFromSec( epochStart, ((long unsigned int) t) );
-
-    return util::DateTime( 0, tmp.GetSec(), tmp.GetMin(), tmp.GetHour(),
-                   tmp.GetDay(), tmp.GetMonth (), tmp.GetYear ());
+    if ( osl_getDateTimeFromTimeValue( &tv, &dt ) )
+        return util::DateTime( 0, dt.Seconds, dt.Minutes, dt.Hours,
+                               dt.Day, dt.Month, dt.Year);
+    else
+        return util::DateTime();
 }
 
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
