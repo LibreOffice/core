@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contenthelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:53:50 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:13:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,8 +254,15 @@ void SAL_CALL ContentImplHelper::acquire()
 void SAL_CALL ContentImplHelper::release()
     throw()
 {
-    osl::MutexGuard aGuard(m_xProvider->m_aMutex);
-    cppu::OWeakObject::release();
+    // #144882# - Call to OWeakObject::release may destroy m_xProvider.
+    //            Prevent this.
+    rtl::Reference< ContentProviderImplHelper > xKeepProviderAlive(
+        m_xProvider );
+
+    {
+        osl::MutexGuard aGuard( m_xProvider->m_aMutex );
+        OWeakObject::release();
+    }
 }
 
 uno::Any SAL_CALL ContentImplHelper::queryInterface( const uno::Type & rType )
