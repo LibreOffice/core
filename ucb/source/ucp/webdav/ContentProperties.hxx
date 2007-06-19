@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ContentProperties.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:32:55 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:12:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@
 
 namespace com { namespace sun { namespace star { namespace beans {
     struct Property;
-    struct PropertyValue;
 } } } }
 
 namespace webdav_ucp
@@ -66,7 +65,7 @@ struct equalString
 {
   bool operator()( const rtl::OUString& s1, const rtl::OUString& s2 ) const
   {
-        return !!( s1 == s2 );
+      return !!( s1 == s2 );
   }
 };
 
@@ -84,10 +83,30 @@ struct hashString
 //
 //=========================================================================
 
+class PropertyValue
+{
+private:
+    ::com::sun::star::uno::Any m_aValue;
+    bool                       m_bIsCaseSensitive;
+
+public:
+    PropertyValue()
+    : m_bIsCaseSensitive( true ) {}
+
+    PropertyValue( const ::com::sun::star::uno::Any & rValue,
+                   bool bIsCaseSensitive )
+    : m_aValue( rValue),
+      m_bIsCaseSensitive( bIsCaseSensitive ) {}
+
+    bool isCaseSensitive() const { return m_bIsCaseSensitive; }
+    const ::com::sun::star::uno::Any & value() const { return m_aValue; }
+
+};
+
 typedef std::hash_map
 <
     rtl::OUString,
-    ::com::sun::star::uno::Any,
+    PropertyValue,
     hashString,
     equalString
 >
@@ -160,7 +179,8 @@ public:
 
     // overwrites probably existing entry.
     void addProperty( const rtl::OUString & rName,
-                      const com::sun::star::uno::Any & rValue );
+                      const com::sun::star::uno::Any & rValue,
+                      bool bIsCaseSensitive );
 
     bool isTrailingSlash() const { return m_bTrailingSlash; }
 
@@ -179,6 +199,8 @@ private:
     static com::sun::star::uno::Any m_aEmptyAny;
 
     ContentProperties & operator=( const ContentProperties & ); // n.i.
+
+    const PropertyValue * get( const rtl::OUString & rName ) const;
 };
 
 }
