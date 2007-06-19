@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eerdll.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:48:24 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 15:58:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,17 @@
 #include "precompiled_svx.hxx"
 
 #include <eeng_pch.hxx>
+
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XLANGUAGEGUESSING_HPP_
+#include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #include <svtools/solar.hrc>
 #include <eerdll.hxx>
@@ -89,6 +100,8 @@
 #include <comphelper/processfactory.hxx>
 
 static EditDLL* pDLL=0;
+
+using namespace ::com::sun::star;
 
 EditDLL* EditDLL::Get()
 {
@@ -205,6 +218,21 @@ vos::ORef<SvxForbiddenCharactersTable> GlobalEditData::GetForbiddenCharsTable()
     return xForbiddenCharsTable;
 }
 
+uno::Reference< linguistic2::XLanguageGuessing > GlobalEditData::GetLanguageGuesser()
+{
+    if (!xLanguageGuesser.is())
+    {
+        uno::Reference< lang::XMultiServiceFactory > xMgr ( comphelper::getProcessServiceFactory() );
+        if (xMgr.is())
+        {
+            xLanguageGuesser = uno::Reference< linguistic2::XLanguageGuessing >(
+                    xMgr->createInstance(
+                        rtl::OUString::createFromAscii( "com.sun.star.linguistic2.LanguageGuessing" ) ),
+                        uno::UNO_QUERY );
+        }
+    }
+    return xLanguageGuesser;
+}
 
 OutputDevice* GlobalEditData::GetStdRefDevice()
 {
