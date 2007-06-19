@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-11 11:32:42 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 14:37:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,8 @@ CNames *Controls::pClasses = NULL;
 ControlDefLoad __READONLY_DATA TestToolObj::arR_Cmds [] =
 #include "r_cmds.hxx"
 CNames *TestToolObj::pRCommands = NULL;
+CErrors *TestToolObj::pFehlerListe = NULL;      // Hier werden die Fehler des Testtools gespeichert
+
 
 DBG_NAME( ControlItem )
 DBG_NAME( ControlDef )
@@ -376,9 +378,7 @@ SbxTransportMethod::SbxTransportMethod( SbxDataType DT )
 
 TestToolObj::TestToolObj( String aName, String aFilePath )              // Interner Aufruf
 : SbxObject( aName )
-, bQuietErrors(FALSE)
 , bUseIPC(FALSE)
-, pFehlerListe(NULL)
 , bReturnOK(TRUE)
 , nSequence(KEEP_SEQUENCES)
 , ProgPath()
@@ -410,9 +410,7 @@ TestToolObj::TestToolObj( String aName, String aFilePath )              // Inter
 
 TestToolObj::TestToolObj( String aName, MyBasic* pBas )                // Aufruf im Testtool
 : SbxObject( aName )
-, bQuietErrors(FALSE)
 , bUseIPC(TRUE)
-, pFehlerListe(NULL)
 , bReturnOK(TRUE)
 , nSequence(KEEP_SEQUENCES)
 , ProgPath()
@@ -598,7 +596,8 @@ void TestToolObj::InitTestToolObj()
 
     pImpl->pChildEnv = new Environment;
 
-    pFehlerListe = new CErrors;             // Vor allem anderen. Wer weiss, wer alles einen Fehler ausl�st.
+    if (!pFehlerListe)
+        pFehlerListe = new CErrors;             // Vor allem anderen. Wer weiss, wer alles einen Fehler ausl�st.
 
     In = new CmdStream();
 
@@ -746,6 +745,7 @@ void TestToolObj::InitTestToolObj()
 
     pImpl->pControlsObj = new Controls( CUniString("GetNextCloseWindow") );
     pImpl->pControlsObj->SetType( SbxVARIANT );
+    Insert( pImpl->pControlsObj );
     pImpl->pControlsObj->SetUserData( ID_GetNextCloseWindow );
     pImpl->pControlsObj->ChangeListener( this );
 
@@ -2806,8 +2806,6 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
             ((StarBASIC*)GetParent())->MakeErrorText(GetError(),String());
             ADD_ERROR_QUIET(GetError(),String(pVar->GetName()).AppendAscii(": ").
                 Append(((StarBASIC*)GetParent())->GetErrorText()));
-            if ( bQuietErrors )
-                ResetError();
         }
     }
 }
@@ -2925,12 +2923,6 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
         if ( !pImpl->bDebugFindNoErrors )
         {
             ADD_ERROR(SbxERR_PROC_UNDEFINED,GEN_RES_STR1(S_UNKNOWN_SLOT_CONTROL, aStr) );
-            if ( bQuietErrors )
-            {       // Vorsichtshalber Control, falls noch �ne Methode Folgt.
-                pImpl->pControlsObj->SetName(aStr);
-                pImpl->pControlsObj->SetUserData( ID_ErrorDummy );
-                return pImpl->pControlsObj;
-            }
         }
     }
     return NULL;
@@ -2938,7 +2930,7 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.32 $
+    // search $Revision: 1.33 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
@@ -4194,7 +4186,7 @@ SbTextType TestToolObj::GetSymbolType( const String &rSymbol, BOOL bWasControl )
 
 
 #undef P_FEHLERLISTE
-#define P_FEHLERLISTE ((TestToolObj*)(GetParent()))->GetFehlerListe()
+#define P_FEHLERLISTE TestToolObj::pFehlerListe
 
 Controls::Controls( String aCName )
 : SbxObject( aCName)
@@ -4255,13 +4247,6 @@ SbxVariable* Controls::Find( const String& aStr, SbxClassType aType)
             return NULL;    // suppress generation of error in this case
     }
     ADD_ERROR(SbxERR_BAD_METHOD,GEN_RES_STR2(S_UNKNOWN_METHOD, GetName(), aStr));
-    if ( ((TestToolObj*)(GetParent()))->bQuietErrors )
-    {
-        pMethodVar->SetName(UniString(GetName()).AppendAscii(".").Append(aStr));
-        pMethodVar->SetUserData( ID_ErrorDummy );
-        pMethodVar->nValue = 0;
-        return pMethodVar;
-    }
     return NULL;
 }
 
