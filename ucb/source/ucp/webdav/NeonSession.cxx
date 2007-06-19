@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:19:40 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:13:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -477,7 +477,6 @@ extern "C" void NeonSession_ResponseHeaderCatcher( void * userdata,
 
         // Note: Empty vector means that all headers are requested.
         bool bIncludeIt = ( pCtx->pHeaderNames->size() == 0 );
-
         if ( !bIncludeIt )
         {
             // Check whether this header was requested.
@@ -488,9 +487,12 @@ extern "C" void NeonSession_ResponseHeaderCatcher( void * userdata,
 
             while ( it != end )
             {
-                if ( (*it) == aHeaderName )
+                // header names are case insensitive
+                if ( (*it).equalsIgnoreAsciiCase( aHeaderName ) )
+                {
+                    aHeaderName = (*it);
                     break;
-
+                }
                 ++it;
             }
 
@@ -501,10 +503,9 @@ extern "C" void NeonSession_ResponseHeaderCatcher( void * userdata,
         if ( bIncludeIt )
         {
             // Create & set the PropertyValue
-            beans::PropertyValue thePropertyValue;
-            thePropertyValue.Handle = -1;
-            thePropertyValue.Name   = aHeaderName;
-            thePropertyValue.State  = beans::PropertyState_DIRECT_VALUE;
+            DAVPropertyValue thePropertyValue;
+            thePropertyValue.IsCaseSensitive = false;
+            thePropertyValue.Name = aHeaderName;
 
             if ( nPos < aHeader.getLength() )
                 thePropertyValue.Value <<= aHeader.copy( nPos + 1 ).trim();
