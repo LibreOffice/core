@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtmsg.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-11 11:38:44 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 14:37:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,3 +120,4 @@
 #define S_SIZE_BELOW_MINIMUM                        ( SVT_START +  69 )
 #define S_CANNOT_FIND_FLOATING_WIN                  ( SVT_START +  70 )
 #define S_NO_LIST_BOX_STRING                        ( SVT_START +  71 )
+#define S_SLOT_IN_EXECUTE                           ( SVT_START +  72 )
