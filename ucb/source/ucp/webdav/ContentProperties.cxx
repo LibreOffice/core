@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ContentProperties.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:04:00 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:11:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,16 +131,17 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
     m_aEscapedTitle = aURI.GetPathBaseName();
 
     (*m_xProps)[ rtl::OUString::createFromAscii( "Title" ) ]
-                = uno::makeAny( aURI.GetPathBaseNameUnescaped() );
+                = PropertyValue(
+                    uno::makeAny( aURI.GetPathBaseNameUnescaped() ), true );
 
-    std::vector< beans::PropertyValue >::const_iterator it
+    std::vector< DAVPropertyValue >::const_iterator it
         = rResource.properties.begin();
-      std::vector< beans::PropertyValue >::const_iterator end
+      std::vector< DAVPropertyValue >::const_iterator end
         = rResource.properties.end();
 
       while ( it != end )
       {
-        beans::PropertyValue aProp = (*it);
+        DAVPropertyValue aProp = (*it);
 
         if ( aProp.Name.equals( DAVProperties::CREATIONDATE ) )
         {
@@ -151,7 +152,7 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
             DateTimeHelper::convert( aValue, aDate );
 
             (*m_xProps)[ rtl::OUString::createFromAscii( "DateCreated" ) ]
-                = uno::makeAny( aDate );
+                = PropertyValue( uno::makeAny( aDate ), true );
         }
 //      else if ( aProp.Name.equals( DAVProperties::DISPLAYNAME ) )
 //      {
@@ -166,7 +167,7 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
             aProp.Value >>= aValue;
 
             (*m_xProps)[ rtl::OUString::createFromAscii( "Size" ) ]
-                = uno::makeAny( aValue.toInt64() );
+                = PropertyValue( uno::makeAny( aValue.toInt64() ), true );
         }
         else if ( aProp.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "Content-Length" ) ) )
@@ -179,13 +180,13 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
             aProp.Value >>= aValue;
 
             (*m_xProps)[ rtl::OUString::createFromAscii( "Size" ) ]
-                = uno::makeAny( aValue.toInt64() );
+                = PropertyValue( uno::makeAny( aValue.toInt64() ), true );
         }
         else if ( aProp.Name.equals( DAVProperties::GETCONTENTTYPE ) )
         {
             // Map DAV:getcontenttype to UCP:MediaType (1:1)
             (*m_xProps)[ rtl::OUString::createFromAscii( "MediaType" ) ]
-                = aProp.Value;
+                = PropertyValue( aProp.Value, true );
         }
         else if ( aProp.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "Content-Type" ) ) )
@@ -195,7 +196,7 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
 
             // Map DAV:getcontenttype to UCP:MediaType (1:1)
             (*m_xProps)[ rtl::OUString::createFromAscii( "MediaType" ) ]
-                = aProp.Value;
+                = PropertyValue( aProp.Value, true );
         }
 //      else if ( aProp.Name.equals( DAVProperties::GETETAG ) )
 //      {
@@ -209,7 +210,7 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
             DateTimeHelper::convert( aValue, aDate );
 
             (*m_xProps)[ rtl::OUString::createFromAscii( "DateModified" ) ]
-                = uno::makeAny( aDate );
+                = PropertyValue( uno::makeAny( aDate ), true );
         }
         else if ( aProp.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "Last-Modified" ) ) )
@@ -224,7 +225,7 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
             DateTimeHelper::convert( aValue, aDate );
 
             (*m_xProps)[ rtl::OUString::createFromAscii( "DateModified" ) ]
-                = uno::makeAny( aDate );
+                = PropertyValue( uno::makeAny( aDate ), true );
         }
 //      else if ( aProp.Name.equals( DAVProperties::LOCKDISCOVERY ) )
 //      {
@@ -240,15 +241,15 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
                     RTL_CONSTASCII_STRINGPARAM( "collection" ) );
 
             (*m_xProps)[ rtl::OUString::createFromAscii( "IsFolder" ) ]
-                = uno::makeAny( bFolder );
+                = PropertyValue( uno::makeAny( bFolder ), true );
             (*m_xProps)[ rtl::OUString::createFromAscii( "IsDocument" ) ]
-                = uno::makeAny( sal_Bool( !bFolder ) );
+                = PropertyValue( uno::makeAny( sal_Bool( !bFolder ) ), true );
             (*m_xProps)[ rtl::OUString::createFromAscii( "ContentType" ) ]
-                    = uno::makeAny( bFolder
+                    = PropertyValue( uno::makeAny( bFolder
                         ? rtl::OUString::createFromAscii(
                             WEBDAV_COLLECTION_TYPE )
                         : rtl::OUString::createFromAscii(
-                            WEBDAV_CONTENT_TYPE ) );
+                            WEBDAV_CONTENT_TYPE ) ), true );
         }
 //      else if ( aProp.Name.equals( DAVProperties::SOURCE ) )
 //      {
@@ -258,7 +259,8 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
 //      }
 
         // Save property.
-        (*m_xProps)[ aProp.Name ] = aProp.Value;
+        (*m_xProps)[ aProp.Name ]
+            = PropertyValue( aProp.Value, aProp.IsCaseSensitive );
 
         ++it;
       }
@@ -275,11 +277,11 @@ ContentProperties::ContentProperties(
   m_bTrailingSlash( sal_False )
 {
     (*m_xProps)[ rtl::OUString::createFromAscii( "Title" ) ]
-        = uno::makeAny( rTitle );
+        = PropertyValue( uno::makeAny( rTitle ), true );
     (*m_xProps)[ rtl::OUString::createFromAscii( "IsFolder" ) ]
-        = uno::makeAny( bFolder );
+        = PropertyValue( uno::makeAny( bFolder ), true );
     (*m_xProps)[ rtl::OUString::createFromAscii( "IsDocument" ) ]
-        = uno::makeAny( sal_Bool( !bFolder ) );
+        = PropertyValue( uno::makeAny( sal_Bool( !bFolder ) ), true );
 }
 
 //=========================================================================
@@ -288,7 +290,7 @@ ContentProperties::ContentProperties( const rtl::OUString & rTitle )
   m_bTrailingSlash( sal_False )
 {
     (*m_xProps)[ rtl::OUString::createFromAscii( "Title" ) ]
-        = uno::makeAny( rTitle );
+        = PropertyValue( uno::makeAny( rTitle ), true );
 }
 
 //=========================================================================
@@ -304,18 +306,42 @@ ContentProperties::ContentProperties( const ContentProperties & rOther )
 //=========================================================================
 bool ContentProperties::contains( const rtl::OUString & rName ) const
 {
-    return ( m_xProps->find( rName ) != m_xProps->end() );
+    const uno::Any & rValue = getValue( rName );
+    return rValue.hasValue();
 }
 
 //=========================================================================
 const uno::Any & ContentProperties::getValue(
                                     const rtl::OUString & rName ) const
 {
-    PropertyValueMap::const_iterator it = m_xProps->find( rName );
-    if ( it != m_xProps->end() )
-        return (*it).second;
+    const PropertyValue * pProp = get( rName );
+    if ( pProp )
+        return pProp->value();
+    else
+        return m_aEmptyAny;
+}
 
-    return m_aEmptyAny;
+//=========================================================================
+const PropertyValue * ContentProperties::get(
+                                    const rtl::OUString & rName ) const
+{
+    PropertyValueMap::const_iterator it = m_xProps->find( rName );
+    const PropertyValueMap::const_iterator end = m_xProps->end();
+
+    if ( it == end )
+    {
+        it  = m_xProps->begin();
+        while ( it != end )
+        {
+            if ( (*it).first.equalsIgnoreAsciiCase( rName ) )
+                return &(*it).second;
+
+            ++it;
+        }
+        return 0;
+    }
+    else
+        return &(*it).second;
 }
 
 //=========================================================================
@@ -532,11 +558,11 @@ void ContentProperties::addProperties(
 
         if ( !contains( rName ) ) // ignore duplicates
         {
-            const uno::Any & rValue = rContentProps.getValue( rName );
-            if ( rValue.hasValue() )
+            const PropertyValue * pProp = rContentProps.get( rName );
+            if ( pProp )
             {
                 // Add it.
-                (*m_xProps)[ rName ] = rValue;
+                (*m_xProps)[ rName ] = PropertyValue( *pProp );
             }
         }
 
@@ -546,8 +572,8 @@ void ContentProperties::addProperties(
 
 //=========================================================================
 void ContentProperties::addProperty( const rtl::OUString & rName,
-                                     const com::sun::star::uno::Any & rValue )
+                                     const com::sun::star::uno::Any & rValue,
+                                     bool bIsCaseSensitive )
 {
-    (*m_xProps)[ rName ] = rValue;
+    (*m_xProps)[ rName ] = PropertyValue( rValue, bIsCaseSensitive );
 }
-
