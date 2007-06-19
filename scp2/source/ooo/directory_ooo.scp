@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directory_ooo.scp,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 11:53:07 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:02:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1435,6 +1435,11 @@ End
 Directory gid_Dir_Share_Plugin
     ParentID = gid_Dir_Share;
     DosName = "plugin";
+End
+
+Directory gid_Dir_Share_Fingerprint
+    ParentID = gid_Dir_Share;
+    DosName = "fingerprint";
 End
 
 Directory gid_Dir_Help
