@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:28:20 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 15:59:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,6 +217,7 @@ class SvtPathOptions_Impl
         const String&   GetUserDictionaryPath() { return GetPath( SvtPathOptions::PATH_USERDICTIONARY ); }
         const String&   GetWorkPath() { return GetPath( SvtPathOptions::PATH_WORK ); }
         const String&   GetUIConfigPath() { return GetPath( SvtPathOptions::PATH_UICONFIG ); }
+        const String&   GetFingerprintPath() { return GetPath( SvtPathOptions::PATH_FINGERPRINT ); }
 
         // set the pathes
         void            SetPath( SvtPathOptions::Pathes, const String& rNewPath );
@@ -296,7 +297,8 @@ static PropertyStruct aPropNames[] =
     { "UserConfig",     SvtPathOptions::PATH_USERCONFIG     },
     { "UserDictionary", SvtPathOptions::PATH_USERDICTIONARY },
     { "Work",           SvtPathOptions::PATH_WORK           },
-    { "UIConfig",       SvtPathOptions::PATH_UICONFIG       }
+    { "UIConfig",       SvtPathOptions::PATH_UICONFIG       },
+    { "Fingerprint",    SvtPathOptions::PATH_FINGERPRINT    }
 };
 
 static VarNameAttribute aVarNameAttribute[] =
@@ -327,7 +329,7 @@ const String& SvtPathOptions_Impl::GetPath( SvtPathOptions::Pathes ePath )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( ePath <= SvtPathOptions::PATH_UICONFIG )
+    if ( ePath < SvtPathOptions::PATH_COUNT )
     {
         OUString    aPathValue;
         String      aResult;
@@ -360,7 +362,7 @@ BOOL SvtPathOptions_Impl::IsPathReadonly(SvtPathOptions::Pathes ePath)const
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     BOOL bReadonly = FALSE;
-    if ( ePath <= SvtPathOptions::PATH_UICONFIG )
+    if ( ePath < SvtPathOptions::PATH_COUNT )
     {
         Reference<XPropertySet> xPrSet(m_xPathSettings, UNO_QUERY);
         if(xPrSet.is())
@@ -380,7 +382,7 @@ void SvtPathOptions_Impl::SetPath( SvtPathOptions::Pathes ePath, const String& r
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( ePath <= SvtPathOptions::PATH_UICONFIG )
+    if ( ePath < SvtPathOptions::PATH_COUNT )
     {
         String      aResult;
         OUString    aNewValue;
@@ -728,6 +730,13 @@ const String& SvtPathOptions::GetLinguisticPath() const
 
 // -----------------------------------------------------------------------
 
+const String& SvtPathOptions::GetFingerprintPath() const
+{
+    return pImp->GetFingerprintPath();
+}
+
+// -----------------------------------------------------------------------
+
 const String& SvtPathOptions::GetModulePath() const
 {
     return pImp->GetModulePath();
@@ -1036,6 +1045,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
                 case PATH_TEMPLATE:     aPath = GetTemplatePath();      break;
                 case PATH_WORK:         aPath = GetWorkPath();          break;
                 case PATH_UICONFIG:     aPath = GetUIConfigPath();      break;
+                case PATH_FINGERPRINT:  aPath = GetFingerprintPath();    break;
                 case PATH_USERDICTIONARY:/*-Wall???*/           break;
                 case PATH_USERCONFIG:/*-Wall???*/           break;
                 case PATH_COUNT: /*-Wall???*/ break;
