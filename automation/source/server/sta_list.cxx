@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: gh $ $Date: 2007-06-13 09:02:52 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 14:36:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,6 +127,8 @@ USHORT StatementList::nMaxTypeKeysDelay = 0;
 BOOL StatementList::bDoTypeKeysDelay = FALSE;
 
 Window* StatementList::pFirstDocFrame = NULL;
+
+BOOL StatementList::bIsSlotInExecute = FALSE;
 
 BOOL StatementList::bCatchGPF = TRUE;
 
