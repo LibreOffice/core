@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnsupportedNameClashException.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:56:01 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:19:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,11 +45,22 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** This exception is used to indicate that the requested <type>NameClash</type>
-    is not supported.
+/** <p>This exception must be thrown in case the requested nameclash
+    directive is not supported, because it is not possible to implement
+    it or if it is just not (yet) implemented.
 
-    <p>For example, each <type>TransferInfo</type> supplied as argument of the
-    command 'transfer' contains a name clash directive.
+    <p>Command 'transfer': Used if the nameclash directive specified in
+    parameter NameClash of the supplied <type>TransferInfo</type> is not
+    supported. For example, if the NameClash was set to NameClash::ERROR,
+    to NameClash::RENAME or to NameClash::ASK, the implementation must be
+    able determine whether there are existing data. This exception must also
+    be used if NameClash::RENAME was specified and the implementation is
+    unable to create a valid new name after a suitable number of tries.
+
+    <p>Command 'insert': Used if the parameter ReplaceExisting of the
+    supplied <type>InsertCommandArgument</type> was set to <false/> and the
+    implementation is unable to determine whether there are existing data.
+    The member NameClash of the exception must be set to NameClash::ERROR
 
     @version    1.0
     @author     Kai Sommerfeld
