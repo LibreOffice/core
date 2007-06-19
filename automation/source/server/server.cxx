@@ -4,9 +4,9 @@
  *
  *  $RCSfile: server.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-11 08:54:31 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 14:36:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -786,7 +786,7 @@ BOOL ImplRemoteControl::QueCommands( ULONG nServiceId, SvStream *pIn )
     {
 #ifdef TIMERIDLE
         m_aIdleTimer.SetTimeoutHdl( LINK( this, ImplRemoteControl, IdleHdl ) );
-        m_aIdleTimer.SetTimeout( 1000 );
+        m_aIdleTimer.SetTimeout( 500 );
         m_aIdleTimer.Start();
 #else
         GetpApp()->InsertIdleHdl( LINK( this, ImplRemoteControl, IdleHdl ), 1 );
