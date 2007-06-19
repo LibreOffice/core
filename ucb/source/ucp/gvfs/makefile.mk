@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 18:04:08 $
+#   last change: $Author: kz $ $Date: 2007-06-19 16:11:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,9 +80,7 @@ SHL1STDLIBS=\
     $(CPPULIB) \
     $(SALLIB)  \
     $(SALHELPERLIB)  \
-    $(UCBHELPERLIB)	\
-    $(UNOTOOLSLIB) \
-    $(TOOLSLIB)
+    $(UCBHELPERLIB)
 
 SHL1STDLIBS+=$(PKGCONFIG_LIBS)
 
