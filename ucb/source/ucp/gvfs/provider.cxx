@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:04:24 $
+ *  last change: $Author: kz $ $Date: 2007-06-19 16:11:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
-#include <tools/urlobj.hxx>
+
 #include <ucbhelper/contentidentifier.hxx>
 #include <libgnomevfs/gnome-vfs-init.h>
 #include "provider.hxx"
@@ -124,18 +124,6 @@ ContentProvider::queryContent(
                (Identifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8));
 #endif
 
-    // It sucks to depend on 'tools' but ...
-//  INetURLObject url( Identifier->getContentIdentifier() );
-//  if ( url.GetProtocol() < INET_PROT_END &&
-//          url.GetProtocol() != INET_PROT_HTTPS &&
-//          url.GetProtocol() != INET_PROT_HTTP ) {
-// #ifdef DEBUG
-//      g_warning ("Not one of ours ... '%s'",
-//                    (const sal_Char *)rtl::OUStringToOString
-//                    (Identifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8));
-// #endif
-//      throw com::sun::star::ucb::IllegalIdentifierException();
-//  }
     osl::MutexGuard aGuard( m_aMutex );
 
     // Check, if a content with given id already exists...
