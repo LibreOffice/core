@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:39:58 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:25:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,6 +140,7 @@
 #ifndef _VCL_PDFEXTOUTDEVDATA_HXX
 #include <vcl/pdfextoutdevdata.hxx>
 #endif
+#include <vcl/tabpage.hxx>
 
 #ifndef COMPHELPER_ASYNCNOTIFICATION_HXX
 #include <comphelper/asyncnotification.hxx>
@@ -2348,26 +2349,87 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
     if ( !pWindow )
         return;
 
-    OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( mxViewGraphics );
-    if ( !pDev )
-        pDev = pWindow->GetParent();
-    if ( !pDev)
-        return;
+    if ( pWindow )
+    {
+        TabPage* pTabPage = dynamic_cast< TabPage* >( pWindow );
+        if ( pTabPage )
+        {
+            Point aPos( nX, nY );
+            Size  aSize = pWindow->GetSizePixel();
 
-    Size aSize = pWindow->GetSizePixel();
-    aSize = pDev->PixelToLogic( aSize );
+            OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( mxViewGraphics );
+            aPos  = pDev->PixelToLogic( aPos );
+            aSize = pDev->PixelToLogic( aSize );
 
-    Point aPos = pDev->PixelToLogic( Point( nX, nY ) );
+            pTabPage->Draw( pDev, aPos, aSize, 0 );
+            return;
+        }
 
-    vcl::PDFExtOutDevData* pPDFExport   = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
-    bool bDrawSimplified =  ( pDev->GetOutDevType() == OUTDEV_PRINTER )
-                         || ( pDev->GetOutDevViewType() == OUTDEV_VIEWTYPE_PRINTPREVIEW )
-                         || ( pPDFExport && ! pPDFExport->GetIsExportFormFields() );
+        OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( mxViewGraphics );
+        Point aPos( nX, nY );
 
-    if ( bDrawSimplified )
-        pWindow->Draw( pDev, aPos, aSize, WINDOW_DRAW_NOCONTROLS );
-    else
-        pWindow->PaintToDevice( pDev, aPos, aSize );
+        if ( !pDev )
+            pDev = pWindow->GetParent();
+
+        if ( pWindow->GetParent() && !pWindow->IsSystemWindow() && ( pWindow->GetParent() == pDev ) )
+        {
+            // #i40647# don't draw here if this is a recursive call
+            // sometimes this is called recursively, because the Update call on the parent
+            // (strangely) triggers another paint. Prevent a stack overflow here
+            // Yes, this is only fixing symptoms for the moment ....
+            // #i40647# / 2005-01-18 / frank.schoenheit@sun.com
+            if ( !mbDrawingOntoParent )
+            {
+                FlagGuard aDrawingflagGuard( mbDrawingOntoParent );
+
+                BOOL bWasVisible = pWindow->IsVisible();
+                Point aOldPos( pWindow->GetPosPixel() );
+
+                if ( bWasVisible && aOldPos == aPos )
+                {
+                    pWindow->Update();
+                    return;
+                }
+
+                pWindow->SetPosPixel( aPos );
+
+                // Erstmal ein Update auf den Parent, damit nicht beim Update
+                // auf dieses Fenster noch ein Paint vom Parent abgearbeitet wird,
+                // wo dann ggf. dieses Fenster sofort wieder gehidet wird.
+                if( pWindow->GetParent() )
+                    pWindow->GetParent()->Update();
+
+                pWindow->Show();
+                pWindow->Update();
+                pWindow->SetParentUpdateMode( sal_False );
+                pWindow->Hide();
+                pWindow->SetParentUpdateMode( sal_True );
+
+                pWindow->SetPosPixel( aOldPos );
+                if ( bWasVisible )
+                    pWindow->Show( TRUE );
+            }
+        }
+        else if ( pDev )
+        {
+            Size aSz = pWindow->GetSizePixel();
+            aSz = pDev->PixelToLogic( aSz );
+            Point aP = pDev->PixelToLogic( aPos );
+
+            vcl::PDFExtOutDevData* pPDFExport   = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
+            bool bDrawSimple =    ( pDev->GetOutDevType() == OUTDEV_PRINTER )
+                               || ( pDev->GetOutDevViewType() == OUTDEV_VIEWTYPE_PRINTPREVIEW )
+                               || ( pPDFExport && ! pPDFExport->GetIsExportFormFields() );
+            if ( bDrawSimple )
+            {
+                pWindow->Draw( pDev, aP, aSz, WINDOW_DRAW_NOCONTROLS );
+            }
+            else
+            {
+                pWindow->PaintToDevice( pDev, aP, aSz );
+            }
+        }
+    }
 }
 
 void VCLXWindow::setZoom( float fZoomX, float /*fZoomY*/ ) throw(::com::sun::star::uno::RuntimeException)
