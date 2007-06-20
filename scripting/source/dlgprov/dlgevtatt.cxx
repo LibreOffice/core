@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgevtatt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:21:04 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:27:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XDIALOGEVENTHANDLER_HPP_
 #include <com/sun/star/awt/XDialogEventHandler.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XCONTAINERWINDOWEVENTHANDLER_HPP_
+#include <com/sun/star/awt/XContainerWindowEventHandler.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -317,14 +320,16 @@ namespace dlgprov
 
     DialogScriptListenerImpl::DialogScriptListenerImpl( const Reference< XComponentContext >& rxContext,
             const Reference< ::com::sun::star::frame::XModel >& rxModel,
-            const Reference< ::com::sun::star::awt::XDialog >& rxDialog,
+            const Reference< ::com::sun::star::awt::XControl >& rxControl,
             const Reference< ::com::sun::star::uno::XInterface >& rxHandler,
-            const Reference< ::com::sun::star::beans::XIntrospectionAccess >& rxIntrospectionAccess )
+            const Reference< ::com::sun::star::beans::XIntrospectionAccess >& rxIntrospectionAccess,
+            bool bDialogProviderMode )
         :m_xContext( rxContext )
         ,m_xModel( rxModel )
-        ,m_xDialog( rxDialog )
+        ,m_xControl( rxControl )
         ,m_xHandler( rxHandler )
         ,m_xIntrospectionAccess( rxIntrospectionAccess )
+        ,m_bDialogProviderMode( bDialogProviderMode )
     {
     }
 
@@ -444,11 +449,27 @@ namespace dlgprov
         const Any* pArguments = aScriptEvent.Arguments.getConstArray();
         Any aEventObject = pArguments[0];
 
-        Reference< XDialogEventHandler > xDialogEventHandler( m_xHandler, UNO_QUERY );
         bool bHandled = false;
-        if( xDialogEventHandler.is() )
+        if( m_xHandler.is() )
         {
-            bHandled = xDialogEventHandler->callHandlerMethod( m_xDialog, aEventObject, aMethodName );
+            if( m_bDialogProviderMode )
+            {
+                Reference< XDialogEventHandler > xDialogEventHandler( m_xHandler, UNO_QUERY );
+                if( xDialogEventHandler.is() )
+                {
+                    Reference< XDialog > xDialog( m_xControl, UNO_QUERY );
+                    bHandled = xDialogEventHandler->callHandlerMethod( xDialog, aEventObject, aMethodName );
+                }
+            }
+            else
+            {
+                Reference< XContainerWindowEventHandler > xContainerWindowEventHandler( m_xHandler, UNO_QUERY );
+                if( xContainerWindowEventHandler.is() )
+                {
+                    Reference< XWindow > xWindow( m_xControl, UNO_QUERY );
+                    bHandled = xContainerWindowEventHandler->callHandlerMethod( xWindow, aEventObject, aMethodName );
+                }
+            }
         }
 
         Any aRet;
@@ -477,7 +498,16 @@ namespace dlgprov
                     // Signature check automatically done by reflection
                     Sequence<Any> Args(2);
                     Any* pArgs = Args.getArray();
-                    pArgs[0] <<= m_xDialog;
+                    if( m_bDialogProviderMode )
+                    {
+                        Reference< XDialog > xDialog( m_xControl, UNO_QUERY );
+                        pArgs[0] <<= xDialog;
+                    }
+                    else
+                    {
+                        Reference< XWindow > xWindow( m_xControl, UNO_QUERY );
+                        pArgs[0] <<= xWindow;
+                    }
                     pArgs[1] = aEventObject;
                     aRet = rxMethod->invoke( aHandlerObject, Args );
                     bHandled = true;
