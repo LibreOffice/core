@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:39:20 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:46:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,15 @@ ModelessDialog RID_DLG_PACKAGE_MANAGER
         TabStop = TRUE;
         Text [ en-US ] = "~Updates...";
     };
+    PushButton RID_BTN_OPTIONS
+    {
+        Disable = TRUE;
+        TabStop = TRUE;
+        Text [ en-US ] = "~Options...";
+        Text [ de ] = "~Optionen...";
+    };
+
+
 
     OKButton RID_BTN_CLOSE
     {
@@ -225,6 +234,11 @@ String RID_CTX_ITEM_EXPORT
 String RID_CTX_ITEM_CHECK_UPDATE
 {
     Text [ en-US ] = "~Update...";
+};
+
+String RID_CTX_ITEM_OPTIONS
+{
+    Text [ en-US ] = "~Options...";
 };
 
 String RID_STR_EXPORT_PACKAGE
