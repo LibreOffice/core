@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:05:45 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:44:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,6 +172,9 @@ public:
 
     static SfxTabPage *CreateSfxAcceleratorConfigPage(
         Window *pParent, const SfxItemSet& rSet );
+
+    virtual VclAbstractDialog*  CreateOptionsDialog(
+        Window* pParent, const rtl::OUString& rExtensionId, const rtl::OUString& rApplicationContext ) = 0;
 };
 
 #endif
