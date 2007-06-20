@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-03 15:30:51 $
+#   last change: $Author: kz $ $Date: 2007-06-20 13:59:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@ XCUFILES= \
     Compatibility.xcu \
     DataAccess.xcu \
     Embedding.xcu \
+    ExtensionManager.xcu \
     Impress.xcu	\
     Jobs.xcu \
     Labels.xcu \
