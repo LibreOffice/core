@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formresid.hrc,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:48:15 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:42:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,6 +277,7 @@
 #define RID_STR_LIST_BINDING                ( RID_FORMBROWSER_START + 241 )
 #define RID_STR_BINDING_UI_NAME             ( RID_FORMBROWSER_START + 242 )
 #define RID_STR_BINDING_NAME                RID_STR_BINDING_UI_NAME
+#define RID_STR_DECORATION                  ( RID_FORMBROWSER_START + 243 )
 
 // -----------------------------------------------------------------------
 // - message strings
