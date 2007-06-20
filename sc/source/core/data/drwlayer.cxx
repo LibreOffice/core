@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:42:43 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 13:32:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1666,7 +1666,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
                             SCROW nClipEndY;
                             pClipDoc->GetClipStart( nClipStartX, nClipStartY );
                             pClipDoc->GetClipArea( nClipEndX, nClipEndY, TRUE );
-                            nClipEndX += nClipStartX;
+                            nClipEndX = nClipEndX + nClipStartX;
                             nClipEndY += nClipStartY;   // GetClipArea returns the difference
 
                             aClipRange = ScRange( nClipStartX, nClipStartY, nSourceTab,
