@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprn.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:08:29 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:13:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,8 +84,9 @@ class VCL_DLLPUBLIC SalInfoPrinter
 public:
     std::vector< vcl::PaperInfo  >      m_aPaperFormats;    // all printer supported formats
     bool                                m_bPapersInit;      // set to true after InitPaperFormats
+    bool                                m_bCompatMetrics;
 
-    SalInfoPrinter() {}
+    SalInfoPrinter() : m_bPapersInit( false ), m_bCompatMetrics( false ) {}
     virtual ~SalInfoPrinter();
 
     // SalGraphics or NULL, but two Graphics for all SalFrames
