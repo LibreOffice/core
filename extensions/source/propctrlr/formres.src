@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:48:01 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:42:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1389,4 +1389,9 @@ String RID_STR_SUBMISSION_ID
 String RID_STR_BINDING_UI_NAME
 {
     Text [ en-US ] = "Binding" ;
+};
+
+String RID_STR_DECORATION
+{
+    Text [ en-US ] = "With title bar" ;
 };
