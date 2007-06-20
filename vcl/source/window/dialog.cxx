@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:40:03 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:38:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -997,13 +997,16 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULO
 
     pDev->DrawRect( Rectangle( aPos, aSize ) );
 
-    ImplBorderWindow aImplWin( this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP );
-    aImplWin.SetText( GetText() );
-    aImplWin.SetPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height() );
-    aImplWin.SetDisplayActive( TRUE );
-    aImplWin.InitView();
+    if (!( GetStyle() & WB_NOBORDER ))
+    {
+        ImplBorderWindow aImplWin( this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP );
+        aImplWin.SetText( GetText() );
+        aImplWin.SetPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height() );
+        aImplWin.SetDisplayActive( TRUE );
+        aImplWin.InitView();
 
-    aImplWin.Draw( Rectangle( aPos, aSize ), pDev, aPos );
+        aImplWin.Draw( Rectangle( aPos, aSize ), pDev, aPos );
+    }
 
     pDev->Pop();
 }
