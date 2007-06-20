@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:03:28 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:11:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1251,33 +1251,19 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bUseOldNumbering = false; // #111955#
     bool bOutlineLevelYieldsOutlineRule = false;
     bool bAddExternalLeading = false;
-    // OD 2004-02-16 #106629#
     bool bAddParaSpacingToTableCells = false;
-    // DVO, OD 12.01.2004 #i11859#
     bool bUseFormerLineSpacing = false;
-    // OD 2004-03-17 #i11860#
     bool bUseFormerObjectPositioning = false;
-    // --> FME #108724#
     bool bUseFormerTextWrapping = false;
-    // --> OD 2004-07-08 #i28701#
     bool bConsiderWrapOnObjPos = false;
-    // --> FME 2005-05-27 #i47448#
     bool bIgnoreFirstLineIndentInNumbering = false;
-    // --> FME 2005-06-08 #i49277#
     bool bDoNotJustifyLinesWithManualBreak = false;
-    // --> FME 2005-08-11 #i53199#
     bool bDoNotResetParaAttrsForNumFont    = false;
-    // --> PB 2004-08-23 #i33095#
     bool bLoadReadonly = false;
-    // --> OD 2006-03-14 #i62875#
     bool bDoNotCaptureDrawObjsOnPage( false );
-    // <--
-    // --> OD 2006-04-13 #b6402800#
     bool bClipAsCharacterAnchoredWriterFlyFrames( false );
-    // <--
-    // --> FME 2006-10-09 #i60945#
     bool bUnixForceZeroExtLeading = false;
-    // <--
+    bool bUseOldPrinterMetrics = false;
 
     OUString sRedlineProtectionKey( RTL_CONSTASCII_USTRINGPARAM( "RedlineProtectionKey" ) );
 
@@ -1316,52 +1302,36 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     bPrinterIndependentLayout = true;
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AddExternalLeading")) )
                     bAddExternalLeading = true;
-                // OD 2004-02-16 #106629#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AddParaSpacingToTableCells")) )
                     bAddParaSpacingToTableCells = true;
-                // DVO, OD 12.01.2004 #i11859#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseFormerLineSpacing")) )
                     bUseFormerLineSpacing = true;
-                // OD 2004-03-17 #i11860#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseFormerObjectPositioning")) )
                     bUseFormerObjectPositioning = true;
-                // FME #108724#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseFormerTextWrapping")) )
                     bUseFormerTextWrapping = true;
-                // #111955#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseOldNumbering")) )
                     bUseOldNumbering = true;
-                // --> HB 2005-07-28
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OutlineLevelYieldsNumbering")) )
                     bOutlineLevelYieldsOutlineRule = true;
-                // <--
-                // --> OD 2004-07-08 #i28701#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ConsiderTextWrapOnObjPos")) )
                     bConsiderWrapOnObjPos = true;
-                // --> FME 2005-05-27 #i47448#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IgnoreFirstLineIndentInNumbering")) )
                     bIgnoreFirstLineIndentInNumbering = true;
-                // --> FME 2005-06-08 #i49277#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DoNotJustifyLinesWithManualBreak")) )
                     bDoNotJustifyLinesWithManualBreak = true;
-                // --> FME 2005-08-11 #i53199#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DoNotResetParaAttrsForNumFont")) )
                     bDoNotResetParaAttrsForNumFont = true;
-                // --> PB 2004-08-23 #i33095#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LoadReadonly")) )
                     bLoadReadonly = true;
-                // --> OD 2006-03-14 #i62875#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DoNotCaptureDrawObjsOnPage")) )
                     bDoNotCaptureDrawObjsOnPage = true;
-                // <--
-                // --> OD 2006-04-13 #b6402800#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ClipAsCharacterAnchoredWriterFlyFrames")) )
                     bClipAsCharacterAnchoredWriterFlyFrames = true;
-                // <--
-                // --> FME 2006-10-09 #i60945#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UnxForceZeroExtLeading")) )
                     bUnixForceZeroExtLeading = true;
-                // <--
+                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseOldPrinterMetrics")) )
+                    bUseOldPrinterMetrics = true;
             }
             catch( Exception& )
             {
@@ -1393,14 +1363,12 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
             OUString( RTL_CONSTASCII_USTRINGPARAM("AddExternalLeading")), makeAny( false ) );
     }
 
-    // OD 12.01.2004 #i11859#
     if( ! bUseFormerLineSpacing )
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("UseFormerLineSpacing")), makeAny( true ) );
     }
 
-    // OD 2004-03-17 #i11860#
     if( !bUseFormerObjectPositioning )
     {
         xProps->setPropertyValue(
@@ -1428,30 +1396,25 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                        aAny );
     }
 
-    // OD 2004-02-16 #106629#
     if( !bAddParaSpacingToTableCells )
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("AddParaSpacingToTableCells")), makeAny( false ) );
     }
 
-    // --> FME #108724#
     if( !bUseFormerTextWrapping )
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("UseFormerTextWrapping")), makeAny( true ) );
     }
-    // <--
 
-    // --> OD 2004-07-08 #i28701#
     if( !bConsiderWrapOnObjPos )
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("ConsiderTextWrapOnObjPos")), makeAny( false ) );
     }
-    // <--
 
-    // --> FME 2005-05-27 #i47448#
+    // FME 2005-05-27 #i47448#
     // For SO7pp4, part of the 'new numbering' stuff has been backported from
     // SO8. Unfortunately, only part of it and by using the same compatibility option
     // like in SO8. Therefore documents generated with SO7pp4, containing
@@ -1467,9 +1430,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("IgnoreFirstLineIndentInNumbering")), makeAny( true ) );
     }
-    // <--
 
-    // --> FME 2005-06-08 #i49277#
     // This flag has to be set for all documents < SO8
     if ( !bDoNotJustifyLinesWithManualBreak && bDocumentPriorSO8 )
     {
@@ -1478,46 +1439,43 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     }
     // <--
 
-    // --> FME 2005-08-11 #i53199#
     // This flag has to be set for all documents < SO8
     if ( !bDoNotResetParaAttrsForNumFont && bDocumentPriorSO8 )
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("DoNotResetParaAttrsForNumFont")), makeAny( true ) );
     }
-    // <--
 
-    // --> PB 2004-08-23 #i33095#
     if ( !bLoadReadonly )
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("LoadReadonly") ), makeAny( false ) );
     }
-    // <--
 
-    // --> OD 2006-03-14 #i62875#
     // This flag has to be set for all documents < SO8
     if ( !bDoNotCaptureDrawObjsOnPage && bDocumentPriorSO8 )
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("DoNotCaptureDrawObjsOnPage") ), makeAny( true ) );
     }
-    // <--
 
-    // --> OD 2006-04-13 #b6402800#
     // This flag has to be set for all documents < SO8
     if ( !bClipAsCharacterAnchoredWriterFlyFrames && bDocumentPriorSO8 )
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("ClipAsCharacterAnchoredWriterFlyFrames") ), makeAny( true ) );
     }
-    // <--
 
-    // --> FME 2006-10-09 #i60945#
     if ( !bUnixForceZeroExtLeading )
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("UnxForceZeroExtLeading") ), makeAny( true ) );
+    }
+
+    if ( !bUseOldPrinterMetrics )
+    {
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("UseOldPrinterMetrics") ), makeAny( true ) );
     }
     // <--
 
@@ -1535,14 +1493,24 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
             SwDoc *pDoc = pText->GetDoc();
             if( pDoc )
             {
-                // If the printer is known, then the OLE objects will
-                // already have correct sizes, and we don't have to call
-                // PrtOLENotify again. Otherwise we have to call it.
-                // The flag might be set from setting the printer, so it
-                // it is required to clear it.
                 SfxPrinter *pPrinter = pDoc->getPrinter( false );
                 if( pPrinter )
+                {
+                    // If the printer is known, then the OLE objects will
+                    // already have correct sizes, and we don't have to call
+                    // PrtOLENotify again. Otherwise we have to call it.
+                    // The flag might be set from setting the printer, so it
+                    // it is required to clear it.
                     pDoc->SetOLEPrtNotifyPending( !pPrinter->IsKnown() );
+
+                    // FME 2007-05-14 #147385# old printer metrics compatibility
+                    if (  pDoc->get(IDocumentSettingAccess::USE_OLD_PRINTER_METRICS ) &&
+                         !pDoc->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE ) )
+                    {
+                        pPrinter->Compat_OldPrinterMetrics( true );
+                        pDoc->GetDocShell()->UpdateFontList();
+                    }
+                }
             }
         }
     }
