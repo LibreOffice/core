@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prtsetup.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:42:25 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:15:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -645,7 +645,7 @@ RTSFontSubstPage::RTSFontSubstPage( RTSDialog* pParent ) :
     // fill to box
     PrintFontManager& rFontManager = PrintFontManager::get();
     ::std::list< FastPrintFontInfo > aFonts;
-    rFontManager.getFontListWithFastInfo( aFonts, m_pParent->m_aJobData.m_pParser );
+    rFontManager.getFontListWithFastInfo( aFonts, m_pParent->m_aJobData.m_pParser, false );
     ::std::list< FastPrintFontInfo >::const_iterator it;
     ::std::hash_map< OUString, int, OUStringHash > aToMap, aFromMap;
     for( it = aFonts.begin(); it != aFonts.end(); ++it )
