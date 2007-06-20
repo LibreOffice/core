@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 08:02:09 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:07:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -414,6 +414,7 @@ class PrintFontManager
     std::hash_multimap< sal_uInt8, sal_Unicode >    m_aAdobecodeToUnicode;
 
     mutable FontCache*                          m_pFontCache;
+    mutable std::vector< fontID >               m_aOverrideFonts;
 
     rtl::OString getAfmFile( PrintFont* pFont ) const;
     rtl::OString getFontFile( PrintFont* pFont ) const;
@@ -463,6 +464,8 @@ class PrintFontManager
     void parseXLFD_appendAliases( const std::list< rtl::OString >& rXLFDs, std::list< XLFDEntry >& rEntries ) const;
     void initFontsAlias();
 
+    bool readOverrideMetrics();
+
     PrintFontManager();
     ~PrintFontManager();
 public:
@@ -471,20 +474,25 @@ public:
     int addFontFile( const rtl::OString& rFileName, int nFaceNum );
 
     // initialize takes an X Display*
-    // if NULL then an XOpendDisplay( NULL ) is performed
+    // if NULL then an XOpenDisplay( NULL ) is performed
     // the Display connection is used to get the font path
     void initialize( void* pDisplay = NULL );
 
     // returns the number of managed fonts
     int getFontCount() const { return m_aFonts.size(); }
+
+    // caution: the getFontList* methods can change the font list on demand
+    // depending on the pParser argument. That is getFontCount() may
+    // return a larger value after getFontList()
+
     // returns the ids of all managed fonts. on pParser != NULL
     // all fonttype::Builtin type fonts are not listed
     // which do not occur in the PPD of pParser
-    void getFontList( std::list< fontID >& rFontIDs, const PPDParser* pParser = NULL ) const;
+    void getFontList( std::list< fontID >& rFontIDs, const PPDParser* pParser = NULL, bool bUseOverrideMetrics = false );
     // get the font list and detailed font info. see getFontList for pParser
-    void getFontListWithInfo( std::list< PrintFontInfo >& rFonts, const PPDParser* pParser = NULL ) const;
+    void getFontListWithInfo( std::list< PrintFontInfo >& rFonts, const PPDParser* pParser = NULL, bool bUseOverrideMetrics = false );
     // get the font list and fast font info. see getFontList for pParser
-    void getFontListWithFastInfo( std::list< FastPrintFontInfo >& rFonts, const PPDParser* pParser = NULL ) const;
+    void getFontListWithFastInfo( std::list< FastPrintFontInfo >& rFonts, const PPDParser* pParser = NULL, bool bUseOverrideMetrics = false );
 
     // get font info for a specific font
     bool getFontInfo( fontID nFontID, PrintFontInfo& rInfo ) const;
