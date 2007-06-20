@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IDocumentSettingAccess.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:09:58 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:10:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,7 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
          CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME,
 
          UNIX_FORCE_ZERO_EXT_LEADING,
+         USE_OLD_PRINTER_METRICS,
          // COMPATIBILITY FLAGS END
 
          BROWSE_MODE,
