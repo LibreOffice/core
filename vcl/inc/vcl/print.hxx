@@ -4,9 +4,9 @@
  *
  *  $RCSfile: print.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:03:48 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:13:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -425,6 +425,8 @@ public:
     const Link&                 GetEndPrintHdl() const   { return maEndPrintHdl;   }
     void                        SetPrintPageHdl( const Link& rLink ) { maPrintPageHdl = rLink; }
     const Link&                 GetPrintPageHdl() const  { return maPrintPageHdl;  }
+
+    void                        Compat_OldPrinterMetrics( bool bSet );
 
     /** checks the printer list and updates it necessary
     *
