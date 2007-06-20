@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:50:27 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:39:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,9 +260,18 @@ bool DlgEdObj::TransformSdrToControlCoordinates(
     aPos.Height() -= aFormPos.Height();
 
     // take window borders into account
-    awt::DeviceInfo aDeviceInfo = pForm->getDeviceInfo();
-    aPos.Width() -= aDeviceInfo.LeftInset;
-    aPos.Height() -= aDeviceInfo.TopInset;
+    Reference< beans::XPropertySet > xPSetForm( pForm->GetUnoControlModel(), UNO_QUERY );
+    DBG_ASSERT( xPSetForm.is(), "DlgEdObj::TransformFormToSdrCoordinates: no form property set!" );
+    if ( !xPSetForm.is() )
+        return false;
+    bool bDecoration = true;
+    xPSetForm->getPropertyValue( DLGED_PROP_DECORATION ) >>= bDecoration;
+    if( bDecoration )
+    {
+        awt::DeviceInfo aDeviceInfo = pForm->getDeviceInfo();
+        aPos.Width() -= aDeviceInfo.LeftInset;
+        aPos.Height() -= aDeviceInfo.TopInset;
+    }
 
     // convert pixel to logic units
     aPos = pDevice->PixelToLogic( aPos, MapMode( MAP_APPFONT ) );
@@ -301,9 +310,18 @@ bool DlgEdObj::TransformSdrToFormCoordinates(
         return false;
 
     // take window borders into account
-    awt::DeviceInfo aDeviceInfo = pForm->getDeviceInfo();
-    aSize.Width() -= aDeviceInfo.LeftInset + aDeviceInfo.RightInset;
-    aSize.Height() -= aDeviceInfo.TopInset + aDeviceInfo.BottomInset;
+    Reference< beans::XPropertySet > xPSetForm( pForm->GetUnoControlModel(), UNO_QUERY );
+    DBG_ASSERT( xPSetForm.is(), "DlgEdObj::TransformFormToSdrCoordinates: no form property set!" );
+    if ( !xPSetForm.is() )
+        return false;
+    bool bDecoration = true;
+    xPSetForm->getPropertyValue( DLGED_PROP_DECORATION ) >>= bDecoration;
+    if( bDecoration )
+    {
+        awt::DeviceInfo aDeviceInfo = pForm->getDeviceInfo();
+        aSize.Width() -= aDeviceInfo.LeftInset + aDeviceInfo.RightInset;
+        aSize.Height() -= aDeviceInfo.TopInset + aDeviceInfo.BottomInset;
+    }
 
     // convert pixel to logic units
     aPos = pDevice->PixelToLogic( aPos, MapMode( MAP_APPFONT ) );
@@ -358,9 +376,14 @@ bool DlgEdObj::TransformControlToSdrCoordinates(
     aPos.Height() += aFormPos.Height();
 
     // take window borders into account
-    awt::DeviceInfo aDeviceInfo = pForm->getDeviceInfo();
-    aPos.Width() += aDeviceInfo.LeftInset;
-    aPos.Height() += aDeviceInfo.TopInset;
+    bool bDecoration = true;
+    xPSetForm->getPropertyValue( DLGED_PROP_DECORATION ) >>= bDecoration;
+    if( bDecoration )
+    {
+        awt::DeviceInfo aDeviceInfo = pForm->getDeviceInfo();
+        aPos.Width() += aDeviceInfo.LeftInset;
+        aPos.Height() += aDeviceInfo.TopInset;
+    }
 
     // convert pixel to 100th_mm
     aPos = pDevice->PixelToLogic( aPos, MapMode( MAP_100TH_MM ) );
@@ -399,9 +422,18 @@ bool DlgEdObj::TransformFormToSdrCoordinates(
         return false;
 
     // take window borders into account
-    awt::DeviceInfo aDeviceInfo = pForm->getDeviceInfo();
-    aSize.Width() += aDeviceInfo.LeftInset + aDeviceInfo.RightInset;
-    aSize.Height() += aDeviceInfo.TopInset + aDeviceInfo.BottomInset;
+    Reference< beans::XPropertySet > xPSetForm( pForm->GetUnoControlModel(), UNO_QUERY );
+    DBG_ASSERT( xPSetForm.is(), "DlgEdObj::TransformFormToSdrCoordinates: no form property set!" );
+    if ( !xPSetForm.is() )
+        return false;
+    bool bDecoration = true;
+    xPSetForm->getPropertyValue( DLGED_PROP_DECORATION ) >>= bDecoration;
+    if( bDecoration )
+    {
+        awt::DeviceInfo aDeviceInfo = pForm->getDeviceInfo();
+        aSize.Width() += aDeviceInfo.LeftInset + aDeviceInfo.RightInset;
+        aSize.Height() += aDeviceInfo.TopInset + aDeviceInfo.BottomInset;
+    }
 
     // convert pixel to 100th_mm
     aPos = pDevice->PixelToLogic( aPos, MapMode( MAP_100TH_MM ) );
@@ -1296,9 +1328,18 @@ void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::Propert
 
         // update position and size
         if ( evt.PropertyName == DLGED_PROP_POSITIONX || evt.PropertyName == DLGED_PROP_POSITIONY ||
-             evt.PropertyName == DLGED_PROP_WIDTH || evt.PropertyName == DLGED_PROP_HEIGHT )
+             evt.PropertyName == DLGED_PROP_WIDTH || evt.PropertyName == DLGED_PROP_HEIGHT ||
+             evt.PropertyName == DLGED_PROP_DECORATION )
         {
             PositionAndSizeChange( evt );
+
+            if ( evt.PropertyName == DLGED_PROP_DECORATION )
+            {
+                if ( ISA(DlgEdForm) )
+                    ((DlgEdForm*)this)->GetDlgEditor()->ResetDialog();
+                else
+                    GetDlgEdForm()->GetDlgEditor()->ResetDialog();
+            }
         }
         // change name of control in dialog model
         else if ( evt.PropertyName == DLGED_PROP_NAME )
