@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:00:05 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 13:33:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,8 @@ public:
 
     BOOL            GetAutoSumArea(ScRangeList& rRangeList);
     void            EnterAutoSum(const ScRangeList& rRangeList, sal_Bool bSubTotal);
+    bool            AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor, bool bContinue );
+    String          GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal );
 
     void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
                                 BOOL bRecord = TRUE );
@@ -354,6 +356,13 @@ private:
     BOOL            TestFormatArea( SCCOL nCol, SCROW nRow, SCTAB nTab, BOOL bAttrChanged );
     void            DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                         BOOL bAttrChanged, BOOL bAddUndo );
+
+    bool            GetAutoSumForColumnRange( ScRangeList& rRangeList, const ScRange& rRange );
+    bool            GetAutoSumForRowRange( ScRangeList& rRangeList, const ScRange& rRange );
+    bool            FindNextSumEntryInColumn( ScDocument* pDoc, SCCOL nCol,
+                        SCROW& nRow, SCTAB nTab, SCCOLROW& nExtend, SCROW nMinRow );
+    bool            FindNextSumEntryInRow( ScDocument* pDoc, SCCOL& nCol,
+                        SCROW nRow, SCTAB nTab, SCCOLROW& nExtend, SCROW nMinCol );
 };
 
 
