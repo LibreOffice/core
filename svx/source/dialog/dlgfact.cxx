@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:36:59 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:36:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2354,3 +2354,10 @@ SfxAbstractLinksDialog* AbstractDialogFactory_Impl::CreateLinksDialog( Window* p
         pLinkDlg->SetActLink(p);
     return new AbstractLinksDialog_Impl( pLinkDlg );
 }
+
+VclAbstractDialog* AbstractDialogFactory_Impl::CreateOptionsDialog(
+    Window* pParent, const rtl::OUString& rExtensionId, const rtl::OUString& /*rApplicationContext*/ )
+{
+    return new VclAbstractDialog_Impl( new OfaTreeOptionsDialog( pParent, rExtensionId ) );
+}
+
