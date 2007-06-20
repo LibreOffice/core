@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlged.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:52:46 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:39:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,6 +179,7 @@ public:
 
     void            SetDialog( ::com::sun::star::uno::Reference<
                         ::com::sun::star::container::XNameContainer > xUnoControlDialogModel );
+    void            ResetDialog( void );
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > GetDialog() const
                         {return m_xUnoControlDialogModel;}
 
