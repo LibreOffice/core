@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:00:44 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:15:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -495,7 +495,7 @@ SalPrinter* X11SalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 {
     mbPrinterInit = true;
     // create and initialize SalPrinter
-    PspSalPrinter* pPrinter = new PspSalPrinter;
+    PspSalPrinter* pPrinter = new PspSalPrinter( pInfoPrinter );
     pPrinter->m_aJobData = static_cast<PspSalInfoPrinter*>(pInfoPrinter)->m_aJobData;
 
     return pPrinter;
@@ -667,7 +667,7 @@ SalGraphics* PspSalInfoPrinter::GetGraphics()
     SalGraphics* pRet = NULL;
     if( ! m_pGraphics )
     {
-        m_pGraphics = new PspGraphics( &m_aJobData, &m_aPrinterGfx );
+        m_pGraphics = new PspGraphics( &m_aJobData, &m_aPrinterGfx, NULL, false, this );
         m_pGraphics->SetLayout( 0 );
         pRet = m_pGraphics;
     }
@@ -1017,7 +1017,13 @@ ULONG PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, USHORT 
  *  SalPrinter
  */
 
-PspSalPrinter::PspSalPrinter()
+ PspSalPrinter::PspSalPrinter( SalInfoPrinter* pInfoPrinter )
+ : m_bFax( false ),
+   m_bPdf( false ),
+   m_bSwallowFaxNo( false ),
+   m_pGraphics( NULL ),
+   m_nCopies( 1 ),
+   m_pInfoPrinter( pInfoPrinter )
 {
 }
 
@@ -1155,7 +1161,7 @@ BOOL PspSalPrinter::AbortJob()
 SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, BOOL )
 {
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, m_aJobData );
-    m_pGraphics = new PspGraphics( &m_aJobData, &m_aPrinterGfx, m_bFax ? &m_aFaxNr : NULL, m_bSwallowFaxNo  );
+    m_pGraphics = new PspGraphics( &m_aJobData, &m_aPrinterGfx, m_bFax ? &m_aFaxNr : NULL, m_bSwallowFaxNo, m_pInfoPrinter  );
     m_pGraphics->SetLayout( 0 );
     if( m_nCopies > 1 )
         // in case user did not do anything (m_nCopies=1)
