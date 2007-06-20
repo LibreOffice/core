@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:04:08 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 13:33:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,11 @@
 #include "undotab.hxx"
 #include "sizedev.hxx"
 #include "editable.hxx"
+#include "scmod.hxx"
+#include "inputhdl.hxx"
+#include "inputwin.hxx"
+
+#include <boost/scoped_ptr.hpp>
 
 
 // STATIC DATA ---------------------------------------------------------------
@@ -291,23 +296,23 @@ BOOL ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
     ScAutoSum eSum;
     if ( nRow != 0
             && ((eSum = lcl_IsAutoSumData( pDoc, nCol, nRow-1, nTab,
-                DIR_TOP, nExtend )) == ScAutoSumData )
+                DIR_TOP, nExtend /*out*/ )) == ScAutoSumData )
             && ((eSum = lcl_IsAutoSumData( pDoc, nCol, nRow-1, nTab,
-                DIR_LEFT, nExtend )) == ScAutoSumData )
+                DIR_LEFT, nExtend /*out*/ )) == ScAutoSumData )
         )
     {
         bRow = TRUE;
         nSeekRow = nRow - 1;
     }
     else if ( nCol != 0 && (eSum = lcl_IsAutoSumData( pDoc, nCol-1, nRow, nTab,
-            DIR_LEFT, nExtend )) == ScAutoSumData )
+            DIR_LEFT, nExtend /*out*/ )) == ScAutoSumData )
     {
         bCol = TRUE;
         nSeekCol = nCol - 1;
     }
-    else if ( (eSum = lcl_SeekAutoSumData( pDoc, nCol, nSeekRow, nTab, DIR_TOP, nExtend )) != ScAutoSumNone )
+    else if ( (eSum = lcl_SeekAutoSumData( pDoc, nCol, nSeekRow, nTab, DIR_TOP, nExtend /*out*/ )) != ScAutoSumNone )
         bRow = TRUE;
-    else if (( eSum = lcl_SeekAutoSumData( pDoc, nSeekCol, nRow, nTab, DIR_LEFT, nExtend )) != ScAutoSumNone )
+    else if (( eSum = lcl_SeekAutoSumData( pDoc, nSeekCol, nRow, nTab, DIR_LEFT, nExtend /*out*/ )) != ScAutoSumNone )
         bCol = TRUE;
 
     if ( bCol || bRow )
@@ -336,13 +341,13 @@ BOOL ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
                 if ( bRow )
                 {
                     while ( nStartRow != 0 && lcl_IsAutoSumData(    pDoc, nCol,
-                            nStartRow-1, nTab, DIR_TOP, nExtend ) == eSum )
+                            nStartRow-1, nTab, DIR_TOP, nExtend /*out*/ ) == eSum )
                         --nStartRow;
                 }
                 else
                 {
                     while ( nStartCol != 0 && lcl_IsAutoSumData( pDoc, nStartCol-1,
-                            nRow, nTab, DIR_LEFT, nExtend ) == eSum )
+                            nRow, nTab, DIR_LEFT, nExtend /*out*/ ) == eSum )
                         --nStartCol;
                 }
             }
@@ -352,37 +357,19 @@ BOOL ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
             {
                 if ( bRow )
                 {
-                    nEndRow = nExtend;
-                    SCROW nTmp = nEndRow ;
-                    ScAutoSum eSkip;
-                    while ( (eSkip = lcl_IsAutoSumData( pDoc, nCol,
-                            nEndRow, nTab, DIR_TOP, nExtend )) == ScAutoSumData
-                            && nEndRow != 0 )
-                        --nEndRow;
-                    if ( eSkip == ScAutoSumSum && nEndRow < nTmp )
+                    nEndRow = static_cast< SCROW >( nExtend );
+                    if ( ( bContinue = FindNextSumEntryInColumn( pDoc, nCol, nEndRow /*inout*/, nTab, nExtend /*out*/, 0 ) ) == true )
                     {
-                        bContinue = TRUE;
                         nStartRow = nEndRow;
                     }
-                    else
-                        bContinue = FALSE;
                 }
                 else
                 {
-                    nEndCol = static_cast<SCCOL>(nExtend);;
-                    SCCOL nTmp = nEndCol ;
-                    ScAutoSum eSkip;
-                    while ( (eSkip = lcl_IsAutoSumData( pDoc, nEndCol,
-                            nRow, nTab, DIR_LEFT, nExtend )) == ScAutoSumData
-                            && nEndCol != 0 )
-                        --nEndCol;
-                    if ( eSkip == ScAutoSumSum && nEndCol < nTmp )
+                    nEndCol = static_cast< SCCOL >( nExtend );
+                    if ( ( bContinue = FindNextSumEntryInRow( pDoc, nEndCol /*inout*/, nRow, nTab, nExtend /*out*/, 0 ) ) == true )
                     {
-                        bContinue = TRUE;
                         nStartCol = nEndCol;
                     }
-                    else
-                        bContinue = FALSE;
                 }
             }
         } while ( bContinue );
@@ -391,36 +378,384 @@ BOOL ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
     return FALSE;
 }
 
-
 //----------------------------------------------------------------------------
 
 void ScViewFunc::EnterAutoSum(const ScRangeList& rRangeList, sal_Bool bSubTotal)        // Block mit Summen fuellen
 {
-    ScDocument* pDoc = GetViewData()->GetDocument();
-    String aRef;
-    rRangeList.Format( aRef, SCA_VALID, pDoc );
-
-    String aFormula = '=';
-    ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
-    const ScFuncDesc* pDesc = NULL;
-    if (!bSubTotal)
-        pDesc = pFuncMgr->Get( SC_OPCODE_SUM );
-    else
-        pDesc = pFuncMgr->Get( SC_OPCODE_SUB_TOTAL );
-    if ( pDesc && pDesc->pFuncName )
-    {
-        aFormula += *pDesc->pFuncName;
-        if (bSubTotal)
-            aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "(9;" ));
-        else
-            aFormula += '(';
-        aFormula += aRef;
-        aFormula += ')';
-    }
-
+    String aFormula = GetAutoSumFormula( rRangeList, bSubTotal );
     EnterBlock( aFormula, NULL );
 }
 
+//----------------------------------------------------------------------------
+
+bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor, bool bContinue )
+{
+    ScDocument* pDoc = GetViewData()->GetDocument();
+    const SCTAB nTab = rRange.aStart.Tab();
+    SCCOL nStartCol = rRange.aStart.Col();
+    SCROW nStartRow = rRange.aStart.Row();
+    const SCCOL nEndCol = rRange.aEnd.Col();
+    const SCROW nEndRow = rRange.aEnd.Row();
+    SCCOLROW nExtend = 0; // out parameter for lcl_IsAutoSumData
+
+    // ignore rows at the top of the given range which don't contain autosum data
+    for ( SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow )
+    {
+        bool bData = false;
+        for ( SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol )
+        {
+            if ( lcl_IsAutoSumData( pDoc, nCol, nRow, nTab, DIR_TOP, nExtend ) != ScAutoSumNone )
+            {
+                bData = true;
+                break;
+            }
+        }
+        if ( bData )
+        {
+            nStartRow = nRow;
+            break;
+        }
+    }
+
+    // ignore columns at the left of the given range which don't contain autosum data
+    for ( SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol )
+    {
+        bool bData = false;
+        for ( SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow )
+        {
+            if ( lcl_IsAutoSumData( pDoc, nCol, nRow, nTab, DIR_LEFT, nExtend ) != ScAutoSumNone )
+            {
+                bData = true;
+                break;
+            }
+        }
+        if ( bData )
+        {
+            nStartCol = nCol;
+            break;
+        }
+    }
+
+    const bool bEndRowEmpty = pDoc->IsBlockEmpty( nTab, nStartCol, nEndRow, nEndCol, nEndRow );
+    const bool bEndColEmpty = pDoc->IsBlockEmpty( nTab, nEndCol, nStartRow, nEndCol, nEndRow );
+    bool bRow = ( ( nStartRow != nEndRow ) && ( bEndRowEmpty || ( !bEndRowEmpty && !bEndColEmpty ) ) );
+    bool bCol = ( ( nStartCol != nEndCol ) && ( bEndColEmpty || nStartRow == nEndRow ) );
+
+    // find an empty row for entering the result
+    SCROW nInsRow = nEndRow;
+    if ( bRow && !bEndRowEmpty )
+    {
+        if ( nInsRow < MAXROW )
+        {
+            ++nInsRow;
+            while ( !pDoc->IsBlockEmpty( nTab, nStartCol, nInsRow, nEndCol, nInsRow ) )
+            {
+                if ( nInsRow < MAXROW )
+                {
+                    ++nInsRow;
+                }
+                else
+                {
+                    bRow = false;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            bRow = false;
+        }
+    }
+
+    // find an empty column for entering the result
+    SCCOL nInsCol = nEndCol;
+    if ( bCol && !bEndColEmpty )
+    {
+        if ( nInsCol < MAXCOL )
+        {
+            ++nInsCol;
+            while ( !pDoc->IsBlockEmpty( nTab, nInsCol, nStartRow, nInsCol, nEndRow ) )
+            {
+                if ( nInsCol < MAXCOL )
+                {
+                    ++nInsCol;
+                }
+                else
+                {
+                    bCol = false;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            bCol = false;
+        }
+    }
+
+    if ( bRow || bCol )
+    {
+        SCCOL nMarkEndCol = nEndCol;
+        SCROW nMarkEndRow = nEndRow;
+
+        if ( bRow )
+        {
+            // calculate the row sums for all columns of the given range
+
+            SCROW nSumEndRow = nEndRow;
+
+            if ( bEndRowEmpty )
+            {
+                // the last row of the given range is empty;
+                // don't take into account for calculating the autosum
+                --nSumEndRow;
+            }
+            else
+            {
+                // increase mark range
+                ++nMarkEndRow;
+            }
+
+            for ( SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol )
+            {
+                if ( !pDoc->IsBlockEmpty( nTab, nCol, nStartRow, nCol, nSumEndRow ) )
+                {
+                    boost::scoped_ptr< ScRangeList > pRangeList( new ScRangeList() );
+                    ScRange aRange( nCol, nStartRow, nTab, nCol, nSumEndRow, nTab );
+                    if ( GetAutoSumForColumnRange( *pRangeList, aRange ) )
+                    {
+                        String aFormula = GetAutoSumFormula( *pRangeList, bSubTotal );
+                        EnterData( nCol, nInsRow, nTab, aFormula );
+                    }
+                }
+            }
+        }
+
+        if ( bCol )
+        {
+            // calculate the column sums for all rows of the given range
+
+            SCCOL nSumEndCol = nEndCol;
+
+            if ( bEndColEmpty )
+            {
+                // the last column of the given range is empty;
+                // don't take into account for calculating the autosum
+                --nSumEndCol;
+            }
+            else
+            {
+                // increase mark range
+                ++nMarkEndCol;
+            }
+
+            for ( SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow )
+            {
+                if ( !pDoc->IsBlockEmpty( nTab, nStartCol, nRow, nSumEndCol, nRow ) )
+                {
+                    boost::scoped_ptr< ScRangeList > pRangeList( new ScRangeList() );
+                    ScRange aRange( nStartCol, nRow, nTab, nSumEndCol, nRow, nTab );
+                    if ( GetAutoSumForRowRange( *pRangeList, aRange ) )
+                    {
+                        String aFormula = GetAutoSumFormula( *pRangeList, bSubTotal );
+                        EnterData( nInsCol, nRow, nTab, aFormula );
+                    }
+                }
+            }
+        }
+
+        // set new mark range and cursor position
+        ScRange aMarkRange( nStartCol, nStartRow, nTab, nMarkEndCol, nMarkEndRow, nTab );
+        MarkRange( aMarkRange, FALSE, bContinue );
+        if ( bSetCursor )
+        {
+            SetCursor( nMarkEndCol, nMarkEndRow );
+        }
+    }
+    else
+    {
+        ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
+        if ( pInputHdl )
+        {
+            ScInputWindow* pInputWin = pInputHdl->GetInputWindow();
+            if ( pInputWin )
+            {
+                ScRange aMarkRange( rRange.aStart.Col(), rRange.aStart.Row(),
+                    nTab, nEndCol, nEndRow, nTab );
+                MarkRange( aMarkRange, FALSE, bContinue );
+                SetCursor( nEndCol, nEndRow );
+                boost::scoped_ptr< ScRangeList > pRangeList( new ScRangeList() );
+                String aFormula = GetAutoSumFormula( *pRangeList, bSubTotal );
+                pInputWin->SetFuncString( aFormula );
+            }
+        }
+        return false;
+    }
+    return true;
+}
+
+//----------------------------------------------------------------------------
+
+bool ScViewFunc::GetAutoSumForColumnRange( ScRangeList& rRangeList, const ScRange& rRange )
+{
+    const ScAddress aStart = rRange.aStart;
+    const ScAddress aEnd = rRange.aEnd;
+    if ( aStart.Col() != aEnd.Col() )
+    {
+        return false;
+    }
+
+    const SCTAB nTab = aEnd.Tab();
+    const SCCOL nCol = aEnd.Col();
+    SCROW nEndRow = aEnd.Row();
+    SCROW nStartRow = nEndRow;
+    SCCOLROW nExtend = 0;
+    ScDocument* pDoc = GetViewData()->GetDocument();
+    const ScAutoSum eSum = lcl_IsAutoSumData( pDoc, nCol, nEndRow, nTab, DIR_TOP, nExtend /*out*/ );
+
+    if ( eSum == ScAutoSumSum )
+    {
+        bool bContinue = false;
+        do
+        {
+            rRangeList.Append( ScRange( nCol, nStartRow, nTab, nCol, nEndRow, nTab ) );
+            nEndRow = static_cast< SCROW >( nExtend );
+            if ( ( bContinue = FindNextSumEntryInColumn( pDoc, nCol, nEndRow /*inout*/, nTab, nExtend /*out*/, aStart.Row() ) ) == true )
+            {
+                nStartRow = nEndRow;
+            }
+        } while ( bContinue );
+    }
+    else
+    {
+        while ( nStartRow > aStart.Row() &&
+                lcl_IsAutoSumData( pDoc, nCol, nStartRow-1, nTab, DIR_TOP, nExtend /*out*/ ) != ScAutoSumSum )
+        {
+            --nStartRow;
+        }
+        rRangeList.Append( ScRange( nCol, nStartRow, nTab, nCol, nEndRow, nTab ) );
+    }
+
+    return true;
+}
+
+//----------------------------------------------------------------------------
+
+bool ScViewFunc::GetAutoSumForRowRange( ScRangeList& rRangeList, const ScRange& rRange )
+{
+    const ScAddress aStart = rRange.aStart;
+    const ScAddress aEnd = rRange.aEnd;
+    if ( aStart.Row() != aEnd.Row() )
+    {
+        return false;
+    }
+
+    const SCTAB nTab = aEnd.Tab();
+    const SCROW nRow = aEnd.Row();
+    SCCOL nEndCol = aEnd.Col();
+    SCCOL nStartCol = nEndCol;
+    SCCOLROW nExtend = 0;
+    ScDocument* pDoc = GetViewData()->GetDocument();
+    const ScAutoSum eSum = lcl_IsAutoSumData( pDoc, nEndCol, nRow, nTab, DIR_LEFT, nExtend /*out*/ );
+
+    if ( eSum == ScAutoSumSum )
+    {
+        bool bContinue = false;
+        do
+        {
+            rRangeList.Append( ScRange( nStartCol, nRow, nTab, nEndCol, nRow, nTab ) );
+            nEndCol = static_cast< SCCOL >( nExtend );
+            if ( ( bContinue = FindNextSumEntryInRow( pDoc, nEndCol /*inout*/, nRow, nTab, nExtend /*out*/, aStart.Col() ) ) == true )
+            {
+                nStartCol = nEndCol;
+            }
+        } while ( bContinue );
+    }
+    else
+    {
+        while ( nStartCol > aStart.Col() &&
+                lcl_IsAutoSumData( pDoc, nStartCol-1, nRow, nTab, DIR_LEFT, nExtend /*out*/ ) != ScAutoSumSum )
+        {
+            --nStartCol;
+        }
+        rRangeList.Append( ScRange( nStartCol, nRow, nTab, nEndCol, nRow, nTab ) );
+    }
+
+    return true;
+}
+
+//----------------------------------------------------------------------------
+
+bool ScViewFunc::FindNextSumEntryInColumn( ScDocument* pDoc, SCCOL nCol,
+    SCROW& nRow, SCTAB nTab, SCCOLROW& nExtend, SCROW nMinRow )
+{
+    const SCROW nTmp = nRow;
+    ScAutoSum eSkip = ScAutoSumNone;
+    while ( ( eSkip = lcl_IsAutoSumData( pDoc, nCol, nRow, nTab, DIR_TOP, nExtend ) ) == ScAutoSumData &&
+            nRow > nMinRow )
+    {
+        --nRow;
+    }
+    if ( eSkip == ScAutoSumSum && nRow < nTmp )
+    {
+        return true;
+    }
+    return false;
+}
+
+//----------------------------------------------------------------------------
+
+bool ScViewFunc::FindNextSumEntryInRow( ScDocument* pDoc, SCCOL& nCol,
+    SCROW nRow, SCTAB nTab, SCCOLROW& nExtend, SCROW nMinCol )
+{
+    const SCCOL nTmp = nCol;
+    ScAutoSum eSkip = ScAutoSumNone;
+    while ( ( eSkip = lcl_IsAutoSumData( pDoc, nCol, nRow, nTab, DIR_LEFT, nExtend ) ) == ScAutoSumData &&
+            nCol > nMinCol )
+    {
+        --nCol;
+    }
+    if ( eSkip == ScAutoSumSum && nCol < nTmp )
+    {
+        return true;
+    }
+    return false;
+}
+
+//----------------------------------------------------------------------------
+
+String ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal )
+{
+    String aFormula = '=';
+    ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
+    const ScFuncDesc* pDesc = NULL;
+    if ( bSubTotal )
+    {
+        pDesc = pFuncMgr->Get( SC_OPCODE_SUB_TOTAL );
+    }
+    else
+    {
+        pDesc = pFuncMgr->Get( SC_OPCODE_SUM );
+    }
+    if ( pDesc && pDesc->pFuncName )
+    {
+        aFormula += *pDesc->pFuncName;
+        if ( bSubTotal )
+        {
+            aFormula.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "(9;" ) );
+        }
+        else
+        {
+            aFormula += '(';
+        }
+        ScDocument* pDoc = GetViewData()->GetDocument();
+        String aRef;
+        rRangeList.Format( aRef, SCA_VALID, pDoc );
+        aFormula += aRef;
+        aFormula += ')';
+    }
+    return aFormula;
+}
 
 //----------------------------------------------------------------------------
 
