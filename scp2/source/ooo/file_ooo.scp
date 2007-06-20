@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.195 $
+ *  $Revision: 1.196 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:03:16 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 14:01:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1832,6 +1832,20 @@ File gid_File_Oo_Office_Events_Xcs
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Events.xcs";
+End
+
+File gid_File_Oo_Office_ExtensionManager_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED, PATCH);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/ExtensionManager.xcs";
+End
+
+File gid_File_Oo_Office_ExtensionManager_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED, PATCH);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/ExtensionManager.xcu";
 End
 
 File gid_File_Oo_Office_Ui_Factories_Xcs
