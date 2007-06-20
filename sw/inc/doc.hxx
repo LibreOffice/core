@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:59:47 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:10:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -580,6 +580,10 @@ class SwDoc :
     //
     // SO8pp4
     // mbUnixForceZeroExtLeading                def = FALSE, hidden
+    //
+    // SO8pu8
+    // mbOldPrinterMetrics                      def = FALSE, hidden
+    //
 
     bool mbParaSpaceMax                     : 1;
     bool mbParaSpaceMaxAtPages              : 1;
@@ -606,7 +610,7 @@ class SwDoc :
     bool mbOutlineLevelYieldsOutlineRule            : 1;
     bool mbClipAsCharacterAnchoredWriterFlyFrames   : 1;   // OD 2006-04-13 #b6402800#
     bool mbUnixForceZeroExtLeading                  : 1;   // FME 2006-10-09 #i60945#
-    bool mbDummyNonUIFlag2                          : 1;   // use this if necessary
+    bool mbOldPrinterMetrics                        : 1;   // FME 2007-05-14 #147385#
 
     //
     // COMPATIBILITY FLAGS END
