@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:46:32 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:14:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,8 +93,9 @@ public:
     psp::JobData            m_aJobData;
     psp::PrinterGfx         m_aPrinterGfx;
     ULONG                   m_nCopies;
+    SalInfoPrinter*         m_pInfoPrinter;
 
-    PspSalPrinter();
+    PspSalPrinter( SalInfoPrinter* );
     virtual ~PspSalPrinter();
 
     // overload all pure virtual methods
