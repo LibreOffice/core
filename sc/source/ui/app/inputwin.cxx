@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:53:59 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 13:32:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,8 @@
 #ifndef _SC_ACCESSIBLETEXT_HXX
 #include "AccessibleText.hxx"
 #endif
+
+#include <boost/scoped_ptr.hpp>
 
 #define TEXT_STARTPOS       3
 #define THESIZE             1000000 //!!! langt... :-)
@@ -390,40 +392,58 @@ void __EXPORT ScInputWindow::Select()
                 if ( pViewSh )
                 {
                     ScMarkData& rMark = pViewSh->GetViewData()->GetMarkData();
-
-                    ScRangeList* pRangeList = new ScRangeList;
-                    BOOL bDataFound = pViewSh->GetAutoSumArea( *pRangeList );
-
-                    sal_Bool bSubTotal(UseSubTotal(pRangeList));
-
-                    if ((rMark.IsMarked() || rMark.IsMultiMarked()) && bDataFound)
+                    if ( rMark.IsMarked() || rMark.IsMultiMarked() )
                     {
-                        pViewSh->EnterAutoSum( *pRangeList, bSubTotal );    // Block mit Summen fuellen
+                        boost::scoped_ptr< ScRangeList > pMarkRangeList( new ScRangeList() );
+                        rMark.FillRangeListWithMarks( pMarkRangeList.get(), FALSE );
+                        ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
+
+                        // check if one of the marked ranges is empty
+                        bool bEmpty = false;
+                        ULONG nCount = pMarkRangeList->Count();
+                        for ( ULONG i = 0; i < nCount; ++i )
+                        {
+                            ScRange aRange( *pMarkRangeList->GetObject( i ) );
+                            if ( pDoc->IsBlockEmpty( aRange.aStart.Tab(),
+                                    aRange.aStart.Col(), aRange.aStart.Row(),
+                                    aRange.aEnd.Col(), aRange.aEnd.Row() ) )
+                            {
+                                bEmpty = true;
+                                break;
+                            }
+                        }
+
+                        if ( bEmpty )
+                        {
+                            boost::scoped_ptr< ScRangeList > pRangeList( new ScRangeList() );
+                            BOOL bDataFound = pViewSh->GetAutoSumArea( *pRangeList );
+                            if ( bDataFound )
+                            {
+                                sal_Bool bSubTotal( UseSubTotal( pRangeList.get() ) );
+                                pViewSh->EnterAutoSum( *pRangeList, bSubTotal );    // Block mit Summen fuellen
+                            }
+                        }
+                        else
+                        {
+                            sal_Bool bSubTotal( UseSubTotal( pMarkRangeList.get() ) );
+                            for ( ULONG i = 0; i < nCount; ++i )
+                            {
+                                ScRange aRange( *pMarkRangeList->GetObject( i ) );
+                                bool bSetCursor = ( i == nCount - 1 ? true : false );
+                                bool bContinue = ( i != 0  ? true : false );
+                                if ( !pViewSh->AutoSum( aRange, bSubTotal, bSetCursor, bContinue ) )
+                                {
+                                    break;
+                                }
+                            }
+                        }
                     }
                     else                                    // nur in Eingabezeile einfuegen
                     {
-                        String aFormula = '=';
-                        ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
-                        const ScFuncDesc* pDesc = NULL;
-                        if (!bSubTotal)
-                            pDesc = pFuncMgr->Get( SC_OPCODE_SUM );
-                        else
-                            pDesc = pFuncMgr->Get( SC_OPCODE_SUB_TOTAL );
-                        if ( pDesc && pDesc->pFuncName )
-                        {
-                            aFormula += *pDesc->pFuncName;
-                            if (bSubTotal)
-                                aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "(9;)" ));
-                            else
-                                aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "()" ));
-                        }
-
-                        xub_StrLen nPos = aFormula.Len() - 1;
-                        String aRef;
-                        ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
-                        pRangeList->Format( aRef, SCA_VALID, pDoc );
-                        aFormula.Insert( aRef, nPos );
-
+                        boost::scoped_ptr< ScRangeList > pRangeList( new ScRangeList() );
+                        BOOL bDataFound = pViewSh->GetAutoSumArea( *pRangeList );
+                        sal_Bool bSubTotal( UseSubTotal( pRangeList.get() ) );
+                        String aFormula = pViewSh->GetAutoSumFormula( *pRangeList, bSubTotal );
                         SetFuncString( aFormula );
 
                         if ( bDataFound && pScMod->IsEditMode() )
@@ -453,7 +473,6 @@ void __EXPORT ScInputWindow::Select()
                             }
                         }
                     }
-                    delete pRangeList;
                 }
             }
             break;
