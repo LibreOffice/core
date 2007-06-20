@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:46:02 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 14:16:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,10 @@
 #include "vcl/threadex.hxx"
 #include "svtools/svtools.hrc"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
+#include "svtools/fixedhyper.hxx"
+#include "com/sun/star/lang/WrappedTargetException.hpp"
 #include "com/sun/star/container/XChild.hpp"
+#include "com/sun/star/container/NoSuchElementException.hpp"
 #include "com/sun/star/ui/dialogs/XFilePicker.hpp"
 #include "com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp"
 #include "com/sun/star/ui/dialogs/XFilterManager.hpp"
@@ -65,6 +68,8 @@
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include "com/sun/star/ui/dialogs/ExecutableDialogResults.hpp"
 #include "com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp"
+#include "com/sun/star/system/SystemShellExecuteFlags.hpp"
+#include "com/sun/star/system/XSystemShellExecute.hpp"
 #include "com/sun/star/ucb/XContent.hpp"
 #include "com/sun/star/ucb/XContentAccess.hpp"
 #include "com/sun/star/ucb/NameClash.hpp"
@@ -73,6 +78,9 @@
 #include "com/sun/star/sdbc/XRow.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/beans/Optional.hpp"
+#include "com/sun/star/beans/PropertyValue.hpp"
+#include "com/sun/star/frame/XDesktop.hpp"
+#include "com/sun/star/deployment/thePackageManagerFactory.hpp"
 #include "boost/function.hpp"
 #include "boost/bind.hpp"
 #include <sfx2/sfxdlg.hxx>
@@ -146,6 +154,14 @@ DialogImpl::DialogImpl(
     m_xNameAccessNodes = Reference<css::container::XNameAccess>(
         xConfig->createInstanceWithArguments(OUSTR("com.sun.star.configuration.ConfigurationAccess"),
           Sequence<Any>(args, 1)), UNO_QUERY_THROW);
+
+    css::beans::PropertyValue val2(
+        OUSTR("nodepath"), 0, Any(OUSTR("/org.openoffice.Office.ExtensionManager/ExtensionRepositories")),
+        ::css::beans::PropertyState_DIRECT_VALUE);
+    args[0] <<= val2;
+    m_xNameAccessRepositories = Reference<css::container::XNameAccess>(
+        xConfig->createInstanceWithArguments(OUSTR("com.sun.star.configuration.ConfigurationAccess"),
+          Sequence<Any>(args, 1)), UNO_QUERY_THROW);
 }
 
 //______________________________________________________________________________
@@ -212,11 +228,20 @@ DialogImpl::~DialogImpl()
     that->m_checkUpdatesButton.reset(
         new SyncPushButton( that.get(), &DialogImpl::clickCheckUpdates,
                             RID_BTN_CHECK_UPDATES ) );
+
     that->m_optionsButton.reset(
         new ThreadedPushButton( that.get(), &DialogImpl::clickOptions,
                                 RID_BTN_OPTIONS ) );
     //ToDo later
     that->m_optionsButton->Enable(true);
+
+    that->m_getExtensionsButton.reset(
+        new svt::FixedHyperlink( that.get(), getResId( RID_BTN_GET_EXTENSIONS ) ) );
+
+    that->m_getExtensionsButton->SetClickHdl( LINK( that.get(), DialogImpl, hyperlink_clicked ) );
+    css::uno::Any aValue = that->m_xNameAccessRepositories->getByName(OUSTR("WebsiteLink"));
+    String sURL( aValue.get< OUString >() );
+    that->m_getExtensionsButton->SetQuickHelpText( sURL );
 
     that->m_bottomLine.reset( new FixedLine( that.get() ) );
     that->m_closeButton.reset(
@@ -245,6 +270,9 @@ DialogImpl::~DialogImpl()
     that->m_buttonSize = that->LogicToPixel(
         Size( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT ),
         MapMode( MAP_APPFONT ) );
+    that->m_textSize = that->LogicToPixel(
+        Size( 0, RSC_CD_CHECKBOX_HEIGHT ),
+        MapMode( MAP_APPFONT ) );
     that->m_relatedSpace = that->LogicToPixel(
         Size( RSC_SP_CTRL_GROUP_X, RSC_SP_CTRL_GROUP_Y ),
         MapMode( MAP_APPFONT ) );
@@ -257,7 +285,7 @@ DialogImpl::~DialogImpl()
     that->m_borderRightBottomSpace = that->LogicToPixel(
         Size( RSC_SP_DLG_INNERBORDER_RIGHT, RSC_SP_DLG_INNERBORDER_BOTTOM ),
         MapMode( MAP_APPFONT ) );
-    that->m_ftFontHeight = that->m_ftPackages->GetTextHeight();
+    that->m_ftFontHeight = that->m_textSize.Height() /*!!!that->m_ftPackages->GetTextHeight()*/;
     that->m_descriptionYSpace = that->LogicToPixel(
         Size( 0, RSC_SP_CTRL_DESC_Y ), MapMode( MAP_APPFONT ) ).getHeight();
 
@@ -272,7 +300,8 @@ DialogImpl::~DialogImpl()
               that->m_borderLeftTopSpace.getHeight() +
               that->m_ftFontHeight +
               that->m_descriptionYSpace +
-              (6 * that->m_buttonSize.getHeight()) +
+              (5 * that->m_buttonSize.getHeight()) +
+              (1 * that->m_textSize.Height()) +
               (4 * that->m_relatedSpace.getHeight()) +
               (2 * that->m_unrelatedSpace.getHeight()) +
               that->m_borderRightBottomSpace.getHeight() ) );
@@ -400,6 +429,8 @@ void DialogImpl::Resize()
                   m_descriptionYSpace -
                   (2 * m_unrelatedSpace.getHeight()) -
                   m_buttonSize.getHeight() -
+                  m_textSize.getHeight() -
+                  m_relatedSpace.getHeight() -
                   m_borderRightBottomSpace.getHeight() );
 
     long buttonX =
@@ -447,13 +478,14 @@ void DialogImpl::Resize()
         buttonX,
         buttonY + (5 * (m_buttonSize.getHeight() + m_relatedSpace.getHeight())),
         m_buttonSize.getWidth(), m_buttonSize.getHeight() );
-
     m_optionsButton->SetPosSizePixel(
         buttonX,
         buttonY + (6 * (m_buttonSize.getHeight() + m_relatedSpace.getHeight())),
         m_buttonSize.getWidth(), m_buttonSize.getHeight() );
-
-
+    m_getExtensionsButton->SetPosSizePixel(
+        m_borderLeftTopSpace.getWidth(),
+        buttonY + selSize.getHeight() + m_relatedSpace.getHeight(),
+        selSize.getWidth(), m_textSize.Height() );
     long bottomY =
         totalSize.getHeight() -
         m_borderRightBottomSpace.getHeight() - m_buttonSize.getHeight();
@@ -501,7 +533,31 @@ IMPL_LINK( DialogImpl, headbar_dragEnd, HeaderBar *, pBar )
     return 1;
 }
 
-//IMPL_STATIC_LINK( DialogImpl, startInstallExtensions, void *, p )
+//______________________________________________________________________________
+IMPL_LINK( DialogImpl, hyperlink_clicked, svt::FixedHyperlink*, EMPTYARG )
+{
+    OUString sURL;
+    try
+    {   //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
+        Any value = m_xNameAccessRepositories->getByName(OUSTR("WebsiteLink"));
+        sURL = value.get<OUString> ();
+
+        Reference< css::system::XSystemShellExecute > xSystemShellExecute(
+            m_xComponentContext->getServiceManager()->createInstanceWithContext(
+                OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" ),
+                m_xComponentContext), UNO_QUERY_THROW);
+        //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
+        xSystemShellExecute->execute(
+            sURL, OUString(), css::system::SystemShellExecuteFlags::DEFAULTS);
+    }
+    catch (css::uno::Exception& )
+    {
+        Any exc( ::cppu::getCaughtException() );
+        OUString msg(::comphelper::anyToString(exc));
+        errbox( msg );
+    }
+    return 1;
+}
 
 //This event should only be called onse during the lifetime of DialogImpl. It is posted
 //in the constructor of DialogImpl.
@@ -607,6 +663,7 @@ void DialogImpl::updateButtonStates(
             m_modifiableContext->isModifiable( m_treelb->getContext( entry ) );
 
         xPackage = m_treelb->getPackage(entry);
+
         if (xPackage.is())
         {
             ++nSelectedPackages;
@@ -691,6 +748,7 @@ void DialogImpl::updateButtonStates(
             bOptions = false;
         }
     }
+
     m_disableButton->Enable( bDisable );
     m_enableButton->Enable( bEnable );
     m_exportButton->Enable( bExport );
@@ -1272,7 +1330,6 @@ DialogImpl::ThreadedPushButton::~ThreadedPushButton()
         osl_destroyThread( m_thread );
     }
 }
-
 
 //==============================================================================
 ResId DialogImpl::getResId( USHORT id )
