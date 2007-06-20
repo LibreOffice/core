@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabpage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:22:35 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:38:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,6 +182,24 @@ void TabPage::Paint( const Rectangle& )
         DrawNativeControl( CTRL_TAB_BODY, part, aCtrlRegion, nState,
                 aControlValue, rtl::OUString() );
     }
+}
+
+// -----------------------------------------------------------------------
+void TabPage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG )
+{
+    Point aPos = pDev->LogicToPixel( rPos );
+    Size aSize = pDev->LogicToPixel( rSize );
+
+    ImplInitSettings();
+
+    pDev->Push();
+    pDev->SetMapMode();
+    pDev->SetLineColor();
+    pDev->SetFillColor( GetSettings().GetStyleSettings().GetDialogColor() );
+
+    pDev->DrawRect( Rectangle( aPos, aSize ) );
+
+    pDev->Pop();
 }
 
 // -----------------------------------------------------------------------
