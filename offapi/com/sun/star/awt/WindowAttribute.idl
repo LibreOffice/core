@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WindowAttribute.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:33:59 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:31:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,6 +127,12 @@ published constants WindowAttribute
             conflicts with <member>VclWindowPeerAttribute::HSCROLL</member>
      */
     const long SYSTEMDEPENDENT = 256;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the window should have no decoration.
+     */
+    const long NODECORATION = 512;
 
 };
 
