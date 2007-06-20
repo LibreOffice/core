@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolcontainer.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:07:34 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:26:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,12 +59,16 @@
 
 #include <tools/debug.hxx>
 #include <tools/list.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 
 #include <limits>
 #include <map>
 #include <boost/shared_ptr.hpp>
 
 using namespace ::com::sun::star;
+
+extern WorkWindow* lcl_GetDefaultWindow();
 
 //  ----------------------------------------------------
 //  class UnoControlHolder
@@ -653,6 +657,7 @@ void UnoControlContainer::impl_createControlPeerIfNecessary( const uno::Referenc
 
     // if the container already has a peer, then also create a peer for the control
     uno::Reference< awt::XWindowPeer > xMyPeer( getPeer() );
+
     if( xMyPeer.is() )
     {
         _rxControl->createPeer( NULL, xMyPeer );
