@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pspgraphics.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 08:07:02 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:14:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #include <impfont.hxx>
 #include <outfont.hxx>
 #include <svapp.hxx>
+#include <vcl/salprn.hxx>
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -831,8 +832,8 @@ bool PspGraphics::AddTempDevFont( ImplDevFontList*, const String&,const String& 
 void PspGraphics::GetDevFontList( ImplDevFontList *pList )
 {
     ::std::list< psp::fontID > aList;
-    const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    rMgr.getFontList( aList, m_pJobData->m_pParser );
+    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+    rMgr.getFontList( aList, m_pJobData->m_pParser, m_pInfoPrinter->m_bCompatMetrics );
 
     ::std::list< psp::fontID >::iterator it;
     psp::FastPrintFontInfo aInfo;
