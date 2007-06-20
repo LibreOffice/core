@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogcontrol.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:36:05 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:25:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_WINDOWATTRIBUTE_HPP_
+#include <com/sun/star/awt/WindowAttribute.hpp>
 #endif
 #ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCERESOLVER_HPP_
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
@@ -257,6 +260,7 @@ UnoControlDialogModel::UnoControlDialogModel()
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
     ImplRegisterProperty( BASEPROPERTY_TITLE );
     ImplRegisterProperty( BASEPROPERTY_SIZEABLE );
+    ImplRegisterProperty( BASEPROPERTY_DECORATION );
 
     Any aBool;
     aBool <<= (sal_Bool) sal_True;
@@ -1263,7 +1267,13 @@ UnoDialogControl::UnoDialogControl() : maTopWindowListeners( *this )
 
 ::rtl::OUString UnoDialogControl::GetComponentServiceName()
 {
-    return ::rtl::OUString::createFromAscii( "Dialog" );
+
+    sal_Bool bDecoration( sal_True );
+    ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DECORATION )) >>= bDecoration;
+    if ( bDecoration )
+        return ::rtl::OUString::createFromAscii( "Dialog" );
+    else
+        return ::rtl::OUString::createFromAscii( "TabPage" );
 }
 
 // XInterface
@@ -1524,9 +1534,23 @@ void UnoDialogControl::createPeer( const Reference< XToolkit > & rxToolkit, cons
     UnoControlContainer::createPeer( rxToolkit, rParentPeer );
 
     Reference < XTopWindow > xTW( getPeer(), UNO_QUERY );
-    xTW->setMenuBar( mxMenuBar );
-    if ( maTopWindowListeners.getLength() )
-        xTW->addTopWindowListener( &maTopWindowListeners );
+    if ( xTW.is() )
+    {
+        xTW->setMenuBar( mxMenuBar );
+        if ( maTopWindowListeners.getLength() )
+            xTW->addTopWindowListener( &maTopWindowListeners );
+    }
+}
+
+void UnoDialogControl::PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc )
+{
+    sal_Bool bDecoration( sal_True );
+    ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DECORATION )) >>= bDecoration;
+    if ( !bDecoration )
+    {
+        // Now we have to manipulate the WindowDescriptor
+        rDesc.WindowAttributes = rDesc.WindowAttributes | ::com::sun::star::awt::WindowAttribute::NODECORATION;
+    }
 }
 
 void UnoDialogControl::elementInserted( const ContainerEvent& Event ) throw(RuntimeException)
