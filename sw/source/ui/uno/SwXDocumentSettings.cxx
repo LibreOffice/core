@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 11:59:30 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:11:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,40 +147,22 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_OUTLINELEVEL_YIELDS_NUMBERING,
     /* Stampit It disable the print cancel button of the shown progress dialog. */
     HANDLE_ALLOW_PRINTJOB_CANCEL,
-    // DVO, OD 12.01.2004 #i11859#
     HANDLE_USE_FORMER_LINE_SPACING,
-    // OD 2004-02-16 #106629#
     HANDLE_ADD_PARA_SPACING_TO_TABLE_CELLS,
-    // OD 2004-03-17 #i11860#
     HANDLE_USE_FORMER_OBJECT_POSITIONING,
-    // FME 2004-04-22 #108724#, #i13832#, #i24135#
     HANDLE_USE_FORMER_TEXT_WRAPPING,
-    // #i20158#: OASIS file format
     HANDLE_CHANGES_PASSWORD,
-    // --> OD 2004-07-08 #i28701#
     HANDLE_CONSIDER_WRAP_ON_OBJPOS,
-    // --> FME 2005-05-27 #i47448#
     HANDLE_IGNORE_FIRST_LINE_INDENT_IN_NUMBERING,
-    // --> FME 2005-06-08 #i49277#
     HANDLE_DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK,
-    // --> FME 2005-08-11 #i53199#
     HANDLE_DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT,
-    // --> FME 2006-02-10 #131283#
     HANDLE_TABLE_ROW_KEEP,
-    // --> FME 2006-03-01 #i3952#
     HANDLE_IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION,
-    // --> PB 2004-08-20 #i33095#
     HANDLE_LOAD_READONLY,
-    // <--
-    // --> OD 2006-03-14 #i62875#
     HANDLE_DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE,
-    // <--
-    // --> OD 2006-04-13 #b6402800#
     HANDLE_CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAMES,
-    // <--
-    // --> FME 2006-10-09 #i60945#
-    HANDLE_UNIX_FORCE_ZERO_EXT_LEADING
-    // <--
+    HANDLE_UNIX_FORCE_ZERO_EXT_LEADING,
+    HANDLE_USE_OLD_PRINTER_METRICS
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -214,39 +196,22 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("OutlineLevelYieldsNumbering"), HANDLE_OUTLINELEVEL_YIELDS_NUMBERING, CPPUTYPE_BOOLEAN,           0,   0},
         /* Stampit It disable the print cancel button of the shown progress dialog. */
         { RTL_CONSTASCII_STRINGPARAM("AllowPrintJobCancel"),        HANDLE_ALLOW_PRINTJOB_CANCEL,           CPPUTYPE_BOOLEAN,           0,   0},
-        // DVO, OD 12.01.2004 #i11859#
         { RTL_CONSTASCII_STRINGPARAM("UseFormerLineSpacing"),       HANDLE_USE_FORMER_LINE_SPACING,         CPPUTYPE_BOOLEAN,           0,   0},
-        // OD 2004-02-16 #106629#
         { RTL_CONSTASCII_STRINGPARAM("AddParaSpacingToTableCells"), HANDLE_ADD_PARA_SPACING_TO_TABLE_CELLS, CPPUTYPE_BOOLEAN,           0,   0},
-        // OD 2004-03-17 #i11860#
         { RTL_CONSTASCII_STRINGPARAM("UseFormerObjectPositioning"), HANDLE_USE_FORMER_OBJECT_POSITIONING,   CPPUTYPE_BOOLEAN,           0,   0},
-        // FME 2004-04-22 #108724#, #i13832#, #i24135#
         { RTL_CONSTASCII_STRINGPARAM("UseFormerTextWrapping"),      HANDLE_USE_FORMER_TEXT_WRAPPING,        CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("RedlineProtectionKey"),       HANDLE_CHANGES_PASSWORD,                CPPUTYPE_SEQINT8,           0,   0},
-        // --> OD 2004-07-08 #i28701#
         { RTL_CONSTASCII_STRINGPARAM("ConsiderTextWrapOnObjPos"),   HANDLE_CONSIDER_WRAP_ON_OBJPOS,         CPPUTYPE_BOOLEAN,           0,   0},
-        // --> FME 2005-05 -27 #i47448#
         { RTL_CONSTASCII_STRINGPARAM("IgnoreFirstLineIndentInNumbering"),   HANDLE_IGNORE_FIRST_LINE_INDENT_IN_NUMBERING,         CPPUTYPE_BOOLEAN,           0,   0},
-        // --> FME 2005-06-08 #i49277#
         { RTL_CONSTASCII_STRINGPARAM("DoNotJustifyLinesWithManualBreak"),   HANDLE_DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK,         CPPUTYPE_BOOLEAN,           0,   0},
-        // --> FME 2005-08-11 #i53199#
         { RTL_CONSTASCII_STRINGPARAM("DoNotResetParaAttrsForNumFont"),   HANDLE_DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT,         CPPUTYPE_BOOLEAN,           0,   0},
-        // --> FME 2006-02-10 #131283#
         { RTL_CONSTASCII_STRINGPARAM("TableRowKeep"),               HANDLE_TABLE_ROW_KEEP,         CPPUTYPE_BOOLEAN,           0,   0},
-        // FME 2006-03-01 #i3952#
         { RTL_CONSTASCII_STRINGPARAM("IgnoreTabsAndBlanksForLineCalculation"),   HANDLE_IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION,         CPPUTYPE_BOOLEAN,           0,   0},
-        // --> PB 2004-08-20 #i33095#
         { RTL_CONSTASCII_STRINGPARAM("LoadReadonly"),               HANDLE_LOAD_READONLY,                   CPPUTYPE_BOOLEAN,           0,   0},
-        // <--
-        // --> OD 2006-03-14 #i62875#
         { RTL_CONSTASCII_STRINGPARAM("DoNotCaptureDrawObjsOnPage"),   HANDLE_DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, CPPUTYPE_BOOLEAN, 0, 0},
-        // <--
-        // --> OD 2006-04-13 #b6402800#
         { RTL_CONSTASCII_STRINGPARAM("ClipAsCharacterAnchoredWriterFlyFrames"), HANDLE_CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAMES, CPPUTYPE_BOOLEAN, 0, 0},
-        // <--
-        // --> FME 2006-10-09 #i60945#
         { RTL_CONSTASCII_STRINGPARAM("UnxForceZeroExtLeading"), HANDLE_UNIX_FORCE_ZERO_EXT_LEADING, CPPUTYPE_BOOLEAN, 0, 0},
-        // <--
+        { RTL_CONSTASCII_STRINGPARAM("UseOldPrinterMetrics"), HANDLE_USE_OLD_PRINTER_METRICS, CPPUTYPE_BOOLEAN, 0, 0},
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -622,28 +587,24 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDocSh->Stamp_SetPrintCancelState(bState);
         }
         break;
-        // DVO, OD 12.01.2004 #i11859#
         case HANDLE_USE_FORMER_LINE_SPACING:
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
             mpDoc->set(IDocumentSettingAccess::OLD_LINE_SPACING, bTmp);
         }
         break;
-        // OD 2004-02-17 #106629#
         case HANDLE_ADD_PARA_SPACING_TO_TABLE_CELLS:
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
             mpDoc->set(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS, bTmp);
         }
         break;
-        // OD 2004-03-17 #i11860#
         case HANDLE_USE_FORMER_OBJECT_POSITIONING:
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
             mpDoc->set(IDocumentSettingAccess::USE_FORMER_OBJECT_POS, bTmp);
         }
         break;
-        // FME 2004-04-22 #108724#, #i13832#, #i24135#
         case HANDLE_USE_FORMER_TEXT_WRAPPING:
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
@@ -665,49 +626,42 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             }
         }
         break;
-        // --> OD 2004-07-08 #i28701#
         case HANDLE_CONSIDER_WRAP_ON_OBJPOS:
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
             mpDoc->set(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION, bTmp );
         }
         break;
-        // --> FME 2005-05-27 #i47448#
         case HANDLE_IGNORE_FIRST_LINE_INDENT_IN_NUMBERING:
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
             mpDoc->set(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING, bTmp);
         }
         break;
-        // --> FME 2005-06-08 #i49277#
         case HANDLE_DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK:
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
             mpDoc->set(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK, bTmp);
         }
         break;
-        // --> FME 2005-08-11 #i53199#
         case HANDLE_DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT:
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
             mpDoc->set(IDocumentSettingAccess::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT, bTmp);
         }
         break;
-        // --> FME 2006-02-10 #131283#
         case HANDLE_TABLE_ROW_KEEP:
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
             mpDoc->set(IDocumentSettingAccess::TABLE_ROW_KEEP, bTmp);
         }
         break;
-        // --> FME 2006-03-01 #i3952#
         case HANDLE_IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION:
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
             mpDoc->set(IDocumentSettingAccess::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION, bTmp);
         }
         break;
-        // --> PB 2004-08-20 #i33095#
         case HANDLE_LOAD_READONLY:
         {
             sal_Bool bReadonly = *(sal_Bool*)rValue.getValue();
@@ -715,31 +669,30 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                 mpDocSh->GetDocInfo().SetLoadReadonly( bReadonly );
         }
         break;
-        // <--
-        // --> OD 2006-03-14 #i62875#
         case HANDLE_DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE:
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
             mpDoc->set(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, bTmp);
         }
         break;
-        // <--
-        // --> OD 2006-04-13 #b6402800#
         case HANDLE_CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAMES:
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
             mpDoc->set(IDocumentSettingAccess::CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME, bTmp);
         }
         break;
-        // <--
-        // --> FME 2006-10-09 #i60945#
         case HANDLE_UNIX_FORCE_ZERO_EXT_LEADING:
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
             mpDoc->set(IDocumentSettingAccess::UNIX_FORCE_ZERO_EXT_LEADING, bTmp);
         }
         break;
-        // <--
+        case HANDLE_USE_OLD_PRINTER_METRICS:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set(IDocumentSettingAccess::USE_OLD_PRINTER_METRICS, bTmp);
+        }
+        break;
 
         default:
             throw UnknownPropertyException();
@@ -945,28 +898,24 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
             rValue.setValue(&bPrintCancelState, ::getBooleanCppuType());
         }
         break;
-        // DVO, OD 12.01.2004 #i11859#
         case HANDLE_USE_FORMER_LINE_SPACING:
         {
             sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::OLD_LINE_SPACING);
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
-        // OD 2004-02-16 #106629#
         case HANDLE_ADD_PARA_SPACING_TO_TABLE_CELLS:
         {
             sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS);
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
-        // OD 2004-03-17 #i11860#
         case HANDLE_USE_FORMER_OBJECT_POSITIONING:
         {
             sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::USE_FORMER_OBJECT_POS);
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
-        // FME 2004-04-22 #108724#, #i13832#, #i24135#
         case HANDLE_USE_FORMER_TEXT_WRAPPING:
         {
             sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING);
@@ -978,80 +927,72 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
             rValue <<= mpDoc->GetRedlinePassword();
         }
         break;
-        // --> OD 2004-07-08 #i28701#
         case HANDLE_CONSIDER_WRAP_ON_OBJPOS:
         {
             sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION);
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
-        // --> FME 2005-05-27 #i47448#
         case HANDLE_IGNORE_FIRST_LINE_INDENT_IN_NUMBERING:
         {
             sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING);
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
-        // --> FME 2005-06-08 #i49277#
         case HANDLE_DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK:
         {
             sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK);
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
-        // --> FME 2005-08-11 #i53199#
         case HANDLE_DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT:
         {
             sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT);
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
-        // --> FME 2006-02-10 #131283#
         case HANDLE_TABLE_ROW_KEEP :
         {
             sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::TABLE_ROW_KEEP);
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
-        // --> FME 2006-03-01 #i3952#
         case HANDLE_IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION:
         {
             sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION);
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
-        // --> PB 2004-08-20 #i33095#
         case HANDLE_LOAD_READONLY:
         {
             sal_Bool bReadonly = mpDocSh->GetDocInfo().IsLoadReadonly();
             rValue.setValue( &bReadonly, ::getBooleanCppuType() );
         }
         break;
-        // <--
-        // --> OD 2006-03-14 #i62875#
         case HANDLE_DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE:
         {
             sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE);
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
-        // <--
-        // --> OD 2006-04-13 #b6402800#
         case HANDLE_CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAMES:
         {
             sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME);
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
-        // <--
-        // --> FME 2006-10-09 #i60945#
         case HANDLE_UNIX_FORCE_ZERO_EXT_LEADING:
         {
             sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::UNIX_FORCE_ZERO_EXT_LEADING);
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
-        // <--
+        case HANDLE_USE_OLD_PRINTER_METRICS:
+        {
+            sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::USE_OLD_PRINTER_METRICS);
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
 
         default:
             throw UnknownPropertyException();
