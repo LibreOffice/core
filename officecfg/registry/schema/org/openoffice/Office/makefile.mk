@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-15 14:00:37 $
+#   last change: $Author: kz $ $Date: 2007-06-20 14:00:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,7 @@ XCSFILES= \
     Draw.xcs \
     Events.xcs \
     Embedding.xcs \
+    ExtensionManager.xcs \
     Impress.xcs \
     Java.xcs \
     Jobs.xcs \
