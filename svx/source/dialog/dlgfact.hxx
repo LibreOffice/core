@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:29:25 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:36:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -818,6 +818,8 @@ public:
             Window* pParent, ::com::sun::star::uno::Any aException);
 
     virtual VclAbstractDialog*          CreateSvxMacroAssignDlg( Window* pParent, SfxItemSet& rSet, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex = 0 );
+    virtual VclAbstractDialog*          CreateOptionsDialog(
+        Window* pParent, const rtl::OUString& rExtensionId, const rtl::OUString& rApplicationContext );
 };
 
 #endif
