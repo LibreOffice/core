@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgprov.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 07:10:17 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:28:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,9 @@
 #ifndef _COM_SUN_STAR_AWT_XDIALOGPROVIDER2_HPP_
 #include <com/sun/star/awt/XDialogProvider2.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XCONTAINERWINDOWPROVIDER_HPP_
+#include <com/sun/star/awt/XContainerWindowProvider.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
@@ -65,7 +68,7 @@
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase4.hxx>
 #endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -88,10 +91,11 @@ namespace dlgprov
     // class DialogProviderImpl
     // =============================================================================
 
-    typedef ::cppu::WeakImplHelper3<
+    typedef ::cppu::WeakImplHelper4<
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::lang::XInitialization,
-        ::com::sun::star::awt::XDialogProvider2 > DialogProviderImpl_BASE;
+        ::com::sun::star::awt::XDialogProvider2,
+        ::com::sun::star::awt::XContainerWindowProvider > DialogProviderImpl_BASE;
 
 
     class DialogProviderImpl : public DialogProviderImpl_BASE
@@ -105,19 +109,23 @@ namespace dlgprov
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > createDialogModel( const ::rtl::OUString& sURL );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > createDialogControl(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxDialogModel );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxDialogModel,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParent );
 
-        void attachDialogEvents( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog >& rxDialog,
+        void attachControlEvents( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rxControlContainer,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxHandler,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >& rxIntrospectionAccess );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >& rxIntrospectionAccess,
+            bool bDialogProviderMode );
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess > inspectHandler(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxHandler );
 
         // XDialogProvider / XDialogProvider2 impl method
-        virtual ::com::sun::star::uno::Reference < ::com::sun::star::awt::XDialog > SAL_CALL createDialogImpl(
+        virtual ::com::sun::star::uno::Reference < ::com::sun::star::awt::XControl > SAL_CALL createDialogImpl(
             const ::rtl::OUString& URL,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xHandler )
-            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xHandler,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParent,
+            bool bDialogProviderMode )
+                throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     public:
         DialogProviderImpl(
@@ -146,7 +154,13 @@ namespace dlgprov
             const ::rtl::OUString& URL,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xHandler )
             throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    };
+
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createContainerWindow(
+            const ::rtl::OUString& URL, const ::rtl::OUString& WindowType,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParent,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xHandler )
+            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+     };
 
 //.........................................................................
 }   // namespace dlgprov

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgevtatt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 07:09:36 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:28:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,8 +54,8 @@
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
-#ifndef _COM_SUN_STAR_AWT_XDIALOG_HPP_
-#include <com/sun/star/awt/XDialog.hpp>
+#ifndef _COM_SUN_STAR_AWT_XCONTROL_HPP_
+#include <com/sun/star/awt/XControl.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XINTROSPECTION_HPP_
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
@@ -148,9 +148,10 @@ namespace dlgprov
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 m_xModel;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog >                  m_xDialog;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >                 m_xControl;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xHandler;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >   m_xIntrospectionAccess;
+        bool                                                                                m_bDialogProviderMode;
 
         virtual void firing_impl( const ::com::sun::star::script::ScriptEvent& aScriptEvent, ::com::sun::star::uno::Any* pRet );
 
@@ -159,9 +160,10 @@ namespace dlgprov
     public:
         DialogScriptListenerImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog >& rxDialog,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rxControl,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxHandler,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >& rxIntrospectionAccess );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >& rxIntrospectionAccess,
+            bool bDialogProviderMode );     // false: ContainerWindowProvider mode
         virtual ~DialogScriptListenerImpl();
 
         // XEventListener
