@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabpage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:14:12 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:37:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ public:
                     TabPage( Window* pParent, const ResId& rResId );
 
     virtual void    Paint( const Rectangle& rRect );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
 
     virtual void    StateChanged( StateChangedType nStateChange );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
