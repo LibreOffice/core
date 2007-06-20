@@ -4,9 +4,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:51:31 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:13:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -711,6 +711,19 @@ Printer::~Printer()
         mpNext->mpPrev = mpPrev;
     else
         pSVData->maGDIData.mpLastPrinter = mpPrev;
+}
+
+// -----------------------------------------------------------------------
+void Printer::Compat_OldPrinterMetrics( bool bSet )
+{
+    // propagate flag
+    if( mpInfoPrinter )
+        mpInfoPrinter->m_bCompatMetrics = bSet;
+    if( mpQPrinter )
+        mpQPrinter->Compat_OldPrinterMetrics( bSet );
+
+    // get new font data
+    ImplUpdateFontData( TRUE );
 }
 
 // -----------------------------------------------------------------------
@@ -1469,6 +1482,8 @@ BOOL Printer::StartJob( const XubString& rJobName )
     else
     {
         mpQPrinter = new ImplQPrinter( this );
+        if( mpInfoPrinter )
+            mpQPrinter->Compat_OldPrinterMetrics( mpInfoPrinter->m_bCompatMetrics );
         mpQPrinter->SetDigitLanguage( GetDigitLanguage() );
         mpQPrinter->SetUserCopy( bUserCopy );
         mpQPrinter->SetPrinterOptions( *mpPrinterOptions );
