@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-20 14:06:58 $
+#   last change: $Author: kz $ $Date: 2007-06-20 10:32:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,7 @@ IDLFILES=\
     DeviceInfo.idl\
     DialogProvider.idl\
     DialogProvider2.idl\
+    ContainerWindowProvider.idl\
     DockingData.idl\
     DockingEvent.idl\
     EndDockingEvent.idl\
@@ -226,6 +227,9 @@ IDLFILES=\
     XDialogProvider.idl\
     XDialogProvider2.idl\
     XDialogEventHandler.idl\
+    ContainerWindowProvider.idl\
+    XContainerWindowProvider.idl\
+    XContainerWindowEventHandler.idl\
     XDisplayBitmap.idl\
     XDisplayConnection.idl\
     XDockableWindow.idl\
