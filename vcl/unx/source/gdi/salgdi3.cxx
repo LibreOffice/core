@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.145 $
+ *  $Revision: 1.146 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-17 13:57:44 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:15:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,8 +265,8 @@ FontLookup::BuildSet (FontLookup::fl_hashset &rSet)
 {
     ::std::list< psp::fontID > aIdList;
 
-    const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    rMgr.getFontList( aIdList, NULL );
+    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+    rMgr.getFontList( aIdList, NULL, false );
 
     ::std::list< psp::fontID >::iterator it;
     for (it = aIdList.begin(); it != aIdList.end(); ++it)
@@ -1280,7 +1280,7 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
     // prepare the GlyphCache using psprint's font infos
     X11GlyphCache& rGC = X11GlyphCache::GetInstance();
 
-    const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     ::std::list< psp::fontID > aList;
     ::std::list< psp::fontID >::iterator it;
     psp::FastPrintFontInfo aInfo;
