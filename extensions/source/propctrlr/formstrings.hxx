@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:35:58 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:43:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,6 +205,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_SHOW_RECORDACTIONS,     "ShowRecordActions" );
     PCR_CONSTASCII_STRING( PROPERTY_SHOW_FILTERSORT,        "ShowFilterSort" );
     PCR_CONSTASCII_STRING( PROPERTY_LINEEND_FORMAT,         "LineEndFormat");
+    PCR_CONSTASCII_STRING( PROPERTY_DECORATION,             "Decoration" );
 
     PCR_CONSTASCII_STRING( PROPERTY_HARDLINEBREAKS,         "HardLineBreaks");
 
