@@ -259,6 +259,7 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\inc\svtools\roadmapwizard.hxx %_DEST%\inc%_EXT%\svtools\roadmapwizard.hxx
 ..\inc\roadmap.hxx %_DEST%\inc%_EXT%\svtools\roadmap.hxx
 ..\inc\svtools\hyperlabel.hxx %_DEST%\inc%_EXT%\svtools\hyperlabel.hxx
+..\inc\svtools\fixedhyper.hxx %_DEST%\inc%_EXT%\svtools\fixedhyper.hxx
 ..\inc\helpagentwindow.hxx %_DEST%\inc%_EXT%\svtools\helpagentwindow.hxx
 ..\inc\pickerhistory.hxx %_DEST%\inc%_EXT%\svtools\pickerhistory.hxx
 ..\inc\pickerhistoryaccess.hxx %_DEST%\inc%_EXT%\svtools\pickerhistoryaccess.hxx
