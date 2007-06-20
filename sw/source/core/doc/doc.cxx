@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:00:35 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:11:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,6 +300,7 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME: return mbClipAsCharacterAnchoredWriterFlyFrames;
         // <--
         case UNIX_FORCE_ZERO_EXT_LEADING: return mbUnixForceZeroExtLeading;
+        case USE_OLD_PRINTER_METRICS: return mbOldPrinterMetrics;
          // COMPATIBILITY FLAGS END
 
         case BROWSE_MODE: return mbBrowseMode;
@@ -407,6 +408,10 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
         // <--
         case UNIX_FORCE_ZERO_EXT_LEADING:
             mbUnixForceZeroExtLeading = value;
+            break;
+
+        case USE_OLD_PRINTER_METRICS:
+            mbOldPrinterMetrics = value;
             break;
 
          // COMPATIBILITY FLAGS END
