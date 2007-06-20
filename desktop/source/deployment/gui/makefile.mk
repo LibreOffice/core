@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-20 14:25:53 $
+#   last change: $Author: kz $ $Date: 2007-06-20 10:47:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,10 +58,9 @@ SLOFILES = \
         $(SLO)$/dp_gui_updateinstalldialog.obj \
         $(SLO)$/dp_gui_autoscrolledit.obj \
         $(SLO)$/dp_gui_modifiablecontext.obj
-        
+
 SHL1TARGET = $(TARGET)$(UPD)$(DLLPOSTFIX).uno
 SHL1VERSIONMAP = ..$/deployment.map
-
 
 SHL1STDLIBS = \
         $(SALLIB) \
@@ -76,8 +75,9 @@ SHL1STDLIBS = \
         $(TKLIB) \
         $(VCLLIB) \
         $(SVTOOLLIB)	\
-        $(SVLLIB)		\
+        $(SVLLIB)  \
         $(SVXLIB) \
+        $(SFXLIB) \
         $(DEPLOYMENTMISCLIB)
 
 SHL1DEPN =
