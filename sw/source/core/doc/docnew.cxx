@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:25:01 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:11:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -406,6 +406,7 @@ SwDoc::SwDoc() :
     mbDoNotCaptureDrawObjsOnPage            = false;        // hidden
     mbClipAsCharacterAnchoredWriterFlyFrames= false;        // hidden
     mbUnixForceZeroExtLeading               = false;        // hidden
+    mbOldPrinterMetrics                     = false;        // hidden
 
     //
     // COMPATIBILITY FLAGS END
@@ -738,6 +739,7 @@ SfxPrinter& SwDoc::CreatePrinter_() const
                     SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                     SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                     0 );
+
     SfxPrinter* pNewPrt = new SfxPrinter( pSet );
     const_cast<SwDoc*>(this)->setPrinter( pNewPrt, true, true );
     return *pPrt;
