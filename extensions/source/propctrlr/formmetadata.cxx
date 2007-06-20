@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:47:49 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:41:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -367,7 +367,8 @@ namespace pcr
         DEF_INFO_2( RECORDMARKER,      RECORDMARKER,       RECORDMARKER,      FORM_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( TAG,               TAG,                TAG,               FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( HELPTEXT,          HELPTEXT,           HELPTEXT,          FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
-        DEF_INFO_3( HELPURL,           HELPURL,            HELPURL,           FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE )
+        DEF_INFO_3( HELPURL,           HELPURL,            HELPURL,           FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_2( DECORATION,        DECORATION,         DECORATION,        DIALOG_VISIBLE, COMPOSEABLE )
         };
 
         s_pPropertyInfos = const_cast<OPropertyInfoImpl*>(aPropertyInfos);
