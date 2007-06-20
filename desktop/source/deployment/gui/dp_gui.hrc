@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:21:41 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:45:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 #define RID_BTN_DISABLE                        23
 #define RID_BTN_EXPORT                         24
 #define RID_BTN_CHECK_UPDATES                  25
+#define RID_BTN_OPTIONS                26
 
 #define RID_IMG_PLUS                           41
 #define RID_IMG_PLUS_HC                        42
@@ -164,6 +165,7 @@
 #define RID_CTX_ITEM_DISABLE                   (RID_DEPLOYMENT_GUI_START+83)
 #define RID_CTX_ITEM_EXPORT                    (RID_DEPLOYMENT_GUI_START+84)
 #define RID_CTX_ITEM_CHECK_UPDATE              (RID_DEPLOYMENT_GUI_START+85)
+#define RID_CTX_ITEM_OPTIONS                   (RID_DEPLOYMENT_GUI_START+86)
 
 #define RID_STR_ADDING_PACKAGES                (RID_DEPLOYMENT_GUI_START+90)
 #define RID_STR_REMOVING_PACKAGES              (RID_DEPLOYMENT_GUI_START+91)
