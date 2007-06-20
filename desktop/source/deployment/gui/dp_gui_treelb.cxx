@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_treelb.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:04:15 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:46:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -404,6 +404,7 @@ DialogImpl::TreeListBoxImpl::TreeListBoxImpl(
       m_strCtxDisable( getResourceString(RID_CTX_ITEM_DISABLE) ),
       m_strCtxExport( getResourceString(RID_CTX_ITEM_EXPORT) ),
       m_strCtxCheckUpdate( getResourceString(RID_CTX_ITEM_CHECK_UPDATE) ),
+      m_strCtxOptions( getResourceString(RID_CTX_ITEM_OPTIONS) ),
       m_defaultPackage( getResId(RID_IMG_DEF_PACKAGE) ),
       m_defaultPackage_hc( getResId(RID_IMG_DEF_PACKAGE_HC) ),
       m_defaultPackageBundle( getResId(RID_IMG_DEF_PACKAGE_BUNDLE) ),
@@ -609,6 +610,12 @@ PopupMenu * DialogImpl::TreeListBoxImpl::CreateContextMenu(void)
         menu->InsertItem( RID_BTN_CHECK_UPDATES, m_strCtxCheckUpdate );
     }
 
+    if (m_dialog->m_optionsButton->IsEnabled())
+    {
+        menu->InsertSeparator();
+        menu->InsertItem( RID_BTN_OPTIONS, m_strCtxOptions );
+    }
+
     return menu.release();
 }
 
@@ -639,6 +646,9 @@ void DialogImpl::TreeListBoxImpl::ExcecuteContextMenuAction(
         break;
     case RID_BTN_CHECK_UPDATES:
         m_dialog->checkUpdates(true);
+        break;
+    case RID_BTN_OPTIONS:
+        m_dialog->m_optionsButton->Click();
         break;
     default:
         OSL_ENSURE( 0, "### forgot button entry?!" );
