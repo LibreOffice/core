@@ -5,9 +5,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2007-06-07 07:12:44 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:54:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -647,7 +647,7 @@ void ImageList::InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
             return;
 
     Size aSize( rBitmapEx.GetSizePixel() );
-    DBG_ASSERT (rBitmapEx.GetSizePixel().Width() % nItems != 0,
+    DBG_ASSERT (rBitmapEx.GetSizePixel().Width() % nItems == 0,
                 "ImageList::InsertFromHorizontalStrip - very odd size");
     aSize.Width() /= nItems;
     ImplInit( nItems, aSize );
@@ -671,9 +671,9 @@ void ImageList::InsertFromHorizontalBitmap( const ResId& rResId,
 //  fprintf (stderr, "InsertFromHorizontalBitmap\n");
 
     BitmapEx aBmpEx( rResId );
-    if (!aBmpEx.IsTransparent())
+    if ( !aBmpEx.IsTransparent() && pMaskColor )
         aBmpEx = BitmapEx( aBmpEx.GetBitmap(), *pMaskColor );
-    if (nColorCount)
+    if ( nColorCount && pSearchColors && pReplaceColors )
         aBmpEx.Replace( pSearchColors, pReplaceColors, nColorCount );
 
     std::vector< rtl::OUString > aNames( nCount );
