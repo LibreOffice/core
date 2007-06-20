@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_cmdenv.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2006-12-22 09:00:28 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 14:02:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,21 @@
 #include "vcl/button.hxx"
 #include "vcl/fixed.hxx"
 #include "vcl/status.hxx"
-#include "com/sun/star/deployment/thePackageManagerFactory.hpp"
+#include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include <memory>
+
+namespace com { namespace sun { namespace star {
+    namespace ucb {
+        class XProgressHandler;
+    }
+    namespace task {
+        class XInteractionHandler;
+        class XAbortChannel;
+    }
+    namespace uno {
+        class XComponentContext;
+    }
+} } }
 
 namespace dp_gui
 {
