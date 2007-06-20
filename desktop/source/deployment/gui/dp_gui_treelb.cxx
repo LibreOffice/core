@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_treelb.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:46:45 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 14:03:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,11 @@
 #include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/deployment/UpdateInformationProvider.hpp"
+#include "com/sun/star/deployment/XPackageManagerFactory.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/ucb/ContentAction.hpp"
 #include "com/sun/star/frame/XModuleManager.hpp"
+#include "com/sun/star/frame/XDesktop.hpp"
 #include <hash_set>
 
 
