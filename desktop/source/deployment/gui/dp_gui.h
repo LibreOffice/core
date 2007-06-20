@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jl $ $Date: 2006-12-22 09:00:28 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:45:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,10 @@
 #include "com/sun/star/frame/XDesktop.hpp"
 #include <list>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace container {
+class XNameAccess;
+}}}}
 
 namespace dp_gui {
 
@@ -124,6 +128,7 @@ struct DialogImpl :
         String m_strCtxDisable;
         String m_strCtxExport;
         String m_strCtxCheckUpdate;
+        String m_strCtxOptions;
 
         Image m_defaultPackage;
         Image m_defaultPackage_hc;
@@ -208,6 +213,7 @@ struct DialogImpl :
     void clickEnableDisable( USHORT id );
     void clickExport( USHORT id );
     void clickCheckUpdates( USHORT id );
+    void clickOptions( USHORT id );
     void installExtensions();
 
     void updateButtonStates(
@@ -218,6 +224,8 @@ struct DialogImpl :
     void errbox( ::rtl::OUString const & msg );
 
     void checkUpdates(bool selected);
+
+    bool supportsOptions( ::rtl::OUString const & sExtensionId);
 
     ::rtl::Reference<ModifiableContext> m_modifiableContext;
     const ::com::sun::star::uno::Sequence< ::rtl::OUString > m_arExtensions;
@@ -230,6 +238,7 @@ struct DialogImpl :
         m_packageManagers;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop> m_xDesktop;
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent> m_xTdocRoot;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xNameAccessNodes;
 
     const String m_strAddPackages;
     const String m_strAddingPackages;
@@ -261,6 +270,7 @@ struct DialogImpl :
     ::std::auto_ptr<ThreadedPushButton> m_disableButton;
     ::std::auto_ptr<ThreadedPushButton> m_exportButton;
     ::std::auto_ptr<SyncPushButton> m_checkUpdatesButton;
+    ::std::auto_ptr<ThreadedPushButton> m_optionsButton;
     ::std::auto_ptr<FixedLine> m_bottomLine;
 
     ::std::auto_ptr<OKButton> m_closeButton;
