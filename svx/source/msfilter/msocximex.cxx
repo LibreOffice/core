@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:12:32 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 08:56:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -437,16 +437,18 @@ inline sal_uInt32 lclGetBufferSize( sal_uInt32 nLenFld )
 void lclReadCharArray( SvStorageStream& rStrm, char*& rpcCharArr, sal_uInt32 nLenFld, long nPos )
 {
     delete[] rpcCharArr;
+    rpcCharArr = 0;
     sal_uInt32 nBufSize = lclGetBufferSize( nLenFld );
-    if( nBufSize )
+    DBG_ASSERT( nBufSize <= 0xFFFF, "lclReadCharArray - possible read error: char array is too big" );
+    if( nBufSize && nBufSize <= 0xFFFF )
     {
-        DBG_ASSERT( nBufSize <= 0xFFFF, "lclReadCharArray - possible read error: char array is too big" );
         rpcCharArr = new char[ nBufSize ];
-        ReadAlign( &rStrm, nPos, 4 );
-        rStrm.Read( rpcCharArr, nBufSize );
+        if( rpcCharArr )
+        {
+            ReadAlign( &rStrm, nPos, 4 );
+            rStrm.Read( rpcCharArr, nBufSize );
+        }
     }
-    else
-        rpcCharArr = 0;
 }
 
 
@@ -4995,6 +4997,8 @@ sal_Bool OCX_FontData::Read(SvStorageStream *pS)
         ReadAlign(pS, pS->Tell() - nStart, 4);
         *pS >> nFontSize;
     }
+    else
+        nFontSize = 240;
     if (pBlockFlags[0] & 0x10)
     {
         ReadAlign(pS, pS->Tell() - nStart, 2);
