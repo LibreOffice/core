@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:03:58 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:46:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "ucbhelper/content.hxx"
-#include "unotools/configmgr.hxx"
 #include "comphelper/anytostring.hxx"
 #include "comphelper/sequence.hxx"
 #include "tools/resmgr.hxx"
@@ -57,6 +56,7 @@
 #include "vcl/msgbox.hxx"
 #include "vcl/threadex.hxx"
 #include "svtools/svtools.hrc"
+#include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/container/XChild.hpp"
 #include "com/sun/star/ui/dialogs/XFilePicker.hpp"
 #include "com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp"
@@ -71,8 +71,11 @@
 #include "com/sun/star/ucb/ContentAction.hpp"
 #include "com/sun/star/sdbc/XResultSet.hpp"
 #include "com/sun/star/sdbc/XRow.hpp"
+#include "com/sun/star/beans/XPropertySet.hpp"
+#include "com/sun/star/beans/Optional.hpp"
 #include "boost/function.hpp"
 #include "boost/bind.hpp"
+#include <sfx2/sfxdlg.hxx>
 #include <map>
 #include <vector>
 #include <algorithm>
@@ -131,6 +134,18 @@ DialogImpl::DialogImpl(
         Application::PostUserEvent(
             LINK( this, DialogImpl, startInstallExtensions ), 0);
 
+    Reference<css::lang::XMultiServiceFactory> xConfig(
+        xContext->getServiceManager()->createInstanceWithContext(
+            OUSTR("com.sun.star.configuration.ConfigurationProvider"), m_xComponentContext),
+        UNO_QUERY_THROW);
+    Any args[1];
+    css::beans::PropertyValue val1(
+        OUSTR("nodepath"), 0, Any(OUSTR("/org.openoffice.Office.OptionsDialog/Nodes")),
+        ::css::beans::PropertyState_DIRECT_VALUE);
+    args[0] <<= val1;
+    m_xNameAccessNodes = Reference<css::container::XNameAccess>(
+        xConfig->createInstanceWithArguments(OUSTR("com.sun.star.configuration.ConfigurationAccess"),
+          Sequence<Any>(args, 1)), UNO_QUERY_THROW);
 }
 
 //______________________________________________________________________________
@@ -197,6 +212,11 @@ DialogImpl::~DialogImpl()
     that->m_checkUpdatesButton.reset(
         new SyncPushButton( that.get(), &DialogImpl::clickCheckUpdates,
                             RID_BTN_CHECK_UPDATES ) );
+    that->m_optionsButton.reset(
+        new ThreadedPushButton( that.get(), &DialogImpl::clickOptions,
+                                RID_BTN_OPTIONS ) );
+    //ToDo later
+    that->m_optionsButton->Enable(true);
 
     that->m_bottomLine.reset( new FixedLine( that.get() ) );
     that->m_closeButton.reset(
@@ -321,7 +341,6 @@ DialogImpl::~DialogImpl()
                 that->m_xComponentContext ),
             UNO_QUERY_THROW );
         that->m_xDesktop->addTerminateListener( that.get() );
-
         ::ucbhelper::Content ucb_tdocRoot( OUSTR("vnd.sun.star.tdoc:/"), 0 );
         that->m_xTdocRoot.set( ucb_tdocRoot.get() );
 
@@ -428,6 +447,12 @@ void DialogImpl::Resize()
         buttonX,
         buttonY + (5 * (m_buttonSize.getHeight() + m_relatedSpace.getHeight())),
         m_buttonSize.getWidth(), m_buttonSize.getHeight() );
+
+    m_optionsButton->SetPosSizePixel(
+        buttonX,
+        buttonY + (6 * (m_buttonSize.getHeight() + m_relatedSpace.getHeight())),
+        m_buttonSize.getWidth(), m_buttonSize.getHeight() );
+
 
     long bottomY =
         totalSize.getHeight() -
@@ -570,21 +595,26 @@ void DialogImpl::updateButtonStates(
     bool bDisable = true;
     bool bRemove = true;
     bool bExport = true;
+    bool bOptions = true;
 
     sal_Int32 nSelectedPackages = 0;
+    Reference<css::deployment::XPackage> xPackage;
+    Reference<css::deployment::XPackageManager> xPackageManager;
     for ( SvLBoxEntry * entry = m_treelb->FirstSelected();
           entry != 0; entry = m_treelb->NextSelected(entry) )
     {
         allowModification = allowModification &&
             m_modifiableContext->isModifiable( m_treelb->getContext( entry ) );
 
-        Reference<deployment::XPackage> xPackage(
-            m_treelb->getPackage(entry) );
+        xPackage = m_treelb->getPackage(entry);
         if (xPackage.is())
         {
             ++nSelectedPackages;
             if (m_treelb->isFirstLevelChild( entry ))
             {
+                //get the package manager for this package which we need to determine if
+                //options button is to be shown.
+                xPackageManager = m_treelb->getPackageManager(entry);
                 switch (getPackageState( xPackage, xCmdEnv ))
                 {
                 case REGISTERED:
@@ -603,11 +633,11 @@ void DialogImpl::updateButtonStates(
             }
             else {
                 // export still possible:
-                bEnable = bDisable = bRemove = false;
+                bEnable = bDisable = bRemove = bOptions = false;
             }
         }
         else { // selected non-package entry:
-            bExport = bEnable = bDisable = bRemove = false;
+            bExport = bEnable = bDisable = bRemove = bOptions = false;
         }
     }
     //When unopkg gui ext1 ext2 ... was used then the installation starts automatically.
@@ -620,9 +650,51 @@ void DialogImpl::updateButtonStates(
     bRemove &= (allowModification && nSelectedPackages > 0) && !bDisableAll;
     bExport &= (nSelectedPackages > 0);
 
+    if (bOptions)
+    {
+        //We do not support multiple selection for the Options button
+        if (nSelectedPackages == 1 && xPackage->isBundle())
+        {
+            //check if this package is shared. Then if the same package exist as
+            //user then we will not enable the button
+            css::beans::Optional<OUString> aId = xPackage->getIdentifier();
+            //a bundle must always have an id
+            OSL_ASSERT(aId.IsPresent);
+            if (xPackageManager->getContext().equals(OUSTR("shared")))
+            {
+                //get the "user" xpackage manager;
+                Reference<css::deployment::XPackageManager> xUserPM;
+                for (sal_Int32 i = 0; i < m_packageManagers.getLength(); i++)
+                {
+                    Reference<css::deployment::XPackageManager> const &  xPM = m_packageManagers[i];
+                    if (xPM->getContext().equals(OUSTR("user")))
+                    {
+                        xUserPM = xPM;
+                        break;
+                    }
+                }
+                try {
+                    //getDeployedPackage throws an IllegalArgumentException if the package
+                    //does not exist
+                    xUserPM->getDeployedPackage(
+                            aId.Value, OUSTR(""),
+                            Reference<css::ucb::XCommandEnvironment>()).is();
+                    bOptions = false;
+                } catch (css::uno::Exception & ) {
+                }
+            }
+            if (bOptions &&  ! supportsOptions(aId.Value))
+                bOptions = false;
+        }
+        else
+        {
+            bOptions = false;
+        }
+    }
     m_disableButton->Enable( bDisable );
     m_enableButton->Enable( bEnable );
     m_exportButton->Enable( bExport );
+    m_optionsButton->Enable( bOptions);
     SvLBoxEntry * currEntry = m_treelb->getCurrentSingleSelectedEntry();
 
     m_addButton->Enable(
@@ -632,6 +704,48 @@ void DialogImpl::updateButtonStates(
          m_treelb->GetParent( currEntry ) == 0 /* top-level */) &&
         (nSelectedPackages == 0) );
     m_removeButton->Enable( bRemove );
+}
+
+// The function investigates if the extension supports options.
+bool DialogImpl::supportsOptions( ::rtl::OUString const & sExtensionId)
+{
+    bool bOptions = false;
+    //iterate over all available nodes
+    Sequence<OUString> seqNames = m_xNameAccessNodes->getElementNames();
+
+    for (int i = 0; i < seqNames.getLength(); i++)
+    {
+        Any anyNode = m_xNameAccessNodes->getByName(seqNames[i]);
+        //If we have a node then then it must contain the set of leaves. This is part of OptionsDialog.xcs
+        Reference<XInterface> xIntNode = anyNode.get<Reference<XInterface> >();
+        Reference<css::container::XNameAccess> xNode(xIntNode, UNO_QUERY_THROW);
+
+        Any anyLeaves = xNode->getByName(OUSTR("Leaves"));
+        Reference<XInterface> xIntLeaves = anyLeaves.get<Reference<XInterface> >();
+        Reference<css::container::XNameAccess> xLeaves(xIntLeaves, UNO_QUERY_THROW);
+
+        //iterate over all available leaves
+        Sequence<OUString> seqLeafNames = xLeaves->getElementNames();
+        for (int j = 0; j < seqLeafNames.getLength(); j++)
+        {
+            Any anyLeaf = xLeaves->getByName(seqLeafNames[j]);
+            Reference<XInterface> xIntLeaf = anyLeaf.get<Reference<XInterface> >();
+            Reference<css::beans::XPropertySet> xLeaf(xIntLeaf, UNO_QUERY_THROW);
+            //investigate the Id property if it matches the extension identifier which
+            //has been passed in.
+            Any anyValue = xLeaf->getPropertyValue(OUSTR("Id"));
+
+            OUString sId = anyValue.get<OUString>();
+            if (sId == sExtensionId)
+            {
+                bOptions = true;
+                break;
+            }
+        }
+        if (bOptions)
+            break;
+    }
+    return bOptions;
 }
 
 //______________________________________________________________________________
@@ -1038,6 +1152,25 @@ void DialogImpl::clickExport( USHORT )
 void DialogImpl::clickCheckUpdates( USHORT )
 {
     checkUpdates(false);
+}
+
+//______________________________________________________________________________
+void DialogImpl::clickOptions( USHORT )
+{
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+    if ( pFact )
+    {
+        rtl::OUString sExtensionId;
+        Reference<deployment::XPackage> xPackage(
+            m_treelb->getPackage( m_treelb->FirstSelected() ) );
+        if ( xPackage.is() )
+            sExtensionId = xPackage->getIdentifier().Value;
+
+        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        VclAbstractDialog* pDlg = pFact->CreateOptionsDialog( this, sExtensionId, rtl::OUString() );
+        pDlg->Execute();
+        delete pDlg;
+    }
 }
 
 //______________________________________________________________________________
