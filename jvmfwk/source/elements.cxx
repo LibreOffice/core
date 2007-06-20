@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elements.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 07:57:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-20 17:13:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,7 +323,7 @@ void NodeJava::load()
             {
                 CXmlCharPtr sUser(xmlNodeListGetString(
                     docUser, cur->children, 1));
-                m_userClassPath = boost::optional<rtl::OUString>(sUser);
+                m_userClassPath = boost::optional<rtl::OUString>(rtl::OUString(sUser));
             }
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "javaInfo") == 0)
