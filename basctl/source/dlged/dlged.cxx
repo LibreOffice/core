@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 16:00:06 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:39:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,6 +164,10 @@ using ::rtl::OUString;
 
 static ::rtl::OUString aResourceResolverPropName =
     ::rtl::OUString::createFromAscii( "ResourceResolver" );
+static ::rtl::OUString aDecorationPropName =
+    ::rtl::OUString::createFromAscii( "Decoration" );
+static ::rtl::OUString aTitlePropName =
+    ::rtl::OUString::createFromAscii( "Title" );
 
 
 //============================================================================
@@ -212,17 +216,35 @@ void DlgEditor::ShowDialog()
 
     uno::Reference< beans::XPropertySet > xSrcDlgModPropSet( m_xUnoControlDialogModel, uno::UNO_QUERY );
     uno::Reference< beans::XPropertySet > xNewDlgModPropSet( xDlgMod, uno::UNO_QUERY );
-    if( xSrcDlgModPropSet.is() && xNewDlgModPropSet.is() )
+    if( xNewDlgModPropSet.is() )
     {
+        if( xSrcDlgModPropSet.is() )
+        {
+            try
+            {
+                Any aResourceResolver = xSrcDlgModPropSet->getPropertyValue( aResourceResolverPropName );
+                xNewDlgModPropSet->setPropertyValue( aResourceResolverPropName, aResourceResolver );
+            }
+            catch( UnknownPropertyException& )
+            {
+                DBG_ERROR( "DlgEditor::ShowDialog(): No ResourceResolver property" );
+            }
+        }
+
+        // Disable decoration
+        bool bDecoration = true;
         try
         {
-            Any aResourceResolver = xSrcDlgModPropSet->getPropertyValue( aResourceResolverPropName );
-            xNewDlgModPropSet->setPropertyValue( aResourceResolverPropName, aResourceResolver );
+            Any aDecorationAny = xSrcDlgModPropSet->getPropertyValue( aDecorationPropName );
+            aDecorationAny >>= bDecoration;
+            if( !bDecoration )
+            {
+                xNewDlgModPropSet->setPropertyValue( aDecorationPropName, makeAny( true ) );
+                xNewDlgModPropSet->setPropertyValue( aTitlePropName, makeAny( ::rtl::OUString() ) );
+            }
         }
         catch( UnknownPropertyException& )
-        {
-            DBG_ERROR( "DlgEditor::ShowDialog(): No ResourceResolver property" );
-        }
+        {}
     }
 
     // set the model
@@ -533,6 +555,21 @@ void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoContr
 
     pDlgEdModel->SetChanged( FALSE );
 }
+
+void DlgEditor::ResetDialog( void )
+{
+    DlgEdForm* pOldDlgEdForm = pDlgEdForm;
+    DlgEdPage* pPage = (DlgEdPage*)pDlgEdModel->GetPage(0);
+    SdrPageView* pPgView = pDlgEdView->GetSdrPageView();
+    BOOL bWasMarked = pDlgEdView->IsObjMarked( pOldDlgEdForm );
+    pDlgEdView->UnmarkAll();
+    pPage->Clear();
+    pPage->SetDlgEdForm( NULL );
+    SetDialog( m_xUnoControlDialogModel );
+    if( bWasMarked )
+        pDlgEdView->MarkObj( pDlgEdForm, pPgView, FALSE );
+}
+
 
 //----------------------------------------------------------------------------
 
