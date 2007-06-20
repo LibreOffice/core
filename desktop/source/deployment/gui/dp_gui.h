@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:45:13 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 14:15:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,9 @@
 #if ! defined INCLUDED_DP_GUI_H
 #define INCLUDED_DP_GUI_H
 
-#include "dp_misc.h"
-#include "dp_gui_cmdenv.h"
 #include "dp_gui_modifiablecontext.hxx"
+#include "dp_gui_cmdenv.h"
+#include "dp_misc.h"
 #include "dp_gui_updatability.hxx"
 #include "dp_gui.hrc"
 #include "rtl/ref.hxx"
@@ -51,18 +51,31 @@
 #include "salhelper/simplereferenceobject.hxx"
 #include "svtools/svtabbx.hxx"
 #include "svtools/headbar.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/awt/XWindow.hpp"
 #include "com/sun/star/ucb/XContentEventListener.hpp"
-#include "com/sun/star/deployment/thePackageManagerFactory.hpp"
-#include "com/sun/star/deployment/ui/PackageManagerDialog.hpp"
-#include "com/sun/star/frame/XDesktop.hpp"
 #include <list>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace container {
-class XNameAccess;
-}}}}
+namespace com { namespace sun { namespace star {
+    namespace container {
+        class XNameAccess;
+    }
+    namespace frame {
+        class XDesktop;
+    }
+    namespace awt {
+        class XWindow;
+    }
+    namespace uno {
+        class XComponentContext;
+    }
+    namespace deployment {
+        class XPackageManagerFactory;
+    }
+} } }
+
+namespace svt {
+    class FixedHyperlink;
+}
 
 namespace dp_gui {
 
@@ -196,6 +209,7 @@ struct DialogImpl :
     virtual BOOL Close();
     virtual void Resize();
     DECL_LINK( headbar_dragEnd, HeaderBar * );
+    DECL_LINK( hyperlink_clicked, svt::FixedHyperlink * );
 
     // solar thread functions, because of gtk file/folder picker:
     ::com::sun::star::uno::Sequence<rtl::OUString> solarthread_raiseAddPicker(
@@ -239,7 +253,7 @@ struct DialogImpl :
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop> m_xDesktop;
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent> m_xTdocRoot;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xNameAccessNodes;
-
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xNameAccessRepositories;
     const String m_strAddPackages;
     const String m_strAddingPackages;
     const String m_strRemovingPackages;
@@ -250,6 +264,7 @@ struct DialogImpl :
     const String m_strExportingPackages;
 
     Size m_buttonSize;
+    Size m_textSize;
     Size m_relatedSpace;
     Size m_unrelatedSpace;
     Size m_borderLeftTopSpace;
@@ -271,6 +286,7 @@ struct DialogImpl :
     ::std::auto_ptr<ThreadedPushButton> m_exportButton;
     ::std::auto_ptr<SyncPushButton> m_checkUpdatesButton;
     ::std::auto_ptr<ThreadedPushButton> m_optionsButton;
+    ::std::auto_ptr<svt::FixedHyperlink> m_getExtensionsButton;
     ::std::auto_ptr<FixedLine> m_bottomLine;
 
     ::std::auto_ptr<OKButton> m_closeButton;
