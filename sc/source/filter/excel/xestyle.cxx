@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xestyle.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:48:42 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 13:32:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -385,7 +385,7 @@ XclExpPaletteImpl::XclExpPaletteImpl( const XclDefaultPalette& rDefPal ) :
     mnLastIdx( 0 )
 {
     // initialize maPalette with default colors
-    sal_uInt16 nCount = mrDefPal.GetColorCount();
+    sal_uInt16 nCount = static_cast< sal_uInt16 >( mrDefPal.GetColorCount() );
     maPalette.reserve( nCount );
     for( sal_uInt16 nIdx = 0; nIdx < nCount; ++nIdx )
         maPalette.push_back( XclPaletteColor( mrDefPal.GetDefColor( GetXclIndex( nIdx ) ) ) );
