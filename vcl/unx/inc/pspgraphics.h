@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pspgraphics.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 08:06:26 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:14:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ namespace psp { struct JobData; class PrinterGfx; }
 
 class ServerFont;
 class ImplDevFontAttributes;
+class SalInfoPrinter;
 
 class VCL_DLLPUBLIC PspGraphics : public SalGraphics
 {
@@ -69,14 +70,16 @@ class VCL_DLLPUBLIC PspGraphics : public SalGraphics
 
     ServerFont*                 m_pServerFont[ MAX_FALLBACK ];
     bool                        m_bFontVertical;
+    SalInfoPrinter*             m_pInfoPrinter;
 public:
-    PspGraphics( psp::JobData* pJob, psp::PrinterGfx* pGfx, String* pPhone = NULL, bool bSwallow = false )
+    PspGraphics( psp::JobData* pJob, psp::PrinterGfx* pGfx, String* pPhone, bool bSwallow, SalInfoPrinter* pInfoPrinter )
             : m_pJobData( pJob ),
               m_pPrinterGfx( pGfx ),
               m_pPhoneNr( pPhone ),
               m_bSwallowFaxNo( bSwallow ),
               m_bPhoneCollectionActive( false ),
-              m_bFontVertical( false )
+              m_bFontVertical( false ),
+              m_pInfoPrinter( pInfoPrinter )
     { for( int i = 0; i < MAX_FALLBACK; i++ ) m_pServerFont[i] = 0; }
     virtual ~PspGraphics();
 
