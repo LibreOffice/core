@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:56:43 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 08:54:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -742,6 +742,14 @@ void SwWW8Writer::Out_SfxBreakItems(const SfxItemSet *pSet, const SwNode& rNd)
                 ItemGet<SvxFmtBreakItem>(*pNd, RES_BREAK);
             if (rBreak.GetBreak() == SVX_BREAK_PAGE_BEFORE)
                 bHackInBreak = true;
+            else
+            {   // Even a pagedesc item is set, the break item can be set 'NONE',
+                // but a pagedesc item is an implicit page break before...
+                const SwFmtPageDesc &rPageDesc =
+                    ItemGet<SwFmtPageDesc>( *pNd, RES_PAGEDESC );
+                if( rPageDesc.GetRegisteredIn() )
+                    bHackInBreak = true;
+            }
         }
     }
 
@@ -3692,8 +3700,18 @@ static Writer& OutWW8_SwFmtBreak( Writer& rWrt, const SfxPoolItem& rHt )
             break;
 
         case SVX_BREAK_PAGE_BEFORE:                         // PageBreak
-            bBefore = true;
-            nC = cPageBreak;
+            // From now on(fix for #i77900#) we prefer to save a page break as
+            // paragraph attribute, this has to be done after the export of the
+            // paragraph ( => !rWW8Wrt.bBreakBefore )
+            if( !rWW8Wrt.bBreakBefore )
+            {
+                // sprmPPageBreakBefore/sprmPFPageBreakBefore
+                if( rWW8Wrt.bWrtWW8 )
+                    rWW8Wrt.InsUInt16( 0x2407 );
+                else
+                    rWW8Wrt.pO->Insert( 9, rWW8Wrt.pO->Count() );
+                rWW8Wrt.pO->Insert( (BYTE)1, rWW8Wrt.pO->Count() );
+            }
             break;
         case SVX_BREAK_PAGE_AFTER:
         case SVX_BREAK_PAGE_BOTH:
