@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:55:47 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 08:53:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1984,6 +1984,14 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                         pTmpSet = new SfxItemSet(pNd->GetSwAttrSet());
                     }
                     pTmpSet->Put( *pBreakAtParaStyle );
+                }
+                else if( pTmpSet )
+                {   // Even a pagedesc item is set, the break item can be set 'NONE',
+                    // this has to be overruled.
+                    const SwFmtPageDesc& rPageDescAtParaStyle =
+                        ItemGet<SwFmtPageDesc>( *pNd, RES_PAGEDESC );
+                    if( rPageDescAtParaStyle.GetRegisteredIn() )
+                        pTmpSet->ClearItem( RES_BREAK );
                 }
             }
         }
