@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgprov.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:36:32 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:28:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,12 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XSIMPLEFILEACCESS_HPP_
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCEWITHLOCATION_HPP_
+#include "com/sun/star/resource/XStringResourceWithLocation.hpp"
+#endif
 
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
@@ -84,10 +90,15 @@
 #ifndef _XMLSCRIPT_XMLDLG_IMEXP_HXX_
 #include <xmlscript/xmldlg_imexp.hxx>
 #endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
 
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
+#include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
+#include <com/sun/star/util/XMacroExpander.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
@@ -131,9 +142,10 @@ namespace dlgprov
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pNames )
             {
-                static Sequence< ::rtl::OUString > aNames(2);
+                static Sequence< ::rtl::OUString > aNames(3);
                 aNames.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.DialogProvider" ) );
                 aNames.getArray()[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.DialogProvider2" ) );
+                aNames.getArray()[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.ContainerWindowProvider" ) );
                 pNames = &aNames;
             }
         }
@@ -202,6 +214,8 @@ namespace dlgprov
     {
         static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAscii( "ResourceResolver" );
 
+        ::rtl::OUString aURL( sURL );
+
         // parse URL
         // TODO: use URL parsing class
         // TODO: decoding of location
@@ -225,171 +239,241 @@ namespace dlgprov
                 Reference< XInterface >() );
         }
 
-        Reference<  uri::XUriReference > uriRef(
-            xFac->parse( sURL ), UNO_QUERY );
+        // i75778: Support non-script URLs
+        Reference< io::XInputStream > xInput;
+        Reference< container::XNameContainer > xDialogLib;
+
+        // Accept file URL to single dialog
+        bool bSingleDialog = false;
+
+        Reference< util::XMacroExpander > xMacroExpander(
+            m_xContext->getValueByName(
+            ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.util.theMacroExpander" ) ),
+            UNO_QUERY_THROW );
+
+        Reference< uri::XUriReference > uriRef;
+        for (;;)
+        {
+            uriRef = Reference< uri::XUriReference >( xFac->parse( aURL ), UNO_QUERY );
+            if ( !uriRef.is() )
+            {
+                ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii( "DialogProviderImpl::getDialogModel: failed to parse URI: " );
+                errorMsg += aURL;
+                throw IllegalArgumentException( errorMsg,
+                                                Reference< XInterface >(), 1 );
+            }
+            Reference < uri::XVndSunStarExpandUrl > sxUri( uriRef, UNO_QUERY );
+            if( !sxUri.is() )
+                break;
+
+            aURL = sxUri->expand( xMacroExpander );
+        }
 
         Reference < uri::XVndSunStarScriptUrl > sfUri( uriRef, UNO_QUERY );
-
-        if ( !uriRef.is() || !sfUri.is() )
+        if( !sfUri.is() )
         {
-            ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii( "DialogProviderImpl::getDialogModel: failed to parse URI: " );
-            errorMsg.concat( sURL );
-            throw IllegalArgumentException( errorMsg,
-                Reference< XInterface >(), 1 );
-        }
+            bSingleDialog = true;
 
-        ::rtl::OUString sDescription = sfUri->getName();
+            // Try any other URL with SimpleFileAccess
+            Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSFI =
+                Reference< ::com::sun::star::ucb::XSimpleFileAccess >( xSMgr->createInstanceWithContext
+                ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ), m_xContext ), UNO_QUERY );
 
-        sal_Int32 nIndex = 0;
-
-        ::rtl::OUString sLibName = sDescription.getToken( 0, (sal_Unicode)'.', nIndex );
-        ::rtl::OUString sDlgName;
-        if ( nIndex != -1 )
-            sDlgName = sDescription.getToken( 0, (sal_Unicode)'.', nIndex );
-
-        ::rtl::OUString sLocation = sfUri->getParameter(
-            ::rtl::OUString::createFromAscii( "location" ) );
-
-
-        // get dialog library container
-        // TODO: dialogs in packages
-        Reference< XLibraryContainer > xLibContainer;
-
-        if ( sLocation == ::rtl::OUString::createFromAscii( "application" ) )
-        {
-            xLibContainer = Reference< XLibraryContainer >( SFX_APP()->GetDialogContainer(), UNO_QUERY );
-        }
-        else if ( sLocation == ::rtl::OUString::createFromAscii( "document" ) )
-        {
-            if ( m_xModel.is() )
+            try
             {
-                for ( SfxObjectShell* pObjShell = SfxObjectShell::GetFirst(); pObjShell; pObjShell = SfxObjectShell::GetNext( *pObjShell ) )
-                {
-                    if ( m_xModel == pObjShell->GetModel() )
-                    {
-                        xLibContainer = Reference< XLibraryContainer >( pObjShell->GetDialogContainer(), UNO_QUERY );
-                        break;
-                    }
-                }
+                xInput = xSFI->openFileRead( aURL );
             }
+            catch( Exception& )
+            {}
         }
         else
         {
-            for ( SfxObjectShell* pObjShell = SfxObjectShell::GetFirst(); pObjShell; pObjShell = SfxObjectShell::GetNext( *pObjShell ) )
+            ::rtl::OUString sDescription = sfUri->getName();
+
+            sal_Int32 nIndex = 0;
+
+            ::rtl::OUString sLibName = sDescription.getToken( 0, (sal_Unicode)'.', nIndex );
+            ::rtl::OUString sDlgName;
+            if ( nIndex != -1 )
+                sDlgName = sDescription.getToken( 0, (sal_Unicode)'.', nIndex );
+
+            ::rtl::OUString sLocation = sfUri->getParameter(
+                ::rtl::OUString::createFromAscii( "location" ) );
+
+
+            // get dialog library container
+            // TODO: dialogs in packages
+            Reference< XLibraryContainer > xLibContainer;
+
+            if ( sLocation == ::rtl::OUString::createFromAscii( "application" ) )
             {
-                Reference< frame::XModel > xModel( pObjShell->GetModel(), UNO_QUERY );
-                if ( xModel.is() )
+                xLibContainer = Reference< XLibraryContainer >( SFX_APP()->GetDialogContainer(), UNO_QUERY );
+            }
+            else if ( sLocation == ::rtl::OUString::createFromAscii( "document" ) )
+            {
+                if ( m_xModel.is() )
                 {
-                    ::rtl::OUString sDocURL = xModel->getURL();
-                    if ( sDocURL.getLength() == 0 )
+                    for ( SfxObjectShell* pObjShell = SfxObjectShell::GetFirst(); pObjShell; pObjShell = SfxObjectShell::GetNext( *pObjShell ) )
                     {
-                        Sequence < beans::PropertyValue > aProps = xModel->getArgs();
-                        sal_Int32 nProps = aProps.getLength();
-                        const beans::PropertyValue* pProps = aProps.getConstArray();
-                        for ( sal_Int32 i = 0; i < nProps; ++i )
+                        if ( m_xModel == pObjShell->GetModel() )
                         {
-                            // TODO: according to MBA the property 'Title' may change in future
-                            if ( pProps[i].Name == ::rtl::OUString::createFromAscii( "Title" ) )
-                            {
-                                pProps[i].Value >>= sDocURL;
-                                break;
-                            }
+                            xLibContainer = Reference< XLibraryContainer >( pObjShell->GetDialogContainer(), UNO_QUERY );
+                            break;
                         }
                     }
-                    if ( sLocation == sDocURL )
+                }
+            }
+            else
+            {
+                for ( SfxObjectShell* pObjShell = SfxObjectShell::GetFirst(); pObjShell; pObjShell = SfxObjectShell::GetNext( *pObjShell ) )
+                {
+                    Reference< frame::XModel > xModel( pObjShell->GetModel(), UNO_QUERY );
+                    if ( xModel.is() )
                     {
-                        xLibContainer = Reference< XLibraryContainer >( pObjShell->GetDialogContainer(), UNO_QUERY );
-                        break;
+                        ::rtl::OUString sDocURL = xModel->getURL();
+                        if ( sDocURL.getLength() == 0 )
+                        {
+                            Sequence < beans::PropertyValue > aProps = xModel->getArgs();
+                            sal_Int32 nProps = aProps.getLength();
+                            const beans::PropertyValue* pProps = aProps.getConstArray();
+                            for ( sal_Int32 i = 0; i < nProps; ++i )
+                            {
+                                // TODO: according to MBA the property 'Title' may change in future
+                                if ( pProps[i].Name == ::rtl::OUString::createFromAscii( "Title" ) )
+                                {
+                                    pProps[i].Value >>= sDocURL;
+                                    break;
+                                }
+                            }
+                        }
+                        if ( sLocation == sDocURL )
+                        {
+                            xLibContainer = Reference< XLibraryContainer >( pObjShell->GetDialogContainer(), UNO_QUERY );
+                            break;
+                        }
                     }
                 }
             }
-        }
 
-        // get input stream provider
-        Reference< io::XInputStreamProvider > xISP;
-        Reference< container::XNameContainer > xDialogLib;
-        if ( xLibContainer.is() )
-        {
-            // load dialog library
-            if ( !xLibContainer->isLibraryLoaded( sLibName ) )
-                xLibContainer->loadLibrary( sLibName );
-
-            // get dialog library
-            if ( xLibContainer->hasByName( sLibName ) )
+            // get input stream provider
+            Reference< io::XInputStreamProvider > xISP;
+            if ( xLibContainer.is() )
             {
-                Any aElement = xLibContainer->getByName( sLibName );
-                aElement >>= xDialogLib;
-            }
+                // load dialog library
+                if ( !xLibContainer->isLibraryLoaded( sLibName ) )
+                    xLibContainer->loadLibrary( sLibName );
 
-            if ( xDialogLib.is() )
-            {
-                // get input stream provider
-                if ( xDialogLib->hasByName( sDlgName ) )
+                // get dialog library
+                if ( xLibContainer->hasByName( sLibName ) )
                 {
-                    Any aElement = xDialogLib->getByName( sDlgName );
-                    aElement >>= xISP;
+                    Any aElement = xLibContainer->getByName( sLibName );
+                    aElement >>= xDialogLib;
                 }
 
-                if ( !xISP.is() )
+                if ( xDialogLib.is() )
+                {
+                    // get input stream provider
+                    if ( xDialogLib->hasByName( sDlgName ) )
+                    {
+                        Any aElement = xDialogLib->getByName( sDlgName );
+                        aElement >>= xISP;
+                    }
+
+                    if ( !xISP.is() )
+                    {
+                        throw IllegalArgumentException(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogProviderImpl::getDialogModel: dialog not found!" ) ),
+                            Reference< XInterface >(), 1 );
+                    }
+                }
+                else
                 {
                     throw IllegalArgumentException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogProviderImpl::getDialogModel: dialog not found!" ) ),
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogProviderImpl::getDialogModel: library not found!" ) ),
                         Reference< XInterface >(), 1 );
                 }
             }
             else
             {
                 throw IllegalArgumentException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogProviderImpl::getDialogModel: library not found!" ) ),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogProviderImpl::getDialog: library container not found!" ) ),
                     Reference< XInterface >(), 1 );
             }
-        }
-        else
-        {
-            throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogProviderImpl::getDialog: library container not found!" ) ),
-                Reference< XInterface >(), 1 );
+
+            if ( xISP.is() )
+                xInput = xISP->createInputStream();
         }
 
         // import dialog model
         Reference< XControlModel > xCtrlModel;
-        if ( xISP.is() )
+        if ( xInput.is() && m_xContext.is() )
         {
-            Reference< io::XInputStream > xInput( xISP->createInputStream() );
-            if ( xInput.is() && m_xContext.is() )
+            Reference< XMultiComponentFactory > xSMgr_( m_xContext->getServiceManager() );
+            if ( xSMgr_.is() )
             {
-                Reference< XMultiComponentFactory > xSMgr_( m_xContext->getServiceManager() );
-                if ( xSMgr_.is() )
+                Reference< container::XNameContainer > xDialogModel( xSMgr_->createInstanceWithContext(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ), m_xContext ), UNO_QUERY );
+
+                if ( xDialogModel.is() )
                 {
-                    Reference< container::XNameContainer > xDialogModel( xSMgr_->createInstanceWithContext(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ), m_xContext ), UNO_QUERY );
+                    ::xmlscript::importDialogModel( xInput, xDialogModel, m_xContext );
+                    xCtrlModel = Reference< XControlModel >( xDialogModel, UNO_QUERY );
 
-                    if ( xDialogModel.is() )
+                    Reference< resource::XStringResourceManager > xStringResourceManager;
+                    if( bSingleDialog )
                     {
-                        ::xmlscript::importDialogModel( xInput, xDialogModel, m_xContext );
-                        xCtrlModel = Reference< XControlModel >( xDialogModel, UNO_QUERY );
+                        INetURLObject aInetObj( aURL );
+                        ::rtl::OUString aDlgName = aInetObj.GetBase();
+                        aInetObj.removeSegment();
+                        ::rtl::OUString aDlgLocation = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
+                        bool bReadOnly = true;
+                        ::com::sun  ::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+                        ::rtl::OUString aComment;
 
-                        // Set resource property
-                        Reference< resource::XStringResourceManager > xStringResourceManager = getStringResourceFromDialogLibrary( xDialogLib );
+                        Sequence<Any> aArgs( 6 );
+                        aArgs[0] <<= aDlgLocation;
+                        aArgs[1] <<= bReadOnly;
+                        aArgs[2] <<= aLocale;
+                        aArgs[3] <<= aDlgName;
+                        aArgs[4] <<= aComment;
+
+                        Reference< task::XInteractionHandler > xDummyHandler;
+                        aArgs[5] <<= xDummyHandler;
+
+                        // TODO: Ctor
+                        xStringResourceManager = Reference< resource::XStringResourceManager >( xSMgr_->createInstanceWithContext
+                            ( ::rtl::OUString::createFromAscii( "com.sun.star.resource.StringResourceWithLocation" ),
+                                m_xContext ), UNO_QUERY );
                         if( xStringResourceManager.is() )
                         {
-
-                            Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
-                            Any aStringResourceManagerAny;
-                            aStringResourceManagerAny <<= xStringResourceManager;
-                            xDlgPSet->setPropertyValue( aResourceResolverPropName, aStringResourceManagerAny );
+                            Reference< XInitialization > xInit( xStringResourceManager, UNO_QUERY );
+                            if( xInit.is() )
+                                xInit->initialize( aArgs );
                         }
+                    }
+                    else if( xDialogLib.is() )
+                    {
+                        xStringResourceManager = getStringResourceFromDialogLibrary( xDialogLib );
+                    }
+
+                    // Set resource property
+                    if( xStringResourceManager.is() )
+                    {
+                        Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
+                        Any aStringResourceManagerAny;
+                        aStringResourceManagerAny <<= xStringResourceManager;
+                        xDlgPSet->setPropertyValue( aResourceResolverPropName, aStringResourceManagerAny );
                     }
                 }
             }
         }
-
         return xCtrlModel;
     }
 
     // -----------------------------------------------------------------------------
 
-    Reference< XControl > DialogProviderImpl::createDialogControl( const Reference< XControlModel >& rxDialogModel )
+    Reference< XControl > DialogProviderImpl::createDialogControl
+        ( const Reference< XControlModel >& rxDialogModel, const Reference< XWindowPeer >& xParent )
     {
         OSL_ENSURE( rxDialogModel.is(), "DialogProviderImpl::getDialogControl: no dialog model" );
 
@@ -417,7 +501,11 @@ namespace dlgprov
 
                     // get the parent of the dialog control
                     Reference< XWindowPeer > xPeer;
-                    if ( m_xModel.is() )
+                    if( xParent.is() )
+                    {
+                        xPeer = xParent;
+                    }
+                    else if ( m_xModel.is() )
                     {
                         Reference< frame::XController > xController( m_xModel->getCurrentController(), UNO_QUERY );
                         if ( xController.is() )
@@ -442,13 +530,15 @@ namespace dlgprov
 
     // -----------------------------------------------------------------------------
 
-    void DialogProviderImpl::attachDialogEvents( const Reference< XDialog >& rxDialog,
+    void DialogProviderImpl::attachControlEvents(
+        const Reference< XControl >& rxControl,
         const Reference< XInterface >& rxHandler,
-        const Reference< XIntrospectionAccess >& rxIntrospectionAccess )
+        const Reference< XIntrospectionAccess >& rxIntrospectionAccess,
+        bool bDialogProviderMode )
     {
-        if ( rxDialog.is() )
+        if ( rxControl.is() )
         {
-            Reference< XControlContainer > xControlContainer( rxDialog, UNO_QUERY );
+            Reference< XControlContainer > xControlContainer( rxControl, UNO_QUERY );
 
             if ( xControlContainer.is() )
             {
@@ -464,10 +554,10 @@ namespace dlgprov
                 }
 
                 // also add the dialog control itself to the sequence
-                pObjects[nControlCount] = Reference< XInterface >( rxDialog, UNO_QUERY );
+                pObjects[nControlCount] = Reference< XInterface >( rxControl, UNO_QUERY );
 
                 Reference< XScriptListener > xScriptListener = new DialogScriptListenerImpl
-                    ( m_xContext, m_xModel, rxDialog, rxHandler, rxIntrospectionAccess );
+                    ( m_xContext, m_xModel, rxControl, rxHandler, rxIntrospectionAccess, bDialogProviderMode );
 
                 if ( xScriptListener.is() )
                 {
@@ -587,8 +677,9 @@ namespace dlgprov
     // XDialogProvider
     // -----------------------------------------------------------------------------
 
-    Reference < XDialog > DialogProviderImpl::createDialogImpl(
-        const ::rtl::OUString& URL, const Reference< XInterface >& xHandler )
+    Reference < XControl > DialogProviderImpl::createDialogImpl(
+        const ::rtl::OUString& URL, const Reference< XInterface >& xHandler,
+        const Reference< XWindowPeer >& xParent, bool bDialogProviderMode )
             throw (IllegalArgumentException, RuntimeException)
     {
         // if the dialog is located in a document, the document must already be open!
@@ -599,51 +690,31 @@ namespace dlgprov
 
         // m_xHandler = xHandler;
 
-        Reference< XDialog > xDialog;
+        //Reference< XDialog > xDialog;
+        Reference< XControl > xCtrl;
         Reference< XControlModel > xCtrlMod( createDialogModel( URL ) );
         if ( xCtrlMod.is() )
         {
-            Reference< XControl > xCtrl( createDialogControl( xCtrlMod ) );
+            xCtrl = Reference< XControl >( createDialogControl( xCtrlMod, xParent ) );
             if ( xCtrl.is() )
             {
-                // attachDialogEvents( xCtrl );
-                xDialog = Reference< XDialog >( xCtrl, UNO_QUERY );
+                //xDialog = Reference< XDialog >( xCtrl, UNO_QUERY );
                 Reference< XIntrospectionAccess > xIntrospectionAccess = inspectHandler( xHandler );
-                attachDialogEvents( xDialog, xHandler, xIntrospectionAccess );
+                attachControlEvents( xCtrl, xHandler, xIntrospectionAccess, bDialogProviderMode );
             }
         }
 
-        return xDialog;
+        return xCtrl;
     }
 
     Reference < XDialog > DialogProviderImpl::createDialog( const ::rtl::OUString& URL )
         throw (IllegalArgumentException, RuntimeException)
     {
         Reference< XInterface > xDummyHandler;
-        Reference< XDialog > xDialog = DialogProviderImpl::createDialogImpl( URL, xDummyHandler );
+        Reference< XWindowPeer > xDummyPeer;
+        Reference < XControl > xControl = DialogProviderImpl::createDialogImpl( URL, xDummyHandler, xDummyPeer, true );
+        Reference< XDialog > xDialog( xControl, UNO_QUERY );
         return xDialog;
-
-        /*
-        // if the dialog is located in a document, the document must already be open!
-
-        ::osl::MutexGuard aGuard( getMutex() );
-
-        OSL_ENSURE( URL.getLength(), "DialogProviderImpl::getDialog: no URL!" );
-
-        Reference< XDialog > xDialog;
-        Reference< XControlModel > xCtrlMod( createDialogModel( URL ) );
-        if ( xCtrlMod.is() )
-        {
-            Reference< XControl > xCtrl( createDialogControl( xCtrlMod ) );
-            if ( xCtrl.is() )
-            {
-                attachDialogEvents( xCtrl );
-                xDialog = Reference< XDialog >( xCtrl, UNO_QUERY );
-            }
-        }
-
-        return xDialog;
-        */
     }
 
     Reference < XDialog > DialogProviderImpl::createDialogWithHandler(
@@ -656,8 +727,27 @@ namespace dlgprov
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogProviderImpl::createDialogWithHandler: Invalid xHandler!" ) ),
                 Reference< XInterface >(), 1 );
         }
-        Reference< XDialog > xDialog = DialogProviderImpl::createDialogImpl( URL, xHandler );
+        Reference< XWindowPeer > xDummyPeer;
+        Reference < XControl > xControl = DialogProviderImpl::createDialogImpl( URL, xHandler, xDummyPeer, true );
+        Reference< XDialog > xDialog( xControl, UNO_QUERY );
         return xDialog;
+    }
+
+    Reference< XWindow > DialogProviderImpl::createContainerWindow(
+        const ::rtl::OUString& URL, const ::rtl::OUString& WindowType,
+        const Reference< XWindowPeer >& xParent, const Reference< XInterface >& xHandler )
+            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+    {
+        (void)WindowType;   // for future use
+        if( !xParent.is() )
+        {
+            throw IllegalArgumentException(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogProviderImpl::createContainerWindow: Invalid xParent!" ) ),
+                Reference< XInterface >(), 1 );
+        }
+        Reference < XControl > xControl = DialogProviderImpl::createDialogImpl( URL, xHandler, xParent, true );
+        Reference< XWindow> xWindow( xControl, UNO_QUERY );
+        return xWindow;
     }
 
 
