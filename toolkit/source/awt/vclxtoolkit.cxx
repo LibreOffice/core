@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 13:52:30 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 10:25:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,6 +334,17 @@ WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt16 nCompType )
             nWinBits |= WB_DEF_YES;
         if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::DEF_NO )
             nWinBits |= WB_DEF_NO;
+    }
+
+    if( nComponentAttribs & ::com::sun::star::awt::WindowAttribute::NODECORATION )
+    {
+        // No decoration removes several window attributes and must
+        // set WB_NOBODER!
+        nWinBits &= ~WB_BORDER;
+        nWinBits &= ~WB_SIZEABLE;
+        nWinBits &= ~WB_MOVEABLE;
+        nWinBits &= ~WB_CLOSEABLE;
+        nWinBits |= WB_NOBORDER;
     }
 
     return nWinBits;
@@ -844,9 +855,11 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WINDOW_DIALOG:
             case WINDOW_MODALDIALOG:
             case WINDOW_MODELESSDIALOG:
+            {
                 // Modal/Modeless nur durch Show/Execute
                 pNewWindow = new Dialog( pParent, nWinBits );
                 *ppNewComp = new VCLXDialog;
+            }
             break;
             case WINDOW_MOREBUTTON:
                 pNewWindow = new MoreButton( pParent, nWinBits );
