@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:45:38 $
+ *  last change: $Author: kz $ $Date: 2007-06-20 14:15:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,8 @@
 #define RID_BTN_DISABLE                        23
 #define RID_BTN_EXPORT                         24
 #define RID_BTN_CHECK_UPDATES                  25
-#define RID_BTN_OPTIONS                26
+#define RID_BTN_OPTIONS                        26
+#define RID_BTN_GET_EXTENSIONS                 27
 
 #define RID_IMG_PLUS                           41
 #define RID_IMG_PLUS_HC                        42
