@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 20:55:49 $
+#   last change: $Author: kz $ $Date: 2007-06-20 13:58:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,45 +46,49 @@ TARGET=ctrl
 # --- Files --------------------------------------------------------
 
 SRS1NAME=$(TARGET)
-SRC1FILES=	ctrltool.src		\
-            ctrlbox.src			\
-            calendar.src		\
-            filectrl.src
+SRC1FILES=\
+        ctrltool.src \
+        ctrlbox.src \
+        calendar.src \
+        filectrl.src
 
 EXCEPTIONSFILES=\
-            $(SLO)$/filectrl2.obj \
-            $(SLO)$/roadmap.obj \
-            $(SLO)$/scriptedtext.obj\
-            $(SLO)$/fmtfield.obj \
-            $(SLO)$/inettbc.obj \
-            $(SLO)$/valueacc.obj
+        $(SLO)$/filectrl2.obj \
+        $(SLO)$/roadmap.obj \
+        $(SLO)$/scriptedtext.obj\
+        $(SLO)$/fmtfield.obj \
+        $(SLO)$/inettbc.obj \
+        $(SLO)$/valueacc.obj
 
-SLOFILES=	$(EXCEPTIONSFILES) \
-            $(SLO)$/asynclink.obj \
-            $(SLO)$/urlcontrol.obj \
-            $(SLO)$/fileurlbox.obj \
-            $(SLO)$/wizardheader.obj \
-            $(SLO)$/ctrltool.obj  \
-            $(SLO)$/ctrlbox.obj  \
-            $(SLO)$/stdctrl.obj  \
-            $(SLO)$/stdmenu.obj  \
-            $(SLO)$/valueset.obj \
-            $(SLO)$/tabbar.obj	 \
-            $(SLO)$/headbar.obj  \
-            $(SLO)$/prgsbar.obj  \
-            $(SLO)$/ruler.obj	 \
-            $(SLO)$/taskbar.obj  \
-            $(SLO)$/taskbox.obj  \
-            $(SLO)$/taskstat.obj \
-            $(SLO)$/taskmisc.obj \
-            $(SLO)$/calendar.obj \
-            $(SLO)$/filectrl.obj \
-            $(SLO)$/scrwin.obj	 \
-            $(SLO)$/reginfo.obj	\
-            $(SLO)$/collatorres.obj \
-            $(SLO)$/indexentryres.obj \
-            $(SLO)$/hyperlabel.obj			
+SLOFILES=\
+      $(EXCEPTIONSFILES) \
+        $(SLO)$/asynclink.obj \
+        $(SLO)$/urlcontrol.obj \
+        $(SLO)$/fileurlbox.obj \
+        $(SLO)$/wizardheader.obj \
+        $(SLO)$/ctrltool.obj  \
+        $(SLO)$/ctrlbox.obj  \
+        $(SLO)$/stdctrl.obj  \
+        $(SLO)$/stdmenu.obj  \
+        $(SLO)$/valueset.obj \
+        $(SLO)$/tabbar.obj       \
+        $(SLO)$/headbar.obj  \
+        $(SLO)$/prgsbar.obj  \
+        $(SLO)$/ruler.obj        \
+        $(SLO)$/taskbar.obj  \
+        $(SLO)$/taskbox.obj  \
+        $(SLO)$/taskstat.obj \
+        $(SLO)$/taskmisc.obj \
+        $(SLO)$/calendar.obj \
+        $(SLO)$/filectrl.obj \
+        $(SLO)$/scrwin.obj       \
+        $(SLO)$/reginfo.obj     \
+        $(SLO)$/collatorres.obj \
+        $(SLO)$/indexentryres.obj \
+        $(SLO)$/hyperlabel.obj  \
+        $(SLO)$/fixedhyper.obj
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
