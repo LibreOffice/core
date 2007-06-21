@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: tl $ $Date: 2007-01-12 12:34:28 $
+#   last change: $Author: kz $ $Date: 2007-06-21 16:09:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,8 @@ ADDITIONAL_FILES= \
                 src$/utf8misc.h \
                 src$/utf8misc.c \
                 src$/win32_config.h \
-                src$/makefile.mk
+                src$/makefile.mk \
+                src$/libtextcat.map
 
 .IF "$(GUI)"=="UNX"
 #CONFIGURE_DIR=$(BUILD_DIR)
@@ -65,7 +66,7 @@ CONFIGURE_FLAGS=
 
 BUILD_ACTION=make
 
-OUT2LIB=$(BUILD_DIR)$/src$/.libs$/libtextcat*.so
+OUT2LIB=$(BUILD_DIR)$/src$/.libs$/libtextcat*$(DLLPOST)
 
 .ENDIF # "$(GUI)"=="UNX"
 
