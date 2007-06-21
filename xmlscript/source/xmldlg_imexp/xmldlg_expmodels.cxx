@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:33:01 $
+ *  last change: $Author: kz $ $Date: 2007-06-21 16:43:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1080,7 +1080,7 @@ void ElementDescriptor::readDialogModel( StyleBag * all_styles )
         OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":title") ) );
 
     Any aDecorationAny( _xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Decoration") ) ) );
-    bool bDecoration;
+    bool bDecoration = sal_False;
     if ( (aDecorationAny >>= bDecoration) && !bDecoration )
         addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":withtitlebar") ),
                       OUString( RTL_CONSTASCII_USTRINGPARAM("false") ) );
