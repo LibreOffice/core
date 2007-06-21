@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:09:15 $
+ *  last change: $Author: kz $ $Date: 2007-06-21 13:49:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,12 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER1_HPP_
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XLANGUAGEGUESSING_HPP_
+#include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #endif
 #ifndef _SVX_DLGUTIL_HXX
 #include <svx/dlgutil.hxx>
@@ -235,8 +241,8 @@ static LanguageType lcl_GuessLocale2Lang( const lang::Locale &rLocale )
 //
 LanguageType lcl_CheckLanguage(
     const OUString &rText,
-    Reference< XSpellChecker1 > xSpell,
-    Reference< linguistic2::XLanguageGuessing > xLangGuess,
+    uno::Reference< linguistic2::XSpellChecker1 > xSpell,
+    uno::Reference< linguistic2::XLanguageGuessing > xLangGuess,
     sal_Bool bIsParaText )
 {
     LanguageType  nLang = LANGUAGE_NONE;
@@ -303,7 +309,7 @@ LanguageType lcl_CheckLanguage(
             if (nTmpLang != LANGUAGE_NONE  &&  nTmpLang != LANGUAGE_DONTKNOW)
             {
                 if (xSpell->hasLanguage( nTmpLang ) &&
-                    xSpell->isValid( rText, nTmpLang, Sequence< PropertyValue >() ))
+                    xSpell->isValid( rText, nTmpLang, uno::Sequence< beans::PropertyValue >() ))
                 {
                     nLang = nTmpLang;
                     break;
@@ -318,7 +324,7 @@ LanguageType lcl_CheckLanguage(
 
 SwSpellPopup::SwSpellPopup(
         SwWrtShell* pWrtSh,
-        const Reference< XSpellAlternatives >  &xAlt,
+        const uno::Reference< linguistic2::XSpellAlternatives >  &xAlt,
         const String &rParaText ) :
     PopupMenu(SW_RES(MN_SPELL_POPUP)),
     pSh ( pWrtSh ),
@@ -352,7 +358,7 @@ SwSpellPopup::SwSpellPopup(
     }
     EnableItem( MN_AUTOCORR, bEnable );
 
-    Reference< linguistic2::XLanguageGuessing > xLG = SW_MOD()->GetLanguageGuesser();
+    uno::Reference< linguistic2::XLanguageGuessing > xLG = SW_MOD()->GetLanguageGuesser();
     nGuessLangWord = LANGUAGE_NONE;
     nGuessLangPara = LANGUAGE_NONE;
     if (xSpellAlt.is() && xLG.is())
