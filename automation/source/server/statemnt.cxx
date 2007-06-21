@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 15:47:37 $
+ *  last change: $Author: vg $ $Date: 2007-06-21 07:31:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4774,6 +4774,7 @@ BOOL StatementControl::Execute()
                 pControl->GrabFocus();
                 int i = 10;
                 while ( i-- && !pControl->HasFocus() )    // reschedule a bit
+                {
                     SafeReschedule();
                     if ( !WinPtrValid( pControl ) )
                         return FALSE;
