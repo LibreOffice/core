@@ -7,9 +7,9 @@
  *
  *  $RCSfile: altstrfunc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:00:27 $
+ *  last change: $Author: vg $ $Date: 2007-06-21 07:55:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_lingucomponent.hxx"
 
 #ifndef _ALT_STRFUNC_HXX_
 #include "altstrfunc.hxx"
