@@ -1,15 +1,12 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Jocelyn Merand                                  *
- *   joc.mer@gmail.com                                                     *
- *                                                                         *
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: altstrfunc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:00:38 $
+ *  last change: $Author: rt $ $Date: 2007-06-22 08:32:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
