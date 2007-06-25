@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2007-06-11 14:03:57 $
+#   last change: $Author: hjs $ $Date: 2007-06-25 11:57:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@ TARGET=zipintro
 
 .INCLUDE :  settings.mk
 
-DEFAULT_FLAVOURS=dev dev_nologo nologo broffice dev_broffice
+DEFAULT_FLAVOURS=dev dev_nologo nologo broffice dev_broffice intro
 
 ZIP1LIST= \
     $(null,$(INTRO_BITMAPS) $(SOLARSRC)$/ooo_custom_images$/dev$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
@@ -68,7 +68,7 @@ ZIP2TARGET=dev_nologo_intro
 
 ZIP3TARGET=nologo_intro
 
-ZIP4TARGET=intro
+ZIP4TARGET=intro_intro
 
 ZIP5TARGET=dev_broffice_intro
 
@@ -78,18 +78,31 @@ ZIP6TARGET=broffice_intro
 
 ALLTAR : $(foreach,i,$(DEFAULT_FLAVOURS) $(COMMONBIN)$/$i$/intro.zip)
 
-#TODO: rewrite deps when ZIP1DEPS are available...
-.IF "$(ZIP1TARGETN)"!=""
-$(ZIP1TARGETN) $(ZIP2TARGETN) $(ZIP3TARGETN) $(ZIP4TARGETN) $(ZIP5TARGETN) $(ZIP6TARGETN) : $(MISC)$/make_zip_dests.done
-.ENDIF			# "$(ZIP1TARGETN)"!=""
-
-# make dirs for various flavours of "default" OOo
-$(MISC)$/make_zip_dests.done :
-    @@-$(MKDIR) $(foreach,i,$(DEFAULT_FLAVOURS) $(COMMONBIN)$/$i) && $(TOUCH) $@
-
 # now duplicate for deliver...
-$(COMMONBIN)$/%$/intro.zip : $(COMMONBIN)$/%_intro.zip
+# Because of issue 78837 we cannot use a % rule here (Commented out below)
+# but have to write individual rules.
+#$(COMMONBIN)$/%$/intro.zip : $(COMMONBIN)$/%_intro.zip
+
+$(COMMONBIN)$/dev$/intro.zip : $(COMMONBIN)$/dev_intro.zip
     @@-$(MKDIR) $(@:d)
     @$(COPY) $< $@
 
+$(COMMONBIN)$/dev_nologo$/intro.zip : $(COMMONBIN)$/dev_nologo_intro.zip
+    @@-$(MKDIR) $(@:d)
+    @$(COPY) $< $@
 
+$(COMMONBIN)$/nologo$/intro.zip : $(COMMONBIN)$/nologo_intro.zip
+    @@-$(MKDIR) $(@:d)
+    @$(COPY) $< $@
+
+$(COMMONBIN)$/broffice$/intro.zip : $(COMMONBIN)$/broffice_intro.zip
+    @@-$(MKDIR) $(@:d)
+    @$(COPY) $< $@
+
+$(COMMONBIN)$/dev_broffice$/intro.zip : $(COMMONBIN)$/dev_broffice_intro.zip
+    @@-$(MKDIR) $(@:d)
+    @$(COPY) $< $@
+
+$(COMMONBIN)$/intro$/intro.zip : $(COMMONBIN)$/intro_intro.zip
+    @@-$(MKDIR) $(@:d)
+    @$(COPY) $< $@
