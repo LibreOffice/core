@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MeasureHandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2007-06-18 12:31:12 $
+ *  last change: $Author: os $ $Date: 2007-06-25 09:09:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@ class WRITERFILTER_DLLPRIVATE MeasureHandler : public doctok::Properties
 {
     sal_Int32 m_nMeasureValue;
     sal_Int32 m_nUnit;
+    sal_Int16 m_nRowHeightSizeType; //table row height type
 
 public:
     MeasureHandler();
@@ -64,8 +65,11 @@ public:
     sal_Int32 getMeasureValue() const;
     //at least tables can have automatic width
     bool isAutoWidth() const;
+
+    sal_Int16 GetRowHeightSizeType() const { return m_nRowHeightSizeType;}
 };
-typedef boost::shared_ptr< MeasureHandler >  MeasureHandlerPtr;
+typedef boost::shared_ptr
+    < MeasureHandler >  MeasureHandlerPtr;
 }
 
 #endif //

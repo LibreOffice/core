@@ -1,12 +1,13 @@
+
 /*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: MeasureHandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2007-06-18 12:31:12 $
+ *  last change: $Author: os $ $Date: 2007-06-25 09:09:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +38,7 @@
 #include <doctok/resourceids.hxx>
 #include <ConversionHelper.hxx>
 #include <ooxml/resourceids.hxx>
+#include <com/sun/star/text/SizeType.hpp>
 
 using namespace ::writerfilter;
 namespace dmapper {
@@ -48,7 +50,8 @@ using namespace ::com::sun::star;
   -----------------------------------------------------------------------*/
 MeasureHandler::MeasureHandler() :
     m_nMeasureValue( 0 ),
-    m_nUnit( -1 )
+    m_nUnit( -1 ),
+    m_nRowHeightSizeType( text::SizeType::MIN )
 {
 }
 /*-- 24.04.2007 09:06:35---------------------------------------------------
@@ -72,10 +75,24 @@ void MeasureHandler::attribute(doctok::Id rName, doctok::Value & rVal)
             //        NS_ooxml::LN_Value_ST_TblWidth_dxa, NS_ooxml::LN_Value_ST_TblWidth_auto;
             m_nUnit = nIntValue;
         break;
+        case NS_ooxml::LN_CT_Height_hRule: // 90666;
+        {
+            ::rtl::OUString sHeightType = rVal.getString();
+            if( sHeightType.equalsAscii( "exact" ) )
+                m_nRowHeightSizeType = text::SizeType::FIX;
+        }
+        break;
         case NS_rtf::LN_trleft:
         case NS_rtf::LN_preferredWidth:
         case NS_ooxml::LN_CT_TblWidth_w:// = 90667;
             m_nMeasureValue = nIntValue;
+        break;
+        case NS_ooxml::LN_CT_Height_val: // 90665 -- a string value
+        {
+            m_nUnit = NS_ooxml::LN_Value_ST_TblWidth_dxa;
+            ::rtl::OUString sHeight = rVal.getString();
+            m_nMeasureValue = sHeight.toInt32();
+        }
         break;
         default:
             OSL_ASSERT("unknown attribute");

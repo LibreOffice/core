@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableManager.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2007-06-19 05:27:41 $
+ *  last change: $Author: os $ $Date: 2007-06-25 09:09:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,28 +34,16 @@
  ************************************************************************/
 #include <DomainMapperTableManager.hxx>
 #include <doctok/WW8ResourceModel.hxx>
-#ifndef INCLUDED_BORDERHANDLER_HXX
 #include <BorderHandler.hxx>
-#endif
-#ifndef INCLUDED_CELLCOLORHANDLER_HXX
 #include <CellColorHandler.hxx>
-#endif
-#ifndef INCLUDED_DMAPPER_CONVERSIONHELPER_HXX
 #include <ConversionHelper.hxx>
-#endif
-#ifndef INCLUDED_MEASUREHANDLER_HXX
 #include <MeasureHandler.hxx>
-#endif
-#ifndef INCLUDED_TDEFTABLEHANDLER_HXX
 #include <TDefTableHandler.hxx>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HDL_
 #include <com/sun/star/text/HoriOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_SIZETYPE_HDL_
 #include <com/sun/star/text/SizeType.hpp>
-#endif
+#include <com/sun/star/text/VertOrientation.hpp>
 #include <ooxml/resourceids.hxx>
+#include <resourcemodel/sprmids.hxx>
 
 using namespace ::writerfilter;
 namespace dmapper {
@@ -169,7 +157,23 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
                 }
             }
             break;
+            case NS_ooxml::LN_CT_TrPrBase_trHeight: //90703
+            {
+                //contains unit and value
+                doctok::Reference<doctok::Properties>::Pointer_t pProperties = rSprm.getProps();
+                if( pProperties.get())
+                {   //contains attributes x2902 (LN_unit) and x17e2 (LN_trleft)
+                    MeasureHandlerPtr pMeasureHandler( new MeasureHandler );
+                    pProperties->resolve(*pMeasureHandler);
+                    PropertyMapPtr pPropMap( new PropertyMap );
+                    pPropMap->Insert( PROP_SIZE_TYPE, uno::makeAny( pMeasureHandler->GetRowHeightSizeType() ));
+                    pPropMap->Insert( PROP_HEIGHT, uno::makeAny(pMeasureHandler->getMeasureValue() ));
+                    insertRowProps(pPropMap);
+                }
+            }
+            break;
             case 0x3403: // sprmTFCantSplit
+            case NS_sprm::LN_TCantSplit: // 0x3644
             {
                 /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0.5 */
                 //row can't break across pages if nIntValue == 1
@@ -179,6 +183,7 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
             }
             break;
             case 0x3404:// sprmTTableHeader
+            case NS_ooxml::LN_CT_TrPrBase_tblHeader: //90704
                 /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
                 // if nIntValue == 1 then the row is a repeated header line
                 // to prevent later rows from increasing the repeating m_nHeaderRepeat is set to NULL when repeating stops
@@ -233,6 +238,20 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
                 }
             }
             break;
+            case NS_ooxml::LN_CT_TcPrBase_vAlign://90694
+            {
+                sal_Int16 nVertOrient = text::VertOrientation::NONE;
+                switch( nIntValue ) //0 - top 1 - center 2 - bottom
+                {
+                    case 1: nVertOrient = text::VertOrientation::CENTER; break;
+                    case 2: nVertOrient = text::VertOrientation::BOTTOM; break;
+                    default:;
+                };
+                PropertyMapPtr pPropMap( new PropertyMap );
+                pPropMap->Insert( PROP_VERT_ORIENT, uno::makeAny( nVertOrient ) );
+                //todo: in ooxml import the value of m_ncell is wrong
+                cellPropsByCell( 0/*m_nCell*/, pPropMap );
+            }
             case 0xD605: // sprmTTableBorders
             {
                 /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
