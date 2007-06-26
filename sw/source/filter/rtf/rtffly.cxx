@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:07:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 10:43:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -453,6 +453,9 @@ void SwRTFParser::SetFlysInDoc()
             // check: the move does not clear the surrounded section. If all
             // nodes moved away, then create a new TxtNode
             {
+                // i76403: an empty selection is not a good idea
+                if( aRg.aStart == aRg.aEnd && aRg.aStart.GetNode().GetTxtNode() )
+                    aRg.aEnd++;
                 SwNodeIndex aPrev( aRg.aStart, -1 );
                 if( aPrev.GetNode().IsStartNode() &&
                     aPrev.GetNode().EndOfSectionNode() == &aRg.aEnd.GetNode())
