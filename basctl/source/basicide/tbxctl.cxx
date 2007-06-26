@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxctl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:33:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 16:52:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,49 +146,9 @@ SfxPopupWindowType TbxControls::GetPopupWindowType() const
     return(SFX_POPUPWINDOW_ONTIMEOUT);
 }
 
-IMPL_STATIC_LINK( TbxControls, StateChangedHdl_Impl, StateChangedInfo*, pStateChangedInfo )
-{
-    (void)pThis;
-    try
-    {
-        if ( pStateChangedInfo )
-        {
-            Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager( pStateChangedInfo->xLayoutManager );
-            if ( xLayoutManager.is() )
-            {
-                if ( pStateChangedInfo->bDisabled )
-                {
-                    xLayoutManager->destroyElement( aSubToolBarResName );
-                }
-                else
-                {
-                    xLayoutManager->createElement( aSubToolBarResName );
-                    xLayoutManager->requestElement( aSubToolBarResName );
-                }
-            }
-        }
-    }
-    catch ( Exception& )
-    {
-        // no update
-    }
-
-    delete pStateChangedInfo;
-
-    return 0;
-}
-
 void TbxControls::StateChanged( USHORT nSID, SfxItemState eState,
   const SfxPoolItem* pState )
 {
-    if ( nSID == SID_CHOOSE_CONTROLS )
-    {
-        StateChangedInfo* pStateChangedInfo = new StateChangedInfo;
-        pStateChangedInfo->xLayoutManager = getLayoutManager();
-        pStateChangedInfo->bDisabled = eState & SFX_ITEM_DISABLED;
-        Application::PostUserEvent( STATIC_LINK( 0, TbxControls, StateChangedHdl_Impl ), pStateChangedInfo );
-    }
-
     if( pState )
     {
         SfxAllEnumItem* pItem = PTR_CAST(SfxAllEnumItem, pState);
