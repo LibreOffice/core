@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:33:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:41:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,6 @@
 #ifndef SD_WINDOW_HXX
 #include "Window.hxx"
 #endif
-#include "ins_page.hxx"
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #include "sdpage.hxx"
@@ -176,6 +175,8 @@
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGES_HPP_
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #endif
+
+#include <strings.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
