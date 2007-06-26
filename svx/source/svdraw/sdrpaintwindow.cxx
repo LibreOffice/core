@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrpaintwindow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:40:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:08:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,28 +88,42 @@ void SdrPreRenderDevice::PreparePreRenderDevice()
 
 void SdrPreRenderDevice::OutputPreRenderDevice(const Region& rExpandedRegion)
 {
-    // expand the ClipRegion if it's a window and we are in paint
-    if(!(rExpandedRegion.IsEmpty() || rExpandedRegion.IsNull())
-        && OUTDEV_WINDOW == mrOutputDevice.GetOutDevType())
-    {
-        ((Window&)mrOutputDevice).ExpandPaintClipRegion(rExpandedRegion);
-    }
+    // region to pixels
+    Region aRegionPixel(mrOutputDevice.LogicToPixel(rExpandedRegion));
+    RegionHandle aRegionHandle(aRegionPixel.BeginEnumRects());
+    Rectangle aRegionRectanglePixel;
 
-    // calculate the to-be-refreshed rectangle
-    Rectangle aPaintRect(rExpandedRegion.GetBoundRect());
-    Rectangle aPaintRectPixel = mrOutputDevice.LogicToPixel(aPaintRect);
-
-    // paint using prepared, pre-rendered VirtualDevice
+    // MapModes off
     sal_Bool bMapModeWasEnabledDest(mrOutputDevice.IsMapModeEnabled());
     sal_Bool bMapModeWasEnabledSource(maPreRenderDevice.IsMapModeEnabled());
     mrOutputDevice.EnableMapMode(sal_False);
     maPreRenderDevice.EnableMapMode(sal_False);
 
-    Size aPaintSizePixel = aPaintRectPixel.GetSize();
-    mrOutputDevice.DrawOutDev(
-        aPaintRectPixel.TopLeft(), aPaintSizePixel,
-        aPaintRectPixel.TopLeft(), aPaintSizePixel,
-        maPreRenderDevice);
+    while(aRegionPixel.GetEnumRects(aRegionHandle, aRegionRectanglePixel))
+    {
+        // for each rectangle, copy the area
+        const Point aTopLeft(aRegionRectanglePixel.TopLeft());
+        const Size aSize(aRegionRectanglePixel.GetSize());
+
+        mrOutputDevice.DrawOutDev(
+            aTopLeft, aSize,
+            aTopLeft, aSize,
+            maPreRenderDevice);
+
+#ifdef DBG_UTIL
+        // #i74769#
+        static bool bDoPaintForVisualControlRegion(false);
+        if(bDoPaintForVisualControlRegion)
+        {
+            Color aColor((((((rand()&0x7f)|0x80)<<8L)|((rand()&0x7f)|0x80))<<8L)|((rand()&0x7f)|0x80));
+            mrOutputDevice.SetLineColor(aColor);
+            mrOutputDevice.SetFillColor();
+            mrOutputDevice.DrawRect(aRegionRectanglePixel);
+        }
+#endif
+    }
+
+    aRegionPixel.EndEnumRects(aRegionHandle);
 
     mrOutputDevice.EnableMapMode(bMapModeWasEnabledDest);
     maPreRenderDevice.EnableMapMode(bMapModeWasEnabledSource);
