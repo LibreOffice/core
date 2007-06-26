@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:22:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:55:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,9 @@ class SwTxtFrm;
 struct SwAccessibilityOptions;
 class Region;
 
+// #i74769#
+class SdrPaintWindow;
+
 //JP 19.07.98: - Bug 52312
 // define fuer Flags, die im CTOR oder den darunter liegenden Schichten
 // benoetigt werden.
@@ -173,6 +176,10 @@ class SW_DLLPUBLIC ViewShell : public Ring
 
     // OD 2004-06-01 #i26791# - boolean, indicating that class in in constructor
     bool mbInConstructor:1;
+
+    // #i74769#
+    SdrPaintWindow*         mpTargetPaintWindow;
+    OutputDevice*           mpBufferedOut;
 
     //Initialisierung, wird von den verschiedenen Konstruktoren gerufen.
     SW_DLLPRIVATE void Init( const SwViewOption *pNewOpt );
