@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viscrs.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:38:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:55:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,9 @@ public:
 
 // ------ Ab hier Klassen / Methoden fuer die Selectionen -------
 
+// #i75172# predefines
+namespace sdr { namespace overlay { class OverlayObject; }}
+
 class SwSelPaintRects : public SwRects
 {
     friend void _InitCore();
@@ -103,9 +106,20 @@ class SwSelPaintRects : public SwRects
     virtual void Paint( const Rectangle& rRect );
     virtual void FillRects() = 0;
 
+    // #i75172#
+    sdr::overlay::OverlayObject*    mpCursorOverlay;
+
+    // #i75172# access to mpCursorOverlay for swapContent
+    sdr::overlay::OverlayObject* getCursorOverlay() const { return mpCursorOverlay; }
+    void setCursorOverlay(sdr::overlay::OverlayObject* pNew) { mpCursorOverlay = pNew; }
+
 public:
     SwSelPaintRects( const SwCrsrShell& rCSh );
     virtual ~SwSelPaintRects();
+
+    // #i75172# in SwCrsrShell::CreateCrsr() the content of SwSelPaintRects is exchanged. To
+    // make a complete swap access to mpCursorOverlay is needed there
+    void swapContent(SwSelPaintRects& rSwap);
 
     void Show();
     void Hide();
