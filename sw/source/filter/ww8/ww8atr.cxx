@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 08:54:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 10:44:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4370,9 +4370,40 @@ static Writer& OutWW8_SwFmtCol( Writer& rWrt, const SfxPoolItem& rHt )
     {
         // dann besorge mal die Seitenbreite ohne Raender !!
 
-        SwTwips nLeft, nRight, nPageSize;
-        nPageSize = rWW8Wrt.CurrentPageWidth(nLeft, nRight);
-        nPageSize -= (nLeft + nRight);
+        const SwFrmFmt* pFmt = rWW8Wrt.pAktPageDesc ? &rWW8Wrt.pAktPageDesc->GetMaster() : &const_cast<const SwDoc *>(rWW8Wrt.pDoc)->GetPageDesc(0).GetMaster();
+        const SvxFrameDirectionItem &frameDirection = pFmt->GetFrmDir();
+        SwTwips nPageSize;
+        if (frameDirection.GetValue() == FRMDIR_VERT_TOP_RIGHT || frameDirection.GetValue() == FRMDIR_VERT_TOP_LEFT)
+        {
+            const SvxULSpaceItem &rUL = pFmt->GetULSpace();
+            nPageSize = pFmt->GetFrmSize().GetHeight();
+            nPageSize -= rUL.GetUpper() + rUL.GetLower();
+
+            const SwFmtHeader *header = dynamic_cast<const SwFmtHeader *>(pFmt->GetAttrSet().GetItem(RES_HEADER));
+            if (header)
+            {
+                const SwFrmFmt *headerFmt = header->GetHeaderFmt();
+                if (headerFmt)
+                {
+                    nPageSize -= headerFmt->GetFrmSize().GetHeight();
+                }
+            }
+            const SwFmtFooter *footer = dynamic_cast<const SwFmtFooter *>(pFmt->GetAttrSet().GetItem(RES_FOOTER));
+            if (footer)
+            {
+                const SwFrmFmt *footerFmt = footer->GetFooterFmt();
+                if (footerFmt)
+                {
+                    nPageSize -= footerFmt->GetFrmSize().GetHeight();
+                }
+            }
+        }
+        else
+        {
+            const SvxLRSpaceItem &rLR = pFmt->GetLRSpace();
+            nPageSize = pFmt->GetFrmSize().GetWidth();
+            nPageSize -= rLR.GetLeft() + rLR.GetRight();
+        }
 
         // CColumns
         if( rWW8Wrt.bWrtWW8 )
@@ -4632,7 +4663,8 @@ static Writer& OutWW8_SvxAdjust(Writer& rWrt, const SfxPoolItem& rHt)
                         ItemGet<SvxFrameDirectionItem>(*pC, RES_FRAMEDIR);
                     nDirection = rItem.GetValue();
                 }
-                if (nDirection == FRMDIR_HORI_RIGHT_TOP)
+                if ((nDirection == FRMDIR_HORI_RIGHT_TOP)
+                 || (nDirection == FRMDIR_ENVIRONMENT &&  Application::GetSettings().GetLayoutRTL()))
                     bBiDiSwap=true;
             }
 
