@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 13:19:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 10:38:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2019,8 +2019,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
         // workaround for #no-bug#
         static const sal_Char sDB[] =
             "com.sun.star.text.FieldMaster.DataBase.";
-        if (0 == sFieldMaster.compareTo( OUString::createFromAscii(sDB),
-                                         sizeof(sDB)-1))
+        if ( sFieldMaster.matchIgnoreAsciiCaseAsciiL( sDB, sizeof(sDB)-1) )
         {
             continue;
         }
