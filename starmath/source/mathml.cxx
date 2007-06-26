@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-18 16:33:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 10:01:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1015,14 +1015,12 @@ sal_Bool SmXMLWrapper::WriteThroughComponent(
         aAny.setValue( &bFalse, ::getBooleanCppuType() );
         xSet->setPropertyValue( aPropName, aAny );
     }
-    else
-    {
-//REMOVE            OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("Encrypted") );
-        OUString aTmpPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
-        sal_Bool bTrue = sal_True;
-        aAny.setValue( &bTrue, ::getBooleanCppuType() );
-        xSet->setPropertyValue( aTmpPropName, aAny );
-    }
+
+    // even plain stream must be encrypted in encrypted document
+    OUString aTmpPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
+    sal_Bool bTrue = sal_True;
+    aAny.setValue( &bTrue, ::getBooleanCppuType() );
+    xSet->setPropertyValue( aTmpPropName, aAny );
 
     // set Base URL
     if( rPropSet.is() )
