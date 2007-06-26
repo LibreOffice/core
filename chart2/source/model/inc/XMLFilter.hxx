@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLFilter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:30:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 10:06:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,8 +165,7 @@ private:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory > & xFactory,
         const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Any > & rFilterProperties,
-        sal_Bool bUseCommonEncryption );
+            ::com::sun::star::uno::Any > & rFilterProperties );
 
     // members
     ::com::sun::star::uno::Reference<
