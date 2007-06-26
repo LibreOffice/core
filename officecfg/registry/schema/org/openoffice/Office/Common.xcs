@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 14:04:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:44:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -956,40 +956,64 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 			<prop oor:name="OverlayBuffer" oor:type="xs:boolean">
 				<info>
 					<author>AW</author>
-					<desc>Specifies if the Overlay pane shall use an own buffer. If on, Overlay is fast but a buffer (graphics memory) is used. If off, Overlay is slow, but no Buffer is needed. This is the global switch which will enable/disable overlay for all Applications.</desc>
-					<label>Overlay uses Background Buffer in all Applications</label>
+					<desc>Specifies if the Overlay pane is allowed to use an own buffer. If on, Overlay is fast but a buffer (graphics memory) is used. If off, Overlay is slow, but no Buffer is needed. This is the global switch which will enable/disable overlay for all Applications. This is the global switch for the whole office.</desc>
+					<label>Overlay is allowed to use a Background Buffer in all Applications</label>
 				</info>
 				<value>true</value>
 			</prop>
 			<prop oor:name="OverlayBuffer_Calc" oor:type="xs:boolean">
 				<info>
 					<author>AW</author>
-					<desc>Due to #i73602#: Similar to OverlayBuffer, but only for Calc Application</desc>
-					<label>Calc Overlay uses Background Buffer</label>
+					<desc>Similar to OverlayBuffer, but only for Calc Application</desc>
+					<label>Calc Overlay is allowed to use a Background Buffer</label>
 				</info>
-				<value>false</value>
+				<value>true</value>
 			</prop>
 			<prop oor:name="OverlayBuffer_Writer" oor:type="xs:boolean">
 				<info>
 					<author>AW</author>
-					<desc>Due to #i73602#: Similar to OverlayBuffer, but only for Writer Application</desc>
-					<label>Writer Overlay uses Background Buffer</label>
+					<desc>Similar to OverlayBuffer, but only for Writer Application</desc>
+					<label>Writer Overlay is allowed to use a Background Buffer</label>
 				</info>
-				<value>false</value>
+				<value>true</value>
 			</prop>
 			<prop oor:name="OverlayBuffer_DrawImpress" oor:type="xs:boolean">
 				<info>
 					<author>AW</author>
-					<desc>Due to #i73602#: Similar to OverlayBuffer, but only for Draw/Impress Applications</desc>
-					<label>Draw/Impress Overlay uses Background Buffer</label>
+					<desc>Similar to OverlayBuffer, but only for Draw/Impress Applications</desc>
+					<label>Draw/Impress Overlay is allowed to use a Background Buffer</label>
 				</info>
 				<value>true</value>
 			</prop>
 			<prop oor:name="PaintBuffer" oor:type="xs:boolean">
 				<info>
 					<author>AW</author>
-					<desc>Specifies if the Paint shall use a buffer. If on, screen flicker is greatly reduced and remote display is fast, but a buffer (graphics memory) is needed. If off, screen flicker will occurr and remote display is slow, but no buffer is needed.</desc>
-					<label>Paint uses Output Buffer</label>
+					<desc>Specifies if the Application Repaint shall use a buffer for Pre-Rendering. If on, screen flicker is greatly reduced and remote display is fast, but a buffer (graphics memory) is needed. If off, screen flicker will occurr and remote display is slow, but no buffer is needed. This is the global switch for the whole office.</desc>
+					<label>Application Repaint is allowed to use Pre-Rendering Buffer.</label>
+				</info>
+				<value>true</value>
+			</prop>
+			<prop oor:name="PaintBuffer_Calc" oor:type="xs:boolean">
+				<info>
+					<author>AW</author>
+					<desc>Similar to PaintBuffer, but only for Calc Application. PaintBuffer is the global switch.</desc>
+					<label>Calc Repaint is allowed to use Pre-Rendering Buffer</label>
+				</info>
+				<value>true</value>
+			</prop>
+			<prop oor:name="PaintBuffer_Writer" oor:type="xs:boolean">
+				<info>
+					<author>AW</author>
+					<desc>Similar to PaintBuffer, but only for Writer Application. PaintBuffer is the global switch.</desc>
+					<label>Writer Repaint is allowed to use Pre-Rendering Buffer</label>
+				</info>
+				<value>true</value>
+			</prop>
+			<prop oor:name="PaintBuffer_DrawImpress" oor:type="xs:boolean">
+				<info>
+					<author>AW</author>
+					<desc>Similar to PaintBuffer, but only for Draw/Impress Applications. PaintBuffer is the global switch.</desc>
+					<label>Draw/Impress Repaint is allowed to use Pre-Rendering Buffer</label>
 				</info>
 				<value>true</value>
 			</prop>
