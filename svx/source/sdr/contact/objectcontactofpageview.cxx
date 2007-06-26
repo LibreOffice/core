@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectcontactofpageview.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:30:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:05:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,152 +181,15 @@ namespace sdr
             }
         }
 
-        // Create and set the ExpandPaintClipRegion. This needs to be done before
-        // any of the objects gets really painted because it relies on the invalidated
-        // and not painted state of the single objects.
-        void ObjectContactOfPageView::ExpandPaintClipRegion(DisplayInfo& rDisplayInfo)
-        {
-            if(rDisplayInfo.GetPaintInfoRec() && rDisplayInfo.GetOutputDevice())
-            {
-                OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
-
-                if(pOut && OUTDEV_WINDOW == pOut->GetOutDevType())
-                {
-                    Window* pWin = (Window*)pOut;
-                    Region aExpandRegion;
-
-                    // For this purpose test against visible area, not against
-                    // paint rectangle. Thus, Remember DrawArea and set visible area instead.
-                    Region aOriginalDrawArea = rDisplayInfo.GetRedrawArea();
-                    Point aEmptyPoint;
-                    Rectangle aVisiblePixel(aEmptyPoint, pOut->GetOutputSizePixel());
-                    Region aVisibleLogic = Region(pOut->PixelToLogic(aVisiblePixel));
-                    rDisplayInfo.SetRedrawArea(aVisibleLogic);
-
-                    for(sal_uInt32 a(0L); a < maDrawHierarchy.Count(); a++)
-                    {
-                        ViewObjectContact& rVOContact = *(maDrawHierarchy.GetObject(a));
-
-                        // Recursively Build Clip Region for ViewObjectContacts
-                        rVOContact.BuildClipRegion(rDisplayInfo, aExpandRegion);
-                    }
-
-                    // #i42431#
-                    if(false)
-                    {
-                        // what should be here:
-                        if(!(aExpandRegion.IsEmpty() || aExpandRegion.IsNull()))
-                        {
-                            pWin->ExpandPaintClipRegion(aExpandRegion);
-                            aOriginalDrawArea.Union(aExpandRegion);
-                        }
-
-                        // #i42431#
-                        // copied comments from older fixes for documentation:
-
-                            // #116639#
-                            //      aOriginalDrawArea.Union(aExpandRegion.GetBoundRect());
-                            // Because of a bug in Region which THB wants to take a look at,
-                            // the result of the previous command is WRONG when done in logical
-                            // coodinates, the Region gets a line to small (!). Thus, for
-                            // a workaround i have to do the union in pixel coordinates (!).
-
-                            //const Region aExpandRegionPixel(pOut->LogicToPixel(aExpandRegion));
-                            //Rectangle aExpandPixelRect(aExpandRegionPixel.GetBoundRect());
-
-                            // #116639#, #i29132#
-                            // Since e.g. with connectors like in #i29132# still rounding
-                            // errors happen when converting to pixels, i choose now to handle
-                            // this here in expanding the expand rectangle by one pixel, that
-                            // means: device dependent.
-                            // The maximum rounding error is potentially 1/2 pixel, so with
-                            // one pixel the rect is then potentially up to 1/2 pixel too big.
-                            // I see no other way until we have more precise conversions, though.
-                            // All involved logic coordinates are correct.
-
-                        // #i42431#
-                        // Real problem is: When regions/rectangles get converted from pixel to logic,
-                        // it should be a scale which expands single pixel lines to rectanges. That
-                        // does not happen. Example: In pixel, a region contains one horizontal region
-                        // which describes one pixel line. That region has no height. When scaled You
-                        // should get a logical region with the logic rectangle describing the line,
-                        // but Yot get just a logical line with no height.
-                        // So all pixel sources need to be expanded by on elogical pixel size in width
-                        // and height, that's now done below. Since the OriginalDrawArea was created
-                        // normally (in all cases?) by converting a rectangle from pixel to logic, it
-                        // is always corrected. In the cases it was not derived from pixels, it's safer
-                        // to do it. Same argument at the ExpandRegion.
-                    }
-                    else
-                    {
-                        const Size aPixelSizeInLogic(pOut->PixelToLogic(Size(1L, 1L)));
-
-                        // correct aOriginalDrawArea
-                        {
-                            Region aCorrectedDrawArea;
-                            Rectangle aCorrectRectangle;
-                            RegionHandle aRegionHandle = aOriginalDrawArea.BeginEnumRects();
-
-                            while(aOriginalDrawArea.GetEnumRects(aRegionHandle, aCorrectRectangle))
-                            {
-                                aCorrectRectangle.Bottom() += aPixelSizeInLogic.Height();
-                                aCorrectRectangle.Right() += aPixelSizeInLogic.Height();
-                                aCorrectedDrawArea.Union(aCorrectRectangle);
-                            }
-
-                            aOriginalDrawArea.EndEnumRects(aRegionHandle);
-                            aOriginalDrawArea = aCorrectedDrawArea;
-                        }
-
-                        if(!(aExpandRegion.IsEmpty() || aExpandRegion.IsNull()))
-                        {
-                            // correct expand region
-                            Region aCorrectedRegion;
-                            Rectangle aCorrectRectangle;
-                            RegionHandle aRegionHandle = aExpandRegion.BeginEnumRects();
-
-                            while(aExpandRegion.GetEnumRects(aRegionHandle, aCorrectRectangle))
-                            {
-                                aCorrectRectangle.Bottom() += aPixelSizeInLogic.Height();
-                                aCorrectRectangle.Right() += aPixelSizeInLogic.Height();
-                                aCorrectedRegion.Union(aCorrectRectangle);
-                            }
-
-                            aExpandRegion.EndEnumRects(aRegionHandle);
-                            aExpandRegion = aCorrectedRegion;
-
-                            // use corrected region
-                            pWin->ExpandPaintClipRegion(aExpandRegion);
-                            aOriginalDrawArea.Union(aExpandRegion);
-                        }
-
-                        // Clip the draw area to the visible are of the
-                        // output device.
-                        aOriginalDrawArea.Intersect(aVisibleLogic);
-                    }
-
-                    // restore original DrawArea
-                    rDisplayInfo.SetRedrawArea(aOriginalDrawArea);
-                }
-            }
-        }
-
-        // Pre-Process the whole displaying.
-        void ObjectContactOfPageView::PreProcessDisplay(DisplayInfo& rDisplayInfo)
-        {
-            // call parent to ensure a valid draw hierarchy.
-            ObjectContact::PreProcessDisplay(rDisplayInfo);
-
-            // also expand the paint clip region in the pre-paint phase
-            if(IsDrawHierarchyValid())
-            {
-                ExpandPaintClipRegion(rDisplayInfo);
-            }
-        }
-
         // Process the whole displaying
         void ObjectContactOfPageView::ProcessDisplay(DisplayInfo& rDisplayInfo)
         {
+            if(!IsDrawHierarchyValid())
+            {
+                // The default implementation ensures a valid draw hierarchy.
+                EnsureValidDrawHierarchy(rDisplayInfo);
+            }
+
             const SdrPage* pStartPage = GetSdrPage();
 
             if(IsDrawHierarchyValid()
@@ -461,23 +324,6 @@ namespace sdr
         {
             // invalidate all associated windows.
             GetPageWindow().Invalidate(rRectangle);
-        }
-
-        // #i37394# Non-painted object was changed. Test for potentially
-        // getting visible
-        void ObjectContactOfPageView::ObjectGettingPotentiallyVisible(const ViewObjectContact& rVOC) const
-        {
-            // #i42815# Use new test method
-            const Rectangle& rOrigObjectRectangle = rVOC.GetViewContact().GetPaintRectangle();
-
-            if(IsAreaVisible(rOrigObjectRectangle))
-            {
-                // invalidate
-                GetPageWindow().Invalidate(rOrigObjectRectangle);
-            }
-
-            // call parent
-            ObjectContact::ObjectGettingPotentiallyVisible(rVOC);
         }
 
         // #i42815#
