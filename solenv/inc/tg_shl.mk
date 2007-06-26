@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.110 $
+#   $Revision: 1.111 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 10:52:17 $
+#   last change: $Author: hr $ $Date: 2007-06-26 17:34:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,25 +64,6 @@ SHL$(TNR)LINKFLAGS+=$(LINKFLAGS)
 .IF "$(SHL$(TNR)USE_EXPORTS)"==""
 SHL$(TNR)DEF*=$(MISC)$/$(SHL$(TNR)TARGET).def
 .ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"==""
-
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.IF "$(SHL$(TNR)TARGET)"!=""
-.IF "$(COMP$(TNR)TYPELIST)"==""
-
-#fallback
-LOCAL$(TNR)DESC:=$(subst,/,$/ $(shell $(FIND) . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL$(TNR)TARGET)))}.xml"))
-.IF "$(LOCAL$(TNR)DESC)"==""
-$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
-    $(COPY) $< $@
-.ELSE           # "$(LOCALDESC$(TNR))"==""
-SHL$(TNR)DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL$(TNR)DESC:b)$($(WINVERSIONNAMES)_MAJOR)_description.obj
-.ENDIF          # "$(LOCALDESC$(TNR))"==""
-
-.ENDIF          # "$(COMP$(TNR)TYPELIST)"==""
-.ENDIF			# "$(SHL$(TNR)TARGET)"!="
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
@@ -247,11 +228,6 @@ SHL$(TNR)LINKRES*=$(MISC)$/$(SHL$(TNR)TARGET).res
 SHL$(TNR)LINKRESO*=$(MISC)$/$(SHL$(TNR)TARGET)_res.o
 .ENDIF			# "$(SHL$(TNR)DEFAULTRES)$(use_shl_versions)"!=""
 
-.IF "$(NO_SHL$(TNR)DESCRIPTION)"==""
-#SHL$(TNR)DESCRIPTIONOBJ*=$(SLO)$/default_description.obj
-SHL$(TNR)DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_description.obj
-.ENDIF			# "$(NO_SHL$(TNR)DESCRIPTION)"==""
-
 #.IF "$(SHL$(TNR)TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
@@ -280,7 +256,6 @@ $(MISC)$/%linkinc.ls:
 
 $(SHL$(TNR)TARGETN) : \
                     $(SHL$(TNR)OBJS)\
-                    $(SHL$(TNR)DESCRIPTIONOBJ)\
                     $(SHL$(TNR)LIBS)\
                     $(USE_$(TNR)IMPLIB_DEPS)\
                     $(USE_SHL$(TNR)DEF)\
@@ -336,7 +311,7 @@ $(SHL$(TNR)TARGETN) : \
         `$(TYPE) /dev/null $(SHL$(TNR)LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
 .ENDIF			# "$(DEFLIB$(TNR)NAME)"!=""
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) $(SHL$(TNR)OBJS) $(SHL$(TNR)LINKRESO) \
+        $(STDOBJ) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)OBJS) $(SHL$(TNR)LINKRESO) \
         `$(TYPE) /dev/null $(SHL$(TNR)LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
         -Wl,--exclude-libs,ALL $(SHL$(TNR)STDLIBS) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) \
         $(MISC)$/$(@:b)_exp.o \
@@ -356,7 +331,7 @@ $(SHL$(TNR)TARGETN) : \
         -def:$(SHL$(TNR)DEF) \
         $(USE_$(TNR)IMPLIB) \
         $(STDOBJ) \
-        $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) $(SHL$(TNR)OBJS) \
+        $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)OBJS) \
         $(SHL$(TNR)LIBS) \
         $(SHL$(TNR)STDLIBS) \
         $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) \
@@ -374,7 +349,7 @@ $(SHL$(TNR)TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(LB)$/$(SHL$(TNR)IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL$(TNR)OBJS) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ)   \
+        $(SHL$(TNR)OBJS) $(SHL$(TNR)VERSIONOBJ) \
         $(SHL$(TNR)LIBS)                         \
         $(SHL$(TNR)STDLIBS)                      \
         $(SHL$(TNR)STDSHL) $(STDSHL$(TNR))                           \
@@ -393,7 +368,7 @@ $(SHL$(TNR)TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(USE_$(TNR)IMPLIB) \
         $(STDOBJ)							\
-        $(SHL$(TNR)OBJS) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ))   \
+        $(SHL$(TNR)OBJS) $(SHL$(TNR)VERSIONOBJ))   \
         @$(MISC)$/$(SHL$(TNR)TARGET)_link.lst \
         @$(mktmp $(SHL$(TNR)STDLIBS)                      \
         $(SHL$(TNR)STDSHL) $(STDSHL$(TNR))                           \
@@ -431,7 +406,7 @@ $(SHL$(TNR)TARGETN) : \
     @-$(RM) $(MISC)$/$(@:b).list
     @-$(RM) $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @echo $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
-    $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ:s/.obj/.o/) \
+    $(SHL$(TNR)VERSIONOBJ) \
     `cat /dev/null $(SHL$(TNR)LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(SHL$(TNR)VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL$(TNR)STDLIBS)` \
@@ -448,7 +423,7 @@ $(SHL$(TNR)TARGETN) : \
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @echo $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(SHL$(TNR)SONAME) $(LINKFLAGSSHL) $(SHL$(TNR)VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
-    $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
+    $(SHL$(TNR)VERSIONOBJ) -o $@ \
     `cat /dev/null $(SHL$(TNR)LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
