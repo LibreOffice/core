@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:29:45 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:40:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1014,7 +1014,7 @@ BOOL FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
         if ( pIMapObj )
         {
             // show name
-            aHelpText = pIMapObj->GetDescription();
+            aHelpText = pIMapObj->GetAltText();
 
             if (aHelpText.Len() == 0)
             {
