@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:34:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:50:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -799,7 +799,7 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
             maURLBox.InsertEntry( rInfo.aMarkURL );
 
         maURLBox.SetText( rInfo.aMarkURL );
-        aEdtText.SetText( rInfo.aMarkDescription );
+        aEdtText.SetText( rInfo.aMarkAltText );
 
         if ( !rInfo.aMarkTarget.Len() )
             maCbbTarget.SetText( DEFINE_CONST_UNICODE( SELF_TARGET ) );
@@ -844,8 +844,8 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
         if ( maURLBox.GetText() != rInfo.aMarkURL )
             maURLBox.SetText( rInfo.aMarkURL );
 
-        if ( aEdtText.GetText() != rInfo.aMarkDescription )
-            aEdtText.SetText( rInfo.aMarkDescription );
+        if ( aEdtText.GetText() != rInfo.aMarkAltText )
+            aEdtText.SetText( rInfo.aMarkAltText );
 
         if ( !rInfo.aMarkTarget.Len() )
             maCbbTarget.SetText( DEFINE_CONST_UNICODE( SELF_TARGET ) );
@@ -913,7 +913,7 @@ IMPL_LINK( SvxIMapDlg, URLModifyHdl, void*, EMPTYARG )
     NotifyInfo  aNewInfo;
 
     aNewInfo.aMarkURL = maURLBox.GetText();
-    aNewInfo.aMarkDescription = aEdtText.GetText();
+    aNewInfo.aMarkAltText = aEdtText.GetText();
     aNewInfo.aMarkTarget = maCbbTarget.GetText();
 
     pIMapWnd->ReplaceActualIMapInfo( aNewInfo );
@@ -944,7 +944,7 @@ IMPL_LINK( SvxIMapDlg, URLLoseFocusHdl, void*, EMPTYARG )
     else
         aNewInfo.aMarkURL = aURLText;
 
-    aNewInfo.aMarkDescription = aEdtText.GetText();
+    aNewInfo.aMarkAltText = aEdtText.GetText();
 
     if ( !aTargetText.Len() )
         aNewInfo.aMarkTarget = DEFINE_CONST_UNICODE( SELF_TARGET );
