@@ -4,9 +4,9 @@
  *
  *  $RCSfile: output3.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:54:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:52:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,8 +122,10 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
 
         if(pLocalDrawView)
         {
+            // #i74769# work with SdrPaintWindow directly
             Region aRectRegion(aRect);
-            pLocalDrawView->BeginDrawLayers(pDev, aRectRegion, false);
+            mpTargetPaintWindow = pLocalDrawView->BeginDrawLayers(pDev, aRectRegion);
+            OSL_ENSURE(mpTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
         }
     }
 
@@ -131,16 +133,33 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
 }
 
 // #i72502#
-void ScOutputData::PostPrintDrawingLayer()
+void ScOutputData::PostPrintDrawingLayer(const Point& rMMOffset) // #i74768#
 {
+    // #i74768# just use offset as in PrintDrawingLayer() to also get the form controls
+    // painted with offset
+    MapMode aOldMode = pDev->GetMapMode();
+
+    if (!bMetaFile)
+    {
+        pDev->SetMapMode( MapMode( MAP_100TH_MM, rMMOffset, aOldMode.GetScaleX(), aOldMode.GetScaleY() ) );
+    }
+
     if(pViewShell || pDrawView)
     {
         SdrView* pLocalDrawView = (pDrawView) ? pDrawView : pViewShell->GetSdrView();
 
         if(pLocalDrawView)
         {
-            pLocalDrawView->EndDrawLayers(pDev);
+            // #i74769# work with SdrPaintWindow directly
+            pLocalDrawView->EndDrawLayers(*mpTargetPaintWindow);
+            mpTargetPaintWindow = 0;
         }
+    }
+
+    // #i74768#
+    if (!bMetaFile)
+    {
+        pDev->SetMapMode( aOldMode );
     }
 }
 
