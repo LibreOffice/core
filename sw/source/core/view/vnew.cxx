@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:11:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:58:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,7 +216,9 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     mpPrePostOutDev(0), // #i72754#
     pSfxViewShell( 0 ),
     pImp( new SwViewImp( this ) ),
-    aBrowseBorder()
+    aBrowseBorder(),
+    mpTargetPaintWindow(0), // #i74769#
+    mpBufferedOut(0) // #i74769#
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::SwViewShell" );
 
@@ -294,7 +296,9 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     mpPrePostOutDev(0), // #i72754#
     pSfxViewShell( 0 ),
     pImp( new SwViewImp( this ) ),
-    aBrowseBorder( rShell.GetBrowseBorder() )
+    aBrowseBorder( rShell.GetBrowseBorder() ),
+    mpTargetPaintWindow(0), // #i74769#
+    mpBufferedOut(0) // #i74769#
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::SwViewShell" );
 
