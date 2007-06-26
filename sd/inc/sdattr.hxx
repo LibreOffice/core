@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdattr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:58:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:38:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,23 @@ public:
         SfxStringItem( ATTR_LAYER_NAME, aStr ) {}
 };
 
+//------------------------------------------------------------------
+
+class SdAttrLayerTitle : public SfxStringItem
+{
+public:
+    SdAttrLayerTitle() : SfxStringItem( ATTR_LAYER_TITLE, XubString()) {}
+    SdAttrLayerTitle( const String& aStr ) : SfxStringItem( ATTR_LAYER_TITLE, aStr ) {}
+};
+
+//------------------------------------------------------------------
+
+class SdAttrLayerDesc : public SfxStringItem
+{
+public:
+    SdAttrLayerDesc() : SfxStringItem( ATTR_LAYER_DESC, XubString()) {}
+    SdAttrLayerDesc( const String& aStr ) : SfxStringItem( ATTR_LAYER_DESC, aStr ) {}
+};
 
 //------------------------------------------------------------------
 
