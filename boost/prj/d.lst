@@ -2,6 +2,9 @@ mkdir: %_DEST%\inc%_EXT%\boost
 
 ..\%__SRC%\misc\build\boost-1.30.2\boost\rational.hpp %_DEST%\inc%_EXT%\boost\rational.hpp
 ..\%__SRC%\misc\build\boost-1.30.2\boost\operators.hpp %_DEST%\inc%_EXT%\boost\operators.hpp
+..\%__SRC%\misc\build\boost-1.30.2\boost\tokenizer.hpp %_DEST%\inc%_EXT%\boost\tokenizer.hpp
+..\%__SRC%\misc\build\boost-1.30.2\boost\token_iterator.hpp %_DEST%\inc%_EXT%\boost\token_iterator.hpp
+..\%__SRC%\misc\build\boost-1.30.2\boost\token_functions.hpp %_DEST%\inc%_EXT%\boost\token_functions.hpp
 ..\%__SRC%\misc\build\boost-1.30.2\boost\enable_shared_from_this.hpp %_DEST%\inc%_EXT%\boost\enable_shared_from_this.hpp
 
 ..\%__SRC%\misc\build\boost-1.30.2\boost\cast.hpp %_DEST%\inc%_EXT%\boost\cast.hpp
