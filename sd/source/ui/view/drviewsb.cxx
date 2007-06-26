@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsb.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:35:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:42:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,6 @@
 #include "app.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
-#include "ins_page.hrc"
 #include "glob.hrc"
 
 #ifndef SD_OUTLINER_HXX
@@ -157,7 +156,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
             USHORT nLayerCnt = rLayerAdmin.GetLayerCount();
             USHORT nLayer = nLayerCnt - 2 + 1;
-            String aLayerName ( SdResId(STR_LAYER) );
+            String aLayerName ( SdResId(STR_LAYER) ), aLayerTitle, aLayerDesc;
             aLayerName += String::CreateFromInt32( (sal_Int32)nLayer );
             BOOL bIsVisible = FALSE;
             BOOL bIsLocked = FALSE;
@@ -170,13 +169,15 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                 SfxItemSet aNewAttr( GetDoc()->GetPool(), ATTR_LAYER_START, ATTR_LAYER_END );
 
                 aNewAttr.Put( SdAttrLayerName( aLayerName ) );
+                aNewAttr.Put( SdAttrLayerTitle() );
+                aNewAttr.Put( SdAttrLayerDesc() );
                 aNewAttr.Put( SdAttrLayerVisible() );
                 aNewAttr.Put( SdAttrLayerPrintable() );
                 aNewAttr.Put( SdAttrLayerLocked() );
                 aNewAttr.Put( SdAttrLayerThisPage() );
 
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                AbstractSdInsertLayerDlg* pDlg = pFact ? pFact->CreateSdInsertLayerDlg(NULL, aNewAttr, TRUE, String( SdResId( STR_INSERTLAYER ) ) ) : 0;
+                AbstractSdInsertLayerDlg* pDlg = pFact ? pFact->CreateSdInsertLayerDlg(NULL, aNewAttr, true, String( SdResId( STR_INSERTLAYER ) ) ) : 0;
                 if( pDlg )
                 {
                     pDlg->SetHelpId( SID_INSERTLAYER );
@@ -213,6 +214,8 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                     {
                         //pDlg->GetAttr( aNewAttr );
                         //aLayerName     = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
+                        aLayerTitle  = ((SdAttrLayerTitle &) aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
+                        aLayerDesc   = ((SdAttrLayerDesc &) aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
                         bIsVisible   = ((SdAttrLayerVisible &) aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
                         bIsLocked    = ((SdAttrLayerLocked &) aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue () ;
                         bIsPrintable = ((SdAttrLayerPrintable &) aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue () ;
@@ -260,6 +263,12 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
             }
 
             mpDrawView->InsertNewLayer(aLayerName, nPrevLayer + 1);
+            pLayer = rLayerAdmin.GetLayer(aLayerName, FALSE);
+            if( pLayer )
+            {
+                pLayer->SetTitle( aLayerTitle );
+                pLayer->SetDescription( aLayerDesc );
+            }
 
             mpDrawView->SetLayerVisible( aLayerName, bIsVisible );
             mpDrawView->SetLayerLocked( aLayerName, bIsLocked);
@@ -288,17 +297,25 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
 
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
             USHORT nCurPage = GetLayerTabControl()->GetCurPageId();
-            String aLayerName = GetLayerTabControl()->GetPageText(nCurPage);
-            String aOldLayerName( aLayerName );
+            String aLayerName( GetLayerTabControl()->GetPageText(nCurPage) );
             SdrLayer* pLayer = rLayerAdmin.GetLayer(aLayerName, FALSE);
+
+            String aLayerTitle( pLayer->GetTitle() );
+            String aLayerDesc( pLayer->GetDescription() );
+
+            String aOldLayerName( aLayerName );
+            String aOldLayerTitle( aLayerTitle );
+            String aOldLayerDesc( aLayerDesc );
+
+            BOOL bIsVisible, bIsLocked, bIsPrintable;
+            BOOL bOldIsVisible = bIsVisible = mpDrawView->IsLayerVisible(aLayerName);
+            BOOL bOldIsLocked = bIsLocked = mpDrawView->IsLayerLocked(aLayerName);
+            BOOL bOldIsPrintable = bIsPrintable = mpDrawView->IsLayerPrintable(aLayerName);
+
+
             const SfxItemSet* pArgs = rReq.GetArgs();
-
-            BOOL bIsVisible = FALSE;
-            BOOL bIsLocked = FALSE;
-            BOOL bIsPrintable = FALSE;
-
-             // darf der Layer geloescht werden ?
-            BOOL bDelete;
+            // darf der Layer geloescht werden ?
+            bool bDelete = true;
 
             String aLayoutLayer ( SdResId(STR_LAYER_LAYOUT) );
             String aControlsLayer ( SdResId(STR_LAYER_CONTROLS) );
@@ -310,19 +327,19 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                 aLayerName == aMeasureLinesLayer ||
                 aLayerName == aBackgroundLayer   || aLayerName == aBackgroundObjLayer )
             {
-                bDelete = FALSE;
+                bDelete = false;
             }
-            else
-                bDelete = TRUE;
 
             if (! pArgs)
             {
                 SfxItemSet aNewAttr( GetDoc()->GetPool(), ATTR_LAYER_START, ATTR_LAYER_END );
 
                 aNewAttr.Put( SdAttrLayerName( aLayerName ) );
-                aNewAttr.Put( SdAttrLayerVisible( mpDrawView->IsLayerVisible(aLayerName) ) );
-                aNewAttr.Put( SdAttrLayerLocked( mpDrawView->IsLayerLocked(aLayerName) ) );
-                aNewAttr.Put( SdAttrLayerPrintable( mpDrawView->IsLayerPrintable(aLayerName) ) );
+                aNewAttr.Put( SdAttrLayerTitle( aLayerTitle ) );
+                aNewAttr.Put( SdAttrLayerDesc( aLayerDesc ) );
+                aNewAttr.Put( SdAttrLayerVisible( bIsVisible ) );
+                aNewAttr.Put( SdAttrLayerLocked( bIsLocked ) );
+                aNewAttr.Put( SdAttrLayerPrintable( bIsPrintable ) );
                 aNewAttr.Put( SdAttrLayerThisPage() );
 
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
@@ -355,18 +372,14 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                     switch (nRet)
                     {
                         case RET_OK :
-                            //pDlg->GetAttr( aNewAttr );
-                            //aLayerName   = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
+                            aLayerTitle  = ((SdAttrLayerTitle &) aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
+                            aLayerDesc   = ((SdAttrLayerDesc &) aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
                             bIsVisible   = ((const SdAttrLayerVisible &) aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
                             bIsLocked    = ((const SdAttrLayerLocked &) aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue ();
                             bIsPrintable = ((const SdAttrLayerLocked &) aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue ();
 
                             delete pDlg;
                             break;
-
-                        case RET_DELETE :
-                            mpDrawView->DeleteLayer (((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ());
-                            GetLayerTabControl()->RemovePage(nCurPage);
 
                         default :
                             delete pDlg;
@@ -385,7 +398,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
 
                 aLayerName   = pLayerName->GetValue ();
                 bIsVisible   = pIsVisible->GetValue ();
-                bIsLocked     = pIsLocked->GetValue ();
+                bIsLocked    = pIsLocked->GetValue ();
                 bIsPrintable = pIsPrintable->GetValue ();
             }
             else
@@ -402,18 +415,22 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                 pLayer,
                 // old values
                 aOldLayerName,
-                mpDrawView->IsLayerVisible(aOldLayerName),
-                mpDrawView->IsLayerLocked(aOldLayerName),
-                mpDrawView->IsLayerPrintable(aOldLayerName),
+                aOldLayerTitle,
+                aOldLayerDesc,
+                bOldIsVisible,
+                bOldIsLocked,
+                bOldIsPrintable,
                 // new values
                 aLayerName,
+                aLayerTitle,
+                aLayerDesc,
                 bIsVisible,
                 bIsLocked,
                 bIsPrintable
                 );
             pManager->AddUndoAction( pAction );
 
-            ModifyLayer( pLayer, aLayerName, bIsVisible, bIsLocked, bIsPrintable );
+            ModifyLayer( pLayer, aLayerName, aLayerTitle, aLayerDesc, bIsVisible, bIsLocked, bIsPrintable );
 
             Cancel();
             rReq.Done ();
@@ -849,14 +866,15 @@ IMPL_LINK( DrawViewShell, RenameSlideHdl, AbstractSvxNameDialog*, pDialog )
 
 void DrawViewShell::ModifyLayer (
     SdrLayer* pLayer,
-    String& rLayerName,
+    const String& rLayerName,
+    const String& rLayerTitle,
+    const String& rLayerDesc,
     bool bIsVisible,
     bool bIsLocked,
     bool bIsPrintable)
 {
     if( pLayer )
     {
-
         const USHORT nPageCount = GetLayerTabControl()->GetPageCount();
         USHORT nCurPage = 0;
         USHORT nPos;
@@ -871,6 +889,8 @@ void DrawViewShell::ModifyLayer (
         }
 
         pLayer->SetName( rLayerName );
+        pLayer->SetTitle( rLayerTitle );
+        pLayer->SetDescription( rLayerDesc );
         mpDrawView->SetLayerVisible( rLayerName, bIsVisible );
         mpDrawView->SetLayerLocked( rLayerName, bIsLocked);
         mpDrawView->SetLayerPrintable(rLayerName, bIsPrintable);
