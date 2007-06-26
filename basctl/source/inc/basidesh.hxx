@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basidesh.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-30 07:35:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 16:53:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,7 @@ protected:
     virtual USHORT      PrepareClose( BOOL bUI, BOOL bForBrowsing );
 
     void                SetCurWindow( IDEBaseWindow* pNewWin, BOOL bUpdateTabBar = FALSE, BOOL bRememberAsCurrent = TRUE );
+    void                ManageToolbars();
     void                RemoveWindow( IDEBaseWindow* pWindow, BOOL bDestroy, BOOL bAllowChangeCurWindow = TRUE );
     void                ArrangeTabBar();
 
