@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuiimapwnd.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:36:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:49:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,36 +110,35 @@
 |*
 \************************************************************************/
 
-URLDlg::URLDlg( Window* pWindow, const String& rURL,
-                const String& rDescription, const String& rTarget,
-                const String& rName, TargetList& rTargetList ) :
-
-    ModalDialog         ( pWindow, SVX_RES( RID_SVXDLG_IMAPURL ) ),
-
-    aFlURL              ( this, SVX_RES( FL_URL ) ),
-    aFtURL1             ( this, SVX_RES( FT_URL1 ) ),
-    aEdtURL             ( this, SVX_RES( EDT_URL ) ),
-    aFtURLDescription   ( this, SVX_RES( FT_URLDESCRIPTION ) ),
-    aEdtURLDescription  ( this, SVX_RES( EDT_URLDESCRIPTION ) ),
-    aFtTarget           ( this, SVX_RES( FT_TARGET ) ),
-    aCbbTargets         ( this, SVX_RES( CBB_TARGETS ) ),
-    aFtName             ( this, SVX_RES( FT_NAME ) ),
-    aEdtName            ( this, SVX_RES( EDT_NAME ) ),
-    aBtnOk              ( this, SVX_RES( BTN_OK ) ),
-    aBtnCancel          ( this, SVX_RES( BTN_CANCEL1 ) )
-
+URLDlg::URLDlg( Window* pWindow, const String& rURL, const String& rAlternativeText, const String& rDescription, const String& rTarget, const String& rName, TargetList& rTargetList )
+: ModalDialog( pWindow, SVX_RES( RID_SVXDLG_IMAPURL ) )
+, maFtURL( this, SVX_RES( FT_URL1 ) )
+, maEdtURL( this, SVX_RES( EDT_URL ) )
+, maFtTarget( this, SVX_RES( FT_TARGET ) )
+, maCbbTargets( this, SVX_RES( CBB_TARGETS ) )
+, maFtName( this, SVX_RES( FT_NAME ) )
+, maEdtName( this, SVX_RES( EDT_NAME ) )
+, maFtAlternativeText( this, SVX_RES( FT_URLDESCRIPTION ) )
+, maEdtAlternativeText( this, SVX_RES( EDT_URLDESCRIPTION ) )
+, maFtDescription( this, SVX_RES( FT_DESCRIPTION ) )
+, maEdtDescription( this, SVX_RES( EDT_DESCRIPTION ) )
+, maFlURL( this, SVX_RES( FL_URL ) )
+, maBtnHelp( this, SVX_RES( BTN_HELP1 ) )
+, maBtnOk( this, SVX_RES( BTN_OK1 ) )
+, maBtnCancel( this, SVX_RES( BTN_CANCEL1 ) )
 {
     FreeResource();
 
-    aEdtURL.SetText( rURL );
-    aEdtURLDescription.SetText( rDescription );
-    aEdtName.SetText( rName );
+    maEdtURL.SetText( rURL );
+    maEdtAlternativeText.SetText( rAlternativeText );
+    maEdtDescription.SetText( rDescription );
+    maEdtName.SetText( rName );
 
     for( String* pStr = rTargetList.First(); pStr; pStr = rTargetList.Next() )
-        aCbbTargets.InsertEntry( *pStr );
+        maCbbTargets.InsertEntry( *pStr );
 
     if( !rTarget.Len() )
-        aCbbTargets.SetText( String::CreateFromAscii( "_self" ) );
+        maCbbTargets.SetText( String::CreateFromAscii( "_self" ) );
     else
-        aCbbTargets.SetText( rTarget );
+        maCbbTargets.SetText( rTarget );
 }
