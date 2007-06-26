@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:02:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:52:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -629,7 +629,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     // USe a paint mode which draws all SDRPAINTMODE_SC_ flags
     aOutputData.PrintDrawingLayer(SC_LAYER_FRONT, nAllPaintMode, aMMOffset);
     aOutputData.PrintDrawingLayer(SC_LAYER_INTERN, nAllPaintMode, aMMOffset);
-    aOutputData.PostPrintDrawingLayer();
+    aOutputData.PostPrintDrawingLayer(aMMOffset); // #i74768#
 
     // #114135#
     delete pDrawView;
@@ -1719,30 +1719,7 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
 
     // #i72502#
     aOutputData.PrintDrawingLayer(SC_LAYER_INTERN, nPaintMode, aMMOffset);
-    aOutputData.PostPrintDrawingLayer();
-
-    //if ( pDrawView && (nObjectFlags & SC_OBJECTS_DRAWING) )
-    // #109985#
-    if(pDrawView && !(mnPaintMode & SDRPAINTMODE_SC_HIDE_DRAW))
-    {
-        SdrPageView* pPV = pDrawView->GetSdrPageView();
-        DBG_ASSERT(pPV, "keine PageView fuer gedruckte Tabelle");
-        if (pPV)
-        {
-            Rectangle aLogicRect = pDoc->GetMMRect( nX1,nY1, nX2,nY2, nPrintTab );
-            Point aControlOffset( nLogStX - aLogicRect.Left(), nLogStY - aLogicRect.Top() );
-            MapMode aControlMode( MAP_100TH_MM, aControlOffset,
-                                    aLogicMode.GetScaleX(), aLogicMode.GetScaleY() );
-            pDev->SetMapMode( aControlMode );
-            pDev->SetClipRegion( aLogicRect );      // single controls may extend beyond the page
-
-            // Region aDrawRegion(aLogicRect);
-            // pPV->DrawLayer( SC_LAYER_CONTROLS, aDrawRegion);
-            pPV->DrawLayer( SC_LAYER_CONTROLS);
-
-            pDev->SetClipRegion();
-        }
-    }
+    aOutputData.PostPrintDrawingLayer(aMMOffset); // #i74768#
 }
 
 BOOL ScPrintFunc::IsMirror( long nPageNo )          // Raender spiegeln ?
