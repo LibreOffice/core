@@ -32,8 +32,6 @@ DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=$(TARGET).dxp
 DEF1DES=jurtpipe
 
-NO_SHL1DESCRIPTION=TRUE
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
