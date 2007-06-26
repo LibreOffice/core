@@ -4,9 +4,9 @@
  *
  *  $RCSfile: output.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:07:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:50:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,9 @@ struct ScTableInfo;
 class ScTabViewShell;
 class ScPageBreakData;
 class FmFormView;
+
+// #i74769# SdrPaintWindow predefine
+class SdrPaintWindow;
 
 // ---------------------------------------------------------------------------
 
@@ -158,6 +161,9 @@ private:
     BYTE    nTabTextDirection;  // EEHorizontalTextDirection values
     BOOL    bLayoutRTL;
 
+    // #i74769# use SdrPaintWindow direct, remember it during BeginDrawLayers/EndDrawLayers
+    SdrPaintWindow*     mpTargetPaintWindow;
+
                             // private methods
 
     BOOL            GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
@@ -200,6 +206,8 @@ public:
                                     const Fraction* pZoomY = NULL );
 
                     ~ScOutputData();
+
+    void    SetContentDevice( OutputDevice* pContentDev );
 
     void    SetRefDevice( OutputDevice* pRDev ) { pRefDevice = pFmtDevice = pRDev; }
     void    SetFmtDevice( OutputDevice* pRDev ) { pFmtDevice = pRDev; }
@@ -245,7 +253,7 @@ public:
 
     // #i72502# printer only command set
     Point PrePrintDrawingLayer(long nLogStX, long nLogStY );
-    void PostPrintDrawingLayer();
+    void PostPrintDrawingLayer(const Point& rMMOffset); // #i74768# need offset for FormLayer
     void PrintDrawingLayer(const sal_uInt16 nLayer, const sal_uInt16 nPaintMode, const Point& rMMOffset);
 
     // nur Bildschirm:
@@ -258,6 +266,7 @@ public:
     void    DrawSelectiveObjects(const sal_uInt16 nLayer, const sal_uInt16 nPaintMode);
 
     BOOL    SetChangedClip();       // FALSE = nix
+    PolyPolygon GetChangedArea();
 
     void    FindChanged();
     void    SetPagebreakMode( ScPageBreakData* pPageData );
