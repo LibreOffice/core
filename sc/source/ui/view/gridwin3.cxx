@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:01:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:51:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,7 +273,7 @@ void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, UL
     }
 }
 
-void ScGridWindow::DrawSdrGrid( const Rectangle& rDrawingRect )
+void ScGridWindow::DrawSdrGrid( const Rectangle& rDrawingRect, OutputDevice* pContentDev )
 {
     //  Draw-Gitterlinien
 
@@ -284,9 +284,9 @@ void ScGridWindow::DrawSdrGrid( const Rectangle& rDrawingRect )
         DBG_ASSERT(pPV, "keine PageView");
         if (pPV)
         {
-            SetLineColor(COL_GRAY);
+            pContentDev->SetLineColor(COL_GRAY);
 
-            pPV->DrawPageViewGrid( *this, rDrawingRect );
+            pPV->DrawPageViewGrid( *pContentDev, rDrawingRect );
         }
     }
 }
