@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undolayer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:28:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:40:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,15 +50,19 @@ TYPEINIT1(SdLayerModifyUndoAction, SdUndoAction);
 
 SdLayerModifyUndoAction::SdLayerModifyUndoAction(
     SdDrawDocument* _pDoc, SdrLayer* pLayer,
-    const String& rOldLayerName, bool bOldIsVisible, bool bOldIsLocked, bool bOldIsPrintable,
-    const String& rNewLayerName, bool bNewIsVisible, bool bNewIsLocked, bool bNewIsPrintable )
+    const String& rOldLayerName, const String& rOldLayerTitle, const String& rOldLayerDesc, bool bOldIsVisible, bool bOldIsLocked, bool bOldIsPrintable,
+    const String& rNewLayerName, const String& rNewLayerTitle, const String& rNewLayerDesc, bool bNewIsVisible, bool bNewIsLocked, bool bNewIsPrintable )
 :   SdUndoAction( _pDoc ),
     mpLayer( pLayer ),
     maOldLayerName( rOldLayerName ),
+    maOldLayerTitle( rOldLayerTitle ),
+    maOldLayerDesc( rOldLayerDesc ),
     mbOldIsVisible( bOldIsVisible ),
     mbOldIsLocked( bOldIsLocked ),
     mbOldIsPrintable( bOldIsPrintable ),
     maNewLayerName( rNewLayerName ),
+    maNewLayerTitle( rNewLayerTitle ),
+    maNewLayerDesc( rNewLayerDesc ),
     mbNewIsVisible( bNewIsVisible ),
     mbNewIsLocked( bNewIsLocked ),
     mbNewIsPrintable( bNewIsPrintable )
@@ -76,7 +80,7 @@ void SdLayerModifyUndoAction::Undo()
               PTR_CAST(::sd::DrawViewShell, mpDocSh->GetViewShell() );
         if( pDrViewSh )
         {
-            pDrViewSh->ModifyLayer( mpLayer, maOldLayerName, mbOldIsVisible, mbOldIsLocked, mbOldIsPrintable );
+            pDrViewSh->ModifyLayer( mpLayer, maOldLayerName, maOldLayerTitle, maOldLayerDesc, mbOldIsVisible, mbOldIsLocked, mbOldIsPrintable );
         }
     }
 }
@@ -90,7 +94,7 @@ void SdLayerModifyUndoAction::Redo()
               PTR_CAST(::sd::DrawViewShell, mpDocSh->GetViewShell() );
         if( pDrViewSh )
         {
-            pDrViewSh->ModifyLayer( mpLayer, maNewLayerName, mbNewIsVisible, mbNewIsLocked, mbNewIsPrintable );
+            pDrViewSh->ModifyLayer( mpLayer, maNewLayerName, maNewLayerTitle, maNewLayerDesc, mbNewIsVisible, mbNewIsLocked, mbNewIsPrintable );
         }
     }
 }
