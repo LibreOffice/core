@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofmasterpagedescriptor.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:38:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:05:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,6 @@ namespace sdr
 
             // Own reaction on changes
             virtual void InvalidatePartOfView(const Rectangle& rRectangle) const;
-            virtual void ObjectGettingPotentiallyVisible(const ViewObjectContact& rVOC) const;
         };
 
         //////////////////////////////////////////////////////////////////////////////
@@ -185,9 +184,6 @@ namespace sdr
                 SdrPaintInfoRec* pInfoRec = rDisplayInfo.GetPaintInfoRec();
                 pInfoRec->nPaintMode = pInfoRec->nPaintMode | SDRPAINTMODE_MASTERPAGE;
 
-                // keep draw hierarchy up-to-date
-                PreProcessDisplay(rDisplayInfo);
-
                 // do processing
                 ProcessDisplay(rDisplayInfo);
 
@@ -218,12 +214,6 @@ namespace sdr
         }
 
         void OwnMasterPagePainter::InvalidatePartOfView(const Rectangle& /*rRectangle*/) const
-        {
-            // call user change
-            mrVCOfMasterPageDescriptor.ActionChanged();
-        }
-
-        void OwnMasterPagePainter::ObjectGettingPotentiallyVisible(const ViewObjectContact& /*rVOC*/) const
         {
             // call user change
             mrVCOfMasterPageDescriptor.ActionChanged();
