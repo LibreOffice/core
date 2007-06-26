@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontact.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:35:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:05:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -401,8 +401,7 @@ namespace sdr
         void ViewContact::ActionChanged()
         {
             // #i42815#
-            // Invalidate paint rectangle first, else calls to ObjectGettingPotentiallyVisible
-            // may use the old one. Before, this was done at the end of this method.
+            // Invalidate paint rectangle first, else new potential one will be used
             InvalidatePaintRectangle();
 
             // check existing animation. This may create or delete an AnimationInfo.
