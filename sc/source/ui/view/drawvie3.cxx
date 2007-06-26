@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawvie3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:50:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:50:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,10 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
 {
     // #i73602# Use default from the configuration
     SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_Calc());
+
+    // #i74769#, #i75172# Use default from the configuration
+    SetBufferedOutputAllowed(getOptionsDrawinglayer().IsPaintBuffer_Calc());
+
     Construct();
 }
 
@@ -89,6 +93,10 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScDocument* pDocument, SCTAB nTable 
 {
     // #i73602# Use default from the configuration
     SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_Calc());
+
+    // #i74769#, #i75172# Use default from the configuration
+    SetBufferedOutputAllowed(getOptionsDrawinglayer().IsPaintBuffer_Calc());
+
     Construct();
 }
 
