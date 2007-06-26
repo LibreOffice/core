@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectcontactofobjlistpainter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:30:39 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:05:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,12 @@ namespace sdr
         // Process the whole displaying
         void ObjectContactPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
         {
+            if(!IsDrawHierarchyValid())
+            {
+                // The default implementation ensures a valid draw hierarchy.
+                EnsureValidDrawHierarchy(rDisplayInfo);
+            }
+
             if( mbIsInitialized
                 && IsDrawHierarchyValid()
                 && rDisplayInfo.GetPaintInfoRec()
