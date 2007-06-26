@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrpaintwindow.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:39:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:01:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ private:
     // The PreRenderDevice for PreRendering
     SdrPreRenderDevice*                                 mpPreRenderDevice;
 
-    // The RedrawRegion used for rendering, Maybe expanded by ExpandPaintClipRegion
+    // The RedrawRegion used for rendering
     Region                                              maRedrawRegion;
 
     // bitfield
@@ -141,7 +141,7 @@ public:
     void OutputPreRenderDevice(const Region& rExpandedRegion);
     SdrPreRenderDevice* GetPreRenderDevice() const { return mpPreRenderDevice; }
 
-    // RedrawRegion, maybe expanded by ExpandPaintClipRegion
+    // RedrawRegion
     const Region& GetRedrawRegion() const;
     void SetRedrawRegion(const Region& rNew);
 
