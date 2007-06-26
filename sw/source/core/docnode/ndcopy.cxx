@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:42:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 10:41:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -396,9 +396,9 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     // (see IsUsed). Therefore the inner table gets the same name as the outer table.
     // We have to make sure that the table node of the SwTable is accessible, even
     // without any content in aSortCntBoxes. #i26629#
-    rTbl.SetTableNode( pTblNd );
+    pTblNd->GetTable().SetTableNode( pTblNd );
     rNds._Copy( aRg, aInsPos, FALSE );
-    rTbl.SetTableNode( 0 );
+    pTblNd->GetTable().SetTableNode( 0 );
 
     // Sonderbehandlung fuer eine einzelne Box
     if( 1 == GetTable().GetTabSortBoxes().Count() )
@@ -417,7 +417,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 
     ((SwTable&)GetTable()).GetTabLines().ForEach( &lcl_CopyTblLine, &aPara );
 
-    if( pDDEType && pDoc->GetRootFrm() )
+    if( pDDEType )
         pDDEType->IncRefCnt();
 
     CHECK_TABLE( GetTable() );
