@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:28:13 $
+#   last change: $Author: hr $ $Date: 2007-06-26 17:01:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -113,8 +113,6 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=$(TARGET).dxp
 DEF1DES=unowinreg
-
-NO_SHL1DESCRIPTION=TRUE
 
 .ENDIF #  "$(OS)" != "WNT"
 
