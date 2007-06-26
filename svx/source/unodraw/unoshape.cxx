@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.156 $
+ *  $Revision: 1.157 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:21:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 16:00:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2240,13 +2240,16 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
             awt::Rectangle aVisArea;
             if( (rVal >>= aVisArea) && mpObj->ISA(SdrOle2Obj))
             {
-                awt::Size aTmp( aVisArea.X + aVisArea.Width, aVisArea.Y + aVisArea.Height );
+                Size aTmp( aVisArea.X + aVisArea.Width, aVisArea.Y + aVisArea.Height );
                 uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)mpObj.get())->GetObjRef();
                 if( xObj.is() )
                 {
                     try
                     {
-                        xObj->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, aTmp );
+                        MapUnit aMapUnit( MAP_100TH_MM ); // the API handles with MAP_100TH_MM map mode
+                        MapUnit aObjUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( embed::Aspects::MSOLE_CONTENT ) );
+                        aTmp = OutputDevice::LogicToLogic( aTmp, aMapUnit, aObjUnit );
+                           xObj->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, awt::Size( aTmp.Width(), aTmp.Height() ) );
                     }
                     catch( uno::Exception& )
                     {
@@ -2615,7 +2618,8 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                 awt::Rectangle aVisArea;
                 if( mpObj->ISA(SdrOle2Obj))
                 {
-                    Size aTmp = ((SdrOle2Obj*)mpObj.get())->GetOrigObjSize();
+                    MapMode aMapMode( MAP_100TH_MM ); // the API uses this map mode
+                    Size aTmp = ((SdrOle2Obj*)mpObj.get())->GetOrigObjSize( &aMapMode ); // get the size in the requested map mode
                     aVisArea = awt::Rectangle( 0, 0, aTmp.Width(), aTmp.Height() );
                 }
 
