@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:47:09 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 10:42:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1378,8 +1378,7 @@ void SwCntntFrm::MakeAll()
                 const SwTwips nHDiff = nOldH - (Frm().*fnRect->fnGetHeight)();
                 const bool bNoPrepAdjustFrm =
                     nHDiff > 0 && IsInTab() && GetFollow() &&
-                    static_cast<SwTxtFrm*>(GetFollow())
-                            ->GetLineCount( STRING_LEN ) == 1 &&
+                    ( 1 == static_cast<SwTxtFrm*>(GetFollow())->GetLineCount( STRING_LEN ) || (static_cast<SwTxtFrm*>(GetFollow())->Frm().*fnRect->fnGetWidth)() < 0 ) &&
                     GetFollow()->CalcAddLowerSpaceAsLastInTableCell() == nHDiff;
                 if ( !bNoPrepAdjustFrm )
                 {
