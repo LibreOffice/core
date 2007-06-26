@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:11:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:33:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,50 +69,14 @@ UINT16 IMapObject::nActualTextEncoding = (UINT16) RTL_TEXTENCODING_DONTKNOW;
 #pragma optimize ( "", off )
 #endif
 
-
-/******************************************************************************
-|*
-|* Ctor
-|*
-\******************************************************************************/
-
-IMapObject::IMapObject( const String& rURL, const String& rDescription, BOOL bURLActive ) :
-            aURL            ( rURL ),
-            aDescription    ( rDescription ),
-            bActive         ( bURLActive )
-{
-}
-
-
-/******************************************************************************
-|*
-|* Ctor
-|*
-\******************************************************************************/
-
-IMapObject::IMapObject( const String& rURL, const String& rDescription,
-                        const String& rTarget, BOOL bURLActive ) :
-            aURL            ( rURL ),
-            aDescription    ( rDescription ),
-            aTarget         ( rTarget ),
-            bActive         ( bURLActive )
-{
-}
-
-
-/******************************************************************************
-|*
-|* Ctor
-|*
-\******************************************************************************/
-
-IMapObject::IMapObject( const String& rURL, const String& rDescription,
-                        const String& rTarget, const String& rName, BOOL bURLActive ) :
-            aURL            ( rURL ),
-            aDescription    ( rDescription ),
-            aTarget         ( rTarget ),
-            aName           ( rName ),
-            bActive         ( bURLActive )
+IMapObject::IMapObject( const String& rURL, const String& rAltText, const String& rDesc,
+                        const String& rTarget, const String& rName, BOOL bURLActive )
+: aURL( rURL )
+, aAltText( rAltText )
+, aDesc( rDesc )
+, aTarget( rTarget )
+, aName( rName )
+, bActive( bURLActive )
 {
 }
 
@@ -146,7 +110,7 @@ void IMapObject::Write( SvStream& rOStm, const String& rBaseURL ) const
 
     const ByteString aRelURL = ByteString( String(URIHelper::simpleNormalizedMakeRelative( rBaseURL, aURL )), eEncoding );
     rOStm.WriteByteString( aRelURL );
-    rOStm.WriteByteString( ByteString( aDescription, eEncoding ) );
+    rOStm.WriteByteString( ByteString( aAltText, eEncoding ) );
     rOStm << bActive;
     rOStm.WriteByteString( ByteString( aTarget, eEncoding ) );
 
@@ -177,7 +141,7 @@ void IMapObject::Read( SvStream& rIStm, const String& rBaseURL )
     rIStm >> nReadVersion;
     rIStm >> nTextEncoding;
     rIStm.ReadByteString( aString ); aURL = String( aString.GetBuffer(), nTextEncoding );
-    rIStm.ReadByteString( aString ); aDescription = String( aString.GetBuffer(), nTextEncoding );
+    rIStm.ReadByteString( aString ); aAltText = String( aString.GetBuffer(), nTextEncoding );
     rIStm >> bActive;
     rIStm.ReadByteString( aString ); aTarget = String( aString.GetBuffer(), nTextEncoding );
 
@@ -236,7 +200,8 @@ Point IMapObject::GetLogPoint( const Point& rPixelPoint )
 BOOL IMapObject::IsEqual( const IMapObject& rEqObj )
 {
     return ( ( aURL == rEqObj.aURL ) &&
-             ( aDescription == rEqObj.aDescription ) &&
+             ( aAltText == rEqObj.aAltText ) &&
+             ( aDesc == rEqObj.aDesc ) &&
              ( aTarget == rEqObj.aTarget ) &&
              ( aName == rEqObj.aName ) &&
              ( bActive == rEqObj.bActive ) );
@@ -247,56 +212,15 @@ BOOL IMapObject::IsEqual( const IMapObject& rEqObj )
 /******************************************************************************/
 /******************************************************************************/
 
-
-/******************************************************************************
-|*
-|* Ctor
-|*
-\******************************************************************************/
-
 IMapRectangleObject::IMapRectangleObject( const Rectangle& rRect,
                                           const String& rURL,
-                                          const String& rDescription,
-                                          BOOL bURLActive,
-                                          BOOL bPixelCoords ) :
-            IMapObject  ( rURL, rDescription, bURLActive )
-{
-    ImpConstruct( rRect, bPixelCoords );
-}
-
-
-/******************************************************************************
-|*
-|* Ctor
-|*
-\******************************************************************************/
-
-IMapRectangleObject::IMapRectangleObject( const Rectangle& rRect,
-                                          const String& rURL,
-                                          const String& rDescription,
-                                          const String& rTarget,
-                                          BOOL bURLActive,
-                                          BOOL bPixelCoords ) :
-            IMapObject  ( rURL, rDescription, rTarget, bURLActive )
-{
-    ImpConstruct( rRect, bPixelCoords );
-}
-
-
-/******************************************************************************
-|*
-|* Ctor
-|*
-\******************************************************************************/
-
-IMapRectangleObject::IMapRectangleObject( const Rectangle& rRect,
-                                          const String& rURL,
-                                          const String& rDescription,
+                                          const String& rAltText,
+                                          const String& rDesc,
                                           const String& rTarget,
                                           const String& rName,
                                           BOOL bURLActive,
                                           BOOL bPixelCoords ) :
-            IMapObject  ( rURL, rDescription, rTarget, rName, bURLActive )
+            IMapObject  ( rURL, rAltText, rDesc, rTarget, rName, bURLActive )
 {
     ImpConstruct( rRect, bPixelCoords );
 }
@@ -421,56 +345,15 @@ BOOL IMapRectangleObject::IsEqual( const IMapRectangleObject& rEqObj )
 /******************************************************************************/
 /******************************************************************************/
 
-
-/******************************************************************************
-|*
-|* Ctor
-|*
-\******************************************************************************/
-
 IMapCircleObject::IMapCircleObject( const Point& rCenter, ULONG nCircleRadius,
                                     const String& rURL,
-                                    const String& rDescription,
-                                    BOOL bURLActive,
-                                    BOOL bPixelCoords ) :
-            IMapObject  ( rURL, rDescription, bURLActive )
-{
-    ImpConstruct( rCenter, nCircleRadius, bPixelCoords );
-}
-
-
-/******************************************************************************
-|*
-|* Ctor
-|*
-\******************************************************************************/
-
-IMapCircleObject::IMapCircleObject( const Point& rCenter, ULONG nCircleRadius,
-                                    const String& rURL,
-                                    const String& rDescription,
-                                    const String& rTarget,
-                                    BOOL bURLActive,
-                                    BOOL bPixelCoords ) :
-            IMapObject  ( rURL, rDescription, rTarget, bURLActive )
-{
-    ImpConstruct( rCenter, nCircleRadius, bPixelCoords );
-}
-
-
-/******************************************************************************
-|*
-|* Ctor
-|*
-\******************************************************************************/
-
-IMapCircleObject::IMapCircleObject( const Point& rCenter, ULONG nCircleRadius,
-                                    const String& rURL,
-                                    const String& rDescription,
+                                    const String& rAltText,
+                                    const String& rDesc,
                                     const String& rTarget,
                                     const String& rName,
                                     BOOL bURLActive,
                                     BOOL bPixelCoords ) :
-            IMapObject  ( rURL, rDescription, rTarget, rName, bURLActive )
+            IMapObject  ( rURL, rAltText, rDesc, rTarget, rName, bURLActive )
 {
     ImpConstruct( rCenter, nCircleRadius, bPixelCoords );
 }
@@ -656,59 +539,15 @@ BOOL IMapCircleObject::IsEqual( const IMapCircleObject& rEqObj )
 /******************************************************************************/
 /******************************************************************************/
 /******************************************************************************/
-
-
-/******************************************************************************
-|*
-|* Ctor
-|*
-\******************************************************************************/
-
 IMapPolygonObject::IMapPolygonObject( const Polygon& rPoly,
                                       const String& rURL,
-                                      const String& rDescription,
-                                      BOOL bURLActive,
-                                      BOOL bPixelCoords ) :
-            IMapObject  ( rURL, rDescription, bURLActive ),
-            bEllipse    ( FALSE )
-{
-    ImpConstruct( rPoly, bPixelCoords );
-}
-
-
-/******************************************************************************
-|*
-|* Ctor
-|*
-\******************************************************************************/
-
-IMapPolygonObject::IMapPolygonObject( const Polygon& rPoly,
-                                      const String& rURL,
-                                      const String& rDescription,
-                                      const String& rTarget,
-                                      BOOL bURLActive,
-                                      BOOL bPixelCoords ) :
-            IMapObject  ( rURL, rDescription, rTarget, bURLActive ),
-            bEllipse    ( FALSE )
-{
-    ImpConstruct( rPoly, bPixelCoords );
-}
-
-
-/******************************************************************************
-|*
-|* Ctor
-|*
-\******************************************************************************/
-
-IMapPolygonObject::IMapPolygonObject( const Polygon& rPoly,
-                                      const String& rURL,
-                                      const String& rDescription,
+                                      const String& rAltText,
+                                      const String& rDesc,
                                       const String& rTarget,
                                       const String& rName,
                                       BOOL bURLActive,
                                       BOOL bPixelCoords ) :
-            IMapObject  ( rURL, rDescription, rTarget, rName, bURLActive ),
+            IMapObject  ( rURL, rAltText, rDesc, rTarget, rName, bURLActive ),
             bEllipse    ( FALSE )
 {
     ImpConstruct( rPoly, bPixelCoords );
