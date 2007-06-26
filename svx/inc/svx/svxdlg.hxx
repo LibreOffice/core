@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:24:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:49:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,8 @@ class AbstractURLDlg :public VclAbstractDialog  //add for URLDlg
 {
 public:
     virtual String      GetURL() const = 0;
-    virtual String      GetDescription() const = 0;
+    virtual String      GetAltText() const = 0;
+    virtual String      GetDesc() const = 0;
     virtual String      GetTarget() const = 0;
     virtual String      GetName() const = 0;
 };
@@ -410,8 +411,8 @@ public:
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet,
                                             sal_uInt32 nResId) = 0;
-    virtual AbstractURLDlg * CreateURLDialog( Window* pParent,  //add for URLDlg
-                                            const String& rURL, const String& rDescription,
+    virtual AbstractURLDlg * CreateURLDialog( Window* pParent,
+                                            const String& rURL, const String& rAltText, const String& rDescription,
                                             const String& rTarget, const String& rName,
                                             TargetList& rTargetList,
                                             sal_uInt32 nResId) = 0;
