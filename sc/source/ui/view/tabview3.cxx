@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:13:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:53:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2114,8 +2114,6 @@ void ScTabView::PaintRangeFinder( long nNumber )
         ScRangeFindList* pRangeFinder = pHdl->GetRangeFindList();
         if ( pRangeFinder && pRangeFinder->GetDocName() == aViewData.GetDocShell()->GetTitle() )
         {
-            BOOL bHide = pRangeFinder->IsHidden();
-
             SCTAB nTab = aViewData.GetTabNo();
             USHORT nCount = (USHORT)pRangeFinder->Count();
             for (USHORT i=0; i<nCount; i++)
@@ -2136,62 +2134,50 @@ void ScTabView::PaintRangeFinder( long nNumber )
                             SCROW nRow1 = aRef.aStart.Row();
                             SCCOL nCol2 = aRef.aEnd.Col();
                             SCROW nRow2 = aRef.aEnd.Row();
-                            if ( bHide )
+
+                            //  wegnehmen -> Repaint
+                            //  SC_UPDATE_MARKS: Invalidate, nicht bis zum Zeilenende
+
+                            BOOL bHiddenEdge = FALSE;
+                            SCROW nTmp;
+                            ScDocument* pDoc = aViewData.GetDocument();
+                            while ( nCol1 > 0 && ( pDoc->GetColFlags( nCol1, nTab ) & CR_HIDDEN ) )
                             {
-                                //  wegnehmen -> Repaint
-                                //  SC_UPDATE_MARKS: Invalidate, nicht bis zum Zeilenende
-
-                                BOOL bHiddenEdge = FALSE;
-                                SCROW nTmp;
-                                ScDocument* pDoc = aViewData.GetDocument();
-                                while ( nCol1 > 0 && ( pDoc->GetColFlags( nCol1, nTab ) & CR_HIDDEN ) )
-                                {
-                                    --nCol1;
-                                    bHiddenEdge = TRUE;
-                                }
-                                while ( nCol2 < MAXCOL && ( pDoc->GetColFlags( nCol2, nTab ) & CR_HIDDEN ) )
-                                {
-                                    ++nCol2;
-                                    bHiddenEdge = TRUE;
-                                }
-                                nTmp = pDoc->GetRowFlagsArray( nTab).GetLastForCondition( 0, nRow1, CR_HIDDEN, 0);
-                                if (!ValidRow(nTmp))
-                                    nTmp = 0;
-                                if (nTmp < nRow1)
-                                {
-                                    nRow1 = nTmp;
-                                    bHiddenEdge = TRUE;
-                                }
-                                nTmp = pDoc->GetRowFlagsArray( nTab).GetFirstForCondition( nRow2, MAXROW, CR_HIDDEN, 0);
-                                if (!ValidRow(nTmp))
-                                    nTmp = MAXROW;
-                                if (nTmp > nRow2)
-                                {
-                                    nRow2 = nTmp;
-                                    bHiddenEdge = TRUE;
-                                }
-
-                                if ( nCol2 - nCol1 > 1 && nRow2 - nRow1 > 1 && !bHiddenEdge )
-                                {
-                                    //  nur an den Raendern entlang
-                                    PaintArea( nCol1, nRow1, nCol2, nRow1, SC_UPDATE_MARKS );
-                                    PaintArea( nCol1, nRow1+1, nCol1, nRow2-1, SC_UPDATE_MARKS );
-                                    PaintArea( nCol2, nRow1+1, nCol2, nRow2-1, SC_UPDATE_MARKS );
-                                    PaintArea( nCol1, nRow2, nCol2, nRow2, SC_UPDATE_MARKS );
-                                }
-                                else    // alles am Stueck
-                                    PaintArea( nCol1, nRow1, nCol2, nRow2, SC_UPDATE_MARKS );
+                                --nCol1;
+                                bHiddenEdge = TRUE;
                             }
-                            else
+                            while ( nCol2 < MAXCOL && ( pDoc->GetColFlags( nCol2, nTab ) & CR_HIDDEN ) )
                             {
-                                //  neuen Rahmen zeichnen
-
-                                for (USHORT nWin=0; nWin<4; nWin++)
-                                    if (pGridWin[nWin] && pGridWin[nWin]->IsVisible())
-                                        pGridWin[nWin]->DrawRefMark( nCol1, nRow1, nCol2, nRow2,
-                                                            Color( ScRangeFindList::GetColorName( i ) ),
-                                                            TRUE );
+                                ++nCol2;
+                                bHiddenEdge = TRUE;
                             }
+                            nTmp = pDoc->GetRowFlagsArray( nTab).GetLastForCondition( 0, nRow1, CR_HIDDEN, 0);
+                            if (!ValidRow(nTmp))
+                                nTmp = 0;
+                            if (nTmp < nRow1)
+                            {
+                                nRow1 = nTmp;
+                                bHiddenEdge = TRUE;
+                            }
+                            nTmp = pDoc->GetRowFlagsArray( nTab).GetFirstForCondition( nRow2, MAXROW, CR_HIDDEN, 0);
+                            if (!ValidRow(nTmp))
+                                nTmp = MAXROW;
+                            if (nTmp > nRow2)
+                            {
+                                nRow2 = nTmp;
+                                bHiddenEdge = TRUE;
+                            }
+
+                            if ( nCol2 - nCol1 > 1 && nRow2 - nRow1 > 1 && !bHiddenEdge )
+                            {
+                                //  nur an den Raendern entlang
+                                PaintArea( nCol1, nRow1, nCol2, nRow1, SC_UPDATE_MARKS );
+                                PaintArea( nCol1, nRow1+1, nCol1, nRow2-1, SC_UPDATE_MARKS );
+                                PaintArea( nCol2, nRow1+1, nCol2, nRow2-1, SC_UPDATE_MARKS );
+                                PaintArea( nCol1, nRow2, nCol2, nRow2, SC_UPDATE_MARKS );
+                            }
+                            else    // alles am Stueck
+                                PaintArea( nCol1, nRow1, nCol2, nRow2, SC_UPDATE_MARKS );
                         }
                     }
                 }
@@ -2508,21 +2494,6 @@ void ScTabView::InvertBlockMark(SCCOL nStartX, SCROW nStartY,
         {
             bHide = FALSE;              // der ganze Bereich ist markiert
         }
-    }
-
-    Rectangle aMMRect = pDoc->GetMMRect(nStartX,nStartY,nEndX,nEndY, nTab);
-    BOOL bPaint = bHide && pDoc->HasControl( nTab, aMMRect );
-
-    if (bPaint)
-    {
-        for (i=0; i<4; i++)
-            if (pGridWin[i])
-                if (pGridWin[i]->IsVisible())
-                {
-                    //  MapMode muss logischer (1/100mm) sein !!!
-                    pDoc->InvalidateControls( pGridWin[i], nTab, aMMRect );
-                    pGridWin[i]->Update();
-                }
     }
 }
 
