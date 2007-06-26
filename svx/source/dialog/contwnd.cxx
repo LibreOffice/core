@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contwnd.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:36:26 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:04:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -377,7 +377,7 @@ void ContourWindow::Paint( const Rectangle& rRect )
     // #i75482#
     const Region aRepaintRegion(rRect);
     pView->DoCompleteRedraw(*pPaintWindow, aRepaintRegion);
-    pView->EndCompleteRedraw(*pPaintWindow, aRepaintRegion);
+    pView->EndCompleteRedraw(*pPaintWindow);
 }
 
 // eof
