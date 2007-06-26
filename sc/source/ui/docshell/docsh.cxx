@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:55:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 16:07:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2250,8 +2250,11 @@ SfxUndoManager* __EXPORT ScDocShell::GetUndoManager()
 
 void ScDocShell::SetModified( BOOL bModified )
 {
-    SfxObjectShell::SetModified( bModified );
-    Broadcast( SfxSimpleHint( SFX_HINT_DOCCHANGED ) );
+    if ( SfxObjectShell::IsEnableSetModified() )
+    {
+        SfxObjectShell::SetModified( bModified );
+        Broadcast( SfxSimpleHint( SFX_HINT_DOCCHANGED ) );
+    }
 }
 
 
