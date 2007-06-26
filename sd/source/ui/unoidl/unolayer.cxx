@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unolayer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:34:39 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:41:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,8 @@ using namespace ::com::sun::star;
 #define WID_LAYER_PRINTABLE 2
 #define WID_LAYER_VISIBLE   3
 #define WID_LAYER_NAME      4
+#define WID_LAYER_TITLE     5
+#define WID_LAYER_DESC      6
 
 const SfxItemPropertyMap* ImplGetSdLayerPropertyMap()
 {
@@ -126,6 +128,8 @@ const SfxItemPropertyMap* ImplGetSdLayerPropertyMap()
         { MAP_CHAR_LEN(UNO_NAME_LAYER_PRINTABLE),   WID_LAYER_PRINTABLE,&::getBooleanCppuType(),            0, 0 },
         { MAP_CHAR_LEN(UNO_NAME_LAYER_VISIBLE),     WID_LAYER_VISIBLE,  &::getBooleanCppuType(),            0, 0 },
         { MAP_CHAR_LEN(UNO_NAME_LAYER_NAME),        WID_LAYER_NAME,     &::getCppuType((const OUString*)0), 0, 0 },
+        { MAP_CHAR_LEN("Title"),                    WID_LAYER_TITLE,    &::getCppuType((const OUString*)0), 0, 0 },
+        { MAP_CHAR_LEN("Description"),              WID_LAYER_DESC,     &::getCppuType((const OUString*)0), 0, 0 },
         { 0,0,0,0,0,0}
     };
 
@@ -281,6 +285,27 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
         pLayerManager->UpdateLayerView();
         break;
     }
+
+    case WID_LAYER_TITLE:
+    {
+        OUString sTitle;
+        if(!(aValue >>= sTitle))
+            throw lang::IllegalArgumentException();
+
+        pLayer->SetTitle(sTitle);
+        break;
+    }
+
+    case WID_LAYER_DESC:
+    {
+        OUString sDescription;
+        if(!(aValue >>= sDescription))
+            throw lang::IllegalArgumentException();
+
+        pLayer->SetDescription(sDescription);
+        break;
+    }
+
     default:
         throw beans::UnknownPropertyException();
     }
@@ -320,6 +345,12 @@ uno::Any SAL_CALL SdLayer::getPropertyValue( const OUString& PropertyName )
         aValue <<= aRet;
         break;
     }
+    case WID_LAYER_TITLE:
+        aValue <<= OUString( pLayer->GetTitle() );
+        break;
+    case WID_LAYER_DESC:
+        aValue <<= OUString( pLayer->GetDescription() );
+        break;
     default:
         throw beans::UnknownPropertyException();
     }
