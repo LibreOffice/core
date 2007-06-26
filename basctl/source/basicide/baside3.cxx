@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:53:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 16:51:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@
 
 #include <basidesh.hrc>
 #include <baside3.hxx>
+#include <localizationmgr.hxx>
 
 #ifndef _BASCTL_ACCESSIBLEDIALOGWINDOW_HXX_
 #include <accessibledialogwindow.hxx>
@@ -86,6 +87,7 @@
 #ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
 #endif
+#include <tools/urlobj.hxx>
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -102,13 +104,34 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #endif
-
+#include <svtools/ehdl.hxx>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/resource/XStringResourceResolver.hpp>
+#include <com/sun/star/resource/StringResourceWithLocation.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
 
 using namespace comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::resource;
+using namespace ::com::sun::star::ui::dialogs;
 
+#if defined(MAC)
+#define FILTERMASK_ALL "****"
+#elif defined(OW) || defined(MTF)
+#define FILTERMASK_ALL "*"
+#elif defined(PM2)
+#define FILTERMASK_ALL ""
+#else
+#define FILTERMASK_ALL "*.*"
+#endif
 
 TYPEINIT1( DialogWindow, IDEBaseWindow );
 
@@ -633,6 +656,9 @@ void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
                 pBindings->Invalidate( SID_DIALOG_TESTMODE );
             return;
         }
+        case SID_EXPORT_DIALOG:
+            SaveDialog();
+            break;
     }
 
     rReq.Done();
@@ -672,6 +698,188 @@ void DialogWindow::UpdateBrowser()
     if( pChildWin )
         ((PropBrw*)(pChildWin->GetWindow()))->Update(GetEditor()->GetView());
 }
+
+static ::rtl::OUString aResourceResolverPropName =
+    ::rtl::OUString::createFromAscii( "ResourceResolver" );
+
+BOOL DialogWindow::SaveDialog()
+{
+    DBG_CHKTHIS( DialogWindow, 0 );
+    BOOL bDone = FALSE;
+
+    Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
+    Reference < XFilePicker > xFP;
+    if( xMSF.is() )
+    {
+        Sequence <Any> aServiceType(1);
+        aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD;
+        xFP = Reference< XFilePicker >( xMSF->createInstanceWithArguments(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ), aServiceType ), UNO_QUERY );
+    }
+
+    Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
+    xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, sal_False);
+    Any aValue;
+    aValue <<= (sal_Bool) sal_True;
+    xFPControl->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);
+
+    if ( aCurPath.Len() )
+        xFP->setDisplayDirectory ( aCurPath );
+
+    xFP->setDefaultName( ::rtl::OUString( GetName() ) );
+
+    String aDialogStr( IDEResId( RID_STR_STDDIALOGNAME ) );
+    Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
+    xFltMgr->appendFilter( aDialogStr, String( RTL_CONSTASCII_USTRINGPARAM( "*.xdl" ) ) );
+    xFltMgr->appendFilter( String( IDEResId( RID_STR_FILTER_ALLFILES ) ), String( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
+    xFltMgr->setCurrentFilter( aDialogStr );
+
+    if( xFP->execute() == RET_OK )
+    {
+        Sequence< ::rtl::OUString > aPaths = xFP->getFiles();
+        aCurPath = aPaths[0];
+
+        // export dialog model to xml
+        Reference< container::XNameContainer > xDialogModel = GetDialog();
+        Reference< XComponentContext > xContext;
+        Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
+        OSL_ASSERT( xProps.is() );
+        OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
+        Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext );
+        Reference< XInputStream > xInput( xISP->createInputStream() );
+
+        Reference< XSimpleFileAccess > xSFI( xMSF->createInstance
+            ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
+
+        Reference< XOutputStream > xOutput;
+        try
+        {
+            if( xSFI->exists( aCurPath ) )
+                xSFI->kill( aCurPath );
+            xOutput = xSFI->openFileWrite( aCurPath );
+        }
+        catch( Exception& )
+        {}
+
+        if( xOutput.is() )
+        {
+            Sequence< sal_Int8 > bytes;
+            sal_Int32 nRead = xInput->readBytes( bytes, xInput->available() );
+            for (;;)
+            {
+                if( nRead )
+                    xOutput->writeBytes( bytes );
+
+                nRead = xInput->readBytes( bytes, 1024 );
+                if (! nRead)
+                    break;
+            }
+            bDone = true;
+
+            // With resource?
+            Reference< beans::XPropertySet > xDialogModelPropSet( xDialogModel, UNO_QUERY );
+            Reference< resource::XStringResourceResolver > xStringResourceResolver;
+            if( xDialogModelPropSet.is() )
+            {
+                try
+                {
+                    Any aResourceResolver = xDialogModelPropSet->getPropertyValue( aResourceResolverPropName );
+                    aResourceResolver >>= xStringResourceResolver;
+                }
+                catch( beans::UnknownPropertyException& )
+                {}
+            }
+
+            bool bResource = false;
+            if( xStringResourceResolver.is() )
+            {
+                Sequence< lang::Locale > aLocaleSeq = xStringResourceResolver->getLocales();
+                sal_Int32 nLocaleCount = aLocaleSeq.getLength();
+                if( nLocaleCount > 0 )
+                    bResource = true;
+            }
+
+            if( bResource )
+            {
+                INetURLObject aURLObj( aCurPath );
+                aURLObj.removeExtension();
+                ::rtl::OUString aDialogName( aURLObj.getName() );
+                aURLObj.removeSegment();
+                ::rtl::OUString aURL( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                sal_Bool bReadOnly = sal_False;
+                ::rtl::OUString aComment( ::rtl::OUString::createFromAscii( "# " ) );
+                aComment += aDialogName;
+                aComment += ::rtl::OUString::createFromAscii( " strings" );
+                Reference< task::XInteractionHandler > xDummyHandler;
+
+                // Remove old properties files in case of overwriting Dialog files
+                if( xSFI->isFolder( aURL ) )
+                {
+                    Sequence< ::rtl::OUString > aContentSeq = xSFI->getFolderContents( aURL, false );
+
+                    ::rtl::OUString aDialogName_( aDialogName );
+                    aDialogName_ += ::rtl::OUString::createFromAscii( "_" );
+                    sal_Int32 nCount = aContentSeq.getLength();
+                    const ::rtl::OUString* pFiles = aContentSeq.getConstArray();
+                    for( int i = 0 ; i < nCount ; i++ )
+                    {
+                        ::rtl::OUString aCompleteName = pFiles[i];
+                        rtl::OUString aPureName;
+                        rtl::OUString aExtension;
+                        sal_Int32 iDot = aCompleteName.lastIndexOf( '.' );
+                        sal_Int32 iSlash = aCompleteName.lastIndexOf( '/' );
+                        if( iDot != -1 )
+                        {
+                            sal_Int32 iCopyFrom = (iSlash != -1) ? iSlash + 1 : 0;
+                            aPureName = aCompleteName.copy( iCopyFrom, iDot-iCopyFrom );
+                            aExtension = aCompleteName.copy( iDot + 1 );
+                        }
+
+                        if( aExtension.equalsAscii( "properties" ) ||
+                            aExtension.equalsAscii( "default" ) )
+                        {
+                            if( aPureName.indexOf( aDialogName_ ) == 0 )
+                            {
+                                try
+                                {
+                                    xSFI->kill( aCompleteName );
+                                }
+                                catch( uno::Exception& )
+                                {}
+                            }
+                        }
+                    }
+                }
+
+                Reference< XStringResourceWithLocation > xStringResourceWithLocation =
+                    StringResourceWithLocation::create( xContext, aURL, bReadOnly,
+                        xStringResourceResolver->getDefaultLocale(), aDialogName, aComment, xDummyHandler );
+
+                // Add locales
+                Sequence< lang::Locale > aLocaleSeq = xStringResourceResolver->getLocales();
+                const lang::Locale* pLocales = aLocaleSeq.getConstArray();
+                sal_Int32 nLocaleCount = aLocaleSeq.getLength();
+                for( sal_Int32 iLocale = 0 ; iLocale < nLocaleCount ; iLocale++ )
+                {
+                    const lang::Locale& rLocale = pLocales[ iLocale ];
+                    xStringResourceWithLocation->newLocale( rLocale );
+                }
+
+                Reference< XStringResourceManager > xTargetStringResourceManager( xStringResourceWithLocation, uno::UNO_QUERY );
+
+                LocalizationMgr::copyResourceForDialog( xDialogModel,
+                    xStringResourceResolver, xTargetStringResourceManager );
+
+                xStringResourceWithLocation->store();
+            }
+        }
+        else
+            ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_COULDNTWRITE) ) ).Execute();
+    }
+
+    return bDone;
+}
+
 
 DlgEdModel* DialogWindow::GetModel() const
 {
