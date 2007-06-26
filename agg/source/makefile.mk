@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:28:52 $
+#   last change: $Author: hr $ $Date: 2007-06-26 17:45:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -87,8 +87,6 @@ DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt \
 
 DEF1DES		=agg
 DEFLIB1NAME	=$(TARGET)
-
-NO_SHL1DESCRIPTION=TRUE
 
 # --- Targets ----------------------------------
 
