@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:24:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 16:00:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,13 +283,6 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
     uno::Reference < embed::XEmbeddedObject > xObj( pPersist->GetEmbeddedObjectContainer().CreateEmbeddedObject( aClassName.GetByteSequence(), aPersistName ) );
     if( xObj.is() )
     {
-        aAny <<= ( aTmpStr = aPersistName );
-        setPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ), aAny );
-
-        // the object is inserted during setting of PersistName property usually
-        if( pOle2Obj->IsEmpty() )
-            pOle2Obj->SetObjRef( xObj );
-
         Rectangle aRect = pOle2Obj->GetLogicRect();
         if ( aRect.GetWidth() == 100 && aRect.GetHeight() == 100 )
         {
@@ -312,6 +305,14 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
             aSz.Height = aSize.Height();
             xObj->setVisualAreaSize(  pOle2Obj->GetAspect(), aSz );
         }
+
+        // connect the object after the visual area is set
+        aAny <<= ( aTmpStr = aPersistName );
+        setPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ), aAny );
+
+        // the object is inserted during setting of PersistName property usually
+        if( pOle2Obj->IsEmpty() )
+            pOle2Obj->SetObjRef( xObj );
     }
 
     return xObj.is();
@@ -350,12 +351,6 @@ sal_Bool SvxOle2Shape::createLink( const ::rtl::OUString& aLinkURL )
 
     if( xObj.is() )
     {
-        setPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ), uno::makeAny( aPersistName ) );
-
-        // the object is inserted during setting of PersistName property usually
-        if ( pOle2Obj->IsEmpty() )
-            pOle2Obj->SetObjRef( xObj );
-
         Rectangle aRect = pOle2Obj->GetLogicRect();
         if ( aRect.GetWidth() == 100 && aRect.GetHeight() == 100 )
         {
@@ -377,6 +372,13 @@ sal_Bool SvxOle2Shape::createLink( const ::rtl::OUString& aLinkURL )
             aSz.Height = aSize.Height();
             xObj->setVisualAreaSize(  pOle2Obj->GetAspect(), aSz );
         }
+
+        // connect the object after the visual area is set
+        setPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ), uno::makeAny( aPersistName ) );
+
+        // the object is inserted during setting of PersistName property usually
+        if ( pOle2Obj->IsEmpty() )
+            pOle2Obj->SetObjRef( xObj );
     }
 
     return xObj.is();
