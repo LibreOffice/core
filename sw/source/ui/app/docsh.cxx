@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:40:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 10:44:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -28,7 +28,7 @@
  *
  *    You should have received a copy of the GNU Lesser General Public
  *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    Foundation, Inc., 59: Temple Place, Suite 330, Boston,
  *    MA  02111-1307  USA
  *
  ************************************************************************/
@@ -202,6 +202,9 @@
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
+#endif
+#ifndef _DOCSTAT_HXX
+#include <docstat.hxx>
 #endif
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
@@ -806,6 +809,10 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         UpdateDocInfoForSave();
     }
 
+    // --> FME 2007-5-7 #i76360# Update document statistics
+    SwDocStat aDocStat( pDoc->GetDocStat() );;
+    pDoc->UpdateDocStat( aDocStat );
+    // <--
     CalcLayoutForOLEObjects();  // format for OLE objets
     // --> OD 2006-03-17 #i62875#
     // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
