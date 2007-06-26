@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpCompiler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-06-08 15:00:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:38:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,6 @@
 #include <osl/file.hxx>
 
 #define EMULATEORIGINAL 1
-//#define CMCDEBUG
 #ifdef CMCDEBUG
     #define HCDBG(foo) do { if (1) foo; } while(0)
 #else
@@ -240,16 +239,24 @@ public:
         appl_hidlist(NULL), appl_keywords(NULL), appl_helptexts(NULL), appl_doc(NULL),
         default_hidlist(NULL), default_keywords(NULL), default_helptexts(NULL), default_doc(NULL)
     {}
-    ~StreamTable()
+    void dropdefault()
+    {
+        delete default_hidlist;
+        delete default_keywords;
+        delete default_helptexts;
+        if (default_doc) xmlFreeDoc(default_doc);
+    }
+    void dropappl()
     {
         delete appl_hidlist;
         delete appl_keywords;
         delete appl_helptexts;
         if (appl_doc) xmlFreeDoc(appl_doc);
-        delete default_hidlist;
-        delete default_keywords;
-        delete default_helptexts;
-        if (default_doc) xmlFreeDoc(default_doc);
+    }
+    ~StreamTable()
+    {
+        dropappl();
+        dropdefault();
     }
 };
 
