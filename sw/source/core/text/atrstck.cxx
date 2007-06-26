@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:01:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 10:43:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -811,8 +811,12 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
         {
             const USHORT nStackPos = StackPos[ RES_CHRATR_HIDDEN ];
             const SwTxtAttr* pTopAt = aAttrStack[ nStackPos ].Top();
-            const SfxPoolItem& rTmpItem = pTopAt ? pTopAt->GetAttr() : *pDefaultArray[ nStackPos ];
-            if ( !((SvxCharHiddenItem&)rTmpItem).GetValue() )
+
+            const SfxPoolItem* pTmpItem = pTopAt ?
+                                          CharFmt::GetItem( *pTopAt, RES_CHRATR_HIDDEN ) :
+                                          pDefaultArray[ nStackPos ];
+
+            if ( pTmpItem && !static_cast<const SvxCharHiddenItem*>(pTmpItem)->GetValue() )
             {
                 rFnt.SetUnderline( ((SvxUnderlineItem&)rItem).GetUnderline() );
                 rFnt.SetUnderColor( ((SvxUnderlineItem&)rItem).GetColor() );
