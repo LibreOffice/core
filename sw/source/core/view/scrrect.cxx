@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrrect.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:10:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:57:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,9 @@
 #include "setmapvirtdev.hxx"
 #include <IDocumentDrawModelAccess.hxx>
 
+// #i75172#
+#include "dview.hxx"
+
 DBG_NAME(RefreshTimer);
 
 SV_IMPL_VARARR(SwStripeArr,SwStripe);
@@ -132,6 +135,14 @@ void ViewShell::AddScrollRect( const SwFrm *pFrm, const SwRect &rRect,
 |*
 ******************************************************************************/
 
+#ifndef _SDRPAINTWINDOW_HXX
+#include <svx/sdrpaintwindow.hxx>
+#endif
+
+#ifndef _SDR_OVERLAY_OVERLAYMANAGER_HXX
+#include <svx/sdr/overlay/overlaymanager.hxx>
+#endif
+
 void ViewShell::Scroll()
 {
     SwScrollAreas *pScrollRects = Imp()->GetScrollRects();
@@ -164,6 +175,7 @@ void ViewShell::Scroll()
                     bPositive ? --j : ++j )
                 {
                     const SwStripes& rStripes = *rScroll[j];
+
                     if( rScroll.IsVertical() )
                     {
                         Rectangle aRectangle( rStripes.GetY() -
@@ -178,19 +190,31 @@ void ViewShell::Scroll()
                         // #i68597# when scrolling, let DrawingLayer know about refreshed areas,
                         // even when no DL objects are in the area. This is needed to allow
                         // fully buffered overlay.
-                        if(!IsPaintInProgress())
+                        const Rectangle aSourceRect(aAlignedScrollRect.SVRect());
+                        const Rectangle aTargetRect(
+                            aSourceRect.Left() - rScroll.GetOffs(), aSourceRect.Top(),
+                            aSourceRect.Right() - rScroll.GetOffs(), aSourceRect.Bottom());
+
+                        if(GetWin())
                         {
-                            Rectangle aDLRect(aAlignedScrollRect.SVRect());
-                            aDLRect.Move( -rScroll.GetOffs(), 0);
-                            DLPrePaint2(Region(aDLRect));
+                            // SCROLL_NOWINDOWINVALIDATE okay since AddPaintRect below adds the to-be-invalidated region
+                            GetWin()->Scroll( -rScroll.GetOffs(), 0, aSourceRect, SCROLL_CHILDREN | SCROLL_NOWINDOWINVALIDATE );
                         }
 
-                        GetWin()->Scroll( -rScroll.GetOffs(), 0,
-                                          aAlignedScrollRect.SVRect(),
-                                          SCROLL_CHILDREN );
+                        // #i68597# if buffered overlay, the buffered content needs to be scrolled directly
+                        {
+                            SdrPaintWindow* pPaintWindow = GetDrawView()->GetPaintWindow(0);
 
-                        // #i68597#
-                        DLPostPaint2();
+                            if(pPaintWindow)
+                            {
+                                sdr::overlay::OverlayManager* pOverlayManager = pPaintWindow->GetOverlayManager();
+
+                                if(pOverlayManager)
+                                {
+                                    pOverlayManager->copyArea(aTargetRect.TopLeft(), aSourceRect.TopLeft(), aSourceRect.GetSize());
+                                }
+                            }
+                        }
 
                         SwRect aRect( aRectangle );
                         Imp()->ScrolledRect( aRect, -rScroll.GetOffs() );
@@ -213,21 +237,31 @@ void ViewShell::Scroll()
                         // #i68597# when scrolling, let DrawingLayer know about refreshed areas,
                         // even when no DL objects are in the area. This is needed to allow
                         // fully buffered overlay.
-                        if(!IsPaintInProgress())
+                        const Rectangle aSourceRect(aAlignedScrollRect.SVRect());
+                        const Rectangle aTargetRect(
+                            aSourceRect.Left(), aSourceRect.Top() + rScroll.GetOffs(),
+                            aSourceRect.Right(), aSourceRect.Bottom() + rScroll.GetOffs());
+
+                        if(GetWin())
                         {
-                            Rectangle aDLRect(aAlignedScrollRect.SVRect());
-                            aDLRect.Move( 0, rScroll.GetOffs());
-                            DLPrePaint2(Region(aDLRect));
+                            // SCROLL_NOWINDOWINVALIDATE okay since AddPaintRect below adds the to-be-invalidated region
+                            GetWin()->Scroll( 0, rScroll.GetOffs(), aSourceRect, SCROLL_CHILDREN | SCROLL_NOWINDOWINVALIDATE );
                         }
 
-                        // OD 2004-05-28 #i29527# - add flag SCROLL_NOWINDOWINVALIDATE
-                        // to avoid repaint, due to invalidate window areas.
-                        GetWin()->Scroll( 0, rScroll.GetOffs(),
-                                          aAlignedScrollRect.SVRect(),
-                                          SCROLL_CHILDREN | SCROLL_NOWINDOWINVALIDATE );
+                        // #i68597# if buffered overlay, the buffered content needs to be scrolled directly
+                        {
+                            SdrPaintWindow* pPaintWindow = GetDrawView()->GetPaintWindow(0);
 
-                        // #i68597#
-                        DLPostPaint2();
+                            if(pPaintWindow)
+                            {
+                                sdr::overlay::OverlayManager* pOverlayManager = pPaintWindow->GetOverlayManager();
+
+                                if(pOverlayManager)
+                                {
+                                    pOverlayManager->copyArea(aTargetRect.TopLeft(), aSourceRect.TopLeft(), aSourceRect.GetSize());
+                                }
+                            }
+                        }
 
                         SwRect aRect( aRectangle );
                         Imp()->ScrolledRect( aRect, rScroll.GetOffs() );
@@ -725,7 +759,10 @@ void SwViewImp::_RefreshScrolledArea( const SwRect &rRect )
 
     const SwRootFrm* pLayout = GetShell()->GetLayout();
 
-    if( pVout->SetOutputSize( aSize ) )
+    // #i75172# Avoid VDev if PreRendering is active
+    static bool bDoNotUseVDev(GetDrawView()->IsBufferedOutputAllowed());
+
+    if(!bDoNotUseVDev &&  pVout->SetOutputSize( aSize ) )
     {
         pVout->SetLineColor( pOld->GetLineColor() );
         pVout->SetFillColor( pOld->GetFillColor() );
@@ -786,13 +823,6 @@ void SwViewImp::_RefreshScrolledArea( const SwRect &rRect )
 
         GetShell()->pOut = pOld;
         delete pVout;
-
-        // controll layer is repainted additionally. It will look different when painted in VDev,
-        // so it's a good idea to do so.
-        if( GetShell()->GetViewOptions()->IsControl() && HasDrawView() )
-        {
-            PaintLayer( GetShell()->getIDocumentDrawModelAccess()->GetControlsId(), aScRect );
-        }
 
         // #i72754# end Pre/PostPaint encapsulation when pOut is back and content is painted
         GetShell()->DLPostPaint2();
