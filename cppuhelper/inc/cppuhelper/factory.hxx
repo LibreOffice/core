@@ -4,9 +4,9 @@
  *
  *  $RCSfile: factory.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:24:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 16:45:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,7 @@ typedef void (SAL_CALL * component_getImplementationEnvironmentExtFunc)(
     Function retrieves a component description.
 
     @return an XML formatted string containing a short component description
+    @deprecated
 */
 typedef const sal_Char * (SAL_CALL * component_getDescriptionFunc)(void);
 
