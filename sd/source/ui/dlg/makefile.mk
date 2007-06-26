@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-03 15:42:03 $
+#   last change: $Author: hr $ $Date: 2007-06-26 13:39:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@ ENABLE_EXCEPTIONS=TRUE
 SRS1NAME=$(TARGET)
 SRC1FILES =\
     masterlayoutdlg.src\
-    ins_page.src\
     headerfooterdlg.src\
     ins_paste.src\
     inspagob.src\
@@ -79,11 +78,11 @@ SRC1FILES =\
     vectdlg.src\
     dlgolbul.src \
     LayerDialog.src			\
-    PaneDockingWindow.src
+    PaneDockingWindow.src \
+    layeroptionsdlg.src
 
 
 SLOFILES =  \
-        $(SLO)$/inspage.obj \
         $(SLO)$/inspagob.obj \
         $(SLO)$/ins_paste.obj \
         $(SLO)$/present.obj  \
@@ -174,7 +173,6 @@ LIB2OBJFILES= \
         $(SLO)$/dlgfield.obj \
         $(SLO)$/dlgpage.obj \
         $(SLO)$/dlgsnap.obj \
-        $(SLO)$/inspage.obj \
         $(SLO)$/ins_paste.obj \
         $(SLO)$/inspagob.obj \
         $(SLO)$/morphdlg.obj \
@@ -188,7 +186,8 @@ LIB2OBJFILES= \
         $(SLO)$/tpaction.obj \
         $(SLO)$/tpoption.obj \
         $(SLO)$/vectdlg.obj \
-        $(SLO)$/prntopts.obj 
+        $(SLO)$/prntopts.obj \
+        $(SLO)$/layeroptionsdlg.obj
 
 # --- Tagets -------------------------------------------------------
 
