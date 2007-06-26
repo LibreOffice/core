@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:00:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 10:42:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5814,6 +5814,8 @@ void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay,
 void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
                                         const SwRect &rRect ) const
 {
+    bool bNewTableModel = false;
+
     // --> collapsing borders FME 2005-05-27 #i29550#
     if ( IsTabFrm() || IsCellFrm() || IsRowFrm() )
     {
@@ -5821,8 +5823,14 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
         if ( pTabFrm->IsCollapsingBorders() )
             return;
 
-        if ( pTabFrm->GetTable()->IsNewModel() && ( !IsCellFrm() || IsCoveredCell() ) )
-            return;
+        bNewTableModel = pTabFrm->GetTable()->IsNewModel();
+        // in the new table model, we have an early return for all cell-related
+        // frames, except from non-covered table cells
+        if ( bNewTableModel )
+            if ( IsTabFrm() ||
+                 IsRowFrm() ||
+                 ( IsCellFrm() && IsCoveredCell() ) )
+                return;
     }
     // <-- collapsing
 
@@ -5896,11 +5904,13 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
 
     // NOTE: for cell frames only left and right (horizontal layout) respectively
     //      top and bottom (vertical layout) lines painted.
+    // NOTE2: this does not hold for the new table model!!! We paint the top border
+    // of each non-covered table cell.
     const bool bVert = IsVertical() ? true : false;
     if ( bFlys )
     {
         // OD 14.11.2002 #104822# - add control for drawing left and right lines
-        if ( !bCell || !bVert )
+        if ( !bCell || bNewTableModel || !bVert )
         {
             if ( aOriginal.Left() == aOut.Left() )
                 ::lcl_RefreshLine( this, pPage, aOut.Pos(), aLB, nSubColor,
@@ -5912,7 +5922,7 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
                                    pUsedSubsLines );
         }
         // OD 14.11.2002 #104822# - adjust control for drawing top and bottom lines
-        if ( !bCell || bVert )
+        if ( !bCell || bNewTableModel || bVert )
         {
             if ( aOriginal.Top() == aOut.Top() )
                 // OD 14.11.2002 #104821# - in horizontal layout set page/column break at top
@@ -5927,34 +5937,34 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
     else
     {
         // OD 14.11.2002 #104822# - add control for drawing left and right lines
-        if ( !bCell || !IsVertical() )
+        if ( !bCell || bNewTableModel || !bVert )
         {
             if ( aOriginal.Left() == aOut.Left() )
             {
-                SwRect aRect( aOut.Pos(), aLB );
+                const SwRect aRect( aOut.Pos(), aLB );
                 pUsedSubsLines->AddLineRect( aRect, 0, 0, nSubColor );
             }
             // OD 14.11.2002 #104821# - in vertical layout set page/column break at right
             if ( aOriginal.Right() == nRight )
             {
-                SwRect aRect( aRT, aRB );
+                const SwRect aRect( aRT, aRB );
                 pUsedSubsLines->AddLineRect( aRect, 0, 0,
                         (bBreak && bVert) ? SUBCOL_BREAK : nSubColor );
             }
         }
         // OD 14.11.2002 #104822# - adjust control for drawing top and bottom lines
-        if ( !bCell || IsVertical() )
+        if ( !bCell || bNewTableModel || bVert )
         {
             if ( aOriginal.Top() == aOut.Top() )
             {
                 // OD 14.11.2002 #104821# - in horizontal layout set page/column break at top
-                SwRect aRect( aOut.Pos(), aRT );
+                const SwRect aRect( aOut.Pos(), aRT );
                 pUsedSubsLines->AddLineRect( aRect, 0, 0,
                         (bBreak && !bVert) ? SUBCOL_BREAK : nSubColor );
             }
             if ( aOriginal.Bottom() == nBottom )
             {
-                SwRect aRect( aLB, aRB );
+                const SwRect aRect( aLB, aRB );
                 pUsedSubsLines->AddLineRect( aRect, 0, 0, nSubColor );
             }
         }
