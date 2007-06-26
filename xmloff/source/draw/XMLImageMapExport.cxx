@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLImageMapExport.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:32:31 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:35:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,6 +149,7 @@ XMLImageMapExport::XMLImageMapExport(SvXMLExport& rExp) :
     msRadius(RTL_CONSTASCII_USTRINGPARAM("Radius")),
     msTarget(RTL_CONSTASCII_USTRINGPARAM("Target")),
     msURL(RTL_CONSTASCII_USTRINGPARAM("URL")),
+    msTitle(RTL_CONSTASCII_USTRINGPARAM("Title")),
     mrExport(rExp),
     mbWhiteSpace(sal_True)
 {
@@ -315,15 +316,22 @@ void XMLImageMapExport::ExportMapEntry(
         SvXMLElementExport aAreaElement(mrExport, XML_NAMESPACE_DRAW, eType,
                                         mbWhiteSpace, mbWhiteSpace);
 
+        // title property (as <svg:title> element)
+        OUString sTitle;
+        rPropertySet->getPropertyValue(msTitle) >>= sTitle;
+        if(sTitle.getLength())
+        {
+            SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_SVG, XML_TITLE, mbWhiteSpace, sal_False);
+            mrExport.Characters(sTitle);
+        }
+
         // description property (as <svg:desc> element)
-        aAny = rPropertySet->getPropertyValue(msDescription);
         OUString sDescription;
-        aAny >>= sDescription;
+        rPropertySet->getPropertyValue(msDescription) >>= sDescription;
         if (sDescription.getLength() > 0)
         {
-            SvXMLElementExport aDesc(mrExport, XML_NAMESPACE_SVG, XML_DESC,
-                                     mbWhiteSpace, sal_False);
-            mrExport.GetDocHandler()->characters(sDescription);
+            SvXMLElementExport aDesc(mrExport, XML_NAMESPACE_SVG, XML_DESC, mbWhiteSpace, sal_False);
+            mrExport.Characters(sDescription);
         }
 
         // export events attached to this
