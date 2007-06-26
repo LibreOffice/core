@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optionsdrawinglayer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:30:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:43:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,11 +150,6 @@ class SVL_DLLPUBLIC SvtOptionsDrawinglayer
         Color       GetStripeColorB() const;
         sal_uInt16  GetStripeLength() const;
 
-        // #i73602#
-        sal_Bool    IsOverlayBuffer_Calc() const;
-        sal_Bool    IsOverlayBuffer_Writer() const;
-        sal_Bool    IsOverlayBuffer_DrawImpress() const;
-
         void        SetOverlayBuffer( sal_Bool bState );
         void        SetPaintBuffer( sal_Bool bState );
         void        SetStripeColorA( Color aColor );
@@ -162,9 +157,20 @@ class SVL_DLLPUBLIC SvtOptionsDrawinglayer
         void        SetStripeLength( sal_uInt16 nLength );
 
         // #i73602#
+        sal_Bool    IsOverlayBuffer_Calc() const;
+        sal_Bool    IsOverlayBuffer_Writer() const;
+        sal_Bool    IsOverlayBuffer_DrawImpress() const;
         void        SetOverlayBuffer_Calc( sal_Bool bState );
         void        SetOverlayBuffer_Writer( sal_Bool bState );
         void        SetOverlayBuffer_DrawImpress( sal_Bool bState );
+
+        // #i74769#, #i75172#
+        sal_Bool    IsPaintBuffer_Calc() const;
+        sal_Bool    IsPaintBuffer_Writer() const;
+        sal_Bool    IsPaintBuffer_DrawImpress() const;
+        void        SetPaintBuffer_Calc( sal_Bool bState );
+        void        SetPaintBuffer_Writer( sal_Bool bState );
+        void        SetPaintBuffer_DrawImpress( sal_Bool bState );
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
