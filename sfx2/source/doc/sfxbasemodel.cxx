@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:38:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 16:10:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -717,7 +717,8 @@ ANY SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( RUNTIME
                                             static_cast< XSTORABLE2*            > ( this )  ,
                                             static_cast< XMODULE*               > ( this )  ,
                                             static_cast< XMODEL2*               > ( this )  ,
-                                               static_cast< XSTORAGEBASEDDOCUMENT* > ( this )   );
+                                               static_cast< XSTORAGEBASEDDOCUMENT* > ( this )   ,
+                                               static_cast< XMODIFIABLE2*          > ( this )   );
     }
 
     // If searched interface supported by this class ...
@@ -784,7 +785,7 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( RUNTIMEEXCEPTION )
                                                          ::getCppuType(( const REFERENCE< XDOCUMENTINFOSUPPLIER  >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XEVENTLISTENER         >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XMODEL                 >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XMODIFIABLE            >*)NULL ) ,
+                                                         ::getCppuType(( const REFERENCE< XMODIFIABLE2            >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XPRINTABLE             >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XSTORABLE2             >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XLOADABLE              >*)NULL ) ,
@@ -1506,6 +1507,52 @@ REFERENCE< XINTERFACE > SAL_CALL SfxBaseModel::getCurrentSelection() throw(::com
     }
 
     return xReturn ;
+}
+
+//________________________________________________________________________________________________________
+//  XModifiable2
+//________________________________________________________________________________________________________
+
+sal_Bool SAL_CALL SfxBaseModel::disableSetModified() throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
+    if ( !m_pData->m_pObjectShell.Is() )
+        throw uno::RuntimeException();
+
+    sal_Bool bResult = m_pData->m_pObjectShell->IsEnableSetModified();
+    m_pData->m_pObjectShell->EnableSetModified( sal_False );
+
+    return bResult;
+}
+
+sal_Bool SAL_CALL SfxBaseModel::enableSetModified() throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
+    if ( !m_pData->m_pObjectShell.Is() )
+        throw uno::RuntimeException();
+
+    sal_Bool bResult = m_pData->m_pObjectShell->IsEnableSetModified();
+    m_pData->m_pObjectShell->EnableSetModified( sal_True );
+
+    return bResult;
+}
+
+sal_Bool SAL_CALL SfxBaseModel::isSetModifiedEnabled() throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
+    if ( !m_pData->m_pObjectShell.Is() )
+        throw uno::RuntimeException();
+
+    return m_pData->m_pObjectShell->IsEnableSetModified();
 }
 
 //________________________________________________________________________________________________________
