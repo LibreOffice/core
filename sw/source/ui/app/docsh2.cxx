@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:40:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 15:56:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1639,9 +1639,10 @@ void SwDocShell::SetModified( BOOL bSet )
             pDoc->ResetModified();
 
         EnableSetModified( TRUE );
+
+        UpdateChildWindows();
+        Broadcast(SfxSimpleHint(SFX_HINT_DOCCHANGED));
     }
-    UpdateChildWindows();
-    Broadcast(SfxSimpleHint(SFX_HINT_DOCCHANGED));
 }
 
 /*--------------------------------------------------------------------
