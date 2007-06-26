@@ -35,7 +35,6 @@ UDK_3.1 { # OOo 1.1.2 SDK
 UDK_3.0 {
     global:
 GetVersionInfo;
-component_getDescriptionFunc;
 __1cJsalhelperSORealDynamicLoaderLnewInstance6Fpp1rknDrtlIOUString_7_2_;
 __1cJsalhelperSORealDynamicLoader2t5B6Mpp1rknDrtlIOUString_7pv8_v_;
 __1cJsalhelperSORealDynamicLoader2t6Mpp1rknDrtlIOUString_7pv8_v_;
