@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imaprect.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:23:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:33:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,18 +72,8 @@ public:
                         IMapRectangleObject() {};
                         IMapRectangleObject( const Rectangle& rRect,
                                              const String& rURL,
-                                             const String& rDescription,
-                                             BOOL bActive = TRUE,
-                                             BOOL bPixelCoords = TRUE );
-                        IMapRectangleObject( const Rectangle& rRect,
-                                             const String& rURL,
-                                             const String& rDescription,
-                                             const String& rTarget,
-                                             BOOL bActive = TRUE,
-                                             BOOL bPixelCoords = TRUE );
-                        IMapRectangleObject( const Rectangle& rRect,
-                                             const String& rURL,
-                                             const String& rDescription,
+                                             const String& rAltText,
+                                             const String& rDesc,
                                              const String& rTarget,
                                              const String& rName,
                                              BOOL bActive = TRUE,

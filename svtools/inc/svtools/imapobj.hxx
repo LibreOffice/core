@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imapobj.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:22:45 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:32:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,8 @@ class SVT_DLLPUBLIC IMapObject
     friend class        ImageMap;
 
     String              aURL;
-    String              aDescription;
+    String              aAltText;
+    String              aDesc;
     String              aTarget;
     String              aName;
     SvxMacroTableDtor   aEventList;
@@ -110,14 +111,8 @@ public:
 
                         IMapObject() {};
                         IMapObject( const String& rURL,
-                                    const String& rDescription,
-                                    BOOL bActive );
-                        IMapObject( const String& rURL,
-                                    const String& rDescription,
-                                    const String& rTarget,
-                                    BOOL bActive );
-                        IMapObject( const String& rURL,
-                                    const String& rDescription,
+                                    const String& rAltText,
+                                    const String& rDesc,
                                     const String& rTarget,
                                     const String& rName,
                                     BOOL bActive );
@@ -135,8 +130,11 @@ public:
     const String&       GetURL() const { return aURL; }
     void                SetURL( const String& rURL ) { aURL = rURL; }
 
-    const String&       GetDescription() const { return aDescription; }
-    void                SetDescription( const String& rDescription ) { aDescription = rDescription; }
+    const String&       GetAltText() const { return aAltText; }
+    void                SetAltText( const String& rAltText) { aAltText = rAltText; }
+
+    const String&       GetDesc() const { return aDesc; }
+    void                SetDesc( const String& rDesc ) { aDesc = rDesc; }
 
     const String&       GetTarget() const { return aTarget; }
     void                SetTarget( const String& rTarget ) { aTarget = rTarget; }
