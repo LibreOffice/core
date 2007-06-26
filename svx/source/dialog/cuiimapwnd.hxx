@@ -28,6 +28,8 @@
 #ifndef _SFXFRAME_HXX
 #include <sfx2/frame.hxx>
 #endif
+#include <svtools/svmedit.hxx>
+
 
 /*************************************************************************
 |*
@@ -37,29 +39,33 @@
 
 class URLDlg : public ModalDialog
 {
-    FixedLine           aFlURL;
-    FixedText           aFtURL1;
-    Edit                aEdtURL;
-    FixedText           aFtURLDescription;
-    Edit                aEdtURLDescription;
-    FixedText           aFtTarget;
-    ComboBox            aCbbTargets;
-    FixedText           aFtName;
-    Edit                aEdtName;
-    OKButton            aBtnOk;
-    CancelButton        aBtnCancel;
+    FixedText           maFtURL;
+    Edit                maEdtURL;
+    FixedText           maFtTarget;
+    ComboBox            maCbbTargets;
+    FixedText           maFtName;
+    Edit                maEdtName;
+    FixedText           maFtAlternativeText;
+    Edit                maEdtAlternativeText;
+    FixedText           maFtDescription;
+    MultiLineEdit       maEdtDescription;
+    FixedLine           maFlURL;
+    HelpButton          maBtnHelp;
+    OKButton            maBtnOk;
+    CancelButton        maBtnCancel;
 
 public:
 
                         URLDlg( Window* pWindow,
-                                const String& rURL, const String& rDescription,
+                                const String& rURL, const String& rAlternativeText, const String& rDescription,
                                 const String& rTarget, const String& rName,
                                 TargetList& rTargetList );
 
-    String              GetURL() const { return aEdtURL.GetText(); }
-    String              GetDescription() const { return aEdtURLDescription.GetText(); }
-    String              GetTarget() const { return aCbbTargets.GetText(); }
-    String              GetName() const { return aEdtName.GetText(); }
+    String              GetURL() const { return maEdtURL.GetText(); }
+    String              GetAltText() const { return maEdtAlternativeText.GetText(); }
+    String              GetDesc() const { return maEdtDescription.GetText(); }
+    String              GetTarget() const { return maCbbTargets.GetText(); }
+    String              GetName() const { return maEdtName.GetText(); }
 };
 
 #endif
