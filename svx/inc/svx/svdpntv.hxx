@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpntv.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:26:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:01:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -437,18 +437,19 @@ public:
     // SdrPaintWindow again. This means: the SdrPaintWindow is no longer safe after this closing call.
     SdrPaintWindow* BeginCompleteRedraw(OutputDevice* pOut);
     void DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, USHORT nPaintMode = 0, ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
-    void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg);
+    void EndCompleteRedraw(SdrPaintWindow& rPaintWindow);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // used for the other applications basctl/sc/sw which call DrawLayer at PageViews
-    void BeginDrawLayers(OutputDevice* pOut, const Region& rReg, sal_Bool bPrepareBuffered);
-    void EndDrawLayers(OutputDevice* pOut);
+    // #i74769# Interface change to use common BeginCompleteRedraw/EndCompleteRedraw
+    SdrPaintWindow* BeginDrawLayers(OutputDevice* pOut, const Region& rReg);
+    void EndDrawLayers(SdrPaintWindow& rPaintWindow);
 
 protected:
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // used to call the old PaintOutlinerView at the single PageViews. Will be replaced when the
     // outliner will be displayed on the overlay in edit mode.
-    void ImpTextEditDrawing(const Region& rReg, SdrPaintWindow& rPaintWindow) const;
+    void ImpTextEditDrawing(SdrPaintWindow& rPaintWindow) const;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // used to paint the form layer after the PreRender device is flushed (painted) to the window.
