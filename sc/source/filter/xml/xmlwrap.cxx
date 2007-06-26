@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:53:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 10:03:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -713,14 +713,10 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
             xSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), uno::makeAny(sMediaType));
             OUString aUseCommonPassPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
             if (bPlainText)
-            {
                 xSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")), uno::makeAny(sal_False));
-                xSet->setPropertyValue( aUseCommonPassPropName, uno::makeAny(sal_False));
-            }
-            else
-            {
-                xSet->setPropertyValue( aUseCommonPassPropName, uno::makeAny(sal_True));
-            }
+
+            // even plain stream should be encrypted in encrypted documents
+            xSet->setPropertyValue( aUseCommonPassPropName, uno::makeAny(sal_True) );
         }
 
         xOut = xStream->getOutputStream();
