@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xcreator.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:21:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 16:05:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,8 +71,9 @@
 #include <rtl/logfile.hxx>
 
 
-#include "xcreator.hxx"
-#include "convert.hxx"
+#include <xcreator.hxx>
+#include <convert.hxx>
+#include <dummyobject.hxx>
 
 
 using namespace ::com::sun::star;
@@ -178,6 +179,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
         throw container::NoSuchElementException();
 
     ::rtl::OUString aMediaType;
+    ::rtl::OUString aEmbedFactory;
     if ( xStorage->isStorageElement( sEntName ) )
     {
         // the object must be based on storage
@@ -223,6 +225,8 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
         try {
             uno::Any aAny = xPropSet->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) );
             aAny >>= aMediaType;
+            if ( aMediaType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.star.oleobject" ) ) ) )
+                aEmbedFactory = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.OLEEmbeddedObjectFactory" ) );
         }
         catch ( uno::Exception& )
         {
@@ -239,24 +243,27 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     }
 
     OSL_ENSURE( aMediaType.getLength(), "No media type is specified for the object!" );
-    ::rtl::OUString aEmbedFactory;
-    if ( aMediaType.getLength() )
+    if ( aMediaType.getLength() && !aEmbedFactory.getLength() )
         aEmbedFactory = m_aConfigHelper.GetFactoryNameByMediaType( aMediaType );
 
-    if ( !aEmbedFactory.getLength() )
+    if ( aEmbedFactory.getLength() )
     {
-        // use system fallback
-        // TODO: in future users factories can be tested
-        aEmbedFactory = ::rtl::OUString::createFromAscii( "com.sun.star.embed.OLEEmbeddedObjectFactory" );
+        uno::Reference< uno::XInterface > xFact = m_xFactory->createInstance( aEmbedFactory );
+
+        uno::Reference< embed::XEmbedObjectCreator > xEmbCreator( xFact, uno::UNO_QUERY );
+        if ( xEmbCreator.is() )
+            return xEmbCreator->createInstanceInitFromEntry( xStorage, sEntName, aMedDescr, lObjArgs );
+
+        uno::Reference < embed::XEmbedObjectFactory > xEmbFact( xFact, uno::UNO_QUERY );
+        if ( xEmbFact.is() )
+            return xEmbFact->createInstanceUserInit( uno::Sequence< sal_Int8 >(), ::rtl::OUString(), xStorage, sEntName, embed::EntryInitModes::DEFAULT_INIT, aMedDescr, lObjArgs);
     }
 
-    uno::Reference< embed::XEmbedObjectCreator > xEmbCreator(
-                    m_xFactory->createInstance( aEmbedFactory ),
-                    uno::UNO_QUERY );
-    if ( !xEmbCreator.is() )
-        throw uno::RuntimeException(); // TODO:
-
-    return xEmbCreator->createInstanceInitFromEntry( xStorage, sEntName, aMedDescr, lObjArgs );
+    // the default object should be created, it will allow to store the contents on the next saving
+    uno::Reference< uno::XInterface > xResult( static_cast< cppu::OWeakObject* >( new ODummyEmbeddedObject() ) );
+    uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY_THROW );
+    xPersist->setPersistentEntry( xStorage, sEntName, embed::EntryInitModes::DEFAULT_INIT, aMedDescr, lObjArgs );
+    return xResult;
 }
 
 //-------------------------------------------------------------------------
