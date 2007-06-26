@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optionsdrawinglayer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:30:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:43:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,32 +83,51 @@ using namespace ::com::sun::star::uno   ;
 #define DEFAULT_STRIPE_COLOR_A          0
 #define DEFAULT_STRIPE_COLOR_B          16581375
 #define DEFAULT_STRIPE_LENGTH           4
+
 // #i73602#
-#define DEFAULT_OVERLAYBUFFER_CALC          sal_False
-#define DEFAULT_OVERLAYBUFFER_WRITER        sal_False
+// #i74769#, #i75172# : Change default for Calc and Writer to True
+#define DEFAULT_OVERLAYBUFFER_CALC          sal_True
+#define DEFAULT_OVERLAYBUFFER_WRITER        sal_True
 #define DEFAULT_OVERLAYBUFFER_DRAWIMPRESS   sal_True
+
+// #i74769#, #i75172#
+#define DEFAULT_PAINTBUFFER_CALC            sal_True
+#define DEFAULT_PAINTBUFFER_WRITER          sal_True
+#define DEFAULT_PAINTBUFFER_DRAWIMPRESS     sal_True
 
 #define PROPERTYNAME_OVERLAYBUFFER      OUString(RTL_CONSTASCII_USTRINGPARAM("OverlayBuffer"    ))
 #define PROPERTYNAME_PAINTBUFFER        OUString(RTL_CONSTASCII_USTRINGPARAM("PaintBuffer"      ))
 #define PROPERTYNAME_STRIPE_COLOR_A     OUString(RTL_CONSTASCII_USTRINGPARAM("StripeColorA"     ))
 #define PROPERTYNAME_STRIPE_COLOR_B     OUString(RTL_CONSTASCII_USTRINGPARAM("StripeColorB"     ))
 #define PROPERTYNAME_STRIPE_LENGTH      OUString(RTL_CONSTASCII_USTRINGPARAM("StripeLength"     ))
+
 // #i73602#
 #define PROPERTYNAME_OVERLAYBUFFER_CALC         OUString(RTL_CONSTASCII_USTRINGPARAM("OverlayBuffer_Calc"))
 #define PROPERTYNAME_OVERLAYBUFFER_WRITER       OUString(RTL_CONSTASCII_USTRINGPARAM("OverlayBuffer_Writer"))
 #define PROPERTYNAME_OVERLAYBUFFER_DRAWIMPRESS  OUString(RTL_CONSTASCII_USTRINGPARAM("OverlayBuffer_DrawImpress"))
+
+// #i74769#, #i75172#
+#define PROPERTYNAME_PAINTBUFFER_CALC           OUString(RTL_CONSTASCII_USTRINGPARAM("PaintBuffer_Calc"))
+#define PROPERTYNAME_PAINTBUFFER_WRITER         OUString(RTL_CONSTASCII_USTRINGPARAM("PaintBuffer_Writer"))
+#define PROPERTYNAME_PAINTBUFFER_DRAWIMPRESS    OUString(RTL_CONSTASCII_USTRINGPARAM("PaintBuffer_DrawImpress"))
 
 #define PROPERTYHANDLE_OVERLAYBUFFER                0
 #define PROPERTYHANDLE_PAINTBUFFER                  1
 #define PROPERTYHANDLE_STRIPE_COLOR_A               2
 #define PROPERTYHANDLE_STRIPE_COLOR_B               3
 #define PROPERTYHANDLE_STRIPE_LENGTH                4
+
 // #i73602#
 #define PROPERTYHANDLE_OVERLAYBUFFER_CALC           5
 #define PROPERTYHANDLE_OVERLAYBUFFER_WRITER         6
 #define PROPERTYHANDLE_OVERLAYBUFFER_DRAWIMPRESS    7
 
-#define PROPERTYCOUNT                               8
+// #i74769#, #i75172#
+#define PROPERTYHANDLE_PAINTBUFFER_CALC             8
+#define PROPERTYHANDLE_PAINTBUFFER_WRITER           9
+#define PROPERTYHANDLE_PAINTBUFFER_DRAWIMPRESS      10
+
+#define PROPERTYCOUNT                               11
 
 class SvtOptionsDrawinglayer_Impl : public ConfigItem
 {
@@ -136,20 +155,32 @@ public:
     Color       GetStripeColorA() const;
     Color       GetStripeColorB() const;
     sal_uInt16  GetStripeLength() const;
+
     // #i73602#
     sal_Bool    IsOverlayBuffer_Calc() const;
     sal_Bool    IsOverlayBuffer_Writer() const;
     sal_Bool    IsOverlayBuffer_DrawImpress() const;
+
+    // #i74769#, #i75172#
+    sal_Bool    IsPaintBuffer_Calc() const;
+    sal_Bool    IsPaintBuffer_Writer() const;
+    sal_Bool    IsPaintBuffer_DrawImpress() const;
 
     void        SetOverlayBuffer( sal_Bool bState );
     void        SetPaintBuffer( sal_Bool bState );
     void        SetStripeColorA( Color aColor );
     void        SetStripeColorB( Color aColor );
     void        SetStripeLength( sal_uInt16 nLength );
+
     // #i73602#
     void        SetOverlayBuffer_Calc( sal_Bool bState );
     void        SetOverlayBuffer_Writer( sal_Bool bState );
     void        SetOverlayBuffer_DrawImpress( sal_Bool bState );
+
+    // #i74769#, #i75172#
+    void        SetPaintBuffer_Calc( sal_Bool bState );
+    void        SetPaintBuffer_Writer( sal_Bool bState );
+    void        SetPaintBuffer_DrawImpress( sal_Bool bState );
 
 //-------------------------------------------------------------------------------------------------------------
 //  private methods
@@ -170,10 +201,16 @@ private:
         Color       m_bStripeColorA;
         Color       m_bStripeColorB;
         sal_uInt16  m_nStripeLength;
+
         // #i73602#
         sal_Bool    m_bOverlayBuffer_Calc;
         sal_Bool    m_bOverlayBuffer_Writer;
         sal_Bool    m_bOverlayBuffer_DrawImpress;
+
+        // #i74769#, #i75172#
+        sal_Bool    m_bPaintBuffer_Calc;
+        sal_Bool    m_bPaintBuffer_Writer;
+        sal_Bool    m_bPaintBuffer_DrawImpress;
 };
 
 //_________________________________________________________________________________________________________________
@@ -190,10 +227,16 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
     m_bStripeColorA(Color(DEFAULT_STRIPE_COLOR_A)),
     m_bStripeColorB(Color(DEFAULT_STRIPE_COLOR_B)),
     m_nStripeLength(DEFAULT_STRIPE_LENGTH),
+
     // #i73602#
     m_bOverlayBuffer_Calc( DEFAULT_OVERLAYBUFFER_CALC ),
     m_bOverlayBuffer_Writer( DEFAULT_OVERLAYBUFFER_WRITER ),
-    m_bOverlayBuffer_DrawImpress( DEFAULT_OVERLAYBUFFER_DRAWIMPRESS )
+    m_bOverlayBuffer_DrawImpress( DEFAULT_OVERLAYBUFFER_DRAWIMPRESS ),
+
+    // #i74769#, #i75172#
+    m_bPaintBuffer_Calc( DEFAULT_PAINTBUFFER_CALC ),
+    m_bPaintBuffer_Writer( DEFAULT_PAINTBUFFER_WRITER ),
+    m_bPaintBuffer_DrawImpress( DEFAULT_PAINTBUFFER_DRAWIMPRESS )
 {
     Sequence< OUString >    seqNames( impl_GetPropertyNames() );
     Sequence< Any >         seqValues   = GetProperties( seqNames ) ;
@@ -270,6 +313,28 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
                 seqValues[nProperty] >>= m_bOverlayBuffer_DrawImpress;
             }
             break;
+
+            // #i74769#, #i75172#
+            case PROPERTYHANDLE_PAINTBUFFER_CALC:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\PaintBuffer_Calc\"?" );
+                seqValues[nProperty] >>= m_bPaintBuffer_Calc;
+            }
+            break;
+
+            case PROPERTYHANDLE_PAINTBUFFER_WRITER:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\PaintBuffer_Writer\"?" );
+                seqValues[nProperty] >>= m_bPaintBuffer_Writer;
+            }
+            break;
+
+            case PROPERTYHANDLE_PAINTBUFFER_DRAWIMPRESS:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\PaintBuffer_DrawImpress\"?" );
+                seqValues[nProperty] >>= m_bPaintBuffer_DrawImpress;
+            }
+            break;
         }
     }
 }
@@ -326,6 +391,19 @@ void SvtOptionsDrawinglayer_Impl::Commit()
 
             case PROPERTYHANDLE_OVERLAYBUFFER_DRAWIMPRESS:
                 aSeqValues[nProperty] <<= m_bOverlayBuffer_DrawImpress;
+            break;
+
+            // #i74769#, #i75172#
+            case PROPERTYHANDLE_PAINTBUFFER_CALC:
+                aSeqValues[nProperty] <<= m_bPaintBuffer_Calc;
+            break;
+
+            case PROPERTYHANDLE_PAINTBUFFER_WRITER:
+                aSeqValues[nProperty] <<= m_bPaintBuffer_Writer;
+            break;
+
+            case PROPERTYHANDLE_PAINTBUFFER_DRAWIMPRESS:
+                aSeqValues[nProperty] <<= m_bPaintBuffer_DrawImpress;
             break;
         }
     }
@@ -387,6 +465,22 @@ sal_Bool SvtOptionsDrawinglayer_Impl::IsOverlayBuffer_Writer() const
 sal_Bool SvtOptionsDrawinglayer_Impl::IsOverlayBuffer_DrawImpress() const
 {
     return m_bOverlayBuffer_DrawImpress;
+}
+
+// #i74769#, #i75172#
+sal_Bool SvtOptionsDrawinglayer_Impl::IsPaintBuffer_Calc() const
+{
+    return m_bPaintBuffer_Calc;
+}
+
+sal_Bool SvtOptionsDrawinglayer_Impl::IsPaintBuffer_Writer() const
+{
+    return m_bPaintBuffer_Writer;
+}
+
+sal_Bool SvtOptionsDrawinglayer_Impl::IsPaintBuffer_DrawImpress() const
+{
+    return m_bPaintBuffer_DrawImpress;
 }
 
 //*****************************************************************************************************************
@@ -477,6 +571,34 @@ void SvtOptionsDrawinglayer_Impl::SetOverlayBuffer_DrawImpress( sal_Bool bState 
     }
 }
 
+// #i74769#, #i75172#
+void SvtOptionsDrawinglayer_Impl::SetPaintBuffer_Calc( sal_Bool bState )
+{
+    if(m_bPaintBuffer_Calc != bState)
+    {
+        m_bPaintBuffer_Calc = bState;
+        SetModified();
+    }
+}
+
+void SvtOptionsDrawinglayer_Impl::SetPaintBuffer_Writer( sal_Bool bState )
+{
+    if(m_bPaintBuffer_Writer != bState)
+    {
+        m_bPaintBuffer_Writer = bState;
+        SetModified();
+    }
+}
+
+void SvtOptionsDrawinglayer_Impl::SetPaintBuffer_DrawImpress( sal_Bool bState )
+{
+    if(m_bPaintBuffer_DrawImpress != bState)
+    {
+        m_bPaintBuffer_DrawImpress = bState;
+        SetModified();
+    }
+}
+
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
@@ -490,10 +612,16 @@ Sequence< OUString > SvtOptionsDrawinglayer_Impl::impl_GetPropertyNames()
         PROPERTYNAME_STRIPE_COLOR_A     ,
         PROPERTYNAME_STRIPE_COLOR_B     ,
         PROPERTYNAME_STRIPE_LENGTH      ,
+
         // #i73602#
         PROPERTYNAME_OVERLAYBUFFER_CALC,
         PROPERTYNAME_OVERLAYBUFFER_WRITER,
-        PROPERTYNAME_OVERLAYBUFFER_DRAWIMPRESS
+        PROPERTYNAME_OVERLAYBUFFER_DRAWIMPRESS,
+
+        // #i74769#, #i75172#
+        PROPERTYNAME_PAINTBUFFER_CALC,
+        PROPERTYNAME_PAINTBUFFER_WRITER,
+        PROPERTYNAME_PAINTBUFFER_DRAWIMPRESS
     };
     // Initialize return sequence with these list ...
     static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
@@ -607,6 +735,25 @@ sal_Bool SvtOptionsDrawinglayer::IsOverlayBuffer_DrawImpress() const
     return m_pDataContainer->IsOverlayBuffer_DrawImpress();
 }
 
+// #i74769#, #i75172#
+sal_Bool SvtOptionsDrawinglayer::IsPaintBuffer_Calc() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsPaintBuffer_Calc();
+}
+
+sal_Bool SvtOptionsDrawinglayer::IsPaintBuffer_Writer() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsPaintBuffer_Writer();
+}
+
+sal_Bool SvtOptionsDrawinglayer::IsPaintBuffer_DrawImpress() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsPaintBuffer_DrawImpress();
+}
+
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
@@ -669,6 +816,25 @@ void SvtOptionsDrawinglayer::SetOverlayBuffer_DrawImpress( sal_Bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetOverlayBuffer_DrawImpress( bState );
+}
+
+// #i74769#, #i75172#
+void SvtOptionsDrawinglayer::SetPaintBuffer_Calc( sal_Bool bState )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetPaintBuffer_Calc( bState );
+}
+
+void SvtOptionsDrawinglayer::SetPaintBuffer_Writer( sal_Bool bState )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetPaintBuffer_Writer( bState );
+}
+
+void SvtOptionsDrawinglayer::SetPaintBuffer_DrawImpress( sal_Bool bState )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetPaintBuffer_DrawImpress( bState );
 }
 
 //*****************************************************************************************************************
