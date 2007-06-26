@@ -4,9 +4,9 @@
  *
  *  $RCSfile: noteurl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:36:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:47:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,8 +90,8 @@ void SwNoteURL::FillImageMap( ImageMap *pMap, const Point &rPos,
             aSwRect -= rPos;
             Rectangle aRect( OutputDevice::LogicToLogic( aSwRect.SVRect(),
                                                          rMap, aMap ) );
-            IMapRectangleObject aObj( aRect, rNote.GetURL(), aEmptyStr,
-                                      rNote.GetTarget(), sal_True, sal_False );
+            IMapRectangleObject aObj( aRect, rNote.GetURL(), aEmptyStr, aEmptyStr,
+                                      rNote.GetTarget(), aEmptyStr, sal_True, sal_False );
             pMap->InsertIMapObject( aObj );
         }
     }
