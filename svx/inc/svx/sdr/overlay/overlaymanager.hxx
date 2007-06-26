@@ -4,9 +4,9 @@
  *
  *  $RCSfile: overlaymanager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:07:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:03:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,9 @@ namespace sdr
 
             // flush. Do buffered updates.
             virtual void flush();
+
+            // #i68597# part of content gets copied, react on it
+            virtual void copyArea(const Point& rDestPt, const Point& rSrcPt, const Size& rSrcSize);
 
             // restore part of background. Implemented form buffered versions only.
             virtual void restoreBackground(const Region& rRegion) const;
