@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:36:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:50:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,7 +311,8 @@ class AbstractURLDlg_Impl :public AbstractURLDlg
 {
     DECL_ABSTDLG_BASE(AbstractURLDlg_Impl,URLDlg)
     virtual String      GetURL() const;
-    virtual String      GetDescription() const;
+    virtual String      GetAltText() const;
+    virtual String      GetDesc() const;
     virtual String      GetTarget() const;
     virtual String      GetName() const;
 };
@@ -710,7 +711,7 @@ public:
                                             SfxItemSet* pItemSet,
                                             sal_uInt32 nResId);
     virtual AbstractURLDlg * CreateURLDialog( Window* pParent,  //add for URLDlg
-                                            const String& rURL, const String& rDescription,
+                                            const String& rURL, const String& rAltText, const String& rDescription,
                                             const String& rTarget, const String& rName,
                                             TargetList& rTargetList,
                                             sal_uInt32 nResId);
