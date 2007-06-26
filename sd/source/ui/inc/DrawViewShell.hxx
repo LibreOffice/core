@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawViewShell.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:02:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:40:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -383,7 +383,7 @@ public:
     bool RenameSlide( USHORT nPageId, const String & rName );
 
     /** modifies the given layer with the given values */
-    void ModifyLayer( SdrLayer* pLayer, String& rLayerName, bool bIsVisible, bool bIsLocked, bool bIsPrintable );
+    void ModifyLayer( SdrLayer* pLayer, const String& rLayerName, const String& rLayerTitle, const String& rLayerDesc, bool bIsVisible, bool bIsLocked, bool bIsPrintable );
 
     virtual ::std::auto_ptr<DrawSubController> CreateSubController (void);
 
