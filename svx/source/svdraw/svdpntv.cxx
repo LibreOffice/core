@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:41:23 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:09:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -848,11 +848,49 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, USHORT
     {
 #endif // SVX_REPAINT_TIMER_TEST
 
+    // #i74769# check if pOut is a win and has a ClipRegion. If Yes, the Region
+    // rReg may be made more granular (fine) with using it. Normally, rReg
+    // does come from Window::Paint() anyways and thus is based on a single
+    // rectangle which was derived from exactly that repaint region
+    Region aOptimizedRepaintRegion(rReg);
+
+    if(pOut && OUTDEV_WINDOW == pOut->GetOutDevType())
+    {
+        Window* pWindow = (Window*)pOut;
+
+        if(pWindow->IsInPaint())
+        {
+            if(!pWindow->GetPaintRegion().IsEmpty())
+            {
+                aOptimizedRepaintRegion.Intersect(pWindow->GetPaintRegion());
+
+#ifdef DBG_UTIL
+                // #i74769# test-paint repaint region
+                static bool bDoPaintForVisualControl(false);
+                if(bDoPaintForVisualControl)
+                {
+                    RegionHandle aRegionHandle(aOptimizedRepaintRegion.BeginEnumRects());
+                    Rectangle aRegionRectangle;
+
+                    while(aOptimizedRepaintRegion.GetEnumRects(aRegionHandle, aRegionRectangle))
+                    {
+                        pWindow->SetLineColor(COL_LIGHTGREEN);
+                        pWindow->SetFillColor();
+                        pWindow->DrawRect(aRegionRectangle);
+                    }
+
+                    aOptimizedRepaintRegion.EndEnumRects(aRegionHandle);
+                }
+#endif
+            }
+        }
+    }
+
     SdrPaintWindow* pPaintWindow = BeginCompleteRedraw(pOut);
     OSL_ENSURE(pPaintWindow, "SdrPaintView::CompleteRedraw: No OutDev (!)");
 
-    DoCompleteRedraw(*pPaintWindow, rReg, nPaintMod, pRedirector);
-    EndCompleteRedraw(*pPaintWindow, rReg);
+    DoCompleteRedraw(*pPaintWindow, aOptimizedRepaintRegion, nPaintMod, pRedirector);
+    EndCompleteRedraw(*pPaintWindow);
 
 #ifdef SVX_REPAINT_TIMER_TEST
     }
@@ -942,7 +980,7 @@ void SdrPaintView::DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& 
     }
 }
 
-void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg)
+void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow)
 {
     if(rPaintWindow.getTemporaryTarget())
     {
@@ -952,52 +990,45 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region&
     else
     {
         // draw postprocessing, only for known devices
-        bool bFormControlsUsed(false);
-        bool bTextEditActive(false);
 
-        if(mpPageView)
-        {
-            bFormControlsUsed = mpPageView->AreFormControlsUsed(rPaintWindow);
-        }
+        // #i74769# it is necessary to always paint FormLayer:
+        //
+        // - AreFormControlsUsed() is not very reliable since ATM ShouldPaintObject may create the
+        //   objects, so XControlContainer may be empty
+        // - In life mode (and thus always since we have controls which even exist as a child window
+        //   when not in life mode) the child windows always need to be positioned and scaled, even
+        //   when not visible (to not stay at their last visible position, but move outside reliably)
+        // - last but not least: There may be other objects on the form layer (an error, but happened)
+        ImpFormLayerDrawing(rPaintWindow);
 
-        if(IsTextEdit() && GetTextEditPageView())
-        {
-            bTextEditActive = true;
-        }
+        // look for active TextEdit. As long as this cannot be painted to a VDev,
+        // it cannot get part of buffering. In that case, output evtl. prerender
+        // early and paint text edit to window.
+        const bool bTextEditActive(IsTextEdit() && GetTextEditPageView());
 
-        if(bFormControlsUsed || bTextEditActive)
+        if(bTextEditActive)
         {
             // output PreRendering and destroy it so that it is not used for FormLayer
             // or overlay
             rPaintWindow.OutputPreRenderDevice(rPaintWindow.GetRedrawRegion());
-
-            // #i73602# do not destroy PreRenderDevice, this will be bad for performance.
-            // To not use it when drawing overlay, better give a flag for that purpose
-            // rPaintWindow.DestroyPreRenderDevice();
-
-            // draw form layer directly to window.
-            if(bFormControlsUsed)
-            {
-                ImpFormLayerDrawing(rPaintWindow);
-            }
 
             // draw old text edit stuff before overlay to have it as part of the background
             // ATM. This will be changed to have the text editing on the overlay, bit it
             // is not an easy thing to do, see BegTextEdit and the OutlinerView stuff used...
             if(bTextEditActive)
             {
-                ImpTextEditDrawing(rReg, rPaintWindow);
+                ImpTextEditDrawing(rPaintWindow);
             }
 
             // draw Overlay directly to window. This will save the contents of the window
             // in the RedrawRegion to the overlay background buffer, too.
-            // #i73602# pass flag if buffer shall be used
+            // This may lead to problems when reading from the screen is slow from the
+            // graphics driver/graphiccard combination.
             rPaintWindow.DrawOverlay(rPaintWindow.GetRedrawRegion(), false);
         }
         else
         {
             // draw Overlay, also to PreRender device if exists
-            // #i73602# add flag if buffer shall be used
             rPaintWindow.DrawOverlay(rPaintWindow.GetRedrawRegion(), true);
 
             // output PreRendering
@@ -1008,27 +1039,82 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region&
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrPaintView::BeginDrawLayers(OutputDevice* pOut, const Region& rReg, sal_Bool bPrepareBuffered)
+SdrPaintWindow* SdrPaintView::BeginDrawLayers(OutputDevice* pOut, const Region& rReg)
 {
-    // prepare the Paint.
+    // #i74769# use BeginCompleteRedraw() as common base
+    SdrPaintWindow* pPaintWindow = BeginCompleteRedraw(pOut);
+    OSL_ENSURE(pPaintWindow, "SdrPaintView::BeginDrawLayers: No SdrPaintWindow (!)");
+
     if(mpPageView)
     {
-        mpPageView->BeginDrawLayer(pOut, rReg, bPrepareBuffered);
+        SdrPageWindow* pKnownTarget = mpPageView->FindPageWindow(*pPaintWindow);
+
+        if(pKnownTarget)
+        {
+            // #i74769# check if pOut is a win and has a ClipRegion. If Yes, the Region
+            // rReg may be made more granular (fine) with using it. Normally, rReg
+            // does come from Window::Paint() anyways and thus is based on a single
+            // rectangle which was derived from exactly that repaint region
+            Region aOptimizedRepaintRegion(rReg);
+
+            if(pOut && OUTDEV_WINDOW == pOut->GetOutDevType())
+            {
+                Window* pWindow = (Window*)pOut;
+
+                if(pWindow->IsInPaint())
+                {
+                    if(!pWindow->GetPaintRegion().IsEmpty())
+                    {
+                        aOptimizedRepaintRegion.Intersect(pWindow->GetPaintRegion());
+
+#ifdef DBG_UTIL
+                        // #i74769# test-paint repaint region
+                        static bool bDoPaintForVisualControl(false);
+                        if(bDoPaintForVisualControl)
+                        {
+                            RegionHandle aRegionHandle(aOptimizedRepaintRegion.BeginEnumRects());
+                            Rectangle aRegionRectangle;
+
+                            while(aOptimizedRepaintRegion.GetEnumRects(aRegionHandle, aRegionRectangle))
+                            {
+                                pWindow->SetLineColor(COL_LIGHTGREEN);
+                                pWindow->SetFillColor();
+                                pWindow->DrawRect(aRegionRectangle);
+                            }
+
+                            aOptimizedRepaintRegion.EndEnumRects(aRegionHandle);
+                        }
+#endif
+                    }
+                }
+            }
+
+            // prepare redraw
+            pKnownTarget->PrepareRedraw(aOptimizedRepaintRegion);
+
+            // remember prepared SdrPageWindow
+            mpPageView->setPreparedPageWindow(pKnownTarget);
+        }
     }
+
+    return pPaintWindow;
 }
 
-void SdrPaintView::EndDrawLayers(OutputDevice* pOut)
+void SdrPaintView::EndDrawLayers(SdrPaintWindow& rPaintWindow)
 {
-    // close the Paint.
+    // #i74769# use EndCompleteRedraw() as common base
+    EndCompleteRedraw(rPaintWindow);
+
     if(mpPageView)
     {
-        mpPageView->EndDrawLayer(pOut);
+        // forget prepared SdrPageWindow
+        mpPageView->setPreparedPageWindow(0);
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrPaintView::ImpTextEditDrawing(const Region& rReg, SdrPaintWindow& rPaintWindow) const
+void SdrPaintView::ImpTextEditDrawing(SdrPaintWindow& rPaintWindow) const
 {
     // draw old text edit stuff
     if(IsTextEdit())
@@ -1038,7 +1124,8 @@ void SdrPaintView::ImpTextEditDrawing(const Region& rReg, SdrPaintWindow& rPaint
         if(pPageView)
         {
             // paint TextEdit directly to the destination OutDev
-            Rectangle aCheckRect(rReg.GetBoundRect());
+            const Region& rRedrawRegion = rPaintWindow.GetRedrawRegion();
+            const Rectangle aCheckRect(rRedrawRegion.GetBoundRect());
             pPageView->PaintOutlinerView(&rPaintWindow.GetOutputDevice(), aCheckRect);
         }
     }
@@ -1048,11 +1135,20 @@ void SdrPaintView::ImpFormLayerDrawing(SdrPaintWindow& rPaintWindow) const
 {
     if(mpPageView)
     {
-        const SdrModel& rModel = *(GetModel());
-        const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
-        const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), sal_False);
+        SdrPageWindow* pKnownTarget = mpPageView->FindPageWindow(rPaintWindow);
 
-        mpPageView->DrawLayer(nControlLayerId, &rPaintWindow.GetOutputDevice());
+        if(pKnownTarget)
+        {
+            const SdrModel& rModel = *(GetModel());
+            const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
+            const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), sal_False);
+
+            // BUFFERED use GetTargetOutputDevice() now, it may be targeted to VDevs, too
+            // need to set PreparedPageWindow to make DrawLayer use the correct ObjectContact
+            mpPageView->setPreparedPageWindow(pKnownTarget);
+            mpPageView->DrawLayer(nControlLayerId, &rPaintWindow.GetTargetOutputDevice());
+            mpPageView->setPreparedPageWindow(0);
+        }
     }
 }
 
