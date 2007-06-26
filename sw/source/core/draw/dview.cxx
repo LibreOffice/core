@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:37:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:56:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,6 +162,9 @@ SwDrawView::SwDrawView( SwViewImp &rI, SdrModel *pMd, OutputDevice *pOutDev) :
 
     // #i73602# Use default from the configuration
     SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_Writer());
+
+    // #i74769#, #i75172# Use default from the configuration
+    SetBufferedOutputAllowed(getOptionsDrawinglayer().IsPaintBuffer_Writer());
 }
 
 /*************************************************************************
