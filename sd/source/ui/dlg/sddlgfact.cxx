@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sddlgfact.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:09:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:39:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 #include "dlgass.hxx"
 #include "dlgfield.hxx"
 #include "dlgsnap.hxx"
-#include "ins_page.hxx"
+#include "layeroptionsdlg.hxx"
 #include "ins_paste.hxx"
 #include "inspagob.hxx"
 #include "morphdlg.hxx"
@@ -451,7 +451,7 @@ AbstractSdSnapLineDlg * SdAbstractDialogFactory_Impl::CreateSdSnapLineDlg( ::Win
 //add for SdSnapLineDlg end
 
 //add for SdInsertLayerDlg begin
-AbstractSdInsertLayerDlg * SdAbstractDialogFactory_Impl::CreateSdInsertLayerDlg( ::Window* pWindow, const SfxItemSet& rInAttrs, BOOL bDeletable, String aStr ) //add for SdInsertLayerDlg
+AbstractSdInsertLayerDlg * SdAbstractDialogFactory_Impl::CreateSdInsertLayerDlg( ::Window* pWindow, const SfxItemSet& rInAttrs, bool bDeletable, String aStr ) //add for SdInsertLayerDlg
 {
     return new AbstractSdInsertLayerDlg_Impl( new SdInsertLayerDlg( pWindow, rInAttrs, bDeletable, aStr ) );
 }
