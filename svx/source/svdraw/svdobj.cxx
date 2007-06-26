@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-06 14:41:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:08:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -954,9 +954,6 @@ sal_Bool SdrObject::SingleObjectPainter(XOutputDevice& rXOut, const SdrPaintInfo
     aDisplayInfo.SetExtendedOutputDevice(&rXOut);
     aDisplayInfo.SetPaintInfoRec((SdrPaintInfoRec*)&rInfoRec);
     aDisplayInfo.SetOutputDevice(rXOut.GetOutDev());
-
-    // keep draw hierarchy up-to-date
-    aPainter.PreProcessDisplay(aDisplayInfo);
 
     // do processing
     aPainter.ProcessDisplay(aDisplayInfo);
