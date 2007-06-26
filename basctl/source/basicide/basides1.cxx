@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 14:53:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 16:51:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,7 @@
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
+#include <com/sun/star/frame/XLayoutManager.hpp>
 
 #include <algorithm>
 
@@ -1143,8 +1144,56 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, BOOL bUpdateTabBar, BO
         InvalidateBasicIDESlots();
         EnableScrollbars( pCurWin ? TRUE : FALSE );
 
+        if ( m_pCurLocalizationMgr )
+            m_pCurLocalizationMgr->handleTranslationbar();
+
+        ManageToolbars();
+
         // fade out (in) property browser in module (dialog) windows
         UIFeatureChanged();
+    }
+}
+
+void BasicIDEShell::ManageToolbars()
+{
+    static ::rtl::OUString aLayoutManagerName = ::rtl::OUString::createFromAscii( "LayoutManager" );
+    static ::rtl::OUString aMacroBarResName =
+        ::rtl::OUString::createFromAscii( "private:resource/toolbar/macrobar" );
+    static ::rtl::OUString aDialogBarResName =
+        ::rtl::OUString::createFromAscii( "private:resource/toolbar/dialogbar" );
+    static ::rtl::OUString aInsertControlsBarResName =
+        ::rtl::OUString::createFromAscii( "private:resource/toolbar/insertcontrolsbar" );
+    (void)aInsertControlsBarResName;
+
+    if( !pCurWin )
+        return;
+
+    Reference< beans::XPropertySet > xFrameProps
+        ( GetViewFrame()->GetFrame()->GetFrameInterface(), uno::UNO_QUERY );
+    if ( xFrameProps.is() )
+    {
+        Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+        uno::Any a = xFrameProps->getPropertyValue( aLayoutManagerName );
+        a >>= xLayoutManager;
+        if ( xLayoutManager.is() )
+        {
+            xLayoutManager->lock();
+            if( pCurWin->IsA( TYPE( DialogWindow ) ) )
+            {
+                xLayoutManager->destroyElement( aMacroBarResName );
+
+                xLayoutManager->requestElement( aDialogBarResName );
+                xLayoutManager->requestElement( aInsertControlsBarResName );
+            }
+            else
+            {
+                xLayoutManager->destroyElement( aDialogBarResName );
+                xLayoutManager->destroyElement( aInsertControlsBarResName );
+
+                xLayoutManager->requestElement( aMacroBarResName );
+            }
+            xLayoutManager->unlock();
+        }
     }
 }
 
