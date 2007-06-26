@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:37:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 10:43:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3340,7 +3340,7 @@ uno::Sequence< beans::PropertyValue > SwXTextTable::createSortDescriptor(void)
     throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return SwXTextCursor::createSortDescriptor(sal_False);
+    return SwXTextCursor::createSortDescriptor(sal_True);
 }
 /*-- 11.12.98 12:42:49---------------------------------------------------
 
@@ -5062,7 +5062,7 @@ double SwXCellRange::getNotANumber(void) throw( uno::RuntimeException )
 uno::Sequence< beans::PropertyValue > SwXCellRange::createSortDescriptor(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return SwXTextCursor::createSortDescriptor(sal_False);
+    return SwXTextCursor::createSortDescriptor(sal_True);
 }
 /*-- 11.12.98 14:27:39---------------------------------------------------
 
