@@ -4,9 +4,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:54:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:52:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,7 +215,8 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     bMarkClipped( FALSE ),          // FALSE fuer Drucker/Metafile etc.
     bSnapPixel( FALSE ),
     bAnyRotated( FALSE ),
-    bAnyClipped( FALSE )
+    bAnyClipped( FALSE ),
+    mpTargetPaintWindow(0) // #i74769# use SdrPaintWindow direct
 {
     if (pZoomX)
         aZoomX = *pZoomX;
@@ -252,6 +253,17 @@ ScOutputData::~ScOutputData()
     delete pValueColor;
     delete pTextColor;
     delete pFormulaColor;
+}
+
+void ScOutputData::SetContentDevice( OutputDevice* pContentDev )
+{
+    // use pContentDev instead of pDev where used
+
+    if ( pRefDevice == pDev )
+        pRefDevice = pContentDev;
+    if ( pFmtDevice == pDev )
+        pFmtDevice = pContentDev;
+    pDev = pContentDev;
 }
 
 void ScOutputData::SetMirrorWidth( long nNew )
@@ -1764,6 +1776,44 @@ void ScOutputData::DrawPageBorder( SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SC
                 pDev->DrawLine( Point( nMaxX,nMinY ), Point( nMaxX,nMaxY ) );
         }
     }
+}
+
+PolyPolygon ScOutputData::GetChangedArea()
+{
+    PolyPolygon aPoly;
+
+    Rectangle aDrawingRect;
+    aDrawingRect.Left() = nScrX;
+    aDrawingRect.Right() = nScrX+nScrW-1;
+
+    BOOL    bHad    = FALSE;
+    long    nPosY   = nScrY;
+    SCSIZE  nArrY;
+    for (nArrY=1; nArrY+1<nArrCount; nArrY++)
+    {
+        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+
+        if ( pThisRowInfo->bChanged )
+        {
+            if (!bHad)
+            {
+                aDrawingRect.Top() = nPosY;
+                bHad = TRUE;
+            }
+            aDrawingRect.Bottom() = nPosY + pRowInfo[nArrY].nHeight - 1;
+        }
+        else if (bHad)
+        {
+            aPoly.Insert( Polygon( pDev->PixelToLogic(aDrawingRect) ) );
+            bHad = FALSE;
+        }
+        nPosY += pRowInfo[nArrY].nHeight;
+    }
+
+    if (bHad)
+        aPoly.Insert( Polygon( pDev->PixelToLogic(aDrawingRect) ) );
+
+    return aPoly;
 }
 
 BOOL ScOutputData::SetChangedClip()
