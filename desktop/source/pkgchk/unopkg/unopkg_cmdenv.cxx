@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg_cmdenv.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:25:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:13:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -303,7 +303,7 @@ void CommandEnvironmentImpl::handle(
     else if (request >>= licAgreementExc)
     {
         String sResMsg( ResId( RID_STR_UNOPKG_NO_SHARED_ALLOWED, *DeploymentResMgr::get() ) );
-        sResMsg.SearchAndReplaceAllAscii( "%NAME", licExc.ExtensionName );
+        sResMsg.SearchAndReplaceAllAscii( "%NAME", licAgreementExc.ExtensionName );
         ::rtl::OString oMsg = ::rtl::OUStringToOString(sResMsg, osl_getThreadTextEncoding());
         fprintf(stdout, "\n%s\n\n", oMsg.getStr());
         abort = true;
