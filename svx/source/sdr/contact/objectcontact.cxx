@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectcontact.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:34:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:04:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,12 +170,6 @@ namespace sdr
             }
         }
 
-        // Pre-Process the whole displaying.
-        void ObjectContact::PreProcessDisplay(DisplayInfo& rDisplayInfo)
-        {
-            // The default implementation ensures a valid draw hierarchy.
-            EnsureValidDrawHierarchy(rDisplayInfo);
-        }
 
         // test if visualizing of entered groups is switched on at all
         sal_Bool ObjectContact::DoVisualizeEnteredGroup() const
@@ -213,13 +207,6 @@ namespace sdr
         // Invalidate given rectangle at the window/output which is represented by
         // this ObjectContact.
         void ObjectContact::InvalidatePartOfView(const Rectangle& /*rRectangle*/) const
-        {
-            // nothing to do here in the default version
-        }
-
-        // Non-painted object was changed. Test for potentially
-        // getting visible
-        void ObjectContact::ObjectGettingPotentiallyVisible(const ViewObjectContact& /*rVOC*/) const
         {
             // nothing to do here in the default version
         }
