@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:00:00 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 10:42:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,6 @@
 #endif
 #ifndef _SVDPAGE_HXX //autogen
 #include <svx/svdpage.hxx>
-#endif
-#ifndef _SFX_PROGRESS_HXX //autogen
-#include <sfx2/progress.hxx>
 #endif
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
@@ -1380,9 +1377,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
     //Wenn in der DocStatistik eine brauchebare Seitenzahl angegeben ist
     //(wird beim Schreiben gepflegt), so wird von dieser Seitenanzahl
     //ausgegengen.
-    BOOL bStartPercent = bPages && !nEndIndex &&
-                        !SfxProgress::GetActiveProgress() &&
-                        !SfxProgress::GetActiveProgress( pDoc->GetDocShell() );
+    const BOOL bStartPercent = bPages && !nEndIndex;
 
     SwPageFrm *pPage = pLay->FindPageFrm();
     const SwSpzFrmFmts *pTbl = pDoc->GetSpzFrmFmts();
@@ -1403,15 +1398,9 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                 pActualSection, bBreakAfter, nIndex, 0 == nEndIndex );
         if( bStartPercent )
         {
-            ULONG nPageCount = pPageMaker->CalcPageCount();
+            const ULONG nPageCount = pPageMaker->CalcPageCount();
             if( nPageCount )
-            {
-                ::StartProgress( STR_STATSTR_LAYOUTINIT, 1, nPageCount,
-                                 pDoc->GetDocShell());
                 bObjsDirect = FALSE;
-            }
-            else
-                bStartPercent = FALSE;
         }
     }
     else
@@ -1453,9 +1442,8 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
             SwCntntNode* pNode = (SwCntntNode*)pNd;
             pFrm = pNode->IsTxtNode() ? new SwTxtFrm( (SwTxtNode*)pNode ) :
                                         pNode->MakeFrm();
-            if( pPageMaker && pPageMaker->CheckInsert( nIndex )
-                && bStartPercent )
-                ::SetProgressState( pPage->GetPhyPageNum(),pDoc->GetDocShell());
+            if( pPageMaker )
+                pPageMaker->CheckInsert( nIndex );
 
             pFrm->InsertBehind( pLay, pPrv );
             // --> OD 2005-12-01 #i27138#
@@ -1507,9 +1495,8 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
 
             pFrm = pTblNode->MakeFrm();
 
-            if( pPageMaker && pPageMaker->CheckInsert( nIndex )
-                && bStartPercent )
-                ::SetProgressState( pPage->GetPhyPageNum(),pDoc->GetDocShell());
+            if( pPageMaker )
+                pPageMaker->CheckInsert( nIndex );
 
             pFrm->InsertBehind( pLay, pPrv );
             // --> OD 2005-12-01 #i27138#
@@ -1747,8 +1734,6 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
         if ( !bDontCreateObjects )
             AppendAllObjs( pTbl );
         bObjsDirect = TRUE;
-        if ( bStartPercent )
-            ::EndProgress( pDoc->GetDocShell() );
     }
 
     if( pPageMaker )
