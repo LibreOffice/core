@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:37:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:56:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,8 +204,11 @@ SwPaM * SwCrsrShell::CreateCrsr()
 
     // hier den akt. Pam nur logisch Hiden, weil sonst die Invertierung
     // vom kopierten Pam aufgehoben wird !!
-    pNew->Insert( pCurCrsr, 0 );
-    pCurCrsr->Remove( 0, pCurCrsr->Count() );
+
+    // #i75172# to be able to make a complete content swap, i moved this to a method
+    // pNew->Insert( pCurCrsr, 0 );
+    // pCurCrsr->Remove( 0, pCurCrsr->Count() );
+    pNew->swapContent(*pCurCrsr);
 
     pCurCrsr->DeleteMark();
 
