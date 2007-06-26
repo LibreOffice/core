@@ -10,7 +10,7 @@ TARGET=odk
 ZIP1TARGET=odkexamples
 ZIP1FLAGS=-u -r
 ZIP1DIR=$(PRJ)
-ZIP1LIST=examples -x "*CVS*" -x "*makefile.mk" -x "*Storage*" -x "*EmbedDocument*" -x "*register_component*" -x "*examples.html"
+ZIP1LIST=examples -x "*CVS*" -x "*makefile.mk" -x "*Container1*" -x "*Storage*" -x "*register_component*" -x "*examples.html"
 
 .INCLUDE :  target.mk
 
