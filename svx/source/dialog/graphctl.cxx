@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:14:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:04:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -373,7 +373,7 @@ void GraphCtrl::Paint( const Rectangle& rRect )
 
         const Region aRepaintRegion(rRect);
         pView->DoCompleteRedraw(*pPaintWindow, aRepaintRegion);
-        pView->EndCompleteRedraw(*pPaintWindow, aRepaintRegion);
+        pView->EndCompleteRedraw(*pPaintWindow);
     }
     else
     {
