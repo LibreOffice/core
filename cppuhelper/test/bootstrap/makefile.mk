@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-09 13:27:04 $
+#   last change: $Author: hr $ $Date: 2007-06-26 16:46:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@ TARGET  := bootstrap.test
 
 ENABLE_EXCEPTIONS  := TRUE
 NO_BSYMBOLIC       := TRUE
-NO_SHL_DESCRIPTION := TRUE
 USE_DEFFILE        := TRUE
 
 
