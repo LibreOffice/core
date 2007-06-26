@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxhtml.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 15:03:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:52:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,7 +272,7 @@ IMAPOBJ_SETEVENT:
         {
             Rectangle aRec( aCoords[0], aCoords[1],
                             aCoords[2], aCoords[3] );
-            IMapRectangleObject aMapRObj( aRec, aHRef, aAlt, aTarget, aName,
+            IMapRectangleObject aMapRObj( aRec, aHRef, aAlt, String(), aTarget, aName,
                                           !bNoHRef );
             if( aMacroTbl.Count() )
                 aMapRObj.SetMacroTable( aMacroTbl );
@@ -283,7 +283,7 @@ IMAPOBJ_SETEVENT:
         if( aCoords.Count() >=3 )
         {
             Point aPoint( aCoords[0], aCoords[1] );
-            IMapCircleObject aMapCObj( aPoint, aCoords[2],aHRef, aAlt,
+            IMapCircleObject aMapCObj( aPoint, aCoords[2],aHRef, aAlt, String(),
                                        aTarget, aName, !bNoHRef );
             if( aMacroTbl.Count() )
                 aMapCObj.SetMacroTable( aMacroTbl );
@@ -297,7 +297,7 @@ IMAPOBJ_SETEVENT:
             Polygon aPoly( nCount );
             for( USHORT i=0; i<nCount; i++ )
                 aPoly[i] = Point( aCoords[2*i], aCoords[2*i+1] );
-            IMapPolygonObject aMapPObj( aPoly, aHRef, aAlt, aTarget, aName,
+            IMapPolygonObject aMapPObj( aPoly, aHRef, aAlt, String(), aTarget, aName,
                                         !bNoHRef );
             if( aMacroTbl.Count() )
                 aMapPObj.SetMacroTable( aMacroTbl );
