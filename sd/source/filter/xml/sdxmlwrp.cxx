@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:46:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 10:02:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1049,14 +1049,9 @@ sal_Bool SdXMLFilter::Export()
 
                     OUString aUseCommonPassPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
                     if( pServices->mbPlain )
-                    {
                         xProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed") ), uno::makeAny( (sal_Bool) sal_False ) );
-                        xProps->setPropertyValue( aUseCommonPassPropName, uno::makeAny( (sal_Bool)sal_False ) );
-                    }
-                    else
-                    {
-                        xProps->setPropertyValue( aUseCommonPassPropName, uno::makeAny( (sal_Bool)sal_True ) );
-                    }
+                    // if the document is encrypted even the plain streams should be encrypted
+                    xProps->setPropertyValue( aUseCommonPassPropName, uno::makeAny( (sal_Bool)sal_True ) );
 
                     const OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
                     xInfoSet->setPropertyValue( sStreamName, Any( sDocName ) );
