@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_cmdenv.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:22:45 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:12:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -349,7 +349,7 @@ void ProgressCommandEnv::handle(
         WarningBox warn(activeDialog(), warnId);
         String msgText = warn.GetMessText();
         msgText.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
-        msgText.SearchAndReplaceAllAscii("%NAME", licExc.ExtensionName);
+        msgText.SearchAndReplaceAllAscii("%NAME", licAgreementExc.ExtensionName);
         warn.SetMessText(msgText);
         warn.Execute();
         abort = true;
