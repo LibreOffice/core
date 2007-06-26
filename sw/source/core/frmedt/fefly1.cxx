@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 13:46:54 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 15:55:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1502,7 +1502,7 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
     SwFlyFrm *pFly = FindFlyFrm( xObj );
     if ( !pFly )
     {
-        aResult = GetAnyCurRect( RECT_FLY_EMBEDDED, 0, xObj ).SSize();
+        aResult = rRect.SSize();
         return aResult;
     }
 
