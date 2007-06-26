@@ -1,7 +1,6 @@
 UDK_3_0_0 {
     global:
 GetVersionInfo
-component_getDescriptionFunc
 ??0ORealDynamicLoader@salhelper@@IAE@PAPAV01@ABVOUString@rtl@@1PAX2@Z
 ??1ORealDynamicLoader@salhelper@@MAE@XZ
 ??_7ORealDynamicLoader@salhelper@@6B@
