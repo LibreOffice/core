@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 10:42:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:57:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2896,20 +2896,28 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
             // #i68597#
             // moved paint pre-process for DrawingLayer overlay here since the above
             // code dependent from bExtraData may expand the PaintRect
-            const Region aDLRegion(aPaintRect.SVRect());
-            pSh->DLPrePaint2(aDLRegion);
+            {
+                // #i75172# if called from ViewShell::ImplEndAction it sould no longer
+                // really be used but handled by ViewShell::ImplEndAction already
+                const Region aDLRegion(aPaintRect.SVRect());
+                pSh->DLPrePaint2(aDLRegion);
+            }
 
-            /// OD 27.09.2002 #103636# - changed method SwLayVout::Enter(..)
-            /// 2nd parameter is no longer <const> and will be set to the
-            /// rectangle the virtual output device is calculated from <aPaintRect>,
-            /// if the virtual output is used.
-            pVout->Enter( pSh, aPaintRect, !bNoVirDev );
+            if(OUTDEV_WINDOW == pGlobalShell->GetOut()->GetOutDevType())
+            {
+                /// OD 27.09.2002 #103636# - changed method SwLayVout::Enter(..)
+                /// 2nd parameter is no longer <const> and will be set to the
+                /// rectangle the virtual output device is calculated from <aPaintRect>,
+                /// if the virtual output is used.
+                pVout->Enter( pSh, aPaintRect, !bNoVirDev );
 
-            /// OD 27.09.2002 #103636# - adjust paint rectangle to pixel size
-            /// Thus, all objects overlapping on pixel level with the unadjusted
-            /// paint rectangle will be considered in the paint.
-            lcl_AdjustRectToPixelSize( aPaintRect, *(pSh->GetOut()) );
+                /// OD 27.09.2002 #103636# - adjust paint rectangle to pixel size
+                /// Thus, all objects overlapping on pixel level with the unadjusted
+                /// paint rectangle will be considered in the paint.
+                lcl_AdjustRectToPixelSize( aPaintRect, *(pSh->GetOut()) );
+            }
 
+            // maybe this can be put in the above scope. Since we are not sure, just leave it ATM
             pVout->SetOrgRect( aPaintRect );
 
             /// OD 29.08.2002 #102450#
@@ -2954,6 +2962,7 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
             pLines->PaintLines( pSh->GetOut() );
 
             BOOL bControlExtra = FALSE;
+
             if ( pSh->Imp()->HasDrawView() )
             {
                 /// OD 29.08.2002 #102450# - add 3rd parameter
@@ -2961,11 +2970,6 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
                 pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHeavenId(), aPaintRect,
                                         &aPageBackgrdColor,
                                         (pPage->IsRightToLeft() ? true : false) );
-                if( pVout->IsFlushable() )
-                    bControlExtra = TRUE;
-                else
-                    pSh->Imp()->PaintLayer( pSh->GetDoc()->GetControlsId(), aPaintRect );
-                pLines->PaintLines( pSh->GetOut() );
             }
 
             if ( bExtraData )
@@ -2978,8 +2982,6 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
                 DELETEZ( pSpecSubsLines );
             }
             pVout->Leave();
-            if( bControlExtra )
-                pSh->Imp()->PaintLayer( pSh->GetDoc()->GetControlsId(), aPaintRect );
 
             // #i68597#
             // needed to move grid painting inside Begin/EndDrawLayer bounds and to change
@@ -2993,7 +2995,9 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
 
             // #i68597#
             // moved paint post-process for DrawingLayer overlay here, see above
-            pSh->DLPostPaint2();
+            {
+                pSh->DLPostPaint2();
+            }
         }
         ASSERT( !pPage->GetNext() || pPage->GetNext()->IsPageFrm(),
                 "Nachbar von Seite keine Seite." );
@@ -6136,8 +6140,6 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
                 pSh->Imp()->PaintLayer( pIDDMA->GetHeavenId(),
                                         aRetouchePart, &aPageBackgrdColor,
                                         (pPage->IsRightToLeft() ? true : false) );
-                pSh->Imp()->PaintLayer( pIDDMA->GetControlsId(),
-                                        aRetouchePart );
             }
 
             SetRetouche();
@@ -6391,11 +6393,6 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         pImp->PaintLayer( pIDDMA->GetHeavenId(), aOut, &aPageBackgrdColor,
                           (pFlyPage->IsRightToLeft() ? true : false) );
         pLines->PaintLines( &aDev );
-        if( pSh->GetViewOptions()->IsControl() )
-        {
-            pImp->PaintLayer( pIDDMA->GetControlsId(), aOut );
-            pLines->PaintLines( &aDev );
-        }
         DELETEZ( pLines );
         pFlyOnlyDraw = 0;
 
