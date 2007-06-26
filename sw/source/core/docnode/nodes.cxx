@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:42:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 10:41:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -509,10 +509,11 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
 
     // falls aEnd-1 auf keinem ContentNode steht, dann suche den vorherigen
     aRg.aEnd--;
-    while( (( pAktNode = &aRg.aEnd.GetNode())->GetStartNode() &&
+    while( ( (( pAktNode = &aRg.aEnd.GetNode())->GetStartNode() &&
             !pAktNode->IsSectionNode() ) ||
             ( pAktNode->IsEndNode() &&
-            ND_STARTNODE == pAktNode->pStartOfSection->GetNodeType()) )
+            ND_STARTNODE == pAktNode->pStartOfSection->GetNodeType()) ) &&
+            aRg.aEnd > aRg.aStart )
         aRg.aEnd--;
 
 
