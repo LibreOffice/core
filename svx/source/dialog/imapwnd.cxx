@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imapwnd.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:37:54 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:51:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,7 +253,7 @@ BOOL IMapWindow::ReplaceActualIMapInfo( const NotifyInfo& rNewInfo )
     if ( pSdrObj && ( ( pIMapObj = GetIMapObj( pSdrObj ) ) != NULL ) )
     {
         pIMapObj->SetURL( rNewInfo.aMarkURL );
-        pIMapObj->SetDescription( rNewInfo.aMarkDescription );
+        pIMapObj->SetAltText( rNewInfo.aMarkAltText );
         pIMapObj->SetTarget( rNewInfo.aMarkTarget );
         pModel->SetChanged( sal_True );
         UpdateInfo( FALSE );
@@ -455,7 +455,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
         {
             SdrRectObj*          pRectObj = (SdrRectObj*) &rObj;
             IMapRectangleObject* pObj = new IMapRectangleObject( pRectObj->GetLogicRect(),
-                                                                 String(), String(), TRUE, FALSE );
+                                                                 String(), String(), String(), String(), String(), TRUE, FALSE );
 
             pRectObj->InsertUserData( new IMapUserData( pObj ) );
         }
@@ -468,7 +468,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
             Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0L));
             delete pPathObj;
 
-            IMapPolygonObject* pObj = new IMapPolygonObject( Polygon(aPoly), String(), String(), TRUE, FALSE );
+            IMapPolygonObject* pObj = new IMapPolygonObject( Polygon(aPoly), String(), String(), String(), String(), String(),  TRUE, FALSE );
             pObj->SetExtraEllipse( aPoly.GetBoundRect() );
             pCircObj->InsertUserData( new IMapUserData( pObj ) );
         }
@@ -485,7 +485,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
             if ( rXPolyPoly.count() )
             {
                 Polygon aPoly(rXPolyPoly.getB2DPolygon(0L));
-                IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, String(), String(), TRUE, FALSE );
+                IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, String(), String(), String(), String(), String(),  TRUE, FALSE );
                 pPathObj->InsertUserData( new IMapUserData( pObj ) );
             }
         }
@@ -509,7 +509,8 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
     if ( pUserData )
     {
         String          aURL;
-        String          aText;
+        String          aAltText;
+        String          aDesc;
         String          aTarget;
         IMapObject*     pIMapObj = pUserData->GetObject();
         BOOL            bActive = TRUE;
@@ -517,7 +518,8 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
         if ( pIMapObj )
         {
             aURL = pIMapObj->GetURL();
-            aText = pIMapObj->GetDescription();
+            aAltText = pIMapObj->GetAltText();
+            aDesc = pIMapObj->GetDesc();
             aTarget = pIMapObj->GetTarget();
             bActive = pIMapObj->IsActive();
         }
@@ -527,7 +529,7 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
             case( OBJ_RECT ):
             {
                 pUserData->ReplaceObject( new IMapRectangleObject( ( (const SdrRectObj&) rObj ).GetLogicRect(),
-                                          aURL, aText, aTarget, bActive, FALSE ) );
+                          aURL, aAltText, aDesc, aTarget, String(), bActive, FALSE ) );
             }
             break;
 
@@ -537,7 +539,7 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
                 SdrPathObj* pPathObj = (SdrPathObj*) rCircObj.ConvertToPolyObj( FALSE, FALSE );
                 Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0L));
 
-                IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, aText, aTarget, bActive, FALSE );
+                IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, String(), bActive, FALSE );
                 pObj->SetExtraEllipse( aPoly.GetBoundRect() );
 
                 // wurde von uns nur temporaer angelegt
@@ -557,7 +559,7 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
                 if ( rXPolyPoly.count() )
                 {
                     Polygon aPoly(rPathObj.GetPathPoly().getB2DPolygon(0L));
-                    IMapPolygonObject*  pObj = new IMapPolygonObject( aPoly, aURL, aText, aTarget, bActive, FALSE );
+                    IMapPolygonObject*  pObj = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, String(), bActive, FALSE );
                     pUserData->ReplaceObject( pObj );
                 }
             }
@@ -767,7 +769,7 @@ sal_Int8 IMapWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
             IMapObject* pIMapObj = GetIMapObj( pSdrObj );
 
             pIMapObj->SetURL( aBookMark.GetURL() );
-            pIMapObj->SetDescription( aBookMark.GetDescription() );
+            pIMapObj->SetAltText( aBookMark.GetDescription() );
             pModel->SetChanged( sal_True );
             pView->UnmarkAll();
             pView->MarkObj( pSdrObj, pView->GetSdrPageView() );
@@ -800,7 +802,7 @@ void IMapWindow::RequestHelp( const HelpEvent& rHEvt )
 
             if ( pIMapObj && ( aStr = pIMapObj->GetURL() ).Len() )
             {
-                String      aDescr( pIMapObj->GetDescription() );
+                String      aDescr( pIMapObj->GetAltText() );
                 Rectangle   aLogicPix( LogicToPixel( Rectangle( Point(), GetGraphicSize() ) ) );
                 Rectangle   aScreenRect( OutputToScreenPixel( aLogicPix.TopLeft() ),
                                          OutputToScreenPixel( aLogicPix.BottomRight() ) );
@@ -868,14 +870,14 @@ void IMapWindow::UpdateInfo( BOOL bNewObj )
         {
             aInfo.bOneMarked = TRUE;
             aInfo.aMarkURL = pIMapObj->GetURL();
-            aInfo.aMarkDescription = pIMapObj->GetDescription();
+            aInfo.aMarkAltText = pIMapObj->GetAltText();
             aInfo.aMarkTarget = pIMapObj->GetTarget();
             aInfo.bActivated = pIMapObj->IsActive();
             aInfoLink.Call( this );
         }
         else
         {
-            aInfo.aMarkURL = aInfo.aMarkDescription = aInfo.aMarkTarget = String();
+            aInfo.aMarkURL = aInfo.aMarkAltText = aInfo.aMarkTarget = String();
             aInfo.bOneMarked = FALSE;
             aInfo.bActivated = FALSE;
         }
@@ -935,17 +937,15 @@ void IMapWindow::DoPropertyDialog()
     if ( pSdrObj )
     {
         IMapObject* pIMapObj = GetIMapObj( pSdrObj );
-        //CHINA001 URLDlg       aDlg( this, pIMapObj->GetURL(), pIMapObj->GetDescription(),
-        //CHINA001                        pIMapObj->GetTarget(), pIMapObj->GetName(), aTargetList );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            AbstractURLDlg* aDlg = pFact->CreateURLDialog( this, pIMapObj->GetURL(), pIMapObj->GetDescription(),
+            AbstractURLDlg* aDlg = pFact->CreateURLDialog( this, pIMapObj->GetURL(), pIMapObj->GetAltText(), pIMapObj->GetDesc(),
                                             pIMapObj->GetTarget(), pIMapObj->GetName(), aTargetList, RID_SVXDLG_IMAPURL );
-            DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
-            if ( aDlg->Execute() == RET_OK ) //CHINA001 if ( aDlg.Execute() == RET_OK )
+            DBG_ASSERT(aDlg, "Dialogdiet fail!");
+            if ( aDlg->Execute() == RET_OK )
             {
-                const String aURLText( aDlg->GetURL() ); //CHINA001 const String aURLText( aDlg.GetURL() );
+                const String aURLText( aDlg->GetURL() );
 
                 if ( aURLText.Len() )
                 {
@@ -956,9 +956,10 @@ void IMapWindow::DoPropertyDialog()
                 else
                     pIMapObj->SetURL( aURLText );
 
-                pIMapObj->SetDescription( aDlg->GetDescription() ); //CHINA001 pIMapObj->SetDescription( aDlg.GetDescription() );
-                pIMapObj->SetTarget( aDlg->GetTarget() ); //CHINA001 pIMapObj->SetTarget( aDlg.GetTarget() );
-                pIMapObj->SetName( aDlg->GetName() ); //CHINA001 pIMapObj->SetName( aDlg.GetName() );
+                pIMapObj->SetAltText( aDlg->GetAltText() );
+                pIMapObj->SetDesc( aDlg->GetDesc() );
+                pIMapObj->SetTarget( aDlg->GetTarget() );
+                pIMapObj->SetName( aDlg->GetName() );
                 pModel->SetChanged( sal_True );
                 UpdateInfo( TRUE );
             }
