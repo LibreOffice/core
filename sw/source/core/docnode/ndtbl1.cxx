@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl1.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:57:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 10:41:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1416,7 +1416,7 @@ void lcl_CalcColValues( SvUShorts &rToFill, const SwTabCols &rCols,
         const SwLayoutFrm *pCell = pTab->FirstCell();
         do
         {
-            if ( pCell->IsCellFrm() && ::IsFrmInTblSel( rUnion, pCell ) )
+            if ( pCell->IsCellFrm() && pCell->FindTabFrm() == pTab && ::IsFrmInTblSel( rUnion, pCell ) )
             {
                 const long nCLeft  = (pCell->Frm().*fnRect->fnGetLeft)();
                 const long nCRight = (pCell->Frm().*fnRect->fnGetRight)();
@@ -1474,7 +1474,7 @@ void lcl_CalcColValues( SvUShorts &rToFill, const SwTabCols &rCols,
             }
             pCell = pCell->GetNextLayoutLeaf();
 
-        } while ( pCell && const_cast<SwLayoutFrm*>(pCell)->ImplFindTabFrm() == pTab );
+        } while ( pCell && pTab->IsAnLower( pCell ) );
     }
 }
 
