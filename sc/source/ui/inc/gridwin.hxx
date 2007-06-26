@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:23:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:50:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -309,7 +309,7 @@ private:
     //void          DrawStartTimer();
 
     void            DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, ULONG nLayer );
-    void            DrawSdrGrid( const Rectangle& rDrawingRect );
+    void            DrawSdrGrid( const Rectangle& rDrawingRect, OutputDevice* pContentDev );
     //BOOL          DrawBeforeScroll();
     void            DrawAfterScroll(/*BOOL bVal*/);
     void            OutlinerViewPaint( const Rectangle& rRect );
@@ -322,7 +322,7 @@ private:
                                      BOOL           bBtnIn  = FALSE );
     Rectangle       GetListValButtonRect( const ScAddress& rButtonPos );
 
-    void            DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
+    void            DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, OutputDevice* pContentDev );
 
     BOOL            GetEditUrl( const Point& rPos,
                                 String* pName=0, String* pUrl=0, String* pTarget=0 );
@@ -401,7 +401,7 @@ public:
     BOOL            HasPageFieldData( SCCOL nCol, SCROW nRow ) const;
 
     void            DrawButtons( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
-                                    ScTableInfo& rTabInfo );
+                                    ScTableInfo& rTabInfo, OutputDevice* pContentDev );
 
     using Window::Draw;
     void            Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
