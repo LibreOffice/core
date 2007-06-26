@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontactofsdrmediaobj.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:13:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:02:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ namespace sdr
             virtual void PrepareDelete();
 
             // Paint this object. This is before evtl. SubObjects get painted. This method
-            // needs to set the flag mbIsPainted and mbIsInvalidated and to set the
+            // needs to set the flag mbIsPainted and to set the
             // maPaintedRectangle member. This information is later used for invalidates
             // and repaints.
             virtual void PaintObject(DisplayInfo& rDisplayInfo);
