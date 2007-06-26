@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:07:23 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:51:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,8 +142,6 @@ ModelessDialog RID_SVXDLG_IMAP
             {
                 Identifier = TBI_POLYINSERT ;
                 HelpId = HID_IMAPDLG_POLYINSERT ;
-                /* ### ACHTUNG: Neuer Text in Resource? Punkte einfügen : Punkte einf³gen */
-                /* ### ACHTUNG: Neuer Text in Resource? Punkte einfügen : Punkte einf³gen */
                 Text [ en-US ] = "Insert Points" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
@@ -152,8 +150,6 @@ ModelessDialog RID_SVXDLG_IMAP
             {
                 Identifier = TBI_POLYDELETE ;
                 HelpId = HID_IMAPDLG_POLYDELETE ;
-                /* ### ACHTUNG: Neuer Text in Resource? Punkte löschen : Punkte l÷schen */
-                /* ### ACHTUNG: Neuer Text in Resource? Punkte löschen : Punkte l÷schen */
                 Text [ en-US ] = "Delete Points" ;
             };
             ToolBoxItem
@@ -354,17 +350,12 @@ Menu RID_SVXMN_IMAP
         MenuItem
         {
             Identifier = MN_MARK_ALL ;
-            /* ### ACHTUNG: Neuer Text in Resource? Alles ausw~ählen : Alles ausw~õhlen */
-            /* ### ACHTUNG: Neuer Text in Resource? Alles ausw~ählen : Alles ausw~õhlen */
             Text [ en-US ] = "Select ~All" ;
         };
         MenuItem
         {
             Identifier = MN_DELETE1 ;
-            /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-            /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
             Text [ en-US ] = "~Delete" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Die Selektion löschen : Die Selektion l÷schen */
         };
     };
 };
@@ -375,26 +366,14 @@ ModalDialog RID_SVXDLG_IMAPURL
     OutputSize = TRUE ;
     Closeable = TRUE ;
     Moveable = TRUE ;
-    Size = MAP_APPFONT ( 214 , 80 ) ;
-    Text [ en-US ] = "Description" ;
-    FixedText FT_URLDESCRIPTION
-    {
-        Pos = MAP_APPFONT ( 12 , 32 ) ;
-        Size = MAP_APPFONT ( 48 , 8 ) ;
-        Text [ en-US ] = "Alternative ~text" ;
-    };
-    Edit EDT_URLDESCRIPTION
-    {
-        Border = TRUE ;
-        TabStop = TRUE ;
-        Left = TRUE ;
-        Pos = MAP_APPFONT ( 62 , 30 ) ;
-        Size = MAP_APPFONT ( 84 , 12 ) ;
-    };
+    Size = MAP_APPFONT ( 214 , 188 ) ;
+    Text [ en-US ] = "Properties" ;
+    Text [ DE ] = "Eigenschaften" ;
+
     FixedText FT_URL1
     {
-        Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 48 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 202 , 8 ) ;
         Text [ en-US ] = "~URL" ;
     };
     Edit EDT_URL
@@ -402,48 +381,31 @@ ModalDialog RID_SVXDLG_IMAPURL
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 62 , 14 ) ;
-        Size = MAP_APPFONT ( 84 , 12 ) ;
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 202 , 12 ) ;
     };
-    OKButton BTN_OK
-    {
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-        Pos = MAP_APPFONT ( 158 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    CancelButton BTN_CANCEL1
-    {
-        TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 158 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    FixedLine FL_URL
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 146 , 8 ) ;
-        Text [ en-US ] = "Hyperlink" ;
-    };
+
     FixedText FT_TARGET
     {
-        Pos = MAP_APPFONT ( 12 , 48 ) ;
-        Size = MAP_APPFONT ( 48 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 32 ) ;
+        Size = MAP_APPFONT ( 202 , 8 ) ;
         Text [ en-US ] = "F~rame" ;
     };
     ComboBox CBB_TARGETS
     {
         Border = TRUE ;
         Sort = TRUE ;
-        Pos = MAP_APPFONT ( 62 , 46 ) ;
-        Size = MAP_APPFONT ( 84 , 50 ) ;
+        Pos = MAP_APPFONT ( 6 , 43 ) ;
+        Size = MAP_APPFONT ( 101 , 50 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         HScroll = TRUE ;
     };
+
     FixedText FT_NAME
     {
-        Pos = MAP_APPFONT ( 12 , 64 ) ;
-        Size = MAP_APPFONT ( 48 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 59 ) ;
+        Size = MAP_APPFONT ( 202 , 8 ) ;
         Text [ en-US ] = "~Name" ;
     };
     Edit EDT_NAME
@@ -451,47 +413,79 @@ ModalDialog RID_SVXDLG_IMAPURL
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 62 , 62 ) ;
-        Size = MAP_APPFONT ( 84 , 12 ) ;
+        Pos = MAP_APPFONT ( 6 , 70 ) ;
+        Size = MAP_APPFONT ( 202 , 12 ) ;
+    };
+
+    FixedText FT_URLDESCRIPTION
+    {
+        Pos = MAP_APPFONT ( 6 , 85 ) ;
+        Size = MAP_APPFONT ( 202 , 8 ) ;
+        Text [ en-US ] = "Alternative ~text" ;
+    };
+
+    Edit EDT_URLDESCRIPTION
+    {
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 96 ) ;
+        Size = MAP_APPFONT ( 202 , 12 ) ;
+    };
+    FixedText FT_DESCRIPTION
+    {
+        Pos = MAP_APPFONT ( 6 , 111 ) ;
+        Size = MAP_APPFONT ( 202 , 8 ) ;
+        Text [ en-US ] = "~Description" ;
+        Text [ DE ] = "~Beschreibung" ;
+    };
+
+    MultiLineEdit EDT_DESCRIPTION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 122 ) ;
+        Size = MAP_APPFONT ( 202 , 34 ) ;
+        TabStop = TRUE ;
+        IgnoreTab = TRUE;
+        VScroll = TRUE;
+    };
+
+    FixedLine FL_URL
+    {
+        Pos = MAP_APPFONT ( 0 , 160 ) ;
+        Size = MAP_APPFONT ( 214 , 4 ) ;
+    };
+
+    // Buttons
+    HelpButton BTN_HELP1
+    {
+        Pos = MAP_APPFONT ( 6, 168 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+
+    OKButton BTN_OK1
+    {
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+        Pos = MAP_APPFONT ( 107 , 168 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+
+    CancelButton BTN_CANCEL1
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 160 , 168 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
     };
 };
-/******************************************************************************/
+
 String STR_IMAPDLG_SAVE
 {
     Text [ en-US ] = "The ImageMap has been modified.\nDo you want to save the changes?";
-    /* ### ACHTUNG: Neuer Text in Resource? Die ImageMap wurde geändert.\nSollen die Änderungen gespeichert werden? : Die ImageMap wurde geõndert.\nSollen die Žnderungen gespeichert werden? */
-    /* ### ACHTUNG: Neuer Text in Resource? Die ImageMap wurde geändert.\nSollen die Änderungen gespeichert werden? : Die ImageMap wurde geõndert.\nSollen die Žnderungen gespeichert werden? */
 };
+
 String STR_IMAPDLG_MODIFY
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Die ImageMap wurde geändert.\nSollen die Änderungen übernommen werden? : Die ImageMap wurde geõndert.\nSollen die Žnderungen ³bernommen werden? */
-    /* ### ACHTUNG: Neuer Text in Resource? Die ImageMap wurde geändert.\nSollen die Änderungen übernommen werden? : Die ImageMap wurde geõndert.\nSollen die Žnderungen ³bernommen werden? */
     Text [ en-US ] = "The ImageMap has been modified.\nDo you want to save the changes?" ;
 };
-/******************************************************************************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
