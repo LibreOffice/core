@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imapwnd.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:16:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:51:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@
 struct NotifyInfo
 {
     String  aMarkURL;
-    String  aMarkDescription;
+    String  aMarkAltText;
     String  aMarkTarget;
     BOOL    bNewObj;
     BOOL    bOneMarked;
