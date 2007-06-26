@@ -36,8 +36,6 @@ SHL1STDLIBS+=-lzip -lawt
 SHL1STDLIBS+=-lstdc++
 .ENDIF
 
-NO_SHL1DESCRIPTION=TRUE
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
