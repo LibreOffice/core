@@ -5815,6 +5815,31 @@ SfxVoidItem SaveBasicAs SID_BASICSAVEAS
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem ExportDialog SID_EXPORT_DIALOG
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem SaveConfiguration SID_SAVECONFIG
 (SfxStringItem FileName SID_CFGFILE)
 [
