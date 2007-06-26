@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLFilter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:27:40 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 10:06:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -734,7 +734,7 @@ sal_Int32 XMLFilter::impl_Export(
             nWarning |= impl_ExportStream(
                 C2U( sXML_metaStreamName ),
                 C2U( sXML_export_chart_oasis_meta_service ),
-                xStorage, xSaxWriter, xServiceFactory, aFilterProperties, sal_False /* bUseCommonEncryption */ );
+                xStorage, xSaxWriter, xServiceFactory, aFilterProperties );
 
         // export styles
         nWarning |= impl_ExportStream(
@@ -742,7 +742,7 @@ sal_Int32 XMLFilter::impl_Export(
             bOasis
             ? C2U( sXML_export_chart_oasis_styles_service )
             : C2U( sXML_export_chart_styles_service ),
-            xStorage, xSaxWriter, xServiceFactory, aFilterProperties, sal_True /* bUseCommonEncryption */ );
+            xStorage, xSaxWriter, xServiceFactory, aFilterProperties );
 
         // export content
         sal_Int32 nContentWarning = impl_ExportStream(
@@ -750,7 +750,7 @@ sal_Int32 XMLFilter::impl_Export(
             bOasis
             ? C2U( sXML_export_chart_oasis_content_service )
             : C2U( sXML_export_chart_content_service ),
-            xStorage, xSaxWriter, xServiceFactory, aFilterProperties, sal_True /* bUseCommonEncryption */ );
+            xStorage, xSaxWriter, xServiceFactory, aFilterProperties );
         nWarning |= nContentWarning;
 
         Reference< lang::XComponent > xComp( xGraphicObjectResolver, uno::UNO_QUERY );
@@ -778,8 +778,7 @@ sal_Int32 XMLFilter::impl_ExportStream(
     const Reference< embed::XStorage > & xStorage,
     const uno::Reference< io::XActiveDataSource >& xActiveDataSource,
     const Reference< lang::XMultiServiceFactory >& xServiceFactory,
-    const Sequence< uno::Any > & rFilterProperties,
-    sal_Bool bUseCommonEncryption )
+    const Sequence< uno::Any > & rFilterProperties )
 {
     sal_Int32 nWarning = 0;
 
@@ -805,7 +804,7 @@ sal_Int32 XMLFilter::impl_ExportStream(
         {
             xStreamProp->setPropertyValue( C2U("MediaType"), uno::makeAny( C2U("text/xml") ) );
             xStreamProp->setPropertyValue( C2U("Compressed"), uno::makeAny( sal_True ) );//@todo?
-            xStreamProp->setPropertyValue( C2U("UseCommonStoragePasswordEncryption"), uno::makeAny( bUseCommonEncryption ) );
+            xStreamProp->setPropertyValue( C2U("UseCommonStoragePasswordEncryption"), uno::makeAny( sal_True ) );
         }
         catch( uno::Exception& rEx )
         {
