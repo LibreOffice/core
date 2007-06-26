@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:39:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:09:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,6 +153,11 @@
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
+#endif
+
+// #i74769#
+#ifndef _SDRPAINTWINDOW_HXX
+#include <svx/sdrpaintwindow.hxx>
 #endif
 
 using namespace comphelper;
@@ -462,7 +467,8 @@ void DlgEditor::DoScroll( ScrollBar* )
     //  Wallpaper aOldBackground = pWindow->GetBackground();
     //  pWindow->SetBackground();
 
-    pWindow->Scroll( -nX, -nY, SCROLL_NOCHILDREN );
+    // #i74769# children should be scrolled
+    pWindow->Scroll( -nX, -nY, SCROLL_CHILDREN); // SCROLL_NOCHILDREN );
     aMap.SetOrigin( Point( -aScrollPos.Width(), -aScrollPos.Height() ) );
     pWindow->SetMapMode( aMap );
     pWindow->Update();
@@ -712,10 +718,14 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
     SdrPageView* pPgView = pDlgEdView->GetSdrPageView();
     const Region aPaintRectRegion(aPaintRect);
 
+    // #i74769#
+    SdrPaintWindow* pTargetPaintWindow = 0;
+
     // mark repaint start
     if(pPgView)
     {
-        pPgView->GetView().BeginDrawLayers(pWindow, aPaintRectRegion, sal_False);
+        pTargetPaintWindow = pPgView->GetView().BeginDrawLayers(pWindow, aPaintRectRegion);
+        OSL_ENSURE(pTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
     }
 
     // draw background self using wallpaper
@@ -728,7 +738,7 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
     if(pPgView)
     {
         pPgView->DrawLayer(0, pWindow);
-        pPgView->GetView().EndDrawLayers(pWindow);
+        pPgView->GetView().EndDrawLayers(*pTargetPaintWindow);
     }
 
     nInPaint = FALSE;
