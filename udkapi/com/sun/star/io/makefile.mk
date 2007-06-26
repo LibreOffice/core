@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 15:36:32 $
+#   last change: $Author: hr $ $Date: 2007-06-26 16:08:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@ IDLFILES=\
     ObjectOutputStream.idl\
     Pipe.idl\
     Pump.idl\
+    SequenceInputStream.idl\
     UnexpectedEOFException.idl\
     WrongFormatException.idl\
     XActiveDataControl.idl\
@@ -82,6 +83,7 @@ IDLFILES=\
     XPersistObject.idl\
     XStreamListener.idl\
     XSeekable.idl\
+    XSeekableInputStream.idl\
     TextInputStream.idl\
     TextOutputStream.idl\
     XTextInputStream.idl\
