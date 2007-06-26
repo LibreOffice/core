@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objembed.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:17:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 16:09:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,8 +151,11 @@ void SfxObjectShell::SetVisArea( const Rectangle & rVisArea )
         pImp->m_aVisArea = rVisArea;
         if ( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
         {
-            SetModified( TRUE );
-            SFX_APP()->NotifyEvent(SfxEventHint( SFX_EVENT_VISAREACHANGED, this));
+            if ( IsEnableSetModified() )
+            {
+                SetModified( TRUE );
+                SFX_APP()->NotifyEvent(SfxEventHint( SFX_EVENT_VISAREACHANGED, this));
+            }
 
             /*
             Size aSize (GetVisArea().GetSize());
