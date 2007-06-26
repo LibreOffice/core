@@ -4,9 +4,9 @@
  *
  *  $RCSfile: overlaymanagerbuffered.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:31:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:07:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,14 @@
 
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
+#endif
+
+// #i72754#
+#ifndef _SV_BITMAP_HXX
+#include <vcl/bitmap.hxx>
+#endif
+#ifndef _STREAM_HXX
+#include <tools/stream.hxx>
 #endif
 
 // #i75163#
@@ -139,36 +147,48 @@ namespace sdr
             const Rectangle aRegionRectanglePixel(
                 maBufferRememberedRangePixel.getMinX(), maBufferRememberedRangePixel.getMinY(),
                 maBufferRememberedRangePixel.getMaxX(), maBufferRememberedRangePixel.getMaxY());
-            ImpRestoreBackground(aRegionRectanglePixel);
+            const Region aRegionPixel(aRegionRectanglePixel);
+
+            ImpRestoreBackground(aRegionPixel);
         }
 
-        void OverlayManagerBuffered::ImpRestoreBackground(const Rectangle& rRegionRectanglePixel) const
+        void OverlayManagerBuffered::ImpRestoreBackground(const Region& rRegionPixel) const
         {
+            // local region
+            Region aRegionPixel(rRegionPixel);
+            RegionHandle aRegionHandle(aRegionPixel.BeginEnumRects());
+            Rectangle aRegionRectanglePixel;
+
             // MapModes off
             const sal_Bool bMapModeWasEnabledDest(getOutputDevice().IsMapModeEnabled());
             const sal_Bool bMapModeWasEnabledSource(maBufferDevice.IsMapModeEnabled());
             getOutputDevice().EnableMapMode(sal_False);
             ((OverlayManagerBuffered*)this)->maBufferDevice.EnableMapMode(sal_False);
 
-#ifdef DBG_UTIL
-            // #i72754# possible graphical region test only with non-pro
-            static bool bDoPaintForVisualControl(false);
-            if(bDoPaintForVisualControl)
+            while(aRegionPixel.GetEnumRects(aRegionHandle, aRegionRectanglePixel))
             {
-                getOutputDevice().SetLineColor(COL_LIGHTGREEN);
-                getOutputDevice().SetFillColor();
-                getOutputDevice().DrawRect(rRegionRectanglePixel);
-            }
+#ifdef DBG_UTIL
+                // #i72754# possible graphical region test only with non-pro
+                static bool bDoPaintForVisualControl(false);
+                if(bDoPaintForVisualControl)
+                {
+                    getOutputDevice().SetLineColor(COL_LIGHTGREEN);
+                    getOutputDevice().SetFillColor();
+                    getOutputDevice().DrawRect(aRegionRectanglePixel);
+                }
 #endif
 
-            // restore the area
-            const Point aTopLeft(rRegionRectanglePixel.TopLeft());
-            const Size aSize(rRegionRectanglePixel.GetSize());
+                // restore the area
+                const Point aTopLeft(aRegionRectanglePixel.TopLeft());
+                const Size aSize(aRegionRectanglePixel.GetSize());
 
-            getOutputDevice().DrawOutDev(
-                aTopLeft, aSize, // destination
-                aTopLeft, aSize, // source
-                maBufferDevice);
+                getOutputDevice().DrawOutDev(
+                    aTopLeft, aSize, // destination
+                    aTopLeft, aSize, // source
+                    maBufferDevice);
+            }
+
+            aRegionPixel.EndEnumRects(aRegionHandle);
 
             // restore MapModes
             getOutputDevice().EnableMapMode(bMapModeWasEnabledDest);
@@ -229,9 +249,20 @@ namespace sdr
                 static bool bDoPaintForVisualControl(false);
                 if(bDoPaintForVisualControl)
                 {
+                    const sal_Bool bMapModeWasEnabledTest(getOutputDevice().IsMapModeEnabled());
+                    getOutputDevice().EnableMapMode(false);
                     getOutputDevice().SetLineColor(COL_LIGHTRED);
                     getOutputDevice().SetFillColor();
                     getOutputDevice().DrawRect(aRegionRectanglePixel);
+                    getOutputDevice().EnableMapMode(bMapModeWasEnabledTest);
+                }
+
+                static bool bDoSaveForVisualControl(false);
+                if(bDoSaveForVisualControl)
+                {
+                    const Bitmap aBitmap(maBufferDevice.GetBitmap(aTopLeft, aSize));
+                    SvFileStream aNew(String(ByteString( "c:\\test.bmp" ), RTL_TEXTENCODING_UTF8), STREAM_WRITE|STREAM_TRUNC);
+                    aNew << aBitmap;
                 }
 #endif
             }
@@ -255,6 +286,16 @@ namespace sdr
                     maBufferRememberedRangePixel.getMinX(), maBufferRememberedRangePixel.getMinY(),
                     maBufferRememberedRangePixel.getMaxX(), maBufferRememberedRangePixel.getMaxY())));
                 const basegfx::B2DRange aBufferRememberedRangeLogic(aRectangleLogic.Left(), aRectangleLogic.Top(), aRectangleLogic.Right(), aRectangleLogic.Bottom());
+                const bool bTargetIsWindow(OUTDEV_WINDOW == rmOutputDevice.GetOutDevType());
+                Cursor* pCursor = 0;
+
+                // #i75172# switch off VCL cursor during overlay refresh
+                if(bTargetIsWindow)
+                {
+                    Window& rWindow = static_cast< Window& >(rmOutputDevice);
+                    pCursor = rWindow.GetCursor();
+                    rWindow.SetCursor(0);
+                }
 
                 if(DoRefreshWithPreRendering())
                 {
@@ -360,7 +401,7 @@ namespace sdr
                 // a window which always keeps it's content consistent over the parent, but it's
                 // more like just a paint flag for the parent.
                 // To get the update, the windows in question are updated manulally here.
-                if(OUTDEV_WINDOW == rmOutputDevice.GetOutDevType())
+                if(bTargetIsWindow)
                 {
                     Window& rWindow = static_cast< Window& >(rmOutputDevice);
 
@@ -386,6 +427,13 @@ namespace sdr
                             }
                         }
                     }
+                }
+
+                // #i75172# restore VCL cursor
+                if(bTargetIsWindow)
+                {
+                    Window& rWindow = static_cast< Window& >(rmOutputDevice);
+                    rWindow.SetCursor(pCursor);
                 }
 
                 // forget remembered Region
@@ -434,12 +482,18 @@ namespace sdr
             ImpBufferTimerHandler(0);
         }
 
+        // #i68597# part of content gets copied, react on it
+        void OverlayManagerBuffered::copyArea(const Point& rDestPt, const Point& rSrcPt, const Size& rSrcSize)
+        {
+            // scroll local buffered area
+            maBufferDevice.CopyArea(rDestPt, rSrcPt, rSrcSize);
+        }
+
         void OverlayManagerBuffered::restoreBackground(const Region& rRegion) const
         {
             // restore
-            Rectangle aBoundRect(rRegion.GetBoundRect());
-            aBoundRect = getOutputDevice().LogicToPixel(aBoundRect);
-            ImpRestoreBackground(aBoundRect);
+            const Region aRegionPixel(getOutputDevice().LogicToPixel(rRegion));
+            ImpRestoreBackground(aRegionPixel);
 
             // call parent
             OverlayManager::restoreBackground(rRegion);
