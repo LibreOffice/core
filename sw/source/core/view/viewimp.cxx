@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:11:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:57:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -382,26 +382,6 @@ void SwViewImp::MakeDrawView()
             if(bIsReadOnly)
             {
                 pDrawView->SetBufferedOverlayAllowed(false);
-            }
-        }
-
-        // #i68597# Init overlay buffer when destination is a window. This is necessary as long
-        // as DrawingLayer is created on demand to start fully buffered overlay correctly.
-        if(pDrawView && pDrawView->IsBufferedOverlayAllowed())
-        {
-            Window* pWindow = GetShell()->GetWin();
-
-            if(pWindow)
-            {
-                // #i72754# use correct region calculation now
-                const Rectangle aRectPixel = Rectangle(Point(), pWindow->GetOutputSizePixel());
-                const Rectangle aRectLogic(pWindow->PixelToLogic(aRectPixel));
-                const Region aRegionLogic(aRectLogic);
-                ViewShell &rSh = *GetShell();
-
-                // simulate repaint of the whole view once initially
-                rSh.DLPrePaint2(aRegionLogic);
-                rSh.DLPostPaint2();
             }
         }
     }
