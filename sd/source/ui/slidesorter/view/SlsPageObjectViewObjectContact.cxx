@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:38:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:47:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,7 +245,6 @@ void PageObjectViewObjectContact::PaintObject (DisplayInfo& rDisplayInfo)
             // Set state flags. This overrides results from a contained
             // call to PaintObject(..).
             mbIsPainted = sal_True;
-            mbIsInvalidated = sal_False;
 
             // Save (a part of) the state of the output device.
             ULONG nPreviousDrawMode = pDevice->GetDrawMode();
@@ -281,7 +280,6 @@ void PageObjectViewObjectContact::PaintObject (DisplayInfo& rDisplayInfo)
         // avoid frequent repaints because when painting failed this time it
         // may fail the next time, too.
         mbIsPainted = sal_True;
-        mbIsInvalidated = sal_False;
     }
 }
 
