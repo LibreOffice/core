@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofpageobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:14:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:06:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,6 @@ namespace sdr
 
             // Own reaction on changes
             virtual void InvalidatePartOfView(const Rectangle& rRectangle) const;
-            virtual void ObjectGettingPotentiallyVisible(const ViewObjectContact& rVOC) const;
         };
 
         //////////////////////////////////////////////////////////////////////////////
@@ -172,9 +171,6 @@ namespace sdr
                 // make MasterPages visible
                 aDisplayInfo.SetPagePainting(sal_True); // #i72889#
 
-                // keep draw hierarchy up-to-date
-                PreProcessDisplay(aDisplayInfo);
-
                 // do processing
                 ProcessDisplay(aDisplayInfo);
 
@@ -199,30 +195,6 @@ namespace sdr
         {
             // call user change
             mrUserViewContact.ActionChanged();
-        }
-
-        void OCOfPageObjPagePainter::ObjectGettingPotentiallyVisible(const ViewObjectContact& rVOC) const
-        {
-            if(mpStartPage)
-            {
-                // transform coordinates of the potentially changed object to
-                // user objects coordinate system
-                const Rectangle& rOrigObjectRectangle = rVOC.GetViewContact().GetPaintRectangle();
-                Point aTopLeft(
-                    (rOrigObjectRectangle.Left() * maScaleX.GetDenominator() / maScaleX.GetNumerator()) - maTranslate.X(),
-                    (rOrigObjectRectangle.Top() * maScaleY.GetDenominator() / maScaleY.GetNumerator()) - maTranslate.Y());
-                Point aBottomRight(
-                    (rOrigObjectRectangle.Right() * maScaleX.GetDenominator() / maScaleX.GetNumerator()) - maTranslate.X(),
-                    (rOrigObjectRectangle.Bottom() * maScaleY.GetDenominator() / maScaleY.GetNumerator()) - maTranslate.Y());
-                Rectangle aTransformedCoordinates(aTopLeft, aBottomRight);
-
-                // compare with the user object's coordinates
-                if(maDestinationRectangle.IsOver(aTransformedCoordinates))
-                {
-                    // call user change
-                    mrUserViewContact.ActionChanged();
-                }
-            }
         }
     } // end of namespace contact
 } // end of namespace sdr
