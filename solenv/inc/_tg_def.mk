@@ -80,9 +80,6 @@ $(DEF1TARGETN) .PHONY :
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
-.IF "$(NO_SHL1DESCRIPTION)"==""
-    @echo component_getDescriptionFunc	>>$@.tmpfile
-.ENDIF			# "$(NO_SHL1DESCRIPTION)"==""
 .IF "$(DEFLIB1NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(EXPORT1_PROTECT) $(RM) $(MISC)$/$(SHL1TARGET).exp
@@ -288,9 +285,6 @@ $(DEF2TARGETN) .PHONY :
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
-.IF "$(NO_SHL2DESCRIPTION)"==""
-    @echo component_getDescriptionFunc	>>$@.tmpfile
-.ENDIF			# "$(NO_SHL2DESCRIPTION)"==""
 .IF "$(DEFLIB2NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(EXPORT2_PROTECT) $(RM) $(MISC)$/$(SHL2TARGET).exp
@@ -496,9 +490,6 @@ $(DEF3TARGETN) .PHONY :
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
-.IF "$(NO_SHL3DESCRIPTION)"==""
-    @echo component_getDescriptionFunc	>>$@.tmpfile
-.ENDIF			# "$(NO_SHL3DESCRIPTION)"==""
 .IF "$(DEFLIB3NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(EXPORT3_PROTECT) $(RM) $(MISC)$/$(SHL3TARGET).exp
@@ -704,9 +695,6 @@ $(DEF4TARGETN) .PHONY :
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
-.IF "$(NO_SHL4DESCRIPTION)"==""
-    @echo component_getDescriptionFunc	>>$@.tmpfile
-.ENDIF			# "$(NO_SHL4DESCRIPTION)"==""
 .IF "$(DEFLIB4NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(EXPORT4_PROTECT) $(RM) $(MISC)$/$(SHL4TARGET).exp
@@ -912,9 +900,6 @@ $(DEF5TARGETN) .PHONY :
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
-.IF "$(NO_SHL5DESCRIPTION)"==""
-    @echo component_getDescriptionFunc	>>$@.tmpfile
-.ENDIF			# "$(NO_SHL5DESCRIPTION)"==""
 .IF "$(DEFLIB5NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(EXPORT5_PROTECT) $(RM) $(MISC)$/$(SHL5TARGET).exp
@@ -1120,9 +1105,6 @@ $(DEF6TARGETN) .PHONY :
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
-.IF "$(NO_SHL6DESCRIPTION)"==""
-    @echo component_getDescriptionFunc	>>$@.tmpfile
-.ENDIF			# "$(NO_SHL6DESCRIPTION)"==""
 .IF "$(DEFLIB6NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(EXPORT6_PROTECT) $(RM) $(MISC)$/$(SHL6TARGET).exp
@@ -1328,9 +1310,6 @@ $(DEF7TARGETN) .PHONY :
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
-.IF "$(NO_SHL7DESCRIPTION)"==""
-    @echo component_getDescriptionFunc	>>$@.tmpfile
-.ENDIF			# "$(NO_SHL7DESCRIPTION)"==""
 .IF "$(DEFLIB7NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(EXPORT7_PROTECT) $(RM) $(MISC)$/$(SHL7TARGET).exp
@@ -1536,9 +1515,6 @@ $(DEF8TARGETN) .PHONY :
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
-.IF "$(NO_SHL8DESCRIPTION)"==""
-    @echo component_getDescriptionFunc	>>$@.tmpfile
-.ENDIF			# "$(NO_SHL8DESCRIPTION)"==""
 .IF "$(DEFLIB8NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(EXPORT8_PROTECT) $(RM) $(MISC)$/$(SHL8TARGET).exp
@@ -1744,9 +1720,6 @@ $(DEF9TARGETN) .PHONY :
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
-.IF "$(NO_SHL9DESCRIPTION)"==""
-    @echo component_getDescriptionFunc	>>$@.tmpfile
-.ENDIF			# "$(NO_SHL9DESCRIPTION)"==""
 .IF "$(DEFLIB9NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(EXPORT9_PROTECT) $(RM) $(MISC)$/$(SHL9TARGET).exp
@@ -1952,9 +1925,6 @@ $(DEF10TARGETN) .PHONY :
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
-.IF "$(NO_SHL10DESCRIPTION)"==""
-    @echo component_getDescriptionFunc	>>$@.tmpfile
-.ENDIF			# "$(NO_SHL10DESCRIPTION)"==""
 .IF "$(DEFLIB10NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(EXPORT10_PROTECT) $(RM) $(MISC)$/$(SHL10TARGET).exp
