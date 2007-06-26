@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlout.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:26:33 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:34:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -719,7 +719,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     Out_String( rStream, rTarget, eDestEnc, pNonConvertableChars ) << '\"';
                 }
 
-                const String& rDesc = pObj->GetDescription();
+                const String& rDesc = pObj->GetAltText();
                 if( rDesc.Len() )
                 {
                     ((sOut = ' ') += sHTML_O_alt) += "=\"";
