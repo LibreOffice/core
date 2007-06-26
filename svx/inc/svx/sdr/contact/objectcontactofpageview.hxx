@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectcontactofpageview.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:05:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:02:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,11 +66,6 @@ namespace sdr
             // The last remembered StartPoint of the hierarchy
             SdrPage*                                        mpRememberedStartPage;
 
-            // Create and set the ExpandPaintClipRegion. This needs to be done before
-            // any of the objects gets really painted because it relies on the invalidated
-            // and not painted state of the single objects.
-            void ExpandPaintClipRegion(DisplayInfo& rDisplayInfo);
-
             // Process the whole displaying, the real version
             void DoProcessDisplay(DisplayInfo& rDisplayInfo);
 
@@ -96,10 +91,6 @@ namespace sdr
             // #i29181# Overload to clear selection at associated view
             virtual void RemoveViewObjectContact(ViewObjectContact& rVOContact);
 
-            // Pre-Process the whole displaying. The default implementation
-            // calls EnsureValidDrawHierarchy() to ensure a valid draw hierarchy.
-            virtual void PreProcessDisplay(DisplayInfo& rDisplayInfo);
-
             // Process the whole displaying
             virtual void ProcessDisplay(DisplayInfo& rDisplayInfo);
 
@@ -114,10 +105,6 @@ namespace sdr
             // Invalidate given rectangle at the window/output which is represented by
             // this ObjectContact.
             virtual void InvalidatePartOfView(const Rectangle& rRectangle) const;
-
-            // #i37394# Non-painted object was changed. Test for potentially
-            // getting visible
-            virtual void ObjectGettingPotentiallyVisible(const ViewObjectContact& rVOC) const;
 
             // #i42815#
             // Get info if given Rectangle is visible in this view
