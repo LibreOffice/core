@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:29:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:04:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2078,9 +2078,6 @@ void SvxXLinePreview::Paint( const Rectangle& )
     aDisplayInfo.SetExtendedOutputDevice((XOutputDevice*)mpXOutDev);
     aDisplayInfo.SetPaintInfoRec(&aInfoRec);
     aDisplayInfo.SetOutputDevice(mpXOutDev->GetOutDev());
-
-    // keep draw hierarchy up-to-date
-    aPainter.PreProcessDisplay(aDisplayInfo);
 
     // do processing
     aPainter.ProcessDisplay(aDisplayInfo);
