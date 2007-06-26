@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localizationmgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:56:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 16:52:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -391,6 +391,33 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                         aPropAny <<= aPropIdStr;
                         xPropertySet->setPropertyValue( aPropName, aPropAny );
                     }
+                    // Copy string from source to target resource
+                    else if( eMode == COPY_RESOURCES && xSourceStringResolver.is() )
+                    {
+                        ::rtl::OUString aSourceIdStr = aPropStr;
+                        ::rtl::OUString aPureSourceIdStr = aSourceIdStr.copy( 1 );
+
+                        const Locale& rDefaultLocale = xSourceStringResolver->getDefaultLocale();
+
+                        // Copy Id for all locales
+                        const Locale* pLocales = aLocaleSeq.getConstArray();
+                        for( sal_Int32 i = 0 ; i < nLocaleCount ; i++ )
+                        {
+                            const Locale& rLocale = pLocales[ i ];
+                            ::rtl::OUString aResStr;
+                            try
+                            {
+                                aResStr = xSourceStringResolver->resolveStringForLocale
+                                    ( aPureSourceIdStr, rLocale );
+                            }
+                            catch(MissingResourceException&)
+                            {
+                                aResStr = xSourceStringResolver->resolveStringForLocale
+                                    ( aPureSourceIdStr, rDefaultLocale );
+                            }
+                            xStringResourceManager->setStringForLocale( aPureSourceIdStr, aResStr, rLocale );
+                        }
+                    }
                     nChangedCount++;
                 }
 
@@ -602,6 +629,38 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                         }
                         aPropAny <<= aIdStrings;
                         xPropertySet->setPropertyValue( aPropName, aPropAny );
+                    }
+                    // Copy string from source to target resource
+                    else if( eMode == COPY_RESOURCES && xSourceStringResolver.is() )
+                    {
+                        const Locale& rDefaultLocale = xSourceStringResolver->getDefaultLocale();
+
+                        const Locale* pLocales = aLocaleSeq.getConstArray();
+                        sal_Int32 i;
+                        for ( i = 0; i < nPropStringCount; ++i )
+                        {
+                            ::rtl::OUString aSourceIdStr = pPropStrings[i];
+                            ::rtl::OUString aPureSourceIdStr = aSourceIdStr.copy( 1 );
+
+                            // Set Id for all locales
+                            for( sal_Int32 iLocale = 0 ; iLocale < nLocaleCount ; iLocale++ )
+                            {
+                                const Locale& rLocale = pLocales[ iLocale ];
+
+                                ::rtl::OUString aResStr;
+                                try
+                                {
+                                    aResStr = xSourceStringResolver->resolveStringForLocale
+                                        ( aPureSourceIdStr, rLocale );
+                                }
+                                catch(MissingResourceException&)
+                                {
+                                    aResStr = xSourceStringResolver->resolveStringForLocale
+                                        ( aPureSourceIdStr, rDefaultLocale );
+                                }
+                                xStringResourceManager->setStringForLocale( aPureSourceIdStr, aResStr, rLocale );
+                            }
+                        }
                     }
                     nChangedCount++;
                 }
@@ -1078,6 +1137,33 @@ void LocalizationMgr::moveResourcesForPastedEditorObject( DlgEditor* pEditor,
           xSourceStringResolver, MOVE_RESOURCES );
 }
 
+void LocalizationMgr::copyResourceForDialog(
+    const Reference< container::XNameContainer >& xDialogModel,
+    const Reference< XStringResourceResolver >& xSourceStringResolver,
+    const Reference< XStringResourceManager >& xTargetStringResourceManager )
+{
+    if( !xDialogModel.is() || !xSourceStringResolver.is() || !xTargetStringResourceManager.is() )
+        return;
+
+    ::rtl::OUString aDummyName;
+    Any aDialogCtrl;
+    aDialogCtrl <<= xDialogModel;
+    implHandleControlResourceProperties
+        ( aDialogCtrl, aDummyName, aDummyName, xTargetStringResourceManager,
+          xSourceStringResolver, COPY_RESOURCES );
+
+    // Handle all controls
+    Sequence< ::rtl::OUString > aNames = xDialogModel->getElementNames();
+    const ::rtl::OUString* pNames = aNames.getConstArray();
+    sal_Int32 nCtrls = aNames.getLength();
+    for( sal_Int32 i = 0 ; i < nCtrls ; ++i )
+    {
+        ::rtl::OUString aCtrlName( pNames[i] );
+        Any aCtrl = xDialogModel->getByName( aCtrlName );
+        implHandleControlResourceProperties( aCtrl, aDummyName, aDummyName,
+            xTargetStringResourceManager, xSourceStringResolver, COPY_RESOURCES );
+    }
+}
 
 Reference< XStringResourceManager > LocalizationMgr::getStringResourceFromDialogLibrary
     ( Reference< container::XNameContainer > xDialogLib )
