@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside3.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 16:01:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 16:52:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,7 @@ private:
     DlgEditor*          pEditor;
     SfxUndoManager*     pUndoMgr;
     Link                aOldNotifyUndoActionHdl;
+    String              aCurPath;
 
 protected:
     virtual void        Paint( const Rectangle& );
@@ -97,6 +98,8 @@ public:
     BOOL                RenameDialog( const String& rNewName );
     void                DisableBrowser();
     void                UpdateBrowser();
+    BOOL                SaveDialog();
+
     virtual String      GetTitle();
     virtual BasicEntryDescriptor CreateEntryDescriptor();
     virtual void        SetReadOnly( BOOL bReadOnly );
