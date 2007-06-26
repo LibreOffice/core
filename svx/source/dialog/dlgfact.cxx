@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:36:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:50:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -549,19 +549,24 @@ String AbstractURLDlg_Impl::GetURL() const
     return pDlg->GetURL();
 }
 
-String AbstractURLDlg_Impl::GetDescription() const
+String AbstractURLDlg_Impl::GetAltText() const
 {
-    return pDlg->GetDescription();
+    return pDlg->GetAltText();
+}
+
+String AbstractURLDlg_Impl::GetDesc() const
+{
+    return pDlg->GetDesc();
 }
 
 String AbstractURLDlg_Impl::GetTarget() const
 {
-    return pDlg-> GetTarget();
+    return pDlg->GetTarget();
 }
 
 String AbstractURLDlg_Impl::GetName() const
 {
-    return pDlg-> GetName();
+    return pDlg->GetName();
 }
 //for URLDlg end
 
@@ -1497,7 +1502,7 @@ VclAbstractDialog2 * AbstractDialogFactory_Impl::CreateGalleryThemePropertiesDia
 //CHINA001 GalleryDialog end
 
 AbstractURLDlg * AbstractDialogFactory_Impl::CreateURLDialog( Window* pParent,  //add for URLDlg
-                                            const String& rURL, const String& rDescription,
+                                            const String& rURL, const String& rAltText, const String& rDescription,
                                             const String& rTarget, const String& rName,
                                             TargetList& rTargetList,
                                             sal_uInt32 nResId)
@@ -1506,7 +1511,7 @@ AbstractURLDlg * AbstractDialogFactory_Impl::CreateURLDialog( Window* pParent,  
     switch ( nResId )
     {
         case RID_SVXDLG_IMAPURL :
-            pDlg = new URLDlg( pParent, rURL, rDescription, rTarget, rName, rTargetList);
+            pDlg = new URLDlg( pParent, rURL, rAltText, rDescription, rTarget, rName, rTargetList);
             break;
         default:
             break;
