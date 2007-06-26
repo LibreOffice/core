@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpCompiler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 10:24:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:37:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -426,6 +426,7 @@ bool HelpCompiler::compile()
 
         if (modulename == "DEFAULT")
         {
+            streamTable.dropdefault();
             streamTable.default_doc = docResolvedDoc;
             streamTable.default_hidlist = aparser.hidlist;
             streamTable.default_helptexts = aparser.helptexts;
@@ -433,6 +434,7 @@ bool HelpCompiler::compile()
         }
         else if (modulename == module)
         {
+            streamTable.dropappl();
             streamTable.appl_doc = docResolvedDoc;
             streamTable.appl_hidlist = aparser.hidlist;
             streamTable.appl_helptexts = aparser.helptexts;
