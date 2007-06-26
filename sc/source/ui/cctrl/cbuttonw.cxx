@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cbuttonw.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:00:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:50:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,20 +36,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
+#include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
-
 #include "cbutton.hxx"
-
 
 //========================================================================
 //  class ScDDComboBoxButton
 //========================================================================
 
-ScDDComboBoxButton::ScDDComboBoxButton( Window* pOutputDevice )
+ScDDComboBoxButton::ScDDComboBoxButton( OutputDevice* pOutputDevice )
     :   pOut( pOutputDevice )
 {
     SetOptSizePixel();
@@ -59,6 +56,13 @@ ScDDComboBoxButton::ScDDComboBoxButton( Window* pOutputDevice )
 
 __EXPORT ScDDComboBoxButton::~ScDDComboBoxButton()
 {
+}
+
+// -------------------------------------------------------------------------
+
+void ScDDComboBoxButton::SetOutputDevice( OutputDevice* pOutputDevice )
+{
+    pOut = pOutputDevice;
 }
 
 // -------------------------------------------------------------------------
