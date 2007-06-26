@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:39:23 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 10:05:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -609,14 +609,12 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
             sal_Bool bFalse = sal_False;
             aAny.setValue( &bFalse, ::getBooleanCppuType() );
             xSet->setPropertyValue( aCompressPropName, aAny );
-            xSet->setPropertyValue( aUseCommonPassPropName, aAny );
         }
-        else
-        {
-            sal_Bool bTrue = sal_True;
-            aAny.setValue( &bTrue, ::getBooleanCppuType() );
-            xSet->setPropertyValue( aUseCommonPassPropName, aAny );
-        }
+
+        // even plain stream should be encrypted in encrypted documents
+        sal_Bool bTrue = sal_True;
+        aAny.setValue( &bTrue, ::getBooleanCppuType() );
+        xSet->setPropertyValue( aUseCommonPassPropName, aAny );
 
         // set buffer and create outputstream
         uno::Reference< io::XOutputStream > xOutputStream = xStream->getOutputStream();
