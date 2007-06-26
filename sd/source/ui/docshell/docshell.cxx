@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:28:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 15:53:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -586,10 +586,13 @@ void DrawDocShell::SetModified( BOOL bSet /* = TRUE */ )
 
     // #100237# change model state, too
     // #103182# only set the changed state if modification is enabled
-    if( IsEnableSetModified() && mpDoc )
-        mpDoc->NbcSetChanged( bSet );
+    if( IsEnableSetModified() )
+    {
+        if ( mpDoc )
+            mpDoc->NbcSetChanged( bSet );
 
-    Broadcast( SfxSimpleHint( SFX_HINT_DOCCHANGED ) );
+        Broadcast( SfxSimpleHint( SFX_HINT_DOCCHANGED ) );
+    }
 }
 
 ::Window* DrawDocShell::GetWindow() const
