@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:54:26 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:47:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -459,7 +459,12 @@ void ViewShell::SetZoom(long nZoom)
     if (mpContentWindow.get() != NULL)
     {
         mpContentWindow->SetZoomIntegral(nZoom);
-        mpContentWindow->Invalidate();
+
+        // #i74769# Here is a 2nd way (besides Window::Scroll) to set the visible prt
+        // of the window. It needs - like Scroll(SCROLL_CHILDREN) does - also to move
+        // the child windows. I am trying INVALIDATE_CHILDREN here which makes things better,
+        // but does not solve the problem completely. Neet to ask PL.
+        mpContentWindow->Invalidate(INVALIDATE_CHILDREN);
     }
 
     Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
@@ -504,7 +509,9 @@ void ViewShell::SetZoomRect(const Rectangle& rZoomRect)
         mpContentWindow->SetZoomIntegral(nZoom);
         mpContentWindow->SetWinViewPos(aNewPos);
         mpContentWindow->UpdateMapOrigin();
-        mpContentWindow->Invalidate();
+
+        // #i74769# see above
+        mpContentWindow->Invalidate(INVALIDATE_CHILDREN);
     }
 
     Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
