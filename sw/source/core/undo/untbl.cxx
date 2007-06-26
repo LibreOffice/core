@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 13:02:09 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 10:43:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2344,7 +2344,7 @@ SwUndoTblNumFmt::SwUndoTblNumFmt( const SwTableBox& rBox,
     bNewFmt = bNewFml = bNewValue = FALSE;
     nNode = rBox.GetSttIdx();
 
-    ULONG nNdPos = rBox.IsValidNumTxtNd( 0 == pNewSet );
+    nNdPos = rBox.IsValidNumTxtNd( 0 == pNewSet );
 
     if( ULONG_MAX != nNdPos )
     {
@@ -2423,7 +2423,7 @@ void SwUndoTblNumFmt::Undo( SwUndoIter& rIter )
     pFmt->SetAttr( *pBoxSet );
     pBox->ChgFrmFmt( pFmt );
 
-    SwTxtNode* pTxtNd = rDoc.GetNodes()[ nNode + 1 ]->GetTxtNode();
+    SwTxtNode* pTxtNd = rDoc.GetNodes()[ nNdPos ]->GetTxtNode();
     // wenn mehr als ein Node geloescht wurde, dann wurden auch
     // alle "Node"-Attribute gespeichert
     if( pTxtNd->HasSwAttrSet() )
