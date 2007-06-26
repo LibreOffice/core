@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 13:10:21 $
+#   last change: $Author: hr $ $Date: 2007-06-26 12:36:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,13 +71,13 @@ BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE
 .IF "$(SYSBASE)"!=""
 xslt_CFLAGS+=-I$(SYSBASE)$/usr$/include -I$(SOLARINCDIR)$/external
-.IF "$(COMNAME)"=="sunpro5"
-xslt_CFLAGS+=$(C_RESTRICTIONFLAGS)
-.ENDIF			# "$(COMNAME)"=="sunpro5"
 .IF "$(OS)"=="SOLARIS" || "$(OS)"=="LINUX"
 xslt_LDFLAGS+=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -L$(SOLARLIBDIR) -lpthread -ldl
 .ENDIF
 .ENDIF			# "$(SYSBASE)"!=""
+.IF "$(COMNAME)"=="sunpro5"
+xslt_CFLAGS+=-xc99=none
+.ENDIF                  # "$(COMNAME)"=="sunpro5"
 CONFIGURE_DIR=
 CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure
 CONFIGURE_FLAGS=--enable-ipv6=no --without-crypto --without-python --enable-static=no --with-sax1=yes CFLAGS="$(xslt_CFLAGS)" LDFLAGS="$(xslt_LDFLAGS)"
