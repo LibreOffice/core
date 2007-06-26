@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLEmbeddedObjectImportContext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:20:17 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 15:52:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
 #include <com/sun/star/util/XModifiable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE2_HPP_
+#include <com/sun/star/util/XModifiable2.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
@@ -216,10 +219,20 @@ sal_Bool XMLEmbeddedObjectImportContext::SetComponent(
     if( !xHandler.is() )
         return sal_False;
 
+    try
+    {
+        Reference < XModifiable2 > xModifiable2( rComp, UNO_QUERY_THROW );
+        xModifiable2->disableSetModified();
+    }
+    catch( Exception& )
+    {
+    }
+
     Reference < XImporter > xImporter( xHandler, UNO_QUERY );
     xImporter->setTargetDocument( rComp );
 
     xComp = rComp;  // keep ref to component only if there is a handler
+
     return sal_True;
 }
 
@@ -355,45 +368,55 @@ void XMLEmbeddedObjectImportContext::EndElement()
 
         // storing part is commented out since it should be done through the object, not the model
         // TODO/LATER: probably an object should be provided here an be stored here
-#if 0
-        // Save the object. That's required because the object should not be
-        // modified (it has been loaded just now). Setting it to unmodified
-        // only does not work, because it is then assumed that it has been
-        // stored.
-        Reference < XStorable > xStorable( xComp, UNO_QUERY );
-        if( xStorable.is() )
-        {
-            try
-            {
-                xStorable->store();
-            }
-            catch( ::com::sun::star::beans::PropertyVetoException& )
-            {
-                Sequence<OUString> aSeq( 0 );
-                GetImport().SetError( XMLERROR_FLAG_WARNING |
-                                  XMLERROR_API,
-                                  aSeq );
-            }
-        }
-        // reset modifies state for the object since it has been imported
-        // completly and therfor hasn't been modified.
-        Reference < XModifiable > xModifiable( xComp, UNO_QUERY );
-        if( xModifiable.is() )
-        {
-            try
-            {
-                xModifiable->setModified( sal_False );
-            }
-            catch( ::com::sun::star::beans::PropertyVetoException& e )
-            {
-                Sequence<OUString> aSeq( 0 );
-                GetImport().SetError( XMLERROR_FLAG_WARNING |
-                                  XMLERROR_API,
-                                  aSeq );
-            }
-        }
-#endif
 
+//      // Save the object. That's required because the object should not be
+//      // modified (it has been loaded just now). Setting it to unmodified
+//      // only does not work, because it is then assumed that it has been
+//      // stored.
+//      Reference < XStorable > xStorable( xComp, UNO_QUERY );
+//      if( xStorable.is() )
+//      {
+//          try
+//          {
+//              xStorable->store();
+//          }
+//          catch( ::com::sun::star::beans::PropertyVetoException& )
+//          {
+//              Sequence<OUString> aSeq( 0 );
+//              GetImport().SetError( XMLERROR_FLAG_WARNING |
+//                                XMLERROR_API,
+//                                aSeq );
+//          }
+//      }
+
+    try
+    {
+        Reference < XModifiable2 > xModifiable2( xComp, UNO_QUERY_THROW );
+        xModifiable2->enableSetModified();
+        xModifiable2->setModified( sal_True ); // trigger new replacement image generation
+    }
+    catch( Exception& )
+    {
+    }
+
+
+//      // reset modifies state for the object since it has been imported
+//      // completly and therfor hasn't been modified.
+//      Reference < XModifiable > xModifiable( xComp, UNO_QUERY );
+//      if( xModifiable.is() )
+//      {
+//          try
+//          {
+//              xModifiable->setModified( sal_False );
+//          }
+//          catch( ::com::sun::star::beans::PropertyVetoException& e )
+//          {
+//              Sequence<OUString> aSeq( 0 );
+//              GetImport().SetError( XMLERROR_FLAG_WARNING |
+//                                XMLERROR_API,
+//                                aSeq );
+//          }
+//      }
     }
 }
 
