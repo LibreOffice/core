@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoimap.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:31:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:34:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,7 @@ const sal_Int32 HANDLE_POLYGON = 6;
 const sal_Int32 HANDLE_CENTER = 7;
 const sal_Int32 HANDLE_RADIUS = 8;
 const sal_Int32 HANDLE_BOUNDARY = 9;
+const sal_Int32 HANDLE_TITLE = 10;
 
 class SvUnoImageMapObject : public OWeakAggObject,
                             public XEventsSupplier,
@@ -181,7 +182,8 @@ private:
     UINT16 mnType;
 
     OUString maURL;
-    OUString maDescription;
+    OUString maAltText;
+    OUString maDesc;
     OUString maTarget;
     OUString maName;
     sal_Bool mbIsActive;
@@ -202,6 +204,7 @@ PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( UINT16 nType )
             static PropertyMapEntry aPolygonObj_Impl[] =
             {
                 { MAP_LEN( "URL" ),         HANDLE_URL,         &::getCppuType((const OUString*)0),     0, 0 },
+                { MAP_LEN( "Title" ),       HANDLE_TITLE,       &::getCppuType((const OUString*)0),     0, 0 },
                 { MAP_LEN( "Description" ), HANDLE_DESCRIPTION, &::getCppuType((const OUString*)0),     0, 0 },
                 { MAP_LEN( "Target" ),      HANDLE_TARGET,      &::getCppuType((const OUString*)0),     0, 0 },
                 { MAP_LEN( "Name" ),        HANDLE_NAME,        &::getCppuType((const OUString*)0),     0, 0 },
@@ -217,6 +220,7 @@ PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( UINT16 nType )
             static PropertyMapEntry aCircleObj_Impl[] =
             {
                 { MAP_LEN( "URL" ),         HANDLE_URL,         &::getCppuType((const OUString*)0),     0, 0 },
+                { MAP_LEN( "Title" ),       HANDLE_TITLE,       &::getCppuType((const OUString*)0),     0, 0 },
                 { MAP_LEN( "Description" ), HANDLE_DESCRIPTION, &::getCppuType((const OUString*)0),     0, 0 },
                 { MAP_LEN( "Target" ),      HANDLE_TARGET,      &::getCppuType((const OUString*)0),     0, 0 },
                 { MAP_LEN( "Name" ),            HANDLE_NAME,        &::getCppuType((const OUString*)0),     0, 0 },
@@ -234,6 +238,7 @@ PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( UINT16 nType )
             static PropertyMapEntry aRectangleObj_Impl[] =
             {
                 { MAP_LEN( "URL" ),         HANDLE_URL,         &::getCppuType((const OUString*)0), 0, 0 },
+                { MAP_LEN( "Title" ),       HANDLE_TITLE,       &::getCppuType((const OUString*)0),     0, 0 },
                 { MAP_LEN( "Description" ), HANDLE_DESCRIPTION, &::getCppuType((const OUString*)0), 0, 0 },
                 { MAP_LEN( "Target" ),      HANDLE_TARGET,      &::getCppuType((const OUString*)0), 0, 0 },
                 { MAP_LEN( "Name" ),        HANDLE_NAME,        &::getCppuType((const OUString*)0), 0, 0 },
@@ -260,7 +265,8 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
     mnType( rMapObject.GetType() )
 {
     maURL = rMapObject.GetURL();
-    maDescription = rMapObject.GetDescription();
+    maAltText = rMapObject.GetAltText();
+    maDesc = rMapObject.GetDesc();
     maTarget = rMapObject.GetTarget();
     maName = rMapObject.GetName();
     mbIsActive = rMapObject.IsActive();
@@ -316,7 +322,8 @@ SvUnoImageMapObject::~SvUnoImageMapObject() throw()
 IMapObject* SvUnoImageMapObject::createIMapObject() const
 {
     const String aURL( maURL );
-    const String aDescription( maDescription );
+    const String aAltText( maAltText );
+    const String aDesc( maDesc );
     const String aTarget( maTarget );
     const String aName( maName );
 
@@ -327,14 +334,14 @@ IMapObject* SvUnoImageMapObject::createIMapObject() const
     case IMAP_OBJ_RECTANGLE:
         {
             const Rectangle aRect( maBoundary.X, maBoundary.Y, maBoundary.X + maBoundary.Width - 1, maBoundary.Y + maBoundary.Height - 1 );
-            pNewIMapObject = new IMapRectangleObject( aRect, aURL, aDescription, aTarget, aName, mbIsActive, sal_False );
+            pNewIMapObject = new IMapRectangleObject( aRect, aURL, aAltText, aDesc, aTarget, aName, mbIsActive, sal_False );
         }
         break;
 
     case IMAP_OBJ_CIRCLE:
         {
             const Point aCenter( maCenter.X, maCenter.Y );
-            pNewIMapObject = new IMapCircleObject( aCenter, mnRadius, aURL, aDescription, aTarget, aName, mbIsActive, sal_False );
+            pNewIMapObject = new IMapCircleObject( aCenter, mnRadius, aURL, aAltText, aDesc, aTarget, aName, mbIsActive, sal_False );
         }
         break;
 
@@ -351,7 +358,7 @@ IMapObject* SvUnoImageMapObject::createIMapObject() const
             }
 
             aPoly.Optimize( POLY_OPTIMIZE_CLOSE );
-            pNewIMapObject = new IMapPolygonObject( aPoly, aURL, aDescription, aTarget, aName, mbIsActive, sal_False );
+            pNewIMapObject = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, aName, mbIsActive, sal_False );
         }
         break;
     }
@@ -497,8 +504,11 @@ void SvUnoImageMapObject::_setPropertyValues( const PropertyMapEntry** ppEntries
         case HANDLE_URL:
             bOk = *pValues >>= maURL;
             break;
+        case HANDLE_TITLE:
+            bOk = *pValues >>= maAltText;
+            break;
         case HANDLE_DESCRIPTION:
-            bOk = *pValues >>= maDescription;
+            bOk = *pValues >>= maDesc;
             break;
         case HANDLE_TARGET:
             bOk = *pValues >>= maTarget;
@@ -541,8 +551,11 @@ void SvUnoImageMapObject::_getPropertyValues( const PropertyMapEntry** ppEntries
         case HANDLE_URL:
             *pValues <<= maURL;
             break;
+        case HANDLE_TITLE:
+            *pValues <<= maAltText;
+            break;
         case HANDLE_DESCRIPTION:
-            *pValues <<= maDescription;
+            *pValues <<= maDesc;
             break;
         case HANDLE_TARGET:
             *pValues <<= maTarget;
