@@ -4,9 +4,9 @@
  *
  *  $RCSfile: overlaymanagerbuffered.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:39:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:03:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ namespace sdr
             // Internal methods for buffering
             void ImpPrepareBufferDevice();
             void ImpRestoreBackground() const ;
-            void ImpRestoreBackground(const Rectangle& rRegionRectanglePixel) const;
+            void ImpRestoreBackground(const Region& rRegionPixel) const;
             void ImpSaveBackground(const Region& rRegion, OutputDevice* pPreRenderDevice = 0L);
 
         public:
@@ -99,6 +99,9 @@ namespace sdr
 
             // flush. Do buffered updates.
             virtual void flush();
+
+            // #i68597# part of content gets copied, react on it
+            virtual void copyArea(const Point& rDestPt, const Point& rSrcPt, const Size& rSrcSize);
 
             // restore part of background. Implemented form buffered versions only.
             virtual void restoreBackground(const Region& rRegion) const;
