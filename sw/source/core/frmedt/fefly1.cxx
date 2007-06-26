@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:27:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:46:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1717,7 +1717,7 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, String* pURL,
                     if ( bSetDescription )
                     {
                         bSetDescription = sal_False;
-                        *pDescription = pObj->GetDescription();
+                        *pDescription = pObj->GetAltText();
                     }
                     pRet = pFly->GetFmt();
                 }
