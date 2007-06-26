@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 08:53:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 10:44:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1873,9 +1873,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             if( pNd->IsNumbered() && pNd->IsCounted() )
             {
                 if (bParaRTL)
-                {
-                            aLR.SetTxtFirstLineOfst(GetWordFirstLineOffset(*pFmt) + pFmt->GetAbsLSpace());
-                }
+                        aLR.SetTxtFirstLineOfstValue(pFmt->GetAbsLSpace() - pFmt->GetFirstLineOffset());
                 else
                         aLR.SetTxtFirstLineOfst(GetWordFirstLineOffset(*pFmt));
 
@@ -1954,7 +1952,8 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
             // new first line indent = 0
             // (first line indent is ignored for NO_NUMLEVEL)
-            aLRSpace.SetTxtFirstLineOfst( 0 );
+            if (!bParaRTL)
+                aLRSpace.SetTxtFirstLineOfst( 0 );
 
             // put back the new item
             pTmpSet->Put( aLRSpace );
