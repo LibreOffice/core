@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin5.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:01:31 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:44:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -337,7 +337,7 @@ void __EXPORT ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                     if ( pIMapObj )
                     {
                         //  #44990# Bei ImageMaps die Description anzeigen, wenn vorhanden
-                        aHelpText = pIMapObj->GetDescription();
+                        aHelpText = pIMapObj->GetAltText();
                         if (!aHelpText.Len())
                             aHelpText = pIMapObj->GetURL();
                         aPixRect = LogicToPixel(aVEvt.pObj->GetLogicRect());
