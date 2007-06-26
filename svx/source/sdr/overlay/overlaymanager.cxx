@@ -4,9 +4,9 @@
  *
  *  $RCSfile: overlaymanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 12:12:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:07:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,6 +172,12 @@ namespace sdr
         void OverlayManager::flush()
         {
             // default has nothing to do
+        }
+
+        // #i68597# part of content gets copied, react on it
+        void OverlayManager::copyArea(const Point& /*rDestPt*/, const Point& /*rSrcPt*/, const Size& /*rSrcSize*/)
+        {
+            // unbuffered versions do nothing here
         }
 
         void OverlayManager::restoreBackground(const Region& /*rRegion*/) const
