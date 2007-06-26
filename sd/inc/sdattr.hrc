@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdattr.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 09:51:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:37:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,9 @@
 #define ATTR_LAYER_PRINTABLE    ATTR_LAYER_START + 2
 #define ATTR_LAYER_LOCKED       ATTR_LAYER_START + 3
 #define ATTR_LAYER_THISPAGE     ATTR_LAYER_START + 4
-#define ATTR_LAYER_END          ATTR_LAYER_THISPAGE
+#define ATTR_LAYER_TITLE        ATTR_LAYER_START + 5
+#define ATTR_LAYER_DESC         ATTR_LAYER_START + 6
+#define ATTR_LAYER_END          ATTR_LAYER_DESC
 
 // Anfang Dia-Attribute
 #define ATTR_DIA_START          ATTR_LAYER_END + 1
