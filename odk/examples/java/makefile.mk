@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:15:43 $
+#   last change: $Author: hr $ $Date: 2007-06-26 16:01:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,13 @@ CONVERTERSERVLET_FILES= \
     $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/Makefile			\
     $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/README
 
+EMBEDDEDOBJECT_FILES= \
+    $(DESTDIRJAVAEXAMPLES)$/EmbedDocument$/EmbeddedObject$/EmbeddedObject.xcu \
+    $(DESTDIRJAVAEXAMPLES)$/EmbedDocument$/EmbeddedObject$/OwnEmbeddedObject.java \
+    $(DESTDIRJAVAEXAMPLES)$/EmbedDocument$/EmbeddedObject$/EditorFrame.java  \
+    $(DESTDIRJAVAEXAMPLES)$/EmbedDocument$/EmbeddedObject$/Makefile \
+    $(DESTDIRJAVAEXAMPLES)$/EmbedDocument$/EmbeddedObject$/OwnEmbeddedObjectFactory.java
+
 INSPECTOR_FILES= \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/Inspector.jpg \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/InspectorThumbnail.jpg \
@@ -130,6 +137,7 @@ DIR_FILE_LIST= \
     $(TEXT_FILES) \
     $(DOCUMENTHANDLING_FILES) \
     $(CONVERTERSERVLET_FILES) \
+    $(EMBEDDEDOBJECT_FILES) \
     $(INSPECTOR_FILES) \
     $(NOTESACCESS_FILES) \
     $(TODO_FILES) \
