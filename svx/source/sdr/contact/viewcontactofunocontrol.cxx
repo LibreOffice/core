@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofunocontrol.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-06 14:39:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:06:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,11 @@
 
 #ifndef _VCL_PDFEXTOUTDEVDATA_HXX
 #include <vcl/pdfextoutdevdata.hxx>
+#endif
+
+/*nnnnn*/
+#ifndef _SDR_CONTACT_DISPLAYINFO_HXX
+#include <svx/sdr/contact/displayinfo.hxx>
 #endif
 
 //........................................................................
@@ -188,14 +193,12 @@ namespace sdr { namespace contact {
         {
             ViewObjectContact* pVOC( maVOCList.GetObject( 0 ) );
 #ifdef DBG_UTIL
-            sal_uInt32 nCountBefore( maVOCList.Count() );
+            const sal_uInt32 nCountBefore( maVOCList.Count() );
 #endif
             pVOC->PrepareDelete();
             delete pVOC;
-#ifdef DBG_UTIL
             DBG_ASSERT( maVOCList.Count() < nCountBefore,
                 "ViewContactOfUnoControl::invalidateAllContacts: prepare for an infinite loop!" );
-#endif
         }
     }
 
@@ -207,8 +210,13 @@ namespace sdr { namespace contact {
         // case, if the base classes ShouldPaintObject returns FALSE, there would be artifacts
         // since the VCL window is not moved to the proper position.
         // #i72694# / 2006-12-18 / frank.schoenheit@sun.com
-        const ViewObjectContactOfUnoControl& rVOC( dynamic_cast< const ViewObjectContactOfUnoControl& >( _rAssociatedVOC ) );
-        rVOC.positionControlForPaint( _rDisplayInfo );
+
+        // #i74769# to not resize and position at each DrawLayer() use FormControl flag
+        if(_rDisplayInfo.GetControlLayerPainting())
+        {
+            const ViewObjectContactOfUnoControl& rVOC( dynamic_cast< const ViewObjectContactOfUnoControl& >( _rAssociatedVOC ) );
+            rVOC.positionControlForPaint( _rDisplayInfo );
+        }
 
         return ViewContactOfSdrObj::ShouldPaintObject( _rDisplayInfo, _rAssociatedVOC );
     }
