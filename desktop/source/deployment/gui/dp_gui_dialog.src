@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 14:03:31 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:12:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -306,7 +306,7 @@ String RID_STR_EXPORTING_PACKAGES
 #define ROW1_Y RSC_SP_DLG_INNERBORDER_TOP
 #define ROW1_HEIGHT 16*RSC_CD_FIXEDTEXT_HEIGHT
 #define ROW2_Y  ROW1_Y+ROW1_HEIGHT+RSC_SP_CTRL_GROUP_Y
-#define ROW2_HEIGHT RSC_CD_FIXEDTEXT_HEIGHT
+#define ROW2_HEIGHT 2*RSC_CD_FIXEDTEXT_HEIGHT
 #define ROW3_Y ROW2_Y+ROW2_HEIGHT+RSC_SP_CTRL_GROUP_Y
 #define ROW3_HEIGHT 3*RSC_CD_FIXEDTEXT_HEIGHT
 #define ROW4_Y ROW3_Y+ROW3_HEIGHT+RSC_SP_CTRL_GROUP_Y
@@ -357,6 +357,7 @@ ModalDialog RID_DLG_LICENSE
     {
         Pos = MAP_APPFONT(COL1_X, ROW2_Y);
         Size = MAP_APPFONT(COL1_WIDTH+COL2_WIDTH+COL3_WIDTH+COL4_WIDTH, ROW2_HEIGHT);
+        WordBreak = TRUE;
         NoLabel = TRUE;
         Text [ en-US ] = "Please follow these steps to proceed with the installation of the extension:";
     };
@@ -460,14 +461,14 @@ WarningBox WARNINGBOX_NOSHAREDALLOWED
 {
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK;
-    Message[ en-US ] ="The extension %NAME cannot be installed under \"%PRODUCTNAME Extensions\", because "
+    Message[ en-US ] ="The extension \'%NAME\' cannot be installed under \"%PRODUCTNAME Extensions\", because "
         "every user has to agree to the license agreement of the extension. The extension will not be installed.";
 };
 
 InfoBox RID_QUERYBOX_INSTALL_EXTENSION {
     Buttons = WB_OK_CANCEL;
     DefButton = WB_DEF_CANCEL;
-    Message[en-US] = "You are about to install the extension %NAME.\nPress Ok to proceed with the installation.\nPress Cancel to abort the installation.";
+    Message[en-US] = "You are about to install the extension \'%NAME\'.\nClick \'OK\' to proceed with the installation.\nClick \'Cancel\' to abort the installation.";
 };
 
 WarningBox WARNINGBOX_CONCURRENTINSTANCE
