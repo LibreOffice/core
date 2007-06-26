@@ -4,9 +4,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:11:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 16:10:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,14 @@ extern OUString SAL_CALL OfficeInstallationDirectories_getSingletonName() throw(
 extern OUString SAL_CALL OfficeInstallationDirectories_getSingletonServiceName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL OfficeInstallationDirectories_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
+// SequenceInputStreamService
+extern uno::Sequence< OUString > SAL_CALL SequenceInputStreamService_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SequenceInputStreamService_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SequenceInputStreamService_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
+
+
+
 //
 static void writeInfo( registry::XRegistryKey * pRegistryKey, const OUString& rImplementationName, const uno::Sequence< OUString >& rServices )
 {
@@ -136,6 +144,9 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void *, void * pRegi
 
             // InstanceLocker
             writeInfo( pKey, OInstanceLocker::impl_staticGetImplementationName(), OInstanceLocker::impl_staticGetSupportedServiceNames() );
+            // SequenceInputStreamService
+            writeInfo( pKey, SequenceInputStreamService_getImplementationName(), SequenceInputStreamService_getSupportedServiceNames() );
+
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -189,6 +200,13 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char * pImp
                 OInstanceLocker::impl_staticGetImplementationName(),
                 OInstanceLocker::impl_staticCreateSelfInstance,
                 OInstanceLocker::impl_staticGetSupportedServiceNames() );
+        }
+        else if( SequenceInputStreamService_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SequenceInputStreamService_getImplementationName(),
+                SequenceInputStreamService_createInstance,
+                SequenceInputStreamService_getSupportedServiceNames() );
         }
 
         if( xFactory.is())
