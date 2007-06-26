@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:23:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 16:09:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,8 +116,8 @@
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
-#include <com/sun/star/util/XModifiable.hpp>
+#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE2_HPP_
+#include <com/sun/star/util/XModifiable2.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_XMODIFYLISTENER_HPP_
@@ -243,7 +243,7 @@
 #define XMODEL                  ::com::sun::star::frame::XModel
 #define XMODEL2                 ::com::sun::star::frame::XModel2
 #define XMODIFIABLE             ::com::sun::star::util::XModifiable
-#define XMODIFIABLE             ::com::sun::star::util::XModifiable
+#define XMODIFIABLE2            ::com::sun::star::util::XModifiable2
 #define XMODIFYBROADCASTER      ::com::sun::star::util::XModifyBroadcaster
 #define XMODIFYLISTENER         ::com::sun::star::util::XModifyListener
 #define XCLOSEABLE              ::com::sun::star::util::XCloseable
@@ -341,7 +341,7 @@ struct IMPL_SfxBaseModel_MutexContainer
                 XDocumentInfoSupplier
                 XEventListener
                 XModel
-                XModifiable
+                XModifiable2
                 XPrintable
                 XStorable2
                 ::document::XEventBroadcaster
@@ -360,7 +360,7 @@ class SFX2_DLLPUBLIC SfxBaseModel   :   public XTYPEPROVIDER
                     ,   public XEVENTLISTENER
                     ,   public XEVENTSSUPPLIER
                     ,   public XMODEL2
-                    ,   public XMODIFIABLE
+                    ,   public XMODIFIABLE2
                     ,   public XPRINTABLE
                     ,   public XPRINTJOBBROADCASTER
                     ,   public XSTORABLE2
@@ -859,8 +859,12 @@ public:
                css::uno::Exception                );
 
     //____________________________________________________________________________________________________
-    //  XModifiable
+    //  XModifiable2
     //____________________________________________________________________________________________________
+
+    virtual ::sal_Bool SAL_CALL disableSetModified(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL enableSetModified(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isSetModifiedEnabled(  ) throw (::com::sun::star::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
