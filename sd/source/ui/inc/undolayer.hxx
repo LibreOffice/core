@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undolayer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:57:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:41:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,8 +49,8 @@ class SdLayerModifyUndoAction : public SdUndoAction
 public:
     TYPEINFO();
     SdLayerModifyUndoAction( SdDrawDocument* _pDoc, SdrLayer* pLayer,
-    const String& rOldLayerName, bool bOldIsVisible, bool bOldIsLocked, bool bOldIsPrintable,
-    const String& rNewLayerName, bool bNewIsVisible, bool bNewIsLocked, bool bNewIsPrintable );
+    const String& rOldLayerName, const String& rOldLayerTitle, const String& rOldLayerDesc, bool bOldIsVisible, bool bOldIsLocked, bool bOldIsPrintable,
+    const String& rNewLayerName, const String& rNewLayerTitle, const String& rNewLayerDesc, bool bNewIsVisible, bool bNewIsLocked, bool bNewIsPrintable );
 
     virtual void Undo();
     virtual void Redo();
@@ -58,10 +58,14 @@ public:
 private:
     SdrLayer* mpLayer;
     String maOldLayerName;
+    String maOldLayerTitle;
+    String maOldLayerDesc;
     bool mbOldIsVisible;
     bool mbOldIsLocked;
     bool mbOldIsPrintable;
     String maNewLayerName;
+    String maNewLayerTitle;
+    String maNewLayerDesc;
     bool mbNewIsVisible;
     bool mbNewIsLocked;
     bool mbNewIsPrintable;
