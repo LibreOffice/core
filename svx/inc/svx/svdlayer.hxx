@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdlayer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:21:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:49:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,8 @@ class SVX_DLLPUBLIC SdrLayer
 friend class SdrLayerAdmin;
 protected:
     String     aName;
+    String      maTitle;
+    String      maDescription;
     SdrModel*  pModel; // zum Broadcasten
     UINT16     nType;  // 0=Userdefined,1=Standardlayer
     SdrLayerID nID;
@@ -73,8 +75,16 @@ public:
     SdrLayer(): pModel(NULL),nType(0),nID(0)                  {}
     bool      operator==(const SdrLayer& rCmpLayer) const;
     bool      operator!=(const SdrLayer& rCmpLayer) const { return !operator==(rCmpLayer); }
+
     void          SetName(const String& rNewName);
     const String& GetName() const                             { return aName; }
+
+    void          SetTitle(const String& rTitle) { maTitle = rTitle; }
+    const String& GetTitle() const { return maTitle; }
+
+    void          SetDescription(const String& rDesc) { maDescription = rDesc; }
+    const String& GetDescription() const { return maDescription; }
+
     SdrLayerID    GetID() const                               { return nID; }
     void          SetModel(SdrModel* pNewModel)               { pModel=pNewModel; }
     SdrModel*     GetModel() const                            { return pModel; }
