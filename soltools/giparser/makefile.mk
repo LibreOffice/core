@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 07:24:42 $
+#   last change: $Author: hr $ $Date: 2007-06-26 17:45:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@ PRJ=..
 PRJNAME=soltools
 TARGET=soltools_giparser
 TARGETTYPE=CUI
-NO_SHL_DESCRIPTION=TRUE
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
