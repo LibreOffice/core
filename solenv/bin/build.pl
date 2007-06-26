@@ -7,9 +7,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.155 $
+#   $Revision: 1.156 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-09 13:25:39 $
+#   last change: $Author: hr $ $Date: 2007-06-26 17:33:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.155 $ ';
+    $id_str = ' $Revision: 1.156 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -108,8 +108,6 @@
     };
 
     $QuantityToBuild = 0;
-    # Number of processes the jam primer should use
-    $JamProcessNum = 1;
 # delete $pid when not needed
     %projects_deps_hash = ();   # hash of projects with no dependencies,
                                 # that could be built now
@@ -184,7 +182,6 @@
     %weights_hash = (); # hash contains info about how many modules are dependent from one module
 #    %weight_stored = ();
     $grab_output = 1;
-    $enable_jam = $ENV{ENABLE_JAM} eq "TRUE";
     $server_mode = 0;
     $setenv_string = ''; # string for configuration of the client environment
     $ports_string = ''; # string with possible ports for server
@@ -422,7 +419,6 @@ sub BuildAll {
                 };
 
                 $PrjDir = CorrectPath($StandDir.$Prj);
-                if ($enable_jam) {jam_dir($Prj);};
                 get_deps_hash($Prj, \%LocalDepsHash);
                 my $info_hash = $html_info{$Prj};
                 $$info_hash{DIRS} = check_deps_hash(\%LocalDepsHash, $Prj);
@@ -436,7 +432,6 @@ sub BuildAll {
             $no_projects = 0;
         };
     } else {
-        if ($enable_jam) {jam_dir($CurrentPrj);};
         store_build_list_content($CurrentPrj);
         get_deps_hash($CurrentPrj, \%LocalDepsHash);
         initialize_html_info($CurrentPrj);
@@ -529,26 +524,6 @@ sub dmake_dir {
         print_error("Error $? occurred while making $BuildDir");
     };
 };
-
-
-#
-# Prebuild a directory using jam. This is a dummy routine that ignore
-#
-
-sub jam_dir {
-    my $JamPrj = shift;
-    my $JamPrjDir = CorrectPath($StandDir.$JamPrj);
-    my $Jamfile = $JamPrjDir . "/Jamfile";
-    print "Jam-primer: Checking for Jamfile in $Jamfile\n";
-    if (-r $Jamfile) {
-        print "Jam-primer: Running 'jam build-$JamPrj'\n";
-        my $currentDir = getcwd();
-        chdir $StandDir;
-        system("jam -j$JamProcessNum build-$JamPrj");
-        chdir $currentDir;
-    };
-};
-
 
 #
 # Procedure stores information about build list (and)
@@ -1193,7 +1168,6 @@ sub usage {
     print STDERR "          --dontgraboutput - do not grab console output when generating html page\n";
     print STDERR "        --dontchekoutmissingmodules - do not chekout missing modules when running prepare (links still will be broken)\n";
     print STDERR "        --job        - execute custom job in (each) module. Job command should be passed after '--'\n";
-    print STDERR "        -jamjN       - [EXPERIMENTAL] Number of processes the jam primer should use\n";
     print STDERR "Default:             - build current project\n";
     print STDERR "Keys that are not listed above would be passed to dmake\n";
 };
@@ -1206,8 +1180,6 @@ sub get_options {
     while ($arg = shift @ARGV) {
         $arg =~ /^-P$/            and $QuantityToBuild = shift @ARGV     and next;
         $arg =~ /^-P(\d+)$/            and $QuantityToBuild = $1 and next;
-        $arg =~ /^-jamj$/            and $JamProcessNum = shift @ARGV     and next;
-        $arg =~ /^-jamj(\d+)$/            and $JamProcessNum = $1 and next;
         $arg =~ /^--all$/        and $BuildAllParents = 1             and next;
         $arg =~ /^-a$/        and $BuildAllParents = 1             and next;
         $arg =~ /^--show$/        and $show = 1                         and next;
