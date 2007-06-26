@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontact.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:32:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:06:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,6 @@ namespace sdr
             mpParent(0L),
             mpAnimationState(0L),
             mbIsPainted(sal_False),
-            mbIsInvalidated(sal_False),
             mbdrawHierarchyValid(sal_False)
         {
             // make the ViewContact remember me
@@ -240,29 +239,8 @@ namespace sdr
             }
         }
 
-        // This method Recursively Builds the expand Clip Region
-        void ViewObjectContact::BuildClipRegion(DisplayInfo& rDisplayInfo, Region& rRegion)
-        {
-            if(IsPainted() && IsInvalidated())
-            {
-                // This object potentially needs a redraw. Is it inside visible area?
-                // just use ShouldPaintObject here, too. The RedrawArea is set to the
-                // visible area for this purpose.
-                if(GetViewContact().ShouldPaintObject(rDisplayInfo, *this))
-                {
-                    rRegion.Union(GetViewContact().GetPaintRectangle());
-                }
-            }
-
-            if(maVOCList.Count())
-            {
-                // proccess contained hierarchy
-                maVOCList.BuildClipRegion(rDisplayInfo, rRegion);
-            }
-        }
-
         // Paint this object. This is before evtl. SubObjects get painted. This method
-        // needs to set the flag mbIsPainted and mbIsInvalidated and to set the
+        // needs to set the flag mbIsPainted and to set the
         // maPaintedRectangle member. This information is later used for invalidates
         // and repaints.
         void ViewObjectContact::PaintObject(DisplayInfo& rDisplayInfo)
@@ -295,7 +273,6 @@ namespace sdr
             {
                 // Set state flags
                 mbIsPainted = sal_True;
-                mbIsInvalidated = sal_False;
 
                 // set painted rectangle
                 maPaintedRectangle = aPaintRectangle;
@@ -416,41 +393,22 @@ namespace sdr
         // React on changes of the object of this ViewContact
         void ViewObjectContact::ActionChanged()
         {
-            if(IsPainted())
+            if(IsPainted() && GetObjectContact().IsAreaVisible(GetPaintedRectangle()))
             {
-                if(IsInvalidated())
-                {
-                    // #i37394# Object changes again, but is currently invalidated. That
-                    // means, it's original position is invalidated. But it's new position
-                    // maybe not invalidated yet.
-                    GetObjectContact().ObjectGettingPotentiallyVisible(*this);
-                }
-                else
-                {
-                    // #i42815#
-                    if(GetObjectContact().IsAreaVisible(GetPaintedRectangle()))
-                    {
-                        // invalidate last paint area
-                        GetObjectContact().InvalidatePartOfView(GetPaintedRectangle());
+                // use last paint rectangle to invalidate last paint area
+                GetObjectContact().InvalidatePartOfView(GetPaintedRectangle());
 
-                        // change state to invalidated
-                        mbIsInvalidated = sal_True;
-                    }
-                    else
-                    {
-                        // #i42815#
-                        // to-be-invalidated area is not visible in view, so object is painted
-                        // but out of display region, e.g. scrolled out without redraw. In that
-                        // case, give redraw a chance by checking if its new position gets visible
-                        GetObjectContact().ObjectGettingPotentiallyVisible(*this);
-                    }
-                }
+                // change state to not painted
+                mbIsPainted = sal_False;
             }
-            else
+
+            // always: use new potential paint rectangle
+            const Rectangle& rNewObjectRectangle = GetViewContact().GetPaintRectangle();
+
+            if(GetObjectContact().IsAreaVisible(rNewObjectRectangle))
             {
-                // Non-painted object was changed. Test for potentially
-                // getting visible
-                GetObjectContact().ObjectGettingPotentiallyVisible(*this);
+                // invalidate new paint area
+                GetObjectContact().InvalidatePartOfView(rNewObjectRectangle);
             }
         }
 
@@ -458,12 +416,6 @@ namespace sdr
         sal_Bool ViewObjectContact::IsPainted() const
         {
             return mbIsPainted;
-        }
-
-        // Get info if it's already invalidated
-        sal_Bool ViewObjectContact::IsInvalidated() const
-        {
-            return mbIsInvalidated;
         }
 
         // Get info about the painted rectangle
@@ -503,7 +455,6 @@ namespace sdr
         {
             // Copy state flags
             mbIsPainted = rParent.IsPainted();
-            mbIsInvalidated = rParent.IsInvalidated();
 
             // Copy painted rectangle
             maPaintedRectangle = rParent.GetPaintedRectangle();
