@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:02:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:56:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2435,9 +2435,6 @@ sal_Bool SwDrawVirtObj::DoPaintObject( XOutputDevice& rOut,
         aDisplayInfo.SetExtendedOutputDevice(&rOut);
         aDisplayInfo.SetPaintInfoRec(&aCopyInfoRec);
         aDisplayInfo.SetOutputDevice(rOut.GetOutDev());
-
-        // keep draw hierarchy up-to-date
-        aPainter.PreProcessDisplay(aDisplayInfo);
 
         // do processing
         aPainter.ProcessDisplay(aDisplayInfo);
