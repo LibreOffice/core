@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_versionboxes.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:40:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:12:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,17 +38,17 @@
 InfoBox RID_QUERYBOX_VERSION_LESS {
     Buttons = WB_OK_CANCEL;
     DefButton = WB_DEF_CANCEL;
-    Message[en-US] = "You are about to install version $NEW of the extension $NAME. The newer version $DEPLOYED is already installed.\nPress OK to replace the installed extension.\nPress Cancel to abort the installation.";
+    Message[en-US] = "You are about to install version $NEW of the extension \'$NAME\'. The newer version $DEPLOYED is already installed.\nClick \'OK\' to replace the installed extension.\nClick \'Cancel\' to abort the installation.";
 };
 
 InfoBox RID_QUERYBOX_VERSION_EQUAL {
     Buttons = WB_OK_CANCEL;
     DefButton = WB_DEF_CANCEL;
-    Message[en-US] = "You are about to install version $NEW of the extension $NAME. That version is already installed.\nPress OK to replace the installed extension.\nPress Cancel to abort the installation.";
+    Message[en-US] = "You are about to install version $NEW of the extension \'$NAME\'. That version is already installed.\nClick \'OK\' to replace the installed extension.\nClick \'Cancel\' to abort the installation.";
 };
 
 InfoBox RID_QUERYBOX_VERSION_GREATER {
     Buttons = WB_OK_CANCEL;
     DefButton = WB_DEF_OK;
-    Message[en-US] = "You are about to install version $NEW of the extension $NAME. The older version $DEPLOYED is already installed.\nPress OK to replace the installed extension.\nPress Cancel to abort the installation.";
+    Message[en-US] = "You are about to install version $NEW of the extension \'$NAME\'. The older version $DEPLOYED is already installed.\nClick \'OK\' to replace the installed extension.\nClick \'Cancel\' to abort the installation.";
 };
