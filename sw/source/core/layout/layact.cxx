@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:48:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:57:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2961,9 +2961,20 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
 #if OSL_DEBUG_LEVEL > 1
     if ( bIndicator && pImp->GetShell()->GetWin() )
     {
-        Rectangle aRect( 0, 0, 5, 5 );
-        aRect = pImp->GetShell()->GetWin()->PixelToLogic( aRect );
-        pImp->GetShell()->GetWin()->Invalidate( aRect );
+        // #i75172# Do not invalidate indicator, this may cause a endless loop. Instead, just repaint it
+        // This should be replaced by an overlay object in the future, anyways. Since it's only for debug
+        // purposes, it is not urgent.
+        static bool bCheckWithoutInvalidating(true);
+        if(bCheckWithoutInvalidating)
+        {
+            bIndicator = false; SHOW_IDLE( COL_LIGHTGREEN );
+        }
+        else
+        {
+            Rectangle aRect( 0, 0, 5, 5 );
+            aRect = pImp->GetShell()->GetWin()->PixelToLogic( aRect );
+            pImp->GetShell()->GetWin()->Invalidate( aRect );
+        }
     }
 #endif
 #endif
