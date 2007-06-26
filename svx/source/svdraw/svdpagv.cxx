@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-26 15:59:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:08:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,24 @@ SdrPageWindow* SdrPageView::FindPageWindow(SdrPaintWindow& rPaintWindow) const
     }
 
     return 0L;
+}
+
+const SdrPageWindow* SdrPageView::FindPatchedPageWindow( const OutputDevice& _rOutDev ) const
+{
+    for (   SdrPageWindowVector::const_iterator loop = maPageWindows.begin();
+            loop != maPageWindows.end();
+            ++loop
+        )
+    {
+        const SdrPageWindow& rPageWindow( *(*loop) );
+        const SdrPaintWindow& rPaintWindow( rPageWindow.GetOriginalPaintWindow() ? *rPageWindow.GetOriginalPaintWindow() : rPageWindow.GetPaintWindow() );
+        if ( &rPaintWindow.GetOutputDevice() == &_rOutDev )
+        {
+            return &rPageWindow;
+        }
+    }
+
+    return NULL;
 }
 
 SdrPageWindow* SdrPageView::FindPageWindow(const OutputDevice& rOutDev) const
@@ -291,7 +309,7 @@ void SdrPageView::RemovePaintWindowFromPageView(SdrPaintWindow& rPaintWindow)
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > SdrPageView::GetControlContainer( const OutputDevice& _rDevice ) const
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > xReturn;
-    const SdrPageWindow* pCandidate = FindPageWindow( _rDevice );
+    const SdrPageWindow* pCandidate = FindPatchedPageWindow( _rDevice );
 
     if ( pCandidate )
         xReturn = pCandidate->GetControlContainer( true );
@@ -410,64 +428,12 @@ void SdrPageView::CompleteRedraw(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// #i74769# use SdrPaintWindow directly
 
-void SdrPageView::BeginDrawLayer(OutputDevice* pGivenTarget, const Region& rReg, sal_Bool /*bPrepareBuffered*/)
+void SdrPageView::setPreparedPageWindow(SdrPageWindow* pKnownTarget)
 {
-    // #i72752#
-    // reset prepared SdrPageWindow
-    mpPreparedPageWindow = 0;
-
-    if(pGivenTarget)
-    {
-        SdrPageWindow* pKnownTarget = FindPageWindow(*pGivenTarget);
-
-        if(pKnownTarget)
-        {
-            // #i72752#
-            // remember prepared SdrPageWindow
-            mpPreparedPageWindow = pKnownTarget;
-
-            // prepare redraw
-            pKnownTarget->PrepareRedraw(rReg);
-
-            // Hide controls in the expanded ClipRegion. This is necessary since the
-            // expanded region may be bigger than the paint region the application is
-            // using. Then, the difference would contain painted controls which would
-            // then be copied to the overlay buffer when working without PrePaintBuffer.
-            SdrPaintWindow& rCandidate = pKnownTarget->GetPaintWindow();
-
-            // use region prepared from PrepareRedraw()
-            rCandidate.HideOverlay(rCandidate.GetRedrawRegion());
-        }
-    }
-}
-
-void SdrPageView::EndDrawLayer(OutputDevice* pGivenTarget)
-{
-    // #i72752#
-    // reset prepared SdrPageWindow
-    mpPreparedPageWindow = 0;
-
-    // draw Overlay directly to window. This will evtl. save the contents of the window
-    // in the RedrawRegion to the overlay background buffer, too.
-    if(pGivenTarget)
-    {
-        SdrPageWindow* pKnownTarget = FindPageWindow(*pGivenTarget);
-
-        if(pKnownTarget)
-        {
-            SdrPaintWindow& rCandidate = pKnownTarget->GetPaintWindow();
-            const Region& rRedrwaRegion = rCandidate.GetRedrawRegion();
-
-            // draw old text edit stuff before overlay to have it as part of the background
-            // ATM. This will be changed to have the text editing on the overlay, bit it
-            // is not an easy thing to do, see BegTextEdit and the OutlinerView stuff used...
-            GetView().ImpTextEditDrawing(rRedrwaRegion, rCandidate);
-
-            // use region prepared from PrepareRedraw()
-            rCandidate.DrawOverlay(rRedrwaRegion, true);
-        }
-    }
+    // #i72752# remember prepared SdrPageWindow
+    mpPreparedPageWindow = pKnownTarget;
 }
 
 void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sal_uInt16 nPaintMode, ::sdr::contact::ViewObjectContactRedirector* pRedirector) const
@@ -511,6 +477,8 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sal_uInt
                 }
                 else
                 {
+                    OSL_ENSURE(false, "SdrPageView::DrawLayer: Creating temporary SdrPageWindow (ObjectContact), this should never be needed (!)");
+
                     // None of the known OutputDevices is the target of this paint, use
                     // a temporary SdrPageWindow for this Redraw.
                     SdrPaintWindow aTemporaryPaintWindow(mrView, *pGivenTarget);
@@ -1199,28 +1167,6 @@ void SdrPageView::SetApplicationDocumentColor(Color aDocumentColor)
 Color SdrPageView::GetApplicationDocumentColor() const
 {
     return maDocumentColor;
-}
-
-// find out if form controls are used by this PageView
-sal_Bool SdrPageView::AreFormControlsUsed(SdrPaintWindow& rPaintWindow) const
-{
-    // #i73602#
-    bool bRetval(false);
-    SdrPageWindow* pPageWindow = FindPageWindow(rPaintWindow);
-
-    if(pPageWindow)
-    {
-        uno::Reference< awt::XControlContainer > xContainer = pPageWindow->GetControlContainer();
-
-        if(xContainer.is())
-        {
-            uno::Sequence< uno::Reference< awt::XControl > > xControls = xContainer->getControls();
-
-            bRetval = xControls.hasElements();
-        }
-    }
-
-    return bRetval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
