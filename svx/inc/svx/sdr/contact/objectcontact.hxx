@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectcontact.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 17:43:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:01:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,10 +144,6 @@ namespace sdr
             // Clear Draw Hierarchy data.
             void ClearDrawHierarchy();
 
-            // Pre-Process the whole displaying. The default implementation
-            // calls EnsureValidDrawHierarchy() to ensure a valid draw hierarchy.
-            virtual void PreProcessDisplay(DisplayInfo& rDisplayInfo);
-
             // Process the whole displaying
             virtual void ProcessDisplay(DisplayInfo& rDisplayInfo) = 0;
 
@@ -170,10 +166,6 @@ namespace sdr
             // Invalidate given rectangle at the window/output which is represented by
             // this ObjectContact. Default does nothing.
             virtual void InvalidatePartOfView(const Rectangle& rRectangle) const;
-
-            // Non-painted object was changed. Test for potentially
-            // getting visible
-            virtual void ObjectGettingPotentiallyVisible(const ViewObjectContact& rVOC) const;
 
             // #i42815#
             // Get info if given Rectangle is visible in this view
