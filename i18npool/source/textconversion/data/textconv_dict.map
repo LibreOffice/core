@@ -1,7 +1,6 @@
 OOO_1.1 {
 global:
     GetVersionInfo;
-    component_getDescriptionFunc;
     getHangul2HanjaData;
     getHangul2HanjaIndex;
     getHangul2HanjaIndexCount;

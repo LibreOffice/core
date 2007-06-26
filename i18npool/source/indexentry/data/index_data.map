@@ -1,7 +1,6 @@
 OOO_1.1 {
 global:
     GetVersionInfo;
-    component_getDescriptionFunc;
     get_indexdata_ko_dict;
     get_indexdata_zh_pinyin;
     get_indexdata_zh_radical;
