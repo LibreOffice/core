@@ -163,3 +163,22 @@
  	    -o $@ $(JAVA_OBJS) $(C_OBJS) $(LIBJSO_LIBS)
  
  # Shared Tcl library.
+*** misc/build/db-4.2.52.NC/btree/bt_put.c.orig	2003-11-17 19:58:20.000000000 +0000
+--- misc/build/db-4.2.52.NC/btree/bt_put.c	2007-06-17 15:05:09.000000000 +0100
+***************
+*** 702,708 ****
+  
+  	/* Sum up all the data items. */
+  	for (cnt = 0, first = indx;
+! 	    inp[first] == inp[indx] && indx < NUM_ENT(h);
+  	    ++cnt, indx += P_INDX) {
+  		bk = GET_BKEYDATA(dbp, h, indx + O_INDX);
+  		sz += B_TYPE(bk->type) == B_KEYDATA ?
+--- 702,708 ----
+  
+  	/* Sum up all the data items. */
+  	for (cnt = 0, first = indx;
+! 	    indx < NUM_ENT(h) && inp[first] == inp[indx];
+  	    ++cnt, indx += P_INDX) {
+  		bk = GET_BKEYDATA(dbp, h, indx + O_INDX);
+  		sz += B_TYPE(bk->type) == B_KEYDATA ?
