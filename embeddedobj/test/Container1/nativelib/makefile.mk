@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:38:36 $
+#   last change: $Author: hr $ $Date: 2007-06-26 17:23:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,6 @@ SHL1STDLIBS= \
 
 SHL1OBJS=$(SLOFILES) 
 SHL1VERSIONOBJ=
-SHL1DESCRIPTIONOBJ=
 
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
