@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:02:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:52:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -524,17 +524,24 @@ void ScTabView::PaintBlock( BOOL bReset )
                     }
 
                     //  repaint if controls are touched (#69680# in both cases)
+                    // #i74768# Forms are rendered by DrawingLayer's EndDrawLayers()
+                    static bool bSuppressControlExtraStuff(true);
 
-                    Rectangle aMMRect = pDoc->GetMMRect(nBlockStartX,nBlockStartY,nBlockEndX,nBlockEndY, nTab);
-                    if (pDoc->HasControl( nTab, aMMRect ))
+                    if(!bSuppressControlExtraStuff)
                     {
-                        for (i=0; i<4; i++)
-                            if (pGridWin[i] && pGridWin[i]->IsVisible())
+                        Rectangle aMMRect = pDoc->GetMMRect(nBlockStartX,nBlockStartY,nBlockEndX,nBlockEndY, nTab);
+                        if (pDoc->HasControl( nTab, aMMRect ))
+                        {
+                            for (i=0; i<4; i++)
                             {
-                                //  MapMode muss logischer (1/100mm) sein !!!
-                                pDoc->InvalidateControls( pGridWin[i], nTab, aMMRect );
-                                pGridWin[i]->Update();
+                                if (pGridWin[i] && pGridWin[i]->IsVisible())
+                                {
+                                    //  MapMode muss logischer (1/100mm) sein !!!
+                                    pDoc->InvalidateControls( pGridWin[i], nTab, aMMRect );
+                                    pGridWin[i]->Update();
+                                }
                             }
+                        }
                     }
                 }
             }
