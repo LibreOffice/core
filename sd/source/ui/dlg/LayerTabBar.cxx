@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LayerTabBar.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:36:45 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:38:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -347,10 +347,14 @@ void LayerTabBar::EndRenaming()
                     pDoc,
                     pLayer,
                     aLayerName,
+                    pLayer->GetTitle(),
+                    pLayer->GetDescription(),
                     pDrView->IsLayerVisible(aLayerName),
                     pDrView->IsLayerLocked(aLayerName),
                     pDrView->IsLayerPrintable(aLayerName),
                     aNewName,
+                    pLayer->GetTitle(),
+                    pLayer->GetDescription(),
                     pDrView->IsLayerVisible(aLayerName),
                     pDrView->IsLayerLocked(aLayerName),
                     pDrView->IsLayerPrintable(aLayerName)
