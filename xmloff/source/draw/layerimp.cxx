@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layerimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:27:39 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:35:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,9 +79,13 @@
 #include "layerimp.hxx"
 #endif
 
+#include "xmltoken.hxx"
+#include "XMLStringBufferImportContext.hxx"
+
 using namespace ::rtl;
 using namespace ::std;
 using namespace ::cppu;
+using namespace ::xmloff::token;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::xml;
 using namespace ::com::sun::star::xml::sax;
@@ -91,7 +95,103 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using ::xmloff::token::IsXMLToken;
-using ::xmloff::token::XML_NAME;
+
+class SdXMLLayerContext : public SvXMLImportContext
+{
+public:
+    SdXMLLayerContext( SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, const Reference< XNameAccess >& xLayerManager );
+    virtual ~SdXMLLayerContext();
+
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
+    virtual void EndElement();
+
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > mxLayerManager;
+    ::rtl::OUString msName;
+    ::rtl::OUStringBuffer sDescriptionBuffer;
+    ::rtl::OUStringBuffer sTitleBuffer;
+};
+
+SdXMLLayerContext::SdXMLLayerContext( SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, const Reference< XNameAccess >& xLayerManager )
+: SvXMLImportContext(rImport, nPrefix, rLocalName)
+, mxLayerManager( xLayerManager )
+{
+    const OUString strName( RTL_CONSTASCII_USTRINGPARAM( "Name" ) );
+
+    OUString aName;
+
+    const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for(sal_Int16 i=0; i < nAttrCount; i++)
+    {
+        OUString aLocalName;
+        if( GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( i ), &aLocalName ) == XML_NAMESPACE_DRAW )
+        {
+            const OUString sValue( xAttrList->getValueByIndex( i ) );
+
+            if( IsXMLToken( aLocalName, XML_NAME ) )
+            {
+                msName = sValue;
+                break; // no more attributes needed
+            }
+        }
+    }
+
+}
+
+SdXMLLayerContext::~SdXMLLayerContext()
+{
+}
+
+SvXMLImportContext * SdXMLLayerContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName, const Reference< XAttributeList >& )
+{
+    if( (XML_NAMESPACE_SVG == nPrefix) && IsXMLToken(rLocalName, XML_TITLE) )
+    {
+        return new XMLStringBufferImportContext( GetImport(), nPrefix, rLocalName, sTitleBuffer);
+    }
+    else if( (XML_NAMESPACE_SVG == nPrefix) && IsXMLToken(rLocalName, XML_DESC) )
+    {
+        return new XMLStringBufferImportContext( GetImport(), nPrefix, rLocalName, sDescriptionBuffer);
+    }
+    else
+    {
+        return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    }
+}
+
+void SdXMLLayerContext::EndElement()
+{
+    DBG_ASSERT( msName.getLength(), "xmloff::SdXMLLayerContext::EndElement(), draw:layer element without draw:name!" );
+    if( msName.getLength() ) try
+    {
+        Reference< XPropertySet > xLayer;
+
+        if( mxLayerManager->hasByName( msName ) )
+        {
+            mxLayerManager->getByName( msName ) >>= xLayer;
+            DBG_ASSERT( xLayer.is(), "xmloff::SdXMLLayerContext::EndElement(), failed to get existing XLayer!" );
+        }
+        else
+        {
+            Reference< XLayerManager > xLayerManager( mxLayerManager, UNO_QUERY );
+            if( xLayerManager.is() )
+                xLayer = Reference< XPropertySet >::query( xLayerManager->insertNewByIndex( xLayerManager->getCount() ) );
+            DBG_ASSERT( xLayer.is(), "xmloff::SdXMLLayerContext::EndElement(), failed to create new XLayer!" );
+
+            if( xLayer.is() )
+                xLayer->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), Any( msName ) );
+        }
+
+        if( xLayer.is() )
+        {
+            xLayer->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Title") ), Any( sTitleBuffer.makeStringAndClear() ) );
+            xLayer->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Description") ), Any( sDescriptionBuffer.makeStringAndClear() ) );
+        }
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR("SdXMLLayerContext::EndElement(), exception caught!");
+    }
+}
 
 
 TYPEINIT1( SdXMLLayerSetContext, SvXMLImportContext );
@@ -101,7 +201,7 @@ SdXMLLayerSetContext::SdXMLLayerSetContext( SvXMLImport& rImport, sal_uInt16 nPr
 : SvXMLImportContext(rImport, nPrfx, rLocalName)
 {
     Reference< XLayerSupplier > xLayerSupplier( rImport.GetModel(), UNO_QUERY );
-    DBG_ASSERT( xLayerSupplier.is(), "XModel is not supporting XLayerSupplier!" );
+    DBG_ASSERT( xLayerSupplier.is(), "xmloff::SdXMLLayerSetContext::SdXMLLayerSetContext(), XModel is not supporting XLayerSupplier!" );
     if( xLayerSupplier.is() )
         mxLayerManager = xLayerSupplier->getLayerManager();
 }
@@ -113,53 +213,5 @@ SdXMLLayerSetContext::~SdXMLLayerSetContext()
 SvXMLImportContext * SdXMLLayerSetContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
-    if( mxLayerManager.is() )
-    {
-        const OUString strName( RTL_CONSTASCII_USTRINGPARAM( "Name" ) );
-
-        OUString aName;
-
-        const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        for(sal_Int16 i=0; i < nAttrCount; i++)
-        {
-            OUString aLocalName;
-            if( GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( i ), &aLocalName ) == XML_NAMESPACE_DRAW )
-            {
-                const OUString sValue( xAttrList->getValueByIndex( i ) );
-
-                if( IsXMLToken( aLocalName, XML_NAME ) )
-                {
-                    aName = sValue;
-                }
-            }
-        }
-
-        DBG_ASSERT( aName.getLength(), "draw:layer element without draw:name!" );
-        if( aName.getLength() )
-        {
-            Reference< XPropertySet > xLayer;
-
-            if( mxLayerManager->hasByName( aName ) )
-            {
-                mxLayerManager->getByName( aName ) >>= xLayer;
-                DBG_ASSERT( xLayer.is(), "failed to get existing XLayer!" );
-            }
-            else
-            {
-                Reference< XLayerManager > xLayerManager( mxLayerManager, UNO_QUERY );
-                if( xLayerManager.is() )
-                    xLayer = Reference< XPropertySet >::query( xLayerManager->insertNewByIndex( xLayerManager->getCount() ) );
-                DBG_ASSERT( xLayer.is(), "failed to create new XLayer!" );
-
-                if( xLayer.is() )
-                {
-                    Any aAny;
-                    aAny <<= aName;
-                    xLayer->setPropertyValue( strName, aAny );
-                }
-            }
-        }
-    }
-
-    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    return new SdXMLLayerContext( GetImport(), nPrefix, rLocalName, xAttrList, mxLayerManager );
 }
