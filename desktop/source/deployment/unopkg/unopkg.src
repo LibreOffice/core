@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:45:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:13:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 
 String RID_STR_UNOPKG_NO_SHARED_ALLOWED
 {
-    Text [ en-US ] = "The option \"--shared\" cannot be used to install the extension %NAME, "
+    Text [ en-US ] = "The option \"--shared\" cannot be used to install the extension \'%NAME\', "
         "because every user has to agree to the license agreement of the extension. The extension will not be installed.";
 };
 
