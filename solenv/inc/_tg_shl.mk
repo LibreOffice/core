@@ -29,25 +29,6 @@ SHL1DEF*=$(MISC)$/$(SHL1TARGET).def
 .ENDIF			# "$(SHL1USE_EXPORTS)"==""
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.IF "$(SHL1TARGET)"!=""
-.IF "$(COMP1TYPELIST)"==""
-
-#fallback
-LOCAL1DESC:=$(subst,/,$/ $(shell $(FIND) . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL1TARGET)))}.xml"))
-.IF "$(LOCAL1DESC)"==""
-$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
-    $(COPY) $< $@
-.ELSE           # "$(LOCALDESC1)"==""
-SHL1DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL1DESC:b)$($(WINVERSIONNAMES)_MAJOR)_description.obj
-.ENDIF          # "$(LOCALDESC1)"==""
-
-.ENDIF          # "$(COMP1TYPELIST)"==""
-.ENDIF			# "$(SHL1TARGET)"!="
-
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -210,11 +191,6 @@ SHL1LINKRES*=$(MISC)$/$(SHL1TARGET).res
 SHL1LINKRESO*=$(MISC)$/$(SHL1TARGET)_res.o
 .ENDIF			# "$(SHL1DEFAULTRES)$(use_shl_versions)"!=""
 
-.IF "$(NO_SHL1DESCRIPTION)"==""
-#SHL1DESCRIPTIONOBJ*=$(SLO)$/default_description.obj
-SHL1DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_description.obj
-.ENDIF			# "$(NO_SHL1DESCRIPTION)"==""
-
 #.IF "$(SHL1TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
@@ -243,7 +219,6 @@ $(MISC)$/%linkinc.ls:
 
 $(SHL1TARGETN) : \
                     $(SHL1OBJS)\
-                    $(SHL1DESCRIPTIONOBJ)\
                     $(SHL1LIBS)\
                     $(USE_1IMPLIB_DEPS)\
                     $(USE_SHL1DEF)\
@@ -284,25 +259,28 @@ $(SHL1TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL1ALLRES)"!=""
-.IF "$(COM)"=="GCC"
-.IF "$(USE_DEFFILE)"!=""
-    dlltool --input-def $(SHL1DEF) --dllname $(SHL1TARGET)$(DLLPOST) --kill-at --output-exp $(MISC)$/$(@:b).exp
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ) $(SHL1OBJS) $(SHL1LINKRESO) \
+.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(DEFLIB1NAME)"!=""	# do not have to include objs
+    @echo dlltool --input-def $(SHL1DEF) \
+        --dllname $(SHL1TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)$/$(@:b)_exp.o > $(MISC)$/$(TARGET).$(@:b)_1.cmd
+.ELSE			# "$(DEFLIB1NAME)"!=""	# do not have to include objs
+    @echo dlltool --input-def $(SHL1DEF) \
+        --dllname $(SHL1TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)$/$(@:b)_exp.o \
+        $(STDOBJ) $(SHL1OBJS) $(SHL1LINKRESO) \
+        `$(TYPE) /dev/null $(SHL1LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_1.cmd
+.ENDIF			# "$(DEFLIB1NAME)"!=""
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+        $(STDOBJ) $(SHL1VERSIONOBJ) $(SHL1OBJS) $(SHL1LINKRESO) \
         `$(TYPE) /dev/null $(SHL1LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,$(MISC)$/$(@:b).exp,--exclude-libs,ALL $(SHL1STDLIBS) $(SHL1STDSHL) $(STDSHL1) \
-        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
-.ELSE			# "$(USE_DEFFILE)"!=""
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ) $(SHL1OBJS) $(SHL1LINKRESO) \
-        `$(TYPE) /dev/null $(SHL1LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,--export-all-symbols,--exclude-libs,ALL $(SHL1STDLIBS) $(SHL1STDSHL) $(STDSHL1) \
-        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
-.ENDIF			# "$(USE_DEFFILE)"!=""
+        -Wl,--exclude-libs,ALL $(SHL1STDLIBS) $(SHL1STDSHL) $(STDSHL1) \
+        $(MISC)$/$(@:b)_exp.o \
+        -Wl,-Map,$(MISC)$/$(@:b).map >> $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_1.cmd
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL1USE_EXPORTS)"!="name"
@@ -316,7 +294,7 @@ $(SHL1TARGETN) : \
         -def:$(SHL1DEF) \
         $(USE_1IMPLIB) \
         $(STDOBJ) \
-        $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ) $(SHL1OBJS) \
+        $(SHL1VERSIONOBJ) $(SHL1OBJS) \
         $(SHL1LIBS) \
         $(SHL1STDLIBS) \
         $(SHL1STDSHL) $(STDSHL1) \
@@ -334,7 +312,7 @@ $(SHL1TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(LB)$/$(SHL1IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL1OBJS) $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ)   \
+        $(SHL1OBJS) $(SHL1VERSIONOBJ) \
         $(SHL1LIBS)                         \
         $(SHL1STDLIBS)                      \
         $(SHL1STDSHL) $(STDSHL1)                           \
@@ -353,7 +331,7 @@ $(SHL1TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(USE_1IMPLIB) \
         $(STDOBJ)							\
-        $(SHL1OBJS) $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ))   \
+        $(SHL1OBJS) $(SHL1VERSIONOBJ))   \
         @$(MISC)$/$(SHL1TARGET)_link.lst \
         @$(mktmp $(SHL1STDLIBS)                      \
         $(SHL1STDSHL) $(STDSHL1)                           \
@@ -391,7 +369,7 @@ $(SHL1TARGETN) : \
     @-$(RM) $(MISC)$/$(@:b).list
     @-$(RM) $(MISC)$/$(TARGET).$(@:b)_1.cmd
     @echo $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
-    $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ:s/.obj/.o/) \
+    $(SHL1VERSIONOBJ) \
     `cat /dev/null $(SHL1LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(SHL1VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL1STDLIBS)` \
@@ -408,7 +386,7 @@ $(SHL1TARGETN) : \
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)$/$(TARGET).$(@:b)_1.cmd
     @echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(SHL1SONAME) $(LINKFLAGSSHL) $(SHL1VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
-    $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
+    $(SHL1VERSIONOBJ) -o $@ \
     `cat /dev/null $(SHL1LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL1STDLIBS) $(SHL1ARCHIVES) $(SHL1STDSHL) $(STDSHL1) $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_1.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_1.cmd
@@ -468,25 +446,6 @@ SHL2LINKFLAGS+=$(LINKFLAGS)
 .IF "$(SHL2USE_EXPORTS)"==""
 SHL2DEF*=$(MISC)$/$(SHL2TARGET).def
 .ENDIF			# "$(SHL2USE_EXPORTS)"==""
-
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.IF "$(SHL2TARGET)"!=""
-.IF "$(COMP2TYPELIST)"==""
-
-#fallback
-LOCAL2DESC:=$(subst,/,$/ $(shell $(FIND) . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL2TARGET)))}.xml"))
-.IF "$(LOCAL2DESC)"==""
-$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
-    $(COPY) $< $@
-.ELSE           # "$(LOCALDESC2)"==""
-SHL2DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL2DESC:b)$($(WINVERSIONNAMES)_MAJOR)_description.obj
-.ENDIF          # "$(LOCALDESC2)"==""
-
-.ENDIF          # "$(COMP2TYPELIST)"==""
-.ENDIF			# "$(SHL2TARGET)"!="
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
@@ -651,11 +610,6 @@ SHL2LINKRES*=$(MISC)$/$(SHL2TARGET).res
 SHL2LINKRESO*=$(MISC)$/$(SHL2TARGET)_res.o
 .ENDIF			# "$(SHL2DEFAULTRES)$(use_shl_versions)"!=""
 
-.IF "$(NO_SHL2DESCRIPTION)"==""
-#SHL2DESCRIPTIONOBJ*=$(SLO)$/default_description.obj
-SHL2DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_description.obj
-.ENDIF			# "$(NO_SHL2DESCRIPTION)"==""
-
 #.IF "$(SHL2TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
@@ -684,7 +638,6 @@ $(MISC)$/%linkinc.ls:
 
 $(SHL2TARGETN) : \
                     $(SHL2OBJS)\
-                    $(SHL2DESCRIPTIONOBJ)\
                     $(SHL2LIBS)\
                     $(USE_2IMPLIB_DEPS)\
                     $(USE_SHL2DEF)\
@@ -725,25 +678,28 @@ $(SHL2TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL2ALLRES)"!=""
-.IF "$(COM)"=="GCC"
-.IF "$(USE_DEFFILE)"!=""
-    dlltool --input-def $(SHL2DEF) --dllname $(SHL2TARGET)$(DLLPOST) --kill-at --output-exp $(MISC)$/$(@:b).exp
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ) $(SHL2OBJS) $(SHL2LINKRESO) \
+.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(DEFLIB2NAME)"!=""	# do not have to include objs
+    @echo dlltool --input-def $(SHL2DEF) \
+        --dllname $(SHL2TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)$/$(@:b)_exp.o > $(MISC)$/$(TARGET).$(@:b)_2.cmd
+.ELSE			# "$(DEFLIB2NAME)"!=""	# do not have to include objs
+    @echo dlltool --input-def $(SHL2DEF) \
+        --dllname $(SHL2TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)$/$(@:b)_exp.o \
+        $(STDOBJ) $(SHL2OBJS) $(SHL2LINKRESO) \
+        `$(TYPE) /dev/null $(SHL2LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_2.cmd
+.ENDIF			# "$(DEFLIB2NAME)"!=""
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+        $(STDOBJ) $(SHL2VERSIONOBJ) $(SHL2OBJS) $(SHL2LINKRESO) \
         `$(TYPE) /dev/null $(SHL2LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,$(MISC)$/$(@:b).exp,--exclude-libs,ALL $(SHL2STDLIBS) $(SHL2STDSHL) $(STDSHL2) \
-        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
-.ELSE			# "$(USE_DEFFILE)"!=""
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ) $(SHL2OBJS) $(SHL2LINKRESO) \
-        `$(TYPE) /dev/null $(SHL2LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,--export-all-symbols,--exclude-libs,ALL $(SHL2STDLIBS) $(SHL2STDSHL) $(STDSHL2) \
-        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
-.ENDIF			# "$(USE_DEFFILE)"!=""
+        -Wl,--exclude-libs,ALL $(SHL2STDLIBS) $(SHL2STDSHL) $(STDSHL2) \
+        $(MISC)$/$(@:b)_exp.o \
+        -Wl,-Map,$(MISC)$/$(@:b).map >> $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_2.cmd
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL2USE_EXPORTS)"!="name"
@@ -757,7 +713,7 @@ $(SHL2TARGETN) : \
         -def:$(SHL2DEF) \
         $(USE_2IMPLIB) \
         $(STDOBJ) \
-        $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ) $(SHL2OBJS) \
+        $(SHL2VERSIONOBJ) $(SHL2OBJS) \
         $(SHL2LIBS) \
         $(SHL2STDLIBS) \
         $(SHL2STDSHL) $(STDSHL2) \
@@ -775,7 +731,7 @@ $(SHL2TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(LB)$/$(SHL2IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL2OBJS) $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ)   \
+        $(SHL2OBJS) $(SHL2VERSIONOBJ) \
         $(SHL2LIBS)                         \
         $(SHL2STDLIBS)                      \
         $(SHL2STDSHL) $(STDSHL2)                           \
@@ -794,7 +750,7 @@ $(SHL2TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(USE_2IMPLIB) \
         $(STDOBJ)							\
-        $(SHL2OBJS) $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ))   \
+        $(SHL2OBJS) $(SHL2VERSIONOBJ))   \
         @$(MISC)$/$(SHL2TARGET)_link.lst \
         @$(mktmp $(SHL2STDLIBS)                      \
         $(SHL2STDSHL) $(STDSHL2)                           \
@@ -832,7 +788,7 @@ $(SHL2TARGETN) : \
     @-$(RM) $(MISC)$/$(@:b).list
     @-$(RM) $(MISC)$/$(TARGET).$(@:b)_2.cmd
     @echo $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
-    $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ:s/.obj/.o/) \
+    $(SHL2VERSIONOBJ) \
     `cat /dev/null $(SHL2LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(SHL2VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL2STDLIBS)` \
@@ -849,7 +805,7 @@ $(SHL2TARGETN) : \
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)$/$(TARGET).$(@:b)_2.cmd
     @echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(SHL2SONAME) $(LINKFLAGSSHL) $(SHL2VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
-    $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
+    $(SHL2VERSIONOBJ) -o $@ \
     `cat /dev/null $(SHL2LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL2STDLIBS) $(SHL2ARCHIVES) $(SHL2STDSHL) $(STDSHL2) $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_2.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_2.cmd
@@ -909,25 +865,6 @@ SHL3LINKFLAGS+=$(LINKFLAGS)
 .IF "$(SHL3USE_EXPORTS)"==""
 SHL3DEF*=$(MISC)$/$(SHL3TARGET).def
 .ENDIF			# "$(SHL3USE_EXPORTS)"==""
-
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.IF "$(SHL3TARGET)"!=""
-.IF "$(COMP3TYPELIST)"==""
-
-#fallback
-LOCAL3DESC:=$(subst,/,$/ $(shell $(FIND) . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL3TARGET)))}.xml"))
-.IF "$(LOCAL3DESC)"==""
-$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
-    $(COPY) $< $@
-.ELSE           # "$(LOCALDESC3)"==""
-SHL3DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL3DESC:b)$($(WINVERSIONNAMES)_MAJOR)_description.obj
-.ENDIF          # "$(LOCALDESC3)"==""
-
-.ENDIF          # "$(COMP3TYPELIST)"==""
-.ENDIF			# "$(SHL3TARGET)"!="
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
@@ -1092,11 +1029,6 @@ SHL3LINKRES*=$(MISC)$/$(SHL3TARGET).res
 SHL3LINKRESO*=$(MISC)$/$(SHL3TARGET)_res.o
 .ENDIF			# "$(SHL3DEFAULTRES)$(use_shl_versions)"!=""
 
-.IF "$(NO_SHL3DESCRIPTION)"==""
-#SHL3DESCRIPTIONOBJ*=$(SLO)$/default_description.obj
-SHL3DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_description.obj
-.ENDIF			# "$(NO_SHL3DESCRIPTION)"==""
-
 #.IF "$(SHL3TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
@@ -1125,7 +1057,6 @@ $(MISC)$/%linkinc.ls:
 
 $(SHL3TARGETN) : \
                     $(SHL3OBJS)\
-                    $(SHL3DESCRIPTIONOBJ)\
                     $(SHL3LIBS)\
                     $(USE_3IMPLIB_DEPS)\
                     $(USE_SHL3DEF)\
@@ -1166,25 +1097,28 @@ $(SHL3TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL3ALLRES)"!=""
-.IF "$(COM)"=="GCC"
-.IF "$(USE_DEFFILE)"!=""
-    dlltool --input-def $(SHL3DEF) --dllname $(SHL3TARGET)$(DLLPOST) --kill-at --output-exp $(MISC)$/$(@:b).exp
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ) $(SHL3OBJS) $(SHL3LINKRESO) \
+.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(DEFLIB3NAME)"!=""	# do not have to include objs
+    @echo dlltool --input-def $(SHL3DEF) \
+        --dllname $(SHL3TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)$/$(@:b)_exp.o > $(MISC)$/$(TARGET).$(@:b)_3.cmd
+.ELSE			# "$(DEFLIB3NAME)"!=""	# do not have to include objs
+    @echo dlltool --input-def $(SHL3DEF) \
+        --dllname $(SHL3TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)$/$(@:b)_exp.o \
+        $(STDOBJ) $(SHL3OBJS) $(SHL3LINKRESO) \
+        `$(TYPE) /dev/null $(SHL3LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_3.cmd
+.ENDIF			# "$(DEFLIB3NAME)"!=""
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+        $(STDOBJ) $(SHL3VERSIONOBJ) $(SHL3OBJS) $(SHL3LINKRESO) \
         `$(TYPE) /dev/null $(SHL3LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,$(MISC)$/$(@:b).exp,--exclude-libs,ALL $(SHL3STDLIBS) $(SHL3STDSHL) $(STDSHL3) \
-        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
-.ELSE			# "$(USE_DEFFILE)"!=""
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ) $(SHL3OBJS) $(SHL3LINKRESO) \
-        `$(TYPE) /dev/null $(SHL3LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,--export-all-symbols,--exclude-libs,ALL $(SHL3STDLIBS) $(SHL3STDSHL) $(STDSHL3) \
-        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
-.ENDIF			# "$(USE_DEFFILE)"!=""
+        -Wl,--exclude-libs,ALL $(SHL3STDLIBS) $(SHL3STDSHL) $(STDSHL3) \
+        $(MISC)$/$(@:b)_exp.o \
+        -Wl,-Map,$(MISC)$/$(@:b).map >> $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_3.cmd
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL3USE_EXPORTS)"!="name"
@@ -1198,7 +1132,7 @@ $(SHL3TARGETN) : \
         -def:$(SHL3DEF) \
         $(USE_3IMPLIB) \
         $(STDOBJ) \
-        $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ) $(SHL3OBJS) \
+        $(SHL3VERSIONOBJ) $(SHL3OBJS) \
         $(SHL3LIBS) \
         $(SHL3STDLIBS) \
         $(SHL3STDSHL) $(STDSHL3) \
@@ -1216,7 +1150,7 @@ $(SHL3TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(LB)$/$(SHL3IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL3OBJS) $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ)   \
+        $(SHL3OBJS) $(SHL3VERSIONOBJ) \
         $(SHL3LIBS)                         \
         $(SHL3STDLIBS)                      \
         $(SHL3STDSHL) $(STDSHL3)                           \
@@ -1235,7 +1169,7 @@ $(SHL3TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(USE_3IMPLIB) \
         $(STDOBJ)							\
-        $(SHL3OBJS) $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ))   \
+        $(SHL3OBJS) $(SHL3VERSIONOBJ))   \
         @$(MISC)$/$(SHL3TARGET)_link.lst \
         @$(mktmp $(SHL3STDLIBS)                      \
         $(SHL3STDSHL) $(STDSHL3)                           \
@@ -1273,7 +1207,7 @@ $(SHL3TARGETN) : \
     @-$(RM) $(MISC)$/$(@:b).list
     @-$(RM) $(MISC)$/$(TARGET).$(@:b)_3.cmd
     @echo $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
-    $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ:s/.obj/.o/) \
+    $(SHL3VERSIONOBJ) \
     `cat /dev/null $(SHL3LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(SHL3VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL3STDLIBS)` \
@@ -1290,7 +1224,7 @@ $(SHL3TARGETN) : \
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)$/$(TARGET).$(@:b)_3.cmd
     @echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(SHL3SONAME) $(LINKFLAGSSHL) $(SHL3VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
-    $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
+    $(SHL3VERSIONOBJ) -o $@ \
     `cat /dev/null $(SHL3LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL3STDLIBS) $(SHL3ARCHIVES) $(SHL3STDSHL) $(STDSHL3) $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_3.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_3.cmd
@@ -1350,25 +1284,6 @@ SHL4LINKFLAGS+=$(LINKFLAGS)
 .IF "$(SHL4USE_EXPORTS)"==""
 SHL4DEF*=$(MISC)$/$(SHL4TARGET).def
 .ENDIF			# "$(SHL4USE_EXPORTS)"==""
-
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.IF "$(SHL4TARGET)"!=""
-.IF "$(COMP4TYPELIST)"==""
-
-#fallback
-LOCAL4DESC:=$(subst,/,$/ $(shell $(FIND) . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL4TARGET)))}.xml"))
-.IF "$(LOCAL4DESC)"==""
-$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
-    $(COPY) $< $@
-.ELSE           # "$(LOCALDESC4)"==""
-SHL4DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL4DESC:b)$($(WINVERSIONNAMES)_MAJOR)_description.obj
-.ENDIF          # "$(LOCALDESC4)"==""
-
-.ENDIF          # "$(COMP4TYPELIST)"==""
-.ENDIF			# "$(SHL4TARGET)"!="
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
@@ -1533,11 +1448,6 @@ SHL4LINKRES*=$(MISC)$/$(SHL4TARGET).res
 SHL4LINKRESO*=$(MISC)$/$(SHL4TARGET)_res.o
 .ENDIF			# "$(SHL4DEFAULTRES)$(use_shl_versions)"!=""
 
-.IF "$(NO_SHL4DESCRIPTION)"==""
-#SHL4DESCRIPTIONOBJ*=$(SLO)$/default_description.obj
-SHL4DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_description.obj
-.ENDIF			# "$(NO_SHL4DESCRIPTION)"==""
-
 #.IF "$(SHL4TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
@@ -1566,7 +1476,6 @@ $(MISC)$/%linkinc.ls:
 
 $(SHL4TARGETN) : \
                     $(SHL4OBJS)\
-                    $(SHL4DESCRIPTIONOBJ)\
                     $(SHL4LIBS)\
                     $(USE_4IMPLIB_DEPS)\
                     $(USE_SHL4DEF)\
@@ -1607,25 +1516,28 @@ $(SHL4TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL4ALLRES)"!=""
-.IF "$(COM)"=="GCC"
-.IF "$(USE_DEFFILE)"!=""
-    dlltool --input-def $(SHL4DEF) --dllname $(SHL4TARGET)$(DLLPOST) --kill-at --output-exp $(MISC)$/$(@:b).exp
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ) $(SHL4OBJS) $(SHL4LINKRESO) \
+.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(DEFLIB4NAME)"!=""	# do not have to include objs
+    @echo dlltool --input-def $(SHL4DEF) \
+        --dllname $(SHL4TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)$/$(@:b)_exp.o > $(MISC)$/$(TARGET).$(@:b)_4.cmd
+.ELSE			# "$(DEFLIB4NAME)"!=""	# do not have to include objs
+    @echo dlltool --input-def $(SHL4DEF) \
+        --dllname $(SHL4TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)$/$(@:b)_exp.o \
+        $(STDOBJ) $(SHL4OBJS) $(SHL4LINKRESO) \
+        `$(TYPE) /dev/null $(SHL4LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_4.cmd
+.ENDIF			# "$(DEFLIB4NAME)"!=""
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+        $(STDOBJ) $(SHL4VERSIONOBJ) $(SHL4OBJS) $(SHL4LINKRESO) \
         `$(TYPE) /dev/null $(SHL4LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,$(MISC)$/$(@:b).exp,--exclude-libs,ALL $(SHL4STDLIBS) $(SHL4STDSHL) $(STDSHL4) \
-        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
-.ELSE			# "$(USE_DEFFILE)"!=""
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ) $(SHL4OBJS) $(SHL4LINKRESO) \
-        `$(TYPE) /dev/null $(SHL4LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,--export-all-symbols,--exclude-libs,ALL $(SHL4STDLIBS) $(SHL4STDSHL) $(STDSHL4) \
-        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
-.ENDIF			# "$(USE_DEFFILE)"!=""
+        -Wl,--exclude-libs,ALL $(SHL4STDLIBS) $(SHL4STDSHL) $(STDSHL4) \
+        $(MISC)$/$(@:b)_exp.o \
+        -Wl,-Map,$(MISC)$/$(@:b).map >> $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_4.cmd
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL4USE_EXPORTS)"!="name"
@@ -1639,7 +1551,7 @@ $(SHL4TARGETN) : \
         -def:$(SHL4DEF) \
         $(USE_4IMPLIB) \
         $(STDOBJ) \
-        $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ) $(SHL4OBJS) \
+        $(SHL4VERSIONOBJ) $(SHL4OBJS) \
         $(SHL4LIBS) \
         $(SHL4STDLIBS) \
         $(SHL4STDSHL) $(STDSHL4) \
@@ -1657,7 +1569,7 @@ $(SHL4TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(LB)$/$(SHL4IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL4OBJS) $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ)   \
+        $(SHL4OBJS) $(SHL4VERSIONOBJ) \
         $(SHL4LIBS)                         \
         $(SHL4STDLIBS)                      \
         $(SHL4STDSHL) $(STDSHL4)                           \
@@ -1676,7 +1588,7 @@ $(SHL4TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(USE_4IMPLIB) \
         $(STDOBJ)							\
-        $(SHL4OBJS) $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ))   \
+        $(SHL4OBJS) $(SHL4VERSIONOBJ))   \
         @$(MISC)$/$(SHL4TARGET)_link.lst \
         @$(mktmp $(SHL4STDLIBS)                      \
         $(SHL4STDSHL) $(STDSHL4)                           \
@@ -1714,7 +1626,7 @@ $(SHL4TARGETN) : \
     @-$(RM) $(MISC)$/$(@:b).list
     @-$(RM) $(MISC)$/$(TARGET).$(@:b)_4.cmd
     @echo $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
-    $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ:s/.obj/.o/) \
+    $(SHL4VERSIONOBJ) \
     `cat /dev/null $(SHL4LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(SHL4VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL4STDLIBS)` \
@@ -1731,7 +1643,7 @@ $(SHL4TARGETN) : \
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)$/$(TARGET).$(@:b)_4.cmd
     @echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(SHL4SONAME) $(LINKFLAGSSHL) $(SHL4VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
-    $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
+    $(SHL4VERSIONOBJ) -o $@ \
     `cat /dev/null $(SHL4LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL4STDLIBS) $(SHL4ARCHIVES) $(SHL4STDSHL) $(STDSHL4) $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_4.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_4.cmd
@@ -1791,25 +1703,6 @@ SHL5LINKFLAGS+=$(LINKFLAGS)
 .IF "$(SHL5USE_EXPORTS)"==""
 SHL5DEF*=$(MISC)$/$(SHL5TARGET).def
 .ENDIF			# "$(SHL5USE_EXPORTS)"==""
-
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.IF "$(SHL5TARGET)"!=""
-.IF "$(COMP5TYPELIST)"==""
-
-#fallback
-LOCAL5DESC:=$(subst,/,$/ $(shell $(FIND) . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL5TARGET)))}.xml"))
-.IF "$(LOCAL5DESC)"==""
-$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
-    $(COPY) $< $@
-.ELSE           # "$(LOCALDESC5)"==""
-SHL5DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL5DESC:b)$($(WINVERSIONNAMES)_MAJOR)_description.obj
-.ENDIF          # "$(LOCALDESC5)"==""
-
-.ENDIF          # "$(COMP5TYPELIST)"==""
-.ENDIF			# "$(SHL5TARGET)"!="
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
@@ -1974,11 +1867,6 @@ SHL5LINKRES*=$(MISC)$/$(SHL5TARGET).res
 SHL5LINKRESO*=$(MISC)$/$(SHL5TARGET)_res.o
 .ENDIF			# "$(SHL5DEFAULTRES)$(use_shl_versions)"!=""
 
-.IF "$(NO_SHL5DESCRIPTION)"==""
-#SHL5DESCRIPTIONOBJ*=$(SLO)$/default_description.obj
-SHL5DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_description.obj
-.ENDIF			# "$(NO_SHL5DESCRIPTION)"==""
-
 #.IF "$(SHL5TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
@@ -2007,7 +1895,6 @@ $(MISC)$/%linkinc.ls:
 
 $(SHL5TARGETN) : \
                     $(SHL5OBJS)\
-                    $(SHL5DESCRIPTIONOBJ)\
                     $(SHL5LIBS)\
                     $(USE_5IMPLIB_DEPS)\
                     $(USE_SHL5DEF)\
@@ -2048,25 +1935,28 @@ $(SHL5TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL5ALLRES)"!=""
-.IF "$(COM)"=="GCC"
-.IF "$(USE_DEFFILE)"!=""
-    dlltool --input-def $(SHL5DEF) --dllname $(SHL5TARGET)$(DLLPOST) --kill-at --output-exp $(MISC)$/$(@:b).exp
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ) $(SHL5OBJS) $(SHL5LINKRESO) \
+.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(DEFLIB5NAME)"!=""	# do not have to include objs
+    @echo dlltool --input-def $(SHL5DEF) \
+        --dllname $(SHL5TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)$/$(@:b)_exp.o > $(MISC)$/$(TARGET).$(@:b)_5.cmd
+.ELSE			# "$(DEFLIB5NAME)"!=""	# do not have to include objs
+    @echo dlltool --input-def $(SHL5DEF) \
+        --dllname $(SHL5TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)$/$(@:b)_exp.o \
+        $(STDOBJ) $(SHL5OBJS) $(SHL5LINKRESO) \
+        `$(TYPE) /dev/null $(SHL5LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_5.cmd
+.ENDIF			# "$(DEFLIB5NAME)"!=""
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+        $(STDOBJ) $(SHL5VERSIONOBJ) $(SHL5OBJS) $(SHL5LINKRESO) \
         `$(TYPE) /dev/null $(SHL5LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,$(MISC)$/$(@:b).exp,--exclude-libs,ALL $(SHL5STDLIBS) $(SHL5STDSHL) $(STDSHL5) \
-        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
-.ELSE			# "$(USE_DEFFILE)"!=""
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ) $(SHL5OBJS) $(SHL5LINKRESO) \
-        `$(TYPE) /dev/null $(SHL5LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,--export-all-symbols,--exclude-libs,ALL $(SHL5STDLIBS) $(SHL5STDSHL) $(STDSHL5) \
-        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
-.ENDIF			# "$(USE_DEFFILE)"!=""
+        -Wl,--exclude-libs,ALL $(SHL5STDLIBS) $(SHL5STDSHL) $(STDSHL5) \
+        $(MISC)$/$(@:b)_exp.o \
+        -Wl,-Map,$(MISC)$/$(@:b).map >> $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_5.cmd
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL5USE_EXPORTS)"!="name"
@@ -2080,7 +1970,7 @@ $(SHL5TARGETN) : \
         -def:$(SHL5DEF) \
         $(USE_5IMPLIB) \
         $(STDOBJ) \
-        $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ) $(SHL5OBJS) \
+        $(SHL5VERSIONOBJ) $(SHL5OBJS) \
         $(SHL5LIBS) \
         $(SHL5STDLIBS) \
         $(SHL5STDSHL) $(STDSHL5) \
@@ -2098,7 +1988,7 @@ $(SHL5TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(LB)$/$(SHL5IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL5OBJS) $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ)   \
+        $(SHL5OBJS) $(SHL5VERSIONOBJ) \
         $(SHL5LIBS)                         \
         $(SHL5STDLIBS)                      \
         $(SHL5STDSHL) $(STDSHL5)                           \
@@ -2117,7 +2007,7 @@ $(SHL5TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(USE_5IMPLIB) \
         $(STDOBJ)							\
-        $(SHL5OBJS) $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ))   \
+        $(SHL5OBJS) $(SHL5VERSIONOBJ))   \
         @$(MISC)$/$(SHL5TARGET)_link.lst \
         @$(mktmp $(SHL5STDLIBS)                      \
         $(SHL5STDSHL) $(STDSHL5)                           \
@@ -2155,7 +2045,7 @@ $(SHL5TARGETN) : \
     @-$(RM) $(MISC)$/$(@:b).list
     @-$(RM) $(MISC)$/$(TARGET).$(@:b)_5.cmd
     @echo $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
-    $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ:s/.obj/.o/) \
+    $(SHL5VERSIONOBJ) \
     `cat /dev/null $(SHL5LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(SHL5VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL5STDLIBS)` \
@@ -2172,7 +2062,7 @@ $(SHL5TARGETN) : \
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)$/$(TARGET).$(@:b)_5.cmd
     @echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(SHL5SONAME) $(LINKFLAGSSHL) $(SHL5VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
-    $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
+    $(SHL5VERSIONOBJ) -o $@ \
     `cat /dev/null $(SHL5LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL5STDLIBS) $(SHL5ARCHIVES) $(SHL5STDSHL) $(STDSHL5) $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_5.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_5.cmd
@@ -2232,25 +2122,6 @@ SHL6LINKFLAGS+=$(LINKFLAGS)
 .IF "$(SHL6USE_EXPORTS)"==""
 SHL6DEF*=$(MISC)$/$(SHL6TARGET).def
 .ENDIF			# "$(SHL6USE_EXPORTS)"==""
-
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.IF "$(SHL6TARGET)"!=""
-.IF "$(COMP6TYPELIST)"==""
-
-#fallback
-LOCAL6DESC:=$(subst,/,$/ $(shell $(FIND) . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL6TARGET)))}.xml"))
-.IF "$(LOCAL6DESC)"==""
-$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
-    $(COPY) $< $@
-.ELSE           # "$(LOCALDESC6)"==""
-SHL6DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL6DESC:b)$($(WINVERSIONNAMES)_MAJOR)_description.obj
-.ENDIF          # "$(LOCALDESC6)"==""
-
-.ENDIF          # "$(COMP6TYPELIST)"==""
-.ENDIF			# "$(SHL6TARGET)"!="
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
@@ -2415,11 +2286,6 @@ SHL6LINKRES*=$(MISC)$/$(SHL6TARGET).res
 SHL6LINKRESO*=$(MISC)$/$(SHL6TARGET)_res.o
 .ENDIF			# "$(SHL6DEFAULTRES)$(use_shl_versions)"!=""
 
-.IF "$(NO_SHL6DESCRIPTION)"==""
-#SHL6DESCRIPTIONOBJ*=$(SLO)$/default_description.obj
-SHL6DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_description.obj
-.ENDIF			# "$(NO_SHL6DESCRIPTION)"==""
-
 #.IF "$(SHL6TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
@@ -2448,7 +2314,6 @@ $(MISC)$/%linkinc.ls:
 
 $(SHL6TARGETN) : \
                     $(SHL6OBJS)\
-                    $(SHL6DESCRIPTIONOBJ)\
                     $(SHL6LIBS)\
                     $(USE_6IMPLIB_DEPS)\
                     $(USE_SHL6DEF)\
@@ -2489,25 +2354,28 @@ $(SHL6TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL6ALLRES)"!=""
-.IF "$(COM)"=="GCC"
-.IF "$(USE_DEFFILE)"!=""
-    dlltool --input-def $(SHL6DEF) --dllname $(SHL6TARGET)$(DLLPOST) --kill-at --output-exp $(MISC)$/$(@:b).exp
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ) $(SHL6OBJS) $(SHL6LINKRESO) \
+.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(DEFLIB6NAME)"!=""	# do not have to include objs
+    @echo dlltool --input-def $(SHL6DEF) \
+        --dllname $(SHL6TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)$/$(@:b)_exp.o > $(MISC)$/$(TARGET).$(@:b)_6.cmd
+.ELSE			# "$(DEFLIB6NAME)"!=""	# do not have to include objs
+    @echo dlltool --input-def $(SHL6DEF) \
+        --dllname $(SHL6TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)$/$(@:b)_exp.o \
+        $(STDOBJ) $(SHL6OBJS) $(SHL6LINKRESO) \
+        `$(TYPE) /dev/null $(SHL6LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_6.cmd
+.ENDIF			# "$(DEFLIB6NAME)"!=""
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+        $(STDOBJ) $(SHL6VERSIONOBJ) $(SHL6OBJS) $(SHL6LINKRESO) \
         `$(TYPE) /dev/null $(SHL6LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,$(MISC)$/$(@:b).exp,--exclude-libs,ALL $(SHL6STDLIBS) $(SHL6STDSHL) $(STDSHL6) \
-        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
-.ELSE			# "$(USE_DEFFILE)"!=""
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ) $(SHL6OBJS) $(SHL6LINKRESO) \
-        `$(TYPE) /dev/null $(SHL6LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,--export-all-symbols,--exclude-libs,ALL $(SHL6STDLIBS) $(SHL6STDSHL) $(STDSHL6) \
-        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
-.ENDIF			# "$(USE_DEFFILE)"!=""
+        -Wl,--exclude-libs,ALL $(SHL6STDLIBS) $(SHL6STDSHL) $(STDSHL6) \
+        $(MISC)$/$(@:b)_exp.o \
+        -Wl,-Map,$(MISC)$/$(@:b).map >> $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_6.cmd
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL6USE_EXPORTS)"!="name"
@@ -2521,7 +2389,7 @@ $(SHL6TARGETN) : \
         -def:$(SHL6DEF) \
         $(USE_6IMPLIB) \
         $(STDOBJ) \
-        $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ) $(SHL6OBJS) \
+        $(SHL6VERSIONOBJ) $(SHL6OBJS) \
         $(SHL6LIBS) \
         $(SHL6STDLIBS) \
         $(SHL6STDSHL) $(STDSHL6) \
@@ -2539,7 +2407,7 @@ $(SHL6TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(LB)$/$(SHL6IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL6OBJS) $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ)   \
+        $(SHL6OBJS) $(SHL6VERSIONOBJ) \
         $(SHL6LIBS)                         \
         $(SHL6STDLIBS)                      \
         $(SHL6STDSHL) $(STDSHL6)                           \
@@ -2558,7 +2426,7 @@ $(SHL6TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(USE_6IMPLIB) \
         $(STDOBJ)							\
-        $(SHL6OBJS) $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ))   \
+        $(SHL6OBJS) $(SHL6VERSIONOBJ))   \
         @$(MISC)$/$(SHL6TARGET)_link.lst \
         @$(mktmp $(SHL6STDLIBS)                      \
         $(SHL6STDSHL) $(STDSHL6)                           \
@@ -2596,7 +2464,7 @@ $(SHL6TARGETN) : \
     @-$(RM) $(MISC)$/$(@:b).list
     @-$(RM) $(MISC)$/$(TARGET).$(@:b)_6.cmd
     @echo $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
-    $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ:s/.obj/.o/) \
+    $(SHL6VERSIONOBJ) \
     `cat /dev/null $(SHL6LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(SHL6VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL6STDLIBS)` \
@@ -2613,7 +2481,7 @@ $(SHL6TARGETN) : \
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)$/$(TARGET).$(@:b)_6.cmd
     @echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(SHL6SONAME) $(LINKFLAGSSHL) $(SHL6VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
-    $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
+    $(SHL6VERSIONOBJ) -o $@ \
     `cat /dev/null $(SHL6LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL6STDLIBS) $(SHL6ARCHIVES) $(SHL6STDSHL) $(STDSHL6) $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_6.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_6.cmd
@@ -2673,25 +2541,6 @@ SHL7LINKFLAGS+=$(LINKFLAGS)
 .IF "$(SHL7USE_EXPORTS)"==""
 SHL7DEF*=$(MISC)$/$(SHL7TARGET).def
 .ENDIF			# "$(SHL7USE_EXPORTS)"==""
-
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.IF "$(SHL7TARGET)"!=""
-.IF "$(COMP7TYPELIST)"==""
-
-#fallback
-LOCAL7DESC:=$(subst,/,$/ $(shell $(FIND) . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL7TARGET)))}.xml"))
-.IF "$(LOCAL7DESC)"==""
-$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
-    $(COPY) $< $@
-.ELSE           # "$(LOCALDESC7)"==""
-SHL7DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL7DESC:b)$($(WINVERSIONNAMES)_MAJOR)_description.obj
-.ENDIF          # "$(LOCALDESC7)"==""
-
-.ENDIF          # "$(COMP7TYPELIST)"==""
-.ENDIF			# "$(SHL7TARGET)"!="
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
@@ -2856,11 +2705,6 @@ SHL7LINKRES*=$(MISC)$/$(SHL7TARGET).res
 SHL7LINKRESO*=$(MISC)$/$(SHL7TARGET)_res.o
 .ENDIF			# "$(SHL7DEFAULTRES)$(use_shl_versions)"!=""
 
-.IF "$(NO_SHL7DESCRIPTION)"==""
-#SHL7DESCRIPTIONOBJ*=$(SLO)$/default_description.obj
-SHL7DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_description.obj
-.ENDIF			# "$(NO_SHL7DESCRIPTION)"==""
-
 #.IF "$(SHL7TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
@@ -2889,7 +2733,6 @@ $(MISC)$/%linkinc.ls:
 
 $(SHL7TARGETN) : \
                     $(SHL7OBJS)\
-                    $(SHL7DESCRIPTIONOBJ)\
                     $(SHL7LIBS)\
                     $(USE_7IMPLIB_DEPS)\
                     $(USE_SHL7DEF)\
@@ -2930,25 +2773,28 @@ $(SHL7TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL7ALLRES)"!=""
-.IF "$(COM)"=="GCC"
-.IF "$(USE_DEFFILE)"!=""
-    dlltool --input-def $(SHL7DEF) --dllname $(SHL7TARGET)$(DLLPOST) --kill-at --output-exp $(MISC)$/$(@:b).exp
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ) $(SHL7OBJS) $(SHL7LINKRESO) \
+.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(DEFLIB7NAME)"!=""	# do not have to include objs
+    @echo dlltool --input-def $(SHL7DEF) \
+        --dllname $(SHL7TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)$/$(@:b)_exp.o > $(MISC)$/$(TARGET).$(@:b)_7.cmd
+.ELSE			# "$(DEFLIB7NAME)"!=""	# do not have to include objs
+    @echo dlltool --input-def $(SHL7DEF) \
+        --dllname $(SHL7TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)$/$(@:b)_exp.o \
+        $(STDOBJ) $(SHL7OBJS) $(SHL7LINKRESO) \
+        `$(TYPE) /dev/null $(SHL7LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_7.cmd
+.ENDIF			# "$(DEFLIB7NAME)"!=""
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+        $(STDOBJ) $(SHL7VERSIONOBJ) $(SHL7OBJS) $(SHL7LINKRESO) \
         `$(TYPE) /dev/null $(SHL7LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,$(MISC)$/$(@:b).exp,--exclude-libs,ALL $(SHL7STDLIBS) $(SHL7STDSHL) $(STDSHL7) \
-        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
-.ELSE			# "$(USE_DEFFILE)"!=""
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ) $(SHL7OBJS) $(SHL7LINKRESO) \
-        `$(TYPE) /dev/null $(SHL7LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,--export-all-symbols,--exclude-libs,ALL $(SHL7STDLIBS) $(SHL7STDSHL) $(STDSHL7) \
-        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
-.ENDIF			# "$(USE_DEFFILE)"!=""
+        -Wl,--exclude-libs,ALL $(SHL7STDLIBS) $(SHL7STDSHL) $(STDSHL7) \
+        $(MISC)$/$(@:b)_exp.o \
+        -Wl,-Map,$(MISC)$/$(@:b).map >> $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_7.cmd
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL7USE_EXPORTS)"!="name"
@@ -2962,7 +2808,7 @@ $(SHL7TARGETN) : \
         -def:$(SHL7DEF) \
         $(USE_7IMPLIB) \
         $(STDOBJ) \
-        $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ) $(SHL7OBJS) \
+        $(SHL7VERSIONOBJ) $(SHL7OBJS) \
         $(SHL7LIBS) \
         $(SHL7STDLIBS) \
         $(SHL7STDSHL) $(STDSHL7) \
@@ -2980,7 +2826,7 @@ $(SHL7TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(LB)$/$(SHL7IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL7OBJS) $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ)   \
+        $(SHL7OBJS) $(SHL7VERSIONOBJ) \
         $(SHL7LIBS)                         \
         $(SHL7STDLIBS)                      \
         $(SHL7STDSHL) $(STDSHL7)                           \
@@ -2999,7 +2845,7 @@ $(SHL7TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(USE_7IMPLIB) \
         $(STDOBJ)							\
-        $(SHL7OBJS) $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ))   \
+        $(SHL7OBJS) $(SHL7VERSIONOBJ))   \
         @$(MISC)$/$(SHL7TARGET)_link.lst \
         @$(mktmp $(SHL7STDLIBS)                      \
         $(SHL7STDSHL) $(STDSHL7)                           \
@@ -3037,7 +2883,7 @@ $(SHL7TARGETN) : \
     @-$(RM) $(MISC)$/$(@:b).list
     @-$(RM) $(MISC)$/$(TARGET).$(@:b)_7.cmd
     @echo $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
-    $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ:s/.obj/.o/) \
+    $(SHL7VERSIONOBJ) \
     `cat /dev/null $(SHL7LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(SHL7VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL7STDLIBS)` \
@@ -3054,7 +2900,7 @@ $(SHL7TARGETN) : \
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)$/$(TARGET).$(@:b)_7.cmd
     @echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(SHL7SONAME) $(LINKFLAGSSHL) $(SHL7VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
-    $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
+    $(SHL7VERSIONOBJ) -o $@ \
     `cat /dev/null $(SHL7LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL7STDLIBS) $(SHL7ARCHIVES) $(SHL7STDSHL) $(STDSHL7) $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_7.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_7.cmd
@@ -3114,25 +2960,6 @@ SHL8LINKFLAGS+=$(LINKFLAGS)
 .IF "$(SHL8USE_EXPORTS)"==""
 SHL8DEF*=$(MISC)$/$(SHL8TARGET).def
 .ENDIF			# "$(SHL8USE_EXPORTS)"==""
-
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.IF "$(SHL8TARGET)"!=""
-.IF "$(COMP8TYPELIST)"==""
-
-#fallback
-LOCAL8DESC:=$(subst,/,$/ $(shell $(FIND) . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL8TARGET)))}.xml"))
-.IF "$(LOCAL8DESC)"==""
-$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
-    $(COPY) $< $@
-.ELSE           # "$(LOCALDESC8)"==""
-SHL8DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL8DESC:b)$($(WINVERSIONNAMES)_MAJOR)_description.obj
-.ENDIF          # "$(LOCALDESC8)"==""
-
-.ENDIF          # "$(COMP8TYPELIST)"==""
-.ENDIF			# "$(SHL8TARGET)"!="
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
@@ -3297,11 +3124,6 @@ SHL8LINKRES*=$(MISC)$/$(SHL8TARGET).res
 SHL8LINKRESO*=$(MISC)$/$(SHL8TARGET)_res.o
 .ENDIF			# "$(SHL8DEFAULTRES)$(use_shl_versions)"!=""
 
-.IF "$(NO_SHL8DESCRIPTION)"==""
-#SHL8DESCRIPTIONOBJ*=$(SLO)$/default_description.obj
-SHL8DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_description.obj
-.ENDIF			# "$(NO_SHL8DESCRIPTION)"==""
-
 #.IF "$(SHL8TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
@@ -3330,7 +3152,6 @@ $(MISC)$/%linkinc.ls:
 
 $(SHL8TARGETN) : \
                     $(SHL8OBJS)\
-                    $(SHL8DESCRIPTIONOBJ)\
                     $(SHL8LIBS)\
                     $(USE_8IMPLIB_DEPS)\
                     $(USE_SHL8DEF)\
@@ -3371,25 +3192,28 @@ $(SHL8TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL8ALLRES)"!=""
-.IF "$(COM)"=="GCC"
-.IF "$(USE_DEFFILE)"!=""
-    dlltool --input-def $(SHL8DEF) --dllname $(SHL8TARGET)$(DLLPOST) --kill-at --output-exp $(MISC)$/$(@:b).exp
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ) $(SHL8OBJS) $(SHL8LINKRESO) \
+.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(DEFLIB8NAME)"!=""	# do not have to include objs
+    @echo dlltool --input-def $(SHL8DEF) \
+        --dllname $(SHL8TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)$/$(@:b)_exp.o > $(MISC)$/$(TARGET).$(@:b)_8.cmd
+.ELSE			# "$(DEFLIB8NAME)"!=""	# do not have to include objs
+    @echo dlltool --input-def $(SHL8DEF) \
+        --dllname $(SHL8TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)$/$(@:b)_exp.o \
+        $(STDOBJ) $(SHL8OBJS) $(SHL8LINKRESO) \
+        `$(TYPE) /dev/null $(SHL8LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_8.cmd
+.ENDIF			# "$(DEFLIB8NAME)"!=""
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+        $(STDOBJ) $(SHL8VERSIONOBJ) $(SHL8OBJS) $(SHL8LINKRESO) \
         `$(TYPE) /dev/null $(SHL8LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,$(MISC)$/$(@:b).exp,--exclude-libs,ALL $(SHL8STDLIBS) $(SHL8STDSHL) $(STDSHL8) \
-        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
-.ELSE			# "$(USE_DEFFILE)"!=""
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ) $(SHL8OBJS) $(SHL8LINKRESO) \
-        `$(TYPE) /dev/null $(SHL8LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,--export-all-symbols,--exclude-libs,ALL $(SHL8STDLIBS) $(SHL8STDSHL) $(STDSHL8) \
-        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
-.ENDIF			# "$(USE_DEFFILE)"!=""
+        -Wl,--exclude-libs,ALL $(SHL8STDLIBS) $(SHL8STDSHL) $(STDSHL8) \
+        $(MISC)$/$(@:b)_exp.o \
+        -Wl,-Map,$(MISC)$/$(@:b).map >> $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_8.cmd
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL8USE_EXPORTS)"!="name"
@@ -3403,7 +3227,7 @@ $(SHL8TARGETN) : \
         -def:$(SHL8DEF) \
         $(USE_8IMPLIB) \
         $(STDOBJ) \
-        $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ) $(SHL8OBJS) \
+        $(SHL8VERSIONOBJ) $(SHL8OBJS) \
         $(SHL8LIBS) \
         $(SHL8STDLIBS) \
         $(SHL8STDSHL) $(STDSHL8) \
@@ -3421,7 +3245,7 @@ $(SHL8TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(LB)$/$(SHL8IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL8OBJS) $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ)   \
+        $(SHL8OBJS) $(SHL8VERSIONOBJ) \
         $(SHL8LIBS)                         \
         $(SHL8STDLIBS)                      \
         $(SHL8STDSHL) $(STDSHL8)                           \
@@ -3440,7 +3264,7 @@ $(SHL8TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(USE_8IMPLIB) \
         $(STDOBJ)							\
-        $(SHL8OBJS) $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ))   \
+        $(SHL8OBJS) $(SHL8VERSIONOBJ))   \
         @$(MISC)$/$(SHL8TARGET)_link.lst \
         @$(mktmp $(SHL8STDLIBS)                      \
         $(SHL8STDSHL) $(STDSHL8)                           \
@@ -3478,7 +3302,7 @@ $(SHL8TARGETN) : \
     @-$(RM) $(MISC)$/$(@:b).list
     @-$(RM) $(MISC)$/$(TARGET).$(@:b)_8.cmd
     @echo $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
-    $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ:s/.obj/.o/) \
+    $(SHL8VERSIONOBJ) \
     `cat /dev/null $(SHL8LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(SHL8VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL8STDLIBS)` \
@@ -3495,7 +3319,7 @@ $(SHL8TARGETN) : \
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)$/$(TARGET).$(@:b)_8.cmd
     @echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(SHL8SONAME) $(LINKFLAGSSHL) $(SHL8VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
-    $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
+    $(SHL8VERSIONOBJ) -o $@ \
     `cat /dev/null $(SHL8LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL8STDLIBS) $(SHL8ARCHIVES) $(SHL8STDSHL) $(STDSHL8) $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_8.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_8.cmd
@@ -3555,25 +3379,6 @@ SHL9LINKFLAGS+=$(LINKFLAGS)
 .IF "$(SHL9USE_EXPORTS)"==""
 SHL9DEF*=$(MISC)$/$(SHL9TARGET).def
 .ENDIF			# "$(SHL9USE_EXPORTS)"==""
-
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.IF "$(SHL9TARGET)"!=""
-.IF "$(COMP9TYPELIST)"==""
-
-#fallback
-LOCAL9DESC:=$(subst,/,$/ $(shell $(FIND) . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL9TARGET)))}.xml"))
-.IF "$(LOCAL9DESC)"==""
-$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
-    $(COPY) $< $@
-.ELSE           # "$(LOCALDESC9)"==""
-SHL9DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL9DESC:b)$($(WINVERSIONNAMES)_MAJOR)_description.obj
-.ENDIF          # "$(LOCALDESC9)"==""
-
-.ENDIF          # "$(COMP9TYPELIST)"==""
-.ENDIF			# "$(SHL9TARGET)"!="
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
@@ -3738,11 +3543,6 @@ SHL9LINKRES*=$(MISC)$/$(SHL9TARGET).res
 SHL9LINKRESO*=$(MISC)$/$(SHL9TARGET)_res.o
 .ENDIF			# "$(SHL9DEFAULTRES)$(use_shl_versions)"!=""
 
-.IF "$(NO_SHL9DESCRIPTION)"==""
-#SHL9DESCRIPTIONOBJ*=$(SLO)$/default_description.obj
-SHL9DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_description.obj
-.ENDIF			# "$(NO_SHL9DESCRIPTION)"==""
-
 #.IF "$(SHL9TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
@@ -3771,7 +3571,6 @@ $(MISC)$/%linkinc.ls:
 
 $(SHL9TARGETN) : \
                     $(SHL9OBJS)\
-                    $(SHL9DESCRIPTIONOBJ)\
                     $(SHL9LIBS)\
                     $(USE_9IMPLIB_DEPS)\
                     $(USE_SHL9DEF)\
@@ -3812,25 +3611,28 @@ $(SHL9TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL9ALLRES)"!=""
-.IF "$(COM)"=="GCC"
-.IF "$(USE_DEFFILE)"!=""
-    dlltool --input-def $(SHL9DEF) --dllname $(SHL9TARGET)$(DLLPOST) --kill-at --output-exp $(MISC)$/$(@:b).exp
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ) $(SHL9OBJS) $(SHL9LINKRESO) \
+.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(DEFLIB9NAME)"!=""	# do not have to include objs
+    @echo dlltool --input-def $(SHL9DEF) \
+        --dllname $(SHL9TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)$/$(@:b)_exp.o > $(MISC)$/$(TARGET).$(@:b)_9.cmd
+.ELSE			# "$(DEFLIB9NAME)"!=""	# do not have to include objs
+    @echo dlltool --input-def $(SHL9DEF) \
+        --dllname $(SHL9TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)$/$(@:b)_exp.o \
+        $(STDOBJ) $(SHL9OBJS) $(SHL9LINKRESO) \
+        `$(TYPE) /dev/null $(SHL9LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_9.cmd
+.ENDIF			# "$(DEFLIB9NAME)"!=""
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+        $(STDOBJ) $(SHL9VERSIONOBJ) $(SHL9OBJS) $(SHL9LINKRESO) \
         `$(TYPE) /dev/null $(SHL9LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,$(MISC)$/$(@:b).exp,--exclude-libs,ALL $(SHL9STDLIBS) $(SHL9STDSHL) $(STDSHL9) \
-        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
-.ELSE			# "$(USE_DEFFILE)"!=""
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ) $(SHL9OBJS) $(SHL9LINKRESO) \
-        `$(TYPE) /dev/null $(SHL9LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,--export-all-symbols,--exclude-libs,ALL $(SHL9STDLIBS) $(SHL9STDSHL) $(STDSHL9) \
-        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
-.ENDIF			# "$(USE_DEFFILE)"!=""
+        -Wl,--exclude-libs,ALL $(SHL9STDLIBS) $(SHL9STDSHL) $(STDSHL9) \
+        $(MISC)$/$(@:b)_exp.o \
+        -Wl,-Map,$(MISC)$/$(@:b).map >> $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_9.cmd
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL9USE_EXPORTS)"!="name"
@@ -3844,7 +3646,7 @@ $(SHL9TARGETN) : \
         -def:$(SHL9DEF) \
         $(USE_9IMPLIB) \
         $(STDOBJ) \
-        $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ) $(SHL9OBJS) \
+        $(SHL9VERSIONOBJ) $(SHL9OBJS) \
         $(SHL9LIBS) \
         $(SHL9STDLIBS) \
         $(SHL9STDSHL) $(STDSHL9) \
@@ -3862,7 +3664,7 @@ $(SHL9TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(LB)$/$(SHL9IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL9OBJS) $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ)   \
+        $(SHL9OBJS) $(SHL9VERSIONOBJ) \
         $(SHL9LIBS)                         \
         $(SHL9STDLIBS)                      \
         $(SHL9STDSHL) $(STDSHL9)                           \
@@ -3881,7 +3683,7 @@ $(SHL9TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(USE_9IMPLIB) \
         $(STDOBJ)							\
-        $(SHL9OBJS) $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ))   \
+        $(SHL9OBJS) $(SHL9VERSIONOBJ))   \
         @$(MISC)$/$(SHL9TARGET)_link.lst \
         @$(mktmp $(SHL9STDLIBS)                      \
         $(SHL9STDSHL) $(STDSHL9)                           \
@@ -3919,7 +3721,7 @@ $(SHL9TARGETN) : \
     @-$(RM) $(MISC)$/$(@:b).list
     @-$(RM) $(MISC)$/$(TARGET).$(@:b)_9.cmd
     @echo $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
-    $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ:s/.obj/.o/) \
+    $(SHL9VERSIONOBJ) \
     `cat /dev/null $(SHL9LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(SHL9VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL9STDLIBS)` \
@@ -3936,7 +3738,7 @@ $(SHL9TARGETN) : \
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)$/$(TARGET).$(@:b)_9.cmd
     @echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(SHL9SONAME) $(LINKFLAGSSHL) $(SHL9VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
-    $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
+    $(SHL9VERSIONOBJ) -o $@ \
     `cat /dev/null $(SHL9LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL9STDLIBS) $(SHL9ARCHIVES) $(SHL9STDSHL) $(STDSHL9) $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_9.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_9.cmd
@@ -3996,25 +3798,6 @@ SHL10LINKFLAGS+=$(LINKFLAGS)
 .IF "$(SHL10USE_EXPORTS)"==""
 SHL10DEF*=$(MISC)$/$(SHL10TARGET).def
 .ENDIF			# "$(SHL10USE_EXPORTS)"==""
-
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.IF "$(SHL10TARGET)"!=""
-.IF "$(COMP10TYPELIST)"==""
-
-#fallback
-LOCAL10DESC:=$(subst,/,$/ $(shell $(FIND) . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL10TARGET)))}.xml"))
-.IF "$(LOCAL10DESC)"==""
-$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
-    $(COPY) $< $@
-.ELSE           # "$(LOCALDESC10)"==""
-SHL10DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL10DESC:b)$($(WINVERSIONNAMES)_MAJOR)_description.obj
-.ENDIF          # "$(LOCALDESC10)"==""
-
-.ENDIF          # "$(COMP10TYPELIST)"==""
-.ENDIF			# "$(SHL10TARGET)"!="
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
@@ -4179,11 +3962,6 @@ SHL10LINKRES*=$(MISC)$/$(SHL10TARGET).res
 SHL10LINKRESO*=$(MISC)$/$(SHL10TARGET)_res.o
 .ENDIF			# "$(SHL10DEFAULTRES)$(use_shl_versions)"!=""
 
-.IF "$(NO_SHL10DESCRIPTION)"==""
-#SHL10DESCRIPTIONOBJ*=$(SLO)$/default_description.obj
-SHL10DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_description.obj
-.ENDIF			# "$(NO_SHL10DESCRIPTION)"==""
-
 #.IF "$(SHL10TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
@@ -4212,7 +3990,6 @@ $(MISC)$/%linkinc.ls:
 
 $(SHL10TARGETN) : \
                     $(SHL10OBJS)\
-                    $(SHL10DESCRIPTIONOBJ)\
                     $(SHL10LIBS)\
                     $(USE_10IMPLIB_DEPS)\
                     $(USE_SHL10DEF)\
@@ -4253,25 +4030,28 @@ $(SHL10TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL10ALLRES)"!=""
-.IF "$(COM)"=="GCC"
-.IF "$(USE_DEFFILE)"!=""
-    dlltool --input-def $(SHL10DEF) --dllname $(SHL10TARGET)$(DLLPOST) --kill-at --output-exp $(MISC)$/$(@:b).exp
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ) $(SHL10OBJS) $(SHL10LINKRESO) \
+.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(DEFLIB10NAME)"!=""	# do not have to include objs
+    @echo dlltool --input-def $(SHL10DEF) \
+        --dllname $(SHL10TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)$/$(@:b)_exp.o > $(MISC)$/$(TARGET).$(@:b)_10.cmd
+.ELSE			# "$(DEFLIB10NAME)"!=""	# do not have to include objs
+    @echo dlltool --input-def $(SHL10DEF) \
+        --dllname $(SHL10TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)$/$(@:b)_exp.o \
+        $(STDOBJ) $(SHL10OBJS) $(SHL10LINKRESO) \
+        `$(TYPE) /dev/null $(SHL10LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_10.cmd
+.ENDIF			# "$(DEFLIB10NAME)"!=""
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+        $(STDOBJ) $(SHL10VERSIONOBJ) $(SHL10OBJS) $(SHL10LINKRESO) \
         `$(TYPE) /dev/null $(SHL10LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,$(MISC)$/$(@:b).exp,--exclude-libs,ALL $(SHL10STDLIBS) $(SHL10STDSHL) $(STDSHL10) \
-        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
-.ELSE			# "$(USE_DEFFILE)"!=""
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ) $(SHL10OBJS) $(SHL10LINKRESO) \
-        `$(TYPE) /dev/null $(SHL10LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,--export-all-symbols,--exclude-libs,ALL $(SHL10STDLIBS) $(SHL10STDSHL) $(STDSHL10) \
-        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
-.ENDIF			# "$(USE_DEFFILE)"!=""
+        -Wl,--exclude-libs,ALL $(SHL10STDLIBS) $(SHL10STDSHL) $(STDSHL10) \
+        $(MISC)$/$(@:b)_exp.o \
+        -Wl,-Map,$(MISC)$/$(@:b).map >> $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_10.cmd
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL10USE_EXPORTS)"!="name"
@@ -4285,7 +4065,7 @@ $(SHL10TARGETN) : \
         -def:$(SHL10DEF) \
         $(USE_10IMPLIB) \
         $(STDOBJ) \
-        $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ) $(SHL10OBJS) \
+        $(SHL10VERSIONOBJ) $(SHL10OBJS) \
         $(SHL10LIBS) \
         $(SHL10STDLIBS) \
         $(SHL10STDSHL) $(STDSHL10) \
@@ -4303,7 +4083,7 @@ $(SHL10TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(LB)$/$(SHL10IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL10OBJS) $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ)   \
+        $(SHL10OBJS) $(SHL10VERSIONOBJ) \
         $(SHL10LIBS)                         \
         $(SHL10STDLIBS)                      \
         $(SHL10STDSHL) $(STDSHL10)                           \
@@ -4322,7 +4102,7 @@ $(SHL10TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(USE_10IMPLIB) \
         $(STDOBJ)							\
-        $(SHL10OBJS) $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ))   \
+        $(SHL10OBJS) $(SHL10VERSIONOBJ))   \
         @$(MISC)$/$(SHL10TARGET)_link.lst \
         @$(mktmp $(SHL10STDLIBS)                      \
         $(SHL10STDSHL) $(STDSHL10)                           \
@@ -4360,7 +4140,7 @@ $(SHL10TARGETN) : \
     @-$(RM) $(MISC)$/$(@:b).list
     @-$(RM) $(MISC)$/$(TARGET).$(@:b)_10.cmd
     @echo $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
-    $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ:s/.obj/.o/) \
+    $(SHL10VERSIONOBJ) \
     `cat /dev/null $(SHL10LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(SHL10VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL10STDLIBS)` \
@@ -4377,7 +4157,7 @@ $(SHL10TARGETN) : \
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)$/$(TARGET).$(@:b)_10.cmd
     @echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(SHL10SONAME) $(LINKFLAGSSHL) $(SHL10VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
-    $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
+    $(SHL10VERSIONOBJ) -o $@ \
     `cat /dev/null $(SHL10LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL10STDLIBS) $(SHL10ARCHIVES) $(SHL10STDSHL) $(STDSHL10) $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_10.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_10.cmd
@@ -4436,7 +4216,7 @@ $(SHL1IMPLIBN):	\
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
     @echo no ImportLibs on mingw
-    @+-$(RM) $@
+    @-$(RM) $@
     @$(TOUCH) $@
 .ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
@@ -4482,7 +4262,7 @@ $(SHL2IMPLIBN):	\
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
     @echo no ImportLibs on mingw
-    @+-$(RM) $@
+    @-$(RM) $@
     @$(TOUCH) $@
 .ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
@@ -4528,7 +4308,7 @@ $(SHL3IMPLIBN):	\
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
     @echo no ImportLibs on mingw
-    @+-$(RM) $@
+    @-$(RM) $@
     @$(TOUCH) $@
 .ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
@@ -4574,7 +4354,7 @@ $(SHL4IMPLIBN):	\
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
     @echo no ImportLibs on mingw
-    @+-$(RM) $@
+    @-$(RM) $@
     @$(TOUCH) $@
 .ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
@@ -4620,7 +4400,7 @@ $(SHL5IMPLIBN):	\
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
     @echo no ImportLibs on mingw
-    @+-$(RM) $@
+    @-$(RM) $@
     @$(TOUCH) $@
 .ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
@@ -4666,7 +4446,7 @@ $(SHL6IMPLIBN):	\
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
     @echo no ImportLibs on mingw
-    @+-$(RM) $@
+    @-$(RM) $@
     @$(TOUCH) $@
 .ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
@@ -4712,7 +4492,7 @@ $(SHL7IMPLIBN):	\
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
     @echo no ImportLibs on mingw
-    @+-$(RM) $@
+    @-$(RM) $@
     @$(TOUCH) $@
 .ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
@@ -4758,7 +4538,7 @@ $(SHL8IMPLIBN):	\
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
     @echo no ImportLibs on mingw
-    @+-$(RM) $@
+    @-$(RM) $@
     @$(TOUCH) $@
 .ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
@@ -4804,7 +4584,7 @@ $(SHL9IMPLIBN):	\
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
     @echo no ImportLibs on mingw
-    @+-$(RM) $@
+    @-$(RM) $@
     @$(TOUCH) $@
 .ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
@@ -4850,7 +4630,7 @@ $(SHL10IMPLIBN):	\
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
     @echo no ImportLibs on mingw
-    @+-$(RM) $@
+    @-$(RM) $@
     @$(TOUCH) $@
 .ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
