@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connctrl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:14:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:03:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -306,9 +306,6 @@ void SvxXConnectionPreview::Paint( const Rectangle& )
         aDisplayInfo.SetExtendedOutputDevice(pExtOutDev);
         aDisplayInfo.SetPaintInfoRec(&aInfoRec);
         aDisplayInfo.SetOutputDevice(pExtOutDev->GetOutDev());
-
-        // keep draw hierarchy up-to-date
-        aPainter.PreProcessDisplay(aDisplayInfo);
 
         // do processing
         aPainter.ProcessDisplay(aDisplayInfo);
