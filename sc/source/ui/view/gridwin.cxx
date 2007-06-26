@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:00:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:51:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,7 @@
 #include "viewuno.hxx"
 #include "compiler.hxx"
 #include "editable.hxx"
+#include "fillinfo.hxx"
 
 // #114409#
 #ifndef _SV_SALBTYPE_HXX
@@ -4109,7 +4110,52 @@ void ScGridWindow::UpdateFormulas()
     if (nX2 > MAXCOL) nX2 = MAXCOL;
     if (nY2 > MAXROW) nY2 = MAXROW;
 
-    Draw( nX1, nY1, nX2, nY2, SC_UPDATE_CHANGED );
+    // Draw( nX1, nY1, nX2, nY2, SC_UPDATE_CHANGED );
+
+    // don't draw directly - instead use OutputData to find changed area and invalidate
+
+    SCROW nPosY = nY1;
+
+    ScDocShell* pDocSh = pViewData->GetDocShell();
+    ScDocument* pDoc = pDocSh->GetDocument();
+    SCTAB nTab = pViewData->GetTabNo();
+
+    pDoc->ExtendHidden( nX1, nY1, nX2, nY2, nTab );
+
+    Point aScrPos = pViewData->GetScrPos( nX1, nY1, eWhich );
+    long nMirrorWidth = GetSizePixel().Width();
+    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    // unused variable long nLayoutSign = bLayoutRTL ? -1 : 1;
+    if ( bLayoutRTL )
+    {
+        long nEndPixel = pViewData->GetScrPos( nX2+1, nPosY, eWhich ).X();
+        nMirrorWidth = aScrPos.X() - nEndPixel;
+        aScrPos.X() = nEndPixel + 1;
+    }
+
+    long nScrX = aScrPos.X();
+    long nScrY = aScrPos.Y();
+
+    double nPPTX = pViewData->GetPPTX();
+    double nPPTY = pViewData->GetPPTY();
+
+    ScTableInfo aTabInfo;
+    pDoc->FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab, nPPTX, nPPTY, FALSE, FALSE );
+
+    Fraction aZoomX = pViewData->GetZoomX();
+    Fraction aZoomY = pViewData->GetZoomY();
+    ScOutputData aOutputData( this, OUTTYPE_WINDOW, aTabInfo, pDoc, nTab,
+                                nScrX, nScrY, nX1, nY1, nX2, nY2, nPPTX, nPPTY,
+                                &aZoomX, &aZoomY );
+    aOutputData.SetMirrorWidth( nMirrorWidth );
+
+    aOutputData.FindChanged();
+
+    PolyPolygon aChangedPoly( aOutputData.GetChangedArea() );   // logic (PixelToLogic)
+    if ( aChangedPoly.Count() )
+    {
+        Invalidate( aChangedPoly );
+    }
 }
 
 void ScGridWindow::UpdateAutoFillMark(BOOL bMarked, const ScRange& rMarkRange)
@@ -4157,90 +4203,8 @@ void ScGridWindow::HideCursor()
     ++nCursorHideCount;
     if (nCursorHideCount==1)
     {
-        BOOL bDrawCursor = TRUE;
-        BOOL bDrawAuto   = TRUE;
-
-        //! irgendwie erkennen, ob wirklich neu gepainted werden muss
-        //! immer flackert zu viel, weil ein Control sich immer komplett zeichnet
-
-        if (!bIsInPaint)
-        {
-            //  Controls unter dem Cursor ?
-
-            ScMarkData& rMark = pViewData->GetMarkData();
-            BOOL bMarked = ( rMark.IsMarked() || rMark.IsMultiMarked() );
-
-            ScDocument* pDoc = pViewData->GetDocument();
-            SCTAB nTab = pViewData->GetTabNo();
-            SCCOL nX = pViewData->GetCurX();
-            SCROW nY = pViewData->GetCurY();
-
-            Point aScrPos = pViewData->GetScrPos( nX, nY, eWhich );
-            long nSizeXPix;
-            long nSizeYPix;
-            pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
-            aScrPos.X() -= 2;
-            aScrPos.Y() -= 2;
-            Rectangle aPixRect( aScrPos, Size( nSizeXPix+4,nSizeYPix+4 ) );
-
-            if ( bAutoMarkVisible && aAutoMarkPos == ScAddress(nX,nY,nTab) )
-            {
-                aPixRect.Right() += 2;      // Anfasser mit einschliessen
-                aPixRect.Bottom() += 2;
-            }
-
-            MapMode aDrawMode = GetDrawMapMode();
-            Rectangle aLogicRect = PixelToLogic( aPixRect, aDrawMode );
-
-            if (pDoc->HasControl( nTab, aLogicRect ))
-            {
-                Invalidate( PixelToLogic( aPixRect ) );
-                if (bMarked)
-                    pDoc->InvalidateControls( this, nTab, aLogicRect );
-
-                Update();
-                bDrawCursor = FALSE;        // nicht per XOR malen
-            }
-
-            //  Controls unter dem AutoFill-Anfasser ?
-
-            if ( bAutoMarkVisible && aAutoMarkPos.Tab() == nTab )
-            {
-                if ( aAutoMarkPos == ScAddress(nX,nY,nTab) )
-                    bDrawAuto = bDrawCursor;                        // schon erledigt
-                else
-                {
-                    SCCOL nAutoX = aAutoMarkPos.Col();
-                    SCROW nAutoY = aAutoMarkPos.Row();
-                    Point aFillPos = pViewData->GetScrPos( nAutoX, nAutoY, eWhich, TRUE );
-                    long nAutoSizeXPix;
-                    long nAutoSizeYPix;
-                    pViewData->GetMergeSizePixel( nAutoX, nAutoY, nAutoSizeXPix, nAutoSizeYPix );
-                    aFillPos.X() += nAutoSizeXPix;
-                    aFillPos.Y() += nAutoSizeYPix;
-
-                    aFillPos.X() -= 2;
-                    aFillPos.Y() -= 2;
-                    Rectangle aFillRect( aFillPos, Size(6,6) );
-
-                    Rectangle aLogicFill = PixelToLogic( aFillRect, aDrawMode );
-                    if (pDoc->HasControl( nTab, aLogicFill ))
-                    {
-                        Invalidate( PixelToLogic( aFillRect ) );
-                        if (bMarked)
-                            pDoc->InvalidateControls( this, nTab, aLogicFill );
-
-                        Update();
-                        bDrawAuto = FALSE;
-                    }
-                }
-            }
-        }
-
-        if (bDrawCursor)
-            DrawCursor();
-        if (bDrawAuto)
-            DrawAutoFillMark();
+        DrawCursor();
+        DrawAutoFillMark();
     }
 }
 
