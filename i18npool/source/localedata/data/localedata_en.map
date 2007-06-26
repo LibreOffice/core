@@ -1,7 +1,6 @@
 OOO_1.1 {
 global:
 GetVersionInfo;
-component_getDescriptionFunc;
 getAllCalendars_en_AU;
 getAllCalendars_en_BZ;
 getAllCalendars_en_CA;
