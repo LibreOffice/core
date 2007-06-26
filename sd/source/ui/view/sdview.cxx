@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:32:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:47:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,10 +195,11 @@ View::View(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
     mbIsDropAllowed(TRUE),
     mpClipboard (new ViewClipboard (*this))
 {
-    // #114898#
-    SetBufferedOutputAllowed(true);
     // #i73602# Use default from the configuration
     SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_DrawImpress());
+
+    // #i74769#, #i75172# Use default from the configuration
+    SetBufferedOutputAllowed(getOptionsDrawinglayer().IsPaintBuffer_DrawImpress());
 
     EnableExtendedKeyInputDispatcher(FALSE);
     EnableExtendedMouseEventDispatcher(FALSE);
