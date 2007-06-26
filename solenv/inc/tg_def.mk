@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 10:52:05 $
+#   last change: $Author: hr $ $Date: 2007-06-26 17:34:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -117,9 +117,6 @@ $(DEF$(TNR)TARGETN) .PHONY :
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
-.IF "$(NO_SHL$(TNR)DESCRIPTION)"==""
-    @echo component_getDescriptionFunc	>>$@.tmpfile
-.ENDIF			# "$(NO_SHL$(TNR)DESCRIPTION)"==""
 .IF "$(DEFLIB$(TNR)NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(EXPORT$(TNR)_PROTECT) $(RM) $(MISC)$/$(SHL$(TNR)TARGET).exp
