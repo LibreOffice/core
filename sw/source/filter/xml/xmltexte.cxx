@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:11:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 15:55:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -344,7 +344,8 @@ void lcl_addOutplaceProperties(
         const UniReference < XMLPropertySetMapper >& rMapper )
 {
     {
-        Size aSize = rObj.GetSize();
+        MapMode aMode( MAP_100TH_MM ); // the API expects this map mode for the embedded objects
+        Size aSize = rObj.GetSize( &aMode ); // get the size in the requested map mode
 
         if( aSize.Width() && aSize.Height() )
         {
