@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localizationmgr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 16:02:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 16:53:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,8 @@ class LocalizationMgr
         RENAME_DIALOG_IDS,
         RENAME_CONTROL_IDS,
         REMOVE_IDS_FROM_RESOURCE,
-        MOVE_RESOURCES
+        MOVE_RESOURCES,
+        COPY_RESOURCES
     };
     static sal_Int32 implHandleControlResourceProperties( ::com::sun::star::uno::Any aControlAny,
             const ::rtl::OUString& aDialogName, const ::rtl::OUString& aCtrlName,
@@ -144,6 +145,13 @@ public:
         ::com::sun::star::uno::Any aControlAny, const ::rtl::OUString& aCtrlName,
         ::com::sun::star::uno::Reference< ::com::sun::star::resource::
         XStringResourceResolver > xSourceStringResolver );
+
+    static void copyResourceForDialog(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xDialogModel,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::resource::
+            XStringResourceResolver >& xSourceStringResolver,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::resource::
+            XStringResourceManager >& xTargetStringResourceManager );
 };
 
 #endif
