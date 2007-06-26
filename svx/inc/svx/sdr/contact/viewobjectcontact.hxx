@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontact.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:05:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:02:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,11 +110,6 @@ namespace sdr
             // happen. Init with sal_False.
             unsigned                                    mbIsPainted : 1;
 
-            // This flag describes if the object was painted and is now
-            // invalidated. This means it may need a repaint. May because it
-            // may also have left the visible area (e.g.). Init with sal_False.
-            unsigned                                    mbIsInvalidated : 1;
-
             // This flag remembers if the DrawHierarchy below this entry is
             // valid or not. Init with sal_False.
             unsigned                                    mbdrawHierarchyValid : 1;
@@ -164,11 +159,8 @@ namespace sdr
             // DrawObjectContacts, it does not delete any to make them reusable.
             void ClearDrawHierarchy();
 
-            // This method Recursively Builds the expand Clip Region
-            void BuildClipRegion(DisplayInfo& rDisplayInfo, Region& rRegion);
-
             // Paint this object. This is before evtl. SubObjects get painted. This method
-            // needs to set the flag mbIsPainted and mbIsInvalidated and to set the
+            // needs to set the flag mbIsPainted and to set the
             // maPaintedRectangle member. This information is later used for invalidates
             // and repaints.
             virtual void PaintObject(DisplayInfo& rDisplayInfo);
@@ -192,9 +184,6 @@ namespace sdr
 
             // Get info if it's painted
             sal_Bool IsPainted() const;
-
-            // Get info if it's already invalidated
-            sal_Bool IsInvalidated() const;
 
             // Get info about the painted rectangle
             const Rectangle& GetPaintedRectangle() const;
