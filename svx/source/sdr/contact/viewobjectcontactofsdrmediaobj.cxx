@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontactofsdrmediaobj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:15:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:06:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,7 +168,6 @@ void ViewObjectContactOfSdrMediaObj::PaintObject(DisplayInfo& rDisplayInfo)
         if( bWasPainted )
         {
             mbIsPainted = sal_True;
-            mbIsInvalidated = sal_False;
             maPaintedRectangle = pObj->GetCurrentBoundRect();
         }
     }
