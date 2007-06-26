@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpagv.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:26:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:01:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,6 +150,14 @@ public:
     SdrPageWindow* FindPageWindow( const OutputDevice& rOutDev ) const;
     SdrPageWindow* GetPageWindow(sal_uInt32 nIndex) const;
 
+    /** finds the page window whose PaintWindow belongs to the given output device
+
+        In opposite to FindPageWindow, this method also cares possibly patched PaintWindow instances.
+        That is, a SdrPageWindow might have an original, and a patched SdrPaintWindow instance - if
+        this is the case, then the original SdrPaintWindow is examined before the patched one.
+    */
+    const SdrPageWindow* FindPatchedPageWindow( const OutputDevice& rOutDev ) const;
+
     void PaintOutlinerView(OutputDevice* pOut, const Rectangle& rRect) const;
 private:
     SVX_DLLPRIVATE SdrPageWindow& CreateNewPageWindowEntry(SdrPaintWindow& rPaintWindow);
@@ -212,8 +220,10 @@ public:
     void CompleteRedraw(
         SdrPaintWindow& rPaintWindow, const Region& rReg, sal_uInt16 nPaintMode,
         ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) const;
-    void BeginDrawLayer(OutputDevice* pGivenTarget, const Region& rReg, sal_Bool bPrepareBuffered);
-    void EndDrawLayer(OutputDevice* pGivenTarget);
+
+    // write access to mpPreparedPageWindow
+    void setPreparedPageWindow(SdrPageWindow* pKnownTarget);
+
     void DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget = 0L, sal_uInt16 nPaintMode = 0, ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) const;
     void DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, Color aColor = Color( COL_BLACK ) );
 
@@ -329,9 +339,6 @@ public:
     {
         return mpDisplayInfo;
     }
-
-    // find out if form controls are used by this PageView
-    sal_Bool AreFormControlsUsed(SdrPaintWindow& rPaintWindow) const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
