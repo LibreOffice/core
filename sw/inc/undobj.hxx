@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:37:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 10:41:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -956,6 +956,7 @@ class SwUndoTblNumFmt : public SwUndo
     ULONG nFmtIdx, nNewFmtIdx;
     double fNum, fNewNum;
     ULONG nNode;
+    ULONG nNdPos;
 
     BOOL bNewFmt : 1;
     BOOL bNewFml : 1;
