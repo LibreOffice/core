@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:12:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 16:03:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1458,8 +1458,10 @@ void SmDocShell::SetModified(BOOL bModified)
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SetModified" );
 
     if( IsEnableSetModified() )
+    {
         SfxObjectShell::SetModified( bModified );
-    Broadcast(SfxSimpleHint(SFX_HINT_DOCCHANGED));
+        Broadcast(SfxSimpleHint(SFX_HINT_DOCCHANGED));
+    }
 }
 
 BOOL SmDocShell::WriteAsMathType3( SfxMedium& rMedium )
