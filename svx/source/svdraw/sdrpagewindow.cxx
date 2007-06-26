@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrpagewindow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-26 15:59:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:08:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,10 +115,11 @@ using namespace ::com::sun::star;
     {
         SdrView& rView = GetPageView().GetView();
 
-        if(GetPaintWindow().OutputToWindow() && !rView.IsPrintPreview())
+        const SdrPaintWindow& rPaintWindow( GetOriginalPaintWindow() ? *GetOriginalPaintWindow() : GetPaintWindow() );
+        if ( rPaintWindow.OutputToWindow() && !rView.IsPrintPreview() )
         {
-            Window* pWindow = (Window*)(&GetPaintWindow().GetOutputDevice());
-            const_cast< SdrPageWindow* >( this )->mxControlContainer = VCLUnoHelper::CreateControlContainer( pWindow );
+            Window& rWindow = dynamic_cast< Window& >( rPaintWindow.GetOutputDevice() );
+            const_cast< SdrPageWindow* >( this )->mxControlContainer = VCLUnoHelper::CreateControlContainer( &rWindow );
 
             // #100394# xC->setVisible triggers window->Show() and this has
             // problems when the view is not completely constructed which may
@@ -165,7 +166,7 @@ using namespace ::com::sun::star;
                 if (xControl.is())
                     xControl->setModel(xModel);
 
-                OutputDevice& rOutDev = GetPaintWindow().GetOutputDevice();
+                OutputDevice& rOutDev = rPaintWindow.GetOutputDevice();
                 Point aPosPix = rOutDev.GetMapMode().GetOrigin();
                 Size aSizePix = rOutDev.GetOutputSizePixel();
 
@@ -333,9 +334,6 @@ void SdrPageWindow::PrepareRedraw(const Region& rReg)
 
     // no PagePainting for preparations
     aDisplayInfo.SetPagePainting(rView.IsPagePaintingAllowed()); // #i72889#
-
-    // keep draw hierarchy up-to-date and expand ClipRegion
-    GetObjectContact().PreProcessDisplay(aDisplayInfo);
 
     // remember eventually changed RedrawArea at PaintWindow for usage with
     // overlay and PreRenderDevice stuff
@@ -589,15 +587,6 @@ void SdrPageWindow::RedrawLayer(
 
         // Writer or calc, coming from original RedrawOneLayer.
         aDisplayInfo.SetPagePainting(sal_False); // #i72889# no page painting for layer painting
-
-        // check for valid draw hierarchy
-        if(!GetObjectContact().IsDrawHierarchyValid())
-        {
-            // Normally, PreProcessDisplay is called from BeginDrawLayer() for layer painting. Instead of finding
-            // all places where SC and SW use RedrawLayer() and embrace the calls with BeginDrawLayer()/EndDrawLayer(),
-            // i will do what happened before (and worked): build the draw hierarchy.
-            GetObjectContact().PreProcessDisplay(aDisplayInfo);
-        }
 
         // paint page
         GetObjectContact().ProcessDisplay(aDisplayInfo);
