@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLImageMapContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:24:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:35:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,7 +145,6 @@ using ::com::sun::star::document::XEventsSupplier;
 enum XMLImageMapToken
 {
     XML_TOK_IMAP_URL,
-    XML_TOK_IMAP_DESCRIPTION,
     XML_TOK_IMAP_X,
     XML_TOK_IMAP_Y,
     XML_TOK_IMAP_CENTER_X,
@@ -187,6 +186,7 @@ protected:
 
     const ::rtl::OUString sBoundary;
     const ::rtl::OUString sCenter;
+    const ::rtl::OUString sTitle;
     const ::rtl::OUString sDescription;
     const ::rtl::OUString sImageMap;
     const ::rtl::OUString sIsActive;
@@ -204,6 +204,7 @@ protected:
     ::rtl::OUString sUrl;
     ::rtl::OUString sTargt;
     ::rtl::OUStringBuffer sDescriptionBuffer;
+    ::rtl::OUStringBuffer sTitleBuffer;
     ::rtl::OUString sNam;
     sal_Bool bIsActive;
 
@@ -255,6 +256,7 @@ XMLImageMapObjectContext::XMLImageMapObjectContext(
         SvXMLImportContext(rImport, nPrefix, rLocalName),
         sBoundary(RTL_CONSTASCII_USTRINGPARAM("Boundary")),
         sCenter(RTL_CONSTASCII_USTRINGPARAM("Center")),
+        sTitle(RTL_CONSTASCII_USTRINGPARAM("Title")),
         sDescription(RTL_CONSTASCII_USTRINGPARAM("Description")),
         sImageMap(RTL_CONSTASCII_USTRINGPARAM("ImageMap")),
         sIsActive(RTL_CONSTASCII_USTRINGPARAM("IsActive")),
@@ -336,6 +338,12 @@ SvXMLImportContext* XMLImageMapObjectContext::CreateChildContext(
             GetImport(), nPrefix, rLocalName, xEvents);
     }
     else if ( (XML_NAMESPACE_SVG == nPrefix) &&
+              IsXMLToken(rLocalName, XML_TITLE) )
+    {
+        return new XMLStringBufferImportContext(
+            GetImport(), nPrefix, rLocalName, sTitleBuffer);
+    }
+    else if ( (XML_NAMESPACE_SVG == nPrefix) &&
               IsXMLToken(rLocalName, XML_DESC) )
     {
         return new XMLStringBufferImportContext(
@@ -377,22 +385,12 @@ void XMLImageMapObjectContext::ProcessAttribute(
 void XMLImageMapObjectContext::Prepare(
     Reference<XPropertySet> & rPropertySet)
 {
-    Any aAny;
-
-    aAny <<= sUrl;
-    rPropertySet->setPropertyValue( sURL, aAny );
-
-    aAny <<= sDescriptionBuffer.makeStringAndClear();
-    rPropertySet->setPropertyValue( sDescription, aAny );
-
-    aAny <<= sTargt;
-    rPropertySet->setPropertyValue( sTarget, aAny );
-
-    aAny.setValue( &bIsActive, ::getBooleanCppuType() );
-    rPropertySet->setPropertyValue( sIsActive, aAny );
-
-    aAny <<= sNam;
-    rPropertySet->setPropertyValue( sName, aAny );
+    rPropertySet->setPropertyValue( sURL, Any( sUrl ) );
+    rPropertySet->setPropertyValue( sTitle, Any( sTitleBuffer.makeStringAndClear() ) );
+    rPropertySet->setPropertyValue( sDescription, Any( sDescriptionBuffer.makeStringAndClear() ) );
+    rPropertySet->setPropertyValue( sTarget, Any( sTarget ) );
+    rPropertySet->setPropertyValue( sIsActive, Any( bIsActive ) );
+    rPropertySet->setPropertyValue( sName, Any( sNam ) );
 }
 
 
