@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:package="org.openoffice.Office" oor:name="Embedding">
+    <node oor:name="Objects">
+        <node oor:name="69474366-FD6F-4806-8374-8EDD1B6E771D" oor:op="replace">
+            <prop oor:name="ObjectFactory"><value>org.openoffice.examples.embedding.Factory69474366FD6F480683748EDD1B6E771D</value></prop>
+            <prop oor:name="ObjectDocumentServiceName"><value></value></prop>
+            <prop oor:name="ObjectMiscStatus"/>
+            <prop oor:name="ObjectVerbs"><value>PRIMARY SHOW OPEN HIDE</value></prop>
+        </node>
+    </node>
+    <node oor:name="MimeTypeClassIDRelations">
+        <prop oor:name="application/x-openoffice-embedded-69474366-FD6F-4806-8374-8EDD1B6E771D" oor:op="replace" oor:type="xs:string">
+            <value>69474366-FD6F-4806-8374-8EDD1B6E771D</value>
+        </prop>
+    </node>
+    <node oor:name="ObjectNames">
+        <node oor:name="Object69474366-FD6F-4806-8374-8EDD1B6E771D" oor:op="replace">
+            <prop oor:name="ObjectUIName">
+                 <value xml:lang="en-US">Example of a simple outplace text object</value>
+            </prop>
+            <prop oor:name="ClassID">
+                <value>69474366-FD6F-4806-8374-8EDD1B6E771D</value>
+            </prop>
+        </node>
+    </node>
+</oor:component-data>
+
