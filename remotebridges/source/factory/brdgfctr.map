@@ -4,7 +4,6 @@ UDK_3_0_0 {
         component_writeInfo;
         component_getFactory;
         component_canUnload;
-        component_getDescriptionFunc;
     local:
     *;
 };
