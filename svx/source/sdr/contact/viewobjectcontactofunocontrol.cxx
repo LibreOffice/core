@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontactofunocontrol.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:09:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:07:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -928,12 +928,9 @@ namespace sdr { namespace contact {
 
 
     //--------------------------------------------------------------------
-    void ViewObjectContactOfUnoControl_Impl::positionControlForPaint( const DisplayInfo& _rDisplayInfo ) const
+    void ViewObjectContactOfUnoControl_Impl::positionControlForPaint( const DisplayInfo& /* #i74769# _rDisplayInfo*/ ) const
     {
         if ( !m_xControl.is() )
-            return;
-
-        if ( m_pOutputDeviceForWindow != _rDisplayInfo.GetOutputDevice() )
             return;
 
         positionAndZoomControl();
@@ -1612,11 +1609,8 @@ namespace sdr { namespace contact {
     {
         VOCGuard aGuard( *m_pImpl );
         m_pImpl->ensureControl();
-        Reference< XControl > xControl = m_pImpl->getExistentControl();
-        Reference< XControlModel > xModel;
-        if ( xControl.is() )
-            xModel = xControl->getModel();
-        return xControl;
+
+        return m_pImpl->getExistentControl();
     }
 
     //--------------------------------------------------------------------
@@ -1695,7 +1689,6 @@ namespace sdr { namespace contact {
         }
 
         mbIsPainted = sal_True;
-        mbIsInvalidated = sal_False;
         maPaintedRectangle = pObject->GetLogicRect();
     }
 
@@ -1797,25 +1790,6 @@ namespace sdr { namespace contact {
         OSL_PRECOND( m_pImpl->getExistentControl().is(),
             "UnoControlWindowContact::doPaintObject: the control was said to be non-NULL here!" );
 
-#ifdef DBG_UTIL
-        // The code below is only true because when we paint onto a window, then this is the parent window
-        // of our control. If we ever happen to paint onto a foreign window, then we probably need to
-        // always paint the control, independent from the design mode setting.
-        // However, for the moment we don't need this complete handling, since it always worked in the reduced
-        // way below ...
-        try
-        {
-            Window* pControlWindow = VCLUnoHelper::GetWindow( m_pImpl->getExistentControl()->getPeer() );
-            Window* pControlParentWindow = pControlWindow ? pControlWindow->GetParent() : NULL;
-            DBG_ASSERT( pControlParentWindow == _rDisplayInfo.GetOutputDevice(),
-                "UnoControlWindowContact::doPaintObject: oops. Special handling needed!" );
-        }
-        catch( const Exception& )
-        {
-            OSL_ENSURE( sal_False, "UnoControlWindowContact::doPaintObject: caught an exception while validating the control/output device!" );
-        }
-#endif
-
         // don't paint if there's a "visible control" which paints itself
         bool bVisibleControl = false;
         try
@@ -1836,6 +1810,25 @@ namespace sdr { namespace contact {
         }
         else
         {
+#ifdef DBG_UTIL
+            // We do effectively nothing here in alive mode. This only works because when we paint onto
+            // a window, then this is the parent window of our control. If we ever happen to paint onto
+            // a foreign window *while in alive mode*, then we probably need to always paint the control.
+            // However, for the moment we don't need this complete handling, since it always worked in
+            // the reduced way ...
+            try
+            {
+                Window* pControlWindow = VCLUnoHelper::GetWindow( m_pImpl->getExistentControl()->getPeer() );
+                Window* pControlParentWindow = pControlWindow ? pControlWindow->GetParent() : NULL;
+                DBG_ASSERT( pControlParentWindow == _rDisplayInfo.GetOutputDevice(),
+                    "UnoControlWindowContact::doPaintObject: oops. Special handling needed!" );
+            }
+            catch( const Exception& )
+            {
+                OSL_ENSURE( sal_False, "UnoControlWindowContact::doPaintObject: caught an exception while validating the control/output device!" );
+            }
+#endif
+
             try
             {
                 Reference< XControl > xControl( m_pImpl->getExistentControl() );
