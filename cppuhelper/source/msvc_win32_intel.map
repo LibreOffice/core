@@ -1,7 +1,6 @@
 UDK_3_0_0 {
     global:
 GetVersionInfo;
-component_getDescriptionFunc;
 ??0OComponentHelper@cppu@@QAE@AAVMutex@osl@@@Z;
 ??1OComponentHelper@cppu@@UAE@XZ;
 ??BOWeakObject@cppu@@QAA?AV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@XZ;

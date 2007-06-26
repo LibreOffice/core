@@ -219,7 +219,6 @@ _end;
 _etext;
 _fini;
 _init;
-component_getDescriptionFunc;
 __1cDcomDsunEstarDunobM__RTTI__1nDcomDsunEstarDunoJException__;
 __1cDcomDsunEstarDunobT__RTTI__1nDcomDsunEstarDunoQdDRuntimeException__;
 __1cDcomDsunEstarElangcA__RTTI__1nDcomDsunEstarElangWWrappedTargetException__;
