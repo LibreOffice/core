@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swnewtable.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-05-31 09:45:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 10:42:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -621,7 +621,7 @@ void lcl_InvalidateCellFrm( const SwTableBox& rBox )
 long lcl_InsertPosition( SwTable &rTable, std::vector<USHORT>& rInsPos,
     const SwSelBoxes& rBoxes, BOOL bBehind )
 {
-    long nAddWidth = 0;
+    sal_Int32 nAddWidth = 0;
     long nCount = 0;
     for( USHORT j = 0; j < rBoxes.Count(); ++j )
     {
@@ -671,32 +671,39 @@ BOOL SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         return FALSE;
 
     CHECK_TABLE( *this )
-    long nOld = 0;
-    for( USHORT i = 0; i < aLines[0]->GetTabBoxes().Count(); ++i )
-        nOld += aLines[0]->GetTabBoxes()[i]->GetFrmFmt()->GetFrmSize().GetWidth();
-
+    long nNewBoxWidth = 0;
     std::vector< USHORT > aInsPos( aLines.Count(), USHRT_MAX );
-    sal_uInt64 nAddWidth = lcl_InsertPosition( *this, aInsPos, rBoxes, bBehind );
-    nAddWidth *= nCnt;
-    sal_uInt64 nNew = nAddWidth + nOld;
-    if( !nNew )
-        return FALSE;
-    nAddWidth *= nOld;
-    nAddWidth /= nNew;
-    nAddWidth /= nCnt;
-    nAddWidth *= nCnt;
-    if( !nAddWidth || nAddWidth >= nOld )
-        return FALSE;
+    { // Calculation of the insert positions and the width of the new boxes
+        long nTableWidth = 0;
+        for( USHORT i = 0; i < aLines[0]->GetTabBoxes().Count(); ++i )
+            nTableWidth += aLines[0]->GetTabBoxes()[i]->GetFrmFmt()->GetFrmSize().GetWidth();
+
+        // Fill the vector of insert positions and the (average) width to insert
+        sal_uInt64 nAddWidth = lcl_InsertPosition( *this, aInsPos, rBoxes, bBehind );
+
+        // Given is the (average) width of the selected boxes, if we would
+        // insert nCnt of columns the table would grow
+        // So we will shrink the table first, then insert the new boxes and
+        // get a table with the same width than before.
+        // But we will not shrink the table by the full already calculated value,
+        // we will reduce this value proportional to the old table width
+        nAddWidth *= nCnt; // we have to insert nCnt boxes per line
+        sal_uInt64 nResultingWidth = nAddWidth + nTableWidth;
+        if( !nResultingWidth )
+            return FALSE;
+        nAddWidth = (nAddWidth * nTableWidth) / nResultingWidth;
+        nNewBoxWidth = long( nAddWidth / nCnt ); // Rounding
+        nAddWidth = nNewBoxWidth * nCnt; // Rounding
+        if( !nAddWidth || nAddWidth >= nTableWidth )
+            return FALSE;
+        AdjustWidths( nTableWidth, long(nTableWidth - nAddWidth) );
+    }
 
     _FndBox aFndBox( 0, 0 );
     aFndBox.SetTableLines( rBoxes, *this );
     aFndBox.DelFrms( *this );
 //  aFndBox.SaveChartData( *this );
 
-    nNew = nOld - nAddWidth;
-    nAddWidth /= nCnt;
-
-    AdjustWidths( nOld, long(nNew) );
     SwTableNode* pTblNd = GetTableNode();
     std::vector<SwTableBoxFmt*> aInsFormat( nCnt, 0 );
     USHORT nLastLine = USHRT_MAX;
@@ -715,7 +722,7 @@ BOOL SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         long nRowSpan = pBox->getRowSpan();
         long nDiff = i - nLastLine;
         bool bNewSpan = false;
-        if( nLastLine != USHRT_MAX && nDiff < nLastRowSpan &&
+        if( nLastLine != USHRT_MAX && nDiff <= nLastRowSpan &&
             nRowSpan != nDiff - nLastRowSpan )
         {
             bNewSpan = true;
@@ -758,7 +765,7 @@ BOOL SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                 pCurrBox->setRowSpan( nLastRowSpan );
                 SwFrmFmt* pFrmFmt = pCurrBox->ClaimFrmFmt();
                 SwFmtFrmSize aFrmSz( pFrmFmt->GetFrmSize() );
-                aFrmSz.SetWidth( long(nAddWidth) );
+                aFrmSz.SetWidth( nNewBoxWidth );
                 pFrmFmt->SetAttr( aFrmSz );
                 if( pNoRightBorder && ( !bBehind || j+1 < nCnt ) )
                     pFrmFmt->SetAttr( *pNoRightBorder );
@@ -1407,7 +1414,6 @@ BOOL SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt,
     ++nCnt;
     _FndBox aFndBox( 0, 0 );
     aFndBox.SetTableLines( rBoxes, *this );
-    aFndBox.DelFrms( *this );
 
     if( bSameHeight && pDoc->GetRootFrm() )
     {
