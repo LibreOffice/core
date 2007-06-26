@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatedialog.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:39:33 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:12:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 
 #define LOCAL_WIDTH (60 * RSC_BS_CHARWIDTH)
 #define LOCAL_LIST_HEIGHT (5 * RSC_BS_CHARHEIGHT)
-#define LOCAL_BUTTON_WIDTH 100
 
 ModalDialog RID_DLG_UPDATE {
     HelpID = HID_DEPLOYMENT_GUI_UPDATE;
@@ -145,15 +144,15 @@ ModalDialog RID_DLG_UPDATE {
     PushButton RID_DLG_UPDATE_OK {
         Disable = TRUE;
         Pos = MAP_APPFONT(
-            (RSC_SP_DLG_INNERBORDER_LEFT + LOCAL_WIDTH - LOCAL_BUTTON_WIDTH -
+            (RSC_SP_DLG_INNERBORDER_LEFT + LOCAL_WIDTH - RSC_CD_PUSHBUTTON_WIDTH -
              RSC_SP_CTRL_GROUP_X - RSC_CD_PUSHBUTTON_WIDTH),
             (RSC_SP_DLG_INNERBORDER_TOP + RSC_CD_FIXEDTEXT_HEIGHT +
              RSC_SP_CTRL_DESC_Y + LOCAL_LIST_HEIGHT + RSC_SP_CTRL_GROUP_Y +
              RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_Y + RSC_CD_FIXEDTEXT_HEIGHT +
              RSC_SP_CTRL_DESC_Y + LOCAL_LIST_HEIGHT + RSC_SP_FLGR_SPACE_Y +
              RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_SPACE_Y));
-        Size = MAP_APPFONT(LOCAL_BUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT);
-        Text[en-US] = "~Download and Install";
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT);
+        Text[en-US] = "~Install";
         DefButton = TRUE;
     };
     CancelButton RID_DLG_UPDATE_CANCEL {
