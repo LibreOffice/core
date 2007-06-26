@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cbutton.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:13:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:50:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #include <tools/color.hxx>
 #endif
 
-class Window;
+class OutputDevice;
 
 
 //==================================================================
@@ -54,8 +54,10 @@ class Window;
 class ScDDComboBoxButton
 {
 public:
-            ScDDComboBoxButton( Window* pOutputDevice );
+            ScDDComboBoxButton( OutputDevice* pOutputDevice );
             ~ScDDComboBoxButton();
+
+    void    SetOutputDevice( OutputDevice* pOutputDevice );
 
     void    Draw( const Point&  rAt,
                   const Size&   rSize,
@@ -84,7 +86,7 @@ private:
                           BOOL              bState );
 
 protected:
-    Window* pOut;
+    OutputDevice* pOut;
     Point   aBtnPos;
     Size    aBtnSize;
 };
