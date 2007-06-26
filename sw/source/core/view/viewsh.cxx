@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:35:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 11:58:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,6 +164,11 @@
 #include <vcl/virdev.hxx>
 #endif
 
+// #i74769#
+#ifndef _SDRPAINTWINDOW_HXX
+#include <svx/sdrpaintwindow.hxx>
+#endif _SDRPAINTWINDOW_HXX
+
 BOOL ViewShell::bLstAct = FALSE;
 ShellResource *ViewShell::pShellRes = 0;
 Window *ViewShell::pCareWindow = 0;
@@ -185,10 +190,25 @@ TYPEINIT0(ViewShell);
 
 void ViewShell::DLPrePaint2(const Region& rRegion)
 {
-    if((0L == mnPrePostPaintCount) && (Imp()->GetDrawView()))
+    if(0L == mnPrePostPaintCount)
     {
+        // #i75172# ensure DrawView to use DrawingLayer bufferings
+        if ( !HasDrawView() )
+            MakeDrawView();
+
+        // Prefer window; if tot available, get pOut (e.g. printer)
         mpPrePostOutDev = (GetWin() ? GetWin() : GetOut());
-        Imp()->GetDrawView()->BeginDrawLayers(mpPrePostOutDev, rRegion, sal_False);
+
+        // #i74769# use SdrPaintWindow now direct
+        mpTargetPaintWindow = Imp()->GetDrawView()->BeginDrawLayers(mpPrePostOutDev, rRegion);
+        OSL_ENSURE(mpTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
+
+        // #i74769# if prerender, save OutDev and redirect to PreRenderDevice
+        if(mpTargetPaintWindow->GetPreRenderDevice())
+        {
+            mpBufferedOut = pOut;
+            pOut = &(mpTargetPaintWindow->GetTargetOutputDevice());
+        }
     }
 
     mnPrePostPaintCount++;
@@ -199,9 +219,17 @@ void ViewShell::DLPostPaint2()
     OSL_ENSURE(mnPrePostPaintCount > 0L, "ViewShell::DLPostPaint2: Pre/PostPaint encapsulation broken (!)");
     mnPrePostPaintCount--;
 
-    if((0L == mnPrePostPaintCount) && (Imp()->GetDrawView()))
+    if((0L == mnPrePostPaintCount) && (0 != mpTargetPaintWindow))
     {
-        Imp()->GetDrawView()->EndDrawLayers(mpPrePostOutDev);
+        // #i74769# restore buffered OutDev
+        if(mpTargetPaintWindow->GetPreRenderDevice())
+        {
+            pOut = mpBufferedOut;
+        }
+
+        // #i74769# use SdrPaintWindow now direct
+        Imp()->GetDrawView()->EndDrawLayers(*mpTargetPaintWindow);
+        mpTargetPaintWindow = 0;
     }
 }
 
@@ -375,27 +403,29 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
                                               aRect.Pos(), aRect.SSize(), *pVout );
                             pOut = pOld;
 
-                            // #i72754# Direct ControlLayer painting for current region. Controls
-                            // are already painted into the VDev, but not with the old window hack
-                            // so it will look slightly different. To avoid that, paint them again
-                            // after VDev is out of race
-                            if(!GetViewOptions()->IsReadonly() && GetViewOptions()->IsControl())
-                            {
-                                // Imp()->PaintLayer( pDoc->GetControlsId(), VisArea() );
-                                Imp()->PaintLayer(pDoc->GetControlsId(), aRect);
-                            }
-
                             // #i72754# end Pre/PostPaint encapsulation when pOut is back and content is painted
                             DLPostPaint2();
                         }
                     }
                     if ( bPaint )
                     {
+                        // #i75172# begin DrawingLayer paint
+                        // need to do begin/end DrawingLayer preparation for each single rectangle of the
+                        // repaint region. I already tried to prepare only once for the whole Region. This
+                        // seems to work (and does technically) but fails with transparent objects. Since the
+                        // region given to BeginDarwLayers() defines the clip region for DrawingLayer paint,
+                        // transparent objects in the single rectangles will indeed be painted multiple times.
+                        DLPrePaint2(Region(aRect.SVRect()));
+
                         if ( bPaintsFromSystem )
                             PaintDesktop( aRect );
                         pLayout->Paint( aRect );
+
+                        // #i75172# end DrawingLayer paint
+                        DLPostPaint2();
                     }
                 }
+
                 delete pVout;
                 delete pRegion;
                 Imp()->DelRegions();
@@ -501,15 +531,6 @@ void ViewShell::ImplUnlockPaint( BOOL bVirDev )
                 pOut = pOld;
                 pOut->DrawOutDev( VisArea().Pos(), aSize,
                                   VisArea().Pos(), aSize, *pVout );
-
-                // controll layer is repainted additionally. It will look different when painted in VDev,
-                // so it's a good idea to do so.
-                if( GetViewOptions()->IsControl() )
-                {
-                    Imp()->PaintLayer( pDoc->GetControlsId(), VisArea() );
-                    GetWin()->Update();//Damit aktive, transparente Controls auch
-                                       //gleich durchkommen
-                }
 
                 // #i72754# end Pre/PostPaint encapsulation when pOut is back and content is painted
                 DLPostPaint2();
@@ -1305,14 +1326,19 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
         lMult = 12;
     }
 
-    if ( !lXDiff && bEnableSmooth && Abs(lYDiff) < lMax &&
-         GetViewOptions()->IsSmoothScroll() &&
-         (!ISA( SwCrsrShell ) ||
-          (!((SwCrsrShell*)this)->HasSelection() &&
-           ((SwCrsrShell*)this)->GetCrsrCnt() < 2)) &&
-         GetWin()->GetWindowClipRegionPixel(
-             WINDOW_GETCLIPREGION_NOCHILDREN|WINDOW_GETCLIPREGION_NULL )
-                                                            .IsNull() )
+    // #i75172# isolated static conditions
+    const bool bOnlyYScroll(!lXDiff && Abs(lYDiff) != 0 && Abs(lYDiff) < lMax);
+    const bool bAllowedWithChildWindows(GetWin()->GetWindowClipRegionPixel(WINDOW_GETCLIPREGION_NOCHILDREN|WINDOW_GETCLIPREGION_NULL).IsNull());
+    const bool bSmoothScrollAllowed(bOnlyYScroll && bEnableSmooth && GetViewOptions()->IsSmoothScroll() &&  bAllowedWithChildWindows);
+    const bool bIAmCursorShell(ISA(SwCrsrShell));
+
+    // #i75172# with selection on overlay, smooth scroll should be allowed with it
+    const bool bAllowedForSelection(true || (bIAmCursorShell && !((SwCrsrShell*)this)->HasSelection()));
+
+    // #i75172# with cursors on overlay, smooth scroll should be allowed with it
+    const bool bAllowedForMultipleCursors(true || (bIAmCursorShell && ((SwCrsrShell*)this)->GetCrsrCnt() < 2));
+
+    if(bSmoothScrollAllowed  && bAllowedForSelection && bAllowedForMultipleCursors)
     {
         Imp()->bStopSmooth = FALSE;
 
@@ -1353,14 +1379,53 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
             pVout->SetMapMode( aMapMode );
             OutputDevice *pOld = pOut;
             pOut = pVout;
-            PaintDesktop( aRect );
-            ViewShell::bLstAct = TRUE;
-            GetLayout()->Paint( aRect );
-            ViewShell::bLstAct = FALSE;
+
+            {
+                // #i75172# To get a clean repaint, a new ObjectContact is needed here. Without, the
+                // repaint would not be correct since it would use the wrong DrawPage visible region.
+                // This repaint IS about painting something currently outside the visible part (!).
+                // For that purpose, AddWindowToPaintView is used which creates a new SdrPageViewWindow
+                // and all the necessary stuff. It's not cheap, but necessary here. Alone because repaint
+                // target really is NOT the current window.
+                // Also will automatically NOT use PreRendering and overlay (since target is VirtualDevice)
+                if(!HasDrawView())
+                    MakeDrawView();
+                SdrView* pDrawView = GetDrawView();
+                pDrawView->AddWindowToPaintView(pVout);
+
+                // clear pWin during DLPrePaint2 to get paint preparation for pOut, but set it again
+                // immediately afterwards. There are many decisions in SW which imply that Printing
+                // is used when pWin == 0 (wrong but widely used).
+                Window* pOldWin = pWin;
+                pWin = 0;
+                DLPrePaint2(Region(aRect.SVRect()));
+                pWin = pOldWin;
+
+                // SW paint stuff
+                PaintDesktop( aRect );
+                ViewShell::bLstAct = TRUE;
+                GetLayout()->Paint( aRect );
+                ViewShell::bLstAct = FALSE;
+
+                // end paint and destroy ObjectContact again
+                DLPostPaint2();
+                pDrawView->DeleteWindowFromPaintView(pVout);
+
+                // temporary debug paint checking...
+                static bool bDoSaveForVisualControl(false);
+                if(bDoSaveForVisualControl)
+                {
+                    const bool bMapModeWasEnabledVDev(pVout->IsMapModeEnabled());
+                    pVout->EnableMapMode(false);
+                    const Bitmap aBitmap(pVout->GetBitmap(Point(), pVout->GetOutputSizePixel()));
+                    SvFileStream aNew(String(ByteString( "c:\\test.bmp" ), RTL_TEXTENCODING_UTF8), STREAM_WRITE|STREAM_TRUNC);
+                    aNew << aBitmap;
+                    pVout->EnableMapMode(bMapModeWasEnabledVDev);
+                }
+            }
+
             pOut = pOld;
             aVisArea = aOldVis;
-            BOOL bControls = GetViewOptions()->IsControl();
-
 
             //Jetzt Stueckchenweise schieben und die neuen Pixel aus dem
             //VirDev  kopieren.
@@ -1404,10 +1469,11 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
                     Rectangle aTmp( aOldVis.SVRect() );
                     aTmp.Left() = pRect->Left();
                     aTmp.Right()= pRect->Right();
-                    GetWin()->Scroll( 0, lScroll, aTmp, SCROLL_CHILDREN );
+                    GetWin()->Scroll( 0, lScroll, aTmp, SCROLL_CHILDREN);
                 }
                 else
-                    GetWin()->Scroll( 0, lScroll, SCROLL_CHILDREN );
+                    GetWin()->Scroll( 0, lScroll, SCROLL_CHILDREN);
+
                 const Point aPt( -VisArea().Left(), -VisArea().Top() );
                 MapMode aMapMode( GetWin()->GetMapMode() );
                 aMapMode.SetOrigin( aPt );
@@ -1419,30 +1485,98 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
                 SetFirstVisPageInvalid();
                 if ( !Imp()->bStopSmooth )
                 {
+                    const bool bScrollDirectionIsUp(lScroll > 0);
                     Imp()->aSmoothRect = VisArea();
-                    if ( lScroll > 0 )
-                        Imp()->aSmoothRect.Bottom( VisArea().Top() +
-                                    lScroll + aPixSz.Height() );
+
+                    if(bScrollDirectionIsUp)
+                    {
+                        Imp()->aSmoothRect.Bottom( VisArea().Top() + lScroll + aPixSz.Height());
+                    }
                     else
-                        Imp()->aSmoothRect.Top( VisArea().Bottom() +
-                                    lScroll + aPixSz.Height() );
+                    {
+                        Imp()->aSmoothRect.Top( VisArea().Bottom() + lScroll - aPixSz.Height());
+                    }
 
                     Imp()->bSmoothUpdate = TRUE;
                     GetWin()->Update();
                     Imp()->bSmoothUpdate = FALSE;
 
-                    if ( !Imp()->bStopSmooth )
+                    if(!Imp()->bStopSmooth)
                     {
-                        SwRect &rTmp = Imp()->aSmoothRect;
-                        rTmp.Pos().Y() -= aPixSz.Height();
-                        rTmp.Pos().X() -= aPixSz.Width();
-                        rTmp.SSize().Height() += 2*aPixSz.Height();
-                        rTmp.SSize().Width() += 2*aPixSz.Width();
-                        GetWin()->DrawOutDev( rTmp.Pos(), rTmp.SSize(),
-                                                rTmp.Pos(), rTmp.SSize(),
-                                                *pVout );
-                        if( bControls )
-                            Imp()->PaintLayer( pDoc->GetControlsId(), rTmp );
+                        static bool bDoItOnPixels(true);
+                        if(bDoItOnPixels)
+                        {
+                            // start paint on logic base
+                            const Rectangle aTargetLogic(Imp()->aSmoothRect.SVRect());
+                            DLPrePaint2(Region(aTargetLogic));
+
+                            // get target rectangle in discrete pixels
+                            OutputDevice& rTargetDevice = mpTargetPaintWindow->GetTargetOutputDevice();
+                            const Rectangle aTargetPixel(rTargetDevice.LogicToPixel(aTargetLogic));
+
+                            // get source top-left in discrete pixels
+                            const Point aSourceTopLeft(pVout->LogicToPixel(aTargetLogic.TopLeft()));
+
+                            // switch off MapModes
+                            const bool bMapModeWasEnabledDest(rTargetDevice.IsMapModeEnabled());
+                            const bool bMapModeWasEnabledSource(pVout->IsMapModeEnabled());
+                            rTargetDevice.EnableMapMode(false);
+                            pVout->EnableMapMode(false);
+
+                            // copy content
+                            static bool bTestDirectToWindowPaint(false);
+                            if(bTestDirectToWindowPaint)
+                            {
+                                const bool bMapModeWasEnabledWin(GetWin()->IsMapModeEnabled());
+                                GetWin()->EnableMapMode(false);
+
+                                GetWin()->DrawOutDev(
+                                    aTargetPixel.TopLeft(), aTargetPixel.GetSize(), // dest
+                                    aSourceTopLeft, aTargetPixel.GetSize(), // source
+                                    *pVout);
+
+                                GetWin()->EnableMapMode(bMapModeWasEnabledWin);
+                            }
+
+                            rTargetDevice.DrawOutDev(
+                                aTargetPixel.TopLeft(), aTargetPixel.GetSize(), // dest
+                                aSourceTopLeft, aTargetPixel.GetSize(), // source
+                                *pVout);
+
+                            // restore MapModes
+                            rTargetDevice.EnableMapMode(bMapModeWasEnabledDest);
+                            pVout->EnableMapMode(bMapModeWasEnabledSource);
+
+                            // end paint on logoc base
+                            DLPostPaint2();
+                        }
+                        else
+                        {
+                            Rectangle aRectangle(Imp()->aSmoothRect.SVRect());
+                            aRectangle.Left() -= aPixSz.Width();
+                            aRectangle.Right() += aPixSz.Width();
+                            aRectangle.Top() -= aPixSz.Height();
+                            aRectangle.Bottom() += aPixSz.Height();
+                            const Point aUpdateTopLeft(aRectangle.TopLeft());
+                            const Size aUpdateSize(aRectangle.GetSize());
+
+                            // #i75172# the part getting visible needs to be handled like a repaint.
+                            // For that, start with DLPrePaint2 and the correct Rectangle
+                            DLPrePaint2(Region(aRectangle));
+
+                            static bool bTestDirectToWindowPaint(false);
+                            if(bTestDirectToWindowPaint)
+                            {
+                                GetWin()->DrawOutDev(aUpdateTopLeft, aUpdateSize, aUpdateTopLeft, aUpdateSize, *pVout);
+                            }
+
+                            mpTargetPaintWindow->GetTargetOutputDevice().DrawOutDev(aUpdateTopLeft, aUpdateSize, aUpdateTopLeft, aUpdateSize, *pVout);
+
+                            // #i75172# Corret repaint end
+                            // Note: This also correcty creates the overlay, thus smooth scroll will
+                            // also be allowed now wth selection (see big IF above)
+                            DLPostPaint2();
+                        }
                     }
                     else
                         --nLockPaint;
@@ -1461,9 +1595,9 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
     aVisArea.Pos().X() -= lXDiff;
     aVisArea.Pos().Y() -= lYDiff;
     if ( pRect )
-        GetWin()->Scroll( lXDiff, lYDiff, *pRect, SCROLL_CHILDREN );
+        GetWin()->Scroll( lXDiff, lYDiff, *pRect, SCROLL_CHILDREN);
     else
-        GetWin()->Scroll( lXDiff, lYDiff, SCROLL_CHILDREN );
+        GetWin()->Scroll( lXDiff, lYDiff, SCROLL_CHILDREN);
     return FALSE;
 }
 
@@ -1548,8 +1682,6 @@ void ViewShell::_PaintDesktop( const SwRegionRects &rRegion )
     //make sure the color configuration has been loaded
     SW_MOD()->GetColorConfig();
     */
-    GetOut()->SetFillColor( SwViewOption::GetAppBackgroundColor());
-    GetOut()->SetLineColor();
 
     for ( USHORT i = 0; i < rRegion.Count(); ++i )
     {
@@ -1557,7 +1689,13 @@ void ViewShell::_PaintDesktop( const SwRegionRects &rRegion )
 
         // #i68597# inform Drawinglayer about display change
         DLPrePaint2(Region(aRectangle));
+
+        // #i75172# needed to move line/Fill color setters into loop since DLPrePaint2
+        // may exchange GetOut(), that's it's purpose. This happens e.g. at print preview.
+        GetOut()->SetFillColor( SwViewOption::GetAppBackgroundColor());
+        GetOut()->SetLineColor();
         GetOut()->DrawRect(aRectangle);
+
         DLPostPaint2();
     }
 
@@ -1751,10 +1889,6 @@ void ViewShell::Paint(const Rectangle &rRect)
             if( !GetOut()->GetConnectMetaFile() && GetOut()->IsClipRegion())
                 GetOut()->SetClipRegion();
 
-            // #i68597#
-            const Region aDLRegion(Region(aRect.SVRect()));
-            DLPrePaint2(aDLRegion);
-
             if ( IsPreView() )
             {
                 //Falls sinnvoll gleich das alte InvalidRect verarbeiten bzw.
@@ -1790,9 +1924,6 @@ void ViewShell::Paint(const Rectangle &rRect)
             SwRootFrm::SetNoVirDev( FALSE );
             bPaintInProgress = FALSE;
             UISizeNotify();
-
-            // #i68597#
-            DLPostPaint2();
         }
     }
     else
