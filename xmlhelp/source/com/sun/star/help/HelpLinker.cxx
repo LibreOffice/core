@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpLinker.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-06-08 15:01:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 12:38:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -413,18 +413,19 @@ int readInt(std::fstream &in)
 {
     HCDBG(std::cerr << "want to read at " << in.tellg() << std::endl);
     int ret = 0;
-    for (int i = 3; i >= 0; --i)
+    for (char i = 3; i >= 0; --i)
     {
         unsigned char byte;
-        in >> byte;
+        in.read( (char*)&byte, 1 );
         ret |= (byte << (i*8));
+        HCDBG(fprintf(stderr, "inputting %x ret is now %x\n", byte, ret));
     }
     return ret;
 }
 
 void writeByte(std::fstream &out, unsigned char byte)
 {
-    out << byte;
+    out.write( (const char *)&byte, 1 );
 }
 
 void writeShort(std::fstream &out, int item)
@@ -432,17 +433,18 @@ void writeShort(std::fstream &out, int item)
     for (int i = 1; i >= 0; --i)
     {
         unsigned char byte = static_cast<unsigned char>((item >> (i*8)));
-        out << byte;
+        out.write( (const char*)&byte, 1 );
     }
 }
 
 void writeInt(std::fstream &out, int item)
 {
+    HCDBG(std::cerr << "want to write at " << out.tellp() << std::endl);
     for (int i = 3; i >= 0; --i)
     {
         unsigned char byte = static_cast<unsigned char>((item >> (i*8)));
-        HCDBG(fprintf(stderr, "outputting %x\n", byte));
-        out << byte;
+        HCDBG(fprintf(stderr, "outputting %x in is %x\n", byte, item));
+        out.write( (const char*)&byte, 1 );
     }
 }
 
@@ -519,7 +521,7 @@ public:
     {
         writeInt(out, _number);
         writeInt(out, _free | (_isLeaf ? 0x80000000 : 0));
-        out.write((char*)(&_data[0]), _data.size());
+        out.write((const char*)(&_data[0]), _data.size());
     }
 };
 
@@ -915,9 +917,7 @@ void BlockManager::addDescriptor(Block *block)
 {
     BlockDescriptor desc(block);
     _blockTab.push_back(desc);
-    // Ivo debug
-    fprintf(stderr, "numbers are %lx %lx\n", block->_number,
-            _blockTab.size() - 1);
+    HCDBG(std::cerr << "numbers are " << block->_number << " " << (_blockTab.size()-1) << std::endl);
     if (block->_number != _blockTab.size() - 1)
     {
         std::cerr << "totally screwed" << std::endl;
@@ -2049,11 +2049,11 @@ public:
         std::fstream *indexFile = _index.getOutputStream("DOCS.TAB");
         unsigned char byte = static_cast<unsigned char>(
             _compr.compressAscending(_concepts));
-        *indexFile << byte; // write k
+        indexFile->write( (const char*)&byte, 1 ); // write k
         _compr.write(*indexFile);
         _compr.clear();
         byte = static_cast<unsigned char>(_compr.minimize(_offsets, K));
-        *indexFile << byte; // write k
+        indexFile->write( (const char*)&byte, 1 ); // write k
         _compr.write(*indexFile);
         indexFile->close();
         delete indexFile;
@@ -2100,7 +2100,7 @@ private:
                 toDifferences(_arrays[i], _diffs);
                 unsigned char byte = static_cast<unsigned char>(
                     _compr.minimize(_diffs, K));
-                *_mainFile << byte; // write k
+                _mainFile->write( (const char*)&byte, 1 ); // write k
                 _offsets.push_back(_compr.byteCount() + 1);
                 _compr.write(*_mainFile);
                 _concepts.push_back(_minConcept + i);
@@ -2819,7 +2819,7 @@ public:
     int getNextByte()
     {
         unsigned char ret;
-        *_input >> ret;
+        _input->read( (char*)&ret, 1 );
         HCDBG(fprintf(stderr, "StreamDecompressor::getNextByte of %d\n", ret));
         return ret;
     }
@@ -2848,17 +2848,17 @@ void Index::readOffsetsTables(const std::string &fileName)
 {
     std::ifstream in(indexFile(fileName).native_file_string().c_str(), std::ios::binary);
     unsigned char k1;
-    in >> k1;
+    in.read( (char*)&k1, 1 );
     StreamDecompressor sddocs(in);
     sddocs.decode(k1, _documents);
     unsigned char k2;
-    in >> k2;
+    in.read( (char*)&k2, 1 );
     _microIndexOffsets.clear();
     StreamDecompressor sdoffsets(in);
     sdoffsets.ascDecode(k2, _microIndexOffsets);
     // decompress titles' ids table
     unsigned char k3;
-    in >> k3;
+    in.read( (char*)&k3, 1 );
     _titles.clear();
     StreamDecompressor sdtitles(in);
     sdtitles.decode(k3, _titles);
@@ -2868,12 +2868,12 @@ void Index::readDocumentsTable(const std::string &fileName)
 {
     std::ifstream in(indexFile(fileName).native_file_string().c_str(), std::ios::binary);
     unsigned char k1;
-    in >> k1;
+    in.read( (char*)&k1, 1 );
     _concepts.clear();
     StreamDecompressor sddocs(in);
     sddocs.ascDecode(k1, _concepts);
     unsigned char k2;
-    in >> k2;
+    in.read( (char*)&k2, 1 );
     _offsets.clear();
     _offsets.push_back(0);
     StreamDecompressor sdoffsets(in);
@@ -3277,7 +3277,7 @@ void XmlIndex::writeOutOffsets()
         std::fstream &out = getOffsetsFile();
         Compressor offsets2;
         char k = static_cast<char>(offsets2.compressAscending(_contextsOffsets));
-        out << k;
+        out.write( (const char*)&k, 1 );
         offsets2.write(out);
     }
 }
@@ -3321,13 +3321,15 @@ public:
 Tokenizer::Tokenizer() : start(BreakIterator::DONE), utfbuffer(64)
 {
     UErrorCode status = U_ZERO_ERROR;
-    bi = BreakIterator::createWordInstance(Locale::getUS(), status);
+    bi = BreakIterator::createWordInstance("en_US", status);
     utf8 = ucnv_open("utf-8", &status);
 }
 
 Tokenizer::~Tokenizer()
 {
+#if !defined(SOLARIS)
     delete bi;
+#endif
     ucnv_close(utf8);
 }
 
@@ -3853,14 +3855,13 @@ class XmlIndexBuilder
 {
 private:
     fs::path _transformLocation;
-    xsltStylesheetPtr _defaultTransform;
     xsltStylesheetPtr _indexingTransform;
     IndexAdapter _indexAdapter;
     int _currentDocID;
     void reset();
     xsltStylesheetPtr getTransform(const std::string &stylesheetName);
 public:
-    XmlIndexBuilder() : _defaultTransform(0), _indexingTransform(0) {}
+    XmlIndexBuilder() : _indexingTransform(0) {}
     XmlIndexBuilder(const fs::path &dir);
     ~XmlIndexBuilder();
     void clearIndex();
@@ -4355,7 +4356,7 @@ private:
             if (_nGroups > 1)
             {
                 unsigned char byte = static_cast<unsigned char>((0x80 | _kk));
-                out << byte;
+                out.write( (const char*)&byte, 1 );
                 HCDBG(std::cerr << "writeOut of " << int(byte) << std::endl);
                 _kCompr.write(out); // concatenated k,l,m
                 for (size_t j = 0; j < _freeComp; j++)
@@ -4363,8 +4364,10 @@ private:
             }
             else // single group, no extents; code: 00
             {
-                out << (unsigned char)(_kTable[0]); // k1
-                out << (unsigned char)(_kTable[1]); // k2
+                unsigned char k1 = (unsigned char)(_kTable[0]);
+                unsigned char k2 = (unsigned char)(_kTable[1]);
+                out.write( (const char*)&k1, 1 );
+                out.write( (const char*)&k2, 1 );
                 _compressors[0].write(out); // C/P
             }
         }
@@ -4372,7 +4375,7 @@ private:
         {               // extents
             unsigned char byte = static_cast<unsigned char>(
                 (_nGroups > 1 ? 0xC0 : 0x40) | _kk);
-            out << byte;
+            out.write( (const char*)&byte, 1 );
             _kCompr.write(out);
             for (size_t j = 0; j < _freeComp; j++)
                 _compressors[j].write(out);
@@ -4447,15 +4450,15 @@ void Index::writeOutOffsets()
     out.clear();
     unsigned char byte;
     byte = static_cast<unsigned char>(k1);
-    out << byte;
+    out.write( (const char*)&byte, 1 );
     HCDBG(fprintf(stderr, "a: offset dump of %x\n", byte));
     documents.write(out);
     byte = static_cast<unsigned char>(k2);
-    out << byte;
+    out.write( (const char*)&byte, 1 );
     HCDBG(fprintf(stderr, "b: offset dump of %x\n", byte));
     offsets.write(out);
     byte = static_cast<unsigned char>(k3);
-    out << byte;
+    out.write( (const char*)&byte, 1 );
     HCDBG(fprintf(stderr, "c: offset dump of %x\n", byte));
     titles.write(out);
 }
@@ -4568,8 +4571,6 @@ void XmlIndexBuilder::indexDocument(xmlDocPtr doc, const std::string &docURL, co
 
 XmlIndexBuilder::~XmlIndexBuilder()
 {
-    if (_defaultTransform) xsltFreeStylesheet(_defaultTransform);
-    if (_indexingTransform) xsltFreeStylesheet(_indexingTransform);
     delete _indexAdapter._index;
 }
 
@@ -4586,7 +4587,6 @@ xsltStylesheetPtr XmlIndexBuilder::getTransform(const std::string &stylesheetNam
 
 void XmlIndexBuilder::initXmlProcessor(const std::string &transform)
 {
-    _defaultTransform = getTransform("default");
     _indexingTransform = getTransform(transform);
 }
 
@@ -4625,8 +4625,7 @@ void XmlIndexBuilder::reset()
 }
 
 XmlIndexBuilder::XmlIndexBuilder(const fs::path &indexDir)
-    : _defaultTransform(0), _indexingTransform(0),
-    _currentDocID(0)
+    : _indexingTransform(0), _currentDocID(0)
 {
     HCDBG(std::cerr << "indexDir is " << indexDir.native_directory_string() << std::endl);
     _indexAdapter._index = new XmlIndex(indexDir, true);
@@ -4730,12 +4729,12 @@ std::string replaceAll(std::string result,
 
 void JarOutputStream::addFile(const std::string &fileName, const std::string &name)
 {
-    perlline << "$zip->addFile(\"" << replaceAll(fileName, "\\", "\\\\") << "\", \"" << name << "\"); ";
+    perlline << "$zip->addFile(\"" << replaceAll(fileName, "\\", "/") << "\", \"" << name << "\"); ";
 }
 
 void JarOutputStream::addTree(const std::string &tree, const std::string &name)
 {
-    perlline << "$zip->addTree(\"" << replaceAll(tree, "\\", "\\\\") << "\", \"" << name << "\"); ";
+    perlline << "$zip->addTree(\"" << replaceAll(tree, "\\", "/") << "\", \"" << name << "\"); ";
 }
 
 void JarOutputStream::dontCompress(const std::string &key)
@@ -4746,32 +4745,33 @@ void JarOutputStream::dontCompress(const std::string &key)
 
 void JarOutputStream::commit()
 {
-    perlline << "$zip->writeToFileNamed(\"" << replaceAll(getname().native_file_string(), "\\", "\\\\") << "\"); ";
+    perlline << "print $zip->writeToFileNamed(\"" << replaceAll(getname().native_file_string(), "\\", "/") << "\").\"\\n\"; ";
 
     fs::path tmp = getname();
     tmp.append(".perl");
-    std::string perlfile = tmp.native_file_string();
+    std::string perlfile = replaceAll( tmp.native_file_string(), "\\", "/");
     std::ofstream fos(perlfile.c_str());
     fos << perlline.str();
     fos.close();
 
-    std::string myperl( getenv( "PERL" ) );
+    std::string myperl;
+    if( myperl.empty() ) myperl = "perl";
     std::string commandline;
     const std::string is4nt ( getenv( "USE_SHELL" ) );
     if( !is4nt.empty() && is4nt == "4nt" )
     {
-        std::string myperl2 = replaceAll( myperl , "\\" , "\\\\" );
-        myperl  = myperl2 ;
-        myperl2 = replaceAll( perlfile , "\\" , "\\\\" );
-        perlfile = myperl2 ;
-        commandline = myperl + " " + perlfile;
+        // in SO windows environment perl isn't in the path and
+        // needs to be fetched from the environment. this doesn't
+        // work in a cygwin shell as "/usr/bin/perl" will fail in a
+        // native shell (see system call).
+        myperl = getenv( "PERL" );
     }
-//    std::string commandline = "perl " + perlfile;
-    else
-        commandline = "perl " + perlfile;
-
+    commandline = myperl + " " + perlfile;
     HCDBG(std::cerr << "command line 3 is" << commandline << std::endl);
-    system(commandline.c_str());
+    // on windows, calling perl (either cygwin or native) from a native
+    // shell the only chance to survive is using "c:/foo" notation
+    if ( system(commandline.c_str()) )
+        fprintf (stderr, "ERROR: calling generated perl script failed!\n");
 
     fs::remove(tmp);
 }
@@ -4953,19 +4953,19 @@ void HelpLinker::link()
         appl = appl.substr(1);
 
     fs::path helpTextFileName(indexDirParentName / (mod + ".ht"));
-    DB* helpText;
+    DB* helpText(0);
     db_create(&helpText,0,0);
     helpText->open(helpText, NULL, helpTextFileName.native_file_string().c_str(), NULL, DB_BTREE,
         DB_CREATE | DB_TRUNCATE, 0644);
 
     fs::path dbBaseFileName(indexDirParentName / (mod + ".db"));
-    DB* dbBase;
+    DB* dbBase(0);
     db_create(&dbBase,0,0);
     dbBase->open(dbBase, NULL, dbBaseFileName.native_file_string().c_str(), NULL, DB_BTREE,
         DB_CREATE | DB_TRUNCATE, 0644);
 
     fs::path keyWordFileName(indexDirParentName / (mod + ".key"));
-    DB* keyWord;
+    DB* keyWord(0);
     db_create(&keyWord,0,0);
     keyWord->open(keyWord, NULL, keyWordFileName.native_file_string().c_str(), NULL, DB_BTREE,
         DB_CREATE | DB_TRUNCATE, 0644);
