@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layerexp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:27:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-26 13:35:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,26 +98,44 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
     if( nCount == 0 )
         return;
 
-    Reference< XPropertySet> xLayer;
     const OUString strName( RTL_CONSTASCII_USTRINGPARAM( "Name" ) );
+    const OUString strTitle( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
+    const OUString strDescription( RTL_CONSTASCII_USTRINGPARAM( "Description" ) );
 
-    OUStringBuffer sTmp;
-    OUString aName;
+    OUString sTmp;
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_LAYER_SET, sal_True, sal_True );
 
     for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
     {
-        xLayerManager->getByIndex( nIndex ) >>= xLayer;
-
-        if( xLayer.is() )
+        try
         {
-            if( xLayer->getPropertyValue( strName ) >>= aName )
-            {
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aName );
-            }
+            Reference< XPropertySet> xLayer( xLayerManager->getByIndex( nIndex ), UNO_QUERY_THROW );
+            xLayer->getPropertyValue( strName ) >>= sTmp;
+            if(sTmp.getLength())
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, sTmp );
 
             SvXMLElementExport aEle( rExport, XML_NAMESPACE_DRAW, XML_LAYER, sal_True, sal_True );
+
+            // title property (as <svg:title> element)
+            xLayer->getPropertyValue(strTitle) >>= sTmp;
+            if(sTmp.getLength())
+            {
+                SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_SVG, XML_TITLE, sal_True, sal_False);
+                rExport.Characters(sTmp);
+            }
+
+            // description property (as <svg:desc> element)
+            xLayer->getPropertyValue(strDescription) >>= sTmp;
+            if(sTmp.getLength() > 0)
+            {
+                SvXMLElementExport aDesc(rExport, XML_NAMESPACE_SVG, XML_DESC, sal_True, sal_False);
+                rExport.Characters(sTmp);
+            }
+        }
+        catch( Exception& )
+        {
+            DBG_ERROR("SdXMLayerExporter::exportLayer(), exception caught during export of one layer!");
         }
     }
 }
