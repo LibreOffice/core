@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmhtmlw.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:49:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:03:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,16 +51,16 @@
 #include <unotools/configmgr.hxx>
 #include "svtools/urihelper.hxx"
 
-#include "docinf.hxx"
-#include "frmhtmlw.hxx"
-#include "evntconf.hxx"
-#include "frame.hxx"
-#include "app.hxx"
-#include "viewfrm.hxx"
-#include "docfile.hxx"
+#include <sfx2/docinf.hxx>
+#include <sfx2/frmhtmlw.hxx>
+#include <sfx2/evntconf.hxx>
+#include <sfx2/frame.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/docfile.hxx>
 #include "sfxresid.hxx"
-#include "objsh.hxx"
-#include "sfx.hrc"
+#include <sfx2/objsh.hxx>
+#include <sfx2/sfx.hrc>
 #include "bastyp.hrc"
 
 // -----------------------------------------------------------------------
