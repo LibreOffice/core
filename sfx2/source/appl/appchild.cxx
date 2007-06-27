@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appchild.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:14:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:55:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,18 +46,18 @@
 #include <svtools/eitem.hxx>
 #endif
 
-#include "app.hxx"
+#include <sfx2/app.hxx>
 #include "appdata.hxx"
 #include "workwin.hxx"
-#include "childwin.hxx"
+#include <sfx2/childwin.hxx>
 #include "arrdecl.hxx"
-#include "templdlg.hxx"
-#include "request.hxx"
-#include "bindings.hxx"
-#include "dispatch.hxx"
+#include <sfx2/templdlg.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 #include "sfxtypes.hxx"
-#include "module.hxx"
-#include "sfxsids.hrc"
+#include <sfx2/module.hxx>
+#include <sfx2/sfxsids.hrc>
 
 //=========================================================================
 
