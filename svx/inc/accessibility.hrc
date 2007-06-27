@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibility.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:15:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:31:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef _SVX_ACCESSIBILITY_HRC
 #define _SVX_ACCESSIBILITY_HRC
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 #define RID_SVXSTR_A11Y_3D_MATERIAL_COLOR       (RID_SVXSTR_ACCESSIBILITY_START + 1)
 #define RID_SVXSTR_A11Y_TEXT_COLOR              (RID_SVXSTR_ACCESSIBILITY_START + 2)
