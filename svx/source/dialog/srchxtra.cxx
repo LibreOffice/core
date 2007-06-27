@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchxtra.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:41:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:40:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,13 +61,13 @@
 #endif
 
 #ifndef _SVX_DIALOGS_HRC
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #endif
 #ifndef _SVX_SRCHXTRA_HRC
 #include "srchxtra.hrc"
 #endif
 #ifndef _SVXITEMS_HRC
-#include "svxitems.hrc"
+#include <svx/svxitems.hrc>
 #endif
 
 #ifndef _SVX_FLSTITEM_HXX
@@ -81,7 +81,7 @@
 #include "paragrph.hxx"
 #endif
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 #ifndef _SVX_BACKGRND_HXX
 #include "backgrnd.hxx"
