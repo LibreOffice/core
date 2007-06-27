@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2005-10-25 11:17:44 $
+#   last change: $Author: hr $ $Date: 2007-06-27 17:55:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,9 @@ TARGETTYPE=GUI
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
+
+CDEFS+=-DUNICODE
+
 
 OBJFILES= \
     $(OBJ)$/launcher.obj \
