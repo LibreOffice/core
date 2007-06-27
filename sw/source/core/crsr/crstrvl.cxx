@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crstrvl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:55:09 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:17:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,6 +162,7 @@
 #ifndef _TXTFRM_HXX
 #include "txtfrm.hxx"
 #endif
+#include <wrong.hxx>
 
 #include <vcl/window.hxx>
 
@@ -1086,6 +1087,10 @@ FASTBOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
         aTmpState.bCntntCheck = SwContentAtPos::SW_CONTENT_CHECK & rCntntAtPos.eCntntAtPos;
         aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
 
+        SwSpecialPos aSpecialPos;
+        aTmpState.pSpecialPos = ( SwContentAtPos::SW_SMARTTAG & rCntntAtPos.eCntntAtPos ) ?
+                                &aSpecialPos : 0;
+
         const BOOL bCrsrFoundExact = GetLayout()->GetCrsrOfst( &aPos, aPt, &aTmpState );
         pTxtNd = aPos.nNode.GetNode().GetTxtNode();
 
@@ -1123,7 +1128,57 @@ FASTBOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
         {
             if( !aTmpState.bPosCorr )
             {
-                if( ( SwContentAtPos::SW_FIELD | SwContentAtPos::SW_CLICKFIELD )
+                if( !bRet && SwContentAtPos::SW_SMARTTAG & rCntntAtPos.eCntntAtPos
+                    && !aTmpState.bFtnNoInfo )
+                {
+                    const SwWrongList* pSmartTagList = pTxtNd->GetSmartTags();
+                    xub_StrLen nCurrent = aPos.nContent.GetIndex();
+                    xub_StrLen nBegin = nCurrent;
+                    xub_StrLen nLen = 1;
+
+                    if ( pSmartTagList && pSmartTagList->InWrongWord( nCurrent, nLen ) && !pTxtNd->IsSymbol(nBegin) )
+                    {
+                        const USHORT nIndex = pSmartTagList->GetWrongPos( nBegin );
+                        const SwWrongList* pSubList = pSmartTagList->SubList( nIndex );
+                        if ( pSubList )
+                        {
+                            nCurrent = aTmpState.pSpecialPos->nCharOfst;
+
+                            if ( pSubList->InWrongWord( nCurrent, nLen ) )
+                                bRet = TRUE;
+                        }
+                        else
+                            bRet = TRUE;
+
+                        if( bRet && bSetCrsr )
+                        {
+                            SwCrsrSaveState aSaveState( *pCurCrsr );
+                            SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
+                            pCurCrsr->DeleteMark();
+                            *pCurCrsr->GetPoint() = aPos;
+                            if( pCurCrsr->IsSelOvr(SELOVER_CHECKNODESSECTION | SELOVER_TOGGLE) )
+                                bRet = FALSE;
+                            else
+                                UpdateCrsr();
+                        }
+                        if( bRet )
+                        {
+//                          rCntntAtPos.sStr = pTxtNd->GetExpandTxt(
+//                                      *pTxtAttr->GetStart(),
+//                                      *pTxtAttr->GetEnd() - *pTxtAttr->GetStart(),
+//                                      FALSE );
+
+//                          rCntntAtPos.aFnd.pAttr = &pTxtAttr->GetAttr();
+                            rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_SMARTTAG;
+//                          rCntntAtPos.pFndTxtAttr = pTxtAttr;
+
+                            if( pFldRect && 0 != ( pFrm = pTxtNd->GetFrm( &aPt ) ) )
+                                pFrm->GetCharRect( *pFldRect, aPos, &aTmpState );
+                        }
+                    }
+                }
+
+                if( !bRet && ( SwContentAtPos::SW_FIELD | SwContentAtPos::SW_CLICKFIELD )
                     & rCntntAtPos.eCntntAtPos && !aTmpState.bFtnNoInfo )
                 {
                     pTxtAttr = pTxtNd->GetTxtAttr( aPos.nContent.GetIndex(),
