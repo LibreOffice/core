@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backgrnd.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:05:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:48:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 #include <svtools/valueset.hxx>
 #endif
 #ifndef _SVX_DLG_CTRL_HXX
-#include <dlgctrl.hxx>
+#include <svx/dlgctrl.hxx>
 #endif
 
 // Absatzvorlage
