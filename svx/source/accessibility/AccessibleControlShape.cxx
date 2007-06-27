@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleControlShape.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:26:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:36:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,10 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_CONTROL_SHAPE_HXX
-#include "AccessibleControlShape.hxx"
+#include <svx/AccessibleControlShape.hxx>
 #endif
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_INFO_HXX
-#include "AccessibleShapeInfo.hxx"
+#include <svx/AccessibleShapeInfo.hxx>
 #endif
 #ifndef _SVX_ACCESSIBILITY_DESCRIPTION_GENERATOR_HXX
 #include "DescriptionGenerator.hxx"
@@ -70,16 +70,16 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #endif
 #ifndef _SVDOUNO_HXX
-#include "svdouno.hxx"
+#include <svx/svdouno.hxx>
 #endif
 #ifndef _SVX_UNOAPI_HXX_
 #include "unoapi.hxx"
 #endif
 #ifndef _SVX_ACCESSIBILITY_SHAPE_TYPE_HANDLER_HXX
-#include "ShapeTypeHandler.hxx"
+#include <svx/ShapeTypeHandler.hxx>
 #endif
 #ifndef _SVX_ACCESSIBILITY_SVX_SHAPE_TYPES_HXX
-#include "SvxShapeTypes.hxx"
+#include <svx/SvxShapeTypes.hxx>
 #endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
@@ -88,10 +88,10 @@
 #include <comphelper/accessiblewrapper.hxx>
 #endif
 #ifndef _SVDVIEW_HXX
-#include "svdview.hxx"
+#include <svx/svdview.hxx>
 #endif
 #ifndef _SVDPAGV_HXX
-#include "svdpagv.hxx"
+#include <svx/svdpagv.hxx>
 #endif
 #include "svdstr.hrc"
 #include <algorithm>
