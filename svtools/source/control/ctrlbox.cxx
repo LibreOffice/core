@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrlbox.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 11:53:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:23:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,8 +54,8 @@
 #include <unotools/charclass.hxx>
 #endif
 
-#include <svtdata.hxx>
-#include <svtools.hrc>
+#include <svtools/svtdata.hxx>
+#include <svtools/svtools.hrc>
 #include <ctrlbox.hxx>
 #include <ctrltool.hxx>
 
