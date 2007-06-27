@@ -4,9 +4,9 @@
  *
  *  $RCSfile: align.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:35:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:46:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,16 +42,16 @@
 
 // include ---------------------------------------------------------------
 
-#include <svxenum.hxx>
+#include <svx/svxenum.hxx>
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "align.hrc"
 #include "rotmodit.hxx"
 
-#include "algitem.hxx"
-#include "frmdiritem.hxx"
+#include <svx/algitem.hxx>
+#include <svx/frmdiritem.hxx>
 #include "align.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
 
 #ifndef _SHL_HXX //autogen
@@ -75,7 +75,7 @@
 #ifndef _SVTOOLS_LOCALRESACCESS_HXX_
 #include <svtools/localresaccess.hxx>
 #endif
-#include "svxids.hrc" //CHINA001
+#include <svx/svxids.hrc> //CHINA001
 #include "flagsdef.hxx" //CHINA001
 #include <svtools/intitem.hxx> //CHINA001
 #include <sfx2/request.hxx> //CHINA001
