@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationexport.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:00:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:31:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,6 +186,7 @@ using namespace ::cppu;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
 using ::com::sun::star::uno::Any;
@@ -613,12 +614,12 @@ struct ImplAttributeNameConversion* getAnimationAttributeNamesConversionList()
 class AnimationsExporterImpl
 {
 public:
-    AnimationsExporterImpl( SvXMLExport& rExport );
+    AnimationsExporterImpl( SvXMLExport& rExport, const Reference< XPropertySet >& xPageProps );
 
     void prepareNode( const Reference< XAnimationNode >& xNode );
     void exportNode( const Reference< XAnimationNode >& xNode );
 
-    void exportContainer( const Reference< XTimeContainer >& xNode );
+    void exportContainer( const Reference< XTimeContainer >& xNode, sal_Int16 nContainerNodeType );
     void exportAnimate( const Reference< XAnimate >& xNode );
     void exportAudio( const Reference< XAudio >& xAudio );
     void exportCommand( const Reference< XCommand >& xCommand );
@@ -633,13 +634,20 @@ public:
 
     void prepareValue( const Any& rValue );
 
+    void exportTransitionNode();
+    void prepareTransitionNode();
+
+    bool mbHasTransition;
 private:
     SvXMLExport& mrExport;
     Reference< XInterface > mxExport;
+    Reference< XPropertySet > mxPageProps;
 };
 
-AnimationsExporterImpl::AnimationsExporterImpl( SvXMLExport& rExport )
-: mrExport( rExport )
+AnimationsExporterImpl::AnimationsExporterImpl( SvXMLExport& rExport, const Reference< XPropertySet >& xPageProps )
+: mbHasTransition(false)
+, mrExport( rExport )
+, mxPageProps( xPageProps )
 {
     try
     {
@@ -649,6 +657,123 @@ AnimationsExporterImpl::AnimationsExporterImpl( SvXMLExport& rExport )
     {
         DBG_ERROR( "xmloff::AnimationsExporterImpl::AnimationsExporterImpl(), RuntimeException catched!" );
     }
+}
+
+void AnimationsExporterImpl::exportTransitionNode()
+{
+    if( mbHasTransition && mxPageProps.is() )
+    {
+        sal_Int16 nTransition = 0;
+        mxPageProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionType" ) ) ) >>= nTransition;
+
+        Any aSound( mxPageProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Sound" ) ) ) );
+        OUString sSoundURL;
+        aSound >>= sSoundURL;
+        sal_Bool bStopSound = sal_False;
+        if( !(aSound >>= bStopSound) )
+            bStopSound = sal_False;
+
+
+        OUStringBuffer sTmp;
+        if( (nTransition != 0) || (sSoundURL.getLength() != 0) || bStopSound )
+        {
+            Reference< XInterface > xSource( mxPageProps.get() );
+            Event aEvent;
+            aEvent.Source <<= xSource;
+            aEvent.Trigger = EventTrigger::BEGIN_EVENT;
+            aEvent.Repeat = 0;
+
+            convertTiming( sTmp, Any( aEvent ) );
+            mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_BEGIN, sTmp.makeStringAndClear() );
+
+            SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, XML_PAR, sal_True, sal_True );
+
+            if( nTransition != 0 )
+            {
+                sal_Int16 nSubtype = 0;
+                sal_Bool bDirection = sal_False;
+                sal_Int32 nFadeColor = 0;
+                double fDuration = 0.0;
+                mxPageProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionSubtype" ) ) ) >>= nSubtype;
+                mxPageProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionDirection" ) ) ) >>= bDirection;
+                mxPageProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionFadeColor" ) ) ) >>= nFadeColor;
+                mxPageProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionDuration" ) ) ) >>= fDuration;
+
+                SvXMLUnitConverter::convertDouble( sTmp, fDuration );
+                sTmp.append( sal_Unicode('s'));
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_DUR, sTmp.makeStringAndClear() );
+
+                SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nTransition, getAnimationsEnumMap(Animations_EnumMap_TransitionType) );
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_TYPE, sTmp.makeStringAndClear() );
+
+                if( nSubtype != TransitionSubType::DEFAULT )
+                {
+                    SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nSubtype, getAnimationsEnumMap(Animations_EnumMap_TransitionSubType) );
+                    mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_SUBTYPE, sTmp.makeStringAndClear() );
+                }
+
+                if( !bDirection )
+                    mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_DIRECTION, XML_REVERSE );
+
+                if( (nTransition == TransitionType::FADE) && ((nSubtype == TransitionSubType::FADETOCOLOR) || (nSubtype == TransitionSubType::FADEFROMCOLOR) ))
+                {
+                    SvXMLUnitConverter::convertColor( sTmp, nFadeColor );
+                    mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_FADECOLOR, sTmp.makeStringAndClear() );
+                }
+                SvXMLElementExport aElement2( mrExport, XML_NAMESPACE_ANIMATION, XML_TRANSITIONFILTER, sal_True, sal_True );
+            }
+
+            if( bStopSound )
+            {
+                mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_COMMAND, XML_STOP_AUDIO );
+                SvXMLElementExport aElement2( mrExport, XML_NAMESPACE_ANIMATION, XML_COMMAND, sal_True, sal_True );
+            }
+            else if( sSoundURL.getLength() != 0)
+            {
+                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, mrExport.GetRelativeReference( sSoundURL ) );
+
+                sal_Bool bLoopSound = sal_False;
+                mxPageProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LoopSound" ) ) ) >>= bLoopSound;
+
+                if( bLoopSound )
+                    mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_REPEATCOUNT, XML_INDEFINITE );
+                SvXMLElementExport aElement2( mrExport, XML_NAMESPACE_ANIMATION, XML_AUDIO, sal_True, sal_True );
+            }
+        }
+    }
+}
+
+void AnimationsExporterImpl::prepareTransitionNode()
+{
+    if( mxPageProps.is() ) try
+    {
+        sal_Int16 nTransition = 0;
+        mxPageProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionType" ) ) ) >>= nTransition;
+
+        sal_Bool bStopSound = sal_False;
+        OUString sSoundURL;
+
+        if( nTransition == 0 )
+        {
+            Any aSound( mxPageProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Sound" ) ) ) );
+            aSound >>= sSoundURL;
+
+            if( !(aSound >>= bStopSound) )
+                bStopSound = sal_False;
+        }
+
+        if( (nTransition != 0) || (sSoundURL.getLength() != 0) || bStopSound )
+        {
+            mbHasTransition = true;
+            Reference< XInterface > xInt( mxPageProps.get() );
+            mrExport.getInterfaceToIdentifierMapper().registerReference( xInt );
+        }
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR( "xmloff::AnimationsExporterImpl::prepareNode(), Exception caught!" );
+    }
+
 }
 
 void AnimationsExporterImpl::prepareNode( const Reference< XAnimationNode >& xNode )
@@ -725,7 +850,7 @@ void AnimationsExporterImpl::prepareNode( const Reference< XAnimationNode >& xNo
             }
         }
     }
-    catch( RuntimeException& )
+    catch( Exception& )
     {
         DBG_ERROR( "xmloff::AnimationsExporterImpl::prepareNode(), RuntimeException catched!" );
     }
@@ -862,7 +987,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
             }
         }
 
-
+        sal_Int16 nContainerNodeType = EffectNodeType::DEFAULT;
         OUString aPresetId;
         Sequence< NamedValue > aUserData( xNode->getUserData() );
         if( aUserData.hasElements() )
@@ -874,10 +999,9 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
             {
                 if( IsXMLToken( pValue->Name, XML_NODE_TYPE ) )
                 {
-                    sal_Int16 nNodeType = sal_Int16();
-                    if( (pValue->Value >>= nNodeType) && (nNodeType != EffectNodeType::DEFAULT) )
+                    if( (pValue->Value >>= nContainerNodeType) && (nContainerNodeType != EffectNodeType::DEFAULT) )
                     {
-                        SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nNodeType, getAnimationsEnumMap(Animations_EnumMap_EffectNodeType) );
+                        SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nContainerNodeType, getAnimationsEnumMap(Animations_EnumMap_EffectNodeType) );
                         mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_NODE_TYPE, sTmp.makeStringAndClear() );
                     }
                 }
@@ -939,7 +1063,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
         case AnimationNodeType::ITERATE:
         {
             Reference< XTimeContainer > xContainer( xNode, UNO_QUERY_THROW );
-            exportContainer( xContainer );
+            exportContainer( xContainer, nContainerNodeType );
         }
         break;
 
@@ -979,7 +1103,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
     mrExport.ClearAttrList();
 }
 
-void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >& xContainer )
+void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >& xContainer, sal_Int16 nContainerNodeType )
 {
     try
     {
@@ -1041,6 +1165,9 @@ void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >&
             return;
         }
         SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, eElementToken, sal_True, sal_True );
+
+        if( nContainerNodeType == EffectNodeType::TIMING_ROOT )
+            exportTransitionNode();
 
         Reference< XEnumerationAccess > xEnumerationAccess( xContainer, UNO_QUERY_THROW );
         Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
@@ -1267,6 +1394,8 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
         case AnimationNodeType::ANIMATETRANSFORM:
         {
             eElementToken = XML_ANIMATETRANSFORM;
+
+            mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_ATTRIBUTENAME, XML_TRANSFORM );
 
             Reference< XAnimateTransform > xTransform( xAnimate, UNO_QUERY_THROW );
             nTemp = xTransform->getTransformType();
@@ -1686,9 +1815,9 @@ void AnimationsExporterImpl::prepareValue( const Any& rValue )
     }
 }
 
-AnimationsExporter::AnimationsExporter( SvXMLExport& rExport )
+AnimationsExporter::AnimationsExporter( SvXMLExport& rExport, const Reference< XPropertySet >& xPageProps )
 {
-    mpImpl = new AnimationsExporterImpl( rExport );
+    mpImpl = new AnimationsExporterImpl( rExport, xPageProps );
 }
 
 AnimationsExporter::~AnimationsExporter()
@@ -1701,7 +1830,10 @@ void AnimationsExporter::prepare( Reference< XAnimationNode > xRootNode )
     try
     {
         if( xRootNode.is() )
+        {
+            mpImpl->prepareTransitionNode();
             mpImpl->prepareNode( xRootNode );
+        }
     }
     catch( RuntimeException& )
     {
@@ -1715,21 +1847,28 @@ void AnimationsExporter::exportAnimations( Reference< XAnimationNode > xRootNode
     {
         if( xRootNode.is() )
         {
-            // first check if there are no animations
-            Reference< XEnumerationAccess > xEnumerationAccess( xRootNode, UNO_QUERY_THROW );
-            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
-            if( xEnumeration->hasMoreElements() )
-            {
-                // first child node may be an empty main sequence, check this
-                Reference< XAnimationNode > xMainNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
-                Reference< XEnumerationAccess > xMainEnumerationAccess( xMainNode, UNO_QUERY_THROW );
-                Reference< XEnumeration > xMainEnumeration( xMainEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+            bool bHasEffects = mpImpl->mbHasTransition;
 
-                // only export if the main sequence is not empty or if there are additional
-                // trigger sequences
-                if( xMainEnumeration->hasMoreElements() || xEnumeration->hasMoreElements() )
-                    mpImpl->exportNode( xRootNode );
+            if( !bHasEffects )
+            {
+                // first check if there are no animations
+                Reference< XEnumerationAccess > xEnumerationAccess( xRootNode, UNO_QUERY_THROW );
+                Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+                if( xEnumeration->hasMoreElements() )
+                {
+                    // first child node may be an empty main sequence, check this
+                    Reference< XAnimationNode > xMainNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
+                    Reference< XEnumerationAccess > xMainEnumerationAccess( xMainNode, UNO_QUERY_THROW );
+                    Reference< XEnumeration > xMainEnumeration( xMainEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+
+                    // only export if the main sequence is not empty or if there are additional
+                    // trigger sequences
+                    bHasEffects = xMainEnumeration->hasMoreElements() || xEnumeration->hasMoreElements();
+                }
             }
+
+            if( bHasEffects )
+                mpImpl->exportNode( xRootNode );
         }
     }
     catch( RuntimeException& )
