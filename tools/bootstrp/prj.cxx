@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:49:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:07:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,8 @@
 #include "bootstrp/sstring.hxx"
 #include <vos/mutex.hxx>
 
-#include "stream.hxx"
-#include "geninfo.hxx"
+#include <tools/stream.hxx>
+#include <tools/geninfo.hxx>
 #include "bootstrp/prj.hxx"
 #include "bootstrp/inimgr.hxx"
 
