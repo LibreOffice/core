@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmsel.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2007-06-11 09:47:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:07:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svx.hxx"
 
 #ifndef SVX_FRMSEL_HXX
-#include "frmsel.hxx"
+#include <svx/frmsel.hxx>
 #endif
 
 #include <algorithm>
@@ -50,11 +50,11 @@
 #include "AccessibleFrameSelector.hxx"
 #endif
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 
 #ifndef _SVX_DIALOGS_HRC
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #endif
 #ifndef SVX_FRMSEL_HRC
 #include "frmsel.hrc"
