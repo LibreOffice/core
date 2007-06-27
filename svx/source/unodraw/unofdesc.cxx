@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofdesc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:02:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:23:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "eeitem.hxx"
+#include <svx/eeitem.hxx>
 
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
@@ -51,31 +51,31 @@
 #endif
 
 #ifndef _SVX_FHGTITEM_HXX //autoge
-#include <fhgtitem.hxx>
+#include <svx/fhgtitem.hxx>
 #endif
 
 #ifndef _SVX_POSTITEM_HXX //autogen
-#include <postitem.hxx>
+#include <svx/postitem.hxx>
 #endif
 
 #ifndef _SVX_UDLNITEM_HXX //autogen
-#include <udlnitem.hxx>
+#include <svx/udlnitem.hxx>
 #endif
 
 #ifndef _SVX_WGHTITEM_HXX //autogen
-#include <wghtitem.hxx>
+#include <svx/wghtitem.hxx>
 #endif
 
 #ifndef _SVX_CRSDITEM_HXX //autog
-#include <crsditem.hxx>
+#include <svx/crsditem.hxx>
 #endif
 
 #ifndef _SVX_WRLMITEM_HXX //aut
-#include <wrlmitem.hxx>
+#include <svx/wrlmitem.hxx>
 #endif
 
 #ifndef _SVX_UNOMID_HXX //autogen
-#include <unomid.hxx>
+#include <svx/unomid.hxx>
 #endif
 
 #ifndef _SFXITEMPOOL_HXX //autogen
