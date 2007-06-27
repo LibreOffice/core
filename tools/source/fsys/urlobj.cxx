@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:54:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:12:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,14 +37,14 @@
 #include "precompiled_tools.hxx"
 
 #ifndef _URLOBJ_HXX
-#include "urlobj.hxx"
+#include <tools/urlobj.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
-#include "debug.hxx"
+#include <tools/debug.hxx>
 #endif
 #ifndef TOOLS_INETMIME_HXX
-#include "inetmime.hxx"
+#include <tools/inetmime.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
