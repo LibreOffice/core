@@ -4,9 +4,9 @@
  *
  *  $RCSfile: communiio.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:28:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:01:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
  *
  ************************************************************************/
 
-#include "commtypes.hxx"
+#include <automation/commtypes.hxx>
 
 #define C_ERROR_NONE                0x0001
 #define C_ERROR_PERMANENT           0x0002
