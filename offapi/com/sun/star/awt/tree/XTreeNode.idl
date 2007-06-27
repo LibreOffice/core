@@ -1,0 +1,113 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XTreeNode.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:29:01 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_tree_XTreeNode_idl__
+#define __com_sun_star_awt_tree_XTreeNode_idl__
+
+#ifndef __com_sun_star_container_XEnumerationAccess_idl__
+#include <com/sun/star/container/XEnumerationAccess.idl>
+#endif
+
+#ifndef _com_sun_star_lang_IndexOutOfBoundsException_idl_
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt { module tree {
+
+//=============================================================================
+
+/** An instance implementing this interface represents the model data for an entry in a
+    <type>XTreeDataModel</type>.
+    <p>The <type>TreeControl</type> uses this interface to retrieve the model
+    information needed to display a hierarchical outline</p>
+    <p>Each XTreeNode in a <type>XTreeDataModel</type> must be unique.
+ */
+interface XTreeNode
+{
+    /** Returns the child tree node at <var>Index</var>.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <var>Index</var> is less than 0 or equal or greater then <member>getChildCount</member>.
+    */
+    XTreeNode getChildAt( [in] long Index )
+        raises( com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** Returns the number of child nodes. */
+    long getChildCount();
+
+    /** Returns the parent node of this node. */
+    XTreeNode getParent();
+
+    /** Returns the index of <var>Node</Node> in this instances children.
+        @returns
+            The child index of <var>Node</Node> , or -1 if <var>Node</Node>  is no child of this instance.
+    */
+    long getIndex( [in] XTreeNode Node);
+
+    /** Returns <TRUE/> if the childs of this node are created on demand.
+        <p>A <type>TreeControl</type> will handle a node that returns <TRUE/> always
+        like a node that has child nodes, even if <member>getChildCount</member>
+        returns 0.</p>
+
+        @see TreeExpansionListener;
+    */
+    boolean hasChildsOnDemand();
+
+    /** If not empty, the textual representation of this any is used as the text part of this node.
+    */
+    any getDisplayValue();
+
+    /** The URL for a graphic that is rendered before the text part of this node.
+        <p>If this URL is empty, no graphic is rendered.
+    */
+    string getNodeGraphicURL();
+
+    /** The URL for a graphic that is rendered to visualize expanded non leaf nodes.
+        <p>If <var>URL</var> is empty, <member>XTreeControl::DefaultExpandedGraphicURL</member> is used.
+    */
+    string getExpandedGraphicURL();
+
+    /** The URL for a graphic that is rendered to visualize collapsed non leaf nodes.
+        <p>If <var>URL</var> is empty, <member>XTreeControl::DefaultCollapsedGraphicURL</member> is used.
+    */
+    string getCollapsedGraphicURL();
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
