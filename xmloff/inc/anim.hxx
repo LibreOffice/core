@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anim.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:02:09 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:44:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,11 +45,11 @@
 #endif
 
 #ifndef _UNIVERSALL_REFERENCE_HXX
-#include <uniref.hxx>
+#include <xmloff/uniref.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLEMENT_HXX
-#include "xmlement.hxx"
+#include <xmloff/xmlement.hxx>
 #endif
 
 enum XMLEffect
