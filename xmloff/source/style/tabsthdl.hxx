@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabsthdl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:51:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:44:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _XMLOFF_PROPERTYHANDLER_TABSTOPTYPES_HXX
 
 #ifndef _XMLOFF_PROPERTYHANDLERBASE_HXX
-#include <xmlprhdl.hxx>
+#include <xmloff/xmlprhdl.hxx>
 #endif
 
 /**
