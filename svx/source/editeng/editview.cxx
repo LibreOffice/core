@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:53:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:57:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,11 +47,11 @@
 #endif
 
 #include <impedit.hxx>
-#include <editeng.hxx>
-#include <editview.hxx>
-#include <flditem.hxx>
-#include <svxacorr.hxx>
-#include <langitem.hxx>
+#include <svx/editeng.hxx>
+#include <svx/editview.hxx>
+#include <svx/flditem.hxx>
+#include <svx/svxacorr.hxx>
+#include <svx/langitem.hxx>
 #include <eerdll.hxx>
 #include <eerdll2.hxx>
 #include <editeng.hrc>
