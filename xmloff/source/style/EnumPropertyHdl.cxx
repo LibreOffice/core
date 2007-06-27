@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnumPropertyHdl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:35:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:23:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,11 +41,11 @@
 #endif
 
 #ifndef _XMLOFF_ENUMPROPERTYHANDLER_HXX
-#include <EnumPropertyHdl.hxx>
+#include <xmloff/EnumPropertyHdl.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #ifndef _COMPHELPER_EXTRACT_HXX_
