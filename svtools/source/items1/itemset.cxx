@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemset.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-07 13:07:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:44:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,12 +48,12 @@
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
 
-#include "svstdarr.hxx"
-#include "itemset.hxx"
-#include "itempool.hxx"
-#include "itemiter.hxx"
+#include <svtools/svstdarr.hxx>
+#include <svtools/itemset.hxx>
+#include <svtools/itempool.hxx>
+#include <svtools/itemiter.hxx>
 #include "whiter.hxx"
-#include "nranges.hxx"
+#include <svtools/nranges.hxx>
 #include "whassert.hxx"
 
 #include <tools/stream.hxx>
