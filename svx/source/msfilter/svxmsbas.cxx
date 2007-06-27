@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxmsbas.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:18:00 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:35:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@
 #include <msvbasic.hxx>
 #endif
 #ifndef _MSOCXIMEX_HXX
-#include <msocximex.hxx>
+#include <svx/msocximex.hxx>
 #endif
 #ifndef _SOT_STORINFO_HXX
 #include <sot/storinfo.hxx>
