@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globname.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:00:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:17:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <stream.hxx>
-#include <globname.hxx>
+#include <tools/stream.hxx>
+#include <tools/globname.hxx>
 
 /************** class ImpSvGlobalName ************************************/
 ImpSvGlobalName::ImpSvGlobalName( const ImpSvGlobalName & rObj )
