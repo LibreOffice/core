@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 11:07:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:50:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1969,6 +1969,7 @@ long SwView::InsertDoc( USHORT nSlotId, const String& rFileName, const String& r
         {
             pMed = new SfxMedium(rFileName, STREAM_READ, TRUE, 0, 0 );
             SfxFilterMatcher aMatcher( rFact.GetFilterContainer()->GetName() );
+            pMed->UseInteractionHandler( TRUE );
             ErrCode nErr = aMatcher.GuessFilter( *pMed, &pFilter, FALSE );
             if ( nErr )
                 DELETEZ(pMed);
