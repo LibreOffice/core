@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hintpost.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:47:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:32:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,8 @@
 #endif
 
 #include "arrdecl.hxx"
-#include "hintpost.hxx"
-#include "app.hxx"
+#include <sfx2/hintpost.hxx>
+#include <sfx2/app.hxx>
 #include "sfxtypes.hxx"
 
 //====================================================================
