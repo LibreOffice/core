@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.258 $
+ *  $Revision: 1.259 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-11 09:13:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:35:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,25 +39,25 @@
 #include <svsys.h>
 #endif
 #ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#include <vcl/salframe.hxx>
 #endif
 #ifndef _SV_SALOBJ_HXX
-#include <salobj.hxx>
+#include <vcl/salobj.hxx>
 #endif
 #ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#include <vcl/salinst.hxx>
 #endif
 #ifndef _SV_SALGTYPE_HXX
-#include <salgtype.hxx>
+#include <vcl/salgtype.hxx>
 #endif
 #ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#include <vcl/salgdi.hxx>
 #endif
 #ifndef _SV_SALCTRLHANDLE_HXX
-#include <salctrlhandle.hxx>
+#include <vcl/salctrlhandle.hxx>
 #endif
 
-#include <unohelp.hxx>
+#include <vcl/unohelp.hxx>
 
 #ifndef _TOOLS_TIME_HXX
 #include <tools/time.hxx>
@@ -69,7 +69,7 @@
 #include <tools/rc.h>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_WINDATA_HXX
 #include <windata.hxx>
@@ -78,7 +78,7 @@
 #include <dbggui.hxx>
 #endif
 #ifndef _SV_OUTFONT_HXX
-#include <outfont.hxx>
+#include <vcl/outfont.hxx>
 #endif
 #ifndef _SV_OUTDEV_H
 #include <outdev.h>
@@ -87,28 +87,28 @@
 #include <region.h>
 #endif
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_HELP_HXX
-#include <help.hxx>
+#include <vcl/help.hxx>
 #endif
 #ifndef _SV_CURSOR_HXX
-#include <cursor.hxx>
+#include <vcl/cursor.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_WINDOW_H
 #include <window.h>
 #endif
 #ifndef _SV_WINDOW_HXX
-#include <window.hxx>
+#include <vcl/window.hxx>
 #endif
 #ifndef _SV_SYSWIN_HXX
-#include <syswin.hxx>
+#include <vcl/syswin.hxx>
 #endif
 #ifndef _SV_SYSCHILD_HXX
-#include <syschild.hxx>
+#include <vcl/syschild.hxx>
 #endif
 #ifndef _SV_BRDWIN_HXX
 #include <brdwin.hxx>
@@ -117,16 +117,16 @@
 #include <helpwin.hxx>
 #endif
 #ifndef _SV_DOCKWIN_HXX
-#include <dockwin.hxx>
+#include <vcl/dockwin.hxx>
 #endif
 #ifndef _SV_MENU_HXX
-#include <menu.hxx>
+#include <vcl/menu.hxx>
 #endif
 #ifndef _SV_WRKWIN_HXX
-#include <wrkwin.hxx>
+#include <vcl/wrkwin.hxx>
 #endif
 #ifndef _SV_WALL_HXX
-#include <wall.hxx>
+#include <vcl/wall.hxx>
 #endif
 #ifndef _SV_TOOLBOX_H
 #include <toolbox.h>
@@ -136,13 +136,13 @@
 #endif
 #include <sysdata.hxx>
 #ifndef _SV_SALLAYOUT_HXX
-#include <sallayout.hxx>
+#include <vcl/sallayout.hxx>
 #endif
 #ifndef _SV_BUTTON_HXX
-#include <button.hxx> // Button::GetStandardText
+#include <vcl/button.hxx> // Button::GetStandardText
 #endif
 #ifndef _SV_TASKPANELIST_HXX
-#include <taskpanelist.hxx>
+#include <vcl/taskpanelist.hxx>
 #endif
 #include <com/sun/star/awt/XWindowPeer.hpp>
 
@@ -186,7 +186,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 
-#include <unowrap.hxx>
+#include <vcl/unowrap.hxx>
 #include <dndlcon.hxx>
 #include <dndevdis.hxx>
 #include <impbmpconv.hxx>
@@ -196,10 +196,10 @@
 #endif
 
 #ifndef _SV_GDIMTF_HXX
-#include <gdimtf.hxx>
+#include <vcl/gdimtf.hxx>
 #endif
 
-#include <pdfextoutdevdata.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
 #include "lazydelete.hxx"
 
 using namespace rtl;
