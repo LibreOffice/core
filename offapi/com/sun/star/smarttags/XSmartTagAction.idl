@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSmartTagAction.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:56:23 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:33:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,139 +34,334 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_smarttags_XSmartTagAction_idl__
 #define __com_sun_star_smarttags_XSmartTagAction_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
+#ifndef __com_sun_star_container_XStringKeyMap_idl__
+#include <com/sun/star/container/XStringKeyMap.idl>
 #endif
+
 #ifndef __com_sun_star_uno_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
 #endif
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+
 #ifndef __com_sun_star_text_XTextRange_idl__
 #include <com/sun/star/text/XTextRange.idl>
 #endif
+
 #ifndef __com_sun_star_frame_XController_idl__
 #include <com/sun/star/frame/XController.idl>
 #endif
 
+#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+//=============================================================================
 
 module com {  module sun {  module star {  module smarttags {
 
+//=============================================================================
 
-  interface XSmartTagAction: com::sun::star::uno::XInterface
-  {
-    /**
-       Function: getName
+/** provides access to smart tag actions.
 
-       @return Name of the smarttag action library
+    @since OOo 2.3.0
+ */
+
+interface XSmartTagAction: com::sun::star::lang::XInitialization
+{
+    //-------------------------------------------------------------------------
+    /** obtains a name that describes this action component.
+
+        @param aLocale
+                Is used for localization of the name.
+
+        @return
+                the name describing the action component.
     */
-    string getName();
+    string getName( [in] ::com::sun::star::lang::Locale aLocale );
 
-    /**
-       Function: getDescription
 
-       @return Description of the smarttag action library
+    //-------------------------------------------------------------------------
+    /** obtains a detailed description of this action component.
+
+        @param aLocale
+                Is used for localization of the description.
+
+        @return
+                the description of the action component.
     */
-    string getDescription();
+    string getDescription( [in] ::com::sun::star::lang::Locale aLocale );
 
-    /**
-       Function: getSmartTagCount
 
-       @return Number of available smarttags in this action library
+    //-------------------------------------------------------------------------
+    /** the number of smart tag types supported by this action
+        component.
     */
-    long getSmartTagCount();
+    [attribute, readonly] long SmartTagCount;
 
-    /**
-       Function: getSmartTagName
 
-       @param sal_Int32 nSmartTagIndex
-       Index of the wanted smarttag. Value needs to
-       be between 0 and the number of smarttags available (exclusively).
+    //-------------------------------------------------------------------------
+    /** obtains the name of one specific smart tag type supported by
+        this action component.
 
-       @return Returns the name of one specific smarttag in this
-       action library. This is needed for associating the actions with the corresponding
-       recognizer.
+        @param nSmartTagIndex
+                Index of the wanted smart tag type. Value needs to be
+                between 0 and the number of smarttags available
+                (exclusively).
+
+        @return
+                an unique name of the smart tag type. Smart tag  type
+                names are always in the format of namespaceURI#tagname.
+
+        @throws com::sun::star::lang::IndexOutOfBoundsException
+                if nSmartTagIndex is greater than SmartTagCount.
     */
-    string getSmartTagName([in] long nSmartTagIndex);
+    string getSmartTagName( [in] long nSmartTagIndex )
+        raises( com::sun::star::lang::IndexOutOfBoundsException );
 
-    /**
-       Function: getSmartTagCaption
 
-       @param sal_Int32 nSmartTagIndex
-       Index of the wanted smarttag. Value needs to
-       be between 0 and the number of smarttags available (exclusively).
+    //-------------------------------------------------------------------------
+    /** obtains the caption of the smart tag type for using in user
+        interfaces.
 
-       @return Returns the caption of one specific smarttag in this
-       action library.
+        @param nSmartTagIndex
+                Index of the wanted smart tag type. Value needs to be
+                between 0 and the number of smarttags available
+                (exclusively).
+
+        @param aLocale
+                Is used for localization of the caption.
+
+        @return
+                the caption associated with the smart tag type.
+
+        @throws com::sun::star::lang::IndexOutOfBoundsException
+                if nSmartTagIndex is greater than SmartTagCount
+     */
+    string getSmartTagCaption( [in] long nSmartTagIndex,
+                               [in] ::com::sun::star::lang::Locale aLocale )
+        raises( com::sun::star::lang::IndexOutOfBoundsException );
+
+
+    //-------------------------------------------------------------------------
+    /** obtains the number of actions provided for a specifiy smart tag
+        type.
+
+        @param aSmartTagName
+                Name of the wanted smart tag type. This is one of the
+                names obtained by getSmartTagName()
+
+        @param xController
+                The current controller of the document.
+
+        @return
+                the number of actions available for the given smart tag
+                type.
     */
-    string getSmartTagCaption([in] long nSmartTagIndex,
-                  [in] com::sun::star::frame::XController xController);
+    long getActionCount( [in] string aSmartTagName,
+                         [in] com::sun::star::frame::XController xController );
 
-  /**
-     Function: getActionCount
+    //-------------------------------------------------------------------------
+    /** obtains a unique integer identifier for an action.
 
-     @param sal_Int32 nSmartTagIndex
-     Index of the wanted smarttag. Value needs to
-     be between 0 and the number of smarttags available (exclusively).
+        @param aSmartTagName
+                Name of the wanted smart tag type. This is one of the
+                names obtained by getSmartTagName()
 
-     @return Returns the number of available actions of one specific smarttag in this
-     action library
-  */
-    long getActionCount([in] long nSmartTagIndex,
-              [in] com::sun::star::frame::XController xController);
+        @param nActionIndex
+                The index of the action for the given smart tag type.
 
-    /**
-       Function: getActionCaption
+        @param xController
+                The current controller of the document.
 
-       @param sal_Int32 nSmartTagIndex
-       Index of the wanted smarttag. Value needs to
-       be between 0 and the number of smarttags available (exclusively).
+        @return
+                the unique integer identifier for the requested action.
 
-       @param sal_Int32 nActionIndex
-       Index of the wanted action. Value needs to
-       be between 0 and the number of actions available for the specified
-       smarttag  (exclusively).
-
-       @return Returns the caption of an action for one specific smarttag in this
-        action library.
+        @throws com::sun::star::lang::IllegalArgumentException
+                if the specified nActionIndex is greater than the number
+                of available actions for the specified smart tag type.
     */
-    string getActionCaption([in] long nSmartTagIndex, [in] long nActionIndex,
-              [in] com::sun::star::frame::XController xController);
+    long getActionID( [in] string aSmartTagName, [in] long nActionIndex,
+                      [in] com::sun::star::frame::XController xController )
+        raises( com::sun::star::lang::IllegalArgumentException );
 
-    /**
-       Function: invokeAction
 
-       @param sal_Int32 nSmartTagIndex
-       Index of the wanted smarttag. Value needs to
-       be between 0 and the number of smarttags available (exclusively).
+    //-------------------------------------------------------------------------
+    /** obtains a caption for a specified action for use in user
+        interfaces.
 
-       @param sal_Int32 nActionIndex
-       Index of the wanted action. Value needs to
-       be between 0 and the number of actions available for the specified
-       smarttag  (exclusively).
+        @param nActionID
+                The identifier of the requested action.
 
-       @param OUString aWord
-       Word that was recognized as actionable.
+        @param aApplicationName
+                A string containing the name of the calling application.
 
+        @param aLocale
+                Is used for localization of the caption.
+
+        @param xProperties
+                Contains additional smart tag properties collected by
+                the smart tag recognizer.
+
+        @param aText
+                The calling application can pass the text of the smart
+                tag to the action component.
+
+        @param aXML
+                A string that is a XML representation of the smart tag.
+
+        @param xController
+                The current controller of the document.
+
+        @param xTarget
+                A text range representing the smart tag in the document.
+
+        @return
+                the caption of the requested action.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+                if the ActionID is not recognized.
     */
-    void invokeAction([in] long nSmartTagIndex, [in] long nActionIndex, [in] com::sun::star::text::XTextRange xRange,
-            [in] com::sun::star::frame::XController xController );
+    string getActionCaptionFromID( [in] long nActionID,
+                                   [in] string aApplicationName,
+                                   [in] ::com::sun::star::lang::Locale aLocale,
+                                   [in] com::sun::star::container::XStringKeyMap xProperties,
+                                   [in] string aText,
+                                   [in] string aXML,
+                                   [in] com::sun::star::frame::XController xController,
+                                   [in] com::sun::star::text::XTextRange xTarget )
+        raises( com::sun::star::lang::IllegalArgumentException );
 
-    /** initializes the object.
 
-    <p>It should be called directly after the object is created.
+    //-------------------------------------------------------------------------
+    /** obtains a language independant name of an action.
+
+        @param nActionID
+                The identifier of the requested action.
+
+        @param xController
+                The current controller of the document.
+
+        @return
+                the language independant name of the specified action.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+                if the ActionID is not recognized.
     */
-    void initialize( [in] sequence<any> aArguments );
+    string getActionNameFromID( [in] long nActionID,
+                                [in] com::sun::star::frame::XController xController )
+        raises( com::sun::star::lang::IllegalArgumentException );
 
-  };
 
-  service SmartTagAction
-  {
-    // exported interfaces:
-    interface XSmartTagAction;
-  };
+    //-------------------------------------------------------------------------
+    /** invokes an action.
 
+        @param nActionID
+                The identifier of the requested action.
+
+        @param aApplicationName
+                A string containing the name of the calling application.
+
+        @param xController
+                The current controller of the document.
+
+        @param xTarget
+                A text range representing the smart tag in the document.
+
+        @param xProperties
+                Contains the smart tag properties collected by the smart
+                tag recognizer.
+
+        @param aText
+                The calling application can pass the text of the smart
+                tag to the action component.
+
+        @param aXML
+                A string that is a XML representation of the smart tag.
+
+        @param aLocale
+                Is used for localization of the action.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+                if the ActionID is not recognized.
+    */
+    void invokeAction( [in] long nActionID,
+                       [in] string aApplicationName,
+                       [in] com::sun::star::frame::XController xController,
+                       [in] com::sun::star::text::XTextRange xTarget,
+                       [in] com::sun::star::container::XStringKeyMap xProperties,
+                       [in] string aText,
+                       [in] string aXML,
+                       [in] ::com::sun::star::lang::Locale aLocale )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+
+    //-------------------------------------------------------------------------
+    /** determines whether a caption is dynamic.
+
+        @param nActionID
+                The identifier of the requested action.
+
+        @param aApplicationName
+                A string containing the name of the calling application.
+
+        @param xController
+                The current controller of the document.
+
+        @param aLocale
+                Is used for localization.
+
+        @return
+                a boolean indicating whether the caption is dynamic.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+                if the ActionID is not recognized.
+    */
+    boolean isCaptionDynamic( [in] long nActionID,
+                              [in] string aApplicationName,
+                              [in] com::sun::star::frame::XController xController,
+                              [in] ::com::sun::star::lang::Locale aLocale )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+
+    //-------------------------------------------------------------------------
+    /** determines whether the smart tag indicator should be visible.
+
+        @param nActionID
+                The identifier of the requested action.
+
+        @param aApplicationName
+                A string containing the name of the calling application.
+
+        @param xController
+                The current controller of the document.
+
+        @param aLocale
+                Is used for localization.
+
+        @return
+                a boolean indicating whether the smart tag indicator
+                should be visible.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+                if the ActionID is not recognized.
+    */
+    boolean isShowSmartTagIndicator( [in] long nActionID,
+                                     [in] string aApplicationName,
+                                     [in] com::sun::star::frame::XController xController,
+                                     [in] ::com::sun::star::lang::Locale aLocale )
+        raises( com::sun::star::lang::IllegalArgumentException );
+};
 
 }; }; }; };
 
