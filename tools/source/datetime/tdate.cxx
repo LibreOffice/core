@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdate.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:51:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:09:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,14 +38,14 @@
 
 #if defined WNT
 #pragma warning (push,1)
-#include <svwin.h>
+#include <tools/svwin.h>
 #pragma warning (pop)
 #else
 #include <time.h>
 #endif
 
-#include <debug.hxx>
-#include <date.hxx>
+#include <tools/debug.hxx>
+#include <tools/date.hxx>
 #ifdef  MACOSX
 extern "C" {
 struct tm *localtime_r(const time_t *timep, struct tm *buffer);
