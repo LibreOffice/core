@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pspgraphics.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:14:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:40:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,17 +38,17 @@
 
 
 #ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#include <vcl/salgdi.hxx>
 #endif
 #ifndef _PSPRINT_FONTMANAGER_HXX
 #include <psprint/fontmanager.hxx>
 #endif
 #ifndef _SV_SALLAYOUT_HXX
-#include <sallayout.hxx>
+#include <vcl/sallayout.hxx>
 #endif
 
 #ifndef _VCL_DLLAPI_H
-#include "dllapi.h"
+#include <vcl/dllapi.h>
 #endif
 
 #ifndef _USE_PRINT_EXTENSION_
