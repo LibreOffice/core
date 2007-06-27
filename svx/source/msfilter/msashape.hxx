@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msashape.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:19:09 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:34:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,10 @@
 #define _MSASHAPE_HXX
 
 #ifndef _MSDFFDEF_HXX
-#include <msdffdef.hxx>
+#include <svx/msdffdef.hxx>
 #endif
 #ifndef _MSDFFIMP_HXX
-#include <msdffimp.hxx>
+#include <svx/msdffimp.hxx>
 #endif
 
 #define DFF_CUSTOMSHAPE_FLIP_V      1
