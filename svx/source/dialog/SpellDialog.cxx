@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SpellDialog.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:52:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:44:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@
 #endif
 
 #ifndef _SVX_SPLWRAP_HXX
-#include "splwrap.hxx"
+#include <svx/splwrap.hxx>
 #endif
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
@@ -103,20 +103,20 @@
 #endif
 
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include <helpid.hrc>
 #include "SpellDialog.hrc"
 
 
 
 #include "optitems.hxx"
-#include "svxenum.hxx"
-#include "SpellDialogChildWindow.hxx"
+#include <svx/svxenum.hxx>
+#include <svx/SpellDialogChildWindow.hxx>
 #include "SpellDialog.hxx"
-//#include "splwrap.hxx"      // Der Wrapper
+//#include <svx/splwrap.hxx>      // Der Wrapper
 #include "dlgutil.hxx"      // language
-#include "optlingu.hxx"
-#include "dialmgr.hxx"
+#include <svx/optlingu.hxx>
+#include <svx/dialmgr.hxx>
 #include "svxerr.hxx"
 #include "treeopt.hxx"
 
