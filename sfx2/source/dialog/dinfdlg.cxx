@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 13:09:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:10:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #include <vcl/svapp.hxx>
 #endif
 #ifndef _FILEDLGHELPER_HXX
-#include <filedlghelper.hxx>
+#include <sfx2/filedlghelper.hxx>
 #endif
 
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
@@ -88,19 +88,19 @@
 #endif
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
-#include "dinfdlg.hxx"
+#include <sfx2/dinfdlg.hxx>
 #include "sfxresid.hxx"
 #include "dinfedt.hxx"
-#include "frame.hxx"
-#include "viewfrm.hxx"
-#include "request.hxx"
+#include <sfx2/frame.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/request.hxx>
 //#include "exptypes.hxx"
 #include "helper.hxx"
-#include "objsh.hxx"
-#include "docfile.hxx"
+#include <sfx2/objsh.hxx>
+#include <sfx2/docfile.hxx>
 #include <comphelper/storagehelper.hxx>
 
-#include "sfx.hrc"
+#include <sfx2/sfx.hrc>
 #include "dinfdlg.hrc"
 #include "sfxlocal.hrc"
 
