@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:04:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:40:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,10 +39,10 @@
 #include "ChildrenManagerImpl.hxx"
 
 #ifndef _SVX_ACCESSIBILITY_SHAPE_TYPE_HANDLER_HXX
-#include "ShapeTypeHandler.hxx"
+#include <svx/ShapeTypeHandler.hxx>
 #endif
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_INFO_HXX
-#include "AccessibleShapeInfo.hxx"
+#include <svx/AccessibleShapeInfo.hxx>
 #endif
 #ifndef _COM_SUN_STAR_ACCESSIBLE_ACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
