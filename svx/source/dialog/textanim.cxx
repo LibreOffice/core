@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textanim.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:44:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:45:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 #include <tools/shl.hxx>
 #endif
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 #ifndef _SVX_TEXTANIM_CXX
 #define _SVX_TEXTANIM_CXX
@@ -61,7 +61,7 @@
 #include "textanim.hxx"
 #include "textanim.hrc"
 #include "textattr.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
 
 static USHORT pRanges[] =
