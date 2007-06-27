@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outleeng.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:01:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:40:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 #include <outl_pch.hxx>
 
 #define _OUTLINER_CXX
-#include <outliner.hxx>
+#include <svx/outliner.hxx>
 #include <outleeng.hxx>
 #include <paralist.hxx>
 #include <outliner.hrc>
@@ -48,7 +48,7 @@
 #endif
 
 #ifndef _EEITEM_HXX //autogen
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 
 OutlinerEditEng::OutlinerEditEng( Outliner* pEngOwner, SfxItemPool* pPool )
