@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpshadow.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:44:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:50:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,22 +55,22 @@
 #define _SVX_TPSHADOW_CXX
 
 #include "xattr.hxx"
-#include "xpool.hxx"
-#include "dialogs.hrc"
+#include <svx/xpool.hxx>
+#include <svx/dialogs.hrc>
 #include "tabarea.hrc"
 
 
 
-#include "svdattr.hxx"
-#include "xoutx.hxx"
+#include <svx/svdattr.hxx>
+#include <svx/xoutx.hxx>
 
 #include "drawitem.hxx"
 #include "cuitabarea.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
 
 #ifndef _SVX_XLINEIT0_HXX //autogen
-#include "xlineit0.hxx"
+#include <svx/xlineit0.hxx>
 #endif
 #include <sfx2/request.hxx> //add CHINA001
 
