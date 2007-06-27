@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:58:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:19:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,13 +91,13 @@ sal_Bool SwTxtCursor::bRightMargin = sal_False;
 
 
 /*************************************************************************
- *                    lcl_GetPositionInsideField
+ *                    lcl_GetCharRectInsideField
  *
  * After calculating the position of a character during GetCharRect
  * this function allows to find the coordinates of a position (defined
  * in pCMS->pSpecialPos) inside a special portion (e.g., a field)
  *************************************************************************/
-void lcl_GetPositionInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
+void lcl_GetCharRectInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
                                  const SwCrsrMoveState& rCMS,
                                  const SwLinePortion& rPor )
 {
@@ -1073,7 +1073,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 {
                     // apply attributes to font
                     Seek( nOfst );
-                    lcl_GetPositionInsideField( aInf, *pOrig, *pCMS, *pPor );
+                    lcl_GetCharRectInsideField( aInf, *pOrig, *pCMS, *pPor );
                 }
             }
         }
@@ -1476,6 +1476,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                         if ( !nHeight || nHeight > nWidth )
                             nHeight = nWidth;
                     }
+
                     if( nWidth - nHeight/2 <= nX &&
                         ( ! pPor->InFldGrp() ||
                           !((SwFldPortion*)pPor)->HasFollow() ) )
@@ -1490,7 +1491,10 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                               pPor->GetPortion()->IsPostItsPortion() ) )
                          && ( bRightAllowed || !bLastHyph ))
                     ++nCurrStart;
-                return nCurrStart;
+
+                // if we want to get the position inside the field, we should not return
+                if ( !pCMS || !pCMS->pSpecialPos )
+                    return nCurrStart;
             }
         }
         else
@@ -1604,6 +1608,9 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                     // <--
                 }
 
+                if ( pPor->InFldGrp() && pCMS && pCMS->pSpecialPos )
+                    aDrawInf.SetLen( STRING_LEN ); // SMARTTAGS
+
                 aDrawInf.SetSpace( nSpaceAdd );
                 aDrawInf.SetFont( aSizeInf.GetFont() );
                 aDrawInf.SetFrm( pFrm );
@@ -1617,6 +1624,14 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
 
                 nLength = aSizeInf.GetFont()->_GetCrsrOfst( aDrawInf );
 
+                // get position inside field portion?
+                if ( pPor->InFldGrp() && pCMS && pCMS->pSpecialPos )
+                {
+                    pCMS->pSpecialPos->nCharOfst = nLength;
+                    nLength = 0; // SMARTTAGS
+                }
+
+                // set cursor bidi level
                 if ( pCMS )
                     ((SwCrsrMoveState*)pCMS)->nCursorBidiLevel =
                         aDrawInf.GetCursorBidiLevel();
