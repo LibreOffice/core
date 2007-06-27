@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolsin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:57:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:14:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,11 +41,11 @@
 #include <string.h>
 
 #ifndef _SHL_HXX
-#include <shl.hxx>
+#include <tools/shl.hxx>
 #endif
 
 #ifndef _DEBUG_HXX
-#include <debug.hxx>
+#include <tools/debug.hxx>
 #endif
 #ifndef _TOOLSIN_HXX
 #include <toolsin.hxx>
